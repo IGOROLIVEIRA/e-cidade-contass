@@ -315,42 +315,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
-                                <!-- Remoção temporária do trecho de código responsável pela categoria do processo 
-                                <tr style="display:table_row;" id="categoriaprocesso">
-                                    <td>
-                                        <b>
-                                            <?
-                                            db_ancora("Categoria Processo :", "js_pesquisal20_categoriaprocesso(true);", 3);
-                                            ?>
-                                        </b>
-                                    </td>
-                                    <td>
-                                        <? /*
-                                        $categoriaprocesso = array();
-                                        $categoriaprocesso[0] = "Selecione";
-
-                                        $result_categoriaprocesso = $cliccategoriaprocesso->sql_record($cliccategoriaprocesso->sql_query_file(null, "l216_codigo,l216_descr", null, ""));
-
-                                        for ($iIndiceTipo = 0; $iIndiceTipo < pg_numrows($result_categoriaprocesso); $iIndiceTipo++) {
-                                            $oTipo = db_utils::fieldsMemory($result_categoriaprocesso, $iIndiceTipo);
-                                            $categoriaprocesso[$oTipo->l216_codigo] = $oTipo->l216_descr;
-                                        }
-                                        if ($cliccategoriaprocesso->numrows == 0) {
-                                            db_msgbox("Nenhum Categoria de Processo cadastrada!!");
-                                            $result_categoriaprocesso = "";
-                                            $db_opcao = 3;
-                                            $db_botao = false;
-                                            db_input("l216_codigo", 10, "", true, "text");
-                                            db_input("l216_codigo", 40, "", true, "text");
-                                        } else {
-                                            db_select("l20_categoriaprocesso", $categoriaprocesso, true, $db_opcao);
-                                            if (isset($l216_codigo) && $l216_codigo != "") {
-                                                echo "<script>document.form1.l20_categoriaprocesso.selected=$l216_codigo;</script>";
-                                            }
-                                        } */
-                                        ?>
-                                    </td>
-                                </tr> -->
                                 <tr style="display:none;" id="amparolegal">
                                     <td nowrap title="Amparo Legal">
                                         <?
@@ -1327,14 +1291,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.getElementById("l212_codigo").style.width = "307px";
         document.getElementById("l20_tipojulg").style.width = "85px";
         document.getElementById("l20_tipoprocesso").style.width = "400px";
-        document.getElementById("l20_categoriaprocesso").style.width = "307px";
-
+        //document.getElementById("l20_codtipocom").style.width="85px";
         document.form1.modalidade_tribunal.value = oRetorno.tribunal;
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
 
         if (document.form1.l20_leidalicitacao.value == 1 && l12_pncp == 't') {
-            document.getElementById("categoriaprocesso").style.display = "";
             document.getElementById("amparolegal").style.display = "";
             if (oRetorno.numrows > 0) {
                 document.getElementById("amparolegal").style.display = "table_row";
@@ -1346,6 +1308,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
                 for ($x = 0; $x < 60; $x++) {
                     if (oRetorno.amparo[$x] != "" && oRetorno.amparo[$x] != null) {
+
                         listaamparolegal.add(new Option(oRetorno.amparo[$x], $x));
                     }
                 }
@@ -1357,20 +1320,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                     listaamparolegal.remove($x);
                 }
             }
-
-
-
         } else {
-            document.getElementById("categoriaprocesso").style.display = "none";
             document.getElementById("amparolegal").style.display = "none";
-
             let listaamparolegal = document.getElementById('l212_codigo').options;
             for ($x = 59; $x > 0; $x--) {
 
                 listaamparolegal.remove($x);
             }
-
-
 
         }
         document.querySelector("#l212_codigo").value = oRetornoamparo;
@@ -1953,7 +1909,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             js_OpenJanelaIframe('', 'db_iframe_pctipocompra', 'func_pctipocompra.php?funcao_js=parent.js_mostrapctipocompra1|pc50_codcom|pc50_descr', 'Pesquisa', true, 0);
         } else {
             if (document.form1.l20_codtipocom.value != '') {
-                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_pctipocompra', 'func_pctipocompra.php?pesquisa_chave=' + document.form1.l20_codtipocom.value + '&funcao_js=parent.js_mostrapctipocompra', 'Pesquisa', false);
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_pctipocompra', 'func_pctipocompra.php?pesquisa_chave=' + document.form1.l20_codtipocom.value + '&funcao_js=parent.js_mostrapctipocompra', 'Pesquisa', false);
             } else {
                 document.form1.pc50_descr.value = '';
             }
@@ -1974,38 +1930,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         db_iframe_pctipocompra.hide();
     }
 
-    function js_pesquisal20_categoriaprocesso(mostra) {
-        if (mostra == true) {
-            js_OpenJanelaIframe('', 'db_iframe_categoriaprocesso', 'func_liccategoriaprocesso.php?funcao_js=parent.js_mostracategoriaprocesso1|l216_codigo|l216_descr', 'Pesquisa', true, 0);
-        } else {
-            if (document.form1.l20_codtipocom.value != '') {
-                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_pctipocompra', 'func_liccategoriaprocesso.php?pesquisa_chave=' + document.form1.l20_categoriaprocesso.value + '&funcao_js=parent.js_mostracategoriaprocesso', 'Pesquisa', false);
-            } else {
-                document.form1.pc50_descr.value = '';
-            }
-        }
-    }
-
-    function js_mostracategoriaprocesso(chave, erro) {
-        document.form1.pc50_descr.value = chave;
-        if (erro == true) {
-            document.form1.l20_codtipocom.focus();
-            document.form1.l20_codtipocom.value = '';
-        }
-    }
-
-    function js_mostracategoriaprocesso1(chave1, chave2) {
-        document.form1.l20_codtipocom.value = chave1;
-        document.form1.pc50_descr.value = chave2;
-        db_iframe_pctipocompra.hide();
-    }
-
     function js_pesquisal20_id_usucria(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('', 'db_iframe_db_usuarios', 'func_db_usuarios.php?funcao_js=parent.js_mostradb_usuarios1|id_usuario|nome', 'Pesquisa', true, 0);
         } else {
             if (document.form1.l20_id_usucria.value != '') {
-                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_db_usuarios', 'func_db_usuarios.php?pesquisa_chave=' + document.form1.l20_id_usucria.value + '&funcao_js=parent.js_mostradb_usuarios', 'Pesquisa', false);
+                js_OpenJanelaIframe('top.corpo', 'db_iframe_db_usuarios', 'func_db_usuarios.php?pesquisa_chave=' + document.form1.l20_id_usucria.value + '&funcao_js=parent.js_mostradb_usuarios', 'Pesquisa', false);
             } else {
                 document.form1.nome.value = '';
             }

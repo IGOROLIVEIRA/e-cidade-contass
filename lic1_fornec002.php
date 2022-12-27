@@ -102,7 +102,7 @@ if (isset($alterar) || isset($excluir) || isset($incluir) || isset($verificado))
         strtotime(date("Y-m-d", db_getsession("DB_datausu"))) >= strtotime($oForne->pc60_databloqueio_ini) &&
         strtotime(date("Y-m-d", db_getsession("DB_datausu"))) <= strtotime($oForne->pc60_databloqueio_fim)
       ) {
-        $erro_msg  = "\\n\\n Fornecedor " . $oForne->z01_nome . " estÃ¡ bloqueado para participar de licitaÃ§Ãµes !\\n\\n\\n\\n";
+        $erro_msg  = "\\n\\n Fornecedor " . $oForne->z01_nome . " está bloqueado para participar de licitaçÃµes !\\n\\n\\n\\n";
         $sqlerro = true;
       }
     }
@@ -116,14 +116,14 @@ if (isset($alterar) || isset($excluir) || isset($incluir) || isset($verificado))
     if (strlen($z01_cgccpf) == 14) {
       if ($z01_cgccpf == '00000000000000') {
         $sqlerro = true;
-        $erro_msg = "ERRO: NÃºmero do CNPJ estÃ¡ zerado. Corrija o CGM do fornecedor e tente novamente";
+        $erro_msg = "ERRO: Número do CNPJ está zerado. Corrija o CGM do fornecedor e tente novamente";
       }
     }
 
     if (strlen($z01_cgccpf) == 11) {
       if ($z01_cgccpf == '00000000000') {
         $sqlerro = true;
-        $erro_msg = "ERRO: NÃºmero do CPF estÃ¡ zerado. Corrija o CGM do fornecedor e tente novamente";
+        $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
       }
     }
   }
@@ -136,7 +136,7 @@ if (isset($alterar) || isset($excluir) || isset($incluir) || isset($verificado))
     $dtsession   = date("Y-m-d", db_getsession("DB_datausu"));
 
     if ($dtsession < $z09_datacadastro) {
-      db_msgbox("UsuÃ¡rio: A data de cadastro do CGM informado Ã© superior a data do procedimento que estÃ¡ sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
+      db_msgbox("Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!");
       $sqlerro = true;
     }
 
@@ -148,7 +148,7 @@ if (isset($alterar) || isset($excluir) || isset($incluir) || isset($verificado))
     db_fieldsmemory($resultControle, 0);
 
     if ($dtsession <= $c99_datapat) {
-      db_msgbox("O perÃ­Â­odo jÃ¡ foi encerrado para envio do SICOM. Verifique os dados do lanÃ§amento e entre em contato com o suporte.");
+      db_msgbox("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
       $sqlerro = true;
     }
   }
@@ -189,7 +189,6 @@ for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
 }
 
 if (isset($incluir)) {
-
   if ($pc30_permsemdotac == "t") {
     $itens_processos = db_query("select distinct pc81_codproc from pcprocitem inner join solicitem on pc81_solicitem = pc11_codigo
     where pc81_codprocitem in (select l21_codpcprocitem from liclicitem where l21_codliclicita = $l20_codigo) 
@@ -229,11 +228,17 @@ if (isset($incluir)) {
 
 
 
+  //BUSCO PARAMETRO PNCP
   $sSqlLicParametro = "select l12_pncp from licitaparam where l12_instit = " . db_getsession('DB_instit');
-
   $rslicparam = db_query($sSqlLicParametro);
+  $dlicparam = db_utils::fieldsMemory($rslicparam, 0);
+  //BUSCO A LEI
+  $sqllei = "select l20_leidalicitacao from liclicita where l20_codigo = $l20_codigo";
+  $rslei = db_query($sqllei);
+  $dleis = db_utils::fieldsMemory($rslei, 0);
 
-  if ($dleis->l20_leidalicitacao == 1) {
+  if ($dleis->l20_leidalicitacao == "1") {
+    //BUSCO OS ANEXOS AQUI
     $sqlvinculo = "select * from licanexopncpdocumento
     inner join licanexopncp on
       licanexopncp.l215_sequencial  = licanexopncpdocumento.l216_licanexospncp
@@ -241,33 +246,12 @@ if (isset($incluir)) {
       l215_liclicita = $l20_codigo";
     $rsvinculo = db_query($sqlvinculo);
     $dvinculo = db_utils::fieldsMemory($rsvinculo, 0);
-    $quatrs = pg_num_rows($rsvinculo);
+    $rsAnexos = pg_num_rows($rsvinculo);
 
     if ($dlicparam->l12_pncp == 't') {
-
-      $sqllei = "select l20_leidalicitacao from liclicita where l20_codigo = $l20_codigo";
-
-      $rslei = db_query($sqllei);
-      $dleis = db_utils::fieldsMemory($rslei, 0);
-
-      if ($dleis->l20_leidalicitacao == 1) {
-        $sqlvinculo = "select * from licanexopncpdocumento
-        inner join licanexopncp on
-          licanexopncp.l215_sequencial  = licanexopncpdocumento.l216_licanexospncp
-        where
-          l215_liclicita = $l20_codigo";
-        $rsvinculo = db_query($sqlvinculo);
-        $dvinculo = db_utils::fieldsMemory($rsvinculo, 0);
-        $quatrs = pg_num_rows($rsvinculo);
-
-        if ($quatrs == 0) {
-          echo "<script>
-                      alert('A Licitação selecionada é decorrente da Lei número 14133/2021, sendo assim, é necessário anexar no mí­nimo um documento na rotina Anexos Envio PNCP!!');
-                      CurrentWindow.corpo.location.href='lic1_fornec001.php?chavepesquisa=$l20_codigo';
-                    </script>";
-
-          exit;
-        }
+      if ($rsAnexos == 0) {
+        $erro_msg = "A Licitação selecionada é decorrente da Lei número 14133/2021, sendo assim, é necessário anexar no mí­nimo um documento na rotina Anexos Envio PNCP!!";
+        $sqlerro = true;
       }
     }
   }
@@ -288,12 +272,8 @@ if (isset($incluir)) {
       if ($tribunal->l03_pctipocompratribunal == "100" || $tribunal->l03_pctipocompratribunal == "101" || $tribunal->l03_pctipocompratribunal == "102" || $tribunal->l03_pctipocompratribunal == "103") {
       } else {
         if ($licita->l20_dtpublic == "" && $licita->l31_codigo == "") {
-          echo "<script>
-                       alert('NÃ£o permitido a inserÃ§Ã£o de fornecedor na licitaÃ§Ã£o se os campos Data PublicaÃ§Ã£o DO e Resp. pela PublicaÃ§Ã£o nÃ£o estiverem preenchidos.');
-                       CurrentWindow.corpo.location.href='lic1_fornec001.php';
-
-                    </script>";
-          exit;
+          $erro_msg = "Não permitido a inserção de fornecedor na licitação se os campos Data Publicação DO e Resp. pela Publicação não estiverem preenchidos.";
+          $sqlerro = true;
         }
       }
 
@@ -315,11 +295,8 @@ if (isset($incluir)) {
         if ($sqlerro == false) {
           $result_itens = $clliclicitem->sql_record($clliclicitem->sql_query_file(null, "l21_codigo", null, "l21_codliclicita=$l20_codigo and l21_situacao=0"));
           if ($clliclicitem->numrows == 0) {
-            echo "<script>
-                     alert('Impossivel incluir fornecedores!!LicitaÃ§Ã£o sem itens cadastrados!!');
-               CurrentWindow.corpo.location.href='lic1_fornec001.php';
-                  </script>";
-            exit;
+            $erro_msg = "Impossivel incluir fornecedores, Licitação sem itens cadastrados!";
+            $sqlerro = true;
           }
 
           for ($w = 0; $w < $clliclicitem->numrows; $w++) {
@@ -377,7 +354,7 @@ if (isset($incluir)) {
       $result_igualcgm = $clpcorcamforne->sql_record($clpcorcamforne->sql_query_file(null, "pc21_codorc", "", " pc21_numcgm=$pc21_numcgm and pc21_codorc=$pc20_codorc"));
       if ($clpcorcamforne->numrows > 0) {
         $sqlerro = true;
-        $erro_msg = "ERRO: NÃºmero de CGM jÃ¡ cadastrado. ";
+        $erro_msg = "ERRO: Número de CGM já cadastrado. ";
       }
 
       if ($sqlerro == false) {
@@ -400,7 +377,7 @@ if (isset($incluir)) {
       db_fim_transacao();
       $op = 1;
     } else {
-      echo "<script>alert('Ã‰ necessÃ¡rio cadastrar pelo menos um representante legal e demais membros para o fornecedor.')</script>";
+      echo "<script>alert('É necessário cadastrar pelo menos um representante legal e demais membros para o fornecedor.')</script>";
       $op = 1;
     }
   } else {
@@ -423,11 +400,8 @@ if (isset($incluir)) {
       if ($sqlerro == false) {
         $result_itens = $clliclicitem->sql_record($clliclicitem->sql_query_file(null, "l21_codigo", null, "l21_codliclicita=$l20_codigo and l21_situacao=0"));
         if ($clliclicitem->numrows == 0) {
-          echo "<script>
-					           alert('Impossivel incluir fornecedores!!Licitação sem itens cadastrados!!');
-						   CurrentWindow.corpo.location.href='lic1_fornec001.php';
-					        </script>";
-          exit;
+          $erro_msg = "Impossivel incluir fornecedores, Licitação sem itens cadastrados!";
+          $sqlerro = true;
         }
 
         for ($w = 0; $w < $clliclicitem->numrows; $w++) {
@@ -485,7 +459,7 @@ if (isset($incluir)) {
     $result_igualcgm = $clpcorcamforne->sql_record($clpcorcamforne->sql_query_file(null, "pc21_codorc", "", " pc21_numcgm=$pc21_numcgm and pc21_codorc=$pc20_codorc"));
     if ($clpcorcamforne->numrows > 0) {
       $sqlerro = true;
-      $erro_msg = "ERRO: NÃºmero de CGM jÃ¡ cadastrado.";
+      $erro_msg = "ERRO: Número de CGM já cadastrado.";
     }
 
     if ($sqlerro == false) {
@@ -513,7 +487,7 @@ if (isset($incluir)) {
   db_fieldsmemory($resultValores, 0)->valor;
   if ($valor > 0) {
     $sqlerro = true;
-    $erro_msg = "Fornecedor com valores lanÃ§ados";
+    $erro_msg = "Fornecedor com valores lançados";
   } else {
     if (!$sqlerro) {
       $clpcorcamjulg->excluir(null, $pc21_orcamforne, null);

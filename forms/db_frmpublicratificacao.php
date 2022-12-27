@@ -5,27 +5,27 @@ $clliclicita->rotulo->label();
 $sSqlTipo = 'SELECT l03_pctipocompratribunal,
                     l20_tipojulg
                         FROM liclicita
-                        JOIN cflicita ON l20_codtipocom = l03_codigo WHERE l20_codigo = '.$l20_codigo;
+                        JOIN cflicita ON l20_codtipocom = l03_codigo WHERE l20_codigo = ' . $l20_codigo;
 
 $rsTipo = db_query($sSqlTipo);
 $l20_tipoprocesso = db_utils::fieldsMemory($rsTipo, 0)->l03_pctipocompratribunal;
-$l20_tipojulg = db_utils::fieldsMemory($rsTipo,0)->l20_tipojulg;
+$l20_tipojulg = db_utils::fieldsMemory($rsTipo, 0)->l20_tipojulg;
 
-if(isset($l20_codigo)){
-   
-    if($l20_codigo!=""){
-            $comissao = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null,'l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome, l31_tipo',null,"l31_licitacao=$l20_codigo"));
-        for($i=0;$i<$clliccomissaocgm->numrows;$i++){
+if (isset($l20_codigo)) {
+
+    if ($l20_codigo != "") {
+        $comissao = $clliccomissaocgm->sql_record($clliccomissaocgm->sql_query_file(null, 'l31_codigo,l31_liccomissao,l31_numcgm, (select cgm.z01_nome from cgm where z01_numcgm = l31_numcgm) as z01_nome, l31_tipo', null, "l31_licitacao=$l20_codigo"));
+        for ($i = 0; $i < $clliccomissaocgm->numrows; $i++) {
             $comisaoRes = db_utils::fieldsMemory($comissao, $i);
-        if($comisaoRes->l31_tipo==2){
+            if ($comisaoRes->l31_tipo == 2) {
                 $respRaticodigo = $comisaoRes->l31_numcgm;
                 $respRatinome = $comisaoRes->z01_nome;
-            }else if($comisaoRes->l31_tipo==8){
+            } else if ($comisaoRes->l31_tipo == 8) {
                 $respPubliccodigo = $comisaoRes->l31_numcgm;
                 $respPublicnome = $comisaoRes->z01_nome;
             }
         }
-    }  
+    }
 }
 
 ?>
@@ -39,15 +39,15 @@ if(isset($l20_codigo)){
             <tr>
                 <td>
                     <?
-                    db_ancora("Licitação:","js_pesquisaLicitacao(true);",$db_opcao);
+                    db_ancora("Licitação:", "js_pesquisaLicitacao(true);", $db_opcao);
                     ?>
                 </td>
                 <td>
                     <?
-                    db_input('l20_codigo',10,$Il20_codigo,true,'text',$db_opcao," onchange='js_pesquisaLicitacao(false);'")
+                    db_input('l20_codigo', 10, $Il20_codigo, true, 'text', $db_opcao, " onchange='js_pesquisaLicitacao(false);'")
                     ?>
                     <?
-                    db_input('l20_objeto',40,$Il20_objeto,true,'text',3,'')
+                    db_input('l20_objeto', 40, $Il20_objeto, true, 'text', 3, '')
                     ?>
                 </td>
             </tr>
@@ -57,25 +57,25 @@ if(isset($l20_codigo)){
                 </td>
                 <td>
                     <?
-                    $al20_tipoprocesso = array("0"=>"","101"=>"Dispensa","100"=>"Inexigibilidade","102"=>"Inexigibilidade por credenciamento/chamada pública","103"=>"Dispensa por chamada publica");
-                    db_select("l20_tipoprocesso",$al20_tipoprocesso,true,3,"","","");
+                    $al20_tipoprocesso = array("0" => "", "101" => "Dispensa", "100" => "Inexigibilidade", "102" => "Inexigibilidade por credenciamento/chamada pública", "103" => "Dispensa por chamada publica");
+                    db_select("l20_tipoprocesso", $al20_tipoprocesso, true, 3, "", "", "");
                     ?>
                 </td>
             </tr>
             <tr>
-                                    <td nowrap title="<?=@$Tl20_codepartamento?>">
-                                        <?
-                                        db_ancora("Resp. Ratificação:","js_pesquisal31_numcgm(true,'respRaticodigo','respRatinome');",$db_opcao)
+                <td nowrap title="<?= @$Tl20_codepartamento ?>">
+                    <?
+                    db_ancora("Resp. Ratificação:", "js_pesquisal31_numcgm(true,'respRaticodigo','respRatinome');", $db_opcao)
 
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('respRaticodigo',10,$respRaticodigo,true,'text',$db_opcao,"onchange=js_pesquisal31_numcgm(false,'respRaticodigo','respRatinome');");
-                                        db_input('respRatinome',45,$respRaticodigo,true,'text',3,"");
-                                        ?>
-                                    </td>
-        </tr>
+                    ?>
+                </td>
+                <td>
+                    <?
+                    db_input('respRaticodigo', 10, $respRaticodigo, true, 'text', $db_opcao, "onchange=js_pesquisal31_numcgm(false,'respRaticodigo','respRatinome');");
+                    db_input('respRatinome', 45, $respRaticodigo, true, 'text', 3, "");
+                    ?>
+                </td>
+            </tr>
 
             <tr id="trdtlimitecredenciamento" style="display: none">
                 <td>
@@ -83,92 +83,98 @@ if(isset($l20_codigo)){
                 </td>
                 <td>
                     <?
-                    db_inputdata("l20_dtlimitecredenciamento",$l20_dtlimitecredenciamento,true,$db_opcao,"style=width: 100%;","","");
+                    db_inputdata("l20_dtlimitecredenciamento", $l20_dtlimitecredenciamento, true, $db_opcao, "style=width: 100%;", "", "");
                     ?>
                 </td>
             </tr>
 
             <tr>
-                <td nowrap title="<?=@$Tl20_dtpubratificacao?>">
+                <td nowrap title="<?= @$Tl20_dtpubratificacao ?>">
                     <strong>Data Publicação Termo Ratificação:</strong>
                 </td>
                 <td>
                     <?
-                    db_inputdata('l20_dtpubratificacao',$l20_dtpubratificacao,true,$db_opcao,"","","");
+                    db_inputdata('l20_dtpubratificacao', $l20_dtpubratificacao, true, $db_opcao, "", "", "");
                     ?>
                 </td>
             </tr>
             <tr>
-                                    <td nowrap title="<?=@$Tl20_codepartamento?>">
-                                        <?
-                                        db_ancora("Resp. pela Publicação:","js_pesquisal31_numcgm(true,'respPubliccodigo','respPublicnome');",$db_opcao)
+                <td nowrap title="<?= @$Tl20_codepartamento ?>">
+                    <?
+                    db_ancora("Resp. pela Publicação:", "js_pesquisal31_numcgm(true,'respPubliccodigo','respPublicnome');", $db_opcao)
 
-                                        ?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('respPubliccodigo',10,$Il20_codepartamento,true,'text',$db_opcao,"onchange=js_pesquisal31_numcgm(false,'respPubliccodigo','respPublicnome');");
-                                        db_input('respPublicnome',45,$Il20_descricaodep,true,'text',3,"");
-                                        ?>
-                                    </td>
-        </tr>
+                    ?>
+                </td>
+                <td>
+                    <?
+                    db_input('respPubliccodigo', 10, $Il20_codepartamento, true, 'text', $db_opcao, "onchange=js_pesquisal31_numcgm(false,'respPubliccodigo','respPublicnome');");
+                    db_input('respPublicnome', 45, $Il20_descricaodep, true, 'text', 3, "");
+                    ?>
+                </td>
+            </tr>
 
             <tr>
-                <td nowrap title="<?=@$Tl20_veicdivulgacao?>">
+                <td nowrap title="<?= @$Tl20_veicdivulgacao ?>">
                     <strong>Veiculo de Divulgação:</strong>
                 </td>
                 <td>
                     <?
-                    db_textarea('l20_veicdivulgacao',0,53,$Il20_veicdivulgacao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff",50);
+                    db_textarea('l20_veicdivulgacao', 0, 53, $Il20_veicdivulgacao, true, 'text', $db_opcao, "onkeyup='limitaTextarea(this);'", "", "#ffffff", 50);
                     ?>
                 </td>
             </tr>
 
-<!--            <tr>-->
-<!--                <td nowrap title="--><?//=@$Tl20_justificativa?><!--">-->
-<!--                    <strong>Justificativa:</strong>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    --><?//
-//                    db_textarea('l20_justificativa',0,53,$Il20_justificativa,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
-//                    ?>
-<!--                </td>-->
-<!--            </tr>-->
-<!---->
-<!--            <tr>-->
-<!--                <td nowrap title="--><?//=@$Tl20_razao?><!--">-->
-<!--                    <strong>Razão:</strong>-->
-<!--                </td>-->
-<!--                <td>-->
-<!--                    --><?//
-//                    db_textarea('l20_razao',0,53,$Il20_razao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
-//                    ?>
-<!--                </td>-->
-<!--            </tr>-->
+            <!--            <tr>-->
+            <!--                <td nowrap title="--><? //=@$Tl20_justificativa
+                                                        ?>
+            <!--">-->
+            <!--                    <strong>Justificativa:</strong>-->
+            <!--                </td>-->
+            <!--                <td>-->
+            <!--                    --><? //
+                                        //                    db_textarea('l20_justificativa',0,53,$Il20_justificativa,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
+                                        //                    
+                                        ?>
+            <!--                </td>-->
+            <!--            </tr>-->
+            <!---->
+            <!--            <tr>-->
+            <!--                <td nowrap title="--><? //=@$Tl20_razao
+                                                        ?>
+            <!--">-->
+            <!--                    <strong>Razão:</strong>-->
+            <!--                </td>-->
+            <!--                <td>-->
+            <!--                    --><? //
+                                        //                    db_textarea('l20_razao',0,53,$Il20_razao,true,'text',$db_opcao,"onkeyup='limitaTextarea(this);'","","#ffffff");
+                                        //                    
+                                        ?>
+            <!--                </td>-->
+            <!--            </tr>-->
         </table>
     </fieldset>
     <?php
 
-    if(!empty($l20_codigo)) {
+    if (!empty($l20_codigo)) {
 
         $sCampos  = "DISTINCT pc81_codprocitem, pc11_seq, pc11_codigo, pc11_quant, pc11_vlrun, m61_descr, pc01_codmater, pc01_descrmater, pc11_resum";
 
         $joinPrecoReferencia = false;
 
-        if(in_array($l03_pctipocompratribunal, array(102, 103)) || in_array($l20_tipoprocesso, array(102, 103))){
+        if (in_array($l03_pctipocompratribunal, array(102, 103)) || in_array($l20_tipoprocesso, array(102, 103))) {
             $sCampos .= ", si02_vlprecoreferencia";
             $valorUnitario = 'si02_vlprecoreferencia';
             $joinPrecoReferencia = true;
-        }elseif($l20_tipojulg == 3 && in_array($l03_pctipocompratribunal, array(100, 101)) || in_array($l20_tipoprocesso, array(100, 101))){
+        } elseif ($l20_tipojulg == 3 && in_array($l03_pctipocompratribunal, array(100, 101)) || in_array($l20_tipoprocesso, array(100, 101))) {
             $sCampos .= ",'-' as pc23_vlrun";
             $valorUnitario = '';
-		}else{
+        } else {
             $valorUnitario = 'pc11_vlrun';
         }
         $sOrdem   = "pc11_seq";
         $sWhere   = "liclicitem.l21_codliclicita = {$l20_codigo} ";
 
-        if($l20_tipoprocesso != "103" && $l20_tipoprocesso != "102"){
+        if ($l20_tipoprocesso != "103" && $l20_tipoprocesso != "102") {
             $sWhere  .= "and pc24_pontuacao = 1";
         }
 
@@ -178,120 +184,119 @@ if(isset($l20_codigo)){
         $numrows = $clhomologacaoadjudica->numrows;
     }
 
-    if($numrows > 0){
+    if ($numrows > 0) {
     ?>
-    <table style="width: 65%;">
-        <tr class="DBgrid">
-            <td class="table_header" style="width: 33px; height:30px;" onclick="marcarTodos();">M</td>
-            <td class="table_header" style="width: 40px">Ordem</td>
-            <td class="table_header" style="width: 50px">Item</td>
-            <td class="table_header" style="width: 235px">Descrição Item</td>
-            <td class="table_header" style="width: 50px">Unidade</td>
-            <? if($valorUnitario != ''): ?>
-                <td class="table_header" style="width: 72px">Valor Unitário</td>
-            <? endif; ?>
-            <td class="table_header" style="width: 125px">Quantidade Licitada</td>
-        </tr>
-    </table>
+        <table style="width: 65%;">
+            <tr class="DBgrid">
+                <td class="table_header" style="width: 33px; height:30px;" onclick="marcarTodos();">M</td>
+                <td class="table_header" style="width: 40px">Ordem</td>
+                <td class="table_header" style="width: 50px">Item</td>
+                <td class="table_header" style="width: 235px">Descrição Item</td>
+                <td class="table_header" style="width: 50px">Unidade</td>
+                <? if ($valorUnitario != '') : ?>
+                    <td class="table_header" style="width: 72px">Valor Unitário</td>
+                <? endif; ?>
+                <td class="table_header" style="width: 125px">Quantidade Licitada</td>
+            </tr>
+        </table>
 
-    <div style="overflow:scroll;height:30%;width:65%;">
-        <table>
-            <th class="table_header">
-                <?php foreach ($aItensLicitacao as $key => $aItem):
-                    $iItem = $aItem->pc81_codprocitem;
+        <div style="overflow:scroll;height:30%;width:65%;">
+            <table>
+                <th class="table_header">
+                    <?php foreach ($aItensLicitacao as $key => $aItem) :
+                        $iItem = $aItem->pc81_codprocitem;
 
                     ?>
-                    <table class="DBgrid">
-                        <th class="table_header" style="width: <?= !$valorUnitario ? '40px': '32px'?>">
-                            <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem?>">
-                        </th>
+                        <table class="DBgrid">
+                            <th class="table_header" style="width: <?= !$valorUnitario ? '58px' : '32px' ?>">
+                                <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem ?>">
+                            </th>
 
-                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '51px' : '44px'?>">
-                            <?= $aItem->pc11_seq ?>
-                            <input type="hidden" name="" value="<?= $aItem->pc11_seq ?>" id="<?= $iItem?>">
-                        </td>
+                            <td class="linhagrid" style="width: <?= !$valorUnitario ? '74px' : '44px' ?>">
+                                <?= $aItem->pc11_seq ?>
+                                <input type="hidden" name="" value="<?= $aItem->pc11_seq ?>" id="<?= $iItem ?>">
+                            </td>
 
-                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '64px' : '52px'?>">
-                            <?= $aItem->pc81_codprocitem ?>
-                            <input type="hidden" name="" value="<?= $aItem->pc81_codprocitem ?>" id="<?= $iItem?>">
-                        </td>
+                            <td class="linhagrid" style="width: <?= !$valorUnitario ? '92px' : '52px' ?>">
+                                <?= $aItem->pc81_codprocitem ?>
+                                <input type="hidden" name="" value="<?= $aItem->pc81_codprocitem ?>" id="<?= $iItem ?>">
+                            </td>
 
-                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '298px' : '260px'?>">
-                            <?= $aItem->pc01_descrmater ?>
-                            <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem?>">
-                        </td>
+                            <td class="linhagrid" style="width: <?= !$valorUnitario ? '421px' : '260px' ?>">
+                                <?= $aItem->pc01_descrmater ?>
+                                <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem ?>">
+                            </td>
 
-                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '64px' : '55px'?>">
-                            <?= $aItem->m61_descr ?>
-                            <input type="hidden" name="" value="<?= $aItem->m61_descr ?>" id="<?= $iItem?>">
-                        </td>
+                            <td class="linhagrid" style="width: <?= !$valorUnitario ? '90px' : '55px' ?>">
+                                <?= $aItem->m61_descr ?>
+                                <input type="hidden" name="" value="<?= $aItem->m61_descr ?>" id="<?= $iItem ?>">
+                            </td>
 
-                        <?php if($valorUnitario != ''): ?>
-                        <td class="linhagrid" style="width: 80px">
-                            <?= $aItem->$valorUnitario ?>
-                            <input type="hidden" name="" value="<?= $aItem->$valorUnitario ?>" id="<?= $iItem?>">
-                        </td>
-                        <? endif;?>
+                            <?php if ($valorUnitario != '') : ?>
+                                <td class="linhagrid" style="width: 80px">
+                                    <?= $aItem->$valorUnitario ?>
+                                    <input type="hidden" name="" value="<?= $aItem->$valorUnitario ?>" id="<?= $iItem ?>">
+                                </td>
+                            <? endif; ?>
 
-                        <td class="linhagrid" style="width: <?= !$valorUnitario ? '145px' : '120px'?>">
-                            <?= $aItem->pc11_quant ?>
-                            <input type="hidden" name="" value="<?= $aItem->pc11_quant ?>" id="<?= $iItem?>">
-                        </td>
+                            <td class="linhagrid" style="width: <?= !$valorUnitario ? '204px' : '120px' ?>">
+                                <?= $aItem->pc11_quant ?>
+                                <input type="hidden" name="" value="<?= $aItem->pc11_quant ?>" id="<?= $iItem ?>">
+                            </td>
 
-                    </table>
-                <?php
-                endforeach;
-                ?>
-            </th>
-        </table>
+                        </table>
+                    <?php
+                    endforeach;
+                    ?>
+                </th>
+            </table>
         <?php
-        }
+    }
         ?>
-    </div>
-    <div style="margin-left: 25%;">
-        <?php if($db_opcao == 11 || $db_opcao == 1):?>
-            <input name="Incluir" type="submit" id="incluir" value="Incluir">
-        <?php elseif ($db_opcao == 22 || $db_opcao == 2):?>
-            <input name="Alterar" type="button" id="excluir" value="Alterar" onclick="js_AHomologacao()">
-        <?php else :?>
-            <input name="Excluir" type="button" id="excluir" value="Excluir" onclick="js_EHomologacao()" >
-        <?php endif;?>
-        <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa(<?= $db_opcao == 1 ? false : true ?>);" >
-    </div>
+        </div>
+        <div style="margin-left: 25%;">
+            <?php if ($db_opcao == 11 || $db_opcao == 1) : ?>
+                <input name="Incluir" type="submit" id="incluir" value="Incluir">
+            <?php elseif ($db_opcao == 22 || $db_opcao == 2) : ?>
+                <input name="Alterar" type="button" id="excluir" value="Alterar" onclick="js_AHomologacao()">
+            <?php else : ?>
+                <input name="Excluir" type="button" id="excluir" value="Excluir" onclick="js_EHomologacao()">
+            <?php endif; ?>
+            <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa(<?= $db_opcao == 1 ? false : true ?>);">
+        </div>
 </form>
 
 <script>
-
-    db_opcao = <?= $db_opcao?>;
+    db_opcao = <?= $db_opcao ?>;
 
     js_verificatipoproc();
 
-    function js_pesquisa(ratificacao=false){
-        if(ratificacao) {
-            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_publicratificacao',
-                'func_liclicita.php?credenciamento=true&situacao=10&ratificacao=true&dispensas=true&ocultacampos=true&funcao_js=parent.js_preenchepesquisa|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
-        }else {
-            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_publicratificacao',
-                'func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&dispensas=true&ocultacampos=true&funcao_js=parent.js_preenchepesquisa|l20_codigo','Pesquisa',true);
+    function js_pesquisa(ratificacao = false) {
+        if (ratificacao) {
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_publicratificacao',
+                'func_liclicita.php?credenciamento=true&situacao=10&ratificacao=true&dispensas=true&ocultacampos=true&funcao_js=parent.js_preenchepesquisa|l20_codigo|l20_objeto|tipocomtribunal', 'Pesquisa', true);
+        } else {
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_publicratificacao',
+                'func_liclicita.php?credenciamento=true&situacao=1&ratificacao=false&dispensas=true&ocultacampos=true&funcao_js=parent.js_preenchepesquisa|l20_codigo', 'Pesquisa', true);
         }
     }
 
-    function js_preenchepesquisa(chave){
+    function js_preenchepesquisa(chave) {
         js_findTipos(chave);
     }
 
-    function js_retornoConsulta(chave, licitacao){
+    function js_retornoConsulta(chave, licitacao) {
         db_iframe_publicratificacao.hide();
 
-        if(db_opcao === 33 || db_opcao === 3){
-            window.location.href = "lic1_publicratificacao003.php?chavepesquisa="+chave+"&l20_tipoprocesso="+
+        if (db_opcao === 33 || db_opcao === 3) {
+            window.location.href = "lic1_publicratificacao003.php?chavepesquisa=" + chave + "&l20_tipoprocesso=" +
                 licitacao.l03_pctipocompratribunal;
-        }else if(db_opcao === 22 || db_opcao === 2){
-            window.location.href = "lic1_publicratificacao002.php?chavepesquisa="+chave+"&l20_tipoprocesso="+
-                licitacao.l03_pctipocompratribunal+"&l20_objeto="+licitacao.l20_objeto;
-        }else if(db_opcao == 1){
-            window.location.href = "lic1_publicratificacao001.php?l20_codigo="+chave+"&l20_tipoprocesso="+
-                licitacao.l03_pctipocompratribunal+"&l20_objeto="+licitacao.l20_objeto;
+        } else if (db_opcao === 22 || db_opcao === 2) {
+            window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" + chave + "&l20_tipoprocesso=" +
+                licitacao.l03_pctipocompratribunal + "&l20_objeto=" + licitacao.l20_objeto;
+        } else if (db_opcao == 1) {
+            window.location.href = "lic1_publicratificacao001.php?l20_codigo=" + chave + "&l20_tipoprocesso=" +
+                licitacao.l03_pctipocompratribunal + "&l20_objeto=" + licitacao.l20_objeto;
         }
     }
 
@@ -303,7 +308,7 @@ if(isset($l20_codigo)){
     function js_verificatipoproc() {
         let tipoproc = document.getElementById('l20_tipoprocesso').value;
 
-        if(tipoproc === '102' || tipoproc === '103'){
+        if (tipoproc === '102' || tipoproc === '103') {
             document.getElementById('trdtlimitecredenciamento').style.display = "";
         }
     }
@@ -312,13 +317,13 @@ if(isset($l20_codigo)){
      * Função para limitar texaarea*
      *
      */
-    function limitaTextarea(valor){
+    function limitaTextarea(valor) {
         var qnt = valor.value;
         quantidade = 80;
         total = qnt.length;
 
-        if(total <= quantidade) {
-            resto = quantidade- total;
+        if (total <= quantidade) {
+            resto = quantidade - total;
             document.getElementById('contador').innerHTML = resto;
         } else {
             document.getElementById(valor.name).value = qnt.substr(0, quantidade);
@@ -330,45 +335,46 @@ if(isset($l20_codigo)){
      * Função para Busca licitações e Carregar itens
      *
      */
-    function js_pesquisaLicitacao(mostra){
-        if(mostra==true){
-            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true'+(db_opcao == 1 ? '&situacao=1&ratificacao=false' : '&situacao=10&ratificacao=true')+
-            '+&dispensas=true&ocultacampos=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal','Pesquisa',true);
-        }else{
-            if(document.form1.l20_codigo.value != ''){
-                js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?credenciamento=true'+
-                    (db_opcao == 1 ? '&situacao=1' : '&situacao=10')+
-                    '&enviada=true&pesquisa_chave='+document.form1.l20_codigo.value+'&tipoproc=true&dispensas=true&ocultacampos=true&funcao_js=parent.js_mostraliclicita','Pesquisa',false);
-            }else{
+    function js_pesquisaLicitacao(mostra) {
+        if (mostra == true) {
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', 'func_liclicita.php?credenciamento=true' + (db_opcao == 1 ? '&situacao=1&ratificacao=false' : '&situacao=10&ratificacao=true') +
+                '+&dispensas=true&ocultacampos=true&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|tipocomtribunal', 'Pesquisa', true);
+        } else {
+            if (document.form1.l20_codigo.value != '') {
+                js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', 'func_liclicita.php?credenciamento=true' +
+                    (db_opcao == 1 ? '&situacao=1' : '&situacao=10') +
+                    '&enviada=true&pesquisa_chave=' + document.form1.l20_codigo.value + '&tipoproc=true&dispensas=true&ocultacampos=true&funcao_js=parent.js_mostraliclicita', 'Pesquisa', false);
+            } else {
                 document.form1.l20_codigo.value = '';
                 js_limpaCampos();
             }
         }
     }
-    function js_mostraliclicita(chave,erro, chave2){
+
+    function js_mostraliclicita(chave, erro, chave2) {
         document.form1.l20_objeto.value = chave;
-        if(erro==true){
+        if (erro == true) {
             document.form1.l20_codigo.focus();
             document.form1.l20_codigo.value = '';
-        }else{
-            if(db_opcao == 1){
-                window.location.href = "lic1_publicratificacao001.php?l20_codigo="+
-                    document.form1.l20_codigo.value+"&l20_objeto="+chave+"&l20_tipoprocesso="+chave2;
-            }else{
-                window.location.href = "lic1_publicratificacao002.php?chavepesquisa="+
-                    document.form1.l20_codigo.value+"&l20_tipoprocesso="+chave2;
+        } else {
+            if (db_opcao == 1) {
+                window.location.href = "lic1_publicratificacao001.php?l20_codigo=" +
+                    document.form1.l20_codigo.value + "&l20_objeto=" + chave + "&l20_tipoprocesso=" + chave2;
+            } else {
+                window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" +
+                    document.form1.l20_codigo.value + "&l20_tipoprocesso=" + chave2;
             }
         }
 
     }
 
-    function js_mostraliclicita1(chave1,chave2,chave3){
+    function js_mostraliclicita1(chave1, chave2, chave3) {
         // let caminho = db_opcao == 1 ? "lic1_publicratificacao001.php?" : "lic1_publicratificacao002.php?";
-        if(db_opcao == 1){
+        if (db_opcao == 1) {
             let caminho = "lic1_publicratificacao001.php?";
-            window.location.href = caminho +"l20_codigo="+chave1+"&l20_objeto="+chave2+"&l20_tipoprocesso="+chave3;
-        }else{
-            window.location.href = "lic1_publicratificacao002.php?chavepesquisa="+chave1+"&l20_tipoprocesso="+chave3;
+            window.location.href = caminho + "l20_codigo=" + chave1 + "&l20_objeto=" + chave2 + "&l20_tipoprocesso=" + chave3;
+        } else {
+            window.location.href = "lic1_publicratificacao002.php?chavepesquisa=" + chave1 + "&l20_tipoprocesso=" + chave3;
         }
         db_iframe_liclicita.hide();
     }
@@ -380,7 +386,7 @@ if(isset($l20_codigo)){
     function aItens() {
         var itensNum = document.getElementsByName("aItonsMarcados");
 
-        return Array.prototype.map.call(itensNum, function (item) {
+        return Array.prototype.map.call(itensNum, function(item) {
             return item;
         });
     }
@@ -390,11 +396,11 @@ if(isset($l20_codigo)){
         //Funcao para retornar data no formato dd/mm/yyyy
         //para deve ser do tipo yyyy-mm-dd
 
-        var ano  = data.split("-")[0];
-        var mes  = data.split("-")[1];
-        var dia  = data.split("-")[2];
+        var ano = data.split("-")[0];
+        var mes = data.split("-")[1];
+        var dia = data.split("-")[2];
 
-        return ("0"+dia).slice(-2) + '/' + ("0"+mes).slice(-2) + '/' + ano;
+        return ("0" + dia).slice(-2) + '/' + ("0" + mes).slice(-2) + '/' + ano;
         // Utilizo o .slice(-2) para garantir o formato com 2 digitos.
     }
     /**
@@ -403,7 +409,7 @@ if(isset($l20_codigo)){
      */
     function marcarTodos() {
 
-        aItens().forEach(function (item) {
+        aItens().forEach(function(item) {
 
             var check = item.classList.contains('marcado');
 
@@ -422,7 +428,7 @@ if(isset($l20_codigo)){
      */
 
     function getItensMarcados() {
-        return aItens().filter(function (item) {
+        return aItens().filter(function(item) {
             return item.checked;
         });
     }
@@ -434,18 +440,18 @@ if(isset($l20_codigo)){
 
     function js_IHomologacao() {
         let itens = getItensMarcados();
-        
+
         if (document.getElementById('l20_dtpubratificacao').value == '') {
             alert('Campo Data Publicação Termo de Ratificação não informado');
             return false;
         }
 
-        if(document.getElementById('respRaticodigo').value== ''){
+        if (document.getElementById('respRaticodigo').value == '') {
             alert('Campo Responsável pela Ratificação não informado.');
             return false;
         }
 
-        if(document.getElementById('respPubliccodigo').value == ''){
+        if (document.getElementById('respPubliccodigo').value == '') {
             alert('Campo Responsável pela Publicação não informado.');
             return false;
         }
@@ -458,27 +464,27 @@ if(isset($l20_codigo)){
         var itensEnviar = [];
 
         try {
-            itens.forEach(function (item) {
+            itens.forEach(function(item) {
                 let coditem = item.id;
                 var novoItem = {
-                    l205_item            :coditem,
+                    l205_item: coditem,
                 };
                 itensEnviar.push(novoItem);
             });
             salvarCredAjax({
-                exec :'salvarHomo',
-                licitacao                  : document.getElementById('l20_codigo').value,
-                l20_tipoprocesso           : document.getElementById('l20_tipoprocesso').value,
-                l20_dtpubratificacao       : document.getElementById('l20_dtpubratificacao').value,
-                l20_dtlimitecredenciamento : document.getElementById('l20_dtlimitecredenciamento').value,
-                l20_veicdivulgacao         : document.getElementById('l20_veicdivulgacao').value,
-                respRaticodigo             : document.getElementById('respRaticodigo').value,
-                respPubliccodigo           : document.getElementById('respPubliccodigo').value,
+                exec: 'salvarHomo',
+                licitacao: document.getElementById('l20_codigo').value,
+                l20_tipoprocesso: document.getElementById('l20_tipoprocesso').value,
+                l20_dtpubratificacao: document.getElementById('l20_dtpubratificacao').value,
+                l20_dtlimitecredenciamento: document.getElementById('l20_dtlimitecredenciamento').value,
+                l20_veicdivulgacao: document.getElementById('l20_veicdivulgacao').value,
+                respRaticodigo: document.getElementById('respRaticodigo').value,
+                respPubliccodigo: document.getElementById('respPubliccodigo').value,
                 // l20_justificativa          : document.getElementById('l20_justificativa').value,
                 // l20_razao                  : document.getElementById('l20_razao').value,
-                itens                      : itensEnviar,
+                itens: itensEnviar,
             }, retornoAjax);
-        } catch(e) {
+        } catch (e) {
             alert(e.toString());
         }
         return false;
@@ -487,8 +493,8 @@ if(isset($l20_codigo)){
     function salvarCredAjax(params, onComplete) {
         js_divCarregando('Aguarde salvando', 'div_aguarde');
         var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
-            method:'post',
-            parameters:'json=' + JSON.stringify(params),
+            method: 'post',
+            parameters: 'json=' + JSON.stringify(params),
             onComplete: function(res) {
                 js_removeObj('div_aguarde');
                 onComplete(res);
@@ -518,17 +524,17 @@ if(isset($l20_codigo)){
             return false;
         }
 
-        if(document.getElementById('l20_dtpubratificacao').value == ''){
+        if (document.getElementById('l20_dtpubratificacao').value == '') {
             alert('Campo Data Publicação Termo de Ratificação não informado.');
             return false;
         }
 
-        if(document.getElementById('respRaticodigo').value== ''){
+        if (document.getElementById('respRaticodigo').value == '') {
             alert('Campo Responsável pela Ratificação não informado.');
             return false;
         }
 
-        if(document.getElementById('respPubliccodigo').value == ''){
+        if (document.getElementById('respPubliccodigo').value == '') {
             alert('Campo Responsável pela Publicação não informado.');
             return false;
         }
@@ -536,27 +542,27 @@ if(isset($l20_codigo)){
         var itensEnviar = [];
 
         try {
-            itens.forEach(function (item) {
+            itens.forEach(function(item) {
                 let coditem = item.id;
                 var novoItem = {
-                    l205_item            :coditem,
+                    l205_item: coditem,
                 };
                 itensEnviar.push(novoItem);
             });
             aHomoAjax({
-                exec :'alterarHomo',
-                licitacao                  : document.getElementById('l20_codigo').value,
-                l20_tipoprocesso           : document.getElementById('l20_tipoprocesso').value,
-                l20_dtpubratificacao       : document.getElementById('l20_dtpubratificacao').value,
-                l20_dtlimitecredenciamento : document.getElementById('l20_dtlimitecredenciamento').value,
-                l20_veicdivulgacao         : document.getElementById('l20_veicdivulgacao').value,
-                respRaticodigo             : document.getElementById('respRaticodigo').value,
-                respPubliccodigo           : document.getElementById('respPubliccodigo').value,
+                exec: 'alterarHomo',
+                licitacao: document.getElementById('l20_codigo').value,
+                l20_tipoprocesso: document.getElementById('l20_tipoprocesso').value,
+                l20_dtpubratificacao: document.getElementById('l20_dtpubratificacao').value,
+                l20_dtlimitecredenciamento: document.getElementById('l20_dtlimitecredenciamento').value,
+                l20_veicdivulgacao: document.getElementById('l20_veicdivulgacao').value,
+                respRaticodigo: document.getElementById('respRaticodigo').value,
+                respPubliccodigo: document.getElementById('respPubliccodigo').value,
                 // l20_justificativa          : document.getElementById('l20_justificativa').value,
                 // l20_razao                  : document.getElementById('l20_razao').value,
-                itens                      : itensEnviar,
+                itens: itensEnviar,
             }, oRetornoAjax);
-        } catch(e) {
+        } catch (e) {
             alert(e.toString());
         }
         return false;
@@ -565,8 +571,8 @@ if(isset($l20_codigo)){
     function aHomoAjax(params, onComplete) {
         js_divCarregando('Aguarde salvando', 'div_aguarde');
         var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
-            method:'post',
-            parameters:'json=' + JSON.stringify(params),
+            method: 'post',
+            parameters: 'json=' + JSON.stringify(params),
             onComplete: function(res) {
                 js_removeObj('div_aguarde');
                 onComplete(res);
@@ -595,7 +601,7 @@ if(isset($l20_codigo)){
                 exec: 'getItensHomo',
                 licitacao: document.getElementById('l20_codigo').value,
             }, oretornoitens);
-        } catch(e) {
+        } catch (e) {
             alert(e.toString());
         }
         return false;
@@ -604,8 +610,8 @@ if(isset($l20_codigo)){
     function carregarItens(params, onComplete) {
         js_divCarregando('Aguarde salvando', 'div_aguarde');
         var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
-            method:'post',
-            parameters:'json=' + JSON.stringify(params),
+            method: 'post',
+            parameters: 'json=' + JSON.stringify(params),
             onComplete: function(res) {
                 js_removeObj('div_aguarde');
                 onComplete(res);
@@ -615,19 +621,19 @@ if(isset($l20_codigo)){
 
     function oretornoitens(res) {
         var oRetornoitens = JSON.parse(res.responseText);
-        oRetornoitens.itens.forEach(function (item, x) {
+        oRetornoitens.itens.forEach(function(item, x) {
             document.getElementById(item.l203_item).checked = true;
         });
 
-        if(oRetornoitens.dtpublicacao === ""){
+        if (oRetornoitens.dtpublicacao === "") {
             document.getElementById('l20_dtpubratificacao').value = "";
-        }else{
+        } else {
             document.getElementById('l20_dtpubratificacao').value = FormataStringData(oRetornoitens.dtpublicacao);
         }
 
-        if(oRetornoitens.dtlimitecredenciamento === ""){
+        if (oRetornoitens.dtlimitecredenciamento === "") {
             document.getElementById('l20_dtlimitecredenciamento').value = "";
-        }else{
+        } else {
             document.getElementById('l20_dtlimitecredenciamento').value = FormataStringData(oRetornoitens.dtlimitecredenciamento);
         }
     }
@@ -638,7 +644,7 @@ if(isset($l20_codigo)){
      */
     function js_EHomologacao() {
 
-        if(document.getElementById('l20_dtpubratificacao').value == ''){
+        if (document.getElementById('l20_dtpubratificacao').value == '') {
             alert('Campo Data Publicação Termo de Ratificação não informado.');
             return false;
         }
@@ -649,7 +655,7 @@ if(isset($l20_codigo)){
                 licitacao: document.getElementById('l20_codigo').value,
                 ratificacao: document.form1.l20_dtpubratificacao.value
             }, oretornoexclusao);
-        } catch(e) {
+        } catch (e) {
             alert(e.toString());
         }
         return false;
@@ -658,8 +664,8 @@ if(isset($l20_codigo)){
     function excluirhomologacao(params, onComplete) {
         js_divCarregando('Aguarde salvando', 'div_aguarde');
         var request = new Ajax.Request('lic1_credenciamento.RPC.php', {
-            method:'post',
-            parameters:'json=' + JSON.stringify(params),
+            method: 'post',
+            parameters: 'json=' + JSON.stringify(params),
             onComplete: function(res) {
                 js_removeObj('div_aguarde');
                 onComplete(res);
@@ -673,17 +679,17 @@ if(isset($l20_codigo)){
         if (oRetornoitens.status == 2) {
             alert(oRetornoitens.message.urlDecode());
         } else if (oRetornoitens.erro == false) {
-            alert('Homologação excluida com sucesso !');
+            alert('Publicação de Termo de Ratificação excluída com sucesso!');
             window.location.href = "lic1_publicratificacao003.php";
         }
     }
 
-    function js_findTipos(licitacao){
+    function js_findTipos(licitacao) {
         let request = new Ajax.Request('lic4_licitacao.RPC.php', {
-            method:'post',
+            method: 'post',
             exec: 'findTipos',
             asynchronous: false,
-            parameters:'json=' + JSON.stringify({
+            parameters: 'json=' + JSON.stringify({
                 exec: 'findTipos',
                 iLicitacao: licitacao
             }),
@@ -693,12 +699,12 @@ if(isset($l20_codigo)){
         });
     }
 
-    function js_onCompleteTipo(licitacao, response){
+    function js_onCompleteTipo(licitacao, response) {
         let oTipos = JSON.parse(response.responseText);
         js_retornoConsulta(licitacao, oTipos.dadosLicitacao);
     }
 
-    function js_limpaCampos(){
+    function js_limpaCampos() {
         document.getElementById('l20_tipoprocesso_select_descr').value = '';
         document.getElementById('l20_objeto').value = '';
         document.getElementsByName("aItonsMarcados").value = '';
@@ -706,34 +712,36 @@ if(isset($l20_codigo)){
 
     var varNumCampo;
     var varNomeCampo;
-    function js_pesquisal31_numcgm(mostra,numCampo,nomeCampo){
+
+    function js_pesquisal31_numcgm(mostra, numCampo, nomeCampo) {
         varNumCampo = numCampo;
         varNomeCampo = nomeCampo;
-        
-        if(mostra==true){
-            js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome&filtro=1','Pesquisa',true,'0','1');
-        }else{
+
+        if (mostra == true) {
+            js_OpenJanelaIframe('', 'db_iframe_cgm', 'func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome&filtro=1', 'Pesquisa', true, '0', '1');
+        } else {
             numcgm = document.getElementById(numCampo).value;
-            if(numcgm != ''){
-                js_OpenJanelaIframe('','db_iframe_cgm','func_nome.php?pesquisa_chave='+numcgm+'&funcao_js=parent.js_mostracgm&filtro=1','Pesquisa',false);
-            }else{
-                document.getElementById(numCampo).value = ""; 
+            if (numcgm != '') {
+                js_OpenJanelaIframe('', 'db_iframe_cgm', 'func_nome.php?pesquisa_chave=' + numcgm + '&funcao_js=parent.js_mostracgm&filtro=1', 'Pesquisa', false);
+            } else {
+                document.getElementById(numCampo).value = "";
             }
         }
     }
-    
-    function js_mostracgm(erro,chave){
-        document.getElementById(varNomeCampo).value = chave; 
-        if(erro==true){ 
-          //  document.form1.l31_numcgm.focus(); 
-          document.getElementById(varNumCampo).value = "";
-          alert("Responsável não encontrado!");
+
+    function js_mostracgm(erro, chave) {
+        document.getElementById(varNomeCampo).value = chave;
+        if (erro == true) {
+            //  document.form1.l31_numcgm.focus(); 
+            document.getElementById(varNumCampo).value = "";
+            alert("Responsável não encontrado!");
         }
     }
-    function js_mostracgm1(chave1,chave2){
 
-    document.getElementById(varNumCampo).value = chave1;
-    document.getElementById(varNomeCampo).value = chave2;
-    db_iframe_cgm.hide(); 
-    } 
+    function js_mostracgm1(chave1, chave2) {
+
+        document.getElementById(varNumCampo).value = chave1;
+        document.getElementById(varNomeCampo).value = chave2;
+        db_iframe_cgm.hide();
+    }
 </script>
