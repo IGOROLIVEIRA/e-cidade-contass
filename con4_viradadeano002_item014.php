@@ -1,33 +1,33 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 // Para garantir que nao houve erros em outros itens
 if ($sqlerro==false) {
-  
+
   //TRANSAÇÕES";
   $sqldestino = "select * from contrans where c45_anousu = $anodestino limit 1";
   $resultdestino = db_query($sqldestino);
@@ -42,7 +42,7 @@ if ($sqlerro==false) {
     // Apaga ContransLr
     $sqldelete  = "delete ";
     $sqldelete .= "  from contranslr  ";
-    $sqldelete .= " using contranslan, "; 
+    $sqldelete .= " using contranslan, ";
     $sqldelete .= "       contrans, ";
     $sqldelete .= "       conhistdoc ";
     $sqldelete .= " where c47_seqtranslan = c46_seqtranslan ";
@@ -63,7 +63,7 @@ if ($sqlerro==false) {
     // Apaga ContransLan
     if($sqlerro == false) {
       $sqldelete  = "delete ";
-      $sqldelete .= "  from contranslan "; 
+      $sqldelete .= "  from contranslan ";
       $sqldelete .= " using contrans, ";
       $sqldelete .= "       conhistdoc ";
       $sqldelete .= " where c46_seqtrans = c45_seqtrans ";
@@ -84,7 +84,7 @@ if ($sqlerro==false) {
     // Apaga Contrans
     if($sqlerro == false) {
       $sqldelete  = "delete ";
-      $sqldelete .= "  from contrans "; 
+      $sqldelete .= "  from contrans ";
       $sqldelete .= " using conhistdoc ";
       $sqldelete .= " where c45_coddoc = c53_coddoc ";
       $sqldelete .= "   and c45_anousu = $anodestino ";
@@ -130,7 +130,7 @@ if ($sqlerro==false) {
     //echo "<br>linhasorigem $linhasorigem<br>linhasdestino $linhasdestino";
     if (($linhasorigem > 0) && ($linhasdestino == 0 )) {
       // duplica contrans
-        
+
       // contrans
       include("classes/db_contrans_classe.php");
       include("classes/db_contranslan_classe.php");
@@ -138,9 +138,9 @@ if ($sqlerro==false) {
       $cl_contrans    = new cl_contrans ;
       $cl_contranslan = new  cl_contranslan;
       $cl_contranslr  = new  cl_contranslr;
-      
+
       for ($r=0; $r<$linhasorigem; $r++) {
-        db_fieldsmemory($resultorigem,$r);  
+        db_fieldsmemory($resultorigem,$r);
         db_atutermometro($r, $linhasorigem, 'termometroitem', 1, $sMensagemTermometroItem . " (Passo 1/2)");
 
         $cl_contrans->c45_anousu = $anodestino;
@@ -153,8 +153,8 @@ if ($sqlerro==false) {
           break;
         }
       }
-      
-      
+
+
       if ($sqlerro==false) {
         //contranslan
         $sqlcontranslan  = " select * from contranslan ";
@@ -170,7 +170,7 @@ if ($sqlerro==false) {
 
           $c46_seqtrans_antigo    = $c46_seqtrans;
           $c46_seqtranslan_antigo = $c46_seqtranslan;
-          
+
           $sql2  = "select c45_seqtrans ";
           $sql2 .= "  from contrans ";
           $sql2 .= " where c45_coddoc = {$c45_coddoc} ";
@@ -180,12 +180,12 @@ if ($sqlerro==false) {
           $linhas2 = pg_num_rows($result2);
           db_fieldsmemory($result2,0);
           $c46_seqtrans_novo = $c45_seqtrans;
-          
+
           //$c46_valor       = ($c46_valor != "")?$c46_valor:0;
           //$c46_obrigatorio = (!is_null($c46_obrigatorio))?$c46_obrigatorio:'f';
           //$c46_evento      = ($c46_evento != "")?$c46_evento:0;
           //echo "<br>$c c46_valor $c46_valor c46_obrigatorio $c46_obrigatorio c46_evento $c46_evento";
-          
+
           // Seta o Globals em funcao de problema no metodo AtualizaCampos da classe cl_contranslan
           //$GLOBALS["HTTP_POST_VARS"]["c46_obrigatorio"] = $c46_obrigatorio;
           $c46_obrigatorio = ($c46_obrigatorio=='t')?'true':'false';
@@ -209,11 +209,11 @@ if ($sqlerro==false) {
           $sqlcontranslr = "SELECT * FROM contranslr
                             WHERE c47_seqtranslan = $c46_seqtranslan_antigo
                                 AND CASE
-                                        WHEN c47_debito <> 0 AND c47_credito = 0 
+                                        WHEN c47_debito <> 0 AND c47_credito = 0
                                             THEN EXISTS
                                                  (SELECT * FROM conplanoreduz
                                                   WHERE c61_anousu=$anodestino AND c61_instit=c47_instit AND c61_reduz=c47_debito)
-                                        WHEN c47_debito = 0 AND c47_credito <> 0 
+                                        WHEN c47_debito = 0 AND c47_credito <> 0
                                             THEN EXISTS
                                                  (SELECT * FROM conplanoreduz
                                                   WHERE c61_anousu=$anodestino AND c61_instit=c47_instit AND c61_reduz=c47_credito)
@@ -234,7 +234,7 @@ if ($sqlerro==false) {
               if ($c45_coddoc!=31 && $c45_coddoc!=32 && $c45_coddoc!=33 && $c45_coddoc!=34 && $c45_coddoc!=35 && $c45_coddoc!=36 && $c45_coddoc!=37 && $c45_coddoc!=38) {
                 $c47_anousu = $anodestino;
               }
-              
+
               //insert into contranslr
               $cl_contranslr->c47_seqtranslan = $cl_contranslan->c46_seqtranslan ;
               $cl_contranslr->c47_debito      = $c47_debito;
@@ -251,7 +251,7 @@ if ($sqlerro==false) {
                 $erro_msg .= $cl_contranslr->erro_msg;
                 break;
               }
-              
+
             }
             if($sqlerro==true) {
               break;
@@ -260,9 +260,9 @@ if ($sqlerro==false) {
         }
         // for
       }
-      
+
     } else {
-      
+
       if ($linhasorigem == 0) {
         $cldb_viradaitemlog->c35_log = "Não existem (contrans) para ano de origem $anoorigem";
       } else if ($linhasdestino>0) {
@@ -276,7 +276,6 @@ if ($sqlerro==false) {
       if ($cldb_viradaitemlog->erro_status==0) {
         $sqlerro   = true;
         $erro_msg .= $cldb_viradaitemlog->erro_msg;
-        break;
       }
     }
   }
