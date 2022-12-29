@@ -227,7 +227,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         <strong id="txtNumeracao">Numeração:</strong>
                                         <?
                                         db_input('l20_numero', 10, $Il20_numero, true, 'text',  $bloqueianumeracoes, "");
-                                        if ($db_opcao == 1) {
+                                        if ($db_opcao == 1 && !isset($incluir)) {
                                             echo "<script> document.getElementById('l20_numero').style.display = 'none'; </script>";
                                             echo "<script> document.getElementById('txtNumeracao').style.display = 'none'; </script>";
                                         }
@@ -1249,7 +1249,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc, res) {
-
+        console.log('132');
         document.getElementById('l20_numero').style.display = '';
         document.getElementById('txtNumeracao').style.display = '';
 

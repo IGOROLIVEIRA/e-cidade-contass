@@ -118,21 +118,21 @@ if (isset($incluir)) {
 		if (pg_numrows($oProcessoLicitatorio) > 0) {
 			$erro_msg .= "Já existe licitação com o processo licitatório número $l20_edital\n\n";
 			$sqlerro = true;
-			db_msgbox($erro_msg);
+			//db_msgbox($erro_msg);
 		}
 
 		$oNumeracao = db_query("select * from liclicita where l20_numero = $l20_numero and l20_anousu = $anousu and l20_instit = $instit and l20_codtipocom = $l20_codtipocom;");
 		if (pg_numrows($oNumeracao) > 0) {
 			$erro_msg .= "Já existe licitação com a modalidade $l20_codtipocom numeração $l20_numero\n\n";
 			$sqlerro = true;
-			db_msgbox($erro_msg);
+			//db_msgbox($erro_msg);
 		}
 
 		$oEdital = db_query("select * from liclicita where l20_anousu = $anousu and l20_instit = $instit and l20_nroedital = $l20_nroedital;");
-		if (pg_numrows($oNumeracao) > 0) {
+		if (pg_numrows($oEdital) > 0) {
 			$erro_msg .= "Já existe licitação com o edital $l20_nroedital\n\n";
 			$sqlerro = true;
-			db_msgbox($erro_msg);
+			//db_msgbox($erro_msg);
 		}
 	}
 
