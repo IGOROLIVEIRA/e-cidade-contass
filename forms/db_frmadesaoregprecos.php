@@ -112,7 +112,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
           </td>
           <td>
             <?
-            $aModalidade = array("2" => "Pregão", "1" => "Concorrência");
+            $aModalidade = array("3" => "Pregão Eletrônico", "2" => "Pregão Presencial", "1" => "Concorrência");
             db_select("si06_modalidade", $aModalidade, true, $db_opcao, "");
             ?>
           </td>

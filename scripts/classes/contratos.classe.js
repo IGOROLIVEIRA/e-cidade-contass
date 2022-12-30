@@ -401,9 +401,59 @@ contrato = function () {
         var iAdesaoregpreco           = $F('ac16_adesaoregpreco');
         var iLicoutroorgao            = $F('ac16_licoutroorgao');
         var iLei                      = $F('ac16_lei');
+        var iReajuste                 = $F('ac16_reajuste');
+        var iCriterioreajuste         = $F('ac16_criterioreajuste');
+        var dtReajuste                = $F('ac16_datareajuste');
+        var sPeriodoreajuste          = $F('ac16_periodoreajuste');
+        var iIndicereajuste           = $F('ac16_indicereajuste');
+        var sDescricaoreajuste        = $F('ac16_descricaoreajuste');
+        var sDescricaoindice          = $F('ac16_descricaoindice');
 
         /* Novas validaï¿½ï¿½es para atender o SICOM */
 
+        if(iReajuste==0){
+            alert("Usuário: Campo Possui Critério de Reajuste não informado.");
+            $('ac16_reajuste').focus();
+            return false;
+        }else if(iReajuste==1){
+            if(iCriterioreajuste==0){
+                alert("Usuário: Campo Critério de Reajuste não informado.");
+                $('ac16_criterioreajuste').focus();
+                return false;
+            }
+            if(dtReajuste==""){
+                alert("Usuário: Campo Data Base de Reajuste não informado.");
+                $('ac16_datareajuste').focus();
+                return false;
+            }
+            if(sPeriodoreajuste==""){
+                alert("Usuário: Campo Período de Reajuste não informado.");
+                $('ac16_periodoreajuste').focus();
+                return false;
+            }
+            if(iCriterioreajuste==1){
+                if(iIndicereajuste==0){
+                    alert("Usuário: Campo Índice de Reajuste não informado.");
+                    $('ac16_indicereajuste').focus();
+                    return false;
+                }
+                if(iIndicereajuste==6){
+                    if(sDescricaoindice==""){
+                        alert("Usuário: Campo Descrição do Índice não informado.");
+                        $('ac16_descricaoindice').focus();
+                        return false;
+                    }
+                }
+            }else{
+                if(sDescricaoreajuste==0){
+                    alert("Usuário: Campo Descrição de Reajuste não informado.");
+                    $('ac16_descricaoreajuste').focus();
+                    return false;
+                }
+            }
+            
+            
+        }
         if(iOrigem == '3') {
             if ((iTipoOrigem == '2' || iTipoOrigem == '3') && !iLicitacao) {
                 alert('Informe uma Licitaï¿½ï¿½o.');
@@ -535,6 +585,7 @@ contrato = function () {
             return false;
       }
 
+
         var oParam      = new Object();
         oParam.exec     = "salvarContrato";
         oParam.contrato = new Object();
@@ -566,7 +617,13 @@ contrato = function () {
         oParam.contrato.iAdesaoregpreco           = iAdesaoregpreco;
         oParam.contrato.iLicoutroorgao            = iLicoutroorgao;
         oParam.contrato.iLei                      = iLei;
-
+        oParam.contrato.iReajuste                 = iReajuste;
+        oParam.contrato.iCriterioreajuste         = iCriterioreajuste;
+        oParam.contrato.dtReajuste                = dtReajuste;
+        oParam.contrato.iIndicereajuste           = iIndicereajuste;
+        oParam.contrato.sDescricaoreajuste        = sDescricaoreajuste;
+        oParam.contrato.sDescricaoindice          = sDescricaoindice;
+        oParam.contrato.sPeriodoreajuste          = sPeriodoreajuste;
         js_divCarregando('Aguarde, salvando dados do contrato','msgbox');
         var oAjax   = new Ajax.Request(
             sURL,
@@ -591,6 +648,10 @@ contrato = function () {
         $("ac16_datafim").disabled                 = true;
         $("ac16_deptoresponsavel").disabled        = true;
         $("ac16_acordocomissao").disabled          = true;
+        $("ac16_criterioreajuste").disabled        = true;
+        $("ac16_datareajuste").disabled        = true;
+        $("ac16_indicereajuste").disabled        = true;
+        $("ac16_reajuste").disabled          = true;
         $("ac16_datainicio").style.backgroundColor = "#DEB887";
         $("ac16_datafim").style.backgroundColor    = "#DEB887";
         $("ac16_anousu").style.backgroundColor    = "#DEB887";
@@ -641,6 +702,7 @@ contrato = function () {
 
             me.bloqueiaCampos();
 
+            
             parent.document.formaba.acordoitem.disabled       = false;
             (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordoitem.location.href         = 'aco1_acordoitem001.php?ac20_acordo='+oRetorno.iCodigoContrato;
             parent.document.formaba.acordogarantia.disabled   = false;
@@ -724,6 +786,18 @@ contrato = function () {
             $('ac50_sequencial').value            = oRetorno.contrato.iCategoriaAcordo;
             $('ac16_tipounidtempoperiodo').value  = oRetorno.contrato.iTipoUnidadeTempoVigencia;
             $('ac16_qtdperiodo').value            = oRetorno.contrato.iQtdPeriodoVigencia;
+            if(oRetorno.contrato.iReajuste == 't'){
+                $('ac16_reajuste').value            = 1;
+            }else{
+                $('ac16_reajuste').value            = 2;
+            }
+            
+            $('ac16_criterioreajuste').value            = oRetorno.contrato.iCriterioreajuste;
+            $('ac16_datareajuste').value            = oRetorno.contrato.dtReajuste;
+            $('ac16_periodoreajuste').value            = oRetorno.contrato.sPeriodoreajuste.urlDecode();
+            $('ac16_indicereajuste').value            = oRetorno.contrato.iIndicereajuste;
+            $('ac16_descricaoreajuste').value            = oRetorno.contrato.sDescricaoreajuste.urlDecode();
+            $('ac16_descricaoindice').value            = oRetorno.contrato.sDescricaoindice.urlDecode();
             //$('ac16_acordoclassificacao').value   = oRetorno.contrato.iClassificacao;
             $('ac16_valor').value                 = js_formatar(oRetorno.contrato.nValorContrato, 'f');
             js_verificatipoorigem();
@@ -735,7 +809,7 @@ contrato = function () {
                 js_pesquisaac16_licoutroorgao(false);
             }
 
-
+            $('ac16_descricaoreajuste').style.display = 'none';
             me.mostraValorAcordo();
 
             var dtInicio                     = oRetorno.contrato.dtInicio;
@@ -743,6 +817,8 @@ contrato = function () {
             if (js_somarDiasVigencia(dtInicio, dtTermino) != false) {
                 $('diasvigencia').value        = js_somarDiasVigencia(dtInicio, dtTermino);
             }
+
+
             parent.document.formaba.acordogarantia.disabled = false;
             top.corpo.iframe_acordogarantia.location.href   = 'aco1_acordoacordogarantia001.php?ac12_acordo='+
                 oRetorno.contrato.iSequencial;

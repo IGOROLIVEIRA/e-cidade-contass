@@ -56,6 +56,9 @@ class cl_acordoposicao {
    var $ac26_numeroaditamento = null;
    var $ac26_numeroapostilamento = null;
    var $ac26_vigenciaalterada = null;//OC5304
+   var $ac26_percentualreajuste = 0;//LeiauteAM2023
+   var $ac26_indicereajuste = null;//LeiauteAM2023
+   var $ac26_descricaoindice = null;//LeiauteAM2023
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ac26_sequencial = int4 = Código Sequencial
@@ -67,7 +70,10 @@ class cl_acordoposicao {
                  ac26_emergencial = bool = Posição Emergencial
                  ac26_observacao = text = Observação
                  ac26_numeroaditamento = varchar(20) = Número do aditamento
+                 ac26_percentualreajuste = varchar(20) = Número do aditamento
+                 ac26_descricaoindice = varchar(20) = Número do aditamento
                  ac26_numeroapostilamento = varchar(20) = Número do apostilamento
+                 ac26_vigenciaalterada = varchar(1) = Caso vigência alterada
                  ac26_vigenciaalterada = varchar(1) = Caso vigência alterada
                  ";
    //funcao construtor da classe
@@ -104,6 +110,9 @@ class cl_acordoposicao {
        $this->ac26_emergencial = ($this->ac26_emergencial == "f"?@$GLOBALS["HTTP_POST_VARS"]["ac26_emergencial"]:$this->ac26_emergencial);
        $this->ac26_observacao = ($this->ac26_observacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_observacao"]:$this->ac26_observacao);
        $this->ac26_numeroaditamento = ($this->ac26_numeroaditamento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_numeroaditamento"]:$this->ac26_numeroaditamento);
+       $this->ac26_percentualreajuste = ($this->ac26_percentualreajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_percentualreajuste"]:$this->ac26_percentualreajuste);
+       $this->ac26_indicereajuste = ($this->ac26_indicereajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_indicereajuste"]:$this->ac26_indicereajuste);
+       $this->ac26_descricaoindice = ($this->ac26_descricaoindice == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_descricaoindice"]:$this->ac26_descricaoindice);
        $this->ac26_numeroapostilamento = ($this->ac26_numeroapostilamento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_numeroapostilamento"]:$this->ac26_numeroapostilamento);
      }else{
        $this->ac26_sequencial = ($this->ac26_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_sequencial"]:$this->ac26_sequencial);
@@ -204,6 +213,9 @@ class cl_acordoposicao {
                                       ,ac26_numeroaditamento
                                       ,ac26_numeroapostilamento
                                       ,ac26_vigenciaalterada
+                                      ,ac26_indicereajuste
+                                      ,ac26_percentualreajuste
+                                      ,ac26_descricaoindice
                        )
                 values (
                                 $this->ac26_sequencial
@@ -217,7 +229,11 @@ class cl_acordoposicao {
                                ,'$this->ac26_numeroaditamento'
                                ,'$this->ac26_numeroapostilamento'
                                ,'$this->ac26_vigenciaalterada'
+                               ," . ($this->ac26_indicereajuste == "null" || $this->ac26_indicereajuste == "" ? '0' :  $this->ac26_indicereajuste )."
+                               ," . ($this->ac26_percentualreajuste == "null" || $this->ac26_percentualreajuste == "" ? 'null' : "'" . $this->ac26_percentualreajuste . "'") . "
+                               ," . ($this->ac26_descricaoindice == "null" || $this->ac26_descricaoindice == "" ? 'null' : "'" . $this->ac26_descricaoindice . "'") . "
                       )";
+
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());

@@ -551,6 +551,126 @@ class Acordo
         return $this;
     }
 
+        /**
+     * @return mixed
+     */
+    public function getReajuste()
+    {
+        return $this->iReajuste;
+    }
+
+    /**
+     * @param mixed $iReajuste
+     */
+    public function setReajuste($iReajuste)
+    {
+        $this->iReajuste = $iReajuste;
+        return $this;
+    }
+
+            /**
+     * @return mixed
+     */
+    public function getCriterioReajuste()
+    {
+        return $this->iCriterioreajuste;
+    }
+
+    /**
+     * @param mixed $iCriterioreajuste
+     */
+    public function setCriterioReajuste($iCriterioreajuste)
+    {
+        $this->iCriterioreajuste = $iCriterioreajuste;
+        return $this;
+    }
+
+                /**
+     * @return mixed
+     */
+    public function getDataReajuste()
+    {
+        return $this->dtReajuste;
+    }
+
+    /**
+     * @param mixed $dtReajuste
+     */
+    public function setDataReajuste($dtReajuste)
+    {
+        $this->dtReajuste = $dtReajuste;
+        return $this;
+    }
+
+                    /**
+     * @return mixed
+     */
+    public function getPeriodoreajuste()
+    {
+        return $this->sPeriodoreajuste;
+    }
+
+    /**
+     * @param mixed $sPeriodoreajuste
+     */
+    public function setPeriodoreajuste($sPeriodoreajuste)
+    {
+        $this->sPeriodoreajuste = $sPeriodoreajuste;
+        return $this;
+    }
+
+                        /**
+     * @return mixed
+     */
+    public function getIndiceReajuste()
+    {
+        return $this->iIndicereajuste;
+    }
+
+    /**
+     * @param mixed $iIndicereajuste
+     */
+    public function setIndiceReajuste($iIndicereajuste)
+    {
+        $this->iIndicereajuste = $iIndicereajuste;
+        return $this;
+    }
+
+                            /**
+     * @return mixed
+     */
+    public function getDescricaoReajuste()
+    {
+        return $this->sDescricaoreajuste;
+    }
+
+    /**
+     * @param mixed $sDescricaoreajuste
+     */
+    public function setDescricaoReajuste($sDescricaoreajuste)
+    {
+        $this->sDescricaoreajuste = $sDescricaoreajuste;
+        return $this;
+    }
+    
+                            /**
+     * @return mixed
+     */
+    public function getDescricaoIndice()
+    {
+        return $this->sDescricaoindice;
+    }
+
+    /**
+     * @param mixed $sDescricaoindice
+     */
+    public function setDescricaoIndice($sDescricaoindice)
+    {
+        $this->sDescricaoindice = $sDescricaoindice;
+        return $this;
+    }
+    
+
     /**
      * @return mixed
      */
@@ -621,7 +741,13 @@ class Acordo
                 $this->setDataRescisao(db_formatar($oDadosAcordo->ac16_datarescisao, "d"));
                 $this->setValorRescisao($oDadosAcordo->ac16_valorrescisao);
                 $this->setSituacaoVigencia(($oDadosAcordo->ac16_semvigencia == 'f' || $oDadosAcordo->ac16_semvigencia == "" || $oDadosAcordo->ac16_semvigencia == null) ? false : true);
-
+                $this->setReajuste($oDadosAcordo->ac16_reajuste);
+                $this->setCriterioReajuste($oDadosAcordo->ac16_criterioreajuste);
+                $this->setDataReajuste($oDadosAcordo->ac16_datareajuste);
+                $this->setPeriodoreajuste($oDadosAcordo->ac16_periodoreajuste);
+                $this->setIndiceReajuste($oDadosAcordo->ac16_indicereajuste);
+                $this->setDescricaoReajuste($oDadosAcordo->ac16_descricaoreajuste);
+                $this->setDescricaoIndice($oDadosAcordo->ac16_descricaoindice);
 
 
                 if (!empty($oDadosAcordo->ac16_licitacao)) {
@@ -1703,6 +1829,13 @@ class Acordo
         $oDaoAcordo->ac16_adesaoregpreco           = $this->getiAdesaoregpreco();
         $oDaoAcordo->ac16_tipocadastro             = $this->getITipocadastro();
         $oDaoAcordo->ac16_providencia              = $this->getProvidencia();
+        $oDaoAcordo->ac16_reajuste                 = $this->getReajuste();
+        $oDaoAcordo->ac16_criterioreajuste         = $this->getCriterioReajuste();
+        $oDaoAcordo->ac16_datareajuste             = "" . implode("-", array_reverse(explode("/", $this->getDataReajuste())));
+        $oDaoAcordo->ac16_periodoreajuste          = $this->getPeriodoreajuste();
+        $oDaoAcordo->ac16_indicereajuste           = $this->getIndiceReajuste();
+        $oDaoAcordo->ac16_descricaoreajuste        = $this->getDescricaoReajuste();
+        $oDaoAcordo->ac16_descricaoindice          = $this->getDescricaoIndice();
         $iCodigoAcordo                             = $this->getCodigoAcordo();
 
         /**
@@ -3176,10 +3309,13 @@ class Acordo
      * @param $sVeiculoDivulgacao
      * @param $iTipoalteracaoAditivo
      * @param $sVigenciaalterada
+     * @param $sPercentualReajuste
+     * @param $iIndiceReajusteacordo
+     * @param $sDescricaoIndiceacordo
      * @return $this
      * @throws Exception
      */
-    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $sJustificativa, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia, $datareferencia)
+    public function aditar($aItens, $iTipoAditamento, $dtVigenciaInicial, $dtVigenciaFinal, $sNumeroAditamento, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $sJustificativa, $iTipoalteracaoAditivo, $aSelecionados, $sVigenciaalterada, $lProvidencia, $datareferencia, $sPercentualReajuste, $iIndiceReajusteacordo, $sDescricaoIndiceacordo)
     {
         $nValorItens = 0;
         $nValorLancamentoContabil = 0;
@@ -3212,6 +3348,9 @@ class Acordo
         $oNovaPosicao->setVigenciaFinal($dtVigenciaFinal);
         $oNovaPosicao->setPosicaoPeriodo($dtVigenciaInicial, $dtVigenciaFinal, $this->getPeriodoComercial());
         $oNovaPosicao->setVigenciaAlterada($sVigenciaalterada);
+        $oNovaPosicao->setPercentualReajuste($sPercentualReajuste);
+        $oNovaPosicao->setIndiceReajusteacordo($iIndiceReajusteacordo);
+        $oNovaPosicao->setDescricaoIndiceacordo($sDescricaoIndiceacordo);
 
         $oNovaPosicao->save();
 
@@ -4254,7 +4393,9 @@ class Acordo
         $oNovaPosicao->setVigenciaInicial($dtVigenciaInicial);
         $oNovaPosicao->setVigenciaFinal($dtVigenciaFinal);
         $oNovaPosicao->setPosicaoPeriodo($dtVigenciaInicial, $dtVigenciaFinal, $this->getPeriodoComercial());
-
+        $oNovaPosicao->setPercentualReajuste($oApostila->percentualreajuste);
+        $oNovaPosicao->setIndiceReajusteacordo($oApostila->indicereajuste);
+        $oNovaPosicao->setDescricaoIndiceacordo($oApostila->descricaoindice);
         $oNovaPosicao->save();
 
         /**

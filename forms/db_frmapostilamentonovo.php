@@ -59,6 +59,37 @@ $clrotulo->label("ac16_resumoobjeto");
                     ?>
                 </td>
             </tr>
+            <tr id="trreajuste" style="display: none;">
+                <td >
+                    <b>Percentual de Reajuste:</b>
+              
+                    
+
+                </td>
+                <td >
+                <?
+                    db_input('si03_percentualreajuste', 10, $Isi03_numapostilamento, true, 'text', $db_opcao, "")
+                    ?>
+                    <b>Índice Reajuste:</b>
+               
+                    <?
+                    $x = array("0" => "Selecione", "1" => "IPCA", "2" => "INPC", "3" => "INCC", "4" => "IGP-M", "5" => "IGP-DI", "6" => "Outro");
+                    db_select('si03_indicereajuste', $x, true, $db_opcao, "onchange='js_indicereajuste()'");
+                    ?>
+                </td>
+            </tr>
+            <tr id="trdescricaoreajuste" style="display: none;">
+
+                
+                    <td>
+                        <b>Descriçao do Índice:</b>
+                    </td>
+                    <td>
+                        <?
+                        db_textarea('si03_descricaoindice', 3, 58, $Isi03_descricaoindice, true, 'text', $db_opcao, "style='resize: none'", "", "", "300");
+                    ?>
+                </td>
+            </tr>
 
             <tr>
                 <td title="<?= @$Tsi03_numapostilamento ?>">
@@ -1165,6 +1196,19 @@ $clrotulo->label("ac16_resumoobjeto");
         if ($("si03_justificativa").value == "" && document.getElementById("justificativa").style.display != 'none') {
             return alert("Usuário: Este contrato  decorrente de Licitação e está utilizando a lei n 14133/2021, sendo assim,  necessário o preenchimento do campo Justificativa.");
         }
+        if ($("si03_tipoapostila").value == "01") {
+            if ($("si03_percentualreajuste").value == "") {
+                return alert("Obrigatório informar o Percentual de Reajuste.");
+            }
+            if ($("si03_indicereajuste").value == "0") {
+                return alert("Obrigatório informar o Indice Reajuste.");
+            }
+            if ($("si03_indicereajuste").value == "6") {
+                if ($("si03_descricaoindice").value == "") {
+                return alert("Obrigatório informar a Descrição do Indice.");
+            }
+            }
+        }
 
         oGridItens.getRows().forEach(function(oRow) {
 
@@ -1185,6 +1229,9 @@ $clrotulo->label("ac16_resumoobjeto");
         oApostila.numapostilamento = $("si03_numapostilamento").value;
         oApostila.datareferencia = $("si03_datareferencia").value;
         oApostila.justificativa = $("si03_justificativa").value;
+        oApostila.percentualreajuste = $("si03_percentualreajuste").value;
+        oApostila.indicereajuste = $("si03_indicereajuste").value;
+        oApostila.descricaoindice = $("si03_descricaoindice").value;
 
 
         var oParam = {
@@ -1294,6 +1341,17 @@ $clrotulo->label("ac16_resumoobjeto");
             .execute();
     }
 
+    function js_indicereajuste(){
+       indice = $("si03_indicereajuste").value;
+       if(indice==6){
+        document.getElementById("trdescricaoreajuste").style.display = '';
+       }else{
+        document.getElementById("trdescricaoreajuste").style.display = 'none';
+        $("si03_descricaoindice").value = "";
+       }
+        
+    }
+
     function js_changeTipoApostila(iTipo) {
 
 
@@ -1346,6 +1404,13 @@ $clrotulo->label("ac16_resumoobjeto");
                 document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "none";
                 document.getElementById('col11').style.display = "none";
 
+            }
+            if (iTipo == "01") {
+                document.getElementById('trreajuste').style.display = "";
+            }else{
+                document.getElementById('trreajuste').style.display = "none";
+                $("si03_percentualreajuste").value = "";
+                $("si03_indicereajuste").options[0].selected = true;
             }
 
         });
