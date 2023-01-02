@@ -633,8 +633,7 @@ try {
 
         if (pg_numrows($result) == 0) {
           $oRetorno->erro  = true;
-          $oRetorno->message = " Usuário: Item $pcmater->pc16_codmater sem dotação vinculada.";
-          break;
+          throw new Exception(" Usuário: Item $pcmater->pc16_codmater sem dotação vinculada.");
         }
       }
 
