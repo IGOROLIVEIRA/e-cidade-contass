@@ -42,6 +42,7 @@ $clrotulo->label("l20_objeto");
 
 if ($db_opcao == 1) {
     $db_action = "aco1_acordo004.php";
+    $ac50_sequencial = 1;
 } else if ($db_opcao == 2 || $db_opcao == 22) {
     $db_action = "aco1_acordo005.php";
 } else if ($db_opcao == 3 || $db_opcao == 33) {
@@ -89,6 +90,15 @@ db_app::load("dbtextFieldData.widget.js");
     #ac16_tipoorigem,
     #ac16_lei {
         width: 410px;
+    }
+
+    #ac16_reajuste,
+    #ac16_periodoreajuste {
+        width: 90px;
+    }
+
+    #ac16_criterioreajuste {
+        width: 130px;
     }
 
     #l20_objeto,
@@ -488,7 +498,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                     ?>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <tr style="display: none;">
                                                 <td nowrap title="Tipo de Instrumento">
                                                     <?
                                                     db_ancora('<b>Tipo Instrumento:</b>', "onchange=js_pesquisaac50_descricao(true)", $db_opcao);
@@ -527,6 +537,115 @@ db_app::load("dbtextFieldData.widget.js");
                                                 <td>
                                                     <?
                                                     db_textarea('ac16_formapagamento', 3, 48, $Iac16_objeto, true, 'text', $db_opcao, "", "", "", "100");
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <table>
+                                                        <tr>
+                                                            <td id='tdpossuireajuste' width="300px">
+                                                                <b>Possui Critério Reajuste:</b>
+
+                                                                <?
+                                                                $aPossui = array(
+                                                                    0 => 'Selecione',
+                                                                    1 => 'Sim',
+                                                                    2 => 'Não'
+                                                                );
+                                                                db_select('ac16_reajuste', $aPossui, true, $db_opcao, "onchange='js_possuireajuste()'", "");
+                                                                ?>
+                                                            </td>
+
+                                                            <td width="23%" id='tdcriterioreajuste' style="display: inline;">
+                                                                <b>Critério de Reajuste:</b>
+
+                                                                <?
+                                                                $aCriterios = array(
+                                                                    0 => 'Selecione',
+                                                                    1 => 'Índice Único',
+                                                                    2 => 'Cesta de Índices',
+                                                                    3 => 'Índice Específico'
+                                                                );
+                                                                db_select('ac16_criterioreajuste', $aCriterios, true, $db_opcao, "onchange='js_criterio()'", "");
+                                                                ?>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <table border="0">
+                                                        <tr id='trdatareajuste'>
+                                                            <td width="140px">
+                                                                <b>Data Base Reajuste:</b>
+                                                            </td>
+                                                            <td width="160px">
+                                                                <?
+                                                                db_inputdata(
+                                                                    'ac16_datareajuste',
+                                                                    @$ac16_datareajuste_dia,
+                                                                    @$ac16_datareajuste_mes,
+                                                                    @$ac16_datareajuste_ano,
+                                                                    true,
+                                                                    'text',
+                                                                    $iCampo,
+                                                                    "onchange='return js_somardias();'",
+                                                                    "",
+                                                                    "",
+                                                                    "return parent.js_somardias();"
+                                                                );
+                                                                ?>
+                                                            </td>
+
+                                                            <td id='tdindicereajuste'>
+                                                                <b>Índice de Reajuste:</b>
+
+                                                                <?
+                                                                $aIndice = array(
+                                                                    0 => 'Selecione',
+                                                                    1 => 'IPCA',
+                                                                    2 => 'INPC',
+                                                                    3 => 'INCC',
+                                                                    4 => 'IGP-M',
+                                                                    5 => 'IGP-DI',
+                                                                    6 => 'Outro'
+                                                                );
+                                                                db_select('ac16_indicereajuste', $aIndice, true, $db_opcao, "onchange='js_indicereajuste()'", "");
+                                                                ?>
+                                                            </td>
+                                                        </tr>
+                                                        <tr id='trperiodoreajuste'>
+                                                            <td width="140px">
+                                                                <b>Período do Reajuste:</b>
+                                                            </td>
+                                                            <td>
+                                                                <?
+                                                                db_input('ac16_periodoreajuste', 12, 1, true, $db_opcao, "", "", "", "", "", 2);
+                                                                ?>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr id='trdescricaoreajuste'>
+                                                <td>
+                                                    <b> Descrição do Critério de Reajuste </b>
+                                                </td>
+                                                <td>
+                                                    <?
+                                                    db_textarea('ac16_descricaoreajuste', 3, 69, '', true, 'text', $db_opcao, "", "", "", "300");
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                            <tr id='trdescricaoindicereajuste'>
+                                                <td>
+                                                    <b> Descrição do Índice de Reajuste </b>
+                                                </td>
+                                                <td>
+                                                    <?
+                                                    db_textarea('ac16_descricaoindice', 3, 69, '', true, 'text', $db_opcao, "", "", "", "300");
                                                     ?>
                                                 </td>
                                             </tr>
@@ -684,6 +803,25 @@ db_app::load("dbtextFieldData.widget.js");
     var sCaminhoMensagens = "patrimonial.contratos.db_frmacordo";
 
     $('trValorAcordo').style.display = 'none';
+
+    <?
+    if ($db_opcao != 1) {
+
+        echo "$('tdcriterioreajuste').style.display = '';
+            $('trdatareajuste').style.display = '';
+            $('trperiodoreajuste').style.display = '';
+            $('trdescricaoreajuste').style.display = '';
+            $('tdindicereajuste').style.display = 'none';
+            $('trdescricaoindicereajuste').style.display = '';";
+    } else {
+        echo "$('tdcriterioreajuste').style.display = 'none';
+            $('trdatareajuste').style.display = 'none';
+            $('trperiodoreajuste').style.display = 'none';
+            $('trdescricaoreajuste').style.display = 'none';
+            $('tdindicereajuste').style.display = 'none';
+            $('trdescricaoindicereajuste').style.display = 'none';";
+    }
+    ?>
 
     function js_validaCampoValor() {
 
@@ -1016,6 +1154,8 @@ db_app::load("dbtextFieldData.widget.js");
         js_getEmpenhosVinculados();
     }
 
+
+
     //função para chamada da grid que tera erros e avisos
 
     function js_montaGridEmpenhos() {
@@ -1098,6 +1238,7 @@ db_app::load("dbtextFieldData.widget.js");
             //alert(5555);
             //$('ac16_origem').disabled        = true;
         }
+
 
     }
 
@@ -1293,6 +1434,7 @@ db_app::load("dbtextFieldData.widget.js");
         ?>
 
     }
+
 
     /**
      * funcao para mostrar fornecedores habilitados quando origem do acordo for manual
@@ -1659,6 +1801,61 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('credenciamento').style.display = "none";
         }
 
+    }
+
+    /*
+     *função para veiricar se possui reajuste e habilitar novas entradas
+     */
+    function js_possuireajuste() {
+
+        iPossuicriterio = document.form1.ac16_reajuste.value;
+        if (iPossuicriterio == 1) {
+            document.getElementById('tdcriterioreajuste').style.display = 'inline';
+            document.getElementById('trdatareajuste').style.display = 'inline';
+            document.getElementById('trperiodoreajuste').style.display = 'inline';
+        } else {
+            document.getElementById('tdcriterioreajuste').style.display = 'none';
+            document.getElementById('trdatareajuste').style.display = 'none';
+            document.getElementById('trperiodoreajuste').style.display = 'none';
+            document.getElementById('trdescricaoreajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoreajuste').value = '';
+            document.form1.ac16_indicereajuste.options[0].selected = true;
+            document.form1.ac16_criterioreajuste.options[0].selected = true;
+            document.getElementById('ac16_periodoreajuste').value = '';
+            document.getElementById('ac16_datareajuste').value = null;
+        }
+    }
+
+    function js_indicereajuste() {
+        iIndicereajuste = document.form1.ac16_indicereajuste.value;
+        if (iIndicereajuste == 6) {
+            document.getElementById('trdescricaoindicereajuste').style.display = '';
+        } else {
+            document.getElementById('trdescricaoindicereajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoindice').value = '';
+        }
+    }
+
+    function js_criterio() {
+        icriterio = document.form1.ac16_criterioreajuste.value;
+
+        if (icriterio == 1) {
+            document.getElementById('tdindicereajuste').style.display = 'inline';
+            document.getElementById('trdescricaoreajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoreajuste').value = '';
+        } else if (icriterio == 2 || icriterio == 3) {
+            document.getElementById('tdindicereajuste').style.display = 'none';
+            document.getElementById('trdescricaoreajuste').style.display = '';
+            document.form1.ac16_indicereajuste.options[0].selected = true;
+            document.getElementById('trdescricaoindicereajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoindice').value = '';
+        } else {
+            document.getElementById('trdescricaoreajuste').style.display = 'none';
+            document.getElementById('tdindicereajuste').style.display = 'none';
+            document.form1.ac16_indicereajuste.options[0].selected = true;
+            document.getElementById('trdescricaoindicereajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoindice').value = '';
+        }
     }
 
     function js_verificaorigem() {

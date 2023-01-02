@@ -73,8 +73,8 @@ $clcredenciamentosaldo = new cl_credenciamentosaldo();
 $erro_msg = '';
 $db_botao = false;
 $db_opcao = 33;
-if(isset($excluir)){
-    $sqlerro=false;
+if (isset($excluir)) {
+    $sqlerro = false;
     $db_opcao = 3;
 
 
@@ -91,11 +91,11 @@ if(isset($excluir)){
     $sqlerro = $status == 1 || !$status ? false : true;
     $erro_msg = $sqlerro ? 'Licitação possui Edital lançado.' : '';
 
-    if(!$sqlerro) {
-        $sqlAnexos = $cleditaldocumentos->sql_query('','l48_arquivo', '', 'l48_liclicita = '.$l20_codigo);
+    if (!$sqlerro) {
+        $sqlAnexos = $cleditaldocumentos->sql_query('', 'l48_arquivo', '', 'l48_liclicita = ' . $l20_codigo);
         $rsAnexos = $cleditaldocumentos->sql_record($sqlAnexos);
 
-        if($cleditaldocumentos->numrows){
+        if ($cleditaldocumentos->numrows) {
             $cleditaldocumentos->excluir('', 'l48_liclicita = ' . $l20_codigo);
             if ($cleditaldocumentos->erro_status == 0) {
                 $sqlerro = true;
@@ -104,32 +104,32 @@ if(isset($excluir)){
         }
     }
 
-    if(!$sqlerro) {
+    if (!$sqlerro) {
         $sqlCodigo = $clobrascodigos->sql_query('', 'db151_codigoobra', '', 'db151_liclicita = ' . $l20_codigo);
         $rsCodigo = $clobrascodigos->sql_record($sqlCodigo);
         $codigoObra = db_utils::fieldsMemory($rsCodigo, 0)->db151_codigoobra;
 
-        if($clobrascodigos->numrows){
-            $clobrasdadoscompl->excluir('', 'db150_codobra = '.$codigoObra);
-            if ($clobrasdadoscompl->erro_status == 0){
+        if ($clobrascodigos->numrows) {
+            $clobrasdadoscompl->excluir('', 'db150_codobra = ' . $codigoObra);
+            if ($clobrasdadoscompl->erro_status == 0) {
                 $sqlerro  = true;
                 $erro_msg = $clobrasdadoscompl->erro_msg;
             }
 
             $clobrascodigos->excluir($codigoObra);
-            if($clobrascodigos->erro_status == 0){
+            if ($clobrascodigos->erro_status == 0) {
                 $sqlerro  = true;
                 $erro_msg = $clobrascodigos->erro_msg;
             }
         }
 
-        if(!$sqlerro){
-            $sqledital = $clliclancedital->sql_query(null,"*",null,'l47_liclicita = '.$l20_codigo);
+        if (!$sqlerro) {
+            $sqledital = $clliclancedital->sql_query(null, "*", null, 'l47_liclicita = ' . $l20_codigo);
             $rsedital = $clliclancedital->sql_record($sqledital);
 
-            if($clliclancedital->numrows){
-                $clliclancedital->excluir('', 'l47_liclicita = '.$l20_codigo);
-                if ($clliclancedital->erro_status == 0){
+            if ($clliclancedital->numrows) {
+                $clliclancedital->excluir('', 'l47_liclicita = ' . $l20_codigo);
+                if ($clliclancedital->erro_status == 0) {
                     $sqlerro  = true;
                     $erro_msg = $clliclancedital->erro_msg;
                 }
@@ -138,43 +138,42 @@ if(isset($excluir)){
     }
 
 
-    $clliclicitaweb->sql_record($clliclicitaweb->sql_query_file(null,"*",null,"l29_liclicita=$l20_codigo"));
-    if ($clliclicitaweb->numrows > 0){
+    $clliclicitaweb->sql_record($clliclicitaweb->sql_query_file(null, "*", null, "l29_liclicita=$l20_codigo"));
+    if ($clliclicitaweb->numrows > 0) {
 
         $sqlerro  = true;
         $erro_msg = "Licitação já publicada ou baixada.\\n Não pode ser Excluida";
-
     }
-    if ($sqlerro == false){
-        $sqlSituacao = $clliclicitasituacao->sql_query(null,"*",null,"l11_liclicita = $l20_codigo");
+    if ($sqlerro == false) {
+        $sqlSituacao = $clliclicitasituacao->sql_query(null, "*", null, "l11_liclicita = $l20_codigo");
         $rsSituacao = $clliclicitasituacao->sql_record($sqlSituacao);
 
-        if($clliclicitasituacao->numrows){
-            $clliclicitasituacao->excluir(null,"l11_liclicita = $l20_codigo");
-            if ($clliclicitasituacao->erro_status == 0){
+        if ($clliclicitasituacao->numrows) {
+            $clliclicitasituacao->excluir(null, "l11_liclicita = $l20_codigo");
+            if ($clliclicitasituacao->erro_status == 0) {
                 $sqlerro  = true;
                 $erro_msg = $clliclicitasituacao->erro_msg;
             }
         }
     }
 
-    if ($sqlerro==false){
-        $clliccomissaocgm->excluir(null,"l31_licitacao=$l20_codigo");
-        if ($clliccomissaocgm->erro_status==0){
-            $sqlerro=true;
-            $erro_msg=$clliccomissaocgm->erro_msg;
+    if ($sqlerro == false) {
+        $clliccomissaocgm->excluir(null, "l31_licitacao=$l20_codigo");
+        if ($clliccomissaocgm->erro_status == 0) {
+            $sqlerro = true;
+            $erro_msg = $clliccomissaocgm->erro_msg;
         }
     }
-    if ($sqlerro==false) {
+    if ($sqlerro == false) {
 
         $sqlCredSaldo = $clcredenciamentosaldo->sql_query_file(null, "*", null, 'l213_licitacao = ' . $l20_codigo);
         $rsCredSaldo = $clcredenciamentosaldo->sql_record($sqlCredSaldo);
 
         if ($clcredenciamentosaldo->numrows) {
             $clcredenciamentosaldo->excluir(null, 'l213_licitacao = ' . $l20_codigo);
-            if ($clcredenciamentosaldo->erro_status==0){
-                $sqlerro=true;
-                $erro_msg=$clcredenciamentosaldo->erro_msg;
+            if ($clcredenciamentosaldo->erro_status == 0) {
+                $sqlerro = true;
+                $erro_msg = $clcredenciamentosaldo->erro_msg;
             }
         }
 
@@ -183,39 +182,39 @@ if(isset($excluir)){
 
         if ($clcredenciamento->numrows) {
             $clcredenciamento->excluir_cred_licitacao($l20_codigo);
-            if ($clcredenciamento->erro_status==0){
-                $sqlerro=true;
-                $erro_msg=$clcredenciamento->erro_msg;
+            if ($clcredenciamento->erro_status == 0) {
+                $sqlerro = true;
+                $erro_msg = $clcredenciamento->erro_msg;
             }
         }
     }
 
-    $result_item = $clliclicitem->sql_record($clliclicitem->sql_query_file(null,"l21_codigo",null,"l21_codliclicita=$l20_codigo"));
+    $result_item = $clliclicitem->sql_record($clliclicitem->sql_query_file(null, "l21_codigo", null, "l21_codliclicita=$l20_codigo"));
     $numrows_item = $clliclicitem->numrows;
-    for($w=0;$w<$numrows_item;$w++){
-        db_fieldsmemory($result_item,$w);
+    for ($w = 0; $w < $numrows_item; $w++) {
+        db_fieldsmemory($result_item, $w);
 
-        if ($sqlerro==false){
-            $clpcorcamitemlic->excluir(null,"pc26_liclicitem=$l21_codigo");
-            if ($clpcorcamitemlic->erro_status==0){
-                $sqlerro=true;
-                $erro_msg=$clpcorcamitemlic->erro_msg;
+        if ($sqlerro == false) {
+            $clpcorcamitemlic->excluir(null, "pc26_liclicitem=$l21_codigo");
+            if ($clpcorcamitemlic->erro_status == 0) {
+                $sqlerro = true;
+                $erro_msg = $clpcorcamitemlic->erro_msg;
                 break;
             }
         }
 
-        if ($sqlerro==false){
-            $clliclicitemlote->excluir(null,"l04_liclicitem = $l21_codigo");
-            if ($clliclicitemlote->erro_status==0){
+        if ($sqlerro == false) {
+            $clliclicitemlote->excluir(null, "l04_liclicitem = $l21_codigo");
+            if ($clliclicitemlote->erro_status == 0) {
                 $sqlerro = true;
                 $erro_msg = $clliclicitemlote->erro_msg;
                 break;
             }
         }
 
-        if ($sqlerro==false){
-            $clliclicitemanu->excluir(null,"l07_liclicitem = $l21_codigo");
-            if ($clliclicitemanu->erro_status==0){
+        if ($sqlerro == false) {
+            $clliclicitemanu->excluir(null, "l07_liclicitem = $l21_codigo");
+            if ($clliclicitemanu->erro_status == 0) {
                 $sqlerro = true;
                 $erro_msg = $clliclicitemanu->erro_msg;
                 break;
@@ -223,21 +222,21 @@ if(isset($excluir)){
         }
     }
 
-    if ($sqlerro==false){
-        if($numrows_item){
-            $clliclicitem->excluir(null,"l21_codliclicita=$l20_codigo");
-            if ($clliclicitem->erro_status==0){
-                $sqlerro=true;
+    if ($sqlerro == false) {
+        if ($numrows_item) {
+            $clliclicitem->excluir(null, "l21_codliclicita=$l20_codigo");
+            if ($clliclicitem->erro_status == 0) {
+                $sqlerro = true;
                 $erro_msg = $clliclicitem->erro_msg;
             }
         }
     }
 
-    if ($sqlerro==false){
-        $clliclicitaproc->excluir(""," l34_liclicita = $l20_codigo");
+    if ($sqlerro == false) {
+        $clliclicitaproc->excluir("", " l34_liclicita = $l20_codigo");
         $erro_msg = $clliclicitaproc->erro_msg;
-        if ($clliclicitaproc->erro_status==0){
-            $sqlerro=true;
+        if ($clliclicitaproc->erro_status == 0) {
+            $sqlerro = true;
         }
     }
 
@@ -251,44 +250,46 @@ if(isset($excluir)){
 
     try {
 
-        $rsLicobras = $cllicobras->sql_record($cllicobras->sql_query(null,"*",null,"obr01_licitacao = $l20_codigo"));
-        if(pg_num_rows($rsLicobras) > 0){
+        $rsLicobras = $cllicobras->sql_record($cllicobras->sql_query(null, "*", null, "obr01_licitacao = $l20_codigo"));
+        if (pg_num_rows($rsLicobras) > 0) {
             throw new Exception("Licitação vinculada a uma obra!");
             $sqlerro  = true;
         }
-
-    }catch (Exception $eErro){
+    } catch (Exception $eErro) {
         db_msgbox($eErro->getMessage());
     }
 
 
-    if ($sqlerro==false){
+    if ($sqlerro == false) {
+        db_query("delete from manutencaolicitacao where manutlic_licitacao = $l20_codigo");
         $clliclicita->excluir($l20_codigo);
         $erro_msg = $clliclicita->erro_msg;
-        if ($clliclicita->erro_status==0) {
+        if ($clliclicita->erro_status == 0) {
             $sqlerro = true;
         }
     }
 
     db_fim_transacao($sqlerro);
-}else if(isset($chavepesquisa)){
+} else if (isset($chavepesquisa)) {
     $db_opcao = 3;
     $result = $clliclicita->sql_record($clliclicita->sql_query($chavepesquisa));
-    db_fieldsmemory($result,0);
-    
+    db_fieldsmemory($result, 0);
+    if ($l08_altera == "t") {
         $db_botao = true;
-    
+    }
 }
 ?>
-    <html>
-    <head>
-        <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-        <meta http-equiv="Expires" CONTENT="0">
-        <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-        <link href="estilos.css" rel="stylesheet" type="text/css">
-    </head>
-    <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
+<html>
+
+<head>
+    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="Expires" CONTENT="0">
+    <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
+</head>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
     <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
         <tr>
             <td width="360" height="18">&nbsp;</td>
@@ -310,21 +311,22 @@ if(isset($excluir)){
         </tr>
     </table>
     <?
-    db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
+    db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
     ?>
-    </body>
-    </html>
+</body>
+
+</html>
 <?
-if(isset($excluir)){
-    if($clliclicita->erro_status==0){
+if (isset($excluir)) {
+    if ($clliclicita->erro_status == 0) {
 
         db_msgbox($erro_msg);
-        $clliclicita->erro(true,false);
-    }else{
-        $clliclicita->erro(true,true);
+        $clliclicita->erro(true, false);
+    } else {
+        $clliclicita->erro(true, true);
     };
 };
-if($db_opcao==33){
+if ($db_opcao == 33) {
     echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>

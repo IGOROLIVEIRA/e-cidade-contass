@@ -1,4 +1,5 @@
 <?php
+//ini_set('display_errors','on');
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -749,6 +750,14 @@ switch ($oParam->exec) {
                 $oContrato->setValorContrato($oParam->contrato->nValorContrato);
                 $oContrato->setDataInclusao(date("Y-m-d"));
                 $oContrato->setITipocadastro(1);
+
+                $oContrato->setReajuste($oParam->contrato->iReajuste);
+                $oContrato->setCriterioReajuste($oParam->contrato->iCriterioreajuste);
+                $oContrato->setDataReajuste($oParam->contrato->dtReajuste);
+                $oContrato->setPeriodoreajuste($oParam->contrato->sPeriodoreajuste);
+                $oContrato->setIndiceReajuste($oParam->contrato->iIndicereajuste);
+                $oContrato->setDescricaoReajuste($oParam->contrato->sDescricaoreajuste);
+                $oContrato->setDescricaoIndice($oParam->contrato->sDescricaoindice);
                 $oContrato->save();
                 /*
                * verificamos se existe empenhos a serem vinculados na seção
@@ -931,6 +940,13 @@ switch ($oParam->exec) {
             $oDadosContrato->iLicoutroorgao               = $oContrato->getiLicoutroorgao();
             $oDadosContrato->iAdesaoregpreco              = $oContrato->getiAdesaoregpreco();
             $oDadosContrato->nValorContrato               = $oContrato->getValorContrato();
+            $oDadosContrato->iReajuste                    = $oContrato->getReajuste();
+            $oDadosContrato->iCriterioreajuste            = $oContrato->getCriterioReajuste();
+            $oDadosContrato->dtReajuste                   = $oContrato->getDataReajuste();
+            $oDadosContrato->iIndicereajuste              = $oContrato->getIndiceReajuste();
+            $oDadosContrato->sDescricaoreajuste           = urlencode($oContrato->getDescricaoReajuste());
+            $oDadosContrato->sDescricaoindice           = urlencode($oContrato->getDescricaoIndice());
+            $oDadosContrato->sPeriodoreajuste             = urlencode($oContrato->getPeriodoreajuste());
 
             $oRetorno->contrato = $oDadosContrato;
         } catch (Exception $eErro) {

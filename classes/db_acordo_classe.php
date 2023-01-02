@@ -76,53 +76,73 @@ class cl_acordo
     var $ac16_datareferencia_ano = null;
     var $ac16_datareferencia = null;
     var $ac16_providencia = null;
+    var $ac16_reajuste = null;
+    var $ac16_criterioreajuste = null;
+    var $ac16_datareajuste = null;
+    var $ac16_periodoreajuste = null;
+    var $ac16_datareajuste_dia = null;
+    var $ac16_datareajuste_mes = null;
+    var $ac16_datareajuste_ano = null;
+    var $ac16_indicereajuste = null;
+    var $ac16_descricaoreajuste = null;
+    var $ac16_descricaoindice = null;
     /**
      * A descrição do status do campo ac16_providencia podem ser checados na tabela providencia
      */
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-        ac16_sequencial = int4 = Acordo
-        ac16_acordosituacao = int4 = Acordo Situação
-        ac16_coddepto = int4 = Código Departamento
-        ac16_numero = varchar(60) = Número
-        ac16_anousu = int4 = Ano Exercícios
-        ac16_dataassinatura = date = Data da Assinatura
-        ac16_datapublicacao = date = Data Publicação
-        ac16_contratado = int4 = Contratado
-        ac16_datainicio = date = Data de Início
-        ac16_datafim = date = Data de Fim
-        ac16_resumoobjeto = varchar(50) = Resumo Objeto
-        ac16_objeto = text = Objeto do Contrato
-        ac16_instit = int4 = Instituição
-        ac16_acordocomissao = int4 = Acordo Comissão
-        ac16_lei = varchar(60) = Lei
-        ac16_acordogrupo = int4 = Acordo Grupo
-        ac16_origem = int4 = Origem
-        ac16_qtdrenovacao = float8 = Quantidade de Renovação
-        ac16_tipounidtempo = int4 = Unidade do Tempo
-        ac16_deptoresponsavel = int4 = Departamento Responsável
-        ac16_numeroprocesso = varchar(60) = Numero do Processo
-        ac16_periodocomercial = bool = Período Comercial
-        ac16_qtdperiodo = float8 = Quantidade do Período de Vigência
-        ac16_tipounidtempoperiodo = int4 = Tipo de Período de Vigência
-        ac16_acordocategoria = int4 = Acordo Categoria
-        ac16_acordoclassificacao = int4 = Sequencial da Classificação do Contrato
-        ac16_numeroacordo = int4 = Número do acordo
-        ac16_valor = float8 = Valor do acordo
-        ac16_tipoorigem = int8 = Tipo de Origem acordo
-        ac16_formafornecimento = Forma de fornecimento acordo
-        ac16_formapagamento = Forma de pagamento acordo
-        ac16_veiculodivulgacao = varchar(50) = Veículo de divulgação
-        ac16_datarescisao = date = Data Rescisão
-        ac16_valorrescisao = float8 = Valor da rescisão do acordo
-        ac16_semvigencia = bool = Contrato criado sem Vigência
-        ac16_licoutroorgao = int8 = licitacao de outros orgaos
-        ac16_adesaoregpreco = int8 = adesao de registro de precos
-        ac16_tipocadastro   = int8 = tipo de cadastro
-        ac16_providencia = int4 = Status da Providência do Acordo
-        ac16_datareferencia = date = Data de referência para geração do SICOM
- ";
+    ac16_sequencial = int4 = Acordo
+    ac16_acordosituacao = int4 = Acordo Situação
+    ac16_coddepto = int4 = Código Departamento
+    ac16_numero = varchar(60) = Número
+    ac16_anousu = int4 = Ano Exercício
+    ac16_dataassinatura = date = Data da Assinatura
+    ac16_datapublicacao = date = Data Publicação
+    ac16_contratado = int4 = Contratado
+    ac16_datainicio = date = Data de Início
+    ac16_datafim = date = Data de Fim
+    ac16_resumoobjeto = varchar(50) = Resumo Objeto
+    ac16_objeto = text = Objeto do Contrato
+    ac16_instit = int4 = Instituição
+    ac16_acordocomissao = int4 = Acordo Comissão
+    ac16_lei = varchar(60) = Lei
+    ac16_acordogrupo = int4 = Acordo Grupo
+    ac16_origem = int4 = Origem
+    ac16_qtdrenovacao = float8 = Quantidade de Renovação
+    ac16_tipounidtempo = int4 = Unidade do Tempo
+    ac16_deptoresponsavel = int4 = Departamento Responsável
+    ac16_numeroprocesso = varchar(60) = Numero do Processo
+    ac16_periodocomercial = bool = Período Comercial
+    ac16_qtdperiodo = float8 = Quantidade do Período de Vigência
+    ac16_tipounidtempoperiodo = int4 = Tipo de Período de Vigência
+    ac16_acordocategoria = int4 = Acordo Categoria
+    ac16_acordoclassificacao = int4 = Sequencial da Classificação do Contrato
+    ac16_numeroacordo = int4 = Número do acordo
+    ac16_valor = float8 = Valor do acordo
+    ac16_tipoorigem = int8 = Tipo de Origem acordo
+    ac16_formafornecimento = Forma de fornecimento acordo
+    ac16_formapagamento = Forma de pagamento acordo
+    ac16_veiculodivulgacao = varchar(50) = Veículo de divulgação
+    ac16_datarescisao = date = Data Rescisão
+    ac16_valorrescisao = float8 = Valor da rescisão do acordo
+    ac16_semvigencia = bool = Contrato criado sem vigência
+    ac16_licoutroorgao = int8 = licitacao de outros orgaos
+    ac16_adesaoregpreco = int8 = adesao de registro de precos
+    ac16_tipocadastro   = int8 = tipo de cadastro
+    ac16_providencia = int4 = Status da Providência do Acordo
+    ac16_datareferencia = date = Data de referência para geração do SICOM
+    ac16_reajuste = boll = possui reajuste
+    ac16_criterioreajuste = 
+    ac16_datareajuste = ;
+    ac16_periodoreajuste = ;
+    ac16_datareajuste_dia = ;
+    ac16_datareajuste_mes = ;
+    ac16_datareajuste_ano = ;
+    ac16_indicereajuste = ;
+    ac16_descricaoreajuste = ;
+    ac16_descricaoindice = ;
+    ";
     //funcao construtor da classe
     function cl_acordo()
     {
@@ -160,6 +180,14 @@ class cl_acordo
                     $this->ac16_dataassinatura = $this->ac16_dataassinatura_ano . "-" . $this->ac16_dataassinatura_mes . "-" . $this->ac16_dataassinatura_dia;
                 }
             }
+            if ($this->ac16_datareajuste == "") {
+                $this->ac16_datareajuste_dia = ($this->ac16_datareajuste_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareajuste_dia"] : $this->ac16_datareajuste_dia);
+                $this->ac16_datareajuste_mes = ($this->ac16_datareajuste_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareajuste_mes"] : $this->ac16_datareajuste_mes);
+                $this->ac16_datareajuste_ano = ($this->ac16_datareajuste_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareajuste_ano"] : $this->ac16_datareajuste_ano);
+                if ($this->ac16_datareajuste_dia != "") {
+                    $this->ac16_datareajuste = $this->ac16_datareajuste_ano . "-" . $this->ac16_datareajuste_mes . "-" . $this->ac16_datareajuste_dia;
+                }
+            }
             if ($this->ac16_datapublicacao == "") {
                 $this->ac16_datapublicacao_dia = ($this->ac16_datapublicacao_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_dia"] : $this->ac16_datapublicacao_dia);
                 $this->ac16_datapublicacao_mes = ($this->ac16_datapublicacao_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_mes"] : $this->ac16_datapublicacao_mes);
@@ -192,6 +220,12 @@ class cl_acordo
             $this->ac16_lei = ($this->ac16_lei == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_lei"] : $this->ac16_lei);
             $this->ac16_acordogrupo = ($this->ac16_acordogrupo == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_acordogrupo"] : $this->ac16_acordogrupo);
             $this->ac16_origem = ($this->ac16_origem == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_origem"] : $this->ac16_origem);
+            $this->ac16_reajuste = ($this->ac16_reajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_reajuste"] : $this->ac16_reajuste);
+            $this->ac16_criterioreajuste = ($this->ac16_criterioreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_criterioreajuste"] : $this->ac16_criterioreajuste);
+            $this->ac16_periodoreajust = ($this->ac16_periodoreajust == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_periodoreajust"] : $this->ac16_periodoreajust);
+            $this->ac16_indicereajuste = ($this->ac16_indicereajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_indicereajuste"] : $this->ac16_indicereajuste);
+            $this->ac16_descricaoreajuste = ($this->ac16_descricaoreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_descricaoreajuste"] : $this->ac16_descricaoreajuste);
+            $this->ac16_descricaoindice = ($this->ac16_descricaoindice == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_descricaoindice"] : $this->ac16_descricaoindice);
             $this->ac16_qtdrenovacao = ($this->ac16_qtdrenovacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_qtdrenovacao"] : $this->ac16_qtdrenovacao);
             $this->ac16_tipounidtempo = ($this->ac16_tipounidtempo == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_tipounidtempo"] : $this->ac16_tipounidtempo);
             $this->ac16_deptoresponsavel = ($this->ac16_deptoresponsavel == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_deptoresponsavel"] : $this->ac16_deptoresponsavel);
@@ -367,6 +401,16 @@ class cl_acordo
             $this->erro_status = "0";
             return false;
         }
+        if ($this->ac16_reajuste == null || !$this->ac16_reajuste) {
+            $this->erro_sql = " Campo reajuste não informado.";
+            $this->erro_campo = "ac16_reajuste";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
         if ($this->ac16_qtdrenovacao == null) {
             $this->ac16_qtdrenovacao = "null";
             //     $this->erro_sql = " Campo Quantidade de Renovação não informado.";
@@ -522,6 +566,13 @@ class cl_acordo
      ,ac16_licoutroorgao
      ,ac16_adesaoregpreco
      ,ac16_tipocadastro
+     ,ac16_reajuste
+     ,ac16_criterioreajuste 
+     ,ac16_datareajuste
+     ,ac16_indicereajuste
+     ,ac16_periodoreajuste
+     ,ac16_descricaoreajuste
+     ,ac16_descricaoindice
      )
      values (
      $this->ac16_sequencial
@@ -560,6 +611,13 @@ class cl_acordo
      ," . ($this->ac16_licoutroorgao == "" ? 'null' : $this->ac16_licoutroorgao) . "
      ," . ($this->ac16_adesaoregpreco == "" ? 'null' : $this->ac16_adesaoregpreco) . "
      ,$this->ac16_tipocadastro
+     ," . ($this->ac16_reajuste == 1 ? "'t'" : "'f'") . "
+     ," . ($this->ac16_criterioreajuste == "null" || $this->ac16_criterioreajuste == "" ? "" : $this->ac16_criterioreajuste) . "
+     ," . ($this->ac16_datareajuste == "null" || $this->ac16_datareajuste == "" ? 'null' : "'" . $this->ac16_datareajuste . "'") . "
+     ," . ($this->ac16_indicereajuste == "null" || $this->ac16_indicereajuste == "" ? "" : $this->ac16_indicereajuste) . "
+     ," . ($this->ac16_periodoreajuste == "null" || $this->ac16_periodoreajuste == "" ? "''" : "'" . $this->ac16_periodoreajuste . "'") . "
+     ," . ($this->ac16_descricaoreajuste == "null" || $this->ac16_descricaoreajuste == "" ? 'null' : "'" . $this->ac16_descricaoreajuste . "'") . "
+     ," . ($this->ac16_descricaoindice == "null" || $this->ac16_descricaoindice == "" ? 'null' : "'" . $this->ac16_descricaoindice . "'") . "
      )";
 
         $result = db_query($sql);
@@ -867,6 +925,7 @@ class cl_acordo
                 return false;
             }
         }
+
         if (trim($this->ac16_qtdrenovacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_qtdrenovacao"])) {
             $sql  .= $virgula . " ac16_qtdrenovacao = $this->ac16_qtdrenovacao ";
             $virgula = ",";
@@ -2455,12 +2514,12 @@ class cl_acordo
         } else {
             $sSql .= $campos;
         }
-        
+
         if (!empty($dbwhere)) {
             $ano = db_getsession("DB_anousu");
             $dbwhere = " {$dbwhere} and ac16_anousu = {$ano} ";
         }
-        
+
         $sSql .= "
         cgc as cnpjCompra,
         ac16_anousu as anoCompra,
@@ -2503,15 +2562,15 @@ class cl_acordo
         where $dbwhere
         order by ac213_numerocontrolepncp desc
         ";
-      
+
         return $sSql;
     }
 
     public function sql_DadosContrato_PCNP($aContratocodigo)
-    {            
+    {
         $ano = db_getsession("DB_anousu");
         $dbwhere = " ac16_anousu = {$ano} and ac16_sequencial = {$aContratocodigo} ";
-               
+
         $sSql = " select 
         ac16_sequencial,
         ac213_numerocontrolepncp,      
@@ -2556,16 +2615,16 @@ class cl_acordo
         left join acocontratopncp on ac213_contrato = ac16_sequencial
         where $dbwhere
         ";
-   
+
         return $sSql;
     }
 
     public function sql_query_pncp($aContratocodigo)
-    {            
+    {
         $ano = db_getsession("DB_anousu");
         $instituicao = db_getsession('DB_instit');
         $dbwhere = " ac16_instit =  {$instituicao} and ac16_anousu = {$ano} ";
-               
+
         $sSql = " select 
         ac16_sequencial, 
         ac213_numerocontrolepncp,
@@ -2658,19 +2717,19 @@ class cl_acordo
                 left join acocontratopncp on ac213_contrato = e60_numemp
                 where e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' and l20_codigo is not null ";
 
-                if (!empty($dbwhere))
-                    $sql .= " and {$dbwhere} ";
-                      
-                if (!empty($ordem)) {
-                    $sql .= " order by {$ordem} ";
-                }        
-                
-                return $sql;
+        if (!empty($dbwhere))
+            $sql .= " and {$dbwhere} ";
+
+        if (!empty($ordem)) {
+            $sql .= " order by {$ordem} ";
+        }
+
+        return $sql;
     }
 
     function sql_query_pncp_empenho($codigoempenho)
     {
-        
+
         $ano  = db_getsession("DB_anousu");
         $sql  = "select
                 e60_numemp,  
@@ -2710,10 +2769,8 @@ class cl_acordo
                 left join liclicita on l20_codigo = e54_codlicitacao
                 left join liccontrolepncp on l20_codigo = l213_licitacao
                 left join acocontratopncp on ac213_contrato = e60_numemp
-                where e60_numemp = {$codigoempenho} and e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' ";       
-              
-                return $sql;
+                where e60_numemp = {$codigoempenho} and e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' ";
+
+        return $sql;
     }
-
-
 }

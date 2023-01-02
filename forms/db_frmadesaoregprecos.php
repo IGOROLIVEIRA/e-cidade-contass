@@ -45,6 +45,19 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
           </td>
         </tr>
         <tr>
+          <td>
+            <?
+            db_ancora("Cod.Departamento", "js_pesquisasi06_departamento(true);", $db_opcao)
+            ?>
+          </td>
+          <td>
+            <?
+            db_input('si06_departamento', 10, '', true, 'text', $db_opcao, "onchange='js_pesquisasi06_departamento(false)';");
+            db_input('descricaodepartamento', 45, '', true, 'text', 3, "");
+            ?>
+          </td>
+        </tr>
+        <tr>
           <td nowrap title="<?= @$Tsi06_orgaogerenciador ?>">
             <?
             db_ancora(@$Lsi06_orgaogerenciador, "js_pesquisasi06_orgaogerenciador(true);", $db_opcao);
@@ -55,7 +68,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
             db_input('si06_orgaogerenciador', 10, $Isi06_orgaogerenciador, true, 'text', $db_opcao, " onchange='js_pesquisasi06_orgaogerenciador(false);'")
             ?>
             <?
-            db_input('z01_nomeorg', 40, $Iz01_nome, true, 'text', 3, '')
+            db_input('z01_nomeorg', 45, $Iz01_nome, true, 'text', 3, '')
             ?>
           </td>
         </tr>
@@ -112,7 +125,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
           </td>
           <td>
             <?
-            $aModalidade = array("2" => "Pregão", "1" => "Concorrência");
+            $aModalidade = array("3" => "Pregão Eletrônico", "2" => "Pregão Presencial", "1" => "Concorrência");
             db_select("si06_modalidade", $aModalidade, true, $db_opcao, "");
             ?>
           </td>
@@ -173,14 +186,14 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
             db_input('si06_cgm', 10, $Isi06_cgm, true, 'text', $db_opcao, " onchange='js_pesquisasi06_cgm(false);'")
             ?>
             <?
-            db_input('z01_nomeresp', 40, $Iz01_nome, true, 'text', 3, '')
+            db_input('z01_nomeresp', 45, $Iz01_nome, true, 'text', 3, '')
             ?>
           </td>
         </tr>
 
       </table>
 </fieldset>
-<fieldset style="width: 640px; height: 410px; margin-top: 40px; ">
+<fieldset style="width: 640px; height: 460px; margin-top: 40px; ">
   <legend><b>Informações do Orgão de Adesão</b></legend>
   <table>
     <tr>
@@ -206,7 +219,6 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
       </td>
     </tr>
     <tr>
-    <tr>
       <td>
         <b>
           Nº Modalidade:
@@ -218,14 +230,15 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
         ?>
       </td>
     </tr>
-    <td nowrap title="<?= @$Tsi06_dataabertura ?>">
-      <?= @$Lsi06_dataabertura ?>
-    </td>
-    <td>
-      <?
-      db_inputdata('si06_dataabertura', @$si06_dataabertura_dia, @$si06_dataabertura_mes, @$si06_dataabertura_ano, true, 'text', $db_opcao, "")
-      ?>
-    </td>
+    <tr>
+      <td nowrap title="<?= @$Tsi06_dataabertura ?>">
+        <?= @$Lsi06_dataabertura ?>
+      </td>
+      <td>
+        <?
+        db_inputdata('si06_dataabertura', @$si06_dataabertura_dia, @$si06_dataabertura_mes, @$si06_dataabertura_ano, true, 'text', $db_opcao, "")
+        ?>
+      </td>
     </tr>
     <tr>
       <td nowrap title="<?= @$Tsi06_dataadesao ?>">
@@ -297,14 +310,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
         db_input('si06_processocompra', 10, $Isi06_processocompra, true, 'text', $db_opcao, " onchange='js_pesquisasi06_processocompra(false);'")
         ?>
       </td>
-  </table>
-  <table>
-    <tr>
-      <td>
-
-      </td>
     </tr>
-  </table>
   </table>
   </center>
 </fieldset>
@@ -490,5 +496,36 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
     } else {
       document.getElementById('tr_edital').style.display = 'none';
     }
+  }
+
+  function js_pesquisasi06_departamento(mostra) {
+    if (mostra == true) {
+      var sUrl = 'func_db_depart.php?funcao_js=parent.js_mostradepartamento|coddepto|descrdepto';
+      js_OpenJanelaIframe('', 'db_iframe_departamento', sUrl, 'Pesquisar Departamento', true, '0');
+    } else {
+      if (document.form1.si06_departamento.value != '') {
+        js_OpenJanelaIframe('', 'db_iframe_departamento', 'func_db_depart.php?pesquisa_chave=' + document.form1.si06_departamento.value + '&funcao_js=parent.js_mostrardepartamento',
+          'Pesquisar licitação Outro Órgão',
+          false,
+          '0');
+      }
+    }
+
+  }
+
+  function js_mostrardepartamento(chave, erro) {
+    document.form1.descricaodepartamento.value = chave;
+
+    if (erro == true) {
+      document.form1.descricaodepartamento.focus();
+    }
+  }
+
+  function js_mostradepartamento(chave, chave2) {
+    document.form1.si06_departamento.value = chave;
+    document.form1.descricaodepartamento.value = chave2;
+    document.form1.si06_departamento.focus();
+
+    db_iframe_departamento.hide();
   }
 </script>
