@@ -4,11 +4,11 @@ use Phinx\Migration\AbstractMigration;
 
 class Ocsicomlayout2023 extends AbstractMigration
 {
-   
-     
-    public function change()
+
+
+    public function up()
     {
-        $sql= "
+        $sql = "
         BEGIN;
         ALTER TABLE acordo ADD ac16_reajuste BOOLEAN; 
         ALTER TABLE acordo ADD ac16_criterioreajuste  INT;
@@ -30,6 +30,5 @@ class Ocsicomlayout2023 extends AbstractMigration
         ";
 
         $this->execute($sql);
-
     }
 }
