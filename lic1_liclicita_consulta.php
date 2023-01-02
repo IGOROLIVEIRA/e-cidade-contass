@@ -46,7 +46,8 @@ $oRetorno->numrows = pg_numrows($result);
 $anousu = db_getsession("DB_anousu");
 $resultNumeracao = db_query("select * from pccflicitapar where l25_anousu = $anousu and l25_codcflicita = $oParam->codigo;");
 $resultNumeracao = db_utils::fieldsmemory($resultNumeracao, 0);
-
 $oRetorno->numeracao = $resultNumeracao->l25_numero;
+$oRetorno->numeracao = $resultNumeracao->l25_numero == null ? "0" : $resultNumeracao->l25_numero;
+
 
 echo $oJson->encode($oRetorno);

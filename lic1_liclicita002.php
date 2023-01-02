@@ -49,6 +49,9 @@ require_once("classes/db_homologacaoadjudica_classe.php");
 require_once("classes/db_liccomissaocgm_classe.php");
 require_once("classes/db_condataconf_classe.php");
 require_once("classes/db_liccategoriaprocesso_classe.php");
+require_once("classes/db_pccflicitapar_classe.php");
+require_once("classes/db_pccflicitanum_classe.php");
+require_once("classes/db_pccfeditalnum_classe.php");
 include("classes/db_pcparam_classe.php");
 
 
@@ -75,6 +78,9 @@ $clpcprocitem         = new cl_pcprocitem;
 $clpcproc             = new cl_pcproc;
 $cliccategoriaprocesso = new cl_liccategoriaprocesso;
 $clpcparam  = new cl_pcparam;
+$clpccflicitapar     = new cl_pccflicitapar;
+$clpccflicitanum     = new cl_pccflicitanum;
+$clpccfeditalnum     = new cl_pccfeditalnum;
 
 
 $db_opcao = 22;
@@ -96,6 +102,80 @@ if ($clpcparam->numrows > 0) {
 if (isset($alterar)) {
     db_inicio_transacao();
     $db_opcao = 2;
+    $oParamNumManual = db_query("select * from licitaparam;");
+    $oParamNumManual = db_utils::fieldsmemory($oParamNumManual, 0);
+    $l12_numeracaomanual = $oParamNumManual->l12_numeracaomanual;
+
+    if ($l12_numeracaomanual == 't') {
+        if ($l20_nroedital == null) {
+            $l20_nroedital = 'null';
+        }
+        $numeracoeslicitacao = db_query("select * from liclicita where l20_anousu = $anousu and l20_instit = $instit and l20_edital = $l20_edital and l20_numero = $l20_numero and l20_nroedital = $l20_nroedital and l20_codtipocom = $l20_codtipocom;");
+        if (pg_numrows($numeracoeslicitacao) == 0) {
+
+            $oProcessoLicitatorio = db_query("select * from liclicita where l20_edital = $l20_edital and l20_anousu = $anousu and l20_instit = $instit;");
+            if (pg_numrows($oProcessoLicitatorio) > 0) {
+                $erro_msg .= "Já existe licitação com o processo licitatório número $l20_edital\n\n";
+                $sqlerro = true;
+            }
+
+            $oNumeracao = db_query("select * from liclicita where l20_numero = $l20_numero and l20_anousu = $anousu and l20_instit = $instit and l20_codtipocom = $l20_codtipocom;");
+            if (pg_numrows($oNumeracao) > 0) {
+                $erro_msg .= "Já existe licitação com a modalidade $l20_codtipocom numeração $l20_numero\n\n";
+                $sqlerro = true;
+            }
+
+            $oEdital = db_query("select * from liclicita where l20_anousu = $anousu and l20_instit = $instit and l20_nroedital = $l20_nroedital;");
+            if (pg_numrows($oEdital) > 0) {
+                $erro_msg .= "Já existe licitação com o edital $l20_nroedital\n\n";
+                $sqlerro = true;
+            }
+
+            /* Verificação da numeração do processo licitatório cujo o seu subsequente não tenha sido utilizado
+				    e atualização na tabela responsável por fazer o controle desta numeração  */
+            do {
+                $l20_edital = $l20_edital + 1;
+                $oLicitacao = db_query("select * from liclicita where l20_anousu = 2022 and l20_instit = 1 and l20_edital = $l20_edital;");
+                if (pg_numrows($oLicitacao) == 0) {
+                    $clpccflicitanum->l24_numero = $l20_edital - 1;
+                    $clpccflicitanum->alterar_where(null, "l24_instit=$instit and l24_anousu=$anousu");
+                    break;
+                }
+            } while (0);
+
+            /* Verificação da numeração da licitação cujo o seu subsequente não tenha sido utilizado
+				    e atualização na tabela responsável por fazer o controle desta numeração  */
+
+            do {
+                $l20_numero = $l20_numero + 1;
+                $oLicitacao = db_query("select * from liclicita where l20_numero = $l20_numero and l20_anousu = $anousu and l20_instit = $instit and l20_codtipocom = $l20_codtipocom;");
+                if (pg_numrows($oLicitacao) == 0) {
+                    $clpccflicitapar->l25_numero = $l20_numero - 1;
+                    $clpccflicitapar->alterar_where(null, "l25_codigo = $l25_codigo and l25_anousu = $anousu");
+                    break;
+                }
+            } while (0);
+
+            /* Verificação da numeração do edital cujo o seu subsequente não tenha sido utilizado
+				    e atualização na tabela responsável por fazer o controle desta numeração  */
+
+            do {
+                $l20_nroedital = $l20_nroedital + 1;
+                $oLicitacao = db_query("select * from liclicita where l20_anousu = $anousu and l20_instit = $instit and l20_nroedital = $l20_nroedital;");
+                if (pg_numrows($oLicitacao) == 0) {
+                    if (db_getsession('DB_anousu') >= 2020) {
+                        if (in_array($modalidade_tribunal, $aModalidades)) {
+                            $clpccfeditalnum->l47_numero = $l20_nroedital - 1;
+                            $clpccfeditalnum->l47_instit = db_getsession('DB_instit');
+                            $clpccfeditalnum->l47_anousu = db_getsession('DB_anousu');
+                            $clpccfeditalnum->incluir(null);
+                        }
+                    }
+                    break;
+                }
+            } while (0);
+        }
+    }
 
 
     /*

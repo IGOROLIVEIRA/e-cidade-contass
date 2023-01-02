@@ -210,12 +210,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         <?
 
                                         $bloqueianumeracoes;
-                                        if ($db_opcao == 1) {
+                                        if ($db_opcao == 1 || $db_opcao == 2) {
                                             $bloqueianumeracoes = 1;
-                                        }
+                                        }/*
                                         if ($db_opcao == 2 || $db_opcao == 3) {
                                             $bloqueianumeracoes = 3;
-                                        }
+                                        }*/
 
                                         if ($l12_numeracaomanual == 'f') {
                                             $bloqueianumeracoes = 3;
@@ -1249,7 +1249,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc, res) {
-        console.log('132');
         document.getElementById('l20_numero').style.display = '';
         document.getElementById('txtNumeracao').style.display = '';
 
@@ -2332,7 +2331,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             let opcoes = document.getElementById('l20_regimexecucao').options;
 
             if (document.getElementById('modalidade_tribunal').value) {
-                console.log('Opcoes: ', opcoes);
                 if (valor != 7) {
                     if (opcoes.item(7)) {
                         opcoes.remove(7);
