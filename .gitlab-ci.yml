@@ -541,3 +541,13 @@ curraldedentro:
     environment: production
     only:
         - master
+
+pmpedrasdemariadacruz:
+    stage: deploy
+    script:
+        - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.113 "cd /var/www/e-cidade && git checkout . && git pull origin ecidade_v3 "'
+        - 'ssh -p22 contass@10.251.27.113 "cd /var/www/e-cidade && git checkout . && php deploy_git.php "'
+    environment: production
+    only:
+        - ecidade_v3
