@@ -184,7 +184,7 @@ if($lImprimeOrgao == 't'){
   $sSelect      .= "    (select t54_codbem from bensimoveis) then 'Imóvel' else 'Indefinido'     ";
   $sSelect      .= " end)                                                                        ";
   $sSelect      .= " end) as definicao,                                                           ";
-  $sSelect      .= "(select t44_valoratual from bensdepreciacao where t44_bens = bens.t52_bem) as t44_valoratual, ";
+  $sSelect      .= "(select (t44_valoratual + t44_valorresidual) as t44_valoratual from bensdepreciacao where t44_bens = bens.t52_bem) as t44_valoratual, ";
   $sSelect      .= "(select z01_nome from cgm where z01_numcgm = bensbaix.t55_destino) as destino ";
   $sSqlBaixaBens = $clbensbaix->sql_query(null, $sSelect, "$sOrderBy", "$relbaix");
 	$result_bens   = $clbensbaix->sql_record($sSqlBaixaBens);
