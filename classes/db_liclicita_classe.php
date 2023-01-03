@@ -1617,7 +1617,7 @@ class cl_liclicita
                 $this->erro_sql = " Campo Data Edital/Convite nao Informado.";
                 $this->erro_campo = "l20_dataaber";
                 $this->erro_banco = "";
-                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg = "Usuario: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;

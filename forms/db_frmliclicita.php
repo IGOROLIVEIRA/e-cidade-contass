@@ -212,10 +212,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         $bloqueianumeracoes;
                                         if ($db_opcao == 1 || $db_opcao == 2) {
                                             $bloqueianumeracoes = 1;
-                                        }/*
-                                        if ($db_opcao == 2 || $db_opcao == 3) {
-                                            $bloqueianumeracoes = 3;
-                                        }*/
+                                        }
 
                                         if ($l12_numeracaomanual == 'f') {
                                             $bloqueianumeracoes = 3;

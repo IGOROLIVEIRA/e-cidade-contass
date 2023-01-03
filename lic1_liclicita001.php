@@ -483,7 +483,7 @@ if (isset($incluir)) {
 				    e atualização na tabela responsável por fazer o controle desta numeração  */
 				do {
 					$l20_edital = $l20_edital + 1;
-					$oLicitacao = db_query("select * from liclicita where l20_anousu = 2022 and l20_instit = 1 and l20_edital = $l20_edital;");
+					$oLicitacao = db_query("select * from liclicita where l20_anousu = $anousu and l20_instit = $instit and l20_edital = $l20_edital;");
 					if (pg_numrows($oLicitacao) == 0) {
 						$clpccflicitanum->l24_numero = $l20_edital - 1;
 						$clpccflicitanum->alterar_where(null, "l24_instit=$instit and l24_anousu=$anousu");
