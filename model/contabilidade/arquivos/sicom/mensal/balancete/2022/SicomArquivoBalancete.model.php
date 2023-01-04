@@ -933,11 +933,10 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                                    o15_codtri,
                                                                    op01_numerocontratoopc,
                                                                    op01_dataassinaturacop,
-                                                                   case when c19_emparlamentar is not null then c19_emparlamentar else 3 end as c19_emparlamentar
+                                                                   case when k81_emparlamentar is not null then k81_emparlamentar else 3 end as c19_emparlamentar
                                                  FROM conplanoorcamento
                                                       INNER JOIN conplanoorcamentoanalitica ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
                                                       INNER JOIN orctiporec ON c61_codigo = o15_codigo
-                                                       LEFT JOIN contacorrentedetalhe ON c19_estrutural = c60_estrut AND c61_anousu = c19_conplanoreduzanousu
                                                        LEFT JOIN orcreceita on o70_codfon = c61_codcon and o70_anousu = c60_anousu
                                                        LEFT JOIN taborc on taborc.k02_anousu=o70_anousu and taborc.k02_codrec=o70_codrec
                                                        LEFT JOIN tabrec on tabrec.k02_codigo=taborc.k02_codigo
