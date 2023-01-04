@@ -160,6 +160,9 @@ try {
   require_once($filePath);
 
 } catch (ResponseException $exception) {
+  if (isset($response) === false) {
+     $response = new Response();
+  }
 
   $response->setCode($exception->getCode() == 0 ? 500 : $exception->getCode());
 
