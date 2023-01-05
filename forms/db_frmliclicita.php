@@ -236,7 +236,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                                 <?
                                                 $mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1
                                                     || db_getsession('DB_anousu') >= 2021 ? 3 : 1;
-                                                db_input('l20_nroedital', 10, $Il20_nroedital, true, 'text', $bloqueianumeracoes, "");
+                                                db_input('l20_nroedital', 10, 1, true, 'text', $bloqueianumeracoes, "");
                                                 ?>
                                             </span>
                                         <?php endif; ?>
@@ -1229,7 +1229,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     document.form1.l20_condicoespag.style.backgroundColor = '#FFFFFF';
     document.form1.l20_local.style.backgroundColor = '#E6E4F1';
     document.getElementById('linha_nroedital').style.display = 'none';
-
+    buscamodalidade = false;
 
     let elemento = document.getElementById('l20_tipnaturezaproced');
     elemento.addEventListener('change', (event) => {
@@ -1287,8 +1287,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         var oRetorno = eval("(" + oAjax.responseText + ")");
         var l12_numeracaomanual = <? echo '"' . $l12_numeracaomanual . '"';      ?>;
 
-        if (oRetorno.numeracao != "" && l12_numeracaomanual == 't' && numeracaopreenchida == false) document.getElementById('l20_numero').value = parseInt(oRetorno.numeracao) + 1;
+
+        if (oRetorno.numeracao != "" && l12_numeracaomanual == 't' && numeracaopreenchida == false && buscamodalidade == true) document.getElementById('l20_numero').value = parseInt(oRetorno.numeracao) + 1;
         numeracaopreenchida = false;
+        buscamodalidade = true;
 
         var campo = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
         var vUsua = document.getElementById("vUsuario").value;
@@ -1511,6 +1513,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         let listaExecucoes = document.getElementById('l20_regimexecucao').options;
     }
 
+
     if ($F('l20_equipepregao') != '') {
         let modalidade = document.form1.modalidade_tribunal.value; //document.form1.l20_codtipocomdescr.value;
 
@@ -1537,7 +1540,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     }
 
     function js_busca() {
-
         var codigocompra = document.getElementById("l20_codtipocom").options[document.getElementById("l20_codtipocom").selectedIndex].text;
         var oParam = new Object();
         oParam.codigo = codigocompra;
@@ -2056,6 +2058,21 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function js_confirmadatas() {
 
+        if (document.getElementById('l20_numero').value == "0") {
+            alert("Usuário: o campo Numeração não pode ser preenchido com valor 0");
+            return false;
+        }
+
+        if (document.getElementById('l20_edital').value == "0") {
+            alert("Usuário: o campo Processo Licitatório: não pode ser preenchido com valor 0");
+            return false;
+        }
+
+        if (document.getElementById('l20_nroedital').value == "0") {
+            alert("Usuário: o campo Edital não pode ser preenchido com valor 0");
+            return false;
+        }
+
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
         var db_opcao = <? echo '"' . $db_opcao . '"';      ?>;
 
@@ -2070,7 +2087,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
 
         var dataCriacao = $F('l20_datacria');
-        //var dataPublicacao = $F('l20_dtpublic');
         var dataAbertura = $F('l20_dataaber');
         var critadjudicac = $F('l20_criterioadjudicacao');
         var matriz = [1, 2, 3, 4, 5, 11, 19];

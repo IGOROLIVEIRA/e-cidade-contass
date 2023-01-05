@@ -126,10 +126,12 @@ if (isset($incluir)) {
 			$sqlerro = true;
 		}
 
-		$oEdital = db_query("select * from liclicita where l20_anousu = $anousu and l20_instit = $instit and l20_nroedital = $l20_nroedital;");
-		if (pg_numrows($oEdital) > 0) {
-			$erro_msg .= "Já existe licitação com o edital $l20_nroedital\n\n";
-			$sqlerro = true;
+		if (in_array($modalidade_tribunal, array(48, 49, 50, 52, 53, 54))) {
+			$oEdital = db_query("select * from liclicita where l20_anousu = $anousu and l20_instit = $instit and l20_nroedital = $l20_nroedital;");
+			if (pg_numrows($oEdital) > 0) {
+				$erro_msg .= "Já existe licitação com o edital $l20_nroedital\n\n";
+				$sqlerro = true;
+			}
 		}
 	}
 
