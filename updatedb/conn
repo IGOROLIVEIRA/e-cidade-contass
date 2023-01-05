@@ -18,6 +18,8 @@ e-cidade			5432	cii-amaje
 e-cidade			5432	mctrans
 e-cidade            5432    cmarinos
 e-cidade            5432    pmlagoadospatos
+e-cidade            5432    pmjuramento
+
 
 e-cidade            5432    pmsaoromao
 
@@ -103,3 +105,7 @@ e-cidade            5432    pmserranopolis
 e-cidade            5432    pmsantafeminas
 
 e-cidade            5432    pmcurraldentro
+
+e-cidade-treinamento   5432 e-cidadev3
+pmpedrasdemariadacruz  5432 e-cidadev3
+pmsaogoncalodoriopreto 5432 e-cidadev3
