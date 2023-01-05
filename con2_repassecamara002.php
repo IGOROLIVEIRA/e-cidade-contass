@@ -168,8 +168,8 @@ ob_start();
         <td class="s7 bdleft" colspan="3">A -  Tributária:</td>
       </tr>
 
-      <?php
-      $aGrupoReceita = array(
+        <?php
+            $aGrupoReceita = array(
                         array('Imposto sobre a Propriedade Territorial Rural - ITR', '41112011%'),
                         array('Imposto sobre a Renda - Retido na Fonte - Trabalho', '41113031%'),
                         array('Imposto sobre a Renda - Retido na Fonte - Outros Rendimentos', '41113034%'),
@@ -177,7 +177,25 @@ ob_start();
                         array('Imposto sobre Transmissão "Inter Vivos" de Bens Imóveis e de Direitos Reais s/ Imóveis - ITBI', '41118014%'),
                         array('Imposto sobre Serviços de Qualquer Natureza - ISS', '41118023%'),
                         array('Taxas', '4112%'),
-      );
+            );
+
+            if ($anousu >= 2022) {
+                $aGrupoReceita = array(
+                    array('Imposto sobre a Propriedade Territorial Rural - ITR', 
+                        '4111201%'),
+                    array('Imposto sobre a Renda - Retido na Fonte - Trabalho', 
+                        '411130311%\' 
+                        OR o57_fonte like \'411130312%\'
+                        OR o57_fonte like \'411130313%\' 
+                        OR o57_fonte like \'411130314%'),
+                    array('Imposto sobre a Renda - Retido na Fonte - Outros Rendimentos', 
+                        '411130341%'),
+                    array('Imposto sobre a Propriedade Predial e Territorial Urbana - IPTU', '4111250%'),
+                    array('Imposto sobre Transmissão "Inter Vivos" de Bens Imóveis e de Direitos Reais s/ Imóveis - ITBI', '4111253%'),
+                    array('Imposto sobre Serviços de Qualquer Natureza - ISS', '4111451%'),
+                    array('Taxas', '4112%'),
+                );
+            }
       $aPrefixosDeducoes = array('491','492','493','496','498','499');
 
       $fSubTotalImpostos = 0.0;
@@ -186,7 +204,6 @@ ob_start();
         $aDadosReceita = getSaldoReceita(null,"distinct o57_fonte,o57_descr,saldo_arrecadado_acumulado",null,"o57_fonte like '$aGrupo[1]'");
         $dDadosReceita = 0.0;
         $sDeducao = '';
-
         foreach($aDadosReceita as $oReceita) {
 
           $dTotalDeducoes = 0.0;
@@ -245,6 +262,20 @@ ob_start();
         array('Cota-Parte do IPI - Municípios', '41728013%'),
         array('Cota-Parte da CIDE', '41728014%'),
       );
+
+      if ($anousu >= 2022) {
+        $aGrupoTransferencias = array(
+            array('Cota-Parte do FPM - Cota Mensal', '417115111%'),
+            array('Cota-Parte do FPM - 1% dezembro', '417115121%'),
+            array('Cota-Parte do FPM - 1% julho', '417115131%'),
+            array('Cota-Parte do ITR', '4171152%'),
+            array('Transferência Financeira do ICMS - Desoneração - LC 87/96', '4171951%'),
+            array('Cota-Parte do ICMS', '4172150%'),
+            array('Cota-Parte do IPVA', '4172151%'),
+            array('Cota-Parte do IPI - Municípios', '4172152%'),
+            array('Cota-Parte da CIDE', '4172153%'),
+          );
+      }
 
       $fSubTotalTransferencias = 0.0;
       foreach($aGrupoTransferencias as $iK => $aGrupo){
