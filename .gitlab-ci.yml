@@ -560,7 +560,7 @@ ecidade_v3:
         - 'ssh -p22 info@10.251.27.113 "cd /var/www/e-cidade && git checkout . && php deploy_git.php "'
     environment: production
     only:
-        - ecidade_v3 pmburitizeiro
+        - ecidade_v3
 
 pmburitizeiro:
     stage: deploy
