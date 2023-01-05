@@ -491,7 +491,7 @@ if (isset($incluir)) {
 						$clpccflicitanum->alterar_where(null, "l24_instit=$instit and l24_anousu=$anousu");
 						break;
 					}
-				} while (0);
+				} while (1);
 
 				/* Verificação da numeração da licitação cujo o seu subsequente não tenha sido utilizado
 				    e atualização na tabela responsável por fazer o controle desta numeração  */
@@ -504,7 +504,7 @@ if (isset($incluir)) {
 						$clpccflicitapar->alterar_where(null, "l25_codigo = $l25_codigo and l25_anousu = $anousu");
 						break;
 					}
-				} while (0);
+				} while (1);
 
 				/* Verificação da numeração do edital cujo o seu subsequente não tenha sido utilizado
 				    e atualização na tabela responsável por fazer o controle desta numeração  */
@@ -523,7 +523,7 @@ if (isset($incluir)) {
 						}
 						break;
 					}
-				} while (0);
+				} while (1);
 			} else {
 				$clpccflicitapar->l25_numero = $l25_numero + 1;
 				$clpccflicitapar->alterar_where(null, "l25_codigo = $l25_codigo and l25_anousu = $anousu");
