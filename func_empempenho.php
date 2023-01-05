@@ -344,6 +344,21 @@ $rotulo->label("z01_cgccpf");
              INNER JOIN matordemitemanu ON m36_matordemitem = m52_codlanc
              WHERE m52_numemp = e60_numemp)
             and e60_vlremp > e60_vlranu ";
+
+            if (isset($chave_e60_codemp) && $chave_e60_codemp != "") {
+              $dbwhere .= " AND e60_codemp = '$chave_e60_codemp'";
+            }
+            if (isset($chave_z01_cgccpf) && $chave_z01_cgccpf != "") {
+              $dbwhere .= " AND z01_cgccpf = '$chave_z01_cgccpf'";
+            }
+            if (isset($chave_z01_nome) && $chave_z01_nome != "") {
+              $dbwhere .= " AND z01_nome LIKE '%$chave_z01_nome%'";
+            }
+            if (isset($chave_e60_numemp) && !empty($chave_e60_numemp)) {
+              $dbwhere .= " AND e60_numemp=$chave_e60_numemp ";
+            }
+
+
             $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
 
             $sql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
