@@ -43,6 +43,7 @@ $clrotulo->label("l20_nroedital");
 require_once("libs/db_utils.php");
 require_once("std/db_stdClass.php");
 
+
 //verificação do tipo de usuário por login => .conttas 
 $lusuario = db_getsession("DB_login");
 $uLogin = explode(".", $lusuario, 2);
@@ -202,17 +203,61 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                 </tr>
 
                                 <tr>
+                                    <td nowrap title="<?= @$Tl20_codtipocom ?>">
+                                        <b>
+                                            <?
+                                            db_ancora("Modalidade :", "js_pesquisal20_codtipocom(true);", 3);
+                                            ?>
+                                        </b>
+                                    </td>
+                                    <td>
+                                        <?
+                                        $result_tipo = $clcflicita->sql_record($clcflicita->sql_query_numeracao(null, "l03_codigo,l03_descr", null, "l03_instit = " . db_getsession("DB_instit")));
+                                        if ($clcflicita->numrows == 0) {
+                                            db_msgbox("Nenhuma Modalidade cadastrada!!");
+                                            $result_tipo = "";
+                                            $db_opcao = 3;
+                                            $db_botao = false;
+                                            db_input("l20_codtipocom", 10, "", true, "text");
+                                            db_input("l20_codtipocom", 40, "", true, "text");
+                                        } else {
+                                            db_selectrecord("l20_codtipocom", @$result_tipo, true, $db_opcao, "js_mostraRegistroPreco()");
+                                            if (isset($l20_codtipocom) && $l20_codtipocom != "") {
+                                                echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
+                                            }
+                                        }
+                                        ?>
+                                        <input type="hidden" id="descricao" name="descricao" value="" onchange="js_convite()">
+                                        <input type="hidden" id="vUsuario" name="vUsuario" value="<? echo $uLogin[1]; ?>">
+                                        <input type="hidden" id="vInclu" name="vInclu" value="<? echo $url_particao[1]; ?>">
+
+                                    </td>
+                                </tr>
+
+                                <tr>
                                     <td nowrap title="<?= @$Tl20_edital ?>">
                                         <?= @$Ll20_edital ?>
                                     </td>
                                     <td>
                                         <?
-                                        db_input('l20_edital', 10, $Il20_edital, true, 'text', 3, "");
+
+                                        $bloqueianumeracoes = 3;
+
+                                        if ($l12_numeracaomanual == 't') {
+                                            if ($db_opcao == 1 || $db_opcao == 2) $bloqueianumeracoes = 1;
+                                        }
+
+
+                                        db_input('l20_edital', 10, $Il20_edital, true, 'text', $bloqueianumeracoes, "");
                                         ?>
 
-                                        <strong>Numeração:</strong>
+                                        <strong id="txtNumeracao">Numeração:</strong>
                                         <?
-                                        db_input('l20_numero', 10, $Il20_numero, true, 'text', 3, "");
+                                        db_input('l20_numero', 10, $Il20_numero, true, 'text',  $bloqueianumeracoes, "");
+                                        if ($db_opcao == 1 && !isset($incluir)) {
+                                            echo "<script> document.getElementById('l20_numero').style.display = 'none'; </script>";
+                                            echo "<script> document.getElementById('txtNumeracao').style.display = 'none'; </script>";
+                                        }
                                         ?>
                                         <?php if ($l20_anousu >= 2020 && $db_opcao == 2 || $l20_anousu == null && $db_opcao == 1) : ?>
                                             <span id="linha_nroedital">
@@ -221,7 +266,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                                 <?
                                                 $mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1
                                                     || db_getsession('DB_anousu') >= 2021 ? 3 : 1;
-                                                db_input('l20_nroedital', 10, $Il20_nroedital, true, 'text', $mostra, "");
+                                                db_input('l20_nroedital', 10, 1, true, 'text', $bloqueianumeracoes, "");
                                                 ?>
                                             </span>
                                         <?php endif; ?>
@@ -265,41 +310,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     <td>
                                         <?
                                         db_input('l20_codepartamento', 4, $Il20_codepartamento, true, 'text', $db_opcao, "onchange='js_pesquisal20_codepartamento(false)';");
-                                        db_input('l20_descricaodep', 45, $Il20_descricaodep, true, 'text', 3, "");
+                                        db_input('l20_descricaodep', 38, $Il20_descricaodep, true, 'text', 3, "");
                                         ?>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td nowrap title="<?= @$Tl20_codtipocom ?>">
-                                        <b>
-                                            <?
-                                            db_ancora("Modalidade :", "js_pesquisal20_codtipocom(true);", 3);
-                                            ?>
-                                        </b>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $result_tipo = $clcflicita->sql_record($clcflicita->sql_query_numeracao(null, "l03_codigo,l03_descr", null, "l03_instit = " . db_getsession("DB_instit")));
-                                        if ($clcflicita->numrows == 0) {
-                                            db_msgbox("Nenhuma Modalidade cadastrada!!");
-                                            $result_tipo = "";
-                                            $db_opcao = 3;
-                                            $db_botao = false;
-                                            db_input("l20_codtipocom", 10, "", true, "text");
-                                            db_input("l20_codtipocom", 40, "", true, "text");
-                                        } else {
-                                            db_selectrecord("l20_codtipocom", @$result_tipo, true, $db_opcao, "js_mostraRegistroPreco()");
-                                            if (isset($l20_codtipocom) && $l20_codtipocom != "") {
-                                                echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
-                                            }
-                                        }
-                                        ?>
-                                        <input type="hidden" id="descricao" name="descricao" value="" onchange="js_convite()">
-                                        <input type="hidden" id="vUsuario" name="vUsuario" value="<? echo $uLogin[1]; ?>">
-                                        <input type="hidden" id="vInclu" name="vInclu" value="<? echo $url_particao[1]; ?>">
 
-                                    </td>
-                                </tr>
                                 <tr>
                                     <td nowrap title="<?= @$Tl20_leidalicitacao ?>" id="leidalicitacao">
                                         <strong>Lei da Licitação:</strong>
@@ -376,7 +391,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        db_input('respConducodigo', 10, $respConducodigo, true, 'text', $db_opcao, "onchange=js_pesquisal31_numcgm(false,'respConducodigo','respCondunome');");
+                                        db_input('respConducodigo', 4, $respConducodigo, true, 'text', $db_opcao, "onchange=js_pesquisal31_numcgm(false,'respConducodigo','respCondunome');");
                                         db_input('respCondunome', 45, $respCondunome, true, 'text', 3, "");
                                         ?>
                                     </td>
@@ -1209,11 +1224,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 </form>
 <script>
     var codigotribunal = 0;
+    var numeracaopreenchida = false;
     document.form1.l20_prazoentrega.style.backgroundColor = '#FFFFFF';
     document.form1.l20_condicoespag.style.backgroundColor = '#FFFFFF';
     document.form1.l20_local.style.backgroundColor = '#E6E4F1';
     document.getElementById('linha_nroedital').style.display = 'none';
-
+    buscamodalidade = false;
 
     let elemento = document.getElementById('l20_tipnaturezaproced');
     elemento.addEventListener('change', (event) => {
@@ -1230,8 +1246,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     // alterando a função padrao para verificar  as opçoes de convite e de INEXIGIBILIDADE
     function js_ProcCod_l20_codtipocom(proc, res) {
+        document.getElementById('l20_numero').style.display = '';
+        document.getElementById('txtNumeracao').style.display = '';
 
         js_verificaDatasProposta();
+
 
         var sel1 = document.forms[0].elements[proc];
         var sel2 = document.forms[0].elements[res];
@@ -1257,6 +1276,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function js_retornolicitacao(oAjax) {
 
+
         var oRetornoNatu = document.getElementById("l20_naturezaobjeto").value;
         var oRetornoamparo = document.getElementById("l212_codigo").value;
         if (oRetornoNatu == 1) {
@@ -1265,6 +1285,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
 
         var oRetorno = eval("(" + oAjax.responseText + ")");
+        var l12_numeracaomanual = <? echo '"' . $l12_numeracaomanual . '"';      ?>;
+
+
+        if (oRetorno.numeracao != "" && l12_numeracaomanual == 't' && numeracaopreenchida == false && buscamodalidade == true) document.getElementById('l20_numero').value = parseInt(oRetorno.numeracao) + 1;
+        numeracaopreenchida = false;
+        buscamodalidade = true;
+
         var campo = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
         var vUsua = document.getElementById("vUsuario").value;
         var vInclu = document.getElementById("vInclu").value;
@@ -1274,7 +1301,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
 
         document.getElementById("respCondunome").style.width = "251px";
-        document.getElementById("l20_descricaodep").style.width = "281px";
+        document.getElementById("l20_descricaodep").style.width = "251px";
         document.getElementById("lprocsis").style.width = "85px";
         document.getElementById("l20_usaregistropreco").style.width = "85px";
         document.getElementById("l20_codtipocomdescr").style.width = "307px";
@@ -1486,6 +1513,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         let listaExecucoes = document.getElementById('l20_regimexecucao').options;
     }
 
+
     if ($F('l20_equipepregao') != '') {
         let modalidade = document.form1.modalidade_tribunal.value; //document.form1.l20_codtipocomdescr.value;
 
@@ -1512,7 +1540,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     }
 
     function js_busca() {
-
         var codigocompra = document.getElementById("l20_codtipocom").options[document.getElementById("l20_codtipocom").selectedIndex].text;
         var oParam = new Object();
         oParam.codigo = codigocompra;
@@ -2031,11 +2058,23 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function js_confirmadatas() {
 
+        if (document.getElementById('l20_numero').value == "0") {
+            alert("Usuário: o campo Numeração não pode ser preenchido com valor 0");
+            return false;
+        }
+
+        if (document.getElementById('l20_edital').value == "0") {
+            alert("Usuário: o campo Processo Licitatório: não pode ser preenchido com valor 0");
+            return false;
+        }
+
+        if (document.getElementById('l20_nroedital').value == "0") {
+            alert("Usuário: o campo Edital não pode ser preenchido com valor 0");
+            return false;
+        }
+
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
         var db_opcao = <? echo '"' . $db_opcao . '"';      ?>;
-        console.log(db_opcao);
-
-
 
         if (document.getElementById('l20_dataaberproposta').style.display == "" && document.getElementById('l20_dataaberproposta').value == "" && db_opcao != 3) {
             alert("Campo Data de Abertura da Proposta não Informado");
@@ -2048,7 +2087,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
 
         var dataCriacao = $F('l20_datacria');
-        //var dataPublicacao = $F('l20_dtpublic');
         var dataAbertura = $F('l20_dataaber');
         var critadjudicac = $F('l20_criterioadjudicacao');
         var matriz = [1, 2, 3, 4, 5, 11, 19];
@@ -2250,6 +2288,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
             document.querySelector("#l20_tipliticacao").value = oRetornoTipo;
         }
+        if (document.getElementById('l20_codtipocomdescr').value != 99) numeracaopreenchida = true;
         js_ProcCod_l20_codtipocom('l20_codtipocomdescr', 'l20_codtipocom');
 
     }
@@ -2305,7 +2344,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             let opcoes = document.getElementById('l20_regimexecucao').options;
 
             if (document.getElementById('modalidade_tribunal').value) {
-                console.log('Opcoes: ', opcoes);
                 if (valor != 7) {
                     if (opcoes.item(7)) {
                         opcoes.remove(7);
