@@ -236,6 +236,12 @@ if (isset($alterar)) {
         $clprecoreferencia->erro_msg    = $clitemprecoreferencia->erro_msg;
         $clprecoreferencia->erro_status = "0";
     }
+    if($cont == 0){
+        $sqlerro = true;
+        $clprecoreferencia->erro_msg    = 'Quantidade de orçamentos cadastrados é menor que a quantidade de cotação selecionada.';
+        $clprecoreferencia->erro_status = "0";
+        $clprecoreferencia->erro_campo = "si01_cotacaoitem";
+    }
     /*  
     $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
                 round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
