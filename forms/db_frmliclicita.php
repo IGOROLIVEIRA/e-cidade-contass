@@ -203,20 +203,50 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                 </tr>
 
                                 <tr>
+                                    <td nowrap title="<?= @$Tl20_codtipocom ?>">
+                                        <b>
+                                            <?
+                                            db_ancora("Modalidade :", "js_pesquisal20_codtipocom(true);", 3);
+                                            ?>
+                                        </b>
+                                    </td>
+                                    <td>
+                                        <?
+                                        $result_tipo = $clcflicita->sql_record($clcflicita->sql_query_numeracao(null, "l03_codigo,l03_descr", null, "l03_instit = " . db_getsession("DB_instit")));
+                                        if ($clcflicita->numrows == 0) {
+                                            db_msgbox("Nenhuma Modalidade cadastrada!!");
+                                            $result_tipo = "";
+                                            $db_opcao = 3;
+                                            $db_botao = false;
+                                            db_input("l20_codtipocom", 10, "", true, "text");
+                                            db_input("l20_codtipocom", 40, "", true, "text");
+                                        } else {
+                                            db_selectrecord("l20_codtipocom", @$result_tipo, true, $db_opcao, "js_mostraRegistroPreco()");
+                                            if (isset($l20_codtipocom) && $l20_codtipocom != "") {
+                                                echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
+                                            }
+                                        }
+                                        ?>
+                                        <input type="hidden" id="descricao" name="descricao" value="" onchange="js_convite()">
+                                        <input type="hidden" id="vUsuario" name="vUsuario" value="<? echo $uLogin[1]; ?>">
+                                        <input type="hidden" id="vInclu" name="vInclu" value="<? echo $url_particao[1]; ?>">
+
+                                    </td>
+                                </tr>
+
+                                <tr>
                                     <td nowrap title="<?= @$Tl20_edital ?>">
                                         <?= @$Ll20_edital ?>
                                     </td>
                                     <td>
                                         <?
 
-                                        $bloqueianumeracoes;
-                                        if ($db_opcao == 1 || $db_opcao == 2) {
-                                            $bloqueianumeracoes = 1;
+                                        $bloqueianumeracoes = 3;
+
+                                        if ($l12_numeracaomanual == 't') {
+                                            if ($db_opcao == 1 || $db_opcao == 2) $bloqueianumeracoes = 1;
                                         }
 
-                                        if ($l12_numeracaomanual == 'f') {
-                                            $bloqueianumeracoes = 3;
-                                        }
 
                                         db_input('l20_edital', 10, $Il20_edital, true, 'text', $bloqueianumeracoes, "");
                                         ?>
@@ -284,37 +314,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td nowrap title="<?= @$Tl20_codtipocom ?>">
-                                        <b>
-                                            <?
-                                            db_ancora("Modalidade :", "js_pesquisal20_codtipocom(true);", 3);
-                                            ?>
-                                        </b>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $result_tipo = $clcflicita->sql_record($clcflicita->sql_query_numeracao(null, "l03_codigo,l03_descr", null, "l03_instit = " . db_getsession("DB_instit")));
-                                        if ($clcflicita->numrows == 0) {
-                                            db_msgbox("Nenhuma Modalidade cadastrada!!");
-                                            $result_tipo = "";
-                                            $db_opcao = 3;
-                                            $db_botao = false;
-                                            db_input("l20_codtipocom", 10, "", true, "text");
-                                            db_input("l20_codtipocom", 40, "", true, "text");
-                                        } else {
-                                            db_selectrecord("l20_codtipocom", @$result_tipo, true, $db_opcao, "js_mostraRegistroPreco()");
-                                            if (isset($l20_codtipocom) && $l20_codtipocom != "") {
-                                                echo "<script>document.form1.l20_codtipocom.selected=$l20_codtipocom;</script>";
-                                            }
-                                        }
-                                        ?>
-                                        <input type="hidden" id="descricao" name="descricao" value="" onchange="js_convite()">
-                                        <input type="hidden" id="vUsuario" name="vUsuario" value="<? echo $uLogin[1]; ?>">
-                                        <input type="hidden" id="vInclu" name="vInclu" value="<? echo $url_particao[1]; ?>">
 
-                                    </td>
-                                </tr>
                                 <tr>
                                     <td nowrap title="<?= @$Tl20_leidalicitacao ?>" id="leidalicitacao">
                                         <strong>Lei da Licitação:</strong>
