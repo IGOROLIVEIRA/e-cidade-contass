@@ -310,7 +310,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     <td>
                                         <?
                                         db_input('l20_codepartamento', 4, $Il20_codepartamento, true, 'text', $db_opcao, "onchange='js_pesquisal20_codepartamento(false)';");
-                                        db_input('l20_descricaodep', 45, $Il20_descricaodep, true, 'text', 3, "");
+                                        db_input('l20_descricaodep', 38, $Il20_descricaodep, true, 'text', 3, "");
                                         ?>
                                     </td>
                                 </tr>
@@ -391,7 +391,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <?
-                                        db_input('respConducodigo', 10, $respConducodigo, true, 'text', $db_opcao, "onchange=js_pesquisal31_numcgm(false,'respConducodigo','respCondunome');");
+                                        db_input('respConducodigo', 4, $respConducodigo, true, 'text', $db_opcao, "onchange=js_pesquisal31_numcgm(false,'respConducodigo','respCondunome');");
                                         db_input('respCondunome', 45, $respCondunome, true, 'text', 3, "");
                                         ?>
                                     </td>
@@ -1301,7 +1301,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
 
         document.getElementById("respCondunome").style.width = "251px";
-        document.getElementById("l20_descricaodep").style.width = "281px";
+        document.getElementById("l20_descricaodep").style.width = "251px";
         document.getElementById("lprocsis").style.width = "85px";
         document.getElementById("l20_usaregistropreco").style.width = "85px";
         document.getElementById("l20_codtipocomdescr").style.width = "307px";
