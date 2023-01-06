@@ -6,28 +6,29 @@ require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
 require_once("libs/db_libdicionario.php");
 require_once("dbforms/db_funcoes.php");
-require_once("dbforms/db_classesgenericas.php");
+//require_once("dbforms/db_classesgenericas.php");
 /*require_once("std/label/rotulo.php");
 require_once("std/label/RotuloDB.php");*/
 
 require_once("libs/db_autoload.php");
 
-/*require_once("model/esocial/FilaESocialTask.model.php");
-require_once("model/configuracao/DBLogXML.model.php");
-require_once("model/configuracao/TaskManager.model.php");
-require_once("src/RecursosHumanos/ESocial/Integracao/Recurso.php");
-require_once("src/RecursosHumanos/ESocial/Model/Formulario/Tipo.php");
-require_once("src/RecursosHumanos/ESocial/Integracao/ESocial.php");*/
-
-use \ECidade\V3\Extension\Registry;
+require_once("model/esocial/FilaESocialTask.model.php");
+// require_once("model/configuracao/DBLogXML.model.php");
+// require_once("model/configuracao/TaskManager.model.php");
+// require_once("src/RecursosHumanos/ESocial/Integracao/Recurso.php");
+// require_once("src/RecursosHumanos/ESocial/Model/Formulario/Tipo.php");
+// require_once("src/RecursosHumanos/ESocial/Integracao/ESocial.php");
+require_once("classes/db_esocialcertificado_classe.php");
+// require_once("src/V3/Extension/Registry.php");
+// require_once("src/Core/Config.php");
+use \ECidade\V3\Extension\Registry as Registry;
 use \ECidade\Core\Config as AppConfig;
 
 
 $fila = new FilaESocialTask();
 
-\ECidade\V3\Extension\Registry::set('app.config', new AppConfig());
-
-\ECidade\V3\Extension\Registry::get('app.config')->merge(array(
+Registry::set('app.config', new AppConfig());
+Registry::get('app.config')->merge(array(
 
     'charset' => 'UTF-8',
 

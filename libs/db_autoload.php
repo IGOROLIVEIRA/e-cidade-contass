@@ -210,7 +210,7 @@ function db_autoload($sClassName) {
     $sArquivoExcecao = $sDiretorioExcecao . $sClassName . '.php';
 
     if (file_exists(ECIDADE_PATH . $sArquivoExcecao)) {
-      return require_once(modification(ECIDADE_PATH . $sArquivoExcecao));
+      return require_once((ECIDADE_PATH . $sArquivoExcecao));
     }
 
   }
@@ -219,37 +219,32 @@ function db_autoload($sClassName) {
    * Verificamos se o arquivo nao consta na lista de excessões de arquivos
    */
   if (isset($aArquivosCLasseErradas[$sClassName])) {
-    return require_once(modification(ECIDADE_PATH . $aArquivosCLasseErradas[$sClassName]));
+    return require_once((ECIDADE_PATH . $aArquivosCLasseErradas[$sClassName]));
   }
 
-  if (substr($sClassName, 0, 3) == 'cl_') {
 
-    $sClassNameDao = str_replace("cl_", "db_", $sClassName);
-    return require_once(modification(ECIDADE_PATH . "classes/{$sClassNameDao}_classe.php"));
-
-  } else {
 
     foreach ($aIncludeDirs as $sDirectory) {
 
       $sFile = "{$sDirectory}{$sClassName}.model.php";
 
       if (file_exists(ECIDADE_PATH . $sFile)) {
-        return require_once(modification(ECIDADE_PATH . $sFile));
+        return require_once((ECIDADE_PATH . $sFile));
       }
 
       $sFile = "{$sDirectory}{$sClassName}.service.php";
 
       if (file_exists(ECIDADE_PATH . $sFile)) {
-        return require_once(modification(ECIDADE_PATH . $sFile));
+        return require_once((ECIDADE_PATH . $sFile));
       }
 
       $sFile = "{$sDirectory}{$sClassName}.interface.php";
 
       if (file_exists(ECIDADE_PATH . $sFile)) {
-        return require_once(modification(ECIDADE_PATH . $sFile));
+        return require_once((ECIDADE_PATH . $sFile));
       }
     }
-  }
+  
 
   return false;
 }
