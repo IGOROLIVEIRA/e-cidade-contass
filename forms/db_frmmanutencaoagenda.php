@@ -1210,7 +1210,7 @@ if (count($aParametrosEmpenho) > 0) {
         gridNotas.setCheckbox(0);
         gridNotas.hasTotalizador = true;
         gridNotas.allowSelectColumns(true);
-        gridNotas.setCellWidth(new Array("5%","7%", "3%", "5%","5%","15%","12%", "12%", "7%", "9%", "5%", "5%", "5%", "5%"));
+        gridNotas.setCellWidth(new Array("5%","6%", "5%", "4%","4%","15%","12%", "12%", "7%", "9%", "5%", "5%", "5%", "5%"));
         gridNotas.setCellAlign(new Array("right", "center","center", "center", "right", "left", "left", "center", "center", "center","right","right","right"));
         gridNotas.setHeader(new Array("Mov.",
             "Empenho",
