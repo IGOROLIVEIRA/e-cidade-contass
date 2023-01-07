@@ -797,8 +797,12 @@ class cl_empagetipo {
     /* PARA ATENDER A Portaria n° 3992/GM/MS/2017 DO MINISTERIO DA SAÚDE. QUE PERMITE PAGAMENTO DESTAS FONTES COM A MESMA CONTA BANCARIA */
     /* Acrescentado fonte 159 e 259 para atender alterações do TCE/MG a partir de 2020 */
     $iAnoUsu = db_getsession("DB_anousu");
-    $aFontes = array('148','149','150','151','152', '159', '248','249','250','251','252', '259','16000000','16020000');
-    $sqlFonteEmp = " select o15_codigo from empempenho ";
+    $aFontes = array('148','149','150','151','152', '159', '248','249','250','251','252', '259');
+    $sqlFonteEmp = " select o15_codtri from empempenho ";
+    if($iAnoUsu>2022){
+        $aFontes = array('148','149','150','151','152', '159', '248','249','250','251','252', '259','16000000','16020000');
+        $sqlFonteEmp = " select o15_codigo from empempenho ";
+    }
     $sqlFonteEmp .= "   inner join orcdotacao on e60_coddot = o58_coddot and e60_anousu = o58_anousu ";    
     if ($op != null) {
         $sqlFonteEmp .= " inner join pagordem on e60_numemp=e50_numemp ";
@@ -822,427 +826,321 @@ class cl_empagetipo {
         $sqlanoEmp .= " where e50_codord = ".$op;
     }    
     $rsResultFonteEmp = db_query($sqlFonteEmp);
-    $iFonteEmpenho = db_utils::fieldsMemory($rsResultFonteEmp, 0)->o15_codigo;
+    $iFonteEmpenho = db_utils::fieldsMemory($rsResultFonteEmp, 0)->o15_codtri;
+    if($iAnoUsu > 2022)
+      $iFonteEmpenho = db_utils::fieldsMemory($rsResultFonteEmp, 0)->o15_codigo;
     $rsResultAnoEmp = db_query($sqlanoEmp);
     $iAnoEmpenho = db_utils::fieldsMemory($rsResultAnoEmp, 0)->e60_anousu;
-
-    function pegarFontesMaior2022($iFonteEmpenho,$aFontes,$lContaUnicaFundeb,$iAnoUsu,$iAnoEmpenho){
+   
+  if($iAnoUsu>2022){
+      if(strlen($iFonteEmpenho) == 4)
+         $iFonteEmpenho= substr($iFonteEmpenho,1,3);
 
       if(in_array($iFonteEmpenho,$aFontes) and db_getsession("DB_anousu") > 2017){
-          $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('148','149','150','151','152', '159', '248','249','250','251','252', '259')) and";
-          $whereFonte2 = " ";
-          return array($$whereFonte,$whereFonte2);
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('148','149','150','151','152', '159', '248','249','250','251','252', '259')) and";
+      $whereFonte2 = " ";
+      return array($$whereFonte,$whereFonte2);
       } 
-      if(substr($iFonteEmpenho, 1, 2) == '00' || substr($iFonteEmpenho, 1, 7) == '5000000') {
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('100','200','15000000','25000000')) and";
-        return array($whereFonte);
+      elseif($iFonteEmpenho == '100' || $iFonteEmpenho == '200' || substr($iFonteEmpenho, 1, 7) == '5000000') {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('100','200','15000000','25000000')) and";
+      
       } 
-      if(substr($iFonteEmpenho, 1, 2) == '01' || substr($iFonteEmpenho, 1, 7) == '5000001') {
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('101','201','15000001','25000001')) and";
-        return array($whereFonte);
+      elseif($iFonteEmpenho == '101' || $iFonteEmpenho == '201' || substr($iFonteEmpenho, 1, 7) == '5000001') {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('101','201','15000001','25000001')) and";
+      
       } 
-      if(substr($iFonteEmpenho, 1, 2) == '02' || substr($iFonteEmpenho, 1, 7) == '5000002') {
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('102','202','15000002','25000002')) and";
-        return array($whereFonte);
+      elseif($iFonteEmpenho == '102' || $iFonteEmpenho == '202' || substr($iFonteEmpenho, 1, 7) == '5000002') {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('102','202','15000002','25000002')) and";
+      
       } 
-      if(substr($iFonteEmpenho, 1, 2) == '03' || substr($iFonteEmpenho,1,6) == '800000' ) {
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('103','203','18000001','18000002','18000000','28000001','28000002','28000000') and";
-        return array($whereFonte);
+      elseif($iFonteEmpenho == '103' || $iFonteEmpenho == '203' || substr($iFonteEmpenho,1,6) == '800000' ) {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('103','203','18000001','18000002','18000000','28000001','28000002','28000000') and";
+      
       } 
-      if(substr($iFonteEmpenho, 1, 2) == '04' || substr($iFonteEmpenho, 1, 7) == '8010000') {
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('104','204','18010000','18010000')) and";
-        return array($whereFonte);
+      elseif($iFonteEmpenho == '104' || $iFonteEmpenho == '204' || substr($iFonteEmpenho, 1, 7) == '8010000') {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('104','204','18010000','18010000')) and";
+      
       } 
-      if(substr($iFonteEmpenho, 1, 2) == '05' || substr($iFonteEmpenho, 1, 7) == '8020000') {
-         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('105','205','103','18020000','18000000','18000001','18000002','28020000','28000000','28000001','28000002')) and";
-         return array($whereFonte);
+      elseif($iFonteEmpenho == '105' || $iFonteEmpenho == '205' || substr($iFonteEmpenho, 1, 7) == '8020000') {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('105','205','103','18020000','18000000','18000001','18000002','28020000','28000000','28000001','28000002')) and";
+      
       }
-      if(substr($iFonteEmpenho, 1, 2) == '06' || substr($iFonteEmpenho, 1, 7) == '5760010') {
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('106','206','15760010','25760010')) and";
-        return array($whereFonte);
+      elseif($iFonteEmpenho == '106' || $iFonteEmpenho == '206' || substr($iFonteEmpenho, 1, 7) == '5760010') {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('106','206','15760010','25760010')) and";
+      
       }
-      if(substr($iFonteEmpenho, 1, 2) == '07' || substr($iFonteEmpenho, 1, 7) == '5440000') {
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('107','207','15440000','25440000')) and";
-        return array($whereFonte);
+      elseif($iFonteEmpenho == '107' || $iFonteEmpenho == '207' || substr($iFonteEmpenho, 1, 7) == '5440000') {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('107','207','15440000','25440000')) and";
+      
       }
-      if(substr($iFonteEmpenho, 1, 2) == '08' || substr($iFonteEmpenho, 1, 7) == '7080000') {
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('108','208','17080000','27080000')) and";
-        return array($whereFonte);
+      elseif($iFonteEmpenho == '108' || $iFonteEmpenho == '208' || substr($iFonteEmpenho, 1, 7) == '7080000') {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('108','208','17080000','27080000')) and";
+      
       }
-      if(substr($iFonteEmpenho, 1, 2) == '12' || substr($iFonteEmpenho, 1, 7) == '6590020') {
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('112','212','16590020','26590020')) and";
-        return array($whereFonte);
+      elseif($iFonteEmpenho == '112' || $iFonteEmpenho == '212' || substr($iFonteEmpenho, 1, 7) == '6590020') {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('112','212','16590020','26590020')) and";
+      
       }
-      if(substr($iFonteEmpenho, 1, 2) == '13' || substr($iFonteEmpenho, 1, 7) == '5990030') {
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('113','213','15990030','25990030')) and";
-        return array($whereFonte);
+      elseif($iFonteEmpenho == '113' || $iFonteEmpenho == '213' || substr($iFonteEmpenho, 1, 7) == '5990030') {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('113','213','15990030','25990030')) and";
+      
       }
-      if(substr($iFonteEmpenho, 1, 2) == '16' || substr($iFonteEmpenho, 1, 7) == '7500000') {
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('116','216','17500000','27500000')) and";
-        return array($whereFonte);
+      elseif($iFonteEmpenho == '116' || $iFonteEmpenho == '216' || substr($iFonteEmpenho, 1, 7) == '7500000') {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('116','216','17500000','27500000')) and";
+      
       }
-      if(substr($iFonteEmpenho, 1, 2) == '17' || substr($iFonteEmpenho, 1, 7) == '7510000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('117','217','17510000','27510000','100','15000000','25000000')) and"; 
-        return array($whereFonte);  
+      elseif($iFonteEmpenho == '117' || $iFonteEmpenho == '217' || substr($iFonteEmpenho, 1, 7) == '7510000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('117','217','17510000','27510000','100','200','15000000','25000000')) and"; 
+        
       }
-      if($lContaUnicaFundeb && (substr($iFonteEmpenho, 1, 2) == '18' || substr($iFonteEmpenho, 1, 2) == '19' || substr($iFonteEmpenho, 1, 2) == '66' || substr($iFonteEmpenho, 1, 2) == '67')
+      elseif($lContaUnicaFundeb && ($iFonteEmpenho == '118' || $iFonteEmpenho == '218' || $iFonteEmpenho == '119' || $iFonteEmpenho == '219' || $iFonteEmpenho == '166' || $iFonteEmpenho == '266' || $iFonteEmpenho == '167' || $iFonteEmpenho == '267')
       || substr($iFonteEmpenho, 1, 7) == '5400007' || substr($iFonteEmpenho, 1, 7) == '5400000' || substr($iFonteEmpenho, 1, 7) == '5420007' || substr($iFonteEmpenho, 1, 7) == '5420000'){
-          $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('118','218','119', '219', '166','167','266','267','15400007','15400000','15420007','15420000','25400007','25400000','25420007','25420000')) and";
-          return array($whereFonte);
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '20' || substr($iFonteEmpenho, 1, 7) == '5760000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('120','220','15760000','25760000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '21' || substr($iFonteEmpenho, 1, 7) == '6220000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('121','221','16220000','26220000')) and"; 
-        return array($whereFonte);  
-      }      
-      if(substr($iFonteEmpenho, 1, 2) == '22' || substr($iFonteEmpenho, 1, 7) == '5700000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('122','222','15700000','25700000','171','122','15710000','25710000')) and";  
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '23' || substr($iFonteEmpenho, 1, 7) == '6310000'){
-         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('123','223','16310000','26310000','176','16320000','26320000')) and";
-         return array($whereFonte); 
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '24' || substr($iFonteEmpenho, 1, 7) == '7000000'){
-         $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('124','224','17000000','27000000','181','17010000','27010000')) and";
-         return array($whereFonte); 
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '29' || substr($iFonteEmpenho, 1, 7) == '6600000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('129','229','16600000','26600000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '30' || substr($iFonteEmpenho, 1, 7) == '8990040'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('130','230','18990040','28990040')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '31' || substr($iFonteEmpenho, 1, 7) == '7590050'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('131','231','17590050','27590050')) and"; 
-        return array($whereFonte);  
-      } 
-      if(substr($iFonteEmpenho, 1, 2) == '32' || substr($iFonteEmpenho, 1, 7) == '6040000'){
-          $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('159','132','16040000','16000000','16020000','26040000','26000000','26020000')) and";   
-          return array($whereFonte);
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '33' || substr($iFonteEmpenho, 1, 7) == '7150000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('133','233','17150000','27150000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '34' || substr($iFonteEmpenho, 1, 7) == '7160000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('134','234',17160000','27160000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '35' || substr($iFonteEmpenho, 1, 7) == '7170000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('135','235','17170000','27170000')) and"; 
-        return array($whereFonte);  
-      }  
-      if(substr($iFonteEmpenho, 1, 2) == '36' || substr($iFonteEmpenho, 1, 7) == '7180000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('136','236','17180000','27180000','100','15000000','25000000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '42' || substr($iFonteEmpenho, 1, 7) == '6650000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('142','242','16650000','26650000')) and"; 
-        return array($whereFonte);  
-      } 
-      if(substr($iFonteEmpenho, 1, 2) == '43' || substr($iFonteEmpenho, 1, 7) == '5510000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('143','243,'15510000','25510000')) and"; 
-        return array($whereFonte);  
-      } 
-      if(substr($iFonteEmpenho, 1, 2) == '44' || substr($iFonteEmpenho, 1, 7) == '5520000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('144','244','15520000','25520000')) and"; 
-        return array($whereFonte);  
-      } 
-      if(substr($iFonteEmpenho, 1, 2) == '45' || substr($iFonteEmpenho, 1, 7) == '5530000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('145','245','15530000','25530000')) and"; 
-        return array($whereFonte);  
-      } 
-      if(substr($iFonteEmpenho, 1, 2) == '46' || substr($iFonteEmpenho, 1, 7) == '5690000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('146','246','15690000','25690000')) and"; 
-        return array($whereFonte);  
-      } 
-      if(substr($iFonteEmpenho, 1, 2) == '47' || substr($iFonteEmpenho, 1, 7) == '5500000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('147','247','15500000','25500000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '53' || substr($iFonteEmpenho,1,7) == '6010000' || substr($iFonteEmpenho,1,7) == '6030000' ) {
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('153','253','16010000','16030000','26010000','26030000') and";
-        return array($whereFonte);
-      }  
-      if(substr($iFonteEmpenho, 1, 2) == '54' || substr($iFonteEmpenho, 1, 7) == '6590000') {
-          $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('154','254','159','259','16590000','16000000','16020000','26590000','26000000','26020000')) and";
-          return array($whereFonte);
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '55' || substr($iFonteEmpenho, 1, 7) == '6210000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('155','255','16210000','26210000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '56' || substr($iFonteEmpenho, 1, 7) == '6610000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('156','256','16610000','26610000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '57' || substr($iFonteEmpenho, 1, 7) == '7520000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('157','257','17520000','27520000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '58' || substr($iFonteEmpenho, 1, 7) == '8990060'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('158','258','18990060','28990060')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '59' || substr($iFonteEmpenho, 1, 7) == '6000000' || substr($iFonteEmpenho, 1, 7) == '6020000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('159','259','16000000','16020000','26000000','26020000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '60' || $iFonteEmpenho == '17040000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('186','17040000',286','27040000')) and";
-        return array($whereFonte);
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '61' || substr($iFonteEmpenho, 1, 7) == '7070000' ){
-          $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('100','161','261','17070000','15000000','27070000','25000000')) and";
-          return array($whereFonte);
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '62' || substr($iFonteEmpenho, 1, 7) == '7490120'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('162','262','17490120','27490120')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '63' || substr($iFonteEmpenho, 1, 7) == '7130070'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('163','263','17130070','27130070')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '64' || substr($iFonteEmpenho, 1, 7) == '7060000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('164','264','17060000','27060000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '65' || substr($iFonteEmpenho, 1, 7) == '8990000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('165','265','18990000','28990000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '66' || substr($iFonteEmpenho, 1, 7) == '5420007'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('166','266','15420007','25420007')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '67' || substr($iFonteEmpenho, 1, 7) == '5420000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('167','267','15420000','25420000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '68' || substr($iFonteEmpenho, 1, 7) == '7100100'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('168','268','17100100','27100100')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '69' || substr($iFonteEmpenho, 1, 7) == '7100000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('169','269','17100000','27100000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '70' || substr($iFonteEmpenho, 1, 7) == '5010000'){
-          $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('100','170','15010000','15000000','270','25010000','25000000')) and";  
-          return array($whereFonte);
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '71' || substr($iFonteEmpenho, 1, 7) == '5710000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('171','271','15710000','25710000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '72' || substr($iFonteEmpenho, 1, 7) == '5720000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('172','272','15720000','25720000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '73' || substr($iFonteEmpenho, 1, 7) == '5750000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('173','273','15750000','25750000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '74' || substr($iFonteEmpenho, 1, 7) == '5740000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('174','274','15740000','25740000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '75' || substr($iFonteEmpenho, 1, 7) == '5730000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('175','275','15730000','25730000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '76' || substr($iFonteEmpenho, 1, 7) == '6320000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('176','276','16320000','26320000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '77' || substr($iFonteEmpenho, 1, 7) == '6330000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('177','277','26330000','26330000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '78' || substr($iFonteEmpenho, 1, 7) == '6360000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('178','278','16360000','26360000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '79' || substr($iFonteEmpenho, 1, 7) == '6340000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('179','279','16340000','26340000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '80' || substr($iFonteEmpenho, 1, 7) == '6350000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('180','280','16350000','26350000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '81' || substr($iFonteEmpenho, 1, 7) == '7010000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('181','281','17010000','27010000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '82' || substr($iFonteEmpenho, 1, 7) == '7020000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('182','282','17020000','27020000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '83' || substr($iFonteEmpenho, 1, 7) == '7030000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('183','283','17030000','27030000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '84' || substr($iFonteEmpenho, 1, 7) == '7090000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('184','284','17090000','27090000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '85' || substr($iFonteEmpenho, 1, 7) == '7530000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('185','285','17530000','27530000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '86' || substr($iFonteEmpenho, 1, 7) == '7040000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('186','286','17040000','27040000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '87' || substr($iFonteEmpenho, 1, 7) == '7050000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('187','287','17050000','27050000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '88' || substr($iFonteEmpenho, 1, 7) == '5000000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('188','288','15000000','25000000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '89' || substr($iFonteEmpenho, 1, 7) == '5000000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('189','289','15000000','25000000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '90' || substr($iFonteEmpenho, 1, 7) == '7540000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('190','290','17540000','27540000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '91' || substr($iFonteEmpenho, 1, 7) == '7540000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('191','291','17540000','27540000' )) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '92' || substr($iFonteEmpenho, 1, 7) == '7550000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('192','292','17550000','27550000')) and"; 
-        return array($whereFonte);  
-      }
-      if(substr($iFonteEmpenho, 1, 2) == '93' || substr($iFonteEmpenho, 1, 7) == '8990000'){
-        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('193','293','18990000','28990000')) and"; 
-        return array($whereFonte);  
-      }
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('$iFonteEmpenho')) and";   
-      return array($whereFonte);
-     
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('118','218','119', '219', '166','167','266','267','15400007','15400000','15420007','15420000','25400007','25400000','25420007','25420000')) and";
       
+      }
+      elseif($iFonteEmpenho == '120' || $iFonteEmpenho == '220' || substr($iFonteEmpenho, 1, 7) == '5760000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('120','220','15760000','25760000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '121' || $iFonteEmpenho == '221' || substr($iFonteEmpenho, 1, 7) == '6220000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('121','221','16220000','26220000')) and"; 
+        
+      } 
+      elseif($iFonteEmpenho == '122' || $iFonteEmpenho == '222' || substr($iFonteEmpenho, 1, 7) == '5700000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('122','222','15700000','25700000','171','122','15710000','25710000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '123' || $iFonteEmpenho == '223' || substr($iFonteEmpenho, 1, 7) == '6310000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('123','223','16310000','26310000','176','16320000','26320000')) and";
+        
+      }
+      elseif($iFonteEmpenho == '124' || $iFonteEmpenho == '224' || substr($iFonteEmpenho, 1, 7) == '7000000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('124','224','17000000','27000000','181','17010000','27010000')) and";
+        
+      }
+      elseif($iFonteEmpenho == '129' || $iFonteEmpenho == '229' || substr($iFonteEmpenho, 1, 7) == '6600000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('129','229','16600000','26600000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '130' || $iFonteEmpenho == '230' || substr($iFonteEmpenho, 1, 7) == '8990040'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('130','230','18990040','28990040')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '131' || $iFonteEmpenho == '231' || substr($iFonteEmpenho, 1, 7) == '7590050'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('131','231','17590050','27590050')) and"; 
+        
+      } 
+      elseif($iFonteEmpenho == '132' || $iFonteEmpenho == '232' || substr($iFonteEmpenho, 1, 7) == '6040000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('159','132','16040000','16000000','16020000','26040000','26000000','26020000')) and"; 
       
-      // if($iFonteEmpenho == '15410000'){
-       
-      // }
-      // if($iFonteEmpenho == '15430000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('15430000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '16040000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('16040000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '17140000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('17140000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '17580000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('17580000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '17610000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('17610000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '17990000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('17990000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '18620000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('18620000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '18690000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('18690000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '17560000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('17560000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '17590000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('17590000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '15990000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('15990000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '16590000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('16590000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '16620000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('16620000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '16690000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('16690000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '17110000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('17110000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '17120000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('17120000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '17130000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('17130000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '17490000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('17490000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '17190000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('17190000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '18980000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('18980000')) and";   
-      //   return array($whereFonte); 
-      // }
-      // if($iFonteEmpenho == '16590000'){
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('16590000')) and";   
-      //   return array($whereFonte); 
-      // }
-     
-     
-      // if($iFonteEmpenho ) {
-      //   $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('$iFonteEmpenho')) and";
-      //   return array($whereFonte);
-      // } 
+      }
+      elseif($iFonteEmpenho == '133' || $iFonteEmpenho == '233' || substr($iFonteEmpenho, 1, 7) == '7150000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('133','233','17150000','27150000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '134' || $iFonteEmpenho == '234' || substr($iFonteEmpenho, 1, 7) == '7160000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('134','234',17160000','27160000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '135' || $iFonteEmpenho == '235' || substr($iFonteEmpenho, 1, 7) == '7170000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('135','235','17170000','27170000')) and"; 
+        
+      } 
+      elseif($iFonteEmpenho == '136' || $iFonteEmpenho == '236' || substr($iFonteEmpenho, 1, 7) == '7180000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('136','236','17180000','27180000','100','200','15000000','25000000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '142' || $iFonteEmpenho == '242' || substr($iFonteEmpenho, 1, 7) == '6650000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('142','242','16650000','26650000')) and"; 
+        
+      } 
+      elseif($iFonteEmpenho == '143' || $iFonteEmpenho == '243' || substr($iFonteEmpenho, 1, 7) == '5510000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('143','243,'15510000','25510000')) and"; 
+        
+      } 
+      elseif($iFonteEmpenho == '144' || $iFonteEmpenho == '244' || substr($iFonteEmpenho, 1, 7) == '5520000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('144','244','15520000','25520000')) and"; 
+        
+      } 
+      elseif($iFonteEmpenho == '145' || $iFonteEmpenho == '245' || substr($iFonteEmpenho, 1, 7) == '5530000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('145','245','15530000','25530000')) and"; 
+        
+      } 
+      elseif($iFonteEmpenho == '146' || $iFonteEmpenho == '246' || substr($iFonteEmpenho, 1, 7) == '5690000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('146','246','15690000','25690000')) and"; 
+        
+      } 
+      elseif($iFonteEmpenho == '147' || $iFonteEmpenho == '247' || substr($iFonteEmpenho, 1, 7) == '5500000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('147','247','15500000','25500000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '153' || $iFonteEmpenho == '253' || substr($iFonteEmpenho,1,7) == '6010000' || substr($iFonteEmpenho,1,7) == '6030000' ) {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('153','253','16010000','16030000','26010000','26030000') and";
       
-
-      // if(substr($iFonteEmpenho, 1, 2) != '60' || $iFonteEmpenho != '17040000'){ // OC11508 Verificação adicionada para permitir utilização do recurso 160/260 na fonte 100
-      //    $whereFonte = " ";
-      //    $whereFonte2 = " AND (SELECT substr(o15_codigo,2,2) FROM orctiporec WHERE o15_codigo = c61_codigo) = (SELECT substr(o15_codigo,2,2) FROM orctiporec WHERE o15_codigo = o58_codigo) ";
-      //    return array($$whereFonte,$whereFonte2); 
-      // }
+      } 
+      elseif($iFonteEmpenho == '154' || $iFonteEmpenho == '254' || substr($iFonteEmpenho, 1, 7) == '6590000') {
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('154','254','159','259','16590000','16000000','16020000','26590000','26000000','26020000')) and";
       
+      }
+      elseif($iFonteEmpenho == '155' || $iFonteEmpenho == '255' || substr($iFonteEmpenho, 1, 7) == '6210000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('155','255','16210000','26210000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '156' || $iFonteEmpenho == '256' || substr($iFonteEmpenho, 1, 7) == '6610000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('156','256','16610000','26610000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '157' || $iFonteEmpenho == '257' || substr($iFonteEmpenho, 1, 7) == '7520000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('157','257','17520000','27520000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '158' || $iFonteEmpenho == '258' || substr($iFonteEmpenho, 1, 7) == '8990060'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('158','258','18990060','28990060')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '159' || $iFonteEmpenho == '259' || substr($iFonteEmpenho, 1, 7) == '6000000' || substr($iFonteEmpenho, 1, 7) == '6020000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('159','259','16000000','16020000','26000000','26020000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '160' || $iFonteEmpenho == '260' || $iFonteEmpenho == '17040000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('186','17040000',286','27040000')) and";
       
-   }
-
-  if($iAnoUsu>2022){
-      $Fonte = pegarFontesMaior2022($iFonteEmpenho,$aFontes,$lContaUnicaFundeb,$iAnoUsu,$iAnoEmpenho); 
-      $whereFonte =  $Fonte[0];
-      $whereFonte2 =  $Fonte[1];  
+      }
+      elseif($iFonteEmpenho == '161' || $iFonteEmpenho == '261' || substr($iFonteEmpenho, 1, 7) == '7070000' ){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('100','200','161','261','17070000','15000000','27070000','25000000')) and";
+      
+      }
+      elseif($iFonteEmpenho == '162' || $iFonteEmpenho == '262' || substr($iFonteEmpenho, 1, 7) == '7490120'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('162','262','17490120','27490120')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '163' || $iFonteEmpenho == '263' || substr($iFonteEmpenho, 1, 7) == '7130070'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('163','263','17130070','27130070')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '164' || $iFonteEmpenho == '264' || substr($iFonteEmpenho, 1, 7) == '7060000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('164','264','17060000','27060000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '165' || $iFonteEmpenho == '265' || substr($iFonteEmpenho, 1, 7) == '8990000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('165','265','18990000','28990000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '166' || $iFonteEmpenho == '266' || substr($iFonteEmpenho, 1, 7) == '5420007'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('166','266','15420007','25420007')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '167' || $iFonteEmpenho == '267' || substr($iFonteEmpenho, 1, 7) == '5420000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('167','267','15420000','25420000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '168' || $iFonteEmpenho == '268' || substr($iFonteEmpenho, 1, 7) == '7100100'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('168','268','17100100','27100100')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '169' || $iFonteEmpenho == '269' || substr($iFonteEmpenho, 1, 7) == '7100000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('169','269','17100000','27100000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '170' || $iFonteEmpenho == '270' || substr($iFonteEmpenho, 1, 7) == '5010000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('100','200','170','15010000','15000000','270','25010000','25000000')) and"; 
+      
+      }
+      elseif($iFonteEmpenho == '171' || $iFonteEmpenho == '271' || substr($iFonteEmpenho, 1, 7) == '5710000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('171','271','15710000','25710000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '172' || $iFonteEmpenho == '272' || substr($iFonteEmpenho, 1, 7) == '5720000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('172','272','15720000','25720000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '173' || $iFonteEmpenho == '273' || substr($iFonteEmpenho, 1, 7) == '5750000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('173','273','15750000','25750000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '174' || $iFonteEmpenho == '274' || substr($iFonteEmpenho, 1, 7) == '5740000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('174','274','15740000','25740000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '175' || $iFonteEmpenho == '275' || substr($iFonteEmpenho, 1, 7) == '5730000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('175','275','15730000','25730000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '176' || $iFonteEmpenho == '276' || substr($iFonteEmpenho, 1, 7) == '6320000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('176','276','16320000','26320000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '177' || $iFonteEmpenho == '277' || substr($iFonteEmpenho, 1, 7) == '6330000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('177','277','26330000','26330000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '178' || $iFonteEmpenho == '278' || substr($iFonteEmpenho, 1, 7) == '6360000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('178','278','16360000','26360000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '179' || $iFonteEmpenho == '279' || substr($iFonteEmpenho, 1, 7) == '6340000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('179','279','16340000','26340000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '180' || $iFonteEmpenho == '280' || substr($iFonteEmpenho, 1, 7) == '6350000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('180','280','16350000','26350000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '181' || $iFonteEmpenho == '281' || substr($iFonteEmpenho, 1, 7) == '7010000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('181','281','17010000','27010000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '182' || $iFonteEmpenho == '282' || substr($iFonteEmpenho, 1, 7) == '7020000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('182','282','17020000','27020000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '183' || $iFonteEmpenho == '283' || substr($iFonteEmpenho, 1, 7) == '7030000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('183','283','17030000','27030000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '184' || $iFonteEmpenho == '284' || substr($iFonteEmpenho, 1, 7) == '7090000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('184','284','17090000','27090000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '185' || $iFonteEmpenho == '285' || substr($iFonteEmpenho, 1, 7) == '7530000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('185','285','17530000','27530000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '186' || $iFonteEmpenho == '286' || substr($iFonteEmpenho, 1, 7) == '7040000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('186','286','17040000','27040000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '187' || $iFonteEmpenho == '287' || substr($iFonteEmpenho, 1, 7) == '7050000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('187','287','17050000','27050000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '188' || $iFonteEmpenho == '288' || substr($iFonteEmpenho, 1, 7) == '5000000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('188','288','15000000','25000000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '189' || $iFonteEmpenho == '289' || substr($iFonteEmpenho, 1, 7) == '5000000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('189','289','15000000','25000000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '190' || $iFonteEmpenho == '290' || substr($iFonteEmpenho, 1, 7) == '7540000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('190','290','17540000','27540000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '191' || $iFonteEmpenho == '291' || substr($iFonteEmpenho, 1, 7) == '7540000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('191','291','17540000','27540000' )) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '192' || $iFonteEmpenho == '292' || substr($iFonteEmpenho, 1, 7) == '7550000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('192','292','17550000','27550000')) and"; 
+        
+      }
+      elseif($iFonteEmpenho == '193' || $iFonteEmpenho == '293' || substr($iFonteEmpenho, 1, 7) == '8990000'){
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('193','293','18990000','28990000')) and"; 
+        
+      }
+      else
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('$iFonteEmpenho')) and"; 
+      
   }else{
     if(in_array($iFonteEmpenho,$aFontes) and db_getsession("DB_anousu") > 2017){
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ('148','149','150','151','152', '159', '248','249','250','251','252', '259')) and";
