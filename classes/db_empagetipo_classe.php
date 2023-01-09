@@ -835,13 +835,8 @@ class cl_empagetipo {
   if($iAnoUsu>2022){
       if(strlen($iFonteEmpenho) == 4)
          $iFonteEmpenho= substr($iFonteEmpenho,1,3);
-
-      if(in_array($iFonteEmpenho,$aFontes) and db_getsession("DB_anousu") > 2017){
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('148','149','150','151','152', '159', '248','249','250','251','252', '259')) and";
-      $whereFonte2 = " ";
-      return array($$whereFonte,$whereFonte2);
-      } 
-      elseif($iFonteEmpenho == '100' || $iFonteEmpenho == '200' || substr($iFonteEmpenho, 1, 7) == '5000000') {
+         
+      if($iFonteEmpenho == '100' || $iFonteEmpenho == '200' || substr($iFonteEmpenho, 1, 7) == '5000000') {
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('100','200','15000000','25000000')) and";
       
       } 
