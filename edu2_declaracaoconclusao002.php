@@ -156,7 +156,7 @@ $proxEtapa = $clserie->sql_record($clserie->sql_query_file("",
                                                            null,
                                                            "ed11_i_sequencia = (select ed11_i_sequencia
                                                                                 from serie
-                                                                                ed11_i_codigo = {$codigo})+1
+                                                                                where ed11_i_codigo = {$codigo})+1
                                                                                     and ed11_i_ensino = {$ensino}"
                                                           ));
 db_fieldsmemory($proxEtapa,0);
@@ -193,7 +193,7 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
 
   $oPdf->setfont('arial', 'b', 12);
   $oPdf->SetY($oPdf->getY() + 10);
-  $oPdf->Cell(192, $oParametros->iAlturaLinha, "Declaração de Conclusão", 0, 1, "C");
+  $oPdf->Cell(192, $oParametros->iAlturaLinha, "Declaração de Transferência", 0, 1, "C");
   $oPdf->Ln($oParametros->iAlturaLinha * 15); //modifica a posicao do paragrafo no relatório
 
   $oPdf->setfont('arial', '', 10);
