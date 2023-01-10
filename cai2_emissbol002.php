@@ -649,6 +649,7 @@ $saldoc_atual = 0;
 $pdf->SetTextColor(0);
 $pdf->SetFont('Arial', '', 8);
 $sVerificaFonte = "";
+
 for ($i = 0; $i < pg_numrows($resultcontasmovimento); $i ++) {
 	db_fieldsmemory($resultcontasmovimento, $i);
 	if ($pdf->gety() > ($pdf->h - 30)) {
@@ -942,7 +943,7 @@ foreach ($aContasMovs as $oConta) {
         $pdf->cell(192, $alt, 0, 1, 1, 1, 0);
       }
       $pdf->SetFont('Arial', 'B', 7);
-      $pdf->cell(96, $alt, $oConta->o15_codtri.' - '.substr($oConta->o15_descr,0,57), "LTB", 0, 'L', 0);
+      $pdf->cell(96, $alt, (db_getsession("DB_anousu") > 2022 ? $oConta->c61_codigo : $oConta->o15_codtri) .' - '.substr($oConta->o15_descr,0,57), "LTB", 0, 'L', 0);
       $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->o15_codtri]->anterior, 'f'), 1, 0, 'R', 0);
       $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->o15_codtri]->debitado, 'f'), 1, 0, 'R', 0);
       $pdf->cell(24, $alt, db_formatar($aAgrupaFonteBancos[$oConta->o15_codtri]->creditado, 'f'), 1, 0, 'R', 0);
