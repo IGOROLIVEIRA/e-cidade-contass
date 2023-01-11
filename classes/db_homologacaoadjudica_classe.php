@@ -667,6 +667,7 @@ class cl_homologacaoadjudica {
         $sql .= "      left  join empempaut              on empempaut.e61_autori                = empautitem.e55_autori ";
         $sql .= "      left  join empempenho             on empempenho.e60_numemp               = empempaut.e61_numemp ";
         $sql .= "      left join liclicitem              on liclicitem.l21_codpcprocitem        = pcprocitem.pc81_codprocitem";
+        $sql .= "      left join liclicita              on liclicita.l20_codigo                 = liclicitem.l21_codliclicita";
         $sql .= "      left join liclicitemlote         on liclicitemlote.l04_liclicitem        = liclicitem.l21_codigo";
         $sql .= "      left join pcorcamitemlic         on liclicitem.l21_codigo               = pcorcamitemlic.pc26_liclicitem";
         $sql .= "      left join pcorcamitem            on pcorcamitemlic.pc26_orcamitem       = pcorcamitem.pc22_orcamitem";
