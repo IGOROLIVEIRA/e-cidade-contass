@@ -3,7 +3,12 @@
 <?php
 
 $clorctiporec = new cl_orctiporec();
-$sql = "select distinct concat('1', substring(o15_codtri, 2, 2)) as o15_codtri from orctiporec o1 where o15_codtri != '' and o15_codtri::int >= 100 AND o15_codtri::int <= 299 AND (o15_datalimite IS NULL OR o15_datalimite <= '" . db_getsession("DB_anousu") . "-12-31') order by concat('1', substring(o15_codtri, 2, 2))";
+
+if (db_getsession("DB_anousu") <= 2022) {
+    $sql = "select distinct concat('1', substring(o15_codtri, 2, 2)) as o15_codtri from orctiporec o1 where o15_codtri != '' and o15_codtri::int >= 100 AND o15_codtri::int <= 299 AND (o15_datalimite IS NULL OR o15_datalimite >= '" . db_getsession("DB_anousu") . "-12-31') order by concat('1', substring(o15_codtri, 2, 2))";
+} else {
+    $sql = "select distinct concat('1', substring(o15_codtri, 2)) as o15_codtri from orctiporec o1 where o15_codtri != '' AND o15_codtri::int > 999999 AND (o15_datalimite IS NULL OR o15_datalimite <= '" . db_getsession("DB_anousu") . "-12-31') order by concat('1', substring(o15_codtri, 2))";
+}
 
 $recursos = $clorctiporec->sql_record($sql);
 
