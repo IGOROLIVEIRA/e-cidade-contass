@@ -934,7 +934,7 @@ class cl_empagetipo {
         
       }
       elseif($iFonteEmpenho == '134' || $iFonteEmpenho == '234' || substr($iFonteEmpenho, 1, 7) == '7160000'){
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('134','234',17160000','27160000')) and"; 
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('134','234','17160000','27160000')) and"; 
         
       }
       elseif($iFonteEmpenho == '135' || $iFonteEmpenho == '235' || substr($iFonteEmpenho, 1, 7) == '7170000'){
@@ -997,8 +997,8 @@ class cl_empagetipo {
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('159','259','16000000','16020000','26000000','26020000')) and"; 
         
       }
-      elseif($iFonteEmpenho == '160' || $iFonteEmpenho == '260' || $iFonteEmpenho == '17040000'){
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('186','17040000',286','27040000')) and";
+      elseif($iFonteEmpenho == '160' || $iFonteEmpenho == '260' || substr($iFonteEmpenho, 1, 7) == '7040000'){ 
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('186','17040000','286','27040000')) and";
       
       }
       elseif($iFonteEmpenho == '161' || $iFonteEmpenho == '261' || substr($iFonteEmpenho, 1, 7) == '7070000' ){
