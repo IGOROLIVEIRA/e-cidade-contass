@@ -2044,12 +2044,7 @@ class cl_formulario_rel_pes {
   }
 
   function limpa_camp_selecionad($tabela){
-//    $campo = '$this->campo_auxilio_'.$tabela;
-//     if(isset($GLOBALS[eval($campo)])){
-//       $valor_variavel = eval($campo);
-//       global $$valor_variavel;
-//       $$valor_variavel = "";
-//    }
+
     if($tabela != "regi"){
       if(isset($GLOBALS[$this->campo_auxilio_regi])){
         $valor_variavel = $this->campo_auxilio_regi;
@@ -2192,60 +2187,60 @@ class cl_formulario_rel_pes {
               js_OpenJanelaIframe('top.corpo','db_iframe_".$tabela."','func_".$tabela.".php?".$testar_rescis."funcao_js=parent.js_geraform_mostra".$tabela."2|".$dcampo1."|".$dcampo2."&instit=".(db_getsession("DB_instit"))."','Pesquisa',true);
             }
           }else{
-    ";
-
-    if($tabela == "rhrubricas"){
-      $variavel_retorno.= "
-                 if(js_completa_rubricas){
-                   if(opcao == 1){
-                     js_completa_rubricas('".$ncampo1."','".$formula."');
-                   }else{
-                     js_completa_rubricas('".$ncampo2."','".$formula."');
-                   }
-                 }
       ";
-    }
 
-    $variavel_retorno.= "
-             if(opcao == 1){
-               if(document.".$formula.".".$ndescri."){
-                 if(document.".$formula.".".$ncampo1.".value != ''){
-                   js_OpenJanelaIframe('top.corpo','db_iframe_".$tabela."','func_".$tabela.".php?".$testar_rescis."pesquisa_chave='+document.".$formula.".".$ncampo1.".value+'&funcao_js=parent.js_geraform_mostra".$tabela."&instit=".db_getsession("DB_instit")."','Pesquisa',false);
-                 }else{
-                   document.".$formula.".".$ndescri.".value = '';
-                 }
-               }
-             }
-          }
-        }
-        function js_geraform_mostra".$tabela."(chave,erro){
-          if(document.".$formula.".".$ndescri."){
-            document.".$formula.".".$ndescri.".value = chave;
-            if(erro==true){
-              document.".$formula.".".$ncampo1.".focus();
-              document.".$formula.".".$ncampo1.".value = '';
+      if($tabela == "rhrubricas"){
+        $variavel_retorno.= "
+                  if(js_completa_rubricas){
+                    if(opcao == 1){
+                      js_completa_rubricas('".$ncampo1."','".$formula."');
+                    }else{
+                      js_completa_rubricas('".$ncampo2."','".$formula."');
+                    }
+                  }
+        ";
+      }
+
+      $variavel_retorno.= "
+              if(opcao == 1){
+                if(document.".$formula.".".$ndescri."){
+                  if(document.".$formula.".".$ncampo1.".value != ''){
+                    js_OpenJanelaIframe('top.corpo','db_iframe_".$tabela."','func_".$tabela.".php?".$testar_rescis."pesquisa_chave='+document.".$formula.".".$ncampo1.".value+'&funcao_js=parent.js_geraform_mostra".$tabela."&instit=".db_getsession("DB_instit")."','Pesquisa',false);
+                  }else{
+                    document.".$formula.".".$ndescri.".value = '';
+                  }
+                }
+              }
             }
           }
-        }
-        function js_geraform_mostra".$tabela."1(chave1,chave2){
-          document.".$formula.".".$ncampo1.".value = chave1;
-          if(document.".$formula.".".$ndescri."){
-            document.".$formula.".".$ndescri.".value = chave2;
+          function js_geraform_mostra".$tabela."(chave,erro){
+            if(document.".$formula.".".$ndescri."){
+              document.".$formula.".".$ndescri.".value = chave;
+              if(erro==true){
+                document.".$formula.".".$ncampo1.".focus();
+                document.".$formula.".".$ncampo1.".value = '';
+              }
+            }
           }
-          db_iframe_".$tabela.".hide();
-        }
-        function js_geraform_mostra".$tabela."2(chave1,chave2){
-          document.".$formula.".".$ncampo2.".value = chave1;
-          db_iframe_".$tabela.".hide();
-        }
-        function js_copiavalor".$tabela."(){
-    if(document.".$formula.".".$ncampo2.".value == ''){
-      document.".$formula.".".$ncampo2.".value = document.".$formula.".".$ncampo1.".value;
+          function js_geraform_mostra".$tabela."1(chave1,chave2){
+            document.".$formula.".".$ncampo1.".value = chave1;
+            if(document.".$formula.".".$ndescri."){
+              document.".$formula.".".$ndescri.".value = chave2;
+            }
+            db_iframe_".$tabela.".hide();
+          }
+          function js_geraform_mostra".$tabela."2(chave1,chave2){
+            document.".$formula.".".$ncampo2.".value = chave1;
+            db_iframe_".$tabela.".hide();
+          }
+          function js_copiavalor".$tabela."(){
+      if(document.".$formula.".".$ncampo2.".value == ''){
+        document.".$formula.".".$ncampo2.".value = document.".$formula.".".$ncampo1.".value;
+      }
     }
-  }
-      </script>
-    ";
-    return $variavel_retorno;
+        </script>
+      ";
+      return $variavel_retorno;
   }
 
   function monta_script_buscdados($formula,$ncampo,$qcampo){
@@ -2294,7 +2289,7 @@ class cl_formulario_rel_pes {
     return $variavel_retorno;
   }
 
-  function gera_form($ano="",$mes=""){
+  function gera_form($ano="",$mes="") {
     $this->atualiza_variaveis_filtro();
 
     if($this->onchpad == true){
@@ -2348,72 +2343,7 @@ class cl_formulario_rel_pes {
             </tr>
            ";
     }
-    /*
-// inicio
-    if($this->usaregi == true){
-      if($this->intregi == true){
-        $this->monta_form_intervalos($this->re1nome,$this->re2nome,$this->re4nome,"rh01_regist","rhpessoal");
-      }else if($this->uniregi == true){
-        $this->monta_form_unicocampo($this->re1nome,"rh01_regist","z01_nome","rhpessoal");
-      }
-      echo $this->monta_script_pesquisa("rhpessoal","rh01_regist","z01_nome",$this->re1nome,$this->re2nome,"z01_nome",$this->formnam);
-    }
-
-    if($this->usaorga == true){
-      if($this->intorga == true){
-        $this->monta_form_intervalos($this->or1nome,$this->or2nome,$this->or4nome,"o40_orgao","orcorgao");
-      }else if($this->uniorga == true){
-        $this->monta_form_unicocampo($this->or1nome,"o40_orgao","o40_descr","orcorgao");
-      }
-      echo $this->monta_script_pesquisa("orcorgao","o40_orgao","o40_descr",$this->or1nome,$this->or2nome,"o40_descr",$this->formnam);
-    }
-
-    if($this->usarecu == true){
-      if($this->intrecu == true){
-        $this->monta_form_intervalos($this->rc1nome,$this->rc2nome,$this->rc4nome,"o15_codigo","orctiporec");
-      }else if($this->unirecu == true){
-        $this->monta_form_unicocampo($this->rc1nome,"o15_codigo","o15_descr","orctiporec");
-      }
-      echo $this->monta_script_pesquisa("orctiporec","o15_codigo","o15_descr",$this->rc1nome,$this->rc2nome,"o15_descr",$this->formnam);
-    }
-
-    if($this->usalota == true){
-      if($this->intlota == true){
-        $this->monta_form_intervalos($this->lo1nome,$this->lo2nome,$this->lo4nome,"r70_estrut","rhlota",15);
-      }else if($this->unilota == true){
-        $this->monta_form_unicocampo($this->lo1nome,"r70_estrut","r70_descr","rhlota",15);
-      }
-      echo $this->monta_script_pesquisa("rhlota","r70_estrut","r70_descr",$this->lo1nome,$this->lo2nome,"r70_descr",$this->formnam);
-    }
-
-    if($this->usarubr == true){
-      if($this->intrubr == true){
-        $this->monta_form_intervalos($this->ru1nome,$this->ru2nome,$this->ru4nome,"rh27_rubric","rhrubricas");
-      }else if($this->unirubr == true){
-        $this->monta_form_unicocampo($this->ru1nome,"rh27_rubric","rh27_descr","rhrubricas");
-      }
-      echo $this->monta_script_pesquisa("rhrubricas","rh27_rubric","rh27_descr",$this->ru1nome,$this->ru2nome,"rh27_descr",$this->formnam);
-    }
-
-    if($this->usaloca == true){
-      if($this->intloca == true){
-        $this->monta_form_intervalos($this->tr1nome,$this->tr2nome,$this->tr4nome,"rh55_estrut","rhlocaltrab");
-      }else if($this->uniloca == true){
-        $this->monta_form_unicocampo($this->tr1nome,"rh55_estrut","rh55_descr","rhlocaltrab");
-      }
-      echo $this->monta_script_pesquisa("rhlocaltrab","rh55_estrut","rh55_descr",$this->tr1nome,$this->tr2nome,"rh55_descr",$this->formnam);
-    }
-
-    if($this->usacarg == true){
-      if($this->intcarg == true){
-        $this->monta_form_intervalos($this->ca1nome,$this->ca2nome,$this->ca4nome,"rh37_funcao","rhfuncao");
-      }else if($this->unicarg == true){
-        $this->monta_form_unicocampo($this->ca1nome,"rh37_funcao","rh37_descr","rhfuncao");
-      }
-      echo $this->monta_script_pesquisa("rhfuncao","rh37_funcao","rh37_descr",$this->ca1nome,$this->ca2nome,"rh37_descr",$this->formnam);
-    }
-/// fim
-*/
+    
     if($this->selecao == true){
         $this->monta_form_unicocampo($this->selnome,"r44_selec","r44_descr","selecao");
           echo $this->monta_script_pesquisa("selecao","r44_selec","r44_descr",$this->selnome,"campo4","r44_descr",$this->formnam);
@@ -2535,7 +2465,7 @@ class cl_formulario_rel_pes {
       $this->monta_select_tdrtable($this->arr_tipoarq, $this->tipoarqnome, 'Tipo de Arquivo', 'Tipo de Arquivo');
     }
     if($this->mostord == true){
-  $this->monta_select_tdrtable($this->arr_mostord,$this->mornome,$this->tipordem.":",$this->tipordem);
+      $this->monta_select_tdrtable($this->arr_mostord,$this->mornome,$this->tipordem.":",$this->tipordem);
     }
 
     if($this->mostasc == true){
@@ -2566,7 +2496,7 @@ class cl_formulario_rel_pes {
        $arr_atinpen = Array("g"=>"Geral","a"=>"Ativos","i"=>"Inativos","p"=>"Pensionistas","ip"=>"Inativos / Pensionistas");
       $this->monta_select_tdrtable($arr_atinpen,$this->aignome,"Vínculo:","Mostrar Inativos/Pensionistas, Ativos ou Geral");
     }
-// monta a parte das tabelas de previdência
+    // monta a parte das tabelas de previdência
     if($this->usarprevid == true){
       $whereprevid = "";
       if(trim($this->whereprevid) != ""){
@@ -2590,7 +2520,7 @@ class cl_formulario_rel_pes {
     }
 
 
-// monta a parte do intervalo da opo escolhida
+    // monta a parte do intervalo da opo escolhida
     $sFieldsetClass = '';
     if( $this->usaLotaFieldsetClass ){
       $sFieldsetClass = "class = 'form-container'";
@@ -2658,7 +2588,7 @@ class cl_formulario_rel_pes {
       echo $this->monta_script_pesquisa("rhfuncao","rh37_funcao","rh37_descr",$this->ca1nome,$this->ca2nome,"rh37_descr",$this->formnam);
     }
 
-// monta a parte do seleção da opção escolhida
+      // monta a parte do seleção da opção escolhida
 
     if($this->selregi == true || $this->selrecu == true || $this->selorga == true || $this->sellota == true || $this->selrubr == true || $this->selloca == true || $this->selcarg == true){
       echo "
@@ -2680,24 +2610,24 @@ class cl_formulario_rel_pes {
         $this->clarquivo_auxiliar->executa_script_lost_focus_campo = "js_insSelect".$this->re3nome."();";
         $this->clarquivo_auxiliar->executa_script_change_focus = "document.form1.rh01_regist.focus();";
         $this->clarquivo_auxiliar->completar_com_zeros_codigo = false;
-  $registrosselecionados = "";
+        $registrosselecionados = "";
         if(isset($GLOBALS[$this->campo_auxilio_regi]) && trim($GLOBALS[$this->campo_auxilio_regi]) != ""){
           $registrosselecionados = $GLOBALS[$this->campo_auxilio_regi];
-    if($this->testarescisaoregi == true){
-      $registrosselecionados = "";
-            $virgula = "";
-            $arr_registrosselecion = split(",",$GLOBALS[$this->campo_auxilio_regi]);
-            for($i=0; $i<count($arr_registrosselecion); $i++){
-                    $result_rescisoes = db_query("select rh05_recis from rhpessoalmov inner join rhpesrescisao on rh05_seqpes = rh02_seqpes where rh02_anousu = ".$ano." and rh02_mesusu = ".$mes." and rh02_regist = ".$arr_registrosselecion[$i]);
-        if(pg_numrows($result_rescisoes) == 0){
-                $registrosselecionados.= $virgula.$arr_registrosselecion[$i];
-                $virgula = ", ";
-        }else{
-          db_msgbox("Funcionário ".$arr_registrosselecion[$i]." rescindido. Verifique.");
-          break;
+        if($this->testarescisaoregi == true){
+          $registrosselecionados = "";
+                $virgula = "";
+                $arr_registrosselecion = split(",",$GLOBALS[$this->campo_auxilio_regi]);
+                for($i=0; $i<count($arr_registrosselecion); $i++){
+                        $result_rescisoes = db_query("select rh05_recis from rhpessoalmov inner join rhpesrescisao on rh05_seqpes = rh02_seqpes where rh02_anousu = ".$ano." and rh02_mesusu = ".$mes." and rh02_regist = ".$arr_registrosselecion[$i]);
+            if(pg_numrows($result_rescisoes) == 0){
+                    $registrosselecionados.= $virgula.$arr_registrosselecion[$i];
+                    $virgula = ", ";
+            }else{
+              db_msgbox("Funcionário ".$arr_registrosselecion[$i]." rescindido. Verifique.");
+              break;
+            }
+                      }
         }
-                  }
-    }
 
           $sql_regi = "select rh01_regist,z01_nome from rhpessoal inner join cgm on z01_numcgm = rh01_numcgm where rh01_regist in (".$registrosselecionados.")";
           if(!isset($chama_funcao) || (isset($chama_funcao) && trim($chama_funcao) == "")){
@@ -2832,7 +2762,7 @@ class cl_formulario_rel_pes {
         $this->clarquivo_auxiliar->executa_script_lost_focus_campo = "js_insSelect".$this->ca3nome."();";
         $this->clarquivo_auxiliar->executa_script_change_focus = "document.form1.rh37_funcao.focus();";
         $this->clarquivo_auxiliar->completar_com_zeros_codigo = false;
-  $this->clarquivo_auxiliar->tamanho_campo_descricao = 42;
+        $this->clarquivo_auxiliar->tamanho_campo_descricao = 42;
         if(isset($GLOBALS[$this->campo_auxilio_carg]) && trim($GLOBALS[$this->campo_auxilio_carg]) != ""){
           $locaistrabselecionados = "";
           $virgula = "";
@@ -2848,7 +2778,7 @@ class cl_formulario_rel_pes {
 
       $query_rescisao = "";
       if($this->selregi == true && trim($this->testarescisaoregi) != ""){
-  $query_rescisao = "&testarescisao=".$this->testarescisaoregi;
+        $query_rescisao = "&testarescisao=".$this->testarescisaoregi;
       }
       $this->clarquivo_auxiliar->passar_query_string_para_func = "&instit=".db_getsession("DB_instit").$query_rescisao;
       $this->clarquivo_auxiliar->mostrar_botao_lancar = false;
@@ -2898,23 +2828,23 @@ class cl_formulario_rel_pes {
     echo "
       function js_testa_complementar(valor, tipo){
    ";
-    if(trim($this->complementar) != ""){
-    echo "
-        if(valor == '".$this->complementar."' || document.".$this->formnam.".".$this->comnome."){
-    document.".$this->formnam.".submit();
-              }
-   ";
-    }
-    if(trim($this->suplementar) != ""){
-    echo "
-        if(valor == '".$this->suplementar."' || document.".$this->formnam.".".$this->comnome."){
-    document.".$this->formnam.".submit();
-              }
-   ";
-    }
+          if(trim($this->complementar) != ""){
+          echo "
+              if(valor == '".$this->complementar."' || document.".$this->formnam.".".$this->comnome."){
+          document.".$this->formnam.".submit();
+                    }
+        ";
+          }
+          if(trim($this->suplementar) != ""){
+              echo "
+                  if(valor == '".$this->suplementar."' || document.".$this->formnam.".".$this->comnome."){
+              document.".$this->formnam.".submit();
+                        }
+            ";
+          }
     echo "
       }
-            function js_geraform_trocaopcao(){
+      function js_geraform_trocaopcao(){
               ".$this->monta_script_buscdados($this->formnam,$this->re3nome,$this->campo_auxilio_regi)."
               ".$this->monta_script_buscdados($this->formnam,$this->or3nome,$this->campo_auxilio_orga)."
               ".$this->monta_script_buscdados($this->formnam,$this->rc3nome,$this->campo_auxilio_recu)."
@@ -2923,20 +2853,20 @@ class cl_formulario_rel_pes {
               ".$this->monta_script_buscdados($this->formnam,$this->tr3nome,$this->campo_auxilio_loca)."
               ".$this->monta_script_buscdados($this->formnam,$this->ca3nome,$this->campo_auxilio_carg)."
               document.".$this->formnam.".submit();
-            }
-            function js_gerar_consrel(){
+      }
+      function js_gerar_consrel(){
               qry = '';
          ";
-    if(trim($this->relarqu) != ""){
-      echo "
-              com = '?';
-           ";
-    }else{
-      echo "
-              com = '';
-           ";
-    }
-    echo "
+              if(trim($this->relarqu) != ""){
+                echo "
+                        com = '?';
+                    ";
+              }else{
+                echo "
+                        com = '';
+                    ";
+              }
+          echo "
               ".$this->monta_script_gerarif($this->formnam,$this->anonome,"")."
               ".$this->monta_script_gerarif($this->formnam,$this->mesnome,"")."
               ".$this->monta_script_gerarif($this->formnam,$this->re1nome,"")."
@@ -2971,26 +2901,26 @@ class cl_formulario_rel_pes {
               ".$this->monta_script_gerarif($this->formnam,$this->selnome,"")."
               ".$this->monta_script_gerarif($this->formnam,$this->previdnome,"")."
          ";
-    if(trim($this->relarqu) != ""){
-      echo "jan = window.open('".$this->relarqu."'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');";
-    }else{
-      echo "
-            if(!document.".$this->formnam.".valores_campos_rel){
-              obj=document.createElement('input');
-              obj.setAttribute('type','hidden');
-              obj.setAttribute('name','valores_campos_rel');
-              obj.setAttribute('id','valores_campos_rel');
-              obj.setAttribute('value',qry);
-              document.".$this->formnam.".appendChild(obj);
-            }else{
-              document.".$this->formnam.".valores_campos_rel.value = qry;
-            }
-           ";
-    }
-    echo $this->jsconsr;
-    flush();
-    echo "
-            }
+          if(trim($this->relarqu) != ""){
+            echo "jan = window.open('".$this->relarqu."'+qry,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');";
+          }else{
+            echo "
+                  if(!document.".$this->formnam.".valores_campos_rel){
+                    obj=document.createElement('input');
+                    obj.setAttribute('type','hidden');
+                    obj.setAttribute('name','valores_campos_rel');
+                    obj.setAttribute('id','valores_campos_rel');
+                    obj.setAttribute('value',qry);
+                    document.".$this->formnam.".appendChild(obj);
+                  }else{
+                    document.".$this->formnam.".valores_campos_rel.value = qry;
+                  }
+                ";
+          }
+          echo $this->jsconsr;
+          flush();
+          echo "
+      }
 
             if(document.".$this->formnam.".tipores){
               if(document.".$this->formnam.".tipores.value == '".$this->valortipores."'){

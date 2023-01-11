@@ -1,12 +1,12 @@
 <?php
-error_reporting(0);
+error_reporting(E_ALL);
 
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
 require_once("libs/db_libdicionario.php");
 require_once("dbforms/db_funcoes.php");
-//require_once("dbforms/db_classesgenericas.php");
+require_once("dbforms/db_classesgenericas.php");
 /*require_once("std/label/rotulo.php");
 require_once("std/label/RotuloDB.php");*/
 
