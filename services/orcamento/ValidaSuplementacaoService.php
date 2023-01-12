@@ -101,6 +101,9 @@ class ValidaSuplementacaoService
      */
     public function desmembrarFontes()
     {
+        if (db_getsession("DB_anousu") > 2022)
+            return array(substr($this->oRecurso->getCodigo(), 1, -1));
+
         $sDigitosFonte = substr($this->oRecurso->getCodigo(), 1, 2);
         if (in_array($sDigitosFonte, array("00", "01", "02", "18", "19"))) {
             if (in_array(substr($sDigitosFonte, 1, 2), array("00", "01", "02"))) {
