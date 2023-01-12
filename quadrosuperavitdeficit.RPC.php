@@ -31,12 +31,14 @@ $perfim = $anousu . "-12-31";
 
 try {
     switch ($oParam->exec) {
-
         case "getValores":
             $aFonte = array();
-      
-            $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query("null", " CONCAT('1',substring(c241_fonte::TEXT, 2, 2)) c241_fonte, SUM(c241_valor) c241_valor", null, "c241_ano = {$anousu} AND c241_instit = {$instit} GROUP BY CONCAT('1',substring(c241_fonte::TEXT, 2, 2)) ORDER BY CONCAT('1',substring(c241_fonte::TEXT, 2, 2)) " ));
-            // $oRetorno->fonte = $clquadrosuperavitdeficit->sql_query("null","*",null,"c241_ano = {$anousu}");
+            // Condição necessária devido a mudança do modelo de fonte de recursos no TCE-MG em 2023
+            if ($anousu <= 2022) {
+                $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query("null", " CONCAT('1',substring(c241_fonte::TEXT, 2, 2)) c241_fonte, SUM(c241_valor) c241_valor", null, "c241_ano = {$anousu} AND c241_instit = {$instit} GROUP BY CONCAT('1',substring(c241_fonte::TEXT, 2, 2)) ORDER BY CONCAT('1',substring(c241_fonte::TEXT, 2, 2)) " ));
+            } else {
+                $result = $clquadrosuperavitdeficit->sql_record($clquadrosuperavitdeficit->sql_query("null", " CONCAT('1', substring(c241_fonte::TEXT, 2)) c241_fonte, SUM(c241_valor) c241_valor", null, "c241_ano = {$anousu} AND c241_instit = {$instit} GROUP BY CONCAT('1', substring(c241_fonte::TEXT, 2)) ORDER BY CONCAT('1', substring(c241_fonte::TEXT, 2)) " ));
+            }
 
             for ($i = 0; $i < pg_num_rows($result); $i++) {
                 $oFonte = db_utils::fieldsMemory($result, $i);

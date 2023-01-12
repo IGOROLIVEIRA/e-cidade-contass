@@ -664,8 +664,12 @@ class cl_orcsuplemval {
             $sql .= "   ,fonte ";
         $sql .= " FROM ( ";
         $sql .= " SELECT ";
-        if (!$o58_codigo)
-            $sql .= "   concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte, ";
+        if (!$o58_codigo) {
+            if (db_getsession("DB_anousu") <= 2022)
+                $sql .= " concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte, ";
+            else
+                $sql .= " concat('1', substring(o58_codigo::TEXT, 2, 6)) fonte, ";
+        }
         $sql .= "   sum(o47_valor) as valor ";
         $sql .= " FROM ";
         $sql .= "   orcsuplemval ";
@@ -674,17 +678,29 @@ class cl_orcsuplemval {
         $sql .= " JOIN orcsuplem ON o47_codsup=o46_codsup ";
         $sql .= " WHERE ";
         $sql .= "   o47_anousu = {$o47_anousu} ";
-        if ($o58_codigo)
-            $sql .= "   AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '{$o58_codigo}' ";
+        if ($o58_codigo) {
+            if (db_getsession("DB_anousu") <= 2022)
+                $sql .= " AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '{$o58_codigo}' ";
+            else
+                $sql .= " AND concat('1', substring(o58_codigo::TEXT, 2, 6)) = '{$o58_codigo}' ";
+        }
         $sql .= "   AND o47_valor > 0 ";
         $sql .= "   AND o46_instit IN ({$o46_instit}) ";
         $sql .= "   AND o46_tiposup IN ({$o46_tiposup}) ";
-        if (!$o58_codigo)
-            $sql .= " GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2)) ";
+        if (!$o58_codigo) {
+            if (db_getsession("DB_anousu") <= 2022)
+                $sql .= " GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2)) ";
+            else
+                $sql .= " GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 6)) ";
+        }
         $sql .= " UNION ";
         $sql .= " SELECT ";
-        if (!$o58_codigo)
-            $sql .= "   concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte, ";
+        if (!$o58_codigo) {
+            if (db_getsession("DB_anousu") <= 2022)
+                $sql .= " concat('1', substring(o58_codigo::TEXT, 2, 2)) fonte, ";
+            else
+                $sql .= " concat('1', substring(o58_codigo::TEXT, 2, 6)) fonte, ";
+        }
         $sql .= "   sum(o136_valor) as valor ";
         $sql .= " FROM ";
         $sql .= "   orcsuplemdespesappa ";
@@ -695,12 +711,20 @@ class cl_orcsuplemval {
         $sql .= " WHERE ";
         $sql .= "   o47_anousu = {$o47_anousu} ";
         $sql .= "   AND o46_instit IN ({$o46_instit}) ";
-        if ($o58_codigo)
-            $sql .= "   AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '{$o58_codigo}' ";
+        if ($o58_codigo) {
+            if (db_getsession("DB_anousu") <= 2022)
+                $sql .= " AND concat('1', substring(o58_codigo::TEXT, 2, 2)) = '{$o58_codigo}' ";
+            else
+                $sql .= " AND concat('1', substring(o58_codigo::TEXT, 2, 6)) = '{$o58_codigo}' ";
+        }
         $sql .= "   AND o46_tiposup IN ({$o46_tiposup}) ";
         $sql .= "   AND o136_valor > 0  ";
-        if (!$o58_codigo)
-            $sql .= " GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2)) ";
+        if (!$o58_codigo) {
+            if (db_getsession("DB_anousu") <= 2022)
+                $sql .= " GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 2)) ";
+            else
+                $sql .= " GROUP BY concat('1', substring(o58_codigo::TEXT, 2, 6)) ";
+        }
         $sql .= " ) as x ";
         if (!$o58_codigo)
             $sql .= " GROUP BY fonte ";
