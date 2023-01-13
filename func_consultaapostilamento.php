@@ -149,27 +149,87 @@ $oResult = db_utils::getColectionByRecord($oResult);
                                 <th style="height: 25px; font-size:14px; background: #ffffff; width: 50%;">Código Item</th>
                                 <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição</th>
                             </tr>
-
-                        <?php } ?>
-                        <?php if ($oResult[0]->tipoapostila == 3) { ?>
-                            <tr style="margin-top:5px; background: #e1dede; height:10px;">
-                                <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
-                                <td><?php echo $aResult->pc01_descrmater; ?> </td>
-                            </tr>
-                        <?php } else { ?>
-                            <tr style="margin-top:5px; background: #e1dede; height:10px;">
-                                <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
-                                <td><?php echo $aResult->pc01_descrmater; ?> </td>
-                                <td align="center"><?php echo $aResult->ac20_quantidade; ?> </td>
-                                <td align="center"><?php echo $aResult->ac20_valorunitario; ?> </td>
-                                <td align="center"><?php echo $aResult->ac20_valortotal; ?> </td>
-                            </tr>
-                        <?php } ?>
-
-
-                        <?php $iMaterial = $aResult->ac20_pcmater; ?>
-
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </fieldset>
+        <br>
+        <br>
+        <fieldset style="width: 75%; margin-bottom: 10px">
+            <legend><b>Itens do Apostilamento</b></legend>
+            <table style='width: 100%; background: #ffffff;' border='0' align="center">
+                <?php if($oResult[0]->tipoapostila!=3){ ?>
+                    <tr style="background: #ffffff; height: 20px;">
+                        <th style="height: 25px; font-size:14px; background: #ffffff;">Código Item</th>
+                        <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição</th>
+                        <th style="height: 25px; font-size:14px; background: #ffffff;">Quantidade</th>
+                        <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Unitário</th>
+                        <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Total</th>
+                    </tr>
+                <?php } ?>
+                <tr>
+                    <?php $iMaterial = ""; ?>
+                    <?php $i = 0; ?>
+                    <?php foreach ($oResult as $aResult): ?>
+                    <?php if($aResult->ac20_acordoposicao == $oResult[0]->ac20_acordoposicao){
+                    if($iMaterial != $aResult->ac20_pcmater){
+                    ?>
+                    <?php if($i!=0):?>
+                    <?php endif; ?>
+                
+                <?php if($oResult[0]->tipoapostila==3){ 
+                    
+                    $sqldotacoes = "select ac22_coddot from acordoitemdotacao where ac22_acordoitem = (select ac20_sequencial from acordoitem where ac20_acordoposicao={$ac26_sequencial} and ac20_pcmater = {$aResult->ac20_pcmater}) order by ac22_coddot";
+                    $oResultdotadocoes = db_query($sqldotacoes);
+                    $oResultdotadocoes = db_utils::getColectionByRecord($oResultdotadocoes);
+                    if(count($oResultdotadocoes)>0){
+                    
+                    ?>
+                   
+                    <tr style="background: #ffffff; height: 20px;">
+                        <th style="height: 25px; font-size:14px; background: #ffffff;text-align:left;">Dotação(ões):
+                        
+                            <?php
+                            
+                            foreach ($oResultdotadocoes as $aResultdotadocoes){
+                                echo " ".$aResultdotadocoes->ac22_coddot;
+                            } 
+                            ?>
+                        </th>
+                    </tr>
+                    <tr style="background: #ffffff; height: 20px;">
+                        <th style="height: 25px; font-size:14px; background: #ffffff; width: 50%;">Código Item</th>
+                        <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição</th>
+                    </tr>
                     <?php } ?>
+                    <?php } ?>
+                    
+                <?php if($oResult[0]->tipoapostila==3 && count($oResultdotadocoes)>0){ ?>
+                    <tr>
+                    <td colspan="10" style="height:10px; width:100%;"><hr></td>
+                </tr>
+                    <tr style="margin-top:5px; background: #e1dede; height:10px;">
+                        <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
+                        <td align="center"><?php echo $aResult->pc01_descrmater; ?> </td>
+                    </tr>
+                <?php }else if($oResult[0]->tipoapostila!=3){ ?>
+                    <tr>
+                    <td colspan="10" style="height:10px; width:100%;"><hr></td>
+                </tr>
+                    <tr style="margin-top:5px; background: #e1dede; height:10px;">
+                        <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
+                        <td align="center"><?php echo $aResult->pc01_descrmater; ?> </td>
+                        <td align="center"><?php echo $aResult->ac20_quantidade; ?> </td>
+                        <td align="center"><?php echo $aResult->ac20_valorunitario; ?> </td>
+                        <td align="center"><?php echo $aResult->ac20_valortotal; ?> </td>
+                    </tr>
+                <?php } ?>
+
+                
+                <?php $iMaterial = $aResult->ac20_pcmater; ?>
+                
+                <?php } ?>
 
                 <?php } ?>
                 <?php $i++; ?>
