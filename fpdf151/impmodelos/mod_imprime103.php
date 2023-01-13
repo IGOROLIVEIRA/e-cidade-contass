@@ -54,15 +54,16 @@ $this->objpdf->Setfont('Arial', 'B', 7);
 $this->objpdf->text(153, ($xlin + $linpc - 2.5), db_formatar(pg_result($this->recorddositens,0,$this->sTipoCompra), 's', '0', 6, 'e'));
 
 $this->objpdf->Setfont('Arial', 'B', 9);
-$this->objpdf->Image('imagens/files/' . $this->logo, 15, $xlin - 17, 12);
+$this->objpdf->Image('imagens/files/' . $this->logo, 13, $xlin - 17, 18);
 $this->objpdf->Setfont('Arial', 'B', 9);
 $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
 $this->objpdf->Setfont('Arial', '', 9);
-$this->objpdf->text(40, $xlin - 11, $this->enderpref);
-$this->objpdf->text(40, $xlin - 7, "FONE: " . $this->telefpref);
-$this->objpdf->text(40, $xlin - 3, $this->emailpref);
-$this->objpdf->text(40, $xlin + 1, $this->url . " - CNPJ:" . db_formatar($this->cgc, 'cnpj'));
-$this->objpdf->text(40, $xlin + 5, $this->inscricaoestadualinstituicao);
+$this->objpdf->text(40, $xlin - 11.5, $this->enderpref);
+$this->objpdf->text(40, $xlin - 8, "CNPJ:" . db_formatar($this->cgc, 'cnpj'));
+$this->objpdf->text(40, $xlin - 4.5, "FONE: " . $this->telefpref);
+$this->objpdf->text(40, $xlin - 1.5, $this->emailpref);
+$this->objpdf->text(40, $xlin + 2, $this->url);
+$this->objpdf->text(40, $xlin + 6, $this->inscricaoestadualinstituicao);
 
 $xlin = $xlin + 5;
 $this->objpdf->rect($xcol, $xlin + 2, $xcol + 198, 20, 2, 'DF', '1234');
