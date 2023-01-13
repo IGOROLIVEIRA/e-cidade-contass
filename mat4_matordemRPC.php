@@ -679,7 +679,9 @@ if ($method == "getDados") {
     if ($haConsumo) {
 
       $clmatrequi->m40_auto  = 'false';
-      $clmatrequi->m40_almox = $objJson->m51_depto;
+      $codseq_dbalmox = db_query("select m91_codigo from db_almox where m91_depto = {$objJson->m51_depto}");
+      $ocodseq_dbalmox = db_utils::fieldsMemory($codseq_dbalmox, 0);
+      $clmatrequi->m40_almox = $ocodseq_dbalmox->m91_codigo;
       if (empty($objJson->codDeptoConsumo)) {
         $clmatrequi->m40_depto = $objJson->m51_depto;
       } else {
