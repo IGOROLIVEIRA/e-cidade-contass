@@ -62,9 +62,7 @@ class SicomTables2023 extends AbstractMigration
                 si46_mododisputa int4 NULL,
                 CONSTRAINT aberlic102023_sequ_pk PRIMARY KEY (si46_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.aex102023 definition
@@ -88,9 +86,7 @@ class SicomTables2023 extends AbstractMigration
                 si130_instit int8 NULL DEFAULT 0,
                 CONSTRAINT aex112023_sequ_pk PRIMARY KEY (si130_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.afast102023 definition
@@ -112,9 +108,7 @@ class SicomTables2023 extends AbstractMigration
                 si199_inst int4 NULL DEFAULT 0,
                 CONSTRAINT afast102023_sequ_pk PRIMARY KEY (si199_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.afast202023 definition
@@ -133,9 +127,7 @@ class SicomTables2023 extends AbstractMigration
                 si200_inst int4 NULL DEFAULT 0,
                 CONSTRAINT afast202023_sequ_pk PRIMARY KEY (si200_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.afast302023 definition
@@ -154,9 +146,7 @@ class SicomTables2023 extends AbstractMigration
                 si201_inst int4 NULL DEFAULT 0,
                 CONSTRAINT afast302023_sequ_pk PRIMARY KEY (si201_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.alq102023 definition
@@ -184,9 +174,7 @@ class SicomTables2023 extends AbstractMigration
                 si121_instit int8 NULL DEFAULT 0,
                 CONSTRAINT alq102023_sequ_pk PRIMARY KEY (si121_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.anl102023 definition
@@ -211,9 +199,7 @@ class SicomTables2023 extends AbstractMigration
                 si110_instit int8 NULL DEFAULT 0,
                 CONSTRAINT anl102023_sequ_pk PRIMARY KEY (si110_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.aob102023 definition
@@ -242,9 +228,7 @@ class SicomTables2023 extends AbstractMigration
                 si141_instit int8 NULL DEFAULT 0,
                 CONSTRAINT aob102023_sequ_pk PRIMARY KEY (si141_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.aoc102023 definition
@@ -263,9 +247,7 @@ class SicomTables2023 extends AbstractMigration
                 si38_instit int8 NULL DEFAULT 0,
                 CONSTRAINT aoc102023_sequ_pk PRIMARY KEY (si38_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.aop102023 definition
@@ -290,9 +272,7 @@ class SicomTables2023 extends AbstractMigration
                 si137_instit int8 NULL DEFAULT 0,
                 CONSTRAINT aop102023_sequ_pk PRIMARY KEY (si137_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.arc102023 definition
@@ -316,9 +296,7 @@ class SicomTables2023 extends AbstractMigration
                 si28_instit int8 NULL DEFAULT 0,
                 CONSTRAINT arc102023_sequ_pk PRIMARY KEY (si28_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.arc202023 definition
@@ -343,9 +321,7 @@ class SicomTables2023 extends AbstractMigration
                 si31_emendaparlamentarestornada int4 NOT NULL DEFAULT 0,
                 CONSTRAINT arc202023_sequ_pk PRIMARY KEY (si31_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete102023 definition
@@ -369,9 +345,7 @@ class SicomTables2023 extends AbstractMigration
                 si177_instit int8 NULL DEFAULT 0,
                 CONSTRAINT balancete102023_sequ_pk PRIMARY KEY (si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bfdcasp102023 definition
@@ -405,9 +379,7 @@ class SicomTables2023 extends AbstractMigration
                 si206_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bfdcasp102023_sequ_pk PRIMARY KEY (si206_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bfdcasp202023 definition
@@ -441,9 +413,7 @@ class SicomTables2023 extends AbstractMigration
                 si207_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bfdcasp202023_sequ_pk PRIMARY KEY (si207_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bodcasp102023 definition
@@ -481,9 +451,7 @@ class SicomTables2023 extends AbstractMigration
                 si201_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bodcasp102023_sequ_pk PRIMARY KEY (si201_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bodcasp202023 definition
@@ -504,9 +472,7 @@ class SicomTables2023 extends AbstractMigration
                 si202_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bodcasp202023_sequ_pk PRIMARY KEY (si202_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bodcasp302023 definition
@@ -538,9 +504,7 @@ class SicomTables2023 extends AbstractMigration
                 si203_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bodcasp302023_sequ_pk PRIMARY KEY (si203_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bodcasp402023 definition
@@ -565,9 +529,7 @@ class SicomTables2023 extends AbstractMigration
                 si204_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bodcasp402023_sequ_pk PRIMARY KEY (si204_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bodcasp502023 definition
@@ -592,9 +554,7 @@ class SicomTables2023 extends AbstractMigration
                 si205_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bodcasp502023_sequ_pk PRIMARY KEY (si205_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bpdcasp102023 definition
@@ -625,9 +585,7 @@ class SicomTables2023 extends AbstractMigration
                 si208_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bpdcasp102023_sequ_pk PRIMARY KEY (si208_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bpdcasp202023 definition
@@ -669,9 +627,7 @@ class SicomTables2023 extends AbstractMigration
                 si209_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bpdcasp202023_sequ_pk PRIMARY KEY (si209_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bpdcasp302023 definition
@@ -692,9 +648,7 @@ class SicomTables2023 extends AbstractMigration
                 si210_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bpdcasp302023_sequ_pk PRIMARY KEY (si210_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bpdcasp402023 definition
@@ -715,9 +669,7 @@ class SicomTables2023 extends AbstractMigration
                 si211_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bpdcasp402023_sequ_pk PRIMARY KEY (si211_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bpdcasp502023 definition
@@ -736,9 +688,7 @@ class SicomTables2023 extends AbstractMigration
                 si212_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bpdcasp502023_sequ_pk PRIMARY KEY (si212_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bpdcasp602023 definition
@@ -764,9 +714,7 @@ class SicomTables2023 extends AbstractMigration
                 si213_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bpdcasp602023_sequ_pk PRIMARY KEY (si213_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bpdcasp702023 definition
@@ -785,9 +733,7 @@ class SicomTables2023 extends AbstractMigration
                 si214_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bpdcasp702023_sequ_pk PRIMARY KEY (si214_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.bpdcasp712023 definition
@@ -807,9 +753,7 @@ class SicomTables2023 extends AbstractMigration
                 si215_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT bpdcasp712023_sequ_pk PRIMARY KEY (si215_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.cadobras102023 definition
@@ -834,9 +778,7 @@ class SicomTables2023 extends AbstractMigration
                 si198_mes int8 NULL,
                 si198_instit int4 NULL
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.cadobras202023 definition
@@ -858,9 +800,7 @@ class SicomTables2023 extends AbstractMigration
                 si199_mes int8 NULL,
                 si199_instit int4 NULL
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.cadobras212023 definition
@@ -881,9 +821,7 @@ class SicomTables2023 extends AbstractMigration
                 si200_mes int8 NULL,
                 si200_instit int4 NULL
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.cadobras302023 definition
@@ -909,9 +847,7 @@ class SicomTables2023 extends AbstractMigration
                 si201_pdf varchar(25) NULL,
                 si201_instit int4 NULL
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.caixa102023 definition
@@ -930,9 +866,7 @@ class SicomTables2023 extends AbstractMigration
                 si103_instit int8 NULL DEFAULT 0,
                 CONSTRAINT caixa102023_sequ_pk PRIMARY KEY (si103_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.conge102023 definition
@@ -968,9 +902,7 @@ class SicomTables2023 extends AbstractMigration
                 si182_instit int8 NULL DEFAULT 0,
                 CONSTRAINT conge102023_sequ_pk PRIMARY KEY (si182_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.conge202023 definition
@@ -996,9 +928,7 @@ class SicomTables2023 extends AbstractMigration
                 si183_instit int8 NULL DEFAULT 0,
                 CONSTRAINT conge202023_sequ_pk PRIMARY KEY (si183_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.conge302023 definition
@@ -1029,9 +959,7 @@ class SicomTables2023 extends AbstractMigration
                 si184_instit int8 NULL DEFAULT 0,
                 CONSTRAINT conge302023_sequ_pk PRIMARY KEY (si184_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.conge402023 definition
@@ -1059,9 +987,7 @@ class SicomTables2023 extends AbstractMigration
                 si237_mes int8 NOT NULL DEFAULT 0,
                 si237_instit int8 NULL DEFAULT 0
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.conge502023 definition
@@ -1086,9 +1012,7 @@ class SicomTables2023 extends AbstractMigration
                 si238_mes int8 NOT NULL DEFAULT 0,
                 si238_instit int8 NULL DEFAULT 0
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.consid102023 definition
@@ -1108,9 +1032,7 @@ class SicomTables2023 extends AbstractMigration
                 si158_instit int8 NULL,
                 CONSTRAINT consid102023_sequ_pk PRIMARY KEY (si158_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.consor102023 definition
@@ -1130,9 +1052,7 @@ class SicomTables2023 extends AbstractMigration
                 si16_instit int8 NULL DEFAULT 0,
                 CONSTRAINT consor102023_sequ_pk PRIMARY KEY (si16_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.consor202023 definition
@@ -1153,9 +1073,7 @@ class SicomTables2023 extends AbstractMigration
                 si17_instit int8 NULL DEFAULT 0,
                 CONSTRAINT consor202023_sequ_pk PRIMARY KEY (si17_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.consor302023 definition
@@ -1184,9 +1102,7 @@ class SicomTables2023 extends AbstractMigration
                 si18_instit int8 NULL DEFAULT 0,
                 CONSTRAINT consor302023_sequ_pk PRIMARY KEY (si18_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.consor402023 definition
@@ -1205,9 +1121,7 @@ class SicomTables2023 extends AbstractMigration
                 si19_instit int8 NULL DEFAULT 0,
                 CONSTRAINT consor402023_sequ_pk PRIMARY KEY (si19_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.consor502023 definition
@@ -1227,9 +1141,7 @@ class SicomTables2023 extends AbstractMigration
                 si20_instit int8 NULL DEFAULT 0,
                 CONSTRAINT consor502023_sequ_pk PRIMARY KEY (si20_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.contratos102023 definition
@@ -1274,9 +1186,7 @@ class SicomTables2023 extends AbstractMigration
                 si83_instit int8 NULL DEFAULT 0,
                 CONSTRAINT contratos102023_sequ_pk PRIMARY KEY (si83_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.contratos122023 definition
@@ -1304,9 +1214,7 @@ class SicomTables2023 extends AbstractMigration
                 si85_instit int8 NULL DEFAULT 0,
                 CONSTRAINT contratos122023_sequ_pk PRIMARY KEY (si85_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX contratos122023_si85_reg10_index ON contratos122023 USING btree (si85_reg10);
 
 
@@ -1329,9 +1237,7 @@ class SicomTables2023 extends AbstractMigration
                 si86_instit int8 NULL DEFAULT 0,
                 CONSTRAINT contratos132023_sequ_pk PRIMARY KEY (si86_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX contratos132023_si86_reg10_index ON contratos132023 USING btree (si86_reg10);
 
 
@@ -1362,9 +1268,7 @@ class SicomTables2023 extends AbstractMigration
                 si87_instit int8 NULL DEFAULT 0,
                 CONSTRAINT contratos202023_sequ_pk PRIMARY KEY (si87_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.contratos302023 definition
@@ -1390,9 +1294,7 @@ class SicomTables2023 extends AbstractMigration
                 si89_instit int8 NULL DEFAULT 0,
                 CONSTRAINT contratos302023_sequ_pk PRIMARY KEY (si89_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.contratos402023 definition
@@ -1414,9 +1316,7 @@ class SicomTables2023 extends AbstractMigration
                 si91_instit int8 NULL DEFAULT 0,
                 CONSTRAINT contratos402023_sequ_pk PRIMARY KEY (si91_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.conv102023 definition
@@ -1442,9 +1342,7 @@ class SicomTables2023 extends AbstractMigration
                 si92_instit int8 NULL DEFAULT 0,
                 CONSTRAINT conv102023_sequ_pk PRIMARY KEY (si92_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.conv202023 definition
@@ -1469,9 +1367,7 @@ class SicomTables2023 extends AbstractMigration
                 si94_mes int8 NOT NULL DEFAULT 0,
                 si94_instit int8 NULL DEFAULT 0
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.conv212023 definition
@@ -1489,9 +1385,7 @@ class SicomTables2023 extends AbstractMigration
                 si232_mes int8 NOT NULL DEFAULT 0,
                 si232_instint int8 NULL DEFAULT 0
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.conv302023 definition
@@ -1511,9 +1405,7 @@ class SicomTables2023 extends AbstractMigration
                 si203_mes int8 NOT NULL DEFAULT 0,
                 si203_instit int8 NULL DEFAULT 0
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.conv312023 definition
@@ -1533,9 +1425,7 @@ class SicomTables2023 extends AbstractMigration
                 si204_mes int8 NOT NULL DEFAULT 0,
                 si204_instit int8 NULL DEFAULT 0
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.cronem102023 definition
@@ -1555,9 +1445,7 @@ class SicomTables2023 extends AbstractMigration
                 si170_mes int8 NULL,
                 CONSTRAINT cronem102023_sequ_pk PRIMARY KEY (si170_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ctb102023 definition
@@ -1587,9 +1475,7 @@ class SicomTables2023 extends AbstractMigration
                 si95_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ctb102023_sequ_pk PRIMARY KEY (si95_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ctb202023 definition
@@ -1611,9 +1497,7 @@ class SicomTables2023 extends AbstractMigration
                 si96_saldocec int8 NULL DEFAULT 0,
                 CONSTRAINT ctb202023_sequ_pk PRIMARY KEY (si96_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ctb302023 definition
@@ -1634,9 +1518,7 @@ class SicomTables2023 extends AbstractMigration
                 si99_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ctb302023_sequ_pk PRIMARY KEY (si99_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ctb402023 definition
@@ -1657,9 +1539,7 @@ class SicomTables2023 extends AbstractMigration
                 si101_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ctb402023_sequ_pk PRIMARY KEY (si101_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ctb502023 definition
@@ -1679,9 +1559,7 @@ class SicomTables2023 extends AbstractMigration
                 si102_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ctb502023_sequ_pk PRIMARY KEY (si102_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.cute102023 definition
@@ -1706,9 +1584,7 @@ class SicomTables2023 extends AbstractMigration
                 si199_instit int8 NULL DEFAULT 0,
                 CONSTRAINT cute102023_sequ_pk PRIMARY KEY (si199_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.cute202023 definition
@@ -1729,9 +1605,7 @@ class SicomTables2023 extends AbstractMigration
                 si200_instit int8 NULL DEFAULT 0,
                 CONSTRAINT cute202023_sequ_pk PRIMARY KEY (si200_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.cute302023 definition
@@ -1751,9 +1625,7 @@ class SicomTables2023 extends AbstractMigration
                 si202_instit int8 NULL DEFAULT 0,
                 CONSTRAINT cute302023_sequ_pk PRIMARY KEY (si202_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.cvc102023 definition
@@ -1786,9 +1658,7 @@ class SicomTables2023 extends AbstractMigration
                 si146_instit int8 NULL DEFAULT 0,
                 CONSTRAINT cvc102023_sequ_pk PRIMARY KEY (si146_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.cvc202023 definition
@@ -1818,9 +1688,7 @@ class SicomTables2023 extends AbstractMigration
                 si147_instit int8 NULL DEFAULT 0,
                 CONSTRAINT cvc202023_sequ_pk PRIMARY KEY (si147_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.cvc302023 definition
@@ -1845,9 +1713,7 @@ class SicomTables2023 extends AbstractMigration
                 si148_instit int8 NULL DEFAULT 0,
                 CONSTRAINT cvc302023_sequ_pk PRIMARY KEY (si148_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.cvc402023 definition
@@ -1869,9 +1735,7 @@ class SicomTables2023 extends AbstractMigration
                 si149_instit int8 NULL DEFAULT 0,
                 CONSTRAINT cvc402023_sequ_pk PRIMARY KEY (si149_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dclrf102023 definition
@@ -1908,9 +1772,7 @@ class SicomTables2023 extends AbstractMigration
                 si157_mes int8 NOT NULL DEFAULT 0,
                 si157_instit int8 NULL DEFAULT 0
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dclrf112023 definition
@@ -1928,9 +1790,7 @@ class SicomTables2023 extends AbstractMigration
                 si205_mes int8 NOT NULL DEFAULT 0,
                 si205_instit int8 NOT NULL DEFAULT 0
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dclrf202023 definition
@@ -1954,9 +1814,7 @@ class SicomTables2023 extends AbstractMigration
                 si191_instit int8 NOT NULL DEFAULT 0,
                 si191_dscnumeroinst varchar(3) NULL
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dclrf302023 definition
@@ -1977,9 +1835,7 @@ class SicomTables2023 extends AbstractMigration
                 si192_mes int8 NOT NULL DEFAULT 0,
                 si192_instit int8 NOT NULL DEFAULT 0
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dclrf402023 definition
@@ -2000,9 +1856,7 @@ class SicomTables2023 extends AbstractMigration
                 si193_mes int8 NOT NULL DEFAULT 0,
                 si193_instit int8 NOT NULL DEFAULT 0
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ddc102023 definition
@@ -2022,9 +1876,7 @@ class SicomTables2023 extends AbstractMigration
                 si150_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ddc102023_sequ_pk PRIMARY KEY (si150_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ddc202023 definition
@@ -2048,9 +1900,7 @@ class SicomTables2023 extends AbstractMigration
                 si153_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ddc202023_sequ_pk PRIMARY KEY (si153_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ddc302023 definition
@@ -2081,9 +1931,7 @@ class SicomTables2023 extends AbstractMigration
                 si154_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ddc302023_sequ_pk PRIMARY KEY (si154_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ddc402023 definition
@@ -2103,9 +1951,7 @@ class SicomTables2023 extends AbstractMigration
                 si178_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ddc402023_sequ_pk PRIMARY KEY (si178_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dfcdcasp1002023 definition
@@ -2124,9 +1970,7 @@ class SicomTables2023 extends AbstractMigration
                 si228_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dfcdcasp1002023_sequ_pk PRIMARY KEY (si228_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dfcdcasp102023 definition
@@ -2147,9 +1991,7 @@ class SicomTables2023 extends AbstractMigration
                 si219_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dfcdcasp102023_sequ_pk PRIMARY KEY (si219_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dfcdcasp1102023 definition
@@ -2168,9 +2010,7 @@ class SicomTables2023 extends AbstractMigration
                 si229_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dfcdcasp1102023_sequ_pk PRIMARY KEY (si229_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dfcdcasp202023 definition
@@ -2192,9 +2032,7 @@ class SicomTables2023 extends AbstractMigration
                 si220_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dfcdcasp202023_sequ_pk PRIMARY KEY (si220_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dfcdcasp302023 definition
@@ -2212,9 +2050,7 @@ class SicomTables2023 extends AbstractMigration
                 si221_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dfcdcasp302023_sequ_pk PRIMARY KEY (si221_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dfcdcasp402023 definition
@@ -2235,9 +2071,7 @@ class SicomTables2023 extends AbstractMigration
                 si222_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dfcdcasp402023_sequ_pk PRIMARY KEY (si222_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dfcdcasp502023 definition
@@ -2258,9 +2092,7 @@ class SicomTables2023 extends AbstractMigration
                 si223_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dfcdcasp502023_sequ_pk PRIMARY KEY (si223_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dfcdcasp602023 definition
@@ -2278,9 +2110,7 @@ class SicomTables2023 extends AbstractMigration
                 si224_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dfcdcasp602023_sequ_pk PRIMARY KEY (si224_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dfcdcasp702023 definition
@@ -2302,9 +2132,7 @@ class SicomTables2023 extends AbstractMigration
                 si225_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dfcdcasp702023_sequ_pk PRIMARY KEY (si225_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dfcdcasp802023 definition
@@ -2324,9 +2152,7 @@ class SicomTables2023 extends AbstractMigration
                 si226_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dfcdcasp802023_sequ_pk PRIMARY KEY (si226_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dfcdcasp902023 definition
@@ -2344,9 +2170,7 @@ class SicomTables2023 extends AbstractMigration
                 si227_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dfcdcasp902023_sequ_pk PRIMARY KEY (si227_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dipr102023 definition
@@ -2367,9 +2191,7 @@ class SicomTables2023 extends AbstractMigration
                 si230_instit int8 NOT NULL DEFAULT 0,
                 CONSTRAINT dipr102023_pkey PRIMARY KEY (si230_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dipr202023 definition
@@ -2398,9 +2220,7 @@ class SicomTables2023 extends AbstractMigration
                 si231_instit int8 NOT NULL DEFAULT 0,
                 CONSTRAINT dipr202023_pkey PRIMARY KEY (si231_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dipr302023 definition
@@ -2429,9 +2249,7 @@ class SicomTables2023 extends AbstractMigration
                 si232_instit int8 NOT NULL DEFAULT 0,
                 CONSTRAINT dipr302023_pkey PRIMARY KEY (si232_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dipr402023 definition
@@ -2459,9 +2277,7 @@ class SicomTables2023 extends AbstractMigration
                 si233_instit int8 NOT NULL DEFAULT 0,
                 CONSTRAINT dipr402023_pkey PRIMARY KEY (si233_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dipr502023 definition
@@ -2487,9 +2303,7 @@ class SicomTables2023 extends AbstractMigration
                 si234_instit int8 NOT NULL DEFAULT 0,
                 CONSTRAINT dipr502023_pkey PRIMARY KEY (si234_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dispensa102023 definition
@@ -2520,9 +2334,7 @@ class SicomTables2023 extends AbstractMigration
                 si74_leidalicitacao int4 NULL,
                 CONSTRAINT dispensa102023_sequ_pk PRIMARY KEY (si74_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dispensa182023 definition
@@ -2560,9 +2372,7 @@ class SicomTables2023 extends AbstractMigration
                 si82_instit int8 NULL DEFAULT 0,
                 CONSTRAINT dispensa182023_sequ_pk PRIMARY KEY (si82_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX dispensa182023_si82_reg10_index ON dispensa182023 USING btree (si82_reg10);
 
 
@@ -2588,9 +2398,7 @@ class SicomTables2023 extends AbstractMigration
                 si216_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dvpdcasp102023_sequ_pk PRIMARY KEY (si216_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dvpdcasp202023 definition
@@ -2617,9 +2425,7 @@ class SicomTables2023 extends AbstractMigration
                 si217_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dvpdcasp202023_sequ_pk PRIMARY KEY (si217_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.dvpdcasp302023 definition
@@ -2637,9 +2443,7 @@ class SicomTables2023 extends AbstractMigration
                 si218_institu int4 NOT NULL DEFAULT 0,
                 CONSTRAINT dvpdcasp302023_sequ_pk PRIMARY KEY (si218_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.emp102023 definition
@@ -2690,9 +2494,7 @@ class SicomTables2023 extends AbstractMigration
                 si106_instit int8 NULL DEFAULT 0,
                 CONSTRAINT emp102023_sequ_pk PRIMARY KEY (si106_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.emp202023 definition
@@ -2716,9 +2518,7 @@ class SicomTables2023 extends AbstractMigration
                 si109_instit int8 NULL DEFAULT 0,
                 CONSTRAINT emp202023_sequ_pk PRIMARY KEY (si109_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.emp302023 definition
@@ -2747,9 +2547,7 @@ class SicomTables2023 extends AbstractMigration
                 si206_instit int8 NULL DEFAULT 0,
                 CONSTRAINT emp302023_sequ_pk PRIMARY KEY (si206_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.exeobras102023 definition
@@ -2776,9 +2574,7 @@ class SicomTables2023 extends AbstractMigration
                 si197_mes int8 NULL,
                 si197_instit int4 NULL
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.exeobras202023 definition
@@ -2805,9 +2601,7 @@ class SicomTables2023 extends AbstractMigration
                 si204_mes int8 NULL,
                 si204_instit int4 NULL
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ext102023 definition
@@ -2829,9 +2623,7 @@ class SicomTables2023 extends AbstractMigration
                 si124_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ext102023_sequ_pk PRIMARY KEY (si124_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ext202023 definition
@@ -2857,9 +2649,7 @@ class SicomTables2023 extends AbstractMigration
                 si165_exerciciocompdevo int4 NULL DEFAULT 0,
                 CONSTRAINT ext202023_sequ_pk PRIMARY KEY (si165_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ext302023 definition
@@ -2886,9 +2676,7 @@ class SicomTables2023 extends AbstractMigration
                 si126_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ext302023_sequ_pk PRIMARY KEY (si126_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.flpgo102023 definition
@@ -2935,9 +2723,7 @@ class SicomTables2023 extends AbstractMigration
                 si195_inst int8 NULL,
                 CONSTRAINT flpgo102023_sequ_pk PRIMARY KEY (si195_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.hablic102023 definition
@@ -2979,9 +2765,7 @@ class SicomTables2023 extends AbstractMigration
                 si57_instit int8 NULL DEFAULT 0,
                 CONSTRAINT hablic102023_sequ_pk PRIMARY KEY (si57_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.hablic202023 definition
@@ -3017,9 +2801,7 @@ class SicomTables2023 extends AbstractMigration
                 si59_instit int8 NULL DEFAULT 0,
                 CONSTRAINT hablic202023_sequ_pk PRIMARY KEY (si59_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.homolic102023 definition
@@ -3045,9 +2827,7 @@ class SicomTables2023 extends AbstractMigration
                 si63_instit int8 NULL DEFAULT 0,
                 CONSTRAINT homolic102023_sequ_pk PRIMARY KEY (si63_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.homolic202023 definition
@@ -3072,9 +2852,7 @@ class SicomTables2023 extends AbstractMigration
                 si64_instit int8 NULL DEFAULT 0,
                 CONSTRAINT homolic202023_sequ_pk PRIMARY KEY (si64_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.homolic302023 definition
@@ -3099,9 +2877,7 @@ class SicomTables2023 extends AbstractMigration
                 si65_instit int8 NULL DEFAULT 0,
                 CONSTRAINT homolic302023_sequ_pk PRIMARY KEY (si65_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.homolic402023 definition
@@ -3123,9 +2899,7 @@ class SicomTables2023 extends AbstractMigration
                 si65_instit int8 NULL DEFAULT 0,
                 CONSTRAINT homolic402023_sequ_pk PRIMARY KEY (si65_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ide2023 definition
@@ -3148,9 +2922,7 @@ class SicomTables2023 extends AbstractMigration
                 si11_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ide2023_sequ_pk PRIMARY KEY (si11_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.idedcasp2023 definition
@@ -3173,9 +2945,7 @@ class SicomTables2023 extends AbstractMigration
                 si200_instit int4 NOT NULL DEFAULT 0,
                 CONSTRAINT idedcasp2023_sequ_pk PRIMARY KEY (si200_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ideedital2023 definition
@@ -3199,9 +2969,7 @@ class SicomTables2023 extends AbstractMigration
                 si186_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ideedital2023_sequ_pk PRIMARY KEY (si186_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.iderp102023 definition
@@ -3224,9 +2992,7 @@ class SicomTables2023 extends AbstractMigration
                 si179_mes int8 NOT NULL DEFAULT 0,
                 CONSTRAINT iderp102023_sequ_pk PRIMARY KEY (si179_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.iderp112023 definition
@@ -3246,9 +3012,7 @@ class SicomTables2023 extends AbstractMigration
                 si180_instit int8 NULL DEFAULT 0,
                 CONSTRAINT iderp112023_sequ_pk PRIMARY KEY (si180_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.iderp202023 definition
@@ -3271,9 +3035,7 @@ class SicomTables2023 extends AbstractMigration
                 si181_instit int8 NULL DEFAULT 0,
                 CONSTRAINT iderp202023_sequ_pk PRIMARY KEY (si181_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.item102023 definition
@@ -3294,9 +3056,7 @@ class SicomTables2023 extends AbstractMigration
                 si43_instit int8 NULL DEFAULT 0,
                 CONSTRAINT item102023_sequ_pk PRIMARY KEY (si43_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.julglic102023 definition
@@ -3322,9 +3082,7 @@ class SicomTables2023 extends AbstractMigration
                 si60_instit int8 NULL DEFAULT 0,
                 CONSTRAINT julglic102023_sequ_pk PRIMARY KEY (si60_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.julglic202023 definition
@@ -3349,9 +3107,7 @@ class SicomTables2023 extends AbstractMigration
                 si61_instit int8 NULL DEFAULT 0,
                 CONSTRAINT julglic202023_sequ_pk PRIMARY KEY (si61_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.julglic302023 definition
@@ -3375,9 +3131,7 @@ class SicomTables2023 extends AbstractMigration
                 si62_mes int8 NOT NULL DEFAULT 0,
                 si62_instit int4 NULL DEFAULT 0
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.julglic402023 definition
@@ -3400,9 +3154,7 @@ class SicomTables2023 extends AbstractMigration
                 si62_instit int4 NULL DEFAULT 0,
                 CONSTRAINT julglic402023_sequ_pk PRIMARY KEY (si62_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.lao102023 definition
@@ -3421,9 +3173,7 @@ class SicomTables2023 extends AbstractMigration
                 si34_instit int8 NULL DEFAULT 0,
                 CONSTRAINT lao102023_sequ_pk PRIMARY KEY (si34_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.lao202023 definition
@@ -3442,9 +3192,7 @@ class SicomTables2023 extends AbstractMigration
                 si36_instit int8 NULL DEFAULT 0,
                 CONSTRAINT lao202023_sequ_pk PRIMARY KEY (si36_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.licobras102023 definition
@@ -3476,9 +3224,7 @@ class SicomTables2023 extends AbstractMigration
                 si195_mes int8 NULL,
                 si195_instit int4 NULL
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.licobras202023 definition
@@ -3510,9 +3256,7 @@ class SicomTables2023 extends AbstractMigration
                 si196_mes int8 NULL,
                 si196_instit int4 NULL
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.licobras302023 definition
@@ -3538,9 +3282,7 @@ class SicomTables2023 extends AbstractMigration
                 si203_mes int8 NULL,
                 si203_instit int4 NULL
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.lqd102023 definition
@@ -3566,9 +3308,7 @@ class SicomTables2023 extends AbstractMigration
                 si118_instit int8 NULL DEFAULT 0,
                 CONSTRAINT lqd102023_sequ_pk PRIMARY KEY (si118_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.metareal102023 definition
@@ -3593,9 +3333,7 @@ class SicomTables2023 extends AbstractMigration
                 si171_mes int4 NULL,
                 CONSTRAINT metareal102023_sequ_pk PRIMARY KEY (si171_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ntf102023 definition
@@ -3631,9 +3369,7 @@ class SicomTables2023 extends AbstractMigration
                 si143_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ntf102023_sequ_pk PRIMARY KEY (si143_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ntf202023 definition
@@ -3661,9 +3397,7 @@ class SicomTables2023 extends AbstractMigration
                 si145_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ntf202023_sequ_pk PRIMARY KEY (si145_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.obelac102023 definition
@@ -3691,9 +3425,7 @@ class SicomTables2023 extends AbstractMigration
                 si139_instit int8 NULL DEFAULT 0,
                 CONSTRAINT obelac102023_sequ_pk PRIMARY KEY (si139_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ops102023 definition
@@ -3716,9 +3448,7 @@ class SicomTables2023 extends AbstractMigration
                 si132_instit int8 NULL DEFAULT 0,
                 CONSTRAINT ops102023_sequ_pk PRIMARY KEY (si132_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.orgao102023 definition
@@ -3743,9 +3473,7 @@ class SicomTables2023 extends AbstractMigration
                 si14_instit int8 NULL DEFAULT 0,
                 CONSTRAINT orgao102023_sequ_pk PRIMARY KEY (si14_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.parec102023 definition
@@ -3768,9 +3496,7 @@ class SicomTables2023 extends AbstractMigration
                 si22_instit int8 NULL DEFAULT 0,
                 CONSTRAINT parec102023_sequ_pk PRIMARY KEY (si22_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.parelic102023 definition
@@ -3793,9 +3519,7 @@ class SicomTables2023 extends AbstractMigration
                 si66_instit int8 NULL DEFAULT 0,
                 CONSTRAINT parelic102023_sequ_pk PRIMARY KEY (si66_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.parpps102023 definition
@@ -3817,9 +3541,7 @@ class SicomTables2023 extends AbstractMigration
                 si156_instit int8 NULL DEFAULT 0,
                 CONSTRAINT parpps102023_sequ_pk PRIMARY KEY (si156_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.parpps202023 definition
@@ -3841,9 +3563,7 @@ class SicomTables2023 extends AbstractMigration
                 si155_dtavaliacao date NULL,
                 CONSTRAINT parpps202023_sequ_pk PRIMARY KEY (si155_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.pessoa102023 definition
@@ -3864,9 +3584,7 @@ class SicomTables2023 extends AbstractMigration
                 si12_instit int8 NULL DEFAULT 0,
                 CONSTRAINT pessoa102023_sequ_pk PRIMARY KEY (si12_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.pessoaflpgo102023 definition
@@ -3889,9 +3607,7 @@ class SicomTables2023 extends AbstractMigration
                 si193_inst int8 NULL DEFAULT 0,
                 CONSTRAINT pessoaflpgo102023_sequ_pk PRIMARY KEY (si193_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.pessoasobra102023 definition
@@ -3910,9 +3626,7 @@ class SicomTables2023 extends AbstractMigration
                 si194_mes int8 NULL,
                 si194_instit int4 NULL
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ralic102023 definition
@@ -3953,9 +3667,7 @@ class SicomTables2023 extends AbstractMigration
                 si180_mododisputa int4 NULL,
                 CONSTRAINT ralic102023_sequ_pk PRIMARY KEY (si180_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.rec102023 definition
@@ -3980,9 +3692,7 @@ class SicomTables2023 extends AbstractMigration
                 si25_instit int8 NULL DEFAULT 0,
                 CONSTRAINT rec102023_sequ_pk PRIMARY KEY (si25_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.redispi102023 definition
@@ -4016,9 +3726,7 @@ class SicomTables2023 extends AbstractMigration
                 si183_regimeexecucaoobras int4 NULL,
                 CONSTRAINT redispi102023_sequ_pk PRIMARY KEY (si183_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.regadesao102023 definition
@@ -4055,9 +3763,7 @@ class SicomTables2023 extends AbstractMigration
                 si67_leidalicitacao int4 NULL,
                 CONSTRAINT regadesao102023_sequ_pk PRIMARY KEY (si67_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.regadesao202023 definition
@@ -4082,9 +3788,7 @@ class SicomTables2023 extends AbstractMigration
                 si73_instit int8 NULL DEFAULT 0,
                 CONSTRAINT regadesao202023_sequ_pk PRIMARY KEY (si73_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.reglic102023 definition
@@ -4105,9 +3809,7 @@ class SicomTables2023 extends AbstractMigration
                 si44_instit int8 NULL DEFAULT 0,
                 CONSTRAINT reglic102023_sequ_pk PRIMARY KEY (si44_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.reglic202023 definition
@@ -4139,9 +3841,7 @@ class SicomTables2023 extends AbstractMigration
                 si45_instit int8 NULL DEFAULT 0,
                 CONSTRAINT reglic202023_sequ_pk PRIMARY KEY (si45_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.respinf2023 definition
@@ -4159,9 +3859,7 @@ class SicomTables2023 extends AbstractMigration
                 si197_instit int8 NULL,
                 CONSTRAINT respinf2023_sequ_pk PRIMARY KEY (si197_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.resplic102023 definition
@@ -4183,9 +3881,7 @@ class SicomTables2023 extends AbstractMigration
                 si55_instit int8 NULL DEFAULT 0,
                 CONSTRAINT resplic102023_sequ_pk PRIMARY KEY (si55_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.resplic202023 definition
@@ -4215,9 +3911,7 @@ class SicomTables2023 extends AbstractMigration
                 si56_instit int8 NULL DEFAULT 0,
                 CONSTRAINT resplic202023_sequ_pk PRIMARY KEY (si56_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.rpsd102023 definition
@@ -4242,9 +3936,7 @@ class SicomTables2023 extends AbstractMigration
                 si189_instit int8 NULL DEFAULT 0,
                 CONSTRAINT rpsd102023_sequ_pk PRIMARY KEY (si189_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.rsp102023 definition
@@ -4271,9 +3963,7 @@ class SicomTables2023 extends AbstractMigration
                 si112_instit int8 NULL DEFAULT 0,
                 CONSTRAINT rsp102023_sequ_pk PRIMARY KEY (si112_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.rsp202023 definition
@@ -4306,9 +3996,7 @@ class SicomTables2023 extends AbstractMigration
                 si115_instit int8 NULL DEFAULT 0,
                 CONSTRAINT rsp202023_sequ_pk PRIMARY KEY (si115_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.tce102023 definition
@@ -4338,9 +4026,7 @@ class SicomTables2023 extends AbstractMigration
                 si187_instit int8 NULL DEFAULT 0,
                 CONSTRAINT tce102023_sequ_pk PRIMARY KEY (si187_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.terem102023 definition
@@ -4365,9 +4051,7 @@ class SicomTables2023 extends AbstractMigration
                 si194_inst int8 NULL DEFAULT 0,
                 CONSTRAINT terem102023_sequ_pk PRIMARY KEY (si194_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.terem202023 definition
@@ -4388,9 +4072,7 @@ class SicomTables2023 extends AbstractMigration
                 si196_inst int8 NULL DEFAULT 0,
                 CONSTRAINT terem202023_sequ_pk PRIMARY KEY (si196_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.viap102023 definition
@@ -4409,9 +4091,7 @@ class SicomTables2023 extends AbstractMigration
                 si198_instit int4 NULL DEFAULT 0,
                 CONSTRAINT viap102023_sequ_pk PRIMARY KEY (si198_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.aberlic112023 definition
@@ -4434,9 +4114,7 @@ class SicomTables2023 extends AbstractMigration
                 si47_instit int8 NULL DEFAULT 0,
                 CONSTRAINT aberlic112023_reg10_fk FOREIGN KEY (si47_reg10) REFERENCES public.aberlic102023(si46_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.aberlic122023 definition
@@ -4459,9 +4137,7 @@ class SicomTables2023 extends AbstractMigration
                 si48_instit int8 NULL DEFAULT 0,
                 CONSTRAINT aberlic122023_reg10_fk FOREIGN KEY (si48_reg10) REFERENCES public.aberlic102023(si46_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.aberlic132023 definition
@@ -4484,9 +4160,7 @@ class SicomTables2023 extends AbstractMigration
                 si49_instit int8 NULL DEFAULT 0,
                 CONSTRAINT aberlic132023_reg10_fk FOREIGN KEY (si49_reg10) REFERENCES public.aberlic102023(si46_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.aberlic142023 definition
@@ -4514,9 +4188,7 @@ class SicomTables2023 extends AbstractMigration
                 si50_instit int8 NULL DEFAULT 0,
                 CONSTRAINT aberlic142023_reg10_fk FOREIGN KEY (si50_reg10) REFERENCES public.aberlic102023(si46_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.aberlic152023 definition
@@ -4540,9 +4212,7 @@ class SicomTables2023 extends AbstractMigration
                 si51_instit int8 NULL DEFAULT 0,
                 CONSTRAINT aberlic152023_reg10_fk FOREIGN KEY (si51_reg10) REFERENCES public.aberlic102023(si46_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.aberlic162023 definition
@@ -4573,9 +4243,7 @@ class SicomTables2023 extends AbstractMigration
                 si52_instit int8 NULL DEFAULT 0,
                 CONSTRAINT aberlic162023_reg10_fk FOREIGN KEY (si52_reg10) REFERENCES public.aberlic102023(si46_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.alq112023 definition
@@ -4596,9 +4264,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT alq112023_sequ_pk PRIMARY KEY (si122_sequencial),
                 CONSTRAINT alq112023_reg10_fk FOREIGN KEY (si122_reg10) REFERENCES public.alq102023(si121_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX alq112023_si122_reg10_index ON alq112023 USING btree (si122_reg10);
 
 
@@ -4621,9 +4287,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT alq122023_sequ_pk PRIMARY KEY (si123_sequencial),
                 CONSTRAINT alq122023_reg10_fk FOREIGN KEY (si123_reg10) REFERENCES public.alq102023(si121_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX alq122023_si123_reg10_index ON alq122023 USING btree (si123_reg10);
 
 
@@ -4647,9 +4311,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT anl112023_sequ_pk PRIMARY KEY (si111_sequencial),
                 CONSTRAINT anl112023_reg10_fk FOREIGN KEY (si111_reg10) REFERENCES public.anl102023(si110_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX anl112023_si111_reg10_index ON anl112023 USING btree (si111_reg10);
 
 
@@ -4671,9 +4333,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT aob112023_sequ_pk PRIMARY KEY (si142_sequencial),
                 CONSTRAINT aob112023_reg10_fk FOREIGN KEY (si142_reg10) REFERENCES public.aob102023(si141_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX aob112023_si142_reg10_index ON aob112023 USING btree (si142_reg10);
 
 
@@ -4697,9 +4357,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT aoc112023_sequ_pk PRIMARY KEY (si39_sequencial),
                 CONSTRAINT aoc112023_reg10_fk FOREIGN KEY (si39_reg10) REFERENCES public.aoc102023(si38_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX aoc112023_si39_reg10_index ON aoc112023 USING btree (si39_reg10);
 
 
@@ -4724,9 +4382,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT aoc122023_sequ_pk PRIMARY KEY (si40_sequencial),
                 CONSTRAINT aoc122023_reg10_fk FOREIGN KEY (si40_reg10) REFERENCES public.aoc102023(si38_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX aoc122023_si40_reg10_index ON aoc122023 USING btree (si40_reg10);
 
 
@@ -4748,9 +4404,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT aoc132023_sequ_pk PRIMARY KEY (si41_sequencial),
                 CONSTRAINT aoc132023_reg10_fk FOREIGN KEY (si41_reg10) REFERENCES public.aoc102023(si38_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX aoc132023_si41_reg10_index ON aoc132023 USING btree (si41_reg10);
 
 
@@ -4784,9 +4438,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT aoc142023_sequ_pk PRIMARY KEY (si42_sequencial),
                 CONSTRAINT aoc142023_reg10_fk FOREIGN KEY (si42_reg10) REFERENCES public.aoc102023(si38_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX aoc142023_si42_reg10_index ON aoc142023 USING btree (si42_reg10);
 
 
@@ -4818,9 +4470,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT aoc152023_sequ_pk PRIMARY KEY (si194_sequencial),
                 CONSTRAINT aoc152023_reg10_fk FOREIGN KEY (si194_reg10) REFERENCES public.aoc102023(si38_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX aoc152023_si194_reg10_index ON aoc152023 USING btree (si194_reg10);
 
 
@@ -4847,9 +4497,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT aop112023_sequ_pk PRIMARY KEY (si138_sequencial),
                 CONSTRAINT aop112023_reg10_fk FOREIGN KEY (si138_reg10) REFERENCES public.aop102023(si137_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX aop112023_si138_reg10_index ON aop112023 USING btree (si138_reg10);
 
 
@@ -4875,9 +4523,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT arc112023_sequ_pk PRIMARY KEY (si29_sequencial),
                 CONSTRAINT arc112023_reg10_fk FOREIGN KEY (si29_reg10) REFERENCES public.arc102023(si28_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX arc112023_si15_reg10_index ON arc112023 USING btree (si29_reg10);
 
 
@@ -4903,9 +4549,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT arc122023_sequ_pk PRIMARY KEY (si30_sequencial),
                 CONSTRAINT arc122023_reg10_fk FOREIGN KEY (si30_reg10) REFERENCES public.arc102023(si28_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX arc122023_si30_reg10_index ON arc122023 USING btree (si30_reg10);
 
 
@@ -4933,9 +4577,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT arc212023_sequ_pk PRIMARY KEY (si32_sequencial),
                 CONSTRAINT arc212023_reg20_fk FOREIGN KEY (si32_reg20) REFERENCES public.arc202023(si31_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX arcwq2023_si32_reg20_index ON arc212023 USING btree (si32_reg20);
 
 
@@ -4971,9 +4613,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete112023_sequ_pk PRIMARY KEY (si178_sequencial),
                 CONSTRAINT fk_balancete112023_reg10_fk FOREIGN KEY (si178_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete122023 definition
@@ -5001,9 +4641,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete122023_sequ_pk PRIMARY KEY (si179_sequencial),
                 CONSTRAINT fk_balancete122023_reg10_fk FOREIGN KEY (si179_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete132023 definition
@@ -5032,9 +4670,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete132023_sequ_pk PRIMARY KEY (si180_sequencial),
                 CONSTRAINT fk_balancete132023_reg10_fk FOREIGN KEY (si180_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete142023 definition
@@ -5073,9 +4709,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete142023_sequ_pk PRIMARY KEY (si181_sequencial),
                 CONSTRAINT fk_balancete142023_reg10_fk FOREIGN KEY (si181_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete152023 definition
@@ -5102,9 +4736,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete152023_sequ_pk PRIMARY KEY (si182_sequencial),
                 CONSTRAINT fk_balancete152023_reg10_fk FOREIGN KEY (si182_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete162023 definition
@@ -5132,9 +4764,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete162023_sequ_pk PRIMARY KEY (si183_sequencial),
                 CONSTRAINT fk_balancete162023_reg10_fk FOREIGN KEY (si183_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete172023 definition
@@ -5163,9 +4793,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete172023_sequ_pk PRIMARY KEY (si184_sequencial),
                 CONSTRAINT fk_balancete172023_reg10_fk FOREIGN KEY (si184_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete182023 definition
@@ -5192,9 +4820,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete182023_sequ_pk PRIMARY KEY (si185_sequencial),
                 CONSTRAINT fk_balancete182023_reg10_fk FOREIGN KEY (si185_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete192023 definition
@@ -5221,9 +4847,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete192023_sequ_pk PRIMARY KEY (si186_sequencial),
                 CONSTRAINT fk_balancete192023_reg10_fk FOREIGN KEY (si186_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete202023 definition
@@ -5256,9 +4880,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete202023_sequ_pk PRIMARY KEY (si187_sequencial),
                 CONSTRAINT fk_balancete202023_reg10_fk FOREIGN KEY (si187_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete212023 definition
@@ -5286,9 +4908,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete212023_sequ_pk PRIMARY KEY (si188_sequencial),
                 CONSTRAINT fk_balancete212023_reg10_fk FOREIGN KEY (si188_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete222023 definition
@@ -5316,9 +4936,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete222023_sequ_pk PRIMARY KEY (si189_sequencial),
                 CONSTRAINT fk_balancete222023_si77_sequencial FOREIGN KEY (si189_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete232023 definition
@@ -5345,9 +4963,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete232023_sequ_pk PRIMARY KEY (si190_sequencial),
                 CONSTRAINT fk_balancete232023_reg10_fk FOREIGN KEY (si190_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete242023 definition
@@ -5375,9 +4991,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete242023_sequ_pk PRIMARY KEY (si191_sequencial),
                 CONSTRAINT fk_balancete242023_reg10_fk FOREIGN KEY (si191_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete252023 definition
@@ -5405,9 +5019,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete252023_sequ_pk PRIMARY KEY (si195_sequencial),
                 CONSTRAINT fk_balancete102023_reg10_fk FOREIGN KEY (si195_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete262023 definition
@@ -5436,9 +5048,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete262023_sequ_pk PRIMARY KEY (si196_sequencial),
                 CONSTRAINT fk_balancete102023_reg10_fk FOREIGN KEY (si196_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete272023 definition
@@ -5468,9 +5078,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete272023_sequ_pk PRIMARY KEY (si197_sequencial),
                 CONSTRAINT fk_balancete272023_reg10_fk FOREIGN KEY (si197_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete282023 definition
@@ -5498,9 +5106,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete282023_sequ_pk PRIMARY KEY (si198_sequencial),
                 CONSTRAINT fk_balancete282023_reg10_fk FOREIGN KEY (si198_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete292023 definition
@@ -5529,9 +5135,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete292023_sequ_pk PRIMARY KEY (si241_sequencial),
                 CONSTRAINT fk_balancete292023_reg10_fk FOREIGN KEY (si241_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete302023 definition
@@ -5568,9 +5172,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete302023_sequ_pk PRIMARY KEY (si242_sequencial),
                 CONSTRAINT fk_balancete302023_reg10_fk FOREIGN KEY (si242_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.balancete312023 definition
@@ -5601,9 +5203,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT balancete312023_sequ_pk PRIMARY KEY (si243_sequencial),
                 CONSTRAINT fk_balancete312023_reg10_fk FOREIGN KEY (si243_reg10) REFERENCES public.balancete102023(si177_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.caixa112023 definition
@@ -5624,9 +5224,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT caixa112023_sequ_pk PRIMARY KEY (si166_sequencial),
                 CONSTRAINT caixa112023_reg10_fk FOREIGN KEY (si166_reg10) REFERENCES public.caixa102023(si103_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.caixa122023 definition
@@ -5652,9 +5250,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT caixa122023_sequ_pk PRIMARY KEY (si104_sequencial),
                 CONSTRAINT caixa122023_reg10_fk FOREIGN KEY (si104_reg10) REFERENCES public.caixa102023(si103_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX caixa122023_si104_reg10_index ON caixa122023 USING btree (si104_reg10);
 
 
@@ -5680,9 +5276,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT caixa132023_sequ_pk PRIMARY KEY (si105_sequencial),
                 CONSTRAINT caixa132023_reg10_fk FOREIGN KEY (si105_reg10) REFERENCES public.caixa102023(si103_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX caixa132023_si105_reg10_index ON caixa132023 USING btree (si105_reg10);
 
 
@@ -5710,9 +5304,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT contratos112023_sequ_pk PRIMARY KEY (si84_sequencial),
                 CONSTRAINT contratos112023_reg10_fk FOREIGN KEY (si84_reg10) REFERENCES public.contratos102023(si83_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.contratos212023 definition
@@ -5740,9 +5332,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT contratos212023_sequ_pk PRIMARY KEY (si88_sequencial),
                 CONSTRAINT contratos212023_reg20_fk FOREIGN KEY (si88_reg20) REFERENCES public.contratos202023(si87_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.conv112023 definition
@@ -5766,9 +5356,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT conv112023_sequ_pk PRIMARY KEY (si93_sequencial),
                 CONSTRAINT conv112023_reg10_fk FOREIGN KEY (si93_reg10) REFERENCES public.conv102023(si92_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX conv112023_si93_reg10_index ON conv112023 USING btree (si93_reg10);
 
 
@@ -5798,9 +5386,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT ctb212023_sequ_pk PRIMARY KEY (si97_sequencial),
                 CONSTRAINT ctb212023_reg20_fk FOREIGN KEY (si97_reg20) REFERENCES public.ctb202023(si96_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX ctb212023_si97_reg20_index ON ctb212023 USING btree (si97_reg20);
 
 
@@ -5826,9 +5412,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT ctb222023_sequ_pk PRIMARY KEY (si98_sequencial),
                 CONSTRAINT ctb222023_reg21_fk FOREIGN KEY (si98_reg21) REFERENCES public.ctb212023(si97_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX ctb222023_si98_reg21_index ON ctb222023 USING btree (si98_reg21);
 
 
@@ -5853,9 +5437,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT ctb312023_sequ_pk PRIMARY KEY (si100_sequencial),
                 CONSTRAINT ctb312023_reg30_fk FOREIGN KEY (si100_reg30) REFERENCES public.ctb302023(si99_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX ctb312023_si100_reg30_index ON ctb312023 USING btree (si100_reg30);
 
 
@@ -5880,9 +5462,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT cute212023_sequ_pk PRIMARY KEY (si201_sequencial),
                 CONSTRAINT cute212023_reg10_fk FOREIGN KEY (si201_reg10) REFERENCES public.cute102023(si199_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX cute212023_si201_reg10_index ON cute212023 USING btree (si201_reg10);
 
 
@@ -5908,9 +5488,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT dispensa112023_sequ_pk PRIMARY KEY (si75_sequencial),
                 CONSTRAINT dispensa112023_reg10_fk FOREIGN KEY (si75_reg10) REFERENCES public.dispensa102023(si74_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX dispensa112023_si75_reg10_index ON dispensa112023 USING btree (si75_reg10);
 
 
@@ -5936,9 +5514,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT dispensa122023_sequ_pk PRIMARY KEY (si76_sequencial),
                 CONSTRAINT dispensa122023_reg10_fk FOREIGN KEY (si76_reg10) REFERENCES public.dispensa102023(si74_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX dispensa122023_si76_reg10_index ON dispensa122023 USING btree (si76_reg10);
 
 
@@ -5964,9 +5540,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT dispensa132023_sequ_pk PRIMARY KEY (si77_sequencial),
                 CONSTRAINT dispensa132023_reg10_fk FOREIGN KEY (si77_reg10) REFERENCES public.dispensa102023(si74_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX dispensa132023_si77_reg10_index ON dispensa132023 USING btree (si77_reg10);
 
 
@@ -5992,9 +5566,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT dispensa142023_sequ_pk PRIMARY KEY (si78_sequencial),
                 CONSTRAINT dispensa142023_reg10_fk FOREIGN KEY (si78_reg10) REFERENCES public.dispensa102023(si74_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX dispensa142023_si78_reg10_index ON dispensa142023 USING btree (si78_reg10);
 
 
@@ -6022,9 +5594,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT dispensa152023_sequ_pk PRIMARY KEY (si79_sequencial),
                 CONSTRAINT dispensa152023_reg10_fk FOREIGN KEY (si79_reg10) REFERENCES public.dispensa102023(si74_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX dispensa152023_si79_reg10_index ON dispensa152023 USING btree (si79_reg10);
 
 
@@ -6058,9 +5628,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT dispensa162023_sequ_pk PRIMARY KEY (si80_sequencial),
                 CONSTRAINT dispensa162023_reg10_fk FOREIGN KEY (si80_reg10) REFERENCES public.dispensa102023(si74_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX dispensa162023_si80_reg10_index ON dispensa162023 USING btree (si80_reg10);
 
 
@@ -6101,9 +5669,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT dispensa172023_sequ_pk PRIMARY KEY (si81_sequencial),
                 CONSTRAINT dispensa172023_reg10_fk FOREIGN KEY (si81_reg10) REFERENCES public.dispensa102023(si74_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX dispensa172023_si81_reg10_index ON dispensa172023 USING btree (si81_reg10);
 
 
@@ -6126,9 +5692,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT emp112023_sequ_pk PRIMARY KEY (si107_sequencial),
                 CONSTRAINT emp112023_reg10_fk FOREIGN KEY (si107_reg10) REFERENCES public.emp102023(si106_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX emp112023_si107_reg10_index ON emp112023 USING btree (si107_reg10);
 
 
@@ -6151,9 +5715,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT emp122023_sequ_pk PRIMARY KEY (si108_sequencial),
                 CONSTRAINT emp122023_reg10_fk FOREIGN KEY (si108_reg10) REFERENCES public.emp102023(si106_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX emp122023_si108_reg10_index ON emp122023 USING btree (si108_reg10);
 
 
@@ -6180,9 +5742,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT ext312023_sequ_pk PRIMARY KEY (si127_sequencial),
                 CONSTRAINT ext312023_reg22_fk FOREIGN KEY (si127_reg30) REFERENCES public.ext302023(si126_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX ext312023_si127_reg20_index ON ext312023 USING btree (si127_reg30);
 
 
@@ -6205,9 +5765,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT ext322023_sequ_pk PRIMARY KEY (si128_sequencial),
                 CONSTRAINT ext322023_reg23_fk FOREIGN KEY (si128_reg30) REFERENCES public.ext322023(si128_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX ext322023_si128_reg20_index ON ext322023 USING btree (si128_reg30);
 
 
@@ -6231,9 +5789,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT flpgo112023_sequ_pk PRIMARY KEY (si196_sequencial),
                 CONSTRAINT flpgo112023_reg10_fk FOREIGN KEY (si196_reg10) REFERENCES public.flpgo102023(si195_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.flpgo122023 definition
@@ -6256,9 +5812,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT flpgo122023_sequ_pk PRIMARY KEY (si197_sequencial),
                 CONSTRAINT flpgo122023_reg10_fk FOREIGN KEY (si197_reg10) REFERENCES public.flpgo102023(si195_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.hablic112023 definition
@@ -6285,9 +5839,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT hablic112023_sequ_pk PRIMARY KEY (si58_sequencial),
                 CONSTRAINT hablic112023_reg10_fk FOREIGN KEY (si58_reg10) REFERENCES public.hablic102023(si57_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX hablic112023_si58_reg10_index ON hablic112023 USING btree (si58_mes);
 
 
@@ -6311,9 +5863,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT lao112023_sequ_pk PRIMARY KEY (si35_sequencial),
                 CONSTRAINT lao112023_reg10_fk FOREIGN KEY (si35_reg10) REFERENCES public.lao102023(si34_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX lao112023_si35_reg10_index ON lao112023 USING btree (si35_reg10);
 
 
@@ -6337,9 +5887,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT lao212023_sequ_pk PRIMARY KEY (si37_sequencial),
                 CONSTRAINT lao212023_reg20_fk FOREIGN KEY (si37_reg20) REFERENCES public.lao202023(si36_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX lao212023_si37_reg20_index ON lao212023 USING btree (si37_reg20);
 
 
@@ -6361,9 +5909,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT lqd112023_sequ_pk PRIMARY KEY (si119_sequencial),
                 CONSTRAINT lqd112023_reg10_fk FOREIGN KEY (si119_reg10) REFERENCES public.lqd102023(si118_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX lqd112023_si119_reg10_index ON lqd112023 USING btree (si119_reg10);
 
 
@@ -6386,9 +5932,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT lqd122023_sequ_pk PRIMARY KEY (si120_sequencial),
                 CONSTRAINT lqd122023_reg10_fk FOREIGN KEY (si120_reg10) REFERENCES public.lqd102023(si118_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX lqd122023_si120_reg10_index ON lqd122023 USING btree (si120_reg10);
 
 
@@ -6411,9 +5955,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT ntf112023_sequ_pk PRIMARY KEY (si144_sequencial),
                 CONSTRAINT ntf112023_reg10_fk FOREIGN KEY (si144_reg10) REFERENCES public.ntf102023(si143_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX ntf112023_si144_reg10_index ON ntf112023 USING btree (si144_reg10);
 
 
@@ -6435,9 +5977,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT obelac112023_sequ_pk PRIMARY KEY (si140_sequencial),
                 CONSTRAINT obelac112023_reg10_fk FOREIGN KEY (si140_reg10) REFERENCES public.lqd122023(si120_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX obelac112023_si140_reg10_index ON obelac112023 USING btree (si140_reg10);
 
 
@@ -6471,9 +6011,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT ops112023_sequ_pk PRIMARY KEY (si133_sequencial),
                 CONSTRAINT ops112023_reg10_fk FOREIGN KEY (si133_reg10) REFERENCES public.ops102023(si132_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX ops112023_si133_reg10_index ON ops112023 USING btree (si133_reg10);
 
 
@@ -6500,9 +6038,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT ops122023_sequ_pk PRIMARY KEY (si134_sequencial),
                 CONSTRAINT ops122023_reg10_fk FOREIGN KEY (si134_reg10) REFERENCES public.ops102023(si132_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX ops122023_si134_reg10_index ON ops122023 USING btree (si134_reg10);
 
 
@@ -6526,9 +6062,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT ops132023_sequ_pk PRIMARY KEY (si135_sequencial),
                 CONSTRAINT ops132023_reg10_fk FOREIGN KEY (si135_reg10) REFERENCES public.ops102023(si132_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX ops132023_si135_reg10_index ON ops132023 USING btree (si135_reg10);
 
 
@@ -6557,9 +6091,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT orgao112023_sequ_pk PRIMARY KEY (si15_sequencial),
                 CONSTRAINT orgao112023_reg10_fk FOREIGN KEY (si15_reg10) REFERENCES public.orgao102023(si14_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX orgao112023_si15_reg10_index ON orgao112023 USING btree (si15_reg10);
 
 
@@ -6581,9 +6113,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT parec112023_sequ_pk PRIMARY KEY (si23_sequencial),
                 CONSTRAINT parec112023_reg10_fk FOREIGN KEY (si23_reg10) REFERENCES public.parec102023(si22_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX parec112023_si23_reg10_index ON parec112023 USING btree (si23_reg10);
 
 
@@ -6618,9 +6148,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT ralic112023_sequ_pk PRIMARY KEY (si181_sequencial),
                 CONSTRAINT ralic112023_reg10_fk FOREIGN KEY (si181_reg10) REFERENCES public.ralic102023(si180_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.ralic122023 definition
@@ -6654,9 +6182,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT ralic122023_sequ_pk PRIMARY KEY (si182_sequencial),
                 CONSTRAINT ralic122023_reg10_fk FOREIGN KEY (si182_reg10) REFERENCES public.ralic102023(si180_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.rec112023 definition
@@ -6683,9 +6209,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT rec112023_sequ_pk PRIMARY KEY (si26_sequencial),
                 CONSTRAINT rec112023_reg10_fk FOREIGN KEY (si26_reg10) REFERENCES public.rec102023(si25_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX rec112023_si26_reg10_index ON rec112023 USING btree (si26_reg10);
 
 
@@ -6720,9 +6244,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT redispi112023_sequ_pk PRIMARY KEY (si184_sequencial),
                 CONSTRAINT redispi112023_reg10_fk FOREIGN KEY (si184_reg10) REFERENCES public.redispi102023(si183_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.redispi122023 definition
@@ -6755,9 +6277,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT redispi122023_sequ_pk PRIMARY KEY (si185_sequencial),
                 CONSTRAINT redispi122023_reg10_fk FOREIGN KEY (si185_reg10) REFERENCES public.redispi102023(si183_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.regadesao112023 definition
@@ -6781,9 +6301,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT regadesao112023_sequ_pk PRIMARY KEY (si68_sequencial),
                 CONSTRAINT regadesao112023_reg10_fk FOREIGN KEY (si68_reg10) REFERENCES public.regadesao102023(si67_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX regadesao112023_si68_reg10_index ON regadesao112023 USING btree (si68_reg10);
 
 
@@ -6808,9 +6326,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT regadesao122023_sequ_pk PRIMARY KEY (si69_sequencial),
                 CONSTRAINT regadesao122023_reg10_fk FOREIGN KEY (si69_reg10) REFERENCES public.regadesao102023(si67_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX regadesao122023_si69_reg10_index ON regadesao122023 USING btree (si69_reg10);
 
 
@@ -6835,9 +6351,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT regadesao132023_sequ_pk PRIMARY KEY (si70_sequencial),
                 CONSTRAINT regadesao132023_reg10_fk FOREIGN KEY (si70_reg10) REFERENCES public.regadesao102023(si67_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX regadesao132023_si70_reg10_index ON regadesao132023 USING btree (si70_reg10);
 
 
@@ -6865,9 +6379,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT regadesao142023_sequ_pk PRIMARY KEY (si71_sequencial),
                 CONSTRAINT regadesao142023_reg10_fk FOREIGN KEY (si71_reg10) REFERENCES public.regadesao102023(si67_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX regadesao142023_si71_reg10_index ON regadesao142023 USING btree (si71_reg10);
 
 
@@ -6897,9 +6409,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT regadesao152023_sequ_pk PRIMARY KEY (si72_sequencial),
                 CONSTRAINT regadesao152023_reg10_fk FOREIGN KEY (si72_reg10) REFERENCES public.regadesao102023(si67_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX regadesao152023_si72_reg10_index ON regadesao152023 USING btree (si72_reg10);
 
 
@@ -6921,9 +6431,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT rpsd112023_sequ_pk PRIMARY KEY (si190_sequencial),
                 CONSTRAINT rpsd112023_reg10_fk FOREIGN KEY (si190_reg10) REFERENCES public.rpsd102023(si189_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
 
             -- public.rsp112023 definition
@@ -6946,9 +6454,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT rsp112023_sequ_pk PRIMARY KEY (si113_sequencial),
                 CONSTRAINT rsp112023_reg10_fk FOREIGN KEY (si113_reg10) REFERENCES public.rsp102023(si112_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX rsp112023_si113_reg10_index ON rsp112023 USING btree (si113_reg10);
 
 
@@ -6970,9 +6476,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT rsp122023_sequ_pk PRIMARY KEY (si114_sequencial),
                 CONSTRAINT rsp122023_reg10_fk FOREIGN KEY (si114_reg10) REFERENCES public.rsp102023(si112_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX rsp122023_si114_reg10_index ON rsp122023 USING btree (si114_reg10);
 
 
@@ -6994,9 +6498,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT rsp212023_sequ_pk PRIMARY KEY (si116_sequencial),
                 CONSTRAINT rsp212023_reg20_fk FOREIGN KEY (si116_reg20) REFERENCES public.rsp202023(si115_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX rsp212023_si116_reg20_index ON rsp212023 USING btree (si116_reg20);
 
 
@@ -7018,9 +6520,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT rsp222023_sequ_pk PRIMARY KEY (si117_sequencial),
                 CONSTRAINT rsp222023_reg20_fk FOREIGN KEY (si117_reg20) REFERENCES public.rsp202023(si115_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
             CREATE INDEX rsp222023_si117_reg20_index ON rsp222023 USING btree (si117_reg20);
 
 
@@ -7043,9 +6543,7 @@ class SicomTables2023 extends AbstractMigration
                 CONSTRAINT tce112023_sequ_pk PRIMARY KEY (si188_sequencial),
                 CONSTRAINT tce112023_reg10_fk FOREIGN KEY (si188_reg10) REFERENCES public.tce112023(si188_sequencial)
             )
-            WITH (
-                OIDS=TRUE
-            );
+
 
             -- public.aberlic102023_si46_sequencial_seq definition
 
