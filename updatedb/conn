@@ -109,4 +109,5 @@ e-cidade            5432    pmcurraldentro
 e-cidade-treinamento   5432 e-cidadev3
 pmpedrasdemariadacruz  5432 e-cidadev3
 pmsaogoncalodoriopreto 5432 e-cidadev3
-pmmonteazul            5432 e-cidadev3
+
+e-cidade            5432 pmmonteazulv3
