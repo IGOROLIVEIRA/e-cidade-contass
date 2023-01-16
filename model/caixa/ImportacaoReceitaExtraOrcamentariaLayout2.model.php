@@ -40,8 +40,10 @@ class ImportacaoReceitaExtraOrcamentariaLayout2 extends ImportacaoReceitaLayout2
         $this->oReceita->sCodAgencia      = substr($sLinha, 3, 4);
         $this->oReceita->dDataCredito     = $this->montarData(substr($sLinha, 7, 8));
         $this->oReceita->nValor           = $this->montarValor(substr($sLinha, 21, 13));
-        $this->oReceita->sPcasp           = $this->montarPcasp(str_replace(".", "", substr(trim($sLinha), 35, -3)));
-        $this->oReceita->iRecurso         = substr(trim($sLinha), -3);
+        // Mudança necessária para utilização das fontes de recursos em 2023
+        $iDigitosRecursos                 = (strlen($sLinha) < 69) ? -3 : -8;
+        $this->oReceita->sPcasp           = $this->montarPcasp(str_replace(".", "", substr(trim($sLinha), 35, $iDigitosRecursos)));
+        $this->oReceita->iRecurso         = substr(trim($sLinha), $iDigitosRecursos);
         $this->preencherContaCredito();
         $this->preencherAgenteArrecadador();
         $this->preencherIdentificadorReceita();
