@@ -190,8 +190,7 @@ if ($oInstit->db21_usasisagua == "t") {
                 <?
                 db_input('codigo_receitaplanilha', 10, null, true, 'text', 2, " style='display:none;'");
                 db_input('k81_receita', 10, $Ik81_receita, true, 'text', 2, " onchange='js_pesquisaReceita(false)'");
-                echo "<b><font color=\"#DCDCDC\">..</font></b>";
-                db_input('c61_codigo', 7, $Ic61_codigo, true, 'text', 3, " onfocus=\"document.getElementById('k81_conta').focus()\" ", 'recurso');
+                echo "&nbsp;&nbsp;";db_input('c61_codigo', 7, $Ic61_codigo, true, 'text', 3, " onfocus=\"document.getElementById('k81_conta').focus()\" ", 'recurso');
                 db_input('k02_drecei', 51, $Ik02_drecei, true, 'text', 3);
                 db_input('estrutural', 20, null, true, 'hidden', 2, "");
                 db_input('k02_tipo', 1, null, true, 'hidden');
@@ -209,8 +208,7 @@ if ($oInstit->db21_usasisagua == "t") {
               <td colspan='3'>
                 <?
                 db_input('k81_conta', 10, $Ik81_conta, true, 'text', 2, "onchange='js_pesquisaConta(false);'");
-                echo "<b><font color=\"#DCDCDC\">..</font></b>";
-                db_input('c61_codigo', 7, $Ic61_codigo, true, 'text', 3);
+                echo "&nbsp;&nbsp;";db_input('c61_codigo', 7, $Ic61_codigo, true, 'text', 3);
                 db_input('k13_descr', 51, $Ik13_descr, true, 'text', 3);
                 ?>
               </td>
@@ -245,8 +243,7 @@ if ($oInstit->db21_usasisagua == "t") {
               <td colspan='3'>
                 <?
                 db_input('k81_numcgm', 10, $Ik81_numcgm, true, 'text', 2, "onchange='js_pesquisaCgm(false);'");
-                echo "<b><font color=\"#DCDCDC\">..</font></b>";
-                db_input('z01_nome', 61, $Iz01_nome, true, 'text', 3);
+                echo "&nbsp;&nbsp;";db_input('z01_nome', 61, $Iz01_nome, true, 'text', 3);
                 ?>
               </td>
             </tr>
@@ -294,8 +291,7 @@ if ($oInstit->db21_usasisagua == "t") {
               <td colspan='3'>
                 <?
                 db_input('k81_convenio', 10, $Ik81_convenio, true, 'text', 3, "onChange='js_pesquisak81_convenio(false);'");
-                echo "<b><font color=\"#DCDCDC\">..</font></b>";
-                db_input("c206_objetoconvenio", 61, 0, true, "text", 3);
+                echo "&nbsp;&nbsp;";db_input("c206_objetoconvenio", 61, 0, true, "text", 3);
                 ?>
               </td>
             </tr>
@@ -1372,13 +1368,6 @@ if ($oInstit->db21_usasisagua == "t") {
       $('k81_conta').focus();
       return false;
     }
-    if ($('anoUsu').value > 2022) {
-      if (lEmendaParlamentarObrigatoria && $('k81_emparlamentar').value == '') {
-        alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
-        return false;
-      }
-    }
-
     if ($('anoUsu').value == 2022) {
       aEstruts = ['4172150', '4172151', '4175150', '4171550'];
       aEstrutsDed = ['4951728011', '4951728012', '4951758011', '4951728991'];
@@ -1716,6 +1705,12 @@ if ($oInstit->db21_usasisagua == "t") {
 
     js_renderizarGrid();
 
+    if ($('anoUsu').value > 2022) {
+      if (lEmendaParlamentarObrigatoria && $('k81_emparlamentar').value == '') {
+        alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
+        return false;
+      }
+    }  
   }
 
   function js_criaLinhaReceita(oAjax) {
