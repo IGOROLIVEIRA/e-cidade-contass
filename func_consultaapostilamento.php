@@ -179,12 +179,33 @@ $oResult = db_utils::getColectionByRecord($oResult);
                     <?php endif; ?>
                 
                 <?php if($oResult[0]->tipoapostila==3){ 
+                    $sqlposicaoant = "select max(ac26_sequencial) as ac26_sequencial from acordoposicao  where ac26_acordo=(select ac26_acordo from acordoposicao where ac26_sequencial={$ac26_sequencial}) and ac26_numeroapostilamento < (select ac26_numeroapostilamento from acordoposicao where ac26_sequencial={$ac26_sequencial})";
+                    $rsposicaoant = db_query($sqlposicaoant);
+                    $oDadosposicaoant = db_utils::getColectionByRecord($rsposicaoant);
+
+                    $sqldotacoesant = "select ac22_coddot from acordoitemdotacao where ac22_acordoitem = (select ac20_sequencial from acordoitem where ac20_acordoposicao={$oDadosposicaoant[0]->ac26_sequencial} and ac20_pcmater = {$aResult->ac20_pcmater}) order by ac22_coddot";
+                    $oResultdotadocoesant = db_query($sqldotacoesant);
+                    $oResultdotadocoesant = db_utils::getColectionByRecord($oResultdotadocoesant);
                     
                     $sqldotacoes = "select ac22_coddot from acordoitemdotacao where ac22_acordoitem = (select ac20_sequencial from acordoitem where ac20_acordoposicao={$ac26_sequencial} and ac20_pcmater = {$aResult->ac20_pcmater}) order by ac22_coddot";
                     $oResultdotadocoes = db_query($sqldotacoes);
                     $oResultdotadocoes = db_utils::getColectionByRecord($oResultdotadocoes);
-                    if(count($oResultdotadocoes)>0){
                     
+                    
+                    $dotacao = array();
+                    if(count($oResultdotadocoes)>0){
+                        foreach ($oResultdotadocoes as $aResultdotadocoes){
+                            $verifica = 0;
+                            foreach ($oResultdotadocoesant as $aResultdotadocoesant){
+                                if($aResultdotadocoes->ac22_coddot == $aResultdotadocoesant->ac22_coddot){
+                                    $verifica = 1;
+                                }
+                            }
+                            if($verifica == 0){
+                                $dotacao[]=$aResultdotadocoes->ac22_coddot;
+                            }
+                        } 
+                        if(count($dotacao)>0){
                     ?>
                    
                     <tr style="background: #ffffff; height: 20px;">
@@ -192,8 +213,8 @@ $oResult = db_utils::getColectionByRecord($oResult);
                         
                             <?php
                             
-                            foreach ($oResultdotadocoes as $aResultdotadocoes){
-                                echo " ".$aResultdotadocoes->ac22_coddot;
+                            foreach ($dotacao as $adotacao){
+                                echo " ".$adotacao;
                             } 
                             ?>
                         </th>
@@ -204,8 +225,9 @@ $oResult = db_utils::getColectionByRecord($oResult);
                     </tr>
                     <?php } ?>
                     <?php } ?>
+                    <?php } ?>
                     
-                <?php if($oResult[0]->tipoapostila==3 && count($oResultdotadocoes)>0){ ?>
+                <?php if($oResult[0]->tipoapostila==3 && count($oResultdotadocoes)>0 && count($dotacao)>0){ ?>
                     <tr>
                     <td colspan="10" style="height:10px; width:100%;"><hr></td>
                 </tr>
