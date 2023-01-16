@@ -12,30 +12,30 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarCRON
  */
 class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    *
    * Codigo do layout. (db_layouttxt.db50_codigo)
    * @var Integer
    */
   protected $iCodigoLayout = 0;
-  
+
   /**
    *
    * NOme do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'CRONEM';
-  
+
   /**
    *
    * Contrutor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * Retorna o codigo do layout
    *
@@ -45,7 +45,7 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
@@ -62,7 +62,7 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
 
     return $aElementos;
   }
-  
+
   /**
    * selecionar os dados de indentificacao da remessa pra gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
@@ -74,7 +74,7 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
     $clcronem10 = new cl_cronem102023();
-    
+
     /**
      * inserir informacoes no banco de dados
      */
@@ -87,7 +87,7 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
       }
     }
     db_fim_transacao();
-    
+
 
     db_inicio_transacao();
     $sSqlTrataUnidade = "select si08_tratacodunidade from infocomplementares where si08_instit = " . db_getsession("DB_instit");
@@ -125,12 +125,12 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
           lpad((CASE WHEN orcorgao.o40_codtri   = '0' OR orcorgao.o40_codtri is NULL THEN orcorgao.o40_orgao::VARCHAR ELSE orcorgao.o40_codtri END),2,0)
         ||lpad((CASE WHEN orcunidade.o41_codtri = '0' OR orcunidade.o41_codtri is NULL THEN orcunidade.o41_unidade::VARCHAR ELSE orcunidade.o41_codtri END),3,0)
         ||(CASE WHEN orcunidade.o41_subunidade  = '0' OR orcunidade.o41_subunidade is NULL THEN '' ELSE lpad(orcunidade.o41_subunidade::VARCHAR,3,0) END) as codunidadesub";
-    
+
     $sSql = $clcronogramamesdesembolso->sql_query(null,$sCampos,"",$sWhere);
 
     $rsResult = db_query($sSql);//db_criatabela($rsResult);
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
-      
+
       $clcronem10 = new cl_cronem102023();
       $oDados = db_utils::fieldsMemory($rsResult, $iCont);
 
@@ -138,7 +138,7 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
       $clcronem10->si170_codorgao = $oDados->codorgao;
       $clcronem10->si170_codunidadesub = $oDados->codunidadesub;
       $clcronem10->si170_grupodespesa = $aTipoDespesa[$oDados->o202_elemento];
-      $clcronem10->si170_vldotmensal = $oDados->$aMeses[$sMes];
+      $clcronem10->si170_vldotmensal = $oDados->{$aMeses[$sMes]};
       $clcronem10->si170_mes = $sMes;
       $clcronem10->si170_instit = db_getsession("DB_instit");
 
@@ -149,13 +149,13 @@ class SicomArquivoCronogramaExecucao extends SicomArquivoBase implements iPadArq
       }
 
     }
-    
+
     db_fim_transacao();
-    
+
     $oGerarCRONEM = new GerarCRONEM();
     $oGerarCRONEM->iMes = $sMes;
     $oGerarCRONEM->gerarDados();
-    
+
   }
-  
+
 }
