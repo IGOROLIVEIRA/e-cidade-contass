@@ -33,7 +33,8 @@
  * default - analitico
  *
  */
-require_once(modification("fpdf151/pdf.php"));
+
+//require_once(modification("fpdf151/pdf.php"));
 require_once(modification("classes/db_empempenho_classe.php"));
 require_once(modification("classes/db_cgm_classe.php"));
 require_once(modification("classes/db_orctiporec_classe.php"));
@@ -52,7 +53,7 @@ require_once(modification("classes/db_conlancamdot_classe.php"));
 require_once(modification("classes/db_conlancamdig_classe.php"));
 require_once(modification("libs/db_libcontabilidade.php"));
 require_once(modification("classes/db_conplano_classe.php"));
-//require_once("fpdf151/PDFDocument.php");
+require_once("fpdf151/PDFDocument.php");
 
 db_postmemory($_GET);
 
@@ -117,7 +118,7 @@ $res = db_query($sql_analitico);
 $head2 = "RAZÃO POR CONTA";
 $head5 = "PERÍODO : " . db_formatar($data1, 'd') . " à " . db_formatar($data2, 'd');
 
-$pdf = new PDF(); // abre a classe
+$pdf = new PDFDocument(); // abre a classe
 // $pdf->clearHeaderDescription();
 // $pdf->addHeaderDescription("\n".$head2);
 // $pdf->addHeaderDescription("\n\n".$head5);
