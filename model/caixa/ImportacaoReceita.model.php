@@ -34,7 +34,6 @@ class ImportacaoReceita
 {
     private $sProcessoAdministrativo;
     private $iLayout;
-    private $iNumeroCgm;
     private $iInscricao = "";
     private $iMatricula = "";
     private $sObservacao = "";
@@ -49,6 +48,7 @@ class ImportacaoReceita
     private $iCodigoTipoOperacao = 11;
     public $iCodigoPlanilhaArrecadada = 0;
     public $aCodigoSlip = array();
+    public $aCodigoPlanilhaArrecadada = array();
 
     /**
      * Construtor
