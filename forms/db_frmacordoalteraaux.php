@@ -436,110 +436,110 @@ db_app::load("dbtextFieldData.widget.js");
                 </td>
               </tr>
               <tr>
-                                                <td colspan="2" >
-                                                    <table >
-                                                        <tr>
-                                                            <td id='tdpossuireajuste' width="300px">
-                                                                <b>Possui Critério Reajuste:</b>
-                                                        
-                                                                <?
-                                                                    $aPossui = array(
-                                                                    0 => 'Selecione',
-                                                                    1 => 'Sim',
-                                                                    2 => 'Não'
-                                                                    );
-                                                                    db_select('ac16_reajuste', $aPossui   , true, $db_opcao,"onchange='js_possuireajuste()'","");
-                                                                ?>
-                                                            </td>
-                                                        
-                                                            <td width="23%" id='tdcriterioreajuste' style="display: inline;">
-                                                                <b>Critério de Reajuste:</b>
-                                                            
-                                                                <?
-                                                                    $aCriterios = array(
-                                                                    0 => 'Selecione',
-                                                                    1 => 'Índice Único',
-                                                                    2 => 'Cesta de Índices',
-                                                                    3 => 'Índice Específico'
-                                                                    );
-                                                                    db_select('ac16_criterioreajuste', $aCriterios   , true, $db_opcao,"onchange='js_criterio()'","");
-                                                                ?>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr >
-                                                <td colspan="2" >
-                                                    <table  border="0">
-                                                        <tr id='trdatareajuste' >
-                                                            <td width="140px">
-                                                                <b>Data Base Reajuste:</b>
-                                                            </td>
-                                                            <td width="160px">
-                                                                <?
-                                                                db_inputdata('ac16_datareajuste', @$ac16_datareajuste_dia, @$ac16_datareajuste_mes, @$ac16_datareajuste_ano,
-                                                                    true, 'text', $iCampo, "onchange='return js_somardias();'",
-                                                                    "", "", "return parent.js_somardias();");
-                                                                ?>
-                                                            </td>
+                <td colspan="2" >
+                    <table >
+                        <tr>
+                            <td id='tdpossuireajuste' width="300px">
+                            <b>Possui Critério Reajuste:</b>
+                        
+                            <?
+                                $aPossui = array(
+                                0 => 'Selecione',
+                                1 => 'Sim',
+                                2 => 'Não'
+                                );
+                                db_select('ac16_reajuste', $aPossui   , true, $db_opcao,"onchange='js_possuireajuste()'","");
+                            ?>
+                            </td>
+                        
+                            <td width="23%" id='tdcriterioreajuste' style="display: inline;">
+                            <b>Critério de Reajuste:</b>
+                            
+                            <?
+                                $aCriterios = array(
+                                0 => 'Selecione',
+                                1 => 'Índice Único',
+                                2 => 'Cesta de Índices',
+                                3 => 'Índice Específico'
+                                );
+                                db_select('ac16_criterioreajuste', $aCriterios   , true, $db_opcao,"onchange='js_criterio()'","");
+                            ?>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr >
+                <td colspan="2" >
+                    <table  border="0">
+                        <tr id='trdatareajuste' >
+                            <td width="140px">
+                            <b>Data Base Reajuste:</b>
+                            </td>
+                            <td width="160px">
+                            <?
+                                db_inputdata('ac16_datareajuste', @$ac16_datareajuste_dia, @$ac16_datareajuste_mes, @$ac16_datareajuste_ano,
+                                true, 'text', $iCampo, "onchange='return js_somardias();'",
+                                "", "", "return parent.js_somardias();");
+                            ?>
+                            </td>
 
-                                                            <td  id='tdindicereajuste' >
-                                                                <b>Índice de Reajuste:</b>
-                                                            
-                                                                <?
-                                                                    $aIndice = array(
-                                                                    0 => 'Selecione',
-                                                                    1 => 'IPCA',
-                                                                    2 => 'INPC',
-                                                                    3 => 'INCC',
-                                                                    4 => 'IGP-M',
-                                                                    5 => 'IGP-DI',
-                                                                    6 => 'Outro'
-                                                                    );
-                                                                    db_select('ac16_indicereajuste', $aIndice   , true, $db_opcao,"onchange='js_indicereajuste()'","");
-                                                                ?>
-                                                            </td>
-                                                        </tr>   
-                                                        <tr id='trperiodoreajuste' >
-                                                            <td width="140px">
-                                                                <b>Período do Reajuste:</b>
-                                                            </td>
-                                                            <td>
-                                                                <?
-                                                                db_input('ac16_periodoreajuste', 12, 1, true, $db_opcao, "","","","","",2);
-                                                                ?>
-                                                            </td>
-                                                        </tr>
-                                                        </table>
-                                                </td>
-                                                <tr >
-                                                <td colspan="2" >
-                                                    <table  border="0">
-                                            </tr>    
-                                            <tr id='trdescricaoreajuste'>
-                                                <td >
-                                                    <b> Descrição do Critério de Reajuste </b>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_textarea('ac16_descricaoreajuste', 3, 69, '', true, 'text', $db_opcao, "", "", "", "300");
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            <tr id='trdescricaoindicereajuste' >
-                                                <td >
-                                                    <b> Descrição do Índice de Reajuste </b>
-                                                </td>
-                                                <td>
-                                                    <?
-                                                    db_textarea('ac16_descricaoindice', 3, 69, '', true, 'text', $db_opcao, "", "", "", "300");
-                                                    ?>
-                                                </td>
-                                            </tr>
-                                            </table>
-                                                </td>
-                                            </tr>
+                            <td  id='tdindicereajuste' >
+                            <b>Índice de Reajuste:</b>
+                            
+                            <?
+                                $aIndice = array(
+                                0 => 'Selecione',
+                                1 => 'IPCA',
+                                2 => 'INPC',
+                                3 => 'INCC',
+                                4 => 'IGP-M',
+                                5 => 'IGP-DI',
+                                6 => 'Outro'
+                                );
+                                db_select('ac16_indicereajuste', $aIndice   , true, $db_opcao,"onchange='js_indicereajuste()'","");
+                            ?>
+                            </td>
+                        </tr>   
+                        <tr id='trperiodoreajuste' >
+                            <td width="140px">
+                            <b>Período do Reajuste:</b>
+                            </td>
+                            <td>
+                            <?
+                                db_input('ac16_periodoreajuste', 12, 1, true, $db_opcao, "","","","","",2);
+                            ?>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <tr >
+                <td colspan="2" >
+                    <table  border="0">
+            </tr>    
+            <tr id='trdescricaoreajuste'>
+                <td >
+                    <b> Descrição do Critério de Reajuste </b>
+                </td>
+                <td>
+                    <?
+                    db_textarea('ac16_descricaoreajuste', 3, 69, '', true, 'text', $db_opcao, "", "", "", "300");
+                    ?>
+                </td>
+            </tr>
+            <tr id='trdescricaoindicereajuste' >
+                <td >
+                    <b> Descrição do Índice de Reajuste </b>
+                </td>
+                <td>
+                    <?
+                    db_textarea('ac16_descricaoindice', 3, 69, '', true, 'text', $db_opcao, "", "", "", "300");
+                    ?>
+                </td>
+            </tr>
+          </table>
+        </td>
+            </tr>
               <tr>
                 <td colspan="2">
                   <fieldset class='fieldsetinterno'>
