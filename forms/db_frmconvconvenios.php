@@ -9,11 +9,16 @@ if ($db_opcao==1) {
     $db_action="con1_convconvenios006.php";
 }
 
-$sSQL = " SELECT o15_codigo, o15_codtri, o15_descr FROM orctiporec WHERE o15_codtri IN ('122','123','124','142','163') ORDER BY o15_codigo ";
+require_once "classes/db_orctiporec_classe.php";
 
-if(db_getsession("DB_anousu") > 2021){
-    $sSQL = " SELECT o15_codigo, o15_codtri, o15_descr FROM orctiporec WHERE o15_codtri IN ('122','123','124','142','163', '163', '171', '172', '173','176', '177', '178', '181', '182', '183') ORDER BY o15_codigo ";
-}
+$clorctiporec = new cl_orctiporec;
+
+$ano = db_getsession("DB_anousu");
+$campos = " o15_codigo, o15_codtri, o15_descr ";
+$ordem = " o15_codigo";
+
+$sSQL = $clorctiporec->validaFontesAno($ano, $campos, $ordem);
+
 $tpCadastros = db_utils::getCollectionByRecord(db_query($sSQL));
 
 $aTpCadastros = array(""=>"Selecione");
