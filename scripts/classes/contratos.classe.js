@@ -800,6 +800,28 @@ contrato = function () {
             $('ac16_descricaoindice').value            = oRetorno.contrato.sDescricaoindice.urlDecode();
             //$('ac16_acordoclassificacao').value   = oRetorno.contrato.iClassificacao;
             $('ac16_valor').value                 = js_formatar(oRetorno.contrato.nValorContrato, 'f');
+            if($('ac16_reajuste').value == 2){
+                $('tdcriterioreajuste').style.display = 'none';
+                $('trdatareajuste').style.display = 'none';
+                $('trperiodoreajuste').style.display = 'none';
+                $('trdescricaoreajuste').style.display = 'none';
+                $('tdindicereajuste').style.display = 'none';
+                $('trdescricaoindicereajuste').style.display = 'none';
+            }
+            if($('ac16_reajuste').value == 1){
+                $('tdcriterioreajuste').style.display = '';
+                $('trdatareajuste').style.display = '';
+                $('trperiodoreajuste').style.display = '';
+                if($('ac16_criterioreajuste').value == 1){
+                    $('tdindicereajuste').style.display = '';
+                }else{
+                    $('trdescricaoreajuste').style.display = '';
+                }
+                if($('tdindicereajuste').value == 6){
+                    $('trdescricaoindicereajuste').style.display = '';
+                }
+            }
+            
             js_verificatipoorigem();
             js_pesquisaac16_acordogrupo(false);
             js_pesquisaac50_descricao(false);
@@ -809,7 +831,6 @@ contrato = function () {
                 js_pesquisaac16_licoutroorgao(false);
             }
 
-            $('ac16_descricaoreajuste').style.display = 'none';
             me.mostraValorAcordo();
 
             var dtInicio                     = oRetorno.contrato.dtInicio;

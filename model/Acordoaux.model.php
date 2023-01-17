@@ -418,7 +418,56 @@ class Acordoaux
 
     protected $sTipo;
 
+        /**
+     * Reajuste
+     * @var
+     */
 
+     protected $iReajuste;
+
+         /**
+     * Criterioreajuste
+     * @var
+     */
+
+     protected $iCriterioreajuste;
+
+          /**
+     * Data Reajuste
+     * @var
+     */
+
+     protected $dtReajuste;
+
+          /**
+     * Periodoreajuste
+     * @var
+     */
+
+     protected $sPeriodoreajuste;
+
+          /**
+     * Indicereajuste
+     * @var
+     */
+
+     protected $iIndicereajuste;
+
+            /**
+     * Descricaoreajuste
+     * @var
+     */
+
+     protected $sDescricaoreajuste;
+
+             /**
+     * Descricaoindice
+     * @var
+     */
+
+     protected $sDescricaoindice;
+
+     
     /**
      * Data Rescisao do acordo acordo.ac16_datarescisao
      * @var string
@@ -519,6 +568,126 @@ class Acordoaux
         return $this;
     }
 
+        /**
+     * @return mixed
+     */
+    public function getReajuste()
+    {
+        return $this->iReajuste;
+    }
+
+    /**
+     * @param mixed $iReajuste
+     */
+    public function setReajuste($iReajuste)
+    {
+        $this->iReajuste = $iReajuste;
+        return $this;
+    }
+
+            /**
+     * @return mixed
+     */
+    public function getCriterioReajuste()
+    {
+        return $this->iCriterioreajuste;
+    }
+
+    /**
+     * @param mixed $iCriterioreajuste
+     */
+    public function setCriterioReajuste($iCriterioreajuste)
+    {
+        $this->iCriterioreajuste = $iCriterioreajuste;
+        return $this;
+    }
+
+                /**
+     * @return mixed
+     */
+    public function getDataReajuste()
+    {
+        return $this->dtReajuste;
+    }
+
+    /**
+     * @param mixed $dtReajuste
+     */
+    public function setDataReajuste($dtReajuste)
+    {
+        $this->dtReajuste = $dtReajuste;
+        return $this;
+    }
+
+                    /**
+     * @return mixed
+     */
+    public function getPeriodoreajuste()
+    {
+        return $this->sPeriodoreajuste;
+    }
+
+    /**
+     * @param mixed $sPeriodoreajuste
+     */
+    public function setPeriodoreajuste($sPeriodoreajuste)
+    {
+        $this->sPeriodoreajuste = $sPeriodoreajuste;
+        return $this;
+    }
+
+                        /**
+     * @return mixed
+     */
+    public function getIndiceReajuste()
+    {
+        return $this->iIndicereajuste;
+    }
+
+    /**
+     * @param mixed $iIndicereajuste
+     */
+    public function setIndiceReajuste($iIndicereajuste)
+    {
+        $this->iIndicereajuste = $iIndicereajuste;
+        return $this;
+    }
+
+                            /**
+     * @return mixed
+     */
+    public function getDescricaoReajuste()
+    {
+        return $this->sDescricaoreajuste;
+    }
+
+    /**
+     * @param mixed $sDescricaoreajuste
+     */
+    public function setDescricaoReajuste($sDescricaoreajuste)
+    {
+        $this->sDescricaoreajuste = $sDescricaoreajuste;
+        return $this;
+    }
+    
+                            /**
+     * @return mixed
+     */
+    public function getDescricaoIndice()
+    {
+        return $this->sDescricaoindice;
+    }
+
+    /**
+     * @param mixed $sDescricaoindice
+     */
+    public function setDescricaoIndice($sDescricaoindice)
+    {
+        $this->sDescricaoindice = $sDescricaoindice;
+        return $this;
+    }
+    
+
     /**
      * Construtor
      * @param integer $iCodigoAcordo
@@ -572,6 +741,13 @@ class Acordoaux
                 $this->setValorContrato($oDadosAcordo->ac16_valor);
                 $this->setDataRescisao(db_formatar($oDadosAcordo->ac16_datarescisao, "d"));
                 $this->setValorRescisao($oDadosAcordo->ac16_valorrescisao);
+                $this->setReajuste($oDadosAcordo->ac16_reajuste);
+                $this->setCriterioReajuste($oDadosAcordo->ac16_criterioreajuste);
+                $this->setDataReajuste($oDadosAcordo->ac16_datareajuste);
+                $this->setPeriodoreajuste($oDadosAcordo->ac16_periodoreajuste);
+                $this->setIndiceReajuste($oDadosAcordo->ac16_indicereajuste);
+                $this->setDescricaoReajuste($oDadosAcordo->ac16_descricaoreajuste);
+                $this->setDescricaoIndice($oDadosAcordo->ac16_descricaoindice);
 
 
 
@@ -1587,6 +1763,13 @@ class Acordoaux
         $oDaoAcordo->ac16_licoutroorgao = $this->getiLicoutroorgao();
         $oDaoAcordo->ac16_adesaoregpreco = $this->getiAdesaoregpreco();
         $iCodigoAcordo = $this->getCodigoAcordo();
+        $oDaoAcordo->ac16_reajuste                 = $this->getReajuste();
+        $oDaoAcordo->ac16_criterioreajuste         = $this->getCriterioReajuste();
+        $oDaoAcordo->ac16_datareajuste             = "" . implode("-", array_reverse(explode("/", $this->getDataReajuste())));
+        $oDaoAcordo->ac16_periodoreajuste          = $this->getPeriodoreajuste();
+        $oDaoAcordo->ac16_indicereajuste           = $this->getIndiceReajuste();
+        $oDaoAcordo->ac16_descricaoreajuste        = $this->getDescricaoReajuste();
+        $oDaoAcordo->ac16_descricaoindice          = $this->getDescricaoIndice();
 
         /**
          * Alteracao

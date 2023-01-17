@@ -400,6 +400,41 @@ class Acordo
     protected $iLicoutroorgao;
 
     /**
+     *  Possui Reajuste
+     */
+    protected $iReajuste;
+
+       /**
+     *  Criterio Reajuste
+     */
+    protected $iCriterioreajuste;
+
+       /**
+     *  Data Reajuste 
+     */
+    protected $dtReajuste;
+
+       /**
+     *  Periodo Reajuste
+     */
+    protected $sPeriodoreajuste;
+
+       /**
+     *  Indice Reajuste
+     */
+    protected $iIndicereajuste;
+
+       /**
+     *   Descricao Reajuste
+     */
+    protected $sDescricaoreajuste;
+
+       /**
+     *  Descricao Indice
+     */
+    protected $sDescricaoindice;
+
+    /**
      * licitacao de outros orgaos
      * @var
      */
