@@ -40,7 +40,7 @@ $clidentificacaoresponsaveis = new cl_identificacaoresponsaveis;
            if(file_exists("funcoes/db_func_identificacaoresponsaveis.php")==true){
              include("funcoes/db_func_identificacaoresponsaveis.php");
            }else{
-           $campos = "identificacaoresponsaveis.oid,identificacaoresponsaveis.*";
+           $campos = "identificacaoresponsaveis.*";
            }
         }
 
@@ -57,7 +57,7 @@ $clidentificacaoresponsaveis = new cl_identificacaoresponsaveis;
 
           if($clidentificacaoresponsaveis->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$oid',false);</script>";
+            echo "<script>".$funcao_js."('$si166_sequencial',false);</script>";
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }
