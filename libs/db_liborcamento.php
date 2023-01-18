@@ -150,6 +150,8 @@ class cl_estrutura
       $funcao = "onChange=\"js_mascara02_$picture(this.value);\"";
     }
     if ($this->mascara == true) {
+      if (db_getsession("DB_anousu")> 2022)
+        $mascara .= '0000';
 ?>
       <tr>
         <td nowrap title="Máscara do campo <?= @$picture ?>">
