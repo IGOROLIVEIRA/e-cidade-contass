@@ -42,6 +42,7 @@ $clrotulo->label("l20_objeto");
 
 if ($db_opcao == 1) {
     $db_action = "aco1_acordo004.php";
+    $ac50_sequencial=1;
 } else if ($db_opcao == 2 || $db_opcao == 22) {
     $db_action = "aco1_acordo005.php";
 } else if ($db_opcao == 3 || $db_opcao == 33) {
@@ -334,7 +335,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                     ?>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <tr style="display: none;">
                                                 <td nowrap title="Tipo de Instrumento">
                                                     <?
                                                     db_ancora('<b>Tipo Instrumento:</b>', "onchange=js_pesquisaac50_descricao(true)", $db_opcao);

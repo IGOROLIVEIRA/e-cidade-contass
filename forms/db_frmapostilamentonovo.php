@@ -68,7 +68,7 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
                 <td >
                 <?
-                    db_input('si03_percentualreajuste', 10, $Isi03_numapostilamento, true, 'text', $db_opcao, "")
+                    db_input('si03_percentualreajuste', 10, 4, true, 'text', $db_opcao, "")
                     ?>
                     <b>Índice Reajuste:</b>
                
