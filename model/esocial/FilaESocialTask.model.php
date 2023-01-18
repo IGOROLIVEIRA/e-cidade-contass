@@ -15,10 +15,6 @@ class FilaESocialTask extends Task implements iTarefa
 
     public function iniciar()
     {
-
-        // caminho absoluto do ecidade (ex.: /var/www/e-cidade/ )
-        define('ECIDADE_PATH', '/var/www/e-cidade/');
-
         // $job = new \Job();
         // $job->setNome("eSocial_Evento_" . $this->tipoEvento . "_$idFila");
 
@@ -34,13 +30,12 @@ class FilaESocialTask extends Task implements iTarefa
 
         require_once("libs/db_conn.php");
         require_once("libs/db_stdlib.php");
-        require_once("std/label/rotulo.php");
-        require_once("std/label/RotuloDB.php");
         require_once("libs/db_utils.php");
         require_once("dbforms/db_funcoes.php");
         //require_once("libs/db_conecta.php");
-        
+
         $dao = new \cl_esocialenvio();
+
 
         $hostname = gethostname();
         $cmd = shell_exec("cat updatedb/conn | grep -e {$hostname}$");
@@ -48,6 +43,7 @@ class FilaESocialTask extends Task implements iTarefa
         $rows = array_filter($rows);
         $array_global = array();
         $array_interno = array();
+
         foreach ($rows as $row) {
             if (count($array_interno) <= 3) {
                 $array_interno[] = $row;
@@ -57,19 +53,19 @@ class FilaESocialTask extends Task implements iTarefa
                 }
             }
         }
-        ini_set('display_errors', 'On');
-        error_reporting(E_ALL);
+
         foreach ($array_global as $row) {
             try {
 
                 /**
                  * Conecta no banco com variaveis definidas no 'libs/db_conn.php'
                  */
-                if (!($conn = @pg_connect("host=$DB_SERVIDOR dbname=$row[0] port=$row[1] user=dbportal password=dbportal"))) {
-                    throw new Exception("Erro ao conectar ao banco. host=$DB_SERVIDOR dbname=$row[0] port=$row[1] user=dbportal password=dbportal");
+                if (!($conn = @pg_connect("host=localhost dbname=$row[0] port=$row[1] user=dbportal password=dbportal"))) {
+                    throw new Exception("Erro ao conectar ao banco. host=localhost dbname=$row[0] port=$row[1] user=dbportal password=dbportal");
                 }
 
                 $sql = $dao->sql_query_file(null, "*", "rh213_sequencial", "rh213_situacao = " . cl_esocialenvio::SITUACAO_NAO_ENVIADO);
+
                 $rs  = \db_query($sql . "\n");
 
                 if (!$rs || pg_num_rows($rs) == 0) {
@@ -100,6 +96,7 @@ class FilaESocialTask extends Task implements iTarefa
             $dao = new \cl_esocialenvio();
             $daoEsocialCertificado = new \cl_esocialcertificado();
             $sql = $daoEsocialCertificado->sql_query(null, "rh214_senha as senha,rh214_certificado as certificado, cgc as nrinsc, z01_nome as nmRazao", "rh214_sequencial", "rh214_cgm = {$dadosEnvio->rh213_empregador}");
+            
             $rsEsocialCertificado  = \db_query($sql);
 
             if (!$rsEsocialCertificado && pg_num_rows($rsEsocialCertificado) == 0) {
@@ -109,7 +106,6 @@ class FilaESocialTask extends Task implements iTarefa
             $dadosCertificado->nmrazao = utf8_encode($dadosCertificado->nmrazao);
             $fase = $this->getFaseEvento($dadosEnvio->rh213_evento);
             $dados = array($dadosCertificado, json_decode($dadosEnvio->rh213_dados), $dadosEnvio->rh213_evento, $dadosEnvio->rh213_ambienteenvio, $fase);
-
             
             $exportar = new ESocial(Registry::get('app.config'), "run.php");
             $exportar->setDados($dados);

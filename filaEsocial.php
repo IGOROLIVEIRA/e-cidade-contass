@@ -1,16 +1,17 @@
 <?php
-error_reporting(E_ALL);
+error_reporting(0);
 
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
 require_once("libs/db_libdicionario.php");
 require_once("dbforms/db_funcoes.php");
-require_once("dbforms/db_classesgenericas.php");
+//require_once("dbforms/db_classesgenericas.php");
 /*require_once("std/label/rotulo.php");
 require_once("std/label/RotuloDB.php");*/
+require_once("bootstrap.php");
 
-require_once("libs/db_autoload.php");
+//require_once("libs/db_autoload.php");
 
 require_once("model/esocial/FilaESocialTask.model.php");
 // require_once("model/configuracao/DBLogXML.model.php");

@@ -9,19 +9,19 @@ use DBHttpRequest;
 use Exception;
 
 /**
- * Classe responsável pelo envio dos dados do eSocial para a API do e-cidade
+ * Classe respons?vel pelo envio dos dados do eSocial para a API do e-cidade
  */
 class ESocial
 {
     /**
-     * Classe para requisição HTTP
+     * Classe para requisi??o HTTP
      *
      * @var DBHttpRequest
      */
     private $httpRequest;
 
     /**
-     * Configuração da aplicação
+     * Configura??o da aplica??o
      *
      * @var Config
      */
@@ -41,11 +41,11 @@ class ESocial
      */
     private $dados;
 
-    public function __construct(Config $config, $recurso)
+    public function __construct(Config $config, $recurso = NULL)
     {
         $this->config = $config;
 
-        $this->validaConfiguracao();
+        // $this->validaConfiguracao();
 
         $dadosAPI = $this->config->get('app.api');
         $httpRequest = new DBHttpRequest(Registry::get('app.config'));
@@ -58,11 +58,11 @@ class ESocial
         ));
         $this->httpRequest = $httpRequest;
 
-        $httpRequest->addOptions(array(
-            'headers' => array(
-                'X-Access-Token' => $this->login()
-            )
-        ));
+        // $httpRequest->addOptions(array(
+        //     'headers' => array(
+        //         'X-Access-Token' => $this->login()
+        //     )
+        // ));
 
         $this->recurso = $recurso;
     }
@@ -78,13 +78,14 @@ class ESocial
     }
 
     /**
-     * Realiza a requisição enviando os dados para API
+     * Realiza a requisi??o enviando os dados para API
      */
     public function request()
     {
+        
         $data = json_encode($this->dados);
 
-        $this->httpRequest->send($this->recurso, 'POST', array(
+        $resultSend = $this->httpRequest->send($this->recurso, 'POST', array(
             'body' => $data
         ));
 
@@ -93,11 +94,12 @@ class ESocial
         if ($this->httpRequest->getResponseCode() >= 400) {
             throw new Exception($result->message);
         }
-        return $result;
+        
+        return $resultSend;
     }
 
     /**
-     * Retorna o código de resposta HTTP da requisição
+     * Retorna o c?digo de resposta HTTP da requisi??o
      *
      * @return integer
      */
@@ -204,6 +206,16 @@ class ESocial
     public function getDescRespostaProcessamento()
     {
         return (string) $this->httpRequest->getObjXml()->retornoEventos->evento->retornoEvento->eSocial->retornoEvento->processamento->ocorrencias->ocorrencia->descricao;
+    }
+
+    /**
+     * Retorna codigo da resposta da conusulta do envio
+     *
+     * @return string
+     */
+    public function getCdRespostaConsulta()
+    {
+        return (string) $this->httpRequest->getObjXml()->status->cdResposta;
     }
 
     /**
