@@ -765,6 +765,8 @@ if ($oInstit->db21_usasisagua == "t") {
     }
 
     iCodRecursoConta = $F('c61_codigo').substr(-3);
+    if($('anoUsu').value > 2022)
+      iCodRecursoConta = $F('c61_codigo')
 
     if ($('estrutural').value.substr(0, 3) == '211') {
 
@@ -795,7 +797,15 @@ if ($oInstit->db21_usasisagua == "t") {
         }
       }
     }
-    if ($('anoUsu').value >= 2022) {
+    if ($('anoUsu').value > 2022){
+      if (iCodRecursoConta == 15700000 || iCodRecursoConta == 16310000 || iCodRecursoConta == 17000000 || iCodRecursoConta == 16650000 || iCodRecursoConta == 17130070 || iCodRecursoConta == 15710000 || iCodRecursoConta == 15720000 || iCodRecursoConta == 15750000 || iCodRecursoConta == 16320000 || iCodRecursoConta == 16330000 || iCodRecursoConta == 16360000 || iCodRecursoConta == 17010000 || iCodRecursoConta == 17020000 || iCodRecursoConta == 17030000) {
+        js_getSaltesConvenio(iCodigoConta);
+      }
+      else {
+        $('k81_convenio').value = '';
+        $('c206_objetoconvenio').value = '';
+      }
+    }else if ($('anoUsu').value == 2022) {
       if (iCodRecursoConta == 122 || iCodRecursoConta == 123 || iCodRecursoConta == 124 || iCodRecursoConta == 142 || iCodRecursoConta == 163 || iCodRecursoConta == 171 || iCodRecursoConta == 172 || iCodRecursoConta == 173 || iCodRecursoConta == 176 || iCodRecursoConta == 177 || iCodRecursoConta == 178 || iCodRecursoConta == 181 || iCodRecursoConta == 182 || iCodRecursoConta == 183) {
         js_getSaltesConvenio(iCodigoConta);
       } else {
@@ -878,6 +888,8 @@ if ($oInstit->db21_usasisagua == "t") {
     }
 
     iCodRecursoConta = $F('c61_codigo').substr(-3);
+    if($('anoUsu').value > 2022)
+      iCodRecursoConta = $F('c61_codigo')
 
     if ($F('estrutural').substr(0, 3) == '211') {
 
@@ -901,8 +913,17 @@ if ($oInstit->db21_usasisagua == "t") {
 
     }
     db_iframe_saltes.hide();
+    if ($('anoUsu').value > 2022) {
+      if (iCodRecursoConta == 15700000 || iCodRecursoConta == 16310000 || iCodRecursoConta == 17000000 || iCodRecursoConta == 16650000 || iCodRecursoConta == 17130070 || iCodRecursoConta == 15710000 || iCodRecursoConta == 15720000 || iCodRecursoConta == 15750000 || iCodRecursoConta == 16320000 || iCodRecursoConta == 16330000 || iCodRecursoConta == 16360000 || iCodRecursoConta == 17010000 || iCodRecursoConta == 17020000 || iCodRecursoConta == 17030000) {
+        js_getSaltesConvenio(iCodigoConta);
 
-    if ($('anoUsu').value >= 2022) {
+      } else {
+
+        $('k81_convenio').value = '';
+        $('c206_objetoconvenio').value = '';
+
+      }  
+    }else if ($('anoUsu').value == 2022) {
       if (iCodRecursoConta == 122 || iCodRecursoConta == 123 || iCodRecursoConta == 124 || iCodRecursoConta == 142 || iCodRecursoConta == 163 || iCodRecursoConta == 171 || iCodRecursoConta == 172 || iCodRecursoConta == 173 || iCodRecursoConta == 176 || iCodRecursoConta == 177 || iCodRecursoConta == 178 || iCodRecursoConta == 181 || iCodRecursoConta == 182 || iCodRecursoConta == 183) {
         js_getSaltesConvenio(iCodigoConta);
 
@@ -1368,6 +1389,12 @@ if ($oInstit->db21_usasisagua == "t") {
       $('k81_conta').focus();
       return false;
     }
+    if ($('anoUsu').value > 2022) {
+      if (lEmendaParlamentarObrigatoria && $('k81_emparlamentar').value == '') {
+        alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
+        return false;
+      }
+    }  
     if ($('anoUsu').value == 2022) {
       aEstruts = ['4172150', '4172151', '4175150', '4171550'];
       aEstrutsDed = ['4951728011', '4951728012', '4951758011', '4951728991'];
@@ -1449,9 +1476,125 @@ if ($oInstit->db21_usasisagua == "t") {
       $('k81_valor').focus();
       return false;
     }
+    if ($('anoUsu').value > 2022) {
+     
+      switch (Number($F('recurso'))) {
 
-    if ($('anoUsu').value >= 2022) {
+          case 15700000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
 
+          case 16310000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+
+          case 17000000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+
+          case 16650000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+
+          case 17130070:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+
+          case 15710000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+
+          case 15720000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+
+          case 15750000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+
+          case 16320000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+
+          case 16330000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+
+          case 16360000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+
+          case 17010000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+
+          case 17020000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+
+          case 17030000:
+            if (!$('k81_convenio').value) {
+              alert("É obrigatório informar o convênio para as receitas de fontes 15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000. ");
+              $('k81_convenio').focus();
+              return false;
+            }
+            break;
+          }
+    }
+    else if ($('anoUsu').value == 2022) {
+    
       switch (Number($F('recurso'))) {
 
         case 122:
@@ -1705,12 +1848,6 @@ if ($oInstit->db21_usasisagua == "t") {
 
     js_renderizarGrid();
 
-    if ($('anoUsu').value > 2022) {
-      if (lEmendaParlamentarObrigatoria && $('k81_emparlamentar').value == '') {
-        alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
-        return false;
-      }
-    }  
   }
 
   function js_criaLinhaReceita(oAjax) {

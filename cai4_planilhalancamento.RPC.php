@@ -48,7 +48,7 @@ if ($oParam->exec == 'getSaltesConvenio') {
    if ($oDaoSaltes->numrows > 0) {
 
       $oSaltesConv = db_utils::fieldsMemory($rsSaltes, 0);
-      $aSaltesConv      = array("c206_sequencial" => $oSaltesConv->c206_sequencial, "c206_objetoconvenio"=> $oSaltesConv->c206_objetoconvenio, "lValidacao" => true, "sMensagem" => $sMensagem);   
+      $aSaltesConv      = array("c206_sequencial" => $oSaltesConv->c206_sequencial, "c206_objetoconvenio"=> utf8_encode($oSaltesConv->c206_objetoconvenio), "lValidacao" => true, "sMensagem" => $sMensagem);   
      
    } else {
 
