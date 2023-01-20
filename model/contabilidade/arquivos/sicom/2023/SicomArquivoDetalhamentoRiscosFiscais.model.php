@@ -50,17 +50,20 @@ class SicomArquivoDetalhamentoRiscosFiscais extends SicomArquivoBase implements 
   
   public function gerarDados()
   {
-    
-    $sqlRiscos = "select * from riscofiscal where si53_codigoppa = {$this->iCodigoPespectiva}";
-    
-    $rsRiscos = db_query($sqlRiscos);
 
-    $sSqlOrgao    = " SELECT si09_codorgaotce 
-                      FROM db_config 
-                        LEFT JOIN infocomplementaresinstit ON si09_instit = codigo 
-                      WHERE prefeitura = 't'";
+    require_once "classes/db_riscofiscal_classe.php";
+    require_once "classes/db_db_config_classe.php";
 
-    $rsOrgao      = db_query($sSqlOrgao);
+    $clriscosfiscais = new cl_riscofiscal;
+    $cl_db_config = new cl_db_config;
+    $ano = db_getsession("DB_anousu");
+    
+    $sqlRiscos = $clriscosfiscais->sql_query_file(null, "*", null, $this->iCodigoPespectiva . " and si53_exercicio = '{$ano}'");
+    $rsRiscos  = db_query($sqlRiscos);
+
+    $sSqlOrgao = $cl_db_config->sql_query_file(null, "si09_codorgaotce", null, "prefeitura = 't'");
+    $rsOrgao   = db_query($sSqlOrgao);
+    
     $iCodOrgaoTce = db_utils::fieldsMemory($rsOrgao, 0)->si09_codorgaotce;                      
     
     for ($iContadorRiscos = 0; $iContadorRiscos < pg_num_rows($rsRiscos); $iContadorRiscos++) {

@@ -1,6 +1,7 @@
 <?php
 require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
+require_once("classes/db_orctiporec_classe.php");
 
 /**
  * selecionar dados de Despesas do Orcamento Sicom Instrumento de Planejamento
@@ -164,14 +165,16 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
            */
           $oDadosAcao = $aDadosAgrupados[$sHash];
         }
-        $sSqlCodigoRecurso = "SELECT o15_codtri ";
-        $sSqlCodigoRecurso .= "  FROM orctiporec ";
-        $sSqlCodigoRecurso .= " WHERE o15_codigo = $oRegistro->o58_codigo";
+
+        $clorctiporec = new cl_orctiporec;
+
+        $sSqlCodigoRecurso = $clorctiporec->sql_query_file($oRegistro->o58_codigo, "o15_codtri", null, "");
+
         $rsCodigoRecurso = db_query($sSqlCodigoRecurso);
         $sCodigoRecurso = db_utils::fieldsMemory($rsCodigoRecurso, 0)->o15_codtri;
         
         $oDadosAcaoRecurso = new stdClass();
-        $oDadosAcaoRecurso->codFontRecursos = str_pad($sCodigoRecurso, 3, "0", STR_PAD_LEFT);
+        $oDadosAcaoRecurso->codFontRecursos = str_pad($sCodigoRecurso, 7, "0", STR_PAD_LEFT);
         $oDadosAcaoRecurso->valorFonte = number_format($oRegistro->dot_ini, 2, ",", "");
         
         /**
