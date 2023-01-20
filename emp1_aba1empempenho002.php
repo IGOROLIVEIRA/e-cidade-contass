@@ -118,11 +118,22 @@ if(isset($alterar)){
             'sigla'  => 'e60'
         );
         $veConvMSC = $clempempenho->verificaConvenioSicomMSC($e60_codemp, db_getsession("DB_anousu"), $dados);
+
+        $fontesMsg = "122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183";
+
+        if (db_getsession("DB_anousu") > 2022) {
+            $fontesMsg = "15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000 e 17030000";
+        }
+
         if ($veConvMSC > 0) {
             $rsResult = $clconvconvenios->sql_record("select c206_sequencial from convconvenios where c206_sequencial = $e60_numconvenio");
+
             if (!$rsResult) {
                 $sqlerro  = true;
-                $erro_msg = "Inclusão Abortada!\n É obrigatório informar o convênio para os empenhos de fontes 122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182 e 183.\n";
+
+                $erro_msg  = "Inclusão Abortada!\n";
+                $erro_msg .= "É obrigatório informar o convênio para os empenhos de fontes:\n";
+                $erro_msg .= $fontesMsg;
             }
 
         }
