@@ -154,14 +154,14 @@ class SicomArquivoReceitaOrcamentariaOrgao extends SicomArquivoBase implements i
           $oDadosReceita = $aDadosAgrupados[$sHash];
         }
 
-        $sHash11 = str_pad($oReceita->o15_codtri, 3, "0", STR_PAD_LEFT);
+        $sHash11 = str_pad($oReceita->o15_codtri, 7, "0", STR_PAD_LEFT);
 
         if (!isset($oDadosReceita->FonteRecurso[$sHash11])) {
           $oDadosFonteRecurso = new stdClass();
           $oDadosFonteRecurso->tipoRegistro   = 11;
           $oDadosFonteRecurso->detalhesessao  = 11;
           $oDadosFonteRecurso->codReceita     = $oDadosReceita->codReceita;
-          $oDadosFonteRecurso->codFontRecursos = str_pad($oReceita->o15_codtri, 3, "0", STR_PAD_LEFT);
+          $oDadosFonteRecurso->codFontRecursos = str_pad($oReceita->o15_codtri, 7, "0", STR_PAD_LEFT);
           $oDadosFonteRecurso->valorFonte     = 0;
 
           $oDadosReceita->FonteRecurso[$sHash11] = $oDadosFonteRecurso;
