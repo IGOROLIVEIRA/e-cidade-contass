@@ -1,7 +1,3 @@
-<link href="https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel="stylesheet">  
-<script src="https://code.jquery.com/jquery-1.10.2.js"></script>  
-<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script> 
-
 <?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
@@ -43,6 +39,10 @@ $clrotulo->label("r59_menos1");
 $clrotulo->label("r59_aviso");
 $clrotulo->label("rh02_seqpes");
 $clrotulo->label("rh02_codreg");
+
+db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js");
+db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js, widgets/DBHint.widget.js");
+db_app::load("estilos.css, grid.style.css");
 ?>
 <form name="form1" method="post" action="pes4_rhpesrescis002.php">
 <center>
@@ -50,7 +50,7 @@ $clrotulo->label("rh02_codreg");
   <tr>
     <td align="center">
       <fieldset>
-        <legend align="left"><b>FUNCIONï¿½RIO</b></legend>
+        <legend align="left"><b>FUNCIONÁRIO</b></legend>
         <table width="100%">
           <tr>
             <td nowrap title="<?=@$Trh01_regist?>">
@@ -90,7 +90,7 @@ $clrotulo->label("rh02_codreg");
   <tr>
     <td align="center">
       <fieldset>
-        <legend align="left"><b>RESCISï¿½O</b></legend>
+        <legend align="left"><b>RESCISÃO</b></legend>
         <table width="100%">
           <tr>
             <td nowrap title="<?=@$Trh05_recis?>">
@@ -136,15 +136,14 @@ $clrotulo->label("rh02_codreg");
           <tr>
           <td>
             <?php
-            db_ancora("Motivo RescisÃ£o:", "js_pesquisarMotivorescisao(true);", $db_opcao);
+            db_ancora("Motivo Rescisão:", "js_pesquisarMotivorescisao(true);", $db_opcao);
             ?>
           </td>
           <td colspan="3" nowrap>
             <?php
             db_input('rh173_codigo', 6, $Irh173_codigo, true, 'text', 3, "onChange='js_pesquisarMotivorescisao(false);'");
-            db_input('rh173_descricao', 48, $Irh173_descricao, true, 'text', 3, "onMouseover=exibirDescricaoCompleta()");
+            db_input('rh173_descricao', 48, $Irh173_descricao, true, 'text', 3, "js_teste();");
             ?>
-            
           </td>
         </tr>
           <tr>
@@ -232,7 +231,6 @@ $clrotulo->label("rh02_codreg");
   </tr>
 </table>
 <script>
-  
 function js_faltas(registro){
 	qry = 'opcao=enviarescis';
   qry+= '&causa='+document.form1.rh05_causa.value;
@@ -263,13 +261,38 @@ function js_pesquisarMotivorescisao(mostra) {
     db_iframe_rhmotivorescisao.hide();
   }
 
-  function exibirDescricaoCompleta(){
-    var elemento = document.getElementById("rh173_descricao");
-    elemento.title = elemento.value;
-    $(function() {  
-      $("#rh173_descricao").tooltip();  
-    });
-}
+  function js_showHint() {
+    
+    var oDivHint = document.createElement("DIV");
+    oDivHint.setAttribute("id",'testeHint');
+    oDivHint.style.position   = "fixed";
+    oDivHint.style.right      = 500;
+    oDivHint.style.top        = 230; 
+    oDivHint.style.zIndex     = "0";
+    oDivHint.style.visibility = 'visible';
+    oDivHint.style.fontFamily = 'Verdana, Arial, Helvetica, sans-serif'; 
+    oDivHint.style.fontSize   = '15px'; 
+    oDivHint.style.border     = '1px solid';
+        
+    oDivHint.innerHTML = ' <table border="0"  style="background-color: #FFFFCC; border-collapse: collapse;"> '
+                        +'    <tr> '
+                        +'      <td  style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: #000000; font-weight: bold;"> '
+                        +'        '+document.form1.rh173_descricao.value+''
+                        +'      </td> '
+                        +'    </tr> '
+                        +' </table> ';
+                      
+    document.body.appendChild(oDivHint);
+    document.getElementById('rh173_descricao').onmouseout = function(){document.body.removeChild(oDivHint);};
+  }
+
+  function js_teste(){
+  
+    document.getElementById('rh173_descricao').onmouseover = function(){js_showHint(document.form1.rh173_descricao.value,"");}
+  
+  }
+  
+  js_teste();
 
   function js_mostraAfastaMotivo(descricao, error) {
     document.form1.rh173_descricao.value = descricao;
@@ -278,19 +301,19 @@ function js_pesquisarMotivorescisao(mostra) {
 function js_verificadados(){
   x = document.form1;
   if(x.rh01_regist.value == ""){
-    alert("Informe a matrï¿½cula do funcionï¿½rio.");
+    alert("Informe a matrícula do funcionário.");
     x.rh01_regist.focus();
   }else if(x.rh05_recis_dia.value == "" || x.rh05_recis_mes.value == "" || x.rh05_recis_ano.value == ""){
-    alert("Informe a data da rescisï¿½o.");
+    alert("Informe a data da rescisão.");
 //    x.rh05_recis_dia.focus();
 //    x.rh05_recis_dia.select();
     x.rh05_recis.focus();
     x.rh05_recis.select();
   }else if(x.rh05_causa.value == ""){
-    alert("Informe a causa da rescisï¿½o.");
+    alert("Informe a causa da rescisão.");
     x.rh05_causa.focus();
   }else if(x.rh173_codigo.value == ""){
-    alert("Informe o motivo da rescisï¿½o.");
+    alert("Informe o motivo da rescisão.");
     x.rh173_codigo.focus();
   }else{
     js_faltas(x.rh01_regist.value);
@@ -305,7 +328,7 @@ function js_validaaviso(opcao){
       dtreciss = new Date(x.rh05_recis_ano.value,(x.rh05_recis_mes.value - 1),x.rh05_recis_dia.value);
       dtavisos = new Date(x.rh05_aviso_ano.value,(x.rh05_aviso_mes.value - 1),x.rh05_aviso_dia.value);
       if(dtreciss < dtadmiss){
-	alert("Data de rescisï¿½o nï¿½o pode ser posterior ï¿½ data de admissï¿½o. Verifique.");
+	alert("Data de rescisão não pode ser posterior à data de admissão. Verifique.");
 	x.rh05_recis_dia.value = "";
 	x.rh05_recis_mes.value = "";
 	x.rh05_recis_ano.value = "";
@@ -319,9 +342,9 @@ function js_validaaviso(opcao){
     }
   }else if(opcao == 1){
     if(x.rh05_causa.value == ""){
-      alert("Informe a causa da rescisï¿½o.");
+      alert("Informe a causa da rescisão.");
     }else{
-      alert("Informe a data da rescisï¿½o.");
+      alert("Informe a data da rescisão.");
     }
     x.rh05_aviso_dia.value = "";
     x.rh05_aviso_mes.value = "";
@@ -354,7 +377,7 @@ function js_validarecis(){
       dtreciss = new Date(x.rh05_recis_ano.value,(x.rh05_recis_mes.value - 1),x.rh05_recis_dia.value);
       dtatualh = new Date(anoatual,mesatual,1);
       if(dtreciss < dtadmiss){
-        alert("Data de rescisï¿½o nï¿½o pode ser posterior ï¿½ data de admissï¿½o. Verifique.");
+        alert("Data de rescisão não pode ser posterior à data de admissão. Verifique.");
         x.rh05_recis_dia.value = "";
         x.rh05_recis_mes.value = "";
         x.rh05_recis_ano.value = "";
@@ -363,13 +386,13 @@ function js_validarecis(){
         x.rh05_aviso_ano.value = "";
         x.rh05_recis_dia.focus();
       }else if(anoatual > anorecis){
-        alert("ALERTA: Data da rescisï¿½o com ano anterior ao atual.");
+        alert("ALERTA: Data da rescisão com ano anterior ao atual.");
       }else if(anomesatual < anomesrecis){
-        alert("ALERTA: Data da rescisï¿½o posterior ao ano / mï¿½s atual..");
+        alert("ALERTA: Data da rescisão posterior ao ano / mês atual..");
       }
     }
   }else{
-    alert("Informe a matrï¿½cula do funcionï¿½rio.");
+    alert("Informe a matrícula do funcionário.");
     x.rh05_recis_dia.value = "";
     x.rh05_recis_mes.value = "";
     x.rh05_recis_ano.value = "";
@@ -539,13 +562,13 @@ function js_mostrarhpessoal(chave,chave2,chave3,chave4,chave5,chave6,chave7,chav
     anmes = '<?=db_anofolha()."/".db_mesfolha()?>';
 
     if(per1f >= ultdi || per2f >= ultdi){
-      alert("Gozo de fï¿½rias integrais neste ou no prï¿½ximo mï¿½s.");
+      alert("Gozo de férias integrais neste ou no próximo mês.");
       location.href = "pes4_rhpesrescis001.php";
     }else if(chave4 == anmes || chave5 == anmes || per1f >= subps || per2f >= subps){
-//      alert("Funcionï¿½rio tem pagamento/gozo de fï¿½rias no mï¿½s");
+//      alert("Funcionário tem pagamento/gozo de férias no mês");
     }
     if(chave9 != "" && chave10 != ""){
-      alert("Se funcionï¿½rio vinculado ao IPE, informe nova situaï¿½ï¿½o (Cadastro de IPE).");
+      alert("Se funcionário vinculado ao IPE, informe nova situação (Cadastro de IPE).");
     }
   }
   js_verifica_saldo_fgts(chave11);
@@ -568,13 +591,13 @@ function js_mostrarhpessoal1(chave1,chave2,chave3,chave4,chave5,chave6,chave7,ch
   anmes = '<?=db_anofolha()."/".db_mesfolha()?>';
 
   if(per1f >= ultdi || per2f >= ultdi){
-    alert("Gozo de fï¿½rias integrais neste ou no prï¿½ximo mï¿½s.");
+    alert("Gozo de férias integrais neste ou no próximo mês.");
     location.href = "pes4_rhpesrescis001.php";
   }else if(chave5 == anmes || chave6 == anmes || per1f >= subps || per2f >= subps){
- //   alert("Funcionï¿½rio tem pagamento/gozo de fï¿½rias no mï¿½s");
+ //   alert("Funcionário tem pagamento/gozo de férias no mês");
   }
   if(chave10 != "" && chave11 != ""){
-    alert("Se funcionï¿½rio vinculado ao IPE, informe nova situaï¿½ï¿½o (Cadastro de IPE).");
+    alert("Se funcionário vinculado ao IPE, informe nova situação (Cadastro de IPE).");
   }
   db_iframe_rhpessoal.hide();
   js_verifica_saldo_fgts(chave12);
