@@ -128,7 +128,7 @@ function js_limpa(){
                 $result = $clorcfontes->sql_record($clorcfontes->sql_query_previsao(null,null,"orcfontes.*, c61_codigo, o15_descr",null,$dbwhere." and o57_codfon = '$pesquisa_chave'"));
               }
           } else {
-             $result = $clorcfontes->sql_record($clorcfontes->sql_query_previsao(null,null,"orcfontes.*",null,$dbwhere." and o57_fonte = '$pesquisa_chave'"));
+             $result = $clorcfontes->sql_record($clorcfontes->sql_query_previsao(null,null,"orcfontes.*, c61_codigo, o15_descr",null,$dbwhere." and o57_fonte = '$pesquisa_chave'"));
           }
           if($clorcfontes->numrows!=0){
             db_fieldsmemory($result,0);
@@ -136,7 +136,7 @@ function js_limpa(){
             if (isset($lBuscaFonte)) {
                 echo "<script>".$funcao_js."('$o57_descr',false, '$o57_codfon', '$o57_fonte', '$c61_codigo', '$o15_descr');</script>";
             } else {
-                echo "<script>".$funcao_js."('$o57_descr',false);</script>";
+                echo "<script>".$funcao_js."('$o57_descr',false, '$c61_codigo', '$o15_descr');</script>";
             }
             
           }else{
