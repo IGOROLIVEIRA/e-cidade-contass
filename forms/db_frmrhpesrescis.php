@@ -142,7 +142,7 @@ db_app::load("estilos.css, grid.style.css");
           <td colspan="3" nowrap>
             <?php
             db_input('rh173_codigo', 6, $Irh173_codigo, true, 'text', 3, "onChange='js_pesquisarMotivorescisao(false);'");
-            db_input('rh173_descricao', 48, $Irh173_descricao, true, 'text', 3, "js_teste();");
+            db_input('rh173_descricao', 48, $Irh173_descricao, true, 'text', 3, "js_DescricaoCompleta();");
             ?>
           </td>
         </tr>
@@ -286,13 +286,13 @@ function js_pesquisarMotivorescisao(mostra) {
     document.getElementById('rh173_descricao').onmouseout = function(){document.body.removeChild(oDivHint);};
   }
 
-  function js_teste(){
+  function js_DescricaoCompleta(){
   
     document.getElementById('rh173_descricao').onmouseover = function(){js_showHint(document.form1.rh173_descricao.value,"");}
   
   }
   
-  js_teste();
+  js_DescricaoCompleta();
 
   function js_mostraAfastaMotivo(descricao, error) {
     document.form1.rh173_descricao.value = descricao;
