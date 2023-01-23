@@ -161,7 +161,7 @@ if ($db_opcao == 1) {
     <td colspan='2' align='center'>
 <?
 if((isset($atualizar) || isset($o50_estrutreceita)) && empty($cadastrado)&& empty($negado)){
-  $matriz= split("\.",$o50_estrutreceita);
+  $matriz= explode(".",$o50_estrutreceita);
   $inicia=false;//variavel que indica que o nivel não tem mais filhos
   $tam=(count($matriz)-1);
   $codigos='';
@@ -180,7 +180,7 @@ if((isset($atualizar) || isset($o50_estrutreceita)) && empty($cadastrado)&& empt
       $codigos=$codigo."#".$codigos;
     }
   }
-  $matriz02= split("#",$codigos);
+  $matriz02= explode("#",$codigos);
   $tam=count($matriz02);
   $espaco=3;
   $esp='';
@@ -363,9 +363,9 @@ function js_atualiza(){
       document.form1.submit();
 }
 function js_mostraorcfontes(chave,chave1,chave2,chave3,erro){
-    
+
   document.form1.o57_descr.value = chave;
- 
+
   if(!empty(chave2)) {
       document.form1.o70_codigo.value = chave2;
       document.form1.o15_descr.value = chave3;
@@ -376,7 +376,7 @@ function js_mostraorcfontes(chave,chave1,chave2,chave3,erro){
   if(erro==true){
     document.form1.o50_estrutreceita.focus();
     //document.form1.o50_estrutreceita.value = '';
-   
+
   js_atualiza();
   }else{
      js_atualiza();
@@ -509,5 +509,5 @@ function js_mostraorcfontes1(chave1,chave2,chave3,chave4){
   ";
 }
 ?>
-js_mostraconcarpeculiar1('000','NÃO SE APLICA'); 
+js_mostraconcarpeculiar1('000','NÃO SE APLICA');
 </script>
