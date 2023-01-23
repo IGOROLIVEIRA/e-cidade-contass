@@ -1,9 +1,9 @@
 /**
- * DBLookUp Classe responsavel por instanciar os comportamentos padr�o para Ancora informada como parametro
+ * DBLookUp Classe responsavel por instanciar os comportamentos padrгo para Ancora informada como parametro
  *
  *  @param oAncora          {HTMLAnchorElement} Ancora para lookUp
- *  @param oInputID         {HTMLInputElement}  Input com a informa��o do ID
- *  @param oInputDescricao  {HTMLInputElement}  Input com a informa��o da Descri��o
+ *  @param oInputID         {HTMLInputElement}  Input com a informaзгo do ID
+ *  @param oInputDescricao  {HTMLInputElement}  Input com a informaзгo da Descriзгo
  *  @param oParametros      {Object}            Parametros opcionais
  *
  *  @constructor
@@ -11,79 +11,37 @@
 DBLookUp = function (oAncora, oInputID, oInputDescricao, oParametros) {
 
   /**
-   * Define valor padr�o
+   * Define valor padrгo
    */
   oParametros = oParametros || {};
 
-  this.iReferencia     = DBLookUp.repository.addInstance(this);
-    this.oAncora         = oAncora;
-    this.oInputID        = oInputID;
-    this.oInputDescricao = oInputDescricao;
-    this.oParametros     = {
-        "sArquivo"              : oParametros.sArquivo               || oParametros.arquivo                || this.oAncora.getAttribute('func-arquivo') || null,
-        "sLabel"                : oParametros.sLabel                 || oParametros.label                  || "Pesquisar",
-        "sQueryString"          : oParametros.sQueryString           || oParametros.queryString            || "",
-        "sDestinoLookUp"        : oParametros.sDestinoLookUp         || oParametros.destinoLookup          || "",
-        "sObjetoLookUp"         : oParametros.sObjetoLookUp          || oParametros.objetoLookup           || this.oAncora.getAttribute('func-objeto') || "db_pesquisa",
-        "aCamposAdicionais"     : oParametros.aCamposAdicionais      || oParametros.camposAdicionais       || [],
-        "fCallBack"             : oParametros.fCallBack              || oParametros.callBack               || null,
-        "aParametrosAdicionais" : oParametros.aParametrosAdicionais  || oParametros.parametrosAdicionais   || [],
-        "zIndex"                : oParametros.zIndex                 || oParametros.index                  || null,
-        "oBotaoParaDesabilitar" : oParametros.oBotaoParaDesabilitar  || oParametros.botaoParaDesabilitar   || ""
-    };
+  this.iReferencia     = CurrentWindow.DBLookUp.repository.addInstance(this);
+  this.oAncora         = oAncora;
+  this.oInputID        = oInputID;
+  this.oInputDescricao = oInputDescricao;
+  this.oParametros     = {
+    "sArquivo"              : oParametros.sArquivo               || oParametros.arquivo                || this.oAncora.getAttribute('func-arquivo') || null,
+    "sLabel"                : oParametros.sLabel                 || oParametros.label                  || "Pesquisar",
+    "sQueryString"          : oParametros.sQueryString           || oParametros.queryString            || "",
+    "sDestinoLookUp"        : oParametros.sDestinoLookUp         || oParametros.destinoLookup          || "",
+    "sObjetoLookUp"         : oParametros.sObjetoLookUp          || oParametros.objetoLookup           || this.oAncora.getAttribute('func-objeto') || "db_pesquisa",
+    "aCamposAdicionais"     : oParametros.aCamposAdicionais      || oParametros.camposAdicionais       || [],
+    "fCallBack"             : oParametros.fCallBack              || oParametros.callBack               || null,
+    "aParametrosAdicionais" : oParametros.aParametrosAdicionais  || oParametros.parametrosAdicionais   || [],
+    "zIndex"                : oParametros.zIndex                 || oParametros.index                  || null,
+    "oBotaoParaDesabilitar" : oParametros.oBotaoParaDesabilitar  || oParametros.botaoParaDesabilitar   || ""
+  };
 
-    this.oCallback  = {
-        onChange         : oParametros.fCallBack,
-        onClick          : oParametros.fCallBack
-    };
+  this.oCallback  = {
+    onChange         : function(lErro) {},
+    onClick          : function() {}
+  };
 
-    this.__init();
-
-    var lHabilitado = true;
-
-    this.habilitar = function() {
-
-        if (lHabilitado) {
-            return true;
-        }
-
-        this.oInputID.classList.remove("readonly");
-        this.oInputID.readOnly = false;
-
-        if ( !(this.oAncora instanceof HTMLInputElement) ){
-
-            this.oAncora.href = "javascript:;";
-            this.oAncora.classList.add("DBAncora");
-        }
-        this.oAncora.onclick   = this.eventFunctions.click.bind(this);
-        this.oInputID.onchange = this.eventFunctions.change.bind(this);
-        lHabilitado = true;
-    };
-
-    this.desabilitar = function() {
-
-        if (!lHabilitado) {
-            return true;
-        }
-
-        this.oInputID.readOnly = true;
-        this.oInputID.onchange = null;
-        this.oAncora.classList.remove("DBAncora");
-
-        if ( !(this.oAncora instanceof HTMLInputElement) ){
-
-            this.oInputID.classList.add("readonly");
-            this.oAncora.removeAttribute("href");
-        }
-        this.oAncora.onclick = null;
-
-        lHabilitado = false;
-    };
-};
+  this.__init();
 
 
 /**
- * Fun��o __init para alterar os elementos necess�rios
+ * Funзгo __init para alterar os elementos necessбrios
  * para o comportamento da LookUp
  */
 DBLookUp.prototype.__init = function() {
@@ -106,7 +64,7 @@ DBLookUp.prototype.__init = function() {
   this.oInputID.oInstancia = this;
 
   var sClassDescricao = this.oInputDescricao.classList.toString();
-  if ( sClassDescricao.match(/field-size/) == null ) { // validado se j� foi adicionado alguma classe
+  if ( sClassDescricao.match(/field-size/) == null ) { // validado se jб foi adicionado alguma classe
     this.oInputDescricao.className += " field-size8";
   }
 
@@ -126,7 +84,7 @@ DBLookUp.prototype.eventFunctions = {
   /**
    *  Abre a janela para pesquisa
    *
-   *  @param  {String} click Onde ser� aberta a janela
+   *  @param  {String} click Onde serб aberta a janela
    *  @return {void}
    */
   click: function(click){
@@ -134,7 +92,7 @@ DBLookUp.prototype.eventFunctions = {
   },
 
   /**
-   *  Callbackda digita��o
+   *  Callbackda digitaзгo
    *
    *  @param  {String} change
    *  @return {void}
@@ -151,7 +109,7 @@ DBLookUp.prototype.eventFunctions = {
 };
 
 /**
- * Monta a QueryString para quando �
+ * Monta a QueryString para quando й
  * feito o click na ancora
  *
  * @return String QueryString
@@ -183,7 +141,7 @@ DBLookUp.prototype.getQueryStringClick = function() {
 }
 
 /**
- * Monta a QueryString para quando � executado
+ * Monta a QueryString para quando й executado
  * o Change no objeto oInputID
  * @return String QueryString
  */
@@ -213,11 +171,13 @@ DBLookUp.prototype.getQueryStringChange = function() {
  * @param iCodigo {Integer}
  * @param sDescricao {String}
  */
-DBLookUp.prototype.callBackClick = function(iCodigo, sDescricao, sCodigo, sDescr) {
+DBLookUp.prototype.callBackClick = function(iCodigo, sDescricao) {
 
-  this.oInputID.value        = iCodigo || sCodigo;
-  this.oInputDescricao.value = sDescricao || sDescr;
-  var oObjetoLookUp          = eval(this.oParametros.sObjetoLookUp);
+  this.oInputID.value        = iCodigo;
+  this.oInputDescricao.value = sDescricao;
+  var prefixo                = !!this.oParametros.sDestinoLookUp ? this.oParametros.sDestinoLookUp + '.' : '';
+  var oObjetoLookUp          = eval(prefixo + this.oParametros.sObjetoLookUp);
+
   oObjetoLookUp.hide();
   this.oCallback.onClick(arguments);
 
@@ -229,9 +189,9 @@ DBLookUp.prototype.callBackClick = function(iCodigo, sDescricao, sCodigo, sDescr
 
 /**
  * Trata o retorno do change no objeto oInputID.
- * Percorre todos os arguments recebido pela fun��o, pois n�o temos um padr�o
- * de retorno dos dados, verificando qual deles � responsavel por informar
- * a ocorrencia de erro e qual realmente � a string que dever� ser a descri��o.
+ * Percorre todos os arguments recebido pela funзгo, pois nгo temos um padrгo
+ * de retorno dos dados, verificando qual deles й responsavel por informar
+ * a ocorrencia de erro e qual realmente й a string que deverб ser a descriзгo.
  */
 DBLookUp.prototype.callBackChange  = function() {
 
@@ -269,7 +229,7 @@ DBLookUp.prototype.callBackChange  = function() {
 };
 
 /**
- * Fun��o respons�vel pela abertura da janela de pesquisa.
+ * Funзгo responsбvel pela abertura da janela de pesquisa.
  * @param lAbre {Boolean}
  */
 DBLookUp.prototype.abrirJanela = function(lAbre){
@@ -281,7 +241,7 @@ DBLookUp.prototype.abrirJanela = function(lAbre){
   }
 
   if ( !this.oParametros.sArquivo ) {
-    throw "Arquivo n�o pode ser vazio.";
+    throw "Arquivo nгo pode ser vazio.";
   };
 
   if (lAbre) {
@@ -318,7 +278,7 @@ DBLookUp.prototype.abrirJanela = function(lAbre){
 };
 
 /**
- * Seta o arquivo respons�vel pela pesquisa
+ * Seta o arquivo responsбvel pela pesquisa
  * @param String sArquivo
  */
 DBLookUp.prototype.setArquivo = function(sArquivo){
@@ -326,7 +286,7 @@ DBLookUp.prototype.setArquivo = function(sArquivo){
 };
 
 /**
- * Seta o nome do Label que ser� utilizado como titulo da janela de pesquisa
+ * Seta o nome do Label que serб utilizado como titulo da janela de pesquisa
  *
  * @param sLabel {String}
  */
@@ -335,7 +295,7 @@ DBLookUp.prototype.setLabel = function(sLabel){
 };
 
 /**
- * Seta a query string que dever� ser utilizada na fun��o de pesquisa.
+ * Seta a query string que deverб ser utilizada na funзгo de pesquisa.
  *
  * @param sQueryString {String}
  */
@@ -353,7 +313,7 @@ DBLookUp.prototype.setDestinoLookUp = function(sDestinoLookUp){
 };
 
 /**
- * Seta o nome do objeto que ser� utilizado na tela de pesquisa.
+ * Seta o nome do objeto que serб utilizado na tela de pesquisa.
  * @param sObjetoLookUp {String}
  */
 DBLookUp.prototype.setObjetoLookUp = function(sObjetoLookUp){
@@ -373,7 +333,7 @@ DBLookUp.prototype.setParametrosAdicionais = function (aParametrosAdicionais) {
   this.oParametros.aParametrosAdicionais = aParametrosAdicionais;
 }
 /**
- * Seta fun��o de callBack.
+ * Seta funзгo de callBack.
  *
  * @param sEvento {String} tipo do evendo (onChange ou onClick)
  * @param fFuncao {String}
