@@ -76,7 +76,7 @@ class GerarDISPENSA extends GerarAM
         $aCSVDISPENSA10['si74_tipoprocesso'] = $this->padLeftZero($aDISPENSA10['si74_tipoprocesso'], 1);
         $aCSVDISPENSA10['si74_dtabertura'] = $this->sicomDate($aDISPENSA10['si74_dtabertura']);
         $aCSVDISPENSA10['si74_naturezaobjeto'] = $this->padLeftZero($aDISPENSA10['si74_naturezaobjeto'], 1);
-        $aCSVDISPENSA10['si74_objeto'] = substr($aDISPENSA10['si74_objeto'], 0, 500);
+        $aCSVDISPENSA10['si74_objeto'] = substr($aDISPENSA10['si74_objeto'], 0, 1000);
         $aCSVDISPENSA10['si74_justificativa'] = substr($aDISPENSA10['si74_justificativa'], 0, 250);
         $aCSVDISPENSA10['si74_razao'] = substr($aDISPENSA10['si74_razao'], 0, 250);
         $aCSVDISPENSA10['si74_dtpublicacaotermoratificacao'] = $this->sicomDate($aDISPENSA10['si74_dtpublicacaotermoratificacao']);
@@ -214,8 +214,7 @@ class GerarDISPENSA extends GerarAM
             $aCSVDISPENSA16['si80_idacao'] = $this->padLeftZero($aDISPENSA16['si80_idacao'], 4);
             $aCSVDISPENSA16['si80_idsubacao'] = $aDISPENSA16['si80_idsubacao'] == 0 ? ' ' : $this->padLeftZero($aDISPENSA16['si80_idsubacao'], 4);
             $aCSVDISPENSA16['si80_naturezadespesa'] = $this->padLeftZero($aDISPENSA16['si80_naturezadespesa'], 6);
-            $aCSVDISPENSA16['si80_codfontrecursos'] = $this->padLeftZero($aDISPENSA16['si80_codfontrecursos'], 3);
-            $aCSVDISPENSA16['si80_vlrecurso'] = $this->sicomNumberReal($aDISPENSA16['si80_vlrecurso'], 2);
+            $aCSVDISPENSA16['si80_codfontrecursos'] = $this->padLeftZero($aDISPENSA16['si80_codfontrecursos'], 7);
 
             $this->sLinha = $aCSVDISPENSA16;
             $this->adicionaLinha();

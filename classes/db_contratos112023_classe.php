@@ -27,6 +27,7 @@ class cl_contratos112023 {
    var $si84_coditemsimcro = null;
    var $si84_descoutrosmateriais = null;
    var $si84_itemplanilha = null;
+   var $si84_nroLote = null;
    var $si84_mes = 0;
    var $si84_reg10 = 0;
    var $si84_instit = 0;
@@ -43,6 +44,7 @@ class cl_contratos112023 {
                  si84_coditemsimcro = vachar = codigo do item simcro
                  si84_descoutrosmateriais = text = descricao do material
                  si84_itemplanilha = int8 = codigo da planilha
+                 si84_nroLote = int8 = Numero do lote
                  si84_mes = int8 = Mês
                  si84_reg10 = int8 = reg10
                  si84_instit = int8 = Instituição
@@ -79,6 +81,7 @@ class cl_contratos112023 {
        $this->si84_coditemsimcro = ($this->si84_coditemsimcro == ""?@$GLOBALS["HTTP_POST_VARS"]["si84_coditemsimcro"]:$this->si84_coditemsimcro);
        $this->si84_descoutrosmateriais = ($this->si84_descoutrosmateriais == ""?@$GLOBALS["HTTP_POST_VARS"]["si84_descoutrosmateriais"]:$this->si84_descoutrosmateriais);
        $this->si84_itemplanilha = ($this->si84_itemplanilha == ""?@$GLOBALS["HTTP_POST_VARS"]["si84_itemplanilha"]:$this->si84_itemplanilha);
+       $this->si84_nroLote = ($this->si84_nroLote == ""?@$GLOBALS["HTTP_POST_VARS"]["si84_nroLote"]:$this->si84_nroLote);
      }else{
        $this->si84_sequencial = ($this->si84_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si84_sequencial"]:$this->si84_sequencial);
      }
@@ -113,6 +116,9 @@ class cl_contratos112023 {
      if($this->si84_itemplanilha == null){
        $this->si84_itemplanilha = "0";
      }
+     if($this->si84_nroLote == null){
+      $this->si84_nroLote = "0";
+    }
      if($this->si84_mes == null ){
        $this->erro_sql = " Campo Mês nao Informado.";
        $this->erro_campo = "si84_mes";
@@ -181,6 +187,7 @@ class cl_contratos112023 {
                                       ,si84_mes
                                       ,si84_reg10
                                       ,si84_instit
+                                      ,si84_nroLote
                        )
                 values (
                                 $this->si84_sequencial
@@ -197,6 +204,7 @@ class cl_contratos112023 {
                                ,$this->si84_mes
                                ,$this->si84_reg10
                                ,$this->si84_instit
+                               ,$this->si84_nroLote
                       )";
      $result = db_query($sql);//die($sql);
      if($result==false){

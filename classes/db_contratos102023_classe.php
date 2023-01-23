@@ -57,6 +57,16 @@ class cl_contratos102023
   var $si83_datapublicacao_mes = null;
   var $si83_datapublicacao_ano = null;
   var $si83_unidadedemedidaprazoexec = null;
+  var $si83_indCriterioReajuste = null;
+  var $si83_tipoCriterioReajuste = null;
+  var $si83_dataBaseReajuste = null;
+  var $si83_dataBaseReajuste_dia = null;
+  var $si83_dataBaseReajuste_mes = null;
+  var $si83_dataBaseReajuste_ano = null;
+  var $si83_indiceUnicoReajuste = null;
+  var $si83_periodicidadeReajuste = null;
+  var $si83_dscReajuste = null;
+  var $si83_dscIndice = null;
   var $campos = "
                  si83_sequencial = int8 = sequencial
                  si83_tiporegistro = int8 = Tipo do registro
@@ -91,6 +101,13 @@ class cl_contratos102023
                  si83_veiculodivulgacao = varchar(50) = Veículo de  Divulgação
                  si83_mes = int8 = Mês
                  si83_instit = int8 = Instituição
+                 si83_indCriterioReajuste = Possui reajuste;
+                 si83_tipoCriterioReajuste = Criterio reajuste;
+                 si83_dataBaseReajuste = Data de reajuste;
+                 si83_indiceUnicoReajuste = Indice reajuste;
+                 si83_periodicidadeReajuste = Periodo reajuste;
+                 si83_dscReajuste = Descricao reajuste;
+                 si83_dscIndice = Descricao indice;
                  ";
   var $si83_datapublicacao = null;
   var $si83_veiculodivulgacao = null;
@@ -134,6 +151,20 @@ class cl_contratos102023
           $this->si83_dataassinatura = $this->si83_dataassinatura_ano . "-" . $this->si83_dataassinatura_mes . "-" . $this->si83_dataassinatura_dia;
         }
       }
+      if ($this->si83_dataBaseReajuste == "") {
+        $this->si83_dataBaseReajuste_dia = ($this->si83_dataBaseReajuste_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_dataBaseReajuste_dia"] : $this->si83_dataBaseReajuste_dia);
+        $this->si83_dataBaseReajuste_mes = ($this->si83_dataBaseReajuste_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_dataBaseReajuste_mes"] : $this->si83_dataBaseReajuste_mes);
+        $this->si83_dataBaseReajuste_ano = ($this->si83_dataBaseReajuste_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_dataBaseReajuste_ano"] : $this->si83_dataBaseReajuste_ano);
+        if ($this->si83_dataBaseReajuste_dia != "") {
+          $this->si83_dataBaseReajuste = $this->si83_dataBaseReajuste_ano . "-" . $this->si83_dataBaseReajuste_mes . "-" . $this->si83_dataBaseReajuste_dia;
+        }
+      }
+      $this->si83_indCriterioReajuste = ($this->si83_indCriterioReajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_indCriterioReajuste"] : $this->si83_indCriterioReajuste);
+      $this->si83_tipoCriterioReajuste = ($this->si83_tipoCriterioReajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_tipoCriterioReajuste"] : $this->si83_tipoCriterioReajuste);
+      $this->si83_indiceUnicoReajuste = ($this->si83_indiceUnicoReajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_indiceUnicoReajuste"] : $this->si83_indiceUnicoReajuste);
+      $this->si83_periodicidadeReajuste = ($this->si83_periodicidadeReajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_periodicidadeReajuste"] : $this->si83_periodicidadeReajuste);
+      $this->si83_dscReajuste = ($this->si83_dscReajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_dscReajuste"] : $this->si83_dscReajuste);
+      $this->si83_dscIndice = ($this->si83_dscIndice == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_dscIndice"] : $this->si83_dscIndice);
       $this->si83_contdeclicitacao = ($this->si83_contdeclicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_contdeclicitacao"] : $this->si83_contdeclicitacao);
       $this->si83_codorgaoresp = ($this->si83_codorgaoresp == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_codorgaoresp"] : $this->si83_codorgaoresp);
       $this->si83_codunidadesubresp = ($this->si83_codunidadesubresp == "" ? @$GLOBALS["HTTP_POST_VARS"]["si83_codunidadesubresp"] : $this->si83_codunidadesubresp);
@@ -329,6 +360,13 @@ class cl_contratos102023
                                       ,si83_veiculodivulgacao
                                       ,si83_mes
                                       ,si83_instit
+                                      ,si83_indCriterioReajuste
+                                      ,si83_tipoCriterioReajuste
+                                      ,si83_dataBaseReajuste
+                                      ,si83_indiceUnicoReajuste
+                                      ,si83_periodicidadeReajuste
+                                      ,si83_dscReajuste
+                                      ,si83_dscIndice
                        )
                 values (
                                 $this->si83_sequencial
@@ -364,6 +402,13 @@ class cl_contratos102023
                                ,'$this->si83_veiculodivulgacao'
                                ,$this->si83_mes
                                ,$this->si83_instit
+                               ,$this->si83_indCriterioReajuste
+                               ," . ($this->si83_tipoCriterioReajuste == "" ? "0" :  $this->si83_tipoCriterioReajuste) . " 
+                               ," . ($this->si83_dataBaseReajuste == "null" || $this->si83_dataBaseReajuste == "" ? "null" : "'" . $this->si83_dataBaseReajuste . "'") . "
+                               ," . ($this->si83_indiceUnicoReajuste == "" ? "0" :  $this->si83_indiceUnicoReajuste) . "
+                               ," . ($this->si83_periodicidadeReajuste == "" ? "''" :  $this->si83_periodicidadeReajuste) . "
+                               ," . ($this->si83_dscReajuste == "" ? "''" :  $this->si83_dscReajuste) . "
+                               ," . ($this->si83_dscIndice == "" ? "''" :  $this->si83_dscIndice) . "
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -423,6 +468,13 @@ class cl_contratos102023
       $resac = db_query("insert into db_acount values($acount,2010312,2010422,'','" . AddSlashes(pg_result($resaco, 0, 'si83_garantia')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010423,'','" . AddSlashes(pg_result($resaco, 0, 'si83_cpfsignatariocontratante')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010424,'','" . AddSlashes(pg_result($resaco, 0, 'si83_datapublicacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010312,2011596,'','" . AddSlashes(pg_result($resaco, 0, 'si83_indCriterioReajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010312,2011596,'','" . AddSlashes(pg_result($resaco, 0, 'si83_tipoCriterioReajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010312,2011596,'','" . AddSlashes(pg_result($resaco, 0, 'si83_dataBaseReajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010312,2011596,'','" . AddSlashes(pg_result($resaco, 0, 'si83_indiceUnicoReajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010312,2011596,'','" . AddSlashes(pg_result($resaco, 0, 'si83_periodicidadeReajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010312,2011596,'','" . AddSlashes(pg_result($resaco, 0, 'si83_dscReajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010312,2011596,'','" . AddSlashes(pg_result($resaco, 0, 'si83_dscIndice')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010425,'','" . AddSlashes(pg_result($resaco, 0, 'si83_veiculodivulgacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2010426,'','" . AddSlashes(pg_result($resaco, 0, 'si83_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010312,2011596,'','" . AddSlashes(pg_result($resaco, 0, 'si83_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -510,6 +562,39 @@ class cl_contratos102023
     }
     if (trim($this->si83_nroprocesso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_nroprocesso"])) {
       $sql  .= $virgula . " si83_nroprocesso = '$this->si83_nroprocesso' ";
+      $virgula = ",";
+    }
+    if (trim($this->si83_indCriterioReajuste) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_indCriterioReajuste"])) {
+      $sql  .= $virgula . " si83_indCriterioReajuste = '$this->si83_indCriterioReajuste' ";
+      $virgula = ",";
+    }
+    if (trim($this->si83_tipoCriterioReajuste) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_tipoCriterioReajuste"])) {
+      $sql  .= $virgula . " si83_tipoCriterioReajuste = '$this->si83_tipoCriterioReajuste' ";
+      $virgula = ",";
+    }
+    if (trim($this->si83_dataBaseReajuste) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_dataBaseReajuste_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si83_dataBaseReajuste_dia"] != "")) {
+      $sql  .= $virgula . " si83_dataBaseReajuste = '$this->si83_dataBaseReajuste' ";
+      $virgula = ",";
+    } else {
+      if (isset($GLOBALS["HTTP_POST_VARS"]["si83_dataBaseReajuste_dia"])) {
+        $sql  .= $virgula . " si83_dataBaseReajuste = null ";
+        $virgula = ",";
+      }
+    }
+    if (trim($this->si83_indiceUnicoReajuste) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_indiceUnicoReajuste"])) {
+      $sql  .= $virgula . " si83_indiceUnicoReajuste = '$this->si83_indiceUnicoReajuste' ";
+      $virgula = ",";
+    }
+    if (trim($this->si83_periodicidadeReajuste) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_periodicidadeReajuste"])) {
+      $sql  .= $virgula . " si83_periodicidadeReajuste = '$this->si83_periodicidadeReajuste' ";
+      $virgula = ",";
+    }
+    if (trim($this->si83_dscReajuste) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_dscReajuste"])) {
+      $sql  .= $virgula . " si83_dscReajuste = '$this->si83_dscReajuste' ";
+      $virgula = ",";
+    }
+    if (trim($this->si83_dscIndice) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_dscIndice"])) {
+      $sql  .= $virgula . " si83_dscIndice = '$this->si83_dscIndice' ";
       $virgula = ",";
     }
     if (trim($this->si83_exercicioprocesso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si83_exercicioprocesso"])) {
@@ -708,6 +793,20 @@ class cl_contratos102023
           $resac = db_query("insert into db_acount values($acount,2010312,2010424,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_datapublicacao')) . "','$this->si83_datapublicacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si83_veiculodivulgacao"]) || $this->si83_veiculodivulgacao != "")
           $resac = db_query("insert into db_acount values($acount,2010312,2010425,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_veiculodivulgacao')) . "','$this->si83_veiculodivulgacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si83_indCriterioReajuste"]) || $this->si83_indCriterioReajuste != "")
+          $resac = db_query("insert into db_acount values($acount,2010312,2010409,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_indCriterioReajuste')) . "','$this->si83_indCriterioReajuste'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si83_tipoCriterioReajuste"]) || $this->si83_tipoCriterioReajuste != "")
+          $resac = db_query("insert into db_acount values($acount,2010312,2010409,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_tipoCriterioReajuste')) . "','$this->si83_tipoCriterioReajuste'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si83_dataBaseReajuste"]) || $this->si83_dataBaseReajuste != "")
+          $resac = db_query("insert into db_acount values($acount,2010312,2010409,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_dataBaseReajuste')) . "','$this->si83_dataBaseReajuste'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si83_indiceUnicoReajuste"]) || $this->si83_indiceUnicoReajuste != "")
+          $resac = db_query("insert into db_acount values($acount,2010312,2010409,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_indiceUnicoReajuste')) . "','$this->si83_indiceUnicoReajuste'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si83_periodicidadeReajuste"]) || $this->si83_periodicidadeReajuste != "")
+          $resac = db_query("insert into db_acount values($acount,2010312,2010409,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_periodicidadeReajuste')) . "','$this->si83_periodicidadeReajuste'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si83_dscReajuste"]) || $this->si83_dscReajuste != "")
+          $resac = db_query("insert into db_acount values($acount,2010312,2010409,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_dscReajuste')) . "','$this->si83_dscReajuste'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si83_dscIndice"]) || $this->si83_dscIndice != "")
+          $resac = db_query("insert into db_acount values($acount,2010312,2010409,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_dscIndice')) . "','$this->si83_dscIndice'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si83_mes"]) || $this->si83_mes != "")
           $resac = db_query("insert into db_acount values($acount,2010312,2010426,'" . AddSlashes(pg_result($resaco, $conresaco, 'si83_mes')) . "','$this->si83_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si83_instit"]) || $this->si83_instit != "")
@@ -789,6 +888,13 @@ class cl_contratos102023
         $resac = db_query("insert into db_acount values($acount,2010312,2010423,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_cpfsignatariocontratante')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010424,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_datapublicacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010425,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_veiculodivulgacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010312,2010409,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_indCriterioReajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010312,2010409,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_tipoCriterioReajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010312,2010409,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_dataBaseReajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010312,2010409,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_indiceUnicoReajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010312,2010409,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_periodicidadeReajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010312,2010409,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_dscReajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010312,2010409,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_dscIndice')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2010426,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010312,2011596,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si83_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       }

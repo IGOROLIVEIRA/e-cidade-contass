@@ -388,6 +388,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     liclicita.l20_anousu,
                     liclicita.l20_codepartamento,
                     liclicita.l20_naturezaobjeto,
+                    liclicita.l20_tipojulg,
                 CASE
                     WHEN p1.pc50_pctipocompratribunal = 100 THEN 2
                     WHEN p1.pc50_pctipocompratribunal = 101 THEN 1
@@ -637,6 +638,34 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             $clcontratos10->si83_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clcontratos10->si83_instit = db_getsession('DB_instit');
             $clcontratos10->si83_tipocadastro = $oDados10->ac16_tipocadastro;
+            if($oDados10->ac16_reajuste == 'f'){
+                $clcontratos10->si83_indCriterioReajuste = 2;
+                $clcontratos10->si83_dataBaseReajuste = '';
+                $clcontratos10->si83_periodicidadeReajuste = '';
+                $clcontratos10->si83_tipoCriterioReajuste = '';
+                $clcontratos10->si83_dscIndice = '';
+                $clcontratos10->si83_indiceUnicoReajuste = '';
+                $clcontratos10->si83_dscReajuste = '';
+            }else{
+                $clcontratos10->si83_indCriterioReajuste = 1;
+                $clcontratos10->si83_dataBaseReajuste = $oDados10->ac16_datareajuste;
+                $clcontratos10->si83_periodicidadeReajuste = $oDados10->ac16_periodoreajuste;
+                $clcontratos10->si83_tipoCriterioReajuste = $oDados10->ac16_criterioreajuste;
+                if($oDados10->ac16_criterioreajuste == 2 || $oDados10->ac16_criterioreajuste == 3){
+                    $clcontratos10->si83_dscReajuste = $oDados10->ac16_descricaoreajuste;
+                    $clcontratos10->si83_indiceUnicoReajuste = 0;
+                    $clcontratos10->si83_dscIndice = '';
+                }else{
+                    $clcontratos10->si83_dscReajuste = '';
+                    $clcontratos10->si83_indiceUnicoReajuste = $oDados10->ac16_indicereajuste;
+                    if($oDados10->ac16_indicereajuste == 6){
+                        $clcontratos10->si83_dscIndice = $oDados10->ac16_descricaoindice;
+                    }else{
+                        $clcontratos10->si83_dscIndice = '';
+                    }
+                }
+            }
+
 
             $clcontratos10->incluir(null);
 
@@ -647,6 +676,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             /*
              * selecionar informacoes registro 11
              */
+
+             
 
             //OC10386
             if ($oDados10->ac02_acordonatureza != "4" && $oDados10->ac02_acordonatureza != "5") {
@@ -664,6 +695,22 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $rsItems = db_query($sqlItemobra);
                     $oDadosItensObra = db_utils::fieldsMemory($rsItems, 0);
 
+                    /*
+                    * Buscas os lote do item
+                    */
+                    if($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3){
+                        $sSqlItemLote = "select l04_descricao 
+                        from liclicitemlote 
+                        inner join liclicitem on l21_codigo = l04_liclicitem 
+                        inner join liclicita on l21_codliclicita = l20_codigo 
+                        inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem 
+                        inner join solicitem on pc11_codigo = pc81_solicitem 
+                        inner join solicitempcmater on pc16_solicitem =pc11_codigo 
+                        where l20_codigo = " . $oDados10->ac16_licitacao . " and pc16_codmater = ".$iCodPcmater;
+        
+                        $rsItemLote = db_query($sSqlItemLote);
+                        $oItemLote = db_utils::fieldsMemory($rsItemLote, 0);
+                    }
                     $sHash = $iCodItem;
                     if (!isset($aDadosAgrupados[$sHash])) {
 
@@ -671,6 +718,11 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         $oContrato11->si84_tiporegistro = 11;
                         $oContrato11->si84_reg10 = $clcontratos10->si83_sequencial;
                         $oContrato11->si84_codcontrato = $oDados10->ac16_sequencial;
+                        if(pg_num_rows($rsItemLote) == 0){
+                            $oContrato11->si84_nroLote = 0;
+                        }else{
+                            $oContrato11->si84_nroLote = $oItemLote->l04_descricao;
+                        }
                         if ($oDados10->ac02_acordonatureza == "1") {
                             if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
                                 $oContrato11->si84_coditem = $iCodItem;
@@ -903,6 +955,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 ac26_acordoposicaotipo,
                 ac26_vigenciaalterada,
                 ac26_data,
+                ac26_indicereajuste,
+                ac26_percentualreajuste,
+                ac26_descricaoindice,
                 ac02_acordonatureza,
                 manutac_codunidsubanterior,
                 ac35_datareferencia
@@ -978,6 +1033,20 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 } else {
                     $clcontratos20->si87_novadatatermino = "";
                 }
+                if ($this->getTipoTermoAditivo($oAcordoPosicao) == '4') {
+                    $clcontratos20->si87_percentualReajuste = $oDados20->ac26_indicereajuste;
+                    $clcontratos20->si87_indiceUnicoReajuste = $oDados20->ac26_indicereajuste;
+                } else {
+                    $clcontratos20->si87_percentualReajuste = '';
+                    $clcontratos20->si87_indiceUnicoReajuste ='';
+                }
+                if ($oDados20->ac26_indicereajuste=='6') {
+                    $clcontratos20->si87_dscReajuste = $oDados20->ac26_descricaoindice;
+                } else {
+                    $clcontratos20->si87_dscReajuste = '';
+                }
+                
+                
                 $iTotalPosicaoAnterior = 0;
                 $iTotalPosicaoAditivo = 0;
                 $iQuantidadeAditada = 0;
