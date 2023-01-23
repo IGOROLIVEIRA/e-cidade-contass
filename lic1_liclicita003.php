@@ -49,6 +49,8 @@ include("classes/db_licobras_classe.php");
 include("classes/db_credenciamentosaldo_classe.php");
 include("classes/db_credenciamento_classe.php");
 require_once("classes/db_condataconf_classe.php");
+require_once("classes/db_pccflicitapar_classe.php");
+require_once("classes/db_pccflicitanum_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
@@ -70,13 +72,16 @@ $clobrascodigos      = new cl_obrascodigos;
 $cllicobras          = new cl_licobras;
 $clcredenciamento    = new cl_credenciamento();
 $clcredenciamentosaldo = new cl_credenciamentosaldo();
+$clpccflicitapar     = new cl_pccflicitapar();
+$clpccflicitanum     = new cl_pccflicitanum();
 $erro_msg = '';
 $db_botao = false;
 $db_opcao = 33;
+$instit     = db_getsession("DB_instit");
+$anousu     = db_getsession("DB_anousu");
 if (isset($excluir)) {
     $sqlerro = false;
     $db_opcao = 3;
-
 
     db_inicio_transacao();
 
@@ -90,6 +95,31 @@ if (isset($excluir)) {
      * */
     $sqlerro = $status == 1 || !$status ? false : true;
     $erro_msg = $sqlerro ? 'Licitação possui Edital lançado.' : '';
+
+    $oParamNumManual = db_query("select * from licitaparam;");
+    $oParamNumManual = db_utils::fieldsmemory($oParamNumManual, 0);
+    $l12_numeracaomanual = $oParamNumManual->l12_numeracaomanual;
+
+    if ($l12_numeracaomanual == 't') {
+
+        $numeracao_l20_edital = db_query("select * from pccflicitanum where l24_anousu = $anousu and l24_instit = $instit and l24_numero = $l20_edital;");
+        if (pg_numrows($numeracao_l20_edital) > 0) {
+            $l24_numero = $l20_edital - 1;
+            db_query("UPDATE pccflicitanum SET l24_numero = $l24_numero WHERE l24_anousu = $anousu and l24_instit = $instit and l24_numero = $l20_edital;");
+        }
+
+        $numeracao_l20_numero = db_query("select * from pccflicitapar where l25_anousu = $anousu and l25_numero = $l20_numero and l25_codcflicita = $l20_codtipocom;");
+        if (pg_numrows($numeracao_l20_numero) > 0) {
+            $l25_numero = $l20_numero - 1;
+            db_query("UPDATE pccflicitapar SET l25_numero = $l25_numero WHERE l25_anousu = $anousu and l25_numero = $l20_numero and l25_codcflicita = $l20_codtipocom;");
+        }
+        if ($l20_nroedital != null) {
+            $numeracao_l20_nroedital = db_query("select * from pccfeditalnum where l47_anousu = $anousu and l47_instit = $instit and l47_numero = $l20_nroedital;");
+            if (pg_numrows($numeracao_l20_nroedital) > 0) {
+                db_query("DELETE FROM pccfeditalnum WHERE l47_numero = $l20_nroedital;");
+            }
+        }
+    }
 
     if (!$sqlerro) {
         $sqlAnexos = $cleditaldocumentos->sql_query('', 'l48_arquivo', '', 'l48_liclicita = ' . $l20_codigo);

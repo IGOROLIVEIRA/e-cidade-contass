@@ -27,7 +27,8 @@
 
 //MODULO: licitacao
 //CLASSE DA ENTIDADE licitaparam
-class cl_licitaparam {
+class cl_licitaparam
+{
     // cria variaveis de erro
     var $rotulo     = null;
     var $query_sql  = null;
@@ -35,7 +36,7 @@ class cl_licitaparam {
     var $numrows_incluir = 0;
     var $numrows_alterar = 0;
     var $numrows_excluir = 0;
-    var $erro_status= null;
+    var $erro_status = null;
     var $erro_sql   = null;
     var $erro_banco = null;
     var $erro_msg   = null;
@@ -50,6 +51,8 @@ class cl_licitaparam {
     var $l12_usuarioadjundica = null;
     var $l12_validacadfornecedor = null;
     var $l12_pncp = null;
+    var $l12_numeracaomanual = null;
+
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  l12_instit = int4 = Instituição 
@@ -60,91 +63,88 @@ class cl_licitaparam {
                  l12_usuarioadjundica = bool = Emitir usuario no relatorio de adjundicação
                  l12_validacadfornecedor = bool = Validacao no Cadastro de Fornecedor
                  l12_pncp = bool = Validacao PNCP
+                 l12_numeracaomanual = bool = Numeração Manual na Licitação
                  ";
     //funcao construtor da classe
-    function cl_licitaparam() {
+    function cl_licitaparam()
+    {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo("licitaparam");
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
     //funcao erro
-    function erro($mostra,$retorna) {
-        if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
-            echo "<script>alert(\"".$this->erro_msg."\");</script>";
-            if($retorna==true){
-                echo "<script>location.href='".$this->pagina_retorno."'</script>";
+    function erro($mostra, $retorna)
+    {
+        if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
+            echo "<script>alert(\"" . $this->erro_msg . "\");</script>";
+            if ($retorna == true) {
+                echo "<script>location.href='" . $this->pagina_retorno . "'</script>";
             }
         }
     }
     // funcao para atualizar campos
-    function atualizacampos($exclusao=false) {
-        if($exclusao==false){
-            $this->l12_instit = ($this->l12_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["l12_instit"]:$this->l12_instit);
-            $this->l12_escolherprocesso = ($this->l12_escolherprocesso == "f"?@$GLOBALS["HTTP_POST_VARS"]["l12_escolherprocesso"]:$this->l12_escolherprocesso);
-            $this->l12_escolheprotocolo = ($this->l12_escolheprotocolo == "f"?@$GLOBALS["HTTP_POST_VARS"]["l12_escolheprotocolo"]:$this->l12_escolheprotocolo);
-            $this->l12_qtdediasliberacaoweb = ($this->l12_qtdediasliberacaoweb == ""?@$GLOBALS["HTTP_POST_VARS"]["l12_qtdediasliberacaoweb"]:$this->l12_qtdediasliberacaoweb);
-            $this->l12_tipoliberacaoweb = ($this->l12_tipoliberacaoweb == ""?@$GLOBALS["HTTP_POST_VARS"]["l12_tipoliberacaoweb"]:$this->l12_tipoliberacaoweb);
-            $this->l12_usuarioadjundica = ($this->l12_usuarioadjundica == ""?@$GLOBALS["HTTP_POST_VARS"]["l12_usuarioadjundica"]:$this->l12_usuarioadjundica);
-            $this->l12_validacadfornecedor = ($this->l12_validacadfornecedor == "f"?@$GLOBALS["HTTP_POST_VARS"]["l12_validacadfornecedor"]:$this->l12_validacadfornecedor);
-            $this->l12_pncp = ($this->l12_pncp == "f"?@$GLOBALS["HTTP_POST_VARS"]["l12_pncp"]:$this->l12_pncp);
-        }else{
-            $this->l12_instit = ($this->l12_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["l12_instit"]:$this->l12_instit);
+    function atualizacampos($exclusao = false)
+    {
+        if ($exclusao == false) {
+            $this->l12_instit = ($this->l12_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l12_instit"] : $this->l12_instit);
+            $this->l12_escolherprocesso = ($this->l12_escolherprocesso == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_escolherprocesso"] : $this->l12_escolherprocesso);
+            $this->l12_escolheprotocolo = ($this->l12_escolheprotocolo == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_escolheprotocolo"] : $this->l12_escolheprotocolo);
+            $this->l12_qtdediasliberacaoweb = ($this->l12_qtdediasliberacaoweb == "" ? @$GLOBALS["HTTP_POST_VARS"]["l12_qtdediasliberacaoweb"] : $this->l12_qtdediasliberacaoweb);
+            $this->l12_tipoliberacaoweb = ($this->l12_tipoliberacaoweb == "" ? @$GLOBALS["HTTP_POST_VARS"]["l12_tipoliberacaoweb"] : $this->l12_tipoliberacaoweb);
+            $this->l12_usuarioadjundica = ($this->l12_usuarioadjundica == "" ? @$GLOBALS["HTTP_POST_VARS"]["l12_usuarioadjundica"] : $this->l12_usuarioadjundica);
+            $this->l12_validacadfornecedor = ($this->l12_validacadfornecedor == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_validacadfornecedor"] : $this->l12_validacadfornecedor);
+            $this->l12_pncp = ($this->l12_pncp == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_pncp"] : $this->l12_pncp);
+            $this->l12_numeracaomanual = ($this->l12_numeracaomanual == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_numeracaomanual"] : $this->l12_numeracaomanual);
+        } else {
+            $this->l12_instit = ($this->l12_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l12_instit"] : $this->l12_instit);
         }
     }
     // funcao para inclusao
-    function incluir ($l12_instit){
+    function incluir($l12_instit)
+    {
         $this->atualizacampos();
-        if($this->l12_escolherprocesso == null ){
+        if ($this->l12_escolherprocesso == null) {
             $this->erro_sql = " Campo Escolher Processo de Compras nao Informado.";
             $this->erro_campo = "l12_escolherprocesso";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->l12_escolheprotocolo == null ){
+        if ($this->l12_escolheprotocolo == null) {
             $this->erro_sql = " Campo Processo de Protocolo do Sistema nao Informado.";
             $this->erro_campo = "l12_escolheprotocolo";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-//        if($this->l12_qtdediasliberacaoweb == null ){
-//            $this->erro_sql = " Campo Dias de disponibilidade nao Informado.";
-//            $this->erro_campo = "l12_qtdediasliberacaoweb";
-//            $this->erro_banco = "";
-//            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//            $this->erro_status = "0";
-//            return false;
-//        }
-        if($this->l12_tipoliberacaoweb == null ){
+        if ($this->l12_tipoliberacaoweb == null) {
             $this->erro_sql = " Campo Disp. licitação na web até o julgamento nao Informado.";
             $this->erro_campo = "l12_tipoliberacaoweb";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if($this->l12_usuarioadjundica == null ){
+        if ($this->l12_usuarioadjundica == null) {
             $this->erro_sql = " Campo Emitir usuário no relatório de adjudicação.";
             $this->erro_campo = "l12_usuarioadjundica";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         $this->l12_instit = $l12_instit;
-        if(($this->l12_instit == null) || ($this->l12_instit == "") ){
+        if (($this->l12_instit == null) || ($this->l12_instit == "")) {
             $this->erro_sql = " Campo l12_instit nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -157,6 +157,7 @@ class cl_licitaparam {
                                       ,l12_usuarioadjundica
                                       ,l12_validacadfornecedor
                                       ,l12_pncp
+                                      ,l12_numeracaomanual
                        )
                 values (
                                 $this->l12_instit 
@@ -167,204 +168,206 @@ class cl_licitaparam {
                                ,'$this->l12_usuarioadjundica'
                                ,'$this->l12_validacadfornecedor'
                                ,'$this->l12_pncp'
+                               ,'$this->l12_numeracaomanual'
                       )";
         $result = db_query($sql);
-        if($result==false){
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
-            if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
+            if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
                 $this->erro_sql   = "parametros do modulo da licitacao ($this->l12_instit) nao Incluído. Inclusao Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_banco = "parametros do modulo da licitacao já Cadastrado";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            }else{
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            } else {
                 $this->erro_sql   = "parametros do modulo da licitacao ($this->l12_instit) nao Incluído. Inclusao Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
             $this->erro_status = "0";
-            $this->numrows_incluir= 0;
+            $this->numrows_incluir = 0;
             return false;
         }
         $this->erro_banco = "";
         $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-        $this->erro_sql .= "Valores : ".$this->l12_instit;
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_sql .= "Valores : " . $this->l12_instit;
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
-        $this->numrows_incluir= pg_affected_rows($result);
+        $this->numrows_incluir = pg_affected_rows($result);
         $resaco = $this->sql_record($this->sql_query_file($this->l12_instit));
-        if(($resaco!=false)||($this->numrows!=0)){
+        if (($resaco != false) || ($this->numrows != 0)) {
             $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-            $acount = pg_result($resac,0,0);
-            $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+            $acount = pg_result($resac, 0, 0);
+            $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
             $resac = db_query("insert into db_acountkey values($acount,11887,'$this->l12_instit','I')");
-            $resac = db_query("insert into db_acount values($acount,2055,11887,'','".AddSlashes(pg_result($resaco,0,'l12_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,2055,11888,'','".AddSlashes(pg_result($resaco,0,'l12_escolherprocesso'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,2055,15697,'','".AddSlashes(pg_result($resaco,0,'l12_escolheprotocolo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,2055,17211,'','".AddSlashes(pg_result($resaco,0,'l12_qtdediasliberacaoweb'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,2055,17210,'','".AddSlashes(pg_result($resaco,0,'l12_tipoliberacaoweb'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+            $resac = db_query("insert into db_acount values($acount,2055,11887,'','" . AddSlashes(pg_result($resaco, 0, 'l12_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,2055,11888,'','" . AddSlashes(pg_result($resaco, 0, 'l12_escolherprocesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,2055,15697,'','" . AddSlashes(pg_result($resaco, 0, 'l12_escolheprotocolo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,2055,17211,'','" . AddSlashes(pg_result($resaco, 0, 'l12_qtdediasliberacaoweb')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,2055,17210,'','" . AddSlashes(pg_result($resaco, 0, 'l12_tipoliberacaoweb')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         }
         return true;
     }
     // funcao para alteracao
-    function alterar ($l12_instit=null) {
+    function alterar($l12_instit = null)
+    {
         $this->atualizacampos();
         $sql = " update licitaparam set ";
         $virgula = "";
-        if(trim($this->l12_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l12_instit"])){
-            $sql  .= $virgula." l12_instit = $this->l12_instit ";
+        if (trim($this->l12_instit) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l12_instit"])) {
+            $sql  .= $virgula . " l12_instit = $this->l12_instit ";
             $virgula = ",";
-            if(trim($this->l12_instit) == null ){
+            if (trim($this->l12_instit) == null) {
                 $this->erro_sql = " Campo Instituição nao Informado.";
                 $this->erro_campo = "l12_instit";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->l12_escolherprocesso)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l12_escolherprocesso"])){
-            $sql  .= $virgula." l12_escolherprocesso = '$this->l12_escolherprocesso' ";
+        if (trim($this->l12_escolherprocesso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l12_escolherprocesso"])) {
+            $sql  .= $virgula . " l12_escolherprocesso = '$this->l12_escolherprocesso' ";
             $virgula = ",";
-            if(trim($this->l12_escolherprocesso) == null ){
+            if (trim($this->l12_escolherprocesso) == null) {
                 $this->erro_sql = " Campo Escolher Processo de Compras nao Informado.";
                 $this->erro_campo = "l12_escolherprocesso";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->l12_escolheprotocolo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l12_escolheprotocolo"])){
-            $sql  .= $virgula." l12_escolheprotocolo = '$this->l12_escolheprotocolo' ";
+        if (trim($this->l12_escolheprotocolo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l12_escolheprotocolo"])) {
+            $sql  .= $virgula . " l12_escolheprotocolo = '$this->l12_escolheprotocolo' ";
             $virgula = ",";
-            if(trim($this->l12_escolheprotocolo) == null ){
+            if (trim($this->l12_escolheprotocolo) == null) {
                 $this->erro_sql = " Campo Processo de Protocolo do Sistema nao Informado.";
                 $this->erro_campo = "l12_escolheprotocolo";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
 
-        if(trim($this->l12_validacadfornecedor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l12_validacadfornecedor"])){
-            $sql  .= $virgula." l12_validacadfornecedor = '$this->l12_validacadfornecedor' ";
+        if (trim($this->l12_validacadfornecedor) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l12_validacadfornecedor"])) {
+            $sql  .= $virgula . " l12_validacadfornecedor = '$this->l12_validacadfornecedor' ";
             $virgula = ",";
-            if(trim($this->l12_validacadfornecedor) == null ){
+            if (trim($this->l12_validacadfornecedor) == null) {
                 $this->erro_sql = " Validacao no Cadastro de Fornecedores nao Informado.";
                 $this->erro_campo = "l12_validacadfornecedor";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->l12_pncp)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l12_pncp"])){
-            $sql  .= $virgula." l12_pncp = '$this->l12_pncp' ";
+        if (trim($this->l12_pncp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l12_pncp"])) {
+            $sql  .= $virgula . " l12_pncp = '$this->l12_pncp' ";
             $virgula = ",";
-            if(trim($this->l12_pncp) == null ){
+            if (trim($this->l12_pncp) == null) {
                 $this->erro_sql = " Validacao no Cadastro de Fornecedores nao Informado.";
                 $this->erro_campo = "l12_pncp";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-//        if(trim($this->l12_qtdediasliberacaoweb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l12_qtdediasliberacaoweb"])){
-//            $sql  .= $virgula." l12_qtdediasliberacaoweb = $this->l12_qtdediasliberacaoweb ";
-//            $virgula = ",";
-//            if(trim($this->l12_qtdediasliberacaoweb) == null ){
-//                $this->erro_sql = " Campo Dias de disponibilidade nao Informado.";
-//                $this->erro_campo = "l12_qtdediasliberacaoweb";
-//                $this->erro_banco = "";
-//                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//                $this->erro_status = "0";
-//                return false;
-//            }
-//        }
-        if(trim($this->l12_tipoliberacaoweb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l12_tipoliberacaoweb"])){
-            $sql  .= $virgula." l12_tipoliberacaoweb = $this->l12_tipoliberacaoweb ";
+        if (trim($this->l12_numeracaomanual) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l12_numeracaomanual"])) {
+            $sql  .= $virgula . " l12_numeracaomanual = '$this->l12_numeracaomanual' ";
             $virgula = ",";
-            if(trim($this->l12_tipoliberacaoweb) == null ){
+            if (trim($this->l12_numeracaomanual) == null) {
+                $this->erro_sql = " Campo numeracao manual da licitacao nao Informado.";
+                $this->erro_campo = "l12_numeracaomanual";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->l12_tipoliberacaoweb) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l12_tipoliberacaoweb"])) {
+            $sql  .= $virgula . " l12_tipoliberacaoweb = $this->l12_tipoliberacaoweb ";
+            $virgula = ",";
+            if (trim($this->l12_tipoliberacaoweb) == null) {
                 $this->erro_sql = " Campo Disp. licitação na web até o julgamento nao Informado.";
                 $this->erro_campo = "l12_tipoliberacaoweb";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->l12_usuarioadjundica)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l12_usuarioadjundica"])){
-            $sql  .= $virgula." l12_usuarioadjundica = '$this->l12_usuarioadjundica' ";
+        if (trim($this->l12_usuarioadjundica) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l12_usuarioadjundica"])) {
+            $sql  .= $virgula . " l12_usuarioadjundica = '$this->l12_usuarioadjundica' ";
             $virgula = ",";
-            if(trim($this->l12_usuarioadjundica) == null ){
+            if (trim($this->l12_usuarioadjundica) == null) {
                 $this->erro_sql = "Emitir usuário no relatório de adjudicação.";
                 $this->erro_campo = "l12_usuarioadjundica";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
         $sql .= " where ";
-        if($l12_instit!=null){
+        if ($l12_instit != null) {
             $sql .= " l12_instit = $this->l12_instit";
         }
         $resaco = $this->sql_record($this->sql_query_file($this->l12_instit));
-        if($this->numrows>0){
-            for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
+        if ($this->numrows > 0) {
+            for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
                 $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                $acount = pg_result($resac,0,0);
-                $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+                $acount = pg_result($resac, 0, 0);
+                $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
                 $resac = db_query("insert into db_acountkey values($acount,11887,'$this->l12_instit','A')");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["l12_instit"]) || $this->l12_instit != "")
-                    $resac = db_query("insert into db_acount values($acount,2055,11887,'".AddSlashes(pg_result($resaco,$conresaco,'l12_instit'))."','$this->l12_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["l12_escolherprocesso"]) || $this->l12_escolherprocesso != "")
-                    $resac = db_query("insert into db_acount values($acount,2055,11888,'".AddSlashes(pg_result($resaco,$conresaco,'l12_escolherprocesso'))."','$this->l12_escolherprocesso',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["l12_escolheprotocolo"]) || $this->l12_escolheprotocolo != "")
-                    $resac = db_query("insert into db_acount values($acount,2055,15697,'".AddSlashes(pg_result($resaco,$conresaco,'l12_escolheprotocolo'))."','$this->l12_escolheprotocolo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["l12_qtdediasliberacaoweb"]) || $this->l12_qtdediasliberacaoweb != "")
-                    $resac = db_query("insert into db_acount values($acount,2055,17211,'".AddSlashes(pg_result($resaco,$conresaco,'l12_qtdediasliberacaoweb'))."','$this->l12_qtdediasliberacaoweb',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["l12_tipoliberacaoweb"]) || $this->l12_tipoliberacaoweb != "")
-                    $resac = db_query("insert into db_acount values($acount,2055,17210,'".AddSlashes(pg_result($resaco,$conresaco,'l12_tipoliberacaoweb'))."','$this->l12_tipoliberacaoweb',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["l12_instit"]) || $this->l12_instit != "")
+                    $resac = db_query("insert into db_acount values($acount,2055,11887,'" . AddSlashes(pg_result($resaco, $conresaco, 'l12_instit')) . "','$this->l12_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["l12_escolherprocesso"]) || $this->l12_escolherprocesso != "")
+                    $resac = db_query("insert into db_acount values($acount,2055,11888,'" . AddSlashes(pg_result($resaco, $conresaco, 'l12_escolherprocesso')) . "','$this->l12_escolherprocesso'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["l12_escolheprotocolo"]) || $this->l12_escolheprotocolo != "")
+                    $resac = db_query("insert into db_acount values($acount,2055,15697,'" . AddSlashes(pg_result($resaco, $conresaco, 'l12_escolheprotocolo')) . "','$this->l12_escolheprotocolo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["l12_qtdediasliberacaoweb"]) || $this->l12_qtdediasliberacaoweb != "")
+                    $resac = db_query("insert into db_acount values($acount,2055,17211,'" . AddSlashes(pg_result($resaco, $conresaco, 'l12_qtdediasliberacaoweb')) . "','$this->l12_qtdediasliberacaoweb'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["l12_tipoliberacaoweb"]) || $this->l12_tipoliberacaoweb != "")
+                    $resac = db_query("insert into db_acount values($acount,2055,17210,'" . AddSlashes(pg_result($resaco, $conresaco, 'l12_tipoliberacaoweb')) . "','$this->l12_tipoliberacaoweb'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             }
         }
         $result = db_query($sql);
-        if($result==false){
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "parametros do modulo da licitacao nao Alterado. Alteracao Abortada.\\n";
-            $this->erro_sql .= "Valores : ".$this->l12_instit;
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_sql .= "Valores : " . $this->l12_instit;
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
             return false;
-        }else{
-            if(pg_affected_rows($result)==0){
+        } else {
+            if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
                 $this->erro_sql = "parametros do modulo da licitacao nao foi Alterado. Alteracao Executada.\\n";
-                $this->erro_sql .= "Valores : ".$this->l12_instit;
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_sql .= "Valores : " . $this->l12_instit;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
                 return true;
-            }else{
+            } else {
                 $this->erro_banco = "";
                 $this->erro_sql = "Alteração efetuada com Sucesso\\n";
-                $this->erro_sql .= "Valores : ".$this->l12_instit;
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_sql .= "Valores : " . $this->l12_instit;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = pg_affected_rows($result);
                 return true;
@@ -372,64 +375,65 @@ class cl_licitaparam {
         }
     }
     // funcao para exclusao
-    function excluir ($l12_instit=null,$dbwhere=null) {
-        if($dbwhere==null || $dbwhere==""){
+    function excluir($l12_instit = null, $dbwhere = null)
+    {
+        if ($dbwhere == null || $dbwhere == "") {
             $resaco = $this->sql_record($this->sql_query_file($l12_instit));
-        }else{
-            $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
+        } else {
+            $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
         }
-        if(($resaco!=false)||($this->numrows!=0)){
-            for($iresaco=0;$iresaco<$this->numrows;$iresaco++){
+        if (($resaco != false) || ($this->numrows != 0)) {
+            for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
                 $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                $acount = pg_result($resac,0,0);
-                $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+                $acount = pg_result($resac, 0, 0);
+                $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
                 $resac = db_query("insert into db_acountkey values($acount,11887,'$l12_instit','E')");
-                $resac = db_query("insert into db_acount values($acount,2055,11887,'','".AddSlashes(pg_result($resaco,$iresaco,'l12_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,2055,11888,'','".AddSlashes(pg_result($resaco,$iresaco,'l12_escolherprocesso'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,2055,15697,'','".AddSlashes(pg_result($resaco,$iresaco,'l12_escolheprotocolo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,2055,17211,'','".AddSlashes(pg_result($resaco,$iresaco,'l12_qtdediasliberacaoweb'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,2055,17210,'','".AddSlashes(pg_result($resaco,$iresaco,'l12_tipoliberacaoweb'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                $resac = db_query("insert into db_acount values($acount,2055,11887,'','" . AddSlashes(pg_result($resaco, $iresaco, 'l12_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,2055,11888,'','" . AddSlashes(pg_result($resaco, $iresaco, 'l12_escolherprocesso')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,2055,15697,'','" . AddSlashes(pg_result($resaco, $iresaco, 'l12_escolheprotocolo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,2055,17211,'','" . AddSlashes(pg_result($resaco, $iresaco, 'l12_qtdediasliberacaoweb')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,2055,17210,'','" . AddSlashes(pg_result($resaco, $iresaco, 'l12_tipoliberacaoweb')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             }
         }
         $sql = " delete from licitaparam
                     where ";
         $sql2 = "";
-        if($dbwhere==null || $dbwhere ==""){
-            if($l12_instit != ""){
-                if($sql2!=""){
+        if ($dbwhere == null || $dbwhere == "") {
+            if ($l12_instit != "") {
+                if ($sql2 != "") {
                     $sql2 .= " and ";
                 }
                 $sql2 .= " l12_instit = $l12_instit ";
             }
-        }else{
+        } else {
             $sql2 = $dbwhere;
         }
-        $result = db_query($sql.$sql2);
-        if($result==false){
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
+        $result = db_query($sql . $sql2);
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "parametros do modulo da licitacao nao Excluído. Exclusão Abortada.\\n";
-            $this->erro_sql .= "Valores : ".$l12_instit;
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_sql .= "Valores : " . $l12_instit;
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_excluir = 0;
             return false;
-        }else{
-            if(pg_affected_rows($result)==0){
+        } else {
+            if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
                 $this->erro_sql = "parametros do modulo da licitacao nao Encontrado. Exclusão não Efetuada.\\n";
-                $this->erro_sql .= "Valores : ".$l12_instit;
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_sql .= "Valores : " . $l12_instit;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = 0;
                 return true;
-            }else{
+            } else {
                 $this->erro_banco = "";
                 $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
-                $this->erro_sql .= "Valores : ".$l12_instit;
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_sql .= "Valores : " . $l12_instit;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = pg_affected_rows($result);
                 return true;
@@ -437,95 +441,97 @@ class cl_licitaparam {
         }
     }
     // funcao do recordset
-    function sql_record($sql) {
+    function sql_record($sql)
+    {
         $result = db_query($sql);
-        if($result==false){
+        if ($result == false) {
             $this->numrows    = 0;
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Erro ao selecionar os registros.";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         $this->numrows = pg_numrows($result);
-//        if($this->numrows==0){
-//            $this->erro_banco = "";
-//            $this->erro_sql   = "Record Vazio na Tabela:licitaparam";
-//            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//            $this->erro_status = "0";
-//            return false;
-//        }
+        //        if($this->numrows==0){
+        //            $this->erro_banco = "";
+        //            $this->erro_sql   = "Record Vazio na Tabela:licitaparam";
+        //            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        //            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        //            $this->erro_status = "0";
+        //            return false;
+        //        }
         return $result;
     }
     // funcao do sql
-    function sql_query ( $l12_instit=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query($l12_instit = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = explode("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = explode("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from licitaparam ";
         $sql2 = "";
-        if($dbwhere==""){
-            if($l12_instit!=null ){
+        if ($dbwhere == "") {
+            if ($l12_instit != null) {
                 $sql2 .= " where licitaparam.l12_instit = $l12_instit ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#",$ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
     // funcao do sql
-    function sql_query_file ( $l12_instit=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_file($l12_instit = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = explode("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = explode("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from licitaparam ";
         $sql2 = "";
-        if($dbwhere==""){
-            if($l12_instit!=null ){
+        if ($dbwhere == "") {
+            if ($l12_instit != null) {
                 $sql2 .= " where licitaparam.l12_instit = $l12_instit ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#",$ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
 }
-?>

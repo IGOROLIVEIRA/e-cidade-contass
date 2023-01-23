@@ -272,11 +272,20 @@ function js_retornoDadosMascara(oAjax) {
     $('iTipo').value = '1';
     return false;
   } else {
-
+    var ano = "<?php print db_getsession("DB_anousu"); ?>";
+    
     $('sMascara').value   = oRetorno.mascara.urlDecode();
     $('o15_codtri').value = oRetorno.mascara.urlDecode();
     $('o15_codtri').maxLength = oRetorno.mascara.urlDecode().length;
-    new MaskedInput("#o15_codtri", oRetorno.mascara.urlDecode().replace(/0/g,"*"), {placeholder:"0"});
+    var mascara = oRetorno.mascara.urlDecode();
+    
+    if(ano > 2022){
+      var mascara = oRetorno.mascara.urlDecode().substr(0,7);
+      $('sMascara').value   = mascara;
+      $('o15_codtri').value = mascara;//oRetorno.mascara.urlDecode();
+      $('o15_codtri').maxLength = mascara.length;
+    }
+    new MaskedInput("#o15_codtri", mascara.replace(/0/g,"*"), {placeholder:"0"});
 
     js_preencherCodigoRecurso();
     if (oRetorno.niveis > 1) {
@@ -446,7 +455,11 @@ function js_retornoRemover(oAjax) {
 function js_preencherCodigoRecurso() {
 
   if ($('o15_codigo').value == '' || new Number($('o15_codigo').value) == 0) {
-    $('o15_codigo').value = $('o15_codtri').value.replace(/\./g,"");
+    var ano = "<?php print db_getsession("DB_anousu"); ?>";
+    if(ano > 2022)
+      $('o15_codigo').value = $('o15_codtri').value.replace(/\./g,"")+'0';
+    else
+      $('o15_codigo').value = $('o15_codtri').value.replace(/\./g,"");
   }
 }
 

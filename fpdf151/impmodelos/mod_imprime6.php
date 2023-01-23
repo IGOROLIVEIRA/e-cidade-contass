@@ -541,7 +541,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
 
         $this->objpdf->setxy($xcol + 1, $xlin + 165);
         $this->objpdf->text($xcol + 2, $xlin + 164, 'RESUMO : ', 0, 1, 'L', 0);
-        $this->objpdf->setxy($xcol + 1, $xlin + 161.5);
+        $this->objpdf->setxy($xcol + 15, $xlin + 161.5);
         // trata o resumo para que caiba no espaço correto
         //  global $texto_resumo, $qtd_string, $tam_string, $spaco_a_acupar;
         $texto_resumo   = $this->resumo;
@@ -552,7 +552,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
             $qtd_string--;
             $tam_string = $this->objpdf->GetStringWidth(substr($texto_resumo, 0, $qtd_string));
         }
-        $this->objpdf->multicell(147, 3.5, substr($this->resumo, 0, $qtd_string), 0, 'J', 0, 14);
+        $this->objpdf->multicell(135, 3.5, substr($this->resumo, 0, $qtd_string), 0, 'J', 0, 14);
 
         $this->objpdf->text($xcol + 159, $xlin + 187, 'T O T A L', 0, 1, 'L', 0);
         $this->objpdf->setxy($xcol + 177, $xlin + 183);

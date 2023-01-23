@@ -105,6 +105,8 @@ $arrayExcesso = array();
 for ($i = 0; $i < pg_numrows($result); $i++) {
     db_fieldsmemory($result, $i);
     $fonte = fonteAgrupada($c241_fonte);
+    if ($valor == 0)
+        continue;
 
     if (array_key_exists($fonte, $arrayExcesso)) {
         $arrayExcesso[$fonte]["A"] += $valor;
@@ -337,6 +339,9 @@ $pdf->Output();
  */
 function fonteAgrupada($fonte) 
 {
+    if (db_getsession("DB_anousu") > 2022)
+        return 2 . substr($fonte, 1, 6);
+
     $fonte = substr($fonte, 1, 2);
 
     if (in_array($fonte, array("01", "02")))

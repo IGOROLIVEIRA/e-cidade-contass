@@ -2351,12 +2351,18 @@ class cl_empempenho
 
         $codigo = $dados->sigla == 'e60' ? "'{$codigo}'" :  $codigo;
 
-        $sSQL = "
-          select {$dados->campo}
-           from {$dados->tabela}
-            join orcdotacao on (o58_coddot, o58_anousu) = ({$dados->sigla}_coddot, {$dados->sigla}_anousu)
-             where {$dados->campo} = {$codigo} and {$dados->sigla}_anousu = {$ano}
-              and o58_codigo in (122,123,124,142,163,171,172,173,176,177,178,181,182,183)";
+        $sSQL = " SELECT {$dados->campo}
+                    FROM {$dados->tabela}
+                  JOIN orcdotacao ON (o58_coddot, o58_anousu) = ({$dados->sigla}_coddot, {$dados->sigla}_anousu)
+                  WHERE {$dados->campo} = {$codigo} AND {$dados->sigla}_anousu = {$ano} ";
+
+        $and = " AND o58_codigo IN (122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182, 183)";
+
+        if ($ano > 2022) {
+            $and = " AND o58_codigo IN (15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000, 17030000)";
+        }
+
+        $sSQL .= $and;
 
         return pg_num_rows(db_query($sSQL));
     }

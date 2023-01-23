@@ -321,7 +321,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
 
 
 
-        $campos = "DISTINCT pc01_codmater,pc01_tabela,pc01_taxa,pc01_descrmater,cgmforncedor.z01_nome,cgmforncedor.z01_cgccpf,m61_descr,m61_abrev,pc11_quant,pc23_obs,pc23_valor,pcorcamval.pc23_vlrun,pcorcamval.pc23_percentualdesconto as mediapercentual,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq";
+        $campos = "DISTINCT pc01_codmater,pc01_tabela,pc01_taxa,pc01_descrmater,cgmforncedor.z01_nome,cgmforncedor.z01_cgccpf,m61_descr,m61_abrev,pc11_quant,pc23_obs,pc23_valor,pcorcamval.pc23_vlrun,pcorcamval.pc23_percentualdesconto as mediapercentual,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq,l20_criterioadjudicacao,pc23_perctaxadesctabela";
 
         //$sWhere = " liclicitem.l21_codliclicita = {$codigo_preco} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
         $sWhere = " liclicitem.l21_codliclicita = {$codigo_preco} and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = {$sequencial}";
@@ -459,20 +459,28 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
                         if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
 
                             $oDadosDaLinha->quantidade = $oResult->pc11_quant;
-                            if ($oResult->mediapercentual == 0) {
+                            if ($oResult->l20_criterioadjudicacao == 3) {
                                 $oDadosDaLinha->valorUnitario = "-";
                             } else {
-                                $oDadosDaLinha->valorUnitario = number_format($oResult->mediapercentual, 2) . "%";
+                                if($oResult->mediapercentual != 0){
+                                    $oDadosDaLinha->valorUnitario = number_format($oResult->mediapercentual, 2) . "%";
+                                }else{
+                                    $oDadosDaLinha->valorUnitario = number_format($oResult->pc23_perctaxadesctabela, 2) . "%";
+                                } 
                             }
                             $oDadosDaLinha->unidadeDeMedida = strtoupper($oResult->m61_abrev);
                             $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                         } else {
                             $oDadosDaLinha->valorUnitario = "R$" . number_format($oResult->pc23_vlrun, $oGet->quant_casas, ",", ".");
                             $oDadosDaLinha->quantidade = $oResult->pc11_quant;
-                            if ($oResult->mediapercentual == 0) {
+                            if ($oResult->l20_criterioadjudicacao == 3) {
                                 $oDadosDaLinha->mediapercentual = "-";
                             } else {
-                                $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
+                                if($oResult->mediapercentual != 0){
+                                    $oDadosDaLinha->valorUnitario = number_format($oResult->mediapercentual, 2) . "%";
+                                }else{
+                                    $oDadosDaLinha->valorUnitario = number_format($oResult->pc23_perctaxadesctabela, 2) . "%";
+                                } 
                             }
                             $oDadosDaLinha->unidadeDeMedida = strtoupper($oResult->m61_abrev);
                             $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");

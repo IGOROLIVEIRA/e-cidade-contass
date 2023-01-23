@@ -227,11 +227,20 @@ if (isset($incluir)) {
             }
         }
 
+        
+
         if ($clitemprecoreferencia->erro_status == 0) {
             
             $sqlerro = true;
             $clprecoreferencia->erro_msg    = $clitemprecoreferencia->erro_msg;
             $clprecoreferencia->erro_status = "0";
+        }
+
+        if($cont == 0){
+            $sqlerro = true;
+            $clprecoreferencia->erro_msg    = 'Quantidade de orçamentos cadastrados é menor que a quantidade de cotação selecionada.';
+            $clprecoreferencia->erro_status = "0";
+            $clprecoreferencia->erro_campo = "si01_cotacaoitem";
         }
 
         if (pg_num_rows($rsResult) == 0) {

@@ -24,6 +24,11 @@ class QuadroSuperavitDeficitRepositoryLegacy implements IQuadroSuperavitDeficitR
     private $iInstituicao;
 
     /**
+     * @var int
+     */
+    private $iRegistros;
+
+    /**
      * @param string $iAnoUsu
      * @param string $iInstituicao
      * @return void
@@ -43,6 +48,7 @@ class QuadroSuperavitDeficitRepositoryLegacy implements IQuadroSuperavitDeficitR
     {
         $sWhere = " c241_fonte = {$sFonte} AND c241_ano = {$this->iAnoUsu} AND c241_instit = {$this->iInstituicao} ";
         $rResult = $this->oRepositorio->sql_record($this->oRepositorio->sql_query(null, "c241_valor as valor", null, $sWhere));
+
         $this->iRegistros = pg_num_rows($rResult);
         
         if ($this->iRegistros === 0)

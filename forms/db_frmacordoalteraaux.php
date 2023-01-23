@@ -101,6 +101,14 @@ db_app::load("dbtextFieldData.widget.js");
     width: 75%;
   }
 
+  #ac16_reajuste,#ac16_periodoreajuste,#ac16_datareajuste{
+        width: 90px;
+    }
+
+    #ac16_criterioreajuste{
+        width: 130px;
+    }
+
   #ac16_objeto {
     width: 100%;
   }
@@ -334,7 +342,7 @@ db_app::load("dbtextFieldData.widget.js");
                           ?>
                         </td>
                       </tr>
-                      <tr>
+                      <tr style="display:none;">
                         <td nowrap title="<?= @$Tac16_qtdrenovacao ?>">
                           <?= $Lac16_qtdrenovacao; ?>
                         </td>
@@ -347,7 +355,7 @@ db_app::load("dbtextFieldData.widget.js");
                           ?>
                         </td>
                       </tr>
-                      <tr>
+                      <tr style="display:none;">
                         <td>
                           <b>Contrato Emergencial:</b>
                         </td>
@@ -359,7 +367,7 @@ db_app::load("dbtextFieldData.widget.js");
                         </td>
                       </tr>
 
-                      <tr>
+                      <tr style="display:none;">
                         <td>
                           <b>Períodos por Mês Comercial:</b>
                         </td>
@@ -376,7 +384,7 @@ db_app::load("dbtextFieldData.widget.js");
                           ?>
                         </td>
                       </tr>
-                      <tr>
+                      <tr style="display:none;">
                         <td nowrap title="Tipo de Instrumento">
                           <?
                           db_ancora('<b>Tipo Instrumento:</b>', "onchange=js_pesquisaac50_descricao(true)", $db_opcao);
@@ -427,6 +435,111 @@ db_app::load("dbtextFieldData.widget.js");
                   </fieldset>
                 </td>
               </tr>
+              <tr>
+                <td colspan="2" >
+                    <table >
+                        <tr>
+                            <td id='tdpossuireajuste' width="300px">
+                            <b>Possui Critério Reajuste:</b>
+                        
+                            <?
+                                $aPossui = array(
+                                0 => 'Selecione',
+                                1 => 'Sim',
+                                2 => 'Não'
+                                );
+                                db_select('ac16_reajuste', $aPossui   , true, $db_opcao,"onchange='js_possuireajuste()'","");
+                            ?>
+                            </td>
+                        
+                            <td width="23%" id='tdcriterioreajuste' style="display: inline;">
+                            <b>Critério de Reajuste:</b>
+                            
+                            <?
+                                $aCriterios = array(
+                                0 => 'Selecione',
+                                1 => 'Índice Único',
+                                2 => 'Cesta de Índices',
+                                3 => 'Índice Específico'
+                                );
+                                db_select('ac16_criterioreajuste', $aCriterios   , true, $db_opcao,"onchange='js_criterio()'","");
+                            ?>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr >
+                <td colspan="2" >
+                    <table  border="0">
+                        <tr id='trdatareajuste' >
+                            <td width="140px">
+                            <b>Data Base Reajuste:</b>
+                            </td>
+                            <td width="160px">
+                            <?
+                                db_inputdata('ac16_datareajuste', @$ac16_datareajuste_dia, @$ac16_datareajuste_mes, @$ac16_datareajuste_ano,
+                                true, 'text', $iCampo, "onchange='return js_somardias();'",
+                                "", "", "return parent.js_somardias();");
+                            ?>
+                            </td>
+
+                            <td  id='tdindicereajuste' >
+                            <b>Índice de Reajuste:</b>
+                            
+                            <?
+                                $aIndice = array(
+                                0 => 'Selecione',
+                                1 => 'IPCA',
+                                2 => 'INPC',
+                                3 => 'INCC',
+                                4 => 'IGP-M',
+                                5 => 'IGP-DI',
+                                6 => 'Outro'
+                                );
+                                db_select('ac16_indicereajuste', $aIndice   , true, $db_opcao,"onchange='js_indicereajuste()'","");
+                            ?>
+                            </td>
+                        </tr>   
+                        <tr id='trperiodoreajuste' >
+                            <td width="140px">
+                            <b>Período do Reajuste:</b>
+                            </td>
+                            <td>
+                            <?
+                                db_input('ac16_periodoreajuste', 12, 1, true, $db_opcao, "","","","","",2);
+                            ?>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <tr >
+                <td colspan="2" >
+                    <table  border="0">
+            </tr>    
+            <tr id='trdescricaoreajuste'>
+                <td >
+                    <b> Descrição do Critério de Reajuste </b>
+                </td>
+                <td>
+                    <?
+                    db_textarea('ac16_descricaoreajuste', 3, 69, '', true, 'text', $db_opcao, "", "", "", "300");
+                    ?>
+                </td>
+            </tr>
+            <tr id='trdescricaoindicereajuste' >
+                <td >
+                    <b> Descrição do Índice de Reajuste </b>
+                </td>
+                <td>
+                    <?
+                    db_textarea('ac16_descricaoindice', 3, 69, '', true, 'text', $db_opcao, "", "", "", "300");
+                    ?>
+                </td>
+            </tr>
+          </table>
+        </td>
+            </tr>
               <tr>
                 <td colspan="2">
                   <fieldset class='fieldsetinterno'>
@@ -540,6 +653,13 @@ db_app::load("dbtextFieldData.widget.js");
 
     $('trValorAcordo').style.display = 'none';
 
+    $('tdcriterioreajuste').style.display = 'none';
+    $('trdatareajuste').style.display = 'none';
+    $('trperiodoreajuste').style.display = 'none';
+    $('trdescricaoreajuste').style.display = 'none';
+    $('tdindicereajuste').style.display = 'none';
+    $('trdescricaoindicereajuste').style.display = 'none';
+
     function js_validaCampoValor() {
 
         var iOrigem = $('ac16_origem').value;
@@ -607,61 +727,6 @@ db_app::load("dbtextFieldData.widget.js");
         db_iframe_liclicita.hide();
     }
 
-    /**
-     * funcao para verificar origem do acordo para listar ancora da licitacao
-     */
-    function js_verificatipoorigem(){
-        value = document.form1.ac16_tipoorigem.value;
-        value1 = document.form1.ac16_origem.value;
-        console.log(value);
-        console.log(value1);
-
-        if(value == 5 && value1 == 3){
-            document.getElementById('trlicoutroorgao').style.display = "";
-            document.getElementById('tradesaoregpreco').style.display = "none";
-            document.getElementById('trLicitacao').style.display = "none";
-        }
-
-        if(value == 4 && value1 == 3){
-            document.getElementById('tradesaoregpreco').style.display = "";
-            document.getElementById('trlicoutroorgao').style.display = "none";
-            document.getElementById('trLicitacao').style.display = "none";
-        }
-
-        if(value == 2 && value1 == 3){
-            document.getElementById('trLicitacao').style.display = "";
-            document.getElementById('tradesaoregpreco').style.display = "none";
-            document.getElementById('trlicoutroorgao').style.display = "none";
-        }
-
-        if((value1 == 2 && value == 2) || (value1 == 2 && value == 3)){
-            document.getElementById('trLicitacao').style.display = "none";
-            document.getElementById('tradesaoregpreco').style.display = "none";
-            document.getElementById('trlicoutroorgao').style.display = "none";
-        }
-
-        if(value1 == 3 && value == 3){
-            document.getElementById('trLicitacao').style.display = "";
-            document.getElementById('tradesaoregpreco').style.display = "none";
-            document.getElementById('trlicoutroorgao').style.display = "none";
-        }
-
-        if((value1 == 3 && value == 1) || (value1 == 3 && value == 6) || (value1 == 3 && value == 7) || (value1 == 3 && value == 8) || (value1 == 3 && value == 9)){
-            document.getElementById('trLicitacao').style.display = "none";
-            document.getElementById('tradesaoregpreco').style.display = "none";
-            document.getElementById('trlicoutroorgao').style.display = "none";
-        }
-
-        if(value != 4){
-            document.form1.ac16_adesaoregpreco.value = "";
-            document.form1.si06_objetoadesao.value = "";
-        }
-        if(value != 5 || value != 6) {
-            document.form1.ac16_licoutroorgao.value = "";
-            document.form1.z01_nome.value = "";
-        }
-
-    }
 
     /**
      * função para retornar licitações de outros orgaos
@@ -1564,10 +1629,20 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
-        if((value1 == 3 && value == 1) || (value1 == 3 && value == 6) || (value1 == 3 && value == 7) || (value1 == 3 && value == 8) || (value1 == 3 && value == 9)){
+        if((value1 == 1 || value1 == 3) && (value == 5 ||  value == 6 || value == 7 || value == 8 || value == 9)){
             document.getElementById('trLicitacao').style.display = "none";
             document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trlicoutroorgao').style.display = "";
+        }
+        if((value1 == 1 || value1 == 3) && (value == 1 || value == 2 || value == 3 || value == 4)){
             document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+        if((value1 == 1 || value1 == 3) && (value == 1 || value == 3)){
+            document.getElementById('trLicitacao').style.display = "";
+        }
+
+        if((value1 == 1 || value1 == 3) && (value == 2 || value == 4 || value == 5 ||  value == 6 || value == 7 || value == 8 || value == 9)){
+            document.getElementById('trLicitacao').style.display = "none";
         }
 
         if(value != 4){
@@ -1652,6 +1727,60 @@ db_app::load("dbtextFieldData.widget.js");
 
         if(erro==true){
             document.form1.si06_objetoadesao.focus();
+        }
+    }
+    /*
+    *função para veiricar se possui reajuste e habilitar novas entradas
+    */
+    function js_possuireajuste(){
+        
+        iPossuicriterio = document.form1.ac16_reajuste.value;
+        if(iPossuicriterio == 1){
+            document.getElementById('tdcriterioreajuste').style.display = 'inline';
+            document.getElementById('trdatareajuste').style.display = 'inline';
+            document.getElementById('trperiodoreajuste').style.display = 'inline';
+        }else{
+            document.getElementById('tdcriterioreajuste').style.display = 'none';
+            document.getElementById('trdatareajuste').style.display = 'none';
+            document.getElementById('trperiodoreajuste').style.display = 'none';
+            document.getElementById('trdescricaoreajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoreajuste').value = '';
+            document.form1.ac16_indicereajuste.options[0].selected = true;
+            document.form1.ac16_criterioreajuste.options[0].selected = true;
+            document.getElementById('ac16_periodoreajuste').value = '';
+            document.getElementById('ac16_datareajuste').value = null;
+        }
+    }
+
+    function js_indicereajuste(){
+        iIndicereajuste = document.form1.ac16_indicereajuste.value;
+        if(iIndicereajuste == 6){
+            document.getElementById('trdescricaoindicereajuste').style.display = '';
+        }else{
+            document.getElementById('trdescricaoindicereajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoindice').value = '';
+        }
+    }
+
+    function js_criterio(){
+        icriterio = document.form1.ac16_criterioreajuste.value;
+
+        if(icriterio == 1){
+            document.getElementById('tdindicereajuste').style.display = 'inline';
+            document.getElementById('trdescricaoreajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoreajuste').value = '';
+        }else if(icriterio == 2 || icriterio == 3){
+            document.getElementById('tdindicereajuste').style.display = 'none';
+            document.getElementById('trdescricaoreajuste').style.display = '';
+            document.form1.ac16_indicereajuste.options[0].selected = true;
+            document.getElementById('trdescricaoindicereajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoindice').value = '';
+        }else{
+            document.getElementById('trdescricaoreajuste').style.display = 'none';
+            document.getElementById('tdindicereajuste').style.display = 'none';
+            document.form1.ac16_indicereajuste.options[0].selected = true;
+            document.getElementById('trdescricaoindicereajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoindice').value = '';
         }
     }
 </script>

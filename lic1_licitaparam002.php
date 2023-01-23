@@ -41,21 +41,10 @@ $cllicitaparam = new cl_licitaparam;
 $db_opcao = 22;
 
 $db_botao = false;
-if(isset($alterar)){
-   db_inicio_transacao();
-   $result = $cllicitaparam->sql_record($cllicitaparam->sql_query(DB_getsession("DB_instit")));
-   if($result==false || $cllicitaparam->numrows==0){
-     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
-     $cllicitaparam->l12_escolherprocesso = $l12_escolherprocesso;
-     $cllicitaparam->l12_escolheprotocolo = $l12_escolheprotocolo;
-     $cllicitaparam->l12_qtdediasliberacaoweb = $l12_qtdediasliberacaoweb;
-     $cllicitaparam->l12_tipoliberacaoweb = $l12_tipoliberacaoweb;
-     $cllicitaparam->l12_usuarioadjundica = $l12_usuarioadjundica;
-     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
-     $cllicitaparam->l12_pncp = $l12_pncp;
-     $cllicitaparam->l12_instit = DB_getsession("DB_instit");
-     $cllicitaparam->incluir(DB_getsession("DB_instit"));
-   }else {
+if (isset($alterar)) {
+  db_inicio_transacao();
+  $result = $cllicitaparam->sql_record($cllicitaparam->sql_query(DB_getsession("DB_instit")));
+  if ($result == false || $cllicitaparam->numrows == 0) {
     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
     $cllicitaparam->l12_escolherprocesso = $l12_escolherprocesso;
     $cllicitaparam->l12_escolheprotocolo = $l12_escolheprotocolo;
@@ -63,74 +52,90 @@ if(isset($alterar)){
     $cllicitaparam->l12_tipoliberacaoweb = $l12_tipoliberacaoweb;
     $cllicitaparam->l12_usuarioadjundica = $l12_usuarioadjundica;
     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
-     $cllicitaparam->l12_pncp = $l12_pncp;
-     $cllicitaparam->l12_instit = DB_getsession("DB_instit");
-     $cllicitaparam->alterar(db_getsession("DB_instit"));
-   }
-   db_fim_transacao();
+    $cllicitaparam->l12_pncp = $l12_pncp;
+    $cllicitaparam->l12_numeracaomanual = $l12_numeracaomanual;
+    $cllicitaparam->l12_instit = DB_getsession("DB_instit");
+    $cllicitaparam->incluir(DB_getsession("DB_instit"));
+  } else {
+    $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
+    $cllicitaparam->l12_escolherprocesso = $l12_escolherprocesso;
+    $cllicitaparam->l12_escolheprotocolo = $l12_escolheprotocolo;
+    $cllicitaparam->l12_qtdediasliberacaoweb = $l12_qtdediasliberacaoweb;
+    $cllicitaparam->l12_tipoliberacaoweb = $l12_tipoliberacaoweb;
+    $cllicitaparam->l12_usuarioadjundica = $l12_usuarioadjundica;
+    $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
+    $cllicitaparam->l12_pncp = $l12_pncp;
+    $cllicitaparam->l12_numeracaomanual = $l12_numeracaomanual;
+    $cllicitaparam->l12_instit = DB_getsession("DB_instit");
+    $cllicitaparam->alterar(db_getsession("DB_instit"));
+  }
+  db_fim_transacao();
 }
 $db_opcao = 2;
 
 $result = $cllicitaparam->sql_record($cllicitaparam->sql_query(db_getsession("DB_instit")));
 
-if($result!=false && $cllicitaparam->numrows>0){
-  db_fieldsmemory($result,0);
+if ($result != false && $cllicitaparam->numrows > 0) {
+  db_fieldsmemory($result, 0);
 } else {
-	$l12_tipoliberacaoweb = 1;
+  $l12_tipoliberacaoweb = 1;
 }
 
 $db_botao = true;
 ?>
 <html>
-<head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 
-<link href="estilos.css" rel="stylesheet" type="text/css">
+<head>
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-    <center>
-	<?
-	include("forms/db_frmlicitaparam.php");
-	?>
-    </center>
-	</td>
-  </tr>
-</table>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+  <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+    <tr>
+      <td width="360" height="18">&nbsp;</td>
+      <td width="263">&nbsp;</td>
+      <td width="25">&nbsp;</td>
+      <td width="140">&nbsp;</td>
+    </tr>
+  </table>
+  <table width="790" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+        <center>
+          <?
+          include("forms/db_frmlicitaparam.php");
+          ?>
+        </center>
+      </td>
+    </tr>
+  </table>
+  <?
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
 </body>
+
 </html>
 <?
-if(isset($alterar)){
-  if($cllicitaparam->erro_status=="0"){
-    $cllicitaparam->erro(true,false);
-    $db_botao=true;
+if (isset($alterar)) {
+  if ($cllicitaparam->erro_status == "0") {
+    $cllicitaparam->erro(true, false);
+    $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($cllicitaparam->erro_campo!=""){
-      echo "<script> document.form1.".$cllicitaparam->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$cllicitaparam->erro_campo.".focus();</script>";
+    if ($cllicitaparam->erro_campo != "") {
+      echo "<script> document.form1." . $cllicitaparam->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $cllicitaparam->erro_campo . ".focus();</script>";
     }
-  }else{
-    $cllicitaparam->erro(true,true);
+  } else {
+    $cllicitaparam->erro(true, true);
   }
 }
-if($db_opcao==22){
+if ($db_opcao == 22) {
   echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>

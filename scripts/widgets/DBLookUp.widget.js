@@ -39,48 +39,6 @@ DBLookUp = function (oAncora, oInputID, oInputDescricao, oParametros) {
 
   this.__init();
 
-  var lHabilitado = true;
-
-  this.habilitar = function() {
-
-    if (lHabilitado) {
-      return true;
-    }
-
-    this.oInputID.classList.remove("readonly");
-    this.oInputID.readOnly = false;
-
-    if ( !(this.oAncora instanceof HTMLInputElement) ){
-
-      this.oAncora.href = "javascript:;";
-      this.oAncora.classList.add("DBAncora");
-    }
-    this.oAncora.onclick   = this.eventFunctions.click.bind(this);
-    this.oInputID.onchange = this.eventFunctions.change.bind(this);
-
-    lHabilitado = true;
-  };
-
-  this.desabilitar = function() {
-
-    if (!lHabilitado) {
-      return true;
-    }
-
-    this.oInputID.readOnly = true;
-    this.oInputID.onchange = null;
-    this.oAncora.classList.remove("DBAncora");
-
-    if ( !(this.oAncora instanceof HTMLInputElement) ){
-
-      this.oInputID.classList.add("readonly");
-      this.oAncora.removeAttribute("href");
-    }
-    this.oAncora.onclick = null;
-
-    lHabilitado = false;
-  };
-};
 
 /**
  * Funзгo __init para alterar os elementos necessбrios
