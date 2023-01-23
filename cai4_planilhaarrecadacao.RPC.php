@@ -529,7 +529,7 @@ function buscaReceitaFundep($iReceita) {
         $sSqlTabRec = $oDaoTabRec->sql_query_concarpeculiar(null, $sCampos, null, $sWhere);
         $rsTabRec 	= $oDaoTabRec->sql_record($sSqlTabRec);
         
-    }if($iReceita =='15420007'){
+  }if($iReceita =='15420007'){
        if (db_getsession("DB_anousu") > 2022) 
               $sWhere 	= "k02_estorc like '417155001%' and o70_codigo = '15420000' limit 1";
           else
@@ -547,6 +547,10 @@ function buscaReceitaFundep($iReceita) {
 		  $sMsgErro = "Para realizar arrecadação da receita do FUNDEB é necessário que a receita de fonte 119 esteja cadastrada na tesouraria.";
     if($iReceita == '166')
 		  $sMsgErro = "Para realizar arrecadação da receita do FUNDEB é necessário que a receita de fonte 167 esteja cadastrada na tesouraria.";
+    if($iReceita == '15400007')
+		  $sMsgErro = "Para realizar arrecadação da receita do FUNDEB é necessário que a receita de fonte 15400000 esteja cadastrada na tesouraria.";
+    if($iReceita == '15420007')
+		  $sMsgErro = "Para realizar arrecadação da receita do FUNDEB é necessário que a receita de fonte 15420000 esteja cadastrada na tesouraria.";
 		
       throw new BusinessException($sMsgErro);
 
