@@ -839,7 +839,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
   function js_mostrapcmater(chave, erro, lVeic, servico) {
 
 
-
     if (erro == true) {
       document.form1.pc16_codmater.focus();
       document.form1.pc16_codmater.value = '';
@@ -847,7 +846,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
     } else {
       document.form1.pc01_descrmater.value = chave;
-      if (servico == 'Sim') {
+      if (servico == 't') {
         document.getElementById('titleUnidade').style.display = "none";
         document.getElementById('pc17_unid').style.display = "none";
         document.getElementById('ctnServicoQuantidade').style.display = "";
