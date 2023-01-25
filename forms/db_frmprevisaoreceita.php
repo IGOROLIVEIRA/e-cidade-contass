@@ -3,8 +3,12 @@
 
     $iAnousu =  db_getsession('DB_anousu');
     $clorcfontes = new cl_orcfontes();
-
-    $sWhere = "o70_codigo in ('122', '123', '124', '142', '163') and o70_anousu = ".$iAnousu." and o70_instit = ".db_getsession("DB_instit")." and o70_valor > 0 group by 1, 2, 3, 4, 5";
+    
+    if ($iAnousu < 2023)
+    $sWhere = "o70_codigo in ('122', '123', '124', '142', '163','171','172','173','176','177','178','181','182','183') and o70_anousu = ".$iAnousu." and o70_instit = ".db_getsession("DB_instit")." and o70_valor > 0 group by 1, 2, 3, 4, 5";
+    
+    if ($iAnousu > 2022)
+    $sWhere = "o70_codigo in ('15700000', '16310000', '17000000', '16650000', '17130070','15710000','15720000','15750000','16320000','16330000','16360000','17010000','17020000','17030000') and o70_anousu = ".$iAnousu." and o70_instit = ".db_getsession("DB_instit")." and o70_valor > 0 group by 1, 2, 3, 4, 5";
 
     if ($iAnousu >= 2020) {
 
