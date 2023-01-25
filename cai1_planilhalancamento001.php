@@ -720,7 +720,7 @@ if ($oInstit->db21_usasisagua == "t") {
       $('op01_dataassinaturacop').value = '';
     }
 
-    js_mostrarNotificacaoOP(oSaltesOP);
+    //js_mostrarNotificacaoOP(oSaltesOP);
   }
 
   function js_retornoSaltesConvenio(oAjax) {
@@ -922,7 +922,7 @@ if ($oInstit->db21_usasisagua == "t") {
         $('k81_convenio').value = '';
         $('c206_objetoconvenio').value = '';
 
-      }  
+      }
     }else if ($('anoUsu').value == 2022) {
       if (iCodRecursoConta == 122 || iCodRecursoConta == 123 || iCodRecursoConta == 124 || iCodRecursoConta == 142 || iCodRecursoConta == 163 || iCodRecursoConta == 171 || iCodRecursoConta == 172 || iCodRecursoConta == 173 || iCodRecursoConta == 176 || iCodRecursoConta == 177 || iCodRecursoConta == 178 || iCodRecursoConta == 181 || iCodRecursoConta == 182 || iCodRecursoConta == 183) {
         js_getSaltesConvenio(iCodigoConta);
@@ -1069,7 +1069,7 @@ if ($oInstit->db21_usasisagua == "t") {
     js_mostrarNotificacaoEstruturais();
     js_mostrarNotificacaoConta();
     js_mostrarNotificacaoConvenio();
-    js_mostrarNotificacaoOP();
+    //js_mostrarNotificacaoOP();
   }
 
   if ($('anoUsu').value >= 2022) {
@@ -1151,7 +1151,7 @@ if ($oInstit->db21_usasisagua == "t") {
       js_mostrarNotificacaoEstruturais();
       js_mostrarNotificacaoConta();
       js_mostrarNotificacaoConvenio();
-      js_mostrarNotificacaoOP();
+      //js_mostrarNotificacaoOP();
 
     }
   } else {
@@ -1197,7 +1197,7 @@ if ($oInstit->db21_usasisagua == "t") {
       js_mostrarNotificacaoEstruturais();
       js_mostrarNotificacaoConta();
       js_mostrarNotificacaoConvenio();
-      js_mostrarNotificacaoOP();
+      //js_mostrarNotificacaoOP();
 
     }
 
@@ -1394,7 +1394,7 @@ if ($oInstit->db21_usasisagua == "t") {
         alert("É obrigatório informar o campo: Referente a Emenda Parlamentar.");
         return false;
       }
-    }  
+    }
     if ($('anoUsu').value == 2022) {
       aEstruts = ['4172150', '4172151', '4175150', '4171550'];
       aEstrutsDed = ['4951728011', '4951728012', '4951758011', '4951728991'];
@@ -1477,7 +1477,7 @@ if ($oInstit->db21_usasisagua == "t") {
       return false;
     }
     if ($('anoUsu').value > 2022) {
-     
+
       switch (Number($F('recurso'))) {
 
           case 15700000:
@@ -1594,7 +1594,7 @@ if ($oInstit->db21_usasisagua == "t") {
           }
     }
     else if ($('anoUsu').value == 2022) {
-    
+
       switch (Number($F('recurso'))) {
 
         case 122:
@@ -2865,43 +2865,79 @@ if ($oInstit->db21_usasisagua == "t") {
    */
   function js_arredondamentoFundeb(fValor, iTipo) {
 
-    if ($('recurso').value == '118') {
+        if ($('recurso').value == '118') {
 
-      let fTotal = js_round((new Number(fValor)), 2);
-      let fVl118 = js_round((new Number(fValor) * 0.70), 2);
-      let fVl119 = js_round((new Number(fValor) * 0.30), 2);
+            let fTotal = js_round((new Number(fValor)), 2);
+            let fVl118 = js_round((new Number(fValor) * 0.70), 2);
+            let fVl119 = js_round((new Number(fValor) * 0.30), 2);
 
-      let fDif = js_round((fTotal - (fVl118 + fVl119)), 2);
+            let fDif = js_round((fTotal - (fVl118 + fVl119)), 2);
 
-      if (fDif > 0) {
-        fVl118 += fDif;
-        fVl119 = js_round((fTotal - fVl118), 2);
-      } else {
-        fVl118 += fDif;
-        fVl119 += fDif;
-        fVl118 = js_round((fTotal - fVl119), 2);
-      }
-      return iTipo == 118 ? fVl118 : fVl119;
+            if (fDif > 0) {
+                fVl118 += fDif;
+                fVl119 = js_round((fTotal - fVl118), 2);
+            } else {
+                fVl118 += fDif;
+                fVl119 += fDif;
+                fVl118 = js_round((fTotal - fVl119), 2);
+            }
+            return iTipo == 118 ? fVl118 : fVl119;
+        }
+        if ($('recurso').value == '166') {
+
+            let fTotal = js_round((new Number(fValor)), 2);
+            let fVl166 = js_round((new Number(fValor) * 0.70), 2);
+            let fVl167 = js_round((new Number(fValor) * 0.30), 2);
+
+            let fDif = js_round((fTotal - (fVl166 + fVl167)), 2);
+
+            if (fDif > 0) {
+                fVl166 += fDif;
+                fVl167 = js_round((fTotal - fVl166), 2);
+            } else {
+                fVl166 += fDif;
+                fVl167 += fDif;
+                fVl166 = js_round((fTotal - fVl167), 2);
+            }
+            return iTipo == 166 ? fVl166 : fVl167;
+        }
+
+        if ($('recurso').value == '15400007') {
+
+            let fTotal = js_round((new Number(fValor)), 2);
+            let fVl15400007 = js_round((new Number(fValor) * 0.70), 2);
+            let fVl15400000 = js_round((new Number(fValor) * 0.30), 2);
+
+            let fDif = js_round((fTotal - (fVl15400007 + fVl15400000)), 2);
+
+            if (fDif > 0) {
+               fVl15400007 += fDif;
+               fVl15400000 = js_round((fTotal - fVl15400007), 2);
+            } else {
+               fVl15400007 += fDif;
+               fVl15400000 += fDif;
+               fVl15400007 = js_round((fTotal - fVl15400000), 2);
+            }
+            return iTipo == 15400007 ? fVl15400007 : fVl15400000;
+        }
+
+        if ($('recurso').value == '15420007') {
+
+            let fTotal = js_round((new Number(fValor)), 2);
+            let fVl15420007 = js_round((new Number(fValor) * 0.70), 2);
+            let fVl15400007 = js_round((new Number(fValor) * 0.30), 2);
+
+            let fDif = js_round((fTotal - (fVl15420007 + fVl15400007)), 2);
+
+            if (fDif > 0) {
+               fVl15420007 += fDif;
+               fVl15400007 = js_round((fTotal - fVl15420007), 2);
+            } else {
+               fVl15420007 += fDif;
+               fVl15400007 += fDif;
+               fVl15420007 = js_round((fTotal - fVl15400007), 2);
+            }
+            return iTipo == 15420007 ? fVl15420007 : fVl15400007;
+        }
     }
-    if ($('recurso').value == '166') {
-
-      let fTotal = js_round((new Number(fValor)), 2);
-      let fVl166 = js_round((new Number(fValor) * 0.70), 2);
-      let fVl167 = js_round((new Number(fValor) * 0.30), 2);
-
-      let fDif = js_round((fTotal - (fVl166 + fVl167)), 2);
-
-      if (fDif > 0) {
-        fVl166 += fDif;
-        fVl167 = js_round((fTotal - fVl166), 2);
-      } else {
-        fVl166 += fDif;
-        fVl167 += fDif;
-        fVl166 = js_round((fTotal - fVl167), 2);
-      }
-      if ($('anoUsu').value > 2022)
-        return iTipo == 15420007 ? fVl166 : fVl167;
-      return iTipo == 166 ? fVl166 : fVl167;
-    }
-  }
 </script>
