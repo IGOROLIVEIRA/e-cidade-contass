@@ -81,6 +81,7 @@ class cl_protparam
                  p90_impdepto = bool = Imprime Departamento
                  p90_db_documentotemplate = int4 = Documento Template
                  p90_impdepto = bool = Autorização Automática de Protocolo
+                 p90_protocolosigiloso = bool = Ativação de Protocolo Sigiloso
                  p90_novatelaprotocolo = bool = Utilização da nova tela de protocolo
                  ";
   //funcao construtor da classe
@@ -120,6 +121,7 @@ class cl_protparam
       $this->p90_instit = ($this->p90_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["p90_instit"] : $this->p90_instit);
       $this->p90_impdepto = ($this->p90_impdepto == "f" ? @$GLOBALS["HTTP_POST_VARS"]["p90_impdepto"] : $this->p90_impdepto);
       $this->p90_db_documentotemplate = ($this->p90_db_documentotemplate == "" ? @$GLOBALS["HTTP_POST_VARS"]["p90_db_documentotemplate"] : $this->p90_db_documentotemplate);
+      $this->p90_protocolosigiloso = ($this->p90_protocolosigiloso == "f" ? @$GLOBALS["HTTP_POST_VARS"]["p90_protocolosigiloso"] : $this->p90_protocolosigiloso);
       $this->p90_novatelaprotocolo = ($this->p90_novatelaprotocolo == "f" ? @$GLOBALS["HTTP_POST_VARS"]["p90_novatelaprotocolo"] : $this->p90_novatelaprotocolo);
     } else {
     }
@@ -266,6 +268,10 @@ class cl_protparam
       $this->erro_status = "0";
       return false;
     }
+    if ($this->p90_protocolosigiloso == null) {
+      $this->erro_sql = " Campo Protocolo Sigiloso nao Informado.";
+      $this->erro_campo = "p90_protocolosigiloso";
+    }
     if ($this->p90_novatelaprotocolo == null) {
       $this->erro_sql = " Campo utilizar nova tela de protocolo na inclusão do processo nao Informado.";
       $this->erro_campo = "p90_novatelaprotocolo";
@@ -296,6 +302,7 @@ class cl_protparam
                                       ,p90_impdepto
                                       ,p90_db_documentotemplate
                                       ,p90_autprotocolo
+                                      ,p90_protocolosigiloso
                                       ,p90_novatelaprotocolo
                        )
                 values (
@@ -316,6 +323,7 @@ class cl_protparam
                                ,'$this->p90_impdepto'
                                ,$this->p90_db_documentotemplate
                                ,'$this->p90_autprotocolo'
+                               ,'$this->p90_protocolosigiloso'
                                ,'$this->p90_novatelaprotocolo'
                       )";
     $result = db_query($sql);
@@ -551,6 +559,14 @@ class cl_protparam
         return false;
       }
     }
+    if (trim($this->p90_protocolosigiloso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["p90_protocolosigiloso"])) {
+      $sql  .= $virgula . " p90_protocolosigiloso = '$this->p90_impdepto' ";
+      $virgula = ",";
+      if (trim($this->p90_protocolosigiloso) == null) {
+        $this->erro_sql = " Campo Protocolo sigiloso nao Informado.";
+        $this->erro_campo = "p90_protocolosigiloso";
+      }
+    }
     if (trim($this->p90_novatelaprotocolo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["p90_novatelaprotocolo"])) {
       $sql  .= $virgula . " p90_novatelaprotocolo = '$this->p90_novatelaprotocolo' ";
       $virgula = ",";
@@ -671,7 +687,7 @@ class cl_protparam
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = explode("#", $campos);
+      $campos_sql = split("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -697,7 +713,7 @@ class cl_protparam
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = explode("#", $ordem);
+      $campos_sql = split("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -711,7 +727,7 @@ class cl_protparam
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = explode("#", $campos);
+      $campos_sql = split("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -729,7 +745,7 @@ class cl_protparam
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = explode("#", $ordem);
+      $campos_sql = split("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -932,6 +948,14 @@ class cl_protparam
         return false;
       }
     }
+    if (trim($this->p90_protocolosigiloso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["p90_protocolosigiloso"])) {
+      $sql  .= $virgula . " p90_protocolosigiloso = '$this->p90_protocolosigiloso' ";
+      $virgula = ",";
+      if (trim($this->p90_protocolosigiloso) == null) {
+        $this->erro_sql = " Campo Protocolo Sigiloso nao Informado.";
+        $this->erro_campo = "p90_protocolosigiloso";
+      }
+    }
     if (trim($this->p90_autprotocolo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["p90_autprotocolo"])) {
       $sql  .= $virgula . " p90_autprotocolo = '$this->p90_autprotocolo' ";
       $virgula = ",";
@@ -1019,7 +1043,7 @@ class cl_protparam
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = explode("#", $campos);
+      $campos_sql = split("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1038,7 +1062,7 @@ class cl_protparam
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = explode("#", $ordem);
+      $campos_sql = split("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
