@@ -53,6 +53,7 @@ class Instituicao {
   const COD_CLI_PMMONTALVANIA = 104;
   const COD_CLI_LAGOADOSPATOS = 19932;
   const COD_CLI_SERRANOPOLIS_DE_MINAS = 107;
+  const COD_CLI_PMJURAMENTO = 115;
 
   /**
    * Código da Instituicao

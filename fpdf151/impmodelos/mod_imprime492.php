@@ -350,7 +350,9 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->Setfont('Arial', 'B', 10);
     $this->objpdf->cell(30, 20,"Avisos", "LTB", 0, "C");
     $this->objpdf->Setfont('Arial', '', 8);
-    if ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA){
+
+    $codInstituicao = array(Instituicao::COD_CLI_PMMONTALVANIA, Instituicao::COD_CLI_PMJURAMENTO);
+    if (in_array($oInstit->getCodigoCliente(), $codInstituicao))    {
         $this->objpdf->rect(40, $this->yOld + 40, 100, 20);
         $this->objpdf->MultiCell(100, 5,$this->texto_aviso, 0, "L");
         $this->objpdf->rect(140, $this->yOld + 40, 60, 20);
