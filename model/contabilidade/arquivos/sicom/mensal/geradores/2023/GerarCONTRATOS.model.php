@@ -232,6 +232,9 @@ class GerarCONTRATOS extends GerarAM
                 $aCSVCONTRATOS20['si87_tipotermoaditivo']              =  str_pad($aCONTRATOS20['si87_tipotermoaditivo'], 2, "0", STR_PAD_LEFT);
                 $aCSVCONTRATOS20['si87_dscalteracao']                  =  substr($aCONTRATOS20['si87_dscalteracao'], 0, 250);
                 $aCSVCONTRATOS20['si87_novadatatermino']               =  implode("", array_reverse(explode("-", $aCONTRATOS20['si87_novadatatermino'])));
+                $aCSVCONTRATOS20['si87_percentualReajuste']                  =  number_format($aCONTRATOS20['si87_dscalteracao'], 2, ",", "");
+                $aCSVCONTRATOS20['si87_indiceUnicoReajuste']                  =  $aCONTRATOS20['si87_dscalteracao'];
+                $aCSVCONTRATOS20['si87_dscReajuste']                  =  substr($aCONTRATOS20['si87_dscReajuste'], 0, 300);
                 $aCSVCONTRATOS20['si87_valoraditivo']                  =  number_format($aCONTRATOS20['si87_valoraditivo'], 2, ",", "");
                 $aCSVCONTRATOS20['si87_datapublicacao']                =  implode("", array_reverse(explode("-", $aCONTRATOS20['si87_datapublicacao'])));
                 $aCSVCONTRATOS20['si87_veiculodivulgacao']             =  substr($aCONTRATOS20['si87_veiculodivulgacao'], 0, 50);

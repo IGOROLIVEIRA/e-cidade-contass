@@ -37,6 +37,9 @@ class cl_contratos302023
   var $si89_valorapostila = 0;
   var $si89_mes = 0;
   var $si89_instit = 0;
+  var $si89_percentualreajuste = null;
+  var $si89_indiceunicoreajuste = null;
+  var $si89_dscreajuste = null;
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
                  si89_sequencial = int8 = sequencial 
@@ -53,6 +56,9 @@ class cl_contratos302023
                  si89_valorapostila = float8 = Valor da Aposlila 
                  si89_mes = int8 = Mês 
                  si89_instit = int8 = Instituição 
+                 si89_percentualreajuste = float8 = Percentual de Reajuste 
+                 si89_indiceunicoreajuste = int8 = Indice do Reajuste
+                 si89_dscreajuste = varchar(300) = Descrição do Reajuste 
                  ";
   //funcao construtor da classe 
   function cl_contratos302023()
@@ -103,6 +109,9 @@ class cl_contratos302023
       $this->si89_valorapostila = ($this->si89_valorapostila == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_valorapostila"] : $this->si89_valorapostila);
       $this->si89_mes = ($this->si89_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_mes"] : $this->si89_mes);
       $this->si89_instit = ($this->si89_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_instit"] : $this->si89_instit);
+      $this->si89_percentualreajuste = ($this->si89_percentualreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_percentualreajuste"] : $this->si89_percentualreajuste);
+      $this->si89_indiceunicoreajuste = ($this->si89_indiceunicoreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_indiceunicoreajuste"] : $this->si89_indiceunicoreajuste);
+      $this->si89_dscreajuste = ($this->si89_dscreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_dscreajuste"] : $this->si89_dscreajuste);
     } else {
       $this->si89_sequencial = ($this->si89_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si89_sequencial"] : $this->si89_sequencial);
     }
@@ -204,6 +213,9 @@ class cl_contratos302023
                                       ,si89_valorapostila 
                                       ,si89_mes 
                                       ,si89_instit 
+                                      ,si89_percentualreajuste
+                                      ,si89_indiceunicoreajuste
+                                      ,si89_dscreajuste
                        )
                 values (
                                 $this->si89_sequencial 
@@ -220,6 +232,9 @@ class cl_contratos302023
                                ,$this->si89_valorapostila 
                                ,$this->si89_mes 
                                ,$this->si89_instit 
+                               ,$this->si89_percentualreajuste
+                               ,$this->si89_indiceunicoreajuste
+                               ,'$this->si89_dscreajuste'
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -266,6 +281,9 @@ class cl_contratos302023
       $resac = db_query("insert into db_acount values($acount,2010318,2010496,'','" . AddSlashes(pg_result($resaco, 0, 'si89_valorapostila')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010318,2010497,'','" . AddSlashes(pg_result($resaco, 0, 'si89_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010318,2011602,'','" . AddSlashes(pg_result($resaco, 0, 'si89_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010318,2010495,'','" . AddSlashes(pg_result($resaco, 0, 'si89_percentualreajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010318,2010495,'','" . AddSlashes(pg_result($resaco, 0, 'si89_indiceunicoreajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010318,2010495,'','" . AddSlashes(pg_result($resaco, 0, 'si89_dscreajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
     return true;
   }
@@ -350,6 +368,18 @@ class cl_contratos302023
       $sql  .= $virgula . " si89_dscalteracao = '$this->si89_dscalteracao' ";
       $virgula = ",";
     }
+    if (trim($this->si89_percentualreajuste) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si89_percentualreajuste"])) {
+      $sql  .= $virgula . " si89_percentualreajuste = '$this->si89_percentualreajuste' ";
+      $virgula = ",";
+    }
+    if (trim($this->si89_indiceunicoreajuste) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si89_indiceunicoreajuste"])) {
+      $sql  .= $virgula . " si89_indiceunicoreajuste = '$this->si89_indiceunicoreajuste' ";
+      $virgula = ",";
+    }
+    if (trim($this->si89_dscreajuste) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si89_dscreajuste"])) {
+      $sql  .= $virgula . " si89_dscreajuste = '$this->si89_dscreajuste' ";
+      $virgula = ",";
+    }
     if (trim($this->si89_valorapostila) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si89_valorapostila"])) {
       if (trim($this->si89_valorapostila) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si89_valorapostila"])) {
         $this->si89_valorapostila = "0";
@@ -422,6 +452,12 @@ class cl_contratos302023
           $resac = db_query("insert into db_acount values($acount,2010318,2010497,'" . AddSlashes(pg_result($resaco, $conresaco, 'si89_mes')) . "','$this->si89_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si89_instit"]) || $this->si89_instit != "")
           $resac = db_query("insert into db_acount values($acount,2010318,2011602,'" . AddSlashes(pg_result($resaco, $conresaco, 'si89_instit')) . "','$this->si89_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si89_percentualreajuste"]) || $this->si89_percentualreajuste != "")
+          $resac = db_query("insert into db_acount values($acount,2010318,2010495,'" . AddSlashes(pg_result($resaco, $conresaco, 'si89_percentualreajuste')) . "','$this->si89_percentualreajuste'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si89_indiceunicoreajuste"]) || $this->si89_indiceunicoreajuste != "")
+          $resac = db_query("insert into db_acount values($acount,2010318,2010495,'" . AddSlashes(pg_result($resaco, $conresaco, 'si89_indiceunicoreajuste')) . "','$this->si89_indiceunicoreajuste'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si89_dscreajuste"]) || $this->si89_dscreajuste != "")
+          $resac = db_query("insert into db_acount values($acount,2010318,2010495,'" . AddSlashes(pg_result($resaco, $conresaco, 'si89_dscreajuste')) . "','$this->si89_dscreajuste'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       }
     }
     $result = db_query($sql);
@@ -485,6 +521,9 @@ class cl_contratos302023
         $resac = db_query("insert into db_acount values($acount,2010318,2010496,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si89_valorapostila')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010318,2010497,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si89_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010318,2011602,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si89_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010318,2010495,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si89_percentualreajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010318,2010495,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si89_indiceunicoreajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010318,2010495,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si89_dscreajuste')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       }
     }
     $sql = " delete from contratos302023

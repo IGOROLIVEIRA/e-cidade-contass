@@ -341,9 +341,9 @@ switch ($oParam->exec) {
         $iAnoReferencia = db_getsession('DB_anousu');
 
         $sSql  = "SELECT si09_codorgaotce AS codorgao
-      FROM db_config
-      LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
-      WHERE codigo = " . db_getsession("DB_instit");
+        FROM db_config
+        LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
+        WHERE codigo = " . db_getsession("DB_instit");
 
         $rsOrgao = db_query($sSql);
         $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2, "0", STR_PAD_LEFT);
@@ -436,9 +436,9 @@ switch ($oParam->exec) {
         }
 
         /*$oEscritorCSV->zip("AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
-      $oEscritorCSV->adicionarArquivo("tmp/AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
-      $oEscritorProgramasCSV->zip("AIP_{$sInst}_{$iAnoReferencia}");
-      $oEscritorProgramasCSV->adicionarArquivo("tmp/AIP_{$sInst}_{$iAnoReferencia}.zip", "AIP_{$sInst}_{$iAnoReferencia}.zip");*/
+        $oEscritorCSV->adicionarArquivo("tmp/AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
+        $oEscritorProgramasCSV->zip("AIP_{$sInst}_{$iAnoReferencia}");
+        $oEscritorProgramasCSV->adicionarArquivo("tmp/AIP_{$sInst}_{$iAnoReferencia}.zip", "AIP_{$sInst}_{$iAnoReferencia}.zip");*/
 
         $aListaArquivos = " ";
         foreach ($aArrayArquivos as $oArquivo) {
