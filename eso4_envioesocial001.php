@@ -225,11 +225,11 @@ try {
 
     function js_processar() {
 
-        let result = confirm('Atenção: Confirmar envio das informações do mês ' + parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
+        //let result = confirm('Atenção: Confirmar envio das informações do mês ' + parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
 
-        if (!result) {
-            return false;
-        }
+        // if (!result) {
+        //     return false;
+        // }
 
         if ($F('anofolha').length < 4 || parseInt($("mesfolha").value) < 1 || parseInt($("mesfolha").value) > 12) {
 
