@@ -18,10 +18,11 @@ class Oc19482 extends PostgresMigration
                 $sqlConta = "SELECT c60_codcon FROM conplanoorcamento WHERE c60_estrut = '{$contasInserir->Estrutural}' AND c60_anousu>= 2023";
     
                 $aContaExiste = $this->fetchAll($sqlConta);
-                $c60_codcon = intval(current($this->fetchRow("SELECT nextval('conplanoorcamento_c60_codcon_seq')")));
-    
+                
                 if (empty($aContaExiste)) {
-    
+                    
+                    $c60_codcon = intval(current($this->fetchRow("SELECT nextval('conplanoorcamento_c60_codcon_seq')")));
+                    
                     $c60_anousu = 1;
                     $c60_estrut = "$contasInserir->Estrutural";
                     $c60_descr = substr("$contasInserir->Descricao",0,50);
