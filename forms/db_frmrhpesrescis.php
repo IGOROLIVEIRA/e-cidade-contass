@@ -39,10 +39,6 @@ $clrotulo->label("r59_menos1");
 $clrotulo->label("r59_aviso");
 $clrotulo->label("rh02_seqpes");
 $clrotulo->label("rh02_codreg");
-
-db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js");
-db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js, widgets/DBHint.widget.js");
-db_app::load("estilos.css, grid.style.css");
 ?>
 <form name="form1" method="post" action="pes4_rhpesrescis002.php">
 <center>
