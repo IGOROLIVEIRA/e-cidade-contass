@@ -1001,11 +1001,11 @@ function situacao_funcionario($registro = null, $datafim = null)
        *
        * Ex.: 45 dias de afastamento considera com afastamento apenas 15 dias
        */
-      if ($afasta[0]["r45_situac"] == Afastamento::AFASTADO_DOENCA_MAIS_30_DIAS) {
+      /* if($afasta[0]["r45_situac"] == Afastamento::AFASTADO_DOENCA_MAIS_30_DIAS) {
 
         $sDataAfastamento        = new DBDate($afasta[0]["r45_dtafas"]);
         $afasta[0]["r45_dtafas"] = $sDataAfastamento->adiantarPeriodo(30, 'd')->getDate();
-      }
+      }*/
 
       // Caso acha afastamento e data de retorno for maior ou igual da de afastamento ou retornou
 
@@ -1090,15 +1090,15 @@ function situacao_funcionario($registro = null, $datafim = null)
 
         //echo "<BR> Rescisao efetuada no ano e mes da folha";
 
-        $dias_pagamento_sf = db_day($pessoal[$Ipessoal]["r01_recis"]);
+        $dias_pagamento_sf = (db_day($pessoal[$Ipessoal]["r01_recis"]) > 30 ? 30 : db_day($pessoal[$Ipessoal]["r01_recis"]));
       } elseif ((db_year($pessoal[$Ipessoal]["r01_recis"]) < db_val(db_substr($subpes, 1, 4)))
         || (db_year($pessoal[$Ipessoal]["r01_recis"]) == db_val(db_substr($subpes, 1, 4))
           && db_month($pessoal[$Ipessoal]["r01_recis"]) < db_val(db_substr($subpes, -2)))
       ) {
-        //echo "<BR> Rescisao efetuada antes do ano e mes da folha --> ".$pessoal[$Ipessoal]["r01_recis"];
+          //echo "<BR> Rescisao efetuada antes do ano e mes da folha --> ".$pessoal[$Ipessoal]["r01_recis"];
 
-        $dias_pagamento_sf = 0;
-      }
+          $dias_pagamento_sf = 0;
+        }
     }
   }
   //  echo "<br>  dias_pagamento_sf --> $dias_pagamento_sf ";
