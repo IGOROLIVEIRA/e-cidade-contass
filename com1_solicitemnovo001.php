@@ -559,35 +559,14 @@ if (isset($incluir) && $sqlerro == false) {
 		// echo "<br>" . $pc11_servicoquantidade; die();
 
 
-		if ($pc11_servicoquantidade == 'true' || $pc01_servico == "f" && $sqlerro == false) {
-
-			$clsolicitemunid->pc17_unid = $pc17_unid;
-			$clsolicitemunid->pc17_quant = 1;
-			$clsolicitemunid->pc17_codigo = $pc11_codigo;
-			$clsolicitemunid->incluir($pc11_codigo);
-			if ($clsolicitemunid->erro_status == 0) {
-				$erro_msg = $clsolicitemunid->erro_msg;
-				$sqlerro = true;
-			}
+		$clsolicitemunid->pc17_unid = $pc17_unid;
+		$clsolicitemunid->pc17_quant = 1;
+		$clsolicitemunid->pc17_codigo = $pc11_codigo;
+		$clsolicitemunid->incluir($pc11_codigo);
+		if ($clsolicitemunid->erro_status == 0) {
+			$erro_msg = $clsolicitemunid->erro_msg;
+			$sqlerro = true;
 		}
-
-		/**
-		 * Quando o Serviço Controlado por Quantidade: NÃO o sistema sete automaticamente a unidade de medida serviço para ele
-		 * @see: OC 3666
-		 */
-
-		if ($pc11_servicoquantidade == 'false' && $pc01_servico == "t") {
-			$clsolicitemunid->pc17_unid = 999999;
-			$clsolicitemunid->pc17_quant = 1;
-			$clsolicitemunid->pc17_codigo = $pc11_codigo;
-			$clsolicitemunid->incluir($pc11_codigo);
-			if ($clsolicitemunid->erro_status == 0) {
-				$erro_msg = $clsolicitemunid->erro_msg;
-				$sqlerro = true;
-			}
-		}
-
-
 
 		if ($sqlerro == false && $pc30_seltipo == 't') {
 			$result_vlsol = $clsolicitatipo->sql_record($clsolicitatipo->sql_query_file($pc11_numero, "pc12_vlrap"));
@@ -849,42 +828,22 @@ db_fieldsmemory($result_pcparam1, 0);
 		}
 
 		//if ((!isset($pc01_servico) || (isset($pc01_servico) && ($pc01_servico == "f" || trim($pc01_servico) == ""))) && $sqlerro == false) {
-		if ($pc11_servicoquantidade == 'true' || $pc01_servico == "f" && $sqlerro == false) {
-			$clsolicitemunid->pc17_unid = $pc17_unid;
-			$clsolicitemunid->pc17_quant = $pc17_quant;
-			$clsolicitemunid->pc17_codigo = $pc11_codigo;
+		$clsolicitemunid->pc17_unid = $pc17_unid;
+		$clsolicitemunid->pc17_quant = $pc17_quant;
+		$clsolicitemunid->pc17_codigo = $pc11_codigo;
 
-			$result_solicitemunid = $clsolicitemunid->sql_record($clsolicitemunid->sql_query_file($pc11_codigo));
-			if ($clsolicitemunid->numrows > 0) {
-				$clsolicitemunid->alterar($pc11_codigo);
-			} else {
-				$clsolicitemunid->incluir($pc11_codigo);
-			}
-			if ($clsolicitemunid->erro_status == 0) {
-				$erro_msg = $clsolicitemunid->erro_msg;
-				$sqlerro = true;
-			}
+		$result_solicitemunid = $clsolicitemunid->sql_record($clsolicitemunid->sql_query_file($pc11_codigo));
+		if ($clsolicitemunid->numrows > 0) {
+			$clsolicitemunid->alterar($pc11_codigo);
+		} else {
+			$clsolicitemunid->incluir($pc11_codigo);
 		}
-		/**
-		 * Quando o Serviço Controlado por Quantidade: NÃO o sistema sete automaticamente a unidade de medida serviço para ele
-		 * @see: OC 3666
-		 */
+		if ($clsolicitemunid->erro_status == 0) {
+			$erro_msg = $clsolicitemunid->erro_msg;
+			$sqlerro = true;
+		}
 
-		if ($pc11_servicoquantidade == 'false' && $pc01_servico == "t") {
-			$clsolicitemunid->pc17_unid = 999999;
-			$clsolicitemunid->pc17_quant = 1;
-			$clsolicitemunid->pc17_codigo = $pc11_codigo;
-			$result_solicitemunid = $clsolicitemunid->sql_record($clsolicitemunid->sql_query_file($pc11_codigo));
-			if ($clsolicitemunid->numrows > 0) {
-				$clsolicitemunid->alterar($pc11_codigo);
-			} else {
-				$clsolicitemunid->incluir($pc11_codigo);
-			}
-			if ($clsolicitemunid->erro_status == 0) {
-				$erro_msg = $clsolicitemunid->erro_msg;
-				$sqlerro = true;
-			}
-		}
+
 		if ($sqlerro == false && isset($pc16_codmater) && $pc16_codmater != "") {
 			$clsolicitempcmater->excluir(@$pcmateranterior, @$pc11_codigo);
 			if ($clsolicitempcmater->erro_status == 0) {
