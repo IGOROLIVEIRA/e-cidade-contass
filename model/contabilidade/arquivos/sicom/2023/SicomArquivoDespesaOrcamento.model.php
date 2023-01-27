@@ -68,9 +68,7 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
      * selecionar arquivo xml de dados elemento da despesa
      */
     $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
-    if (!file_exists($sArquivo)) {
-      throw new Exception("Arquivo de elemento da despesa inexistente!");
-    }
+   
     $sTextoXml = file_get_contents($sArquivo);
     $oDOMDocument = new DOMDocument();
     $oDOMDocument->loadXML($sTextoXml);
