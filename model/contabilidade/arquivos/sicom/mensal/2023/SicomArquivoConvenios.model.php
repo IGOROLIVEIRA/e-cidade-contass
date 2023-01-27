@@ -351,7 +351,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 								FROM prevconvenioreceita
 									LEFT JOIN orcreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec 
 									LEFT JOIN convconvenios ON c206_sequencial = c229_convenio
-								WHERE o70_codigo IN ('15700000','16310000','17000000','16650000')
+								WHERE o70_codigo IN ('15700000', '16310000', '17000000', '16650000', '17130070','15710000','15720000','15750000','16320000','16330000','16360000','17010000','17020000','17030000')
 									AND o70_anousu = {$iAnoUsu}
 									AND o70_instit = {$iInstit}
 									AND o70_valor > 0
@@ -377,7 +377,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 										LEFT JOIN placaixarec ON k81_seqpla = k82_seqpla
 										LEFT JOIN convconvenios ON c206_sequencial = k81_convenio
 										LEFT JOIN prevconvenioreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec AND c229_convenio = c206_sequencial
-									WHERE o70_codigo IN ('15700000','16310000','17000000','16650000')
+									WHERE o70_codigo IN ('15700000', '16310000', '17000000', '16650000', '17130070','15710000','15720000','15750000','16320000','16330000','16360000','17010000','17020000','17030000')
 										AND o70_anousu = {$iAnoUsu}
 										AND o70_instit = {$iInstit}
 										AND o70_valor > 0
