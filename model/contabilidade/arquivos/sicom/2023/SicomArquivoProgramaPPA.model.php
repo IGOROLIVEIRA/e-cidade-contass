@@ -75,9 +75,7 @@ class SicomArquivoProgramaPPA extends SicomArquivoBase implements iPadArquivoBas
     $sSqlPrograma .= "WHERE p.o54_anousu = ". db_getsession("DB_anousu");
 
     $rsPrograma = db_query($sSqlPrograma) or die($sSqlPrograma);
-    $aCaracteres = array("°", chr(13), chr(10), "
-", "
-");
+    $aCaracteres = array("°", chr(13), chr(10), "", "");
 
     $sSqlVALOR = "select o58_programa,o28_anoref,round(sum(o28_valor),2) as o28_valor from orcdotacao inner join orcprojativprogramfisica on o28_orcprojativ = o58_projativ and o28_anousu = o58_anousu where o58_anousu = " . db_getsession("DB_anousu") . "  group by o58_programa,o28_anoref order by o58_programa,o28_anoref";
 
