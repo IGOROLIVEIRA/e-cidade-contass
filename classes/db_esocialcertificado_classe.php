@@ -61,7 +61,7 @@ class cl_esocialcertificado {
    }
 
   // funcao para inclusao
-  function incluir ($rh214_sequencial) { 
+  function incluir () { 
       $this->atualizacampos();
      if ($this->rh214_cgm == null ) { 
        $this->erro_sql = " Campo Cgm não informado.";
