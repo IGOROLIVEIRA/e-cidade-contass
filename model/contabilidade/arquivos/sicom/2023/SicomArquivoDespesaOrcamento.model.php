@@ -192,7 +192,19 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
       /**
        * o repetição ocorrerá para cada linha do array $aDadosAgrupados passando a linha do registro 10 a ser gerada
        */
-      foreach ($aDadosAgrupados as $oDado) {
+      $codDespesas = array();
+      $i = 0;
+      $controlador = 0;
+      $total = 0;
+      $comparar = 0;
+      $incremento = 0;
+      
+      foreach ($aDadosAgrupados as $oDadoaux) {
+          $codDespesas[$i] = $oDadoaux;
+          $i++;
+      }
+     
+      foreach ($aDadosAgrupados as $oDado) {        
         if ($oDado->vlTotalrecurso != 0) {
           $oDadosAcao = clone $oDado;
           unset($oDadosAcao->recursos);
@@ -201,13 +213,44 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
           /**
            * a repetição adicionará os registros tipo 11 abaixo do registro tipo 10 correspondente para serem gravados no arquivo
            */
-          foreach ($oDado->recursos as $oRecurso) {
+          if(count($codDespesas[$controlador]->recursos) > 1){
+
+            for($c = 0; $c < count($codDespesas[$controlador]->recursos); $c ++){
+              
+              for($d = 0; $d < count($codDespesas[$controlador]->recursos); $d ++){ 
+                 if($codDespesas[$controlador]->recursos[$c]->codFontRecursos == $codDespesas[$controlador]->recursos[$d]->codFontRecursos){
+                    $total += str_replace(",", ".", $codDespesas[$controlador]->recursos[$d]->valorFonte);
+                 }
+                  if($codDespesas[$controlador]->recursos[$c]->codFontRecursos == $codDespesas[$controlador]->recursos[$d]->codFontRecursos & $c > $d){
+                   $comparar = 1; 
+                 }
+              }
+                
+                 if($comparar == 0){   
+                    $codDespesas[$controlador]->recursos[$c]->tipoRegistro   = 11;
+                    $codDespesas[$controlador]->recursos[$c]->detalhesessao  = 11;
+                    $codDespesas[$controlador]->recursos[$c]->codDespesa     = $oDadosAcao->codDespesa;
+                    $codDespesas[$controlador]->recursos[$c]->valorFonte     = number_format($total, 2, ",", "");
+                    $this->aDados[] = $codDespesas[$controlador]->recursos[$c];
+                    $total = 0;
+                   
+                }  
+                $comparar = 0;  
+                $total = 0;
+                $incremento++; 
+     
+           }  
             
-            $oRecurso->tipoRegistro   = 11;
-            $oRecurso->detalhesessao  = 11;
-            $oRecurso->codDespesa     = $oDadosAcao->codDespesa;
-            $this->aDados[] = $oRecurso;
-          }
+           $total = 0;         
+          }else{
+            foreach ($oDado->recursos as $oRecurso) {
+                      $oRecurso->tipoRegistro   = 11;
+                      $oRecurso->detalhesessao  = 11;
+                      $oRecurso->codDespesa     = $oDadosAcao->codDespesa;
+                      $this->aDados[] = $oRecurso;
+              } 
+          }  
+          $controlador ++;
         }
       }
       /**
