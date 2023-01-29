@@ -197,7 +197,7 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
       $controlador = 0;
       $total = 0;
       $comparar = 0;
-      $incremento = 0;
+      
       
       foreach ($aDadosAgrupados as $oDadoaux) {
           $codDespesas[$i] = $oDadoaux;
@@ -237,7 +237,7 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
                 }  
                 $comparar = 0;  
                 $total = 0;
-                $incremento++; 
+               
      
            }  
             
@@ -250,8 +250,9 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
                       $this->aDados[] = $oRecurso;
               } 
           }  
-          $controlador ++;
+          
         }
+        $controlador ++;
       }
       /**
        * excluir tabela temporaria para a criacao da mesma com os dados da proxima instituicao
