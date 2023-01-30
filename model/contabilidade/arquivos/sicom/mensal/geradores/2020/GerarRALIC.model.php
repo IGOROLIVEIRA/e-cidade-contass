@@ -60,6 +60,7 @@ class GerarRALIC extends GerarAM
                 $aCSVRALIC10['si180_nroedital']                  = $aRALIC10['si180_nroedital'];
                 $aCSVRALIC10['si180_exercicioedital']            = $aRALIC10['si180_exercicioedital'];
                 $aCSVRALIC10['si180_dtpublicacaoeditaldo']       = $this->sicomDate($aRALIC10['si180_dtpublicacaoeditaldo']);
+                $aCSVRALIC10['si180_dtaberturaenvelopes']       = $this->sicomDate($aRALIC10['si180_dtaberturaenvelopes']);
                 $aCSVRALIC10['si180_link']                       = substr($aRALIC10['si180_link'], 0, 150);
                 $aCSVRALIC10['si180_tipolicitacao']              = $this->padLeftZero($aRALIC10['si180_tipolicitacao'], 1);
                 $aCSVRALIC10['si180_naturezaobjeto']             = $aRALIC10['si180_naturezaobjeto'] == 0 ? ' ' : $aRALIC10['si180_naturezaobjeto'];
