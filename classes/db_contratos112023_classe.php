@@ -204,7 +204,7 @@ class cl_contratos112023 {
                                ,$this->si84_mes
                                ,$this->si84_reg10
                                ,$this->si84_instit
-                               ,$this->si84_nrolote
+                               ," . ($this->si84_nrolote == "" ? "0" :  $this->si84_nrolote) . "
                       )";
      $result = db_query($sql);//die($sql);
      if($result==false){

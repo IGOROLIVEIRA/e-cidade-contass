@@ -161,6 +161,8 @@ class SicomArquivoParticipantesLicitacao extends SicomArquivoBase implements iPa
             $clpartlic10->si203_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
             $clpartlic10->si203_tipodocumento = $oDados10->tipodocumento;
             $clpartlic10->si203_nrodocumento = $oDados10->nrodocumento;
+            $clpartlic10->si203_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $clpartlic10->si203_instit = db_getsession("DB_instit");
             $clpartlic10->incluir(null);
 
             if ($clpartlic10->erro_status == 0) {

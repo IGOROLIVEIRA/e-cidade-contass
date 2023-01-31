@@ -407,10 +407,10 @@ class cl_contratos102023
                                ," . ($this->si83_databasereajuste == "null" || $this->si83_databasereajuste == "" ? "null" : "'" . $this->si83_databasereajuste . "'") . "
                                ," . ($this->si83_indiceunicoreajuste == "" ? "0" :  $this->si83_indiceunicoreajuste) . "
                                ," . ($this->si83_periodicidadereajuste == "" ? "''" :  $this->si83_periodicidadereajuste) . "
-                               ," . ($this->si83_dscreajuste == "" ? "''" :  $this->si83_dscreajuste) . "
-                               ," . ($this->si83_dscindice == "" ? "''" :  $this->si83_dscindice) . "
+                               ," . ($this->si83_dscreajuste == "" ? "''" : "'" . $this->si83_dscreajuste . "'") . "
+                               ," . ($this->si83_dscindice == "" ? "''" : "'" . $this->si83_dscindice . "'") . "
                       )";
-                      
+
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("", "", @pg_last_error());

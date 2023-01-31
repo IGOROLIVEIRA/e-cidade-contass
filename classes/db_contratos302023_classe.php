@@ -234,7 +234,7 @@ class cl_contratos302023
                                ,$this->si89_instit 
                                ," . ($this->si89_percentualreajuste == "" ? "0" :  $this->si89_percentualreajuste) . "
                                ," . ($this->si89_indiceunicoreajuste == "" ? "0" :  $this->si89_indiceunicoreajuste) . "
-                               ,'$this->si89_dscreajuste'
+                               ," . ($this->si89_dscreajuste == "" ? "''" : "'" . $this->si89_dscreajuste . "'") . "
                       )";
     $result = db_query($sql);
     if ($result == false) {

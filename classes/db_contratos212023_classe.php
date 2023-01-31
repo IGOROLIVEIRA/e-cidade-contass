@@ -210,7 +210,7 @@ class cl_contratos212023 {
                                ,$this->si88_mes
                                ,$this->si88_reg20
                                ,$this->si88_instit
-                               ,$this->si88_nroLote
+                               ," . ($this->si88_nroLote == "" ? "0" :  $this->si88_nroLote) . "
                       )";
      $result = db_query($sql);
      if($result==false){
