@@ -179,7 +179,7 @@ $oResult = db_utils::getColectionByRecord($oResult);
                     <?php endif; ?>
                 
                 <?php if($oResult[0]->tipoapostila==3){ 
-                    $sqlposicaoant = "select max(ac26_sequencial) as ac26_sequencial from acordoposicao  where ac26_acordo=(select ac26_acordo from acordoposicao where ac26_sequencial={$ac26_sequencial}) and ac26_numeroapostilamento < (select ac26_numeroapostilamento from acordoposicao where ac26_sequencial={$ac26_sequencial})";
+                    $sqlposicaoant = "select max(ac26_sequencial) as ac26_sequencial from acordoposicao  where ac26_acordo=(select ac26_acordo from acordoposicao where ac26_sequencial={$ac26_sequencial}) and ac26_numeroapostilamento < (select ac26_numeroapostilamento from acordoposicao where ac26_sequencial={$ac26_sequencial}) and ac26_numeroaditamento = ''";
                     $rsposicaoant = db_query($sqlposicaoant);
                     $oDadosposicaoant = db_utils::getColectionByRecord($rsposicaoant);
 
