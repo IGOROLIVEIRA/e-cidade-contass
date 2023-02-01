@@ -24,16 +24,24 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
+ini_set('display_erros', 'on');
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
+include("classes/db_licitaparam_classe.php");
 
 $oGet = db_utils::postMemory($_GET);
 
 $iAcao = ($oGet->acao ? $oGet->acao : 3);
+
+$oParam = new cl_licitaparam;
+$oParam = $oParam->sql_query(null, '*');
+$oParam = db_query($oParam);
+$oParam = db_utils::fieldsMemory($oParam);
+$oParam = $oParam->l12_pncp;
+
 ?>
 <html>
 
@@ -56,8 +64,12 @@ $iAcao = ($oGet->acao ? $oGet->acao : 3);
 <body class="body-default">
   <?php
 
-  include("forms/db_frmprocessocompra.php");
 
+  if ($oParam == 't') {
+    include("forms/db_frmprocessocompraPNCP.php");
+  } else {
+    include("forms/db_frmprocessocompra.php");
+  }
   db_menu(
     db_getsession("DB_id_usuario"),
     db_getsession("DB_modulo"),

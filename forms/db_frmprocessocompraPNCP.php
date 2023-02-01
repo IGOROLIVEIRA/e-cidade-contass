@@ -43,6 +43,10 @@ $clrotulo->label("descrdepto");
     textarea {
         resize: none;
     }
+
+    #pc80_numdispensa {
+        width: 169px;
+    }
 </style>
 
 <form id="processocompra" name="processocompra" method="post" action="">
@@ -118,15 +122,84 @@ $clrotulo->label("descrdepto");
                         </td>
                         <td colspan="2"></td>
                     </tr>
+                    <tr>
+                        <td>
+                            <label class="bold">Nº da Dispensa:</label>
+                        </td>
+                        <td>
+                            <?php
+                            db_input('pc80_numdispensa', 37, $Ipc80_numdispensa, true, 'text', 1);
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="bold">Dispensa por valor:</label>
+                        </td>
+                        <td>
+                            <?php
+                            $aDispensa = array(
+                                '' => 'Selecione',
+                                't' => 'Sim',
+                                'f' => 'Não',
+                            );
+
+                            db_select('pc80_dispvalor', $aDispensa, true, '', 'style="width:50%"');
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="bold">Orc. Sigiloso:</label>
+                        </td>
+                        <td>
+                            <?php
+                            $aOrc = array(
+                                '' => 'Selecione',
+                                't' => 'Sim',
+                                'f' => 'Não',
+                            );
+
+                            db_select('pc80_orcsigiloso', $aOrc, true, '', 'style="width:50%"');
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label class="bold">Subcontratação:</label>
+                        </td>
+                        <td>
+                            <?php
+                            $aSub = array(
+                                '' => 'Selecione',
+                                't' => 'Sim',
+                                'f' => 'Não',
+                            );
+
+                            db_select('pc80_subcontratacao', $aSub, true, '', 'style="width:50%"');
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <fieldset>
+                                <legend>Dados Complementares:</legend>
+                                <?php
+                                db_textarea('pc80_dadoscomplementares', 5, 70, $Ipc80_dadoscomplementares, true, 'text', 1, "", "", "", 735);
+                                ?>
+                            </fieldset>
+                        </td>
+                    </tr>
                     <!-- FIM - OC3770-->
-                    <td colspan="4">
+                    <tr>
+                        <td colspan="4">
 
-                        <fieldset class="text-center">
-                            <legend><?php echo $Spc80_resumo; ?></legend>
-                            <?php db_textarea('pc80_resumo', 4, 80, $Ipc80_resumo, true, 'text', $iAcao, "", "", "", 735); ?>
-                        </fieldset>
+                            <fieldset class="text-center">
+                                <legend><?php echo $Spc80_resumo; ?></legend>
+                                <?php db_textarea('pc80_resumo', 4, 80, $Ipc80_resumo, true, 'text', $iAcao, "", "", "", 735); ?>
+                            </fieldset>
 
-                    </td>
+                        </td>
                     </tr>
                 </table>
             </fieldset>
@@ -215,7 +288,12 @@ $clrotulo->label("descrdepto");
                 resumo: $('pc80_resumo'),
                 tipo_processo: $('pc80_tipoprocesso'),
                 lote: $('lote'),
-                criterioajudicacao: $('pc80_criterioadjudicacao')
+                criterioajudicacao: $('pc80_criterioadjudicacao'),
+                pc80_numdispensa: $('pc80_numdispensa'),
+                pc80_dispvalor: $('pc80_dispvalor'),
+                pc80_orcsigiloso: $('pc80_orcsigiloso'),
+                pc80_subcontratacao: $('pc80_subcontratacao'),
+                pc80_dadoscomplementares: $('pc80_dadoscomplementares')
             },
             lRedirecionaLote = false;
 
@@ -338,7 +416,7 @@ $clrotulo->label("descrdepto");
                     js_pesquisa();
                     return false;
                 }
-
+                console.log(oRetorno);
                 iCodigoProcesso = oRetorno.pc80_codproc;
 
                 oCampos.codigo_processo.value = oRetorno.pc80_codproc;
@@ -357,6 +435,23 @@ $clrotulo->label("descrdepto");
                 } else {
                     document.getElementById('pc80_criterioadjudicacao').selectedIndex = 3;
                 }
+                document.getElementById('pc80_numdispensa').value = oRetorno.pc80_numdispensa;
+                if (oRetorno.pc80_dispvalor == 't') {
+                    document.getElementById('pc80_dispvalor').selectedIndex = 1;
+                } else {
+                    document.getElementById('pc80_dispvalor').selectedIndex = 2;
+                }
+                if (oRetorno.pc80_orcsigiloso == 't') {
+                    document.getElementById('pc80_orcsigiloso').selectedIndex = 1;
+                } else {
+                    document.getElementById('pc80_orcsigiloso').selectedIndex = 2;
+                }
+                if (oRetorno.pc80_subcontratacao == 't') {
+                    document.getElementById('pc80_subcontratacao').selectedIndex = 1;
+                } else {
+                    document.getElementById('pc80_subcontratacao').selectedIndex = 2;
+                }
+                document.getElementById('pc80_dadoscomplementares').value = oRetorno.pc80_dadoscomplementares.urlDecode();
 
                 aLotes = (Object.isArray(oRetorno.aLotes) ? {} : oRetorno.aLotes);
 
@@ -638,6 +733,12 @@ $clrotulo->label("descrdepto");
                 iProcessoCompra: iCodigoProcesso,
                 sResumo: oCampos.resumo.value,
                 criterioaj: oCampos.criterioajudicacao.value,
+                pc80_numdispensa: oCampos.pc80_numdispensa.value,
+                pc80_dispvalor: oCampos.pc80_dispvalor.value,
+                pc80_orcsigiloso: oCampos.pc80_orcsigiloso.value,
+                pc80_subcontratacao: oCampos.pc80_subcontratacao.value,
+                pc80_dadoscomplementares: oCampos.pc80_dadoscomplementares.value,
+
                 aItens: aItensLote
             }
 
