@@ -2800,7 +2800,8 @@ class empenho {
          * para anular o item na solicitação
          */
         $clsolicitem = $this->usarDao("solicitem",true);
-        $ItemSol = $clsolicitem->sql_record($clsolicitem->sql_query_solicitem_emp(null, "distinct pc11_codigo", null,"e62_sequencial = " . $aItens[$iInd]->e62_sequencial));
+        $dbwhere = "pc10_solicitacaotipo = 5 and e62_sequencial = " . $aItens[$iInd]->e62_sequencial;
+        $ItemSol = $clsolicitem->sql_record($clsolicitem->sql_query_solicitem_emp(null, "distinct pc11_codigo", null,$dbwhere));
         $rsItemSol = db_utils::fieldsMemory($ItemSol,0);
          
         if(pg_num_rows($ItemSol) > 0){
@@ -3078,7 +3079,15 @@ class empenho {
 
         if($clsolicitem->numrows > 0){
 
-        $sSql = db_query("select distinct e54_autori autoriza, e54_anulad from empautitempcprocitem inner join empautoriza on e54_autori = e73_autori where e73_pcprocitem in (select pc81_codprocitem from pcprocitem where pc81_solicitem in (select pc11_codigo from solicitem where pc11_numero = {$oSolicitem->solicitacao}))");
+        $sSql = db_query("select distinct e54_autori autoriza,
+                                          e54_anulad
+                          from empautitempcprocitem
+                          inner join empautoriza on e54_autori = e73_autori
+                          where e73_pcprocitem in (select pc81_codprocitem
+                                                   from pcprocitem
+                                                   where pc81_solicitem in (select pc11_codigo
+                                                                            from solicitem
+                                                                            where pc11_numero = {$oSolicitem->solicitacao}))");
         $rsSql = $sSql;
         
         for($i = 0; $i < pg_num_rows($sSql); $i++){
