@@ -608,7 +608,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocessolicitacao;
             } else $clcontratos10->si83_tipoprocesso = $oDados10->tipoprocesso;
             $clcontratos10->si83_naturezaobjeto = $oDados10->ac02_acordonatureza;
-            $clcontratos10->si83_objetocontrato = substr($this->removeCaracteres($oDados10->ac16_objeto), 0, 500);
+            $clcontratos10->si83_objetocontrato = substr($this->removeCaracteres($oDados10->ac16_objeto), 0, 1000);
             $clcontratos10->si83_tipoinstrumento = $oDados10->ac16_acordocategoria;
             $clcontratos10->si83_datainiciovigencia = $oDados10->ac16_datainicio;
             $clcontratos10->si83_datafinalvigencia = $oDados10->ac16_datafim;
@@ -1037,16 +1037,16 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $clcontratos20->si87_novadatatermino = "";
                 }
                 if ($this->getTipoTermoAditivo($oAcordoPosicao) == '4') {
-                    $clcontratos20->si87_percentualReajuste = $oDados20->ac26_indicereajuste;
-                    $clcontratos20->si87_indiceUnicoReajuste = $oDados20->ac26_indicereajuste;
+                    $clcontratos20->si87_percentualreajuste = $oDados20->ac26_percentualreajuste;
+                    $clcontratos20->si87_indiceunicoreajuste = $oDados20->ac26_indicereajuste;
                 } else {
-                    $clcontratos20->si87_percentualReajuste = '';
-                    $clcontratos20->si87_indiceUnicoReajuste ='';
+                    $clcontratos20->si87_percentualreajuste = '';
+                    $clcontratos20->si87_indiceunicoreajuste ='';
                 }
                 if ($oDados20->ac26_indicereajuste=='6') {
-                    $clcontratos20->si87_dscReajuste = $oDados20->ac26_descricaoindice;
+                    $clcontratos20->si87_dscreajuste = $oDados20->ac26_descricaoindice;
                 } else {
-                    $clcontratos20->si87_dscReajuste = '';
+                    $clcontratos20->si87_dscreajuste = '';
                 }
                 
                 
@@ -1343,16 +1343,16 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $clcontratos20->si87_novadatatermino = "";
                 }
                 if ($this->getTipoTermoAditivo($oAcordoPosicao) == '4') {
-                    $clcontratos20->si87_percentualReajuste = $oDados20->ac26_indicereajuste;
-                    $clcontratos20->si87_indiceUnicoReajuste = $oDados20->ac26_indicereajuste;
+                    $clcontratos20->si87_percentualreajuste = $oDados20->ac26_percentualreajuste;
+                    $clcontratos20->si87_indiceunicoreajuste = $oDados20->ac26_indicereajuste;
                 } else {
-                    $clcontratos20->si87_percentualReajuste = '';
-                    $clcontratos20->si87_indiceUnicoReajuste ='';
+                    $clcontratos20->si87_percentualreajuste = '';
+                    $clcontratos20->si87_indiceunicoreajuste ='';
                 }
                 if ($oDados20->ac26_indicereajuste=='6') {
-                    $clcontratos20->si87_dscReajuste = $oDados20->ac26_descricaoindice;
+                    $clcontratos20->si87_dscreajuste = $oDados20->ac26_descricaoindice;
                 } else {
-                    $clcontratos20->si87_dscReajuste = '';
+                    $clcontratos20->si87_dscreajuste = '';
                 }
                 $iTotalPosicaoAnterior = 0;
                 $iTotalPosicaoAditivo = 0;
