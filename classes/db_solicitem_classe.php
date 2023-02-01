@@ -1484,6 +1484,7 @@ class cl_solicitem
     $sSql .= "        inner join empempitem           on e62_numemp     = e61_numemp";
     $sSql .= "        inner join solicitempcmater     on pc16_solicitem = pc11_codigo";
     $sSql .= "                                 and pc16_codmater        = e62_item";
+    $sSql .= "        inner join solicita             on pc10_numero    = pc11_numero";
     $sSqlWhere = '';
     if ($dbwhere == "") {
       if ($pc11_codigo != null) {
