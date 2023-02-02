@@ -26,8 +26,7 @@
 */
 
 
-
-if (isset($_POST["salvar"])) {
+if (isset($_POST["descricao"])) {
     $descricao = $_POST['descricao'];
     $data =  $_POST['data'];
     $servico =  $_POST['servico'];
@@ -612,12 +611,12 @@ if (isset($_POST["processar"])) {
     if (isset($_POST["processar"])) {
         echo "<script>document.getElementById('pc01_data').value = '$pc01_data'; </script>";
         echo "<script>document.getElementById('descricaoimportacao').value = '" . $_POST['pc96_descricao'] . "'</script>";
-        echo  "<input style='margin-top: 10px;' type='submit' id='salvar' name='salvar'  value='Salvar'>";
+        echo  "<input name='salvar' id='save' value='Salvar' style='margin-top: 10px;' type='submit'>";
     } else {
-        echo  "<input style='margin-top: -200px;' type='submit' id='salvar' value='Salvar' name='salvar'>";
+        echo  "<input name='salvar' id='save' value='Salvar' style='margin-top: -200px;' type='submit'>";
     }
     if ($erro) {
-        echo "<script> document.getElementById('salvar').disabled = true; </script>";
+        echo "<script> document.getElementById('save').disabled = true; </script>";
         echo "<script>  alert('Corrija os itens grifados em vermelho e reprocesse a planilha.'); </script>";
     }
 
@@ -651,6 +650,7 @@ if (isset($_POST["processar"])) {
 
     function gerar() {
         window.location.href = " com1_xlsimportacaoitensPlanilha.php";
+        js_removeObj("msgbox");
     }
 
     function js_liberarButton() {
