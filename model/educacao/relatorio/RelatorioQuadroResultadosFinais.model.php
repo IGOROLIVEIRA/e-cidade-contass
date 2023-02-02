@@ -220,15 +220,13 @@ class RelatorioQuadroResultadosFinais {
     global $head4;
     global $head5;
     global $head6;
-    global $head7;
 
     $head1 = "QUADRO DE RESULTADOS FINAIS";
     $head2 = "Curso: " . $oTurma->getBaseCurricular()->getCurso()->getNome();
     $head3 = "Calendário: " . $oTurma->getCalendario()->getDescricao();
     $head4 = "Ano: " . $oTurma->getCalendario()->getAnoExecucao();
-    $head5 = "C.H. Total: " . $oTurma->getCargaHoraria( $oEtapa );
-    $head6 = "Turma: " . $oTurma->getDescricao();
-    $head7 = "Regente: {$sDocente}";
+    $head5 = "Turma: " . $oTurma->getDescricao();
+    $head6 = "Regente: {$sDocente}";
     $this->oPdf->AddPage();
   }
 
@@ -599,6 +597,7 @@ class RelatorioQuadroResultadosFinais {
 
       $this->imprimeCabecalho($oTurmaEtapa->oTurma, $oTurmaEtapa->oEtapa);
       $this->imprimeGrade($oTurmaEtapa->oTurma, $oTurmaEtapa->oEtapa);
+      $this->imprimeAssinaturas($oTurmaEtapa->oTurma, $oTurmaEtapa->oEtapa);
     }
     $this->oPdf->Output();
   }
@@ -716,8 +715,8 @@ class RelatorioQuadroResultadosFinais {
 
     for ($iContador = 1; $iContador <= $iColunasImpressas; $iContador++) {
 
-      $this->oPdf->Cell(12, 4, "Aprov", 1, 0, "C");
-      $this->oPdf->Cell(10, 4, "% Freq", 1, 0, "C");
+      $this->oPdf->Cell(22, 4, "Aprov", 1, 0, "C");
+      //$this->oPdf->Cell(10, 4, "% Freq", 1, 0, "C");
     }
 
     $this->imprimeColunasEmBranco($iColunasEmBranco);
@@ -739,8 +738,8 @@ class RelatorioQuadroResultadosFinais {
         $this->oPdf->Cell(22, 4, "", 1, 0);
       } else {
 
-        $this->oPdf->Cell(12, 4, "", 1, 0);
-        $this->oPdf->Cell(10, 4, "", 1, 0);
+        $this->oPdf->Cell(22, 4, "", 1, 0);
+        //$this->oPdf->Cell(10, 4, "", 1, 0);
       }
 
       $iColunasEmBranco --;
@@ -761,7 +760,7 @@ class RelatorioQuadroResultadosFinais {
 
       foreach ($oDadosAluno->aAvaliacoes[$iPaginaDisciplina] as $iIndex => $oAvaliacao) {
 
-        $this->oPdf->Cell(12, 4, "{$oAvaliacao->nAproveitamentoFinal}", 1, 0, "C");
+        $this->oPdf->Cell(22, 4, "{$oAvaliacao->nAproveitamentoFinal}", 1, 0, "C");
 
         $sPercentualFrequencia = '';
 
@@ -775,7 +774,7 @@ class RelatorioQuadroResultadosFinais {
           $sPercentualFrequencia = '--';
         }
 
-        $this->oPdf->Cell(10, 4, $sPercentualFrequencia, 1, 0, "C");
+        //$this->oPdf->Cell(10, 4, $sPercentualFrequencia, 1, 0, "C");
       }
 
       $iColunasEmBranco = $this->iDisciplinasPagina - count($oDadosAluno->aAvaliacoes[$iPaginaDisciplina]);
@@ -849,33 +848,25 @@ class RelatorioQuadroResultadosFinais {
       $this->oPdf->Line(10, $this->oPdf->GetY(), 278, $this->oPdf->GetY());
     }
 
-    $this->oPdf->Ln(8);
-    $this->oPdf->Line(10, $this->oPdf->GetY(), 134, $this->oPdf->GetY());
-
-    $this->oPdf->Line(144, $this->oPdf->GetY(), 278, $this->oPdf->GetY());
-    $this->oPdf->Ln(1);
-
+    $this->oPdf->Ln(9);
+    $this->oPdf->Line(40, $this->oPdf->GetY(), 140, $this->oPdf->GetY());
+    $this->oPdf->Line(160, $this->oPdf->GetY(), 260, $this->oPdf->GetY());
+    $this->oPdf->Line(97, $this->oPdf->GetY()+10, 197, $this->oPdf->GetY()+10);
+    
     $iPosicaoY = $this->oPdf->getY();
 
-    if ( !empty($this->sSecretario) ) {
+    $this->oPdf->SetXY(40, $iPosicaoY );
+    $this->oPdf->SetFont("Arial", "B", 7);
+    $this->oPdf->Cell(100, 4, "Professor(a)", 0, 0, "C");
 
-      $this->oPdf->SetXY(10, $iPosicaoY );
-      $this->oPdf->SetFont("Arial", "B", 7);
-      $this->oPdf->Cell(134, 4, $this->sSecretario, 0, 1, "C" );
-      $this->oPdf->SetX(10);
-      $this->oPdf->Cell(134, 4, "Secretário(a)", 0, 0, "C");
-      $this->oPdf->SetFont("Arial", "", 7);
-    }
+    $this->oPdf->SetXY(160, $iPosicaoY);
+    $this->oPdf->SetFont("Arial", "B", 7);
+    $this->oPdf->Cell(100, 4, "Secretário(a) nº Aut.", 0, 0, "C");
 
-    if ( !empty($this->sDiretor) ) {
-
-      $this->oPdf->SetXY(144, $iPosicaoY);
-      $this->oPdf->SetFont("Arial", "B", 7);
-      $this->oPdf->Cell(134, 4, $this->sDiretor, 0, 1, "C" );
-      $this->oPdf->SetX(144);
-      $this->oPdf->Cell(134, 4, "Diretor(a)", 0, 0, "C" );
-      $this->oPdf->SetFont("Arial", "", 7);
-    }
+    $this->oPdf->SetXY(97, $iPosicaoY+10);
+    $this->oPdf->SetFont("Arial", "B", 7);
+    $this->oPdf->Cell(100, 4, "Diretor(a) nº Aut.", 0, 0, "C");
+  
   }
   
   /**
