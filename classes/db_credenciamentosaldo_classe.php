@@ -311,7 +311,7 @@ class cl_credenciamentosaldo
         }
         $sql .= " where ";
         $sql .= "l213_sequencial = $l213_sequencial";
-        $result = db_query($sql);die($sql);
+        $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "credenciamentosaldo nao Alterado. Alteracao Abortada.\\n";
