@@ -24,8 +24,8 @@
 }
 
 .db-modal-header .top{
-  background: -moz-linear-gradient(to bottom, #2f5b8c, #234368);
-  background: linear-gradient(to bottom, #2f5b8c, #234368);
+  background: -moz-linear-gradient(to bottom, #316648, #27533a);
+  background: linear-gradient(to bottom, #316648, #27533a);
   text-align: center;
 }
 
@@ -34,7 +34,7 @@
 }
 
 .db-modal-content {
-  color: #3e3e3f;
+  color: #316648;
 }
 
 .db-modal-footer a{
@@ -50,8 +50,8 @@
   font-weight: normal;
 }
 .db-modal-footer a.button{
-  border: 1px solid #2f5b8c;
-  color: #2f5b8c;
+  border: 1px solid #316648;
+  color: #316648;
 }
 
 .db-modal-footer a.link{
@@ -69,11 +69,11 @@
 
 .db-modal-footer a.button:active{
   color: white;
-  background-color: #2f5b8c;
+  background-color: #316648;
 }
 
 .db-modal-footer a.link:active{
-  color: #2f5b8c;
+  color: #316648;
 }
 
 .db-modal-footer a.button:hover{
