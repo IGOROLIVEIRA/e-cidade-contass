@@ -1574,7 +1574,7 @@ if ($x->consultarDataDoSistema == true) {
         $('e54_resumo').value = oRetorno.sResumoAcordo.urlDecode();
         $('e54_numerl').value = oRetorno.iProcesso;
         $('e54_codcom').value = oRetorno.sTipo;
-        //$('e54_codcomdescr').value = oRetorno.sTipo;
+        $('e54_codcomdescr').value = oRetorno.sTipo;
         $('e54_nummodalidade').value = oRetorno.iNumModalidade;
         /*if (oRetorno.sTipoorigem == 4) {
             $('e54_adesaoregpreco').value = oRetorno.iSequencial;
