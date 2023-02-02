@@ -199,7 +199,8 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 l20_usaregistropreco,
                 l20_leidalicitacao,
                 l20_mododisputa,
-                l20_dataaber
+                l20_dataaber,
+                l20_orcsigiloso 
 FROM
     (SELECT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                      (CASE
@@ -367,6 +368,11 @@ ORDER BY nroprocessolicitatorio
       $clralic10->si180_naturezaobjeto = $oDados10->naturezaobjeto;
       $clralic10->si180_objeto = substr($this->removeCaracteres($oDados10->objeto), 0, 500);
       $clralic10->si180_regimeexecucaoobras = $oDados10->regimeexecucaoobras;
+      if($oDados10->l20_orcsigiloso == '' || $oDados10->l20_orcsigiloso == 'f'){
+        $clralic10->si180_tipoorcamento = 1;
+      }else{
+        $clralic10->si180_tipoorcamento = 2;
+      }
       $clralic10->si180_vlcontratacao = $oDados10->vlcontratacao;
       $clralic10->si180_bdi = $oDados10->bdi;
       $clralic10->si180_mesexercicioreforc = $oDados10->datacotacao;

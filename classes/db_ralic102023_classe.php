@@ -43,6 +43,7 @@ class cl_ralic102023
   var $si180_naturezaobjeto = 0;
   var $si180_objeto = null;
   var $si180_regimeexecucaoobras = 0;
+  var $si180_tipoorcamento = 0;
   var $si180_vlcontratacao = 0;
   var $si180_bdi = 0;
   var $si180_mesexercicioreforc = 0;
@@ -74,6 +75,7 @@ class cl_ralic102023
                  si180_naturezaobjeto = int8 = Natureza do objeto
                  si180_objeto = varchar(500) = Objeto da licitação
                  si180_regimeexecucaoobras = int8 = Regime de execução para obras
+                 si180_tipoorcamento = int8 = Regime de execução para obras
                  si180_vlcontratacao = real = Valor Estimado da contratação
                  si180_bdi = real = Percentual da Bonificação e Despesas
                  si180_mesexercicioreforc = int(4) = Percentual da Bonificação e Despesas
@@ -145,6 +147,7 @@ class cl_ralic102023
       $this->si180_naturezaobjeto = ($this->si180_naturezaobjeto == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_naturezaobjeto"] : $this->si180_naturezaobjeto);
       $this->si180_objeto = ($this->si180_objeto == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_objeto"] : $this->si180_objeto);
       $this->si180_regimeexecucaoobras = ($this->si180_regimeexecucaoobras == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_regimeexecucaoobras"] : $this->si180_regimeexecucaoobras);
+      $this->si180_tipoorcamento = ($this->si180_tipoorcamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_tipoorcamento"] : $this->si180_tipoorcamento);
       $this->si180_vlcontratacao = ($this->si180_vlcontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_vlcontratacao"] : $this->si180_vlcontratacao);
       $this->si180_bdi = ($this->si180_bdi == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_bdi"] : $this->si180_bdi);
       $this->si180_mesexercicioreforc = ($this->si180_mesexercicioreforc == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_mesexercicioreforc"] : $this->si180_mesexercicioreforc);
@@ -216,6 +219,9 @@ class cl_ralic102023
     }
     if ($this->si180_regimeexecucaoobras == null) {
       $this->si180_regimeexecucaoobras = "0";
+    }
+    if ($this->si180_tipoorcamento == null) {
+      $this->si180_tipoorcamento = "1";
     }
     if ($this->si180_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -347,6 +353,7 @@ class cl_ralic102023
                                       ,si180_leidalicitacao
                                       ,si180_mododisputa
                                       ,si180_dtaberturaenvelopes
+                                      ,si180_tipoorcamento
                        )
                 values (
                                 $this->si180_sequencial
@@ -379,6 +386,7 @@ class cl_ralic102023
                                ,$this->si180_leidalicitacao
                                ,$this->si180_mododisputa
                                ," . ($this->si180_dtaberturaenvelopes == "null" || $this->si180_dtaberturaenvelopes == "" ? "null" : "'" . $this->si180_dtaberturaenvelopes . "'") . "
+                               ,$this->si180_tipoorcamento
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -515,6 +523,13 @@ class cl_ralic102023
         $this->si180_regimeexecucaoobras = "0";
       }
       $sql .= $virgula . " si180_regimeexecucaoobras = $this->si180_regimeexecucaoobras ";
+      $virgula = ",";
+    }
+    if (trim($this->si180_tipoorcamento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_tipoorcamento"])) {
+      if (trim($this->si180_tipoorcamento) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si180_tipoorcamento"])) {
+        $this->si180_tipoorcamento = "0";
+      }
+      $sql .= $virgula . " si180_tipoorcamento = $this->si180_tipoorcamento ";
       $virgula = ",";
     }
 
