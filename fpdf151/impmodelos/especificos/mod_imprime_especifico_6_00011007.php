@@ -363,7 +363,7 @@ for ($xxx = 0; $xxx < $this->nvias; $xxx++) {
         $iLinhasMulticellItem = (int) $this->objpdf->NbLines(122, $descricaoitem);
 
         if($iLinhasRestantesItem < $iLinhasMulticellItem){
-          $CaracteresPermitidos = (65 * $iLinhasRestantesItem);
+          $CaracteresPermitidos = (122 * $iLinhasRestantesItem);
           $descricaoitemInteira = trim($descricaoitem);
           $descricaoitem = substr(trim($descricaoitem), 0, $CaracteresPermitidos);
           $continuaProximaPagia = true;
