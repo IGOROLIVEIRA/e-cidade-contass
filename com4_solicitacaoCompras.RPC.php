@@ -35,7 +35,7 @@ require_once("libs/db_sessoes.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 $oJson             = new services_json();
-$oParam            = $oJson->decode(str_replace("\\","",$_POST["json"]));
+$oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
 $oRetorno->message = '';
@@ -54,7 +54,7 @@ switch ($oParam->exec) {
         $oSolicita = new aberturaRegistroPreco();
       }
 
-      $oSolicita->setLiberado($oParam->liberado); 
+      $oSolicita->setLiberado($oParam->liberado);
       $oSolicita->setResumo(db_stdClass::normalizeStringJsonEscapeString($oParam->resumo));
       $oSolicita->setDataInicio($oParam->datainicio);
       $oSolicita->setDataTermino($oParam->datatermino);
@@ -70,23 +70,21 @@ switch ($oParam->exec) {
         $oItemRetono->descricaoitem     = $oItem->getDescricaoMaterial();
         $oItemRetono->quantidade        = $oItem->getQuantidade();
         $oItemRetono->automatico        = $oItem->isAutomatico();
-        $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n",urldecode($oItem->getResumo())));
-        $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n",urldecode($oItem->getJustificativa())));
-        $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n",urldecode($oItem->getPrazos())));
-        $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n",urldecode($oItem->getPagamento())));
+        $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+        $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+        $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+        $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
         $oItemRetono->unidade           = $oItem->getUnidade();
         $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
         $oItemRetono->indice            = $iIndice;
         $oRetorno->itens[] = $oItemRetono;
       }
       db_fim_transacao(false);
-
     } catch (Exception $eErro) {
 
       db_fim_transacao(true);
       $oRetorno->message = urlencode($eErro->getMessage());
       $oRetorno->status  = 2;
-
     }
     break;
 
@@ -101,7 +99,6 @@ switch ($oParam->exec) {
 
         $oEstimativa = new estimativaRegistroPreco();
         $oEstimativa->setCodigoAbertura($oParam->iAbertura);
-
       }
 
       $oEstimativa->setResumo(utf8_decode(db_stdClass::db_stripTagsJson($oParam->resumo)));
@@ -119,29 +116,77 @@ switch ($oParam->exec) {
         $oItemRetono->descricaoitem = $oItem->getDescricaoMaterial();
         $oItemRetono->quantidade    = $oItem->getQuantidade();
         $oItemRetono->automatico    = $oItem->isAutomatico();
-        $oItemRetono->resumo        = urlencode(str_replace("\\n", "\n",urldecode($oItem->getResumo())));
-        $oItemRetono->justificativa = urlencode(str_replace("\\n", "\n",urldecode($oItem->getJustificativa())));
-        $oItemRetono->prazo         = urlencode(str_replace("\\n", "\n",urldecode($oItem->getPrazos())));
-        $oItemRetono->pagamento     = urlencode(str_replace("\\n", "\n",urldecode($oItem->getPagamento())));
+        $oItemRetono->resumo        = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+        $oItemRetono->justificativa = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+        $oItemRetono->prazo         = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+        $oItemRetono->pagamento     = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
         $oItemRetono->unidade       = $oItem->getUnidade();
-        $oItemRetono->unidade_descricao = urlencode(urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade)));
+        $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
         $oItemRetono->indice        = $iIndice;
         $oRetorno->itens[] = $oItemRetono;
-
       }
       db_fim_transacao(false);
-
     } catch (Exception $eErro) {
 
       db_fim_transacao(true);
       $oRetorno->message = urlencode($eErro->getMessage());
       $oRetorno->status  = 2;
-
     }
 
     break;
 
-  case "adicionarItemAbertura" :
+  case "alterarItemAbertura":
+
+    try {
+      db_inicio_transacao();
+      $oSolicita =  $_SESSION["oSolicita"];
+
+      $validaItens = $oSolicita->getItens();
+      if (count($validaItens) > 0) {
+        foreach ($validaItens as $row) {
+          if ($oParam->iCodigoItem == $row->getCodigoMaterial()) {
+          }
+        }
+      }
+
+
+      $aItens    = $oSolicita->getItens();
+      $oItem     = $aItens[$oParam->iIndice];
+      $oItem->setUnidade($oParam->iUnidade);
+      $oItem->save($oSolicita->getCodigoSolicitacao());
+      $aitens         = $oSolicita->getItens();
+
+      $aitens = $oSolicita->getItens();
+
+      foreach ($aitens as $iIndice => $oItem) {
+
+        $oItemRetono = new stdClass;
+        $oItemRetono->codigoitem = $oItem->getCodigoMaterial();
+        $oItemRetono->descricaoitem = $oItem->getDescricaoMaterial();
+        $oItemRetono->quantidade = $oItem->getQuantidade();
+        $oItemRetono->automatico = $oItem->isAutomatico();
+        $oItemRetono->resumo = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+        $oItemRetono->justificativa = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+        $oItemRetono->prazo = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+        $oItemRetono->pagamento = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
+        $oItemRetono->unidade = $oItem->getUnidade();
+        $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
+        $oItemRetono->indice = $iIndice;
+        $oItemRetono->temestimativa = $lTemEstimativa;
+
+        $oRetorno->itens[] = $oItemRetono;
+      }
+      db_fim_transacao(false);
+    } catch (Exception $eErro) {
+
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+      db_fim_transacao(true);
+    }
+
+    break;
+
+  case "adicionarItemAbertura":
 
     try {
 
@@ -151,16 +196,16 @@ switch ($oParam->exec) {
       //VALIDANDO SE JÁ FOI ADD O ITEM
       $iControle = 0;
       $validaItens = $oSolicita->getItens();
-      if(count($validaItens) > 0) {
+      if (count($validaItens) > 0) {
         foreach ($validaItens as $row) {
-          if($oParam->iCodigoItem == $row->getCodigoMaterial()){
+          if ($oParam->iCodigoItem == $row->getCodigoMaterial()) {
             $oRetorno->status  = 2;
             $oRetorno->message = urlencode("O item $oParam->iCodigoItem já foi adicionado!!");
             $iControle = 1;
           }
         }
       }
-      if($iControle == 0) {
+      if ($iControle == 0) {
         if ($oSolicita->getTipoSolicitacao() == 3) {
           $oItemNovo = new  itemSolicitacao(null, $oParam->iCodigoItem);
         } else if ($oSolicita->getTipoSolicitacao() == 4) {
@@ -202,7 +247,6 @@ switch ($oParam->exec) {
           $oItemRetono->temestimativa = $lTemEstimativa;
 
           $oRetorno->itens[] = $oItemRetono;
-
         }
       }
     } catch (Exception $eErro) {
@@ -250,7 +294,7 @@ switch ($oParam->exec) {
           if (count($oSolicita->getEstimativas()) > 0) {
             $lTemEstimativa = true;
           }
-        break;
+          break;
 
         case 4:
 
@@ -258,7 +302,7 @@ switch ($oParam->exec) {
           $_SESSION["oSolicita"] = $oSolicita;
           $oRetorno->lCorreto    = $oSolicita->isAlterado();
 
-        break;
+          break;
       }
 
       $aitens = $oSolicita->getItens();
@@ -269,26 +313,25 @@ switch ($oParam->exec) {
         $oItemRetono->descricaoitem     = $oItem->getDescricaoMaterial();
         $oItemRetono->quantidade        = $oItem->getQuantidade();
         $oItemRetono->automatico        = $oItem->isAutomatico();
-        $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n",urldecode($oItem->getResumo())));
-        $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n",urldecode($oItem->getJustificativa())));
-        $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n",urldecode($oItem->getPrazos())));
-        $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n",urldecode($oItem->getPagamento())));
+        $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+        $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+        $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+        $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
         $oItemRetono->unidade           = $oItem->getUnidade();
-        $oItemRetono->unidade_descricao = urlencode(urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade)));
+        $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
         $oItemRetono->indice            = $iIndice;
         $oItemRetono->temestimativa     = $lTemEstimativa;
         $oRetorno->itens[] = $oItemRetono;
-
       }
       switch ($oSolicita->getTipoSolicitacao()) {
 
 
-        case 3 :
+        case 3:
 
-          $oRetorno->datainicio  = db_formatar($oSolicita->getDataInicio(),"d");
-          $oRetorno->datatermino = db_formatar($oSolicita->getDataTermino(),"d");
+          $oRetorno->datainicio  = db_formatar($oSolicita->getDataInicio(), "d");
+          $oRetorno->datatermino = db_formatar($oSolicita->getDataTermino(), "d");
           $oRetorno->liberado    = $oSolicita->isLiberado();
-        break;
+          break;
 
         case 4:
 
@@ -297,77 +340,73 @@ switch ($oParam->exec) {
           break;
       }
 
-      $oRetorno->resumo      = urlencode(str_replace("\\n", "\n",urldecode($oSolicita->getResumo())));
+      $oRetorno->resumo      = urlencode(str_replace("\\n", "\n", urldecode($oSolicita->getResumo())));
       $oRetorno->solicitacao = $oSolicita->getCodigoSolicitacao();
-
-
     } catch (Exception $eErro) {
 
       $oRetorno->status  = 2;
       $oRetorno->message = urlencode($eErro->getMessage());
-
     }
     break;
 
   case "excluirItens":
 
-     try {
+    try {
 
-       db_inicio_transacao();
-       $oSolicita = $_SESSION["oSolicita"];
-       $oSolicita->removerItem($oParam->iItemRemover);
-       db_fim_transacao(false);
-       $lTemEstimativa = false;
-       $aitens = $oSolicita->getItens();
-       if ($oSolicita instanceof aberturaRegistroPreco) {
-         if ($oSolicita->hasEstimativas()) {
-            $lTemEstimativa = true;
-         }
-       }
-       foreach ($aitens as $iIndice => $oItem) {
+      db_inicio_transacao();
+      $oSolicita = $_SESSION["oSolicita"];
+      $oSolicita->removerItem($oParam->iItemRemover);
+      db_fim_transacao(false);
+      $lTemEstimativa = false;
+      $aitens = $oSolicita->getItens();
+      if ($oSolicita instanceof aberturaRegistroPreco) {
+        if ($oSolicita->hasEstimativas()) {
+          $lTemEstimativa = true;
+        }
+      }
+      foreach ($aitens as $iIndice => $oItem) {
 
         $oItemRetono = new stdClass;
         $oItemRetono->codigoitem        = $oItem->getCodigoMaterial();
         $oItemRetono->descricaoitem     = $oItem->getDescricaoMaterial();
         $oItemRetono->quantidade        = $oItem->getQuantidade();
         $oItemRetono->automatico        = $oItem->isAutomatico();
-        $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n",urldecode($oItem->getResumo())));
-        $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n",urldecode($oItem->getJustificativa())));
-        $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n",urldecode($oItem->getPrazos())));
-        $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n",urldecode($oItem->getPagamento())));
+        $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+        $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+        $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+        $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
         $oItemRetono->unidade           = $oItem->getUnidade();
-        $oItemRetono->unidade_descricao = urlencode(urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade)));
+        $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
         $oItemRetono->indice            = $iIndice;
         $oItemRetono->temestimativa     = $lTemEstimativa;
         $oRetorno->itens[] = $oItemRetono;
-
       }
-     } catch (Exception $eErro) {
+    } catch (Exception $eErro) {
 
 
-       db_fim_transacao(true);
-       $oRetorno->status  = 2;
-       $oRetorno->message = urlencode($eErro->getMessage());
-       $aitens = $oSolicita->getItens();
-     }
-     break;
-   case "salvarItensValor" :
+      db_fim_transacao(true);
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+      $aitens = $oSolicita->getItens();
+    }
+    break;
+  case "salvarItensValor":
 
-     try {
+    try {
 
-       db_inicio_transacao();
-       $oSolicita = $_SESSION["oSolicita"];
-       $aitens = $oSolicita->getItens();
-       if (isset($aitens[$oParam->iIndice])) {
-         $aitens[$oParam->iIndice]->setQuantidade($oParam->quantidade);
-       }
-       db_fim_transacao(true);
-     } catch (Exception $eErro) {
-       db_fim_transacao(true);
-     }
-     break;
+      db_inicio_transacao();
+      $oSolicita = $_SESSION["oSolicita"];
+      $aitens = $oSolicita->getItens();
+      if (isset($aitens[$oParam->iIndice])) {
+        $aitens[$oParam->iIndice]->setQuantidade($oParam->quantidade);
+      }
+      db_fim_transacao(true);
+    } catch (Exception $eErro) {
+      db_fim_transacao(true);
+    }
+    break;
 
-   case "alterarItem" :
+  case "alterarItem":
 
     try {
 
@@ -384,9 +423,9 @@ switch ($oParam->exec) {
       $lTemEstimativa = false;
       if ($oSolicita instanceof aberturaRegistroPreco) {
 
-         if (count($oSolicita->getEstimativas()) > 0) {
-            $lTemEstimativa = true;
-         }
+        if (count($oSolicita->getEstimativas()) > 0) {
+          $lTemEstimativa = true;
+        }
       }
       foreach ($aitens as $iIndice => $oItem) {
 
@@ -395,16 +434,15 @@ switch ($oParam->exec) {
         $oItemRetono->descricaoitem     = $oItem->getDescricaoMaterial();
         $oItemRetono->quantidade        = $oItem->getQuantidade();
         $oItemRetono->automatico        = $oItem->isAutomatico();
-        $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n",urldecode($oItem->getResumo())));
-        $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n",urldecode($oItem->getJustificativa())));
-        $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n",urldecode($oItem->getPrazos())));
-        $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n",urldecode($oItem->getPagamento())));
+        $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+        $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+        $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+        $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
         $oItemRetono->unidade           = $oItem->getUnidade();
-        $oItemRetono->unidade_descricao = urlencode(urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade)));
+        $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
         $oItemRetono->indice            = $iIndice;
         $oItemRetono->temestimativa     = $lTemEstimativa;
         $oRetorno->itens[] = $oItemRetono;
-
       }
       db_fim_transacao(false);
     } catch (Exception $eErro) {
@@ -416,41 +454,42 @@ switch ($oParam->exec) {
 
     break;
 
-   case "getUltimosOrcamentos":
+  case "getUltimosOrcamentos":
 
-     require_once("model/itemSolicitacao.model.php");
+    require_once("model/itemSolicitacao.model.php");
 
-     $oRetorno->itens   = itemSolicitacao::getUltimosOrcamentos($oParam->iMaterial,
-                                                              $oParam->aUnidades,
-                                                              $oParam->iFornecedor,
-                                                              $oParam->dtInicial,
-                                                              $oParam->dtFinal
-                                                             );
-     $oRetorno->media    = itemSolicitacao::calculaMediaPrecoOrcamentos($oRetorno->itens);
-     $oRetorno->unidades = itemSolicitacao::getUnidadesMaterial($oParam->iMaterial);
-     break;
+    $oRetorno->itens   = itemSolicitacao::getUltimosOrcamentos(
+      $oParam->iMaterial,
+      $oParam->aUnidades,
+      $oParam->iFornecedor,
+      $oParam->dtInicial,
+      $oParam->dtFinal
+    );
+    $oRetorno->media    = itemSolicitacao::calculaMediaPrecoOrcamentos($oRetorno->itens);
+    $oRetorno->unidades = itemSolicitacao::getUnidadesMaterial($oParam->iMaterial);
+    break;
 
-   case 'pesquisarEstimativaDepartamento':
+  case 'pesquisarEstimativaDepartamento':
 
-     if (isset($oParam->iSolicitacao)) {
+    if (isset($oParam->iSolicitacao)) {
 
-       $oSolicita   = new aberturaRegistroPreco($oParam->iSolicitacao);
-       $oEstimativa = $oSolicita->getEstimativaPorDepartamento(db_getsession("DB_coddepto"));
-       if ($oEstimativa instanceof estimativaRegistroPreco) {
+      $oSolicita   = new aberturaRegistroPreco($oParam->iSolicitacao);
+      $oEstimativa = $oSolicita->getEstimativaPorDepartamento(db_getsession("DB_coddepto"));
+      if ($oEstimativa instanceof estimativaRegistroPreco) {
 
-       	 if (!$oEstimativa->isAnulada()) {
+        if (!$oEstimativa->isAnulada()) {
 
-	         $sMessage          = "Departamento já possui estimativa lançada para a ";
-	         $sMessage         .= "Abertura de Registo de preço {$oParam->iSolicitacao}.\n";
-	         $sMessage         .= "Dados da estimativa:\n";
-	         $sMessage         .= "Número:{$oEstimativa->getCodigoSolicitacao()}.\n";
-	         $sMessage         .= "Data Cadastro:".db_formatar($oEstimativa->getDataSolicitacao(), "d").".";
-	         $oRetorno->status  = 2;
-	         $oRetorno->message = urlencode($sMessage);
-       	 }
-       }
-     }
-     break;
+          $sMessage          = "Departamento já possui estimativa lançada para a ";
+          $sMessage         .= "Abertura de Registo de preço {$oParam->iSolicitacao}.\n";
+          $sMessage         .= "Dados da estimativa:\n";
+          $sMessage         .= "Número:{$oEstimativa->getCodigoSolicitacao()}.\n";
+          $sMessage         .= "Data Cadastro:" . db_formatar($oEstimativa->getDataSolicitacao(), "d") . ".";
+          $oRetorno->status  = 2;
+          $oRetorno->message = urlencode($sMessage);
+        }
+      }
+    }
+    break;
 
   case 'anularSolicitacao':
 
@@ -467,7 +506,6 @@ switch ($oParam->exec) {
       db_fim_transacao(false);
       $oRetorno->erro = false;
       $oRetorno->mensagem = urlencode(_M('patrimonial.compras.com4_anularsolicitacaocompras001.solicitacao_anulada'));
-
     } catch (Exception $eErro) {
 
       db_fim_transacao(true);
