@@ -2024,9 +2024,128 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
         for ($varrep = 0; $varrep < sizeof($variaveis_repassa); $varrep++) {
 
-            $sHtml .= "<input type=\"hidden\" name=\"" . key($variaveis_repassa) . "\"";
-            $sHtml .= "       value=\"" . $variaveis_repassa[key($variaveis_repassa)] . "\">\n";
-            next($variaveis_repassa);
+      $sHtml .= "<input type=\"hidden\" name=\"".key($variaveis_repassa)."\"";
+      $sHtml .= "       value=\"".$variaveis_repassa[key($variaveis_repassa)]."\">\n";
+      next($variaveis_repassa);
+    }
+  }
+
+  if( isset( $ordem_lov ) && ( isset( $ordem_ordenacao ) && $ordem_ordenacao == '' ) ) {
+    $sHtml .= "<input type=\"hidden\" name=\"ordem_lov_anterior\" value=\"".$_POST[key($_POST)]."\">\n";
+  }
+
+  if( isset( $_POST['nova_quantidade_linhas'] ) && $_POST['nova_quantidade_linhas'] == '' ) {
+    $numlinhas = $_POST['nova_quantidade_linhas'];
+  }
+
+  $sHtml .= "<input type=\"hidden\" name=\"nova_quantidade_linhas\" value=\"$numlinhas\" >\n";
+
+  if( isset( $totalizacao ) && isset( $tot ) ) {
+
+    if( count( $totalizacao ) > 0 ) {
+
+      $totNumfields = pg_numfields( $tot );
+      for( $totrep = 1; $totrep < $totNumfields; $totrep++ ) {
+
+        $sHtml .= "<input type=\"hidden\"";
+        $sHtml .= "       name=\"totrep_" . pg_fieldname( $tot, $totrep ) . "\"";
+        $sHtml .= "       value=\"" . db_formatar( pg_result( $tot , 0 , $totrep ), 'f' ) . "\">";
+      }
+
+      reset( $totalizacao );
+      $totrepreg = "";
+      $totregsep = "";
+
+      for( $totrep = 0; $totrep < count( $totalizacao ); $totrep++ ) {
+
+        $totrepreg .= $totregsep . key( $totalizacao ) . "=" . $totalizacao[key( $totalizacao )];
+        $totregsep  = "|";
+        next( $totalizacao );
+      }
+
+      reset( $totalizacao );
+      $sHtml .= "<input type=\"hidden\" name=\"totalizacao_repas\" value=\"".$totrepreg."\">";
+    }
+  } else if( isset( $_POST["totalizacao_repas"] ) ) {
+
+    $totalizacao_split = split( "\|", $_POST["totalizacao_repas"] );
+
+    for( $totrep = 0; $totrep < count( $totalizacao_split ); $totrep++ ) {
+
+      $totalizacao_sep                  = split( "\=", $totalizacao_split[$totrep] );
+      $totalizacao[$totalizacao_sep[0]] = $totalizacao_sep[1];
+
+      if( isset( $_POST["totrep_".$totalizacao_sep[0]] ) ) {
+
+        $sHtml .= "<input type=\"hidden\"";
+        $sHtml .= "       name=\"totrep_".$totalizacao_sep[0]."\"";
+        $sHtml .= "       value=\"".$_POST["totrep_".$totalizacao_sep[0]]."\">";
+      }
+    }
+
+    $sHtml .= "<input type=\"hidden\" name=\"totalizacao_repas\" value=\"".$_POST["totalizacao_repas"]."\">";
+  }
+
+  $sHtml .= "<input type=\"hidden\" name=\"filtroquery\" value=\"" . base64_encode( @$filtroquery ) . "\">";
+
+  if( $NumRows > 0 ) {
+
+    $sHtml .= "Foram retornados <label class='DBLovrotNumeroRegistros'> ". $$tot_registros . "</label> registros.";
+    $sHtml .= " Mostrando de <label class='DBLovrotNumeroRegistros'>" . (@$$offset +1)." </label> até";
+    $sHtml .= "<label class='DBLovrotNumeroRegistros'> ";
+    $sHtml .= ($$tot_registros < (@ $$offset + $numlinhas) ? ($NumRows <= $numlinhas ? $$tot_registros : $NumRows) : ($$offset + $numlinhas));
+    $sHtml .= "</label>.";
+  } else {
+    $sHtml .= "Nenhum Registro Retornado";
+  }
+
+  $sHtml .= "    </form>";
+  $sHtml .= "  </td>";
+  $sHtml .= "</tr>";
+
+  /*********************************/
+  /***** Escreve o cabecalho *******/
+  /*********************************/
+
+  if( $NumRows > 0 ) {
+
+    $sHtml .= "<tr>";
+    $sHtml .= "<td><input type='checkbox' id='select-all'></td>";
+    // se foi passado funcao
+    if ( $campos_layer != "" ) {
+
+      $campo_layerexe = split( "\|", $campos_layer );
+      $sHtml .= "<td bgcolor=\"$db_corcabec\" title=\"Executa Procedimento Específico.\" class='DBLovrotClique'>";
+      $sHtml .= "  Clique";
+      $sHtml .= "</td>";
+    }
+
+    $clrotulocab = new rotulolov();
+
+    for ( $i = 0; $i < $NumFields; $i ++ ) {
+
+      if( strlen( strstr( pg_fieldname( $result, $i ), "db_") ) == 0 ) {
+
+        $clrotulocab->label( pg_fieldname( $result, $i) );
+        
+        $sHtml .= "<td bgcolor=\"$db_corcabec\" title=\"".$clrotulocab->title."\" class = 'DBLovrotTdCabecalho'> ";
+        $sHtml .= "  <input name=\"" . pg_fieldname( $result, $i ) . "\" ";
+        $sHtml .= "         value=\"" . ucfirst( $clrotulocab->titulo ) . "\" ";
+        $sHtml .= "         type=\"button\" ";
+        $sHtml .= "         onclick=\"js_troca_ordem( 'navega_lov" . $NomeForm . "', ";
+        $sHtml .= "                                   'ordem_dblov" . pg_fieldname( $result, $i ) . "', ";
+        $sHtml .= "                                   '" . pg_fieldname( $result, $i ) . "');\" ";
+        $sHtml .= "         class='DBLovrotInputCabecalho'>";
+        $sHtml .= "</td>";
+
+      } else {
+
+        if( strlen( strstr( pg_fieldname( $result, $i ), "db_m_" ) ) != 0 ) {
+          $sHtml .= "<td bgcolor=\"$db_corcabec\" ";
+          $sHtml .= "    title=\"" . substr( pg_fieldname( $result, $i ), 5 ) . "\" ";
+          $sHtml .= "    class = 'DBLovrotTdCabecalho'> ";
+          $sHtml .= "  <b><u>" . substr( pg_fieldname( $result, $i ), 5 ) . "</u></b> ";
+          $sHtml .= "</td>";
         }
     }
 
@@ -2042,10 +2161,14 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
     if (isset($totalizacao) && isset($tot)) {
 
-        if (count($totalizacao) > 0) {
+    
+    $sHtml .= '<tr>';
 
-            $totNumfields = pg_numfields($tot);
-            for ($totrep = 1; $totrep < $totNumfields; $totrep++) {
+    if($marcar = true){
+      $sHtml .= "<td><input type='checkbox' class='checkbox'></td>";
+    }
+    
+    if( $arquivo == "()" ) {
 
                 $sHtml .= "<input type=\"hidden\"";
                 $sHtml .= "       name=\"totrep_" . pg_fieldname($tot, $totrep) . "\"";
@@ -2103,16 +2226,26 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
     $sHtml .= "  </td>";
     $sHtml .= "</tr>";
 
-    /*********************************/
-    /***** Escreve o cabecalho *******/
-    /*********************************/
+      $campo_layerexe = split( "\|", $campos_layer );
+      
+      $sHtml .= "<td id=\"funcao_aux" . $i . "\" ";
+      $sHtml .= "    class = 'DBLovrotTdFuncaoAuxiliar' ";
+      $sHtml .= "    bgcolor=\"$cor\"> ";
+      $sHtml .= "  <a href=\"\" onclick=\"" . $campo_layerexe[1] . "({$loop});return false\" > ";
+      $sHtml .= "    <strong>" . $campo_layerexe[0] . "&nbsp;</strong> ";
+      $sHtml .= "  </a> ";
+      $sHtml .= "</td>";
+    }
 
     if ($NumRows > 0) {
 
-        $sHtml .= "<tr>";
-
-        // se foi passado funcao
-        if ($campos_layer != "") {
+      $sHtmlCampos     = "";
+      $var_data        = "";
+      $lCampoTipoTexto = false;
+      $lTipoEspecifico = true;
+      $lPrefixoDb      = false;
+      if(    strlen( strstr( pg_fieldname( $result, $j ), "db_" ) ) == 0
+        || strlen( strstr( pg_fieldname( $result, $j ), "db_m_" ) ) != 0 ) {
 
             $campo_layerexe = explode("\|", $campos_layer);
             $sHtml .= "<td bgcolor=\"$db_corcabec\" title=\"Executa Procedimento Específico.\" class='DBLovrotClique'>";

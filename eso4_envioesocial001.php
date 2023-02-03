@@ -377,6 +377,16 @@ try {
         }
     }
 
+    function js_S3000(e){
+        if (e.checked) {
+        console.log("Checkbox está marcado");
+        js_OpenJanelaIframe('top.corpo', 'iframe_envio_s3000', 'func_envioesocialS3000.php', 'Pesquisa', true);
+        } else {
+        console.log("Checkbox não está marcado");
+        }
+
+    }
+
     checkFase('');
 </script>
 <div id='debug'>
