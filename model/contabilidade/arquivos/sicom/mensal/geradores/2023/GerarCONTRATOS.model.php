@@ -255,7 +255,7 @@ class GerarCONTRATOS extends GerarAM
 
                             $aCSVCONTRATOS21['si88_tiporegistro']         =  str_pad($aCONTRATOS21['si88_tiporegistro'], 2, "0", STR_PAD_LEFT);
                             $aCSVCONTRATOS21['si88_codaditivo']           =  substr($aCONTRATOS21['si88_codaditivo'], 0, 15);
-                            $aCSVCONTRATOS21['si88_nroLote']          =  $aCONTRATOS21['si88_nroLote']          == "0" ? '' : $aCONTRATOS21['si88_nroLote'];
+                            $aCSVCONTRATOS21['si88_nrolote']          =  $aCONTRATOS21['si88_nrolote']          == "0" ? '' : $aCONTRATOS21['si88_nrolote'];
                             $aCSVCONTRATOS21['si88_coditem']              =  substr($aCONTRATOS21['si88_coditem'], 0, 15) == 0 ? '' : substr($aCONTRATOS21['si88_coditem'], 0, 15);
                             $aCSVCONTRATOS21['si88_tipomaterial']          =  $aCONTRATOS21['si88_tipomaterial']          == "0" ? '' : $aCONTRATOS21['si88_tipomaterial'];
                             $aCSVCONTRATOS21['si88_coditemsinapi']         =   $aCONTRATOS21['si88_coditemsinapi']        == "0" ? '' : $aCONTRATOS21['si88_coditemsinapi'];
@@ -309,8 +309,8 @@ class GerarCONTRATOS extends GerarAM
                 $aCSVCONTRATOS30['si89_dataapostila']                  =  implode("", array_reverse(explode("-", $aCONTRATOS30['si89_dataapostila'])));
                 $aCSVCONTRATOS30['si89_tipoalteracaoapostila']         =  str_pad($aCONTRATOS30['si89_tipoalteracaoapostila'], 1, "0", STR_PAD_LEFT);
                 $aCSVCONTRATOS30['si89_dscalteracao']                  =  substr($aCONTRATOS30['si89_dscalteracao'], 0, 250);
-                $aCSVCONTRATOS30['si89_percentualreajuste']            =  number_format($aCONTRATOS30['si89_percentualreajuste'], 2, ",","");
-                $aCSVCONTRATOS30['si89_indiceunicoreajuste']           =  $aCONTRATOS30['si89_indiceunicoreajuste'];
+                $aCSVCONTRATOS30['si89_percentualreajuste']            =  $aCONTRATOS20['si89_percentualreajuste'] == 0 ? ' ' : number_format($aCONTRATOS30['si89_percentualreajuste'], 2, ",","");
+                $aCSVCONTRATOS30['si89_indiceunicoreajuste']           =  $aCONTRATOS30['si89_indiceunicoreajuste'] == 0 ? ' ' : $aCONTRATOS30['si89_indiceunicoreajuste'];
                 $aCSVCONTRATOS30['si89_dscreajuste']                   =  substr($aCONTRATOS30['si89_dscreajuste'], 0, 300);
                 $aCSVCONTRATOS30['si89_valorapostila']                 =  number_format($aCONTRATOS30['si89_valorapostila'], 2, ",", "");
 

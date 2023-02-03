@@ -722,7 +722,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         $oContrato11->si84_reg10 = $clcontratos10->si83_sequencial;
                         $oContrato11->si84_codcontrato = $oDados10->ac16_sequencial;
                         if($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3){
-                            $oContrato11->si84_nrolote = $oItemLote->l04_descricao;
+                            $oContrato11->si84_nrolote = preg_replace("/[^0-9]/", "", $oItemLote->l04_descricao);
                         }else{
                             $oContrato11->si84_nrolote = 0;
                         }
@@ -1177,9 +1177,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
                             $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
                             if($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3){
-                                $clcontratos21->si88_nroLote = $oItemLote->l04_descricao;
+                                $clcontratos21->si88_nrolote = preg_replace("/[^0-9]/", "", $oItemLote->l04_descricao);
                             }else{
-                                $clcontratos21->si88_nroLote = 0;
+                                $clcontratos21->si88_nrolote = 0;
                             }
                             if ($oDados20->ac02_acordonatureza == "1") {
                                 if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
@@ -1253,9 +1253,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
                                 $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
                                 if($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3){
-                                    $clcontratos21->si88_nroLote = $oItemLote->l04_descricao;
+                                    $clcontratos21->si88_nrolote = preg_replace("/[^0-9]/", "", $oItemLote->l04_descricao);
                                 }else{
-                                    $clcontratos21->si88_nroLote = 0;
+                                    $clcontratos21->si88_nrolote = 0;
                                 }
                                 if ($oDados20->ac02_acordonatureza == "1") {
                                     if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
@@ -1475,9 +1475,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
                             $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
                             if($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3){
-                                $clcontratos21->si88_nroLote = $oItemLote->l04_descricao;
+                                $clcontratos21->si88_nrolote = preg_replace("/[^0-9]/", "", $oItemLote->l04_descricao);
                             }else{
-                                $clcontratos21->si88_nroLote = 0;
+                                $clcontratos21->si88_nrolote = 0;
                             }
                             if ($oDados20->ac02_acordonatureza == "1") {
                                 if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
@@ -1556,9 +1556,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
                                 $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
                                 if($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3){
-                                    $clcontratos21->si88_nroLote = $oItemLote->l04_descricao;
+                                    $clcontratos21->si88_nrolote = preg_replace("/[^0-9]/", "", $oItemLote->l04_descricao);
                                 }else{
-                                    $clcontratos21->si88_nroLote = 0;
+                                    $clcontratos21->si88_nrolote = 0;
                                 }
                                 if ($oDados20->ac02_acordonatureza == "1") {
                                     if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
@@ -1671,9 +1671,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
                                 $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
                                 if($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3){
-                                    $clcontratos21->si88_nroLote = $oItemLote->l04_descricao;
+                                    $clcontratos21->si88_nrolote = preg_replace("/[^0-9]/", "", $oItemLote->l04_descricao);
                                 }else{
-                                    $clcontratos21->si88_nroLote = 0;
+                                    $clcontratos21->si88_nrolote = 0;
                                 }
                                 if ($oDados20->ac02_acordonatureza == "1") {
                                     if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
@@ -1784,9 +1784,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
                                 $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
                                 if($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3){
-                                    $clcontratos21->si88_nroLote = $oItemLote->l04_descricao;
+                                    $clcontratos21->si88_nrolote = preg_replace("/[^0-9]/", "", $oItemLote->l04_descricao);
                                 }else{
-                                    $clcontratos21->si88_nroLote = 0;
+                                    $clcontratos21->si88_nrolote = 0;
                                 }
                                 if ($oDados20->ac02_acordonatureza == "1") {
                                     if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
@@ -1881,9 +1881,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 $clcontratos21->si88_reg20 = $clcontratos20->si87_sequencial;
                                 $clcontratos21->si88_codaditivo = $clcontratos20->si87_codaditivo;
                                 if($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3){
-                                    $clcontratos21->si88_nroLote = $oItemLote->l04_descricao;
+                                    $clcontratos21->si88_nrolote = preg_replace("/[^0-9]/", "", $oItemLote->l04_descricao);
                                 }else{
-                                    $clcontratos21->si88_nroLote = 0;
+                                    $clcontratos21->si88_nrolote = 0;
                                 }
                                 if ($oDados20->ac02_acordonatureza == "1") {
                                     if ($oDadosItensObra->obr06_tabela == "3" || $oDadosItensObra->obr06_tabela == "4") {
