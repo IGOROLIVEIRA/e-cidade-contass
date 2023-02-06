@@ -220,13 +220,15 @@ class RelatorioQuadroResultadosFinais {
     global $head4;
     global $head5;
     global $head6;
+    global $head7;
 
     $head1 = "QUADRO DE RESULTADOS FINAIS";
     $head2 = "Curso: " . $oTurma->getBaseCurricular()->getCurso()->getNome();
     $head3 = "Calendário: " . $oTurma->getCalendario()->getDescricao();
     $head4 = "Ano: " . $oTurma->getCalendario()->getAnoExecucao();
     $head5 = "Turma: " . $oTurma->getDescricao();
-    $head6 = "Regente: {$sDocente}";
+    $head6 = "Etapa: " . $oEtapa->getNome();
+    $head7 = "Regente: {$sDocente}";
     $this->oPdf->AddPage();
   }
 
