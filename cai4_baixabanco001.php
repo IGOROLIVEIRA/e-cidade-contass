@@ -1273,7 +1273,14 @@ if ($situacao == 2) {
 
                     }
 
-                    if($hlhposicaonumpre > 0 && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_NOVAPORTEIRINHA || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_MONTEAZUL) ){
+                    $codInstituicao = array(Instituicao::COD_CLI_CURRAL_DE_DENTRO,
+                    						Instituicao::COD_CLI_BURITIZEIRO,
+                    						Instituicao::COD_CLI_NOVAPORTEIRINHA,
+                    						Instituicao::COD_CLI_MONTEAZUL,
+                    						Instituicao::COD_CLI_PEDRASDEMARIADACRUZ,
+                    						Instituicao::COD_CLI_PMJURAMENTO
+                    						);
+                    if($hlhposicaonumpre > 0 && in_array($oInstit->getCodigoCliente(), $codInstituicao) ){
                             if ($lDebugAtivo == true) {
                                 echo "     </br> continuando Guia da HLH";
                             }
@@ -1371,9 +1378,9 @@ if ($situacao == 2) {
 	                        	}
 
 	                        	$txexpediente = 0.00;
-	                        	if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO){ 	$txexpediente = 3.00; }
-	                        	if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO){ 		$txexpediente = 4.21; }
-	                        	if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_NOVAPORTEIRINHA){	$txexpediente = 0.00; }
+	                        	if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_CURRAL_DE_DENTRO){ $txexpediente = 3.00;}
+	                        	if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO){ $txexpediente = 4.21;}
+	                        	if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMJURAMENTO){ $txexpediente = 10.00;}
 
 	                            $desconto = ($soma + $txexpediente) - $hlhvalor;
 	                            if( $desconto > 0 ){
