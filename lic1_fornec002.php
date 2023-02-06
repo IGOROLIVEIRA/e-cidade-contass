@@ -210,20 +210,25 @@ if (isset($incluir)) {
     order by pc81_codproc);");
       $quantidade_itens = pg_numrows($itens);
     }
+    $result_natureza = db_query("select l20_tipnaturezaproced from liclicita where l20_codigo=$l20_codigo");
+    $tiponaturezaproced = db_utils::fieldsMemory($result_natureza, 0);
 
-    for ($i = 0; $i < $quantidade_itens; $i++) {
-      $item = db_utils::fieldsMemory($itens, $i);
-      $codigo_item =  $item->pc11_codigo;
-      $result = db_query("select * from pcdotac where pc13_codigo = $codigo_item;");
-      if (pg_numrows($result) == 0) {
-        echo "<script>
-          alert('Usuário: Item $codigo_item sem dotação vinculada.');
-          CurrentWindow.corpo.location.href='lic1_fornec001.php?chavepesquisa=$l20_codigo';
-        </script>";
+    if($tiponaturezaproced->l20_tipnaturezaproced==1){
 
-        exit;
+      for ($i = 0; $i < $quantidade_itens; $i++) {
+        $item = db_utils::fieldsMemory($itens, $i);
+        $codigo_item =  $item->pc11_codigo;
+        $result = db_query("select * from pcdotac where pc13_codigo = $codigo_item;");
+        if (pg_numrows($result) == 0) {
+          echo "<script>
+            alert('Usuário: Item $codigo_item sem dotação vinculada.');
+            CurrentWindow.corpo.location.href='lic1_fornec001.php?chavepesquisa=$l20_codigo';
+          </script>";
+
+          exit;
+        }
       }
-    }
+    }  
   }
 
 
