@@ -60,13 +60,11 @@ class GerarRALIC extends GerarAM
                 $aCSVRALIC10['si180_nroedital']                  = $aRALIC10['si180_nroedital'];
                 $aCSVRALIC10['si180_exercicioedital']            = $aRALIC10['si180_exercicioedital'];
                 $aCSVRALIC10['si180_dtpublicacaoeditaldo']       = $this->sicomDate($aRALIC10['si180_dtpublicacaoeditaldo']);
-                $aCSVRALIC10['si180_dtaberturaenvelopes']        = $this->sicomDate($aRALIC10['si180_dtaberturaenvelopes']);
                 $aCSVRALIC10['si180_link']                       = substr($aRALIC10['si180_link'], 0, 150);
                 $aCSVRALIC10['si180_tipolicitacao']              = $this->padLeftZero($aRALIC10['si180_tipolicitacao'], 1);
                 $aCSVRALIC10['si180_naturezaobjeto']             = $aRALIC10['si180_naturezaobjeto'] == 0 ? ' ' : $aRALIC10['si180_naturezaobjeto'];
                 $aCSVRALIC10['si180_objeto']                     = substr($aRALIC10['si180_objeto'], 0, 500);
                 $aCSVRALIC10['si180_regimeexecucaoobras']        = $aRALIC10['si180_regimeexecucaoobras'] == 0 ? '' : $aRALIC10['si180_regimeexecucaoobras'];
-                $aCSVRALIC10['si180_tipoorcamento']              = $aRALIC10['si180_tipoorcamento'];
                 $aCSVRALIC10['si180_vlcontratacao']              = $aRALIC10['si180_tipoorcamento'] == 2 ? '' : $this->sicomNumberReal($aRALIC10['si180_vlcontratacao'], 2);
                 $aCSVRALIC10['si180_bdi']                        = $aRALIC10['si180_naturezaobjeto'] == '7' ? '' : $this->sicomNumberReal($aRALIC10['si180_bdi'], 2);
                 $aCSVRALIC10['si180_mesexercicioreforc']         = $this->padLeftZero($aRALIC10['si180_mesexercicioreforc'], 6);
