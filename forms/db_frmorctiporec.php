@@ -43,7 +43,7 @@ $clorctiporec->rotulo->label();
 	            </td>
 	            <td>
 						    <?
-						      db_input('o15_codigo', 10, $Io15_codigo, true, 'text', $db_opcao, "onblur='js_preencherCodigoRecurso();'");
+						      db_input('o15_codigo', 10, $Io15_codigo, true, 'text', $db_opcao, "onblur='js_preencherCodigoRecurso();'","","","",8);
 						    ?>
 	            </td>
 	          </tr>
