@@ -79,7 +79,7 @@ if (isset($_POST["descricao"])) {
         $clpcmater->pc01_ativo =  'f';
         $clpcmater->pc01_conversao = 'f';
         $clpcmater->pc01_id_usuario =  db_getsession("DB_id_usuario");
-        $clpcmater->pc01_libaut = 'f';
+        $clpcmater->pc01_libaut = "true";
         $clpcmater->pc01_veiculo = 'f';
         $clpcmater->pc01_fraciona = 'f';
         $clpcmater->pc01_validademinima = 'f';
