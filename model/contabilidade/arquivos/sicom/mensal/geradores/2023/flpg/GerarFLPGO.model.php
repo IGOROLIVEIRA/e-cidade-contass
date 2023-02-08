@@ -12,7 +12,7 @@ class GerarFLPGO extends GerarAM {
 
     /**
      *
-     * Mes de refer?cia
+     * Mes de referencia
      * @var Integer
      */
     public $iMes;
@@ -22,13 +22,13 @@ class GerarFLPGO extends GerarAM {
         $this->sArquivo = "FLPGO";
         $this->abreArquivo();
 
-        $sSql = "select * from flpgo102022 where si195_mes = ". $this->iMes ." and si195_inst = ". db_getsession("DB_instit");
+        $sSql = "select * from flpgo102023 where si195_mes = ". $this->iMes ." and si195_inst = ". db_getsession("DB_instit");
         $rsFLPGO10    = db_query($sSql);
 
-        $sSql2 = "select * from flpgo112022 where si196_mes = ". $this->iMes ." and si196_inst = ". db_getsession("DB_instit");
+        $sSql2 = "select * from flpgo112023 where si196_mes = ". $this->iMes ." and si196_inst = ". db_getsession("DB_instit");
         $rsFLPGO11    = db_query($sSql2);
 
-        $sSql3 = "select * from flpgo122022 where si197_mes = ". $this->iMes ." and si197_inst = ". db_getsession("DB_instit");
+        $sSql3 = "select * from flpgo122023 where si197_mes = ". $this->iMes ." and si197_inst = ". db_getsession("DB_instit");
         $rsFLPGO12    = db_query($sSql3);
 
 
@@ -86,8 +86,6 @@ class GerarFLPGO extends GerarAM {
                         $aCSVFLPGO10['si195_natcargo']           = empty($aFLPGO10['si195_natcargo']) ? ' ' : str_pad($aFLPGO10['si195_natcargo'], 1, "0", STR_PAD_LEFT);
                     else
                         $aCSVFLPGO10['si195_natcargo']           = ' ';
-
-                    $aCSVFLPGO10['si195_dscnatcargo']            =   $aFLPGO10['si195_dscnatcargo'];
                     $aCSVFLPGO10['si195_indcessao']              =   $aFLPGO10['si195_indcessao'];
 
                     if($aFLPGO10['si195_indsituacaoservidorpensionista'] == '01') {
@@ -115,7 +113,6 @@ class GerarFLPGO extends GerarAM {
 
                     $aCSVFLPGO10['si195_dscapo']                 = substr($aFLPGO10['si195_dscapo'],0, 3);
                     $aCSVFLPGO10['si195_natcargo']               = in_array($aFLPGO10['si195_indsituacaoservidorpensionista'], array('03','05','06','07','08','09')) ? ' ' : (empty($aFLPGO10['si195_natcargo']) ? ' ' : str_pad($aFLPGO10['si195_natcargo'], 1, "0", STR_PAD_LEFT));
-                    $aCSVFLPGO10['si195_dscnatcargo']            = $aFLPGO10['si195_dscnatcargo'];
                     $aCSVFLPGO10['si195_indcessao']              = str_pad($aFLPGO10['si195_indcessao'], 1, " ", STR_PAD_LEFT);
                     $aCSVFLPGO10['si195_dsclotacao']             = in_array($aFLPGO10['si195_indsituacaoservidorpensionista'], array('03','05','06','07','08','09')) ? ' ' :substr($aFLPGO10['si195_dsclotacao'], 0, 22);
                     $aCSVFLPGO10['si195_indsalaaula']            =   $aFLPGO10['si195_indsalaaula'];
