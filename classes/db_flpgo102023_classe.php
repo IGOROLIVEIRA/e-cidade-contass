@@ -43,7 +43,6 @@ class cl_flpgo102023 {
     var $si195_sglcargo = null;
     var $si195_dscapo = null;
     var $si195_natcargo = 0;
-    var $si195_dscnatcargo  = null;
     var $si195_indcessao = null;
     var $si195_dsclotacao = null;
     var $si195_indsalaaula = null;
@@ -91,7 +90,6 @@ class cl_flpgo102023 {
                  si195_sglcargo = varchar(3) = Sigla de Cargo
                  si195_dscapo = varchar(3) = Descrição do tipo de cargo do agente político
                  si195_natcargo = int8 = Natureza do Cargo
-                 si195_dscnatcargo = varchar(150) = Descrição do Cargo
                  si195_indcessao = varchar(3) = Servidor Cedido com ônus
                  si195_dsclotacao = varchar(250) = Descrição da lotação
                  si195_indsalaaula = varchar(1) = Atividade em sala de aula para o professor
@@ -166,7 +164,6 @@ class cl_flpgo102023 {
             $this->si195_sglcargo = ($this->si195_sglcargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_sglcargo"]:$this->si195_sglcargo);
             $this->si195_dscapo = ($this->si195_dscapo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dscapo"]:$this->si195_dscapo);
             $this->si195_natcargo = ($this->si195_natcargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_natcargo"]:$this->si195_natcargo);
-            $this->si195_dscnatcargo = ($this->si195_dscnatcargo == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dscnatcargo"]:$this->si195_dscnatcargo);
             $this->si195_indcessao = ($this->si195_indcessao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indcessao"]:$this->si195_indcessao);
             $this->si195_dsclotacao = ($this->si195_dsclotacao == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_dsclotacao"]:$this->si195_dsclotacao);
             $this->si195_indsalaaula = ($this->si195_indsalaaula == ""?@$GLOBALS["HTTP_POST_VARS"]["si195_indsalaaula"]:$this->si195_indsalaaula);
@@ -373,7 +370,6 @@ class cl_flpgo102023 {
                                       ,si195_sglcargo
                                       ,si195_dscapo
                                       ,si195_natcargo
-                                      ,si195_dscnatcargo
                                       ,si195_indcessao
                                       ,si195_dsclotacao
                                       ,si195_indsalaaula
@@ -410,7 +406,6 @@ class cl_flpgo102023 {
                                ,'$this->si195_sglcargo'
                                ,'$this->si195_dscapo'
                                ,".($this->si195_natcargo == "null" || $this->si195_natcargo == ""?"null":"'".$this->si195_natcargo."'")."
-                               ,'$this->si195_dscnatcargo'
                                ,'$this->si195_indcessao'
                                ,'$this->si195_dsclotacao'
                                ,'$this->si195_indsalaaula'
