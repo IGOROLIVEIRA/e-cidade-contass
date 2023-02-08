@@ -229,8 +229,7 @@ class GerarABERLIC extends GerarAM
                         $aCSVABERLIC16['si52_idacao']                 = $this->padLeftZero($aABERLIC16['si52_idacao'], 4);
                         $aCSVABERLIC16['si52_idsubacao']              = $aABERLIC16['si52_idsubacao'] == '' ? ' ' : $this->padLeftZero($aABERLIC16['si52_idsubacao'], 4);
                         $aCSVABERLIC16['si52_naturezadespesa']        = $this->padLeftZero($aABERLIC16['si52_naturezadespesa'], 6);
-                        $aCSVABERLIC16['si52_codfontrecursos']        = $this->padLeftZero($aABERLIC16['si52_codfontrecursos'], 3);
-                        $aCSVABERLIC16['si52_vlrecurso']              = $this->sicomNumberReal($aABERLIC16['si52_vlrecurso'], 2);
+                        $aCSVABERLIC16['si52_codfontrecursos']        = $this->padLeftZero($aABERLIC16['si52_codfontrecursos'], 7);
 
                         $this->sLinha = $aCSVABERLIC16;
                         $this->adicionaLinha();
