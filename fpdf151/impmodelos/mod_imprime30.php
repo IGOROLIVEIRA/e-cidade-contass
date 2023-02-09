@@ -236,7 +236,7 @@ $descr18   = null;
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(180,$y+38,$this->titulo15." Total"); // valor
 	$this->objpdf->SetFont('Arial','B',7);
-	$this->objpdf->Text(180,$y+41,""); // total de URM ou valor
+	$this->objpdf->Text(180,$y+41,$this->ipttotal); // total de URM ou valor
 
 /**/
 
