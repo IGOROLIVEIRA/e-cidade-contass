@@ -97,6 +97,7 @@
     $this->objpdf->sety($y+27);
     $this->objpdf->multicell(0,3,$this->descr4_1); // Instruções 1 - linha 1
     $this->objpdf->multicell(0,3,$this->descr4_2); // Instruções 1 - linha 2
+    $this->objpdf->multicell(0,3,$this->descr12_2); // Instruções 1 - linha 3
     $this->objpdf->setxy($xx,$yy-1);
 	
 /**/
