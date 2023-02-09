@@ -59,10 +59,6 @@ db_app::import("exceptions/*");
 $oDaoReciboPaga         = new cl_recibopaga();
 $oJson                  = new services_json();
 
-/**
- * Alterado pois estava estourando o tamanho do objeto
- */
-//$oParam               = $oJson->decode(str_replace("\\", "", $_POST["json"]) );
 $oParam                 = json_decode(str_replace("\\", "", $_POST["json"]) );
 
 $oRetorno               = new stdClass();

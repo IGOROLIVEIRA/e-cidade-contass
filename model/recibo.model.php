@@ -25,6 +25,14 @@
  *                                licenca/licenca_pt.txt
  */
 
+use App\Models\Numpref;
+use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Implementations\BancoDoBrasil\Auth;
+use App\Services\Tributario\Arrecadacao\GeneratePixWithQRCodeService;
+use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
+use GuzzleHttp\Client;
+use Swagger\Client\Api\Oauth2Api;
+use Swagger\Client\Model\ArrecadacaoqrcodesBody;
+
 /**
  * Classe responsável pela manutenção de recibos do sistema
  * @package Caixa
@@ -815,6 +823,67 @@ class Recibo {
       }
 
     }
+
+      /**
+       * @var Numpref $numpref
+       */
+      $numpref = Numpref::query()
+          ->where('k03_anousu', db_getsession("DB_anousu"))
+          ->where('k03_instit', db_getsession("DB_instit"))
+          ->first();
+
+      if (!$numpref->k03_ativo_integracao_pix) {
+          return true;
+      }
+
+      $providerConfig = (new ResolvePixProviderService())->execute($numpref);
+
+      try {
+          $providerConfig->authenticate();
+      } catch (\Exception $e) {
+          throw new \BusinessException('Erro ao obter token: '. $e->getMessage());
+      }
+
+      $body['numeroConvenio'] = "62191";
+      $body['indicadorCodigoBarras'] = "S";
+      $body['codigoGuiaRecebimento'] = "83660000000199800053846101172358000000000000";
+      $body['codigoSolicitacaoBancoCentralBrasil'] = "88a33759-78b0-43b7-8c60-e5e3e7cb55fe";
+      $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
+      $body['valorOriginalSolicitacao'] = '18.98';
+      $body['nomeDevedor'] = "Contribuinte da Silva";
+      $body['quantidadeSegundoExpiracao'] = '3600';
+
+      $service = new GeneratePixWithQRCodeService($providerConfig);
+
+//      $apiInstance = new Swagger\Client\Api\QrCodesApi(new GuzzleHttp\Client(), $config);
+//      $body = new ArrecadacaoqrcodesBody();
+
+      try {
+
+          $service->execute($body);
+
+//          $result = $apiInstance->criaBoletoBancarioId(
+//              $body,
+//              $config->getAccessToken(),
+//              $config->getChaveAplicacaoBB()
+//          );
+
+      } catch (Exception $e) {
+          echo 'Erro na chamada QrCodesApi->criaBoletoBancarioId: ', $e->getMessage(), PHP_EOL;
+      }
+
+//      $configuration = new Configuration(
+//          $numpref->getUrlApi(),
+//          $numpref->getUrlOAuth(),
+//          $numpref->getDevelopApplicationKey(),
+//          $numpref->getClientId(),
+//          $numpref->getClientSecret()
+//      );
+//
+//      $auth = new Auth($configuration);
+//      $token = $auth->auth();
+//      $service = new GeneratePixWithQRCodeService($configuration);
+//      $service->execute();
     return true;
   }
 

@@ -676,7 +676,7 @@ class RefactorGeracaoBoleto {
               $oRecibo->setDataRecibo($dtOperacao);
 
               $oRecibo->setDataVencimentoRecibo($dVencimento);
-              $oRecibo->setExercicioRecibo(substr($dVencimento, 0, 4) ); 
+              $oRecibo->setExercicioRecibo(substr($dVencimento, 0, 4) );
               $oRecibo->emiteRecibo();
 
               $k03_numnov           = $oRecibo->getNumpreRecibo();
@@ -930,8 +930,15 @@ class RefactorGeracaoBoleto {
       }
     }
 
+    $this->createPixQRCode();
+
     return $oRetorno;
   }
+
+    public function createPixQRCode($oRecibosEmitidos)
+    {
+
+    }
 
   /**
    * Retorna os Débitos  selecionados no formulário da CGF

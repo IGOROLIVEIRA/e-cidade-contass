@@ -1,31 +1,6 @@
-<?
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
+<?php
+use App\Models\InstituicaoFinanceiraApiPix;
 
-//MODULO: caixa
 $clnumpref->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("k06_descr");
@@ -38,11 +13,11 @@ $clrotulo->label("k02_drecei");
 $clrotulo->label("k03_diasvalidadecertidao");
 $clrotulo->label("k03_diasreemissaocertidao");
 
-if( !DBNumber::isInteger( trim($k03_diasreemissaocertidao) ) ){
+if (!DBNumber::isInteger( trim($k03_diasreemissaocertidao))) {
 	$k03_diasreemissaocertidao = '';
 }
 
-if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
+if (!DBNumber::isInteger( trim($k03_diasvalidadecertidao))) {
 	$k03_diasvalidadecertidao = '';
 }
 ?>
@@ -62,7 +37,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     				  <?=@$Lk03_anousu?>
     				</td>
     				<td colspan='4'>
-    				  <?
+                        <?php
         				$k03_anousu = db_getsession('DB_anousu');
         				db_input('k03_anousu',15,$Ik03_anousu,true,'text',3,"");
 
@@ -77,7 +52,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     				  <?=@$Lk03_defope?>
     				</td>
     				<td width="20%">
-    				  <?
+                        <?php
         				db_input('k03_defope',15,$Ik03_defope,true,'text',$db_opcao,"");
       				?>
             </td>
@@ -85,7 +60,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     				  <?=@$Lk03_numsli?>
     				</td>
     				<td width="20%">
-    				  <?
+                        <?php
     				    db_input('k03_numsli',15,$Ik03_numsli,true,'text',$db_opcao,"");
     				  ?>
             </td>
@@ -95,7 +70,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     				  <?=@$Lk03_recjur?>
             </td>
     				<td>
-    				  <?
+                        <?php
     				    db_input('k03_recjur',15,$Ik03_recjur,true,'text',$db_opcao,"");
     				  ?>
             </td>
@@ -103,7 +78,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     				  <?=@$Lk03_recmul?>
             </td>
     				<td >
-    				  <?
+                        <?php
     				    db_input('k03_recmul',15,$Ik03_recmul,true,'text',$db_opcao,"");
     				  ?>
             </td>
@@ -113,7 +88,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     				  <?=@$Lk03_codbco?>
             </td>
     				<td>
-    				  <?
+                        <?php
     				    db_input('k03_codbco',15,$Ik03_codbco,true,'text',$db_opcao,"");
       				?>
             </td>
@@ -121,7 +96,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     				  <?=@$Lk03_codage?>
             </td>
     				<td>
-    				  <?
+                        <?php
     				    db_input('k03_codage',15,$Ik03_codage,true,'text',$db_opcao,"");
     				  ?>
             </td>
@@ -131,7 +106,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
     				  <?=@$Lk03_calrec?>
             </td>
     				<td>
-    				  <?
+                        <?php
       			  	$x = array("f"=>"NÃO","t"=>"SIM");
       			  	db_select('k03_calrec',$x,true,$db_opcao,"style='width:115px'");
       				?>
@@ -140,7 +115,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
               <b>Tipo Recibo Protocolo:</b>
             </td>
     				<td>
-    				  <?
+                        <?php
     				    db_input('k03_reciboprot',15,$Ik03_reciboprot,true,'text',$db_opcao,"");
     				  ?>
             </td>
@@ -148,13 +123,13 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
    				<tr>
    					<td>
               <b>
-                <?
+                  <?php
                   db_ancora("Tipo Recibo Retenção: ","js_consultareciboretencao(true);",1);
                 ?>
               </b>
   					</td>
    					<td colspan='4'>
-   					  <?
+                        <?php
      				 	  db_input('k03_reciboprotretencao',15,$Ik03_reciboprotretencao,true,'text',$db_opcao," onchange=js_consultareciboretencao(false);");
      					  db_input('k00_descr',48,$Ik00_descr,true,'text',3);
    					  ?>
@@ -165,7 +140,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
               <b><?=@$Lk03_pgtoparcial?></b>
             </td>
             <td colspan='4'>
-              <?
+                <?php
 
                 if (isset($k03_pgtoparcial) ) {
                   if ($k03_pgtoparcial == 't') {
@@ -187,7 +162,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
               <b><?=@$Lk03_toleranciapgtoparc?></b>
             </td>
             <td colspan='4'>
-              <?
+                <?php
                 db_input('k03_toleranciapgtoparc',15,$Ik03_toleranciapgtoparc,true,'text',$db_opcao,"");
               ?>
             </td>
@@ -197,7 +172,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
               <?=@$Lk03_toleranciacredito?>
             </td>
             <td colspan='3'>
-              <?
+                <?php
                 db_input('k03_toleranciacredito',15,$Ik03_toleranciacredito, true, 'text', $db_opcao,"");
               ?>
             </td>
@@ -207,7 +182,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
               <b><?=@$Lk03_agrupadorarquivotxtbaixabanco?></b>
             </td>
             <td colspan='4'>
-              <?
+                <?php
                 $aAgrupadorArquivoTxtBaixaBancoValores = getValoresPadroesCampo("k03_agrupadorarquivotxtbaixabanco");
                 db_select("k03_agrupadorarquivotxtbaixabanco",$aAgrupadorArquivoTxtBaixaBancoValores,true,$db_opcao,"style='width:350px'");
               ?>
@@ -234,7 +209,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
   					  <?=@$Lk03_impend?>
   					</td>
   					<td width="20%">
-  					  <?
+                        <?php
     					  $x = array("f"=>"NÃO","t"=>"SIM");
     					  db_select('k03_impend',$x,true,$db_opcao,"style='width:125px'");
     					?>
@@ -243,7 +218,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
   					  <?=@$Lk03_unipri?>
   					</td>
   					<td width="20%">
-  					  <?
+                        <?php
     					  $x = array("f"=>"NÃO","t"=>"SIM");
     				  	db_select('k03_unipri',$x,true,$db_opcao,"style='width:125px'");
     					?>
@@ -254,7 +229,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
   					  <?=@$Lk03_certissvar?>
             </td>
   					<td>
-  					  <?
+                        <?php
     				  	$x = array("f"=>"NÃO","t"=>"SIM");
     				  	db_select('k03_certissvar',$x,true,$db_opcao,"style='width:125px'");
     					?>
@@ -263,7 +238,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
   					  <?=@$Lk03_diasjust?>
             </td>
   					<td>
-  					  <?
+                        <?php
   					    db_input('k03_diasjust',16,$Ik03_diasjust,true,'text',$db_opcao,"")
   					  ?>
             </td>
@@ -273,7 +248,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
   					  <?=@$Lk03_separajurmulparc?>
   					</td>
   					<td colspan='3'>
-  					  <?
+                        <?php
     				  	$x = array('2'=>'NÃO','1'=>'SIM');
     				  	db_select('k03_separajurmulparc',$x,true,$db_opcao,"style='width:125px'");
     					?>
@@ -281,12 +256,12 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
           </tr>
           <tr>
   					<td title="<?=@$Tk03_respcgm?>" >
-  					  <?
+                        <?php
       					db_ancora(@$Lk03_respcgm, "js_pesquisak03_respcgm(true);", $db_opcao);
   	   				?>
             </td>
   					<td colspan="3">
-  					  <?
+                        <?php
     					  db_input('k03_respcgm', 15, $Ik03_respcgm, true, 'text', $db_opcao, " onchange='js_pesquisak03_respcgm(false)' ");
     					  db_input('z01_nome', 48, $Iz01_nome, true, 'text', 3);
     					?>
@@ -294,12 +269,12 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
   				</tr>
   				<tr>
   					<td ="" title="<?=@$Tk03_respcargo?>">
-  					  <?
+                    <?php
       					db_ancora(@$Lk03_respcargo, "js_pesquisak03_respcargo(true)", $db_opcao);
   	   				?>
             </td>
   					<td colspan="3">
-  					  <?
+                        <?php
     					  db_input('k03_respcargo', 15, $Ik03_respcargo, true, 'text', $db_opcao, " onchange='js_pesquisak03_respcargo(false)'" );
     					  db_input('rh37_descr', 48, $Irh37_descr, true, 'text', 3)
     					?>
@@ -307,12 +282,12 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
   				</tr>
   				<tr>
   					<td  title="<?=@$Tk03_taxagrupo?>">
-  					  <?
+                        <?php
   					    db_ancora(@$Lk03_taxagrupo,"js_pesquisak03_taxagrupo(true);",$db_opcao);
   					  ?>
             </td>
   					<td colspan='3'>
-  					  <?
+                        <?php
     					  db_input('k03_taxagrupo',15,$Ik03_taxagrupo,true,'text',$db_opcao," onchange='js_pesquisak03_taxagrupo(false);'");
     					  db_input('k06_descr',48,$Ik06_descr,true,'text',3,'');
     					?>
@@ -323,7 +298,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
               <?=@$Lk03_reemissaorecibo?>
             </td>
             <td colspan="3">
-			        <?
+                <?php
     					  $aReemiteRecibo = array(
            					    								'f'=>"Não",
     					                          't'=>"Sim"
@@ -337,7 +312,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
 	    				  <?=@$Lk03_diasvalidadecertidao?>
 	            </td>
     				<td>
-    				  <?
+                        <?php
     				    db_input('k03_diasvalidadecertidao',2,$Ik03_diasvalidadecertidao,true,'text',$db_opcao,"",'','','',2);
     				  ?>
             </td>
@@ -347,7 +322,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
 	    				  <?=@$Lk03_diasreemissaocertidao?>
 	            </td>
     				<td>
-    				  <?
+                        <?php
     				    db_input('k03_diasreemissaocertidao',2,$Ik03_diasreemissaocertidao,true,'text',$db_opcao," onchange=js_teste();",'','','',2);
     				  ?>
             </td>
@@ -358,7 +333,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
               <?=@$Lk03_tipocertidao?>
             </td>
             <td colspan='3'>
-              <?
+                <?php
                 $x = array("1"=>"Conjunta","2"=>"Individualizada", "3"=>"Sele&ccedil;&atilde;o Usu&aacute;rio");
                 db_select('k03_tipocertidao',$x,true,$db_opcao,"style='width:125px'");
               ?>
@@ -369,7 +344,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
   					  <?=@$Lk03_reccert?>
             </td>
   					<td colspan='3'>
-  					  <?
+                        <?php
     					  $x = array("f"=>"NÃO","t"=>"SIM");
     					  db_select('k03_reccert',$x,true,$db_opcao,"style='width:125px'");
     					?>
@@ -380,7 +355,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
   					  <?=@$Lk03_tipocodcert?>
   					</td>
   					<td colspan="3">
-  					  <?
+                        <?php
       					$x = array( '0'=>'Não codifica',
                 						'1'=>'Sequencial geral',
                 						'2'=>'Sequencial por Instituição',
@@ -397,7 +372,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
   					  <?=@$Lk03_regracnd?>
             </td>
   					<td colspan="3">
-  					  <?
+                        <?php
     					  $aRegraCND = array("1"=>"Verifica os débitos dos imóveis por matrícula",
     					    								 "2"=>"Verifica os débitos dos imóveis por lote",
     							    						 "3"=>"Verifica os débitos dos imóveis por idbql");
@@ -414,13 +389,19 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
   				  </td>
   				  <td colspan="3">
   				    <?php
-  				      db_input('k03_receitapadraocredito', 15, $Ik03_receitapadraocredito, true, 'text', $db_opcao, "onchange='js_pesquisaReceita(false)'");
+  				      db_input(
+                            'k03_receitapadraocredito',
+                            15,
+                            $Ik03_receitapadraocredito,
+                            true,
+                            'text',
+                            $db_opcao,
+                            "onchange='js_pesquisaReceita(false)'"
+                      );
   				      db_input('k02_drecei', 48, $Ik02_drecei, true, 'text', 3);
   				    ?>
   				  </td>
   				</tr>
-
-
   			</table>
 			</fieldset>
 	  </td>
@@ -428,6 +409,53 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
 </table>
 
 <!-- final tributario -->
+    <fieldset>
+        <legend>Integração PIX - Geração QR Code</legend>
+        <table style="width: 100%">
+            <tr>
+                <th style="width: 50%"></th>
+                <th style="width: 50%"></th>
+            </tr>
+            <tr>
+                <td title="<?=$Tk03_ativo_integracao_pix?>">
+                    <?=$Lk03_ativo_integracao_pix?>
+                </td>
+                <td>
+                    <?php
+                    db_select(
+                        'k03_ativo_integracao_pix',
+                        ["f" => "Não", "t" => "Sim"],
+                        true,
+                        $db_opcao,
+                        "onChange='showInstituicaoFinanceira(this)'"
+                    );
+                    ?>
+                </td>
+            </tr>
+            <tr
+                id="instituicaoFinanceira"
+                style="display: <?=$k03_ativo_integracao_pix === 'f' ? 'none' : 'table-row' ?>"
+            >
+                <td title="<?=$Tk03_instituicao_financeira?>">
+                    <?=$Lk03_instituicao_financeira?>
+                </td>
+                <td>
+                    <?php
+                    db_select(
+                        'k03_instituicao_financeira',
+                        InstituicaoFinanceiraApiPix::INSTITUICOES_FINANCEIRAS_OPTION,
+                        true,
+                        $db_opcao,
+                        "onChange='showApiSettings(this)'"
+                    );
+                    ?>
+                </td>
+            </tr>
+        </table>
+        <?php
+        require_once 'forms/arrecadacao/numpref/partials/db_frmbbpixsettings.php';
+        ?>
+    </fieldset>
 <!-- Inicio mensagens-->
       <fieldset id="field_mensagem" name="field_mensagem">
         <legend>Mensagens</legend>
@@ -436,7 +464,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
             <td title="<?=@$Tk03_msg?>" colspan="4" align="center">
               <fieldset>
               <legend><?=@$Lk03_msg?></legend>
-              <?
+                  <?php
                 db_textarea('k03_msg',0,100,$Ik03_msg,true,'text',$db_opcao,"");
               ?>
               </fieldset>
@@ -446,7 +474,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
             <td title="<?=@$Tk03_msgcarne?>" colspan='4' align="center">
               <fieldset>
                <legend><?=@$Lk03_msgcarne?></legend>
-              <?
+                  <?php
                 db_textarea('k03_msgcarne',0,100,$Ik03_msgcarne,true,'text',$db_opcao,"");
               ?>
               </fieldset>
@@ -456,7 +484,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
             <td title="<?=@$Tk03_msgbanco?>" colspan="4" align="center">
               <fieldset>
               <legend><?=@$Lk03_msgbanco?></legend>
-              <?
+                  <?php
                 db_textarea('k03_msgbanco',0,100,$Ik03_msgbanco,true,'text',$db_opcao,"");
               ?>
               </fieldset>
@@ -466,7 +494,7 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
             <td title="<?=@$Tk03_msgautent?>" colspan="4" align="center">
               <fieldset>
               <legend><?=@$Lk03_msgautent?></legend>
-               <?
+                  <?php
                  db_textarea('k03_msgautent',0,100,$Ik03_msgautent,true,'text',$db_opcao,"");
                ?>
               </fieldset>
@@ -487,7 +515,8 @@ if( !DBNumber::isInteger( trim($k03_diasvalidadecertidao) ) ){
 <script>
 
 oMensagem = new DBToogle("field_mensagem", false);
-var MENSAGENS = 'tributario.arrecadacao.db_frmnumpref.';
+const MENSAGENS = 'tributario.arrecadacao.db_frmnumpref.';
+const CODIGO_BANCO_DO_BRASIL = 1;
 
 function validaCampo() {
 
@@ -581,6 +610,12 @@ function validaCampo() {
     $('k03_diasreemissaocertidao').focus();
     return false;
   }
+    if (
+        $F('k03_ativo_integracao_pix').trim() === 't'
+        && parseInt($F('k03_instituicao_financeira').trim()) === CODIGO_BANCO_DO_BRASIL
+    ) {
+        return validaCamposBB();
+    }
 }
 var chave_k03_tipo = 14;
 
@@ -692,7 +727,7 @@ function js_pesquisa(){
 }
 function js_preenchepesquisa(chave,chave1){
   db_iframe_numpref.hide();
-  <?
+    <?php
   if($db_opcao!=1){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave+'&chavepesquisa1='+chave1";
   }
@@ -756,5 +791,31 @@ function js_mostraReceitaHide(sDescricao, lErro) {
 
   document.getElementById('k02_drecei').value = sDescricao;
 
+}
+
+function showInstituicaoFinanceira(element) {
+    const tableSettingsApi = document.getElementById('instituicaoFinanceira');
+    const instituicaoFinanceira = document.getElementById('k03_instituicao_financeira');
+    const event = new Event('change');
+
+    if (element.value === 't') {
+        tableSettingsApi.removeAttribute('style');
+        instituicaoFinanceira.dispatchEvent(event);
+        return;
+    }
+    tableSettingsApi.style.display = 'none';
+}
+
+function showApiSettings(element) {
+    const settingsForms = ['apiSettings1'];
+    const formNameSelected = `apiSettings${element.value}`;
+    settingsForms.each(function (form) {
+        const formToShow = document.getElementById(form);
+        if (form === formNameSelected) {
+            formToShow.removeAttribute('style');
+            return;
+        }
+        formToShow.style.display = 'none';
+    });
 }
 </script>
