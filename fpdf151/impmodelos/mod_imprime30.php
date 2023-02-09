@@ -80,9 +80,10 @@
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(13,$y+10,$this->titulo3); // contribuinte/endereço
 	$this->objpdf->SetFont('Arial','B',6);
-	$this->objpdf->Text(13,$y+13,$this->descr3_1); // nome do contribuinte
-	$this->objpdf->Text(13,$y+16,$this->descr3_2); // endereço
-	$this->objpdf->Text(40,$y+22,$this->descr17); // SQL
+    $this->objpdf->sety($y+10);
+	$this->objpdf->MultiCell(55,3,$this->descr3_1); // nome do contribuinte
+	$this->objpdf->MultiCell(55,3,$this->descr3_2); // endereço
+	$this->objpdf->MultiCell(55,3,$this->descr17); // SQL
 
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(13,$y+27,$this->titulo4); // Instruções
