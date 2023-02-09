@@ -38,7 +38,7 @@
 	$this->objpdf->SetX(105);
 	$this->objpdf->Cell(90,4,$this->tipodebito,0,0,"C",0);
     $this->objpdf->SetFont('Arial','B',6);
-	$this->objpdf->Cell(05,4,'2ª Via Prefeitura',0,1,"R",0);
+	$this->objpdf->Cell(05,4,'2ª Via Banco',0,1,"R",0);
 
 	$y = $this->objpdf->GetY()-1;
 
