@@ -108,27 +108,27 @@
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(69,$y+10,"Valor documento"); // Valor do documento
 	$this->objpdf->SetFont('Arial','B',6);
-	$this->objpdf->Text(69,$y+13,$this->descr7); 
+	$this->objpdf->Text(69,$y+13,!empty($this->valororigem) ? $this->valororigem : $this->iptuvlrcor);
 
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(69,$y+17,"Desconto"); // valor do desconto
 	$this->objpdf->SetFont('Arial','B',6);
-	$this->objpdf->Text(69,$y+20,""); 
-	
+	$this->objpdf->Text(69,$y+20,$this->iptuvlrdesconto);
+
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(69,$y+24,"Multa"); // valor da multa
 	$this->objpdf->SetFont('Arial','B',6);
-	$this->objpdf->Text(69,$y+27,"");
-	
+	$this->objpdf->Text(69,$y+27,$this->arrayvalreceitas[2]);
+
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(69,$y+31,"Juros"); // valor do juros
 	$this->objpdf->SetFont('Arial','B',6);
-	$this->objpdf->Text(69,$y+34,""); 
+	$this->objpdf->Text(69,$y+34,$this->arrayvalreceitas[1]);
 
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(69,$y+38,$this->titulo7." Total"); // valor total
 	$this->objpdf->SetFont('Arial','B',6);
-	$this->objpdf->Text(69,$y+41,""); 
+	$this->objpdf->Text(69,$y+41,$this->ipttotal);
 
 /**/
 
@@ -214,23 +214,23 @@ $descr18   = null;
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(180,$y+10,"Valor Documento"); // valor do documento
 	$this->objpdf->SetFont('Arial','B',7);
-	$this->objpdf->Text(180,$y+13,$this->descr15); // total de URM ou valor
+	$this->objpdf->Text(180,$y+13,!empty($this->valororigem) ? $this->valororigem : $this->iptuvlrcor); // total de URM ou valoraqui
 
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(180,$y+17,"Desconto"); // valor
 	$this->objpdf->SetFont('Arial','B',7);
-	$this->objpdf->Text(180,$y+20,""); // total de URM ou valor
+	$this->objpdf->Text(180,$y+20,$this->iptuvlrdesconto); // total de URM ou valor
 
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(180,$y+24,"Multa"); // valor
 	$this->objpdf->SetFont('Arial','B',7);
-	$this->objpdf->Text(180,$y+27,""); // total de URM ou valor
+	$this->objpdf->Text(180,$y+27,$this->arrayvalreceitas[2]); // total de URM ou valor
 
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(180,$y+31,"Juros"); // valor
 	$this->objpdf->SetFont('Arial','B',7);
-	$this->objpdf->Text(180,$y+34,""); // total de URM ou valor
-	
+	$this->objpdf->Text(180,$y+34,$this->arrayvalreceitas[1]); // total de URM ou valor
+
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(180,$y+38,$this->titulo15." Total"); // valor
 	$this->objpdf->SetFont('Arial','B',7);
