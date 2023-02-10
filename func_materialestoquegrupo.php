@@ -1,37 +1,37 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_usuariosonline.php");
-require_once("dbforms/db_funcoes.php");
-require_once("classes/db_materialestoquegrupo_classe.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("classes/db_materialestoquegrupo_classe.php"));
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 $clmaterialestoquegrupo = new cl_materialestoquegrupo();
@@ -51,33 +51,33 @@ $oGet = db_utils::postMemory($_GET);
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
   <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-    <tr> 
+    <tr>
       <td height="63" align="center" valign="top">
         <table width="200px" border="0" align="center" cellspacing="0">
           <form name="form2" method="post" action="" >
-            <tr> 
+            <tr>
               <td width="4%" align="right" nowrap title="<?=$Tm65_sequencial?>">
                 <?=$Lm65_sequencial?>
               </td>
-              <td width="96%" align="left" nowrap> 
+              <td width="96%" align="left" nowrap>
                 <?php
                   db_input("m65_sequencial",10,$Im65_sequencial,true,"text",4,"","chave_m65_sequencial");
                 ?>
               </td>
             </tr>
-            <tr> 
+            <tr>
               <td width="4%" align="right" nowrap title="<?=$Tdb121_estrutural?>">
                 <b>Grupo:</br>
               </td>
-              <td width="96%" align="left" nowrap> 
+              <td width="96%" align="left" nowrap>
                 <?php
                   db_input("db121_estrutural",10,$Idb121_estrutural,true,"text",4,"","chave_db121_estrutural");
                 ?>
               </td>
             </tr>
-            <tr> 
-              <td colspan="2" align="center"> 
-                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar"> 
+            <tr>
+              <td colspan="2" align="center">
+                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
                 <input name="limpar" type="reset" id="limpar" value="Limpar" >
                 <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_materialestoquegrupo.hide();">
               </td>
@@ -86,23 +86,23 @@ $oGet = db_utils::postMemory($_GET);
         </table>
       </td>
     </tr>
-    <tr> 
-      <td align="center" valign="top"> 
+    <tr>
+      <td align="center" valign="top">
       <?php
-      
-      
+
+
       $sWhere = "1=1";
-      
+
       if (isset($iTipoConta) && trim($iTipoConta) != '') {
-      	$sWhere .= " and db_estruturavalor.db121_tipoconta = {$iTipoConta}"; 
+      	$sWhere .= " and db_estruturavalor.db121_tipoconta = {$iTipoConta}";
       }
 
       if ( !empty($oGet->lGruposAtivos) ) {
-        $sWhere .= " and materialestoquegrupo.m65_ativo is {$oGet->lGruposAtivos} "; 
+        $sWhere .= " and materialestoquegrupo.m65_ativo is {$oGet->lGruposAtivos} ";
       }
-      
+
       if(!isset($pesquisa_chave)){
-      	
+
         /**
          * Os nomes dos campos das tabelas foram mascarados para aparecem no lookup
          */
@@ -124,16 +124,16 @@ $oGet = db_utils::postMemory($_GET);
         }
 
         $repassa = array();
-        
+
         if(isset($chave_db121_estrutural)){
           $repassa = array("chave_m65_sequencial"=>$chave_m65_sequencial,"chave_db121_estrutural"=>$chave_db121_estrutural);
         }
-        
+
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
-        
+
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-        	
+
           $result = $clmaterialestoquegrupo->sql_record($clmaterialestoquegrupo->sql_query_conta(null,"*",null,"m65_sequencial = {$pesquisa_chave} and {$sWhere}"));
 
           if($clmaterialestoquegrupo->numrows!=0){
