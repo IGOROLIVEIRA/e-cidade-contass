@@ -518,7 +518,6 @@ class cl_pcorcamforne {
 				$virgula = ",";
 			}
 		}
-    print_r($sql);
 		return $sql;
 	}
    function sql_query_file ( $pc21_orcamforne=null,$campos="*",$ordem=null,$dbwhere=""){
