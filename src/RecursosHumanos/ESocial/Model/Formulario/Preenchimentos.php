@@ -5,20 +5,20 @@ namespace ECidade\RecursosHumanos\ESocial\Model\Formulario;
 use ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosResposta;
 
 /**
- * Classe responsï¿½vel por buscar os dados de preenchimento dos formulï¿½rios
+ * Classe respons?vel por buscar os dados de preenchimento dos formul?rios
  * @package ECidade\RecursosHumanos\ESocial\Model\Formulario
  */
 class Preenchimentos
 {
     /**
-     * Responsï¿½vel pelo preenchimento do formulï¿½rio
+     * Respons?vel pelo preenchimento do formul?rio
      *
      * @var mixed
      */
     private $responsavelPreenchimento;
 
     /**
-     * Informa o responsï¿½vel pelo preenchimento. Se nï¿½o indormado, busca de todos
+     * Informa o respons?vel pelo preenchimento. Se n?o indormado, busca de todos
      *
      * @param mixed $responsavel
      */
@@ -50,7 +50,7 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulï¿½rios dos empregadores.");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formul?rios dos empregadores.");
         }
 
         return \db_utils::getCollectionByRecord($rs);
@@ -72,18 +72,18 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulï¿½rios dos servidores.");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formul?rios dos servidores xx. $sql");
         }
 
         /**
-         * Para pegar o empregador, vai ter que ver a lotaï¿½ï¿½o do servidor na competï¿½ncia.
+         * Para pegar o empregador, vai ter que ver a lota??o do servidor na compet?ncia.
          */
         return \db_utils::getCollectionByRecord($rs);
     }
 
     /**
-     * Busca o preenchimento dos formulï¿½rios genï¿½ricos.
-     * Aqueles que possuem uma carga de dados e um campo pk (Uma chave ï¿½nica )
+     * Busca o preenchimento dos formul?rios gen?ricos.
+     * Aqueles que possuem uma carga de dados e um campo pk (Uma chave ?nica )
      *
      * @param integer $codigoFormulario
      * @return stdClass[]
@@ -106,7 +106,7 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulï¿½rios.");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formul?rios.");
         }
 
         return \db_utils::getCollectionByRecord($rs);
@@ -151,13 +151,13 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulï¿½rios das rubricas.");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formul?rios das rubricas.");
         }
 
         $rubricas = \db_utils::getCollectionByRecord($rs);
 
         /**
-         * @todo busca os empregadores da instituiï¿½ï¿½o e adicona para cada rubriuca
+         * @todo busca os empregadores da institui??o e adicona para cada rubriuca
          */
         return \db_utils::getCollectionByRecord($rs);
     }
@@ -179,7 +179,7 @@ class Preenchimentos
         $rs = \db_query($sql);
 
         if (!$rs) {
-            throw new \Exception("Erro ao buscar os preenchimentos dos formulï¿½rios dos empregadores.");
+            throw new \Exception("Erro ao buscar os preenchimentos dos formul?rios dos empregadores.");
         }
 
         return \db_utils::getCollectionByRecord($rs);
@@ -283,7 +283,7 @@ class Preenchimentos
         }
 
         /**
-         * @todo busca os empregadores da instituição e adicona para cada rubrica
+         * @todo busca os empregadores da institui??o e adicona para cada rubrica
          */
         return \db_utils::getCollectionByRecord($rsRubrica);
     }
@@ -657,7 +657,7 @@ class Preenchimentos
 
 
         /**
-         * @todo busca os empregadores da instituição e adicona para cada rubriuca
+         * @todo busca os empregadores da institui??o e adicona para cada rubriuca
          */
         return \db_utils::getCollectionByRecord($rs);
     }
@@ -679,6 +679,8 @@ class Preenchimentos
        1 AS indsitbenef,
        rh01_regist AS nrbeneficio,
        rh01_admiss AS dtinibeneficio,
+       date_part('month', rh01_admiss) as rh01_admiss_mes,
+       date_part('year', rh01_admiss) as rh01_admiss_ano,
        rh02_tipobeneficio AS tpbeneficio,
        CASE
            WHEN rh02_plansegreg = 1 THEN 1
@@ -730,7 +732,7 @@ WHERE rh30_vinculo IN ('I',
 
 
         /**
-         * @todo busca os empregadores da instituição e adicona para cada rubriuca
+         * @todo busca os empregadores da institui??o e adicona para cada rubriuca
          */
         return \db_utils::getCollectionByRecord($rs);
     }
@@ -803,73 +805,8 @@ WHERE rh30_vinculo IN ('I',
             $data->modify('last day of this month');
             $ultimoDiaDoMes = $data->format('d');
 
-            $sql = "SELECT
-            x.ideDmDev,
-            x.e60_numcgm,
-            x.e70_vlrliq as e70_vlrliq,
-            x.e50_data,
-            x.e50_empresadesconto,
-            (select z01_cgccpf from cgm where z01_numcgm = x.e50_empresadesconto) as doc_empresa,
-            x.codCateg,
-            x.indMV,
-            x.vlrRemunOE,
-            x.e50_valordesconto,
-            x.e50_datacompetencia,
-            x.codCategRemun,
-            sum(x.valor_inss) as valor_inss,
-            sum(x.valor_irrf) as valor_irrf,
-            sum(x.outrasretencoes) as outrasretencoes,
-            sum(x.sest) as sest,
-            sum(x.senat) as senat,
-            x.cpfTrab,
-            x.nmTrab,
-            x.codCBO,
-            x.dtNascto,
-            x.nrInsc
-            from
-            (
-            select
-                distinct e50_codord as ideDmDev,
-                e60_numcgm,
-                e70_vlrliq,
-                e50_data,
-                e50_empresadesconto,
-                e50_cattrabalhador as codCateg,
-                e50_contribuicaoprev as indMV,
-                e50_valorremuneracao as vlrRemunOE,
-                e50_valordesconto,
-                e50_datacompetencia,
-                e50_cattrabalhadorremurenacao as codCategRemun,
-                case
-                    when (retencaotiporec.e21_retencaotipocalc in (3, 4, 7)
-                    and e23_ativo = true) then (coalesce(e23_valorretencao, 0))
-                    else 0
-                end as valor_inss,
-                case
-                    when (retencaotiporec.e21_retencaotipocalc in (1, 2)
-                    and e23_ativo = true) then (coalesce(e23_valorretencao, 0))
-                    else 0
-                end as valor_irrf,
-                case
-                    when (retencaotiporec.e21_retencaotipocalc in (5, 6)
-                    and e23_ativo = true) then (coalesce(e23_valorretencao, 0))
-                    else 0
-                end as outrasretencoes,
-                case
-                    when (retencaotiporec.e21_retencaotipocalc in (8)
-                    and e23_ativo = true) then (coalesce(e23_valorretencao, 0))
-                    else 0
-                end as sest,
-                case
-                    when (retencaotiporec.e21_retencaotipocalc in (9)
-                    and e23_ativo = true) then (coalesce(e23_valorretencao, 0))
-                    else 0
-                end as senat,
-                cgm.z01_cgccpf as cpfTrab,
-                cgm.z01_nome as nmTrab,
-                rh70_estrutural as codCBO,
-                cgm.z01_nasc as dtNascto,
-                cgc as nrInsc
+            $sql = "SELECT distinct
+                cgm.z01_cgccpf
             from
                 empnota
             inner join empempenho on
@@ -918,24 +855,6 @@ WHERE rh30_vinculo IN ('I',
             if ($cgm != null) {
                 $sql .= " and cgm.z01_numcgm in ($cgm) ";
             }
-            $sql .= " ) as x ";
-            $sql .= " group by
-            x.idedmdev,
-            x.e60_numcgm,
-            x.e50_data,
-            x.e50_empresadesconto,
-            x.codcateg,
-            x.indmv,
-            x.vlrremunoe,
-            x.e50_valordesconto,
-            x.e50_datacompetencia,
-            x.codcategremun,
-            x.cpftrab,
-            x.nmtrab,
-            x.codcbo,
-            x.dtnascto,
-            x.nrinsc,
-            x.e70_vlrliq";
         }
         $rs = \db_query($sql);
         // echo $sql;
@@ -945,7 +864,7 @@ WHERE rh30_vinculo IN ('I',
             throw new \Exception("Erro ao buscar os preenchimentos do S1200");
         }
         /**
-         * @todo busca os empregadores da instituição e adicona para cada rubriuca
+         * @todo busca os empregadores da institui??o e adicona para cada rubriuca
          */
         return \db_utils::getCollectionByRecord($rs);
     }
@@ -1008,7 +927,7 @@ WHERE rh30_vinculo IN ('I',
             throw new \Exception("Erro ao buscar os preenchimentos do S1202");
         }
         /**
-         * @todo busca os empregadores da instituição e adicona para cada rubriuca
+         * @todo busca os empregadores da institui??o e adicona para cada rubriuca
          */
         return \db_utils::getCollectionByRecord($rs);
     }
@@ -1068,7 +987,7 @@ WHERE rh30_vinculo IN ('I',
             throw new \Exception("Erro ao buscar os preenchimentos do S1207");
         }
         /**
-         * @todo busca os empregadores da instituição e adicona para cada rubriuca
+         * @todo busca os empregadores da institui??o e adicona para cada rubriuca
          */
         return \db_utils::getCollectionByRecord($rs);
     }
@@ -1124,14 +1043,10 @@ WHERE rh30_vinculo IN ('I',
                 $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
             }
         } else {
-            $sql = "SELECT *
+            $sql = "SELECT distinct z01_cgccpf
             FROM (
-                    select e60_numcgm as num_cgm,
-                        z01_cgccpf as cpf_benef,
-                        e50_codord as ide_dm_dev,
-                        substr(e50_data::varchar, 1, 7) as per_ref,
-                        (e53_valor - e53_vlranu) as valor_op,
-                        corrente.k12_data as dt_pgto,
+                    select
+                        z01_cgccpf,
                         sum(
                             case
                                 when corgrupotipo.k106_sequencial = 4 then corrente.k12_valor * -1
@@ -1168,21 +1083,14 @@ WHERE rh30_vinculo IN ('I',
                     where e50_cattrabalhador is not null
                         and date_part('month',corrente.k12_data) = $mes
                         and date_part('year',corrente.k12_data) = $ano
-                        and corgrupotipo.k106_sequencial in (1, 4) -- somente pagamento/estorno liquido
-                        and length(z01_cgccpf) = 11 --and e50_codord = 33521
-                    group by 1,
-                        2,
-                        3,
-                        4,
-                        5,
-                        6
-                    order by e50_codord, corrente.k12_data
-                ) AS pagamentos
+                        and corgrupotipo.k106_sequencial in (1, 4)
+                        and length(z01_cgccpf) = 11";
+            if ($cgm != null) {
+                $sql .= " and e60_numcgm in ($cgm) ";
+            }
+            $sql .= " group by 1 ) AS pagamentos
             WHERE vr_liq > 0
             ";
-            if ($cgm != null) {
-                $sql .= " and num_cgm in ($cgm) ";
-            }
         }
         $rs = \db_query($sql);
         // echo $sql;
@@ -1192,7 +1100,7 @@ WHERE rh30_vinculo IN ('I',
             throw new \Exception("Erro ao buscar os preenchimentos do S1210");
         }
         /**
-         * @todo busca os empregadores da instituição e adicona para cada rubriuca
+         * @todo busca os empregadores da institui??o e adicona para cada rubriuca
          */
         return \db_utils::getCollectionByRecord($rs);
     }
@@ -1261,18 +1169,19 @@ WHERE rh30_vinculo IN ('I',
         $rsAfasta = \db_query($sql);
         // echo $sql;
         // db_criatabela($rsAfasta);
+        // exit;
         if (!$rsAfasta) {
             throw new \Exception("Erro ao buscar os preenchimentos do S2230");
         }
 
         /**
-         * @todo busca os empregadores da instituição e adicona para cada rubrica
+         * @todo busca os empregadores da institui??o e adicona para cada rubrica
          */
         return \db_utils::getCollectionByRecord($rsAfasta);
     }
 
     /**
-     * Buscar dados para preenchimento de um evento específico
+     * Buscar dados para preenchimento de um evento espec?fico
      *
      * @param integer $tipo - ECidade\RecursosHumanos\ESocial\Model\Formulario\Tipo
      * @param integer $matricula
