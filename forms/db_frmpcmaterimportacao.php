@@ -625,6 +625,7 @@ if (isset($_POST["processar"])) {
 </form>
 <script>
     function salvarItens() {
+
         js_divCarregando('Aguarde, salvando os itens...', 'msgbox');
         var oParam = new Object();
         oParam.exec = "salvarItens";
@@ -666,6 +667,7 @@ if (isset($_POST["processar"])) {
             Filtros += '&descricao=' + document.getElementById('pc96_descricao').value;
             Filtros += '&data=' + document.getElementById('pc01_data').value;
 
+            document.location.href = document.location.href;
 
             var jan = window.open('com2_relatorioimportacaoitens.php?' + Filtros, '', 'location=0, width=' + (screen.availWidth - 5) +
                 'width=' + (screen.availWidth - 5) + ', scrollbars=1');
