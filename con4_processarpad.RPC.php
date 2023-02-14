@@ -429,7 +429,7 @@ switch ($oParam->exec) {
             } catch (Exception $eErro) {
 
               $oRetorno->status  = 2;
-              $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
+              $sGetMessage       = "\nArquivo: {$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n{$eErro->getMessage()}";
               $oRetorno->message = urlencode(str_replace("\\n", "\n", $sGetMessage));
             }
           }
@@ -538,7 +538,7 @@ switch ($oParam->exec) {
             } catch (Exception $eErro) {
 
               $oRetorno->status  = 2;
-              $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
+              $sGetMessage       = "\nArquivo: {$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
               $oRetorno->message = urlencode(str_replace("\\n", "\n", $sGetMessage));
             }
           }

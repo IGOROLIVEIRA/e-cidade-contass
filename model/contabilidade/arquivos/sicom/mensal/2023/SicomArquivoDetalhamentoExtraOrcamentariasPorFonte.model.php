@@ -32,6 +32,12 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
     protected $sNomeArquivo = 'EXT';
 
     /**
+ 	* @var bollean
+	* Realiza transferência de fontes utilizadas no reg 20 para fonte principal da conta (PCASP)
+	*/
+    protected $bEncerramento = false;
+
+    /**
      * @var array Fontes encerradas em 2023
      */
     protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
@@ -59,6 +65,38 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
      */
     public function getCampos()
     {
+    }
+
+    public function setEncerramentoExt($iEncerramento)
+    {
+        if ($iEncerramento == 1) {
+            $this->bEncerramento = true;
+        }
+    }
+
+    /**
+     * Separa função para buscar a natureza do saldo atual/final da conta
+     * utilizando as condições já existentes
+     * @param Object $oExt20
+     * @return String
+     */
+    private function getNatSaldoAtual($oExt20)
+    {
+
+        if (substr($oExt20->si165_codfontrecursos, 1, 2) == '59') {
+            $verificaNatSaldoAtual = $oExt20->si165_vlsaldoatualfonte;
+        } else {
+            $verificaNatSaldoAtual = ($oExt20->si165_vlsaldoanteriorfonte + $oExt20->si165_totaldebitos - $oExt20->si165_totalcreditos);
+        }
+
+        if ($verificaNatSaldoAtual < 0) {
+            return 'C';
+        } elseif ($verificaNatSaldoAtual > 0) {
+            return 'D';
+        } else {
+            return $oExt20->si165_natsaldoatualfonte;
+        }
+
     }
 
     /**
@@ -124,9 +162,11 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 					       COALESCE(c60_tipolancamento,0) AS tipolancamento,
 					       COALESCE(c60_subtipolancamento,0) AS subtipo,
 					       COALESCE(c60_desdobramneto,0) AS desdobrasubtipo,
-					       substr(c60_descr,1,50) AS descextraorc
+					       substr(c60_descr,1,50) AS descextraorc,
+                           o15_codtri as recurso
 					FROM conplano
 					INNER JOIN conplanoreduz ON c60_codcon = c61_codcon AND c60_anousu = c61_anousu
+                    INNER JOIN orctiporec ON c61_codigo = o15_codigo
 					LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
 					WHERE c60_anousu = " . db_getsession("DB_anousu") . "
 					  AND c60_codsis = 7
@@ -258,24 +298,32 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                         throw new Exception($cExt10->erro_msg);
                     }
                 }
+                
+                $oExtra = new stdClass();
+                $oExtra->codext = $oContaExtra->codext;
+                $oExtra->recurso = $oContaExtra->recurso;
 
-                $cExt10->extras[] = $oContaExtra->codext;
+                $cExt10->extras[]= $oExtra;
                 $aExt10Agrupodo[$aHash] = $cExt10;
+
             } else {
-                $aExt10Agrupodo[$aHash]->extras[] = $oContaExtra->codext;
+                $oExtra = new stdClass();
+                $oExtra->codext = $oContaExtra->codext;
+                $oExtra->recurso = $oContaExtra->recurso;
+                $aExt10Agrupodo[$aHash]->extras[] = $oExtra;
             }
         }
         $aExt20 = array();
         $aExtExercicioCompDevo = array();
         foreach ($aExt10Agrupodo as $oExt10Agrupado) {
-            foreach ($oExt10Agrupado->extras as $nExtras) {
-                $aExtExercicioCompDevo = $this->recuperarExercicioCompetenciaDevolucao($nExtras, $oExt10Agrupado->si124_codorgao, $aExtExercicioCompDevo);
+            foreach ($oExt10Agrupado->extras as $oExtras) {
+                $aExtExercicioCompDevo = $this->recuperarExercicioCompetenciaDevolucao($oExtras->codext, $oExt10Agrupado->si124_codorgao, $aExtExercicioCompDevo);
 
                 /*
 				 * pegar todas as fontes de recursos movimentadas para cada codext
 				 */
                 $sSql20Fonte  = " SELECT DISTINCT codext, fonte  from ( ";
-                $sSql20Fonte .= $this->getSql20FonteBase($nExtras);
+                $sSql20Fonte .= $this->getSql20FonteBase($oExtras->codext);
                 $sSql20Fonte .= " ) as extfonte order by codext, fonte ";
 
                 $rsExt20FonteRecurso = db_query($sSql20Fonte); // or die($sSql20Fonte);
@@ -371,6 +419,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                         $cExt20->si165_mes                   = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                         $cExt20->si165_instit                = db_getsession("DB_instit");
                         $cExt20->ext30                       = array();
+                        $cExt20->iFontePrincipal			 = $oExtras->recurso;
                         $aExt20[$Hash20]                     = $cExt20;
                     } else {
 
@@ -405,7 +454,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                                 inner join orctiporec on  orctiporec.o15_codigo = conplanoreduz.c61_codigo
                                         and conplanoreduz.c61_anousu = conlancamval.c69_anousu
                                 where conlancamdoc.c71_coddoc in (120,151,161)
-                                  and conlancamval.c69_debito = {$nExtras}
+                                  and conlancamval.c69_debito = {$oExtras->codext}
                                   and DATE_PART('YEAR',conlancamval.c69_data) = " . db_getsession("DB_anousu") . "
                                   and DATE_PART('MONTH',conlancamval.c69_data) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                                   and orctiporec.o15_codigo = {$oExtRecurso}";
@@ -527,8 +576,66 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                 }
             }
         }
-        // echo "<pre>";
-        // print_r($aExtExercicioCompDevo);
+        
+        /**
+         * Realiza trasnferências das fontes utilizadas no registro 20 para o registro da fonte principal (Cadastrada no PCASP)
+         */
+        if ($this->bEncerramento) {
+            
+            //Percorre array dos registros 20 para fazer as transferências nas fontes que não são principal
+            foreach ($aExt20 as $sHash20 => $oExt20) {
+
+                $sHashPrincipal = substr($sHash20, 0, -3) . $oExt20->iFontePrincipal;
+
+                //Considera apena fonte diferente da principal
+                if ($oExt20->iFontePrincipal != $oExt20->si165_codfontrecursos) {
+
+                    //Guarda soma dos saldos atuais/finais das fontes para, posteriormente, atribuir para a principal
+                    $aExt20[$sHashPrincipal]->iTotalSaldoAtual += $oExt20->si165_vlsaldoatualfonte;
+
+                    /**
+                     * Caso saldo final seja D: soma vlSaldoAtualFonte com totalCreditos
+                     * Caso saldo final seja C: soma vlSaldoAtualFonte com totalDebitos
+                     * Zera vlSaldoAtualFonte
+                     */
+                    if ($this->getNatSaldoAtual($oExt20) == 'D') {
+
+                        $oExt20->si165_totalcreditos += $oExt20->si165_vlsaldoatualfonte;
+                        $oExt20->si165_vlsaldoatualfonte = 0;
+
+                    } elseif ($this->getNatSaldoAtual($oExt20) == 'C') {
+
+                        $oExt20->si165_totaldebitos += abs($oExt20->si165_vlsaldoatualfonte);
+                        $oExt20->si165_vlsaldoatualfonte = 0;
+
+                    }
+
+                }
+                
+            }
+
+            //Percorre array dos registros 20 para atualizar os saldos da fonte principal
+            foreach ($aExt20 as $sHash20 => $oExt20) {
+                //Considera apenas fonte principal
+                if ($oExt20->iFontePrincipal == $oExt20->si165_codfontrecursos) {
+                    if (!isset($oExt20->iTotalSaldoAtual)) {
+                        continue;
+                    }
+                    //Atualiza saldo atual da fonte principal utilizando o valor acumulado no for das fontes não principais
+                    $oExt20->si165_vlsaldoatualfonte += $oExt20->iTotalSaldoAtual;
+
+                    //Atualiza o crédito/débito da fonte principal
+                    if ($oExt20->iTotalSaldoAtual > 0) {
+                        $oExt20->si165_totaldebitos += abs($oExt20->iTotalSaldoAtual);
+                    } else {
+                        $oExt20->si165_totalcreditos += abs($oExt20->iTotalSaldoAtual);
+                    }
+
+                }
+
+            }
+            
+        }
         foreach($aExt20 as $oExt20) {
             $hash = $this->getChave20($oExt20);
     
@@ -562,7 +669,6 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
         $aExt20 = $this->lancamentosGenericos($aExt20);
 
         ksort($aExt20);
-       // echo "<pre>";print_r($aExt20);
         foreach ($aExt20 as $oExt20) {
 
             $cExt   = new cl_ext202023();
@@ -603,7 +709,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
             $cExt->incluir(null);
 
             if ($cExt->erro_status == 0) {
-                throw new Exception("EXT20: " . $cExt->erro_msg);
+                throw new Exception("Registro 20!\n" . $cExt->erro_msg);
             }
             foreach ($oExt20->ext30 as $oExtAgrupado) {
 
@@ -627,7 +733,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
                 $cExt30->incluir(null);
                 if ($cExt30->erro_status == 0) {
-                    throw new Exception("EXT30: " . $cExt30->erro_msg);
+                    throw new Exception("Registro 30!\n" . $cExt30->erro_msg);
                 }
 
                 foreach ($oExtAgrupado->ext31 as $oext31agrupado) {
@@ -650,7 +756,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
                     $cExt31->incluir(null);
                     if ($cExt31->erro_status == 0) {
-                        throw new Exception("EXT31: " . $cExt31->erro_msg);
+                        throw new Exception("Registro 31!\n" . $cExt31->erro_msg);
                     }
                 }
             }
