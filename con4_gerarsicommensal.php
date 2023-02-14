@@ -155,10 +155,13 @@ $clrotulo->label("o15_codigo");
                                 <label for="LegislacaoMunicipalLicitacao">REGLIC - Legislação Municipal para Licitação</label><br>
                             <? } ?>
                             <input type="checkbox" value="AberturaLicitacao" id="AberturaLicitacao" />
-                            <label for="AberturaLicitacao">ABERLIC - Abertura da Licitação</label><br>
+                            <label for="AberturaLicitacao">ABERLIC - Abertura da Licitação</label><br> 
 
                             <input type="checkbox" value="ResponsaveisLicitacao" id="ResponsaveisLicitacao" />
                             <label for="ResponsaveisLicitacao">RESPLIC - Responsáveis pela Licitação</label><br>
+
+                            <input type="checkbox" value="ParticipantesLicitacao" id="ParticipantesLicitacao" />
+                            <label for="ParticipantesLicitacao">PARTLIC - Participantes da Licitação</label><br>
 
                             <input type="checkbox" value="HabilitacaoLicitacao" id="HabilitacaoLicitacao" />
                             <label for="HabilitacaoLicitacao">HABLIC - Habilitação da Licitação</label><br>

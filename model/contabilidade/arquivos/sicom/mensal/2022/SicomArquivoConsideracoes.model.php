@@ -79,7 +79,7 @@ class SicomArquivoConsideracoes extends SicomArquivoBase implements iPadArquivoB
      * selecionar informacoes registro 10
      */
 
-    $sSql = "select * from consideracoes where si171_mesreferencia = '{$this->sDataFinal['6']}';";
+    $sSql = "select * from consideracoes where si171_anousu = " . db_getsession('DB_anousu') . "  and si171_mesreferencia = " . $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
     $rsResult10 = db_query($sSql);
 

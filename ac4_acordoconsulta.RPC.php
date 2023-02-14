@@ -66,60 +66,32 @@ switch ($oParam->exec) {
 
   case 'itensConsulta':
 
-    $oRetorno->dados = array();
 
-    $oAcordo    = new Acordo($oParam->ac16_sequencial);
-    $aPosicao   = $oAcordo->getPosicoes();
-    $nSomaTotal = 0;
+    $itens = db_query("select * from acordoposicao
+    inner join acordoitem on ac20_acordoposicao = ac26_sequencial
+    inner join pcmater on ac20_pcmater = pc01_codmater
+    inner join matunid on ac20_matunid = m61_codmatunid
+    inner join pcmaterele on pc07_codmater = pc01_codmater and pc07_codele = ac20_elemento
+    where ac26_acordo = $oParam->ac16_sequencial and ac26_acordoposicaotipo = 1;");
 
-    foreach ($aPosicao as $oPosicao) {
-
-      foreach ($oPosicao->getItens() as $oDado) {
-
-        $oItem = new stdClass();
-
-        if ($oPosicao->getTipo() == 1) {
-
-          $oItem->aditamento = '';
-          $oItem->tipo       = '';
-        } else {
-
-          $oItem->aditamento = urlencode($oPosicao->getDescricaoTipo());
-          $oItem->tipo       = $oPosicao->getTipo();
-        }
-
-
-
-        $oItem->codigo      = $oDado->getMaterial()->getMaterial();
-
-        $complmater = db_query("select pc01_complmater from acordoitem inner join pcmater on ac20_pcmater = pc01_codmater where pc01_codmater = $oItem->codigo limit 1");
-        $complmater           = db_utils::fieldsmemory($complmater, 0);
-
-
-
-        $oItem->descricao   = $oDado->getMaterial()->getDescricao();
-        $oItem->quantidade  = $oDado->getQuantidade();
-        $oItem->unidade     = $oDado->getUnidade();
-        $oItem->vlrUnit     = $oDado->getValorunitario();
-        $oItem->vlrTotal    = $oDado->getValorTotal();
-        $oItem->dotacoes    = $oDado->getDotacoes();
-        $oItem->saldos      = $oDado->getSaldos();
-        $oItem->ordem       = $oDado->getOrdem();
-        $oItem->elemento    = $oDado->getElemento();
-        $oItem->unidademed  = $oDado->getDescricaoUnidade();
-        //$oItem->observacao  = $oDado->getResumo();
-        $oItem->observacao = urlencode($complmater->pc01_complmater);
-        $nSomaTotal        += $oDado->getValorTotal();
-        $oRetorno->dados[]  = $oItem;
-      }
+    for ($i = 0; $i < pg_numrows($itens); $i++) {
+      $item = db_utils::fieldsmemory($itens, $i);
+      $oItem = new stdClass();
+      $oItem->aditamento = '';
+      $oItem->tipo       = '';
+      $oItem->codigo      = $item->ac20_pcmater;
+      $oItem->descricao      = urlencode($item->pc01_descrmater);
+      $oItem->unidademed = $item->m61_descr;
+      $oItem->quantidade = $item->ac20_quantidade;
+      $oItem->vlrUnit = $item->ac20_valorunitario;
+      $oItem->vlrTotal = $item->ac20_valortotal;
+      $oItem->observacao = urlencode($item->pc01_complmater);
+      $oItem->ordem = $item->ac20_ordem;
+      $oItem->elemento = $item->ac20_elemento;
+      $oRetorno->dados[]  = $oItem;
     }
-    $oRetorno->ac16_sequencial = $oParam->ac16_sequencial;
 
-
-    //Soma do valor total de cada item
-    $oRetorno->nValorTotal = $nSomaTotal;
-
-    $oRetorno->detalhe  = $oParam->detalhe;
+    $oRetorno->detalhe  = "itens";
 
     break;
 
@@ -308,13 +280,13 @@ switch ($oParam->exec) {
     foreach ($aDados as $oDado) {
 
       $oItem = new stdClass();
-      if (urlencode($oDado->getNumeroAditamento()) != "") {
+      if (urlencode($oDado->getNumero()) != 1) {
         $oItem->codigo = $oDado->getCodigo();
         $oItem->situacao = urlencode($oDado->getDescricaoTipo());
         $oItem->data = $oDado->getData();
         $oItem->emergencial = $oDado->isEmergencial();
         $oItem->vigencia = urlencode($oDado->getVigenciaInicial() . " até " . $oDado->getVigenciaFinal());
-        $oItem->numeroAditamento = urlencode($oDado->getNumeroAditamento());
+        $oItem->numeroAditamento = urlencode($oDado->getNumero());
         $oRetorno->dados[] = $oItem;
       }
     }
@@ -527,10 +499,10 @@ switch ($oParam->exec) {
           $controleItem = db_utils::fieldsMemory($rsItem, 0)->controle;
           $servicoItem = db_utils::fieldsMemory($rsItem, 0)->servico;
           $valorExecutado = db_utils::fieldsMemory($rsItem, 0)->valor;
-          if($controleItem == 'f' && $servicoItem == 't'){
-          $qtdeExecutada = 0;
+          if ($controleItem == 'f' && $servicoItem == 't') {
+            $qtdeExecutada = 0;
           } else {
-          $qtdeExecutada = db_utils::fieldsMemory($rsItem, 0)->quantidade;
+            $qtdeExecutada = db_utils::fieldsMemory($rsItem, 0)->quantidade;
           }
 
           $oItem = new stdClass();
@@ -540,7 +512,7 @@ switch ($oParam->exec) {
           $oItem->vlrUnit = $oDado->getValorunitario();
           $oItem->vlrTotal = $oDado->getValorTotal() - $valorExecutado;
           $nSomaTotal += $oDado->getValorTotal();
-          $oRetorno->dados[] = $oItem; 
+          $oRetorno->dados[] = $oItem;
         }
       }
     }

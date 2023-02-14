@@ -26,8 +26,7 @@
 */
 
 
-
-if (isset($_POST["salvar"])) {
+if (isset($_POST["descricao"])) {
     $descricao = $_POST['descricao'];
     $data =  $_POST['data'];
     $servico =  $_POST['servico'];
@@ -80,7 +79,7 @@ if (isset($_POST["salvar"])) {
         $clpcmater->pc01_ativo =  'f';
         $clpcmater->pc01_conversao = 'f';
         $clpcmater->pc01_id_usuario =  db_getsession("DB_id_usuario");
-        $clpcmater->pc01_libaut = 'f';
+        $clpcmater->pc01_libaut = "true";
         $clpcmater->pc01_veiculo = 'f';
         $clpcmater->pc01_fraciona = 'f';
         $clpcmater->pc01_validademinima = 'f';
@@ -612,12 +611,12 @@ if (isset($_POST["processar"])) {
     if (isset($_POST["processar"])) {
         echo "<script>document.getElementById('pc01_data').value = '$pc01_data'; </script>";
         echo "<script>document.getElementById('descricaoimportacao').value = '" . $_POST['pc96_descricao'] . "'</script>";
-        echo  "<input style='margin-top: 10px;' type='submit' id='salvar' name='salvar'  value='Salvar'>";
+        echo  "<input style='margin-top: 10px;' type='button' id='salvar' name='salvar'  value='Salvar' onclick='salvarItens()'> ";
     } else {
-        echo  "<input style='margin-top: -200px;' type='submit' id='salvar' value='Salvar' name='salvar'>";
+        echo  "<input style='margin-top: -200px;' type='button' id='salvar' value='Salvar' name='salvar' onclick='salvarItens()'>";
     }
     if ($erro) {
-        echo "<script> document.getElementById('salvar').disabled = true; </script>";
+        echo "<script> document.getElementById('save').disabled = true; </script>";
         echo "<script>  alert('Corrija os itens grifados em vermelho e reprocesse a planilha.'); </script>";
     }
 
@@ -625,6 +624,63 @@ if (isset($_POST["processar"])) {
 
 </form>
 <script>
+    function salvarItens() {
+
+        js_divCarregando('Aguarde, salvando os itens...', 'msgbox');
+        var oParam = new Object();
+        oParam.exec = "salvarItens";
+        oParam.data = document.getElementById('pc01_data').value;
+        oParam.descricaoImportacao = document.getElementById('pc96_descricao').value;
+        oParam.aItens = new Array();
+
+        for (i = 0; i < document.getElementsByName('descricao[]').length; i++) {
+            var oItem = new Object();
+            oItem.descricao = document.getElementsByName('descricao[]')[i].value;
+            oItem.codsubgrupo = document.getElementsByName('codsubgrupo[]')[i].value;
+            oItem.obra = document.getElementsByName('obra[]')[i].value;
+            oItem.taxa = document.getElementsByName('taxa[]')[i].value;
+            oItem.tabela = document.getElementsByName('tabela[]')[i].value;
+            oItem.codele = document.getElementsByName('codele[]')[i].value;
+            oItem.complemento = document.getElementsByName('complemento[]')[i].value;
+            oItem.servico = document.getElementsByName('servico[]')[i].value;
+
+            oParam.aItens.push(oItem);
+        }
+
+
+        var oAjax = new Ajax.Request('com1_pcmaterimportacao.RPC.php', {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_retornoSalvar
+        });
+
+    }
+
+    function js_retornoSalvar(oResponse) {
+
+        js_removeObj('msgbox');
+        var oRetorno = eval("(" + oResponse.responseText + ")");
+        if (oRetorno.iStatus == 1) {
+            Filtros = '';
+            Filtros += 'codigoitens=' + oRetorno.codigoitens;
+            Filtros += '&codigoimportacao=' + oRetorno.pc96_sequencial;
+            Filtros += '&descricao=' + document.getElementById('pc96_descricao').value;
+            Filtros += '&data=' + document.getElementById('pc01_data').value;
+
+            document.location.href = document.location.href;
+
+            var jan = window.open('com2_relatorioimportacaoitens.php?' + Filtros, '', 'location=0, width=' + (screen.availWidth - 5) +
+                'width=' + (screen.availWidth - 5) + ', scrollbars=1');
+            jan.moveTo(0, 0);
+
+        }
+
+        if (oRetorno.iStatus == 2) {
+            alert(oRetorno.sMensagem.urlDecode())
+        }
+
+    }
+
     function validaData() {
 
         var data_patrimonial = document.getElementById('c99_datapat').value;
@@ -651,6 +707,7 @@ if (isset($_POST["processar"])) {
 
     function gerar() {
         window.location.href = " com1_xlsimportacaoitensPlanilha.php";
+        js_removeObj("msgbox");
     }
 
     function js_liberarButton() {

@@ -127,7 +127,7 @@ class cl_ext202023
       $this->erro_campo = "si165_mes";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_msg .= ($this->erro_banco != "" ? str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n")) : '');
       $this->erro_status = "0";
       
       return false;
@@ -137,7 +137,7 @@ class cl_ext202023
       $this->erro_campo = "si165_instit";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_msg .= ($this->erro_banco != "" ? str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n")) : '');
       $this->erro_status = "0";
       
       return false;
@@ -149,7 +149,7 @@ class cl_ext202023
 ", "", @pg_last_error());
         $this->erro_sql = "Verifique o cadastro da sequencia: ext202023_si165_sequencial_seq do campo: si165_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_msg .= ($this->erro_banco != "" ? str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n")) : '');
         $this->erro_status = "0";
         
         return false;
@@ -161,7 +161,7 @@ class cl_ext202023
         $this->erro_sql = " Campo si165_sequencial maior que último número da sequencia.";
         $this->erro_banco = "Sequencia menor que este número.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_msg .= ($this->erro_banco != "" ? str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n")) : '');
         $this->erro_status = "0";
         
         return false;
@@ -173,7 +173,7 @@ class cl_ext202023
       $this->erro_sql = " Campo si165_sequencial nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_msg .= ($this->erro_banco != "" ? str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n")) : '');
       $this->erro_status = "0";
       
       return false;
@@ -222,7 +222,7 @@ class cl_ext202023
       } else {
         $this->erro_sql = "ext202023 ($this->si165_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_msg .= ($this->erro_banco != "" ? str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n")) : '');
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
@@ -233,7 +233,7 @@ class cl_ext202023
     $this->erro_sql = "Inclusao efetuada com Sucesso\n";
     $this->erro_sql .= "Valores : " . $this->si165_sequencial;
     $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+    $this->erro_msg .= ($this->erro_banco != "" ? str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n")) : '');
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
     $resaco = $this->sql_record($this->sql_query_file($this->si165_sequencial));

@@ -679,7 +679,7 @@ class cl_pcproc
     $sql  = "select {$campos}";
     $sql .= "  from pcproc ";
     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = pcproc.pc80_usuario";
-    $sql .= "      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto";
+    $sql .= "      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto and db_depart.instit = " . db_getsession("DB_instit");
     $sql .= "      inner join pcprocitem  on  pcprocitem.pc81_codproc = pcproc.pc80_codproc";
     $sql .= "      inner join solicitem  on  solicitem.pc11_codigo = pcprocitem.pc81_solicitem";
     $sql .= "      inner join solicita  on  solicita.pc10_numero = solicitem.pc11_numero";
@@ -912,7 +912,7 @@ class cl_pcproc
     }
     $sql .= " from pcproc ";
     $sql .= "      inner join db_usuarios          on db_usuarios.id_usuario              = pcproc.pc80_usuario";
-    $sql .= "      inner join db_depart            on db_depart.coddepto                  = pcproc.pc80_depto";
+    $sql .= "      inner join db_depart            on db_depart.coddepto                  = pcproc.pc80_depto and db_depart.instit = " . db_getsession("DB_instit");
     $sql .= "      inner join db_departorg         on db_departorg.db01_coddepto          = db_depart.coddepto";
     $sql .= "                                     and db_departorg.db01_anousu            = " . db_getsession("DB_anousu");
     $sql .= "      inner join orcorgao             on orcorgao.o40_orgao                  = db_departorg.db01_orgao";
@@ -967,7 +967,7 @@ class cl_pcproc
     }
     $sql .= " from pcproc ";
     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = pcproc.pc80_usuario";
-    $sql .= "      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto";
+    $sql .= "      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto and db_depart.instit = " . db_getsession("DB_instit");
     $sql2 = "";
     if ($dbwhere == "") {
       if ($pc80_codproc != null) {
@@ -1206,7 +1206,7 @@ class cl_pcproc
     }
     $sql .= " from pcproc ";
     $sql .= "      inner join db_usuarios  on db_usuarios.id_usuario      = pcproc.pc80_usuario";
-    $sql .= "      inner join db_depart    on db_depart.coddepto          = pcproc.pc80_depto";
+    $sql .= "      inner join db_depart    on db_depart.coddepto          = pcproc.pc80_depto and db_depart.instit = " . db_getsession("DB_instit");
     $sql .= "      inner join pcprocitem   on pcprocitem.pc81_codproc     = pcproc.pc80_codproc";
     $sql .= "      inner join liclicitem   on pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem";
     $sql .= "      inner join liclicita    on liclicitem.l21_codliclicita = liclicita.l20_codigo";
@@ -1248,7 +1248,7 @@ class cl_pcproc
     }
     $sql .= " from pcproc ";
     $sql .= "      inner join db_usuarios           on db_usuarios.id_usuario              = pcproc.pc80_usuario ";
-    $sql .= "      inner join db_depart             on db_depart.coddepto                  = pcproc.pc80_depto ";
+    $sql .= "      inner join db_depart             on db_depart.coddepto                  = pcproc.pc80_depto and db_depart.instit = " . db_getsession("DB_instit");
     $sql .= "      inner join db_departorg          on db_departorg.db01_coddepto          = db_depart.coddepto ";
     $sql .= "                                      and db_departorg.db01_anousu            = " . db_getsession("DB_anousu");
     $sql .= "      inner join orcorgao              on orcorgao.o40_orgao                  = db_departorg.db01_orgao ";

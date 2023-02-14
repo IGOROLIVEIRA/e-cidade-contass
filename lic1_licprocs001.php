@@ -119,62 +119,46 @@ if ($clliclicita->numrows > 0) {
                     </td>
 
                     <td><b <?php if ($clliclicitem->numrows > 0) {
-                                if ($l20_leidalicitacao == 2) {
-                                    echo "style='margin-left: 0px; display: none;'";
-                                } else {
-                                    echo "style='margin-left: 0px;'";
-                                }
+
+
+
+                                echo "style='margin-left: 0px;'";
                             } else {
-                                if ($l20_leidalicitacao == 2) {
-                                    echo "style='margin-left: 0px; display: none;'";
-                                } else {
-                                    echo "style='margin-left: 0px;'";
-                                }
+
+                                echo "style='margin-left: 0px;'";
                             } ?>>Valor Estimado Sigiloso: </b></td>
                     <td>
                         <?
                         if ($clliclicitem->numrows > 0) {
 
-                            if ($l20_leidalicitacao == 2) {
-                                echo "<select style='margin-left: 0px; display: none;' name='l20_orcsigiloso' id='l20_orcsigiloso'>";
-                                echo " <option value='false'>Não</option>\n";
-                                echo " <option value='true'>Sim</option>\n";
-                                echo " </select>";
-                            } else {
-                                echo "<select style='margin-left: 0px;' name='l20_orcsigiloso' id='l20_orcsigiloso'>";
-                                echo " <option value='false'>Não</option>\n";
-                                echo " <option value='true'>Sim</option>\n";
-                                echo " </select>";
-                            }
+
+                            echo "<select style='margin-left: 0px;' name='l20_orcsigiloso' id='l20_orcsigiloso'>";
+                            echo " <option value='false'>Não</option>\n";
+                            echo " <option value='true'>Sim</option>\n";
+                            echo " </select>";
                         } else {
-                            if ($l20_leidalicitacao == 2) {
-                                echo "<select style='margin-left: 0px; display: none;' name='l20_orcsigiloso' id='l20_orcsigiloso'>";
-                                echo " <option value='false'>Não</option>\n";
-                                echo " <option value='true'>Sim</option>\n";
-                                echo " </select>";
-                            } else {
-                                echo "<select style='margin-left: 0px;' name='l20_orcsigiloso' id='l20_orcsigiloso'>";
-                                echo " <option value='false'>Não</option>\n";
-                                echo " <option value='true'>Sim</option>\n";
-                                echo " </select>";
-                            }
+
+                            echo "<select style='margin-left: 0px;' name='l20_orcsigiloso' id='l20_orcsigiloso'>";
+                            echo " <option value='false'>Não</option>\n";
+                            echo " <option value='true'>Sim</option>\n";
+                            echo " </select>";
                         }
 
-                        if ($l20_leidalicitacao == 1) {
 
-                            $l20_orcsigiloso = db_query("select l20_orcsigiloso from liclicita where l20_codigo = $licitacao");
-                            $l20_orcsigiloso = db_utils::fieldsMemory($l20_orcsigiloso, 0);
-                            $l20_orcsigiloso =  $l20_orcsigiloso->l20_orcsigiloso;
-                            if ($l20_orcsigiloso == "t") {
-                                $l20_orcsigiloso = "true";
-                            }
-                            if ($l20_orcsigiloso == "f") {
-                                $l20_orcsigiloso = "false";
-                            }
-                            if ($l20_orcsigiloso != null) {
-                                echo "<script> document.getElementById('l20_orcsigiloso').value = $l20_orcsigiloso </script>";
-                            }
+
+                        $l20_orcsigiloso = db_query("select l20_orcsigiloso from liclicita where l20_codigo = $licitacao");
+                        $l20_orcsigiloso = db_utils::fieldsMemory($l20_orcsigiloso, 0);
+                        $l20_orcsigiloso =  $l20_orcsigiloso->l20_orcsigiloso;
+                        if ($l20_orcsigiloso == "t") {
+                            $l20_orcsigiloso = "true";
                         }
+                        if ($l20_orcsigiloso == "f") {
+                            $l20_orcsigiloso = "false";
+                        }
+                        if ($l20_orcsigiloso != null) {
+                            echo "<script> document.getElementById('l20_orcsigiloso').value = $l20_orcsigiloso </script>";
+                        }
+
 
                         ?>
                     <td>

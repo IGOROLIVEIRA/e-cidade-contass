@@ -198,7 +198,7 @@ if ( $k03_class == 19 ) {
 						inner join vistorias      on vistorias.y70_codvist      = vistinscr.y71_codvist
 						inner join tipovistorias  on vistorias.y70_tipovist     = tipovistorias.y77_codtipo
 						inner join vistorianumpre on vistorianumpre.y69_codvist = vistorias.y70_codvist
-            inner join arreinscr      on vistorianumpre.y69_numpre  = arreinscr.k00_numpre 
+            inner join arreinscr      on vistorianumpre.y69_numpre  = arreinscr.k00_numpre
             inner join arrecad        on (arrecad.k00_numpre,arrecad.k00_tipo) = (vistorianumpre.y69_numpre,$tipo_debito)
             left  join recibounica    on recibounica.k00_numpre     = arreinscr.k00_numpre
 						$join join escrito        on escrito.q10_inscr          = issbase.q02_inscr
@@ -551,9 +551,14 @@ for($inti = 0; $inti < $intNumrowsNumpre; $inti ++) {
 	          $oDadosPgtoUnica = db_utils::fieldsMemory($DadosPgtoUnica, 0);
 
 	          $vlrhis      = db_formatar($uvlrhis, 'f');
-	          $vlrdesconto = db_formatar($uvlrdesconto, 'f');
-	          $utotal     += @$taxabancaria;
+              $pdf1->valororigem = $vlrhis;
+              $vlrdesconto = db_formatar($uvlrdesconto, 'f');
+              $pdf1->valorDesconto = $vlrdesconto;
+              $utotal     += @$taxabancaria;
 	          $vlrtotal    = db_formatar($utotal, 'f');
+              $pdf1->valortotal = $vlrtotal;
+              $pdf1->valorJuros = db_formatar($uvlrjuros, 'f');
+              $pdf1->valorMulta = db_formatar($uvlrmulta, 'f');
 	          $vlrbar      = db_formatar(str_replace('.', '', str_pad(number_format($utotal, 2, "", "."), 11, "0", STR_PAD_LEFT)), 's', '0', 11, 'e');
 
 	          $sqlvalor    = "select k00_impval, k00_tercdigcarneunica from arretipo where k00_tipo = $tipo_debito";
@@ -1010,6 +1015,7 @@ for($inti = 0; $inti < $intNumrowsNumpre; $inti ++) {
 	          }
 
 	          $pdf1->descr12_2       = '- PARCELA ÚNICA COM ' . $k00_percdes . '% DE DESCONTO';
+	          $pdf1->descr4_2       = '- PARCELA ÚNICA COM ' . $k00_percdes . '% DE DESCONTO';
 	          $pdf1->linha_digitavel = $linha_digitavel;
 	          $pdf1->codigo_barras   = $codigo_barras;
 
@@ -1269,27 +1275,53 @@ for($inti = 0; $inti < $intNumrowsNumpre; $inti ++) {
       /**
        * PEGA AS RECEITAS COM OS VALORES
        */
-      $sqlReceitas = "select k00_receit as codreceita,
-                                     k02_descr  as descrreceita,
-                                     case when taborc.k02_codigo is not null then k02_codrec
-                                          when tabplan.k02_codigo is not null then k02_reduz
-                                     end  as reduzreceita,
-                                     k00_valor as valreceita
-                                from arrecad
-                                     inner join tabrec on tabrec.k02_codigo = arrecad.k00_receit
-                                     left  join taborc  on tabrec.k02_codigo   = taborc.k02_codigo
-                                                       and taborc.k02_anousu   = " . db_getsession('DB_anousu') . "
-                                     left  join tabplan on tabrec.k02_codigo   = tabplan.k02_codigo
-                                                       and tabplan.k02_anousu  = " . db_getsession('DB_anousu') . "
-                              where k00_numpre in ( select distinct
-                               														 arrecad.k00_numpre
-  																										from arreinscr
-  																										     inner join arrecad on arrecad.k00_numpre = arreinscr.k00_numpre
-  																										     inner join isscalc on isscalc.q01_numpre = arreinscr.k00_numpre
-  																												                   and isscalc.q01_anousu = " . db_getsession('DB_anousu') . "
-  																									 where arreinscr.k00_inscr = $q02_inscr
-  																									   and arrecad.k00_tipo    = $k00_tipo	)
-                                and k00_numpar = $k00_numpar ";
+
+        $sqlReceitas  = " select substr(fc_calcula,15,13)::float8 as valor_corrigido,           ";
+        $sqlReceitas .= "        substr(fc_calcula,28,13)::float8 as valor_juros,               ";
+        $sqlReceitas .= "        substr(fc_calcula,41,13)::float8 as valor_multa,               ";
+        $sqlReceitas .= "        (substr(fc_calcula,54,13)::float8 * -1)as valor_desconto,      ";
+        $sqlReceitas .= "        (substr(fc_calcula,15,13)::float8+                             ";
+        $sqlReceitas .= "        substr(fc_calcula,28,13)::float8+                              ";
+        $sqlReceitas .= "        substr(fc_calcula,41,13)::float8-                              ";
+        $sqlReceitas .= "        substr(fc_calcula,54,13)::float8) as valreceita,               ";
+        $sqlReceitas .= "        codreceita,                                                    ";
+        $sqlReceitas .= "        k00_hist,                                                      ";
+        $sqlReceitas .= "        valor_historico,                                               ";
+        $sqlReceitas .= "        codtipo,                                                       ";
+        $sqlReceitas .= "        descrreceita,                                                  ";
+        $sqlReceitas .= "        reduzreceita                                                   ";
+        $sqlReceitas .= "   from (                                                              ";
+        $sqlReceitas .= " select k00_receit as codreceita,                                      ";
+        $sqlReceitas .= "        k02_descr  as descrreceita,                                    ";
+        $sqlReceitas .= "        case when taborc.k02_codigo is not null then k02_codrec        ";
+        $sqlReceitas .= "             when tabplan.k02_codigo is not null then k02_reduz        ";
+        $sqlReceitas .= "        end  as reduzreceita,                                          ";
+        $sqlReceitas .= "        k00_valor  as val,                                             ";
+        $sqlReceitas .= "        k00_tipo as codtipo,                                           ";
+        $sqlReceitas .= "        k00_hist,                                                      ";
+        $sqlReceitas .= "        case when a.k00_tipo = 3 then issvar.q05_vlrinf                ";
+        $sqlReceitas .= "             else a.k00_valor                                          ";
+        $sqlReceitas .= "        end as valor_historico,                                        ";
+        $sqlReceitas .= "        fc_calcula(a.k00_numpre,                                       ";
+        $sqlReceitas .= "                   a.k00_numpar,                                       ";
+        $sqlReceitas .= "                   a.k00_receit,                                       ";
+        $sqlReceitas .= "                   ( case when k00_dtvenc < '".date("Y-m-d",db_getsession("DB_datausu"))."'";
+        $sqlReceitas .= "                          then '".date('Y-m-d',$H_DATAUSU)."'          ";
+        $sqlReceitas .= "                          else k00_dtvenc end ),                       ";
+        $sqlReceitas .= "                   ( case when k00_dtvenc < '".date("Y-m-d",db_getsession("DB_datausu"))."'";
+        $sqlReceitas .= "                          then '".date('Y-m-d',$H_DATAUSU)."'          ";
+        $sqlReceitas .= "                          else k00_dtvenc end ),                       ";
+        $sqlReceitas .=                     $H_ANOUSU.")                                        ";
+        $sqlReceitas .= "   from arrecad a                                                      ";
+        $sqlReceitas .= "        inner join tabrec  on tabrec.k02_codigo = a.k00_receit         ";
+        $sqlReceitas .= "        left  join taborc  on tabrec.k02_codigo   = taborc.k02_codigo  ";
+        $sqlReceitas .= "                          and taborc.k02_anousu   = ".db_getsession('DB_anousu');
+        $sqlReceitas .= "        left  join tabplan on tabrec.k02_codigo   = tabplan.k02_codigo ";
+        $sqlReceitas .= "                          and tabplan.k02_anousu  = ".db_getsession('DB_anousu');
+        $sqlReceitas .= "        left join issvar   on a.k00_numpre        = q05_numpre         ";
+        $sqlReceitas .= "                          and a.k00_numpar        = q05_numpar         ";
+        $sqlReceitas .= " where a.k00_numpre = $k00_numpre                                      ";
+        $sqlReceitas .= "   and a.k00_numpar = $k00_numpar ) as c                               ";
 
       $rsReceitas         = db_query($sqlReceitas);
       $sDescricaoReceitas = "";
@@ -1299,35 +1331,95 @@ for($inti = 0; $inti < $intNumrowsNumpre; $inti ++) {
       $pdf1->descr4_2     = "";
 
       $intnumrows         = pg_num_rows($rsReceitas);
+        $vlrjuros     = 0;
+        $vlrmulta     = 0;
+        $vlrhistorico = 0;
+        $nDesconto    = 0;
 
-      for($x = 0; $x < $intnumrows; $x ++) {
+        unset($pdf1->arraycodhist);
+        unset($pdf1->arraycodtipo);
+        unset($pdf1->arraycodreceitas);
+        unset($pdf1->arrayreduzreceitas);
+        unset($pdf1->arraydescrreceitas);
+        unset($pdf1->arrayvalreceitas);
+        $pdf1->valororigem = db_formatar('0', 'f');
+        $pdf1->valorJuros = db_formatar('0', 'f');
+        $pdf1->valorMulta = db_formatar('0', 'f');
+        $pdf1->valorDesconto = db_formatar('0', 'f');
+        $pdf1->valortotal = db_formatar('0', 'f');
+        $pdf1->descr4_2 = "";
 
-        db_fieldsmemory($rsReceitas, $x);
+        for ($x = 0; $x < $intnumrows; $x ++) {
 
-        $pdf1->arraycodreceitas   [$x] = $codreceita;
-        $pdf1->arrayreduzreceitas [$x] = $reduzreceita;
-        $pdf1->arraydescrreceitas [$x] = $descrreceita;
-        $pdf1->arrayvalreceitas   [$x] = $valreceita;
-        $sDescricaoReceitas           .= $traco . $descrreceita . "(" . trim(db_formatar($valreceita, 'f')) . ")";
-        $traco                         = " - ";
-      }
+            db_fieldsmemory($rsReceitas, $x);
 
-      if (isset($vlrjuros) && $vlrjuros != "" && $vlrjuros != 0) {
+            $pdf1->arraycodreceitas[$x]   = $codreceita;
+            $pdf1->arrayreduzreceitas[$x] = $reduzreceita;
+            $pdf1->arraydescrreceitas[$x] = $descrreceita;
 
-        $pdf1->arraycodreceitas   [$x] = "";
-        $pdf1->arrayreduzreceitas [$x] = "";
-        $pdf1->arraydescrreceitas [$x] = "Juros : ";
-        $pdf1->arrayvalreceitas   [$x] = $vlrjuros;
-      }
+            $sqlHono = "select db21_honorarioadvocaticio
+                  from db_config
+                  where prefeitura = true and codigo = ".db_getsession("DB_instit");
+            db_fieldsmemory($sqlHono, 0);
 
-      if (isset($vlrmulta) && $vlrmulta != "" && $vlrmulta != 0) {
+            if($codreceita == $db21_honorarioadvocaticio){
+                $vlrhonorarios += $valor_corrigido;
+            }
 
-        $x ++;
-        $pdf1->arraycodreceitas   [$x] = "";
-        $pdf1->arrayreduzreceitas [$x] = "";
-        $pdf1->arraydescrreceitas [$x] = "Multa : ";
-        $pdf1->arrayvalreceitas   [$x] = $vlrmulta;
-      }
+            if ($k00_hist != 918) {
+
+                $nTotalDebito += $valor_corrigido;
+                $pdf1->arrayvalreceitas[$x] = $valor_corrigido;
+            } else {
+                $pdf1->arrayvalreceitas[$x] = $valor_historico;
+            }
+
+            $pdf1->arraycodtipo[$x]       = $codtipo;
+            $pdf1->arraycodhist[$x]       = $k00_hist;
+            $vlrhistorico  += $valor_historico;
+
+            if ($k00_hist != 918) {
+
+                $vlrjuros      += $valor_juros;
+                $vlrmulta      += $valor_multa;
+            }
+
+            $nDesconto     += $valor_desconto;
+            $sDescricaoReceitas           .= $traco . $descrreceita . "(" . trim(db_formatar($valreceita, 'f')) . ")";
+            $traco                         = " - ";
+        }
+
+        $pdf1->valororigem = db_formatar($vlrhistorico, "f");
+        $pdf1->valortotal = db_formatar($valreceita, 'f');
+
+        if (isset($vlrjuros) && $vlrjuros != 0) {
+
+            $pdf1->arraycodreceitas   [] = "";
+            $pdf1->arrayreduzreceitas [] = "";
+            $pdf1->arraydescrreceitas [] = "Juros : ";
+            $pdf1->arrayvalreceitas   [] = $vlrjuros;
+            $pdf1->valorJuros = db_formatar($vlrjuros, 'f');
+        }
+
+        if (isset($vlrmulta) && $vlrmulta != 0) {
+
+            $pdf1->arraycodreceitas   [] = "";
+            $pdf1->arrayreduzreceitas [] = "";
+            $pdf1->arraydescrreceitas [] = "Multa : ";
+            $pdf1->arrayvalreceitas   [] = $vlrmulta;
+            $pdf1->valorMulta = db_formatar($vlrmulta, 'f');
+        }
+
+        if (isset($nDesconto) && $nDesconto != 0) {
+
+            $pdf1->arraycodhist[] = 918;
+            $pdf1->arraycodtipo[] = "t";
+            $pdf1->arraycodreceitas[] = "";
+            $pdf1->arrayreduzreceitas[] = "";
+            $pdf1->arraydescrreceitas[] = "Desconto : ";
+            $pdf1->arrayvalreceitas[] = $nDesconto;
+            $pdf1->valorDesconto = db_formatar($nDesconto, 'f');
+        }
 
       $sqlInfoEmpresa = "select z01_cgccpf,z01_bairro,z01_munic,z01_ender from empresa where q02_inscr = $q02_inscr";
       $rsInfoEmpresa  = db_query($sqlInfoEmpresa);

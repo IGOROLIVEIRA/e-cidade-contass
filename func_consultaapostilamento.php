@@ -108,7 +108,7 @@ $oResult = db_utils::getColectionByRecord($oResult);
                 <fieldset style="width: 75%; margin-bottom: 10px">
                     <legend><b>Itens do Apostilamento</b></legend>
                     <table style='width: 100%; background: #ffffff;' border='0' align="center">
-                        <?php if ($oResult[0]->tipoapostila != 3) { ?>
+                        <?php if($oResult[0]->tipoapostila!=3){ ?>
                             <tr style="background: #ffffff; height: 20px;">
                                 <th style="height: 25px; font-size:14px; background: #ffffff;">Código Item</th>
                                 <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição</th>
@@ -120,28 +120,51 @@ $oResult = db_utils::getColectionByRecord($oResult);
                         <tr>
                             <?php $iMaterial = ""; ?>
                             <?php $i = 0; ?>
-                            <?php foreach ($oResult as $aResult) : ?>
-                                <?php if ($aResult->ac20_acordoposicao == $oResult[0]->ac20_acordoposicao) {
-                                    if ($iMaterial != $aResult->ac20_pcmater) {
-                                ?>
-                                        <?php if ($i != 0) : ?>
-                                        <?php endif; ?>
-                        <tr>
-                            <td colspan="10" style="height:10px; width:100%;">
-                                <hr>
-                            </td>
-                        </tr>
-                        <?php if ($oResult[0]->tipoapostila == 3) { ?>
-                            <tr style="background: #ffffff; height: 20px;">
-                                <th style="height: 25px; font-size:14px; background: #ffffff;">Dotação(ões):
+                            <?php foreach ($oResult as $aResult): ?>
+                            <?php if($aResult->ac20_acordoposicao == $oResult[0]->ac20_acordoposicao){
+                            if($iMaterial != $aResult->ac20_pcmater){
+                            ?>
+                            <?php if($i!=0):?>
+                            <?php endif; ?>
+                        
+                        <?php if($oResult[0]->tipoapostila==3){ 
+                            $sqlposicaoant = "select max(ac26_sequencial) as ac26_sequencial from acordoposicao  where ac26_acordo=(select ac26_acordo from acordoposicao where ac26_sequencial={$ac26_sequencial}) and ac26_numeroapostilamento < (select ac26_numeroapostilamento from acordoposicao where ac26_sequencial={$ac26_sequencial}) and ac26_numeroaditamento = ''";
+                            $rsposicaoant = db_query($sqlposicaoant);
+                            $oDadosposicaoant = db_utils::getColectionByRecord($rsposicaoant);
 
+                            $sqldotacoesant = "select ac22_coddot from acordoitemdotacao where ac22_acordoitem = (select ac20_sequencial from acordoitem where ac20_acordoposicao={$oDadosposicaoant[0]->ac26_sequencial} and ac20_pcmater = {$aResult->ac20_pcmater}) order by ac22_coddot";
+                            $oResultdotadocoesant = db_query($sqldotacoesant);
+                            $oResultdotadocoesant = db_utils::getColectionByRecord($oResultdotadocoesant);
+                            
+                            $sqldotacoes = "select ac22_coddot from acordoitemdotacao where ac22_acordoitem = (select ac20_sequencial from acordoitem where ac20_acordoposicao={$ac26_sequencial} and ac20_pcmater = {$aResult->ac20_pcmater}) order by ac22_coddot";
+                            $oResultdotadocoes = db_query($sqldotacoes);
+                            $oResultdotadocoes = db_utils::getColectionByRecord($oResultdotadocoes);
+                            
+                            
+                            $dotacao = array();
+                            if(count($oResultdotadocoes)>0){
+                                foreach ($oResultdotadocoes as $aResultdotadocoes){
+                                    $verifica = 0;
+                                    foreach ($oResultdotadocoesant as $aResultdotadocoesant){
+                                        if($aResultdotadocoes->ac22_coddot == $aResultdotadocoesant->ac22_coddot){
+                                            $verifica = 1;
+                                        }
+                                    }
+                                    if($verifica == 0){
+                                        $dotacao[]=$aResultdotadocoes->ac22_coddot;
+                                    }
+                                } 
+                                if(count($dotacao)>0){
+                            ?>
+                        
+                            <tr style="background: #ffffff; height: 20px;">
+                                <th style="height: 25px; font-size:14px; background: #ffffff;text-align:left;">Dotação(ões):
+                                
                                     <?php
-                                            $sqldotacoes = "select ac22_coddot from acordoitemdotacao where ac22_acordoitem = (select ac20_sequencial from acordoitem where ac20_acordoposicao={$ac26_sequencial} and ac20_pcmater = {$aResult->ac20_pcmater}) order by ac22_coddot";
-                                            $oResultdotadocoes = db_query($sqldotacoes);
-                                            $oResultdotadocoes = db_utils::getColectionByRecord($oResultdotadocoes);
-                                            foreach ($oResultdotadocoes as $aResultdotadocoes) {
-                                                echo " " . $aResultdotadocoes->ac22_coddot;
-                                            }
+                                    
+                                    foreach ($dotacao as $adotacao){
+                                        echo " ".$adotacao;
+                                    } 
                                     ?>
                                 </th>
                             </tr>
@@ -149,116 +172,42 @@ $oResult = db_utils::getColectionByRecord($oResult);
                                 <th style="height: 25px; font-size:14px; background: #ffffff; width: 50%;">Código Item</th>
                                 <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição</th>
                             </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </fieldset>
-        <br>
-        <br>
-        <fieldset style="width: 75%; margin-bottom: 10px">
-            <legend><b>Itens do Apostilamento</b></legend>
-            <table style='width: 100%; background: #ffffff;' border='0' align="center">
-                <?php if($oResult[0]->tipoapostila!=3){ ?>
-                    <tr style="background: #ffffff; height: 20px;">
-                        <th style="height: 25px; font-size:14px; background: #ffffff;">Código Item</th>
-                        <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição</th>
-                        <th style="height: 25px; font-size:14px; background: #ffffff;">Quantidade</th>
-                        <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Unitário</th>
-                        <th style="height: 25px; font-size:14px; background: #ffffff;">Valor Total</th>
-                    </tr>
-                <?php } ?>
-                <tr>
-                    <?php $iMaterial = ""; ?>
-                    <?php $i = 0; ?>
-                    <?php foreach ($oResult as $aResult): ?>
-                    <?php if($aResult->ac20_acordoposicao == $oResult[0]->ac20_acordoposicao){
-                    if($iMaterial != $aResult->ac20_pcmater){
-                    ?>
-                    <?php if($i!=0):?>
-                    <?php endif; ?>
-                
-                <?php if($oResult[0]->tipoapostila==3){ 
-                    $sqlposicaoant = "select max(ac26_sequencial) as ac26_sequencial from acordoposicao  where ac26_acordo=(select ac26_acordo from acordoposicao where ac26_sequencial={$ac26_sequencial}) and ac26_numeroapostilamento < (select ac26_numeroapostilamento from acordoposicao where ac26_sequencial={$ac26_sequencial})";
-                    $rsposicaoant = db_query($sqlposicaoant);
-                    $oDadosposicaoant = db_utils::getColectionByRecord($rsposicaoant);
-
-                    $sqldotacoesant = "select ac22_coddot from acordoitemdotacao where ac22_acordoitem = (select ac20_sequencial from acordoitem where ac20_acordoposicao={$oDadosposicaoant[0]->ac26_sequencial} and ac20_pcmater = {$aResult->ac20_pcmater}) order by ac22_coddot";
-                    $oResultdotadocoesant = db_query($sqldotacoesant);
-                    $oResultdotadocoesant = db_utils::getColectionByRecord($oResultdotadocoesant);
-                    
-                    $sqldotacoes = "select ac22_coddot from acordoitemdotacao where ac22_acordoitem = (select ac20_sequencial from acordoitem where ac20_acordoposicao={$ac26_sequencial} and ac20_pcmater = {$aResult->ac20_pcmater}) order by ac22_coddot";
-                    $oResultdotadocoes = db_query($sqldotacoes);
-                    $oResultdotadocoes = db_utils::getColectionByRecord($oResultdotadocoes);
-                    
-                    
-                    $dotacao = array();
-                    if(count($oResultdotadocoes)>0){
-                        foreach ($oResultdotadocoes as $aResultdotadocoes){
-                            $verifica = 0;
-                            foreach ($oResultdotadocoesant as $aResultdotadocoesant){
-                                if($aResultdotadocoes->ac22_coddot == $aResultdotadocoesant->ac22_coddot){
-                                    $verifica = 1;
-                                }
-                            }
-                            if($verifica == 0){
-                                $dotacao[]=$aResultdotadocoes->ac22_coddot;
-                            }
-                        } 
-                        if(count($dotacao)>0){
-                    ?>
-                   
-                    <tr style="background: #ffffff; height: 20px;">
-                        <th style="height: 25px; font-size:14px; background: #ffffff;text-align:left;">Dotação(ões):
-                        
-                            <?php
+                            <?php } ?>
+                            <?php } ?>
+                            <?php } ?>
                             
-                            foreach ($dotacao as $adotacao){
-                                echo " ".$adotacao;
-                            } 
-                            ?>
-                        </th>
-                    </tr>
-                    <tr style="background: #ffffff; height: 20px;">
-                        <th style="height: 25px; font-size:14px; background: #ffffff; width: 50%;">Código Item</th>
-                        <th style="height: 25px; font-size:14px; background: #ffffff;">Descrição</th>
-                    </tr>
-                    <?php } ?>
-                    <?php } ?>
-                    <?php } ?>
-                    
-                <?php if($oResult[0]->tipoapostila==3 && count($oResultdotadocoes)>0 && count($dotacao)>0){ ?>
-                    <tr>
-                    <td colspan="10" style="height:10px; width:100%;"><hr></td>
-                </tr>
-                    <tr style="margin-top:5px; background: #e1dede; height:10px;">
-                        <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
-                        <td align="center"><?php echo $aResult->pc01_descrmater; ?> </td>
-                    </tr>
-                <?php }else if($oResult[0]->tipoapostila!=3){ ?>
-                    <tr>
-                    <td colspan="10" style="height:10px; width:100%;"><hr></td>
-                </tr>
-                    <tr style="margin-top:5px; background: #e1dede; height:10px;">
-                        <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
-                        <td align="center"><?php echo $aResult->pc01_descrmater; ?> </td>
-                        <td align="center"><?php echo $aResult->ac20_quantidade; ?> </td>
-                        <td align="center"><?php echo $aResult->ac20_valorunitario; ?> </td>
-                        <td align="center"><?php echo $aResult->ac20_valortotal; ?> </td>
-                    </tr>
-                <?php } ?>
+                        <?php if($oResult[0]->tipoapostila==3 && count($oResultdotadocoes)>0 && count($dotacao)>0){ ?>
+                            <tr>
+                            <td colspan="10" style="height:10px; width:100%;"><hr></td>
+                        </tr>
+                            <tr style="margin-top:5px; background: #e1dede; height:10px;">
+                                <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
+                                <td align="center"><?php echo $aResult->pc01_descrmater; ?> </td>
+                            </tr>
+                        <?php }else if($oResult[0]->tipoapostila!=3){ ?>
+                            <tr>
+                            <td colspan="10" style="height:10px; width:100%;"><hr></td>
+                        </tr>
+                            <tr style="margin-top:5px; background: #e1dede; height:10px;">
+                                <td align="center"><?php echo $aResult->ac20_pcmater; ?> </td>
+                                <td align="center"><?php echo $aResult->pc01_descrmater; ?> </td>
+                                <td align="center"><?php echo $aResult->ac20_quantidade; ?> </td>
+                                <td align="center"><?php echo $aResult->ac20_valorunitario; ?> </td>
+                                <td align="center"><?php echo $aResult->ac20_valortotal; ?> </td>
+                            </tr>
+                        <?php } ?>
 
-                
-                <?php $iMaterial = $aResult->ac20_pcmater; ?>
-                
-                <?php } ?>
+                        
+                        <?php $iMaterial = $aResult->ac20_pcmater; ?>
+                        
+                        <?php } ?>
 
-                <?php } ?>
-                <?php $i++; ?>
-            <?php endforeach; ?>
+                        <?php } ?>
+                        <?php $i++; ?>
+                        <?php endforeach; ?>
 
-        <?php endif; ?>
-        </tr>
+                        
+                    </tr>
 
                     </table>
                 </fieldset>
@@ -272,6 +221,7 @@ $oResult = db_utils::getColectionByRecord($oResult);
 
                 </table>
             </form>
+        <?php endif; ?>
 </body>
 
 </html>

@@ -120,7 +120,7 @@ class cl_acordoitemexecutado {
      }
    }
    // funcao para Inclusão
-   function incluir ($ac29_sequencial){
+   function incluir ($ac29_sequencial = null){
       $this->atualizacampos();
      if($this->ac29_acordoitem == null ){
        $this->erro_sql = " Campo Item do Acordo não informado.";

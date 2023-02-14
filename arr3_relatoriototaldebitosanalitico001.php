@@ -1198,12 +1198,24 @@ function fc_totalTipo($oPdf, $oDadosTipo) {
   $oPdf->SetFont('arial','',6);
 }
 
+function fc_numeroCda($iNumpre) {
+  $sCda = "select (' CDA: '||v14_certid||' ')as nrcda from divida d
+  inner join certdiv on v14_coddiv = d.v01_coddiv
+  where d.v01_numpre = ".$iNumpre;
+  
+  $rsCDA = db_query($sCda);
+  
+  $sNrCda  = db_utils::fieldsMemory($rsCDA,0)->nrcda;
+
+  return $sNrCda;
+}
 
 function fc_totalNumpre($oPdf, $oDadosNumpre) {
 
   $oPdf->setx(5);
   $oPdf->SetFont('Arial','B',5);
-  $sTexto_complementar = "TOTAL DO NUMPRE {$oDadosNumpre->numpre} {$oDadosNumpre->numpre_complemento}";
+  $nrCda = fc_numeroCda($oDadosNumpre->numpre);
+  $sTexto_complementar = "TOTAL DO NUMPRE {$oDadosNumpre->numpre} $nrCda {$oDadosNumpre->numpre_complemento}";
   $iAlt = 5;
   if(strlen($sTexto_complementar) > 184) {
     $aTexto_Complemento = quebrar_texto($sTexto_complementar, 184);

@@ -220,7 +220,6 @@ class cl_veicparam
                                ,$this->ve50_abastempenho
                                ," . ($this->ve50_datacorte == "null" || $this->ve50_datacorte == "" ? "null" : "'" . $this->ve50_datacorte . "'") . " 
                       )";
-    die($sql);
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());

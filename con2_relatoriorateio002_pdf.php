@@ -11,6 +11,8 @@ foreach ($oInfoRelatorio->aHeader as $key => $value) {
 $sSql  = "SELECT db21_codigomunicipoestado,cgc FROM db_config where codigo = ".db_getsession("DB_instit");
 $rsInst = db_query($sSql);
 $sInstCgc  = str_pad(db_utils::fieldsMemory($rsInst, 0)->cgc, 5, "0", STR_PAD_LEFT);
+
+$aFontesNovas = array('15000001' => 1001, '15000002' => 1002, '15400007' => 1070  , '1542000' => 1070);
 //Cimva
 //$aCgcExecaoRelFinanceiro = $arrayName = array('21466841000169');
 
@@ -121,11 +123,12 @@ ob_start();
         </tr>
 
         <tr style='height:20px;'>
-            <td class="s1 borda2 borda3">Fun&ccedil;&atilde;o</td>
+            <!-- <td class="s1 borda2 borda3">Fun&ccedil;&atilde;o</td>
             <td class="s2 borda2">SubFun&ccedil;&atilde;o</td>
             <td class="s2 borda2">Elemento</td>
             <td class="s3 borda2">SubElemento</td>
-            <td class="s0">Fonte</td>
+            <td class="s0">Fonte</td> -->
+            <td class="s0 borda3" colspan="5"></td>
             <td class="s0">No M&ecirc;s</td>
             <td class="s0">At&eacute; o M&ecirc;s</td>
             <td class="s0">No M&ecirc;s</td>
@@ -159,11 +162,20 @@ ob_start();
             ?>
 
             <tr style='height:20px;' class="bg_<?= ($key % 2) == 0 ?>">
-                <td class="s4 borda3"><?= $oRegistro->funcao ?></td>
+                <!-- <td class="s4 borda3"><?= $oRegistro->funcao ?></td>
                 <td class="s4"><?= $oRegistro->subfuncao ?></td>
                 <td class="s4"><?= $oRegistro->c217_natureza ?></td>
-                <td class="s4"><?= $oRegistro->c217_subelemento ?></td>
-                <td class="s4"><?= $oRegistro->c217_fonte ?></td>
+                <td class="s4"><?= $oRegistro->c217_subelemento ?></td> -->
+                <?php
+                    $classificacao = $oRegistro->funcao.".";
+                    $classificacao .= $oRegistro->subfuncao.".";
+                    $classificacao .= $oRegistro->c217_natureza.".";
+                    $classificacao .= $oRegistro->c217_subelemento.".";
+                    $classificacao .= substr($oRegistro->c217_fonte, 0, 7).".";
+                    $fonteco = $aFontesNovas[$oRegistro->c217_fonte] != Null ? $aFontesNovas[$oRegistro->c217_fonte] : '0000';
+                    $classificacao .= $fonteco;
+                    echo "<td class='s0 borda3 center' colspan='5'  >". $classificacao ."</td>";
+                ?>
                 <td class="s4"><?= db_formatar($oRegistro->empenhomes, 'f') ?></td>
                 <td class="s4"><?= db_formatar($oRegistro->empenhoatemes, 'f') ?></td>
                 <td class="s4"><?= db_formatar($oRegistro->anuladomes, 'f') ?></td>

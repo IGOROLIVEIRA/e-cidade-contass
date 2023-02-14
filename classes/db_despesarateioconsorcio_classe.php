@@ -94,7 +94,7 @@ class cl_despesarateioconsorcio {
    }
 
   // funcao para inclusao
-  function incluir ($c217_sequencial) {
+  function incluir ($c217_sequencial=null) {
       $this->atualizacampos();
      if ($this->c217_enteconsorciado == null ) {
        $this->erro_sql = " Campo Ente consorciado não informado.";

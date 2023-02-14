@@ -947,7 +947,7 @@ if (isset($alterar)) {
 
 
 
-    if ($pc30_permsemdotac == "t") {
+    if ($pc30_permsemdotac == "t" && $l20_tipnaturezaproced == 1) {
         echo "<script>
       
         parent.iframe_dotacoesnovo.location.href='com1_dotacoesnovo001lic.php?licitacao=$chavepesquisa&tipojulg=" . @$tipojulg . "';\n

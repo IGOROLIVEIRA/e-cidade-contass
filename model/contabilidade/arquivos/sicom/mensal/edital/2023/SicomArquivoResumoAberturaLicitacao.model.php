@@ -198,7 +198,9 @@ class SicomArquivoResumoAberturaLicitacao extends SicomArquivoBase implements iP
                 case when tipoJulgamento = 1 THEN 1 else qtdLotes end as qtdLotes,
                 l20_usaregistropreco,
                 l20_leidalicitacao,
-                l20_mododisputa
+                l20_mododisputa,
+                l20_recdocumentacao,
+                l20_orcsigiloso 
 FROM
     (SELECT infocomplementaresinstit.si09_codorgaotce AS codOrgaoResp,
                      (CASE
@@ -256,6 +258,8 @@ FROM
                      liclicita.l20_usaregistropreco,
                      liclicita.l20_leidalicitacao,
                      liclicita.l20_mododisputa,
+                     liclicita.l20_recdocumentacao,
+                     liclicita.l20_orcsigiloso, 
                      (SELECT count(*) FROM
                         (SELECT DISTINCT l04_descricao
                             FROM liclicitemlote
@@ -329,7 +333,7 @@ FROM
 GROUP BY si01_datacotacao, codorgaoresp, codunidadesubresp, mediapercentual, exerciciolicitacao, nroProcessoLicitatorio,
          tipoCadastradoLicitacao, codmodalidadelicitacao, naturezaprocedimento, nroedital,
          exercicioedital, dtpublicacaoeditaldo, LINK, tipolicitacao, naturezaobjeto, objeto, bdi, regimeexecucaoobras,
-         origemrecurso, dscorigemrecurso, qtdLotes, tipoJulgamento, l20_usaregistropreco,l20_leidalicitacao,l20_mododisputa 
+         origemrecurso, dscorigemrecurso, qtdLotes, tipoJulgamento, l20_usaregistropreco,l20_leidalicitacao,l20_mododisputa,l20_recdocumentacao,l20_orcsigiloso
 
 ORDER BY nroprocessolicitatorio
 
@@ -360,11 +364,17 @@ ORDER BY nroprocessolicitatorio
       $clralic10->si180_nroedital = $oDados10->nroedital;
       $clralic10->si180_exercicioedital = $oDados10->exercicioedital ? $oDados10->exercicioedital : intval($oDados10->exerciciolicitacao);
       $clralic10->si180_dtpublicacaoeditaldo = $oDados10->dtpublicacaoeditaldo;
+      $clralic10->si180_dtaberturaenvelopes = $oDados10->l20_recdocumentacao;
       $clralic10->si180_link = preg_replace("/\r|\n/", "", $oDados10->link);
       $clralic10->si180_tipolicitacao = $oDados10->codmodalidadelicitacao == '4' ? '' : $oDados10->tipolicitacao;
       $clralic10->si180_naturezaobjeto = $oDados10->naturezaobjeto;
       $clralic10->si180_objeto = substr($this->removeCaracteres($oDados10->objeto), 0, 500);
       $clralic10->si180_regimeexecucaoobras = $oDados10->regimeexecucaoobras;
+      if($oDados10->l20_orcsigiloso == '' || $oDados10->l20_orcsigiloso == 'f'){
+        $clralic10->si180_tipoorcamento = 1;
+      }else{
+        $clralic10->si180_tipoorcamento = 2;
+      }
       $clralic10->si180_vlcontratacao = $oDados10->vlcontratacao;
       $clralic10->si180_bdi = $oDados10->bdi;
       $clralic10->si180_mesexercicioreforc = $oDados10->datacotacao;

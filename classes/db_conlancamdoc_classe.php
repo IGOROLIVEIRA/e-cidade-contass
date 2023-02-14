@@ -572,27 +572,40 @@ if($dbwhere==""){
   {
     $nAnoUsu = db_getsession('DB_anousu');
     $nInstit = db_getsession('DB_instit');
+    $aFontesNovas = array('100' => 15000000,'101' => 15000001,'102' => 15000002,'103' => 18000000,'104' => 18010000,'105' => 18020000,
+                        '106' => 15760010,'107' => 15440000,'108' => 17080000,'112' => 16590020,'113' => 15990030,'116' => 17500000,
+                        '117' => 17510000,'118' => 15400007,'119' => 15400000,'120' => 15760000,'121' => 16220000,'122' => 15700000,
+                        '123' => 16310000,'124' => 17000000,'129' => 16600000,'130' => 18990040,'131' => 17590050,'132' => 16040000,
+                        '142' => 16650000,'143' => 15510000,'144' => 15520000,'145' => 15530000,'146' => 15690000,'147' => 15500000,
+                        '153' => 16010000,'154' => 16590000,'155' => 16210000,'156' => 16610000,'157' => 17520000,'158' => 18990060,
+                        '159' => 16000000,'160' => 17040000,'161' => 17070000,'162' => 17490120,'163' => 17130070,'164' => 17060000,
+                        '165' => 18990000,'166' => 15420007,'167' => 15420000,'168' => 17100100,'169' => 17100000,'170' => 15010000,
+                        '171' => 15710000,'172' => 15720000,'173' => 15750000,'174' => 15740000,'175' => 15730000,'176' => 16320000,
+                        '177' => 16330000,'178' => 16360000,'179' => 16340000,'180' => 16350000,'181' => 17010000,'182' => 17020000,
+                        '183' => 17030000,'184' => 17090000,'185' => 17530000,'186' => 17040000,'187' => 17050000,'188' => 15000080,
+                        '189' => 15000090,'190' => 17540000,'191' => 17540000,'192' => 17550000,'193' => 18990130, '132' => 16040000,
+                        '133' => 17150000, '134' => 17160000, '135' => 17170000, '136' => 17180000);
 
     $sSql = "
       SELECT lpad(o58_funcao,2,'0') AS funcao,
              lpad(o58_subfuncao,3,'0') AS subfuncao,
              substring(o56_elemento,2,6) AS natureza,
              substring(o56_elemento,8,2) AS subelemento,
-             o15_codtri AS fonte,
-             sum(CASE
+             o15_codigo AS fonte,
+             round(sum(CASE
                      WHEN c71_coddoc = 6 THEN c70_valor*-1
                      ELSE c70_valor
-                 END) AS emp,
+                 END),2) AS emp,
              0 AS empanulado,
-             sum(CASE
+             round(sum(CASE
                      WHEN c71_coddoc = 6 THEN c70_valor*-1
                      ELSE c70_valor
-                 END) AS lqd,
+                 END),2) AS lqd,
              0 AS lqdanulado,
-             sum(CASE
+             round(sum(CASE
                      WHEN c71_coddoc = 6 THEN c70_valor*-1
                      ELSE c70_valor
-                 END) AS pag,
+                 END),2) AS pag,
              0 AS paganulado
       FROM conlancamdoc
       INNER JOIN conhistdoc on c53_coddoc=c71_coddoc
@@ -611,10 +624,11 @@ if($dbwhere==""){
           AND DATE_PART('MONTH',c71_data) = '{$nMes}'
           AND c02_instit = '{$nInstit}'
           AND o55_rateio = true
-      GROUP BY o58_funcao,
-               o58_subfuncao,
-               o15_codtri,
-               o56_elemento
+      GROUP BY 1,
+               2,
+               3,
+               4,
+               5
     ";
 
     $rsConLancamDoc = $this->sql_record($sSql);
@@ -625,18 +639,39 @@ if($dbwhere==""){
 
     foreach ($aConLancamDoc as $oDotacao) {
 
+      $fonte = $aFontesNovas[$oDotacao->fonte] != Null ? $aFontesNovas[$oDotacao->fonte] : $oDotacao->fonte;
       $sHash = ""
         . $oDotacao->funcao
         . $oDotacao->subfuncao
         . $oDotacao->natureza
         . $oDotacao->subelemento
-        . $oDotacao->fonte
+        . $fonte
       ;
-
-      $aRetorno[$sHash] = $oDotacao;
+      if(!isset($aRetorno[$sHash])){
+          $oMovimento = new stdClass();
+          $oMovimento->funcao      = $oDotacao->funcao;
+          $oMovimento->subfuncao   = $oDotacao->subfuncao;
+          $oMovimento->natureza    = $oDotacao->natureza;
+          $oMovimento->subelemento = $oDotacao->subelemento;
+          $oMovimento->fonte       = $fonte;
+          $oMovimento->emp         = $oDotacao->emp;
+          $oMovimento->empanulado  = $oDotacao->empanulado;
+          $oMovimento->lqd         = $oDotacao->lqd;
+          $oMovimento->lqdanulado  = $oDotacao->lqdanulado;
+          $oMovimento->pag         = $oDotacao->pag;
+          $oMovimento->paganulado  = $oDotacao->paganulado;
+          $aRetorno[$sHash] = $oMovimento;
+      }else {
+          $aRetorno[$sHash]->emp        = $aRetorno[$sHash]->emp         + $oDotacao->emp;
+          $aRetorno[$sHash]->empanulado = $aRetorno[$sHash]->empanulado  + $oDotacao->empanulado;
+          $aRetorno[$sHash]->lqd        = $aRetorno[$sHash]->lqd         + $oDotacao->lqd;
+          $aRetorno[$sHash]->lqdanulado = $aRetorno[$sHash]->lqdanulado  + $oDotacao->lqdanulado;
+          $aRetorno[$sHash]->pag        = $aRetorno[$sHash]->pag         + $oDotacao->pag;
+          $aRetorno[$sHash]->paganulado = $aRetorno[$sHash]->paganulado  + $oDotacao->paganulado;
+      }
 
     }
-
+ //echo "<pre>";print_r($aRetorno);exit;
     return $aRetorno;
   }
 
@@ -742,11 +777,11 @@ if($dbwhere==""){
         $oNovaDotacao->natureza               = $oDotacao->natureza;
         $oNovaDotacao->subelemento            = $oDotacao->subelemento;
         $oNovaDotacao->fonte                  = $oDotacao->fonte;
-        $oNovaDotacao->valorempenhado         = $oDotacao->emp;
+        $oNovaDotacao->valorempenhado         = round($oDotacao->emp,2);
         $oNovaDotacao->valorempenhadoanulado  = isset($oDotacao->empanulado) ? $oDotacao->empanulado : 0;
-        $oNovaDotacao->valorliquidado         = $oDotacao->lqd;
+        $oNovaDotacao->valorliquidado         = round($oDotacao->lqd,2);
         $oNovaDotacao->valorliquidadoanulado  = isset($oDotacao->lqdanulado) ? $oDotacao->lqdanulado : 0;
-        $oNovaDotacao->valorpago              = isset($oDotacao->pag) ? $oDotacao->pag : 0;
+        $oNovaDotacao->valorpago              = isset($oDotacao->pag) ? round($oDotacao->pag,2) : 0;
         $oNovaDotacao->valorpagoanulado       = isset($oDotacao->paganulado) ? $oDotacao->paganulado : 0;
 
         $oNovaDotacao->valorempenhado = round(($oNovaDotacao->valorempenhado * $nPercentual) / 100,2);

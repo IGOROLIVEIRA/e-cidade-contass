@@ -156,6 +156,17 @@ switch ($oParam->exec) {
 
           db_inicio_transacao();
 
+            $cldiarioclasseregenciahorario = new cl_diarioclasseregenciahorario;
+            $cldiarioclasseregenciahorario->excluir(null,"ed302_regenciahorario = $oParam->iRegenciaHorario");
+            $cldiarioclasseregenciahorario->erro_msg;
+
+            if ($cldiarioclasseregenciahorario->erro_status == 0) {
+
+              $sMsg  = "Erro ao excluir dados do Agenda de Sábado.\n";
+              $sMsg .= "Erro Sistema: {$cldiarioclasseregenciahorario->erro_msg}";
+              throw new Exception($sMsg);
+            }
+            
             $clregenciahorario = new cl_regenciahorario;
             $clregenciahorario->excluir($oParam->iRegenciaHorario);
             $clregenciahorario->erro_msg;
