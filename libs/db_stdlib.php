@@ -1275,7 +1275,7 @@ function db_fieldsmemory($recordset, $indice = 0, $formatar = "", $mostravar = f
     //#20#//Record Set        : Record set que será pesquisado
     //#20#//Indice            : Número da linha (índice) que será caregada as funções
     //#20#//Formatar          : Se formata as variáveis conforme o tipo no banco de dados
-    //#20#//                    true = Formatar      false = Nðo Formatar (Padrðo = false)
+    //#20#//                    true = Formatar      false = Não Formatar (Padrðo = false)
     //#20#//Mostrar Variáveis : Mostrar na tela as variáveis que estðo sendo geradas
     //#99#//Esta funçðo é bastante utilizada quando se faz um for para percorrer um record set.
     //#99#//Exemplo:
@@ -1866,7 +1866,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
 
         if (isset($query_anterior)) {
 
-            echo "<script>alert('Nðo existem dados para este filtro');</script>";
+            echo "<script>alert('Não existem dados para este filtro');</script>";
 
             if (count($totalizacao) > 0 || isset($totalizacao_rep)) {
 
@@ -2240,7 +2240,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
                 } else if (pg_fieldtype($result, $j) == "float8" || pg_fieldtype($result, $j) == "float4" || pg_fieldtype($result, $j) == "numeric") {
                     $var_data = db_formatar(pg_result($result, $i, $j), 'f', ' ');
                 } else if (pg_fieldtype($result, $j) == "bool") {
-                    $var_data  = (pg_result($result, $i, $j) == 'f' || pg_result($result, $i, $j) == '' ? 'Nðo' : 'Sim');
+                    $var_data  = (pg_result($result, $i, $j) == 'f' || pg_result($result, $i, $j) == '' ? 'Não' : 'Sim');
                 } else if (pg_fieldtype($result, $j) == "text") {
 
                     $lCampoTipoTexto = true;
@@ -3584,7 +3584,7 @@ function db_buscaImagemBanco($cadban, $conn)
             return $arr;
         } else {
             // se nðo tiver o banco na db_bancos
-            db_redireciona('db_erros.php?fechar=true&db_erro=Nðo existe Banco cadastrado para o código' . $banco . ' no Cadastro de Bancos' . $sqlBanco);
+            db_redireciona('db_erros.php?fechar=true&db_erro=Não existe Banco cadastrado para o código' . $banco . ' no Cadastro de Bancos' . $sqlBanco);
         }
     }
 }
