@@ -516,7 +516,7 @@ if (isset($pc30_instit) && $pc30_instit != "") {
 																		<td nowrap title="<?= @$Tpc30_modeloordemcompra ?>"><?= @$Lpc30_modeloordemcompra ?> </td>
 																		<td>
 																			<?
-																			$y = array('10' => 'Modelo 1', '57' => 'Modelo 2', '60' => 'Modelo 3', '103' => 'Modelo 4');
+																			$y = array('10' => 'Modelo teste','60' => 'Modelo 1', '57' => 'Modelo 2', '60' => 'Modelo 3', '103' => 'Modelo 4');
 																			db_select('pc30_modeloordemcompra', $y, true, $db_opcao, "");
 																			?>
 																		</td>

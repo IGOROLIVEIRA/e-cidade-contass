@@ -237,7 +237,7 @@ $autorizacoes = array();
 for ($i = 0; $i < pg_numrows($newResult); $i++) {
     db_fieldsmemory($newResult, $i);
 
-    $sqlitem = " select distinct (pc01_descrmater||'. '||(case when pc01_complmater is null or pc01_complmater!=pc01_descrmater then '' else pc01_complmater end)||' '||(case when l21_codpcprocitem is null and coalesce((select 'Marca'||pc23_obs from pcorcamval
+    $sqlitem = " select distinct (pc01_descrmater||'. '||(case when pc01_complmater is null then '' else pc01_complmater end)||' '||(case when l21_codpcprocitem is null and coalesce((select 'Marca'||pc23_obs from pcorcamval
 inner join pcorcamitem on pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem
 inner join pcorcamjulgamentologitem on pcorcamjulgamentologitem.pc93_pcorcamitem = pcorcamitem.pc22_orcamitem
 inner join pcorcamitemproc on pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem
