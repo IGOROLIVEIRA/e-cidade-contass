@@ -6,16 +6,15 @@
 
 <?php
 
-use Model\Arrecadacao\Pix\InstituicaoFinanceiraApiPix;
 use App\Models\ConfiguracaoPixBancoDoBrasil;
+use App\Models\InstituicaoFinanceiraApiPix;
 
-require_once("classes/db_configuracoes_pix_banco_do_brasil_classe.php");
-$configuracaoPixBb = new cl_configuracoes_pix_banco_do_brasil();
-$configuracaoPixBb->rotulo->label();
+$configuracaoPixBb = new ConfiguracaoPixBancoDoBrasil();
+$configuracaoPixBb->legacyLabel->label();
 if (!isset($k03_instituicao_financeira)) {
     $k03_instituicao_financeira = null;
 }
-$style = ((int)$k03_instituicao_financeira) === InstituicaoFinanceiraApiPix::CODIGO_INSTITUICAO_FINANCEIRA
+$style = ((int)$k03_instituicao_financeira) === InstituicaoFinanceiraApiPix::BANCO_DO_BRASIL
     ?: "style='display: none'";
 ?>
 <table id="apiSettings1" <?= $style ?>>

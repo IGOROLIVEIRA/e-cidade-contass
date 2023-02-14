@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Models\Concerns\IApiPixConfiguration;
 use App\Traits\LegacyAccount;
+use App\Traits\LegacyLabel;
 
 class ConfiguracaoPixBancoDoBrasil extends LegacyModel implements IApiPixConfiguration
 {
     use LegacyAccount;
+    use LegacyLabel;
 
     public const CODIGO = 1;
     public const OPTION_LABEL = 'Banco do Brasil';

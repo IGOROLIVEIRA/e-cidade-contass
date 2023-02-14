@@ -33,8 +33,13 @@
             "app",
             "app/Models"
         ],
+        "files": [
+            "model/protocolo/cgm/CgmRepository.model.php",
+            "classes/ClasseBase.php"
+        ],
         "psr-4": {
-            "App\\": "app/"
+            "App\\": "app/",
+            "ECidadeLegacy\\Classes\\": "classes/"
         }
     },
     "scripts": {

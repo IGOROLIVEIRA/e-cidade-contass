@@ -2,7 +2,9 @@
 
 namespace App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO;
 
-class PixArrecadacaoPayloadDTO
+use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IPixPayload;
+
+class PixArrecadacaoPayloadDTO implements IPixPayload
 {
     /**
      * @var int
@@ -79,11 +81,27 @@ class PixArrecadacaoPayloadDTO
         if (empty($data)) {
            return;
         }
+        $this->fill($data);
+    }
+
+    /**
+     * Business logic to fill the payload
+     * @param array $data
+     * @return void
+     */
+    public function fill(array $data): void
+    {
         foreach ($data as $attribute => $value) {
+            if ($attribute === 'valorOriginalSolicitacao') {
+                $value = number_format($value, 2);
+            }
             $this->$attribute = $value;
         }
     }
 
+    /**
+     * @return false|string
+     */
     public function toJson()
     {
         return json_encode($this);

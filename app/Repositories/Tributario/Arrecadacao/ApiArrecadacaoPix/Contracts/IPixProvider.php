@@ -2,8 +2,7 @@
 
 namespace App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts;
 
-
-use App\Repositories\Arrecadacao\ApiArrecadacaoPix\DTO\PixArrecadacaoResponseDTO;
+use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO\PixArrecadacaoResponseDTO;
 
 interface IPixProvider
 {

@@ -3,6 +3,7 @@
 namespace App\Services\Tributario\Arrecadacao;
 
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IConfiguration;
+use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO\PixArrecadacaoResponseDTO;
 
 class GeneratePixWithQRCodeService
 {
@@ -13,9 +14,9 @@ class GeneratePixWithQRCodeService
         $this->configuration = $configuration;
     }
 
-    public function execute(array $data): void
+    public function execute(array $data): PixArrecadacaoResponseDTO
     {
         $provider = $this->configuration->getFinancialProvider();
-        $response = $provider->generatePixArrecadacaoQrCodes($data);
+        return $provider->generatePixArrecadacaoQrCodes($data);
     }
 }

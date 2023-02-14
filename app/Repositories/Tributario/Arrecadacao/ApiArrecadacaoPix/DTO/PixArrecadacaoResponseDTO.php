@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Arrecadacao\ApiArrecadacaoPix\DTO;
+namespace App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO;
 
 class PixArrecadacaoResponseDTO
 {

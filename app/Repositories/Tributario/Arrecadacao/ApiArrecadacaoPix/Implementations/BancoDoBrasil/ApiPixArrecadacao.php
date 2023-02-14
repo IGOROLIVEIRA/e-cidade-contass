@@ -2,11 +2,10 @@
 
 namespace App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Implementations\BancoDoBrasil;
 
-
 use App\Exceptions\ApiException;
-use App\Repositories\Arrecadacao\ApiArrecadacaoPix\DTO\PixArrecadacaoResponseDTO;
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IPixProvider;
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO\PixArrecadacaoPayloadDTO;
+use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO\PixArrecadacaoResponseDTO;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
@@ -17,10 +16,11 @@ use InvalidArgumentException;
 
 class ApiPixArrecadacao implements IPixProvider
 {
-
     private Configuration $configuration;
     private ClientInterface $client;
 
+    public const INDICADOR_CODIGO_BARRAS_NAO = 'N';
+    public const INDICADOR_CODIGO_BARRAS_SIM = 'S';
 
     public function __construct(Configuration $configuration)
     {
@@ -34,6 +34,9 @@ class ApiPixArrecadacao implements IPixProvider
      */
     public function generatePixArrecadacaoQrCodes(array $payload): PixArrecadacaoResponseDTO
     {
+        $payload['numeroConvenio'] = $this->configuration->getNumeroConvenio();
+        $payload['indicadorCodigoBarras'] = self::INDICADOR_CODIGO_BARRAS_NAO;
+        $payload['codigoSolicitacaoBancoCentralBrasil'] = $this->configuration->getChavePix();
         $pixArrecadacaoPayloadDTO = new PixArrecadacaoPayloadDTO($payload);
         $response = $this->criaBoletoBancarioIdWithHttpInfo(
             $pixArrecadacaoPayloadDTO,

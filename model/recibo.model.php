@@ -1,43 +1,15 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBSeller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
 
 use App\Models\Numpref;
-use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Implementations\BancoDoBrasil\Auth;
 use App\Services\Tributario\Arrecadacao\GeneratePixWithQRCodeService;
 use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
-use GuzzleHttp\Client;
-use Swagger\Client\Api\Oauth2Api;
-use Swagger\Client\Model\ArrecadacaoqrcodesBody;
 
 /**
  * Classe responsável pela manutenção de recibos do sistema
  * @package Caixa
  */
-class Recibo {
+class Recibo
+{
 
   const TIPOEMISSAO_RECIBO_AVULSO = 1;
   const TIPOEMISSAO_RECIBO_CGF    = 2;
@@ -191,7 +163,7 @@ class Recibo {
    * @param integer
    *
    */
-  function __construct($iTipoEmissao = null, $iNumCgm = null, $iTipo = 1, $iNumnov = null) {
+  public function __construct($iTipoEmissao = null, $iNumCgm = null, $iTipo = 1, $iNumnov = null) {
 
   	if ($iNumnov != null) {
 
@@ -211,6 +183,7 @@ class Recibo {
         $this->setExercicioRecibo     (date("Y", strtotime($oRecibo->k00_dtoper)));
         $this->setConta               ($oRecibo->k00_conta);
         $this->setTipoEmissao         ($oRecibo->tipo_emissao);
+        $this->iNumCgm = $oRecibo->k00_numcgm;
         $sSqlDebitosRecibo            = $oDaoReciboPaga->sql_query_file(null," distinct k00_numpre, k00_numpar ",
                                                                         null," k00_numnov = {$iNumnov} ");
         $rsDebitosRecibo              = $oDaoReciboPaga->sql_record($sSqlDebitosRecibo);
@@ -844,46 +817,21 @@ class Recibo {
           throw new \BusinessException('Erro ao obter token: '. $e->getMessage());
       }
 
-      $body['numeroConvenio'] = "62191";
-      $body['indicadorCodigoBarras'] = "S";
-      $body['codigoGuiaRecebimento'] = "83660000000199800053846101172358000000000000";
-      $body['codigoSolicitacaoBancoCentralBrasil'] = "88a33759-78b0-43b7-8c60-e5e3e7cb55fe";
+      $body['codigoGuiaRecebimento'] = $this->getNumpreRecibo();
       $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
-      $body['valorOriginalSolicitacao'] = '18.98';
-      $body['nomeDevedor'] = "Contribuinte da Silva";
-      $body['quantidadeSegundoExpiracao'] = '3600';
+      $body['valorOriginalSolicitacao'] = $this->getTotalRecibo();
 
       $service = new GeneratePixWithQRCodeService($providerConfig);
 
-//      $apiInstance = new Swagger\Client\Api\QrCodesApi(new GuzzleHttp\Client(), $config);
-//      $body = new ArrecadacaoqrcodesBody();
-
       try {
-
-          $service->execute($body);
-
-//          $result = $apiInstance->criaBoletoBancarioId(
-//              $body,
-//              $config->getAccessToken(),
-//              $config->getChaveAplicacaoBB()
-//          );
-
+          $response = $service->execute($body);
+          echo "<pre>";
+          print_r($response);
+          exit;
       } catch (Exception $e) {
           echo 'Erro na chamada QrCodesApi->criaBoletoBancarioId: ', $e->getMessage(), PHP_EOL;
       }
 
-//      $configuration = new Configuration(
-//          $numpref->getUrlApi(),
-//          $numpref->getUrlOAuth(),
-//          $numpref->getDevelopApplicationKey(),
-//          $numpref->getClientId(),
-//          $numpref->getClientSecret()
-//      );
-//
-//      $auth = new Auth($configuration);
-//      $token = $auth->auth();
-//      $service = new GeneratePixWithQRCodeService($configuration);
-//      $service->execute();
     return true;
   }
 
