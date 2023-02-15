@@ -228,7 +228,7 @@ if ($clempparametro->numrows > 0) {
 
 $pdf = new scpdf();
 $pdf->Open();
-$pdf1 = new db_impcarne($pdf, '5');
+$pdf1 = new db_impcarne($pdf, '81');
 //$pdf1->modelo = 5;
 $pdf1->nvias = @$e30_nroviaaut;
 $pdf1->objpdf->SetTextColor(0, 0, 0);
