@@ -286,7 +286,7 @@ $clempparametro->rotulo->label();
                 <td nowrap title=""> <b>Modelo Aut. de Empenho:</b></td>
                 <td>
                     <?
-                    $y = array('57' => 'Modelo 1', '10' => 'Modelo 2');
+                    $y = array('5' => 'Modelo 1', '81' => 'Modelo 2');
                     db_select('e30_modeloautempenho', $y, true, $db_opcao, "");
                     ?>
                 </td>

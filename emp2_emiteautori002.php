@@ -1,4 +1,5 @@
 <?php
+//ini_set('display_errors','on');
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -218,7 +219,7 @@ if (pg_numrows($result) == 0) {
 //exit;
 
 //rotina que pega o numero de vias
-$result02 = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"), "e30_nroviaaut,e30_numdec"));
+$result02 = $clempparametro->sql_record($clempparametro->sql_query_file(db_getsession("DB_anousu"), "e30_nroviaaut,e30_numdec,e30_modeloautempenho"));
 
 if ($clempparametro->numrows > 0) {
     db_fieldsmemory($result02, 0);
@@ -228,7 +229,7 @@ if ($clempparametro->numrows > 0) {
 
 $pdf = new scpdf();
 $pdf->Open();
-$pdf1 = new db_impcarne($pdf, '81');
+$pdf1 = new db_impcarne($pdf, $e30_modeloautempenho);
 //$pdf1->modelo = 5;
 $pdf1->nvias = @$e30_nroviaaut;
 $pdf1->objpdf->SetTextColor(0, 0, 0);
@@ -236,7 +237,7 @@ $autorizacoes = array();
 
 for ($i = 0; $i < pg_numrows($newResult); $i++) {
     db_fieldsmemory($newResult, $i);
-
+    if($e30_modeloautempenho == 81){
     $sqlitem = " select distinct (pc01_descrmater||'. '||(case when pc01_complmater is null then '' else pc01_complmater end)||' '||(case when l21_codpcprocitem is null and coalesce((select 'Marca'||pc23_obs from pcorcamval
 inner join pcorcamitem on pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem
 inner join pcorcamjulgamentologitem on pcorcamjulgamentologitem.pc93_pcorcamitem = pcorcamitem.pc22_orcamitem
@@ -301,7 +302,72 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
 	   						   and o56_anousu =" . db_getsession("DB_anousu") . "
 	   				  order by e55_sequen,o56_elemento,e55_item
 	   					";
-
+    }else{
+        $sqlitem = " select distinct (pc01_descrmater||'. '||(case when pc01_complmater is null or pc01_complmater!=pc01_descrmater then '' else pc01_complmater end)||' '||(case when l21_codpcprocitem is null and coalesce((select 'Marca'||pc23_obs from pcorcamval
+        inner join pcorcamitem on pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem
+        inner join pcorcamjulgamentologitem on pcorcamjulgamentologitem.pc93_pcorcamitem = pcorcamitem.pc22_orcamitem
+        inner join pcorcamitemproc on pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem
+        inner join pcprocitem on pcprocitem.pc81_codprocitem = pcorcamitemproc.pc31_pcprocitem
+        inner join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
+        inner join empautitem on empautitem.e55_autori = empautitempcprocitem.e73_autori and e73_sequen = e55_sequen
+        inner join pcmater as material on material.pc01_codmater = empautitem.e55_item
+        where e55_autori=$e54_autori and pc93_pontuacao=1),'') = '' then (coalesce((SELECT DISTINCT (CASE WHEN pc23_obs IS NOT NULL and pc23_obs <> '' THEN 'Marca: '||pc23_obs ELSE pc23_obs END)
+        FROM empautitem empautiteminter
+        inner JOIN empautitempcprocitem ON empautiteminter.e55_autori = empautitempcprocitem.e73_autori
+        AND e73_sequen = e55_sequen
+        inner JOIN pcprocitem ON pc81_codprocitem = e73_pcprocitem
+        inner JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+        inner JOIN pcorcamitem ON pc22_orcamitem = pc31_orcamitem
+        inner JOIN pcorcamval ON pc23_orcamitem = pc22_orcamitem
+        inner JOIN pcorcamjulg ON pc24_orcamitem = pc22_orcamitem and pc23_orcamforne = pc24_orcamforne
+        WHERE e55_autori=$e54_autori
+            and empautiteminter.e55_item = empautitem.e55_item
+          AND pc24_pontuacao = 1),''))
+        else
+            coalesce((select 'Marca'||pc23_obs from pcorcamval
+        inner join pcorcamitem on pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem
+        inner join pcorcamjulgamentologitem on pcorcamjulgamentologitem.pc93_pcorcamitem = pcorcamitem.pc22_orcamitem
+        inner join pcorcamitemproc on pcorcamitemproc.pc31_orcamitem = pcorcamitem.pc22_orcamitem
+        inner join pcprocitem on pcprocitem.pc81_codprocitem = pcorcamitemproc.pc31_pcprocitem
+        inner join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem
+        inner join empautitem on empautitem.e55_autori = empautitempcprocitem.e73_autori and e73_sequen = e55_sequen
+        inner join pcmater as material on material.pc01_codmater = empautitem.e55_item
+        where e55_autori=$e54_autori and pc93_pontuacao=1),'')
+         end)) as pc01_descrmater,
+                                  e55_autori,
+                               e55_sequen,
+                                   e55_marca,
+                                   e55_item,
+                                   e55_quant,
+                                   e55_vltot,
+                                   e55_vlrun,
+                                   o56_elemento,
+                                   o56_descr,
+                                   pc81_codproc,
+                                   pc11_numero,
+                                   e56_orctiporec,
+                                   m61_descr,
+                                   (CASE WHEN pc23_obs IS NOT NULL and pc23_obs <> '' THEN 'Marca: ' ELSE '' END)||coalesce(trim(pc23_obs),'') as pc23_obs
+                                                    from empautitem
+                                        inner join pcmater        			on pc01_codmater = e55_item
+                                    inner join orcelemento          on e55_codele    = o56_codele and o56_anousu = " . db_getsession("DB_anousu") . "
+                                    left join empautitempcprocitem  on empautitempcprocitem.e73_autori = empautitem.e55_autori
+                                                                   and empautitempcprocitem.e73_sequen = empautitem.e55_sequen
+                                    inner join matunid on matunid.m61_codmatunid = empautitem.e55_unid
+                                    left join pcprocitem            on pcprocitem.pc81_codprocitem     = empautitempcprocitem.e73_pcprocitem
+                                        left  join solicitem            on solicitem.pc11_codigo          = pcprocitem.pc81_solicitem
+                                        left  join liclicitem           on liclicitem.l21_codpcprocitem   = pcprocitem.pc81_codprocitem
+                                        left  join pcorcamitemlic       on pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
+                                        left  join pcorcamjulg          on pcorcamjulg.pc24_orcamitem     = pcorcamitemlic.pc26_orcamitem
+                                                                                                   and pcorcamjulg.pc24_pontuacao     = 1
+                                        left  join pcorcamval     			on pcorcamval.pc23_orcamitem      = pcorcamjulg.pc24_orcamitem
+                                                                                                     and pcorcamval.pc23_orcamforne     = pcorcamjulg.pc24_orcamforne
+                                    left  join empautidot     		  on e56_autori                     = e55_autori
+                                        where e55_autori = $e54_autori
+                                          and o56_anousu =" . db_getsession("DB_anousu") . "
+                                 order by e55_sequen,o56_elemento,e55_item
+                                   ";
+    }
     $sqltot = "select sum(e55_vltot) as tot_item from empautitem where e55_autori = $e54_autori";
     $resulttot = db_query($sqltot);
     db_fieldsmemory($resulttot, 0);
