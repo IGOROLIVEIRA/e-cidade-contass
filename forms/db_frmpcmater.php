@@ -84,7 +84,11 @@ function verPermissaoAlteraServico($iItem)
                                 ?>
                         <b>Tipo:</b>
                         <?
-                        $x = array("0" => "Selecione","f" => "Material", "t" => "Serviço/Material Permanente");
+                        if ($db_opcao == 1) {
+                            $x = array("selecione" => "Selecione", "f" => "Material", "t" => "Serviço/Material Permanente");
+                        } else {
+                            $x = array("f" => "Material", "t" => "Serviço/Material Permanente");
+                        }
                         if (isset($pc01_codmater)) {
                             if (verPermissaoAlteraServico($pc01_codmater)) {
                                 db_select("pc01_servico", $x, true, 3);
