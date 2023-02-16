@@ -127,7 +127,7 @@ if (isset($_POST["processar"])) {
                 break;
             }
 
-            PHPExcel_Shared_Date::setExcelCalendar(PHPExcel_Shared_Date::CALENDAR_MAC_1904);
+            PHPExcel_Shared_Date::setExcelCalendar(PHPExcel_Shared_Date::CALENDAR_WINDOWS_1900);
 
             $valorData = strlen($data);
             if ($valorData == 10) {
@@ -136,7 +136,7 @@ if (isset($_POST["processar"])) {
             } else {
                 $data = date('d/m/Y', PHPExcel_Shared_Date::ExcelToPHP($cell->getValue()));
                 $data = explode("/", $data);
-                $data = $data[2] - 4 . "-" . $data[1] . "-" . ($data[0]);
+                $data = $data[2] . "-" . $data[1] . "-" . ($data[0]);
             }
             //$hora = PHPExcel_Shared_Date::stringToExcel($data+1);
 
