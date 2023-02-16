@@ -182,6 +182,7 @@ $clsolicitaregistropreco->rotulo->label("pc54_sequencial");
             }
           }
           $campos .= ", solicita.pc10_resumo, nomeinst";
+          $sWhereInstituicao = " and solicita.pc10_instit = " . db_getsession("DB_instit");
           $sWhere  = $sWhere . $sWhereInstituicao;
 
 
@@ -214,7 +215,6 @@ $clsolicitaregistropreco->rotulo->label("pc54_sequencial");
           if (isset($chave_pc54_sequencial)) {
             $repassa = array("chave_pc54_sequencial" => $chave_pc54_sequencial, "chave_pc54_solicita" => $chave_pc54_solicita);
           }
-
           db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
         } else {
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
