@@ -6234,7 +6234,10 @@ function getSaldoPlanoContaFonte($sFonte, $dtIni, $dtFim, $aInstits){
     db_inicio_transacao();
 
     $where = " c61_instit in ({$aInstits})" ;
-    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($sFonte) ) ";
+    if(db_getsession("DB_anousu") > 2022)
+        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ($sFonte) ) ";
+    else 
+        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($sFonte) ) ";   
     $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
     $nTotalFinal = 0;
     for($x = 0; $x < pg_numrows($result); $x++){
@@ -6319,9 +6322,12 @@ function getTotalAnexoIIEducacao($instits,$dtini,$dtfim,$anousu)
     $fSubTotal = 0;
     $aSubFuncoes = array(122,272,271,361,365,366,367,843);
     $sFuncao     = "12";
-    $aFonte      = array("'101'");
+    $aFonte      = array("'101','1101','15000001'");
+
     foreach ($aSubFuncoes as $iSubFuncao) {
         $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+        if($anousu > 2022)
+            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
         if (count($aDespesasProgramas) > 0) {
             foreach ($aDespesasProgramas as $oDespesaPrograma) {
                 $fSubTotal += $oDespesaPrograma->pago;
@@ -6351,7 +6357,7 @@ function getTotalAnexoIIEducacaoNovo($instits,$dtini,$dtfim,$anousu){
     db_query("drop table if exists work_pl");
     db_query("drop table if exists work_dotacao");
     db_query("drop table if exists work_receita");
-    $nRPExercicioAnteriorSemSaldo = getRestosSemDisponilibidade("'101'", $dtini, $dtfim, $instits);
+    $nRPExercicioAnteriorSemSaldo = getRestosSemDisponilibidade("'101','15000001'", $dtini, $dtfim, $instits);
     $sWhereDespesa      = " o58_instit in({$instits})";
     criaWorkDotacao($sWhereDespesa,array($anousu),$dtini,$dtfim);
     $sWhereReceita      = "o70_instit in ({$instits})";
@@ -6359,10 +6365,12 @@ function getTotalAnexoIIEducacaoNovo($instits,$dtini,$dtfim,$anousu){
     $fSubTotal = 0;
     $aSubFuncoes = array(122, 272, 271, 361, 365, 366, 367, 843);
     $sFuncao     = "12";
-    $aFonte      = array("'101'");
+    $aFonte      = array("'101','15000001'");
     $fTotalRPExercicio = 0;
     foreach ($aSubFuncoes as $iSubFuncao) {
         $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(atual_a_pagar+atual_a_pagar_liquidado),0) as apagar", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+        if($anousu > 2022)
+            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(atual_a_pagar+atual_a_pagar_liquidado),0) as apagar", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
         if (count($aDespesasProgramas) > 0) {
             foreach ($aDespesasProgramas as $oDespesaPrograma) {
                 $fSubTotal += $oDespesaPrograma->pago;
@@ -6373,7 +6381,7 @@ function getTotalAnexoIIEducacaoNovo($instits,$dtini,$dtfim,$anousu){
         }
     }
     $aDadoDeducao = getSaldoReceita(null,"sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado",null,"o57_fonte like '495%'");
-    $nSaldoFinalFonte = getSaldoPlanoContaFonte("'101'", $dtini, $dtfim, $instits);
+    $nSaldoFinalFonte = getSaldoPlanoContaFonte("'101','15000001'", $dtini, $dtfim, $instits);
     db_query("drop table if exists work_pl");
     db_query("drop table if exists work_dotacao");
     db_query("drop table if exists work_receita");
@@ -6404,9 +6412,12 @@ function getTotalAnexoIISaude($instits,$dtini,$dtfim,$anousu)
     $fSubTotal = 0;
     $aSubFuncoes = array(122,272,271,301,302,303,304,305,306);
     $sFuncao     = "10";
-    $aFonte      = array("'102'");
+    $aFonte      = array("'102','15000002'");
+
     foreach ($aSubFuncoes as $iSubFuncao) {
         $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
+        if($anousu > 2022)
+            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
         if (count($aDespesasProgramas) > 0) {
             foreach ($aDespesasProgramas as $oDespesaPrograma) {
                 $fSubTotal += $oDespesaPrograma->pago;
@@ -6561,6 +6572,7 @@ function criaWorkDotacao($sWhere, $aAnousu, $dtini, $dtfim)
                           o58_elemento CHARACTER varying,
                           o58_codigo INTEGER,
                           o15_codtri CHARACTER VARYING,
+                          o15_codigo CHARACTER VARYING,
                           dot_ini DOUBLE PRECISION,
                           saldo_anterior DOUBLE PRECISION,
                           empenhado DOUBLE PRECISION,
@@ -6643,6 +6655,7 @@ function criaWorkDotacao($sWhere, $aAnousu, $dtini, $dtfim)
                               END AS o58_elemento,
                               o58_codigo,
                               o15_codtri,
+                              o15_codigo,
                               substr(fc_dotacaosaldo,3,12)::float8 AS dot_ini,
                               substr(fc_dotacaosaldo,16,12)::float8 AS saldo_anterior,
                               substr(fc_dotacaosaldo,29,12)::float8 AS empenhado,
@@ -6711,6 +6724,8 @@ function getSaldoAPagarRPFonte($sFontes, $dtIni, $dtFim, $aInstits)
     $sSqlOrder = "";
     $sCampos = " o15_codtri, sum(e91_vlremp) as vlremp, sum(e91_vlranu) as vlranu, sum(e91_vlrpag) as vlrpag ";
     $sSqlWhere = " o15_codtri in ($sFontes) group by 1 ";
+    if(db_getsession("DB_anousu") > 2022)
+        $sSqlWhere = " o15_codigo in ($sFontes) group by 1 ";
     $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
 
     $nValorARpPagar = 0;
