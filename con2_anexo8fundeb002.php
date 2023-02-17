@@ -99,12 +99,12 @@ $aSubFuncoes = array(122, 272, 271, 361, 365, 366, 367, 843);
 
 if ($anousu >=2022){
     $aReceitasImpostos = array(
-        array('1 - FUNDEB - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS', 'title', array('413210101%', '413210501%', '417515001%'), "'118','119'"),
-        array('1.1 - TRANSFERÊNCIAS DE RECURSOS DO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISSIONAIS DA EDUCAÇÃO - FUNDEB (NR 1.7.5.1.50.0.1 )', 'text', array('417515001%'), "'118','119'"),
-        array('1.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.01.0.1 + NR 1.3.2.1.05.0.1 )', 'text', array('413210101%', '413210501%'), "'118','119'"),
-        array('2 - FUNDEB - COMPLEMENTAÇÃO DA UNIÃO - VAAT', 'title', array('413210101%', '413210501%', '417155001%'), "'166','167'"),
-        array('2.1 - TRANSFERÊNCIAS DE RECURSOS DA COMPLEMENTAÇÃO DA UNIÃO AO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISSIONAIS DA EDUCAÇÃO - FUNDEB (VAAT) (NR 1.7.1.5.50.0.1)', 'text', array('417155001%'), "'166','167'"),
-        array('2.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.01.0.1 + NR 1.3.2.1.05.0.1 )', 'text', array('413210101%', '413210501%'), "'166','167'"),
+        array('1 - FUNDEB - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS', 'title', array('413210101%', '413210501%', '417515001%'), "'118','119','1118','1119','15400007','15400000'"),
+        array('1.1 - TRANSFERÊNCIAS DE RECURSOS DO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISSIONAIS DA EDUCAÇÃO - FUNDEB (NR 1.7.5.1.50.0.1 )', 'text', array('417515001%'), "'118','119','1118','1119','15400007','15400000'"),
+        array('1.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.01.0.1 + NR 1.3.2.1.05.0.1 )', 'text', array('413210101%', '413210501%'), "'118','119','1118','1119','15400007','15400000'"),
+        array('2 - FUNDEB - COMPLEMENTAÇÃO DA UNIÃO - VAAT', 'title', array('413210101%', '413210501%', '417155001%'), "'15420007','15420000'"),
+        array('2.1 - TRANSFERÊNCIAS DE RECURSOS DA COMPLEMENTAÇÃO DA UNIÃO AO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISSIONAIS DA EDUCAÇÃO - FUNDEB (VAAT) (NR 1.7.1.5.50.0.1)', 'text', array('417155001%'), "'166','167','1166','1167','15420007','15420000'"),
+        array('2.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.01.0.1 + NR 1.3.2.1.05.0.1 )', 'text', array('413210101%', '413210501%'), "'166','167','1166','1167','15420007','15420000'"),
     );
 }else{
     $aReceitasImpostos = array(
@@ -125,7 +125,10 @@ function getValorNaturezaReceita($aNaturecaReceita, $aFontes, $anoUsu, $dtIni, $
 {
     $nReceitaTotal = 0;
     $sWhereReceita      = " o70_instit in ({$instits}) ";
-    $sWhereReceita      .= " and o70_codigo in ( select o15_codigo from orctiporec where o15_codtri in ({$aFontes}) )";
+    if($anoUsu > 2022)
+        $sWhereReceita      .= " and o70_codigo in ( select o15_codigo from orctiporec where o15_codigo in ({$aFontes}) )";
+    else
+        $sWhereReceita      .= " and o70_codigo in ( select o15_codigo from orctiporec where o15_codtri in ({$aFontes}) )";
     $rsReceitas = db_receitasaldo(11, 1, 3, true, $sWhereReceita, $anoUsu, $dtIni, $dtFim, false, ' * ', true, 0);
     $aReceitas = db_utils::getColectionByRecord($rsReceitas);
     db_query("drop table if exists work_receita");
@@ -160,6 +163,8 @@ function getEmpenhosApagar($aFontes, $dtini, $dtfim, $instits, $tipo) {
         $sSqlOrder    = "";
         $sCampos      = "o15_codtri, sum(e60_vlremp) as vlremp, sum(vlranu) as vlranu,  sum(vlrpag) as vlrpago, sum(vlrliq) as vlrliq ";
         $sSqlWhere    = " o15_codtri in (".implode(",", $aFontes).") group by 1";
+        if(db_getsession("DB_anousu") > 2022)
+            $sSqlWhere    = " o15_codigo in (".implode(",", $aFontes).") group by 1";
         $aEmpEmpenho  = $clempempenho->getEmpenhosMovimentosPeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits, $sCampos, $sSqlWhere, $sSqlOrder);
         $valorEmpLQDAPagar = 0;
         $valorEmpNaoLQDAPagar = 0;
@@ -181,6 +186,8 @@ function getPagamentoFuncao($iFuncao, $aFontes, $dtini, $dtfim, $instits)
     $sSqlOrder    = "";
     $sCampos      = "o58_funcao, sum(vlrpag) as vlrpago ";
     $sSqlWhere    = " o58_funcao = {$iFuncao} and o15_codtri in (".implode(",", $aFontes).") group by 1";
+    if(db_getsession("DB_anousu") > 2022)
+        $sSqlWhere    = " o58_funcao = {$iFuncao} and o15_codigo in (".implode(",", $aFontes).") group by 1";
     $aEmpEmpenho  = $clempempenho->getEmpenhosMovimentosPeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits, $sCampos, $sSqlWhere, $sSqlOrder);
     $valorEmpPago = 0;
     foreach($aEmpEmpenho as $oEmp){
@@ -193,9 +200,11 @@ function getRestosaPagarComplementacaoCapital($dtini, $dtfim, $instits)
 {
         $clempresto = new cl_empresto();
         $sSqlOrder = "";
-        $sCampos = " sum(vlrpag) as vlrpag, sum(vlrpagnproc) as vlrpagnproc ";
-        $sSqlWhere = " substr(o56_elemento,0,3) = '344' and o15_codtri in in ('166', '167')";
-        $aEmpRestos = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
+        $sCampos = " sum(vlrpag) as vlrpag ";
+        $sSqlWhere = " substr(o56_elemento,1,3) = '344' and o15_codtri in ('166', '167')";
+        if(db_getsession("DB_anousu") > 2022)
+            $sSqlWhere = " substr(o56_elemento,1,3) = '344' and o15_codigo in ('166', '167','1166', '1167','15420007', '15420000')";
+        $aEmpRestos = $clempresto->getRestosPagarRelAnexoVIII(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
         $nRPPagoComplementacao = 0;
         foreach($aEmpRestos as $oEmpResto){
             $nRPPagoComplementacao = $oEmpResto->vlrpag + $oEmpResto->vlrpagnproc;
@@ -209,6 +218,8 @@ function getPagamentoComplementacaoCapital($dtini, $dtfim, $instits)
     $sSqlOrder    = "";
     $sCampos      = "sum(vlrpag) as vlrpago ";
     $sSqlWhere    = " substr(o56_elemento, 1, 3) = '344' and o15_codtri in ('166', '167')";
+    if(db_getsession("DB_anousu") > 2022)
+        $sSqlWhere = " substr(o56_elemento, 1, 3) = '344' and o15_codigo in ('166', '167','1166', '1167','15420007', '15420000')";
     $aEmpEmpenho  = $clempempenho->getEmpenhosMovimentosPeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits, $sCampos, $sSqlWhere, $sSqlOrder);
     $valorEmpPago = 0;
     foreach($aEmpEmpenho as $oEmp){
@@ -221,9 +232,11 @@ function getRestosaPagarComplementacaoInfantil($dtini, $dtfim, $instits)
 {
         $clempresto = new cl_empresto();
         $sSqlOrder = "";
-        $sCampos = " sum(vlrpag) as vlrpag, sum(vlrpagnproc) as vlrpagnproc ";
-        $sSqlWhere = " o58_subfuncao = 365 and o15_codtri in in ('166', '167')";
-        $aEmpRestos = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
+        $sCampos = " sum(vlrpag) as vlrpag ";
+        $sSqlWhere = " o58_subfuncao = 365 and o15_codtri in ('166', '167')";
+        if(db_getsession("DB_anousu") > 2022)
+            $sSqlWhere = " o58_subfuncao = 365 and o15_codigo in ('166', '167','1166', '1167','15420007', '15420000')";
+        $aEmpRestos = $clempresto->getRestosPagarRelAnexoVIII(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
         $nRPPagoComplementacao = 0;
         foreach($aEmpRestos as $oEmpResto){
             $nRPPagoComplementacao = $oEmpResto->vlrpag + $oEmpResto->vlrpagnproc;
@@ -237,6 +250,8 @@ function getPagamentoComplementacaoInfantil($dtini, $dtfim, $instits)
     $sSqlOrder    = "";
     $sCampos      = "sum(vlrpag) as vlrpago ";
     $sSqlWhere    = " o58_subfuncao = 365 and o15_codtri in ('166', '167')";
+    if(db_getsession("DB_anousu") > 2022)
+        $sSqlWhere    = " o58_subfuncao = 365 and o15_codigo in ('166', '167','1166', '1167','15420007', '15420000')";
     $aEmpEmpenho  = $clempempenho->getEmpenhosMovimentosPeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits, $sCampos, $sSqlWhere, $sSqlOrder);
     $valorEmpPago = 0;
     foreach($aEmpEmpenho as $oEmp){
@@ -247,7 +262,10 @@ function getPagamentoComplementacaoInfantil($dtini, $dtfim, $instits)
 
 function getSaldoPlanoContaFonteFundeb($nFonte, $dtIni, $dtFim, $aInstits){
     $where = " c61_instit in ({$aInstits})" ;
-    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
+    if(db_getsession("DB_anousu") > 2022)
+        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ($nFonte) ) ";
+    else    
+        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";   
     $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
     $nTotalAnterior = 0;
     for($x = 0; $x < pg_numrows($result); $x++){
@@ -276,7 +294,9 @@ function getRestosSemDisponilibidadeFundeb($aFontes, $dtIni, $dtFim, $aInstits) 
         $sSqlOrder = "";
         $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
         $sSqlWhere = " o15_codtri in ($sFonte) group by 1 ";
-        $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
+        if(db_getsession("DB_anousu") > 2022)
+            $sSqlWhere = " o15_codigo in ($sFonte) group by 1 ";
+        $aEmpRestos = $clEmpResto->getRestosPagarRelAnexoVIII(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
         $nValorRpPago = 0;
         foreach($aEmpRestos as $oEmpResto){
             $nValorRpPago += $oEmpResto->pagorpp + $oEmpResto->pagorpnp;
@@ -298,6 +318,8 @@ function getDespesasCusteadosComSuperavit($aFontes, $dtini, $dtfim, $instits) {
     $sSqlOrder = "";
     $sCampos = " o15_codtri, sum(vlrpag) as vlrpag ";
     $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
+    if(db_getsession("DB_anousu") > 2022)
+        $sSqlWhere = " o15_codigo in (".implode(",", $aFontes).") group by 1";
     $dtfim = db_getsession("DB_anousu")."-04-30";
     $aEmpEmpenho = $clempempenho->getDespesasCusteadosComSuperavit(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
     $valorEmpPagoSuperavit = 0;
@@ -312,6 +334,8 @@ function getDespesasCusteadosComSuperavitPosPrimeiroQuadrimestre($aFontes, $dtin
     $sSqlOrder = "";
     $sCampos = " o15_codtri, sum(vlrpag) as vlrpag ";
     $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
+    if(db_getsession("DB_anousu") > 2022)
+        $sSqlWhere = " o15_codigo in (".implode(",", $aFontes).") group by 1";
     $dtini = db_getsession("DB_anousu")."-05-01";
     $aEmpEmpenho = $clempempenho->getDespesasCusteadosComSuperavit(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
     $valorEmpPagoSuperavit = 0;
@@ -1285,13 +1309,23 @@ ob_start();
                     <td class="s29" dir="ltr" colspan="2">DESPESAS CUSTEADAS COM RECURSOS FUNDEB - COMPLEMENTAÇÃO DA
                         UNIÃO - VAAT</td>
                 </tr>
+                <? if ($anousu > 2022){ ?>
+                <tr style="height: 20px">
+                    <td class="s3" dir="ltr"></td>
+                    <td class="s4" dir="ltr">15400007</td>
+                    <td class="s4" dir="ltr">15400000</td>
+                    <td class="s4" dir="ltr">15420007</td>
+                    <td class="s4" dir="ltr">15420000</td>
+                </tr>
+                <?} else {?>
                 <tr style="height: 20px">
                     <td class="s3" dir="ltr"></td>
                     <td class="s4" dir="ltr">118</td>
                     <td class="s4" dir="ltr">119</td>
                     <td class="s4" dir="ltr">166</td>
                     <td class="s4" dir="ltr">167</td>
-                </tr>
+                </tr>     
+                <?}?>    
                 <?php
                     $pagoFuncao118 = 0;
                     $pagoFuncao119 = 0;
@@ -1305,27 +1339,46 @@ ob_start();
                         echo " <td class='s31' dir='ltr'></td>";
                         echo " <td class='s31' dir='ltr'></td>";
                         echo " <td class='s31' dir='ltr'></td>";
-                        echo " <td class='s31' dir='ltr'></td>";
-
-                        $aSubFuncoes = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o15_codtri in (".implode(",",array("'118','119','166','167'")).") and o58_instit in ($instits) group by 1,2 order by 1");
+                        if($anousu > 2022)
+                            $aSubFuncoes = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o15_codigo in (".implode(",",array("'118','119','166','167','1118','1119','1166','1167','15400007','15400000','15420007','15420000'")).") and o58_instit in ($instits) group by 1,2 order by 1");
+                        else
+                            $aSubFuncoes = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o15_codtri in (".implode(",",array("'118','119','166','167'")).") and o58_instit in ($instits) group by 1,2 order by 1");
                         foreach ($aSubFuncoes as $oSubFuncao) {
                             $sDescrSubfuncao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$oSubFuncao->o58_subfuncao}'"), 0)->o53_descr;
 
                             echo "<tr style='height: 20px'> ";
                             echo " <td class='s8' dir='ltr'></td>";
                             echo " <td class='s9' dir='ltr' colspan='5'>{$oSubFuncao->o58_subfuncao} - {$sDescrSubfuncao}</td>";
-                            $aSubFuncao118 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'118'")).") and o58_instit in ($instits) group by 1,2 order by 1");
-                            $nValorPagoSubFuncao118 = count( $aSubFuncao118) > 0 ? $aSubFuncao118[0]->pago : 0;
-                            $pagoFuncao118 += $nValorPagoSubFuncao118;
-                            $aSubFuncao119 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'119'")).") and o58_instit in ($instits) group by 1,2 order by 1");
-                            $nValorPagoSubFuncao119 = count( $aSubFuncao119) > 0 ? $aSubFuncao119[0]->pago : 0;
-                            $pagoFuncao119 += $nValorPagoSubFuncao119;
-                            $aSubFuncao166 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'166'")).") and o58_instit in ($instits) group by 1,2 order by 1");
-                            $nValorPagoSubFuncao166 = count( $aSubFuncao166) > 0 ? $aSubFuncao166[0]->pago : 0;
-                            $pagoFuncao166 += $nValorPagoSubFuncao166;
-                            $aSubFuncao167 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'167'")).") and o58_instit in ($instits) group by 1,2 order by 1");
-                            $nValorPagoSubFuncao167 = count( $aSubFuncao167) > 0 ? $aSubFuncao167[0]->pago : 0;
-                            $pagoFuncao167 += $nValorPagoSubFuncao167;
+                            if($anousu > 2022){
+                                $aSubFuncao118 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codigo in (".implode(",",array("'118','1118','15400007'")).") and o58_instit in ($instits) group by 1,2 order by 1");
+                                $nValorPagoSubFuncao118 = count( $aSubFuncao118) > 0 ? $aSubFuncao118[0]->pago : 0;
+                                $pagoFuncao118 += $nValorPagoSubFuncao118;
+                                $aSubFuncao119 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codigo in (".implode(",",array("'119','1119','15400000'")).") and o58_instit in ($instits) group by 1,2 order by 1");
+                                $nValorPagoSubFuncao119 = count( $aSubFuncao119) > 0 ? $aSubFuncao119[0]->pago : 0;
+                                $pagoFuncao119 += $nValorPagoSubFuncao119;
+                                $aSubFuncao166 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codigo in (".implode(",",array("'166','1166','15420007'")).") and o58_instit in ($instits) group by 1,2 order by 1");
+                                $nValorPagoSubFuncao166 = count( $aSubFuncao166) > 0 ? $aSubFuncao166[0]->pago : 0;
+                                $pagoFuncao166 += $nValorPagoSubFuncao166;
+                                $aSubFuncao167 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codigo in (".implode(",",array("'167','1167','15420000'")).") and o58_instit in ($instits) group by 1,2 order by 1");
+                                $nValorPagoSubFuncao167 = count( $aSubFuncao167) > 0 ? $aSubFuncao167[0]->pago : 0;
+                                $pagoFuncao167 += $nValorPagoSubFuncao167;
+
+                            }else{
+                                $aSubFuncao118 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'118'")).") and o58_instit in ($instits) group by 1,2 order by 1");
+                                $nValorPagoSubFuncao118 = count( $aSubFuncao118) > 0 ? $aSubFuncao118[0]->pago : 0;
+                                $pagoFuncao118 += $nValorPagoSubFuncao118;
+                                $aSubFuncao119 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'119'")).") and o58_instit in ($instits) group by 1,2 order by 1");
+                                $nValorPagoSubFuncao119 = count( $aSubFuncao119) > 0 ? $aSubFuncao119[0]->pago : 0;
+                                $pagoFuncao119 += $nValorPagoSubFuncao119;
+                                $aSubFuncao166 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'166'")).") and o58_instit in ($instits) group by 1,2 order by 1");
+                                $nValorPagoSubFuncao166 = count( $aSubFuncao166) > 0 ? $aSubFuncao166[0]->pago : 0;
+                                $pagoFuncao166 += $nValorPagoSubFuncao166;
+                                $aSubFuncao167 = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o15_codtri in (".implode(",",array("'167'")).") and o58_instit in ($instits) group by 1,2 order by 1");
+                                $nValorPagoSubFuncao167 = count( $aSubFuncao167) > 0 ? $aSubFuncao167[0]->pago : 0;
+                                $pagoFuncao167 += $nValorPagoSubFuncao167;
+
+                            }
+                            
                             echo " <td class='s10' dir='ltr'>";
                             echo db_formatar($nValorPagoSubFuncao118, "f");
                             echo " </td>";
@@ -1343,14 +1396,28 @@ ob_start();
                             $aDespesasProgramas = getSaldoDespesa(null, "o58_programa, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_instit in ($instits) group by 1,2");
                             foreach ($aDespesasProgramas as $oDespesaPrograma) {
                                 $oPrograma = new Programa($oDespesaPrograma->o58_programa, $oDespesaPrograma->o58_anousu);
-                                $aPrograma118 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codtri in (".implode(",",array("'118'")).") and o58_instit in ($instits) group by 1,2");
-                                $nValorPagoFonte118 = count( $aPrograma118) > 0 ? $aPrograma118[0]->pago : 0;
-                                $aFonte119 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codtri in (".implode(",",array("'119'")).") and o58_instit in ($instits) group by 1,2");
-                                $nValorPagoFonte119 = count( $aFonte119) > 0 ? $aFonte119[0]->pago : 0;
-                                $aFonte166 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codtri in (".implode(",",array("'166'")).") and o58_instit in ($instits) group by 1,2");
-                                $nValorPagoFonte166 = count( $aFonte166) > 0 ? $aFonte166[0]->pago : 0;
-                                $aFonte167 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codtri in (".implode(",",array("'167'")).") and o58_instit in ($instits) group by 1,2");
-                                $nValorPagoFonte167 = count( $aFonte167) > 0 ? $aFonte167[0]->pago : 0;
+                                if($anousu > 2022){
+                                    $aPrograma118 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codigo in (".implode(",",array("'118','1118','15400007'")).") and o58_instit in ($instits) group by 1,2");
+                                    $nValorPagoFonte118 = count( $aPrograma118) > 0 ? $aPrograma118[0]->pago : 0;
+                                    $aFonte119 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codigo in (".implode(",",array("'119','1119','15400000'")).") and o58_instit in ($instits) group by 1,2");
+                                    $nValorPagoFonte119 = count( $aFonte119) > 0 ? $aFonte119[0]->pago : 0;
+                                    $aFonte166 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codigo in (".implode(",",array("'166','1166','15420007'")).") and o58_instit in ($instits) group by 1,2");
+                                    $nValorPagoFonte166 = count( $aFonte166) > 0 ? $aFonte166[0]->pago : 0;
+                                    $aFonte167 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codigo in (".implode(",",array("'167','1167','15420000'")).") and o58_instit in ($instits) group by 1,2");
+                                    $nValorPagoFonte167 = count( $aFonte167) > 0 ? $aFonte167[0]->pago : 0;
+
+                                }else{
+                                    $aPrograma118 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codtri in (".implode(",",array("'118'")).") and o58_instit in ($instits) group by 1,2");
+                                    $nValorPagoFonte118 = count( $aPrograma118) > 0 ? $aPrograma118[0]->pago : 0;
+                                    $aFonte119 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codtri in (".implode(",",array("'119'")).") and o58_instit in ($instits) group by 1,2");
+                                    $nValorPagoFonte119 = count( $aFonte119) > 0 ? $aFonte119[0]->pago : 0;
+                                    $aFonte166 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codtri in (".implode(",",array("'166'")).") and o58_instit in ($instits) group by 1,2");
+                                    $nValorPagoFonte166 = count( $aFonte166) > 0 ? $aFonte166[0]->pago : 0;
+                                    $aFonte167 = getSaldoDespesa(null, "o15_codtri, o58_anousu, coalesce(sum(pago),0) as pago ", null, "o58_funcao = {$iFuncao} and o58_subfuncao in ({$oSubFuncao->o58_subfuncao}) and o58_programa in ({$oDespesaPrograma->o58_programa}) and o15_codtri in (".implode(",",array("'167'")).") and o58_instit in ($instits) group by 1,2");
+                                    $nValorPagoFonte167 = count( $aFonte167) > 0 ? $aFonte167[0]->pago : 0;
+
+                                }
+                                
                                 echo "<tr style='height: 20px'>";
                                 echo " <td class='s8' dir='ltr'></td>";
                                 echo " <td class='s9' dir='ltr' colspan='5' style='padding-left: 10px;'> ";
@@ -1385,6 +1452,16 @@ ob_start();
                     <td class="s35"></td>
                     <td class="s19" colspan="9"></td>
                 </tr>
+                <? if ($anousu > 2022){ ?>
+                <tr style="height: 20px">
+                    <td class="s35"></td>
+                    <td class="s36" colspan="5"></td>
+                    <td class="s37" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITAS NA FONTE 15400007</td>
+                    <td class="s37" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITAS NA FONTE 15400000</td>
+                    <td class="s37" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITAS NA FONTE 15420007</td>
+                    <td class="s4" dir="ltr"  style='border-left: 1px SOLID #000000;'>INSCRITAS NA FONTE 15420000</td>
+                </tr>
+                <?} else {?>
                 <tr style="height: 20px">
                     <td class="s35"></td>
                     <td class="s36" colspan="5"></td>
@@ -1392,7 +1469,8 @@ ob_start();
                     <td class="s37" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITAS NA FONTE 119</td>
                     <td class="s37" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITAS NA FONTE 166</td>
                     <td class="s4" dir="ltr"  style='border-left: 1px SOLID #000000;'>INSCRITAS NA FONTE 167</td>
-                </tr>
+                </tr>       
+                <?}?>    
                 <tr style="height: 20px">
                     <td class="s32" dir="ltr"></td>
                     <td class="s33" dir="ltr" colspan="5">7 - RESTOS A PAGAR PROCESSADOS DO EXERCÍCIO</td>
@@ -1403,10 +1481,11 @@ ob_start();
                         $nLiqAPagar167 = 0;
                         $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
                         if($dtfim == $dtfimExercicio){
-                            $nLiqAPagar118 = getEmpenhosApagar(array("'118'"), $dtini, $dtfim, $instits, 'lqd');
-                            $nLiqAPagar119 = getEmpenhosApagar(array("'119'"), $dtini, $dtfim, $instits, 'lqd');
-                            $nLiqAPagar166 = getEmpenhosApagar(array("'166'"), $dtini, $dtfim, $instits, 'lqd');
-                            $nLiqAPagar167 = getEmpenhosApagar(array("'167'"), $dtini, $dtfim, $instits, 'lqd');
+                            $nLiqAPagar118 = getEmpenhosApagar(array("'118','1118','15400007'"), $dtini, $dtfim, $instits, 'lqd');
+                            $nLiqAPagar119 = getEmpenhosApagar(array("'119','1119','15400000'"), $dtini, $dtfim, $instits, 'lqd');
+                            $nLiqAPagar166 = getEmpenhosApagar(array("'166','1166','15420007'"), $dtini, $dtfim, $instits, 'lqd');
+                            $nLiqAPagar167 = getEmpenhosApagar(array("'167','1167','15420000'"), $dtini, $dtfim, $instits, 'lqd');
+
                         }
                         echo "<td class='s10' dir='ltr' >";
                         echo db_formatar($nLiqAPagar118, "f");
@@ -1433,10 +1512,11 @@ ob_start();
                         $nNaoLiqAPagar167 = 0;
                         $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
                         if($dtfim == $dtfimExercicio){
-                            $nNaoLiqAPagar118 = getEmpenhosApagar(array("'118'"), $dtini, $dtfim, $instits, '');
-                            $nNaoLiqAPagar119 = getEmpenhosApagar(array("'119'"), $dtini, $dtfim, $instits, '');
-                            $nNaoLiqAPagar166 = getEmpenhosApagar(array("'166'"), $dtini, $dtfim, $instits, '');
-                            $nNaoLiqAPagar167 = getEmpenhosApagar(array("'167'"), $dtini, $dtfim, $instits, '');
+                            $nNaoLiqAPagar118 = getEmpenhosApagar(array("'118','1118','15400007'"), $dtini, $dtfim, $instits, '');
+                            $nNaoLiqAPagar119 = getEmpenhosApagar(array("'119','1119','15400000'"), $dtini, $dtfim, $instits, '');
+                            $nNaoLiqAPagar166 = getEmpenhosApagar(array("'166','1166','15420007'"), $dtini, $dtfim, $instits, '');
+                            $nNaoLiqAPagar167 = getEmpenhosApagar(array("'167','1167','15420000'"), $dtini, $dtfim, $instits, '');
+
                         }
                         echo "<td class='s38' dir='ltr'>";
                         echo db_formatar($nNaoLiqAPagar118, "f");
@@ -1508,6 +1588,16 @@ ob_start();
                     <td class="s40"></td>
                     <td class="s19"></td>
                 </tr>
+                <? if ($anousu > 2022){ ?>
+                <tr style="height: 20px">
+                    <td class="s35"></td>
+                    <td class="s41" colspan="5"></td>
+                    <td class="s42" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITOS NA FONTE 15400007 (A)</td>
+                    <td class="s43" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITOS NA FONTE 15400000 (B)</td>
+                    <td class="s44" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITOS NA FONTE 15420007 (D)</td>
+                    <td class="s44" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITOS NA FONTE 15420000 (E)</td>
+                </tr>
+                <? } else { ?>
                 <tr style="height: 20px">
                     <td class="s35"></td>
                     <td class="s41" colspan="5"></td>
@@ -1516,6 +1606,7 @@ ob_start();
                     <td class="s44" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITOS NA FONTE 166 (D)</td>
                     <td class="s44" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITOS NA FONTE 167 (E)</td>
                 </tr>
+                <? } ?>
                 <tr style="height: 20px">
                     <td class="s11" dir="ltr"></td>
                     <td class="s12" dir="ltr" colspan="5">11 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO SEM DISPONIBILIDADE FINANCEIRA</td>
@@ -1524,16 +1615,32 @@ ob_start();
                         $nRPIncritosSemDesponibilidade166 = 0;
                         $nRPIncritosSemDesponibilidade118 = 0;
                         $nRPIncritosSemDesponibilidade167 = 0;
+                        $nRPIncritosSemDesponibilidadeTotal = 0;
                         if($dtfim == $dtfimExercicio){
-                            $nSaldoFonteAno118 = getSaldoPlanoContaFonte("'118'", $dtini, $dtfim, $instits);
-                            $nSaldoFonteAno119 = getSaldoPlanoContaFonte("'119'", $dtini, $dtfim, $instits);
-                            $nSaldoFonteAno166 = getSaldoPlanoContaFonte("'166'", $dtini, $dtfim, $instits);
-                            $nSaldoFonteAno167 = getSaldoPlanoContaFonte("'167'", $dtini, $dtfim, $instits);
+                          
+                            $nSaldoFonteAno118 = getSaldoPlanoContaFonte("'118','1118','15400007','119','1119','15400000','166','1166','15420007','167','1167','15420000'", $dtini, $dtfim, $instits);
+                    
                             $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
                             $nRPSemDesponibilidade118 = $aTotalPago118 - $nSaldoFonteAno118;
-                            $nRPSemDesponibilidade119 = $aTotalPago119 - $nSaldoFonteAno119;
-                            $nRPSemDesponibilidade166 = $aTotalPago166 - $nSaldoFonteAno166;
-                            $nRPSemDesponibilidade167 = $aTotalPago167 - $nSaldoFonteAno167;
+                            $nRPSemDesponibilidade119 = $aTotalPago119 - $nSaldoFonteAno118;
+                            $nRPSemDesponibilidade166 = $aTotalPago166 - $nSaldoFonteAno118;
+                            $nRPSemDesponibilidade167 = $aTotalPago167 - $nSaldoFonteAno118;
+                            
+                            $nRPIncritosSemDesponibilidadeTotal = $aTotalPago118 + $aTotalPago119 + $aTotalPago166 + $aTotalPago167 - $nSaldoFonteAno118;
+                            
+                            if($nRPIncritosSemDesponibilidadeTotal > 0){
+
+                                $nSaldoFonteAno118 = getSaldoPlanoContaFonte("'118','1118','15400007'", $dtini, $dtfim, $instits);
+                                $nSaldoFonteAno119 = getSaldoPlanoContaFonte("'119','1119','15400000'", $dtini, $dtfim, $instits);
+                                $nSaldoFonteAno166 = getSaldoPlanoContaFonte("'166','1166','15420007'", $dtini, $dtfim, $instits);
+                                $nSaldoFonteAno167 = getSaldoPlanoContaFonte("'167','1167','15420000'", $dtini, $dtfim, $instits);
+                        
+                                $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
+                                $nRPSemDesponibilidade118 = $aTotalPago118 - $nSaldoFonteAno118;
+                                $nRPSemDesponibilidade119 = $aTotalPago119 - $nSaldoFonteAno119;
+                                $nRPSemDesponibilidade166 = $aTotalPago166 - $nSaldoFonteAno166;
+                                $nRPSemDesponibilidade167 = $aTotalPago167 - $nSaldoFonteAno167;
+                            }
 
                             if($nRPSemDesponibilidade118 > 0){
                                 $nRPIncritosSemDesponibilidade118 = $nRPSemDesponibilidade118;
@@ -1559,10 +1666,12 @@ ob_start();
                     <td class="s45" dir="ltr" colspan="5">12 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE
                         FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932736)</td>
                     <?php
-                        $nRPNPAnteriorSemDispFonte118 = getRestosSemDisponilibidadeFundeb(array("'118','119'"), $dtini, $dtfim, $instits);
-                        $nRPNPAnteriorSemDispFonte119 = 0;//getRestosSemDisponilibidade(array("'119'"), $dtini, $dtfim, $instits);
-                        $nRPNPAnteriorSemDispFonte166 = getRestosSemDisponilibidadeFundeb(array("'166'"), $dtini, $dtfim, $instits);
-                        $nRPNPAnteriorSemDispFonte167 = getRestosSemDisponilibidadeFundeb(array("'167'"), $dtini, $dtfim, $instits);
+
+                        $nRPNPAnteriorSemDispFonte118 = getRestosSemDisponilibidadeFundeb(array("'118','119','1118','1119','15400007','15400000'"), $dtini, $dtfim, $instits);
+                        $nRPNPAnteriorSemDispFonte119 = 0;//getRestosSemDisponilibidade(array("'15400000'"), $dtini, $dtfim, $instits);
+                        $nRPNPAnteriorSemDispFonte166 = getRestosSemDisponilibidadeFundeb(array("'166','1166','15420007'"), $dtini, $dtfim, $instits);
+                        $nRPNPAnteriorSemDispFonte167 = getRestosSemDisponilibidadeFundeb(array("'167','1167','15420000'"), $dtini, $dtfim, $instits);
+
                         echo "<td class='s38' dir='ltr'>";
                         echo db_formatar($nRPNPAnteriorSemDispFonte118,"f");
                         echo "</td>";
@@ -1749,7 +1858,7 @@ ob_start();
                 <tr style="height: 20px">
                     <td class="s5" dir="ltr"></td>
                     <td class="s21" dir="ltr" colspan="7">16 - VALOR APLICADO NA REMUNERAÇÃO DE PROFISSIONAIS DA
-                        EDUCAÇÃO BÁSICA - FONTES 118 E 166 (13A + 13D)</td>
+                        EDUCAÇÃO BÁSICA - FONTES <? if ($anousu > 2022) {?>15400007 E 15420007 <? }else{?> 118 E 166 <?}?>(13A + 13D)</td>
                         <?php
                             $nTotalAplicadoRemuProfEducBasica = $nTotalPagoItem13Fonte118 + $nTotalPagoItem13Fonte166;
                             echo "<td class='s22' dir='ltr'>"; echo db_formatar($nTotalAplicadoRemuProfEducBasica,"f"); echo "</td>";
@@ -1788,11 +1897,11 @@ ob_start();
                         UTILIZADOS</td>
                         <?php
                             if ($anousu >=2022){
-                                $nFundebImpostosTransferencias = getValorNaturezaReceita(array('413210101%', '413210501%', '417515001%'), "'118','119'", $anousu, $dtini, $dtfim, $instits);
+                                $nFundebImpostosTransferencias = getValorNaturezaReceita(array('413210101%', '413210501%', '417515001%'), "'118','119','1118','1119','15400007','15400000'", $anousu, $dtini, $dtfim, $instits);
                                 $nRestosaPagar = $nTotalPagoItem13Fonte118 + $nTotalPagoItem13Fonte119;
                                 $nFundebItem171 = $nFundebImpostosTransferencias - $nDevolucaoFundeb - $nRestosaPagar;
 
-                                $nFundebComplementacao = getValorNaturezaReceita(array('413210101%', '413210501%', '417155001%'), "'166','167'", $anousu, $dtini, $dtfim, $instits);
+                                $nFundebComplementacao = getValorNaturezaReceita(array('413210101%', '413210501%', '417155001%'), "'166','167','1166','1167','15420007','15420000'", $anousu, $dtini, $dtfim, $instits);
                                 $nRestosaPagarFonte166_167 = $nTotalPagoItem13Fonte166 + $nTotalPagoItem13Fonte167;
                                 $nFundebItem172 = $nFundebComplementacao - $nRestosaPagarFonte166_167;
                             }else{
@@ -2029,8 +2138,8 @@ ob_start();
                     <td class="s10" dir="ltr"><?php echo db_formatar($nValorNaoAplicadoFundebImpostosTransfAnoAnterior+$nValorNaoAplicadoFundebComplementacaoAnoAnterior,"f"); ?></td>
                 </tr>
                 <?php
-                    $nValorAPlicadoSuperavit218_219 = getDespesasCusteadosComSuperavit(array("'218','219'"), $dtini, $dtfim, $instits);
-                    $nValorAPlicadoSuperavit266_267 = getDespesasCusteadosComSuperavit(array("'266','267'"), $dtini, $dtfim, $instits);
+                        $nValorAPlicadoSuperavit218_219 = getDespesasCusteadosComSuperavit(array("'218','219','25400007','25400000'"), $dtini, $dtfim, $instits);
+                        $nValorAPlicadoSuperavit266_267 = getDespesasCusteadosComSuperavit(array("'266','267','25420007','25420007'"), $dtini, $dtfim, $instits);  
                 ?>
                 <tr style="height: 20px">
                     <td class="s11" dir="ltr"></td>
@@ -2051,9 +2160,9 @@ ob_start();
                     <td class="s10" dir="ltr"><?php echo db_formatar($nValorAPlicadoSuperavit218_219,"f"); ?></td>
                 </tr>
                 <?php
-                    $nValorAPlicadoSuperavitPosPrimQuad218_219 = getDespesasCusteadosComSuperavitPosPrimeiroQuadrimestre(array("'218','219'"), $dtini, $dtfim, $instits);
-                    $nValorAPlicadoSuperavitPosPrimQuad266_267 = getDespesasCusteadosComSuperavitPosPrimeiroQuadrimestre(array("'266','267'"), $dtini, $dtfim, $instits);
-                ?>
+                        $nValorAPlicadoSuperavitPosPrimQuad218_219 = getDespesasCusteadosComSuperavitPosPrimeiroQuadrimestre(array("'218','219','25400007','25400000'"), $dtini, $dtfim, $instits);
+                        $nValorAPlicadoSuperavitPosPrimQuad266_267 = getDespesasCusteadosComSuperavitPosPrimeiroQuadrimestre(array("'266','267','25420007','25420007'"), $dtini, $dtfim, $instits);
+                     ?>
                 <tr style="height: 20px">
                     <td class="s11" dir="ltr"></td>
                     <td class="s40" dir="ltr" colspan="5">34 - VALOR APLICADO APÓS O PRIMEIRO QUADRIMESTRE</td>
