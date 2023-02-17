@@ -21,6 +21,7 @@ class cl_arc212023
   var $si32_tiporegistro = 0;
   var $si32_codestorno = 0;
   var $si32_codfonteestornada = 0;
+  var $si32_codigocontroleorcamentario = null;
   var $si32_tipodocumento = 0;
   var $si32_nrodocumento = "";
   var $si32_nroconvenio = "";
@@ -43,6 +44,7 @@ class cl_arc212023
                  si32_tiporegistro = int8 = Tipo do  registro
                  si32_codestorno = int8 = Código identificador
                  si32_codfonteestornada = int8 = Código da fonte
+                 si32_codigocontroleorcamentario = varchar = Código da fonte
                  si32_tipodocumento = int8 = Tipo do documento
                  si32_nrodocumento = varchar(14) = Número do documento
                  si32_nroconvenio = varchar(30) = Número do convênio
@@ -82,6 +84,7 @@ class cl_arc212023
       $this->si32_tiporegistro = ($this->si32_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_tiporegistro"] : $this->si32_tiporegistro);
       $this->si32_codestorno = ($this->si32_codestorno == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_codestorno"] : $this->si32_codestorno);
       $this->si32_codfonteestornada = ($this->si32_codfonteestornada == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_codfonteestornada"] : $this->si32_codfonteestornada);
+      $this->si32_codigocontroleorcamentario = ($this->si32_codigocontroleorcamentario == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_codigocontroleorcamentario"] : $this->si32_codigocontroleorcamentario);
   	  $this->si32_tipodocumento = ($this->si32_tipodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_tipodocumento"] : $this->si32_tipodocumento);
   	  $this->si32_nrodocumento = ($this->si32_nrodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_nrodocumento"] : $this->si32_nrodocumento);
   	  $this->si32_nroconvenio = ($this->si32_nroconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si32_nroconvenio"] : $this->si32_nroconvenio);
@@ -147,6 +150,11 @@ class cl_arc212023
 
       return false;
     }
+    
+    if ($this->si32_codigocontroleorcamentario == null) {
+    	$this->si32_codigocontroleorcamentario = "0000";
+    }
+
   	if (!$this->si32_tipodocumento) {
   		$this->si32_tipodocumento = 0;
   	}
@@ -213,6 +221,7 @@ class cl_arc212023
                                       ,si32_tiporegistro
                                       ,si32_codestorno
                                       ,si32_codfonteestornada
+                                      ,si32_codigocontroleorcamentario
                                       ,si32_tipodocumento
                                       ,si32_nrodocumento
                                       ,si32_nroconvenio
@@ -229,6 +238,7 @@ class cl_arc212023
                                ,$this->si32_tiporegistro
                                ,$this->si32_codestorno
                                ,$this->si32_codfonteestornada
+                               ,'$this->si32_codigocontroleorcamentario'
                                ,$this->si32_tipodocumento
                                ,'$this->si32_nrodocumento'
                                ,'$this->si32_nroconvenio'
@@ -325,6 +335,13 @@ class cl_arc212023
         $this->si32_codfonteestornada = "0";
       }
       $sql .= $virgula . " si32_codfonteestornada = $this->si32_codfonteestornada ";
+      $virgula = ",";
+    }
+    if (trim($this->si32_codigocontroleorcamentario) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si32_codigocontroleorcamentario"])) {
+      if (trim($this->si32_codigocontroleorcamentario) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si32_codigocontroleorcamentario"])) {
+        $this->si32_codigocontroleorcamentario = "0";
+      }
+      $sql .= $virgula . " si32_codigocontroleorcamentario = $this->si32_codigocontroleorcamentario ";
       $virgula = ",";
     }
 	  if (trim($this->si32_tipodocumento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si32_tipodocumento"])) {
