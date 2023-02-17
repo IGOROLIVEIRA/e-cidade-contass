@@ -795,6 +795,80 @@ class cl_rsp202023
 
     return $sql;
   }
+
+  public function sql_Reg20($instit, $dataIni, $dataFim)
+  {
+    $sql = "SELECT '20' AS tiporegistro,
+                    c70_codlan AS codreduzidomov,
+                    si09_codorgaotce AS codorgao,
+                    CASE
+                        WHEN o41_subunidade != 0
+                            OR NOT NULL THEN lpad((CASE
+                                                        WHEN o40_codtri = '0'
+                                                            OR NULL THEN o40_orgao::varchar
+                                                        ELSE o40_codtri
+                                                    END),2,0)||lpad((CASE
+                                                                        WHEN o41_codtri = '0'
+                                                                              OR NULL THEN o41_unidade::varchar
+                                                                        ELSE o41_codtri
+                                                                    END),3,0)||lpad(o41_subunidade::integer,3,0)
+                        ELSE lpad((CASE
+                                      WHEN o40_codtri = '0'
+                                            OR NULL THEN o40_orgao::varchar
+                                      ELSE o40_codtri
+                                  END),2,0)||lpad((CASE
+                                                        WHEN o41_codtri = '0'
+                                                            OR NULL THEN o41_unidade::varchar
+                                                        ELSE o41_codtri
+                                                    END),3,0)
+                    END AS codunidadesub,
+                    e60_codemp AS nroempenho,
+                    e60_anousu AS exercicioempenho,
+                    e60_emiss AS dtempenho,
+                    CASE
+                        WHEN c71_coddoc = 32 THEN 2
+                        ELSE 1
+                    END AS tiporestospagar,
+                    '1' AS tipomovimento,
+                    c71_data AS dtmovimentacao,
+                    ' ' AS dotorig,
+                    c70_valor AS vlmovimentacao,
+                    ' ' AS codorgaoencampatribuic,
+                    ' ' AS codunidadesubencampatribuic,
+                    e94_motivo AS justificativa,
+                    e60_codemp,
+                    substr(e94_ato,1,20) AS atocancelamento,
+                    e94_dataato AS dataatocancelamento,
+                    o15_codtri AS codfontrecursos,
+                    CASE
+                          WHEN o15_codtri::int4 IN (101, 201) THEN '1001'
+                          WHEN o15_codtri::int4 IN (102, 202) THEN '1002'
+                          WHEN o15_codtri::int4 IN (118, 166, 218, 266) THEN '1070'
+                          ELSE '0000'
+                    END AS codco,
+                    o15_codtri::int4 AS codidentificafr,
+                    ano2022 AS old_codfontrecursos,
+                    substr(ano2023, 1, 7) AS new_codfontrecursos,
+                    e60_numemp
+            FROM conlancamdoc
+            JOIN conlancamemp ON c71_codlan = c75_codlan
+            JOIN empempenho ON c75_numemp = e60_numemp
+            JOIN conlancam ON c70_codlan = c71_codlan
+            JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu
+            JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu
+            JOIN orctiporec ON o58_codigo = o15_codigo
+            JOIN db_config ON codigo = e60_instit
+            JOIN empanulado ON e94_numemp = e60_numemp AND c71_data = e94_data AND c70_valor = e94_valor
+            LEFT JOIN infocomplementaresinstit ON codigo = si09_instit
+            JOIN orcunidade ON o58_orgao=o41_orgao AND o58_unidade=o41_unidade AND o58_anousu = o41_anousu
+            JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu
+            LEFT JOIN de_para_fontes ON o15_codtri::int4 = ano2022
+            WHERE e60_instit = {$instit}
+              AND c71_coddoc IN (31, 32)
+              AND c71_data BETWEEN '{$dataIni}' AND '{$dataFim}'";
+
+    return $sql;
+  }
 }
 
 ?>
