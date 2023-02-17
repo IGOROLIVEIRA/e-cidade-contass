@@ -24,9 +24,6 @@ class cl_rec102023
   var $si25_ededucaodereceita = 0;
   var $si25_identificadordeducao = 0;
   var $si25_naturezareceita = 0;
-  var $si25_regularizacaorepasse = 0;
-  var $si25_exercicio = null;
-  var $si25_emendaparlamentar = 0;
   var $si25_vlarrecadado = 0;
   var $si25_mes = 0;
   var $si25_instit = 0;
@@ -39,9 +36,6 @@ class cl_rec102023
                  si25_ededucaodereceita = int8 = Identifica 
                  si25_identificadordeducao = int8 = Identificador da  dedução 
                  si25_naturezareceita = int8 = Natureza da receita
-                 si25_regularizacaorepasse = int8 = Regularização de Repasse
-                 si25_exercicio = int8 = Exercicio
-                 si25_emendaparlamentar = int8 = Emenda Parlamentar
                  si25_vlarrecadado = float8 = Valor arrecadado 
                  si25_mes = int8 = Mês 
                  si25_instit = int8 = Instituição 
@@ -77,9 +71,6 @@ class cl_rec102023
       $this->si25_ededucaodereceita = ($this->si25_ededucaodereceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_ededucaodereceita"] : $this->si25_ededucaodereceita);
       $this->si25_identificadordeducao = ($this->si25_identificadordeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_identificadordeducao"] : $this->si25_identificadordeducao);
       $this->si25_naturezareceita = ($this->si25_naturezareceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_naturezareceita"] : $this->si25_naturezareceita);
-      $this->si25_regularizacaorepasse = ($this->si25_regularizacaorepasse == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_regularizacaorepasse"] : $this->si25_regularizacaorepasse);
-      $this->si25_exercicio = ($this->si25_exercicio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_exercicio"] : $this->si25_exercicio);
-      $this->si25_emendaparlamentar = ($this->si25_emendaparlamentar == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_emendaparlamentar"] : $this->si25_emendaparlamentar);
       $this->si25_vlarrecadado = ($this->si25_vlarrecadado == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_vlarrecadado"] : $this->si25_vlarrecadado);
       $this->si25_mes = ($this->si25_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_mes"] : $this->si25_mes);
       $this->si25_instit = ($this->si25_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si25_instit"] : $this->si25_instit);
@@ -113,15 +104,6 @@ class cl_rec102023
     }
     if ($this->si25_naturezareceita == null) {
       $this->si25_naturezareceita = "0";
-    }
-    if ($this->si25_regularizacaorepasse == null) {
-      $this->si25_regularizacaorepasse = "0";
-    }
-    if ($this->si25_exercicio == null) {
-      $this->si25_exercicio = "0";
-    }
-    if ($this->si25_emendaparlamentar == null) {
-      $this->si25_emendaparlamentar = "0";
     }
     if ($this->si25_vlarrecadado == null) {
       $this->si25_vlarrecadado = "0";
@@ -190,9 +172,6 @@ class cl_rec102023
                                       ,si25_ededucaodereceita 
                                       ,si25_identificadordeducao 
                                       ,si25_naturezareceita
-                                      ,si25_regularizacaorepasse
-                                      ,si25_exercicio
-                                      ,si25_emendaparlamentar
                                       ,si25_vlarrecadado 
                                       ,si25_mes 
                                       ,si25_instit 
@@ -205,9 +184,6 @@ class cl_rec102023
                                ,$this->si25_ededucaodereceita 
                                ,$this->si25_identificadordeducao 
                                ,$this->si25_naturezareceita
-                               ,$this->si25_regularizacaorepasse
-                               ,$this->si25_exercicio
-                               ,$this->si25_emendaparlamentar
                                ,$this->si25_vlarrecadado 
                                ,$this->si25_mes 
                                ,$this->si25_instit 
@@ -316,27 +292,6 @@ class cl_rec102023
         $this->si25_naturezareceita = "0";
       }
       $sql .= $virgula . " si25_naturezareceita = $this->si25_naturezareceita ";
-      $virgula = ",";
-    }
-    if (trim($this->si25_regularizacaorepasse) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si25_regularizacaorepasse"])) {
-      if (trim($this->si25_regularizacaorepasse) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si25_regularizacaorepasse"])) {
-        $this->si25_regularizacaorepasse = "0";
-      }
-      $sql .= $virgula . " si25_regularizacaorepasse = $this->si25_regularizacaorepasse ";
-      $virgula = ",";
-    }
-    if (trim($this->si25_exercicio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si25_exercicio"])) {
-      if (trim($this->si25_exercicio) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si25_exercicio"])) {
-        $this->si25_exercicio = "0";
-      }
-      $sql .= $virgula . " si25_exercicio = $this->si25_exercicio ";
-      $virgula = ",";
-    }
-    if (trim($this->si25_emendaparlamentar) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si25_emendaparlamentar"])) {
-      if (trim($this->si25_emendaparlamentar) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si25_emendaparlamentar"])) {
-        $this->si25_emendaparlamentar = "0";
-      }
-      $sql .= $virgula . " si25_emendaparlamentar = $this->si25_emendaparlamentar ";
       $virgula = ",";
     }
     if (trim($this->si25_vlarrecadado) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si25_vlarrecadado"])) {

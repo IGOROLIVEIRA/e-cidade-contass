@@ -243,11 +243,10 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         $sEmParlamentar = $oCodDoc2->k81_emparlamentar == '' ? '3' : $oCodDoc2->k81_emparlamentar;
 
                         $iIdentDeducao = (substr($oDadosRec->o57_fonte, 0, 2) == 49) ? substr($oDadosRec->o57_fonte, 1, 2) : "0";
-                        $sHash10 = $iIdentDeducao . $sNaturezaReceita . substr($oDadosRec->o70_concarpeculiar, -2) . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar;
+                        $sHash10 = $iIdentDeducao . $sNaturezaReceita . substr($oDadosRec->o70_concarpeculiar, -2);
                         // echo $sHash10.' '.$iIdentDeducao . $sNaturezaReceita . substr($oDadosRec->o70_concarpeculiar, -2) . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar.' '.$oCodDoc2->c70_valor.'<br>';
 
                         if (!isset($aDadosAgrupados[$sHash10])) {
-
                             $oDados10 = new stdClass();
                             $oDados10->si25_tiporegistro = 10;
                             $oDados10->si25_codreceita = $oDadosRec->o70_codrec;
@@ -255,9 +254,6 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                             $oDados10->si25_ededucaodereceita = $iIdentDeducao != '0' ? 1 : 2;
                             $oDados10->si25_identificadordeducao = $iIdentDeducao;
                             $oDados10->si25_naturezareceita = $sNaturezaReceita;
-                            $oDados10->si25_regularizacaorepasse = $sRegRepasse;
-                            $oDados10->si25_exercicio = $oCodDoc2->k81_exerc;
-                            $oDados10->si25_emendaparlamentar = $sEmParlamentar;
                             $oDados10->si25_vlarrecadado = 0;
                             $oDados10->si25_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                             $oDados10->Reg11 = array();
@@ -267,10 +263,15 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         }
                         $aDadosAgrupados[$sHash10]->si25_vlarrecadado += $oCodDoc2->c70_valor;
 
+                        $oControleOrcamentario = new ControleOrcamentario();
+                        $oControleOrcamentario->setNaturezaReceita($oDadosRec->o57_fonte);
+                        $oControleOrcamentario->setFonte($oDadosRec->o70_codigo); 
+                        $oControleOrcamentario->setEmendaParlamentar($sEmParlamentar);
+
                         /**
                          * agrupar registro 11
                          */
-                        $sHash11 = $oDadosRec->o70_codigo . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar;
+                        $sHash11 = $oDadosRec->o70_codigo . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar . $oControleOrcamentario->getCodigoPorReceita();
 
                         if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
 
@@ -333,7 +334,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
                                 $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
 
-                                $sHashCgm = $oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura.$oCodFontRecursos->op01_numerocontratoopc.$oCodFontRecursos->op01_dataassinaturacop;
+                                $sHashCgm = $oCodFontRecursos->z01_cgccpf.$oCodFontRecursos->c206_nroconvenio.$oCodFontRecursos->c206_dataassinatura.$oCodFontRecursos->op01_numerocontratoopc.$oCodFontRecursos->op01_dataassinaturacop.$oControleOrcamentario->getCodigoPorReceita();
 
                                 if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->z01_cgccpf != ''){
 
@@ -341,6 +342,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                     $oDados11->si26_tiporegistro = 11;
                                     $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
                                     $oDados11->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
+                                    $oDados11->si26_codigocontroleorcamentario = $oControleOrcamentario->getCodigoPorReceita();
                                     if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
                                         $oDados11->si26_tipodocumento = 1;
                                     } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
@@ -368,11 +370,13 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
 
                             if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {
+                                
 
                                 $aDados = new stdClass();
                                 $aDados->si26_tiporegistro = 11;
                                 $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
-                                $aDados->si26_codfontrecursos = $oDadosRec->o70_codigo;
+                                $aDados->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
+                                $aDados->si26_codigocontroleorcamentario = $oControleOrcamentario->getCodigoPorReceita();
                                 if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
                                     $aDados->si26_tipodocumento = 1;
                                 } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
@@ -419,9 +423,6 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
             $clarc20->si31_ededucaodereceita = $oDados10->si25_ededucaodereceita;
             $clarc20->si31_identificadordeducao = $oDados10->si25_identificadordeducao;
             $clarc20->si31_naturezareceitaestornada = $oDados10->si25_naturezareceita;
-            $clarc20->si31_regularizacaorepasseestornada = $oDados10->si25_regularizacaorepasse;
-            $clarc20->si31_exercicioestornada = $oDados10->si25_exercicio;
-            $clarc20->si31_emendaparlamentarestornada = $oDados10->si25_emendaparlamentar;
             $clarc20->si31_vlestornado = abs($oDados10->si25_vlarrecadado);
             $clarc20->si31_mes = $oDados10->si25_mes;
             $clarc20->si31_instit = db_getsession("DB_instit");
@@ -447,6 +448,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         $clarc21->si32_reg20 = $clarc20->si31_sequencial;
                         $clarc21->si32_codestorno = intval($oDados10->si25_codreceita);
                         $clarc21->si32_codfonteestornada = $oDados11->si26_codfontrecursos;
+                        $clarc21->si32_codigocontroleorcamentario = $oDados11->si26_codigocontroleorcamentario;
                         $clarc21->si32_tipodocumento = intval($oDados11->si26_tipodocumento);
                         $clarc21->si32_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
                         $clarc21->si32_nroconvenio = $oDados11->si26_nroconvenio;
@@ -476,6 +478,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         $clarc21->si32_reg20 = $clarc20->si31_sequencial;
                         $clarc21->si32_codestorno = intval($oDados10->si25_codreceita);
                         $clarc21->si32_codfonteestornada = $oDados11->si26_codfontrecursos;
+                        $clarc21->si32_codigocontroleorcamentario = $oDados11->si26_codigocontroleorcamentario;
                         $clarc21->si32_tipodocumento = intval($oDados11->si26_tipodocumento);// \d arc212023
                         $clarc21->si32_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
                         $clarc21->si32_nroconvenio = $oDados11->si26_nroconvenio;
