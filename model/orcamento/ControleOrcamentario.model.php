@@ -1,4 +1,5 @@
 <?php
+
 /**
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -146,7 +147,7 @@ class ControleOrcamentario
     {
         $this->iEmendaParlamentar = $iEmendaParlamentar;
     }
-    
+
     public function setEsferaEmendaParlamentar($iEsferaEmendaParlamentar)
     {
         $this->iEsferaEmendaParlamentar = $iEsferaEmendaParlamentar;
@@ -181,8 +182,8 @@ class ControleOrcamentario
     {
 
         $iFonte6Digitos = substr($this->iFonte, 1, 6);
-        if (array_key_exists($iFonte6Digitos, $this->deParaFonte6Digitos)) 
-            if (array_key_exists($this->iEmendaParlamentar, $this->deParaFonte6Digitos[$iFonte6Digitos])) 
+        if (array_key_exists($iFonte6Digitos, $this->deParaFonte6Digitos))
+            if (array_key_exists($this->iEmendaParlamentar, $this->deParaFonte6Digitos[$iFonte6Digitos]))
                 $this->sCodigo = $this->deParaFonte6Digitos[$iFonte6Digitos][$this->iEmendaParlamentar];
 
         return;
@@ -193,9 +194,9 @@ class ControleOrcamentario
         $iFonte6Digitos = substr($this->iFonte, 1, 6);
         if (array_key_exists($iFonte6Digitos, $this->deParaFonte6DigitosEEsfera))
             if (array_key_exists($this->iEsferaEmendaParlamentar, $this->deParaFonte6DigitosEEsfera[$iFonte6Digitos]))
-                if (array_key_exists($this->iEmendaParlamentar, $this->deParaFonte6DigitosEEsfera[$iFonte6Digitos][$this->iEsferaEmendaParlamentar]))
-                    $this->sCodigo = $this->deParaFonte6DigitosEEsfera[$this->iEsferaEmendaParlamentar][$this->iEmendaParlamentar];
-
+                if (array_key_exists($this->iEmendaParlamentar, $this->deParaFonte6DigitosEEsfera[$iFonte6Digitos][$this->iEsferaEmendaParlamentar])) {
+                    $this->sCodigo = $this->deParaFonte6DigitosEEsfera[$iFonte6Digitos][$this->iEsferaEmendaParlamentar][$this->iEmendaParlamentar];
+                }
         return;
     }
 

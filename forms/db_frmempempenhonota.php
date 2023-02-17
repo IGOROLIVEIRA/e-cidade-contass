@@ -50,21 +50,21 @@ $clrotulo->label("e40_historico");
 $clrotulo->label("e60_emiss");
 $clrotulo->label("e60_emiss");
 
-if(isset($e57_codhist)){
+if (isset($e57_codhist)) {
     $query = "select e40_descr from emphist where e40_codhist = $e57_codhist";
     $resultado = db_query($query);
     $resultado = db_utils::fieldsMemory($resultado, 0);
-    $e40_descr=$resultado->e40_descr;
+    $e40_descr = $resultado->e40_descr;
 }
-if(!$e57_codhist){
+if (!$e57_codhist) {
     $query = "select distinct e57_codhist from empauthist where e57_codhist = 0";
     $resultado = db_query($query);
     $resultado = db_utils::fieldsMemory($resultado, 0);
-    $e57_codhist=$resultado->e57_codhist;
+    $e57_codhist = $resultado->e57_codhist;
     $query = "select e40_descr from emphist where e40_codhist = $e57_codhist";
     $resultado = db_query($query);
     $resultado = db_utils::fieldsMemory($resultado, 0);
-    $e40_descr=$resultado->e40_descr;
+    $e40_descr = $resultado->e40_descr;
 }
 
 
@@ -166,7 +166,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         ?>
 
         <center>
-        <table border="0">
+            <table border="0">
                 <tr>
                     <td nowrap title="Número Empenho">
                         <b>Número do Empenho</b>
@@ -174,16 +174,16 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     <td>
                         <?php
                         db_input('e60_codemp', 8, $Ie60_codemp, true, 'text', $db_opcao, "onchange='js_ValidaCampos(),'");
-                        echo " ","<b></b>","&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+                        echo " ", "<b></b>", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
                         ?>
                         <b> Data Empenho:</b>
                         <?
-                            if($db_opcao ==  1 && !$e60_emiss){
-                                $e60_emiss_dia = date("d",db_getsession("DB_datausu"));
-                                $e60_emiss_mes = date("m",db_getsession("DB_datausu"));
-                                $e60_emiss_ano = date("Y",db_getsession("DB_datausu"));
-                            }
-                            db_inputData('e60_emiss', @$e60_emiss_dia, @$e60_emiss_mes, @$e60_emiss_ano, true, 'text', $db_opcao);
+                        if ($db_opcao ==  1 && !$e60_emiss) {
+                            $e60_emiss_dia = date("d", db_getsession("DB_datausu"));
+                            $e60_emiss_mes = date("m", db_getsession("DB_datausu"));
+                            $e60_emiss_ano = date("Y", db_getsession("DB_datausu"));
+                        }
+                        db_inputData('e60_emiss', @$e60_emiss_dia, @$e60_emiss_mes, @$e60_emiss_ano, true, 'text', $db_opcao);
                         ?>
                     </td>
                 </tr>
@@ -194,18 +194,18 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     <td>
                         <?
                         db_input('e54_autori', 8, $Ie54_autori, true, 'text', 3);
-                        echo " ","<b></b>","&nbsp;&nbsp;&nbsp;&nbsp;";
+                        echo " ", "<b></b>", "&nbsp;&nbsp;&nbsp;&nbsp;";
                         ?>
                         <b> Data Autorização:</b>
 
                         <?
-                          db_inputData('e54_emiss', @$e54_emiss_dia, @$e54_emiss_mes, @$e54_emiss_ano, true, 'text', 3);
+                        db_inputData('e54_emiss', @$e54_emiss_dia, @$e54_emiss_mes, @$e54_emiss_ano, true, 'text', 3);
                         ?>
                     </td>
                 </tr>
                 <tr>
                     <td nowrap title="<?= @$Te54_numcgm ?>">
-                    <b> Credor:</b>
+                        <b> Credor:</b>
                     </td>
                     <td>
                         <?
@@ -277,7 +277,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                     <td>
                         <?
                         db_input('e54_numerl', 8, $Ie54_numerl, true, 'text', 3, "onchange='js_validaNumLicitacao();'");
-                        echo " ","<b></b>","&nbsp;&nbsp;&nbsp;&nbsp;";
+                        echo " ", "<b></b>", "&nbsp;&nbsp;&nbsp;&nbsp;";
                         ?>
                         <strong>Modalidade:</strong>
 
@@ -364,7 +364,6 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                                             $aEle[$oRow->o56_codele] = $oRow->o56_descr;
                                             $aCodele[] = substr($oRow->o56_elemento, 0, -6);
                                         }
-
                                     }
 
                                     $result = $clempautitem->sql_record($clempautitem->sql_query_autoriza(null, null, "e55_codele", null, "e55_autori = $e54_autori"));
@@ -376,7 +375,6 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                                     $e56_codele2 = $oResult->e55_codele;
                                     db_select("e56_codele", $aCodele2, true, 1);
                                     db_select("e56_codele2", $aEle, true, 1);
-
                                 }
                             }
                         } else {
@@ -460,15 +458,15 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 </tr>
                 <tr>
                     <td nowrap title="<?= @$Te57_codhist ?>">
-                        <?= db_ancora(substr(@$Le40_codhist, 12, 50), "js_pesquisahistorico(true);", isset($emprocesso)&&$emprocesso==true?"1":"1"); ?>
+                        <?= db_ancora(substr(@$Le40_codhist, 12, 50), "js_pesquisahistorico(true);", isset($emprocesso) && $emprocesso == true ? "1" : "1"); ?>
                     </td>
                     <td nowrap="nowrap">
                         <?
-                            db_input('e57_codhist', 8, $Ie57_codhist, true, '', 1, " onchange='js_pesquisahistorico(false);'");
-                            if($db_opcao == 1)
-                                db_input('e40_descr', 45, $Ie40_descr, true, '', 3);
-                            else
-                                db_input('e40_descr', 45, $Ie40_descr, true, '', 3);
+                        db_input('e57_codhist', 8, $Ie57_codhist, true, '', 1, " onchange='js_pesquisahistorico(false);'");
+                        if ($db_opcao == 1)
+                            db_input('e40_descr', 45, $Ie40_descr, true, '', 3);
+                        else
+                            db_input('e40_descr', 45, $Ie40_descr, true, '', 3);
                         ?>
                     </td>
                 </tr>
@@ -479,7 +477,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         <fieldset style="width:500px">
                             <legend><strong><?= @$Le54_resumo ?></strong></legend>
                             <?php
-                            db_textarea('e54_resumo', 3, 10000, $Ie54_resumo, true, 'text', $db_opcao,"","","#FFFFFF");
+                            db_textarea('e54_resumo', 3, 10000, $Ie54_resumo, true, 'text', $db_opcao, "", "", "#FFFFFF");
                             ?>
                         </fieldset>
                     </td>
@@ -774,12 +772,12 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
     function js_naoimprimir() {
         if (document.form1.e54_resumo.value == '') {
-             alert("Campo Resumo nao Informado.");
-             return false;
+            alert("Campo Resumo nao Informado.");
+            return false;
         }
         if (document.form1.e50_obs.value == '') {
-             alert("Campo Informações da OP nao Informado.")
-             return false;
+            alert("Campo Informações da OP nao Informado.")
+            return false;
         }
 
         if (!js_valida()) {
@@ -871,12 +869,12 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
     function js_valida() {
 
         if (document.form1.e54_resumo.value == '') {
-             alert("Campo Resumo nao Informado.")
-             return false;
+            alert("Campo Resumo nao Informado.")
+            return false;
         }
         if (document.form1.e50_obs.value == '') {
-             alert("Campo Informações da OP nao Informado.")
-             return false;
+            alert("Campo Informações da OP nao Informado.")
+            return false;
         }
         options = document.form1.op;
         sValor = '';
@@ -1000,6 +998,16 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 js_removeObj("msgBox");
                 var oRetorno = eval("(" + oAjax.responseText + ")");
 
+                lEsferaEmendaParlamentar = oRetorno.lEsferaEmendaParlamentar;
+                js_verificaresfera();
+                if (oRetorno.lEmendaParlamentar) {
+                    $('trEmendaParlamentar').style.display = '';
+                    bEmendaParlamentar = true;
+                } else {
+                    $('trEmendaParlamentar').style.display = 'none';
+                    bEmendaParlamentar = false;
+                }
+
                 if (oRetorno.lFundeb) {
                     $('trFinalidadeFundeb').style.display = '';
                 } else {
@@ -1012,15 +1020,15 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
     js_pesquisarRecursoDotacao();
 
-    function js_ValidaCampos() { 
+    function js_ValidaCampos() {
         var numero = document.form1.e60_codemp.value;
         if (numero % 1 !== 0) {
-             alert("Campo de Número do Empenho informar apenas números inteiros.");
-             document.form1.e60_codemp.focus();
-                document.form1.e60_codemp.value = '';
-             return false;
-        }       
-    }       
+            alert("Campo de Número do Empenho informar apenas números inteiros.");
+            document.form1.e60_codemp.focus();
+            document.form1.e60_codemp.value = '';
+            return false;
+        }
+    }
 
     function js_validaNumLicitacao() {
 
