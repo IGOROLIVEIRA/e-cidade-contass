@@ -365,7 +365,7 @@ switch ($_POST["action"]) {
 
             $vlrunit = $item['vlrunit'];
             $vlrunitdesc = ($vlrunit - ($vlrunit * $item['desc'] / 100));
-            $total += $item['total'];
+
             if (pg_numrows($rsItem) == 0) {
                 $clempautitem->e55_codele = $_POST['codele'];
                 $clempautitem->e55_item   = $item['id'];
@@ -397,13 +397,15 @@ switch ($_POST["action"]) {
                 $clempautitem->alterar($_POST['autori'], db_utils::fieldsMemory($rsItem, 0)->e55_sequen);
             }
         endforeach;
+        db_fim_transacao();
         //alterando o valor da autorização que impedia o empenho
+        $rsTotalItens = $clempautitem->sql_record($clempautitem->sql_query(null, null, " sum(e55_vltot) as totalautorizacao ", null, "e55_autori = " . $_POST['autori'] . ""));
+        $total = db_utils::getCollectionByRecord($rsTotalItens);
 
         $clempautoriza->e54_autori = $_POST['autori'];
         $clempautoriza->e54_valor = $total;
         $clempautoriza->alterar($_POST['autori']);
-        
-        db_fim_transacao();
+
 
         if ($clempautitem->erro_status == 0) {
             $oRetorno          = new stdClass();
