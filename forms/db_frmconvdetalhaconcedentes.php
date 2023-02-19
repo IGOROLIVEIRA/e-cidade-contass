@@ -50,6 +50,8 @@ if(isset($db_opcaoal)){
     <td>
       <?php
         $x = array("1"=>"Federal","2"=>"Estadual","3"=>"Municipal","4"=>"Exterior","5"=>"Instituição Privada");
+        if(db_getsession('DB_anousu') > 2021)
+          $x = array("1"=>"Federal","2"=>"Estadual","3"=>"Municipal","5"=>"Instituição Privada");
         db_select('c207_esferaconcedente',$x,true,$db_opcao,'onchange="setDescrConcedente(this.value)"');
       ?>
     </td>

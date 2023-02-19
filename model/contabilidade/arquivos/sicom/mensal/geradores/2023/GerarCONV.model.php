@@ -83,7 +83,6 @@ class GerarCONV extends GerarAM
 
             $aCSVCONV11['si93_tiporegistro']      = $this->padLeftZero($aCONV11['si93_tiporegistro'], 2);
             $aCSVCONV11['si93_codconvenio']       = substr($aCONV11['si93_codconvenio'], 0, 15);
-            $aCSVCONV11['si93_tipodocumento']     = $aCONV11['si93_esferaconcedente'] == 4 && empty($aCONV11['si92_tiporegistro']) ? "" : $this->padLeftZero($aCONV11['si93_tipodocumento'], 1);
             $aCSVCONV11['si93_nrodocumento']      = $aCONV11['si93_esferaconcedente'] == 4 ? "" : $this->padLeftZero($aCONV11['si93_nrodocumento'], 14);
             $aCSVCONV11['si93_esferaconcedente']  = $this->padLeftZero($aCONV11['si93_esferaconcedente'], 1);
             $aCSVCONV11['si93_dscexterior']       = $aCONV11['si93_dscexterior'] != "null" ? $aCONV11['si93_dscexterior'] : '';

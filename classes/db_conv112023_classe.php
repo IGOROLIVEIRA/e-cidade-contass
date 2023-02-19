@@ -20,7 +20,6 @@ class cl_conv112023
   var $si93_sequencial = 0;
   var $si93_tiporegistro = 0;
   var $si93_codconvenio = 0;
-  var $si93_tipodocumento = 0;
   var $si93_nrodocumento = null;
   var $si93_esferaconcedente = 0;
   var $si93_valorconcedido = 0;
@@ -33,7 +32,6 @@ class cl_conv112023
                  si93_sequencial = int8 = sequencial
                  si93_tiporegistro = int8 = Tipo do  registro
                  si93_codconvenio = int8 = Código do  Convênio
-                 si93_tipodocumento = int8 = Tipo de documento
                  si93_nrodocumento = varchar(14) = Número do  documento
                  si93_esferaconcedente = int8 = Esfera do  Concedente
                  si93_valorconcedido = float8 = Valor a ser  concedido
@@ -69,7 +67,6 @@ class cl_conv112023
       $this->si93_sequencial = ($this->si93_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si93_sequencial"] : $this->si93_sequencial);
       $this->si93_tiporegistro = ($this->si93_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si93_tiporegistro"] : $this->si93_tiporegistro);
       $this->si93_codconvenio = ($this->si93_codconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si93_codconvenio"] : $this->si93_codconvenio);
-      $this->si93_tipodocumento = ($this->si93_tipodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si93_tipodocumento"] : $this->si93_tipodocumento);
       $this->si93_nrodocumento = ($this->si93_nrodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si93_nrodocumento"] : $this->si93_nrodocumento);
       $this->si93_esferaconcedente = ($this->si93_esferaconcedente == "" ? @$GLOBALS["HTTP_POST_VARS"]["si93_esferaconcedente"] : $this->si93_esferaconcedente);
       $this->si93_valorconcedido = ($this->si93_valorconcedido == "" ? @$GLOBALS["HTTP_POST_VARS"]["si93_valorconcedido"] : $this->si93_valorconcedido);
@@ -98,9 +95,6 @@ class cl_conv112023
     }
     if ($this->si93_codconvenio == null) {
       $this->si93_codconvenio = "0";
-    }
-    if ($this->si93_tipodocumento == null) {
-      $this->si93_tipodocumento = "0";
     }
     if ($this->si93_esferaconcedente == null) {
       $this->si93_esferaconcedente = "0";
@@ -185,7 +179,6 @@ class cl_conv112023
                                        si93_sequencial
                                       ,si93_tiporegistro
                                       ,si93_codconvenio
-                                      ,si93_tipodocumento
                                       ,si93_nrodocumento
                                       ,si93_esferaconcedente
                                       ,si93_valorconcedido
@@ -198,7 +191,6 @@ class cl_conv112023
                                 $this->si93_sequencial
                                ,$this->si93_tiporegistro
                                ,$this->si93_codconvenio
-                               ,$this->si93_tipodocumento
                                ,'$this->si93_nrodocumento'
                                ,$this->si93_esferaconcedente
                                ,$this->si93_valorconcedido
@@ -241,7 +233,6 @@ class cl_conv112023
       $resac = db_query("insert into db_acount values($acount,2010322,2010524,'','" . AddSlashes(pg_result($resaco, 0, 'si93_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010322,2010525,'','" . AddSlashes(pg_result($resaco, 0, 'si93_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010322,2010526,'','" . AddSlashes(pg_result($resaco, 0, 'si93_codconvenio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010322,2010527,'','" . AddSlashes(pg_result($resaco, 0, 'si93_tipodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010322,2010528,'','" . AddSlashes(pg_result($resaco, 0, 'si93_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010322,2010529,'','" . AddSlashes(pg_result($resaco, 0, 'si93_esferaconcedente')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010322,2010530,'','" . AddSlashes(pg_result($resaco, 0, 'si93_valorconcedido')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -285,13 +276,6 @@ class cl_conv112023
         $this->si93_codconvenio = "0";
       }
       $sql .= $virgula . " si93_codconvenio = $this->si93_codconvenio ";
-      $virgula = ",";
-    }
-    if (trim($this->si93_tipodocumento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si93_tipodocumento"])) {
-      if (trim($this->si93_tipodocumento) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si93_tipodocumento"])) {
-        $this->si93_tipodocumento = "0";
-      }
-      $sql .= $virgula . " si93_tipodocumento = $this->si93_tipodocumento ";
       $virgula = ",";
     }
     if (trim($this->si93_nrodocumento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si93_nrodocumento"])) {
@@ -364,8 +348,6 @@ class cl_conv112023
           $resac = db_query("insert into db_acount values($acount,2010322,2010525,'" . AddSlashes(pg_result($resaco, $conresaco, 'si93_tiporegistro')) . "','$this->si93_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si93_codconvenio"]) || $this->si93_codconvenio != "")
           $resac = db_query("insert into db_acount values($acount,2010322,2010526,'" . AddSlashes(pg_result($resaco, $conresaco, 'si93_codconvenio')) . "','$this->si93_codconvenio'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si93_tipodocumento"]) || $this->si93_tipodocumento != "")
-          $resac = db_query("insert into db_acount values($acount,2010322,2010527,'" . AddSlashes(pg_result($resaco, $conresaco, 'si93_tipodocumento')) . "','$this->si93_tipodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si93_nrodocumento"]) || $this->si93_nrodocumento != "")
           $resac = db_query("insert into db_acount values($acount,2010322,2010528,'" . AddSlashes(pg_result($resaco, $conresaco, 'si93_nrodocumento')) . "','$this->si93_nrodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si93_esferaconcedente"]) || $this->si93_esferaconcedente != "")
@@ -434,7 +416,6 @@ class cl_conv112023
         $resac = db_query("insert into db_acount values($acount,2010322,2010524,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si93_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010322,2010525,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si93_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010322,2010526,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si93_codconvenio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010322,2010527,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si93_tipodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010322,2010528,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si93_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010322,2010529,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si93_esferaconcedente')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010322,2010530,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si93_valorconcedido')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");

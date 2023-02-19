@@ -416,7 +416,7 @@ if (isset($testanome) && $testanome == 'true' && !isset($pesquisa_chave)) {
 
                     if (isset($nomeDigitadoParaPesquisa) && ($nomeDigitadoParaPesquisa != "")) {
                         if (isset($z01_tipcre_cnpj)) {
-                            $sSqlConv .= " and z01_tipcre = 2 ";
+                            $sSqlConv .= " and LENGTH(z01_cgccpf) = 14 ";
                         }
                         $nomeDigitadoParaPesquisa = strtoupper($nomeDigitadoParaPesquisa);
                         $sql = $clnome->sqlnome($nomeDigitadoParaPesquisa, $campos, $filtro, $sSqlConv);
