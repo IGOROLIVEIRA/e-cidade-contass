@@ -21,6 +21,7 @@ class cl_lqd112023
   var $si119_tiporegistro = 0;
   var $si119_codreduzido = 0;
   var $si119_codfontrecursos = 0;
+  var $si119_codco = 0;
   var $si119_valorfonte = 0;
   var $si119_mes = 0;
   var $si119_reg10 = 0;
@@ -64,6 +65,7 @@ class cl_lqd112023
       $this->si119_tiporegistro = ($this->si119_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si119_tiporegistro"] : $this->si119_tiporegistro);
       $this->si119_codreduzido = ($this->si119_codreduzido == "" ? @$GLOBALS["HTTP_POST_VARS"]["si119_codreduzido"] : $this->si119_codreduzido);
       $this->si119_codfontrecursos = ($this->si119_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si119_codfontrecursos"] : $this->si119_codfontrecursos);
+      $this->si119_codco = ($this->si119_codco == "" ? @$GLOBALS["HTTP_POST_VARS"]["si119_codco"] : $this->si119_codco);
       $this->si119_valorfonte = ($this->si119_valorfonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si119_valorfonte"] : $this->si119_valorfonte);
       $this->si119_mes = ($this->si119_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si119_mes"] : $this->si119_mes);
       $this->si119_reg10 = ($this->si119_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si119_reg10"] : $this->si119_reg10);
@@ -92,6 +94,9 @@ class cl_lqd112023
     }
     if ($this->si119_codfontrecursos == null) {
       $this->si119_codfontrecursos = "0";
+    }
+    if ($this->si119_codfontrecursos == null) {
+      $this->si119_codfontrecursos = "0000";
     }
     if ($this->si119_valorfonte == null) {
       $this->si119_valorfonte = "0";
@@ -160,6 +165,7 @@ class cl_lqd112023
                                       ,si119_tiporegistro 
                                       ,si119_codreduzido 
                                       ,si119_codfontrecursos 
+                                      ,si119_codco 
                                       ,si119_valorfonte 
                                       ,si119_mes 
                                       ,si119_reg10 
@@ -170,6 +176,7 @@ class cl_lqd112023
                                ,$this->si119_tiporegistro 
                                ,$this->si119_codreduzido 
                                ,$this->si119_codfontrecursos 
+                               ,'$this->si119_codco' 
                                ,$this->si119_valorfonte 
                                ,$this->si119_mes 
                                ,$this->si119_reg10 
@@ -259,6 +266,13 @@ class cl_lqd112023
         $this->si119_codfontrecursos = "0";
       }
       $sql .= $virgula . " si119_codfontrecursos = $this->si119_codfontrecursos ";
+      $virgula = ",";
+    }
+    if (trim($this->si119_codco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si119_codco"])) {
+      if (trim($this->si119_codco) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si119_codco"])) {
+        $this->si119_codco = "0000";
+      }
+      $sql .= $virgula . " si119_codco = $this->si119_codco ";
       $virgula = ",";
     }
     if (trim($this->si119_valorfonte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si119_valorfonte"])) {
