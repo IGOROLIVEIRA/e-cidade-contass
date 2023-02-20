@@ -38,6 +38,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
      $c202_valorpagoanu = "";
      $o52_descr = "";
      $o53_descr = "";
+     $c202_codacompanhamento = "";
    }
 } 
 ?>
@@ -59,7 +60,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
 </style>
 <form name="form1" method="post" action="">
 <center>
-<fieldset style="margin-left: 80px; margin-top: 10px;">
+<fieldset style="margin-left: 80px; margin-top: 10px; width : 1700px">
 <legend>Execução Orçamentária da Despesa</legend>
 <table border="0">
   <tr>
@@ -131,10 +132,27 @@ db_input('o53_descr',55,$Io53_descr,true,'text',3,'')
     </td>
     <td> 
 <?
-db_input('c202_codfontrecursos',10,$Ic202_codfontrecursos,true,'text',$db_opcao,"","","","",3)
+if(db_getsession('DB_anousu') > 2022)
+    db_input('c202_codfontrecursos',10,$Ic202_codfontrecursos,true,'text',$db_opcao,"","","","",7);
+else  
+    db_input('c202_codfontrecursos',10,$Ic202_codfontrecursos,true,'text',$db_opcao,"","","","",3);
 ?>
     </td>
   </tr>
+  <?
+  if(db_getsession('DB_anousu') > 2022) {
+?>      
+  <tr>
+    <td nowrap title="Código de acompanhamento">
+       <b>Código de acompanhamento: </b>
+    </td>
+    <td> 
+      <?
+        db_input('c202_codacompanhamento',10,$Ic202_codacompanhamento,true,'text',$db_opcao,"","","","",4);
+      ?>
+    </td>
+  </tr>
+<? } ?>
   <tr>
     <td nowrap title="<?=@$Tc202_elemento?>">
        <?=@$Lc202_elemento?>
@@ -155,10 +173,11 @@ db_input('c202_elemento',10,$Ic202_elemento,true,'text',$db_opcao,"")
   <table class="DBGrid" id="gridConsExecOrc">
       <tr>
           <th class="table_header" style="width: 33px; cursor: pointer;" onclick="marcarTodos(<?= $iFonte ?>);" id="marcarTodos">M</th>
-          <th class="table_header" style="width: 70px;">Função</th>
-          <th class="table_header" style="width: 240px;">Subfunção</th>
-          <th class="table_header" style="width: 100px;">Fonte</th>
-          <th class="table_header" style="width: 110px;">Elemento</th>
+          <th class="table_header" style="width: 50px;">Função</th>
+          <th class="table_header" style="width: 70px;">Subfunção</th>
+          <th class="table_header" style="width: 60px;">Fonte</th>
+          <th class="table_header" style="width: 40px;">CO</th>
+          <th class="table_header" style="width: 70px;">Elemento</th>
           <th class="table_header" style="width: 100px;">Empenhado no Mês</th>
           <th class="table_header" style="width: 100px;">Empenhado Anulado no Mês</th>
           <th class="table_header" style="width: 100px;">Liquidado no Mês</th>
@@ -441,6 +460,9 @@ function js_pesquisao58_subfuncao(mostra){
       sLinhaTabela +=         oItem.c202_codfontrecursos+"<input type='hidden' name='aItensConsExecOrc["+ iLinha +"][c202_codfontrecursos]' value='"+ oItem.c202_codfontrecursos +"'>";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid center'>";
+      sLinhaTabela +=         oItem.c202_codacompanhamento+"<input type='hidden' name='aItensConsExecOrc["+ iLinha +"][c202_codacompanhamento]' value='"+ oItem.c202_codacompanhamento +"'>";
+      sLinhaTabela += "   </td>";
+      sLinhaTabela += "   <td class='linhagrid center'>";
       sLinhaTabela +=         oItem.c202_elemento+"<input type='hidden' name='aItensConsExecOrc["+ iLinha +"][c202_elemento]' value='"+ oItem.c202_elemento +"'>";
       sLinhaTabela += "   </td>";
       sLinhaTabela += "   <td class='linhagrid'>";
@@ -490,7 +512,7 @@ function js_pesquisao58_subfuncao(mostra){
       if (iNovo) {
           
           sLinhaTotalizador = "<tr id='totalizador'>";
-          sLinhaTotalizador += "  <th class='table_header' colspan='5'>TOTAL</th>";      
+          sLinhaTotalizador += "  <th class='table_header' colspan='6'>TOTAL</th>";      
           sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorempenhado_total'>"+ js_formatar(oTotalizador.iTotEmpMes, 'f') +"</th>";
           sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorempenhadoanu_total'>"+ js_formatar(oTotalizador.iTotEmpAnuMes, 'f') +"</th>";
           sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorliquidado_total'>"+ js_formatar(oTotalizador.iTotLiqMes, 'f') +"</th>";
@@ -528,6 +550,14 @@ function js_pesquisao58_subfuncao(mostra){
 
       }
 
+      if (document.form1.c202_codacompanhamento.value == '') {
+          
+          alert("Informe o Código de acompanhamento.");
+          document.form1.c202_codacompanhamento.focus();
+          return;
+
+      }
+
       if (document.form1.c202_subfuncao.value == '') {
           
           alert("Informe a Sub Função.");
@@ -557,6 +587,7 @@ function js_pesquisao58_subfuncao(mostra){
       oItem.c202_funcao               = document.form1.c202_funcao.value;
       oItem.c202_subfuncao            = document.form1.c202_subfuncao.value;
       oItem.c202_codfontrecursos      = document.form1.c202_codfontrecursos.value;
+      oItem.c202_codacompanhamento    = document.form1.c202_codacompanhamento.value;
       oItem.c202_elemento             = document.form1.c202_elemento.value;
       oItem.c202_mescompetencia       = document.form1.c202_mescompetencia.value;
       oItem.c202_consconsorcios       = document.form1.c202_consconsorcios.value;
@@ -680,7 +711,10 @@ function js_pesquisao58_subfuncao(mostra){
                     c202_funcao:              document.form1[elemento+'[c202_funcao]'].getAttribute('value'),
                     c202_subfuncao:           document.form1[elemento+'[c202_subfuncao]'].getAttribute('value'),
                     c202_codfontrecursos:     document.form1[elemento+'[c202_codfontrecursos]'].getAttribute('value'),
-                    c202_elemento:            document.form1[elemento+'[c202_elemento]'].getAttribute('value')
+                    c202_elemento:            document.form1[elemento+'[c202_elemento]'].getAttribute('value'),
+                    c202_elemento:            document.form1[elemento+'[c202_elemento]'].getAttribute('value'),
+                    c202_codacompanhamento:   document.form1[elemento+'[c202_codacompanhamento]'].getAttribute('value')
+                    
                   };
 
                   itensExcluir.push(novoItem);

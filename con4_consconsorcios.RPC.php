@@ -214,6 +214,7 @@ function novoExercOrc($oItem, $iAnoUsu) {
     $clconsexecucaoorc->c202_valorpago          = ($oItem->c202_valorpago > 0) ? $oItem->c202_valorpago : '0';
     $clconsexecucaoorc->c202_valorpagoanu       = ($oItem->c202_valorpagoanu > 0) ? $oItem->c202_valorpagoanu : '0';
     $clconsexecucaoorc->c202_codfontrecursos    = $oItem->c202_codfontrecursos;
+    $clconsexecucaoorc->c202_codacompanhamento  = $oItem->c202_codacompanhamento;
     $clconsexecucaoorc->c202_anousu             = $iAnoUsu;
 
     $clconsexecucaoorc->incluir(null);
@@ -443,6 +444,7 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                       AND c202_consconsorcios = x.c202_consconsorcios)";
 
     $sCampos2 = " DISTINCT  c202_funcao,
+                            c202_codacompanhamento,
                             c202_subfuncao,
                             c202_elemento,
                             c202_codfontrecursos,

@@ -55,7 +55,10 @@ db_input('c203_consconsorcios',10,$Ic203_consconsorcios,true,'text',3,"")
     </td>
     <td> 
 <?
-db_input('c203_codfontrecursos',10,$Ic203_codfontrecursos,true,'text',$db_opcao,"")
+if(db_getsession('DB_anousu') > 2022)
+  db_input('c203_codfontrecursos',10,$Ic203_codfontrecursos,true,'text',$db_opcao,"","","","",7);
+else
+  db_input('c203_codfontrecursos',10,$Ic203_codfontrecursos,true,'text',$db_opcao,"");
 ?>
     </td>
   </tr>
