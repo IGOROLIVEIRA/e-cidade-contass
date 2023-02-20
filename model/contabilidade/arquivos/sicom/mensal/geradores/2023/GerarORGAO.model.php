@@ -72,6 +72,7 @@ class GerarORGAO extends GerarAM
             $aCSVORGAO11['si15_dtinicio']           = $this->sicomDate($aORGAO11['si15_dtinicio']);
             $aCSVORGAO11['si15_dtfinal']            = $this->sicomDate($aORGAO11['si15_dtfinal']);
             $aCSVORGAO11['si15_email']              = substr($aORGAO11['si15_email'], 0, 50);
+            $aCSVORGAO11['si15_numeroTelefone']     = $aORGAO11['si15_numerotelefone'];
 
             $this->sLinha = $aCSVORGAO11;
             $this->adicionaLinha();
