@@ -190,8 +190,7 @@ class cl_ctb202022
                       )";
     $result = db_query($sql);
     if ($result == false) {
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
         $this->erro_sql = "ctb202022 ($this->si96_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
