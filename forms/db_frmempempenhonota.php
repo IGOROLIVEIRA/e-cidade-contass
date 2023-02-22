@@ -416,6 +416,47 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         ?>
                     </td>
                 </tr>
+
+
+
+                <!-- Campos referentes ao sicom 2023 - OC19656 -->
+                <tr id="trEmendaParlamentar" style="display: none;">
+                    <td nowrap title="Referente a Emenda Parlamentar">
+                        <strong>Referente a Emenda Parlamentar:</strong>
+                    </td>
+                    <td>
+                        <?
+                        $arr  = array(
+                            '0' => 'Selecione',
+                            '1' => '1 - Emenda Parlamentar Individual',
+                            '2' => '2 - Emenda Parlamentar de Bancada ou Bloco',
+                            '3' => '3 - No se aplica',
+                            '4' => '4 - Emenda No Impositiva'
+                        );
+
+                        db_select("e60_emendaparlamentar", $arr, true, 1, "onchange='js_verificaresfera();'");
+                        ?>
+                    </td>
+                </tr>
+
+                <tr id="trEsferaEmendaParlamentar" style="display: none;">
+                    <td nowrap title="Esfera da Emenda Parlamentar">
+                        <strong>Esfera da Emenda Parlamentar:</strong>
+                    </td>
+                    <td>
+                        <?
+                        $arr  = array(
+                            '0' => 'Selecione',
+                            '1' => '1 - Unio',
+                            '2' => '2 - Estados'
+                        );
+
+                        db_select("e60_esferaemendaparlamentar", $arr, true, 1);
+                        ?>
+                    </td>
+                </tr>
+                <!-- Final dos campos referentes ao sicom 2023 - OC19656 -->
+
                 <?php //var_dump($o56_elemento);
                 ?>
                 <tr id="trFinalidadeFundeb" style="display: none;">
@@ -681,9 +722,28 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
     #e50_obs {
         width: 588px;
     }
+
+    #e60_emendaparlamentar,
+    #e60_esferaemendaparlamentar {
+        width: 442px
+    }
 </style>
 
 <script>
+    var lEsferaEmendaParlamentar = 'f';
+    var bEmendaParlamentar = false;
+    var bEsferaEmendaParlamentar = false;
+
+    function js_verificaresfera() {
+        if ($F('e60_emendaparlamentar') != 3 && lEsferaEmendaParlamentar == 't') {
+            $('trEsferaEmendaParlamentar').style.display = '';
+            bEsferaEmendaParlamentar = true;
+        } else {
+            $('trEsferaEmendaParlamentar').style.display = 'none';
+            bEsferaEmendaParlamentar = false;
+        }
+    }
+
     /*===========================================
     =            pesquisa 54_gestaut            =
     ===========================================*/
@@ -867,6 +927,15 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
     }
 
     function js_valida() {
+        if (bEmendaParlamentar && document.form1.e60_emendaparlamentar.value == 0) {
+            alert("Campo Emenda Parlamentar nao Informado.")
+            return false;
+        }
+
+        if (bEsferaEmendaParlamentar && document.form1.e60_esferaemendaparlamentar.value == 0) {
+            alert("Campo Esfera da Emenda Parlamentar nao Informado.")
+            return false;
+        }
 
         if (document.form1.e54_resumo.value == '') {
             alert("Campo Resumo nao Informado.")
