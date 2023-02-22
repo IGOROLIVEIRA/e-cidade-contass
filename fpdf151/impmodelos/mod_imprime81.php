@@ -635,8 +635,8 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->rect($xcol, $xlin + 58, 8, 6, 2, 'DF', '12');
     $this->objpdf->rect($xcol + 8, $xlin + 58, 12, 6, 2, 'DF', '12');
     $this->objpdf->rect($xcol + 20, $xlin + 58, 15, 6, 2, 'DF', '12');
-    $this->objpdf->rect($xcol + 35, $xlin + 58, 103, 6, 2, 'DF', '12');
-    $this->objpdf->rect($xcol + 138, $xlin + 58, 22, 6, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 35, $xlin + 58, 105, 6, 2, 'DF', '12');
+    $this->objpdf->rect($xcol + 140, $xlin + 58, 20, 6, 2, 'DF', '12');
     $this->objpdf->rect($xcol + 160, $xlin + 58, 20, 6, 2, 'DF', '12');
     $this->objpdf->rect($xcol + 180, $xlin + 58, 22, 6, 2, 'DF', '12');
 
@@ -651,17 +651,17 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->rect($xcol, $xlin + 64, 8, 118, 2, 'DF', '34');
     $this->objpdf->rect($xcol + 8, $xlin + 64, 12, 118, 2, 'DF', '34');
     $this->objpdf->rect($xcol + 20, $xlin + 64, 15, 118, 2, 'DF', '34');
-    $this->objpdf->rect($xcol + 35, $xlin + 64, 103, 118, 2, 'DF', '34');
-    $this->objpdf->rect($xcol + 138, $xlin + 64, 22, 141, 2, 'DF', '34');
+    $this->objpdf->rect($xcol + 35, $xlin + 64, 105, 118, 2, 'DF', '34');
+    $this->objpdf->rect($xcol + 140, $xlin + 64, 20, 141, 2, 'DF', '34');
     $this->objpdf->rect($xcol + 160, $xlin + 64, 20, 141, 2, 'DF', '34');
     $this->objpdf->rect($xcol + 180, $xlin + 64, 22, 141, 2, 'DF', '34');
 
-    $this->objpdf->rect($xcol, $xlin + 205, 138, 10, 2, 'DF', '34');
+    $this->objpdf->rect($xcol, $xlin + 205, 140, 10, 2, 'DF', '34');
 
-    $this->objpdf->rect($xcol + 138, $xlin + 205, 0, 10, 2, 'DF', '34');
-    $this->objpdf->rect($xcol + 138, $xlin + 205, 64, 10, 2, 'DF', '34');
+    $this->objpdf->rect($xcol + 140, $xlin + 205, 0, 10, 2, 'DF', '34');
+    $this->objpdf->rect($xcol + 140, $xlin + 205, 64, 10, 2, 'DF', '34');
 
-    $this->objpdf->rect($xcol, $xlin + 182, 138, 23, 2, 'DF', '');
+    $this->objpdf->rect($xcol, $xlin + 182, 140, 23, 2, 'DF', '');
 
     $this->objpdf->sety($xlin + 28);
     $alt = 4;
@@ -686,7 +686,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
 
     $this->objpdf->SetWidths(array(8, 12, 15, 104, 20, 20, 20));
 
-    $this->objpdf->SetAligns(array('C', 'C', 'C', 'L', 'C', 'R', 'R'));
+    $this->objpdf->SetAligns(array('C', 'C', 'C', 'J', 'C', 'R', 'R'));
 
     /*$this->objpdf->SetWidths(array(8, 12, 15, 105, 30, 30));
 
@@ -720,19 +720,32 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             if ($pagina == 1) {
                 //DESCRIÇÃO DO ITEM
                 $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, 2380));
+                $descricaoitem = mb_strtoupper($descricaoitem);
                 $quantlinhadescricaoitem = round(strlen(pg_result($this->recorddositens, $ii, $this->descricaoitem))/70,0)+1;
                 if(($this->objpdf->gety() + ($quantlinhadescricaoitem*3) ) > 190 ){
                     $carct = ((190 - $this->objpdf->gety())/3)*70;
                     $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, $carct));
+                    $descricaoitem = mb_strtoupper($descricaoitem);
                     $descricaoitemcontinuacao = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), $carct, 300000));
+                    $descricaoitemcontinuacao = strtoupper($descricaoitemcontinuacao);
                     $pula = 1;
-                    $pagina += 1;
+                    //$pagina += 1;
                 }     
             } else {
                 //DESCRIÇÃO DO ITEM PARA PRÓXIMAS PÁGINAS
                 
                     $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, 5000));
-                
+                    $descricaoitem = mb_strtoupper($descricaoitem);
+                    $quantlinhadescricaoitem = round(strlen(pg_result($this->recorddositens, $ii, $this->descricaoitem))/70,0)+1;
+                if(($this->objpdf->gety() + ($quantlinhadescricaoitem*3) ) > 250 ){
+                    $carct = ((250 - $this->objpdf->gety())/3)*70;
+                    $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, $carct));
+                    $descricaoitem = mb_strtoupper($descricaoitem);
+                    $descricaoitemcontinuacao = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), $carct, 300000));
+                    $descricaoitemcontinuacao = mb_strtoupper($descricaoitemcontinuacao);
+                    $pula = 1;
+                    //$pagina += 1;
+                }  
             }
 
             if ($this->informa_adic == "PC") {
@@ -799,9 +812,9 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
 
         // troca de pagina
 
-            $quantlinhadescricaoitem = round((round((strlen($descricaoitemcontinuacao))/70,0)+1)/81);
+            $quantlinhadescricaoitem = round(strlen($descricaoitemcontinuacao)/70,0)+1;
         
-        
+        $quantlinhadescricaoitem = ceil($quantlinhadescricaoitem/81);
         if (($this->objpdf->gety() > $this->objpdf->h - 110 && $pagina == 1) || ($this->objpdf->gety() > $this->objpdf->h - 40 && $pagina != 1) || ($pula == 1)) {
             //if ($descricaoitemcontinuacao != "") { // Alterado para controle de itens nao imprimir paginas sem itens(branco)
                 //
@@ -902,6 +915,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 } else {
                     $this->objpdf->text(85, $xlin + 320, 'Continua na Página ' . ($this->objpdf->PageNo() + 1));
                 }
+                
                 for($cont=0;$cont < $quantlinhadescricaoitem;$cont++){
                     $descricaoitem = preg_replace('/\n/', ' ', substr($descricaoitemcontinuacao, 0, 5400));
                     $this->objpdf->addpage();
@@ -991,7 +1005,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                     if (pg_result($this->recorddositens, $ii, $this->marca) != '') {
                         $descricaoitem .= ' - Marca: ' . pg_result($this->recorddositens, $ii, $this->marca);
                     }
-
+                    
                     $this->objpdf->Setfont('Arial', '', 7);
                     $this->objpdf->Row(array(
 
@@ -1003,6 +1017,16 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                         "",
                         ""
                     ), 3, false, 3);
+                    $this->objpdf->Row(array(
+
+                        "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            "",
+                            ""
+                        ), 3, false, 3);
                     $descricaoitemcontinuacao = preg_replace('/\n/', ' ', substr($descricaoitemcontinuacao, 5400, 300000));
                     
                 }
