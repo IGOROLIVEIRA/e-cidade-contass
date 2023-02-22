@@ -85,6 +85,7 @@ require_once("model/itempacto.model.php");
 require_once("classes/solicitacaocompras.model.php");
 require_once("model/ItemEstimativa.model.php");
 require_once("classes/db_itemprecoreferencia_classe.php");
+include("libs/PHPExcel/Classes/PHPExcel.php");
 
 $clsolicitem         = new cl_solicitem;
 $clsolicitemunid     = new cl_solicitemunid;
@@ -144,6 +145,7 @@ $db_opcao = 1;
 $db_botao = true;
 $iframe   = true;
 
+
 if (isset($verificado)) {
 	if (isset($selecao)) {
 		if ($selecao == "1" || $selecao == "2") {
@@ -160,6 +162,356 @@ if (isset($verificado)) {
 			$db_opcao = 3;
 			$db_botao = false;
 			$iframe = false;
+		}
+	}
+}
+
+db_app::load("scripts.js, strings.js, datagrid.widget.js, windowAux.widget.js,dbautocomplete.widget.js, DBHint.widget.js, roundDecimal.js");
+db_app::load("dbmessageBoard.widget.js, prototype.js, dbtextField.widget.js, dbcomboBox.widget.js,dbtextFieldData.widget.js");
+db_app::load("time.js");
+db_app::load("estilos.css, grid.style.css");
+
+if (isset($processar)) {
+
+
+	$abrirPopupErro = false;
+	$anousu = db_getsession("DB_anousu");
+
+
+	$novo_nome = $_FILES["uploadfile"]["name"];
+
+	// Nome do novo arquivo
+	$nomearq = $_FILES["uploadfile"]["name"];
+
+	$extensao = strtolower(substr($nomearq, -5));
+
+	$diretorio = "libs/Pat_xls_import/";
+
+	// Nome do arquivo temporário gerado no /tmp
+	$nometmp = $_FILES["uploadfile"]["tmp_name"];
+
+	// Seta o nome do arquivo destino do upload
+	$arquivoDocument = "$diretorio" . "$novo_nome";
+
+	if ($nomearq == "") {
+		db_msgbox("Usuário: Nennhuma planilha selecionada.");
+		db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
+	}
+
+
+	if ($extensao != ".xlsx") {
+		db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo .xlsx");
+		unlink($nometmp);
+		$lFail = true;
+		db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
+	}
+
+	$files = glob('libs/Pat_xls_import/*');
+	foreach ($files as $file) {
+		if (is_file($file)) {
+			unlink($file);
+		}
+	}
+
+	// Faz um upload do arquivo para o local especificado
+	if (move_uploaded_file($_FILES["uploadfile"]["tmp_name"], $diretorio . $novo_nome)) {
+
+		$href = $arquivoDocument;
+	} else {
+
+		db_msgbox("Erro ao enviar arquivo.");
+		unlink($nometmp);
+		$lFail = true;
+		return false;
+	}
+
+	$dir = "libs/Pat_xls_import/";
+	$files1 = scandir($dir, 1);
+	$arquivo = "libs/Pat_xls_import/" . $files1[0];
+
+	if (!file_exists($arquivo)) {
+		echo "<script>alert('Arquivo não localizado')</script>";
+	} else {
+
+		$objPHPExcel = PHPExcel_IOFactory::load($arquivo);
+		$sheetData = $objPHPExcel->getSheet(0)->toArray(null, true, true, true);
+		$objWorksheet = $objPHPExcel->getActiveSheet();
+		$highestRow = $objWorksheet->getHighestRow();
+		$highestRow = $highestRow;
+
+		for ($row = 2; $row <= $highestRow; $row++) {
+
+			if (
+				$objWorksheet->getCellByColumnAndRow(0, $row)->getValue() == NULL &&
+				$objWorksheet->getCellByColumnAndRow(1, $row)->getValue() == NULL &&
+				$objWorksheet->getCellByColumnAndRow(2, $row)->getValue() == NULL &&
+				$objWorksheet->getCellByColumnAndRow(3, $row)->getValue() == NULL &&
+				$objWorksheet->getCellByColumnAndRow(4, $row)->getValue() == NULL &&
+				$objWorksheet->getCellByColumnAndRow(5, $row)->getValue() == NULL
+
+			) {
+				break;
+			}
+
+			$cell = $objWorksheet->getCellByColumnAndRow(0, $row);
+			$cell_ordem = $cell->getValue();
+
+			$cell = $objWorksheet->getCellByColumnAndRow(1, $row);
+			$cell_codmaterial = $cell->getValue();
+
+			$cell = $objWorksheet->getCellByColumnAndRow(2, $row);
+			$cell_reduzido =  $cell->getValue();
+
+			$cell = $objWorksheet->getCellByColumnAndRow(3, $row);
+			$cell_controladoquantidade = utf8_decode($cell->getValue());
+
+			$cell = $objWorksheet->getCellByColumnAndRow(4, $row);
+			$cell_quantidade = $cell->getValue();
+
+			$cell = $objWorksheet->getCellByColumnAndRow(5, $row);
+			$cell_codunidade = $cell->getValue();
+
+
+
+			if (!is_numeric($cell_ordem)) {
+				$abrirPopupErro = true;
+			}
+
+			if (is_numeric($cell_codmaterial)) {
+				$sSQL = "select * from pcmater where pc01_codmater = $cell_codmaterial ;";
+				$rsPcmater       = db_query($sSQL);
+				if (pg_numrows($rsPcmater) == 0) {
+					$abrirPopupErro = true;
+				}
+			} else {
+				$abrirPopupErro = true;
+			}
+
+			if (is_numeric($cell_reduzido)) {
+				$sSQL = "select * from orcelemento where o56_codele = $cell_reduzido and o56_anousu = $anousu ;";
+				$rsOrcelemento       = db_query($sSQL);
+				if (pg_numrows($rsOrcelemento) == 0) {
+					$abrirPopupErro = true;
+				}
+			} else {
+				$abrirPopupErro = true;
+			}
+
+
+			if ($cell_controladoquantidade == "") {
+				$abrirPopupErro = true;
+			} else if (mb_strtolower($cell_controladoquantidade) != "sim" && mb_strtolower($cell_controladoquantidade) != "não" && mb_strtolower($cell_controladoquantidade) != "nao") {
+				$abrirPopupErro = true;
+			} else if (mb_strtolower($cell_controladoquantidade) == "não" || mb_strtolower($cell_controladoquantidade) == "nao") {
+				$sSQL = "select * from pcmater where pc01_codmater = $cell_codmaterial and pc01_servico = true;";
+				$rsPcmater       = db_query($sSQL);
+				if (pg_numrows($rsPcmater) == 0) $abrirPopupErro = true;
+			}
+
+			if (!is_numeric($cell_quantidade)) {
+				$abrirPopupErro = true;
+			}
+
+			if ((mb_strtolower(($cell_controladoquantidade)) == "não" || mb_strtolower(($cell_controladoquantidade)) == "nao") && $cell_quantidade > 1) {
+				$abrirPopupErro = true;
+			}
+
+
+			if (is_numeric($cell_codunidade)) {
+				$sSQL = "select * from matunid where m61_codmatunid = $cell_codunidade ;";
+				$rsMatunid       = db_query($sSQL);
+				if (pg_numrows($rsMatunid) == 0) {
+					$abrirPopupErro = true;
+				}
+			} else {
+				$abrirPopupErro = true;
+			}
+
+			$aItens[$i][0] = $cell_ordem;
+			$aItens[$i][1] = $cell_codmaterial;
+			$aItens[$i][2] = $cell_reduzido;
+			$aItens[$i][3] = $cell_controladoquantidade;
+			$aItens[$i][4] = $cell_quantidade;
+			$aItens[$i][5] = $cell_codunidade;
+
+
+			$i++;
+		}
+
+		$arrayItensPlanilha = array();
+
+		$sOrdem = "";
+		$sCodmaterial = "";
+		$sReduzido = "";
+		$sControladoquantidade = "";
+		$sQuantidade = "";
+		$sCodunidade = "";
+
+		foreach ($aItens as $keyRow => $Row) {
+
+
+			$objItensPlanilha = new stdClass();
+			foreach ($Row as $keyCel => $cell) {
+
+				if ($keyCel == 0) {
+					$sOrdem .=  $cell . "-";
+					$objItensPlanilha->ordem = $cell;
+				}
+
+				if ($keyCel == 1) {
+					$sCodmaterial .=  $cell . "-";
+					$objItensPlanilha->codmaterial = $cell;
+				}
+				if ($keyCel == 2) {
+					$sReduzido .=  $cell . "-";
+					$objItensPlanilha->reduzido = $cell;
+				}
+				if ($keyCel == 3) {
+					$sControladoquantidade .=  $cell . "-";
+					$objItensPlanilha->controladoquantidade = $cell;
+				}
+				if ($keyCel == 4) {
+					$sQuantidade .=  $cell . "-";
+					$objItensPlanilha->quantidade = $cell;
+				}
+				if ($keyCel == 5) {
+					$sCodunidade .=  $cell . "-";
+					$objItensPlanilha->codunidade = $cell;
+				}
+			}
+			$arrayItensPlanilha[] = $objItensPlanilha;
+		}
+	}
+
+
+	$_SESSION["sOrdem"] = substr($sOrdem, 0, -1);
+	$_SESSION["sCodmaterial"] = substr($sCodmaterial, 0, -1);
+	$_SESSION["sReduzido"] = substr($sReduzido, 0, -1);
+	$_SESSION["sControlaQuantidade"] = substr($sControladoquantidade, 0, -1);
+	$_SESSION["sQuantidade"] = substr($sQuantidade, 0, -1);
+	$_SESSION["sCodUnidade"] = substr($sCodunidade, 0, -1);
+
+
+	if ($abrirPopupErro == true) {
+		echo "<script>
+
+		function popupwindow(url, title, w, h) {
+			var y = window.outerHeight / 2 + window.screenY - ( h / 2)
+			var x = window.outerWidth / 2 + window.screenX - ( w / 2)
+			return window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + w + ', height=' + h + ', top=' + y + ', left=' + x);
+		} 
+
+	alert('Corrija os itens grifados em vermelho e reprocesse a planilha.');
+
+	popupwindow('com1_solicitemerroimportacao.php','',832,424);
+	
+		  </script>";
+	}
+
+	$sqlerro = false;
+
+	if ($abrirPopupErro == false) {
+
+		$sCodMateriaisErros = "";
+
+		if (count($arrayItensPlanilha) == 0) {
+			db_msgbox("Usuário: planilha não possui itens");
+			db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
+		}
+
+		for ($i = 0; $i < count($arrayItensPlanilha); $i++) {
+
+			db_inicio_transacao();
+
+			$clsolicitem->pc11_numero = $pc11_numero;
+			$clsolicitem->pc11_seq    = $arrayItensPlanilha[$i]->ordem;
+			$clsolicitem->pc11_quant    = $arrayItensPlanilha[$i]->quantidade;
+			$clsolicitem->pc11_vlrun  = "0";
+			$clsolicitem->pc11_liberado = "f";
+			$clsolicitem->pc11_prazo = addslashes(stripslashes(trim($pc11_prazo)));
+			$clsolicitem->pc11_pgto  = addslashes(stripslashes(trim($pc11_pgto)));
+			$clsolicitem->pc11_resum = addslashes(stripslashes(trim($sResumoRegistro)));
+			$clsolicitem->pc11_just  = addslashes(stripslashes(trim($pc11_just)));
+			$clsolicitem->pc11_servicoquantidade = mb_strtolower($arrayItensPlanilha[$i]->controladoquantidade) == "sim" ? "t" : "f";
+			$pc11_codigo = null;
+			$clsolicitem->incluir(empty($pc11_codigo) ? null : $pc11_codigo);
+
+			if ($clsolicitem->erro_status == 0) {
+				$sqlerro = true;
+				$msg_alert = $clsolicitem->erro_msg;
+				db_msgbox("Erro na inclusão do material: " . $arrayItensPlanilha[$i]->codmaterial . "\\n" . $msg_alert);
+				db_fim_transacao($sqlerro);
+				db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
+			}
+
+			if ($sqlerro == false) {
+				$result_msgcodmater = $clsolicitempcmater->sql_record($clsolicitempcmater->sql_query_file(null, null, "pc16_codmater", "", " pc16_codmater={$arrayItensPlanilha[$i]->codmaterial} and pc16_solicitem in (select pc11_codigo from solicitem where pc11_numero in ($pc11_numero))"));
+				if ($clsolicitempcmater->numrows > 0) {
+					$sCodMateriaisErros .= $arrayItensPlanilha[$i]->codmaterial . ",";
+					db_fim_transacao(true);
+					continue;
+				} else {
+					$clsolicitempcmater->pc16_codmater = $arrayItensPlanilha[$i]->codmaterial;
+					$clsolicitempcmater->pc16_solicitem = $clsolicitem->pc11_codigo;
+					$clsolicitempcmater->incluir($arrayItensPlanilha[$i]->codmaterial, $clsolicitem->pc11_codigo);
+
+					if ($clsolicitempcmater->erro_status == 0) {
+						$sqlerro = true;
+						$erro_msg = $clsolicitempcmater->erro_msg;
+						db_msgbox("Erro na inclusão do material: " . $arrayItensPlanilha[$i]->codmaterial . "\\n" . $msg_alert);
+						db_fim_transacao($sqlerro);
+						db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
+					}
+				}
+			}
+
+
+
+			if ($sqlerro == false) {
+				$clsolicitemele->incluir($clsolicitem->pc11_codigo, $arrayItensPlanilha[$i]->reduzido);
+			}
+
+			if ($clsolicitemele->erro_status == 0) {
+				$sqlerro = true;
+				$erro_msg = $clsolicitemele->erro_msg;
+				db_msgbox("Erro na inclusão do material: " . $arrayItensPlanilha[$i]->codmaterial . "\\n" . $erro_msg);
+				db_fim_transacao($sqlerro);
+				db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
+			}
+
+			if ($sqlerro == false) {
+				$clsolicitemunid->pc17_unid = $arrayItensPlanilha[$i]->codunidade;
+				$clsolicitemunid->pc17_quant = 1;
+				$clsolicitemunid->pc17_codigo = $clsolicitem->pc11_codigo;
+				$clsolicitemunid->incluir($clsolicitem->pc11_codigo);
+			}
+
+			if ($clsolicitemunid->erro_status == 0) {
+				$erro_msg = $clsolicitemunid->erro_msg;
+				$sqlerro = true;
+				db_msgbox("Erro na inclusão do material: " . $arrayItensPlanilha[$i]->codmaterial . "\\n" . $msg_alert);
+				db_fim_transacao($sqlerro);
+				db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
+			}
+
+			if ($sqlerro == false) {
+				db_fim_transacao($sqlerro);
+			}
+		}
+
+		if ($sCodMateriaisErros != "") {
+			$sqlerro = true;
+			db_msgbox("Usuário: item(ns) " . rtrim($sCodMateriaisErros, ",") . " já estão incluídos nesta solicitação.");
+			db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
+		}
+
+		if ($sqlerro == false) {
+			db_fim_transacao($sqlerro);
+			$msg_alert = "Itens Incluidos com sucesso.";
+			db_msgbox($msg_alert);
+			db_redireciona("com1_solicitemnovo001.php?pc11_numero=$pc11_numero");
+		} else {
+			db_fim_transacao($sqlerro);
 		}
 	}
 }
