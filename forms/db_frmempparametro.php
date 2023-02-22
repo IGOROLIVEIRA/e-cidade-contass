@@ -291,6 +291,26 @@ $clempparametro->rotulo->label();
                     ?>
                 </td>
             </tr>
+            <tr>
+                <td nowrap title="<?= @$Te30_liquidacaodataanterior ?>">
+                    <?= @$Le30_liquidacaodataanterior ?>
+                </td>
+                <td>
+                    <?
+                    $x = array('f' => 'Não', 't' => 'Sim');
+                    db_select('e30_liquidacaodataanterior', $x, true, $db_opcao, "");
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td nowrap title=""> <b>Modelo Aut. de Empenho:</b></td>
+                <td>
+                    <?
+                    $y = array('5' => 'Modelo 1', '81' => 'Modelo 2');
+                    db_select('e30_modeloautempenho', $y, true, $db_opcao, "");
+                    ?>
+                </td>
+            </tr>
         </table>
     </fieldset>
     <center>
