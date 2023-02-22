@@ -46,7 +46,7 @@ $val = false;
     }
 
     #pc80_numdispensa {
-        width: 98px;
+        width: 115px;
     }
 </style>
 <form name="form1" method="post" action="">
@@ -182,10 +182,6 @@ $val = false;
                         db_select('pc80_tipoprocesso', $aTipos, true, '', 'style="width:50%"');
                         ?>
                     </td>
-                    <td colspan="2"></td>
-                </tr>
-                <!--OC3770-->
-                <tr>
                     <td align="left">
                         <label class="bold">Critério de Adjudicação:</label>
                     </td>
@@ -204,18 +200,15 @@ $val = false;
                     </td>
                     <td colspan="2"></td>
                 </tr>
-                <!-- FIM - OC3770-->
                 <tr>
                     <td>
                         <label class="bold">Nº da Dispensa:</label>
                     </td>
                     <td>
                         <?php
-                        db_input('pc80_numdispensa', 37, $Idescrdepto, true, 'text', $db_opcao);
+                        db_input('pc80_numdispensa', 40, $Idescrdepto, true, 'text', $db_opcao);
                         ?>
                     </td>
-                </tr>
-                <tr>
                     <td>
                         <label class="bold">Dispensa por valor:</label>
                     </td>
@@ -246,8 +239,6 @@ $val = false;
                         db_select('pc80_orcsigiloso', $aOrc, true, '', 'style="width:50%"');
                         ?>
                     </td>
-                </tr>
-                <tr>
                     <td>
                         <label class="bold">Subcontratação:</label>
                     </td>
@@ -260,6 +251,36 @@ $val = false;
                         );
 
                         db_select('pc80_subcontratacao', $aSub, true, '', 'style="width:50%"');
+                        ?>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <label class="bold">Amparo Legal:</label>
+                    </td>
+                    <td>
+                        <?php
+                        $sql = "SELECT * FROM amparolegal 
+                        WHERE l212_codigo IN
+                                (SELECT l213_amparo
+                                 FROM amparocflicita
+                                 WHERE l213_modalidade IN
+                                         (SELECT DISTINCT l03_codigo
+                                          FROM amparocflicita
+                                          INNER JOIN cflicita ON cflicita.l03_codigo=l213_modalidade
+                                          WHERE l03_pctipocompratribunal=101
+                                              AND l03_instit = " . db_getsession('DB_instit') . "))";
+                        $result_tipo = db_query($sql);
+
+                        for ($iIndiceTipo = 0; $iIndiceTipo < pg_numrows($result_tipo); $iIndiceTipo++) {
+
+                            $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
+
+                            $tipo[$oTipo->l212_codigo] = $oTipo->l212_lei;
+                        }
+
+                        db_select('pc80_amparolegal', $tipo, true, '', 'style="width:100%"');
                         ?>
                     </td>
                 </tr>

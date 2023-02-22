@@ -82,6 +82,8 @@ if (isset($incluir) || isset($juntar)) {
       $clpcproc->pc80_orcsigiloso           = $pc80_orcsigiloso;
       $clpcproc->pc80_subcontratacao        = $pc80_subcontratacao;
       $clpcproc->pc80_dadoscomplementares   = $pc80_dadoscomplementares;
+      $clpcproc->pc80_amparolegal           = $pc80_amparolegal;
+
       /*OC3770*/
       $clpcproc->pc80_criterioadjudicacao   = $pc80_criterioadjudicacao;
       /*FIM - OC3770*/

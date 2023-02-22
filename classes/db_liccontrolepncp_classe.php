@@ -29,6 +29,7 @@ class cl_liccontrolepncp
     public $l213_numerocompra = null;
     public $l213_anousu = null;
     public $l213_instit = 0;
+    public $l213_processodecompras = 0;
     // cria propriedade com as variaveis do arquivo 
     public $campos = "
                  l213_sequencial = int8 = l213_sequencial 
@@ -40,6 +41,7 @@ class cl_liccontrolepncp
                  l213_numerocompra = int8 = numero da compra no pncp
                  l213_anousu = int8 = ano da compra
                  l213_instit = int8 = l213_instit 
+                 l213_processodecompras = int8 = numero de processo de compras
                  ";
 
     //funcao construtor da classe 
@@ -81,7 +83,7 @@ class cl_liccontrolepncp
             $this->l213_numerocompra = ($this->l213_numerocompra == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_numerocompra"] : $this->l213_numerocompra);
             $this->l213_anousu = ($this->l213_anousu == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_anousu"] : $this->l213_anousu);
             $this->l213_instit = ($this->l213_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_instit"] : $this->l213_instit);
-        } else {
+            $this->l213_processodecompras = ($this->l213_processodecompras == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_processodecompras"] : $this->l213_processodecompras);
         }
     }
 
@@ -90,15 +92,6 @@ class cl_liccontrolepncp
     {
         $this->atualizacampos();
 
-        if ($this->l213_licitacao == null) {
-            $this->erro_sql = " Campo l213_licitacao não informado.";
-            $this->erro_campo = "l213_licitacao";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
         if ($this->l213_dtlancamento == null) {
             $this->erro_sql = " Campo l213_dtlancamento não informado.";
             $this->erro_campo = "l213_dtlancamento_dia";
@@ -204,6 +197,7 @@ class cl_liccontrolepncp
                                       ,l213_numerocompra 
                                       ,l213_anousu 
                                       ,l213_instit 
+                                      ,l213_processodecompras
                        )
                 values (
                                 $this->l213_sequencial 
@@ -215,6 +209,7 @@ class cl_liccontrolepncp
                                ,$this->l213_numerocompra
                                ,$this->l213_anousu
                                ,$this->l213_instit 
+                               ,$this->l213_processodecompras
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -337,6 +332,19 @@ class cl_liccontrolepncp
             if (trim($this->l213_instit) == null) {
                 $this->erro_sql = " Campo l213_instit não informado.";
                 $this->erro_campo = "l213_instit";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->l213_processodecompras) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l213_processodecompras"])) {
+            $sql  .= $virgula . " l213_processodecompras = $this->l213_processodecompras ";
+            $virgula = ",";
+            if (trim($this->l213_processodecompras) == null) {
+                $this->erro_sql = " Campo l213_processodecompras não informado.";
+                $this->erro_campo = "l213_processodecompras";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));

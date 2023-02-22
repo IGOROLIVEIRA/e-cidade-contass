@@ -59,6 +59,7 @@ class cl_pcproc
   var $pc80_orcsigiloso = null;
   var $pc80_subcontratacao = null;
   var $pc80_dadoscomplementares = null;
+  var $pc80_amparolegal = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  pc80_codproc = int8 = Código do Processo de Compras
@@ -74,6 +75,7 @@ class cl_pcproc
                  pc80_orcsigiloso = orcamento sigiloso
                  pc80_subcontratacao = possui subcontratacao
                  pc80_dadoscomplementares = dados complementares
+                 pc80_amparolegal = amparo legal
                  ";
   //funcao construtor da classe
   function cl_pcproc()
@@ -116,6 +118,7 @@ class cl_pcproc
       $this->pc80_orcsigiloso = ($this->pc80_orcsigiloso == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_orcsigiloso"] : $this->pc80_orcsigiloso);
       $this->pc80_subcontratacao = ($this->pc80_subcontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_subcontratacao"] : $this->pc80_subcontratacao);
       $this->pc80_dadoscomplementares = ($this->pc80_dadoscomplementares == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_dadoscomplementares"] : $this->pc80_dadoscomplementares);
+      $this->pc80_amparolegal = ($this->pc80_amparolegal == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_amparolegal"] : $this->pc80_amparolegal);
     } else {
       $this->pc80_codproc = ($this->pc80_codproc == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_codproc"] : $this->pc80_codproc);
     }
@@ -217,6 +220,15 @@ class cl_pcproc
       $this->erro_status = "0";
       return false;
     }
+    if ($this->pc80_amparolegal == null) {
+      $this->erro_sql = " Campo dados amparo legal nao Informado.";
+      $this->erro_campo = "pc80_amparolegal";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
     if ($pc80_codproc == "" || $pc80_codproc == null) {
       $result = db_query("select nextval('pcproc_pc80_codproc_seq')");
       if ($result == false) {
@@ -263,6 +275,7 @@ class cl_pcproc
                                       ,pc80_orcsigiloso
                                       ,pc80_subcontratacao
                                       ,pc80_dadoscomplementares 
+                                      ,pc80_amparolegal
                        )
                 values (
                                 $this->pc80_codproc
@@ -278,6 +291,7 @@ class cl_pcproc
                                ,'$this->pc80_orcsigiloso'
                                ,'$this->pc80_subcontratacao'
                                ,'$this->pc80_dadoscomplementares'
+                               ,$this->pc80_amparolegal
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -497,6 +511,20 @@ class cl_pcproc
       if (trim($this->pc80_dadoscomplementares) == null) {
         $this->erro_sql = " Campo dados complementares nao Informado.";
         $this->erro_campo = "pc80_dadoscomplementares";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+
+    if (trim($this->pc80_amparolegal) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_amparolegal"])) {
+      $sql  .= $virgula . " pc80_amparolegal = '$this->pc80_amparolegal' ";
+      $virgula = ",";
+      if (trim($this->pc80_amparolegal) == null) {
+        $this->erro_sql = " Campo dados amparo legal nao Informado.";
+        $this->erro_campo = "pc80_amparolegal";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -1326,8 +1354,6 @@ class cl_pcproc
     return $sql;
   }
 
-
-
   function sql_query_proc_solicita_abertura($pc80_codproc = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
@@ -1366,6 +1392,94 @@ class cl_pcproc
         $virgula = ",";
       }
     }
+    return $sql;
+  }
+
+
+  public function sql_query_pncp($pc80_codproc = null)
+  {
+
+    $sql  = "select distinct (SELECT CASE
+      WHEN o41_subunidade != 0
+          OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+              OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+      ELSE lpad((CASE WHEN o40_codtri = '0'
+          OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+          OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+      END AS codunidadesub
+      FROM db_departorg
+      JOIN infocomplementares ON si08_anousu = db01_anousu
+      AND si08_instit = 1
+      JOIN orcunidade ON db01_orgao=o41_orgao
+      AND db01_unidade=o41_unidade
+      AND db01_anousu = o41_anousu
+      JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+      WHERE db01_coddepto=pc80_depto and db01_anousu=2022 LIMIT 1) AS codigoUnidadeCompradora,
+      3 AS tipoInstrumentoConvocatorioId,
+      8 AS modalidadeId,
+      5 AS modoDisputaId,
+      pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
+      pcproc.pc80_numdispensa AS numeroCompra,
+      EXTRACT(YEAR FROM pcproc.pc80_data) AS anoCompra,
+      pcproc.pc80_numdispensa||'/'||EXTRACT(YEAR FROM pcproc.pc80_data) AS numeroProcesso,
+      pcproc.pc80_resumo AS objetoCompra,
+      pcproc.pc80_dadoscomplementares as informacaoComplementar,
+      false AS srp,
+      pcproc.pc80_orcsigiloso as orcamentoSigiloso,
+      pc20_dtate AS dataAberturaProposta,
+      pc20_dtate AS dataEncerramentoProposta,
+      pcproc.pc80_amparolegal as amparoLegalId,
+      null as linkSistemaOrigem
+      from pcproc
+      join pcprocitem on pc81_codproc=pc80_codproc
+      join solicitem on pc11_codigo=pc81_solicitem
+      join solicitempcmater on pc16_solicitem=pc11_codigo
+      join pcmater on pc16_codmater = pc01_codmater
+      join solicitemunid on pc17_codigo=pc11_codigo
+      join matunid on m61_codmatunid=pc17_unid
+      left JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+      left JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+      left join pcorcam on pc20_codorc = pc22_codorc
+      left JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+      left JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+      left JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+      where pcproc.pc80_codproc = {$pc80_codproc}";
+
+    return $sql;
+  }
+
+  public function sql_query_pncp_itens($pc80_codproc = null)
+  {
+    $sql  = "SELECT DISTINCT pcmater.pc01_codmater AS numeroItem,
+        CASE
+            WHEN pcmater.pc01_servico='t' THEN 'S'
+            ELSE 'M'
+        END AS materialOuServico,
+        1 AS tipoBeneficioId,
+        TRUE AS incentivoProdutivoBasico,
+        pcmater.pc01_descrmater AS descricao,
+        matunid.m61_descr AS unidadeMedida,
+        si02_vlprecoreferencia AS valorUnitarioEstimado,
+        pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
+        pcmater.pc01_codmater,
+        solicitem.pc11_numero,
+        solicitem.pc11_reservado,
+        solicitem.pc11_quant
+        FROM pcproc
+        JOIN pcprocitem ON pc81_codproc=pc80_codproc
+        JOIN solicitem ON pc11_codigo=pc81_solicitem
+        JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+        JOIN pcmater ON pc16_codmater = pc01_codmater
+        JOIN solicitemunid ON pc17_codigo=pc11_codigo
+        JOIN matunid ON m61_codmatunid=pc17_unid
+        LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+        LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+        LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+        LEFT JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+        LEFT JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+        WHERE pcproc.pc80_codproc = {$pc80_codproc}
+        ORDER BY numeroitem";
     return $sql;
   }
 }
