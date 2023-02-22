@@ -49,7 +49,41 @@ if ((isset($opcao) && $opcao == "alterar")) {
   }
 </style>
 <div>
-  <form name="form1" method="post" action="">
+  <form style="margin-top: 20px;" name="form1" method="post" action="" enctype="multipart/form-data">
+
+    <fieldset style="width: 1000px;">
+      <legend><strong>Importar Itens</strong></legend>
+      <table align="left" style="margin-left:44px;">
+        <tr>
+          <td>
+            <b> Importar Itens: </b>
+            <select id="importaritens" name="importaritens" onchange="importar()" ali>
+              <option value="1" selected>Não</option>
+              <option value="2">Sim</option>
+            </select>
+          </td>
+          <td id="anexarimportacao" style="display: none;">
+            <b style="margin-left:100px;"> Importar xls: </b>
+            <?php
+            db_input("uploadfile", 30, 0, true, "file", 1);
+            db_input("namefile", 31, 0, true, "hidden", 1);
+
+            ?>
+          </td>
+        </tr>
+      </table>
+      <table id="inputimportacao" style="display: none;margin-top: 30px;margin-left: -200px;" align="left">
+        <tr>
+          <td>
+            <input name='exportar' type='button' id="exportar" value="Gerar Planilha" onclick="gerar()" />
+            <input name='processar' type='submit' id="Processar" value="Processar" onClick="return validaData()" />
+          </td>
+        </tr>
+      </table>
+
+    </fieldset>
+
+
     <fieldset style="width: 1000px;">
       <legend><strong>Adicionar Item</strong></legend>
       <table border="0">
@@ -422,6 +456,20 @@ if ((isset($opcao) && $opcao == "alterar")) {
 
 
 <script>
+  function importar() {
+    if (document.getElementById('importaritens').value == "2") {
+      document.getElementById('inputimportacao').style.display = '';
+      document.getElementById('anexarimportacao').style.display = '';
+    } else {
+      document.getElementById('inputimportacao').style.display = 'none';
+      document.getElementById('anexarimportacao').style.display = 'none';
+    }
+  }
+
+  function gerar() {
+    window.location.href = "com1_xlsitenssolicitacaoplanilha?numero=" + top.corpo.iframe_solicita.document.form1.pc10_numero.value;
+  }
+
   function mask_4casasdecimais(e) {
     var valor = e.target.value.replace(/[^0-9\.]/g, "");
 
@@ -714,22 +762,6 @@ if ((isset($opcao) && $opcao == "alterar")) {
       i = 1;
     }
 
-    /*
-    if (oRetorno.dados.length == 1) {
-      document.getElementById("eleSub").setAttribute("tabindex", "-1");
-      document.getElementById("eleSub").setAttribute("aria-disabled", "true");
-
-      $('eleSub').style.background = "#EEE";
-      $('eleSub').style.pointerEvents = "none";
-
-    } else {
-      document.getElementById("eleSub").removeAttribute("tabindex");
-      document.getElementById("eleSub").removeAttribute("aria-disabled");
-
-      $('eleSub').style.background = "";
-      $('eleSub').style.pointerEvents = "";
-
-    } */
 
     oRetorno.dados.forEach(function(oItem) {
       valor = oItem.codigo + " - " + oItem.elemento + " - " + oItem.nome.urlDecode();
