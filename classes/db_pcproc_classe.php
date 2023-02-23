@@ -211,15 +211,7 @@ class cl_pcproc
       $this->erro_status = "0";
       return false;
     }
-    if ($this->pc80_dadoscomplementares == null) {
-      $this->erro_sql = " Campo dados complementares nao Informado.";
-      $this->erro_campo = "pc80_depto";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+
     if ($this->pc80_amparolegal == null) {
       $this->erro_sql = " Campo dados amparo legal nao Informado.";
       $this->erro_campo = "pc80_amparolegal";
