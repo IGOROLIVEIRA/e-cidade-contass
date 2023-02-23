@@ -430,8 +430,8 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                             '0' => 'Selecione',
                             '1' => '1 - Emenda Parlamentar Individual',
                             '2' => '2 - Emenda Parlamentar de Bancada ou Bloco',
-                            '3' => '3 - No se aplica',
-                            '4' => '4 - Emenda No Impositiva'
+                            '3' => '3 - Não se aplica',
+                            '4' => '4 - Emenda Não Impositiva'
                         );
 
                         db_select("e60_emendaparlamentar", $arr, true, 1, "onchange='js_verificaresfera();'");
@@ -447,7 +447,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         <?
                         $arr  = array(
                             '0' => 'Selecione',
-                            '1' => '1 - Unio',
+                            '1' => '1 - União',
                             '2' => '2 - Estados'
                         );
 
@@ -792,17 +792,18 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
      * funcao para avisar o usuario sobre liquidar empenho dos grupos 7, 8, 10
      * onde nao ira mais forçar pela ordem de compra
      */
-    $('id_1').observe('change', function() {
+    if ($('id_1') !== null) {
+        $('id_1').observe('change', function() {
+            if ($F('lLiquidaMaterialConsumo') == 'true') {
 
-        if ($F('lLiquidaMaterialConsumo') == 'true') {
-
-            var sGrupo = '<?php echo $sGrupoDesdobramento; ?>';
-            var sMensagem = _M('financeiro.empenho.emp4_empempenho004.liquidacao_item_consumo_imediato', {
-                sGrupo: sGrupo
-            });
-            alert(sMensagem);
-        }
-    });
+                var sGrupo = '<?php echo $sGrupoDesdobramento; ?>';
+                var sMensagem = _M('financeiro.empenho.emp4_empempenho004.liquidacao_item_consumo_imediato', {
+                    sGrupo: sGrupo
+                });
+                alert(sMensagem);
+            }
+        });
+    }
 
     function js_pesquisae54_concarpeculiar(mostra) {
         if (mostra == true) {
@@ -1068,6 +1069,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 var oRetorno = eval("(" + oAjax.responseText + ")");
 
                 lEsferaEmendaParlamentar = oRetorno.lEsferaEmendaParlamentar;
+
                 js_verificaresfera();
                 if (oRetorno.lEmendaParlamentar) {
                     $('trEmendaParlamentar').style.display = '';
