@@ -709,7 +709,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       $oDadosEmpenho10->si106_mes = $this->sDataFinal['5'] . $this->sDataFinal['6']; // campo 36
       $oDadosEmpenho10->si106_instit = db_getsession("DB_instit"); // campo 37
 
-      $oDadosEmpenho10->incluir();
+      $oDadosEmpenho10->incluir(null);
       if ($oDadosEmpenho10->erro_status == 0) {
         throw new Exception($oDadosEmpenho10->erro_msg);
       }
@@ -883,7 +883,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
           $oDadosEmpenho30->si206_mes = $this->sDataFinal['5'] . $this->sDataFinal['6']; // campo 36
           $oDadosEmpenho30->si206_instit = db_getsession("DB_instit"); // campo 37
 
-          $oDadosEmpenho30->incluir();
+          $oDadosEmpenho30->incluir(null);
         }
       }
 
