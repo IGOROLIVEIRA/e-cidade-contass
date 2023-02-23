@@ -131,8 +131,7 @@ class cl_rec102023
     if ($si25_sequencial == "" || $si25_sequencial == null) {
       $result = db_query("select nextval('rec102023_si25_sequencial_seq')");
       if ($result == false) {
-        $this->erro_banco = str_replace("
-", "", @pg_last_error());
+        $this->erro_banco = str_replace("", "", @pg_last_error());
         $this->erro_sql = "Verifique o cadastro da sequencia: rec102023_si25_sequencial_seq do campo: si25_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));

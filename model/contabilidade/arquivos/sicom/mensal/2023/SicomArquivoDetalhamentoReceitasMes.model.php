@@ -113,8 +113,6 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         /**
          * exlcuir informacoes do mes selecionado
          */
-        db_inicio_transacao();
-
         $result = $clrec11->sql_record($clrec11->sql_query(null, "*", null, "si26_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']) . " and si26_instit = " . db_getsession("DB_instit"));
         if (pg_num_rows($result) > 0) {
             $clrec11->excluir(null, "si26_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si26_instit = " . db_getsession("DB_instit"));
@@ -130,6 +128,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                 throw new Exception($clrec10->erro_msg);
             }
         }
+
         /* RECEITAS QUE DEVEM SER SUBSTIUIDAS RUBRICA CADASTRADA ERRADA */
         $aRectce = array('111202', '111208', '172136', '191138', '191139', '191140',
             '191308', '191311', '191312', '191313', '193104', '193111', '193112',
@@ -495,8 +494,6 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
 
         }
-
-        db_fim_transacao();
 
         $oGerarREC = new GerarREC();
         $oGerarREC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
