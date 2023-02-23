@@ -58,6 +58,13 @@ switch ($oParam->exec) {
       $lRecursoFundeb = true;
     }
 
+    $aFontesEmenda = array(
+      551000, 552000, 553000, 569000, 570000, 571000, 576000, 576001, 600000, 601000, 602000, 603000, 621000, 631000, 632000, 660000, 661000, 665000, 700000, 700007, 701000, 710000
+    );
+
+    $oRetorno->lEmendaParlamentar = in_array(substr($iCodigoRecursoAutorizacao, 1, 6), $aFontesEmenda);
+    $oRetorno->lEsferaEmendaParlamentar = substr($iCodigoRecursoAutorizacao, 1, 6) == 665000 ? 't': 'f';
+
     $oRetorno->lFundeb = $lRecursoFundeb;
     break;
 
