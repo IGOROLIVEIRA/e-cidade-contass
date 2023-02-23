@@ -467,7 +467,7 @@ if ((isset($opcao) && $opcao == "alterar")) {
   }
 
   function gerar() {
-    window.location.href = "com1_xlsitenssolicitacaoplanilha?numero=" + top.corpo.iframe_solicita.document.form1.pc10_numero.value;
+    window.location.href = "com1_xlsitenssolicitacaoplanilha.php?numero=" + CurrentWindow.corpo.iframe_solicita.document.form1.pc10_numero.value;
   }
 
   function mask_4casasdecimais(e) {

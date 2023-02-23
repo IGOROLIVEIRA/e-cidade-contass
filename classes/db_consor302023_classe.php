@@ -34,6 +34,7 @@ class cl_consor302023
   var $si18_vlanulacaopagamentofonte = 0;
   var $si18_mes = 0;
   var $si18_instit = 0;
+  var $si18_codacompanhamento = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si18_sequencial = int8 = sequencial 
@@ -53,6 +54,7 @@ class cl_consor302023
                  si18_vlanulacaopagamentofonte = float8 = Valor de  pagamentos 
                  si18_mes = int8 = Mês
                  si18_instit = int8 = Instituição 
+                 si18_codacompanhamento = text = Código acompanhamento
                  ";
 
   //funcao construtor da classe
@@ -95,6 +97,7 @@ class cl_consor302023
       $this->si18_vlanulacaopagamento = ($this->si18_vlanulacaopagamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si18_vlanulacaopagamento"] : $this->si18_vlanulacaopagamento);
       $this->si18_mes = ($this->si18_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si18_mes"] : $this->si18_mes);
       $this->si18_instit = ($this->si18_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si18_instit"] : $this->si18_instit);
+      $this->si18_codacompanhamento = ($this->si18_codacompanhamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si18_codacompanhamento"] : $this->si18_codacompanhamento);
     } else {
       $this->si18_sequencial = ($this->si18_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si18_sequencial"] : $this->si18_sequencial);
     }
@@ -155,6 +158,16 @@ class cl_consor302023
 
       return false;
     }
+    if ($this->si18_codacompanhamento == null) {
+      $this->erro_sql = " Campo Código de acompanhamento nao Informado.";
+      $this->erro_campo = "si18_codacompanhamento";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
     if ($si18_sequencial == "" || $si18_sequencial == null) {
       $result = db_query("select nextval('consor302023_si18_sequencial_seq')");
       if ($result == false) {
@@ -208,7 +221,8 @@ class cl_consor302023
                                       ,si18_vlpagofonte 
                                       ,si18_vlanulacaopagamentofonte 
                                       ,si18_mes
-                                      ,si18_instit 
+                                      ,si18_instit
+                                      ,si18_codacompanhamento 
                        )
                 values (
                                 $this->si18_sequencial 
@@ -228,6 +242,7 @@ class cl_consor302023
                                ,$this->si18_vlanulacaopagamentofonte 
                                ,$this->si18_mes
                                ,$this->si18_instit 
+                               ,$this->si18_codacompanhamento
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -397,6 +412,20 @@ class cl_consor302023
       if (trim($this->si18_instit) == null) {
         $this->erro_sql = " Campo Instituição nao Informado.";
         $this->erro_campo = "si18_instit";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+
+        return false;
+      }
+    }
+    if (trim($this->si18_codacompanhamento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si18_codacompanhamento"])) {
+      $sql .= $virgula . " si18_codacompanhamento = $this->si18_codacompanhamento ";
+      $virgula = ",";
+      if (trim($this->si18_codacompanhamento) == null) {
+        $this->erro_sql = " Campo Código acompanhamento nao Informado.";
+        $this->erro_campo = "si18_codacompanhamento";
         $this->erro_banco = "";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
