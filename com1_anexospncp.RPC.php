@@ -33,6 +33,9 @@ require_once("libs/db_sessoes.php");
 require_once("libs/JSON.php");
 require_once("std/db_stdClass.php");
 require_once("dbforms/db_funcoes.php");
+require_once("model/ProcessodeComprasAnexo.model.php");
+require_once("model/ProcessoComprasDocumento.model.php");
+
 
 define("URL_MENSAGEM_LIC1ANEXOSPNCP", "patrimonial.licitacao.lic1_anexospncp.");
 
@@ -53,31 +56,31 @@ try {
 
         case "salvarDocumento":
 
-            $oLicitacaoAnexo = new AnexoComprasPNCP($oParam->iCodigoLicitacao);
-            $oLicitacaoAnexo->setPor($oParam->iCodigoLicitacao);
-            $oLicitacaoAnexo->salvar();
+            $oProcessoAnexo = new AnexoComprasPNCP($oParam->iCodigoProcesso);
+            $oProcessoAnexo->setPcproc($oParam->iCodigoProcesso);
+            $oProcessoAnexo->salvar();
 
-            $oLicitacaoDocumento = new LicitacaoDocumento();
-            $oLicitacaoDocumento->setProcessoProtocolo($oLicitacaoAnexo);
-            $oLicitacaoDocumento->setTipoanexo($oParam->iCodigoDocumento);
+            $oProcessocomprasDocumento = new ProcessoComprasDocumento();
+            $oProcessocomprasDocumento->setProcessoProtocolo($oProcessoAnexo);
+            $oProcessocomprasDocumento->setTipoanexo($oParam->iCodigoDocumento);
 
             if (!empty($oParam->sCaminhoArquivo)) {
-                $oLicitacaoDocumento->setCaminhoArquivo($oParam->sCaminhoArquivo);
+                $oProcessocomprasDocumento->setCaminhoArquivo($oParam->sCaminhoArquivo);
             }
 
-            $oRetorno->sMensagem = urlencode($oLicitacaoDocumento->salvar());
+            $oRetorno->sMensagem = urlencode($oProcessocomprasDocumento->salvar());
             break;
 
         case "carregarDocumentos":
 
-            $oProcessoProtocolo    = new LicitacaoAnexo($oParam->iCodigoProcesso);
+            $oProcessoProtocolo    = new AnexoComprasPNCP($oParam->iCodigoProcesso);
             $aDocumentosVinculados = $oProcessoProtocolo->getDocumentos();
             $aDocumentosRetorno    = array();
-            foreach ($aDocumentosVinculados as $oProcessoLicitacao) {
+            foreach ($aDocumentosVinculados as $oProcesso) {
 
                 $oStdDocumento = new stdClass();
-                $oStdDocumento->iCodigoDocumento    = $oProcessoLicitacao->getCodigo();
-                $oStdDocumento->sDescricaoDocumento = urlencode($oProcessoLicitacao->getDescricaoTipo());
+                $oStdDocumento->iCodigoDocumento    = $oProcesso->getCodigo();
+                $oStdDocumento->sDescricaoDocumento = urlencode($oProcesso->getDescricaoTipo());
 
                 $aDocumentosRetorno[] = $oStdDocumento;
             }
@@ -87,7 +90,7 @@ try {
 
         case "download":
 
-            $oProcessoDocumento                = new LicitacaoDocumento($oParam->iCodigoDocumento);
+            $oProcessoDocumento                = new ProcessoComprasDocumento($oParam->iCodigoDocumento);
             $oRetorno->sCaminhoDownloadArquivo = $oProcessoDocumento->download();
             $oRetorno->sTituloArquivo          = urlencode($oProcessoDocumento->getNomeDocumento());
 
@@ -108,13 +111,13 @@ try {
 
         case "excluir":
 
-            $oProcessoDocumento = new LicitacaoDocumento($oParam->iCodigoDocumento);
+            $oProcessoDocumento = new ProcessoComprasDocumento($oParam->iCodigoDocumento);
             $oProcessoDocumento->excluir();
             $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
             break;
 
         case "alterardocumento":
-            $oProcessoDocumento = new LicitacaoDocumento();
+            $oProcessoDocumento = new ProcessoComprasDocumento();
             $oProcessoDocumento->alterartipo($oParam->iCodigoDocumento, $oParam->itipoanexo);
             $oRetorno->sMensagm = urlencode('Alteração realizada com sucesso!');
             break;
@@ -122,19 +125,19 @@ try {
         case "excluirDocumento":
             $aDocumentosNaoExcluidos = array();
             foreach ($oParam->aDocumentosExclusao as $iCodigoDocumento) {
-                $oProcessoDocumento = new LicitacaoDocumento($iCodigoDocumento);
+                $oProcessoDocumento = new ProcessoComprasDocumento($iCodigoDocumento);
                 $oProcessoDocumento->excluir();
             }
             $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
             break;
 
         case "buscardocumento":
-            $oProcessoDocumento = new LicitacaoDocumento($oParam->iCodigoDocumento);
+            $oProcessoDocumento = new ProcessoComprasDocumento($oParam->iCodigoDocumento);
             $oRetorno->idtipo = $oProcessoDocumento->buscartipo();
             break;
 
         case "verifica":
-            $oProcessoDocumento = new LicitacaoDocumento();
+            $oProcessoDocumento = new ProcessoComprasDocumento();
             $oRetorno->idtipo = $oProcessoDocumento->verificavinculo($oParam->iCodigoDocumento);
             break;
 

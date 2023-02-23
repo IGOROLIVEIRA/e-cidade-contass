@@ -1,31 +1,4 @@
 <?php
-/*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
- */
-
-
 require_once('std/DBLargeObject.php');
 
 /**
@@ -188,7 +161,7 @@ class AnexoComprasPNCP
 
     /**
      * Retorna os documentos anexados ao processo
-     * @return ProcessoComrpasDocumento[]
+     * @return ProcessoComprasDocumento[]
      */
     public function getDocumentos()
     {
@@ -211,7 +184,7 @@ class AnexoComprasPNCP
         $oDaoProcessoDocumento = db_utils::getDao('anexocomprapncp');
         $sSqlBuscaDocumentos   = $oDaoProcessoDocumento->sql_query_file(
             null,
-            "l216_sequencial",
+            "l217_sequencial",
             "l216_sequencial",
             "l216_codproc = {$this->iCodproc}"
         );
@@ -219,8 +192,8 @@ class AnexoComprasPNCP
 
         for ($iRowDocumento = 0; $iRowDocumento < $oDaoProcessoDocumento->numrows; $iRowDocumento++) {
 
-            $iCodigoSequencial = db_utils::fieldsMemory($rsBuscaProcesso, $iRowDocumento)->l216_sequencial;
-            $this->aDocumentosAnexados[] = new ProcessoComrpasDocumento($iCodigoSequencial);
+            $iCodigoSequencial = db_utils::fieldsMemory($rsBuscaProcesso, $iRowDocumento)->l217_sequencial;
+            $this->aDocumentosAnexados[] = new ProcessoComprasDocumento($iCodigoSequencial);
         }
         return true;
     }
@@ -235,10 +208,8 @@ class AnexoComprasPNCP
      */
     public function salvar()
     {
-
-        if ($this->getProcessoCompras() == '') {
-
-            $oDaoComprasanexopncp = db_utils::getDao('licanexopncp');
+        if ($this->getSequencialAnexo() == '') {
+            $oDaoComprasanexopncp = db_utils::getDao('anexocomprapncp');
 
             $oDaoComprasanexopncp->l216_sequencial    = null;
             $oDaoComprasanexopncp->l216_codproc  = $this->getPcproc();
@@ -256,7 +227,7 @@ class AnexoComprasPNCP
             if ($oDaoComprasanexopncp->erro_status == "0") {
                 throw new Exception($oDaoComprasanexopncp->erro_msg);
             }
+            return true;
         }
-        return true;
     }
 }

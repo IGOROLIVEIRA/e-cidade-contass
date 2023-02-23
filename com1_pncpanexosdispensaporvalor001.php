@@ -1,30 +1,4 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
-
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -677,14 +651,14 @@ $oRotulo->label("pc80_resumo");
 
     /**
      * Retorno da js_pesquisarProcessoCompras apor clicar em uma Licitacao
-     * @param  integer iCodigoLicitacao
+     * @param  integer iCodigoProcesso
      * @param  integer iNumeroLicitacao
      * @param  string descricao
      * @return void
      */
-    function js_mostraProcessodecompras(iCodigoLicitacao, descricao) {
+    function js_mostraProcessodecompras(iCodigoProcesso, descricao) {
 
-        $('pc80_codproc').value = iCodigoLicitacao;
+        $('pc80_codproc').value = iCodigoProcesso;
         $('pc80_resumo').value = descricao;
         $('uploadfile').value = '';
         $('uploadfile').disabled = false;
@@ -761,7 +735,7 @@ $oRotulo->label("pc80_resumo");
 
     /**
      * Retorno da pesquisa js_pesquisarProcessoCompras apos mudar o campo pc80_codproc
-     * @param  integer iCodigoLicitacao
+     * @param  integer iCodigoProcesso
      * @param  string descricao
      * @param  boolean lErro
      * @return void
@@ -807,11 +781,11 @@ $oRotulo->label("pc80_resumo");
 
     function js_salvar() {
 
-        var iCodigoLicitacao = $('pc80_codproc').value;
+        var iCodigoProcesso = $('pc80_codproc').value;
 
 
 
-        if (empty(iCodigoLicitacao)) {
+        if (empty(iCodigoProcesso)) {
 
             alert('Processo de Compras não incluido');
             return false;
@@ -840,7 +814,7 @@ $oRotulo->label("pc80_resumo");
 
         oParametros.exec = 'salvarDocumento';
         oParametros.iCodigoDocumento = iCodigoDocumento;
-        oParametros.iCodigoLicitacao = iCodigoLicitacao;
+        oParametros.iCodigoProcesso = iCodigoProcesso;
         oParametros.sCaminhoArquivo = sCaminhoArquivo;
 
         var oAjax = new Ajax.Request(

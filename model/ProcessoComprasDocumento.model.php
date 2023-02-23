@@ -1,31 +1,4 @@
 <?php
-/*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
- */
-
-
 require_once('std/DBLargeObject.php');
 
 /**
@@ -40,7 +13,7 @@ define('URL_MENSAGEM_PROCESSO_DOCUMENTO', 'patrimonial.licitacao.LicitacaoDocume
  * @version $Revision: 1.17 $
  * @author Jeferson Belmiro <jeferson.belmiro@dbseller.com.br> 
  */
-class ProcessoComrpasDocumento
+class ProcessoComprasDocumento
 {
 
     /**
@@ -56,10 +29,10 @@ class ProcessoComrpasDocumento
      * Processo do protocolo
      * - campo p01_protprocesso 
      * 
-     * @var LicitacaoAnexo
+     * @var AnexoComprasPNCP
      * @access private
      */
-    private $oLicitacaoAnexo;
+    private $oAnexoComprasPNCP;
 
 
     /**
@@ -115,28 +88,27 @@ class ProcessoComrpasDocumento
             return false;
         }
 
-        $oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
-        $dbwhere = "l216_sequencial = " . $iCodigo;
-        $sSqlDocumento = $oDaoLicanexopncpdocumento->sql_query_file(null, "*", null, $dbwhere);
+        $oDaocomanexopncpdocumento = db_utils::getDao('comanexopncpdocumento');
+        $dbwhere = "l217_sequencial = " . $iCodigo;
+        $sSqlDocumento = $oDaocomanexopncpdocumento->sql_query_file(null, "*", null, $dbwhere);
 
-        $rsDocumento   = $oDaoLicanexopncpdocumento->sql_record($sSqlDocumento);
+        $rsDocumento   = $oDaocomanexopncpdocumento->sql_record($sSqlDocumento);
 
-
-        if ($oDaoLicanexopncpdocumento->erro_status  == "0") {
+        if ($oDaocomanexopncpdocumento->erro_status  == "0") {
 
             $oStdMsgErro = (object)array("iDocumento" => "$iCodigo");
             throw new BusinessException('Erro no construtor');
         }
 
         $oDocumento = db_utils::fieldsMemory($rsDocumento, 0);
-        $this->iCodigo            = $oDocumento->l216_sequencial;
-        $this->oLicitacaoAnexo    = $oDocumento->l216_licanexospncp;
-        $this->iOid               = $oDocumento->l216_documento;
-        $this->sNomeDocumento     = $oDocumento->l216_nomedocumento;
-        $this->iTipoanexo         = $oDocumento->l216_tipoanexo;
+        $this->iCodigo            = $oDocumento->l217_sequencial;
+        $this->oAnexoComprasPNCP    = $oDocumento->l217_licanexospncp;
+        $this->iOid               = $oDocumento->l217_documento;
+        $this->sNomeDocumento     = $oDocumento->l217_nomedocumento;
+        $this->iTipoanexo         = $oDocumento->l217_tipoanexo;
 
         $oDaoTipoanexo = db_utils::getDao('tipoanexo');
-        $sSqlTipo = $oDaoTipoanexo->sql_query_file($oDocumento->l216_tipoanexo);
+        $sSqlTipo = $oDaoTipoanexo->sql_query_file($oDocumento->l217_tipoanexo);
         $rsTipo   = $oDaoTipoanexo->sql_record($sSqlTipo);
 
 
@@ -164,24 +136,24 @@ class ProcessoComrpasDocumento
     /**
      * Define processo protocolo
      *
-     * @param LicitacaoAnexo $oLicitacaoAnexo
+     * @param AnexoComprasPNCP $oAnexoComprasPNCP
      * @access public
      * @return void
      */
-    public function setProcessoProtocolo(LicitacaoAnexo $oLicitacaoAnexo)
+    public function setProcessoProtocolo(AnexoComprasPNCP $oAnexoComprasPNCP)
     {
-        $this->oLicitacaoAnexo = $oLicitacaoAnexo;
+        $this->oAnexoComprasPNCP = $oAnexoComprasPNCP;
     }
 
     /**
      * Retorno o processo do protocolo
      *
      * @access public
-     * @return LicitacaoAnexo
+     * @return AnexoComprasPNCP
      */
     public function getProcessoProtocolo()
     {
-        return $this->oLicitacaoAnexo;
+        return $this->oAnexoComprasPNCP;
     }
 
 
@@ -346,28 +318,28 @@ class ProcessoComrpasDocumento
         /**
          * Processo do protocolo nao informado
          */
-        if (!($this->oLicitacaoAnexo instanceof LicitacaoAnexo) && $this->getProcessoProtocolo()->getProcessoLicitacao() != '') {
+        if (!($this->oAnexoComprasPNCP instanceof AnexoComprasPNCP) && $this->getProcessoProtocolo()->getSequencialAnexo() != '') {
             throw new Exception('Licitação não informada.');
         }
 
         // $this->iOi = $this->salvarArquivoBanco();
         $this->sNomeDocumento = basename($this->sCaminhoArquivo);
-        $oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
-        $oDaoLicanexopncpdocumento->l216_sequencial    = null;
-        $oDaoLicanexopncpdocumento->l216_licanexospncp  = $this->getProcessoProtocolo()->getProcessoLicitacao();
-        $oDaoLicanexopncpdocumento->l216_documento     = $this->sNomeDocumento;
-        $oDaoLicanexopncpdocumento->l216_nomedocumento = $this->sNomeDocumento;
-        $oDaoLicanexopncpdocumento->l216_tipoanexo = $this->iTipoanexo;
-        $oDaoLicanexopncpdocumento->incluir(null);
+        $oDaocomanexopncpdocumento = db_utils::getDao('comanexopncpdocumento');
+        $oDaocomanexopncpdocumento->l217_sequencial    = null;
+        $oDaocomanexopncpdocumento->l217_licanexospncp  = $this->getProcessoProtocolo()->getSequencialAnexo();
+        $oDaocomanexopncpdocumento->l217_documento     = $this->sNomeDocumento;
+        $oDaocomanexopncpdocumento->l217_nomedocumento = $this->sNomeDocumento;
+        $oDaocomanexopncpdocumento->l217_tipoanexo = $this->iTipoanexo;
+        $oDaocomanexopncpdocumento->incluir(null);
 
         /**
          * Erro ao incluir documento
          */
-        if ($oDaoLicanexopncpdocumento->erro_status == "0") {
+        if ($oDaocomanexopncpdocumento->erro_status == "0") {
             throw new Exception('Erro ao incluir o documento');
         }
 
-        $this->iCodigo = $oDaoLicanexopncpdocumento->l216_sequencial;
+        $this->iCodigo = $oDaocomanexopncpdocumento->l217_sequencial;
         return  'Anexo salvo com sucesso!'; //true;
     }
 
@@ -402,18 +374,13 @@ class ProcessoComrpasDocumento
     public function download()
     {
 
-
         $sCaracteres = "/[^a-z0-9\\_\.]/i";
         $sNomeArquivo = str_replace(" ", '_', $this->sNomeDocumento);
         $sNomeArquivo = preg_replace($sCaracteres, '', $sNomeArquivo);
         $sCaminhoArquivo  = '/tmp/' . $sNomeArquivo;
-        $lEscreveuArquivo = DBLargeObject::leitura($this->iOid, $sCaminhoArquivo);
 
-        if (!$lEscreveuArquivo) {
-
-            $oStdMensagemErro                  = new StdClass();
-            $oStdMensagemErro->sCaminhoArquivo = $sCaminhoArquivo;
-            throw new BusinessException('Erro ao escrever o arquivo no diretorio.');
+        if (!copy('model/licitacao/PNCP/anexoslicitacao/' . $this->iOid, $sCaminhoArquivo)) {
+            throw new BusinessException("Erro ao copiar arquivo para tmp.");
         }
 
         return $sCaminhoArquivo;
@@ -431,40 +398,26 @@ class ProcessoComrpasDocumento
         if (empty($this->iCodigo)) {
             throw new Exception('Documento não especificado.');
         }
-        $oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
-        $oDaoLicanexopncpdocumento->excluir($this->iCodigo);
+        $oDaocomanexopncpdocumento = db_utils::getDao('comanexopncpdocumento');
+        $oDaocomanexopncpdocumento->excluir($this->iCodigo);
 
-        if ($oDaoLicanexopncpdocumento->erro_status  == "0") {
+        if ($oDaocomanexopncpdocumento->erro_status  == "0") {
             throw new Exception('Erro ao excluir o Arquivo.');
         }
 
-        /*
-    *$lExclusao = DBLargeObject::exclusao($this->iOid);
-
-    
-     * Erro ao excluir documento do banco
-     
-    if ( !$lExclusao ) {
-      throw new Exception( 'Erro ao excluir aquivo no banco');
-    }
-*/
         return true;
     }
 
     public function buscartipo()
     {
-
         if (empty($this->iCodigo)) {
             throw new Exception('Documento não especificado.');
         }
-
-
         return $this->getTipoanexo();
     }
 
     public function alterartipo($idocumento, $itipoanexo)
     {
-
         if (empty($idocumento)) {
             throw new Exception('Documento não especificado.');
         }
@@ -472,11 +425,11 @@ class ProcessoComrpasDocumento
             throw new Exception('Tipo não especificado.');
         }
 
-        $oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
-        $oDaoLicanexopncpdocumento->l216_tipoanexo = $itipoanexo;
-        $oDaoLicanexopncpdocumento->alterar($idocumento);
+        $oDaocomanexopncpdocumento = db_utils::getDao('comanexopncpdocumento');
+        $oDaocomanexopncpdocumento->l217_tipoanexo = $itipoanexo;
+        $oDaocomanexopncpdocumento->alterar($idocumento);
 
-        if ($oDaoLicanexopncpdocumento->erro_status  == "0") {
+        if ($oDaocomanexopncpdocumento->erro_status  == "0") {
             throw new Exception('Erro ao alterar o Arquivo.');
         }
 
@@ -490,18 +443,14 @@ class ProcessoComrpasDocumento
             throw new Exception('Licitação não especificado.');
         }
 
+        $oDaocomanexopncpdocumento = db_utils::getDao('comanexopncpdocumento');
 
-        $oDaoLicanexopncpdocumento = db_utils::getDao('licanexopncpdocumento');
+        $oDaocomanexopncpdocumento->sql_record($oDaocomanexopncpdocumento->verificalic($ilicitacao));
 
-        $oDaoLicanexopncpdocumento->sql_record($oDaoLicanexopncpdocumento->verificalic($ilicitacao));
-
-
-
-
-        if ($oDaoLicanexopncpdocumento->numrows  == 0) {
+        if ($oDaocomanexopncpdocumento->numrows  == 0) {
             throw new Exception('A Licitação selecionada é decorrente da Lei nº 14133/2021, sendo assim, é necessário anexar no mínimo um documento na rotina Anexos Envio PNCP.');
         }
-        if ($oDaoLicanexopncpdocumento->erro_status  == "0") {
+        if ($oDaocomanexopncpdocumento->erro_status  == "0") {
             throw new Exception('Erro ao verificar vinculo com o PNCP');
         }
         return true;
