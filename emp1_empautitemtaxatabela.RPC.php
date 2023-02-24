@@ -151,9 +151,9 @@ switch ($_POST["action"]) {
         if (!empty($_POST["tabela"])) {
             $sqlQuery .= " and  pc94_sequencial = $tabela";
         }
-        //if ($_POST["codele"] != '...') {
+
         $sqlQuery .= " and  pc07_codele = $codele";
-        //}
+
         if (!empty($_POST["search"]["value"])) {
             $sqlQuery .= " and (pcmater.pc01_descrmater ILIKE '%" . $_POST["search"]["value"] . "%') ";
         }
@@ -197,9 +197,9 @@ switch ($_POST["action"]) {
         if (!empty($_POST["tabela"])) {
             $sqlQuery .= " and  pc94_sequencial = $tabela";
         }
-        //if ($_POST["codele"] != '...') {
+
         $sqlQuery .= " and  pc07_codele = $codele";
-        //}
+
         if (!empty($_POST["search"]["value"])) {
             $sqlQuery .= " and (pcmater.pc01_descrmater ILIKE '%" . $_POST["search"]["value"] . "%') ";
         }
@@ -486,7 +486,7 @@ function verificaSaldoCriterioDisponivel($e55_autori, $tabela)
                     LEFT JOIN pctabela ON pctabela.pc94_codmater = pcmater.pc01_codmater
                     LEFT JOIN pcmaterele ON pcmaterele.pc07_codmater = pcmater.pc01_codmater
                     LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
-                    AND orcelemento.o56_anousu = 2021
+                    AND orcelemento.o56_anousu = ". db_getsession("DB_anousu") ."
                     WHERE l20_codigo =
                             (SELECT e54_codlicitacao
                              FROM empautoriza
@@ -497,32 +497,50 @@ function verificaSaldoCriterioDisponivel($e55_autori, $tabela)
 
     $oDadosTotal = db_utils::getCollectionByRecord($rsConsultaTotal);
 
-    $sqlUtilizado = "SELECT sum(e55_vltot) AS totalitens
-                        FROM empautitem
-                        INNER JOIN empautoriza ON e54_autori = e55_autori
-                        LEFT join empempaut ON e61_autori = e54_autori
-                        LEFT join empempenho ON e60_numemp = e61_numemp
-                        INNER join empempitem ON e62_numemp = e60_numemp
-                        AND e62_item = e55_item
-                        LEFT join empanulado ON e94_numemp = e60_numemp
-                        LEFT join empanuladoitem ON e37_empempitem = e62_sequencial
-                        INNER JOIN pctabelaitem ON pctabelaitem.pc95_codmater = empautitem.e55_item
-                        INNER JOIN pctabela ON pctabela.pc94_sequencial = pctabelaitem.pc95_codtabela
-                        LEFT JOIN liclicita ON liclicita.l20_codigo = empautoriza.e54_autori
-                        LEFT JOIN liclicitem ON liclicitem.l21_codliclicita = liclicita.l20_codigo
-                        LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
-                        LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
-                        LEFT JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
-                        LEFT JOIN cgm ON z01_numcgm = pc21_numcgm
-                        LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
-                        AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
-                        WHERE e54_codlicitacao =
-                                (SELECT e54_codlicitacao
-                                 FROM empautoriza
-                                 WHERE e54_autori = $e55_autori)
-                                 AND e54_anulad IS NULL
-                                 AND e37_sequencial IS NULL  
-                                 AND pc94_sequencial = $tabela";
+    $sqlUtilizado = "select
+    (select sum(e55_vltot) as totalitens
+     from empautitem
+     inner join empautoriza on e54_autori = e55_autori
+     left join empempaut on e61_autori = e54_autori
+     left join empempenho on e60_numemp = e61_numemp
+     inner join empempitem on e62_numemp = e60_numemp
+     and e62_item = e55_item
+     left join empanulado on e94_numemp = e60_numemp
+     left join empanuladoitem on e37_empempitem = e62_sequencial
+     inner join pctabelaitem on pctabelaitem.pc95_codmater = empautitem.e55_item
+     inner join pctabela on pctabela.pc94_sequencial = pctabelaitem.pc95_codtabela
+     where e54_codlicitacao = (select e54_codlicitacao
+                               from empautoriza
+                               where e54_autori = $e55_autori)
+         and pc95_codtabela = $tabela
+         and e54_anulad is null
+         and e37_sequencial is null) as totalitens
+     from liclicita
+     left join liclicitem on liclicita.l20_codigo = liclicitem.l21_codliclicita
+     left join pcprocitem on liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+     left join pcproc on pcproc.pc80_codproc = pcprocitem.pc81_codproc
+     left join solicitem on solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+     left join solicita on solicita.pc10_numero = solicitem.pc11_numero
+     left join db_depart on db_depart.coddepto = solicita.pc10_depto
+     left join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom
+     left join pctipocompra on pctipocompra.pc50_codcom = cflicita.l03_codcom
+     left join pcorcamitemlic on l21_codigo = pc26_liclicitem
+     left join pcorcamval on pc26_orcamitem = pc23_orcamitem
+     left join pcorcamforne on pc21_orcamforne = pc23_orcamforne
+     left join pcorcamjulg on pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+     and pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+     inner join cgm on z01_numcgm = pcorcamforne.pc21_numcgm
+     left join solicitempcmater on solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+     left join pcmater itemtabela on itemtabela.pc01_codmater = solicitempcmater.pc16_codmater
+     inner join pctabela on pctabela.pc94_codmater = itemtabela.pc01_codmater
+     left join pcmater on pcmater.pc01_codmater = pctabela.pc94_codmater
+     where l20_codigo = (select e54_codlicitacao
+     from empautoriza
+     where e54_autori = $e55_autori)
+         and pc24_pontuacao = 1
+         and pc94_sequencial = $tabela
+         and l20_instit = " . db_getsession("DB_instit");
+
     $rsConsultaUtilizado = db_query($sqlUtilizado);
     $oDadosTotalUtilizado = db_utils::getCollectionByRecord($rsConsultaUtilizado);
 
@@ -553,9 +571,9 @@ function verificaSaldoCriterio($e55_autori)
           (select sum(x.utilizado) from
 (select
 case
-	 when e54_anulad is null and sum(e60_vlranu) is not null  then sum(e55_vltot) - sum(e60_vlranu)
-	 when e54_anulad is null and sum(e60_vlranu) is null then sum(e55_vltot)
-	 when e54_anulad is not null then 0
+     when e54_anulad is null and sum(e60_vlranu) is not null  then sum(e55_vltot) - sum(e60_vlranu)
+     when e54_anulad is null and sum(e60_vlranu) is null then sum(e55_vltot)
+     when e54_anulad is not null then 0
 end as utilizado,
 e54_anulad
 from empautoriza
@@ -565,12 +583,12 @@ left join empempaut on e61_autori=e54_autori
 left join empempenho on e60_numemp=e61_numemp
 left join empanulado on e94_numemp=e60_numemp
 where l20_codigo = (
-			select
-				e54_codlicitacao
-			from
-				empautoriza
-			where
-				e54_autori = {$e55_autori} )
+            select
+                e54_codlicitacao
+            from
+                empautoriza
+            where
+                e54_autori = {$e55_autori} )
 group by empautoriza.e54_anulad) x) as utilizado
           FROM liclicitem
           INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
