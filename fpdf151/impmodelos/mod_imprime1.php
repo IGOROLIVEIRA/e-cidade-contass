@@ -113,11 +113,15 @@ if($this->hasQrCode) {
     $this->objpdf->RoundedRect(178,$y+22,23,6,2,'DF','1234'); // vencimento
     $this->objpdf->RoundedRect(178,$y+29,23,6,2,'DF','1234'); // valor
     $this->objpdf->Image($this->qrcode,181,$y+3, 17, 17, 'png');
+    $this->objpdf->SetFont('Arial','',5);
+    $this->objpdf->Text(180,$y+3,'Pague com QRCode'); // livre
 } else {
     $this->objpdf->RoundedRect(178,$y+1,23,6,2,'DF','1234'); // livre
     $this->objpdf->RoundedRect(95,$y+22,106,13,2,'DF','1234'); // instrucoes
     $this->objpdf->RoundedRect(178,$y+8,23,6,2,'DF','1234'); // vencimento
     $this->objpdf->RoundedRect(178,$y+15,23,6,2,'DF','1234'); // valor
+    $this->objpdf->SetFont('Arial','',5);
+    $this->objpdf->Text(180,$y+3,$this->titulo13); // livre
 }
 
 $this->objpdf->RoundedRect(95,$y+8,82,13,2,'DF','1234'); // nome / endereco
@@ -137,8 +141,6 @@ $this->objpdf->Text(161,$y+3,$this->titulo10); // parcela
 $this->objpdf->SetFont('Arial','B',7);
 $this->objpdf->Text(162,$y+6,$this->descr10); // parcela e total das parcelas
 
-$this->objpdf->SetFont('Arial','',5);
-$this->objpdf->Text(180,$y+3,'Pix QRCode'); // livre
 $this->objpdf->SetFont('Arial','B',7);
 $this->objpdf->Text(183,$y+6,$this->descr13); // livre
 
