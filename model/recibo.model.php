@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Numpref;
+use App\Models\RecibopagaQrcodePix;
 use App\Services\Tributario\Arrecadacao\GeneratePixWithQRCodeService;
 use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
 
@@ -512,6 +513,7 @@ class Recibo
       throw new Exception("Erro [0] - Não existe Transação Ativa.");
     }
 
+    $nDescontoReciboWeb = 0;
 
     if ($this->iTipoEmissao == 1) {
 
@@ -798,38 +800,34 @@ class Recibo
     }
 
       /**
-       * @var Numpref $numpref
+       * @var Numpref $settings
        */
-      $numpref = Numpref::query()
+      $settings = Numpref::query()
           ->where('k03_anousu', db_getsession("DB_anousu"))
           ->where('k03_instit', db_getsession("DB_instit"))
           ->first();
 
-      if (!$numpref->k03_ativo_integracao_pix) {
+      /**
+       * Não gera qrcode para recibos de desconto
+       */
+      if (!$settings->k03_ativo_integracao_pix || $nDescontoReciboWeb > 0) {
           return true;
       }
 
-      $providerConfig = (new ResolvePixProviderService())->execute($numpref);
-
-      try {
-          $providerConfig->authenticate();
-      } catch (\Exception $e) {
-          throw new \BusinessException('Erro ao obter token: '. $e->getMessage());
-      }
+      $providerConfig = (new ResolvePixProviderService())->execute($settings);
 
       $body['codigoGuiaRecebimento'] = $this->getNumpreRecibo();
       $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
       $body['valorOriginalSolicitacao'] = $this->getTotalRecibo();
+      $body['k00_numnov'] = $this->getNumpreRecibo();
+      $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
 
       $service = new GeneratePixWithQRCodeService($providerConfig);
 
       try {
-          $response = $service->execute($body);
-          echo "<pre>";
-          print_r($response);
-          exit;
+          $service->execute($body);
       } catch (Exception $e) {
-          echo 'Erro na chamada QrCodesApi->criaBoletoBancarioId: ', $e->getMessage(), PHP_EOL;
+          throw new \BusinessException('Erro ao gerar QRCode: '. $e->getMessage());
       }
 
     return true;

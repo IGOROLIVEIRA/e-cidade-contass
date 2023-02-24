@@ -23,7 +23,8 @@
         "dbseller/phinx_postgres": "^1.0",
         "robmorgan/phinx": "^0.4.6",
         "ext-json": "*",
-        "illuminate/database": "^5.8"
+        "illuminate/database": "^5.8",
+        "endroid/qr-code": "^4.6.1"
     },
     "require-dev": {
         "rafaelnery/phputils": "^1.3.10"

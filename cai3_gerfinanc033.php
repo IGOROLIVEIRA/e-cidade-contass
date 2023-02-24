@@ -25,6 +25,14 @@
  *                                licenca/licenca_pt.txt
  */
 
+use App\Models\Numpref;
+use App\Models\RecibopagaQrcodePix;
+use App\Services\Tributario\Arrecadacao\GeneratePixWithQRCodeService;
+use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Writer\PngWriter;
+
 require_once(modification("fpdf151/scpdf.php"));
 require_once(modification("fpdf151/impcarne.php"));
 require_once(modification("libs/db_sql.php"));
@@ -344,6 +352,20 @@ if (isset ($geracarne) && $geracarne == 'banco') {
 
 /******************************************************   F O R   Q   M O N T A   O S   C A R N E S  ******************************************************/
 $aParcelasSemInflatores = array();
+$usePixIntegration = false;
+$providerConfig = null;
+/**
+ * @var Numpref $settings
+ */
+$settings = Numpref::query()
+    ->where('k03_anousu', db_getsession("DB_anousu"))
+    ->where('k03_instit', db_getsession("DB_instit"))
+    ->first();
+
+if ($settings->k03_ativo_integracao_pix) {
+    $usePixIntegration = true;
+    $providerConfig = (new ResolvePixProviderService())->execute($settings);
+}
 
 if ($unica != "1"){
 
@@ -390,6 +412,60 @@ if (count($aParcelasSemInflatores) > 0 ) {
   $sS = ( count($aParcelasSemInflatores) > 1 ? 's' : '' );
   db_redireciona("db_erros.php?fechar=true&db_erro=Valor negativo na{$sS} parcela{$sS} ".implode(",",$aParcelasSemInflatores)." verifique.");
   exit;
+}
+
+if ($usePixIntegration) {
+    $body['codigoGuiaRecebimento'] = "{$k00_numpre}-{$k00_numpar}";
+    $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
+    $body['valorOriginalSolicitacao'] = $total;
+    $body['k00_numpre'] = $k00_numpre;
+    $body['k00_numpar'] = $k00_numpar;
+    $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
+
+    $service = new GeneratePixWithQRCodeService($providerConfig);
+
+    try {
+        $service->execute($body);
+    } catch (Exception $e) {
+        throw new \BusinessException('Erro ao gerar QRCode: '. $e->getMessage());
+    }
+}
+
+$pdf1->hasQrCode = false;
+$pdf1 = usePixIntegration($pdf1, $k00_numpre, $k00_numpar);
+function usePixIntegration(db_impcarne $pdfObject, int $numpre, int $numpar): db_impcarne
+{
+    $numpref = Numpref::query()
+        ->where('k03_anousu', db_getsession("DB_anousu"))
+        ->where('k03_instit', db_getsession("DB_instit"))
+        ->first();
+
+    if (!$numpref->k03_ativo_integracao_pix) {
+        return $pdfObject;
+    }
+
+    $recibopagaQrcodePix = RecibopagaQrcodePix::query()
+        ->where('k176_numpre', $numpre)
+        ->where('k176_numpar', $numpar)
+        ->first();
+
+    $pdfObject->hasQrCode = true;
+
+    $result = Builder::create()
+        ->writer(new PngWriter())
+        ->writerOptions([])
+        ->data($recibopagaQrcodePix->k176_qrcode)
+        ->encoding(new Encoding('UTF-8'))
+        ->size(300)
+        ->margin(10)
+        ->validateResult(false)
+        ->build();
+    $imagePath = "tmp/qrcode{$numpre}-{$numpar}.png";
+
+    $result->saveToFile($imagePath);
+
+    $pdfObject->qrcode = $imagePath;
+    return $pdfObject;
 }
 
 /**

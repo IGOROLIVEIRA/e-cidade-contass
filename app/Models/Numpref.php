@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use App\Traits\LegacyAccount;
+
 class Numpref extends LegacyModel
 {
+    use LegacyAccount;
     /**
      * @var string
      */

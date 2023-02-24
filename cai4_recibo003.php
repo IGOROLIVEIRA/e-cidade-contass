@@ -1,29 +1,37 @@
-<?
+<?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
+
+use App\Models\Numpref;
+use App\Models\RecibopagaQrcodePix;
+use App\Services\Tributario\Arrecadacao\GeneratePixWithQRCodeService;
+use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Writer\PngWriter;
 
 require_once("fpdf151/impcarne.php");
 require_once("libs/db_stdlib.php");
@@ -48,7 +56,8 @@ db_postmemory($_POST);
 $instit = db_getsession("DB_instit");
 
 $cldb_bancos = new cl_db_bancos;
-
+$usePixIntegration = false;
+$providerConfig = null;
 
 $sqluf = "select db21_codcli, db12_uf,db12_extenso from db_config  inner join db_uf on db12_uf=uf  where codigo = $instit";
 $resultuf = db_query($sqluf);
@@ -64,7 +73,7 @@ if(isset($mostramenu) && $mostramenu == 't'){
   }else if(isset($q02_inscr) && $q02_inscr != ''){
       $titulo = 'INSCRICAO';
       $origem = $q02_inscr;
-  } 
+  }
 }
 
 db_query("begin");
@@ -79,25 +88,25 @@ if (!isset($lReemissao)) {
 
   $result = db_query("select nextval('numpref_k03_numpre_seq') as k03_numpre");
   db_fieldsmemory($result,0);
-  
+
 } else {
   $k03_numpre = $iNumpre;
 }
 
 db_query("commit");
 if (!isset($lReemissao)) {
-	
+
   db_query("begin");
   //
   $dignum = db_sqlformatar($k03_numpre,8,'0')."001001";
   $dignum = db_CalculaDV($dignum);
-  
+
   $rece           = explode("YY",$codrece);
   $concarpeculiar = explode("YY",$codcpca);
   $codtaxa        = explode("YY",$codtaxa);
   $valor          = explode("YY",$vlrrece);
   $recurso        = explode("YY",$codrecu);
-  
+
   if($j01_matric!=""){
     $cliptubase = new cl_iptubase;
     $result = $cliptubase->sql_record($cliptubase->sql_query($j01_matric,'j01_numcgm'));
@@ -122,7 +131,7 @@ if (!isset($lReemissao)) {
   }
   if($q02_inscr!=""){
     $clissbase = new cl_issbase;
-    
+
     $result = $clissbase->sql_record($clissbase->sql_query_file($q02_inscr,'q02_inscr#q02_numcgm'));
     if($clissbase->numrows>0){
       db_fieldsmemory($result,0);
@@ -132,28 +141,28 @@ if (!isset($lReemissao)) {
       $q02_inscr = "";
     }
   }
-  
-  
+
+
   if($k32_ordpag!="") {
   	$clcairetordem = new cl_cairetordem;
   	$clcairetordem->k32_numpre = $k03_numpre;
   	$clcairetordem->k32_ordpag = $k32_ordpag;
   	$clcairetordem->incluir(null);
   }
-    
+
   for ($i = 0; $i < sizeof($rece); $i++) {
-    
-    
+
+
     if ( empty($codtaxa[$i])){
       $xcodtaxa = 0;
     } else {
       $xcodtaxa = $codtaxa[$i];
     }
-    
+
     if ( $valor[$i] == 0 ) {
       db_redireciona("db_erros.php?fechar=true&db_erro=O Recibo Com a Receita ".$rece[$i]." Com Valor Zerado.");
     }
-    
+
     $sql = "insert into recibo (k00_numcgm,
   	              						  k00_dtoper,
   	              						  k00_receit,
@@ -182,16 +191,28 @@ if (!isset($lReemissao)) {
   	              						  $xcodtaxa)";
     $result = db_query($sql);
   }
-  
+    /**
+     * @var Numpref $settings
+     */
+    $settings = Numpref::query()
+        ->where('k03_anousu', db_getsession("DB_anousu"))
+        ->where('k03_instit', db_getsession("DB_instit"))
+        ->first();
+
+    if ($settings->k03_ativo_integracao_pix) {
+        $usePixIntegration = true;
+        $providerConfig = (new ResolvePixProviderService())->execute($settings);
+    }
+
   for ($iInd = 0; $iInd < sizeof($concarpeculiar); $iInd++) {
-    
+
   	/**
   	 * verifica se existe a CP cadastrada para o numpre/numpar/receita.
   	 * o problema apenas ocorre quando o recibo possui mais de uma taxa com a mesma receita.
   	 */
-    $oDaoReciboConCarPeculiar   = db_utils::getDao("reciboconcarpeculiar");       
+    $oDaoReciboConCarPeculiar   = db_utils::getDao("reciboconcarpeculiar");
     $sWhere  =  " k130_numpre = {$k03_numpre} and k130_numpar = 1 and  k130_receit = {$rece[$iInd]}";
-  	$sSqlCaracteristicaPeculiar = $oDaoReciboConCarPeculiar->sql_query_file(null,"*", null, $sWhere); 
+  	$sSqlCaracteristicaPeculiar = $oDaoReciboConCarPeculiar->sql_query_file(null,"*", null, $sWhere);
     $rsCaracteriscaPeculiar     = $oDaoReciboConCarPeculiar->sql_record($sSqlCaracteristicaPeculiar);
   	if ($oDaoReciboConCarPeculiar->numrows == 0) {
 
@@ -205,7 +226,7 @@ if (!isset($lReemissao)) {
 	    }
   	}
   }
-  
+
   // grava o recurso do recibo
   $sql = "insert into reciborecurso( k00_sequen,
   						              	  		 k00_numpre,
@@ -214,29 +235,29 @@ if (!isset($lReemissao)) {
   						                       $k03_numpre,
   							             		     $recurso[0])";
   $result = db_query($sql);
-  
+
   if($p58_codproc!=""){
     $sql = "insert into arreproc values ($k03_numpre,$p58_codproc)";
-    $result = db_query($sql);    
+    $result = db_query($sql);
   }
-  
+
   if($j01_matric!=""){
     $sql = "insert into arrematric values ($k03_numpre,$j01_matric)";
-    $result = db_query($sql);    
+    $result = db_query($sql);
   }
   if($q02_inscr!=""){
     $sql = "insert into arreinscr  values ($k03_numpre,$q02_inscr)";
-    $result = db_query($sql);    
+    $result = db_query($sql);
   }
-  
+
   $sql = "select * from arrenumcgm where k00_numcgm = $z01_numcgm and k00_numpre = $k03_numpre";
   $result = db_query($sql);
-  
+
   if (pg_numrows($result) == 0) {
     $sql = "insert into arrenumcgm (k00_numcgm, k00_numpre) values ($z01_numcgm,$k03_numpre)";
     $result = db_query($sql);
   }
-  
+
   $sql = "insert into arrehist ( k00_numpre,
                                  k00_numpar,
 				  			                 k00_hist,
@@ -245,7 +266,7 @@ if (!isset($lReemissao)) {
 				  			                 k00_id_usuario,
 				  			                 k00_histtxt,
 				  			                 k00_limithist,
-				  			                 k00_idhist 
+				  			                 k00_idhist
 				  			               ) values (
   		                          			 $k03_numpre,
 				  			                 0,
@@ -256,20 +277,20 @@ if (!isset($lReemissao)) {
 				  			                 '$historico',
 				  			                 null,
 				  			                 nextval('arrehist_k00_idhist_seq')
-				  			               )"; 
+				  			               )";
   $result = db_query($sql);
-  
+
   db_query("commit");
-  
+
 } else {
-	
+
   $historico     = "";
   $sSqlHistorico = "select * from arrehist where k00_numpre = {$k03_numpre}";
   $rsHistorico   = db_query($sSqlHistorico);
   if ($rsHistorico) {
     $historico   .=  pg_result($rsHistorico, 0, "k00_histtxt");
   }
-  
+
   $oDaoArrepaga = db_utils::getDao("arrepaga");
   $sSqlPagamento = $oDaoArrepaga->sql_query_file(null,"k00_numpre",null,"k00_numpre = {$iNumpre}");
   $rsPagamento   = $oDaoArrepaga->sql_record($sSqlPagamento);
@@ -278,14 +299,14 @@ if (!isset($lReemissao)) {
     $historico   .= "\nRecibo já pago. Não Receber";
     $bGuiapaga = true;
   }
-  
+
 }
 
 $k00_histtxt = $historico;
 
 $result = db_query("select k00_msgrecibo, k00_codbco,k00_codage,k00_hist1,k00_hist2,k00_hist3,k00_hist4,k00_hist5,k00_hist6,k00_hist7,k00_hist8 from arretipo where k00_tipo = 11");
 db_fieldsmemory($result,0);
-  
+
 global $tipo, $k03_numpre,$emite_recibo_protocolo, $k00_histtxt;
 $tipo = 11;
 $emite_recibo_protocolo = true;
@@ -308,7 +329,7 @@ if(isset($db_datausu)){
      echo "Data deverá se superior a : ".date('Y-m-d',db_getsession("DB_datausu"));
 	 exit;
   }
-  if(mktime(0,0,0,substr($db_datausu,5,2),substr($db_datausu,8,2),substr($db_datausu,0,4)) < 
+  if(mktime(0,0,0,substr($db_datausu,5,2),substr($db_datausu,8,2),substr($db_datausu,0,4)) <
      mktime(0,0,0,date('m',db_getsession("DB_datausu")),date('d',db_getsession("DB_datausu")),date('Y',db_getsession("DB_datausu"))) ){
      echo "Data não permitida para cálculo. <br><br>";
      echo "Data deverá se superior a : ".date('Y-m-d',db_getsession("DB_datausu"));
@@ -340,16 +361,16 @@ if ($oDaoEmpPrestaRecibo->numrows > 0) {
 	 * atualizamos a recibo dtvenc para a nova data de vencimento
 	 */
 	if ($iDataVencimento < $iDataAtual) {
-		
+
 		$dtVencimento = date("Y-m-d", $iDataAtual);
 		$sSqlAtualizaDataVenc  = " Update recibo set k00_dtvenc = '{$dtVencimento}' ";
 		$sSqlAtualizaDataVenc .= " where k00_numpre = {$k03_numpre} ";
 		$sSqlAtualizaDataVenc .= "   and k00_numpar = {$oDadosEmpPrestaRecibo->k00_numpar} ";
-		
+
 		db_query($sSqlAtualizaDataVenc);
-		
+
 	}
-	
+
 }
 
 $k00_descr = $k00_histtxt."\n".$k00_msgrecibo;
@@ -363,20 +384,20 @@ $k00_descr = $k00_histtxt."\n".$k00_msgrecibo;
                 k00_codsubrec,
                 coalesce(upper(k07_descr),' ') as k07_descr ,
                 sum(r.k00_valor) as valor,
-                case 
-                   when taborc.k02_codigo is null 
-                     then tabplan.k02_reduz 
+                case
+                   when taborc.k02_codigo is null
+                     then tabplan.k02_reduz
                    else
-                     taborc.k02_codrec 
+                     taborc.k02_codrec
                 end as codreduz,
                 k00_hist,
                 (select (select k02_codigo from tabrec where k02_recjur = k00_receit or k02_recmul = k00_receit limit 1) is not null ) as codtipo
            from recibo r
-                inner join tabrec t 		 on t.k02_codigo       = r.k00_receit 
+                inner join tabrec t 		 on t.k02_codigo       = r.k00_receit
                 inner join tabrecjm 		 on tabrecjm.k02_codjm = t.k02_codjm
-		             left outer join tabdesc on codsubrec          = k00_codsubrec 
+		             left outer join tabdesc on codsubrec          = k00_codsubrec
                                         and k07_instit         = $instit
-                 left outer join taborc  on t.k02_codigo       = taborc.k02_codigo 
+                 left outer join taborc  on t.k02_codigo       = taborc.k02_codigo
                                         and taborc.k02_anousu  = ".db_getsession("DB_anousu")."
                  left outer join tabplan on t.k02_codigo       = tabplan.k02_codigo
                                         and tabplan.k02_anousu = ".db_getsession("DB_anousu")."
@@ -386,7 +407,7 @@ $DadosPagamento = db_query($sql);
 
 $sCampoVencimento = "k00_dtoper";
 if (isset($lDevolucaoAdiantamento)) {
-	
+
 	$sCampoVencimento = "k00_dtvenc";
 }
 //faz um somatorio do valor
@@ -394,7 +415,7 @@ if (isset($lDevolucaoAdiantamento)) {
 $datavencimento = pg_result($DadosPagamento, 0, $sCampoVencimento);
 $total_recibo = 0;
 for($i = 0;$i < pg_numrows($DadosPagamento);$i++) {
-  db_fieldsmemory($DadosPagamento,$i); 
+  db_fieldsmemory($DadosPagamento,$i);
   $total_recibo           += $valor;
   $arraycodreceitas[$i]   = $k00_receit;
   $arrayreduzreceitas[$i] = $codreduz;
@@ -420,7 +441,7 @@ $db_email     = pg_result($DadosInstit,0,'email');
 $cgc          = pg_result($DadosInstit,0,'cgc');
 
 $total_recibo += $taxabancaria;
-$valor_parm = $total_recibo; 
+$valor_parm = $total_recibo;
 
 
 //seleciona dados de identificacao. Verifica se é inscr ou matric e da o respectivo select
@@ -430,33 +451,33 @@ $valor_parm = $total_recibo;
 if (!empty($HTTP_POST_VARS["ver_matric"]) || $matricularecibo > 0 ) {
   $numero = @$HTTP_POST_VARS["ver_matric"] + $matricularecibo;
   $tipoidentificacao = "Matricula :";
-  
-  $sSqlMatricula = "select z01_cgccpf, 
-                           z01_nome, 
-                           z01_ender, 
-                           z01_bairro, 
-                           z01_numero, 
-                           z01_compl, 
-                           z01_munic, 
-                           z01_uf, 
-                           z01_cep, 
-                           nomepri, 
-                           j39_compl, 
-                           j39_numero, 
-                           j13_descr, 
+
+  $sSqlMatricula = "select z01_cgccpf,
+                           z01_nome,
+                           z01_ender,
+                           z01_bairro,
+                           z01_numero,
+                           z01_compl,
+                           z01_munic,
+                           z01_uf,
+                           z01_cep,
+                           nomepri,
+                           j39_compl,
+                           j39_numero,
+                           j13_descr,
                            j34_setor||'.'||j34_quadra||'.'||j34_lote as sql
                       from proprietario
                    	 where j01_matric = $numero limit 1";
-  
+
   $Identificacao = db_query($sSqlMatricula);
   db_fieldsmemory($Identificacao,0);
-  
+
 	$cgmcerto = $z01_cgccpf;
 
 } else if(!empty($HTTP_POST_VARS["ver_inscr"]) || $inscricaorecibo > 0 ) {
   $numero = @$HTTP_POST_VARS["ver_inscr"] + $inscricaorecibo;
   $tipoidentificacao = "Inscricao :";
-  
+
 //   $sSqlInscr = "select cgm.z01_nome,
 // 								       cgm.z01_ender,
 // 								       cgm.z01_numero,
@@ -473,31 +494,31 @@ if (!empty($HTTP_POST_VARS["ver_matric"]) || $matricularecibo > 0 ) {
 // 								 from issbase
 // 								inner join cgm       on cgm.z01_numcgm      = issbase.q02_numcgm
 // 								inner join issruas   on issruas.q02_inscr   = issbase.q02_inscr
-// 								inner join ruas      on ruas.j14_codigo     = issruas.j14_codigo 
+// 								inner join ruas      on ruas.j14_codigo     = issruas.j14_codigo
 // 								inner join issbairro on issbairro.q13_inscr = issbase.q02_inscr
 // 								inner join bairro    on bairro.j13_codi   = issbairro.q13_bairro
 // 								where issbase.q02_inscr = {$numero}";
-  
-  $sSqlInscr = "select z01_nome, 
-                       z01_ender, 
-                       z01_numero, 
-                       z01_compl, 
-                       z01_munic, 
-                       z01_uf, 
-                       z01_cep, 
-                       z01_cgccpf, 
-                       z01_ender as nomepri, 
-                       z01_compl as j39_compl, 
+
+  $sSqlInscr = "select z01_nome,
+                       z01_ender,
+                       z01_numero,
+                       z01_compl,
+                       z01_munic,
+                       z01_uf,
+                       z01_cep,
+                       z01_cgccpf,
+                       z01_ender as nomepri,
+                       z01_compl as j39_compl,
                        z01_numero as j39_numero,
-                       z01_bairro as j13_descr, '' as sql  
+                       z01_bairro as j13_descr, '' as sql
                   from empresa
                  where q02_inscr = $numero";
   $Identificacao = db_query($sSqlInscr);
   db_fieldsmemory($Identificacao,0);
-  
+
 	$cgmcerto = $z01_cgccpf;
 } else if(!empty($HTTP_POST_VARS["ver_numcgm"]) || $numcgmrecibo > 0) {
-  
+
   $numero = @$HTTP_POST_VARS["ver_numcgm"] + $numcgmrecibo ;
   $tipoidentificacao = "Numcgm :";
   if($numprot > 0){
@@ -505,8 +526,8 @@ if (!empty($HTTP_POST_VARS["ver_matric"]) || $matricularecibo > 0 ) {
      $res_proc = db_query("select p58_requer,p51_descr from protprocesso inner join tipoproc on p58_codigo = p51_codigo where p58_codproc = $numprot");
      db_fieldsmemory($res_proc,0);
   }
-  
-  $sSqlCgm = "select z01_cgccpf, 
+
+  $sSqlCgm = "select z01_cgccpf,
   									 z01_nome,
   									 z01_ender,
   									 z01_numero,
@@ -518,8 +539,8 @@ if (!empty($HTTP_POST_VARS["ver_matric"]) || $matricularecibo > 0 ) {
   									 ''::bpchar as nomepri,
   									 ''::bpchar as j39_compl,
   									 ''::bpchar as j39_numero,
-  									 '' as j13_descr, 
-  									 '' as sql 
+  									 '' as j13_descr,
+  									 '' as sql
                 from cgm
 					      where z01_numcgm = $numero ";
   $Identificacao = db_query($sSqlCgm);
@@ -528,7 +549,7 @@ if (!empty($HTTP_POST_VARS["ver_matric"]) || $matricularecibo > 0 ) {
 } else {
   if(isset($emite_recibo_protocolo)){
    $Identificacao = db_query("
-            select c.z01_cgccpf, 
+            select c.z01_cgccpf,
                    c.z01_nome,
                    c.z01_ender,
                    c.z01_numero,
@@ -537,15 +558,15 @@ if (!empty($HTTP_POST_VARS["ver_matric"]) || $matricularecibo > 0 ) {
                    c.z01_uf,
                    c.z01_cep,
                    ' ' as nomepri,
-                   ' ' as j39_compl, 
-                   ' ' as j39_numero, 
-                   ' ' as j13_descr, 
+                   ' ' as j39_compl,
+                   ' ' as j39_numero,
+                   ' ' as j13_descr,
                    '' as sql
             from recibo r
                  inner join cgm c on c.z01_numcgm = r.k00_numcgm
    		    where r.k00_numpre = ".$k03_numpre."
             limit 1");
-   
+
     db_fieldsmemory($Identificacao,0);
 	$cgmcerto = $z01_cgccpf;
   }
@@ -558,7 +579,7 @@ if(isset($tipo_debito)){
     $sqlhist = "select distinct v01_exerc,v01_numpar
 	        from db_reciboweb
 			     left outer join divida on v01_numpre = k99_numpre and v01_numpar = k99_numpar
-	        where k99_numpre_n = $k03_numpre 
+	        where k99_numpre_n = $k03_numpre
 			group by v01_exerc,v01_numpar
 			order by v01_exerc,v01_numpar";
     $result = db_query($sqlhist);
@@ -570,14 +591,14 @@ if(isset($tipo_debito)){
            $histparcela .= pg_result($result,$xy,0).":";
 		}
         $histparcela .= pg_result($result,$xy,1)."-";
-	  }	
+	  }
     }
   }else if($tipo_debito == 3 || $tipo_debito == 2){
     $histparcela = "Exercicio: ";
     $sqlhist = "select distinct q05_ano,q05_numpar
 	        from db_reciboweb
 			     left outer join issvar on q05_numpre = k99_numpre and q05_numpar = k99_numpar
-	        where k99_numpre_n = $k03_numpre 
+	        where k99_numpre_n = $k03_numpre
 			group by q05_ano,q05_numpar
 			order by q05_ano,q05_numpar";
     $result = db_query($sqlhist);
@@ -589,7 +610,7 @@ if(isset($tipo_debito)){
            $histparcela .= "  ".pg_result($result,$xy,0).": Parc:";
 		}
         $histparcela .= "-".pg_result($result,$xy,1);
-	  }	
+	  }
     }
   }else if($tipo_debito == 6 || $tipo_debito == 1){
     $histparcela = '';
@@ -597,7 +618,7 @@ if(isset($tipo_debito)){
     $sqlhist = "select v07_parcel,k99_numpar
 	        from db_reciboweb
 			     left outer join termo on v07_numpre = k99_numpre
-	        where k99_numpre_n = $k03_numpre 
+	        where k99_numpre_n = $k03_numpre
 			order by v07_parcel,k99_numpar";
     $result = db_query($sqlhist);
     if(pg_numrows($result)!=false){
@@ -607,7 +628,7 @@ if(isset($tipo_debito)){
 	    }
             $histparcela .= pg_result($result,$xy,1)." ";
 	    $parcelamento = pg_result($result,$xy,0);
-	}	
+	}
     }
   }else{
     $histparcela = "PARCELAS: ";
@@ -616,8 +637,8 @@ if(isset($tipo_debito)){
 	        where k99_numpre_n = $k03_numpre order by k99_numpar";
     $result = db_query($sqlhist);
 	for($xy=0;$xy<pg_numrows($result);$xy++){
-       $histparcela .= pg_result($result,$xy,0)." ";	   
-	}	
+       $histparcela .= pg_result($result,$xy,0)." ";
+	}
   }
 }
 /********************************************************************************************************************************************/
@@ -635,15 +656,15 @@ if (isset($lGerarOutput)) {
    */
   $pdf       = $pdf;
   $lNovoPdf  = false;
-  
+
 } else {
-  
+
   $pdf = null;
   $lNovoPdf  = true;
-  
+
 }
 try {
-  $oRegraEmissao = new regraEmissao($iTipoDebito, 
+  $oRegraEmissao = new regraEmissao($iTipoDebito,
                                     $iTipoMod,
                                     db_getsession('DB_instit'),
                                     date("Y-m-d",db_getsession("DB_datausu")),
@@ -654,7 +675,7 @@ try {
   db_redireciona("db_erros.php?fechar=true&db_erro={$eExeption->getMessage()}");
 }
 $pdf1 = $oRegraEmissao->getObjPdf();
- 
+
 /********************************************************************************************************************************************/
 //select pras observacoes
 $Observacoes = db_query($conn,"select mens,alinhamento from db_confmensagem where cod in('obsboleto1','obsboleto2','obsboleto3','obsboleto4')");
@@ -673,14 +694,14 @@ $datavencimento = db_formatar($datavencimento,"d");
 if($oRegraEmissao->isCobranca()){
 
   $pdf1->agencia_cedente = $oConvenio->getAgenciaCedente();
-  $pdf1->carteira 	     = $oConvenio->getCarteira();       
-          	
+  $pdf1->carteira 	     = $oConvenio->getCarteira();
+
   if(strlen($oConvenio->getConvenioCobranca()) == 7) {
   	$pdf1->nosso_numero = trim($oConvenio->getConvenioCobranca()) . str_pad($k03_numpre,8,"0",STR_PAD_LEFT) . "00";
   } else {
   	$pdf1->nosso_numero = $oConvenio->getNossoNumero();
   }
-         
+
 }
 
 //numpre formatado
@@ -693,6 +714,58 @@ $numpre = $numpre . db_CalculaDV($numpre,11);
 if (isset($mostramenu) && $mostramenu == "t"){
    db_redireciona("cai2_emitecnd001.php?tipo=$tipocert&k03_numpre=$k03_numpre&codproc=$p58_codproc&titulo=$titulo&origem=$origem&historico=".trim($historico)."&codigobarras=$codigobarras&linhadigitavel=$linhadigitavel&dtvenc=$datavencimento&cadrecibo=$mostramenu");
    exit;
+}
+
+if ($usePixIntegration) {
+    $body['codigoGuiaRecebimento'] = $k03_numpre;
+    $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
+    $body['valorOriginalSolicitacao'] = $total_recibo;
+    $body['k00_numnov'] = $k03_numpre;
+    $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
+
+    $service = new GeneratePixWithQRCodeService($providerConfig);
+
+    try {
+        $service->execute($body);
+    } catch (Exception $e) {
+        throw new \BusinessException('Erro ao gerar QRCode: '. $e->getMessage());
+    }
+}
+
+$pdf1->hasQrCode = false;
+$pdf1 = usePixIntegration($pdf1, $k03_numpre);
+function usePixIntegration(db_impcarne $pdfObject, int $numnov): db_impcarne
+{
+    $numpref = Numpref::query()
+        ->where('k03_anousu', db_getsession("DB_anousu"))
+        ->where('k03_instit', db_getsession("DB_instit"))
+        ->first();
+
+    if (!$numpref->k03_ativo_integracao_pix) {
+        return $pdfObject;
+    }
+
+    $recibopagaQrcodePix = RecibopagaQrcodePix::query()
+        ->where('k176_numnov', $numnov)
+        ->first();
+
+    $pdfObject->hasQrCode = true;
+
+    $result = Builder::create()
+        ->writer(new PngWriter())
+        ->writerOptions([])
+        ->data($recibopagaQrcodePix->k176_qrcode)
+        ->encoding(new Encoding('UTF-8'))
+        ->size(300)
+        ->margin(10)
+        ->validateResult(false)
+        ->build();
+    $imagePath = "tmp/qrcode{$numnov}.png";
+
+    $result->saveToFile($imagePath);
+
+    $pdfObject->qrcode = $imagePath;
+    return $pdfObject;
 }
 
 $oIdentificacao = db_utils::fieldsMemory($Identificacao, 0);
@@ -761,21 +834,21 @@ $pdf1->linhadigitavel	  = $linhadigitavel;
 $pdf1->codigobarras    	= $codigobarras;
 if (isset($lReemissao) && $lReemissao ) {
 
-  
-  $sSqlCodAutenticador       = " SELECT k12_codautent 
-                                   from cornump 
-                                        inner join corautent on cornump.k12_id = corautent.k12_id 
-                                               and cornump.k12_data = corautent.k12_data 
-                                               and corautent.k12_autent = cornump.k12_autent 
+
+  $sSqlCodAutenticador       = " SELECT k12_codautent
+                                   from cornump
+                                        inner join corautent on cornump.k12_id = corautent.k12_id
+                                               and cornump.k12_data = corautent.k12_data
+                                               and corautent.k12_autent = cornump.k12_autent
                                   where k12_numnov = $k03_numpre ";
   $rsCodAutenticador         = db_query($sSqlCodAutenticador);
   $iNumrowsCodAutenticador   = pg_numrows($rsCodAutenticador);
 	if($iNumrowsCodAutenticador > 0){
-	  db_fieldsmemory($rsCodAutenticador,0); 
+	  db_fieldsmemory($rsCodAutenticador,0);
 	}else{
 	  $k12_codautent= '';
 	}
-	
+
 	/*
    *
    * Adicionada logica para buscar os dados da autenticação do recibo quando foi utilizado o reprocessamento dos lançamentos de receita para o PCASP
@@ -792,13 +865,13 @@ if (isset($lReemissao) && $lReemissao ) {
 			}
 		}
 	}
-	
-	
+
+
 	$pdf1->k12_codautent = $k12_codautent;
-  
+
 }
 $pdf1->texto            = db_getsession('DB_login').' - '.date("d-m-Y - H-i").'   '.db_base_ativa();
-  
+
 /**********************************************************************************************************/
 $pdf1->descr3_1  = trim(pg_result($Identificacao,0,"z01_nome")); // contribuinte
 $pdf1->descr3_2  = trim(pg_result($Identificacao,0,"z01_ender")).', '.pg_result($Identificacao,0,"z01_numero").' '.trim(pg_result($Identificacao,0,"z01_compl"));
@@ -869,19 +942,19 @@ $pdf1->dtparapag           = $datavencimento; //date('d/m/Y',db_getsession('DB_d
 
 // ###################### BUSCA OS DADOS PARA IMPRIMIR O LOGO DO BANCO #########################
 //verifica se é ficha e busca o codigo do banco
-		
+
 if($oRegraEmissao->isCobranca()){
   $rsConsultaBanco  = $cldb_bancos->sql_record($cldb_bancos->sql_query_file($oConvenio->getCodBanco()));
-  $oBanco			= db_utils::fieldsMemory($rsConsultaBanco,0);  
+  $oBanco			= db_utils::fieldsMemory($rsConsultaBanco,0);
   $pdf1->numbanco   = $oBanco->db90_codban."-".$oBanco->db90_digban;
   $pdf1->banco      = $oBanco->db90_abrev;
-  
+
   try {
   	$pdf1->imagemlogo = $oConvenio->getImagemBanco();
   } catch (Exception $eExeption){
   	db_redireciona("db_erros.php?fechar=true&db_erro=".$eExeption->getMessage());
   }
-  
+
 }
 
 //#############################################################

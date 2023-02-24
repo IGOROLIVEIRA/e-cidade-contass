@@ -2,14 +2,14 @@
 
 namespace App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Implementations\BancoDoBrasil;
 
-use App\Exceptions\ApiException;
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IPixProvider;
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO\PixArrecadacaoPayloadDTO;
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO\PixArrecadacaoResponseDTO;
+use BusinessException;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use InvalidArgumentException;
@@ -24,7 +24,7 @@ class ApiPixArrecadacao implements IPixProvider
 
     public function __construct(Configuration $configuration)
     {
-        $this->configuration = $configuration;
+        $this->configuration = $configuration->authenticate();
         $this->client = new Client();
     }
 
@@ -38,7 +38,7 @@ class ApiPixArrecadacao implements IPixProvider
         $payload['indicadorCodigoBarras'] = self::INDICADOR_CODIGO_BARRAS_NAO;
         $payload['codigoSolicitacaoBancoCentralBrasil'] = $this->configuration->getChavePix();
         $pixArrecadacaoPayloadDTO = new PixArrecadacaoPayloadDTO($payload);
-        $response = $this->criaBoletoBancarioIdWithHttpInfo(
+        $response = $this->send(
             $pixArrecadacaoPayloadDTO,
             $this->configuration->getAccessToken()
         );
@@ -46,29 +46,29 @@ class ApiPixArrecadacao implements IPixProvider
     }
 
     /**
-     * @throws GuzzleException
-     * @throws ApiException
-     * @throws \BusinessException
+     * @throws BusinessException|GuzzleException
      */
-    public function criaBoletoBancarioIdWithHttpInfo(PixArrecadacaoPayloadDTO $body, $authorization)
+    public function send(PixArrecadacaoPayloadDTO $body, $authorization)
     {
-        $request = $this->criaBoletoBancarioIdRequest($body, $authorization);
+        $request = $this->createRequest($body, $authorization);
 
         try {
             $response = $this->client->send($request);
-        } catch (RequestException $e) {
-            throw new ApiException(
-                "[{$e->getCode()}] {$e->getMessage()}",
-                $e->getCode(),
-                $e->getResponse() ? $e->getResponse()->getHeaders() : null,
-                $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
-            );
+
+        } catch (ClientException $e) {
+            $message =
+                'Erro ao integrar com API pix da Instituição Financeira habilidata. Verifique os parâmetros informados';
+            $error = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
+            if (!empty($error->erros)) {
+                $message = utf8_decode($error->erros[0]->mensagem);
+            }
+            throw new BusinessException($message);
         }
 
-        return json_decode($response->getBody());
+        return \GuzzleHttp\json_decode(($response->getBody()));
     }
 
-    protected function criaBoletoBancarioIdRequest(PixArrecadacaoPayloadDTO $body, $authorization): Request
+    protected function createRequest(PixArrecadacaoPayloadDTO $body, $authorization): Request
     {
         if (empty($body)) {
             throw new InvalidArgumentException(

@@ -1,4 +1,4 @@
-<?
+<?php
 
 //// RECIBO
 $this->objpdf->AliasNbPages();
@@ -24,7 +24,7 @@ for ($i = 0;$i < 2;$i++){
   if( $i == 0 ){
     $str_via = 'Contribuinte';
   }else{
-    $str_via = 'Prefeitura';
+    $str_via = 'Caixa';
   }
   $this->objpdf->Setfont('Arial','B',8);
   $this->objpdf->text(178,$xlin-1,($i+1).'ª Via '.$str_via );
@@ -79,7 +79,14 @@ for ($i = 0;$i < 2;$i++){
   $this->objpdf->text($xcol+128,$xlin+19,$this->tipobairro);
   $this->objpdf->text($xcol+145,$xlin+19,$this->bairropri);
 
-  $this->objpdf->Roundedrect($xcol,$xlin+24,202,35,2,'DF','1234');
+  if ($this->hasQrCode) {
+      $this->objpdf->Roundedrect($xcol,$xlin+24,165,35,2,'DF','1234');
+      $this->objpdf->Roundedrect($xcol+167,$xlin+24,35,35,2,'DF','1234');
+      $this->objpdf->Image($this->qrcode, 176, $xlin+28, 25, 25, 'png');
+  } else {
+      $this->objpdf->Roundedrect($xcol,$xlin+24,202,35,2,'DF','1234');
+  }
+
   $this->objpdf->sety($xlin+24);
   $maiscol = 0;
   $yy = $this->objpdf->gety();

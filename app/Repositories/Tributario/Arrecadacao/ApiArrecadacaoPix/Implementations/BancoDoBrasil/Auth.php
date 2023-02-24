@@ -38,7 +38,6 @@ class Auth implements IAuth
         $headerParams['Authorization'] = "Basic " . base64_encode($this->configuration->getClientId() .
                 ":" . $this->configuration->getClientSecret());
         $headerParams['Content-Type'] = "application/x-www-form-urlencoded";
-//        $headerParams['User-Agent'] = $this->configuration->getUserAgent();
         $formParams['grant_type'] = "client_credentials";
         $formParams['scope'] = $this->configuration->getScopesOauth2();
         $httpBody = Query::build($formParams);

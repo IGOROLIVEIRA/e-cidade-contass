@@ -155,9 +155,9 @@ SQL;
         );
 
         $table->addColumn('k176_sequencial', 'integer');
-        $table->addColumn('k176_numnov', 'integer');
-        $table->addColumn('k176_numpre', 'integer');
-        $table->addColumn('k176_numpar', 'integer');
+        $table->addColumn('k176_numnov', 'integer', ['null' => true]);
+        $table->addColumn('k176_numpre', 'integer', ['null' => true]);
+        $table->addColumn('k176_numpar', 'integer', ['null' => true]);
         $table->addColumn('k176_dtcriacao', 'date');
         $table->addColumn('k176_qrcode', 'text');
         $table->addColumn('k176_hist', 'text');
