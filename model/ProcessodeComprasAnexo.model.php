@@ -188,6 +188,7 @@ class AnexoComprasPNCP
             "l216_sequencial",
             "l216_codproc = {$this->iCodproc}"
         );
+
         $rsBuscaProcesso = $oDaoProcessoDocumento->sql_record($sSqlBuscaDocumentos);
 
         for ($iRowDocumento = 0; $iRowDocumento < $oDaoProcessoDocumento->numrows; $iRowDocumento++) {
@@ -195,6 +196,7 @@ class AnexoComprasPNCP
             $iCodigoSequencial = db_utils::fieldsMemory($rsBuscaProcesso, $iRowDocumento)->l217_sequencial;
             $this->aDocumentosAnexados[] = new ProcessoComprasDocumento($iCodigoSequencial);
         }
+
         return true;
     }
 

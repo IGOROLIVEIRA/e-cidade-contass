@@ -175,7 +175,12 @@ class cl_pcproc
       $this->erro_status = "0";
       return false;
     }
-    if ($this->pc80_numdispensa == null) {
+
+    if ($this->pc80_dispvalor == null) {
+      $this->pc80_dispvalor = "null";
+    }
+
+    if ($this->pc80_numdispensa == null && $this->pc80_dispvalor != "null") {
       $this->erro_sql = " Campo numero da dispensa nao Informado.";
       $this->erro_campo = "pc80_depto";
       $this->erro_banco = "";
@@ -183,17 +188,11 @@ class cl_pcproc
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
+    } else {
+      $this->pc80_numdispensa = "NULL";
     }
-    if ($this->pc80_dispvalor == null) {
-      $this->erro_sql = " Campo dispensa por valor nao Informado.";
-      $this->erro_campo = "pc80_depto";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->pc80_orcsigiloso == null) {
+
+    if ($this->pc80_orcsigiloso == null && $this->pc80_dispvalor != "null") {
       $this->erro_sql = " Campo orcamento sigiloso nao Informado.";
       $this->erro_campo = "pc80_depto";
       $this->erro_banco = "";
@@ -202,7 +201,7 @@ class cl_pcproc
       $this->erro_status = "0";
       return false;
     }
-    if ($this->pc80_subcontratacao == null) {
+    if ($this->pc80_subcontratacao == null && $this->pc80_dispvalor != "null") {
       $this->erro_sql = " Campo subcontratacao nao Informado.";
       $this->erro_campo = "pc80_depto";
       $this->erro_banco = "";
@@ -212,7 +211,7 @@ class cl_pcproc
       return false;
     }
 
-    if ($this->pc80_amparolegal == null) {
+    if ($this->pc80_amparolegal == null && $this->pc80_dispvalor != "null") {
       $this->erro_sql = " Campo dados amparo legal nao Informado.";
       $this->erro_campo = "pc80_amparolegal";
       $this->erro_banco = "";
@@ -220,6 +219,8 @@ class cl_pcproc
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
+    } else {
+      $this->pc80_amparolegal = "NULL";
     }
     if ($pc80_codproc == "" || $pc80_codproc == null) {
       $result = db_query("select nextval('pcproc_pc80_codproc_seq')");
@@ -279,13 +280,14 @@ class cl_pcproc
                                ,$this->pc80_tipoprocesso
                                ,$this->pc80_criterioadjudicacao
                                ,$this->pc80_numdispensa
-                               ,'$this->pc80_dispvalor'
-                               ,'$this->pc80_orcsigiloso'
-                               ,'$this->pc80_subcontratacao'
+                               ," . ($this->pc80_dispvalor == "null" || $this->pc80_dispvalor == "" ? "false" : "'" . $this->pc80_dispvalor . "'") . "
+                               ," . ($this->pc80_orcsigiloso == "null" || $this->pc80_orcsigiloso == "" ? "false" : "'" . $this->pc80_orcsigiloso . "'") . "
+                               ," . ($this->pc80_subcontratacao == "null" || $this->pc80_subcontratacao == "" ? "false" : "'" . $this->pc80_subcontratacao . "'") . "
                                ,'$this->pc80_dadoscomplementares'
                                ,$this->pc80_amparolegal
                       )";
     $result = db_query($sql);
+
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
@@ -458,71 +460,26 @@ class cl_pcproc
     if (trim($this->pc80_dispvalor) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_dispvalor"])) {
       $sql  .= $virgula . " pc80_dispvalor = '$this->pc80_dispvalor' ";
       $virgula = ",";
-      if (trim($this->pc80_dispvalor) == null) {
-        $this->erro_sql = " Campo dispensa por valor nao Informado.";
-        $this->erro_campo = "pc80_dispvalor";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
     }
 
     if (trim($this->pc80_orcsigiloso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_orcsigiloso"])) {
       $sql  .= $virgula . " pc80_orcsigiloso = '$this->pc80_orcsigiloso' ";
       $virgula = ",";
-      if (trim($this->pc80_orcsigiloso) == null) {
-        $this->erro_sql = " Campo orcamento sigiloso nao Informado.";
-        $this->erro_campo = "pc80_orcsigiloso";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
     }
 
     if (trim($this->pc80_subcontratacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_subcontratacao"])) {
       $sql  .= $virgula . " pc80_subcontratacao = '$this->pc80_subcontratacao' ";
       $virgula = ",";
-      if (trim($this->pc80_subcontratacao) == null) {
-        $this->erro_sql = " Campo subcontratacao nao Informado.";
-        $this->erro_campo = "pc80_subcontratacao";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
     }
 
     if (trim($this->pc80_dadoscomplementares) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_dadoscomplementares"])) {
       $sql  .= $virgula . " pc80_dadoscomplementares = '$this->pc80_dadoscomplementares' ";
       $virgula = ",";
-      if (trim($this->pc80_dadoscomplementares) == null) {
-        $this->erro_sql = " Campo dados complementares nao Informado.";
-        $this->erro_campo = "pc80_dadoscomplementares";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
     }
 
     if (trim($this->pc80_amparolegal) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_amparolegal"])) {
       $sql  .= $virgula . " pc80_amparolegal = '$this->pc80_amparolegal' ";
       $virgula = ",";
-      if (trim($this->pc80_amparolegal) == null) {
-        $this->erro_sql = " Campo dados amparo legal nao Informado.";
-        $this->erro_campo = "pc80_amparolegal";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
     }
 
     $sql .= " where ";

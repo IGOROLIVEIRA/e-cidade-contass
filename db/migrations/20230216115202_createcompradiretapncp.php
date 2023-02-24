@@ -99,7 +99,7 @@ class Createcompradiretapncp extends AbstractMigration
             FOREIGN KEY (l217_tipoanexo) REFERENCES tipoanexo (l213_sequencial);
 
             ALTER TABLE liccontrolepncp DROP CONSTRAINT 'liccontrolepncp_l213_licitacao_fkey';
-
+            ALTER TABLE anexocomprapncp DROP CONSTRAINT 'anexocomprapncp_liclicita_fk';
             ALTER TABLE liccontrolepncp ALTER COLUMN l213_licitacao DROP NOT NULL;
         ";
         $this->execute($sql);

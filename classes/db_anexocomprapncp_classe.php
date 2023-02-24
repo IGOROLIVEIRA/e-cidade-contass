@@ -452,7 +452,7 @@ class cl_anexocomprapncp
             $sql .= $campos;
         }
         $sql .= " from anexocomprapncp ";
-        $sql .= " left join comanexopncpdocumento on l217_licanexospncp=l216_sequencial ";
+        $sql .= " inner join comanexopncpdocumento on l217_licanexospncp=l216_sequencial ";
         $sql2 = "";
         if ($dbwhere == "") {
         } else if ($dbwhere != "") {

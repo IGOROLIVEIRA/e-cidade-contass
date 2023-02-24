@@ -110,7 +110,6 @@ try {
             break;
 
         case "excluir":
-
             $oProcessoDocumento = new ProcessoComprasDocumento($oParam->iCodigoDocumento);
             $oProcessoDocumento->excluir();
             $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
