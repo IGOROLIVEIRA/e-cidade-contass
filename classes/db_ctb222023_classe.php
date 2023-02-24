@@ -24,6 +24,7 @@ class cl_ctb222023
   var $si98_identificadordeducao = 0;
   var $si98_naturezareceita = 0;
   var $si98_codfontrecursos = 0;
+  var $si98_codco = 0;
   var $si98_saldocec = 0;
   var $si98_vlrreceitacont = 0;
   var $si98_mes = 0;
@@ -38,6 +39,7 @@ class cl_ctb222023
                  si98_identificadordeducao = int8 = Identificador da dedução da receita 
                  si98_naturezareceita = int8 = Natureza da receita 
                  si98_codfontrecursos = int8 = Código da fonte de recursos 
+                 si98_codco = varchar = Código de Acompanhamento da Execução Orçamentária
                  si98_saldocec = int8 = Saldo compõe ou não compõe Caixa e Equivalentes de Caixa
                  si98_vlrreceitacont = float8 = Valor  correspondente à  receita 
                  si98_mes = int8 = Mês 
@@ -75,6 +77,7 @@ class cl_ctb222023
       $this->si98_identificadordeducao = ($this->si98_identificadordeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_identificadordeducao"] : $this->si98_identificadordeducao);
       $this->si98_naturezareceita = ($this->si98_naturezareceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_naturezareceita"] : $this->si98_naturezareceita);
       $this->si98_codfontrecursos = ($this->si98_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_codfontrecursos"] : $this->si98_codfontrecursos);
+      $this->si98_codco = ($this->si98_codco == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_codco"] : $this->si98_codco);
       $this->si98_saldocec = ($this->si98_saldocec == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_saldocec"] : $this->si98_saldocec);
       $this->si98_vlrreceitacont = ($this->si98_vlrreceitacont == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_vlrreceitacont"] : $this->si98_vlrreceitacont);
       $this->si98_mes = ($this->si98_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si98_mes"] : $this->si98_mes);
@@ -113,6 +116,9 @@ class cl_ctb222023
     }
     if ($this->si98_codfontrecursos == null) {
       $this->si98_codfontrecursos = "0";
+    }
+    if ($this->si98_codco == null) {
+      $this->si98_codco = "0000";
     }
     if ($this->si98_saldocec == null) {
       $this->si98_saldocec = "0";
@@ -187,6 +193,7 @@ class cl_ctb222023
                                       ,si98_identificadordeducao 
                                       ,si98_naturezareceita 
                                       ,si98_codfontrecursos
+                                      ,si98_codco
                                       ,si98_saldocec
                                       ,si98_vlrreceitacont 
                                       ,si98_mes 
@@ -201,6 +208,7 @@ class cl_ctb222023
                                ,$this->si98_identificadordeducao 
                                ,$this->si98_naturezareceita
                                ,$this->si98_codfontrecursos 
+                               ,'$this->si98_codco'
                                ,$this->si98_saldocec
                                ,$this->si98_vlrreceitacont 
                                ,$this->si98_mes 
@@ -314,6 +322,13 @@ class cl_ctb222023
         $this->si98_codfontrecursos = "0";
       }
       $sql .= $virgula . " si98_codfontrecursos = $this->si98_codfontrecursos ";
+      $virgula = ",";
+    }
+    if (trim($this->si98_codco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si98_codco"])) {
+      if (trim($this->si98_codco) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si98_codco"])) {
+        $this->si98_codco = "0";
+      }
+      $sql .= $virgula . " si98_codco = $this->si98_codco ";
       $virgula = ",";
     }
     if (trim($this->si98_saldocec) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si98_saldocec"])) {
@@ -628,6 +643,40 @@ class cl_ctb222023
     }
     
     return $sql;
+  }
+
+  /**
+   * Consulta para geracao do Registro 22
+   *
+   * @param integer $ano
+   * @param integer $codReduzido
+   * @return $sSql
+   */
+  public function sql_Reg22($ano, $codReduzido)
+  {
+    $sSql = " SELECT 22 AS tiporegistro, o70_codigo,
+                     c74_codlan AS codreduzdio,
+                     CASE
+                         WHEN substr(o57_fonte,1,2) = '49' THEN 1
+                         ELSE 2
+                     END AS ededucaodereceita,
+                     CASE
+                         WHEN substr(o57_fonte,1,2) = '49' THEN substr(o57_fonte,2,2)
+                         ELSE NULL
+                     END AS identificadordeducao,
+                     CASE
+                         WHEN substr(o57_fonte,1,2) = '49' THEN substr(o57_fonte,4,8)
+                         ELSE substr(o57_fonte,2,8)
+                     END AS naturezaReceita,
+                     c70_valor AS vlrreceitacont
+              FROM conlancamrec
+              JOIN conlancam ON c70_codlan = c74_codlan AND c70_anousu = c74_anousu
+              LEFT JOIN orcreceita ON c74_codrec = o70_codrec AND o70_anousu = {$ano}
+              LEFT JOIN orcfontes ON o70_codfon = o57_codfon AND o70_anousu = o57_anousu
+              LEFT JOIN orctiporec ON o15_codigo = o70_codigo
+              WHERE c74_codlan = {$codReduzido}";
+
+    return $sSql;
   }
 }
 
