@@ -24,13 +24,18 @@ class CaspwebCsv extends Caspweb {
         foreach ($aDados as $sItens) {
 
             $sLinha = "";
-
+            $totalarray = count($sItens);
+            $cont = 1;
             foreach ($sItens as $chave => $sItem) {
                 if ($chave == 'debito' || $chave == 'credito') {
-                    $sLinha .= number_format($sItem,2,',','') . $this->sDelim;
+                    if($totalarray ==  $cont)
+                        $sLinha .= number_format($sItem,2,',','');
+                    else
+                        $sLinha .= number_format($sItem,2,',','') . $this->sDelim;    
                 } else {
-                    $sLinha .= ($sItem != null || $sItem != "") ? $sItem . $this->sDelim : " " . $this->sDelim;
+                    $sLinha .= ($sItem != null || $sItem != "") ? $sItem . $this->sDelim : $this->sDelim;
                 }
+                $cont ++;
             }
 
             fputs($this->_arquivo, $sLinha);
