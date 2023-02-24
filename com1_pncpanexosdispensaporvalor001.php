@@ -88,7 +88,7 @@ $oRotulo->label("pc80_resumo");
 
                             $tipo = array();
                             $tipo[0] = "Selecione";
-                            $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query(null, "*", "l213_sequencial", ""));
+                            $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query(null, "*", "l213_sequencial", "l213_sequencial in (1,3,7,10)"));
 
 
                             for ($iIndiceTipo = 0; $iIndiceTipo < $cltipoanexo->numrows; $iIndiceTipo++) {
@@ -631,7 +631,7 @@ $oRotulo->label("pc80_resumo");
      */
     function js_pesquisarProcessoCompras(lMostra) {
 
-        var sArquivo = 'func_pcproc.php?pncp=1&funcao_js=parent.';
+        var sArquivo = 'func_pcproc.php?pncp=t&pncp=true&funcao_js=parent.';
 
         if (lMostra) {
             sArquivo += 'js_mostraProcessodecompras|pc80_codproc|pc80_resumo';

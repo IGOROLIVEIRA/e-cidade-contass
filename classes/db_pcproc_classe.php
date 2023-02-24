@@ -1444,34 +1444,53 @@ class cl_pcproc
   public function sql_query_pncp_itens($pc80_codproc = null)
   {
     $sql  = "SELECT DISTINCT pcmater.pc01_codmater AS numeroItem,
-        CASE
-            WHEN pcmater.pc01_servico='t' THEN 'S'
-            ELSE 'M'
-        END AS materialOuServico,
-        1 AS tipoBeneficioId,
-        TRUE AS incentivoProdutivoBasico,
-        pcmater.pc01_descrmater AS descricao,
-        matunid.m61_descr AS unidadeMedida,
-        si02_vlprecoreferencia AS valorUnitarioEstimado,
-        pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
-        pcmater.pc01_codmater,
-        solicitem.pc11_numero,
-        solicitem.pc11_reservado,
-        solicitem.pc11_quant
-        FROM pcproc
-        JOIN pcprocitem ON pc81_codproc=pc80_codproc
-        JOIN solicitem ON pc11_codigo=pc81_solicitem
-        JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
-        JOIN pcmater ON pc16_codmater = pc01_codmater
-        JOIN solicitemunid ON pc17_codigo=pc11_codigo
-        JOIN matunid ON m61_codmatunid=pc17_unid
-        LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-        LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-        LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-        LEFT JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-        LEFT JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-        WHERE pcproc.pc80_codproc = {$pc80_codproc}
-        ORDER BY numeroitem";
+    CASE
+        WHEN pcmater.pc01_servico='t' THEN 'S'
+        ELSE 'M'
+    END AS materialOuServico,
+    1 AS tipoBeneficioId,
+    TRUE AS incentivoProdutivoBasico,
+            pcmater.pc01_descrmater AS descricao,
+            matunid.m61_descr AS unidadeMedida,
+            pc23_vlrun AS valorUnitarioEstimado,
+            pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
+            pcmater.pc01_codmater,
+            solicitem.pc11_numero,
+            solicitem.pc11_reservado,
+            pc23_quant
+      FROM pcproc
+      JOIN pcprocitem ON pc81_codproc=pc80_codproc
+      JOIN solicitem ON pc11_codigo=pc81_solicitem
+      JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+      JOIN pcmater ON pc16_codmater = pc01_codmater
+      JOIN solicitemunid ON pc17_codigo=pc11_codigo
+      JOIN matunid ON m61_codmatunid=pc17_unid
+      JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+      JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+      JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+      WHERE pcproc.pc80_codproc = {$pc80_codproc}
+      ORDER BY numeroitem";
+    return $sql;
+  }
+
+  public function sql_get_dispensa_por_valor()
+  {
+    $sql  = "SELECT DISTINCT pc80_codproc,
+    pc80_numdispensa,
+    pc80_resumo,
+	  l213_numerocontrolepncp AS numerodecontrole
+    FROM pcproc
+    JOIN pcprocitem ON pc81_codproc=pc80_codproc
+    JOIN solicitem ON pc11_codigo=pc81_solicitem
+    JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+    JOIN pcmater ON pc16_codmater = pc01_codmater
+    JOIN solicitemunid ON pc17_codigo=pc11_codigo
+    JOIN matunid ON m61_codmatunid=pc17_unid
+    INNER JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+    INNER JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+    INNER JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+    left join liccontrolepncp on l213_processodecompras = pc80_codproc
+    WHERE pc80_dispvalor='t'";
     return $sql;
   }
 }

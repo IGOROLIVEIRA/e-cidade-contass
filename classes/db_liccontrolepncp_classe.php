@@ -155,6 +155,12 @@ class cl_liccontrolepncp
             $this->erro_status = "0";
             return false;
         }
+        if ($this->l213_licitacao == null || $this->l213_licitacao == "") {
+            $this->l213_licitacao == 'NULL';
+        }
+        if ($this->l213_processodecompras == null || $this->l213_processodecompras == "") {
+            $this->l213_processodecompras == 'NULL';
+        }
         if ($this->l213_sequencial == "" || $this->l213_sequencial == null) {
             $result = db_query("select nextval('liccontrolepncp_l213_sequencial_seq')");
             if ($result == false) {
@@ -201,7 +207,7 @@ class cl_liccontrolepncp
                        )
                 values (
                                 $this->l213_sequencial 
-                               ,$this->l213_licitacao 
+                               ," . ($this->l213_licitacao == null ? "null" : "'" . $this->l213_licitacao . "'") . " 
                                ,$this->l213_usuario 
                                ," . ($this->l213_dtlancamento == "null" || $this->l213_dtlancamento == "" ? "null" : "'" . $this->l213_dtlancamento . "'") . " 
                                ,'$this->l213_numerocontrolepncp'

@@ -33,14 +33,12 @@ class Createcompradiretapncp extends AbstractMigration
             INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l216_hora','varchar' ,'hora','', 'hora',5 ,false, false, false, 0, 'varchar', 'hora');
             INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l216_instit','int8' ,'Instituição','', 'Instituição',16   ,false, false, false, 0, 'int8', 'Instituição');
 
-
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l216_sequencial')            , 1, 0);
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l216_codproc')             , 2, 0);
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l216_dataanexo')         , 3, 0);
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l216_id_usuario')            , 4, 0);
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l216_hora')          , 5, 0);
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l216_instit')            , 6, 0);
-
 
             CREATE TABLE anexocomprapncp(
             l216_sequencial         int8 NOT NULL default 0,
@@ -50,7 +48,6 @@ class Createcompradiretapncp extends AbstractMigration
             l216_hora               varchar(5) NOT NULL default 0,
             l216_instit             int8 NOT NULL default 0);
 
-
             CREATE SEQUENCE anexocomprapncp_l216_sequencial_seq
             INCREMENT 1
             MINVALUE 1
@@ -58,12 +55,10 @@ class Createcompradiretapncp extends AbstractMigration
             START 1
             CACHE 1;
 
-
             ALTER TABLE anexocomprapncp ADD PRIMARY KEY (l216_sequencial);
 
             ALTER TABLE anexocomprapncp ADD CONSTRAINT anexocomprapncp_liclicita_fk
             FOREIGN KEY (l216_codproc) REFERENCES pcproc (pc80_codproc);
-
 
             INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'comanexopncpdocumento','cadastro dos documentos de anexos pncp','l216','2022-08-22','cadastro dos documentosde anexos pncp',0,'f','f','f','f');
 
@@ -74,15 +69,12 @@ class Createcompradiretapncp extends AbstractMigration
 
             INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 'l217_tipoanexo','int8' ,'Tipo do anexo','', 'Tipo do anexo',8 ,false, false, false, 1, 'int8', 'Tipo do anexo');
 
-
-
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l217_sequencial')            , 1, 0);
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l217_licanexospncp')             , 2, 0);
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l217_documento')         , 3, 0);
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l217_nomedocumento')         , 4, 0);
 
             INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 'l217_tipoanexo')         , 5, 0);
-
 
             CREATE TABLE comanexopncpdocumento(
             l217_sequencial         int8 NOT NULL default 0,
@@ -91,14 +83,12 @@ class Createcompradiretapncp extends AbstractMigration
             l217_nomedocumento                varchar(255) NOT NULL default 0,
             l217_tipoanexo                      int8 NOT NULL default 0);
 
-
             CREATE SEQUENCE comanexopncpdocumento_l217_sequencial_seq
             INCREMENT 1
             MINVALUE 1
             MAXVALUE 9223372036854775807
             START 1
             CACHE 1;
-
 
             ALTER TABLE comanexopncpdocumento ADD PRIMARY KEY (l217_sequencial);
 
@@ -108,6 +98,9 @@ class Createcompradiretapncp extends AbstractMigration
             ALTER TABLE comanexopncpdocumento ADD CONSTRAINT comanexopncpdocumento_tipoanexo_fk
             FOREIGN KEY (l217_tipoanexo) REFERENCES tipoanexo (l213_sequencial);
 
+            ALTER TABLE liccontrolepncp DROP CONSTRAINT 'liccontrolepncp_l213_licitacao_fkey';
+
+            ALTER TABLE liccontrolepncp ALTER COLUMN l213_licitacao DROP NOT NULL;
         ";
         $this->execute($sql);
     }

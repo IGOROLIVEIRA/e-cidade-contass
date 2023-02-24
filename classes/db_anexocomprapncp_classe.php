@@ -471,13 +471,13 @@ class cl_anexocomprapncp
         return $sql;
     }
 
-    public function sql_anexos_licitacao($l20_codigo)
+    public function sql_anexos_licitacao($pc80_codproc)
     {
         $sql = "
-       SELECT l216_nomedocumento
-        FROM anexocomprapncp
-        INNER JOIN anexocomprapncpdocumento ON l216_sequencial = l216_licanexospncp
-        where l216_codproc = {$l20_codigo}
+       SELECT l217_nomedocumento
+       FROM anexocomprapncp
+        INNER JOIN comanexopncpdocumento ON l217_licanexospncp = l216_sequencial
+        where l216_codproc = {$pc80_codproc}
     ";
         return $sql;
     }

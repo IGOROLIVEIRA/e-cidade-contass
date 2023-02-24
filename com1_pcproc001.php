@@ -72,6 +72,19 @@ if (isset($incluir) || isset($juntar)) {
   $sqlerro = false;
   if (isset($valores) && $valores != "") {
     db_inicio_transacao();
+
+    if (isset($pc80_numdispensa)) {
+      $sql = "select pc80_numdispensa as numerodispensa,pc80_codproc as codigoprocesso from pcproc where pc80_numdispensa={$pc80_numdispensa}";
+      $rsPccompra = db_query($sql);
+
+      $dispensacadastrada = db_utils::getColectionByRecord($rsPccompra);
+      foreach ($dispensacadastrada as $dispensa) {
+        $erro_msg = "Já existe uma dispensa cadastrada com mesmo numero codigo do processo: {$dispensa->codigoprocesso}";
+        $sqlerro = true;
+        break;
+      }
+    }
+
     if (isset($incluir)) {
       $clpcproc->pc80_data                  = date("Y-m-d", db_getsession("DB_datausu"));
       $clpcproc->pc80_usuario               = db_getsession("DB_id_usuario");
@@ -96,6 +109,7 @@ if (isset($incluir) || isset($juntar)) {
       $pc80_codproc = $clpcproc->pc80_codproc;
       /*OC3770*/
       $verifica  = false;
+
       if (isset($pc80_criterioadjudicacao) && !empty($pc80_criterioadjudicacao) && $pc80_criterioadjudicacao != 3) {
         $sSQL = "
             SELECT pcmater.pc01_tabela, pc01_taxa
@@ -441,7 +455,9 @@ if (isset($incluir)) {
                            'height='+(screen.availHeight-40)+',scrollbars=1, location=0'
                           );
         jan.moveTo(0, 0);
-      }";
+      }
+      window.location = \"com1_pcproc001.php\";
+      ";
 
     if ($pc80_tipoprocesso == 2) {
       echo "window.location = \"com4_processocompra001.php?acao=2&iCodigo={$pc80_codproc}\";";

@@ -206,7 +206,10 @@ $val = false;
                     </td>
                     <td>
                         <?php
-                        db_input('pc80_numdispensa', 40, $Idescrdepto, true, 'text', $db_opcao);
+                        $resultUltimaDispensa = $clpcproc->sql_record($clpcproc->sql_query(null, "max(pc80_numdispensa) + 1  AS pc80_numdispensa", null, "instit = " . db_getsession('DB_instit')));
+                        db_fieldsmemory($resultUltimaDispensa, 0);
+
+                        db_input('pc80_numdispensa', 40, $Ipc80_numdispensa, true, 'text', $db_opcao);
                         ?>
                     </td>
                     <td>
@@ -279,7 +282,7 @@ $val = false;
 
                             $tipo[$oTipo->l212_codigo] = $oTipo->l212_lei;
                         }
-
+                        $tipo[0] = 'Selecione';
                         db_select('pc80_amparolegal', $tipo, true, '', 'style="width:100%"');
                         ?>
                     </td>
