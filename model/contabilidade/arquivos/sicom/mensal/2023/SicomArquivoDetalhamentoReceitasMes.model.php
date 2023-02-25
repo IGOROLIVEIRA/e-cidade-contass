@@ -245,6 +245,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                     END AS z01_cgccpf,
                                     o70_codrec,
                                     o15_codtri,
+                                    o70_codigo,
                                     SUM(CASE
                                             WHEN c53_tipo = 100 THEN ROUND(C70_VALOR,2)::FLOAT8
                                             WHEN c53_tipo = 101 THEN ROUND(C70_VALOR*-1,2)::FLOAT8
@@ -289,7 +290,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                             LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int 
                              WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
                                AND o70_instit = " . db_getsession('DB_instit') . "
-                               AND k81_emparlamentar = {$oCodDoc2->k81_emparlamentar}
+                               AND k81_emparlamentar = {$sEmParlamentar}
                                AND (CASE
                                         WHEN substr(taborc.k02_estorc,1,2) = '49' THEN substr(taborc.k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10) ."'
                                         ELSE substr(taborc.k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8) ."'
@@ -297,21 +298,21 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                AND c74_data BETWEEN '". $this->sDataInicial ." 'AND '". $this->sDataFinal ."'
                                AND ((c53_tipo = 100 AND substr(taborc.k02_estorc,1,2) != '49') 
                                       OR (c53_tipo = 101 AND substr(taborc.k02_estorc,1,2) = '49'))
-                             GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm, op01_numerocontratoopc, op01_dataassinaturacop
+                             GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm, op01_numerocontratoopc, op01_dataassinaturacop, o70_codigo
                              ORDER BY 1, 4, 2";
-                   
+                         
                             $result = db_query($sSql);
 
                             $aDadosCgm11 = array();
 
-                            for ($iContCgm = 0; $iContCgm < pg_num_rows($result); $iContCgm++) {
-
-                                $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
- 
-                                $oControleOrcamentario = new ControleOrcamentario();
+                            $oControleOrcamentario = new ControleOrcamentario();
                                 $oControleOrcamentario->setNaturezaReceita($oDadosRec->o57_fonte);
                                 $oControleOrcamentario->setFonte($oDadosRec->o70_codigo); 
                                 $oControleOrcamentario->setEmendaParlamentar($sEmParlamentar);
+
+                            for ($iContCgm = 0; $iContCgm < pg_num_rows($result); $iContCgm++) {
+
+                                $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
          
                                 // Criação padrão de hash
                                 $sHashCgm = $sHash10 . $sHash11 
@@ -376,11 +377,11 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
                              
-                            if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {                                                         
+                            if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {                    
                                 $aDados = new stdClass();
                                 $aDados->si26_tiporegistro = 11;
                                 $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
-                                $aDados->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
+                                $aDados->si26_codfontrecursos = $oDadosRec->o70_codigo;
                                 $oControleOrcamentario->setFonte($oDadosRec->o70_codigo);
                                 $aDados->si26_codigocontroleorcamentario = $oControleOrcamentario->getCodigoPorReceita();
                                 if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
