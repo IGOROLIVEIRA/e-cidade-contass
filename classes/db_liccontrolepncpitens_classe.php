@@ -19,6 +19,7 @@ class cl_liccontrolepncpitens
     // cria variaveis do arquivo 
     public $l214_sequencial = 0;
     public $l214_licitacao = 0;
+    public $l214_pcproc = 0;
     public $l214_numeroresultado = null;
     public $l214_numerocompra = null;
     public $l214_anousu = null;
@@ -30,6 +31,7 @@ class cl_liccontrolepncpitens
                  l214_numeroresultado = int8 = situacao da licitacao pncp
                  l214_numerocompra = int8 = numero da compra no pncp
                  l214_anousu = int8 = ano da compra
+                 l214_pcproc = int8 = numero do processo de compras
                  l214_ordem = int8 = l214_ordem 
                  ";
 
@@ -58,6 +60,7 @@ class cl_liccontrolepncpitens
         if ($exclusao == false) {
             $this->l214_sequencial = ($this->l214_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_sequencial"] : $this->l214_sequencial);
             $this->l214_licitacao = ($this->l214_licitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_licitacao"] : $this->l214_licitacao);
+            $this->l214_pcproc = ($this->l214_pcproc == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_pcproc"] : $this->l214_pcproc);
             $this->l214_numeroresultado = ($this->l214_numeroresultado == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_numeroresultado"] : $this->l214_numeroresultado);
             $this->l214_numerocompra = ($this->l214_numerocompra == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_numerocompra"] : $this->l214_numerocompra);
             $this->l214_anousu = ($this->l214_anousu == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_anousu"] : $this->l214_anousu);
@@ -71,14 +74,12 @@ class cl_liccontrolepncpitens
         $this->atualizacampos();
 
         if ($this->l214_licitacao == null) {
-            $this->erro_sql = " Campo l214_licitacao não informado.";
-            $this->erro_campo = "l214_licitacao";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->l214_licitacao == "null";
         }
+        if ($this->l214_pcproc == null) {
+            $this->l214_pcproc == "null";
+        }
+
         if ($this->l214_ordem == null) {
             $this->erro_sql = " Campo l214_ordem não informado.";
             $this->erro_campo = "l214_ordem";
@@ -153,7 +154,8 @@ class cl_liccontrolepncpitens
                                       ,l214_numeroresultado 
                                       ,l214_numerocompra 
                                       ,l214_anousu 
-                                      ,l214_ordem 
+                                      ,l214_ordem
+                                      ,l214_pcproc 
                        )
                 values (
                                 $this->l214_sequencial 
@@ -161,7 +163,8 @@ class cl_liccontrolepncpitens
                                ,$this->l214_numeroresultado
                                ,$this->l214_numerocompra
                                ,$this->l214_anousu
-                               ,$this->l214_ordem 
+                               ,$this->l214_ordem
+                               ,$this->l214_pcproc 
                       )";
         $result = db_query($sql);
         if ($result == false) {
