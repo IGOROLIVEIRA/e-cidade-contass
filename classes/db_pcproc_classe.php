@@ -180,14 +180,8 @@ class cl_pcproc
       $this->pc80_dispvalor = "null";
     }
 
-    if ($this->pc80_numdispensa == null && $this->pc80_dispvalor != "null") {
-      $this->erro_sql = " Campo numero da dispensa nao Informado.";
-      $this->erro_campo = "pc80_depto";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
+    if ($this->pc80_numdispensa == null) {
+      $this->pc80_numdispensa = "null";
     }
 
     if ($this->pc80_orcsigiloso == null && $this->pc80_dispvalor != "null") {
@@ -209,14 +203,8 @@ class cl_pcproc
       return false;
     }
 
-    if ($this->pc80_amparolegal == null && $this->pc80_dispvalor != "null") {
-      $this->erro_sql = " Campo dados amparo legal nao Informado.";
-      $this->erro_campo = "pc80_amparolegal";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
+    if ($this->pc80_amparolegal == null) {
+      $this->pc80_amparolegal = "null";
     }
 
     if ($pc80_codproc == "" || $pc80_codproc == null) {
