@@ -25,6 +25,14 @@
  *                                licenca/licenca_pt.txt
  */
 
+use App\Models\Numpref;
+use App\Models\RecibopagaQrcodePix;
+use App\Services\Tributario\Arrecadacao\GeneratePixWithQRCodeService;
+use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Writer\PngWriter;
+
 require_once("libs/db_barras.php");
 require_once("fpdf151/impcarne.php");
 require_once("fpdf151/scpdf.php");
@@ -1048,5 +1056,76 @@ if ( $db21_codcli == 19985 or $db21_codcli == 18 or $db21_codcli == 74 or $db21_
     $pdf1->lUtilizaModeloDefault = false;
 }
 
+$usePixIntegration = false;
+$providerConfig = null;
+$pdf1->hasQrCode = false;
+/**
+ * @var Numpref $settings
+ */
+$settings = Numpref::query()
+    ->where('k03_anousu', db_getsession("DB_anousu"))
+    ->where('k03_instit', db_getsession("DB_instit"))
+    ->first();
+
+if ($settings->k03_ativo_integracao_pix && !empty($pdf1->it14_valorpaga)) {
+    $usePixIntegration = true;
+    $providerConfig = (new ResolvePixProviderService())->execute($settings);
+}
+
+if ($usePixIntegration) {
+    $body['codigoGuiaRecebimento'] = "{$pdf1->numpreitbi}-1";
+    $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
+    $body['valorOriginalSolicitacao'] = $pdf1->it14_valorpaga;
+    $body['k00_numpre'] = $pdf1->numpreitbi;
+    $body['k00_numpar'] = 1;
+    $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
+    $body['listaInformacaoAdicional'] = [
+        ['codigoInformacaoAdicional' => 'ITBI', 'textoInformacaoAdicional' => 'ITBI #'.$itbi]
+    ];
+
+    $service = new GeneratePixWithQRCodeService($providerConfig);
+
+    try {
+        $service->execute($body);
+    } catch (Exception $e) {
+        throw new \BusinessException('Erro ao gerar QRCode: '. $e->getMessage());
+    }
+    $pdf1 = usePixIntegration($pdf1, $pdf1->numpreitbi, 1);
+}
+
+function usePixIntegration(db_impcarne $pdfObject, int $numpre, int $numpar): db_impcarne
+{
+    $numpref = Numpref::query()
+        ->where('k03_anousu', db_getsession("DB_anousu"))
+        ->where('k03_instit', db_getsession("DB_instit"))
+        ->first();
+
+    if (!$numpref->k03_ativo_integracao_pix) {
+        return $pdfObject;
+    }
+
+    $recibopagaQrcodePix = RecibopagaQrcodePix::query()
+        ->where('k176_numpre', $numpre)
+        ->where('k176_numpar', $numpar)
+        ->first();
+
+    $pdfObject->hasQrCode = true;
+
+    $result = Builder::create()
+        ->writer(new PngWriter())
+        ->writerOptions([])
+        ->data($recibopagaQrcodePix->k176_qrcode)
+        ->encoding(new Encoding('UTF-8'))
+        ->size(300)
+        ->margin(10)
+        ->validateResult(false)
+        ->build();
+    $imagePath = "tmp/qrcode{$numpre}-{$numpar}.png";
+
+    $result->saveToFile($imagePath);
+
+    $pdfObject->qrcode = $imagePath;
+    return $pdfObject;
+}
 $pdf1->imprime();
 $pdf1->objpdf->output();
