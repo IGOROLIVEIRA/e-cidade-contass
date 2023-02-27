@@ -1,7 +1,7 @@
 <?php
 //MODULO: licitacao
-//CLASSE DA ENTIDADE liccontrolepncp
-class cl_liccontrolepncp
+//CLASSE DA ENTIDADE anexocomprapncp
+class cl_anexocomprapncp
 {
     // cria variaveis de erro 
     public $rotulo     = null;
@@ -17,38 +17,30 @@ class cl_liccontrolepncp
     public $erro_campo = null;
     public $pagina_retorno = null;
     // cria variaveis do arquivo 
-    public $l213_sequencial = 0;
-    public $l213_licitacao = 0;
-    public $l213_dtlancamento_dia = null;
-    public $l213_dtlancamento_mes = null;
-    public $l213_dtlancamento_ano = null;
-    public $l213_dtlancamento = null;
-    public $l213_usuario = 0;
-    public $l213_numerocontrolepncp = null;
-    public $l213_situacao = null;
-    public $l213_numerocompra = null;
-    public $l213_anousu = null;
-    public $l213_instit = 0;
-    public $l213_processodecompras = 0;
+    public $l216_sequencial = 0;
+    public $l216_codproc = 0;
+    public $l216_dataanexo_dia = null;
+    public $l216_dataanexo_mes = null;
+    public $l216_dataanexo_ano = null;
+    public $l216_dataanexo = null;
+    public $l216_id_usuario = 0;
+    public $l216_hora = null;
+    public $l216_instit = 0;
     // cria propriedade com as variaveis do arquivo 
     public $campos = "
-                 l213_sequencial = int8 = l213_sequencial 
-                 l213_licitacao = int8 = l213_licitacao 
-                 l213_usuario = int8 = l213_usuario
-                 l213_dtlancamento = date = l213_dtlancamento 
-                 l213_numerocontrolepncp = text = numero de controle do portal pncp 
-                 l213_situacao = int8 = situacao da licitacao pncp
-                 l213_numerocompra = int8 = numero da compra no pncp
-                 l213_anousu = int8 = ano da compra
-                 l213_instit = int8 = l213_instit 
-                 l213_processodecompras = int8 = numero de processo de compras
+                 l216_sequencial = int8 = l216_sequencial 
+                 l216_codproc = int8 = l216_codproc 
+                 l216_dataanexo = date = l216_dataanexo 
+                 l216_id_usuario = int8 = l216_id_usuario 
+                 l216_hora = varchar(5) = l216_hora 
+                 l216_instit = int8 = l216_instit 
                  ";
 
     //funcao construtor da classe 
     function __construct()
     {
         //classes dos rotulos dos campos
-        $this->rotulo = new rotulo("liccontrolepncp");
+        $this->rotulo = new rotulo("anexocomprapncp");
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
 
@@ -67,23 +59,20 @@ class cl_liccontrolepncp
     function atualizacampos($exclusao = false)
     {
         if ($exclusao == false) {
-            $this->l213_sequencial = ($this->l213_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_sequencial"] : $this->l213_sequencial);
-            $this->l213_licitacao = ($this->l213_licitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_licitacao"] : $this->l213_licitacao);
-            if ($this->l213_dtlancamento == "") {
-                $this->l213_dtlancamento_dia = ($this->l213_dtlancamento_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_dtlancamento_dia"] : $this->l213_dtlancamento_dia);
-                $this->l213_dtlancamento_mes = ($this->l213_dtlancamento_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_dtlancamento_mes"] : $this->l213_dtlancamento_mes);
-                $this->l213_dtlancamento_ano = ($this->l213_dtlancamento_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_dtlancamento_ano"] : $this->l213_dtlancamento_ano);
-                if ($this->l213_dtlancamento_dia != "") {
-                    $this->l213_dtlancamento = $this->l213_dtlancamento_ano . "-" . $this->l213_dtlancamento_mes . "-" . $this->l213_dtlancamento_dia;
+            $this->l216_sequencial = ($this->l216_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l216_sequencial"] : $this->l216_sequencial);
+            $this->l216_codproc = ($this->l216_codproc == "" ? @$GLOBALS["HTTP_POST_VARS"]["l216_codproc"] : $this->l216_codproc);
+            if ($this->l216_dataanexo == "") {
+                $this->l216_dataanexo_dia = ($this->l216_dataanexo_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l216_dataanexo_dia"] : $this->l216_dataanexo_dia);
+                $this->l216_dataanexo_mes = ($this->l216_dataanexo_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l216_dataanexo_mes"] : $this->l216_dataanexo_mes);
+                $this->l216_dataanexo_ano = ($this->l216_dataanexo_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l216_dataanexo_ano"] : $this->l216_dataanexo_ano);
+                if ($this->l216_dataanexo_dia != "") {
+                    $this->l216_dataanexo = $this->l216_dataanexo_ano . "-" . $this->l216_dataanexo_mes . "-" . $this->l216_dataanexo_dia;
                 }
             }
-            $this->l213_usuario = ($this->l213_usuario == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_usuario"] : $this->l213_usuario);
-            $this->l213_numerocontrolepncp = ($this->l213_numerocontrolepncp == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_numerocontrolepncp"] : $this->l213_numerocontrolepncp);
-            $this->l213_situacao = ($this->l213_situacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_situacao"] : $this->l213_situacao);
-            $this->l213_numerocompra = ($this->l213_numerocompra == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_numerocompra"] : $this->l213_numerocompra);
-            $this->l213_anousu = ($this->l213_anousu == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_anousu"] : $this->l213_anousu);
-            $this->l213_instit = ($this->l213_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_instit"] : $this->l213_instit);
-            $this->l213_processodecompras = ($this->l213_processodecompras == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_processodecompras"] : $this->l213_processodecompras);
+            $this->l216_id_usuario = ($this->l216_id_usuario == "" ? @$GLOBALS["HTTP_POST_VARS"]["l216_id_usuario"] : $this->l216_id_usuario);
+            $this->l216_hora = ($this->l216_hora == "" ? @$GLOBALS["HTTP_POST_VARS"]["l216_hora"] : $this->l216_hora);
+            $this->l216_instit = ($this->l216_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l216_instit"] : $this->l216_instit);
+        } else {
         }
     }
 
@@ -92,141 +81,109 @@ class cl_liccontrolepncp
     {
         $this->atualizacampos();
 
-        if ($this->l213_dtlancamento == null) {
-            $this->erro_sql = " Campo l213_dtlancamento não informado.";
-            $this->erro_campo = "l213_dtlancamento_dia";
+        if ($this->l216_codproc == null) {
+            $this->erro_sql = " Campo l216_codproc não informado.";
+            $this->erro_campo = "l216_codproc";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l213_usuario == null) {
-            $this->erro_sql = " Campo l213_usuario não informado.";
-            $this->erro_campo = "l213_usuario";
+        if ($this->l216_dataanexo == null) {
+            $this->erro_sql = " Campo l216_dataanexo não informado.";
+            $this->erro_campo = "l216_dataanexo_dia";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l213_numerocontrolepncp == null) {
-            $this->erro_sql = " Campo l213_numerocontrolepncp não informado.";
-            $this->erro_campo = "l213_numerocontrolepncp";
+        if ($this->l216_id_usuario == null) {
+            $this->erro_sql = " Campo l216_id_usuario não informado.";
+            $this->erro_campo = "l216_id_usuario";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l213_instit == null) {
-            $this->erro_sql = " Campo l213_instit não informado.";
-            $this->erro_campo = "l213_instit";
+        if ($this->l216_hora == null) {
+            $this->erro_sql = " Campo l216_hora não informado.";
+            $this->erro_campo = "l216_hora";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l213_situacao == null) {
-            $this->erro_sql = " Campo l213_situacao não informado.";
-            $this->erro_campo = "l213_situacao";
+        if ($this->l216_instit == null) {
+            $this->erro_sql = " Campo l216_instit não informado.";
+            $this->erro_campo = "l216_instit";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l213_numerocompra == null) {
-            $this->erro_sql = " Campo l213_numerocompra não informado.";
-            $this->erro_campo = "l213_numerocompra";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->l213_anousu == null) {
-            $this->erro_sql = " Campo l213_anousu não informado.";
-            $this->erro_campo = "l213_anousu";
-            $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }
-        if ($this->l213_licitacao == null || $this->l213_licitacao == "") {
-            $this->l213_licitacao == 'NULL';
-        }
-        if ($this->l213_processodecompras == null || $this->l213_processodecompras == "") {
-            $this->l213_processodecompras == 'NULL';
-        }
-        if ($this->l213_sequencial == "" || $this->l213_sequencial == null) {
-            $result = db_query("select nextval('liccontrolepncp_l213_sequencial_seq')");
+        if ($this->l216_sequencial == "" || $this->l216_sequencial == null) {
+            $result = db_query("select nextval('anexocomprapncp_l216_sequencial_seq')");
             if ($result == false) {
                 $this->erro_banco = str_replace("\n", "", @pg_last_error());
-                $this->erro_sql   = "Verifique o cadastro da sequencia: liccontrolepncp_l213_sequencial_seq do campo: l213_sequencial";
+                $this->erro_sql   = "Verifique o cadastro da sequencia: anexocomprapncp_l216_sequencial_seq do campo: l216_sequencial";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
-            $this->l213_sequencial = pg_result($result, 0, 0);
+            $this->l216_sequencial = pg_result($result, 0, 0);
         } else {
-            $result = db_query("select last_value from liccontrolepncp_l213_sequencial_seq");
-            if (($result != false) && (pg_result($result, 0, 0) < $this->l213_sequencial)) {
-                $this->erro_sql = " Campo l213_sequencial maior que último número da sequencia.";
+            $result = db_query("select last_value from anexocomprapncp_l216_sequencial_seq");
+            if (($result != false) && (pg_result($result, 0, 0) < $this->l216_sequencial)) {
+                $this->erro_sql = " Campo l216_sequencial maior que último número da sequencia.";
                 $this->erro_banco = "Sequencia menor que este número.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             } else {
-                $this->l213_sequencial = $this->l213_sequencial;
+                $this->l216_sequencial = $this->l216_sequencial;
             }
         }
-        if (($this->l213_sequencial == null) || ($this->l213_sequencial == "")) {
-            $this->erro_sql = " Campo l213_sequencial nao declarado.";
+        if (($this->l216_sequencial == null) || ($this->l216_sequencial == "")) {
+            $this->erro_sql = " Campo l216_sequencial nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
-        $sql = "insert into liccontrolepncp(
-                                       l213_sequencial 
-                                      ,l213_licitacao 
-                                      ,l213_usuario 
-                                      ,l213_dtlancamento 
-                                      ,l213_numerocontrolepncp
-                                      ,l213_situacao 
-                                      ,l213_numerocompra 
-                                      ,l213_anousu 
-                                      ,l213_instit 
-                                      ,l213_processodecompras
+        $sql = "insert into anexocomprapncp(
+                                       l216_sequencial 
+                                      ,l216_codproc 
+                                      ,l216_dataanexo 
+                                      ,l216_id_usuario 
+                                      ,l216_hora 
+                                      ,l216_instit 
                        )
                 values (
-                                $this->l213_sequencial 
-                               ," . ($this->l213_licitacao == null ? "null" : "'" . $this->l213_licitacao . "'") . " 
-                               ,$this->l213_usuario 
-                               ," . ($this->l213_dtlancamento == "null" || $this->l213_dtlancamento == "" ? "null" : "'" . $this->l213_dtlancamento . "'") . " 
-                               ,'$this->l213_numerocontrolepncp'
-                               ,$this->l213_situacao
-                               ,$this->l213_numerocompra
-                               ,$this->l213_anousu
-                               ,$this->l213_instit 
-                               ,$this->l213_processodecompras
+                                $this->l216_sequencial 
+                               ,$this->l216_codproc 
+                               ," . ($this->l216_dataanexo == "null" || $this->l216_dataanexo == "" ? "null" : "'" . $this->l216_dataanexo . "'") . " 
+                               ,$this->l216_id_usuario 
+                               ,'$this->l216_hora' 
+                               ,$this->l216_instit 
                       )";
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
             if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
-                $this->erro_sql   = "liccontrolepncp () nao Incluído. Inclusao Abortada.";
+                $this->erro_sql   = "anexocomprapncp () nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_banco = "liccontrolepncp já Cadastrado";
+                $this->erro_banco = "anexocomprapncp já Cadastrado";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             } else {
-                $this->erro_sql   = "liccontrolepncp () nao Incluído. Inclusao Abortada.";
+                $this->erro_sql   = "anexocomprapncp () nao Incluído. Inclusao Abortada.";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
@@ -248,17 +205,17 @@ class cl_liccontrolepncp
     }
 
     // funcao para alteracao
-    function alterar($l213_sequencial = null)
+    function alterar($oid = null)
     {
         $this->atualizacampos();
-        $sql = " update liccontrolepncp set ";
+        $sql = " update anexocomprapncp set ";
         $virgula = "";
-        if (trim($this->l213_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l213_sequencial"])) {
-            $sql  .= $virgula . " l213_sequencial = $this->l213_sequencial ";
+        if (trim($this->l216_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l216_sequencial"])) {
+            $sql  .= $virgula . " l216_sequencial = $this->l216_sequencial ";
             $virgula = ",";
-            if (trim($this->l213_sequencial) == null) {
-                $this->erro_sql = " Campo l213_sequencial não informado.";
-                $this->erro_campo = "l213_sequencial";
+            if (trim($this->l216_sequencial) == null) {
+                $this->erro_sql = " Campo l216_sequencial não informado.";
+                $this->erro_campo = "l216_sequencial";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -266,12 +223,12 @@ class cl_liccontrolepncp
                 return false;
             }
         }
-        if (trim($this->l213_licitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l213_licitacao"])) {
-            $sql  .= $virgula . " l213_licitacao = $this->l213_licitacao ";
+        if (trim($this->l216_codproc) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l216_codproc"])) {
+            $sql  .= $virgula . " l216_codproc = $this->l216_codproc ";
             $virgula = ",";
-            if (trim($this->l213_licitacao) == null) {
-                $this->erro_sql = " Campo l213_licitacao não informado.";
-                $this->erro_campo = "l213_licitacao";
+            if (trim($this->l216_codproc) == null) {
+                $this->erro_sql = " Campo l216_codproc não informado.";
+                $this->erro_campo = "l216_codproc";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -279,12 +236,12 @@ class cl_liccontrolepncp
                 return false;
             }
         }
-        if (trim($this->l213_dtlancamento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l213_dtlancamento_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["l213_dtlancamento_dia"] != "")) {
-            $sql  .= $virgula . " l213_dtlancamento = '$this->l213_dtlancamento' ";
+        if (trim($this->l216_dataanexo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l216_dataanexo_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["l216_dataanexo_dia"] != "")) {
+            $sql  .= $virgula . " l216_dataanexo = '$this->l216_dataanexo' ";
             $virgula = ",";
-            if (trim($this->l213_dtlancamento) == null) {
-                $this->erro_sql = " Campo l213_dtlancamento não informado.";
-                $this->erro_campo = "l213_dtlancamento_dia";
+            if (trim($this->l216_dataanexo) == null) {
+                $this->erro_sql = " Campo l216_dataanexo não informado.";
+                $this->erro_campo = "l216_dataanexo_dia";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -292,12 +249,12 @@ class cl_liccontrolepncp
                 return false;
             }
         } else {
-            if (isset($GLOBALS["HTTP_POST_VARS"]["l213_dtlancamento_dia"])) {
-                $sql  .= $virgula . " l213_dtlancamento = null ";
+            if (isset($GLOBALS["HTTP_POST_VARS"]["l216_dataanexo_dia"])) {
+                $sql  .= $virgula . " l216_dataanexo = null ";
                 $virgula = ",";
-                if (trim($this->l213_dtlancamento) == null) {
-                    $this->erro_sql = " Campo l213_dtlancamento não informado.";
-                    $this->erro_campo = "l213_dtlancamento_dia";
+                if (trim($this->l216_dataanexo) == null) {
+                    $this->erro_sql = " Campo l216_dataanexo não informado.";
+                    $this->erro_campo = "l216_dataanexo_dia";
                     $this->erro_banco = "";
                     $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -306,12 +263,12 @@ class cl_liccontrolepncp
                 }
             }
         }
-        if (trim($this->l213_usuario) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l213_usuario"])) {
-            $sql  .= $virgula . " l213_usuario = $this->l213_usuario ";
+        if (trim($this->l216_id_usuario) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l216_id_usuario"])) {
+            $sql  .= $virgula . " l216_id_usuario = $this->l216_id_usuario ";
             $virgula = ",";
-            if (trim($this->l213_usuario) == null) {
-                $this->erro_sql = " Campo l213_usuario não informado.";
-                $this->erro_campo = "l213_usuario";
+            if (trim($this->l216_id_usuario) == null) {
+                $this->erro_sql = " Campo l216_id_usuario não informado.";
+                $this->erro_campo = "l216_id_usuario";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -319,12 +276,12 @@ class cl_liccontrolepncp
                 return false;
             }
         }
-        if (trim($this->l213_numerocontrolepncp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l213_numerocontrolepncp"])) {
-            $sql  .= $virgula . " l213_numerocontrolepncp = '$this->l213_numerocontrolepncp' ";
+        if (trim($this->l216_hora) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l216_hora"])) {
+            $sql  .= $virgula . " l216_hora = '$this->l216_hora' ";
             $virgula = ",";
-            if (trim($this->l213_numerocontrolepncp) == null) {
-                $this->erro_sql = " Campo l213_numerocontrolepncp não informado.";
-                $this->erro_campo = "l213_numerocontrolepncp";
+            if (trim($this->l216_hora) == null) {
+                $this->erro_sql = " Campo l216_hora não informado.";
+                $this->erro_campo = "l216_hora";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -332,25 +289,12 @@ class cl_liccontrolepncp
                 return false;
             }
         }
-        if (trim($this->l213_instit) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l213_instit"])) {
-            $sql  .= $virgula . " l213_instit = $this->l213_instit ";
+        if (trim($this->l216_instit) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l216_instit"])) {
+            $sql  .= $virgula . " l216_instit = $this->l216_instit ";
             $virgula = ",";
-            if (trim($this->l213_instit) == null) {
-                $this->erro_sql = " Campo l213_instit não informado.";
-                $this->erro_campo = "l213_instit";
-                $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        if (trim($this->l213_processodecompras) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l213_processodecompras"])) {
-            $sql  .= $virgula . " l213_processodecompras = $this->l213_processodecompras ";
-            $virgula = ",";
-            if (trim($this->l213_processodecompras) == null) {
-                $this->erro_sql = " Campo l213_processodecompras não informado.";
-                $this->erro_campo = "l213_processodecompras";
+            if (trim($this->l216_instit) == null) {
+                $this->erro_sql = " Campo l216_instit não informado.";
+                $this->erro_campo = "l216_instit";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -359,11 +303,11 @@ class cl_liccontrolepncp
             }
         }
         $sql .= " where ";
-        $sql .= "l213_sequencial = '$l213_sequencial'";
+        $sql .= "oid = '$oid'";
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "liccontrolepncp nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_sql   = "anexocomprapncp nao Alterado. Alteracao Abortada.\\n";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -372,7 +316,7 @@ class cl_liccontrolepncp
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "liccontrolepncp nao foi Alterado. Alteracao Executada.\\n";
+                $this->erro_sql = "anexocomprapncp nao foi Alterado. Alteracao Executada.\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -391,21 +335,21 @@ class cl_liccontrolepncp
     }
 
     // funcao para exclusao 
-    function excluir($l213_sequencial = null, $dbwhere = null)
+    function excluir($oid = null, $dbwhere = null)
     {
 
-        $sql = " delete from liccontrolepncp
+        $sql = " delete from anexocomprapncp
                     where ";
         $sql2 = "";
         if ($dbwhere == null || $dbwhere == "") {
-            $sql2 = "l213_sequencial = $l213_sequencial";
+            $sql2 = "oid = '$oid'";
         } else {
             $sql2 = $dbwhere;
         }
         $result = db_query($sql . $sql2);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
-            $this->erro_sql   = "liccontrolepncp nao Excluído. Exclusão Abortada.\\n";
+            $this->erro_sql   = "anexocomprapncp nao Excluído. Exclusão Abortada.\\n";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -414,7 +358,7 @@ class cl_liccontrolepncp
         } else {
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
-                $this->erro_sql = "liccontrolepncp nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_sql = "anexocomprapncp nao Encontrado. Exclusão não Efetuada.\\n";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -448,7 +392,7 @@ class cl_liccontrolepncp
         $this->numrows = pg_numrows($result);
         if ($this->numrows == 0) {
             $this->erro_banco = "";
-            $this->erro_sql   = "Record Vazio na Tabela:liccontrolepncp";
+            $this->erro_sql   = "Record Vazio na Tabela:anexocomprapncp";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
@@ -458,7 +402,7 @@ class cl_liccontrolepncp
     }
 
     // funcao do sql 
-    function sql_query($l213_sequencial = null, $campos = "liccontrolepncp.l213_sequencial,*", $ordem = null, $dbwhere = "")
+    function sql_query($oid = null, $campos = "anexocomprapncp.oid,*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -471,11 +415,11 @@ class cl_liccontrolepncp
         } else {
             $sql .= $campos;
         }
-        $sql .= " from liccontrolepncp ";
+        $sql .= " from anexocomprapncp ";
         $sql2 = "";
         if ($dbwhere == "") {
-            if ($l213_sequencial != "" && $l213_sequencial != null) {
-                $sql2 = " where liccontrolepncp.l213_sequencial = '$l213_sequencial'";
+            if ($oid != "" && $oid != null) {
+                $sql2 = " where anexocomprapncp.oid = '$oid'";
             }
         } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
@@ -494,7 +438,7 @@ class cl_liccontrolepncp
     }
 
     // funcao do sql 
-    function sql_query_file($l213_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
+    function sql_query_file($oid = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
         if ($campos != "*") {
@@ -507,7 +451,8 @@ class cl_liccontrolepncp
         } else {
             $sql .= $campos;
         }
-        $sql .= " from liccontrolepncp ";
+        $sql .= " from anexocomprapncp ";
+        $sql .= " inner join comanexopncpdocumento on l217_licanexospncp=l216_sequencial ";
         $sql2 = "";
         if ($dbwhere == "") {
         } else if ($dbwhere != "") {
@@ -523,6 +468,17 @@ class cl_liccontrolepncp
                 $virgula = ",";
             }
         }
+        return $sql;
+    }
+
+    public function sql_anexos_licitacao($pc80_codproc)
+    {
+        $sql = "
+       SELECT l217_nomedocumento
+       FROM anexocomprapncp
+        INNER JOIN comanexopncpdocumento ON l217_licanexospncp = l216_sequencial
+        where l216_codproc = {$pc80_codproc}
+    ";
         return $sql;
     }
 }
