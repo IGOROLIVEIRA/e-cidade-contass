@@ -402,7 +402,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
       $clrsp20->si115_tiporestospagar = $oDados->si115_tiporestospagar;
       $clrsp20->si115_tipomovimento = $oDados->si115_tipomovimento;
       $clrsp20->si115_dtmovimentacao = $oDados->si115_dtmovimentacao;
-      $clrsp20->si115_dotorig = $oDados->si115_dotorig;
+      $clrsp20->si115_dotorig = '';
       $clrsp20->si115_vlmovimentacao = $oDados->si115_vlmovimentacao;
       $clrsp20->si115_codorgaoencampatribuic = $oDados->si115_codorgaoencampatribuic;
       $clrsp20->si115_codunidadesubencampatribuic = $oDados->si115_codunidadesubencampatribuic;
@@ -479,7 +479,7 @@ class SicomArquivoRestosPagar extends SicomArquivoBase implements iPadArquivoBas
     $clrsp20->si115_tiporestospagar = $iTiporestospagar;
     $clrsp20->si115_tipomovimento = $iTipoMovimento;
     $clrsp20->si115_dtmovimentacao = '2023-01-01';
-    $clrsp20->si115_dotorig = $bRestabelecimento ? $oDados10->dototigres : '';
+    $clrsp20->si115_dotorig = '';
     $clrsp20->si115_vlmovimentacao = $vlSaldoproce;
     $clrsp20->si115_codorgaoencampatribuic = '';
     $clrsp20->si115_codunidadesubencampatribuic = '';
