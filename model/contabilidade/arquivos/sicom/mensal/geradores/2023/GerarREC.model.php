@@ -59,7 +59,7 @@ class GerarREC extends GerarAM {
 
                         $aCSVREC11['si26_tiporegistro']         = $this->padLeftZero($aREC11['si26_tiporegistro'], 2);
                         $aCSVREC11['si26_codreceita']           = substr($aREC11['si26_codreceita'], 0, 15);
-                        $aCSVREC11['si26_codfontrecursos']      = $this->padLeftZero($aREC11['si26_codfontrecursos'], 3);
+                        $aCSVREC11['si26_codfontrecursos']      = substr($aREC11['si26_codfontrecursos'], 0, 7);
                         $aCSVREC11['si26_codigocontroleorcamentario'] = $this->padLeftZero($aREC11['si26_codigocontroleorcamentario'], 4);
                         $aCSVREC11['si26_tipodocumento']        = $aREC11['si26_tipodocumento'] == "" || $aREC11['si26_tipodocumento'] == '0' ? "" : $aREC11['si26_tipodocumento'];
                         $aCSVREC11['si26_nrodocumento']         = $aREC11['si26_nrodocumento'] == "" || $aREC11['si26_nrodocumento'] == '0' ? "" : $aREC11['si26_nrodocumento'];

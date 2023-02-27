@@ -42,7 +42,7 @@ $cldadoscomplementareslrf->rotulo->label();
                 ?>
             </td>
         </tr>
-
+        <? if(db_getsession('DB_anousu') < 2023) {?>
         <tr  <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
             <td nowrap title="<?=@$Tc218_passivosreconhecidos?>">
                 <b>Valores dos passivos reconhecidos:</b>
@@ -53,6 +53,7 @@ $cldadoscomplementareslrf->rotulo->label();
                 ?>
             </td>
         </tr>
+        <? } ?>
         <tr <?php if($tipoInstint == 1): ?> style="display:none;" <?php endif;?>>
             <td nowrap title="<?=@$Tc218_vlsaldoatualconcgarantiainterna?>">
                 <b>Saldo atual das concessões com garantia interna:</b>
@@ -387,7 +388,9 @@ $cldadoscomplementareslrf->rotulo->label();
         <?php endif;?>
         CurrentWindow.corpo.dadoscomplementares.c218_sequencial = document.form1.c218_sequencial.value;
         CurrentWindow.corpo.dadoscomplementares.c218_mesusu = document.form1.c218_mesusu.value;
-        CurrentWindow.corpo.dadoscomplementares.c218_passivosreconhecidos = document.form1.c218_passivosreconhecidos.value;
+        <?php if(db_getsession('DB_anousu') < 2023){ ?>
+            CurrentWindow.corpo.dadoscomplementares.c218_passivosreconhecidos = document.form1.c218_passivosreconhecidos.value;
+        <?php } ?>    
         CurrentWindow.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantiainterna = document.form1.c218_vlsaldoatualconcgarantiainterna.value;
         CurrentWindow.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantia = document.form1.c218_vlsaldoatualconcgarantia.value;
         CurrentWindow.corpo.dadoscomplementares.c218_vlsaldoatualcontragarantiainterna = document.form1.c218_vlsaldoatualcontragarantiainterna.value;
@@ -444,6 +447,9 @@ $cldadoscomplementareslrf->rotulo->label();
                 method: "post",
                 parameters: 'json=' + Object.toJSON(oParametros),
                 onComplete: (function(oAjax){
+                    <?php if(db_getsession("DB_anousu") > 2022){?>
+                        js_removeObj('msgBox');
+                    <?php } ?>     
                     oRetorno = eval("(" + oAjax.responseText + ")");
                     oRetornoMedidas = oRetorno.medidasadotadas;
                     oRetorno = oRetorno.dadoscomplementares;
@@ -453,7 +459,9 @@ $cldadoscomplementareslrf->rotulo->label();
                     document.form1.c218_mesusu.value = oRetorno.c218_mesusu;
                     document.form1.c218_mesusu.disabled = "true";
                     document.form1.c218_mesusu.style.background = "#DEB887";
-                    document.form1.c218_passivosreconhecidos.value = oRetorno.c218_passivosreconhecidos;
+                    <?php if(db_getsession('DB_anousu') < 2023) {?>
+                        document.form1.c218_passivosreconhecidos.value = oRetorno.c218_passivosreconhecidos;
+                    <?php } ?>      
                     document.form1.c218_vlsaldoatualconcgarantiainterna.value = oRetorno.c218_vlsaldoatualconcgarantiainterna;
                     document.form1.c218_vlsaldoatualconcgarantia.value = oRetorno.c218_vlsaldoatualconcgarantia;
                     document.form1.c218_vlsaldoatualcontragarantiainterna.value = oRetorno.c218_vlsaldoatualcontragarantiainterna;
@@ -507,7 +515,9 @@ $cldadoscomplementareslrf->rotulo->label();
                     /* PREENCHE AS VARIAVEIS GLOBAIS */
                     top.corpo.dadoscomplementares.c218_sequencial = oRetorno.c218_sequencial;
                     top.corpo.dadoscomplementares.c218_mesusu = oRetorno.c218_mesusu;
-                    top.corpo.dadoscomplementares.c218_passivosreconhecidos = oRetorno.c218_passivosreconhecidos;
+                    <?php if(db_getsession('DB_anousu') < 2023){ ?>
+                        top.corpo.dadoscomplementares.c218_passivosreconhecidos = oRetorno.c218_passivosreconhecidos;
+                    <?php } ?>      
                     top.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantiainterna = oRetorno.c218_vlsaldoatualconcgarantiainterna;
                     top.corpo.dadoscomplementares.c218_vlsaldoatualconcgarantia = oRetorno.c218_vlsaldoatualconcgarantia;
                     top.corpo.dadoscomplementares.c218_vlsaldoatualcontragarantiainterna = oRetorno.c218_vlsaldoatualcontragarantiainterna;
@@ -659,7 +669,9 @@ $cldadoscomplementareslrf->rotulo->label();
                 parameters: 'json=' + Object.toJSON(oParametros),
                 onComplete: (function(oAjax){
                     oRetorno = eval("(" + oAjax.responseText + ")");
-                    document.form1.c218_passivosreconhecidos.value = oRetorno.si167_vlsaldoatual;
+                    <?php if(db_getsession('DB_anousu') < 2023){ ?>
+                        document.form1.c218_passivosreconhecidos.value = oRetorno.si167_vlsaldoatual;
+                    <?php } ?>          
                     js_removeObj('msgBox');
                 })
             });
@@ -712,6 +724,10 @@ $cldadoscomplementareslrf->rotulo->label();
 
     function js_buscarMedidas(codigosmedidas) {
 
+        if(db_getsession('DB_anousu') > 2023){
+            js_removeObj('msgBox');
+        }
+            
         var oParametros = new Object();
         oParametros.exec = 'getMedidas';
         oParametros.codmedidas = codigosmedidas;

@@ -96,6 +96,11 @@ try {
       $oRetorno->pc80_tipoprocesso = $oProcessoCompra->getTipoProcesso();
       /*OC3770*/
       $oRetorno->pc80_criterioadjudicacao = $oProcessoCompra->getCriterioAdjudicacao();
+      $oRetorno->pc80_numdispensa = $oProcessoCompra->getNumerodispensa();
+      $oRetorno->pc80_dispvalor = $oProcessoCompra->getDispensaPorValor();
+      $oRetorno->pc80_orcsigiloso = $oProcessoCompra->getOrcSigiloso();
+      $oRetorno->pc80_subcontratacao = $oProcessoCompra->getSubContratacao();
+      $oRetorno->pc80_dadoscomplementares = urlencode($oProcessoCompra->getDadosComplementares());
 
 
       $aLotes = array();
@@ -148,6 +153,12 @@ try {
       $sResumo                   = db_stdClass::normalizeStringJsonEscapeString($oParam->sResumo);
       /*OC3770*/
       $sCriterioAjudicacao       = $oParam->criterioaj;
+      $iNumdispensa              = $oParam->pc80_numdispensa;
+      $sDiepensaValor            = $oParam->pc80_dispvalor;
+      $sOrcsigiloso              = $oParam->pc80_orcsigiloso;
+      $sSubContratacao           = $oParam->pc80_subcontratacao;
+      $sDadosComplementares      = $oParam->pc80_dadoscomplementares;
+      $iAmparolegal              = $oParam->pc80_amparolegal;
 
       if (empty($iSequencialProcessoCompra)) {
         throw new DBException(_M(MENSAGENS . "nao_informado_processo_compra"));
@@ -156,6 +167,13 @@ try {
       $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
       $oProcessoCompra->setResumo($sResumo);
       $oProcessoCompra->setCriterioAdjudicacao($sCriterioAjudicacao);
+
+      $oProcessoCompra->setNumerodispensa($iNumdispensa);
+      $oProcessoCompra->setDispensaPorValor($sDiepensaValor);
+      $oProcessoCompra->setOrcSigiloso($sOrcsigiloso);
+      $oProcessoCompra->setSubContratacao($sSubContratacao);
+      $oProcessoCompra->setDadosComplementares($sDadosComplementares);
+      $oProcessoCompra->setAmparoLegal($iAmparolegal);
 
       foreach ($aLotes as $oStdLote) {
 
