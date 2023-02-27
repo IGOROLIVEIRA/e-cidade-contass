@@ -40,7 +40,6 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
   private $oDeParaRecurso;
-  private $oControleOrcamentario;
 
   /**
    *
@@ -49,7 +48,6 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
   public function __construct()
   {
     $this->oDeParaRecurso = new DeParaRecurso();
-    $this->oControleOrcamentario = new ControleOrcamentario();
   }
 
   /**
@@ -341,9 +339,10 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops11 = new cl_ops112023();
 
             $clops11->si133_codfontrecursos = $this->oDeParaRecurso->getDePara($reg11->o15_codigo);
-            $this->oControleOrcamentario->setFonte($clops11->si133_codfontrecursos);
-            $this->oControleOrcamentario->setEmendaParlamentar($reg11->e60_emendaparlamentar);
-            $this->oControleOrcamentario->setEsferaEmendaParlamentar($reg11->e60_esferaemendaparlamentar);
+            $oControleOrcamentario = new ControleOrcamentario();
+            $oControleOrcamentario->setFonte($clops11->si133_codfontrecursos);
+            $oControleOrcamentario->setEmendaParlamentar($reg11->e60_emendaparlamentar);
+            $oControleOrcamentario->setEsferaEmendaParlamentar($reg11->e60_esferaemendaparlamentar);
             if ($reg11->subunidade != '' && $reg11->subunidade != 0) {
               $reg11->codunidadesub .= str_pad($reg11->subunidade, 3, "0", STR_PAD_LEFT);
             }
@@ -363,7 +362,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                 $clops11->si133_dtliquidacao = $reg11->dtliquidacao;
             }
             $clops11->si133_codfontrecursos = $clops11->si133_codfontrecursos;
-            $clops11->si133_codco = $this->oControleOrcamentario->getCodigoParaEmpenho();
+            $clops11->si133_codco = $oControleOrcamentario->getCodigoParaEmpenho();
             $clops11->si133_valorfonte = $oEmpPago->valor;
             $clops11->si133_tipodocumentocredor = $reg11->tipodocumentocredor;
             $clops11->si133_nrodocumento = $reg11->nrodocumento;
@@ -1003,9 +1002,10 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
             $clops11 = new cl_ops112023();
 
             $clops11->si133_codfontrecursos = $this->oDeParaRecurso->getDePara($reg11->o15_codigo);
-            $this->oControleOrcamentario->setFonte($clops11->si133_codfontrecursos);
-            $this->oControleOrcamentario->setEmendaParlamentar($reg11->e60_emendaparlamentar);
-            $this->oControleOrcamentario->setEsferaEmendaParlamentar($reg11->e60_esferaemendaparlamentar);
+            $oControleOrcamentario = new ControleOrcamentario();
+            $oControleOrcamentario->setFonte($clops11->si133_codfontrecursos);
+            $oControleOrcamentario->setEmendaParlamentar($reg11->e60_emendaparlamentar);
+            $oControleOrcamentario->setEsferaEmendaParlamentar($reg11->e60_esferaemendaparlamentar);
 
             if ($reg11->subunidade != '' && $reg11->subunidade != 0) {
               $reg11->codunidadesub .= str_pad($reg11->subunidade, 3, "0", STR_PAD_LEFT);
@@ -1026,7 +1026,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                   $clops11->si133_dtliquidacao = $reg11->dtliquidacao;
               }
             $clops11->si133_codfontrecursos = $clops11->si133_codfontrecursos;
-            $clops11->si133_codco = $this->oControleOrcamentario->getCodigoParaEmpenho();
+            $clops11->si133_codco = $oControleOrcamentario->getCodigoParaEmpenho();
             $clops11->si133_valorfonte = $oEmpPago->valor;
             $clops11->si133_tipodocumentocredor = $reg11->tipodocumentocredor;
             $clops11->si133_nrodocumento = $reg11->nrodocumento;

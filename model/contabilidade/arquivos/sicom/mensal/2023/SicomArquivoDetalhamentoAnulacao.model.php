@@ -36,7 +36,6 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
   private $oDeParaRecurso;
-  private $oControleOrcamentario;
 
   /**
    *
@@ -45,7 +44,6 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
   public function __construct()
   {
     $this->oDeParaRecurso = new DeParaRecurso();
-    $this->oControleOrcamentario = new ControleOrcamentario();
   }
 
   /**
@@ -331,14 +329,15 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
       $oDados11 = new cl_alq112023();
 
       $oDadosAgrupados->Reg11->si122_codfontrecursos = $this->oDeParaRecurso->getDePara($oDadosAgrupados->Reg11->si122_codfontrecursos);
-      $this->oControleOrcamentario->setFonte($oDadosAgrupados->Reg11->si122_codfontrecursos);
-      $this->oControleOrcamentario->setEmendaParlamentar($oDadosAgrupados->e60_emendaparlamentar);
-      $this->oControleOrcamentario->setEsferaEmendaParlamentar($oDadosAgrupados->e60_esferaemendaparlamentar);
+      $oControleOrcamentario = new ControleOrcamentario();
+      $oControleOrcamentario->setFonte($oDadosAgrupados->Reg11->si122_codfontrecursos);
+      $oControleOrcamentario->setEmendaParlamentar($oDadosAgrupados->e60_emendaparlamentar);
+      $oControleOrcamentario->setEsferaEmendaParlamentar($oDadosAgrupados->e60_esferaemendaparlamentar);
 
       $oDados11->si122_tiporegistro = 11;
       $oDados11->si122_codreduzido = $oDadosAgrupados->Reg11->si122_codreduzido;
       $oDados11->si122_codfontrecursos = $oDadosAgrupados->Reg11->si122_codfontrecursos;
-      $oDados11->si122_codco = $this->oControleOrcamentario->getCodigoParaEmpenho();
+      $oDados11->si122_codco = $oControleOrcamentario->getCodigoParaEmpenho();
       $oDados11->si122_valoranuladofonte = $oDadosAgrupados->Reg11->si122_valoranuladofonte;
       $oDados11->si122_mes = $oDadosAgrupados->Reg11->si122_mes;
       $oDados11->si122_reg10 = $oDados10->si121_sequencial;
