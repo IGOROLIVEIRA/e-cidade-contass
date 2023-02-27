@@ -158,7 +158,7 @@ try {
       $sOrcsigiloso              = $oParam->pc80_orcsigiloso;
       $sSubContratacao           = $oParam->pc80_subcontratacao;
       $sDadosComplementares      = $oParam->pc80_dadoscomplementares;
-
+      $iAmparolegal              = $oParam->pc80_amparolegal;
 
       if (empty($iSequencialProcessoCompra)) {
         throw new DBException(_M(MENSAGENS . "nao_informado_processo_compra"));
@@ -173,6 +173,7 @@ try {
       $oProcessoCompra->setOrcSigiloso($sOrcsigiloso);
       $oProcessoCompra->setSubContratacao($sSubContratacao);
       $oProcessoCompra->setDadosComplementares($sDadosComplementares);
+      $oProcessoCompra->setAmparoLegal($iAmparolegal);
 
       foreach ($aLotes as $oStdLote) {
 

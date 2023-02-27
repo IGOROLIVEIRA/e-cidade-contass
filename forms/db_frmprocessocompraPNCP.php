@@ -181,6 +181,35 @@ $clrotulo->label("descrdepto");
                         </td>
                     </tr>
                     <tr>
+                        <td>
+                            <label class="bold">Amparo Legal:</label>
+                        </td>
+                        <td>
+                            <?php
+                            $sql = "SELECT * FROM amparolegal 
+                        WHERE l212_codigo IN
+                                (SELECT l213_amparo
+                                 FROM amparocflicita
+                                 WHERE l213_modalidade IN
+                                         (SELECT DISTINCT l03_codigo
+                                          FROM amparocflicita
+                                          INNER JOIN cflicita ON cflicita.l03_codigo=l213_modalidade
+                                          WHERE l03_pctipocompratribunal=101
+                                              AND l03_instit = " . db_getsession('DB_instit') . "))";
+                            $result_tipo = db_query($sql);
+
+                            for ($iIndiceTipo = 0; $iIndiceTipo < pg_numrows($result_tipo); $iIndiceTipo++) {
+
+                                $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
+
+                                $tipo[$oTipo->l212_codigo] = $oTipo->l212_lei;
+                            }
+                            $tipo[0] = 'Selecione';
+                            db_select('pc80_amparolegal', $tipo, true, '', 'style="width:100%"');
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
                         <td colspan="4">
                             <fieldset>
                                 <legend>Dados Complementares:</legend>
@@ -293,7 +322,8 @@ $clrotulo->label("descrdepto");
                 pc80_dispvalor: $('pc80_dispvalor'),
                 pc80_orcsigiloso: $('pc80_orcsigiloso'),
                 pc80_subcontratacao: $('pc80_subcontratacao'),
-                pc80_dadoscomplementares: $('pc80_dadoscomplementares')
+                pc80_dadoscomplementares: $('pc80_dadoscomplementares'),
+                pc80_amparolegal: $('pc80_amparolegal')
             },
             lRedirecionaLote = false;
 
@@ -416,7 +446,7 @@ $clrotulo->label("descrdepto");
                     js_pesquisa();
                     return false;
                 }
-                console.log(oRetorno);
+
                 iCodigoProcesso = oRetorno.pc80_codproc;
 
                 oCampos.codigo_processo.value = oRetorno.pc80_codproc;
@@ -738,6 +768,7 @@ $clrotulo->label("descrdepto");
                 pc80_orcsigiloso: oCampos.pc80_orcsigiloso.value,
                 pc80_subcontratacao: oCampos.pc80_subcontratacao.value,
                 pc80_dadoscomplementares: oCampos.pc80_dadoscomplementares.value,
+                pc80_amparolegal: oCampos.pc80_amparolegal.value,
 
                 aItens: aItensLote
             }

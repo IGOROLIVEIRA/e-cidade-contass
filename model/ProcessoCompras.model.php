@@ -145,6 +145,12 @@ class ProcessoCompras
     protected $sDadosComplementares;
 
     /**
+     * Amparo legal
+     * @var string
+     */
+    protected $iAmparolegal;
+
+    /**
      *
      */
     function __construct($iCodigo = null)
@@ -174,6 +180,8 @@ class ProcessoCompras
                 $this->setOrcSigiloso($oDadosProcesso->pc80_orcsigiloso);
                 $this->setSubContratacao($oDadosProcesso->pc80_subcontratacao);
                 $this->setDadosComplementares($oDadosProcesso->pc80_dadoscomplementares);
+                $this->setAmparoLegal($oDadosProcesso->pc80_amparolegal);
+
                 /*FIM - OC3770*/
                 unset($oDadosProcesso);
             }
@@ -191,6 +199,20 @@ class ProcessoCompras
     public function setNumerodispensa($iNumeroDispensa)
     {
         $this->iNumeroDispensa = $iNumeroDispensa;
+    }
+
+    public function getAmparoLegal()
+    {
+        return $this->iAmparolegal;
+    }
+
+    /**
+     * Retorna o valor da propriedade iAmparolegal
+     * @return integer
+     */
+    public function setAmparoLegal($iAmparolegal)
+    {
+        $this->iAmparolegal = $iAmparolegal;
     }
 
     public function setDispensaPorValor($sDispensaPorValor)
@@ -525,14 +547,13 @@ class ProcessoCompras
         $oDaoPcProc->pc80_orcsigiloso = $this->getOrcSigiloso();
         $oDaoPcProc->pc80_subcontratacao = $this->getSubContratacao();
         $oDaoPcProc->pc80_dadoscomplementares = $this->getDadosComplementares();
-
+        $oDaoPcProc->pc80_amparolegal = $this->getAmparoLegal();
 
         if (empty($this->iCodigo)) {
 
             $oDaoPcProc->incluir(null);
             $this->iCodigo = $oDaoPcProc->pc80_codproc;
         } else {
-
             $oDaoPcProc->pc80_codproc = $this->getCodigo();
             $oDaoPcProc->alterar($oDaoPcProc->pc80_codproc);
         }

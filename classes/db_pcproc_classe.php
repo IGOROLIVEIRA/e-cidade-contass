@@ -188,8 +188,6 @@ class cl_pcproc
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
-    } else {
-      $this->pc80_numdispensa = "NULL";
     }
 
     if ($this->pc80_orcsigiloso == null && $this->pc80_dispvalor != "null") {
@@ -219,9 +217,8 @@ class cl_pcproc
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
-    } else {
-      $this->pc80_amparolegal = "NULL";
     }
+
     if ($pc80_codproc == "" || $pc80_codproc == null) {
       $result = db_query("select nextval('pcproc_pc80_codproc_seq')");
       if ($result == false) {
