@@ -25,7 +25,7 @@
 	$this->objpdf->SetX(17);
 	$this->objpdf->Text(16,$top,$this->prefeitura,0,0,"L",0);
 	$this->objpdf->SetX(105);
-	$this->objpdf->Text(105,$top,$this->prefeitura,0,0,"L",0);
+	$this->objpdf->Text(105,$top,$this->prefeitura,0,1,"L",0);
 	$this->objpdf->SetX(15);
 
 	$this->objpdf->SetFont('Arial','',6);
@@ -74,11 +74,9 @@
 	$this->objpdf->RoundedRect(68,$y+22,17,6,2,'DF','1234');// multa
 	$this->objpdf->RoundedRect(68,$y+29,17,6,2,'DF','1234');// juros
 	$this->objpdf->RoundedRect(68,$y+36,17,6,2,'DF','1234');// valor total
-	//$this->objpdf->RoundedRect(85,$y+1,06,40,2,'DF','1234');// vertical
 
 	$this->objpdf->RoundedRect(10,$y+8,57,16,2,'DF','1234');// nome / endereço
 	$this->objpdf->RoundedRect(10,$y+25,57,17,2,'DF','1234');// instruçoes
-
 
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(13,$y+3,$this->titulo1);// matricula/ inscrição
@@ -111,18 +109,16 @@
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(13,$y+27,$this->titulo4);// Instruções
 
-	$this->objpdf->SetFont('Arial','B',7);
+	$this->objpdf->SetFont('Arial','B',6);
 	$xx = $this->objpdf->getx();
 	$yy = $this->objpdf->gety();
 	$this->objpdf->setleftmargin(10);
-	$this->objpdf->setrightmargin(120);
+	$this->objpdf->setrightmargin(2);
 	$this->objpdf->sety($y+27);
-	$this->objpdf->multicell(0,3,$this->descr4_1);// Instruções 1 - linha 1
-	$this->objpdf->multicell(0,3,$this->descr4_2);// Instruções 1 - linha 2
-	$this->objpdf->multicell(0,3,$this->descr12_2);// Instruções 1 - linha 3
+	$this->objpdf->multicell(57,2,$this->descr4_1);// Instruções 1 - linha 1
+	$this->objpdf->multicell(57,2,$this->descr4_2);// Instruções 1 - linha 2
+	$this->objpdf->multicell(57,2,$this->descr12_2);// Instruções 1 - linha 3
 	$this->objpdf->setxy($xx,$yy-1);
-
-/**/
 
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(69,$y+3,$this->titulo6);// Vencimento
@@ -153,8 +149,6 @@
 	$this->objpdf->Text(69,$y+38,$this->titulo7." Total");// valor total
 	$this->objpdf->SetFont('Arial','B',6);
 	$this->objpdf->Text(69,$y+41,$this->valtotal);
-
-/**/
 
 /**************************************************************************************/
 //////////////////////////   G U I A   D O   B A N C O  ////////////////////////////////
@@ -214,16 +208,16 @@
 
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(97,$y+25,$this->titulo12);// instruções
-	$this->objpdf->SetFont('Arial','B',7);
+	$this->objpdf->SetFont('Arial','B',6);
 	$xx = $this->objpdf->getx();
 	$yy = $this->objpdf->gety();
-	$this->objpdf->setleftmargin(97);
+	$this->objpdf->setleftmargin(96);
 	$this->objpdf->setrightmargin(2);
-	$this->objpdf->sety($y+25);
+	$this->objpdf->sety($y+26);
 
 	// mensagem de instruções da guia prefeitura
-	$this->objpdf->multicell(80,3,$this->descr12_1);// Instruções 2 - linha 1
-	$this->objpdf->multicell(80,3,$this->descr12_2);// Instruções 2 - linha 2
+	$this->objpdf->multicell(80,2,$this->descr12_1);// Instruções 2 - linha 1
+	$this->objpdf->multicell(80,2,$this->descr12_2);// Instruções 2 - linha 2
 	$this->objpdf->setxy($xx,$yy);
 
 	$this->objpdf->SetFont('Arial','',5);
