@@ -705,7 +705,6 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->pql_localizacao = $pql_localizacao;
     $bql                   = ($db21_usadistritounidade == 't' ? 'DSQLU: '.$j34_distrito.'-':'SQL: ').$j34_setor.'-'.$j34_quadra.'-'.$j34_lote.($db21_usadistritounidade == 't' ? '-'.$j01_unidade:"")." ".($pql_localizacao!=""?"PQL: $pql_localizacao":"");
 
-
     if (isset ($impmodelo) && $pdf1->impmodelo == 30) {
       $sqlparag  = " select db02_texto                                             ";
       $sqlparag .= "   from db_documento                                           ";
@@ -732,7 +731,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     } else {
 
       if ($k00_tipo != 6) {
-        $iNumeroOrigem = $j01_matric($db21_usadistritounidade == 't' ? 'DSQLU: '.$j34_distrito.'-':'SQL: ').'-'.$j34_setor.'-'.$j34_quadra.'-'.$j34_lote.($db21_usadistritounidade == 't' ? '-'.$j01_unidade:"");
+        $iNumeroOrigem = $j01_matric.($db21_usadistritounidade == 't' ? 'DSQLU: '.$j34_distrito.'-':'SQL: ').'-'.$j34_setor.'-'.$j34_quadra.'-'.$j34_lote.($db21_usadistritounidade == 't' ? '-'.$j01_unidade:"");
       } else {
 
         $iNumeroOrigem = "";
