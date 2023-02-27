@@ -156,10 +156,10 @@ class cl_liccontrolepncp
             return false;
         }
         if ($this->l213_licitacao == null || $this->l213_licitacao == "") {
-            $this->l213_licitacao == 'NULL';
+            $this->l213_licitacao = "NULL";
         }
-        if ($this->l213_processodecompras == null || $this->l213_processodecompras == "") {
-            $this->l213_processodecompras == 'NULL';
+        if ($this->l213_processodecompras == null) {
+            $this->l213_processodecompras = "NULL";
         }
         if ($this->l213_sequencial == "" || $this->l213_sequencial == null) {
             $result = db_query("select nextval('liccontrolepncp_l213_sequencial_seq')");

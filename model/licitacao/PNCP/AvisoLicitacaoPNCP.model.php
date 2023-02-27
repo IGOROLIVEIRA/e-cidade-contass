@@ -133,7 +133,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $method = 'POST';
 
         $file = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.json';
-        $filezip = curl_file_create('model/licitacao/PNCP/arquivos/Compra6.zip');
+        $filezip = curl_file_create('model/licitacao/PNCP/arquivos/Compra' . $processo . '.zip');
 
         $cfile = new \CURLFile($file, 'application/json', 'compra');
         //$cfilezip = new \CURLFile($filezip, 'application/zip', 'documento');
