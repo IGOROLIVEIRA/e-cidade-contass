@@ -62,7 +62,6 @@ class cl_emp102023
   var $si106_exercicioprocessolicitatorio = 0;
   var $si106_tipoprocesso = 0;
   var $si106_cpfordenador = null;
-  var $si106_tipodespesaemprpps = 0;
   var $si106_mes = 0;
   var $si106_instit = 0;
   // cria propriedade com as variaveis do arquivo
@@ -103,7 +102,6 @@ class cl_emp102023
                  si106_exercicioprocessolicitatorio = int8 = Exercício do  processo  licitatório
                  si106_tipoprocesso = int8 = Tipo de processo
                  si106_cpfordenador = varchar(11) = Número do CPF
-                 si106_tipodespesaemprpps = int8 = Tipos de empenhos do RPPS
                  si106_mes = int8 = Mês
                  si106_instit = int8 = Instituição
                  ";
@@ -188,7 +186,6 @@ class cl_emp102023
       $this->si106_exercicioprocessolicitatorio = ($this->si106_exercicioprocessolicitatorio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_exercicioprocessolicitatorio"] : $this->si106_exercicioprocessolicitatorio);
       $this->si106_tipoprocesso = ($this->si106_tipoprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_tipoprocesso"] : $this->si106_tipoprocesso);
       $this->si106_cpfordenador = ($this->si106_cpfordenador == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_cpfordenador"] : $this->si106_cpfordenador);
-      $this->si106_tipodespesaemprpps = ($this->si106_tipodespesaemprpps == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_tipodespesaemprpps"] : $this->si106_tipodespesaemprpps);
       $this->si106_mes = ($this->si106_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_mes"] : $this->si106_mes);
       $this->si106_instit = ($this->si106_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si106_instit"] : $this->si106_instit);
     } else {
@@ -343,7 +340,6 @@ class cl_emp102023
                                       ,si106_exercicioprocessolicitatorio
                                       ,si106_tipoprocesso
                                       ,si106_cpfordenador
-                                      ,si106_tipodespesaemprpps
                                       ,si106_mes
                                       ,si106_instit
                        )
@@ -384,7 +380,6 @@ class cl_emp102023
                                ,$this->si106_exercicioprocessolicitatorio
                                ,$this->si106_tipoprocesso
                                ,'$this->si106_cpfordenador'
-                               ,".($this->si106_tipodespesaemprpps == "null" || $this->si106_tipodespesaemprpps == "" ? "null" : $this->si106_tipodespesaemprpps)."
                                ,$this->si106_mes
                                ,$this->si106_instit
                       )";
@@ -656,10 +651,7 @@ class cl_emp102023
       $sql .= $virgula . " si106_cpfordenador = '$this->si106_cpfordenador' ";
       $virgula = ",";
     }
-    if (trim($this->si106_tipodespesaemprpps) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si106_cpfordenador"])) {
-      $sql .= $virgula . " si106_cpfordenador = '$this->si106_tipodespesaemprpps' ";
-      $virgula = ",";
-    }
+
     if (trim($this->si106_mes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si106_mes"])) {
       $sql .= $virgula . " si106_mes = $this->si106_mes ";
       $virgula = ",";

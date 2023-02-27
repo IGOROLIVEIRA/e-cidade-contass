@@ -23,6 +23,7 @@ class cl_anl112023
   var $si111_nroempenho = 0;
   var $si111_nroanulacao = 0;
   var $si111_codfontrecursos = 0;
+  var $si111_codco = 0;
   var $si111_vlanulacaofonte = 0;
   var $si111_mes = 0;
   var $si111_reg10 = 0;
@@ -67,6 +68,7 @@ class cl_anl112023
       $this->si111_sequencial = ($this->si111_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si111_sequencial"] : $this->si111_sequencial);
       $this->si111_tiporegistro = ($this->si111_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si111_tiporegistro"] : $this->si111_tiporegistro);
       $this->si111_codunidadesub = ($this->si111_codunidadesub == "" ? @$GLOBALS["HTTP_POST_VARS"]["si111_codunidadesub"] : $this->si111_codunidadesub);
+      $this->si111_codco = ($this->si111_codco == "" ? @$GLOBALS["HTTP_POST_VARS"]["si111_codco"] : $this->si111_codco);
       $this->si111_nroempenho = ($this->si111_nroempenho == "" ? @$GLOBALS["HTTP_POST_VARS"]["si111_nroempenho"] : $this->si111_nroempenho);
       $this->si111_nroanulacao = ($this->si111_nroanulacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si111_nroanulacao"] : $this->si111_nroanulacao);
       $this->si111_codfontrecursos = ($this->si111_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si111_codfontrecursos"] : $this->si111_codfontrecursos);
@@ -168,6 +170,7 @@ class cl_anl112023
                                        si111_sequencial 
                                       ,si111_tiporegistro 
                                       ,si111_codunidadesub 
+                                      ,si111_codco 
                                       ,si111_nroempenho 
                                       ,si111_nroanulacao 
                                       ,si111_codfontrecursos 
@@ -180,6 +183,7 @@ class cl_anl112023
                                 $this->si111_sequencial 
                                ,$this->si111_tiporegistro 
                                ,'$this->si111_codunidadesub' 
+                               ,'$this->si111_codco' 
                                ,$this->si111_nroempenho 
                                ,$this->si111_nroanulacao 
                                ,$this->si111_codfontrecursos 
@@ -264,6 +268,10 @@ class cl_anl112023
     }
     if (trim($this->si111_codunidadesub) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si111_codunidadesub"])) {
       $sql .= $virgula . " si111_codunidadesub = '$this->si111_codunidadesub' ";
+      $virgula = ",";
+    }
+    if (trim($this->si111_codco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si111_codco"])) {
+      $sql .= $virgula . " si111_codco = '$this->si111_codco' ";
       $virgula = ",";
     }
     if (trim($this->si111_nroempenho) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si111_nroempenho"])) {

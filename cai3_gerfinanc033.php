@@ -705,7 +705,22 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->pql_localizacao = $pql_localizacao;
     $bql                   = ($db21_usadistritounidade == 't' ? 'DSQLU: '.$j34_distrito.'-':'SQL: ').$j34_setor.'-'.$j34_quadra.'-'.$j34_lote.($db21_usadistritounidade == 't' ? '-'.$j01_unidade:"")." ".($pql_localizacao!=""?"PQL: $pql_localizacao":"");
 
-    if (isset ($impmodelo) && $impmodelo == 30) {
+
+    if (isset ($impmodelo) && $pdf1->impmodelo == 30) {
+      $sqlparag  = " select db02_texto                                             ";
+      $sqlparag .= "   from db_documento                                           ";
+      $sqlparag .= "        inner join db_docparag  on db03_docum   = db04_docum   ";
+      $sqlparag .= "        inner join db_tipodoc   on db08_codigo  = db03_tipodoc ";
+      $sqlparag .= "        inner join db_paragrafo on db04_idparag = db02_idparag ";
+      $sqlparag .= " where db03_tipodoc = 1040 ";
+      $sqlparag .= "   and db03_instit = ".db_getsession("DB_instit")." ";
+      $sqlparag .= " order by db04_ordem ";
+      $resparag = db_query($sqlparag);
+
+      if (pg_numrows($resparag) > 0) {
+        db_fieldsmemory($resparag, 0);
+        $pdf1->secretaria = $db02_texto;
+      }
 
       if ($k00_tipo != 6) {
         $iNumeroOrigem = $j01_matric;
@@ -717,7 +732,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     } else {
 
       if ($k00_tipo != 6) {
-        $iNumeroOrigem = $j01_matric.($db21_usadistritounidade == 't' ? 'DSQLU: '.$j34_distrito.'-':'SQL: ').'-'.$j34_setor.'-'.$j34_quadra.'-'.$j34_lote.($db21_usadistritounidade == 't' ? '-'.$j01_unidade:"");
+        $iNumeroOrigem = $j01_matric($db21_usadistritounidade == 't' ? 'DSQLU: '.$j34_distrito.'-':'SQL: ').'-'.$j34_setor.'-'.$j34_quadra.'-'.$j34_lote.($db21_usadistritounidade == 't' ? '-'.$j01_unidade:"");
       } else {
 
         $iNumeroOrigem = "";

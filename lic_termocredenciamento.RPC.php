@@ -103,7 +103,7 @@ switch ($oParam->exec) {
     case 'getNumeroTermo':
         $iAnoSessao      = db_getsession('DB_anousu');
 
-        $sql = "select max(l212_numerotermo) as numeromaximo from credenciamentotermo";
+        $sql = "select max(l212_numerotermo) as numeromaximo from credenciamentotermo where l212_anousu = $iAnoSessao";
         $rsNumTermo  = db_query($sql);
         $iNumTermo = db_utils::fieldsMemory($rsNumTermo, 0)->numeromaximo;
         if ($iNumTermo == "") {

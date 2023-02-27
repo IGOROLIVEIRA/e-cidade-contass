@@ -29,6 +29,9 @@ class cl_consexecucaoorc {
    var $c202_valorpago = 0; 
    var $c202_valorpagoanu = 0; 
    var $c202_mesreferenciasicom = 0; 
+   var $c202_codfontrecursos = 0;
+   var $c202_codacompanhamento = 0;
+   var $c202_anousu = 0;
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  c202_sequencial = int8 = Código Sequencial 
@@ -45,6 +48,7 @@ class cl_consexecucaoorc {
                  c202_valorpago = float8 = Valor Pago no Mês 
                  c202_valorpagoanu = float8 = Valor Pago Anulado no Mês 
                  c202_mesreferenciasicom = int8 = Mês de Referência SICOM
+                 c202_codacompanhamento = text = Código de acompanhamento
                  ";
    //funcao construtor da classe 
    function cl_consexecucaoorc() { 
@@ -78,7 +82,8 @@ class cl_consexecucaoorc {
        $this->c202_valorpago = ($this->c202_valorpago == ""?@$GLOBALS["HTTP_POST_VARS"]["c202_valorpago"]:$this->c202_valorpago);
        $this->c202_valorpagoanu = ($this->c202_valorpagoanu == ""?@$GLOBALS["HTTP_POST_VARS"]["c202_valorpagoanu"]:$this->c202_valorpagoanu);
        $this->c202_mesreferenciasicom = ($this->c202_mesreferenciasicom == ""?@$GLOBALS["HTTP_POST_VARS"]["c202_mesreferenciasicom"]:$this->c202_mesreferenciasicom);
-     }else{
+       $this->c202_codacompanhamento = ($this->c202_codacompanhamento == ""?@$GLOBALS["HTTP_POST_VARS"]["c202_codacompanhamento"]:$this->c202_codacompanhamento);
+      }else{
        $this->c202_sequencial = ($this->c202_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["c202_sequencial"]:$this->c202_sequencial);
      }
    }
@@ -139,18 +144,42 @@ class cl_consexecucaoorc {
        $this->erro_status = "0";
        return false;
      }
-     /**
+     if(db_getsession('DB_anousu') > 2022){
+      /**
       * adicionado para verificar o tamanho do campo
       */
-     if(strlen($this->c202_codfontrecursos) != 3 ){ 
-       $this->erro_sql = " Campo Fonte deve conter 3 dígitos.";
-       $this->erro_campo = "c202_codfontrecursos";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+      if(strlen($this->c202_codfontrecursos) != 7 ){ 
+        $this->erro_sql = " Campo Fonte deve conter 7 dígitos.";
+        $this->erro_campo = "c202_codfontrecursos";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+      if($this->c202_codacompanhamento == null ){ 
+        $this->erro_sql = " Campo Código de acompanhamento nao Informado.";
+        $this->erro_campo = "c202_codacompanhamento";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+     }else{
+      /**
+      * adicionado para verificar o tamanho do campo
+      */
+      if(strlen($this->c202_codfontrecursos) != 3 ){ 
+        $this->erro_sql = " Campo Fonte deve conter 3 dígitos.";
+        $this->erro_campo = "c202_codfontrecursos";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+   }
      if($this->c202_elemento == null ){ 
        $this->erro_sql = " Campo Elemento nao Informado.";
        $this->erro_campo = "c202_elemento";
@@ -274,6 +303,7 @@ class cl_consexecucaoorc {
                                       ,c202_valorpagoanu 
                                       ,c202_anousu
                                       ,c202_mesreferenciasicom
+                                      ,c202_codacompanhamento
                        )
                 values (
                                 $this->c202_sequencial 
@@ -291,6 +321,7 @@ class cl_consexecucaoorc {
                                ,$this->c202_valorpagoanu
                                ,".db_getsession("DB_anousu")." 
                                ,$this->c202_mesreferenciasicom 
+                               ,'$this->c202_codacompanhamento'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -333,7 +364,8 @@ class cl_consexecucaoorc {
        $resac = db_query("insert into db_acount values($acount,2010219,2009425,'','".AddSlashes(pg_result($resaco,0,'c202_valorliquidado'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010219,2009426,'','".AddSlashes(pg_result($resaco,0,'c202_valorpago'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010219,2009427,'','".AddSlashes(pg_result($resaco,0,'c202_valorpagoanu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     }
+       $resac = db_query("insert into db_acount values($acount,2010219,2009428,'','".AddSlashes(pg_result($resaco,0,'c202_codacompanhamento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      }
      return true;
    } 
    // funcao para alteracao
@@ -434,16 +466,43 @@ class cl_consexecucaoorc {
        /**
         * adicionado para verificar o tamanho do campo
         */
-       if(strlen($this->c202_codfontrecursos) != 3 ){ 
-         $this->erro_sql = " Campo Fonte deve conter 3 dígitos.";
-         $this->erro_campo = "c202_codfontrecursos";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
+        if(db_getsession('DB_anousu') > 2022){ 
+          if(strlen($this->c202_codfontrecursos) != 7 ){ 
+            $this->erro_sql = " Campo Fonte deve conter 7 dígitos.";
+            $this->erro_campo = "c202_codfontrecursos";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+          }
+        }else{
+          if(strlen($this->c202_codfontrecursos) != 3 ){ 
+            $this->erro_sql = " Campo Fonte deve conter 3 dígitos.";
+            $this->erro_campo = "c202_codfontrecursos";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+          }
+        }
        }
-     }
+       if(db_getsession('DB_anousu') > 2022){ 
+        if(trim($this->c202_codacompanhamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c202_codacompanhamento"])){ 
+          $sql  .= $virgula." c202_codacompanhamento = $this->c202_codacompanhamento ";
+          $virgula = ",";
+          if(trim($this->c202_codacompanhamento) == null ){ 
+            $this->erro_sql = " Campo Código de acompanhamento Informado.";
+            $this->erro_campo = "c202_codacompanhamento";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+          }
+        }
+       }
      if(trim($this->c202_elemento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c202_elemento"])){ 
        $sql  .= $virgula." c202_elemento = $this->c202_elemento ";
        $virgula = ",";
@@ -580,7 +639,10 @@ class cl_consexecucaoorc {
            $resac = db_query("insert into db_acount values($acount,2010219,2009426,'".AddSlashes(pg_result($resaco,$conresaco,'c202_valorpago'))."','$this->c202_valorpago',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["c202_valorpagoanu"]) || $this->c202_valorpagoanu != "")
            $resac = db_query("insert into db_acount values($acount,2010219,2009427,'".AddSlashes(pg_result($resaco,$conresaco,'c202_valorpagoanu'))."','$this->c202_valorpagoanu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
+         if(isset($GLOBALS["HTTP_POST_VARS"]["c202_codacompanhamento"]) || $this->c202_codacompanhamento != "")
+           $resac = db_query("insert into db_acount values($acount,2010219,2009428,'".AddSlashes(pg_result($resaco,$conresaco,'c202_codacompanhamento'))."','$this->c202_codacompanhamento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+     
+        }
      }
      $result = db_query($sql);
      if($result==false){ 
@@ -638,6 +700,7 @@ class cl_consexecucaoorc {
          $resac = db_query("insert into db_acount values($acount,2010219,2009425,'','".AddSlashes(pg_result($resaco,$iresaco,'c202_valorliquidado'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010219,2009426,'','".AddSlashes(pg_result($resaco,$iresaco,'c202_valorpago'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010219,2009427,'','".AddSlashes(pg_result($resaco,$iresaco,'c202_valorpagoanu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,2010219,2009428,'','".AddSlashes(pg_result($resaco,$iresaco,'c202_codacompanhamento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $sql = " delete from consexecucaoorc

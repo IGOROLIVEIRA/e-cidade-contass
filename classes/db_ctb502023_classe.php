@@ -551,6 +551,29 @@ class cl_ctb502023
     
     return $sql;
   }
+
+  public function sql_Reg50($ano, $dataIni, $dataFim, $instit)
+  {
+    $sSqlCtbEncerradas = "SELECT 50 AS tiporegistro,
+                              si09_codorgaotce,
+                              CASE
+                                  WHEN c61_codtce <> 0 THEN c61_codtce
+                                  ELSE k13_reduz
+                              END AS codctb,
+                              'E' AS situacaoconta,
+                              k13_limite AS dataencerramento
+                          FROM saltes
+                          JOIN conplanoreduz ON k13_reduz = c61_reduz AND c61_anousu = {$ano}
+                          JOIN conplanoconta ON c63_codcon = c61_codcon AND c63_anousu = c61_anousu
+                          LEFT JOIN conplanocontabancaria ON c56_codcon = c61_codcon AND c56_anousu = c61_anousu
+                          LEFT JOIN contabancaria ON c56_contabancaria = db83_sequencial
+                          LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
+                          WHERE k13_limite BETWEEN '{$dataIni}' AND '{$dataFim}'
+                          AND c61_instit = {$instit}";
+
+    return $sSqlCtbEncerradas;
+    
+  }
 }
 
 ?>

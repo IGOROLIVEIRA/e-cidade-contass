@@ -38,6 +38,7 @@ class cl_ops112023
   var $si133_dtliquidacao_ano = null;
   var $si133_dtliquidacao = null;
   var $si133_codfontrecursos = 0;
+  var $si133_codco = "0000";
   var $si133_valorfonte = 0;
   var $si133_tipodocumentocredor = 0;
   var $si133_nrodocumento = null;
@@ -60,6 +61,7 @@ class cl_ops112023
                  si133_nroliquidacao = int8 = Número da  Liquidação 
                  si133_dtliquidacao = date = Data da  Liquidação do  empenho 
                  si133_codfontrecursos = int8 = Código da fonte de recursos 
+                 si133_codco = varchar(4) = Código do Acompanhamento Orçamentário
                  si133_valorfonte = float8 = Valor bruto do pagamento por fonte 
                  si133_tipodocumentocredor = int8 = Tipo de  Documento do  credor 
                  si133_nrodocumento = varchar(14) = Número do documento do credor 
@@ -126,6 +128,7 @@ class cl_ops112023
         }
       }
       $this->si133_codfontrecursos = ($this->si133_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si133_codfontrecursos"] : $this->si133_codfontrecursos);
+      $this->si133_codco = ($this->si133_codco == "" ? @$GLOBALS["HTTP_POST_VARS"]["si133_codco"] : $this->si133_codco);
       $this->si133_valorfonte = ($this->si133_valorfonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si133_valorfonte"] : $this->si133_valorfonte);
       $this->si133_tipodocumentocredor = ($this->si133_tipodocumentocredor == "" ? @$GLOBALS["HTTP_POST_VARS"]["si133_tipodocumentocredor"] : $this->si133_tipodocumentocredor);
       $this->si133_nrodocumento = ($this->si133_nrodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si133_nrodocumento"] : $this->si133_nrodocumento);
@@ -180,6 +183,11 @@ class cl_ops112023
     if ($this->si133_codfontrecursos == null) {
       $this->si133_codfontrecursos = "0";
     }
+    
+    if ($this->si133_codco == null) {
+        $this->si133_codco = "0000";
+    }
+    
     if ($this->si133_valorfonte == null) {
       $this->si133_valorfonte = "0";
     }
@@ -258,6 +266,7 @@ class cl_ops112023
                                       ,si133_nroliquidacao 
                                       ,si133_dtliquidacao 
                                       ,si133_codfontrecursos 
+                                      ,si133_codco
                                       ,si133_valorfonte 
                                       ,si133_tipodocumentocredor 
                                       ,si133_nrodocumento 
@@ -280,6 +289,7 @@ class cl_ops112023
                                ,$this->si133_nroliquidacao 
                                ," . ($this->si133_dtliquidacao == "null" || $this->si133_dtliquidacao == "" ? "null" : "'" . $this->si133_dtliquidacao . "'") . "
                                ,$this->si133_codfontrecursos 
+                               ,'$this->si133_codco' 
                                ,$this->si133_valorfonte 
                                ,$this->si133_tipodocumentocredor 
                                ,'$this->si133_nrodocumento' 
@@ -446,6 +456,15 @@ class cl_ops112023
       $sql .= $virgula . " si133_codfontrecursos = $this->si133_codfontrecursos ";
       $virgula = ",";
     }
+    
+    if (trim($this->si133_codco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si133_codco"])) {
+        if (trim($this->si133_codco) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si133_codco"])) {
+            $this->si133_codco = "0";
+        }
+        $sql .= $virgula . " si133_codco = '$this->si133_codco' ";
+        $virgula = ",";
+    }
+    
     if (trim($this->si133_valorfonte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si133_valorfonte"])) {
       if (trim($this->si133_valorfonte) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si133_valorfonte"])) {
         $this->si133_valorfonte = "0";

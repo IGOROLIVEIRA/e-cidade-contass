@@ -26,6 +26,7 @@ if(isset($db_opcaoal) && !isset($opcao) && !isset($excluir)){
      $c201_valortransf = "";
      $c201_enviourelatorios = "";
      $c201_codfontrecursos = "";
+     $c201_codacompanhamento = "";
    }
 } 
 ?>
@@ -72,10 +73,27 @@ db_select('c201_mescompetencia',$x,true,$db_opcao,"");
     </td>
     <td> 
 <?
-db_input('c201_codfontrecursos',10,$Ic201_codfontrecursos,true,'text',$db_opcao,"","","","",3)
+if($iAnoUsu > 2022)
+db_input('c201_codfontrecursos',10,$Ic201_codfontrecursos,true,'text',$db_opcao,"","","","",7);
+else
+db_input('c201_codfontrecursos',10,$Ic201_codfontrecursos,true,'text',$db_opcao,"","","","",3);
 ?>
+  </td>
+</tr>
+<?
+if($iAnoUsu > 2022) {
+?>      
+<tr>
+  <td nowrap title="Código de acompanhamento">
+     <b>Código de acompanhamento: </b>
+  </td>
+  <td> 
+    <?
+      db_input('c201_codacompanhamento',10,$Ic201_codacompanhamento,true,'text',$db_opcao,"","","","",4);
+    ?>
     </td>
   </tr>
+  <? } ?>
   <tr>
     <td nowrap title="<?=@$Tc201_valortransf?>">
        <?=@$Lc201_valortransf?>
@@ -111,7 +129,7 @@ db_select('c201_enviourelatorios',$x,true,$db_opcao,"");
 	 $chavepri= array("c201_sequencial"=>@$c201_sequencial);
 	 $cliframe_alterar_excluir->chavepri=$chavepri;
 	 $cliframe_alterar_excluir->sql     = $clconsvalorestransf->sql_query_file(null,"*",null,"c201_consconsorcios=$c201_consconsorcios and c201_anousu = ".db_getsession("DB_anousu"));
-	 $cliframe_alterar_excluir->campos  ="c201_consconsorcios,c201_mescompetencia,c201_codfontrecursos,c201_valortransf,c201_enviourelatorios";
+	 $cliframe_alterar_excluir->campos  ="c201_consconsorcios,c201_mescompetencia,c201_codfontrecursos,c201_codacompanhamento,c201_valortransf,c201_enviourelatorios";
 	 $cliframe_alterar_excluir->legenda="ITENS LANÇADOS";
 	 $cliframe_alterar_excluir->iframe_height ="160";
 	 $cliframe_alterar_excluir->iframe_width ="700";

@@ -4,6 +4,7 @@ require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("classes/db_rec102023_classe.php");
 require_once("classes/db_rec112023_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarREC.model.php");
+require_once("model/orcamento/ControleOrcamentario.model.php");
 
 /**
  * detalhamento das receitas do mês Sicom Acompanhamento Mensal
@@ -79,8 +80,6 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
      */
     public function gerarDados()
     {
-
-
         /**
          * selecionar arquivo xml com dados das receitas
          */
@@ -114,8 +113,6 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         /**
          * exlcuir informacoes do mes selecionado
          */
-        db_inicio_transacao();
-
         $result = $clrec11->sql_record($clrec11->sql_query(null, "*", null, "si26_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']) . " and si26_instit = " . db_getsession("DB_instit"));
         if (pg_num_rows($result) > 0) {
             $clrec11->excluir(null, "si26_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si26_instit = " . db_getsession("DB_instit"));
@@ -131,6 +128,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                 throw new Exception($clrec10->erro_msg);
             }
         }
+
         /* RECEITAS QUE DEVEM SER SUBSTIUIDAS RUBRICA CADASTRADA ERRADA */
         $aRectce = array('111202', '111208', '172136', '191138', '191139', '191140',
             '191308', '191311', '191312', '191313', '193104', '193111', '193112',
@@ -145,7 +143,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
             $oDadosRec = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-            $sSql = "SELECT c74_codlan, c70_valor, c53_tipo, o57_fonte, k81_regrepasse, k81_exerc, k81_emparlamentar FROM conlancamrec
+            $sSql = "SELECT c74_codlan, c70_valor,k81_emparlamentar, c53_tipo, o57_fonte FROM conlancamrec
                JOIN conlancamdoc ON c71_codlan = c74_codlan
                JOIN conhistdoc ON c71_coddoc = c53_coddoc
                JOIN conlancam ON c70_codlan = c74_codlan
@@ -160,7 +158,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                  AND ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49') 
                         OR (c53_tipo = 101 AND substr(o57_fonte,1,2) = '49'))
                  AND o57_fonte = '{$oDadosRec->o57_fonte}'
-               GROUP BY 1, 2, 3, 4, 5, 6, 7 ORDER BY 4, 3, 6";
+               GROUP BY 1, 2, 3, 4, 5 ORDER BY 4, 3";
 
             /* $sSqlValor = "SELECT SUM(c70_valor) c70_valor, k81_regrepasse, k81_exerc, k81_emparlamentar, o57_fonte, c53_tipo FROM (" . $sSql . ") x
                     WHERE ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49') 
@@ -175,7 +173,6 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
             if (($oCodDoc->c53_tipo == 100 && substr($oDadosRec->o57_fonte, 0, 2) != '49') || ($oCodDoc->c53_tipo == 101 && substr($oDadosRec->o57_fonte, 0, 2) == '49')) {
 
                 if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
-
                     $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
                     foreach ($oNaturezaReceita as $oNatureza) {
 
@@ -209,7 +206,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         $sEmParlamentar = $oCodDoc2->k81_emparlamentar == '' ? '3' : $oCodDoc2->k81_emparlamentar;
 
                         $iIdentDeducao = (substr($oDadosRec->o57_fonte, 0, 2) == 49) ? substr($oDadosRec->o57_fonte, 1, 2) : "0";
-                        $sHash10 = $iIdentDeducao . $sNaturezaReceita . substr($oDadosRec->o70_concarpeculiar, -2) . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar;
+                        $sHash10 = $iIdentDeducao . $sNaturezaReceita;
 
                         if (!isset($aDadosAgrupados[$sHash10])) {
 
@@ -235,7 +232,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         /**
                          * agrupar registro 11
                          */
-                        $sHash11 = $oDadosRec->o70_codigo . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar;
+                        $sHash11 = $oDadosRec->o70_codigo . $sEmParlamentar;
 
                         if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
 
@@ -248,18 +245,19 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                     END AS z01_cgccpf,
                                     o70_codrec,
                                     o15_codtri,
+                                    o70_codigo,
                                     SUM(CASE
                                             WHEN c53_tipo = 100 THEN ROUND(C70_VALOR,2)::FLOAT8
                                             WHEN c53_tipo = 101 THEN ROUND(C70_VALOR*-1,2)::FLOAT8
                                             ELSE 0::FLOAT8
                                         END) AS c70_valor,
                                     CASE
-                                        WHEN o15_codtri IN ('122', '123', '124', '142', '163', '171', '172', '173', '176', '177', '178', '181', '182', '183')  
+                                        WHEN substr(o15_codtri, 1, 4) IN ('1570', '1571', '1572', '1575', '1631', '1632', '1633', '1636', '1665', '1700', '1701', '1702', '1703') 
                                         THEN c206_nroconvenio
                                         ELSE null
                                     END c206_nroconvenio,
                                     CASE
-                                        WHEN o15_codtri IN ('122', '123', '124', '142', '163', '171', '172', '173', '176', '177', '178', '181', '182', '183') 
+                                        WHEN substr(o15_codtri, 1, 4) IN ('1570', '1571', '1572', '1575', '1631', '1632', '1633', '1636', '1665', '1700', '1701', '1702', '1703') 
                                         THEN c206_dataassinatura
                                         ELSE null
                                     END c206_dataassinatura,
@@ -292,6 +290,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                             LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int 
                              WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
                                AND o70_instit = " . db_getsession('DB_instit') . "
+                               AND k81_emparlamentar = {$sEmParlamentar}
                                AND (CASE
                                         WHEN substr(taborc.k02_estorc,1,2) = '49' THEN substr(taborc.k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10) ."'
                                         ELSE substr(taborc.k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8) ."'
@@ -299,22 +298,28 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                AND c74_data BETWEEN '". $this->sDataInicial ." 'AND '". $this->sDataFinal ."'
                                AND ((c53_tipo = 100 AND substr(taborc.k02_estorc,1,2) != '49') 
                                       OR (c53_tipo = 101 AND substr(taborc.k02_estorc,1,2) = '49'))
-                             GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm, op01_numerocontratoopc, op01_dataassinaturacop
+                             GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm, op01_numerocontratoopc, op01_dataassinaturacop, o70_codigo
                              ORDER BY 1, 4, 2";
-
+                         
                             $result = db_query($sSql);
 
                             $aDadosCgm11 = array();
 
+                            $oControleOrcamentario = new ControleOrcamentario();
+                                $oControleOrcamentario->setNaturezaReceita($oDadosRec->o57_fonte);
+                                $oControleOrcamentario->setFonte($oDadosRec->o70_codigo); 
+                                $oControleOrcamentario->setEmendaParlamentar($sEmParlamentar);
+
                             for ($iContCgm = 0; $iContCgm < pg_num_rows($result); $iContCgm++) {
 
                                 $oCodFontRecursos = db_utils::fieldsMemory($result, $iContCgm);
-
+         
                                 // Criação padrão de hash
                                 $sHashCgm = $sHash10 . $sHash11 
                                     . $oCodFontRecursos->z01_cgccpf 
                                     . $oCodFontRecursos->c206_nroconvenio 
-                                    . $oCodFontRecursos->c206_dataassinatura;
+                                    . $oCodFontRecursos->c206_dataassinatura
+                                    . $oControleOrcamentario->getCodigoPorReceita();
  
                                 // Condição para criação do convênio
                                 if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->c206_nroconvenio != '') {
@@ -322,6 +327,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                     $oDados11->si26_tiporegistro = 11;
                                     $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
                                     $oDados11->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
+                                    $oDados11->si26_codigocontroleorcamentario = $oControleOrcamentario->getCodigoPorReceita();
                                     if (strlen($oCodFontRecursos->z01_cgccpf) == 11) {
                                         $oDados11->si26_tipodocumento = 1;
                                     } else if (strlen($oCodFontRecursos->z01_cgccpf) == 14) {
@@ -344,6 +350,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                     $oDados11->si26_tiporegistro = 11;
                                     $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
                                     $oDados11->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
+                                    $oDados11->si26_codigocontroleorcamentario = $oControleOrcamentario->getCodigoPorReceita();
                                     if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
                                         $oDados11->si26_tipodocumento = 1;
                                     } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
@@ -370,11 +377,13 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
                              
-                            if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {                                                         
+                            if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {                    
                                 $aDados = new stdClass();
                                 $aDados->si26_tiporegistro = 11;
                                 $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
                                 $aDados->si26_codfontrecursos = $oDadosRec->o70_codigo;
+                                $oControleOrcamentario->setFonte($oDadosRec->o70_codigo);
+                                $aDados->si26_codigocontroleorcamentario = $oControleOrcamentario->getCodigoPorReceita();
                                 if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
                                     $aDados->si26_tipodocumento = 1;
                                 } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
@@ -419,9 +428,6 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
             $clrec10->si25_ededucaodereceita = $oDados10->si25_ededucaodereceita;
             $clrec10->si25_identificadordeducao = $oDados10->si25_identificadordeducao;
             $clrec10->si25_naturezareceita = $oDados10->si25_naturezareceita;
-            $clrec10->si25_regularizacaorepasse = $oDados10->si25_regularizacaorepasse;
-            $clrec10->si25_exercicio = $oDados10->si25_exercicio;
-            $clrec10->si25_emendaparlamentar = $oDados10->si25_emendaparlamentar;
             $clrec10->si25_vlarrecadado = abs($oDados10->si25_vlarrecadado);
             $clrec10->si25_mes = $oDados10->si25_mes;
             $clrec10->si25_instit = db_getsession("DB_instit");
@@ -441,6 +447,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         $clrec11->si26_reg10 = $clrec10->si25_sequencial;
                         $clrec11->si26_codreceita = $oDados10->si25_codreceita;
                         $clrec11->si26_codfontrecursos = $oDados11->si26_codfontrecursos;//'100';
+                        $clrec11->si26_codigocontroleorcamentario = $oDados11->si26_codigocontroleorcamentario;
                         $clrec11->si26_tipodocumento = $oDados11->si26_tipodocumento;
                         $clrec11->si26_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
                         $clrec11->si26_nroconvenio = $oDados11->si26_nroconvenio;
@@ -461,12 +468,12 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         || $oDados10->si25_identificadordeducao != ''
                     ) {
 
-
                         $clrec11 = new cl_rec112023();
                         $clrec11->si26_tiporegistro = $oDados11->si26_tiporegistro;
                         $clrec11->si26_reg10 = $clrec10->si25_sequencial;
                         $clrec11->si26_codreceita = $oDados10->si25_codreceita;
                         $clrec11->si26_codfontrecursos = $oDados11->si26_codfontrecursos;
+                        $clrec11->si26_codigocontroleorcamentario = $oDados11->si26_codigocontroleorcamentario;
                         $clrec11->si26_tipodocumento = $oDados11->si26_tipodocumento;
                         $clrec11->si26_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
                         $clrec11->si26_nroconvenio = $oDados11->si26_nroconvenio;
@@ -488,8 +495,6 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
 
         }
-
-        db_fim_transacao();
 
         $oGerarREC = new GerarREC();
         $oGerarREC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];

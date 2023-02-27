@@ -22,6 +22,7 @@ class cl_emp112023
   var $si107_codunidadesub = null;
   var $si107_nroempenho = 0;
   var $si107_codfontrecursos = 0;
+  var $si107_codco = null;
   var $si107_valorfonte = 0;
   var $si107_mes = 0;
   var $si107_reg10 = 0;
@@ -33,6 +34,7 @@ class cl_emp112023
                  si107_codunidadesub = varchar(8) = Código da unidade 
                  si107_nroempenho = int8 = Número do  empenho 
                  si107_codfontrecursos = int8 = Código da fonte de  recursos 
+                 si107_codco = varchar(8) = Código do Acompanhamento
                  si107_valorfonte = float8 = Valor empenhado  na fonte 
                  si107_mes = int8 = Mês 
                  si107_reg10 = int8 = reg10 
@@ -65,6 +67,7 @@ class cl_emp112023
       $this->si107_sequencial = ($this->si107_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si107_sequencial"] : $this->si107_sequencial);
       $this->si107_tiporegistro = ($this->si107_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si107_tiporegistro"] : $this->si107_tiporegistro);
       $this->si107_codunidadesub = ($this->si107_codunidadesub == "" ? @$GLOBALS["HTTP_POST_VARS"]["si107_codunidadesub"] : $this->si107_codunidadesub);
+      $this->si107_codco = ($this->si107_codco == "" ? @$GLOBALS["HTTP_POST_VARS"]["si107_codco"] : $this->si107_codco);
       $this->si107_nroempenho = ($this->si107_nroempenho == "" ? @$GLOBALS["HTTP_POST_VARS"]["si107_nroempenho"] : $this->si107_nroempenho);
       $this->si107_codfontrecursos = ($this->si107_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si107_codfontrecursos"] : $this->si107_codfontrecursos);
       $this->si107_valorfonte = ($this->si107_valorfonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si107_valorfonte"] : $this->si107_valorfonte);
@@ -162,6 +165,7 @@ class cl_emp112023
                                        si107_sequencial 
                                       ,si107_tiporegistro 
                                       ,si107_codunidadesub 
+                                      ,si107_codco 
                                       ,si107_nroempenho 
                                       ,si107_codfontrecursos 
                                       ,si107_valorfonte 
@@ -173,6 +177,7 @@ class cl_emp112023
                                 $this->si107_sequencial 
                                ,$this->si107_tiporegistro 
                                ,'$this->si107_codunidadesub' 
+                               ,'$this->si107_codco' 
                                ,$this->si107_nroempenho 
                                ,$this->si107_codfontrecursos 
                                ,$this->si107_valorfonte 
@@ -257,6 +262,12 @@ class cl_emp112023
       $sql .= $virgula . " si107_codunidadesub = '$this->si107_codunidadesub' ";
       $virgula = ",";
     }
+    
+    if (trim($this->si107_codco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si107_codco"])) {
+        $sql .= $virgula . " si107_codco = '$this->si107_codco' ";
+        $virgula = ",";
+    }
+    
     if (trim($this->si107_nroempenho) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si107_nroempenho"])) {
       if (trim($this->si107_nroempenho) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si107_nroempenho"])) {
         $this->si107_nroempenho = "0";

@@ -21,6 +21,8 @@ class cl_rec112023
   var $si26_tiporegistro = 0;
   var $si26_codreceita = 0;
   var $si26_codfontrecursos = 0;
+  var $si26_tipodocumento = 0;
+  var $si26_codigocontroleorcamentario = null;
   var $si26_nrodocumento = null;
   var $si26_nroconvenio = null;
   var $si26_dataassinaturarec10_dia = null;
@@ -28,6 +30,7 @@ class cl_rec112023
   var $si26_dataassinatura_ano = null;
   var $si26_dataassinatura = null;
   var $si26_nrocontratoop = null;
+  var $si26_dataassinatura_dia = null;
   var $si26_dataassinaturacontratoop = null;
   var $si26_dataassinaturacontratoop_dia = null;
   var $si26_dataassinaturacontratoop_mes = null;
@@ -42,6 +45,7 @@ class cl_rec112023
                  si26_tiporegistro = int8 = Tipo do  registro
                  si26_codreceita = int8 = Código identificador
                  si26_codfontrecursos = int8 = Código da fonte de  recursos
+                 si26_codigocontroleorcamentario = varchar(4) = Código de Controle Orçamentário
                  si26_tipodocumento = int8 = Tipo do documento
                  si26_nrodocumento = character varying(14) = CNPJ do contribuinte;
                  si26_nroconvenio = varchar(30) = Número do convênio
@@ -81,6 +85,7 @@ class cl_rec112023
       $this->si26_tiporegistro = ($this->si26_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_tiporegistro"] : $this->si26_tiporegistro);
       $this->si26_codreceita = ($this->si26_codreceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_codreceita"] : $this->si26_codreceita);
       $this->si26_codfontrecursos = ($this->si26_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_codfontrecursos"] : $this->si26_codfontrecursos);
+      $this->si26_codigocontroleorcamentario = ($this->si26_codigocontroleorcamentario == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_codigocontroleorcamentario"] : $this->si26_codigocontroleorcamentario);
       $this->si26_tipodocumento = ($this->si26_tipodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_tipodocumento"] : $this->si26_tipodocumento);
       $this->si26_nrodocumento = ($this->si26_nrodocumento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_nrodocumento"] : $this->si26_nrodocumento);
       $this->si26_nroconvenio = ($this->si26_nroconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si26_nroconvenio"] : $this->si26_nroconvenio);
@@ -206,6 +211,7 @@ class cl_rec112023
                                       ,si26_tiporegistro
                                       ,si26_codreceita
                                       ,si26_codfontrecursos
+                                      ,si26_codigocontroleorcamentario
                                       ,si26_tipodocumento
                                       ,si26_nrodocumento
                                       ,si26_nroconvenio
@@ -222,6 +228,7 @@ class cl_rec112023
                                ,$this->si26_tiporegistro
                                ,$this->si26_codreceita
                                ,$this->si26_codfontrecursos
+                               ,'$this->si26_codigocontroleorcamentario'
                                ,$this->si26_tipodocumento
                                ,'$this->si26_nrodocumento'
                                ,'$this->si26_nroconvenio'

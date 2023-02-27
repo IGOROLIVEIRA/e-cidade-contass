@@ -80,7 +80,7 @@ class ReceitaContabil {
    * @var string
    */
   protected $sCaracteristicaPeculiar;
-  
+
   /**
    * Estrutrul Plano Orcamentario
    * @var string
@@ -141,13 +141,13 @@ class ReceitaContabil {
       $this->oInstituicao            = InstituicaoRepository::getInstituicaoByCodigo($oDadoReceita->o70_instit);
       $this->sCaracteristicaPeculiar = $oDadoReceita->o70_concarpeculiar;
       $this->dtCriacao               = $oDadoReceita->o70_datacriacao;
-      
+
       $sSqlBuscaReceita = $oDaoOrcReceita->sql_query_dados_receita($iAno, $iCodigo);
       $rsBuscaReceita   = $oDaoOrcReceita->sql_record($sSqlBuscaReceita);
       $oDadoReceita                  = db_utils::fieldsMemory($rsBuscaReceita, 0);
       if ($oDaoOrcReceita->erro_status == "0" && $this->getAno() > 2016) {
         throw new BusinessException("Não foi possível buscar a Estrutual Plano Orçamentário.");
-        
+
       }
       $this->sEstruturalPlanoOrcamentario               = $oDadoReceita->c60_estrut;
       unset($oDadoReceita);
@@ -162,8 +162,8 @@ class ReceitaContabil {
                                              $sCaracteristaPeculiarRecibo=null,
                                              $iCodigoCgm = null) {
 
-   
-    
+
+
     $oDadoSqlGeral           = new stdClass();
     $oDadoSqlGeral->arrecada = $nValorArrecadacao;
 
@@ -173,7 +173,7 @@ class ReceitaContabil {
 
     $aValoresDesdobrados = array();
     $aReceitas           = array();
-    
+
     /**
      * @autor IGOR RUAS
      * Pega o o15_codtri de acordo com a orctiporec associada a orcfontes
@@ -183,12 +183,12 @@ class ReceitaContabil {
     $rsBuscaRecursoTCE   = $oDaoOrcTipoRec->sql_record($sSqlBuscaRecursoTCE);
     $oDaoOrcTipoRec      = db_utils::fieldsMemory($rsBuscaRecursoTCE, 0);
     $nRecursoTCE         = $oDaoOrcTipoRec->o15_codtri;
-   
-    if ($oRecursoTCE->erro_status == "0" && $this->getAno() > 2016) {
-      throw new BusinessException("Não foi possível buscar a Cod TCE {$this->getTipoRecurso()}/{$iAno}.");
+
+    if ($oDaoOrcTipoRec->erro_status == "0" && $this->getAno() > 2016) {
+      throw new BusinessException("Não foi possível buscar a Cod TCE {$this->getTipoRecurso()}.");
     }
-    
-    /** 
+
+    /**
      * @autor IGOR RUAS
      * se aDesdobramentos vir vazia verificar se o desdobramento é obrigatorio
      * caso seja não continuar.
@@ -206,17 +206,19 @@ class ReceitaContabil {
     $aReceitaDesdobradaObrigatorio = array('11120101','11120200','11120431','11120434','11120800','11130501','11130502','17210102','17210105','17213600',
         '17220101','17220102','17220104','19110801','19113800','19113900','19114000','19130800','19131100','19131200','19131300','19310400','19311100',
         '19311200','19311300','17210103','17210104','17210132');
-    
+
+    $aFonteIndenente = array('100', '1500000');
+
     if (count($aDesdobramentos) <= 0 && $this->getAno() > 2016){
-      
-      if(in_array($sRecitaLancamento, $aReceitaDesdobradaObrigatorio) && $nRecursoTCE == 100){
+
+      if(in_array($sRecitaLancamento, $aReceitaDesdobradaObrigatorio) && in_array($nRecursoTCE,  $aFonteIndenente)){
         throw new BusinessException("Receita ".$this->getEstruturalPlanoOrcamentario()." tem que ser desdobrada.");
       }else if(in_array($sRecitaLancamento, $aReceitaDesdobradaObrigatorio)){
         throw new BusinessException("Receita ".$this->getEstruturalPlanoOrcamentario()." é desdobrada então a fonte de recurso ".$nRecursoTCE." não pode receber lançamentos na tesouraria.");
       }
-      
+
     }
-    if (count($aDesdobramentos) > 0 && $nRecursoTCE == 100 && $this->getAno() > 2016) {
+    if (count($aDesdobramentos) > 0 && in_array($nRecursoTCE,  $aFonteIndenente) && $this->getAno() > 2016) {
 
 
       $nValorSoma  = 0;
@@ -253,7 +255,7 @@ class ReceitaContabil {
         $oDadoReceitaDesdobrada->valor                   = $nValorPercentual;
         $oDadoReceitaDesdobrada->tem_desobramento        = true;
         $aReceitas[$oDadosDesdobramento->codigo_receita] = $oDadoReceitaDesdobrada;
-        
+
       }
 
       //Valor total arrecado é menor que o total.
@@ -276,9 +278,9 @@ class ReceitaContabil {
     } else if(count($aDesdobramentos) > 0 && in_array($sRecitaLancamento, $aReceitaDesdobradaObrigatorio) && $this->getAno() > 2016) {
 
       throw new BusinessException("Receita ".$this->getEstruturalPlanoOrcamentario()." é desdobrada então a fonte de recurso ".$nRecursoTCE." não pode receber lançamentos na tesouraria.");
-      
+
     }else{
-      
+
       $oDadoReceita                          = new stdClass();
       $oDadoReceita->codigo_receita          = $this->getCodigo();
       $oDadoReceita->caracteristica_peculiar = $this->getCaracteristicaPeculiar();
@@ -288,7 +290,7 @@ class ReceitaContabil {
       $oDadoReceita->valor                   = round($oDadoSqlGeral->arrecada, 2);
       $oDadoReceita->recurso                 = $this->getTipoRecurso();
       $aReceitas[$this->getCodigo()]         = $oDadoReceita;
-      
+
     }
     $sCaracteristicaPeculiarPlanilhaRecibo = '';
     // passa aqui quando tem desdobramento (existe no arquivo orcreceitades)
@@ -489,7 +491,7 @@ class ReceitaContabil {
         if (substr($this->getContaOrcamento()->getEstrutural(), 0, 3) == 493) {
           $iCodigoTipoDocumento = 101;
         }
-        
+
         $oDocumentoContabil = SingletonRegraDocumentoContabil::getDocumento($iCodigoTipoDocumento);
         $oDocumentoContabil->setValorVariavel("[codigoreceita]", $codrec);
         $oDocumentoContabil->setValorVariavel("[anousureceita]", $iAnoAutenticacao);
@@ -690,7 +692,7 @@ class ReceitaContabil {
     $this->oInstituicao = $oInstituicao;
   }
 
-  
+
   /**
    * Retorna a caracteristica peculiar
    * @return string
@@ -706,7 +708,7 @@ class ReceitaContabil {
   public function setCaracteristicaPeculiar($sCaracteristicaPeculiar) {
     $this->sCaracteristicaPeculiar = $sCaracteristicaPeculiar;
   }
-  
+
   /**
    * Retorna a EstruturalPlanoOrcamentario
    * @return string
@@ -714,7 +716,7 @@ class ReceitaContabil {
   public function getEstruturalPlanoOrcamentario() {
     return $this->sEstruturalPlanoOrcamentario;
   }
-  
+
   /**
    * Seta a EstruturalPlanoOrcamentario
    * @param string $sCaracteristicaPeculiar

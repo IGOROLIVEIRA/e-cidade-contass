@@ -6,6 +6,8 @@ require_once("classes/db_lqd102023_classe.php");
 require_once("classes/db_lqd112023_classe.php");
 require_once("classes/db_lqd122023_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarLQD.model.php");
+require_once("model/orcamento/ControleOrcamentario.model.php");
+require_once("model/orcamento/DeParaRecurso.model.php");
 
 /**
  * Detalhamento da liquidação da despesa Sicom Acompanhamento Mensal
@@ -72,6 +74,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
     $cllqd10 = new cl_lqd102023();
     $cllqd11 = new cl_lqd112023();
     $cllqd12 = new cl_lqd122023();
+    $oDeParaRecurso = new DeParaRecurso();
 
     $sSqlUnidade = "select * from infocomplementares where
     si08_anousu = " . db_getsession("DB_anousu") . " and si08_instit = " . db_getsession("DB_instit");
@@ -93,6 +96,8 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
                    e50_DATA,
                    e60_anousu,
                    e60_numemp,
+                   e60_emendaparlamentar,
+                   e60_esferaemendaparlamentar,
                    e60_codemp,
                    e60_emiss,
                    e60_datasentenca,
@@ -112,6 +117,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
                    e53_valor,
                    e53_vlranu,
                    o15_codtri,
+                   o15_codigo,
                    si09_codorgaotce,
                    o41_subunidade AS subunidade,
                    o56_elemento,
@@ -206,7 +212,7 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
         $iFonteAlterada = '0';
         if (pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
           $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
-          $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos, 3, "0", STR_PAD_LEFT);
+          $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos, 7, "0", STR_PAD_LEFT);
           $oDadosLiquidacao->si118_codorgao = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
           $oDadosLiquidacao->si118_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
         } else {
@@ -236,13 +242,19 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
          */
 
         $oDadosLiquidacaoFonte = new stdClass();
+        $oControleOrcamentario = new ControleOrcamentario();
+        $oDadosLiquidacaoFonte->si119_codfontrecursos = $oDeParaRecurso->getDePara($oLiquidacao->o15_codigo);
+        $oControleOrcamentario->setFonte($oDadosLiquidacaoFonte->si119_codfontrecursos);
+        $oControleOrcamentario->setEmendaParlamentar($oLiquidacao->e60_emendaparlamentar);
+        $oControleOrcamentario->setEsferaEmendaParlamentar($oLiquidacao->e60_esferaemendaparlamentar);
 
         $oDadosLiquidacaoFonte->si119_tiporegistro = '11';
         $oDadosLiquidacaoFonte->si119_codreduzido = substr($oLiquidacao->codreduzido, 0, 15);
-        $oDadosLiquidacaoFonte->si119_codfontrecursos = $iFonteAlterada != 0 ? $iFonteAlterada : substr($oLiquidacao->o15_codtri, 0, 3);
+        $oDadosLiquidacaoFonte->si119_codfontrecursos = $iFonteAlterada != 0 ? $iFonteAlterada : substr($oLiquidacao->o15_codtri, 0, 7);
         if (in_array($oDadosLiquidacaoFonte->si119_codfontrecursos, $this->aFontesEncerradas)) {
             $oDadosLiquidacaoFonte->si119_codfontrecursos = substr($oDadosLiquidacaoFonte->si119_codfontrecursos, 0 , 1).'59';
         }
+        $oDadosLiquidacaoFonte->si119_codco = $oControleOrcamentario->getCodigoParaEmpenho();
         $oDadosLiquidacaoFonte->si119_valorfonte = $oLiquidacao->e53_valor;
         $oDadosLiquidacaoFonte->si119_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
 
@@ -284,7 +296,8 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
 
         $cllqd11->si119_tiporegistro = $oDados11->si119_tiporegistro;
         $cllqd11->si119_codreduzido = $oDados11->si119_codreduzido;
-        $cllqd11->si119_codfontrecursos = $oDados11->si119_codfontrecursos;
+        $cllqd11->si119_codfontrecursos = $oDeParaRecurso->getDePara($oDados11->si119_codfontrecursos);
+        $cllqd11->si119_codco = $oDados11->si119_codco;
         $cllqd11->si119_valorfonte = $oDados11->si119_valorfonte;
         $cllqd11->si119_mes = $oDados11->si119_mes;
         $cllqd11->si119_reg10 = $cllqd10->si118_sequencial;

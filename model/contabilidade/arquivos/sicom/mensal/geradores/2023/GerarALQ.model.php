@@ -95,7 +95,8 @@ class GerarALQ extends GerarAM
 
             $aCSVALQ11['si122_tiporegistro']      = $this->padLeftZero($aALQ11['si122_tiporegistro'], 2);
             $aCSVALQ11['si122_codreduzido']       = substr($aALQ11['si122_codreduzido'], 0, 15);
-            $aCSVALQ11['si122_codfontrecursos']   = $this->padLeftZero($aALQ11['si122_codfontrecursos'], 3);
+            $aCSVALQ11['si122_codfontrecursos']   = substr(str_pad($aALQ11['si122_codfontrecursos'], 7, "0", STR_PAD_LEFT), 0, 7);
+            $aCSVALQ11['si122_codco']             = str_pad($aALQ11['si122_codco'], 4, "0", STR_PAD_LEFT);
             $aCSVALQ11['si122_valoranuladofonte'] = $this->sicomNumberReal($aALQ11['si122_valoranuladofonte'], 2);
 
             $this->sLinha = $aCSVALQ11;

@@ -5,6 +5,8 @@ require_once("classes/db_alq102023_classe.php");
 require_once("classes/db_alq112023_classe.php");
 require_once("classes/db_alq122023_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarALQ.model.php");
+require_once("model/orcamento/ControleOrcamentario.model.php");
+require_once("model/orcamento/DeParaRecurso.model.php");
 
 /**
  * Anulacao da Liquidacao Sicom Acompanhamento Mensal
@@ -33,13 +35,17 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
    */
   protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
+  private $oDeParaRecurso;
+  private $oControleOrcamentario;
+
   /**
    *
    * Construtor da classe
    */
   public function __construct()
   {
-
+    $this->oDeParaRecurso = new DeParaRecurso();
+    $this->oControleOrcamentario = new ControleOrcamentario();
   }
 
   /**
@@ -96,7 +102,6 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
    */
   public function gerarDados()
   {
-
     $sSqlUnidade = "select * from infocomplementares where
   	si08_anousu = " . db_getsession("DB_anousu") . " and si08_instit = " . db_getsession("DB_instit");
 
@@ -114,6 +119,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
                    END AS nroliquidacao,
                    c80_data,
                    orctiporec.o15_codtri,
+                   o15_codigo,
                    e60_codemp,
                    e60_emiss,
                    e60_anousu,
@@ -137,7 +143,9 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
                    c53_tipo,
                    c70_data,
                    si09_codorgaotce ,
-                   o56_elemento
+                   o56_elemento,
+                   e60_emendaparlamentar,
+                   e60_esferaemendaparlamentar
             FROM empempenho
             INNER JOIN conlancamemp ON c75_numemp = empempenho.e60_numemp
             INNER JOIN conlancam ON c70_codlan = c75_codlan
@@ -243,10 +251,10 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $iFonteAlterada = '0';
         if (pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
           $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
-          $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos, 3, "0", STR_PAD_LEFT);
+          $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos, 7, "0", STR_PAD_LEFT);
           $oDadosDetalhamento->si121_codorgao = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
           $oDadosDetalhamento->si121_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
-          $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos, 3, "0", STR_PAD_LEFT);
+          $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos, 7, "0", STR_PAD_LEFT);
         } else {
           $oDadosDetalhamento->si121_codorgao = $oDetalhamento->si09_codorgaotce;
           $oDadosDetalhamento->si121_codunidadesub = $sCodUnidade;
@@ -270,6 +278,8 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $oDadosDetalhamento->o56_elemento = $oDetalhamento->o56_elemento;
         $oDadosDetalhamento->e50_compdesp = $oDetalhamento->e50_compdesp;
         $oDadosDetalhamento->e60_datasentenca = $oDetalhamento->e60_datasentenca;
+        $oDadosDetalhamento->e60_emendaparlamentar = $oDetalhamento->e60_emendaparlamentar;
+        $oDadosDetalhamento->e60_esferaemendaparlamentar = $oDetalhamento->e60_esferaemendaparlamentar;
 
         $aDadosAgrupados[$sHash] = $oDadosDetalhamento;
 
@@ -277,7 +287,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 
         $oDadosDetalhamentoFonte->si122_tiporegistro = 11;
         $oDadosDetalhamentoFonte->si122_codreduzido = substr($oDetalhamento->codreduzido, 0, 15);
-        $oDadosDetalhamentoFonte->si122_codfontrecursos = $iFonteAlterada != '0' ? $iFonteAlterada : str_pad($oDetalhamento->o15_codtri, 3, "0", STR_PAD_LEFT);
+        $oDadosDetalhamentoFonte->si122_codfontrecursos = $iFonteAlterada != '0' ? $iFonteAlterada : $oDetalhamento->o15_codigo;
         $oDadosDetalhamentoFonte->si122_valoranuladofonte = $oDetalhamento->c70_valor;
         $oDadosDetalhamentoFonte->si122_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $oDadosDetalhamentoFonte->si122_instit = db_getsession("DB_instit");
@@ -320,12 +330,15 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 
       $oDados11 = new cl_alq112023();
 
+      $oDadosAgrupados->Reg11->si122_codfontrecursos = $this->oDeParaRecurso->getDePara($oDadosAgrupados->Reg11->si122_codfontrecursos);
+      $this->oControleOrcamentario->setFonte($oDadosAgrupados->Reg11->si122_codfontrecursos);
+      $this->oControleOrcamentario->setEmendaParlamentar($oDadosAgrupados->e60_emendaparlamentar);
+      $this->oControleOrcamentario->setEsferaEmendaParlamentar($oDadosAgrupados->e60_esferaemendaparlamentar);
+
       $oDados11->si122_tiporegistro = 11;
       $oDados11->si122_codreduzido = $oDadosAgrupados->Reg11->si122_codreduzido;
       $oDados11->si122_codfontrecursos = $oDadosAgrupados->Reg11->si122_codfontrecursos;
-      if (in_array($oDados11->si122_codfontrecursos, $this->aFontesEncerradas)) {
-          $oDados11->si122_codfontrecursos = substr($oDados11->si122_codfontrecursos, 0, 1).'59';
-      }
+      $oDados11->si122_codco = $this->oControleOrcamentario->getCodigoParaEmpenho();
       $oDados11->si122_valoranuladofonte = $oDadosAgrupados->Reg11->si122_valoranuladofonte;
       $oDados11->si122_mes = $oDadosAgrupados->Reg11->si122_mes;
       $oDados11->si122_reg10 = $oDados10->si121_sequencial;

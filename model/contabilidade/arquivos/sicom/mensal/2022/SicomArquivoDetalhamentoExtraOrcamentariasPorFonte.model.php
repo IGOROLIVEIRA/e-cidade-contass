@@ -280,7 +280,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                                       AND si124_tipolancamento    = '" . $cExt10->si124_tipolancamento . "'
                                       AND si124_subtipo           = '" . $cExt10->si124_subtipo . "'
                                       AND si124_desdobrasubtipo   = '" . $cExt10->si124_desdobrasubtipo . "' ";
-        
+
                 $rsResulVerifica = db_query($sSqlVerifica) or die($sSqlVerifica);
                 //  echo $rsResulVerifica;db_criatabela($rsResulVerifica);exit;
 
@@ -292,7 +292,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                         throw new Exception($cExt10->erro_msg);
                     }
                 }
-                
+
                 $oExtra = new stdClass();
                 $oExtra->codext = $oContaExtra->codext;
                 $oExtra->recurso = $oContaExtra->recurso;
@@ -570,12 +570,12 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                 }
             }
         }
-        
+
         /**
          * Realiza trasnferências das fontes utilizadas no registro 20 para o registro da fonte principal (Cadastrada no PCASP)
          */
         if ($this->bEncerramento) {
-            
+
             //Percorre array dos registros 20 para fazer as transferências nas fontes que não são principal
             foreach ($aExt20 as $sHash20 => $oExt20) {
 
@@ -605,7 +605,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                     }
 
                 }
-                
+
             }
 
             //Percorre array dos registros 20 para atualizar os saldos da fonte principal
@@ -628,25 +628,25 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                 }
 
             }
-            
+
         }
         foreach($aExt20 as $oExt20) {
             $hash = $this->getChave20($oExt20);
-    
+
             if (array_key_exists($hash, $aExtExercicioCompDevo)) {
-                
+
                 foreach ($aExtExercicioCompDevo[$hash] as $ano => $devolucao) {
                     $aExt20[$hash]->si165_vlsaldoanteriorfonte -= $devolucao->valorInicial;
                     $aExt20[$hash]->si165_totaldebitos -= $devolucao->valor;
                     $aExt20[$hash]->si165_vlsaldoatualfonte = $aExt20[$hash]->si165_vlsaldoanteriorfonte + $aExt20[$hash]->si165_totaldebitos - $aExt20[$hash]->si165_totalcreditos;
-    
+
                     $hashDevolucao = $hash . $ano;
                     $aExt20[$hashDevolucao] = new stdClass();
                     $aExt20[$hashDevolucao]->si165_tiporegistro = $aExt20[$hash]->si165_tiporegistro;
                     $aExt20[$hashDevolucao]->si165_codorgao = $aExt20[$hash]->si165_codorgao;
                     $aExt20[$hashDevolucao]->si165_codext = $aExt20[$hash]->si165_codext;
                     $aExt20[$hashDevolucao]->si165_codfontrecursos = $aExt20[$hash]->si165_codfontrecursos;
-                    $aExt20[$hashDevolucao]->si165_exerciciocompdevo = $ano; 
+                    $aExt20[$hashDevolucao]->si165_exerciciocompdevo = $ano;
                     $aExt20[$hashDevolucao]->si165_vlsaldoanteriorfonte = $devolucao->valorInicial;
                     $aExt20[$hashDevolucao]->si165_natsaldoanteriorfonte = "D";
                     $aExt20[$hashDevolucao]->si165_totaldebitos = $devolucao->valor;
@@ -659,14 +659,14 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                 }
             }
         }
-        
+
         $aExt20 = $this->lancamentosGenericos($aExt20);
 
         ksort($aExt20);
         foreach ($aExt20 as $oExt20) {
-            
+
             $cExt   = new cl_ext202022();
-            
+
             $cExt->si165_tiporegistro          = $oExt20->si165_tiporegistro;
             $cExt->si165_codorgao                = $oExt20->si165_codorgao;
             $cExt->si165_codext                = $oExt20->si165_codext;
@@ -723,7 +723,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                 $cExt30->si126_cpfresppgto         = $oExtAgrupado->si126_cpfresppgto;
                 $cExt30->si126_mes                 = $oExtAgrupado->si126_mes;
                 $cExt30->si126_instit              = $oExtAgrupado->si126_instit;
-                $cExt30->si125_reg20               = $cExt->si165_sequencial;
+                //$cExt30->si125_reg20               = $cExt->si165_sequencial;
 
                 $cExt30->incluir(null);
                 if ($cExt30->erro_status == 0) {
@@ -835,8 +835,8 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
             $oContaExtraFonte = db_utils::fieldsMemory($rsExt20FonteRecurso, $iC);
             $oExtRecursoTCE = $this->getExtRecursoTCE($oContaExtraFonte->fonte);
 
-            $sql = " SELECT 
-                        k17_devolucao devolucao, 
+            $sql = " SELECT
+                        k17_devolucao devolucao,
                         c69_valor valor
                     FROM conlancamdoc
                     INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
@@ -889,8 +889,8 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
             $oContaExtraFonte = db_utils::fieldsMemory($rsExt20FonteRecurso, $iC);
             $oExtRecursoTCE = $this->getExtRecursoTCE($oContaExtraFonte->fonte);
 
-            $sql = " SELECT 
-                        k17_devolucao devolucao, 
+            $sql = " SELECT
+                        k17_devolucao devolucao,
                         c69_valor valor
                     FROM conlancamdoc
                     INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
@@ -909,7 +909,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                         AND k17_devolucao IS NOT NULL
                         and DATE_PART('MONTH',conlancamdoc.c71_data) < " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                         and conlancaminstit.c02_instit = " . db_getsession("DB_instit");
-  
+
             $resultado = db_query($sql) or die($sql);
             for ($linha = 0; $linha < pg_num_rows($resultado); $linha++) {
                 $data = db_utils::fieldsMemory($resultado, $linha);
@@ -937,7 +937,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
     public function lancamentosGenericos($aExt20)
     {
         return $this->buscarGenericos($aExt20);
-    } 
+    }
 
     public function buscarGenericos($aExt20)
     {
@@ -967,8 +967,8 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                     and DATE_PART('MONTH',conlancamdoc.c71_data) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                     and conplanoreduz.c61_instit = " . db_getsession("DB_instit") . "
 
-                UNION 
-                
+                UNION
+
                 SELECT
                     CASE
                         WHEN c61_codtce IS NULL THEN c69_credito
@@ -994,7 +994,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                     and DATE_PART('MONTH',conlancamdoc.c71_data) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                     and conplanoreduz.c61_instit = " . db_getsession("DB_instit") . "
             ) as x ";
-        
+
         $rsGenerico = db_query($sSqlGenerico);
         for ($iC = 0; $iC < pg_num_rows($rsGenerico); $iC++) {
             $oExt20 = db_utils::fieldsMemory($rsGenerico, $iC);
@@ -1002,11 +1002,11 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
             $fSaldoInicial = 0;
             $fDebito       = 0;
             $fCredito      = 0;
-    
-            $fSaldoInicial  += $this->getInicialDebitoGenerico($oExt20);  
-            $fSaldoInicial  -= $this->getInicialCreditoGenerico($oExt20);  
+
+            $fSaldoInicial  += $this->getInicialDebitoGenerico($oExt20);
+            $fSaldoInicial  -= $this->getInicialCreditoGenerico($oExt20);
             $fDebito        += $this->getDebitoGenerico($oExt20);
-            $fCredito       += $this->getCreditoGenerico($oExt20);  
+            $fCredito       += $this->getCreditoGenerico($oExt20);
 
             $aExt20 = $this->atualizaEXT20($aExt20, $oExt20, $fSaldoInicial, $fDebito, $fCredito);
         }
@@ -1021,7 +1021,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                 $aExt20[$chave]->si165_vlsaldoanteriorfonte += $fSaldoInicial;
                 $aExt20[$chave]->si165_totaldebitos += $fDebito;
                 $aExt20[$chave]->si165_totalcreditos += $fCredito;
-                $aExt20[$chave]->si165_vlsaldoatualfonte = $aExt20[$chave]->si165_vlsaldoanteriorfonte + $aExt20[$chave]->si165_totaldebitos - $aExt20[$chave]->si165_totalcreditos; 
+                $aExt20[$chave]->si165_vlsaldoatualfonte = $aExt20[$chave]->si165_vlsaldoanteriorfonte + $aExt20[$chave]->si165_totaldebitos - $aExt20[$chave]->si165_totalcreditos;
                 return $aExt20;
             } else {
                 $aExt20[$chave] = new stdClass();
@@ -1038,9 +1038,9 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                 $aExt20[$chave]->si165_natsaldoatualfonte = "C";
                 $aExt20[$chave]->si165_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                 $aExt20[$chave]->si165_instit = db_getsession("DB_instit");
-                $aExt20[$chave]->ext30 = array(); 
+                $aExt20[$chave]->ext30 = array();
                 return $aExt20;
-            } 
+            }
         }
         return $aExt20;
     }
