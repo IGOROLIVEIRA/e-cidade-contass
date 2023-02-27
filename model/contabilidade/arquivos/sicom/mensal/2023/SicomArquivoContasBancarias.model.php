@@ -325,12 +325,12 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
           $oTotalMov = db_utils::fieldsMemory($rsTotalMov, 0);
 
-          $bFonteEncerrada = in_array($iFonte, $this->aFontesEncerradas);
-          $bCorrecaoFonte = ($nMes == '01' && db_getsession("DB_anousu") == 2023);
+          $bFonteEncerrada = $iFonte != $iFonteNova ?  true : false;
+          $bCorrecaoFonte = ($bFonteEncerrada && $nMes == '01' && db_getsession("DB_anousu") == 2023);
 
-          $iFonte2 = $bFonteEncerrada ? substr($iFonte, 0, 1) . '59' : $iFonte;
-          $codIdentificaFR = $iFonte;
+          $iFonte2 = in_array($iFonte, $this->aFontesEncerradas) ? substr($iFonte, 0, 1) . '59' : $iFonte;
           $iFonte2 = substr($clDeParaFonte->getDePara($iFonte2), 0, 7);
+          $codIdentificaFR = $iFonte;
 
           $sHash20 = $bCorrecaoFonte ? $oContaAgrupada->si95_codctb . $iFonte : $oContaAgrupada->si95_codctb . $iFonte2;
 
@@ -344,7 +344,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
             if ($bFonteEncerrada && $nMes != '01' && db_getsession("DB_anousu") == 2023) {
               $oCtb20->si96_codfontrecursos = $iFonte2;
             } elseif ($nMes != '01' && db_getsession("DB_anousu") == 2023) {
-              $oCtb20->si96_codfontrecursos = $iFonteNova;
+              $oCtb20->si96_codfontrecursos = $iFonte;
             } elseif ($bFonteEncerrada && db_getsession("DB_anousu") > 2023) {
               $oCtb20->si96_codfontrecursos = $iFonte2;
             } else {
@@ -363,9 +363,9 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
             $oCtb20->si96_vlsaldoinicialfonte += $bCorrecaoFonte ? 0 : ($oTotalMov->sinalanterior == 'C' ? $oTotalMov->saldo_anterior * -1 : $oTotalMov->saldo_anterior);
             $oCtb20->si96_vlsaldofinalfonte += $oTotalMov->sinalfinal == 'C' ? $oTotalMov->saldo_final * -1 : $oTotalMov->saldo_final;
           }
-          if ($bCorrecaoFonte) {
+          if ($bFonteEncerrada && $bCorrecaoFonte) {
 
-            $sHash20  = $oContaAgrupada->si95_codctb . $iFonte2;
+            $sHash20  = $oContaAgrupada->si95_codctb . $iFonteNova;
             $shash20b = $oContaAgrupada->si95_codctb . $iFonte;
 
             if (!$aCtb20Agrupado[$sHash20]) {
@@ -375,6 +375,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
               $oCtb20->si96_codorgao = $oContaAgrupada->si95_codorgao;
               $oCtb20->si96_codctb = $oContaAgrupada->si95_codctb;
               $oCtb20->si96_codfontrecursos = $iFonteNova;
+              $oCtb20->si96_saldocec = $oConta->saldocec;
               $oCtb20->si96_vlsaldoinicialfonte = 0;
               $oCtb20->si96_vlsaldofinalfonte = $oTotalMov->sinalfinal == 'C' ? $oTotalMov->saldo_final * -1 : $oTotalMov->saldo_final;
               $oCtb20->si96_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -388,7 +389,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
             if ($oTotalMov->sinalanterior == 'D' && $oTotalMov->saldo_anterior != 0) {
 
-              $sHash21a = $oContaAgrupada->si95_codctb . $iFonteNova . '01';
+              $sHash21a = $oContaAgrupada->si95_codctb . $iFonte . '01';
 
               if (!$aCtb20Agrupado[$sHash20]->ext21[$sHash21a]) {
 
@@ -441,7 +442,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
               }
             } elseif ($oTotalMov->saldo_anterior != 0) {
 
-              $sHash21c = $oContaAgrupada->si95_codctb . $iFonte2 . '02';
+              $sHash21c = $oContaAgrupada->si95_codctb . $iFonteNova . '02';
 
               if (!$aCtb20Agrupado[$sHash20]->ext21[$sHash21c]) {
 
