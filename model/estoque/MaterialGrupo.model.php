@@ -125,6 +125,18 @@ class MaterialGrupo extends DBEstruturaValor
    */
   protected $iCodigoContaPerdaAtivoVPD;
 
+  /**
+   * Código contábil Crédito
+   * @var integer
+   */
+  protected $iCodigoContaCredito;
+
+  /**
+   * Código da contábil Débito
+   * @var integer
+   */
+  protected $iCodigoContaDebito;
+
 
   const SAIDA_INVENTARIO    = 1;
   const SAIDA_TRANSFERENCIA = 2;
@@ -160,7 +172,8 @@ class MaterialGrupo extends DBEstruturaValor
         $this->iCodigoContaDoacao         = $oDadosGrupo->m66_codcondoacao;
         $this->iCodigoContaDoacaoVPD      = $oDadosGrupo->m66_codcondoacaovpd;
         $this->iCodigoContaPerdaAtivo     = $oDadosGrupo->m66_codconperdaativo;
-        $this->iCodigoContaPerdaAtivoVPD  = $oDadosGrupo->m66_codconperdaativovpd;
+        $this->iCodigoContaCredito  = $oDadosGrupo->m66_codconcredito;
+        $this->iCodigoContaDebito  = $oDadosGrupo->m66_codcondebito;
         $this->iAnoUsu         = $oDadosGrupo->m66_anousu;
         parent::__construct($oDadosGrupo->m65_db_estruturavalor);
         unset($oDadosGrupo);
@@ -214,6 +227,8 @@ class MaterialGrupo extends DBEstruturaValor
       $oDaoGrupoMaterialConta->m66_codcondoacaovpd      = $this->iCodigoContaDoacaoVPD;
       $oDaoGrupoMaterialConta->m66_codconperdaativo     = $this->iCodigoContaPerdaAtivo;
       $oDaoGrupoMaterialConta->m66_codconperdaativovpd  = $this->iCodigoContaPerdaAtivoVPD;
+      $oDaoGrupoMaterialConta->m66_codconcredito     = $this->iCodigoContaCredito;
+      $oDaoGrupoMaterialConta->m66_codcondebito  = $this->iCodigoContaDebito;
 
       if ($oDaoGrupoMaterialConta->numrows == 0) {
         $oDaoGrupoMaterialConta->incluir(null);
@@ -457,6 +472,44 @@ class MaterialGrupo extends DBEstruturaValor
   public function setCodigoContaPerdaAtivoVPD($iCodigoConta)
   {
     $this->iCodigoContaPerdaAtivoVPD = $iCodigoConta;
+    return $this;
+  }
+
+  /**
+   * Retorna o código da conta Crédito
+   * @return integer
+   */
+  public function getCodigoContaCredito()
+  {
+    return $this->iCodigoContaCredito;
+  }
+
+  /**
+   * Seta o código da conta Crédito
+   * @return object
+   */
+  public function setCodigoContaCredito($iCodigoConta)
+  {
+    $this->iCodigoContaCredito = $iCodigoConta;
+    return $this;
+  }
+
+  /**
+   * Retorna o código da conta Débito
+   * @return integer
+   */
+  public function getCodigoContaDebito()
+  {
+    return $this->iCodigoContaDebito;
+  }
+
+  /**
+   * Seta o código da conta Débito
+   * @return object
+   */
+  public function setCodigoContaDebito($iCodigoConta)
+  {
+    $this->iCodigoContaDebito = $iCodigoConta;
     return $this;
   }
 

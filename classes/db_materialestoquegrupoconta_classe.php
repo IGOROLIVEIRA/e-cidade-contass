@@ -54,6 +54,8 @@ class cl_materialestoquegrupoconta
   var $m66_codcondoacaovpd = null;
   var $m66_codconperdaativo = null;
   var $m66_codconperdaativovpd = null;
+  var $m66_codconcredito = null;
+  var $m66_codcondebito = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  m66_sequencial = int4 = Código Sequencial
@@ -67,6 +69,8 @@ class cl_materialestoquegrupoconta
                   m66_codcondoacaovpd = int4 = Código da conta Doação VPD
                   m66_codconperdaativo = int4 = Código da conta Perda Ativo
                   m66_codconperdaativovpd = int4 = Código da conta Perda Ativo VPD
+                  m66_codconcredito = int4 = Código da conta de crédito
+                  m66_codcondebito = int4 = Código da conta de débito
                  ";
   //funcao construtor da classe
   function cl_materialestoquegrupoconta()
@@ -100,6 +104,8 @@ class cl_materialestoquegrupoconta
       $this->m66_codcondoacaovpd = ($this->m66_codcondoacaovpd == "" ? @$GLOBALS["HTTP_POST_VARS"]["m66_codcondoacaovpd"] : $this->m66_codcondoacaovpd);
       $this->m66_codconperdaativo = ($this->m66_codconperdaativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["m66_codconperdaativo"] : $this->m66_codconperdaativo);
       $this->m66_codconperdaativovpd = ($this->m66_codconperdaativovpd == "" ? @$GLOBALS["HTTP_POST_VARS"]["m66_codconperdaativovpd"] : $this->m66_codconperdaativovpd);
+      $this->m66_codconcredito = ($this->m66_codconcredito == "" ? @$GLOBALS["HTTP_POST_VARS"]["m66_codconcredito"] : $this->m66_codconcredito);
+      $this->m66_codcondebito = ($this->m66_codcondebito == "" ? @$GLOBALS["HTTP_POST_VARS"]["m66_codcondebito"] : $this->m66_codcondebito);
     } else {
       $this->m66_sequencial = ($this->m66_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["m66_sequencial"] : $this->m66_sequencial);
     }
@@ -163,6 +169,12 @@ class cl_materialestoquegrupoconta
     if ($this->m66_codconperdaativovpd == null) {
       $this->m66_codconperdaativovpd = 'null';
     }
+    if ($this->m66_codconcredito == null) {
+      $this->m66_codconcredito = 'null';
+    }
+    if ($this->m66_codcondebito == null) {
+      $this->m66_codcondebito = 'null';
+    }
 
     if ($m66_sequencial == "" || $m66_sequencial == null) {
       $result = db_query("select nextval('materialestoquegrupoconta_m66_sequencial_seq')");
@@ -208,6 +220,8 @@ class cl_materialestoquegrupoconta
                                       ,m66_codcondoacaovpd
                                       ,m66_codconperdaativo
                                       ,m66_codconperdaativovpd
+                                      ,m66_codconcredito
+                                      ,m66_codcondebito
                        )
                 values (
                                 {$this->m66_sequencial}
@@ -221,6 +235,10 @@ class cl_materialestoquegrupoconta
                                 ,{$this->m66_codcondoacaovpd}
                                 ,{$this->m66_codconperdaativo}
                                 ,{$this->m66_codconperdaativovpd}
+                                ,{$this->m66_codconcredito}
+                                ,{$this->m66_codcondebito}
+
+                                
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -360,6 +378,14 @@ class cl_materialestoquegrupoconta
     }
     if (trim($this->m66_codconperdaativovpd) != "" || isset($GLOBALS['HTTP_POST_VARS']['m66_codconperdaativovpd'])) {
       $sql .= $virgula . " m66_codconperdaativovpd = {$this->m66_codconperdaativovpd} ";
+      $virgula = ',';
+    }
+    if (trim($this->m66_codconcredito) != "" || isset($GLOBALS['HTTP_POST_VARS']['m66_codconcredito'])) {
+      $sql .= $virgula . " m66_codconcredito = {$this->m66_codconcredito} ";
+      $virgula = ',';
+    }
+    if (trim($this->m66_codcondebito) != "" || isset($GLOBALS['HTTP_POST_VARS']['m66_codcondebito'])) {
+      $sql .= $virgula . " m66_codcondebito = {$this->m66_codcondebito} ";
       $virgula = ',';
     }
 

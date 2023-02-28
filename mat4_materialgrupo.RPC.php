@@ -39,7 +39,7 @@ require_once("classes/db_materialestoquegrupo_classe.php");
 db_app::import("configuracao.DBEstrutura");
 db_app::import("estoque.MaterialGrupo");
 $oJson             = new services_json();
-$oParam            = $oJson->decode(str_replace("\\","",$_POST["json"]));
+$oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
 $oRetorno->erro    = false;
@@ -50,7 +50,7 @@ switch ($oParam->exec) {
   case "getCodigoEstrutural":
 
     $oRetorno->iCodigoEstrutura = '';
-    $aParametro = db_stdClass::getParametro("matparam",array());
+    $aParametro = db_stdClass::getParametro("matparam", array());
     if (count($aParametro) > 0) {
       $oRetorno->iCodigoEstrutura = $aParametro[0]->m90_db_estrutura;
     }
@@ -68,19 +68,21 @@ switch ($oParam->exec) {
       $oMaterialGrupo = new MaterialGrupo($oParam->iCodigoGrupo);
 
       $oMaterialGrupo->setDescricao(db_stdClass::db_stripTagsJson(utf8_decode($oParam->oGrupo->sDescricao)))
-                     ->setEstrutura((int)$oParam->oGrupo->iCodigoEstrutura)
-                     ->setTipoConta($oParam->oGrupo->iTipo)
-                     ->setEstrutural(db_stdClass::db_stripTagsJson(utf8_decode($oParam->oGrupo->sEstrutural)))
-                     ->setAtivo($oParam->oGrupo->lAtivo == 1?true:false)
-                     ->setConta($oParam->oGrupo->iConta)
-                     ->setCodigoContaVPD($oParam->oGrupo->iContaVPD)
-                      ->setCodigoContaTransf($oParam->oGrupo->iContaTransferencia)
-                      ->setCodigoContaTransfVPD($oParam->oGrupo->iContaTransferenciaVPD)
-                      ->setCodigoContaDoacao($oParam->oGrupo->iContaDoacao)
-                      ->setCodigoContaDoacaoVPD($oParam->oGrupo->iContaDoacaoVPD)
-                      ->setCodigoContaPerdaAtivo($oParam->oGrupo->iContaPerdaAtivo)
-                      ->setCodigoContaPerdaAtivoVPD($oParam->oGrupo->iContaPerdaAtivoVPD)
-                     ->salvar();
+        ->setEstrutura((int)$oParam->oGrupo->iCodigoEstrutura)
+        ->setTipoConta($oParam->oGrupo->iTipo)
+        ->setEstrutural(db_stdClass::db_stripTagsJson(utf8_decode($oParam->oGrupo->sEstrutural)))
+        ->setAtivo($oParam->oGrupo->lAtivo == 1 ? true : false)
+        ->setConta($oParam->oGrupo->iConta)
+        ->setCodigoContaVPD($oParam->oGrupo->iContaVPD)
+        ->setCodigoContaTransf($oParam->oGrupo->iContaTransferencia)
+        ->setCodigoContaTransfVPD($oParam->oGrupo->iContaTransferenciaVPD)
+        ->setCodigoContaDoacao($oParam->oGrupo->iContaDoacao)
+        ->setCodigoContaDoacaoVPD($oParam->oGrupo->iContaDoacaoVPD)
+        ->setCodigoContaPerdaAtivo($oParam->oGrupo->iContaPerdaAtivo)
+        ->setCodigoContaPerdaAtivoVPD($oParam->oGrupo->iContaPerdaAtivoVPD)
+        ->setCodigoContaCredito($oParam->oGrupo->iCodigoContaCredito)
+        ->setCodigoContaDebito($oParam->oGrupo->iCodigoContaDebito)
+        ->salvar();
 
       db_fim_transacao(false);
     } catch (Exception $eErro) {
@@ -89,7 +91,6 @@ switch ($oParam->exec) {
       $oRetorno->status  = 2;
       $oRetorno->erro    = true;
       $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
-
     }
     break;
 
@@ -99,7 +100,7 @@ switch ($oParam->exec) {
     $oRetorno->descricao         = urlencode($oMaterialGrupo->getDescricao());
     $oRetorno->estrutural        = urlencode($oMaterialGrupo->getEstrutural());
     $oRetorno->tipoconta         = $oMaterialGrupo->getTipoConta();
-    $oRetorno->ativo             = $oMaterialGrupo->isAtivo()?1:2;
+    $oRetorno->ativo             = $oMaterialGrupo->isAtivo() ? 1 : 2;
     $oRetorno->codigoconta       = $oMaterialGrupo->getConta();
     $oRetorno->codigocontaVPD    = $oMaterialGrupo->getCodigoContaVPD();
     $oRetorno->codigogrupo       = $oMaterialGrupo->getCodigo();
@@ -111,6 +112,8 @@ switch ($oParam->exec) {
     $oRetorno->codigocontadoacaoVPD     = $oMaterialGrupo->getCodigoContaDoacaoVPD();
     $oRetorno->codigocontaperdaativo    = $oMaterialGrupo->getCodigoContaPerdaAtivo();
     $oRetorno->codigocontaperdaativoVPD = $oMaterialGrupo->getCodigoContaPerdaAtivoVPD();
+    $oRetorno->codigocontacredito    = $oMaterialGrupo->getCodigoContaCredito();
+    $oRetorno->codigocontadebito = $oMaterialGrupo->getCodigoContaDebito();
     if ($oMaterialGrupo->getContaVPD() != "") {
       $oRetorno->descricaocontaVPD = urlencode($oMaterialGrupo->getContaVPD()->getDescricao());
     }
@@ -133,7 +136,6 @@ switch ($oParam->exec) {
 
     $aGrupos           = db_utils::getCollectionByRecord($rsMatEstoqueGrupo, false, false, true);
     $oRetorno->aGrupos = $aGrupos;
-  break;
+    break;
 }
 echo $oJson->encode($oRetorno);
-?>
