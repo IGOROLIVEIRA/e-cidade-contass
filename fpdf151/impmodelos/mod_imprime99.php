@@ -21,46 +21,39 @@ if (file_exists('imagens/files/' . $logofundo.'_fundoalvara.jpg')){
   $this->objpdf->Image('imagens/files/Brasao.jpg',60,80,100);
 }
 
-
-//        $obj_alpha->SetAlpha(0.5);
-$this->objpdf->Image('imagens/files/' . $logo,90,7,16);
-
-$this->objpdf->sety(34);
+$this->objpdf->Image('imagens/files/' . $logo,5,7,16);
+$this->objpdf->sety(6);
 $this->objpdf->setfont('Arial','B',14);
 $this->objpdf->Multicell(0,8,$this->prefeitura,0,"C",0); // prefeitura
 
-$this->objpdf->sety(42);
+if ($this->cabecalhoDet != null){    
+  $this->objpdf->setfont('Arial','B',12);
+  $this->objpdf->Multicell(0,8,$this->cabecalhoDet,0,"C",0); // Cabeçalho
+}
+
 $this->objpdf->setfont('Arial','B',14);
 $this->objpdf->Multicell(0,8,$this->tipoalvara,0,"C",0); // tipo de alvara
-
-
 
 if(!empty($this->dtemissao)){
   $sDataEmissao = db_formatar($this->dtemissao,'d');
 }else{
   $sDataEmissao = date('d/m/Y');
 }
-if($this->permanente == 't'){
-
-	$this->objpdf->sety(49);
+if($this->permanente == 't'){  
+  $xx = $this->objpdf->getx();
+	$yy = $this->objpdf->gety();	
 	$this->objpdf->setfont('Arial','B',10);
-	$this->objpdf->Multicell(0,8,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara
-	$this->objpdf->sety(55);
+	$this->objpdf->Multicell(0,8,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara	
 	$this->objpdf->setfont('Arial','B',10);
-	$this->objpdf->Multicell(0,8,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade
-  $this->objpdf->sety(61);
+	$this->objpdf->Multicell(0,8,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade  
   $this->objpdf->setfont('Arial','B',10);
   $this->objpdf->Multicell(0,8,"Data do Documento: ".$sDataEmissao,0,"C",0); // Data de Emissao
 	$this->objpdf->setxy(10,70);
 } else {
-
-	$this->objpdf->sety(56);
 	$this->objpdf->setfont('Arial','B',10);
-	$this->objpdf->Multicell(0,8,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara
-	$this->objpdf->sety(62);
+	$this->objpdf->Multicell(0,8,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara	
 	$this->objpdf->setfont('Arial','B',10);
 	$this->objpdf->Multicell(0,8,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade
-  $this->objpdf->sety(67);
   $this->objpdf->setfont('Arial','B',10);
   $this->objpdf->Multicell(0,8,"Data do Documento: ".db_formatar($this->dtemissao,'d'),0,"C",0); // Data de Emissao
 	$this->objpdf->setxy(10,75);
@@ -76,16 +69,8 @@ $a = $linha;
 $this->objpdf->SetFont('Arial','B',$fonte);
 $this->objpdf->Text($coluna,$linha+9,'INSCRIÇÃO:'); // inscricao
 
-
-//   $this->objpdf->Text($coluna + 97,$linha+9,'Numero Alvará: '); // Numero Alvara
-
-
 $this->objpdf->SetFont('Arial','',$fonte);
 $this->objpdf->Text($coluna + 60,$linha+9,$this->nrinscr); // inscricao
-
-
-//    $this->objpdf->Text($coluna + 130,$linha+9,$this->numeroalvara); // numeroalvara
-
 
 $this->objpdf->SetFont('Arial','B',$fonte);
 $this->objpdf->Text($coluna,$linha+15,"NOME/RAZAO SOCIAL: "); // nome
@@ -101,16 +86,8 @@ $this->objpdf->Text($coluna + 60,$linha+21,$this->fantasia); // nome
 $this->objpdf->SetFont('Arial','B',$fonte);
 $this->objpdf->Text($coluna,$linha+27,"CNPJ/CPF: ");
 
-//	  if ($this->areaterreno > 0) {
-//      $this->objpdf->Text($coluna + 97,$linha+27,'ÁREA AUTORIZADA:'); // area autorizada
-//    }
-
 $this->objpdf->SetFont('Arial','',$fonte);
 $this->objpdf->Text($coluna + 60,$linha+27,$this->cnpjcpf);
-
-//    if ($this->areaterreno > 0) {
-//      $this->objpdf->Text($coluna + 142,$linha+27,$this->areaterreno." m²"); // area autorizada
-//    }
 
 $this->objpdf->SetFont('Arial','B',$fonte);
 $this->objpdf->Text($coluna,$linha+33,"ENDEREÇO: "); // endereco
@@ -135,12 +112,10 @@ $this->objpdf->SetFont('Arial','',$fonte);
 $this->objpdf->Text($coluna + 60,$linha+45,$this->bairropri);
 
 $this->objpdf->SetFont('Arial','B',$fonte);
-//$this->objpdf->Text($coluna,$linha+51,"DATA INICIAL: ");
 if ($this->datafim != "") {
   $this->objpdf->Text($coluna + 60,$linha+51,"VALIDADE ATÉ: ");
 }
 $this->objpdf->SetFont('Arial','',$fonte);
-//$this->objpdf->Text($coluna + 60,$linha+51,db_formatar($this->datainc,'d'));
 if ($this->datafim != "") {
   $this->objpdf->Text($coluna + 105,$linha+51,db_formatar($this->datafim,'d'));
 }
@@ -154,7 +129,6 @@ $linha1 =  $this->objpdf->gety();
 $this->objpdf->sety($linha);
 $pos = $linha;
 $alt = 10;
-//	  $this->objpdf->roundedrect($coluna-2,$linha-1,187,20,2,'1234');
 $this->objpdf->SetFont('Arial','B',10);
 $this->objpdf->Ln(2);
 $this->objpdf->setx(15);
@@ -429,13 +403,10 @@ $sqlass = "
 			inner join db_tipodoc on db08_codigo  = db03_tipodoc
 			inner join db_paragrafo on db04_idparag = db02_idparag
 			where db03_tipodoc = 1010 and db03_instit = ".db_getsession("DB_instit")."
-			and db02_descr = 'ASSINATURAS_CODIGOPHP'
-			";
-//die($sqlass);
+			and db02_descr = 'ASSINATURAS_CODIGOPHP'";
 $resultass = db_query($sqlass);
 $linhasass = pg_num_rows($resultass);
 if ($linhasass>0){
-  //db_fieldsmemory($resultass,0);
   $ass= pg_result($resultass,0,'db02_texto');
   eval($ass);
 }else{
@@ -451,9 +422,6 @@ if ($linhasass>0){
 					order by db04_ordem ";
   $resparag = db_query($sqlparag);
 
-//		db_criatabela($resparag);exit;
-//		die($sqlparag);
-
   if (pg_numrows($resparag) == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Configure o documento do alvara!');
     exit;
@@ -464,16 +432,20 @@ if ($linhasass>0){
   $colpri = $coluna;
   global $db02_texto;
   for ($i = 0; $i < $numrows; $i ++){
-    db_fieldsmemory($resparag, $i);
-    //echo("texto -- ".$db02_texto);
+    db_fieldsmemory($resparag, $i);    
     $ass = $db02_texto;
-    if($i % 2 == 0){
+    if ($numrows == 1){
       $this->objpdf->SetXY($coluna,$linha);
-      $this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".db_geratexto($ass),0,"C",0);
+      $this->objpdf->MultiCell(0,4,'..........................................................................................'."\n".db_geratexto($ass),0,"C",0);
     }else{
-      $this->objpdf->SetXY($coluna+90,$linha);
-      $this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".db_geratexto($ass),0,"C",0);
-      $linha += 10;
+      if($i % 2 == 0){
+        $this->objpdf->SetXY($coluna,$linha);
+        $this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".db_geratexto($ass),0,"C",0);
+      }else{
+        $this->objpdf->SetXY($coluna+90,$linha);
+        $this->objpdf->MultiCell(90,4,'..........................................................................................'."\n".db_geratexto($ass),0,"C",0);
+        $linha += 10;
+      }
     }
   }
 }
