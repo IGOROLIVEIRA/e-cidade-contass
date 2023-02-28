@@ -26,13 +26,14 @@
  */
 
 
-require_once ('model/configuracao/DBEstruturaValor.model.php');
+require_once('model/configuracao/DBEstruturaValor.model.php');
 
 /**
  * Model para controle do grupo do material do estoque
  * Class MaterialGrupo
  */
-class MaterialGrupo extends DBEstruturaValor  {
+class MaterialGrupo extends DBEstruturaValor
+{
 
   /**
    * Código sequencial do grupo do material
@@ -135,7 +136,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Código sequencial do grupo do material
    * @param $iCodigoGrupo
    */
-  public function __construct($iCodigoGrupo = null) {
+  public function __construct($iCodigoGrupo = null)
+  {
 
     if (!empty($iCodigoGrupo)) {
 
@@ -149,7 +151,7 @@ class MaterialGrupo extends DBEstruturaValor  {
 
         $oDadosGrupo = db_utils::fieldsMemory($rsDadosGrupo, 0);
         $this->iCodigoGrupo    = $iCodigoGrupo;
-        $this->lAtivo          = $oDadosGrupo->m65_ativo=='t'?true:false;
+        $this->lAtivo          = $oDadosGrupo->m65_ativo == 't' ? true : false;
         $this->iConta          = $oDadosGrupo->m66_codcon;
         $this->sDescricaoConta = $oDadosGrupo->c60_descr;
         $this->iCodigoContaVPD = $oDadosGrupo->m66_codconvpd;
@@ -172,11 +174,12 @@ class MaterialGrupo extends DBEstruturaValor  {
    *
    * @return MaterialGrupo
    */
-  public function salvar() {
+  public function salvar()
+  {
 
     parent::salvar();
     $oDaoGrupoMaterial                        = db_utils::getDao("materialestoquegrupo");
-    $oDaoGrupoMaterial->m65_ativo             = $this->lAtivo?"true":"false";
+    $oDaoGrupoMaterial->m65_ativo             = $this->lAtivo ? "true" : "false";
     $oDaoGrupoMaterial->m65_db_estruturavalor = $this->iCodigo;
     if (empty($this->iCodigoGrupo)) {
 
@@ -199,7 +202,7 @@ class MaterialGrupo extends DBEstruturaValor  {
     $oDaoGrupoMaterialConta->excluir(null, $sWhere);
     if (!empty($this->iConta)) {
 
-      $sSqlDadosConta = $oDaoGrupoMaterialConta->sql_query_file(null,"*", null, $sWhere);
+      $sSqlDadosConta = $oDaoGrupoMaterialConta->sql_query_file(null, "*", null, $sWhere);
       $rsDadosConta   = $oDaoGrupoMaterialConta->sql_record($sSqlDadosConta);
       $oDaoGrupoMaterialConta->m66_anousu               = db_getsession("DB_anousu");
       $oDaoGrupoMaterialConta->m66_codcon               = $this->getConta();
@@ -234,7 +237,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * @param  boolean $lAtivo ativo/inativo
    * @return MaterialGrupo
    */
-  public function setAtivo($lAtivo) {
+  public function setAtivo($lAtivo)
+  {
 
     $this->lAtivo = $lAtivo;
     return $this;
@@ -245,7 +249,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    *
    * @return boolean
    */
-  public function isAtivo() {
+  public function isAtivo()
+  {
     return $this->lAtivo;
   }
 
@@ -254,11 +259,13 @@ class MaterialGrupo extends DBEstruturaValor  {
    * @param integer $iCodigoEstrutura
    * @return integer
    */
-  static public function getCodigoByEstrutura($iCodigoEstrutura) {
+  static public function getCodigoByEstrutura($iCodigoEstrutura)
+  {
 
     $iCodigoGrupo       = null;
     $oDaoGrupoMaterial  = db_utils::getDao("materialestoquegrupo");
-    $sSqlCodigo         = $oDaoGrupoMaterial->sql_query_file(null,
+    $sSqlCodigo         = $oDaoGrupoMaterial->sql_query_file(
+      null,
       'm65_sequencial',
       null,
       "m65_db_estruturavalor={$iCodigoEstrutura}"
@@ -276,7 +283,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * @param $iConta
    * @return MaterialGrupo
    */
-  public function setConta($iConta) {
+  public function setConta($iConta)
+  {
 
     $this->iConta = $iConta;
     return $this;
@@ -286,7 +294,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * retorna a conta contábil do grupo
    *@return integer
    */
-  public function getConta() {
+  public function getConta()
+  {
     return $this->iConta;
   }
 
@@ -295,7 +304,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    *
    * @return integer
    */
-  public function getCodigo() {
+  public function getCodigo()
+  {
     return $this->iCodigoGrupo;
   }
   /**
@@ -303,7 +313,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    *
    * @return integer
    */
-  public function getCodigoEstrutural() {
+  public function getCodigoEstrutural()
+  {
     return $this->iCodigo;
   }
 
@@ -311,7 +322,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna a Descrição da Conta Contábil
    * @return string
    */
-  public function getDescricaoConta() {
+  public function getDescricaoConta()
+  {
     return $this->sDescricaoConta;
   }
 
@@ -319,7 +331,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta VPD (Variação Patrimonial Diminutiva)
    * @return integer
    */
-  public function getCodigoContaVPD() {
+  public function getCodigoContaVPD()
+  {
     return $this->iCodigoContaVPD;
   }
 
@@ -327,7 +340,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta VPD (Variação Patrimonial Diminutiva)
    * @return integer
    */
-  public function setCodigoContaVPD($iCodigoContaVPD) {
+  public function setCodigoContaVPD($iCodigoContaVPD)
+  {
     $this->iCodigoContaVPD = $iCodigoContaVPD;
     return $this;
   }
@@ -336,7 +350,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta Transferência
    * @return integer
    */
-  public function getCodigoContaTransf() {
+  public function getCodigoContaTransf()
+  {
     return $this->iCodigoContaTransf;
   }
 
@@ -344,7 +359,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta Transferência
    * @return object
    */
-  public function setCodigoContaTransf($iCodigoConta) {
+  public function setCodigoContaTransf($iCodigoConta)
+  {
     $this->iCodigoContaTransf = $iCodigoConta;
     return $this;
   }
@@ -353,7 +369,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta Transferência VPD
    * @return integer
    */
-  public function getCodigoContaTransfVPD() {
+  public function getCodigoContaTransfVPD()
+  {
     return $this->iCodigoContaTransfVPD;
   }
 
@@ -361,7 +378,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta Transferência VPD
    * @return object
    */
-  public function setCodigoContaTransfVPD($iCodigoConta) {
+  public function setCodigoContaTransfVPD($iCodigoConta)
+  {
     $this->iCodigoContaTransfVPD = $iCodigoConta;
     return $this;
   }
@@ -370,7 +388,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta Doação
    * @return integer
    */
-  public function getCodigoContaDoacao() {
+  public function getCodigoContaDoacao()
+  {
     return $this->iCodigoContaDoacao;
   }
 
@@ -378,7 +397,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta Doação
    * @return object
    */
-  public function setCodigoContaDoacao($iCodigoConta) {
+  public function setCodigoContaDoacao($iCodigoConta)
+  {
     $this->iCodigoContaDoacao = $iCodigoConta;
     return $this;
   }
@@ -387,7 +407,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta Doação VPD
    * @return integer
    */
-  public function getCodigoContaDoacaoVPD() {
+  public function getCodigoContaDoacaoVPD()
+  {
     return $this->iCodigoContaDoacaoVPD;
   }
 
@@ -395,7 +416,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta Doação VPD
    * @return object
    */
-  public function setCodigoContaDoacaoVPD($iCodigoConta) {
+  public function setCodigoContaDoacaoVPD($iCodigoConta)
+  {
     $this->iCodigoContaDoacaoVPD = $iCodigoConta;
     return $this;
   }
@@ -404,7 +426,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta Perda Ativo
    * @return integer
    */
-  public function getCodigoContaPerdaAtivo() {
+  public function getCodigoContaPerdaAtivo()
+  {
     return $this->iCodigoContaPerdaAtivo;
   }
 
@@ -412,7 +435,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta Perda Ativo
    * @return object
    */
-  public function setCodigoContaPerdaAtivo($iCodigoConta) {
+  public function setCodigoContaPerdaAtivo($iCodigoConta)
+  {
     $this->iCodigoContaPerdaAtivo = $iCodigoConta;
     return $this;
   }
@@ -421,7 +445,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta Perda Ativo VPD
    * @return integer
    */
-  public function getCodigoContaPerdaAtivoVPD() {
+  public function getCodigoContaPerdaAtivoVPD()
+  {
     return $this->iCodigoContaPerdaAtivoVPD;
   }
 
@@ -429,7 +454,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna o código da conta Perda Ativo VPD
    * @return object
    */
-  public function setCodigoContaPerdaAtivoVPD($iCodigoConta) {
+  public function setCodigoContaPerdaAtivoVPD($iCodigoConta)
+  {
     $this->iCodigoContaPerdaAtivoVPD = $iCodigoConta;
     return $this;
   }
@@ -438,7 +464,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna um objeto do tipo ContaPlanoPCASP
    * @return ContaPlanoPCASP
    */
-  public function getContaVPD($iTipoSaida = 1) {
+  public function getContaVPD($iTipoSaida = 1)
+  {
 
     $oContas = $this->contasParaSaida($iTipoSaida);
 
@@ -452,7 +479,8 @@ class MaterialGrupo extends DBEstruturaValor  {
    * Retorna um objeto do tipo ContaPlanoPCASP para a Conta Contábil
    * @return ContaPlanoPCASP
    */
-  public function getContaAtivo($iTipoSaida = 1) {
+  public function getContaAtivo($iTipoSaida = 1)
+  {
 
     $oContas = $this->contasParaSaida($iTipoSaida);
 
@@ -464,7 +492,8 @@ class MaterialGrupo extends DBEstruturaValor  {
 
 
 
-  public function contasParaSaida($iTipoSaida = 1) {
+  public function contasParaSaida($iTipoSaida = 1)
+  {
 
     $oContas = new stdClass();
     $oContas->codigo = 0;
@@ -474,25 +503,20 @@ class MaterialGrupo extends DBEstruturaValor  {
 
       $oContas->codigo = $this->getConta();
       $oContas->codigoVPD = $this->getCodigoContaVPD();
-
     } else if ($iTipoSaida === self::SAIDA_TRANSFERENCIA) {
 
       $oContas->codigo = $this->getCodigoContaTransf();
       $oContas->codigoVPD = $this->getCodigoContaTransfVPD();
-
     } else if ($iTipoSaida === self::SAIDA_DOACAO) {
 
       $oContas->codigo = $this->getCodigoContaDoacao();
       $oContas->codigoVPD = $this->getCodigoContaDoacaoVPD();
-
     } else if ($iTipoSaida === self::SAIDA_PERDA_ATIVO) {
 
       $oContas->codigo = $this->getCodigoContaPerdaAtivo();
       $oContas->codigoVPD = $this->getCodigoContaPerdaAtivoVPD();
-
     }
 
     return $oContas;
-
   }
 }
