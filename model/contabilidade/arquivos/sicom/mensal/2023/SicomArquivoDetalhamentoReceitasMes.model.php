@@ -232,7 +232,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         /**
                          * agrupar registro 11
                          */
-                        $sHash11 = $oDadosRec->o70_codigo . $sEmParlamentar;
+                        $sHash11 = substr($oDadosRec->o70_codigo, 0, 7) . $sEmParlamentar;
 
                         if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
 
@@ -319,15 +319,14 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                     . $oCodFontRecursos->z01_cgccpf 
                                     . $oCodFontRecursos->c206_nroconvenio 
                                     . $oCodFontRecursos->c206_dataassinatura
-                                    . $oControleOrcamentario->getCodigoPorReceita();
- 
+                                    . (in_array($oControleOrcamentario->getCodigoPorReceita(), array('1001', '1002', '1070')) ? '0000' : $oControleOrcamentario->getCodigoPorReceita());
                                 // Condição para criação do convênio
                                 if (!isset($aDadosCgm11[$sHashCgm]) && $oCodFontRecursos->c206_nroconvenio != '') {
                                     $oDados11 = new stdClass();
                                     $oDados11->si26_tiporegistro = 11;
                                     $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
-                                    $oDados11->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
-                                    $oDados11->si26_codigocontroleorcamentario = $oControleOrcamentario->getCodigoPorReceita();
+                                    $oDados11->si26_codfontrecursos = substr($oCodFontRecursos->o15_codtri, 0, 7);
+                                    $oDados11->si26_codigocontroleorcamentario = in_array($oControleOrcamentario->getCodigoPorReceita(), array('1001', '1002', '1070')) ? '0000' : $oControleOrcamentario->getCodigoPorReceita();
                                     if (strlen($oCodFontRecursos->z01_cgccpf) == 11) {
                                         $oDados11->si26_tipodocumento = 1;
                                     } else if (strlen($oCodFontRecursos->z01_cgccpf) == 14) {
@@ -349,8 +348,8 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                     $oDados11 = new stdClass();
                                     $oDados11->si26_tiporegistro = 11;
                                     $oDados11->si26_codreceita = $oCodFontRecursos->o70_codrec;
-                                    $oDados11->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
-                                    $oDados11->si26_codigocontroleorcamentario = $oControleOrcamentario->getCodigoPorReceita();
+                                    $oDados11->si26_codfontrecursos = substr($oCodFontRecursos->o15_codtri, 0, 7);
+                                    $oDados11->si26_codigocontroleorcamentario = in_array($oControleOrcamentario->getCodigoPorReceita(), array('1001', '1002', '1070')) ? '0000' : $oControleOrcamentario->getCodigoPorReceita();
                                     if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
                                         $oDados11->si26_tipodocumento = 1;
                                     } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
@@ -381,9 +380,9 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                 $aDados = new stdClass();
                                 $aDados->si26_tiporegistro = 11;
                                 $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
-                                $aDados->si26_codfontrecursos = $oDadosRec->o70_codigo;
+                                $aDados->si26_codfontrecursos = substr($oDadosRec->o70_codigo, 0, 7);
                                 $oControleOrcamentario->setFonte($oDadosRec->o70_codigo);
-                                $aDados->si26_codigocontroleorcamentario = $oControleOrcamentario->getCodigoPorReceita();
+                                $aDados->si26_codigocontroleorcamentario = in_array($oControleOrcamentario->getCodigoPorReceita(), array('1001', '1002', '1070')) ? '0000' : $oControleOrcamentario->getCodigoPorReceita();
                                 if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
                                     $aDados->si26_tipodocumento = 1;
                                 } elseif (strlen($oCodFontRecursos->z01_cgccpf) == 14){
@@ -436,6 +435,9 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
             if ($clrec10->erro_status == 0) {
                 throw new Exception($clrec10->erro_msg);
             }
+
+    
+
             foreach ($oDados10->Reg11 as $aDados11) {
                 foreach ($aDados11 as $oDados11) {
                     if (in_array($oDados10->si25_naturezareceita, $aRectceSaudEduc) &&
@@ -446,7 +448,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         $clrec11->si26_tiporegistro = $oDados11->si26_tiporegistro;
                         $clrec11->si26_reg10 = $clrec10->si25_sequencial;
                         $clrec11->si26_codreceita = $oDados10->si25_codreceita;
-                        $clrec11->si26_codfontrecursos = $oDados11->si26_codfontrecursos;//'100';
+                        $clrec11->si26_codfontrecursos = substr($oDados11->si26_codfontrecursos, 0, 7);
                         $clrec11->si26_codigocontroleorcamentario = $oDados11->si26_codigocontroleorcamentario;
                         $clrec11->si26_tipodocumento = $oDados11->si26_tipodocumento;
                         $clrec11->si26_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
@@ -472,7 +474,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                         $clrec11->si26_tiporegistro = $oDados11->si26_tiporegistro;
                         $clrec11->si26_reg10 = $clrec10->si25_sequencial;
                         $clrec11->si26_codreceita = $oDados10->si25_codreceita;
-                        $clrec11->si26_codfontrecursos = $oDados11->si26_codfontrecursos;
+                        $clrec11->si26_codfontrecursos = substr($oDados11->si26_codfontrecursos, 0, 7);
                         $clrec11->si26_codigocontroleorcamentario = $oDados11->si26_codigocontroleorcamentario;
                         $clrec11->si26_tipodocumento = $oDados11->si26_tipodocumento;
                         $clrec11->si26_nrodocumento = $oDados11->si26_cnpjorgaocontribuinte;
