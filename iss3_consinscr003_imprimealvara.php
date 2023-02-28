@@ -149,7 +149,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
 } else {
   if (isset($q60_modalvara) && $q60_modalvara == "1") {
     //echo "modelo 23";
-    $pdf1 = new db_impcarne($pdf, '23'); // alvara tamanha A5
+    $pdf1 = new db_impcarne($pdf, '23'); // alvara tamanho A5
   } else if (isset($q60_modalvara) && $q60_modalvara == "2") {
     //echo "modelo 24";
     $pdf1 = new db_impcarne($pdf, '24'); // alvara tamanho A4
@@ -161,7 +161,7 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
     $pdf1 = new db_impcarne($pdf, '50'); // alvara tamanho pre-impresso A4
   } else if (isset($q60_modalvara) && $q60_modalvara == "6") {
     //echo "modelo 59";
-    $pdf1 = new db_impcarne($pdf, '59'); // alvara tamanho pre-impresso A4
+    $pdf1 = new db_impcarne($pdf, '59'); // alvara tamanho pre-impresso A4 (codigo cnae ao inves de atividades secundarias)
   } else if (isset($q60_modalvara) && $q60_modalvara == "7") {
     //echo "modelo 63";
     $pdf1 = new db_impcarne($pdf, '63'); // alvara tamanho A4 frente/verso
@@ -202,18 +202,12 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
   } else {
     //============================== PARAGRAFOS ALVARA PERMANENTE ======================================================
 
-
-    //db_msgbox("permanente");
-
-
     $sql_tipoalvara = "select db_paragrafo.*
       from db_documento
       inner join db_docparag on db03_docum = db04_docum
       inner join db_paragrafo on db04_idparag = db02_idparag
-      where db03_tipodoc = 1034 and
-      db03_instit  = " . db_getsession('DB_instit') . "
-      order by db02_descr
-      ";
+      where db03_tipodoc = 1034 and db03_instit  = " . db_getsession('DB_instit') . "
+      order by db02_descr";
     $res_tipoalvara = db_query($sql_tipoalvara);
     if (pg_numrows($res_tipoalvara) > 0) {
       db_fieldsmemory($res_tipoalvara, 0);
@@ -224,6 +218,20 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
 
     $pdf1->permanente = 't';
   }
+
+  //DADOS DO CABEÇALHO DO ALVARÁ
+  $sqlparag = "select db_paragrafo.*
+      from db_documento
+      inner join db_docparag on db03_docum = db04_docum      
+      inner join db_paragrafo on db04_idparag = db02_idparag
+      where db03_tipodoc = 1045 and db03_instit = " . db_getsession("DB_instit") . "      
+      order by db02_descr";
+  $res_cabecalho = db_query($sqlparag);
+  if (pg_numrows($res_cabecalho) > 0) {
+    db_fieldsmemory($res_cabecalho, 0);
+    $pdf1->cabecalhoDet = $db02_texto;
+  }
+
   $sqlparag = "select *
       from db_documento
       inner join db_docparag on db03_docum = db04_docum
@@ -233,14 +241,12 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
       and not db02_descr ilike 'assinatura%'
       order by db04_ordem ";
   $resparag = db_query($sqlparag);
-  //die($sqlparag);
-  //db_criatabela($resparag);exit;
+
   if (pg_numrows($resparag) == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Configure o documento do alvara!');
     exit();
   }
   $numrows = pg_numrows($resparag);
-  //		$pdf1->inicia = $db02_inicia;
   for($i = 0; $i < $numrows; $i ++) {
     db_fieldsmemory($resparag, $i);
     if ($db04_ordem == '1') {
