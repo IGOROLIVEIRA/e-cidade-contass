@@ -549,6 +549,14 @@ HTML;
 
             </div>
             <?php
+            setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+            date_default_timezone_set('America/Sao_Paulo');
+            $sSqlDataHomolacao = "select distinct l202_datahomologacao from homologacaoadjudica where l202_licitacao = {$codigo_preco} and l202_datahomologacao is not null";
+            $rsDataHomolacao = db_query($sSqlDataHomolacao);
+            db_fieldsmemory($rsDataHomolacao,0);
+            $dataformatada = strftime('%d de %B de %Y',strtotime($l202_datahomologacao));
+
+            
             $data = date('d/m/Y');
             $data = explode("/", $data);
 
@@ -614,7 +622,7 @@ HTML;
             <br>
             <br>
             <div style="text-align: right;margin-right: 5px;">
-                <? echo $resultado->munic; ?>, <? echo $diausu ?> de <? echo $mes; ?> de <? echo $anousu; ?>
+                <? echo $resultado->munic; ?>, <? echo $dataformatada; ?>
             </div>
             <?php
 

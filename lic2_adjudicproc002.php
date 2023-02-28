@@ -263,8 +263,10 @@ if($l12_usuarioadjundica == 't') {
 }
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 date_default_timezone_set('America/Sao_Paulo');
-$hoje = date("Y-m-d",db_getsession("DB_datausu"));
-$dataformatada = strftime('%d de %B de %Y',strtotime($hoje));
+$sSqlDataAdjudicacao = "select distinct l202_dataadjudicacao as dataadjudicacao from homologacaoadjudica where l202_licitacao = {$l20_codigo} and l202_dataadjudicacao is not null";
+$rsDataAdjudicacao = db_query($sSqlDataAdjudicacao);
+db_fieldsmemory($rsDataAdjudicacao,0);
+$dataformatada = strftime('%d de %B de %Y',strtotime($dataadjudicacao));
 
 $oPDF->ln();
 $oPDF->cell(90,0.5," ",0,0,"R",0);

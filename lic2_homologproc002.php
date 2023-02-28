@@ -273,6 +273,12 @@ $oPDF->cell(120,$alt,"TOTAL:","T",0,"R",0);
 $oPDF->cell(60,$alt,"R$".db_formatar($val_tot, "f"),"T",1,"R",0);
 $oPDF->ln();
 
+setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+date_default_timezone_set('America/Sao_Paulo');
+$sSqlDataHomolacao = "select distinct l202_datahomologacao from homologacaoadjudica where l202_licitacao = {$l20_codigo} and l202_datahomologacao is not null";
+$rsDataHomolacao = db_query($sSqlDataHomolacao);
+db_fieldsmemory($rsDataHomolacao,0);
+$dataformatada = strftime('%d de %B de %Y',strtotime($l202_datahomologacao));
 $oPDF->setfont('arial','',9);
 $dia=date('d',db_getsession("DB_datausu"));
 $mes=date('m',db_getsession("DB_datausu"));
@@ -281,7 +287,7 @@ $mes=db_mes($mes);
 $oPDF->ln();
 $oPDF->ln();
 $oPDF->cell(90,$alt,"",0,0,"R",0);
-$oPDF->cell(90,$alt,"$munic, $dia $mes de $ano.",0,1,"C",0);
+$oPDF->cell(90,$alt,$munic . ", ".$dataformatada.".",0,1,"C",0);
 $oPDF->ln(15);
 
 $sqlparag = "select db02_texto
