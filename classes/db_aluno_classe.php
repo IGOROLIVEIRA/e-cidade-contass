@@ -2209,5 +2209,50 @@ class cl_aluno {
 
     return $sSql;
   }
+
+  function sql_query_matricula_uf ( $ed47_i_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from aluno ";
+    $sql .= "      inner join matricula                    on  ed60_i_aluno                   = ed47_i_codigo                ";
+    $sql .= "      inner join pais                         on  pais.ed228_i_codigo            = aluno.ed47_i_pais            ";
+    $sql .= "      left  join censouf as censoufident      on  censoufident.ed260_i_codigo    = aluno.ed47_i_censoufident    ";
+    $sql .= "      left  join censouf as censoufnat        on  censoufnat.ed260_i_codigo      = aluno.ed47_i_censoufnat      ";
+    $sql .= "      left  join censouf as censoufcert       on  censoufcert.ed260_i_codigo     = aluno.ed47_i_censoufcert     ";
+    $sql .= "      left  join censouf as censoufend        on  censoufend.ed260_i_codigo      = aluno.ed47_i_censoufend      ";
+    $sql .= "      left  join censomunic as censomunicnat  on  censomunicnat.ed261_i_codigo   = aluno.ed47_i_censomunicnat   ";
+    $sql .= "      left  join censomunic as censomuniccert on  censomuniccert.ed261_i_codigo  = aluno.ed47_i_censomuniccert  ";
+    $sql .= "      left  join censomunic as censomunicend  on  censomunicend.ed261_i_codigo   = aluno.ed47_i_censomunicend   ";
+    $sql .= "      left  join censoorgemissrg              on  censoorgemissrg.ed132_i_codigo = aluno.ed47_i_censoorgemissrg ";
+    $sql .= "      left  join censocartorio                on  censocartorio.ed291_i_codigo   = aluno.ed47_i_censocartorio   ";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($ed47_i_codigo!=null ){
+        $sql2 .= " where aluno.ed47_i_codigo = $ed47_i_codigo ";
+      }
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+ }
 }
 ?>
