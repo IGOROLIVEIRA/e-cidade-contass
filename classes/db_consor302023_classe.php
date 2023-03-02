@@ -242,7 +242,7 @@ class cl_consor302023
                                ,$this->si18_vlanulacaopagamentofonte 
                                ,$this->si18_mes
                                ,$this->si18_instit 
-                               ,$this->si18_codacompanhamento
+                               ,'$this->si18_codacompanhamento'
                       )";
     $result = db_query($sql);
     if ($result == false) {
