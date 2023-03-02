@@ -596,7 +596,7 @@ pmsaogoncalodoriopreto:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no info@10.251.27.127 "cd /var/www/ecidade && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.127 "cd /var/www/ecidade && git pull origin ecidade_v3 "'
         - 'ssh -p22 contass@10.251.27.127 "cd /var/www/e-cidade && php deploy_git.php"'
     environment: production
     only:
@@ -606,7 +606,7 @@ pmsantafev3:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no info@10.251.27.124 "cd /var/www/ecidade && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.124 "cd /var/www/ecidade && git pull origin ecidade_v3 "'
         - 'ssh -p22 contass@10.251.27.124 "cd /var/www/e-cidade && php deploy_git.php"'
     environment: production
     only:
