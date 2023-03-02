@@ -262,7 +262,6 @@ if($l12_usuarioadjundica == 't') {
     $oPDF->cell(86, 35, "Lançamento realizado conforme de relatório de folhas __________.", 'T', 1, "R", 0);
 }
 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
-date_default_timezone_set('America/Sao_Paulo');
 $hoje = date("Y-m-d",db_getsession("DB_datausu"));
 $dataformatada = strftime('%d de %B de %Y',strtotime($hoje));
 
