@@ -71,6 +71,7 @@ $iInstituicaoSessao = db_getsession('DB_instit');
   <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
     <tr>
       <td align="center" valign="top">
+      <h2 style='color: red;'>Acordos a vencer</h2>
         <?php
 
         $sWhere  = " 1 = 1 ";
@@ -95,7 +96,7 @@ $iInstituicaoSessao = db_getsession('DB_instit');
         $sWhere .= " and (ac16_providencia is null OR ac16_providencia in (1, 2)) ";
         $sWhere .= " and ac16_acordosituacao = 4 ";
         $sWhere .= " and ac16_coddepto = " . db_getsession('DB_coddepto');
-        $sql = $clacordo->sql_query_completo(null, $campos, '', $sWhere);
+        $sql = $clacordo->sql_query_completo(null, $campos, 'ac16_datafim', $sWhere);
 
         $repassa = array();
         //die($sql);
@@ -116,8 +117,7 @@ $iInstituicaoSessao = db_getsession('DB_instit');
   for (let count = 0; count < aTr.length; count++) {
 
     let idCampo = parseInt(aTr[count].id.replace('I', ''));
-    let format = idCampo.toString().includes('08') ? idCampo.toString().replace('08', '8') : idCampo;
-    let idCampoInicial = format == 8 ? '00' : idCampo == 108 ? 100 : parseInt(format.toString().substr(0, format.toString().length - 1));
+    let idCampoInicial = idCampo == 8 ? '00' : parseInt(idCampo.toString().substr(0, idCampo.toString().length - 1));
 
     if (aTr[count].cellIndex == 8) {
 
@@ -132,9 +132,9 @@ $iInstituicaoSessao = db_getsession('DB_instit');
         // Pega o código do acordo que está na primeira célula da primeira linha
         let codigoAcordo = document.getElementById(`I${idCampoInicial}`).innerText.trim();
 
-        for (let count = 0; count <= 8; count++) {
+        for (let counta = 0; counta <= 8; counta++) {
 
-          let campo = document.getElementById(`I0${count}`);
+          let campo = document.getElementById(`I0${counta}`);
           campo.bgColor = 'red';
           campo.onclick = (e) => {
             js_OpenJanelaIframe('', 'db_iframe_providencia', `aco1_providencia.php?codigo=${codigoAcordo}`, 'Providência', true, null, 550, 280, 143);
@@ -151,8 +151,8 @@ $iInstituicaoSessao = db_getsession('DB_instit');
          * Adiciona o fundo vermelho a partir da segunda linha
          */
 
-        for (let count = 0; count <= 8; count++) {
-          let campo = document.getElementById(`I${idCampoInicial.toString() + count}`);
+         for (let counta = 0; counta <= 8; counta++) {
+          let campo = document.getElementById(`I${idCampoInicial.toString() + counta}`);
 
           campo.bgColor = 'red';
           campo.onclick = (e) => {
