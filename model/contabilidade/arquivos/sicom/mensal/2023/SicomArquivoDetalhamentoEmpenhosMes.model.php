@@ -155,24 +155,27 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
     $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
     // print_r('enter');
     // print_r($sArquivo);
+        if (file_exists($sArquivo)) {
+          $sTextoXml = file_get_contents($sArquivo);
+          $oDOMDocument = new DOMDocument();
+          $oDOMDocument->loadXML($sTextoXml);
+          $oElementos = $oDOMDocument->getElementsByTagName('elemento');
+
+        }
     
-    $sTextoXml = file_get_contents($sArquivo);
-    $oDOMDocument = new DOMDocument();
-    $oDOMDocument->loadXML($sTextoXml);
-    $oElementos = $oDOMDocument->getElementsByTagName('elemento');
 
     /**
      * selecionar arquivo xml de Dados Compl Licitação
      */
     $sArquivo = "config/sicom/" . (db_getsession("DB_anousu") - 1) . "/{$sCnpj}_sicomdadoscompllicitacao.xml";
-    /*if (!file_exists($sArquivo)) {
-            throw new Exception("Arquivo de dados compl licitacao inexistente!");
-        }*/
-    $sTextoXml = file_get_contents($sArquivo);
-    $oDOMDocument = new DOMDocument();
-    $oDOMDocument->loadXML($sTextoXml);
-    $oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
-
+    if (file_exists($sArquivo)) {
+            
+          $sTextoXml = file_get_contents($sArquivo);
+          $oDOMDocument = new DOMDocument();
+          $oDOMDocument->loadXML($sTextoXml);
+          $oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
+        }
+    
 
     $sSql = "SELECT si09_codorgaotce AS codorgao,
         si09_tipoinstit
@@ -520,7 +523,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
               break;
             }
           } elseif ($oElemento->getAttribute('elementoEcidade') == $sElemento) {
-            $sElemento;
+            $sElemento = $oElemento->getAttribute('elementoSicom');
             break;
           }
         }
