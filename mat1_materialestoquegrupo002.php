@@ -71,16 +71,6 @@ require_once("libs/db_utils.php");
 <script>
   oCadastroGrupo = new DBViewMaterialGrupo('', 'oCadastroGrupo', $('ctnTela'));
   oCadastroGrupo.onSaveComplete = function(oRetorno) {
-
-    oCadastroGrupo.dbViewEstrutural.txtDescricao.setValue('');
-    oCadastroGrupo.dbViewEstrutural.txtEstrutural.setValue(0);
-    oCadastroGrupo.dbViewEstrutural.cboTipoEstrutural.setValue(1);
-    oCadastroGrupo.cboAtivo.setValue(1);
-    oCadastroGrupo.txtCodigoConta.setValue('');
-    oCadastroGrupo.txtDescricaoConta.setValue('');
-    oCadastroGrupo.txtCodigoContaVPD.setValue('');
-    oCadastroGrupo.txtDescricaoContaVPD.setValue('');
-    $('txtEstrutural').focus();
     alert('Operação realizada com sucesso.');
   }
 
@@ -104,6 +94,12 @@ require_once("libs/db_utils.php");
     db_iframe_materialestoquegrupo.hide();
     oCadastroGrupo.getDados(iCodigo);
   }
+  js_OpenJanelaIframe('',
+    'db_iframe_materialestoquegrupo',
+    'func_materialestoquegrupo.php?funcao_js=parent.getDados|m65_sequencial',
+    'Pesquisar Grupos/Subgrupos',
+    true
+  );
   $('btnPesquisar').observe("click", function() {
     js_OpenJanelaIframe('',
       'db_iframe_materialestoquegrupo',
