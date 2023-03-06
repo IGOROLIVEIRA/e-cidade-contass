@@ -32,7 +32,6 @@ require_once(modification("libs/db_utils.php"));
 require_once(modification("libs/db_libtributario.php"));
 require_once(modification("libs/db_libdocumento.php"));
 require_once(modification("dbforms/db_funcoes.php"));
-//require_once(modification("fpdf151/pdf.php"));
 require_once(modification("libs/db_utils.php"));
 require_once(modification("fpdf151/scpdf.php"));
 
