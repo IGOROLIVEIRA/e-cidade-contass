@@ -75,19 +75,20 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 		* SE JA FOI GERADO ESTA ROTINA UMA VEZ O SISTEMA APAGA OS DADOS DO BANCO E GERA NOVAMENTE
 		*/
 		db_inicio_transacao();
-		$result = $clcaixa10->sql_record($clcaixa10->sql_query(null, "*", null, "si103_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-			and si103_instit = " . db_getsession("DB_instit")));
+
+		// Variaveis comuns de utilização recorrente.
+		$nMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+		$iInstit = db_getsession("DB_instit");
+		$iAno = db_getsession("DB_anousu");
+		
+		$result = $clcaixa10->sql_record($clcaixa10->sql_query(null, "*", null, "si103_mes = {$nMes} and si103_instit = {$iInstit}"));
 		
 		if (pg_num_rows($result) > 0) {
 
-			$clcaixa13->excluir(null, "si105_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-					and si105_instit = " . db_getsession("DB_instit"));
-			$clcaixa12->excluir(null, "si104_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-					and si104_instit = " . db_getsession("DB_instit"));
-			$clcaixa11->excluir(null, "si166_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-					and si166_instit = " . db_getsession("DB_instit"));
-			$clcaixa10->excluir(null, "si103_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-					and si103_instit = " . db_getsession("DB_instit"));
+			$clcaixa13->excluir(null, "si105_mes = {$nMes} and si105_instit = {$iInstit}");
+			$clcaixa12->excluir(null, "si104_mes = {$nMes} and si104_instit = {$iInstit}");
+			$clcaixa11->excluir(null, "si166_mes = {$nMes} and si166_instit = {$iInstit}");
+			$clcaixa10->excluir(null, "si103_mes = {$nMes} and si103_instit = {$iInstit}");
 
 			if ($clcaixa10->erro_status == 0) {
 				throw new Exception($clcaixa10->erro_msg);
@@ -95,22 +96,15 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 		}
 		
-		$result = $clcaixa10->sql_record($clcaixa10->sql_query(null, "*", null, "si103_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
-			and si103_instit = " . db_getsession("DB_instit")));
+		$result = $clcaixa10->sql_record($clcaixa10->sql_query(null, "*", null, "si103_mes = {$nMes} and si103_instit = {$iInstit}"));
 
 		db_fim_transacao();
 
 		/*
 		* PEGA TODAS AS CONTAS CAIXA DA INSTIUICAO
 		*/
-		$sSqlContasCaixa = "SELECT c60_codcon,c61_reduz,c60_descr,si09_codorgaotce,o15_codtri from ";
-		$sSqlContasCaixa .= "conplano join conplanoreduz on c60_codcon = c61_codcon 
-							left join  infocomplementaresinstit on c61_instit = si09_instit 
-							join orctiporec on o15_codigo = c61_codigo ";
-		$sSqlContasCaixa .= "where c60_codsis = 5 and c60_anousu = " . db_getsession("DB_anousu");
-		$sSqlContasCaixa .= " and c61_anousu = " . db_getsession("DB_anousu") . " and c61_instit = " . db_getsession("DB_instit");
-		
-		$rsContasCaixa = db_query($sSqlContasCaixa);
+		$sSqlContasCaixa = $clcaixa10->sql_ContasCaixa($iAno, $iInstit);		
+		$rsContasCaixa = $clcaixa10->sql_record($sSqlContasCaixa);
 
 		/**
 		 * percorrer registros de contas retornados do sql acima para pega saldo anterior
@@ -121,14 +115,14 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 			$oContas = db_utils::fieldsMemory($rsContasCaixa, $iCont);
 
-			$where = " c61_instit in (" . db_getsession("DB_instit") . ") and c60_codsis in (5) ";
+			$where = " c61_instit in ({$iInstit}) and c60_codsis in (5) ";
 			$where .= "and c61_codcon = " . $oContas->c60_codcon;
 
 			/**
 			 * Comando adicionado para excluir tabela temporária que, ao gerar o arquivo juntamente com outros que utilizam essa função, traz valores diferentes
 			 */
 			db_query("drop table if EXISTS work_pl");
-			$rsPlanoContas = db_planocontassaldo(db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, $where);
+			$rsPlanoContas = db_planocontassaldo($iAno, $this->sDataInicial, $this->sDataFinal, false, $where);
 
 			for ($iContPlano = 0; $iContPlano < pg_num_rows($rsPlanoContas); $iContPlano++) {
 
@@ -190,75 +184,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 			}
 
-			$sSql = "select  12 as tiporegistro,
-								c69_codlan as codreduzido ,
-								1 as tipomovimentacao,
-								case when substr(o57_fonte,1,2) = '49' and c71_coddoc in (100) then 8
-									when c71_coddoc in (100) then 1
-									when c71_coddoc in (140) then 3
-									when c71_coddoc in (121,131,141,152,153,162,163,6,36,38,101) then 8
-									else 10 
-								end as tipoentrsaida,
-								case when c71_coddoc not in (100,101,140,121,131,152,153,162,163,6,36,38,5,35,37) then substr(c72_complem,1,50) 
-									else ' '
-								end as descrmovimentacao,
-								c69_valor as valorEntrsaida,
-								case 
-									when c71_coddoc = 140 then
-										case 
-											when c61_codtce is not null then c61_codtce
-											else c69_credito
-										end 
-									else null 
-								end as codctbtransf,
-								case when c71_coddoc = 140 then o15_codtri else null end as codfontectbtransf,c71_coddoc,substr(o57_fonte,1,2) as dedu
-								from conlancamval
-								join conlancamdoc on c71_codlan = c69_codlan
-						left join conlancamrec on c74_codlan = c69_codlan
-						left join orcreceita on c74_codrec = o70_codrec and o70_anousu = " . db_getsession("DB_anousu") . "
-						left join conplanoreduz on c61_reduz = c69_credito and c61_anousu = " . db_getsession("DB_anousu") . "
-						left join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
-						left join orctiporec on o15_codigo = c61_codigo
-						left join conlancamcompl on c72_codlan = c71_codlan
-							where c69_debito = {$oContas->c61_reduz}
-								and c69_data between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
-						
-						union all 
-						
-						select  12 as tiporegistro,
-								c69_codlan as codreduzido ,
-								case when c71_coddoc in (101) and substr(o57_fonte,1,2) = '49' then 1 else 2 end as tipomovimentacao,
-								case when c71_coddoc in (100) and substr(o57_fonte,1,2) = '49' then 8
-									when c71_coddoc in (101) and substr(o57_fonte,1,2) = '49' then 1
-									when c71_coddoc in (140) then 4
-									when c71_coddoc in (121,131,141,152,153,162,163,6,36,38,101) then 8
-									when c71_coddoc in (5,35,37,161) then 6
-									else 10 
-								end as tipoentrsaida,
-								case when c71_coddoc not in (100,101,140,121,131,152,153,162,163,6,36,38,5,35,37) then substr(c72_complem,1,50) 
-									else ' '
-								end as descrmovimentacao,
-								c69_valor as valorEntrsaida,
-								case 
-									when c71_coddoc = 140 then
-										case 
-											when c61_codtce is not null then c61_codtce
-											else c69_debito 
-										end
-									else null
-								end as codctbtransf,
-								case when c71_coddoc = 140 then o15_codtri else null end as codfontectbtransf,c71_coddoc,substr(o57_fonte,1,2) as dedu
-								from conlancamval
-								join conlancamdoc on c71_codlan = c69_codlan
-						left join conlancamrec on c74_codlan = c69_codlan
-						left join orcreceita on c74_codrec = o70_codrec and o70_anousu = " . db_getsession("DB_anousu") . "
-						left join conplanoreduz on c61_reduz = c69_debito and c61_anousu = " . db_getsession("DB_anousu") . "
-						left join orcfontes on o70_codfon = o57_codfon and o70_anousu = o57_anousu
-						left join orctiporec on o15_codigo = c61_codigo
-						left join conlancamcompl on c72_codlan = c71_codlan
-							where c69_credito = {$oContas->c61_reduz}
-								and c69_data between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
-
+			$sSql = $clcaixa12->sql_Reg12($oContas->c61_reduz, $iAno, $this->sDataInicial, $this->sDataFinal);
 			$rsMovi = db_query($sSql);
 
 			for ($iCont2 = 0; $iCont2 < pg_num_rows($rsMovi); $iCont2++) {
@@ -290,6 +216,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 					$oDados12->si104_valorentrsaida 	= $nValor;
 					$oDados12->si104_codctbtransf 		= $oMovi->codctbtransf;
 					$oDados12->si104_codfontectbtransf 	= $oMovi->codfontectbtransf;
+					$oDados12->si104_codidentificafr 	= 'null';
 
 					$aDadosAgrupados[$sHash10]->registro12[$sHash12] = $oDados12;
 
@@ -297,27 +224,8 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 					$aDadosAgrupados[$sHash10]->registro12[$sHash12]->si104_valorentrsaida += $nValor;
 				}
 
-				$sSql = "SELECT 13 AS tiporegistro,
-								c74_codlan AS codreduzdio,
-								CASE
-									WHEN substr(o57_fonte,1,2) = '49' THEN 1
-									ELSE 2
-								END AS ededucaodereceita,
-								CASE
-									WHEN substr(o57_fonte,1,2) = '49' THEN substr(o57_fonte,2,2)
-									ELSE NULL
-								END AS ededucaodereceita,
-								substr(o57_fonte,2,8) AS naturezaReceita,
-								c70_valor AS vlrreceitacont,
-								o15_codtri::integer
-							FROM conlancamrec
-							JOIN conlancam ON c70_codlan = c74_codlan AND c70_anousu = c74_anousu
-							LEFT JOIN orcreceita ON c74_codrec = o70_codrec AND o70_anousu = 2023
-							LEFT JOIN orcfontes ON o70_codfon = o57_codfon AND o70_anousu = o57_anousu
-							LEFT JOIN orctiporec ON o15_codigo = o70_codigo
-							WHERE c74_codlan = {$oMovi->codreduzido}";
-
-				$rsReceita = db_query($sSql);
+				$sSql = $clcaixa13->sql_Reg13($iAno, $oMovi->codreduzido);
+				$rsReceita = $clcaixa13->sql_record($sSql);
 
 				if (pg_num_rows($rsReceita) != 0) {
 
@@ -333,6 +241,7 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 						$oDados13->si105_ededucaodereceita 		= $oReceita->ededucaodereceita;
 						$oDados13->si105_identificadordeducao 	= $oReceita->identificadordeducao;
 						$oDados13->si105_naturezareceita 		= $oReceita->naturezareceita;
+						$oDados13->si105_codco 					= "0000";
 						$oDados13->si105_vlrreceitacont 		= $oReceita->vlrreceitacont;
 						$oDados13->si105_codfontcaixa 			= $oReceita->o15_codtri;
 
@@ -356,8 +265,8 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 			$clcaixa10->si103_codorgao 			= $oDados10->si103_codorgao;
 			$clcaixa10->si103_vlsaldoinicial	= $oDados10->si103_vlsaldoinicial;
 			$clcaixa10->si103_vlsaldofinal 		= $oDados10->si103_vlsaldofinal;
-			$clcaixa10->si103_mes 				= $this->sDataFinal['5'] . $this->sDataFinal['6'];
-			$clcaixa10->si103_instit 			= db_getsession("DB_instit");			
+			$clcaixa10->si103_mes 				= $nMes;
+			$clcaixa10->si103_instit 			= $iInstit;
 
 			$clcaixa10->incluir(null);
 
@@ -372,8 +281,8 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 				$clcaixa11->si166_codfontecaixa 		= $oDados11->si166_codfontecaixa;
 				$clcaixa11->si166_vlsaldoinicialfonte 	= $oDados11->si166_vlsaldoinicialfonte;
 				$clcaixa11->si166_vlsaldofinalfonte 	= $oDados11->si166_vlsaldofinalfonte;
-				$clcaixa11->si166_mes 					= $this->sDataFinal['5'] . $this->sDataFinal['6'];
-				$clcaixa11->si166_instit 				= db_getsession("DB_instit");
+				$clcaixa11->si166_mes 					= $nMes;
+				$clcaixa11->si166_instit 				= $iInstit;
 				$clcaixa11->si166_reg10 				= $clcaixa10->si103_sequencial;
 				
 				$clcaixa11->incluir(null);
@@ -397,8 +306,9 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 				$clcaixa12->si104_valorentrsaida 	= abs($oDados12->si104_valorentrsaida);
 				$clcaixa12->si104_codctbtransf 		= $oDados12->si104_codctbtransf;
 				$clcaixa12->si104_codfontectbtransf = $oDados12->si104_codfontectbtransf;
-				$clcaixa12->si104_mes 				= $this->sDataFinal['5'] . $this->sDataFinal['6'];
-				$clcaixa12->si104_instit 			= db_getsession("DB_instit");
+				$clcaixa12->si104_codidentificafr	= $oDados12->si104_codidentificafr;
+				$clcaixa12->si104_mes 				= $nMes;
+				$clcaixa12->si104_instit 			= $iInstit;
 				$clcaixa12->si104_reg10 			= $clcaixa10->si103_sequencial;
 
 				$clcaixa12->incluir(null);
@@ -419,9 +329,10 @@ class SicomArquivoCaixa extends SicomArquivoBase implements iPadArquivoBaseCSV
 				$clcaixa13->si105_identificadordeducao 	= $oDados13->si105_identificadordeducao;
 				$clcaixa13->si105_naturezareceita 		= $oDados13->si105_naturezareceita;
 				$clcaixa13->si105_codfontcaixa 			= $oDados13->si105_codfontcaixa;
+				$clcaixa13->si105_codco 		= $oDados13->si105_codco;
 				$clcaixa13->si105_vlrreceitacont 		= $oDados13->si105_vlrreceitacont;
-				$clcaixa13->si105_mes 					= $this->sDataFinal['5'] . $this->sDataFinal['6'];
-				$clcaixa13->si105_instit 				= db_getsession("DB_instit");
+				$clcaixa13->si105_mes 					= $nMes;
+				$clcaixa13->si105_instit 				= $iInstit;
 				$clcaixa13->si105_reg10 				= $clcaixa10->si103_sequencial;
 
 				$clcaixa13->incluir(null);
