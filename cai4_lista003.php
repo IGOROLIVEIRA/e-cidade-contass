@@ -76,8 +76,9 @@ if (count($clpostgresqlutils->getTableIndexes('debitos')) == 0) {
 <script>
 
 function js_fimprocessamento(){
- CurrentWindow.corpo.db_iframe_lista002.hide();
+ db_iframe_lista002.hide();
  location.href = '<?=basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])?>';
+
 }
 
 function js_sobe() {
