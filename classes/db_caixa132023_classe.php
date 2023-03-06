@@ -24,6 +24,7 @@ class cl_caixa132023
   var $si105_identificadordeducao = 0;
   var $si105_naturezareceita = 0;
   var $si105_codfontcaixa = 0;
+  var $si105_codco = 0;
   var $si105_vlrreceitacont = 0;
   var $si105_mes = 0;
   var $si105_reg10 = 0;
@@ -37,6 +38,7 @@ class cl_caixa132023
                  si105_identificadordeducao = int8 = Identificador da dedução da receita 
                  si105_naturezareceita = int8 = Natureza da receita 
                  si105_codfontcaixa = int4 = Fonte recurso do Caixa 
+                 si105_codco = varchar = Código identificador da movimentação de reclassificação de entrada e saída
                  si105_vlrreceitacont = float8 = Valor  correspondente à  receita 
                  si105_mes = int8 = Mês 
                  si105_reg10 = int8 = reg10 
@@ -73,6 +75,7 @@ class cl_caixa132023
       $this->si105_identificadordeducao = ($this->si105_identificadordeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_identificadordeducao"] : $this->si105_identificadordeducao);
       $this->si105_naturezareceita = ($this->si105_naturezareceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_naturezareceita"] : $this->si105_naturezareceita);
       $this->si105_codfontcaixa = ($this->si105_codfontcaixa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_codfontcaixa"] : $this->si105_codfontcaixa);
+      $this->si105_codco = ($this->si105_codco == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_codco"] : $this->si105_codco);
       $this->si105_vlrreceitacont = ($this->si105_vlrreceitacont == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_vlrreceitacont"] : $this->si105_vlrreceitacont);
       $this->si105_mes = ($this->si105_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_mes"] : $this->si105_mes);
       $this->si105_reg10 = ($this->si105_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si105_reg10"] : $this->si105_reg10);
@@ -110,6 +113,9 @@ class cl_caixa132023
     }
     if ($this->si105_codfontcaixa == null) {
       $this->si105_codfontcaixa = "0";
+    }
+    if ($this->si105_codco == null) {
+      $this->si105_codco = "0000";
     }
     if ($this->si105_vlrreceitacont == null) {
       $this->si105_vlrreceitacont = "0";
@@ -181,6 +187,7 @@ class cl_caixa132023
                                       ,si105_identificadordeducao 
                                       ,si105_naturezareceita
                                       ,si105_codfontcaixa 
+                                      ,si105_codco 
                                       ,si105_vlrreceitacont 
                                       ,si105_mes 
                                       ,si105_reg10 
@@ -194,6 +201,7 @@ class cl_caixa132023
                                ,$this->si105_identificadordeducao 
                                ,$this->si105_naturezareceita 
                                ,$this->si105_codfontcaixa 
+                               ,'$this->si105_codco'
                                ,$this->si105_vlrreceitacont 
                                ,$this->si105_mes 
                                ,$this->si105_reg10 
@@ -306,6 +314,13 @@ class cl_caixa132023
         $this->si105_codfontcaixa = "0";
       }
       $sql .= $virgula . " si105_codfontcaixa = $this->si105_codfontcaixa ";
+      $virgula = ",";
+    }
+    if (trim($this->si105_codco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si105_codco"])) {
+      if (trim($this->si105_codco) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si105_codco"])) {
+        $this->si105_codco = "0";
+      }
+      $sql .= $virgula . " si105_codco = $this->si105_codco ";
       $virgula = ",";
     }
     if (trim($this->si105_vlrreceitacont) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si105_vlrreceitacont"])) {
@@ -598,6 +613,31 @@ class cl_caixa132023
     }
 
     return $sql;
+  }
+
+  public function sql_Reg13($iAno, $iReduz)
+  {
+    $sSql = "SELECT 13 AS tiporegistro,
+								    c74_codlan AS codreduzdio,
+								    CASE
+								    	WHEN substr(o57_fonte,1,2) = '49' THEN 1
+								    	ELSE 2
+								    END AS ededucaodereceita,
+								    CASE
+								    	WHEN substr(o57_fonte,1,2) = '49' THEN substr(o57_fonte,2,2)
+								    	ELSE NULL
+								    END AS ededucaodereceita,
+								    substr(o57_fonte,2,8) AS naturezaReceita,
+								    c70_valor AS vlrreceitacont,
+								    o15_codtri::integer
+             FROM conlancamrec
+             JOIN conlancam ON c70_codlan = c74_codlan AND c70_anousu = c74_anousu
+             LEFT JOIN orcreceita ON c74_codrec = o70_codrec AND o70_anousu = {$iAno}
+             LEFT JOIN orcfontes ON o70_codfon = o57_codfon AND o70_anousu = o57_anousu
+             LEFT JOIN orctiporec ON o15_codigo = o70_codigo
+             WHERE c74_codlan = {$iReduz}";
+
+    return $sSql;
   }
 }
 
