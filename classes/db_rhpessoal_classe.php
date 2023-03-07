@@ -45,6 +45,7 @@ class cl_rhpessoal
     public $pagina_retorno = null;
     // cria variaveis do arquivo
     public $rh01_regist = 0;
+    public $rh01_esocial = null;
     public $rh01_numcgm = 0;
     public $rh01_funcao = 0;
     public $rh01_lotac = 0;
@@ -92,6 +93,7 @@ class cl_rhpessoal
     // cria propriedade com as variaveis do arquivo
     public $campos = "
                  rh01_regist = int4 = Matrícula
+                 rh01_esocial = char(30) = Esocial
                  rh01_numcgm = int4 = Numcgm
                  rh01_funcao = int4 = Cargo
                  rh01_lotac = int4 = Lotação
@@ -144,7 +146,7 @@ class cl_rhpessoal
     {
         if ($exclusao == false) {
             $this->rh01_regist = ($this->rh01_regist == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_regist"] : $this->rh01_regist);
-            $this->rh_esocial = ($this->rh01_regist == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_esocial"] : $this->rh_esocial);
+            $this->rh01_esocial = ($this->rh01_esocial == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_esocial"] : @$GLOBALS["HTTP_POST_VARS"]["rh01_esocial"]);
             $this->rh01_numcgm = ($this->rh01_numcgm == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_numcgm"] : $this->rh01_numcgm);
             $this->rh01_funcao = ($this->rh01_funcao == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_funcao"] : $this->rh01_funcao);
             $this->rh01_lotac = ($this->rh01_lotac == "" ? @$GLOBALS["HTTP_POST_VARS"]["rh01_lotac"] : $this->rh01_lotac);
@@ -366,8 +368,14 @@ class cl_rhpessoal
             $this->erro_status = "0";
             return false;
         }
+
+        if($this->rh01_esocial == null || $this->rh01_esocial == ''){
+            $this->rh01_esocial = $this->rh01_regist;
+        }
+        
         $sql = "insert into rhpessoal(
                                        rh01_regist
+                                      ,rh01_esocial 
                                       ,rh01_numcgm
                                       ,rh01_funcao
                                       ,rh01_lotac
@@ -400,6 +408,7 @@ class cl_rhpessoal
                        )
                 values (
                                 $this->rh01_regist
+                               ,'$this->rh01_esocial'
                                ,$this->rh01_numcgm
                                ,$this->rh01_funcao
                                ,$this->rh01_lotac
@@ -510,10 +519,10 @@ class cl_rhpessoal
             }
         }
 
-        if (trim($this->rh_esocial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_esocial"])) {
-            $sql  .= $virgula . " rh01_esocial = $this->rh_esocial ";
+        if (trim($this->rh01_esocial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["rh01_esocial"])) {
+            $sql  .= $virgula . " rh01_esocial = '$this->rh01_esocial' ";
             $virgula = ",";
-            if (trim($this->rh_esocial) == null) {
+            if (trim($this->rh01_esocial) == null) {
                 $this->erro_sql = " Campo Matricula e-social não Informado.";
                 $this->erro_campo = "rh01_esocial";
                 $this->erro_banco = "";
