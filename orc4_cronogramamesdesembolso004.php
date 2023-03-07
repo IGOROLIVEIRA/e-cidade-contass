@@ -1,6 +1,5 @@
 <?
-/*ini_set('display_errors', 'On');
-error_reporting(E_ALL);*/
+
 require_once(modification("libs/db_stdlib.php"));
 require_once(modification("libs/db_utils.php"));
 require_once(modification("libs/db_conecta.php"));
@@ -105,7 +104,6 @@ try {
       if ($clcronogramamesdesembolso->erro_status=="0") {
         throw new Exception("Erro ao incluir/alterar grupo ".$aTipoDespesa[$sKey].". ".$clcronogramamesdesembolso->erro_msg);
       }
-
     }
 
   } else if ($verificaResult) {
@@ -119,7 +117,7 @@ try {
     }
 
   }
-  db_fim_transacao(true);
+  db_fim_transacao();
 } catch (Exception $oErro) {
 
   db_fim_transacao(true);
