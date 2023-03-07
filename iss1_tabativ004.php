@@ -80,8 +80,6 @@ function quantDias($data1, $data2) {
             mktime(0,0,0,$aVet1[1],$aVet1[0],$aVet1[2])) / (24 * 60 * 60), 0);
 }
 
-
-
 //verifica o parametro na tabela parissqn para gerar sanitario automaticamente apartir do ISSQN
 //die($clparissqn->sql_query(null,"q60_integrasani",null,""));
 $rsParissqn      = $clparissqn->sql_record($clparissqn->sql_query(null,"q60_integrasani",null,""));
@@ -95,6 +93,9 @@ if ($numrowsParissqn > 0) {
 
 $db_botao = true;
 if (isset($incluir)) {
+
+    $buscaAliquota = getAliquotas();    
+    $q07_aliquota_incentivo = $buscaAliquota[$q07_aliquota_incentivo];
 
     //echo "<br><br> q07_perman -> " . $q07_perman; die();
     $lAlvaraPerm = $q07_perman;
@@ -912,9 +913,11 @@ function getAliquotas()
     $start = 2;
     $end = 5;
     $arrAliq = array();
-    array_push($arrAliq,number_format(0,2,'.',''));
+    //array_push($arrAliq,number_format(0,2,'.',''));
+    $arrAliq[number_format(0,2,'.','')] = number_format(0,2,'.','');
     while($start < $end){
-        array_push($arrAliq,number_format($start,2,'.',''));
+        //array_push($arrAliq,number_format($start,2,'.',''));
+        $arrAliq[number_format($start,2,'.','')] = number_format($start,2,'.','');
         $start += 0.01;
     }
 
