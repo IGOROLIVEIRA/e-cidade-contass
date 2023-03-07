@@ -106,6 +106,7 @@ class Evento
          * @todo se houver e os $dados forem diferentes ( usar md5 ), altera / inclui novo registro e reagenda
          *
          */
+        
         $this->tipoEvento               = str_replace('S', '', $tipoEvento);
         $this->empregador               = $empregador;
         $this->responsavelPreenchimento = $responsavelPreenchimento;
@@ -183,6 +184,30 @@ class Evento
         }
 
         $this->adicionarTarefa($daoFilaEsocial->rh213_sequencial);
+    }
+
+    public function adicionarEventoExclusao()
+    {
+        
+        $dados                                          = $this->montarDadosAPI();
+        //adicionado esse str_replace pra pegar o evendo quando o envio foi individual
+        $tipoEvento                                     = str_replace('Individual', '', $this->tipoEvento);
+        $daoFilaEsocial                                 = new \cl_esocialenvio();
+        $daoFilaEsocial->rh213_evento                   = $tipoEvento;
+        $daoFilaEsocial->rh213_empregador               = $this->empregador;
+        $daoFilaEsocial->rh213_responsavelpreenchimento = $this->responsavelPreenchimento;
+        $daoFilaEsocial->rh213_ambienteenvio            = $this->tpAmb;
+        
+        $daoFilaEsocial->rh213_dados    = pg_escape_string(json_encode(\DBString::utf8_encode_all($dados)));
+        $daoFilaEsocial->rh213_md5      = $this->md5;
+        $daoFilaEsocial->rh213_situacao = \cl_esocialenvio::SITUACAO_NAO_ENVIADO;
+        $daoFilaEsocial->rh213_dataprocessamento = date('Y-m-d h:i:s');
+        if (is_object($dados) || count($dados) > 0) {
+            $daoFilaEsocial->incluir(null);
+            if ($daoFilaEsocial->erro_status == 0) {
+                throw new \Exception("Não foi possível adicionar na fila. \n {$daoFilaEsocial->erro_msg}");
+            }
+        }
     }
 
     /**
