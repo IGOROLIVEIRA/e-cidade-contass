@@ -7,7 +7,7 @@ class Oc19785 extends AbstractMigration
 
     public function up()
     {
-        $sql = "
+        /* $sql = "
         BEGIN
 
         INSERT INTO db_itensmenu VALUES((select max(id_item)+1 from db_itensmenu),
@@ -23,6 +23,6 @@ class Oc19785 extends AbstractMigration
 
         COMMIT";
 
-        $this->execute($sql);
+        $this->execute($sql);*/
     }
 }
