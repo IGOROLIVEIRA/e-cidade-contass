@@ -4293,6 +4293,38 @@ class Acordo
         return $aDotacoes;
     }
 
+    public function getObraAcordo()
+    {
+        $sql = "select
+        obr01_sequencial,
+        obr01_numeroobra,
+        (select max(obr02_situacao) as obr02_situacao from licobrasituacao where obr02_seqobra = obr01_sequencial),
+        (select obr02_dtsituacao from licobrasituacao where obr02_seqobra = obr01_sequencial and obr02_situacao in (select max(obr02_situacao) from licobrasituacao where obr02_seqobra = obr01_sequencial)),
+        (select obr03_tipomedicao from licobrasmedicao where obr03_seqobra = obr01_sequencial and obr03_nummedicao in (select max(obr03_nummedicao) from licobrasmedicao where obr03_seqobra = obr01_sequencial)),
+        (select obr03_dtentregamedicao from licobrasmedicao where obr03_seqobra = obr01_sequencial and obr03_nummedicao in (select max(obr03_nummedicao) from licobrasmedicao where obr03_seqobra = obr01_sequencial)),
+        (select obr03_vlrmedicao from licobrasmedicao where obr03_seqobra = obr01_sequencial and obr03_nummedicao in (select max(obr03_nummedicao) from licobrasmedicao where obr03_seqobra = obr01_sequencial))
+    from
+        licobras
+    where
+        obr01_sequencial in (
+        select
+            obr01_sequencial
+        from
+            acordo
+        left join licobras on
+            obr01_licitacao = ac16_licitacao
+        where
+            ac16_sequencial = {$this->getCodigo()})";
+
+        $rsObras = db_query($sql);
+
+        for ($i = 0; $i < pg_numrows($rsObras); $i++) {
+            $oDadosObras = db_utils::fieldsMemory($rsObras, $i);
+            $aObras[] = $oDadosObras;
+        }
+        return $aObras;
+    }
+
     public function getSaldoItemPosicao($iPcmater, $iPosicao)
     {
         $oSaldo                             = new stdClass();
