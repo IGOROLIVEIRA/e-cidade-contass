@@ -119,7 +119,8 @@ if($sPonto == 's'){
 if($sQuebra){
 	if($sOrdem == 'l')
 		$sigla = "LOTAÇÃO";
-	else $sigla = "RECURSO";
+	else $sigla = "RECURSO
+	";
 	$head7 = "QUEBRAR POR: ".$sigla;
 }
 
@@ -351,8 +352,8 @@ if($sTipo == 'r'){
 					if($sOrdem == 'r'){
 						$pdf->setfont('arial','b',10);
 						$pdf->cell(20,$alt,'RECURSO : ', 0,0,"L",0);
-						$pdf->cell(10,$alt,$rh25_recurso,0,0,"R",0);
-						$pdf->cell(60,$alt,$o15_descr,   0,1,"L",0);
+						$pdf->cell(25,$alt,$rh25_recurso,0,0,"R",0);
+						$pdf->cell(100,$alt,$o15_descr,   0,1,"L",0);
 					}
 					if($sOrdem == 'l'){
 						$pdf->cell(20, $alt, 'Lotação : ', 0, 0, "L", 0);
@@ -370,8 +371,8 @@ if($sTipo == 'r'){
 				$pdf->ln(3);
 				$pdf->setfont('arial','b',10);
 				$pdf->cell(20,$alt,'RECURSO : ', 0,0,"L",0);
-				$pdf->cell(10,$alt,$rh25_recurso,0,0,"R",0);
-				$pdf->cell(60,$alt,$o15_descr,   0,1,"L",0);
+				$pdf->cell(25,$alt,$rh25_recurso,0,0,"R",0);
+				$pdf->cell(100,$alt,$o15_descr,   0,1,"L",0);
 				$pdf->ln(2);
 			}
 
@@ -432,14 +433,14 @@ if($sTipo == 'r'){
 
 				if(!$sQuebra && $sOrdem != 'l' && $sOrdem != 'a'){
 					$pdf->cell(20, $alt, 'RECURSO : ', 0, 0, "L", 0);
-					$pdf->cell(10, $alt, $rh25_recurso, 0, 0, "R", 0);
-					$pdf->cell(60, $alt, $o15_descr, 0, 1, "L", 0);
+					$pdf->cell(25, $alt, $rh25_recurso, 0, 0, "R", 0);
+					$pdf->cell(100, $alt, $o15_descr, 0, 1, "L", 0);
 				}
 
 				if($sQuebra && $sOrdem != 'l'){
 					$pdf->cell(20, $alt, 'RECURSO : ', 0, 0, "L", 0);
-					$pdf->cell(10, $alt, $rh25_recurso, 0, 0, "R", 0);
-					$pdf->cell(60, $alt, $o15_descr, 0, 1, "L", 0);
+					$pdf->cell(25, $alt, $rh25_recurso, 0, 0, "R", 0);
+					$pdf->cell(100, $alt, $o15_descr, 0, 1, "L", 0);
 				}else if($sQuebra && $sOrdem == 'l'){
 					$pdf->cell(20, $alt, 'Lotação : ', 0, 0, "L", 0);
 					$pdf->cell(10, $alt, $lotacao, 0, 1, "L", 0);
@@ -498,8 +499,8 @@ if($sTipo == 'r'){
 
 				}else if($sOrdem == 'r'){
 					$pdf->cell(20,$alt,'RECURSO : ', 0,0,"L",0);
-					$pdf->cell(10,$alt,$rh25_recurso,0,0,"R",0);
-					$pdf->cell(60,$alt,$o15_descr,   0,1,"L",0);
+					$pdf->cell(25,$alt,$rh25_recurso,0,0,"R",0);
+					$pdf->cell(100,$alt,$o15_descr,   0,1,"L",0);
 				}
 			}
 
@@ -522,8 +523,8 @@ if($sTipo == 'r'){
 
 				if($sOrdem != 'a' && $sOrdem != 'l'){
 					$pdf->cell(20,$alt,'RECURSO : ', 0,0,"L",0);
-					$pdf->cell(10,$alt,$rh25_recurso,0,0,"R",0);
-					$pdf->cell(60,$alt,$o15_descr,   0,1,"L",0);
+					$pdf->cell(25,$alt,$rh25_recurso,0,0,"R",0);
+					$pdf->cell(100,$alt,$o15_descr,0,1,"L",0);
 				}
 
 				}
