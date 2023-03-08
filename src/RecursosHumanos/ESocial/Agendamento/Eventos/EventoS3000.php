@@ -61,14 +61,17 @@ class EventoS3000 extends EventoBase
 
                 $std->infoexclusao = $infoexclusao;
 
-                $idefolhapagto = new \stdClass();
-                $idefolhapagto->indapuracao = $this->indapuracao;
-                $idefolhapagto->perapur = $ano . '-' . $mes;
-                if ($this->indapuracao == 2) {
-                    $idefolhapagto->perapur         = $ano;
-                }
+                if ($infoexclusao->tpevento == 'S-1200' || $infoexclusao->tpevento == 'S-1202' || $infoexclusao->tpevento == 'S-1207') {
 
-                $std->idefolhapagto = $idefolhapagto;
+                    $idefolhapagto = new \stdClass();
+                    $idefolhapagto->indapuracao = $this->indapuracao;
+                    $idefolhapagto->perapur = $ano . '-' . $mes;
+                    if ($this->indapuracao == 2) {
+                        $idefolhapagto->perapur         = $ano;
+                    }
+
+                    $std->idefolhapagto = $idefolhapagto;
+                }
 
                 $idetrabalhador = new \stdClass();
 
