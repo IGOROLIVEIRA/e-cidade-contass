@@ -972,7 +972,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                     and c61_anousu = c56_anousu
                                                     LEFT JOIN contabancaria ON c56_contabancaria = db83_sequencial
                                                     LEFT JOIN db_operacaodecredito ON db83_codigoopcredito = op01_sequencial
-                                                WHERE 
+                                                WHERE
                                                     substr(c60_estrut,1 ,1 ) in ('4')
                                                     AND conplanoorcamentoanalitica.c61_instit = " . db_getsession('DB_instit') . "
                                                     AND contacorrentesaldo.c29_mesusu <= " . $nMes . "
@@ -995,7 +995,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                 //Constante da contacorrente orçamentária
                 $nContaCorrente = 100;
-                
+
                 for ($iContVinculo = 0; $iContVinculo < pg_num_rows($rsVinculoContaOrcamento); $iContVinculo++) {
 
                     $objContas = db_utils::fieldsMemory($rsVinculoContaOrcamento, $iContVinculo);
@@ -1012,7 +1012,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                  AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . " and c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
                                                  WHERE c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                    AND c17_sequencial = {$nContaCorrente} ";
-                                                 if ($oContas10->nregobrig == 31)  
+                                                 if ($oContas10->nregobrig == 31)
                                                     $sSqlReg12saldos .= " AND c19_emparlamentar = {$objContas->c19_emparlamentar} ";
                                                  $sSqlReg12saldos .= "    AND c19_estrutural = '{$objContas->c60_estrut}') AS saldoimplantado,
 
@@ -1029,7 +1029,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                      AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
                                                      AND c19_contacorrente = {$nContaCorrente}
                                                      AND c19_reduz IN (" . implode(',', $oContas10->contas) . ") ";
-                                                     if ($oContas10->nregobrig == 31)  
+                                                     if ($oContas10->nregobrig == 31)
                                                      $sSqlReg12saldos .= " AND c19_emparlamentar = {$objContas->c19_emparlamentar} ";
                                                      $sSqlReg12saldos .= "    AND c19_estrutural = '{$objContas->c60_estrut}'
                                                      {$sWhereEncerramento}
@@ -1048,7 +1048,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                                      AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
                                                      AND c19_contacorrente = {$nContaCorrente}
                                                      AND c19_reduz IN (" . implode(',', $oContas10->contas) . ") ";
-                                                     if ($oContas10->nregobrig == 31)  
+                                                     if ($oContas10->nregobrig == 31)
                                                      $sSqlReg12saldos .= " AND c19_emparlamentar = {$objContas->c19_emparlamentar} ";
                                                      $sSqlReg12saldos .= "   AND c19_estrutural = '{$objContas->c60_estrut}'
                                                      {$sWhereEncerramento}
@@ -1067,7 +1067,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                              AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
                                              AND c19_contacorrente = {$nContaCorrente}
                                              AND c19_reduz IN (" . implode(',', $oContas10->contas) . ") ";
-                                             if ($oContas10->nregobrig == 31)  
+                                             if ($oContas10->nregobrig == 31)
                                              $sSqlReg12saldos .= " AND c19_emparlamentar = {$objContas->c19_emparlamentar} ";
                                              $sSqlReg12saldos .= "   AND c19_estrutural = '{$objContas->c60_estrut}'
                                              {$sWhereEncerramento}
@@ -1086,13 +1086,13 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                              AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
                                              AND c19_contacorrente = {$nContaCorrente}
                                              AND c19_reduz IN (" . implode(',', $oContas10->contas) . ") ";
-                                             if ($oContas10->nregobrig == 31)  
+                                             if ($oContas10->nregobrig == 31)
                                              $sSqlReg12saldos .= " AND c19_emparlamentar = {$objContas->c19_emparlamentar} ";
                                              $sSqlReg12saldos .= "   AND c19_estrutural = '{$objContas->c60_estrut}'
                                              {$sWhereEncerramento}
                                            GROUP BY c28_tipo) AS debitos";
-           
-                    
+
+
                     $rsReg12saldos = db_query($sSqlReg12saldos) or die($sSqlReg12saldos);
 
                     for ($iContSaldo12 = 0; $iContSaldo12 < pg_num_rows($rsReg12saldos); $iContSaldo12++) {
@@ -1217,7 +1217,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 }
 
                                 $sHash31 = '31' . $oContas10->si177_contacontaabil . $sNaturezaReceita . $objContas->o15_codtri . $objContas->c19_emparlamentar;
-                    
+
                                 if (!isset($aContasReg10[$reg10Hash]->reg31[$sHash31])) {
 
                                     $obalancete31 = new stdClass();
