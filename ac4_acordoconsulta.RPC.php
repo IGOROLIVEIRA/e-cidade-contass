@@ -1,4 +1,5 @@
 <?php
+
 /*
  *     E-cidade Software Publico para Gestao Municipal                
  *  Copyright (C) 2014  DBselller Servicos de Informatica             
@@ -524,6 +525,29 @@ switch ($oParam->exec) {
 
     $oRetorno->detalhe  = $oParam->detalhe;
 
+    break;
+
+  case "obraConsulta":
+
+
+      $oAcordo = new Acordo($oParam->ac16_sequencial);
+      $Obras = $oAcordo->getObraAcordo();
+      foreach ($Obras as $oDado) {
+        $oInfoObras = new stdClass();
+          $oInfoObras->sequencial = $oDado->obr01_sequencial;
+          $oInfoObras->obra = $oDado->obr01_numeroobra;
+          $oInfoObras->situacao = $oDado->obr02_situacao;
+          $oInfoObras->dtsituacao = $oDado->obr02_dtsituacao;
+          $oInfoObras->tipomedicao = $oDado->obr03_tipomedicao;
+          $oInfoObras->dtentregamedicao = $oDado->obr03_dtentregamedicao;
+          $oInfoObras->vlrmedicao = $oDado->obr03_vlrmedicao;
+          $oRetorno->dados[]    = $oInfoObras;
+
+      }
+  
+      
+      $oRetorno->detalhe  = $oParam->detalhe;
+  
     break;
 }
 echo $oJson->encode($oRetorno);
