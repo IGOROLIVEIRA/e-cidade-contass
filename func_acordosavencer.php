@@ -71,7 +71,7 @@ $iInstituicaoSessao = db_getsession('DB_instit');
   <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
     <tr>
       <td align="center" valign="top">
-      <h2 style='color: red;'>Acordos a vencer</h2>
+      <h2 style="margin-bottom: 10px;color:red;">Acordos a vencer</h2>
         <?php
 
         $sWhere  = " 1 = 1 ";
@@ -88,12 +88,12 @@ $iInstituicaoSessao = db_getsession('DB_instit');
           $campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datainicio END ac16_datainicio, ";
           $campos .= "CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datafim END ac16_datafim, ";
           $campos .= "CAST(ac16_datafim AS date) - date '" . date("Y-m-d") . "'||' dias' as dl_Prazo, ";
-          $campos .= "(CASE WHEN ac16_providencia is null OR ac16_providencia = 1 THEN 'Pendente' ELSE providencia.descricao END) as dl_Providencia";
+          $campos .= "(CASE WHEN ac16_providencia is null THEN 'Pendente' ELSE providencia.descricao END) as dl_Providencia";
         }
 
         $sWhere = " cast((case WHEN ac16_datafim > ac26_data THEN ac16_datafim ELSE ac26_data END) AS date) - date '" . date("Y-m-d") . "' between 0 and 60 ";
         $sWhere .= " and  ac16_instit = " . db_getsession('DB_instit');
-        $sWhere .= " and (ac16_providencia is null OR ac16_providencia in (1, 2)) ";
+        $sWhere .= " and (ac16_providencia is null OR ac16_providencia in (2)) ";
         $sWhere .= " and ac16_acordosituacao = 4 ";
         $sWhere .= " and ac16_coddepto = " . db_getsession('DB_coddepto');
         $sql = $clacordo->sql_query_completo(null, $campos, 'ac16_datafim', $sWhere);

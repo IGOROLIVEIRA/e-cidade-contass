@@ -80,6 +80,10 @@ class Window extends Controller {
     $session->set('DB_coddepto', $codigoDepartamento);
     $session->set('DB_nomedepto', $nomeDepartamento);
 
+    $notificacao = $model->getNotificacao($session->get('DB_id_usuario'),$session->get('DB_modulo'),$session->get('DB_instit'),date("Y-m-d", $session->get('DB_datausu')),$session->get('DB_coddepto'));
+
+    $this->view->notificacaoModulo = $notificacao;
+
     $this->view->dateUser = false;
     $dateUser = $model->getDataUsuario($session->get("DB_id_usuario"));
 

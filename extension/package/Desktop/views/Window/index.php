@@ -85,6 +85,9 @@ var Desktop = parent.Desktop, CurrentWindow, Window, corpo, bstatus;
   // data do sistema esta diferente da data do servidor, exibe aviso
   var dateSystemDiffServer = <?php echo $this->dateSystemDiffServer ? 'true' : 'false'; ?>;
 
+  // data do sistema esta diferente da data do servidor, exibe aviso
+  var notificacaoModulo = <?php echo $this->notificacaoModulo ? 'true' : 'false'; ?>;
+
   // mensagem de aviso ja exibida
   var notificationDateSystemDiffServer = false;
 
@@ -200,6 +203,20 @@ var Desktop = parent.Desktop, CurrentWindow, Window, corpo, bstatus;
     });
   }
 
+    /**
+   * Exibe aviso quando existe notificacoes
+   */
+  function checkNotificacoes() {
+    
+    if (!notificacaoModulo) {
+      return false;
+    }
+
+    alertify.log('Notificações Pendentes.', "alert", 0, function() {
+      
+    });
+  }
+
   // ao dar focu na janela, verifica se deve exibir aviso de data diferente
   CurrentWindow.addObserver('onFocus', function() {
     checkSystemDate();
@@ -228,6 +245,7 @@ var Desktop = parent.Desktop, CurrentWindow, Window, corpo, bstatus;
     CurrentWindow.loader.hide();
 
     checkSystemDate();
+    checkNotificacoes();
     checkUrl();
 
     if (dateUser) {
