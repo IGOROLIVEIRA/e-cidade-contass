@@ -207,7 +207,7 @@ class cl_liccontrolepncp
                        )
                 values (
                                 $this->l213_sequencial 
-                               ," . ($this->l213_licitacao == null ? "null" : "'" . $this->l213_licitacao . "'") . " 
+                               ,$this->l213_licitacao 
                                ,$this->l213_usuario 
                                ," . ($this->l213_dtlancamento == "null" || $this->l213_dtlancamento == "" ? "null" : "'" . $this->l213_dtlancamento . "'") . " 
                                ,'$this->l213_numerocontrolepncp'
