@@ -624,6 +624,57 @@ if (isset($_POST["processar"])) {
 
 </form>
 <script>
+    var codigoimportacao;
+    var urlrelatorio;
+
+    function js_gerarRelatorio() {
+
+        var iHeight = 200;
+        var iWidth = 300;
+        windowDotacaoItem = new windowAux('wndDotacoesItem',
+            'Gerar Relagório ',
+            iWidth,
+            iHeight
+        );
+
+        var sContent = "<div style='margin-top:30px;'>";
+        sContent += "<fieldset>";
+        sContent += "<legend>Gerar Relatório de Importação de itens em:</legend>";
+        sContent += "  <div id=''>";
+        sContent += "  <input type='checkbox' id='pdf' name='PDF'>";
+        sContent += "  <label>PDF</label>";
+        sContent += "  </div>";
+        sContent += "  <div id=''>";
+        sContent += "  <input type='checkbox' id='excel' name='EXCEL'>";
+        sContent += "  <label>EXCEL</label>";
+        sContent += "  </div>";
+        sContent += "</fieldset>";
+        sContent += "<center>";
+        sContent += "<input type='button' id='btnGerar' value='Confirmar' onclick='gerarRelatorio()'>";
+        sContent += "</center>";
+        sContent += "</div>";
+        windowDotacaoItem.setContent(sContent);
+        windowDotacaoItem.show();
+
+    }
+
+    function gerarRelatorio() {
+        var pdf = document.getElementById("pdf");
+        var excel = document.getElementById("excel");
+
+
+        if (pdf.checked) {
+            //document.location.href = document.location.href;
+
+            var jan = window.open('com2_relatorioimportacaoitens.php?' + urlrelatorio, '', 'location=0, width=' + (screen.availWidth - 5) +
+                'width=' + (screen.availWidth - 5) + ', scrollbars=1');
+            jan.moveTo(0, 0);
+        } else if (excel.checked) {
+            window.location.href = "com2_relatorioimportacaoitensexcel.php?codigoimportacao=" + codigoimportacao;
+        }
+        windowDotacaoItem.destroy();
+    }
+
     function salvarItens() {
 
         js_divCarregando('Aguarde, salvando os itens...', 'msgbox');
@@ -666,12 +717,10 @@ if (isset($_POST["processar"])) {
             Filtros += '&codigoimportacao=' + oRetorno.pc96_sequencial;
             Filtros += '&descricao=' + document.getElementById('pc96_descricao').value;
             Filtros += '&data=' + document.getElementById('pc01_data').value;
+            urlrelatorio = Filtros;
+            codigoimportacao = oRetorno.pc96_sequencial;
+            js_gerarRelatorio();
 
-            document.location.href = document.location.href;
-
-            var jan = window.open('com2_relatorioimportacaoitens.php?' + Filtros, '', 'location=0, width=' + (screen.availWidth - 5) +
-                'width=' + (screen.availWidth - 5) + ', scrollbars=1');
-            jan.moveTo(0, 0);
 
         }
 
