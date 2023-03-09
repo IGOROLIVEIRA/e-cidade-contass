@@ -176,7 +176,9 @@ db_input('c202_elemento',10,$Ic202_elemento,true,'text',$db_opcao,"")
           <th class="table_header" style="width: 50px;">Função</th>
           <th class="table_header" style="width: 70px;">Subfunção</th>
           <th class="table_header" style="width: 60px;">Fonte</th>
-          <th class="table_header" style="width: 40px;">CO</th>
+          <?if(db_getsession('DB_anousu') > 2022) {          ?> 
+            <th class="table_header" style="width: 40px;">CO</th>
+          <? } ?>
           <th class="table_header" style="width: 70px;">Elemento</th>
           <th class="table_header" style="width: 100px;">Empenhado no Mês</th>
           <th class="table_header" style="width: 100px;">Empenhado Anulado no Mês</th>
@@ -204,6 +206,7 @@ db_input('c202_elemento',10,$Ic202_elemento,true,'text',$db_opcao,"")
   </center>
 </form>
 <script>
+var ano = "<?php print db_getsession('DB_anousu'); ?>"; 
 iMes = document.form1.c202_mescompetencia.value;
 if(iMes) {
     js_buscaInformacaoPorMes(iMes, <?= $db_opcao ?>);
@@ -459,9 +462,11 @@ function js_pesquisao58_subfuncao(mostra){
       sLinhaTabela += "   <td class='linhagrid center'>";
       sLinhaTabela +=         oItem.c202_codfontrecursos+"<input type='hidden' name='aItensConsExecOrc["+ iLinha +"][c202_codfontrecursos]' value='"+ oItem.c202_codfontrecursos +"'>";
       sLinhaTabela += "   </td>";
-      sLinhaTabela += "   <td class='linhagrid center'>";
-      sLinhaTabela +=         oItem.c202_codacompanhamento+"<input type='hidden' name='aItensConsExecOrc["+ iLinha +"][c202_codacompanhamento]' value='"+ oItem.c202_codacompanhamento +"'>";
-      sLinhaTabela += "   </td>";
+      if(ano > 2022){
+        sLinhaTabela += "   <td class='linhagrid center'>";
+        sLinhaTabela +=         oItem.c202_codacompanhamento+"<input type='hidden' name='aItensConsExecOrc["+ iLinha +"][c202_codacompanhamento]' value='"+ oItem.c202_codacompanhamento +"'>";
+        sLinhaTabela += "   </td>";
+      }
       sLinhaTabela += "   <td class='linhagrid center'>";
       sLinhaTabela +=         oItem.c202_elemento+"<input type='hidden' name='aItensConsExecOrc["+ iLinha +"][c202_elemento]' value='"+ oItem.c202_elemento +"'>";
       sLinhaTabela += "   </td>";
@@ -512,7 +517,10 @@ function js_pesquisao58_subfuncao(mostra){
       if (iNovo) {
           
           sLinhaTotalizador = "<tr id='totalizador'>";
-          sLinhaTotalizador += "  <th class='table_header' colspan='6'>TOTAL</th>";      
+          if(ano > 2022)
+                sLinhaTotalizador += "  <th class='table_header' colspan='6'>TOTAL</th>"; 
+          else   
+                sLinhaTotalizador += "  <th class='table_header' colspan='5'>TOTAL</th>";     
           sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorempenhado_total'>"+ js_formatar(oTotalizador.iTotEmpMes, 'f') +"</th>";
           sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorempenhadoanu_total'>"+ js_formatar(oTotalizador.iTotEmpAnuMes, 'f') +"</th>";
           sLinhaTotalizador += "  <th class='table_header' style='width: 100px;' id='c202_valorliquidado_total'>"+ js_formatar(oTotalizador.iTotLiqMes, 'f') +"</th>";
@@ -550,12 +558,13 @@ function js_pesquisao58_subfuncao(mostra){
 
       }
 
-      if (document.form1.c202_codacompanhamento.value == '') {
+      if(ano > 2022){
+        if (document.form1.c202_codacompanhamento.value == '') {
           
           alert("Informe o Código de acompanhamento.");
           document.form1.c202_codacompanhamento.focus();
           return;
-
+        }
       }
 
       if (document.form1.c202_subfuncao.value == '') {
@@ -587,7 +596,8 @@ function js_pesquisao58_subfuncao(mostra){
       oItem.c202_funcao               = document.form1.c202_funcao.value;
       oItem.c202_subfuncao            = document.form1.c202_subfuncao.value;
       oItem.c202_codfontrecursos      = document.form1.c202_codfontrecursos.value;
-      oItem.c202_codacompanhamento    = document.form1.c202_codacompanhamento.value;
+      if(ano > 2022)
+        oItem.c202_codacompanhamento  = document.form1.c202_codacompanhamento.value;
       oItem.c202_elemento             = document.form1.c202_elemento.value;
       oItem.c202_mescompetencia       = document.form1.c202_mescompetencia.value;
       oItem.c202_consconsorcios       = document.form1.c202_consconsorcios.value;
@@ -704,7 +714,8 @@ function js_pesquisao58_subfuncao(mostra){
 
                   var elemento = 'aItensConsExecOrc[' + item + ']';
 
-                  var novoItem = {
+                  if(ano > 2022){
+                    var novoItem = {
                     iItem:                    Number(item),
                     c202_mescompetencia:      document.form1.c202_mescompetencia.value,
                     c202_consconsorcios:      document.form1.c202_consconsorcios.value,
@@ -712,11 +723,25 @@ function js_pesquisao58_subfuncao(mostra){
                     c202_subfuncao:           document.form1[elemento+'[c202_subfuncao]'].getAttribute('value'),
                     c202_codfontrecursos:     document.form1[elemento+'[c202_codfontrecursos]'].getAttribute('value'),
                     c202_elemento:            document.form1[elemento+'[c202_elemento]'].getAttribute('value'),
-                    c202_elemento:            document.form1[elemento+'[c202_elemento]'].getAttribute('value'),
                     c202_codacompanhamento:   document.form1[elemento+'[c202_codacompanhamento]'].getAttribute('value')
                     
                   };
 
+                  }
+                  else{
+                    var novoItem = {
+                    iItem:                    Number(item),
+                    c202_mescompetencia:      document.form1.c202_mescompetencia.value,
+                    c202_consconsorcios:      document.form1.c202_consconsorcios.value,
+                    c202_funcao:              document.form1[elemento+'[c202_funcao]'].getAttribute('value'),
+                    c202_subfuncao:           document.form1[elemento+'[c202_subfuncao]'].getAttribute('value'),
+                    c202_codfontrecursos:     document.form1[elemento+'[c202_codfontrecursos]'].getAttribute('value'),
+                    c202_elemento:            document.form1[elemento+'[c202_elemento]'].getAttribute('value')
+                    
+                  };
+
+                  }
+                 
                   itensExcluir.push(novoItem);
 
               }
