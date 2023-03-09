@@ -1409,8 +1409,11 @@ class cl_pcproc
       JOIN matunid ON m61_codmatunid=pc17_unid
       JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
       JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-      JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-      WHERE pcproc.pc80_codproc = {$pc80_codproc}
+      join pcorcam on pc22_codorc = pc20_codorc
+      join pcorcamforne on pc20_codorc = pc21_codorc
+      JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem and pc23_orcamforne = pc21_orcamforne
+      join pcorcamjulg on pc24_orcamitem = pc22_orcamitem and pc24_orcamforne = pc21_orcamforne
+      WHERE pcproc.pc80_codproc = {$pc80_codproc} and pc24_pontuacao = 1
       ORDER BY numeroitem";
     return $sql;
   }
