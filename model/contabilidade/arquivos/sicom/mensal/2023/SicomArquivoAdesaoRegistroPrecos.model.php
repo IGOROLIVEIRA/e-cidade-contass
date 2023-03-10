@@ -305,7 +305,9 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       }
 
       $sSql = "select si07_numeroitem,
-                   (si07_item::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) AS coditem
+      CASE 
+      WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
+    ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
                    from itensregpreco
                    where si07_sequencialadesao = $oDados10->si06_sequencial ";
       $rsResult12 = db_query($sSql);
@@ -335,7 +337,9 @@ class SicomArquivoAdesaoRegistroPrecos extends SicomArquivoBase implements iPadA
       }
 
       $sSql = "select si07_numerolote,
-                   (si07_item::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) AS coditem
+                    CASE 
+      WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
+    ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
                    from itensregpreco where si07_sequencialadesao = $oDados10->si06_sequencial
                    and (select si06_processoporlote from adesaoregprecos where  si06_sequencial = $oDados10->si06_sequencial) = 1";
       $rsResult13 = db_query($sSql);
@@ -409,7 +413,9 @@ ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
                 si01_datacotacao,
                 si07_numerolote,
-                (si07_item::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) AS coditem
+                 CASE 
+      WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
+    ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem
 FROM pcproc
 JOIN pcprocitem ON pc80_codproc = pc81_codproc
 JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
@@ -455,7 +461,9 @@ ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater
       $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,
 case when length(z01_cgccpf) = 11 then 1 when length(z01_cgccpf) = 14 then 2 else 0 end as tipodocumento,
 z01_cgccpf,
-(si07_item::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) AS coditem
+ CASE 
+      WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
+    ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem
 from itensregpreco
 INNER JOIN adesaoregprecos on  si07_sequencialadesao = si06_sequencial and si06_descontotabela = 2
 INNER join cgm on si07_fornecedor = z01_numcgm
@@ -494,7 +502,9 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
       $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,
 case when length(z01_cgccpf) = 11 then 1 when length(z01_cgccpf) = 14 then 2 else 0 end as tipodocumento,
 z01_cgccpf,
-(si07_item::varchar || (CASE WHEN si07_codunidade IS NULL THEN 1 ELSE si07_codunidade END)::varchar) AS coditem
+ CASE 
+      WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
+    ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem
 from itensregpreco
 INNER JOIN adesaoregprecos on  si07_sequencialadesao = si06_sequencial and si06_descontotabela = 1
 INNER join cgm on si07_fornecedor = z01_numcgm
