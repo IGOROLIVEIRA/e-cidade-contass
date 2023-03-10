@@ -636,5 +636,3 @@ class cl_julglic102023
     return $sql;
   }
 }
-
-?>
