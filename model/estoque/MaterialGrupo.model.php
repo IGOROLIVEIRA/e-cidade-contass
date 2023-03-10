@@ -142,6 +142,8 @@ class MaterialGrupo extends DBEstruturaValor
   const SAIDA_TRANSFERENCIA = 2;
   const SAIDA_DOACAO        = 3;
   const SAIDA_PERDA_ATIVO   = 4;
+  const OBRAS_EM_ANDAMENTO   = 5;
+
 
 
   /**
@@ -568,6 +570,9 @@ class MaterialGrupo extends DBEstruturaValor
 
       $oContas->codigo = $this->getCodigoContaPerdaAtivo();
       $oContas->codigoVPD = $this->getCodigoContaPerdaAtivoVPD();
+    } else if ($iTipoSaida === self::OBRAS_EM_ANDAMENTO) {
+      $oContas->codigo = $this->getCodigoContaDebito();
+      $oContas->codigoVPD = $this->getCodigoContaCredito();
     }
 
     return $oContas;
