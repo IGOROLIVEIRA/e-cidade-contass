@@ -19,24 +19,34 @@ class cl_dipr102023
     // cria variaveis do arquivo
     var $si230_sequencial = 0;
     var $si230_tiporegistro = 0;
-    var $si230_coddipr = 0;
+    var $si230_tipocadastro = 0;
     var $si230_segregacaomassa = 0;
     var $si230_benefcustesouro = 0;
     var $si230_atonormativo = 0;
-    var $si230_exercicioato = 0;
+    var $si230_dtatonormativo = 0;
     var $si230_mes = 0;
     var $si230_instit = 0;
+    var $si230_nroatonormasegremassa;
+    var $si230_dtatonormasegremassa;
+    var $si230_planodefatuarial;
+    var $si230_atonormplanodefat;
+    var $si230_dtatoplanodefat;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  si230_sequencial = int8 = sequencial 
                  si230_tiporegistro = int8 = Tipo do  registro 
-                 si230_coddipr = int8 = Código DIPR
+                 si230_tipocadastro = int8 = Tipo de Cadastro
                  si230_segregacaomassa = int8 = Segregação da massa
                  si230_benefcustesouro = int8 = Possui beneficio custeados com recurso do tesouro
                  si230_atonormativo = int8 = Ato normativo
-                 si230_exercicioato = int8 = Exercicio ato normativo
+                 si230_dtatonormativo = date = Data Ato Normativo
                  si230_mes = int8 = Mês 
                  si230_instit = int8 = Instituição 
+                 si230_nroatonormasegremassa = int8 = Número do ato normativo que implementou ou desfez a segregação da massa
+                 si230_dtatonormasegremassa = date = Data do ato normativo que implementou ou desfez a segregação da massa
+                 si230_planodefatuarial = int8 = Houve necessidade de implementar plano de equacionamento de déficit atuarial?
+                 si230_atonormplanodefat = int8 Ato normativo que estabeleceu o plano de equacionamento do déficit atuarial
+                 si230_dtatoplanodefat = date = Data do ato normativo que estabeleceu o plano de equacionamento do déficit atuarial
                  ";
 
     //funcao construtor da classe
@@ -64,15 +74,36 @@ class cl_dipr102023
         if ($exclusao == false) {
             $this->si230_sequencial = ($this->si230_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_sequencial"] : $this->si230_sequencial);
             $this->si230_tiporegistro = ($this->si230_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_tiporegistro"] : $this->si230_tiporegistro);
-            $this->si230_coddipr = ($this->si230_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_coddipr"] : $this->si230_coddipr);
+            $this->si230_tipocadastro = ($this->si230_tipocadastro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_tipocadastro"] : $this->si230_tipocadastro);
             $this->si230_segregacaomassa = ($this->si230_segregacaomassa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_segregacaomassa"] : $this->si230_segregacaomassa);
             $this->si230_benefcustesouro = ($this->si230_benefcustesouro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_benefcustesouro"] : $this->si230_benefcustesouro);
             $this->si230_atonormativo = ($this->si230_atonormativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_atonormativo"] : $this->si230_atonormativo);
-            $this->si230_exercicioato = ($this->si230_exercicioato == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_exercicioato"] : $this->si230_exercicioato);
+            $this->atualizaCampoData("si230_dtatonormativo");
             $this->si230_mes = ($this->si230_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_mes"] : $this->si230_mes);
             $this->si230_instit = ($this->si230_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_instit"] : $this->si230_instit);
+            $this->si230_nroatonormasegremassa = ($this->si230_nroatonormasegremassa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_nroatonormasegremassa"] : $this->si230_nroatonormasegremassa);
+            $this->atualizaCampoData("si230_dtatonormasegremassa");
+            $this->si230_dtatonormasegremassa = ($this->si230_dtatonormasegremassa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_dtatonormasegremassa"] : $this->si230_dtatonormasegremassa);
+            $this->si230_planodefatuarial = ($this->si230_planodefatuarial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_planodefatuarial"] : $this->si230_planodefatuarial);
+            $this->si230_atonormplanodefat = ($this->si230_atonormplanodefat == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_atonormplanodefat"] : $this->si230_atonormplanodefat);
+            $this->atualizaCampoData("si230_dtatoplanodefat");
         } else {
             $this->si230_sequencial = ($this->si230_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si230_sequencial"] : $this->si230_sequencial);
+        }
+    }
+
+    function atualizaCampoData($nomeCampo)
+    {
+        $nomeCampoDia = "{$nomeCampo}_dia";
+        $nomeCampoMes = "{$nomeCampo}_mes";
+        $nomeCampoAno = "{$nomeCampo}_ano";
+        if ($this->$nomeCampo == "") {
+            $this->$nomeCampoDia = ($this->$nomeCampoDia == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoDia] : $this->$nomeCampoDia);
+            $this->$nomeCampoMes = ($this->$nomeCampoMes == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoMes] : $this->$nomeCampoMes);
+            $this->$nomeCampoAno = ($this->$nomeCampoAno == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoAno] : $this->$nomeCampoAno);
+            if ($this->$nomeCampoDia != "") {
+                $this->$nomeCampo = $this->$nomeCampoAno . "-" . $this->$nomeCampoMes . "-" . $this->$nomeCampoDia;
+            }
         }
     }
 
@@ -84,8 +115,8 @@ class cl_dipr102023
             $this->si230_atonormativo = "0";
         }
 
-        if ($this->si230_exercicioato == null) {
-            $this->si230_exercicioato = "0";
+        if ($this->si230_dtatonormativo == null) {
+            $this->si230_dtatonormativo = "0";
         }
 
         if ($this->si230_tiporegistro == null) {
@@ -137,24 +168,34 @@ class cl_dipr102023
         $sql = "insert into dipr102023(
                     si230_sequencial 
                     ,si230_tiporegistro
-                    ,si230_coddipr 
+                    ,si230_tipocadastro 
                     ,si230_segregacaomassa 
                     ,si230_benefcustesouro
                     ,si230_atonormativo
-                    ,si230_exercicioato
+                    ,si230_dtatonormativo
                     ,si230_mes 
-                    ,si230_instit )
+                    ,si230_instit
+                    ,si230_nroatonormasegremassa
+                    ,si230_dtatonormasegremassa
+                    ,si230_planodefatuarial
+                    ,si230_atonormplanodefat
+                    ,si230_dtatoplanodefat )
                 values (
                     $this->si230_sequencial 
                     ,$this->si230_tiporegistro 
-                    ,$this->si230_coddipr
+                    ,$this->si230_tipocadastro
                     ,$this->si230_segregacaomassa
                     ,$this->si230_benefcustesouro
                     ,$this->si230_atonormativo
-                    ,$this->si230_exercicioato
+                    ,'$this->si230_dtatonormativo'
                     ,$this->si230_mes 
-                    ,$this->si230_instit )";
-
+                    ,$this->si230_instit
+                    ,$this->si230_nroatonormasegremassa
+                    ,'$this->si230_dtatonormasegremassa'
+                    ,$this->si230_planodefatuarial
+                    ,$this->si230_atonormplanodefat
+                    ,'$this->si230_dtatoplanodefat')";
+                  
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("", "", @pg_last_error());
@@ -194,6 +235,12 @@ class cl_dipr102023
             $resac = db_query("insert into db_acount values($acount,2010379,2011149,'','" . AddSlashes(pg_result($resaco, 0, 'si230_dtpublicacaoleiautorizacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             $resac = db_query("insert into db_acount values($acount,2010379,2011150,'','" . AddSlashes(pg_result($resaco, 0, 'si230_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             $resac = db_query("insert into db_acount values($acount,2010379,2011663,'','" . AddSlashes(pg_result($resaco, 0, 'si230_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,2010379,2011663,'','" . AddSlashes(pg_result($resaco, 0, 'si230_nroatonormasegremassa')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,2010379,2011663,'','" . AddSlashes(pg_result($resaco, 0, 'si230_dtatonormasegremassa')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,2010379,2011663,'','" . AddSlashes(pg_result($resaco, 0, 'si230_planodefatuarial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,2010379,2011663,'','" . AddSlashes(pg_result($resaco, 0, 'si230_atonormplanodefat')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,2010379,2011663,'','" . AddSlashes(pg_result($resaco, 0, 'si230_dtatoplanodefat')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        
         }
 
         return true;

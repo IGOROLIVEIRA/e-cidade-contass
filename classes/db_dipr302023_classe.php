@@ -19,19 +19,22 @@ class cl_dipr302023
     // cria variaveis do arquivo
     var $si232_sequencial = 0;
     var $si232_tiporegistro = 0;
-    var $si232_coddipr = 0;
     var $si232_segregacaomassa = 0;
     var $si232_benefcustesouro = 0;
     var $si232_atonormativo = 0;
     var $si232_exercicioato = 0;
     var $si232_mes = 0;
     var $si232_instit = 0;
+    var $si232_valororiginalrepassado = 0;
+    var $si232_valorjuros = 0;
+    var $si232_valormulta = 0;
+    var $si232_valoratualizacaomonetaria = 0;
+    var $si232_valortotaldeducoes = 0;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
         si232_sequencial = Sequencial,
         si232_tiporegistro = Tipo de Registro
         si232_codorgao = Codigo do Orgao
-        si232_coddipr = Codigo DIPR
         si232_tipobasecalculo = Tipo Base de Calculo
         si232_mescompetencia = Mes Competencia
         si232_exerciciocompetencia = Exercicio Mes Competencia
@@ -45,6 +48,11 @@ class cl_dipr302023
         si232_valorcontribdevida = Valor da Contribuicao
         si232_mes = Mes
         si232_instit = Instituicao
+        si232_valororiginalrepassado = numeric
+        si232_valorjuros = numeric
+        si232_valormulta = numeric
+        si232_valoratualizacaomonetaria = numeric
+        si232_valortotaldeducoes = numeric
     ";
 
     //funcao construtor da classe
@@ -73,7 +81,6 @@ class cl_dipr302023
             $this->si232_sequencial = ($this->si232_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_sequencial"] : $this->si232_sequencial);
             $this->si232_tiporegistro = ($this->si232_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_tiporegistro"] : $this->si232_tiporegistro);
             $this->si232_codorgao = ($this->si232_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_codorgao"] : $this->si232_codorgao);
-            $this->si232_coddipr = ($this->si232_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_coddipr"] : $this->si232_coddipr);
             $this->si232_mescompetencia = ($this->si232_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_mescompetencia"] : $this->si232_mescompetencia);
             $this->si232_exerciciocompetencia = ($this->si232_exerciciocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_exerciciocompetencia"] : $this->si232_exerciciocompetencia);
             $this->si232_tipofundo = ($this->si232_tipofundo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_tipofundo"] : $this->si232_tipofundo);
@@ -88,6 +95,10 @@ class cl_dipr302023
             $this->si232_valororiginalrepassado = ($this->si232_valororiginalrepassado == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_valororiginalrepassado"] : $this->si232_valororiginalrepassado);
             $this->si232_mes = ($this->si232_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_mes"] : $this->si232_mes);
             $this->si232_instit = ($this->si232_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_instit"] : $this->si232_instit);
+            $this->si232_valorjuros = ($this->si232_valorjuros == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_valorjuros"] : $this->si232_valorjuros);
+            $this->si232_valormulta = ($this->si232_valormulta == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_valormulta"] : $this->si232_valormulta);
+            $this->si232_valoratualizacaomonetaria = ($this->si232_valoratualizacaomonetaria == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_valoratualizacaomonetaria"] : $this->si232_valoratualizacaomonetaria);
+            $this->si232_valortotaldeducoes = ($this->si232_valortotaldeducoes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_valortotaldeducoes"] : $this->si232_valortotaldeducoes);
         } else {
             $this->si232_sequencial = ($this->si232_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si232_sequencial"] : $this->si232_sequencial);
         }
@@ -148,7 +159,6 @@ class cl_dipr302023
                     si232_sequencial 
                     ,si232_tiporegistro
                     ,si232_codorgao
-                    ,si232_coddipr 
                     ,si232_mescompetencia
                     ,si232_exerciciocompetencia
                     ,si232_tipofundo
@@ -161,12 +171,15 @@ class cl_dipr302023
                     ,si232_valororiginal
                     ,si232_valororiginalrepassado
                     ,si232_mes 
-                    ,si232_instit )
+                    ,si232_instit
+                    ,si232_valorjuros
+                    ,si232_valormulta
+                    ,si232_valoratualizacaomonetaria
+                    ,si232_valortotaldeducoes )
                 values (
                     $this->si232_sequencial 
                     ,$this->si232_tiporegistro
                     ,$this->si232_codorgao
-                    ,$this->si232_coddipr 
                     ,$this->si232_mescompetencia
                     ,$this->si232_exerciciocompetencia
                     ,$this->si232_tipofundo
@@ -179,8 +192,12 @@ class cl_dipr302023
                     ,$this->si232_valororiginal
                     ,$this->si232_valororiginalrepassado
                     ,$this->si232_mes 
-                    ,$this->si232_instit )";
-         
+                    ,$this->si232_instit
+                    ,$this->si232_valorjuros
+                    ,$this->si232_valormulta
+                    ,$this->si232_valoratualizacaomonetaria
+                    ,$this->si232_valortotaldeducoes ) ";
+        
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("", "", @pg_last_error());

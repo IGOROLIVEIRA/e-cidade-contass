@@ -19,19 +19,19 @@ class cl_dipr402023
     // cria variaveis do arquivo
     var $si233_sequencial = 0;
     var $si233_tiporegistro = 0;
-    var $si233_coddipr = 0;
     var $si233_segregacaomassa = 0;
     var $si233_benefcustesouro = 0;
     var $si233_atonormativo = 0;
     var $si233_exercicioato = 0;
     var $si233_mes = 0;
     var $si233_instit = 0;
+    var $si233_datarepasse = 0;
+    var $si233_valordeducao = 0;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
         si233_sequencial = Sequencial,
         si233_tiporegistro = Tipo de Registro
         si233_codorgao = Codigo do Orgao
-        si233_coddipr = Codigo DIPR
         si233_tipobasecalculo = Tipo Base de Calculo
         si233_mescompetencia = Mes Competencia
         si233_exerciciocompetencia = Exercicio Mes Competencia
@@ -45,6 +45,9 @@ class cl_dipr402023
         si233_valorcontribdevida = Valor da Contribuicao
         si233_mes = Mes
         si233_instit = Instituicao
+        si233_datarepasse = Date
+        si233_valordeducao = numeric
+        
     ";
 
     //funcao construtor da classe
@@ -65,6 +68,7 @@ class cl_dipr402023
             }
         }
     }
+    
 
     // funcao para atualizar campos
     function atualizacampos($exclusao = false)
@@ -73,7 +77,6 @@ class cl_dipr402023
             $this->si233_sequencial = ($this->si233_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si233_sequencial"] : $this->si233_sequencial);
             $this->si233_tiporegistro = ($this->si233_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si233_tiporegistro"] : $this->si233_tiporegistro);
             $this->si233_codorgao = ($this->si233_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si233_codorgao"] : $this->si233_codorgao);
-            $this->si233_coddipr = ($this->si233_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["si233_coddipr"] : $this->si233_coddipr);
             $this->si233_mescompetencia = ($this->si233_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si233_mescompetencia"] : $this->si233_mescompetencia);
             $this->si233_exerciciocompetencia = ($this->si233_exerciciocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si233_exerciciocompetencia"] : $this->si233_exerciciocompetencia);
             $this->si233_tipofundo = ($this->si233_tipofundo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si233_tipofundo"] : $this->si233_tipofundo);
@@ -85,8 +88,24 @@ class cl_dipr402023
             $this->si233_valordeducao = ($this->si233_valordeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si233_valordeducao"] : $this->si233_valordeducao);
             $this->si233_mes = ($this->si233_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si233_mes"] : $this->si233_mes);
             $this->si233_instit = ($this->si233_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si233_instit"] : $this->si233_instit);
+            $this->atualizaCampoData("si233_datarepasse");
         } else {
             $this->si233_sequencial = ($this->si233_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si233_sequencial"] : $this->si233_sequencial);
+        }
+    }
+
+    function atualizaCampoData($nomeCampo)
+    {
+        $nomeCampoDia = "{$nomeCampo}_dia";
+        $nomeCampoMes = "{$nomeCampo}_mes";
+        $nomeCampoAno = "{$nomeCampo}_ano";
+        if ($this->$nomeCampo == "") {
+            $this->$nomeCampoDia = ($this->$nomeCampoDia == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoDia] : $this->$nomeCampoDia);
+            $this->$nomeCampoMes = ($this->$nomeCampoMes == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoMes] : $this->$nomeCampoMes);
+            $this->$nomeCampoAno = ($this->$nomeCampoAno == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoAno] : $this->$nomeCampoAno);
+            if ($this->$nomeCampoDia != "") {
+                $this->$nomeCampo = $this->$nomeCampoAno . "-" . $this->$nomeCampoMes . "-" . $this->$nomeCampoDia;
+            }
         }
     }
 
@@ -145,7 +164,6 @@ class cl_dipr402023
                     si233_sequencial 
                     ,si233_tiporegistro
                     ,si233_codorgao
-                    ,si233_coddipr 
                     ,si233_mescompetencia
                     ,si233_exerciciocompetencia
                     ,si233_tipofundo
@@ -157,12 +175,12 @@ class cl_dipr402023
                     ,si233_dsctiposdeducoes
                     ,si233_valordeducao
                     ,si233_mes 
-                    ,si233_instit )
+                    ,si233_instit
+                    ,si233_datarepasse )
                 values (
                     $this->si233_sequencial 
                     ,$this->si233_tiporegistro
                     ,$this->si233_codorgao
-                    ,$this->si233_coddipr 
                     ,$this->si233_mescompetencia
                     ,$this->si233_exerciciocompetencia
                     ,$this->si233_tipofundo
@@ -174,8 +192,9 @@ class cl_dipr402023
                     ,'$this->si233_dsctiposdeducoes'
                     ,$this->si233_valordeducao
                     ,$this->si233_mes 
-                    ,$this->si233_instit )";
-
+                    ,$this->si233_instit
+                    ,'$this->si233_datarepasse' )";
+                    
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("", "", @pg_last_error());
