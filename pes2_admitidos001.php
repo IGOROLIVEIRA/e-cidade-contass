@@ -233,6 +233,14 @@ if(!isset($datai_dia) &&
         	      <input type="checkbox" name="listarescis" value="listarescis"<?=$chk_listarescis?>>Listar rescindidos
             </td>
           </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td align="left">
+        	      <input type="checkbox" name="documentos" value="documentos" id="documentos">Documentos
+            </td>
+          </tr>
 					<tr					>
 					<td colspan=2 align=Left >
               <strong><?$arr_SouN[$tipo]?></strong>
@@ -293,9 +301,10 @@ function js_relatorio2(){
     if(F.listainativ.checked == true){
       qry+= "&listainativo=s";
     }
-    if(F.listarescis.checked == true){
-      qry+= "&listarescis=s";
+    if(F.documentos.checked == true){
+      qry+= "&documentos=1";
     }
+    
     if(F.listapens.checked == true){
       qry+= "&listapens=s";
     }
