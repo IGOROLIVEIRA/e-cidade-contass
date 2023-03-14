@@ -1431,10 +1431,10 @@ class cl_pcproc
     JOIN pcmater ON pc16_codmater = pc01_codmater
     JOIN solicitemunid ON pc17_codigo=pc11_codigo
     JOIN matunid ON m61_codmatunid=pc17_unid
-    INNER JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-    INNER JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-    INNER JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-    left join liccontrolepncp on l213_processodecompras = pc80_codproc
+    LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+    LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+    LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+    LEFT JOIN liccontrolepncp on l213_processodecompras = pc80_codproc
     WHERE pc80_dispvalor='t'";
     return $sql;
   }
