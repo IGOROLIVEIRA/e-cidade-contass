@@ -293,25 +293,25 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbodcasp30 = new cl_bodcasp302022();
 
       // $clbodcasp30 = new stdClass();
-      $clbodcasp30->si203_anousu                    = $iAnoUsu;
-      $clbodcasp30->si203_periodo                   = $iCodigoPeriodo;
-      $clbodcasp30->si203_instit                    = db_getsession("DB_instit");
-      $clbodcasp30->si203_tiporegistro              = 30;
-      $clbodcasp30->si203_fasedespesaorca           = $iValorNumerico;
-      $clbodcasp30->si203_vlpessoalencarsoci        = $oRetornoBO[32]->$sChave;
-      $clbodcasp30->si203_vljurosencardividas       = $oRetornoBO[33]->$sChave;
-      $clbodcasp30->si203_vloutrasdespcorren        = $oRetornoBO[34]->$sChave;
-      $clbodcasp30->si203_vlinvestimentos           = $oRetornoBO[36]->$sChave;
-      $clbodcasp30->si203_vlinverfinanceira         = $oRetornoBO[37]->$sChave;
-      $clbodcasp30->si203_vlamortizadivida          = $oRetornoBO[38]->$sChave;
-      $clbodcasp30->si203_vlreservacontingen        = $oRetornoBO[39]->$sChave;
-      $clbodcasp30->si203_vlreservarpps             = $oRetornoBO[40]->$sChave;
-      $clbodcasp30->si203_vlamortizadiviintermob    = $oRetornoBO[44]->$sChave;
-      $clbodcasp30->si203_vlamortizaoutrasdivinter  = $oRetornoBO[45]->$sChave;
-      $clbodcasp30->si203_vlamortizadivextmob       = $oRetornoBO[47]->$sChave;
-      $clbodcasp30->si203_vlamortizaoutrasdivext    = $oRetornoBO[48]->$sChave;
-      $clbodcasp30->si203_vlsuperavit               = $oRetornoBO[50]->$sChave;
-      $clbodcasp30->si203_vltotalquadrodespesa      = $oRetornoBO[51]->$sChave;
+      $clbodcasp30->si203_anousu                              = $iAnoUsu;
+      $clbodcasp30->si203_periodo                             = $iCodigoPeriodo;
+      $clbodcasp30->si203_instit                              = db_getsession("DB_instit");
+      $clbodcasp30->si203_tiporegistro                        = 30;
+      $clbodcasp30->si203_fasedespesaorca                     = $iValorNumerico;
+      $clbodcasp30->si203_vlpessoalencarsoci                  = $oRetornoBO[32]->$sChave;
+      $clbodcasp30->si203_vljurosencardividas                 = $oRetornoBO[33]->$sChave;
+      $clbodcasp30->si203_vloutrasdespcorren                  = $oRetornoBO[34]->$sChave;
+      $clbodcasp30->si203_vlinvestimentos                     = $oRetornoBO[36]->$sChave;
+      $clbodcasp30->si203_vlinverfinanceira                   = $oRetornoBO[37]->$sChave;
+      $clbodcasp30->si203_vlamortizadivida                    = $oRetornoBO[38]->$sChave;
+      $clbodcasp30->si203_vlreservacontingen                  = $oRetornoBO[39]->$sChave;
+      $clbodcasp30->si203_vlreservarpps                       = $oRetornoBO[40]->$sChave;
+      $clbodcasp30->si203_vlamortizadiviintermob              = $oRetornoBO[44]->$sChave;
+      $clbodcasp30->si203_vlamortizadividacontratualinternas  = $oRetornoBO[45]->$sChave;
+      $clbodcasp30->si203_vlamortizadivextmob                 = $oRetornoBO[47]->$sChave;
+      $clbodcasp30->si203_vlamortizadividacontratualexternas  = $oRetornoBO[48]->$sChave;
+      $clbodcasp30->si203_vlsuperavit                         = $oRetornoBO[50]->$sChave;
+      $clbodcasp30->si203_vltotalquadrodespesa                = $oRetornoBO[51]->$sChave;
 
       $clbodcasp30->incluir(null);
       if ($clbodcasp30->erro_status == 0) {
