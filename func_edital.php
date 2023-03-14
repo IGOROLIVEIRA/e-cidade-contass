@@ -217,15 +217,9 @@ if(!isset($pesquisa_chave)){
                 let codigoLicitacao = document.getElementById(`I${idCampoInicial}`).innerText.trim();
                 document.getElementById(`${aTr[count].id}`).bgColor = 'red';
 
-                if(!module_licitacao){
-                    document.getElementById(`${aTr[count].id}`).onclick = (e) => {
-                        if(status == 'AGUARDANDO ENVIO'){
-                            js_OpenJanelaIframe('','db_iframe_dataenvio',`lic4_dataenvio.php?codigo=${codigoLicitacao}`,'Data de Envio - SICOM',true, null, 550, 250, 180);
-                        }
-                    }
-                }else{
+                
                     document.getElementById(`${aTr[count].id}`).style.pointerEvents = 'none';
-                }
+                
             }else{
 
                 /* Trecho que exibe as licitações pendentes no módulo Licitação */

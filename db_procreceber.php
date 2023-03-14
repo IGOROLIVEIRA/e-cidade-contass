@@ -215,7 +215,7 @@ $db_botao = true;
                     echo "</table>";
                     echo "  <tr>";
 
-                    db_redireciona();
+                    echo "<script>parent.location.href = 'db_procreceber.php';</script>";
 
                 } else {
 
