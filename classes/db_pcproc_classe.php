@@ -1439,7 +1439,7 @@ class cl_pcproc
     return $sql;
   }
 
-  public function sql_query_pncp_itens_resultado($iPcproc)
+  public function sql_query_pncp_itens_resultado($iPcproc, $iPcmater, $iSeq)
   {
     $sql  = "SELECT pcorcamval.pc23_quant AS quantidadeHomologada,
               pcorcamval.pc23_vlrun AS valorUnitarioHomologado,
@@ -1475,7 +1475,49 @@ class cl_pcproc
           LEFT JOIN liccontrolepncp ON l213_processodecompras = pc80_codproc
           WHERE pc80_dispvalor='t'
           and pc80_codproc= $iPcproc
+          and pc01_codmater= $iPcmater
+          and pc11_seq = $iSeq
+          AND pc24_pontuacao = 1
           ORDER BY pc11_seq";
+
+    return $sql;
+  }
+
+  public function sql_query_item_pncp($pc80_codproc)
+  {
+
+    $sql  = " SELECT pc01_codmater,
+        pc11_seq,
+        pc01_descrmater,
+        CASE
+            WHEN pc80_tipoprocesso = 2 THEN pc68_nome
+            ELSE NULL
+        END AS pc68_nome,
+        cgm.z01_numcgm,
+        cgm.z01_nome,
+        matunid.m61_descr,
+        pcorcamval.pc23_quant,
+        pcorcamval.pc23_valor
+        FROM pcproc
+        INNER JOIN pcprocitem ON pc81_codproc = pc80_codproc
+        INNER JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem
+        INNER JOIN pcorcamitem ON pc22_orcamitem = pc31_orcamitem
+        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+        LEFT  JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+        left join processocompralote on pc68_pcproc = pc80_codproc
+        left join processocompraloteitem on pc69_processocompralote = pc68_sequencial and pc69_pcprocitem=pc81_codprocitem
+        LEFT  JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+        INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+        INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+        INNER JOIN pcorcam ON pc20_codorc = pc22_codorc
+        INNER JOIN pcorcamforne ON pc21_codorc = pc20_codorc
+        INNER JOIN cgm ON pc21_numcgm = z01_numcgm
+        INNER JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+        AND pc23_orcamforne=pc21_orcamforne
+        INNER JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+        AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+        WHERE pc80_codproc = $pc80_codproc AND pc24_pontuacao =1 ORDER BY pc11_seq
+        ";
 
     return $sql;
   }
