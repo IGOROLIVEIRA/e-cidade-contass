@@ -18,28 +18,28 @@ class GerarBP extends GerarAM
     $this->sArquivo = "BP";
     $this->abreArquivo();
 
-    $sSql = "select * from bpdcasp102021 where si208_ano = {$this->iAno} AND si208_periodo = {$this->iPeriodo} AND si208_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp102022 where si208_ano = {$this->iAno} AND si208_periodo = {$this->iPeriodo} AND si208_institu = " . db_getsession("DB_instit");
     $rsBP10 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp202121 where si209_ano = {$this->iAno} AND si209_periodo = {$this->iPeriodo} AND si209_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp202022 where si209_ano = {$this->iAno} AND si209_periodo = {$this->iPeriodo} AND si209_institu = " . db_getsession("DB_instit");
     $rsBP20 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp302021 where si210_ano = {$this->iAno} AND si210_periodo = {$this->iPeriodo} AND si210_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp302022 where si210_ano = {$this->iAno} AND si210_periodo = {$this->iPeriodo} AND si210_institu = " . db_getsession("DB_instit");
     $rsBP30 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp402021 where si211_ano = {$this->iAno} AND si211_periodo = {$this->iPeriodo} AND si211_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp402022 where si211_ano = {$this->iAno} AND si211_periodo = {$this->iPeriodo} AND si211_institu = " . db_getsession("DB_instit");
     $rsBP40 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp502021 where si212_ano = {$this->iAno} AND si212_periodo = {$this->iPeriodo} AND si212_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp502022 where si212_ano = {$this->iAno} AND si212_periodo = {$this->iPeriodo} AND si212_institu = " . db_getsession("DB_instit");
     $rsBP50 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp602021 where si213_ano = {$this->iAno} AND si213_periodo = {$this->iPeriodo} AND si213_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp602022 where si213_ano = {$this->iAno} AND si213_periodo = {$this->iPeriodo} AND si213_institu = " . db_getsession("DB_instit");
     $rsBP60 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp702021 where si214_ano = {$this->iAno} AND si214_periodo = {$this->iPeriodo} AND si214_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp702022 where si214_ano = {$this->iAno} AND si214_periodo = {$this->iPeriodo} AND si214_institu = " . db_getsession("DB_instit");
     $rsBP70 = db_query($sSql);
 
-    $sSql = "select * from bpdcasp712021 where si215_ano = {$this->iAno} AND si215_periodo = {$this->iPeriodo} AND si215_institu = " . db_getsession("DB_instit");
+    $sSql = "select * from bpdcasp712022 where si215_ano = {$this->iAno} AND si215_periodo = {$this->iPeriodo} AND si215_institu = " . db_getsession("DB_instit");
     $rsBP71 = db_query($sSql);
 
 
@@ -68,14 +68,13 @@ class GerarBP extends GerarAM
         $aCSVBP10['si208_tiporegistro']                       = $this->padLeftZero($aBP10['si208_tiporegistro'], 2);
         $aCSVBP10['si208_vlativocircucaixaequicaixa']         = $this->sicomNumberReal($aBP10['si208_vlativocircucaixaequicaixa'], 2);
         $aCSVBP10['si208_vlativocircucredicurtoprazo']        = $this->sicomNumberReal($aBP10['si208_vlativocircucredicurtoprazo'], 2);
+        $aCSVBP10['si208_vlativocircudemaiscredicurtoprazo']  = $this->sicomNumberReal($aBP10['si208_vlativocircudemaiscredicurtoprazo'], 2);
         $aCSVBP10['si208_vlativocircuinvestapliccurtoprazo']  = $this->sicomNumberReal($aBP10['si208_vlativocircuinvestapliccurtoprazo'], 2);
         $aCSVBP10['si208_vlativocircuestoques']               = $this->sicomNumberReal($aBP10['si208_vlativocircuestoques'], 2);
-        $aCSVBP10['si208_vlAtivoNaoCircuMantidoVenda']        = $this->sicomNumberReal(0, 2);
+        $aCSVBP10['si208_vlativonaocircumantidovenda']        = $this->sicomNumberReal($aBP10['si208_vlativonaocircumantidovenda'], 2);
+        $aCSVBP10['si208_vlativocircuativobio']               = $this->sicomNumberReal(0, 2);
         $aCSVBP10['si208_vlativocircuvpdantecipada']          = $this->sicomNumberReal($aBP10['si208_vlativocircuvpdantecipada'], 2);
-        $aCSVBP10['si208_vlativonaocircucredilongoprazo']     = $this->sicomNumberReal($aBP10['si208_vlativonaocircucredilongoprazo'], 2);
-        $aCSVBP10['si208_vlativonaocircuinvestemplongpraz']   = $this->sicomNumberReal($aBP10['si208_vlativonaocircuinvestemplongpraz'], 2);
-        $aCSVBP10['si208_vlativonaocircuestoques']            = $this->sicomNumberReal($aBP10['si208_vlativonaocircuestoques'], 2);
-        $aCSVBP10['si208_vlativonaocircuvpdantecipada']       = $this->sicomNumberReal($aBP10['si208_vlativonaocircuvpdantecipada'], 2);
+        $aCSVBP10['si208_vlativonaocircurlp']                 = $this->sicomNumberReal($aBP10['si208_vlativonaocircurlp'], 2);
         $aCSVBP10['si208_vlativonaocircuinvestimentos']       = $this->sicomNumberReal($aBP10['si208_vlativonaocircuinvestimentos'], 2);
         $aCSVBP10['si208_vlativonaocircuimobilizado']         = $this->sicomNumberReal($aBP10['si208_vlativonaocircuimobilizado'], 2);
         $aCSVBP10['si208_vlativonaocircuintagivel']           = $this->sicomNumberReal($aBP10['si208_vlativonaocircuintagivel'], 2);
@@ -93,31 +92,32 @@ class GerarBP extends GerarAM
         $aBP20 = pg_fetch_array($rsBP20, $iCont, PGSQL_ASSOC);
 
         $aCSVBP20 = array();
-        $aCSVBP20['si209_tiporegistro']                       = $this->padLeftZero($aBP20['si209_tiporegistro'], 2);
-        $aCSVBP20['si209_vlpassivcircultrabprevicurtoprazo']  = $this->sicomNumberReal($aBP20['si209_vlpassivcircultrabprevicurtoprazo'], 2);
-        $aCSVBP20['si209_vlpassivcirculemprefinancurtoprazo'] = $this->sicomNumberReal($aBP20['si209_vlpassivcirculemprefinancurtoprazo'], 2);
-        $aCSVBP20['si209_vlpassivocirculafornecedcurtoprazo'] = $this->sicomNumberReal($aBP20['si209_vlpassivocirculafornecedcurtoprazo'], 2);
-        $aCSVBP20['si209_vlpassicircuobrigfiscacurtoprazo']   = $this->sicomNumberReal($aBP20['si209_vlpassicircuobrigfiscacurtoprazo'], 2);
-        $aCSVBP20['si209_vlpassivocirculaobrigacoutrosentes'] = $this->sicomNumberReal($aBP20['si209_vlpassivocirculaobrigacoutrosentes'], 2);
-        $aCSVBP20['si209_vlpassivocirculaprovisoecurtoprazo'] = $this->sicomNumberReal($aBP20['si209_vlpassivocirculaprovisoecurtoprazo'], 2);
-        $aCSVBP20['si209_vlpassicircudemaiobrigcurtoprazo']   = $this->sicomNumberReal($aBP20['si209_vlpassicircudemaiobrigcurtoprazo'], 2);
-        $aCSVBP20['si209_vlpassinaocircutrabprevilongoprazo'] = $this->sicomNumberReal($aBP20['si209_vlpassinaocircutrabprevilongoprazo'], 2);
-        $aCSVBP20['si209_vlpassnaocircemprfinalongpraz']      = $this->sicomNumberReal($aBP20['si209_vlpassnaocircemprfinalongpraz'], 2);
-        $aCSVBP20['si209_vlpassivnaocirculforneclongoprazo']  = $this->sicomNumberReal($aBP20['si209_vlpassivnaocirculforneclongoprazo'], 2);
-        $aCSVBP20['si209_vlpassnaocircobrifisclongpraz']      = $this->sicomNumberReal($aBP20['si209_vlpassnaocircobrifisclongpraz'], 2);
-        $aCSVBP20['si209_vlpassivnaocirculprovislongoprazo']  = $this->sicomNumberReal($aBP20['si209_vlpassivnaocirculprovislongoprazo'], 2);
-        $aCSVBP20['si209_vlpassnaocircdemaobrilongpraz']      = $this->sicomNumberReal($aBP20['si209_vlpassnaocircdemaobrilongpraz'], 2);
-        $aCSVBP20['si209_vlpassivonaocircularesuldiferido']   = $this->sicomNumberReal($aBP20['si209_vlpassivonaocircularesuldiferido'], 2);
-        $aCSVBP20['si209_vlpatriliquidocapitalsocial']        = $this->sicomNumberReal($aBP20['si209_vlpatriliquidocapitalsocial'], 2);
-        $aCSVBP20['si209_vlpatriliquidoadianfuturocapital']   = $this->sicomNumberReal($aBP20['si209_vlpatriliquidoadianfuturocapital'], 2);
-        $aCSVBP20['si209_vlpatriliquidoreservacapital']       = $this->sicomNumberReal($aBP20['si209_vlpatriliquidoreservacapital'], 2);
-        $aCSVBP20['si209_vlpatriliquidoajustavaliacao']       = $this->sicomNumberReal($aBP20['si209_vlpatriliquidoajustavaliacao'], 2);
-        $aCSVBP20['si209_vlpatriliquidoreservalucros']        = $this->sicomNumberReal($aBP20['si209_vlpatriliquidoreservalucros'], 2);
-        $aCSVBP20['si209_vlpatriliquidodemaisreservas']       = $this->sicomNumberReal($aBP20['si209_vlpatriliquidodemaisreservas'], 2);
-        $aCSVBP20['si209_vlpatriliquidoresultexercicio']      = $this->sicomNumberReal($aBP20['si209_vlpatriliquidoresultexercicio'], 2);
-        $aCSVBP20['si209_vlpatriliquidresultacumexeranteri']  = $this->sicomNumberReal($aBP20['si209_vlpatriliquidresultacumexeranteri'], 2);
-        $aCSVBP20['si209_vlpatriliquidoacoescotas']           = $this->sicomNumberReal($aBP20['si209_vlpatriliquidoacoescotas'], 2);
-        $aCSVBP20['si209_vltotalpassivo']                     = $this->sicomNumberReal($aBP20['si209_vltotalpassivo'], 2);
+        $aCSVBP20['si209_tiporegistro']                              = $this->padLeftZero($aBP20['si209_tiporegistro'], 2);
+        $aCSVBP20['si209_vlpassivcircultrabprevicurtoprazo']         = $this->sicomNumberReal($aBP20['si209_vlpassivcircultrabprevicurtoprazo'], 2);
+        $aCSVBP20['si209_vlpassivcirculemprefinancurtoprazo']        = $this->sicomNumberReal($aBP20['si209_vlpassivcirculemprefinancurtoprazo'], 2);
+        $aCSVBP20['si209_vlpassivocirculafornecedcurtoprazo']        = $this->sicomNumberReal($aBP20['si209_vlpassivocirculafornecedcurtoprazo'], 2);
+        $aCSVBP20['si209_vlpassicircuobrigfiscacurtoprazo']          = $this->sicomNumberReal($aBP20['si209_vlpassicircuobrigfiscacurtoprazo'], 2);
+        $aCSVBP20['si209_vlpassivocirculatransffiscalcurtoprazo']    = $this->sicomNumberReal($aBP20['si209_vlpassivocirculatransffiscalcurtoprazo'], 2);
+        $aCSVBP20['si209_vlpassivocirculaprovisoecurtoprazo']        = $this->sicomNumberReal($aBP20['si209_vlpassivocirculaprovisoecurtoprazo'], 2);
+        $aCSVBP20['si209_vlpassicircudemaiobrigcurtoprazo']          = $this->sicomNumberReal($aBP20['si209_vlpassicircudemaiobrigcurtoprazo'], 2);
+        $aCSVBP20['si209_vlpassinaocircutrabprevilongoprazo']        = $this->sicomNumberReal($aBP20['si209_vlpassinaocircutrabprevilongoprazo'], 2);
+        $aCSVBP20['si209_vlpassnaocircemprfinalongpraz']             = $this->sicomNumberReal($aBP20['si209_vlpassnaocircemprfinalongpraz'], 2);
+        $aCSVBP20['si209_vlpassivnaocirculforneclongoprazo']         = $this->sicomNumberReal($aBP20['si209_vlpassivnaocirculforneclongoprazo'], 2);
+        $aCSVBP20['si209_vlpassnaocircobrifisclongpraz']             = $this->sicomNumberReal($aBP20['si209_vlpassnaocircobrifisclongpraz'], 2);
+        $aCSVBP20['si209_vlpassivonaocirculatransffiscallongoprazo'] = $this->sicomNumberReal($aBP20['si209_vlpassivonaocirculatransffiscallongoprazo'], 2);
+        $aCSVBP20['si209_vlpassivnaocirculprovislongoprazo']         = $this->sicomNumberReal($aBP20['si209_vlpassivnaocirculprovislongoprazo'], 2);
+        $aCSVBP20['si209_vlpassnaocircdemaobrilongpraz']             = $this->sicomNumberReal($aBP20['si209_vlpassnaocircdemaobrilongpraz'], 2);
+        $aCSVBP20['si209_vlpassivonaocircularesuldiferido']          = $this->sicomNumberReal($aBP20['si209_vlpassivonaocircularesuldiferido'], 2);
+        $aCSVBP20['si209_vlpatriliquidocapitalsocial']               = $this->sicomNumberReal($aBP20['si209_vlpatriliquidocapitalsocial'], 2);
+        $aCSVBP20['si209_vlpatriliquidoadianfuturocapital']          = $this->sicomNumberReal($aBP20['si209_vlpatriliquidoadianfuturocapital'], 2);
+        $aCSVBP20['si209_vlpatriliquidoreservacapital']              = $this->sicomNumberReal($aBP20['si209_vlpatriliquidoreservacapital'], 2);
+        $aCSVBP20['si209_vlpatriliquidoajustavaliacao']              = $this->sicomNumberReal($aBP20['si209_vlpatriliquidoajustavaliacao'], 2);
+        $aCSVBP20['si209_vlpatriliquidoreservalucros']               = $this->sicomNumberReal($aBP20['si209_vlpatriliquidoreservalucros'], 2);
+        $aCSVBP20['si209_vlpatriliquidodemaisreservas']              = $this->sicomNumberReal($aBP20['si209_vlpatriliquidodemaisreservas'], 2);
+        $aCSVBP20['si209_vlpatriliquidoresultexercicio']             = $this->sicomNumberReal($aBP20['si209_vlpatriliquidoresultexercicio'], 2);
+        $aCSVBP20['si209_vlpatriliquidresultacumexeranteri']         = $this->sicomNumberReal($aBP20['si209_vlpatriliquidresultacumexeranteri'], 2);
+        $aCSVBP20['si209_vlpatriliquidoacoescotas']                  = $this->sicomNumberReal($aBP20['si209_vlpatriliquidoacoescotas'], 2);
+        $aCSVBP20['si209_vltotalpassivo']                            = $this->sicomNumberReal($aBP20['si209_vltotalpassivo'], 2);
 
         $this->sLinha = $aCSVBP20;
         $this->adicionaLinha();
@@ -180,15 +180,17 @@ class GerarBP extends GerarAM
         $aBP60 = pg_fetch_array($rsBP60, $iCont, PGSQL_ASSOC);
 
         $aCSVBP60 = array();
-        $aCSVBP60['si213_tiporegistro']                       = $this->padLeftZero($aBP60['si213_tiporegistro'], 2);
-        $aCSVBP60['si213_vlatospotenativosgarancontrarecebi'] = $this->sicomNumberReal($aBP60['si213_vlatospotenativosgarancontrarecebi'], 2);
-        $aCSVBP60['si213_vlatospotenativodirconveoutroinstr'] = $this->sicomNumberReal($aBP60['si213_vlatospotenativodirconveoutroinstr'], 2);
-        $aCSVBP60['si213_vlatospotenativosdireitoscontratua'] = $this->sicomNumberReal($aBP60['si213_vlatospotenativosdireitoscontratua'], 2);
-        $aCSVBP60['si213_vlatospotenativosoutrosatos']        = $this->sicomNumberReal($aBP60['si213_vlatospotenativosoutrosatos'], 2);
-        $aCSVBP60['si213_vlatospotenpassivgarancontraconced'] = $this->sicomNumberReal($aBP60['si213_vlatospotenpassivgarancontraconced'], 2);
-        $aCSVBP60['si213_vlatospotepassobriconvoutrinst']     = $this->sicomNumberReal($aBP60['si213_vlatospotepassobriconvoutrinst'], 2);
-        $aCSVBP60['si213_vlatospotenpassivoobrigacocontratu'] = $this->sicomNumberReal($aBP60['si213_vlatospotenpassivoobrigacocontratu'], 2);
-        $aCSVBP60['si213_vlatospotenpassivooutrosatos']       = $this->sicomNumberReal($aBP60['si213_vlatospotenpassivooutrosatos'], 2);
+        $aCSVBP60['si213_tiporegistro']                         = $this->padLeftZero($aBP60['si213_tiporegistro'], 2);
+        $aCSVBP60['si213_vlatospotenativosgarancontrarecebi']   = $this->sicomNumberReal($aBP60['si213_vlatospotenativosgarancontrarecebi'], 2);
+        $aCSVBP60['si213_vlatospotenativodirconveoutroinstr']   = $this->sicomNumberReal($aBP60['si213_vlatospotenativodirconveoutroinstr'], 2);
+        $aCSVBP60['si213_vlatospotenativosdireitoscontratua']   = $this->sicomNumberReal($aBP60['si213_vlatospotenativosdireitoscontratua'], 2);
+        $aCSVBP60['si213_vlatospotenativosdemandasjudiciais']   = $this->sicomNumberReal(0, 2);
+        $aCSVBP60['si213_vlatospotenativosoutrosatos']          = $this->sicomNumberReal($aBP60['si213_vlatospotenativosoutrosatos'], 2);
+        $aCSVBP60['si213_vlatospotenpassivgarancontraconced']   = $this->sicomNumberReal($aBP60['si213_vlatospotenpassivgarancontraconced'], 2);
+        $aCSVBP60['si213_vlatospotepassobriconvoutrinst']       = $this->sicomNumberReal($aBP60['si213_vlatospotepassobriconvoutrinst'], 2);
+        $aCSVBP60['si213_vlatospotenpassivoobrigacocontratu']   = $this->sicomNumberReal($aBP60['si213_vlatospotenpassivoobrigacocontratu'], 2);
+        $aCSVBP60['si213_vlatospotenpassivosdemandasjudiciais'] = $this->sicomNumberReal(0, 2);
+        $aCSVBP60['si213_vlatospotenpassivooutrosatos']         = $this->sicomNumberReal($aBP60['si213_vlatospotenpassivooutrosatos'], 2);
 
         $this->sLinha = $aCSVBP60;
         $this->adicionaLinha();
@@ -219,6 +221,7 @@ class GerarBP extends GerarAM
         $aCSVBP71 = array();
         $aCSVBP71['si215_tiporegistro']     = $this->padLeftZero($aBP71['si215_tiporegistro'], 2);
         $aCSVBP71['si215_codfontrecursos']  = $this->padLeftZero($aBP71['si215_codfontrecursos'], 3);
+        $aCSVBP71['si215_codfontrecursos23']= $this->padLeftZero($aBP71['si215_codfontrecursos23'], 7);
         $aCSVBP71['si215_vlsaldofonte']     = $this->sicomNumberReal($aBP71['si215_vlsaldofonte'], 2);
 
         $this->sLinha = $aCSVBP71;

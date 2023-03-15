@@ -26,6 +26,8 @@ require_once("classes/db_bpdcasp712022_classe.php");
 
 require_once("model/contabilidade/arquivos/sicom/2022/dcasp/geradores/GerarBP.model.php");
 
+require_once("model/orcamento/DeParaRecurso.model.php");
+
 /**
  * gerar arquivo de Balanço Patrimonial
  * @author gabriel
@@ -41,6 +43,11 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
   protected $iCodigoPespectiva;
 
   protected $sTipoGeracao;
+
+  /**
+   * @var array Fontes encerradas em 2020
+   */
+  protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
 
   /**
    * @return mixed
@@ -83,6 +90,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
     $iAnoUsu            = db_getsession("DB_anousu");
     $iCodigoPeriodo     = 28;
     $iCodigoRelatorio   = $this->iCodigoLayout;
+    $lInstit            = false;
 
     if ($this->getTipoGeracao() == 'CONSOLIDADO') {
 
@@ -91,6 +99,8 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $aInstituicoes = array_map(function ($oItem) {
         return $oItem->codigo;
       }, $aInstits);
+
+      $lInstit = true;
 
     } else {
       $aInstituicoes = array(db_getsession("DB_instit"));
@@ -205,7 +215,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
     /**
-     * O método `getDados()`, da classe `BalancoPatromonialDCASP2022()`,
+     * O método `getDados()`, da classe `BalancoPatromonialDCASP2015()`,
      * retorna um array enorme. Para pegar os dados necessários para cada
      * registro do SICOM DCASP, estamos passando os índices exatos do array.
      * Se eles forem alterados (nas configurações dos relatórios), devem
@@ -442,7 +452,14 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
         //db_criatabela($rsSaldoFontes);
         $oSaldoFontes = db_utils::fieldsMemory($rsSaldoFontes,0);
         //echo "<pre>";print_r($oSaldoFontes);
-        $nHash = $objContasfr->o15_codtri;
+        $bFonteEncerrada        = in_array($objContasfr->o15_codtri, $this->aFontesEncerradas);
+
+        if (!$bFonteEncerrada) {
+            $iFonte = $objContasfr->o15_codtri;
+        } elseif ($bFonteEncerrada) {
+            $iFonte = substr($objContasfr->o15_codtri, 0, 1).'59';
+        }
+        $nHash = $iFonte;
         $nSaldoFinal = ($oSaldoFontes->saldoanterior + $oSaldoFontes->debito - $oSaldoFontes->credito);
         if(!isset($aDadosSuperavitFontes[$nHash])){
           $oDadosSuperavitFonte = new stdClass();
@@ -468,6 +485,9 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       foreach($aDadosSuperavitFontes as $oDadosBP71) {
         if($oDadosBP71->si215_vlsaldofonte != 0){
 
+          $clDeParaFonte = new DeParaRecurso;
+          $iFonteNova = substr($clDeParaFonte->getDePara($oDadosBP71->si215_codfontrecursos),0,7);
+
           $clbpdcasp71 = new cl_bpdcasp712022();
           $clbpdcasp71->si215_ano = $iAnoUsu;
           $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
@@ -475,6 +495,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
           $clbpdcasp71->si215_tiporegistro = 71;
           $clbpdcasp71->si215_exercicio = $iValorNumerico;
           $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->si215_codfontrecursos;
+          $clbpdcasp71->si215_codfontrecursos23 = $iFonteNova;
           $clbpdcasp71->si215_vlsaldofonte = $oDadosBP71->si215_vlsaldofonte*-1;
 
           $clbpdcasp71->incluir(null);
@@ -485,6 +506,9 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
         } elseif ($oDadosBP71->si215_codfontrecursos == 100){
 
+            $clDeParaFonte = new DeParaRecurso;
+            $iFonteNova = substr($clDeParaFonte->getDePara($oDadosBP71->si215_codfontrecursos),0,7);
+
             $clbpdcasp71 = new cl_bpdcasp712022();
             $clbpdcasp71->si215_ano = $iAnoUsu;
             $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
@@ -492,6 +516,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
             $clbpdcasp71->si215_tiporegistro = 71;
             $clbpdcasp71->si215_exercicio = $iValorNumerico;
             $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->si215_codfontrecursos;
+            $clbpdcasp71->si215_codfontrecursos23 = $iFonteNova;
             $clbpdcasp71->si215_vlsaldofonte = 0;
 
             $clbpdcasp71->incluir(null);

@@ -19,6 +19,7 @@ class cl_bpdcasp712022 {
    var $si215_sequencial = 0; 
    var $si215_tiporegistro = 0; 
    var $si215_codfontrecursos = 0; 
+   var $si215_codfontrecursos23 = 0; 
    var $si215_vlsaldofonte = 0; 
    var $si215_ano = 0;
    var $si215_periodo = 0;
@@ -28,6 +29,7 @@ class cl_bpdcasp712022 {
                  si215_sequencial = int4 = si215_sequencial 
                  si215_tiporegistro = int4 = si215_tiporegistro 
                  si215_codfontrecursos = int4 = si215_codfontrecursos 
+                 si215_codfontrecursos23 = int4 = si215_codfontrecursos23 
                  si215_vlsaldofonte = float4 = si215_vlsaldofonte 
                  ";
    //funcao construtor da classe 
@@ -51,6 +53,7 @@ class cl_bpdcasp712022 {
        $this->si215_sequencial = ($this->si215_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_sequencial"]:$this->si215_sequencial);
        $this->si215_tiporegistro = ($this->si215_tiporegistro == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_tiporegistro"]:$this->si215_tiporegistro);
        $this->si215_codfontrecursos = ($this->si215_codfontrecursos == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_codfontrecursos"]:$this->si215_codfontrecursos);
+       $this->si215_codfontrecursos23 = ($this->si215_codfontrecursos23 == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_codfontrecursos23"]:$this->si215_codfontrecursos23);
        $this->si215_vlsaldofonte = ($this->si215_vlsaldofonte == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_vlsaldofonte"]:$this->si215_vlsaldofonte);
        $this->si215_ano = ($this->si215_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_ano"]:$this->si215_ano);
        $this->si215_periodo = ($this->si215_periodo == ""?@$GLOBALS["HTTP_POST_VARS"]["si215_periodo"]:$this->si215_periodo);
@@ -74,6 +77,9 @@ class cl_bpdcasp712022 {
      if($this->si215_codfontrecursos == null ){
        $this->si215_codfontrecursos = 0;
      }
+     if($this->si215_codfontrecursos23 == null ){
+       $this->si215_codfontrecursos23 = 0;
+     }
      if($this->si215_vlsaldofonte == null ){
        $this->si215_vlsaldofonte = 0;
      }
@@ -82,6 +88,7 @@ class cl_bpdcasp712022 {
                                        si215_sequencial 
                                       ,si215_tiporegistro 
                                       ,si215_codfontrecursos 
+                                      ,si215_codfontrecursos23 
                                       ,si215_vlsaldofonte 
                                       ,si215_ano
                                       ,si215_periodo
@@ -91,6 +98,7 @@ class cl_bpdcasp712022 {
                                 (select nextval('bpdcasp712022_si215_sequencial_seq'))
                                ,$this->si215_tiporegistro 
                                ,$this->si215_codfontrecursos 
+                               ,$this->si215_codfontrecursos23 
                                ,$this->si215_vlsaldofonte 
                                ,$this->si215_ano
                                ,$this->si215_periodo
@@ -160,6 +168,19 @@ class cl_bpdcasp712022 {
        if(trim($this->si215_codfontrecursos) == null ){ 
          $this->erro_sql = " Campo si215_codfontrecursos não informado.";
          $this->erro_campo = "si215_codfontrecursos";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
+     if(trim($this->si215_codfontrecursos23)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si215_codfontrecursos23"])){ 
+       $sql  .= $virgula." si215_codfontrecursos23 = $this->si215_codfontrecursos23 ";
+       $virgula = ",";
+       if(trim($this->si215_codfontrecursos23) == null ){ 
+         $this->erro_sql = " Campo si215_codfontrecursos23 não informado.";
+         $this->erro_campo = "si215_codfontrecursos23";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \n\n ".$this->erro_sql." \n\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \n\n ".$this->erro_banco." \n"));
