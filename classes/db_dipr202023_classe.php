@@ -19,7 +19,6 @@ class cl_dipr202023
     // cria variaveis do arquivo
     var $si231_sequencial = 0;
     var $si231_tiporegistro = 0;
-    var $si231_coddipr = 0;
     var $si231_segregacaomassa = 0;
     var $si231_benefcustesouro = 0;
     var $si231_atonormativo = 0;
@@ -31,7 +30,6 @@ class cl_dipr202023
         si231_sequencial = Sequencial,
         si231_tiporegistro = Tipo de Registro
         si231_codorgao = Codigo do Orgao
-        si231_coddipr = Codigo DIPR
         si231_tipobasecalculo = Tipo Base de Calculo
         si231_mescompetencia = Mes Competencia
         si231_exerciciocompetencia = Exercicio Mes Competencia
@@ -73,7 +71,6 @@ class cl_dipr202023
             $this->si231_sequencial = ($this->si231_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si231_sequencial"] : $this->si231_sequencial);
             $this->si231_tiporegistro = ($this->si231_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si231_tiporegistro"] : $this->si231_tiporegistro);
             $this->si231_codorgao = ($this->si231_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si231_codorgao"] : $this->si231_codorgao);
-            $this->si231_coddipr = ($this->si231_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["si231_coddipr"] : $this->si231_coddipr);
             $this->si231_tipobasecalculo = ($this->si231_tipobasecalculo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si231_tipobasecalculo"] : $this->si231_tipobasecalculo);
             $this->si231_mescompetencia = ($this->si231_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si231_mescompetencia"] : $this->si231_mescompetencia);
             $this->si231_exerciciocompetencia = ($this->si231_exerciciocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si231_exerciciocompetencia"] : $this->si231_exerciciocompetencia);
@@ -147,7 +144,6 @@ class cl_dipr202023
                     si231_sequencial 
                     ,si231_tiporegistro
                     ,si231_codorgao
-                    ,si231_coddipr 
                     ,si231_tipobasecalculo
                     ,si231_mescompetencia
                     ,si231_exerciciocompetencia
@@ -165,7 +161,6 @@ class cl_dipr202023
                     $this->si231_sequencial 
                     ,$this->si231_tiporegistro
                     ,$this->si231_codorgao
-                    ,$this->si231_coddipr 
                     ,$this->si231_tipobasecalculo
                     ,$this->si231_mescompetencia
                     ,$this->si231_exerciciocompetencia

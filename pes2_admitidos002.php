@@ -37,6 +37,9 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("rh01_regist");
 $clrotulo->label("rh01_admiss");
 $clrotulo->label("z01_nome");
+$clrotulo->label("z01_cgccpf");
+$clrotulo->label("z01_ident");
+$clrotulo->label("rh01_nasc");
 $clrotulo->label("rh37_rubric");
 $clrotulo->label("rh37_descr");
 $clrotulo->label("r70_estrut");
@@ -46,6 +49,8 @@ $clrotulo->label("o40_orgao");
 $clrotulo->label("o40_descr");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
+
+$documento = $_GET['documentos'];
 
 $head5 = "PERÍODO: ".db_formatar($datai,"d")." até ".db_formatar($dataf,"d");
 
@@ -206,7 +211,7 @@ if(isset($listarescis) || $adm_dem == 'd' ) {
 
 $dbwhere .= $dbwhereinativo.$dbwhererescis.$sWhere;
 
-$sql_dados = $clrhpessoal->sql_query_lotafuncres(null,"rh01_regist, z01_nome, rh01_admiss, r70_estrut, r70_descr, rh37_funcao, rh37_descr,o40_orgao,o40_descr,rh03_padrao,rh05_recis".$camposQuebra,$orderby,$dbwhere);
+$sql_dados = $clrhpessoal->sql_query_lotafuncres(null,"rh01_regist, z01_nome, z01_ident, z01_cgccpf, rh01_nasc, rh01_admiss, r70_estrut, r70_descr, rh37_funcao, rh37_descr,o40_orgao,o40_descr,rh03_padrao,rh05_recis".$camposQuebra,$orderby,$dbwhere);
 //echo $sql_dados;exit;
 $result_dados = $clrhpessoal->sql_record($sql_dados);//echo $sql_dados;db_criatabela($result_dados);exit;
 $numrows_dados = $clrhpessoal->numrows;
@@ -245,14 +250,27 @@ for($x=0; $x<$numrows_dados; $x++){
   }
 
   if($pdf->gety() > $pdf->h - 30 || $troca != 0){
-    $pdf->addpage();
+    if($documentos)
+      $pdf->addpage('L');
+    else
+      $pdf->addpage();  
+
     $pdf->setfont("arial","b",8);
-    $pdf->cell(13,$alt,$RLrh01_regist,1,0,"C",1);
+    $pdf->cell(20,$alt,$RLrh01_regist,1,0,"C",1);
     $pdf->cell(65,$alt,$RLz01_nome,1,0,"C",1);
     $pdf->cell(70,$alt,$labelFuncaoLotacao,1,0,"C",1);
-    $pdf->cell(15,$alt,$RLrh01_admiss,1,0,"C",1);
-    $pdf->cell(15,$alt,'Rescisão',1,0,"C",1);
-    $pdf->cell(13,$alt,'PADRAO',1,1,"C",1);
+
+    if($documentos){
+      $pdf->cell(20,$alt,$RLrh01_admiss,1,0,"C",1);
+      $pdf->cell(20,$alt,'Rescisão',1,0,"C",1);
+      $pdf->cell(20,$alt,'CPF',1,0,"C",1);
+      $pdf->cell(20,$alt,'RG',1,0,"C",1);
+      $pdf->cell(44,$alt,'Data de Nascimento',1,1,"C",1);
+    }else{
+      $pdf->cell(15,$alt,$RLrh01_admiss,1,0,"C",1);
+      $pdf->cell(15,$alt,'Rescisão',1,0,"C",1);
+      $pdf->cell(13,$alt,'PADRAO',1,1,"C",1);
+    }
 
     if($fixo == "s"){
       $pdf->setfont("arial","b",6);
@@ -290,12 +308,21 @@ for($x=0; $x<$numrows_dados; $x++){
   }
 
   $pdf->setfont("arial",$put_b,7);
-  $pdf->cell(13,$alt,$rh01_regist,$put_t,0,"C",$pre);
+  $pdf->cell(20,$alt,$rh01_regist,$put_t,0,"C",$pre);
   $pdf->cell(65,$alt,$z01_nome,$put_t,0,"L",$pre);
   $pdf->cell(70,$alt,substr($$valorImprime,0,40),$put_t,0,"L",$pre);
-  $pdf->cell(15,$alt,db_formatar($rh01_admiss,"d"),$put_t,0,"C",$pre);
-  $pdf->cell(15,$alt,db_formatar($rh05_recis,"d"),$put_t,0,"C",$pre);
-  $pdf->cell(13,$alt,$rh03_padrao,$put_t,1,"L",$pre);
+  if($documentos){
+    $pdf->cell(20,$alt,db_formatar($rh01_admiss,"d"),$put_t,0,"C",$pre);
+    $pdf->cell(20,$alt,db_formatar($rh05_recis,"d"),$put_t,0,"C",$pre);
+    $pdf->cell(20,$alt,$z01_cgccpf,$put_t,0,"C",$pre);
+    $pdf->cell(20,$alt,$z01_ident,$put_t,0,"C",$pre);
+    $pdf->cell(44,$alt,db_formatar($rh01_nasc,"d"), $put_t,1,"C",$pre);
+  }else{
+    $pdf->cell(15,$alt,db_formatar($rh01_admiss,"d"),$put_t,0,"C",$pre);
+    $pdf->cell(15,$alt,db_formatar($rh05_recis,"d"),$put_t,0,"C",$pre);
+    $pdf->cell(13,$alt,$rh03_padrao,$put_t,1,"L",$pre);
+  }
+  
 
   if($fixo == "s"){
     $sql_fixo = $clpontofx->sql_query_rubrica($ano, $mes, $rh01_regist, null, " * ");
@@ -315,6 +342,8 @@ for($x=0; $x<$numrows_dados; $x++){
 
 $pdf->setfont("arial","b",8);
 $pdf->cell(190,$alt,"TOTAL :  ".$total."  FUNCIONÁRIOS","T",0,"R",0);
+
+
 
 $pdf->Output();
 ?>

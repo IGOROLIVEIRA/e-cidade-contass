@@ -182,30 +182,32 @@ if (isset($alterar)) {
 
     db_fim_transacao($sqlerro);
 
-    $result = $clrhpessoal->sql_record($clrhpessoal->sql_query_com_temporarios($rh01_regist, "rh02_funcao, rh163_matricula", "rh164_datafim desc"));
-    if ($clrhpessoal->numrows > 0) {
-        db_fieldsmemory($result, 0);
-        if (!empty($rh163_matricula)) {
-            $visibilityContratoEmergencial  = true;
-            $contratoEmergencial = 't';
-        }
+  $result = $clrhpessoal->sql_record($clrhpessoal->sql_query_com_temporarios($rh01_regist, "rh02_funcao, rh163_matricula", "rh164_datafim desc"));
+
+  if ($clrhpessoal->numrows > 0) {
+    db_fieldsmemory($result, 0);
+    if (!empty($rh163_matricula)) {
+      $visibilityContratoEmergencial  = true;
+      $contratoEmergencial = 't';
     }
-} elseif (isset($chavepesquisa)) {
-    $db_opcao = 2;
-    $db_botao = true;
-    $visibilityContratoEmergencial = false;
-    $result = $clrhpessoal->sql_record($clrhpessoal->sql_query_com_temporarios($chavepesquisa, "*", "rh164_datafim desc"));
-    if ($clrhpessoal->numrows > 0) {
-        db_fieldsmemory($result, 0);
-        if (!empty($rh163_matricula)) {
-            $visibilityContratoEmergencial  = true;
-            $contratoEmergencial = 't';
-        }
-        $result_rhpesfgts = $clrhpesfgts->sql_record($clrhpesfgts->sql_query_banco($rh01_regist, "rh15_data,rh15_banco,rh15_agencia,rh15_agencia_d,rh15_contac,rh15_contac_d,db90_descr"));
-        if ($clrhpesfgts->numrows > 0) {
-            db_fieldsmemory($result_rhpesfgts, 0);
-        }
+  }
+} else if (isset($chavepesquisa)) {
+  $db_opcao = 2;
+  $db_botao = true;
+  $visibilityContratoEmergencial = false;
+  $result = $clrhpessoal->sql_record($clrhpessoal->sql_query_com_temporarios($chavepesquisa, "*", "rh164_datafim desc"));
+
+  if ($clrhpessoal->numrows > 0) {
+    db_fieldsmemory($result, 0);
+    if (!empty($rh163_matricula)) {
+      $visibilityContratoEmergencial  = true;
+      $contratoEmergencial = 't';
     }
+    $result_rhpesfgts = $clrhpesfgts->sql_record($clrhpesfgts->sql_query_banco($rh01_regist, "rh15_data,rh15_banco,rh15_agencia,rh15_agencia_d,rh15_contac,rh15_contac_d,db90_descr"));
+    if ($clrhpesfgts->numrows > 0) {
+      db_fieldsmemory($result_rhpesfgts, 0);
+    }
+  }
 }
 ?>
 <html>

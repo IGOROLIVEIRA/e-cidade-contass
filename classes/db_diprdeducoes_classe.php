@@ -46,6 +46,10 @@ class cl_diprdeducoes
     var $c239_codhist = 0;
     var $c239_compl = 'f';
     var $c239_descr = null;
+    var $c239_datarepasse = null;
+    var $c239_datarepasse_dia = null;
+    var $c239_datarepasse_mes = null;
+    var $c239_datarepasse_ano = null; 
     var $nomeTabela = "diprdeducoes";
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -62,7 +66,8 @@ class cl_diprdeducoes
         c239_tipodeducao int4,
         c239_tipocontribuicao int4,
         c239_descricao text,
-        c239_valordeducao numeric ";
+        c239_valordeducao numeric,
+        c239_datarepasse date ";
 
     //funcao construtor da classe
     function cl_diprdeducoes()
@@ -101,7 +106,16 @@ class cl_diprdeducoes
             $this->c239_tipodeducao = ($this->c239_tipodeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_tipodeducao"] : $this->c239_tipodeducao);
             $this->c239_descricao = ($this->c239_descricao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_descricao"] : $this->c239_descricao);
             $this->c239_valordeducao = ($this->c239_valordeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_valordeducao"] : $this->c239_valordeducao);
+            if ($this->c239_datarepasse == "") {
+                $this->c239_datarepasse_dia = ($this->c239_datarepasse_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_datarepasse_dia"] : $this->c239_datarepasse_dia);
+                $this->c239_datarepasse_mes = ($this->c239_datarepasse_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_datarepasse_mes"] : $this->c239_datarepasse_mes);
+                $this->c239_datarepasse_ano = ($this->c239_datarepasse_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["c239_datarepasse_ano"] : $this->c239_datarepasse_ano);
+                if ($this->c239_datarepasse_dia != "") {
+                    $this->c239_datarepasse = $this->c239_datarepasse_ano . "-" . $this->c239_datarepasse_mes . "-" . $this->c239_datarepasse_dia;
+                }
+            }
         } 
+
     }
 
     function atualizaCampoData($nomeCampo)
@@ -156,6 +170,9 @@ class cl_diprdeducoes
         if (!$this->verificaTipoDeducao())
             return false;
 
+        if (!$this->verificaDataRepasse())
+            return false;           
+
         if (!$this->verificaDescricao())
             return false;
 
@@ -175,7 +192,8 @@ class cl_diprdeducoes
         $sql .= " c239_tipodeducao, ";
         $sql .= " c239_tipocontribuicao, ";   
         $sql .= " c239_descricao, ";
-        $sql .= " c239_valordeducao ";
+        $sql .= " c239_valordeducao, ";
+        $sql .= " c239_datarepasse ";
         $sql .= " ) VALUES ( ";
         $sql .= " {$this->c239_coddipr}, ";
         $sql .= " {$this->c239_tipoente}, ";
@@ -189,7 +207,11 @@ class cl_diprdeducoes
         $sql .= " {$this->c239_tipocontribuicao}, ";
         $sql .= " {$this->c239_tipodeducao}, ";
         $sql .= " '{$this->c239_descricao}', ";
-        $sql .= " {$this->c239_valordeducao}) ";
+        $sql .= " {$this->c239_valordeducao}, ";
+        if (db_getsession("DB_anousu") > 2022)
+            $sql .= " '{$this->c239_datarepasse}' ) ";
+        else  
+            $sql .= " null) ";  
 
         $result = db_query($sql);
         if ($result == false) {
@@ -294,6 +316,16 @@ class cl_diprdeducoes
             $virgula = ",";            
         }
 
+        if ($this->verificaDataRepasse()) {
+            if(db_getsession("DB_anousu") < 2023){
+                $sql .= $virgula . " c239_datarepasse = 'null'";
+                $virgula = ","; 
+            }else{
+                $sql .= $virgula . " c239_datarepasse = '{$this->c239_datarepasse}' ";
+                $virgula = ","; 
+            }        
+        }        
+
         if ($this->verificaDescricao()) {
             $sql .= $virgula . " c239_descricao = '{$this->c239_descricao}' ";
             $virgula = ",";            
@@ -309,7 +341,7 @@ class cl_diprdeducoes
         if ($c239_sequencial != null) {
             $sql .= " c239_sequencial = $c239_sequencial ";
         }
-
+        
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -577,6 +609,16 @@ class cl_diprdeducoes
         $nomeCampo = "c239_tipodeducao";
         $descricaoCampo = "Tipo Dedução";
         return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+    }
+
+    public function verificaDataRepasse()
+    {
+        if(db_getsession("DB_anousu") > 2022){
+            $nomeCampo = "c239_datarepasse";
+            $descricaoCampo = "Data Repasse";
+            return $this->validacaoCampoInteiro($nomeCampo, $descricaoCampo);
+        }
+        return true;    
     }
 
     public function verificaDescricao()

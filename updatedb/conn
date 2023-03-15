@@ -104,11 +104,17 @@ e-cidade            5432    pmserranopolis
 
 e-cidade            5432    pmsantafeminas
 
+e-cidade            5432    pmsantafeminasv3
+
+e-cidade            5432    pmsaogoncalov3
+
 e-cidade            5432    pmcurraldentro
 
 e-cidade-treinamento   5432 e-cidadev3
 pmfranciscodumont      5432 e-cidadev3
 pmsaogoncalodoriopreto 5432 e-cidadev3
+cismesf                5432 e-cidadev3
+treinamento_consorcio  5432 e-cidadev3
 
 e-cidade            5432 pmmonteazulv3
 

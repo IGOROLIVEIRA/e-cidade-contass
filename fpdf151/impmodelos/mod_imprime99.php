@@ -21,18 +21,18 @@ if (file_exists('imagens/files/' . $logofundo.'_fundoalvara.jpg')){
   $this->objpdf->Image('imagens/files/Brasao.jpg',60,80,100);
 }
 
-$this->objpdf->Image('imagens/files/' . $logo,5,7,16);
+$this->objpdf->Image('imagens/files/' . $logo,12,6,20);
 $this->objpdf->sety(6);
 $this->objpdf->setfont('Arial','B',14);
 $this->objpdf->Multicell(0,8,$this->prefeitura,0,"C",0); // prefeitura
 
 if ($this->cabecalhoDet != null){    
-  $this->objpdf->setfont('Arial','B',12);
-  $this->objpdf->Multicell(0,8,$this->cabecalhoDet,0,"C",0); // Cabeçalho
+  $this->objpdf->setfont('Arial','B',10);
+  $this->objpdf->Multicell(0,5,$this->cabecalhoDet,0,"C",0); // Cabeçalho
 }
 
 $this->objpdf->setfont('Arial','B',14);
-$this->objpdf->Multicell(0,8,$this->tipoalvara,0,"C",0); // tipo de alvara
+$this->objpdf->Multicell(0,15,$this->tipoalvara,0,"C",0); // tipo de alvara
 
 if(!empty($this->dtemissao)){
   $sDataEmissao = db_formatar($this->dtemissao,'d');
@@ -43,19 +43,19 @@ if($this->permanente == 't'){
   $xx = $this->objpdf->getx();
 	$yy = $this->objpdf->gety();	
 	$this->objpdf->setfont('Arial','B',10);
-	$this->objpdf->Multicell(0,8,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara	
+	$this->objpdf->Multicell(0,6,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara	
 	$this->objpdf->setfont('Arial','B',10);
-	$this->objpdf->Multicell(0,8,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade  
+	$this->objpdf->Multicell(0,6,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade  
   $this->objpdf->setfont('Arial','B',10);
-  $this->objpdf->Multicell(0,8,"Data do Documento: ".$sDataEmissao,0,"C",0); // Data de Emissao
+  $this->objpdf->Multicell(0,6,"Data do Documento: ".$sDataEmissao,0,"C",0); // Data de Emissao
 	$this->objpdf->setxy(10,70);
 } else {
 	$this->objpdf->setfont('Arial','B',10);
-	$this->objpdf->Multicell(0,8,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara	
+	$this->objpdf->Multicell(0,6,"Número do Alvará: ".$this->numeroalvara,0,"C",0); // Numero do Alvara	
 	$this->objpdf->setfont('Arial','B',10);
-	$this->objpdf->Multicell(0,8,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade
+	$this->objpdf->Multicell(0,6,"Válido Até: ".$this->validadealvara,0,"C",0); // Validade
   $this->objpdf->setfont('Arial','B',10);
-  $this->objpdf->Multicell(0,8,"Data do Documento: ".db_formatar($this->dtemissao,'d'),0,"C",0); // Data de Emissao
+  $this->objpdf->Multicell(0,6,"Data do Documento: ".db_formatar($this->dtemissao,'d'),0,"C",0); // Data de Emissao
 	$this->objpdf->setxy(10,75);
 }
 

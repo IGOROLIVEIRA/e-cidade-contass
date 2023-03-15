@@ -610,10 +610,13 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                 */
                 
                 $oReceita = db_utils::fieldsMemory($rsReceita, 0);
+
+                $sEmParlamentar = $oReceita->k81_emparlamentar == '' ? '3' : $oReceita->k81_emparlamentar;
                 
                 $oControleOrcamentario = new ControleOrcamentario();
-                $oControleOrcamentario->setNaturezaReceita($oReceita->naturezareceita);
-                $oControleOrcamentario->setFonte($oReceita->o70_codigo); 
+                $oControleOrcamentario->setNaturezaReceita("4".$oReceita->naturezareceita);
+                $oControleOrcamentario->setFonte($oReceita->o70_codigo);
+                $oControleOrcamentario->setEmendaParlamentar($sEmParlamentar); 
 
                 $sNaturezaReceita = $oReceita->naturezareceita;
                 foreach ($oNaturezaReceita as $oNatureza) {
@@ -632,7 +635,8 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                   $oReceita->naturezareceita = substr($oReceita->naturezareceita, 0, 6) . "00";
                 }
 
-                $sHash22 = $oReceita->naturezareceita . $oCtb20->ext21[$sHash]->si97_codreduzidomov . $oReceita->o70_codigo;
+                $sHash22 = $oReceita->naturezareceita . $oCtb20->ext21[$sHash]->si97_codreduzidomov;
+                $sHash22 .= in_array($oControleOrcamentario->getCodigoPorReceita(), array('1001', '1002', '1070')) ? '0000' : $oControleOrcamentario->getCodigoPorReceita();
 
                 if (!isset($oCtb20->ext21[$sHash]->registro22[$sHash22])) {
 
@@ -644,12 +648,12 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
                   $oDadosReceita->si98_identificadordeducao = $oReceita->identificadordeducao;
                   $oDadosReceita->si98_naturezareceita = $oReceita->naturezareceita;
                   $oDadosReceita->si98_codfontrecursos = $oCtb20->ext21[$sHash]->si97_codfontrecursos;
-                  $oDadosReceita->si98_codco = $oControleOrcamentario->getCodigoPorReceita();
+                  $oDadosReceita->si98_codco = in_array($oControleOrcamentario->getCodigoPorReceita(), array('1001', '1002', '1070')) ? '0000' : $oControleOrcamentario->getCodigoPorReceita();
                   $oDadosReceita->si98_saldocec = $oCtb20->ext21[$sHash]->si97_saldocec;
                   $oDadosReceita->si98_vlrreceitacont = $oReceita->vlrreceitacont;
                   $oDadosReceita->si98_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                   $oDadosReceita->si98_reg20 = 0;
-                  $oDadosReceita->si98_instit = db_getsession("DB_instit");
+                  $oDadosReceita->si98_instit = $instit;
 
 
                   $oCtb20->ext21[$sHash]->registro22[$sHash22] = $oDadosReceita;

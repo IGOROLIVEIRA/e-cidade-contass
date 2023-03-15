@@ -13,21 +13,25 @@ $clpcorcam   = new cl_pcorcam();
 $objPHPExcel = new PHPExcel;
 
 /**
-* matriz de entrada
-*/
-$what = array( 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û',
-'Ä','Ã','À','Á','Â','Ê','Ë','È','É','Ï','Ì','Í','Ö','Õ','Ò','Ó','Ô','Ü','Ù','Ú','Û',
-'ñ','Ñ','ç','Ç','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','°', "°",chr(13),chr(10),"'");
+ * matriz de entrada
+ */
+$what = array(
+    'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û',
+    'Ä', 'Ã', 'À', 'Á', 'Â', 'Ê', 'Ë', 'È', 'É', 'Ï', 'Ì', 'Í', 'Ö', 'Õ', 'Ò', 'Ó', 'Ô', 'Ü', 'Ù', 'Ú', 'Û',
+    'ñ', 'Ñ', 'ç', 'Ç', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', '°', "°", chr(13), chr(10), "'"
+);
 
 /**
-* matriz de saida
-*/
-$by   = array( 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u',
-'A','A','A','A','A','E','E','E','E','I','I','I','O','O','O','O','O','U','U','U','U',
-'n','N','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ', " "," "," "," ");
+ * matriz de saida
+ */
+$by   = array(
+    'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u',
+    'A', 'A', 'A', 'A', 'A', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U',
+    'n', 'N', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', " ", " ", " ", " "
+);
 
-$result_fornecedores = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"DISTINCT pc22_codorc,pc81_codproc,z01_nome,z01_cgccpf,pc80_criterioadjudicacao,pc80_resumo",null,"pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
-db_fieldsmemory($result_fornecedores,0);
+$result_fornecedores = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null, "DISTINCT pc22_codorc,pc81_codproc,z01_nome,z01_cgccpf,pc80_criterioadjudicacao,pc80_resumo", null, "pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
+db_fieldsmemory($result_fornecedores, 0);
 
 //Inicio
 $sheet = $objPHPExcel->getActiveSheet();
@@ -124,30 +128,39 @@ $styleItens = array(
         'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
     ),
 );
+$styleItensCenterAlign = array(
+    'borders' => array(
+        'allborders' => array(
+            'style' => PHPExcel_Style_Border::BORDER_THIN,
+            'color' => array('argb' => 'FF000000'),
+        ),
+    ),
+    'font' => array(
+        'size' => 10,
+    ),
+    'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+    ),
+);
 //Iniciando planilha
-$sheet->setCellValue('A1','Orcamento de Processo de Compra Numero: '.$pc81_codproc.' do Processo de Compra');
-$sheet->setCellValue('A2','Codigo do Orcamento:');
-$sheet->setCellValue('A3','Objeto:');
-$sheet->setCellValue('A4','Codigo do Orcamento do Fornecedor:');
-$sheet->setCellValue('A5','CPF / CNPJ:');
-$sheet->setCellValue('A6','Nome / Razao Social:');
-$sheet->setCellValue('E2',$pc22_codorc);
-$sheet->setCellValue('E3',iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, $pc80_resumo)));
-$sheet->setCellValue('E4',$pc21_orcamforne);
-$sheet->setCellValue('E5',$z01_cgccpf);
-$sheet->setCellValue('E6',$z01_nome);
+$sheet->setCellValue('A1', 'Orcamento de Processo de Compra Numero: ' . $pc81_codproc . ' do Processo de Compra');
+$sheet->setCellValue('A2', "Codigo do Orcamento: " . $pc22_codorc);
+$sheet->setCellValue('A3', "Objeto: " . iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $pc80_resumo)));
+$sheet->setCellValue('A4', 'Codigo do Orcamento do Fornecedor: ' . $pc21_orcamforne);
+$sheet->setCellValue('A5', 'CPF / CNPJ: ');
+$sheet->setCellValue('C5', $z01_cgccpf);
+$sheet->setCellValue('A6', 'Nome / Razao Social: ' . $z01_nome);
+
 //merge das cells
 $sheet->mergeCells('A1:S1');
-$sheet->mergeCells('A2:D2');
-$sheet->mergeCells('A3:D3');
-$sheet->mergeCells('A4:D4');
-$sheet->mergeCells('A5:D5');
-$sheet->mergeCells('A6:D6');
-$sheet->mergeCells('E2:S2');
-$sheet->mergeCells('E3:S3');
-$sheet->mergeCells('E4:S4');
-$sheet->mergeCells('E5:S5');
-$sheet->mergeCells('E6:S6');
+$sheet->mergeCells('A2:S2');
+$sheet->mergeCells('A3:S3');
+$sheet->mergeCells('A4:S4');
+$sheet->mergeCells('A5:B5');
+$sheet->mergeCells('A6:S6');
+$sheet->mergeCells('M5:S5');
+
+
 //cabeçalho
 $sheet->getStyle('A1:S1')->applyFromArray($styleTitulo);
 $sheet->getStyle('A2:A6')->applyFromArray($styleTitulo1);
@@ -157,19 +170,18 @@ $sheet->getStyle('D2:D6')->applyFromArray($styleTitulo1);
 //resposta cabeçalho
 $sheet->getStyle('E2:S6')->applyFromArray($styleResTitulo1);
 //itens
-$sheet->setCellValue('A7','Cod. Item');
-$sheet->setCellValue('B7','Seq. Item');
-$sheet->setCellValue('C7','Servico Material');
-$sheet->setCellValue('M7','UN');
-$sheet->setCellValue('N7','Qtde');
-if($pc80_criterioadjudicacao == 3){
-    $sheet->setCellValue('O7','Valor Unit.');
-}else{
-    $sheet->setCellValue('O7','Taxa/Tabela %');
+$sheet->setCellValue('A7', 'Cod. Item');
+$sheet->setCellValue('B7', 'Seq. Item');
+$sheet->setCellValue('C7', 'Servico Material');
+$sheet->setCellValue('M7', 'UN');
+$sheet->setCellValue('N7', 'Qtde');
+if ($pc80_criterioadjudicacao == 3) {
+    $sheet->setCellValue('O7', 'Valor Unit.');
+} else {
+    $sheet->setCellValue('O7', 'Taxa/Tabela %');
 }
-$sheet->setCellValue('P7','Valor Total');
-$sheet->setCellValue('R7','Marca');
-$sheet->mergeCells('C7:L7');
+$sheet->setCellValue('P7', 'Valor Total');
+$sheet->setCellValue('R7', 'Marca');
 $sheet->mergeCells('P7:Q7');
 $sheet->mergeCells('R7:S7');
 $sheet->getStyle('A7:S7')->applyFromArray($styleItens2);
@@ -182,61 +194,69 @@ $sheet->getProtection()->setInsertRows(false);
 $sheet->getProtection()->setFormatCells(false);
 $sheet->getStyle('E4')->getNumberFormat()->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
 //itens orcamento
-$result_itens = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"distinct pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,pc01_complmater,m61_abrev,pc11_quant","pc11_seq","pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
+$result_itens = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null, "distinct pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,pc01_complmater,m61_abrev,pc11_quant", "pc11_seq", "pc20_codorc = $pc22_codorc AND pc21_orcamforne = $pc21_orcamforne"));
 $numrows_itens = $clpcorcam->numrows;
 
-for ($i = 0; $i < $numrows_itens; $i ++){
+foreach ($objPHPExcel->getActiveSheet()->getRowDimensions() as $rd) {
+    $rd->setRowHeight(-1);
+}
+
+for ($i = 0; $i < $numrows_itens; $i++) {
     db_fieldsmemory($result_itens, $i);
     $numrow = $i + 8;
-    $collA = 'A'.$numrow;
-    $collB = 'B'.$numrow;
-    $collC = 'C'.$numrow;
-    $collF = 'F'.$numrow;
-    $collG = 'G'.$numrow;
-    $collH = 'H'.$numrow;
-    $collI = 'I'.$numrow;
-    $collJ = 'J'.$numrow;
-    $collK = 'K'.$numrow;
-    $collL = 'L'.$numrow;
-    $collM = 'M'.$numrow;
-    $collN = 'N'.$numrow;
-    $collO = 'O'.$numrow;
-    $collP = 'P'.$numrow;
-    $collQ = 'Q'.$numrow;
-    $collR = 'R'.$numrow;
-    $collS = 'S'.$numrow;
-    $pc01_descrmater = $pc01_descrmater.'-'.$pc01_complmater;
-    $sheet->setCellValue($collA,$pc01_codmater);
-    $sheet->setCellValue($collB,$pc11_seq);
-    $sheet->setCellValue($collC,iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, $pc01_descrmater)));
-    $sheet->getStyle($collC)->getAlignment()->setWrapText(false);
-    $sheet->setCellValue($collM,$m61_abrev);
-    $sheet->setCellValue($collN,$pc11_quant);
+    $collA = 'A' . $numrow;
+    $collB = 'B' . $numrow;
+    $collC = 'C' . $numrow;
+    $collF = 'F' . $numrow;
+    $collG = 'G' . $numrow;
+    $collH = 'H' . $numrow;
+    $collI = 'I' . $numrow;
+    $collJ = 'J' . $numrow;
+    $collK = 'K' . $numrow;
+    $collL = 'L' . $numrow;
+    $collM = 'M' . $numrow;
+    $collN = 'N' . $numrow;
+    $collO = 'O' . $numrow;
+    $collP = 'P' . $numrow;
+    $collQ = 'Q' . $numrow;
+    $collR = 'R' . $numrow;
+    $collS = 'S' . $numrow;
+    $pc01_descrmater = $pc01_descrmater . '-' . $pc01_complmater;
+    $sheet->getStyle($collC)->getAlignment()->setWrapText(true);
+    $sheet->setCellValue($collA, $pc01_codmater);
+    $sheet->setCellValue($collB, $pc11_seq);
+    $sheet->setCellValue($collC, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $pc01_descrmater)));
+    $sheet->setCellValue($collM, $m61_abrev);
+    $sheet->setCellValue($collN, $pc11_quant);
 
     //merge das cells
-    $sheet->mergeCells($collC.':'.$collL);
-    $sheet->mergeCells($collP.':'.$collQ);
-    $sheet->mergeCells($collR.':'.$collS);
+    //$sheet->mergeCells($collD . ':' . $collL);
+    $sheet->mergeCells($collP . ':' . $collQ);
+    $sheet->mergeCells($collR . ':' . $collS);
 
-    if($pc80_criterioadjudicacao == 3) {
+    if ($pc80_criterioadjudicacao == 3) {
         //formatacao na cell valor unitario
         $sheet->getStyle($collO)->getNumberFormat()->setFormatCode('[$R$ ]#,####0.0000_-');
         //formula multiplicacao
-        $sheet->setCellValue($collP,'='.$collN.'*'.$collO);
+        $sheet->setCellValue($collP, '=' . $collN . '*' . $collO);
         $sheet->getStyle($collP)->getNumberFormat()->setFormatCode('[$R$ ]#,##0.00_-');
         //formatando os itens
-        $sheet->getStyle($collA.':'.$collS)->applyFromArray($styleItens);
+        $sheet->getStyle($collA . ':' . $collS)->applyFromArray($styleItensCenterAlign);
+        $sheet->getStyle($collC)->applyFromArray($styleItens);
+
+
         //libera celulas para alteracao
         $sheet->getStyle($collO)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
         $sheet->getStyle($collR)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
-    }else{
+    } else {
         //formatando os itens
-        $sheet->getStyle($collA.':'.$collS)->applyFromArray($styleItens);
+        $sheet->getStyle($collA . ':' . $collS)->applyFromArray($styleItens);
         //libera celulas para alteracao
         $sheet->getStyle($collO)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
         $sheet->getStyle($collP)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
         $sheet->getStyle($collR)->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
     }
+    $sheet->getStyle($collA . ':' . $collS)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
 }
 $styleTotal = array(
     'borders' => array(
@@ -255,37 +275,68 @@ $styleTotal = array(
 );
 
 //ultima linha itens
-$lastCell = 'P'.($numrows_itens + 7);
+$lastCell = 'P' . ($numrows_itens + 7);
 
 //linha texto valor total
-$totalCellN = 'N'.($numrows_itens + 8);
-$totalCellO = 'O'.($numrows_itens + 8);
-$totalCellG = 'G'.($numrows_itens + 8);
+$totalCellN = 'N' . ($numrows_itens + 8);
+$totalCellO = 'O' . ($numrows_itens + 8);
+$totalCellG = 'G' . ($numrows_itens + 8);
 
 //linha valor total
-$totalCellP = 'P'.($numrows_itens + 8);
-$totalCellQ = 'Q'.($numrows_itens + 8);
-$sheet->mergeCells($totalCellP.':'.$totalCellQ);
-$sheet->mergeCells($totalCellN.':'.$totalCellO);
+$totalCellP = 'P' . ($numrows_itens + 8);
+$totalCellQ = 'Q' . ($numrows_itens + 8);
+$sheet->mergeCells($totalCellP . ':' . $totalCellQ);
+$sheet->mergeCells($totalCellN . ':' . $totalCellO);
 
-$sheet->getStyle($totalCellN.':'.$totalCellQ)->applyFromArray($styleTotal);
+$sheet->getStyle($totalCellN . ':' . $totalCellQ)->applyFromArray($styleTotal);
 
-$sheet->setCellValue($totalCellN,iconv('UTF-8', 'ISO-8859-1//IGNORE',str_replace($what, $by, 'Valor Orçamento').':'));
+$sheet->setCellValue($totalCellN, iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, 'Valor Orçamento') . ':'));
 
-$formula = '=(SUM(P7:'.$lastCell.'))';
+$formula = '=(SUM(P7:' . $lastCell . '))';
 //valor Total
-$sheet->setCellValue($totalCellP,$formula);
+$sheet->setCellValue($totalCellP, $formula);
 $sheet->getStyle($totalCellP)->getNumberFormat()->setFormatCode('[$R$ ]#,##0.00_-');
 
-$nomefile = "prc_".$pc81_codproc.'_'.db_getsession('DB_instit').".xlsx";
+$objPHPExcel->getActiveSheet()->protectCells('');
+$sheet->getStyle('A6:E6')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+$sheet->getStyle('A5:E5')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+$sheet->getStyle('A8:A1000')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+$sheet->getStyle('C8:C1000')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);
+
+$sheet->getDefaultRowDimension()->setRowHeight(-1);
+
+
+$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(80);
+$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setVisible(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setVisible(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setVisible(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setVisible(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setVisible(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setVisible(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setVisible(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('K')->setVisible(false);
+$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setVisible(false);
+
+
+
+
+
+$objPHPExcel->getActiveSheet()->getProtection()->setSheet(true);
+
+foreach ($objPHPExcel->getActiveSheet()->getRowDimensions() as $rd) {
+    $rd->setRowHeight(-1);
+}
+
+$sheet->getStyle('C8:C1000')->getAlignment()->setWrapText(true);
+
+
+$nomefile = "prc_" . $pc81_codproc . '_' . db_getsession('DB_instit') . ".xlsx";
 
 header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment; filename=$nomefile" );
+header("Content-Disposition: attachment; filename=$nomefile");
 header("Expires: 0");
 header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
 header("Pragma: public");
 
-$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel,'Excel2007');
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->save('php://output');
-
-?>

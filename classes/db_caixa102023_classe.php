@@ -520,6 +520,23 @@ class cl_caixa102023
 
     return $sql;
   }
+
+  public function sql_ContasCaixa($ano, $instit)
+  {
+    $sqlContasCaixa = "SELECT c60_codcon,
+                               c61_reduz,
+                               c60_descr,
+                               si09_codorgaotce,
+                               o15_codtri
+                        FROM conplano
+                        JOIN conplanoreduz ON (c60_codcon, c60_anousu) = (c61_codcon, c61_anousu)
+                        LEFT JOIN infocomplementaresinstit ON c61_instit = si09_instit
+                        JOIN orctiporec ON o15_codigo = c61_codigo
+                        WHERE c60_codsis = 5
+                          AND (c60_anousu, c61_instit) = ({$ano}, $instit)";
+
+    return $sqlContasCaixa;
+  }
 }
 
 ?>

@@ -89,6 +89,7 @@ class GerarCAIXA extends GerarAM
               $aCSVCAIXA12['si104_valorentrsaida']    = $this->sicomNumberReal($aCAIXA12['si104_valorentrsaida'], 2);
               $aCSVCAIXA12['si104_codctbtransf']      = ($aCAIXA12['si104_codctbtransf'] == 0) ? ' ' : substr($aCAIXA12['si104_codctbtransf'], 0, 20);
               $aCSVCAIXA12['si104_codfontectbtransf'] = ($aCAIXA12['si104_codfontectbtransf'] == 0) ? ' ' : $this->padLeftZero($aCAIXA12['si104_codfontectbtransf'], 3);
+              $aCSVCAIXA12['si104_codidentificafr']   = $aCAIXA12['si104_codidentificafr'];
 
               $this->sLinha = $aCSVCAIXA12;
               $this->adicionaLinha();
@@ -107,6 +108,7 @@ class GerarCAIXA extends GerarAM
                 $aCSVCAIXA13['si105_identificadordeducao']  = $aCAIXA13['si105_identificadordeducao'] == '0' ? ' ' : $this->padLeftZero($aCAIXA13['si105_identificadordeducao'], 2);
                 $aCSVCAIXA13['si105_naturezareceita']       = $this->padLeftZero($aCAIXA13['si105_naturezareceita'], 8);
                 $aCSVCAIXA13['si105_codfontcaixa']          = ($aCAIXA13['si105_codfontcaixa'] == 0 ? ' ':$aCAIXA13['si105_codfontcaixa']);
+                $aCSVCAIXA13['si105_codco']                 = $aCAIXA13['si105_codco'];
                 $aCSVCAIXA13['si105_vlrreceitacont']        = $this->sicomNumberReal($aCAIXA13['si105_vlrreceitacont'], 2);
 
                 $this->sLinha = $aCSVCAIXA13;

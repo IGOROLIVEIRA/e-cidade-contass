@@ -82,7 +82,7 @@ try {
 
 
         $clpcmater->pc01_descrmater = utf8_decode($oItem->descricao);
-        $clpcmater->pc01_complmater = utf8_decode($oItem->complmater);
+        $clpcmater->pc01_complmater = utf8_decode($oItem->complemento);
         $clpcmater->pc01_data = $pc01_data;
         $clpcmater->pc01_servico   = $oItem->servico == "Sim" ? "true" : "false";
         $clpcmater->pc01_codsubgrupo = $oItem->codsubgrupo;

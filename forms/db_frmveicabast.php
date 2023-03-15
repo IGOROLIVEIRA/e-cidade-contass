@@ -748,10 +748,10 @@ db_app::load("estilos.css");
     $("ve60_horasaida").value = "";
 
     if (mostra == true) {
-      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?funcao_js=parent.js_mostraveiculos1|ve01_codigo|ve01_placa|ve26_codigo', 'Pesquisa', true);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiculos', 'func_veiculosbaixa.php?funcao_js=parent.js_mostraveiculos1|ve01_codigo|ve01_placa|ve26_codigo', 'Pesquisa', true);
     } else {
       if (document.form1.ve70_veiculos.value != '') {
-        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiculos', 'func_veiculosalt.php?veiccadcomb=true&pesquisa_chave=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveiculos', 'Pesquisa', false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiculos', 'func_veiculosbaixa.php?veiccadcomb=true&pesquisa_chave=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveiculos', 'Pesquisa', false);
       } else {
         document.form1.ve01_placa.value = '';
       }
@@ -765,16 +765,22 @@ db_app::load("estilos.css");
     }
   }
 
-  function js_mostraveiculos(chave, chave2, erro) {
-    document.form1.ve01_placa.value = chave;
-    document.form1.ve70_veiculoscomb.value = chave2;
-    js_pesquisave70_veiculoscomb(false, 0);
-    js_buscarultimaretirada(false);
-    if (erro == true) {
-      document.form1.ve70_veiculos.focus();
-      document.form1.ve70_veiculos.value = '';
-    } else {
-      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
+  function js_mostraveiculos(chave, chave2, erro,chave4) {
+    if(chave4 == 2){
+      alert("Usurio: O veculo selecionado est baixado.");
+      location.href='vei1_veicabast001.php';
+    }else{
+      document.form1.ve01_placa.value = chave;
+      
+      if (erro == true) {
+        document.form1.ve70_veiculos.focus();
+        document.form1.ve70_veiculos.value = '';
+      } else {
+        document.form1.ve70_veiculoscomb.value = chave2;
+        js_pesquisave70_veiculoscomb(false, 0);
+        js_buscarultimaretirada(false);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_veiculos', 'func_veiculos.php?sigla=true&pesquisa_chave=' + document.form1.ve70_veiculos.value + '&funcao_js=parent.js_mostraveictipoabast', 'Pesquisa', false);
+      }
     }
   }
 
