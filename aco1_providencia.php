@@ -119,7 +119,7 @@ $oGet = db_utils::postMemory($_GET);
 		if(oResponse.status){
 			alert('Providência do acordo Finalizada com sucesso!');
 			parent.db_iframe_providencia.hide();
-			parent.parent.location.href = 'func_acordosavencer.php';
+			window.parent.location.href = 'func_acordosavencer.php';
 		}
 	}
 

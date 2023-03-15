@@ -95,7 +95,6 @@ $iInstituicaoSessao = db_getsession('DB_instit');
         $sWhere .= " and  ac16_instit = " . db_getsession('DB_instit');
         $sWhere .= " and (ac16_providencia is null OR ac16_providencia in (2)) ";
         $sWhere .= " and ac16_acordosituacao = 4 ";
-        $sWhere .= " and ac16_coddepto = " . db_getsession('DB_coddepto');
         $sql = $clacordo->sql_query_completo(null, $campos, 'ac16_datafim', $sWhere);
 
         $repassa = array();

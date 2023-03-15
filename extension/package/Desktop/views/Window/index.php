@@ -91,6 +91,9 @@ var Desktop = parent.Desktop, CurrentWindow, Window, corpo, bstatus;
   // mensagem de aviso ja exibida
   var notificationDateSystemDiffServer = false;
 
+  // mensagem de aviso ja exibida
+  var notificationModulo = false;
+
   // ultima url, usado para verifiar se deve alterar o titulo da janela
   var lastUrl = null;
 
@@ -208,12 +211,14 @@ var Desktop = parent.Desktop, CurrentWindow, Window, corpo, bstatus;
    */
   function checkNotificacoes() {
     
-    if (!notificacaoModulo) {
+    if (!notificacaoModulo || notificationModulo) {
       return false;
     }
 
+    notificationModulo = true;
+    
     alertify.log('Notificações Pendentes.', "alert", 0, function() {
-      
+      notificationModulo = false;
     });
   }
 
