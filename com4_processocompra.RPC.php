@@ -101,6 +101,8 @@ try {
       $oRetorno->pc80_orcsigiloso = $oProcessoCompra->getOrcSigiloso();
       $oRetorno->pc80_subcontratacao = $oProcessoCompra->getSubContratacao();
       $oRetorno->pc80_dadoscomplementares = urlencode($oProcessoCompra->getDadosComplementares());
+      $oRetorno->pc80_amparolegal = urlencode($oProcessoCompra->getAmparoLegal());
+
 
 
       $aLotes = array();
@@ -165,6 +167,11 @@ try {
       }
 
       $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
+
+      if ($oProcessoCompra->getNumerodispensa() == $oParam->pc80_numdispensa) {
+        throw new DBException(_M(MENSAGENS . 'dispensa_ja_existe'));
+      }
+
       $oProcessoCompra->setResumo($sResumo);
       $oProcessoCompra->setCriterioAdjudicacao($sCriterioAjudicacao);
 

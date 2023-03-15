@@ -64,11 +64,6 @@ switch ($oParam->exec) {
                 for ($lic = 0; $lic < pg_numrows($rsDadosEnvio); $lic++) {
                     $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvio, $lic);
 
-                    //validaçoes
-                    if ($oDadosLicitacao->dataaberturaproposta == '') {
-                        throw new Exception('Data da Abertura de Proposta não informado! Licitacao:' . $aProcesso->codigo);
-                    }
-
                     //valida se existe anexos na licitacao
                     if (pg_numrows($rsAnexos) == 0) {
                         throw new Exception('Processo sem Anexos vinculados! Processo:' . $aProcesso->codigo);
@@ -126,51 +121,11 @@ switch ($oParam->exec) {
                     $clliccontrolepncp->l213_anousu = $oDadosLicitacao->anocompra;
                     $clliccontrolepncp->l213_instit = db_getsession('DB_instit');
                     $clliccontrolepncp->incluir();
+
+                    $oRetorno->status  = 1;
+                    $oRetorno->message = "Enviado com Sucesso !";
                 } else {
                     throw new Exception(utf8_decode($rsApiPNCP->message));
-                }
-
-                $l213_numerocontrolepncp  = substr($rsApiPNCP->compraUri, 74);
-
-                //$oDadosLicitacao->anocompra
-
-                //ENVIO DE RESULTADOS
-                $rsItensProcessoDecompras = $clProcesso->sql_record($clProcesso->sql_query($aProcesso->codigo, "pc80_codproc,pc11_seq"));
-                $aItensDoProcesso = db_utils::getCollectionByRecord($rsItensProcessoDecompras);
-
-                foreach ($aItensDoProcesso as $item) {
-
-                    //busco resultado dos itens do processo
-                    $rsResultado = $clProcesso->sql_record($clProcesso->sql_query_pncp_itens_resultado($aProcesso->codigo, $item->pc11_seq));
-
-                    for ($i = 0; $i < pg_numrows($rsResultado); $i++) {
-                        $oDadosResultado = db_utils::fieldsMemory($rsResultado, $i);
-                        $aItensProcessoResultado[] = $oDadosResultado;
-                    }
-
-                    //classe modelo
-                    $clResultadoItensPNCP = new ResultadoItensPNCP($aItensProcessoResultado);
-                    //monta o json com os dados da licitacao
-                    $odadosResultado = $clResultadoItensPNCP->montarDados();
-                    //envia para pncp
-                    $rsApiPNCP = $clResultadoItensPNCP->enviarResultado($odadosResultado, $l213_numerocontrolepncp, $oDadosLicitacao->anocompra, $item->pc11_seq);
-                    $urlResutltado = explode('x-content-type-options', $rsApiPNCP[0]);
-
-                    if ($rsApiPNCP[1] == '201') {
-                        $clliccontrolepncp = new cl_liccontrolepncpitens();
-                        $l214_numeroresultado = substr($urlResutltado[0], 96);
-                        $clliccontrolepncp->l214_numeroresultado = $l214_numeroresultado;
-                        $clliccontrolepncp->l214_numerocompra = $l213_numerocontrolepncp;
-                        $clliccontrolepncp->l214_anousu = $oDadosLicitacao->anocompra;
-                        $clliccontrolepncp->l214_pcproc = $aProcesso->codigo;
-                        $clliccontrolepncp->l214_ordem = $item->pc11_seq;
-                        $clliccontrolepncp->incluir();
-
-                        $oRetorno->status  = 1;
-                        $oRetorno->message = "Enviado com Sucesso !";
-                    } else {
-                        throw new Exception(utf8_decode($rsApiPNCP[0]));
-                    }
                 }
             }
         } catch (Exception $eErro) {
