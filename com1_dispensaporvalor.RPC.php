@@ -64,11 +64,6 @@ switch ($oParam->exec) {
                 for ($lic = 0; $lic < pg_numrows($rsDadosEnvio); $lic++) {
                     $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvio, $lic);
 
-                    //validaçoes
-                    if ($oDadosLicitacao->dataaberturaproposta == '') {
-                        throw new Exception('Data da Abertura de Proposta não informado! Licitacao:' . $aProcesso->codigo);
-                    }
-
                     //valida se existe anexos na licitacao
                     if (pg_numrows($rsAnexos) == 0) {
                         throw new Exception('Processo sem Anexos vinculados! Processo:' . $aProcesso->codigo);

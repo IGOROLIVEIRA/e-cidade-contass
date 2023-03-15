@@ -1361,8 +1361,8 @@ class cl_pcproc
       pcproc.pc80_dadoscomplementares as informacaoComplementar,
       false AS srp,
       pcproc.pc80_orcsigiloso as orcamentoSigiloso,
-      pc20_dtate AS dataAberturaProposta,
-      pc20_dtate AS dataEncerramentoProposta,
+      pcproc.pc80_data AS dataAberturaProposta,
+      pcproc.pc80_data AS dataEncerramentoProposta,
       pcproc.pc80_amparolegal as amparoLegalId,
       null as linkSistemaOrigem
       from pcproc
@@ -1386,35 +1386,36 @@ class cl_pcproc
   public function sql_query_pncp_itens($pc80_codproc = null)
   {
     $sql  = "SELECT DISTINCT solicitem.pc11_seq AS numeroItem,
-    CASE
-        WHEN pcmater.pc01_servico='t' THEN 'S'
-        ELSE 'M'
-    END AS materialOuServico,
-    1 AS tipoBeneficioId,
-    TRUE AS incentivoProdutivoBasico,
-            pcmater.pc01_descrmater AS descricao,
-            matunid.m61_descr AS unidadeMedida,
-            pc23_vlrun AS valorUnitarioEstimado,
-            pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
-            pcmater.pc01_codmater,
-            solicitem.pc11_numero,
-            solicitem.pc11_reservado,
-            pc23_quant
-      FROM pcproc
-      JOIN pcprocitem ON pc81_codproc=pc80_codproc
-      JOIN solicitem ON pc11_codigo=pc81_solicitem
-      JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
-      JOIN pcmater ON pc16_codmater = pc01_codmater
-      JOIN solicitemunid ON pc17_codigo=pc11_codigo
-      JOIN matunid ON m61_codmatunid=pc17_unid
-      JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-      JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-      join pcorcam on pc22_codorc = pc20_codorc
-      join pcorcamforne on pc20_codorc = pc21_codorc
-      JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem and pc23_orcamforne = pc21_orcamforne
-      join pcorcamjulg on pc24_orcamitem = pc22_orcamitem and pc24_orcamforne = pc21_orcamforne
-      WHERE pcproc.pc80_codproc = {$pc80_codproc} and pc24_pontuacao = 1
-      ORDER BY numeroitem";
+              CASE
+                  WHEN pcmater.pc01_servico='t' THEN 'S'
+                  ELSE 'M'
+              END AS materialOuServico,
+              1 AS tipoBeneficioId,
+              TRUE AS incentivoProdutivoBasico,
+                      pcmater.pc01_descrmater AS descricao,
+                      matunid.m61_descr AS unidadeMedida,
+                      solicitem.pc11_vlrun AS valorUnitarioEstimado,
+                      pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
+                      pcmater.pc01_codmater,
+                      solicitem.pc11_numero,
+                      solicitem.pc11_reservado,
+                      solicitem.pc11_quant
+          FROM pcproc
+          JOIN pcprocitem ON pc81_codproc=pc80_codproc
+          JOIN solicitem ON pc11_codigo=pc81_solicitem
+          JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+          JOIN pcmater ON pc16_codmater = pc01_codmater
+          JOIN solicitemunid ON pc17_codigo=pc11_codigo
+          JOIN matunid ON m61_codmatunid=pc17_unid
+          LEFT  JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+          LEFT  JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+          LEFT  JOIN pcorcam ON pc22_codorc = pc20_codorc
+          LEFT  JOIN pcorcamforne ON pc20_codorc = pc21_codorc
+          LEFT  JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+          AND pc23_orcamforne = pc21_orcamforne
+          LEFT JOIN pcorcamjulg ON pc24_orcamitem = pc22_orcamitem
+          AND pc24_orcamforne = pc21_orcamforne
+          WHERE pcproc.pc80_codproc = $pc80_codproc";
     return $sql;
   }
 
@@ -1435,7 +1436,8 @@ class cl_pcproc
     LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
     LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
     LEFT JOIN liccontrolepncp on l213_processodecompras = pc80_codproc
-    WHERE pc80_dispvalor='t'";
+    WHERE pc80_dispvalor='t'
+    order by pc80_numdispensa,l213_numerocontrolepncp";
     return $sql;
   }
 

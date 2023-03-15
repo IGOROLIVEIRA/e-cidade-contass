@@ -482,6 +482,7 @@ $clrotulo->label("descrdepto");
                     document.getElementById('pc80_subcontratacao').selectedIndex = 2;
                 }
                 document.getElementById('pc80_dadoscomplementares').value = oRetorno.pc80_dadoscomplementares.urlDecode();
+                document.getElementById('pc80_amparolegal').value = oRetorno.pc80_amparolegal;
 
                 aLotes = (Object.isArray(oRetorno.aLotes) ? {} : oRetorno.aLotes);
 
