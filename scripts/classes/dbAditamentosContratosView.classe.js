@@ -302,15 +302,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }
     }
 
-    this.pesquisaAcordoByCodigo = (acordo) => {
+    this.pesquisaAcordoByCodigo = function (acordo) {
         var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave=' + acordo +
             '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4&ac16_acordosituacao=4';
 
-        js_OpenJanelaIframe('top.corpo',
+        js_OpenJanelaIframe('',
             'db_iframe_acordo',
             sUrl,
             'Pesquisa de Acordo',
-            false);
+            false,null,'0','780','430');
 
     }
 
@@ -325,9 +325,23 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             me.oTxtDescricaoAcordo.setValue('');
             $('oTxtDescricaoAcordo').focus();
         } else {
-            alert();
 
-            me.oTxtCodigoAcordo.setValue(chave4);
+            var oParam = {
+                exec: 'getleilicitacao',
+                licitacao: chave4
+            }
+    
+            new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
+                if(oRetorno.lei==1){
+                    $('justificativa').style.display = '';
+                }else{
+                    $('justificativa').style.display = 'none';
+                }
+    
+            }).setMessage("Aguarde, pesquisando acordos.")
+                .execute();
+            
+            me.oTxtCodigoAcordo.setValue(chave1);
             me.oTxtDescricaoAcordo.setValue(chave2);
             me.pesquisarDadosAcordo();
         }
@@ -582,7 +596,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         if(me.lTipoAlteracao) {
             me.oCboTipoAditivo = new DBComboBox('oCboTipoAditivo', me.sInstance + '.oCboTipoAditivo',null,'455px');
             me.oCboTipoAditivo.addItem('0', 'Selecione');
-            me.oCboTipoAditivo.addItem('2', 'Reequilí­brio');
+            me.oCboTipoAditivo.addItem('2', 'Resssssequilí­brio');
             me.oCboTipoAditivo.addItem('5', 'Reajuste');
             me.oCboTipoAditivo.addItem('7', 'Outros');
             me.oCboTipoAditivo.addItem('6', 'Alteração de Prazo de Vigência');
@@ -1026,7 +1040,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         /**
          *
          */
-        if(acordo){
+        if(acordo != null && acordo != ''){
             me.pesquisaAcordoByCodigo(acordo);
             me.lProvidencia = true;
         }else{
