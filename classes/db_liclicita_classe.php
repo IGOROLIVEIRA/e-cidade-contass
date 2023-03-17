@@ -714,8 +714,8 @@ class cl_liclicita
             return false;
         } else {
 
-            if (strlen($this->l20_objeto) < 15 and strlen($this->l20_objeto) > 500) {
-                $this->erro_msg = "Usuário: \\n\\n O campo Objeto deve ter no mínimo 15 caracteres e no máximo 500 \\n\\n";
+            if (strlen($this->l20_objeto) < 15 and strlen($this->l20_objeto) > 1000) {
+                $this->erro_msg = "Usuário: \\n\\n O campo Objeto deve ter no mínimo 15 caracteres e no máximo 1000 \\n\\n";
                 $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
@@ -1678,8 +1678,8 @@ class cl_liclicita
                 $this->erro_status = "0";
                 return false;
             } else {
-                if (strlen($this->l20_objeto) < 15 and strlen($this->l20_objeto) > 500) {
-                    $this->erro_msg = "Usuário: \\n\\n O campo Objeto deve ter no mínimo 15 caracteres e no máximo 500 \\n\\n";
+                if (strlen($this->l20_objeto) < 15 and strlen($this->l20_objeto) > 1000) {
+                    $this->erro_msg = "Usuário: \\n\\n O campo Objeto deve ter no mínimo 15 caracteres e no máximo 1000 \\n\\n";
                     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                     $this->erro_status = "0";
                     return false;

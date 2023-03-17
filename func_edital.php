@@ -57,68 +57,11 @@ $iAnoSessao = db_getsession("DB_anousu");
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
 <table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
-    <?php if(!$oGet->pendentes && !$oGet->module_licitacao):?>
+    
     <tr>
-        <td height="63" align="center" valign="top">
-            <table width="35%" border="0" align="center" cellspacing="0">
-                <form name="form2" method="post" action="" >
-                    <tr>
-                        <td width="4%" align="right" nowrap title="<?=$Tl20_codigo?>">
-                            <?=$Ll20_codigo?>
-                        </td>
-                        <td width="96%" align="left" nowrap>
-                            <?
-                            db_input("l20_codigo",10,$Il20_codigo,true,"text",4,"","chave_l20_codigo");
-                            ?>
-                        </td>
-                    </tr>
 
-                    <tr>
-                        <td width="4%" align="right" nowrap title="<?=$Tl20_edital?>">
-                            <?=$Ll20_edital?>
-                        </td>
-                        <td width="96%" align="left" nowrap>
-                            <?
-                            db_input("l20_edital",10,$Il20_edital,true,"text",4,"","chave_l20_edital");
-                            ?>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td width="4%" align="right" nowrap title="<?=$Tl20_numero?>">
-                            <?=$Ll20_numero?>
-                        </td>
-                        <td width="96%" align="left" nowrap>
-                            <?
-                            db_input("l20_numero",10,$Il20_numero,true,"text",4,"","chave_l20_numero");
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                    <tr>
-                        <td align="right">
-                            <b>Ano:</b>
-                        </td>
-                        <td>
-                            <?php
-                            db_input("l20_anousu", 10, "int", true, "text", 1, null, null, null, null, 4);
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="2" align="center">
-                            <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-                            <input name="limpar" type="reset" id="limpar" value="Limpar" >
-                            <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_liclicita.hide();">
-                        </td>
-                    </tr>
-                </form>
-            </table>
-        </td>
-    </tr>
-    <?php endif;?>
-    <tr>
         <td align="center" valign="top">
+        <h2 style="margin-bottom: 10px;margin-top: 10px;color:red;">Editais pendentes de envio</h2>
             <?
 
             if(!isset($pesquisa_chave)){
@@ -186,7 +129,7 @@ $iAnoSessao = db_getsession("DB_anousu");
                     ORDER BY l20_codigo";
 
                 $aRepassa = array();
-                db_lovrot($sql.' desc ',15,"()","",$funcao_js, null,'NoMe', $aRepassa, false);
+                db_lovrot($sql.' desc ',15,"","","", "",'NoMe', "", false);
             }
             ?>
         </td>
@@ -274,15 +217,9 @@ if(!isset($pesquisa_chave)){
                 let codigoLicitacao = document.getElementById(`I${idCampoInicial}`).innerText.trim();
                 document.getElementById(`${aTr[count].id}`).bgColor = 'red';
 
-                if(!module_licitacao){
-                    document.getElementById(`${aTr[count].id}`).onclick = (e) => {
-                        if(status == 'AGUARDANDO ENVIO'){
-                            js_OpenJanelaIframe('','db_iframe_dataenvio',`lic4_dataenvio.php?codigo=${codigoLicitacao}`,'Data de Envio - SICOM',true, null, 550, 250, 180);
-                        }
-                    }
-                }else{
+                
                     document.getElementById(`${aTr[count].id}`).style.pointerEvents = 'none';
-                }
+                
             }else{
 
                 /* Trecho que exibe as licitações pendentes no módulo Licitação */

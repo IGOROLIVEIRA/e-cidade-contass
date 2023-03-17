@@ -43,7 +43,8 @@ $cldecretopregao = new cl_decretopregao;
            $campos = "decretopregao.oid,decretopregao.*";
            }
         }
-	         $sql = $cldecretopregao->sql_query();
+           $dbwhere = " l201_instit = ". db_getsession("DB_instit");
+	         $sql = $cldecretopregao->sql_query(null,"*",null,$dbwhere);
         $repassa = array();
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{

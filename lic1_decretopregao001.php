@@ -11,7 +11,7 @@ $db_opcao = 1;
 $db_botao = true;
 if(isset($incluir)){
   db_inicio_transacao();
-  if($cldecretopregao->verifica_decreto_unico($l201_numdecreto, $l201_datadecreto, $l201_tipodecreto) == false) {
+  if($cldecretopregao->verifica_decreto_unico($l201_numdecreto, $l201_datadecreto, $l201_tipodecreto,$l201_instit) == false) {
   	$cldecretopregao->erro_status=0;
   	$cldecretopregao->erro_msg = "Só deve existir um decreto com o mesmo número, data e tipo";
   } else {

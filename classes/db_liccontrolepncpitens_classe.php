@@ -73,11 +73,12 @@ class cl_liccontrolepncpitens
     {
         $this->atualizacampos();
 
-        if ($this->l214_licitacao == null) {
-            $this->l214_licitacao == "null";
+        if ($this->l214_licitacao == null || $this->l214_licitacao == "") {
+            $this->l214_licitacao = "NULL";
         }
-        if ($this->l214_pcproc == null) {
-            $this->l214_pcproc == "null";
+
+        if ($this->l214_pcproc == null || $this->l214_pcproc == "") {
+            $this->l214_pcproc = "NULL";
         }
 
         if ($this->l214_ordem == null) {

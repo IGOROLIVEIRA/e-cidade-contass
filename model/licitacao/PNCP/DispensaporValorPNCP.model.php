@@ -51,10 +51,10 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
             $oDadosAPI->itensCompra[$key]->tipoBeneficioId             = $item->tipobeneficioid;
             $oDadosAPI->itensCompra[$key]->incentivoProdutivoBasico    = $item->incentivoprodutivobasico == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->descricao                   = utf8_encode($item->descricao);
-            $oDadosAPI->itensCompra[$key]->quantidade                  = $item->pc23_quant;
+            $oDadosAPI->itensCompra[$key]->quantidade                  = $item->pc11_quant;
             $oDadosAPI->itensCompra[$key]->unidadeMedida               = utf8_encode($item->unidademedida);
             $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
-            $vlrtotal = $item->pc23_quant * $item->valorunitarioestimado;
+            $vlrtotal = $item->pc11_quant * $item->valorunitarioestimado;
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
             $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
         }

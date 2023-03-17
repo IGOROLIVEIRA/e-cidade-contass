@@ -155,14 +155,6 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
 
           if (!isset($lNovoDetalhe)) {
 
-            if (!isset($lDepartamento)) {
-
-              if ($pc01_libcontratodepart == 't') {
-                $sDepartamentos = "( ac16_coddepto = ".db_getsession("DB_coddepto"). " or ac16_deptoresponsavel = ".db_getsession("DB_coddepto")." )";
-                $sWhere .= " and {$sDepartamentos} ";
-              }
-              
-            }
             if($pc01_liberaautorizacao <> 't') {
               if (isset($iTipoFiltro)) {
                 $sWhere .= " and ac16_acordosituacao in ({$iTipoFiltro})";
