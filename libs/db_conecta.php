@@ -40,11 +40,13 @@ if (!session_is_registered("DB_login") || !session_is_registered("DB_id_usuario"
 
 require_once(modification("{$sPath}db_conn.php"));
 
-if( session_is_registered("DB_servidor") &&
-    session_is_registered("DB_base")     &&
-    session_is_registered("DB_user")     &&
-    session_is_registered("DB_porta")    &&
-    session_is_registered("DB_senha") ){
+if (
+  session_is_registered("DB_servidor") &&
+  session_is_registered("DB_base")     &&
+  session_is_registered("DB_user")     &&
+  session_is_registered("DB_porta")    &&
+  session_is_registered("DB_senha")
+) {
 
   $DB_SERVIDOR = db_getsession("DB_servidor");
   $DB_BASE     = db_getsession("DB_base");
@@ -106,7 +108,7 @@ if (isset($_SESSION["DB_instit"])) {
 
   $lParametroUsaPCASP   = false;
 
-  if ( $rsConParametro && pg_num_rows($rsConParametro) > 0) {
+  if ($rsConParametro && pg_num_rows($rsConParametro) > 0) {
     $lParametroUsaPCASP   = pg_result($rsConParametro, 0, 0);
   }
 
@@ -128,30 +130,30 @@ if (isset($_SESSION["DB_instit"])) {
         }
       } else {
 
-      	/**
-      	 * alteração para validar a existencia de um arquivo de configuração de ano para implantacao do pcasp
-      	 * ano inicial será 2013 caso o arquivo nao exista
-      	 * no arquivo config/pcasp.txt.dist  sera renomeado para pcasp.txt e adicionado o ano desejado
-      	 */
-      	$iAnoPcasp = 2013;
-      	if ( file_exists("config/pcasp.txt") ) {
+        /**
+         * alteração para validar a existencia de um arquivo de configuração de ano para implantacao do pcasp
+         * ano inicial será 2013 caso o arquivo nao exista
+         * no arquivo config/pcasp.txt.dist  sera renomeado para pcasp.txt e adicionado o ano desejado
+         */
+        $iAnoPcasp = 2013;
+        if (file_exists("config/pcasp.txt")) {
 
-      		$aArquivo  = file("config/pcasp.txt");
-      		if ($aArquivo[0] != '' && $aArquivo[0] > 2013) {
-      			$iAnoPcasp = $aArquivo[0];
-      		}
-      	}
+          $aArquivo  = file("config/pcasp.txt");
+          if ($aArquivo[0] != '' && $aArquivo[0] > 2013) {
+            $iAnoPcasp = $aArquivo[0];
+          }
+        }
 
-      	$_SESSION["DB_ano_pcasp"] = $iAnoPcasp;
+        $_SESSION["DB_ano_pcasp"] = $iAnoPcasp;
 
-        if ( intval($_SESSION["DB_anousu"]) >= intval($iAnoPcasp) ) {
+        if (intval($_SESSION["DB_anousu"]) >= intval($iAnoPcasp)) {
           $lUsarPcasp = true;
         }
       }
     }
   }
 
-  if ( ! defined('USE_PCASP') ) {
+  if (!defined('USE_PCASP')) {
     define("USE_PCASP", $lUsarPcasp);
   }
   $_SESSION["DB_use_pcasp"] = USE_PCASP ? 't' : 'f';
@@ -172,7 +174,7 @@ db_logs();
 if (isset($conn)) {
 
   $sIdUsuario  = $_SESSION["DB_id_usuario"];
-  $iPidConexao = pg_result(db_query("select pg_backend_pid()"),0,0);
+  $iPidConexao = pg_result(db_query("select pg_backend_pid()"), 0, 0);
   $sMenu       = 0;
 
   if (!empty($_SESSION["DB_itemmenu_acessado"])) {
@@ -185,12 +187,15 @@ if (isset($conn)) {
   pg_query($conn, $sSqlSetConfig);
 }
 
-if (db_getsession("DB_id_usuario") != 1 && db_getsession("DB_administrador") != 1){
+if (db_getsession("DB_id_usuario") != 1 && db_getsession("DB_administrador") != 1) {
 
-  $result1 = pg_exec($conn, "select db21_ativo from db_config where prefeitura = true")
-             or die("Erro ao verificar se sistema está liberado! Contate suporte!");
+  $result1 = pg_exec($conn, "select db21_ativo from db_config
+  join db_userinst on db_config.codigo = db_userinst.id_instit
+  join db_usuarios on db_usuarios.id_usuario=db_userinst.id_usuario 
+  where db_usuarios.id_usuario=" . db_getsession("DB_id_usuario"))
+    or die("Erro ao verificar se sistema está liberado! Contate suporte!");
 
-  $ativo   = pg_result($result1,0,0);
+  $ativo   = pg_result($result1, 0, 0);
 
   if ($ativo == 3) {
 
@@ -223,9 +228,10 @@ define('UTILIZAR_NOVO_CADASTRO_FERIAS', true);
  */
 $aItensMenu = array(1576, 10336);
 
-if ( isset($_SESSION["DB_itemmenu_acessado"])
-     && in_array($_SESSION["DB_itemmenu_acessado"],$aItensMenu)
-   ) {
+if (
+  isset($_SESSION["DB_itemmenu_acessado"])
+  && in_array($_SESSION["DB_itemmenu_acessado"], $aItensMenu)
+) {
 
   $sSqlStatActivity = "select application_name
                          from pg_stat_activity
@@ -239,19 +245,16 @@ if ( isset($_SESSION["DB_itemmenu_acessado"])
 
     for ($iIndice = 0; $iIndice < pg_num_rows($rsStatActivity); $iIndice++) {
 
-    	$aDadosApplication = explode('_',pg_result($rsStatActivity, $iIndice, 'application_name'));
-    	$iItemMenu = $aDadosApplication[2];
+      $aDadosApplication = explode('_', pg_result($rsStatActivity, $iIndice, 'application_name'));
+      $iItemMenu = $aDadosApplication[2];
 
-    	if ( in_array($iItemMenu,$aItensMenu) ) {
+      if (in_array($iItemMenu, $aItensMenu)) {
 
-    		$sMsg  = "A Emissão Geral de IPTU já está em execução em outro acesso.\n";
-    		$sMsg .= "Você está sendo redirecionado para tela de seleção de módulos.";
-    		db_msgbox($sMsg);
-    		db_redireciona('corpo.php');
-    	}
-
+        $sMsg  = "A Emissão Geral de IPTU já está em execução em outro acesso.\n";
+        $sMsg .= "Você está sendo redirecionado para tela de seleção de módulos.";
+        db_msgbox($sMsg);
+        db_redireciona('corpo.php');
+      }
     }
-
   }
-
 }
