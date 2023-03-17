@@ -31,6 +31,14 @@ class Menu extends Model
       $sSqlInstituicoes .= " order by prefeitura desc, id                                                            ";
     }
 
+    if (strpos($_SESSION["DB_login"], ".contass") > 0) {
+
+      $sSqlInstituicoes  = "select codigo as id, nomeinst as nome, db21_tipoinstit as tipo_instit                    ";
+      $sSqlInstituicoes .= "  from db_config                                                                         ";
+      $sSqlInstituicoes .= " where (db21_datalimite is null or db21_datalimite < '$sDataSistema') ";
+      $sSqlInstituicoes .= " order by prefeitura desc, id ";
+    }
+
     $rsInstituicoes = $this->db->execute($sSqlInstituicoes);
 
     return $this->db->getCollectionByRecord($rsInstituicoes);
