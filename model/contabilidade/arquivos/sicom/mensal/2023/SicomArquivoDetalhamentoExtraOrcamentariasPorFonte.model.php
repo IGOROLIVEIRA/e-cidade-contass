@@ -670,10 +670,14 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
 
         $aExt20 = $this->lancamentosGenericos($aExt20);
 
-        if($this->sDataFinal['5'] . $this->sDataFinal['6'] = '01' && db_getsession("DB_anousu") == 2023){
+
+        if($this->sDataFinal['5'] . $this->sDataFinal['6'] == '01' && db_getsession("DB_anousu") == 2023){
             $aExt20 = $this->lancamentosGenericosTransferenciaSaldoFonte($aExt20);
         }
 
+        if($this->sDataFinal['5'] . $this->sDataFinal['6'] != '01' && db_getsession("DB_anousu") == 2023){
+            $aExt20 = $this->lancamentosGenericosTransferenciaSaldoFontePosJaneiro($aExt20);
+        }
 
         ksort($aExt20);
         foreach ($aExt20 as $oExt20) {
@@ -681,7 +685,7 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
             $cExt   = new cl_ext202023();
 
             $cExt->si165_tiporegistro          = $oExt20->si165_tiporegistro;
-            $cExt->si165_codorgao                = $oExt20->si165_codorgao;
+            $cExt->si165_codorgao              = $oExt20->si165_codorgao;
             $cExt->si165_codext                = $oExt20->si165_codext;
             $cExt->si165_codfontrecursos       = $oExt20->si165_codfontrecursos;
             $cExt->si165_vlsaldoanteriorfonte  = abs($oExt20->si165_vlsaldoanteriorfonte);
@@ -1036,6 +1040,51 @@ class SicomArquivoDetalhamentoExtraOrcamentariasPorFonte extends SicomArquivoBas
                 }
             }
 
+        }
+        return $aExt20Novo;
+    }
+
+    public function lancamentosGenericosTransferenciaSaldoFontePosJaneiro($aExt20)
+    {
+        $aExt20Novo = array();
+        $iMes = (int)($this->sDataFinal['5'] . $this->sDataFinal['6']) - 1;
+
+        foreach($aExt20 as $oExt20){
+
+            $oFonteNova = $oExt20->si165_codfontrecursos;
+            if($oExt20->si165_codfontrecursos < 999){
+                $oFonteNova = substr($this->oDeParaRecurso->getDePara($oExt20->si165_codfontrecursos), 0, 7);
+            }
+
+            $nVlSaldoAnteriorFonte = 0;
+            $sNatSaldoAnteriorFonte = 'C';
+            $sSaldoAnterior  = "select si165_vlsaldoatualfonte, si165_natsaldoatualfonte ";
+            $sSaldoAnterior .= " from ext202023 where si165_mes={$iMes} and si165_instit={$oExt20->si165_instit} ";
+            $sSaldoAnterior .= " and si165_codext={$oExt20->si165_codext} and si165_codfontrecursos={$oFonteNova} ";
+            $rsSaldoAnterior = db_query($sSaldoAnterior);
+            $oSaldoAnterior  = db_utils::fieldsMemory($rsSaldoAnterior, 0);
+
+            if(!empty($oSaldoAnterior)){
+                $nVlSaldoAnteriorFonte = $oSaldoAnterior->si165_natsaldoatualfonte == 'D' ? $oSaldoAnterior->si165_vlsaldoatualfonte : ($oSaldoAnterior->si165_vlsaldoatualfonte * -1);
+                $sNatSaldoAnteriorFonte = $oSaldoAnterior->si165_natsaldoatualfonte;
+            }
+            $cExt20   = new stdClass();
+            $cExt20->si165_tiporegistro          = $oExt20->si165_tiporegistro;
+            $cExt20->si165_codorgao              = $oExt20->si165_codorgao;
+            $cExt20->si165_codext                = $oExt20->si165_codext;
+            $cExt20->si165_codfontrecursos       = $oFonteNova;
+            $cExt20->si165_exerciciocompdevo     = $oExt20->si165_exerciciocompdevo;
+            $cExt20->si165_vlsaldoanteriorfonte  = $nVlSaldoAnteriorFonte;
+            $cExt20->si165_natsaldoanteriorfonte = $sNatSaldoAnteriorFonte;
+            $cExt20->si165_totalcreditos         = $oExt20->si165_totalcreditos;
+            $cExt20->si165_totaldebitos          = $oExt20->si165_totaldebitos;
+            $cExt20->si165_vlsaldoatualfonte     = $cExt20->si165_vlsaldoanteriorfonte + $cExt20->si165_totaldebitos - $cExt20->si165_totalcreditos;
+            $cExt20->si165_natsaldoatualfonte    = $cExt20->si165_vlsaldoatualfonte > 0 ? 'D' : 'C';
+            $cExt20->si165_mes                   = $oExt20->si165_mes;
+            $cExt20->si165_instit                = $oExt20->si165_instit;
+            $cExt20->ext30                       = $oExt20->ext30;
+            $hashNovo = $oExt20->si165_tiporegistro.$oExt20->si165_codorgao.$oExt20->si165_codext.$oFonteNova;
+            $aExt20Novo[$hashNovo]                        = $cExt20;
         }
         return $aExt20Novo;
     }
