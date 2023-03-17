@@ -38,7 +38,7 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         $oDadosAPI->objetoCompra                    = utf8_encode($oDado->objetocompra);
         $oDadosAPI->informacaoComplementar          = $oDado->informacaocomplementar;
         $oDadosAPI->srp                             = $oDado->srp == 'f' ? 'false' : 'true';
-        $oDadosAPI->orcamentoSigiloso               = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';
+        //$oDadosAPI->orcamentoSigiloso               = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';
         $oDadosAPI->dataAberturaProposta            = $this->formatDate($oDado->dataaberturaproposta);
         $oDadosAPI->dataEncerramentoProposta        = $this->formatDate($oDado->dataencerramentoproposta);
         $oDadosAPI->amparoLegalId                   = $oDado->amparolegalid;
@@ -48,6 +48,7 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         foreach ($oDado->itensCompra as $key => $item) {
             $oDadosAPI->itensCompra[$key]->numeroItem                  = $item->numeroitem;
             $oDadosAPI->itensCompra[$key]->materialOuServico           = $item->materialouservico;
+            $oDadosAPI->itensCompra[$key]->orcamentoSigiloso           = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->tipoBeneficioId             = $item->tipobeneficioid;
             $oDadosAPI->itensCompra[$key]->incentivoProdutivoBasico    = $item->incentivoprodutivobasico == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->descricao                   = utf8_encode($item->descricao);

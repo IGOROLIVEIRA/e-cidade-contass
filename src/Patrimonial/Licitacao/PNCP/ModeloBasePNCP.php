@@ -101,7 +101,7 @@ abstract class ModeloBasePNCP
         $header['header']  = $content;
 
         $aHeader = explode(':', $content);
-        $token = substr($aHeader[5], 1, -24);
+        $token = substr($aHeader[5], 1, -9);
 
         return $token;
     }

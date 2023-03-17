@@ -184,7 +184,11 @@ class cl_pcproc
       $this->pc80_numdispensa = "null";
     }
 
-    if ($this->pc80_orcsigiloso == null && $this->pc80_dispvalor != "null") {
+    if ($this->pc80_dispvalor == "f") {
+      $this->pc80_numdispensa = 0;
+    }
+
+    if ($this->pc80_orcsigiloso == null && $this->pc80_dispvalor != "null" && $this->pc80_dispvalor == "t") {
       $this->erro_sql = " Campo orcamento sigiloso nao Informado.";
       $this->erro_campo = "pc80_depto";
       $this->erro_banco = "";
@@ -193,7 +197,7 @@ class cl_pcproc
       $this->erro_status = "0";
       return false;
     }
-    if ($this->pc80_subcontratacao == null && $this->pc80_dispvalor != "null") {
+    if ($this->pc80_subcontratacao == null && $this->pc80_dispvalor != "null" && $this->pc80_dispvalor == "t") {
       $this->erro_sql = " Campo subcontratacao nao Informado.";
       $this->erro_campo = "pc80_depto";
       $this->erro_banco = "";

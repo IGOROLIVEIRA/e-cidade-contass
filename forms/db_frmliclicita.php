@@ -2205,7 +2205,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById(valor.name).value = qnt;
         }
 
-        quantidade = 499;
+        quantidade = 999;
         total = qnt.length;
 
         if (total <= quantidade) {
