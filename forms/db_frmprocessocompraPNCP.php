@@ -124,16 +124,6 @@ $clrotulo->label("descrdepto");
                     </tr>
                     <tr>
                         <td>
-                            <label class="bold">Nº da Dispensa:</label>
-                        </td>
-                        <td>
-                            <?php
-                            db_input('pc80_numdispensa', 37, $Ipc80_numdispensa, true, 'text', 1);
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
                             <label class="bold">Dispensa por valor:</label>
                         </td>
                         <td>
@@ -144,11 +134,21 @@ $clrotulo->label("descrdepto");
                                 'f' => 'Não',
                             );
 
-                            db_select('pc80_dispvalor', $aDispensa, true, '', 'style="width:50%"');
+                            db_select('pc80_dispvalor', $aDispensa, true, '', 'onChange=js_verificadispensa();');
                             ?>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="dispensaporvalor1" style="display:none">
+                        <td>
+                            <label class="bold">Nº da Dispensa:</label>
+                        </td>
+                        <td>
+                            <?php
+                            db_input('pc80_numdispensa', 37, $Ipc80_numdispensa, true, 'text', 1);
+                            ?>
+                        </td>
+                    </tr>
+                    <tr id="dispensaporvalor2" style="display:none">
                         <td>
                             <label class="bold">Orc. Sigiloso:</label>
                         </td>
@@ -164,7 +164,7 @@ $clrotulo->label("descrdepto");
                             ?>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="dispensaporvalor3" style="display:none">
                         <td>
                             <label class="bold">Subcontratação:</label>
                         </td>
@@ -180,7 +180,7 @@ $clrotulo->label("descrdepto");
                             ?>
                         </td>
                     </tr>
-                    <tr>
+                    <tr id="dispensaporvalor4" style="display:none">
                         <td>
                             <label class="bold">Amparo Legal:</label>
                         </td>
@@ -291,6 +291,22 @@ $clrotulo->label("descrdepto");
 </form>
 
 <script>
+    function js_verificadispensa() {
+        var dispensavalor = document.getElementById('pc80_dispvalor').value;
+        console.log(dispensavalor);
+        if (dispensavalor == "t") {
+            document.getElementById('dispensaporvalor1').style.display = '';
+            document.getElementById('dispensaporvalor2').style.display = '';
+            document.getElementById('dispensaporvalor3').style.display = '';
+            document.getElementById('dispensaporvalor4').style.display = '';
+        } else {
+            document.getElementById('dispensaporvalor1').style.display = 'none';
+            document.getElementById('dispensaporvalor2').style.display = 'none';
+            document.getElementById('dispensaporvalor3').style.display = 'none';
+            document.getElementById('dispensaporvalor4').style.display = 'none';
+        }
+    }
+
     (function(exports) {
 
         const MENSAGENS = 'patrimonial.compras.com4_processocompra.';

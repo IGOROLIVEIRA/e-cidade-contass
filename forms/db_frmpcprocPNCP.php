@@ -46,7 +46,11 @@ $val = false;
     }
 
     #pc80_numdispensa {
-        width: 115px;
+        width: 112px;
+    }
+
+    #pc80_dispvalor {
+        width: 112px;
     }
 </style>
 <form name="form1" method="post" action="">
@@ -182,6 +186,8 @@ $val = false;
                         db_select('pc80_tipoprocesso', $aTipos, true, '', 'style="width:50%"');
                         ?>
                     </td>
+                </tr>
+                <tr>
                     <td align="left">
                         <label class="bold">Critério de Adjudicação:</label>
                     </td>
@@ -202,17 +208,6 @@ $val = false;
                 </tr>
                 <tr>
                     <td>
-                        <label class="bold">Nº da Dispensa:</label>
-                    </td>
-                    <td>
-                        <?php
-                        $resultUltimaDispensa = $clpcproc->sql_record($clpcproc->sql_query(null, "max(pc80_numdispensa) + 1  AS pc80_numdispensa", null, "instit = " . db_getsession('DB_instit')));
-                        db_fieldsmemory($resultUltimaDispensa, 0);
-
-                        db_input('pc80_numdispensa', 40, $Ipc80_numdispensa, true, 'text', $db_opcao);
-                        ?>
-                    </td>
-                    <td>
                         <label class="bold">Dispensa por valor:</label>
                     </td>
                     <td>
@@ -223,11 +218,24 @@ $val = false;
                             'f' => 'Não',
                         );
 
-                        db_select('pc80_dispvalor', $aDispensa, true, '', 'style="width:50%"');
+                        db_select('pc80_dispvalor', $aDispensa, true, '', 'onChange=js_verificadispensa();');
                         ?>
                     </td>
                 </tr>
-                <tr>
+                <tr id="dispensaporvalor1" style="display:none">
+                    <td>
+                        <label class="bold">Nº da Dispensa:</label>
+                    </td>
+                    <td>
+                        <?php
+                        $resultUltimaDispensa = $clpcproc->sql_record($clpcproc->sql_query(null, "max(pc80_numdispensa) + 1  AS pc80_numdispensa", null, "instit = " . db_getsession('DB_instit')));
+                        db_fieldsmemory($resultUltimaDispensa, 0);
+
+                        db_input('pc80_numdispensa', 40, $Ipc80_numdispensa, true, 'text', $db_opcao);
+                        ?>
+                    </td>
+                </tr>
+                <tr id="dispensaporvalor2" style="display:none">
                     <td>
                         <label class="bold">Orc. Sigiloso:</label>
                     </td>
@@ -242,6 +250,8 @@ $val = false;
                         db_select('pc80_orcsigiloso', $aOrc, true, '', 'style="width:50%"');
                         ?>
                     </td>
+                </tr>
+                <tr id="dispensaporvalor4" style="display:none">
                     <td>
                         <label class="bold">Subcontratação:</label>
                     </td>
@@ -258,7 +268,7 @@ $val = false;
                     </td>
                 </tr>
 
-                <tr>
+                <tr id="dispensaporvalor3" style="display:none">
                     <td>
                         <label class="bold">Amparo Legal:</label>
                     </td>
@@ -457,5 +467,19 @@ $val = false;
         var sUrlPendencia = "com4_cadpendencias002.php?pc10_numero=" + iCodigoSolicitacao + "&cadastroprocessodecompras=true";
         var sTituloJanelaIframe = "Cadastro de Pendência da Solicitação: " + iCodigoSolicitacao;
         js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_cadpendencia', sUrlPendencia, sTituloJanelaIframe, true);
+    }
+
+    function js_verificadispensa() {
+        if ($F('pc80_dispvalor') == "t") {
+            $('dispensaporvalor1').style.display = '';
+            $('dispensaporvalor2').style.display = '';
+            $('dispensaporvalor3').style.display = '';
+            $('dispensaporvalor4').style.display = '';
+        } else {
+            $('dispensaporvalor1').style.display = 'none';
+            $('dispensaporvalor2').style.display = 'none';
+            $('dispensaporvalor3').style.display = 'none';
+            $('dispensaporvalor4').style.display = 'none';
+        }
     }
 </script>
