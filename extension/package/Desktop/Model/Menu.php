@@ -1,14 +1,17 @@
 <?php
+
 namespace ECidade\Package\Desktop\Model;
 
 use \ECidade\V3\Extension\Model;
 use \ECidade\V3\Extension\Request;
 
-class Menu extends Model {
+class Menu extends Model
+{
 
   private $sOrdenacaoMenu = null;
 
-  public function getInstituicoes() {
+  public function getInstituicoes()
+  {
 
     $sDataSistema = date('Y-m-d', !empty($_SESSION["DB_datausu"]) ? $_SESSION["DB_datausu"] : time());
 
@@ -33,7 +36,8 @@ class Menu extends Model {
     return $this->db->getCollectionByRecord($rsInstituicoes);
   }
 
-  public function getAreas($iInstitId) {
+  public function getAreas($iInstitId)
+  {
 
     $iIdUsuario = $_SESSION['DB_id_usuario'];
     $iAno       = isset($_SESSION['DB_datausu']) ? date('Y', $_SESSION['DB_datausu']) : date('Y');
@@ -94,7 +98,7 @@ class Menu extends Model {
     $sSqlAreas .= "        order by nome_modulo ";
     $sSqlAreas .= "                        ) order by at25_descr ";
 
-    if ( $_SESSION['DB_id_usuario'] == "1" || $_SESSION['DB_administrador'] == 1 ) {
+    if ($_SESSION['DB_id_usuario'] == "1" || $_SESSION['DB_administrador'] == 1) {
       $sSqlAreas  = "select distinct at26_sequencial as id, at25_descr as nome         ";
       $sSqlAreas .= "  from atendcadarea                                               ";
       $sSqlAreas .= "       inner join atendcadareamod on at26_sequencial=at26_codarea ";
@@ -105,7 +109,8 @@ class Menu extends Model {
     return $this->db->getCollectionByRecord($rsAreas);
   }
 
-  public function getModulos($iInstitId, $iAreaId) {
+  public function getModulos($iInstitId, $iAreaId)
+  {
 
     $iIdUsuario = $_SESSION['DB_id_usuario'];
     $iAno       = isset($_SESSION['DB_datausu']) ? date('Y', $_SESSION['DB_datausu']) : date('Y');
@@ -159,7 +164,7 @@ class Menu extends Model {
     $sSqlModulos .= "        where at26_codarea = $iAreaId                                                                    ";
     $sSqlModulos .= "        order by descr_modulo                                                                             ";
 
-    if (  $_SESSION['DB_id_usuario'] == "1" || $_SESSION['DB_administrador'] == 1 ) {
+    if ($_SESSION['DB_id_usuario'] == "1" || $_SESSION['DB_administrador'] == 1) {
 
       $sSqlModulos  = "select distinct  db_modulos.id_item as id,                                     ";
       $sSqlModulos .= "       db_modulos.descr_modulo as nome                                         ";
@@ -170,7 +175,6 @@ class Menu extends Model {
       $sSqlModulos .= "       inner join atendcadarea    on atendcadarea.at26_sequencial = atendcadareamod.at26_codarea ";
       $sSqlModulos .= " where libcliente is true and at26_codarea = $iAreaId                          ";
       $sSqlModulos .= " order by db_modulos.descr_modulo                                              ";
-
     }
 
     $rsModulos = $this->db->execute($sSqlModulos);
@@ -185,18 +189,19 @@ class Menu extends Model {
    * @param integer $iItemMenuId
    * @return array
    */
-  public function getItensMenu($iInstitId, $iAreaId, $iModuloId, $iItemMenuId = null) {
+  public function getItensMenu($iInstitId, $iAreaId, $iModuloId, $iItemMenuId = null)
+  {
 
     $iIdUsuario = $_SESSION['DB_id_usuario'];
     $iAno       = isset($_SESSION['DB_datausu']) ? date('Y', $_SESSION['DB_datausu']) : date('Y');
 
-    if ( !$iItemMenuId ) {
-        $iItemMenuId = $iModuloId;
+    if (!$iItemMenuId) {
+      $iItemMenuId = $iModuloId;
     }
 
     $aItensMenu = array();
 
-    $sCampos = "m.id_item as id_pai, m.id_item_filho as id, i.descricao as nome, i.funcao as action, menusequencia";    
+    $sCampos = "m.id_item as id_pai, m.id_item_filho as id, i.descricao as nome, i.funcao as action, menusequencia";
 
     $sSqlItensMenu  = " select $sCampos";
     $sSqlItensMenu .= "  from db_menu m                                                         ";
@@ -228,8 +233,8 @@ class Menu extends Model {
     $sSqlItensMenu .= "   and libcliente is true                                                ";
     $sSqlItensMenu .= "   and m.id_item = $iItemMenuId                                          ";
     $sSqlItensMenu .= "   and p.id_usuario = h.id_perfil                                        ";
-        
-    if ($iIdUsuario == 1 || $_SESSION['DB_administrador'] == 1 ) {
+
+    if ($iIdUsuario == 1 || $_SESSION['DB_administrador'] == 1) {
 
       $sSqlItensMenu  = " select $sCampos";
       $sSqlItensMenu .= "  from db_menu m                                                ";
@@ -240,11 +245,11 @@ class Menu extends Model {
       $sSqlItensMenu .= "   and m.id_item = $iItemMenuId                                 ";
     }
 
-    if ( !$this->sOrdenacaoMenu ) {
+    if (!$this->sOrdenacaoMenu) {
 
       require_once(modification(ECIDADE_PATH . 'model/configuracao/PreferenciaUsuario.model.php'));
       $oPreferencias = unserialize(base64_decode($_SESSION['DB_preferencias_usuario']));
-      $this->sOrdenacaoMenu = ( $oPreferencias->getOrdenacao() == "alfabetico" ? "nome" : "menusequencia" );
+      $this->sOrdenacaoMenu = ($oPreferencias->getOrdenacao() == "alfabetico" ? "nome" : "menusequencia");
     }
 
     $sSqlItensMenu .= "order by " . $this->sOrdenacaoMenu;
@@ -257,8 +262,8 @@ class Menu extends Model {
     $aItensMenu = $this->db->getCollectionByRecord($rsItensMenu);
     foreach ($aItensMenu as &$aItemMenu) {
 
-        $aItemMenu['nome'] = $aItemMenu['nome'];
-        $aItemMenu['filhos'] = $this->getItensMenu($iInstitId, $iAreaId, $iModuloId, $aItemMenu['id']);
+      $aItemMenu['nome'] = $aItemMenu['nome'];
+      $aItemMenu['filhos'] = $this->getItensMenu($iInstitId, $iAreaId, $iModuloId, $aItemMenu['id']);
     }
 
     return $aItensMenu;
@@ -268,7 +273,8 @@ class Menu extends Model {
    * @param integer $instit
    * @param array
    */
-  public function buildMenu($instit) {
+  public function buildMenu($instit)
+  {
 
     require_once(modification(ECIDADE_PATH . 'std/DBCache.php'));
 
@@ -299,11 +305,10 @@ class Menu extends Model {
           'action' => null,
         );
 
-        foreach($this->getItensMenu($instit, $area['id'], $modulo['id']) as $menu) {
+        foreach ($this->getItensMenu($instit, $area['id'], $modulo['id']) as $menu) {
           $this->buildMenuChildren(array($menu), $data, $menus);
         }
       }
-
     }
 
     \DBCache::write($cachePath, $menus);
@@ -315,7 +320,8 @@ class Menu extends Model {
    * @param array $menu
    * @return array
    */
-  public function buildMenuChildren(array $data, $menu, &$menus) {
+  public function buildMenuChildren(array $data, $menu, &$menus)
+  {
 
     foreach ($data as $item) {
 
@@ -342,19 +348,20 @@ class Menu extends Model {
    * @param string $path
    * @return integer | boolean
    */
-  public function getMenuArquivo(Request $request, $path) {
+  public function getMenuArquivo(Request $request, $path)
+  {
 
     $file = trim(addslashes(basename($path)));
     $where = null;
 
-    if ($request->session()->has("DB_modulo")){
-      $where =  "and modulo = ".$request->session()->get("DB_modulo");
+    if ($request->session()->has("DB_modulo")) {
+      $where =  "and modulo = " . $request->session()->get("DB_modulo");
     }
 
     $sql = "select db_itensmenu.id_item
                     from db_itensmenu
               inner join db_menu  on  db_menu.id_item_filho = db_itensmenu.id_item
-                    where trim(funcao) = '".$file."'
+                    where trim(funcao) = '" . $file . "'
               $where limit 1 ";
 
     $result = $this->db->execute($sql);
@@ -370,7 +377,8 @@ class Menu extends Model {
    * @param integer $id
    * @return string
    */
-  public function getBreadcrumbMenu($id) {
+  public function getBreadcrumbMenu($id)
+  {
 
     require_once(modification(ECIDADE_PATH . 'libs/db_stdlib.php'));
     return \DBMenu::getBreadcrumb($id);
@@ -382,7 +390,8 @@ class Menu extends Model {
    * @param integer $item
    * @return boolean
    */
-  public function getPermissaoMenu($ano, $modulo, $item) {
+  public function getPermissaoMenu($ano, $modulo, $item)
+  {
 
     require_once(modification(ECIDADE_PATH . 'libs/db_stdlib.php'));
     return db_permissaomenu($ano, $modulo, $item) == 'true';
@@ -392,8 +401,8 @@ class Menu extends Model {
    * @param integer $ano
    * @retuern boolean
    */
-  public function getPermissaoAlterarData($ano) {
+  public function getPermissaoAlterarData($ano)
+  {
     return $this->getPermissaoMenu($ano, 1, 3896);
   }
-
 }
