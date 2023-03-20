@@ -556,7 +556,7 @@ pmjuramento:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.115 "cd /var/www/e-cidade && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.115 "cd /var/www/e-cidade && git pull origin ecidade_v3 && composer update && composer install "'
         - 'ssh -p22 contass@10.251.27.115 "cd /var/www/e-cidade && php deploy_git.php"'
     environment: production
     only:
@@ -566,7 +566,7 @@ ecidade_v3:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no info@10.251.27.113 "cd /var/www/e-cidade && git pull origin ecidade_v3  "'
+        - 'ssh -o StrictHostKeyChecking=no info@10.251.27.113 "cd /var/www/e-cidade && git pull origin ecidade_v3 && composer update && composer install  "'
         - 'ssh -p22 info@10.251.27.113 "cd /var/www/e-cidade && php deploy_git.php"'
     environment: production
     only:
@@ -576,17 +576,17 @@ pmburitizeiro:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.110 "cd /var/www/e-cidade && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.110 "cd /var/www/e-cidade && git pull origin ecidade_v3 && composer update && composer install "'
         - 'ssh -p22 contass@10.251.27.110 "cd /var/www/e-cidade && php deploy_git.php"'
     environment: production
     only:
-        - ecidade_v3 
+        - ecidade_v3
 
 pmmonteazul_v3:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.112 "cd /var/www/e-cidade && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.112 "cd /var/www/e-cidade && git pull origin ecidade_v3 && composer update && composer install "'
         - 'ssh -p22 contass@10.251.27.112 "cd /var/www/e-cidade && php deploy_git.php"'
     environment: production
     only:
@@ -596,7 +596,7 @@ pmsaogoncalodoriopreto:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.127 "cd /var/www/e-cidade && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.127 "cd /var/www/e-cidade && git pull origin ecidade_v3 && composer update && composer install "'
         - 'ssh -p22 contass@10.251.27.127 "cd /var/www/e-cidade && php deploy_git.php"'
     environment: production
     only:
@@ -606,7 +606,7 @@ pmsantafev3:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.124 "cd /var/www/e-cidade && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.124 "cd /var/www/e-cidade && git pull origin ecidade_v3 && composer update && composer install "'
         - 'ssh -p22 contass@10.251.27.124 "cd /var/www/e-cidade && php deploy_git.php"'
     environment: production
     only:
@@ -616,7 +616,7 @@ pmfranciscodumont:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no info@10.251.27.113 "cd /var/www/pmfranciscodumont && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no info@10.251.27.113 "cd /var/www/pmfranciscodumont && git pull origin ecidade_v3 && composer update && composer install "'
     environment: production
     only:
         - ecidade_v3
@@ -625,7 +625,7 @@ cismesf:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no info@10.251.27.113 "cd /var/www/cismesf && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no info@10.251.27.113 "cd /var/www/cismesf && git pull origin ecidade_v3 && composer update && composer install "'
     environment: production
     only:
         - ecidade_v3
@@ -634,7 +634,7 @@ cias:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no info@10.251.27.113 "cd /var/www/cias && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no info@10.251.27.113 "cd /var/www/cias && git pull origin ecidade_v3 && composer update && composer install "'
     environment: production
     only:
         - ecidade_v3
@@ -644,7 +644,7 @@ treinamentoconsorcio:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no info@10.251.27.113 "cd /var/www/treinamentoconsorcio && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no info@10.251.27.113 "cd /var/www/treinamentoconsorcio && git pull origin ecidade_v3 && composer update && composer install "'
     environment: production
     only:
         - ecidade_v3
@@ -653,7 +653,7 @@ pmmontalvaniav3:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.117 "cd /var/www/e-cidade && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.117 "cd /var/www/e-cidade && git pull origin ecidade_v3 && composer update && composer install "'
         - 'ssh -p22 contass@10.251.27.117 "cd /var/www/e-cidade && php deploy_git.php"'
     environment: production
     only:
@@ -663,7 +663,7 @@ pmpedrasdemariadacruzv3:
     stage: deploy
     script:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.121 "cd /var/www/e-cidade && git pull origin ecidade_v3 "'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.121 "cd /var/www/e-cidade && git pull origin ecidade_v3 && composer update && composer install "'
         - 'ssh -p22 contass@10.251.27.121 "cd /var/www/e-cidade && php deploy_git.php"'
     environment: production
     only:
