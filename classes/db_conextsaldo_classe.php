@@ -63,7 +63,7 @@ class cl_conextsaldo {
      }
    }
    // funcao para inclusao
-   function incluir ($ces01_sequencial){
+   function incluir ($ces01_sequencial=null){
       $this->atualizacampos();
      if($this->ces01_codcon == null ){
        $this->erro_sql = " Campo Plano de contas não informado.";
