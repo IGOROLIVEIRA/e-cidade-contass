@@ -120,7 +120,6 @@ $iAnoSessao = db_getsession("DB_anousu");
     novoAjax(params, function(e) {
       var oRetorno = JSON.parse(e.responseText);
       js_removeObj('div_aguarde');
-		console.log(oRetorno.sArquivoLog);
 	  if (oRetorno.sArquivoLog != '') {
 		$('retorno').innerHTML = "<b>Contas não implantadas: </b>"
 	  	$('retorno').innerHTML += "<a href='db_download.php?arquivo="+oRetorno.sArquivoLog+"'>"+oRetorno.sArquivoLog+"</a><br>";

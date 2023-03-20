@@ -280,6 +280,7 @@ try {
 		case "importSaldoCtbExtContaCorrenteDetalhe":
 
 			$iAnoUsu = db_getsession("DB_anousu");
+            $iInstit = db_getsession("DB_instit");
 
 			$sSqlConSaldoCtbExt = "	SELECT c.ces01_reduz AS reduzido,
 											c.ces01_fonte AS fonte,
@@ -299,7 +300,7 @@ try {
 									FROM conextsaldo AS c
 										INNER JOIN conplanoexe ON c62_reduz = c.ces01_reduz AND c62_anousu = c.ces01_anousu
 										INNER JOIN conplanoreduz ON c61_reduz = c.ces01_reduz AND c61_anousu = c.ces01_anousu
-									WHERE c.ces01_anousu = {$iAnoUsu}
+									WHERE c.ces01_anousu = {$iAnoUsu} and c61_instit = {$iInstit}
 											AND c.ces01_valor <> 0
 									UNION ALL
 									SELECT c.ces02_reduz AS reduzido,
@@ -320,16 +321,17 @@ try {
 									FROM conctbsaldo AS c
 										INNER JOIN conplanoexe ON c62_reduz = c.ces02_reduz AND c.ces02_anousu = c62_anousu
 										INNER JOIN conplanoreduz ON c61_reduz = c.ces02_reduz AND c61_anousu = c.ces02_anousu
-									WHERE c.ces02_anousu = {$iAnoUsu}
+									WHERE c.ces02_anousu = {$iAnoUsu} and c61_instit = {$iInstit}
 										AND c.ces02_valor <> 0";
 
 			$rsConSaldoCtbExt = db_query($sSqlConSaldoCtbExt);
 
-			if (pg_num_rows($rsConSaldoCtbExt) < 1) {
+            if (pg_num_rows($rsConSaldoCtbExt) < 1) {
 				throw new DBException(urlencode('ERRO - [ 2 ] - Nenhum registro encontrado nas tabelas conctbsaldo/conextsaldo!'));
 			}
 
 			db_inicio_transacao();
+
 
 			$sLogContasNaoImplantadas = '';
 
@@ -451,7 +453,7 @@ function salvarSaldoSICOMAM( $oSaldoCtb ){
 
       }else{
         if($oSaldoCtb->si96_vlsaldofinalfonte <> 0){
-            $clconextsaldo->incluir($ces01_sequencial);
+            $clconextsaldo->incluir();
 
           if($clconextsaldo->erro_status == 0){
             throw new DBException("ERRO 14 " . $clconextsaldo->erro_msg);
@@ -484,13 +486,34 @@ function salvarSaldoSICOMAM( $oSaldoCtb ){
 
       }else{
         if($oSaldoCtb->si96_vlsaldofinalfonte <> 0){
-           $clconctbsaldo->incluir($ces02_sequencial);
+           $clconctbsaldo->incluir();
            if($clconctbsaldo->erro_status == 0){
               throw new DBException("ERRO 16 " . $clconctbsaldo->erro_msg);
            }
         }
       }
     }
+}
+function excluirSaldo ($iReduzido, $iContaCorrente) {
+      /**
+       * Remove todos os registros existentes na contacorrentesaldo para o ano atual e mes 0 do contacorrentedetalhe em questao
+       */
+      $iAnoUsu = db_getsession("DB_anousu");
+      $iInstit = db_getsession("DB_instit");
+      $oDaoContaCorrenteDetalhe = new cl_contacorrentedetalhe();
+      $sWhereExcluirTodos  = " c19_reduz = {$iReduzido} and c19_contacorrente = {$iContaCorrente} and c19_instit = {$iInstit}";
+      $sSqlExcluirTodos = $oDaoContaCorrenteDetalhe->sql_query_file(null, "c19_sequencial", null, $sWhereExcluirTodos);
+      $aContaCorrente = db_utils::getCollectionByRecord($oDaoContaCorrenteDetalhe->sql_record($sSqlExcluirTodos));
+      foreach($aContaCorrente as $oContaCorrente){
+        $oDaoContaCorrenteSaldo = new cl_contacorrentesaldo();
+        $sWhereExcluir  = " c29_anousu = {$iAnoUsu} and c29_mesusu = 0 and c29_contacorrentedetalhe = {$oContaCorrente->c19_sequencial} ";
+        $oDaoContaCorrenteSaldo->excluir(null, $sWhereExcluir);
+
+        if ($oDaoContaCorrenteSaldo->erro_status == "0") {
+            throw new DBException(urlencode("ERRO [ 22 ] - Excluindo Registros - " . $oDaoContaCorrenteSaldo->erro_msg ."<br>"));
+        }
+      }
+
 }
 function salvarSaldo($saldo, $valorSaldo){
 
@@ -500,16 +523,7 @@ function salvarSaldo($saldo, $valorSaldo){
 
   $iAnoUsu = db_getsession("DB_anousu");
 
-      /**
-       * Remove os registros existentes na contacorrentesaldo para o ano atual e mes 0 do contacorrentedetalhe em questao
-       */
-      $oDaoContaCorrenteSaldo = new cl_contacorrentesaldo();
-      $sWhereExcluir = "c29_anousu = {$iAnoUsu} and c29_mesusu = 0 and c29_contacorrentedetalhe = {$saldo->c19_sequencial}";
-      $oDaoContaCorrenteSaldo->excluir(null, $sWhereExcluir);
-
-      if ($oDaoContaCorrenteSaldo->erro_status == "0") {
-          throw new DBException(urlencode("ERRO [ 22 ] - Excluindo Registros - " . $oDaoContaCorrenteSaldo->erro_msg ."<br>"));
-      }
+      excluirSaldo($saldo->c19_reduz, $saldo->c19_contacorrente);
 
       if ($valorSaldo <> 0) {
 
@@ -525,12 +539,13 @@ function salvarSaldo($saldo, $valorSaldo){
 
 
           /*
-           * modificação para reajustar valores, basicamente devemos verificar se
-           * ja foi feita implantação na contacorrentesaldo pelo detalhe em questão
-           * se retornar registro, para o detalhe, ano e mes = 0, significa que devemos altera-lo
-           * se não retornar significa que é a primeira vez que está sendo implantado e logo devemos incluir registro na
-           * contacorrentesaldo
-           */
+          * modificação para reajustar valores, basicamente devemos verificar se
+          * ja foi feita implantação na contacorrentesaldo pelo detalhe em questão
+          * se retornar registro, para o detalhe, ano e mes = 0, significa que devemos altera-lo
+          * se não retornar significa que é a primeira vez que está sendo implantado e logo devemos incluir registro na
+          * contacorrentesaldo
+          */
+          $oDaoContaCorrenteSaldo = new cl_contacorrentesaldo();
           $sWhereImplantacao = "     c29_contacorrentedetalhe = {$saldo->c19_sequencial} ";
           $sWhereImplantacao .= " and c29_anousu = {$iAnoUsu} ";
           $sWhereImplantacao .= " and c29_mesusu = 0 ";

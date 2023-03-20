@@ -63,7 +63,7 @@ class cl_conctbsaldo {
      }
    }
    // funcao para inclusao
-   function incluir ($ces02_sequencial){
+   function incluir ($ces02_sequencial=null){
 
       $this->atualizacampos();
 
