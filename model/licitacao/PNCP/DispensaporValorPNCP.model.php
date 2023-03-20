@@ -149,7 +149,7 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
             'Content-Type: multipart/form-data',
             'Authorization: ' . $token,
             'Titulo-Documento:Compra' . $processo,
-            'Tipo-Documento-Id:' . $tipodocumento
+            'Tipo-Documento-Id: 1'
         );
 
         $optionspncp = array(
