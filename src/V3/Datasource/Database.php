@@ -53,33 +53,17 @@ class Database {
     $this->sServidor = $sServidor;
   }
 
-  public function getServidor() {
-    return $this->sServidor;
-  }
-
   public function setPorta($sPorta) {
     $this->sPorta = $sPorta;
   }
-
-    public function getPorta() {
-        return $this->sPorta;
-    }
 
   public function setUsuario($sUsuario) {
     $this->sUsuario = $sUsuario;
   }
 
-    public function getUsuario() {
-        return $this->sUsuario;
-    }
-
   public function setSenha($sSenha) {
     $this->sSenha = $sSenha;
   }
-
-    public function getSenha() {
-        return $this->sSenha;
-    }
 
   public function getBase() {
     return $this->sBase;
