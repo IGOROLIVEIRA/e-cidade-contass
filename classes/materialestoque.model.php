@@ -1185,6 +1185,10 @@ class materialEstoque
       throw new BusinessException("Material sem grupo informado.");
     }
 
+    if ($this->iTipoSaida == 5 && $this->oMaterialGrupo->getCodigoContaDebito() == null && $this->oMaterialGrupo->getCodigoContaCredito() == null) {
+      throw new Exception("Contas não cadastradas para a respectiva saída");
+    }
+
     $iCodConta = $this->oMaterialGrupo->contasParaSaida($this->iTipoSaida)->codigo;
 
     if (empty($iCodConta)) {

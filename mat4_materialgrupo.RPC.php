@@ -114,6 +114,42 @@ switch ($oParam->exec) {
     $oRetorno->codigocontaperdaativoVPD = $oMaterialGrupo->getCodigoContaPerdaAtivoVPD();
     $oRetorno->codigocontacredito    = $oMaterialGrupo->getCodigoContaCredito();
     $oRetorno->codigocontadebito = $oMaterialGrupo->getCodigoContaDebito();
+
+
+    $rsDescricaoTransferencia = db_query("select c60_descr from conplano where c60_codcon = $oRetorno->codigocontatransf and c60_anousu = " . db_getsession('DB_anousu'));
+    $sDescricaoTransferencia = db_utils::fieldsMemory($rsDescricaoTransferencia, 0)->c60_descr;
+
+    $rsDescricaoTransferenciaVPD = db_query("select c60_descr from conplano where c60_codcon = $oRetorno->codigocontatransfVPD  and c60_anousu = " . db_getsession('DB_anousu'));
+    $sDescricaoTransferenciaVPD  = db_utils::fieldsMemory($rsDescricaoTransferenciaVPD, 0)->c60_descr;
+
+    $rsDescricaoDoacao = db_query("select c60_descr from conplano where c60_codcon = $oRetorno->codigocontadoacao  and c60_anousu = " . db_getsession('DB_anousu'));
+    $sDescricaoDoacao = db_utils::fieldsMemory($rsDescricaoDoacao, 0)->c60_descr;
+
+    $rsDescricaoDoacaoVPD = db_query("select c60_descr from conplano where c60_codcon = $oRetorno->codigocontadoacaoVPD and c60_anousu = " . db_getsession('DB_anousu'));
+    $sDescricaoDoacaoVPD  = db_utils::fieldsMemory($rsDescricaoDoacaoVPD, 0)->c60_descr;
+
+    $rsDescricaoPerdaAtivo = db_query("select c60_descr from conplano where c60_codcon = $oRetorno->codigocontaperdaativo and c60_anousu = " . db_getsession('DB_anousu'));
+    $sDescricaoPerdaAtivo = db_utils::fieldsMemory($rsDescricaoPerdaAtivo, 0)->c60_descr;
+
+    $rsDescricaoPerdaAtivoVPD = db_query("select c60_descr from conplano where c60_codcon = $oRetorno->codigocontaperdaativoVPD  and c60_anousu = " . db_getsession('DB_anousu'));
+    $sDescricaoPerdaAtivoVPD  = db_utils::fieldsMemory($rsDescricaoPerdaAtivoVPD, 0)->c60_descr;
+
+    $rsDescricaoCredito = db_query("select c60_descr from conplano where c60_codcon = $oRetorno->codigocontacredito and c60_anousu = " . db_getsession('DB_anousu'));
+    $sDescricaoCredito  = db_utils::fieldsMemory($rsDescricaoCredito, 0)->c60_descr;
+
+    $rsDescricaoDebito = db_query("select c60_descr from conplano where c60_codcon = $oRetorno->codigocontadebito and c60_anousu = " . db_getsession('DB_anousu'));
+    $sDescricaoDebito  = db_utils::fieldsMemory($rsDescricaoDebito, 0)->c60_descr;
+
+    $oRetorno->sDescricaoTransferencia = $sDescricaoTransferencia;
+    $oRetorno->sDescricaoTransferenciaVPD = $sDescricaoTransferenciaVPD;
+    $oRetorno->sDescricaoDoacao = $sDescricaoDoacao;
+    $oRetorno->sDescricaoDoacaoVPD = $sDescricaoDoacaoVPD;
+    $oRetorno->sDescricaoPerdaAtivo = $sDescricaoPerdaAtivo;
+    $oRetorno->sDescricaoPerdaAtivoVPD = $sDescricaoPerdaAtivoVPD;
+    $oRetorno->sDescricaoCredito = $sDescricaoCredito;
+    $oRetorno->sDescricaoDebito = $sDescricaoDebito;
+
+
     if ($oMaterialGrupo->getContaVPD() != "") {
       $oRetorno->descricaocontaVPD = urlencode($oMaterialGrupo->getContaVPD()->getDescricao());
     }
