@@ -162,6 +162,16 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
         let iLinha = 0;
         let iTotalDotacoes = 0;
 
+        indiceDotacoes = 0;
+        elementos = '';
+        for (let iCodigoDotacao in me.aDotacoes) {
+            if(indiceDotacoes != 0){
+                let oDotacao = me.aDotacoes[iCodigoDotacao];
+                elementos += oDotacao.sElemento + ",";
+            }
+            indiceDotacoes++;
+        }
+
         for (let iCodigoDotacao in me.aDotacoes) {
             if (typeof (me.aDotacoes[iCodigoDotacao]) == 'function') {
                 continue;
@@ -169,12 +179,19 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
 
             me.aDotacoes[iCodigoDotacao].lMarcadoTodos = false;
             let oDotacao = me.aDotacoes[iCodigoDotacao];
-
+            
             /**
              * Nome da função que ira mostrar o saldo da dotação
              */
+
+           
+         
             let sNomeFuncaoDotacao = me.sNameInstance + `.mostrarDadosDotacao(${oDotacao.iDotacao},${oDotacao.iAnoDotacao})`;
             let sNomeFuncaoAlteraDotacao = me.sNameInstance + `.pesquisaDotacaoGrupo('${iCodigoDotacao}', '${oDotacao.sElemento}', '${oDotacao.iAnoDotacao}')`;
+            if(iCodigoDotacao == '0'){
+                 sNomeFuncaoAlteraDotacao = me.sNameInstance + `.pesquisaDotacaoesGrupos('${iCodigoDotacao}', '${elementos}', '${oDotacao.iAnoDotacao}')`;
+
+             }
             let sNomeFuncaoMarcarTodos = me.sNameInstance + `.marcaTodosItens('${iCodigoDotacao}')`;
             let sNomeFuncaoHide = me.sNameInstance + `.controlArrow('${iCodigoDotacao}')`;
 
@@ -217,7 +234,6 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
 
 
             oDotacao.aItens.each((oItem, iIndice) => {
-
                 let sElementoItem = oDotacao.sElemento;
 
                 let sNomeFuncaoDotacaoItem = me.sNameInstance + ".mostrarDadosDotacao(" + oItem.iDotacao + "," + oDotacao.iAnoDotacao + ")";
@@ -227,7 +243,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
                 }
 
                 let sNomeFuncaoAlteraDotacaoItem = me.sNameInstance + ".pesquisaDotacaoItem('";
-                sNomeFuncaoAlteraDotacaoItem += oItem.sequencial + "','" + oItem.itemDotacao + "'," + "'" + oItem.iDotacao + "'," + iIndice + ", '" + sElementoItem + "'," + oDotacao.iAnoDotacao + " )";
+                sNomeFuncaoAlteraDotacaoItem += oItem.sequencial + "','" + oItem.itemDotacao + "'," + "'" + oItem.iDotacao + "'," + iIndice + ", '" + oItem.sElemento + "'," + oDotacao.iAnoDotacao + " )";
                 let sFunctionToogleLinha = me.sNameInstance + ".toogleLinhaItem('" + iCodigoDotacao + "'," + iIndice + ")";
                 aRowItem = new Array();
                 let sChecked = '';
@@ -328,11 +344,41 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
         $('Jandb_iframe_alterarDotacao').style.zIndex = '10000';
     }
 
+    this.pesquisaDotacaoesGrupos = (sDotacao, sElemento, iAnoDot) => {
+
+        itensSelecionados = 0;
+
+        me.aDotacoes[sDotacao].aItens.each((oItem, iIndice) => {
+
+            with (oItem) {
+
+                if($('chk' + iLinhaNaGrid).checked == true){
+                    itensSelecionados++;
+                }
+            }
+        });
+
+        if(itensSelecionados == 0) return alert('Nenhum item selecionado');
+
+        sDotacaoAtual = sDotacao;
+        iAnoDotGrupo = iAnoDot;
+
+        let sFuncaoRetorno = 'funcao_js=parent.' + me.sNameInstance + '.insereDotacaoGrupo|o58_coddot';
+
+        js_OpenJanelaIframe('',
+            'db_iframe_alterarDotacao',
+            'func_permorcdotacao.php?obriga_depto=nao&cod_elementos=' + '3339039,3339030' + '&' + sFuncaoRetorno,
+            'Escolha uma Dotação',
+            true);
+        $('Jandb_iframe_alterarDotacao').style.zIndex = '10000';
+    }
+
     /**
      * Altera as dotações de todos os itens que possuem uma mesma Dotação.
      * @param {integer} Código da Nova Dotação
      */
     this.alteraDotacaoGrupo = (iCodigoDotacao) => {
+   
         let keyDotAnterior = sDotacaoAtual;
 
         if (me.aDotacoes[sDotacaoAtual]) {
@@ -354,6 +400,46 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
         delete iAnoDotGrupo;
         db_iframe_alterarDotacao.hide();
         me.renderizaLinhasGrid(keyDotAnterior);
+    }
+
+    this.insereDotacaoGrupo = (iCodigoDotacao,descricao,estrutural) => {
+
+        estrutural = estrutural.substr(23, 7);
+   
+        let keyDotAnterior = sDotacaoAtual;
+        sItensComDotacoesDiferentes = '';
+
+        if (me.aDotacoes[sDotacaoAtual]) {
+
+            me.aDotacoes[sDotacaoAtual].iDotacao = iCodigoDotacao;
+            me.aDotacoes[sDotacaoAtual].iAnoDotacao = me.iAnoSessao;
+
+            me.aDotacoes[sDotacaoAtual].aItens.each((oItem, iInd) => {
+               
+                if(oItem.lAlterado){
+                    if(estrutural != oItem.sElemento){
+                        sItensComDotacoesDiferentes = oItem.iOrdem + ",";
+                        oViewSolicitacaoDotacao.toogleLinhaItem('0',oItem.iLinhaNaGrid-1);
+                    } else {
+                        oItem.iDotacao = iCodigoDotacao;
+                        oItem.iAnoDotacao = me.iAnoSessao;
+                        oItem.lAlterado = true;
+                        oItem.iAnoDotAnterior = iAnoDotGrupo;
+                        me.marcaLinhaItem(oItem.iLinhaNaGrid);
+                    }
+               
+            }
+
+            });
+        }
+        
+        delete sDotacaoAtual;
+        delete iAnoDotGrupo;
+        db_iframe_alterarDotacao.hide();
+        me.renderizaLinhasGrid(keyDotAnterior);
+        if(sItensComDotacoesDiferentes != ''){
+            alert(' Dotação não incluída para o(s) item(ns) ' + sItensComDotacoesDiferentes.substr(0,sItensComDotacoesDiferentes.length-1) + '. O elemento do item é divergente do elemento da dotação.')
+        }
     }
 
     /* Seta as classes nas TRs para manipulação da exibição/ocultação das linhas */
