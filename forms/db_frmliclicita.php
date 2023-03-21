@@ -429,10 +429,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         <?
                                         $arr_tipo = array(
                                             "0" => "Selecione",
-                                            "1" => "1- Menor Preço",
-                                            "2" => "2- Melhor Técnica",
-                                            "3" => "3- Técnica e Preço",
-                                            "4" => "4- Maior Lance ou Oferta"
+                                            "1" => "1- Menor preço",
+                                            "2" => "2- Maior desconto",
+                                            "4" => "4- Técnica e preço",
+                                            "5" => "5- Maior lance",
+                                            "6" => "6- Maior retorno econômico",
+                                            "7" => "7- Não se aplica",
+                                            "8" => "8- Melhor técnica",
+                                            "9" => "9- Conteúdo artístico"
                                         );
                                         db_select("l20_tipliticacao", $arr_tipo, true, $db_opcao);
                                         ?>

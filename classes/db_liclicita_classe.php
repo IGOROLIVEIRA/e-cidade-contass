@@ -4063,7 +4063,7 @@ class cl_liclicita
                             pcmater.pc01_descrmater AS descricao,
                             matunid.m61_descr AS unidadeMedida,
                             si02_vlprecoreferencia AS valorUnitarioEstimado,
-                            liclicita.l20_criterioadjudicacao AS criterioJulgamentoId,
+                            liclicita.l20_tipliticacao AS criterioJulgamentoId,
                             pcmater.pc01_codmater,
                             solicitem.pc11_numero,
                             solicitem.pc11_reservado,
