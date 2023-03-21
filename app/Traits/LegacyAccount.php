@@ -44,7 +44,7 @@ trait LegacyAccount
 
         foreach ($model->fillable as $field) {
             $oldValue = empty($model->getOriginal($field)) ? '' : $model->getOriginal($field);
-            $newValue = $model->getAttributeValue($field);
+            $newValue = empty($model->getAttributeValue($field)) ? '' : $model->getAttributeValue($field);
             $codCam = $this->getCodcamByName($field);
             $this->insertAcount($sequence, $codArq, $codCam, $newValue, $oldValue);
         }
