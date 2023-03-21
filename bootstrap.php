@@ -3,6 +3,7 @@
 use \ECidade\Core\Autoloader as EcidadeAutoloader;
 use \ECidade\Core\Config as AppConfig;
 use \ECidade\V3\Extension\Registry;
+use \ECidade\V3\Extension\Loader as Ecidade3Autoloader;
 use \ECidade\V3\Extension\Logger;
 use \ECidade\V3\Extension\Container;
 use \ECidade\V3\Error\Handler\Error as ErrorHandler;
