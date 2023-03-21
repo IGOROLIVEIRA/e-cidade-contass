@@ -272,10 +272,27 @@ $oPDF->ln();
 $oPDF->ln();
 $oPDF->cell(185,$alt,"__________________________________",0,1,"R",0);
 
-if($l12_usuarioadjundica == 't'){
+if($l12_usuarioadjundica == 't' && $nomeusuario != ""){
     $oPDF->cell(175,$alt,$nomeusuario,0,0,"R",0);
-}else{
+}else if($pregoeiro != ""){
     $oPDF->cell(185,$alt,$pregoeiro,0,0,"R",0);
+}else{
+    $oLibDocumento = new libdocumento(9006, null);
+    if ($oLibDocumento->lErro) {
+        die($oLibDocumento->sMsgErro);
+    }
+    $aParagrafos = $oLibDocumento->getDocParagrafos();
+    $contador = 0;
+    foreach ($aParagrafos as $oParag) {
+        if($contador > 0){
+            if ($oParag->oParag->db02_tipo == "3") {
+                eval($oParag->oParag->db02_texto);
+            } else {
+                $oParag->writeText($oPDF);
+            }
+        }
+        $contador++;
+    }
 }
 
 /**
