@@ -34,7 +34,6 @@
             "app/Models"
         ],
         "files": [
-            "model/arrecadacao/Pix/InstituicaoFinanceiraApiPix.php",
             "classes/ClasseBase.php"
         ],
         "psr-4": {
