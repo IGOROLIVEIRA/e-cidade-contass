@@ -3,16 +3,22 @@ require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("classes/db_aop102023_classe.php");
 require_once("classes/db_aop112023_classe.php");
+require_once("classes/db_aop122023_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarAOP.model.php");
+require_once("model/orcamento/ControleOrcamentario.model.php");
+require_once("model/orcamento/DeParaRecurso.model.php");
 
+/*
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+*/
 /**
- * AnulaÃ§Ãµes das Ordens de Pagamento Sicom Acompanhamento Mensal
+ * Anulações das Ordens de Pagamento Sicom Acompanhamento Mensal
  * @author marcelo
  * @package Contabilidade
  */
 class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-
     /**
      *
      * Codigo do layout. (db_layouttxt.db50_codigo)
@@ -31,13 +37,16 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
      * @var array Fontes encerradas em 2023
      */
     protected $aFontesEncerradas = array('148', '149', '150', '151', '152', '248', '249', '250', '251', '252');
+
+    private $oDeParaRecurso;
+
     /**
      *
      * Construtor da classe
      */
     public function __construct()
     {
-
+        $this->oDeParaRecurso = new DeParaRecurso();
     }
 
     /**
@@ -78,7 +87,6 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
             "valorAnulacaoFonte"
         );
         return $aElementos;
-
     }
 
     /**
@@ -90,6 +98,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
         $claop10 = new cl_aop102023();
         $claop11 = new cl_aop112023();
+        $claop12 = new cl_aop122023();
 
 
         $sSqlUnidade = "select * from infocomplementares where
@@ -113,6 +122,11 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
             . " and si137_instit = " . db_getsession("DB_instit")));
 
         if (pg_num_rows($result) > 0) {
+            $claop12->excluir(null, "si139_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si139_instit = " . db_getsession("DB_instit"));
+
+            if ($claop12->erro_status == 0) {
+                throw new Exception($claop12->erro_msg);
+            }
 
             $claop11->excluir(null, "si138_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si138_instit = " . db_getsession("DB_instit"));
 
@@ -169,13 +183,16 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                    substr(o56_elemento,8,2) AS subelemento,
                    substr(o56_elemento,2,2) AS divida,
                    o15_codtri AS recurso,
+                   o15_codigo,
                    e50_obs,
                    CASE
                        WHEN date_part('year',e50_data) < 2023 THEN e71_codnota::varchar
                        ELSE (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0'))
                    END AS nroliquidacao,
                    si09_codorgaotce,
-                   o41_subunidade AS subunidade
+                   o41_subunidade AS subunidade,
+                   e60_emendaparlamentar,
+                    e60_esferaemendaparlamentar
             FROM conlancam
             JOIN conlancamdoc ON c71_codlan = c70_codlan
             JOIN conlancamord ON c80_codlan = c71_codlan
@@ -194,7 +211,6 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                 AND o41_instit = " . db_getsession("DB_instit") . "
                 AND e60_instit = " . db_getsession("DB_instit") . "
                 AND c71_data BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'";
-
 
         $rsAnulacao = db_query($sSql);
         // print_r($sSql);die();
@@ -221,22 +237,18 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                     } else {
                         $itipoOP = 2;
                     }
-
                 }
-
             }
 
-            if (($sTrataCodUnidade == "2") && ($oAnulacoes->subunidade != '' && $oAnulacoes->subunidade != 0)){
+            if (($sTrataCodUnidade == "2") && ($oAnulacoes->subunidade != '' && $oAnulacoes->subunidade != 0)) {
 
                 $sCodUnidade  = str_pad($oAnulacoes->o58_orgao, 2, "0", STR_PAD_LEFT);
                 $sCodUnidade .= str_pad($oAnulacoes->o58_unidade, 3, "0", STR_PAD_LEFT);
                 $sCodUnidade .= str_pad($oAnulacoes->subunidade, 3, "0", STR_PAD_LEFT);
-
             } else {
 
                 $sCodUnidade = str_pad($oAnulacoes->o58_orgao, 2, "0", STR_PAD_LEFT);
                 $sCodUnidade .= str_pad($oAnulacoes->o58_unidade, 3, "0", STR_PAD_LEFT);
-
             }
             /**
              * pegar quantidade de extornos
@@ -258,7 +270,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
             if (db_utils::fieldsMemory($rsQuantExtornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantExtornos, 0)->valor <> 0) {
 
 
-                $sSqlOp = "select c70_codlan || lpad($oAnulacoes->e50_codord,10,0) as codlan, c70_data as dtpagamento from conlancam
+                $sSqlOp = "select c70_codlan || lpad($oAnulacoes->e50_codord,10,0) as codlan, c70_data as dtpagamento, c70_codlan from conlancam
     		             where c70_codlan in (
     					select max(c71_codlan)
 				  						from conlancamdoc
@@ -271,7 +283,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                 $rsResultOP = db_query($sSqlOp);
 
                 if (pg_num_rows($rsResultOP) == 0) {
-                    $sSqlOp = "select c70_codlan || lpad($oAnulacoes->e50_codord,10,0) as codlan, c70_data as dtpagamento from conlancam
+                    $sSqlOp = "select c70_codlan || lpad($oAnulacoes->e50_codord,10,0) as codlan, c70_data as dtpagamento, c70_codlan from conlancam
     		             where c70_codlan in (
     					select max(c71_codlan)
 				  						from conlancamdoc
@@ -283,9 +295,8 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                 }
                 //echo $sSqlOp;			db_criatabela($rsResultOP);
                 $OpdoExtorno = db_utils::fieldsMemory($rsResultOP)->codlan;
-
+                $iOpPagamento = db_utils::fieldsMemory($rsResultOP)->c70_codlan;
                 $DataOpExorno = db_utils::fieldsMemory($rsResultOP)->dtpagamento;
-
 
                 $rsQuantExtornos = db_query($sSqlExtornos);
                 /**
@@ -314,8 +325,8 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
                     $oDadosAnulacao->si137_tiporegistro = 10;
                     $oDadosAnulacao->si137_codreduzido = $oAnulacoes->c71_codlan;
-                    $oDadosAnulacao->si137_nroop = $OpdoExtorno;//$oAnulacoes->numordem;
-                    $oDadosAnulacao->si137_dtpagamento = ($DataOpExorno == '' || $DataOpExorno == null) ? $oAnulacoes->dtanulacao : $DataOpExorno;//$oAnulacoes->dtpag;
+                    $oDadosAnulacao->si137_nroop = $OpdoExtorno; //$oAnulacoes->numordem;
+                    $oDadosAnulacao->si137_dtpagamento = ($DataOpExorno == '' || $DataOpExorno == null) ? $oAnulacoes->dtanulacao : $DataOpExorno; //$oAnulacoes->dtpag;
                     $oDadosAnulacao->si137_nroanulacaoop = $OpdoExtorno;
                     $oDadosAnulacao->si137_dtanulacaoop = $oAnulacoes->dtanulacao;
                     $oDadosAnulacao->si137_justificativaanulacao = "ESTORNO DE PAGAMENTO";
@@ -324,10 +335,10 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                     $oDadosAnulacao->si137_instit = db_getsession("DB_instit");
                     $oDadosAnulacao->reg11 = array();
 
-
                     /**
                      * Registro 11
                      */
+
                     $oDadosAnulacaoFonte = new stdClass();
 
                     $oDadosAnulacaoFonte->si138_tiporegistro = 11;
@@ -335,17 +346,24 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                     $oDadosAnulacaoFonte->si138_tipopagamento = $itipoOP;
                     $oDadosAnulacaoFonte->si138_nroempenho = $oAnulacoes->e60_codemp;
                     $oDadosAnulacaoFonte->si138_dtempenho = $oAnulacoes->dtempenho;
-                    if($itipoOP == 3){
+                    if ($itipoOP == 3) {
                         $oDadosAnulacaoFonte->si138_nroliquidacao = "";
                         $oDadosAnulacaoFonte->si138_dtliquidacao = "";
-                    }else{
+                    } else {
                         $oDadosAnulacaoFonte->si138_nroliquidacao = $oAnulacoes->nroliquidacao;
                         $oDadosAnulacaoFonte->si138_dtliquidacao = $oAnulacoes->dtliquida;
                     }
                     $oDadosAnulacaoFonte->si138_codfontrecursos = $iFonteAlterada != 0 ? $iFonteAlterada : str_pad($oAnulacoes->recurso, 3, "0", STR_PAD_LEFT);
                     if (in_array($oDadosAnulacaoFonte->si138_codfontrecursos, $this->aFontesEncerradas)) {
-                        $oDadosAnulacaoFonte->si138_codfontrecursos = substr($oDadosAnulacaoFonte->si138_codfontrecursos, 0, 1).'59';
+                        $oDadosAnulacaoFonte->si138_codfontrecursos = substr($oDadosAnulacaoFonte->si138_codfontrecursos, 0, 1) . '59';
                     }
+                    
+                    $oControleOrcamentario = new ControleOrcamentario();
+                    $oControleOrcamentario->setFonte($oAnulacoes->o15_codigo);
+                    $oControleOrcamentario->setEmendaParlamentar($oAnulacoes->e60_emendaparlamentar);
+                    $oControleOrcamentario->setEsferaEmendaParlamentar($oAnulacoes->e60_esferaemendaparlamentar);
+           
+                    $oDadosAnulacaoFonte->si138_codco = $oControleOrcamentario->getCodigoParaEmpenho();
                     $oDadosAnulacaoFonte->si138_valoranulacaofonte = $oAnulacoes->vlrordem;
                     $oDadosAnulacaoFonte->si138_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                     $oDadosAnulacaoFonte->si138_reg10 = 0;
@@ -353,13 +371,16 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
                     $oDadosAnulacao->reg11[$Hash] = $oDadosAnulacaoFonte;
                     $aAnulacoes[$Hash] = $oDadosAnulacao;
-
-
                 } else {
                     $aAnulacoes[$Hash]->si137_vlanulacaoop += $oAnulacoes->vlrordem;
                     $aAnulacoes[$Hash]->reg11[$Hash]->si138_valoranulacaofonte += $oAnulacoes->vlrordem;
                 }
 
+                $oEmpPago = new stdClass();
+                $oEmpPago->ordem = $oAnulacoes->e50_codord;
+                $oEmpPago->lancamento = $iOpPagamento;
+                $oEmpPago->valor = $oAnulacoes->vlrordem;
+                $aAnulacoes[$Hash]->reg11[$Hash]->reg12 = $this->setDetalhamento12($oEmpPago, $aAnulacoes[$Hash], $aAnulacoes[$Hash]->reg11[$Hash]);
             }
         }
 
@@ -397,9 +418,10 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                 $oDadosAnulacaoFonte->si138_nroliquidacao = $reg11->si138_nroliquidacao;
                 $oDadosAnulacaoFonte->si138_dtliquidacao = $reg11->si138_dtliquidacao;
                 $oDadosAnulacaoFonte->si138_codfontrecursos = $reg11->si138_codfontrecursos;
+                $oDadosAnulacaoFonte->si138_codco = $reg11->si138_codco;
                 $oDadosAnulacaoFonte->si138_valoranulacaofonte = $reg11->si138_valoranulacaofonte;
-                $oDadosAnulacaoFonte->si138_codorgaoempop = $reg11->si138_codorgaoempop;
-                $oDadosAnulacaoFonte->si138_codunidadeempop = $reg11->si138_codunidadeempop;
+                // $oDadosAnulacaoFonte->si138_codorgaoempop = $reg11->si138_codorgaoempop;
+                // $oDadosAnulacaoFonte->si138_codunidadeempop = $reg11->si138_codunidadeempop;
                 $oDadosAnulacaoFonte->si138_mes = $reg11->si138_mes;
                 $oDadosAnulacaoFonte->si138_reg10 = $oDadosAnulacao->si137_sequencial;
                 $oDadosAnulacaoFonte->si138_instit = $reg11->si138_instit;
@@ -407,6 +429,14 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                 $oDadosAnulacaoFonte->incluir(null);
                 if ($oDadosAnulacaoFonte->erro_status == 0) {
                     throw new Exception($oDadosAnulacaoFonte->erro_msg);
+                }
+
+                if ($reg11->reg12) {
+                    $reg11->reg12->si139_reg10 = $oDadosAnulacao->si137_sequencial;
+                    $reg11->reg12->incluir(null);
+                    if ($reg11->reg12->erro_status == 0) {
+                        throw new Exception($reg11->reg12->erro_msg);
+                    }
                 }
             }
         }
@@ -418,4 +448,184 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
         $oGerarAOP->gerarDados();
     }
 
+    public function setDetalhamento12($oEmpPago, $oAOP10, $oAOP11)
+    {
+        $sHash = $oEmpPago->ordem;
+        $sSql12 = "SELECT 12 AS tiporegistro,
+                        e82_codord AS codreduzidoop,
+                            CASE
+                                WHEN e96_codigo = 4 AND c60_codsis = 5 THEN 5
+                                WHEN e96_codigo = 1 THEN 5
+                                WHEN e96_codigo = 2 THEN 1
+                                ELSE 99
+                            END AS tipodocumentoop,
+                            CASE
+                                WHEN e96_codigo = 2 THEN e86_cheque
+                                ELSE NULL
+                            END AS nrodocumento,
+                            c61_reduz AS codctb,
+                            o15_codigo AS codfontectb,
+                            e50_data AS dtemissao,
+                            k12_valor AS vldocumento,
+                            CASE
+                                WHEN c60_codsis = 5 THEN ''
+                                ELSE e96_descr
+                            END desctipodocumentoop,
+                            c23_conlancam AS codlan,
+                            e81_codmov,
+                            e81_numdoc
+                     FROM empagemov
+                     INNER JOIN empage ON empage.e80_codage = empagemov.e81_codage
+                     INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
+                     INNER JOIN empempenho ON empempenho.e60_numemp = empagemov.e81_numemp
+                     LEFT JOIN empagemovforma ON empagemovforma.e97_codmov = empagemov.e81_codmov
+                     LEFT JOIN empageforma ON empageforma.e96_codigo = empagemovforma.e97_codforma
+                     LEFT JOIN empagepag ON empagepag.e85_codmov = empagemov.e81_codmov
+                     LEFT JOIN empagetipo ON empagetipo.e83_codtipo = empagepag.e85_codtipo
+                     LEFT JOIN empageconf ON empageconf.e86_codmov = empagemov.e81_codmov
+                     LEFT JOIN empageconfgera ON (empageconfgera.e90_codmov, empageconfgera.e90_cancelado) = (empagemov.e81_codmov, 'f')
+                     LEFT JOIN saltes ON saltes.k13_conta = empagetipo.e83_conta
+                     LEFT JOIN empagegera ON empagegera.e87_codgera = empageconfgera.e90_codgera
+                     LEFT JOIN empagedadosret ON empagedadosret.e75_codgera = empagegera.e87_codgera
+                     LEFT JOIN empagedadosretmov ON (empagedadosretmov.e76_codret, empagedadosretmov.e76_codmov) = (empagedadosret.e75_codret, empagemov.e81_codmov)
+                     LEFT JOIN empagedadosretmovocorrencia ON (empagedadosretmovocorrencia.e02_empagedadosretmov, empagedadosretmovocorrencia.e02_empagedadosret) = (empagedadosretmov.e76_codmov, empagedadosretmov.e76_codret)
+                     LEFT JOIN errobanco ON errobanco.e92_sequencia = empagedadosretmovocorrencia.e02_errobanco
+                     LEFT JOIN empageconfche ON empageconfche.e91_codmov = empagemov.e81_codmov AND empageconfche.e91_ativo IS TRUE
+                     LEFT JOIN corconf ON corconf.k12_codmov = empageconfche.e91_codcheque AND corconf.k12_ativo IS TRUE
+                     LEFT JOIN corempagemov ON corempagemov.k12_codmov = empagemov.e81_codmov
+                     LEFT JOIN pagordemele ON e53_codord = empord.e82_codord
+                     LEFT JOIN empagenotasordem ON e43_empagemov = e81_codmov
+                     LEFT JOIN coremp ON (coremp.k12_id, coremp.k12_data, coremp.k12_autent) = (corempagemov.k12_id, corempagemov.k12_data, corempagemov.k12_autent)
+                     JOIN pagordem ON (k12_empen, k12_codord) = (e50_numemp, e50_codord)
+                     JOIN corrente ON (coremp.k12_autent, coremp.k12_data, coremp.k12_id) = (corrente.k12_autent, corrente.k12_data, corrente.k12_id) AND corrente.k12_estorn != TRUE
+                     JOIN conplanoreduz ON c61_reduz = k12_conta AND c61_anousu = " . db_getsession("DB_anousu") . "
+                     JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                     LEFT JOIN conplanoconta ON c63_codcon = c60_codcon AND c60_anousu = c63_anousu
+                     JOIN corgrupocorrente cg ON cg.k105_autent = corrente.k12_autent
+                     JOIN orcdotacao ON (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
+                     JOIN orctiporec ON o58_codigo = o15_codigo AND (cg.k105_data, cg.k105_id) = (corrente.k12_data, corrente.k12_id)
+                     JOIN conlancamcorgrupocorrente ON c23_corgrupocorrente = cg.k105_sequencial AND c23_conlancam = {$oEmpPago->lancamento}
+                     WHERE e60_instit = " . db_getsession("DB_instit") . "
+                       AND k12_codord = {$oEmpPago->ordem}
+                       AND e81_cancelado IS NULL";
+
+
+        $sSql12 = "
+        SELECT
+                12 AS tiporegistro,
+                coremp.k12_codord AS codreduzidoop,
+                CASE
+                    WHEN e96_codigo = 4
+                    AND c60_codsis = 5 THEN 5
+                    WHEN e96_codigo = 1 THEN 5
+                    WHEN e96_codigo = 2 THEN 1
+                    ELSE 99
+                END AS tipodocumentoop,
+                CASE
+                    WHEN e96_codigo = 2 THEN e86_cheque
+                    ELSE NULL
+                END AS nrodocumento,
+                c61_reduz AS codctb,
+                o15_codigo AS codfontectb,
+                e50_data AS dtemissao,
+                corrente.k12_valor AS vldocumento,
+                CASE
+                    WHEN c60_codsis = 5 THEN ''
+                    ELSE e96_descr
+                END desctipodocumentoop,
+                c23_conlancam AS codlan,
+                e81_codmov,
+                e81_numdoc
+            FROM
+                corrente
+                JOIN coremp ON (
+                    coremp.k12_autent,
+                    coremp.k12_data,
+                    coremp.k12_id
+                ) = (
+                    corrente.k12_autent,
+                    corrente.k12_data,
+                    corrente.k12_id
+                )
+                JOIN conplanoreduz ON c61_reduz = k12_conta
+                JOIN conplano ON c61_codcon = c60_codcon
+                AND c61_anousu = c60_anousu
+                LEFT JOIN conplanoconta ON c63_codcon = c60_codcon
+                AND c60_anousu = c63_anousu
+                JOIN corgrupocorrente ON corgrupocorrente.k105_autent = corrente.k12_autent
+                AND corgrupocorrente.k105_data = corrente.k12_data
+                AND (
+                    corgrupocorrente.k105_data,
+                    corgrupocorrente.k105_id
+                ) = (corrente.k12_data, corrente.k12_id)
+                JOIN conlancamcorgrupocorrente ON c23_corgrupocorrente = corgrupocorrente.k105_sequencial
+                JOIN pagordem ON (k12_empen, k12_codord) = (e50_numemp, e50_codord)
+                INNER JOIN empempenho ON empempenho.e60_numemp = e50_numemp
+                INNER JOIN empagemov ON empempenho.e60_numemp = empagemov.e81_numemp
+                INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
+                LEFT JOIN empagemovforma ON empagemovforma.e97_codmov = empagemov.e81_codmov
+                LEFT JOIN empageforma ON empageforma.e96_codigo = empagemovforma.e97_codforma
+                LEFT JOIN empageconf ON empageconf.e86_codmov = empagemov.e81_codmov
+                JOIN orcdotacao ON (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
+                JOIN orctiporec ON o58_codigo = o15_codigo
+            WHERE
+                k12_codord = {$oEmpPago->ordem}
+                AND c23_conlancam = {$oEmpPago->lancamento}
+                AND c61_anousu = " . db_getsession("DB_anousu") . "
+                AND e81_cancelado IS NULL";
+
+        $rsPagOrd12 = db_query($sSql12);
+
+        $reg12 = db_utils::fieldsMemory($rsPagOrd12, 0);
+
+        $claop12 = new cl_aop122023();
+
+        $sSqlContaPagFont = " SELECT * FROM ( ";
+        for ($iAno = 2014; $iAno <= 2023; $iAno++) {
+            $sSqlContaPagFont .= $this->getUnionPagFont($reg12, $iAno);
+            if ($iAno < 2023)
+                $sSqlContaPagFont .= " UNION ";
+        }
+        $sSqlContaPagFont .= ") AS x ORDER BY ano DESC";
+
+        $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont . " teste1");
+
+        $ContaPag = db_utils::fieldsMemory($rsResultContaPag)->contapag;
+
+        $claop12->si139_tiporegistro = $reg12->tiporegistro;
+        $claop12->si139_codreduzido = $oAOP10->si137_codreduzido;
+        $claop12->si139_tipodocumento = $reg12->tipodocumentoop;
+        $claop12->si139_nrodocumento = ($reg12->tipodocumentoop == '99' && $reg12->e81_numdoc != '') ? ' ' : $reg12->nrodocumento;
+        $claop12->si139_codctb = $ContaPag;
+        $claop12->si139_codfontectb = $oAOP11->si138_codfontrecursos;
+        if ($reg12->tipodocumentoop == '99' && $reg12->e81_numdoc != '') {
+            $claop12->si139_desctipodocumentoop = $reg12->e81_numdoc;
+        } elseif ($reg12->tipodocumentoop == '99') {
+            $claop12->si139_desctipodocumentoop = 'TED';
+        } else {
+            $claop12->si139_desctipodocumentoop = ' ';
+        }
+        $claop12->si139_dtemissao = $reg12->dtemissao;
+        $claop12->si139_vldocumento = $reg12->vldocumento;
+        $claop12->si139_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        $claop12->si139_instit = db_getsession("DB_instit");
+
+        return $claop12;
+    }
+
+    public function getUnionPagFont($reg12, $iAno)
+    {
+        return " SELECT DISTINCT 'ctb10{$iAno}' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
+                JOIN conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
+                JOIN orctiporec on c61_codigo = o15_codigo
+                JOIN ctb10{$iAno} on
+                    si95_banco = c63_banco and
+                    substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer and
+                    coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
+                    si95_contabancaria = c63_conta::int8 and
+                    si95_digitoverificadorcontabancaria = c63_dvconta and
+                    si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20{$iAno} on si96_codctb = si95_codctb and si96_mes = si95_mes
+                WHERE si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu") . "
+                    and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+    }
 }
