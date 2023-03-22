@@ -189,7 +189,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
             let sNomeFuncaoDotacao = me.sNameInstance + `.mostrarDadosDotacao(${oDotacao.iDotacao},${oDotacao.iAnoDotacao})`;
             let sNomeFuncaoAlteraDotacao = me.sNameInstance + `.pesquisaDotacaoGrupo('${iCodigoDotacao}', '${oDotacao.sElemento}', '${oDotacao.iAnoDotacao}')`;
             if(iCodigoDotacao == '0'){
-                 sNomeFuncaoAlteraDotacao = me.sNameInstance + `.pesquisaDotacaoesGrupos('${iCodigoDotacao}', '${elementos}', '${oDotacao.iAnoDotacao}')`;
+                sNomeFuncaoAlteraDotacao = me.sNameInstance + `.pesquisaDotacaoesGrupos('${iCodigoDotacao}', '${elementos.substring(0, elementos.length - 1)}', '${oDotacao.iAnoDotacao}')`;
 
              }
             let sNomeFuncaoMarcarTodos = me.sNameInstance + `.marcaTodosItens('${iCodigoDotacao}')`;
@@ -367,7 +367,7 @@ DBViewAcordoDotacaoItens = function (iCodigoAcordo, sNameInstance) {
 
         js_OpenJanelaIframe('',
             'db_iframe_alterarDotacao',
-            'func_permorcdotacao.php?obriga_depto=nao&cod_elementos=' + '3339039,3339030' + '&' + sFuncaoRetorno,
+            'func_permorcdotacao.php?obriga_depto=nao&cod_elementos=' + sElemento + '&' + sFuncaoRetorno,
             'Escolha uma Dotação',
             true);
         $('Jandb_iframe_alterarDotacao').style.zIndex = '10000';
