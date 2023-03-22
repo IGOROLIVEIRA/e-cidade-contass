@@ -66,12 +66,12 @@ $iAnoSessao = db_getsession("DB_anousu");
           </tr>
 		  <tr>
 			<td>
-                <label for="contaCorrente"><b>Implantação Conta Corrente:</b></label><br>
+                <label for="contaCorrente"><b>Somente Atualizar Conta Corrente?</b></label><br>
 			</td>
 			<td>
 				<select name="contaCorrente" id="contaCorrente" style="width: 84px;">
-				<option value="1">Sim</option>
-				<option value="0">Não</option>
+                    <option value="0">Não</option>
+                    <option value="1">Sim</option>
 				</select>
 			</td>
 		  </tr>
