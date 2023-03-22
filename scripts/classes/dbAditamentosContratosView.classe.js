@@ -596,7 +596,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         if(me.lTipoAlteracao) {
             me.oCboTipoAditivo = new DBComboBox('oCboTipoAditivo', me.sInstance + '.oCboTipoAditivo',null,'455px');
             me.oCboTipoAditivo.addItem('0', 'Selecione');
-            me.oCboTipoAditivo.addItem('2', 'Resssssequilí­brio');
+            me.oCboTipoAditivo.addItem('2', 'Reequilí­brio');
             me.oCboTipoAditivo.addItem('5', 'Reajuste');
             me.oCboTipoAditivo.addItem('7', 'Outros');
             me.oCboTipoAditivo.addItem('6', 'Alteração de Prazo de Vigência');
