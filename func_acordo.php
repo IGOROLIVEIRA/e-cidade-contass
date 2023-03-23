@@ -320,11 +320,30 @@ $pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros,0)->pc01_libcontr
 
           } else if (isset($ac16_acordogrupo) && (trim($ac16_acordogrupo)!="")) {
 
-            $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc",
-              "ac16_acordogrupo = '{$ac16_acordogrupo}' and {$sWhere} and ac16_instit = {$iInstituicaoSessao} {$sql_departamentos}", $apostilamento);
+            if (isset($chave_ac16_sequencial)) {
+              $repassa = array("chave_ac16_sequencial" => $chave_ac16_sequencial, "chave_ac16_sequencial" => $chave_ac16_sequencial);
+            }
+            if ($geraAutorizacao == true) {
+              $sql = "select distinct acordo.ac16_sequencial, CASE WHEN ac16_semvigencia='t' THEN ('-')::varchar ELSE (ac16_numeroacordo || '/' || ac16_anousu)::varchar END dl_Nº_Acordo, ac17_descricao as dl_Situação, acordo.ac16_contratado, cgm.z01_nome, acordo.ac16_resumoobjeto::text, acordo.ac16_valor, acordo.ac16_dataassinatura, CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datainicio END ac16_datainicio, CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datafim END ac16_datafim, CASE WHEN acordo.ac16_origem = 1 THEN 'Processo de Compras' WHEN acordo.ac16_origem = 2 THEN 'Licitação' ELSE 'Manual' END ac16_origem, db_depart.descrdepto as dl_Dpto_de_Inclusao, responsavel.descrdepto as dl_Dpto_Responsavel from acordo inner join cgm on cgm.z01_numcgm = acordo.ac16_contratado inner join db_depart on db_depart.coddepto = acordo.ac16_coddepto inner join db_depart as responsavel on responsavel.coddepto = acordo.ac16_deptoresponsavel  inner join acordosituacao on acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao  where 1 = 1 and (select ac18_datafim from acordovigencia where ac18_acordoposicao = (select ac26_sequencial from acordoposicao where ac26_acordo = ac16_sequencial order by ac26_sequencial desc limit 1)) >= '" .  date("d-m-Y", db_getsession('DB_datausu')) . "' and ac16_instit = $iInstituicaoSessao and ac16_acordosituacao in (4) and ac16_origem in(1, 2, 3, 6)  order by ac16_sequencial desc";
+            }
+            db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
           } else {
             $sql = $clacordo->sql_query_acordoitemexecutado("",$campos,"ac16_sequencial desc", $sWhere . " and ac16_instit = {$iInstituicaoSessao} {$sql_departamentos} ", $apostilamento);
             }
+            if ($pesquisa_chave != null && $pesquisa_chave != "") {
+
+              $sSqlBuscaAcordo = $clacordo->sql_query_acordoitemexecutado(
+                null,
+                "*",
+                null,
+                "ac16_sequencial = {$pesquisa_chave}
+              and {$sWhere}",
+                $apostilamento
+              );
+
+              if ($geraAutorizacao == true) {
+                $sSqlBuscaAcordo = " select distinct acordo.ac16_sequencial, CASE WHEN ac16_semvigencia='t' THEN ('-')::varchar ELSE (ac16_numeroacordo || '/' || ac16_anousu)::varchar END dl_Nº_Acordo, ac17_descricao as dl_Situação, acordo.ac16_contratado, cgm.z01_nome, acordo.ac16_resumoobjeto::text, acordo.ac16_valor, acordo.ac16_dataassinatura, CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datainicio END ac16_datainicio, CASE WHEN ac16_semvigencia='t' THEN null ELSE ac16_datafim END ac16_datafim, CASE WHEN acordo.ac16_origem = 1 THEN 'Processo de Compras' WHEN acordo.ac16_origem = 2 THEN 'Licitação' ELSE 'Manual' END ac16_origem, db_depart.descrdepto as dl_Dpto_de_Inclusao, responsavel.descrdepto as dl_Dpto_Responsavel from acordo inner join cgm on cgm.z01_numcgm = acordo.ac16_contratado inner join db_depart on db_depart.coddepto = acordo.ac16_coddepto inner join db_depart as responsavel on responsavel.coddepto = acordo.ac16_deptoresponsavel inner join acordosituacao on acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao where 1 = 1 and (select ac18_datafim from acordovigencia where ac18_acordoposicao = (select ac26_sequencial from acordoposicao where ac26_acordo = ac16_sequencial order by ac26_sequencial desc limit 1)) >= '"  .  date("d-m-Y", db_getsession('DB_datausu')) . "' and ac16_sequencial = $pesquisa_chave and ac16_instit = $iInstituicaoSessao and ac16_acordosituacao in (4) and ac16_origem in(1, 2, 3, 6) order by ac16_sequencial desc;";
+              }
 
           $repassa = array();
 

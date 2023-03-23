@@ -1718,7 +1718,7 @@ if ($x->consultarDataDoSistema == true) {
     }
 
     function js_somaItens() {
-        document.getElementById('oGridItenstotalValue').innerText = js_formatar(oGridItens.sum(7), 'f');
+        document.getElementById('oGridItenstotalValue').innerText = js_formatar(oGridItens.sum(8), 'f');
     }
 
     /* Soma todos os itens da lista */
