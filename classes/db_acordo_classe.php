@@ -2575,7 +2575,7 @@ class cl_acordo
         ac16_sequencial,
         ac213_numerocontrolepncp,      
         cgc as cnpjCompra,
-        ac16_anousu as anoCompra,
+        l213_anousu as anoCompra,
         l213_numerocompra as sequencialCompra,
         ac16_acordocategoria as tipoContratoId,
         ac16_numero as numeroContratoEmpenho,
@@ -2606,7 +2606,7 @@ class cl_acordo
         join acordocategoria on ac50_sequencial=ac16_acordocategoria
         join liclicita on l20_codigo = ac16_licitacao
         join db_depart on coddepto=ac16_deptoresponsavel
-        join db_departorg on db01_coddepto=coddepto
+        join db_departorg on db01_coddepto=coddepto and db01_anousu = ac16_anousu
         join cgm on z01_numcgm=ac16_contratado
         join cgmtipoempresa on z03_numcgm=z01_numcgm
         join tipoempresa on db98_sequencial=z03_tipoempresa

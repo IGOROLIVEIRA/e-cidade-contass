@@ -3801,7 +3801,8 @@ class cl_liclicita
             ELSE liclicita.l20_recdocumentacao
         END AS dataEncerramentoProposta,
         liclicita.l20_amparolegal as amparoLegalId,
-        liclicita.l20_linkpncp as linkSistemaOrigem
+        liclicita.l20_linkpncp as linkSistemaOrigem,
+        liclicita.l20_justificativapncp as justificativaPresencial
         from liclicita
         join db_depart on coddepto=l20_codepartamento
         join db_config on codigo=instit

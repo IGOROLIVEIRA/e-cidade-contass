@@ -24,20 +24,20 @@ $oRetorno->status  = 1;
 
 switch ($oParam->exec) {
     case 'getContratos':
-        $clcontratos = new cl_acordo; 
-        $rsContrato = $clcontratos->sql_record($clcontratos->sql_Contrato_PCNP(null,"distinct ac16_sequencial,ac213_numerocontrolepncp,l213_numerocompra, ",null,"ac16_instit = " . db_getsession('DB_instit')));
-        
+        $clcontratos = new cl_acordo;
+        $rsContrato = $clcontratos->sql_record($clcontratos->sql_Contrato_PCNP(null, "distinct ac16_sequencial,ac213_numerocontrolepncp,l213_numerocompra, ", null, "ac16_instit = " . db_getsession('DB_instit')));
+
         for ($iCont = 0; $iCont < pg_num_rows($rsContrato); $iCont++) {
 
             $oContratos = db_utils::fieldsMemory($rsContrato, $iCont);
             $oContrato      = new stdClass();
             $oContrato->sequencial      = $oContratos->ac16_sequencial;
             $oContrato->objeto          = utf8_encode($oContratos->objetocontrato);
-            $oContrato->contrato        = $oContratos->numerocontratoempenho.'/'.$oContratos->anocontrato;
+            $oContrato->contrato        = $oContratos->numerocontratoempenho . '/' . $oContratos->anocontrato;
             $oContrato->fornecedor      = utf8_encode($oContratos->nomerazaosocialfornecedor);
             $oContrato->licitacao       = $oContratos->processo;
             $oContrato->numerocontrolepncp = $oContratos->ac213_numerocontrolepncp;
-            
+
             $itens[] = $oContrato;
         }
         $oRetorno->contratos = $itens;
@@ -45,30 +45,30 @@ switch ($oParam->exec) {
 
     case 'enviarContrato':
         $clContrato  = db_utils::getDao("acordo");
-        $clacocontrolepncp = db_utils::getDao("acocontratopncp"); 
+        $clacocontrolepncp = db_utils::getDao("acocontratopncp");
         //todas as contratos marcadas
         try {
             foreach ($oParam->aContratos as $aContrato) {
                 //Contrato
                 $rsDadosEnvio = $clContrato->sql_record($clContrato->sql_DadosContrato_PCNP($aContrato->codigo));
-                           
+
                 $aItensContrato = array();
                 for ($aco = 0; $aco < pg_numrows($rsDadosEnvio); $aco++) {
                     $oDadosContrato = db_utils::fieldsMemory($rsDadosEnvio, $aco);
                 }
-                
+
                 $clContratoPNCP = new ContratoPNCP($oDadosContrato);
                 //monta o json com os dados da Contrato
                 $oDados = $clContratoPNCP->montarDados();
-                $arraybensjson = json_encode(DBString::utf8_encode_all($oDados));  
-                
+                $arraybensjson = json_encode(DBString::utf8_encode_all($oDados));
+
                 $rsApiPNCP = $clContratoPNCP->enviarContrato($arraybensjson);
-                
+
                 if ($rsApiPNCP[1] == 201) {
-                    $codigocontrato = explode('x-content-type-options',$rsApiPNCP[0]);
+                    $codigocontrato = explode('x-content-type-options', $rsApiPNCP[0]);
                     $clacocontrolepncp = new cl_acocontratopncp();
                     //monto o codigo do contrato no pncp
-                    $ac213_numerocontrolepncp = '17316563000196-1-' . str_pad(substr($codigocontrato[0], 75), 6, '0', STR_PAD_LEFT). '/' .$oDadosContrato->anocontrato;
+                    $ac213_numerocontrolepncp = '17316563000196-1-' . str_pad(substr($codigocontrato[0], 75), 6, '0', STR_PAD_LEFT) . '/' . $oDadosContrato->anocontrato;
                     $clacocontrolepncp->ac213_contrato = $aContrato->codigo;
                     $clacocontrolepncp->ac213_usuario = db_getsession('DB_id_usuario');
                     $clacocontrolepncp->ac213_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
@@ -78,7 +78,7 @@ switch ($oParam->exec) {
                     $clacocontrolepncp->ac213_ano = substr($codigocontrato[0], 71, 4);
                     $clacocontrolepncp->ac213_sequencialpncp = str_pad(substr($codigocontrato[0], 76), 6, '0', STR_PAD_LEFT);
                     $clacocontrolepncp->incluir();
-                    
+
                     $oRetorno->status  = 1;
                 } else {
                     throw new Exception(utf8_decode($rsApiPNCP[0]));
@@ -102,11 +102,11 @@ switch ($oParam->exec) {
                 for ($aco = 0; $aco < pg_numrows($rsDadosExtras); $aco++) {
                     $oDadosContratoExtras = db_utils::fieldsMemory($rsDadosExtras, $aco);
                 }
-               
+
                 $clContratoPNCP = new ContratoPNCP($oDadosContratoExtras);
                 $oDadosRatificacao = $clContratoPNCP->montarRetificacao();
-                $arraybensjson = json_encode(DBString::utf8_encode_all($oDadosRatificacao)); 
-                $rsApiPNCP = $clContratoPNCP->enviarRetificacaoContrato($arraybensjson,$oDadosContratoExtras);
+                $arraybensjson = json_encode(DBString::utf8_encode_all($oDadosRatificacao));
+                $rsApiPNCP = $clContratoPNCP->enviarRetificacaoContrato($arraybensjson, $oDadosContratoExtras);
             }
         } catch (Exception $eErro) {
             $oRetorno->status  = 2;
@@ -114,156 +114,153 @@ switch ($oParam->exec) {
         }
         break;
 
-    case 'ExcluirContrato': 
+    case 'ExcluirContrato':
 
         $clContrato  = db_utils::getDao("acordo");
-        $clacocontrolepncp = db_utils::getDao("acocontratopncp"); 
-        
+        $clacocontrolepncp = db_utils::getDao("acocontratopncp");
+
         try {
             foreach ($oParam->aContratos as $aContrato) {
                 $clacocontrolepncp = new cl_acocontratopncp();
                 $clContratoPNCP = new ContratoPNCP($oDadosContrato);
-                
-                $rsContrato = $clacocontrolepncp->sql_record($clacocontrolepncp->sql_query_file(null," * ",null,"ac213_contrato = " . $aContrato->codigo));
-       
+
+                $rsContrato = $clacocontrolepncp->sql_record($clacocontrolepncp->sql_query_file(null, " * ", null, "ac213_contrato = " . $aContrato->codigo));
+
                 for ($iCont = 0; $iCont < pg_num_rows($rsContrato); $iCont++) {
-                     $sequencialpncp = db_utils::fieldsMemory($rsContrato, $iCont);
-                }    
-                
-                $statusExclusão = $clContratoPNCP->excluirContrato($sequencialpncp->ac213_sequencialpncp,$sequencialpncp->ac213_ano,$sequencialpncp->ac213_numerocontrolepncp);
-                
-                if($statusExclusão->status == null)
-                    $clacocontrolepncp->excluir($ac123_sequencial = null,"ac213_contrato = $aContrato->codigo");
-                
-                if($statusExclusão->status == 404){
-                    throw new Exception(utf8_decode($statusExclusão->message));
-                }
-                if($statusExclusão->status == 422){
-                    throw new Exception(utf8_decode($statusExclusão->message));
-                }
-                if($statusExclusão->status == 500){
-                    throw new Exception(utf8_decode($statusExclusão->message));
+                    $sequencialpncp = db_utils::fieldsMemory($rsContrato, $iCont);
                 }
 
+                $statusExclusão = $clContratoPNCP->excluirContrato($sequencialpncp->ac213_sequencialpncp, $sequencialpncp->ac213_ano, $sequencialpncp->ac213_numerocontrolepncp);
+
+                if ($statusExclusão->status == null)
+                    $clacocontrolepncp->excluir($ac123_sequencial = null, "ac213_contrato = $aContrato->codigo");
+
+                if ($statusExclusão->status == 404) {
+                    throw new Exception(utf8_decode($statusExclusão->message));
+                }
+                if ($statusExclusão->status == 422) {
+                    throw new Exception(utf8_decode($statusExclusão->message));
+                }
+                if ($statusExclusão->status == 500) {
+                    throw new Exception(utf8_decode($statusExclusão->message));
+                }
             }
         } catch (Exception $eErro) {
             $oRetorno->status  = 2;
             $oRetorno->message = urlencode($eErro->getMessage());
         }
-        break; 
-        
-        case 'getEmpenhos':
-            $clcontratos = new cl_acordo; 
-            $rsEmpenhos = $clcontratos->sql_record($clcontratos->sql_query_publicacaoEmpenho_pncp("*", null,"e60_anousu = " . db_getsession("DB_anousu"),null));
-            
-            for ($iCont = 0; $iCont < pg_num_rows($rsEmpenhos); $iCont++) {
-    
-                $oEmpenhos = db_utils::fieldsMemory($rsEmpenhos, $iCont);
-                
-                $oEmpenho      = new stdClass();
-                $oEmpenho->sequencial      = $oEmpenhos->e60_numemp;
-                $oEmpenho->objeto          = utf8_encode($oEmpenhos->objetocontrato);
-                $oEmpenho->empenho         = $oEmpenhos->numerocontratoempenho.'/'.$oEmpenhos->anocontrato;
-                $oEmpenho->fornecedor      = utf8_encode($oEmpenhos->nomerazaosocialfornecedor);
-                $oEmpenho->licitacao       = $oEmpenhos->processo;
-                $oEmpenho->numerocontrolepncp = $oEmpenhos->ac213_numerocontrolepncp;
-                
-                $itens[] = $oEmpenho;
-            }
-            $oRetorno->empenhos = $itens;
         break;
 
-        case 'enviarEmpenho':
-            $clEmpenho  = db_utils::getDao("acordo");
-            $clacocontrolepncp = db_utils::getDao("acocontratopncp");
-            
-            //todas os empenhos marcadas
-            try {
-                foreach ($oParam->aEmpenhos as $aEmpenho) {
-                    $clEmpenho = new cl_acordo; 
+    case 'getEmpenhos':
+        $clcontratos = new cl_acordo;
+        $rsEmpenhos = $clcontratos->sql_record($clcontratos->sql_query_publicacaoEmpenho_pncp("*", null, "e60_anousu = " . db_getsession("DB_anousu"), null));
+
+        for ($iCont = 0; $iCont < pg_num_rows($rsEmpenhos); $iCont++) {
+
+            $oEmpenhos = db_utils::fieldsMemory($rsEmpenhos, $iCont);
+
+            $oEmpenho      = new stdClass();
+            $oEmpenho->sequencial      = $oEmpenhos->e60_numemp;
+            $oEmpenho->objeto          = utf8_encode($oEmpenhos->objetocontrato);
+            $oEmpenho->empenho         = $oEmpenhos->numerocontratoempenho . '/' . $oEmpenhos->anocontrato;
+            $oEmpenho->fornecedor      = utf8_encode($oEmpenhos->nomerazaosocialfornecedor);
+            $oEmpenho->licitacao       = $oEmpenhos->processo;
+            $oEmpenho->numerocontrolepncp = $oEmpenhos->ac213_numerocontrolepncp;
+
+            $itens[] = $oEmpenho;
+        }
+        $oRetorno->empenhos = $itens;
+        break;
+
+    case 'enviarEmpenho':
+        $clEmpenho  = db_utils::getDao("acordo");
+        $clacocontrolepncp = db_utils::getDao("acocontratopncp");
+
+        //todas os empenhos marcadas
+        try {
+            foreach ($oParam->aEmpenhos as $aEmpenho) {
+                $clEmpenho = new cl_acordo;
+                $clacocontrolepncp = new cl_acocontratopncp();
+                //Empenhos
+                // $oParam->aEmpenhos;
+
+                $rsDadosEnvio = $clEmpenho->sql_record($clEmpenho->sql_query_pncp_empenho($aEmpenho->codigo));
+
+                for ($aco = 0; $aco < pg_numrows($rsDadosEnvio); $aco++) {
+                    $oDadosEmpenho = db_utils::fieldsMemory($rsDadosEnvio, $aco);
+                }
+
+                $clEmpenhoPNCP = new ContratoPNCP($oDadosEmpenho);
+                //monta o json com os dados da Contrato
+                $oDados = $clEmpenhoPNCP->montarDados();
+
+                $arraybensjson = json_encode(DBString::utf8_encode_all($oDados));
+
+                $rsApiPNCP = $clEmpenhoPNCP->enviarContrato($arraybensjson);
+                // print_r($rsApiPNCP);exit;
+                if ($rsApiPNCP[1] == 201) {
+                    $codigocontrato = explode('x-content-type-options', $rsApiPNCP[0]);
                     $clacocontrolepncp = new cl_acocontratopncp();
-                    //Empenhos
-                    // $oParam->aEmpenhos;
-                    
-                    $rsDadosEnvio = $clEmpenho->sql_record($clEmpenho->sql_query_pncp_empenho($aEmpenho->codigo));
-                               
-                    for ($aco = 0; $aco < pg_numrows($rsDadosEnvio); $aco++) {
-                        $oDadosEmpenho = db_utils::fieldsMemory($rsDadosEnvio, $aco);
-                    }
-                    
-                    $clEmpenhoPNCP = new ContratoPNCP($oDadosEmpenho);
-                    //monta o json com os dados da Contrato
-                    $oDados = $clEmpenhoPNCP->montarDados();
-                    
-                    $arraybensjson = json_encode(DBString::utf8_encode_all($oDados));  
-                    
-                    $rsApiPNCP = $clEmpenhoPNCP->enviarContrato($arraybensjson);
-                    // print_r($rsApiPNCP);exit;
-                    if ($rsApiPNCP[1] == 201) {
-                        $codigocontrato = explode('x-content-type-options',$rsApiPNCP[0]);
-                        $clacocontrolepncp = new cl_acocontratopncp();
-                        //monto o codigo do contrato no pncp
-                        $ac213_numerocontrolepncp = '17316563000196-1-' . str_pad(substr($codigocontrato[0], 75), 6, '0', STR_PAD_LEFT). '/' .$oDadosContrato->anocontrato;
-                        $clacocontrolepncp->ac213_contrato = $aEmpenho->codigo;
-                        $clacocontrolepncp->ac213_usuario = db_getsession('DB_id_usuario');
-                        $clacocontrolepncp->ac213_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
-                        $clacocontrolepncp->ac213_numerocontrolepncp = $ac213_numerocontrolepncp;
-                        $clacocontrolepncp->ac213_situacao = 1;
-                        $clacocontrolepncp->ac213_instit = db_getsession('DB_instit');
-                        $clacocontrolepncp->ac213_ano = substr($codigocontrato[0], 71, 4);
-                        $clacocontrolepncp->ac213_sequencialpncp = str_pad(substr($codigocontrato[0], 76), 6, '0', STR_PAD_LEFT);
-                        $clacocontrolepncp->ac213_tipopublicacao = 2;
-                        $clacocontrolepncp->incluir();
-                        
-                        $oRetorno->status  = 1;
-                    } else {
-                        throw new Exception(utf8_decode($rsApiPNCP[0]));
-                    }
+                    //monto o codigo do contrato no pncp
+                    $ac213_numerocontrolepncp = '17316563000196-1-' . str_pad(substr($codigocontrato[0], 75), 6, '0', STR_PAD_LEFT) . '/' . $oDadosContrato->anocontrato;
+                    $clacocontrolepncp->ac213_contrato = $aEmpenho->codigo;
+                    $clacocontrolepncp->ac213_usuario = db_getsession('DB_id_usuario');
+                    $clacocontrolepncp->ac213_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
+                    $clacocontrolepncp->ac213_numerocontrolepncp = $ac213_numerocontrolepncp;
+                    $clacocontrolepncp->ac213_situacao = 1;
+                    $clacocontrolepncp->ac213_instit = db_getsession('DB_instit');
+                    $clacocontrolepncp->ac213_ano = substr($codigocontrato[0], 71, 4);
+                    $clacocontrolepncp->ac213_sequencialpncp = str_pad(substr($codigocontrato[0], 76), 6, '0', STR_PAD_LEFT);
+                    $clacocontrolepncp->ac213_tipopublicacao = 2;
+                    $clacocontrolepncp->incluir();
+
+                    $oRetorno->status  = 1;
+                } else {
+                    throw new Exception(utf8_decode($rsApiPNCP[0]));
                 }
-            } catch (Exception $eErro) {
-                $oRetorno->status  = 2;
-                $oRetorno->message = urlencode($eErro->getMessage());
             }
-    
-            break;
+        } catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
 
-            case 'ExcluirEmpenho': 
+        break;
 
-                $clEmpenho  = db_utils::getDao("acordo");
-                $clacocontrolepncp = db_utils::getDao("acocontratopncp");
-                
-                try {
-                    foreach ($oParam->aEmpenhos as $aEmpenho) {
-                        $clacocontrolepncp = new cl_acocontratopncp();
-                        $clContratoPNCP = new ContratoPNCP($oDadosContrato);
-                        
-                        $rsContrato = $clacocontrolepncp->sql_record($clacocontrolepncp->sql_query_file(null," * ",null,"ac213_tipopublicacao = 2 and ac213_contrato = " . $aEmpenho->codigo));
-               
-                        for ($iCont = 0; $iCont < pg_num_rows($rsContrato); $iCont++) {
-                             $sequencialpncp = db_utils::fieldsMemory($rsContrato, $iCont);
-                        }    
-                        
-                        $statusExclusão = $clContratoPNCP->excluirContrato($sequencialpncp->ac213_sequencialpncp,$sequencialpncp->ac213_ano,$sequencialpncp->ac213_numerocontrolepncp);
-                        
-                        if($statusExclusão->status == null)
-                            $clacocontrolepncp->excluir($ac123_sequencial = null,"ac213_contrato = $aContrato->codigo");
-                        
-                        if($statusExclusão->status == 404){
-                            throw new Exception(utf8_decode($statusExclusão->message));
-                        }
-                        if($statusExclusão->status == 422){
-                            throw new Exception(utf8_decode($statusExclusão->message));
-                        }
-                        if($statusExclusão->status == 500){
-                            throw new Exception(utf8_decode($statusExclusão->message));
-                        }
-        
-                    }
-                } catch (Exception $eErro) {
-                    $oRetorno->status  = 2;
-                    $oRetorno->message = urlencode($eErro->getMessage());
+    case 'ExcluirEmpenho':
+
+        $clEmpenho  = db_utils::getDao("acordo");
+        $clacocontrolepncp = db_utils::getDao("acocontratopncp");
+
+        try {
+            foreach ($oParam->aEmpenhos as $aEmpenho) {
+                $clacocontrolepncp = new cl_acocontratopncp();
+                $clContratoPNCP = new ContratoPNCP($oDadosContrato);
+
+                $rsContrato = $clacocontrolepncp->sql_record($clacocontrolepncp->sql_query_file(null, " * ", null, "ac213_tipopublicacao = 2 and ac213_contrato = " . $aEmpenho->codigo));
+
+                for ($iCont = 0; $iCont < pg_num_rows($rsContrato); $iCont++) {
+                    $sequencialpncp = db_utils::fieldsMemory($rsContrato, $iCont);
                 }
-                break;      
-         
+
+                $statusExclusão = $clContratoPNCP->excluirContrato($sequencialpncp->ac213_sequencialpncp, $sequencialpncp->ac213_ano, $sequencialpncp->ac213_numerocontrolepncp);
+
+                if ($statusExclusão->status == null)
+                    $clacocontrolepncp->excluir($ac123_sequencial = null, "ac213_contrato = $aContrato->codigo");
+
+                if ($statusExclusão->status == 404) {
+                    throw new Exception(utf8_decode($statusExclusão->message));
+                }
+                if ($statusExclusão->status == 422) {
+                    throw new Exception(utf8_decode($statusExclusão->message));
+                }
+                if ($statusExclusão->status == 500) {
+                    throw new Exception(utf8_decode($statusExclusão->message));
+                }
+            }
+        } catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+        break;
 }
 echo json_encode($oRetorno);

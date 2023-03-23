@@ -24,92 +24,71 @@ class ContratoPNCP extends ModeloBasePNCP
     {
         $oDado = $this->dados;
 
-        if($oDado->receita = 't')
+        if ($oDado->receita = 't')
             $oDado->receita = true;
 
-        $aDadosAPI = array 
-        ( 
-        'cnpjCompra'                               => '17316563000196',//$oDado->cnpjcompra,
-        'anoCompra'                                => $oDado->anocompra,
-        'sequencialCompra'                         => $oDado->sequencialcompra,
-        'tipoContratoId'                           => $oDado->tipocontratoid,
-        'numeroContratoEmpenho'                    => $oDado->numerocontratoempenho,
-        'anoContrato'                              => $oDado->anocontrato,
-        'processo'                                 => $oDado->processo,
-        'categoriaProcessoId'                      => $oDado->categoriaprocessoid,
-        'niFornecedor'                             => $oDado->nifornecedor,
-        'tipoPessoaFornecedor'                     => 'PJ',//$oDado->tipopessoafornecedor,
-        'nomeRazaoSocialFornecedor'                => $oDado->nomerazaosocialfornecedor,
-        'receita'                                  => $oDado->receita,
-        'codigoUnidade'                            => '01001',//$oDado->codigounidade,
-        'objetoContrato'                           => $oDado->objetocontrato,
-        'valorInicial'                             => $oDado->valorinicial,
-        'numeroParcelas'                           => $oDado->numeroparcelas,
-        'valorParcela'                             => $oDado->valorparcela,
-        'valorGlobal'                              => $oDado->valorglobal,
-        'dataAssinatura'                           => $oDado->dataassinatura,
-        'dataVigenciaInicio'                       => $oDado->datavigenciainicio,
-        'dataVigenciaFim'                          => $oDado->datavigenciafim,
-        'valorAcumulado'                           => $oDado->valorAcumulado,
-        // 'niFornecedorSubContratado'                => '09336849000105',//$oDado->nifornecedorsubcontratado,
-        // 'tipoPessoaFornecedorSubContratado'        => 'PJ',//$oDado->tipopessoafornecedorsubcontratado,
-        // 'nomeRazaoSocialFornecedorSubContratado'   => 'Teste Fornecedor',//$oDado->nomerazaosocialfornecedorsubcontratado,
-        // 'informacaoComplementar'                   => $oDado->informacaocomplementar,
-        // 'urlCipi'                                  => $oDado->urlcipi,
-        // 'identificadorCipi'                        => '',//$oDado->identificadorcipi,
-        );   
-        // '2522.31-81',
+        $aDadosAPI = array(
+            'cnpjCompra'                               => '17316563000196', //$oDado->cnpjcompra,
+            'anoCompra'                                => $oDado->anocompra,
+            'sequencialCompra'                         => $oDado->sequencialcompra,
+            'tipoContratoId'                           => $oDado->tipocontratoid,
+            'numeroContratoEmpenho'                    => $oDado->numerocontratoempenho,
+            'anoContrato'                              => $oDado->anocontrato,
+            'processo'                                 => $oDado->processo,
+            'categoriaProcessoId'                      => $oDado->categoriaprocessoid,
+            'niFornecedor'                             => $oDado->nifornecedor,
+            'tipoPessoaFornecedor'                     => 'PJ', //$oDado->tipopessoafornecedor,
+            'nomeRazaoSocialFornecedor'                => $oDado->nomerazaosocialfornecedor,
+            'receita'                                  => $oDado->receita,
+            'codigoUnidade'                            => '01001', //$oDado->codigounidade,
+            'objetoContrato'                           => $oDado->objetocontrato,
+            'valorInicial'                             => $oDado->valorinicial,
+            'numeroParcelas'                           => $oDado->numeroparcelas,
+            'valorParcela'                             => $oDado->valorparcela,
+            'valorGlobal'                              => $oDado->valorglobal,
+            'dataAssinatura'                           => $oDado->dataassinatura,
+            'dataVigenciaInicio'                       => $oDado->datavigenciainicio,
+            'dataVigenciaFim'                          => $oDado->datavigenciafim,
+            'valorAcumulado'                           => $oDado->valorAcumulado,
+        );
         $oDadosAPI = $aDadosAPI;
 
         return $oDadosAPI;
-               
     }
 
     public function montarRetificacao()
     {
         $oDado = $this->dados;
 
-        if($oDado->receita = 't')
+        if ($oDado->receita = 't')
             $oDado->receita = true;
 
-        $aDadosAPI = array 
-        ( 
-        'cnpjCompra'                               => '17316563000196',//$oDado->cnpjcompra,
-        'anoCompra'                                => $oDado->anocompra,
-        'sequencialCompra'                         => $oDado->sequencialcompra,
-        'tipoContratoId'                           => $oDado->tipocontratoid,
-        'numeroContratoEmpenho'                    => $oDado->numerocontratoempenho,
-        'anoContrato'                              => $oDado->anocontrato,
-        'processo'                                 => $oDado->processo,
-        'categoriaProcessoId'                      => $oDado->categoriaprocessoid,
-        'niFornecedor'                             => $oDado->nifornecedor,
-        'tipoPessoaFornecedor'                     => 'PJ',//$oDado->tipopessoafornecedor,
-        'nomeRazaoSocialFornecedor'                => $oDado->nomerazaosocialfornecedor,
-        'receita'                                  => $oDado->receita,
-        'codigoUnidade'                            => '01001',//$oDado->codigounidade,
-        'objetoContrato'                           => $oDado->objetocontrato,
-        'valorInicial'                             => $oDado->valorinicial,
-        'numeroParcelas'                           => $oDado->numeroparcelas,
-        'valorParcela'                             => $oDado->valorparcela,
-        'valorGlobal'                              => $oDado->valorglobal,
-        'dataAssinatura'                           => $oDado->dataassinatura,
-        'dataVigenciaInicio'                       => $oDado->datavigenciainicio,
-        'dataVigenciaFim'                          => $oDado->datavigenciafim,
-        'valorAcumulado'                           => $oDado->valorAcumulado,
-        // 'niFornecedorSubContratado'                => '09336849000105',//$oDado->nifornecedorsubcontratado,
-        // 'tipoPessoaFornecedorSubContratado'        => 'PJ',//$oDado->tipopessoafornecedorsubcontratado,
-        // 'nomeRazaoSocialFornecedorSubContratado'   => 'Teste Fornecedor',//$oDado->nomerazaosocialfornecedorsubcontratado,
-        // 'informacaoComplementar'                   => $oDado->informacaocomplementar,
-        // 'urlCipi'                                  => $oDado->urlcipi,
-        // 'identificadorCipi'                        => '',//$oDado->identificadorcipi,
-        );   
-        // '2522.31-81',
-        $oDadosAPI = $aDadosAPI;
+        $aDadosAPI = array(
+            'cnpjCompra'                               => '17316563000196', //$oDado->cnpjcompra,
+            'anoCompra'                                => $oDado->anocompra,
+            'sequencialCompra'                         => $oDado->sequencialcompra,
+            'tipoContratoId'                           => $oDado->tipocontratoid,
+            'numeroContratoEmpenho'                    => $oDado->numerocontratoempenho,
+            'anoContrato'                              => $oDado->anocontrato,
+            'processo'                                 => $oDado->processo,
+            'categoriaProcessoId'                      => $oDado->categoriaprocessoid,
+            'niFornecedor'                             => $oDado->nifornecedor,
+            'tipoPessoaFornecedor'                     => 'PJ', //$oDado->tipopessoafornecedor,
+            'nomeRazaoSocialFornecedor'                => $oDado->nomerazaosocialfornecedor,
+            'receita'                                  => $oDado->receita,
+            'codigoUnidade'                            => '01001', //$oDado->codigounidade,
+            'objetoContrato'                           => $oDado->objetocontrato,
+            'valorInicial'                             => $oDado->valorinicial,
+            'numeroParcelas'                           => $oDado->numeroparcelas,
+            'valorParcela'                             => $oDado->valorparcela,
+            'valorGlobal'                              => $oDado->valorglobal,
+            'dataAssinatura'                           => $oDado->dataassinatura,
+            'dataVigenciaInicio'                       => $oDado->datavigenciainicio,
+            'dataVigenciaFim'                          => $oDado->datavigenciafim,
+            'valorAcumulado'                           => $oDado->valorAcumulado,
+        );
 
-       
-        // echo "<pre>";
-        // print_r($aDadosAPI);
-        // exit;
+        $oDadosAPI = $aDadosAPI;
 
         return $oDadosAPI;
     }
@@ -125,9 +104,9 @@ class ContratoPNCP extends ModeloBasePNCP
         $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos";
 
         $method = 'POST';
-        
+
         $chpncp      = curl_init($url);
-          
+
         $headers = array(
             'Content-Type: application/json',
             'Authorization: ' . $token,
@@ -152,31 +131,30 @@ class ContratoPNCP extends ModeloBasePNCP
         );
 
         curl_setopt_array($chpncp, $optionspncp);
-       
+
         $contentpncp = curl_exec($chpncp);
-       
+
         curl_close($chpncp);
 
-        $retorno = explode(':',$contentpncp);
+        $retorno = explode(':', $contentpncp);
 
-        if (substr($retorno[0],7,3) == 201)
-            return array($retorno[5].$retorno[6],substr($retorno[0],7,3));
-        return array($retorno[17],substr($retorno[0],7,3));    
-            
+        if (substr($retorno[0], 7, 3) == 201)
+            return array($retorno[5] . $retorno[6], substr($retorno[0], 7, 3));
+        return array($retorno[17], substr($retorno[0], 7, 3));
     }
-    
-    public function enviarRetificacaoContrato($dadosPNCP,$dadosExtras)
+
+    public function enviarRetificacaoContrato($dadosPNCP, $dadosExtras)
     {
         $token = $this->login();
 
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = substr($dadosExtras->ac213_numerocontrolepncp,0,14);
+        $cnpj = substr($dadosExtras->ac213_numerocontrolepncp, 0, 14);
         $ano = $dadosExtras->anocompra;
 
         $sequencial = $dadosExtras->ac213_sequencialpncp;
-        
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos"."/".$ano."/".$sequencial;
-        
+
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
+
         $method = 'PUT';
 
         $chpncp      = curl_init($url);
@@ -218,26 +196,26 @@ class ContratoPNCP extends ModeloBasePNCP
         exit;
         */
         curl_close($chpncp);
-        
-        $retorno = explode(':',$contentpncp);
 
-        if (substr($retorno[0],7,3) == 201)
-            return array($retorno[5].$retorno[6],substr($retorno[0],7,3));
-        return array($retorno[22],substr($retorno[0],7,3));    
+        $retorno = explode(':', $contentpncp);
+
+        if (substr($retorno[0], 7, 3) == 201)
+            return array($retorno[5] . $retorno[6], substr($retorno[0], 7, 3));
+        return array($retorno[22], substr($retorno[0], 7, 3));
     }
 
-    public function excluirContrato($sequencial,$ano,$cnpj)
+    public function excluirContrato($sequencial, $ano, $cnpj)
     {
-       
+
         $token = $this->login();
-        
+
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = substr($cnpj,0,14);
-       
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos"."/".$ano."/".$sequencial;
+        $cnpj = substr($cnpj, 0, 14);
+
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
 
         $method = 'DELETE';
-         
+
         $chpncp      = curl_init($url);
 
         $headers = array(
@@ -266,11 +244,11 @@ class ContratoPNCP extends ModeloBasePNCP
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
-       
+
         curl_close($chpncp);
 
         $retorno = json_decode($contentpncp);
-        
+
         return $retorno;
-    }    
+    }
 }
