@@ -452,4 +452,30 @@ class OrdemDeCompra {
     $oDaoOrdemItemTabela->incluir();
   }
 
+  public function getItensOrdemTabela($item){
+    $oDaoOrdemItemTabela  = new cl_empordemtabela;
+    $sqlOrdemItemTabela  = "select * from empordemtabela inner join pcmater on pc01_codmater = l223_pcmatertabela where l223_pcmaterordem  = $item->pcmaterordem and l223_numemp = $item->codempenho";
+    $rsOrdemItemTabela = $oDaoOrdemItemTabela->sql_record($sqlOrdemItemTabela);
+    $aItensEntrada     = array();
+    if ($oDaoOrdemItemTabela->numrows > 0) {
+
+      $iTotalItens    = $oDaoOrdemItemTabela->numrows;
+      for ($iRowItem = 0; $iRowItem < $iTotalItens; $iRowItem++) {
+
+        $oDadosOrdemItemTabela  = db_utils::fieldsMemory($rsOrdemItemTabela, $iRowItem);
+
+        $oItentabela   = new stdClass();
+        $oItentabela->pc01_descrmater = $oDadosOrdemItemTabela->pc01_descrmater;
+        $oItentabela->l223_quant = $oDadosOrdemItemTabela->l223_quant;
+        $oItentabela->l223_vlrn = $oDadosOrdemItemTabela->l223_vlrn;
+        $oItentabela->l223_total = $oDadosOrdemItemTabela->l223_total;
+        $oItentabela->l223_sequencial = $oDadosOrdemItemTabela->l223_sequencial;
+
+        $aItensEntrada[]     = $oItentabela;
+
+      }
+    }
+    return $aItensEntrada;
+  }
+
 }

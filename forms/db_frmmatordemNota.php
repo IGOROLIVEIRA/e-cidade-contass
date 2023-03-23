@@ -652,16 +652,16 @@ if ($lBloquear) {
   
   var sUrlRC = 'com4_ordemdecompra001.RPC.php';
 
-  function js_init() {
+  function js_init(empenho,item) {
 
   oGridItens = new DBGrid('gridItens');
   oGridItens.nameInstance = "gridItens";
   oGridItens.setCellAlign(new Array("center", "center", "center", "center", "center", "center"));
-  oGridItens.setCellWidth(new Array("5%", "50%", "10%", "10%", "14%", "10%"));
+  oGridItens.setCellWidth(new Array("6%", "40%", "10%", "10%", "10%", "10%"));
   oGridItens.setHeader(new Array("Ordem", "Descrição", "Quantidade", "Valor Unitário", "Valor Total", "Ação"));
-  oGridItens.aHeaders[3].lDisplayed = false;
   oGridItens.show($('gridItensSolicitacao'));
   $('btnAddItem').observe("click", js_adicionarItem);
+  js_pesquisaitemtabela(empenho,item);
 
   }
 
@@ -886,7 +886,7 @@ if ($lBloquear) {
       $('coditemordem').value = item;
       $('codempenho').style.display = 'none';
       $('coditemordem').style.display = 'none';
-      js_init();
+      js_init(empenho,item);
     }
   }
 
@@ -978,7 +978,7 @@ if ($lBloquear) {
 
     js_removeObj('msgBox');
     var oRetorno = eval("(" + oAjax.responseText + ")");
-    if (oRetorno.status == 1) {
+    if (oRetorno.iStatus == 1) {
 
       js_preencheGrid(oRetorno.itens);
       js_limparForm();
@@ -986,6 +986,32 @@ if ($lBloquear) {
     } else {
       alert(oRetorno.message.urlDecode());
     }
+  }
+
+  function js_pesquisaitemtabela(empenho,item){
+    if (empenho == "") {
+
+    alert('Numero de empenho vazio');
+    return false;
+
+    }
+    if (item == "") {
+
+    alert('Item vazio');
+    return false;
+
+    }
+
+    js_divCarregando('Aguarde, adicionando item', "msgBox");
+    var oParam = new Object();
+    oParam.pcmaterordem = item;
+    oParam.codempenho = empenho;
+    oParam.exec = "adicionarItemOrdemTabela";
+    var oAjax = new Ajax.Request(sUrlRC, {
+      method: "post",
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: js_retornoadicionarItem
+    });
   }
 
   function js_limparForm() {
@@ -1012,17 +1038,12 @@ if ($lBloquear) {
 
         var aLinha = new Array();
         aLinha[0] = i + 1;
-        aLinha[1] = codigoitem;
-        aLinha[2] = descricaoitem.urlDecode();
-        aLinha[3] = unidade;
-        aLinha[4] = unidade_descricao.urlDecode();
-        aLinha[5] = "<span id='justificativa" + indice + "' style='display:none'>" + justificativa.urlDecode() + "</span>";
-        aLinha[5] += "<span id='resumo" + indice + "'        style='display:none'>" + resumo.urlDecode() + "</span>";
-        aLinha[5] += "<span id='pgto" + indice + "'          style='display:none'>" + pagamento.urlDecode() + "</span>";
-        aLinha[5] += "<span id='prazo" + indice + "'         style='display:none'>" + prazo.urlDecode() + "</span>";
-        aLinha[5] += "<span><a href='#' onclick='js_showInfo(" + indice + ")'><img src='imagens/edittext.png' border='0' ></a>...</span>";
-        aLinha[6] = "<input type='button' value='Alterar' onclick='js_alterarLinha(" + indice + ")'>";
-        aLinha[6] += "<input type='button' value='Excluir' onclick='js_excluirLinha(" + indice + ", " + temestimativa + ")'>";
+        aLinha[1] = iPcmaterdescr.urlDecode();
+        aLinha[2] = iQuantidade;
+        aLinha[3] = iUnit;
+        aLinha[4] = iValor;
+        aLinha[5] = "<input type='button' value='A' onclick='js_alterarLinha(" + iSequencial + ", " + i + ")'>";
+        aLinha[5] += "<input type='button' value='E' onclick='js_excluirLinha(" + iSequencial + ", " + i + ")'>";
 
         oGridItens.addRow(aLinha);
         oGridItens.aRows[i].aCells[0].sStyle += "background-color:#DED5CB;font-weight:bold;padding:1px";

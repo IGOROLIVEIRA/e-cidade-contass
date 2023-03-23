@@ -23,7 +23,7 @@ class cl_empordemtabela {
   public $l223_vlrn = 0; 
   public $l223_total = 0; 
   public $l223_numemp = 0; 
-  public $l223_codordem = 0; 
+  public $l223_codordem = NULL; 
   // cria propriedade com as variaveis do arquivo 
   public $campos = "
                  l223_sequencial = int8 = l223_sequencial 
@@ -71,14 +71,17 @@ class cl_empordemtabela {
   // funcao para inclusao
   function incluir () { 
       $this->atualizacampos();
-     if ($this->l223_sequencial == null ) { 
-       $this->erro_sql = " Campo l223_sequencial não informado.";
-       $this->erro_campo = "l223_sequencial";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if($this->l223_sequencial == "" || $this->l223_sequencial == null ){
+       $result = db_query("select nextval('empordemtabela_l223_sequencial_seq')"); 
+       if($result==false){
+         $this->erro_banco = str_replace("\n","",@pg_last_error());
+         $this->erro_sql   = "Verifique o cadastro da sequencia: empordemtabela_l223_sequencial_seq do campo: l223_sequencial"; 
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false; 
+       }
+       $this->l223_sequencial = pg_result($result,0,0); 
      }
      if ($this->l223_pcmaterordem == null ) { 
        $this->erro_sql = " Campo l223_pcmaterordem não informado.";
@@ -157,8 +160,6 @@ class cl_empordemtabela {
                                ,$this->l223_numemp 
                                ,$this->l223_codordem 
                       )";
-                  print_r($sql);
-                  exit;
      $result = db_query($sql); 
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());

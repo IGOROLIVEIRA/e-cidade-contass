@@ -137,9 +137,26 @@ try {
 
       $oOrdemCompraItemTabela->addItemTabela($oParam);
       
+      $aItens           = $oOrdemCompraItemTabela->getItensOrdemTabela($oParam);
       
-      $oRetorno->iStatus  = 2;
-      $oRetorno->sMessage = urlencode("erro");
+      $aDadosEntrada       = array();
+      
+      foreach ($aItens as $oItens) {
+        
+        $oDados = new stdClass();
+        $oDados->iPcmaterdescr         = urlencode($oItens->pc01_descrmater);
+        $oDados->iQuantidade         = $oItens->l223_quant;
+        $oDados->iUnit       = $oItens->l223_vlrn;
+        $oDados->iValor       = $oItens->l223_total;
+        $oDados->iSequencial= $oItens->l223_sequencial;
+
+        $aDadosEntrada[]           = $oDados;
+
+      }
+
+      $oRetorno->itens = $aDadosEntrada;
+      
+      
     break;
 
     default:
