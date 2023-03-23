@@ -168,7 +168,7 @@ try {
 
       $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
 
-      if ($oProcessoCompra->getNumerodispensa() == $oParam->pc80_numdispensa) {
+      if ($oProcessoCompra->getNumerodispensa() != '0' && ($oProcessoCompra->getNumerodispensa() == $oParam->pc80_numdispensa)) {
         throw new DBException(_M(MENSAGENS . 'dispensa_ja_existe'));
       }
 

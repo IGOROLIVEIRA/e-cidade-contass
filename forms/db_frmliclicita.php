@@ -1160,6 +1160,16 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                     </td>
                 </tr>
 
+                <tr id="justificativapncp">
+                    <td>
+                        <strong>Justificativa pela escolha da modalidade presencial:</strong>
+                    </td>
+                    <td>
+                        <?
+                        db_textarea('l20_justificativapncp', 0, 57, $Il20_justificativapncp, true, 'text', $db_opcao, "onkeyup='limitaTextarea(this);'");
+                        ?>
+                    </td>
+                </tr>
             </table>
         </fieldset>
 
@@ -1689,8 +1699,15 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         var oRetorno = eval("(" + oAjax.responseText + ")");
         codigotribunal = oRetorno.l03_pctipocompratribunal;
+        presencial = oRetorno.l03_presencial;
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
+
+        if (presencial == 't' && l12_pncp == 't') {
+            document.getElementById('justificativapncp').style.display = 'none';
+        } else {
+            document.getElementById('justificativapncp').style.display = '';
+        }
 
         if (document.getElementById('l20_leidalicitacao').value == "1" && l12_pncp == "t" && (codigotribunal == 100 || codigotribunal == 101 || codigotribunal == 102 || codigotribunal == 103)) {
             document.getElementById('dtjs_l20_dataaberproposta').style.display = '';

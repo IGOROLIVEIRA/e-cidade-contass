@@ -48,6 +48,7 @@ switch ($oParam->exec) {
 
             $oDados = db_utils::fieldsMemory($rsModalidade, 0);
             $oRetorno->l03_pctipocompratribunal = $oDados->l03_pctipocompratribunal;
+            $oRetorno->l03_presencial = $oDados->l03_presencial;
         }
 
 
