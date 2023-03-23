@@ -438,4 +438,18 @@ class OrdemDeCompra {
     return $this->oEmpenhoFinanceiro;
   }
 
+
+  public function addItemTabela($item){
+    
+    $oDaoOrdemItemTabela  = new cl_empordemtabela;
+    $oDaoOrdemItemTabela->l223_pcmaterordem = $item->pcmaterordem;
+    $oDaoOrdemItemTabela->l223_pcmatertabela = $item->pcmatertabela;
+    $oDaoOrdemItemTabela->l223_quant = $item->quantidade;
+    $oDaoOrdemItemTabela->l223_vlrn = $item->valorunit;
+    $oDaoOrdemItemTabela->l223_total = $item->quantidade * $item->valorunit;
+    $oDaoOrdemItemTabela->l223_numemp = $item->codempenho;
+    $oDaoOrdemItemTabela->l223_codordem = null;
+    $oDaoOrdemItemTabela->incluir();
+  }
+
 }

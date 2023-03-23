@@ -255,6 +255,18 @@ if ($lBloquear) {
                   db_input("programa", 45, @$Iprograma, true, 'text', 3, '');
                   ?>
                 </td>
+                <td nowrap align="right" title="<?= @$Te60_codemp ?>">
+                <?
+                db_ancora("Empenho:", "js_pesquisaEmpenho({$e60_numemp});", "1");
+                ?>
+                </td>
+                <td>
+                  <? 
+                  $sSql = db_query("select e60_codemp||'/'||e60_anousu as numempano from empempenho where e60_numemp = $e60_numemp");
+                  db_fieldsmemory($sSql, 0, true);
+                  db_input('numempano', 20, $Ie60_codemp, true, 'text', 3) 
+                  ?>
+                </td>
               </tr>
               <tr>
                 <td align='right'><b>Obs:</b></td>
@@ -306,8 +318,6 @@ if ($lBloquear) {
                     <a onclick='js_marca(true)' style='cursor:pointer'><b>M</b></a>
                   </td>
                   <td class='table_header' align='center'><b>Seq.</b></td>
-                  <td class='table_header' align='center'><b>N. Empenho</b></td>
-                  <td class='table_header' align='center'><b>Seq .Empenho</b></td>
                   <td class='table_header' align='center'><b>Cod. Item</b></td>
                   <td class='table_header' align='center' style='width:26%'><b>Item</b></td>
                   <td class='table_header' align='center'><b>Unid.</b></td>
@@ -367,6 +377,34 @@ if ($lBloquear) {
 
                     $numrows  = pg_num_rows($result);
 
+
+                    $sSQLacordo = "select
+                    ac26_acordo
+                  from
+                    acordoposicao
+                  inner join acordoitem on
+                    ac20_acordoposicao = ac26_sequencial
+                  inner join acordoitemexecutado on
+                    ac20_sequencial = ac29_acordoitem
+                  inner join acordoitemexecutadoempautitem on
+                    ac29_sequencial = ac19_acordoitemexecutado
+                  inner join empautitem on
+                    e55_sequen = ac19_sequen
+                    and ac19_autori = e55_autori
+                  inner join empautoriza on
+                    e54_autori = e55_autori
+                  left join empempaut on
+                    e61_autori = e54_autori
+                  left join empempenho on
+                    e61_numemp = e60_numemp
+                  where
+                    e60_numemp = {$e60_numemp}";
+                    $resultAcordo   = db_query($sSQLacordo);
+
+                    $numrowAcordo  = pg_num_rows($resultAcordo);
+
+                    db_fieldsmemory($resultAcordo, 0);
+
                     $sClassName = 'normal';
                     $sChecked   = '';
                     //      if ($numrows == 1) {
@@ -381,6 +419,12 @@ if ($lBloquear) {
                       $iOpcao      = 1;
                       $sClassName  = "normal";
                       db_fieldsmemory($result, $i);
+                      if($numrowAcordo == 1){
+                        $sSQLtabela = "select case when pc01_tabela = false then 0 else 1 end as pc01_tabela from pcmater where pc01_codmater = {$e62_item}";
+                        $resultTabela   = db_query($sSQLtabela);
+                        db_fieldsmemory($resultTabela, 0);
+                      }
+                      
                       if ($e62_vltot <= 0 || $e62_quant <= 0) {
 
                         $disabled   = " disabled ";
@@ -399,19 +443,12 @@ if ($lBloquear) {
                       // Sequencia
                       echo "  <td class='linhagrid' id='sequen{$e62_sequencial}' align='center'>$e62_sequen</td>";
 
-                      // Número do empenho
-                      echo "  <td class='linhagrid' align='center'>";
-                      db_ancora($e60_codemp, "js_pesquisaEmpenho({$e60_numemp});", "1");
-                      echo "	</td>";
-
-                      // Sequência do empenho
-                      echo "  <td class='linhagrid'id='empenho{$e62_sequencial}' align='center'>$e60_numemp</td>";
 
                       // Código do item
-                      echo "  <td class='linhagrid' align='center'><small>$e62_item</small></td>";
+                      echo "  <td class='linhagrid' id='e62_item' align='center'>$e62_item</td>";
 
                       // Item
-                      echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
+                      echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' ondblclick='js_verificatabela($e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
 
                       // Unidade
                       echo "  <td class='linhagrid' id='m61_abrev{$e62_sequencial}' nowrap align='left' title='$m61_abrev'>{$m61_abrev}</td>";
@@ -541,6 +578,53 @@ if ($lBloquear) {
                   <!--        </tr>-->
                 </tbody>
               </table>
+              <div id="itenstabela" style="display:none">
+                <fieldset>
+                  <legend><b>Adicionar Item</b></legend>
+                  <table>
+                    <tr>
+                      <td>
+                        <?
+                        db_ancora("Código do material", "js_pesquisapc16_codmater(true);", 1);
+                        ?>
+                      </td>
+                      <td nowrap>
+                        <?
+                        db_input('pc16_codmater', 8, $Ipc16_codmater, true, 'text', 1, " onchange='js_pesquisapc16_codmater(false);'");
+                        db_input('pc01_descrmater', 50, $Ipc01_descrmater, true, 'text', 1, '');
+                        echo "<b>Quantidade<b>";
+                        db_input('l223_quant', 5, 0, true, 'text', 1, "onchange='js_calculatotal();'");
+                        echo "<b>Unitário<b>";
+                        db_input('l223_vlrn', 5, 0, true, 'text', 1, "onchange='js_calculatotal();'");
+                        echo "<b>Total<b>";
+                        db_input('l223_total', 5, 0, true, 'text', 3, '');
+                        db_input('codempenho', 5, 0, true, 'text', 3, '');
+                        db_input('coditemordem', 5, 0, true, 'text', 3, '');
+                        ?>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" style="text-align: center;">
+                        <input type="button" value='Adicionar Item' id='btnAddItem'>
+
+                      </td>
+                    </tr>                   
+                  </table>
+                  <table width='100%'>
+                    <tr>
+                      <td>
+                        <fieldset>
+                          <legend>
+                            <b>Itens</b>
+                          </legend>
+                          <div id='gridItensSolicitacao'>
+
+                          </div>
+                        </fieldset>
+                      </td>
+                    </tr>
+                  </table>
+              </div>
 
               <div style="display: block;height: auto; background-color:#EEEFF2; border-top:1px solid #444444; padding: 6px 42px 19px 10px;">
                 <div style="float: left; width: 50%; text-align: left">
@@ -565,6 +649,22 @@ if ($lBloquear) {
 </form>
 </center>
 <script>
+  
+  var sUrlRC = 'com4_ordemdecompra001.RPC.php';
+
+  function js_init() {
+
+  oGridItens = new DBGrid('gridItens');
+  oGridItens.nameInstance = "gridItens";
+  oGridItens.setCellAlign(new Array("center", "center", "center", "center", "center", "center"));
+  oGridItens.setCellWidth(new Array("5%", "50%", "10%", "10%", "14%", "10%"));
+  oGridItens.setHeader(new Array("Ordem", "Descrição", "Quantidade", "Valor Unitário", "Valor Total", "Ação"));
+  oGridItens.aHeaders[3].lDisplayed = false;
+  oGridItens.show($('gridItensSolicitacao'));
+  $('btnAddItem').observe("click", js_adicionarItem);
+
+  }
+
   function js_validaQuantidade(evt, lFraciona, obj) {
     t = document.all ? event.keyCode : evt.which;
     if (obj.value.indexOf(".") != -1 && t == 46) {
@@ -775,6 +875,167 @@ if ($lBloquear) {
     }
 
 
+  }
+
+  function js_verificatabela(empenho,item,acordo,tabela){
+    if(tabela == 1 && acordo != ""){
+      $('itenstabela').style.display = '';
+      $('pc16_codmater').value = "";
+      $('pc01_descrmater').value = "";
+      $('codempenho').value = empenho;
+      $('coditemordem').value = item;
+      $('codempenho').style.display = 'none';
+      $('coditemordem').style.display = 'none';
+      js_init();
+    }
+  }
+
+  function js_pesquisapc16_codmater(mostra) {
+
+    if (mostra == true) {
+      js_OpenJanelaIframe('',
+        'db_iframe_pcmater',
+        'func_pcmatersolicita.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater',
+        'Pesquisar Materias/Serviços',
+        true,
+        '0'
+      );
+    } else {
+
+      if ($F('pc16_codmater') != '') {
+
+        js_OpenJanelaIframe('',
+          'db_iframe_pcmater',
+          'func_pcmatersolicita.php?pesquisa_chave=' +
+          $F('pc16_codmater') +
+          '&funcao_js=parent.js_mostrapcmater',
+          'Pesquisar Materiais/Serviços',
+          false, '0'
+        );
+      } else {
+        $('pc16_codmater').value = '';
+      }
+    }
+    }
+
+    function js_mostrapcmater(sDescricaoMaterial, Erro) {
+    $('pc01_descrmater').value = sDescricaoMaterial;
+    if (Erro == true) {
+      $('pc16_codmater').value = "";
+    }
+    }
+
+    function js_mostrapcmater1(iCodigoMaterial, sDescricaoMaterial) {
+
+    $('pc16_codmater').value = iCodigoMaterial;
+    $('pc01_descrmater').value = sDescricaoMaterial;
+    db_iframe_pcmater.hide();
+  }
+
+  function js_adicionarItem() {
+
+    if ($F('pc16_codmater') == "") {
+
+      alert('Informe o material!');
+      return false;
+
+    }
+    if ($F('l223_quant') == "") {
+
+    alert('Informe a quantidade!');
+    return false;
+
+    }
+    if ($F('l223_vlrn') == "") {
+
+    alert('Informe o valor unitário!');
+    return false;
+
+    }
+    if ($F('l223_total') == 0) {
+
+    alert('Valor total zerado!');
+    return false;
+
+    }
+    
+    js_divCarregando('Aguarde, adicionando item', "msgBox");
+    var oParam = new Object();
+    oParam.pcmaterordem = $F('coditemordem');
+    oParam.pcmatertabela = $F('pc16_codmater');
+    oParam.quantidade = $F('l223_quant');
+    oParam.valorunit = $F('l223_vlrn');
+    oParam.codempenho = $F('codempenho') ;
+    oParam.exec = "adicionarItemOrdemTabela";
+    var oAjax = new Ajax.Request(sUrlRC, {
+      method: "post",
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: js_retornoadicionarItem
+    });
+  }
+
+  function js_retornoadicionarItem(oAjax) {
+
+    js_removeObj('msgBox');
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+    if (oRetorno.status == 1) {
+
+      js_preencheGrid(oRetorno.itens);
+      js_limparForm();
+
+    } else {
+      alert(oRetorno.message.urlDecode());
+    }
+  }
+
+  function js_limparForm() {
+
+    $('pc16_codmater').value = "";
+    $('pc01_descrmater').value = "";
+    $('pc11_resum').value = "";
+    $('pc11_just').value = "";
+    $('pc11_pgto').value = "";
+    $('pc11_prazo').value = "";
+    $('btnFecharWindowAux').onclick = function() {
+      windowAuxiliar.hide();
+    }
+
+  }
+
+  function js_preencheGrid(aItens) {
+
+    aItensAbertura = aItens;
+    oGridItens.clearAll(true);
+    for (var i = 0; i < aItens.length; i++) {
+
+      with(aItens[i]) {
+
+        var aLinha = new Array();
+        aLinha[0] = i + 1;
+        aLinha[1] = codigoitem;
+        aLinha[2] = descricaoitem.urlDecode();
+        aLinha[3] = unidade;
+        aLinha[4] = unidade_descricao.urlDecode();
+        aLinha[5] = "<span id='justificativa" + indice + "' style='display:none'>" + justificativa.urlDecode() + "</span>";
+        aLinha[5] += "<span id='resumo" + indice + "'        style='display:none'>" + resumo.urlDecode() + "</span>";
+        aLinha[5] += "<span id='pgto" + indice + "'          style='display:none'>" + pagamento.urlDecode() + "</span>";
+        aLinha[5] += "<span id='prazo" + indice + "'         style='display:none'>" + prazo.urlDecode() + "</span>";
+        aLinha[5] += "<span><a href='#' onclick='js_showInfo(" + indice + ")'><img src='imagens/edittext.png' border='0' ></a>...</span>";
+        aLinha[6] = "<input type='button' value='Alterar' onclick='js_alterarLinha(" + indice + ")'>";
+        aLinha[6] += "<input type='button' value='Excluir' onclick='js_excluirLinha(" + indice + ", " + temestimativa + ")'>";
+
+        oGridItens.addRow(aLinha);
+        oGridItens.aRows[i].aCells[0].sStyle += "background-color:#DED5CB;font-weight:bold;padding:1px";
+
+      }
+    }
+    oGridItens.renderRows();
+  }
+
+  function js_calculatotal(){
+    quant = $('l223_quant').value;
+    unit =  $('l223_vlrn').value;
+    $('l223_total').value = quant * unit;
   }
 
   function js_verifica(max, quan, nome, valoruni, numemp, sequencia) {

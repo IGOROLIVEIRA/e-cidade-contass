@@ -129,6 +129,19 @@ try {
 
     break;
 
+    case "adicionarItemOrdemTabela" :
+
+
+
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+
+      $oOrdemCompraItemTabela->addItemTabela($oParam);
+      
+      
+      $oRetorno->iStatus  = 2;
+      $oRetorno->sMessage = urlencode("erro");
+    break;
+
     default:
       throw new ParameterException("Nenhuma Opção Definida");
     break;
