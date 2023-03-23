@@ -40,6 +40,22 @@ try {
       case 'importSaldoCtbExt':
 
           db_inicio_transacao();
+          $iAnoUsuAtual = db_getsession("DB_anousu");
+          $iInstit = db_getsession("DB_instit");
+
+          $oDaoConExtSaldo = new cl_conextsaldo;
+          $sWhereExcluirEXTSaldo = " ces01_anousu = {$iAnoUsuAtual} and ces01_inst = {$iInstit} ";
+          $oDaoConExtSaldo->excluir(null, $sWhereExcluirEXTSaldo);
+          if ($oDaoConExtSaldo->erro_status == "0") {
+              throw new DBException(urlencode("ERRO [ 1 ] - Excluindo Registros - " . $oDaoConExtSaldo->erro_msg ."<br>"));
+          }
+
+          $oDaoConCtbSaldo = new cl_conctbsaldo;
+          $sWhereExcluirCTBSaldo  = " ces02_anousu = {$iAnoUsuAtual} and ces02_inst = {$iInstit} ";
+          $oDaoConCtbSaldo->excluir(null, $sWhereExcluirCTBSaldo);
+          if ($oDaoConCtbSaldo->erro_status == "0") {
+              throw new DBException(urlencode("ERRO [ 2 ] - Excluindo Registros - " . $oDaoConCtbSaldo->erro_msg ."<br>"));
+          }
 
           $sSqlGeral = "select  10 as tiporegistro,
                          k13_reduz as icodigoreduzido,
@@ -265,11 +281,11 @@ try {
                       throw new DBException(urlencode('ERRO - [ 1 ] - Incluindo Detalhe de Conta Corrente : '
                         . $oDaoContaCorrenteDetalhe->erro_msg));
                   }
-                  salvarSaldo($oDaoContaCorrenteDetalhe, $oSaldoCtb->si96_vlsaldofinalfonte);
+                  salvarSaldoContaCorrente($oDaoContaCorrenteDetalhe, $oSaldoCtb->si96_vlsaldofinalfonte);
                   salvarSaldoSICOMAM($oSaldoCtb);
                   continue;
               }
-              salvarSaldo($oContaCorrente, $oSaldoCtb->si96_vlsaldofinalfonte);
+              salvarSaldoContaCorrente($oContaCorrente, $oSaldoCtb->si96_vlsaldofinalfonte);
               salvarSaldoSICOMAM($oSaldoCtb);
 
               $oRetorno->message = urlencode("Implantação realizada com sucesso.");
@@ -385,7 +401,7 @@ try {
                         	. $oDaoContaCorrenteDetalhe->erro_msg));
                   	}
 
-					salvarSaldo($oDaoContaCorrenteDetalhe, $oConta->valor);
+                      salvarSaldoContaCorrente($oDaoContaCorrenteDetalhe, $oConta->valor);
                   	continue;
               	}
 
@@ -394,7 +410,7 @@ try {
 					$oContaCorrente = db_utils::fieldsMemory($rsVerificacao, 0);
 				}
 
-				salvarSaldo($oContaCorrente, $oConta->valor);
+				salvarSaldoContaCorrente($oContaCorrente, $oConta->valor);
 
               	$oRetorno->message = urlencode("Implantação no conta corrente detalhe realizada com sucesso.");
 
@@ -515,7 +531,7 @@ function excluirSaldo ($iReduzido, $iContaCorrente) {
       }
 
 }
-function salvarSaldo($saldo, $valorSaldo){
+function salvarSaldoContaCorrente($saldo, $valorSaldo){
 
   $iCodigoReduzido = $saldo->c19_reduz;
   $sColunaImplantar = "c29_credito";
@@ -523,18 +539,15 @@ function salvarSaldo($saldo, $valorSaldo){
 
   $iAnoUsu = db_getsession("DB_anousu");
 
-      excluirSaldo($saldo->c19_reduz, $saldo->c19_contacorrente);
+  excluirSaldo($saldo->c19_reduz, $saldo->c19_contacorrente);
 
       if ($valorSaldo <> 0) {
 
-          if ($valorSaldo < 0) {
+          if ($valorSaldo > 0) {
 
-              $sColunaImplantar = "c29_credito";
-              $sColunaZerar = "c29_debito";
-
-          } else {
               $sColunaImplantar = "c29_debito";
               $sColunaZerar = "c29_credito";
+
           }
 
 

@@ -9,13 +9,9 @@ use \ECidade\V3\Extension\Response;
 use \ECidade\V3\Extension\Manager as ExtensionManager;
 use \ECidade\V3\Extension\Exceptions\ResponseException;
 use \ECidade\V3\Extension\Glob;
-use \ECidade\V3\Extension\Error\Handler as ErrorHandler;
 use \ECidade\V3\Error\EntityFactory;
 use \ECidade\V3\Error\Renderer as ErrorRenderer;
-
-use Silex\Application;
-use Symfony\Component\HttpFoundation\Request as SilexRequest;
-use Symfony\Component\HttpFoundation\Response as SilexResponse;
+use Illuminate\Database\Capsule\Manager;
 
 try {
 
@@ -153,6 +149,39 @@ try {
   $request->session()->close();
   $response->send();
 
+    /**
+     * Eloquent bootstrap
+     */
+    /**
+     * @var \ECidade\V3\Window\Session $session
+     */
+    $session = Registry::get('app.request')->session();
+    $userLoggedIn = $session->has('DB_id_usuario');
+
+    if ($userLoggedIn) {
+        $capsule = new Manager();
+
+        $capsule->addConnection([
+            'driver' => 'pgsql',
+            'host' => $session->get('DB_servidor'),
+            'database' => $session->get('DB_NBASE', $session->get('DB_base')),
+            'username' => $session->get('DB_user'),
+            'password' => $session->get('DB_senha'),
+            'port' => $session->get('DB_porta'),
+            'charset' => 'latin1',
+            'collation' => 'pt_BR',
+            'prefix' => '',
+            'strict' => false,
+            'prefix_indexes' => true,
+            'search_path' => 'public',
+        ]);
+
+        $capsule->setAsGlobal();
+        $capsule->bootEloquent();
+    }
+    /**
+     * End Eloquent bootstrap
+     */
   // Remove todas as variaveis criadas neste arquivo
   // para nao ter impacto em outros arquivos, exemplo: iniciar sessao no db_conecta.php
   unset($_SESSION, $front, $request, $response, $router, $config);
@@ -164,6 +193,9 @@ try {
      $response = new Response();
   }
 
+    if (!isset($response)) {
+        $response = new Response();
+    }
   $response->setCode($exception->getCode() == 0 ? 500 : $exception->getCode());
 
   $entity = EntityFactory::createFromException($exception);
