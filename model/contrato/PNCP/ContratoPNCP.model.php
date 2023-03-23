@@ -35,7 +35,7 @@ class ContratoPNCP extends ModeloBasePNCP
             'numeroContratoEmpenho'                    => $oDado->numerocontratoempenho,
             'anoContrato'                              => $oDado->anocontrato,
             'processo'                                 => $oDado->processo,
-            'categoriaProcessoId'                      => $oDado->categoriaprocessoid,
+            'categoriaProcessoId'                      => 8,
             'niFornecedor'                             => $oDado->nifornecedor,
             'tipoPessoaFornecedor'                     => 'PJ', //$oDado->tipopessoafornecedor,
             'nomeRazaoSocialFornecedor'                => $oDado->nomerazaosocialfornecedor,
