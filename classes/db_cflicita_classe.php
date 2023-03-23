@@ -48,7 +48,9 @@ class cl_cflicita {
    var $l03_codcom = 0; 
    var $l03_instit = 0; 
    var $l03_usaregistropreco = 'f'; 
-   var $l03_pctipocompratribunal = 0; 
+   var $l03_pctipocompratribunal = 0;
+   var $l03_presencial = 'f'; 
+
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  l03_codigo = int4 = Codigo Sequencial 
@@ -57,7 +59,8 @@ class cl_cflicita {
                  l03_codcom = int4 = Codigo compra 
                  l03_instit = int4 = Instituição 
                  l03_usaregistropreco = bool = Usa Registro de Preço 
-                 l03_pctipocompratribunal = int4 = Código Tribunal 
+                 l03_pctipocompratribunal = int4 = Código Tribunal
+                 l03_presencial = boll = justificativa presencial 
                  ";
    //funcao construtor da classe 
    function cl_cflicita() { 
@@ -84,6 +87,7 @@ class cl_cflicita {
        $this->l03_instit = ($this->l03_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["l03_instit"]:$this->l03_instit);
        $this->l03_usaregistropreco = ($this->l03_usaregistropreco == "f"?@$GLOBALS["HTTP_POST_VARS"]["l03_usaregistropreco"]:$this->l03_usaregistropreco);
        $this->l03_pctipocompratribunal = ($this->l03_pctipocompratribunal == ""?@$GLOBALS["HTTP_POST_VARS"]["l03_pctipocompratribunal"]:$this->l03_pctipocompratribunal);
+       $this->l03_presencial = ($this->l03_presencial == ""?@$GLOBALS["HTTP_POST_VARS"]["l03_presencial"]:$this->l03_presencial);
      }else{
        $this->l03_codigo = ($this->l03_codigo == ""?@$GLOBALS["HTTP_POST_VARS"]["l03_codigo"]:$this->l03_codigo);
      }
@@ -178,7 +182,8 @@ class cl_cflicita {
                                       ,l03_codcom 
                                       ,l03_instit 
                                       ,l03_usaregistropreco 
-                                      ,l03_pctipocompratribunal 
+                                      ,l03_pctipocompratribunal
+                                      ,l03_presencial 
                        )
                 values (
                                 $this->l03_codigo 
@@ -188,6 +193,7 @@ class cl_cflicita {
                                ,$this->l03_instit 
                                ,'$this->l03_usaregistropreco' 
                                ,$this->l03_pctipocompratribunal 
+                               ,'$this->l03_presencial' 
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -303,6 +309,10 @@ class cl_cflicita {
        $sql  .= $virgula." l03_usaregistropreco = '$this->l03_usaregistropreco' ";
        $virgula = ",";
      }
+     if(trim($this->l03_presencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l03_presencial"])){ 
+      $sql  .= $virgula." l03_presencial = '$this->l03_presencial' ";
+      $virgula = ",";
+    }
      if(trim($this->l03_pctipocompratribunal)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l03_pctipocompratribunal"])){ 
        $sql  .= $virgula." l03_pctipocompratribunal = $this->l03_pctipocompratribunal ";
        $virgula = ",";
@@ -698,4 +708,3 @@ class cl_cflicita {
      return $sql;
   }
 }
-?>

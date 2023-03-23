@@ -160,6 +160,19 @@ if (isset($incluir)) {
 			$sqlerro = true;
 		}
 	}
+
+	//verifica modalidades e presencial
+	$sSql = $clcflicita->sql_query_file(null, 'l03_presencial', '', "l03_codigo = $oPost->l20_codtipocom");
+	$aCf = db_utils::getColectionByRecord($clcflicita->sql_record($sSql));
+	$sPresencial = $aCf[0]->l03_presencial;
+
+	if ($sPresencial == 'f' && $l12_pncp == 't') {
+		if ($oPost->l20_justificativapncp == '' || $oPost->l20_justificativapncp == null) {
+			$erro_msg .= 'Campo Justificativa PNCP não informado\n\n';
+			$sqlerro = true;
+		}
+	}
+
 	/*
     Verifica se o Campo "Natureza do Objeto" no foi selecionado.
   */
@@ -438,6 +451,7 @@ if (isset($incluir)) {
 			$clliclicita->l20_instit      = db_getsession("DB_instit");
 
 			$clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao; //OC3770
+			$clliclicita->l20_justificativapncp = $l20_justificativapncp;
 			$clliclicita->incluir(null, null);
 
 			if ($clliclicita->erro_status == "0") {

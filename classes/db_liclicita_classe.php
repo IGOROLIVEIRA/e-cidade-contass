@@ -147,6 +147,7 @@ class cl_liclicita
     var $l20_dataencproposta_ano = null;
     var $l20_amparolegal = null;
     var $l20_categoriaprocesso = null;
+    var $l20_justificativapncp = null;
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -222,6 +223,7 @@ class cl_liclicita
                  l20_dataencproposta = date = Data encerramento Proposta;
                  l20_amparolegal = Amparo legal;
                  l20_categoriaprocesso = text = Categoria Processo;
+                 l20_justificativapncp = text = justificativa para pncp
                  ";
 
     //funcao construtor da classe
@@ -416,6 +418,7 @@ class cl_liclicita
         }
         $this->l20_amparolegal = ($this->l20_amparolegal == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_amparolegal"] : $this->l20_amparolegal);
         $this->l20_categoriaprocesso = ($this->l20_categoriaprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_categoriaprocesso"] : $this->l20_categoriaprocesso);
+        $this->l20_justificativapncp = ($this->l20_justificativapncp == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_justificativapncp"] : $this->l20_justificativapncp);
     }
 
     // funcao para inclusao aqui
@@ -1120,6 +1123,7 @@ class cl_liclicita
                 ,l20_dataencproposta
                 ,l20_amparolegal
                 ,l20_categoriaprocesso
+                ,l20_justificativapncp
                        )
                 values (
                  $this->l20_codigo
@@ -1177,6 +1181,7 @@ class cl_liclicita
                 ," . ($this->l20_dataencproposta == "null" || $this->l20_dataencproposta == "" ? "null" : "'" . $this->l20_dataencproposta . "'") . "
                 ,$this->l20_amparolegal
                 ," . ($this->l20_categoriaprocesso == "null" || $this->l20_categoriaprocesso == "" ? "null" : "'" . $this->l20_categoriaprocesso . "'") . "
+                ,'$this->l20_justificativapncp'
 
                       )";
         $result = db_query($sql);
@@ -1473,15 +1478,6 @@ class cl_liclicita
 
 
         if (trim($this->l20_horacria != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_horacria"]))) {
-            //            if($this->l20_codtipocom == && $this->l20_datacria > $this->l20_dataaber){
-            //                $this->erro_sql = "Data Abertura Proc. Adm deve ser menor que Data Emis/Alt Edital/Convite.";
-            //                $this->erro_campo = "l20_datacria";
-            //                $this->erro_banco = "";
-            //                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-            //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            //                $this->erro_status = "0";
-            //                return false;
-            //            }
             $sql .= $virgula . " l20_horacria = '$this->l20_horacria' ";
             $virgula = ",";
             if ($this->l20_horacria == null) {
@@ -1504,94 +1500,6 @@ class cl_liclicita
             $sql .= $virgula . " l20_horaaber = '$this->l20_horaaber'";
             $virgula = ",";
         }
-
-        /*
-        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-            $sql .= $virgula . " l20_dtpublic = null ";
-            $virgula = ",";
-        } else {
-            if (trim($this->l20_dtpublic != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpublic"]))) {
-                if ($this->l20_dtpublic == "" || $this->l20_dtpublic == null) {
-                    $sql .= $virgula . " l20_dtpublic =null ";
-                    $virgula = ",";
-                } else {
-                    if ($this->l20_dtpublic < $this->l20_datacria) {
-                        $this->erro_sql = " A data da publicacao em diario oficial  deve ser superior  ou igual a data de criacao.";
-                        $this->erro_campo = "l20_dtpublic";
-                        $this->erro_banco = "";
-                        $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                        $this->erro_status = "0";
-                        return false;
-                    } else {
-                        $sql .= $virgula . " l20_dtpublic ='$this->l20_dtpublic' ";
-                        $virgula = ",";
-                    }
-                }
-            }
-        }
-        */
-        /*
-        if (trim($this->l20_datapublicacao1 != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao1"]))) {
-            if ($this->l20_datapublicacao1 == "" || $this->l20_datapublicacao1 == null) {
-                $sql .= $virgula . " l20_datapublicacao1 =null ";
-                $virgula = ",";
-            } else {
-                $sql .= $virgula . " l20_datapublicacao1 ='$this->l20_datapublicacao1' ";
-                $virgula = ",";
-                if ($this->l20_datapublicacao1 != "" && ($this->l20_datacria > $this->l20_datapublicacao1)) {
-                    $this->erro_sql = " A data da publicacao em Edital Veiculo 1  deve ser superior  ou igual a data de criacao.";
-                    $this->erro_campo = "l20_datapublicacao1";
-                    $this->erro_banco = "";
-                    $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                } else if ($this->l20_datapublicacao1 > $this->l20_recdocumentacao) {
-                    //  A data da publicacao em diario oficial nao deve ser superior  ou igual a data de criacao.
-                    $this->erro_sql = " A Data da Publica??o em Edital Veiculo 1 deve ser anterior a Data de Recebimento da Documenta??o";
-                    $this->erro_campo = "l20_datapublicacao1";
-                    $this->erro_banco = "";
-                    $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
-            }
-        }
-        */
-
-        /*
-
-        if (trim($this->l20_datapublicacao2 != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao2"]))) {
-            if ($this->l20_datapublicacao2 == "" || $this->l20_datapublicacao2 == null) {
-                $sql .= $virgula . " l20_datapublicacao2 =null ";
-                $virgula = ",";
-            } else {
-                $sql .= $virgula . " l20_datapublicacao2 ='$this->l20_datapublicacao2' ";
-                $virgula = ",";
-                if ($this->l20_datapublicacao2 != "" && ($this->l20_datacria > $this->l20_datapublicacao2)) {
-                    $this->erro_sql = " A data da publicacao em Edital Veiculo 2  deve ser superior  ou igual a data de criacao.";
-                    $this->erro_campo = "l20_datapublicacao2";
-                    $this->erro_banco = "";
-                    $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                } else if ($this->l20_datapublicacao2 > $this->l20_recdocumentacao) {
-                    //  A data da publicacao em diario oficial nao deve ser superior  ou igual a data de criacao.
-                    $this->erro_sql = " A Data da Publica??o em Edital Veiculo 2 deve ser anterior a Data de Recebimento da Documenta??o";
-                    $this->erro_campo = "l20_datapublicacao2";
-                    $this->erro_banco = "";
-                    $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
-            }
-        }
-
-        */
 
         if (trim($this->l20_recdocumentacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao"]))) {
             if ($this->l20_recdocumentacao == null || $this->l20_recdocumentacao == "" and $tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
@@ -2188,76 +2096,6 @@ class cl_liclicita
             }
         }
 
-        /*
-        if (trim($this->l20_dtpulicacaopncp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaopncp"])) {
-            if ($this->l20_dtpulicacaopncp == null) {
-                $sql .= $virgula . " l20_dtpulicacaopncp = null";
-                $virgula = ",";
-            } else {
-                $sql .= $virgula . " l20_dtpulicacaopncp = '$this->l20_dtpulicacaopncp'";
-                $virgula = ",";
-            }
-        }
-        */
-
-        /*
-
-        if (trim($this->l20_linkpncp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_linkpncp"])) {
-            if (trim($this->l20_linkpncp) == null and $tribunal == 100 and $tribunal == 101 and $tribunal == 102 and $tribunal == 103) {
-                $this->erro_sql = " Campo Link PNCP nao Informado.";
-                $this->erro_campo = "l20_linkpncp";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            } else {
-                $sql .= $virgula . " l20_linkpncp ='$this->l20_linkpncp' ";
-                $virgula = ",";
-            }
-        }
-        */
-
-        /*
-
-        if (trim($this->l20_diariooficialdivulgacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_diariooficialdivulgacao"])) {
-            $sql .= $virgula . " l20_diariooficialdivulgacao = '$this->l20_diariooficialdivulgacao'";
-            $virgula = ",";
-            if (trim($this->l20_diariooficialdivulgacao) == null) {
-                $this->erro_sql = " Campo Diario Oficial de divulgacao n?o Informado.";
-                $this->erro_campo = "l20_diariooficialdivulgacao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        */
-
-        /*
-
-        if (trim($this->l20_dtpulicacaoedital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaoedital"])) {
-            if ($this->l20_dtpulicacaoedital == null) {
-                $sql .= $virgula . " l20_dtpulicacaoedital = null";
-                $virgula = ",";
-            } else {
-                $sql .= $virgula . " l20_dtpulicacaoedital = '$this->l20_dtpulicacaoedital'";
-                $virgula = ",";
-            }
-        }
-
-        */
-
-        /*
-
-        if (trim($this->l20_linkedital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_linkedital"])) {
-            $sql .= $virgula . " l20_linkedital = '$this->l20_linkedital'";
-            $virgula = ",";
-        }
-
-        */
-
         if (trim($this->l20_mododisputa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_mododisputa"])) {
             $sql .= $virgula . " l20_mododisputa = '$this->l20_mododisputa'";
             $virgula = ",";
@@ -2272,79 +2110,15 @@ class cl_liclicita
             }
         }
 
+        if (trim($this->l20_justificativapncp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_justificativapncp"])) {
+            $sql .= $virgula . " l20_justificativapncp = '$this->l20_justificativapncp'";
+            $virgula = ",";
+        }
+
         $sql .= " where ";
         if ($l20_codigo != null) {
             $sql .= " l20_codigo = $this->l20_codigo";
         }
-        $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-        if (
-            !isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-                && ($lSessaoDesativarAccount === false))
-        ) {
-            // $resaco = $this->sql_record($this->sql_query_file($this->l20_codigo));
-            // if ($this->numrows > 0) {
-            //     for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-            //         $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-            //         $acount = pg_result($resac, 0, 0);
-            //         $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-            //         $resac = db_query("insert into db_acountkey values($acount,7589,'$this->l20_codigo','A')");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_codigo"]) || $this->l20_codigo != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7589,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_codigo')) . "','$this->l20_codigo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_codtipocom"]) || $this->l20_codtipocom != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7590,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_codtipocom')) . "','$this->l20_codtipocom'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_numero"]) || $this->l20_numero != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7594,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_numero')) . "','$this->l20_numero'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_id_usucria"]) || $this->l20_id_usucria != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7592,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_id_usucria')) . "','$this->l20_id_usucria'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_datacria"]) || $this->l20_datacria != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7591,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_datacria')) . "','$this->l20_datacria'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_horacria"]) || $this->l20_horacria != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7593,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_horacria')) . "','$this->l20_horacria'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaber"]) || $this->l20_dataaber != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7595,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_dataaber')) . "','$this->l20_dataaber'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpublic"]) || $this->l20_dtpublic != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7596,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_dtpublic')) . "','$this->l20_dtpublic'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_horaaber"]) || $this->l20_horaaber != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7597,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_horaaber')) . "','$this->l20_horaaber'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_local"]) || $this->l20_local != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7598,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_local')) . "','$this->l20_local'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_objeto"]) || $this->l20_objeto != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7599,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_objeto')) . "','$this->l20_objeto'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_tipojulg"]) || $this->l20_tipojulg != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7782,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_tipojulg')) . "','$this->l20_tipojulg'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_liccomissao"]) || $this->l20_liccomissao != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7909,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_liccomissao')) . "','$this->l20_liccomissao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_liclocal"]) || $this->l20_liclocal != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,7908,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_liclocal')) . "','$this->l20_liclocal'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_procadmin"]) || $this->l20_procadmin != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,8986,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_procadmin')) . "','$this->l20_procadmin'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_correto"]) || $this->l20_correto != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,10010,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_correto')) . "','$this->l20_correto'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_instit"]) || $this->l20_instit != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,10103,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_instit')) . "','$this->l20_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_licsituacao"]) || $this->l20_licsituacao != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,10287,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_licsituacao')) . "','$this->l20_licsituacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_edital"]) || $this->l20_edital != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,12605,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_edital')) . "','$this->l20_edital'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_anousu"]) || $this->l20_anousu != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,12606,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_anousu')) . "','$this->l20_anousu'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_usaregistropreco"]) || $this->l20_usaregistropreco != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,15270,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_usaregistropreco')) . "','$this->l20_usaregistropreco'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_localentrega"]) || $this->l20_localentrega != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,15424,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_localentrega')) . "','$this->l20_localentrega'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_prazoentrega"]) || $this->l20_prazoentrega != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,15425,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_prazoentrega')) . "','$this->l20_prazoentrega'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_condicoespag"]) || $this->l20_condicoespag != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,15426,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_condicoespag')) . "','$this->l20_condicoespag'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_validadeproposta"]) || $this->l20_validadeproposta != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,15427,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_validadeproposta')) . "','$this->l20_validadeproposta'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //         if (isset($GLOBALS["HTTP_POST_VARS"]["l20_formacontroleregistropreco"]) || $this->l20_formacontroleregistropreco != "")
-            //             $resac = db_query("insert into db_acount values($acount,1260,20854,'" . AddSlashes(pg_result($resaco, $conresaco, 'l20_formacontroleregistropreco')) . "','$this->l20_formacontroleregistropreco'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            //     }
-            // }
-        }
-        //print_r($sql);
-        //exit;
         $result = db_query($sql);
 
 
