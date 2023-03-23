@@ -1162,7 +1162,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
                 <tr id="justificativapncp">
                     <td>
-                        <strong>Justificativa:</strong>
+                        <strong>Justificativa pela escolha da modalidade presencial:</strong>
                     </td>
                     <td>
                         <?
