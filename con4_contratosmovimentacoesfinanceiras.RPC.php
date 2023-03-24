@@ -297,9 +297,92 @@ switch ($oParam->exec) {
         }
         break;
 
+    case "getUltimaPosicao":
+
+        $oContrato = new Acordo($oParam->iAcordo);
+        $aItens    = array();
+
+        $oRetorno->iCasasDecimais = 2;
+        //echo 'info contrato ';
+        //print_r($oContrato);
+
+        $oRetorno->iOrigemContrato      = $oContrato->getOrigem();
+
+        if ($oRetorno->iOrigemContrato == 2) {
+            $aLicitacoesVinculadas = $oContrato->getLicitacoes();
+            $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
+            $oRetorno->iCodigoLicitacao     = $oStdDados->l20_codigo;
+            $oRetorno->iEdital              = $oStdDados->l20_edital;
+            $oRetorno->iAnoLicitacao        = $oStdDados->l20_anousu;
+            $oRetorno->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
+            $oRetorno->iNumModalidade       = $oStdDados->l20_numero;
+            $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
+            $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
+        } else if ($oRetorno->iOrigemContrato == 3) {
+            $aLicitacoesVinculadas = $oContrato->getLicitacoes();
+
+            if (empty($aLicitacoesVinculadas[0])) {
+
+                $oRetorno->iCodigoLicitacao     = '';
+                $oRetorno->iEdital              = '';
+                $oRetorno->iAnoLicitacao        = '';
+                $oRetorno->iModalidadeLicitacao = '';
+                $oRetorno->pc50_codcom          = '';
+                $oRetorno->l03_tipo             = '';
+            } else {
+
+                $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
+                $oRetorno->iCodigoLicitacao     = $oStdDados->l20_codigo;
+                $oRetorno->iEdital              = $oStdDados->l20_edital;
+                $oRetorno->iNumModalidade       = $oStdDados->l20_numero;
+                $oRetorno->iAnoLicitacao        = $oStdDados->l20_anousu;
+                $oRetorno->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
+                $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
+                $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
+            }
+        }
+
+
+
+        foreach ($oContrato->getUltimaPosicao()->getItens() as $oItem) {
+
+            $oItemRetorno                      = new stdClass();
+            $oItemRetorno->codigo              = $oItem->getCodigo();
+            $oItemRetorno->material            = $oItem->getMaterial()->getDescricao();
+            $oItemRetorno->codigomaterial      = urlencode($oItem->getMaterial()->getMaterial());
+            $oItemRetorno->elemento            = $oItem->getElemento();
+            $oItemRetorno->desdobramento       = $oItem->getDesdobramento();
+            $oItemRetorno->valorunitario       = $oItem->getValorUnitario();
+            $oItemRetorno->valortotal          = $oItem->getValorTotal();
+            $oItemRetorno->quantidade          = $oItem->getQuantidade();
+            $oItemRetorno->lControlaQuantidade = $oItem->getControlaQuantidade();
+            $oItemRetorno->ordem  = $oItem->getOrdem();
+
+            $aCasasDecimais = explode(".", $oItemRetorno->valorunitario);
+            if (count($aCasasDecimais) > 1 && strlen($aCasasDecimais[1]) > 2) {
+                $oRetorno->iCasasDecimais = 3;
+            }
+
+            foreach ($oItem->getDotacoes() as $oDotacao) {
+
+                $oDotacaoSaldo = new Dotacao($oDotacao->dotacao, $oDotacao->ano);
+                $oDotacao->saldoexecutado = 0;
+                $oDotacao->valorexecutar  = 0;
+                $oDotacao->saldodotacao   = $oDotacaoSaldo->getSaldoFinal();
+
+                $oDotacao->valor -= $oDotacao->executado;
+            }
+            $oItemRetorno->dotacoes       = $oItem->getDotacoes();
+            $oItemRetorno->saldos         = $oItem->getSaldos();
+            $oItemRetorno->servico        = $oItem->getMaterial()->isServico();
+            $oRetorno->itens[]            = $oItemRetorno;
+        }
+        break;
+
     case "processarAutorizacoes":
 
         $oContrato = $_SESSION["oContrato"];
+        $oContrato              = new Acordo($oParam->iCodigoAcordo);
 
         try {
 
@@ -477,14 +560,14 @@ switch ($oParam->exec) {
 
         $oContrato = $_SESSION["oContrato"];
         foreach ($oParam->aAutorizacoes as $iAutorizacao) {
-        if (empty($iAutorizacao)) {
-            
-            $oRetorno->message = "Codigo da autorização não informado.";
-            $oRetorno->status = 2;
-            return;            
-        }
-       
-        $sql = "select distinct       
+            if (empty($iAutorizacao)) {
+
+                $oRetorno->message = "Codigo da autorização não informado.";
+                $oRetorno->status = 2;
+                return;
+            }
+
+            $sql = "select distinct       
         ac20_acordoposicao  from acordoposicao        
         inner join acordoitem          on ac20_acordoposicao = ac26_sequencial        
         inner join acordoitemexecutado on ac20_sequencial    = ac29_acordoitem        
@@ -496,45 +579,45 @@ switch ($oParam->exec) {
         and e54_autori = {$iAutorizacao}";
 
 
-        $rsacordoitem = db_query($sql);
-        $oDadosacordoitem = db_utils::fieldsMemory($rsacordoitem, 0);
+            $rsacordoitem = db_query($sql);
+            $oDadosacordoitem = db_utils::fieldsMemory($rsacordoitem, 0);
 
 
-        $sql2 = "select max(ac20_acordoposicao) as codigoposicao
+            $sql2 = "select max(ac20_acordoposicao) as codigoposicao
         from acordoposicao 
         inner join acordoitem on ac20_acordoposicao = ac26_sequencial 
         where ac26_acordo = {$oContrato->getCodigoAcordo()}";
 
 
-        $rsacordoitemd = db_query($sql2);
-        $oDadosacordoitemd = db_utils::fieldsMemory($rsacordoitemd, 0);
+            $rsacordoitemd = db_query($sql2);
+            $oDadosacordoitemd = db_utils::fieldsMemory($rsacordoitemd, 0);
 
-        
 
-        $sql3 = "select pc01_liberarsaldoposicao from parametroscontratos";
-        $rsparamcontrato = db_query($sql3);
-        $oDadosparamcontrato = db_utils::fieldsMemory($rsparamcontrato, 0);
-        
 
-        /*
+            $sql3 = "select pc01_liberarsaldoposicao from parametroscontratos";
+            $rsparamcontrato = db_query($sql3);
+            $oDadosparamcontrato = db_utils::fieldsMemory($rsparamcontrato, 0);
+
+
+            /*
          * Verifica se a autorizacao é do contrato,
          */
-        $aAutorizacoes = $oContrato->getAutorizacoes($iAutorizacao);
-        if (count($aAutorizacoes) == 1) {
+            $aAutorizacoes = $oContrato->getAutorizacoes($iAutorizacao);
+            if (count($aAutorizacoes) == 1) {
 
-            $status = 1;
-            /**
-             * Buscamos todos os itens que são da autorizacao
-             */
-            $aItens = $oContrato->getItensAcordoNaAutorizacao($iAutorizacao);
-            
-            /**
-             * Verifica se tema alguma alteracao do empenho para ultima posicao do acordo
-             */
-            foreach ($aItens as $oItem) {
+                $status = 1;
+                /**
+                 * Buscamos todos os itens que são da autorizacao
+                 */
+                $aItens = $oContrato->getItensAcordoNaAutorizacao($iAutorizacao);
 
-                if ($oDadosparamcontrato->pc01_liberarsaldoposicao == 'f' && pg_num_rows($rsparamcontrato) > 0) {
-                    $ItemUltimaPosicao = db_query("
+                /**
+                 * Verifica se tema alguma alteracao do empenho para ultima posicao do acordo
+                 */
+                foreach ($aItens as $oItem) {
+
+                    if ($oDadosparamcontrato->pc01_liberarsaldoposicao == 'f' && pg_num_rows($rsparamcontrato) > 0) {
+                        $ItemUltimaPosicao = db_query("
                     SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade,pc01_servico
                     FROM acordoitem
                     inner join pcmater on pc01_codmater = ac20_pcmater
@@ -544,49 +627,46 @@ switch ($oParam->exec) {
                     {$oDadosacordoitemd->codigoposicao}
                     AND ac20_pcmater = {$oItem->ac20_pcmater} ");
 
-                    $oDadosItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
+                        $oDadosItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
 
-                    $ItemAtualPosicao = db_query("
+                        $ItemAtualPosicao = db_query("
                     SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade
                     FROM acordoitem
                     JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
                     WHERE ac26_acordo = {$oContrato->getCodigoAcordo()}
                     AND ac26_sequencial ={$oDadosacordoitem->ac20_acordoposicao}
                     AND ac20_pcmater = {$oItem->ac20_pcmater} ");
-                    
-                    $oDadosItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
 
-                    $ItemAutoriza = db_query("
+                        $oDadosItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
+
+                        $ItemAutoriza = db_query("
                     select * from empautitem where e55_autori ={$iAutorizacao} and e55_item = {$oItem->ac20_pcmater}");
-                    
-                    $oDadosItemAutoriza = db_utils::fieldsMemory($ItemAutoriza, 0);
 
-                    if ($oDadosItemAtualPosicao->ac20_acordoposicao != $oDadosItemUltimaPosicao->ac20_acordoposicao) {
-                        
-                        if ($oDadosItemAutoriza->e55_servicoquantidade != $oDadosItemUltimaPosicao->ac20_servicoquantidade) {
-                            $smessage = "Usuário: Não será possível a anulação da autorização ".$iAutorizacao." .\n\nMotivo: A forma de controle do item " . $oItem->ac20_pcmater . " na autorização é diferente da posição atual do contrato!";
-                            $oRetorno->message = urlencode($smessage);
-                            $oRetorno->status = 2;
-                            return;
-                        }
-                        if($oDadosItemUltimaPosicao->ac20_servicoquantidade == 'f' && $oDadosItemUltimaPosicao->pc01_servico == 't'){
-                  
-                        }else if ($oDadosItemUltimaPosicao->ac20_valorunitario != $oDadosItemAtualPosicao->ac20_valorunitario) {
-                            $smessage .= "Item " . $oItem->ac20_pcmater . " da autorização ".$iAutorizacao.": O valor unitário atual do contrato é " . $oDadosItemUltimaPosicao->ac20_valorunitario . " e o valor unitário do item a ser anulado é " . $oDadosItemAtualPosicao->ac20_valorunitario . ". Ao anular os itens do empenho, o valor unitario será o " . $oDadosItemUltimaPosicao->ac20_valorunitario . ".\n\n";
-                            $oRetorno->status = 3;
+                        $oDadosItemAutoriza = db_utils::fieldsMemory($ItemAutoriza, 0);
+
+                        if ($oDadosItemAtualPosicao->ac20_acordoposicao != $oDadosItemUltimaPosicao->ac20_acordoposicao) {
+
+                            if ($oDadosItemAutoriza->e55_servicoquantidade != $oDadosItemUltimaPosicao->ac20_servicoquantidade) {
+                                $smessage = "Usuário: Não será possível a anulação da autorização " . $iAutorizacao . " .\n\nMotivo: A forma de controle do item " . $oItem->ac20_pcmater . " na autorização é diferente da posição atual do contrato!";
+                                $oRetorno->message = urlencode($smessage);
+                                $oRetorno->status = 2;
+                                return;
+                            }
+                            if ($oDadosItemUltimaPosicao->ac20_servicoquantidade == 'f' && $oDadosItemUltimaPosicao->pc01_servico == 't') {
+                            } else if ($oDadosItemUltimaPosicao->ac20_valorunitario != $oDadosItemAtualPosicao->ac20_valorunitario) {
+                                $smessage .= "Item " . $oItem->ac20_pcmater . " da autorização " . $iAutorizacao . ": O valor unitário atual do contrato é " . $oDadosItemUltimaPosicao->ac20_valorunitario . " e o valor unitário do item a ser anulado é " . $oDadosItemAtualPosicao->ac20_valorunitario . ". Ao anular os itens do empenho, o valor unitario será o " . $oDadosItemUltimaPosicao->ac20_valorunitario . ".\n\n";
+                                $oRetorno->status = 3;
+                            }
                         }
                     }
                 }
-              
-                
             }
         }
-    }
 
-           
-       
-            
-    $oRetorno->message = urlencode($smessage);
+
+
+
+        $oRetorno->message = urlencode($smessage);
 
 
         break;
