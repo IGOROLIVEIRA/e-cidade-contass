@@ -40,6 +40,7 @@ require_once("model/documentoTemplate.model.php");
 require_once("std/db_stdClass.php");
 
 $clisstipoalvara = new cl_isstipoalvara;
+$oInstit = new Instituicao(db_getsession('DB_instit'));
 
 db_postmemory($HTTP_SERVER_VARS);
 
@@ -354,6 +355,12 @@ if (isset($q60_modalvara) && $q60_modalvara == "3") {
 
         if ($pdf1->permanente == 't') {
           $pdf1->validadealvara = "31/12/" . db_getsession('DB_anousu');
+          
+          $codInstituicao = array(Instituicao::COD_CLI_SERRANOPOLIS_DE_MINAS);
+          $iAnoValidade = db_getsession('DB_anousu') + 1;
+          if (in_array($oInstit->getCodigoCliente(), $codInstituicao)) {
+            $pdf1->validadealvara = "31/01/" . $iAnoValidade;
+          }          
 
         } else {
 
