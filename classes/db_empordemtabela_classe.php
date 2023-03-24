@@ -192,7 +192,7 @@ class cl_empordemtabela {
   }
 
   // funcao para alteracao
-  function alterar ( $oid=null ) { 
+  function alterar ( $l223_sequencial=null ) { 
       $this->atualizacampos();
      $sql = " update empordemtabela set ";
      $virgula = "";
@@ -295,7 +295,8 @@ class cl_empordemtabela {
        $virgula = ",";
      }
      $sql .= " where ";
-$sql .= "oid = '$oid'";     $result = db_query($sql);
+$sql .= "l223_sequencial = '$l223_sequencial'";     
+$result = db_query($sql);
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "empordemtabela nao Alterado. Alteracao Abortada.\\n";
@@ -326,13 +327,13 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao para exclusao 
-  function excluir ( $oid=null ,$dbwhere=null) { 
+  function excluir ( $l223_sequencial=null ,$dbwhere=null) { 
 
      $sql = " delete from empordemtabela
                     where ";
      $sql2 = "";
      if ($dbwhere==null || $dbwhere =="") {
-       $sql2 = "oid = '$oid'";
+       $sql2 = "l223_sequencial = '$l223_sequencial'";
      } else {
        $sql2 = $dbwhere;
      }

@@ -144,6 +144,7 @@ try {
       foreach ($aItens as $oItens) {
         
         $oDados = new stdClass();
+        $oDados->pc01_codmater         = $oItens->pc01_codmater;
         $oDados->iPcmaterdescr         = urlencode($oItens->pc01_descrmater);
         $oDados->iQuantidade         = $oItens->l223_quant;
         $oDados->iUnit       = $oItens->l223_vlrn;
@@ -157,6 +158,86 @@ try {
       $oRetorno->itens = $aDadosEntrada;
       
       
+    break;
+
+    case "buscaItemOrdemTabela" :
+
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+      $aItens           = $oOrdemCompraItemTabela->getItensOrdemTabela($oParam);
+      
+      $aDadosEntrada       = array();
+      
+      foreach ($aItens as $oItens) {
+        
+        $oDados = new stdClass();
+        $oDados->pc01_codmater         = $oItens->pc01_codmater;
+        $oDados->iPcmaterdescr         = urlencode($oItens->pc01_descrmater);
+        $oDados->iQuantidade         = $oItens->l223_quant;
+        $oDados->iUnit       = $oItens->l223_vlrn;
+        $oDados->iValor       = $oItens->l223_total;
+        $oDados->iSequencial= $oItens->l223_sequencial;
+
+        $aDadosEntrada[]           = $oDados;
+
+      }
+
+      $oRetorno->itens = $aDadosEntrada;
+
+    break;
+
+    case "alterarItemOrdemTabela" :
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+
+      $oOrdemCompraItemTabela->alterarItemTabela($oParam);
+      
+      $aItens           = $oOrdemCompraItemTabela->getItensOrdemTabela($oParam);
+      
+      $aDadosEntrada       = array();
+      
+      foreach ($aItens as $oItens) {
+        
+        $oDados = new stdClass();
+        $oDados->pc01_codmater         = $oItens->pc01_codmater;
+        $oDados->iPcmaterdescr         = urlencode($oItens->pc01_descrmater);
+        $oDados->iQuantidade         = $oItens->l223_quant;
+        $oDados->iUnit       = $oItens->l223_vlrn;
+        $oDados->iValor       = $oItens->l223_total;
+        $oDados->iSequencial= $oItens->l223_sequencial;
+
+        $aDadosEntrada[]           = $oDados;
+
+      }
+
+      $oRetorno->itens = $aDadosEntrada;
+
+    break;
+
+    case "excluirItemOrdemTabela" :
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+
+      $oOrdemCompraItemTabela->excluirItemTabela($oParam);
+      
+      $aItens           = $oOrdemCompraItemTabela->getItensOrdemTabela($oParam);
+      
+      $aDadosEntrada       = array();
+      
+      foreach ($aItens as $oItens) {
+        
+        $oDados = new stdClass();
+        $oDados->pc01_codmater         = $oItens->pc01_codmater;
+        $oDados->iPcmaterdescr         = urlencode($oItens->pc01_descrmater);
+        $oDados->iQuantidade         = $oItens->l223_quant;
+        $oDados->iUnit       = $oItens->l223_vlrn;
+        $oDados->iValor       = $oItens->l223_total;
+        $oDados->iSequencial= $oItens->l223_sequencial;
+
+        $aDadosEntrada[]           = $oDados;
+
+      }
+
+      $oRetorno->itens = $aDadosEntrada;
+
+
     break;
 
     default:
