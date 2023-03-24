@@ -133,7 +133,15 @@ class ContratoPNCP extends ModeloBasePNCP
         curl_setopt_array($chpncp, $optionspncp);
 
         $contentpncp = curl_exec($chpncp);
-
+        /*$err     = curl_errno($chpncp);
+        $errmsg  = curl_error($chpncp);
+        $header  = curl_getinfo($chpncp);
+        $header['errno']   = $err;
+        $header['errmsg']  = $errmsg;
+        $header['header']  = $contentpncp;
+        echo "<pre>";
+        print_r($header);
+        exit;*/
         curl_close($chpncp);
 
         $retorno = explode(':', $contentpncp);

@@ -222,7 +222,7 @@ class cl_liclicita
                  l20_dataaberproposta = date = Data encerramento Proposta;
                  l20_dataencproposta = date = Data encerramento Proposta;
                  l20_amparolegal = Amparo legal;
-                 l20_categoriaprocesso = text = Categoria Processo;
+                 l20_categoriaprocesso = int4 = Categoria Processo;
                  l20_justificativapncp = text = justificativa para pncp
                  ";
 
@@ -1180,7 +1180,7 @@ class cl_liclicita
                 ," . ($this->l20_dataaberproposta == "null" || $this->l20_dataaberproposta == "" ? "null" : "'" . $this->l20_dataaberproposta . "'") . "
                 ," . ($this->l20_dataencproposta == "null" || $this->l20_dataencproposta == "" ? "null" : "'" . $this->l20_dataencproposta . "'") . "
                 ,$this->l20_amparolegal
-                ," . ($this->l20_categoriaprocesso == "null" || $this->l20_categoriaprocesso == "" ? "null" : "'" . $this->l20_categoriaprocesso . "'") . "
+                ,$this->l20_categoriaprocesso
                 ,'$this->l20_justificativapncp'
 
                       )";
@@ -1552,7 +1552,7 @@ class cl_liclicita
 
         if ($this->l20_datacria != null  && $this->l20_dataaberproposta != null) {
             if ($this->l20_datacria > $this->l20_dataaberproposta) {
-                $this->erro_sql = "A data inserida no campo 'Data Abertura Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
+                $this->erro_sql = "A data inserida no campo 'Data Abertura das Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
                 $this->erro_campo = "l20_dataaberproposta";
                 $this->erro_banco = "";
                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -1562,9 +1562,9 @@ class cl_liclicita
             }
         }
 
-        if ($this->l20_datacria != null  && $this->l20_dataencproposta != null) {
-            if ($this->l20_datacria > $this->l20_dataaberproposta) {
-                $this->erro_sql = "A data inserida no campo 'Data Encerramento Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
+        if ($this->l20_dataaberproposta != null  && $this->l20_dataencproposta != null) {
+            if ($this->l20_dataencproposta > $this->l20_dataaberproposta) {
+                $this->erro_sql = "A data inserida no campo 'Data Abertura das Propostas' deverá ser maior ou igual a data inserida no campo ' Data Encerramento Proposta'.";
                 $this->erro_campo = "l20_dataencproposta";
                 $this->erro_banco = "";
                 $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";

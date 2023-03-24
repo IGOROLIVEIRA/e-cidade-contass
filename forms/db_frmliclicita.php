@@ -164,6 +164,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         text-indent: 1px;
         text-overflow: '';
     }
+
+    #l20_categoriaprocesso {
+        width: 307px;
+    }
 </style>
 <form name="form1" method="post" action="" onsubmit="js_ativaregistro()">
     <input type="hidden" id="modalidade_tribunal" name="modalidade_tribunal">
@@ -469,6 +473,29 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             ?>
                                         </td>
                                     </tr>
+                                    <tr id="categoriaprocesso" style="display:none">
+                                        <td>
+                                            <strong>Categoria do Processo:</strong>
+                                        </td>
+                                        <td>
+                                            <?
+                                            $al20_categoriaprocesso = array(
+                                                "0" => "Selecione",
+                                                "1" => "1- Cessão",
+                                                "2" => "2- Compras",
+                                                "3" => "3- Informática (TIC)",
+                                                "4" => "4- Internacional",
+                                                "5" => "5- Locação Imóveis",
+                                                "6" => "6- Mão de Obra",
+                                                "7" => "7- Obras",
+                                                "8" => "8- Serviços",
+                                                "9" => "9- Serviços de Engenharia",
+                                                "10" => "10- Serviços de Saúde"
+                                            );
+                                            db_select("l20_categoriaprocesso", $al20_categoriaprocesso, true, $db_opcao, '');
+                                            ?>
+                                        </td>
+                                    </tr>
                                     <tr style="display:none;" id="respObras">
                                         <td nowrap title="respObrascodigo">
                                             <?
@@ -765,32 +792,24 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                 </tr>
                                 -->
 
-                                <tr>
-                                    <td nowrap title="<?= @$Tl20_recdocumentacao ?>" id="recdocumentacao">
-                                        <b>Abertura das Propostas :</b>
+                                <tr id="dataaberturapncp" style="display: none;">
+                                    <td>
+                                        <b>Data Abertura Proposta :</b>
                                     </td>
                                     <td>
                                         <?
-                                        db_inputdata('l20_recdocumentacao', @$l20_recdocumentacao_dia, @$l20_recdocumentacao_mes, @$l20_recdocumentacao_ano, true, 'text', $db_opcao, "");
+                                        db_inputdata("l20_dataaberproposta", @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'text', $db_opcao, "");
                                         ?>
                                     </td>
                                 </tr>
-                                <tr>
+
+                                <tr id="dataencerramentopncp" style="display: none;">
                                     <td>
-                                        <b class="dataabertura" style="display: none;">Data Abertura Proposta :</b>
+                                        <b> Data Encerramento Proposta: </b>
                                     </td>
                                     <td>
                                         <?
-
-                                        db_inputdata("l20_dataaberproposta", @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'text', $db_opcao, "style='display:none;' class='dataabertura'");
-                                        echo "<script> document.getElementById('dtjs_l20_dataaberproposta').style.display = 'none' </script>";
-                                        ?>
-                                        <b id="dataencerramentoid" class="dataencerramento" style="display: none;"> Data Encerramento Proposta: </b>
-                                        <?
-
-                                        db_inputdata("l20_dataencproposta", @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'text', $db_opcao, "style='display:none;' class='dataencerramento'");
-                                        echo "<script> document.getElementById('dtjs_l20_dataencproposta').style.display = 'none' </script>";
-
+                                        db_inputdata("l20_dataencproposta", @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'text', $db_opcao, "");
                                         ?>
                                     </td>
                                 </tr>
@@ -1709,7 +1728,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById('justificativapncp').style.display = '';
         }
 
-        if (document.getElementById('l20_leidalicitacao').value == "1" && l12_pncp == "t" && (codigotribunal == 100 || codigotribunal == 101 || codigotribunal == 102 || codigotribunal == 103)) {
+        if (l12_pncp == 't') {
+            document.getElementById('categoriaprocesso').style.display = '';
+            document.getElementById('dataaberturapncp').style.display = '';
+            document.getElementById('dataencerramentopncp').style.display = '';
+        }
+
+        if (document.getElementById('l20_leidalicitacao').value == "1" && l12_pncp == "t") {
             document.getElementById('dtjs_l20_dataaberproposta').style.display = '';
             for (const s of document.getElementsByClassName("dataabertura")) {
                 s.style.display = '';
@@ -1718,26 +1743,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         } else {
             document.getElementById('dtjs_l20_dataaberproposta').style.display = 'none';
             for (const s of document.getElementsByClassName("dataabertura")) {
-                s.style.display = 'none';
-            }
-        }
-
-        if (document.getElementById('l20_leidalicitacao').value == "1" && l12_pncp == "t" && document.getElementById("l20_codtipocomdescr").value != 99) {
-            document.getElementById('dtjs_l20_dataencproposta').style.display = '';
-            for (const s of document.getElementsByClassName("dataencerramento")) {
-                s.style.display = '';
-            }
-            if (codigotribunal != 100 && codigotribunal != 101 && codigotribunal != 102 && codigotribunal != 103) {
-                document.getElementById('l20_dataencproposta').style.marginLeft = '12px';
-                document.getElementById('dataencerramentoid').style.marginLeft = '-185px';
-            } else {
-                document.getElementById('l20_dataencproposta').style.marginLeft = '0px';
-                document.getElementById('dataencerramentoid').style.marginLeft = '0px';
-            }
-
-        } else {
-            document.getElementById('dtjs_l20_dataencproposta').style.display = 'none';
-            for (const s of document.getElementsByClassName("dataencerramento")) {
                 s.style.display = 'none';
             }
         }
@@ -1757,9 +1762,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             parameters: 'json=' + Object.toJSON(oParam),
             onComplete: js_retornoVerificaModalidade
         });
-
-
-
 
     }
 

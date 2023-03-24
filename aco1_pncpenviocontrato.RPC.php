@@ -153,7 +153,7 @@ switch ($oParam->exec) {
 
     case 'getEmpenhos':
         $clcontratos = new cl_acordo;
-        $rsEmpenhos = $clcontratos->sql_record($clcontratos->sql_query_publicacaoEmpenho_pncp("*", null, "e60_anousu = " . db_getsession("DB_anousu"), null));
+        $rsEmpenhos = $clcontratos->sql_record($clcontratos->sql_query_publicacaoEmpenho_pncp("*", null, "", null));
 
         for ($iCont = 0; $iCont < pg_num_rows($rsEmpenhos); $iCont++) {
 
@@ -165,7 +165,7 @@ switch ($oParam->exec) {
             $oEmpenho->empenho         = $oEmpenhos->numerocontratoempenho . '/' . $oEmpenhos->anocontrato;
             $oEmpenho->fornecedor      = utf8_encode($oEmpenhos->nomerazaosocialfornecedor);
             $oEmpenho->licitacao       = $oEmpenhos->processo;
-            $oEmpenho->numerocontrolepncp = $oEmpenhos->ac213_numerocontrolepncp;
+            $oEmpenho->numerocontrolepncp = $oEmpenhos->l213_numerocontrolepncp;
 
             $itens[] = $oEmpenho;
         }
