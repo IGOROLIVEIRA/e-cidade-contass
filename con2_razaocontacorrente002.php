@@ -37,19 +37,20 @@ require_once("model/contabilidade/planoconta/ContaCorrente.model.php");
 $oGet = db_utils::postMemory($_GET,0);
 
 // definimos variaveis selecionadas nos filtros
-$dDataInicial    = $oGet->dtInicial;
-$dDataFinal      = $oGet->dtFinal;
-$sDataInicial    = implode("-", array_reverse(explode("/",$dDataInicial)));
-$sDataFinal      = implode("-", array_reverse(explode("/",$dDataFinal)));
-$iContaCorrente  = $oGet->iContaCorrente;
-$sReduzidos      = $oGet->sListaReduzido;
-$aDadosRelatorio = array();
-$aAtributos      = array();
-$iInstit         = db_getsession("DB_instit");
+$dDataInicial          = $oGet->dtInicial;
+$dDataFinal            = $oGet->dtFinal;
+$bContaSomenteComSaldo = $oGet->bContaSomenteComSaldo;
+$sDataInicial          = implode("-", array_reverse(explode("/",$dDataInicial)));
+$sDataFinal            = implode("-", array_reverse(explode("/",$dDataFinal)));
+$iContaCorrente        = $oGet->iContaCorrente;
+$sReduzidos            = $oGet->sListaReduzido;
+$aDadosRelatorio       = array();
+$aAtributos            = array();
+$iInstit               = db_getsession("DB_instit");
 
-$oContaCorrente  = new ContaCorrente($iContaCorrente);
-$sContaCorrente  = $oContaCorrente->getContaCorrente();
-$sDescricaoConta = $oContaCorrente->getDescricao();
+$oContaCorrente        = new ContaCorrente($iContaCorrente);
+$sContaCorrente        = $oContaCorrente->getContaCorrente();
+$sDescricaoConta       = $oContaCorrente->getDescricao();
 
 $sCamposContaCorrenteDetalhe  = " distinct ";
 $sCamposContaCorrenteDetalhe .= "c19_contacorrente, ";
@@ -172,7 +173,7 @@ function getLancamentosContaCorrenteDetalhe($iNumcgm, $dtInicial, $dtFinal, $iFi
   $sSqlLancamentos .= "  order by c69_codlan, c53_coddoc " ;
   $rsLancamentos    = db_query($sSqlLancamentos);
 
-  $aLancamento      = db_utils::getColectionByRecord($rsLancamentos);
+  $aLancamento      = db_utils::getCollectionByRecord($rsLancamentos);
 
 
   return $aLancamento;
@@ -180,9 +181,9 @@ function getLancamentosContaCorrenteDetalhe($iNumcgm, $dtInicial, $dtFinal, $iFi
 
 function getSaldosIniciais ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $iNumcgm, $iOrgao, $iUnidade, $c19_sequencial) {
 
-  $aDataInicial = explode('-', $dtInicial);
-  $iDataInicial = mktime(null, null, null,$aDataInicial[1]  ,$aDataInicial[2]  , $aDataInicial[0], null);
-  $dDataInicial = date('Y-m-d', $iDataInicial);
+  $aDataFinal = explode('-', $dtFinal);
+  $iDataFinal = mktime(null, null, null,$aDataFinal[1]  ,$aDataFinal[2]  , $aDataFinal[0], null);
+  $dDataInicial = date('Y-m-d', $iDataFinal);
 
   $sCampos = " sum(case when c28_tipo = 'D'
                          then coalesce(c69_valor,0)
@@ -228,6 +229,57 @@ function getSaldosIniciais ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $
 
   return $oSadosIniciais;
 }
+
+function getSaldosFinal ($dtInicial, $dtFinal, $iContaCorrente, $iReduzido, $iNumcgm, $iOrgao, $iUnidade, $c19_sequencial) {
+
+    $aDataInicial = explode('-', $dtFinal);
+    $iDataFinal = mktime(null, null, null,$aDataInicial[1]  ,$aDataInicial[2]  , $aDataInicial[0], null);
+    $dDataFinal = date('Y-m-d', $iDataFinal);
+
+    $sCampos = " sum(case when c28_tipo = 'D'
+                           then coalesce(c69_valor,0)
+                           else 0
+                      end ) as debito,
+                   sum(case when c28_tipo = 'C'
+                            then coalesce(c69_valor,0)
+                            else 0
+                       end ) as credito ";
+
+    $sWhere  = "     c69_data <= '{$dDataFinal}' ";
+    $sWhere .= " and c19_contacorrente = {$iContaCorrente} ";
+    $sWhere .= " and c19_reduz  = {$iReduzido} ";
+    $sWhere .= " and c19_sequencial  = {$c19_sequencial} ";
+
+    if (isset($iNumcgm) && !empty($iNumcgm)) {
+      $sWhere .= " and c19_numcgm = {$iNumcgm} ";
+    }
+
+    if (isset($iOrgao) && !empty($iOrgao)) {
+      $sWhere .= " and c19_orcunidadeorgao   = {$iOrgao} ";
+    }
+
+    if (isset($iUnidade) && !empty($iUnidade)) {
+      $sWhere .= " and c19_orcunidadeunidade = {$iUnidade} ";
+    }
+
+    $sSql  = " select {$sCampos} ";
+    $sSql .= "   from contacorrentedetalhe ";
+    $sSql .= "        left join contacorrentedetalheconlancamval on contacorrentedetalhe.c19_sequencial               = contacorrentedetalheconlancamval.c28_contacorrentedetalhe ";
+    $sSql .= "        left join conlancamval                     on contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen ";
+    $sSql .= "  where {$sWhere} ";
+    $sSql .= "  group by c19_reduz, c19_numcgm, c19_orcunidadeorgao, c19_orcunidadeunidade ";
+    $rsSaldos = db_query($sSql);
+
+    $oSadosIniciais = new stdClass();
+    $oSadosIniciais->nTotalDebito  = db_utils::fieldsMemory($rsSaldos, 0)->debito;
+    $oSadosIniciais->nTotalCredito = db_utils::fieldsMemory($rsSaldos, 0)->credito;
+
+    $oDadosImplantacao = buscaDadosImplantacao($iReduzido, $iNumcgm, $iOrgao, $iUnidade, $c19_sequencial);
+    $oSadosIniciais->nTotalDebito  += $oDadosImplantacao->debito;
+    $oSadosIniciais->nTotalCredito += $oDadosImplantacao->credito;
+
+    return $oSadosIniciais;
+  }
 
 /**
  * Busca o Saldo da Conta, na implantação
@@ -346,6 +398,21 @@ foreach ($aContacorrenteDetalhe as $oIndiceDados => $oValorDados) {
                                          $oValorDados->c19_orcunidadeunidade,
                                          $oValorDados->c19_sequencial);
   $nSaldoInicial     = ($oSaldosIniciais->nTotalDebito - $oSaldosIniciais->nTotalCredito);
+
+
+  $oSaldosFinal   = getSaldosFinal($sDataInicial,
+                                         $sDataFinal,
+                                         $iContaCorrente,
+                                         $iReduzConta,
+                                         $oValorDados->z01_numcgm,
+                                         $oValorDados->c19_orcunidadeorgao,
+                                         $oValorDados->c19_orcunidadeunidade,
+                                         $oValorDados->c19_sequencial);
+  $nSaldoFinal     = ($oSaldosFinal->nTotalDebito - $oSaldosFinal->nTotalCredito);
+
+  if($bContaSomenteComSaldo == 1 && $nSaldoFinal == 0 ){
+    continue;
+  }
   // escrevemos os atributos
   $aAtributos = ContaCorrente::getAtributos($oValorDados->c19_contacorrente);
   foreach ($aAtributos as $iValor => $oValorAtributos) {
