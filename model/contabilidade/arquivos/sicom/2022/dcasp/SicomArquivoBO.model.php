@@ -265,7 +265,6 @@ class SicomArquivoBO extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbodcasp20->si202_tiporegistro          = 20;
       $clbodcasp20->si202_faserecorcamentaria   = $iValorNumerico;
       $clbodcasp20->si202_vlsaldoexeantsupfin   = $oRetornoBO[29]->$sChave;
-      $clbodcasp20->si202_vlsaldoexeantrecredad = $oRetornoBO[30]->$sChave;
       $clbodcasp20->si202_vltotalsaldoexeant    = ($oRetornoBO[29]->$sChave + $oRetornoBO[30]->$sChave);
 
       $clbodcasp20->incluir(null);
