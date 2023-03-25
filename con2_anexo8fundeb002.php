@@ -102,7 +102,7 @@ if ($anousu >=2022){
         array('1 - FUNDEB - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS', 'title', array('413210101%', '413210501%', '417515001%'), "'118','119','1118','1119','15400007','15400000'"),
         array('1.1 - TRANSFERÊNCIAS DE RECURSOS DO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISSIONAIS DA EDUCAÇÃO - FUNDEB (NR 1.7.5.1.50.0.1 )', 'text', array('417515001%'), "'118','119','1118','1119','15400007','15400000'"),
         array('1.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.01.0.1 + NR 1.3.2.1.05.0.1 )', 'text', array('413210101%', '413210501%'), "'118','119','1118','1119','15400007','15400000'"),
-        array('2 - FUNDEB - COMPLEMENTAÇÃO DA UNIÃO - VAAT', 'title', array('413210101%', '413210501%', '417155001%'), "'15420007','15420000'"),
+        array('2 - FUNDEB - COMPLEMENTAÇÃO DA UNIÃO - VAAT', 'title', array('413210101%', '413210501%', '417155001%'), "'166','167','1166','1167','15420007','15420000'"),
         array('2.1 - TRANSFERÊNCIAS DE RECURSOS DA COMPLEMENTAÇÃO DA UNIÃO AO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISSIONAIS DA EDUCAÇÃO - FUNDEB (VAAT) (NR 1.7.1.5.50.0.1)', 'text', array('417155001%'), "'166','167','1166','1167','15420007','15420000'"),
         array('2.2 - RENDIMENTOS DE APLICAÇÃO FINANCEIRA (NR 1.3.2.1.01.0.1 + NR 1.3.2.1.05.0.1 )', 'text', array('413210101%', '413210501%'), "'166','167','1166','1167','15420007','15420000'"),
     );
@@ -264,8 +264,8 @@ function getSaldoPlanoContaFonteFundeb($nFonte, $dtIni, $dtFim, $aInstits){
     $where = " c61_instit in ({$aInstits})" ;
     if(db_getsession("DB_anousu") > 2022)
         $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ($nFonte) ) ";
-    else    
-        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";   
+    else
+        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
     $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
     $nTotalAnterior = 0;
     for($x = 0; $x < pg_numrows($result); $x++){
@@ -1324,8 +1324,8 @@ ob_start();
                     <td class="s4" dir="ltr">119</td>
                     <td class="s4" dir="ltr">166</td>
                     <td class="s4" dir="ltr">167</td>
-                </tr>     
-                <?}?>    
+                </tr>
+                <?}?>
                 <?php
                     $pagoFuncao118 = 0;
                     $pagoFuncao119 = 0;
@@ -1378,7 +1378,7 @@ ob_start();
                                 $pagoFuncao167 += $nValorPagoSubFuncao167;
 
                             }
-                            
+
                             echo " <td class='s10' dir='ltr'>";
                             echo db_formatar($nValorPagoSubFuncao118, "f");
                             echo " </td>";
@@ -1417,7 +1417,7 @@ ob_start();
                                     $nValorPagoFonte167 = count( $aFonte167) > 0 ? $aFonte167[0]->pago : 0;
 
                                 }
-                                
+
                                 echo "<tr style='height: 20px'>";
                                 echo " <td class='s8' dir='ltr'></td>";
                                 echo " <td class='s9' dir='ltr' colspan='5' style='padding-left: 10px;'> ";
@@ -1469,8 +1469,8 @@ ob_start();
                     <td class="s37" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITAS NA FONTE 119</td>
                     <td class="s37" dir="ltr" style='border-left: 1px SOLID #000000;'>INSCRITAS NA FONTE 166</td>
                     <td class="s4" dir="ltr"  style='border-left: 1px SOLID #000000;'>INSCRITAS NA FONTE 167</td>
-                </tr>       
-                <?}?>    
+                </tr>
+                <?}?>
                 <tr style="height: 20px">
                     <td class="s32" dir="ltr"></td>
                     <td class="s33" dir="ltr" colspan="5">7 - RESTOS A PAGAR PROCESSADOS DO EXERCÍCIO</td>
@@ -1617,24 +1617,24 @@ ob_start();
                         $nRPIncritosSemDesponibilidade167 = 0;
                         $nRPIncritosSemDesponibilidadeTotal = 0;
                         if($dtfim == $dtfimExercicio){
-                          
+
                             $nSaldoFonteAno118 = getSaldoPlanoContaFonte("'118','1118','15400007','119','1119','15400000','166','1166','15420007','167','1167','15420000'", $dtini, $dtfim, $instits);
-                    
+
                             $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
                             $nRPSemDesponibilidade118 = $aTotalPago118 - $nSaldoFonteAno118;
                             $nRPSemDesponibilidade119 = $aTotalPago119 - $nSaldoFonteAno118;
                             $nRPSemDesponibilidade166 = $aTotalPago166 - $nSaldoFonteAno118;
                             $nRPSemDesponibilidade167 = $aTotalPago167 - $nSaldoFonteAno118;
-                            
+
                             $nRPIncritosSemDesponibilidadeTotal = $aTotalPago118 + $aTotalPago119 + $aTotalPago166 + $aTotalPago167 - $nSaldoFonteAno118;
-                            
+
                             if($nRPIncritosSemDesponibilidadeTotal > 0){
 
                                 $nSaldoFonteAno118 = getSaldoPlanoContaFonte("'118','1118','15400007'", $dtini, $dtfim, $instits);
                                 $nSaldoFonteAno119 = getSaldoPlanoContaFonte("'119','1119','15400000'", $dtini, $dtfim, $instits);
                                 $nSaldoFonteAno166 = getSaldoPlanoContaFonte("'166','1166','15420007'", $dtini, $dtfim, $instits);
                                 $nSaldoFonteAno167 = getSaldoPlanoContaFonte("'167','1167','15420000'", $dtini, $dtfim, $instits);
-                        
+
                                 $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
                                 $nRPSemDesponibilidade118 = $aTotalPago118 - $nSaldoFonteAno118;
                                 $nRPSemDesponibilidade119 = $aTotalPago119 - $nSaldoFonteAno119;
@@ -2139,7 +2139,7 @@ ob_start();
                 </tr>
                 <?php
                         $nValorAPlicadoSuperavit218_219 = getDespesasCusteadosComSuperavit(array("'218','219','25400007','25400000'"), $dtini, $dtfim, $instits);
-                        $nValorAPlicadoSuperavit266_267 = getDespesasCusteadosComSuperavit(array("'266','267','25420007','25420007'"), $dtini, $dtfim, $instits);  
+                        $nValorAPlicadoSuperavit266_267 = getDespesasCusteadosComSuperavit(array("'266','267','25420007','25420007'"), $dtini, $dtfim, $instits);
                 ?>
                 <tr style="height: 20px">
                     <td class="s11" dir="ltr"></td>
