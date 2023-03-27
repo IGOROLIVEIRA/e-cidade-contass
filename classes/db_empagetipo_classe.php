@@ -869,7 +869,7 @@ class cl_empagetipo {
       
       }
       elseif($iFonteEmpenho == '108' || $iFonteEmpenho == '208' || substr($iFonteEmpenho, 1, 7) == '7080000') {
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('108','208','17080000','27080000')) and";
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('108','208','17080000','27080000','15000000')) and";
       
       }
       elseif($iFonteEmpenho == '112' || $iFonteEmpenho == '212' || substr($iFonteEmpenho, 1, 7) == '6590020') {
