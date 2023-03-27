@@ -344,7 +344,7 @@ switch ($oParam->exec) {
 
 
 
-        foreach ($oContrato->getUltimaPosicao()->getItens() as $oItem) {
+        foreach ($oContrato->getUltimaPosicao(true)->getItens() as $oItem) {
 
             $oItemRetorno                      = new stdClass();
             $oItemRetorno->codigo              = $oItem->getCodigo();
