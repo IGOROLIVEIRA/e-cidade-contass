@@ -853,13 +853,7 @@ class cl_liclicita
         } */
 
         if ($this->l20_recdocumentacao == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
-            $this->erro_sql = " Campo Abertura das Propostas não Informado.";
-            $this->erro_campo = "l20_recdocumentacao";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
+            $this->l20_recdocumentacao = 'null';
         }
 
         if ($this->l20_numeroconvidado == null) {
