@@ -129,7 +129,11 @@ $iAnoSessao = db_getsession("DB_anousu");
                     ORDER BY l20_codigo";
 
                 $aRepassa = array();
-                db_lovrot($sql.' desc ',15,"","","", "",'NoMe', "", false);
+                if(isset($notifica)){
+                    db_lovrot($sql.' desc ',15,"","","", null,'NoMe', "", false);
+                }else{
+                    db_lovrot($sql.' desc ',15,"()","",$funcao_js, "",'NoMe', "", false);
+                }
             }
             ?>
         </td>
@@ -150,6 +154,7 @@ if(!isset($pesquisa_chave)){
     let pendentes = "<?=$oGet->pendentes?>";
     let dataenvio = "<?=$oGet->dataenviosicom?>";
     let module_licitacao = ("<?=$oGet->module_licitacao?>" == 'true');
+    let notifica = ("<?=$oGet->notifica?>" == 'true');
 
     for(let count=0;count<aTr.length;count++){
 
@@ -218,7 +223,15 @@ if(!isset($pesquisa_chave)){
                 document.getElementById(`${aTr[count].id}`).bgColor = 'red';
 
                 
+                if(!module_licitacao && !notifica){
+                    document.getElementById(`${aTr[count].id}`).onclick = (e) => {
+                        if(status == 'AGUARDANDO ENVIO'){
+                            js_OpenJanelaIframe('','db_iframe_dataenvio',`lic4_dataenvio.php?codigo=${codigoLicitacao}`,'Data de Envio - SICOM',true, null, 550, 250, 180);
+                        }
+                    }
+                }else{
                     document.getElementById(`${aTr[count].id}`).style.pointerEvents = 'none';
+                }
                 
             }else{
 
