@@ -878,18 +878,9 @@ class cl_liclicita
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l20_naturezaobjeto == '1' || $this->l20_naturezaobjeto == 1) {
-            if ($this->l20_regimexecucao == 0 || $this->l20_regimexecucao == "0") {
-                $this->erro_sql = " Campo Regime da Execução não Informado.";
-                $this->erro_campo = "l20_regimexecucao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        } else {
-            $this->l20_regimexecucao = 'NULL'; // aqui
+
+        if ($this->l20_regimexecucao == 0 || $this->l20_regimexecucao == "0") {
+            $this->l20_regimexecucao = 'NULL';
         }
 
         if ($this->l20_prazoentrega == null) {
