@@ -50,5 +50,6 @@ class Oc20005 extends AbstractMigration
                 ALTER TABLE dfcdcasp102023 ALTER si219_vloutrosingressosoperacionais DROP NOT NULL;
 
                 ";
+        $this->execute($sql);
     }
 }
