@@ -2677,52 +2677,133 @@ class cl_acordo
     function sql_query_publicacaoEmpenho_pncp($campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
     {
         $ano  = db_getsession("DB_anousu");
-        $sql  = "select
-                e60_numemp,  
-                ac213_numerocontrolepncp,  
-                z01_cgccpf as cnpjCompra,
-                e60_anousu as anoCompra,
-                l213_numerocompra as sequencialCompra,
-                7 as tipoContratoId,
-                e60_codemp as numeroContratoEmpenho,
-                e60_anousu as anoContrato,
-                l20_edital||'/'||l20_anousu as processo,
-                l20_categoriaprocesso as categoriaProcessoId,
-                false as receita,
-                01001 as codigoUnidade,
-                z01_cgccpf as niFornecedor,
-                case when length(trim(z01_cgccpf)) = 14 then 'PJ' 
-                        when length(trim(z01_cgccpf)) = 11 then 'PF' 
-                else 
-                        'PE' end as tipoPessoaFornecedor,
-                z01_nome as nomeRazaoSocialFornecedor,
-                null as niFornecedorSubContratado,
-                null as tipoPessoaFornecedorSubContratado,
-                null as nomeRazaoSocialFornecedorSubContratado,
-                l20_objeto as objetoContrato,
-                null as informacaoComplementar,
-                0 as valorParcela,
-                null as dataVigenciaInicio,
-                null as dataVigenciaFim,
-                null as dataAssinatura,
-                e60_vlremp as valorInicial,
-                e60_vlremp as valorGlobal,
-                null as numeroParcelas
-                from empempenho
-                join cgm on z01_numcgm = e60_numcgm
-                join empempaut on e61_numemp=e60_numemp
-                join empautoriza on e54_autori=e61_autori
-                left join liclicita on l20_codigo = e54_codlicitacao
-                left join liccontrolepncp on l20_codigo = l213_licitacao
-                left join acocontratopncp on ac213_contrato = e60_numemp
-                where e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' and l20_codigo is not null ";
-
-        if (!empty($dbwhere))
-            $sql .= " and {$dbwhere} ";
-
-        if (!empty($ordem)) {
-            $sql .= " order by {$ordem} ";
-        }
+        $sql  = "SELECT e60_numemp,
+            l213_numerocontrolepncp,
+            z01_cgccpf AS cnpjCompra,
+            e60_anousu AS anoCompra,
+            l213_numerocompra AS sequencialCompra,
+            7 AS tipoContratoId,
+            e60_codemp AS numeroContratoEmpenho,
+            e60_anousu AS anoContrato,
+            l20_edital||'/'||l20_anousu AS processo,
+            l20_categoriaprocesso AS categoriaProcessoId,
+            FALSE AS receita,
+            01001 AS codigoUnidade,
+            z01_cgccpf AS niFornecedor,
+            CASE
+                WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                ELSE 'PE'
+            END AS tipoPessoaFornecedor,
+            z01_nome AS nomeRazaoSocialFornecedor,
+            NULL AS niFornecedorSubContratado,
+            NULL AS tipoPessoaFornecedorSubContratado,
+            NULL AS nomeRazaoSocialFornecedorSubContratado,
+            l20_objeto AS objetoContrato,
+            NULL AS informacaoComplementar,
+            0 AS valorParcela,
+            NULL AS dataVigenciaInicio,
+            NULL AS dataVigenciaFim,
+            NULL AS dataAssinatura,
+            e60_vlremp AS valorInicial,
+            e60_vlremp AS valorGlobal,
+            NULL AS numeroParcelas
+    FROM empempenho
+    JOIN cgm ON z01_numcgm = e60_numcgm
+    JOIN empempaut ON e61_numemp=e60_numemp
+    JOIN empautoriza ON e54_autori=e61_autori
+    LEFT JOIN liclicita ON l20_codigo = e54_codlicitacao
+    JOIN liccontrolepncp ON l20_codigo = l213_licitacao
+    WHERE e60_emiss >='$ano-01-01'
+        AND e60_emiss <='$ano-12-31'
+        AND l20_codigo IS NOT NULL
+    UNION
+    SELECT e60_numemp,
+            l213_numerocontrolepncp,
+            z01_cgccpf AS cnpjCompra,
+            e60_anousu AS anoCompra,
+            l213_numerocompra AS sequencialCompra,
+            7 AS tipoContratoId,
+            e60_codemp AS numeroContratoEmpenho,
+            e60_anousu AS anoContrato,
+            l20_edital||'/'||l20_anousu AS processo,
+            l20_categoriaprocesso AS categoriaProcessoId,
+            FALSE AS receita,
+            01001 AS codigoUnidade,
+            z01_cgccpf AS niFornecedor,
+            CASE
+                WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                ELSE 'PE'
+            END AS tipoPessoaFornecedor,
+            z01_nome AS nomeRazaoSocialFornecedor,
+            NULL AS niFornecedorSubContratado,
+            NULL AS tipoPessoaFornecedorSubContratado,
+            NULL AS nomeRazaoSocialFornecedorSubContratado,
+            l20_objeto AS objetoContrato,
+            NULL AS informacaoComplementar,
+            0 AS valorParcela,
+            NULL AS dataVigenciaInicio,
+            NULL AS dataVigenciaFim,
+            NULL AS dataAssinatura,
+            e60_vlremp AS valorInicial,
+            e60_vlremp AS valorGlobal,
+            NULL AS numeroParcelas
+    FROM empempenho
+    JOIN cgm ON z01_numcgm = e60_numcgm
+    JOIN empempaut ON e61_numemp=e60_numemp
+    JOIN empautoriza ON e54_autori=e61_autori
+    join empautitempcprocitem on e73_autori = e54_autori
+    join pcprocitem on e73_pcprocitem= pc81_codprocitem
+    join liclicitem on pc81_codprocitem=l21_codpcprocitem
+    LEFT JOIN liclicita ON l20_codigo = l21_codliclicita
+    JOIN liccontrolepncp ON l20_codigo = l213_licitacao
+    WHERE e60_emiss >='$ano-01-01'
+        AND e60_emiss <='$ano-12-31'
+        AND l20_codigo IS NOT NULL
+    UNION
+    SELECT e60_numemp,
+            l213_numerocontrolepncp,
+            z01_cgccpf AS cnpjCompra,
+            e60_anousu AS anoCompra,
+            l213_numerocompra AS sequencialCompra,
+            7 AS tipoContratoId,
+            e60_codemp AS numeroContratoEmpenho,
+            e60_anousu AS anoContrato,
+            pc80_numdispensa||'/'||EXTRACT(YEAR FROM pcproc.pc80_data) AS processo,
+            null AS categoriaProcessoId,
+            FALSE AS receita,
+            01001 AS codigoUnidade,
+            z01_cgccpf AS niFornecedor,
+            CASE
+                WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                ELSE 'PE'
+            END AS tipoPessoaFornecedor,
+            z01_nome AS nomeRazaoSocialFornecedor,
+            NULL AS niFornecedorSubContratado,
+            NULL AS tipoPessoaFornecedorSubContratado,
+            NULL AS nomeRazaoSocialFornecedorSubContratado,
+            pc80_resumo AS objetoContrato,
+            NULL AS informacaoComplementar,
+            0 AS valorParcela,
+            NULL AS dataVigenciaInicio,
+            NULL AS dataVigenciaFim,
+            NULL AS dataAssinatura,
+            e60_vlremp AS valorInicial,
+            e60_vlremp AS valorGlobal,
+            NULL AS numeroParcelas
+    FROM empempenho
+    JOIN cgm ON z01_numcgm = e60_numcgm
+    JOIN empempaut ON e61_numemp=e60_numemp
+    JOIN empautoriza ON e54_autori=e61_autori
+    join empautitempcprocitem on e73_autori = e54_autori
+    join pcprocitem on e73_pcprocitem= pc81_codprocitem
+    join pcproc on pc80_codproc=pc81_codproc
+    JOIN liccontrolepncp ON pc80_codproc = l213_processodecompras
+    WHERE e60_emiss >='$ano-01-01'
+        AND e60_emiss <='$ano-12-31'
+        AND pc80_codproc IS NOT NULL ";
 
         return $sql;
     }
@@ -2732,7 +2813,7 @@ class cl_acordo
 
         $ano  = db_getsession("DB_anousu");
         $sql  = "SELECT e60_numemp,
-                    ac213_numerocontrolepncp,
+                    l213_numerocontrolepncp,
                     z01_cgccpf AS cnpjCompra,
                     e60_anousu AS anoCompra,
                     l213_numerocompra AS sequencialCompra,
@@ -2742,35 +2823,122 @@ class cl_acordo
                     l20_edital||'/'||l20_anousu AS processo,
                     l20_categoriaprocesso AS categoriaProcessoId,
                     FALSE AS receita,
-                    01001 AS codigoUnidade,
-                    z01_cgccpf AS niFornecedor,
-                    CASE
-                        WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
-                        WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
-                        ELSE 'PE'
-                    END AS tipoPessoaFornecedor,
-                    z01_nome AS nomeRazaoSocialFornecedor,
-                    NULL AS niFornecedorSubContratado,
-                    NULL AS tipoPessoaFornecedorSubContratado,
-                    NULL AS nomeRazaoSocialFornecedorSubContratado,
-                    e60_resumo AS objetoContrato,
-                    NULL AS informacaoComplementar,
-                    0 AS valorParcela,
-                    e60_emiss AS dataVigenciaInicio,
-                    e60_emiss AS dataVigenciaFim,
-                    e60_emiss AS dataAssinatura,
-                    e60_vlremp AS valorInicial,
-                    e60_vlremp AS valorGlobal,
-                    1 AS numeroParcelas
-                from empempenho
-                join cgm on z01_numcgm = e60_numcgm
-                join empempaut on e61_numemp=e60_numemp
-                join empautoriza on e54_autori=e61_autori
-                left join liclicita on l20_codigo = e54_codlicitacao
-                left join liccontrolepncp on l20_codigo = l213_licitacao
-                left join acocontratopncp on ac213_contrato = e60_numemp
-                where e60_numemp = {$codigoempenho} and e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' ";
-
+                            01001 AS codigoUnidade,
+                            z01_cgccpf AS niFornecedor,
+                            CASE
+                                WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                                WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                                ELSE 'PE'
+                            END AS tipoPessoaFornecedor,
+                            z01_nome AS nomeRazaoSocialFornecedor,
+                            NULL AS niFornecedorSubContratado,
+                            NULL AS tipoPessoaFornecedorSubContratado,
+                            NULL AS nomeRazaoSocialFornecedorSubContratado,
+                            e60_resumo AS objetoContrato,
+                            NULL AS informacaoComplementar,
+                            0 AS valorParcela,
+                            e60_emiss AS dataVigenciaInicio,
+                            e60_emiss AS dataVigenciaFim,
+                            e60_emiss AS dataAssinatura,
+                            e60_vlremp AS valorInicial,
+                            e60_vlremp AS valorGlobal,
+                            1 AS numeroParcelas
+            FROM empempenho
+            JOIN cgm ON z01_numcgm = e60_numcgm
+            JOIN empempaut ON e61_numemp=e60_numemp
+            JOIN empautoriza ON e54_autori=e61_autori
+            LEFT JOIN liclicita ON l20_codigo = e54_codlicitacao
+            JOIN liccontrolepncp ON l20_codigo = l213_licitacao
+            WHERE e60_numemp = {$codigoempenho}
+                AND e60_emiss >='$ano-01-01'
+                AND e60_emiss <='$ano-12-31'
+            UNION
+            SELECT e60_numemp,
+                    l213_numerocontrolepncp,
+                    z01_cgccpf AS cnpjCompra,
+                    e60_anousu AS anoCompra,
+                    l213_numerocompra AS sequencialCompra,
+                    7 AS tipoContratoId,
+                    e60_codemp AS numeroContratoEmpenho,
+                    e60_anousu AS anoContrato,
+                    l20_edital||'/'||l20_anousu AS processo,
+                    l20_categoriaprocesso AS categoriaProcessoId,
+                    FALSE AS receita,
+                            01001 AS codigoUnidade,
+                            z01_cgccpf AS niFornecedor,
+                            CASE
+                                WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                                WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                                ELSE 'PE'
+                            END AS tipoPessoaFornecedor,
+                            z01_nome AS nomeRazaoSocialFornecedor,
+                            NULL AS niFornecedorSubContratado,
+                            NULL AS tipoPessoaFornecedorSubContratado,
+                            NULL AS nomeRazaoSocialFornecedorSubContratado,
+                            e60_resumo AS objetoContrato,
+                            NULL AS informacaoComplementar,
+                            0 AS valorParcela,
+                            e60_emiss AS dataVigenciaInicio,
+                            e60_emiss AS dataVigenciaFim,
+                            e60_emiss AS dataAssinatura,
+                            e60_vlremp AS valorInicial,
+                            e60_vlremp AS valorGlobal,
+                            1 AS numeroParcelas
+            FROM empempenho
+            JOIN cgm ON z01_numcgm = e60_numcgm
+            JOIN empempaut ON e61_numemp=e60_numemp
+            JOIN empautoriza ON e54_autori=e61_autori
+            JOIN empautitempcprocitem ON e73_autori = e54_autori
+            JOIN pcprocitem ON e73_pcprocitem= pc81_codprocitem
+            JOIN liclicitem ON pc81_codprocitem=l21_codpcprocitem
+            LEFT JOIN liclicita ON l20_codigo = l21_codliclicita
+            JOIN liccontrolepncp ON l20_codigo = l213_licitacao
+            WHERE e60_numemp = {$codigoempenho}
+                AND e60_emiss >='$ano-01-01'
+                AND e60_emiss <='$ano-12-31'
+            UNION
+            SELECT e60_numemp,
+                    l213_numerocontrolepncp,
+                    z01_cgccpf AS cnpjCompra,
+                    e60_anousu AS anoCompra,
+                    l213_numerocompra AS sequencialCompra,
+                    7 AS tipoContratoId,
+                    e60_codemp AS numeroContratoEmpenho,
+                    e60_anousu AS anoContrato,
+                    pc80_numdispensa||'/'||EXTRACT(YEAR FROM pcproc.pc80_data) AS processo,
+                    null AS categoriaProcessoId,
+                    FALSE AS receita,
+                                01001 AS codigoUnidade,
+                                z01_cgccpf AS niFornecedor,
+                                CASE
+                                    WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                                    WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                                    ELSE 'PE'
+                                END AS tipoPessoaFornecedor,
+                                z01_nome AS nomeRazaoSocialFornecedor,
+                                NULL AS niFornecedorSubContratado,
+                                NULL AS tipoPessoaFornecedorSubContratado,
+                                NULL AS nomeRazaoSocialFornecedorSubContratado,
+                                e60_resumo AS objetoContrato,
+                                NULL AS informacaoComplementar,
+                                0 AS valorParcela,
+                                e60_emiss AS dataVigenciaInicio,
+                                e60_emiss AS dataVigenciaFim,
+                                e60_emiss AS dataAssinatura,
+                                e60_vlremp AS valorInicial,
+                                e60_vlremp AS valorGlobal,
+                                1 AS numeroParcelas
+            FROM empempenho
+            JOIN cgm ON z01_numcgm = e60_numcgm
+            JOIN empempaut ON e61_numemp=e60_numemp
+            JOIN empautoriza ON e54_autori=e61_autori
+            JOIN empautitempcprocitem ON e73_autori = e54_autori
+            JOIN pcprocitem ON e73_pcprocitem= pc81_codprocitem
+            JOIN pcproc ON pc80_codproc=pc81_codproc
+            JOIN liccontrolepncp ON pc80_codproc = l213_processodecompras
+            WHERE e60_numemp = {$codigoempenho}
+                AND e60_emiss >='$ano-01-01'
+                AND e60_emiss <='$ano-12-31'";
         return $sql;
     }
 }

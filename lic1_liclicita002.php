@@ -338,6 +338,11 @@ if (isset($alterar)) {
             }
         }
 
+        if ($l20_categoriaprocesso == 0 && $l12_pncp == 't') {
+            $erro_msg .= 'Campo categoria do processo não informado\n\n';
+            $sqlerro = true;
+        }
+
         //verifica modalidades e presencial
         $sSql = $clcflicita->sql_query_file(null, 'l03_presencial', '', "l03_codigo = $oPost->l20_codtipocom");
         $aCf = db_utils::getColectionByRecord($clcflicita->sql_record($sSql));
@@ -561,6 +566,7 @@ if (isset($alterar)) {
             $clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao; //OC3770
             $clliclicita->l20_exercicioedital = $oPost->l20_datacria_ano;
             $clliclicita->l20_justificativapncp = $oPost->l20_justificativapncp;
+            $clliclicita->l20_categoriaprocesso = $oPost->l20_categoriaprocesso;
             $clliclicita->alterar($l20_codigo, $descricao);
 
             if ($clliclicita->erro_status == "0") {
