@@ -165,6 +165,30 @@ class cl_dipr102023
 
             return false;
         }
+        if ($this->si230_nroatonormasegremassa == null || $this->si230_nroatonormasegremassa == "") {
+            $this->si230_nroatonormasegremassa = 'null';
+        }
+
+        if ($this->si230_dtatonormasegremassa == null || $this->si230_dtatonormasegremassa == "") {
+            $this->si230_dtatonormasegremassa = 'null';
+        }else{
+            $this->si230_dtatonormasegremassa = "'".$this->si230_dtatonormasegremassa."'";
+        }
+
+        if ($this->si230_planodefatuarial == null || $this->si230_planodefatuarial == "") {
+            $this->si230_planodefatuarial = 'null';
+        }
+
+        if ($this->si230_atonormplanodefat == null || $this->si230_atonormplanodefat == "") {
+            $this->si230_atonormplanodefat = 'null';
+        }
+
+        if ($this->si230_dtatoplanodefat == null || $this->si230_dtatoplanodefat == "") {
+            $this->si230_dtatoplanodefat = 'null';
+        }else{
+            $this->si230_dtatoplanodefat = "'".$this->si230_dtatoplanodefat."'";
+        }
+        
         $sql = "insert into dipr102023(
                     si230_sequencial 
                     ,si230_tiporegistro
@@ -191,11 +215,11 @@ class cl_dipr102023
                     ,$this->si230_mes 
                     ,$this->si230_instit
                     ,$this->si230_nroatonormasegremassa
-                    ,'$this->si230_dtatonormasegremassa'
+                    ,$this->si230_dtatonormasegremassa
                     ,$this->si230_planodefatuarial
                     ,$this->si230_atonormplanodefat
-                    ,'$this->si230_dtatoplanodefat')";
-                  
+                    ,$this->si230_dtatoplanodefat)";
+            
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("", "", @pg_last_error());
