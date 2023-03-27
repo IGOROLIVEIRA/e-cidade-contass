@@ -2255,7 +2255,8 @@ if ($oInstit->db21_usasisagua == "t") {
       if ((iContaReceita == 17510000 && iConta == 15000000) || (iContaReceita == 17180000 && iConta == 15000000) || (iContaReceita == 17040000 && iConta == 17040000) || (iContaReceita == 15010000 && iConta == 15000000) || (iContaReceita == 15400000 && iConta == 15400007) ||
         (iContaReceita == 15420007 && iConta == 15400007) || (iContaReceita == 15420000 && iConta == 15400007) || (iContaReceita == 15420007 && iConta == 15400000) || (iContaReceita == 15420000 && iConta == 15400000) || (iContaReceita == 15400007 && iConta == 15400000) ||
         (iContaReceita == 15000001 && iConta == 15000000) || (iContaReceita == 15000002 && iConta == 15000000) || (iContaReceita == 16590000 && iConta == 16000000) || (iContaReceita == 16590000 && iConta == 16020000) || (iContaReceita == 16040000 && iConta == 16000000) ||
-        (iContaReceita == 16040000 && iConta == 16020000) || (iContaReceita == 16590000 && iConta == 16010000) || (iContaReceita == 16590000 && iConta == 16030000) || (iContaReceita == 17070000 && iConta == 15000000) || (iContaReceita == 17040000 && iConta == 17040000)
+        (iContaReceita == 16040000 && iConta == 16020000) || (iContaReceita == 16590000 && iConta == 16010000) || (iContaReceita == 16590000 && iConta == 16030000) || (iContaReceita == 17070000 && iConta == 15000000) || (iContaReceita == 17040000 && iConta == 17040000) ||
+        (iContaReceita == 17080000 && iConta == 15000000)
       ) {
         $('notificacao').setStyle({
           display: 'none'
