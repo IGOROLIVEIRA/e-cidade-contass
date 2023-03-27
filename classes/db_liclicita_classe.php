@@ -3786,14 +3786,8 @@ class cl_liclicita
         '' as informacaoComplementar,
         liclicita.l20_usaregistropreco AS srp,
         false as orcamentoSigiloso,
-        CASE
-            WHEN l03_pctipocompratribunal IN (100,101,102,103) THEN liclicita.l20_dataaberproposta
-            ELSE liclicita.l20_recdocumentacao
-        END AS dataAberturaProposta,
-        CASE
-            WHEN l03_pctipocompratribunal IN (100,101,102,103) THEN liclicita.l20_dataaberproposta
-            ELSE liclicita.l20_recdocumentacao
-        END AS dataEncerramentoProposta,
+        liclicita.l20_dataaberproposta AS dataAberturaProposta,
+        liclicita.l20_dataencproposta AS dataEncerramentoProposta,
         liclicita.l20_amparolegal as amparoLegalId,
         liclicita.l20_linkpncp as linkSistemaOrigem,
         liclicita.l20_justificativapncp as justificativaPresencial
