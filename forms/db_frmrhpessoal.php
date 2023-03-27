@@ -140,6 +140,16 @@ if (($db_opcao == 2 || $db_opcao == 22) && isset($rh01_regist) && $rh01_regist !
                 ?>
               </td>
             </tr>
+            <!-- MATRICULA E-SOCIAL -->
+            <tr>
+              <td nowrap title="rh_esocial">
+                <?php echo "<strong>Matricula e-Social</strong>"; ?>
+              </td>
+              <td nowrap>
+              <?php db_input('rh01_esocial', 30, $Irh01_esocial, true, 'text', $mostra, ""); ?>
+                <input type="checkbox" id="check_esocial" name="check_esocial">
+              </td>
+            </tr>
             <tr>
               <td nowrap title="<?= @$Trh01_numcgm ?>">
                 <?
@@ -897,4 +907,12 @@ if (($db_opcao == 2 || $db_opcao == 22) && isset($rh01_regist) && $rh01_regist !
     }
   }
   js_verificatipoadm();
+
+  //Habilitar campo matricula e-social
+  document.getElementById('check_esocial').onchange = function() {
+    document.getElementById('rh01_esocial').disabled = !this.checked;
+    document.getElementById('rh01_esocial').removeAttribute('readonly');
+    document.getElementById('rh01_esocial').style.backgroundColor = "";
+  };
+
 </script>
