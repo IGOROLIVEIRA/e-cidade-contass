@@ -326,6 +326,11 @@ class cl_diprcontribuicao
             $virgula = ",";
         }
 
+        if ($this->verificaTipoContribuicao()) {
+            $sql  .= $virgula . " c237_tipocontribuinte = '$this->c237_tipocontribuinte' ";
+            $virgula = ",";
+        }
+
         $sql .= " WHERE ";
 
         if ($c237_sequencial != null) {
