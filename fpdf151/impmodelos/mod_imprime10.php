@@ -271,6 +271,13 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 	$valorItem = db_utils::fieldsMemory($resItens, 0)->m52_valor;
 	$qtdAnulada = db_utils::fieldsMemory($resItens, 0)->m36_qtd;
 
+	/*Realiza a consulta se o item é tabela e tem itens associados*/
+
+	$sqlItemTabela = "SELECT * FROM empordemtabela where l223_pcmaterordem = ". pg_result($this->recorddositens, $ii, $this->codmater) ." and l223_codordem = ".$this->numordem;
+
+	$resItemTabela = @db_query($sqlItemTabela);
+	
+
 	$descricaoitem = pg_result($this->recorddositens, $ii, $this->descricaoitem);
 	if (pg_result($this->recorddositens, $ii, $this->Snumero) != "") {
 		$descricaoitem .= "\n\n" . 'SOLICITAÇÃO: ' . pg_result($this->recorddositens, $ii, $this->Snumero);
@@ -459,7 +466,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 				}
 			}
 
-			// Insere quebra no ponto informado
+			// Insere quebra no ponto informado 
 			//$sObsItem = substr($sObsItem,0,$iLimitString)."\n".substr($sObsItem,$iLimitString,strlen($sObsItem));
 			//$sObsItem = substr($sObsItem,0,1421);
 		}
@@ -475,6 +482,19 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 			3,
 			($this->objpdf->h - $iAlturaFinal)
 		);
+		if(@pg_numrows($resItemTabela) > 0){
+			$this->objpdf->Setfont('Arial', 'B', 8);
+			$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() - 3, "DETALHAMENTO:");
+			for($contitem=0;$contitem < @pg_numrows($resItemTabela);$contitem++){
+				$oDadosItemTabela = db_utils::fieldsMemory($resItemTabela, $contitem);
+				$sqlPcmater = "SELECT pc01_descrmater FROM pcmater WHERE pc01_codmater = ".$oDadosItemTabela->l223_pcmatertabela;
+				$resPcmater = @db_query($sqlPcmater);
+				$oDadosPcmater = db_utils::fieldsMemory($resPcmater, 0);
+				$this->objpdf->Setfont('Arial', '', 8);
+				$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() + (($contitem*4)*2),($contitem+1)." - ".$oDadosPcmater->pc01_descrmater);
+				$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety()+ ($contitem*4)+(($contitem+1)*4), " Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f'));
+			}
+		}
 		if ($valorItemAnulado == $valorItem && $valorItemAnulado > 0) {
 			$this->objpdf->Setfont('Arial', 'B', 8);
 			$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() - 3, "(ANULADO)");

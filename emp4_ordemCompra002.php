@@ -153,7 +153,7 @@ if (isset($oPost->incluir)){
    */
   for ($i=0; $i < count($oPost->itensOrdem); $i++) {
 
-    $sSqlEmp    = "select e62_numemp, e62_sequen from empempitem where e62_sequencial = {$oPost->itensOrdem[$i]}";
+    $sSqlEmp    = "select e62_item,e62_numemp, e62_sequen from empempitem where e62_sequencial = {$oPost->itensOrdem[$i]}";
     $rsEmpItem  = $clempempitem->sql_record($sSqlEmp);
     if ($clempempitem->numrows == 1) {
       $oEmpItem = db_utils::fieldsMemory($rsEmpItem, 0);
@@ -163,6 +163,24 @@ if (isset($oPost->incluir)){
       $erro_msg = "Item {$oPost->itensOrdem[$i]} não encontrado no Empenho.Operacao cancelada.";
       break;
     }
+    
+    $sSqlTab    = "select sum(l223_total) as totaltabela from empordemtabela where l223_numemp = $oEmpItem->e62_numemp and l223_pcmaterordem = $oEmpItem->e62_item and l223_codordem = 0";
+    $rsTabItem  = $clempempitem->sql_record($sSqlTab);
+    if ($clempempitem->numrows == 1) {
+      $oTabItem = db_utils::fieldsMemory($rsTabItem, 0);
+
+      if($oTabItem->totaltabela > $nValorTotal){
+        $sqlerro  = true;
+        $erro_msg = "Total Item da tabela {$oEmpItem->totaltabela} é maior que o total do item principal $nValorTotal.Operacao cancelada.";
+        break;
+      }else{
+        $sSqlEmp    = "update empordemtabela set l223_codordem = $codigo where l223_numemp = $oEmpItem->e62_numemp and l223_pcmaterordem = $oEmpItem->e62_item and l223_codordem = 0";
+        db_query($sSqlEmp);
+      }
+    }
+
+    
+    
     if (!$sqlerro) {
 
       /**

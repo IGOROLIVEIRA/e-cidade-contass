@@ -445,7 +445,7 @@ if ($lBloquear) {
 
 
                       // Código do item
-                      echo "  <td class='linhagrid' id='e62_item' align='center'>$e62_item</td>";
+                      echo "  <td class='linhagrid' id='e62_item{$e62_sequencial}' align='center'>$e62_item</td>";
 
                       // Item
                       echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' ondblclick='js_verificatabela($e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
@@ -885,16 +885,25 @@ if ($lBloquear) {
   }
 
   function js_verificatabela(empenho,item,acordo,tabela){
+   if( $('itenstabela').style.display == 'none'){
+      if(tabela == 1 && acordo != "block"){
+        $('itenstabela').style.display = '';
+        $('pc16_codmater').value = "";
+        $('pc01_descrmater').value = "";
+        $('codempenho').value = empenho;
+        $('coditemordem').value = item;
+        $('codempenho').style.display = 'none';
+        $('coditemordem').style.display = 'none';
+        $('coditemordemtabela').style.display = 'none';
+        js_init(empenho,item);
+      }
+   }else{
     if(tabela == 1 && acordo != ""){
-      $('itenstabela').style.display = '';
-      $('pc16_codmater').value = "";
-      $('pc01_descrmater').value = "";
-      $('codempenho').value = empenho;
-      $('coditemordem').value = item;
-      $('codempenho').style.display = 'none';
-      $('coditemordem').style.display = 'none';
-      js_init(empenho,item);
-    }
+        $('itenstabela').style.display = 'none';
+  
+      }
+   }
+
   }
 
   function js_pesquisapc16_codmater(mostra) {
@@ -1232,7 +1241,8 @@ if ($lBloquear) {
     unit = novoValorunit;
     $('l223_quant').value = quan;
     $('l223_vlrn').value = unit;
-    $('l223_total').value = quan * unit;
+    $('l223_total').value = round(quan * unit,2);
+    
   }
 
   function js_verifica(max, quan, nome, valoruni, numemp, sequencia) {
