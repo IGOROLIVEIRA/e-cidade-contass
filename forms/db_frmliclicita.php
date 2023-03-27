@@ -978,39 +978,9 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 <?
                 db_input('l20_liclocal', 10, $Il20_liclocal, true, 'hidden', $db_opcao, " onchange='js_pesquisal20_liclocal(false);'")
                 ?>
-                <!--            
-                                    </td>
-                                </tr> -->
                 <?
                 db_input('l20_liccomissao', 10, $Il20_liccomissao, true, 'hidden', $db_opcao, " onchange='js_pesquisal20_liccomissao(false);'")
-                /*
-                                if(db_getsession("DB_anousu") >= 2016){
-                                    ?>
-                                    <tr>
 
-                                        <td>
-                                            <?
-                                            db_input('l20_liccomissao',10,$Il20_liccomissao,true,'hidden',$db_opcao," onchange='js_pesquisal20_liccomissao(false);'")
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <?
-                                }else {
-                                    ?>
-                                    <tr>
-                                        <td nowrap title="<?=@$Tl20_liccomissao?>">
-                                            <?
-                                            db_ancora(@$Ll20_liccomissao,"js_pesquisal20_liccomissao(true);",$db_opcao);
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?
-                                            db_input('l20_liccomissao',10,$Il20_liccomissao,true,'text',$db_opcao," onchange='js_pesquisal20_liccomissao(false);'")
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <?
-                                }*/
                 ?>
                 <tr style="padding-bottom:70px important!;">
                     <td nowrap title="<?= @$Tl20_equipepregao ?>" id="equipepregao">
@@ -1179,7 +1149,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                     </td>
                 </tr>
 
-                <tr id="justificativapncp">
+                <tr id="justificativapncp" style="display:none">
                     <td>
                         <strong>Justificativa pela escolha da modalidade presencial:</strong>
                     </td>
@@ -1721,11 +1691,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         presencial = oRetorno.l03_presencial;
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
+        console.log(presencial);
+        console.log(l12_pncp);
 
         if (presencial == 't' && l12_pncp == 't') {
-            document.getElementById('justificativapncp').style.display = 'none';
-        } else {
             document.getElementById('justificativapncp').style.display = '';
+        } else {
+            document.getElementById('justificativapncp').style.display = 'none';
         }
 
         if (l12_pncp == 't') {
@@ -2099,12 +2071,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
         var db_opcao = <? echo '"' . $db_opcao . '"';      ?>;
 
-        if (document.getElementById('l20_dataaberproposta').style.display == "" && document.getElementById('l20_dataaberproposta').value == "" && db_opcao != 3) {
+        if (l12_pncp == 't' && document.getElementById('l20_dataaberproposta').style.display == "" && document.getElementById('l20_dataaberproposta').value == "" && db_opcao != 3) {
             alert("Campo Data de Abertura da Proposta não Informado");
             return false;
         }
 
-        if (document.getElementById('l20_dataencproposta').style.display == "" && document.getElementById('l20_dataencproposta').value == "" && db_opcao != 3) {
+        if (l12_pncp == 't' && document.getElementById('l20_dataencproposta').style.display == "" && document.getElementById('l20_dataencproposta').value == "" && db_opcao != 3) {
             alert("Campo Data de Encerramento da Proposta não Informado");
             return false;
         }
