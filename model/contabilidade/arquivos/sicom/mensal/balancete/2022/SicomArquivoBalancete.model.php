@@ -353,7 +353,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                        where c60_anousu = " . db_getsession("DB_anousu") . " {$sWhere10} and (c61_reduz = 25480 or c61_codtce = 25480)) as x
+                        where c60_anousu = " . db_getsession("DB_anousu") . " {$sWhere10}) as x
                         where  debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 
         $rsReg10 = db_query($sqlReg10);
