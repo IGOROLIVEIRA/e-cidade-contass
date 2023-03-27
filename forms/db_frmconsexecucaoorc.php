@@ -296,6 +296,7 @@ function js_pesquisao58_subfuncao(mostra){
                 c202_subfuncao:           document.form1[elemento+'[c202_subfuncao]'].getAttribute('value'),
                 c202_codfontrecursos:     document.form1[elemento+'[c202_codfontrecursos]'].getAttribute('value'),
                 c202_elemento:            document.form1[elemento+'[c202_elemento]'].getAttribute('value'),
+                c202_codacompanhamento:   document.form1[elemento+'[c202_codacompanhamento]'].getAttribute('value'),
                 c202_valorempenhado:      isNaN(Number(valorEmpenhado))    ? valorEmpenhado.replace(/\./g, '').replace(/\,/, '.')     : valorEmpenhado,
                 c202_valorempenhadoanu:   isNaN(Number(valorEmpenhadoAnu)) ? valorEmpenhadoAnu.replace(/\./g, '').replace(/\,/, '.')  : valorEmpenhadoAnu,
                 c202_valorliquidado:      isNaN(Number(valorLiquidado))    ? valorLiquidado.replace(/\./g, '').replace(/\,/, '.')     : valorLiquidado,

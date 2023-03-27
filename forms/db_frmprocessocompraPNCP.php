@@ -138,7 +138,7 @@ $clrotulo->label("descrdepto");
                             ?>
                         </td>
                     </tr>
-                    <tr id="dispensaporvalor1" style="display:none">
+                    <tr id="dispensaporvalor1">
                         <td>
                             <label class="bold">Nº da Dispensa:</label>
                         </td>
@@ -148,7 +148,7 @@ $clrotulo->label("descrdepto");
                             ?>
                         </td>
                     </tr>
-                    <tr id="dispensaporvalor2" style="display:none">
+                    <tr id="dispensaporvalor2">
                         <td>
                             <label class="bold">Orc. Sigiloso:</label>
                         </td>
@@ -164,7 +164,7 @@ $clrotulo->label("descrdepto");
                             ?>
                         </td>
                     </tr>
-                    <tr id="dispensaporvalor3" style="display:none">
+                    <tr id="dispensaporvalor3">
                         <td>
                             <label class="bold">Subcontratação:</label>
                         </td>
@@ -180,7 +180,7 @@ $clrotulo->label("descrdepto");
                             ?>
                         </td>
                     </tr>
-                    <tr id="dispensaporvalor4" style="display:none">
+                    <tr id="dispensaporvalor4">
                         <td>
                             <label class="bold">Amparo Legal:</label>
                         </td>
@@ -293,17 +293,17 @@ $clrotulo->label("descrdepto");
 <script>
     function js_verificadispensa() {
         var dispensavalor = document.getElementById('pc80_dispvalor').value;
-        console.log(dispensavalor);
-        if (dispensavalor == "t") {
-            document.getElementById('dispensaporvalor1').style.display = '';
-            document.getElementById('dispensaporvalor2').style.display = '';
-            document.getElementById('dispensaporvalor3').style.display = '';
-            document.getElementById('dispensaporvalor4').style.display = '';
-        } else {
+
+        if (dispensavalor == "f") {
             document.getElementById('dispensaporvalor1').style.display = 'none';
             document.getElementById('dispensaporvalor2').style.display = 'none';
             document.getElementById('dispensaporvalor3').style.display = 'none';
             document.getElementById('dispensaporvalor4').style.display = 'none';
+        } else {
+            document.getElementById('dispensaporvalor1').style.display = '';
+            document.getElementById('dispensaporvalor2').style.display = '';
+            document.getElementById('dispensaporvalor3').style.display = '';
+            document.getElementById('dispensaporvalor4').style.display = '';
         }
     }
 
