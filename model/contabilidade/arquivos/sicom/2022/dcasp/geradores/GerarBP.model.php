@@ -72,7 +72,7 @@ class GerarBP extends GerarAM
         $aCSVBP10['si208_vlativocircuinvestapliccurtoprazo']  = $this->sicomNumberReal($aBP10['si208_vlativocircuinvestapliccurtoprazo'], 2);
         $aCSVBP10['si208_vlativocircuestoques']               = $this->sicomNumberReal($aBP10['si208_vlativocircuestoques'], 2);
         $aCSVBP10['si208_vlativonaocircumantidovenda']        = $this->sicomNumberReal($aBP10['si208_vlativonaocircumantidovenda'], 2);
-        $aCSVBP10['si208_vlativocircuativobio']               = $this->sicomNumberReal(0, 2);
+        $aCSVBP10['si208_vlativocircuativobio']               = $this->sicomNumberReal($aBP10['si208_vlativocircuativobio'], 2);
         $aCSVBP10['si208_vlativocircuvpdantecipada']          = $this->sicomNumberReal($aBP10['si208_vlativocircuvpdantecipada'], 2);
         $aCSVBP10['si208_vlativonaocircurlp']                 = $this->sicomNumberReal($aBP10['si208_vlativonaocircurlp'], 2);
         $aCSVBP10['si208_vlativonaocircuinvestimentos']       = $this->sicomNumberReal($aBP10['si208_vlativonaocircuinvestimentos'], 2);

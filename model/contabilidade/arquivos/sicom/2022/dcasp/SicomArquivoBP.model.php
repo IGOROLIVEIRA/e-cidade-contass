@@ -248,20 +248,21 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
 
       $clbpdcasp10  = new cl_bpdcasp102022();
 
+      $vlativonaocircurlp = $oRetornoBP[10]->$sChave + $oRetornoBP[11]->$sChave + $oRetornoBP[12]->$sChave + $oRetornoBP[13]->$sChave;
+
       $clbpdcasp10->si208_ano                               = $iAnoUsu;
       $clbpdcasp10->si208_periodo                           = $iCodigoPeriodo;
       $clbpdcasp10->si208_institu                           = db_getsession("DB_instit");
       $clbpdcasp10->si208_tiporegistro                      = 10;
-      $clbpdcasp10->si208_exercicio                         = $iValorNumerico;
       $clbpdcasp10->si208_vlativocircucaixaequicaixa        = $oRetornoBP[2]->$sChave;
       $clbpdcasp10->si208_vlativocircucredicurtoprazo       = $oRetornoBP[3]->$sChave;
+      $clbpdcasp10->si208_vlativocircudemaiscredicurtoprazo = 0;
       $clbpdcasp10->si208_vlativocircuinvestapliccurtoprazo = $oRetornoBP[4]->$sChave;
       $clbpdcasp10->si208_vlativocircuestoques              = $oRetornoBP[5]->$sChave;
+      $clbpdcasp10->si208_vlativonaocircumantidovenda       = 0;
+      $clbpdcasp10->si208_vlativocircuativobio              = 0;
       $clbpdcasp10->si208_vlativocircuvpdantecipada         = $oRetornoBP[6]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircucredilongoprazo    = $oRetornoBP[10]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuinvestemplongpraz  = $oRetornoBP[11]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuestoques           = $oRetornoBP[12]->$sChave;
-      $clbpdcasp10->si208_vlativonaocircuvpdantecipada      = $oRetornoBP[13]->$sChave;
+      $clbpdcasp10->si208_vlativonaocircurlp                = $vlativonaocircurlp;
       $clbpdcasp10->si208_vlativonaocircuinvestimentos      = $oRetornoBP[14]->$sChave;
       $clbpdcasp10->si208_vlativonaocircuimobilizado        = $oRetornoBP[15]->$sChave;
       $clbpdcasp10->si208_vlativonaocircuintagivel          = $oRetornoBP[16]->$sChave;
@@ -282,7 +283,6 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp20->si209_periodo                             = $iCodigoPeriodo;
       $clbpdcasp20->si209_institu                             = db_getsession("DB_instit");
       $clbpdcasp20->si209_tiporegistro                        = 20;
-      $clbpdcasp20->si209_exercicio                           = $iValorNumerico;
       $clbpdcasp20->si209_vlpassivcircultrabprevicurtoprazo   = $oRetornoBP[21]->$sChave;
       $clbpdcasp20->si209_vlpassivcirculemprefinancurtoprazo  = $oRetornoBP[22]->$sChave;
       $clbpdcasp20->si209_vlpassivocirculafornecedcurtoprazo  = $oRetornoBP[23]->$sChave;
@@ -341,7 +341,6 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp30->si210_periodo                           = $iCodigoPeriodo;
       $clbpdcasp30->si210_institu                           = db_getsession("DB_instit");
       $clbpdcasp30->si210_tiporegistro                      = 30;
-      $clbpdcasp30->si210_exercicio                         = $iValorNumerico;
       $clbpdcasp30->si210_vlativofinanceiro                 = $oRetornoBP[50]->$sChave;
       $clbpdcasp30->si210_vlativopermanente                 = $oRetornoBP[51]->$sChave;
       $clbpdcasp30->si210_vltotalativofinanceiropermanente  = $oRetornoBP[52]->$sChave;
@@ -362,7 +361,6 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp40->si211_periodo                             = $iCodigoPeriodo;
       $clbpdcasp40->si211_institu                             = db_getsession("DB_instit");
       $clbpdcasp40->si211_tiporegistro                        = 40;
-      $clbpdcasp40->si211_exercicio                           = $iValorNumerico;
       $clbpdcasp40->si211_vlpassivofinanceiro                 = $oRetornoBP[54]->$sChave;
       $clbpdcasp40->si211_vlpassivopermanente                 = $oRetornoBP[55]->$sChave;
       $clbpdcasp40->si211_vltotalpassivofinanceiropermanente  = $oRetornoBP[56]->$sChave;
@@ -383,7 +381,6 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp50->si212_periodo             = $iCodigoPeriodo;
       $clbpdcasp50->si212_institu             = db_getsession("DB_instit");
       $clbpdcasp50->si212_tiporegistro        = 50;
-      $clbpdcasp50->si212_exercicio           = $iValorNumerico;
       $clbpdcasp50->si212_vlsaldopatrimonial  = $oRetornoBP[57]->$sChave;
 
       $clbpdcasp50->incluir(null);
@@ -402,7 +399,6 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp60->si213_periodo                             = $iCodigoPeriodo;
       $clbpdcasp60->si213_institu                             = db_getsession("DB_instit");
       $clbpdcasp60->si213_tiporegistro                        = 60;
-      $clbpdcasp60->si213_exercicio                           = $iValorNumerico;
       $clbpdcasp60->si213_vlatospotenativosgarancontrarecebi  = $oRetornoBP[59]->$sChave;
       $clbpdcasp60->si213_vlatospotenativodirconveoutroinstr  = $oRetornoBP[60]->$sChave;
       $clbpdcasp60->si213_vlatospotenativosdireitoscontratua  = $oRetornoBP[61]->$sChave;
@@ -464,7 +460,7 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
         if(!isset($aDadosSuperavitFontes[$nHash])){
           $oDadosSuperavitFonte = new stdClass();
           $oDadosSuperavitFonte->si215_exercicio = $iValorNumerico;
-          $oDadosSuperavitFonte->si215_codfontrecursos = $objContasfr->o15_codtri;
+          $oDadosSuperavitFonte->si215_codfontrecursos = $iFonte;
           if($iValorNumerico == 2){
             $oDadosSuperavitFonte->si215_vlsaldofonte = $oSaldoFontes->saldoanterior;
           }else{
@@ -493,7 +489,6 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
           $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
           $clbpdcasp71->si215_institu = db_getsession("DB_instit");
           $clbpdcasp71->si215_tiporegistro = 71;
-          $clbpdcasp71->si215_exercicio = $iValorNumerico;
           $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->si215_codfontrecursos;
           $clbpdcasp71->si215_codfontrecursos23 = $iFonteNova;
           $clbpdcasp71->si215_vlsaldofonte = $oDadosBP71->si215_vlsaldofonte*-1;
@@ -514,7 +509,6 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
             $clbpdcasp71->si215_periodo = $iCodigoPeriodo;
             $clbpdcasp71->si215_institu = db_getsession("DB_instit");
             $clbpdcasp71->si215_tiporegistro = 71;
-            $clbpdcasp71->si215_exercicio = $iValorNumerico;
             $clbpdcasp71->si215_codfontrecursos = $oDadosBP71->si215_codfontrecursos;
             $clbpdcasp71->si215_codfontrecursos23 = $iFonteNova;
             $clbpdcasp71->si215_vlsaldofonte = 0;
@@ -535,7 +529,6 @@ class SicomArquivoBP extends SicomArquivoBase implements iPadArquivoBaseCSV
       $clbpdcasp70->si214_periodo       = $iCodigoPeriodo;
       $clbpdcasp70->si214_institu       = db_getsession("DB_instit");
       $clbpdcasp70->si214_tiporegistro  = 70;
-      $clbpdcasp70->si214_exercicio     =  $iValorNumerico;
       $clbpdcasp70->si214_vltotalsupdef = $nVltotalsupdef;
       $clbpdcasp70->incluir(null);
       if ($clbpdcasp70->erro_status == 0) {
