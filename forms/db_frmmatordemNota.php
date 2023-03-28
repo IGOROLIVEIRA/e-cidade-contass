@@ -379,7 +379,7 @@ if ($lBloquear) {
 
 
                     $sSQLacordo = "select
-                    ac26_acordo
+                    distinct ac26_acordo
                   from
                     acordoposicao
                   inner join acordoitem on
