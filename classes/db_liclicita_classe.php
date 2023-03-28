@@ -685,6 +685,16 @@ class cl_liclicita
             }
         }
 
+        if ($this->l20_dataaberproposta == "null" || $this->l20_dataaberproposta == "") {
+            $this->erro_sql = "Campo Abertura das Propostas não Informado";
+            $this->erro_campo = "l20_dataaberproposta";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
         if ($this->l20_dataencproposta != null && $this->l20_datacria != null) {
             if ($this->l20_datacria > $this->l20_dataencproposta) {
                 $this->erro_sql = "A data inserida no campo 'Data Encerramento Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
@@ -1645,12 +1655,18 @@ class cl_liclicita
             $virgula = ",";
         }
 
-        if (trim($this->l20_dataaberproposta) == null || trim($this->l20_dataaberproposta) == "") {
-            $sql .= $virgula . " l20_dataaberproposta =null ";
-            $virgula = ",";
-        } else {
+        if (trim($this->l20_dataaberproposta != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaberproposta"]))) {
             $sql .= $virgula . " l20_dataaberproposta = '$this->l20_dataaberproposta' ";
             $virgula = ",";
+            if (trim($this->l20_dataaberproposta) == null) {
+                $this->erro_sql = " Campo Abertura das Propostas não Informado. ";
+                $this->erro_campo = "l20_dataaberproposta";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
         }
 
         if (trim($this->l20_dataencproposta) == null || trim($this->l20_dataencproposta) == "") {

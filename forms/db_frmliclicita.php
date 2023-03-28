@@ -1145,8 +1145,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 </tr>
 
 
-                <tr>
-                    <td nowrap title="<?= @$Tl20_aceitabilidade ?>" id="aceitabilidade">
+                <tr id="aceitabilidade">
+                    <td nowrap title="<?= @$Tl20_aceitabilidade ?>">
                         <b>Critério de Aceitabilidade:</b>
                     </td>
                     <td>
@@ -1410,6 +1410,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("dataaber").style.display = "none";
             document.getElementById("dataaberturapncp").style.display = "none";
             document.getElementById("equipepregao").style.display = 'none';
+            document.getElementById("usaregistropreco").style.display = 'none';
+            document.getElementById("aceitabilidade").style.display = 'none';
 
 
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
@@ -1442,15 +1444,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.form1.dtjs_l20_recdocumentacao.style.display = 'none';
             document.form1.l20_usaregistropreco.style.display = 'none';
             document.form1.l20_local.style.display = 'none';
-            document.form1.l20_aceitabilidade.style.display = 'none';
             document.getElementById("tipolicitacao").style.display = 'none';
             document.getElementById("tipnaturezaproced").style.display = 'none';
             document.getElementById("descontotab").style.display = 'none';
             document.getElementById("numeroconvidado").style.display = 'none';
             document.getElementById("recdocumentacao").style.display = 'none';
-            document.getElementById("usaregistropreco").style.display = 'none';
             document.getElementById("local").style.display = 'none';
-            document.getElementById("aceitabilidade").style.display = 'none';
             document.getElementById("respAvaliaBens").style.display = "none";
             document.getElementById("respAberProcesso").style.display = "none";
             document.getElementById("respEmissaoEdi").style.display = "none";
@@ -1467,6 +1466,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("dataaber").style.display = '';
             document.getElementById("dataaberturapncp").style.display = '';
             document.getElementById("equipepregao").style.display = '';
+            document.getElementById("usaregistropreco").style.display = '';
+            document.getElementById("aceitabilidade").style.display = '';
 
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
 
@@ -1507,15 +1508,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.form1.l20_usaregistropreco.style.display = 'inline';
             document.form1.l20_equipepregao.style.display = 'inline';
             document.form1.l20_local.style.display = 'inline';
-            document.form1.l20_aceitabilidade.style.display = 'inline';
             document.getElementById("tipnaturezaproced").style.display = 'inline';
             document.getElementById("descontotab").style.display = 'inline';
             document.getElementById("numeroconvidado").style.display = 'inline';
             document.getElementById("recdocumentacao").style.display = 'inline';
-            document.getElementById("usaregistropreco").style.display = 'inline';
             document.getElementById("equipepregao").style.display = 'inline';
             document.getElementById("local").style.display = 'inline';
-            document.getElementById("aceitabilidade").style.display = 'inline';
 
         }
 
