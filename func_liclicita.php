@@ -186,6 +186,8 @@ $sWhereContratos = " and 1 = 1 ";
                     } else {
                         if ($situacao == '10') {
                             $dbwhere .= " l20_licsituacao = 10 AND ";
+                        } elseif ($situacao == '3') {
+                            $dbwhere .= " l20_licsituacao = 3 AND ";
                         } elseif ($situacao) {
                             $dbwhere .= " l20_licsituacao = 1 AND ";
                         }
@@ -432,8 +434,7 @@ $sWhereContratos = " and 1 = 1 ";
                                      AND liclicita.l20_datacria IS NOT NULL THEN EXTRACT(YEAR FROM liclicita.l20_datacria)
                                 END) >= 2020 $sWhere AND liclicita.l20_naturezaobjeto = 1
                             AND (select count(l21_codigo) from liclicitem where l21_codliclicita = liclicita.l20_codigo) >= 1
-                        ORDER BY l20_codigo
-          ";
+                        ORDER BY l20_codigo ";
                     }
 
                     $aRepassa = array();

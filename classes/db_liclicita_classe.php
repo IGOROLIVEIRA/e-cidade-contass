@@ -3775,13 +3775,21 @@ class cl_liclicita
         liclicita.l20_edital||'/'||liclicita.l20_anousu AS numeroProcesso,
         liclicita.l20_objeto AS objetoCompra,
         '' as informacaoComplementar,
-        liclicita.l20_usaregistropreco AS srp,
-        false as orcamentoSigiloso,
+        CASE
+            WHEN l03_pctipocompratribunal =54 THEN 'f'
+            ELSE liclicita.l20_usaregistropreco
+        END AS srp,
         liclicita.l20_dataaberproposta AS dataAberturaProposta,
         liclicita.l20_dataencproposta AS dataEncerramentoProposta,
         liclicita.l20_amparolegal as amparoLegalId,
         liclicita.l20_linkpncp as linkSistemaOrigem,
-        liclicita.l20_justificativapncp as justificativaPresencial
+        liclicita.l20_justificativapncp as justificativaPresencial,
+        CASE
+            WHEN l20_licsituacao IN (0,1,10,13) THEN 1
+            WHEN l20_licsituacao IN (5,12) THEN 3
+            WHEN l20_licsituacao IN (11) THEN 4
+            ELSE l20_licsituacao
+        END AS situacaoCompraId
         from liclicita
         join db_depart on coddepto=l20_codepartamento
         join db_config on codigo=instit

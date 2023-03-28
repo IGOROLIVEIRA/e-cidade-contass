@@ -117,16 +117,18 @@ switch ($oParam->exec) {
                 //envia para pncp
                 $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarAviso($tipoDocumento, $processo);
 
-                if ($rsApiPNCP->compraUri) {
+                if ($rsApiPNCP[0] == 201) {
                     //monto o codigo da compra no pncp
+                    $l213_numerocompra = substr($rsApiPNCP[1], 68, 2);
+                    $l213_numerocontrolepncp = '17316563000196-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
+
                     $clliccontrolepncp = new cl_liccontrolepncp();
-                    $l213_numerocontrolepncp = '17316563000196-1-' . str_pad(substr($rsApiPNCP->compraUri, 74), 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
                     $clliccontrolepncp->l213_licitacao = $aLicitacao->codigo;
                     $clliccontrolepncp->l213_usuario = db_getsession('DB_id_usuario');
                     $clliccontrolepncp->l213_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
                     $clliccontrolepncp->l213_numerocontrolepncp = $l213_numerocontrolepncp;
                     $clliccontrolepncp->l213_situacao = 1;
-                    $clliccontrolepncp->l213_numerocompra = substr($rsApiPNCP->compraUri, 74);
+                    $clliccontrolepncp->l213_numerocompra = $l213_numerocompra;
                     $clliccontrolepncp->l213_anousu = $oDadosLicitacao->anocompra;
                     $clliccontrolepncp->l213_instit = db_getsession('DB_instit');
                     $clliccontrolepncp->incluir();
@@ -134,7 +136,7 @@ switch ($oParam->exec) {
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Enviado com Sucesso !";
                 } else {
-                    throw new Exception(utf8_decode($rsApiPNCP->message));
+                    throw new Exception(utf8_decode($rsApiPNCP[1]));
                 }
             }
         } catch (Exception $eErro) {
@@ -158,6 +160,7 @@ switch ($oParam->exec) {
                 }
                 $clAvisoLicitacaoPNCP = new AvisoLicitacaoPNCP($oDadosLicitacao);
                 $oDadosRatificacao = $clAvisoLicitacaoPNCP->montarRetificacao();
+
                 //envia Retificacao para pncp
                 $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarRetificacao($oDadosRatificacao, substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
 
