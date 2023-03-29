@@ -1567,7 +1567,7 @@ db_app::load("dbtextFieldData.widget.js");
         }
 
         if (iTipoOrigem == 2 && iOrigem == 3) {
-            document.getElementById('trLicitacao').style.display = "";
+            //document.getElementById('trLicitacao').style.display = "";
             document.getElementById('tradesaoregpreco').style.display = "none";
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
@@ -1579,7 +1579,7 @@ db_app::load("dbtextFieldData.widget.js");
         }
 
         if (iTipoOrigem == 3 && iOrigem == 3) {
-            document.getElementById('trLicitacao').style.display = "";
+            //document.getElementById('trLicitacao').style.display = "";
             document.getElementById('tradesaoregpreco').style.display = "none";
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
@@ -1592,7 +1592,7 @@ db_app::load("dbtextFieldData.widget.js");
 
         if (iOrigem == 1) {
             document.getElementById('tradesaoregpreco').style.display = "none";
-            document.getElementById('trLicitacao').style.display = "";
+            //document.getElementById('trLicitacao').style.display = "";
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
@@ -1600,6 +1600,12 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('tradesaoregpreco').style.display = "";
             document.getElementById('trLicitacao').style.display = "none";
             document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+
+        if(iOrigem == 1 && iTipoOrigem == 2){
+            document.getElementById('trLicitacao').style.display = "";
+        }else{
+            document.getElementById('trLicitacao').style.display = "none";
         }
 
         if (iTipoOrigem != 4) {
