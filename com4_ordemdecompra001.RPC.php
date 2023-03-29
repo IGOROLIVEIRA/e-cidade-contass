@@ -145,11 +145,11 @@ try {
         
         $oDados = new stdClass();
         $oDados->pc01_codmater         = $oItens->pc01_codmater;
-        $oDados->iPcmaterdescr         = urlencode($oItens->pc01_descrmater);
         $oDados->iQuantidade         = $oItens->l223_quant;
         $oDados->iUnit       = $oItens->l223_vlrn;
         $oDados->iValor       = $oItens->l223_total;
         $oDados->iSequencial= $oItens->l223_sequencial;
+        $oDados->iDescricao = urlencode($oItens->l223_descr);
 
         $aDadosEntrada[]           = $oDados;
 
@@ -171,11 +171,11 @@ try {
         
         $oDados = new stdClass();
         $oDados->pc01_codmater         = $oItens->pc01_codmater;
-        $oDados->iPcmaterdescr         = urlencode($oItens->pc01_descrmater);
         $oDados->iQuantidade         = $oItens->l223_quant;
         $oDados->iUnit       = $oItens->l223_vlrn;
         $oDados->iValor       = $oItens->l223_total;
         $oDados->iSequencial= $oItens->l223_sequencial;
+        $oDados->iDescricao = urlencode($oItens->l223_descr);
 
         $aDadosEntrada[]           = $oDados;
 
@@ -198,11 +198,11 @@ try {
         
         $oDados = new stdClass();
         $oDados->pc01_codmater         = $oItens->pc01_codmater;
-        $oDados->iPcmaterdescr         = urlencode($oItens->pc01_descrmater);
         $oDados->iQuantidade         = $oItens->l223_quant;
         $oDados->iUnit       = $oItens->l223_vlrn;
         $oDados->iValor       = $oItens->l223_total;
         $oDados->iSequencial= $oItens->l223_sequencial;
+        $oDados->iDescricao = urlencode($oItens->l223_descr);
 
         $aDadosEntrada[]           = $oDados;
 
@@ -225,11 +225,11 @@ try {
         
         $oDados = new stdClass();
         $oDados->pc01_codmater         = $oItens->pc01_codmater;
-        $oDados->iPcmaterdescr         = urlencode($oItens->pc01_descrmater);
         $oDados->iQuantidade         = $oItens->l223_quant;
         $oDados->iUnit       = $oItens->l223_vlrn;
         $oDados->iValor       = $oItens->l223_total;
         $oDados->iSequencial= $oItens->l223_sequencial;
+        $oDados->iDescricao = urlencode($oItens->l223_descr);
 
         $aDadosEntrada[]           = $oDados;
 

@@ -23,7 +23,8 @@ class cl_empordemtabela {
   public $l223_vlrn = 0; 
   public $l223_total = 0; 
   public $l223_numemp = 0; 
-  public $l223_codordem = NULL; 
+  public $l223_codordem = NULL;
+  public $l223_descr = NULL;  
   // cria propriedade com as variaveis do arquivo 
   public $campos = "
                  l223_sequencial = int8 = l223_sequencial 
@@ -34,6 +35,7 @@ class cl_empordemtabela {
                  l223_total = float8 = l223_total 
                  l223_numemp = int8 = l223_numemp 
                  l223_codordem = int8 = l223_codordem 
+                 l223_descr = varchar = l223_descr
                  ";
 
   //funcao construtor da classe 
@@ -64,6 +66,7 @@ class cl_empordemtabela {
        $this->l223_total = ($this->l223_total == ""?@$GLOBALS["HTTP_POST_VARS"]["l223_total"]:$this->l223_total);
        $this->l223_numemp = ($this->l223_numemp == ""?@$GLOBALS["HTTP_POST_VARS"]["l223_numemp"]:$this->l223_numemp);
        $this->l223_codordem = ($this->l223_codordem == ""?@$GLOBALS["HTTP_POST_VARS"]["l223_codordem"]:$this->l223_codordem);
+       $this->l223_descr = ($this->l223_descr == ""?@$GLOBALS["HTTP_POST_VARS"]["l223_descr"]:$this->l223_descr);
      } else {
      }
    }
@@ -92,14 +95,17 @@ class cl_empordemtabela {
        $this->erro_status = "0";
        return false;
      }
-     if ($this->l223_pcmatertabela == null ) { 
-       $this->erro_sql = " Campo l223_pcmatertabela não informado.";
-       $this->erro_campo = "l223_pcmatertabela";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
+     if ($this->l223_pcmatertabela == null || $this->l223_pcmatertabela == "") { 
+      $result = db_query("select count(l223_pcmatertabela)+1 as l223_pcmatertabela from empordemtabela where l223_pcmaterordem  = $this->l223_pcmaterordem and l223_numemp = $this->l223_numemp and l223_codordem = 0"); 
+      if($result==false){
+        $this->erro_banco = str_replace("\n","",@pg_last_error());
+        $this->erro_sql   = "Verifique o cadastro da sequencia: empordemtabela_l223_sequencial_seq do campo: l223_sequencial"; 
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false; 
+      }
+      $this->l223_pcmatertabela = pg_result($result,0,0); 
      }
      if ($this->l223_quant == null ) { 
        $this->erro_sql = " Campo l223_quant não informado.";
@@ -137,6 +143,15 @@ class cl_empordemtabela {
        $this->erro_status = "0";
        return false;
      }
+     if ($this->l223_descr == null ) { 
+      $this->erro_sql = " Campo l223_descr não informado.";
+      $this->erro_campo = "l223_descr";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      if ($this->l223_codordem == null ) { 
        $this->l223_codordem = "0";
      }
@@ -149,6 +164,7 @@ class cl_empordemtabela {
                                       ,l223_total 
                                       ,l223_numemp 
                                       ,l223_codordem 
+                                      ,l223_descr 
                        )
                 values (
                                 $this->l223_sequencial 
@@ -159,6 +175,7 @@ class cl_empordemtabela {
                                ,$this->l223_total 
                                ,$this->l223_numemp 
                                ,$this->l223_codordem 
+                               ,'$this->l223_descr'
                       )";
      $result = db_query($sql); 
      if ($result==false) { 
@@ -287,6 +304,19 @@ class cl_empordemtabela {
          return false;
        }
      }
+     if (trim($this->l223_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l223_descr"])) { 
+      $sql  .= $virgula." l223_descr = $this->l223_descr ";
+      $virgula = ",";
+      if (trim($this->l223_descr) == null ) { 
+        $this->erro_sql = " Campo l223_descr não informado.";
+        $this->erro_campo = "l223_descr";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      if (trim($this->l223_codordem)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l223_codordem"])) { 
         if (trim($this->l223_codordem)=="" && isset($GLOBALS["HTTP_POST_VARS"]["l223_codordem"])) { 
            $this->l223_codordem = "0" ; 

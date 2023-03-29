@@ -950,9 +950,9 @@ if ($lBloquear) {
 
   function js_adicionarItem() {
 
-    if ($F('pc16_codmater') == "") {
+    if ($F('pc01_descrmater') == "") {
 
-      alert('Informe o material!');
+      alert('Informe a descrição!');
       return false;
 
     }
@@ -982,6 +982,7 @@ if ($lBloquear) {
     oParam.quantidade = $F('l223_quant');
     oParam.valorunit = $F('l223_vlrn');
     oParam.codempenho = $F('codempenho') ;
+    oParam.descricao = $F('pc01_descrmater') ;
     oParam.exec = "adicionarItemOrdemTabela";
     var oAjax = new Ajax.Request(sUrlRC, {
       method: "post",
@@ -1064,7 +1065,7 @@ if ($lBloquear) {
         var aLinha = new Array();
         aLinha[0] = i + 1;
         aLinha[1] = pc01_codmater;
-        aLinha[2] = iPcmaterdescr.urlDecode();
+        aLinha[2] = iDescricao.urlDecode();
         aLinha[3] = iQuantidade;
         aLinha[4] = iUnit;
         aLinha[5] = iValor;
