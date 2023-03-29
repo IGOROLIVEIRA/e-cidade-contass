@@ -3914,35 +3914,34 @@ class cl_liclicita
                             cgm.z01_numcgm,
                             cgm.z01_nome,
                             matunid.m61_descr,
-                            pcorcamval.pc23_quant,
+                            solicitem.pc11_quant,
                             pcorcamval.pc23_valor
-        FROM liclicitem
-        INNER JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
-        INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
-        LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem
-        INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
-        INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-        INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
-        INNER JOIN licsituacao ON l08_sequencial = l20_licsituacao
-        INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
-        INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
-        INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-        INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-        INNER JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
-        INNER JOIN pcorcamitem ON pc22_orcamitem = pc26_orcamitem
-        INNER JOIN pcorcam ON pc20_codorc = pc22_codorc
-        INNER JOIN pcorcamforne ON pc21_codorc = pc20_codorc
-        LEFT  JOIN cgm ON pc21_numcgm = z01_numcgm
-        LEFT  JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
-        AND pc23_orcamforne=pc21_orcamforne
-        LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
-        AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
-        LEFT  JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-        LEFT  JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-        WHERE l21_codliclicita = $l20_codigo
-            AND pc24_pontuacao =1
-        ORDER BY l21_ordem";
+            FROM liclicitem
+            INNER JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
+            INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+            LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem
+            INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+            INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+            INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+            INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+            INNER JOIN licsituacao ON l08_sequencial = l20_licsituacao
+            INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+            INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+            INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+            INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+            LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+            LEFT JOIN pcorcamitem ON pc22_orcamitem = pc26_orcamitem
+            LEFT JOIN pcorcam ON pc20_codorc = pc22_codorc
+            LEFT JOIN pcorcamforne ON pc21_codorc = pc20_codorc
+            LEFT JOIN cgm ON pc21_numcgm = z01_numcgm
+            LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+            AND pc23_orcamforne=pc21_orcamforne
+            LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+            AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne AND pc24_pontuacao =1
+            LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+            LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+            WHERE l21_codliclicita = $l20_codigo
+            ORDER BY l21_ordem";
 
         return $sql;
     }

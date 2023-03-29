@@ -375,55 +375,6 @@ class licitacao
         }
 
         /**
-         * Percorremos todos os itens da licitacao e o excluimos.
-         */
-        $oDaoLicitaItens     = db_utils::getDao("liclicitem");
-        $oDaoLicitaItensLote = db_utils::getDao("liclicitemlote");
-        $sSqlItens           = $oDaoLicitaItens->sql_query_file(
-            null,
-            "distinct *",
-            "l21_codigo",
-            "l21_codliclicita={$this->iCodLicitacao}"
-        );
-
-        $rsItens = $oDaoLicitaItens->sql_record($sSqlItens);
-        $aItens  = db_utils::getCollectionByRecord($rsItens);
-
-        foreach ($aItens as $oItem) {
-
-            /**
-             * Excluimos os lotes
-             */
-            $oDaoLicitaItensLote->excluir(null, "l04_liclicitem={$oItem->l21_codigo}");
-
-            if ($oDaoLicitaItensLote->erro_status == 0) {
-
-                $sErro = "Erro ao alterar status da Licitação:\n\n Erro tÃ©cnico: erro ao excluir lotes /{$oDaoLicitaItensLote->erro_msg}";
-                throw new Exception($sErro, 2);
-            }
-
-            /**
-             * Excluimos o item na tabela liclicitemanu 23/07/2015
-             */
-            $oDaoLiclicitemanu              = db_utils::getDao("liclicitemanu");
-            $oDaoLiclicitemanu->excluir('', "l07_liclicitem = " . $oItem->l21_codigo);
-            if ($oDaoLiclicitemanu->erro_status == 0) {
-                $sErro = "Erro ao excluir item da tabela liclicitemanu:\n\n Erro tÃ©cnico: erro ao excluir item /{$oDaoLiclicitemanu->erro_msg}";
-                throw new Exception($sErro, 3);
-            }
-
-            /**
-             * Excluimos o item
-             */
-            $oDaoLicitaItens->excluir($oItem->l21_codigo);
-            if ($oDaoLicitaItens->erro_status == 0) {
-
-                $sErro = "Erro ao alterar status da Licitação:\n\n Erro tÃ©cnico: erro ao excluir item /{$oDaoLicitaItens->erro_msg}";
-                throw new Exception($sErro, 3);
-            }
-        }
-
-        /**
          * Incluimos a situacao  para licitacao
          */
         $oDaoLiclicita                  = db_utils::getDao("liclicita");
@@ -540,15 +491,6 @@ class licitacao
 
         $oDaoLicilicitem  = db_utils::getDao("liclicitem");
 
-        //echo ("<pre>".print_r($aLicitacoes, 1)."</pre>");
-        //echo count($aLicitacoes); die();
-        /*
-        if (count($aLicitacoes) > 1) {
-          $sLista = implode(",", $aLicitacoes);
-        } else {
-          $sLista = implode("", $aLicitacoes);
-        }
-         */
         $sLista = $aLicitacoes;
         $sCampos          = "l21_codigo as codigo, pc01_codmater as codigomaterial,";
         $sCampos         .= "pc01_descrmater as material, pc23_vlrun as valorunitario,";
