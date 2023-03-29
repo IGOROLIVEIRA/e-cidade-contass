@@ -180,7 +180,7 @@ switch ($iOpcao) {
     }
 
     function js_getDadosSituacaoLicitacao(iCodigoAlteracao) {
-
+        console.log(iCodigoAlteracao);
         db_iframe_liclicitasituacao.hide();
 
         var oParam = new Object();
@@ -212,18 +212,8 @@ switch ($iOpcao) {
     }
 
     function js_pequisaLicitacao(iOpcao) {
-
-        if (iOpcao > 1) {
-
-            sPesquisaTipo = "situacao=" + iTipoSituacao + "&";
-            var sUrlLicitacao = "func_liclicita.php?" + sPesquisaTipo + "funcao_js=parent.js_getDadosSituacaoLicitacao|l11_sequencial";
-            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicitasituacao', sUrlLicitacao, 'Pesquisa Licitações', true);
-
-        } else {
-
-            var sUrlLicitacao = "func_liclicita.php?" + sPesquisaTipo + "funcao_js=parent.js_preencheDados|l20_codigo|l20_edital"
-            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', sUrlLicitacao, 'Pesquisa Licitações', true);
-        }
+        var sUrlLicitacao = "func_liclicita.php?deserta=true&" + sPesquisaTipo + "funcao_js=parent.js_preencheDados|l20_codigo|l20_edital"
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', sUrlLicitacao, 'Pesquisa Licitações', true);
     }
 
     function js_preencheDados(iCodigoLicitacao, iCodigoEdital, sObservacao) {
@@ -235,6 +225,7 @@ switch ($iOpcao) {
         if (sObservacao != undefined) {
 
             $('l11_obs').value = sObservacao;
+
         }
 
         db_iframe_liclicita.hide();

@@ -162,4 +162,3 @@ switch ($oParam->exec) {
 db_fim_transacao(false);
 
 echo $oJson->encode($oRetorno);
-?>
