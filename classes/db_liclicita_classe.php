@@ -685,7 +685,7 @@ class cl_liclicita
             }
         }
 
-        if ($this->l20_dataaberproposta == "null" || $this->l20_dataaberproposta == "") {
+        if ($this->l20_dataaberproposta == "null" || $this->l20_dataaberproposta == "" and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
             $this->erro_sql = "Campo Abertura das Propostas não Informado";
             $this->erro_campo = "l20_dataaberproposta";
             $this->erro_banco = "";
