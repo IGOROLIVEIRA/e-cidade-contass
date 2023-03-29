@@ -989,8 +989,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 db_input('l20_liccomissao', 10, $Il20_liccomissao, true, 'hidden', $db_opcao, " onchange='js_pesquisal20_liccomissao(false);'")
 
                 ?>
-                <tr style="padding-bottom:70px important!;">
-                    <td nowrap title="<?= @$Tl20_equipepregao ?>" id="equipepregao">
+                <tr style="padding-bottom:70px important!;" id="equipepregao">
+                    <td nowrap title="<?= @$Tl20_equipepregao ?>">
                         <?
                         db_ancora(@$Ll20_equipepregao, "js_pesquisal20_equipepregao(true);", $db_opcao);
                         ?>
@@ -1145,8 +1145,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 </tr>
 
 
-                <tr>
-                    <td nowrap title="<?= @$Tl20_aceitabilidade ?>" id="aceitabilidade">
+                <tr id="aceitabilidade">
+                    <td nowrap title="<?= @$Tl20_aceitabilidade ?>">
                         <b>Critério de Aceitabilidade:</b>
                     </td>
                     <td>
@@ -1401,13 +1401,17 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("respCondProcesso").style.display = "none";
             document.getElementById("l20_tipliticacao").style.display = "none";
             document.getElementById("l20_tipnaturezaproced").style.display = "none";
-            document.getElementById("l20_regimexecucao").style.display = "none";
+            //document.getElementById("l20_regimexecucao").style.display = "none";
             document.getElementById("l20_criterioadjudicacao").style.display = "none";
             document.getElementById("disputa").style.display = "none";
             document.getElementById("respAutoProcesso").style.display = '';
             document.getElementById("respAberProcesso").style.display = "none";
             document.getElementById("respEmissaoEdi").style.display = "none";
             document.getElementById("dataaber").style.display = "none";
+            document.getElementById("dataaberturapncp").style.display = "none";
+            document.getElementById("equipepregao").style.display = 'none';
+            document.getElementById("usaregistropreco").style.display = 'none';
+            document.getElementById("aceitabilidade").style.display = 'none';
 
 
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
@@ -1439,18 +1443,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.form1.l20_recdocumentacao.style.display = 'none';
             document.form1.dtjs_l20_recdocumentacao.style.display = 'none';
             document.form1.l20_usaregistropreco.style.display = 'none';
-            document.form1.l20_equipepregao.style.display = 'none';
             document.form1.l20_local.style.display = 'none';
-            document.form1.l20_aceitabilidade.style.display = 'none';
             document.getElementById("tipolicitacao").style.display = 'none';
             document.getElementById("tipnaturezaproced").style.display = 'none';
             document.getElementById("descontotab").style.display = 'none';
             document.getElementById("numeroconvidado").style.display = 'none';
             document.getElementById("recdocumentacao").style.display = 'none';
-            document.getElementById("usaregistropreco").style.display = 'none';
-            document.getElementById("equipepregao").style.display = 'none';
             document.getElementById("local").style.display = 'none';
-            document.getElementById("aceitabilidade").style.display = 'none';
             document.getElementById("respAvaliaBens").style.display = "none";
             document.getElementById("respAberProcesso").style.display = "none";
             document.getElementById("respEmissaoEdi").style.display = "none";
@@ -1459,12 +1458,16 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("respCondProcesso").style.display = '';
             document.getElementById("l20_tipliticacao").style.display = '';
             document.getElementById("l20_tipnaturezaproced").style.display = '';
-            document.getElementById("l20_regimexecucao").style.display = '';
+            //document.getElementById("l20_regimexecucao").style.display = '';
             document.getElementById("l20_criterioadjudicacao").style.display = '';
             document.getElementById("respAutoProcesso").style.display = "none";
             document.getElementById("respAberProcesso").style.display = '';
             document.getElementById("respEmissaoEdi").style.display = '';
             document.getElementById("dataaber").style.display = '';
+            document.getElementById("dataaberturapncp").style.display = '';
+            document.getElementById("equipepregao").style.display = '';
+            document.getElementById("usaregistropreco").style.display = '';
+            document.getElementById("aceitabilidade").style.display = '';
 
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
 
@@ -1505,15 +1508,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.form1.l20_usaregistropreco.style.display = 'inline';
             document.form1.l20_equipepregao.style.display = 'inline';
             document.form1.l20_local.style.display = 'inline';
-            document.form1.l20_aceitabilidade.style.display = 'inline';
             document.getElementById("tipnaturezaproced").style.display = 'inline';
             document.getElementById("descontotab").style.display = 'inline';
             document.getElementById("numeroconvidado").style.display = 'inline';
             document.getElementById("recdocumentacao").style.display = 'inline';
-            document.getElementById("usaregistropreco").style.display = 'inline';
             document.getElementById("equipepregao").style.display = 'inline';
             document.getElementById("local").style.display = 'inline';
-            document.getElementById("aceitabilidade").style.display = 'inline';
 
         }
 

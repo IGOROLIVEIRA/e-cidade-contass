@@ -455,7 +455,7 @@ switch ($oParam->exec) {
             $oItem->pc01_descrmater                 = urlencode($oItensLicitacao->pc01_descrmater);
             $oItem->z01_numcgm                      = $oItensLicitacao->z01_numcgm;
             $oItem->z01_nome                        = urlencode($oItensLicitacao->z01_nome);
-            $oItem->m61_descr                       = $oItensLicitacao->m61_descr;
+            $oItem->m61_descr                       = urlencode($oItensLicitacao->m61_descr);
             $oItem->pc11_quant                      = $oItensLicitacao->pc11_quant;
             $oItem->pc23_valor                      = $oItensLicitacao->pc23_valor;
             $oItem->l203_homologaadjudicacao        = $oItensLicitacao->l203_homologaadjudicacao;
@@ -1090,4 +1090,4 @@ switch ($oParam->exec) {
 
         break;
 }
-echo json_encode($oRetorno);
+echo $oJson->encode($oRetorno);
