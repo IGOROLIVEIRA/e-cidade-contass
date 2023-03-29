@@ -25,14 +25,14 @@
  *                                licenca/licenca_pt.txt 
  */
 
-require_once ("libs/db_stdlib.php");
-require_once ("libs/db_utils.php");
-require_once ("std/db_stdClass.php");
-require_once ("libs/db_conecta.php");
-require_once ("libs/db_sessoes.php");
-require_once ("dbforms/db_funcoes.php");
-require_once ("libs/JSON.php");
-require_once ("model/licitacao.model.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_utils.php");
+require_once("std/db_stdClass.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("dbforms/db_funcoes.php");
+require_once("libs/JSON.php");
+require_once("model/licitacao.model.php");
 
 $oJson  = new services_json();
 $oParam = $oJson->decode(str_replace("\\", "", $_POST['json']));
@@ -60,21 +60,20 @@ switch ($oParam->exec) {
             }
 
             $oLicitacao = new licitacao($iCodigoLicitacao);
-            $oLicitacao->alterarSituacao($iTipoSituacao,$sObservacao);
+            $oLicitacao->alterarSituacao($iTipoSituacao, $sObservacao);
             $oRetorno->message = urlencode("Situação salva com sucesso.");
             db_fim_transacao(false);
+        } catch (Exception $eErro) {
 
-        }catch (Exception $eErro) {
-
-            $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
             $oRetorno->status  = 2;
             db_fim_transacao(true);
         }
         break;
 
-    /**
-     * Modifica apenas a observação da Licitação
-     */
+        /**
+         * Modifica apenas a observação da Licitação
+         */
     case 'alterar':
 
         try {
@@ -88,12 +87,11 @@ switch ($oParam->exec) {
             }
 
             $oLicitacao          = new licitacao($iCodigoLicitacao);
-            $oLicitacao->alterarObservacaoSituacao($iSituacaoSequencial,$sObservacao);
+            $oLicitacao->alterarObservacaoSituacao($iCodigoLicitacao, $sObservacao);
             $oRetorno->message = urlencode("Motivo alterado com sucesso.");
+        } catch (Exception $eErro) {
 
-        }catch (Exception $eErro) {
-
-            $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
             $oRetorno->status  = 1;
             db_fim_transacao(true);
         }
@@ -118,13 +116,11 @@ switch ($oParam->exec) {
             $oRetorno->l11_sequencial   = $oDadoSituacao->l11_sequencial;
             $oRetorno->iCodigoEdital    = $oLicitacao->getEdital();
             $oRetorno->iCodigoLicitacao = $oDadoSituacao->l11_liclicita;
-
         } catch (Exception $eErro) {
 
-            $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
             $oRetorno->status  = 1;
             db_fim_transacao(true);
-
         }
 
         break;
@@ -143,21 +139,16 @@ switch ($oParam->exec) {
             }
 
             $oLicitacao = new licitacao($iCodigoLicitacao);
-            $oLicitacao->alterarSituacao(0,$sObservacao);
+            $oLicitacao->alterarSituacao(0, $sObservacao);
             $oRetorno->message = urlencode("Situação cancelada com sucesso.");
-
         } catch (Exception $eErro) {
 
-            $oRetorno->message = urlencode(str_replace("\\n","\n",$eErro->getMessage()));
+            $oRetorno->message = urlencode(str_replace("\\n", "\n", $eErro->getMessage()));
             $oRetorno->status  = 1;
             db_fim_transacao(true);
         }
 
         break;
-
-
-
-
 }
 db_fim_transacao(false);
 

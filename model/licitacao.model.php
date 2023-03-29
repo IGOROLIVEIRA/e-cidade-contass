@@ -374,23 +374,6 @@ class licitacao
                 break;
         }
 
-
-
-        /**
-         * incluimos o log dos itens da licitacap
-         */
-        $sXMl                        = $this->itensToXml();
-        $oDaoitensLog                = db_utils::getDao("liclicitaitemlog");
-        $oDaoitensLog->l14_liclicita = $this->iCodLicitacao;
-        $oDaoitensLog->l14_xml       = $sXMl;
-        $oDaoitensLog->incluir($this->iCodLicitacao);
-
-        if ($oDaoitensLog->erro_status == 0) {
-
-            $sErro = "Erro ao alterar status da Licitação:\n\n Erro tÃ©cnico: erro ao incluir log dos itens /{$oDaoitensLog->erro_msg}";
-            throw new Exception($sErro, 1);
-        }
-
         /**
          * Percorremos todos os itens da licitacao e o excluimos.
          */
@@ -480,187 +463,33 @@ class licitacao
     public function retornaAndamento($sObservacao = "")
     {
 
-        /**
-         * Buscamos as informacoes dos itens na tabela liclicitem log e
-         * incluimos novamente nos lotes e itens.
-         */
-        $oDaoitensLog   = db_utils::getDao("liclicitaitemlog");
-        $oDaoAutoriza   = db_utils::getDao("empautitem");
-        $oDaoPcProcItem = db_utils::getDao("pcprocitem");
-        $sSqlLog        = $oDaoitensLog->sql_query_file($this->iCodLicitacao);
-        $rsLog          = $oDaoitensLog->sql_record($sSqlLog);
+        $oDaoLiclicita                  = db_utils::getDao("liclicita");
+        $oDaoLiclicita->l20_codigo      = $this->iCodLicitacao;
+        $oDaoLiclicita->l20_licsituacao = "0";
+        $oDaoLiclicita->alterar_situacao($this->iCodLicitacao);
 
-        if ($oDaoitensLog->numrows == 1) {
+        if ($oDaoLiclicita->erro_status == 0) {
 
-            $oLog = db_utils::fieldsMemory($rsLog, 0);
-            $oXML = new SimpleXMLElement($oLog->l14_xml);
-            $sItensLicita  = null;
-            $sVirgula      = "";
-            foreach ($oXML->item as $oItem) {
+            $sErro = "erro ao incluir licitação deserta:\n{$oDaoLiclicita->erro_msg}";
+            throw new Exception($sErro, 4);
+        }
 
-                $sItensLicita .= $sVirgula . $oItem->l21_codpcprocitem;
-                $sVirgula = ",";
-            }
-            /*
-             * Verificamos se as itens da Licitação já possui um orçamento realizado para ela
-             * caso esse orçamento já exista, não podemos incluir esse soLicitação como deserta.
-             */
-            $oDaoLiclicita = db_utils::getDao("liclicita");
-            $sWhere = "pc26_liclicitem is null and pc31_pcprocitem in($sItensLicita)  and pc23_orcamitem is null ";
-            $sSqlLicitaOrcamento = $oDaoLiclicita->sql_query_pcodireta(null, " distinct pc81_codproc ", null, $sWhere);
-            $rsLicitaOrcamento   = $oDaoLiclicita->sql_record($sSqlLicitaOrcamento);
-            //echo $sSqlLicitaOrcamento;exit;
+        /*
+        * incluimos a situação
+        */
+        $oDaolicSituacao = db_utils::getDao("liclicitasituacao");
+        $oDaolicSituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
+        $oDaolicSituacao->l11_hora        = db_hora();
+        $oDaolicSituacao->l11_licsituacao = "0";
+        $oDaolicSituacao->l11_obs         = $sObservacao;
+        $oDaolicSituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
+        $oDaolicSituacao->l11_liclicita   = $this->iCodLicitacao;
+        $oDaolicSituacao->incluir(null);
 
-            if ($oDaoLiclicita->numrows > 0) {
+        if ($oDaolicSituacao->erro_status == 0) {
 
-                $sMsg     = "Licitação {$this->iCodLicitacao} já possui valores lançados em Compra Direta\\nCancelamento não Realizado";
-                throw new Exception($sMsg, 5);
-            }
-            /*
-             * Verificamos se as itens da Licitação ja esta incluso em outra licitacao
-             * caso esse orçamento já exista, não podemos incluir esse solicitação como deserta.
-             */
-            $oDaoLiclicitem = db_utils::getDao("liclicitem");
-            $sWhere         = "l21_codpcprocitem in($sItensLicita)";
-            $sSqlLicita     = $oDaoLiclicitem->sql_query_file(null, " distinct l21_codliclicita ", null, $sWhere);
-            $rsLicita       = $oDaoLiclicitem->sql_record($sSqlLicita);
-
-            if ($oDaoLiclicitem->numrows > 0) {
-
-                $sLicita  = "";
-                $sVirgula = "";
-
-                for ($i = 0; $i < $oDaoLiclicitem->numrows; $i++) {
-
-                    $oLicita  = db_utils::fieldsMemory($rsLicita, $i);
-                    $sLicita .= $sVirgula . $oLicita->l21_codliclicita;
-                    $sVirgula = ", ";
-                    unset($oLicita);
-                }
-
-                $sMsg  = "Itens da licitação {$this->iCodLicitacao} já lançados nas licitações {$sLicita}";
-                $sMsg .= "\\nCancelamento não Realizado";
-                throw new Exception($sMsg, 5);
-            }
-            foreach ($oXML->item as $oItem) {
-
-                $oDaoLiclicitem   = db_utils::getDao("liclicitem");
-
-                /*
-                 * percorremos os itens que cadastramos no xml e validamos pelas seguintes regras:
-                 * 1 - o Processo de compras nao pode estar em nenhum orcamento.
-                 * 2 - não pode estar em nenhuma outra licitacao.
-                 * 3 - não pode estar excluido;
-                 */
-                $sSqlVerificaItem = $oDaoLiclicitem->sql_query_file(
-                    null,
-                    "*",
-                    null,
-                    "l21_codpcprocitem = {$oItem->l21_codpcprocitem}"
-                );
-                $rsVerificaItem   = $oDaoLiclicitem->sql_record($sSqlVerificaItem);
-
-                if ($oDaoLiclicitem->numrows > 0) {
-
-                    $oLicitacao = db_utils::fieldsMemory($rsVerificaItem, 0);
-                    $sMsg       = "O item " . utf8_decode($oItem->pc01_descrmater) . " foi incluso na licitação";
-                    $sMsg      .= " {$oLicitacao->l21_codliclicita}.\nProcesso cancelado";
-                    throw new Exception($sMsg, 6);
-                }
-                /**
-                 * Verificamos se o item está incluso em alguma autorização de empenho
-                 */
-                $sSqlAutoriza  = $oDaoAutoriza->sql_query_autoriza(
-                    null,
-                    null,
-                    "e54_autori",
-                    null,
-                    " e55_sequen = {$oItem->l21_codpcprocitem}
-          and e54_anulad is null"
-                );
-                $rsAutoriza   = $oDaoAutoriza->sql_record($sSqlAutoriza);
-
-                if ($oDaoAutoriza->numrows > 0) {
-
-                    $oAutoriza  = db_utils::fieldsMemory($rsAutoriza, 0);
-                    $sMsg       = "Erro ao Cancelar situação. Item {$oItem->l21_codpcprocitem} já está autorizado para empenho ";
-                    $sMsg      .= "na autorização {$oAutoriza->e54_autori}";
-                    throw new Exception($sMsg, 3);
-                }
-                /**
-                 * Validamos se o o item do processo de compras ainda existe.
-                 */
-                $sSqlItem    = $oDaoPcProcItem->sql_query_file(utf8_decode($oItem->l21_codpcprocitem));
-                $rsITem      = $oDaoPcProcItem->sql_record($sSqlItem);
-
-                if ($oDaoPcProcItem->numrows == 0) {
-
-                    $sMsg       = "Erro ao Cancelar situação. Processo de Compras({$oItem->pc81_codproc}) excluído";
-                    throw new Exception($sMsg, 6);
-                }
-                $oDaoLiclicitem->l21_codigo        = utf8_decode($oItem->l21_codigo);
-                $oDaoLiclicitem->l21_codliclicita  = $oItem->l21_codliclicita;
-                $oDaoLiclicitem->l21_codpcprocitem = utf8_decode($oItem->l21_codpcprocitem);
-                $oDaoLiclicitem->l21_situacao      = "$oItem->l21_situacao";
-                $oDaoLiclicitem->l21_ordem         = utf8_decode($oItem->l21_ordem);
-                $oDaoLiclicitem->incluir($oItem->l21_codigo);
-
-                if ($oDaoLiclicitem->erro_status == 0) {
-
-                    $sErro = "Erro ao excluir licitação deserta:\n{$oDaoLiclicitem->erro_msg}";
-                    throw new Exception($sErro, 2);
-                }
-                /*
-                 * incluimos os lotes do item
-                 */
-                $sequencial = 0;
-                foreach ($oItem->lote as $oLote) {
-
-                    $sequencial++;
-                    $oDaoliclicitemlote = db_utils::getDao("liclicitemlote");
-                    $oDaoliclicitemlote->l04_codigo     = utf8_decode($oLote["l04_codigo"]);
-                    $oDaoliclicitemlote->l04_liclicitem = utf8_decode($oLote["l04_liclicitem"]);
-                    $oDaoliclicitemlote->l04_descricao  = utf8_decode($oLote["l04_descricao"]);
-                    $oDaoliclicitemlote->l04_seq = $sequencial;
-                    $oDaoliclicitemlote->incluir(utf8_decode($oLote["l04_codigo"]));
-
-                    if ($oDaoliclicitemlote->erro_status == 0) {
-
-                        $sErro = "erro ao excluir licitação deserta:\n{$oDaoliclicitemlote->erro_msg}";
-                        throw new Exception($sErro, 3);
-                    }
-                }
-            }
-            $oDaoitensLog->excluir($this->iCodLicitacao);
-            $oDaoLiclicita                  = db_utils::getDao("liclicita");
-            $oDaoLiclicita->l20_codigo      = $this->iCodLicitacao;
-            $oDaoLiclicita->l20_licsituacao = "0";
-            $oDaoLiclicita->alterar_situacao($this->iCodLicitacao);
-
-            if ($oDaoLiclicita->erro_status == 0) {
-
-                $sErro = "erro ao incluir licitação deserta:\n{$oDaoLiclicita->erro_msg}";
-                throw new Exception($sErro, 4);
-            }
-            /*
-             * incluimos a situação
-             */
-            $oDaolicSituacao = db_utils::getDao("liclicitasituacao");
-            $oDaolicSituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
-            $oDaolicSituacao->l11_hora        = db_hora();
-            $oDaolicSituacao->l11_licsituacao = "0";
-            $oDaolicSituacao->l11_obs         = $sObservacao;
-            $oDaolicSituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
-            $oDaolicSituacao->l11_liclicita   = $this->iCodLicitacao;
-            $oDaolicSituacao->incluir(null);
-
-            if ($oDaolicSituacao->erro_status == 0) {
-
-                $sErro = "erro ao incluir licitação deserta:\n{$oDaolicSituacao->erro_msg}";
-                throw new Exception($sErro, 5);
-            }
-        } else {
-            throw new Exception("Licitação sem Log gerado!", 1);
+            $sErro = "erro ao incluir licitação deserta:\n{$oDaolicSituacao->erro_msg}";
+            throw new Exception($sErro, 5);
         }
     }
 
@@ -1541,13 +1370,17 @@ class licitacao
         return $this->iNumeroEdital;
     }
 
-    public function alterarObservacaoSituacao($iSequencialLicitacaoSituacao, $sObservacao)
+    public function alterarObservacaoSituacao($iSequencialLicitacao, $sObservacao)
     {
 
         $oDaoLicLicitaSituacao = db_utils::getDao('liclicitasituacao');
+        //busco a ultima situacao deserta
+        $sSqlSituacao = $oDaoLicLicitaSituacao->sql_query(null, "l11_sequencial", null, "l11_liclicita = {$iSequencialLicitacao} and l11_licsituacao = 3 ORDER BY l11_sequencial desc limit 1");
+        $rsSequencialLiclicitasituacao = $oDaoLicLicitaSituacao->sql_record($sSqlSituacao);
+        $iSequencialLicitacaoSituacao = db_utils::fieldsMemory($rsSequencialLiclicitasituacao, 0);
         $oDaoLicLicitaSituacao->l11_obs        = "{$sObservacao}";
-        $oDaoLicLicitaSituacao->l11_sequencial = $iSequencialLicitacaoSituacao;
-        $oDaoLicLicitaSituacao->alterar($iSequencialLicitacaoSituacao);
+        $oDaoLicLicitaSituacao->l11_sequencial = $iSequencialLicitacaoSituacao->l11_sequencial;
+        $oDaoLicLicitaSituacao->alterar($iSequencialLicitacaoSituacao->l11_sequencial);
 
         if ($oDaoLicLicitaSituacao->erro_status == 0) {
 

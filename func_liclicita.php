@@ -436,13 +436,49 @@ $sWhereContratos = " and 1 = 1 ";
                             AND (select count(l21_codigo) from liclicitem where l21_codliclicita = liclicita.l20_codigo) >= 1
                         ORDER BY l20_codigo ";
                     }
-                    var_dump($deserta);
-                    $sql = "
-                    
-                    ";
+
+                    if (isset($deserta) && $deserta == "true") {
+                        $sql = "
+                            SELECT DISTINCT liclicita.l20_codigo,
+                            liclicita.l20_edital,
+                            l20_anousu,
+                            pctipocompra.pc50_descr,
+                            liclicita.l20_numero,
+                            (CASE
+                                WHEN l20_nroedital IS NULL THEN '-'
+                                ELSE l20_nroedital::varchar
+                            END) AS l20_nroedital,
+                            liclicita.l20_datacria AS dl_Data_Abertura_Proc_Adm,
+                            liclicita.l20_dataaber AS dl_Data_Emis_Alt_Edital_Convite,
+                            liclicita.l20_dtpublic AS dl_Data_Publicação_DO,
+                            liclicita.l20_objeto,
+                            l08_descr AS dl_Situacao
+                            FROM liclicita
+                            INNER JOIN liclicitasituacao ON liclicitasituacao.l11_liclicita=liclicita.l20_codigo
+                            INNER JOIN db_config ON db_config.codigo = liclicita.l20_instit
+                            INNER JOIN db_usuarios ON db_usuarios.id_usuario = liclicita.l20_id_usucria
+                            INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                            INNER JOIN liclocal ON liclocal.l26_codigo = liclicita.l20_liclocal
+                            INNER JOIN liccomissao ON liccomissao.l30_codigo = liclicita.l20_liccomissao
+                            INNER JOIN licsituacao ON licsituacao.l08_sequencial = liclicita.l20_licsituacao
+                            INNER JOIN cgm ON cgm.z01_numcgm = db_config.numcgm
+                            INNER JOIN db_config AS dbconfig ON dbconfig.codigo = cflicita.l03_instit
+                            INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+                            INNER JOIN bairro ON bairro.j13_codi = liclocal.l26_bairro
+                            INNER JOIN ruas ON ruas.j14_codigo = liclocal.l26_lograd
+                            LEFT JOIN liclicitaproc ON liclicitaproc.l34_liclicita = liclicita.l20_codigo
+                            LEFT JOIN protprocesso ON protprocesso.p58_codproc = liclicitaproc.l34_protprocesso
+                            LEFT JOIN liclicitem ON liclicita.l20_codigo = l21_codliclicita
+                            LEFT JOIN acordoliclicitem ON liclicitem.l21_codigo = acordoliclicitem.ac24_liclicitem
+                            LEFT JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
+                            WHERE l20_licsituacao = $situacao
+                                AND l20_instit = 1
+                            ORDER BY l20_codigo
+                        ";
+                    }
 
                     $aRepassa = array();
-                    echo $sql;
+
                     db_lovrot($sql . ' desc ', 15, "()", "", $funcao_js, null, 'NoMe', $aRepassa, false);
                 } else {
 
