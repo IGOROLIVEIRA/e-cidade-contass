@@ -1327,8 +1327,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.form1.modalidade_tribunal.value = oRetorno.tribunal;
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
-        console.log('aquilei');
-        console.log(document.form1.l20_leidalicitacao.value);
+
         if (document.form1.l20_leidalicitacao.value == 1 && l12_pncp == 't') {
             document.getElementById("amparolegal").style.display = "";
             if (oRetorno.numrows > 0) {
@@ -1412,6 +1411,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("equipepregao").style.display = 'none';
             document.getElementById("usaregistropreco").style.display = 'none';
             document.getElementById("aceitabilidade").style.display = 'none';
+            document.getElementById("linha_nroedital").style.display = 'none';
+
 
 
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
@@ -1468,6 +1469,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("equipepregao").style.display = '';
             document.getElementById("usaregistropreco").style.display = '';
             document.getElementById("aceitabilidade").style.display = '';
+            document.getElementById("linha_nroedital").style.display = '';
 
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
 
