@@ -146,9 +146,14 @@ class ContratoPNCP extends ModeloBasePNCP
 
         $retorno = explode(':', $contentpncp);
 
-        if (substr($retorno[0], 7, 3) == 201)
-            return array($retorno[5] . $retorno[6], substr($retorno[0], 7, 3));
-        return array($retorno[17], substr($retorno[0], 7, 3));
+        ////erro ao enviar aviso
+        if ($retorno[23]) {
+            return array(422, $retorno[17]);
+        }
+        //caso tenha enviado com sucesso!
+        else {
+            return array(201, $retorno[6]);
+        }
     }
 
     public function enviarRetificacaoContrato($dadosPNCP, $dadosExtras)

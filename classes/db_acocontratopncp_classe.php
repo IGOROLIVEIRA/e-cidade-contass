@@ -18,7 +18,7 @@ class cl_acocontratopncp
     public $pagina_retorno = null;
     // cria variaveis do arquivo 
     public $ac213_sequencial = 0;
-    public $ac213_contrato= 0;
+    public $ac213_contrato = 0;
     public $ac213_dtlancamento_dia = null;
     public $ac213_dtlancamento_mes = null;
     public $ac213_dtlancamento_ano = null;
@@ -67,7 +67,7 @@ class cl_acocontratopncp
 
         if ($exclusao == false) {
             $this->ac213_sequencial = ($this->ac213_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_sequencial"] : $this->ac213_sequencial);
-            $this->ac213_contrato= ($this->ac213_contrato== "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_licitacao"] : $this->ac213_contrato);
+            $this->ac213_contrato = ($this->ac213_contrato == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_licitacao"] : $this->ac213_contrato);
             if ($this->ac213_dtlancamento == "") {
                 $this->ac213_dtlancamento_dia = ($this->ac213_dtlancamento_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_dtlancamento_dia"] : $this->ac213_dtlancamento_dia);
                 $this->ac213_dtlancamento_mes = ($this->ac213_dtlancamento_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_dtlancamento_mes"] : $this->ac213_dtlancamento_mes);
@@ -82,7 +82,6 @@ class cl_acocontratopncp
             $this->ac213_instit = ($this->ac213_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_instit"] : $this->ac213_instit);
             $this->ac213_ano = ($this->ac213_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_ano"] : $this->ac213_ano);
             $this->ac213_sequencialpncp = ($this->ac213_sequencialpncp == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac213_sequencialpncp"] : $this->ac213_sequencialpncp);
-                   
         } else {
         }
     }
@@ -91,8 +90,8 @@ class cl_acocontratopncp
     function incluir()
     {
         $this->atualizacampos();
-        
-        if ($this->ac213_contrato== null) {
+
+        if ($this->ac213_contrato == null) {
             $this->erro_sql = " Campo ac213_contrato não informado.";
             $this->erro_campo = "ac213_contrato";
             $this->erro_banco = "";
@@ -101,7 +100,7 @@ class cl_acocontratopncp
             $this->erro_status = "0";
             return false;
         }
-        if ($this->ac213_ano== null) {
+        if ($this->ac213_ano == null) {
             $this->erro_sql = " Campo ac213_ano não informado.";
             $this->erro_campo = "ac213_ano";
             $this->erro_banco = "";
@@ -110,7 +109,7 @@ class cl_acocontratopncp
             $this->erro_status = "0";
             return false;
         }
-        if ($this->ac213_sequencialpncp== null) {
+        if ($this->ac213_sequencialpncp == null) {
             $this->erro_sql = " Campo ac213_sequencialpncp não informado.";
             $this->erro_campo = "ac213_sequencialpncp";
             $this->erro_banco = "";
@@ -196,7 +195,7 @@ class cl_acocontratopncp
             $this->erro_status = "0";
             return false;
         }
-        
+
         $sql = "insert into acocontratopncp(
                                        ac213_sequencial 
                                       ,ac213_contrato
@@ -221,7 +220,7 @@ class cl_acocontratopncp
                                ,$this->ac213_sequencialpncp 
       
                       )";
-                      
+
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -271,7 +270,7 @@ class cl_acocontratopncp
                 return false;
             }
         }
-             
+
         if (trim($this->ac213_contrato) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac213_contrato"])) {
             $sql  .= $virgula . " ac213_contrato= $this->ac213_contrato";
             $virgula = ",";
