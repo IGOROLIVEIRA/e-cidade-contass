@@ -1,8 +1,12 @@
 <?php
 
 $sSQLTomadorDBConfig = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is true";
+$sSQLTomadorDBCamara = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is false
+                        AND db21_tipoinstit = (SELECT db21_codtipo FROM db_tipoinstit WHERE UPPER(db21_nome) LIKE 'CAMARA%')";
 $rsTomadorDBConfig = db_query($sSQLTomadorDBConfig);
+$rsTomadorDBCamara = db_query($sSQLTomadorDBCamara);
 $lTomadorEhPrefeitura = !!pg_num_rows($rsTomadorDBConfig);
+$lTomadorEhCamara     = !!pg_num_rows($rsTomadorDBCamara);
 $oInstit = new Instituicao(db_getsession('DB_instit'));
 
 ##Modelo de nota Fiscal
@@ -335,9 +339,9 @@ for ($j = 0; $j < $confNumRows; $j++) {
     if ($lTomadorEhPrefeitura){
         $fTotalNota = $this->fTotaliUni - $this->fvlrIssqn - $this->fvlrInss - $this->fvlrIrrf;
     }
-
-    if ($lTomadorEhPrefeitura == null && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMGRAOMOGOL
-    || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_MONTEAZUL)){        
+    
+    $codInstit = array(Instituicao::COD_CLI_PMGRAOMOGOL, Instituicao::COD_CLI_MONTEAZUL);
+    if (($lTomadorEhPrefeitura == null) && (in_array($oInstit->getCodigoCliente(), $codInstit)) || ($lTomadorEhCamara)){        
             $fTotalNota = $this->fTotaliUni - $this->fvlrInss - $this->fvlrIrrf;
     }
 
