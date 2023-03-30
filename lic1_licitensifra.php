@@ -164,13 +164,14 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
             let item = new Object();
             item.codigo = elemento.aCells[1].getContent();
             item.sequencial = elemento.aCells[2].getContent();
-            item.codprocitem = elemento.aCells[9].getContent();
+            item.codprocitem = elemento.aCells[10].getContent();
             item.codproc = document.form1.codproc.value;
 
 
             idMeepp = "meEpp" + index;
             valorMeepp = document.forms["form1"][idMeepp].value;
 
+            item.sigilo = document.getElementById(elemento.aCells[9].sId).children[0].selectedIndex;
 
             if (document.getElementById(elemento.aCells[7].sId).children[0].selectedIndex) {
                 item.qtdexclusiva = document.getElementById(elemento.aCells[8].sId).children[0].value;
@@ -183,7 +184,6 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
                 erro = true;
                 return;
             }
-
 
             aItensFormatados.push(item);
             index++;

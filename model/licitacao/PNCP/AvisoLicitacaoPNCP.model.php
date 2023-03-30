@@ -38,7 +38,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDadosAPI->objetoCompra                    = utf8_encode($oDado->objetocompra);
         $oDadosAPI->informacaoComplementar          = $oDado->informacaocomplementar;
         $oDadosAPI->srp                             = $oDado->srp == 'f' ? 'false' : 'true';
-        $oDadosAPI->justificativaPresencial         = $oDado->justificativaPresencial;
+        $oDadosAPI->justificativaPresencial         = utf8_encode($oDado->justificativapresencial);
         $oDadosAPI->dataAberturaProposta            = $this->formatDate($oDado->dataaberturaproposta);
         $oDadosAPI->dataEncerramentoProposta        = $this->formatDate($oDado->dataencerramentoproposta);
         $oDadosAPI->amparoLegalId                   = $oDado->amparolegalid;
@@ -91,21 +91,24 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDado = $this->dados;
 
         $oDadosAPI                                  = new \stdClass;
-        $oDadosAPI->codigoUnidadeCompradora         = '01001'; //$oDado->codigounidadecompradora;
+        //$oDadosAPI->codigoUnidadeCompradora         = '01001'; 
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
         $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
         $oDadosAPI->numeroCompra                    = $oDado->numerocompra;
-        $oDadosAPI->anoCompra                       = $oDado->anocompra;
         $oDadosAPI->numeroProcesso                  = $oDado->numeroprocesso;
-        $oDadosAPI->objetoCompra                    = $this->formatText($oDado->objetocompra);
+        $oDadosAPI->situacaoCompraId                = $oDado->situacaocompraid;
+        $oDadosAPI->objetoCompra                    = utf8_encode($oDado->objetocompra);
         $oDadosAPI->informacaoComplementar          = $oDado->informacaocomplementar;
+        //$oDadosAPI->cnpjOrgaoSubRogado            = $oDado->cnpjOrgaoSubRogado;
+        //$oDadosAPI->codigoUnidadeSubRogada        = $oDado->codigoUnidadeSubRogada;
         $oDadosAPI->srp                             = $oDado->srp == 'f' ? 'false' : 'true';
-        $oDadosAPI->orcamentoSigiloso               = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';
         $oDadosAPI->dataAberturaProposta            = $this->formatDate($oDado->dataaberturaproposta);
         $oDadosAPI->dataEncerramentoProposta        = $this->formatDate($oDado->dataencerramentoproposta);
         $oDadosAPI->amparoLegalId                   = $oDado->amparolegalid;
         $oDadosAPI->linkSistemaOrigem               = $oDado->linksistemaorigem;
+        //$oDadosAPI->justificativa                   = $oDado->justificativa;
+        $oDadosAPI->justificativaPresencial         = utf8_encode($oDado->justificativapresencial);
 
         $aDadosAPI = json_encode($oDadosAPI);
 
@@ -185,9 +188,16 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
         curl_close($chpncp);
 
-        $retorno = json_decode($contentpncp);
+        $retorno = explode(':', $contentpncp);
 
-        return $retorno;
+        ////erro ao enviar aviso
+        if ($retorno[8]) {
+            return array(422, $retorno[2]);
+        }
+        //caso tenha enviado com sucesso!
+        else {
+            return array(201, $retorno[4]);
+        }
     }
 
     public function enviarRetificacao($oDados, $sCodigoControlePNCP, $iAnoCompra)
@@ -229,16 +239,16 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
-        $err     = curl_errno($chpncp);
+        /*$err     = curl_errno($chpncp);
         $errmsg  = curl_error($chpncp);
         $header  = curl_getinfo($chpncp);
-        /*$header['errno']   = $err;
+        $header['errno']   = $err;
         $header['errmsg']  = $errmsg;
         $header['header']  = $contentpncp;
         echo "<pre>";
         print_r($header);
-        exit;
-        */
+        exit;*/
+
         curl_close($chpncp);
 
         $retorno = json_decode($contentpncp);

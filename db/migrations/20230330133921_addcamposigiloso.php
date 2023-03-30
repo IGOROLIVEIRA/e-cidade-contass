@@ -2,11 +2,11 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class Oc20005 extends AbstractMigration
+class Addcamposigiloso extends AbstractMigration
 {
     public function up()
     {
-        $sql = "";
+        $sql = "alter table liclicitem add column l21_sigilo bool";
         $this->execute($sql);
     }
 }
