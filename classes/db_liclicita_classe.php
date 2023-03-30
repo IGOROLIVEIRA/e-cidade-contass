@@ -3964,16 +3964,12 @@ class cl_liclicita
                             WHEN pc31_liclicitatipoempresa = 3 THEN 2
                             ELSE 3
                         END AS porteFornecedorId,
-                        '0000' AS porteFornecedorId,
                         'BRA' AS codigoPais,
-                        FALSE AS indicadorSubcontratacao, --1 as indicadorSubcontratacao
-                CASE
-                    WHEN pc50_pctipocompratribunal IN (100,
-                                                        101,
-                                                        102,
-                                                        103) THEN l20_dtpubratificacao
-                    ELSE l202_datahomologacao
-                END AS dataResultado
+                        liclicita.l20_subcontratacao AS indicadorSubcontratacao, 
+                        CASE
+                            WHEN pc50_pctipocompratribunal IN (100,101,102,103) THEN l20_dtpubratificacao
+                            ELSE l202_datahomologacao
+                        END AS dataResultado
                 FROM liclicitem
                 INNER JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
                 INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
@@ -3988,20 +3984,19 @@ class cl_liclicita
                 INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
                 INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
                 INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-                INNER JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
-                INNER JOIN pcorcamitem ON pc22_orcamitem = pc26_orcamitem
-                INNER JOIN pcorcam ON pc20_codorc = pc22_codorc
-                INNER JOIN pcorcamforne ON pc21_codorc = pc20_codorc
-                INNER  JOIN cgm ON pc21_numcgm = z01_numcgm
-                INNER  JOIN pcorcamfornelic ON pc31_orcamforne = pc21_orcamforne
-                LEFT  JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+                LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+                LEFT JOIN pcorcamitem ON pc22_orcamitem = pc26_orcamitem
+                LEFT JOIN pcorcam ON pc20_codorc = pc22_codorc
+                LEFT JOIN pcorcamforne ON pc21_codorc = pc20_codorc
+                LEFT JOIN cgm ON pc21_numcgm = z01_numcgm
+                LEFT JOIN pcorcamfornelic ON pc31_orcamforne = pc21_orcamforne
+                LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
                 AND pc23_orcamforne=pc21_orcamforne
                 LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
-                AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+                AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne AND pc24_pontuacao = 1
                 LEFT  JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
                 LEFT  JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
                 WHERE l21_codliclicita = $l20_codigo
-                    AND pc24_pontuacao = 1
                     AND l21_ordem = $ordem
                     and l202_datahomologacao is not null
                 ORDER BY l21_ordem";

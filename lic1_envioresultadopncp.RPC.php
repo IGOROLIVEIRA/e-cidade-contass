@@ -61,8 +61,7 @@ switch ($oParam->exec) {
 
                 $aItensLicitacao = array();
                 $rsResultado = $clliclicita->sql_record($clliclicita->sql_query_resultado_pncp($oParam->iLicitacao, $item->l21_ordem));
-                echo $clliclicita->sql_query_resultado_pncp($oParam->iLicitacao, $item->l21_ordem);
-                exit;
+
                 for ($i = 0; $i < pg_numrows($rsResultado); $i++) {
                     $oDadosResultado = db_utils::fieldsMemory($rsResultado, $i);
                     $aItensLicitacao[] = $oDadosResultado;
