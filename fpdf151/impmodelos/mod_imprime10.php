@@ -273,7 +273,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 
 	/*Realiza a consulta se o item é tabela e tem itens associados*/
 
-	$sqlItemTabela = "SELECT * FROM empordemtabela where l223_pcmaterordem = ". pg_result($this->recorddositens, $ii, $this->codmater) ." and l223_codordem = ".$this->numordem;
+	$sqlItemTabela = "SELECT * FROM empordemtabela where l223_pcmaterordem = ". pg_result($this->recorddositens, $ii, $this->codmater) ." and l223_codordem = ".$this->numordem."order by l223_pcmatertabela";
 
 	$resItemTabela = @db_query($sqlItemTabela);
 	
@@ -285,7 +285,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 
 	$obsitem  = pg_result($this->recorddositens, $ii, $this->observacaoitem);
 	$obsitem  = substr($obsitem, 0, 1421);
-	$obsitem .= "\n\n" . 'Marca: ' . pg_result($this->recorddositens, $ii, $this->obs_ordcom_orcamval) . "\n\n\n";
+	$obsitem .= "\n" . 'Marca: ' . pg_result($this->recorddositens, $ii, $this->obs_ordcom_orcamval) . "\n\n\n";
 
 	$obsitem .=
 		$sObsItem = $obsitem;
@@ -485,16 +485,115 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 		if(@pg_numrows($resItemTabela) > 0){
 			$this->objpdf->Setfont('Arial', 'B', 8);
 			$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() - 3, "DETALHAMENTO:");
+			$itempag = 0;
 			for($contitem=0;$contitem < @pg_numrows($resItemTabela);$contitem++){
 				$oDadosItemTabela = db_utils::fieldsMemory($resItemTabela, $contitem);
-				$sqlPcmater = "SELECT pc01_descrmater FROM pcmater WHERE pc01_codmater = ".$oDadosItemTabela->l223_pcmatertabela;
-				$resPcmater = @db_query($sqlPcmater);
-				$oDadosPcmater = db_utils::fieldsMemory($resPcmater, 0);
+				
 				$this->objpdf->Setfont('Arial', '', 8);
-				$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() + (($contitem*4)*2),($contitem+1)." - ".$oDadosPcmater->pc01_descrmater);
-				$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety()+ ($contitem*4)+(($contitem+1)*4), " Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f'));
+				//$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() + (($itempag*4)*2),($itempag+1)." - ".$oDadosItemTabela->l223_descr);
+				//$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety()+ ($itempag*4)+(($itempag+1)*4), " Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f'));
+				$this->objpdf->Row_multicell(array("","","","",
+				($contitem+1)." - ".$oDadosItemTabela->l223_descr . "\n Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f')."\n\n","",""
+				), 3, false, 4, 0, true);
+				
+				$posi = $this->objpdf->gety() + (($itempag*4)*2) + ($itempag*4)+(($itempag+1)*4);
+				//// troca de pagina
+				if (($posi > $this->objpdf->h && $pagina == 1)
+					|| ($posi > $this->objpdf->h + 100 && $pagina != 1)
+				) {
+
+					$this->objpdf->Setfont('Arial', 'B', 7);
+					if ($this->objpdf->PageNo() == 1) {
+
+						if ($this->obs != "") {
+
+							$this->objpdf->text(90, 268 - $xlin, 'Continua na Página ' . ($pagina + 1));
+						} else {
+							$this->objpdf->text(90, $xlin + 243, 'Continua na Página ' . ($pagina + 1));
+						}
+					} else {
+						$this->objpdf->text(110, $xlin + 320, 'Continua na Página ' . ($pagina + 1));
+					}
+					if ($pagina == 1) {
+
+						$xlin = 20;
+						$xcol = 4;
+						$this->objpdf->rect($xcol, $xlin + 205, 154, 10, 2, 'DF', '34');
+						$this->objpdf->rect($xcol + 154, $xlin + 205, 26, 10, 2, 'DF', '34');
+						$this->objpdf->rect($xcol + 180, $xlin + 205, 22, 10, 2, 'DF', '34');
+						$this->objpdf->text($xcol + 111, $xlin + 211, 'T O T A L   D A   P Á G I N A');
+
+						$this->objpdf->SetXY(173, $xlin + 205);
+						$this->objpdf->cell(30, 10, db_formatar($xtotal, 'f'), 0, 0, "R");
+
+						$this->objpdf->SetXY(4, $xlin + 217);
+
+						if (isset($texto2) && trim($texto2) != "") {
+							$this->objpdf->multicell(202, 4, $texto2, 1);
+						}
+					}
+					$this->objpdf->addpage();
+					$pagina += 1;
+
+					$this->objpdf->settopmargin(1);
+					$xlin = 20;
+					$xcol = 4;
+
+					$this->objpdf->setfillcolor(245);
+					$this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
+					$this->objpdf->setfillcolor(255, 255, 255);
+					$this->objpdf->Setfont('Arial', 'B', 9);
+					$this->objpdf->text(130, $xlin - 13, 'ORDEM DE COMPRA N' . CHR(176));
+					$this->objpdf->text(185, $xlin - 13, db_formatar($this->numordem, 's', '0', 6, 'e'));
+					$this->objpdf->Image('imagens/files/' . $this->logo, 5, $xlin - 18, 25);
+					$this->objpdf->Setfont('Arial', 'B', 9);
+					$this->objpdf->text(40, $xlin - 15, $this->prefeitura);
+					$this->objpdf->Setfont('Arial', '', 9);
+					$this->objpdf->text(40, $xlin - 11, $this->enderpref);
+					$this->objpdf->text(40, $xlin - 8, $this->municpref);
+					$this->objpdf->text(40, $xlin - 5, $this->telefpref);
+					$this->objpdf->text(40, $xlin - 2, $this->emailpref);
+
+					$xlin = -30;
+					$this->objpdf->Setfont('Arial', 'B', 8);
+
+					$this->objpdf->rect($xcol, $xlin + 54, 12, 6, 2, 'DF', '12');
+					$this->objpdf->rect($xcol + 12, $xlin + 54, 17, 6, 2, 'DF', '12');
+					$this->objpdf->rect($xcol + 29, $xlin + 54, 13, 6, 2, 'DF', '12'); //$this->objpdf->rect($xcol+ 27,$xlin+54,11,6,2,'DF','12');
+					$this->objpdf->rect($xcol + 42, $xlin + 54, 13, 6, 2, 'DF', '12'); //$this->objpdf->rect($xcol+ 27,$xlin+54,11,6,2,'DF','12');
+					$this->objpdf->rect($xcol + 55, $xlin + 54, 99, 6, 2, 'DF', '12'); //$this->objpdf->rect($xcol+ 38,$xlin+54,104,6,2,'DF','12');
+					$this->objpdf->rect($xcol + 154, $xlin + 54, 28, 6, 2, 'DF', '12');
+					$this->objpdf->rect($xcol + 182, $xlin + 54, 21, 6, 2, 'DF', '12');
+
+					$this->objpdf->rect($xcol,    $xlin + 60, 12, 252, 2, 'DF', '34');
+					$this->objpdf->rect($xcol + 12, $xlin + 60, 17, 252, 2, 'DF', '34');
+					$this->objpdf->rect($xcol + 29, $xlin + 60, 13, 252, 2, 'DF', '34'); //$this->objpdf->rect($xcol+ 27,$xlin+60,11,252,2,'DF','34');
+					$this->objpdf->rect($xcol + 42, $xlin + 60, 13, 252, 2, 'DF', '34'); //$this->objpdf->rect($xcol+ 27,$xlin+60,11,252,2,'DF','34');
+					$this->objpdf->rect($xcol + 55, $xlin + 60, 99, 252, 2, 'DF', '34'); //$this->objpdf->rect($xcol+ 38,$xlin+60,104,252,2,'DF','34');
+					$this->objpdf->rect($xcol + 154, $xlin + 60, 28, 252, 2, 'DF', '');
+					$this->objpdf->rect($xcol + 182, $xlin + 60, 21, 252, 2, 'DF', '34');
+
+					$this->objpdf->sety($xlin + 66);
+					$alt = 4;
+
+					$this->objpdf->text($xcol +   2, $xlin + 59, 'ITEM');
+					$this->objpdf->text($xcol + 12.5, $xlin + 59, 'EMPENHO');
+					$this->objpdf->text($xcol + 30.5, $xlin + 59, 'QUANT');
+					$this->objpdf->text($xcol + 45.5, $xlin + 59, 'UNID');
+					$this->objpdf->text($xcol + 77, $xlin + 59, 'MATERIAL OU SERVIÇO');
+					$this->objpdf->text($xcol + 155, $xlin + 59, 'VALOR UNITÁRIO');
+					$this->objpdf->text($xcol + 183, $xlin + 59, 'VALOR TOTAL');
+					$this->objpdf->text($xcol + 59, $xlin + 63, 'Continuação da Página ' . ($pagina - 1));
+					$this->objpdf->Setfont('Arial', '', 8);
+
+					$maiscol = 0;
+					$itempag = 0;
+				}
+				$itempag = $itempag + 1;
 			}
 		}
+		
+		//$this->objpdf->sety($posi + 3);
 		if ($valorItemAnulado == $valorItem && $valorItemAnulado > 0) {
 			$this->objpdf->Setfont('Arial', 'B', 8);
 			$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() - 3, "(ANULADO)");
@@ -502,6 +601,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 			$this->objpdf->Setfont('Arial', 'B', 8);
 			$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() - 3, "(ANULADO PARCIALMENTE)");
 		}
+		
 
 		if ($sObsItem != "") {
 

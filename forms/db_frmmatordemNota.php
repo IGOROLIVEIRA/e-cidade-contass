@@ -448,7 +448,7 @@ if ($lBloquear) {
                       echo "  <td class='linhagrid' id='e62_item{$e62_sequencial}' align='center'>$e62_item</td>";
 
                       // Item
-                      echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' ondblclick='js_verificatabela($e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
+                      echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' ondblclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
 
                       // Unidade
                       echo "  <td class='linhagrid' id='m61_abrev{$e62_sequencial}' nowrap align='left' title='$m61_abrev'>{$m61_abrev}</td>";
@@ -599,6 +599,7 @@ if ($lBloquear) {
                         echo "<b>Total<b>";
                         db_input('l223_total', 5, 0, true, 'text', 3, '');
                         db_input('codempenho', 5, 0, true, 'text', 3, '');
+                        db_input('sequencia', 5, 0, true, 'text', 3, '');
                         db_input('coditemordem', 5, 0, true, 'text', 3, '');
                         db_input('coditemordemtabela', 5, 0, true, 'text', 3, '');
                         ?>
@@ -622,6 +623,9 @@ if ($lBloquear) {
                           </legend>
                           <div id='gridItensSolicitacao'>
 
+                          </div>
+                          <div style="float: left; width: 100%; text-align: right">
+                            <b>Valor total: </b><span id="valor_total_tabela">0.00</span>
                           </div>
                         </fieldset>
                       </td>
@@ -884,15 +888,17 @@ if ($lBloquear) {
 
   }
 
-  function js_verificatabela(empenho,item,acordo,tabela){
+  function js_verificatabela(sequencia,empenho,item,acordo,tabela){
    if( $('itenstabela').style.display == 'none'){
       if(tabela == 1 && acordo != "block"){
         $('itenstabela').style.display = '';
         $('pc16_codmater').value = "";
         $('pc01_descrmater').value = "";
+        $('sequencia').value = sequencia;
         $('codempenho').value = empenho;
         $('coditemordem').value = item;
         $('codempenho').style.display = 'none';
+        $('sequencia').style.display = 'none';
         $('coditemordem').style.display = 'none';
         $('coditemordemtabela').style.display = 'none';
         js_init(empenho,item);
@@ -974,6 +980,20 @@ if ($lBloquear) {
     return false;
 
     }
+
+    var sequencia = $('sequencia').value;
+
+    if ($("chk" + sequencia).checked == false) {
+      alert('Selecione o item.');
+      return false;
+    }
+
+    var valorcompar = parseFloat($("valor_total_tabela").innerText) + ($F('l223_quant') * $F('l223_vlrn'));
+
+    if( valorcompar > parseFloat($("valor" + sequencia).value)){
+      alert('Usuário: O valor total dos itens ultrapassa o valor total do item tabela.');
+      return false;
+    }
     
     js_divCarregando('Aguarde, adicionando item', "msgBox");
     var oParam = new Object();
@@ -982,7 +1002,7 @@ if ($lBloquear) {
     oParam.quantidade = $F('l223_quant');
     oParam.valorunit = $F('l223_vlrn');
     oParam.codempenho = $F('codempenho') ;
-    oParam.descricao = $F('pc01_descrmater') ;
+    oParam.descricao = encodeURIComponent(tagString($F('pc01_descrmater')));
     oParam.exec = "adicionarItemOrdemTabela";
     var oAjax = new Ajax.Request(sUrlRC, {
       method: "post",
@@ -1058,6 +1078,7 @@ if ($lBloquear) {
 
     aItensAbertura = aItens;
     oGridItens.clearAll(true);
+    valortotal = 0;
     for (var i = 0; i < aItens.length; i++) {
 
       with(aItens[i]) {
@@ -1071,18 +1092,19 @@ if ($lBloquear) {
         aLinha[5] = iValor;
         aLinha[6] = "<input type='button' value='A' onclick='js_alterarLinha(" + iSequencial + ", " + i + ")'>";
         aLinha[6] += "<input type='button' value='E' onclick='js_excluirLinha(" + iSequencial + ", " + i + ")'>";
-
+        valortotal += Number(iValor);
         oGridItens.addRow(aLinha);
         oGridItens.aRows[i].aCells[0].sStyle += "background-color:#DED5CB;font-weight:bold;padding:1px";
 
       }
     }
     oGridItens.renderRows();
+    $("valor_total_tabela").innerText = formataValor(valortotal);
   }
 
   function js_alterarLinha(coditemtabela,linha){
     $('coditemordemtabela').value = coditemtabela; 
-    $('pc16_codmater').value = oGridItens.aRows[linha].aCells[1].getValue();
+    $('pc16_codmater').value = oGridItens.aRows[linha].aCells[0].getValue();
     $('pc01_descrmater').value = oGridItens.aRows[linha].aCells[2].getValue();
     $('l223_quant').value = oGridItens.aRows[linha].aCells[3].getValue();
     $('l223_vlrn').value = oGridItens.aRows[linha].aCells[4].getValue();
@@ -1094,7 +1116,7 @@ if ($lBloquear) {
 
   function js_excluirLinha(coditemtabela,linha){
     $('coditemordemtabela').value = coditemtabela; 
-    $('pc16_codmater').value = oGridItens.aRows[linha].aCells[1].getValue();
+    $('pc16_codmater').value = oGridItens.aRows[linha].aCells[0].getValue();
     $('pc01_descrmater').value = oGridItens.aRows[linha].aCells[2].getValue();
     $('l223_quant').value = oGridItens.aRows[linha].aCells[3].getValue();
     $('l223_vlrn').value = oGridItens.aRows[linha].aCells[4].getValue();
@@ -1106,7 +1128,7 @@ if ($lBloquear) {
     $('l223_total').disabled = true;
     $('btnAddItem').style.display = "none";
     $('btnAlterarItem').style.display = "none";
-    $('btnNovoItem').style.display = "none";
+    $('btnNovoItem').style.display = "";
     $('btnExcluirItem').style.display = "";
   }
 
@@ -1163,9 +1185,15 @@ if ($lBloquear) {
     $('l223_quant').value = "";
     $('l223_vlrn').value = "";
     $('l223_total').value = "";
+    $('pc16_codmater').disabled = false;
+    $('pc01_descrmater').disabled = false;
+    $('l223_quant').disabled = false;
+    $('l223_vlrn').disabled = false;
+    $('l223_total').disabled = false;
     $('btnAddItem').style.display = "";
     $('btnAlterarItem').style.display = "none";
     $('btnNovoItem').style.display = "none";
+    $('btnExcluirItem').style.display = "none";
   }
 
   function js_excluirItem(){

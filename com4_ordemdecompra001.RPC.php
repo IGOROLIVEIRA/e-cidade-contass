@@ -134,6 +134,7 @@ try {
 
 
       $oOrdemCompraItemTabela = new OrdemDeCompra();
+      $oParam->descricao = db_stdClass::normalizeStringJsonEscapeString($oParam->descricao);
 
       $oOrdemCompraItemTabela->addItemTabela($oParam);
       
