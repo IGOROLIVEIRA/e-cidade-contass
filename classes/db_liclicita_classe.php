@@ -3831,43 +3831,73 @@ class cl_liclicita
 
     public function sql_query_pncp_itens($l20_codigo = null)
     {
-        $sql  = "SELECT DISTINCT liclicitem.l21_ordem AS numeroItem,
-                            CASE
-                                WHEN pcmater.pc01_servico='t' THEN 'S'
-                                ELSE 'M'
-                            END AS materialOuServico,
-                            1 AS tipoBeneficioId,
-                            TRUE AS incentivoProdutivoBasico,
-                            pcmater.pc01_descrmater AS descricao,
-                            matunid.m61_descr AS unidadeMedida,
-                            si02_vlprecoreferencia AS valorUnitarioEstimado,
-                            liclicita.l20_tipliticacao AS criterioJulgamentoId,
-                            pcmater.pc01_codmater,
-                            solicitem.pc11_numero,
-                            solicitem.pc11_reservado,
-                            solicitem.pc11_quant,
-                            liclicita.l20_codigo
-                FROM liclicita
-                JOIN db_depart ON coddepto=l20_codepartamento
-                JOIN db_config ON codigo=instit
-                JOIN infocomplementaresinstit ON si09_instit=instit
-                JOIN liclicitem ON l21_codliclicita=l20_codigo
-                JOIN pcprocitem ON pc81_codprocitem=l21_codpcprocitem
-                JOIN pcproc ON pc80_codproc=pc81_codproc
-                JOIN solicitem ON pc11_codigo=pc81_solicitem
-                JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
-                JOIN pcmater ON pc16_codmater = pc01_codmater
-                JOIN solicitemunid ON pc17_codigo=pc11_codigo
-                JOIN matunid ON m61_codmatunid=pc17_unid
-                LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-                LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-                LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-                LEFT JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-                LEFT JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-                LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo
-                INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
-                WHERE liclicita.l20_codigo = {$l20_codigo}
-                ORDER BY numeroitem";
+        $sql  = "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
+                                    CASE
+                                        WHEN pcmater.pc01_servico='t' THEN 'S'
+                                        ELSE 'M'
+                                    END AS materialOuServico,
+                                    COALESCE ((case when liclicita.l20_destexclusiva = 1 then 1 else null end),
+                                            (case when liclicita.l20_subcontratacao = 1 then 2 else null end),
+                                            (case when liclicitem.l21_reservado = 't' then 3 ELSE null end),
+                                            4) AS tipoBeneficioId,
+                                    FALSE AS incentivoProdutivoBasico,
+                                    pcmater.pc01_descrmater AS descricao,
+                                    matunid.m61_descr AS unidadeMedida,
+                                    si02_vlprecoreferencia AS valorUnitarioEstimado,
+                                    liclicita.l20_tipliticacao AS criterioJulgamentoId,
+                                    pcmater.pc01_codmater,
+                                    solicitem.pc11_numero,
+                                    solicitem.pc11_reservado,
+                                    solicitem.pc11_quant,
+                                    liclicita.l20_codigo,
+                                    CASE
+                                        WHEN liclicitem.l21_sigilo IS NOT NULL THEN liclicitem.l21_sigilo
+                                        ELSE 'f'
+                                    END AS l21_sigilo,
+                                    CASE
+                                        WHEN substring(o56_elemento
+                                                        FROM 0
+                                                        FOR 8) IN
+                                                (SELECT DISTINCT substring(o56_elemento
+                                                                            FROM 0
+                                                                            FOR 8)
+                                                FROM orcelemento
+                                                WHERE o56_elemento LIKE '%3449061%') THEN 1
+                                        WHEN substring(o56_elemento
+                                                        FROM 0
+                                                        FOR 8) IN
+                                                (SELECT DISTINCT substring(o56_elemento
+                                                                            FROM 0
+                                                                            FOR 8)
+                                                FROM orcelemento
+                                                WHERE o56_elemento LIKE '%3449052%') THEN 2
+                                        ELSE 3
+                                    END AS itemCategoriaId,
+                                    pcmater.pc01_regimobiliario AS codigoRegistroImobiliario
+                        FROM liclicita
+                        JOIN db_depart ON coddepto=l20_codepartamento
+                        JOIN db_config ON codigo=instit
+                        JOIN infocomplementaresinstit ON si09_instit=instit
+                        JOIN liclicitem ON l21_codliclicita=l20_codigo
+                        JOIN pcprocitem ON pc81_codprocitem=l21_codpcprocitem
+                        JOIN pcproc ON pc80_codproc=pc81_codproc
+                        JOIN solicitem ON pc11_codigo=pc81_solicitem
+                        JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+                        JOIN pcmater ON pc16_codmater = pc01_codmater
+                        JOIN solicitemele ON pc18_solicitem = pc11_codigo
+                        JOIN orcelemento ON o56_codele = pc18_codele
+                        AND o56_anousu=l20_anousu
+                        JOIN solicitemunid ON pc17_codigo=pc11_codigo
+                        JOIN matunid ON m61_codmatunid=pc17_unid
+                        LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+                        LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+                        LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+                        LEFT JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+                        LEFT JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+                        LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo
+                        INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                        WHERE liclicita.l20_codigo = $l20_codigo
+                        ORDER BY numeroitem";
         return $sql;
     }
 

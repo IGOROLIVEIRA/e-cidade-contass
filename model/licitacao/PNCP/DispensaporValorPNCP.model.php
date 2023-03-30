@@ -46,18 +46,21 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         //ITENS
         $vlrtotal = 0;
         foreach ($oDado->itensCompra as $key => $item) {
+            $vlrtotal = $item->pc11_quant * $item->valorunitarioestimado;
+
             $oDadosAPI->itensCompra[$key]->numeroItem                  = $item->numeroitem;
             $oDadosAPI->itensCompra[$key]->materialOuServico           = $item->materialouservico;
-            $oDadosAPI->itensCompra[$key]->orcamentoSigiloso           = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->tipoBeneficioId             = $item->tipobeneficioid;
             $oDadosAPI->itensCompra[$key]->incentivoProdutivoBasico    = $item->incentivoprodutivobasico == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->descricao                   = utf8_encode($item->descricao);
             $oDadosAPI->itensCompra[$key]->quantidade                  = $item->pc11_quant;
             $oDadosAPI->itensCompra[$key]->unidadeMedida               = utf8_encode($item->unidademedida);
+            $oDadosAPI->itensCompra[$key]->orcamentoSigiloso           = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
-            $vlrtotal = $item->pc11_quant * $item->valorunitarioestimado;
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
             $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
+            $oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
+            $oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = $item->codigoregistroimobiliario;
         }
 
         $aDadosAPI = $oDadosAPI;

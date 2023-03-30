@@ -47,9 +47,9 @@ $clcondataconf = new cl_condataconf;
 
 $db_opcao = 1;
 $db_botao = true;
-if (((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir")) {
+if (((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incluir")) {
     db_inicio_transacao();
-    $sqlerro=false;
+    $sqlerro = false;
     $clpcmater->pc01_libaut = @$pc01_libaut;
     $clpcmater->pc01_ativo = "false";
     $clpcmater->pc01_conversao = "false";
@@ -57,11 +57,13 @@ if (((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Inclu
     /*OC3770*/
     $clpcmater->pc01_tabela = $pc01_tabela;
     $clpcmater->pc01_taxa   = $pc01_taxa;
+    $clpcmater->pc01_regimobiliario   = $pc01_regimobiliario;
+
     /*FIM - OC3770*/
-    if(!empty($pc01_data)){
+    if (!empty($pc01_data)) {
         $anousu = db_getsession('DB_anousu');
         $instituicao = db_getsession('DB_instit');
-        $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu,$instituicao,"c99_datapat",null,null));
+        $result = $clcondataconf->sql_record($clcondataconf->sql_query_file($anousu, $instituicao, "c99_datapat", null, null));
         $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
         if (strtotime($pc01_data) <= strtotime($c99_datapat)) {
@@ -71,13 +73,13 @@ if (((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Inclu
         }
     }
 
-    if ($pc01_obras == "0"){
-      $erro_msg = "Campo  Material Utilizado em Obras/serviços?  nao informado.";
-      $sqlerro  = true;
-      db_msgbox($erro_msg);
+    if ($pc01_obras == "0") {
+        $erro_msg = "Campo  Material Utilizado em Obras/serviços?  nao informado.";
+        $sqlerro  = true;
+        db_msgbox($erro_msg);
     }
 
-    if($sqlerro == false){
+    if ($sqlerro == false) {
         $clpcmater->incluir(null);
     }
 
@@ -87,15 +89,15 @@ if (((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Inclu
         $codmater =  $clpcmater->pc01_codmater;
     }
 
-    if ($sqlerro==false) {
-        $arr =  explode("XX",$codeles);
-        for($i = 0; $i < count($arr); $i++ ) {
+    if ($sqlerro == false) {
+        $arr =  explode("XX", $codeles);
+        for ($i = 0; $i < count($arr); $i++) {
             if ($sqlerro == false) {
                 $elemento = $arr[$i];
-                if (trim($elemento)!="") {
+                if (trim($elemento) != "") {
                     $clpcmaterele->pc07_codmater = $codmater;
                     $clpcmaterele->pc07_codele = $elemento;
-                    $clpcmaterele->incluir($codmater,$elemento);
+                    $clpcmaterele->incluir($codmater, $elemento);
                     if ($clpcmaterele->erro_status == 0) {
                         $sqlerro = true;
                         break;
@@ -112,12 +114,13 @@ if (isset($impmater)) {
     $sCampos       .= "pc03_codgrupo as pc01_codgrupo,pc01_libaut,pc01_servico,pc01_obras";
     $sSqlPcMater    = $clpcmater->sql_query($impmater, $sCampos, null, "");
     $result_pcmater = $clpcmater->sql_record($sSqlPcMater);
-    if($clpcmater->numrows>0){
-        db_fieldsmemory($result_pcmater,0);
+    if ($clpcmater->numrows > 0) {
+        db_fieldsmemory($result_pcmater, 0);
     }
 }
 ?>
 <html>
+
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -126,56 +129,58 @@ if (isset($impmater)) {
     <link href="estilos.css" rel="stylesheet" type="text/css">
     <script>
         function js_iniciar() {
-            if(document.form1)
+            if (document.form1)
                 document.form1.pc01_descrmater.focus();
         }
     </script>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="js_iniciar()" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-    <tr>
-        <td width="360" height="18">&nbsp;</td>
-        <td width="263">&nbsp;</td>
-        <td width="25">&nbsp;</td>
-        <td width="140">&nbsp;</td>
-    </tr>
-</table>
-<center>
-    <table width="790" border="0" cellspacing="0" cellpadding="0">
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="js_iniciar()">
+    <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
         <tr>
-            <td>&nbsp;</td>
-        </tr>
-        <tr>
-            <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
-                <?
-                include("forms/db_frmpcmater.php");
-                ?>
-            </td>
+            <td width="360" height="18">&nbsp;</td>
+            <td width="263">&nbsp;</td>
+            <td width="25">&nbsp;</td>
+            <td width="140">&nbsp;</td>
         </tr>
     </table>
-</center>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+    <center>
+        <table width="790" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
+                    <?
+                    include("forms/db_frmpcmater.php");
+                    ?>
+                </td>
+            </tr>
+        </table>
+    </center>
+    <?
+    db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+    ?>
 </body>
+
 </html>
 <?
-if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Incluir"){
-    if($clpcmater->erro_status=="0"){
-        $clpcmater->erro(true,false);
-        $db_botao=true;
+if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Incluir") {
+    if ($clpcmater->erro_status == "0") {
+        $clpcmater->erro(true, false);
+        $db_botao = true;
         echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-        if($clpcmater->erro_campo!=""){
-            echo "<script> document.form1.".$clpcmater->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-            echo "<script> document.form1.".$clpcmater->erro_campo.".focus();</script>";
+        if ($clpcmater->erro_campo != "") {
+            echo "<script> document.form1." . $clpcmater->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1." . $clpcmater->erro_campo . ".focus();</script>";
         };
-    }else{
-        $clpcmater->erro(true,true);
+    } else {
+        $clpcmater->erro(true, true);
     };
 };
 ?>
 <?
-if($db_opcao=="3"){
+if ($db_opcao == "3") {
     echo "
   if(pcmater0011.document.form1.nexclui.value=='T'){
     document.form1.db_opcao.disabled=true;
@@ -183,7 +188,7 @@ if($db_opcao=="3"){
     document.form1.db_opcao.disabled=false;
   }
   ";
-}else if($db_opcao=="1" && !(isset($HTTP_POST_VARS["db_opcao"])) && !isset($impmater) && !isset($codigomater) && !isset($pc01_codmater)){
+} else if ($db_opcao == "1" && !(isset($HTTP_POST_VARS["db_opcao"])) && !isset($impmater) && !isset($codigomater) && !isset($pc01_codmater)) {
     echo "
   <script>
     document.form1.importar.click();
