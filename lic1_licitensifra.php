@@ -193,7 +193,7 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
         if (erro == true) {
             return;
         }
-        //js_divCarregando('Aguarde, processando.....', 'msgbox');
+        js_divCarregando('Aguarde, processando.....', 'msgbox');
         let oParam = new Object();
         if (parent.procs.document.form1.l20_orcsigiloso.style.display == 'none') {
             oParam.l20_orcsigiloso = 'null';
