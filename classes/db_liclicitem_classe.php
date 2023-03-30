@@ -23,6 +23,8 @@ class cl_liclicitem
     var $l21_situacao = 0;
     var $l21_ordem = 0;
     var $l21_reservado = null;
+    var $l21_sigilo = null;
+
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  l21_codigo = int8 = Cod. Sequencial
@@ -31,6 +33,7 @@ class cl_liclicitem
                  l21_situacao = int4 = Situação
                  l21_ordem = int4 = Seqüência
                  l21_reservado = boolean = Reservado
+                 l21_sigilo = boolean = orc sigiloso
                  ";
     //funcao construtor da classe
     function cl_liclicitem()
@@ -59,6 +62,7 @@ class cl_liclicitem
             $this->l21_situacao = ($this->l21_situacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l21_situacao"] : $this->l21_situacao);
             $this->l21_ordem = ($this->l21_ordem == "" ? @$GLOBALS["HTTP_POST_VARS"]["l21_ordem"] : $this->l21_ordem);
             $this->l21_reservado = ($this->l21_reservado == "" ? @$GLOBALS["HTTP_POST_VARS"]["l21_reservado"] : $this->l21_reservado);
+            $this->l21_sigilo = ($this->l21_sigilo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l21_sigilo"] : $this->l21_sigilo);
         } else {
             $this->l21_codigo = ($this->l21_codigo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l21_codigo"] : $this->l21_codigo);
         }
@@ -133,6 +137,10 @@ class cl_liclicitem
             $this->l21_reservado = 'false';
         }
 
+        if ($this->l21_sigilo == null || !$this->l21_sigilo) {
+            $this->l21_sigilo = 'false';
+        }
+
         $sql = "insert into liclicitem(
                                        l21_codigo
                                       ,l21_codliclicita
@@ -140,6 +148,7 @@ class cl_liclicitem
                                       ,l21_situacao
                                       ,l21_ordem
                                       ,l21_reservado
+                                      ,l21_sigilo
                        )
                 values (
                                 $this->l21_codigo
@@ -148,6 +157,7 @@ class cl_liclicitem
                                ,$this->l21_situacao
                                ,$this->l21_ordem
                                ,'$this->l21_reservado'
+                               ,'$this->l21_sigilo'
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -401,7 +411,7 @@ class cl_liclicitem
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -432,7 +442,7 @@ class cl_liclicitem
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -445,7 +455,7 @@ class cl_liclicitem
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -483,7 +493,7 @@ class cl_liclicitem
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -496,7 +506,7 @@ class cl_liclicitem
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -517,7 +527,7 @@ class cl_liclicitem
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -530,7 +540,7 @@ class cl_liclicitem
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -588,7 +598,7 @@ class cl_liclicitem
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -601,7 +611,7 @@ class cl_liclicitem
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -631,7 +641,7 @@ class cl_liclicitem
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -644,7 +654,7 @@ class cl_liclicitem
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -673,7 +683,7 @@ class cl_liclicitem
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -686,7 +696,7 @@ class cl_liclicitem
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -722,7 +732,7 @@ class cl_liclicitem
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -736,7 +746,7 @@ class cl_liclicitem
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -781,7 +791,7 @@ class cl_liclicitem
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -798,7 +808,7 @@ class cl_liclicitem
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -836,7 +846,7 @@ class cl_liclicitem
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -850,7 +860,7 @@ class cl_liclicitem
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -879,7 +889,7 @@ class cl_liclicitem
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -893,7 +903,7 @@ class cl_liclicitem
     {
         $sql = "select ";
         if ($campos != "*") {
-            $campos_sql = split("#", $campos);
+            $campos_sql = explode("#", $campos);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];
@@ -940,7 +950,7 @@ class cl_liclicitem
         $sql .= $sql2;
         if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#", $ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
             for ($i = 0; $i < sizeof($campos_sql); $i++) {
                 $sql .= $virgula . $campos_sql[$i];

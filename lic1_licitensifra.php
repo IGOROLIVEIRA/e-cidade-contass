@@ -164,13 +164,14 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
             let item = new Object();
             item.codigo = elemento.aCells[1].getContent();
             item.sequencial = elemento.aCells[2].getContent();
-            item.codprocitem = elemento.aCells[9].getContent();
+            item.codprocitem = elemento.aCells[10].getContent();
             item.codproc = document.form1.codproc.value;
 
 
             idMeepp = "meEpp" + index;
             valorMeepp = document.forms["form1"][idMeepp].value;
 
+            item.sigilo = document.getElementById(elemento.aCells[9].sId).children[0].selectedIndex;
 
             if (document.getElementById(elemento.aCells[7].sId).children[0].selectedIndex) {
                 item.qtdexclusiva = document.getElementById(elemento.aCells[8].sId).children[0].value;
@@ -184,7 +185,6 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
                 return;
             }
 
-
             aItensFormatados.push(item);
             index++;
 
@@ -193,7 +193,7 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
         if (erro == true) {
             return;
         }
-        js_divCarregando('Aguarde, processando.....', 'msgbox');
+        //js_divCarregando('Aguarde, processando.....', 'msgbox');
         let oParam = new Object();
         if (parent.procs.document.form1.l20_orcsigiloso.style.display == 'none') {
             oParam.l20_orcsigiloso = 'null';

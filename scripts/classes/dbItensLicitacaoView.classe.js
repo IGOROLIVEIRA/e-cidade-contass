@@ -112,8 +112,8 @@ function dbViewItensLicitacao(sNomeInstance, oNode, destinacaoExclusiva) {
             aLinha[7].lDisabled = oItem.marcado;
 
             aLinha[8] = new DBComboBox('Sigilo' + iSeq, 'Sigilo' + iSeq,null,'100%');
-            aLinha[8].addItem('0', 'Não');
-            aLinha[8].addItem('1', 'Sim');
+            aLinha[8].addItem('f', 'Não');
+            aLinha[8].addItem('t', 'Sim');
             
             aLinha[9] = oItem.procitem;
             
