@@ -1342,7 +1342,7 @@ switch ($oParam->exec) {
     case "getItensOrigem":
 
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
-            
+
             $oContrato = $_SESSION["oContrato"];
 
             $oDataInicialAcordo        = new DBDate($oContrato->getDataInicial());
@@ -1361,13 +1361,13 @@ switch ($oParam->exec) {
             }
 
             $iTipocompraTribunal = $oContrato->getTipoCompraTribunal($oContrato->getLicitacao());
-            
+
             if ($oContrato->getOrigem() == 2) {
 
                 if ($iTipocompraTribunal == "103" || $iTipocompraTribunal == "102") {
                     $aItens = licitacao::getItensPorFornecedorCredenciamento($oContrato->getContratado()->getCodigo(), $oContrato->getLicitacao());
                 } else {
-                    $aItens = licitacao::getItensPorFornecedor($oContrato->getLicitacao(), $oContrato->getContratado()->getCodigo(), 0);  
+                    $aItens = licitacao::getItensPorFornecedor($oContrato->getLicitacao(), $oContrato->getContratado()->getCodigo(), 0);
                 }
             } else {
 
@@ -1582,7 +1582,7 @@ switch ($oParam->exec) {
         }
         break;
 
- 
+
     case "getDocumento":
 
 
@@ -1614,14 +1614,13 @@ switch ($oParam->exec) {
         $clacoanexopncp = new cl_acoanexopncp();
 
         try {
-            $rsAnexos = $clacoanexopncp->sql_record($clacoanexopncp->sql_query_file(null," * ",null,"ac214_acordo = " . $oParam->codigoDocumento));
+            $rsAnexos = $clacoanexopncp->sql_record($clacoanexopncp->sql_query_file(null, " * ", null, "ac214_acordo = " . $oParam->codigoDocumento));
 
-                if(pg_num_rows($rsAnexos) > 0)
-                {
-                    $oRetorno->message = "Para excluir o documento ".$Documentos." do E-cidade, exclua antes do PNCP !";
-                    $oRetorno->status  = 2;
-                    break;
-                }    
+            if (pg_num_rows($rsAnexos) > 0) {
+                $oRetorno->message = "Para excluir o documento " . $Documentos . " do E-cidade, exclua antes do PNCP !";
+                $oRetorno->status  = 2;
+                break;
+            }
             $oAcordo->removeDocumento($oParam->codigoDocumento);
         } catch (Exception $oErro) {
 
@@ -1753,54 +1752,53 @@ switch ($oParam->exec) {
 
 
         break;
-        
+
     case "EnviarDocumentoPNCP":
 
-            $clContratoPNCP = new ContratoPNCP($oDadosContrato);
-            $clacocontrolepncp = new cl_acocontratopncp();
-            $clacoanexopncp = new cl_acoanexopncp();
-            $contTipoAnexos = 0;
+        $clContratoPNCP = new ContratoPNCP($oDadosContrato);
+        $clacocontrolepncp = new cl_acocontratopncp();
+        $clacoanexopncp = new cl_acoanexopncp();
+        $contTipoAnexos = 0;
 
-            foreach ($oParam->aDocumentos as $Documentos) {
+        foreach ($oParam->aDocumentos as $Documentos) {
 
             try {
                 $oDocumento = new AcordoDocumento($Documentos);
 
-                $rsAnexos = $clacoanexopncp->sql_record($clacoanexopncp->sql_query_file(null," * ",null,"ac214_acordo = " . $Documentos));
+                $rsAnexos = $clacoanexopncp->sql_record($clacoanexopncp->sql_query_file(null, " * ", null, "ac214_acordo = " . $Documentos));
 
-                if(pg_num_rows($rsAnexos)>0)
-                {
-                    $oRetorno->message = "O documento do codigo ".$Documentos." ja foi enviado !";
+                if (pg_num_rows($rsAnexos) > 0) {
+                    $oRetorno->message = "O documento do codigo " . $Documentos . " ja foi enviado !";
                     $oRetorno->status  = 2;
                     break;
-                }    
-               
-                $rsContrato = $clacocontrolepncp->sql_record($clacocontrolepncp->sql_query_file(null," * ",null,"ac213_contrato = " . $oParam->iCodigoProcesso));
-        
+                }
+
+                $rsContrato = $clacocontrolepncp->sql_record($clacocontrolepncp->sql_query_file(null, " * ", null, "ac213_contrato = " . $oParam->iCodigoProcesso));
+
                 for ($iCont = 0; $iCont < pg_num_rows($rsContrato); $iCont++) {
                     $dadospncp = db_utils::fieldsMemory($rsContrato, $iCont);
-                } 
-                
+                }
+
                 db_inicio_transacao();
-        
+
                 $sNomeArquivo = "tmp/{$oDocumento->getNomeArquivo()}";
 
                 pg_lo_export($conn, $oDocumento->getArquivo(), $sNomeArquivo);
                 db_fim_transacao(true);
                 $oRetorno->nomearquivo = $sNomeArquivo;
-                
+
                 $nomearquivo = $oRetorno->nomearquivo;
-                $rsApiPNCP = $clContratoPNCP->enviarArquivoContrato($dadospncp,$sNomeArquivo,$Documentos);
-                
+                $rsApiPNCP = $clContratoPNCP->enviarArquivoContrato($dadospncp, $sNomeArquivo, $Documentos);
+
                 if ($rsApiPNCP[1] == 201) {
 
-                    $codigocontrato = explode('x-content-type-options',$rsApiPNCP[0]);
+                    $codigocontrato = explode('x-content-type-options', $rsApiPNCP[0]);
                     $codigocontrato = preg_replace('#\s+#', '', $codigocontrato);
-                    $codigocontrato = explode('/',$codigocontrato[0]);
+                    $codigocontrato = explode('/', $codigocontrato[0]);
                     $clacoanexopncp = new cl_acoanexopncp();
-                    
+
                     //monto o codigo dos arquivos do anexo no pncp
-                    $ac214_numerocontrolepncp = '17316563000196-2-'. $codigocontrato[9]. '/' .$codigocontrato[8];
+                    $ac214_numerocontrolepncp = '17316563000196-2-' . $codigocontrato[9] . '/' . $codigocontrato[8];
                     $clacoanexopncp->ac214_acordo  = $Documentos;
                     $clacoanexopncp->ac214_usuario = db_getsession('DB_id_usuario');
                     $clacoanexopncp->ac214_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
@@ -1811,117 +1809,113 @@ switch ($oParam->exec) {
                     $clacoanexopncp->ac214_sequencialpncp = $codigocontrato[9];
                     $clacoanexopncp->ac214_sequencialarquivo = $codigocontrato[11];
                     $clacoanexopncp->incluir();
-                    
+
                     $oRetorno->status  = 1;
                 } else {
                     // throw new Exception(utf8_decode($rsApiPNCP[1]));
-                    $oRetorno->message = "Documento Codigo ".$Documentos." Formato Invalido<br/>".$rsApiPNCP[1].$rsApiPNCP[2];
+                    $oRetorno->message = "Documento Codigo " . $Documentos . " Formato Invalido<br/>" . $rsApiPNCP[1] . $rsApiPNCP[2];
                     $oRetorno->status  = 2;
                     break;
                 }
 
                 $contTipoAnexos++;
-            
             } catch (Exception $oErro) {
-        
-                    $oRetorno->message = $oErro->getMessage();
-                    $oRetorno->status  = 2;
-        }
-    }
-    break; 
-    case "DowloadDocumentosSelecionados":
-            $contador = 0;   
-            foreach ($oParam->aDocumentos as $Documentos) {
-                $oDocumento = new AcordoDocumento($Documentos);
-                db_inicio_transacao();
 
-                // Abrindo o objeto no modo leitura "r" passando como parâmetro o OID.
-                $sNomeArquivo = "tmp/{$oDocumento->getNomeArquivo()}";
-                pg_lo_export($conn, $oDocumento->getArquivo(), $sNomeArquivo);
-                db_fim_transacao(true);
-                $oRetorno->nomearquivo[$contador] = $sNomeArquivo;
-                // Setando Cabeçalho do browser para interpretar que o binário que será carregado é de uma foto do tipo JPEG.
-                $contador++;
-                $oRetorno->contador = $contador;
+                $oRetorno->message = $oErro->getMessage();
+                $oRetorno->status  = 2;
             }
-            break;
-    
+        }
+        break;
+    case "DowloadDocumentosSelecionados":
+        $contador = 0;
+        foreach ($oParam->aDocumentos as $Documentos) {
+            $oDocumento = new AcordoDocumento($Documentos);
+            db_inicio_transacao();
+
+            // Abrindo o objeto no modo leitura "r" passando como parâmetro o OID.
+            $sNomeArquivo = "tmp/{$oDocumento->getNomeArquivo()}";
+            pg_lo_export($conn, $oDocumento->getArquivo(), $sNomeArquivo);
+            db_fim_transacao(true);
+            $oRetorno->nomearquivo[$contador] = $sNomeArquivo;
+            // Setando Cabeçalho do browser para interpretar que o binário que será carregado é de uma foto do tipo JPEG.
+            $contador++;
+            $oRetorno->contador = $contador;
+        }
+        break;
+
     case "ExcluirDocumentoPNCP":
 
-            $clContratoPNCP = new ContratoPNCP($oDadosContrato);
-            $clacocontrolepncp = new cl_acocontratopncp();
-            $clacoanexopncp = new cl_acoanexopncp();
-            $contTipoAnexos = 0;
+        $clContratoPNCP = new ContratoPNCP($oDadosContrato);
+        $clacocontrolepncp = new cl_acocontratopncp();
+        $clacoanexopncp = new cl_acoanexopncp();
+        $contTipoAnexos = 0;
 
-            foreach ($oParam->aDocumentos as $Documentos) {
+        foreach ($oParam->aDocumentos as $Documentos) {
 
             try {
                 $oDocumento = new AcordoDocumento($Documentos);
 
-                $rsAnexos = $clacoanexopncp->sql_record($clacoanexopncp->sql_query_file(null," * ",null,"ac214_acordo = " . $Documentos));
+                $rsAnexos = $clacoanexopncp->sql_record($clacoanexopncp->sql_query_file(null, " * ", null, "ac214_acordo = " . $Documentos));
 
-                if(pg_num_rows($rsAnexos)==0)
-                {
-                    $oRetorno->message = "O documento do codigo ".$Documentos." nao foi encontrado !";
+                if (pg_num_rows($rsAnexos) == 0) {
+                    $oRetorno->message = "O documento do codigo " . $Documentos . " nao foi encontrado !";
                     $oRetorno->status  = 2;
                     break;
-                }    
-               
+                }
+
                 for ($iCont = 0; $iCont < pg_num_rows($rsAnexos); $iCont++) {
                     $anexospncp = db_utils::fieldsMemory($rsAnexos, $iCont);
-                } 
-               
+                }
+
                 $rsApiPNCP = $clContratoPNCP->excluirArquivoContrato($anexospncp);
 
-                if($rsApiPNCP->status == null || $rsApiPNCP->status == '' || $rsApiPNCP->status == 201){
+                if ($rsApiPNCP->status == null || $rsApiPNCP->status == '' || $rsApiPNCP->status == 201) {
 
                     $clacoanexopncp->excluir($Documentos);
-                    
+
                     $oRetorno->status  = 1;
-                }  
-                if($rsApiPNCP->status == 404){
+                }
+                if ($rsApiPNCP->status == 404) {
                     throw new Exception(utf8_decode($rsApiPNCP->message));
                 }
-                if($rsApiPNCP->status == 422){
+                if ($rsApiPNCP->status == 422) {
                     throw new Exception(utf8_decode($rsApiPNCP->message));
                 }
-                if($rsApiPNCP->status == 500){
+                if ($rsApiPNCP->status == 500) {
                     throw new Exception(utf8_decode($rsApiPNCP->message));
                 }
             } catch (Exception $oErro) {
-        
+
                 $oRetorno->message = utf8_decode($oErro->getMessage());
                 $oRetorno->status  = 2;
             }
         }
-        break; 
-    
+        break;
+
     case "ExcluirDocumentosSelecionados":
-       
+
         $oAcordo          = new Acordo($oParam->acordo);
         $clacoanexopncp = new cl_acoanexopncp();
-        
+
         try {
 
             foreach ($oParam->aDocumentos as $Documentos) {
-                $rsAnexos = $clacoanexopncp->sql_record($clacoanexopncp->sql_query_file(null," * ",null,"ac214_acordo = " . $Documentos));
+                $rsAnexos = $clacoanexopncp->sql_record($clacoanexopncp->sql_query_file(null, " * ", null, "ac214_acordo = " . $Documentos));
 
-                if(pg_num_rows($rsAnexos) > 0)
-                {
-                    $oRetorno->message = "Para excluir o documento ".$Documentos." do E-cidade, exclua antes do PNCP !";
+                if (pg_num_rows($rsAnexos) > 0) {
+                    $oRetorno->message = "Para excluir o documento " . $Documentos . " do E-cidade, exclua antes do PNCP !";
                     $oRetorno->status  = 2;
                     break;
-                }    
+                }
                 $oAcordo->removeDocumento($Documentos);
-            }    
-            
+            }
         } catch (Exception $oErro) {
 
             $oRetorno->message = utf8_decode($oErro->getMessage());
             $oRetorno->status  = 2;
         }
-    break; 
-    }              
+        break;
+}
 /**
  * Função que verifica se a data de assinatura do acordo é anterior a data de homologação da licitação
  * @param $iLicitacao
