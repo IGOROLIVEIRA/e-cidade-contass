@@ -83,7 +83,7 @@ $sql = "
                      from ( select j39_matric,
                                   j39_idcons,
                                   j39_dtdemo,
-                                  '' as j60_codproc,
+                                  (j39_codprotdemo)as j60_codproc,
                                   'f'::boolean as parcial,
                                   j39_area,
                                   0 as j60_area
