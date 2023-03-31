@@ -1774,6 +1774,13 @@ switch ($oParam->exec) {
                 }
 
                 $rsContrato = $clacocontrolepncp->sql_record($clacocontrolepncp->sql_query_file(null, " * ", null, "ac213_contrato = " . $oParam->iCodigoProcesso));
+                //validacao para enviar somente documentos de contratos que ja foram enviados para PNCP
+
+                if (pg_num_rows($rsContrato) == null) {
+                    $oRetorno->message = "Contrato nao localizado no PNCP !";
+                    $oRetorno->status  = 2;
+                    break;
+                }
 
                 for ($iCont = 0; $iCont < pg_num_rows($rsContrato); $iCont++) {
                     $dadospncp = db_utils::fieldsMemory($rsContrato, $iCont);
