@@ -616,7 +616,7 @@ class MSCEncerramento {
         ELSE 10131
         END AS po,
         case when c60_identificadorfinanceiro = 'F' then 1 else 2 end as fp,
-        o15_codstn as fr,
+        o15_codstnnovo as fr,
       round(substr(fc_saldocontacorrente,113,15)::float8,2)::float8 AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
       substr(fc_saldocontacorrente,177,1)::varchar(1) AS nat_vlr_si,
@@ -644,7 +644,7 @@ class MSCEncerramento {
       c61_codcon,
       c61_codigo,
       r.c61_instit,
-            c60_identificadorfinanceiro,o15_codstn,
+            c60_identificadorfinanceiro,o15_codstnnovo,
             fc_saldocontacorrente($iAno,c19_sequencial,103,$iMes,codigo)
           from conplanoexe e
       inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz
@@ -679,7 +679,7 @@ class MSCEncerramento {
         WHEN db21_tipoinstit IN (2) THEN 20231
         ELSE 10131
         END AS po,
-        o15_codstn as fr,
+        o15_codstnnovo as fr,
       round(substr(fc_saldocontacorrente,113,15)::float8,2)::float8 AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
       substr(fc_saldocontacorrente,177,1)::varchar(1) AS nat_vlr_si,
@@ -707,7 +707,7 @@ class MSCEncerramento {
       c61_codcon,
       c61_codigo,
       r.c61_instit,
-            c60_identificadorfinanceiro,o15_codstn,
+            c60_identificadorfinanceiro,o15_codstnnovo,
             fc_saldocontacorrente($iAno,c19_sequencial,103,$iMes,codigo)
           from conplanoexe e
       inner join conplanoreduz r on   r.c61_anousu = c62_anousu  and  r.c61_reduz = c62_reduz
@@ -742,13 +742,7 @@ class MSCEncerramento {
                             WHEN db21_tipoinstit IN (2) THEN 20231
                             ELSE 10131
                         END AS po,
-                        CASE
-                            WHEN o15_codtri = '124' THEN
-                                CASE
-                                    WHEN substr(natreceita,1,6) = '172810' OR substr(natreceita,1,6) = '242810' THEN 15200000
-                                    ELSE 15100000 END
-                            ELSE o15_codstn
-                        END AS fr,
+                        o15_codstnnovo AS fr,
                         natreceita AS nr,
                         round(substr(fc_saldocontacorrente,113,15)::float8,2)::float8 AS saldoinicial,
                         'beginning_balance' AS tipovalor_si,
@@ -791,7 +785,7 @@ class MSCEncerramento {
                                 c61_codcon,
                                 c61_codigo,
                                 r.c61_instit,
-                                c60_identificadorfinanceiro,o15_codstn,
+                                c60_identificadorfinanceiro,o15_codstnnovo,
                                 CASE
                                     WHEN substr(c19_estrutural,2,1) = '9' THEN substr(c19_estrutural,4,8)
                                     WHEN c212_mscestrut IS NOT NULL THEN c212_mscestrut
@@ -839,7 +833,7 @@ class MSCEncerramento {
                         funsub AS fs,
                         CASE
                             WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
-                            ELSE o15_codstn
+                            ELSE o15_codstnnovo
                         END AS fr,
                         CASE
                             WHEN substr(c60_estrut, 1, 3) = '522' AND natdespesa != '99999999' THEN rpad(substr(natdespesa, 1, 6), 8, '0')
@@ -896,7 +890,7 @@ class MSCEncerramento {
                             r.c61_instit,
                             o15_codtri,
                             lpad(o58_funcao,2,0) AS o58_funcao,
-                            c60_identificadorfinanceiro,o15_codstn,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
+                            c60_identificadorfinanceiro,o15_codstnnovo,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
                             fc_saldocontacorrente($iAno,c19_sequencial,102,$iMes,codigo),
                             e60_tipodespesa,
                             c211_elemdespestrut
@@ -945,7 +939,7 @@ class MSCEncerramento {
                         funsub AS fs,
                         CASE
                             WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
-                            ELSE o15_codstn
+                            ELSE o15_codstnnovo
                         END AS fr,
                         CASE
                             WHEN substr(c60_estrut, 1, 3) = '522' AND natdespesa != '99999999' THEN rpad(substr(natdespesa, 1, 6), 8, '0')
@@ -1002,7 +996,7 @@ class MSCEncerramento {
                             r.c61_instit,
                             o15_codtri,
                             lpad(o58_funcao,2,0) AS o58_funcao,
-                            c60_identificadorfinanceiro,o15_codstn,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
+                            c60_identificadorfinanceiro,o15_codstnnovo,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
                             fc_saldocontacorrente($iAno,c19_sequencial,101,$iMes,codigo),
                             e60_tipodespesa,
                             c19_estrutural
@@ -1046,7 +1040,7 @@ class MSCEncerramento {
         END AS po,
         case when c60_identificadorfinanceiro = 'F' then 1 else 2 end as fp,
         null as dc,
-        o15_codstn AS fr,
+        o15_codstnnovo AS fr,
       abs(round(substr(fc_planosaldonovo,45,14)::float8,2)::float8) AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
       substr(fc_planosaldonovo,60,1)::varchar(1) AS nat_vlr_si,
@@ -1069,7 +1063,7 @@ class MSCEncerramento {
       c61_reduz,
       c61_codcon,
       c61_codigo,
-      r.c61_instit,o15_codstn,
+      r.c61_instit,o15_codstnnovo,
       fc_planosaldonovo(".$iAno.", c61_reduz, '".$dataInicio."', '".$dataFim."', false),
       fc_movencerramentomsc('".$dataInicio."', '".$dataFim."', r.c61_reduz)
           from conplanoexe e
@@ -1111,7 +1105,7 @@ class MSCEncerramento {
                             funsub AS fs,
                             CASE
                                 WHEN o15_codtri = '103' AND o58_funcao = '04' THEN 14300000
-                                ELSE o15_codstn
+                                ELSE o15_codstnnovo
                             END AS fr,
                             natdespesa AS nd,
                             null AS es,
@@ -1162,7 +1156,7 @@ class MSCEncerramento {
                             r.c61_instit, e60_anousu,
                             o15_codtri,
                             lpad(o58_funcao,2,0) AS o58_funcao,
-                            p.c60_identificadorfinanceiro,o15_codstn,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
+                            p.c60_identificadorfinanceiro,o15_codstnnovo,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
                             fc_saldocontacorrente($iAno,c19_sequencial,102,$iMes,codigo),
                             c211_elemdespestrut,
                             e60_tipodespesa
@@ -1214,7 +1208,7 @@ class MSCEncerramento {
                             CASE
                                 WHEN o15_codtri = '103'
                                         AND o58_funcao = '04' THEN 14300000
-                                ELSE o15_codstn
+                                ELSE o15_codstnnovo
                             END AS fr,
                             natdespesa AS nd,
                             NULL AS es,
@@ -1272,7 +1266,7 @@ class MSCEncerramento {
                                 r.c61_instit,
                                 e60_anousu,
                                 p.c60_identificadorfinanceiro,
-                                o15_codstn,
+                                o15_codstnnovo,
                                 lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) AS funsub,
                                 fc_saldocontacorrente($iAno,c19_sequencial,106,$iMes,codigo),
                                 a1.c211_elemdespestrut,
