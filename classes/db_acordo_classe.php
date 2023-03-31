@@ -2463,16 +2463,20 @@ class cl_acordo
         
         $sSql .= "
         cgc as cnpjCompra,
-        ac16_anousu as anoCompra,
+        l213_anousu as anoCompra,
         l213_numerocompra as sequencialCompra,
-        ac16_acordocategoria as tipoContratoId,
+        1 as tipoContratoId,
         ac16_numero as numeroContratoEmpenho,
         ac16_anousu as anoContrato,
         l20_edital||'/'||l20_anousu as processo,
         ac16_acordogrupo as categoriaProcessoId,
-        false as receita,
+        true as receita,
+        db01_unidade as codigoUnidade,
         z01_cgccpf as niFornecedor,
-        null as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
+        case when length(trim(z01_cgccpf)) = 14 then 'PJ' 
+        when length(trim(z01_cgccpf)) = 11 then 'PF' 
+        else 
+        'PE' end as tipoPessoaFornecedor,
         z01_nome as nomeRazaoSocialFornecedor,
         null as niFornecedorSubContratado,
         null as tipoPessoaFornecedorSubContratado,
@@ -2481,7 +2485,7 @@ class cl_acordo
         null as informacaoComplementar,
         ac16_valor as valorInicial,
         ac16_qtdperiodo as numeroParcelas,
-        null as valorParcela,
+        0 as valorParcela,
         ac16_valor as valorGlobal,
         null as valorAcumulado,
         ac16_dataassinatura as dataAssinatura,
@@ -2490,10 +2494,15 @@ class cl_acordo
         null as identificadorCipi,
         null as urlCipi
         from acordo
+        left join acordosituacao on ac17_sequencial=ac16_acordosituacao /*nova tabela*/
+        left join acordoposicao on ac26_acordo=ac16_sequencial /*nova tabela*/
+        left join acordoitem on ac20_acordoposicao=ac26_sequencial /*nova tabela*/
+        left join acordoposicaotipo on ac27_sequencial=ac20_acordoposicaotipo
         join acordocategoria on ac50_sequencial=ac16_acordocategoria
         join liclicita on l20_codigo = ac16_licitacao
         join db_depart on coddepto=ac16_deptoresponsavel
         join db_departorg on db01_coddepto=coddepto
+        and db01_anousu = l20_anousu
         join cgm on z01_numcgm=ac16_contratado
         join cgmtipoempresa on z03_numcgm=z01_numcgm
         join tipoempresa on db98_sequencial=z03_tipoempresa
@@ -2513,12 +2522,12 @@ class cl_acordo
         $dbwhere = " ac16_anousu = {$ano} and ac16_sequencial = {$aContratocodigo} ";
                
         $sSql = " select 
-        ac16_sequencial,
-        ac213_numerocontrolepncp,      
+        distinct ac16_sequencial,
+        ac213_numerocontrolepncp,
         cgc as cnpjCompra,
-        ac16_anousu as anoCompra,
+        l213_anousu as anoCompra,
         l213_numerocompra as sequencialCompra,
-        ac16_acordocategoria as tipoContratoId,
+        1 as tipoContratoId,
         ac16_numero as numeroContratoEmpenho,
         ac16_anousu as anoContrato,
         l20_edital||'/'||l20_anousu as processo,
@@ -2526,7 +2535,10 @@ class cl_acordo
         true as receita,
         db01_unidade as codigoUnidade,
         z01_cgccpf as niFornecedor,
-        null as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
+        case when length(trim(z01_cgccpf)) = 14 then 'PJ' 
+        when length(trim(z01_cgccpf)) = 11 then 'PF' 
+        else 
+        'PE' end as tipoPessoaFornecedor,
         z01_nome as nomeRazaoSocialFornecedor,
         null as niFornecedorSubContratado,
         null as tipoPessoaFornecedorSubContratado,
@@ -2544,10 +2556,15 @@ class cl_acordo
         null as identificadorCipi,
         null as urlCipi
         from acordo
+        left join acordosituacao on ac17_sequencial=ac16_acordosituacao /*nova tabela*/
+        left join acordoposicao on ac26_acordo=ac16_sequencial /*nova tabela*/
+        left join acordoitem on ac20_acordoposicao=ac26_sequencial /*nova tabela*/
+        left join acordoposicaotipo on ac27_sequencial=ac20_acordoposicaotipo
         join acordocategoria on ac50_sequencial=ac16_acordocategoria
         join liclicita on l20_codigo = ac16_licitacao
         join db_depart on coddepto=ac16_deptoresponsavel
         join db_departorg on db01_coddepto=coddepto
+        and db01_anousu = l20_anousu
         join cgm on z01_numcgm=ac16_contratado
         join cgmtipoempresa on z03_numcgm=z01_numcgm
         join tipoempresa on db98_sequencial=z03_tipoempresa
@@ -2571,17 +2588,20 @@ class cl_acordo
         ac213_numerocontrolepncp,
         ac213_sequencialpncp,      
         cgc as cnpjCompra,
-        ac16_anousu as anoCompra,
+        l213_anousu as anoCompra,
         l213_numerocompra as sequencialCompra,
-        ac16_acordocategoria as tipoContratoId,
+        1 as tipoContratoId,
         ac16_numero as numeroContratoEmpenho,
         ac16_anousu as anoContrato,
         l20_edital||'/'||l20_anousu as processo,
-        ac16_acordogrupo as categoriaProcessoId,
+        l20_categoriaprocesso as categoriaProcessoId,
         true as receita,
         db01_unidade as codigoUnidade,
         z01_cgccpf as niFornecedor,
-        null as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
+        case when length(trim(z01_cgccpf)) = 14 then 'PJ' 
+        when length(trim(z01_cgccpf)) = 11 then 'PF' 
+        else 
+        'PE' end as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
         z01_nome as nomeRazaoSocialFornecedor,
         null as niFornecedorSubContratado,
         null as tipoPessoaFornecedorSubContratado,
@@ -2598,11 +2618,15 @@ class cl_acordo
         ac16_datafim as datavigenciaFim,
         null as identificadorCipi,
         null as urlCipi
-        from acordo
+        left join acordosituacao on ac17_sequencial=ac16_acordosituacao /*nova tabela*/
+        left join acordoposicao on ac26_acordo=ac16_sequencial /*nova tabela*/
+        left join acordoitem on ac20_acordoposicao=ac26_sequencial /*nova tabela*/
+        left join acordoposicaotipo on ac27_sequencial=ac20_acordoposicaotipo
         join acordocategoria on ac50_sequencial=ac16_acordocategoria
         join liclicita on l20_codigo = ac16_licitacao
         join db_depart on coddepto=ac16_deptoresponsavel
         join db_departorg on db01_coddepto=coddepto
+        and db01_anousu = l20_anousu
         join cgm on z01_numcgm=ac16_contratado
         join cgmtipoempresa on z03_numcgm=z01_numcgm
         join tipoempresa on db98_sequencial=z03_tipoempresa
@@ -2614,106 +2638,4 @@ class cl_acordo
 
         return $sSql;
     }
-
-    function sql_query_publicacaoEmpenho_pncp($campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
-    {
-        $ano  = db_getsession("DB_anousu");
-        $sql  = "select
-                e60_numemp,  
-                ac213_numerocontrolepncp,  
-                z01_cgccpf as cnpjCompra,
-                e60_anousu as anoCompra,
-                l213_numerocompra as sequencialCompra,
-                7 as tipoContratoId,
-                e60_codemp as numeroContratoEmpenho,
-                e60_anousu as anoContrato,
-                l20_edital||'/'||l20_anousu as processo,
-                l20_categoriaprocesso as categoriaProcessoId,
-                false as receita,
-                01001 as codigoUnidade,
-                z01_cgccpf as niFornecedor,
-                case when length(trim(z01_cgccpf)) = 14 then 'PJ' 
-                        when length(trim(z01_cgccpf)) = 11 then 'PF' 
-                else 
-                        'PE' end as tipoPessoaFornecedor,
-                z01_nome as nomeRazaoSocialFornecedor,
-                null as niFornecedorSubContratado,
-                null as tipoPessoaFornecedorSubContratado,
-                null as nomeRazaoSocialFornecedorSubContratado,
-                l20_objeto as objetoContrato,
-                null as informacaoComplementar,
-                0 as valorParcela,
-                null as dataVigenciaInicio,
-                null as dataVigenciaFim,
-                null as dataAssinatura,
-                e60_vlremp as valorInicial,
-                e60_vlremp as valorGlobal,
-                null as numeroParcelas
-                from empempenho
-                join cgm on z01_numcgm = e60_numcgm
-                join empempaut on e61_numemp=e60_numemp
-                join empautoriza on e54_autori=e61_autori
-                left join liclicita on l20_codigo = e54_codlicitacao
-                left join liccontrolepncp on l20_codigo = l213_licitacao
-                left join acocontratopncp on ac213_contrato = e60_numemp
-                where e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' and l20_codigo is not null ";
-
-                if (!empty($dbwhere))
-                    $sql .= " and {$dbwhere} ";
-                      
-                if (!empty($ordem)) {
-                    $sql .= " order by {$ordem} ";
-                }        
-                
-                return $sql;
-    }
-
-    function sql_query_pncp_empenho($codigoempenho)
-    {
-        
-        $ano  = db_getsession("DB_anousu");
-        $sql  = "select
-                e60_numemp,  
-                ac213_numerocontrolepncp,  
-                z01_cgccpf as cnpjCompra,
-                e60_anousu as anoCompra,
-                l213_numerocompra as sequencialCompra,
-                7 as tipoContratoId,
-                e60_codemp as numeroContratoEmpenho,
-                e60_anousu as anoContrato,
-                l20_edital||'/'||l20_anousu as processo,
-                l20_categoriaprocesso as categoriaProcessoId,
-                false as receita,
-                01001 as codigoUnidade,
-                z01_cgccpf as niFornecedor,
-                case when length(trim(z01_cgccpf)) = 14 then 'PJ' 
-                        when length(trim(z01_cgccpf)) = 11 then 'PF' 
-                else 
-                        'PE' end as tipoPessoaFornecedor,
-                z01_nome as nomeRazaoSocialFornecedor,
-                null as niFornecedorSubContratado,
-                null as tipoPessoaFornecedorSubContratado,
-                null as nomeRazaoSocialFornecedorSubContratado,
-                l20_objeto as objetoContrato,
-                null as informacaoComplementar,
-                0 as valorParcela,
-                null as dataVigenciaInicio,
-                null as dataVigenciaFim,
-                null as dataAssinatura,
-                e60_vlremp as valorInicial,
-                e60_vlremp as valorGlobal,
-                null as numeroParcelas
-                from empempenho
-                join cgm on z01_numcgm = e60_numcgm
-                join empempaut on e61_numemp=e60_numemp
-                join empautoriza on e54_autori=e61_autori
-                left join liclicita on l20_codigo = e54_codlicitacao
-                left join liccontrolepncp on l20_codigo = l213_licitacao
-                left join acocontratopncp on ac213_contrato = e60_numemp
-                where e60_numemp = {$codigoempenho} and e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' ";       
-              
-                return $sql;
-    }
-
-
 }

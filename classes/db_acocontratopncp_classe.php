@@ -221,7 +221,7 @@ class cl_acocontratopncp
                                ,$this->ac213_sequencialpncp 
       
                       )";
-                      
+                    
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -543,6 +543,7 @@ class cl_acocontratopncp
                 $virgula = ",";
             }
         }
+        
         return $sql;
     }
 }
