@@ -494,7 +494,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202023 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202023 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= " UNION select distinct 'ctb102022' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
@@ -506,8 +506,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202023 on si96_codctb = si95_codctb and si96_mes = si95_mes
-                              where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu"); 
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202022 on si96_codctb = si95_codctb
+                              where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct 'ctb102021' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
@@ -517,8 +517,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202023 on si96_codctb = si95_codctb and si96_mes = si95_mes
-                              where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu"); 
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb
+                              where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct 'ctb102020' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
@@ -528,8 +528,8 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
-                              where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");                  
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb
+                              where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct 'ctb102019' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
                       join orctiporec on c61_codigo = o15_codigo
@@ -539,7 +539,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb
                               where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct 'ctb102018' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -550,7 +550,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202018 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202018 on si96_codctb = si95_codctb
                               where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct 'ctb102017' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -561,7 +561,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202017 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202017 on si96_codctb = si95_codctb
                               where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct 'ctb102016' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -572,7 +572,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202016 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202016 on si96_codctb = si95_codctb
                               where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
               $sSqlContaPagFont .= " UNION select distinct 'ctb102015' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -583,7 +583,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202015 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202015 on si96_codctb = si95_codctb
                               where si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct 'ctb102014' as ano, si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -594,7 +594,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu") . ") as x order by ano desc";
             $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont." teste1");
 
@@ -614,7 +614,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
 				$clops12->si134_desctipodocumentoop = 'TED';
 			} else {
 				$clops12->si134_desctipodocumentoop = ' ';
-			}            
+			}
             $clops12->si134_dtemissao = $reg12->dtemissao;
             $clops12->si134_vldocumento = $nVolorOp;
             $clops12->si134_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -633,7 +633,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202023 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202023 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= "UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
@@ -646,7 +646,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202022 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202022 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= "UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
@@ -659,7 +659,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= "UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
@@ -672,7 +672,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= "UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
@@ -685,7 +685,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
@@ -698,7 +698,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202018 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202018 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
@@ -711,7 +711,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202017 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202017 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
@@ -724,7 +724,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202016 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202016 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
@@ -737,7 +737,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202015 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202015 on si96_codctb = si95_codctb
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -749,7 +749,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . ") as x order by contapag asc";
             $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont." teste2");
 
@@ -990,7 +990,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                              AND c71_codlan = {$oEmpPago->lancamento}
                            ORDER BY c71_codlan) AS pagamentos
                       GROUP BY tiporegistro, codreduzidoop, codunidadesub, nroop, tipopagamento, nroempenho, dtempenho, nroliquidacao,
-                               dtliquidacao, codfontrecursos, tipodocumentocredor, nrodocumento, codorgaoempop, codunidadeempop, subunidade,    
+                               dtliquidacao, codfontrecursos, tipodocumentocredor, nrodocumento, codorgaoempop, codunidadeempop, subunidade,
                                o15_codigo, e60_emendaparlamentar,
                                e60_esferaemendaparlamentar ";
 
@@ -1163,7 +1163,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202023 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202023 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu") . "
                               and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
@@ -1175,7 +1175,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202022 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202022 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1186,7 +1186,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1197,7 +1197,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1208,7 +1208,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1219,7 +1219,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202018 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202018 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1230,7 +1230,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202017 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202017 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION  select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1241,7 +1241,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202016 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202016 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1252,7 +1252,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202015 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202015 on si96_codctb = si95_codctb
                               where c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1263,7 +1263,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c61_reduz = {$reg12->codctb} and c61_anousu = " . db_getsession("DB_anousu") . ") as x order by contapag asc";
             $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont." teste3");
 
@@ -1301,7 +1301,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202023 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202023 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= "UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1313,7 +1313,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202022 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202022 on si96_codctb = si95_codctb
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= "UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1325,7 +1325,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202021 on si96_codctb = si95_codctb
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= "UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1337,7 +1337,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202020 on si96_codctb = si95_codctb
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= "UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1349,7 +1349,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202019 on si96_codctb = si95_codctb
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1361,7 +1361,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202018 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202018 on si96_codctb = si95_codctb
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1373,7 +1373,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202017 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202017 on si96_codctb = si95_codctb
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1385,7 +1385,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202016 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202016 on si96_codctb = si95_codctb
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1397,7 +1397,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202015 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202015 on si96_codctb = si95_codctb
                               where c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu");
             $sSqlContaPagFont .= " UNION select distinct si95_codctb  as contapag, o15_codtri as fonte from conplanoconta
                       join conplanoreduz on c61_codcon = c63_codcon and c61_anousu = c63_anousu
@@ -1409,7 +1409,7 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
                       coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '') and
                       si95_contabancaria = c63_conta::int8 and
                       si95_digitoverificadorcontabancaria = c63_dvconta and
-                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb and si96_mes = si95_mes
+                      si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb202014 on si96_codctb = si95_codctb
                               where  si95_instit =  " . db_getsession("DB_instit") . " and c82_codlan =  {$oEmpPago->lancamento} and c61_anousu = " . db_getsession("DB_anousu") . " and si95_mes <=" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") as x order by contapag desc";
             $rsResultContaPag = db_query($sSqlContaPagFont) or die($sSqlContaPagFont." teste4");
 
