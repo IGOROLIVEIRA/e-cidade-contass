@@ -35,6 +35,8 @@ pmjanuaria_consulta    5432    prefeituras
 
 pmsaojoaomissoes       5432    prefeituras2
 pmcurraldedentro       5432    prefeituras2
+pmcurraldedentro_consulta 5432 prefeituras2
+pmnovaporteirinha_consulta 5432 prefeituras2
 
 cmnavarro			5432    cmnavarro
 cmfranciscodumont		5432    cmnavarro
