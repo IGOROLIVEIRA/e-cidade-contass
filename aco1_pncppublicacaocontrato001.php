@@ -37,6 +37,7 @@ db_app::load("time.js");
 
                         <strong>Tipo: </strong>
                         <select name="tipo" id="tipo">
+                            <option value="0" >Selecione</option>
                             <option value="1">Inclusão</option>
                             <option value="2">Retificação</option>
                             <option value="3">Exclusão</option>
@@ -152,12 +153,16 @@ db_app::load("time.js");
     function js_enviar() {
         var aContratos = oGridContrato.getSelection("object");
 
+        let tipo = $F('tipo');
+        if(tipo == 0){
+            alert('Selecione um Tipo');
+            return false;
+        }    
+
         if (aContratos.length == 0) {
             alert('Nenhum Contrato Selecionado');
             return false;
         }
-
-        let tipo = $F('tipo');
 
         var oParam = new Object();
         if (tipo == 1) {
@@ -196,9 +201,14 @@ db_app::load("time.js");
         var oRetornoContratos = eval('(' + oAjax.responseText + ")");
         if (oRetornoContratos.status == '2') {
             alert(oRetornoContratos.message.urlDecode());
-            // window.location.href = "aco1_pncppublicacaocontrato001.php";
         } else {
-            alert('Enviado com Sucesso !');
+            let tipo = $F('tipo');
+            if(tipo == 1)
+                alert('Enviado com sucesso !');
+            if(tipo == 2)
+                alert('Retificação enviada com sucesso!');    
+            if(tipo == 3)
+                alert('Exclusão efetuada com sucesso!');
             window.location.href = "aco1_pncppublicacaocontrato001.php";
         }
     }
