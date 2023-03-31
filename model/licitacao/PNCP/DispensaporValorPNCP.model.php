@@ -60,7 +60,8 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
             $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
             $oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
-            $oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = $item->codigoregistroimobiliario;
+            //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
+            //$oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = $item->codigoregistroimobiliario;
         }
 
         $aDadosAPI = $oDadosAPI;
@@ -188,8 +189,21 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         curl_close($chpncp);
 
-        $retorno = json_decode($contentpncp);
-        return $retorno;
+        $retorno = explode(':', $contentpncp);
+
+        //caso erro nos itens
+        if (substr(str_replace('"', '', $retorno[2]), 0, 11) == "itensCompra") {
+            return array(422, $retorno[3]);
+        } else {
+            //erro ao enviar aviso
+            if ($retorno[8]) {
+                return array(422, $retorno[2]);
+            }
+            //caso tenha enviado com sucesso!
+            else {
+                return array(201, $retorno[4]);
+            }
+        }
     }
 
     public function enviarRetificacao($oDados, $sCodigoControlePNCP, $iAnoCompra)

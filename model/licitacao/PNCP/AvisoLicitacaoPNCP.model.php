@@ -26,9 +26,6 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $aDadosAPI = array();
 
         $oDado = $this->dados;
-        echo "<pre>";
-        var_dump($this->dados);
-        exit;
 
         $oDadosAPI                                  = new \stdClass;
         $oDadosAPI->codigoUnidadeCompradora         = '01001'; //$oDado->codigounidadecompradora;
@@ -62,8 +59,9 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
             $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
             $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
-            $oDadosAPI->itensCompra[$key]->itemCategoriaId             = utf8_encode($item->unidademedida);
-            $oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = utf8_encode($item->codigoregistroimobiliario);
+            //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
+            $oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
+            //$oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = utf8_encode($item->codigoregistroimobiliario);
         }
 
         $aDadosAPI = $oDadosAPI;
@@ -196,13 +194,18 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
         $retorno = explode(':', $contentpncp);
 
-        ////erro ao enviar aviso
-        if ($retorno[8]) {
-            return array(422, $retorno[2]);
-        }
-        //caso tenha enviado com sucesso!
-        else {
-            return array(201, $retorno[4]);
+        //caso erro nos itens
+        if (substr(str_replace('"', '', $retorno[2]), 0, 11) == "itensCompra") {
+            return array(422, $retorno[3]);
+        } else {
+            //erro ao enviar aviso
+            if ($retorno[8]) {
+                return array(422, $retorno[2]);
+            }
+            //caso tenha enviado com sucesso!
+            else {
+                return array(201, $retorno[4]);
+            }
         }
     }
 

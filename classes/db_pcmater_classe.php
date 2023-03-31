@@ -313,6 +313,7 @@ class cl_pcmater
                                       ,pc01_obras
                                       ,pc01_instit
                                       ,pc01_codmaterant
+                                      ,pc01_regimobiliario
                        )
                 values (
                                 $this->pc01_codmater
