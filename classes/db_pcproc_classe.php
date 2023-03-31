@@ -60,6 +60,7 @@ class cl_pcproc
   var $pc80_subcontratacao = null;
   var $pc80_dadoscomplementares = null;
   var $pc80_amparolegal = null;
+  var $pc80_categoriaprocesso = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  pc80_codproc = int8 = Código do Processo de Compras
@@ -76,6 +77,7 @@ class cl_pcproc
                  pc80_subcontratacao = possui subcontratacao
                  pc80_dadoscomplementares = dados complementares
                  pc80_amparolegal = amparo legal
+                 pc80_categoriaprocesso = categoria do processo
                  ";
   //funcao construtor da classe
   function cl_pcproc()
@@ -119,6 +121,7 @@ class cl_pcproc
       $this->pc80_subcontratacao = ($this->pc80_subcontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_subcontratacao"] : $this->pc80_subcontratacao);
       $this->pc80_dadoscomplementares = ($this->pc80_dadoscomplementares == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_dadoscomplementares"] : $this->pc80_dadoscomplementares);
       $this->pc80_amparolegal = ($this->pc80_amparolegal == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_amparolegal"] : $this->pc80_amparolegal);
+      $this->pc80_categoriaprocesso = ($this->pc80_categoriaprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_categoriaprocesso"] : $this->pc80_categoriaprocesso);
     } else {
       $this->pc80_codproc = ($this->pc80_codproc == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_codproc"] : $this->pc80_codproc);
     }
@@ -211,6 +214,10 @@ class cl_pcproc
       $this->pc80_amparolegal = "null";
     }
 
+    if ($this->pc80_categoriaprocesso == null) {
+      $this->pc80_categoriaprocesso = "null";
+    }
+
     if ($pc80_codproc == "" || $pc80_codproc == null) {
       $result = db_query("select nextval('pcproc_pc80_codproc_seq')");
       if ($result == false) {
@@ -258,6 +265,7 @@ class cl_pcproc
                                       ,pc80_subcontratacao
                                       ,pc80_dadoscomplementares 
                                       ,pc80_amparolegal
+                                      ,pc80_categoriaprocesso
                        )
                 values (
                                 $this->pc80_codproc
@@ -274,6 +282,7 @@ class cl_pcproc
                                ," . ($this->pc80_subcontratacao == "null" || $this->pc80_subcontratacao == "" ? "false" : "'" . $this->pc80_subcontratacao . "'") . "
                                ,'$this->pc80_dadoscomplementares'
                                ,$this->pc80_amparolegal
+                               ,$this->pc80_categoriaprocesso
                       )";
     $result = db_query($sql);
 
@@ -468,6 +477,11 @@ class cl_pcproc
 
     if (trim($this->pc80_amparolegal) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_amparolegal"])) {
       $sql  .= $virgula . " pc80_amparolegal = '$this->pc80_amparolegal' ";
+      $virgula = ",";
+    }
+
+    if (trim($this->pc80_categoriaprocesso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_categoriaprocesso"])) {
+      $sql  .= $virgula . " pc80_categoriaprocesso = '$this->pc80_categoriaprocesso' ";
       $virgula = ",";
     }
 

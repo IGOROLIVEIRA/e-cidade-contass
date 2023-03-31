@@ -180,6 +180,29 @@ $clrotulo->label("descrdepto");
                             ?>
                         </td>
                     </tr>
+                    <tr id="categoriaprocesso">
+                        <td>
+                            <strong>Categoria do Processo:</strong>
+                        </td>
+                        <td>
+                            <?
+                            $apc80_categoriaprocesso = array(
+                                "0" => "Selecione",
+                                "1" => "1- Cessão",
+                                "2" => "2- Compras",
+                                "3" => "3- Informática (TIC)",
+                                "4" => "4- Internacional",
+                                "5" => "5- Locação Imóveis",
+                                "6" => "6- Mão de Obra",
+                                "7" => "7- Obras",
+                                "8" => "8- Serviços",
+                                "9" => "9- Serviços de Engenharia",
+                                "10" => "10- Serviços de Saúde"
+                            );
+                            db_select("pc80_categoriaprocesso", $apc80_categoriaprocesso, true, $db_opcao, '');
+                            ?>
+                        </td>
+                    </tr>
                     <tr id="dispensaporvalor4">
                         <td>
                             <label class="bold">Amparo Legal:</label>
@@ -299,11 +322,13 @@ $clrotulo->label("descrdepto");
             document.getElementById('dispensaporvalor2').style.display = 'none';
             document.getElementById('dispensaporvalor3').style.display = 'none';
             document.getElementById('dispensaporvalor4').style.display = 'none';
+            document.getElementById('categoriaprocesso').style.display = 'none';
         } else {
             document.getElementById('dispensaporvalor1').style.display = '';
             document.getElementById('dispensaporvalor2').style.display = '';
             document.getElementById('dispensaporvalor3').style.display = '';
             document.getElementById('dispensaporvalor4').style.display = '';
+            document.getElementById('categoriaprocesso').style.display = '';
         }
     }
 
@@ -339,7 +364,8 @@ $clrotulo->label("descrdepto");
                 pc80_orcsigiloso: $('pc80_orcsigiloso'),
                 pc80_subcontratacao: $('pc80_subcontratacao'),
                 pc80_dadoscomplementares: $('pc80_dadoscomplementares'),
-                pc80_amparolegal: $('pc80_amparolegal')
+                pc80_amparolegal: $('pc80_amparolegal'),
+                pc80_categoriaprocesso: $('pc80_categoriaprocesso')
             },
             lRedirecionaLote = false;
 
@@ -499,6 +525,9 @@ $clrotulo->label("descrdepto");
                 }
                 document.getElementById('pc80_dadoscomplementares').value = oRetorno.pc80_dadoscomplementares.urlDecode();
                 document.getElementById('pc80_amparolegal').value = oRetorno.pc80_amparolegal;
+
+                document.getElementById('pc80_categoriaprocesso').selectedIndex = oRetorno.pc80_categoriaprocesso;
+
 
                 aLotes = (Object.isArray(oRetorno.aLotes) ? {} : oRetorno.aLotes);
 
@@ -786,7 +815,7 @@ $clrotulo->label("descrdepto");
                 pc80_subcontratacao: oCampos.pc80_subcontratacao.value,
                 pc80_dadoscomplementares: oCampos.pc80_dadoscomplementares.value,
                 pc80_amparolegal: oCampos.pc80_amparolegal.value,
-
+                pc80_categoriaprocesso: oCampos.pc80_categoriaprocesso.value,
                 aItens: aItensLote
             }
 
