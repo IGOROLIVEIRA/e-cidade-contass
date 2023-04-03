@@ -29,88 +29,116 @@
  * Controle de materias do compras
  * @package compras
  */
-class MaterialCompras {
-  
+class MaterialCompras
+{
+
   /**
    * código do material;
    *
    * @var integer
    */
   protected $iMaterial;
-  
+
   /**
    * Descrição do material
    *
    * @var ustring
    */
   protected $sDescricao;
-  
+
   /**
    * Verifica se o material é um serviço 
    *
    * @var bool
    */
   protected $lServico;
-  
+
   /**
    * Elementos vinculados ao material
    *
    * @var array
    */
   protected $aElementos = array();
-  
+
+  /**
+   * Codigo anterior
+   *
+   * @var integer
+   */
+  protected $iCodanterior = array();
+
   /**
    * 
    */
-  function __construct($iMaterial = null) {
-    
+  function __construct($iMaterial = null)
+  {
+
     if (!empty($iMaterial)) {
-      
+
       $this->iMaterial = $iMaterial;
       $oDaoPcmater     = db_utils::getDao("pcmater");
       $sSqlMaterial    = $oDaoPcmater->sql_query_file($iMaterial);
       $rsMaterial      = $oDaoPcmater->sql_record($sSqlMaterial);
-      if ($oDaoPcmater->numrows > 0)    {
-        
+      if ($oDaoPcmater->numrows > 0) {
+
         $oMaterial = db_utils::fieldsMemory($rsMaterial, 0, false, false, true);
         $this->sDescricao = $oMaterial->pc01_descrmater;
-        $this->lServico   = $oMaterial->pc01_servico== 't'?true:false;
-        
+        $this->lServico   = $oMaterial->pc01_servico == 't' ? true : false;
+        $this->iCodanterior = $oMaterial->pc01_codmaterant;
       } else {
         $this->iMaterial = null;
       }
     }
-    
-    
   }
   /**
    * @return integer
    */
-  public function getMaterial() {
+  public function getMaterial()
+  {
 
     return $this->iMaterial;
   }
-  
-  /**
-   * @return ustring
-   */
-  public function getDescricao() {
 
-    return $this->sDescricao;
+  /**
+   * @return integer
+   */
+  public function getCodanterior()
+  {
+
+    return $this->iCodanterior;
   }
-  
+
   /**
    * @param ustring $sDescricao
    */
-  public function setDescricao($sDescricao) {
+  public function setCodanterior($iCodanterior)
+  {
+    $this->iCodanterior = $iCodanterior;
+  }
+
+  /**
+   * @return ustring
+   */
+  public function getDescricao()
+  {
+
+    return $this->sDescricao;
+  }
+
+  /**
+   * @param ustring $sDescricao
+   */
+  public function setDescricao($sDescricao)
+  {
     $this->sDescricao = $sDescricao;
   }
 
-  
-  public function getElementos() {
-    
+
+  public function getElementos()
+  {
+
     if (count($this->aElementos) == 0) {
-      
+
       require_once("classes/db_pcmaterele_classe.php");
       $oDaoMaterialElemento  = new cl_pcmaterele;
       $sSqlElementos         = "SELECT o56_codele as codigoelemento,";
@@ -118,26 +146,27 @@ class MaterialCompras {
       $sSqlElementos        .= "       o56_descr   as descricao";
       $sSqlElementos        .= "  from pcmaterele ";
       $sSqlElementos        .= "       inner join orcelemento on pc07_codele = o56_codele ";
-      $sSqlElementos        .= "                             and o56_anousu = ".db_getsession("DB_anousu");
+      $sSqlElementos        .= "                             and o56_anousu = " . db_getsession("DB_anousu");
       $sSqlElementos        .= " where pc07_codmater = {$this->iMaterial}";
       $rsElementos           = db_query($sSqlElementos);
       $this->aElementos = db_utils::getCollectionByRecord($rsElementos, false, false, true);
-      
     }
     return $this->aElementos;
   }
-  
+
   /**
    * verifica se o material é um serviço;
    *
    * @return boolean
    */
-  public function isServico() {
+  public function isServico()
+  {
 
     return $this->lServico;
   }
 
-  public function getCodigo() {
+  public function getCodigo()
+  {
     return $this->iMaterial;
   }
 }

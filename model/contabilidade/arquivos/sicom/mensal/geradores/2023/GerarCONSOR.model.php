@@ -70,6 +70,7 @@ class GerarCONSOR extends GerarAM
         $aCSVCONSOR20['si17_codorgao']        = $this->padLeftZero($aCONSOR20['si17_codorgao'], 2);
         $aCSVCONSOR20['si17_cnpjconsorcio']   = $this->padLeftZero($aCONSOR20['si17_cnpjconsorcio'], 14);
         $aCSVCONSOR20['si17_codfontrecursos'] = $this->padLeftZero($aCONSOR20['si17_codfontrecursos'], 3);
+        $aCSVCONSOR20['si17_codacompanhamento'] = $this->padLeftZero($aCONSOR20['si17_codacompanhamento'], 3);
         $aCSVCONSOR20['si17_vltransfrateio']  = $this->sicomNumberReal($aCONSOR20['si17_vltransfrateio'], 2);
         $aCSVCONSOR20['si17_prestcontas']     = $aCONSOR20['si17_prestcontas'];
 
@@ -88,6 +89,7 @@ class GerarCONSOR extends GerarAM
         $aCSVCONSOR30['si18_naturezadespesa']           = $this->padLeftZero($aCONSOR30['si18_naturezadespesa'], 6);
         $aCSVCONSOR30['si18_subelemento']               = $this->padLeftZero($aCONSOR30['si18_subelemento'], 2);
         $aCSVCONSOR30['si18_codfontrecursos']           = $this->padLeftZero($aCONSOR30['si18_codfontrecursos'], 3);
+        $aCSVCONSOR30['si18_codacompanhamento']           = $this->padLeftZero($aCONSOR30['si18_codacompanhamento'], 3);
         $aCSVCONSOR30['si18_vlempenhadofonte']          = $this->sicomNumberReal($aCONSOR30['si18_vlempenhadofonte'], 2);
         $aCSVCONSOR30['si18_vlanulacaoempenhofonte']    = $this->sicomNumberReal($aCONSOR30['si18_vlanulacaoempenhofonte'], 2);
         $aCSVCONSOR30['si18_vlliquidadofonte']          = $this->sicomNumberReal($aCONSOR30['si18_vlliquidadofonte'], 2);

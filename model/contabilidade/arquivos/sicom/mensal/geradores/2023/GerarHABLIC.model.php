@@ -89,7 +89,6 @@ class GerarHABLIC extends GerarAM
             $aCSVHABLIC11['si58_codunidadesub']                   = $this->padLeftZero($aHABLIC11['si58_codunidadesub'], 5);
             $aCSVHABLIC11['si58_exerciciolicitacao']              = $this->padLeftZero($aHABLIC11['si58_exerciciolicitacao'], 4);
             $aCSVHABLIC11['si58_nroprocessolicitatorio']          = substr($aHABLIC11['si58_nroprocessolicitatorio'], 0, 12);
-            $aCSVHABLIC11['si58_tipodocumentocnpjempresahablic']  = $this->padLeftZero($aHABLIC11['si58_tipodocumentocnpjempresahablic'], 1);
             $aCSVHABLIC11['si58_cnpjempresahablic']               = substr($aHABLIC11['si58_cnpjempresahablic'], 0, 14);
             $aCSVHABLIC11['si58_tipodocumentosocio']              = substr($aHABLIC11['si58_tipodocumentosocio'], 0, 1);
             $aCSVHABLIC11['si58_nrodocumentosocio']               = substr($aHABLIC11['si58_nrodocumentosocio'], 0, 14);

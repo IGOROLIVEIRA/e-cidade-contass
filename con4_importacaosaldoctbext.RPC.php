@@ -40,6 +40,22 @@ try {
       case 'importSaldoCtbExt':
 
           db_inicio_transacao();
+          $iAnoUsuAtual = db_getsession("DB_anousu");
+          $iInstit = db_getsession("DB_instit");
+
+          $oDaoConExtSaldo = new cl_conextsaldo;
+          $sWhereExcluirEXTSaldo = " ces01_anousu = {$iAnoUsuAtual} and ces01_inst = {$iInstit} ";
+          $oDaoConExtSaldo->excluir(null, $sWhereExcluirEXTSaldo);
+          if ($oDaoConExtSaldo->erro_status == "0") {
+              throw new DBException(urlencode("ERRO [ 1 ] - Excluindo Registros - " . $oDaoConExtSaldo->erro_msg ."<br>"));
+          }
+
+          $oDaoConCtbSaldo = new cl_conctbsaldo;
+          $sWhereExcluirCTBSaldo  = " ces02_anousu = {$iAnoUsuAtual} and ces02_inst = {$iInstit} ";
+          $oDaoConCtbSaldo->excluir(null, $sWhereExcluirCTBSaldo);
+          if ($oDaoConCtbSaldo->erro_status == "0") {
+              throw new DBException(urlencode("ERRO [ 2 ] - Excluindo Registros - " . $oDaoConCtbSaldo->erro_msg ."<br>"));
+          }
 
           $sSqlGeral = "select  10 as tiporegistro,
                          k13_reduz as icodigoreduzido,
@@ -68,7 +84,7 @@ try {
               left join acertactb on si95_codtceant = c61_codtce
               left join infocomplementaresinstit on si09_instit = c61_instit
                 where  k13_limite is null and c61_instit = ".db_getsession("DB_instit")."  order by k13_reduz ";
-               
+
           $rsContas = db_query($sSqlGeral);
          // db_criatabela($rsContas);
           $aBancosAgrupados = array();
@@ -122,7 +138,7 @@ try {
             $rsResult = db_query($sSQL);
             //db_criatabela($rsResult);exit;
             $oCtbFontes = db_utils::getCollectionByRecord($rsResult);
-            
+
             foreach ($oCtbFontes as $oCtbFonte) {
               $aHash = $aBancosAgrupado->icodigoreduzido.$oCtbFonte->si96_codfontrecursos;
 
@@ -163,11 +179,11 @@ try {
           from conplano
           join conplanoreduz on c60_codcon = c61_codcon and c60_anousu = c61_anousu
           left join infocomplementaresinstit on si09_instit = c61_instit
-          where c60_anousu = " . db_getsession("DB_anousu") . " and c60_codsis = 7 
+          where c60_anousu = " . db_getsession("DB_anousu") . " and c60_codsis = 7
           and c61_instit = " . db_getsession("DB_instit") . " order by c61_reduz ";
-        
-          $rsContasExtra = db_query($sSqlExt);  
-          
+
+          $rsContasExtra = db_query($sSqlExt);
+
           $aExt10Agrupado = array();
           for ($iCont10 = 0;$iCont10 < pg_num_rows($rsContasExtra); $iCont10++) {
 
@@ -194,13 +210,13 @@ try {
               }
 
           }
-          
+
           foreach ($aExt10Agrupado as $oExt10Agrupado) {
             $ext = $oExt10Agrupado->codtce != '' ? $oExt10Agrupado->codtce : $oExt10Agrupado->codext;
-            $sSQL = "select si165_codfontrecursos, si165_vlsaldoatualfonte, si165_natsaldoatualfonte from ext20{$anousu} 
-                      where si165_codext = {$ext} and si165_mes = 12 
-                      and si165_instit = ".db_getsession("DB_instit"); 
-            $rsResult = db_query($sSQL); 
+            $sSQL = "select si165_codfontrecursos, si165_vlsaldoatualfonte, si165_natsaldoatualfonte from ext20{$anousu}
+                      where si165_codext = {$ext} and si165_mes = 12
+                      and si165_instit = ".db_getsession("DB_instit");
+            $rsResult = db_query($sSQL);
             $oExtFontes = db_utils::getCollectionByRecord($rsResult);
 
             foreach ($oExtFontes as $oExtFonte) {
@@ -243,7 +259,7 @@ try {
               $sWhereVerificacao .= " and c19_conplanoreduzanousu = {$iAnoUsu}           ";
 
               $sSqlVerificaDetalhe = $oDaoVerificaDetalhe->sql_query_file(null, "*", null, $sWhereVerificacao);
-             
+
               $rsVerificacao = $oDaoVerificaDetalhe->sql_record($sSqlVerificaDetalhe);
 
               if ($oDaoVerificaDetalhe->numrows > 0) {
@@ -262,17 +278,17 @@ try {
                   $oDaoContaCorrenteDetalhe->incluir(null);
                   if ($oDaoContaCorrenteDetalhe->erro_status == 0 || $oDaoContaCorrenteDetalhe->erro_status == '0') {
                       $sqlerro = true;
-                      throw new DBException(urlencode('ERRO - [ 1 ] - Incluindo Detalhe de Conta Corrente : ' 
+                      throw new DBException(urlencode('ERRO - [ 1 ] - Incluindo Detalhe de Conta Corrente : '
                         . $oDaoContaCorrenteDetalhe->erro_msg));
                   }
-                  salvarSaldo($oDaoContaCorrenteDetalhe, $oSaldoCtb->si96_vlsaldofinalfonte);
+                  salvarSaldoContaCorrente($oDaoContaCorrenteDetalhe, $oSaldoCtb->si96_vlsaldofinalfonte);
                   salvarSaldoSICOMAM($oSaldoCtb);
                   continue;
               }
-              salvarSaldo($oContaCorrente, $oSaldoCtb->si96_vlsaldofinalfonte);
+              salvarSaldoContaCorrente($oContaCorrente, $oSaldoCtb->si96_vlsaldofinalfonte);
               salvarSaldoSICOMAM($oSaldoCtb);
-              
-              $oRetorno->message = urlencode("Implantação realizada com sucesso."); 
+
+              $oRetorno->message = urlencode("Implantação realizada com sucesso.");
           }
           db_fim_transacao(false);
           break;
@@ -280,6 +296,7 @@ try {
 		case "importSaldoCtbExtContaCorrenteDetalhe":
 
 			$iAnoUsu = db_getsession("DB_anousu");
+            $iInstit = db_getsession("DB_instit");
 
 			$sSqlConSaldoCtbExt = "	SELECT c.ces01_reduz AS reduzido,
 											c.ces01_fonte AS fonte,
@@ -287,7 +304,7 @@ try {
 											c.ces01_valor AS valor,
 											c.ces01_anousu AS anousu,
 											c.ces01_inst AS instit,
-											CASE 
+											CASE
 												WHEN c.ces01_valor < 0 THEN c62_vlrcre
 												ELSE c62_vlrdeb
 											END AS saldoinicial,
@@ -299,16 +316,16 @@ try {
 									FROM conextsaldo AS c
 										INNER JOIN conplanoexe ON c62_reduz = c.ces01_reduz AND c62_anousu = c.ces01_anousu
 										INNER JOIN conplanoreduz ON c61_reduz = c.ces01_reduz AND c61_anousu = c.ces01_anousu
-									WHERE c.ces01_anousu = {$iAnoUsu}
-											AND c.ces01_valor <> 0	
-									UNION ALL								
+									WHERE c.ces01_anousu = {$iAnoUsu} and c61_instit = {$iInstit}
+											AND c.ces01_valor <> 0
+									UNION ALL
 									SELECT c.ces02_reduz AS reduzido,
 											c.ces02_fonte AS fonte,
 											c61_codtce AS codtce,
 											c.ces02_valor AS valor,
 											c.ces02_anousu AS anousu,
 											c.ces02_inst AS instit,
-											CASE 
+											CASE
 												WHEN c.ces02_valor < 0 THEN c62_vlrcre
 												ELSE c62_vlrdeb
 											END AS saldoinicial,
@@ -320,16 +337,17 @@ try {
 									FROM conctbsaldo AS c
 										INNER JOIN conplanoexe ON c62_reduz = c.ces02_reduz AND c.ces02_anousu = c62_anousu
 										INNER JOIN conplanoreduz ON c61_reduz = c.ces02_reduz AND c61_anousu = c.ces02_anousu
-									WHERE c.ces02_anousu = {$iAnoUsu}
+									WHERE c.ces02_anousu = {$iAnoUsu} and c61_instit = {$iInstit}
 										AND c.ces02_valor <> 0";
 
 			$rsConSaldoCtbExt = db_query($sSqlConSaldoCtbExt);
-			
-			if (pg_num_rows($rsConSaldoCtbExt) < 1) {
+
+            if (pg_num_rows($rsConSaldoCtbExt) < 1) {
 				throw new DBException(urlencode('ERRO - [ 2 ] - Nenhum registro encontrado nas tabelas conctbsaldo/conextsaldo!'));
 			}
 
 			db_inicio_transacao();
+
 
 			$sLogContasNaoImplantadas = '';
 
@@ -338,7 +356,7 @@ try {
 				$oConta = db_utils::fieldsMemory($rsConSaldoCtbExt,$iCont);
 
 				if ($oConta->saldoinicial != abs($oConta->totalconta)) {
-					
+
 					$sLogContasNaoImplantadas .= "Tipo: {$oConta->tipo}, ";
 					$sLogContasNaoImplantadas .= "Cod. Reduzido: {$oConta->reduzido}, ";
 					$sLogContasNaoImplantadas .= "Fonte: {$oConta->fonte}, ";
@@ -365,7 +383,7 @@ try {
 				$sWhereVerificacao .= " and c19_reduz               = {$iReduzido}         ";
 				$sWhereVerificacao .= " and c19_conplanoreduzanousu = {$iAnoUsu}           ";
 
-              	$sSqlVerificaDetalhe 	= $oDaoVerificaDetalhe->sql_query_file(null, "*", null, $sWhereVerificacao);             
+              	$sSqlVerificaDetalhe 	= $oDaoVerificaDetalhe->sql_query_file(null, "*", null, $sWhereVerificacao);
               	$rsVerificacao 			= $oDaoVerificaDetalhe->sql_record($sSqlVerificaDetalhe);
 
 				$oDaoContaCorrenteDetalhe->c19_contacorrente 		= $iContaCorrente;
@@ -379,11 +397,11 @@ try {
                   	$oDaoContaCorrenteDetalhe->incluir(null);
                   	if ($oDaoContaCorrenteDetalhe->erro_status == 0 || $oDaoContaCorrenteDetalhe->erro_status == '0') {
                       	$sqlerro = true;
-                      	throw new DBException(urlencode('ERRO - [ 3 ] - Erro ao incluir no Conta Corrente Detalhe!: ' 
+                      	throw new DBException(urlencode('ERRO - [ 3 ] - Erro ao incluir no Conta Corrente Detalhe!: '
                         	. $oDaoContaCorrenteDetalhe->erro_msg));
                   	}
-                  	
-					salvarSaldo($oDaoContaCorrenteDetalhe, $oConta->valor);
+
+                      salvarSaldoContaCorrente($oDaoContaCorrenteDetalhe, $oConta->valor);
                   	continue;
               	}
 
@@ -392,8 +410,8 @@ try {
 					$oContaCorrente = db_utils::fieldsMemory($rsVerificacao, 0);
 				}
 
-				salvarSaldo($oContaCorrente, $oConta->valor);
-              
+				salvarSaldoContaCorrente($oContaCorrente, $oConta->valor);
+
               	$oRetorno->message = urlencode("Implantação no conta corrente detalhe realizada com sucesso.");
 
 			}
@@ -401,7 +419,7 @@ try {
 			$oRetorno->sArquivoLog = '';
 
 			if (!empty($sLogContasNaoImplantadas)) {
-				
+
 				$sArquivoLog = 'tmp/implantacao_saldo_conta_corrente_' . date('Y-m-d_H:i:s') . '.log';
 				file_put_contents($sArquivoLog, $sLogContasNaoImplantadas);
 				$oRetorno->sArquivoLog = $sArquivoLog;
@@ -422,7 +440,7 @@ try {
 
   }
 function salvarSaldoSICOMAM( $oSaldoCtb ){
-    
+
     if($oSaldoCtb->tipo == 'ext'){
       $clconextsaldo = new cl_conextsaldo;
       $clconextsaldo->ces01_codcon  = $oSaldoCtb->codcon;
@@ -431,10 +449,10 @@ function salvarSaldoSICOMAM( $oSaldoCtb ){
       $clconextsaldo->ces01_valor = $oSaldoCtb->si96_vlsaldofinalfonte;
       $clconextsaldo->ces01_anousu = db_getsession('DB_anousu');
       $clconextsaldo->ces01_inst = db_getsession('DB_instit');
-      $rsVerificacaoExt = $clconextsaldo->sql_record($clconextsaldo->sql_query('','*','',"ces01_codcon =  $oSaldoCtb->codcon 
-        and ces01_fonte = $oSaldoCtb->si96_codfontrecursos and ces01_anousu = " . db_getsession('DB_anousu') ." 
+      $rsVerificacaoExt = $clconextsaldo->sql_record($clconextsaldo->sql_query('','*','',"ces01_codcon =  $oSaldoCtb->codcon
+        and ces01_fonte = $oSaldoCtb->si96_codfontrecursos and ces01_anousu = " . db_getsession('DB_anousu') ."
         and c60_anousu = " . db_getsession('DB_anousu') ));
-      
+
       if($clconextsaldo->erro_status > 0){
           throw new DBException("ERRO 12 " . $clconextsaldo->erro_msg);
       }
@@ -444,14 +462,14 @@ function salvarSaldoSICOMAM( $oSaldoCtb ){
         $clconextsaldo->ces01_valor = $oSaldoCtb->si96_vlsaldofinalfonte;
         $clconextsaldo->ces01_sequencial = $oExt->ces01_sequencial;
         $clconextsaldo->alterar($oExt->ces01_sequencial);
-        
+
         if($clconextsaldo->erro_status == 0){
           throw new DBException("ERRO 13 " . $clconextsaldo->erro_msg);
         }
 
       }else{
         if($oSaldoCtb->si96_vlsaldofinalfonte <> 0){
-            $clconextsaldo->incluir($ces01_sequencial);
+            $clconextsaldo->incluir();
 
           if($clconextsaldo->erro_status == 0){
             throw new DBException("ERRO 14 " . $clconextsaldo->erro_msg);
@@ -468,7 +486,7 @@ function salvarSaldoSICOMAM( $oSaldoCtb ){
       $clconctbsaldo->ces02_valor = $oSaldoCtb->si96_vlsaldofinalfonte;
       $clconctbsaldo->ces02_anousu = db_getsession('DB_anousu');
       $clconctbsaldo->ces02_inst = db_getsession('DB_instit');
-      $rsVerificacaoCtb = $clconctbsaldo->sql_record($clconctbsaldo->sql_query('','*',''," ces02_codcon =  $oSaldoCtb->codcon 
+      $rsVerificacaoCtb = $clconctbsaldo->sql_record($clconctbsaldo->sql_query('','*',''," ces02_codcon =  $oSaldoCtb->codcon
         and ces02_fonte = $oSaldoCtb->si96_codfontrecursos and ces02_anousu = " . db_getsession('DB_anousu') ) );
 
       if($clconctbsaldo->numrows > 0){
@@ -484,7 +502,7 @@ function salvarSaldoSICOMAM( $oSaldoCtb ){
 
       }else{
         if($oSaldoCtb->si96_vlsaldofinalfonte <> 0){
-           $clconctbsaldo->incluir($ces02_sequencial);
+           $clconctbsaldo->incluir();
            if($clconctbsaldo->erro_status == 0){
               throw new DBException("ERRO 16 " . $clconctbsaldo->erro_msg);
            }
@@ -492,45 +510,55 @@ function salvarSaldoSICOMAM( $oSaldoCtb ){
       }
     }
 }
-function salvarSaldo($saldo, $valorSaldo){
-  
+function excluirSaldo ($iReduzido, $iContaCorrente) {
+      /**
+       * Remove todos os registros existentes na contacorrentesaldo para o ano atual e mes 0 do contacorrentedetalhe em questao
+       */
+      $iAnoUsu = db_getsession("DB_anousu");
+      $iInstit = db_getsession("DB_instit");
+      $oDaoContaCorrenteDetalhe = new cl_contacorrentedetalhe();
+      $sWhereExcluirTodos  = " c19_reduz = {$iReduzido} and c19_contacorrente = {$iContaCorrente} and c19_instit = {$iInstit}";
+      $sSqlExcluirTodos = $oDaoContaCorrenteDetalhe->sql_query_file(null, "c19_sequencial", null, $sWhereExcluirTodos);
+      $aContaCorrente = db_utils::getCollectionByRecord($oDaoContaCorrenteDetalhe->sql_record($sSqlExcluirTodos));
+      foreach($aContaCorrente as $oContaCorrente){
+        $oDaoContaCorrenteSaldo = new cl_contacorrentesaldo();
+        $sWhereExcluir  = " c29_anousu = {$iAnoUsu} and c29_mesusu = 0 and c29_contacorrentedetalhe = {$oContaCorrente->c19_sequencial} ";
+        $oDaoContaCorrenteSaldo->excluir(null, $sWhereExcluir);
+
+        if ($oDaoContaCorrenteSaldo->erro_status == "0") {
+            throw new DBException(urlencode("ERRO [ 22 ] - Excluindo Registros - " . $oDaoContaCorrenteSaldo->erro_msg ."<br>"));
+        }
+      }
+
+}
+function salvarSaldoContaCorrente($saldo, $valorSaldo){
+
   $iCodigoReduzido = $saldo->c19_reduz;
   $sColunaImplantar = "c29_credito";
   $sColunaZerar = "c29_debito";
 
   $iAnoUsu = db_getsession("DB_anousu");
 
-      /**
-       * Remove os registros existentes na contacorrentesaldo para o ano atual e mes 0 do contacorrentedetalhe em questao
-       */
-      $oDaoContaCorrenteSaldo = new cl_contacorrentesaldo();
-      $sWhereExcluir = "c29_anousu = {$iAnoUsu} and c29_mesusu = 0 and c29_contacorrentedetalhe = {$saldo->c19_sequencial}";
-      $oDaoContaCorrenteSaldo->excluir(null, $sWhereExcluir);
-      
-      if ($oDaoContaCorrenteSaldo->erro_status == "0") {
-          throw new DBException(urlencode("ERRO [ 22 ] - Excluindo Registros - " . $oDaoContaCorrenteSaldo->erro_msg ."<br>"));
-      }
+  excluirSaldo($saldo->c19_reduz, $saldo->c19_contacorrente);
 
       if ($valorSaldo <> 0) {
-          
-          if ($valorSaldo < 0) {
 
-              $sColunaImplantar = "c29_credito";
-              $sColunaZerar = "c29_debito";
+          if ($valorSaldo > 0) {
 
-          } else {
               $sColunaImplantar = "c29_debito";
               $sColunaZerar = "c29_credito";
+
           }
 
-          
+
           /*
-           * modificação para reajustar valores, basicamente devemos verificar se
-           * ja foi feita implantação na contacorrentesaldo pelo detalhe em questão
-           * se retornar registro, para o detalhe, ano e mes = 0, significa que devemos altera-lo
-           * se não retornar significa que é a primeira vez que está sendo implantado e logo devemos incluir registro na
-           * contacorrentesaldo
-           */
+          * modificação para reajustar valores, basicamente devemos verificar se
+          * ja foi feita implantação na contacorrentesaldo pelo detalhe em questão
+          * se retornar registro, para o detalhe, ano e mes = 0, significa que devemos altera-lo
+          * se não retornar significa que é a primeira vez que está sendo implantado e logo devemos incluir registro na
+          * contacorrentesaldo
+          */
+          $oDaoContaCorrenteSaldo = new cl_contacorrentesaldo();
           $sWhereImplantacao = "     c29_contacorrentedetalhe = {$saldo->c19_sequencial} ";
           $sWhereImplantacao .= " and c29_anousu = {$iAnoUsu} ";
           $sWhereImplantacao .= " and c29_mesusu = 0 ";

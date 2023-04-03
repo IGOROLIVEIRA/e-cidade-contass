@@ -101,7 +101,6 @@ class GerarEMP extends GerarAM
         $aCSVEMP10['si106_exercicioprocessolicitatorio']  = $aEMP10['si106_exercicioprocessolicitatorio'] == 0 ? ' ' : $this->padLeftZero($aEMP10['si106_exercicioprocessolicitatorio'], 4);
         $aCSVEMP10['si106_tipoprocesso']                  = $aEMP10['si106_tipoprocesso'] == 0 ? ' ' : $this->padLeftZero($aEMP10['si106_tipoprocesso'], 1);
         $aCSVEMP10['si106_cpfordenador']                  = $this->padLeftZero($aEMP10['si106_cpfordenador'], 11);
-        $aCSVEMP10['si106_tipodespesaemprpps']            = ($aEMP10['si106_tipodespesaemprpps'] == 0) ? '' : $this->padLeftZero($aEMP10['si106_tipodespesaemprpps'], 1);
 
         $this->sLinha = $aCSVEMP10;
         $this->adicionaLinha();
@@ -116,6 +115,7 @@ class GerarEMP extends GerarAM
             $aCSVEMP11['si107_codunidadesub']   = $this->padLeftZero($aEMP11['si107_codunidadesub'], 5, strlen($aEMP11['si107_codunidadesub']) > 5 ? 8 : 5);
             $aCSVEMP11['si107_nroempenho']      = substr($aEMP11['si107_nroempenho'], 0, 22);
             $aCSVEMP11['si107_codfontrecursos'] = $this->padLeftZero($aEMP11['si107_codfontrecursos'], 3);
+            $aCSVEMP11['si107_codco'] = $this->padLeftZero($aEMP11['si107_codco'], 4);
             $aCSVEMP11['si107_valorfonte']      = $this->sicomNumberReal($aEMP11['si107_valorfonte'], 2);
 
             $this->sLinha = $aCSVEMP11;

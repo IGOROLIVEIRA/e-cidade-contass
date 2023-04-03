@@ -27,6 +27,7 @@ class cl_decretopregao {
    var $l201_datapublicacao_ano = null; 
    var $l201_datapublicacao = null; 
    var $l201_tipodecreto = 0; 
+   var $l201_instit = null; 
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  l201_sequencial = int8 = Código Sequencial 
@@ -34,6 +35,7 @@ class cl_decretopregao {
                  l201_datadecreto = date = Data do Decreto 
                  l201_datapublicacao = date = Data de Publicação 
                  l201_tipodecreto = int8 = Tipo do Decreto 
+                 l201_instit = int4 = Instituição
                  ";
    //funcao construtor da classe 
    function cl_decretopregao() { 
@@ -72,6 +74,7 @@ class cl_decretopregao {
          }
        }
        $this->l201_tipodecreto = ($this->l201_tipodecreto == ""?@$GLOBALS["HTTP_POST_VARS"]["l201_tipodecreto"]:$this->l201_tipodecreto);
+       $this->l201_instit = ($this->l201_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["l201_instit"]:$this->l201_instit);
      }else{
        $this->l201_sequencial = ($this->l201_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["l201_sequencial"]:$this->l201_sequencial);
      }
@@ -115,6 +118,9 @@ class cl_decretopregao {
        $this->erro_status = "0";
        return false;
      }
+     if($this->l201_instit == null ){
+      $this->l201_instit = db_getsession('DB_instit');
+    }
    if($l201_sequencial == "" || $l201_sequencial == null ){
        $result = db_query("select nextval('decretopregao_l201_sequencial_seq')"); 
        if($result==false){
@@ -153,13 +159,15 @@ class cl_decretopregao {
                                       ,l201_datadecreto 
                                       ,l201_datapublicacao 
                                       ,l201_tipodecreto 
+                                      ,l201_instit
                        )
                 values (
                                 $this->l201_sequencial 
                                ,$this->l201_numdecreto 
                                ,".($this->l201_datadecreto == "null" || $this->l201_datadecreto == ""?"null":"'".$this->l201_datadecreto."'")." 
                                ,".($this->l201_datapublicacao == "null" || $this->l201_datapublicacao == ""?"null":"'".$this->l201_datapublicacao."'")." 
-                               ,$this->l201_tipodecreto 
+                               ,$this->l201_tipodecreto
+                               ,$this->l201_instit
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -509,9 +517,9 @@ class cl_decretopregao {
      return $sql;
   }
   
-  function verifica_decreto_unico($numdecreto,$datadecreto,$tipodecreto) {
+  function verifica_decreto_unico($numdecreto,$datadecreto,$tipodecreto,$instit) {
   	
-  	$sql = "select * from decretopregao where l201_numdecreto = $numdecreto and l201_datadecreto = '$datadecreto' and l201_tipodecreto = $tipodecreto";
+  	$sql = "select * from decretopregao where l201_numdecreto = $numdecreto and l201_datadecreto = '$datadecreto' and l201_tipodecreto = $tipodecreto and l201_instit = " .db_getsession("DB_instit");
   	$result = db_query($sql);
   	if (pg_num_rows($result) > 0) {
   		return false;

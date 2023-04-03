@@ -7,6 +7,7 @@ require_once("classes/db_emp122023_classe.php");
 require_once("classes/db_emp302023_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarEMP.model.php");
 require_once("model/empenho/EmpenhoFinanceiro.model.php");
+require_once("model/orcamento/ControleOrcamentario.model.php");
 
 /**
  * detalhamento dos empenhos do mês Sicom Acompanhamento Mensal
@@ -154,24 +155,27 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
     $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
     // print_r('enter');
     // print_r($sArquivo);
+        if (file_exists($sArquivo)) {
+          $sTextoXml = file_get_contents($sArquivo);
+          $oDOMDocument = new DOMDocument();
+          $oDOMDocument->loadXML($sTextoXml);
+          $oElementos = $oDOMDocument->getElementsByTagName('elemento');
+
+        }
     
-    $sTextoXml = file_get_contents($sArquivo);
-    $oDOMDocument = new DOMDocument();
-    $oDOMDocument->loadXML($sTextoXml);
-    $oElementos = $oDOMDocument->getElementsByTagName('elemento');
 
     /**
      * selecionar arquivo xml de Dados Compl Licitação
      */
     $sArquivo = "config/sicom/" . (db_getsession("DB_anousu") - 1) . "/{$sCnpj}_sicomdadoscompllicitacao.xml";
-    /*if (!file_exists($sArquivo)) {
-            throw new Exception("Arquivo de dados compl licitacao inexistente!");
-        }*/
-    $sTextoXml = file_get_contents($sArquivo);
-    $oDOMDocument = new DOMDocument();
-    $oDOMDocument->loadXML($sTextoXml);
-    $oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
-
+    if (file_exists($sArquivo)) {
+            
+          $sTextoXml = file_get_contents($sArquivo);
+          $oDOMDocument = new DOMDocument();
+          $oDOMDocument->loadXML($sTextoXml);
+          $oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
+        }
+    
 
     $sSql = "SELECT si09_codorgaotce AS codorgao,
         si09_tipoinstit
@@ -192,7 +196,10 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         OR NULL THEN orcunidade.o41_unidade::varchar
         ELSE orcunidade.o41_codtri
         END AS o58_unidade,
-        o15_codtri,
+         o15_codtri,
+         o15_codigo,
+         e60_emendaparlamentar,
+        e60_esferaemendaparlamentar,
         si09_codorgaotce AS codorgao,
         lpad((CASE
         WHEN orcorgao.o40_codtri = '0'
@@ -516,7 +523,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
               break;
             }
           } elseif ($oElemento->getAttribute('elementoEcidade') == $sElemento) {
-            $sElemento;
+            $sElemento = $oElemento->getAttribute('elementoSicom');
             break;
           }
         }
@@ -695,15 +702,17 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       /*
              * verificar se o tipo de despesa se enquadra nos elementos necessários para informar esse campo para RPPS
              */
+            /*
       if (($sCodorgao->si09_tipoinstit == 5 || $sCodorgao->si09_tipoinstit == 6) && (in_array(substr($sElemento, 0, 6), $aTipoDespEmpRPPS))) {
         $oDadosEmpenho10->si106_tipodespesaemprpps = $oEmpenho10->e60_tipodespesa; // campo 35
       } else {
         $oDadosEmpenho10->si106_tipodespesaemprpps = null; // campo 35
       }
+      */
       $oDadosEmpenho10->si106_mes = $this->sDataFinal['5'] . $this->sDataFinal['6']; // campo 36
       $oDadosEmpenho10->si106_instit = db_getsession("DB_instit"); // campo 37
 
-      $oDadosEmpenho10->incluir();
+      $oDadosEmpenho10->incluir(null);
       if ($oDadosEmpenho10->erro_status == 0) {
         throw new Exception($oDadosEmpenho10->erro_msg);
       }
@@ -713,10 +722,16 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
        */
       $oDadosEmpenhoFonte = new cl_emp112023();
 
+        $oCodigoAcompanhamento = new ControleOrcamentario();
+        $oCodigoAcompanhamento->setFonte($oEmpenho10->o15_codigo);
+        $oCodigoAcompanhamento->setEmendaParlamentar($oEmpenho10->e60_emendaparlamentar);
+        $oCodigoAcompanhamento->setEsferaEmendaParlamentar($oEmpenho10->e60_esferaemendaparlamentar);
+
       $oDadosEmpenhoFonte->si107_tiporegistro = 11;
       $oDadosEmpenhoFonte->si107_codunidadesub = $sCodUnidade;
       $oDadosEmpenhoFonte->si107_nroempenho = $oEmpenho10->nroempenho;
       $oDadosEmpenhoFonte->si107_codfontrecursos = $oEmpenho10->o15_codtri;
+        $oDadosEmpenhoFonte->si107_codco = $oCodigoAcompanhamento->getCodigoParaEmpenho();
       $oDadosEmpenhoFonte->si107_valorfonte = $oEmpenho10->vlbruto;
       $oDadosEmpenhoFonte->si107_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
       $oDadosEmpenhoFonte->si107_reg10 = $oDadosEmpenho10->si106_sequencial;
@@ -871,7 +886,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
           $oDadosEmpenho30->si206_mes = $this->sDataFinal['5'] . $this->sDataFinal['6']; // campo 36
           $oDadosEmpenho30->si206_instit = db_getsession("DB_instit"); // campo 37
 
-          $oDadosEmpenho30->incluir();
+          $oDadosEmpenho30->incluir(null);
         }
       }
 

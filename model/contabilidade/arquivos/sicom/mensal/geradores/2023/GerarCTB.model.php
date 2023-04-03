@@ -72,7 +72,6 @@ class GerarCTB extends GerarAM
                 $aCSVCTB10['si95_contabancaria']                  = substr($aCTB10['si95_contabancaria'], 0, 12);
                 $aCSVCTB10['si95_digitoverificadorcontabancaria'] = substr($aCTB10['si95_digitoverificadorcontabancaria'], 0, 2);
                 $aCSVCTB10['si95_tipoconta']                      = $this->padLeftZero($aCTB10['si95_tipoconta'], 2);
-                $aCSVCTB10['si95_tipoaplicacao']                  = $this->padLeftZero($aCTB10['si95_tipoaplicacao'], 2) == 0 ? " " : $this->padLeftZero($aCTB10['si95_tipoaplicacao'], 2);
                 $aCSVCTB10['si95_nroseqaplicacao']                = substr($aCTB10['si95_nroseqaplicacao'], 0, 2) == 0 ? " " : substr($aCTB10['si95_nroseqaplicacao'], 0, 2);
                 $aCSVCTB10['si95_desccontabancaria']              = substr($aCTB10['si95_desccontabancaria'], 0, 50) == "" ? " " : substr($aCTB10['si95_desccontabancaria'], 0, 50);
                 $aCSVCTB10['si95_contaconvenio']                  = $this->padLeftZero($aCTB10['si95_contaconvenio'], 1) == 0 ? " " : $this->padLeftZero($aCTB10['si95_contaconvenio'], 1);
@@ -135,6 +134,7 @@ class GerarCTB extends GerarAM
                         $aCSVCTB21['si97_codctbtransf']       = $aCTB21['si97_codctbtransf'] != 0 ? substr($aCTB21['si97_codctbtransf'], 0, 20) : ' ';
                         $aCSVCTB21['si97_codfontectbtransf']  = $this->padLeftZero($aCTB21['si97_codfontectbtransf'], 3) != 0 ? $this->padLeftZero($aCTB21['si97_codfontectbtransf'], 3) : ' ';
                         $aCSVCTB21['si97_saldocectransf']     = $this->padLeftZero($aCTB21['si97_saldocectransf'], 1) != 0 ? $this->padLeftZero($aCTB21['si97_saldocectransf'], 1) : ' ';
+                        $aCSVCTB21['si97_codidentificafr']    = $aCTB21['si97_codidentificafr'];
 
                         $this->sLinha = $aCSVCTB21;
                         $this->adicionaLinha();
@@ -152,6 +152,7 @@ class GerarCTB extends GerarAM
                                 $aCSVCTB22['si98_identificadordeducao'] = $aCTB22['si98_identificadordeducao'] == '0' ? ' ' : $this->padLeftZero($aCTB22['si98_identificadordeducao'], 2);
                                 $aCSVCTB22['si98_naturezareceita']      = $this->padLeftZero($aCTB22['si98_naturezareceita'], 8);
                                 $aCSVCTB22['si98_codfontrecursos']      = ($aCTB22['si98_codfontrecursos'] == 0 ? ' ' : $aCTB22['si98_codfontrecursos']);
+                                $aCSVCTB22['si98_codco']                = ($aCTB22['si98_codco'] == '' ? '0000' : $aCTB22['si98_codco']);
                                 $aCSVCTB22['si98_saldocec']             = $this->padLeftZero($aCTB22['si98_saldocec'], 1);
                                 $aCSVCTB22['si98_vlrreceitacont']       = $this->sicomNumberReal($aCTB22['si98_vlrreceitacont'], 2);
 

@@ -164,6 +164,17 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         text-indent: 1px;
         text-overflow: '';
     }
+
+    #l20_categoriaprocesso,
+    #l20_tipliticacao,
+    #l20_tipnaturezaproced,
+    #l20_regimexecucao {
+        width: 307px;
+    }
+
+    #l20_mododisputa {
+        width: 169px;
+    }
 </style>
 <form name="form1" method="post" action="" onsubmit="js_ativaregistro()">
     <input type="hidden" id="modalidade_tribunal" name="modalidade_tribunal">
@@ -310,7 +321,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     <td>
                                         <?
                                         db_input('l20_codepartamento', 4, $Il20_codepartamento, true, 'text', $db_opcao, "onchange='js_pesquisal20_codepartamento(false)';");
-                                        db_input('l20_descricaodep', 38, $Il20_descricaodep, true, 'text', 3, "");
+                                        db_input('l20_descricaodep', 40, $Il20_descricaodep, true, 'text', 3, "");
                                         ?>
                                     </td>
                                 </tr>
@@ -368,7 +379,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
                                     </td>
                                 </tr>
-                                <tr style="display:none;" id="respAvaliaBens">
+                                <tr style="display:none" id="respAvaliaBens">
                                     <td nowrap title="respAvaliBenscodigo">
                                         <?
                                         db_ancora("Resp.Avaliação de Bens:", "js_pesquisal31_numcgm(true,'respAvaliBenscodigo','respAvaliBensnome');", $db_opcao)
@@ -382,7 +393,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
-                                <tr id="respCondProcesso">
+                                <tr id="respCondProcesso" style="display:none">
                                     <td nowrap title="respConducodigo">
                                         <?
                                         db_ancora("Resp.Condução do Processo:", "js_pesquisal31_numcgm(true,'respConducodigo','respCondunome');", $db_opcao)
@@ -419,7 +430,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-                                <tr>
+                                <tr id='l20_tipliticacao'>
 
                                     <td nowrap title="<?= @$Tl20_tipliticacao ?>" id="tipolicitacao">
                                         <strong>Critério de Julgamento: </strong>
@@ -429,17 +440,21 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         <?
                                         $arr_tipo = array(
                                             "0" => "Selecione",
-                                            "1" => "1- Menor Preço",
-                                            "2" => "2- Melhor Técnica",
-                                            "3" => "3- Técnica e Preço",
-                                            "4" => "4- Maior Lance ou Oferta"
+                                            "1" => "1- Menor preço",
+                                            "2" => "2- Maior desconto",
+                                            "4" => "4- Técnica e preço",
+                                            "5" => "5- Maior lance",
+                                            "6" => "6- Maior retorno econômico",
+                                            "7" => "7- Não se aplica",
+                                            "8" => "8- Melhor técnica",
+                                            "9" => "9- Conteúdo artístico"
                                         );
                                         db_select("l20_tipliticacao", $arr_tipo, true, $db_opcao);
                                         ?>
                                     </td>
                                 </tr>
 
-                                <tr>
+                                <tr id="l20_tipnaturezaproced">
                                     <td nowrap title="<?= @$Tl20_tipnaturezaproced ?>" id="tipnaturezaproced">
                                         <?= @$Ll20_tipnaturezaproced ?>
                                     </td>
@@ -465,6 +480,29 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             ?>
                                         </td>
                                     </tr>
+                                    <tr id="categoriaprocesso" style="display:none">
+                                        <td>
+                                            <strong>Categoria do Processo:</strong>
+                                        </td>
+                                        <td>
+                                            <?
+                                            $al20_categoriaprocesso = array(
+                                                "0" => "Selecione",
+                                                "1" => "1- Cessão",
+                                                "2" => "2- Compras",
+                                                "3" => "3- Informática (TIC)",
+                                                "4" => "4- Internacional",
+                                                "5" => "5- Locação Imóveis",
+                                                "6" => "6- Mão de Obra",
+                                                "7" => "7- Obras",
+                                                "8" => "8- Serviços",
+                                                "9" => "9- Serviços de Engenharia",
+                                                "10" => "10- Serviços de Saúde"
+                                            );
+                                            db_select("l20_categoriaprocesso", $al20_categoriaprocesso, true, $db_opcao, '');
+                                            ?>
+                                        </td>
+                                    </tr>
                                     <tr style="display:none;" id="respObras">
                                         <td nowrap title="respObrascodigo">
                                             <?
@@ -480,7 +518,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         </td>
                                     </tr>
                                 </span>
-                                <tr>
+                                <tr id="l20_regimexecucao">
                                     <td nowrap title="<?= @$Tl20_regimexecucao ?>">
                                         <?= @$Ll20_regimexecucao ?>
                                     </td>
@@ -501,7 +539,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         ?>
                                     </td>
                                 </tr>
-                                <tr>
+                                <tr id="l20_criterioadjudicacao">
                                     <td id="descontotab">
                                         <label class="bold">Critério de Adjudicação:</label>
                                     </td>
@@ -519,7 +557,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-                                <tr id="disputa">
+                                <tr id="disputa" style="display:none">
                                     <td nowrap title="Modo de disputa">
                                         <b>Modo de disputa: </b>
                                     </td>
@@ -628,7 +666,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-                                <tr>
+                                <tr id="dataaber">
                                     <td nowrap title="Data Emis/Alt Edital/Convite" id="dataaber">
                                         <b> Data Emis/Alt Edital/Convite : </b>
                                     </td>
@@ -761,32 +799,24 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                 </tr>
                                 -->
 
-                                <tr>
-                                    <td nowrap title="<?= @$Tl20_recdocumentacao ?>" id="recdocumentacao">
-                                        <b>Abertura das Propostas :</b>
+                                <tr id="dataaberturapncp" style="display: none;">
+                                    <td>
+                                        <b>Data Abertura Proposta :</b>
                                     </td>
                                     <td>
                                         <?
-                                        db_inputdata('l20_recdocumentacao', @$l20_recdocumentacao_dia, @$l20_recdocumentacao_mes, @$l20_recdocumentacao_ano, true, 'text', $db_opcao, "");
+                                        db_inputdata("l20_dataaberproposta", @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'text', $db_opcao, "");
                                         ?>
                                     </td>
                                 </tr>
-                                <tr>
+
+                                <tr id="dataencerramentopncp" style="display: none;">
                                     <td>
-                                        <b class="dataabertura" style="display: none;">Data Abertura Proposta :</b>
+                                        <b> Data Encerramento Proposta: </b>
                                     </td>
                                     <td>
                                         <?
-
-                                        db_inputdata("l20_dataaberproposta", @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'text', $db_opcao, "style='display:none;' class='dataabertura'");
-                                        echo "<script> document.getElementById('dtjs_l20_dataaberproposta').style.display = 'none' </script>";
-                                        ?>
-                                        <b id="dataencerramentoid" class="dataencerramento" style="display: none;"> Data Encerramento Proposta: </b>
-                                        <?
-
-                                        db_inputdata("l20_dataencproposta", @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'text', $db_opcao, "style='display:none;' class='dataencerramento'");
-                                        echo "<script> document.getElementById('dtjs_l20_dataencproposta').style.display = 'none' </script>";
-
+                                        db_inputdata("l20_dataencproposta", @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'text', $db_opcao, "");
                                         ?>
                                     </td>
                                 </tr>
@@ -955,42 +985,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 <?
                 db_input('l20_liclocal', 10, $Il20_liclocal, true, 'hidden', $db_opcao, " onchange='js_pesquisal20_liclocal(false);'")
                 ?>
-                <!--            
-                                    </td>
-                                </tr> -->
                 <?
                 db_input('l20_liccomissao', 10, $Il20_liccomissao, true, 'hidden', $db_opcao, " onchange='js_pesquisal20_liccomissao(false);'")
-                /*
-                                if(db_getsession("DB_anousu") >= 2016){
-                                    ?>
-                                    <tr>
 
-                                        <td>
-                                            <?
-                                            db_input('l20_liccomissao',10,$Il20_liccomissao,true,'hidden',$db_opcao," onchange='js_pesquisal20_liccomissao(false);'")
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <?
-                                }else {
-                                    ?>
-                                    <tr>
-                                        <td nowrap title="<?=@$Tl20_liccomissao?>">
-                                            <?
-                                            db_ancora(@$Ll20_liccomissao,"js_pesquisal20_liccomissao(true);",$db_opcao);
-                                            ?>
-                                        </td>
-                                        <td>
-                                            <?
-                                            db_input('l20_liccomissao',10,$Il20_liccomissao,true,'text',$db_opcao," onchange='js_pesquisal20_liccomissao(false);'")
-                                            ?>
-                                        </td>
-                                    </tr>
-                                    <?
-                                }*/
                 ?>
-                <tr style="padding-bottom:70px important!;">
-                    <td nowrap title="<?= @$Tl20_equipepregao ?>" id="equipepregao">
+                <tr style="padding-bottom:70px important!;" id="equipepregao">
+                    <td nowrap title="<?= @$Tl20_equipepregao ?>">
                         <?
                         db_ancora(@$Ll20_equipepregao, "js_pesquisal20_equipepregao(true);", $db_opcao);
                         ?>
@@ -1145,8 +1145,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 </tr>
 
 
-                <tr>
-                    <td nowrap title="<?= @$Tl20_aceitabilidade ?>" id="aceitabilidade">
+                <tr id="aceitabilidade">
+                    <td nowrap title="<?= @$Tl20_aceitabilidade ?>">
                         <b>Critério de Aceitabilidade:</b>
                     </td>
                     <td>
@@ -1156,6 +1156,16 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                     </td>
                 </tr>
 
+                <tr id="justificativapncp" style="display:none">
+                    <td>
+                        <strong>Justificativa pela escolha da modalidade presencial:</strong>
+                    </td>
+                    <td>
+                        <?
+                        db_textarea('l20_justificativapncp', 0, 57, $Il20_justificativapncp, true, 'text', $db_opcao, "onkeyup='limitaTextarea(this);'");
+                        ?>
+                    </td>
+                </tr>
             </table>
         </fieldset>
 
@@ -1300,8 +1310,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("l20_codtipocomdescr").disabled = true;
         }
 
-        document.getElementById("respCondunome").style.width = "251px";
-        document.getElementById("l20_descricaodep").style.width = "251px";
+        document.getElementById("respCondunome").style.width = "258px";
+        document.getElementById("l20_descricaodep").style.width = "258px";
         document.getElementById("lprocsis").style.width = "85px";
         document.getElementById("l20_usaregistropreco").style.width = "85px";
         document.getElementById("l20_codtipocomdescr").style.width = "307px";
@@ -1364,13 +1374,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             var campo = document.getElementById("l20_codtipocomdescr").options[document.getElementById("l20_codtipocomdescr").selectedIndex].text;
             document.getElementById("convite1").style.display = "none";
             if (campo == "CONCURSO") {
-                document.getElementById("tipolicitacao").style.display = 'none';
+                document.getElementById("l20_tipliticacao").style.display = "none";
                 document.getElementById("licitacao1").style.display = "none";
                 document.getElementById("natureOB").style.display = "none";
                 document.getElementById("natureOB1").style.display = "none";
             } else {
                 document.getElementById("licitacao1").style.display = "table-cell";
-                document.getElementById("tipolicitacao").style.display = "table-cell";
+                document.getElementById("l20_tipliticacao").style.display = "";
                 document.getElementById("natureOB").style.display = "table-cell";
                 document.getElementById("natureOB1").style.display = "table-cell";
             }
@@ -1387,6 +1397,23 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
 
         if (oRetorno.tribunal == 100 || oRetorno.tribunal == 101 || oRetorno.tribunal == 102 || oRetorno.tribunal == 103) {
+            document.getElementById("respCondProcesso").style.display = "none";
+            document.getElementById("l20_tipliticacao").style.display = "none";
+            document.getElementById("l20_tipnaturezaproced").style.display = "none";
+            //document.getElementById("l20_regimexecucao").style.display = "none";
+            document.getElementById("l20_criterioadjudicacao").style.display = "none";
+            document.getElementById("disputa").style.display = "none";
+            document.getElementById("respAutoProcesso").style.display = '';
+            document.getElementById("respAberProcesso").style.display = "none";
+            document.getElementById("respEmissaoEdi").style.display = "none";
+            document.getElementById("dataaber").style.display = "none";
+            document.getElementById("dataaberturapncp").style.display = "none";
+            document.getElementById("equipepregao").style.display = 'none';
+            document.getElementById("usaregistropreco").style.display = 'none';
+            document.getElementById("aceitabilidade").style.display = 'none';
+            document.getElementById("linha_nroedital").style.display = 'none';
+
+
 
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
             listaNatureza.remove(7);
@@ -1400,6 +1427,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             listaNatureza.add(new Option('2- Compras e Outros Serviços', 2));
             listaNatureza.add(new Option('3- Locação de Imóveis', 3));
             listaNatureza.add(new Option('7- Compras Para Obras e/ou Serviços de Engenharia', 7));
+
             document.querySelector("#l20_naturezaobjeto").value = oRetornoNatu;
             document.form1.l20_justificativa.style.backgroundColor = '#FFFFFF ';
             document.form1.l20_razao.style.backgroundColor = '#FFFFFF ';
@@ -1408,36 +1436,40 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("l20_tipoprocesso").disabled = false;
             document.getElementById("dispensa").style.display = 'block';
             document.getElementById("recdocumentacao").style.display = 'none';
+
             /*Demandas sicom 2016*/
-            document.form1.l20_tipliticacao.style.display = 'none';
-            document.form1.l20_tipnaturezaproced.style.display = 'none';
-            document.form1.l20_criterioadjudicacao.style.display = 'none';
             document.form1.l20_numeroconvidado.style.display = 'none';
             document.form1.l20_dataaber.style.display = 'none';
             document.form1.dtjs_l20_dataaber.style.display = 'none';
             document.form1.l20_recdocumentacao.style.display = 'none';
             document.form1.dtjs_l20_recdocumentacao.style.display = 'none';
             document.form1.l20_usaregistropreco.style.display = 'none';
-            document.form1.l20_equipepregao.style.display = 'none';
             document.form1.l20_local.style.display = 'none';
-            document.form1.l20_aceitabilidade.style.display = 'none';
             document.getElementById("tipolicitacao").style.display = 'none';
             document.getElementById("tipnaturezaproced").style.display = 'none';
             document.getElementById("descontotab").style.display = 'none';
             document.getElementById("numeroconvidado").style.display = 'none';
-            document.getElementById("dataaber").style.display = 'none';
             document.getElementById("recdocumentacao").style.display = 'none';
-            document.getElementById("usaregistropreco").style.display = 'none';
-            document.getElementById("equipepregao").style.display = 'none';
             document.getElementById("local").style.display = 'none';
-            document.getElementById("aceitabilidade").style.display = 'none';
-            document.getElementById("respAutoProcesso").style.display = "table-row";
             document.getElementById("respAvaliaBens").style.display = "none";
-            document.getElementById("respCondProcesso").style.display = "none";
             document.getElementById("respAberProcesso").style.display = "none";
             document.getElementById("respEmissaoEdi").style.display = "none";
 
         } else {
+            document.getElementById("respCondProcesso").style.display = '';
+            document.getElementById("l20_tipliticacao").style.display = '';
+            document.getElementById("l20_tipnaturezaproced").style.display = '';
+            //document.getElementById("l20_regimexecucao").style.display = '';
+            document.getElementById("l20_criterioadjudicacao").style.display = '';
+            document.getElementById("respAutoProcesso").style.display = "none";
+            document.getElementById("respAberProcesso").style.display = '';
+            document.getElementById("respEmissaoEdi").style.display = '';
+            document.getElementById("dataaber").style.display = '';
+            document.getElementById("dataaberturapncp").style.display = '';
+            document.getElementById("equipepregao").style.display = '';
+            document.getElementById("usaregistropreco").style.display = '';
+            document.getElementById("aceitabilidade").style.display = '';
+            document.getElementById("linha_nroedital").style.display = '';
 
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
 
@@ -1462,15 +1494,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("l20_tipoprocesso").disabled = true;
             document.getElementById("dispensa").style.display = 'none';
             var codigo_lei = document.form1.l20_leidalicitacao.value;
+
             if (codigo_lei == 1) {
                 document.getElementById("disputa").style.display = '';
             }
-
             //OC17312toda vez que fizer uma alteração na modalidade a opção de lei de licitação volta para selecionar para que o usuario coloque novamente a lei
 
             /*Demandas sicom 2016*/
-            document.form1.l20_tipliticacao.style.display = 'inline';
-            document.form1.l20_tipnaturezaproced.style.display = 'inline';
             document.form1.l20_criterioadjudicacao.style.display = 'inline';
             document.form1.l20_numeroconvidado.style.display = 'inline';
             document.form1.l20_dataaber.style.display = 'inline';
@@ -1480,21 +1510,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.form1.l20_usaregistropreco.style.display = 'inline';
             document.form1.l20_equipepregao.style.display = 'inline';
             document.form1.l20_local.style.display = 'inline';
-            document.form1.l20_aceitabilidade.style.display = 'inline';
             document.getElementById("tipnaturezaproced").style.display = 'inline';
             document.getElementById("descontotab").style.display = 'inline';
             document.getElementById("numeroconvidado").style.display = 'inline';
-            document.getElementById("dataaber").style.display = 'inline';
             document.getElementById("recdocumentacao").style.display = 'inline';
-            document.getElementById("usaregistropreco").style.display = 'inline';
             document.getElementById("equipepregao").style.display = 'inline';
             document.getElementById("local").style.display = 'inline';
-            document.getElementById("aceitabilidade").style.display = 'inline';
 
-            document.getElementById("respAutoProcesso").style.display = "none";
-            document.getElementById("respCondProcesso").style.display = "table-row";
-            document.getElementById("respAberProcesso").style.display = "table-row";
-            document.getElementById("respEmissaoEdi").style.display = "table-row";
         }
 
         let aModalidades = ['48', '49', '50', '52', '53', '54'];
@@ -1685,10 +1707,23 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         var oRetorno = eval("(" + oAjax.responseText + ")");
         codigotribunal = oRetorno.l03_pctipocompratribunal;
+        presencial = oRetorno.l03_presencial;
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
 
-        if (document.getElementById('l20_leidalicitacao').value == "1" && l12_pncp == "t" && (codigotribunal == 100 || codigotribunal == 101 || codigotribunal == 102 || codigotribunal == 103)) {
+        if (presencial == 't' && l12_pncp == 't') {
+            document.getElementById('justificativapncp').style.display = '';
+        } else {
+            document.getElementById('justificativapncp').style.display = 'none';
+        }
+
+        if (l12_pncp == 't') {
+            document.getElementById('categoriaprocesso').style.display = '';
+            document.getElementById('dataaberturapncp').style.display = '';
+            document.getElementById('dataencerramentopncp').style.display = '';
+        }
+
+        if (document.getElementById('l20_leidalicitacao').value == "1" && l12_pncp == "t") {
             document.getElementById('dtjs_l20_dataaberproposta').style.display = '';
             for (const s of document.getElementsByClassName("dataabertura")) {
                 s.style.display = '';
@@ -1697,26 +1732,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         } else {
             document.getElementById('dtjs_l20_dataaberproposta').style.display = 'none';
             for (const s of document.getElementsByClassName("dataabertura")) {
-                s.style.display = 'none';
-            }
-        }
-
-        if (document.getElementById('l20_leidalicitacao').value == "1" && l12_pncp == "t" && document.getElementById("l20_codtipocomdescr").value != 99) {
-            document.getElementById('dtjs_l20_dataencproposta').style.display = '';
-            for (const s of document.getElementsByClassName("dataencerramento")) {
-                s.style.display = '';
-            }
-            if (codigotribunal != 100 && codigotribunal != 101 && codigotribunal != 102 && codigotribunal != 103) {
-                document.getElementById('l20_dataencproposta').style.marginLeft = '12px';
-                document.getElementById('dataencerramentoid').style.marginLeft = '-185px';
-            } else {
-                document.getElementById('l20_dataencproposta').style.marginLeft = '0px';
-                document.getElementById('dataencerramentoid').style.marginLeft = '0px';
-            }
-
-        } else {
-            document.getElementById('dtjs_l20_dataencproposta').style.display = 'none';
-            for (const s of document.getElementsByClassName("dataencerramento")) {
                 s.style.display = 'none';
             }
         }
@@ -1736,9 +1751,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             parameters: 'json=' + Object.toJSON(oParam),
             onComplete: js_retornoVerificaModalidade
         });
-
-
-
 
     }
 
@@ -2076,12 +2088,12 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
         var db_opcao = <? echo '"' . $db_opcao . '"';      ?>;
 
-        if (document.getElementById('l20_dataaberproposta').style.display == "" && document.getElementById('l20_dataaberproposta').value == "" && db_opcao != 3) {
+        if (l12_pncp == 't' && document.getElementById('l20_dataaberproposta').style.display == "" && document.getElementById('l20_dataaberproposta').value == "" && db_opcao != 3) {
             alert("Campo Data de Abertura da Proposta não Informado");
             return false;
         }
 
-        if (document.getElementById('l20_dataencproposta').style.display == "" && document.getElementById('l20_dataencproposta').value == "" && db_opcao != 3) {
+        if (l12_pncp == 't' && document.getElementById('l20_dataencproposta').style.display == "" && document.getElementById('l20_dataencproposta').value == "" && db_opcao != 3) {
             alert("Campo Data de Encerramento da Proposta não Informado");
             return false;
         }
@@ -2156,13 +2168,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         $('l20_usaregistropreco').disabled = "disabled";
     }
 
-
-
-    //$('l20_descontotab').value='2';
-
-
-    // document.form1.l20_dtpubratificacao.style.backgroundColor='#E6E4F1';
-    // document.form1.l20_veicdivulgacao.style.backgroundColor='#E6E4F1';
     document.form1.l20_justificativa.style.backgroundColor = '#E6E4F1';
     document.form1.l20_razao.style.backgroundColor = '#E6E4F1';
     document.getElementById("l20_numeroconvidado").readOnly = true;
@@ -2205,7 +2210,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById(valor.name).value = qnt;
         }
 
-        quantidade = 499;
+        quantidade = 999;
         total = qnt.length;
 
         if (total <= quantidade) {
@@ -2245,7 +2250,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         let modalidade = document.form1.modalidade_tribunal.value;
 
-        if (lei == 1) {
+        /*if (lei == 1) {
             opcoesreg.remove(7);
             opcoesreg.remove(6);
             opcoesreg.remove(5);
@@ -2287,7 +2292,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             opcoesreg.add(new Option('4- Maior Lance ou Oferta', 4));
 
             document.querySelector("#l20_tipliticacao").value = oRetornoTipo;
-        }
+        }*/
         if (document.getElementById('l20_codtipocomdescr').value != 99) numeracaopreenchida = true;
         js_ProcCod_l20_codtipocom('l20_codtipocomdescr', 'l20_codtipocom');
 

@@ -160,6 +160,24 @@ if (isset($incluir)) {
 			$sqlerro = true;
 		}
 	}
+
+	if ($l20_categoriaprocesso == 0 && $l12_pncp == 't') {
+		$erro_msg .= 'Campo categoria do processo não informado\n\n';
+		$sqlerro = true;
+	}
+
+	//verifica modalidades e presencial
+	$sSql = $clcflicita->sql_query_file(null, 'l03_presencial', '', "l03_codigo = $oPost->l20_codtipocom");
+	$aCf = db_utils::getColectionByRecord($clcflicita->sql_record($sSql));
+	$sPresencial = $aCf[0]->l03_presencial;
+
+	if ($sPresencial == 't' && $l12_pncp == 't') {
+		if ($oPost->l20_justificativapncp == '' || $oPost->l20_justificativapncp == null) {
+			$erro_msg .= 'Campo Justificativa PNCP não informado\n\n';
+			$sqlerro = true;
+		}
+	}
+
 	/*
     Verifica se o Campo "Natureza do Objeto" no foi selecionado.
   */
@@ -170,16 +188,6 @@ if (isset($incluir)) {
 		}
 	}
 
-	/*
-    Verifica se o campo "Regime de execução" foi selecionado
-  */
-
-	if ($oPost->l20_naturezaobjeto == 1 || $oPost->l20_naturezaobjeto == 7) {
-		if ($oPost->l20_regimexecucao == 0) {
-			$erro_msg .= 'Campo Regime da Execução não selecionado\n\n';
-			$sqlerro = true;
-		}
-	}
 
 	/*
    Validações dos membros da licitação
@@ -218,6 +226,16 @@ if (isset($incluir)) {
 			if ($respAvaliBenscodigo == "") {
 				$erro_msg .= 'Responsável pela avaliação de bens não informado\n\n';
 				$nomeCampo = "respAvaliBenscodigo";
+				$sqlerro = true;
+			}
+		}
+
+		/*
+    	Verifica se o campo "Regime de execução" foi selecionado
+  		*/
+		if ($oPost->l20_naturezaobjeto == 1 || $oPost->l20_naturezaobjeto == 7) {
+			if ($oPost->l20_regimexecucao == 0) {
+				$erro_msg .= 'Campo Regime da Execuçãoooooooooooooooooooooooo não selecionado\n\n';
 				$sqlerro = true;
 			}
 		}
@@ -296,12 +314,6 @@ if (isset($incluir)) {
 			$sqlerro = true;
 		}
 
-		// if ($sqlerro == false){
-		// #1
-		// $clpccflicitapar->l25_numero=$l25_numero+1;
-		// $clpccflicitapar->alterar_where(null,"l25_codigo = $l25_codigo and l25_anousu = $anousu");
-		// }
-
 		//numeração geral
 
 		if ($clpccflicitanum->numrows > 0) {
@@ -343,16 +355,6 @@ if (isset($incluir)) {
 			}
 		}
 
-
-		// if ($sqlerro == false){
-		// #2
-		// $clpccflicitanum->l24_numero=$l24_numero+1;
-		// $clpccflicitanum->alterar_where(null,"l24_instit=$instit and l24_anousu=$anousu");
-		// } else {
-		//   $sqlerro = true;
-		// }
-
-
 		//verifica se ja existe licitacao por modalidade
 		$sqlveriflicitamod = $clpccflicitapar->sql_query_mod_licita(null, "l25_numero as xx", null, "l20_instit=$instit and l25_anousu=$anousu and l20_codtipocom=$l20_codtipocom and l20_numero=$l20_numero and l20_anousu=$anousu");
 		$result_verif_licitamod = $clpccflicitapar->sql_record($sqlveriflicitamod);
@@ -379,18 +381,6 @@ if (isset($incluir)) {
 				$sqlerro = true;
 			}
 		}
-
-
-		//    /**
-		//     * Verificar Encerramento Periodo Contabil
-		//     */
-		//    if (!empty($l20_dtpubratificacao)) {
-		//			$clcondataconf = new cl_condataconf;
-		//	    if (!$clcondataconf->verificaPeriodoContabil($l20_dtpubratificacao)) {
-		//	      $erro_msg = $clcondataconf->erro_msg;
-		//	      $sqlerro  = true;
-		//	    }
-		//    }
 
 		/**
 		 * Verificar Encerramento Periodo Patrimonial
@@ -438,6 +428,8 @@ if (isset($incluir)) {
 			$clliclicita->l20_instit      = db_getsession("DB_instit");
 
 			$clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao; //OC3770
+			$clliclicita->l20_justificativapncp = $l20_justificativapncp;
+			$clliclicita->l20_categoriaprocesso = $l20_categoriaprocesso;
 			$clliclicita->incluir(null, null);
 
 			if ($clliclicita->erro_status == "0") {

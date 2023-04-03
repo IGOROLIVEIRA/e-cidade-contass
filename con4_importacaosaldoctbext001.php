@@ -66,12 +66,12 @@ $iAnoSessao = db_getsession("DB_anousu");
           </tr>
 		  <tr>
 			<td>
-                <label for="contaCorrente"><b>Implantação Conta Corrente:</b></label><br>
+                <label for="contaCorrente"><b>Somente Atualizar Conta Corrente?</b></label><br>
 			</td>
 			<td>
 				<select name="contaCorrente" id="contaCorrente" style="width: 84px;">
-				<option value="1">Sim</option>
-				<option value="0">Não</option>
+                    <option value="0">Não</option>
+                    <option value="1">Sim</option>
 				</select>
 			</td>
 		  </tr>
@@ -120,7 +120,6 @@ $iAnoSessao = db_getsession("DB_anousu");
     novoAjax(params, function(e) {
       var oRetorno = JSON.parse(e.responseText);
       js_removeObj('div_aguarde');
-		console.log(oRetorno.sArquivoLog);
 	  if (oRetorno.sArquivoLog != '') {
 		$('retorno').innerHTML = "<b>Contas não implantadas: </b>"
 	  	$('retorno').innerHTML += "<a href='db_download.php?arquivo="+oRetorno.sArquivoLog+"'>"+oRetorno.sArquivoLog+"</a><br>";

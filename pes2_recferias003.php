@@ -24,7 +24,7 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-phpinfo();
+
 require ("libs/db_stdlib.php");
 require ("libs/db_utils.php");
 require ("libs/db_conecta.php");

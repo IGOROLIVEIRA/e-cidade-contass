@@ -29,7 +29,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
 }
 
 ?>
-<fieldset style="width: 650px; margin-top: 0px;">
+<fieldset style="width: 700px; margin-top: 0px;">
   <legend><b>Informações do Orgão Gerenciador</b></legend>
   <form name="form1" method="post" action="">
     <center>

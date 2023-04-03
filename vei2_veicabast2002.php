@@ -146,7 +146,7 @@ $sCampos = " distinct
 	      ve01_codigo,
 	      ve01_placa,
 	      z01_numcgm cgmposto,
-	      case when ve71_nota is null or ve71_nota = '' then 'INTERNO' else z01_nome end as posto,
+	      z01_nome as posto,
               ve70_codigo,
               ve70_dtabast as ve70_data,
               ve70_hora,
@@ -166,7 +166,7 @@ $sCampos = " distinct
                   ve70_litros
               end as ve70_litros,
               ve70_valor,
-              e60_codemp||'/'||e60_anousu as numemp ";
+              e60_codemp||'/'||e60_anousu as numemp,ve71_veiccadposto ";
 
 if($exibir_cupom){
     $sCampos .= ', ve71_nota';

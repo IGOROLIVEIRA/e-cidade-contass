@@ -1,4 +1,5 @@
 <?php
+
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBselller Servicos de Informatica
@@ -332,6 +333,66 @@ $oGet = db_utils::postMemory($_GET);
 
                                     break;
 
+                                case 'obra':
+
+                                    var aRow = new Array();
+
+                                    aRow[0] = oDado.sequencial;
+                                    aRow[1] = oDado.obra;
+                                    if(oDado.situacao == 1){
+                                        aRow[2] = "Não Iniciada";
+                                    }else if(oDado.situacao == 2){
+                                        aRow[2] = "Iniciada";
+                                    }else if(oDado.situacao == 3){
+                                        aRow[2] = "Paralisada por rescisão contratual";
+                                    }else if(oDado.situacao == 4){
+                                        aRow[2] = "Paralisada";
+                                    }else if(oDado.situacao == 5){
+                                        aRow[2] = "Concluída e não recebida";
+                                    }else if(oDado.situacao == 6){
+                                        aRow[2] = "Concluída e recebida provisoriamente";
+                                    }else if(oDado.situacao == 7){
+                                        aRow[2] = "Concluída e recebida definitivamente";
+                                    }else if(oDado.situacao == 8){
+                                        aRow[2] = "Reiniciada";
+                                    }else{
+                                        aRow[2] = "-";
+                                    }
+                                    if(oDado.situacao != ""){
+                                        aRow[3] = js_formatar(oDado.dtsituacao,'d');
+                                    }else{
+                                        aRow[3] = "-";
+                                    }
+                                    if(oDado.dtentregamedicao != ""){
+                                        if(oDado.tipomedicao == 1){
+                                            aRow[4] = "Medição a preços iniciais";
+                                        }else if(oDado.tipomedicao == 2){
+                                            aRow[4] = "Medição de reajuste";
+                                        }else if(oDado.tipomedicao == 3){
+                                            aRow[4] = "Medição complementar";
+                                        }else if(oDado.tipomedicao == 4){
+                                            aRow[4] = "Medição final";
+                                        }else if(oDado.tipomedicao == 5){
+                                            aRow[4] = "Medição de termo aditivo";
+                                        }else if(oDado.tipomedicao == 9){
+                                            aRow[4] = "Outro documento de medição";
+                                        }
+                                        aRow[5] = js_formatar(oDado.dtentregamedicao,'d');
+                                        aRow[6] = js_formatar(oDado.vlrmedicao,'f',2);
+                                    }else{
+                                        aRow[4] = "-";
+                                        aRow[5] = "-";
+                                        aRow[6] = "-";
+                                    }
+                                    oGrvDetalhes.addRow(aRow);
+
+                                    var oDadosHint = new Object();
+                                    oDadosHint.idLinha = oGrvDetalhes.aRows[iInd].sId;
+                                    oDadosHint.sText = sTextEvent;
+                                    aDadosHintGrid.push(oDadosHint);
+
+                                    break;
+                                    
                                 case 'licrealizadaoutrosorgaos':
 
                                     var aRow = new Array();
@@ -619,6 +680,20 @@ $oGet = db_utils::postMemory($_GET);
                 oGrvDetalhes.setCellWidth(['15%', '55%', '15%', '15%']);
                 oGrvDetalhes.setCellAlign(['left', 'left', 'left', 'left']);
                 oGrvDetalhes.setHeader(['Código', 'Descrição', 'Quantidade', 'Valor']);
+                oGrvDetalhes.setHeight(230);
+                oGrvDetalhes.hasTotalizador = true;
+                oGrvDetalhes.show($('grvDetalhes'));
+                oGrvDetalhes.clearAll(true);
+                oGrvDetalhes.renderRows();
+                break;
+
+            case 'obra':
+
+                oGrvDetalhes = new DBGrid('detalhes');
+                oGrvDetalhes.nameInstance = 'oGrvDetalhes';
+                oGrvDetalhes.setCellWidth(['10%', '10%', '25%', '10%', '30%', '10%', '10%']);
+                oGrvDetalhes.setCellAlign(['center', 'center', 'center', 'center', 'center', 'center', 'center']);
+                oGrvDetalhes.setHeader(['Seq. Obra', 'Nº Obra', 'Situação', 'Data Situação','Medição','Dt. Entrega','Vlr. Medição']);
                 oGrvDetalhes.setHeight(230);
                 oGrvDetalhes.hasTotalizador = true;
                 oGrvDetalhes.show($('grvDetalhes'));

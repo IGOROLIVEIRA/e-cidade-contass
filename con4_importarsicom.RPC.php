@@ -72,7 +72,7 @@ switch ($oParam->exec) {
                         $num = count($data);
                         $aArquivoCSV = explode(".", $arquivo);
 
-                        
+
 
                         if ((($data[0] != 99 &&
                             $aArquivoCSV[0] == 'EMP' || $aArquivoCSV[0] == 'ANL' || $aArquivoCSV[0] == 'LQD' || $aArquivoCSV[0] == 'ALQ' ||
@@ -152,7 +152,7 @@ switch ($oParam->exec) {
                                     $sTabelaAnterior = strtolower($aArquivoCSV[0]) . substr($aux[1], -2) . $ano;
                                     $sClasseAnterior = 'cl_' . strtolower($aArquivoCSV[0]) . substr($aux[1], -2) . $ano;
 
-                                    $sSqlCamposAnteriores = "SELECT column_name,data_type FROM information_schema.columns WHERE table_name ='" . $sTabelaAnterior . "'";
+                                    $sSqlCamposAnteriores = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name ='" . $sTabelaAnterior . "'";
                                     $rsSqlCamposAnteriores = db_query($sSqlCamposAnteriores);
                                     $oCamposAnteriores = db_utils::fieldsMemory($rsSqlCamposAnteriores, 0);
 
@@ -193,7 +193,6 @@ switch ($oParam->exec) {
 
                                 $oClasse->incluir(null);
                                 if($oClasse->erro_status == 0) {
-                                    print_r($oClasse);exit;
                                     $oRetorno->status = 2;
                                     $oRetorno->message = ("Erro importacao  $sClasse  {$oClasse->erro_msg}");
                                 }

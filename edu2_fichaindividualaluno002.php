@@ -57,25 +57,6 @@ $rsDadosEscola   = db_query($sSqlDadosEscola);
 $oDadosEscola    = db_utils::fieldsMemory($rsDadosEscola, 0);
 $mun_escola      = $oDadosEscola->mun_escola;
 
-$sCamposDiretor    = " 'DIRETOR' as funcao, ";
-$sCamposDiretor   .= "          case when ed20_i_tiposervidor = 1 then ";
-$sCamposDiretor   .= "                  cgmrh.z01_nome ";
-$sCamposDiretor   .= "               else cgmcgm.z01_nome ";
-$sCamposDiretor   .= "            end as nome,";
-$sCamposDiretor   .= " ed83_c_descr||' n°: '||ed05_c_numero::varchar as descricao,'D' as tipo";
-$sWhereDiretor     = " ed254_i_escola = " . $escola . " AND ed254_c_tipo = 'A' AND ed01_i_funcaoadmin = 2 limit 1 ";
-$sSqlDiretor       = $oDaoEscolaDiretor->sql_query_resultadofinal("", $sCamposDiretor, "", $sWhereDiretor);
-$rsDiretor         = $oDaoEscolaDiretor->sql_record($sSqlDiretor);
-$iLinhasDiretor    = $oDaoEscolaDiretor->numrows;
-
-if ($iLinhasDiretor > 0) {
-
-  db_fieldsmemory($result, 0);
-  $nome = trim(db_utils::fieldsmemory($rsDiretor, 0)->nome);
-} else {
-  $nome = "";
-}
-
 $camp  = " ed60_d_datasaida as datasaida, ";
 $camp .= "  case ";
 $camp .= "   when ed60_c_situacao = 'TRANSFERIDO REDE' then ";
@@ -119,20 +100,18 @@ if ($clmatricula->numrows == 0) {
   db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado.");
 }
 
-$sSqlTipoSanguineo = $oDaoTipoSanguineo->sql_query_file("", "*", "sd100_sequencial", "");
-$rsTipoSanguineo   = $oDaoTipoSanguineo->sql_record($sSqlTipoSanguineo);
-$iLinhas           = $oDaoTipoSanguineo->numrows;
-
-$aTiposSanguineos = array();
-
-if (isset($rsTipoSanguineo) && $iLinhas > 0) {
-
-  for ($iContador = 0; $iContador < $iLinhas; $iContador++) {
-
-    $oDados = db_utils::fieldsMemory($rsTipoSanguineo, $iContador);
-    $aTiposSanguineos[$oDados->sd100_sequencial] = $oDados->sd100_tipo;
-  }
-}
+$sCampos  = " aluno.ed47_i_codigo,   ";
+$sCampos .= " censoufident.ed260_c_nome as ufident, ";
+$sCampos .= " censoufnat.ed260_c_nome as ufnat, ";
+$sCampos .= " censoufcert.ed260_c_nome as ufcert, ";
+$sCampos .= " censoufend.ed260_c_nome as ufend, ";
+$sCampos .= " censomunicnat.ed261_c_nome as municnat, ";
+$sCampos .= " censomuniccert.ed261_c_nome as municcert, ";
+$sCampos .= " censomunicend.ed261_c_nome as municend, ";
+$sCampos .= " censoorgemissrg.ed132_c_descr as orgemissrg, ";
+$sCampos .= " pais.ed228_c_descr ";
+$sSql     = $claluno->sql_query_matricula_uf("",  $sCampos, "ed47_v_nome", " ed60_i_codigo IN ($alunos) ");
+$rsResult = $claluno->sql_record($sSql);
 
 $pdf = new PDF();
 $pdf->Open();
@@ -142,6 +121,7 @@ $pdf->setfillcolor(223);
 for ($ww = 0; $ww < $clmatricula->numrows; $ww++) {
 
   db_fieldsmemory($result1, $ww);
+  db_fieldsmemory($rsResult,$ww);
 
   $data         = date("Y-m-d", DB_getsession("DB_datausu"));
   $dia          = date("d");
@@ -230,13 +210,7 @@ for ($ww = 0; $ww < $clmatricula->numrows; $ww++) {
   $pdf->cell(3,  4, "",             "L", 0, "C", 0);
 
   $pdf->setfont('arial', '', 7);
-  $pdf->cell(35, 4, strip_tags($Led47_tiposanguineo), 0, 0, "L", 0);
-
-  $pdf->setfont('arial', 'b', 7);
-  $pdf->cell(65, 4, $ed47_tiposanguineo == "" ? "NÃO INFORMADO" : $aTiposSanguineos[$ed47_tiposanguineo], 0, 0, "L", 0);
-
-  $pdf->setfont('arial', '', 7);
-  $pdf->cell(30, 4, strip_tags($Led47_c_raca), 0, 0, "R", 0);
+  $pdf->cell(35, 4, strip_tags($Led47_c_raca), 0, 0, "L", 0);
 
   $pdf->setfont('arial', 'b', 7);
   $pdf->cell(25, 4, $ed47_c_raca, 0,   1, "L", 0);
@@ -264,18 +238,32 @@ for ($ww = 0; $ww < $clmatricula->numrows; $ww++) {
   $pdf->cell(3, 4, "", "L", 0, "C", 0);
 
   $pdf->setfont('arial', '', 7);
-  $pdf->cell(35, 4, strip_tags($Led47_c_nomeresp), 0, 0, "L", 0);
+  $pdf->cell(35,  4,  strip_tags($Led47_i_nacion),  0,  0,  "L",  0);
+
+  if ($ed47_i_nacion == 1) {
+    $ed47_i_nacion = "BRASILEIRA";
+  } else if ($ed47_i_nacion == 2) {
+    $ed47_i_nacion = "BRASILEIRA NO EXTERIOR OU NATURALIZADO";
+  } else if ($ed47_i_nacion == 3) {
+    $ed47_i_nacion = "ESTRANGEIRA";
+  }
 
   $pdf->setfont('arial', 'b', 7);
-  $pdf->cell(121, 4, $ed47_c_nomeresp, 0, 1, "L", 0);
+  $pdf->cell(42, 4, $ed47_i_nacion, 0, 0, "L", 0);
+
+  $pdf->setfont('arial', '', 7);
+  $pdf->cell(18,  4,  strip_tags($Led47_i_censomunicnat),  0,  0,  "L",  0);
+
+  $pdf->setfont('arial', 'b', 7);
+  $pdf->cell(20, 4, $municnat .", " . $ufnat, 0, 1, "L", 0);
   $pdf->cell(3, 4, "", "L", 0, "C", 0);
 
   $pdf->setfont('arial', '', 7);
-  $pdf->cell(35, 4, strip_tags($Led47_c_emailresp), 0, 0, "L", 0);
+  $pdf->cell(35, 4, strip_tags($Led47_v_ender), 0, 0, "L", 0);
 
   $pdf->setfont('arial', 'b', 7);
-  $pdf->cell(121, 4, $ed47_c_emailresp, 0, 1, "L", 0);
-
+  $pdf->cell(121, 4, substr($ed47_v_ender,  0,  35). ", ". $ed47_c_numero . ". " . $ed47_v_bairro, 0, 0, "L", 0);
+  
   $pdf->line(201, 35, 201, 75);
   $pdf->line(10,  75, 201, 75);
 
@@ -387,20 +375,7 @@ for ($ww = 0; $ww < $clmatricula->numrows; $ww++) {
 
     $oEtapa        = EtapaRepository::getEtapaByCodigo($ed11_i_codigo);
     $sCargaHoraria = "";
-
-    /*
-    * Remoção temporária da carga horária até que seja compreendido
-    * o funcionamento da rotina responsável por armazenar
-    * a regra de calculo da carga horária.
-    /*
-
-    /*
-    try {
-      $sCargaHoraria = $oTurma->getCargaHoraria($oEtapa);
-    } catch (Exception $oErro) {
-      db_redireciona('db_erros.php?fechar=true&db_erro=' . trim($oErro->getMessage()));
-    }
-    */
+    $sCargaHoraria = $oTurma->getCargaHoraria($oEtapa);
 
     $pdf->setfont('arial', 'b', 7);
     $pdf->cell(40, 4, $ed15_c_nome, 0, 0, "L", 1);
@@ -677,7 +652,7 @@ for ($ww = 0; $ww < $clmatricula->numrows; $ww++) {
   $pdf->setY($final + 10);
 
   $pdf->setfont('arial', '', 7);
-  $pdf->cell(25, 4, $data_extenso, 0, 1, "L", 0);
+  $pdf->cell(191, 4, $data_extenso, 0, 1, "C", 0);
 
   $fim = $pdf->getY();
   $pdf->setY($fim + 1);
@@ -698,15 +673,18 @@ for ($ww = 0; $ww < $clmatricula->numrows; $ww++) {
   /**
    * Variáveis para controle da posição X das opções possíveis de serem impressas
    */
-  $iPosicaoXProfessor = 10;
-  $iPosicaoXAdicional = 10;
-  $iPosicaoXDiretor   = 10;
+  $iPosicaoXProfessor  = 10;
+  $iPosicaoXAdicional  = 10;
+  $iPosicaoXDiretor    = 10;
+  $iPosicaoXSecretario = 10;
 
   /**
    * Variáveis para controle da posição Y das opções possíveis de serem impressas
    */
-  $iPosicaoYDiretor   = $pdf->GetY();
-  $iPosicaoYProfessor = $pdf->GetY();
+  $iPosicaoYDiretor    = $pdf->GetY();
+  $iPosicaoYProfessor  = $pdf->GetY();
+  $iPosicaoYAdicional  = $pdf->GetY();
+  $iPosicaoYSecretario = $pdf->GetY();
 
   /**
    * Variáveis para controle de exibição da assinatura adicional e do professor
@@ -727,7 +705,6 @@ for ($ww = 0; $ww < $clmatricula->numrows; $ww++) {
    */
   if ($lExibirAdicional) {
 
-    $iPosicaoXDiretor = 120;
     $oDocente         = DocenteRepository::getDocenteByCodigoRecursosHumano($oGet->iAssinaturaAdicional);
     $sNomeDocente     = $oDocente->getNome();
     $sFuncaoDocente   = '';
@@ -739,50 +716,58 @@ for ($ww = 0; $ww < $clmatricula->numrows; $ww++) {
       }
     }
 
-    $pdf->setX($iPosicaoXAdicional);
-    $pdf->cell(45, 5, "______________________________________________", 0, 1, "L", 0);
+    $pdf->setY($iPosicaoYAdicional+15);
+    $pdf->setX(30);
+    $pdf->cell(60, 5, "______________________________________________", 0, 1, "C", 0);
 
-    $pdf->setX($iPosicaoXAdicional);
-    $pdf->multicell(70, 4, $sNomeDocente, 0, "L", 0, 0);
-    $pdf->setX($iPosicaoXAdicional);
-    $pdf->cell(45, 3, $sFuncaoDocente, 0, 1, "L", 0);
+    $pdf->setX(30);
+    $pdf->multicell(60, 4, ucwords($sNomeDocente), 0, "C", 0, 0);
+    $pdf->setX(30);
+    $pdf->cell(60, 3, $sFuncaoDocente, 0, 1, "C", 0);
 
     /**
      * Caso tenha sido selecionado para exibir a assinatura do professor, setamos a posição Y do mesmo
      */
     if ($lExibirProfessor) {
-      $iPosicaoYProfessor = $pdf->GetY() + 8;
+      
+      $pdf->setY($iPosicaoYProfessor+15);
+      $pdf->setX(110);
+      $pdf->cell(60, 5, "______________________________________________", 0, 1, "C", 0);
+  
+      $pdf->setX(110);
+      $pdf->cell(60, 3, "Professor",   0, 1, "C", 0);
     }
   }
 
   /**
    * Imprime a assinatura do professor caso checado
    */
-  if ($lExibirProfessor) {
+  if ($lExibirProfessor && !$lExibirAdicional) {
 
-    $iPosicaoXDiretor = 120;
+    $pdf->setY($iPosicaoYProfessor+15);
+    $pdf->setX(70);
+    $pdf->cell(60, 5, "______________________________________________", 0, 1, "C", 0);
 
-    $pdf->setY($iPosicaoYProfessor);
-    $pdf->setX($iPosicaoXProfessor);
-    $pdf->cell(45, 5, "______________________________________________", 0, 1, "L", 0);
-
-    $pdf->setX($iPosicaoXProfessor);
-    $pdf->multicell(70, 4, "",    0, "L", 0, 0);
-    $pdf->setX($iPosicaoXProfessor);
-    $pdf->cell(45, 3, "Professor",   0, 1, "L", 0);
+    $pdf->setX(70);
+    $pdf->cell(60, 3, "Professor",   0, 1, "C", 0);
   }
 
   /**
-   * Imprime a assinatura do diretor
+   * Imprime assinaturas
    */
   $pdf->setY($iPosicaoYDiretor);
-  $pdf->setX($iPosicaoXDiretor);
-  $pdf->cell(45, 5, "______________________________________________", 0, 1, "L", 0);
+  $pdf->setX(30);
+  $pdf->cell(60, 5, "______________________________________________", 0, 1, "C", 0);
 
-  $pdf->setX($iPosicaoXDiretor);
-  $pdf->multicell(70, 4, $nome,    0, "L", 0, 0);
-  $pdf->setX($iPosicaoXDiretor);
-  $pdf->cell(45, 3, "Diretor",   0, 1, "L", 0);
+  $pdf->setX(30);
+  $pdf->cell(60, 3, "Diretor(a) Escolar nº Reg ou Aut.",   0, 1, "C", 0);
+
+  $pdf->setY($iPosicaoYSecretario);
+  $pdf->setX(110);
+  $pdf->cell(60, 5, "______________________________________________", 0, 1, "C", 0);
+
+  $pdf->setX(110);
+  $pdf->cell(60, 3, "Secretário(a) Escolar nº Reg ou Aut.",   0, 1, "C", 0);
 }
 
 $pdf->Output();

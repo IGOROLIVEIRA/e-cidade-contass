@@ -21,6 +21,7 @@ class cl_rsp112023
   var $si113_tiporegistro = 0;
   var $si113_codreduzidorsp = 0;
   var $si113_codfontrecursos = 0;
+  var $si113_codco = 0;
   var $si113_vloriginalfonte = 0;
   var $si113_vlsaldoantprocefonte = 0;
   var $si113_vlsaldoantnaoprocfonte = 0;
@@ -33,6 +34,7 @@ class cl_rsp112023
                  si113_tiporegistro = int8 = Tipo do  registro 
                  si113_codreduzidorsp = int8 = Código Identificador do resto a pagar 
                  si113_codfontrecursos = int8 = Código da fonte de  recursos 
+                 si113_codco = varchar = Código de Acompanhamento da Execução Orçamentária 
                  si113_vloriginalfonte = float8 = Valor original do  empenho 
                  si113_vlsaldoantprocefonte = float8 = Valor do Saldo do  empenho 
                  si113_vlsaldoantnaoprocfonte = float8 = Valor do Saldo do  empenho 
@@ -68,6 +70,7 @@ class cl_rsp112023
       $this->si113_tiporegistro = ($this->si113_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si113_tiporegistro"] : $this->si113_tiporegistro);
       $this->si113_codreduzidorsp = ($this->si113_codreduzidorsp == "" ? @$GLOBALS["HTTP_POST_VARS"]["si113_codreduzidorsp"] : $this->si113_codreduzidorsp);
       $this->si113_codfontrecursos = ($this->si113_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si113_codfontrecursos"] : $this->si113_codfontrecursos);
+      $this->si113_codco = ($this->si113_codco == "" ? @$GLOBALS["HTTP_POST_VARS"]["si113_codco"] : $this->si113_codco);
       $this->si113_vloriginalfonte = ($this->si113_vloriginalfonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si113_vloriginalfonte"] : $this->si113_vloriginalfonte);
       $this->si113_vlsaldoantprocefonte = ($this->si113_vlsaldoantprocefonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si113_vlsaldoantprocefonte"] : $this->si113_vlsaldoantprocefonte);
       $this->si113_vlsaldoantnaoprocfonte = ($this->si113_vlsaldoantnaoprocfonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si113_vlsaldoantnaoprocfonte"] : $this->si113_vlsaldoantnaoprocfonte);
@@ -98,6 +101,9 @@ class cl_rsp112023
     }
     if ($this->si113_codfontrecursos == null) {
       $this->si113_codfontrecursos = "0";
+    }
+    if ($this->si113_codco == "") {
+      $this->si113_codco = "0000";
     }
     if ($this->si113_vloriginalfonte == null) {
       $this->si113_vloriginalfonte = "0";
@@ -172,6 +178,7 @@ class cl_rsp112023
                                       ,si113_tiporegistro 
                                       ,si113_codreduzidorsp 
                                       ,si113_codfontrecursos 
+                                      ,si113_codco
                                       ,si113_vloriginalfonte 
                                       ,si113_vlsaldoantprocefonte 
                                       ,si113_vlsaldoantnaoprocfonte 
@@ -184,6 +191,7 @@ class cl_rsp112023
                                ,$this->si113_tiporegistro 
                                ,$this->si113_codreduzidorsp 
                                ,$this->si113_codfontrecursos 
+                               ,'$this->si113_codco'
                                ,$this->si113_vloriginalfonte 
                                ,$this->si113_vlsaldoantprocefonte 
                                ,$this->si113_vlsaldoantnaoprocfonte 
@@ -277,6 +285,13 @@ class cl_rsp112023
         $this->si113_codfontrecursos = "0";
       }
       $sql .= $virgula . " si113_codfontrecursos = $this->si113_codfontrecursos ";
+      $virgula = ",";
+    }
+    if (trim($this->si113_codco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si113_codco"])) {
+      if (trim($this->si113_codco) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si113_codco"])) {
+        $this->si113_codco = "0";
+      }
+      $sql .= $virgula . " si113_codco = $this->si113_codco ";
       $virgula = ",";
     }
     if (trim($this->si113_vloriginalfonte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si113_vloriginalfonte"])) {

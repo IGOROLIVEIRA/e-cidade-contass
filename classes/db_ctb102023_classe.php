@@ -27,7 +27,6 @@ class cl_ctb102023
   var $si95_contabancaria = 0;
   var $si95_digitoverificadorcontabancaria = null;
   var $si95_tipoconta = null;
-  var $si95_tipoaplicacao = null;
   var $si95_nroseqaplicacao = 0;
   var $si95_desccontabancaria = null;
   var $si95_contaconvenio = 0;
@@ -50,7 +49,6 @@ class cl_ctb102023
                  si95_contabancaria = int8 = Número da Conta  Bancária 
                  si95_digitoverificadorcontabancaria = varchar(2) = Dígito verificador  da conta bancária 
                  si95_tipoconta = varchar(2) = Tipo da Conta 
-                 si95_tipoaplicacao = varchar(2) = Tipo de Aplicação  Financeira 
                  si95_nroseqaplicacao = int8 = Número sequencial  da aplicação 
                  si95_desccontabancaria = varchar(50) = Nome da Conta  Bancária 
                  si95_contaconvenio = int8 = Conta vinculada a  convênio 
@@ -93,7 +91,6 @@ class cl_ctb102023
       $this->si95_contabancaria = ($this->si95_contabancaria == "" ? @$GLOBALS["HTTP_POST_VARS"]["si95_contabancaria"] : $this->si95_contabancaria);
       $this->si95_digitoverificadorcontabancaria = ($this->si95_digitoverificadorcontabancaria == "" ? @$GLOBALS["HTTP_POST_VARS"]["si95_digitoverificadorcontabancaria"] : $this->si95_digitoverificadorcontabancaria);
       $this->si95_tipoconta = ($this->si95_tipoconta == "" ? @$GLOBALS["HTTP_POST_VARS"]["si95_tipoconta"] : $this->si95_tipoconta);
-      $this->si95_tipoaplicacao = ($this->si95_tipoaplicacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si95_tipoaplicacao"] : $this->si95_tipoaplicacao);
       $this->si95_nroseqaplicacao = ($this->si95_nroseqaplicacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si95_nroseqaplicacao"] : $this->si95_nroseqaplicacao);
       $this->si95_desccontabancaria = ($this->si95_desccontabancaria == "" ? @$GLOBALS["HTTP_POST_VARS"]["si95_desccontabancaria"] : $this->si95_desccontabancaria);
       $this->si95_contaconvenio = ($this->si95_contaconvenio == "" ? @$GLOBALS["HTTP_POST_VARS"]["si95_contaconvenio"] : $this->si95_contaconvenio);
@@ -212,7 +209,6 @@ class cl_ctb102023
                                       ,si95_contabancaria 
                                       ,si95_digitoverificadorcontabancaria 
                                       ,si95_tipoconta 
-                                      ,si95_tipoaplicacao 
                                       ,si95_nroseqaplicacao 
                                       ,si95_desccontabancaria 
                                       ,si95_contaconvenio 
@@ -232,7 +228,6 @@ class cl_ctb102023
                                ,$this->si95_contabancaria 
                                ,'$this->si95_digitoverificadorcontabancaria' 
                                ,'$this->si95_tipoconta' 
-                               ,'$this->si95_tipoaplicacao' 
                                ,$this->si95_nroseqaplicacao 
                                ,'$this->si95_desccontabancaria' 
                                ,$this->si95_contaconvenio 
@@ -283,7 +278,6 @@ class cl_ctb102023
       $resac = db_query("insert into db_acount values($acount,2010324,2010552,'','" . AddSlashes(pg_result($resaco, 0, 'si95_contabancaria')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010324,2010553,'','" . AddSlashes(pg_result($resaco, 0, 'si95_digitoverificadorcontabancaria')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010324,2010554,'','" . AddSlashes(pg_result($resaco, 0, 'si95_tipoconta')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      $resac = db_query("insert into db_acount values($acount,2010324,2010555,'','" . AddSlashes(pg_result($resaco, 0, 'si95_tipoaplicacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010324,2010556,'','" . AddSlashes(pg_result($resaco, 0, 'si95_nroseqaplicacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010324,2010557,'','" . AddSlashes(pg_result($resaco, 0, 'si95_desccontabancaria')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010324,2010558,'','" . AddSlashes(pg_result($resaco, 0, 'si95_contaconvenio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -359,10 +353,6 @@ class cl_ctb102023
     }
     if (trim($this->si95_tipoconta) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si95_tipoconta"])) {
       $sql .= $virgula . " si95_tipoconta = '$this->si95_tipoconta' ";
-      $virgula = ",";
-    }
-    if (trim($this->si95_tipoaplicacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si95_tipoaplicacao"])) {
-      $sql .= $virgula . " si95_tipoaplicacao = '$this->si95_tipoaplicacao' ";
       $virgula = ",";
     }
     if (trim($this->si95_nroseqaplicacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si95_nroseqaplicacao"])) {
@@ -468,9 +458,6 @@ class cl_ctb102023
         if (isset($GLOBALS["HTTP_POST_VARS"]["si95_tipoconta"]) || $this->si95_tipoconta != "") {
           $resac = db_query("insert into db_acount values($acount,2010324,2010554,'" . AddSlashes(pg_result($resaco, $conresaco, 'si95_tipoconta')) . "','$this->si95_tipoconta'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         }
-        if (isset($GLOBALS["HTTP_POST_VARS"]["si95_tipoaplicacao"]) || $this->si95_tipoaplicacao != "") {
-          $resac = db_query("insert into db_acount values($acount,2010324,2010555,'" . AddSlashes(pg_result($resaco, $conresaco, 'si95_tipoaplicacao')) . "','$this->si95_tipoaplicacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        }
         if (isset($GLOBALS["HTTP_POST_VARS"]["si95_nroseqaplicacao"]) || $this->si95_nroseqaplicacao != "") {
           $resac = db_query("insert into db_acount values($acount,2010324,2010556,'" . AddSlashes(pg_result($resaco, $conresaco, 'si95_nroseqaplicacao')) . "','$this->si95_nroseqaplicacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         }
@@ -555,7 +542,6 @@ class cl_ctb102023
         $resac = db_query("insert into db_acount values($acount,2010324,2010552,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si95_contabancaria')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010324,2010553,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si95_digitoverificadorcontabancaria')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010324,2010554,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si95_tipoconta')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,2010324,2010555,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si95_tipoaplicacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010324,2010556,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si95_nroseqaplicacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010324,2010557,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si95_desccontabancaria')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010324,2010558,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si95_contaconvenio')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
@@ -720,6 +706,152 @@ class cl_ctb102023
     }
     
     return $sql;
+  }
+
+  /**
+   * Método para retornar as contas que serão utilizadas para geração do Registro 10
+   *
+   * @param integer $ano
+   * @param integer $instit
+   * @param integer $mes
+   * @param string $dataFinal
+   * @return $sSqlGeral
+   */
+  public function sql_Reg10($ano, $instit, $mes, $dataFinal)
+  {
+    $sSqlGeral = "SELECT 10 AS tiporegistro,
+                          k13_reduz AS codctb,
+                          c61_codtce AS codtce,
+                          si09_tipoinstit,
+                          si09_codorgaotce,
+                          c63_banco,
+                          c63_agencia,
+                          c63_conta,
+                          c63_dvconta,
+                          c63_dvagencia,
+                          CASE
+                              WHEN db83_tipoconta IN (2, 3) THEN 2
+                              ELSE 1
+                          END AS tipoconta,
+                          CASE
+                              WHEN
+                                      (SELECT si09_tipoinstit FROM infocomplementaresinstit
+                                        WHERE si09_instit = {$instit}) = 5
+                                  AND db83_tipoconta IN (2, 3) THEN db83_nroseqaplicacao::varchar
+                              ELSE ' '
+                          END AS nroseqaplicacao,
+                          db83_descricao AS desccontabancaria,
+                          CASE
+                              WHEN db83_numconvenio IS NULL THEN 2
+                              ELSE 1
+                          END AS contaconvenio,
+                          CASE
+                              WHEN db83_numconvenio IS NULL THEN ' '
+                              ELSE c206_nroconvenio
+                          END AS nroconvenio,
+                          CASE
+                              WHEN db83_numconvenio IS NULL THEN NULL
+                              ELSE c206_dataassinatura
+                          END AS dataassinaturaconvenio,
+                          o15_codtri AS recurso,
+                          CASE
+                              WHEN substr(c60_estrut, 1, 3) = '111'
+                                  AND substr(c60_estrut, 1, 7) != '1111101'
+                                  AND substr(c60_estrut, 1, 7) != '1111102'
+                                  AND substr(c60_estrut, 1, 6) != '111113'
+                                  AND substr(c60_estrut, 1, 7) != '1112101' THEN 1
+                              ELSE 2
+                          END AS saldocec
+                  FROM saltes
+                  JOIN conplanoreduz ON k13_reduz = c61_reduz AND c61_anousu = {$ano}
+                  JOIN conplanoconta ON c63_codcon = c61_codcon AND c63_anousu = c61_anousu
+                  JOIN conplano ON c60_codcon = c61_codcon AND c60_anousu = c61_anousu
+                  JOIN orctiporec ON c61_codigo = o15_codigo
+                  LEFT JOIN conplanocontabancaria ON c56_codcon = c61_codcon AND c56_anousu = c61_anousu
+                  LEFT JOIN contabancaria ON c56_contabancaria = db83_sequencial
+                  LEFT JOIN convconvenios ON db83_numconvenio = c206_sequencial
+                  LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit";
+
+    if ($ano == 2023 && $mes == 1) {
+      $sSqlGeral .= " WHERE (k13_limite IS NULL OR k13_limite >= '$dataFinal')
+               AND c61_instit = {$instit} ORDER BY k13_reduz";
+    } else {
+      $sSqlGeral .= " WHERE (k13_limite IS NULL OR k13_limite >= '$dataFinal')
+          AND (date_part('MONTH',k13_dtimplantacao) <= '$mes'
+          OR date_part('YEAR',k13_dtimplantacao) < {$ano})
+            AND c61_instit = {$instit} ORDER BY k13_reduz";
+    }
+
+    return $sSqlGeral;
+  }
+
+  /**
+   * Verifica se existe o codctb
+   *
+   * @param object $oRegVerifica
+   * @param integer $instit
+   * @param string $mes
+   * @return $sSqlVerifica
+   */
+  public function verificaExisteReg10($oRegVerifica, $instit, $mes, $ano)
+  {
+
+    $sSqlVerifica = "";
+
+    $sSqlAplicacaoPrevidencia = "";
+    if ($oRegVerifica->si09_tipoinstit == 5) {
+      $sSqlAplicacaoPrevidencia = $oRegVerifica->nroseqaplicacao == "" ? "" : " AND si95_nroseqaplicacao = {$oRegVerifica->nroseqaplicacao} ";
+    }
+
+    for ($iContAnoReg10 = 2014; $iContAnoReg10 <= $ano; $iContAnoReg10++) {
+      $table = 'ctb10' . $iContAnoReg10;
+      $sSqlVerifica .= "SELECT '{$table}' AS ano, si95_codctb, si95_nroconvenio::varchar FROM {$table}
+                        WHERE si95_codorgao::int = {$oRegVerifica->si09_codorgaotce}
+                          AND si95_banco = '{$oRegVerifica->c63_banco}'
+                          AND si95_agencia = '{$oRegVerifica->c63_agencia}'
+                          AND si95_digitoverificadoragencia = '{$oRegVerifica->c63_dvagencia}'
+                          AND si95_contabancaria = '{$oRegVerifica->c63_conta}'
+                          AND si95_digitoverificadorcontabancaria = '{$oRegVerifica->c63_dvconta}'
+                          AND si95_tipoconta::int = {$oRegVerifica->tipoconta}
+                          {$sSqlAplicacaoPrevidencia}
+                          AND si95_instit = {$instit}";
+
+      $sSqlVerifica .= $iContAnoReg10 == $ano ? " AND si95_mes <= '{$mes}' " : " UNION ";
+    }
+    return $sSqlVerifica;
+  }
+
+  /**
+   * Verificando a data de cadastro da conta
+   *
+   * @param object $oRegVerifica
+   * @param integer $ano
+   * @param integer $instit
+   * @return $sSqlDtCad
+   */
+  public function verificaDtCadastro($oRegVerifica, $ano, $instit)
+  {
+    $sSqlDtCad = "SELECT k13_dtimplantacao,
+                         si09_codorgaotce,
+                         CASE
+                             WHEN c61_codtce = 0 OR c61_codtce IS NULL THEN c61_reduz
+                             ELSE c61_codtce
+                         END AS codctb
+                  FROM conplanoconta
+                  JOIN conplanoreduz ON (c61_codcon, c61_anousu) = (c63_codcon, c63_anousu)
+                  JOIN saltes ON (k13_reduz) = (c61_reduz)
+                  LEFT JOIN infocomplementaresinstit on si09_instit = c61_instit
+                  WHERE si09_codorgaotce = $oRegVerifica->si09_codorgaotce
+                    AND c63_banco = '$oRegVerifica->c63_banco'
+                    AND c63_agencia = '$oRegVerifica->c63_agencia'
+                    AND c63_dvagencia = '$oRegVerifica->c63_dvagencia'
+                    AND c63_conta = '$oRegVerifica->c63_conta'
+                    AND c63_dvconta = '$oRegVerifica->c63_dvconta'
+                    AND (($oRegVerifica->tipoconta IN (2,3) AND c63_tipoconta IN (2,3)) OR ($oRegVerifica->tipoconta = 1 AND c63_tipoconta = 1))
+                    AND c61_instit = {$instit}
+                    AND c61_anousu = {$ano}";
+
+    return $sSqlDtCad;
   }
 }
 

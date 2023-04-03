@@ -112,12 +112,20 @@
                     <td><b>Tipo de fundo:</b></td>
                     <td>
                         <?php
-                        $arrayTipoFundo = array(
-                            0 => "Selecione",
-                            1 => "Fundo em Capitalização (Plano Previdenciário)",
-                            2 => "Fundo em Repartição (Plano Financeiro)",
-                            3 => "Responsabilidade do tesouro municipal"
-                        );
+                          if(db_getsession("DB_anousu") < 2023){
+                                $arrayTipoFundo = array(
+                                    0 => "Selecione",
+                                    1 => "Fundo em Capitalização (Plano Previdenciário)",
+                                    2 => "Fundo em Repartição (Plano Financeiro)",
+                                    3 => "Responsabilidade do tesouro municipal"
+                                );
+                            }else{
+                                $arrayTipoFundo = array(
+                                    0 => "Selecione",
+                                    1 => "Fundo em Capitalização (Plano Previdenciário)",
+                                    2 => "Fundo em Repartição (Plano Financeiro)"
+                                );     
+                            }      
                         db_select('c239_tipofundo', $arrayTipoFundo, true, 1, "");
                         ?>
                     </td>
@@ -196,6 +204,17 @@
                     </td>
                 </tr>
 
+                <tr id="LinhaDataRepasse">
+                    <td>
+                        <b>Data do repasse:</b>
+                    </td>
+                    <td nowrap>
+                        <?
+                        db_inputdata("c239_datarepasse", @$c239_datarepasse_dia, @$c239_datarepasse_mes, @$c239_datarepasse_ano, true, "text", 1);
+                        ?>
+                    </td>
+                </tr>
+
                 <tr id="LinhaDescricaoDeducao">
                     <td>
                         <b>Descrição da dedução:</b>
@@ -228,6 +247,8 @@
 
 
 <script>
+    var ano = "<?php echo db_getsession("DB_anousu"); ?>";
+    
     verificarTipoDeducao();
     verificarTipoRepasse();
 
@@ -257,6 +278,12 @@
 
     function verificarTipoDeducao()
     {
+        if(ano > 2022){
+            mostrarLinha('LinhaDataRepasse');
+        }else{
+            ocultarLinha('LinhaDataRepasse');
+        }    
+        
         if (document.form1.c239_tipodeducao.value === "2") {
             condicoesDeducao();
             return;

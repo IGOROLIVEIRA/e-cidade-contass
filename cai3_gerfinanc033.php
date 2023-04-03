@@ -598,7 +598,7 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
                             j22_pontos,
                    sum(j22_valor) as j22_valor,
                    sum(j22_vm2) as j22_vm2,
-                   (select j21_valor from iptucalv 
+                   (select j21_valor from iptucalv
 inner join cfiptu on j21_anousu = j18_anousu and j21_receit = j18_rpredi
 where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limit 1) as totaliptu
           from iptucalc
@@ -620,7 +620,7 @@ order by iptucalc.j23_anousu desc limit 1
      $Iptucalc = db_query($sqlIptucalc);//db_criatabela($Iptucalc);exit;
      $oIptucalc = db_utils::fieldsMemory($Iptucalc, 0);
 
-     $rsDescrQuadro = db_query("select j17_descr||' - R$'||j21_valor as descrquadro from iptucalv 
+     $rsDescrQuadro = db_query("select j17_descr||' - R$'||j21_valor as descrquadro from iptucalv
 inner join cfiptu on j21_anousu = j18_anousu inner join iptucalh on j21_codhis = j17_codhis
 where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}");
 
@@ -705,7 +705,21 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->pql_localizacao = $pql_localizacao;
     $bql                   = ($db21_usadistritounidade == 't' ? 'DSQLU: '.$j34_distrito.'-':'SQL: ').$j34_setor.'-'.$j34_quadra.'-'.$j34_lote.($db21_usadistritounidade == 't' ? '-'.$j01_unidade:"")." ".($pql_localizacao!=""?"PQL: $pql_localizacao":"");
 
-    if (isset ($impmodelo) && $impmodelo == 30) {
+    if (isset ($impmodelo) && $pdf1->impmodelo == 30) {
+      $sqlparag  = " select db02_texto                                             ";
+      $sqlparag .= "   from db_documento                                           ";
+      $sqlparag .= "        inner join db_docparag  on db03_docum   = db04_docum   ";
+      $sqlparag .= "        inner join db_tipodoc   on db08_codigo  = db03_tipodoc ";
+      $sqlparag .= "        inner join db_paragrafo on db04_idparag = db02_idparag ";
+      $sqlparag .= " where db03_tipodoc = 1040 ";
+      $sqlparag .= "   and db03_instit = ".db_getsession("DB_instit")." ";
+      $sqlparag .= " order by db04_ordem ";
+      $resparag = db_query($sqlparag);
+
+      if (pg_numrows($resparag) > 0) {
+        db_fieldsmemory($resparag, 0);
+        $pdf1->secretaria = $db02_texto;
+      }
 
       if ($k00_tipo != 6) {
         $iNumeroOrigem = $j01_matric;
@@ -911,9 +925,14 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
         db_fieldsmemory($resultfin, $unicont);
         $vlrhis       = db_formatar($uvlrhis, 'f');
+        $pdf1->valororigem = $vlrhis;
         $vlrdesconto  = db_formatar($uvlrdesconto, 'f');
+        $pdf1->valorDesconto = $vlrdesconto;
         $utotal      += $taxabancaria;
         $vlrtotal     = db_formatar($utotal, 'f');
+        $pdf1->valortotal = $vlrtotal;
+        $pdf1->valorJuros = db_formatar($uvlrjuros, 'f');
+        $pdf1->valorMulta = db_formatar($uvlrmulta, 'f');
         $vlrbar       = db_formatar(str_replace('.', '', str_pad(number_format($utotal, 2, "", "."), 11, "0", STR_PAD_LEFT)), 's', '0', 11, 'e');
 
         $sqlvalor     = "select k00_impval, k00_tercdigcarneunica from arretipo where k00_tipo = $tipo_debito";
@@ -1328,6 +1347,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
         }
 
         $pdf1->descr12_2           = '- PARCELA ÚNICA COM '.$k00_percdes.'% DE DESCONTO';
+        $pdf1->descr4_2            = '- PARCELA ÚNICA COM '.$k00_percdes.'% DE DESCONTO';
         $pdf1->prehistoricoparcela = ' PARCELA ÚNICA COM '.$k00_percdes.'% DE DESCONTO';
         $pdf1->linha_digitavel     = $linha_digitavel;
         $pdf1->codigo_barras       = $codigo_barras;
@@ -1850,6 +1870,12 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
   unset($pdf1->arrayreduzreceitas);
   unset($pdf1->arraydescrreceitas);
   unset($pdf1->arrayvalreceitas);
+    $pdf1->valororigem = db_formatar('0', 'f');
+    $pdf1->valorJuros = db_formatar('0', 'f');
+    $pdf1->valorMulta = db_formatar('0', 'f');
+    $pdf1->valorDesconto = db_formatar('0', 'f');
+    $pdf1->valortotal = db_formatar('0', 'f');
+    $pdf1->descr4_2 = "";
 
   $nTotalDebito = 0;
   $vlrhonorarios = 0;
@@ -1862,12 +1888,12 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->arraydescrreceitas[$x] = $descrreceita;
 
     $sqlHono = "select db21_honorarioadvocaticio
-                  from db_config 
+                  from db_config
                   where prefeitura = true and codigo = ".db_getsession("DB_instit");
     db_fieldsmemory($sqlHono, 0);
 
     if($codreceita == $db21_honorarioadvocaticio){
-       $vlrhonorarios += $valor_corrigido; 
+       $vlrhonorarios += $valor_corrigido;
     }
 
     if ($k00_hist != 918) {
@@ -1891,7 +1917,8 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $nDesconto     += $valor_desconto;
   }
 
-  $pdf1->valororigem = db_formatar($vlrhistorico,"f");
+    $pdf1->valororigem = db_formatar($vlrhistorico, "f");
+    $pdf1->valortotal = db_formatar($valreceita, 'f');
 
   if(isset($vlrjuros) && $vlrjuros != "" && $vlrjuros !=0){
 
@@ -1901,6 +1928,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->arrayreduzreceitas[] = "";
     $pdf1->arraydescrreceitas[] = "Juros : ";
     $pdf1->arrayvalreceitas[]   = $vlrjuros;
+      $pdf1->valorJuros = db_formatar($vlrjuros, 'f');
   }
   if(isset($vlrmulta) && $vlrmulta != "" && $vlrmulta != 0){
 
@@ -1910,6 +1938,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->arrayreduzreceitas[] = "";
     $pdf1->arraydescrreceitas[] = "Multa : ";
     $pdf1->arrayvalreceitas[]   = $vlrmulta;
+      $pdf1->valorMulta = db_formatar($vlrmulta, 'f');
   }
   if(isset($nDesconto) && $nDesconto != "" && $nDesconto != 0){
 
@@ -1919,6 +1948,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->arrayreduzreceitas[] = "";
     $pdf1->arraydescrreceitas[] = "Desconto : ";
     $pdf1->arrayvalreceitas[]   = $nDesconto;
+      $pdf1->valorDesconto = db_formatar($nDesconto, 'f');
   }
   /***********************************************************************************************/
 
@@ -2551,7 +2581,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
       $pdf1->descr4_2  = $vlrhonorarios > 0 ? "Valor da parcela   R$".db_formatar($nTotalDebito-$vlrhonorarios,"f")." + R$".db_formatar($vlrhonorarios,"f")."\n" : "Valor da parcela                       R$".db_formatar($nTotalDebito,"f")."\n";
       $pdf1->descr4_2 .= "Juro (mora + fincanciamento) R$".db_formatar($vlrjuros,"f")."\n";
       $pdf1->descr4_2 .= "Multa                                          R$".db_formatar($vlrmulta,"f")."\n";
-            
+
     }
   }
 

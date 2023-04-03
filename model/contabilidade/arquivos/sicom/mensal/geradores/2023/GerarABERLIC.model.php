@@ -85,7 +85,7 @@ class GerarABERLIC extends GerarAM
                 $aCSVABERLIC10['si46_tipolicitacao']              = $aABERLIC10['si46_tipolicitacao'] == 0 ? ' ' : substr($aABERLIC10['si46_tipolicitacao'], 0, 1);
                 $aCSVABERLIC10['si46_mododisputa']                = $aABERLIC10['si46_mododisputa'];
                 $aCSVABERLIC10['si46_naturezaobjeto']             = $aABERLIC10['si46_naturezaobjeto'] == 0 ? ' ' : substr($aABERLIC10['si46_naturezaobjeto'], 0, 1);
-                $aCSVABERLIC10['si46_objeto']                     = substr($aABERLIC10['si46_objeto'], 0, 500);
+                $aCSVABERLIC10['si46_objeto']                     = substr($aABERLIC10['si46_objeto'], 0, 1000);
                 $aCSVABERLIC10['si46_regimeexecucaoobras']        = $aABERLIC10['si46_regimeexecucaoobras'] == 0 ? ' ' : substr($aABERLIC10['si46_regimeexecucaoobras'], 0, 1);
                 $aCSVABERLIC10['si46_nroconvidado']               = $aABERLIC10['si46_nroconvidado'] == 0 ? ' ' : substr($aABERLIC10['si46_nroconvidado'], 0, 3);
                 $aCSVABERLIC10['si46_clausulaprorrogacao']        = substr($aABERLIC10['si46_clausulaprorrogacao'], 0, 250);
@@ -229,8 +229,7 @@ class GerarABERLIC extends GerarAM
                         $aCSVABERLIC16['si52_idacao']                 = $this->padLeftZero($aABERLIC16['si52_idacao'], 4);
                         $aCSVABERLIC16['si52_idsubacao']              = $aABERLIC16['si52_idsubacao'] == '' ? ' ' : $this->padLeftZero($aABERLIC16['si52_idsubacao'], 4);
                         $aCSVABERLIC16['si52_naturezadespesa']        = $this->padLeftZero($aABERLIC16['si52_naturezadespesa'], 6);
-                        $aCSVABERLIC16['si52_codfontrecursos']        = $this->padLeftZero($aABERLIC16['si52_codfontrecursos'], 3);
-                        $aCSVABERLIC16['si52_vlrecurso']              = $this->sicomNumberReal($aABERLIC16['si52_vlrecurso'], 2);
+                        $aCSVABERLIC16['si52_codfontrecursos']        = $this->padLeftZero($aABERLIC16['si52_codfontrecursos'], 7);
 
                         $this->sLinha = $aCSVABERLIC16;
                         $this->adicionaLinha();

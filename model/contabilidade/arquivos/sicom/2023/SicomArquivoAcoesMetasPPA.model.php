@@ -197,7 +197,7 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
         $oDadosAMP->descAcao        = substr($this->removeCaracteres($oMetasPPA->o55_descr), 0, 100);
         $oDadosAMP->finalidadeAcao  = substr($this->removeCaracteres($oMetasPPA->o55_finali), 0, 230);
         $oDadosAMP->produto         = substr($this->removeCaracteres($oMetasPPA->o22_descrprod), 0, 50);
-        $oDadosAMP->unidadeMedida   = ($oMetasPPA->o55_descrunidade != '') ? substr($this->removeCaracteres($oMetasPPA->o55_descrunidade), 0, 15) : "unidade";
+        $oDadosAMP->unidadeMedida   = (pg_num_rows($rsProjetoPPA) > 0 ? ($oMetasPPA->o55_descrunidade == '' ? "percentual" : substr($this->removeCaracteres($oMetasPPA->o55_descrunidade), 0, 15)) : "percentual");
         $oDadosAMP->Reg12           = array();
         $aDadosAgrupados[$sHash] = $oDadosAMP;
       }
@@ -219,10 +219,10 @@ LEFT JOIN db_config on o58_instit = codigo left join infocomplementaresinstit on
       $oDadosAMP12->produto       = substr($this->removeCaracteres($oMetasPPA->o22_descrprod), 0, 50);
       $oDadosAMP12->unidadeMedida = substr($this->removeCaracteres($oMetasPPA->o55_descrunidade), 0, 15);
 
-      $oDadosAMP12->metas1Ano = "1,00";
-      $oDadosAMP12->metas2Ano = "1,00";
-      $oDadosAMP12->metas3Ano = "1,00";
-      $oDadosAMP12->metas4Ano = "1,00";
+      $oDadosAMP12->metas1Ano = "25,00";
+      $oDadosAMP12->metas2Ano = "25,00";
+      $oDadosAMP12->metas3Ano = "25,00";
+      $oDadosAMP12->metas4Ano = "25,00";
 
       if (pg_num_rows($rsProjetoPPA) > 0) {
         for ($iConta = 0; $iConta < pg_num_rows($rsMetasFisica); $iConta++) {

@@ -90,7 +90,8 @@ class GerarLQD extends GerarAM
 
             $aCSVLQD11['si119_tiporegistro']    = $this->padLeftZero($aLQD11['si119_tiporegistro'], 2);
             $aCSVLQD11['si119_codreduzido']     = substr($aLQD11['si119_codreduzido'], 0, 15);
-            $aCSVLQD11['si119_codfontrecursos'] = $this->padLeftZero($aLQD11['si119_codfontrecursos'], 3);
+            $aCSVLQD11['si119_codfontrecursos'] = substr($this->padLeftZero($aLQD11['si119_codfontrecursos'], 7), 0, 7);
+            $aCSVLQD11['si119_codco']           = $this->padLeftZero($aLQD11['si119_codco'], 4);
             $aCSVLQD11['si119_valorfonte']      = $this->sicomNumberReal($aLQD11['si119_valorfonte'], 2);
 
             $this->sLinha = $aCSVLQD11;

@@ -1,8 +1,11 @@
 <?php
 
-$sSQLTomadorDBConfig = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is true";
-$rsTomadorDBConfig = db_query($sSQLTomadorDBConfig);
-$lTomadorEhPrefeitura = !!pg_num_rows($rsTomadorDBConfig);
+$sSQLTomadorDBPrefeitura    = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is true";
+$sSQLTomadorDBDemaisOrgaos  = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is false";
+$rsTomadorDBPrefeitura      = db_query($sSQLTomadorDBPrefeitura);
+$rsTomadorDBDemaisOrgaos    = db_query($sSQLTomadorDBDemaisOrgaos);
+$lTomadorEhPrefeitura       = !!pg_num_rows($rsTomadorDBPrefeitura);
+$lTomadorEhDemaisOrgaos     = !!pg_num_rows($rsTomadorDBDemaisOrgaos);
 $oInstit = new Instituicao(db_getsession('DB_instit'));
 
 ##Modelo de nota Fiscal
@@ -335,9 +338,9 @@ for ($j = 0; $j < $confNumRows; $j++) {
     if ($lTomadorEhPrefeitura){
         $fTotalNota = $this->fTotaliUni - $this->fvlrIssqn - $this->fvlrInss - $this->fvlrIrrf;
     }
-
-    if ($lTomadorEhPrefeitura == null && ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMGRAOMOGOL
-    || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_MONTEAZUL)){        
+    
+    $codInstit = array(Instituicao::COD_CLI_PMGRAOMOGOL, Instituicao::COD_CLI_MONTEAZUL);
+    if (($lTomadorEhPrefeitura == null) && (in_array($oInstit->getCodigoCliente(), $codInstit) || ($lTomadorEhDemaisOrgaos))){
             $fTotalNota = $this->fTotaliUni - $this->fvlrInss - $this->fvlrIrrf;
     }
 
@@ -350,7 +353,9 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->Setfont('Arial', 'B', 10);
     $this->objpdf->cell(30, 20,"Avisos", "LTB", 0, "C");
     $this->objpdf->Setfont('Arial', '', 8);
-    if ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA){
+
+    $codInstituicao = array(Instituicao::COD_CLI_PMMONTALVANIA, Instituicao::COD_CLI_PMJURAMENTO);
+    if (in_array($oInstit->getCodigoCliente(), $codInstituicao))    {
         $this->objpdf->rect(40, $this->yOld + 40, 100, 20);
         $this->objpdf->MultiCell(100, 5,$this->texto_aviso, 0, "L");
         $this->objpdf->rect(140, $this->yOld + 40, 60, 20);

@@ -102,7 +102,10 @@ if ($db_opcao == 2) {
                             "2"=>"Profissão regulamentada privativa de profissionais de saúde (Ex: Médicos, Assistentes Sociais, Técnicos em Enfermagem etc)",
                             "3"=>"Professor",
                             "4"=>"Outras",
-                            "5"=>"Agente Policico");
+                            "5"=>"Agente Policico",
+                            "6"=>"Cargo cujo ingresso exige ensino médio (completo e incompleto)",
+                            "7"=>"Cargo cujo ingresso exige ensino fundamental (completo ou incompleto)",
+                            "8"=>"Cargo sem exigência de escolaridade mínima (cargo cuja lei de criação não prevê escolaridade mínima para acesso)");
                         db_select('rh37_reqcargo', $areqCargo, true, $db_opcao,"onchange='js_showOutros(value);js_verificacargo(value)'");
                         ?>
                     </td>

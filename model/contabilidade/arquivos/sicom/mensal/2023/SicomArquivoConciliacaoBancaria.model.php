@@ -18,7 +18,7 @@ class SicomArquivoConciliacaoBancaria extends SicomArquivoBase implements iPadAr
      */
     protected $iCodigoLayout = 229;
 
-    
+
     /**
      *
      * Nome do arquivo a ser criado
@@ -62,6 +62,8 @@ class SicomArquivoConciliacaoBancaria extends SicomArquivoBase implements iPadAr
 
         $oGerarCONCIBANC = new GerarCONCIBANC();
         $oGerarCONCIBANC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+        $oGerarCONCIBANC->sDataInicial = $this->sDataInicial;
+        $oGerarCONCIBANC->sDataFinal = $this->sDataFinal;
         $oGerarCONCIBANC->gerarDados();
 
     }

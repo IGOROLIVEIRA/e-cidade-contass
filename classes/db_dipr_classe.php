@@ -43,9 +43,35 @@ class cl_dipr
     var $erro_campo = null;
     var $pagina_retorno = null;
     // cria variaveis do arquivo
+    var $c236_sequencial = 0;
     var $c236_codhist = 0;
     var $c236_compl = 'f';
     var $c236_descr = null;
+    var $c236_dtatonormacrirpps = null;
+    var $c236_dtatonormacrirpps_dia = null;
+    var $c236_dtatonormacrirpps_mes = null;
+    var $c236_dtatonormacrirpps_ano = null;
+    var $c236_tipocadastro = 0;
+    var $c236_nroatonormasegremassa = 0;
+    var $c236_dtatonormasegremassa = null;
+    var $c236_dtatonormasegremassa_dia = null;
+    var $c236_dtatonormasegremassa_mes= null;
+    var $c236_dtatonormasegremassa_ano = null;
+    var $c236_planodefatuarial = null;
+    var $c236_atonormplanodefat = 0;
+    var $c236_dtatoplanodefat = null;
+    var $c236_dtatoplanodefat_dia = null;
+    var $c236_dtatoplanodefat_mes = null;
+    var $c236_dtatoplanodefat_ano = null;
+    var $c236_orgao = 0;
+    var $c236_massainstituida = 0;
+    var $c236_beneficiotesouro = 0;
+    var $c236_atonormativo = 0;
+    var $c236_exercicionormativo = 0;
+    var $c236_numcgmexecutivo = 0;
+    var $c236_numcgmlegislativo = 0;
+    var $c236_numcgmgestora = 0;
+    var $c236_coddipr = 0;
     var $nomeTabela = "dipr";
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -57,7 +83,14 @@ class cl_dipr
         c236_exercicionormativo int4,
         c236_numcgmexecutivo int8,
         c236_numcgmlegislativo int8,
-        c236_numcgmgestora int8 ";
+        c236_numcgmgestora int8,
+        c236_tipocadastro int8, 
+        c236_dtatonormacrirpps date,
+        c236_nroatonormasegremassa int8,
+        c236_dtatonormasegremassa date,
+        c236_planodefatuarial int8,
+        c236_atonormplanodefat int8,
+        c236_dtatoplanodefat date";
 
     //funcao construtor da classe
     function cl_dipr()
@@ -91,6 +124,34 @@ class cl_dipr
             $this->c236_numcgmexecutivo = ($this->c236_numcgmexecutivo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_numcgmexecutivo"] : $this->c236_numcgmexecutivo);
             $this->c236_numcgmlegislativo = ($this->c236_numcgmlegislativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_numcgmlegislativo"] : $this->c236_numcgmlegislativo);
             $this->c236_numcgmgestora = ($this->c236_numcgmgestora == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_numcgmgestora"] : $this->c236_numcgmgestora);
+            $this->c236_tipocadastro = ($this->c236_tipocadastro == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_tipocadastro"] : $this->c236_tipocadastro);
+            if ($this->c236_dtatonormacrirpps == "") {
+                $this->c236_dtatonormacrirpps_dia = ($this->c236_dtatonormacrirpps_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_dtatonormacrirpps_dia"] : $this->c236_dtatonormacrirpps_dia);
+                $this->c236_dtatonormacrirpps_mes = ($this->c236_dtatonormacrirpps_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_dtatonormacrirpps_mes"] : $this->c236_dtatonormacrirpps_mes);
+                $this->c236_dtatonormacrirpps_ano = ($this->c236_dtatonormacrirpps_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_dtatonormacrirpps_ano"] : $this->c236_dtatonormacrirpps_ano);
+                if ($this->c236_dtatonormacrirpps_dia != "") {
+                    $this->c236_dtatonormacrirpps = $this->c236_dtatonormacrirpps_ano . "-" . $this->c236_dtatonormacrirpps_mes . "-" . $this->c236_dtatonormacrirpps_dia;
+                }
+            }
+            $this->c236_nroatonormasegremassa = ($this->c236_nroatonormasegremassa == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_nroatonormasegremassa"] : $this->c236_nroatonormasegremassa);
+            if ($this->c236_dtatonormasegremassa == "") {
+                $this->c236_dtatonormasegremassa_dia = ($this->c236_dtatonormasegremassa_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_dtatonormasegremassa_dia"] : $this->c236_dtatonormasegremassa_dia);
+                $this->c236_dtatonormasegremassa_mes = ($this->c236_dtatonormasegremassa_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_dtatonormasegremassa_mes"] : $this->c236_dtatonormasegremassa_mes);
+                $this->c236_dtatonormasegremassa_ano = ($this->c236_dtatonormasegremassa_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_dtatonormasegremassa_ano"] : $this->c236_dtatonormasegremassa_ano);
+                if ($this->c236_dtatonormasegremassa_dia != "") {
+                    $this->c236_dtatonormasegremassa = $this->c236_dtatonormasegremassa_ano . "-" . $this->c236_dtatonormasegremassa_mes . "-" . $this->c236_dtatonormasegremassa_dia;
+                }
+            }
+            $this->c236_planodefatuarial = ($this->c236_planodefatuarial == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_planodefatuarial"] : $this->c236_planodefatuarial);
+            $this->c236_atonormplanodefat = ($this->c236_atonormplanodefat == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_atonormplanodefat"] : $this->c236_atonormplanodefat);
+            if ($this->c236_dtatoplanodefat == "") {
+                $this->c236_dtatoplanodefat_dia = ($this->c236_dtatoplanodefat_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_dtatoplanodefat_dia"] : $this->c236_dtatoplanodefat_dia);
+                $this->c236_dtatoplanodefat_mes = ($this->c236_dtatoplanodefat_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_dtatoplanodefat_mes"] : $this->c236_dtatoplanodefat_mes);
+                $this->c236_dtatoplanodefat_ano = ($this->c236_dtatoplanodefat_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_dtatoplanodefat_ano"] : $this->c236_dtatoplanodefat_ano);
+                if ($this->c236_dtatoplanodefat_dia != "") {
+                    $this->c236_dtatoplanodefat = $this->c236_dtatoplanodefat_ano . "-" . $this->c236_dtatoplanodefat_mes . "-" . $this->c236_dtatoplanodefat_dia;
+                }
+            }
         }
     }
 
@@ -117,8 +178,26 @@ class cl_dipr
         if (!$this->verificaBeneficioTesouro())
             return false;
 
+        if (!$this->verificaDtAtoNormaCriRpps())
+            return false; 
+            
+        if (!$this->verificaNroAtoNormaSegreMassa())
+            return false; 
+            
+        if (!$this->verificaDataAtoSossegragacao())
+            return false;     
+               
         if (!$this->verificaAtoNormativo())
             return false;
+            
+        if (!$this->verificaPlanoDeFatuarial())
+            return false;    
+                 
+        if (!$this->verificaAtoPlanoDeFatuarial())
+            return false; 
+            
+        if (!$this->verificaDataAtoEquacionamento())
+            return false;     
 
         if (!$this->verificaExercicioNormativo())
             return false;
@@ -131,25 +210,60 @@ class cl_dipr
 
         if (!$this->verificaCgmGestora())
             return false;
-
-        $sql  = "INSERT INTO {$this->nomeTabela} ( ";
-        $sql .= "c236_orgao, ";
-        $sql .= "c236_massainstituida, ";
-        $sql .= "c236_beneficiotesouro, ";
-        $sql .= "c236_atonormativo, ";
-        $sql .= "c236_exercicionormativo, ";
-        $sql .= "c236_numcgmexecutivo, ";
-        $sql .= "c236_numcgmlegislativo, ";
-        $sql .= "c236_numcgmgestora ";
-        $sql .= ") VALUES ( ";
-        $sql .= "{$this->c236_orgao}, ";
-        $sql .= "'{$this->c236_massainstituida}', ";
-        $sql .= "'{$this->c236_beneficiotesouro}', ";
-        $sql .= "{$this->c236_atonormativo}, ";
-        $sql .= "{$this->c236_exercicionormativo}, ";
-        $sql .= "{$this->c236_numcgmexecutivo}, ";
-        $sql .= "{$this->c236_numcgmlegislativo}, ";
-        $sql .= "{$this->c236_numcgmgestora} ); ";
+            
+        if (!$this->verificaTipoCadastro())
+            return false;   
+        
+        if(db_getsession("DB_anousu") > 2022){
+            $this->c236_exercicionormativo =  'null' ;  
+        }  
+        
+        if($this->c236_planodefatuarial != 1 or db_getsession("DB_anousu") < 2023){
+            $this->c236_atonormplanodefat = 'null' ;
+            $this->c236_dtatoplanodefat = 'null' ;
+        }else{
+            $this->c236_dtatoplanodefat = "'$this->c236_dtatoplanodefat'";
+        }
+        
+        if($this->c236_massainstituida != 't' or db_getsession("DB_anousu") < 2023){
+            $this->c236_nroatonormasegremassa = 'null' ;
+            $this->c236_dtatonormasegremassa = 'null' ;
+        }else{
+            $this->c236_dtatonormasegremassa = "'$this->c236_dtatonormasegremassa'";
+        }
+        
+            $sql  = "INSERT INTO {$this->nomeTabela} ( ";
+            $sql .= "c236_orgao, ";
+            $sql .= "c236_massainstituida, ";
+            $sql .= "c236_beneficiotesouro, ";
+            $sql .= "c236_atonormativo, ";
+            $sql .= "c236_exercicionormativo, ";
+            $sql .= "c236_numcgmexecutivo, ";
+            $sql .= "c236_numcgmlegislativo, ";
+            $sql .= "c236_numcgmgestora, ";
+            $sql .= "c236_tipocadastro, ";
+            $sql .= "c236_dtatonormacrirpps, ";
+            $sql .= "c236_nroatonormasegremassa, ";
+            $sql .= "c236_dtatonormasegremassa, ";
+            $sql .= "c236_planodefatuarial, ";
+            $sql .= "c236_atonormplanodefat, ";
+            $sql .= "c236_dtatoplanodefat ";
+            $sql .= ") VALUES ( ";
+            $sql .= "{$this->c236_orgao}, ";
+            $sql .= "'{$this->c236_massainstituida}', ";
+            $sql .= "'{$this->c236_beneficiotesouro}', ";
+            $sql .= "{$this->c236_atonormativo}, ";
+            $sql .= "{$this->c236_exercicionormativo}, ";
+            $sql .= "{$this->c236_numcgmexecutivo}, ";
+            $sql .= "{$this->c236_numcgmlegislativo}, ";
+            $sql .= "{$this->c236_numcgmgestora}, ";
+            $sql .= "{$this->c236_tipocadastro}, ";
+            $sql .= "'{$this->c236_dtatonormacrirpps}', ";
+            $sql .= "{$this->c236_nroatonormasegremassa}, ";
+            $sql .= "{$this->c236_dtatonormasegremassa},";
+            $sql .= "{$this->c236_planodefatuarial}, ";
+            $sql .= "{$this->c236_atonormplanodefat}, ";
+            $sql .= "{$this->c236_dtatoplanodefat} ); ";
 
         $result = db_query($sql);
         if ($result == false) {
@@ -182,59 +296,199 @@ class cl_dipr
     {
         $this->atualizacampos();
 
-        if (!$this->verificaAtoNormativo())
+        if (!$this->verificaMassaInstituida())
             return false;
 
+        if (!$this->verificaBeneficioTesouro())
+            return false;
+
+        if (!$this->verificaDtAtoNormaCriRpps())
+            return false; 
+            
+        if (!$this->verificaNroAtoNormaSegreMassa())
+            return false; 
+            
+        if (!$this->verificaDataAtoSossegragacao())
+            return false;     
+               
+        if (!$this->verificaAtoNormativo())
+            return false;
+            
+        if (!$this->verificaPlanoDeFatuarial())
+            return false;    
+                 
+        if (!$this->verificaAtoPlanoDeFatuarial())
+            return false; 
+            
+        if (!$this->verificaDataAtoEquacionamento())
+            return false;     
+           
         if (!$this->verificaExercicioNormativo())
             return false;
 
+        if (!$this->verificaCgmExecutivo())
+            return false;
+
+        if (!$this->verificaCgmLegislativo())
+            return false;
+            
+        if (!$this->verificaCgmGestora())
+            return false;
+            
+        if (!$this->verificaTipoCadastro())
+            return false;   
+        
+        if(db_getsession("DB_anousu") > 2022){
+            $this->c236_exercicionormativo =  'null' ;  
+        }  
+
         $sql = " UPDATE {$this->nomeTabela} SET ";
         $virgula = "";
+        if(db_getsession("DB_anousu") > 2022){
+            if ($this->verificaCodDirp()) {
+                $sql .= $virgula . " c236_coddipr = {$this->c236_coddipr} ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaOrgao()) {
+                $sql  .= $virgula . " c236_orgao = '$this->c236_orgao' ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaMassaInstituida()) {
+                $sql  .= $virgula . " c236_massainstituida = '$this->c236_massainstituida' ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaBeneficioTesouro()) {
+                $sql  .= $virgula . " c236_beneficiotesouro = '$this->c236_beneficiotesouro' ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaAtoNormativo()) {
+                $sql  .= $virgula . " c236_atonormativo = $this->c236_atonormativo ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaDtAtoNormaCriRpps ()) {
+                if($this->c236_dtatonormacrirpps == null)
+                    $sql  .= $virgula . " c236_dtatonormacrirpps = null  ";
+                else
+                    $sql  .= $virgula . " c236_dtatonormacrirpps = '$this->c236_dtatonormacrirpps'  ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaNroAtoNormaSegreMassa()) {
+            
+                if($this->c236_massainstituida == 't' & db_getsession("DB_anousu") > 2022){
+                    $sql  .= $virgula . " c236_nroatonormasegremassa = '$this->c236_nroatonormasegremassa' ";  
+                }else{
+                    $sql  .= $virgula . " c236_nroatonormasegremassa = null ";
+                }
+               
+                $virgula = ",";
+            }
+    
+            if ($this->verificaDataAtoSossegragacao()) {
+                if ($this->c236_massainstituida == "t" && db_getsession("DB_anousu") > 2022)
+                    $sql  .= $virgula . " c236_dtatonormasegremassa = '$this->c236_dtatonormasegremassa' ";
+                else    
+                    $sql  .= $virgula . " c236_dtatonormasegremassa = null ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaPlanoDeFatuarial()) {
+                $sql  .= $virgula . " c236_planodefatuarial = '$this->c236_planodefatuarial' ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaAtoPlanoDeFatuarial()) {
+                if($this->c236_planodefatuarial == 1 && db_getsession("DB_anousu") > 2022)
+                    $sql  .= $virgula . " c236_atonormplanodefat = '$this->c236_atonormplanodefat' ";
+                else  
+                    $sql  .= $virgula . " c236_atonormplanodefat = null ";  
+                $virgula = ",";
+            }
+    
+            if ($this->verificaDataAtoEquacionamento()) {
+                if ($this->c236_planodefatuarial == 1 && db_getsession("DB_anousu") > 2022)
+                    $sql  .= $virgula . " c236_dtatoplanodefat = '$this->c236_dtatoplanodefat' ";
+                else    
+                    $sql  .= $virgula . " c236_dtatoplanodefat = null " ;
+                $virgula = ",";
+            }        
+                
+            if ($this->verificaCgmExecutivo()) {
+                $sql  .= $virgula . " c236_numcgmexecutivo = '$this->c236_numcgmexecutivo' ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaCgmLegislativo()) {
+                $sql  .= $virgula . " c236_numcgmlegislativo = '$this->c236_numcgmlegislativo' ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaCgmGestora()) {
+                $sql  .= $virgula . " c236_numcgmgestora = '$this->c236_numcgmgestora' ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaTipoCadastro()) {
+                $sql  .= $virgula . " c236_tipocadastro = '$this->c236_tipocadastro' ";
+                $virgula = ",";
+            }        
+        }else{
+            if ($this->verificaCodDirp()) {
+                $sql .= $virgula . " c236_coddipr = {$this->c236_coddipr} ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaOrgao()) {
+                $sql  .= $virgula . " c236_orgao = '$this->c236_orgao' ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaMassaInstituida()) {
+                $sql  .= $virgula . " c236_massainstituida = '$this->c236_massainstituida' ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaBeneficioTesouro()) {
+                $sql  .= $virgula . " c236_beneficiotesouro = '$this->c236_beneficiotesouro' ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaAtoNormativo()) {
+                $sql  .= $virgula . " c236_atonormativo = $this->c236_atonormativo ";
+                $virgula = ",";
+            }
+                            
+            if ($this->verificaExercicioNormativo()) {
+                if(db_getsession("DB_anousu") > 2022){
+                    $sql  .= $virgula . " c236_exercicionormativo =  null " ;  
+                }else{
+                    $sql  .= $virgula . " c236_exercicionormativo = $this->c236_exercicionormativo ";
+                } 
+                $virgula = ",";
+            }
+    
+            if ($this->verificaCgmExecutivo()) {
+                $sql  .= $virgula . " c236_numcgmexecutivo = '$this->c236_numcgmexecutivo' ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaCgmLegislativo()) {
+                $sql  .= $virgula . " c236_numcgmlegislativo = '$this->c236_numcgmlegislativo' ";
+                $virgula = ",";
+            }
+    
+            if ($this->verificaCgmGestora()) {
+                $sql  .= $virgula . " c236_numcgmgestora = '$this->c236_numcgmgestora' ";
+                $virgula = ",";
+            }
 
-        if ($this->verificaCodDirp()) {
-            $sql .= $virgula . " c236_coddipr = {$this->c236_coddipr} ";
-            $virgula = ",";
         }
-
-        if ($this->verificaOrgao()) {
-            $sql  .= $virgula . " c236_orgao = '$this->c236_orgao' ";
-            $virgula = ",";
-        }
-
-        if ($this->verificaMassaInstituida()) {
-            $sql  .= $virgula . " c236_massainstituida = '$this->c236_massainstituida' ";
-            $virgula = ",";
-        }
-
-        if ($this->verificaBeneficioTesouro()) {
-            $sql  .= $virgula . " c236_beneficiotesouro = '$this->c236_beneficiotesouro' ";
-            $virgula = ",";
-        }
-
-        if ($this->verificaAtoNormativo()) {
-            $sql  .= $virgula . " c236_atonormativo = $this->c236_atonormativo ";
-            $virgula = ",";
-        }
-
-        if ($this->verificaExercicioNormativo()) {
-            $sql  .= $virgula . " c236_exercicionormativo = $this->c236_exercicionormativo ";
-            $virgula = ",";
-        }
-
-        if ($this->verificaCgmExecutivo()) {
-            $sql  .= $virgula . " c236_numcgmexecutivo = '$this->c236_numcgmexecutivo' ";
-            $virgula = ",";
-        }
-
-        if ($this->verificaCgmLegislativo()) {
-            $sql  .= $virgula . " c236_numcgmlegislativo = '$this->c236_numcgmlegislativo' ";
-            $virgula = ",";
-        }
-
-        if ($this->verificaCgmGestora()) {
-            $sql  .= $virgula . " c236_numcgmgestora = '$this->c236_numcgmgestora' ";
-            $virgula = ",";
-        }
+      
 
         $sql .= " WHERE ";
 
@@ -256,7 +510,7 @@ class cl_dipr
             if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
                 $this->erro_sql = "Despesa do Codigo DIRP não foi Alterado. Alteracao Executada.\\n";
-                $this->erro_sql .= "Valores : " . $this->c233_sequencial;
+                $this->erro_sql .= "Valores : " . $this->c236_sequencial;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -265,7 +519,7 @@ class cl_dipr
             } else {
                 $this->erro_banco = "";
                 $this->erro_sql = "Alteracao efetuada com Sucesso\\n";
-                $this->erro_sql .= "Valores : " . $this->c233_sequencial;
+                $this->erro_sql .= "Valores : " . $this->c236_sequencial;
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
@@ -463,9 +717,64 @@ class cl_dipr
         return true;
     }
 
+    function verificaDtAtoNormaCriRpps()
+    {   
+        if (($this->c236_dtatonormacrirpps == '' || $this->c236_dtatonormacrirpps == null) && db_getsession("DB_anousu") > 2022) {
+            $this->erroCampo("Campo Data do ato normativo de criação do RPPS não Informado.", "c236_dtatonormacrirpps" );
+            return false;
+        }
+        return true;
+    }
+
+    function verificaNroAtoNormaSegreMassa()
+    {
+        if ($this->c236_nroatonormasegremassa == null && $this->c236_massainstituida == "t" && db_getsession("DB_anousu") > 2022) {
+            $this->erroCampo("Campo Número do ato normativo que implementou ou desfez a segregação da massa não Informado.", "c236_nroatonormasegremassa");
+            return false;
+        }
+        return true;
+    }
+
+    function verificaDataAtoSossegragacao()
+    {
+       
+        if ($this->c236_dtatonormasegremassa == null && $this->c236_massainstituida == "t" && db_getsession("DB_anousu") > 2022) {
+            $this->erroCampo("Campo Data do ato normativo que implementou ou desfez a segregação da massa não Informado.", "c236_dtatonormasegremassa");
+            return false;
+        }
+        return true;
+    }
+
+    function verificaAtoPlanoDeFatuarial()
+    {
+        if ($this->c236_atonormplanodefat == null && $this->c236_planodefatuarial == 1 && db_getsession("DB_anousu") > 2022) {
+            $this->erroCampo("Campo Ato normativo que estabeleceu o plano de equacionamento do déficit atuarial não Informado.", "c236_atonormplanodefat");
+            return false;
+        }
+        return true;
+    }
+
+    function verificaDataAtoEquacionamento()
+    {
+        if ($this->c236_dtatoplanodefat == null && $this->c236_planodefatuarial == 1 && db_getsession("DB_anousu") > 2022) {
+            $this->erroCampo("Campo Data do ato normativo que estabeleceu o plano de equacionamento do déficit atuarial não Informado.", "c236_dtatoplanodefat");
+            return false;
+        }
+        return true;
+    }
+    
+    function verificaPlanoDeFatuarial()
+    {   
+        if ($this->c236_planodefatuarial == 0 && db_getsession("DB_anousu") > 2022) {
+            $this->erroCampo("Campo Houve necessidade de implementar plano de equacionamento de déficit atuarial? não Informado.", "c236_planodefatuarial");
+            return false;
+        }
+        return true;
+    }
+
     function verificaExercicioNormativo()
     {
-        if ($this->c236_exercicionormativo == null) {
+        if ($this->c236_exercicionormativo == null && db_getsession("DB_anousu") < 2023) {
             $this->erroCampo("Campo Exercicio Normativo não Informado.", "c236_exercicionormativo");
             return false;
         }
@@ -497,8 +806,17 @@ class cl_dipr
             return false;
         }
         return true;
-    }
-
+    } 
+    
+    function verificaTipoCadastro()
+    {
+        if ($this->c236_tipocadastro == null && db_getsession("DB_anousu") > 2022) {
+            $this->erroCampo("Campo Tipo de Cadastro: não Informado.", "c236_tipocadastro");
+            return false;
+        }
+        return true;
+    } 
+    
     function erroCampo($descricao, $campo)
     {
         $this->erro_sql = $descricao;

@@ -134,11 +134,11 @@ class SicomArquivoBF extends SicomArquivoBase implements iPadArquivoBaseCSV
 
 
     /**
-     * O método `getDados()`, da classe `BalancoFinanceiroDCASP2022()`,
+     * O metodo `getDados()`, da classe `BalancoFinanceiroDCASP2022()`,
      * retorna um array enorme. Para pegar os dados necessários para cada
      * registro do SICOM DCASP, estamos passando os índices exatos do array.
      * Se eles forem alterados (nas configurações dos relatórios), devem
-     * ser alterados aqui também.
+     * ser alterados aqui tambem.
      */
 
     $oBalancoFinanceiro = new BalancoFinanceiroDCASP2015($iAnoUsu, $iCodigoRelatorio, $iCodigoPeriodo);

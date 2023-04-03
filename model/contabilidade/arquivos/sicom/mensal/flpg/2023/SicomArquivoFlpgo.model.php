@@ -507,11 +507,11 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
         $clflpgo10                                          = new cl_flpgo102023();
         $clflpgo10->si195_tiporegistro                      = $oDados10->si195_tiporegistro;
         $clflpgo10->si195_codvinculopessoa                  = $oDados10->rh02_regist;
-		$clflpgo10->si195_regime             		        = $oDados10->si195_regime;
-		$clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
+		    $clflpgo10->si195_regime             		            = $oDados10->si195_regime;
+		    $clflpgo10->si195_indtipopagamento                  = $aTiposPagamento[$iContEx]['si195_indtipopagamento'];
         $clflpgo10->si195_dsctipopagextra                   = $this->convert_accented_characters($aTiposPagamento[$iContEx]['si195_dsctipopagextra']);
         $clflpgo10->si195_indsituacaoservidorpensionista    = $oDados10->si195_indsituacaoservidorpensionista;
-        $clflpgo10->si195_indpensionista      = $oDados10->si195_indpensionista;
+        $clflpgo10->si195_indpensionista                    = $oDados10->si195_indpensionista;
         if($oDados10->rh30_vinculo == 'P') {
             if($oDados10->rh02_cgminstituidor == "" || $oDados10->rh02_cgminstituidor == null){
                 $clflpgo10->si195_nrocpfinstituidor         = "";
@@ -525,20 +525,19 @@ class SicomArquivoFlpgo extends SicomArquivoBase implements iPadArquivoBaseCSV {
             $clflpgo10->si195_datobitoinstituidor           = "";
             $clflpgo10->si195_tipodependencia               = "";
         }
-        $clflpgo10->si195_dscdependencia                       = $this->convert_accented_characters($oDados10->si195_dscdependencia);
-        $clflpgo10->si195_optouafastpreliminar                 = "2";
-        $clflpgo10->si195_datfastpreliminar                   = NULL;
+        $clflpgo10->si195_dscdependencia                    = $this->convert_accented_characters($oDados10->si195_dscdependencia);
+        $clflpgo10->si195_optouafastpreliminar              = "2";
+        $clflpgo10->si195_datfastpreliminar                 = NULL;
         $clflpgo10->si195_datconcessaoaposentadoriapensao   = $oDados10->si195_datconcessaoaposentadoriapensao;
         $clflpgo10->si195_dsccargo                          = $this->convert_accented_characters($oDados10->si195_dsccargo);
         $clflpgo10->si195_codcargo                          = (in_array($oDados10->si195_indsituacaoservidorpensionista,array('03','05','06','07','08','09')) ? 0 : $oDados10->rh37_cbo);
-        $clflpgo10->si195_sglcargo 							= $this->convert_accented_characters($oDados10->si195_sglcargo);
-        $clflpgo10->si195_dscapo           					= $this->convert_accented_characters($dscAPO);
+        $clflpgo10->si195_sglcargo 							            = $this->convert_accented_characters($oDados10->si195_sglcargo);
+        $clflpgo10->si195_dscapo           					        = $this->convert_accented_characters($dscAPO);
         $clflpgo10->si195_natcargo                          = $this->convert_accented_characters($oDados10->si195_reqcargo);
-        $clflpgo10->si195_dscnatcargo 						= ($oDados10->si195_reqcargo == 4)?substr($this->convert_accented_characters($oDados10->rh37_atividadedocargo),0,150):' ';
-        $clflpgo10->si195_indcessao 						= $this->convert_accented_characters($oDados10->si195_indcessao);
-        $clflpgo10->si195_dsclotacao 						= $this->convert_accented_characters($oDados10->si195_dsclotacao);
-        $clflpgo10->si195_indsalaaula 						= ($oDados10->rh30_vinculo != 'I' ? $oDados10->rh37_exerceatividade : '');
-        $clflpgo10->si195_vlrcargahorariasemanal 		    = ($oDados10->si195_sglcargo != 'APO') ? $oDados10->si195_vlrcargahorariasemanal : '';
+        $clflpgo10->si195_indcessao 						            = $this->convert_accented_characters($oDados10->si195_indcessao);
+        $clflpgo10->si195_dsclotacao 						            = $this->convert_accented_characters($oDados10->si195_dsclotacao);
+        $clflpgo10->si195_indsalaaula 						          = ($oDados10->rh30_vinculo != 'I' ? $oDados10->rh37_exerceatividade : '');
+        $clflpgo10->si195_vlrcargahorariasemanal 		        = ($oDados10->si195_sglcargo != 'APO') ? $oDados10->si195_vlrcargahorariasemanal : '';
         $clflpgo10->si195_datefetexercicio                  = $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datcomissionado                   = $oDados10->si195_datefetexercicio;
         $clflpgo10->si195_datexclusao                       = $oDados10->si195_datexclusao;

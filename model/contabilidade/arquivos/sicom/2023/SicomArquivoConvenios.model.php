@@ -154,7 +154,6 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
         
         $clconv112023->si93_tiporegistro          = 11;
         $clconv112023->si93_codconvenio           = $oDados10->c206_sequencial;
-        $clconv112023->si93_tipodocumento         = 2;
         $clconv112023->si93_nrodocumento          = $oDados11->c207_nrodocumento;
         $clconv112023->si93_esferaconcedente      = $oDados11->c207_esferaconcedente;
         $clconv112023->si93_valorconcedido        = $oDados11->c207_valorconcedido;

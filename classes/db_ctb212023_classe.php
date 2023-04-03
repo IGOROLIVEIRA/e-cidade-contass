@@ -29,6 +29,7 @@ class cl_ctb212023 {
    var $si97_codctbtransf = 0; 
    var $si97_codfontectbtransf = 0; 
    var $si97_saldocectransf = 0;
+   var $si97_codidentificafr = null;
    var $si97_mes = 0; 
    var $si97_reg20 = 0; 
    var $si97_instit = 0; 
@@ -47,6 +48,7 @@ class cl_ctb212023 {
                  si97_codctbtransf = int8 = Código Identificador da Conta Bancária 
                  si97_codfontectbtransf = int8 = Código da fonte de recursos ctb 
                  si97_saldocectransf = int8 = A conta de onde saiu ou entrou recurso compõe ou não compõe Caixa e Equivalentes de Caixa
+                 si97_codidentificafr = int8 = Código identificador da movimentação de reclassificação de entrada e saída
                  si97_mes = int8 = Mês 
                  si97_reg20 = int8 = reg20 
                  si97_instit = int8 = Instituição 
@@ -82,6 +84,7 @@ class cl_ctb212023 {
        $this->si97_codctbtransf = ($this->si97_codctbtransf == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_codctbtransf"]:$this->si97_codctbtransf);
        $this->si97_codfontectbtransf = ($this->si97_codfontectbtransf == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_codfontectbtransf"]:$this->si97_codfontectbtransf);
        $this->si97_saldocectransf = ($this->si97_saldocectransf == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_saldocectransf"]:$this->si97_saldocectransf);
+       $this->si97_codidentificafr = ($this->si97_codidentificafr == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_codidentificafr"]:$this->si97_codidentificafr);
        $this->si97_mes = ($this->si97_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_mes"]:$this->si97_mes);
        $this->si97_reg20 = ($this->si97_reg20 == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_reg20"]:$this->si97_reg20);
        $this->si97_instit = ($this->si97_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si97_instit"]:$this->si97_instit);
@@ -127,6 +130,9 @@ class cl_ctb212023 {
 	 }
 	 if($this->si97_saldocectransf == null ){ 
 		$this->si97_saldocectransf = "0";
+	 }
+	 if($this->si97_codidentificafr == null ){ 
+		$this->si97_codidentificafr = null;
 	 }
      if($this->si97_mes == null ){ 
        $this->erro_sql = " Campo Mês nao Informado.";
@@ -190,12 +196,13 @@ class cl_ctb212023 {
                                       ,si97_codreduzidomov 
                                       ,si97_tipomovimentacao 
                                       ,si97_tipoentrsaida 
-									  ,si97_dscoutrasmov
-									  ,si97_saldocec
+									                    ,si97_dscoutrasmov
+									                    ,si97_saldocec
                                       ,si97_valorentrsaida 
                                       ,si97_codctbtransf 
-									  ,si97_codfontectbtransf 
-									  ,si97_saldocectransf
+									                    ,si97_codfontectbtransf 
+									                    ,si97_saldocectransf
+									                    ,si97_codidentificafr
                                       ,si97_mes 
                                       ,si97_reg20 
                                       ,si97_instit 
@@ -208,12 +215,13 @@ class cl_ctb212023 {
                                ,$this->si97_codreduzidomov 
                                ,$this->si97_tipomovimentacao 
                                ,'$this->si97_tipoentrsaida' 
-							   ,'$this->si97_dscoutrasmov'
-							   ,$this->si97_saldocec
+							                 ,'$this->si97_dscoutrasmov'
+							                 ,$this->si97_saldocec
                                ,$this->si97_valorentrsaida 
                                ,$this->si97_codctbtransf 
-							   ,$this->si97_codfontectbtransf 
-							   ,$this->si97_saldocectransf
+							                 ,$this->si97_codfontectbtransf 
+							                 ,$this->si97_saldocectransf
+							                 ,$this->si97_codidentificafr
                                ,$this->si97_mes 
                                ,$this->si97_reg20 
                                ,$this->si97_instit 
@@ -353,6 +361,10 @@ class cl_ctb212023 {
 	 }
 	 if(trim($this->si97_saldocectransf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si97_saldocectransf"])){
 		$sql  .= $virgula." si97_saldocectransf = '$this->si97_saldocectransf' ";
+		$virgula = ",";
+	 }
+	 if(trim($this->si97_codidentificafr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si97_codidentificafr"])){
+		$sql  .= $virgula." si97_codidentificafr = '$this->si97_codidentificafr' ";
 		$virgula = ",";
 	 }
      if(trim($this->si97_mes)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si97_mes"])){ 
@@ -626,6 +638,311 @@ class cl_ctb212023 {
        }
      }
      return $sql;
+  }
+
+  /**
+   * Consulta principal para geracao do Registro 21
+   *
+   * @param string $dataFinal
+   * @param integer $ano
+   * @param integer $mes
+   * @param integer $codctb
+   * @param integer $fonte
+   * @return $sSqlReg21
+   */
+  public function sql_Reg21($dataFinal, $ano, $mes, $codctb, $fonte)
+  {
+    $sSqlReg21 = "SELECT * FROM
+                      (SELECT '21' AS tiporegistro,
+                              c71_codlan AS codreduzido,
+                              contacredito.c61_reduz AS codctb,
+                              conplanodebito.c60_codsis AS codsisctb,
+                              contacreditofonte.o15_codtri AS codfontrecurso,
+                              2 AS tipomovimentacao,
+                              (bancodebito.c63_conta||bancodebito.c63_dvconta)AS bancodebito_c63_conta,
+                              bancodebito.c63_tipoconta AS bancodebito_c63_tipoconta,
+                              (bancocredito.c63_conta||bancocredito.c63_dvconta) AS bancocredito_c63_conta,
+                              bancocredito.c63_tipoconta AS bancocredito_c63_tipoconta,
+                              CASE
+                                  WHEN c71_coddoc IN (101, 116) AND substr(o57_fonte,0,3) = '49' THEN 2
+                                  WHEN c71_coddoc = 101 THEN 3
+                                  WHEN c71_coddoc IN (35, 37)
+                                      AND
+                                          (SELECT sum(CASE
+                                                          WHEN c53_tipo = 31 THEN -1 * c70_valor
+                                                          ELSE c70_valor
+                                                      END) AS valor
+                                            FROM conlancamdoc
+                                            JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                                            JOIN conlancamord ON c71_codlan = c80_codlan
+                                            JOIN conlancam ON c70_codlan = c71_codlan
+                                            WHERE c53_tipo IN (31, 30)
+                                              AND c70_data <= '{$dataFinal}'
+                                              AND c80_codord =
+                                                    (SELECT c80_codord FROM conlancamord
+                                                      WHERE c80_codlan=c69_codlan
+                                                      LIMIT 1)) >= 0
+                                      OR c71_coddoc = 5
+                                      AND
+                                          (SELECT sum(CASE
+                                                          WHEN c53_tipo = 31 THEN -1 * c70_valor
+                                                          ELSE c70_valor
+                                                      END) AS valor
+                                            FROM conlancamdoc
+                                            JOIN conhistdoc ON c53_coddoc = c71_coddoc
+                                            JOIN conlancamord ON c71_codlan = c80_codlan
+                                            JOIN conlancam ON c70_codlan = c71_codlan
+                                            WHERE c53_tipo IN (31, 30)
+                                              AND c70_data <= '{$dataFinal}'
+                                              AND c80_codord =
+                                                    (SELECT c80_codord FROM conlancamord
+                                                    WHERE c80_codlan=c69_codlan
+                                                    LIMIT 1)) >= 0 THEN 8
+                                  WHEN c71_coddoc IN (151, 161, 163)
+                                      AND
+                                          (SELECT k17_situacao FROM slip
+                                            JOIN conlancamslip ON k17_codigo = c84_slip
+                                            JOIN conlancamdoc ON c71_codlan = c84_conlancam
+                                            WHERE c71_codlan=c69_codlan
+                                                AND c71_coddoc IN (151, 161, 163)
+                                            LIMIT 1) IN (2, 4) THEN 8
+                                  WHEN c71_coddoc IN (131, 152, 162) THEN 10
+                                  WHEN c71_coddoc IN (120)
+                                      AND
+                                          (SELECT k17_situacao FROM slip
+                                            JOIN conlancamslip ON k17_codigo = c84_slip
+                                            JOIN conlancamdoc ON c71_codlan = c84_conlancam
+                                            WHERE c71_codlan=c69_codlan
+                                              AND c71_coddoc IN (120)
+                                            LIMIT 1) = 2 THEN 13
+                                  WHEN c71_coddoc IN (141, 140) AND k131_concarpeculiar = '095' THEN 95
+                                  WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3) THEN 7
+                                  WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta IN (2, 3) AND bancocredito.c63_tipoconta = 1 THEN 9
+                                  WHEN c71_coddoc IN (141, 140) THEN 6
+                                  ELSE 99
+                              END AS tipoentrsaida,
+                              substr(o57_fonte,0,3) AS rubrica,
+                              conlancamval.c69_valor AS valorentrsaida,
+                              CASE
+                                  WHEN substr(conplanocredito.c60_estrut, 1, 3) = '111'
+                                      AND substr(conplanocredito.c60_estrut, 1, 7) != '1111101'
+                                      AND substr(conplanocredito.c60_estrut, 1, 7) != '1111102'
+                                      AND substr(conplanocredito.c60_estrut, 1, 6) != '111113'
+                                      AND substr(conplanocredito.c60_estrut, 1, 7) != '1112101' THEN 1
+                                  ELSE 2
+                              END AS saldocec,
+                              CASE
+                                  WHEN c71_coddoc IN (140, 141) THEN contadebito.c61_reduz
+                                  ELSE 0
+                              END AS codctbtransf,
+                              CASE
+                                  WHEN c71_coddoc IN (140, 141) THEN contacreditofonte.o15_codtri
+                                  ELSE '0'
+                              END AS codfontectbtransf,
+                              CASE
+                                  WHEN c71_coddoc IN (140, 141) THEN CASE
+                                                                        WHEN substr(conplanodebito.c60_estrut, 1, 3) = '111'
+                                                                              AND substr(conplanodebito.c60_estrut, 1, 7) != '1111101'
+                                                                              AND substr(conplanodebito.c60_estrut, 1, 7) != '1111102'
+                                                                              AND substr(conplanodebito.c60_estrut, 1, 6) != '111113'
+                                                                              AND substr(conplanodebito.c60_estrut, 1, 7) != '1112101' THEN 1
+                                                                        ELSE 2
+                                                                    END
+                                  ELSE 0
+                              END AS saldocectransf,
+                              c71_coddoc,
+                              c71_codlan,
+                              CASE
+                                  WHEN c71_coddoc IN (5, 35, 37, 6, 36, 38) THEN fontempenho.o15_codtri
+                                  WHEN c71_coddoc IN (100, 101, 115, 116) THEN fontereceita.o15_codtri
+                                  ELSE contacreditofonte.o15_codtri
+                              END AS fontemovimento,
+                              CASE
+                                  WHEN c72_complem ILIKE 'Referente%'
+                                      AND c71_coddoc IN (5, 35, 37, 6, 36, 38) THEN 1
+                                  ELSE 0
+                              END AS retencao,
+                              k131_concarpeculiar
+                      FROM conlancamdoc
+                      INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
+                      INNER JOIN conplanoreduz contadebito ON contadebito.c61_reduz = conlancamval.c69_debito AND contadebito.c61_anousu = conlancamval.c69_anousu
+                      LEFT JOIN conplanoconta bancodebito ON (bancodebito.c63_codcon, bancodebito.c63_anousu) = (contadebito.c61_codcon, contadebito.c61_anousu)
+                            AND contadebito.c61_reduz = conlancamval.c69_debito
+                      INNER JOIN conplanoreduz contacredito ON contacredito.c61_reduz = conlancamval.c69_credito AND contacredito.c61_anousu = conlancamval.c69_anousu
+                      INNER JOIN conplano conplanocredito ON contacredito.c61_codcon = conplanocredito.c60_codcon AND contacredito.c61_anousu = conplanocredito.c60_anousu
+                      INNER JOIN conplano conplanodebito ON contacredito.c61_codcon = conplanodebito.c60_codcon AND contacredito.c61_anousu = conplanodebito.c60_anousu
+                      LEFT JOIN conplanoconta bancocredito ON (bancocredito.c63_codcon, bancocredito.c63_anousu) = (contacredito.c61_codcon, contacredito.c61_anousu)
+                            AND contacredito.c61_reduz = conlancamval.c69_credito
+                      LEFT JOIN conlancamemp ON conlancamemp.c75_codlan = conlancamdoc.c71_codlan
+                      LEFT JOIN empempenho ON empempenho.e60_numemp = conlancamemp.c75_numemp
+                      LEFT JOIN orcdotacao ON orcdotacao.o58_anousu = empempenho.e60_anousu AND orcdotacao.o58_coddot = empempenho.e60_coddot
+                      LEFT JOIN orctiporec fontempenho ON fontempenho.o15_codigo = orcdotacao.o58_codigo
+                      LEFT JOIN orctiporec contacreditofonte ON contacreditofonte.o15_codigo = contacredito.c61_codigo
+                      LEFT JOIN orctiporec contadebitofonte ON contadebitofonte.o15_codigo = contadebito.c61_codigo
+                      LEFT JOIN conlancamrec ON conlancamrec.c74_codlan = conlancamdoc.c71_codlan
+                      LEFT JOIN orcreceita ON orcreceita.o70_codrec = conlancamrec.c74_codrec AND orcreceita.o70_anousu = conlancamrec.c74_anousu
+                      LEFT JOIN orcfontes receita ON receita.o57_codfon = orcreceita.o70_codfon AND receita.o57_anousu = orcreceita.o70_anousu
+                      LEFT JOIN orctiporec fontereceita ON fontereceita.o15_codigo = orcreceita.o70_codigo
+                      LEFT JOIN conlancamcompl ON c72_codlan = c71_codlan
+                      LEFT JOIN conlancamslip ON c71_codlan=c84_conlancam
+                      LEFT JOIN slipconcarpeculiar ON k131_slip=c84_slip AND k131_tipo=2
+                      WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = {$ano}
+                          AND DATE_PART('MONTH',conlancamdoc.c71_data) = '{$mes}'
+                          AND conlancamval.c69_credito = {$codctb}
+                      UNION ALL
+                      SELECT '21' AS tiporegistro,
+                              c71_codlan AS codreduzido,
+                              contadebito.c61_reduz AS codctb,
+                              conplanodebito.c60_codsis AS codsisctb,
+                              contadebitofonte.o15_codtri AS codfontrecurso,
+                              1 AS tipomovimentacao,
+                              (bancodebito.c63_conta||bancodebito.c63_dvconta) AS bancodebito_c63_conta,
+                              bancodebito.c63_tipoconta AS bancodebito_c63_tipoconta,
+                              (bancocredito.c63_conta||bancocredito.c63_dvconta) AS bancocredito_c63_conta,
+                              bancocredito.c63_tipoconta AS bancocredito_c63_tipoconta,
+                              CASE
+                                  WHEN c71_coddoc IN (100, 115) AND substr(o57_fonte,0,3) = '49' THEN 16
+                                  WHEN c71_coddoc = 100 AND substr(o57_fonte,2,4) = '1321' AND bancodebito.c63_tipoconta IN (2, 3) THEN 4
+                                  WHEN c71_coddoc = 100 THEN 1
+                                  WHEN c71_coddoc IN (6, 36, 38, 121, 153, 163) THEN 17
+                                  WHEN c71_coddoc IN (131, 152, 162) THEN 10
+                                  WHEN c71_coddoc IN (130) THEN 12
+                                  WHEN c71_coddoc IN (141, 140) AND k131_concarpeculiar = '096' THEN 96
+                                  WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta = 1 AND bancocredito.c63_tipoconta IN (2, 3) THEN 7
+                                  WHEN c71_coddoc IN (141, 140) AND bancodebito.c63_tipoconta IN (2, 3) AND bancocredito.c63_tipoconta = 1 THEN 9
+                                  WHEN c71_coddoc IN (141, 140) THEN 5
+                                  ELSE 99
+                              END AS tipoentrsaida,
+                              substr(o57_fonte,0,3) AS rubrica,
+                              conlancamval.c69_valor AS valorentrsaida,
+                              CASE
+                                  WHEN substr(conplanocredito.c60_estrut, 1, 3) = '111'
+                                      AND substr(conplanocredito.c60_estrut, 1, 7) != '1111101'
+                                      AND substr(conplanocredito.c60_estrut, 1, 7) != '1111102'
+                                      AND substr(conplanocredito.c60_estrut, 1, 6) != '111113'
+                                      AND substr(conplanocredito.c60_estrut, 1, 7) != '1112101' THEN 1
+                                  ELSE 2
+                              END AS saldocec,
+                              CASE
+                                  WHEN c71_coddoc IN (140, 141) THEN contacredito.c61_reduz
+                                  ELSE 0
+                              END AS codctbtransf,
+                              CASE
+                                  WHEN c71_coddoc IN (140, 141) THEN contacreditofonte.o15_codtri
+                                  ELSE '0'
+                              END AS codfontectbtransf,
+                              CASE
+                                  WHEN c71_coddoc IN (140, 141) THEN CASE
+                                                                        WHEN substr(conplanodebito.c60_estrut, 1, 3) = '111'
+                                                                              AND substr(conplanodebito.c60_estrut, 1, 7) != '1111101'
+                                                                              AND substr(conplanodebito.c60_estrut, 1, 7) != '1111102'
+                                                                              AND substr(conplanodebito.c60_estrut, 1, 6) != '111113'
+                                                                              AND substr(conplanodebito.c60_estrut, 1, 7) != '1112101' THEN 1
+                                                                        ELSE 2
+                                                                    END
+                                  ELSE 0
+                              END AS saldocectransf,
+                              c71_coddoc,
+                              c71_codlan,
+                              CASE
+                                  WHEN c71_coddoc IN (5, 35, 37, 6, 36, 38) THEN fontempenho.o15_codtri
+                                  WHEN c71_coddoc IN (100, 101, 115, 116) THEN fontereceita.o15_codtri
+                                  WHEN c71_coddoc IN (140, 141) THEN contacreditofonte.o15_codtri
+                                  ELSE contadebitofonte.o15_codtri
+                              END AS fontemovimento,
+                              CASE
+                                  WHEN c72_complem ILIKE 'Referente%'
+                                      AND c71_coddoc IN (5, 35, 37, 6, 36, 38) THEN 1
+                                  ELSE 0
+                              END AS retencao,
+                              k131_concarpeculiar
+                      FROM conlancamdoc
+                      INNER JOIN conlancamval ON conlancamval.c69_codlan = conlancamdoc.c71_codlan
+                      INNER JOIN conplanoreduz contadebito ON contadebito.c61_reduz = conlancamval.c69_debito AND contadebito.c61_anousu = conlancamval.c69_anousu
+                      INNER JOIN conplano conplanocredito ON contadebito.c61_codcon = conplanocredito.c60_codcon AND contadebito.c61_anousu = conplanocredito.c60_anousu
+                      INNER JOIN conplano conplanodebito ON contadebito.c61_codcon = conplanodebito.c60_codcon AND contadebito.c61_anousu = conplanodebito.c60_anousu
+                      LEFT JOIN conplanoconta bancodebito ON (bancodebito.c63_codcon, bancodebito.c63_anousu) = (contadebito.c61_codcon, contadebito.c61_anousu)
+                            AND contadebito.c61_reduz = conlancamval.c69_debito
+                      INNER JOIN conplanoreduz contacredito ON contacredito.c61_reduz = conlancamval.c69_credito AND contacredito.c61_anousu = conlancamval.c69_anousu
+                      LEFT JOIN conplanoconta bancocredito ON (bancocredito.c63_codcon,  bancocredito.c63_anousu) = (contacredito.c61_codcon, contacredito.c61_anousu)
+                            AND contacredito.c61_reduz = conlancamval.c69_credito
+                      LEFT JOIN conlancamemp ON conlancamemp.c75_codlan = conlancamdoc.c71_codlan
+                      LEFT JOIN empempenho ON empempenho.e60_numemp = conlancamemp.c75_numemp
+                      LEFT JOIN orcdotacao ON orcdotacao.o58_anousu = empempenho.e60_anousu AND orcdotacao.o58_coddot = empempenho.e60_coddot
+                      LEFT JOIN orctiporec fontempenho ON fontempenho.o15_codigo = orcdotacao.o58_codigo
+                      LEFT JOIN orctiporec contacreditofonte ON contacreditofonte.o15_codigo = contacredito.c61_codigo
+                      LEFT JOIN orctiporec contadebitofonte ON contadebitofonte.o15_codigo = contadebito.c61_codigo
+                      LEFT JOIN conlancamrec ON conlancamrec.c74_codlan = conlancamdoc.c71_codlan
+                      LEFT JOIN orcreceita ON orcreceita.o70_codrec = conlancamrec.c74_codrec AND orcreceita.o70_anousu = conlancamrec.c74_anousu
+                      LEFT JOIN orcfontes receita ON receita.o57_codfon = orcreceita.o70_codfon AND receita.o57_anousu = orcreceita.o70_anousu
+                      LEFT JOIN orctiporec fontereceita ON fontereceita.o15_codigo = orcreceita.o70_codigo
+                      LEFT JOIN conlancamslip ON c71_codlan=c84_conlancam
+                      LEFT JOIN slipconcarpeculiar ON k131_slip=c84_slip AND k131_tipo=1
+                      LEFT JOIN conlancamcompl ON c72_codlan = c71_codlan WHERE DATE_PART('YEAR',conlancamdoc.c71_data) = {$ano}
+                            AND DATE_PART('MONTH',conlancamdoc.c71_data) = '{$mes}'
+                            AND conlancamval.c69_debito = {$codctb} ) AS xx
+                  WHERE fontemovimento::integer = {$fonte}";
+
+    return $sSqlReg21;
+  }
+
+  /**
+   * Dados da conta utilizada na transferencia
+   *
+   * @param integer $instituicao
+   * @param integer $ano
+   * @param integer $codctbtransf
+   * @return $sqlcontatransf
+   */
+  public function contaTransf($instituicao, $ano, $codctbtransf)
+  {
+    $sqlcontatransf = "SELECT si09_codorgaotce||(c63_banco::integer)::varchar
+                                          ||(c63_agencia::integer)::varchar
+                                          ||c63_dvagencia
+                                          ||(c63_conta::integer)::varchar
+                                          ||c63_dvconta
+                                          ||CASE
+                                                WHEN db83_tipoconta IN (2, 3) THEN 2
+                                                ELSE 1
+                                            END AS contadebito,
+                                          c61_reduz,
+                                          CASE
+                                               WHEN db83_tipoconta IN (2, 3) THEN 2
+                                               ELSE 1
+                                           END AS tipo,
+                                           CASE
+                                                WHEN (SELECT si09_tipoinstit FROM infocomplementaresinstit
+                                                      WHERE si09_instit = $instituicao) = 5 AND db83_tipoconta IN (2, 3)
+                                                  THEN db83_tipoaplicacao::varchar
+                                                ELSE ''
+                                            END AS tipoaplicacao,
+                                            CASE
+                                                WHEN (SELECT si09_tipoinstit FROM infocomplementaresinstit
+                                                      WHERE si09_instit = $instituicao) = 5 AND db83_tipoconta IN (2, 3)
+                                                  THEN db83_nroseqaplicacao::varchar
+                                                ELSE ''
+                                            END AS nroseqaplicacao,
+                                          o15_codtri
+                                    FROM saltes
+                                    JOIN conplanoreduz ON k13_reduz = c61_reduz AND c61_anousu = $ano
+                                    JOIN conplanoconta ON c63_codcon = c61_codcon AND c63_anousu = c61_anousu
+                                    JOIN orctiporec ON c61_codigo = o15_codigo
+                                    LEFT JOIN conplanocontabancaria ON c56_codcon = c61_codcon AND c56_anousu = c61_anousu
+                                    LEFT JOIN contabancaria ON c56_contabancaria = db83_sequencial
+                                    LEFT JOIN infocomplementaresinstit ON si09_instit = c61_instit
+                                    WHERE k13_reduz = {$codctbtransf}";
+
+    return $sqlcontatransf;
+  }
+
+  public function sql_codSisReg21($ano, $codctbtransf)
+  {
+    $sSql = "SELECT c60_codsis FROM saltes
+             JOIN conplanoreduz ON k13_reduz = c61_reduz AND c61_anousu = {$ano}
+             JOIN conplano ON c60_codcon = c61_codcon AND c60_anousu = c61_anousu
+             WHERE k13_reduz = {$codctbtransf}";
+
+    return $sSql;
   }
 }
 ?>

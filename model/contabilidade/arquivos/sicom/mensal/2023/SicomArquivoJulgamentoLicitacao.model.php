@@ -176,7 +176,9 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	END) as tipoDocumento,
 	cgm.z01_cgccpf as nroDocumento,
 	CASE WHEN liclicita.l20_tipojulg = 3 THEN aberlic112023.si47_nrolote  ELSE 0 END AS nroLote,
-	(solicitempcmater.pc16_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
+	CASE 
+	WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
+  ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
 	pcorcamval.pc23_vlrun as vlUnitario,
 	pcorcamval.pc23_quant as quantidade,
   l20_codigo as codlicitacao,
@@ -194,6 +196,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
 	INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
 	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
+	inner join pcmater on pcmater.pc01_codmater = solicitempcmater.pc16_codmater
 	INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
   LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
   LEFT JOIN aberlic102023 on (aberlic102023.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar)
@@ -216,6 +219,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 		                                                  '54')";
 
 		$rsResult10 = db_query($sSql);
+
 		/**
 		 * registro 10
 		 */
@@ -233,9 +237,9 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 
 					$oDados10->si60_tiporegistro = 10;
 					$oDados10->si60_codorgao = $oResult10->codorgaoresp;
-					if($oResult10->codunidsubant!= null || $oResult10->codunidsubant!=''){
-						$oDados10->si60_codunidadesub = $oResult10->codunidsubant;    
-					}else{
+					if ($oResult10->codunidsubant != null || $oResult10->codunidsubant != '') {
+						$oDados10->si60_codunidadesub = $oResult10->codunidsubant;
+					} else {
 						$oDados10->si60_codunidadesub = $oResult10->codunidadesubresp;
 					}
 					$oDados10->si60_exerciciolicitacao = $oResult10->exerciciolicitacao;
@@ -266,9 +270,9 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 
 			$cljulglic10->si60_tiporegistro = $oDadosAgrupados10->si60_tiporegistro;
 			$cljulglic10->si60_codorgao = $oDadosAgrupados10->si60_codorgao;
-			if($oDadosAgrupados10->codunidsubant!= null || $oDadosAgrupados10->codunidsubant!=''){
-				$cljulglic10->si60_codunidadesub = $oDadosAgrupados10->codunidsubant;    
-			}else{
+			if ($oDadosAgrupados10->codunidsubant != null || $oDadosAgrupados10->codunidsubant != '') {
+				$cljulglic10->si60_codunidadesub = $oDadosAgrupados10->codunidsubant;
+			} else {
 				$cljulglic10->si60_codunidadesub = $oDadosAgrupados10->si60_codunidadesub;
 			}
 			$cljulglic10->si60_exerciciolicitacao = $oDadosAgrupados10->si60_exerciciolicitacao;
@@ -314,7 +318,9 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	END) as tipoDocumento,
 	cgm.z01_cgccpf as nroDocumento,
 	aberlic112023.si47_nrolote as nroLote,
-	(solicitempcmater.pc16_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
+	CASE 
+	WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
+  ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
   pcorcamval.pc23_perctaxadesctabela as percDesconto,
   aberlic102023.si46_criterioadjudicacao as criterioadjudicacao,
   manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
@@ -330,6 +336,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 	INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
 	INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
 	INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
+	INNER JOIN pcmater on (solicitempcmater.pc16_codmater = pcmater.pc01_codmater)
 	INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
   LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
   LEFT JOIN aberlic102023 on (aberlic102023.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar
@@ -366,9 +373,9 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 
 					$oDados20->si61_tiporegistro = 20;
 					$oDados20->si61_codorgao = $oResult20->codorgaoresp;
-					if($oResult20->codunidsubant!= null || $oResult20->codunidsubant!=''){
-						$oDados20->si61_codunidadesub = $oResult20->codunidsubant;    
-					}else{
+					if ($oResult20->codunidsubant != null || $oResult20->codunidsubant != '') {
+						$oDados20->si61_codunidadesub = $oResult20->codunidsubant;
+					} else {
 						$oDados20->si61_codunidadesub = $oResult20->codunidadesubresp;
 					}
 					$oDados20->si61_exerciciolicitacao = $oResult20->exerciciolicitacao;
@@ -391,9 +398,9 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 
 			$cljulglic20->si61_tiporegistro = $oDadosAgrupados20->si61_tiporegistro;
 			$cljulglic20->si61_codorgao = $oDadosAgrupados20->si61_codorgao;
-			if($oDadosAgrupados20->codunidsubant!= null || $oDadosAgrupados20->codunidsubant!=''){
-				$cljulglic20->si61_codunidadesub = $oDadosAgrupados20->codunidsubant;    
-			}else{
+			if ($oDadosAgrupados20->codunidsubant != null || $oDadosAgrupados20->codunidsubant != '') {
+				$cljulglic20->si61_codunidadesub = $oDadosAgrupados20->codunidsubant;
+			} else {
 				$cljulglic20->si61_codunidadesub = $oDadosAgrupados20->si61_codunidadesub;
 			}
 			$cljulglic20->si61_exerciciolicitacao = $oDadosAgrupados20->si61_exerciciolicitacao;
@@ -438,7 +445,9 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
   END) as tipoDocumento,
   cgm.z01_cgccpf as nroDocumento,
   aberlic112023.si47_nrolote as nroLote,
-  (solicitempcmater.pc16_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) as codItem,
+  CASE 
+  WHEN (pcmater.pc01_codmaterant != 0 or pcmater.pc01_codmaterant != null) THEN pcmater.pc01_codmaterant::varchar
+ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) END AS coditem,
   pcorcamval.pc23_percentualdesconto as perctaxaadm,
   aberlic102023.si46_criterioadjudicacao as criterioadjudicacao,
   manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
@@ -454,6 +463,7 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
   INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
   INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
   INNER JOIN solicitempcmater ON (solicitem.pc11_codigo=solicitempcmater.pc16_solicitem)
+  INNER JOIN pcmater on (solicitempcmater.pc16_codmater = pcmater.pc01_codmater)
   INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
   LEFT  JOIN liclicitemlote on (liclicitem.l21_codigo=liclicitemlote.l04_liclicitem)
   LEFT JOIN aberlic102023 on (aberlic102023.si46_nroprocessolicitatorio = liclicita.l20_edital::varchar)
@@ -487,9 +497,9 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 
 					$oDados30->si62_tiporegistro = 30;
 					$oDados30->si62_codorgao = $oResult30->codorgaoresp;
-					if($oResult30->codunidsubant!= null || $oResult30->codunidsubant!=''){
-						$oDados30->si62_codunidadesub = $oResult30->codunidsubant;    
-					}else{
+					if ($oResult30->codunidsubant != null || $oResult30->codunidsubant != '') {
+						$oDados30->si62_codunidadesub = $oResult30->codunidsubant;
+					} else {
 						$oDados30->si62_codunidadesub = $oResult30->codunidadesubresp;
 					}
 					$oDados30->si62_exerciciolicitacao = $oResult30->exerciciolicitacao;
@@ -512,9 +522,9 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 
 			$cljulglic30->si62_tiporegistro = $oDadosAgrupados30->si62_tiporegistro;
 			$cljulglic30->si62_codorgao = $oDadosAgrupados30->si62_codorgao;
-			if($oDadosAgrupados30->codunidsubant!= null || $oDadosAgrupados30->codunidsubant!=''){
-				$cljulglic30->si62_codunidadesub = $oDadosAgrupados30->codunidsubant;    
-			}else{
+			if ($oDadosAgrupados30->codunidsubant != null || $oDadosAgrupados30->codunidsubant != '') {
+				$cljulglic30->si62_codunidadesub = $oDadosAgrupados30->codunidsubant;
+			} else {
 				$cljulglic30->si62_codunidadesub = $oDadosAgrupados30->si62_codunidadesub;
 			}
 			$cljulglic30->si62_exerciciolicitacao = $oDadosAgrupados30->si62_exerciciolicitacao;
@@ -582,9 +592,9 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 
 				$oDados40->si62_tiporegistro = $oResult40->tiporegistro;
 				$oDados40->si62_codorgao = $oResult40->codorgaoresp;
-				if($oResult40->codunidsubant!= null || $oResult40->codunidsubant!=''){
-					$oDados40->si62_codunidadesub = $oResult40->codunidsubant;    
-				}else{
+				if ($oResult40->codunidsubant != null || $oResult40->codunidsubant != '') {
+					$oDados40->si62_codunidadesub = $oResult40->codunidsubant;
+				} else {
 					$oDados40->si62_codunidadesub = $oResult40->codunidadesubresp;
 				}
 				$oDados40->si62_exerciciolicitacao = $oResult40->exerciciolicitacao;
@@ -608,12 +618,12 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 
 			$cljulglic40->si62_tiporegistro = $oDados40->si62_tiporegistro;
 			$cljulglic40->si62_codorgao = $oDados40->si62_codorgao;
-			if($oDados40->codunidsubant!= null || $oDados40->codunidsubant!=''){
-				$cljulglic40->si62_codunidadesub = $oDados40->codunidsubant;    
-			}else{
+			if ($oDados40->codunidsubant != null || $oDados40->codunidsubant != '') {
+				$cljulglic40->si62_codunidadesub = $oDados40->codunidsubant;
+			} else {
 				$cljulglic40->si62_codunidadesub = $oDados40->si62_codunidadesub;
 			}
-			
+
 			$cljulglic40->si62_exerciciolicitacao = $oDados40->si62_exerciciolicitacao;
 			$cljulglic40->si62_nroprocessolicitatorio = $oDados40->si62_nroprocessolicitatorio;
 			$cljulglic40->si62_dtjulgamento = $oDados40->si62_dtjulgamento;

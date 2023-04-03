@@ -31,6 +31,7 @@ class cl_contratos212023 {
    var $si88_mes = 0;
    var $si88_reg20 = 0;
    var $si88_instit = 0;
+   var $si88_nrolote = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  si88_sequencial = int8 = sequencial
@@ -48,6 +49,7 @@ class cl_contratos212023 {
                  si88_mes = int8 = Mês
                  si88_reg20 = int8 = reg20
                  si88_instit = int8 = Instituição
+                 si88_nrolote = int8 = Numero do Lote
                  ";
    //funcao construtor da classe
    function cl_contratos212023() {
@@ -82,6 +84,7 @@ class cl_contratos212023 {
        $this->si88_coditemsimcro = ($this->si88_coditemsimcro == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_coditemsimcro"]:$this->si88_coditemsimcro);
        $this->si88_descoutrosmateriais = ($this->si88_descoutrosmateriais == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_descoutrosmateriais"]:$this->si88_descoutrosmateriais);
        $this->si88_itemplanilha = ($this->si88_itemplanilha == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_itemplanilha"]:$this->si88_itemplanilha);
+       $this->si88_nrolote = ($this->si88_nrolote == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_nrolote"]:$this->si88_nrolote);
      }else{
        $this->si88_sequencial = ($this->si88_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si88_sequencial"]:$this->si88_sequencial);
      }
@@ -189,6 +192,7 @@ class cl_contratos212023 {
                                       ,si88_mes
                                       ,si88_reg20
                                       ,si88_instit
+                                      ,si88_nrolote
                        )
                 values (
                                 $this->si88_sequencial
@@ -206,6 +210,7 @@ class cl_contratos212023 {
                                ,$this->si88_mes
                                ,$this->si88_reg20
                                ,$this->si88_instit
+                               ," . ($this->si88_nrolote == "" ? "0" :  $this->si88_nrolote) . "
                       )";
      $result = db_query($sql);
      if($result==false){

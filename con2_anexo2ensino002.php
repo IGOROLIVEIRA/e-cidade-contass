@@ -93,11 +93,15 @@ criaWorkDotacao($sWhereDespesa,array($anousu), $dtini, $dtfim);
 
 $aSubFuncao = array(122,272,271,361,365,366,367,843);
 $sFuncao     = "12";
-$aFontes      = array("'101','118','119'");
+$aFontes      = array("'101','118','119','1101','1118','1119','15000001','15400007','15400000'");
 
 function getSaldoPlanoContaFonteAnexo($nFonte, $dtIni, $dtFim, $aInstits){
     $where = " c61_instit in ({$aInstits})" ;
-    $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
+    if(db_getsession("DB_anousu") > 2022){
+        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ($nFonte) ) ";
+    }else{
+        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
+    }
     $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
     $nTotalAnterior = 0;
     for($x = 0; $x < pg_numrows($result); $x++){
@@ -126,6 +130,8 @@ function getRestosSemDisponilibidadeAnexo($aFontes, $dtIni, $dtFim, $aInstits) {
         $sSqlOrder = "";
         $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
         $sSqlWhere = " o15_codtri in ($sFonte) group by 1 ";
+        if(db_getsession("DB_anousu") > 2022)
+            $sSqlWhere = " o15_codigo in ($sFonte) group by 1 ";
         $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
         $nValorRpPago = 0;
         foreach($aEmpRestos as $oResto){
@@ -149,6 +155,8 @@ function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dt
     $nValorAplicado = 0;
     // despesas pagas
     $aDespesasAplicada = getSaldoDespesa(null, "o58_funcao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in (".implode(",",$aSubFuncao).") and o15_codtri in (".implode(",",$aFontes).") and o58_instit in ($instits) group by 1,2");
+    if(db_getsession("DB_anousu") > 2022)
+        $aDespesasAplicada = getSaldoDespesa(null, "o58_funcao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in (".implode(",",$aSubFuncao).") and o15_codigo in (".implode(",",$aFontes).") and o58_instit in ($instits) group by 1,2");
     $nValorAplicado = count($aDespesasAplicada[0]) > 0 ? $aDespesasAplicada[0]->pago : 0;
 
     $nTotalReceitasRecebidasFundeb = 0;
@@ -170,8 +178,10 @@ function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dt
     $clempempenho = new cl_empempenho();
     $sSqlOrder = "";
     $sCampos = " o15_codtri, sum(vlrpag) as vlrpag";
-    $aFontesSuperavit = array("'201','218','219'");
+    $aFontesSuperavit = array("'201','218','219','25000001','25400007','25400000'");
     $sSqlWhere = " o15_codtri in (".implode(",", $aFontesSuperavit).") group by 1";
+    if(db_getsession("DB_anousu") > 2022)
+        $sSqlWhere = " o15_codigo in (".implode(",", $aFontesSuperavit).") group by 1";  
     $dtFimQuadrimestre = db_getsession("DB_anousu")."-04-30";
     $aEmpPagoSuperavit = $clempempenho->getDespesasCusteadosComSuperavit(db_getsession("DB_anousu"), $dtini, $dtFimQuadrimestre, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
     $valorEmpPagoSuperavit = 0;
@@ -180,7 +190,7 @@ function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dt
     }
     $nValorAplicado = $nValorAplicado + $valorEmpPagoSuperavit;
 
-    $aFontes = array("'101'","'201'","'118','119'","'218','219'");
+    $aFontes = array("'101','1101','15000001'","'201','25000001'","'118','119','1118','1119','15400007','15400000'","'218','219','25400007','25400000'");
     $nValorPagoSemDisponibilidade = getRestosSemDisponilibidadeAnexo($aFontes, $dtini, $dtfim, $instits);
 
     $nValorAplicado = $nValorAplicado + $nValorPagoSemDisponibilidade;
@@ -189,7 +199,10 @@ function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dt
     $sSqlOrder = "";
     $sCampos = " o15_codtri, sum(vlranu) as vlranu ";
     $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
-    $aFontes =array("'101','118','119','201','218','219'");
+    if(db_getsession("DB_anousu") > 2022)
+        $sSqlWhere = " o15_codigo in (".implode(",", $aFontes).") group by 1";
+    $aFontes =array("'101','118','119','1101','1118','1119','201','218','219','15000001','15400007','15400000','25000001','25400007','25400000'");
+
     $aEmpRestos = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
     $valorRpAnulado = 0;
     foreach($aEmpRestos as $oEmpResto){

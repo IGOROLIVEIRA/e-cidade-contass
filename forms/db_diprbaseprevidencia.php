@@ -114,12 +114,22 @@ $cldipr->rotulo->label();
                     <td><b>Tipo de fundo:</b></td>
                     <td>
                         <?php
-                        $arrayTipoFundo = array(
-                            0 => "Selecione",
-                            1 => "Fundo em Capitalização (Plano Previdenciário)",
-                            2 => "Fundo em Repartição (Plano Financeiro)",
-                            3 => "Responsabilidade do tesouro municipal"
-                        );
+                        if(db_getsession("DB_anousu") < 2023){
+                            $arrayTipoFundo = array(
+                                0 => "Selecione",
+                                1 => "Fundo em Capitalização (Plano Previdenciário)",
+                                2 => "Fundo em Repartição (Plano Financeiro)",                 
+                                3 => "Responsabilidade do tesouro municipal"
+                            );
+
+                        }else{
+                            $arrayTipoFundo = array(
+                                0 => "Selecione",
+                                1 => "Fundo em Capitalização (Plano Previdenciário)",
+                                2 => "Fundo em Repartição (Plano Financeiro)"
+                            );
+
+                        }  
                         db_select('c238_tipofundo', $arrayTipoFundo, true, 1, "");
                         ?>
                     </td>
@@ -217,11 +227,51 @@ $cldipr->rotulo->label();
                         ?>
                     </td>
                 </tr>
-
-                <tr>
+                <tr id="LinhaValorJuros">
                     <td>
-                        <b>Valor original repassado menos as deduções:</b>
+                        <b>Valor dos juros:</b>
                     </td>
+                    <td nowrap>
+                        <?
+                        db_input('c238_valorjuros', 14, null, null, true, "text", "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"","","","",14);
+                        ?>
+                    </td>
+                </tr>
+                <tr id="LinhaValorMulta">
+                    <td>
+                        <b>Valor da multa:</b>
+                    </td>
+                    <td nowrap>
+                        <?
+                        db_input('c238_valormulta', 14, null, null, true, "text", "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"","","","",14);
+                        ?>
+                    </td>
+                </tr>
+                <tr id="LinhaValorAtuMone">
+                    <td>
+                        <b>Valor da atualização monetária:</b>
+                    </td>
+                    <td nowrap>
+                        <?
+                        db_input('c238_valoratualizacaomonetaria', 14, null, null, true, "text", "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"","","","",14);
+                        ?>
+                    </td>
+                </tr>
+                <tr id="LinhaValorTotDedu">
+                    <td>
+                        <b>Valor total das deduções:</b>
+                    </td>
+                    <td nowrap>
+                        <?
+                        db_input('c238_valortotaldeducoes', 14, null, null, true, "text", "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"","","","",14);
+                        ?>
+                    </td>
+                </tr>
+               
+                <tr>
+                    <td><b>
+                    <?= db_getsession("DB_anousu") < 2023 ? "Valor original repassado menos as deduções:" : "Valor repassado:"?>
+                    </b></td>
                     <td nowrap>
                         <?
                         db_input('c238_valororiginalrepassado', 14, null, null, true, "text", "onkeyup=\"js_ValidaCampos(this, 4, 'valor', false, null, event)\"");
@@ -239,8 +289,7 @@ $cldipr->rotulo->label();
 </form>
 
 <script>
-    verificarTipoRepasse();
-
+    verificarTipoRepasse();                 
     function js_pesquisac237_codigodipr($lmostra) {
         js_OpenJanelaIframe('top.corpo', 'db_iframe_dipr', 'func_dipr.php?funcao_js=parent.js_preenchecoddipr|c236_coddipr|c236_massainstituida', 'Pesquisa', true);
     }
@@ -306,11 +355,33 @@ $cldipr->rotulo->label();
             document.getElementById('c238_tipocontribuicaosegurados').value = 0;
             return;
         }
-        document.getElementById('c238_tipocontribuicaopatronal').value = 0;
+        // document.getElementById('c238_tipocontribuicaopatronal').value = 0;
         return;
     }
 
     function alterarDisplayDaLinha(identificador, display) {
         document.getElementById(identificador).style.display = display;
     }
+
+    function validarCampos() {
+        return true;
+    }
+
+    function verificarCampos() {
+        var ano = "<?php echo db_getsession("DB_anousu"); ?>";
+        if(ano > 2022){
+            mostrarLinha('LinhaValorJuros');
+            mostrarLinha('LinhaValorMulta');
+            mostrarLinha('LinhaValorAtuMone');
+            mostrarLinha('LinhaValorTotDedu');
+            return;
+        }
+        ocultarLinha('LinhaValorJuros');
+        ocultarLinha('LinhaValorMulta');
+        ocultarLinha('LinhaValorAtuMone');
+        ocultarLinha('LinhaValorTotDedu');
+        return;
+    }
+
+    verificarCampos(); 
 </script>

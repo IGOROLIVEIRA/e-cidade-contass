@@ -27,14 +27,13 @@
 
 ini_set("memory_limit", '-1');
 
-require_once("libs/db_sql.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_libtributario.php");
-require_once("libs/db_libdocumento.php");
-require_once("dbforms/db_funcoes.php");
-require_once("fpdf151/pdf.php");
-require_once("libs/db_utils.php");
-require_once("fpdf151/scpdf.php");
+require_once(modification("libs/db_sql.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_libtributario.php"));
+require_once(modification("libs/db_libdocumento.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("fpdf151/scpdf.php"));
 
 define('DB_BIBLIOT',true);
 
@@ -721,7 +720,7 @@ if ( $tiporel == 1 || $tiporel == 11 ) {
     global $variavel;
     $variavel = "";
     if( ($imprimirtimbre == 1) || ($imprimirtimbre == 2) ){
-      CabecNotif(&$pdf, 0, &$variavel);
+      CabecNotif($pdf, 0, $variavel);
     }
 
     $pdf->SetFont('Arial','',13);
@@ -2807,7 +2806,7 @@ if ( $tiporel == 1 || $tiporel == 11 ) {
             $pdf->cell(0,05,"ATENÇÃO: Recibo para pagamento na próxima página. ",0,1,"C",0);
             $pdf->addpage();
             $iQtdNotificoesGeradas++;
-            CabecNotif(&$pdf,0,&$variavel);
+            CabecNotif($pdf,0,$variavel);
             $pdf->Setfont('Arial','',11);
             $pdf->cell(0,05,"NOTIFICAÇÃO: $notifica/$lista ",0,1,"C",0);
 
@@ -4025,7 +4024,7 @@ if ( $tiporel == 1 || $tiporel == 11 ) {
               $variavel = "";
 
               if(($imprimirtimbre == 1) || ($imprimirtimbre == 3)){
-                CabecNotif(&$pdf, 1, &$variavel);
+                CabecNotif($pdf, 1, $variavel);
               }else{
                 $pdf->ln(135);
               }
@@ -4155,7 +4154,7 @@ if ( $tiporel == 1 || $tiporel == 11 ) {
               $S = $pdf->lMargin;
               $S = 10;
 
-              CabecNotif(&$pdf, 1, "");
+              CabecNotif($pdf, 1, "");
 
               $pdf->SetLeftMargin(45);
 
@@ -4628,7 +4627,7 @@ if ( $tiporel == 1 || $tiporel == 11 ) {
         $variavel = "";
 
         if(($imprimirtimbre == 1) || ($imprimirtimbre == 3)){
-          CabecNotif(&$pdf, 1, &$variavel);
+          CabecNotif($pdf, 1, $variavel);
         }else{
           $pdf->ln(135);
         }

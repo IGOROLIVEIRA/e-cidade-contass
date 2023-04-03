@@ -58,6 +58,9 @@ class cl_adesaoregprecos
   var $si06_leidalicitacao = null;
   var $si06_anomodadm = null;
   var $si06_nummodadm = null;
+  var $si06_departamento = null;
+  var $si06_codunidadesubant = null;
+
 
   // cria propriedade com as variaveis do arquivo
   var $campos = "
@@ -86,6 +89,7 @@ class cl_adesaoregprecos
                  si06_leidalicitacao = int4 = Lei de licitacao
                  si06_anomodadm = int4 = Ano do Processo
                  si06_nummodadm = int8 = Numero Modalidade
+                 si06_departamento = int8 = codigo do departamento responsavel
                  ";
   //funcao construtor da classe 
   function cl_adesaoregprecos()
@@ -169,6 +173,7 @@ class cl_adesaoregprecos
       $this->si06_leidalicitacao = ($this->si06_leidalicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_leidalicitacao"] : $this->si06_leidalicitacao);
       $this->si06_anomodadm = ($this->si06_anomodadm == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_anomodadm"] : $this->si06_anomodadm);
       $this->si06_nummodadm = ($this->si06_nummodadm == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_nummodadm"] : $this->si06_nummodadm);
+      $this->si06_departamento = ($this->si06_departamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_departamento"] : $this->si06_departamento);
     } else {
       $this->si06_sequencial = ($this->si06_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_sequencial"] : $this->si06_sequencial);
     }
@@ -335,15 +340,15 @@ class cl_adesaoregprecos
       $this->erro_status = "0";
       return false;
     }
-    /*if($this->si06_fornecedor == null ){
-       $this->erro_sql = " Campo Fornecedor nao Informado.";
-       $this->erro_campo = "si06_fornecedor";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }*/
+    if ($this->si06_departamento == null) {
+      $this->erro_sql = " Campo Departamento nao Informado.";
+      $this->erro_campo = "si06_departamento";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
 
     if ($this->si06_processoporlote == null) {
       $this->erro_sql = " Campo Processo por Lote nao Informado.";
@@ -451,6 +456,7 @@ class cl_adesaoregprecos
                                       ,si06_leidalicitacao
                                       ,si06_anomodadm
                                       ,si06_nummodadm
+                                      ,si06_departamento
                        )
                 values (
                                 $this->si06_sequencial
@@ -479,6 +485,7 @@ class cl_adesaoregprecos
                                ,$this->si06_leidalicitacao
                                ,$this->si06_anomodadm
                                ,$this->si06_nummodadm
+                               ,$this->si06_departamento
 
                       )";
     $result = db_query($sql);
@@ -898,7 +905,19 @@ class cl_adesaoregprecos
         return false;
       }
     }
-
+    if (trim($this->si06_departamento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_departamento"])) {
+      $sql  .= $virgula . " si06_departamento = $this->si06_departamento ";
+      $virgula = ",";
+      if (trim($this->si06_departamento) == null) {
+        $this->erro_sql = " Campo Departamento não Informado.";
+        $this->erro_campo = "si06_departamento";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
 
     if (trim($this->si06_edital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_edital"])) {
       $sql  .= $virgula . " si06_edital = $this->si06_edital ";
@@ -919,6 +938,10 @@ class cl_adesaoregprecos
     }
     if (trim($this->si06_exercicioedital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_exercicioedital"])) {
       $sql  .= $virgula . " si06_exercicioedital = $this->si06_exercicioedital ";
+      $virgula = ",";
+    }
+    if (trim($this->si06_codunidadesubant) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_codunidadesubant"])) {
+      $sql  .= $virgula . " si06_codunidadesubant = '$this->si06_codunidadesubant'";
       $virgula = ",";
     }
     $sql .= " where ";
@@ -1106,7 +1129,7 @@ class cl_adesaoregprecos
     return $result;
   }
   // funcao do sql 
-  function sql_query($si06_sequencial = null, $campos = "si06_sequencial, si06_orgaogerenciador, si06_modalidade, si06_numeroprc, si06_numlicitacao, si06_dataadesao, si06_dataata, si06_datavalidade, si06_publicacaoaviso, si06_objetoadesao, si06_orgarparticipante, si06_cgm, si06_descontotabela, si06_numeroadm, si06_anomodadm,si06_nummodadm, si06_dataabertura, si06_processocompra, si06_fornecedor, cgm.z01_nome as z01_nomeorg, cgm.z01_nome as z01_nomef, c.z01_nome as z01_nomeresp, pc80_data", $ordem = null, $dbwhere = "")
+  function sql_query($si06_sequencial = null, $campos = "si06_sequencial, si06_orgaogerenciador, db_depart.descrdepto as descricaodepartamento,si06_modalidade, si06_numeroprc, si06_numlicitacao, si06_dataadesao, si06_dataata, si06_datavalidade, si06_publicacaoaviso, si06_objetoadesao, si06_orgarparticipante, si06_cgm, si06_descontotabela, si06_numeroadm, si06_anomodadm,si06_nummodadm, si06_dataabertura, si06_processocompra, si06_fornecedor, cgm.z01_nome as z01_nomeorg, cgm.z01_nome as z01_nomef, c.z01_nome as z01_nomeresp, pc80_data", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
     if ($campos != "*") {
@@ -1124,7 +1147,7 @@ class cl_adesaoregprecos
     $sql .= "      inner join cgm c on c.z01_numcgm = adesaoregprecos.si06_cgm";
     $sql .= "      inner join pcproc  on  pcproc.pc80_codproc = adesaoregprecos.si06_processocompra";
     $sql .= "      inner join db_usuarios  on  db_usuarios.id_usuario = pcproc.pc80_usuario";
-    $sql .= "      inner join db_depart  on  db_depart.coddepto = pcproc.pc80_depto";
+    $sql .= "      left join db_depart  on  db_depart.coddepto = adesaoregprecos.si06_departamento";
     $sql .= "      left join acordo on  acordo.ac16_adesaoregpreco = adesaoregprecos.si06_sequencial";
     $sql2 = "";
     // $dbwhere = "si06_instit = " . db_getsession("DB_instit");

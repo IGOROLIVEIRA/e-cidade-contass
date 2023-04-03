@@ -46,6 +46,10 @@ class cl_diprbaseprevidencia
     var $c238_codhist = 0;
     var $c238_compl = 'f';
     var $c238_descr = null;
+    var $c238_valorjuros = 0;
+    var $c238_valormulta = 0;
+    var $c238_valoratualizacaomonetaria = 0;
+    var $c238_valortotaldeducoes = 0;
     var $nomeTabela = "diprbaseprevidencia";
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -63,7 +67,11 @@ class cl_diprbaseprevidencia
         c238_datarepasse date,
         c238_datavencimentorepasse date,
         c238_valororiginal numeric,
-        c238_valororiginalrepassado numeric ";
+        c238_valororiginalrepassado numeric,
+        c238_valorjuros numeric,
+        c238_valormulta numeric,
+        c238_valoratualizacaomonetaria numeric,
+        c238_valortotaldeducoes numeric";
 
     //funcao construtor da classe
     function cl_diprbaseprevidencia()
@@ -103,6 +111,11 @@ class cl_diprbaseprevidencia
             $this->atualizaCampoData("c238_datavencimentorepasse");
             $this->c238_valororiginal = ($this->c238_valororiginal == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_valororiginal"] : $this->c238_valororiginal);
             $this->c238_valororiginalrepassado = ($this->c238_valororiginalrepassado == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_valororiginalrepassado"] : $this->c238_valororiginalrepassado);
+            $this->c238_valorjuros = ($this->c238_valorjuros == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_valorjuros"] : $this->c238_valorjuros);
+            $this->c238_valormulta = ($this->c238_valormulta == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_valormulta"] : $this->c238_valormulta);
+            $this->c238_valoratualizacaomonetaria = ($this->c238_valoratualizacaomonetaria == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_valoratualizacaomonetaria"] : $this->c238_valoratualizacaomonetaria);
+            $this->c238_valortotaldeducoes = ($this->c238_valortotaldeducoes == "" ? @$GLOBALS["HTTP_POST_VARS"]["c238_valortotaldeducoes"] : $this->c238_valortotaldeducoes);
+            
         }
     }
 
@@ -124,6 +137,7 @@ class cl_diprbaseprevidencia
     // funcao para Inclusão
     function incluir()
     {
+        
         $this->atualizacampos();
         if (!$this->verificaCodigoDIRP())
             return false;
@@ -164,6 +178,25 @@ class cl_diprbaseprevidencia
         if (!$this->verificaValorOriginalRepassado())
             return false;
 
+        if (db_getsession("DB_anousu") > 2022){
+            if (!$this->verificaValorJuros())
+                return false;
+           
+            if (!$this->verificaValorMulta())
+                return false;    
+
+            if (!$this->verificaValorAtualizacaoMonetaria())
+                return false;  
+                
+            if (!$this->verificaValorDeducoes())
+                return false;
+        }else{
+            $this->c238_valorjuros = 'null';
+            $this->c238_valormulta = 'null';
+            $this->c238_valoratualizacaomonetaria = 'null';
+            $this->c238_valortotaldeducoes = 'null' ;
+        }     
+                      
         $sql  = "INSERT INTO {$this->nomeTabela} ( ";
         $sql .= " c238_coddipr, ";
         $sql .= " c238_datasicom, ";
@@ -178,7 +211,11 @@ class cl_diprbaseprevidencia
         $sql .= " c238_datarepasse, ";
         $sql .= " c238_datavencimentorepasse, ";
         $sql .= " c238_valororiginal, ";
-        $sql .= " c238_valororiginalrepassado ";
+        $sql .= " c238_valororiginalrepassado, ";
+        $sql .= " c238_valorjuros, ";
+        $sql .= " c238_valormulta, ";
+        $sql .= " c238_valoratualizacaomonetaria, ";
+        $sql .= " c238_valortotaldeducoes ";
         $sql .= ") VALUES ( ";
         $sql .= " {$this->c238_coddipr}, ";
         $sql .= " '{$this->c238_datasicom}', ";
@@ -193,8 +230,12 @@ class cl_diprbaseprevidencia
         $sql .= " '{$this->c238_datarepasse}', ";
         $sql .= " '{$this->c238_datavencimentorepasse}', ";
         $sql .= " {$this->c238_valororiginal}, ";
-        $sql .= " {$this->c238_valororiginalrepassado}) ";
-
+        $sql .= " {$this->c238_valororiginalrepassado}, ";
+        $sql .= " {$this->c238_valorjuros}, ";
+        $sql .= " {$this->c238_valormulta}, ";
+        $sql .= " {$this->c238_valoratualizacaomonetaria}, ";
+        $sql .= " {$this->c238_valortotaldeducoes}) ";
+     
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -307,6 +348,38 @@ class cl_diprbaseprevidencia
 
         if ($this->verificaValorOriginalRepassado()) {
             $sql .= $virgula . " c238_valororiginalrepassado = '{$this->c238_valororiginalrepassado}' ";
+            $virgula = ",";   
+        }
+
+        if ($this->verificaValorJuros()) {
+            if (db_getsession("DB_anousu") > 2022)
+                $sql .= $virgula . " c238_valorjuros = '{$this->c238_valorjuros}' ";
+            else 
+                $sql .= $virgula . " c238_valorjuros = null ";
+            $virgula = ",";   
+        }
+
+        if ($this->verificaValorMulta()) {
+            if (db_getsession("DB_anousu") > 2022)
+                $sql .= $virgula . " c238_valormulta = '{$this->c238_valormulta}' ";
+            else 
+                $sql .= $virgula . " c238_valormulta = null ";  
+            $virgula = ",";   
+        }
+
+        if ($this->verificaValorAtualizacaoMonetaria()) {
+            if (db_getsession("DB_anousu") > 2022)
+                $sql .= $virgula . " c238_valoratualizacaomonetaria = '{$this->c238_valoratualizacaomonetaria}' ";
+            else 
+                $sql .= $virgula . " c238_valoratualizacaomonetaria = null ";    
+            $virgula = ",";   
+        }
+
+        if ($this->verificaValorDeducoes()) {
+            if (db_getsession("DB_anousu") > 2022)
+                $sql .= $virgula . " c238_valortotaldeducoes = '{$this->c238_valortotaldeducoes}' ";
+            else 
+                $sql .= $virgula . " c238_valortotaldeducoes = null ";       
             $virgula = ",";   
         }
 
@@ -604,6 +677,38 @@ class cl_diprbaseprevidencia
         $descricaoCampo = "Valor Original Repassado";
         return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
+ 
+    public function verificaValorJuros()
+    {
+        $nomeCampo = "c238_valorjuros";
+        $descricaoCampo = "Valor dos Juros";
+        if (db_getsession("DB_anousu") > 2022)
+            return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);  
+    } 
+
+    public function verificaValorMulta()
+    {
+        $nomeCampo = "c238_valormulta";
+        $descricaoCampo = "Valor da Multa";
+        if (db_getsession("DB_anousu") > 2022)
+            return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+   } 
+
+    public function verificaValorAtualizacaoMonetaria()
+    {
+        $nomeCampo = "c238_valoratualizacaomonetaria";
+        $descricaoCampo = "Valor da atualização monetária";
+        if (db_getsession("DB_anousu") > 2022)
+            return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+} 
+
+    public function verificaValorDeducoes()
+    {
+        $nomeCampo = "c238_valortotaldeducoes";
+        $descricaoCampo = "Valor total das deduções";
+        if (db_getsession("DB_anousu") > 2022)
+            return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+   } 
 
     public function validacaoCampoTexto($nomeCampo, $descricaoCampo)
     {

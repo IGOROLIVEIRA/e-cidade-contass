@@ -130,7 +130,6 @@ class SicomArquivoDadosComplementares extends SicomArquivoBase implements iPadAr
             $cldclrf10 = new cl_dclrf102023();
             $cldclrf10->si157_tiporegistro = 10;
             $cldclrf10->si157_codorgao                          = $dados->c218_codorgao;
-            $cldclrf10->si157_passivosreconhecidos              = $dados->c218_passivosreconhecidos;
             $cldclrf10->si157_vlsaldoatualconcgarantiainterna   = $dados->c218_vlsaldoatualconcgarantiainterna;
             $cldclrf10->si157_vlsaldoatualconcgarantia          = $dados->c218_vlsaldoatualconcgarantia;
             $cldclrf10->si157_vlsaldoatualcontragarantiainterna = $dados->c218_vlsaldoatualcontragarantiainterna;

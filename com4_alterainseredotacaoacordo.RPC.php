@@ -243,6 +243,8 @@ switch ($oParam->exec) {
 						$oItem->sElemento = $aItens->o56_elemento;
 						$oItem->itemDotacao = "true";
 						$oDotacao->aItens[] = $oItem;
+						$oDotacao->sql = $sSqlItens;
+
 
 						if (!isset($aItensDotacao[$iCodigoDotacao])) {
 							$aItensDotacao[$iCodigoDotacao] = $oDotacao;
@@ -270,17 +272,18 @@ switch ($oParam->exec) {
 								ac20_sequencial ,
 								ac20_acordoposicao,
 								ac20_quantidade,
-								ac20_valortotal
+								ac20_valortotal,o56_codele,o58_anousu,o56_elemento
 								FROM orcdotacao, acordoitem
 							JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
 							JOIN acordoposicaotipo ON ac26_acordoposicaotipo = ac27_sequencial
 							JOIN acordo ON ac26_acordo = ac16_sequencial
 							JOIN cgm ON ac16_contratado = z01_numcgm
 							JOIN pcmater ON ac20_pcmater = pc01_codmater
+							JOIN orcelemento ON o56_codele = ac20_elemento and o56_anousu = 2023
 							WHERE ac20_acordoposicao = (SELECT max(ac26_sequencial)
 															FROM acordoposicao
 															WHERE ac26_acordo = '" . $oParam->iCodigoAcordo . "') 
-															AND ac16_sequencial = '" . $oParam->iCodigoAcordo . "'
+															AND ac16_sequencial = '" . $oParam->iCodigoAcordo . "' and o58_anousu = 2023
 															ORDER BY ac20_acordoposicao DESC, ac20_sequencial ASC";
 
 			$rsResultItens = db_query($sSqlItens);
@@ -308,6 +311,12 @@ switch ($oParam->exec) {
 					$oItem->nQuantidade = $aItens->ac20_quantidade;
 					$oItem->iCodigoItem = $aItens->ac20_sequencial;
 					$oItem->lAlterado = false;
+					$oItem->sElemento = substr($aItens->o56_elemento, 0, 7);
+
+
+
+
+
 					$oItem->itemDotacao = "false";
 					$oDotacao->aItens[] = $oItem;
 

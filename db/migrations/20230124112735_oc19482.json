@@ -1,0 +1,398 @@
+{
+    "INCLUSOES": [
+        {
+            "Estrutural": "331900410000000",
+            "Descricao": "Servico Extraordinario - Contrato Temporario",
+            "Tipo": "Analitica",
+            "Vinculo_PCASP": "311210499%",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "331900413000000",
+            "Descricao": "13o. Salario - Contrato Temporario",
+            "Tipo": "Analitica",
+            "Vinculo_PCASP": "311210413%",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "331900414000000",
+            "Descricao": "Ferias - Abono Constitucional - Contrato Temporario",
+            "Tipo": "Analitica",
+            "Vinculo_PCASP": " 311210124%",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "331900415000000",
+            "Descricao": "Obrigacoes Patronais - Contrato Temporario",
+            "Tipo": "Analitica",
+            "Vinculo_PCASP": "3122101%",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "331900451000000",
+            "Descricao": "Adicionais de Contrato Temporario",
+            "Tipo": "Analitica",
+            "Vinculo_PCASP": "311210499%",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "331951101000000",
+            "Descricao": "Vencimentos e Salarios",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "331961101000000",
+            "Descricao": "Vencimentos e Salarios",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333323200000000",
+            "Descricao": "Material, Bem ou Servico para Distribuicao Gratuita",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333409100000000",
+            "Descricao": "Sentencas Judiciais",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333423200000000",
+            "Descricao": "Material, Bem ou Servico para Distribuicao Gratuita",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333508100000000",
+            "Descricao": "Distribuicao Constitucional ou Legal de Receitas ",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333908100000000",
+            "Descricao": "Distribuicao Constitucional ou Legal de Receitas ",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333913400000000",
+            "Descricao": "Outras Despesas de Pessoal Decorrentes de Contratos de Terceirizacao - Op. Intraorcamentarias",
+            "Tipo": "Analitica",
+            "Vinculo_PCASP": "33242%",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333918600000000",
+            "Descricao": "Compensacoes a Regimes de Previdencia",
+            "Tipo": "Analitica",
+            "Vinculo_PCASP": "39912%",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333921400000000",
+            "Descricao": "Diarias a Pessoal Civil",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333921800000000",
+            "Descricao": "Auxilio Financeiro a Estudantes",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333922000000000",
+            "Descricao": "Auxilio Financeiro a Pesquisadores",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333923300000000",
+            "Descricao": "Passagens e Despesas com Locomocao",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333923500000000",
+            "Descricao": "Servicos de Consultoria",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333923600000000",
+            "Descricao": "Outros Servicos de Terceiros - Pessoa Fisica ",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333929200000000",
+            "Descricao": "Despesas de Exercicios Anteriores",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "344503600000000",
+            "Descricao": "Outros Servicos de Terceiros - Pessoa Fisica ",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "344504700000000",
+            "Descricao": "Obrigacoes Tributarias e Contributivas",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "344804100000000",
+            "Descricao": "Contribuicoes",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "344805100000000",
+            "Descricao": "Obras e Instalacoes",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "344805200000000",
+            "Descricao": "Equipamentos e Material Permanente",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "344922000000000",
+            "Descricao": "Auxilio Financeiro a Pesquisadores",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "345506600000000",
+            "Descricao": "Concessao de Emprestimos e Financiamentos",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "345918400000000",
+            "Descricao": "Despesas Decorrentes da Participacao em Fundos, Organismos, ou Entidades Assemelhadas, Nacionais e Internacionais.",
+            "Tipo": "Analitica",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "331901142000000",
+            "Descricao": "Ferias Vencidas e Proporcionais",
+            "Tipo": "Analitica",
+            "Vinculo_PCASP": "311110121%",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "331901143000000",
+            "Descricao": "13o Salario ",
+            "Tipo": "Analitica",
+            "Vinculo_PCASP": "311110122%",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "331901144000000",
+            "Descricao": "Ferias - Abono Pecuniario",
+            "Tipo": "Analitica",
+            "Vinculo_PCASP": "311110123%",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "331901145000000",
+            "Descricao": "Ferias - Abono Constitucional ",
+            "Tipo": "Analitica",
+            "Vinculo_PCASP": "311110124%",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        },
+        {
+            "Estrutural": "333909134000000",
+            "Descricao": "Sentencas Judiciais  - Terceirizacao (Art. 18, Parag.1, LC101)",
+            "Tipo": "Analitica",
+            "Vinculo_PCASP": "3311198%",
+            "Instituicoes": "TODAS",
+            "Fonte": "15000000"
+        }
+    ],
+    "EXCLUSOES": [
+        {
+            "Estrutural": "331900402000000",
+            "Descricao": "Pessoal do FUNDEB (Recursos: Ate 30%) ",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        },
+        {
+            "Estrutural": "331901102%",
+            "Descricao": "Pessoal  do FUNDEB (Recursos: Ate 30%) ",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        },
+        {
+            "Estrutural": "331901103000000",
+            "Descricao": "Pessoal de Cargo Efetivo (Vinculado ao RPPS), exceto FUNDEB",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        },
+        {
+            "Estrutural": "331901104000000",
+            "Descricao": "Pessoal de Cargo Efetivo (Vinculado ao INSS), exceto FUNDEB",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        },
+        {
+            "Estrutural": "331901105000000",
+            "Descricao": "Pessoal de Cargo Comissionado, exceto FUNDEB",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        },
+        {
+            "Estrutural": "331901304000000",
+            "Descricao": "Obrigacoes Patronais Referentes ao FUNDEB (Minimo de 70%)",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        },
+        {
+            "Estrutural": "331901305000000",
+            "Descricao": "Obrigacoes Patronais Referentes ao FUNDEB (ate 30%)",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        },
+        {
+            "Estrutural": "331951103000000",
+            "Descricao": "Pessoal de Cargo Efetivo (Vinculado ao RPPS), exceto FUNDEB",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        },
+        {
+            "Estrutural": "331951104000000",
+            "Descricao": "Pessoal de Cargo Efetivo (Vinculado ao INSS), exceto FUNDEB",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        },
+        {
+            "Estrutural": "331951105000000",
+            "Descricao": "Pessoal de Cargo Comissionado, exceto FUNDEB",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        },
+        {
+            "Estrutural": "331961103000000",
+            "Descricao": "Pessoal de Cargo Efetivo (Vinculado ao RPPS), exceto FUNDEB",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        },
+        {
+            "Estrutural": "331961104000000",
+            "Descricao": "Pessoal de Cargo Efetivo (Vinculado ao INSS), exceto FUNDEB",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        },
+        {
+            "Estrutural": "331961105000000",
+            "Descricao": "Pessoal de Cargo Comissionado, exceto FUNDEB",
+            "NOVA_DESCR": "DESATIVADA 2023"
+        }
+    ],
+    "ALTERACOES": [
+        {
+            "Estrutural": "331900401%",
+            "Descricao": "Salario Contrato Temporario",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331900499%",
+            "Descricao": "Outras Contratacoes por Tempo Determinado",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331900499000000",
+            "Descricao": "Outras Contratacoes por Tempo Determinado",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331901101000000",
+            "Descricao": "Vencimentos e Salarios",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331901101010000",
+            "Descricao": "Vencimentos e Salarios - RPPS",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331901101020000",
+            "Descricao": "Vencimentos e Salarios - RGPS",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331901301000000",
+            "Descricao": "FGTS",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331901302000000",
+            "Descricao": "Contribuicao Patronal para o RPPS",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331901303000000",
+            "Descricao": "Contribuicao Patronal para o INSS ",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331951301000000",
+            "Descricao": "FGTS ",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331951302000000",
+            "Descricao": "Contribuicao Patronal para o RPPS",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331951303000000",
+            "Descricao": "Contribuicao Patronal para o INSS ",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331961301000000",
+            "Descricao": "FGTS",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331961302000000",
+            "Descricao": "Contribuicao Patronal para o RPPS ",
+            "Tipo": "Analitica"
+        },
+        {
+            "Estrutural": "331961303000000",
+            "Descricao": "Contribuicao Patronal para o INSS",
+            "Tipo": "Analitica"
+        }
+    ]
+}

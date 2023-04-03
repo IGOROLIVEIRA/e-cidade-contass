@@ -27,6 +27,7 @@ class cl_caixa122023
   var $si104_valorentrsaida = 0;
   var $si104_codctbtransf = 0;
   var $si104_codfontectbtransf = 0;
+  var $si104_codidentificafr = null;
   var $si104_mes = 0;
   var $si104_reg10 = 0;
   var $si104_instit = 0;
@@ -42,6 +43,7 @@ class cl_caixa122023
                  si104_valorentrsaida = float8 = Valor  correspondente entrada ou saída 
                  si104_codctbtransf = int8 = Código Identificador da Conta Bancária 
                  si104_codfontectbtransf = int8 = Código da fonte de recursos ctb 
+                 si104_codidentificafr = int8 = Código identificador da movimentação de reclassificação de entrada e saída
                  si104_mes = int8 = Mês 
                  si104_reg10 = int8 = reg10 
                  si104_instit = int8 = Instituição 
@@ -79,6 +81,7 @@ class cl_caixa122023
       $this->si104_valorentrsaida = ($this->si104_valorentrsaida == "" ? @$GLOBALS["HTTP_POST_VARS"]["si104_valorentrsaida"] : $this->si104_valorentrsaida);
       $this->si104_codctbtransf = ($this->si104_codctbtransf == "" ? @$GLOBALS["HTTP_POST_VARS"]["si104_codctbtransf"] : $this->si104_codctbtransf);
       $this->si104_codfontectbtransf = ($this->si104_codfontectbtransf == "" ? @$GLOBALS["HTTP_POST_VARS"]["si104_codfontectbtransf"] : $this->si104_codfontectbtransf);
+      $this->si104_codidentificafr = ($this->si104_codidentificafr == "" ? @$GLOBALS["HTTP_POST_VARS"]["si104_codidentificafr"] : $this->si104_codidentificafr);
       $this->si104_mes = ($this->si104_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si104_mes"] : $this->si104_mes);
       $this->si104_reg10 = ($this->si104_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si104_reg10"] : $this->si104_reg10);
       $this->si104_instit = ($this->si104_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si104_instit"] : $this->si104_instit);
@@ -118,6 +121,9 @@ class cl_caixa122023
     }
     if ($this->si104_codfontectbtransf == null) {
       $this->si104_codfontectbtransf = "0";
+    }
+    if ($this->si104_codidentificafr == null) {
+      $this->si104_codidentificafr = null;
     }
     if ($this->si104_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -189,6 +195,7 @@ class cl_caixa122023
                                       ,si104_valorentrsaida 
                                       ,si104_codctbtransf 
                                       ,si104_codfontectbtransf 
+                                      ,si104_codidentificafr 
                                       ,si104_mes 
                                       ,si104_reg10 
                                       ,si104_instit 
@@ -204,6 +211,7 @@ class cl_caixa122023
                                ,$this->si104_valorentrsaida 
                                ,$this->si104_codctbtransf 
                                ,$this->si104_codfontectbtransf 
+                               ,$this->si104_codidentificafr
                                ,$this->si104_mes 
                                ,$this->si104_reg10 
                                ,$this->si104_instit 
@@ -332,6 +340,13 @@ class cl_caixa122023
         $this->si104_codfontectbtransf = "0";
       }
       $sql .= $virgula . " si104_codfontectbtransf = $this->si104_codfontectbtransf ";
+      $virgula = ",";
+    }
+    if (trim($this->si104_codidentificafr) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si104_codidentificafr"])) {
+      if (trim($this->si104_codidentificafr) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si104_codidentificafr"])) {
+        $this->si104_codidentificafr = "0";
+      }
+      $sql .= $virgula . " si104_codidentificafr = $this->si104_codidentificafr ";
       $virgula = ",";
     }
     if (trim($this->si104_mes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si104_mes"])) {
@@ -623,6 +638,103 @@ class cl_caixa122023
     }
 
     return $sql;
+  }
+
+  public function sql_Reg12($reduz, $ano, $dtIni, $dtFim)
+  {
+    // Movimentação de entrada
+    $sSql = "SELECT 12 AS tiporegistro,
+                    c69_codlan AS codreduzido,
+                    1 AS tipomovimentacao,
+                    CASE
+                        WHEN substr(o57_fonte,1,2) = '49'
+                            AND c71_coddoc IN (100) THEN 8
+                        WHEN c71_coddoc IN (100) THEN 1
+                        WHEN c71_coddoc IN (140) THEN 3
+                        WHEN c71_coddoc IN (121, 131, 141, 152, 153, 162, 163, 6, 36, 38, 101) THEN 8
+                        ELSE 10
+                    END AS tipoentrsaida,
+                    CASE
+                        WHEN c71_coddoc NOT IN (100, 101, 140, 121, 131, 152, 153, 162, 163, 6, 36, 38, 5, 35, 37) THEN substr(c72_complem,1,50)
+                        ELSE ' '
+                    END AS descrmovimentacao,
+                    c69_valor AS valorEntrsaida,
+                    CASE
+                        WHEN c71_coddoc = 140 THEN 
+                                                CASE
+                                                    WHEN c61_codtce IS NOT NULL THEN c61_codtce
+                                                    ELSE c69_credito
+                                                END
+                        ELSE NULL
+                    END AS codctbtransf,
+                    CASE
+                        WHEN c71_coddoc = 140 THEN o15_codtri
+                        ELSE NULL
+                    END AS codfontectbtransf,
+                    c71_coddoc,
+                    substr(o57_fonte,1,2) AS dedu
+             FROM conlancamval
+             JOIN conlancamdoc ON c71_codlan = c69_codlan
+             LEFT JOIN conlancamrec ON c74_codlan = c69_codlan
+             LEFT JOIN orcreceita ON c74_codrec = o70_codrec AND o70_anousu = {$ano}
+             LEFT JOIN conplanoreduz ON c61_reduz = c69_credito AND c61_anousu = {$ano}
+             LEFT JOIN orcfontes ON o70_codfon = o57_codfon AND o70_anousu = o57_anousu
+             LEFT JOIN orctiporec ON o15_codigo = c61_codigo
+             LEFT JOIN conlancamcompl ON c72_codlan = c71_codlan
+             WHERE c69_debito = {$reduz}
+               AND c69_data BETWEEN '{$dtIni}' AND '{$dtFim}'";
+
+    $sSql .= " UNION ALL ";
+
+    // Movimentação de saída
+    $sSql .= "SELECT 12 AS tiporegistro,
+                c69_codlan AS codreduzido,
+                CASE
+                    WHEN c71_coddoc IN (101)
+                        AND substr(o57_fonte,1,2) = '49' THEN 1
+                    ELSE 2
+                END AS tipomovimentacao,
+                CASE
+                    WHEN c71_coddoc IN (100)
+                        AND substr(o57_fonte,1,2) = '49' THEN 8
+                    WHEN c71_coddoc IN (101)
+                        AND substr(o57_fonte,1,2) = '49' THEN 1
+                    WHEN c71_coddoc IN (140) THEN 4
+                    WHEN c71_coddoc IN (121, 131, 141, 152, 153, 162, 163, 6, 36, 38, 101) THEN 8
+                    WHEN c71_coddoc IN (5, 35, 37, 161) THEN 6
+                    ELSE 10
+                END AS tipoentrsaida,
+                CASE
+                    WHEN c71_coddoc NOT IN (100, 101, 140, 121, 131, 152, 153, 162, 163, 6, 36, 38, 5, 35, 37) THEN substr(c72_complem,1,50)
+                    ELSE ' '
+                END AS descrmovimentacao,
+                c69_valor AS valorEntrsaida,
+                CASE
+                    WHEN c71_coddoc = 140 THEN 
+                                            CASE
+                                                WHEN c61_codtce IS NOT NULL THEN c61_codtce
+                                                ELSE c69_debito
+                                            END
+                    ELSE NULL
+                END AS codctbtransf,
+                CASE
+                    WHEN c71_coddoc = 140 THEN o15_codtri
+                    ELSE NULL
+                END AS codfontectbtransf,
+                c71_coddoc,
+                substr(o57_fonte,1,2) AS dedu
+            FROM conlancamval
+            JOIN conlancamdoc ON c71_codlan = c69_codlan
+            LEFT JOIN conlancamrec ON c74_codlan = c69_codlan
+            LEFT JOIN orcreceita ON c74_codrec = o70_codrec AND o70_anousu = {$ano}
+            LEFT JOIN conplanoreduz ON c61_reduz = c69_debito AND c61_anousu = {$ano}
+            LEFT JOIN orcfontes ON o70_codfon = o57_codfon AND o70_anousu = o57_anousu
+            LEFT JOIN orctiporec ON o15_codigo = c61_codigo
+            LEFT JOIN conlancamcompl ON c72_codlan = c71_codlan
+            WHERE c69_credito = {$reduz} 
+              AND c69_data BETWEEN '{$dtIni}' AND '{$dtFim}'";
+
+    return $sSql;
   }
 }
 

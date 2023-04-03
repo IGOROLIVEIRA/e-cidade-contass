@@ -1340,7 +1340,8 @@ if($dbwhere==""){
                                     inner join veicretirada on ve60_codigo = ve61_veicretirada
                               where ve60_codigo = ve73_veicretirada
                               limit 1 ) as ve61_medidadevol,
-                            ve40_veiccadcentral
+                            ve40_veiccadcentral,
+                            ve71_veiccadposto
                      from veicabast
                           $dbwhereSubqueryClausula join veicabastretirada on ve73_veicabast    = ve70_codigo
                           $dbwhereSubqueryClausula join veicretirada      on ve73_veicretirada = ve60_codigo

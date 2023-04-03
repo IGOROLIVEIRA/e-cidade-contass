@@ -173,11 +173,11 @@ LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacon
 
       $sSql = "select * from identificacaoresponsaveis join cgm on si166_numcgm = z01_numcgm where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel in (1, 2, 3, 4, 5, 6) and (si166_dataini <= '{$this->sDataInicial}' AND si166_datafim >= '{$this->sDataInicial}') AND (si166_dataini <= '{$this->sDataFinal}' AND si166_datafim >= '{$this->sDataFinal}')";
       $rsResult11 = db_query($sSql); // db_criatabela($rsResult11);
-
+   
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
-
+        
         $clorgao11 = new cl_orgao112023();
-        $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
+        $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);    
         //if (strlen($oDados11->z01_cgccpf) > 11)
         //echo $oDados11->z01_numcgm." | ".$oDados11->z01_cgccpf."<br>";
         $clorgao11->si15_tiporegistro = 11; //echo $clorgao11->si15_tiporegistro ;
@@ -194,6 +194,7 @@ LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacon
         $clorgao11->si15_reg10 = $clorgao10->si14_sequencial;
         $clorgao11->si15_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $clorgao11->si15_instit = db_getsession("DB_instit");
+        $clorgao11->si15_numeroTelefone = $oDados11->z01_telef;
 
         $clorgao11->incluir(null);
         if ($clorgao11->erro_status == 0) {

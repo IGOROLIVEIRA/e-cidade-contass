@@ -509,8 +509,6 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                 $oDados14->si42_tiporegistro = 14;
                                 $oDados14->si42_codreduzidodecreto = $oDadosSql14->codreduzidodecreto;
                                 $oDados14->si42_origemrecalteracao = $oDadosSql14->tipodecretoalteracao;
-                                $oDados14->si42_nrocontratoop = $oDadosSql14->numerocontratoopc;
-                                $oDados14->si42_dataassinaturacontratoop = $oDadosSql14->dataassinaturacontratoop;
                                 $oDados14->si42_codorigem = $oDadosSql14->codorigem;
                                 $oDados14->si42_codorgao = $oDadosSql14->codorgao;
                                 $oDados14->si42_codunidadesub = $oDadosSql14->codunidadesub;
@@ -577,8 +575,6 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                           $oDados14->si42_tiporegistro = 14;
                           $oDados14->si42_codreduzidodecreto = $oDadosSql14Vlr->codreduzidodecreto;
                           $oDados14->si42_origemrecalteracao = $oDadosSql14Vlr->tipodecretoalteracao;
-                          $oDados14->si42_nrocontratoop = $oDadosSql14Vlr->numerocontratoopc;
-                          $oDados14->si42_dataassinaturacontratoop = $oDadosSql14Vlr->dataassinaturacontratoop;
                           $oDados14->si42_codorigem = $oDadosSql14Vlr->codorigem;
                           $oDados14->si42_codorgao = $oDadosSql14Vlr->codorgao;
                           $oDados14->si42_codunidadesub = $oDadosSql14Vlr->codunidadesub;
@@ -616,8 +612,6 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 
                     $claoc14->si42_tiporegistro = 14;
                     $claoc14->si42_codreduzidodecreto = $oDadosReg14->si42_codreduzidodecreto;
-                    $claoc14->si42_nrocontratoop = $oDadosReg14->si42_numerocontratoopc;
-                    $claoc14->si42_dataassinaturacontratoop = $oDadosReg14->si42_dataassinaturacontratoop;
                     $claoc14->si42_codorigem = '';
                     $claoc14->si42_codorgao = $oDadosReg14->si42_codorgao;
                     $claoc14->si42_codunidadesub = $oDadosReg14->si42_codunidadesub;
@@ -651,8 +645,6 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                     $claoc14->si42_codreduzidodecreto = $oDadosReg14->si194_codreduzidodecreto;
                     $claoc14->si42_codorigem = $oDadosReg14->si194_codorigem;
                     $claoc14->si42_codorgao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codorgao;
-                    $claoc14->si42_nrocontratoop = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_nrocontratoop;
-                    $claoc14->si42_dataassinaturacontratoop = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_dataassinaturacontratoop;
                     $claoc14->si42_codunidadesub = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codunidadesub;
                     $claoc14->si42_codfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codfuncao;
                     $claoc14->si42_codsubfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codsubfuncao;
@@ -719,8 +711,6 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                         $claoc14->si42_codreduzidodecreto = $oDadosReg14->si42_codreduzidodecreto;
                         $claoc14->si42_codorigem = '';
                         $claoc14->si42_codorgao = $oDadosReg14->si42_codorgao;
-                        $claoc14->si42_nrocontratoop = $oDadosReg14->si42_nrocontratoop;
-                        $claoc14->si42_dataassinaturacontratoop = $oDadosReg14->si42_dataassinaturacontratoop;
                         $claoc14->si42_codunidadesub = $oDadosReg14->si42_codunidadesub;
                         $claoc14->si42_codfuncao = $oDadosReg14->si42_codfuncao;
                         $claoc14->si42_codsubfuncao = $oDadosReg14->si42_codsubfuncao;

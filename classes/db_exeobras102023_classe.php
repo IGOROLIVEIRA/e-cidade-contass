@@ -126,7 +126,7 @@ class cl_exeobras102023 {
       return false;
     }
     if ($this->si197_codunidadesub == null ) {
-      $this->erro_sql = " Campo codUnidadeSubRespEstadual não informado.";
+      $this->erro_sql = " Campo codunidadesub não informado."; 
       $this->erro_campo = "si197_codunidadesub";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";

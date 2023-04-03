@@ -151,6 +151,9 @@ class cl_orctiporec {
      if($this->o15_datalimite == null ){
        $this->o15_datalimite = "null";
      }
+     if($this->o15_codstn == null ){
+      $this->o15_codstn = "null";
+    }
      if($this->o15_db_estruturavalor == null ){
        $this->erro_sql = " Campo Código da Estrutura nao Informado.";
        $this->erro_campo = "o15_db_estruturavalor";

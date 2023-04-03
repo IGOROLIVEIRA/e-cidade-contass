@@ -60,7 +60,8 @@ class cl_dipraportes
         c240_descricao text,
         c240_atonormativo int4,
         c240_exercicioatonormativo int4,
-        c240_valoraporte numeric ";
+        c240_valoraporte numeric,
+        c240_datarepasse ";
 
     //funcao construtor da classe
     function cl_dipraportes()
@@ -97,6 +98,7 @@ class cl_dipraportes
             $this->c240_atonormativo = ($this->c240_atonormativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_atonormativo"] : $this->c240_atonormativo);
             $this->c240_exercicioatonormativo = ($this->c240_exercicioatonormativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_exercicioatonormativo"] : $this->c240_exercicioatonormativo);
             $this->c240_valoraporte = ($this->c240_valoraporte == "" ? @$GLOBALS["HTTP_POST_VARS"]["c240_valoraporte"] : $this->c240_valoraporte);
+            $this->atualizaCampoData("c240_datarepasse");
         }
     }
 
@@ -158,7 +160,10 @@ class cl_dipraportes
 
         if (!$this->verificaValorAporte())
             return false;
-
+        if (db_getsession("DB_anousu") > 2022){
+            if (!$this->verificaDataRepasse())
+                return false;
+        }    
         return true;
     }
 
@@ -169,7 +174,13 @@ class cl_dipraportes
 
         if (!$this->verificacoes())
             return false;
-
+          
+        if (db_getsession("DB_anousu") > 2022)
+            $this->c240_atonormativo = 'null'; 
+            
+        if (db_getsession("DB_anousu") > 2022)
+            $this->c240_exercicioatonormativo = 'null' ;
+          
         $sql  = " INSERT INTO {$this->nomeTabela} ( ";
         $sql .= " c240_coddipr, ";
         $sql .= " c240_datasicom, ";
@@ -181,7 +192,8 @@ class cl_dipraportes
         $sql .= " c240_descricao, ";
         $sql .= " c240_atonormativo, ";
         $sql .= " c240_exercicioatonormativo, ";
-        $sql .= " c240_valoraporte ";
+        $sql .= " c240_valoraporte, ";
+        $sql .= " c240_datarepasse ";
         $sql .= " ) VALUES ( ";
         $sql .= " {$this->c240_coddipr}, ";
         $sql .= " '{$this->c240_datasicom}', ";
@@ -193,8 +205,12 @@ class cl_dipraportes
         $sql .= " '{$this->c240_descricao}', ";
         $sql .= " {$this->c240_atonormativo}, ";
         $sql .= " {$this->c240_exercicioatonormativo}, ";
-        $sql .= " {$this->c240_valoraporte} ) ";
-
+        $sql .= " {$this->c240_valoraporte},";
+        if (db_getsession("DB_anousu") > 2022)
+            $sql .= " '{$this->c240_datarepasse}' ) ";
+        else  
+            $sql .= " null) ";  
+        
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -278,17 +294,31 @@ class cl_dipraportes
         }
 
         if ($this->verificaAtoNormativo()) {
-            $sql .= $virgula . " c240_atonormativo = {$this->c240_atonormativo} ";
+            if (db_getsession("DB_anousu") > 2022)
+                $sql .= $virgula . " c240_atonormativo = null ";
+            else 
+                $sql .= $virgula . " c240_atonormativo = {$this->c240_atonormativo} ";
             $virgula = ",";
         }
 
         if ($this->verificaExercicioNormativo()) {
-            $sql .= $virgula . " c240_exercicioatonormativo = {$this->c240_exercicioatonormativo} ";
+            if (db_getsession("DB_anousu") > 2022)
+                $sql .= $virgula . " c240_exercicioatonormativo = null ";
+            else 
+                $sql .= $virgula . " c240_exercicioatonormativo = {$this->c240_exercicioatonormativo} ";  
             $virgula = ",";
         }
 
         if ($this->verificaValorAporte()) {
             $sql .= $virgula . " c240_valoraporte = {$this->c240_valoraporte} ";
+            $virgula = ",";
+        }
+
+        if ($this->verificaDataRepasse()) {
+            if (db_getsession("DB_anousu") > 2022)
+                $sql .= $virgula . " c240_datarepasse = '{$this->c240_datarepasse}' ";
+            else 
+                $sql .= $virgula . " c240_datarepasse = null ";    
             $virgula = ",";
         }
 
@@ -544,14 +574,21 @@ class cl_dipraportes
     {
         $nomeCampo = "c240_atonormativo";
         $descricaoCampo = "Ato Normativo";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        if (db_getsession("DB_anousu") < 2023)
+            return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        else 
+            return true;
+          
     }
 
     public function verificaExercicioNormativo()
     {
         $nomeCampo = "c240_exercicioatonormativo";
         $descricaoCampo = "Exercício Normativo";
-        return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+        if (db_getsession("DB_anousu") < 2023)
+            return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+            else 
+            return true;    
     }
 
     public function verificaValorAporte()
@@ -559,6 +596,14 @@ class cl_dipraportes
         $nomeCampo = "c240_valoraporte";
         $descricaoCampo = "Valor de Aporte";
         return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
+    }
+
+    public function verificaDataRepasse()
+    {
+        $nomeCampo = "c240_datarepasse";
+        $descricaoCampo = "Valor da Data do Repasse";
+        if (db_getsession("DB_anousu") > 2022)
+            return $this->validacaoCampoTexto($nomeCampo, $descricaoCampo);
     }
 
     public function validacaoCampoTexto($nomeCampo, $descricaoCampo)

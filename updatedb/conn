@@ -35,6 +35,8 @@ pmjanuaria_consulta    5432    prefeituras
 
 pmsaojoaomissoes       5432    prefeituras2
 pmcurraldedentro       5432    prefeituras2
+pmcurraldedentro_consulta 5432 prefeituras2
+pmnovaporteirinha_consulta 5432 prefeituras2
 
 cmnavarro			5432    cmnavarro
 cmfranciscodumont		5432    cmnavarro
@@ -104,10 +106,20 @@ e-cidade            5432    pmserranopolis
 
 e-cidade            5432    pmsantafeminas
 
+e-cidade            5432    pmsantafeminasv3
+
+e-cidade            5432    pmsaogoncalov3
+
 e-cidade            5432    pmcurraldentro
 
 e-cidade-treinamento   5432 e-cidadev3
-pmpedrasdemariadacruz  5432 e-cidadev3
+pmfranciscodumont      5432 e-cidadev3
 pmsaogoncalodoriopreto 5432 e-cidadev3
+cismesf                5432 e-cidadev3
+cias                   5432 e-cidadev3
+treinamento_consorcio  5432 e-cidadev3
 
 e-cidade            5432 pmmonteazulv3
+
+e-cidade            5432 pmmontalvaniav3
+e-cidade            5432 pmpedrasdemariadacruzv3

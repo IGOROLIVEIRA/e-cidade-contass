@@ -16,7 +16,6 @@ class cl_dclrf102023 {
  	var $si157_sequencial = 0;
 	var $si157_tiporegistro = 0;
 	var $si157_codorgao = null;
-	var $si157_passivosreconhecidos = 0;
 	var $si157_vlsaldoatualconcgarantiainterna = 0;
 	var $si157_vlsaldoatualconcgarantia = 0;
 	var $si157_vlsaldoatualcontragarantiainterna = 0;
@@ -44,7 +43,6 @@ class cl_dclrf102023 {
    var $campos = "
                  si157_sequencial = int4 = Sequencial DCLRF
                  si157_codorgao = char(2) = Código do órgão
-                 si157_passivosreconhecidos = double = Valores dos passivos  reconhecidos
                  si157_vlsaldoatualconcgarantiainterna = double = Saldo atual das concessões de garantia
                  si157_vlsaldoatualconcgarantia = double = Saldo atual das concessões de garantia
                  si157_vlsaldoatualcontragarantiainterna = double = Saldo atual das contragarantias
@@ -91,7 +89,6 @@ class cl_dclrf102023 {
      if($exclusao==false){
        $this->si157_sequencial = ($this->si157_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_sequencial"]:$this->si157_sequencial);
        $this->si157_codorgao = ($this->si157_codorgao == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_codorgao"]:$this->si157_codorgao);
-       $this->si157_passivosreconhecidos = ($this->si157_passivosreconhecidos == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_passivosreconhecidos"]:$this->si157_passivosreconhecidos);
        $this->si157_vlsaldoatualconcgarantiainterna = ($this->si157_vlsaldoatualconcgarantiainterna == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlsaldoatualconcgarantiainterna"]:$this->si157_vlsaldoatualconcgarantiainterna);
        $this->si157_vlsaldoatualconcgarantia = ($this->si157_vlsaldoatualconcgarantia == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlsaldoatualconcgarantia"]:$this->si157_vlsaldoatualconcgarantia);
        $this->si157_vlsaldoatualcontragarantiainterna = ($this->si157_vlsaldoatualcontragarantiainterna == ""?@$GLOBALS["HTTP_POST_VARS"]["si157_vlsaldoatualcontragarantiainterna"]:$this->si157_vlsaldoatualcontragarantiainterna);
@@ -132,15 +129,6 @@ class cl_dclrf102023 {
      if($this->si157_codorgao == null ){
        $this->erro_sql = " Campo Código do órgão nao Informado.";
        $this->erro_campo = "si157_codorgao";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
-     if($this->si157_passivosreconhecidos == null ){
-       $this->erro_sql = " Campo Valores dos passivos  reconhecidos nao Informado.";
-       $this->erro_campo = "si157_passivosreconhecidos";
        $this->erro_banco = "";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
@@ -379,7 +367,6 @@ class cl_dclrf102023 {
        $sql = "insert into dclrf102023(
                                        si157_sequencial
                                       ,si157_codorgao
-                                      ,si157_passivosreconhecidos
                                       ,si157_vlsaldoatualconcgarantiainterna
                                       ,si157_vlsaldoatualconcgarantia
                                       ,si157_vlsaldoatualcontragarantiainterna
@@ -407,7 +394,6 @@ class cl_dclrf102023 {
                 values (
                                 $this->si157_sequencial
                                ,'$this->si157_codorgao'
-                               ,$this->si157_passivosreconhecidos
                                ,$this->si157_vlsaldoatualconcgarantiainterna
                                ,$this->si157_vlsaldoatualconcgarantia
                                ,$this->si157_vlsaldoatualcontragarantiainterna
@@ -483,19 +469,6 @@ class cl_dclrf102023 {
        if(trim($this->si157_codorgao) == null ){
          $this->erro_sql = " Campo Código do órgão nao Informado.";
          $this->erro_campo = "si157_codorgao";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
-       }
-     }
-     if(trim($this->si157_passivosreconhecidos)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si157_passivosreconhecidos"])){
-       $sql  .= $virgula." si157_passivosreconhecidos = $this->si157_passivosreconhecidos ";
-       $virgula = ",";
-       if(trim($this->si157_passivosreconhecidos) == null ){
-         $this->erro_sql = " Campo Valores dos passivos  reconhecidos nao Informado.";
-         $this->erro_campo = "si157_passivosreconhecidos";
          $this->erro_banco = "";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));

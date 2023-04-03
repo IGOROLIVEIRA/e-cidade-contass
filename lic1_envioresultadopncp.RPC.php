@@ -40,7 +40,7 @@ switch ($oParam->exec) {
             $oItem->z01_numcgm                      = $oItensLicitacao->z01_numcgm;
             $oItem->z01_nome                        = urlencode($oItensLicitacao->z01_nome);
             $oItem->m61_descr                       = $oItensLicitacao->m61_descr;
-            $oItem->pc23_quant                      = $oItensLicitacao->pc23_quant;
+            $oItem->pc11_quant                      = $oItensLicitacao->pc11_quant;
             $oItem->pc23_valor                      = $oItensLicitacao->pc23_valor;
             $itens[]                                = $oItem;
         }
@@ -61,6 +61,7 @@ switch ($oParam->exec) {
 
                 $aItensLicitacao = array();
                 $rsResultado = $clliclicita->sql_record($clliclicita->sql_query_resultado_pncp($oParam->iLicitacao, $item->l21_ordem));
+
                 for ($i = 0; $i < pg_numrows($rsResultado); $i++) {
                     $oDadosResultado = db_utils::fieldsMemory($rsResultado, $i);
                     $aItensLicitacao[] = $oDadosResultado;

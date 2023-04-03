@@ -171,7 +171,8 @@ if (isset($incluir) && $incluir != "") {
 				db_fieldsmemory($result_solicitemunid, 0);
 				$clsolicitemunid->pc17_unid = $pc17_unid;
 				$clsolicitemunid->pc17_quant = $pc17_quant;
-				$clsolicitemunid->incluir($pc11_codigo);
+                $clsolicitemunid->pc17_codigo = $pc11_codigo;
+                $clsolicitemunid->incluir($pc17_unid,$pc17_quant,$pc11_codigo);
 				if ($clsolicitemunid->erro_status == 0) {
 					$sqlerro = true;
 					$erro_msg = $clsolicitemunid->erro_msg;

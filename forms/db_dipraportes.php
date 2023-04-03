@@ -111,13 +111,24 @@
                 <tr>
                     <td><b>Tipo de fundo:</b></td>
                     <td>
-                        <?php
+                       <?php
+                       if(db_getsession("DB_anousu") < 2023){
+                       
                         $arrayTipoFundo = array(
                             0 => "Selecione",
                             1 => "Fundo em Capitalização (Plano Previdenciário)",
                             2 => "Fundo em Repartição (Plano Financeiro)",
                             3 => "Responsabilidade do tesouro municipal"
                         );
+                        }else{
+                        $arrayTipoFundo = array(
+                            0 => "Selecione",
+                            1 => "Fundo em Capitalização (Plano Previdenciário)",
+                            2 => "Fundo em Repartição (Plano Financeiro)"
+                            
+                        );   
+
+                        }
                         db_select('c240_tipofundo', $arrayTipoFundo, true, 1, "");
                         ?>
                     </td>
@@ -140,6 +151,17 @@
                     </td>
                 </tr>
 
+                <tr id="LinhaDataRepasse">
+                    <td>
+                        <b>Data do repasse:</b>
+                    </td>
+                    <td nowrap>
+                        <?
+                        db_inputdata("c240_datarepasse", @$c240_datarepasse_dia, @$c240_datarepasse_mes, @$c240_datarepasse_ano, true, "text", 1);
+                        ?>
+                    </td>
+                </tr>
+
                 <tr id="LinhaDescricaoAporte">
                     <td>
                         <b>Descrição dos outros aportes ou transferências:</b>
@@ -150,7 +172,7 @@
                         ?>
                     </td>
                 </tr>
-                <tr>
+                <tr id="LinhaAtoNormativo">
                     <td>
                         <b>Ato normativo:</b>
                     </td>
@@ -160,7 +182,7 @@
                         ?>
                     </td>
                 </tr>
-                <tr>
+                <tr id="LinhaExcecicioAtoNormativo">
                     <td>
                         <b>Exercício de ato normativo:</b>
                     </td>
@@ -191,6 +213,8 @@
 
 
 <script>
+    var ano = "<?php echo db_getsession("DB_anousu"); ?>";
+    
     verificarTipoAporte();
 
     function js_pesquisac240_codigodipr($lmostra) {
@@ -255,4 +279,15 @@
     function validarCampos() {
         return true;
     }
+
+    function mostrarAtoNormativo() {
+        if(ano > 2022){
+            ocultarLinha('LinhaAtoNormativo');
+            ocultarLinha('LinhaExcecicioAtoNormativo');             
+        }else{
+            ocultarLinha('LinhaDataRepasse');
+        }      
+    }
+
+    mostrarAtoNormativo()
 </script>

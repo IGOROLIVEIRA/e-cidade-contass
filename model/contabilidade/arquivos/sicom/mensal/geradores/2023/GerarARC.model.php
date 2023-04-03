@@ -119,10 +119,7 @@ class GerarARC extends GerarAM
                 $aCSVARC20['si31_codestorno']               = substr($aARC20['si31_codestorno'], 0, 15);
                 $aCSVARC20['si31_ededucaodereceita']        = $this->padLeftZero($aARC20['si31_ededucaodereceita'], 1);
                 $aCSVARC20['si31_identificadordeducao']     = $aARC20['si31_identificadordeducao'] == '' || $aARC20['si31_identificadordeducao'] == '0' ? "" : $aARC20['si31_identificadordeducao'];
-                $aCSVARC20['si31_naturezareceitaestornada'] = $this->padLeftZero($aARC20['si31_naturezareceitaestornada'], 8);
-                $aCSVARC20['si31_regularizacaorepasse']     = $aARC20['si31_regularizacaorepasseestornada'] == '' || $aARC20['si31_regularizacaorepasseestornada'] == '0' ? '2' : $aARC20['si31_regularizacaorepasseestornada'];
-                $aCSVARC20['si31_exercicio']                = $aARC20['si31_exercicioestornada'] == '' || $aARC20['si31_exercicioestornada'] == '0' ? ' ' : $aARC20['si31_exercicioestornada'];
-                $aCSVARC20['si31_emendaparlamentar']        = $aARC20['si31_emendaparlamentarestornada'] == '' || $aARC20['si31_emendaparlamentarestornada'] == '0' ? '3' : $aARC20['si31_emendaparlamentarestornada'];               
+                $aCSVARC20['si31_naturezareceitaestornada'] = $this->padLeftZero($aARC20['si31_naturezareceitaestornada'], 8);    
                 $aCSVARC20['si31_vlestornado']              = $this->sicomNumberReal($aARC20['si31_vlestornado'], 2);
 
                 $this->sLinha = $aCSVARC20;
@@ -136,7 +133,8 @@ class GerarARC extends GerarAM
 
                         $aCSVARC21['si32_tiporegistro']       = $this->padLeftZero($aARC21['si32_tiporegistro'], 2);
                         $aCSVARC21['si32_codestorno']         = substr($aARC21['si32_codestorno'], 0, 15);
-                        $aCSVARC21['si32_codfonteestornada']  = $this->padLeftZero($aARC21['si32_codfonteestornada'], 3);
+                        $aCSVARC21['si32_codfonteestornada']  = $this->padLeftZero($aARC21['si32_codfonteestornada'], 7);
+                        $aCSVARC21['si32_codigocontroleorcamentario']  = $this->padLeftZero($aARC21['si32_codigocontroleorcamentario'], 4);
                         $aCSVARC21['si32_tipodocumento']      = $aARC21['si32_tipodocumento'] == "" || $aARC21['si32_tipodocumento'] == '0' ? "" : $aARC21['si32_tipodocumento'];
                         $aCSVARC21['si32_nrodocumento']       = $aARC21['si32_nrodocumento'] == "" || $aARC21['si32_nrodocumento'] == '0' ? "" : $aARC21['si32_nrodocumento'];
                         $aCSVARC21['si32_nroconvenio']        = $aARC21['si32_nroconvenio'];

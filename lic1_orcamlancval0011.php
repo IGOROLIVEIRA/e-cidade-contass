@@ -676,7 +676,7 @@ if ($clempparametro->numrows > 0) {
                                     if ($l20_usaregistropreco == 't') {
                                         $db_opcaoquant = 3;
                                     }
-                                    db_input("qtde_$pc22_orcamitem", 10, $Ipc23_quant, true, 'text',3, "onchange='js_verquant(this.name,this.value,$pc11_quant,$pc22_orcamitem);js_somavalor();'");
+                                    db_input("qtde_$pc22_orcamitem", 10, $Ipc23_quant, true, 'text', 3, "onchange='js_verquant(this.name,this.value,$pc11_quant,$pc22_orcamitem);js_somavalor();'");
                                     echo "</td> ";
 
                                     /*OC3770*/

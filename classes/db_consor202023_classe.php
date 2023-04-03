@@ -26,6 +26,7 @@ class cl_consor202023
   var $si17_prestcontas = 0;
   var $si17_mes = 0;
   var $si17_instit = 0;
+  var $si17_codacompanhamento = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  si17_sequencial = int8 = sequencial 
@@ -36,7 +37,8 @@ class cl_consor202023
                  si17_vltransfrateio = float8 = Valor transferido 
                  si17_prestcontas = int8 = informa encaminhamento 
                  si17_mes = int8 = Mês 
-                 si17_instit = int8 = Instituição 
+                 si17_instit = int8 = Instituição
+                 si17_codacompanhamento = Código acompanhamento 
                  ";
 
   //funcao construtor da classe
@@ -71,6 +73,7 @@ class cl_consor202023
       $this->si17_prestcontas = ($this->si17_prestcontas == "" ? @$GLOBALS["HTTP_POST_VARS"]["si17_prestcontas"] : $this->si17_prestcontas);
       $this->si17_mes = ($this->si17_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si17_mes"] : $this->si17_mes);
       $this->si17_instit = ($this->si17_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si17_instit"] : $this->si17_instit);
+      $this->si17_codacompanhamento = ($this->si17_codacompanhamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si17_codacompanhamento"] : $this->si17_codacompanhamento);
     } else {
       $this->si17_sequencial = ($this->si17_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si17_sequencial"] : $this->si17_sequencial);
     }
@@ -109,6 +112,16 @@ class cl_consor202023
     if ($this->si17_instit == null) {
       $this->erro_sql = " Campo Instituição nao Informado.";
       $this->erro_campo = "si17_instit";
+      $this->erro_banco = "";
+      $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+      $this->erro_status = "0";
+
+      return false;
+    }
+    if ($this->si17_codacompanhamento == null) {
+      $this->erro_sql = " Campo Código acompanhamento nao Informado.";
+      $this->erro_campo = "si17_codacompanhamento";
       $this->erro_banco = "";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -161,7 +174,8 @@ class cl_consor202023
                                       ,si17_vltransfrateio 
                                       ,si17_prestcontas 
                                       ,si17_mes 
-                                      ,si17_instit 
+                                      ,si17_instit
+                                      ,si17_codacompanhamento 
                        )
                 values (
                                 $this->si17_sequencial 
@@ -173,6 +187,7 @@ class cl_consor202023
                                ,$this->si17_prestcontas 
                                ,$this->si17_mes 
                                ,$this->si17_instit 
+                               ,$this->si17_codacompanhamento
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -214,6 +229,7 @@ class cl_consor202023
       $resac = db_query("insert into db_acount values($acount,2010245,2009629,'','" . AddSlashes(pg_result($resaco, 0, 'si17_prestcontas')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010245,2009737,'','" . AddSlashes(pg_result($resaco, 0, 'si17_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       $resac = db_query("insert into db_acount values($acount,2010245,2011535,'','" . AddSlashes(pg_result($resaco, 0, 'si17_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+      $resac = db_query("insert into db_acount values($acount,2010245,2011535,'','" . AddSlashes(pg_result($resaco, 0, 'si17_codacompanhamento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
     }
 
     return true;
@@ -300,6 +316,20 @@ class cl_consor202023
         return false;
       }
     }
+    if (trim($this->si17_codacompanhamento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si17_codacompanhamento"])) {
+      $sql .= $virgula . " si17_codacompanhamento = $this->si17_codacompanhamento ";
+      $virgula = ",";
+      if (trim($this->si17_codacompanhamento) == null) {
+        $this->erro_sql = " Campo Código acompanhamento nao Informado.";
+        $this->erro_campo = "si17_codacompanhamento";
+        $this->erro_banco = "";
+        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
+        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
+        $this->erro_status = "0";
+
+        return false;
+      }
+    }    
     $sql .= " where ";
     if ($si17_sequencial != null) {
       $sql .= " si17_sequencial = $this->si17_sequencial";
@@ -327,7 +357,9 @@ class cl_consor202023
           $resac = db_query("insert into db_acount values($acount,2010245,2009737,'" . AddSlashes(pg_result($resaco, $conresaco, 'si17_mes')) . "','$this->si17_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         if (isset($GLOBALS["HTTP_POST_VARS"]["si17_instit"]) || $this->si17_instit != "")
           $resac = db_query("insert into db_acount values($acount,2010245,2011535,'" . AddSlashes(pg_result($resaco, $conresaco, 'si17_instit')) . "','$this->si17_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      }
+        if (isset($GLOBALS["HTTP_POST_VARS"]["si17_codacompanhamento"]) || $this->si17_codacompanhamento != "")
+          $resac = db_query("insert into db_acount values($acount,2010245,2011535,'" . AddSlashes(pg_result($resaco, $conresaco, 'si17_codacompanhamento')) . "','$this->si17_codacompanhamento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")"); 
+        }
     }
     $result = db_query($sql);
     if ($result == false) {
@@ -388,6 +420,7 @@ class cl_consor202023
         $resac = db_query("insert into db_acount values($acount,2010245,2009629,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si17_prestcontas')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010245,2009737,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si17_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,2010245,2011535,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si17_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,2010245,2011535,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si17_codacompanhamento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       }
     }
     $sql = " delete from consor202023

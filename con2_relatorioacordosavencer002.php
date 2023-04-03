@@ -43,8 +43,8 @@ require_once("model/CgmFactory.model.php");
 $oPost               = db_utils::postMemory($_POST);
 $clacordo            = new cl_acordo;
 
-$sWhere              = '';
-$sAnd                = '';
+$sWhere              = 'ac16_instit = ' . db_getsession("DB_instit");
+$sAnd                = ' and ';
 $sOrder              = 'acordo.ac16_dataassinatura';
 
 $sAcordo             = 'Todos';
@@ -58,70 +58,70 @@ if (isset($oPost->ordemdescricao)) {
 }
 
 if (isset($oPost->ac16_sequencial)) {
-  
+
   if (!empty($oPost->ac16_sequencial)) {
-    
-    $sAcordo = $oPost->ac16_sequencial.' - '.substr($oPost->ac16_resumoobjeto, 0, 40);
+
+    $sAcordo = $oPost->ac16_sequencial . ' - ' . substr($oPost->ac16_resumoobjeto, 0, 40);
     $sWhere .= "{$sAnd} acordo.ac16_sequencial = {$oPost->ac16_sequencial}";
-    $sAnd    = " and ";   
+    $sAnd    = " and ";
   }
 }
 
 if (isset($oPost->sDepartsInclusao) && !empty($oPost->sDepartsInclusao)) {
-	
-	$sWhere .= "{$sAnd} ac16_coddepto in ({$oPost->sDepartsInclusao})";
-	$sAnd    = " and ";
+
+  $sWhere .= "{$sAnd} ac16_coddepto in ({$oPost->sDepartsInclusao})";
+  $sAnd    = " and ";
 }
 
 if (isset($oPost->sDepartsResponsavel) && !empty($oPost->sDepartsResponsavel)) {
 
-	$sWhere .= "{$sAnd} ac16_deptoresponsavel in ({$oPost->sDepartsResponsavel})";
-	$sAnd    = " and ";
+  $sWhere .= "{$sAnd} ac16_deptoresponsavel in ({$oPost->sDepartsResponsavel})";
+  $sAnd    = " and ";
 }
 
 $sDataInicio = $oPost->ac16_datainicio;
 $sDataFim    = $oPost->ac16_datafim;
 
 if (isset($oPost->ac16_datainicio) && isset($oPost->ac16_datafim)) {
-	
+
   if (!empty($oPost->ac16_datainicio) && !empty($oPost->ac16_datafim)) {
-  	
-  	$dtIni       = implode("-",array_reverse(explode("/",$sDataInicio)));
-  	$dtFim       = implode("-",array_reverse(explode("/",$sDataFim)));
-  	
+
+    $dtIni       = implode("-", array_reverse(explode("/", $sDataInicio)));
+    $dtFim       = implode("-", array_reverse(explode("/", $sDataFim)));
+
     $sWhere .= "{$sAnd} acordo.ac16_datafim between '{$dtIni}' and '{$dtFim}' ";
-    $sAnd    = " and "; 
+    $sAnd    = " and ";
   }
 } else {
-	db_redireciona("db_erros.php?fechar=true&db_erro=Informe a data de inicio e data de fim da vigencia!");
+  db_redireciona("db_erros.php?fechar=true&db_erro=Informe a data de inicio e data de fim da vigencia!");
 }
 
 if (isset($oPost->listaacordogrupo)) {
-  
+
   if (!empty($oPost->listaacordogrupo)) {
-    
+
     $sWhere .= "{$sAnd} acordogrupo.ac02_sequencial in({$oPost->listaacordogrupo})";
-    $sAnd    = " and ";  
-  }  
+    $sAnd    = " and ";
+  }
 }
 
 if (!empty($oPost->listacontratado)) {
-  
-    $sWhere .= "{$sAnd} contratado.z01_numcgm in({$oPost->listacontratado})";
-    $sAnd    = " and "; 
+
+  $sWhere .= "{$sAnd} contratado.z01_numcgm in({$oPost->listacontratado})";
+  $sAnd    = " and ";
 }
 
 if (!empty($oPost->ordem)) {
-    
-    if (trim($oPost->ordem) == 1) {
-      $sOrder = 'acordo.ac16_datafim';
-    } else if (trim($oPost->ordem) == 2) {
-      $sOrder = 'acordo.ac16_contratado';
-    }
+
+  if (trim($oPost->ordem) == 1) {
+    $sOrder = 'acordo.ac16_datafim';
+  } else if (trim($oPost->ordem) == 2) {
+    $sOrder = 'acordo.ac16_contratado';
+  }
 }
 
-if(!empty($oPost->ac50_sequencial)) {
-  
+if (!empty($oPost->ac50_sequencial)) {
+
   $sWhere .= "{$sAnd} acordo.ac16_acordocategoria = {$oPost->ac50_sequencial} ";
   $sAnd    = " and ";
   $head7   = "CATEGORIA: {$oPost->ac50_descricao}";
@@ -132,10 +132,10 @@ $sWhere     .= "          or ac16_deptoresponsavel = ".db_getsession("DB_coddept
 
 $sSqlAcordo  = $clacordo->sql_query_completo(null, "DISTINCT acordo.ac16_sequencial, acordotipo.ac04_descricao, acordo.ac16_deptoresponsavel, depresp.descrdepto, acordo.ac16_datafim", $sOrder, $sWhere);
 $rsSqlAcordo = $clacordo->sql_record($sSqlAcordo);
-if ( $clacordo->numrows == 0  ) {
+if ($clacordo->numrows == 0) {
   db_redireciona("db_erros.php?fechar=true&db_erro=Nenhum registro encontrado!");
 }
- 
+
 $aDadosAcordo = array();
 for ($iInd = 0; $iInd < $clacordo->numrows; $iInd++) {
 
@@ -147,92 +147,91 @@ for ($iInd = 0; $iInd < $clacordo->numrows; $iInd++) {
    */
   $oDadosAcordo                   = new stdClass();
   $oDadosAcordo->getCodigo        = $oAcordo->getCodigoAcordo();
-  $oDadosAcordo->getNumeroAno     = $oAcordo->getNumeroAcordo()."/".$oAcordo->getAno();
+  $oDadosAcordo->getNumeroAno     = $oAcordo->getNumeroAcordo() . "/" . $oAcordo->getAno();
   $oDadosAcordo->getTipoAcordo    = $oAcordoCompleto->ac04_descricao;
-  $oDadosAcordo->getDepartamento  = $oAcordo->getDepartamentoResponsavel()." - ".$oAcordoCompleto->descrdepto;
-  $oDadosAcordo->getContratado    = $oAcordo->getContratado()->getCodigo()." - ".$oAcordo->getContratado()->getNome();
+  $oDadosAcordo->getDepartamento  = $oAcordo->getDepartamentoResponsavel() . " - " . $oAcordoCompleto->descrdepto;
+  $oDadosAcordo->getContratado    = $oAcordo->getContratado()->getCodigo() . " - " . $oAcordo->getContratado()->getNome();
   $oDadosAcordo->getAssinatura    = $oAcordo->getDataAssinatura();
   $oDadosAcordo->getVigencia      = $oAcordo->getDataFinal();
   $oDadosAcordo->getValorTotal    = $oAcordo->getValoresItens()->valoratual;
-  $oDadosAcordo->getObjeto        = substr($oAcordo->getObjeto(),"0","249");
+  $oDadosAcordo->getObjeto        = substr($oAcordo->getObjeto(), "0", "249");
   $aDadosAcordo[] = $oDadosAcordo;
 }
 $head2 = "Acordo: {$sAcordo}";
 
-if($oPost->ac16_datainicio != ''){
-	$head4 = "Data de Início: {$sDataInicio} ";
+if ($oPost->ac16_datainicio != '') {
+  $head4 = "Data de Início: {$sDataInicio} ";
 }
 
-if($oPost->ac16_datafim != ''){
-	$head4 .= " Data Fim: {$sDataFim}";
+if ($oPost->ac16_datafim != '') {
+  $head4 .= " Data Fim: {$sDataFim}";
 }
 
 $head6 = "Ordem: {$sOrdemDescricao}";
 
-$oPdf  = new PDF(); 
-$oPdf->Open(); 
-$oPdf->AliasNbPages(); 
-$oPdf->SetTextColor(0,0,0);
+$oPdf  = new PDF();
+$oPdf->Open();
+$oPdf->AliasNbPages();
+$oPdf->SetTextColor(0, 0, 0);
 $oPdf->SetFillColor(220);
 $oPdf->SetAutoPageBreak(false);
 
 $iFonte     = 9;
-$iAlt       = 5 ;
+$iAlt       = 5;
 $lImprime   = true;
 $lPreencher = false;
 
 foreach ($aDadosAcordo as $oDadoAcordo) {
-	
+
   imprimirCabecalhoAcordos($oPdf, $iFonte, $iAlt, $lImprime);
   $lImprime = false;
-  
+
   if ($lPreencher == true) {
-                  
+
     $lPreencher   = false;
-    $iCorFundo    = 1;    
+    $iCorFundo    = 1;
     $oPdf->SetFillColor(240);
   } else {
-            
+
     $lPreencher   = true;
     $iCorFundo    = 0;
     $oPdf->SetFillColor(220);
   }
-  
-  $oPdf->SetFont('Arial','',$iFonte-1);
-  $oPdf->Cell(20 ,$iAlt,$oDadoAcordo->getCodigo,'TBR',0,'C',$iCorFundo);
-  $oPdf->Cell(22 ,$iAlt,$oDadoAcordo->getNumeroAno,1,0,'C',$iCorFundo);
-  $oPdf->Cell(78 ,$iAlt,substr($oDadoAcordo->getContratado, 0, 46),1,0,'C',$iCorFundo);
-  $oPdf->Cell(78 ,$iAlt,$oDadoAcordo->getDepartamento,1,0,'C',$iCorFundo);
-  $oPdf->Cell(40 ,$iAlt,$oDadoAcordo->getAssinatura,1,0,'C',$iCorFundo);
-  $oPdf->Cell(40 ,$iAlt,$oDadoAcordo->getVigencia,'TBL',1,'C',$iCorFundo);
-  $oPdf->MultiCell(278,$iAlt,urldecode($oDadoAcordo->getObjeto      ),'TB','L',$iCorFundo);
-  
+
+  $oPdf->SetFont('Arial', '', $iFonte - 1);
+  $oPdf->Cell(20, $iAlt, $oDadoAcordo->getCodigo, 'TBR', 0, 'C', $iCorFundo);
+  $oPdf->Cell(22, $iAlt, $oDadoAcordo->getNumeroAno, 1, 0, 'C', $iCorFundo);
+  $oPdf->Cell(78, $iAlt, substr($oDadoAcordo->getContratado, 0, 46), 1, 0, 'C', $iCorFundo);
+  $oPdf->Cell(78, $iAlt, $oDadoAcordo->getDepartamento, 1, 0, 'C', $iCorFundo);
+  $oPdf->Cell(40, $iAlt, $oDadoAcordo->getAssinatura, 1, 0, 'C', $iCorFundo);
+  $oPdf->Cell(40, $iAlt, $oDadoAcordo->getVigencia, 'TBL', 1, 'C', $iCorFundo);
+  $oPdf->MultiCell(278, $iAlt, urldecode($oDadoAcordo->getObjeto), 'TB', 'L', $iCorFundo);
 }
-  
-$oPdf->SetFont('Arial','B',$iFonte);
-$oPdf->Cell(278 ,$iAlt-3,'',0,1,'C',0);
-$oPdf->Cell(30 ,$iAlt,'Total de Registros:',0,0,'L',0);
-$oPdf->Cell(30 ,$iAlt,''.count($aDadosAcordo).'',0,0,'L',0);
+
+$oPdf->SetFont('Arial', 'B', $iFonte);
+$oPdf->Cell(278, $iAlt - 3, '', 0, 1, 'C', 0);
+$oPdf->Cell(30, $iAlt, 'Total de Registros:', 0, 0, 'L', 0);
+$oPdf->Cell(30, $iAlt, '' . count($aDadosAcordo) . '', 0, 0, 'L', 0);
 
 $oPdf->Output();
 
 /*
  * Monta Cabecalho dos Arcordos
  */
-function imprimirCabecalhoAcordos($oPdf, $iFonte, $iAlt, $lImprime) {
-  
-	if ($oPdf->GetY() > ($oPdf->h - 30) || $lImprime) {
-		
-		$oPdf->AddPage('L');
-    $oPdf->SetFont('Arial','B',$iFonte);
+function imprimirCabecalhoAcordos($oPdf, $iFonte, $iAlt, $lImprime)
+{
+
+  if ($oPdf->GetY() > ($oPdf->h - 30) || $lImprime) {
+
+    $oPdf->AddPage('L');
+    $oPdf->SetFont('Arial', 'B', $iFonte);
     $oPdf->SetFillColor(220);
-    $oPdf->Cell(20 ,$iAlt,'Código',1,0,'C',1);
-    $oPdf->Cell(22 ,$iAlt,'Acordo',1,0,'C',1);
-    $oPdf->Cell(78 ,$iAlt,'Contratado',1,0,'C',1);
-    $oPdf->Cell(78 ,$iAlt,'Departamento',1,0,'C',1);
-    $oPdf->Cell(40 ,$iAlt,'Assinatura',1,0,'C',1);
-    $oPdf->Cell(40 ,$iAlt,'Vigência',1,1,'C',1);
-    $oPdf->Cell(278 ,$iAlt,'Objeto',1,1,'L',1);
-	}
+    $oPdf->Cell(20, $iAlt, 'Código', 1, 0, 'C', 1);
+    $oPdf->Cell(22, $iAlt, 'Acordo', 1, 0, 'C', 1);
+    $oPdf->Cell(78, $iAlt, 'Contratado', 1, 0, 'C', 1);
+    $oPdf->Cell(78, $iAlt, 'Departamento', 1, 0, 'C', 1);
+    $oPdf->Cell(40, $iAlt, 'Assinatura', 1, 0, 'C', 1);
+    $oPdf->Cell(40, $iAlt, 'Vigência', 1, 1, 'C', 1);
+    $oPdf->Cell(278, $iAlt, 'Objeto', 1, 1, 'L', 1);
+  }
 }
-?>

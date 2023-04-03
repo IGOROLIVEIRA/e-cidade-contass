@@ -58,6 +58,7 @@ if (isset($alterar)) {
   } else {
 
     db_inicio_transacao();
+    $clcflicita->l03_presencial = $l03_presencial;
     $clcflicita->alterar($l03_codigo);
     if ($clcflicita->erro_status == 0) {
       $sqlerro = true;

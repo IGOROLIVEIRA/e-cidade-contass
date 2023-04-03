@@ -102,7 +102,7 @@ class cl_aberlic102023
                  si46_dtrecebimentodoc = date = Data prevista para  recebimento
                  si46_tipolicitacao = int8 = Tipo de licitação
                  si46_naturezaobjeto = int8 = Natureza do objeto
-                 si46_objeto = varchar(500) = Objeto da licitação
+                 si46_objeto = varchar(1000) = Objeto da licitação
                  si46_regimeexecucaoobras = int8 = Regime de  execução para    obras
                  si46_nroconvidado = int8 = Número de   convidados
                  si46_clausulaprorrogacao = varchar(250) = se  existente a  cláusula de   prorrogação

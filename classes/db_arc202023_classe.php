@@ -24,9 +24,6 @@ class cl_arc202023
   var $si31_ededucaodereceita = 0;
   var $si31_identificadordeducao = 0;
   var $si31_naturezareceitaestornada = 0;
-  var $si31_regularizacaorepasseestornada = 0;
-  var $si31_exercicioestornada = null;
-  var $si31_emendaparlamentarestornada = 0;
   var $si31_vlestornado = 0;
   var $si31_mes = 0;
   var $si31_instit = 0;
@@ -39,9 +36,6 @@ class cl_arc202023
                  si31_ededucaodereceita = int8 = Identifica
                  si31_identificadordeducao = int8 = Identificador
                  si31_naturezareceitaestornada = int8 = Natureza da receita
-                 si31_regularizacaorepasseestornada = int8 = Regularização de Repasse
-                 si31_exercicioestornada = varchar(4) = Exercício
-                 si31_emendaparlamentarestornada = int8 = Emenda Parlamentar
                  si31_vlestornado = float8 = Valor estornado
                  si31_mes = int8 = Mês
                  si31_instit = int8 = Instituição
@@ -77,9 +71,6 @@ class cl_arc202023
       $this->si31_ededucaodereceita = ($this->si31_ededucaodereceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_ededucaodereceita"] : $this->si31_ededucaodereceita);
       $this->si31_identificadordeducao = ($this->si31_identificadordeducao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_identificadordeducao"] : $this->si31_identificadordeducao);
       $this->si31_naturezareceitaestornada = ($this->si31_naturezareceitaestornada == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_naturezareceitaestornada"] : $this->si31_naturezareceitaestornada);
-      $this->si31_regularizacaorepasseestornada = ($this->si31_regularizacaorepasseestornada == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_regularizacaorepasseestornada"] : $this->si31_regularizacaorepasseestornada);
-      $this->si31_exercicioestornada = ($this->si31_exercicioestornada == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_exercicioestornada"] : $this->si31_exercicioestornada);
-      $this->si31_emendaparlamentarestornada = ($this->si31_emendaparlamentarestornada == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_emendaparlamentarestornada"] : $this->si31_emendaparlamentarestornada);
       $this->si31_vlestornado = ($this->si31_vlestornado == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_vlestornado"] : $this->si31_vlestornado);
       $this->si31_mes = ($this->si31_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_mes"] : $this->si31_mes);
       $this->si31_instit = ($this->si31_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si31_instit"] : $this->si31_instit);
@@ -144,15 +135,7 @@ class cl_arc202023
     //   $this->erro_status = "0";
 
     // }
-    if ($this->si31_regularizacaorepasseestornada == null) {
-        $this->si31_regularizacaorepasseestornada = "0";
-      }
-      if ($this->si31_exercicioestornada == null) {
-        $this->si31_exercicioestornada = "0";
-      }
-      if ($this->si31_emendaparlamentarestornada == null) {
-        $this->si31_emendaparlamentarestornada = "0";
-      }
+
     if ($this->si31_vlestornado == null) {
       $this->erro_sql = " Campo Valor Estornado na Natureza de Receita não Informado.";
       $this->erro_campo = "si31_vlestornado";
@@ -232,9 +215,7 @@ class cl_arc202023
                                       ,si31_ededucaodereceita
                                       ,si31_identificadordeducao
                                       ,si31_naturezareceitaestornada
-                                      ,si31_regularizacaorepasseestornada
-                                      ,si31_exercicioestornada
-                                      ,si31_emendaparlamentarestornada
+                
                                       ,si31_vlestornado
                                       ,si31_mes
                                       ,si31_instit
@@ -247,9 +228,7 @@ class cl_arc202023
                                ,$this->si31_ededucaodereceita
                                ,$this->si31_identificadordeducao
                                ,$this->si31_naturezareceitaestornada
-                               ,$this->si31_regularizacaorepasseestornada
-                               ,$this->si31_exercicioestornada
-                               ,$this->si31_emendaparlamentarestornada
+             
                                ,$this->si31_vlestornado
                                ,$this->si31_mes
                                ,$this->si31_instit
@@ -364,27 +343,8 @@ class cl_arc202023
       $sql .= $virgula . " si31_naturezareceitaestornada = $this->si31_naturezareceitaestornada ";
       $virgula = ",";
     }
-    if (trim($this->si31_regularizacaorepasseestornada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si31_regularizacaorepasseestornada"])) {
-        if (trim($this->si31_regularizacaorepasseestornada) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si31_regularizacaorepasseestornada"])) {
-            $this->si31_regularizacaorepasseestornada = "0";
-        }
-        $sql .= $virgula . " si31_regularizacaorepasseestornada = $this->si31_regularizacaorepasseestornada ";
-        $virgula = ",";
-        }
-    if (trim($this->si31_exercicioestornada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si31_exercicioestornada"])) {
-        if (trim($this->si31_exercicioestornada) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si31_exercicioestornada"])) {
-            $this->si31_exercicioestornada = "0";
-        }
-        $sql .= $virgula . " si31_exercicioestornada = $this->si31_exercicioestornada ";
-        $virgula = ",";
-        }
-    if (trim($this->si31_emendaparlamentarestornada) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si31_emendaparlamentarestornada"])) {
-        if (trim($this->si31_emendaparlamentarestornada) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si31_emendaparlamentarestornada"])) {
-            $this->si31_emendaparlamentarestornada = "0";
-        }
-        $sql .= $virgula . " si31_emendaparlamentarestornada = $this->si31_emendaparlamentarestornada ";
-        $virgula = ",";
-    }
+
+
     if (trim($this->si31_vlestornado) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si31_vlestornado"])) {
       if (trim($this->si31_vlestornado) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si31_vlestornado"])) {
         $this->si31_vlestornado = "0";

@@ -58,7 +58,7 @@ class SicomArquivoDetalhamentoRiscosFiscais extends SicomArquivoBase implements 
     $cl_db_config = new cl_db_config;
     $ano = db_getsession("DB_anousu");
     
-    $sqlRiscos = $clriscosfiscais->sql_query_file(null, "*", null, $this->iCodigoPespectiva . " and si53_exercicio = '{$ano}'");
+    $sqlRiscos = $clriscosfiscais->sql_query_file(null, "*", null, " si53_codigoppa = {$this->iCodigoPespectiva} and si53_exercicio = '{$ano}'");
     $rsRiscos  = db_query($sqlRiscos);
 
     $sSqlOrgao = $cl_db_config->sql_query_file(null, "si09_codorgaotce", null, "prefeitura = 't'");

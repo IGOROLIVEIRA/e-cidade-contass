@@ -488,6 +488,21 @@ class cl_ctb402023
     
     return $sql;
   }
+
+  public function sql_verificaReg40($codctb, $ano, $mes, $instit)
+  {
+    $sSql40 = "";
+    for ($iContAnoReg40 = 2015; $iContAnoReg40 <= $ano; $iContAnoReg40++) { 
+      $table = 'ctb40' . $iContAnoReg40;
+
+      $sSql40 .= "SELECT '{$table}' AS ano, $table.* FROM $table
+                    WHERE si101_codctb = {$codctb}
+                      AND si101_instit = {$instit}";
+      
+      $sSql40 .= $iContAnoReg40 == $ano ? " AND si101_mes <= {$mes} " : " UNION ALL ";
+    }
+    return $sSql40;
+  }
 }
 
 ?>

@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -76,6 +76,19 @@ $aux = new cl_arquivo_auxiliar;
                 echo " a ";
                 db_inputdata("dtFinal", "", "", "", true, "text", 1, "");
               ?>
+            </td>
+          </tr>
+          <tr>
+            <td nowrap align=left>
+                <b>Somente com Saldo Final Diferente de ZERO:</b>
+            </td>
+            <td align=left>
+
+                <select id='contasomentecomsaldo' name='contasomentecomsaldo' class="ComboRazao">
+                    <option value='0'>Não</option>
+                    <option value='1'>Sim</option>
+                </select>
+            <!--  <input type=checkbox name=contasemmov > -->
             </td>
           </tr>
           <tr>
@@ -213,11 +226,11 @@ $aux = new cl_arquivo_auxiliar;
                                               aCamposCredor,
                                               sStringAdicional);
       oDBLancadorCredor.show($('tdCtnCredoresContaCorrente'));
-      
+
       var oDBToogle = new DBToogle(oDBLancadorCredor.getFieldset(), false);
-  
+
       $('txtCodigooDBLancadorCredor').observe("change", function() {
-        
+
         sStringAdicional += '&c17_sequencial='+$('txtCodigooDBLancadorCredor').value;
         oDBLancadorCredor.setParametrosPesquisa('func_contacorrentedetalhecgm.php',
                                                 aCamposCredor,
@@ -234,7 +247,7 @@ $aux = new cl_arquivo_auxiliar;
 
       $('trCredores').style.display = 'none';
       $('trPrestacaoContas').style.display = 'none';
-	  
+
     switch ($F('iContaCorrente')) {
 
     case "19":
@@ -246,14 +259,14 @@ $aux = new cl_arquivo_auxiliar;
     break;
 
     case "3":
-        
+
     	$('trCredores').style.display = '';
     	js_criarLancadorCredores();
-    	
+
     break;
 
     default :
-    
+
       $('trCredores').style.display = 'none';
       $('trPrestacaoContas').style.display = 'none';
 
@@ -294,6 +307,7 @@ $aux = new cl_arquivo_auxiliar;
     var iContaCorrente = $F('iContaCorrente');
     var sListaReduzido = "";
     var sListaCredor   = "";
+    var bContaSomenteComSaldo = $("contasomentecomsaldo").value;
     var sFonte         = "con2_razaocontacorrente002.php";
     var sQuery         = "";
 
@@ -349,6 +363,7 @@ $aux = new cl_arquivo_auxiliar;
     sQuery += "&iContaCorrente="   + iContaCorrente;
     sQuery += "&sListaReduzido="   + sListaReduzido;
     sQuery += "&sListaCredor="     + sListaCredor;
+    sQuery += "&bContaSomenteComSaldo="+ bContaSomenteComSaldo;
     sQuery += "&iPrestacaoContas=" + $F('comboboxPrestacaoContas');
     jan = window.open(sFonte+sQuery,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0,0);
@@ -373,7 +388,7 @@ $aux = new cl_arquivo_auxiliar;
 	      $('trCredores').style.display = 'none';
 	      $('trPrestacaoContas').style.display = 'none';
     switch (iContaCorrente) {
-    
+
       case "19" :
 
       	$('trCredores').style.display = '';
@@ -381,7 +396,7 @@ $aux = new cl_arquivo_auxiliar;
     	  js_getTipoPrestacaoContas();
     	  js_criarLancadorCredores();
       break;
-      
+
       case "3" :
 
     	  $('trCredores').style.display = '';
@@ -391,7 +406,7 @@ $aux = new cl_arquivo_auxiliar;
       default :
  	      $('trCredores').style.display = 'none';
 	      $('trPrestacaoContas').style.display = 'none';
-          
+
 
     }
     $("sContaCorrente").value = sContaCorrente + " - " + sDescricaoConta;

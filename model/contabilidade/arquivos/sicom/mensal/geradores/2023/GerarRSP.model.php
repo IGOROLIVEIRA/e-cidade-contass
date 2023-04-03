@@ -129,6 +129,7 @@ class GerarRSP extends GerarAM
             $aCSVRSP11['si113_tiporegistro']            = $this->padLeftZero($aRSP11['si113_tiporegistro'], 2);
             $aCSVRSP11['si113_codreduzidorsp']          = substr($aRSP11['si113_codreduzidorsp'], 0, 15);
             $aCSVRSP11['si113_codfontrecursos']         = $this->padLeftZero($aRSP11['si113_codfontrecursos'], 3);
+            $aCSVRSP11['si113_codco']                   = $aRSP11['si113_codco'];
             $aCSVRSP11['si113_vloriginalfonte']         = $this->sicomNumberReal($aRSP11['si113_vloriginalfonte'], 2);
             $aCSVRSP11['si113_vlsaldoantprocefonte']    = $this->sicomNumberReal($aRSP11['si113_vlsaldoantprocefonte'], 2);
             $aCSVRSP11['si113_vlsaldoantnaoprocfonte']  = $this->sicomNumberReal($aRSP11['si113_vlsaldoantnaoprocfonte'], 2);
@@ -201,7 +202,9 @@ class GerarRSP extends GerarAM
 
             $aCSVRSP21['si116_tiporegistro']        = $this->padLeftZero($aRSP21['si116_tiporegistro'], 2);
             $aCSVRSP21['si116_codreduzidomov']      = substr($aRSP21['si116_codreduzidomov'], 0, 15);
-            $aCSVRSP21['si116_codfontrecursos']     = $this->padLeftZero($aRSP21['si116_codfontrecursos'], 3);
+            $aCSVRSP21['si116_codfontrecursos']     = $aRSP21['si116_codfontrecursos'];
+            $aCSVRSP21['si116_codco']               = $aRSP21['si116_codco'];
+            $aCSVRSP21['si116_codidentificafr']     = $aRSP21['si116_codidentificafr'];
             $aCSVRSP21['si116_vlmovimentacaofonte'] = $this->sicomNumberReal($aRSP21['si116_vlmovimentacaofonte'], 2);
 
             $this->sLinha = $aCSVRSP21;

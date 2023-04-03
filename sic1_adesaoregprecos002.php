@@ -191,7 +191,7 @@ if (!$sqlerro) {
 
       if ($sqlerro == false) {
 
-
+        $cladesaoregprecos->si06_departamento = $si06_departamento;
         $cladesaoregprecos->alterar($si06_sequencial);
 
         $sSqlItemacordo = $clacordo->sql_record($clacordo->sql_query_sequencial_acordo($si06_sequencial));

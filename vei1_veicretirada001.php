@@ -125,6 +125,16 @@ if(isset($incluir)){
 			  </script>";
 		exit;
    }
+   $result_baixa = $clveiculos->sql_record($clveiculos->sql_query_file($veiculo,"ve01_ativo"));
+   db_fieldsmemory($result_baixa,0);
+   if ($ve01_ativo == 2){
+      echo "<script>
+      alert('Usuário: O veículo selecionado está baixado.');
+      location.href='vei1_veicretirada001.php';
+      </script>";
+      exit;
+    }
+
    $result = $clveiculos->sql_record($clveiculos->sql_query($veiculo,"ve01_codigo,ve01_placa,ve01_veictipoabast"));
    db_fieldsmemory($result,0);
    $ve60_veiculo=$ve01_codigo;

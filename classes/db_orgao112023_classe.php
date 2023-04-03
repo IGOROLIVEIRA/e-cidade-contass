@@ -37,6 +37,8 @@ class cl_orgao112023 {
    var $si15_reg10 = 0; 
    var $si15_mes = 0; 
    var $si15_instit = 0; 
+   var $si15_numeroTelefone = 0;
+   
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  si15_sequencial = int8 = sequencial 
@@ -54,6 +56,7 @@ class cl_orgao112023 {
                  si15_reg10 = int8 = reg10 
                  si15_mes = int8 = Mês 
                  si15_instit = int8 = Instituição 
+                 si15_numeroTelefone = int8 = Telefone
                  ";
    //funcao construtor da classe 
    function cl_orgao112023() { 
@@ -102,7 +105,8 @@ class cl_orgao112023 {
        $this->si15_reg10 = ($this->si15_reg10 == ""?@$GLOBALS["HTTP_POST_VARS"]["si15_reg10"]:$this->si15_reg10);
        $this->si15_mes = ($this->si15_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["si15_mes"]:$this->si15_mes);
        $this->si15_instit = ($this->si15_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["si15_instit"]:$this->si15_instit);
-     }else{
+       $this->si15_numeroTelefone = ($this->si15_numeroTelefone == ""?@$GLOBALS["HTTP_POST_VARS"]["si15_numeroTelefone"]:$this->si15_numeroTelefone);
+      }else{
        $this->si15_sequencial = ($this->si15_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["si15_sequencial"]:$this->si15_sequencial);
      }
    }
@@ -145,7 +149,10 @@ class cl_orgao112023 {
        $this->erro_status = "0";
        return false;
      }
-     if($si15_sequencial == "" || $si15_sequencial == null ){
+     if($this->si15_numeroTelefone == null ){ 
+      $this->si15_numeroTelefone = 'null';
+    }
+    if($si15_sequencial == "" || $si15_sequencial == null ){
        $result = db_query("select nextval('orgao112023_si15_sequencial_seq')"); 
        if($result==false){
          $this->erro_banco = str_replace("
@@ -194,6 +201,7 @@ class cl_orgao112023 {
                                       ,si15_reg10 
                                       ,si15_mes 
                                       ,si15_instit 
+                                      ,si15_numeroTelefone
                        )
                 values (
                                 $this->si15_sequencial 
@@ -211,6 +219,7 @@ class cl_orgao112023 {
                                ,$this->si15_reg10 
                                ,$this->si15_mes 
                                ,$this->si15_instit 
+                               ,$this->si15_numeroTelefone
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -258,6 +267,7 @@ class cl_orgao112023 {
        $resac = db_query("insert into db_acount values($acount,2010243,2009617,'','".AddSlashes(pg_result($resaco,0,'si15_reg10'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010243,2009735,'','".AddSlashes(pg_result($resaco,0,'si15_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010243,2011533,'','".AddSlashes(pg_result($resaco,0,'si15_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,2010243,2011533,'','".AddSlashes(pg_result($resaco,0,'si15_numeroTelefone'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
    } 
@@ -369,6 +379,10 @@ class cl_orgao112023 {
          return false;
        }
      }
+     if(trim($this->si15_numeroTelefone)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si15_numeroTelefone"])){ 
+      $sql  .= $virgula." si15_numeroTelefone = $this->si15_numeroTelefone ";
+      $virgula = ",";
+    }
      $sql .= " where ";
      if($si15_sequencial!=null){
        $sql .= " si15_sequencial = $this->si15_sequencial";
@@ -410,8 +424,9 @@ class cl_orgao112023 {
            $resac = db_query("insert into db_acount values($acount,2010243,2009735,'".AddSlashes(pg_result($resaco,$conresaco,'si15_mes'))."','$this->si15_mes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["si15_instit"]) || $this->si15_instit != "")
            $resac = db_query("insert into db_acount values($acount,2010243,2011533,'".AddSlashes(pg_result($resaco,$conresaco,'si15_instit'))."','$this->si15_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-     }
+         if(isset($GLOBALS["HTTP_POST_VARS"]["si15_numeroTelefone"]) || $this->si15_numeroTelefone != "")
+           $resac = db_query("insert into db_acount values($acount,2010243,2011533,'".AddSlashes(pg_result($resaco,$conresaco,'si15_numeroTelefone'))."','$this->si15_numeroTelefone',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");          }
+        }
      $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("
@@ -473,7 +488,8 @@ class cl_orgao112023 {
          $resac = db_query("insert into db_acount values($acount,2010243,2009617,'','".AddSlashes(pg_result($resaco,$iresaco,'si15_reg10'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010243,2009735,'','".AddSlashes(pg_result($resaco,$iresaco,'si15_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010243,2011533,'','".AddSlashes(pg_result($resaco,$iresaco,'si15_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
+         $resac = db_query("insert into db_acount values($acount,2010243,2011533,'','".AddSlashes(pg_result($resaco,$iresaco,'si15_numeroTelefone'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        }
      }
      $sql = " delete from orgao112023
                     where ";

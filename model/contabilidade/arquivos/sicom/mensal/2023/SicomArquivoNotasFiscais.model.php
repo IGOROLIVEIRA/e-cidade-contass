@@ -133,7 +133,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
                 OR empnota.e69_notafiscaleletronica = 3 then empnota.e69_nfserie
                 else ' '
             end as nfserie,
-            CASE 
+            CASE
                 WHEN cgmfilial.z01_cgccpf IS NOT NULL
                 THEN (
                     case
@@ -141,40 +141,40 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
                         when 11 then 1
                         else 2
                     end
-                ) 
-            ELSE 
+                )
+            ELSE
                 (
                     case
                         length(cgm.z01_cgccpf)
                         when 11 then 1
                         else 2
                     end
-                ) 
+                )
             END as tipodocumento,
-            CASE 
+            CASE
                 WHEN cgmfilial.z01_cgccpf IS NOT NULL
                 THEN cgmfilial.z01_cgccpf
                 ELSE cgm.z01_cgccpf
             END as nrodocumento,
-            CASE 
+            CASE
                 WHEN cgmfilial.z01_cgccpf IS NOT NULL
-                THEN REPLACE(cgmfilial.z01_incest, '.', '') 
-                ELSE REPLACE(cgm.z01_incest, '.', '') 
+                THEN REPLACE(cgmfilial.z01_incest, '.', '')
+                ELSE REPLACE(cgm.z01_incest, '.', '')
             END as nroinscestadual,
-            CASE 
+            CASE
                 WHEN cgmfilial.z01_cgccpf IS NOT NULL
-                THEN cgmfilial.z01_incmunici 
+                THEN cgmfilial.z01_incmunici
                 ELSE cgm.z01_incmunici
             END as nroinscmunicipal,
             cadendermunicipio.db72_descricao as nomemunicipio,
-            CASE 
+            CASE
                 WHEN cgmfilial.z01_cgccpf IS NOT NULL
-                THEN cgmfilial.z01_cep 
+                THEN cgmfilial.z01_cep
                 ELSE cgm.z01_cep
             END as cepmunicipio,
-            CASE 
+            CASE
                 WHEN cgmfilial.z01_cgccpf IS NOT NULL
-                THEN cgmfilial.z01_uf 
+                THEN cgmfilial.z01_uf
                 ELSE cgm.z01_uf
             END as ufcredor,
             empnota.e69_notafiscaleletronica as notafiscaleletronica,
@@ -215,7 +215,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
             inner join configuracoes.db_config as db_config on (empempenho.e60_instit = db_config.codigo)
             inner join patrimonio.cgmendereco as cgmendereco on (
                 ((cgmfilial.z01_numcgm = cgmendereco.z07_numcgm AND cgmfilial.z01_cgccpf IS NOT NULL)
-                OR 
+                OR
                 (cgm.z01_numcgm = cgmendereco.z07_numcgm AND cgmfilial.z01_cgccpf IS NULL)
                 )
                 and z07_tipo = 'P'
@@ -257,7 +257,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
         $clntf10->si143_codorgao = $oDados10->codorgao;
 
         $oDados10->nfnumero = str_replace("/", "", $oDados10->nfnumero);
-        if (ereg('[^0-9]', $oDados10->nfnumero)) {
+        if (preg_match('/[^0-9]/', $oDados10->nfnumero)) {
           //$clntf10->si143_nfnumero                  = null;
           continue;
         } else {
@@ -371,7 +371,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
       $sSql = "select '20' as tiporegistro,
         empnota.e69_numero as nfnumero,
         case when empnota.e69_notafiscaleletronica = 2 OR empnota.e69_notafiscaleletronica = 3 then empnota.e69_nfserie else ' ' end as nfserie,
-        CASE 
+        CASE
             WHEN cgmfilial.z01_cgccpf IS NOT NULL
             THEN (
                 case
@@ -379,17 +379,17 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
                     when 11 then 1
                     else 2
                 end
-            ) 
-        ELSE 
+            )
+        ELSE
             (
                 case
                     length(cgm.z01_cgccpf)
                     when 11 then 1
                     else 2
                 end
-            ) 
+            )
         END as tipodocumento,
-        CASE 
+        CASE
             WHEN cgmfilial.z01_cgccpf IS NOT NULL
             THEN cgmfilial.z01_cgccpf
             ELSE cgm.z01_cgccpf
@@ -433,7 +433,7 @@ class SicomArquivoNotasFiscais extends SicomArquivoBase implements iPadArquivoBa
           $clntf20->si145_tiporegistro = 20;
 
           $oDados20->nfnumero = str_replace("/", "", $oDados20->nfnumero);
-          if (ereg('[^0-9]', $oDados20->nfnumero)) {
+          if (preg_match('/[^0-9]/', $oDados10->nfnumero)) {
             //$clntf20->si145_nfnumero                  = null;
             continue;
           } else {

@@ -44,6 +44,7 @@ $erro           = false;
 $descricao_erro = false;
 
 $iAnousu        = db_getsession('DB_anousu');
+$dataUsu = db_getsession('DB_datausu');
 ?>
 <html>
 <head>
@@ -292,7 +293,7 @@ $iAnousu        = db_getsession('DB_anousu');
           $sSql .= "              inner join arretipo on arretipo.k00_tipo = arrecad.k00_tipo ";
           $sSql .= "                                 and arretipo.k03_tipo = $k03_tipo        ";
           $sSql .= "       where k00_tipoger = 'G' group by k00_percdes) as x                 ";
-          $sSql .= "  where k00_dtvenc > '".date('Y-m-d', $iAnousu)."'                        ";
+          $sSql .= "  where k00_dtvenc > '".date('Y-m-d', $dataUsu)."'                        ";
           $sSql .= " order by k00_dtvenc, k00_percdes                                         ";
 
           if ($k03_tipo == 19 || $k03_tipo == 5) {
@@ -307,7 +308,7 @@ $iAnousu        = db_getsession('DB_anousu');
             $sSql .= "        inner join arrecad          on y69_numpre                  = arrecad.k00_numpre     ";
             $sSql .= "        inner join arretipo         on arretipo.k00_tipo           = arrecad.k00_tipo       ";
             $sSql .= "                                   and arretipo.k03_tipo           = $k03_tipo              ";
-            $sSql .= "  where recibounica.k00_dtvenc > '".date('Y-m-d', $iAnousu)."'                              ";
+            $sSql .= "  where recibounica.k00_dtvenc > '".date('Y-m-d', $dataUsu)."'                              ";
             $sSql .= "group by k00_percdes order by k00_dtvenc, k00_percdes";
           }
 
@@ -315,7 +316,7 @@ $iAnousu        = db_getsession('DB_anousu');
 
          if (pg_numrows($result) > 0) { ?>
           <label for="totcheck">Unicas:</label>
-      <? } ?>
+         <?php } ?>
       </td>
     </tr>
 
@@ -331,7 +332,7 @@ $iAnousu        = db_getsession('DB_anousu');
                 $expressao = $k00_dtvenc . "=" . $k00_dtoper . "=" . $k00_percdes;
                 ?>
                 <input type="checkbox" value="<?=$expressao?>" name="check_<?=$iIndice?>" checked><?php echo "Vencimento: ".db_formatar($k00_dtvenc,"d")."- Lançamento: ".db_formatar($k00_dtoper,"d")."- Desconto: ".$k00_percdes."<br/>" ?>
-                <?
+                  <?php
               }
             }
 

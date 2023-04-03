@@ -174,7 +174,7 @@ if ($method == "getDados") {
         $clmatestoquedev->m45_codmatrequi = $m40_codigo;
         $clmatestoquedev->m45_codatendrequi = $m42_codigo;
 
-        $clmatestoquedev->incluir();
+        $clmatestoquedev->incluir(null);
         $erro_msg = $clmatestoquedev->erro_msg;
 
 
@@ -192,7 +192,7 @@ if ($method == "getDados") {
           $clmatestoqueini->m80_codtipo        = "18";
           $clmatestoqueini->m80_coddepto       = db_getsession("DB_coddepto");
 
-          $clmatestoqueini->incluir();
+          $clmatestoqueini->incluir(null);
 
 
           if ($clmatestoqueini->erro_status == 0) {

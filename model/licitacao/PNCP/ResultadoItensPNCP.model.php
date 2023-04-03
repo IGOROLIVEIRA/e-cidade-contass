@@ -37,7 +37,7 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         $oDadosAPI->nomeRazaoSocialFornecedor       = utf8_encode($oDado[0]->nomerazaosocialfornecedor);
         $oDadosAPI->porteFornecedorId               = $oDado[0]->portefornecedorid;
         $oDadosAPI->codigoPais                      = $oDado[0]->codigopais;
-        $oDadosAPI->indicadorSubcontratacao         = $oDado[0]->indicadorsubcontratacao == 'f' ? 'false' : 'true';
+        $oDadosAPI->indicadorSubcontratacao         = $oDado[0]->indicadorsubcontratacao == 2 ? 'false' : 'true';
         $oDadosAPI->ordemClassificacaoSrp           = 1;
         $oDadosAPI->dataResultado                   = $this->formatDate($oDado[0]->dataresultado);
         //naturezaJuridicaId faltando campo nao obrigatorio
@@ -120,7 +120,15 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
         curl_close($chpncp);
-
+        /*$err     = curl_errno($chpncp);
+        $errmsg  = curl_error($chpncp);
+        $header  = curl_getinfo($chpncp);
+        $header['errno']   = $err;
+        $header['errmsg']  = $errmsg;
+        $header['header']  = $contentpncp;
+        echo "<pre>";
+        print_r($header);
+        exit;*/
         $retorno = explode(':', $contentpncp);
 
         if (substr($retorno[0], 7, 3) == 201) {

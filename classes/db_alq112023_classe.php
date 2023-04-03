@@ -21,6 +21,7 @@ class cl_alq112023
   var $si122_tiporegistro = 0;
   var $si122_codreduzido = 0;
   var $si122_codfontrecursos = 0;
+  var $si122_codco = '0000';
   var $si122_valoranuladofonte = 0;
   var $si122_mes = 0;
   var $si122_reg10 = 0;
@@ -31,6 +32,7 @@ class cl_alq112023
                  si122_tiporegistro = int8 = Tipo do  registro 
                  si122_codreduzido = int8 = Código Identificador do registro 
                  si122_codfontrecursos = int8 = Código da fonte  de recursos 
+                 si122_codco = varchar(4) = Código do Acompanhamento Orçamentário 
                  si122_valoranuladofonte = float8 = Valor anulado da  liquidação 
                  si122_mes = int8 = Mês 
                  si122_reg10 = int8 = reg10 
@@ -64,6 +66,7 @@ class cl_alq112023
       $this->si122_tiporegistro = ($this->si122_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si122_tiporegistro"] : $this->si122_tiporegistro);
       $this->si122_codreduzido = ($this->si122_codreduzido == "" ? @$GLOBALS["HTTP_POST_VARS"]["si122_codreduzido"] : $this->si122_codreduzido);
       $this->si122_codfontrecursos = ($this->si122_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si122_codfontrecursos"] : $this->si122_codfontrecursos);
+      $this->si122_codco = ($this->si122_codco == "" ? @$GLOBALS["HTTP_POST_VARS"]["si122_codco"] : $this->si122_codco);
       $this->si122_valoranuladofonte = ($this->si122_valoranuladofonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si122_valoranuladofonte"] : $this->si122_valoranuladofonte);
       $this->si122_mes = ($this->si122_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si122_mes"] : $this->si122_mes);
       $this->si122_reg10 = ($this->si122_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si122_reg10"] : $this->si122_reg10);
@@ -93,6 +96,11 @@ class cl_alq112023
     if ($this->si122_codfontrecursos == null) {
       $this->si122_codfontrecursos = "0";
     }
+    
+    if ($this->si122_codco == null) {
+      $this->si122_codco = "0000";
+    }
+    
     if ($this->si122_valoranuladofonte == null) {
       $this->si122_valoranuladofonte = "0";
     }
@@ -160,6 +168,7 @@ class cl_alq112023
                                       ,si122_tiporegistro 
                                       ,si122_codreduzido 
                                       ,si122_codfontrecursos 
+                                      ,si122_codco 
                                       ,si122_valoranuladofonte 
                                       ,si122_mes 
                                       ,si122_reg10 
@@ -170,6 +179,7 @@ class cl_alq112023
                                ,$this->si122_tiporegistro 
                                ,$this->si122_codreduzido 
                                ,$this->si122_codfontrecursos 
+                               ,'$this->si122_codco' 
                                ,$this->si122_valoranuladofonte 
                                ,$this->si122_mes 
                                ,$this->si122_reg10 
@@ -261,6 +271,15 @@ class cl_alq112023
       $sql .= $virgula . " si122_codfontrecursos = $this->si122_codfontrecursos ";
       $virgula = ",";
     }
+
+        if (trim($this->si122_codco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si122_codco"])) {
+            if (trim($this->si122_codco) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si122_codco"])) {
+                $this->si122_codco = "0000";
+            }
+            $sql .= $virgula . " si122_codco = '$this->si122_codco' ";
+            $virgula = ",";
+        }
+    
     if (trim($this->si122_valoranuladofonte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si122_valoranuladofonte"])) {
       if (trim($this->si122_valoranuladofonte) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si122_valoranuladofonte"])) {
         $this->si122_valoranuladofonte = "0";

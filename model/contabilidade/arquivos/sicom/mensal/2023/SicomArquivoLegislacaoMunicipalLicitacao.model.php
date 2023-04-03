@@ -91,27 +91,29 @@ class SicomArquivoLegislacaoMunicipalLicitacao extends SicomArquivoBase implemen
       }
     }
     
-    $sSql = "SELECT   '10' as tipoRegistro,
-  2 as codOrgao,
-  decretopregao.l201_tipodecreto as tipoDecreto,
-  decretopregao.l201_numdecreto as nroDecretoMunicipal,
-  decretopregao.l201_datadecreto as dataDecretoMunicipal,
-  decretopregao.l201_datapublicacao as dataPublicacaoDecretoMunicipal
-  FROM licitacao.decretopregao as decretopregao
-  WHERE decretopregao.l201_numdecreto not in
-  (select si44_nrodecretomunicipal from reglic102023
-   UNION 
-   select si44_nrodecretomunicipal from reglic102023
-   UNION
-   select si44_nrodecretomunicipal from reglic102023
-   UNION
-   select si44_nrodecretomunicipal from reglic102023
-   UNION
-   select si44_nrodecretomunicipal from reglic102023
-   UNION
-   select si44_nrodecretomunicipal from reglic102023
-   UNION
-   select si44_nrodecretomunicipal from reglic102023 where si44_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") 
+    $sSql = "SELECT '10' AS tipoRegistro,
+                    2 AS codOrgao,
+                    decretopregao.l201_tipodecreto AS tipoDecreto,
+                    decretopregao.l201_numdecreto AS nroDecretoMunicipal,
+                    decretopregao.l201_datadecreto AS dataDecretoMunicipal,
+                    decretopregao.l201_datapublicacao AS dataPublicacaoDecretoMunicipal
+             FROM licitacao.decretopregao AS decretopregao
+             WHERE decretopregao.l201_instit = " . db_getsession("DB_instit") . "
+             AND decretopregao.l201_numdecreto NOT IN
+                          (SELECT si44_nrodecretomunicipal
+                            FROM reglic102023
+                           UNION SELECT si44_nrodecretomunicipal
+                            FROM reglic102022
+                           UNION SELECT si44_nrodecretomunicipal
+                            FROM reglic102021
+                           UNION SELECT si44_nrodecretomunicipal
+                            FROM reglic102020
+                           UNION SELECT si44_nrodecretomunicipal
+                            FROM reglic102019
+                           UNION SELECT si44_nrodecretomunicipal
+                            FROM reglic102018
+                           UNION SELECT si44_nrodecretomunicipal
+                            FROM reglic102023 WHERE si44_mes <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . ") 
     AND DATE_PART ( 'YEAR' , l201_datapublicacao ) = '2023'
     AND DATE_PART ( 'MONTH' , l201_datapublicacao ) = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
     ";

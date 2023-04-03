@@ -83,7 +83,6 @@ class GerarCONV extends GerarAM
 
             $aCSVCONV11['si93_tiporegistro']      = $this->padLeftZero($aCONV11['si93_tiporegistro'], 2);
             $aCSVCONV11['si93_codconvenio']       = substr($aCONV11['si93_codconvenio'], 0, 15);
-            $aCSVCONV11['si93_tipodocumento']     = $aCONV11['si93_esferaconcedente'] == 4 && empty($aCONV11['si92_tiporegistro']) ? "" : $this->padLeftZero($aCONV11['si93_tipodocumento'], 1);
             $aCSVCONV11['si93_nrodocumento']      = $aCONV11['si93_esferaconcedente'] == 4 ? "" : $this->padLeftZero($aCONV11['si93_nrodocumento'], 14);
             $aCSVCONV11['si93_esferaconcedente']  = $this->padLeftZero($aCONV11['si93_esferaconcedente'], 1);
             $aCSVCONV11['si93_dscexterior']       = $aCONV11['si93_dscexterior'] != "null" ? $aCONV11['si93_dscexterior'] : '';
@@ -144,9 +143,11 @@ class GerarCONV extends GerarAM
          *
          * Registros 30
          */
+        $totalregisto30 = 0;
         for ($iCont4 = 0; $iCont4 < pg_num_rows($rsCONV30); $iCont4++) {
 
             $aCONV30 = pg_fetch_array($rsCONV30, $iCont4);
+            $totalregisto30 = $aCONV30['si203_vlprevisao'];
 
             $aCSVCONV30['si203_tiporegistro']                 = $this->padLeftZero($aCONV30['si203_tiporegistro'], 2);
             $aCSVCONV30['si203_codreceita']                   = $aCONV30['si203_codreceita'];
@@ -157,7 +158,7 @@ class GerarCONV extends GerarAM
 
             $this->sLinha = $aCSVCONV30;
             $this->adicionaLinha();
-
+            
             /**
              *
              * Registros 31
@@ -165,9 +166,10 @@ class GerarCONV extends GerarAM
             for ($iCont5 = 0; $iCont5 < pg_num_rows($rsCONV31); $iCont5++) {
 
                 $aCONV31 = pg_fetch_array($rsCONV31, $iCont5);
-
+                
                 if ($aCONV30['si203_codreceita'] == $aCONV31['si204_codreceita']) {
-
+                  $totalregisto30 -= $aCONV31['si204_vlprevisaoconvenio'];
+                  if($totalregisto30 >= 0){  
                     $aCSVCONV31['si204_tiporegistro']                 = $this->padLeftZero($aCONV31['si204_tiporegistro'], 2);
                     $aCSVCONV31['si204_codreceita'] = $aCONV31['si204_codreceita'];
                     $aCSVCONV31['si204_prevorcamentoassin'] = $aCONV31['si204_prevorcamentoassin'];
@@ -177,11 +179,11 @@ class GerarCONV extends GerarAM
 
                     $this->sLinha = $aCSVCONV31;
                     $this->adicionaLinha();
-
+                  }  
                 }
 
             }
-
+            $totalregisto30 = 0;
         }
 
 

@@ -77,26 +77,17 @@ if (isset($oGet->numeroProcessoInicial) && !empty($oGet->numeroProcessoInicial))
   if (empty($iNumeroProcessoFinal) || $iNumeroProcessoFinal == '') {
     $iNumeroProcessoFinal = $iNumeroProcessoInicical;
   }
+
+  $sWhere = " where p58_numero between '{$iNumeroProcessoInicical}' and '{$iNumeroProcessoFinal}' ";
+  $sWhere .= " and p58_ano between {$iAnoUsuInicial} and {$iAnoUsuFinal} ";
 }
 
 if (isset($oGet->codproc)  && !empty($oGet->codproc)) {
-
-  /*
-	 * aqui é parte de impresao quando se inclui um processo
-	 * como é um só, definimos inicial e final o mesmo, para fazer o between na query
-	 */
-  /*
-  $oProcesso = new ProcessoProtocolo($oGet->codproc);
-  $iNumeroProcessoInicical = $oProcesso->getNumeroProcesso();
-  $iAnoUsuInicial          = $oProcesso->getAnoProcesso();
-
-  $iAnoUsuFinal            = $iAnoUsuInicial;
-  $iNumeroProcessoFinal    = $iNumeroProcessoInicical;
-  */
+  $sWhere = " where p58_codproc = $oGet->codproc";
 }
 
 
-$sWhere = " where p58_codproc = $oGet->codproc";
+
 
 $sWhere  .= " and p58_instit = " . db_getsession("DB_instit");
 

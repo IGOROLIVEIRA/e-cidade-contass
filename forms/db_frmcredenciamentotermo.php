@@ -68,9 +68,9 @@ $clcredenciamentotermo->rotulo->label();
                 </td>
                 <td>
                     <?
-                    $iAnoSessao         = db_getsession('DB_anousu');
+                    $iAnoUsu = $db_opcao == 1 ? db_getsession('DB_anousu') : $l212_anousu;
                     ?>
-                    <input type="text" value="<?= $iAnoSessao ?>" id="l212_anousu" style="width: 93px; background-color: #DEB887;" readonly>
+                    <input type="text" value="<?= $iAnoUsu; ?>" id="l212_anousu" name="l212_anousu" style="width: 93px; background-color: #DEB887;" readonly>
                 </td>
             </tr>
             <tr>

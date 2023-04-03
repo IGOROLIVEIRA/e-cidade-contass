@@ -203,7 +203,6 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 
         $clconv11->si93_tiporegistro = 11;
         $clconv11->si93_codconvenio = $oDados10->c206_sequencial;
-        $clconv11->si93_tipodocumento = ($oDados11->c207_esferaconcedente != 4) ? 2 : '';
         $clconv11->si93_nrodocumento = $oDados11->c207_nrodocumento;
         $clconv11->si93_esferaconcedente = $oDados11->c207_esferaconcedente;
         $clconv11->si93_dscexterior = $oDados11->c207_descrconcedente;
@@ -302,7 +301,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 						FROM orcfontes
 							LEFT JOIN orcreceita ON o57_codfon = o70_codfon AND o57_anousu = o70_anousu
 							LEFT JOIN prevconvenioreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec
-						WHERE o70_codigo IN ('122','123','124','142','163')
+						WHERE o70_codigo IN ('15700000', '16310000', '17000000', '16650000', '17130070','15710000','15720000','15750000','16320000','16330000','16360000','17010000','17020000','17030000')
 							AND o70_anousu = {$iAnoUsu}
 							AND o70_instit = {$iInstit}
 							AND o70_valor > 0
@@ -351,7 +350,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 								FROM prevconvenioreceita
 									LEFT JOIN orcreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec 
 									LEFT JOIN convconvenios ON c206_sequencial = c229_convenio
-								WHERE o70_codigo IN ('122','123','124','142')
+								WHERE o70_codigo IN ('15700000', '16310000', '17000000', '16650000', '17130070','15710000','15720000','15750000','16320000','16330000','16360000','17010000','17020000','17030000')
 									AND o70_anousu = {$iAnoUsu}
 									AND o70_instit = {$iInstit}
 									AND o70_valor > 0
@@ -377,7 +376,7 @@ class SicomArquivoConvenios extends SicomArquivoBase implements iPadArquivoBaseC
 										LEFT JOIN placaixarec ON k81_seqpla = k82_seqpla
 										LEFT JOIN convconvenios ON c206_sequencial = k81_convenio
 										LEFT JOIN prevconvenioreceita ON c229_anousu = o70_anousu AND c229_fonte = o70_codrec AND c229_convenio = c206_sequencial
-									WHERE o70_codigo IN ('122','123','124','142')
+									WHERE o70_codigo IN ('15700000', '16310000', '17000000', '16650000', '17130070','15710000','15720000','15750000','16320000','16330000','16360000','17010000','17020000','17030000')
 										AND o70_anousu = {$iAnoUsu}
 										AND o70_instit = {$iInstit}
 										AND o70_valor > 0

@@ -559,7 +559,9 @@ $projativ = "";
 $o55anousu = "";
 $vprojativ = "";
 $uIndice = count($arr_tipos)-1;
-if ($formato != "csv") {
+if ($formato != "csv") { 
+  // db_criatabela($res);
+  // echo "nro de linhas: ".$rows;
     for ($x = 0; $x < $rows; $x++) {
         db_fieldsmemory($resconsulta, $x);
         // inicio criando variaveis auxiliares para receber o valor da primentira consulta
@@ -583,7 +585,7 @@ if ($formato != "csv") {
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -640,7 +642,7 @@ if ($formato != "csv") {
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -693,7 +695,7 @@ if ($formato != "csv") {
                 $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
                 $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
                 $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
                 $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
                 $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
                 $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -748,7 +750,7 @@ if ($formato != "csv") {
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -801,7 +803,7 @@ if ($formato != "csv") {
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -854,7 +856,7 @@ if ($formato != "csv") {
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -907,7 +909,7 @@ if ($formato != "csv") {
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -960,7 +962,7 @@ if ($formato != "csv") {
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -1012,7 +1014,7 @@ if ($formato != "csv") {
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -1064,7 +1066,7 @@ if ($formato != "csv") {
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -1118,7 +1120,7 @@ if ($formato != "csv") {
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -1171,7 +1173,7 @@ if ($formato != "csv") {
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-                  $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+                  $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
                   $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -1490,7 +1492,7 @@ if ($formato != "csv") {
             $pdf->Cell(20, $tam, db_formatar(abs($vlranuliq), 'f'), 1, 0, "R", 0);//anulacao -> rp proc
            
             if ($c70_anousu == $anoatual) {
-                $pdf->Cell(20, $tam, db_formatar(abs($vlrliq), 'f'), 1, 0, "R", 0);//liquidado=rpproc
+                $pdf->Cell(20, $tam, db_formatar($vlrliq, 'f'), 1, 0, "R", 0);//liquidado=rpproc
                
             } else {
                            
@@ -1548,7 +1550,7 @@ if ($formato != "csv") {
         $pdf->Cell(20, $tam, db_formatar(abs($subtotal_rp_proc), 'f'), 1, 0, "R", 1);
         $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
         $pdf->Cell(20, $tam, db_formatar(abs($subtotal_anula_rp_proc), 'f'), 1, 0, "R", 1);
-        $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_liquida), 'f'), 1, 0, "R", 1);
+        $pdf->Cell(20, $tam, db_formatar($subtotal_mov_liquida, 'f'), 1, 0, "R", 1);
         $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagnproc), 'f'), 1, 0, "R", 1);
         $pdf->Cell(20, $tam, db_formatar(abs($subtotal_mov_pagmento), 'f'), 1, 0, "R", 1);
         $pdf->Cell(20, $tam, db_formatar(abs($subtotal_aliquidar_finais), 'f'), 1, 0, "R", 1);
@@ -1556,6 +1558,7 @@ if ($formato != "csv") {
         $pdf->Cell(20, $tam, db_formatar(abs($subtotal_geral_finais), 'f'), "TBL", 1, "R", 1);
 
     }
+    // die("<br>vlr da liquidacao: ".$total_mov_liquida);
 
     $pdf->ln(2);
     $pdf->Cell(80, $tam, "Total", "TBR", 0, "C", 1);
@@ -1563,7 +1566,7 @@ if ($formato != "csv") {
     $pdf->Cell(20, $tam, db_formatar(abs($total_rp_proc), 'f'), 1, 0, "R", 1);
     $pdf->Cell(20, $tam, db_formatar(abs($total_anula_rp_n_proc), 'f'), 1, 0, "R", 1);
     $pdf->Cell(20, $tam, db_formatar(abs($total_anula_rp_proc), 'f'), 1, 0, "R", 1);
-    $pdf->Cell(20, $tam, db_formatar(abs($total_mov_liquida), 'f'), 1, 0, "R", 1);
+    $pdf->Cell(20, $tam, db_formatar($total_mov_liquida, 'f'), 1, 0, "R", 1);
     $pdf->Cell(20, $tam, db_formatar(abs($total_mov_pagnproc), 'f'), 1, 0, "R", 1);
     $pdf->Cell(20, $tam, db_formatar(abs($total_mov_pagmento), 'f'), 1, 0, "R", 1);
     $pdf->Cell(20, $tam, db_formatar(abs($total_aliquidar_finais), 'f'), 1, 0, "R", 1);

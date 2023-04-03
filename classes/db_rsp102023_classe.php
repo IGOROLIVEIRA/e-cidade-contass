@@ -676,6 +676,167 @@ class cl_rsp102023
     
     return $sql;
   }
+
+  public function sql_Reg10($ano, $instit)
+  {
+    $sql = "SELECT tiporegistro,
+                  codreduzidorsp,
+                  codorgao,
+                  codunidadesub,
+                  subunidade,
+                  nroempenho,
+                  exercicioempenho,
+                  dtempenho,
+                  dotorig,
+                  vlremp AS vloriginal,
+                  (vlremp - vlranu - vlrliq) AS vlsaldoantnaoproc,
+                  (vlrliq - vlrpag) AS vlsaldoantproce,
+                  codfontrecursos,
+                  old_codfontrecursos,
+                  new_codfontrecursos,
+                  codco,
+                  codidentificafr,
+                  vlremp,
+                  vlranu,
+                  vlrliq,
+                  vlrpag,
+                  tipodoccredor,
+                  documentocreddor,
+                  e60_anousu,
+                  pessoal,
+                  dototigres
+              FROM
+              (SELECT '10' AS tiporegistro,
+                      e60_numemp AS codreduzidorsp,
+                      si09_codorgaotce AS codorgao,
+                      lpad((CASE
+                                WHEN o40_codtri = '0'
+                                      OR NULL THEN o40_orgao::varchar
+                                ELSE o40_codtri
+                            END),2,0)||lpad((CASE
+                                                  WHEN o41_codtri = '0'
+                                                      OR NULL THEN o41_unidade::varchar
+                                                  ELSE o41_codtri
+                                              END),3,0) AS codunidadesub,
+                      o41_subunidade AS subunidade,
+                      e60_codemp AS nroempenho,
+                      e60_anousu AS exercicioempenho,
+                      e60_emiss AS dtempenho,
+                      CASE
+                          WHEN e60_anousu >= 2013 THEN ' '
+                          ELSE lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0)||lpad(o58_programa,4,0)||lpad(o58_projativ,4,0)|| substr(orcelemento.o56_elemento,2,6)||'00'
+                      END AS dotorig,
+                      sum(CASE
+                              WHEN c71_coddoc IN
+                                        (SELECT c53_coddoc
+                                        FROM conhistdoc
+                                        WHERE c53_tipo = 10) THEN round(c70_valor,2)
+                              ELSE 0
+                          END) AS vlremp,
+                      sum(CASE
+                              WHEN c71_coddoc IN
+                                        (SELECT c53_coddoc
+                                        FROM conhistdoc
+                                        WHERE c53_tipo = 11) THEN round(c70_valor,2)
+                              ELSE 0
+                          END) AS vlranu,
+                      sum(CASE
+                              WHEN c71_coddoc IN
+                                        (SELECT c53_coddoc
+                                        FROM conhistdoc
+                                        WHERE c53_tipo = 20) THEN round(c70_valor,2)
+                              WHEN c71_coddoc IN
+                                        (SELECT c53_coddoc
+                                        FROM conhistdoc
+                                        WHERE c53_tipo = 21) THEN round(c70_valor,2) *-1
+                              WHEN c71_coddoc IN
+                                        (SELECT c53_coddoc
+                                        FROM conhistdoc
+                                        WHERE c53_coddoc = 31) THEN round(c70_valor,2) *-1
+                              ELSE 0
+                          END) AS vlrliq,
+                      sum(CASE
+                              WHEN c71_coddoc IN
+                                        (SELECT c53_coddoc
+                                        FROM conhistdoc
+                                        WHERE c53_tipo = 30) THEN round(c70_valor,2)
+                              WHEN c71_coddoc IN
+                                        (SELECT c53_coddoc
+                                        FROM conhistdoc
+                                        WHERE c53_tipo = 31) THEN round(c70_valor,2) *-1
+                              ELSE 0
+                          END) AS vlrpag,
+                      CASE
+                          WHEN o15_codtri::int4 IN (101, 201) THEN '1001'
+                          WHEN o15_codtri::int4 IN (102, 202) THEN '1002'
+                          WHEN o15_codtri::int4 IN (118, 166, 218, 266) THEN '1070'
+                          ELSE '0000'
+                      END AS codco,
+                      o15_codtri::int4 AS codidentificafr,
+                      o15_codtri AS codfontrecursos,
+                      ano2022 AS old_codfontrecursos,
+                      substr(ano2023, 1, 7) AS new_codfontrecursos,
+                      CASE
+                          WHEN length(z01_cgccpf) = 11 THEN 1
+                          ELSE 2
+                      END AS tipodoccredor,
+                      z01_cgccpf AS documentocreddor,
+                      e60_anousu,
+                      substr(orcelemento.o56_elemento,2,6) AS pessoal,
+                      lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0)||lpad(o58_programa,4,0)||lpad(o58_projativ,4,0)||substr(orcelemento.o56_elemento,2,6)||substr(t1.o56_elemento, 8, 2) AS dototigres
+                FROM empempenho
+                INNER JOIN empresto ON e60_numemp = e91_numemp AND e91_anousu = {$ano}
+                INNER JOIN conlancamemp ON e60_numemp = c75_numemp
+                INNER JOIN empelemento ON e64_numemp = e60_numemp
+                INNER JOIN cgm ON e60_numcgm = z01_numcgm
+                INNER JOIN conlancamdoc ON c75_codlan = c71_codlan
+                INNER JOIN conlancam ON c75_codlan = c70_codlan
+                INNER JOIN orcdotacao ON (e60_coddot, e60_anousu) = (o58_coddot, o58_anousu)
+                INNER JOIN orcelemento ON (o58_codele, o58_anousu) = (orcelemento.o56_codele, orcelemento.o56_anousu)
+                INNER JOIN orcelemento t1 ON (t1.o56_anousu, t1.o56_codele) = (o58_anousu, e64_codele)
+                JOIN orctiporec ON o58_codigo = o15_codigo
+                JOIN db_config ON codigo = e60_instit
+                LEFT JOIN infocomplementaresinstit ON codigo = si09_instit
+                LEFT JOIN de_para_fontes ON o15_codtri::int4 = ano2022
+                INNER JOIN orcunidade ON (o58_orgao, o58_unidade, o58_anousu) = (o41_orgao, o41_unidade, o41_anousu)
+                JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu
+                WHERE e60_anousu < {$ano}
+                    AND e60_instit = {$instit}
+                    AND c70_data <= '" . (db_getsession("DB_anousu") - 1) . "-12-31'
+                GROUP BY e60_anousu, e60_codemp, e60_emiss, z01_numcgm, z01_cgccpf, z01_nome, e60_numemp, o58_codigo, o58_orgao, o58_unidade, o41_subunidade, o58_funcao, o58_subfuncao, o58_programa, o58_projativ,
+                        orcelemento.o56_elemento, t1.o56_elemento, o15_codtri, si09_codorgaotce, o40_codtri, orcorgao.o40_orgao, orcunidade.o41_codtri, orcunidade.o41_unidade, de_para_fontes.ano2022, de_para_fontes.ano2023) AS restos
+              WHERE (vlremp - vlranu - vlrliq) > 0
+              OR (vlrliq - vlrpag) > 0";
+
+    return $sql;
+  }
+
+  public function sql_DeParaFontes()
+  {
+    $sSql = "DROP TABLE IF EXISTS de_para_fontes;";
+    
+    $sSql .="CREATE TEMP TABLE de_para_fontes
+             (
+                 ano2022 int4,
+                 ano2023 int4
+             );
+             
+             INSERT INTO de_para_fontes VALUES
+             (100, 15000000), (101, 15000001), (102, 15000002), (103, 18000000), (104, 18010000), (105, 18020000), (106, 15760010), (107, 15440000), (108, 17080000), (112, 16590020), (113, 15990030), (116, 17500000), (117, 17510000),
+             (118, 15400007), (119, 15400000), (120, 15760000), (121, 16220000), (122, 15700000), (123, 16310000), (124, 17000000), (129, 16600000), (130, 18990040), (131, 17590050), (132, 16040000), (133, 17150000), (134, 17160000),
+             (135, 17170000), (136, 17180000), (142, 16650000), (143, 15510000), (144, 15520000), (145, 15530000), (146, 15690000), (147, 15500000), (153, 16010000), (154, 16590000), (155, 16210000), (156, 16610000), (157, 17520000),
+             (158, 18990060), (159, 16000000), (160, 17040000), (161, 17070000), (162, 17490120), (163, 17130070), (164, 17060000), (165, 17490000), (166, 15420007), (167, 15420000), (168, 17100100), (169, 17100000), (170, 15010000),
+             (171, 15710000), (172, 15720000), (173, 15750000), (174, 15740000), (175, 15730000), (176, 16320000), (177, 16330000), (178, 16360000), (179, 16340000), (180, 16350000), (181, 17010000), (182, 17020000), (183, 17030000),
+             (184, 17090000), (185, 17530000), (186, 17040000), (187, 17050000), (188, 15000000), (189, 15000000), (190, 17540000), (191, 17540000), (192, 17550000), (193, 18990000),
+             (200, 25000000), (201, 25000001), (202, 25000002), (203, 28000000), (204, 28010000), (205, 28020000), (206, 25760010), (207, 25440000), (208, 27080000), (212, 26590020), (213, 25990030), (216, 27500000), (217, 27510000),
+             (218, 25400007), (219, 25400000), (220, 25760000), (221, 26220000), (222, 25700000), (223, 26310000), (224, 27000000), (229, 26600000), (230, 28990040), (231, 27590050), (232, 26040000), (233, 27150000), (234, 27160000),
+             (235, 27170000), (236, 27180000), (242, 26650000), (243, 25510000), (244, 25520000), (245, 25530000), (246, 25690000), (247, 25500000), (253, 26010000), (254, 26590000), (255, 26210000), (256, 26610000), (257, 27520000),
+             (258, 28990060), (259, 26000000), (260, 27040000), (261, 27070000), (262, 27490120), (263, 27130070), (264, 27060000), (265, 27490000), (266, 25420007), (267, 25420000), (268, 27100100), (269, 27100000), (270, 25010000),
+             (271, 25710000), (272, 25720000), (273, 25750000), (274, 25740000), (275, 25730000), (276, 26320000), (277, 26330000), (278, 26360000), (279, 26340000), (280, 26350000), (281, 27010000), (282, 27020000), (283, 27030000),
+             (284, 27090000), (285, 27530000), (286, 27040000), (287, 27050000), (288, 25000000), (289, 25000000), (290, 27540000), (291, 27540000), (292, 27550000), (293, 28990000)";
+
+    db_query($sSql);
+  }
 }
 
 ?>

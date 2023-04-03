@@ -338,6 +338,23 @@ if (isset($alterar)) {
             }
         }
 
+        if ($l20_categoriaprocesso == 0 && $l12_pncp == 't') {
+            $erro_msg .= 'Campo categoria do processo não informado\n\n';
+            $sqlerro = true;
+        }
+
+        //verifica modalidades e presencial
+        $sSql = $clcflicita->sql_query_file(null, 'l03_presencial', '', "l03_codigo = $oPost->l20_codtipocom");
+        $aCf = db_utils::getColectionByRecord($clcflicita->sql_record($sSql));
+        $sPresencial = $aCf[0]->l03_presencial;
+
+        if ($sPresencial == 'f' && $l12_pncp == 't') {
+            if ($oPost->l20_justificativapncp == '' || $oPost->l20_justificativapncp == null) {
+                $erro_msg .= 'Campo Justificativa PNCP não informado\n\n';
+                $sqlerro = true;
+            }
+        }
+
         /*
       Verifica se o Campo "Natureza do Objeto" no foi selecionado.
     */
@@ -503,17 +520,6 @@ if (isset($alterar)) {
                 //$sqlerro = false;
             }
         }
-        //  /**
-        //   * Verificar Encerramento Periodo Contabil
-        //   */
-        //  $dtpubratificacao = db_utils::fieldsMemory(db_query($clliclicita->sql_query_file($l20_codigo,"l20_dtpubratificacao")),0)->l20_dtpubratificacao;
-        //  if (!empty($dtpubratificacao)) {
-        //    $clcondataconf = new cl_condataconf;
-        //    if (!$clcondataconf->verificaPeriodoContabil($dtpubratificacao)) {
-        //      $erro_msg = $clcondataconf->erro_msg;
-        //      $sqlerro  = true;
-        //    }
-        //  }
 
         /**
          * Verificar Encerramento Periodo Patrimonial
@@ -559,6 +565,8 @@ if (isset($alterar)) {
             $clliclicita->l20_nroedital = $l20_nroedital;
             $clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao; //OC3770
             $clliclicita->l20_exercicioedital = $oPost->l20_datacria_ano;
+            $clliclicita->l20_justificativapncp = $oPost->l20_justificativapncp;
+            $clliclicita->l20_categoriaprocesso = $oPost->l20_categoriaprocesso;
             $clliclicita->alterar($l20_codigo, $descricao);
 
             if ($clliclicita->erro_status == "0") {
@@ -947,7 +955,7 @@ if (isset($alterar)) {
 
 
 
-    if ($pc30_permsemdotac == "t") {
+    if ($pc30_permsemdotac == "t" && $l20_tipnaturezaproced == 1) {
         echo "<script>
       
         parent.iframe_dotacoesnovo.location.href='com1_dotacoesnovo001lic.php?licitacao=$chavepesquisa&tipojulg=" . @$tipojulg . "';\n

@@ -149,7 +149,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
 
     }
 
-    $sSql = "select si09_codorgaotce, z01_cgccpf,c201_valortransf,c201_enviourelatorios,c201_codfontrecursos from consvalorestransf
+    $sSql = "select si09_codorgaotce, z01_cgccpf,c201_valortransf,c201_enviourelatorios,c201_codfontrecursos,c201_codacompanhamento from consvalorestransf
 		join consconsorcios on c201_consconsorcios = c200_sequencial
 		join cgm on c200_numcgm = z01_numcgm
 		join db_config on c200_instit = codigo
@@ -168,6 +168,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
       $clconsor20->si17_codorgao = $oDados20->si09_codorgaotce;
       $clconsor20->si17_cnpjconsorcio = $oDados20->z01_cgccpf;
       $clconsor20->si17_codfontrecursos = $oDados20->c201_codfontrecursos;
+      $clconsor20->si17_codacompanhamento = $oDados20->c201_codacompanhamento;
       $clconsor20->si17_vltransfrateio = $oDados20->c201_valortransf;
       $clconsor20->si17_prestcontas = $oDados20->c201_enviourelatorios == 't' ? 1 : 2;
       $clconsor20->si17_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -203,6 +204,7 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
       $clconsor30->si18_naturezadespesa = substr($oDados30->c202_elemento, 0, 6);
       $clconsor30->si18_subelemento = substr($oDados30->c202_elemento, 6, 2);
       $clconsor30->si18_codfontrecursos = $oDados30->c202_codfontrecursos;
+      $clconsor30->si18_codacompanhamento = $oDados30->c202_codacompanhamento;
       $clconsor30->si18_vlempenhadofonte = $oDados30->c202_valorempenhado;
       $clconsor30->si18_vlanulacaoempenhofonte = $oDados30->c202_valorempenhadoanu;
       $clconsor30->si18_vlliquidadofonte = $oDados30->c202_valorliquidado;

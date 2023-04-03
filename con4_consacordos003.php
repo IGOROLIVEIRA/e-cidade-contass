@@ -450,6 +450,16 @@ db_app::import("configuracao.DBDepartamento");
                 "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=saldo"
             );
 
+            if ($clAcordo->getNaturezaAcordo($oGet->ac16_sequencial) ==  "1" || $clAcordo->getNaturezaAcordo($oGet->ac16_sequencial) ==  "7") {
+                $oDados = $clAcordo->getObraAcordo();
+                if(!empty($oDados)){
+                    $oTabDetalhes->add(
+                        "Obras",
+                        "Obras",
+                        "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=obra"
+                    );
+                }
+            }
             $oTabDetalhes->show();
 
 

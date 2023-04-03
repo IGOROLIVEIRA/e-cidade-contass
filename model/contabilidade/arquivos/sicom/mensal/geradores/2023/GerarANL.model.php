@@ -70,7 +70,8 @@ class GerarANL extends GerarAM
             $aCSVANL11['si111_codunidadesub']   = $this->padLeftZero($aANL11['si111_codunidadesub'], 5);
             $aCSVANL11['si111_nroempenho']      = substr($aANL11['si111_nroempenho'], 0, 22);
             $aCSVANL11['si111_nroanulacao']     = substr($aANL11['si111_nroanulacao'], 0, 22);
-            $aCSVANL11['si111_codfontrecursos'] = $this->padLeftZero($aANL11['si111_codfontrecursos'], 3);
+            $aCSVANL11['si111_codfontrecursos'] = $this->padLeftZero($aANL11['si111_codfontrecursos'], 7);
+            $aCSVANL11['si111_codco'] = $this->padLeftZero($aANL11['si111_codco'], 4);
             $aCSVANL11['si111_vlanulacaofonte'] = $this->sicomNumberReal($aANL11['si111_vlanulacaofonte'], 2);
             
             $this->sLinha = $aCSVANL11;

@@ -43,6 +43,7 @@ class GerarOPS extends GerarAM
                      si133_nrodocumento,
                      si133_codorgaoempop,
                      si133_codunidadeempop,
+                     si133_codco,
                      si133_mes,
                      si133_reg10,
                      si133_instit
@@ -105,7 +106,8 @@ class GerarOPS extends GerarAM
             $aCSVOPS11['si133_dtempenho']           = $this->sicomDate($aOPS11['si133_dtempenho']);
             $aCSVOPS11['si133_nroliquidacao']       = substr($aOPS11['si133_nroliquidacao'], 0, 22) == 0 ? "" : substr($aOPS11['si133_nroliquidacao'], 0, 22);
             $aCSVOPS11['si133_dtliquidacao']        = $this->sicomDate($aOPS11['si133_dtliquidacao']);
-            $aCSVOPS11['si133_codfontrecursos']     = $this->padLeftZero($aOPS11['si133_codfontrecursos'], 3);
+            $aCSVOPS11['si133_codfontrecursos']     = substr($this->padLeftZero($aOPS11['si133_codfontrecursos'], 3), 0, 7);
+            $aCSVOPS11['si133_codco']     =         $this->padLeftZero($aOPS11['si133_codco'], 4);
             $aCSVOPS11['si133_valorfonte']          = $this->sicomNumberReal($aOPS11['si133_valorfonte'], 2);
             $aCSVOPS11['si133_tipodocumentocredor'] = $this->padLeftZero($aOPS11['si133_tipodocumentocredor'], 1);
             $aCSVOPS11['si133_nrodocumento']        = substr($aOPS11['si133_nrodocumento'], 0, 14);
@@ -129,7 +131,7 @@ class GerarOPS extends GerarAM
             $aCSVOPS12['si134_tipodocumentoop']     = $this->padLeftZero(substr($aOPS12['si134_tipodocumentoop'], 0, 2), 2);
             $aCSVOPS12['si134_nrodocumento']        = $aOPS12['si134_nrodocumento'] == '' ? " " : substr($aOPS12['si134_nrodocumento'], 0, 15);
             $aCSVOPS12['si134_codctb']              = substr($aOPS12['si134_codctb'], 0, 20) == 0 ? " " : substr($aOPS12['si134_codctb'], 0, 20);
-            $aCSVOPS12['si134_codfontectb']         = $this->padLeftZero($aOPS12['si134_codfontectb'], 3) == 0 ? " " : $this->padLeftZero($aOPS12['si134_codfontectb'], 3);
+            $aCSVOPS12['si134_codfontectb']         = substr($this->padLeftZero($aOPS12['si134_codfontectb'], 3) == 0 ? " " : $this->padLeftZero($aOPS12['si134_codfontectb'], 3), 0, 7);
             $aCSVOPS12['si134_desctipodocumentoop'] = substr($aOPS12['si134_desctipodocumentoop'], 0, 50);
             $aCSVOPS12['si134_dtemissao']           = $this->sicomDate($aOPS12['si134_dtemissao']);
             $aCSVOPS12['si134_vldocumento']         = $this->sicomNumberReal($aOPS12['si134_vldocumento'], 2);

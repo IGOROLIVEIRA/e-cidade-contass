@@ -54,7 +54,6 @@ class GerarDCLRF extends GerarAM {
                 if($this->iTipoIntint == 2):
                     $aCSVDCLRF10['si157_tiporegistro']                      = str_pad($aDCLRF['si157_tiporegistro'], 2, "0", STR_PAD_LEFT);
                     $aCSVDCLRF10['si157_codorgao']                          = str_pad((int)$aDCLRF['si157_codorgao'], 2, "0", STR_PAD_LEFT);
-                    $aCSVDCLRF10['si157_passivosreconhecidos']              = number_format($aDCLRF['si157_passivosreconhecidos'], 2, ",", "");
                     $aCSVDCLRF10['si157_vlsaldoatualconcgarantiainterna']   = number_format($aDCLRF['si157_vlsaldoatualconcgarantiainterna'], 2, ",", "");
                     $aCSVDCLRF10['si157_vlsaldoatualconcgarantia']          = number_format($aDCLRF['si157_vlsaldoatualconcgarantia'], 2, ",", "");
                     $aCSVDCLRF10['si157_vlsaldoatualcontragarantiainterna'] = number_format($aDCLRF['si157_vlsaldoatualcontragarantiainterna'], 2, ",", "");

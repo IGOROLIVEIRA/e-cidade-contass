@@ -80,8 +80,6 @@ function quantDias($data1, $data2) {
             mktime(0,0,0,$aVet1[1],$aVet1[0],$aVet1[2])) / (24 * 60 * 60), 0);
 }
 
-
-
 //verifica o parametro na tabela parissqn para gerar sanitario automaticamente apartir do ISSQN
 //die($clparissqn->sql_query(null,"q60_integrasani",null,""));
 $rsParissqn      = $clparissqn->sql_record($clparissqn->sql_query(null,"q60_integrasani",null,""));
@@ -96,7 +94,9 @@ if ($numrowsParissqn > 0) {
 $db_botao = true;
 if (isset($incluir)) {
 
-    //echo "<br><br> q07_perman -> " . $q07_perman; die();
+    $buscaAliquota = getAliquotas();    
+    $q07_aliquota_incentivo = $buscaAliquota[$q07_aliquota_incentivo];
+    
     $lAlvaraPerm = $q07_perman;
 
     $sqlerro=false;
@@ -224,7 +224,7 @@ if (isset($incluir)) {
             // verifica se porte, eh do tipo juridica
             $sql = " select q40_fisica from issbaseporte inner join issporte on q45_codporte = q40_codporte where q40_fisica is false and q45_inscr = $q07_inscr";
             $rsPorte = $clissporte->sql_record($sql);
-//    echo "<br><br>".$clissporte->sql_query(null," q40_fisica ",null," q40_fisica is false ");
+
             if($clissporte->numrows > 0){
                 $incluisani = 't';
                 $incluiativ = 't';
@@ -233,7 +233,7 @@ if (isset($incluir)) {
 
             // verifica a classe se a classe esta configurada
             $rsClasAtiv  = $clclasativ->sql_record($clclasativ->sql_query(null,null,"*",null," q82_ativ = $q07_ativ and q12_integrasani = 't' "));
-            //die($clclasativ->sql_query(null,null,"*",null," q82_ativ = $q07_ativ and q12_integrasani = 't' "));
+            
             if( $clclasativ->numrows > 0 ){
 
                 $incluisani = 't';
@@ -245,16 +245,14 @@ if (isset($incluir)) {
 
         if (isset($incluisani) && $incluisani = 't') {
             $rsSanitario = $clsanitario->sql_record($clsanitario->sql_query_file($q07_inscr,"*",null,""));
-            if($clsanitario->numrows == 0){
-                //db_msgbox('sanitario inclusao2222222');
+            if($clsanitario->numrows == 0){                
                 $sqlIssbase  = "select issbase.q02_inscr, issbase.q02_numcgm, q30_area, j14_codigo, q13_bairro as j13_codi, q02_numero, q02_compl, q02_dtbaix";
                 $sqlIssbase .= "  from issbase ";
                 $sqlIssbase .= "   inner join issquant  on issquant.q30_inscr  = issbase.q02_inscr ";
                 $sqlIssbase .= "                       and issquant.q30_anousu = ".db_getsession('DB_anousu');
                 $sqlIssbase .= "   left  join issruas   on issruas.q02_inscr   = issbase.q02_inscr ";
                 $sqlIssbase .= "   left  join issbairro on issbairro.q13_inscr = issbase.q02_inscr ";
-                $sqlIssbase .= "where issbase.q02_inscr = $q07_inscr ";
-                //die($sqlIssbase);
+                $sqlIssbase .= "where issbase.q02_inscr = $q07_inscr ";                
                 $rsIssbase  = $clissbase->sql_record($sqlIssbase);
                 if($clissbase->numrows > 0){
 
@@ -294,7 +292,6 @@ if (isset($incluir)) {
                         $sqlerro = true;
                         $erromsg = " -- Sanitario ".$clsanitario->erro_msg;
                     }
-                    //db_msgbox("sanitarioinscr");
 
                     $clsanitarioinscr->y18_codsani = $q07_inscr;
                     $clsanitarioinscr->y18_inscr = $q07_inscr;
@@ -354,7 +351,7 @@ if (isset($incluir)) {
                 }
 
                 $clsaniatividade->incluir($clsaniatividade->y83_codsani,$clsaniatividade->y83_seq);
-                //db_msgbox("incluindo na tabativ -- ".$clsaniatividade->y83_codsani." -- ".$clsaniatividade->y83_seq);
+                
                 if ($clsaniatividade->erro_status==0) {
                     $erromsg = "Inclusão saniatividade : ".$clsaniatividade->erro_msg;
                     $sqlerro = true;
@@ -367,13 +364,12 @@ if (isset($incluir)) {
 
     if($sqlerro==false){
         $result05 = $clissbase->sql_record($clissbase->sql_query_file($q07_inscr,"q02_dtbaix"));
-//    db_criatabela($result05);
+
         if( $clissbase->numrows > 0 ){
             db_fieldsmemory($result05,0);
         }
         $result01 = $cltabativ->sql_record($cltabativ->sql_query_file('','','min(q07_datain) as datainicial','',' q07_inscr = '.$q07_inscr.''));
-//    echo $cltabativ->sql_query_file('','','min(q07_datain) as datainicial','',' q07_inscr = '.$q07_inscr.'');
-//    db_criatabela($result01);
+
         if( $cltabativ->numrows > 0 ){
             db_fieldsmemory($result01,0);
         }
@@ -593,7 +589,7 @@ if (isset($incluir)) {
             }
         }
     }
-//  $sqlerro = true;
+
     db_fim_transacao($sqlerro);
     if($sqlerro==false){
         $q07_seq="";
@@ -680,14 +676,14 @@ if (isset($incluir)) {
             $clissbase->q02_dtbaix=$q07_databx;
             $clissbase->q02_inscr=$q07_inscr;
             $clissbase->alterar($q07_inscr);
-            //$clissbase->erro(true,false);
+            
             if($clissbase->erro_status==0){
                 $erromsg = "Alteração issbase erro 1 : ".$clissbase->erro_msg;
                 $sqlerro = true;
             }
         }
     }
-//  $sqlerro = true;
+
     db_fim_transacao($sqlerro);
     if($sqlerro == false){
         $q07_ativ       = "";
@@ -911,10 +907,10 @@ function getAliquotas()
 {
     $start = 2;
     $end = 5;
-    $arrAliq = array();
-    array_push($arrAliq,number_format(0,2,'.',''));
-    while($start < $end){
-        array_push($arrAliq,number_format($start,2,'.',''));
+    $arrAliq = array();    
+    $arrAliq[number_format(0,2,'.','')] = number_format(0,2,'.','');
+    while($start < $end){        
+        $arrAliq[number_format($start,2,'.','')] = number_format($start,2,'.','');
         $start += 0.01;
     }
 

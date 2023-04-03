@@ -32,13 +32,8 @@ $leiaute = $oGet->leiaute;
 if ($leiaute == 1) {
 
     //====================  instanciamos a classe da solicitação selecionada para retornar os itens
-<<<<<<< HEAD
 
 
-=======
-
-
->>>>>>> master
     $oLicitacao = new licitacao($iLicitacao);
     try {
         $aEditalLicitacao   = $oLicitacao->getEditalExport();
@@ -79,7 +74,6 @@ if ($leiaute == 1) {
             $sProcessoObjeto                 = $oItens->objeto;
             $iNaturezaObjeto                 = $oItens->naturezadoobjeto;
             $iRegistroPreco                  = $oItens->registrodepreco;
-<<<<<<< HEAD
 
             fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
             fputs($clabre_arquivo->arquivo, formatarCampo($iCodigoOrgao, $vir, $del));
@@ -94,22 +88,6 @@ if ($leiaute == 1) {
             fputs($clabre_arquivo->arquivo, formatarCampo($iNaturezaObjeto, $vir, $del));
             fputs($clabre_arquivo->arquivo, formatarCampo($iRegistroPreco, $vir, $del));
 
-=======
-
-            fputs($clabre_arquivo->arquivo, formatarCampo($iTipoRegistro, $vir, $del));
-            fputs($clabre_arquivo->arquivo, formatarCampo($iCodigoOrgao, $vir, $del));
-            fputs($clabre_arquivo->arquivo, formatarCampo($iTipoOrgao, $vir, $del));
-            fputs($clabre_arquivo->arquivo, formatarCampo($iCnpj, $vir, $del));
-            fputs($clabre_arquivo->arquivo, formatarCampo($sNomeOrgao, $vir, $del));
-            fputs($clabre_arquivo->arquivo, formatarCampo($iProcessoLicitatorio, $vir, $del));
-            fputs($clabre_arquivo->arquivo, formatarCampo($iExercicio, $vir, $del));
-            fputs($clabre_arquivo->arquivo, formatarCampo($iNroEdital, $vir, $del));
-            fputs($clabre_arquivo->arquivo, formatarCampo($iExercicioEdital, $vir, $del));
-            fputs($clabre_arquivo->arquivo, formatarCampo($sProcessoObjeto, $vir, $del));
-            fputs($clabre_arquivo->arquivo, formatarCampo($iNaturezaObjeto, $vir, $del));
-            fputs($clabre_arquivo->arquivo, formatarCampo($iRegistroPreco, $vir, $del));
-
->>>>>>> master
             fputs($clabre_arquivo->arquivo, "\n");
         }
 
@@ -209,65 +187,6 @@ if ($leiaute == 1) {
     $aArquivosGerados[] = "Edital_" . $numeroEdital . "_" . $anoEdital . "_" . $iLicitacao . "_" . $anoProcessoLicitatorio . "." . $extensao;
     $aArquivosGerados[] = "Itens_" . $iLicitacao . "_" . $anoProcessoLicitatorio . "_" . $cnpj . "." . $extensao;
     $aArquivosGerados[] = "Lote_" . $iLicitacao . "_" . $anoProcessoLicitatorio . "_" . $cnpj . "." . $extensao;
-<<<<<<< HEAD
-
-    $sNomeAbsoluto = $cnpj . "_" . $codigotcemg . "_" . $processolicitatorio . "_" . $anoProcessoLicitatorio;
-
-    //compactaArquivos($aArquivosGerados, $sNomeArquivo);
-
-    foreach ($aArquivosGerados as $sArquivo) {
-        $sArquivos .= " $sArquivo";
-    }
-
-    system("cd tmp; rm -f {$sNomeAbsoluto}.zip; cd ..");
-    system("cd tmp; ../bin/zip -q {$sNomeAbsoluto}.zip $sArquivos 2> erro.txt; cd ..");
-
-    echo "<script>";
-    echo "  jan = window.open('db_download.php?arquivo=" . "tmp/{$sNomeAbsoluto}.zip" . "','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');";
-    echo "  jan.moveTo(0,0);";
-    echo "</script>";
-} else if ($leiaute == 2) {
-
-
-    $resultRegistro1 = db_query("select
-    1 as tiporegistro,
-    l20_nroedital as edital,
-    l20_exercicioedital as exercicioedital,
-    l20_edital as numprocesso,
-    nomeinst as orgao,
-    l20_usaregistropreco,
-    12 as mesesvigencia
-    from liclicita
-    join db_config on codigo=l20_instit
-    where l20_codigo= $l20_codigo");
-
-    if (pg_numrows($resultRegistro1) == 0) {
-        db_redireciona('db_erros.php?fechar=true&db_erro=Dados do Edital Incompletos.');
-        exit;
-    }
-
-    $resultRegistro2 = db_query("select distinct
-    2 as tiporegistro,
-    l20_nroedital as edital,
-    l20_exercicioedital as exercicioedital,
-    l04_descricao as  descricaolote,
-    l20_liclocal as localentrega,
-    l20_localentrega as localdeentrega,
-    l20_prazoentrega as datadeentrega,
-    0 as garantia /*gerar em branco*/
-    from liclicita
-    join liclicitem on l21_codliclicita=l20_codigo
-    join liclicitemlote on l04_liclicitem=l21_codigo
-    where l20_codigo= $l20_codigo;");
-
-    if (pg_numrows($resultRegistro2) == 0) {
-        db_redireciona('db_erros.php?fechar=true&db_erro=Dados do Lote Edital Incompletos.');
-        exit;
-    }
-
-    $resultRegistro3 = db_query("SELECT 
-    3 as tiporegistro,
-=======
 
     $sNomeAbsoluto = $cnpj . "_" . $codigotcemg . "_" . $processolicitatorio . "_" . $anoProcessoLicitatorio;
 
@@ -326,7 +245,6 @@ if ($leiaute == 1) {
     $resultRegistro3 = db_query("SELECT 
     3 as tiporegistro,
     pc16_codmater,
->>>>>>> master
     l20_nroedital as edital,
     l20_exercicioedital as exercicioedital,
     l04_descricao as  descricaolote,
@@ -384,58 +302,6 @@ if ($leiaute == 1) {
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "exercicioedital") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "numprocesso") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "orgao") . "|");
-<<<<<<< HEAD
-
-            $usaregistropreco = pg_result($resultRegistro1, $w, "l20_usaregistropreco");
-
-            if ($usaregistropreco == "f") {
-                $usaregistropreco = "0";
-            } else {
-                $usaregistropreco = "1";
-            }
-
-            fputs($clabre_arquivo->arquivo, $usaregistropreco . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro1, $w, "mesesvigencia"));
-            fputs($clabre_arquivo->arquivo, "\n");
-        }
-
-        $descricaoLote = "";
-        $sequencial = 0;
-        $sequencialLote = array();
-
-        for ($w = 0; $w < pg_numrows($resultRegistro2); $w++) {
-
-            if ($descricaoLote != pg_result($resultRegistro2, $w, "descricaolote")) {
-                $sequencial++;
-                $sequencialLote[pg_result($resultRegistro2, $w, "numerodolote")] = $sequencial;
-                $descricaoLote = pg_result($resultRegistro2, $w, "descricaolote");
-            } else {
-                $sequencialLote[pg_result($resultRegistro2, $w, "numerodolote")] = $sequencial;
-            }
-
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "tiporegistro") . "|");
-
-            if (pg_result($resultRegistro2, $w, "edital") == "") {
-                fputs($clabre_arquivo->arquivo, $numeroprocesso . "|");
-            } else {
-                fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "edital") . "|");
-            }
-
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "exercicioedital") . "|");
-            fputs($clabre_arquivo->arquivo, $sequencialLote[pg_result($resultRegistro2, $w, "numerodolote")] . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "descricaolote") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "localentrega") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "localdeentrega") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "datadeentrega") . "|");
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "garantia"));
-            //fputs($clabre_arquivo->arquivo, pg_result($resultRegistro2, $w, "numerodolote"));
-            fputs($clabre_arquivo->arquivo, "\n");
-        }
-
-        $descricaoLote = "";
-        $sequencial = 0;
-        $sequencialLote = array();
-=======
 
             $usaregistropreco = pg_result($resultRegistro1, $w, "l20_usaregistropreco");
 
@@ -496,7 +362,6 @@ if ($leiaute == 1) {
         }
 
 
->>>>>>> master
 
         for ($w = 0; $w < pg_numrows($resultRegistro3); $w++) {
 
@@ -521,9 +386,6 @@ if ($leiaute == 1) {
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "numerodoitem") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "unidade") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "pc11_quant") . "|");
-<<<<<<< HEAD
-            fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "vlrun") . "|");
-=======
 
             if (pg_result($resultRegistro3, $w, "vlrun") == null) {
                 fputs($clabre_arquivo->arquivo,  $valores[pg_result($resultRegistro3, $w, "pc16_codmater")] . "|");
@@ -531,7 +393,6 @@ if ($leiaute == 1) {
                 fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "vlrun") . "|");
             }
 
->>>>>>> master
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "pc01_descrmater") . "|");
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "numerodolote"));
             fputs($clabre_arquivo->arquivo, "\n");

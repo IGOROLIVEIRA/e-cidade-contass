@@ -1,28 +1,28 @@
 <?PHP
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -112,7 +112,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])
       // nda
     } elseif (!USE_PCASP && (($sistema_debito == 'F') && ($sistema_credito == 'P')
                              || ($sistema_debito == 'P') && ($sistema_credito == 'F'))) {
-    	
+
       $erro = true;
       db_msgbox("Não é permitido lançamentos entre o sistema Financeiro e Patrimonial !");
       db_redireciona();
@@ -187,7 +187,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])
         $contacorrentedetalheconlancamval->c28_contacorrentedetalhe = $oDaoContaCorrenteDetalhe->c19_sequencial != '' ? $oDaoContaCorrenteDetalhe->c19_sequencial : $seqContaCorrenteDetalhe;
         $contacorrentedetalheconlancamval->c28_tipo = 'D';
         if($c18_contacorrente == 103)
-            $contacorrentedetalheconlancamval->incluir();
+            $contacorrentedetalheconlancamval->incluir(null);
         if ($contacorrentedetalheconlancamval->erro_status == "0") {
             db_msgbox("Não foi possível incluir detalhe da conta débito. Procedimento abortado.".$contacorrentedetalheconlancamval->erro_msg);
             $erro = true;
@@ -236,7 +236,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])
         $contacorrentedetalheconlancamval->c28_contacorrentedetalhe = $oDaoContaCorrenteDetalhe->c19_sequencial != '' ? $oDaoContaCorrenteDetalhe->c19_sequencial : $seqContaCorrenteDetalhe;
         $contacorrentedetalheconlancamval->c28_tipo = 'C';
         if($c18_contacorrente == 103)
-            $contacorrentedetalheconlancamval->incluir();
+            $contacorrentedetalheconlancamval->incluir(null);
         if ($contacorrentedetalheconlancamval->erro_status == "0") {
             db_msgbox("Não foi possível incluir detalhe da conta crédito. Procedimento abortado.".$contacorrentedetalheconlancamval->erro_msg);
             $erro = true;

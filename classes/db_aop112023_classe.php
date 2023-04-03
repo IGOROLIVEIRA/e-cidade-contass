@@ -32,6 +32,7 @@ class cl_aop112023
   var $si138_dtliquidacao_ano = null;
   var $si138_dtliquidacao = null;
   var $si138_codfontrecursos = 0;
+  var $si138_codco = 0;
   var $si138_valoranulacaofonte = 0;
   var $si138_mes = 0;
   var $si138_reg10 = 0;
@@ -99,6 +100,7 @@ class cl_aop112023
         }
       }
       $this->si138_codfontrecursos = ($this->si138_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si138_codfontrecursos"] : $this->si138_codfontrecursos);
+      $this->si138_codco = ($this->si138_codco == "" ? @$GLOBALS["HTTP_POST_VARS"]["si138_codco"] : $this->si138_codco);
       $this->si138_valoranulacaofonte = ($this->si138_valoranulacaofonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si138_valoranulacaofonte"] : $this->si138_valoranulacaofonte);
       $this->si138_mes = ($this->si138_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si138_mes"] : $this->si138_mes);
       $this->si138_reg10 = ($this->si138_reg10 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si138_reg10"] : $this->si138_reg10);
@@ -142,6 +144,9 @@ class cl_aop112023
     }
     if ($this->si138_codfontrecursos == null) {
       $this->si138_codfontrecursos = "0";
+    }   
+     if ($this->si138_codco == null) {
+      $this->si138_codco = "0";
     }
     if ($this->si138_valoranulacaofonte == null) {
       $this->si138_valoranulacaofonte = "0";
@@ -215,6 +220,7 @@ class cl_aop112023
                                       ,si138_nroliquidacao 
                                       ,si138_dtliquidacao 
                                       ,si138_codfontrecursos 
+                                      ,si138_codco 
                                       ,si138_valoranulacaofonte 
                                       ,si138_mes 
                                       ,si138_reg10 
@@ -230,6 +236,7 @@ class cl_aop112023
                                ,$this->si138_nroliquidacao 
                                ," . ($this->si138_dtliquidacao == "null" || $this->si138_dtliquidacao == "" ? "null" : "'" . $this->si138_dtliquidacao . "'") . "
                                ,$this->si138_codfontrecursos 
+                               ,$this->si138_codco 
                                ,$this->si138_valoranulacaofonte 
                                ,$this->si138_mes 
                                ,$this->si138_reg10 
@@ -365,6 +372,13 @@ class cl_aop112023
         $this->si138_codfontrecursos = "0";
       }
       $sql .= $virgula . " si138_codfontrecursos = $this->si138_codfontrecursos ";
+      $virgula = ",";
+    }
+    if (trim($this->si138_codco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si138_codco"])) {
+      if (trim($this->si138_codco) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si138_codco"])) {
+        $this->si138_codco = "0";
+      }
+      $sql .= $virgula . " si138_codco = $this->si138_codco ";
       $virgula = ",";
     }
     if (trim($this->si138_valoranulacaofonte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si138_valoranulacaofonte"])) {

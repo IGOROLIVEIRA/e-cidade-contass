@@ -34,11 +34,16 @@ class cl_ralic102023
   var $si180_dtpublicacaoeditaldo_mes = null;
   var $si180_dtpublicacaoeditaldo_ano = null;
   var $si180_dtpublicacaoeditaldo = null;
+  var $si180_dtaberturaenvelopes_dia = null;
+  var $si180_dtaberturaenvelopes_mes = null;
+  var $si180_dtaberturaenvelopes_ano = null;
+  var $si180_dtaberturaenvelopes = null;
   var $si180_link = '';
   var $si180_tipolicitacao = 0;
   var $si180_naturezaobjeto = 0;
   var $si180_objeto = null;
   var $si180_regimeexecucaoobras = 0;
+  var $si180_tipoorcamento = 0;
   var $si180_vlcontratacao = 0;
   var $si180_bdi = 0;
   var $si180_mesexercicioreforc = 0;
@@ -64,11 +69,13 @@ class cl_ralic102023
                  si180_nroedital = int8 = Número do edital
                  si180_exercicioedital = int8 = Exercício do edital
                  si180_dtpublicacaoeditaldo = date = Data de publicação do edital
+                 si180_dtaberturaenvelopes = date = Data de publicação do edital
                  si180_link = varchar(200) = Link da publicação de documentos
                  si180_tipolicitacao = int8 = Tipo de licitação
                  si180_naturezaobjeto = int8 = Natureza do objeto
                  si180_objeto = varchar(500) = Objeto da licitação
                  si180_regimeexecucaoobras = int8 = Regime de execução para obras
+                 si180_tipoorcamento = int8 = Regime de execução para obras
                  si180_vlcontratacao = real = Valor Estimado da contratação
                  si180_bdi = real = Percentual da Bonificação e Despesas
                  si180_mesexercicioreforc = int(4) = Percentual da Bonificação e Despesas
@@ -126,12 +133,21 @@ class cl_ralic102023
           $this->si180_dtpublicacaoeditaldo = $this->si180_dtpublicacaoeditaldo_ano . "-" . $this->si180_dtpublicacaoeditaldo_mes . "-" . $this->si180_dtpublicacaoeditaldo_dia;
         }
       }
+      if ($this->si180_dtaberturaenvelopes == "") {
+        $this->si180_dtaberturaenvelopes_dia = ($this->si180_dtaberturaenvelopes_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_dtaberturaenvelopes_dia"] : $this->si180_dtaberturaenvelopes_dia);
+        $this->si180_dtaberturaenvelopes_mes = ($this->si180_dtaberturaenvelopes_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_dtaberturaenvelopes_mes"] : $this->si180_dtaberturaenvelopes_mes);
+        $this->si180_dtaberturaenvelopes_ano = ($this->si180_dtaberturaenvelopes_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_dtaberturaenvelopes_ano"] : $this->si180_dtaberturaenvelopes_ano);
+        if ($this->si180_dtaberturaenvelopes_dia != "") {
+          $this->si180_dtaberturaenvelopes = $this->si180_dtaberturaenvelopes_ano . "-" . $this->si180_dtaberturaenvelopes_mes . "-" . $this->si180_dtaberturaenvelopes_dia;
+        }
+      }
 
       $this->si180_link = ($this->si180_link == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_link"] : $this->si180_link);
       $this->si180_tipolicitacao = ($this->si180_tipolicitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_tipolicitacao"] : $this->si180_tipolicitacao);
       $this->si180_naturezaobjeto = ($this->si180_naturezaobjeto == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_naturezaobjeto"] : $this->si180_naturezaobjeto);
       $this->si180_objeto = ($this->si180_objeto == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_objeto"] : $this->si180_objeto);
       $this->si180_regimeexecucaoobras = ($this->si180_regimeexecucaoobras == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_regimeexecucaoobras"] : $this->si180_regimeexecucaoobras);
+      $this->si180_tipoorcamento = ($this->si180_tipoorcamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_tipoorcamento"] : $this->si180_tipoorcamento);
       $this->si180_vlcontratacao = ($this->si180_vlcontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_vlcontratacao"] : $this->si180_vlcontratacao);
       $this->si180_bdi = ($this->si180_bdi == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_bdi"] : $this->si180_bdi);
       $this->si180_mesexercicioreforc = ($this->si180_mesexercicioreforc == "" ? @$GLOBALS["HTTP_POST_VARS"]["si180_mesexercicioreforc"] : $this->si180_mesexercicioreforc);
@@ -192,6 +208,9 @@ class cl_ralic102023
     if ($this->si180_dtpublicacaoeditaldo == null) {
       $this->si180_dtpublicacaoeditaldo = "null";
     }
+    if ($this->si180_dtaberturaenvelopes == null) {
+      $this->si180_dtaberturaenvelopes = "null";
+    }
     if ($this->si180_tipolicitacao == null) {
       $this->si180_tipolicitacao = "0";
     }
@@ -200,6 +219,9 @@ class cl_ralic102023
     }
     if ($this->si180_regimeexecucaoobras == null) {
       $this->si180_regimeexecucaoobras = "0";
+    }
+    if ($this->si180_tipoorcamento == null) {
+      $this->si180_tipoorcamento = "1";
     }
     if ($this->si180_mes == null) {
       $this->erro_sql = " Campo Mês nao Informado.";
@@ -330,6 +352,8 @@ class cl_ralic102023
                                       ,si180_instit
                                       ,si180_leidalicitacao
                                       ,si180_mododisputa
+                                      ,si180_dtaberturaenvelopes
+                                      ,si180_tipoorcamento
                        )
                 values (
                                 $this->si180_sequencial
@@ -361,6 +385,8 @@ class cl_ralic102023
                                ,$this->si180_instit
                                ,$this->si180_leidalicitacao
                                ,$this->si180_mododisputa
+                               ," . ($this->si180_dtaberturaenvelopes == "null" || $this->si180_dtaberturaenvelopes == "" ? "null" : "'" . $this->si180_dtaberturaenvelopes . "'") . "
+                               ,$this->si180_tipoorcamento
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -464,6 +490,15 @@ class cl_ralic102023
         $virgula = ",";
       }
     }
+    if (trim($this->si180_dtaberturaenvelopes) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_dtaberturaenvelopes_dia"]) && ($GLOBALS["HTTP_POST_VARS"]["si180_dtaberturaenvelopes_dia"] != "")) {
+      $sql .= $virgula . " si180_dtaberturaenvelopes = '$this->si180_dtaberturaenvelopes' ";
+      $virgula = ",";
+    } else {
+      if (isset($GLOBALS["HTTP_POST_VARS"]["si180_dtaberturaenvelopes_dia"])) {
+        $sql .= $virgula . " si180_dtaberturaenvelopes = null ";
+        $virgula = ",";
+      }
+    }
     if (trim($this->si180_tipolicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_tipolicitacao"])) {
       if (trim($this->si180_tipolicitacao) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si180_tipolicitacao"])) {
         $this->si180_tipolicitacao = "0";
@@ -488,6 +523,13 @@ class cl_ralic102023
         $this->si180_regimeexecucaoobras = "0";
       }
       $sql .= $virgula . " si180_regimeexecucaoobras = $this->si180_regimeexecucaoobras ";
+      $virgula = ",";
+    }
+    if (trim($this->si180_tipoorcamento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si180_tipoorcamento"])) {
+      if (trim($this->si180_tipoorcamento) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si180_tipoorcamento"])) {
+        $this->si180_tipoorcamento = "0";
+      }
+      $sql .= $virgula . " si180_tipoorcamento = $this->si180_tipoorcamento ";
       $virgula = ",";
     }
 

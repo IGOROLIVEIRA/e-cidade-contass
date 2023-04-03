@@ -290,7 +290,6 @@ class CreditoCompensacao extends Credito {
 
       $nTotalReciboPaga = $oRecibo->getTotalRecibo();
       $nValorRestanteCompensacao = $nTotalReciboPaga - $this->getValorCompensacao();
-      $this->verificarCorrecaoCredito();
 
       /**
        * Pagamento Total dos Débitos

@@ -21,6 +21,8 @@ class cl_rsp212023
   var $si116_tiporegistro = 0;
   var $si116_codreduzidomov = 0;
   var $si116_codfontrecursos = 0;
+  var $si116_codco = null;
+  var $si116_codidentificafr = 0;
   var $si116_vlmovimentacaofonte = 0;
   var $si116_mes = 0;
   var $si116_reg20 = 0;
@@ -31,6 +33,8 @@ class cl_rsp212023
                  si116_tiporegistro = int8 = Tipo do  registro 
                  si116_codreduzidomov = int8 = Código Identificador da Movimentação 
                  si116_codfontrecursos = int8 = Código da fonte de recursos 
+                 si116_codco = varchar = Código de Acompanhamento da Execução Orçamentária
+                 si116_codidentificafr = int4 = Código identificador da movimentação de reclassificação de entrada e saída
                  si116_vlmovimentacaofonte = float8 = Valor da  Movimentação fonte de recurso 
                  si116_mes = int8 = Mês 
                  si116_reg20 = int8 = reg20 
@@ -64,6 +68,8 @@ class cl_rsp212023
       $this->si116_tiporegistro = ($this->si116_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si116_tiporegistro"] : $this->si116_tiporegistro);
       $this->si116_codreduzidomov = ($this->si116_codreduzidomov == "" ? @$GLOBALS["HTTP_POST_VARS"]["si116_codreduzidomov"] : $this->si116_codreduzidomov);
       $this->si116_codfontrecursos = ($this->si116_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si116_codfontrecursos"] : $this->si116_codfontrecursos);
+      $this->si116_codco = ($this->si116_codco == "" ? @$GLOBALS["HTTP_POST_VARS"]["si116_codco"] : $this->si116_codco);
+      $this->si116_codidentificafr = ($this->si116_codidentificafr == "" ? @$GLOBALS["HTTP_POST_VARS"]["si116_codidentificafr"] : $this->si116_codidentificafr);
       $this->si116_vlmovimentacaofonte = ($this->si116_vlmovimentacaofonte == "" ? @$GLOBALS["HTTP_POST_VARS"]["si116_vlmovimentacaofonte"] : $this->si116_vlmovimentacaofonte);
       $this->si116_mes = ($this->si116_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si116_mes"] : $this->si116_mes);
       $this->si116_reg20 = ($this->si116_reg20 == "" ? @$GLOBALS["HTTP_POST_VARS"]["si116_reg20"] : $this->si116_reg20);
@@ -92,6 +98,12 @@ class cl_rsp212023
     }
     if ($this->si116_codfontrecursos == null) {
       $this->si116_codfontrecursos = "0";
+    }
+    if ($this->si116_codco == null) {
+      $this->si116_codco = "0000";
+    }
+    if ($this->si116_codidentificafr == null) {
+      $this->si116_codidentificafr = 'null';
     }
     if ($this->si116_vlmovimentacaofonte == null) {
       $this->si116_vlmovimentacaofonte = "0";
@@ -160,6 +172,8 @@ class cl_rsp212023
                                       ,si116_tiporegistro 
                                       ,si116_codreduzidomov 
                                       ,si116_codfontrecursos 
+                                      ,si116_codco 
+                                      ,si116_codidentificafr 
                                       ,si116_vlmovimentacaofonte 
                                       ,si116_mes 
                                       ,si116_reg20 
@@ -170,6 +184,8 @@ class cl_rsp212023
                                ,$this->si116_tiporegistro 
                                ,$this->si116_codreduzidomov 
                                ,$this->si116_codfontrecursos 
+                               ,'$this->si116_codco' 
+                               ,$this->si116_codidentificafr 
                                ,$this->si116_vlmovimentacaofonte 
                                ,$this->si116_mes 
                                ,$this->si116_reg20 
@@ -259,6 +275,20 @@ class cl_rsp212023
         $this->si116_codfontrecursos = "0";
       }
       $sql .= $virgula . " si116_codfontrecursos = $this->si116_codfontrecursos ";
+      $virgula = ",";
+    }
+    if (trim($this->si116_codco) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si116_codco"])) {
+      if (trim($this->si116_codco) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si116_codco"])) {
+        $this->si116_codco = "0";
+      }
+      $sql .= $virgula . " si116_codco = $this->si116_codco ";
+      $virgula = ",";
+    }
+    if (trim($this->si116_codidentificafr) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si116_codidentificafr"])) {
+      if (trim($this->si116_codidentificafr) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si116_codidentificafr"])) {
+        $this->si116_codidentificafr = "0";
+      }
+      $sql .= $virgula . " si116_codidentificafr = $this->si116_codidentificafr ";
       $virgula = ",";
     }
     if (trim($this->si116_vlmovimentacaofonte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si116_vlmovimentacaofonte"])) {

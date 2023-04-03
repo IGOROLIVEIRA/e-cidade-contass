@@ -50,6 +50,7 @@
 
     $('.taskbar-menu-button').on('click', function(e) {
         $('#menu').trigger('menu.toggle');
+        $('#menu-search').focus();
     });
 
     // Botão para fechar o menu

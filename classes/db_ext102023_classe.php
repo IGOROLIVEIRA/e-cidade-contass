@@ -29,18 +29,18 @@ class cl_ext102023
   var $si124_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si124_sequencial = int8 = sequencial 
-                 si124_tiporegistro = int8 = Tipo do  registro 
-                 si124_codext = int8 = Código identificador ExtraOrçamentária 
+                 si124_sequencial = int8 = sequencial
+                 si124_tiporegistro = int8 = Tipo do  registro
+                 si124_codext = int8 = Código identificador ExtraOrçamentária
                  si124_codorgao = varchar(2) = Código do órgão
-                 si124_tipolancamento = varchar(2) = Tipo de  Lançamento 
-                 si124_subtipo = varchar(4) = Subtipo do  Lançamento 
-                 si124_desdobrasubtipo = varchar(4) = Desdobramento  do Sub-Tipo 
-                 si124_descextraorc = varchar(50) = Descrição da  Extra  Orçamentária 
-                 si124_mes = int8 = Mês 
-                 si124_instit = int8 = Instituição 
+                 si124_tipolancamento = varchar(2) = Tipo de  Lançamento
+                 si124_subtipo = varchar(4) = Subtipo do  Lançamento
+                 si124_desdobrasubtipo = varchar(4) = Desdobramento  do Sub-Tipo
+                 si124_descextraorc = varchar(50) = Descrição da  Extra  Orçamentária
+                 si124_mes = int8 = Mês
+                 si124_instit = int8 = Instituição
                  ";
-  
+
   //funcao construtor da classe
   function cl_ext102023()
   {
@@ -48,7 +48,7 @@ class cl_ext102023
     $this->rotulo = new rotulo("ext102023");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
+
   //funcao erro
   function erro($mostra, $retorna)
   {
@@ -59,7 +59,7 @@ class cl_ext102023
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -78,7 +78,7 @@ class cl_ext102023
       $this->si124_sequencial = ($this->si124_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si124_sequencial"] : $this->si124_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si124_sequencial)
   {
@@ -90,7 +90,7 @@ class cl_ext102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si124_codext == null) {
@@ -103,7 +103,7 @@ class cl_ext102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si124_instit == null) {
@@ -113,7 +113,7 @@ class cl_ext102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($si124_sequencial == "" || $si124_sequencial == null) {
@@ -125,7 +125,7 @@ class cl_ext102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si124_sequencial = pg_result($result, 0, 0);
@@ -137,7 +137,7 @@ class cl_ext102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si124_sequencial = $si124_sequencial;
@@ -149,32 +149,32 @@ class cl_ext102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $sql = "insert into ext102023(
-                                       si124_sequencial 
-                                      ,si124_tiporegistro 
-                                      ,si124_codext 
+                                       si124_sequencial
+                                      ,si124_tiporegistro
+                                      ,si124_codext
                                       ,si124_codorgao
-                                      ,si124_tipolancamento 
-                                      ,si124_subtipo 
-                                      ,si124_desdobrasubtipo 
-                                      ,si124_descextraorc 
-                                      ,si124_mes 
-                                      ,si124_instit 
+                                      ,si124_tipolancamento
+                                      ,si124_subtipo
+                                      ,si124_desdobrasubtipo
+                                      ,si124_descextraorc
+                                      ,si124_mes
+                                      ,si124_instit
                        )
                 values (
-                                $this->si124_sequencial 
-                               ,$this->si124_tiporegistro 
-                               ,$this->si124_codext 
+                                $this->si124_sequencial
+                               ,$this->si124_tiporegistro
+                               ,$this->si124_codext
                                ,'$this->si124_codorgao'
-                               ,'$this->si124_tipolancamento' 
-                               ,'$this->si124_subtipo' 
-                               ,'$this->si124_desdobrasubtipo' 
-                               ,'$this->si124_descextraorc' 
-                               ,$this->si124_mes 
-                               ,$this->si124_instit 
+                               ,'$this->si124_tipolancamento'
+                               ,'$this->si124_subtipo'
+                               ,'$this->si124_desdobrasubtipo'
+                               ,'$this->si124_descextraorc'
+                               ,$this->si124_mes
+                               ,$this->si124_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -192,7 +192,7 @@ class cl_ext102023
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -219,10 +219,10 @@ class cl_ext102023
 //      $resac = db_query("insert into db_acount values($acount,2010353,2010856,'','" . AddSlashes(pg_result($resaco, 0, 'si124_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
 //      $resac = db_query("insert into db_acount values($acount,2010353,2011637,'','" . AddSlashes(pg_result($resaco, 0, 'si124_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
 //    }
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si124_sequencial = null)
   {
@@ -246,7 +246,7 @@ class cl_ext102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -287,7 +287,7 @@ class cl_ext102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -301,7 +301,7 @@ class cl_ext102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -358,7 +358,7 @@ class cl_ext102023
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -369,7 +369,7 @@ class cl_ext102023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -379,12 +379,12 @@ class cl_ext102023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao para exclusao
   function excluir($si124_sequencial = null, $dbwhere = null)
   {
@@ -434,7 +434,7 @@ class cl_ext102023
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -445,7 +445,7 @@ class cl_ext102023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -455,12 +455,12 @@ class cl_ext102023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao do recordset
   function sql_record($sql)
   {
@@ -473,7 +473,7 @@ class cl_ext102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
@@ -483,13 +483,13 @@ class cl_ext102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
+
   // funcao do sql
   function sql_query($si124_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -525,10 +525,10 @@ class cl_ext102023
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
+
   // funcao do sql
   function sql_query_file($si124_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -564,7 +564,7 @@ class cl_ext102023
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }

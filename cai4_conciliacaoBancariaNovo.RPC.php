@@ -558,7 +558,7 @@ function excluir_lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
 
 function where_conciliados($conta, $data, $tipo, $valor, $data_conciliacao, $numcgm, $documento)
 {
-    $where = "k172_conta = {$conta} AND k172_data = '{$data}' AND k172_valor = {$valor} ";
+    $where = "k172_conta = {$conta} AND k172_data = '{$data}' AND round(k172_valor,2) = round({$valor},2) ";
     $where .= $data_conciliacao ? " AND k172_dataconciliacao = '{$data_conciliacao}' " : " ";
     $where .= $tipo ? " AND k172_coddoc = {$tipo} " : " AND k172_coddoc IS NULL ";
     $where .= $numcgm ? " AND k172_numcgm = {$numcgm} " :  " AND k172_numcgm IS NULL ";
@@ -1259,7 +1259,7 @@ function query_padrao_slip_debito()
   LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corlanc.k12_conta
   AND conc.k172_data = corrente.k12_data
   AND conc.k172_coddoc = conhistdoc.c53_tipo
-  AND round(conc.k172_valor, 2) = round(corrente.k12_valor, 2) 
+  AND round(conc.k172_valor, 2) = round(corrente.k12_valor, 2)
   AND conc.k172_codigo = concat_ws('', k12_codigo::text, case
   when e91_cheque is null then e81_numdoc :: text
   else 'CHE ' || e91_cheque :: text
@@ -1328,7 +1328,7 @@ function query_padrao_slip_credito()
       LEFT JOIN conciliacaobancarialancamento conc ON conc.k172_conta = corrente.k12_conta
       AND conc.k172_data = corrente.k12_data
       AND conc.k172_coddoc = conhistdoc.c53_tipo
-      AND round(conc.k172_valor, 2) = round(corrente.k12_valor, 2) 
+      AND round(conc.k172_valor, 2) = round(corrente.k12_valor, 2)
       AND conc.k172_codigo = concat_ws('', k12_codigo::text, case
       when e91_cheque is null then e81_numdoc :: text
       else 'CHE ' || e91_cheque :: text

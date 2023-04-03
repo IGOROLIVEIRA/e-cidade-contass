@@ -90,7 +90,8 @@ $pdf1->dadosTomador = db_utils::fieldsMemory($rsTom,0);
 $rsNotaCancelada = $clissnotaavulsacanc->sql_record($clissnotaavulsacanc->sql_query(null,"q63_sequencial",null,"q63_issnotaavulsa = ".$get->q51_sequencial));
 $pdf1->notaCancelada = empty(db_utils::fieldsMemory($rsNotaCancelada,0)->q63_sequencial) ? false : true;
 
-if ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA){
+$codInstituicao = array(Instituicao::COD_CLI_PMMONTALVANIA, Instituicao::COD_CLI_PMJURAMENTO);
+if (in_array($oInstit->getCodigoCliente(), $codInstituicao)){
     $pdf1->texto_aviso = "";
 }else{    
     $pdf1->texto_aviso = "Acesse {$pdf1->urlautenticacao} e utilize o código de verificação {$pdf1->dadosPrestador->q51_codautent} para confirmar a autenticidade.";

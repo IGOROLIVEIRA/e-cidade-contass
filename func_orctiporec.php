@@ -80,7 +80,7 @@ if (isset($pesquisa_conta)){
             </td>
             <td width="96%" align="left" nowrap> 
               <?
-		       db_input("o15_codigo",4,$Io15_codigo,true,"text",4,"","chave_o15_codigo");
+		       db_input("o15_codigo",8,$Io15_codigo,true,"text",4,"","chave_o15_codigo");
 		       ?>
             </td>
           </tr>

@@ -49,7 +49,9 @@ switch ($oParam->exec) {
         $oDaoDadoscomplementareslrf->c218_codorgao = $iCodOrgao;
         $oDaoDadoscomplementareslrf->c218_anousu = db_getsession('DB_anousu');
         $oDaoDadoscomplementareslrf->c218_mesusu = $oParam->dadoscomplementares->c218_mesusu;
-        $oDaoDadoscomplementareslrf->c218_passivosreconhecidos = $oParam->dadoscomplementares->c218_passivosreconhecidos;
+        if(db_getsession('DB_anousu') < 2023){
+            $oDaoDadoscomplementareslrf->c218_passivosreconhecidos = $oParam->dadoscomplementares->c218_passivosreconhecidos;
+        }    
         $oDaoDadoscomplementareslrf->c218_vlsaldoatualconcgarantiainterna = $oParam->dadoscomplementares->c218_vlsaldoatualconcgarantiainterna;
         $oDaoDadoscomplementareslrf->c218_vlsaldoatualconcgarantia = $oParam->dadoscomplementares->c218_vlsaldoatualconcgarantia;
         $oDaoDadoscomplementareslrf->c218_vlsaldoatualcontragarantiainterna = $oParam->dadoscomplementares->c218_vlsaldoatualcontragarantiainterna;
@@ -284,12 +286,12 @@ switch ($oParam->exec) {
 
         $oDadosMedidasadotadaslrf = $oDaoDadosMedidasadotadaslrf->sql_query(null,"c225_metasadotadas",null,"c225_dadoscomplementareslrf = {$oParam->c218_sequencial}");
         $oDadosMedidasadotadaslrfResult = $oDaoDadosMedidasadotadaslrf->sql_record($oDadosMedidasadotadaslrf);
-
+        
         for($i = 0; $i < pg_num_rows($oDadosMedidasadotadaslrfResult); $i ++){
             $oMedidas = db_utils::fieldsMemory($oDadosMedidasadotadaslrfResult, $i)->c225_metasadotadas;
             $oMedidasadotadas[] = $oMedidas;
         }
-
+        
         $oRetorno->medidasadotadas = $oMedidasadotadas;
 
         break;

@@ -143,6 +143,9 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
                        ELSE o41_codtri::int
                    END AS o58_unidade,
                    o15_codtri,
+                   o15_codigo,
+                   e60_emendaparlamentar,
+                   e60_esferaemendaparlamentar,
                    si09_codorgaotce,
                    o41_subunidade AS subunidade,
                    lpad((CASE
@@ -246,11 +249,17 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
 
             $oDadosEmpenhoAnuladoFonte = new cl_anl112023();
 
+            $oCodigoAcompanhamento = new ControleOrcamentario();
+            $oCodigoAcompanhamento->setFonte($oEmpenhoAnulado->o15_codigo);
+            $oCodigoAcompanhamento->setEmendaParlamentar($oEmpenhoAnulado->e60_emendaparlamentar);
+            $oCodigoAcompanhamento->setEsferaEmendaParlamentar($oEmpenhoAnulado->e60_esferaemendaparlamentar);
+
             $oDadosEmpenhoAnuladoFonte->si111_tiporegistro = 11;
             $oDadosEmpenhoAnuladoFonte->si111_codunidadesub = $sCodUnidade;
             $oDadosEmpenhoAnuladoFonte->si111_nroempenho = substr($oEmpenhoAnulado->e60_codemp, 0, 22);
             $oDadosEmpenhoAnuladoFonte->si111_nroanulacao = substr($oEmpenhoAnulado->c70_codlan, 0, 9);
-            $oDadosEmpenhoAnuladoFonte->si111_codfontrecursos = substr($oEmpenhoAnulado->o15_codtri, 0, 3);
+            $oDadosEmpenhoAnuladoFonte->si111_codfontrecursos = $oEmpenhoAnulado->o15_codtri;
+            $oDadosEmpenhoAnuladoFonte->si111_codco = $oCodigoAcompanhamento->getCodigoParaEmpenho();
             $oDadosEmpenhoAnuladoFonte->si111_vlanulacaofonte = $oEmpenhoAnulado->c70_valor;
             $oDadosEmpenhoAnuladoFonte->si111_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $oDadosEmpenhoAnuladoFonte->si111_reg10 = $oDadosEmpenhoAnulado->si110_sequencial;

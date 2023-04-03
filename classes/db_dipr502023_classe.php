@@ -19,19 +19,16 @@ class cl_dipr502023
     // cria variaveis do arquivo
     var $si234_sequencial = 0;
     var $si234_tiporegistro = 0;
-    var $si234_coddipr = 0;
     var $si234_segregacaomassa = 0;
     var $si234_benefcustesouro = 0;
-    var $si234_atonormativo = 0;
-    var $si234_exercicioato = 0;
     var $si234_mes = 0;
     var $si234_instit = 0;
+    var $si234_datarepasse = 0;
     // cria propriedade com as variaveis do arquivo
     var $campos = "
         si234_sequencial = Sequencial,
         si234_tiporegistro = Tipo de Registro
         si234_codorgao = Codigo do Orgao
-        si234_coddipr = Codigo DIPR
         si234_tipobasecalculo = Tipo Base de Calculo
         si234_mescompetencia = Mes Competencia
         si234_exerciciocompetencia = Exercicio Mes Competencia
@@ -45,6 +42,7 @@ class cl_dipr502023
         si234_valorcontribdevida = Valor da Contribuicao
         si234_mes = Mes
         si234_instit = Instituicao
+        si234_datarepasse = date
     ";
 
     //funcao construtor da classe
@@ -73,19 +71,31 @@ class cl_dipr502023
             $this->si234_sequencial = ($this->si234_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_sequencial"] : $this->si234_sequencial);
             $this->si234_tiporegistro = ($this->si234_tiporegistro == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_tiporegistro"] : $this->si234_tiporegistro);
             $this->si234_codorgao = ($this->si234_codorgao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_codorgao"] : $this->si234_codorgao);
-            $this->si234_coddipr = ($this->si234_coddipr == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_coddipr"] : $this->si234_coddipr);
             $this->si234_mescompetencia = ($this->si234_mescompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_mescompetencia"] : $this->si234_mescompetencia);
             $this->si234_exerciciocompetencia = ($this->si234_exerciciocompetencia == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_exerciciocompetencia"] : $this->si234_exerciciocompetencia);
             $this->si234_tipofundo = ($this->si234_tipofundo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_tipofundo"] : $this->si234_tipofundo);
             $this->si234_tipoaportetransf = ($this->si234_tipoaportetransf == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_tipoaportetransf"] : $this->si234_tipoaportetransf);
             $this->si234_dscoutrosaportestransf = ($this->si234_dscoutrosaportestransf == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_dscoutrosaportestransf"] : $this->si234_dscoutrosaportestransf);
-            $this->si234_atonormativo = ($this->si234_atonormativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_atonormativo"] : $this->si234_atonormativo);
-            $this->si234_exercicioato = ($this->si234_exercicioato == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_exercicioato"] : $this->si234_exercicioato);
             $this->si234_valoraportetransf = ($this->si234_valoraportetransf == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_valoraportetransf"] : $this->si234_valoraportetransf);
             $this->si234_mes = ($this->si234_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_mes"] : $this->si234_mes);
             $this->si234_instit = ($this->si234_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_instit"] : $this->si234_instit);
+            $this->atualizaCampoData("si234_datarepasse");
         } else {
             $this->si234_sequencial = ($this->si234_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si234_sequencial"] : $this->si234_sequencial);
+        }
+    }
+    function atualizaCampoData($nomeCampo)
+    {
+        $nomeCampoDia = "{$nomeCampo}_dia";
+        $nomeCampoMes = "{$nomeCampo}_mes";
+        $nomeCampoAno = "{$nomeCampo}_ano";
+        if ($this->$nomeCampo == "") {
+            $this->$nomeCampoDia = ($this->$nomeCampoDia == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoDia] : $this->$nomeCampoDia);
+            $this->$nomeCampoMes = ($this->$nomeCampoMes == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoMes] : $this->$nomeCampoMes);
+            $this->$nomeCampoAno = ($this->$nomeCampoAno == "" ? @$GLOBALS["HTTP_POST_VARS"][$nomeCampoAno] : $this->$nomeCampoAno);
+            if ($this->$nomeCampoDia != "") {
+                $this->$nomeCampo = $this->$nomeCampoAno . "-" . $this->$nomeCampoMes . "-" . $this->$nomeCampoDia;
+            }
         }
     }
 
@@ -144,33 +154,29 @@ class cl_dipr502023
                     si234_sequencial 
                     ,si234_tiporegistro
                     ,si234_codorgao
-                    ,si234_coddipr 
                     ,si234_mescompetencia
                     ,si234_exerciciocompetencia
                     ,si234_tipofundo
                     ,si234_tipoaportetransf
                     ,si234_dscoutrosaportestransf
-                    ,si234_atonormativo
-                    ,si234_exercicioato
                     ,si234_valoraportetransf
                     ,si234_mes 
-                    ,si234_instit )
+                    ,si234_instit
+                    ,si234_datarepasse )
                 values (
                     $this->si234_sequencial 
                     ,$this->si234_tiporegistro
                     ,$this->si234_codorgao
-                    ,$this->si234_coddipr 
                     ,$this->si234_mescompetencia
                     ,$this->si234_exerciciocompetencia
                     ,$this->si234_tipofundo
                     ,$this->si234_tipoaportetransf
                     ,'$this->si234_dscoutrosaportestransf'
-                    ,$this->si234_atonormativo
-                    ,$this->si234_exercicioato
                     ,$this->si234_valoraportetransf
                     ,$this->si234_mes 
-                    ,$this->si234_instit )";
-                 
+                    ,$this->si234_instit
+                    ,'$this->si234_datarepasse' )";
+           
         $result = db_query($sql);
         if ($result == false) {
             $this->erro_banco = str_replace("", "", @pg_last_error());
