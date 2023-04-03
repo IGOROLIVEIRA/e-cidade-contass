@@ -126,6 +126,8 @@ $sql = " select	p58_codproc,
               {$sWhere}		  
               order by p58_codproc";
 
+
+
 /**
  * Verifica se o parâmetro não esta setado como Documento Template
  */

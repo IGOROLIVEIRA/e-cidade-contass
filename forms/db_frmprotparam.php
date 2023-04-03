@@ -270,6 +270,16 @@ $clrotulo->label("p90_db_documentotemplate");
                   </select>
                 </td>
               </tr>
+              <tr>
+                <td nowrap title="<?= @$Tp90_protocolosigiloso ?>" align="right">
+                  <strong>Ativar Protocolo Sigiloso</strong>
+                </td>
+                <td>
+                  <?
+                  $x = array("f" => "Não", "t" => "Sim");
+                  db_select('p90_protocolosigiloso', $x, true, $db_opcao, "");
+                  ?>
+                </td>
 
               <tr>
                 <td nowrap title="<?= @$Tp90_novatelaprotocolo ?>" align="right">
@@ -283,10 +293,13 @@ $clrotulo->label("p90_db_documentotemplate");
                 </td>
               </tr>
 
-            </table>
-          </fieldset>
         </td>
       </tr>
+
+    </table>
+    </fieldset>
+    </td>
+    </tr>
     </table>
   </center>
   <input name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
@@ -363,6 +376,34 @@ $clrotulo->label("p90_db_documentotemplate");
       }
     }
   }
+
+  function js_mostrataxagrupo(chave, erro) {
+    document.form1.k06_descr.value = chave;
+    if (erro == true) {
+      document.form1.p90_taxagrupo.focus();
+      document.form1.p90_taxagrupo.value = '';
+    }
+  }
+
+  function js_mostrataxagrupo1(chave1, chave2) {
+    document.form1.p90_taxagrupo.value = chave1;
+    document.form1.k06_descr.value = chave2;
+    db_iframe_taxagrupo.hide();
+  }
+
+  function js_pesquisa() {
+    js_OpenJanelaIframe('top.corpo', 'db_iframe_protparam', 'func_protparam.php?funcao_js=parent.js_preenchepesquisa|0', 'Pesquisa', true);
+  }
+
+  function js_preenchepesquisa(chave) {
+    db_iframe_protparam.hide();
+    <?
+    if ($db_opcao != 1) {
+      echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave";
+    }
+    ?>
+  }
+
 
   function js_mostrataxagrupo(chave, erro) {
     document.form1.k06_descr.value = chave;

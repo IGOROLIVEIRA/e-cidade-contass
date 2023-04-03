@@ -25,5 +25,4 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "db_usuarios.id_usuario,db_usuarios.nome,db_usuarios.login,db_usuarios.usuarioativo,db_usuarios.email,db_usuarios.usuext,db_usuarios.administrador";
-?>
+$campos = "db_usuarios.id_usuario,db_usuarios.nome,db_usuarios.login,db_usuarios.usuarioativo,db_usuarios.email,db_usuarios.usuext,db_usuarios.administrador,db_usuarios.senha";
