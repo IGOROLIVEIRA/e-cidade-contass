@@ -31,8 +31,7 @@ db_app::load("time.js");
                     <td colspan="2">
                         <strong>Ambiente: </strong>
                         <select name="ambiente" id="ambiente">
-                            <option value="1">Ambiente de Homologao Externa (teste)</option>
-                            <option value="2">Ambiente de Produção</option>
+                            <option value="1">Ambiente de Homologao Externa</option>
                         </select>
 
                         <strong>Tipo: </strong>
@@ -73,7 +72,7 @@ db_app::load("time.js");
         oGridEmpenho.setCheckbox(0);
         oGridEmpenho.setCellAlign(new Array("center", "center", "Center", "Left", "Center", "Center"));
         oGridEmpenho.setCellWidth(new Array("5%", "40%", "10%", "40%", "10%", "20%"));
-        oGridEmpenho.setHeader(new Array("Código", "Objeto", "Empenho","Fornecedor", "Licitação", "Número de Controle"));
+        oGridEmpenho.setHeader(new Array("Código", "Objeto", "Empenho", "Fornecedor", "Licitação", "Número de Controle"));
         oGridEmpenho.hasTotalValue = false;
         oGridEmpenho.show($('cntgridempenhos'));
 
@@ -155,16 +154,16 @@ db_app::load("time.js");
 
         let tipo = $F('tipo');
 
-        if(tipo == 0){
+        if (tipo == 0) {
             alert('Selecione um Tipo');
             return false;
-        }    
+        }
 
         if (aEmpenhos.length == 0) {
             alert('Nenhum Empenho Selecionado');
             return false;
         }
-        
+
         var oParam = new Object();
         if (tipo == 1) {
             oParam.exec = "enviarEmpenho";
@@ -183,7 +182,7 @@ db_app::load("time.js");
                 empenho.sequencialpncp = aCells[6].getValue();
                 empenho.codigo = aCells[1].getValue();
                 empenho.processo = aCells[2].getValue();
-                
+
                 oParam.aEmpenhos.push(empenho);
             }
         }
@@ -206,11 +205,11 @@ db_app::load("time.js");
             // window.location.href = "aco1_pncppublicacaocontrato001.php";
         } else {
             let tipo = $F('tipo');
-            if(tipo == 1)
+            if (tipo == 1)
                 alert('Enviado com sucesso !');
-            if(tipo == 2)
-                alert('Retificação enviada com sucesso!');    
-            if(tipo == 3)
+            if (tipo == 2)
+                alert('Retificação enviada com sucesso!');
+            if (tipo == 3)
                 alert('Exclusão efetuada com sucesso!');
             window.location.href = "lic1_publicacaoempenhopncp.php";
         }
