@@ -1,0 +1,5 @@
+01Ambulatorial                                                                                        200810
+02Hospitalar                                                                                          200810
+03Hospital Dia                                                                                        200810
+04Internação Domiciliar                                                                               200810
+05Assistência Domiciliar                                                                              200810

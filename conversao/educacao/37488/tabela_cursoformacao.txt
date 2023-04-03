@@ -1,0 +1,124 @@
+1 | Educação | 142C01 | Ciências da educação
+1 | Educação | 143F01 | Formação de professor de creche
+1 | Educação | 143F02 | Formação de professor de educação infantil
+1 | Educação | 143F03 | Formação de professor de pré-escola
+1 | Educação | 144F01 | Formação de professor das séries finais do ensino fundamental
+1 | Educação | 144F02 | Formação de professor das séries iniciais do ensino fundamental
+1 | Educação | 144F03 | Formação de professor de alfabetização
+1 | Educação | 144F04 | Formação de professor de educação especial
+1 | Educação | 144F05 | Formação de professor de educação infantil e séries iniciais do ensino fundamental
+1 | Educação | 144F06 | Formação de professor do ensino fundamental
+1 | Educação | 144F07 | Formação de professor do ensino médio
+1 | Educação | 144F08 | Formação de professor de jovens e adultos
+1 | Educação | 144F11 | Formação de professor para a educação básica
+1 | Educação | 144N01 | Normal superior
+1 | Educação | 145F01 | Formação de professor de biologia
+1 | Educação | 145F02 | Formação de professor de ciências
+1 | Educação | 145F05 | Formação de professor de educação religiosa
+1 | Educação | 145F07 | Formação de professor de estudos sociais
+1 | Educação | 145F08 | Formação de professor de filosofia
+1 | Educação | 145F09 | Formação de professor de física
+1 | Educação | 145F10 | Formação de professor de geografia
+1 | Educação | 145F11 | Formação de professor de história
+1 | Educação | 145F13 | Formação de professor de língua estrangeira
+1 | Educação | 145F15 | Formação de professor de português
+1 | Educação | 145F16 | Formação de professor de português e língua estrangeira
+1 | Educação | 145F18 | Formação de professor de matemática
+1 | Educação | 145F21 | Formação de professor de química
+1 | Educação | 145F24 | Formação de professor de sociologia
+1 | Educação | 145F25 | Formação de professor em ciências sociais
+1 | Educação | 146A01 | Formação de professor de disciplinas profissionais - AMBIENTE, SAÚDE E SEGURANÇA
+1 | Educação | 146E01 | Formação de professor de disciplinas profissionais - APOIO EDUCACIONAL
+1 | Educação | 146P01 | Formação de professor de disciplinas profissionais - CONTROLE E PROCESSOS INDUSTRIAIS
+1 | Educação | 146G01 | Formação de professor de disciplinas profissionais - GESTÃO E NEGÓCIOS
+1 | Educação | 146C01 | Formação de professor de disciplinas profissionais - INFORMAÇÃO E COMUNICAÇÃO
+1 | Educação | 146I01 | Formação de professor de disciplinas profissionais - INFRA-ESTRUTURA
+1 | Educação | 146D01 | Formação de professor de disciplinas profissionais - PRODUÇÃO CULTURAL E DESIGN
+1 | Educação | 146N01 | Formação de professor de disciplinas profissionais - RECURSOS NATURAIS
+2 | Humanidades e artes | 210A01 | Artes
+2 | Humanidades e artes | 212999 | Música e artes cênicas
+2 | Humanidades e artes | 213999 | Técnicas audiovisuais e produção de mídia
+2 | Humanidades e artes | 214999 | Design e estilismo
+2 | Humanidades e artes | 215999 | Artesanato
+2 | Humanidades e artes | 220H01 | Humanidades
+2 | Humanidades e artes | 220L01 | Letras
+2 | Humanidades e artes | 220P01 | Letras português
+2 | Humanidades e artes | 220E01 | Letras línguas estrangeiras
+2 | Humanidades e artes | 220L03 | Letras português e línguas estrangeiras
+2 | Humanidades e artes | 221999 | Religião e teologia
+2 | Humanidades e artes | 225A01 | Arqueologia
+2 | Humanidades e artes | 225H01 | História
+2 | Humanidades e artes | 225M01 | Museologia
+2 | Humanidades e artes | 226999 | Filosofia e ética
+3 | Ciências sociais, negócios e direito | 312999 | Sociologia e estudos culturais
+3 | Ciências sociais, negócios e direito | 311P02 | Psicologia
+3 | Ciências sociais, negócios e direito | 313999 | Ciência política e educação cívica
+3 | Ciências sociais, negócios e direito | 314E02 | Economia
+3 | Ciências sociais, negócios e direito | 321999 | Jornalismo e reportagem
+3 | Ciências sociais, negócios e direito | 322999 | Biblioteconomia, informação, arquivos
+3 | Ciências sociais, negócios e direito | 341999 | Vendas em atacado e varejo
+3 | Ciências sociais, negócios e direito | 342999 | Marketing e publicidade
+3 | Ciências sociais, negócios e direito | 343F01 | Finanças, bancos, seguros
+3 | Ciências sociais, negócios e direito | 344999 | Contabilidade e tributação
+3 | Ciências sociais, negócios e direito | 345999 | Gerenciamento e administração
+3 | Ciências sociais, negócios e direito | 346999 | Secretariado e trabalhos de escritório
+3 | Ciências sociais, negócios e direito | 347V01 | Vida profissional
+3 | Ciências sociais, negócios e direito | 380D01 | Direito
+4 | Ciências, matemática e computação | 420C01 | Ciências
+4 | Ciências, matemática e computação | 421B01 | Biofísica
+4 | Ciências, matemática e computação | 421B02 | Biologia
+4 | Ciências, matemática e computação | 421B07 | Biomedicina
+4 | Ciências, matemática e computação | 421B09 | Bioquímica
+4 | Ciências, matemática e computação | 441F01 | Física
+4 | Ciências, matemática e computação | 442Q01 | Química
+4 | Ciências, matemática e computação | 443999 | Ciências da terra
+4 | Ciências, matemática e computação | 443G04 | Geografia
+4 | Ciências, matemática e computação | 443M01 | Meteorologia
+4 | Ciências, matemática e computação | 443P01 | Paleontologia
+4 | Ciências, matemática e computação | 461M01 | Matemática
+4 | Ciências, matemática e computação | 462E01 | Estatística
+4 | Ciências, matemática e computação | 481C01 | Ciência da computação
+5 | Engenharia, produção e construção | 520999 | Engenharia e profissões de engenharia
+5 | Engenharia, produção e construção | 520D01 | Desenho industrial
+5 | Engenharia, produção e construção | 521999 | Engenharia mecânica e metalurgia (trabalhos com metais)
+5 | Engenharia, produção e construção | 522999 | Eletricidade e energia
+5 | Engenharia, produção e construção | 523999 | Eletrônica e automação
+5 | Engenharia, produção e construção | 523E04 | Engenharia de computação
+5 | Engenharia, produção e construção | 523E08 | Engenharia de redes de comunicação
+5 | Engenharia, produção e construção | 524999 | Química e engenharia de processos
+5 | Engenharia, produção e construção | 524E02 | Engenharia de biotecnologia
+5 | Engenharia, produção e construção | 524E06 | Engenharia nuclear
+5 | Engenharia, produção e construção | 525999 | Veículos a motor, construção naval e aeronáutica
+5 | Engenharia, produção e construção | 540F01 | Fabricação e processamento
+5 | Engenharia, produção e construção | 541P04 | Processamento de alimentos e bebidas
+5 | Engenharia, produção e construção | 542999 | Têxteis, roupas, calçados, couros
+5 | Engenharia, produção e construção | 543999 | Materiais (madeira, papel, plástico, vidro)
+5 | Engenharia, produção e construção | 544M02 | Mineração e extração
+5 | Engenharia, produção e construção | 581A05 | Arquitetura e urbanismo
+5 | Engenharia, produção e construção | 582999 | Engenharia civil e de construção
+6 | Agricultura e veterinária | 621999 | Produção agrícola e pecuária
+6 | Agricultura e veterinária | 623E01 | Engenharia florestal - silvicultura
+6 | Agricultura e veterinária | 624999 | Recursos pesqueiros
+6 | Agricultura e veterinária | 641999 | Veterinária
+7 | Saúde e bem estar social | 720S01 | Saúde
+7 | Saúde e bem estar social | 720E01 | Educação física
+7 | Saúde e bem estar social | 721M01 | Medicina
+7 | Saúde e bem estar social | 723999 | Enfermagem e atenção primária (assistência básica)
+7 | Saúde e bem estar social | 724O01 | Odontologia
+7 | Saúde e bem estar social | 726999 | Terapia e reabilitação
+7 | Saúde e bem estar social | 726F01 | Fisioterapia
+7 | Saúde e bem estar social | 726F03 | Fonoaudiologia
+7 | Saúde e bem estar social | 726N02 | Nutrição
+7 | Saúde e bem estar social | 727F01 | Farmácia
+7 | Saúde e bem estar social | 762999 | Serviço social e orientação
+8 | Serviços | 811999 | Hotelaria, restaurantes  e serviços de alimentação
+8 | Serviços | 812999 | Viagens, turismo e lazer
+8 | Serviços | 813E01 | Esportes
+8 | Serviços | 814C01 | Ciências domésticas
+8 | Serviços | 815999 | Serviços de beleza
+8 | Serviços | 840999 | Transportes e serviços
+8 | Serviços | 850999 | Proteção ambiental e saneamento
+8 | Serviços | 861999 | Proteção de pessoas e de propriedades
+8 | Serviços | 862999 | Saúde e segurança do trabalho
+8 | Serviços | 863999 | Setor militar e de defesa
+9 | Outros | 999999 | Outro curso de formação superior

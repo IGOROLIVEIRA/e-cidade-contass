@@ -1,0 +1,52 @@
+100Serviço de atenção a saúde no sistema penitenciário                                                                     200807
+101Estratégia de saúde da família                                                                                          200807
+102Estratégias de agentes comunitário de saúde                                                                             200807
+103Serviço de regulação médica de urgências - Central SAMU 192                                                             200807
+104Servico de regulação de servicos de saúde                                                                               200807
+105Serviço de assistência de alta complexidade em neurocirurgia                                                            200807
+106Serviço de atenção a DST/HIV/AIDS                                                                                       200807
+107Serviço de atenção a saúde auditiva                                                                                     200807
+108Serviço de atenção a saúde do trabalhador                                                                               200807
+109Serviço de atenção a saúde dos adolecentes em conflito com a lei, em regime de internação e internação provisória       200807
+110Serviço de atenção a saúde reprodutiva                                                                                  200807
+111Serviço de atenção ao paciente com tuberculose                                                                          200807
+112Serviço de atenção ao pré-natal, parto e nascimento                                                                     200807
+113Serviço de atenção domiciliar                                                                                           200807
+114Serviço de atenção em saúde bucal                                                                                       200807
+115Serviço de atenção psicossocial                                                                                         200807
+116Serviço de cirurgia cardiovascular                                                                                      200807
+117Serviço de cirurgia reparadora                                                                                          200807
+118Serviço de cirurgia torácica                                                                                            200807
+119Serviço de controle de tabagismo                                                                                        200807
+120Serviço de diagnóstico por anatomia patológica e/ou citopatologia                                                       200807
+121Serviço de diagnóstico por imagem                                                                                       200807
+122Serviço de diagnóstico por métodos gráficos/dinâmicos                                                                   200807
+123Serviço de dispensação de órteses, próteses e materiais especiais                                                       200807
+124Serviço de endocrinologia                                                                                               200807
+125Serviço de farmácia                                                                                                     200807
+126Serviço de fisioterapia                                                                                                 200807
+127Serviço de atenção à obesidade grave                                                                                    200807
+128Serviço de hemoterapia                                                                                                  200807
+129Servico de laboratório de histocompatibilidade                                                                          200807
+130Serviço de nefrologia/urologia                                                                                          200807
+131Serviço de oftalmologia                                                                                                 200807
+132Serviço de oncologia                                                                                                    200807
+133Serviço de pneumologia                                                                                                  200807
+134Serviço de práticas integrativas e complementares                                                                       200807
+135Serviço de reabilitação                                                                                                 200807
+136Serviço de suporte nutricional                                                                                          200807
+137Serviço de telemedicina                                                                                                 200807
+138Serviço de traumato-ortopedia                                                                                           200807
+139Serviço de triagem neonatal                                                                                             200807
+140Serviço de urgências                                                                                                    200807
+141Serviço de vigilância em saúde                                                                                          200807
+142Serviço de endoscopia                                                                                                   200807
+143Serviço móvel de urgência (exceto SAMU)                                                                                 200807
+144Serviço posto de coleta de materiais biológicos                                                                         200807
+145Serviço de diagnóstico por laboratório clínico                                                                          200807
+146Serviço de videolaparoscopia                                                                                            200807
+147Serviço de apoio a saúde da família                                                                                     200807
+148Hospital-Dia                                                                                                            200807
+149Transplante                                                                                                             200807
+150Cirurgia vascular                                                                                                       200807
+151Medicina nuclear                                                                                                        200807

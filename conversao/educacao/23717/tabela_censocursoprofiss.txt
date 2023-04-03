@@ -1,0 +1,408 @@
+101001 | Agrícola/Agricultura                                            | 1
+101002 | Agrícola com habilitação em agroindústria                       | 1
+101003 | Agrícola com habilitação em agricultura                         | 1
+101004 | Agrícola com habilitação em agropecuária                        | 1
+101005 | Agrícola com habilitação em zootecnia                           | 1
+101006 | Agricultura com especialização em café e caju                   | 1
+101007 | Agroecologia                                                    | 1
+101008 | Agroindústria                                                   | 1
+101009 | Agropecuária                                                    | 1
+101010 | Agropecuária alternância                                        | 1
+101011 | Agropecuária com habilitação em agricultura                     | 1
+101012 | Agropecuária com habilitação em agroindústria                   | 1
+101013 | Agropecuária com habilitação em fruticultura                    | 1
+101014 | Agropecuária com habilitação em zootecnia                       | 1
+101015 | Agrotécnica                                                     | 1
+101016 | Cafeicultura                                                    | 1
+101017 | Fruticultura de clima temperado                                 | 1
+101018 | Horticultura Intensiva                                          | 1
+101019 | Jardinagem                                                      | 1
+101020 | Floricultura                                                    | 1
+101021 | Pecuária                                                        | 1
+101022 | Pecuária com ênfase em suinocultura                             | 1
+101023 | Agropecuária com ênfase em produção agrícola                    | 1
+101024 | Agropecuária com ênfase em produção animal                      | 1
+101025 | Produção animal e produção vegetal                              | 1
+101026 | Agropecuária com ênfase em produção vegetal                     | 1
+101027 | Agropecuária orgânica                                           | 1
+101028 | Zoonose                                                         | 1
+101029 | Zootecnia                                                       | 1
+101030 | Alimentos e Bebidas                                             | 1
+101031 | Carnes e derivados                                              | 1
+101032 | Controle de qualidade de alimentos                              | 1
+101033 | Enologia                                                        | 1
+101034 | Leite e derivados (laticínios)                                  | 1
+102001 | Florestal                                                       | 1
+102002 | Manejo florestal                                                | 1
+199001 | Outros cursos da área                                           | 1
+201001 | Aqüicultura                                                     | 2
+201002 | Pesca                                                           | 2
+201003 | Piscicultura                                                    | 2
+201004 | Piscicultura com ênfase em tilapicultura                        | 2
+201005 | Recursos pesqueiros                                             | 2
+299001 | Outros cursos da área                                           | 2
+301004 | Cervejaria                                                      | 3
+302001 | Têxtil                                                          | 3
+302002 | Confecção de vestuário ? modelagem                              | 3
+302003 | Vestuário                                                       | 3
+302004 | Costura industrial                                              | 3
+302005 | Estilismo com confecção industrial                              | 3
+303001 | Calçados                                                        | 3
+303002 | Curtimento                                                      | 3
+304001 | Plásticos                                                       | 3
+304002 | Processamento de polímeros                                      | 3
+305001 | Celulose e papel                                                | 3
+305002 | Fabricação de papel                                             | 3
+306001 | Ajustagem mecânica                                              | 3
+306002 | Caldeiraria                                                     | 3
+306003 | Siderurgia                                                      | 3
+306004 | Controle de produção                                            | 3
+306005 | Fabricação mecânica                                             | 3
+306006 | Ferramentaria de moldes                                         | 3
+306007 | Fundição                                                        | 3
+306008 | Inspeção de equipamentos                                        | 3
+306009 | Instrumentação                                                  | 3
+306010 | Manutenção de equipamentos mecânicos                            | 3
+306011 | Manutenção de máquinas                                          | 3
+306012 | Mecânica                                                        | 3
+306013 | Mecânica de manutenção industrial                               | 3
+306014 | Mecânica de precisão                                            | 3
+306015 | Mecânica geral                                                  | 3
+306016 | Mecânica industrial                                             | 3
+306017 | Metalmecânica                                                   | 3
+306018 | Metalurgia                                                      | 3
+306019 | Mecânica com ênfase em fabricação                               | 3
+306020 | Mecânica com ênfase em manutenção                               | 3
+306021 | Produção mecânica                                               | 3
+306022 | Projeto e conformação de chapas                                 | 3
+306023 | Refrigeração e ar condicionado                                  | 3
+306024 | Serralharia                                                     | 3
+306025 | Torneiro mecânico                                               | 3
+306026 | Usinagem  industrial                                            | 3
+307001 | Automação e controle industrial                                 | 3
+307002 | Automação industrial                                            | 3
+307003 | Eletricista                                                     | 3
+307004 | Eletricista de manutenção                                       | 3
+307005 | Eletricista predial e industrial                                | 3
+307006 | Eletrônica                                                      | 3
+307007 | Eletrônica com ênfase em automação industrial                   | 3
+307008 | Eletrotécnica                                                   | 3
+307009 | Equipamentos médico-hospitalares                                | 3
+307010 | Instalador de sistemas de automação (CLP)                       | 3
+307011 | Instalador de sistemas de energia elétrica                      | 3
+307012 | Eletromecânica                                                  | 3
+307013 | Instrumentação eletrônica                                       | 3
+307014 | Manutenção de sistemas de automação                             | 3
+307015 | Manutenção de sistemas elétricos                                | 3
+307016 | Manutenção de sistemas eletroeletrônicos                        | 3
+307017 | Manutenção de sistemas eletrônicos                              | 3
+307018 | Sistemas elétricos/eletrônicos                                  | 3
+307019 | Mecatrônica                                                     | 3
+307020 | Sistemas eletrônicos industriais                                | 3
+308001 | Automobilística                                                 | 3
+308002 | Eletricidade de autos                                           | 3
+308003 | Manutenção automática                                           | 3
+308004 | Manutenção de aeronaves                                         | 3
+308005 | Manutenção mecânica                                             | 3
+308006 | Mecânica de aeronaves                                           | 3
+308007 | Mecânica de automóveis                                          | 3
+308008 | Mecânica de autos ? manutenção e reparos                        | 3
+308009 | Mecânica de manutenção de aeronave                              | 3
+308010 | Mecânica de manutenção de célula de aeronave                    | 3
+308011 | Mecânica de manutenção de grupo motopropulsor de aeronave       | 3
+308012 | Mecânica de motores de combustão interna                        | 3
+308013 | Sistemas automotivos                                            | 3
+309001 | Indústria moveleira                                             | 3
+309002 | Marcenaria                                                      | 3
+310001 | Biotecnologia                                                   | 3
+310002 | Transporte e distribuição de gás                                | 3
+399001 | Outros cursos da área                                           | 3
+401001 | Geologia                                                        | 4
+401002 | Lapidação                                                       | 4
+401003 | Mineração                                                       | 4
+499001 | Outros cursos da área                                           | 4
+501001 | Açúcar e álcool                                                 | 5
+501002 | Análise e produção de açúcar e álcool                           | 5
+501003 | Exploração de petróleo                                          | 5
+501004 | Produção de petróleo e gás natural                              | 5
+501005 | Produção de açúcar e álcool                                     | 5
+502001 | Análise química                                                 | 5
+502002 | Análises de processos industriais químicos                      | 5
+502003 | Laboratorista de análises químicas                              | 5
+502004 | Química com habilitação em alimentos                            | 5
+502005 | Bioquímica                                                      | 5
+502006 | Química                                                         | 5
+502007 | Química industrial                                              | 5
+502008 | Química com habilitação em alimentos e bebidas                  | 5
+502009 | Química com ênfase em colorimetria                              | 5
+502010 | Química com ênfase em galvanoplastia                            | 5
+502011 | Petroquímica                                                    | 5
+503001 | Cerâmica                                                        | 5
+599001 | Outros cursos da área                                           | 5
+601001 | Construção civil                                                | 6
+601002 | Construção predial                                              | 6
+601003 | Construção civil com ênfase em edificações                      | 6
+601004 | Execução de obras civis                                         | 6
+601005 | Edificações                                                     | 6
+601006 | Estradas                                                        | 6
+601007 | Planejamento e execução de obras                                | 6
+601008 | Urbanismo e paisagismo                                          | 6
+699001 | Outros cursos da área                                           | 6
+701001 | Agrimensura                                                     | 7
+701002 | Geomática                                                       | 7
+701003 | Geomensura                                                      | 7
+701004 | Geoprocessamento                                                | 7
+799001 | Outros cursos da área                                           | 7
+801001 | Comércio                                                        | 8
+801002 | Vendas                                                          | 8
+802001 | Comércio exterior                                               | 8
+803001 | Marketing                                                       | 8
+803002 | Vendas em varejo                                                | 8
+804001 | Transações imobiliárias                                         | 8
+899001 | Outros cursos da área                                           | 8
+901001 | Cruzeiros marítimos                                             | 9
+901002 | Gastronomia                                                     | 9
+901003 | Hospedagem                                                      | 9
+901004 | Hotelaria                                                       | 9
+902001 | Agência e operações turísticas                                  | 9
+902002 | Agenciamento e guia                                             | 9
+902003 | Agroturismo                                                     | 9
+902004 | Ecoturismo                                                      | 9
+902005 | Eventos                                                         | 9
+902006 | Guia de excursão                                                | 9
+902007 | Guia de excursão nacional e regional                            | 9
+902008 | Guia de turismo                                                 | 9
+902009 | Hotelaria com ênfase em turismo                                 | 9
+902010 | Turismo e lazer                                                 | 9
+902011 | Turismo rural                                                   | 9
+902012 | Serviços de hotelaria e turismo                                 | 9
+902013 | Serviços de turismo                                             | 9
+902014 | Turismo                                                         | 9
+902015 | Turismo e hospitalidade                                         | 9
+902016 | Turismo e hotelaria                                             | 9
+999001 | Outros cursos da área                                           | 9
+1001001 | Estruturas navais                                               | 10
+1001002 | Logística                                                       | 10
+1001003 | Operações rodoviárias                                           | 10
+1001004 | Sistema viário                                                  | 10
+1001005 | Trânsito                                                        | 10
+1001006 | Transporte                                                      | 10
+1001007 | Transporte e trânsito                                           | 10
+1001008 | Transporte sobre trilhos                                        | 10
+1001009 | Transporte sobre pneus e trânsito urbano                        | 10
+1001010 | Transporte com operação rodoviária                              | 10
+1001011 | Transporte multimodal                                           | 10
+1002001 | Manutenção de aeronaves                                         | 10
+1002002 | Manutenção de aviônicos e aeronaves                             | 10
+1002003 | Manutenção de grupos motopropulsores                            | 10
+1002004 | Manutenção em celulas de aeronaves                              | 10
+1099001 | Outros cursos da área                                           | 10
+1101001 | Eletrônica com ênfase em telecomunicações                       | 11
+1101002 | Telecomunicações com ênfase em telefonia                        | 11
+1101003 | Sistemas de comunicação sem fio                                 | 11
+1101004 | Sistemas de telecomunicações                                    | 11
+1101005 | Telecomunicações                                                | 11
+1101006 | Telemática                                                      | 11
+1101007 | Telecomunicações com ênfase em sistemas de comunicação digital  | 11
+1199001 | Outros cursos da área                                           | 11
+1201001 | Administração de redes de computadores                          | 12
+1201002 | Computação gráfica                                              | 12
+1201003 | CTI ? desenvolvimento de sistema                                | 12
+1201004 | CTI ? desenvolvimento de software                               | 12
+1201005 | CTI ? suporte ao usuário                                        | 12
+1201006 | Desenvolvimento de programas                                    | 12
+1201007 | Desenvolvimento de sistemas                                     | 12
+1201008 | Desenvolvimento de software                                     | 12
+1201009 | Editoração eletrônica e web design                              | 12
+1201010 | Gerência de redes de computadores                               | 12
+1201011 | Hardware e  cabeamento de redes                                 | 12
+1201012 | Informática                                                     | 12
+1201013 | Informática ? configuração de redes                             | 12
+1201014 | Informática ? editoração                                        | 12
+1201015 | Informática ? programação comercial                             | 12
+1201016 | Informática com ênfase em automação                             | 12
+1201017 | Informática com habilitação em programação                      | 12
+1201018 | Informática empresarial                                         | 12
+1201019 | Informática com ênfase em web design                            | 12
+1201020 | Informática industrial                                          | 12
+1201021 | Manutenção de componentes periféricos                           | 12
+1201022 | Informática com ênfase em hardware                              | 12
+1201023 | Manutenção de equipamentos de informática                       | 12
+1201024 | Manutenção e programação de microcomputadores                   | 12
+1201025 | Operação e manutenção de microcomputadores                      | 12
+1201026 | Processamento de dados                                          | 12
+1201027 | Programação de computadores                                     | 12
+1201028 | Projeto e administrador de redes                                | 12
+1201029 | Redes de computação                                             | 12
+1201030 | Sistema de internet e intranet                                  | 12
+1201031 | Sistemas de informação                                          | 12
+1201032 | Tecnotrônica                                                    | 12
+1201033 | Web design e web developer                                      | 12
+1299001 | Outros cursos da área                                           | 12
+1301001 | Administração/gestão                                            | 13
+1301002 | Administração de varejo                                         | 13
+1301003 | Administração com ênfase em gerência empresarial                | 13
+1301004 | Administração de comércio exterior                              | 13
+1301005 | Administração hospitalar                                        | 13
+1301006 | Administração de empresas                                       | 13
+1301007 | Administração de empresas (negócios)                            | 13
+1301008 | Administração de recursos humanos e marketing                   | 13
+1301009 | Administração e negócios                                        | 13
+1301010 | Administração esportiva                                         | 13
+1301011 | Empreendimento                                                  | 13
+1301012 | Administração rural                                             | 13
+1301013 | Gerência de manutenção automobilística                          | 13
+1301014 | Gestão                                                          | 13
+1301015 | Gestão com administração da produção                            | 13
+1301016 | Gestão bancária                                                 | 13
+1301017 | Gestão com ênfase em recursos humanos                           | 13
+1301018 | Gestão de agronegócios                                          | 13
+1301019 | Gestão de bens e serviços                                       | 13
+1301020 | Gestão de comércio internacional                                | 13
+1301021 | Gestão de processos industriais                                 | 13
+1301022 | Gestão de projetos empreendedores                               | 13
+1301023 | Gestão de transportes nacionais e internacionais                | 13
+1301024 | Gestão em serviços de saúde                                     | 13
+1301025 | Gestão hoteleira                                                | 13
+1301026 | Gestão industrial                                               | 13
+1301027 | Gestão de qualidade e produtividade                             | 13
+1301028 | Logística                                                       | 13
+1301029 | Negócios                                                        | 13
+1301030 | Gestão imobiliária                                              | 13
+1301031 | Gestão de condomínios                                           | 13
+1301032 | Qualidade industrial de serviços                                | 13
+1302001 | Contabilidade                                                   | 13
+1302002 | Contabilidade e finanças                                        | 13
+1302003 | Contabilidade e gerenciamento                                   | 13
+1303001 | Secretariado                                                    | 13
+1303002 | Secretariado bilíngüe                                           | 13
+1303004 | Secretariado executivo                                          | 13
+1304001 | Judiciário                                                      | 13
+1305001 | Gestão tributária                                               | 13
+1399001 | Outros cursos da área                                           | 13
+1401001 | Acupuntura                                                      | 14
+1401002 | Administração hospitalar em saúde                               | 14
+1401003 | Agente sanitário de alimentos e nutrição                        | 14
+1401004 | Análises clínicas                                               | 14
+1401005 | Atendente de consultório dentário                               | 14
+1401006 | Auxiliar de farmácia                                            | 14
+1401007 | Auxiliar de laboratório de análises químicas                    | 14
+1401008 | Auxiliar técnico de enfermagem                                  | 14
+1401009 | Auxiliar técnico de instrumentação cirúrgica                    | 14
+1401010 | Biodiagnóstico                                                  | 14
+1401011 | Citologia                                                       | 14
+1401012 | Enfermagem                                                      | 14
+1401013 | Enfermagem com especialização em geronto-geriatria              | 14
+1401014 | Enfermagem de centro cirúrgico                                  | 14
+1401015 | Enfermagem no trabalho                                          | 14
+1401016 | Esteticista                                                     | 14
+1401017 | Farmácia                                                        | 14
+1401018 | Higiene dental                                                  | 14
+1401019 | Higiene dentária                                                | 14
+1401020 | Instrumentação cirúrgica                                        | 14
+1401021 | Laboratório                                                     | 14
+1401022 | Laboratório de análises clinicas                                | 14
+1401023 | Laboratório de biodiagnóstico em saúde                          | 14
+1401024 | Laboratório de prótese dentária                                 | 14
+1401025 | Massoterapia                                                    | 14
+1401026 | Nutrição e dietética                                            | 14
+1401027 | Optometria                                                      | 14
+1401028 | Ótica                                                           | 14
+1401029 | Patologia clínica                                               | 14
+1401030 | Prótese                                                         | 14
+1401031 | Prótese dentária                                                | 14
+1401032 | Radiologia                                                      | 14
+1401033 | Radiologia médica ? radiodiagnóstico                            | 14
+1401034 | Reabilitação massagista                                         | 14
+1401035 | Saúde comunitária                                               | 14
+1401036 | Segurança no trabalho                                           | 14
+1401037 | Serviços médicos                                                | 14
+1499001 | Outros cursos da área                                           | 14
+1501001 | Artes gráficas                                                  | 15
+1501002 | Fotografia                                                      | 15
+1501003 | Gráfico em offset                                               | 15
+1501004 | Gráfico em pré-impressão                                        | 15
+1501005 | Gráfico em rotagravura e flexografia                            | 15
+1502002 | Produção em audiovisual                                         | 15
+1502003 | Rádio e TV                                                      | 15
+1502004 | Tradutor e intérprete                                           | 15
+1503002 | Comunicação                                                     | 15
+1503003 | Comunicação visual                                              | 15
+1503004 | Propaganda                                                      | 15
+1503005 | Propaganda e marketing                                          | 15
+1503006 | Propaganda e publicidade                                        | 15
+1599001 | Outros cursos da área                                           | 15
+1601001 | Arranjos musicais                                               | 16
+1601002 | Artes cênicas                                                   | 16
+1601003 | Artes circenses                                                 | 16
+1601004 | Artes plásticas                                                 | 16
+1601005 | Ator                                                            | 16
+1601006 | Bailarino e magistério de dança                                 | 16
+1601007 | Bailarino para corpo de baile                                   | 16
+1601008 | Cantor                                                          | 16
+1601009 | Cantor erudito                                                  | 16
+1601010 | Cantor popular                                                  | 16
+1601011 | Coreografia                                                     | 16
+1601012 | Dança                                                           | 16
+1601013 | Instrumento musical                                             | 16
+1601014 | Música                                                          | 16
+1601015 | Regência de conjuntos                                           | 16
+1601016 | Sonorização                                                     | 16
+1699001 | Outros cursos da área                                           | 16
+1701005 | Monitor de recreação e Lazer                                    | 17
+1701006 | Recreação                                                       | 17
+1701007 | Lazer e desporto                                                | 17
+1702001 | Alemão                                                          | 17
+1702002 | Francês                                                         | 17
+1702003 | Idiomas                                                         | 17
+1702004 | Inglês                                                          | 17
+1702005 | Tradutor e intérprete                                           | 17
+1703001 | Desenvolvimento de comunidades                                  | 17
+1799001 | Outros cursos da área                                           | 17
+1801001 | Cabeleireiro                                                    | 18
+1801002 | Esteticista                                                     | 18
+1801003 | Podologia                                                       | 18
+1899001 | Outros cursos da área                                           | 18
+1901001 | Agroecologia                                                    | 19
+1901002 | Controle e monitoramento ambiental                              | 19
+1901003 | Ecologia e meio ambiente                                        | 19
+1901004 | Gestão ambiental                                                | 19
+1901005 | Meio ambiente                                                   | 19
+1901006 | Recursos naturais                                               | 19
+1901007 | Saneamento                                                      | 19
+1901008 | Saneamento ambiental                                            | 19
+1901009 | Sistemas hídricos                                               | 19
+1902001 | Biologia marinha                                                | 19
+1902002 | Reciclagem                                                      | 19
+1999001 | Outros cursos da área                                           | 19
+2001001 | Artes e design                                                  | 20
+2001002 | Decoração                                                       | 20
+2001003 | Design de modas                                                 | 20
+2001004 | Design de Interiores                                            | 20
+2001005 | Design de móveis                                                | 20
+2001006 | Design de jóias                                                 | 20
+2001007 | Estilismo de moda                                               | 20
+2001008 | Moda                                                            | 20
+2001009 | Moda e estilismo                                                | 20
+2001010 | Modelagem de vestuário feminino                                 | 20
+2001011 | Modelista de calçados                                           | 20
+2001012 | Vestuário                                                       | 20
+2002001 | Desenhista                                                      | 20
+2002002 | Desenho arquitetônico                                           | 20
+2002003 | Desenho de construção civil                                     | 20
+2002004 | Desenho de projetos                                             | 20
+2002005 | Desenho de projetos mecânicos                                   | 20
+2002006 | Desenho industrial                                              | 20
+2002007 | Design comunicação gráfica                                      | 20
+2002008 | Design gráfico                                                  | 20
+2002009 | Design gráfico web                                              | 20
+2002010 | Paisagismo                                                      | 20
+2002011 | Web design                                                      | 20
+2099001 | Outros cursos da área                                           | 20
+2101001 | Alimentação escolar                                             | 21
+2101002 | Formação de docentes                                            | 21
+2101003 | Gestão escolar                                                  | 21
+2101004 | Meio ambiente e manutenção de infra-estrutura escolar           | 21
+2101005 | Muitimeios didáticos                                            | 21
+2101006 | Secretaria escolar                                              | 21
+2101007 | Outros cursos da área                                           | 21

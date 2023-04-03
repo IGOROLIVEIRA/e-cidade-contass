@@ -1,0 +1,179 @@
+0101Centro de referência em atenção a saúde do idoso                                                                                                      200805
+0201Centro de referência em cirúrgia bariátrica                                                                                                           200805
+0202Unidade de alta complexidade ao paciente portador de obesidade grave                                                                                  200805
+0301Centros/Núcleos para realização de implante coclear                                                                                                   200805
+0302Diagnóstico, tratamento e reabilitação auditiva na média complexidade                                                                                 200805
+0303Diagnóstico, tratamento e reabilitação auditiva na alta complexidade                                                                                  200805
+0401Centro de tratamento da má formação labio-palatal                                                                                                     200805
+0402Laboratório Regional de Prótese Dentária                                                                                                              200805
+0403Centro de Especialidade Odontológica - CEO I                                                                                                          200805
+0404Centro de Especialidade Odontológica - CEO II                                                                                                         200805
+0405Centro de Especialidade Odontológica - CEO III                                                                                                        200805
+0501Unidade de Atenção Especializada em Oftalmologia                                                                                                      200805
+0502Centro de Atenção Especializada em Oftalmologia                                                                                                       200805
+0601Psiquiatria - Classe I                                                                                                                                200805
+0602Psiquiatria - Classe II                                                                                                                               200805
+0603Psiquiatria - Classe III                                                                                                                              200805
+0604Psiquiatria - Classe IV                                                                                                                               200805
+0605Psiquiatria - Classe V                                                                                                                                200805
+0606Psiquiatria - Classe VI                                                                                                                               200805
+0607Psiquiatria - Classe VII                                                                                                                              200805
+0608Psiquiatria - Classe VIII                                                                                                                             200805
+0609Psiquiatria - Classe IX                                                                                                                               200805
+0610Psiquiatria - Classe X                                                                                                                                200805
+0611Psiquiatria - Classe XI                                                                                                                               200805
+0612Psiquiatria - Classe XII                                                                                                                              200805
+0613Psiquiatria - Classe XIII                                                                                                                             200805
+0614Psiquiatria - Classe XIV                                                                                                                              200805
+0615PNASS maior que 80%                                                                                                                                   200805
+0616Centro de Atenção Psicossocial - CAPS I                                                                                                               200805
+0617Centro de Atenção Psicossocial - CAPS II                                                                                                              200805
+0618Centro de Atenção Psicossocial - CAPS III                                                                                                             200805
+0619Centro de Atenção Psicossocial Álcool e Drogas - CAPSad                                                                                               200805
+0620Centro de Atenção Psicossocial Infantil - CAPSi                                                                                                       200805
+0621Serviço hospitalar de referência para a atenção integral aos usuários de álcool e outras drogas                                                       200805
+0622Psiquiatria Classe I - PT/GM nº251/02                                                                                                                 200805
+0623Psiquiatria Classe II - PT/GM nº251/02                                                                                                                200805
+0624Psiquiatria Classe III - PT/GM nº251/02                                                                                                               200805
+0625Psiquiatria Classe IV - PT/GM nº 251/02                                                                                                               200805
+0626Psiquiatria Classe V - PT/GM nº251/02                                                                                                                 200805
+0627Psiquiatria Classe VI - PT/GM nº251/02                                                                                                                200805
+0628Psiquiatria Classe VII - PT/GM nº251/02                                                                                                               200805
+0629Psiquiatria Classe VIII - PT/GM nº251/02                                                                                                              200805
+0630Psiquiatria III                                                                                                                                       200805
+0701Serviço de Referência de Saúde do Trabalhador Estadual A                                                                                              200805
+0702Serviço de Referência de Saúde do Trabalhador Estadual B                                                                                              200805
+0703Serviço de Referência de Saúde do Trabalhador Estadual C                                                                                              200805
+0704Serviço de Referência de Saúde do Trabalhador Regional A                                                                                              200805
+0705Serviço de Referência de Saúde do Trabalhador Regional B                                                                                              200805
+0706Serviço de Referência de Saúde do Trabalhador Regional C                                                                                              200805
+0801Unidade de assistência de alta complexidade cardiovascular                                                                                            200805
+0802Centro de referência em alta complexidade cardiovascular                                                                                              200805
+0803Cirurgia cardiovascular e procedimentos em cardiologia intervencionista                                                                               200805
+0804Cirurgia cardiovascular pediátrica                                                                                                                    200805
+0805Cirurgia vascular                                                                                                                                     200805
+0806Cirurgia vascular e procedimentos endovasculares extracardíacos                                                                                       200805
+0807Laboratório de eletrofisiologia, cirurgia cardiovascular e procedimentos de cardiologia intervencionista                                              200805
+0808Implante de marcapasso definitivo                                                                                                                     200805
+0809Cirurgia cardíaca                                                                                                                                     200805
+0810Laboratório eletrofisiológico e terapia intervencionista                                                                                              200805
+0901Cuidados prolongados - enfermidades cardiovasculares                                                                                                  200805
+0902Cuidados prolongados - enfermidades pneumológicas                                                                                                     200805
+0903Cuidados prolongados - enfermidades neurológicas                                                                                                      200805
+0904Cuidados prolongados - enfermidades osteomuscular e do tecido conjuntivo                                                                              200805
+0905Cuidados prolongados - enfermidades oncológicas                                                                                                       200805
+0906Cuidados prolongados - enfermidades decorrentes da AIDS                                                                                               200805
+0907Cuidados prolongados - enfermidades devido a causas externas                                                                                          200805
+1001Centro de referência no tratamento da dor crônica                                                                                                     200805
+1101Serviço hospitalar para tratamento AIDS                                                                                                               200805
+1102Laboratório para CD4/CD8, carga viral                                                                                                                 200805
+1103Tratamento da lipoatrofia facial do portador de HIV/AIDS                                                                                              200805
+1104Tratamento da liopodistrofia do Portador de HIV/AIDS                                                                                                  200805
+1201Fibrose cística - Hospital Dia                                                                                                                        200805
+1202Hospital Dia - Procedimentos cirúrgicos, diagnósticos ou terapêuticos                                                                                 200805
+1203Hospital Dia - AIDS                                                                                                                                   200805
+1204Hospital Dia em intercorrências pós-transplante de medula óssea e de outros precursores hematopoéticos                                                200805
+1205Hospital Dia - Geriatria                                                                                                                              200805
+1206Hospital Dia - Saúde Mental                                                                                                                           200805
+1301Internação domiciliar                                                                                                                                 200805
+1401Referência hospitalar em atendimento secundário a gestante de alto risco                                                                              200805
+1402Referência hospitalar em atendimento terciário a gestante de alto risco                                                                               200805
+1404Hospital Amigo da Criança                                                                                                                             200805
+1405Centro de referência em triagem neonatal/acompanhamento e tratamento de doenças congênitas - fenilcetonuria/hipotireoidismo congenito                 200805
+1406Centro de referência em triagem neonatal/acompanhamento e tratamento - doenças falciformes e outras hemoglobinopatias                                 200805
+1407Centro de referência em triagem neonatal/acompanhamento e tratamento - fibrose cística                                                                200805
+1501Unidade de assistência de alta complexidade em nefrologia (serviço de nefrologia)                                                                     200805
+1502Centro de referência de alta complexidade em nefrologia                                                                                               200805
+1503Hemodiálise II                                                                                                                                        200805
+1601Unidade de assistência de alta complexidade em neurologia/neurocirurgia                                                                               200805
+1602Centro de referência de alta complexidade em neurologia/neurocirurgia                                                                                 200805
+1603Trauma e anomalias do desenvolvimento                                                                                                                 200805
+1604Coluna e dos nervos periféricos                                                                                                                       200805
+1605Tumores do sistema nervoso                                                                                                                            200805
+1606Neurocirurgia vascular                                                                                                                                200805
+1607Tratamento neurocirúrgico da dor e funcional                                                                                                          200805
+1608Investigação e cirurgia de epilepsia                                                                                                                  200805
+1609Tratamento neuro-endovascular                                                                                                                         200805
+1610Neurocirurgia funcional esteriotáxica                                                                                                                 200805
+1611Epilepsia                                                                                                                                             200805
+1612Neurocirurgia I                                                                                                                                       200805
+1613Neurocirurgia II                                                                                                                                      200805
+1614Neurocirurgia III                                                                                                                                     200805
+1701Centro de Alta Complexidade em Oncologia - CACON I                                                                                                    200805
+1702Centro de Alta Complexidade em Oncologia - CACON II                                                                                                   200805
+1703Centro de Alta Complexidade em Oncologia - CACON III                                                                                                  200805
+1704Serviço isolado de radioterapia                                                                                                                       200805
+1705Serviço isolado de quimioterapia                                                                                                                      200805
+1706UNACON                                                                                                                                                200805
+1707UNACON com serviço de radioterapia                                                                                                                    200805
+1708UNACON com serviço de hematologia                                                                                                                     200805
+1709UNACON com serviço de oncologia pediátrica                                                                                                            200805
+1710UNACON exclusiva de hematologia                                                                                                                       200805
+1711UNACON exclusiva de oncologia pediátrica                                                                                                              200805
+1712CACON                                                                                                                                                 200805
+1713CACON com serviço de oncologia pediátrica                                                                                                             200805
+1714Hospital Geral com cirurgia oncológica                                                                                                                200805
+1715Serviço de radioterapia de complexo hospitalar                                                                                                        200805
+1716Serviço de Oncologia Clínica de Complexo hospitalar                                                                                                   200805
+1801Centro de referência de tratamento de osteogênesis imperfecta                                                                                         200805
+1901Laqueadura                                                                                                                                            200805
+1902Vasectomia                                                                                                                                            200805
+2001Programa de assistência ventilatoria não invasiva a paciente portador de distrofia muscular progressiva                                               200805
+2101Unidade de referência em assistência a queimados - média complexidade                                                                                 200805
+2102Centro de referência em assistência a queimados - alta complexidade                                                                                   200805
+2201Centro de referência de reabilitação em medicina fisica                                                                                               200805
+2202Serviço de reabilitação fisica - nível intermediário                                                                                                  200805
+2301Unidade de assistência de alta complexidade em terapia nutricional                                                                                    200805
+2302Centro de referência de alta complexidade em terapia nutricional                                                                                      200805
+2303Enteral                                                                                                                                               200805
+2304Enteral e parenteral                                                                                                                                  200805
+2305Enteral e parenteral com manipulação e fabricação da fórmula nutricional                                                                              200805
+2306Nutrição enteral                                                                                                                                      200805
+2401Transplante de medula óssea-autogênico                                                                                                                200805
+2402Transplante de medula óssea-alogênico aparentado                                                                                                      200805
+2403Transplante de medula óssea-alogênico não aparentado                                                                                                  200805
+2404Transplante de pâncreas isolado                                                                                                                       200805
+2405Transplante conjugado rim e pâncreas                                                                                                                  200805
+2406Transplante de esclera                                                                                                                                200805
+2407Transplante de córnea                                                                                                                                 200805
+2408Transplante renal                                                                                                                                     200805
+2409Transplante de fígado                                                                                                                                 200805
+2410Transplante de pulmão                                                                                                                                 200805
+2411Transplante de coração                                                                                                                                200805
+2412Busca ativa de orgãos                                                                                                                                 200805
+2413Banco de tecido ocular humano                                                                                                                         200805
+2414Banco de válvulas cardíacas                                                                                                                           200805
+2415Banco de tecido músculo-esquelético                                                                                                                   200805
+2416Banco de sangue e cordão umbilical e placentário                                                                                                      200805
+2417Exames de histocompatibilidade atraves de sorologia - Tipo I                                                                                          200805
+2418Exames de histocompatibilidade atraves de sorologia e ou biologia molecular - Tipo II                                                                 200805
+2501Unidade de atenção especializada em traumato-ortopedia                                                                                                200805
+2502Centro de referência de alta complexidade em traumato-ortopedia                                                                                       200805
+2503Coluna                                                                                                                                                200805
+2504Cintura escapular, ombro, braço e cotovelo                                                                                                            200805
+2505Antebraço, punho e mão                                                                                                                                200805
+2506Cintura pélvica, quadril, coxa                                                                                                                        200805
+2507Coxa, joelho e perna                                                                                                                                  200805
+2508Perna, tornozelo e pé                                                                                                                                 200805
+2509Ortopedia infantil                                                                                                                                    200805
+2510Traumatologia ortopédica de urgência                                                                                                                  200805
+2511Ortopedia - Coluna                                                                                                                                    200805
+2512Ortopedia - Ombro                                                                                                                                     200805
+2513Ortopedia - Mão                                                                                                                                       200805
+2514Ortopedia - Quadril                                                                                                                                   200805
+2515Ortopedia - Joelho                                                                                                                                    200805
+2516Ortopedia - Tumor Ósseo                                                                                                                               200805
+2517Outros segmentos ósseos                                                                                                                               200805
+2601UTI II - Adulto                                                                                                                                       200805
+2602UTI II - Neonatal                                                                                                                                     200805
+2603UTI II - Pediátrica                                                                                                                                   200805
+2604UTI III - Adulto                                                                                                                                      200805
+2605UTI III - Neonatal                                                                                                                                    200805
+2606UTI III - Pediátrica                                                                                                                                  200805
+2607UTI - Queimados                                                                                                                                       200805
+2699UTI I                                                                                                                                                 200805
+2701Hospital Tipo I em Urgência                                                                                                                           200805
+2702Hospital Tipo II em Urgência                                                                                                                          200805
+2703Hospital Tipo III em Urgência                                                                                                                         200805
+2801Unidade de cuidados intermediários neonatal                                                                                                           200805
+2901Videocirurgia                                                                                                                                         200805

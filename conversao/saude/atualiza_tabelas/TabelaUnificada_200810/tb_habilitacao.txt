@@ -1,0 +1,184 @@
+0101Centro de referência em atenção a saúde do idoso                                                                                                      200810
+0201Centro de referência em cirúrgia bariátrica                                                                                                           200810
+0202Unidade de alta complexidade ao paciente portador de obesidade grave                                                                                  200810
+0301Centros/Núcleos para realização de implante coclear                                                                                                   200810
+0302Diagnóstico, tratamento e reabilitação auditiva na média complexidade                                                                                 200810
+0303Diagnóstico, tratamento e reabilitação auditiva na alta complexidade                                                                                  200810
+0401Centro de tratamento da má formação labio-palatal                                                                                                     200810
+0402Laboratório Regional de Prótese Dentária                                                                                                              200810
+0403Centro de Especialidade Odontológica - CEO I                                                                                                          200810
+0404Centro de Especialidade Odontológica - CEO II                                                                                                         200810
+0405Centro de Especialidade Odontológica - CEO III                                                                                                        200810
+0501Centro de Referencia em Oftalmologia Nível I                                                                                                          200810
+0502Centro de Referência em Oftalmologia Nível II                                                                                                         200810
+0503UNIDADE DE ATENÇÃO ESPECIALIZADA EM OFTALMOLOGIA                                                                                                      200810
+0504CENTRO DE REFERÊNCIA EM OFTALMOGIA                                                                                                                    200810
+0601Psiquiatria - Classe I                                                                                                                                200810
+0602Psiquiatria - Classe II                                                                                                                               200810
+0603Psiquiatria - Classe III                                                                                                                              200810
+0604Psiquiatria - Classe IV                                                                                                                               200810
+0605Psiquiatria - Classe V                                                                                                                                200810
+0606Psiquiatria - Classe VI                                                                                                                               200810
+0607Psiquiatria - Classe VII                                                                                                                              200810
+0608Psiquiatria - Classe VIII                                                                                                                             200810
+0609Psiquiatria - Classe IX                                                                                                                               200810
+0610Psiquiatria - Classe X                                                                                                                                200810
+0611Psiquiatria - Classe XI                                                                                                                               200810
+0612Psiquiatria - Classe XII                                                                                                                              200810
+0613Psiquiatria - Classe XIII                                                                                                                             200810
+0614Psiquiatria - Classe XIV                                                                                                                              200810
+0615PNASS maior que 80%                                                                                                                                   200810
+0616Centro de Atenção Psicossocial - CAPS I                                                                                                               200810
+0617Centro de Atenção Psicossocial - CAPS II                                                                                                              200810
+0618Centro de Atenção Psicossocial - CAPS III                                                                                                             200810
+0619Centro de Atenção Psicossocial Álcool e Drogas - CAPSad                                                                                               200810
+0620Centro de Atenção Psicossocial Infantil - CAPSi                                                                                                       200810
+0621Serviço hospitalar de referência para a atenção integral aos usuários de álcool e outras drogas                                                       200810
+0622Psiquiatria Classe I - PT/GM nº251/02                                                                                                                 200810
+0623Psiquiatria Classe II - PT/GM nº251/02                                                                                                                200810
+0624Psiquiatria Classe III - PT/GM nº251/02                                                                                                               200810
+0625Psiquiatria Classe IV - PT/GM nº 251/02                                                                                                               200810
+0626Psiquiatria Classe V - PT/GM nº251/02                                                                                                                 200810
+0627Psiquiatria Classe VI - PT/GM nº251/02                                                                                                                200810
+0628Psiquiatria Classe VII - PT/GM nº251/02                                                                                                               200810
+0629Psiquiatria Classe VIII - PT/GM nº251/02                                                                                                              200810
+0630Psiquiatria III                                                                                                                                       200810
+0701Serviço de Referência de Saúde do Trabalhador Estadual A                                                                                              200810
+0702Serviço de Referência de Saúde do Trabalhador Estadual B                                                                                              200810
+0703Serviço de Referência de Saúde do Trabalhador Estadual C                                                                                              200810
+0704Serviço de Referência de Saúde do Trabalhador Regional A                                                                                              200810
+0705Serviço de Referência de Saúde do Trabalhador Regional B                                                                                              200810
+0706Serviço de Referência de Saúde do Trabalhador Regional C                                                                                              200810
+0801Unidade de assistência de alta complexidade cardiovascular                                                                                            200810
+0802Centro de referência em alta complexidade cardiovascular                                                                                              200810
+0803Cirurgia cardiovascular e procedimentos em cardiologia intervencionista                                                                               200810
+0804Cirurgia cardiovascular pediátrica                                                                                                                    200810
+0805Cirurgia vascular                                                                                                                                     200810
+0806Cirurgia vascular e procedimentos endovasculares extracardíacos                                                                                       200810
+0807Laboratório de eletrofisiologia, cirurgia cardiovascular e procedimentos de cardiologia intervencionista                                              200810
+0808Implante de marcapasso definitivo                                                                                                                     200810
+0809Cirurgia cardíaca                                                                                                                                     200810
+0810Laboratório eletrofisiológico e terapia intervencionista                                                                                              200810
+0901Cuidados prolongados - enfermidades cardiovasculares                                                                                                  200810
+0902Cuidados prolongados - enfermidades pneumológicas                                                                                                     200810
+0903Cuidados prolongados - enfermidades neurológicas                                                                                                      200810
+0904Cuidados prolongados - enfermidades osteomuscular e do tecido conjuntivo                                                                              200810
+0905Cuidados prolongados - enfermidades oncológicas                                                                                                       200810
+0906Cuidados prolongados - enfermidades decorrentes da AIDS                                                                                               200810
+0907Cuidados prolongados - enfermidades devido a causas externas                                                                                          200810
+1001Centro de referência no tratamento da dor crônica                                                                                                     200810
+1101Serviço hospitalar para tratamento AIDS                                                                                                               200810
+1102Laboratório Especializado em Contagem de Linfócitos T CD4+/CD8+ e HIV1 Quant. do RNA                                                                  200810
+1103Tratamento da lipoatrofia facial do portador de HIV/AIDS                                                                                              200810
+1104Tratamento da liopodistrofia do Portador de HIV/AIDS                                                                                                  200810
+1105Laboratório Especializado em Contagem de Linfócitos T CD4+/CD8+                                                                                       200810
+1106Laboratório Especializado em Quantificação do RNA do HIV1                                                                                             200810
+1201Fibrose cística - Hospital Dia                                                                                                                        200810
+1202Hospital Dia - Procedimentos cirúrgicos, diagnósticos ou terapêuticos                                                                                 200810
+1203Hospital Dia - AIDS                                                                                                                                   200810
+1204Hospital Dia em intercorrências pós-transplante de medula óssea e de outros precursores hematopoéticos                                                200810
+1205Hospital Dia - Geriatria                                                                                                                              200810
+1206Hospital Dia - Saúde Mental                                                                                                                           200810
+1301Internação domiciliar                                                                                                                                 200810
+1401Referência hospitalar em atendimento secundário a gestante de alto risco                                                                              200810
+1402Referência hospitalar em atendimento terciário a gestante de alto risco                                                                               200810
+1404Hospital Amigo da Criança                                                                                                                             200810
+1405Centro de referência em triagem neonatal/acompanhamento e tratamento de doenças congênitas - fenilcetonuria/hipotireoidismo congenito                 200810
+1406Centro de referência em triagem neonatal/acompanhamento e tratamento - doenças falciformes e outras hemoglobinopatias                                 200810
+1407Centro de referência em triagem neonatal/acompanhamento e tratamento - fibrose cística                                                                200810
+1501Unidade de assistência de alta complexidade em nefrologia (serviço de nefrologia)                                                                     200810
+1502Centro de referência de alta complexidade em nefrologia                                                                                               200810
+1503Hemodiálise II                                                                                                                                        200810
+1601Unidade de assistência de alta complexidade em neurologia/neurocirurgia                                                                               200810
+1602Centro de referência de alta complexidade em neurologia/neurocirurgia                                                                                 200810
+1603Trauma e anomalias do desenvolvimento                                                                                                                 200810
+1604Coluna e dos nervos periféricos                                                                                                                       200810
+1605Tumores do sistema nervoso                                                                                                                            200810
+1606Neurocirurgia vascular                                                                                                                                200810
+1607Tratamento neurocirúrgico da dor e funcional                                                                                                          200810
+1608Investigação e cirurgia de epilepsia                                                                                                                  200810
+1609Tratamento neuro-endovascular                                                                                                                         200810
+1610Neurocirurgia funcional esteriotáxica                                                                                                                 200810
+1611Epilepsia                                                                                                                                             200810
+1612Neurocirurgia I                                                                                                                                       200810
+1613Neurocirurgia II                                                                                                                                      200810
+1614Neurocirurgia III                                                                                                                                     200810
+1701Centro de Alta Complexidade em Oncologia - CACON I                                                                                                    200810
+1702Centro de Alta Complexidade em Oncologia - CACON II                                                                                                   200810
+1703Centro de Alta Complexidade em Oncologia - CACON III                                                                                                  200810
+1704Serviço isolado de radioterapia                                                                                                                       200810
+1705Serviço isolado de quimioterapia                                                                                                                      200810
+1706UNACON                                                                                                                                                200810
+1707UNACON com serviço de radioterapia                                                                                                                    200810
+1708UNACON com serviço de hematologia                                                                                                                     200810
+1709UNACON com serviço de oncologia pediátrica                                                                                                            200810
+1710UNACON exclusiva de hematologia                                                                                                                       200810
+1711UNACON exclusiva de oncologia pediátrica                                                                                                              200810
+1712CACON                                                                                                                                                 200810
+1713CACON com serviço de oncologia pediátrica                                                                                                             200810
+1714Hospital Geral com cirurgia oncológica                                                                                                                200810
+1715Serviço de radioterapia de complexo hospitalar                                                                                                        200810
+1716Serviço de Oncologia Clínica de Complexo hospitalar                                                                                                   200810
+1801Centro de referência de tratamento de osteogênesis imperfecta                                                                                         200810
+1901Laqueadura                                                                                                                                            200810
+1902Vasectomia                                                                                                                                            200810
+2001Programa de assistência ventilatoria não invasiva aos portadores de doenças neuromusculares                                                           200810
+2101Unidade de referência em assistência a queimados - média complexidade                                                                                 200810
+2102Centro de referência em assistência a queimados - alta complexidade                                                                                   200810
+2201Centro de referência de reabilitação em medicina fisica                                                                                               200810
+2202Serviço de reabilitação fisica - nível intermediário                                                                                                  200810
+2301Unidade de assistência de alta complexidade em terapia nutricional                                                                                    200810
+2302Centro de referência de alta complexidade em terapia nutricional                                                                                      200810
+2303Enteral                                                                                                                                               200810
+2304Enteral e parenteral                                                                                                                                  200810
+2305Enteral e parenteral com manipulação e fabricação da fórmula nutricional                                                                              200810
+2306Nutrição enteral                                                                                                                                      200810
+2401Transplante de medula óssea-autogênico                                                                                                                200810
+2402Transplante de medula óssea-alogênico aparentado                                                                                                      200810
+2403Transplante de medula óssea-alogênico não aparentado                                                                                                  200810
+2404Transplante de pâncreas isolado                                                                                                                       200810
+2405Transplante conjugado rim e pâncreas                                                                                                                  200810
+2406Transplante de esclera                                                                                                                                200810
+2407Transplante de córnea                                                                                                                                 200810
+2408Transplante renal                                                                                                                                     200810
+2409Transplante de fígado                                                                                                                                 200810
+2410Transplante de pulmão                                                                                                                                 200810
+2411Transplante de coração                                                                                                                                200810
+2412Busca ativa de orgãos                                                                                                                                 200810
+2413Banco de tecido ocular humano                                                                                                                         200810
+2414Banco de válvulas cardíacas                                                                                                                           200810
+2415Banco de tecido músculo-esquelético                                                                                                                   200810
+2416Banco de sangue e cordão umbilical e placentário                                                                                                      200810
+2417Exames de histocompatibilidade atraves de sorologia - Tipo I                                                                                          200810
+2418Exames de histocompatibilidade atraves de sorologia e ou biologia molecular - Tipo II                                                                 200810
+2501Unidade de atenção especializada em traumato-ortopedia                                                                                                200810
+2502Centro de referência de alta complexidade em traumato-ortopedia                                                                                       200810
+2503Coluna                                                                                                                                                200810
+2504Cintura escapular, ombro, braço e cotovelo                                                                                                            200810
+2505Antebraço, punho e mão                                                                                                                                200810
+2506Cintura pélvica, quadril, coxa                                                                                                                        200810
+2507Coxa, joelho e perna                                                                                                                                  200810
+2508Perna, tornozelo e pé                                                                                                                                 200810
+2509Ortopedia infantil                                                                                                                                    200810
+2510Traumatologia ortopédica de urgência                                                                                                                  200810
+2511Ortopedia - Coluna                                                                                                                                    200810
+2512Ortopedia - Ombro                                                                                                                                     200810
+2513Ortopedia - Mão                                                                                                                                       200810
+2514Ortopedia - Quadril                                                                                                                                   200810
+2515Ortopedia - Joelho                                                                                                                                    200810
+2516Ortopedia - Tumor Ósseo                                                                                                                               200810
+2517Outros segmentos ósseos                                                                                                                               200810
+2601UTI II - Adulto                                                                                                                                       200810
+2602UTI II - Neonatal                                                                                                                                     200810
+2603UTI II - Pediátrica                                                                                                                                   200810
+2604UTI III - Adulto                                                                                                                                      200810
+2605UTI III - Neonatal                                                                                                                                    200810
+2606UTI III - Pediátrica                                                                                                                                  200810
+2607UTI - Queimados                                                                                                                                       200810
+2699UTI I                                                                                                                                                 200810
+2701Hospital Tipo I em Urgência                                                                                                                           200810
+2702Hospital Tipo II em Urgência                                                                                                                          200810
+2703Hospital Tipo III em Urgência                                                                                                                         200810
+2801Unidade de cuidados intermediários neonatal                                                                                                           200810
+2901Videocirurgia                                                                                                                                         200810
+3001Unidade de Atenção Especializada no Processo de Transgenitalização                                                                                    200810

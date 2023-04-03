@@ -1,0 +1,52 @@
+100Serviço de atenção a saúde no sistema penitenciário                                                                     200810
+101Estratégia de saúde da família                                                                                          200810
+102Estratégias de agentes comunitário de saúde                                                                             200810
+103Serviço de regulação médica de urgências - Central SAMU 192                                                             200810
+104Servico de regulação de servicos de saúde                                                                               200810
+105Serviço de assistência de alta complexidade em neurocirurgia                                                            200810
+106Serviço de atenção a DST/HIV/AIDS                                                                                       200810
+107Serviço de atenção a saúde auditiva                                                                                     200810
+108Serviço de atenção a saúde do trabalhador                                                                               200810
+109Serviço de atenção a saúde dos adolecentes em conflito com a lei, em regime de internação e internação provisória       200810
+110Serviço de atenção a saúde reprodutiva                                                                                  200810
+111Serviço de atenção ao paciente com tuberculose                                                                          200810
+112Serviço de atenção ao pré-natal, parto e nascimento                                                                     200810
+113Serviço de atenção domiciliar                                                                                           200810
+114Serviço de atenção em saúde bucal                                                                                       200810
+115Serviço de atenção psicossocial                                                                                         200810
+116Serviço de cirurgia cardiovascular                                                                                      200810
+117Serviço de cirurgia reparadora                                                                                          200810
+118Serviço de cirurgia torácica                                                                                            200810
+119Serviço de controle de tabagismo                                                                                        200810
+120Serviço de diagnóstico por anatomia patológica e/ou citopatologia                                                       200810
+121Serviço de diagnóstico por imagem                                                                                       200810
+122Serviço de diagnóstico por métodos gráficos/dinâmicos                                                                   200810
+123Serviço de dispensação de órteses, próteses e materiais especiais                                                       200810
+124Serviço de endocrinologia                                                                                               200810
+125Serviço de farmácia                                                                                                     200810
+126Serviço de fisioterapia                                                                                                 200810
+127Serviço de atenção à obesidade grave                                                                                    200810
+128Serviço de hemoterapia                                                                                                  200810
+129Servico de laboratório de histocompatibilidade                                                                          200810
+130Serviço de nefrologia/urologia                                                                                          200810
+131Serviço de oftalmologia                                                                                                 200810
+132Serviço de oncologia                                                                                                    200810
+133Serviço de pneumologia                                                                                                  200810
+134Serviço de práticas integrativas e complementares                                                                       200810
+135Serviço de reabilitação                                                                                                 200810
+136Serviço de suporte nutricional                                                                                          200810
+137Serviço de telemedicina                                                                                                 200810
+138Serviço de traumato-ortopedia                                                                                           200810
+139Serviço de triagem neonatal                                                                                             200810
+140Serviço de urgências                                                                                                    200810
+141Serviço de vigilância em saúde                                                                                          200810
+142Serviço de endoscopia                                                                                                   200810
+143Serviço móvel de urgência (exceto SAMU)                                                                                 200810
+144Serviço posto de coleta de materiais biológicos                                                                         200810
+145Serviço de diagnóstico por laboratório clínico                                                                          200810
+146Serviço de videolaparoscopia                                                                                            200810
+147Serviço de apoio a saúde da família                                                                                     200810
+148Hospital-Dia                                                                                                            200810
+149Transplante                                                                                                             200810
+150Cirurgia vascular                                                                                                       200810
+151Medicina nuclear                                                                                                        200810

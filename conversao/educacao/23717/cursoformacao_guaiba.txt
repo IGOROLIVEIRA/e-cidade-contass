@@ -1,0 +1,19 @@
+7  | ARTES                              | 210A01
+15 | BIOLOGIA                           | 421B02
+4  | CIENCIAS                           | 420C01
+14 | CIENCIAS SOCIAIS                   | 310C02
+6  | EDUCACAO FISICA                    | 720E01
+10 | EDUCACAO FISICA - RECREACAO        | 813G02
+--| 17 | ENSINO FUNDAMENTAL COMPLETO        |
+--| 16 | ENSINO FUNDAMENTAL INCOMPLETO      |
+--| 18 | ENSINO MÉDIO COMPLETO              |
+--| 19 | ENSINO MEDIO INCOMPLETO            |
+5  | GEOGRAFIA                          | 443G04
+2  | HISTORIA                           | 225H01
+3  | LETRAS                             | 220L01
+9  | LINGUA INGLESA                     | 145F13
+8  | MAGISTERIO                         | 144F11
+1  | MATEMATICA                         | 461M01
+13 | PEDAGOGIA - ORIENTACAO EDUCACIONAL | 142O01
+11 | PEDAGOGIA - SERIES INICIAIS        | 144F05
+12 | PEDAGOGIA - SUPERVISAO ESCOLAR     | 142S01

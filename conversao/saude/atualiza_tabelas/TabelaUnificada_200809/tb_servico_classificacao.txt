@@ -1,0 +1,216 @@
+100001Atendimento em presídio até 100 presos                                                                                                                200809
+151001Medicina nuclear in vivo                                                                                                                              200809
+102001Estratégia de Agentes Comunitários de Saúde - EACS                                                                                                    200809
+103001Ambulância de transporte                                                                                                                              200809
+104001Unidade de internação                                                                                                                                 200809
+105001Neurocirurgia do trauma e anomalias do desenvolvimento                                                                                                200809
+106001Testagem e aconselhamento                                                                                                                             200809
+107001Diagnóstico, tratamento e reabilitação auditiva na média complexidade                                                                                 200809
+108001Atendimento/acompanhamento em saúde do trabalhador                                                                                                    200809
+109001Unidade sócio-educativa com até 40 adolecentes                                                                                                        200809
+110001Atenção à infertilidade                                                                                                                               200809
+111001Diagnóstico e tratamento                                                                                                                              200809
+112001Acompanhamento do pré-natal de baixo risco                                                                                                            200809
+113001Assitência domiciliar                                                                                                                                 200809
+114001Dentística                                                                                                                                            200809
+115001Residência terapêutica em saúde mental                                                                                                                200809
+116001Eletrofisiologia                                                                                                                                      200809
+117001Tratamento da lipodistrofia do portador de HIV / AIDS                                                                                                 200809
+118001Cirurgia torácica                                                                                                                                     200809
+119001Abordagem e tratamento do fumante                                                                                                                     200809
+120001Exames anatomopatológicos                                                                                                                             200809
+121001Radiologia                                                                                                                                            200809
+122001Teste ergométrico                                                                                                                                     200809
+123001OPM auxiliares de locomoção                                                                                                                           200809
+124001Diagnóstico/Tratamento das doenças endócrinas, metabólicas e nutricionais                                                                             200809
+125001Dispensação de medicamentos excepcionais/especiais                                                                                                    200809
+126001Assistência fisioterapêutica em alterações obstétricas, neonatais e uroginecológicas                                                                  200809
+127001Tratamento clínico, reparador e acompanhamento ao paciente                                                                                            200809
+128001Procedimentos destinados à obtenção do sangue para fins de assitência hemoterápica                                                                    200809
+129001Exames de histocompatibilidade por meio de sorologia                                                                                                  200809
+130001Tratamento dialítico                                                                                                                                  200809
+131001Diagnóstico em oftalmologia                                                                                                                           200809
+132001Oncologia pediátrica                                                                                                                                  200809
+133001Tratamento de doenças das vias aéreas inferiores                                                                                                      200809
+134001Acupuntura                                                                                                                                            200809
+135001Reabilitação visual                                                                                                                                   200809
+136001Enteral                                                                                                                                               200809
+137001Exame eletrocardiográfico por telemedicina                                                                                                            200809
+138001Diagnóstico e tratamento em cintura escapular                                                                                                         200809
+139001Tratamento de recém-nascido com hipotireoidismo e fenilcetonuria                                                                                      200809
+140001Pronto Socorro Geral                                                                                                                                  200809
+141001Vigilância epidemiológica                                                                                                                             200809
+142001Do aparelho digestivo                                                                                                                                 200809
+143001Transporte terrestre                                                                                                                                  200809
+144001Coleta realizada fora das estrutura laboratorial                                                                                                      200809
+145001Exames bioquímicos                                                                                                                                    200809
+146001Diagnóstica                                                                                                                                           200809
+147001NASF 1                                                                                                                                                200809
+148001Saúde mental                                                                                                                                          200809
+149001Rim                                                                                                                                                   200809
+150001Fístula arteriovenosa sem enxerto                                                                                                                     200809
+101001Saúde da família                                                                                                                                      200809
+100002Atendimento em manicômio até 100 presos                                                                                                               200809
+101002Saúde bucal MI                                                                                                                                        200809
+103002Ambulância de suporte básico de vida                                                                                                                  200809
+104002Unidade de consulta e exames                                                                                                                          200809
+105002Coluna e nervos periféricos                                                                                                                           200809
+106002Diagnóstico e tratamento                                                                                                                              200809
+107002Diagnóstico diferencial, tratamento e reabilitação auditiva na alta complexidade                                                                      200809
+108002Centro de referência em saúde do trabalhador CEREST estadual                                                                                          200809
+109002Unidade sócio-educativa com de 41 a 100 adolecentes                                                                                                   200809
+110002Contracepção clínica                                                                                                                                  200809
+111002Tratamento multidrogas resistentes                                                                                                                    200809
+112002Acompanhamento do pré-natal de alto risco                                                                                                             200809
+113002Internação domiciliar                                                                                                                                 200809
+114002Endodontia                                                                                                                                            200809
+115002Atendimento psicossocial                                                                                                                              200809
+116002Cirurgia cardiovascular (adulto)                                                                                                                      200809
+117002Tratamento em queimados                                                                                                                               200809
+120002Exames citopatológicos                                                                                                                                200809
+121002Ultra-sonografia                                                                                                                                      200809
+122002Teste de Holter                                                                                                                                       200809
+123002OPM ortopédicas                                                                                                                                       200809
+124002Cirurgia de glândulas endócrinas                                                                                                                      200809
+125002Farmácia Popular                                                                                                                                      200809
+126002Assistência fisioterapêutica em alterações oncológicas                                                                                                200809
+128002Diagnóstico em hemoterapia                                                                                                                            200809
+129002Exames de histocompatibilidade por sorologia e biologia                                                                                               200809
+130002Litotripsia                                                                                                                                           200809
+131002Tratamento clínico do aparelho da visão                                                                                                               200809
+132002Hematologia                                                                                                                                           200809
+134002Fitoterapia                                                                                                                                           200809
+135002Reabilitação mental/autismo                                                                                                                           200809
+136002Enteral/Parenteral                                                                                                                                    200809
+138002Diagnóstico e tratamento em membros superiores                                                                                                        200809
+139002Tratamento de recém-nascido com doenças falciformes                                                                                                   200809
+140002Pronto Socorro Especializado                                                                                                                          200809
+141002Vigilância sanitária                                                                                                                                  200809
+142002Do aparelho respiratório                                                                                                                              200809
+143002Transporte aéreo                                                                                                                                      200809
+145002Exames hematológicos e hemostasia                                                                                                                     200809
+146002Cirúrgica                                                                                                                                             200809
+147002NASF 2                                                                                                                                                200809
+148002AIDS                                                                                                                                                  200809
+149002Medula óssea                                                                                                                                          200809
+150002Fístula arteriovenosa com enxerto                                                                                                                     200809
+151002Medicina nuclear in vitro                                                                                                                             200809
+131003Tratamento cirúrgico do aparelho da visão                                                                                                             200809
+130003Confeccção/Intervenção de acessos para diálise                                                                                                        200809
+134003Outras técnicas em medicina tradicional chinesa                                                                                                       200809
+135003Reabilitação física                                                                                                                                   200809
+136003Enteral/Parenteral, com manipulação/fabricação                                                                                                        200809
+138003Diagnóstico e tratamento em coluna vertebral e caixa torácica                                                                                         200809
+139003Tratamento de recém-nascido com fibrose cística                                                                                                       200809
+140003Pronto Atendimento                                                                                                                                    200809
+141003Vigilância ambiental                                                                                                                                  200809
+142003Do aparelho urinário                                                                                                                                  200809
+143003Transporte marítimo                                                                                                                                   200809
+145003Exames sorológicos e imunológicos                                                                                                                     200809
+148003Geriátrico                                                                                                                                            200809
+149003Coração                                                                                                                                               200809
+100003Atendimento em presídio acima de 100 presos                                                                                                           200809
+101003Saúde bucal MII                                                                                                                                       200809
+103003Ambulância de suporte avançado de vida                                                                                                                200809
+104003Unidade de urgências                                                                                                                                  200809
+105003Tumores do sistema nervoso                                                                                                                            200809
+106003Diagnóstico, tratamento e capacitação técnica                                                                                                         200809
+107003Terapia fonoaudiológica                                                                                                                               200809
+109003Unidade sócio-educativa com de 101 a 180 adolecentes                                                                                                  200809
+110003Laqueadura                                                                                                                                            200809
+112003Parto em gestação de baixo risco                                                                                                                      200809
+114003Periodontia clínica                                                                                                                                   200809
+116003Cirurgia cardiovascular (criança)                                                                                                                     200809
+117003Tratamento da lipoatrofia facial do portador de HIV / AIDS                                                                                            200809
+121003Tomografia computadorizada                                                                                                                            200809
+122003Exame eletrocardiográfico                                                                                                                             200809
+123003OPM auditivas                                                                                                                                         200809
+125003Farmácia com manipulação homeopática                                                                                                                  200809
+126003Assistência fisioterapêutica em oftalmologia                                                                                                          200809
+128003Procedimentos especiais em hemoterapia                                                                                                                200809
+132003Oncologia clínica                                                                                                                                     200809
+130004Tratamento em nefrologia em geral                                                                                                                     200809
+131004Projeto Olhar Brasil                                                                                                                                  200809
+132004Radioterapia                                                                                                                                          200809
+134004Práticas corporais/Atividade física                                                                                                                   200809
+135004Reabilitação visual/mental/múltiplas deficiências                                                                                                     200809
+138004Diagnóstico e tratamento em cintura pélvica                                                                                                           200809
+139004Tratamento de recém-nascido com outras doenças congênitas                                                                                             200809
+141004Núcleo de vigilância hospitalar                                                                                                                       200809
+142004Do aparelho ginecológico                                                                                                                              200809
+145004Exames coprológicos                                                                                                                                   200809
+148004Fibrose cística                                                                                                                                       200809
+149004Pulmão                                                                                                                                                200809
+100004Atendimento em manicômio acima de 100 presos                                                                                                          200809
+103004Aeronave de transporte médico                                                                                                                         200809
+104004Unidade de autorizações de TFD intermunicipais                                                                                                        200809
+105004Neurocirurgia vascular                                                                                                                                200809
+107004Diagnóstico em audiologia/otologia                                                                                                                    200809
+109004Unidade sócio-educativa com mais de 180 adolecentes                                                                                                   200809
+110004Vasectomia                                                                                                                                            200809
+112004Parto em gestação de alto risco                                                                                                                       200809
+114004Moldagem/Manutenção                                                                                                                                   200809
+116004Cirurgia vascular                                                                                                                                     200809
+121004Ressonância magnética                                                                                                                                 200809
+122004Exame eletroencefalográfico                                                                                                                           200809
+123004OPM oftalmológicas                                                                                                                                    200809
+125004Dispensação de medicamentos estratégicos                                                                                                              200809
+126004Assistência fisioterapêutica cardiovasculares e pneumo-funcionais                                                                                     200809
+128004Medicina transfusional                                                                                                                                200809
+132005Oncologia cirúrgica                                                                                                                                   200809
+134005Homeopatia                                                                                                                                            200809
+126005Assistência fisioterapêutica nas disfunções músculo-esqueléticas (todas as origens)                                                                   200809
+125005Dispensação de medicamentos básicos                                                                                                                   200809
+123005OPM em gastroenterologia                                                                                                                              200809
+116005Cardiologia intervencionista (hemodinâmica)                                                                                                           200809
+114005Cirurgia oral                                                                                                                                         200809
+112005Centro de parto normal                                                                                                                                200809
+107005Implante coclear                                                                                                                                      200809
+105005Tratamento neurocirúrgico da dor funcional                                                                                                            200809
+104005Unidade de autorizações de TFD interestaduais                                                                                                         200809
+103005Embarcação de transporte médico                                                                                                                       200809
+149005Córnea / Esclera                                                                                                                                      200809
+148005Cirúrgico / Diagnóstico                                                                                                                               200809
+145005Exames de uroanálise                                                                                                                                  200809
+138005Diagnóstico e tratamento em membros inferiores                                                                                                        200809
+134006Termalismo/Crenoterapia                                                                                                                               200809
+149006Fígado                                                                                                                                                200809
+126006Assistência fisioterapêutica em queimados                                                                                                             200809
+121006Radiologia intervencionista                                                                                                                           200809
+125006Farmácia Hospitalar                                                                                                                                   200809
+148006Acompanhamento pós-transplante de medula óssea                                                                                                        200809
+114006Cirurgia buco-maxilo-facial                                                                                                                           200809
+105006Investigação e cirurgia de epilepsia                                                                                                                  200809
+103006Veículos de intervenção rápida                                                                                                                        200809
+145006Exames hormonais                                                                                                                                      200809
+116006Endovascular extracardíaca                                                                                                                            200809
+123006OPM em urologia                                                                                                                                       200809
+149007Pâncreas                                                                                                                                              200809
+105007Tratamento endovascular                                                                                                                               200809
+123007OPM em odontologia                                                                                                                                    200809
+103007Outros veículos                                                                                                                                       200809
+126007Assistência fisioterapêutica nas alterações em neurologia                                                                                             200809
+134007Medicina antroposófica                                                                                                                                200809
+145007Exames de  vigilância epidemiológica e  ambiental                                                                                                     200809
+105008Neurocirurgia funcional estereotáxica                                                                                                                 200809
+123008OPM buco-maxilo-facial                                                                                                                                200809
+126008Diagnóstico cinético funcional                                                                                                                        200809
+103008Ambulância de resgate                                                                                                                                 200809
+145008Exames toxicológicos ou de monitorização terapêutica                                                                                                  200809
+149008Retirada de orgãos                                                                                                                                    200809
+149009Pele                                                                                                                                                  200809
+123009Substituição/Troca em órteses/próteses                                                                                                                200809
+145009Exames microbiológicos                                                                                                                                200809
+105009Polissonografia                                                                                                                                       200809
+149010Válvulas cardíacas                                                                                                                                    200809
+123010OPM em queimados                                                                                                                                      200809
+145010Exames em outros líquidos biológicos                                                                                                                  200809
+123011OPM em nefrologia                                                                                                                                     200809
+145011Exames de genética                                                                                                                                    200809
+149011Osteocondroligamentos                                                                                                                                 200809
+123012OPM - Projeto Olhar Brasil                                                                                                                            200809
+145012Exames para triagem neonatal                                                                                                                          200809
+149012Separação, avaliação biomicroscópica e conservação da córnea/esclera                                                                                  200809
+149013Contagem endotelial corneana                                                                                                                          200809
+145013Exames imunohematológicos                                                                                                                             200809
+149014Acompanhamento de paciente transplantado                                                                                                              200809

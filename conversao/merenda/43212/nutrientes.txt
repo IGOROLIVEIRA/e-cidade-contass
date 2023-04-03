@@ -1,0 +1,99 @@
+203 |   Proteínas                               |   g
+204 |   Lípides totais (gordura)            |   g
+205 |   Carboidratos, por diferença         |   g
+207 |   Cinzas                      |   g
+208 |   Energia                     |   kcal
+209 |   Amido                       |   g
+210 |   Sacarose                    |   g
+211 |   Glicose (dextrose)              |   g
+212 |   Frutose                     |   g
+213 |   Lactose                     |   g
+214 |   Maltose                     |   g
+221 |   Álcool, etílico                 |   g
+255 |   Água                        |   g
+262 |   Cafeína                     |   mg
+263 |   Teobromina                  |   mg
+268 |   Energia kJ                  |   kJ
+269 |   Açúcares, total                 |   g
+287 |   Galactose                   |   g
+291 |   Fibra alimentar total               |   g
+301 |   Cálcio, Ca                  |   mg
+303 |   Ferro, Fe                   |   mg
+304 |   Magnésio, Mg                    |   mg
+305 |   Fósforo, P                  |   mg
+306 |   Potássio, K                 |   mg
+307 |   Sódio, Na                   |   mg
+309 |   Zinco, Zn                   |   mg
+312 |   Cobre, Cu                   |   mg
+315 |   Manganês, Mn                    |   mg
+317 |   Selênio, Se                 |   mcg
+318 |   Vitamina A, UI                  |   IU
+319 |   Retinol                     |   mcg
+320 |   Vitamina A, RAE                 |   mcg_RAE
+321 |   Caroteno, beta                  |   mcg
+322 |   Caroteno, alfa                  |   mcg
+323 |   Vitamina E (alfa-tocoferol)         |   mg
+334 |   Criptoxantina, beta             |   mcg
+337 |   Licopeno                    |   mcg
+338 |   Luteína + zeaxantina                |   mcg
+341 |   Tocoferol, beta                 |   mg
+342 |   Tocoferol, gama                 |   mg
+343 |   Tocoferol, delta                |   mg
+401 |   Vitamina C, ácido ascórbico total           |   mg
+404 |   Tiamina                     |   mg
+405 |   Riboflavina                 |   mg
+406 |   Niacina                     |   mg
+410 |   Ácido pantotênico               |   mg
+415 |   Vitamina B-6 (piridoxina)           |   mg
+417 |   Folato, total                   |   mcg
+418 |   Vitamina B-12                   |   mcg
+430 |   Vitamina K (filoquinona)            |   mcg
+431 |   Ácido fólico                    |   mcg
+432 |   Folato alimentar                |   mcg
+435 |   Folato, DFE                 |   mcg_DFE
+501 |   Triptofano                  |   g
+502 |   Treonina                    |   g
+503 |   Isoleucina                  |   g   
+504 |   Leucina                     |   g
+505 |   Lisina                      |   g
+506 |   Metionina                   |   g
+507 |   Cistina                         |   g
+508 |   Fenilalanina                    |   g
+509 |   Tirosina                    |   g
+510 |   Valina                      |   g
+511 |   Arginina                    |   g
+512 |   Histidina                       |   g
+513 |   Alanina                         |   g
+514 |   Ácido aspártico                 |   g
+515 |   Ácido glutâmico                 |   g
+516 |   Glicina                     |   g
+517 |   Prolina                     |   g
+518 |   Serina                      |   g
+601 |   Colesterol                  |   mg
+606 |   Ácidos graxos, total saturados          |   g
+607 |   Ácido butírico (4:0)                |   g
+608 |   Ácido capróico (6:0)                |   g
+609 |   Ácido caprílico (8:0)               |   g
+610 |   Ácido cáprico (10:0)                |   g
+611 |   Ácido láurico (12:0)                |   g
+612 |   Ácido mirístico (14:0)              |   g
+613 |   Ácido palmítico (16:0)              |   g
+614 |   Ácido esteárico (18:0)              |   g
+615 |   Ácido araquídico (20:0)             |   g
+617 |   Ácido oléico (18:1 indiferenciado)      |   g
+618 |   Ácido linoléico (18:2 indiferenciado)       |   g
+619 |   Ácido alfa-linolênico (18:3 indiferenciado) |   g
+620 |   Ácido araquidônico (20:4 indiferenciado)    |   g
+621 |   Ácido docosahexaenóico (DHA - 22:6 n-3)     |   g
+624 |   Ácido behênico (22:0)               |   g 
+626 |   Ácido palmitoleico (16:1 indiferenciado)    |   g
+627 |   Ácido parinárico (18:4)                     |   g
+628 |   Ácido gadoleico (20:1)              |   g
+629 |   Ácido timnodônico (EPA - 20:5 n-3)      |   g
+630 |   Ácido erúcico (22:1 indiferenciado)     |   g
+631 |   Ácido clupanodônico (DPA - 22:5 n-3)        |   g
+645 |   Ácidos graxos, total monoinsaturado     |   g
+646 |   Ácidos graxos, total poliinsaturado         |   g
+654 |   Ácido lignocérico (24:0)            |   g
+675 |   Ácido cis,cis-linoléico (18:2 n-6 c,c)      |   g
+851 |   Ácido alfa-linolênico (18:3 n-3 c,c,c)      |   g

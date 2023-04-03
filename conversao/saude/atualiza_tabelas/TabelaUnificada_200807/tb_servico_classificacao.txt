@@ -1,0 +1,216 @@
+101001Saúde da família                                                                                                                                      200807
+125001Dispensação de medicamentos excepcionais/especiais                                                                                                    200807
+146001Diagnóstica                                                                                                                                           200807
+147001NASF 1                                                                                                                                                200807
+103001Ambulância de transporte                                                                                                                              200807
+105001Neurocirurgia do trauma e anomalias do desenvolvimento                                                                                                200807
+107001Diagnóstico, tratamento e reabilitação auditiva na média complexidade                                                                                 200807
+111001Diagnóstico e tratamento                                                                                                                              200807
+112001Acompanhamento do pré-natal de baixo risco                                                                                                            200807
+145001Exames bioquímicos                                                                                                                                    200807
+151001Medicina nuclear in vivo                                                                                                                              200807
+100001Atendimento em presídio até 100 presos                                                                                                                200807
+109001Unidade sócio-educativa com até 40 adolecentes                                                                                                        200807
+121001Radiologia                                                                                                                                            200807
+124001Diagnóstico/Tratamento das doenças endócrinas, metabólicas e nutricionais                                                                             200807
+128001Procedimentos destinados à obtenção do sangue para fins de assitência hemoterápica                                                                    200807
+129001Exames de histocompatibilidade por meio de sorologia                                                                                                  200807
+131001Diagnóstico em oftalmologia                                                                                                                           200807
+135001Reabilitação visual                                                                                                                                   200807
+138001Diagnóstico e tratamento em cintura escapular                                                                                                         200807
+140001Pronto Socorro Geral                                                                                                                                  200807
+142001Do aparelho digestivo                                                                                                                                 200807
+144001Coleta realizada fora das estrutura laboratorial                                                                                                      200807
+149001Rim                                                                                                                                                   200807
+102001Estratégia de Agentes Comunitários de Saúde - EACS                                                                                                    200807
+115001Residência terapêutica em saúde mental                                                                                                                200807
+119001Abordagem e tratamento do fumante                                                                                                                     200807
+127001Tratamento clínico, reparador e acompanhamento ao paciente                                                                                            200807
+113001Assitência domiciliar                                                                                                                                 200807
+114001Dentística                                                                                                                                            200807
+117001Tratamento da lipodistrofia do portador de HIV / AIDS                                                                                                 200807
+137001Exame eletrocardiográfico por telemedicina                                                                                                            200807
+134001Acupuntura                                                                                                                                            200807
+136001Enteral                                                                                                                                               200807
+143001Transporte terrestre                                                                                                                                  200807
+148001Saúde mental                                                                                                                                          200807
+104001Unidade de internação                                                                                                                                 200807
+110001Atenção à infertilidade                                                                                                                               200807
+116001Eletrofisiologia                                                                                                                                      200807
+118001Cirurgia torácica                                                                                                                                     200807
+122001Teste ergométrico                                                                                                                                     200807
+126001Assistência fisioterapêutica em alterações obstétricas, neonatais e uroginecológicas                                                                  200807
+132001Oncologia pediátrica                                                                                                                                  200807
+133001Tratamento de doenças das vias aéreas inferiores                                                                                                      200807
+139001Tratamento de recém-nascido com hipotireoidismo e fenilcetonuria                                                                                      200807
+150001Fístula arteriovenosa sem enxerto                                                                                                                     200807
+106001Testagem e aconselhamento                                                                                                                             200807
+108001Atendimento/acompanhamento em saúde do trabalhador                                                                                                    200807
+120001Exames anatomopatológicos                                                                                                                             200807
+123001OPM auxiliares de locomoção                                                                                                                           200807
+130001Tratamento dialítico                                                                                                                                  200807
+141001Vigilância epidemiológica                                                                                                                             200807
+100002Atendimento em manicômio até 100 presos                                                                                                               200807
+107002Diagnóstico diferencial, tratamento e reabilitação auditiva na alta complexidade                                                                      200807
+108002Centro de referência em saúde do trabalhador CEREST estadual                                                                                          200807
+121002Ultra-sonografia                                                                                                                                      200807
+128002Diagnóstico em hemoterapia                                                                                                                            200807
+130002Litotripsia                                                                                                                                           200807
+136002Enteral/Parenteral                                                                                                                                    200807
+103002Ambulância de suporte básico de vida                                                                                                                  200807
+122002Teste de Holter                                                                                                                                       200807
+123002OPM ortopédicas                                                                                                                                       200807
+129002Exames de histocompatibilidade por sorologia e biologia                                                                                               200807
+135002Reabilitação mental/autismo                                                                                                                           200807
+141002Vigilância sanitária                                                                                                                                  200807
+146002Cirúrgica                                                                                                                                             200807
+101002Saúde bucal MI                                                                                                                                        200807
+105002Coluna e nervos periféricos                                                                                                                           200807
+125002Farmácia Popular                                                                                                                                      200807
+124002Cirurgia de glândulas endócrinas                                                                                                                      200807
+134002Fitoterapia                                                                                                                                           200807
+139002Tratamento de recém-nascido com doenças falciformes                                                                                                   200807
+140002Pronto Socorro Especializado                                                                                                                          200807
+149002Medula óssea                                                                                                                                          200807
+106002Diagnóstico e tratamento                                                                                                                              200807
+110002Contracepção clínica                                                                                                                                  200807
+131002Tratamento clínico do aparelho da visão                                                                                                               200807
+132002Hematologia                                                                                                                                           200807
+138002Diagnóstico e tratamento em membros superiores                                                                                                        200807
+142002Do aparelho respiratório                                                                                                                              200807
+143002Transporte aéreo                                                                                                                                      200807
+147002NASF 2                                                                                                                                                200807
+104002Unidade de consulta e exames                                                                                                                          200807
+112002Acompanhamento do pré-natal de alto risco                                                                                                             200807
+113002Internação domiciliar                                                                                                                                 200807
+115002Atendimento psicossocial                                                                                                                              200807
+150002Fístula arteriovenosa com enxerto                                                                                                                     200807
+151002Medicina nuclear in vitro                                                                                                                             200807
+111002Tratamento multidrogas resistentes                                                                                                                    200807
+114002Endodontia                                                                                                                                            200807
+116002Cirurgia cardiovascular (adulto)                                                                                                                      200807
+117002Tratamento em queimados                                                                                                                               200807
+126002Assistência fisioterapêutica em alterações oncológicas                                                                                                200807
+148002AIDS                                                                                                                                                  200807
+109002Unidade sócio-educativa com de 41 a 100 adolecentes                                                                                                   200807
+120002Exames citopatológicos                                                                                                                                200807
+145002Exames hematológicos e hemostasia                                                                                                                     200807
+100003Atendimento em presídio acima de 100 presos                                                                                                           200807
+103003Ambulância de suporte avançado de vida                                                                                                                200807
+136003Enteral/Parenteral, com manipulação/fabricação                                                                                                        200807
+140003Pronto Atendimento                                                                                                                                    200807
+106003Diagnóstico, tratamento e capacitação técnica                                                                                                         200807
+109003Unidade sócio-educativa com de 101 a 180 adolecentes                                                                                                  200807
+138003Diagnóstico e tratamento em coluna vertebral e caixa torácica                                                                                         200807
+117003Tratamento da lipoatrofia facial do portador de HIV / AIDS                                                                                            200807
+121003Tomografia computadorizada                                                                                                                            200807
+125003Farmácia com manipulação homeopática                                                                                                                  200807
+132003Oncologia clínica                                                                                                                                     200807
+134003Outras técnicas em medicina tradicional chinesa                                                                                                       200807
+141003Vigilância ambiental                                                                                                                                  200807
+145003Exames sorológicos e imunológicos                                                                                                                     200807
+149003Coração                                                                                                                                               200807
+123003OPM auditivas                                                                                                                                         200807
+131003Tratamento cirúrgico do aparelho da visão                                                                                                             200807
+135003Reabilitação física                                                                                                                                   200807
+142003Do aparelho urinário                                                                                                                                  200807
+148003Geriátrico                                                                                                                                            200807
+116003Cirurgia cardiovascular (criança)                                                                                                                     200807
+128003Procedimentos especiais em hemoterapia                                                                                                                200807
+130003Confeccção/Intervenção de acessos para diálise                                                                                                        200807
+143003Transporte marítimo                                                                                                                                   200807
+104003Unidade de urgências                                                                                                                                  200807
+105003Tumores do sistema nervoso                                                                                                                            200807
+107003Terapia fonoaudiológica                                                                                                                               200807
+110003Laqueadura                                                                                                                                            200807
+112003Parto em gestação de baixo risco                                                                                                                      200807
+114003Periodontia clínica                                                                                                                                   200807
+126003Assistência fisioterapêutica em oftalmologia                                                                                                          200807
+101003Saúde bucal MII                                                                                                                                       200807
+139003Tratamento de recém-nascido com fibrose cística                                                                                                       200807
+122003Exame eletrocardiográfico                                                                                                                             200807
+110004Vasectomia                                                                                                                                            200807
+122004Exame eletroencefalográfico                                                                                                                           200807
+139004Tratamento de recém-nascido com outras doenças congênitas                                                                                             200807
+100004Atendimento em manicômio acima de 100 presos                                                                                                          200807
+116004Cirurgia vascular                                                                                                                                     200807
+126004Assistência fisioterapêutica cardiovasculares e pneumo-funcionais                                                                                     200807
+130004Tratamento em nefrologia em geral                                                                                                                     200807
+145004Exames coprológicos                                                                                                                                   200807
+105004Neurocirurgia vascular                                                                                                                                200807
+135004Reabilitação visual/mental/múltiplas deficiências                                                                                                     200807
+107004Diagnóstico em audiologia/otologia                                                                                                                    200807
+121004Ressonância magnética                                                                                                                                 200807
+132004Radioterapia                                                                                                                                          200807
+149004Pulmão                                                                                                                                                200807
+104004Unidade de autorizações de TFD intermunicipais                                                                                                        200807
+125004Dispensação de medicamentos estratégicos                                                                                                              200807
+128004Medicina transfusional                                                                                                                                200807
+138004Diagnóstico e tratamento em cintura pélvica                                                                                                           200807
+141004Núcleo de vigilância hospitalar                                                                                                                       200807
+103004Aeronave de transporte médico                                                                                                                         200807
+109004Unidade sócio-educativa com mais de 180 adolecentes                                                                                                   200807
+112004Parto em gestação de alto risco                                                                                                                       200807
+114004Moldagem/Manutenção                                                                                                                                   200807
+131004Projeto Olhar Brasil                                                                                                                                  200807
+134004Práticas corporais/Atividade física                                                                                                                   200807
+148004Fibrose cística                                                                                                                                       200807
+123004OPM oftalmológicas                                                                                                                                    200807
+142004Do aparelho ginecológico                                                                                                                              200807
+107005Implante coclear                                                                                                                                      200807
+145005Exames de uroanálise                                                                                                                                  200807
+148005Cirúrgico / Diagnóstico                                                                                                                               200807
+103005Embarcação de transporte médico                                                                                                                       200807
+149005Córnea / Esclera                                                                                                                                      200807
+114005Cirurgia oral                                                                                                                                         200807
+105005Tratamento neurocirúrgico da dor funcional                                                                                                            200807
+132005Oncologia cirúrgica                                                                                                                                   200807
+138005Diagnóstico e tratamento em membros inferiores                                                                                                        200807
+104005Unidade de autorizações de TFD interestaduais                                                                                                         200807
+112005Centro de parto normal                                                                                                                                200807
+116005Cardiologia intervencionista (hemodinâmica)                                                                                                           200807
+123005OPM em gastroenterologia                                                                                                                              200807
+134005Homeopatia                                                                                                                                            200807
+125005Dispensação de medicamentos básicos                                                                                                                   200807
+126005Assistência fisioterapêutica nas disfunções músculo-esqueléticas (todas as origens)                                                                   200807
+116006Endovascular extracardíaca                                                                                                                            200807
+126006Assistência fisioterapêutica em queimados                                                                                                             200807
+121006Radiologia intervencionista                                                                                                                           200807
+123006OPM em urologia                                                                                                                                       200807
+114006Cirurgia buco-maxilo-facial                                                                                                                           200807
+134006Termalismo/Crenoterapia                                                                                                                               200807
+103006Veículos de intervenção rápida                                                                                                                        200807
+105006Investigação e cirurgia de epilepsia                                                                                                                  200807
+148006Acompanhamento pós-transplante de medula óssea                                                                                                        200807
+149006Fígado                                                                                                                                                200807
+145006Exames hormonais                                                                                                                                      200807
+125006Farmácia Hospitalar                                                                                                                                   200807
+134007Medicina antroposófica                                                                                                                                200807
+103007Outros veículos                                                                                                                                       200807
+105007Tratamento endovascular                                                                                                                               200807
+145007Exames de  vigilância epidemiológica e  ambiental                                                                                                     200807
+126007Assistência fisioterapêutica nas alterações em neurologia                                                                                             200807
+123007OPM em odontologia                                                                                                                                    200807
+149007Pâncreas                                                                                                                                              200807
+145008Exames toxicológicos ou de monitorização terapêutica                                                                                                  200807
+123008OPM buco-maxilo-facial                                                                                                                                200807
+126008Diagnóstico cinético funcional                                                                                                                        200807
+103008Ambulância de resgate                                                                                                                                 200807
+105008Neurocirurgia funcional estereotáxica                                                                                                                 200807
+149008Retirada de orgãos                                                                                                                                    200807
+123009Substituição/Troca em órteses/próteses                                                                                                                200807
+149009Pele                                                                                                                                                  200807
+105009Polissonografia                                                                                                                                       200807
+145009Exames microbiológicos                                                                                                                                200807
+145010Exames em outros líquidos biológicos                                                                                                                  200807
+149010Válvulas cardíacas                                                                                                                                    200807
+123010OPM em queimados                                                                                                                                      200807
+123011OPM em nefrologia                                                                                                                                     200807
+145011Exames de genética                                                                                                                                    200807
+149011Osteocondroligamentos                                                                                                                                 200807
+123012OPM - Projeto Olhar Brasil                                                                                                                            200807
+149012Separação, avaliação biomicroscópica e conservação da córnea/esclera                                                                                  200807
+145012Exames para triagem neonatal                                                                                                                          200807
+149013Contagem endotelial corneana                                                                                                                          200807
+145013Exames imunohematológicos                                                                                                                             200807
+149014Acompanhamento de paciente transplantado                                                                                                              200807

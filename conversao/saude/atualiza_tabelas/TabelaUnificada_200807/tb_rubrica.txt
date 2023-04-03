@@ -1,0 +1,40 @@
+040001Coleta de material                                                                                  200807
+040002Diagnóstico em laboratório clínico                                                                  200807
+040003Coleta/exame anátomo-patológico colo uterino                                                        200807
+040004Diagnóstico em neurologia                                                                           200807
+040005Diagnóstico em otorrinolaringologia/fonoaudiologia                                                  200807
+040006Diagnóstico em psicologia/psiquiatria                                                               200807
+040007Consultas médicas/outros profissionais de nível superior                                            200807
+040008Atenção domiciliar                                                                                  200807
+040009Atendimento/acompanhamento em reabilitação física, mental, visual e múltiplas deficiências          200807
+040010Atendimento/acompanhamento psicossocial                                                             200807
+040011Atendimento/acompanhamento em saúde do idoso                                                        200807
+040012Atendimento/acompanhamento de queimados                                                             200807
+040013Atendimento/acompanhamento de diagnóstico de doenças endocrinas/metabólicas e nutricionais          200807
+040014Tratamento de doenças do sistema nervoso central e periférico                                       200807
+040015Tratamento de doenças do aparelho da visão                                                          200807
+040016Tratamento em oncologia                                                                             200807
+040017Nefrologia                                                                                          200807
+040018Tratamentos odontológicos                                                                           200807
+040019Cirurgia do sistema nervoso central e periférico                                                    200807
+040020Cirurgias de ouvido, nariz e garganta                                                               200807
+040021Deformidade labio-palatal e crânio-facial                                                           200807
+040022Cirurgia do aparelho da visão                                                                       200807
+040023Cirurgia do aparelho circulatório                                                                   200807
+040024Cirurgia do aparelho digestivo, orgãos anexos e parede abdominal                                    200807
+040025Cirurgia do aparelho geniturinário                                                                  200807
+040026Tratamento de queimados                                                                             200807
+040027Cirurgia reparadora para lipodistrofia                                                              200807
+040028Outras cirurgias plásticas/reparadoras                                                              200807
+040029Cirurgia orofacial                                                                                  200807
+040030Sequenciais                                                                                         200807
+040032Transplantes de orgãos, tecidos e células                                                           200807
+040033Medicamentos para transplante                                                                       200807
+040035OPM em odontologia                                                                                  200807
+040036OPM em queimados                                                                                    200807
+040038OPM para transplantes                                                                               200807
+040039Incentivos ao pré-natal e nascimento                                                                200807
+040040Incentivo ao registro cívil de nascimento                                                           200807
+040041Central Nacional de Regulação de Alta Complexidade (CNRAC)                                          200807
+040042Reguladores de Atividade hormonal - Inibidores de prolactina                                        200807
+040043Política Nacional de Cirurgias Eletivas                                                             200807

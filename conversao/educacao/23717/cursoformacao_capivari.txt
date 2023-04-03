@@ -1,0 +1,43 @@
+1  | ADMINISTRAÇÃO                                      | 345A01
+2  | AGRONOMIA/GEOLOGIA/CIÊNCIAS DA TERRA               | 621A04
+3  | ARQUITETURA E URBANISMO                            | 581A05
+4  | ARTES CÊNICAS                                      | 212A01
+5  | ASTRONOMIA                                         | 441A03
+6  | BELAS ARTES/ARTES PLASTICAS/EDUCAÇÃO ARTÍSTICA     | 210E01
+7  | BIBLIOTECONOMIA                                    | 322B01
+8  | CIÊNCIAS                                           | 420C01
+9  | CIÊNCIAS BIOLÓGICAS                                | 421C01
+10 | CIÊNCIAS SOCIAIS/SOCIOLOGIA                        | 310C02
+11 | COMUNICAÇÃO SOCIAL                                 | 321C02
+12 | DIREITO                                            | 380D01
+13 | EDUCAÇÃO FÍSICA                                    | 720E01
+14 | ENGENHARIA                                         | 520E01
+--| 37 | ENSINO MÉDIO                                       |
+--| 35 | ENSINO MÉDIO NORMAL/MAGISTÉRIO                     |
+--| 36 | ENSINO MÉDIO NORMAL/MAGISTÉRIO INDÍGENA            |
+38 | ENSINO SUPERIOR                                    | 144N01
+39 | ESPECÍFICO PARA CRECHE                             | 143F01
+40 | ESPECÍFICO PARA EDUCAÇÃO ESPECIAL                  | 144F04
+42 | ESPECÍFICO PARA EDUCAÇÃO INDÍGENA                  | 144F03
+41 | ESPECÍFICO PARA PRÉ ESCOLA                         | 143F03
+15 | ESTATÍSTICAS/CIÊNCIAS CONTÁBEIS/CIÊNCIAS ECONÔMICA | 462E01
+16 | ESTUDOS SOCIAIS                                    | 312E03
+17 | FILOSOFIA                                          | 226F01
+18 | FÍSICA                                             | 441F01
+--| 33 | FUNDAMENTAL                                        |
+--| 34 | FUNDAMENTAL COMPLETO                               |
+19 | GEOGRAFIA                                          | 443G04
+20 | HISTÓRIA                                           | 225H01
+21 | INFORMÁTICA/COMPUTAÇÃO/PROCESSAMENTO DE DADOS      | 146F05
+--| 43 | INTERCULTURAL/DIVERSIDADE                          |
+23 | LETRAS/LITERATURA/LÍMGUA ESTRANGEIRA               | 145F14
+22 | LETRAS/LITERATURA/LÍMGUA PORTUGUESA                | 220L07
+--| 24 | LICENCIATURA INTERCULTURAL ESPECÍFICA              |
+25 | MATEMÁTICA                                         | 461M01
+26 | MEDICINA/ODONTOLOGIA/ENFERMAGEM/FARMÁCIA           | 721M01
+27 | MÚSICA                                             | 212M02
+--| 32 | OUTROS CURSOS                                      |
+28 | PEDAGOGIA/CIÊNCIAS DA EDUCAÇÃO                     | 140T01
+29 | PSICOLOGIA                                         | 311P02
+30 | QUÍMICA                                            | 442Q01
+31 | RELIGIÃO/TEOLOGIA                                  | 145F05

@@ -1,0 +1,31 @@
+
+[30/08/2011 13:42:38] - BASE PARA IMPORTACAO Prefeitura: host=localhost 
+                dbname=pmlagoadospatos 
+                port=5432 
+                user=dbportal 
+                password=
+[30/08/2011 13:42:38] 
+[30/08/2011 13:42:38] *** INICIO Script 01_testes_material_negativo.php ***
+[30/08/2011 13:42:38] 
+[30/08/2011 13:42:38] Arquivo de Log: log/01_testes_material_negativo.php_20110830_134238.log
+[30/08/2011 13:42:38]     Script PHP: 01_testes_material_negativo.php
+[30/08/2011 13:42:38] 
+[30/08/2011 13:42:38] Iniciando Sessao
+[30/08/2011 13:42:38] Setando Variáveis da Sessao
+[30/08/2011 13:42:38] Iniciando Processamento
+
+
+[30/08/2011 13:42:38] Processando SaldoEstoqueDiferenteMovimentacao.test.php
+[30/08/2011 13:42:39] Script: SaldoEstoqueDiferenteMovimentacao.test.php Não encontrou erro ................................................................................ [  OK  ]
+[30/08/2011 13:42:39] 
+[30/08/2011 13:42:39] Processando MaterialSaidaAnteriorentrada.test.php
+[30/08/2011 13:42:39] Script: MaterialSaidaAnteriorentrada.test.php Encontrou erro ......................................................................................... [ ERRO ]
+[30/08/2011 13:42:39] 
+[30/08/2011 13:42:39] Processando MaterialSaldoNegativo.test.php
+[30/08/2011 13:42:39] Script: MaterialSaldoNegativo.test.php Não encontrou erro ............................................................................................ [  OK  ]
+[30/08/2011 13:42:39] 
+[30/08/2011 13:42:39] Inicio: 13:42:38
+[30/08/2011 13:42:39] Final.: 13:42:39
+[30/08/2011 13:42:39] 
+[30/08/2011 13:42:39] *** FINAL Script 01_testes_material_negativo.php ***
+[30/08/2011 13:42:39] 

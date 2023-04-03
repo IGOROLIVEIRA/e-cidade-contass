@@ -1,0 +1,26 @@
+01Cirúrgico                                                   200806
+02Obstétricos                                                 200806
+03Clínico                                                     200806
+04Crônicos                                                    200806
+05Psiquiatria                                                 200806
+06Pneumologia Sanitária (Tisiologia)                          200806
+07Pediátricos                                                 200806
+08Reabilitação                                                200806
+09Leito Dia / Cirúrgicos                                      200806
+10Leito Dia / Aids                                            200806
+11Leito Dia / Fibrose Cística                                 200806
+12Leito Dia / Intercorrência Pós-Transplante                  200806
+13Leito Dia / Geriatria                                       200806
+14Leito Dia / Saúde Mental                                    200806
+64Unidade Intermediária                                       200806
+65Unidade Intermediária Neonatal                              200806
+74UTI I                                                       200806
+75UTI Adulto II                                               200806
+76UTI Adulto III                                              200806
+77UTI Infantil I                                              200806
+78UTI Infantil II                                             200806
+79UTI Infantil III                                            200806
+80UTI Neonatal I                                              200806
+81UTI Neonatal II                                             200806
+82UTI Neonatal III                                            200806
+83UTI Queimados                                               200806

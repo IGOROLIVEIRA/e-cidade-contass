@@ -1,0 +1,182 @@
+0101Centro de referência em atenção a saúde do idoso                                                                                                      200809
+0201Centro de referência em cirúrgia bariátrica                                                                                                           200809
+0202Unidade de alta complexidade ao paciente portador de obesidade grave                                                                                  200809
+0301Centros/Núcleos para realização de implante coclear                                                                                                   200809
+0302Diagnóstico, tratamento e reabilitação auditiva na média complexidade                                                                                 200809
+0303Diagnóstico, tratamento e reabilitação auditiva na alta complexidade                                                                                  200809
+0401Centro de tratamento da má formação labio-palatal                                                                                                     200809
+0402Laboratório Regional de Prótese Dentária                                                                                                              200809
+0403Centro de Especialidade Odontológica - CEO I                                                                                                          200809
+0404Centro de Especialidade Odontológica - CEO II                                                                                                         200809
+0405Centro de Especialidade Odontológica - CEO III                                                                                                        200809
+0501Centro de Referencia em Oftalmologia Nível I                                                                                                          200809
+0502Centro de Referência em Oftalmologia Nível II                                                                                                         200809
+0503UNIDADE DE ATENÇÃO ESPECIALIZADA EM OFTALMOLOGIA                                                                                                      200809
+0504CENTRO DE REFERÊNCIA EM OFTALMOGIA                                                                                                                    200809
+0601Psiquiatria - Classe I                                                                                                                                200809
+0602Psiquiatria - Classe II                                                                                                                               200809
+0603Psiquiatria - Classe III                                                                                                                              200809
+0604Psiquiatria - Classe IV                                                                                                                               200809
+0605Psiquiatria - Classe V                                                                                                                                200809
+0606Psiquiatria - Classe VI                                                                                                                               200809
+0607Psiquiatria - Classe VII                                                                                                                              200809
+0608Psiquiatria - Classe VIII                                                                                                                             200809
+0609Psiquiatria - Classe IX                                                                                                                               200809
+0610Psiquiatria - Classe X                                                                                                                                200809
+0611Psiquiatria - Classe XI                                                                                                                               200809
+0612Psiquiatria - Classe XII                                                                                                                              200809
+0613Psiquiatria - Classe XIII                                                                                                                             200809
+0614Psiquiatria - Classe XIV                                                                                                                              200809
+0615PNASS maior que 80%                                                                                                                                   200809
+0616Centro de Atenção Psicossocial - CAPS I                                                                                                               200809
+0617Centro de Atenção Psicossocial - CAPS II                                                                                                              200809
+0618Centro de Atenção Psicossocial - CAPS III                                                                                                             200809
+0619Centro de Atenção Psicossocial Álcool e Drogas - CAPSad                                                                                               200809
+0620Centro de Atenção Psicossocial Infantil - CAPSi                                                                                                       200809
+0621Serviço hospitalar de referência para a atenção integral aos usuários de álcool e outras drogas                                                       200809
+0622Psiquiatria Classe I - PT/GM nº251/02                                                                                                                 200809
+0623Psiquiatria Classe II - PT/GM nº251/02                                                                                                                200809
+0624Psiquiatria Classe III - PT/GM nº251/02                                                                                                               200809
+0625Psiquiatria Classe IV - PT/GM nº 251/02                                                                                                               200809
+0626Psiquiatria Classe V - PT/GM nº251/02                                                                                                                 200809
+0627Psiquiatria Classe VI - PT/GM nº251/02                                                                                                                200809
+0628Psiquiatria Classe VII - PT/GM nº251/02                                                                                                               200809
+0629Psiquiatria Classe VIII - PT/GM nº251/02                                                                                                              200809
+0630Psiquiatria III                                                                                                                                       200809
+0701Serviço de Referência de Saúde do Trabalhador Estadual A                                                                                              200809
+0702Serviço de Referência de Saúde do Trabalhador Estadual B                                                                                              200809
+0703Serviço de Referência de Saúde do Trabalhador Estadual C                                                                                              200809
+0704Serviço de Referência de Saúde do Trabalhador Regional A                                                                                              200809
+0705Serviço de Referência de Saúde do Trabalhador Regional B                                                                                              200809
+0706Serviço de Referência de Saúde do Trabalhador Regional C                                                                                              200809
+0801Unidade de assistência de alta complexidade cardiovascular                                                                                            200809
+0802Centro de referência em alta complexidade cardiovascular                                                                                              200809
+0803Cirurgia cardiovascular e procedimentos em cardiologia intervencionista                                                                               200809
+0804Cirurgia cardiovascular pediátrica                                                                                                                    200809
+0805Cirurgia vascular                                                                                                                                     200809
+0806Cirurgia vascular e procedimentos endovasculares extracardíacos                                                                                       200809
+0807Laboratório de eletrofisiologia, cirurgia cardiovascular e procedimentos de cardiologia intervencionista                                              200809
+0808Implante de marcapasso definitivo                                                                                                                     200809
+0809Cirurgia cardíaca                                                                                                                                     200809
+0810Laboratório eletrofisiológico e terapia intervencionista                                                                                              200809
+0901Cuidados prolongados - enfermidades cardiovasculares                                                                                                  200809
+0902Cuidados prolongados - enfermidades pneumológicas                                                                                                     200809
+0903Cuidados prolongados - enfermidades neurológicas                                                                                                      200809
+0904Cuidados prolongados - enfermidades osteomuscular e do tecido conjuntivo                                                                              200809
+0905Cuidados prolongados - enfermidades oncológicas                                                                                                       200809
+0906Cuidados prolongados - enfermidades decorrentes da AIDS                                                                                               200809
+0907Cuidados prolongados - enfermidades devido a causas externas                                                                                          200809
+1001Centro de referência no tratamento da dor crônica                                                                                                     200809
+1101Serviço hospitalar para tratamento AIDS                                                                                                               200809
+1102Laboratório Especializado em Contagem de Linfócitos T CD4+/CD8+ e HIV1 Quant. do RNA                                                                  200809
+1103Tratamento da lipoatrofia facial do portador de HIV/AIDS                                                                                              200809
+1104Tratamento da liopodistrofia do Portador de HIV/AIDS                                                                                                  200809
+1201Fibrose cística - Hospital Dia                                                                                                                        200809
+1202Hospital Dia - Procedimentos cirúrgicos, diagnósticos ou terapêuticos                                                                                 200809
+1203Hospital Dia - AIDS                                                                                                                                   200809
+1204Hospital Dia em intercorrências pós-transplante de medula óssea e de outros precursores hematopoéticos                                                200809
+1205Hospital Dia - Geriatria                                                                                                                              200809
+1206Hospital Dia - Saúde Mental                                                                                                                           200809
+1301Internação domiciliar                                                                                                                                 200809
+1401Referência hospitalar em atendimento secundário a gestante de alto risco                                                                              200809
+1402Referência hospitalar em atendimento terciário a gestante de alto risco                                                                               200809
+1404Hospital Amigo da Criança                                                                                                                             200809
+1405Centro de referência em triagem neonatal/acompanhamento e tratamento de doenças congênitas - fenilcetonuria/hipotireoidismo congenito                 200809
+1406Centro de referência em triagem neonatal/acompanhamento e tratamento - doenças falciformes e outras hemoglobinopatias                                 200809
+1407Centro de referência em triagem neonatal/acompanhamento e tratamento - fibrose cística                                                                200809
+1501Unidade de assistência de alta complexidade em nefrologia (serviço de nefrologia)                                                                     200809
+1502Centro de referência de alta complexidade em nefrologia                                                                                               200809
+1503Hemodiálise II                                                                                                                                        200809
+1601Unidade de assistência de alta complexidade em neurologia/neurocirurgia                                                                               200809
+1602Centro de referência de alta complexidade em neurologia/neurocirurgia                                                                                 200809
+1603Trauma e anomalias do desenvolvimento                                                                                                                 200809
+1604Coluna e dos nervos periféricos                                                                                                                       200809
+1605Tumores do sistema nervoso                                                                                                                            200809
+1606Neurocirurgia vascular                                                                                                                                200809
+1607Tratamento neurocirúrgico da dor e funcional                                                                                                          200809
+1608Investigação e cirurgia de epilepsia                                                                                                                  200809
+1609Tratamento neuro-endovascular                                                                                                                         200809
+1610Neurocirurgia funcional esteriotáxica                                                                                                                 200809
+1611Epilepsia                                                                                                                                             200809
+1612Neurocirurgia I                                                                                                                                       200809
+1613Neurocirurgia II                                                                                                                                      200809
+1614Neurocirurgia III                                                                                                                                     200809
+1701Centro de Alta Complexidade em Oncologia - CACON I                                                                                                    200809
+1702Centro de Alta Complexidade em Oncologia - CACON II                                                                                                   200809
+1703Centro de Alta Complexidade em Oncologia - CACON III                                                                                                  200809
+1704Serviço isolado de radioterapia                                                                                                                       200809
+1705Serviço isolado de quimioterapia                                                                                                                      200809
+1706UNACON                                                                                                                                                200809
+1707UNACON com serviço de radioterapia                                                                                                                    200809
+1708UNACON com serviço de hematologia                                                                                                                     200809
+1709UNACON com serviço de oncologia pediátrica                                                                                                            200809
+1710UNACON exclusiva de hematologia                                                                                                                       200809
+1711UNACON exclusiva de oncologia pediátrica                                                                                                              200809
+1712CACON                                                                                                                                                 200809
+1713CACON com serviço de oncologia pediátrica                                                                                                             200809
+1714Hospital Geral com cirurgia oncológica                                                                                                                200809
+1715Serviço de radioterapia de complexo hospitalar                                                                                                        200809
+1716Serviço de Oncologia Clínica de Complexo hospitalar                                                                                                   200809
+1801Centro de referência de tratamento de osteogênesis imperfecta                                                                                         200809
+1901Laqueadura                                                                                                                                            200809
+1902Vasectomia                                                                                                                                            200809
+2001Programa de assistência ventilatoria não invasiva aos portadores de doenças neuromusculares                                                           200809
+2101Unidade de referência em assistência a queimados - média complexidade                                                                                 200809
+2102Centro de referência em assistência a queimados - alta complexidade                                                                                   200809
+2201Centro de referência de reabilitação em medicina fisica                                                                                               200809
+2202Serviço de reabilitação fisica - nível intermediário                                                                                                  200809
+2301Unidade de assistência de alta complexidade em terapia nutricional                                                                                    200809
+2302Centro de referência de alta complexidade em terapia nutricional                                                                                      200809
+2303Enteral                                                                                                                                               200809
+2304Enteral e parenteral                                                                                                                                  200809
+2305Enteral e parenteral com manipulação e fabricação da fórmula nutricional                                                                              200809
+2306Nutrição enteral                                                                                                                                      200809
+2401Transplante de medula óssea-autogênico                                                                                                                200809
+2402Transplante de medula óssea-alogênico aparentado                                                                                                      200809
+2403Transplante de medula óssea-alogênico não aparentado                                                                                                  200809
+2404Transplante de pâncreas isolado                                                                                                                       200809
+2405Transplante conjugado rim e pâncreas                                                                                                                  200809
+2406Transplante de esclera                                                                                                                                200809
+2407Transplante de córnea                                                                                                                                 200809
+2408Transplante renal                                                                                                                                     200809
+2409Transplante de fígado                                                                                                                                 200809
+2410Transplante de pulmão                                                                                                                                 200809
+2411Transplante de coração                                                                                                                                200809
+2412Busca ativa de orgãos                                                                                                                                 200809
+2413Banco de tecido ocular humano                                                                                                                         200809
+2414Banco de válvulas cardíacas                                                                                                                           200809
+2415Banco de tecido músculo-esquelético                                                                                                                   200809
+2416Banco de sangue e cordão umbilical e placentário                                                                                                      200809
+2417Exames de histocompatibilidade atraves de sorologia - Tipo I                                                                                          200809
+2418Exames de histocompatibilidade atraves de sorologia e ou biologia molecular - Tipo II                                                                 200809
+2501Unidade de atenção especializada em traumato-ortopedia                                                                                                200809
+2502Centro de referência de alta complexidade em traumato-ortopedia                                                                                       200809
+2503Coluna                                                                                                                                                200809
+2504Cintura escapular, ombro, braço e cotovelo                                                                                                            200809
+2505Antebraço, punho e mão                                                                                                                                200809
+2506Cintura pélvica, quadril, coxa                                                                                                                        200809
+2507Coxa, joelho e perna                                                                                                                                  200809
+2508Perna, tornozelo e pé                                                                                                                                 200809
+2509Ortopedia infantil                                                                                                                                    200809
+2510Traumatologia ortopédica de urgência                                                                                                                  200809
+2511Ortopedia - Coluna                                                                                                                                    200809
+2512Ortopedia - Ombro                                                                                                                                     200809
+2513Ortopedia - Mão                                                                                                                                       200809
+2514Ortopedia - Quadril                                                                                                                                   200809
+2515Ortopedia - Joelho                                                                                                                                    200809
+2516Ortopedia - Tumor Ósseo                                                                                                                               200809
+2517Outros segmentos ósseos                                                                                                                               200809
+2601UTI II - Adulto                                                                                                                                       200809
+2602UTI II - Neonatal                                                                                                                                     200809
+2603UTI II - Pediátrica                                                                                                                                   200809
+2604UTI III - Adulto                                                                                                                                      200809
+2605UTI III - Neonatal                                                                                                                                    200809
+2606UTI III - Pediátrica                                                                                                                                  200809
+2607UTI - Queimados                                                                                                                                       200809
+2699UTI I                                                                                                                                                 200809
+2701Hospital Tipo I em Urgência                                                                                                                           200809
+2702Hospital Tipo II em Urgência                                                                                                                          200809
+2703Hospital Tipo III em Urgência                                                                                                                         200809
+2801Unidade de cuidados intermediários neonatal                                                                                                           200809
+2901Videocirurgia                                                                                                                                         200809
+3001Unidade de Atenção Especializada no Processo de Transgenitalização                                                                                    200809

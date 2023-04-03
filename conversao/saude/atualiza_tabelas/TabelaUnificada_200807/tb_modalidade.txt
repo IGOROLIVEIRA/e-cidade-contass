@@ -1,0 +1,5 @@
+01Ambulatorial                                                                                        200807
+02Hospitalar                                                                                          200807
+03Hospital Dia                                                                                        200807
+04Internação Domiciliar                                                                               200807
+05Assistência Domiciliar                                                                              200807

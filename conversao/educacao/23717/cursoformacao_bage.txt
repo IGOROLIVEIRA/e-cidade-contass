@@ -1,0 +1,25 @@
+1  | ADMINISTRACAO                 | 345A01
+11 | BIOLOGIA                      | 421B02
+15 | CIENCIAS                      | 420C01
+22 | CIENCIAS BIOLOGICAS           | 421C01
+21 | CIENCIAS SOCIAIS              | 310C02
+28 | DIREITO                       | 380D01
+5  | EDUACAO ARTISTICA             | 210E01
+9  | EDUCACAO FISICA               | 720E01
+--| 23 | ENSINO FUNDAMENTAL            |
+--| 24 | ENSINO FUNDAMENTAL INCOMPLETO |
+--| 20 | ENSINO MEDIO                  |
+--| 25 | ENSINO MEDIO INCOMPLETO       |
+18 | ENSINO RELIGIOSO              | 145F05
+16 | ESPANHOL                      | 145F14
+10 | ESTUDOS SOCIAIS               | 312E03
+14 | GEOGRAFIA                     | 443G04
+13 | HISTORIA                      | 225H01
+17 | INGLES                        | 145F13
+2  | LETRAS                        | 220L01
+7  | MAGISTERIO                    | 144F11
+4  | MATEMATICA                    | 461M01
+6  | PEDAGOGIA                     | 142P01
+12 | PORTUGUES                     | 220L01
+--| 8  | POS GRADUACAO                 |
+26 | PSICOLOGIA                    | 311P02

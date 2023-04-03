@@ -1,0 +1,13 @@
+001Inclui valor da anestesia                                                                           200807
+002Politica Nacional de Cirurgias Eletivas                                                             200807
+003Admite longa permanência                                                                            200807
+004Admite permanência à maior                                                                          200807
+005Admite liberação de quantidade na AIH                                                               200807
+006CNRAC                                                                                               200807
+007Permanência por dia                                                                                 200807
+008Não permite mudança de procedimento                                                                 200807
+009Exige CNS                                                                                           200807
+010Exige VDRL na AIH                                                                                   200807
+011Permite alta direta de UTI                                                                          200807
+012Exige idade no BPA (Consolidado)                                                                    200807
+013Verifica habilitação de terceiro                                                                    200807

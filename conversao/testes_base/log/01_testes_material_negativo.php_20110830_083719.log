@@ -1,0 +1,31 @@
+
+[30/08/2011 08:37:19] - BASE PARA IMPORTACAO Prefeitura: host=localhost 
+                dbname=cmverdelandia 
+                port=5432 
+                user=dbportal 
+                password=
+[30/08/2011 08:37:19] 
+[30/08/2011 08:37:19] *** INICIO Script 01_testes_material_negativo.php ***
+[30/08/2011 08:37:19] 
+[30/08/2011 08:37:19] Arquivo de Log: log/01_testes_material_negativo.php_20110830_083719.log
+[30/08/2011 08:37:19]     Script PHP: 01_testes_material_negativo.php
+[30/08/2011 08:37:19] 
+[30/08/2011 08:37:19] Iniciando Sessao
+[30/08/2011 08:37:19] Setando Variáveis da Sessao
+[30/08/2011 08:37:19] Iniciando Processamento
+
+
+[30/08/2011 08:37:19] Processando SaldoEstoqueDiferenteMovimentacao.test.php
+[30/08/2011 08:37:19] Script: SaldoEstoqueDiferenteMovimentacao.test.php Não encontrou erro ................................................................................ [  OK  ]
+[30/08/2011 08:37:19] 
+[30/08/2011 08:37:19] Processando MaterialSaidaAnteriorentrada.test.php
+[30/08/2011 08:37:19] Script: MaterialSaidaAnteriorentrada.test.php Não encontrou erro ..................................................................................... [  OK  ]
+[30/08/2011 08:37:19] 
+[30/08/2011 08:37:19] Processando MaterialSaldoNegativo.test.php
+[30/08/2011 08:37:19] Script: MaterialSaldoNegativo.test.php Não encontrou erro ............................................................................................ [  OK  ]
+[30/08/2011 08:37:19] 
+[30/08/2011 08:37:19] Inicio: 08:37:19
+[30/08/2011 08:37:19] Final.: 08:37:19
+[30/08/2011 08:37:19] 
+[30/08/2011 08:37:19] *** FINAL Script 01_testes_material_negativo.php ***
+[30/08/2011 08:37:19] 
