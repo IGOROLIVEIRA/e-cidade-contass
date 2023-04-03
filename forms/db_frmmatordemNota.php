@@ -1269,7 +1269,7 @@ if ($lBloquear) {
     quan = novaQuantidade;
     unit = novoValorunit;
     $('l223_quant').value = quan;
-    $('l223_vlrn').value = unit;
+    $('l223_vlrn').value = round(unit,4);
     $('l223_total').value = round(quan * unit,2);
     
   }

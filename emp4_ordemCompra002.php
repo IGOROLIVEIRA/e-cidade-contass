@@ -170,9 +170,10 @@ if (isset($oPost->incluir)){
       $oTabItem = db_utils::fieldsMemory($rsTabItem, 0);
       $sValor         = "valor{$oPost->itensOrdem[$i]}";
       $nValor   = DBNumber::round($oPost->$sValor,2);
-      if($oTabItem->totaltabela > $nValor){
+              
+      if($oTabItem->totaltabela != $nValor){
         $sqlerro  = true;
-        $erro_msg = "Total Item da tabela $oTabItem->totaltabela é maior que o total do item principal $nValor. Operacao cancelada.";
+        $erro_msg = "Total Item da tabela R$ $oTabItem->totaltabela é diferente que o total do item principal R$ $nValor.\n Operacao cancelada.";
         break;
       }else{
         $sSqlEmp    = "update empordemtabela set l223_codordem = $codigo where l223_numemp = $oEmpItem->e62_numemp and l223_pcmaterordem = $oEmpItem->e62_item and l223_codordem = 0";

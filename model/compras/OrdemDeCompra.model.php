@@ -446,7 +446,7 @@ class OrdemDeCompra {
     $oDaoOrdemItemTabela->l223_pcmatertabela = $item->pcmatertabela;
     $oDaoOrdemItemTabela->l223_quant = $item->quantidade;
     $oDaoOrdemItemTabela->l223_vlrn = $item->valorunit;
-    $oDaoOrdemItemTabela->l223_total = $item->quantidade * $item->valorunit;
+    $oDaoOrdemItemTabela->l223_total = round($item->quantidade * $item->valorunit,2);
     $oDaoOrdemItemTabela->l223_numemp = $item->codempenho;
     $oDaoOrdemItemTabela->l223_descr = $item->descricao;
     $oDaoOrdemItemTabela->l223_codordem = null;
