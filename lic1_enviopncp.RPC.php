@@ -114,12 +114,13 @@ switch ($oParam->exec) {
                 $clAvisoLicitacaoPNCP = new AvisoLicitacaoPNCP($oDadosLicitacao);
                 //monta o json com os dados da licitacao
                 $clAvisoLicitacaoPNCP->montarDados();
+
                 //envia para pncp
                 $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarAviso(2, $processo);
 
                 if ($rsApiPNCP[0] == 201) {
                     //monto o codigo da compra no pncp
-                    $l213_numerocompra = substr(substr($rsApiPNCP[1], 68), 0, -13);
+                    $l213_numerocompra = substr(substr($rsApiPNCP[1], 61), 0, -2);
                     $l213_numerocontrolepncp = '17316563000196-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
 
                     $clliccontrolepncp = new cl_liccontrolepncp();

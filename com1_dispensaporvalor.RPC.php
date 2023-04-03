@@ -105,7 +105,7 @@ switch ($oParam->exec) {
                 if ($rsApiPNCP[0] == 201) {
 
                     //monto o codigo da compra no pncp
-                    $l213_numerocompra = substr(substr($rsApiPNCP[1], 68), 0, -13);
+                    $l213_numerocompra = substr(substr($rsApiPNCP[1], 61), 0, -2);
                     $l213_numerocontrolepncp = '17316563000196-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
 
 
