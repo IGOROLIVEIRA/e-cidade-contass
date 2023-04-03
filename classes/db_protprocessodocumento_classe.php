@@ -189,6 +189,8 @@ class cl_protprocessodocumento
                                       ,p01_documento 
                                       ,p01_nomedocumento 
                                       ,p01_depart
+                                      ,p01_nivelacesso
+
                        )
                 values (
                                 $this->p01_sequencial 
@@ -197,6 +199,8 @@ class cl_protprocessodocumento
                                ,$this->p01_documento 
                                ,'$this->p01_nomedocumento' 
                                ,$this->p01_depart
+                               ,$this->p01_nivelacesso
+
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -306,6 +310,19 @@ class cl_protprocessodocumento
       if (trim($this->p01_nomedocumento) == null) {
         $this->erro_sql = " Campo Nome do documento não informado.";
         $this->erro_campo = "p01_nomedocumento";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->p01_nivelacesso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["p01_nivelacesso"])) {
+      $sql  .= $virgula . " p01_nivelacesso = $this->p01_nivelacesso ";
+      $virgula = ",";
+      if (trim($this->p01_nivelacesso) == null || $this->p01_nivelacesso == "0") {
+        $this->erro_sql = " Campo Nível de acesso não informado.";
+        $this->erro_campo = "p01_nivelacesso";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));

@@ -261,7 +261,7 @@ for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
   oGridDocumentos.nameInstance = "oGridDocumentos";
   oGridDocumentos.setCheckbox(0);
   oGridDocumentos.setCellAlign(new Array("center", "left", "left", "center"));
-  oGridDocumentos.setCellWidth(["10%", "30%", "30%", "30%"]);
+  oGridDocumentos.setCellWidth(["10%", "20%", "30%", "40%"]);
   oGridDocumentos.setHeader(new Array("Código", "Descrição", "Departamento", "Ação"));
   oGridDocumentos.allowSelectColumns(true);
   oGridDocumentos.show($('ctnDbGridDocumentos'));
