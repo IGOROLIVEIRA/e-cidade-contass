@@ -1,1 +1,0 @@
-grant usage on sequence integra_cadastro_sequencial_seq to integraiss;
