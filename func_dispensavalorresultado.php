@@ -77,7 +77,7 @@ $sWhereContratos = " and 1 = 1 ";
                     FROM pcproc
                     INNER JOIN pcprocitem ON pc81_codproc = pc80_codproc
                     INNER JOIN liccontrolepncp ON l213_processodecompras = pc80_codproc
-                    WHERE l213_instit=" . db_getsession('DB_instit');
+                    WHERE l213_instit=" . db_getsession('DB_instit') . " order by pc80_codproc desc";
                 }
                 //die($sql);
                 db_lovrot($sql, 15, "()", "", $funcao_js);

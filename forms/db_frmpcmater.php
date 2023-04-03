@@ -43,6 +43,11 @@ function verPermissaoAlteraServico($iItem)
         pcmater0011.location.href = 'com1_pcmater0011.php?db_opcao=' + opc + '&codigomater=' + mat + '&codsubgrupo=' + val + '&codele=' + ele;
     }
 </script>
+<style>
+    #pc01_regimobiliario {
+        background-color: #e6e4f1;
+    }
+</style>
 <form name="form1" method="post" action="" onsubmit="return js_check()">
     <input type="hidden" name="codeles" value=<?= @$coluna ?>>
     <center>
@@ -292,6 +297,16 @@ function verPermissaoAlteraServico($iItem)
                                     db_select("pc01_taxa", $aTaxa, true, $db_opcao, "style=width:90px;");
                                     ?>
                 </td>
+                </tr>
+                <tr>
+                    <td>
+                        <strong>Reg. Imobiliário</strong>
+                    </td>
+                    <td>
+                        <?
+                        db_textarea('pc01_regimobiliario', 0, 75, '', true, 'text', $db_opcao, "onkeyup = 'return js_validaCaracteres(this.value, pc01_justificativa.id)';", '', '', '255');
+                        ?>
+                    </td>
                 </tr>
                 <? if ($db_opcao == 22 || $db_opcao == 2) : ?>
                     <tr>

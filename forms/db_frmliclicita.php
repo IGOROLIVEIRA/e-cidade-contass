@@ -1407,7 +1407,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("respAberProcesso").style.display = "none";
             document.getElementById("respEmissaoEdi").style.display = "none";
             document.getElementById("dataaber").style.display = "none";
-            document.getElementById("dataaberturapncp").style.display = "none";
+            if (l12_pncp == 't') {
+                document.getElementById("dataaberturapncp").style.display = '';
+            } else {
+                document.getElementById("dataaberturapncp").style.display = 'none';
+            }
             document.getElementById("equipepregao").style.display = 'none';
             document.getElementById("usaregistropreco").style.display = 'none';
             document.getElementById("aceitabilidade").style.display = 'none';
@@ -2178,7 +2182,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     }
 
 
-
     /*Função para limitar texaarea*/
     //"onkeyup='limitaTextarea(this.value);'");
     function limitaTextarea(valor) {
@@ -2226,7 +2229,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         var keyCode = event.keyCode ? event.keyCode : event.which ? event.which : event.charCode;
         if (keyCode == 13) {
 
-
             if (!e) var e = window.event;
 
             e.cancelBubble = true;
@@ -2241,7 +2243,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     function js_verificalei(lei) {
 
-
         js_verificaDatasProposta();
 
         var oRetornoTipo = document.getElementById('l20_tipliticacao').value;
@@ -2250,49 +2251,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         let modalidade = document.form1.modalidade_tribunal.value;
 
-        /*if (lei == 1) {
-            opcoesreg.remove(7);
-            opcoesreg.remove(6);
-            opcoesreg.remove(5);
-            opcoesreg.remove(4);
-            opcoesreg.remove(3);
-            opcoesreg.remove(2);
-            opcoesreg.remove(1);
-            opcoesreg.add(new Option('1- Menor Preço', 1));
-            opcoesreg.add(new Option('2- Melhor Técnica', 2));
-            opcoesreg.add(new Option('3- Técnica e Preço', 3));
-            opcoesreg.add(new Option('4- Maior Lance ou Oferta', 4));
-            opcoesreg.add(new Option('6- Maior Retorno Econômico', 6));
-            opcoesreg.add(new Option('7- Maior desconto', 7));
-            opcoesreg.add(new Option('8- Melhor técnica ou conteúdo artístico', 8));
-
-            document.querySelector("#l20_tipliticacao").value = oRetornoTipo;
-
-            if (modalidade != 100 && modalidade != 101 && modalidade != 102 && modalidade != 103) {
-                document.getElementById('disputa').style.display = '';
-
-            } else {
-                document.getElementById('disputa').style.display = 'none';
-            }
-        }
-        if (lei == 2 || lei == 0) {
-            document.getElementById('disputa').style.display = 'none';
-
-            opcoesreg.remove(7);
-            opcoesreg.remove(6);
-            opcoesreg.remove(5);
-            opcoesreg.remove(4);
-            opcoesreg.remove(3);
-            opcoesreg.remove(2);
-            opcoesreg.remove(1);
-
-            opcoesreg.add(new Option('1- Menor Preço', 1));
-            opcoesreg.add(new Option('2- Melhor Técnica', 2));
-            opcoesreg.add(new Option('3- Técnica e Preço', 3));
-            opcoesreg.add(new Option('4- Maior Lance ou Oferta', 4));
-
-            document.querySelector("#l20_tipliticacao").value = oRetornoTipo;
-        }*/
         if (document.getElementById('l20_codtipocomdescr').value != 99) numeracaopreenchida = true;
         js_ProcCod_l20_codtipocom('l20_codtipocomdescr', 'l20_codtipocom');
 

@@ -45,11 +45,9 @@ $val = false;
         background-color: #e6e4f1;
     }
 
-    #pc80_numdispensa {
-        width: 112px;
-    }
-
-    #pc80_dispvalor {
+    #pc80_numdispensa,
+    #pc80_dispvalor,
+    #l20_categoriaprocesso {
         width: 112px;
     }
 </style>
@@ -267,6 +265,29 @@ $val = false;
                         ?>
                     </td>
                 </tr>
+                <tr id="categoriaprocesso" style="display:none">
+                    <td>
+                        <strong>Categoria do Processo:</strong>
+                    </td>
+                    <td>
+                        <?
+                        $apc80_categoriaprocesso = array(
+                            "0" => "Selecione",
+                            "1" => "1- Cessão",
+                            "2" => "2- Compras",
+                            "3" => "3- Informática (TIC)",
+                            "4" => "4- Internacional",
+                            "5" => "5- Locação Imóveis",
+                            "6" => "6- Mão de Obra",
+                            "7" => "7- Obras",
+                            "8" => "8- Serviços",
+                            "9" => "9- Serviços de Engenharia",
+                            "10" => "10- Serviços de Saúde"
+                        );
+                        db_select("pc80_categoriaprocesso", $apc80_categoriaprocesso, true, $db_opcao, '');
+                        ?>
+                    </td>
+                </tr>
 
                 <tr id="dispensaporvalor3" style="display:none">
                     <td>
@@ -475,11 +496,13 @@ $val = false;
             $('dispensaporvalor2').style.display = '';
             $('dispensaporvalor3').style.display = '';
             $('dispensaporvalor4').style.display = '';
+            $('categoriaprocesso').style.display = '';
         } else {
             $('dispensaporvalor1').style.display = 'none';
             $('dispensaporvalor2').style.display = 'none';
             $('dispensaporvalor3').style.display = 'none';
             $('dispensaporvalor4').style.display = 'none';
+            $('categoriaprocesso').style.display = 'none';
         }
     }
 </script>

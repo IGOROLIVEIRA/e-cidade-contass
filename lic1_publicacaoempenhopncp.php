@@ -13,7 +13,7 @@ db_app::load("time.js");
 <html>
 
 <head>
-    <title>Contass Contabilidade Ltda - Pgina Inicial</title>
+    <title>Contass Contabilidade Ltda - Página Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
@@ -32,10 +32,12 @@ db_app::load("time.js");
                         <strong>Ambiente: </strong>
                         <select name="ambiente" id="ambiente">
                             <option value="1">Ambiente de Homologao Externa (teste)</option>
+                            <option value="2">Ambiente de Produção</option>
                         </select>
 
                         <strong>Tipo: </strong>
                         <select name="tipo" id="tipo">
+                            <option value="0">Selecione</option>
                             <option value="1">Inclusão</option>
                             <option value="2">Retificação</option>
                             <option value="3">Exclusão</option>
@@ -71,7 +73,7 @@ db_app::load("time.js");
         oGridEmpenho.setCheckbox(0);
         oGridEmpenho.setCellAlign(new Array("center", "center", "Center", "Left", "Center", "Center"));
         oGridEmpenho.setCellWidth(new Array("5%", "40%", "10%", "40%", "10%", "20%"));
-        oGridEmpenho.setHeader(new Array("Código", "Objeto", "Empenho", "Fornecedor", "Licitação", "Número de Controle"));
+        oGridEmpenho.setHeader(new Array("Código", "Objeto", "Empenho","Fornecedor", "Licitação", "Número de Controle"));
         oGridEmpenho.hasTotalValue = false;
         oGridEmpenho.show($('cntgridempenhos'));
 
@@ -88,7 +90,7 @@ db_app::load("time.js");
         oParam.exec = "getEmpenhos";
         js_divCarregando('Aguarde, pesquisando Empenhos', 'msgBox');
         var oAjax = new Ajax.Request(
-            'aco1_pncpenviocontrato.RPC.php', {
+            'lic1_pncpenvioempenho.RPC.php', {
                 method: 'post',
                 parameters: 'json=' + Object.toJSON(oParam),
                 onComplete: js_retornogetEmpenhos
@@ -151,13 +153,18 @@ db_app::load("time.js");
     function js_enviar() {
         var aEmpenhos = oGridEmpenho.getSelection("object");
 
+        let tipo = $F('tipo');
+
+        if(tipo == 0){
+            alert('Selecione um Tipo');
+            return false;
+        }    
+
         if (aEmpenhos.length == 0) {
             alert('Nenhum Empenho Selecionado');
             return false;
         }
-
-        let tipo = $F('tipo');
-
+        
         var oParam = new Object();
         if (tipo == 1) {
             oParam.exec = "enviarEmpenho";
@@ -176,14 +183,14 @@ db_app::load("time.js");
                 empenho.sequencialpncp = aCells[6].getValue();
                 empenho.codigo = aCells[1].getValue();
                 empenho.processo = aCells[2].getValue();
-
+                
                 oParam.aEmpenhos.push(empenho);
             }
         }
 
         js_divCarregando('Aguarde, Enviando empenhos', 'msgBox');
         var oAjax = new Ajax.Request(
-            'aco1_pncpenviocontrato.RPC.php', {
+            'lic1_pncpenvioempenho.RPC.php', {
                 method: 'post',
                 parameters: 'json=' + Object.toJSON(oParam),
                 onComplete: js_returnEnvPncp
@@ -198,7 +205,13 @@ db_app::load("time.js");
             alert(oRetornoEmpenhos.message.urlDecode());
             // window.location.href = "aco1_pncppublicacaocontrato001.php";
         } else {
-            alert('Enviado com Sucesso !');
+            let tipo = $F('tipo');
+            if(tipo == 1)
+                alert('Enviado com sucesso !');
+            if(tipo == 2)
+                alert('Retificação enviada com sucesso!');    
+            if(tipo == 3)
+                alert('Exclusão efetuada com sucesso!');
             window.location.href = "lic1_publicacaoempenhopncp.php";
         }
     }

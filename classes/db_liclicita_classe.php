@@ -1020,7 +1020,7 @@ class cl_liclicita
         }
 
         if (($this->l20_leidalicitacao == null) || ($this->l20_leidalicitacao == "0")) {
-            $this->erro_sql = "Lei da Licitação não informada!";
+            $this->erro_sql = " Campo l20_leidalicitacao nao informado.";
             $this->erro_banco = "l20_leidalicitacao.";
             $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -1365,11 +1365,11 @@ class cl_liclicita
         }
 
         if (trim($this->l20_dtpubratificacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
-            if (trim($this->l20_dtpubratificacao == null)) {
+            if (trim($this->l20_numeroconvidado == null)) {
                 $sql .= $virgula . " l20_dtpubratificacao = null ";
                 $virgula = ",";
             } else {
-                $sql .= $virgula . " l20_dtpubratificacao = '$this->l20_dtpubratificacao' ";
+                $sql .= $virgula . " l20_dtpubratificacao = $this->l20_dtpubratificacao ";
                 $virgula = ",";
             }
         }
@@ -3751,41 +3751,39 @@ class cl_liclicita
     public function sql_query_pncp($l20_codigo = null)
     {
         $sql  = " select distinct (SELECT CASE
-            WHEN o41_subunidade != 0
-                OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
-                    OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-                    OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
-            ELSE lpad((CASE WHEN o40_codtri = '0'
+        WHEN o41_subunidade != 0
+             OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
                 OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
-                OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
-        END AS codunidadesub
-        FROM db_departorg
-        JOIN infocomplementares ON si08_anousu = db01_anousu
-        AND si08_instit = " . db_getsession("DB_instit") . "
-        JOIN orcunidade ON db01_orgao=o41_orgao
-        AND db01_unidade=o41_unidade
-        AND db01_anousu = o41_anousu
-        JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-        WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) AS codigoUnidadeCompradora,
-        CASE
-                WHEN l03_pctipocompratribunal IN (110,51,53,52,102) THEN 1
-                WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa != 5 THEN 2
-                WHEN l03_pctipocompratribunal = 100 AND liclicita.l20_mododisputa != 5 THEN 3
-                WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa = 5 THEN 3
-        END AS tipoInstrumentoConvocatorioId,
-        CASE
-            WHEN l03_pctipocompratribunal = 110 THEN 2
-            WHEN l03_pctipocompratribunal = 51 THEN 3
-            WHEN l03_pctipocompratribunal = 53 THEN 6
-            WHEN l03_pctipocompratribunal = 52 THEN 7
-            WHEN l03_pctipocompratribunal = 101 THEN 8
-            WHEN l03_pctipocompratribunal = 100 THEN 9
-            WHEN l03_pctipocompratribunal = 102 THEN 12
-        END AS modalidadeId,
-        CASE
-            WHEN l03_pctipocompratribunal IN (100,101,102,103) THEN 4
-            ELSE liclicita.l20_mododisputa
-        END AS modoDisputaId,
+                  OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+        ELSE lpad((CASE WHEN o40_codtri = '0'
+             OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+               OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+       END AS codunidadesub
+       FROM db_departorg
+       JOIN infocomplementares ON si08_anousu = db01_anousu
+       AND si08_instit = " . db_getsession("DB_instit") . "
+       JOIN orcunidade ON db01_orgao=o41_orgao
+       AND db01_unidade=o41_unidade
+       AND db01_anousu = o41_anousu
+       JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
+       WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) AS codigoUnidadeCompradora,
+       CASE
+            WHEN l03_pctipocompratribunal IN (110,51,53,52,50,102) THEN 1
+            WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa != 5 THEN 2
+            WHEN l03_pctipocompratribunal = 100 AND liclicita.l20_mododisputa != 5 THEN 3
+            WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa = 5 THEN 3
+       END AS tipoInstrumentoConvocatorioId,
+       CASE
+           WHEN l03_pctipocompratribunal = 110 THEN 2
+           WHEN l03_pctipocompratribunal = 51 THEN 3
+           WHEN l03_pctipocompratribunal = 53 THEN 6
+           WHEN l03_pctipocompratribunal = 52 THEN 7
+           WHEN l03_pctipocompratribunal = 50 THEN 5
+           WHEN l03_pctipocompratribunal = 101 THEN 8
+           WHEN l03_pctipocompratribunal = 100 THEN 9
+           WHEN l03_pctipocompratribunal = 102 THEN 12
+       END AS modalidadeId,
+        liclicita.l20_mododisputa AS modoDisputaId,
         liclicita.l20_edital AS numeroCompra,
         liclicita.l20_anousu AS anoCompra,
         liclicita.l20_edital||'/'||liclicita.l20_anousu AS numeroProcesso,
@@ -3831,43 +3829,73 @@ class cl_liclicita
 
     public function sql_query_pncp_itens($l20_codigo = null)
     {
-        $sql  = "SELECT DISTINCT liclicitem.l21_ordem AS numeroItem,
-                            CASE
-                                WHEN pcmater.pc01_servico='t' THEN 'S'
-                                ELSE 'M'
-                            END AS materialOuServico,
-                            1 AS tipoBeneficioId,
-                            TRUE AS incentivoProdutivoBasico,
-                            pcmater.pc01_descrmater AS descricao,
-                            matunid.m61_descr AS unidadeMedida,
-                            si02_vlprecoreferencia AS valorUnitarioEstimado,
-                            liclicita.l20_tipliticacao AS criterioJulgamentoId,
-                            pcmater.pc01_codmater,
-                            solicitem.pc11_numero,
-                            solicitem.pc11_reservado,
-                            solicitem.pc11_quant,
-                            liclicita.l20_codigo
-                FROM liclicita
-                JOIN db_depart ON coddepto=l20_codepartamento
-                JOIN db_config ON codigo=instit
-                JOIN infocomplementaresinstit ON si09_instit=instit
-                JOIN liclicitem ON l21_codliclicita=l20_codigo
-                JOIN pcprocitem ON pc81_codprocitem=l21_codpcprocitem
-                JOIN pcproc ON pc80_codproc=pc81_codproc
-                JOIN solicitem ON pc11_codigo=pc81_solicitem
-                JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
-                JOIN pcmater ON pc16_codmater = pc01_codmater
-                JOIN solicitemunid ON pc17_codigo=pc11_codigo
-                JOIN matunid ON m61_codmatunid=pc17_unid
-                LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-                LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-                LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-                LEFT JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-                LEFT JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-                LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo
-                INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
-                WHERE liclicita.l20_codigo = {$l20_codigo}
-                ORDER BY numeroitem";
+        $sql  = "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
+                                    CASE
+                                        WHEN pcmater.pc01_servico='t' THEN 'S'
+                                        ELSE 'M'
+                                    END AS materialOuServico,
+                                    COALESCE ((case when liclicita.l20_destexclusiva = 1 then 1 else null end),
+                                            (case when liclicita.l20_subcontratacao = 1 then 2 else null end),
+                                            (case when liclicitem.l21_reservado = 't' then 3 ELSE null end),
+                                            4) AS tipoBeneficioId,
+                                    FALSE AS incentivoProdutivoBasico,
+                                    pcmater.pc01_descrmater AS descricao,
+                                    matunid.m61_descr AS unidadeMedida,
+                                    si02_vlprecoreferencia AS valorUnitarioEstimado,
+                                    liclicita.l20_tipliticacao AS criterioJulgamentoId,
+                                    pcmater.pc01_codmater,
+                                    solicitem.pc11_numero,
+                                    solicitem.pc11_reservado,
+                                    solicitem.pc11_quant,
+                                    liclicita.l20_codigo,
+                                    CASE
+                                        WHEN liclicitem.l21_sigilo IS NOT NULL THEN liclicitem.l21_sigilo
+                                        ELSE 'f'
+                                    END AS l21_sigilo,
+                                    CASE
+                                        WHEN substring(o56_elemento
+                                                        FROM 0
+                                                        FOR 8) IN
+                                                (SELECT DISTINCT substring(o56_elemento
+                                                                            FROM 0
+                                                                            FOR 8)
+                                                FROM orcelemento
+                                                WHERE o56_elemento LIKE '%3449061%') THEN 1
+                                        WHEN substring(o56_elemento
+                                                        FROM 0
+                                                        FOR 8) IN
+                                                (SELECT DISTINCT substring(o56_elemento
+                                                                            FROM 0
+                                                                            FOR 8)
+                                                FROM orcelemento
+                                                WHERE o56_elemento LIKE '%3449052%') THEN 2
+                                        ELSE 3
+                                    END AS itemCategoriaId,
+                                    pcmater.pc01_regimobiliario AS codigoRegistroImobiliario
+                        FROM liclicita
+                        JOIN db_depart ON coddepto=l20_codepartamento
+                        JOIN db_config ON codigo=instit
+                        JOIN infocomplementaresinstit ON si09_instit=instit
+                        JOIN liclicitem ON l21_codliclicita=l20_codigo
+                        JOIN pcprocitem ON pc81_codprocitem=l21_codpcprocitem
+                        JOIN pcproc ON pc80_codproc=pc81_codproc
+                        JOIN solicitem ON pc11_codigo=pc81_solicitem
+                        JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+                        JOIN pcmater ON pc16_codmater = pc01_codmater
+                        JOIN solicitemele ON pc18_solicitem = pc11_codigo
+                        JOIN orcelemento ON o56_codele = pc18_codele
+                        AND o56_anousu=l20_anousu
+                        JOIN solicitemunid ON pc17_codigo=pc11_codigo
+                        JOIN matunid ON m61_codmatunid=pc17_unid
+                        LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+                        LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+                        LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+                        LEFT JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+                        LEFT JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+                        LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo
+                        INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                        WHERE liclicita.l20_codigo = $l20_codigo
+                        ORDER BY numeroitem";
         return $sql;
     }
 
@@ -4013,6 +4041,392 @@ class cl_liclicita
                         l221_datafinal AS dataVigenciaFim  
         FROM licatareg
         WHERE l221_licitacao = $l20_codigo";
+
+        return $sql;
+    }
+
+    function sql_query_publicacaoEmpenho_pncp()
+    {
+        $ano  = db_getsession("DB_anousu");
+        $sql  = "SELECT *
+        FROM
+            (SELECT DISTINCT e60_numemp,
+                             e213_numerocontrolepncp,
+                             z01_cgccpf AS cnpjCompra,
+                             e213_ano AS anoCompra,
+                             e213_sequencialpncp AS sequencialCompra,
+                             7 AS tipoContratoId,
+                             e60_codemp AS numeroContratoEmpenho,
+                             e60_anousu AS anoContrato,
+                             e54_numerl AS processo,
+                             l20_categoriaprocesso AS categoriaProcessoId,
+                             FALSE AS receita,
+                                      01001 AS codigoUnidade,
+                                      z01_cgccpf AS niFornecedor,
+                                      CASE
+                                          WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                                          WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                                          ELSE 'PE'
+                                      END AS tipoPessoaFornecedor,
+                                      z01_nome AS nomeRazaoSocialFornecedor,
+                                      NULL AS niFornecedorSubContratado,
+                                      NULL AS tipoPessoaFornecedorSubContratado,
+                                      NULL AS nomeRazaoSocialFornecedorSubContratado,
+                                      l20_objeto AS objetoContrato,
+                                      NULL AS informacaoComplementar,
+                                      0 AS valorParcela,
+                                      e60_emiss AS dataVigenciaInicio,
+                                      '$ano-12-31' AS dataVigenciaFim,
+                                      e60_emiss AS dataAssinatura,
+                                      e60_vlremp AS valorInicial,
+                                      e60_vlremp AS valorGlobal,
+                                      CASE
+                                          WHEN
+                                                   (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date))) > 0 THEN
+                                                   (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date)))
+                                          ELSE 1
+                                      END AS numeroParcelas
+             FROM empautitem
+             LEFT JOIN empautitempcprocitem ON empautitempcprocitem.e73_sequen = empautitem.e55_sequen
+             AND empautitempcprocitem.e73_autori = empautitem.e55_autori
+             INNER JOIN liclicitem ON liclicitem.l21_codpcprocitem = empautitempcprocitem.e73_pcprocitem
+             INNER JOIN empautoriza ON empautoriza.e54_autori = empautitem.e55_autori
+             INNER JOIN liclicita ON liclicitem.l21_codliclicita = liclicita.l20_codigo
+             OR liclicita.l20_codigo = empautoriza.e54_codlicitacao
+             LEFT JOIN cflicita ON liclicita.l20_codtipocom = cflicita.l03_codigo
+             INNER JOIN empempaut ON e61_autori = e54_autori
+             INNER JOIN empempenho ON e60_numemp = e61_numemp
+             JOIN cgm ON z01_numcgm = e60_numcgm
+             LEFT JOIN empempenhopncp ON e213_contrato = e60_numemp
+             INNER JOIN liccontrolepncp ON l213_licitacao = l20_codigo
+             UNION SELECT DISTINCT e60_numemp,
+                                   e213_numerocontrolepncp,
+                                   z01_cgccpf AS cnpjCompra,
+                                   e213_ano AS anoCompra,
+                                   e213_sequencialpncp AS sequencialCompra,
+                                   7 AS tipoContratoId,
+                                   e60_codemp AS numeroContratoEmpenho,
+                                   e60_anousu AS anoContrato,
+                                   e54_numerl AS processo,
+                                   pc80_categoriaprocesso AS categoriaProcessoId,
+                                   FALSE AS receita,
+                                            01001 AS codigoUnidade,
+                                            z01_cgccpf AS niFornecedor,
+                                            CASE
+                                                WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                                                WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                                                ELSE 'PE'
+                                            END AS tipoPessoaFornecedor,
+                                            z01_nome AS nomeRazaoSocialFornecedor,
+                                            NULL AS niFornecedorSubContratado,
+                                            NULL AS tipoPessoaFornecedorSubContratado,
+                                            NULL AS nomeRazaoSocialFornecedorSubContratado,
+                                            pc80_resumo AS objetoContrato,
+                                            NULL AS informacaoComplementar,
+                                            0 AS valorParcela,
+                                            e60_emiss AS dataVigenciaInicio,
+                                            '$ano-12-31' AS dataVigenciaFim,
+                                            e60_emiss AS dataAssinatura,
+                                            e60_vlremp AS valorInicial,
+                                            e60_vlremp AS valorGlobal,
+                                            CASE
+                                                WHEN
+                                                         (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date))) > 0 THEN
+                                                         (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date)))
+                                                ELSE 1
+                                            END AS numeroParcelas
+             FROM empautitem
+             LEFT JOIN empautitempcprocitem ON empautitempcprocitem.e73_sequen = empautitem.e55_sequen
+             AND empautitempcprocitem.e73_autori = empautitem.e55_autori
+             JOIN pcprocitem ON pc81_codprocitem = e73_pcprocitem
+             JOIN pcproc ON pc80_codproc= pc81_codproc
+             INNER JOIN empautoriza ON empautoriza.e54_autori = empautitem.e55_autori
+             INNER JOIN empempaut ON e61_autori = e54_autori
+             INNER JOIN empempenho ON e60_numemp = e61_numemp
+             JOIN cgm ON z01_numcgm = e60_numcgm
+             LEFT JOIN empempenhopncp ON e213_contrato = e60_numemp
+             INNER JOIN liccontrolepncp ON l213_processodecompras = pc80_codproc
+             UNION SELECT DISTINCT e60_numemp,
+                                   e213_numerocontrolepncp,
+                                   z01_cgccpf AS cnpjCompra,
+                                   e213_ano AS anoCompra,
+                                   e213_sequencialpncp AS sequencialCompra,
+                                   7 AS tipoContratoId,
+                                   e60_codemp AS numeroContratoEmpenho,
+                                   e60_anousu AS anoContrato,
+                                   e54_numerl AS processo,
+                                   l20_categoriaprocesso AS categoriaProcessoId,
+                                   FALSE AS receita,
+                                            01001 AS codigoUnidade,
+                                            z01_cgccpf AS niFornecedor,
+                                            CASE
+                                                WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                                                WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                                                ELSE 'PE'
+                                            END AS tipoPessoaFornecedor,
+                                            z01_nome AS nomeRazaoSocialFornecedor,
+                                            NULL AS niFornecedorSubContratado,
+                                            NULL AS tipoPessoaFornecedorSubContratado,
+                                            NULL AS nomeRazaoSocialFornecedorSubContratado,
+                                            l20_objeto AS objetoContrato,
+                                            NULL AS informacaoComplementar,
+                                            0 AS valorParcela,
+                                            e60_emiss AS dataVigenciaInicio,
+                                            '$ano-12-31' AS dataVigenciaFim,
+                                            e60_emiss AS dataAssinatura,
+                                            e60_vlremp AS valorInicial,
+                                            e60_vlremp AS valorGlobal,
+                                            CASE
+                                                WHEN
+                                                         (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date))) > 0 THEN
+                                                         (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date)))
+                                                ELSE 1
+                                            END AS numeroParcelas
+             FROM empautitem
+             INNER JOIN empautoriza ON empautoriza.e54_autori = empautitem.e55_autori
+             INNER JOIN liclicita ON liclicita.l20_codigo = empautoriza.e54_codlicitacao
+             LEFT JOIN cflicita ON liclicita.l20_codtipocom = cflicita.l03_codigo
+             INNER JOIN empempaut ON e61_autori = e54_autori
+             INNER JOIN empempenho ON e60_numemp = e61_numemp
+             JOIN cgm ON z01_numcgm = e60_numcgm
+             LEFT JOIN empempenhopncp ON e213_contrato = e60_numemp
+             INNER JOIN liccontrolepncp ON l213_licitacao = l20_codigo ) AS x
+        ORDER BY x.e60_numemp DESC
+        ";
+        return $sql;
+    }
+
+    function sql_query_pncp_empenho($codigoempenho, $data)
+    {
+        $ano  = substr($data, 0, 4);
+
+        $sql  = "SELECT DISTINCT e60_numemp,
+                    e213_numerocontrolepncp,
+                    z01_cgccpf AS cnpjCompra,
+                    l213_anousu AS anoCompra,
+                    l213_numerocompra AS sequencialCompra,
+                    7 AS tipoContratoId,
+                    e60_codemp AS numeroContratoEmpenho,
+                    e60_anousu AS anoContrato,
+                    e54_numerl AS processo,
+                    l20_categoriaprocesso AS categoriaProcessoId,
+                    FALSE AS receita,
+                 01001 AS codigoUnidade,
+                 z01_cgccpf AS niFornecedor,
+                 CASE
+                     WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                     WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                     ELSE 'PE'
+                 END AS tipoPessoaFornecedor,
+                 z01_nome AS nomeRazaoSocialFornecedor,
+                 NULL AS niFornecedorSubContratado,
+                 NULL AS tipoPessoaFornecedorSubContratado,
+                 NULL AS nomeRazaoSocialFornecedorSubContratado,
+                 l20_objeto AS objetoContrato,
+                 NULL AS informacaoComplementar,
+                 0 AS valorParcela,
+                 e60_emiss AS dataVigenciaInicio,
+                 '$ano-12-31' AS dataVigenciaFim,
+                 e60_emiss AS dataAssinatura,
+                 e60_vlremp AS valorInicial,
+                 e60_vlremp AS valorGlobal,
+                 CASE
+                     WHEN
+                              (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date))) > 0 THEN
+                              (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date)))
+                     ELSE 1
+                 END AS numeroParcelas
+                FROM empautitem
+                LEFT JOIN empautitempcprocitem ON empautitempcprocitem.e73_sequen = empautitem.e55_sequen
+                AND empautitempcprocitem.e73_autori = empautitem.e55_autori
+                INNER JOIN liclicitem ON liclicitem.l21_codpcprocitem = empautitempcprocitem.e73_pcprocitem
+                INNER JOIN empautoriza ON empautoriza.e54_autori = empautitem.e55_autori
+                INNER JOIN liclicita ON liclicitem.l21_codliclicita = liclicita.l20_codigo
+                OR liclicita.l20_codigo = empautoriza.e54_codlicitacao
+                LEFT JOIN cflicita ON liclicita.l20_codtipocom = cflicita.l03_codigo
+                INNER JOIN empempaut ON e61_autori = e54_autori
+                INNER JOIN empempenho ON e60_numemp = e61_numemp
+                JOIN cgm ON z01_numcgm = e60_numcgm
+                LEFT JOIN empempenhopncp ON e213_contrato = e60_numemp
+                LEFT JOIN liccontrolepncp ON l213_licitacao = l20_codigo
+                WHERE e60_numemp = $codigoempenho
+            UNION
+                SELECT DISTINCT e60_numemp,
+                        e213_numerocontrolepncp,
+                        z01_cgccpf AS cnpjCompra,
+                        l213_anousu AS anoCompra,
+                        l213_numerocompra AS sequencialCompra,
+                        7 AS tipoContratoId,
+                        e60_codemp AS numeroContratoEmpenho,
+                        e60_anousu AS anoContrato,
+                        e54_numerl AS processo,
+                        pc80_categoriaprocesso AS categoriaProcessoId,
+                        FALSE AS receita,
+                 01001 AS codigoUnidade,
+                 z01_cgccpf AS niFornecedor,
+                 CASE
+                     WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                     WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                     ELSE 'PE'
+                 END AS tipoPessoaFornecedor,
+                 z01_nome AS nomeRazaoSocialFornecedor,
+                 NULL AS niFornecedorSubContratado,
+                 NULL AS tipoPessoaFornecedorSubContratado,
+                 NULL AS nomeRazaoSocialFornecedorSubContratado,
+                 pc80_resumo AS objetoContrato,
+                 NULL AS informacaoComplementar,
+                 0 AS valorParcela,
+                 e60_emiss AS dataVigenciaInicio,
+                 '$ano-12-31' AS dataVigenciaFim,
+                 e60_emiss AS dataAssinatura,
+                 e60_vlremp AS valorInicial,
+                 e60_vlremp AS valorGlobal,
+                 CASE
+                     WHEN
+                              (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date))) > 0 THEN
+                              (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date)))
+                     ELSE 1
+                 END AS numeroParcelas
+                FROM empautitem
+                LEFT JOIN empautitempcprocitem ON empautitempcprocitem.e73_sequen = empautitem.e55_sequen
+                AND empautitempcprocitem.e73_autori = empautitem.e55_autori
+                JOIN pcprocitem ON pc81_codprocitem = e73_pcprocitem
+                JOIN pcproc ON pc80_codproc= pc81_codproc
+                INNER JOIN empautoriza ON empautoriza.e54_autori = empautitem.e55_autori
+                INNER JOIN empempaut ON e61_autori = e54_autori
+                INNER JOIN empempenho ON e60_numemp = e61_numemp
+                JOIN cgm ON z01_numcgm = e60_numcgm
+                LEFT JOIN empempenhopncp ON e213_contrato = e60_numemp
+                INNER JOIN liccontrolepncp ON l213_processodecompras = pc80_codproc
+                WHERE e60_numemp = $codigoempenho
+            UNION
+            SELECT DISTINCT e60_numemp,
+                    e213_numerocontrolepncp,
+                    z01_cgccpf AS cnpjCompra,
+                    l213_anousu AS anoCompra,
+                    l213_numerocompra AS sequencialCompra,
+                    7 AS tipoContratoId,
+                    e60_codemp AS numeroContratoEmpenho,
+                    e60_anousu AS anoContrato,
+                    e54_numerl AS processo,
+                    l20_categoriaprocesso AS categoriaProcessoId,
+                    FALSE AS receita,
+                 01001 AS codigoUnidade,
+                 z01_cgccpf AS niFornecedor,
+                 CASE
+                     WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                     WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                     ELSE 'PE'
+                 END AS tipoPessoaFornecedor,
+                 z01_nome AS nomeRazaoSocialFornecedor,
+                 NULL AS niFornecedorSubContratado,
+                 NULL AS tipoPessoaFornecedorSubContratado,
+                 NULL AS nomeRazaoSocialFornecedorSubContratado,
+                 l20_objeto AS objetoContrato,
+                 NULL AS informacaoComplementar,
+                 0 AS valorParcela,
+                 e60_emiss AS dataVigenciaInicio,
+                 '$ano-12-31' AS dataVigenciaFim,
+                 e60_emiss AS dataAssinatura,
+                 e60_vlremp AS valorInicial,
+                 e60_vlremp AS valorGlobal,
+                 CASE
+                     WHEN
+                              (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date))) > 0 THEN
+                              (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date)))
+                     ELSE 1
+                 END AS numeroParcelas
+                FROM empautitem
+                INNER JOIN empautoriza ON empautoriza.e54_autori = empautitem.e55_autori
+                INNER JOIN liclicita ON liclicita.l20_codigo = empautoriza.e54_codlicitacao
+                LEFT JOIN cflicita ON liclicita.l20_codtipocom = cflicita.l03_codigo
+                INNER JOIN empempaut ON e61_autori = e54_autori
+                INNER JOIN empempenho ON e60_numemp = e61_numemp
+                JOIN cgm ON z01_numcgm = e60_numcgm
+                LEFT JOIN empempenhopncp ON e213_contrato = e60_numemp
+                INNER JOIN liccontrolepncp ON l213_licitacao = l20_codigo
+                WHERE e60_numemp = $codigoempenho
+                ";
+
+        return $sql;
+    }
+
+    function sql_query_pncp_empenho_enviado()
+    {
+        $ano  = db_getsession("DB_anousu");
+        $sql  = "select  distinct
+        e60_numemp,
+        e213_numerocontrolepncp,
+        z01_cgccpf as cnpjCompra,
+        l213_anousu as anoCompra,
+        l213_numerocompra as sequencialCompra,
+        7 as tipoContratoId,
+        e60_codemp as numeroContratoEmpenho,
+        e60_anousu as anoContrato,
+        e54_numerl as processo,
+        l20_categoriaprocesso as categoriaProcessoId,
+        false as receita,
+        01001 as codigoUnidade,
+        z01_cgccpf as niFornecedor,
+        case
+            when length(trim(z01_cgccpf)) = 14 then 'PJ'
+            when length(trim(z01_cgccpf)) = 11 then 'PF'
+            else 
+                            'PE'
+        end as tipoPessoaFornecedor,
+        z01_nome as nomeRazaoSocialFornecedor,
+        null as niFornecedorSubContratado,
+        null as tipoPessoaFornecedorSubContratado,
+        null as nomeRazaoSocialFornecedorSubContratado,
+        l20_objeto as objetoContrato,
+        null as informacaoComplementar,
+        0 as valorParcela,
+        e60_emiss as dataVigenciaInicio,
+        '$ano-12-31' as dataVigenciaFim,
+        e60_emiss as dataAssinatura,
+        e60_vlremp as valorInicial,
+        e60_vlremp as valorGlobal,
+        case
+            when
+                         (
+            select
+                (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 +
+                          (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date))) > 0 then 
+                          (
+            select
+                (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 +
+                          (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date)))
+            else 
+                         1
+            end as numeroParcelas
+        from
+            empautitem
+        left join empautitempcprocitem on
+            empautitempcprocitem.e73_sequen = empautitem.e55_sequen
+            and empautitempcprocitem.e73_autori = empautitem.e55_autori
+        left join liclicitem on
+            liclicitem.l21_codpcprocitem = empautitempcprocitem.e73_pcprocitem
+        inner join empautoriza on
+            empautoriza.e54_autori = empautitem.e55_autori                    
+        left join liclicita on
+        liclicitem.l21_codliclicita = liclicita.l20_codigo
+		or 
+		liclicita.l20_codigo = empautoriza.e54_codlicitacao
+        left join cflicita on
+            liclicita.l20_codtipocom = cflicita.l03_codigo
+        inner join empempaut on
+            e61_autori = e54_autori
+        inner join empempenho on
+            e60_numemp = e61_numemp
+        join cgm on
+            z01_numcgm = e60_numcgm
+        left join liccontrolepncp on
+            l20_codigo = l213_licitacao
+            or e54_codlicitacao = l213_licitacao
+        join empempenhopncp on
+            e213_contrato = e60_numemp
+                
+        where e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' ";
 
         return $sql;
     }

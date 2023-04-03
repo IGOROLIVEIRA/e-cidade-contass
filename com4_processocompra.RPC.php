@@ -102,8 +102,7 @@ try {
       $oRetorno->pc80_subcontratacao = $oProcessoCompra->getSubContratacao();
       $oRetorno->pc80_dadoscomplementares = urlencode($oProcessoCompra->getDadosComplementares());
       $oRetorno->pc80_amparolegal = urlencode($oProcessoCompra->getAmparoLegal());
-
-
+      $oRetorno->pc80_categoriaprocesso = $oProcessoCompra->getCategoriaProcesso();
 
       $aLotes = array();
       foreach ($oProcessoCompra->getLotes() as $oLotesProcessoCompra) {
@@ -161,6 +160,8 @@ try {
       $sSubContratacao           = $oParam->pc80_subcontratacao;
       $sDadosComplementares      = $oParam->pc80_dadoscomplementares;
       $iAmparolegal              = $oParam->pc80_amparolegal;
+      $iCategoriaprocesso        = $oParam->pc80_categoriaprocesso;
+
 
       if (empty($iSequencialProcessoCompra)) {
         throw new DBException(_M(MENSAGENS . "nao_informado_processo_compra"));
@@ -168,9 +169,9 @@ try {
 
       $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
 
-      if ($oProcessoCompra->getNumerodispensa() != '0' && ($oProcessoCompra->getNumerodispensa() == $oParam->pc80_numdispensa)) {
+      /*if ($oProcessoCompra->getNumerodispensa() != '0' && ($oProcessoCompra->getNumerodispensa() == $oParam->pc80_numdispensa)) {
         throw new DBException(_M(MENSAGENS . 'dispensa_ja_existe'));
-      }
+      }*/
 
       $oProcessoCompra->setResumo($sResumo);
       $oProcessoCompra->setCriterioAdjudicacao($sCriterioAjudicacao);
@@ -181,6 +182,8 @@ try {
       $oProcessoCompra->setSubContratacao($sSubContratacao);
       $oProcessoCompra->setDadosComplementares($sDadosComplementares);
       $oProcessoCompra->setAmparoLegal($iAmparolegal);
+      $oProcessoCompra->setCategoriaProcesso($iCategoriaprocesso);
+
 
       foreach ($aLotes as $oStdLote) {
 

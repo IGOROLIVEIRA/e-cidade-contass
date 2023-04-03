@@ -37,7 +37,7 @@ switch ($oParam->exec) {
                      AND l213_licitacao=l20_codigo)
         ORDER BY l213_sequencial DESC
         LIMIT 1) AS l213_numerocontrolepncp,l03_descr,l20_numero";
-        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, $campos, 'l20_codigo desc', "l03_pctipocompratribunal in (110,51,53,52,102,101,100,101) and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
+        $rsLicitacaoAbertas = $clliclicita->sql_record($clliclicita->sql_query(null, $campos, 'l20_codigo desc', "l03_pctipocompratribunal in (110,50,51,53,52,102,101,100,101) and liclicita.l20_leidalicitacao = 1 and l20_instit = " . db_getsession('DB_instit')));
 
         for ($iCont = 0; $iCont < pg_num_rows($rsLicitacaoAbertas); $iCont++) {
 
@@ -86,7 +86,7 @@ switch ($oParam->exec) {
 
                     //continua...
 
-                    $tipoDocumento = $oDadosLicitacao->tipoinstrumentoconvocatorioid;
+                    //$tipoDocumento = $oDadosLicitacao->tipoinstrumentoconvocatorioid;
                     $processo = $oDadosLicitacao->numerocompra;
 
                     for ($item = 0; $item < pg_numrows($rsDadosEnvioItens); $item++) {
@@ -115,11 +115,11 @@ switch ($oParam->exec) {
                 //monta o json com os dados da licitacao
                 $clAvisoLicitacaoPNCP->montarDados();
                 //envia para pncp
-                $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarAviso($tipoDocumento, $processo);
+                $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarAviso(2, $processo);
 
                 if ($rsApiPNCP[0] == 201) {
                     //monto o codigo da compra no pncp
-                    $l213_numerocompra = substr($rsApiPNCP[1], 68, 2);
+                    $l213_numerocompra = substr(substr($rsApiPNCP[1], 68), 0, -13);
                     $l213_numerocontrolepncp = '17316563000196-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
 
                     $clliccontrolepncp = new cl_liccontrolepncp();

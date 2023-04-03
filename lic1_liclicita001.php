@@ -235,7 +235,7 @@ if (isset($incluir)) {
   		*/
 		if ($oPost->l20_naturezaobjeto == 1 || $oPost->l20_naturezaobjeto == 7) {
 			if ($oPost->l20_regimexecucao == 0) {
-				$erro_msg .= 'Campo Regime da Execuçãoooooooooooooooooooooooo não selecionado\n\n';
+				$erro_msg .= 'Campo Regime da Execução não selecionado\n\n';
 				$sqlerro = true;
 			}
 		}

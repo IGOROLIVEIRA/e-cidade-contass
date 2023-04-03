@@ -56,6 +56,8 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
   /*OC3770*/
   $clpcmater->pc01_tabela = $pc01_tabela;
   $clpcmater->pc01_taxa   = $pc01_taxa;
+  $clpcmater->pc01_regimobiliario   = $pc01_regimobiliario;
+
   /*FIM - OC3770*/
 
   if ($pc01_obras == "0") {

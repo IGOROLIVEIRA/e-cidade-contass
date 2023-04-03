@@ -102,10 +102,15 @@ switch ($oParam->exec) {
                 //envia para pncp
                 $rsApiPNCP = $clDispensaporvalor->enviarAviso($tipoDocumento, $processo);
 
-                if ($rsApiPNCP->compraUri) {
+                if ($rsApiPNCP[0] == 201) {
+
+                    //monto o codigo da compra no pncp
+                    $l213_numerocompra = substr(substr($rsApiPNCP[1], 68), 0, -13);
+                    $l213_numerocontrolepncp = '17316563000196-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
+
+
                     //monto o codigo da compra no pncp
                     $clliccontrolepncp = new cl_liccontrolepncp();
-                    $l213_numerocontrolepncp = '17316563000196-1-' . str_pad(substr($rsApiPNCP->compraUri, 74), 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
                     //Neste if verifico o tipo de instrumento para salvar os campos licitacao ou processo de compras
 
                     if ($oDadosLicitacao->tipoinstrumentoconvocatorioid == "3") {
@@ -117,7 +122,7 @@ switch ($oParam->exec) {
                     $clliccontrolepncp->l213_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
                     $clliccontrolepncp->l213_numerocontrolepncp = $l213_numerocontrolepncp;
                     $clliccontrolepncp->l213_situacao = 1;
-                    $clliccontrolepncp->l213_numerocompra = substr($rsApiPNCP->compraUri, 74);
+                    $clliccontrolepncp->l213_numerocompra = $l213_numerocompra;
                     $clliccontrolepncp->l213_anousu = $oDadosLicitacao->anocompra;
                     $clliccontrolepncp->l213_instit = db_getsession('DB_instit');
                     $clliccontrolepncp->incluir();
@@ -125,7 +130,7 @@ switch ($oParam->exec) {
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Enviado com Sucesso !";
                 } else {
-                    throw new Exception(utf8_decode($rsApiPNCP->message));
+                    throw new Exception(utf8_decode($rsApiPNCP[1]));
                 }
             }
         } catch (Exception $eErro) {
