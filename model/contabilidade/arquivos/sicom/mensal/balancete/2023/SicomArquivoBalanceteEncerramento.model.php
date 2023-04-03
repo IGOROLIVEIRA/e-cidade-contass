@@ -108,7 +108,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
                                     else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub
                      from orcunidade
-                     inner join orcorgao on (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu) 
+                     inner join orcorgao on (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
                      where o41_orgao = {$iOrgao}
                        and o41_unidade = {$iUnidade}
                        and o41_anousu = " . db_getsession('DB_anousu') ."
@@ -297,7 +297,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
 						inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . db_getsession("DB_instit") . "
                         inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu
                         left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut
-                             where   c60_anousu = " . db_getsession("DB_anousu") . ") as x
+                             where c60_nregobrig=14 and  c60_anousu = " . db_getsession("DB_anousu") . ") as x
                         where debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil";
 
         $rsReg10 = db_query($sqlReg10) or die("Erro 20 ".$sqlReg10);
@@ -818,8 +818,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                 select DISTINCT conplanoorcamento.c60_codcon,
                                                             conplanoorcamento.c60_descr,
                                                             conplanoorcamento.c60_estrut, o15_codtri
-                                                FROM orcreceita 
-                                                inner join conplanoorcamento on o70_codfon=c60_codcon and c60_anousu=o70_anousu 
+                                                FROM orcreceita
+                                                inner join conplanoorcamento on o70_codfon=c60_codcon and c60_anousu=o70_anousu
                                                 left JOIN conplanoorcamentoanalitica ON c61_codcon = conplanoorcamento.c60_codcon AND c61_anousu = conplanoorcamento.c60_anousu
                                                 inner JOIN orctiporec ON o70_codigo = orctiporec.o15_codigo
                                                 WHERE  substr(conplanoorcamento.c60_estrut,1,1) in ('3','4') and conplanoorcamentoanalitica.c61_instit = " . db_getsession('DB_instit') . "
@@ -1279,7 +1279,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     e60_numemp numemp,
                                     e60_anousu anoinscricao,
                                     o58_orgao,o58_unidade
-                                    from  contacorrentedetalhe 
+                                    from  contacorrentedetalhe
                                     inner join empempenho on e60_numemp = c19_numemp
                                     inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot
                                     inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
@@ -1307,7 +1307,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                       (SELECT case when round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) = '0.00' then null else round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) end AS saldoinicial
                                        FROM
                                          (SELECT
-                                            (SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
+                                            (SELECT sum(CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END) AS saldoanterior
                                              FROM contacorrente
                                              INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
                                              INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
@@ -1874,7 +1874,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                      * Busca o codigo unico do ctb enviado no AM
                      *
                      */
-                    $sSqlVerifica = " select distinct si95_codctb, ano from ( 
+                    $sSqlVerifica = " select distinct si95_codctb, ano from (
                                       SELECT distinct si95_codctb, 2023 as ano FROM ctb102023 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
                                       AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'

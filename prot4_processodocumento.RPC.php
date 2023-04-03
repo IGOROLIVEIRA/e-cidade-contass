@@ -35,7 +35,6 @@ require_once("std/db_stdClass.php");
 require_once("dbforms/db_funcoes.php");
 
 define("URL_MENSAGEM_PROT4PROCESSODOCUMENTO", "patrimonial.protocolo.prot4_processodocumento.");
-
 $oJson               = new services_json();
 $oParam              = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno            = new stdClass();
@@ -51,6 +50,9 @@ try {
   switch ($oParam->exec) {
 
     case "carregarDocumentos":
+      $usuario = db_getsession('DB_id_usuario');
+      $protocolosigiloso = db_query("select * from protparam");
+      $protocolosigiloso = db_utils::fieldsMemory($protocolosigiloso, 0);
 
       $oProcessoProtocolo    = new processoProtocolo($oParam->iCodigoProcesso);
 
@@ -59,23 +61,48 @@ try {
       foreach ($aDocumentosVinculados as $oProcessoDocumento) {
 
         $oStdDocumento = new stdClass();
+        $oStdDocumento->nivelacesso = $oProcessoDocumento->getNivelAcesso();
+        if ($oStdDocumento->nivelacesso == null) {
+          $oStdDocumento->nivelacesso = "null";
+        }
         $oStdDocumento->iCodigoDocumento    = $oProcessoDocumento->getCodigo();
         $oStdDocumento->sDescricaoDocumento = urlencode($oProcessoDocumento->getDescricao());
         $oStdDocumento->iDepart             = $oProcessoDocumento->getDepart();
         $oDepartamento = new DBDepartamento($oProcessoDocumento->getDepart());
         $oStdDocumento->sDepartamento = urlencode($oDepartamento->getNomeDepartamento());
-
         $oStdDocumento->iDepartUsuario      = db_getsession("DB_coddepto");
+
+        if ($protocolosigiloso->p90_protocolosigiloso == "t") {
+          $result = db_query("select * from perfispermanexo
+          inner join db_permherda p203_perfil on p203_perfil = id_perfil
+          where id_usuario = $usuario and p203_permanexo = $oStdDocumento->nivelacesso;
+          ");
+          $permissao = pg_num_rows($result);
+          if ($permissao == 0) {
+            $oStdDocumento->permissao = false;
+          } else {
+            $oStdDocumento->permissao = true;
+          }
+        }
+
+        if ($oStdDocumento->nivelacesso == "null") {
+          $oStdDocumento->nivelacesso = "";
+        }
+
 
         $aDocumentosRetorno[] = $oStdDocumento;
       }
       $oRetorno->aDocumentosVinculados = $aDocumentosRetorno;
 
       $oRetorno->andamento = $oProcessoProtocolo->getHaTramiteInicial($oProcessoProtocolo->getNumeroProcesso(), $oProcessoProtocolo->getAnoProcesso());
-
       break;
 
     case "salvarDocumento":
+
+      $erro = false;
+
+      $protocolosigiloso = db_query("select * from protparam");
+      $protocolosigiloso = db_utils::fieldsMemory($protocolosigiloso, 0);
 
       $oProcessoProtocolo = new processoProtocolo($oParam->iCodigoProcesso);
       $oDepartamentoAtual = $oProcessoProtocolo->getDepartamentoAtual();
@@ -83,12 +110,19 @@ try {
       if ($oDepartamentoAtual->getCodigo() != db_getsession("DB_coddepto")) {
 
         $oStdErro = (object)array("sDepartamento" => "{$oDepartamentoAtual->getCodigo()} - {$oDepartamentoAtual->getNomeDepartamento()}");
-        throw new BusinessException(_M(URL_MENSAGEM_PROT4PROCESSODOCUMENTO . "departamento_diferente_vinculo_documento", $oStdErro));
+        if ($protocolosigiloso->p90_protocolosigiloso == "t") {
+          $oRetorno->sMensagem = "So o departamento {$oDepartamentoAtual->getCodigo()} - {$oDepartamentoAtual->getNomeDepartamento()} em que o processo se encontra atualmente pode vincular documento.";
+          $oRetorno->iStatus   = 2;
+          break;
+        } else {
+          throw new BusinessException(_M(URL_MENSAGEM_PROT4PROCESSODOCUMENTO . "departamento_diferente_vinculo_documento", $oStdErro));
+        }
       }
-
       $oProcessoDocumento = new ProcessoDocumento($oParam->iCodigoDocumento);
       $oProcessoDocumento->setDescricao(db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricaoDocumento));
       $oProcessoDocumento->setProcessoProtocolo($oProcessoProtocolo);
+      $oProcessoDocumento->setNivelAcesso($oParam->iNivelAcesso);
+
 
       if (!empty($oParam->sCaminhoArquivo)) {
         $oProcessoDocumento->setCaminhoArquivo($oParam->sCaminhoArquivo);
@@ -100,37 +134,36 @@ try {
 
     case "excluirDocumento":
 
-			$aDocumentosNaoExcluidos = array();
+      $aDocumentosNaoExcluidos = array();
 
       foreach ($oParam->aDocumentosExclusao as $iCodigoDocumento) {
 
-				$oProcessoDocumento = new ProcessoDocumento($iCodigoDocumento);
+        $oProcessoDocumento = new ProcessoDocumento($iCodigoDocumento);
 
-				if ($oProcessoDocumento->getDepart() === db_getsession("DB_coddepto")) {
-					$oProcessoDocumento->excluir();
-					continue;
-				}
-				$aDocumentosNaoExcluidos[] = $oProcessoDocumento->getDescricao();
+        if ($oProcessoDocumento->getDepart() === db_getsession("DB_coddepto")) {
+          $oProcessoDocumento->excluir();
+          continue;
+        }
+        $aDocumentosNaoExcluidos[] = $oProcessoDocumento->getDescricao();
+      }
 
-			}
+      $sMensagemDeNaoExclusao = "Alguns documentos não foram excluídos pois não" .
+        " pertencem ao departamento atual.\n\nDocumentos não excluídos:";
+      $sDocumentosNaoExcluidos = '';
+      foreach ($aDocumentosNaoExcluidos as $sDocumentoNaoExcluido) {
+        $sDocumentosNaoExcluidos .= "\n- $sDocumentoNaoExcluido";
+      }
 
-			$sMensagemDeNaoExclusao = "Alguns documentos não foram excluídos pois não".
-			" pertencem ao departamento atual.\n\nDocumentos não excluídos:";
-			$sDocumentosNaoExcluidos = '';
-			foreach($aDocumentosNaoExcluidos as $sDocumentoNaoExcluido) {
-				$sDocumentosNaoExcluidos .= "\n- $sDocumentoNaoExcluido";
-			}		
+      if (count($aDocumentosNaoExcluidos) === 1) {
+        $sMensagemDeNaoExclusao = "Um documento não foi excluído pois não" .
+          " pertence ao departamento atual.\n\nDocumento não excluído:";
+      }
 
-			if (count($aDocumentosNaoExcluidos) === 1) {
-				$sMensagemDeNaoExclusao = "Um documento não foi excluído pois não" .
-				" pertence ao departamento atual.\n\nDocumento não excluído:";
-			}
-
-			if (!empty($aDocumentosNaoExcluidos)) {
-				$oRetorno->sMensagem = urlencode($sMensagemDeNaoExclusao.$sDocumentosNaoExcluidos);
-			} else {
-				$oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
-			}
+      if (!empty($aDocumentosNaoExcluidos)) {
+        $oRetorno->sMensagem = urlencode($sMensagemDeNaoExclusao . $sDocumentosNaoExcluidos);
+      } else {
+        $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
+      }
 
       break;
 

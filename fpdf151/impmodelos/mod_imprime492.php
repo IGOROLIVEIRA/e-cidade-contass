@@ -1,12 +1,11 @@
 <?php
 
-$sSQLTomadorDBConfig = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is true";
-$sSQLTomadorDBCamara = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is false
-                        AND db21_tipoinstit = (SELECT db21_codtipo FROM db_tipoinstit WHERE UPPER(db21_nome) LIKE 'CAMARA%')";
-$rsTomadorDBConfig = db_query($sSQLTomadorDBConfig);
-$rsTomadorDBCamara = db_query($sSQLTomadorDBCamara);
-$lTomadorEhPrefeitura = !!pg_num_rows($rsTomadorDBConfig);
-$lTomadorEhCamara     = !!pg_num_rows($rsTomadorDBCamara);
+$sSQLTomadorDBPrefeitura    = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is true";
+$sSQLTomadorDBDemaisOrgaos  = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is false";
+$rsTomadorDBPrefeitura      = db_query($sSQLTomadorDBPrefeitura);
+$rsTomadorDBDemaisOrgaos    = db_query($sSQLTomadorDBDemaisOrgaos);
+$lTomadorEhPrefeitura       = !!pg_num_rows($rsTomadorDBPrefeitura);
+$lTomadorEhDemaisOrgaos     = !!pg_num_rows($rsTomadorDBDemaisOrgaos);
 $oInstit = new Instituicao(db_getsession('DB_instit'));
 
 ##Modelo de nota Fiscal
@@ -341,7 +340,7 @@ for ($j = 0; $j < $confNumRows; $j++) {
     }
     
     $codInstit = array(Instituicao::COD_CLI_PMGRAOMOGOL, Instituicao::COD_CLI_MONTEAZUL);
-    if (($lTomadorEhPrefeitura == null) && (in_array($oInstit->getCodigoCliente(), $codInstit)) || ($lTomadorEhCamara)){        
+    if (($lTomadorEhPrefeitura == null) && (in_array($oInstit->getCodigoCliente(), $codInstit) || ($lTomadorEhDemaisOrgaos))){
             $fTotalNota = $this->fTotaliUni - $this->fvlrInss - $this->fvlrIrrf;
     }
 
