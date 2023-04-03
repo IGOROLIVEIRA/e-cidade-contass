@@ -24,24 +24,24 @@ if (isset($geratxt)) {
 
     $sSql = "
 SELECT 'I;'|| nextval('teste_seq') || ';' || lpad(x.rh02_mesusu,2,0) || ';' || x.z01_cgccpf || ';' || x.z01_nome || ';' || coalesce(x.rh55_inep,'00000000') || ';' || coalesce(x.rh55_descr,'') || ';' || x.rh02_hrssem || ';' || CASE WHEN x.rh02_tipcatprof IN (14,15,16) THEN 2 ELSE 1 END || ';' ||
-CASE WHEN x.rh02_tipcatprof IN (14,15,16) THEN 'Outros profissionais da educação' ELSE 'Profissionais do magistério' END || ';' || 
+CASE WHEN x.rh02_tipcatprof IN (14,15,16) THEN 'Outros profissionais da educaÃ§Ã£o' ELSE 'Profissionais do magistÃ©rio' END || ';' || 
 CASE WHEN x.rh02_tipcatprof IS NOT NULL THEN x.rh02_tipcatprof::varchar ELSE '0' || ';'|| 
 CASE WHEN x.rh02_tipcatprof = 0 THEN 'Nenhum' 
-WHEN x.rh02_tipcatprof = 1 THEN 'Docente habilitado em curso de nível médio' 
+WHEN x.rh02_tipcatprof = 1 THEN 'Docente habilitado em curso de nÃ­vel mÃ©dio' 
 WHEN x.rh02_tipcatprof = 2 THEN 'Docente habilitado em curso de pedagogia' 
 WHEN x.rh02_tipcatprof = 3 THEN 'Docente habilitado em curso de licenciatura plena' 
-WHEN x.rh02_tipcatprof = 4 THEN 'Docente habilitado em programa especial de formação pedagógica de docentes' 
-WHEN x.rh02_tipcatprof = 5 THEN 'Docente pós-graduado em cursos de especialização para formação de docentes para educação profissional técnica de nível médio' 
-WHEN x.rh02_tipcatprof = 6 THEN 'Docente graduado bacharel e tecnólogo com diploma de mestrado ou doutorado na área do componente curricular da educação profissional técnica de nível médio' WHEN x.rh02_tipcatprof = 7 THEN 'Docente professor indígena sem prévia formação pedagógica' 
-WHEN x.rh02_tipcatprof = 8 THEN 'Docente instrutor, tradutor e intérprete de libras.' 
+WHEN x.rh02_tipcatprof = 4 THEN 'Docente habilitado em programa especial de formaÃ§Ã£o pedagÃ³gica de docentes' 
+WHEN x.rh02_tipcatprof = 5 THEN 'Docente pÃ³s-graduado em cursos de especializaÃ§Ã£o para formaÃ§Ã£o de docentes para educaÃ§Ã£o profissional tÃ©cnica de nÃ­vel mÃ©dio' 
+WHEN x.rh02_tipcatprof = 6 THEN 'Docente graduado bacharel e tecnÃ³logo com diploma de mestrado ou doutorado na Ã¡rea do componente curricular da educaÃ§Ã£o profissional tÃ©cnica de nÃ­vel mÃ©dio' WHEN x.rh02_tipcatprof = 7 THEN 'Docente professor indÃ­gena sem prÃ©via formaÃ§Ã£o pedagÃ³gica' 
+WHEN x.rh02_tipcatprof = 8 THEN 'Docente instrutor, tradutor e intÃ©rprete de libras.' 
 WHEN x.rh02_tipcatprof = 9 THEN 'Docente professor de comunidade quilombola' 
-WHEN x.rh02_tipcatprof = 10 THEN 'Profissionais não habilitados, porém autorizados a exercer a docência em caráter precário e provisório na educação infantil e nos anos iniciais do ensino fundamental.' 
-WHEN x.rh02_tipcatprof = 11 THEN 'Profissionais graduados, bacharéis e tecnólogos autorizados a atuar como docentes, em caráter precário e provisório, nos anos finais do ensino fundamental e no ensino médio e médio integrado à educação.' 
-WHEN x.rh02_tipcatprof = 12 THEN 'Profissionais experientes, não graduados, autorizados a atuar como docentes, em caráter precário e provisório, no ensino médio e médio integrado à educação profissional técnica de nível médio.' 
-WHEN x.rh02_tipcatprof = 13 THEN 'Profissionais em efetivo exercício no âmbito da educação infantil e ensino fundamental.' 
+WHEN x.rh02_tipcatprof = 10 THEN 'Profissionais nÃ£o habilitados, porÃ©m autorizados a exercer a docÃªncia em carÃ¡ter precÃ¡rio e provisÃ³rio na educaÃ§Ã£o infantil e nos anos iniciais do ensino fundamental.' 
+WHEN x.rh02_tipcatprof = 11 THEN 'Profissionais graduados, bacharÃ©is e tecnÃ³logos autorizados a atuar como docentes, em carÃ¡ter precÃ¡rio e provisÃ³rio, nos anos finais do ensino fundamental e no ensino mÃ©dio e mÃ©dio integrado Ã  educaÃ§Ã£o.' 
+WHEN x.rh02_tipcatprof = 12 THEN 'Profissionais experientes, nÃ£o graduados, autorizados a atuar como docentes, em carÃ¡ter precÃ¡rio e provisÃ³rio, no ensino mÃ©dio e mÃ©dio integrado Ã  educaÃ§Ã£o profissional tÃ©cnica de nÃ­vel mÃ©dio.' 
+WHEN x.rh02_tipcatprof = 13 THEN 'Profissionais em efetivo exercÃ­cio no Ã¢mbito da educaÃ§Ã£o infantil e ensino fundamental.' 
 WHEN x.rh02_tipcatprof = 14 THEN 'Auxiliar/Assistente Educacional' 
-WHEN x.rh02_tipcatprof = 15 THEN 'Profissionais que exercem funções de secretaria escolar, alimentação escolar (merendeiras), multimeios didáticos e infraestrutura.' 
-WHEN x.rh02_tipcatprof = 16 THEN 'Profissionais que atuam na realização das atividades requeridos nos ambientes de secretaria, de manutenção em geral.' 
+WHEN x.rh02_tipcatprof = 15 THEN 'Profissionais que exercem funÃ§Ãµes de secretaria escolar, alimentaÃ§Ã£o escolar (merendeiras), multimeios didÃ¡ticos e infraestrutura.' 
+WHEN x.rh02_tipcatprof = 16 THEN 'Profissionais que atuam na realizaÃ§Ã£o das atividades requeridos nos ambientes de secretaria, de manutenÃ§Ã£o em geral.' 
 ELSE 'Nenhum' 
 END || ';' || 
 translate(trim(to_char(round(x.rh02_salari,2),'99999999.99')),'.',',') || ';' || 
@@ -350,25 +350,25 @@ group by x.rh02_mesusu,x.z01_cgccpf,x.z01_nome,x.rh55_inep,x.rh55_descr,x.rh02_h
 }else{
         $sSql = "
 SELECT 'I;'|| nextval('teste_seq') || ';' || lpad(x.rh02_mesusu,2,0) || ';' || x.z01_cgccpf || ';' || x.rh01_regist::varchar || ';' || x.z01_nome || ';' || coalesce(x.rh55_inep,'00000000') || ';' || coalesce(x.rh55_descr,'') || ';' || x.rh02_hrssem || ';' || CASE WHEN x.rh02_tipcatprof IN (14,15,16) THEN 2 ELSE 1 END || ';' ||
-CASE WHEN x.rh02_tipcatprof IN (14,15,16) THEN 'Outros profissionais da educação' ELSE 'Profissionais do magistério' END || ';' || 
+CASE WHEN x.rh02_tipcatprof IN (14,15,16) THEN 'Outros profissionais da educaÃ§Ã£o' ELSE 'Profissionais do magistÃ©rio' END || ';' || 
 CASE WHEN x.rh02_tipcatprof IS NOT NULL THEN x.rh02_tipcatprof::varchar ELSE '0' END || ';'|| 
 CASE WHEN x.rh02_tipcatprof = 0 THEN 'Nenhum' 
-WHEN x.rh02_tipcatprof = 1 THEN 'Docente habilitado em curso de nível médio' 
+WHEN x.rh02_tipcatprof = 1 THEN 'Docente habilitado em curso de nÃ­vel mÃ©dio' 
 WHEN x.rh02_tipcatprof = 2 THEN 'Docente habilitado em curso de pedagogia' 
 WHEN x.rh02_tipcatprof = 3 THEN 'Docente habilitado em curso de licenciatura plena' 
-WHEN x.rh02_tipcatprof = 4 THEN 'Docente habilitado em programa especial de formação pedagógica de docentes' 
-WHEN x.rh02_tipcatprof = 5 THEN 'Docente pós-graduado em cursos de especialização para formação de docentes para educação profissional técnica de nível médio' 
-WHEN x.rh02_tipcatprof = 6 THEN 'Docente graduado bacharel e tecnólogo com diploma de mestrado ou doutorado na área do componente curricular da educação profissional técnica de nível médio' 
-WHEN x.rh02_tipcatprof = 7 THEN 'Docente professor indígena sem prévia formação pedagógica' 
-WHEN x.rh02_tipcatprof = 8 THEN 'Docente instrutor, tradutor e intérprete de libras.' 
+WHEN x.rh02_tipcatprof = 4 THEN 'Docente habilitado em programa especial de formaÃ§Ã£o pedagÃ³gica de docentes' 
+WHEN x.rh02_tipcatprof = 5 THEN 'Docente pÃ³s-graduado em cursos de especializaÃ§Ã£o para formaÃ§Ã£o de docentes para educaÃ§Ã£o profissional tÃ©cnica de nÃ­vel mÃ©dio' 
+WHEN x.rh02_tipcatprof = 6 THEN 'Docente graduado bacharel e tecnÃ³logo com diploma de mestrado ou doutorado na Ã¡rea do componente curricular da educaÃ§Ã£o profissional tÃ©cnica de nÃ­vel mÃ©dio' 
+WHEN x.rh02_tipcatprof = 7 THEN 'Docente professor indÃ­gena sem prÃ©via formaÃ§Ã£o pedagÃ³gica' 
+WHEN x.rh02_tipcatprof = 8 THEN 'Docente instrutor, tradutor e intÃ©rprete de libras.' 
 WHEN x.rh02_tipcatprof = 9 THEN 'Docente professor de comunidade quilombola' 
-WHEN x.rh02_tipcatprof = 10 THEN 'Profissionais não habilitados, porém autorizados a exercer a docência em caráter precário e provisório na educação infantil e nos anos iniciais do ensino fundamental.' 
-WHEN x.rh02_tipcatprof = 11 THEN 'Profissionais graduados, bacharéis e tecnólogos autorizados a atuar como docentes, em caráter precário e provisório, nos anos finais do ensino fundamental e no ensino médio e médio integrado à educação.' 
-WHEN x.rh02_tipcatprof = 12 THEN 'Profissionais experientes, não graduados, autorizados a atuar como docentes, em caráter precário e provisório, no ensino médio e médio integrado à educação profissional técnica de nível médio.' 
-WHEN x.rh02_tipcatprof = 13 THEN 'Profissionais em efetivo exercício no âmbito da educação infantil e ensino fundamental.' 
+WHEN x.rh02_tipcatprof = 10 THEN 'Profissionais nÃ£o habilitados, porÃ©m autorizados a exercer a docÃªncia em carÃ¡ter precÃ¡rio e provisÃ³rio na educaÃ§Ã£o infantil e nos anos iniciais do ensino fundamental.' 
+WHEN x.rh02_tipcatprof = 11 THEN 'Profissionais graduados, bacharÃ©is e tecnÃ³logos autorizados a atuar como docentes, em carÃ¡ter precÃ¡rio e provisÃ³rio, nos anos finais do ensino fundamental e no ensino mÃ©dio e mÃ©dio integrado Ã  educaÃ§Ã£o.' 
+WHEN x.rh02_tipcatprof = 12 THEN 'Profissionais experientes, nÃ£o graduados, autorizados a atuar como docentes, em carÃ¡ter precÃ¡rio e provisÃ³rio, no ensino mÃ©dio e mÃ©dio integrado Ã  educaÃ§Ã£o profissional tÃ©cnica de nÃ­vel mÃ©dio.' 
+WHEN x.rh02_tipcatprof = 13 THEN 'Profissionais em efetivo exercÃ­cio no Ã¢mbito da educaÃ§Ã£o infantil e ensino fundamental.' 
 WHEN x.rh02_tipcatprof = 14 THEN 'Auxiliar/Assistente Educacional' 
-WHEN x.rh02_tipcatprof = 15 THEN 'Profissionais que exercem funções de secretaria escolar, alimentação escolar (merendeiras), multimeios didáticos e infraestrutura.' 
-WHEN x.rh02_tipcatprof = 16 THEN 'Profissionais que atuam na realização das atividades requeridos nos ambientes de secretaria, de manutenção em geral.' 
+WHEN x.rh02_tipcatprof = 15 THEN 'Profissionais que exercem funÃ§Ãµes de secretaria escolar, alimentaÃ§Ã£o escolar (merendeiras), multimeios didÃ¡ticos e infraestrutura.' 
+WHEN x.rh02_tipcatprof = 16 THEN 'Profissionais que atuam na realizaÃ§Ã£o das atividades requeridos nos ambientes de secretaria, de manutenÃ§Ã£o em geral.' 
 ELSE 'Nenhum' 
 END || ';'
 
@@ -385,10 +385,10 @@ END || ';'
    end    || ';' 
 || case
    when rh02_segatuacao = 1 then '1;Creche'
-   when rh02_segatuacao = 2 then '2;Pré-escola'
+   when rh02_segatuacao = 2 then '2;PrÃ©-escola'
    when rh02_segatuacao = 3 then '3;Fundamental 1'
    when rh02_segatuacao = 4 then '4;Fundamental 2'
-   when rh02_segatuacao = 5 then '5;Médio'
+   when rh02_segatuacao = 5 then '5;MÃ©dio'
    when rh02_segatuacao = 6 then '6;Profissional'
    when rh02_segatuacao = 7 then '7;Administrativo'
    when rh02_segatuacao = 8 then '8;EJA'
@@ -482,7 +482,7 @@ AS dado  from
     LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
     INNER JOIN tpcontra ON tpcontra.h13_codigo       = rhpessoalmov.rh02_tpcont
     where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
-    and rh25_recurso in (119,118,1119,1118,218,219,166, 266, 167, 267) 
+    and rh25_recurso in (119,118,1119,1118,218,219,166, 266, 167, 267, 15400007, 25400007, 15420007, 25420007, 15400000, 25400000, 15420000, 25420000) 
      GROUP BY z01_cgccpf,
               z01_nome,
               rh55_inep,
@@ -575,7 +575,7 @@ SELECT
     LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
     INNER JOIN tpcontra ON tpcontra.h13_codigo       = rhpessoalmov.rh02_tpcont
     where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
-    and rh25_recurso in (119,118,1119,1118,218,219, 166, 266, 167, 267) 
+    and rh25_recurso in (119,118,1119,1118,218,219, 166, 266, 167, 267, 15400007, 25400007, 15420007, 25420007, 15400000, 25400000, 15420000, 25420000) 
      GROUP BY z01_cgccpf,
               z01_nome,
               rh55_inep,
@@ -668,7 +668,7 @@ SELECT
     LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
     INNER JOIN tpcontra ON tpcontra.h13_codigo       = rhpessoalmov.rh02_tpcont
     where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
-    and rh25_recurso in (119,118,1119,1118,218,219, 166, 266,167, 267) 
+    and rh25_recurso in (119,118,1119,1118,218,219, 166, 266,167, 267, 15400007, 25400007, 15420007, 25420007, 15400000, 25400000, 15420000, 25420000) 
      GROUP BY z01_cgccpf,
               z01_nome,
               rh55_inep,
@@ -762,7 +762,7 @@ SELECT
     LEFT JOIN retencaotiporecgrupo ON e01_sequencial = e21_retencaotiporecgrupo
     INNER JOIN tpcontra ON tpcontra.h13_codigo       = rhpessoalmov.rh02_tpcont
     where rh23_rubric IS NOT NULL and rh75_rubric is null and rh23_rubric IS NOT NULL
-    and rh25_recurso in (119,118,1119,1118,218,219, 166, 266, 167, 267) 
+    and rh25_recurso in (119,118,1119,1118,218,219, 166, 266, 167, 267, 15400007, 25400007, 15420007, 25420007, 15400000, 25400000, 15420000, 25420000) 
      GROUP BY z01_cgccpf,
               z01_nome,
               rh55_inep,
@@ -805,7 +805,7 @@ $result = db_query($sSql);
   // Abre o arquivo para leitura e escrita
   $f = fopen("tmp/siope.csv", "x");
 
-  // Lê o conteúdo do arquivo
+  // LÃª o conteÃºdo do arquivo
   $content = "";
   if(filesize("tmp/siope.csv") > 0)
   $content = fread($f, filesize("tmp/siope.csv"));
