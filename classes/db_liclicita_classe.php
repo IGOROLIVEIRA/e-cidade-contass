@@ -3768,7 +3768,7 @@ class cl_liclicita
        JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
        WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) AS codigoUnidadeCompradora,
        CASE
-            WHEN l03_pctipocompratribunal IN (110,51,53,52,102) THEN 1
+            WHEN l03_pctipocompratribunal IN (110,51,53,52,50,102) THEN 1
             WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa != 5 THEN 2
             WHEN l03_pctipocompratribunal = 100 AND liclicita.l20_mododisputa != 5 THEN 3
             WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa = 5 THEN 3
@@ -3778,6 +3778,7 @@ class cl_liclicita
            WHEN l03_pctipocompratribunal = 51 THEN 3
            WHEN l03_pctipocompratribunal = 53 THEN 6
            WHEN l03_pctipocompratribunal = 52 THEN 7
+           WHEN l03_pctipocompratribunal = 50 THEN 5
            WHEN l03_pctipocompratribunal = 101 THEN 8
            WHEN l03_pctipocompratribunal = 100 THEN 9
            WHEN l03_pctipocompratribunal = 102 THEN 12

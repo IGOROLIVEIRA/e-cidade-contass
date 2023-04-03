@@ -348,13 +348,14 @@ if (isset($alterar)) {
         $aCf = db_utils::getColectionByRecord($clcflicita->sql_record($sSql));
         $sPresencial = $aCf[0]->l03_presencial;
 
-        if ($sPresencial == 'f' && $l12_pncp == 't') {
-            if ($oPost->l20_justificativapncp == '' || $oPost->l20_justificativapncp == null) {
-                $erro_msg .= 'Campo Justificativa PNCP não informado\n\n';
-                $sqlerro = true;
+        if (in_array($iTipoCompraTribunal, $aTipoLicNatProc)) {
+            if ($sPresencial == 't' && $l12_pncp == 't') {
+                if ($oPost->l20_justificativapncp == '' || $oPost->l20_justificativapncp == null) {
+                    $erro_msg .= 'Campo Justificativa PNCP não informado\n\n';
+                    $sqlerro = true;
+                }
             }
         }
-
         /*
       Verifica se o Campo "Natureza do Objeto" no foi selecionado.
     */

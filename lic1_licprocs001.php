@@ -118,7 +118,8 @@ if ($clliclicita->numrows > 0) {
 
                     </td>
 
-                    <td><b <?php if ($clliclicitem->numrows > 0) {
+                    <td style="display:none">
+                        <b <?php if ($clliclicitem->numrows > 0) {
 
 
 
@@ -126,8 +127,9 @@ if ($clliclicita->numrows > 0) {
                             } else {
 
                                 echo "style='margin-left: 0px;'";
-                            } ?>>Valor Estimado Sigiloso: </b></td>
-                    <td>
+                            } ?>>Valor Estimado Sigiloso: </b>
+                    </td>
+                    <td style="display:none">
                         <?
                         if ($clliclicitem->numrows > 0) {
 
