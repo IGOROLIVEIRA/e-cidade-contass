@@ -1480,7 +1480,7 @@ class cl_pcproc
     LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
     LEFT JOIN liccontrolepncp on l213_processodecompras = pc80_codproc
     WHERE pc80_dispvalor='t'
-    order by pc80_numdispensa,l213_numerocontrolepncp";
+    ORDER BY pc80_codproc desc";
     return $sql;
   }
 
