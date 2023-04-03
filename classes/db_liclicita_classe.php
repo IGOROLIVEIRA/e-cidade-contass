@@ -4191,7 +4191,7 @@ class cl_liclicita
              JOIN cgm ON z01_numcgm = e60_numcgm
              LEFT JOIN empempenhopncp ON e213_contrato = e60_numemp
              INNER JOIN liccontrolepncp ON l213_licitacao = l20_codigo ) AS x
-        ORDER BY x.anocompra DESC
+        ORDER BY x.e60_numemp DESC
         ";
         return $sql;
     }
