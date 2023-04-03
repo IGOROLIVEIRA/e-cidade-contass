@@ -1,0 +1,12 @@
+001Inclui valor da anestesia                                                                           200805
+002Cirurgias Eletivas                                                                                  200805
+003Admite longa permanência                                                                            200805
+004Admite permanência à maior                                                                          200805
+005Admite liberação de quantidade                                                                      200805
+006CNRAC                                                                                               200805
+007Permanência por dia                                                                                 200805
+008Não permite mudança de procedimento                                                                 200805
+009Exige CNS                                                                                           200805
+010Exige VDRL                                                                                          200805
+011Permite alta direta de UTI                                                                          200805
+012Exige idade no BPA (Consolidado)                                                                    200805

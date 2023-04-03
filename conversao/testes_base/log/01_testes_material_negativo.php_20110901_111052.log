@@ -1,0 +1,31 @@
+
+[01/09/2011 11:10:52] - BASE PARA IMPORTACAO Prefeitura: host=localhost 
+                dbname=cisnorte 
+                port=5432 
+                user=dbportal 
+                password=
+[01/09/2011 11:10:52] 
+[01/09/2011 11:10:52] *** INICIO Script 01_testes_material_negativo.php ***
+[01/09/2011 11:10:52] 
+[01/09/2011 11:10:52] Arquivo de Log: log/01_testes_material_negativo.php_20110901_111052.log
+[01/09/2011 11:10:52]     Script PHP: 01_testes_material_negativo.php
+[01/09/2011 11:10:52] 
+[01/09/2011 11:10:52] Iniciando Sessao
+[01/09/2011 11:10:52] Setando Variáveis da Sessao
+[01/09/2011 11:10:52] Iniciando Processamento
+
+
+[01/09/2011 11:10:52] Processando SaldoEstoqueDiferenteMovimentacao.test.php
+[01/09/2011 11:10:52] Script: SaldoEstoqueDiferenteMovimentacao.test.php Não encontrou erro ................................................................................ [  OK  ]
+[01/09/2011 11:10:52] 
+[01/09/2011 11:10:52] Processando MaterialSaidaAnteriorentrada.test.php
+[01/09/2011 11:10:52] Script: MaterialSaidaAnteriorentrada.test.php Não encontrou erro ..................................................................................... [  OK  ]
+[01/09/2011 11:10:52] 
+[01/09/2011 11:10:52] Processando MaterialSaldoNegativo.test.php
+[01/09/2011 11:10:52] Script: MaterialSaldoNegativo.test.php Não encontrou erro ............................................................................................ [  OK  ]
+[01/09/2011 11:10:52] 
+[01/09/2011 11:10:52] Inicio: 11:10:52
+[01/09/2011 11:10:52] Final.: 11:10:52
+[01/09/2011 11:10:52] 
+[01/09/2011 11:10:52] *** FINAL Script 01_testes_material_negativo.php ***
+[01/09/2011 11:10:52] 

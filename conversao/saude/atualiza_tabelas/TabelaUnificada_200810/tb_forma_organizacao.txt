@@ -1,0 +1,301 @@
+010101Educação em saúde                                                                                   200810
+080301Deslocamento/Ajuda de custo                                                                         200810
+020101Coleta de material por meio de punção/biópsia                                                       200810
+020201Exames bioquimicos                                                                                  200810
+020301Exames citopatológicos                                                                              200810
+020401Exames radiológicos da cabeça e pescoço                                                             200810
+020501Ultra-sonografias do sistema circulatório (qualquer região anatômica)                               200810
+020601Tomografia da cabeça, pescoço e coluna vertebral                                                    200810
+020701RM da cabeça, pescoço e coluna vertebral                                                            200810
+020801Aparelho cardiovascular                                                                             200810
+020901Aparelho digestivo                                                                                  200810
+021001Exames radiológicos de vasos sangüíneos e linfáticos                                                200810
+021101Diagnóstico em angiologia                                                                           200810
+021201Exames do doador/receptor                                                                           200810
+021301Exames relacionados a doenças e agravos de notificação compulsória                                  200810
+021401Teste realizado fora da estrutura de laboratório                                                    200810
+030101Consultas médicas/outros profissionais  de nivel superior                                           200810
+030201Assistência fisioterapêutica em alterações obstétricas, neonatais e uroginecológicas                200810
+030301Tratamento de doenças infecciosas e parasitárias                                                    200810
+030401Radioterapia                                                                                        200810
+030501Tratamento dialítico                                                                                200810
+030601Procedimentos destinados a obtenção do sangue para fins de assistência hemoterapica                 200810
+030701Dentística                                                                                          200810
+030801Traumatismos                                                                                        200810
+030901Terapia nutricional                                                                                 200810
+031001Parto e nascimento                                                                                  200810
+040101Pequenas cirurgias                                                                                  200810
+040201Cirurgia de tireóide e paratireóide                                                                 200810
+040301Trauma e anomalias do desenvolvimento                                                               200810
+040401Cirurgias de ouvido, nariz e garganta                                                               200810
+040501Palpebras e vias lacrimais                                                                          200810
+040601Cirurgia cardiovascular                                                                             200810
+040701Esôfago, estômago e duodeno                                                                         200810
+040801Cintura escapular                                                                                   200810
+040901Rim, ureter e bexiga                                                                                200810
+041001Mama                                                                                                200810
+041101Parto                                                                                               200810
+041201Traqueia e brônquios                                                                                200810
+041301Tratamento de queimados                                                                             200810
+041401Buco-maxilo-facial                                                                                  200810
+041501Múltiplas                                                                                           200810
+041601Urologia                                                                                            200810
+041701Anestesias                                                                                          200810
+041801Acessos para dialise                                                                                200810
+050101Coleta e exames para identificação de doador de células-tronco hematopoéticas (busca nacional)      200810
+050201Avaliação clínica de morte encefálica                                                               200810
+050301Ações relacionadas a doação de orgãos, tecidos e células                                            200810
+050401Processamento de córnea/esclera                                                                     200810
+050501Transplante de tecidos e células                                                                    200810
+050601Acompanhamento pós-transplante                                                                      200810
+060101Agentes anticitocinas                                                                               200810
+060201Procoagulantes em coagulopatias hereditárias                                                        200810
+060301Antiinflamatórios                                                                                   200810
+070101OPM auxiliares da locomoção                                                                         200810
+070201OPM em neurocirurgia                                                                                200810
+080101Incentivos                                                                                          200810
+080201Diárias                                                                                             200810
+010201Vigilancia sanitária                                                                                200810
+010102Saúde bucal                                                                                         200810
+020102Outras formas de coleta de material                                                                 200810
+020202Exames hematológicos e hemostasia                                                                   200810
+020302Exames anatomopatológicos                                                                           200810
+020402Exames radiológicos da coluna vertebral                                                             200810
+020502Ultra-sonografias dos demais sistemas                                                               200810
+020602Tomografia do torax e membros superiores                                                            200810
+020702RM do torax e membros superiores                                                                    200810
+020802Aparelho digestivo                                                                                  200810
+020902Aparelho urinário                                                                                   200810
+021002Vias biliares                                                                                       200810
+021102Diagnóstico em cardiologia                                                                          200810
+021202Procedimentos especiais em hemoterápica                                                             200810
+021302Exames relacionados ao meio ambiente                                                                200810
+030102Atendimento/Acompanhamento em saúde do trabalhador                                                  200810
+030202Assistência fisioterapêutica em alterações oncológicas                                              200810
+030302Tratamento de doenças do sangue, orgãos hematopoéticos e alguns transtornos imunitários             200810
+030402Quimioterapia paliativa - adulto                                                                    200810
+030502Tratamento em nefrologia em geral                                                                   200810
+030602Medicina transfusional                                                                              200810
+030702Endodontia                                                                                          200810
+030802Intoxicações e envenenamentos                                                                       200810
+030902Terapias em doenças alérgicas                                                                       200810
+040102Cirurgias de pele, tecido subcutâneo e mucosa                                                       200810
+040202Cirurgia da suprarrenal                                                                             200810
+040302Coluna e nervos periféricos                                                                         200810
+040402Cirurgia da face e do sistema estomatognomático                                                     200810
+040502Músculos oculomotores                                                                               200810
+040602Cirurgia vascular                                                                                   200810
+040702Intestinos , reto e anus                                                                            200810
+040802Membros superiores                                                                                  200810
+040902Uretra                                                                                              200810
+041102Outras cirurgias relacionadas com o estado gestacional                                              200810
+041202Mediastino                                                                                          200810
+041302Reparadora em oncológica                                                                            200810
+041402Cirurgia oral                                                                                       200810
+041502Sequenciais                                                                                         200810
+041602Sistema linfático                                                                                   200810
+041802Intervençõess cirúrgicas em acessos para diálise                                                    200810
+050102Exames de histocompatibilidade para identificação de receptor de células-tronco hematopoéticas      200810
+050302Cirurgias para transplante - doador vivo                                                            200810
+050402Processamento de tecido ósteo-fascio-condro-ligamentoso humano                                      200810
+050502Transplante de orgãos                                                                               200810
+050602Intercorrência pós transplante                                                                      200810
+060102Antagonista do glutamato                                                                            200810
+060302Imunossupressores                                                                                   200810
+070102OPM ortopédicas                                                                                     200810
+070202OPM em cirurgia buco-maxilo-facial                                                                  200810
+080202Outras ações                                                                                        200810
+070203OPM em ortopedia                                                                                    200810
+030903Terapias do aparelho geniturinário                                                                  200810
+040403Deformidade lábio palatal e crânio-facial                                                           200810
+040503Corpo vítreo, retina, coróide e esclera                                                             200810
+040603Cardiologia intervencionista                                                                        200810
+040703Pancreas, baco, figado e vias biliares                                                              200810
+040803Coluna vertebral e caixa torácica                                                                   200810
+040903Próstata e vesicula seminal                                                                         200810
+041203Pleura                                                                                              200810
+041303Reparadora para lipodistrofia                                                                       200810
+041503Politraumatizados                                                                                   200810
+041603Cabeça e pescoço                                                                                    200810
+050103Coleta e exames para identificação de doador de células-tronco hematopoéticas (busca internacional) 200810
+050303Manutenção e retirada de orgãos e tecidos para transplante                                          200810
+050403Processamento de válvula/tubo valvado cardíaco humano                                               200810
+060103Antianêmicos não hormonais                                                                          200810
+060303Imunoterápicos                                                                                      200810
+070103OPM auditivas                                                                                       200810
+010103Visita domiciliar                                                                                   200810
+020203Exames sorológicos e imunológicos                                                                   200810
+020403Exames radiológicos do torax e mediastino                                                           200810
+020603Tomografia do abdomen, pelve e membros inferiores                                                   200810
+020703RM do abdomen, pelve e membros inferiores                                                           200810
+020803Aparelho endócrino                                                                                  200810
+020903Aparelho ginecológico                                                                               200810
+021103Diagnóstico cinético funcional                                                                      200810
+030103Atendimento pré-hospitalar de urgência                                                              200810
+030203Assistência fisioterapêutica em oftalmologia                                                        200810
+030303Tratamento de doenças endocrinas, metabólicas e nutricionais                                        200810
+030403Quimioterapia para controle temporário de doença - adulto                                           200810
+030703Periodontia clínica                                                                                 200810
+030803Outras consequências de causas externas                                                             200810
+040303Tumores do sistema nervoso                                                                          200810
+070204OPM em assistência cardiovascular                                                                   200810
+030904Terapias do aparelho cardiovascular                                                                 200810
+040504Cavidade orbitária e globo ocular                                                                   200810
+040604Cirurgia endovascular                                                                               200810
+040704Parede e cavidade abdominal                                                                         200810
+040804Cintura pélvica                                                                                     200810
+040904Bolsa escrotal, testículos e cordão espermático                                                     200810
+041204Parede torácica                                                                                     200810
+041304Outras cirurgias plásticas/reparadoras                                                              200810
+041504Procedimentos cirúrgicos gerais                                                                     200810
+041604Esôfago-gastro duodenal e vísceras anexas e outros orgãos intra-abdominais                          200810
+050104Exames imunogenéticos/histocompatibilidade para identificação de doador de orgãos                   200810
+050304Açõess complementares destinadas a doação de orgãos, tecidos e células.                             200810
+060104Antianêmicos hormonais                                                                              200810
+060304Reguladores de atividade hormonal - inibidores da prolactina                                        200810
+070104OPM oftalmológicas                                                                                  200810
+010104Alimentação e nutrição                                                                              200810
+020204Exames coprológicos                                                                                 200810
+020404Exames radiológicos da cintura escapular e dos membros superiores                                   200810
+020804Aparelho geniturinário                                                                              200810
+020904Aparelho respiratório                                                                               200810
+021104Diagnóstico em ginecologia-obstetrícia                                                              200810
+030104Outros atendimentos realizados por profissionais de níveis superior                                 200810
+030204Assistência fisioterapêutica cardiovasculares e pneumo-funcionais                                   200810
+030304Tratamento de doenças do sistema nervoso central e periférico                                       200810
+030404Quimioterapia prévia (neoadjuvante/citorredutora)- adulto                                           200810
+030704Moldagem/Manutenção                                                                                 200810
+030804Complicações consequentes a procedimentos em saúde                                                  200810
+040304Neurocirurgias vasculares                                                                           200810
+070205OPM comuns                                                                                          200810
+030905Práticas integrativas e complementares                                                              200810
+040505Conjuntiva, córnea, câmara anterior, íris, corpo ciliar e cristalino                                200810
+040605Eletrofisiologia                                                                                    200810
+040805Membros inferiores                                                                                  200810
+040905Pênis                                                                                               200810
+041205Pulmão                                                                                              200810
+041605Colo-proctologia                                                                                    200810
+050105Exames imunogenéticos/histocompatibilidade para identificação de receptor de orgãos                 200810
+060105Antiasmáticos                                                                                       200810
+060305Antitrombóticos                                                                                     200810
+070105OPM em gastroenterologia                                                                            200810
+020205Exames de uroanálise                                                                                200810
+020405Exames radiológicos do abdomen e pelve                                                              200810
+020805Aparelho esquelético                                                                                200810
+021105Diagnóstico em neurologia                                                                           200810
+030105Atenção domiciliar                                                                                  200810
+030205Assistência fisioterapêutica nas disfunções musculo esqueleticas (todas as origens)                 200810
+030305Tratamento de doenças do aparelho da visão                                                          200810
+030405Quimioterapia adjuvante (profilática) - adulto                                                      200810
+040305Tratamento neurocirúrgico da dor funcional                                                          200810
+070206OPM em urologia                                                                                     200810
+030406Quimioterapia curativa - adulto                                                                     200810
+040806Gerais                                                                                              200810
+040906Útero e anexos                                                                                      200810
+041606Ginecologia                                                                                         200810
+050106Exames gréficos ou por imagem para diagnóstico de morte encefálica                                  200810
+060106Antibióticos                                                                                        200810
+060306Tensiolítico alveolar                                                                               200810
+070106OPM em urologia                                                                                     200810
+020206Exames hormonais                                                                                    200810
+020406Exames radiológicos da cintura pélvica e dos membros inferiores                                     200810
+020806Aparelho nervoso                                                                                    200810
+021106Diagnóstico em oftalmologia                                                                         200810
+030106Consulta/Atendimento ás urgências (em geral)                                                        200810
+030206Assistência fisioterapêutica nas alterações em neurologia                                           200810
+030306Tratamento de doenças cardiovasculares                                                              200810
+040306Investigação e cirurgia da epilepsia                                                                200810
+070107OPM em odontologia                                                                                  200810
+070207OPM em cirurgias oftálmicas                                                                         200810
+040307Tratamento neuro-endovascular                                                                       200810
+040907Vagina, vulva e períneo                                                                             200810
+041607Oftalmologia                                                                                        200810
+050107Outros exames complementares para doação de orgãos, tecidos e células                               200810
+060107Antiepiléticos                                                                                      200810
+060307Hemoderivados                                                                                       200810
+020207Exames toxicológicos ou de monitorização terapêutica                                                200810
+020807Aparelho respiratório                                                                               200810
+021107Diagnóstico em otorrinolaringologia/fonoaudiologia                                                  200810
+030107Atendimento/acompanhamento em reabilitação física, mental, visual e múltiplas deficiências          200810
+030207Assistência fisioterapêutica em queimados                                                           200810
+030307Tratamento de doenças do aparelho digestivo                                                         200810
+030407Quimioterapia de tumores de crianca e adolescente                                                   200810
+070108OPM de anomalias buco-maxilo-facial                                                                 200810
+020208Exames microbiológicos                                                                              200810
+030408Quimioterapia - procedimentos especiais                                                             200810
+030308Tratamento de doenças da pele e do tecido  subcutâneo                                               200810
+030108Atendimento/Acompanhamento psicossocial                                                             200810
+021108Diagnóstico em pneumologia                                                                          200810
+020808Aparelho hematológico                                                                               200810
+060308Medicamentos para transplante                                                                       200810
+060108Antiinflamatórios                                                                                   200810
+050108Exames complementares para pacientes transplantados                                                 200810
+041608Pele e cirurgia plástica                                                                            200810
+070208OPM em cirurgia plástica/reparadora                                                                 200810
+040308Neurocirurgia funcional estereotáxica                                                               200810
+021109Diagnóstico em urologia                                                                             200810
+060109Antiinflamatórios intestinais                                                                       200810
+030109Atendimento/Acompanhamento em saúde do idoso                                                        200810
+020809Outros métodos de diagnóstico em medicina nuclear in vivo                                           200810
+070109Substituição/Troca em órteses/próteses                                                              200810
+030309Tratamento de doenças do sistema osteomuscular e do tecido conjuntivo                               200810
+020209Exames em outros líquidos biológicos                                                                200810
+070209OPM em cirurgia de otorrinolaringologia                                                             200810
+030409Medicina nuclear - terapêutica oncológica                                                           200810
+041609Ossos e partes moles                                                                                200810
+070110OPM em queimados                                                                                    200810
+030310Tratamento durante a gestação, parto e puerpério                                                    200810
+030410Gerais em oncologia                                                                                 200810
+021110Diagnóstico em psicologia-psiquiatria                                                               200810
+041610Neurocirurgia                                                                                       200810
+060110Antiparkinsonianos                                                                                  200810
+030110Atendimentos de enfermagem (em geral)                                                               200810
+070210OPM em nefrologia                                                                                   200810
+020210Exames de genética                                                                                  200810
+030311Tratamento de malformações congênitas, deformidades e anomalias cromossômicas                       200810
+030111Atendimento/Acompanhamento queimados                                                                200810
+021111Diagnóstico em cardiologia intervencionista                                                         200810
+020211Exames para triagem neonatal                                                                        200810
+070211OPM em queimados                                                                                    200810
+060111Antipsicóticos                                                                                      200810
+041611Cirurgia torácica                                                                                   200810
+060112Antivirais                                                                                          200810
+041612Mastologia                                                                                          200810
+070212OPM para transplantes                                                                               200810
+021112Diagnóstico em traumato-ortopedia                                                                   200810
+030312Tratamentos por medicina nuclear in vivo                                                            200810
+030112Atendimento/acompanhamento de diagnóstico de doenças endocrinas/metabolicas e nutricionais          200810
+020212Exames imunohematológicos                                                                           200810
+041613Otorrinolaringologia                                                                                200810
+030113Acompanhamento em outras especialidades                                                             200810
+030313Tratamento de pacientes sob cuidados prolongados                                                    200810
+060113Bloqueadores neuromusculares                                                                        200810
+060114Ceratolíticos sistêmicos                                                                            200810
+030314Tratamento de doenças do ouvido/apófise mastóide e vias aéreas                                      200810
+030315Tratamento das doenças do aparelho geniturinário                                                    200810
+060115Complementos alimentares para fenilcetonúricos                                                      200810
+030316Tratamento de algumas afecçõess originadas no período neonatal                                      200810
+060116Fatores de crescimento mielóides                                                                    200810
+030317Tratamento dos transtornos mentais e comportamentais                                                200810
+060117Hipnoanalgésicos                                                                                    200810
+060118Hipolipemiantes                                                                                     200810
+030318Tratamento HIV/AIDS                                                                                 200810
+030319Reabilitação                                                                                        200810
+060119Imunomoduladores                                                                                    200810
+060120Imunossupressores                                                                                   200810
+060121Imunoterapicos                                                                                      200810
+060122Inibidores da acetilcolinesterase                                                                   200810
+060123Mucolíticos                                                                                         200810
+060124Quelantes do ferro                                                                                  200810
+060125Outros quelantes                                                                                    200810
+060126Reguladores da atividade hormonal-agonistas da vasopressina                                         200810
+060127Reguladores da atividade hormonal-analogos do GNRH                                                  200810
+060128Reguladores da atividade hormonal-antiandrogênicos                                                  200810
+060129Reguladores da atividade hormonal-inibidores das gonadotrofinas                                     200810
+060130Reguladores da atividade hormonal-inibidores do hormônio do crescimento                             200810
+060131Reguladores da atividade hormonal-inibidores de prolactina                                          200810
+060132Reguladores da atividade hormonal-hormonios de crescimento                                          200810
+060133Reguladores da atividade hormonal-hormonios tireoidianos                                            200810
+060134Reguladores da atividade hormonal-mineralocorticóides                                               200810
+060135Reguladores da homeostase do cálcio                                                                 200810
+060136Repositores enzimáticos                                                                             200810

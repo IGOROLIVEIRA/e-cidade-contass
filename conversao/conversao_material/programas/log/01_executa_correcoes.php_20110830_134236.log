@@ -1,0 +1,38 @@
+
+[30/08/2011 13:42:36] - BASE PARA IMPORTACAO Prefeitura: host=localhost 
+                dbname=pmlagoadospatos 
+                port=5432 
+                user=dbportal 
+                password=
+[30/08/2011 13:42:36] 
+[30/08/2011 13:42:36] *** INICIO Script 01_executa_correcoes.php ***
+[30/08/2011 13:42:36] 
+[30/08/2011 13:42:36] Arquivo de Log: log/01_executa_correcoes.php_20110830_134236.log
+[30/08/2011 13:42:36]     Script PHP: 01_executa_correcoes.php
+[30/08/2011 13:42:36] 
+[30/08/2011 13:42:36] Iniciando Sessao
+[30/08/2011 13:42:36] Setando Variáveis da Sessao
+[30/08/2011 13:42:36] Iniciando Processamento 
+[30/08/2011 13:42:36] Processando Script: CorrigeMovimentacaoSemInicio.path.php com Commit
+[30/08/2011 13:42:36] Script: CorrigeMovimentacaoSemInicio - Processamento efetuado com Sucesso ............................................................................ [  OK  ]
+[30/08/2011 13:42:36] 
+[30/08/2011 13:42:36] Processando Script: CorrigeTransferenciasAtendidas.path.php com Commit
+[30/08/2011 13:42:36] Script: CorrigeTransferenciasAtendidas - Processamento efetuado com Sucesso .......................................................................... [  OK  ]
+[30/08/2011 13:42:36] 
+[30/08/2011 13:42:36] Processando Script: CorrigeTransferenciasDataErrada.path.php com Commit
+[30/08/2011 13:42:36] Script: CorrigeTransferenciasDataErrada - Processamento efetuado com Sucesso ......................................................................... [  OK  ]
+[30/08/2011 13:42:36] 
+[30/08/2011 13:42:36] Processando Script: SaidaAntesEntrada.path.php com Commit
+[30/08/2011 13:42:36] Script: SaidaAntesEntrada - Processamento efetuado com Sucesso ....................................................................................... [  OK  ]
+[30/08/2011 13:42:36] 
+[30/08/2011 13:42:36] Processando Script: CorrigeEstoqueNegativo.path.php com Commit
+[30/08/2011 13:42:37] Script: CorrigeEstoqueNegativo - Processamento efetuado com Sucesso .................................................................................. [  OK  ]
+[30/08/2011 13:42:37] 
+[30/08/2011 13:42:37] Processando Script: CorrigeTransferenciasSemSaldo.path.php com Commit
+[30/08/2011 13:42:37] Script: CorrigeTransferenciasSemSaldo - Processamento efetuado com Sucesso ........................................................................... [  OK  ]
+[30/08/2011 13:42:37] 
+[30/08/2011 13:42:37] Inicio: 13:42:36
+[30/08/2011 13:42:37] Final.: 13:42:37
+[30/08/2011 13:42:37] 
+[30/08/2011 13:42:37] *** FINAL Script 01_executa_correcoes.php ***
+[30/08/2011 13:42:37] 

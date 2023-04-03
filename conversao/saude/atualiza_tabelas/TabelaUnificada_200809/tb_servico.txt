@@ -1,0 +1,52 @@
+100Serviço de atenção a saúde no sistema penitenciário                                                                     200809
+101Estratégia de saúde da família                                                                                          200809
+102Estratégias de agentes comunitário de saúde                                                                             200809
+103Serviço de regulação médica de urgências - Central SAMU 192                                                             200809
+104Servico de regulação de servicos de saúde                                                                               200809
+105Serviço de assistência de alta complexidade em neurocirurgia                                                            200809
+106Serviço de atenção a DST/HIV/AIDS                                                                                       200809
+107Serviço de atenção a saúde auditiva                                                                                     200809
+108Serviço de atenção a saúde do trabalhador                                                                               200809
+109Serviço de atenção a saúde dos adolecentes em conflito com a lei, em regime de internação e internação provisória       200809
+110Serviço de atenção a saúde reprodutiva                                                                                  200809
+111Serviço de atenção ao paciente com tuberculose                                                                          200809
+112Serviço de atenção ao pré-natal, parto e nascimento                                                                     200809
+113Serviço de atenção domiciliar                                                                                           200809
+114Serviço de atenção em saúde bucal                                                                                       200809
+115Serviço de atenção psicossocial                                                                                         200809
+116Serviço de cirurgia cardiovascular                                                                                      200809
+117Serviço de cirurgia reparadora                                                                                          200809
+118Serviço de cirurgia torácica                                                                                            200809
+119Serviço de controle de tabagismo                                                                                        200809
+120Serviço de diagnóstico por anatomia patológica e/ou citopatologia                                                       200809
+121Serviço de diagnóstico por imagem                                                                                       200809
+122Serviço de diagnóstico por métodos gráficos/dinâmicos                                                                   200809
+123Serviço de dispensação de órteses, próteses e materiais especiais                                                       200809
+124Serviço de endocrinologia                                                                                               200809
+125Serviço de farmácia                                                                                                     200809
+126Serviço de fisioterapia                                                                                                 200809
+127Serviço de atenção à obesidade grave                                                                                    200809
+128Serviço de hemoterapia                                                                                                  200809
+129Servico de laboratório de histocompatibilidade                                                                          200809
+130Serviço de nefrologia/urologia                                                                                          200809
+131Serviço de oftalmologia                                                                                                 200809
+132Serviço de oncologia                                                                                                    200809
+133Serviço de pneumologia                                                                                                  200809
+134Serviço de práticas integrativas e complementares                                                                       200809
+135Serviço de reabilitação                                                                                                 200809
+136Serviço de suporte nutricional                                                                                          200809
+137Serviço de telemedicina                                                                                                 200809
+138Serviço de traumato-ortopedia                                                                                           200809
+139Serviço de triagem neonatal                                                                                             200809
+140Serviço de urgências                                                                                                    200809
+141Serviço de vigilância em saúde                                                                                          200809
+142Serviço de endoscopia                                                                                                   200809
+143Serviço móvel de urgência (exceto SAMU)                                                                                 200809
+144Serviço posto de coleta de materiais biológicos                                                                         200809
+145Serviço de diagnóstico por laboratório clínico                                                                          200809
+146Serviço de videolaparoscopia                                                                                            200809
+147Serviço de apoio a saúde da família                                                                                     200809
+148Hospital-Dia                                                                                                            200809
+149Transplante                                                                                                             200809
+150Cirurgia vascular                                                                                                       200809
+151Medicina nuclear                                                                                                        200809

@@ -1,0 +1,24 @@
+ 0| 0| 1|Jardim||1
+ 1| 1| 1|1a Série|8 anos|2
+ 2| 2| 1|2a Série|8 anos|3
+ 3| 3| 1|3a Série|8 anos|4
+ 4| 4| 1|4a Série|8 anos|5
+ 5| 5| 1|5a Série|8 anos|6
+ 6| 6| 1|6a Série|8 anos|7
+ 7| 7| 1|7a Série|8 anos|8
+ 8| 8| 1|8a Série|8 anos|9
+ 9| 1| 1|1o Ano EF|9 anos|10
+ 10| 2| 1|2o Ano EF|9 anos|11
+ 11| 3| 1|3o Ano EF|9 anos|12
+ 12| 4| 1|4o Ano EF|9 anos|13
+ 13| 5| 1|5o Ano EF|9 anos|14
+ 14| 6| 1|6o Ano EF|9 anos|15
+ 15| 7| 1|7o Ano EF|9 anos|16
+ 16| 8| 1|8o Ano EF|9 anos|17
+ 17| 9| 1|9o Ano EF|9 anos|18
+ 18| 1| 2|1o Ano EM||19
+ 19| 2| 2|2o Ano EM||20
+ 20| 3| 2|3o Ano EM||21
+ 21| 4| 2|Estágio||22
+ 23| 5| 2|Supletivo EM||23
+ 24| 11| 1|Classe de Aceleração||24

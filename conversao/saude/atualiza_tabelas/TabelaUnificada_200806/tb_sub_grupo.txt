@@ -1,0 +1,58 @@
+0301Consultas / Atendimentos / Acompanhamentos                                                          200806
+0801Ações relacionadas ao estabelecimento                                                               200806
+0201Coleta de material                                                                                  200806
+0101Ações coletivas/individuais em saúde                                                                200806
+0701Órteses, próteses e materiais especiais não relacionados ao ato cirúrgico                           200806
+0601Medicamentos de dispensação excepcional                                                             200806
+0501Coleta e exames para fins de doação de orgãos, tecidos e células e de transplante                   200806
+0401Pequenas cirurgias e cirurgias de pele, tecido subcutâneo e mucosa                                  200806
+0202Diagnóstico em laboratório clínico                                                                  200806
+0102Vigilância em saúde                                                                                 200806
+0802Ações relacionadas ao atendimento                                                                   200806
+0702Órteses, próteses e materiais especiais relacionados ao ato cirúrgico                               200806
+0602Medicamentos estratégicos                                                                           200806
+0502Avaliação de morte encefálica                                                                       200806
+0402Cirurgia de glândulas endócrinas                                                                    200806
+0302Fisioterapia                                                                                        200806
+0203Diagnóstico por anatomia patológica e citopatologia                                                 200806
+0803Autorização / Regulação                                                                             200806
+0403Cirurgia do sistema nervoso central e periférico                                                    200806
+0603Medicamentos de âmbito hospitalar                                                                   200806
+0303Tratamentos clínicos (outras especialidades)                                                        200806
+0503Ações relacionadas à doação de orgãos, tecidos e células                                            200806
+0504Processamento de tecidos para transplante                                                           200806
+0204Diagnóstico por radiologia                                                                          200806
+0304Tratamento em oncologia                                                                             200806
+0404Cirurgia das vias aéreas superiores, da cabeça e do pescoço                                         200806
+0405Cirurgia do aparelho da visão                                                                       200806
+0305Tratamento em nefrologia                                                                            200806
+0205Diagnóstico por ultra-sonografia                                                                    200806
+0505Transplante de orgãos, tecidos e células                                                            200806
+0306Hemoterapia                                                                                         200806
+0506Acompanhamento e intercorrências pós-transplante                                                    200806
+0206Diagnóstico por tomografia                                                                          200806
+0406Cirurgia do aparelho circulatório                                                                   200806
+0207Diagnóstico por ressonância magnética                                                               200806
+0307Tratamentos odontológicos                                                                           200806
+0407Cirurgia do aparelho digestivo, orgãos anexos e parede abdominal                                    200806
+0408Cirurgia do sistema osteomuscular                                                                   200806
+0208Diagnóstico por medicina nuclear in vivo                                                            200806
+0308Tratamento de lesões, envenenamentos e outros, decorrentes de causas externas                       200806
+0409Cirurgia do aparelho geniturinário                                                                  200806
+0309Terapias especializadas                                                                             200806
+0209Diagnóstico por endoscopia                                                                          200806
+0410Cirurgia de mama                                                                                    200806
+0310Parto e nascimento                                                                                  200806
+0210Diagnóstico por radiologia intervencionista                                                         200806
+0411Cirurgia obstétrica                                                                                 200806
+0211Métodos diagnósticos em especialidades                                                              200806
+0412Cirurgia torácica                                                                                   200806
+0212Diagnóstico e procedimentos especiais em hemoterapia                                                200806
+0213Diagnóstico em vigilância epidemiológica e ambiental                                                200806
+0413Cirurgia reparadora                                                                                 200806
+0414Cirurgia oro-facial                                                                                 200806
+0214Diagnóstico por teste rápido                                                                        200806
+0415Outras cirurgias                                                                                    200806
+0416Cirurgia em oncologia                                                                               200806
+0417Anestesiologia                                                                                      200806
+0418Cirurgia em nefrologia                                                                              200806

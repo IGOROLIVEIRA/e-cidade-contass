@@ -1,0 +1,207 @@
+1 | Aikaná (Masaká, Kasupá)
+4 | Aikewara (Suruí do Tocantins)
+2 | Ajuru (Wayró)
+198 | Akuntsú
+7 | Amanaié
+8 | Amawáka
+199 | Amondawa (Kawahib)
+9 | Anambé
+10 | Aparai (Apalaí)
+11 | Apiaká
+12 | Apinayé
+13 | Apurinã (Ipurinã)
+14 | Arapaso
+15 | Arara (Sharádawa)
+200 | Arara do Beiradão do Aripuanã
+201 | Arara do Xingu
+17 | Araweté
+18 | Arikapú
+19 | Aruá
+60 | Ashaninka (Kampa)
+20 | Asuriní do Tocantins
+21 | Asuriní do Xingu
+202 | Aurê-Aurá
+22 | Avá-Canoeiro
+23 | Awetí
+24 | Bakairí
+25 | Banawá-Yafi
+26 | Baníwa do Içana
+28 | Bará (Makú)
+203 | Barasána
+29 | Baré
+30 | Boróro
+204 | Cambeba (Omágua)
+205 | Canela Ramkokamekra (Timbira)
+206 | Chamacoco
+207 | Chiquitano (Chiquito)
+31 | Cinta-Larga
+34 | Dáw (Makú)
+32 | Dení
+33 | Desána
+208 | Diahói (Kawahib)
+35 | Galibí (Ka?ríña)
+135 | Galibi Marworno
+36 | Gavião (Ikõro, Digüt)
+209 | Gavião do Pará (Timbira)
+81 | Gorotire (Kayapó)
+37 | Guajá
+211 | Guajajara (Tenetehára)
+41 | Guariba
+42 | Guató
+43 | Hixkaryána
+44 | Húpda (Maku)
+173 | Ikpeng (Txicão)
+45 | Ingarikó
+46 | Irántxe
+47 | Jabutí (Jeoromitxí)
+214 | Jamanadi (Kanamanti)
+48 | Jarawára
+50 | Javaé
+215 | Juma
+216 | Juriti
+52 | Ka?apór (Urubu)
+53 | Kadiwéu
+235 | Kaingang
+38 | Kaiowá (Guarani)
+58 | Kalapálo
+59 | Kamayurá
+217 | Kanamantí
+61 | Kanamarí
+62 | Kanoê
+218 | Kapóng (Patamona)
+63 | Karajá
+64 | Karapanã
+82 | Kararaô (Kayapó)
+219 | Karipúna
+65 | Karitiana (Arikém)
+66 | Káro (Arara)
+67 | Katawixí
+69 | Katukina (Rio Biá)
+68 | Katukina-Páno (Acre)
+77 | Kaxararí
+78 | Kaxinawá
+79 | Kaxuyána
+80 | Kayabí
+220 | Kayapó
+222 | Kinikinawa
+90 | Kokama (Omagua)
+83 | Kokraimoro (Kayapó)
+91 | Korúbo
+92 | Krenák
+223 | Kren-yé (Timbira)
+224 | Krikati (Timbira)
+84 | Kubenkrngkegn (Kayapó)
+93 | Kubéwa
+94 | Kuikúru
+225 | Kujubim, Kuyubi (Txapakura)
+95 | Kulína (Madihá)
+226 | Kuripáko
+96 | Kuruáya
+227 | Kwazá (Kwayá, Coaiá)
+228 | Lakondê (Nambikwara)
+229 | Latundê (Nambikwara)
+98 | Makúna
+99 | Makuráp
+100 | Makuxí
+230 | Mamaindê (Nambikwara)
+101 | Mandawáka
+231 | Mandúka (Nambikwara)
+102 | Marúbo
+103 | Matipú
+104 | Matís
+105 | Matsé (Mayoruna)
+106 | Mawé (Sateré)
+107 | Maxakalí
+232 | Maxinéri (Manchineri)
+108 | Mayongong (Makiritáre, Yekuana)
+39 | Mbyá (Guarani)
+221 | Mebengokré (Kayapó)
+109 | Mehináku
+110 | Mekém (Sakirabiat)
+85 | Menkrangnoti (Kayapó)
+86 | Mentuktíre, Txukahamae (Kayapó)
+233 | Miranha
+234 | Mirití-tapúya
+111 | Mondé
+112 | Mundurukú
+113 | Múra
+114 | Meky, Menky (Menki)
+115 | Nadêb (Maku)
+116 | Nahukwá
+120 | Negarotê (Nambikwara)
+40 | Nhandéva (Guarani)
+126 | Nheengatú (Língua Geral Amazônica)
+127 | Ninam (Yanomami)
+128 | Nukini
+129 | Ofayé
+130 | Orowín (Oro Win)
+236 | Paitér (Suruí de Rondônia)
+131 | Palikúr
+132 | Panará
+237 | Parakanã (Akwawa)
+133 | Paresí
+238 | Parintintin (Kawahib)
+239 | Parkateyé (Timbira)
+134 | Patois Creole (karipuna)
+136 | Paumarí
+137 | Pirahã
+138 | Pira-tapúya
+139 | Piro Manchineri
+140 | Poyanáwa
+240 | Pukubié (Timbira)
+141 | Puroborá
+142 | Rikbáktsa (Rikbák, Canoeiro)
+143 | Sabanê (Nambikwara)
+145 | Salumã (Enawenê-nawê)
+146 | Sanumá
+148 | Suruahá (Zuruahá)
+150 | Suyá
+241 | Tepayúna
+151 | Tapirapé
+152 | Tariána
+153 | Taulipáng (Pemong)
+242 | Tawandê (Nambikwar)
+155 | Tembé (Tenetehára)
+243 | Tenharim (Kawahib)
+156 | Teréna
+157 | Tikúna (Ticuna)
+167 | Tiriyó
+168 | Torá
+169 | Trumái
+171 | Tuparí
+172 | Tuyúka
+174 | Txunhuã-djapá (Tsohom-djapá)
+244 | Umutína
+76 | Uruewawáu (Kawahib)
+175 | Urupá
+176 | Waimirí (Waimirí-Atroarí)
+177 | Waiwái
+178 | Wanána
+179 | Wapixána
+180 | Warekéna
+245 | Wari, Pakaanóva (Txapakura)
+181 | Warikyána
+182 | Waurá
+183 | Wayampí
+184 | Wayána
+185 | Xambioá
+5 | Xavante
+246 | Xawanáwa (Arara)
+6 | Xerénte
+186 | Xetá
+87 | Xikrin (Kayapó)
+187 | Xipáya
+188 | Xokléng
+247 | Yamamaí
+49 | Yamináwa
+190 | Yanomám
+191 | Yanomámi
+192 | Yatê (Fulniô)
+193 | Yawalapití
+194 | Yawanáwa
+248 | Yebá-masã (Tukano)
+51 | Yudjá (Juruna)
+195 | Yuhup (Makú)
+249 | Yuhupde (Makú)
+196 | Zoé (Poturu)
+197 | Zoró

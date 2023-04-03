@@ -1,0 +1,12 @@
+<?xml version='1.0' standalone='yes'?>
+<scripts>
+  <script className='CorrigeMovimentacaoSemInicio'    lModoTeste='false'> </script>
+  <script className='CorrigeTransferenciasAtendidas'  lModoTeste='false'> </script>
+  <script className='CorrigeTransferenciasDataErrada' lModoTeste='false'> </script>
+  <script className='SaidaAntesEntrada'               lModoTeste='false'> </script>
+  <script className='CorrigeEstoqueNegativo'          lModoTeste='false'> </script>
+  <script className='CorrigeTransferenciasSemSaldo'   lModoTeste='false'> </script>
+</scripts>
+
+
+
