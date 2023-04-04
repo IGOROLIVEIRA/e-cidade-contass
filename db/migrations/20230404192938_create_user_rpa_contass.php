@@ -1,6 +1,6 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+use Classes\PostgresMigration;
 
 class CreateUserRpaContass extends PostgresMigration
 {
