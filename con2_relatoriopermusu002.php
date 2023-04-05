@@ -41,18 +41,18 @@ $listausuarios_perfil  = array();
 $listausuarios  = array();
 $total_usuarios = 0;
 
-if(!isset($codigo) || (isset($codigo) && trim($codigo) == "")){
+if (!isset($codigo) || (isset($codigo) && trim($codigo) == "")) {
   $codigo = db_getsession("DB_instit");
 }
 
 $dbwhere_permiss = "";
-if(isset($id_item) && trim($id_item) != ""){
-  $dbwhere_permiss = " and m.id_item = ".$id_item;
+if (isset($id_item) && trim($id_item) != "") {
+  $dbwhere_permiss = " and m.id_item = " . $id_item;
 }
 
 $dbwhere_tipo_usuario = "";
-if (isset($tipo_usuario) && trim(@$tipo_usuario) != "" && trim(@$tipo_usuario) != "T"){
-  $dbwhere_tipo_usuario = " and d.usuarioativo = '".$tipo_usuario."' ";
+if (isset($tipo_usuario) && trim(@$tipo_usuario) != "" && trim(@$tipo_usuario) != "T") {
+  $dbwhere_tipo_usuario = " and d.usuarioativo = '" . $tipo_usuario . "' ";
 }
 
 $ambiente = "'1'";
@@ -61,48 +61,44 @@ $dbwhereid_usuariospermis = "";
 $dbwhereid_usuariosperfil = "";
 
 $id_usuarios_selecionados = "";
-if(isset($usuariossel) && count($usuariossel) > 0){
+if (isset($usuariossel) && count($usuariossel) > 0) {
   $virgula = "";
-  foreach ($usuariossel as $indexArray => $id_usuario){
-    $id_usuarios_selecionados .= $virgula.$id_usuario;
+  foreach ($usuariossel as $indexArray => $id_usuario) {
+    $id_usuarios_selecionados .= $virgula . $id_usuario;
     $virgula = ",";
   }
-  $dbwhereid_usuariospermis = " and p.id_usuario in (".$id_usuarios_selecionados.") and d.usuext = 0";
-  $dbwhereid_usuariosperfil = " and h.id_usuario in (".$id_usuarios_selecionados.") and d.usuext = 0";
+  $dbwhereid_usuariospermis = " and p.id_usuario in (" . $id_usuarios_selecionados . ") and d.usuext = 0";
+  $dbwhereid_usuariosperfil = " and h.id_usuario in (" . $id_usuarios_selecionados . ") and d.usuext = 0";
 }
 
-if(isset($tipo_principal) && trim($tipo_principal) == "0"){
-}
-else if (isset($tipo_principal) && trim($tipo_principal) == "1"){
+if (isset($tipo_principal) && trim($tipo_principal) == "0") {
+} else if (isset($tipo_principal) && trim($tipo_principal) == "1") {
   $dbwhereid_usuariospermis .= " and d.usuext = 0";
   $dbwhereid_usuariosperfil .= " and d.usuext = 0";
-}
-else if (isset($tipo_principal) && trim($tipo_principal) == "2"){
+} else if (isset($tipo_principal) && trim($tipo_principal) == "2") {
   $dbwhereid_usuariospermis .= " and d.usuext = 1";
   $dbwhereid_usuariosperfil .= " and d.usuext = 1";
-}
-else if (isset($tipo_principal) && trim($tipo_principal) == "3"){
+} else if (isset($tipo_principal) && trim($tipo_principal) == "3") {
   $dbwhereid_usuariospermis .= " and d.usuext = 2";
   $dbwhereid_usuariosperfil .= " and d.usuext = 2";
   /*OC3161*/
-  if (isset($numperfil) ) {
-    $dbwhereid_usuariospermis .= " and d.id_usuario IN (".implode(",",$numperfil).") ";
+  if (isset($numperfil)) {
+    $dbwhereid_usuariospermis .= " and d.id_usuario IN (" . implode(",", $numperfil) . ") ";
   }
   /*OC3161*/
-}
-else if (isset($tipo_principal) && trim($tipo_principal) == "4"){
+} else if (isset($tipo_principal) && trim($tipo_principal) == "4") {
   $dbwhereid_usuariospermis .= " and d.usuext in (0,2)";
   $dbwhereid_usuariosperfil .= " and d.usuext in (0,2)";
   /*OC3161*/
-  if (isset($numperfil) ) {
-    $dbwhereid_usuariosperfil .= " and h.id_perfil IN (".implode(",",$numperfil).") ";
+  if (isset($numperfil)) {
+    $dbwhereid_usuariosperfil .= " and h.id_perfil IN (" . implode(",", $numperfil) . ") ";
   }
   /*OC3161*/
 }
 
 
-if (isset($numperfil) ) {
-  $dbwhereperfis = " and h.id_perfil IN (".implode(",",$numperfil).") ";
+if (isset($numperfil)) {
+  $dbwhereperfis = " and h.id_perfil IN (" . implode(",", $numperfil) . ") ";
 } else {
   $dbwhereperfis = '';
 }
@@ -129,11 +125,11 @@ if (isset($tipoAS) && $tipoAS == 'a') {
                                         and p.id_item    = m.id_item
               inner join db_usuarios  d   on d.id_usuario = p.id_usuario
          where p.id_instit = $codigo
-               ".$dbwhereid_usuariospermis."
-               ".$dbwhere_permiss.
-                 $dbwhere_tipo_usuario;
+               " . $dbwhereid_usuariospermis . "
+               " . $dbwhere_permiss .
+    $dbwhere_tipo_usuario;
 
-/////////////////////////////////////////
+  /////////////////////////////////////////
 
   //// SQL VERIFICA PERMISSÕES DE PERFIS
   $sql_verifica_permissoesper = "
@@ -173,9 +169,9 @@ if (isset($tipoAS) && $tipoAS == 'a') {
                                           and p.id_item    = m.id_item
                 inner join db_usuarios  d   on d.id_usuario = p.id_usuario
            where p.id_instit = $codigo
-                 ".$dbwhereid_usuariospermis."
-                 ".$dbwhere_permiss.
-                   $dbwhere_tipo_usuario;
+                 " . $dbwhereid_usuariospermis . "
+                 " . $dbwhere_permiss .
+    $dbwhere_tipo_usuario;
 
   $rs_executa = db_query($sql_executa);
   $numrows_exec = pg_numrows($rs_executa);
@@ -208,7 +204,7 @@ if (isset($tipoAS) && $tipoAS == 'a') {
 $result_executa = db_query($sql_executa);
 $numrows_executa = pg_numrows($result_executa);
 
-if($numrows_executa == 0){
+if ($numrows_executa == 0) {
   db_redireciona("db_erros.php?fechar=true&db_erro=Verifique os dados digitados ou não existem permissões para este exercício.");
 }
 
@@ -225,30 +221,30 @@ $head4 = strtoupper($nomeinst);
 
 $cabec_usuarios_tipo = "";
 if (isset($tipo_principal) && trim(@$tipo_principal) != "") {
-     if (trim(@$tipo_principal) == "0"){
-          $cabec_usuarios_tipo = "TIPO DE USUARIO: TODOS";
-     }
+  if (trim(@$tipo_principal) == "0") {
+    $cabec_usuarios_tipo = "TIPO DE USUARIO: TODOS";
+  }
 
-     if (trim(@$tipo_principal) == "1"){
-          $cabec_usuarios_tipo = "TIPO DE USUARIO: SOMENTE INTERNOS";
-     }
+  if (trim(@$tipo_principal) == "1") {
+    $cabec_usuarios_tipo = "TIPO DE USUARIO: SOMENTE INTERNOS";
+  }
 
-     if (trim(@$tipo_principal) == "2"){
-          $cabec_usuarios_tipo = "TIPO DE USUARIO: SOMENTE EXTERNOS";
-     }
+  if (trim(@$tipo_principal) == "2") {
+    $cabec_usuarios_tipo = "TIPO DE USUARIO: SOMENTE EXTERNOS";
+  }
 
-     if (trim(@$tipo_principal) == "3"){
-          $cabec_usuarios_tipo = "TIPO DE USUARIO: SOMENTE PERFIS";
-     }
+  if (trim(@$tipo_principal) == "3") {
+    $cabec_usuarios_tipo = "TIPO DE USUARIO: SOMENTE PERFIS";
+  }
 
-     if (trim(@$tipo_principal) == "4" ){
-          $cabec_usuarios_tipo = "TIPO DE USUARIO: USUARIOS INTERNOS + PERFIS";
-     }
+  if (trim(@$tipo_principal) == "4") {
+    $cabec_usuarios_tipo = "TIPO DE USUARIO: USUARIOS INTERNOS + PERFIS";
+  }
 }
 $head5 = $cabec_usuarios_tipo;
 
 $cabec_usuarios_situacao = "";
-if (isset($tipo_usuario) && trim(@$tipo_usuario) != ""){
+if (isset($tipo_usuario) && trim(@$tipo_usuario) != "") {
 
   switch (trim(@$tipo_usuario)) {
     case "0":
@@ -265,7 +261,6 @@ if (isset($tipo_usuario) && trim(@$tipo_usuario) != ""){
       break;
     default:
       $cabec_usuarios_situacao = "SITUAÇÃO: TODOS";
-
   }
 }
 $head6 = $cabec_usuarios_situacao;
@@ -275,13 +270,13 @@ $adicionapagina = true;
 $pass = 0;
 $testaUsuario = "";
 $indexImprime = 0;
-$pdf->SetTextColor(0,0,0);
+$pdf->SetTextColor(0, 0, 0);
 $pdf->SetFillColor(220);
 
 global $tipo_AS;
 $tipo_AS = $tipoAS;
-for($a=0; $a<$numrows_executa; $a++){
-  db_fieldsmemory($result_executa,$a);
+for ($a = 0; $a < $numrows_executa; $a++) {
+  db_fieldsmemory($result_executa, $a);
 
   $descr_tipo_usuario = "";
   if ($usuext == 0) {
@@ -309,10 +304,10 @@ for($a=0; $a<$numrows_executa; $a++){
   }
 
   $pdf->setfont("arial", "B", 8);
-  if($pdf->gety() > $pdf->h - 35 || $a == 0 || $testaUsuario != $id_usuario){
+  if ($pdf->gety() > $pdf->h - 35 || $a == 0 || $testaUsuario != $id_usuario) {
     $pdf->addpage();
-    $pdf->cell(10,$alt,$id_usuario,"T",0,"L",1);
-    $pdf->cell(0,$alt,$nome . " [Login: " . $login . "] - [Situação: ".trim($status)."]" . " - [Tipo de usuario: $descr_tipo_usuario]","T",1,"L",1);
+    $pdf->cell(10, $alt, $id_usuario, "T", 0, "L", 1);
+    $pdf->cell(0, $alt, $nome . " [Login: " . $login . "] - [Situação: " . trim($status) . "]" . " - [Tipo de usuario: $descr_tipo_usuario]", "T", 1, "L", 1);
 
     /*OC3117*/
     if (isset($tipoAS) && $tipoAS == 's') {
@@ -332,8 +327,8 @@ for($a=0; $a<$numrows_executa; $a++){
       LEFT  JOIN db_permherda p ON p.id_usuario  = u.id_usuario
       WHERE usuext = 2
           AND u.id_usuario <> {$id_usuario}
-          AND i.id_instit = ".db_getsession("DB_instit")."
-          AND u.id_usuario in (".implode(",",$profileusers).")
+          AND i.id_instit = " . db_getsession("DB_instit") . "
+          AND u.id_usuario in (" . implode(",", $profileusers) . ")
       ORDER BY nome
     ";
 
@@ -341,19 +336,19 @@ for($a=0; $a<$numrows_executa; $a++){
       if (pg_numrows($rsProfileUsers) > 0) {
         $aProfileUsers = db_utils::getCollectionByRecord($rsProfileUsers);
         $pdf->setfont("arial", "B", 8);
-        $pdf->cell(0,$alt,"PERFIS","T",0,"L",1);
+        $pdf->cell(0, $alt, "PERFIS", "T", 0, "L", 1);
         $pdf->ln();
-        $pdf->setfont("arial","",8);
+        $pdf->setfont("arial", "", 8);
         foreach ($aProfileUsers as $aProfileUser) {
-         $pdf->cell(10,$alt,$aProfileUser->id_usuario, 0, 0, "L", 0);
-         $pdf->cell(10,$alt,$aProfileUser->nome, 0, 0, "L", 0);
-         $pdf->ln();
+          $pdf->cell(10, $alt, $aProfileUser->id_usuario, 0, 0, "L", 0);
+          $pdf->cell(10, $alt, $aProfileUser->nome, 0, 0, "L", 0);
+          $pdf->ln();
         }
         $pdf->ln();
       }
       if ($numrows_exec != false) {
         $pdf->setfont("arial", "B", 8);
-        $pdf->cell(0,$alt,"ACESSOS INDIVIDUAIS","T",0,"L",1);
+        $pdf->cell(0, $alt, "ACESSOS INDIVIDUAIS", "T", 0, "L", 1);
         $pdf->ln();
       }
     }
@@ -363,41 +358,41 @@ for($a=0; $a<$numrows_executa; $a++){
   $testaUsuario = $id_usuario;
 
   if ($numrows_exec != false) {
-  $pdf->cell(10,$alt,$id_modulo,"T",0,"L",1);
-  $pdf->cell(0,$alt,$descr_modulo,"T",1,"L",1);
+    $pdf->cell(10, $alt, $id_modulo, "T", 0, "L", 1);
+    $pdf->cell(0, $alt, $descr_modulo, "T", 1, "L", 1);
 
-    define("TIPOAS",$tipo_AS);
-    $pass ++;
+    define("TIPOAS", $tipo_AS);
+    $pass++;
     recGravaMenus($id_usuario, $id_modulo, $id_modulo, TIPOAS);
-    $pass --;
+    $pass--;
   }
 
   if (!isset($totalpormodulo[strtoupper($descr_modulo)])) {
     $totalpormodulo[strtoupper($descr_modulo)] = 1;
   } else {
-    $totalpormodulo[strtoupper($descr_modulo)] ++;
+    $totalpormodulo[strtoupper($descr_modulo)]++;
   }
 }
 
 $pdf->addpage();
-$total_quant=0;
+$total_quant = 0;
 
-$pdf->setfont("arial","B",8);
-$pdf->cell(80,5,"TOTALIZAÇÃO POR MODULO",1,1,"C",1);
-$pdf->cell(60,5,"MODULO",1,0,"L",1);
-$pdf->cell(20,5,"QUANTIDADE",1,1,"C",1);
+$pdf->setfont("arial", "B", 8);
+$pdf->cell(80, 5, "TOTALIZAÇÃO POR MODULO", 1, 1, "C", 1);
+$pdf->cell(60, 5, "MODULO", 1, 0, "L", 1);
+$pdf->cell(20, 5, "QUANTIDADE", 1, 1, "C", 1);
 
 ksort($totalpormodulo);
 
-$pdf->setfont("arial","",8);
+$pdf->setfont("arial", "", 8);
 foreach ($totalpormodulo as $k => $v) {
-  $pdf->cell(60,5,$k,0,0,"L",0);
-  $pdf->cell(20,5,$v,0,1,"R",0);
+  $pdf->cell(60, 5, $k, 0, 0, "L", 0);
+  $pdf->cell(20, 5, $v, 0, 1, "R", 0);
   $total_quant++;
 }
-$pdf->setfont("arial","B",8);
-$pdf->cell(60,5,"TOTAL DE MODULOS",1,0,"L",1);
-$pdf->cell(20,5,$total_quant,1,1,"R",1);
+$pdf->setfont("arial", "B", 8);
+$pdf->cell(60, 5, "TOTAL DE MODULOS", 1, 0, "L", 1);
+$pdf->cell(20, 5, $total_quant, 1, 1, "R", 1);
 
 $pdf->addpage();
 
@@ -405,70 +400,71 @@ ksort($listausuarios_interno);
 ksort($listausuarios_externo);
 ksort($listausuarios_perfil);
 
-$pdf->setfont("arial","B",8);
+$pdf->setfont("arial", "B", 8);
 if (sizeof($listausuarios_interno) > 0) {
-  $pdf->cell(110,5,"LISTA DE USUARIOS - INTERNOS",1,1,"C",1);
-  $pdf->cell(80,5,"NOME", 1,0,"C",1);
-  $pdf->cell(30,5,"LOGIN",1,1,"C",1);
+  $pdf->cell(110, 5, "LISTA DE USUARIOS - INTERNOS", 1, 1, "C", 1);
+  $pdf->cell(80, 5, "NOME", 1, 0, "C", 1);
+  $pdf->cell(30, 5, "LOGIN", 1, 1, "C", 1);
 
-  $pdf->setfont("arial","",8);
-  $total_usuarios=0;
+  $pdf->setfont("arial", "", 8);
+  $total_usuarios = 0;
   foreach ($listausuarios_interno as $k => $v) {
-    $pdf->cell(80,5,$v,0,0,"L",0);
-    $pdf->cell(30,5,$k,0,1,"L",0);
+    $pdf->cell(80, 5, $v, 0, 0, "L", 0);
+    $pdf->cell(30, 5, $k, 0, 1, "L", 0);
     $total_usuarios++;
   }
-  $pdf->setfont("arial","b",8);
-  $pdf->cell(80,5,"TOTAL DE USUARIOS - INTERNOS",1,0,"L",1);
-  $pdf->cell(30,5,$total_usuarios,1,1,"R",1);
+  $pdf->setfont("arial", "b", 8);
+  $pdf->cell(80, 5, "TOTAL DE USUARIOS - INTERNOS", 1, 0, "L", 1);
+  $pdf->cell(30, 5, $total_usuarios, 1, 1, "R", 1);
   $pdf->ln(5);
 }
 
 if (sizeof($listausuarios_externo) > 0) {
-  $pdf->cell(110,5,"LISTA DE USUARIOS - EXTERNOS",1,1,"C",1);
-  $pdf->cell(80,5,"NOME", 1,0,"C",1);
-  $pdf->cell(30,5,"LOGIN",1,1,"C",1);
+  $pdf->cell(110, 5, "LISTA DE USUARIOS - EXTERNOS", 1, 1, "C", 1);
+  $pdf->cell(80, 5, "NOME", 1, 0, "C", 1);
+  $pdf->cell(30, 5, "LOGIN", 1, 1, "C", 1);
 
-  $pdf->setfont("arial","",8);
-  $total_usuarios=0;
+  $pdf->setfont("arial", "", 8);
+  $total_usuarios = 0;
   foreach ($listausuarios_externo as $k => $v) {
-    $pdf->cell(80,5,$v,0,0,"L",0);
-    $pdf->cell(30,5,$k,0,1,"L",0);
+    $pdf->cell(80, 5, $v, 0, 0, "L", 0);
+    $pdf->cell(30, 5, $k, 0, 1, "L", 0);
     $total_usuarios++;
   }
-  $pdf->setfont("arial","b",8);
-  $pdf->cell(80,5,"TOTAL DE USUARIOS - EXTERNOS",1,0,"L",1);
-  $pdf->cell(30,5,$total_usuarios,1,1,"R",1);
+  $pdf->setfont("arial", "b", 8);
+  $pdf->cell(80, 5, "TOTAL DE USUARIOS - EXTERNOS", 1, 0, "L", 1);
+  $pdf->cell(30, 5, $total_usuarios, 1, 1, "R", 1);
   $pdf->ln(5);
 }
 
 if (sizeof($listausuarios_perfil) > 0) {
-  $pdf->setfont("arial","B",8);
-  $pdf->cell(110,5,"LISTA DE USUARIOS - PERFIL",1,1,"C",1);
-  $pdf->cell(80,5,"NOME", 1,0,"C",1);
-  $pdf->cell(30,5,"LOGIN",1,1,"C",1);
+  $pdf->setfont("arial", "B", 8);
+  $pdf->cell(110, 5, "LISTA DE USUARIOS - PERFIL", 1, 1, "C", 1);
+  $pdf->cell(80, 5, "NOME", 1, 0, "C", 1);
+  $pdf->cell(30, 5, "LOGIN", 1, 1, "C", 1);
 
   ksort($listausuarios_interno);
   ksort($listausuarios_perfil);
 
-  $pdf->setfont("arial","",8);
-  $total_usuarios=0;
+  $pdf->setfont("arial", "", 8);
+  $total_usuarios = 0;
   foreach ($listausuarios_perfil as $k => $v) {
-    $pdf->cell(80,5,$v,0,0,"L",0);
-    $pdf->cell(30,5,$k,0,1,"L",0);
+    $pdf->cell(80, 5, $v, 0, 0, "L", 0);
+    $pdf->cell(30, 5, $k, 0, 1, "L", 0);
     $total_usuarios++;
   }
-  $pdf->setfont("arial","b",8);
-  $pdf->cell(80,5,"TOTAL DE USUARIOS - PERFIL",1,0,"L",1);
-  $pdf->cell(30,5,$total_usuarios,1,1,"R",1);
+  $pdf->setfont("arial", "b", 8);
+  $pdf->cell(80, 5, "TOTAL DE USUARIOS - PERFIL", 1, 0, "L", 1);
+  $pdf->cell(30, 5, $total_usuarios, 1, 1, "R", 1);
 }
 
-function recGravaMenus($id_usuario, $id_modulo, $id_item, $tipoAS){
+function recGravaMenus($id_usuario, $id_modulo, $id_item, $tipoAS)
+{
 
   global $anousu, $codigo, $pdf, $alt, $pass, $ambiente;
   global $pai, $id_item_filho, $menusequencia, $descricao, $help;
 
-  define("TIPOAS",$tipoAS);
+  define("TIPOAS", $tipoAS);
 
   $sql_itens_pai_usu = "
                         select m.id_item as pai, m.id_item, m.id_item_filho, m.menusequencia, i.descricao, i.help
@@ -511,27 +507,26 @@ function recGravaMenus($id_usuario, $id_modulo, $id_item, $tipoAS){
   $numrows_executa_item = pg_numrows($result_executa_item);
   /////////////////////////////////////////
 
-  for($b=0; $b<$numrows_executa_item; $b++){
+  for ($b = 0; $b < $numrows_executa_item; $b++) {
     db_fieldsmemory($result_executa_item, $b);
-    $conta=1;
-    $pdf->setfont("arial","",8);
-    $pdf->cell(($pass * 3),$alt,"", 0, 0, "L", 0);
-    $pdf->cell(80,$alt,substr($descricao,0,80) , 0, 0, "L", 0);
-    $pdf->setfont('arial','',5);
+    $conta = 1;
+    $pdf->setfont("arial", "", 8);
+    $pdf->cell(($pass * 3), $alt, "", 0, 0, "L", 0);
+    $pdf->cell(80, $alt, substr($descricao, 0, 80), 0, 0, "L", 0);
+    $pdf->setfont('arial', '', 5);
 
-    verificaPerfilMenu($id_usuario, $id_modulo, $id_item, $id_item_filho, false, ($pass * 3), TIPOAS);
+    verificaPerfilMenu($id_usuario, $id_modulo, $id_item, $id_item_filho, false, ($pass * 3), "0", TIPOAS);
 
-    $pass ++;
+    $pass++;
     recGravaMenus($id_usuario, $id_modulo, $id_item_filho, TIPOAS);
-    $pass --;
-
+    $pass--;
   }
-
 }
 
-function verificaPerfilMenu($id_usuario, $id_modulo, $id_item, $id_item_filho, $borda=true, $width=0, $preenche="0", $tipo_AS){
+function verificaPerfilMenu($id_usuario, $id_modulo, $id_item, $id_item_filho, $borda = true, $width = 0, $preenche = "0", $tipo_AS)
+{
 
-  define("TIPOAS",$tipo_AS);
+  define("TIPOAS", $tipo_AS);
   global $anousu, $codigo, $pdf, $alt, $logper, $nomper, $usuper;
 
   $sql_itens_per = "
@@ -557,13 +552,13 @@ function verificaPerfilMenu($id_usuario, $id_modulo, $id_item, $id_item_filho, $
   $result_itens_per = db_query($sql_itens_per);
   $numrows_itens_per = pg_num_rows($result_itens_per);
 
-  if ($numrows_itens_per == 0){
-    $pdf->cell(70,$alt,"" , 0, 1, "L", 0);
+  if ($numrows_itens_per == 0) {
+    $pdf->cell(70, $alt, "", 0, 1, "L", 0);
   }
 
-  if ($numrows_itens_per > 0 ) {
+  if ($numrows_itens_per > 0) {
 
-  $pdf->setfont("arial", "I", 7);
+    $pdf->setfont("arial", "I", 7);
     $sql_itens_usu = "
         select distinct u.id_usuario as usuper, u.nome as nomper, u.login as logper
         from db_menu m
@@ -581,37 +576,36 @@ function verificaPerfilMenu($id_usuario, $id_modulo, $id_item, $id_item_filho, $
           and m.id_item        = $id_item
           and m.id_item_filho  = $id_item_filho
           and i.itemativo      = '1' ";
-      $result_itens_usu  = db_query($sql_itens_usu);
-      $numrows_itens_usu = pg_num_rows($result_itens_usu);
+    $result_itens_usu  = db_query($sql_itens_usu);
+    $numrows_itens_usu = pg_num_rows($result_itens_usu);
 
     $pdf->setx(120);
 
     if ($numrows_itens_usu > 0) {
       db_fieldsmemory($result_itens_usu, 0);
-      $pdf->cell(30,$alt,"Login: $logper","0","L",$preenche);
+      $pdf->cell(30, $alt, "Login: $logper", "0", "L", $preenche);
     }
     $vNomper = null;
-    for($i = 0; $i < $numrows_itens_per; $i++){
+    for ($i = 0; $i < $numrows_itens_per; $i++) {
       db_fieldsmemory($result_itens_per, $i);
       if ($i > 0) {
-       $vNomper.=",".$nomper;
+        $vNomper .= "," . $nomper;
       } else {
-       $vNomper.=$nomper;
+        $vNomper .= $nomper;
       }
 
-      if ($i == $numrows_itens_per-1){
-      /*OC3117*/
+      if ($i == $numrows_itens_per - 1) {
+        /*OC3117*/
         if (TIPOAS == 'a') {
-          $pdf->multiCell(60,$alt,"Perfil: $vNomper","0","L",$preenche);
+          $pdf->multiCell(60, $alt, "Perfil: $vNomper", "0", "L", $preenche);
         } else {
           $pdf->ln();
         }
-      /*OC3117*/
+        /*OC3117*/
       }
     }
   }
-
 }
 
-$pdf->SetFont('Arial','B',7);
+$pdf->SetFont('Arial', 'B', 7);
 $pdf->Output();
