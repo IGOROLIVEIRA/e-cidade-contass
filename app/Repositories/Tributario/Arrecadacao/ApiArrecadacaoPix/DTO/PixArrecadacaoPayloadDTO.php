@@ -92,9 +92,15 @@ class PixArrecadacaoPayloadDTO implements IPixPayload
     public function fill(array $data): void
     {
         foreach ($data as $attribute => $value) {
+
+            if (!property_exists((new self()), $attribute)) {
+                continue;
+            }
+
             if ($attribute === 'valorOriginalSolicitacao') {
                 $value = number_format($value, 2);
             }
+
             $this->$attribute = $value;
         }
     }
