@@ -240,6 +240,38 @@ $clrotulo->label("e62_descr");
 
                                         $oItemOrdem = db_utils::fieldsMemory($rsItem, 0);
 
+                                        $sSQLacordo = "select
+                                            distinct ac26_acordo
+                                        from
+                                            acordoposicao
+                                        inner join acordoitem on
+                                            ac20_acordoposicao = ac26_sequencial
+                                        inner join acordoitemexecutado on
+                                            ac20_sequencial = ac29_acordoitem
+                                        inner join acordoitemexecutadoempautitem on
+                                            ac29_sequencial = ac19_acordoitemexecutado
+                                        inner join empautitem on
+                                            e55_sequen = ac19_sequen
+                                            and ac19_autori = e55_autori
+                                        inner join empautoriza on
+                                            e54_autori = e55_autori
+                                        left join empempaut on
+                                            e61_autori = e54_autori
+                                        left join empempenho on
+                                            e61_numemp = e60_numemp
+                                        where
+                                            e60_numemp = {$e60_numemp}";
+                                            $resultAcordo   = db_query($sSQLacordo);
+
+                                            $numrowAcordo  = pg_num_rows($resultAcordo);
+
+                                            db_fieldsmemory($resultAcordo, 0);
+                                            if($numrowAcordo == 1){
+                                                $sSQLtabela = "select case when pc01_tabela = false then 0 else 1 end as pc01_tabela from pcmater where pc01_codmater = {$e62_item}";
+                                                $resultTabela   = db_query($sSQLtabela);
+                                                db_fieldsmemory($resultTabela, 0);
+                                              }
+
                                         if ($clmatestoqueitemoc->numrows == 0) {
 
                                             echo "<tr id='tr_$e62_sequencial' class='$marcaLinha'>
@@ -267,7 +299,7 @@ $clrotulo->label("e62_descr");
 													        <input id ='coditem_" . $i . "' class ='input__static' value='" . $e62_item . "' disabled></input>
 													    </small>
                                                     </td>
-													<td	class='linhagrid' align='center'>
+													<td	class='linhagrid' align='center' ondblclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'>
 													    <small>$pc01_descrmater</small>
                                                     </td>
 
@@ -441,7 +473,7 @@ $clrotulo->label("e62_descr");
                                             echo "   <td class='linhagrid' nowrap align='left' title='$e62_item'>
                                                     <small>$e62_item</small>
                                                  </td>";
-                                            echo "   <td class='linhagrid' align='center' title='$pc01_descrmater'>
+                                            echo "   <td class='linhagrid' align='center' title='$pc01_descrmater' ondblclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'>
                                                     <small>$pc01_descrmater</small>
                                                  </td>";
                                             echo "   <td class='linhagrid' nowrap align='left' title='$m61_abrev'>
@@ -593,6 +625,60 @@ $clrotulo->label("e62_descr");
                                     }
                                 }
                                 ?>
+                                <div id="itenstabela" style="display:none">
+                                    <fieldset>
+                                    <legend><b>Adicionar Item</b></legend>
+                                    <table style='display:none'>
+                                        <tr>
+                                        <td>
+                                            <?
+                                            db_ancora("Código do material", "js_pesquisapc16_codmater(true);", 1);
+                                            ?>
+                                        </td>
+                                        <td nowrap>
+                                            <?
+                                            db_input('pc16_codmater', 8, $Ipc16_codmater, true, 'text', 1, " onchange='js_pesquisapc16_codmater(false);'");
+                                            db_input('pc01_descrmater', 50, $Ipc01_descrmater, true, 'text', 1, '');
+                                            echo "<b>Quantidade<b>";
+                                            db_input('l223_quant', 5, 0, true, 'text', 1, "onchange='js_calculatotal();'");
+                                            echo "<b>Unitário<b>";
+                                            db_input('l223_vlrn', 5, 0, true, 'text', 1, "onchange='js_calculatotal();'");
+                                            echo "<b>Total<b>";
+                                            db_input('l223_total', 5, 0, true, 'text', 3, '');
+                                            db_input('codempenho', 5, 0, true, 'text', 3, '');
+                                            db_input('sequencia', 5, 0, true, 'text', 3, '');
+                                            db_input('coditemordem', 5, 0, true, 'text', 3, '');
+                                            db_input('coditemordemtabela', 5, 0, true, 'text', 3, '');
+                                            ?>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                        <td colspan="2" style="text-align: center;">
+                                            <input type="button" value='Adicionar Item' id='btnAddItem'>
+                                            <input type="button" value='Alterar Item' id='btnAlterarItem' style="display:none;">
+                                            <input type="button" value='Novo Item' id='btnNovoItem' style="display:none;">
+                                            <input type="button" value='Excluir Item' id='btnExcluirItem' style="display:none;">
+                                        </td>
+                                        </tr>                   
+                                    </table>
+                                    <table style='display:none'>
+                                        <tr>
+                                        <td>
+                                            <fieldset>
+                                            <legend>
+                                                <b>Itens</b>
+                                            </legend>
+                                            <div id='gridItensSolicitacao'>
+
+                                            </div>
+                                            <div style="float: left; width: 100%; text-align: right">
+                                                <b>Valor total: </b><span id="valor_total_tabela">0.00</span>
+                                            </div>
+                                            </fieldset>
+                                        </td>
+                                        </tr>
+                                    </table>
+                                </div>
 
                                 <? if ($numrows > 0) : ?>
 
@@ -830,6 +916,47 @@ $clrotulo->label("e62_descr");
 
                 document.getElementById('valor_total').innerText = js_formatar(valor_total, 'f');
             }
+        }
+
+        function js_verificatabela(sequencia,empenho,item,acordo,tabela){
+            if( document.getElementById('itenstabela').style.display == 'none'){
+                if(tabela == 1 && acordo != "block"){
+                    $('itenstabela').style.display = '';
+                    $('pc16_codmater').value = "";
+                    $('pc01_descrmater').value = "";
+                    $('sequencia').value = sequencia;
+                    $('codempenho').value = empenho;
+                    $('coditemordem').value = item;
+                    $('codempenho').style.display = 'none';
+                    $('sequencia').style.display = 'none';
+                    $('coditemordem').style.display = 'none';
+                    $('coditemordemtabela').style.display = 'none';
+                    js_init(empenho,item);
+                }
+            }else{
+                if(tabela == 1 && acordo != ""){
+                    $('itenstabela').style.display = 'none';
+            
+                }
+            }
+
+        }
+
+        function js_init(empenho,item) {
+
+            oGridItens = new DBGrid('gridItens');
+            oGridItens.nameInstance = "gridItens";
+            oGridItens.setCellAlign(new Array("center", "center","center", "center", "center", "center", "center"));
+            oGridItens.setCellWidth(new Array("6%","6%", "40%", "10%", "10%", "10%", "10%"));
+            oGridItens.setHeader(new Array("Ordem", "Cod Material", "Descrição", "Quantidade", "Valor Unitário", "Valor Total", "Ação"));
+            oGridItens.aHeaders[1].lDisplayed = false;
+            oGridItens.show($('gridItensSolicitacao'));
+            $('btnAddItem').observe("click", js_adicionarItem);
+            $('btnAlterarItem').observe("click", js_alterarItem);
+            $('btnNovoItem').observe("click", js_novoItem);
+            $('btnExcluirItem').observe("click", js_excluirItem);
+            js_pesquisaitemtabela(empenho,item);
+
         }
     </script>
 </body>

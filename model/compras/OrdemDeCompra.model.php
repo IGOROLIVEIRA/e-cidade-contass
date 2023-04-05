@@ -497,4 +497,14 @@ class OrdemDeCompra {
     return $aItensEntrada;
   }
 
+  public function getValorOrdemTabela($item){
+    
+    $oDaoOrdemItemTabela  = new cl_empordemtabela;
+    $sqlOrdemItemTabela  = "select sum(l223_total) as l223_total from empordemtabela where l223_numemp = $item->iCodigoempenho and l223_pcmaterordem = $item->iCodigoitem and l223_codordem = 0";
+    $rsOrdemItemTabela = $oDaoOrdemItemTabela->sql_record($sqlOrdemItemTabela);
+    $oDadosOrdemItemTabela  = db_utils::fieldsMemory($rsOrdemItemTabela, 0);
+    print_r($oDadosOrdemItemTabela->l223_total);
+    return $oDadosOrdemItemTabela->l223_total;
+  }
+
 }

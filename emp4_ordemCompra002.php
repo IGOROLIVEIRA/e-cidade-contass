@@ -173,7 +173,7 @@ if (isset($oPost->incluir)){
               
       if($oTabItem->totaltabela != $nValor){
         $sqlerro  = true;
-        $erro_msg = "Total Item da tabela R$ $oTabItem->totaltabela é diferente que o total do item principal R$ $nValor.\n Operacao cancelada.";
+        $erro_msg = "Usuário: A soma dos itens da tabela X $oEmpItem->e62_item está divergente do valor total do item Tabela.";
         break;
       }else{
         $sSqlEmp    = "update empordemtabela set l223_codordem = $codigo where l223_numemp = $oEmpItem->e62_numemp and l223_pcmaterordem = $oEmpItem->e62_item and l223_codordem = 0";

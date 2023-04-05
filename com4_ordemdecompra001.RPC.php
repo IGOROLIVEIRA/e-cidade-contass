@@ -241,6 +241,17 @@ try {
 
     break;
 
+    case "confereitemtabela" :
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+      
+      $Valortotal           = $oOrdemCompraItemTabela->getValorOrdemTabela($oParam);
+      
+      
+      $oRetorno->valor = $Valortotal;
+
+
+    break;
+
     default:
       throw new ParameterException("Nenhuma Opção Definida");
     break;
