@@ -17,9 +17,6 @@ class GeneratePixWithQRCodeService
 
     public function execute(array $data): void
     {
-        if ($this->hasQrCode($data)) {
-            return;
-        }
         $provider = $this->configuration->getFinancialProvider();
         $response = $provider->generatePixArrecadacaoQrCodes($data);
         RecibopagaQrcodePix::create(
@@ -33,19 +30,5 @@ class GeneratePixWithQRCodeService
                 'k176_instituicao_financeira' => $data['k03_instituicao_financeira']
             ]
         );
-    }
-
-    private function hasQrCode(array $data): bool
-    {
-        $builder = RecibopagaQrcodePix::query();
-        if (isset($data['k00_numnov'])) {
-           $builder->where('k176_numnov', $data['k00_numnov']);
-        }
-
-        if (isset($data['k00_numpre'])) {
-            $builder->where('k176_numpre', $data['k00_numpre']);
-            $builder->where('k176_numpar', $data['k00_numpar']);
-        }
-        return $builder->exists();
     }
 }
