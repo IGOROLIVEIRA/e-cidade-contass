@@ -104,11 +104,6 @@ switch ($oParam->exec) {
                             $siopeReceita->setNomeArquivo($sNomeArqReceita);
                             $siopeReceita->gerarSiope();
 
-                            if ($siopeReceita->status == 3) {
-                                $oRetorno->message = "Não foi possível gerar a Receita. De/Para dos seguintes estruturais não encontrado: {$siopeReceita->sMensagem}";
-                                $oRetorno->status = 3;
-                            }
-
                             if ($siopeReceita->status == 2) {
                                 $oRetorno->message = "As seguintes receitas não foram localizadas na tabela de receitas do Siope: {$siopeReceita->sMensagem}";
                                 $oRetorno->status = 2;
