@@ -4,7 +4,10 @@ namespace App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Implementati
 
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IAuth;
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IConfiguration;
+use BusinessException;
+use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Psr7\Request;
@@ -51,8 +54,20 @@ class Auth implements IAuth
                 $bodyJson = json_decode($response->getBody());
                 $token = $bodyJson->{'access_token'};
             }
-        } catch (\BusinessException $e) {
-            throw new \BusinessException($e->getMessage());
+        } catch (ClientException | RequestException $e) {
+
+            $message =
+                'Erro de autenticação com API pix da Instituição Financeira habilidata.';
+            $error = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
+
+            if (!empty($error->error)) {
+                $message .= ' Detalhes: '.utf8_decode($error->mensagem);
+            }
+
+            if (!empty($error->erros)) {
+                $message .= ' Detalhes: '.utf8_decode($error->erros[0]->mensagem);
+            }
+            throw new BusinessException($message);
         }
 
         return $token;
@@ -68,9 +83,10 @@ class Auth implements IAuth
     {
         $options = [];
         if ($this->debug) {
-            $options[RequestOptions::DEBUG] = fopen('tmp/', 'a');
-            if (! $options[RequestOptions::DEBUG]) {
-                throw new \BusinessException('Failed to open the debug file: ' . 'tmp/');
+            $filename = 'tmp/'.date('Y-m-d').'_pixlog.log';
+            $options[RequestOptions::DEBUG] = fopen($filename, 'a');
+            if (!$options[RequestOptions::DEBUG]) {
+                throw new \BusinessException('Failed to open the debug file: ' . $filename);
             }
         }
 

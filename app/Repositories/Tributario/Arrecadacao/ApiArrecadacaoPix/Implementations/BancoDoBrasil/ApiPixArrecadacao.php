@@ -10,6 +10,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
 use InvalidArgumentException;
@@ -55,13 +56,18 @@ class ApiPixArrecadacao implements IPixProvider
         try {
             $response = $this->client->send($request);
 
-        } catch (ClientException $e) {
-            $message =
-                'Erro ao integrar com API pix da Instituição Financeira habilidata. Verifique os parâmetros informados';
+        } catch (ClientException | RequestException $e) {
+            $message = 'Erro ao integrar com API pix da Instituição Financeira habilidata.';
             $error = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
-            if (!empty($error->erros)) {
-                $message = utf8_decode($error->erros[0]->mensagem);
+
+            if (!empty($error->error)) {
+                $message .= ' Detalhes: '.utf8_decode($error->mensagem);
             }
+
+            if (!empty($error->erros)) {
+                $message .= ' Detalhes: '.utf8_decode($error->erros[0]->mensagem);
+            }
+
             throw new BusinessException($message);
         }
 
@@ -86,7 +92,7 @@ class ApiPixArrecadacao implements IPixProvider
         $queryParams = [];
         $headerParams = [];
 
-        $appKeyIndex = $this->configuration->isProductionEnvironment() ? 'gw-app-key' : 'gw-dev-app-key';
+        $appKeyIndex = 'gw-app-key';
         $queryParams[$appKeyIndex] = $this->configuration->getApplicationKey();
 
         $headerParams['Content-Type'] = "application/json";
