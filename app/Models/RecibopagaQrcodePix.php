@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\LegacyAccount;
+use Illuminate\Database\Eloquent\Builder;
 
 class RecibopagaQrcodePix extends LegacyModel
 {
@@ -38,4 +39,13 @@ class RecibopagaQrcodePix extends LegacyModel
         'k176_hist',
         'k176_instituicao_financeira'
     ];
+
+    public function scopeWhereNumpreNumpar(Builder $query, int $numpre, int $numpar = null): Builder
+    {
+        if ($numpar === null) {
+            return $query->where('k176_numnov', $numpre);
+        }
+
+        return $query->where('k176_numpre', $numpre)->where('k176_numpar', $numpar);
+    }
 }
