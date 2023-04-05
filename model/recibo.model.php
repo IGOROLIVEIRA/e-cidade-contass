@@ -1,7 +1,7 @@
 <?php
 
+use App\Models\Arretipo;
 use App\Models\Numpref;
-use App\Models\RecibopagaQrcodePix;
 use App\Services\Tributario\Arrecadacao\GeneratePixWithQRCodeService;
 use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
 
@@ -818,7 +818,7 @@ class Recibo
 
       $body['codigoGuiaRecebimento'] = $this->getNumpreRecibo();
       $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
-      $body['valorOriginalSolicitacao'] = $this->getTotalRecibo();
+      $body['valorOriginalSolicitacao'] = $this->getTotalReciboComTaxaExpediente();
       $body['k00_numnov'] = $this->getNumpreRecibo();
       $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
 
@@ -1037,6 +1037,20 @@ class Recibo
 
     return db_utils::fieldsMemory($rsBuscaRecibo, 0)->soma_k00_valor;
   }
+
+    /**
+     * Retorna o total do recibo incluindo a taxa de expediente
+     * vinculada ao tipo de debito
+     * @return float
+     */
+    public function getTotalReciboComTaxaExpediente(): float
+    {
+        $totalRecibo = (float) $this->getTotalRecibo();
+        $debitos = current($this->getDebitosRecibo());
+        $arretipo = Arretipo::query()->where('k00_tipo', $debitos->k00_tipo)->firstOrFail();
+        $valorTaxaExpediente = (float) $arretipo->k00_txban;
+        return $totalRecibo + $valorTaxaExpediente;
+    }
 
   /**
    * Cancela o Recibo
