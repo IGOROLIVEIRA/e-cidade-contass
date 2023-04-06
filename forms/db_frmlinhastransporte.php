@@ -24,13 +24,16 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
+$clrotulo = new rotulocampo;
+$clrotulo->label("z01_nome");
+$clrotulo->label("z01_numcgm");
 ?>
 <div style="margin-top: 20px;"  id='ctnAbas'></div>
 
 <!-- CONTAINER DA ABA LINHA -->
 <div id="ctnLinha">
   <form id="frmLinha" method="post" action="" class="container">
-    <fieldset style="width: 25%;">
+    <fieldset style="width: 100%;">
       <legend class="bold">Linha</legend>
       <table>
         <tr style="display: none;">
@@ -45,8 +48,32 @@
           <td><label class="bold">Abreviatura:</label></td>
           <td id="ctnAbreviatura"></td>
         </tr>
+        <tr>
+          <td><label class="bold">Data limite:</label></td>
+          <td id="ctnDatalimite" ></td>
+        </tr> 
+        <tr>
+          <td><label class="bold">KM Ida e Volta (Diário):</label></td>
+          <td id="ctnKmidavolta" onkeypress="inserirPonto()"></td>
+        </tr> 
+        <tr>
+          <td><label class="bold">Valor do KM:</label></td>
+          <td id="ctnValorkm" onkeypress="inserirPonto2()"></td>
+        </tr>
+        <tr>
+        <td  align="left" nowrap title="<?=$Tz01_numcgm?>">
+          <?db_ancora(@$Lz01_numcgm,"js_pesquisa_cgm(true);",1);?>
+        </td>
+        <td >
+          <?
+  	        db_input("tre06_numcgm",10,$Itre06_numcgm,true,"text",4,"onchange='js_pesquisa_cgm(false);'");
+  	        db_input("z01_nome2",30,"",true,"text",3);  
+          ?>
+        </td>
+      </tr>
       </table>
     </fieldset>
+    <input id="btnNovo" type="button" value="" />
     <input id="btnAcaoLinha" type="button" value="" />
     <input id="btnPesquisarLinha" type="button" value="Pesquisar" />
   </form>
@@ -144,10 +171,16 @@ function js_validaRequisicao(iOpcao) {
       $('btnAcaoLinha').observe("click", function(event) {
         js_salvarLinha();
       });
+
+      $('btnNovo').value   = 'Novo';
+      $('btnNovo').observe("click", function(event) {
+        js_btNovo();
+      });
+
       break;
 
     case 2:
-
+      $('btnNovo').style.display = 'none';
       $('btnAcaoLinha').value    = 'Alterar';
       $('btnAcaoLinha').disabled = true;
       $('btnAcaoLinha').observe("click", function(event) {
@@ -157,15 +190,40 @@ function js_validaRequisicao(iOpcao) {
       break;
 
     case 3:
-
+      $('btnNovo').style.display = 'none';
       $('btnAcaoLinha').value    = 'Excluir';
       $('btnAcaoLinha').disabled = true;
+      
       $('btnAcaoLinha').observe("click", function(event) {
         js_removerLinha();
       });
       js_pesquisaLinhas();
       break;
   }
+}
+
+function js_pesquisa_cgm(mostra){
+  if(mostra==true){
+    js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm_empenho.php?funcao_js=parent.js_mostracgm1|e60_numcgm|z01_nome','Pesquisa',true);
+  }else{
+     if(document.getElementById("tre06_numcgm").value != ''){
+        js_OpenJanelaIframe('top.corpo','db_iframe_cgm','func_cgm_empenho.php?pesquisa_chave='+document.getElementById("tre06_numcgm").value+'&funcao_js=parent.js_mostracgm','Pesquisa',false);
+     }else{
+       document.getElementById("z01_nome2").value = '';
+     }
+  }
+}
+function js_mostracgm(chave,erro){
+  document.getElementById("z01_nome2").value = chave;
+  if(erro==true){
+    document.getElementById("z01_nome2").value = '';
+    document.getElementById("tre06_numcgm").focus();
+  }
+}
+function js_mostracgm1(chave1,chave2){
+  document.getElementById("tre06_numcgm").value = chave1;
+  document.getElementById("z01_nome2").value  = chave2;
+  db_iframe_cgm.hide();
 }
 
 js_validaRequisicao(iOpcao);
@@ -196,7 +254,7 @@ var oInputNome             = document.createElement('input');
     oInputNome.id          = 'oInputNome';
     oInputNome.name        = 'oInputNome';
     oInputNome.style.width = '500px';
-    oInputNome.maxLength   = 60;
+    oInputNome.maxLength   = 200;
 $('ctnNome').appendChild(oInputNome);
 
 $('oInputNome').observe("keyup", function(event) {
@@ -218,6 +276,56 @@ $('oInputAbreviatura').observe("keyup", function(event) {
   $('oInputAbreviatura').value = $('oInputAbreviatura').value.toUpperCase();
 });
 
+/**
+ * Elemento input da Data limite
+ */
+var oInputDatalimite             = document.createElement('input');
+    oInputDatalimite.id          = 'oInputDatalimite';
+    oInputDatalimite.name        = 'oInputDatalimite';
+    oInputDatalimite.type        = 'date';
+    oInputDatalimite.style.width = '500px';
+    oInputDatalimite.maxLength   = 10;
+$('ctnDatalimite').appendChild(oInputDatalimite);
+
+$('oInputDatalimite').observe("keyup", function(event) {
+  var value = event.key;
+  if(value == "Delete" || value == "Backspace"){
+    document.getElementById("oInputDatalimite").value = '';
+}  
+  
+});
+
+/**
+ * Elemento input do Valor KM
+ */
+var oInputValorkm            = document.createElement('input');
+    oInputValorkm.id          = 'oInputValorkm';
+    oInputValorkm.name        = 'oInputValorkm';
+    oInputValorkm.style.width = '500px';
+    oInputValorkm.maxLength   = 10;
+$('ctnValorkm').appendChild(oInputValorkm);
+
+$('oInputValorkm').observe("keyup", function(event) {
+  $('oInputValorkm').value = $('oInputValorkm').value.toUpperCase();
+});
+
+/**
+ * Elemento input do KM ida e volta
+ */
+var oInputKmidavolta            = document.createElement('input');
+    oInputKmidavolta.id          = 'oInputKmidavolta';
+    oInputKmidavolta.name        = 'oInputKmidavolta';
+    oInputKmidavolta.style.width = '500px';
+    oInputKmidavolta.maxLength   = 10;
+    // oInputKmidavolta.onkeydown   = inserirPonto($('oInputKmidavolta').value);
+$('ctnKmidavolta').appendChild(oInputKmidavolta);
+
+$('oInputKmidavolta').observe("keyup", function(event) {
+  $('oInputKmidavolta').value = $('oInputKmidavolta').value.toUpperCase();
+});
+
+document.getElementById("z01_nome2").style.width = '410px';
+
 if (iOpcao == 3) {
 
   oInputNome.readOnly              = true;
@@ -225,6 +333,21 @@ if (iOpcao == 3) {
 
   oInputAbreviatura.readOnly              = true;
   oInputAbreviatura.style.backgroundColor = '#DEB887';
+
+  oInputDatalimite.readOnly              = true;
+  oInputDatalimite.style.backgroundColor = '#DEB887';
+
+  oInputValorkm.readOnly              = true;
+  oInputValorkm.style.backgroundColor = '#DEB887';
+
+  oInputKmidavolta.readOnly              = true;
+  oInputKmidavolta.style.backgroundColor = '#DEB887';
+
+  tre06_numcgm.readOnly              = true;
+  tre06_numcgm.style.backgroundColor = '#DEB887';
+
+  z01_nome2.readOnly              = true;
+  z01_nome2.style.backgroundColor = '#DEB887';
 }
 
 /**
@@ -243,7 +366,7 @@ function js_verificaPreenchimentoAbaLinha() {
 /**
  * Salva as informacoes de uma nova linha
  */
-function js_salvarLinha() {
+function js_salvarLinha(){
 
   if (js_verificaPreenchimentoAbaLinha()) {
 
@@ -252,6 +375,10 @@ function js_salvarLinha() {
         oParametro.iCodigo      = oInputSequencial.value;
         oParametro.sNome        = encodeURIComponent(tagString(oInputNome.value));
         oParametro.sAbreviatura = encodeURIComponent(tagString(oInputAbreviatura.value));
+        oParametro.sDatalimite  = encodeURIComponent(tagString(oInputDatalimite.value));
+        oParametro.sKmidaevolta = encodeURIComponent(tagString(oInputKmidavolta.value));
+        oParametro.sValorkm     = encodeURIComponent(tagString(oInputValorkm.value));
+        oParametro.sNumcgm     = encodeURIComponent(tagString(document.getElementById("tre06_numcgm").value));
 
     var oDadosRequisicao            = new Object();
         oDadosRequisicao.method     = 'post';
@@ -285,7 +412,7 @@ function js_retornoSalvarLinha(oResponse) {
 function js_pesquisaLinhas() {
 
   var sUrl  = 'func_linhatransporte.php';
-      sUrl += '?funcao_js=parent.js_mostraLinhas|tre06_sequencial|tre06_nome|tre06_abreviatura';
+      sUrl += '?funcao_js=parent.js_mostraLinhas|tre06_sequencial|tre06_nome|tre06_abreviatura|tre06_datalimite|tre06_kmidaevolta|tre06_valorkm|tre06_numcgm';
 
   js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_linhatransporte', sUrl, 'Pesquisa Linhas de Transporte', true);
 }
@@ -301,10 +428,16 @@ function js_mostraLinhas() {
     db_iframe_linhatransporte.hide();
     return false;
   }
-
+  
   oInputSequencial.value     = arguments[0];
   oInputNome.value           = arguments[1];
   oInputAbreviatura.value    = arguments[2];
+  oInputDatalimite.value     = arguments[3];
+  oInputKmidavolta.value     = arguments[4]; 
+  oInputValorkm.value        = arguments[5];
+  document.getElementById("tre06_numcgm").value = arguments[6];
+
+  js_pesquisa_cgm(false);
   $('btnAcaoLinha').disabled = false;
   db_iframe_linhatransporte.hide();
   js_buscaLogradourosItinerarios();
@@ -359,6 +492,11 @@ function js_limpaCamposLinha() {
   oInputSequencial.value  = '';
   oInputNome.value        = '';
   oInputAbreviatura.value = '';
+  oInputDatalimite.value  = '';
+  oInputKmidavolta.value  = '';
+  oInputValorkm.value     = '';  
+  document.getElementById("tre06_numcgm").value = ''; 
+  
 }
 
 /**********************************************************************************************************/
@@ -766,6 +904,14 @@ function js_validaHora() {
   return true;
 }
 
+function inserirPonto(){
+   document.getElementById("oInputKmidavolta").value = document.getElementById("oInputKmidavolta").value.replace(",",".");
+}
+
+function inserirPonto2(){
+   document.getElementById("oInputValorkm").value = document.getElementById("oInputValorkm").value.replace(",",".");
+}
+
 /**
  * Adiciona um horario ao itinerario
  */
@@ -924,4 +1070,8 @@ if (iOpcao == 1) {
 var oDBAbaItinerario         = new DBAbas($('ctnAbasItinerario'));
 var oAbaItinerarioLogradouro = oDBAbaItinerario.adicionarAba("Logradouro", $('ctnItinerarioLogradouro'));
 var oAbaItinerarioHorario    = oDBAbaItinerario.adicionarAba("Horários", $('ctnItinerarioHorario'));
+
+function js_btNovo(){
+    location.href='tre1_linhastransporte001.php?j39_area=<?=$j39_area?>&j39_matric=<?=$j39_matric?>&z01_nome=<?=$z01_nome?>&j39_idcons=<?=$j39_idcons?>';
+ }
 </script>
