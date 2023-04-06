@@ -49,7 +49,7 @@ $oRetorno->sMensagem = '';
 
 try {
 
-  switch ($oParam->sExecucao) {
+  switch ($oParam->exec) {
 
     /**
      * Salva uma linha de transporte. Caso iCodigo esteja vazio (novo cadastro), incluimos tambem os registros em
@@ -60,6 +60,70 @@ try {
      *
      * @return integer $oRetorno->iCodigo - Sequencial da linha de transporte salvo
      */
+    case 'carregarLinhas':
+      $data =  implode("-", array_reverse(explode("/", $oParam->data)));
+      $cllinhatransporte   = new cl_linhatransporte();
+      $sSqlLinhatransporte = $cllinhatransporte->sql_query_file(null,"*","","tre06_datalimite >= '$data' or tre06_datalimite is null"); 
+      $rsLinhatransporte   = $cllinhatransporte->sql_record($sSqlLinhatransporte);
+
+      if(pg_num_rows($rsLinhatransporte)==0){
+        $oRetorno->status = 2;
+        $erro_msg = 'Nao foi encontrado nenhuma Linha!';
+        $oRetorno->msg = $erro_msg; 
+      }
+
+      $oRetorno->dados  = array();
+
+      for ($cont = 0; $cont < pg_num_rows($rsLinhatransporte); $cont++) {
+        $dadosLinhas = db_utils::fieldsMemory($rsLinhatransporte, $cont); 
+        $sSqlMarcarLinha = $cllinhatransporte->sql_query_transporte(null,"*","","tre06_sequencial = $dadosLinhas->tre06_sequencial and tre13_data = '$data' and (tre06_datalimite >= '$data' or tre06_datalimite is null)"); 
+        $rsMarcarLinha    = $cllinhatransporte->sql_record($sSqlMarcarLinha);
+       
+        $oDadoslinhas                 = new stdClass();
+        $oDadoslinhas->abreviatura    = $dadosLinhas->tre06_abreviatura;
+        $oDadoslinhas->nomelinha      = urldecode(utf8_encode($dadosLinhas->tre06_nome));
+        $oDadoslinhas->sequencial     = $dadosLinhas->tre06_sequencial;
+        if(pg_num_rows($rsMarcarLinha) > 0){
+          $oDadoslinhas->sequencialFreq = $dadosLinhas->tre13_sequencial;
+        }else{
+          $oDadoslinhas->sequencialFreq = '';
+        }
+        $oRetorno->dados[]            = $oDadoslinhas;
+        $oRetorno->status             = 1; 
+      }     
+      
+    break;
+
+    case 'salvarFrequencia':
+
+      $aExluir = array();
+      foreach ($oParam->aLinhas as $alinhas) {
+
+        $cllinhafrequencia   = new cl_linhafrequencia();
+        $data =  implode("-", array_reverse(explode("/", $oParam->data)));
+        $sSqlLinhafrequencia = $cllinhafrequencia->sql_query(null,"*","","tre13_linhatransporte =  $alinhas->sequencial and tre13_data ='$data'"); 
+        $rsLinhafrequencia   = $cllinhafrequencia->sql_record($sSqlLinhafrequencia);
+
+          if(pg_num_rows($rsLinhafrequencia)==0){
+            $cllinhafrequencia->tre13_linhatransporte = $alinhas->sequencial;
+            $cllinhafrequencia->tre13_data            = $oParam->data;
+            $cllinhafrequencia->incluir();
+            $oRetorno->status                         = 1; 
+          }  
+        $aExluir [] =  $alinhas->sequencial; 
+      }  
+      $virgula = '';
+      foreach ($aExluir as $alinhasExcluir) { 
+        $dadoExcluir  .=  $virgula.$alinhasExcluir;
+        $virgula = ',';
+      }
+      $cllinhafrequencia->excluir ( $oid=null ,"tre13_linhatransporte not in ($dadoExcluir) and tre13_data = '$data'");    
+
+    break;  
+
+
+
+/***/
     case 'salvarLinha':
 
       if (isset($oParam->iCodigo) && isset($oParam->sNome)) {

@@ -71,11 +71,22 @@ class cl_linhatransporte {
    var $tre06_sequencial = 0;
    var $tre06_nome = null;
    var $tre06_abreviatura = null;
+   var $tre06_datalimite = null;
+   var $tre06_datalimite_dia = null;
+   var $tre06_datalimite_mes = null;
+   var $tre06_datalimite_ano = null;
+   var $tre06_kmidaevolta = 0;
+   var $tre06_valorkm = 0;
+   var $tre06_numcgm = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  tre06_sequencial = int4 = Sequencial
                  tre06_nome = varchar(60) = Nome
                  tre06_abreviatura = varchar(10) = Abreviatura
+                 tre06_datalimite = date = Data limite
+                 tre06_kmidaevolta  = KM Ida e Volta (Diário)
+                 tre06_valorkm    = Valor do KM
+                 tre06_numcgm =  Numero CGM
                  ";
    //funcao construtor da classe
    function cl_linhatransporte() {
@@ -98,6 +109,17 @@ class cl_linhatransporte {
        $this->tre06_sequencial = ($this->tre06_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["tre06_sequencial"]:$this->tre06_sequencial);
        $this->tre06_nome = ($this->tre06_nome == ""?@$GLOBALS["HTTP_POST_VARS"]["tre06_nome"]:$this->tre06_nome);
        $this->tre06_abreviatura = ($this->tre06_abreviatura == ""?@$GLOBALS["HTTP_POST_VARS"]["tre06_abreviatura"]:$this->tre06_abreviatura);
+       $this->tre06_numcgm = ($this->tre06_numcgm == ""?@$GLOBALS["HTTP_POST_VARS"]["tre06_numcgm"]:$this->tre06_numcgm);
+       if($this->tre06_datalimite == ""){
+          $this->tre06_datalimite_dia = ($this->tre06_datalimite_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["tre06_datalimite_dia"]:$this->tre06_datalimite_dia);
+          $this->tre06_datalimite_mes = ($this->tre06_datalimite_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["tre06_datalimite_mes"]:$this->tre06_datalimite_mes);
+          $this->tre06_datalimite_ano = ($this->tre06_datalimite_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["tre06_datalimite_ano"]:$this->tre06_datalimite_ano);
+          if($this->tre06_datalimite_dia != ""){
+            $this->tre06_datalimite = $this->tre06_datalimite_ano."-".$this->tre06_datalimite_mes."-".$this->tre06_datalimite_dia;
+          }
+      }
+       $this->tre06_kmidaevolta = ($this->tre06_kmidaevolta == ""?@$GLOBALS["HTTP_POST_VARS"]["tre06_kmidaevolta"]:$this->tre06_kmidaevolta);
+       $this->tre06_valorkm = ($this->tre06_valorkm == ""?@$GLOBALS["HTTP_POST_VARS"]["tre06_valorkm"]:$this->tre06_valorkm);
      }else{
        $this->tre06_sequencial = ($this->tre06_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["tre06_sequencial"]:$this->tre06_sequencial);
      }
@@ -155,16 +177,36 @@ class cl_linhatransporte {
        $this->erro_status = "0";
        return false;
      }
+     if(($this->tre06_kmidaevolta == null) || ($this->tre06_kmidaevolta == "") ){
+       $this->tre06_kmidaevolta = 'null';
+     }
+     if(($this->tre06_valorkm == null) || ($this->tre06_valorkm == "") ){
+      $this->tre06_valorkm = 'null';
+     }
+     if(($this->tre06_numcgm == null) || ($this->tre06_numcgm == "") ){
+      $this->tre06_numcgm = 'null';
+     }
+
+
      $sql = "insert into linhatransporte(
                                        tre06_sequencial
                                       ,tre06_nome
                                       ,tre06_abreviatura
+                                      ,tre06_datalimite
+                                      ,tre06_kmidaevolta
+                                      ,tre06_valorkm
+                                      ,tre06_numcgm
                        )
                 values (
                                 $this->tre06_sequencial
                                ,'$this->tre06_nome'
                                ,'$this->tre06_abreviatura'
-                      )";
+                               ,".($this->tre06_datalimite == "null" || $this->tre06_datalimite == ""?"null":"'".$this->tre06_datalimite."'")."
+                               ,$this->tre06_kmidaevolta
+                               ,$this->tre06_valorkm
+                               ,$this->tre06_numcgm
+                      )"; 
+                           
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -203,7 +245,11 @@ class cl_linhatransporte {
          $resac = db_query("insert into db_acount values($acount,3603,20093,'','".AddSlashes(pg_result($resaco,0,'tre06_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,3603,20094,'','".AddSlashes(pg_result($resaco,0,'tre06_nome'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,3603,20095,'','".AddSlashes(pg_result($resaco,0,'tre06_abreviatura'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
+         $resac = db_query("insert into db_acount values($acount,3603,20095,'','".AddSlashes(pg_result($resaco,0,'tre06_datalimite'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3603,20097,'','".AddSlashes(pg_result($resaco,0,'tre06_kmidaevolta'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3603,20098,'','".AddSlashes(pg_result($resaco,0,'tre06_valorkm'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3603,20099,'','".AddSlashes(pg_result($resaco,0,'tre06_numcgm'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")"); 
+        }
      }
      return true;
    }
@@ -251,6 +297,27 @@ class cl_linhatransporte {
          return false;
        }
      }
+     if(trim($this->tre06_datalimite)!="" || isset($GLOBALS["HTTP_POST_VARS"]["tre06_datalimite"])){
+      $sql  .= $virgula." tre06_datalimite = '$this->tre06_datalimite' ";
+      $virgula = ",";
+      }else{
+        $sql  .= $virgula." tre06_datalimite = null ";
+        $virgula = ",";
+      }
+     if(trim($this->tre06_kmidaevolta)!="" || isset($GLOBALS["HTTP_POST_VARS"]["tre06_kmidaevolta"])){
+      $sql  .= $virgula." tre06_kmidaevolta = '$this->tre06_kmidaevolta' ";
+      $virgula = ",";
+    }
+    if(trim($this->tre06_valorkm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["tre06_valorkm"])){
+      $sql  .= $virgula." tre06_valorkm = '$this->tre06_valorkm' ";
+      $virgula = ",";
+    }
+    
+    if(trim($this->tre06_numcgm)!="" || isset($GLOBALS["HTTP_POST_VARS"]["tre06_numcgm"])){
+      $sql  .= $virgula." tre06_numcgm = '$this->tre06_numcgm' ";
+      $virgula = ",";
+    }
+
      $sql .= " where ";
      if($tre06_sequencial!=null){
        $sql .= " tre06_sequencial = $this->tre06_sequencial";
@@ -274,7 +341,15 @@ class cl_linhatransporte {
              $resac = db_query("insert into db_acount values($acount,3603,20094,'".AddSlashes(pg_result($resaco,$conresaco,'tre06_nome'))."','$this->tre06_nome',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            if(isset($GLOBALS["HTTP_POST_VARS"]["tre06_abreviatura"]) || $this->tre06_abreviatura != "")
              $resac = db_query("insert into db_acount values($acount,3603,20095,'".AddSlashes(pg_result($resaco,$conresaco,'tre06_abreviatura'))."','$this->tre06_abreviatura',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-         }
+           if(isset($GLOBALS["HTTP_POST_VARS"]["tre06_datalimite"]) || $this->tre06_datalimite != "")
+             $resac = db_query("insert into db_acount values($acount,3603,20095,'".AddSlashes(pg_result($resaco,$conresaco,'tre06_datalimite'))."','$this->tre06_datalimite',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if(isset($GLOBALS["HTTP_POST_VARS"]["tre06_kmidaevolta"]) || $this->tre06_kmidaevolta != "")
+             $resac = db_query("insert into db_acount values($acount,3603,20097,'".AddSlashes(pg_result($resaco,$conresaco,'tre06_kmidaevolta'))."','$this->tre06_kmidaevolta',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if(isset($GLOBALS["HTTP_POST_VARS"]["tre06_valorkm"]) || $this->tre06_valorkm != "")
+             $resac = db_query("insert into db_acount values($acount,3603,20098,'".AddSlashes(pg_result($resaco,$conresaco,'tre06_valorkm'))."','$this->tre06_valorkm',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           if(isset($GLOBALS["HTTP_POST_VARS"]["tre06_valorkm"]) || $this->tre06_valorkm != "")
+             $resac = db_query("insert into db_acount values($acount,3603,20099,'".AddSlashes(pg_result($resaco,$conresaco,'tre06_numcgm'))."','$this->tre06_numcgm',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")"); 
+          }
        }
      }
      $result = db_query($sql);
@@ -333,6 +408,11 @@ class cl_linhatransporte {
            $resac  = db_query("insert into db_acount values($acount,3603,20093,'','".AddSlashes(pg_result($resaco,$iresaco,'tre06_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,3603,20094,'','".AddSlashes(pg_result($resaco,$iresaco,'tre06_nome'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
            $resac  = db_query("insert into db_acount values($acount,3603,20095,'','".AddSlashes(pg_result($resaco,$iresaco,'tre06_abreviatura'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,3603,20095,'','".AddSlashes(pg_result($resaco,$iresaco,'tre06_datalimite'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,3603,20097,'','".AddSlashes(pg_result($resaco,$iresaco,'tre06_kmidaevolta'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,3603,20098,'','".AddSlashes(pg_result($resaco,$iresaco,'tre06_valorkm'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+           $resac  = db_query("insert into db_acount values($acount,3603,20099,'','".AddSlashes(pg_result($resaco,$iresaco,'tre06_numcgm'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          
          }
        }
      }
@@ -440,6 +520,7 @@ class cl_linhatransporte {
   }
    // funcao do sql
    function sql_query_file ( $tre06_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+      
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = split("#",$campos);
@@ -520,5 +601,40 @@ class cl_linhatransporte {
     }
     return $sSql;
   }
+
+  function sql_query_transporte ( $tre06_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from linhatransporte ";
+    $sql .= " left join linhafrequencia on tre13_linhatransporte = tre06_sequencial";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($tre06_sequencial!=null ){
+        $sql2 .= " where linhatransporte.tre06_sequencial = $tre06_sequencial ";
+      }
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    } 
+    return $sql;
+ }
 }
 ?>
