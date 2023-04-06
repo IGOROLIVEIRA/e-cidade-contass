@@ -227,6 +227,7 @@ if (isset ($processa_elemento) && ($processa_elemento == 'Processar')) {
 }//
 // dotações, migra dotações
 if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
+
     $instit = db_getsession("DB_instit");
     // echo "aqui";
     // vars
@@ -242,8 +243,8 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Processar')) {
     $resAtual= $clorcdotacao->sql_record($clorcdotacao->sql_query(null,null,"*",null," orcdotacao.o58_anousu = $anousu and o58_instit =  $instit "));
     $rowsAtual = $clorcdotacao->numrows;
     // seleciona todas as dotações do exercicio anterior
-    $res= $clorcdotacao->sql_record($clorcdotacao->sql_query(null,null,"*",null," o58_codigo < 200 and orcdotacao.o58_anousu = $anousu_ant and o58_instit =  $instit "));
-    //db_criatabela($res);
+    $res= $clorcdotacao->sql_record($clorcdotacao->sql_query(null,null,"*",null," substr(o58_codigo::varchar,1,1) != '2' and orcdotacao.o58_anousu = $anousu_ant and o58_instit =  $instit "));
+
     $rows = $clorcdotacao->numrows;
 
     db_inicio_transacao();
@@ -612,7 +613,7 @@ if (isset ($processa_dotacao) && ($processa_dotacao == 'Excluir')) {
 	   <tr><td><input type=radio name=dotacao value=zerada  ><b>Zerado </b>   </td></tr>
 	   <tr><td><input type=radio name=dotacao value=inicial ><b>Dotação inicial   </td></tr>
            <tr><td><input type=radio name=dotacao value=atualizada><b>Dotação Atualizada ate  <? $dataf_dia = '31';$dataf_mes = '12';	$dataf_ano = $anousu_ant; db_inputdata("dataf",@$dataf_dia,@$dataf_mes,@$dataf_ano,true,'text',1) ?> </td></tr>
-           <tr><td><input type=checkbox name=percent><b> Percentual adicional de <input type=text name=percentual value='0' size=3 maxlength=3>% </b></td></tr>
+           <tr><td><input type=checkbox name=percent><b> Percentual adicional de <input type=text name=percentual value='0' size=4 maxlength=4>% </b></td></tr>
 	   <tr><td height=50px> &nbsp; </td></tr>
 	 </table>
        <?
