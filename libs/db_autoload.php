@@ -168,7 +168,6 @@ function db_autoload($sClassName) {
   $aArquivosCLasseErradas['impressaoOS214_plus']                                  = 'model/impressao.argoxOS214_plus.php';
   $aArquivosCLasseErradas['impressaoOS214']                                       = 'model/impressao.argoxOS214.php';
   $aArquivosCLasseErradas['tableDataManager']                                     = 'model/dataManager.php';
-  $aArquivosCLasseErradas['LancamentoAuxiliarInscricaoRestosAPagarNaoProcessado'] = 'model/contabilidade/lancamento/LancamentoAuxiliarInscricaoRestosAPagar.model.php';
   $aArquivosCLasseErradas['SingletonRegraDocumentoContabil']                      = 'model/contabilidade/SingletonDocumentoContabil.model.php';
   $aArquivosCLasseErradas['AlvaraCancelamento']                                   = 'model/issqn/AlvaraMovimentacaoCancelamento.model.php';
   $aArquivosCLasseErradas['AlvaraRenovacao']                                      = 'model/issqn/AlvaraMovimentacaoRenovacao.model.php';
