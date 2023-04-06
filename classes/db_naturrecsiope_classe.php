@@ -412,8 +412,8 @@ class cl_naturrecsiope {
 
         if ($c224_anousu > 2022) {
             $sql = "SELECT  CASE 
-                                WHEN c224_natrececidade IS NOT NULL THEN substr(c224_natrececidade,2,12)
-                                ELSE substr(o57_fonte,2,12)
+                                WHEN c224_natrececidade IS NOT NULL THEN substr(c224_natrececidade,1,12)
+                                ELSE substr(o57_fonte,1,12)
                             END AS c225_natrecsiope,
                             CASE 
                                 WHEN c224_natrececidade IS NOT NULL THEN c225_descricao
