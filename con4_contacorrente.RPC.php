@@ -2,41 +2,41 @@
 // ini_set('display_errors','On');
 // error_reporting(E_ALL);
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("std/db_stdClass.php");
-require_once("libs/db_utils.php");
-require_once("libs/db_app.utils.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/JSON.php");
-require_once("dbforms/db_funcoes.php");
-require_once "model/contabilidade/planoconta/ContaCorrente.model.php";
-require_once "model/contabilidade/planoconta/ContaPlano.model.php";
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("std/db_stdClass.php"));
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_app.utils.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/JSON.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("model/contabilidade/planoconta/ContaCorrente.model.php"));
+require_once(modification("model/contabilidade/planoconta/ContaPlano.model.php"));
 db_app::import("configuracao.*");
 db_app::import("contabilidade.*");
 db_app::import("contabilidade.planoconta.*");
@@ -573,7 +573,7 @@ try {
                 $sErroMessage = "ERRO [ 2 ] - Conta sem saldo a ser distribuído.";
                 throw new BusinessException($sErroMessage);
             }
-           
+
             /*
              * buscamos os detalhes das contas pelo estrutural
              * deve retornar as contas que ainda não foram incluidas na
@@ -644,7 +644,7 @@ try {
                                             inner join empempenho on e60_numemp = c19_numemp
                                             inner join empelemento on e64_numemp = e60_numemp
                                             inner join empresto on e91_numemp = e60_numemp
-                                where c19_contacorrente = {$iCorrente} 
+                                where c19_contacorrente = {$iCorrente}
                                     and c19_reduz = {$iReduzido} and c19_conplanoreduzanousu = {$iAnousuEmp} and e60_anousu < {$iAnousuEmp}
                                     and c19_instit = " . db_getsession('DB_instit');
 
@@ -802,7 +802,7 @@ try {
                                          AND DATE_PART('YEAR',c69_data) = {$iAnousuEmp}
                                          AND c19_contacorrente = {$iCorrente}
                                          AND c19_reduz = {$iReduzido}
-                                         AND c19_conplanoreduzanousu =  $iAnousuEmp 
+                                         AND c19_conplanoreduzanousu =  $iAnousuEmp
                                          AND c19_instit = " . db_getsession("DB_instit") . "
                                          AND c19_numemp = {$oLancamentos->e60_numemp}
                                          AND conhistdoc.c53_tipo not in (1000)
@@ -893,10 +893,10 @@ try {
                             $sWhereCCDetalhe  = " c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . " and c19_reduz = {$iReduzido} ";
                             $sWhereCCDetalhe .= " and c19_contacorrente = {$iCorrente} and c19_numemp = {$oLancamentos->e60_numemp} ";
                             $sSqlCCDetalhe = $oDaoCCDetalhe->sql_query_file(null, " c19_sequencial ",null, $sWhereCCDetalhe);
-                            
+
                             $rsCCDetalhe = $oDaoCCDetalhe->sql_record($sSqlCCDetalhe);
                             $iContaCorrenteDetalhe = db_utils::fieldsMemory($rsCCDetalhe, 0)->c19_sequencial;
-                              
+
                             //verifica se existe ccdetalhe para o anouso se não existir cria um novo.
                             if( ($iContaCorrenteDetalhe == null || $iContaCorrenteDetalhe == '0')   ){
 
@@ -921,9 +921,9 @@ try {
                                 $sSqlCCDetalhe = $oDaoCCDetalhe->sql_query_file(null, " c19_sequencial ",null, $sWhereCCDetalhe);
                                 $rsCCDetalhe = $oDaoCCDetalhe->sql_record($sSqlCCDetalhe);
                                 $iContaCorrenteDetalhe = db_utils::fieldsMemory($rsCCDetalhe, 0)->c19_sequencial;
-                                
+
                             }
-                           
+
                             $hash = $iContaCorrenteDetalhe;
 
                             if (!isset($aDadosAgrupados[$hash])) {
@@ -969,7 +969,7 @@ try {
                     }
                     db_fim_transacao(false);
                     break;
-                    
+
                 case 103:
 
                     $iTroca = 1;
@@ -1010,7 +1010,7 @@ try {
 
 
                     $aDadosAgrupados = array();
-                    
+
                     for ($iContfr = 0; $iContfr < pg_num_rows($rsSqlfr); $iContfr++) {
 
                         $objContasfr = db_utils::fieldsMemory($rsSqlfr, $iContfr);
@@ -1026,7 +1026,7 @@ try {
                                                      INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
                                                      AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = {$iAnousuEmp}
                                                      WHERE c19_reduz = {$iReduzido}
-                                                      
+
                                                        AND c19_orctiporec = {$objContasfr->o15_codigo}) as x) AS saldoimplantado,
 
                                                 (SELECT sum(c69_valor) AS debito
