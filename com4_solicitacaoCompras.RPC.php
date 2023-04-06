@@ -34,6 +34,12 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
+require_once("classes/db_solicitem_classe.php");
+require_once("classes/db_solicitempcmater_classe.php");
+require_once("classes/db_solicitemunid_classe.php");
+require_once("classes/db_solicitemregistropreco_classe.php");
+include("libs/PHPExcel/Classes/PHPExcel.php");
+
 $oJson             = new services_json();
 $oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno          = new stdClass();
@@ -514,6 +520,174 @@ switch ($oParam->exec) {
     }
 
     break;
-}
 
+  case 'processaritens':
+
+    //monto o nome do arquivo
+    $dir = "libs/Pat_xls_import/";
+    $files1 = scandir($dir);
+    $files1 = scandir($dir, 1);
+    $arquivo = "libs/Pat_xls_import/" . $files1[0];
+
+    //verificar se existe o arquivo
+    if (!file_exists($arquivo)) {
+      $oRetorno->status = 2;
+      $oRetorno->message = urlencode("Erro ! Arquivo de planilha nao existe.");
+      $erro = true;
+    } else {
+      $objPHPExcel = PHPExcel_IOFactory::load($arquivo);
+      $objWorksheet = $objPHPExcel->getActiveSheet();
+
+      //monto array com todos as linhas da planilha
+      foreach ($objWorksheet->getRowIterator() as $row) {
+        $rowIndex = $row->getRowIndex();
+        $cellIterator = $row->getCellIterator();
+        $cellIterator->setIterateOnlyExistingCells(false); //varre todas as células
+        foreach ($cellIterator as $cell) {
+          $colIndex = PHPExcel_Cell::columnIndexFromString($cell->getColumn());
+          $val = $cell->getValue();
+          $dataArr[$rowIndex][$colIndex] = $val;
+        }
+      }
+    }
+
+
+    $arrayItensPlanilha = array();
+    $oRetorno->erroPlanilha = false;
+
+    foreach ($dataArr as $keyRow => $Row) {
+      $objItensPlanilha = new stdClass();
+
+
+
+      if ($keyRow >= 2) {
+
+        //encerra o loop caso a linha atual da planilha esteja vazia.
+        if ($Row[1] == "" && $Row[2] == "") break;
+
+        foreach ($Row as $keyCel => $cell) {
+
+          // célula do código do material
+          if ($keyCel == 1) {
+
+            $objItensPlanilha->codmaterial = $cell;
+            $objItensPlanilha->errocodmaterial = "";
+
+            if ($objItensPlanilha->codmaterial != null) {
+
+              $rsMaterial = db_query("select * from pcmater where pc01_codmater = $objItensPlanilha->codmaterial;");
+              if (pg_numrows($rsMaterial) == 0) {
+                $objItensPlanilha->errocodmaterial = "Codigo do Material nao encontrado";
+                $oRetorno->erroPlanilha = true;
+              }
+
+              $rsMaterial = db_query("select * from solicitem
+              inner join solicitempcmater on pc11_codigo = pc16_solicitem
+              where pc11_numero = $oParam->iSolicitacao and pc16_codmater = $objItensPlanilha->codmaterial; ");
+
+              if (pg_numrows($rsMaterial) > 0) {
+                $objItensPlanilha->errocodmaterial = "Material cadastrado na solicitação";
+                $oRetorno->erroPlanilha = true;
+              }
+            } else {
+              $objItensPlanilha->errocodmaterial = "Campo em branco";
+              $oRetorno->erroPlanilha = true;
+            }
+          }
+
+          // célula do código da unidade
+          if ($keyCel == 2) {
+
+            $objItensPlanilha->codunidade = $cell;
+            $objItensPlanilha->errocodunidade = "";
+
+            if ($objItensPlanilha->codunidade != null) {
+              $rsUnidade = db_query("select * from matunid where m61_codmatunid =  $objItensPlanilha->codunidade;");
+
+              if (pg_numrows($rsUnidade) == 0) {
+                $objItensPlanilha->errocodunidade = "Unidade nao cadastrada";
+                $oRetorno->erroPlanilha = true;
+              }
+            } else {
+              $objItensPlanilha->errocodunidade = "Campo em branco";
+              $oRetorno->erroPlanilha = true;
+            }
+          }
+        }
+
+        $arrayItensPlanilha[] = $objItensPlanilha;
+      }
+    }
+
+    $oRetorno->itensPlanilha = $arrayItensPlanilha;
+
+    // variável que será utilizada para listagem dos itens com erro ao abrir o pop-up
+    $_SESSION["aItensPlanilha"] = $arrayItensPlanilha;
+
+    if ($oRetorno->erroPlanilha == false) {
+
+      $clsolicitem         = new cl_solicitem;
+      $clsolicitemunid     = new cl_solicitemunid;
+      $clsolicitempcmater  = new cl_solicitempcmater;
+
+      db_inicio_transacao();
+
+      $rsSequencial = db_query("select max (pc11_seq) as sequencial from solicitem where pc11_numero = $oParam->iSolicitacao;");
+      $iSquencial = db_utils::fieldsmemory($rsSequencial, 0)->sequencial;
+
+      for ($i = 0; $i < count($arrayItensPlanilha); $i++) {
+
+        $iSquencial++;
+
+        $clsolicitem->pc11_numero = $oParam->iSolicitacao;
+        $clsolicitem->pc11_seq    = $iSquencial;
+        $clsolicitem->pc11_quant    = "0";
+        $clsolicitem->pc11_vlrun  = "0";
+        $clsolicitem->pc11_liberado = "t";
+        $pc11_codigo = null;
+        $clsolicitem->incluir(empty($pc11_codigo) ? null : $pc11_codigo);
+
+        $clsolicitempcmater->pc16_codmater = $arrayItensPlanilha[$i]->codmaterial;
+        $clsolicitempcmater->pc16_solicitem = $clsolicitem->pc11_codigo;
+        $clsolicitempcmater->incluir($arrayItensPlanilha[$i]->codmaterial, $clsolicitem->pc11_codigo);
+
+        $clsolicitemunid->pc17_unid = $arrayItensPlanilha[$i]->codunidade;
+        $clsolicitemunid->pc17_quant = 1;
+        $clsolicitemunid->pc17_codigo = $clsolicitem->pc11_codigo;
+        $clsolicitemunid->incluir($clsolicitem->pc11_codigo);
+      }
+
+      db_fim_transacao(false);
+
+      $oSolicita             = new aberturaRegistroPreco($oParam->iSolicitacao);
+      $_SESSION["oSolicita"] = $oSolicita;
+
+      $lTemEstimativa = false;
+
+      if (count($oSolicita->getEstimativas()) > 0) {
+        $lTemEstimativa = true;
+      }
+
+
+      $aitens = $oSolicita->getItens();
+      foreach ($aitens as $iIndice => $oItem) {
+
+        $oItemRetono = new stdClass;
+        $oItemRetono->codigoitem        = $oItem->getCodigoMaterial();
+        $oItemRetono->descricaoitem     = $oItem->getDescricaoMaterial();
+        $oItemRetono->quantidade        = $oItem->getQuantidade();
+        $oItemRetono->automatico        = $oItem->isAutomatico();
+        $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+        $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+        $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+        $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
+        $oItemRetono->unidade           = $oItem->getUnidade();
+        $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
+        $oItemRetono->indice            = $iIndice;
+        $oItemRetono->temestimativa     = $lTemEstimativa;
+        $oRetorno->itens[] = $oItemRetono;
+      }
+    }
+    break;
+}
 echo $oJson->encode($oRetorno);

@@ -39,6 +39,10 @@ require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
+
+db_postmemory($HTTP_POST_VARS); //echo '<pre>';print_r($HTTP_POST_VARS);die;
+db_postmemory($HTTP_GET_VARS);
+
 $clrotulo = new rotulocampo;
 $clrotulo->label("pc16_codmater");
 $clrotulo->label("pc11_just");
@@ -71,6 +75,45 @@ $db_opcao           = 1;
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="js_init()">
   <center>
     <table width="70%">
+      <tr>
+        <td>
+          <fieldset>
+            <legend><strong>Importar Itens</strong></legend>
+            <form name="form2" id='form2' method="post" action="" enctype="multipart/form-data">
+
+              <table align="left" style="margin-left:44px;">
+                <tr>
+                  <td>
+                    <b> Importar Itens: </b>
+                    <select id="importaritens" name="importaritens" onchange="importar()" ali>
+                      <option value="1" selected>Não</option>
+                      <option value="2">Sim</option>
+                    </select>
+                  </td>
+                  <td id="anexarimportacao" style="display: none;">
+                    <b style="margin-left:100px;"> Importar xls: </b>
+                    <?php
+                    db_input("uploadfile", 30, 0, true, "file", 1);
+                    db_input("namefile", 31, 0, true, "hidden", 1);
+
+                    ?>
+                  </td>
+                </tr>
+              </table>
+              <table id="inputimportacao" style="display: none;margin-top: 30px;margin-left: -200px;" align="left">
+                <tr>
+                  <td>
+                    <input name='exportar' type='button' id="exportar" value="Gerar Planilha" onclick="gerar()" />
+                    <input name='processar' type='button' id="Processar" value="Processar" onclick="processarItens()" />
+                  </td>
+                </tr>
+              </table>
+            </form>
+            <div id='anexo' style='display:none'></div>
+          </fieldset>
+        </td>
+      </tr>
+
       <tr>
         <td>
           <fieldset>
@@ -127,6 +170,7 @@ $db_opcao           = 1;
       <tr>
         <td colspan="2" style="text-align: center;">
           <input type="button" value="Salvar Itens" id='btnSalvarItens'>
+          <input type='button' value='Exportar Planilha' id='exportarPlanilha' onclick="exportar()">
         </td>
       </tr>
     </table>
@@ -199,6 +243,75 @@ $db_opcao           = 1;
   var sUrlRC = 'com4_solicitacaoCompras.RPC.php';
   var aItensAbertura = new Array();
   var iIndiceAlteracao = 0;
+
+  /***
+   * ROTINA PARA SALVAR ANEXO
+   */
+
+  function js_salvarAnexo() {
+    let iFrame = document.createElement("iframe");
+    iFrame.src = 'func_uploadfilexls.php?clone=form2';
+    iFrame.id = 'uploadIframe';
+    $('anexo').appendChild(iFrame);
+  }
+  $('uploadfile').observe("change", js_salvarAnexo);
+
+  function processarItens() {
+
+    if (document.getElementById('uploadfile').value == "")
+      return alert('Nenhum arquivo selecionado');
+
+    js_divCarregando('Aguarde, adicionando item', "msgBox");
+    var oParam = new Object();
+    oParam.exec = "processaritens";
+    oParam.iSolicitacao = parent.iframe_registro.document.getElementById('pc10_numero').value;
+    var oAjax = new Ajax.Request(sUrlRC, {
+      method: "post",
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: js_retornoprocessaritens
+    });
+
+
+  }
+
+  function js_retornoprocessaritens(oAjax) {
+
+    js_removeObj('msgBox');
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+
+
+    if (oRetorno.erroPlanilha) {
+
+      alert('Corrija os itens grifados em vermelho e reprocesse a planilha.');
+
+      var y = window.outerHeight / 2 + window.screenY - (424 / 2)
+      var x = window.outerWidth / 2 + window.screenX - (832 / 2)
+      return window.open('com4_popuperroimportacaoabertura.php', '', 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width=' + 832 + ', height=' + 424 + ', top=' + y + ', left=' + x);
+
+    }
+
+    js_preencheGrid(oRetorno.itens);
+
+  }
+
+  function importar() {
+    if (document.getElementById('importaritens').value == "2") {
+      document.getElementById('inputimportacao').style.display = '';
+      document.getElementById('anexarimportacao').style.display = '';
+    } else {
+      document.getElementById('inputimportacao').style.display = 'none';
+      document.getElementById('anexarimportacao').style.display = 'none';
+    }
+  }
+
+  function gerar() {
+    window.location.href = "com4_xlsitensaberturaplanilha.php";
+  }
+
+  function exportar() {
+
+    window.location.href = "com4_xlsexportacaoaberturaplanilha.php?pc11_numero=" + parent.iframe_registro.document.getElementById('pc10_numero').value;
+  }
 
   function js_init() {
 
@@ -321,7 +434,6 @@ $db_opcao           = 1;
   }
 
   function js_preencheGrid(aItens) {
-
     aItensAbertura = aItens;
     oGridItens.clearAll(true);
     for (var i = 0; i < aItens.length; i++) {
