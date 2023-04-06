@@ -275,7 +275,7 @@ class SiopeDespesa extends Siope {
 
                 $this->verificaDePara($oDadosMes);
                 
-                if(substr($oDespesa->o58_codigo,1,2) == 22) {
+                if(substr($oDespesa->o58_codigo,1,7) == 22) {
                     $this->verificaConvenio($oDadosMes);
                 }
 
@@ -472,41 +472,41 @@ class SiopeDespesa extends Siope {
      */
     public function getCodPlanilha($oDespesa) {
 
-        if (substr($oDespesa->o58_codigo,1,2) == 5000001) {
+        if (substr($oDespesa->o58_codigo,1,7) == 5000001) {
             return $this->getCod101201($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5760010) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5760010) {
             return $this->getCod106206($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5440000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5440000) {
             return $this->getCod107207($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5400007) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5400007) {
             return $this->getCod118218($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5400000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5400000) {
             return $this->getCod119219($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5700000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5700000) {
             return $this->getCod122222($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta, $oDespesa->esferaconcedente);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5510000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5510000) {
             return $this->getCod143243($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5520000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5520000) {
             return $this->getCod144244($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5530000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5530000) {
             return $this->getCod145245($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5690000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5690000) {
             return $this->getCod146246($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5500000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5500000) {
             return $this->getCod147247($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5420007) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5420007) {
             return $this->getCod166266($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5420000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5420000) {
             return $this->getCod167267($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5710000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5710000) {
             return $this->getCod171271($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);     
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5720000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5720000) {
             return $this->getCod172272($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);    
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5750000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5750000) {
             return $this->getCod173273($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);    
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5730000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5730000) {
             return $this->getCod175275($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);    
-        } elseif(substr($oDespesa->o58_codigo,1,2) == 5740000 ||substr($oDespesa->o58_codigo,1,2) == 7540000 || substr($oDespesa->o58_codigo,1,2) == 7540000) {
+        } elseif(substr($oDespesa->o58_codigo,1,7) == 5740000 ||substr($oDespesa->o58_codigo,1,7) == 7540000 || substr($oDespesa->o58_codigo,1,7) == 7540000) {
             return $this->getCod174190191274290291($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
         } else {
             return $this->getCodGenerico($oDespesa->o58_subfuncao, $oDespesa->o55_tipoensino, $oDespesa->o55_tipopasta);
