@@ -1,6 +1,45 @@
 <?php
 global $resparag, $resparagpadrao, $db61_texto, $db02_texto;
 
+/**
+* Rodapé do Relatório
+*/
+function insereRodape() {
+    $sSqlMenuAcess  = " select trim(modulo.descricao)||'>'||trim(menu.descricao)||'>'||trim(item.descricao) as menu ";
+    $sSqlMenuAcess .= "   from db_menu                                                                              ";
+    $sSqlMenuAcess .= "        inner join db_itensmenu as modulo on modulo.id_item = db_menu.modulo                 ";
+    $sSqlMenuAcess .= "        inner join db_itensmenu as menu on menu.id_item     = db_menu.id_item                ";
+    $sSqlMenuAcess .= "        inner join db_itensmenu as item on item.id_item     = db_menu.id_item_filho          ";
+    $sSqlMenuAcess .= "  where id_item_filho = " . db_getsession("DB_itemmenu_acessado");
+    $sSqlMenuAcess .= "    and modulo        = " . db_getsession("DB_modulo");
+
+    $rsMenuAcess    = db_query($sSqlMenuAcess);
+
+    $sMenuAcess     = substr(pg_result($rsMenuAcess, 0, "menu"), 0, 50);
+
+    $sNomeArquivo   = $_SERVER["PHP_SELF"];
+    $sNomeArquivo   = substr($sNomeArquivo, strrpos($_SERVER["PHP_SELF"], "/") + 1);
+    $rsNomeUsuario  = db_query("select nome as nomeusu from db_usuarios where id_usuario = " . db_getsession("DB_id_usuario"));
+    $sEmissor       = "";
+
+    if (pg_num_rows($rsNomeUsuario) > 0) {
+      $sEmissor = trim(pg_result($rsNomeUsuario, 0, 0));
+    }
+
+    if (empty($sEmissor)) {
+      $sEmissor     = db_getsession("DB_login");
+    }
+
+    $sRodape        = " $sMenuAcess ($sNomeArquivo) ";
+    $sRodape       .= ' - Base: ' . db_getsession("DB_base"); //.QUAL BASE?
+    $sRodape       .= ' - Emissor: ' . substr(ucwords(strtolower($sEmissor)), 0, 30);
+    $sRodape       .= ' - Exerc: '   . db_getsession("DB_anousu");
+    $sRodape       .= ' - Data: '    . date("d/m/Y", db_getsession("DB_datausu")) . " " . date("H:i:s");
+
+    return $sRodape;
+
+}
+
 if (!function_exists('addCaracter')) {
 
     function addCaracter($sString, $sQuebra = "\n", $iLimite = 86)
@@ -32,8 +71,8 @@ if (!function_exists('addCaracter')) {
 
 $seq_item = 1;
 $pagina = 1;
-if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
 
+if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->AliasNbPages();
     $this->objpdf->AddPage();
     $this->objpdf->settopmargin(1);
@@ -41,7 +80,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $xcol = 4;
     //Inserindo usuario e data no rodape
     $this->objpdf->Setfont('Arial', 'I', 6);
-    $this->objpdf->text($xcol + 3, $xlin + 276, "Emissor: " . db_getsession("DB_login") . " Data: " . date("d/m/Y", db_getsession("DB_datausu")) . "");
+    $this->objpdf->text($xcol + 3, $xlin + 276, insereRodape());
 
     $this->objpdf->setfillcolor(245);
     $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
@@ -222,7 +261,8 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->sety($xlin + 65);
     $ele = 0;
     $xtotal = 0;
-
+    var_dump("chegou aqui fora do for");
+    die();
     $retorna_obs = 0;
     for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
         db_fieldsmemory($this->recorddositens, $ii);
@@ -342,7 +382,8 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             }
 
             if ($this->objpdf->PageNo() == 1) {
-
+                var_dump("chegou aqui n1");
+                die();
                 $this->objpdf->text(110, $xlin + 214, 'Continua na Página ' . ($this->objpdf->PageNo() + 1));
 
                 // Assinatura documento
@@ -394,8 +435,10 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             $xlin = 20;
             $xcol = 4;
             //Inserindo usuario e data no rodape
+            var_dump("chegou aqui roda pe");
+            die();
             $this->objpdf->Setfont('Arial', 'I', 6);
-            $this->objpdf->text($xcol + 3, $xlin + 276, "Emissor: " . db_getsession("DB_login") . " Data: " . date("d/m/Y", db_getsession("DB_datausu")) . "");
+            $this->objpdf->text($xcol + 3, $xlin + 276, insereRodape());
 
             $this->objpdf->setfillcolor(245);
             $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
@@ -492,7 +535,6 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
         }
     }
 } else {
-
     // quando nao e guaiba
 
     $this->objpdf->AliasNbPages();
@@ -505,7 +547,8 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
 
 
     $this->objpdf->Setfont('Arial', 'I', 6);
-    $this->objpdf->text($xcol + 3, $xlin + 276, "Emissor : " . db_getsession("DB_login") . " Data: " . date("d/m/Y", db_getsession("DB_datausu")) . "");
+    //$this->objpdf->text($xcol + 3, $xlin + 276, "Emissor : " . db_getsession("DB_login") . " Data: " . date("d/m/Y", db_getsession("DB_datausu")) . "");
+    $this->objpdf->text($xcol + 3, $xlin + 276, insereRodape());
 
     $this->objpdf->setfillcolor(245);
     $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
@@ -730,10 +773,10 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                     $descricaoitemcontinuacao = strtoupper($descricaoitemcontinuacao);
                     $pula = 1;
                     //$pagina += 1;
-                }     
+                }
             } else {
                 //DESCRIÇÃO DO ITEM PARA PRÓXIMAS PÁGINAS
-                
+
                     $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, 5000));
                     $descricaoitem = mb_strtoupper($descricaoitem);
                     $quantlinhadescricaoitem = round(strlen(pg_result($this->recorddositens, $ii, $this->descricaoitem))/70,0)+1;
@@ -745,7 +788,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                     $descricaoitemcontinuacao = mb_strtoupper($descricaoitemcontinuacao);
                     $pula = 1;
                     //$pagina += 1;
-                }  
+                }
             }
 
             if ($this->informa_adic == "PC") {
@@ -813,7 +856,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
         // troca de pagina
 
             $quantlinhadescricaoitem = round(strlen($descricaoitemcontinuacao)/70,0)+1;
-        
+
         $quantlinhadescricaoitem = ceil($quantlinhadescricaoitem/81);
         if (($this->objpdf->gety() > $this->objpdf->h - 110 && $pagina == 1) || ($this->objpdf->gety() > $this->objpdf->h - 40 && $pagina != 1) || ($pula == 1)) {
             //if ($descricaoitemcontinuacao != "") { // Alterado para controle de itens nao imprimir paginas sem itens(branco)
@@ -915,7 +958,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 } else {
                     $this->objpdf->text(85, $xlin + 320, 'Continua na Página ' . ($this->objpdf->PageNo() + 1));
                 }
-                
+
                 for($cont=0;$cont < $quantlinhadescricaoitem;$cont++){
                     $descricaoitem = preg_replace('/\n/', ' ', substr($descricaoitemcontinuacao, 0, 5400));
                     $this->objpdf->addpage();
@@ -926,7 +969,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                     $xcol = 4;
                     //Inserindo usuario e data no rodape
                     $this->objpdf->Setfont('Arial', 'I', 6);
-                    $this->objpdf->text($xcol + 3, $xlin + 276, "Emissor: " . db_getsession("DB_login") . " Data: " . date("d/m/Y", db_getsession("DB_datausu")) . "");
+                    $this->objpdf->text($xcol + 3, $xlin + 276, insereRodape());
 
                     $this->objpdf->setfillcolor(245);
                     $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
@@ -1005,7 +1048,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                     if (pg_result($this->recorddositens, $ii, $this->marca) != '') {
                         $descricaoitem .= ' - Marca: ' . pg_result($this->recorddositens, $ii, $this->marca);
                     }
-                    
+
                     $this->objpdf->Setfont('Arial', '', 7);
                     $this->objpdf->Row(array(
 
@@ -1028,9 +1071,9 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                             ""
                         ), 3, false, 3);
                     $descricaoitemcontinuacao = preg_replace('/\n/', ' ', substr($descricaoitemcontinuacao, 5400, 300000));
-                    
+
                 }
-        
+
         }
     }
     if ($pagina == 1) {
