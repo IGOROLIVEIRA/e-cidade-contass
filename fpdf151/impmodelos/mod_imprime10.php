@@ -493,7 +493,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 				//$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() + (($itempag*4)*2),($itempag+1)." - ".$oDadosItemTabela->l223_descr);
 				//$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety()+ ($itempag*4)+(($itempag+1)*4), " Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f'));
 				$this->objpdf->Row_multicell(array("","","","",
-				($contitem+1)." - ".$oDadosItemTabela->l223_descr . "\n Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f')."\n\n","",""
+				($contitem+1)." - ".$oDadosItemTabela->l223_descr . "\n Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário: ".trim(db_formatar($oDadosItemTabela->l223_vlrn,'f'))." - Total: ".trim(db_formatar($oDadosItemTabela->l223_total,'f'))."\n\n","",""
 				), 3, false, 4, 0, true);
 				
 				$posi = $this->objpdf->gety() + (($itempag*4)*2) + ($itempag*4)+(($itempag+1)*4);

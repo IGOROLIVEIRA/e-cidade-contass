@@ -503,8 +503,14 @@ class OrdemDeCompra {
     $sqlOrdemItemTabela  = "select sum(l223_total) as l223_total from empordemtabela where l223_numemp = $item->iCodigoempenho and l223_pcmaterordem = $item->iCodigoitem and l223_codordem = 0";
     $rsOrdemItemTabela = $oDaoOrdemItemTabela->sql_record($sqlOrdemItemTabela);
     $oDadosOrdemItemTabela  = db_utils::fieldsMemory($rsOrdemItemTabela, 0);
-    print_r($oDadosOrdemItemTabela->l223_total);
     return $oDadosOrdemItemTabela->l223_total;
+  }
+  public function alterarItemTabelaCadastrado($item){
+    
+    
+    $sqlOrdemItemTabela  = "update empordemtabela set l223_quant = $item->quantidade, l223_vlrn = $item->vlrn, l223_total = $item->total where l223_pcmatertabela = $item->sequencia and l223_pcmaterordem = $item->item and l223_codordem = $item->ordem";
+    db_query($sqlOrdemItemTabela);
+    return true;
   }
 
 }

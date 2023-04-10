@@ -422,7 +422,7 @@ $result = db_query($sql);
   }
 
   // funcao do sql 
-  function sql_query ( $oid = null,$campos="empordemtabela.oid,*",$ordem=null,$dbwhere="") { 
+  function sql_query ( $oid = null,$campos="*",$ordem=null,$dbwhere="") { 
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);

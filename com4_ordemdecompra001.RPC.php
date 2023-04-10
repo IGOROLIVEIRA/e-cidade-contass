@@ -213,6 +213,25 @@ try {
 
     break;
 
+    case "alterarItensOrdemTabela" :
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+
+    
+      
+      foreach ($oParam->itens as $oItens) {
+        
+  
+
+        $oOrdemCompraItemTabela->alterarItemTabelaCadastrado($oItens);
+
+        $oRetorno->ordem = $oItens->ordem;
+
+      }
+
+      
+
+    break;
+
     case "excluirItemOrdemTabela" :
       $oOrdemCompraItemTabela = new OrdemDeCompra();
 
