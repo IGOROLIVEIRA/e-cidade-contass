@@ -413,6 +413,7 @@ if ($processar) {
 
   function js_completaPesquisa() {
 
+    if (parent.iframe_registro.document.getElementById('pc10_numero').value == "") return false;
     var oParam = new Object();
     oParam.exec = "pesquisarAbertura";
     oParam.iSolicitacao = parent.iframe_registro.document.getElementById('pc10_numero').value;
