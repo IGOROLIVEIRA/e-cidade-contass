@@ -313,7 +313,11 @@ function verificaCamposVazios(
                             $aNumeroAcordo = explode('/', $ac16_numeroacordo);
                             $iNumero = $aNumeroAcordo[0];
                             $iAno    = !empty($aNumeroAcordo[1]) ? $aNumeroAcordo[1] : db_getsession("DB_anousu");
-                            $sWhere  = "ac16_numeroacordo = {$iNumero} and ac16_anousu = {$iAno} and ac16_instit = {$iInstituicaoSessao} and {$sDepartamentos}";
+                            $sWhere  = "ac16_numeroacordo = '{$iNumero}' and ac16_anousu = '{$iAno}' and ac16_instit = {$iInstituicaoSessao}";
+
+                            if (!empty($sDepartamentos)) {
+                                $sWhere .= "and {$sDepartamentos}";
+                            }
                         }
 
                         $sql_departamentos = "";
