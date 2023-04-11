@@ -63,9 +63,9 @@ class EventoS1202 extends EventoBase
             for ($iCont = 0; $iCont < count($aDadosPorMatriculas); $iCont++) {
                 $aIdentificador = $this->buscarIdentificador($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime);
                 for ($iCont2 = 0; $iCont2 < count($aIdentificador); $iCont2++) {
-                    $std->dmdev[$seqdmdev]->codcateg = $oDados->codcateg; //Obrigatório
+                    $std->dmdev[$seqdmdev]->codcateg = $oDados->codcateg; //Obrigatï¿½rio
 
-                    $std->dmdev[$seqdmdev] = new \stdClass(); //Obritatório
+                    $std->dmdev[$seqdmdev] = new \stdClass(); //Obritatï¿½rio
                     //Identifica??o de cada um dos demonstrativos de valores devidos ao trabalhador.
                     if ($aIdentificador[$iCont2]->idedmdev == 1) {
                         $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfsal'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
@@ -79,15 +79,15 @@ class EventoS1202 extends EventoBase
                     if ($aIdentificador[$iCont2]->idedmdev == 4) {
                         $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfs13'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
                     }
-                    $std->dmdev[$seqdmdev]->codcateg = $aDadosPorMatriculas[$iCont]->codcateg;  //Obritatório
+                    $std->dmdev[$seqdmdev]->codcateg = $aDadosPorMatriculas[$iCont]->codcateg;  //Obritatï¿½rio
 
-                    //Identificação da unidade do órgão público na qual o servidor possui remuneração.
-                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0] = new \stdClass(); //Obrigatório
-                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->tpinsc = 1; //Obrigatório somente pode ser 1 - cnpj
+                    //Identificaï¿½ï¿½o da unidade do ï¿½rgï¿½o pï¿½blico na qual o servidor possui remuneraï¿½ï¿½o.
+                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0] = new \stdClass(); //Obrigatï¿½rio
+                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->tpinsc = 1; //Obrigatï¿½rio somente pode ser 1 - cnpj
                     $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->nrinsc = $aDadosPorMatriculas[$iCont]->nrinsc; //Obrigat?rio
 
-                    //Informações relativas à remuneração do trabalhador no período de apuração.
-                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->remunperapur[0] = new \stdClass(); //Obrigatório
+                    //Informaï¿½ï¿½es relativas ï¿½ remuneraï¿½ï¿½o do trabalhador no perï¿½odo de apuraï¿½ï¿½o.
+                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->remunperapur[0] = new \stdClass(); //Obrigatï¿½rio
                     $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->remunperapur[0]->matricula = $aDadosPorMatriculas[$iCont]->matricula; //Opcional
 
                     $aDadosValoreRubrica = $this->buscarValorRubrica($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime, $aIdentificador[$iCont2]->idedmdev);
@@ -138,7 +138,7 @@ class EventoS1202 extends EventoBase
         end as grauExp,
         rh30_regime,
         rh51_cgcvinculo,
-        rh01_regist as matricula,
+        rh01_esocial as matricula,
         h13_categoria as codCateg
     from
         rhpessoal
