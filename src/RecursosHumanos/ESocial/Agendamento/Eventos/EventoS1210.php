@@ -69,9 +69,9 @@ class EventoS1210 extends EventoBase
                 for ($iCont = 0; $iCont < count($aDadosPorMatriculas); $iCont++) {
                     $aIdentificador = $this->buscarIdentificador($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime);
                     for ($iCont2 = 0; $iCont2 < count($aIdentificador); $iCont2++) {
-                        $std->infopgto[$seqinfopag]->codcateg = $oDados->codcateg; //Obrigatório
+                        $std->infopgto[$seqinfopag]->codcateg = $oDados->codcateg; //Obrigatï¿½rio
 
-                        $std->infopgto[$seqinfopag] = new \stdClass(); //Obritatório
+                        $std->infopgto[$seqinfopag] = new \stdClass(); //Obritatï¿½rio
 
                         $std->infopgto[$seqinfopag]->dtpgto = "$ano-$mes-$dia";
                         $std->infopgto[$seqinfopag]->tppgto = $this->tppgto;
@@ -165,7 +165,7 @@ class EventoS1210 extends EventoBase
         end as grauExp,
         rh30_regime,
         rh51_cgcvinculo,
-        rh01_regist as matricula,
+        rh01_esocial as matricula,
         h13_categoria as codCateg
         from
             rhpessoal
@@ -583,9 +583,9 @@ class EventoS1210 extends EventoBase
         for ($iCont = 0; $iCont < count($aDadosPorCpf); $iCont++) {
             $seqinfopag = 0;
 
-            //$std->infopgto[$seqinfopag]->codcateg = $aDadosPorCpf[$iCont]->codcateg; //Obrigatório
+            //$std->infopgto[$seqinfopag]->codcateg = $aDadosPorCpf[$iCont]->codcateg; //Obrigatï¿½rio
 
-            $std->infopgto[$iCont] = new \stdClass(); //Obritatório
+            $std->infopgto[$iCont] = new \stdClass(); //Obritatï¿½rio
 
             $std->infopgto[$iCont]->dtpgto = $aDadosPorCpf[$iCont]->dt_pgto;
             $std->infopgto[$iCont]->tppgto = $this->tppgto;
