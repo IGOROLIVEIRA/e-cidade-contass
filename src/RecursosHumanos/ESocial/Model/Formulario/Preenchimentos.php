@@ -1111,7 +1111,8 @@ WHERE rh30_vinculo IN ('I',
         SELECT DISTINCT *
             FROM
                 (SELECT cgm.z01_cgccpf AS cpftrab,
-                        rhpessoal.rh01_regist AS matricula,
+                        rhpessoal.rh01_esocial AS matricula,
+                        rhpessoal.rh01_regist AS matricula_sistema,
                         tpcontra.h13_categoria AS codcateg,
                         afasta.r45_dtafas AS dtiniafast,
                         afasta.r45_codigoafasta AS codmotafast,
@@ -1135,7 +1136,8 @@ WHERE rh30_vinculo IN ('I',
                 AND date_part('year',afasta.r45_dtafas::date) = fc_getsession('DB_anousu')::int
             UNION
             SELECT cgm.z01_cgccpf AS cpftrab,
-                rhpessoal.rh01_regist AS matricula,
+                rhpessoal.rh01_esocial AS matricula,
+                rhpessoal.rh01_regist AS matricula_sistema,
                 tpcontra.h13_categoria AS codcateg,
                 cadferia.r30_per1i AS dtiniafast,
                 '15' AS codmotafast,
@@ -1163,7 +1165,7 @@ WHERE rh30_vinculo IN ('I',
                 AND date_part('year',cadferia.r30_per1i::date) = fc_getsession('DB_anousu')::int) AS xxx
         ";
         if ($matricula != null) {
-            $sql .= "where matricula in ($matricula) ";
+            $sql .= "where matricula_sistema::int in ($matricula) ";
         }
 
         $rsAfasta = \db_query($sql);
