@@ -43,11 +43,16 @@ $clAcordo          = new cl_acordo;
 $db_opcao          = 22;
 $db_botao          = false;
 $clRotulo          = new rotulocampo;
+$cltipoanexo       = new cl_tipoanexo;
+$cllicanexopncp    = new cl_licanexopncp;
 
 $clAcordoDocumento->rotulo->label();
 $clRotulo->label('ac40_acordo');
+$clRotulo->label('ac40_descricao');
 $clRotulo->label('ac16_resumoobjeto');
 $clRotulo->label('ac16_sequencial');
+// $clRotulo->label("l20_codigo");
+// $clRotulo->label("l20_objeto");
 ?>
 <html>
   <head>
@@ -66,7 +71,7 @@ $clRotulo->label('ac16_sequencial');
     <div style="margin-top: 30px;"></div>
     <form name="form1" id='form1' method="post" action="" enctype="multipart/form-data">
       <center>
-        <div style="width: 600px;">
+        <div style="width: 750px;">
           <fieldset>
             <legend><b>Adicionar Documento:</b></legend>
             <table>
@@ -93,26 +98,57 @@ $clRotulo->label('ac16_sequencial');
                 </td>
               </tr>
               <tr>
-                <td>
-                  <?php echo $Lac40_descricao;?>
-                </td>
-                <td>
-                  <?php
-                    db_input("sDescricaoDocumento", 55, 0, true, 'text', 1, "disabled style='background-color:#DEB887;'");
-                    db_input("ac40_acordo", 30, 0, true, 'hidden', 3);
-                  ?>
-                </td>
-              </tr>
+            <td nowrap title="<?= @$Tl213_sequencial ?>">
+              <b>
+                <?
+                db_ancora("Tipo de Anexo :", "js_pesquisal20_codtipocom(true);", 3);
+                ?>
+              </b>
+            </td>
+            <td>
+              <?
+
+
+              $tipo = array();
+              $tipo[0] = "Selecione";
+              $result_tipo = $cltipoanexo->sql_record($cltipoanexo->sql_query(null, "*", "l213_sequencial", "l213_sequencial > 11"));
+
+
+              for ($iIndiceTipo = 0; $iIndiceTipo < $cltipoanexo->numrows; $iIndiceTipo++) {
+
+                $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
+
+                $tipo[$oTipo->l213_descricao] = $oTipo->l213_descricao;
+              }
+
+              if ($cltipoanexo->numrows == 0) {
+                db_msgbox("Nenhuma Tipo de anexo cadastrado!!");
+                $result_tipo = "";
+                $db_opcao = 3;
+                $db_botao = false;
+                db_input("l213_sequencial", 10, "", true, "text");
+                db_input("l213_sequencial", 40, "", true, "text");
+              } else {
+                $db_opcao = 1;
+                db_select("l213_sequencial", $tipo, true, $db_opcao, "");
+              }
+              ?>
+            </td>
+          </tr>
             </table>
           </fieldset>
         </div>
         <input type='button' id='btnSalvar' Value='Salvar' disabled/>
-        <div style="width: 600px;">
+        <div style="width: 750px;">
           <fieldset>
             <legend><b>Documentos Cadastrados</b></legend>
             <div id='ctnDbGridDocumentos'>
             </div>
           </fieldset>
+          <input type="button" id="btnEnviarPNCP" value="Envia documento para o PNCP" onClick="js_enviarDocumentoPNCP();" />
+          <input type="button" id="btnExcluirPNCP" value="Excluir documento no PNCP" onClick="js_excluirDocumentoPNCP();" />
+          <input type="button" id="btnExcluir" value="Excluir Selecionados" onClick="js_excluirSelecionados();" />
+          <input type="button" id="btnDownloadAnexos" value="Download" onClick="js_downloadSelecionados();" />
         </div>
       </center>
     </form>
@@ -180,8 +216,8 @@ function js_controlaCampos(lBloqueia) {
     $("uploadfile").setAttribute("disabled", true);
     $("uploadfile").style.backgroundColor = "#DEB887";
 
-    $("sDescricaoDocumento").setAttribute("disabled", true);
-    $("sDescricaoDocumento").style.backgroundColor = "#DEB887";
+    $("l213_sequencial").setAttribute("disabled", true);
+    $("l213_sequencial").style.backgroundColor = "#DEB887";
 
     $("btnSalvar").setAttribute("disabled", true);
 
@@ -190,8 +226,8 @@ function js_controlaCampos(lBloqueia) {
     $("uploadfile").removeAttribute("disabled");
     $("uploadfile").style.backgroundColor = "#FFFFFF";
 
-    $("sDescricaoDocumento").style.backgroundColor = "#FFFFFF";  
-    $("sDescricaoDocumento").removeAttribute("disabled");
+    $("l213_sequencial").style.backgroundColor = "#FFFFFF";  
+    $("l213_sequencial").removeAttribute("disabled");
 
     $("btnSalvar").removeAttribute("disabled");
   }
@@ -201,11 +237,12 @@ var sUrlRpc = "con4_contratos.RPC.php";
 
 oGridDocumento     = new DBGrid('gridDocumento');
 oGridDocumento.nameInstance = "oGridDocumento";
-oGridDocumento.setHeight(200);
-oGridDocumento.setCellAlign(new Array("right","right","left","center", "center"));
-oGridDocumento.setHeader(new Array("Codigo","Acordo","Descricao","Download", "Ação"));
+oGridDocumento.setCheckbox(0);
+oGridDocumento.setCellWidth(["30%", "30%", "30%", "50%", "30%", "30%"]);
+oGridDocumento.setCellAlign(new Array("center", "center", "center", "center", "center"));
+oGridDocumento.setHeader(new Array("Código","Acordo","Tipo", "Ação"));
+oGridDocumento.allowSelectColumns(true);
 oGridDocumento.show($('ctnDbGridDocumentos'));
-
 
 /**
  * Cria um listener para subir a imagem, e criar um preview da mesma
@@ -236,16 +273,16 @@ function js_salvarDocumento() {
      return false;
   }
 
-  if ($F('sDescricaoDocumento') == '') {
+  if ($F('l213_sequencial') == 0) {
 
-    alert('Informe uma descrição para o documento!');
+    alert('Selecione o tipo de Anexo!');
     return false;
   }
-
+  
   var oParam       = new Object();
   oParam.exec      = 'adicionarDocumento';
   oParam.acordo    = $F('iCodigoContrato');
-  oParam.descricao = encodeURIComponent(($F('sDescricaoDocumento').replace(/\\/g,  "<contrabarra>")));
+  oParam.descricao = encodeURIComponent(($F('l213_sequencial').replace(/\\/g,  "<contrabarra>")));
   oParam.arquivo   = $F('namefile');
   js_divCarregando('Aguarde... Salvando Documento','msgbox');
   var oAjax        = new Ajax.Request(
@@ -259,16 +296,16 @@ function js_salvarDocumento() {
 
 function js_retornoSalvarFoto(oAjax) {
 
-  js_removeObj("msgbox");
-  var oRetorno = eval('('+oAjax.responseText+")");
-  if (oRetorno.status == 1) {
+js_removeObj("msgbox");
+var oRetorno = eval('('+oAjax.responseText+")");
+if (oRetorno.status == 1) {
 
-     $('uploadfile').value     = '';
-     $("sDescricaoDocumento").value = "";
-     js_getDocumento();
-  } else {
-    alert(oRetorno.message.urlDecode());
-  }
+   $('uploadfile').value     = '';
+   $("l213_sequencial").value = "";
+   js_getDocumento();
+} else {
+  alert(oRetorno.message.urlDecode());
+}
 }
 
 function js_getDocumento() {
@@ -304,8 +341,11 @@ function js_retornoGetDocumento(oAjax) {
     aLinha[0]  = oDocumento.iCodigo;
     aLinha[1]  = oDocumento.iAcordo;
     aLinha[2]  = decodeURIComponent(oDocumento.sDescricao.replace(/\+/g,  " "));
-    aLinha[3]  = '<input type="button" value="Dowload" onclick="js_documentoDownload('+oDocumento.iCodigo+')">';
-    aLinha[4]  = '<input type="button" value="E" onclick="js_excluirDocumento('+oDocumento.iCodigo+')">';
+    aLinha[3]  = '<input type="button" value="Alterar" onclick="js_alterarDocumento(' +oDocumento.iCodigo+ ');" >  ';
+    aLinha[3]  += '<input type="button" value="Excluir" onclick="js_excluirDocumento(' +oDocumento.iCodigo+ ')" />  ';
+   
+
+   
     oGridDocumento.addRow(aLinha);  
   });
 
@@ -376,6 +416,301 @@ function js_downloadDocumento(oAjax) {
   }
   window.open("db_download.php?arquivo="+oRetorno.nomearquivo);
 } 
+
+
+function js_enviarDocumentoPNCP(){
+
+    const documentosSelecionados = oGridDocumento.getSelection("object")
+    var iSelecionados = documentosSelecionados.length;
+    var iCodigoProcesso = $('iCodigoContrato').value;
+    var aDocumentos = [];
+    var aTipo = [];
+
+    if (iSelecionados== 0) {
+      alert('Selecione pelo menos arquivo para Enviar')
+      return false
+    }
+    if (!confirm('Confirma o Envio do Documento?')) {
+    return false;
+  }
+    
+    if (empty(iCodigoProcesso)) {
+
+      alert('Acordo não informado.');
+      return false;
+    }
+
+    for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
+
+    var iDocumento = documentosSelecionados[iIndice].aCells[0].getValue();
+    aDocumentos.push(iDocumento);
+
+    var iTipo = documentosSelecionados[iIndice].aCells[3].getValue();
+    aTipo.push(iTipo);
+  
+    }
+
+    js_divCarregando('Aguarde... Enviando documentos!', 'msgbox');
+
+    var oParametros = new Object();
+
+    oParametros.exec = 'EnviarDocumentoPNCP';
+    oParametros.iCodigoProcesso = iCodigoProcesso;
+    oParametros.aDocumentos = aDocumentos;
+    oParametros.aTipoDocumentos = aTipo;
+
+    var oAjax = new Ajax.Request(
+      sUrlRpc, {
+        parameters: 'json=' + Object.toJSON(oParametros),
+        method: 'post',
+        asynchronous: false,
+
+        /**
+         * 
+         * Retorno do RPC
+         */
+        onComplete: function(oAjax) {
+
+          js_removeObj("msgbox");
+          var oRetorno = eval('(' + oAjax.responseText + ")");
+          var sMensagem = oRetorno.message;
+          var status = oRetorno.status;
+          for (var cont = 0; cont <= oRetorno.length; cont++) {
+            document.write(oRetorno[cont] + "<br>");
+          }
+          if (oRetorno.status == 2) {
+            alert(sMensagem);
+            return false;
+          }
+          alert("Anexo(s) Enviado(s) com Sucesso!");
+
+          
+        }
+      });
+
+}
+
+function js_excluirDocumentoPNCP(){
+
+const documentosSelecionados = oGridDocumento.getSelection("object")
+var iSelecionados = documentosSelecionados.length;
+var iCodigoProcesso = $('iCodigoContrato').value;
+var aDocumentos = [];
+var aTipo = [];
+
+if (iSelecionados== 0) {
+  alert('Selecione pelo menos um arquivo para Excluir')
+  return false
+}
+
+if (!confirm('Confirma a Exclusão do Documento?')) {
+    return false;
+  }
+
+if (empty(iCodigoProcesso)) {
+
+  alert('Acordo não informado.');
+  return false;
+}
+
+for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
+
+var iDocumento = documentosSelecionados[iIndice].aCells[0].getValue();
+aDocumentos.push(iDocumento);
+
+var iTipo = documentosSelecionados[iIndice].aCells[3].getValue();
+aTipo.push(iTipo);
+
+}
+
+js_divCarregando('Aguarde... Excluindo documentos!', 'msgbox');
+
+var oParametros = new Object();
+
+oParametros.exec = 'ExcluirDocumentoPNCP';
+oParametros.iCodigoProcesso = iCodigoProcesso;
+oParametros.aDocumentos = aDocumentos;
+oParametros.aTipoDocumentos = aTipo;
+
+var oAjax = new Ajax.Request(
+  sUrlRpc, {
+    parameters: 'json=' + Object.toJSON(oParametros),
+    method: 'post',
+    asynchronous: false,
+
+    /**
+     * 
+     * Retorno do RPC
+     */
+    onComplete: function(oAjax) {
+
+      js_removeObj("msgbox");
+      var oRetorno = eval('(' + oAjax.responseText + ")");
+      var sMensagem = oRetorno.message;
+      var status = oRetorno.status;
+      for (var cont = 0; cont <= oRetorno.length; cont++) {
+        document.write(oRetorno[cont] + "<br>");
+      }
+      if (oRetorno.status == 2) {
+        alert(sMensagem);
+        return false;
+      }
+      alert("Documento(s) Excluido(s) com Sucesso do PNCP!");
+            
+      
+    }
+  });
+
+}
+
+function js_excluirSelecionados(){
+  const documentosSelecionados = oGridDocumento.getSelection("object")
+var iSelecionados = documentosSelecionados.length;
+var iCodigoProcesso = $('iCodigoContrato').value;
+var aDocumentos = [];
+var aTipo = [];
+
+if (iSelecionados== 0) {
+  alert('Selecione pelo menos um arquivo para Excluir')
+  return false
+}
+
+if (!confirm('Confirma a Exclusão do Documento?')) {
+    return false;
+  }
+
+if (empty(iCodigoProcesso)) {
+
+  alert('Acordo não informado.');
+  return false;
+}
+
+for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
+
+var iDocumento = documentosSelecionados[iIndice].aCells[0].getValue();
+aDocumentos.push(iDocumento);
+
+var iTipo = documentosSelecionados[iIndice].aCells[3].getValue();
+aTipo.push(iTipo);
+
+}
+
+js_divCarregando('Aguarde... Excluindo documentos!', 'msgbox');
+
+var oParametros = new Object();
+
+oParametros.exec = 'ExcluirDocumentosSelecionados';
+oParametros.iCodigoProcesso = iCodigoProcesso;
+oParametros.aDocumentos = aDocumentos;
+oParametros.aTipoDocumentos = aTipo;
+
+var oAjax = new Ajax.Request(
+  sUrlRpc, {
+    parameters: 'json=' + Object.toJSON(oParametros),
+    method: 'post',
+    asynchronous: false,
+
+    /**
+     * 
+     * Retorno do RPC
+     */
+    onComplete: function(oAjax) {
+
+      js_removeObj("msgbox");
+      var oRetorno = eval('(' + oAjax.responseText + ")");
+      var sMensagem = oRetorno.message;
+      var status = oRetorno.status;
+      for (var cont = 0; cont <= oRetorno.length; cont++) {
+        document.write(oRetorno[cont] + "<br>");
+      }
+      if (oRetorno.status == 2) {
+        alert(sMensagem);
+        return false;
+      }
+
+      alert("Anexo(s) Excluido(s) com Sucesso!");
+      oGridDocumento.renderRows();
+     
+      
+    }
+  });
+
+}
+function js_downloadSelecionados(){
+  const documentosSelecionados = oGridDocumento.getSelection("object")
+var iSelecionados = documentosSelecionados.length;
+var iCodigoProcesso = $('iCodigoContrato').value;
+var aDocumentos = [];
+var aTipo = [];
+
+if (iSelecionados== 0) {
+  alert('Selecione pelo menos um arquivo para Excluir')
+  return false
+}
+
+if (!confirm('Confirma o download do Documento?')) {
+    return false;
+  }
+
+if (empty(iCodigoProcesso)) {
+
+  alert('Acordo não informado.');
+  return false;
+}
+
+for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
+
+var iDocumento = documentosSelecionados[iIndice].aCells[0].getValue();
+aDocumentos.push(iDocumento);
+
+var iTipo = documentosSelecionados[iIndice].aCells[3].getValue();
+aTipo.push(iTipo);
+
+}
+
+js_divCarregando('Aguarde... Fazendo dowload do documentos!', 'msgbox');
+
+var oParametros = new Object();
+
+oParametros.exec = 'DowloadDocumentosSelecionados';
+oParametros.iCodigoProcesso = iCodigoProcesso;
+oParametros.aDocumentos = aDocumentos;
+oParametros.aTipoDocumentos = aTipo;
+
+var oAjax = new Ajax.Request(
+  sUrlRpc, {
+    parameters: 'json=' + Object.toJSON(oParametros),
+    method: 'post',
+    asynchronous: false,
+
+    /**
+     * 
+     * Retorno do RPC
+     */
+    onComplete: function(oAjax) {
+
+      js_removeObj("msgbox");
+      var oRetorno = eval('(' + oAjax.responseText + ")");
+      var sMensagem = oRetorno.message;
+      var status = oRetorno.status;
+      for (var cont = 0; cont <= oRetorno.length; cont++) {
+        document.write(oRetorno[cont] + "<br>");
+      }
+      if (oRetorno.status == 2) {
+        alert(sMensagem);
+        return false;
+      }
+      for (var cont = 0; cont < oRetorno.contador; cont++) {
+        window.open("db_download.php?arquivo="+oRetorno.nomearquivo[cont]);
+      }
+      
+      alert("Download do(s) Anexo(s) efetuado com Sucesso!");
+     
+      
+    }
+  });
+
+}
 
 js_pesquisaContrato(true);
 

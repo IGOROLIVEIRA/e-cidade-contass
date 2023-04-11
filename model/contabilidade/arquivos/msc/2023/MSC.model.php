@@ -635,9 +635,12 @@ class MSC {
         case when c60_identificadorfinanceiro = 'F' then 1 else 2 end as fp,
         o15_codstnnovo as fr,
         case 
-            WHEN o15_codtri = '101' THEN '1001'
-            WHEN o15_codtri = '102' THEN '1002'
-            WHEN o15_codtri IN ('118', '218', '166', '266') THEN '1070'
+            WHEN o15_codtri IN ('101','1101','201') THEN '1001'
+            WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
+            WHEN o15_codtri IN ('102','1102','202') THEN '1002'
+            WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
+            WHEN o15_codtri IN ('118','1118', '218', '166', '266') THEN '1070'
+            WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
             else '' 
         end as co,
       round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
@@ -666,6 +669,7 @@ class MSC {
       c61_reduz,
       c61_codcon,
       c61_codigo,
+      o15_codigo,
       o15_codtri,
       r.c61_instit,
             c60_identificadorfinanceiro,o15_codstnnovo,
@@ -728,9 +732,12 @@ class MSC {
     (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
             db21_tipoinstit,
         case 
-            WHEN o15_codtri = '101' THEN '1001'
-            WHEN o15_codtri = '102' THEN '1002'
-            WHEN o15_codtri IN ('118', '218', '166', '266') THEN '1070'
+            WHEN o15_codtri IN ('101','1101','201') THEN '1001'
+            WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
+            WHEN o15_codtri IN ('102','1102','202') THEN '1002'
+            WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
+            WHEN o15_codtri IN ('118','1118', '218', '166', '266') THEN '1070'
+            WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
             else '' 
         end as co,
       c61_reduz,
@@ -772,6 +779,13 @@ class MSC {
                                	WHEN db21_tipoinstit IN (2) THEN 20231
                                	ELSE 10131
                            	END AS po,
+                            CASE
+                            	WHEN o15_codtri = '124' THEN
+                                   	CASE
+                                    	WHEN substr(natreceita,1,6) = '172810' OR substr(natreceita,1,6) = '242810' THEN 15200000
+                                       	ELSE 15100000 END
+                               	ELSE o15_codstnnovo
+                           	END AS fr,
                            	natreceita AS nr,
                            	round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
                            	'beginning_balance' AS tipovalor_si,
@@ -798,9 +812,12 @@ class MSC {
                                    	CASE
                                        	WHEN c19_emparlamentar = 1 THEN '3110'
                                        	WHEN c19_emparlamentar = 2 THEN '3120'
-                                        WHEN o15_codtri = '101' THEN '1001'
-                                        WHEN o15_codtri = '102' THEN '1002'
-                                        WHEN o15_codtri IN ('118', '218', '166', '266') THEN '1070'
+                                        WHEN o15_codtri IN ('101','1101','201') THEN '1001'
+                                        WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
+                                        WHEN o15_codtri IN ('102','1102','202') THEN '1002'
+                                        WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
+                                        WHEN o15_codtri IN ('118','1118', '218', '166', '266') THEN '1070'
+                                        WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
                                        	ELSE ''
                                    	END
                                	ELSE ''
@@ -812,6 +829,7 @@ class MSC {
                                     ELSE c210_mscestrut
                                 END AS estrut,
                                 db21_tipoinstit,
+                                o15_codigo,
                                 o15_codtri,
                                 c61_reduz,
                                 c61_codcon,
@@ -839,7 +857,7 @@ class MSC {
                         ) AS movgeral
                     ) AS movfinal
 				WHERE (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
-
+//  echo $sSQL;exit;
     $rsResult = db_query($sSQL);
     
     $aCampos  = array("conta", "po", "fr", "nr", "co", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
@@ -896,14 +914,20 @@ class MSC {
                             CASE
                                 WHEN e60_tipodespesa = 1 THEN '1111'
                                 WHEN e60_tipodespesa = 2 THEN '1121'
-                                WHEN o15_codtri = '101' THEN '1001'
-                                WHEN o15_codtri = '102' THEN '1002'
-                                WHEN o15_codtri IN ('118', '218', '166', '266') THEN '1070'
+                                WHEN o15_codtri IN ('101','1101','201') THEN '1001'
+                                WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
+                                WHEN o15_codtri IN ('102','1102','202') THEN '1002'
+                                WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
+                                WHEN o15_codtri IN ('118','1118', '218', '166', '266') THEN '1070'
+                                WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
                                 ELSE ''
                             END
-                        WHEN o15_codtri = '101' THEN '1001'
-                        WHEN o15_codtri = '102' THEN '1002'
-                        WHEN o15_codtri IN ('118', '218', '166', '266') THEN '1070'
+                        WHEN o15_codtri IN ('101','1101','201') THEN '1001'
+                        WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
+                        WHEN o15_codtri IN ('102','1102','202') THEN '1002'
+                        WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
+                        WHEN o15_codtri IN ('118','1118', '218', '166', '266') THEN '1070'
+                        WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
                       ELSE ''
                     END AS co,
                     c61_reduz,
@@ -926,6 +950,7 @@ class MSC {
                         c61_codcon,
                         c61_codigo,
                         r.c61_instit,
+                        o15_codigo,
                         o15_codtri,
                         lpad(o58_funcao,2,0) AS o58_funcao,
                         c60_identificadorfinanceiro,o15_codstnnovo,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) as funsub,
@@ -1006,14 +1031,20 @@ class MSC {
                                CASE
                                    WHEN e60_tipodespesa = 1 THEN '1111'
                                    WHEN e60_tipodespesa = 2 THEN '1121'
-                                   WHEN o15_codtri = '101' THEN '1001'
-                                   WHEN o15_codtri = '102' THEN '1002'
-                                   WHEN o15_codtri IN ('118', '218', '166', '266') THEN '1070'
+                                   WHEN o15_codtri IN ('101','1101','201') THEN '1001'
+                                   WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
+                                   WHEN o15_codtri IN ('102','1102','202') THEN '1002'
+                                   WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
+                                   WHEN o15_codtri IN ('118','1118', '218', '166', '266') THEN '1070'
+                                   WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
                                 ELSE ''
                                END
-                           WHEN o15_codtri = '101' THEN '1001'
-                           WHEN o15_codtri = '102' THEN '1002'
-                           WHEN o15_codtri IN ('118', '218', '166', '266') THEN '1070'
+                           WHEN o15_codtri IN ('101','1101','201') THEN '1001'
+                           WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
+                           WHEN o15_codtri IN ('102','1102','202') THEN '1002'
+                           WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
+                           WHEN o15_codtri IN ('118','1118', '218', '166', '266') THEN '1070'
+                           WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
                          ELSE ''
                        END AS co,
                        c61_reduz,
@@ -1036,6 +1067,7 @@ class MSC {
                             c61_codcon,
                             c61_codigo,
                             r.c61_instit,
+                            o15_codigo,
                             o15_codtri,
                             lpad(o58_funcao,2,0) AS o58_funcao,
                             c60_identificadorfinanceiro,o15_codstnnovo,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) AS funsub,
@@ -1174,14 +1206,20 @@ class MSC {
                              CASE
                                  WHEN e60_tipodespesa = 1 THEN '1111'
                                  WHEN e60_tipodespesa = 2 THEN '1121'
-                                 WHEN o15_codtri = '101' THEN '1001'
-                                 WHEN o15_codtri = '102' THEN '1002'
-                                 WHEN o15_codtri IN ('118', '218', '166', '266') THEN '1070'
+                                 WHEN o15_codtri IN ('101','1101','201') THEN '1001'
+                                 WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
+                                 WHEN o15_codtri IN ('102','1102','202') THEN '1002'
+                                 WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
+                                 WHEN o15_codtri IN ('118','1118', '218', '166', '266') THEN '1070'
+                                 WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
                                ELSE '' 
                              END
-                         WHEN o15_codtri = '101' THEN '1001'
-                         WHEN o15_codtri = '102' THEN '1002'
-                         WHEN o15_codtri IN ('118', '218', '166', '266') THEN '1070'
+                         WHEN o15_codtri IN ('101','1101','201') THEN '1001'
+                         WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
+                         WHEN o15_codtri IN ('102','1102','202') THEN '1002'
+                         WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
+                         WHEN o15_codtri IN ('118','1118', '218', '166', '266') THEN '1070'
+                         WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
                         ELSE ''
                        END AS co,
                        c61_reduz,
@@ -1204,6 +1242,7 @@ class MSC {
                             c61_codigo,
                             r.c61_instit,
                             e60_anousu,
+                            o15_codigo,
                             o15_codtri,
                             lpad(o58_funcao,2,0) AS o58_funcao,
                             p.c60_identificadorfinanceiro,o15_codstnnovo,lpad(o58_funcao,2,0)||lpad(o58_subfuncao,3,0) AS funsub,
@@ -1285,14 +1324,20 @@ $aCampos  = array("conta", "po", "fs", "fr", "nd", "co", "ai", "es", "saldoinici
                                CASE
                                    WHEN e60_tipodespesa = 1 THEN '1111'
                                    WHEN e60_tipodespesa = 2 THEN '1121'
-                                   WHEN o15_codtri = '101' THEN '1001'
-                                   WHEN o15_codtri = '102' THEN '1002'
-                                   WHEN o15_codtri IN ('118', '218', '166', '266') THEN '1070'
+                                   WHEN o15_codtri IN ('101','1101','201') THEN '1001'
+                                   WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
+                                   WHEN o15_codtri IN ('102','1102','202') THEN '1002'
+                                   WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
+                                   WHEN o15_codtri IN ('118', '1118', '218', '166', '266') THEN '1070'
+                                   WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
                                  ELSE '' 
                                END
-                             WHEN o15_codtri = '101' THEN '1001'
-                             WHEN o15_codtri = '102' THEN '1002'
-                             WHEN o15_codtri IN ('118', '218', '166', '266') THEN '1070'
+                             WHEN o15_codtri IN ('101','1101','201') THEN '1001'
+                             WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
+                             WHEN o15_codtri IN ('102','1102','202') THEN '1002'
+                             WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
+                             WHEN o15_codtri IN ('118', '1118', '218', '166', '266') THEN '1070'
+                             WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
                             ELSE ''
                            END AS co,
                            c61_reduz,
@@ -1318,6 +1363,7 @@ $aCampos  = array("conta", "po", "fs", "fr", "nd", "co", "ai", "es", "saldoinici
                                c61_reduz,
                                c61_codcon,
                                c61_codigo,
+                               o15_codigo,
                                o15_codtri,
                                lpad(o58_funcao,2,0) AS o58_funcao,
                                r.c61_instit,
@@ -1350,7 +1396,7 @@ $aCampos  = array("conta", "po", "fs", "fr", "nd", "co", "ai", "es", "saldoinici
                             AND r.c61_reduz IS NOT NULL
                         ORDER BY p.c60_estrut ) AS movgeral) AS movfinal
               WHERE (saldoinicial <> 0 OR debito <> 0 OR credito <> 0)";
-
+          
     $rsResult = db_query($sSQL);
     $aCampos  = array("conta", "po", "fs", "fr", "nd", "co", "ai", "es", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
    

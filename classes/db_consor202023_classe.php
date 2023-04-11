@@ -187,7 +187,7 @@ class cl_consor202023
                                ,$this->si17_prestcontas 
                                ,$this->si17_mes 
                                ,$this->si17_instit 
-                               ,$this->si17_codacompanhamento
+                               ,'$this->si17_codacompanhamento'
                       )";
     $result = db_query($sql);
     if ($result == false) {

@@ -154,17 +154,7 @@ class estimativaRegistroPreco extends solicitacaoCompra
   {
 
     $sCampoOrdem = 'pc11_codigo';
-    switch (ParametroRegistroPreco::getOrdenacaoEstimativa()) {
 
-      case 1:
-
-        $sCampoOrdem = 'pc11_codigo';
-        break;
-      case 2:
-
-        $sCampoOrdem = 'pc01_descrmater';
-        break;
-    }
     if ($this->iCodigoSolicitacao != "" && count($this->aItens) == 0) {
 
       $oDaoSolicitem = db_utils::getDao("solicitem");

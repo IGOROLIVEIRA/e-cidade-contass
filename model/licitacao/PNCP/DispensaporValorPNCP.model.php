@@ -46,18 +46,22 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         //ITENS
         $vlrtotal = 0;
         foreach ($oDado->itensCompra as $key => $item) {
+            $vlrtotal = $item->pc11_quant * $item->valorunitarioestimado;
+
             $oDadosAPI->itensCompra[$key]->numeroItem                  = $item->numeroitem;
             $oDadosAPI->itensCompra[$key]->materialOuServico           = $item->materialouservico;
-            $oDadosAPI->itensCompra[$key]->orcamentoSigiloso           = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->tipoBeneficioId             = $item->tipobeneficioid;
             $oDadosAPI->itensCompra[$key]->incentivoProdutivoBasico    = $item->incentivoprodutivobasico == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->descricao                   = utf8_encode($item->descricao);
             $oDadosAPI->itensCompra[$key]->quantidade                  = $item->pc11_quant;
             $oDadosAPI->itensCompra[$key]->unidadeMedida               = utf8_encode($item->unidademedida);
+            $oDadosAPI->itensCompra[$key]->orcamentoSigiloso           = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
-            $vlrtotal = $item->pc11_quant * $item->valorunitarioestimado;
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
             $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
+            $oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
+            //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
+            //$oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = $item->codigoregistroimobiliario;
         }
 
         $aDadosAPI = $oDadosAPI;
@@ -129,7 +133,7 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = '17316563000196';
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras";
+        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras";
 
         $method = 'POST';
 
@@ -185,8 +189,21 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         curl_close($chpncp);
 
-        $retorno = json_decode($contentpncp);
-        return $retorno;
+        $retorno = explode(':', $contentpncp);
+
+        //caso erro nos itens
+        if (substr(str_replace('"', '', $retorno[2]), 0, 11) == "itensCompra") {
+            return array(422, $retorno[3]);
+        } else {
+            //erro ao enviar aviso
+            if ($retorno[8]) {
+                return array(422, $retorno[2]);
+            }
+            //caso tenha enviado com sucesso!
+            else {
+                return array(201, $retorno[4]);
+            }
+        }
     }
 
     public function enviarRetificacao($oDados, $sCodigoControlePNCP, $iAnoCompra)
@@ -196,7 +213,7 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = '17316563000196';
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
+        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
         $method = 'PATCH';
 
@@ -252,7 +269,7 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = '17316563000196';
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
+        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
         $method = 'DELETE';
 

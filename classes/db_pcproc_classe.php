@@ -60,6 +60,7 @@ class cl_pcproc
   var $pc80_subcontratacao = null;
   var $pc80_dadoscomplementares = null;
   var $pc80_amparolegal = null;
+  var $pc80_categoriaprocesso = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  pc80_codproc = int8 = Código do Processo de Compras
@@ -76,6 +77,7 @@ class cl_pcproc
                  pc80_subcontratacao = possui subcontratacao
                  pc80_dadoscomplementares = dados complementares
                  pc80_amparolegal = amparo legal
+                 pc80_categoriaprocesso = categoria do processo
                  ";
   //funcao construtor da classe
   function cl_pcproc()
@@ -119,6 +121,7 @@ class cl_pcproc
       $this->pc80_subcontratacao = ($this->pc80_subcontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_subcontratacao"] : $this->pc80_subcontratacao);
       $this->pc80_dadoscomplementares = ($this->pc80_dadoscomplementares == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_dadoscomplementares"] : $this->pc80_dadoscomplementares);
       $this->pc80_amparolegal = ($this->pc80_amparolegal == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_amparolegal"] : $this->pc80_amparolegal);
+      $this->pc80_categoriaprocesso = ($this->pc80_categoriaprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_categoriaprocesso"] : $this->pc80_categoriaprocesso);
     } else {
       $this->pc80_codproc = ($this->pc80_codproc == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_codproc"] : $this->pc80_codproc);
     }
@@ -211,6 +214,10 @@ class cl_pcproc
       $this->pc80_amparolegal = "null";
     }
 
+    if ($this->pc80_categoriaprocesso == null) {
+      $this->pc80_categoriaprocesso = "null";
+    }
+
     if ($pc80_codproc == "" || $pc80_codproc == null) {
       $result = db_query("select nextval('pcproc_pc80_codproc_seq')");
       if ($result == false) {
@@ -258,6 +265,7 @@ class cl_pcproc
                                       ,pc80_subcontratacao
                                       ,pc80_dadoscomplementares 
                                       ,pc80_amparolegal
+                                      ,pc80_categoriaprocesso
                        )
                 values (
                                 $this->pc80_codproc
@@ -274,6 +282,7 @@ class cl_pcproc
                                ," . ($this->pc80_subcontratacao == "null" || $this->pc80_subcontratacao == "" ? "false" : "'" . $this->pc80_subcontratacao . "'") . "
                                ,'$this->pc80_dadoscomplementares'
                                ,$this->pc80_amparolegal
+                               ,$this->pc80_categoriaprocesso
                       )";
     $result = db_query($sql);
 
@@ -468,6 +477,11 @@ class cl_pcproc
 
     if (trim($this->pc80_amparolegal) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_amparolegal"])) {
       $sql  .= $virgula . " pc80_amparolegal = '$this->pc80_amparolegal' ";
+      $virgula = ",";
+    }
+
+    if (trim($this->pc80_categoriaprocesso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_categoriaprocesso"])) {
+      $sql  .= $virgula . " pc80_categoriaprocesso = '$this->pc80_categoriaprocesso' ";
       $virgula = ",";
     }
 
@@ -1390,36 +1404,61 @@ class cl_pcproc
   public function sql_query_pncp_itens($pc80_codproc = null)
   {
     $sql  = "SELECT DISTINCT solicitem.pc11_seq AS numeroItem,
-              CASE
-                  WHEN pcmater.pc01_servico='t' THEN 'S'
-                  ELSE 'M'
-              END AS materialOuServico,
-              1 AS tipoBeneficioId,
-              TRUE AS incentivoProdutivoBasico,
-                      pcmater.pc01_descrmater AS descricao,
-                      matunid.m61_descr AS unidadeMedida,
-                      solicitem.pc11_vlrun AS valorUnitarioEstimado,
-                      pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
-                      pcmater.pc01_codmater,
-                      solicitem.pc11_numero,
-                      solicitem.pc11_reservado,
-                      solicitem.pc11_quant
-          FROM pcproc
-          JOIN pcprocitem ON pc81_codproc=pc80_codproc
-          JOIN solicitem ON pc11_codigo=pc81_solicitem
-          JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
-          JOIN pcmater ON pc16_codmater = pc01_codmater
-          JOIN solicitemunid ON pc17_codigo=pc11_codigo
-          JOIN matunid ON m61_codmatunid=pc17_unid
-          LEFT  JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-          LEFT  JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-          LEFT  JOIN pcorcam ON pc22_codorc = pc20_codorc
-          LEFT  JOIN pcorcamforne ON pc20_codorc = pc21_codorc
-          LEFT  JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-          AND pc23_orcamforne = pc21_orcamforne
-          LEFT JOIN pcorcamjulg ON pc24_orcamitem = pc22_orcamitem
-          AND pc24_orcamforne = pc21_orcamforne
-          WHERE pcproc.pc80_codproc = $pc80_codproc";
+                    CASE
+                        WHEN pcmater.pc01_servico='t' THEN 'S'
+                        ELSE 'M'
+                    END AS materialOuServico,
+                    5 AS tipoBeneficioId,
+                    FALSE AS incentivoProdutivoBasico,
+                            pcmater.pc01_descrmater AS descricao,
+                            matunid.m61_descr AS unidadeMedida,
+                            solicitem.pc11_vlrun AS valorUnitarioEstimado,
+                            pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
+                            pcmater.pc01_codmater,
+                            solicitem.pc11_numero,
+                            solicitem.pc11_reservado,
+                            solicitem.pc11_quant,
+                            FALSE AS l21_sigilo,
+                      CASE
+                          WHEN substring(o56_elemento
+                                         FROM 0
+                                         FOR 8) IN
+                                   (SELECT DISTINCT substring(o56_elemento
+                                                              FROM 0
+                                                              FOR 8)
+                                    FROM orcelemento
+                                    WHERE o56_elemento LIKE '%3449061%') THEN 1
+                          WHEN substring(o56_elemento
+                                         FROM 0
+                                         FOR 8) IN
+                                   (SELECT DISTINCT substring(o56_elemento
+                                                              FROM 0
+                                                              FOR 8)
+                                    FROM orcelemento
+                                    WHERE o56_elemento LIKE '%3449052%') THEN 2
+                          ELSE 3
+                      END AS itemCategoriaId,
+                      pcmater.pc01_regimobiliario AS codigoRegistroImobiliario
+                    FROM pcproc
+                    JOIN pcprocitem ON pc81_codproc=pc80_codproc
+                    JOIN solicitem ON pc11_codigo=pc81_solicitem
+                    JOIN solicitemele ON pc18_solicitem = pc11_codigo
+                    JOIN orcelemento ON o56_codele = pc18_codele
+                    AND o56_anousu=EXTRACT(YEAR
+                              FROM pcproc.pc80_data)
+                    JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+                    JOIN pcmater ON pc16_codmater = pc01_codmater
+                    JOIN solicitemunid ON pc17_codigo=pc11_codigo
+                    JOIN matunid ON m61_codmatunid=pc17_unid
+                    LEFT  JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+                    LEFT  JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+                    LEFT  JOIN pcorcam ON pc22_codorc = pc20_codorc
+                    LEFT  JOIN pcorcamforne ON pc20_codorc = pc21_codorc
+                    LEFT  JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+                    AND pc23_orcamforne = pc21_orcamforne
+                    LEFT JOIN pcorcamjulg ON pc24_orcamitem = pc22_orcamitem
+                    AND pc24_orcamforne = pc21_orcamforne
+                    WHERE pcproc.pc80_codproc = $pc80_codproc";
     return $sql;
   }
 
@@ -1441,7 +1480,7 @@ class cl_pcproc
     LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
     LEFT JOIN liccontrolepncp on l213_processodecompras = pc80_codproc
     WHERE pc80_dispvalor='t'
-    order by pc80_numdispensa,l213_numerocontrolepncp";
+    ORDER BY pc80_codproc desc";
     return $sql;
   }
 

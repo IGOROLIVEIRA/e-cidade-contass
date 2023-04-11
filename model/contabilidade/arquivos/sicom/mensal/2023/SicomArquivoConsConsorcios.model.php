@@ -149,7 +149,16 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
 
     }
 
-    $sSql = "select si09_codorgaotce, z01_cgccpf,c201_valortransf,c201_enviourelatorios,c201_codfontrecursos,c201_codacompanhamento from consvalorestransf
+    $sSql = "select si09_codorgaotce, z01_cgccpf,c201_valortransf,c201_enviourelatorios,c201_codfontrecursos,
+    case
+        when c201_codacompanhamento = '0'then '0000'
+        when c201_codacompanhamento = '00'then '0000'
+        when c201_codacompanhamento = '000'then '0000'
+        when c201_codacompanhamento is null then '0000'
+    else
+        c201_codacompanhamento
+    end as c201_codacompanhamento 
+    from consvalorestransf
 		join consconsorcios on c201_consconsorcios = c200_sequencial
 		join cgm on c200_numcgm = z01_numcgm
 		join db_config on c200_instit = codigo
@@ -180,7 +189,17 @@ class SicomArquivoConsConsorcios extends SicomArquivoBase implements iPadArquivo
       }
 
     }
-    $sSql = "select si09_codorgaotce, z01_cgccpf, consexecucaoorc.* from consexecucaoorc
+    $sSql = "select si09_codorgaotce, z01_cgccpf, c202_sequencial,c202_consconsorcios ,c202_mescompetencia ,c202_funcao 
+    ,c202_subfuncao ,c202_codfontrecursos,c202_elemento ,c202_valorempenhado,c202_valorempenhadoanu,c202_valorliquidado
+    ,c202_valorliquidadoanu,c202_valorpago,c202_valorpagoanu,c202_anousu,c202_mesreferenciasicom,
+    case
+        when c202_codacompanhamento = '0'then '0000'
+        when c202_codacompanhamento = '00'then '0000'
+        when c202_codacompanhamento = '000'then '0000'
+        when c202_codacompanhamento is null then '0000'
+    else
+        c202_codacompanhamento
+    end as c202_codacompanhamento from consexecucaoorc
               join consconsorcios on c202_consconsorcios = c200_sequencial
               join cgm on c200_numcgm = z01_numcgm join db_config on c200_instit = codigo
               join infocomplementaresinstit on codigo = si09_instit

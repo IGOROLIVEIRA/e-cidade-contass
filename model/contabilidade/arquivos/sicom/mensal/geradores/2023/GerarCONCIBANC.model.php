@@ -43,8 +43,8 @@ class GerarCONCIBANC extends GerarAM
 
 
 
-        $sqlConcibanc102023  = "	    select case when c61_codtce is not null
-                                        then c61_codtce
+        $sqlConcibanc102023  = "	    select case 
+                                            when c61_codtce is not null and c61_codtce != 0 then c61_codtce
                                         else k13_reduz
                                         end as c61_codtce,";
         $sqlConcibanc102023 .= "        si09_codorgaotce as si202_codorgao,";

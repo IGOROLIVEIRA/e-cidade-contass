@@ -97,7 +97,7 @@ try {
             $rsResultExecOrc = getExecOrc($oParam->oItem, false, $iAnoUsu);
 
             if(pg_num_rows($rsResultExecOrc) > 0) {
-                throw new Exception("Já existe a função, subfunção, fonte de recursos e elemento para o ano.", null);
+                throw new Exception("Já existe a função, subfunção, fonte de recursos, elemento e código de acompanhamento para o ano.", null);
             } else {
 
                 $retorno = novoExercOrc($oParam->oItem, $iAnoUsu);
@@ -312,7 +312,8 @@ function getExecOrc($oItem, $bMes, $iAnoUsu) {
                             and c202_funcao             = {$oItem->c202_funcao}
                             and c202_subfuncao          = {$oItem->c202_subfuncao}
                             and c202_codfontrecursos    = {$oItem->c202_codfontrecursos}
-                            and c202_elemento           = {$oItem->c202_elemento}";
+                            and c202_elemento           = {$oItem->c202_elemento}
+                            and c202_codacompanhamento  = '{$oItem->c202_codacompanhamento}'";
     if ($bMes) {
         $sSqlWhere .= " and c202_mescompetencia     = {$oItem->c202_mescompetencia}";
     }                            

@@ -150,6 +150,13 @@ class ProcessoCompras
      */
     protected $iAmparolegal;
 
+
+    /**
+     * Amparo legal
+     * @var integer
+     */
+    protected $iCategoriaprocesso;
+
     /**
      *
      */
@@ -181,6 +188,8 @@ class ProcessoCompras
                 $this->setSubContratacao($oDadosProcesso->pc80_subcontratacao);
                 $this->setDadosComplementares($oDadosProcesso->pc80_dadoscomplementares);
                 $this->setAmparoLegal($oDadosProcesso->pc80_amparolegal);
+                $this->setCategoriaProcesso($oDadosProcesso->pc80_categoriaprocesso);
+
 
                 /*FIM - OC3770*/
                 unset($oDadosProcesso);
@@ -213,6 +222,20 @@ class ProcessoCompras
     public function setAmparoLegal($iAmparolegal)
     {
         $this->iAmparolegal = $iAmparolegal;
+    }
+
+    public function getCategoriaProcesso()
+    {
+        return $this->iCategoriaprocesso;
+    }
+
+    /**
+     * Retorna o valor da propriedade iCategoriaprocesso
+     * @return integer
+     */
+    public function setCategoriaProcesso($iCategoriaprocesso)
+    {
+        $this->iCategoriaprocesso = $iCategoriaprocesso;
     }
 
     public function setDispensaPorValor($sDispensaPorValor)
@@ -548,6 +571,8 @@ class ProcessoCompras
         $oDaoPcProc->pc80_subcontratacao = $this->getSubContratacao();
         $oDaoPcProc->pc80_dadoscomplementares = $this->getDadosComplementares();
         $oDaoPcProc->pc80_amparolegal = $this->getAmparoLegal();
+        $oDaoPcProc->pc80_categoriaprocesso = $this->getCategoriaProcesso();
+
 
         if (empty($this->iCodigo)) {
 

@@ -397,15 +397,15 @@ END || ';'
    end    || ';' ||
 translate(trim(to_char(round(x.rh02_salari,2),'99999999.99')),'.',',') || ';' || 
 
-translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (118,1118,218,166, 266) then -x.valor 
-                   when x.pd=1 and x.rh25_recurso in (118,1118,218,166, 266) then x.valor 
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (118,1118,218,166,266,15400007) then -x.valor 
+                   when x.pd=1 and x.rh25_recurso in (118,1118,218,166,266,15400007) then x.valor 
                    else 0 end ),2))::varchar),'.',',')  || ';' ||
-translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119,219,167, 267) then -x.valor 
-                   when x.pd=1 and x.rh25_recurso in (119,1119,219,167, 267) then x.valor 
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119,219,167,267,15400000) then -x.valor 
+                   when x.pd=1 and x.rh25_recurso in (119,1119,219,167,267,15400000) then x.valor 
                    else 0 end ),2))::varchar),'.',',')  || ';' ||
 '0,00' || ';' ||
-translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119,118,1118,218,219,166, 266,167, 267) then -x.valor 
-                   when x.pd=1 and x.rh25_recurso in (119,1119,118,1118,218,219,166, 266,167, 267) then x.valor 
+translate(trim((round(sum( case      when x.pd=2 and x.rh25_recurso in (119,1119,118,1118,218,219,166,266,167,267,15400000,15400007) then -x.valor 
+                   when x.pd=1 and x.rh25_recurso in (119,1119,118,1118,218,219,166,266,167,267,15400000,15400007) then x.valor 
                    else 0 end ),2))::varchar),'.',',') || ';' ||
 CASE WHEN rh02_art61ldb1 = 't' THEN 'S' ELSE 'N' END  || ';' ||
 CASE WHEN rh02_art61ldb2 = 't' THEN 'S' ELSE 'N' END || ';' ||

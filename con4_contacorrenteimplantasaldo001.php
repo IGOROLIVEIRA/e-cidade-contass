@@ -25,13 +25,13 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_stdlib.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_usuariosonline.php");
-require_once("classes/db_conhistdoc_classe.php");
-require_once("dbforms/db_funcoes.php");
-require_once("libs/db_app.utils.php");
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("classes/db_conhistdoc_classe.php"));
+require_once(modification("dbforms/db_funcoes.php"));
+require_once(modification("libs/db_app.utils.php"));
 $clconhistdoc = new cl_conhistdoc;
 $clconhistdoc->rotulo->label();
 
@@ -78,7 +78,7 @@ db_app::load("widgets/DBAncora.widget.js");
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
 
-<center>
+<div class="container">
 
     <form name="form1" method="post" action="">
 
@@ -176,7 +176,7 @@ db_app::load("widgets/DBAncora.widget.js");
 
         </div>
     </form>
-</center>
+</div>
 
 <?
 db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
@@ -1150,7 +1150,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
     }
 
     function js_validavalores(obj, nome) {
-        
+
         if ( js_countOccurs(obj.value, '.') > 1 ) {
             obj.value = js_strToFloat(obj.value);
         }
