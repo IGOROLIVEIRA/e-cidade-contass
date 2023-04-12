@@ -60,6 +60,10 @@ class ApiPixArrecadacao implements IPixProvider
             $message = 'Erro ao integrar com API pix da Instituição Financeira habilidata.';
             $error = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
 
+            if (in_array($e->getResponse()->getStatusCode(), [401, 403])) {
+                throw new BusinessException($message. ' Detalhes: '.utf8_decode($error->message));
+            }
+
             if (!empty($error->error)) {
                 $message .= ' Detalhes: '.utf8_decode($error->mensagem);
             }
