@@ -128,8 +128,7 @@ where recibounica.k00_numpre = numpre
           perform fc_debug('<desconto> Encontrou percentual desconto da Tabela recibounica', lRaise, false, false);
 end if;
 
-        if v_recibounica = 0 and v_data_arre <= fc_proximo_dia_util(recunica.k00_dtvenc)
-            and (recunica.k00_receit = 0 OR recunica.k00_receit = receita) then
+        if v_recibounica = 0 and v_data_arre <= fc_proximo_dia_util(recunica.k00_dtvenc) and (recunica.k00_receit = 0 OR recunica.k00_receit = receita) then
 
           descon        := descon + ( recunica.k00_percdes / 100::float8 );
           v_recibounica := 1;

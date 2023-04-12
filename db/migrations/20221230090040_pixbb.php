@@ -1,11 +1,13 @@
 <?php
 
+use App\Support\Database\AsFunction;
 use App\Support\Database\Sequence;
 use Classes\PostgresMigration;
 
 class PixBb extends PostgresMigration
 {
     use Sequence;
+    use AsFunction;
 
     public const COD_MODULO_ARRECADACAO = 54;
 
@@ -18,6 +20,7 @@ class PixBb extends PostgresMigration
         $this->insertDicionarioDadosBBSettingsTable();
         $this->createSettingsFields();
         $this->insertDicionarioDadosSettingsFields();
+        $this->upFcDesconto();
     }
 
     public function down()
@@ -26,6 +29,17 @@ class PixBb extends PostgresMigration
         $this->dropTables();
         $this->dropDicionarioDados();
         $this->dropDicionarioDadosSettingsFields();
+        $this->downFcDesconto();
+    }
+
+    private function upFcDesconto()
+    {
+        $this->createFunction('public.fc_desconto', '2023-04-06');
+    }
+
+    private function downFcDesconto()
+    {
+        $this->createFunction('public.fc_desconto', '2023-01-01');
     }
 
     private function createInstituicoesFinanceirasApiPixTable()
