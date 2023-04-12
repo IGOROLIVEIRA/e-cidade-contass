@@ -994,6 +994,19 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
         try {
           $oConvenio = new convenio($oRegraEmissao->getConvenio(),$k00_numpre,0,$k00_valor,$vlrbar,$dtvencunic,$iTercDig);
+
+            if ($usePixIntegration) {
+                $body['codigoGuiaRecebimento'] = $k00_numpre.'0';
+                $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
+                $body['valorOriginalSolicitacao'] = $k00_valor;
+                $body['k00_numnov'] = $k00_numpre;
+                $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
+
+                $service = new GeneratePixWithQRCodeService($providerConfig);
+                $service->execute($body);
+                $pdf1 = usePixIntegration($pdf1, $k00_numpre);
+                $pdf1->hasQrCode = true;
+            }
         } catch (Exception $eExeption){
 
           db_redireciona("db_erros.php?fechar=true&db_erro={$eExeption->getMessage()}");
@@ -1437,6 +1450,8 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
         $pdf1->iptz01_ender       = $pdf1->iptnomepri.$pdf1->iptcodpri;
 
         $pdf1->imprime();
+
+        //GERA DA UNICA AQUI
       }
     }
 
