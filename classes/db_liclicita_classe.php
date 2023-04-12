@@ -148,6 +148,8 @@ class cl_liclicita
     var $l20_amparolegal = null;
     var $l20_categoriaprocesso = null;
     var $l20_justificativapncp = null;
+    var $l20_receita = null;
+
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -224,6 +226,7 @@ class cl_liclicita
                  l20_amparolegal = Amparo legal;
                  l20_categoriaprocesso = int4 = Categoria Processo;
                  l20_justificativapncp = text = justificativa para pncp
+                 l20_receita = bool = receita
                  ";
 
     //funcao construtor da classe
@@ -419,6 +422,7 @@ class cl_liclicita
         $this->l20_amparolegal = ($this->l20_amparolegal == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_amparolegal"] : $this->l20_amparolegal);
         $this->l20_categoriaprocesso = ($this->l20_categoriaprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_categoriaprocesso"] : $this->l20_categoriaprocesso);
         $this->l20_justificativapncp = ($this->l20_justificativapncp == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_justificativapncp"] : $this->l20_justificativapncp);
+        $this->l20_receita = ($this->l20_receita == "" ? @$GLOBALS["HTTP_POST_VARS"]["l20_receita"] : $this->l20_receita);
     }
 
     // funcao para inclusao aqui
@@ -1119,6 +1123,7 @@ class cl_liclicita
                 ,l20_amparolegal
                 ,l20_categoriaprocesso
                 ,l20_justificativapncp
+                ,l20_receita
                        )
                 values (
                  $this->l20_codigo
@@ -1177,6 +1182,7 @@ class cl_liclicita
                 ,$this->l20_amparolegal
                 ,$this->l20_categoriaprocesso
                 ,'$this->l20_justificativapncp'
+                ,'$this->l20_receita'
 
                       )";
         $result = db_query($sql);
@@ -2115,6 +2121,12 @@ class cl_liclicita
             $sql .= $virgula . " l20_justificativapncp = '$this->l20_justificativapncp'";
             $virgula = ",";
         }
+
+        if (trim($this->l20_receita) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_receita"])) {
+            $sql .= $virgula . " l20_receita = '$this->l20_receita'";
+            $virgula = ",";
+        }
+
 
         $sql .= " where ";
         if ($l20_codigo != null) {
@@ -3969,6 +3981,8 @@ class cl_liclicita
             LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
             LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
             WHERE l21_codliclicita = $l20_codigo
+            AND pc24_pontuacao =1
+
             ORDER BY l21_ordem";
 
         return $sql;

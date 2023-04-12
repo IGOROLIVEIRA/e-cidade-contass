@@ -172,7 +172,8 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         width: 307px;
     }
 
-    #l20_mododisputa {
+    #l20_mododisputa,
+    #l20_receita {
         width: 169px;
     }
 </style>
@@ -553,6 +554,21 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             //                                        $aCriterios["3"] = "Menor preço global";
                                         }
                                         db_select("l20_criterioadjudicacao", $aCriterios, true, '');
+                                        ?>
+                                    </td>
+                                </tr>
+
+                                <tr id="receita" style="display:none">
+                                    <td nowrap title="receita">
+                                        <b>Receita: </b>
+                                    </td>
+                                    <td>
+                                        <?
+                                        $aReceita = array(
+                                            "t" => "Despesa",
+                                            "f" => "Receita"
+                                        );
+                                        db_select("l20_receita", $aReceita, true, '');
                                         ?>
                                     </td>
                                 </tr>
@@ -1408,8 +1424,10 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("respEmissaoEdi").style.display = "none";
             document.getElementById("dataaber").style.display = "none";
             if (l12_pncp == 't') {
+                document.getElementById("receita").style.display = '';
                 document.getElementById("dataaberturapncp").style.display = '';
             } else {
+                document.getElementById("receita").style.display = 'none';
                 document.getElementById("dataaberturapncp").style.display = 'none';
             }
             document.getElementById("equipepregao").style.display = 'none';
@@ -1474,6 +1492,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("usaregistropreco").style.display = '';
             document.getElementById("aceitabilidade").style.display = '';
             document.getElementById("linha_nroedital").style.display = '';
+            if (l12_pncp == 't') {
+                document.getElementById("receita").style.display = '';
+            } else {
+                document.getElementById("receita").style.display = 'none';
+            }
 
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
 

@@ -88,7 +88,7 @@ try {
     case "download":
 
       $oProcessoDocumento                = new LicitacaoDocumento($oParam->iCodigoDocumento);
-      $oRetorno->sCaminhoDownloadArquivo = $oProcessoDocumento->download();
+      $oRetorno->sCaminhoDownloadArquivo = "model/licitacao/PNCP/anexoslicitacao/" . $oProcessoDocumento->sNomeDocumento;
       $oRetorno->sTituloArquivo          = urlencode($oProcessoDocumento->getNomeDocumento());
 
       break;

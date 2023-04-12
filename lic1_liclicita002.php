@@ -568,6 +568,7 @@ if (isset($alterar)) {
             $clliclicita->l20_exercicioedital = $oPost->l20_datacria_ano;
             $clliclicita->l20_justificativapncp = $oPost->l20_justificativapncp;
             $clliclicita->l20_categoriaprocesso = $oPost->l20_categoriaprocesso;
+            $clliclicita->l20_receita           = $oPost->l20_receita;
             $clliclicita->alterar($l20_codigo, $descricao);
 
             if ($clliclicita->erro_status == "0") {
