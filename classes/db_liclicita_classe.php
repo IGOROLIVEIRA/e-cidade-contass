@@ -4041,6 +4041,7 @@ class cl_liclicita
                 WHERE l21_codliclicita = $l20_codigo
                     AND l21_ordem = $ordem
                     and l202_datahomologacao is not null
+                    AND pc24_pontuacao = 1
                 ORDER BY l21_ordem";
 
         return $sql;
