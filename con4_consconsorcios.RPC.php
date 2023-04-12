@@ -343,7 +343,8 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                         AND c202_elemento = x.c202_elemento
                         AND c202_anousu = x.c202_anousu
                         AND c202_codfontrecursos = x.c202_codfontrecursos
-                        AND c202_consconsorcios = x.c202_consconsorcios),
+                        AND c202_consconsorcios = x.c202_consconsorcios
+                        AND c202_codacompanhamento =x.c202_codacompanhamento),
                   (SELECT CASE WHEN sum(c202_valorempenhadoanu) IS NULL THEN 0 ELSE sum(c202_valorempenhadoanu) END as c202_valorempenhadoanu
                     FROM consexecucaoorc
                     WHERE c202_mescompetencia = {$c202_mescompetencia}
@@ -352,7 +353,8 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                         AND c202_elemento = x.c202_elemento
                         AND c202_anousu = x.c202_anousu
                         AND c202_codfontrecursos = x.c202_codfontrecursos
-                        AND c202_consconsorcios = x.c202_consconsorcios),
+                        AND c202_consconsorcios = x.c202_consconsorcios
+                        AND c202_codacompanhamento =x.c202_codacompanhamento),
                   (SELECT CASE WHEN sum(c202_valorliquidado) IS NULL THEN 0 ELSE sum(c202_valorliquidado) END as c202_valorliquidado
                   FROM consexecucaoorc
                   WHERE c202_mescompetencia = {$c202_mescompetencia}
@@ -361,7 +363,8 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                       AND c202_elemento = x.c202_elemento
                       AND c202_anousu = x.c202_anousu
                       AND c202_codfontrecursos = x.c202_codfontrecursos
-                      AND c202_consconsorcios = x.c202_consconsorcios),
+                      AND c202_consconsorcios = x.c202_consconsorcios
+                      AND c202_codacompanhamento =x.c202_codacompanhamento),
                   (SELECT CASE WHEN sum(c202_valorliquidadoanu) IS NULL THEN 0 ELSE sum(c202_valorliquidadoanu) END as c202_valorliquidadoanu
                   FROM consexecucaoorc
                   WHERE c202_mescompetencia = {$c202_mescompetencia}
@@ -370,7 +373,8 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                       AND c202_elemento = x.c202_elemento
                       AND c202_anousu = x.c202_anousu
                       AND c202_codfontrecursos = x.c202_codfontrecursos
-                      AND c202_consconsorcios = x.c202_consconsorcios),
+                      AND c202_consconsorcios = x.c202_consconsorcios
+                      AND c202_codacompanhamento =x.c202_codacompanhamento),
                   (SELECT CASE WHEN sum(c202_valorpago) IS NULL THEN 0 ELSE sum(c202_valorpago) END as c202_valorpago
                   FROM consexecucaoorc
                   WHERE c202_mescompetencia = {$c202_mescompetencia}
@@ -379,7 +383,8 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                       AND c202_elemento = x.c202_elemento
                       AND c202_anousu = x.c202_anousu
                       AND c202_codfontrecursos = x.c202_codfontrecursos
-                      AND c202_consconsorcios = x.c202_consconsorcios),
+                      AND c202_consconsorcios = x.c202_consconsorcios
+                      AND c202_codacompanhamento =x.c202_codacompanhamento),
                   (SELECT CASE WHEN sum(c202_valorpagoanu) IS NULL THEN 0 ELSE sum(c202_valorpagoanu) END as c202_valorpagoanu
                   FROM consexecucaoorc
                   WHERE c202_mescompetencia = {$c202_mescompetencia}
@@ -388,7 +393,8 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                       AND c202_elemento = x.c202_elemento
                       AND c202_anousu = x.c202_anousu
                       AND c202_codfontrecursos = x.c202_codfontrecursos
-                      AND c202_consconsorcios = x.c202_consconsorcios),
+                      AND c202_consconsorcios = x.c202_consconsorcios
+                      AND c202_codacompanhamento =x.c202_codacompanhamento),
                 (SELECT CASE WHEN SUM(c202_valorempenhado) IS NULL THEN 0 ELSE SUM(c202_valorempenhado) END AS empenhado_ate_mes
                   FROM consexecucaoorc
                   WHERE c202_mescompetencia <= {$c202_mescompetencia}
@@ -397,7 +403,8 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                       AND c202_elemento = x.c202_elemento
                       AND c202_anousu = x.c202_anousu
                       AND c202_codfontrecursos = x.c202_codfontrecursos
-                      AND c202_consconsorcios = x.c202_consconsorcios),
+                      AND c202_consconsorcios = x.c202_consconsorcios
+                      AND c202_codacompanhamento =x.c202_codacompanhamento),
                   (SELECT CASE WHEN SUM(c202_valorempenhadoanu) IS NULL THEN 0 ELSE SUM(c202_valorempenhadoanu) END AS empenhado_anulado_ate_mes
                   FROM consexecucaoorc
                   WHERE c202_mescompetencia <= {$c202_mescompetencia}
@@ -406,7 +413,8 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                       AND c202_elemento = x.c202_elemento
                       AND c202_anousu = x.c202_anousu
                       AND c202_codfontrecursos = x.c202_codfontrecursos
-                      AND c202_consconsorcios = x.c202_consconsorcios),
+                      AND c202_consconsorcios = x.c202_consconsorcios
+                      AND c202_codacompanhamento =x.c202_codacompanhamento),
                   (SELECT CASE WHEN SUM(c202_valorliquidado) IS NULL THEN 0 ELSE SUM(c202_valorliquidado) END AS liquidado_ate_mes
                   FROM consexecucaoorc
                   WHERE c202_mescompetencia <= {$c202_mescompetencia}
@@ -415,7 +423,8 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                       AND c202_elemento = x.c202_elemento
                       AND c202_anousu = x.c202_anousu
                       AND c202_codfontrecursos = x.c202_codfontrecursos
-                      AND c202_consconsorcios = x.c202_consconsorcios),
+                      AND c202_consconsorcios = x.c202_consconsorcios
+                      AND c202_codacompanhamento =x.c202_codacompanhamento),
                   (SELECT CASE WHEN SUM(c202_valorliquidadoanu) IS NULL THEN 0 ELSE SUM(c202_valorliquidadoanu) END AS liquidado_anulado_ate_mes
                   FROM consexecucaoorc
                   WHERE c202_mescompetencia <= {$c202_mescompetencia}
@@ -424,7 +433,8 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                       AND c202_elemento = x.c202_elemento
                       AND c202_anousu = x.c202_anousu
                       AND c202_codfontrecursos = x.c202_codfontrecursos
-                      AND c202_consconsorcios = x.c202_consconsorcios),
+                      AND c202_consconsorcios = x.c202_consconsorcios
+                      AND c202_codacompanhamento =x.c202_codacompanhamento),
                   (SELECT CASE WHEN SUM(c202_valorpago) IS NULL THEN 0 ELSE SUM(c202_valorpago) END AS pago_ate_mes
                   FROM consexecucaoorc
                   WHERE c202_mescompetencia <= {$c202_mescompetencia}
@@ -433,7 +443,8 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                       AND c202_elemento = x.c202_elemento
                       AND c202_anousu = x.c202_anousu
                       AND c202_codfontrecursos = x.c202_codfontrecursos
-                      AND c202_consconsorcios = x.c202_consconsorcios),
+                      AND c202_consconsorcios = x.c202_consconsorcios
+                      AND c202_codacompanhamento =x.c202_codacompanhamento),
                   (SELECT CASE WHEN SUM(c202_valorpagoanu) IS NULL THEN 0 ELSE SUM(c202_valorpagoanu) END AS pago_anulado_ate_mes
                   FROM consexecucaoorc
                   WHERE c202_mescompetencia <= {$c202_mescompetencia}
@@ -442,7 +453,8 @@ function getRegistrosAno($c202_consconsorcios, $c202_mescompetencia, $c202_anous
                       AND c202_elemento = x.c202_elemento
                       AND c202_anousu = x.c202_anousu
                       AND c202_codfontrecursos = x.c202_codfontrecursos
-                      AND c202_consconsorcios = x.c202_consconsorcios)";
+                      AND c202_consconsorcios = x.c202_consconsorcios
+                      AND c202_codacompanhamento =x.c202_codacompanhamento)";
 
     $sCampos2 = " DISTINCT  c202_funcao,
                             c202_codacompanhamento,
