@@ -208,7 +208,7 @@ GROUP BY e96_descr,e53_valor";
 				$oDados->k00_sequencial = db_utils::fieldsMemory(db_query($sSql),0)->nextval;
 				
 				$sSql = "INSERT INTO ordembancariapagamento VALUES ({$oDados->k00_sequencial},
-				{$k00_codordembancaria},{$oDados->k00_codord},{$oDados->k00_cgmfornec},{$oDados->k00_valor},{$oDados->k00_contabanco},{$oDados->k17_codigo},'{$k00_formapag}',{$k00_dtvencpag},{$ordemauxiliar})";
+				{$k00_codordembancaria},{$oDados->k00_codord},{$oDados->k00_cgmfornec},{$oDados->k00_valor},{$oDados->k00_contabanco},{$oDados->k17_codigo},'{$k00_formapag}',{$ordemauxiliar},{$k00_dtvencpag})";
 				db_query($sSql);
 
 		  } else {
