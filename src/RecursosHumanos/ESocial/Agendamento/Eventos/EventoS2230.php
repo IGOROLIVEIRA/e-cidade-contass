@@ -47,10 +47,10 @@ class EventoS2230 extends EventoBase
                 $oDadosAPI->evtAfastTemp->iniafastamento->codmotafast         = $oDados->codmotafast;
                 if ($oDados->codmotafast == "15" && $oDados->rh30_regime == 2) {
                     if (!empty($oDados->dtinicio)) {
-                        $oDadosAPI->evtAfastTemp->peraquis->dtinicio  = $oDados->dtinicio;
+                        $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtinicio  = $oDados->dtinicio;
                     }
                     if (!empty($oDados->dtfim)) {
-                        $oDadosAPI->evtAfastTemp->peraquis->dtfim = $oDados->dtfim;
+                        $oDadosAPI->evtAfastTemp->iniafastamento->peraquis->dtfim = $oDados->dtfim;
                     }
                 }
             }

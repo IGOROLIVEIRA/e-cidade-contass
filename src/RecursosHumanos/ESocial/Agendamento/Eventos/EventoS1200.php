@@ -8,7 +8,7 @@ use DBPessoal;
 use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 
 /**
- * Classe responsÃ¡vel por montar as informaÃ§Ãµes do evento S1200 Esocial
+ * Classe responsável por montar as informações do evento S1200 Esocial
  *
  * @package  ECidade\RecursosHumanos\ESocial\Agendamento\Eventos
  * @author   Marcelo Hernane
@@ -164,7 +164,7 @@ class EventoS1200 extends EventoBase
             case 'salario':
                 $sigla          = 'r14_';
                 $arquivo        = 'gerfsal';
-                $sTituloCalculo = 'Salï¿½rio';
+                $sTituloCalculo = 'Sal?rio';
                 break;
 
             case 'complementar':
@@ -182,7 +182,7 @@ class EventoS1200 extends EventoBase
                 $sigla          = 'r20_';
                 $arquivo        = 'gerfres';
                 $xtipo          = ' r20_tpp ';
-                $sTituloCalculo = 'Rescisï¿½o';
+                $sTituloCalculo = 'Rescis?o';
                 break;
 
             default:
@@ -372,32 +372,32 @@ class EventoS1200 extends EventoBase
             $aIdentificador = $this->buscarIdentificador($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime);
 
             for ($iCont2 = 0; $iCont2 < count($aIdentificador); $iCont2++) {
-                $std->dmdev[$seqdmdev] = new \stdClass(); //Obrigatï¿½rio
-                //Identificaï¿½ï¿½o de cada um dos demonstrativos de valores devidos ao trabalhador.
+                $std->dmdev[$seqdmdev] = new \stdClass(); //Obrigat?rio
+                //Identifica??o de cada um dos demonstrativos de valores devidos ao trabalhador.
                 if ($aIdentificador[$iCont2]->idedmdev == 1) {
-                    $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfsal'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigatï¿½rio
+                    $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfsal'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
                 }
                 if ($aIdentificador[$iCont2]->idedmdev == 2) {
-                    $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfres'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigatï¿½rio
+                    $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfres'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
                 }
                 if ($aIdentificador[$iCont2]->idedmdev == 3) {
-                    $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfcom'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigatï¿½rio
+                    $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfcom'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
                 }
                 if ($aIdentificador[$iCont2]->idedmdev == 4) {
-                    $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfs13'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigatï¿½rio
+                    $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfs13'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
                 }
-                $std->dmdev[$seqdmdev]->codcateg = $aDadosPorMatriculas[$iCont]->codcateg; //Obrigatï¿½rio
+                $std->dmdev[$seqdmdev]->codcateg = $aDadosPorMatriculas[$iCont]->codcateg; //Obrigat?rio
 
-                //Identificaï¿½ï¿½o do estabelecimento e da lotaï¿½ï¿½o nos quais o
-                //trabalhador possui remuneraï¿½ï¿½o no perï¿½odo de apuraï¿½ï¿½o
+                //Identifica??o do estabelecimento e da lota??o nos quais o
+                //trabalhador possui remunera??o no per?odo de apura??o
                 $std->dmdev[$seqdmdev]->ideestablot[0] = new \stdClass(); //Opcional
-                $std->dmdev[$seqdmdev]->ideestablot[0]->tpinsc = "1"; //Obrigatï¿½rio
-                $std->dmdev[$seqdmdev]->ideestablot[0]->nrinsc = $aDadosPorMatriculas[$iCont]->nrinsc; //Obrigatï¿½rio
-                $std->dmdev[$seqdmdev]->ideestablot[0]->codlotacao = 'LOTA1'; //Obrigatï¿½rio
+                $std->dmdev[$seqdmdev]->ideestablot[0]->tpinsc = "1"; //Obrigat?rio
+                $std->dmdev[$seqdmdev]->ideestablot[0]->nrinsc = $aDadosPorMatriculas[$iCont]->nrinsc; //Obrigat?rio
+                $std->dmdev[$seqdmdev]->ideestablot[0]->codlotacao = 'LOTA1'; //Obrigat?rio
 
-                //Informaï¿½ï¿½es relativas ï¿½ remuneraï¿½ï¿½o do trabalhador no perï¿½odo de apuraï¿½ï¿½o.
-                $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->matricula = $aDadosPorMatriculas[$iCont]->matricula; //Opcional
+                //Informa??es relativas ? remunera??o do trabalhador no per?odo de apura??o.
+                $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->matricula = $aDadosPorMatriculas[$iCont]->matricula_esocial; //Opcional
 
                 $aDadosValoreRubrica = $this->buscarValorRubrica($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime, $aIdentificador[$iCont2]->idedmdev);
 
@@ -406,12 +406,12 @@ class EventoS1200 extends EventoBase
                 }
 
                 for ($iCont4 = 0; $iCont4 < count($aDadosValoreRubrica); $iCont4++) {
-                    //Rubricas que compï¿½em a remuneraï¿½ï¿½o do trabalhador.
-                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4] = new \stdClass(); //Obrigatï¿½rio
-                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->codrubr = $aDadosValoreRubrica[$iCont4]->codrubr; //Obrigatï¿½rio
-                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->idetabrubr = $aDadosValoreRubrica[$iCont4]->idetabrubr; //Obrigatï¿½rio
-                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->vrunit = $aDadosValoreRubrica[$iCont4]->vrrubr; //Obrigatï¿½rio
-                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->vrrubr = $aDadosValoreRubrica[$iCont4]->vrrubr; //Obrigatï¿½rio
+                    //Rubricas que comp?em a remunera??o do trabalhador.
+                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4] = new \stdClass(); //Obrigat?rio
+                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->codrubr = $aDadosValoreRubrica[$iCont4]->codrubr; //Obrigat?rio
+                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->idetabrubr = $aDadosValoreRubrica[$iCont4]->idetabrubr; //Obrigat?rio
+                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->vrunit = $aDadosValoreRubrica[$iCont4]->vrrubr; //Obrigat?rio
+                    $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->vrrubr = $aDadosValoreRubrica[$iCont4]->vrrubr; //Obrigat?rio
                     $std->dmdev[$seqdmdev]->ideestablot[0]->remunperapur[0]->itensremun[$iCont4]->indapurir = $aDadosValoreRubrica[$iCont4]->indapurir; //Opcional
                 }
 
@@ -431,118 +431,118 @@ class EventoS1200 extends EventoBase
         for ($iCont = 0; $iCont < count($aDadosPorCpf); $iCont++) {
             $seqitens = 0;
             $std->infocomplem = new \stdClass(); //Opcional
-            $std->infocomplem->nmtrab = $aDadosPorCpf[$iCont]->nmtrab; ///Obrigatï¿½rio
-            $std->infocomplem->dtnascto = $aDadosPorCpf[$iCont]->dtnascto; //Obrigatï¿½rio
+            $std->infocomplem->nmtrab = $aDadosPorCpf[$iCont]->nmtrab; ///Obrigat?rio
+            $std->infocomplem->dtnascto = $aDadosPorCpf[$iCont]->dtnascto; //Obrigat?rio
 
             $std->dmdev[$iCont] = new \stdClass(); //Obrigat?rio
             $std->dmdev[$iCont]->idedmdev = $aDadosPorCpf[$iCont]->idedmdev; //Obrigat?rio
-            $std->dmdev[$iCont]->codcateg = $aDadosPorCpf[$iCont]->codcateg; //Obrigatï¿½rio
+            $std->dmdev[$iCont]->codcateg = $aDadosPorCpf[$iCont]->codcateg; //Obrigat?rio
 
-            //Identificaï¿½ï¿½o do estabelecimento e da lotaï¿½ï¿½o nos quais o
-            //trabalhador possui remuneraï¿½ï¿½o no perï¿½odo de apuraï¿½ï¿½o
+            //Identifica??o do estabelecimento e da lota??o nos quais o
+            //trabalhador possui remunera??o no per?odo de apura??o
             //if (!empty($aDadosPorCpf[$iCont]->e50_empresadesconto)) {
             $std->dmdev[$iCont]->ideestablot[0] = new \stdClass(); //Opcional
-            $std->dmdev[$iCont]->ideestablot[0]->tpinsc = '1'; //Obrigatï¿½rio
-            $std->dmdev[$iCont]->ideestablot[0]->nrinsc = $aDadosPorCpf[$iCont]->nrinsc; //Obrigatï¿½rio
-            $std->dmdev[$iCont]->ideestablot[0]->codlotacao = 'LOTA1'; //Obrigatï¿½rio
+            $std->dmdev[$iCont]->ideestablot[0]->tpinsc = '1'; //Obrigat?rio
+            $std->dmdev[$iCont]->ideestablot[0]->nrinsc = $aDadosPorCpf[$iCont]->nrinsc; //Obrigat?rio
+            $std->dmdev[$iCont]->ideestablot[0]->codlotacao = 'LOTA1'; //Obrigat?rio
             //}
-            //Informaï¿½ï¿½es relativas ï¿½ remuneraï¿½ï¿½o do trabalhador no perï¿½odo de apuraï¿½ï¿½o.
-            // $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0] = new \stdClass(); //Obrigatï¿½rio
+            //Informa??es relativas ? remunera??o do trabalhador no per?odo de apura??o.
+            // $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0] = new \stdClass(); //Obrigat?rio
             // $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->matricula = $aDadosPorCpf[$iCont]->e60_numcgm; //Opcional
 
 
-            //Rubricas que compï¿½em a remuneraï¿½ï¿½o do trabalhador.
+            //Rubricas que comp?em a remunera??o do trabalhador.
             if ($aDadosPorCpf[$iCont]->codcateg == 711) {
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R002'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R002'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->idetabrubr = 'TABRUB1';
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq * 0.7; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq * 0.7; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->indapurir = 0; //Opcional
                 $seqitens++;
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R003'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R003'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->idetabrubr = 'TABRUB1';
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq * 0.2; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq * 0.2; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->indapurir = 0; //Opcional
                 $seqitens++;
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R004'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R004'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->idetabrubr = 'TABRUB1';
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq * 0.1; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq * 0.1; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->indapurir = 0; //Opcional
                 $seqitens++;
             } elseif ($aDadosPorCpf[$iCont]->codcateg == 712) {
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R002'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R002'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->idetabrubr = 'TABRUB1';
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq * 0.2; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq * 0.2; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->indapurir = 0; //Opcional
                 $seqitens++;
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R003'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R003'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->idetabrubr = 'TABRUB1';
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq * 0.2; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq * 0.2; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->indapurir = 0; //Opcional
                 $seqitens++;
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R004'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R004'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->idetabrubr = 'TABRUB1';
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq * 0.6; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq * 0.6; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->indapurir = 0; //Opcional
                 $seqitens++;
             } else {
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R001'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R001'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->idetabrubr = 'TABRUB1';
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->e70_vlrliq; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->indapurir = 0; //Opcional
                 $seqitens++;
             }
             if ($aDadosPorCpf[$iCont]->valor_inss > 0) {
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R005'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R005'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->idetabrubr = 'TABRUB1';
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->valor_inss; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->valor_inss; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->indapurir = 0; //Opcional
                 $seqitens++;
             }
 
             if ($aDadosPorCpf[$iCont]->valor_irrf > 0) {
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R006'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R006'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->idetabrubr = 'TABRUB1';
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->valor_irrf; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->valor_irrf; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->indapurir = 0; //Opcional
                 $seqitens++;
             }
             if ($aDadosPorCpf[$iCont]->outrasretencoes > 0) {
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R009'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R009'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->idetabrubr = 'TABRUB1';
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->outrasretencoes; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->outrasretencoes; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->indapurir = 0; //Opcional
                 $seqitens++;
             }
             if ($aDadosPorCpf[$iCont]->sest > 0) {
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R007'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R007'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->idetabrubr = 'TABRUB1';
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->sest; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->sest; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->indapurir = 0; //Opcional
                 $seqitens++;
             }
             if ($aDadosPorCpf[$iCont]->senat > 0) {
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigatï¿½rio
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R008'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens] = new \stdClass(); //Obrigat?rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->codrubr = 'R008'; //$aDadosPorCpf[$iCont]->codrubr; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->idetabrubr = 'TABRUB1';
-                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->senat; //Obrigatï¿½rio
+                $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->vrrubr = $aDadosPorCpf[$iCont]->senat; //Obrigat?rio
                 $std->dmdev[$iCont]->ideestablot[0]->remunperapur[0]->itensremun[$seqitens]->indapurir = 0; //Opcional
                 $seqitens++;
             }
 
             $std->dmdev[$iCont]->infocomplcont = new \stdClass(); //Opcional
-            $std->dmdev[$iCont]->infocomplcont->codcbo = $aDadosPorCpf[$iCont]->codcbo; //Obrigatï¿½rio
-            //$std->dmdev[$iCont]->infocomplcont->natatividade = 1; //Obrigatï¿½rio
+            $std->dmdev[$iCont]->infocomplcont->codcbo = $aDadosPorCpf[$iCont]->codcbo; //Obrigat?rio
+            //$std->dmdev[$iCont]->infocomplcont->natatividade = 1; //Obrigat?rio
         }
         return $std;
     }
@@ -575,7 +575,8 @@ class EventoS1200 extends EventoBase
         end as grauExp,
         rh30_regime,
         rh51_cgcvinculo,
-        rh01_esocial as matricula,
+        rh01_regist as matricula,
+        rh01_esocial as matricula_esocial,
         h13_categoria as codCateg
         from
             rhpessoal
@@ -802,7 +803,7 @@ class EventoS1200 extends EventoBase
             throw new \Exception("Erro ao buscar os preenchimentos do S1200");
         }
         /**
-         * @todo busca os empregadores da instituiï¿½ï¿½o e adicona para cada rubriuca
+         * @todo busca os empregadores da institui??o e adicona para cada rubriuca
          */
         return \db_utils::getCollectionByRecord($rs);
     }
