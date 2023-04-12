@@ -4225,7 +4225,7 @@ class cl_liclicita
                     e60_anousu AS anoContrato,
                     e54_numerl AS processo,
                     l20_categoriaprocesso AS categoriaProcessoId,
-                    FALSE AS receita,
+                    l20_receita AS receita,
                  01001 AS codigoUnidade,
                  z01_cgccpf AS niFornecedor,
                  CASE
@@ -4325,7 +4325,7 @@ class cl_liclicita
                     e60_anousu AS anoContrato,
                     e54_numerl AS processo,
                     l20_categoriaprocesso AS categoriaProcessoId,
-                    FALSE AS receita,
+                    l20_receita AS receita,
                  01001 AS codigoUnidade,
                  z01_cgccpf AS niFornecedor,
                  CASE
