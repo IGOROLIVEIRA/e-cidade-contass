@@ -2,9 +2,10 @@
 global $resparag, $resparagpadrao, $db61_texto, $db02_texto;
 
 /**
-* Rodapé do Relatório
-*/
-function insereRodape() {
+ * Rodapé do Relatório
+ */
+function insereRodape()
+{
     $sSqlMenuAcess  = " select trim(modulo.descricao)||'>'||trim(menu.descricao)||'>'||trim(item.descricao) as menu ";
     $sSqlMenuAcess .= "   from db_menu                                                                              ";
     $sSqlMenuAcess .= "        inner join db_itensmenu as modulo on modulo.id_item = db_menu.modulo                 ";
@@ -23,11 +24,11 @@ function insereRodape() {
     $sEmissor       = "";
 
     if (pg_num_rows($rsNomeUsuario) > 0) {
-      $sEmissor = trim(pg_result($rsNomeUsuario, 0, 0));
+        $sEmissor = trim(pg_result($rsNomeUsuario, 0, 0));
     }
 
     if (empty($sEmissor)) {
-      $sEmissor     = db_getsession("DB_login");
+        $sEmissor     = db_getsession("DB_login");
     }
 
     $sRodape        = " $sMenuAcess ($sNomeArquivo) ";
@@ -37,7 +38,6 @@ function insereRodape() {
     $sRodape       .= ' - Data: '    . date("d/m/Y", db_getsession("DB_datausu")) . " " . date("H:i:s");
 
     return $sRodape;
-
 }
 
 if (!function_exists('addCaracter')) {
@@ -261,8 +261,6 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->sety($xlin + 65);
     $ele = 0;
     $xtotal = 0;
-    var_dump("chegou aqui fora do for");
-    die();
     $retorna_obs = 0;
     for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
         db_fieldsmemory($this->recorddositens, $ii);
@@ -382,8 +380,6 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             }
 
             if ($this->objpdf->PageNo() == 1) {
-                var_dump("chegou aqui n1");
-                die();
                 $this->objpdf->text(110, $xlin + 214, 'Continua na Página ' . ($this->objpdf->PageNo() + 1));
 
                 // Assinatura documento
@@ -435,8 +431,6 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             $xlin = 20;
             $xcol = 4;
             //Inserindo usuario e data no rodape
-            var_dump("chegou aqui roda pe");
-            die();
             $this->objpdf->Setfont('Arial', 'I', 6);
             $this->objpdf->text($xcol + 3, $xlin + 276, insereRodape());
 
@@ -764,9 +758,9 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 //DESCRIÇÃO DO ITEM
                 $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, 2380));
                 $descricaoitem = mb_strtoupper($descricaoitem);
-                $quantlinhadescricaoitem = round(strlen(pg_result($this->recorddositens, $ii, $this->descricaoitem))/70,0)+1;
-                if(($this->objpdf->gety() + ($quantlinhadescricaoitem*3) ) > 190 ){
-                    $carct = ((190 - $this->objpdf->gety())/3)*70;
+                $quantlinhadescricaoitem = round(strlen(pg_result($this->recorddositens, $ii, $this->descricaoitem)) / 70, 0) + 1;
+                if (($this->objpdf->gety() + ($quantlinhadescricaoitem * 3)) > 190) {
+                    $carct = ((190 - $this->objpdf->gety()) / 3) * 70;
                     $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, $carct));
                     $descricaoitem = mb_strtoupper($descricaoitem);
                     $descricaoitemcontinuacao = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), $carct, 300000));
@@ -777,11 +771,11 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             } else {
                 //DESCRIÇÃO DO ITEM PARA PRÓXIMAS PÁGINAS
 
-                    $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, 5000));
-                    $descricaoitem = mb_strtoupper($descricaoitem);
-                    $quantlinhadescricaoitem = round(strlen(pg_result($this->recorddositens, $ii, $this->descricaoitem))/70,0)+1;
-                if(($this->objpdf->gety() + ($quantlinhadescricaoitem*3) ) > 250 ){
-                    $carct = ((250 - $this->objpdf->gety())/3)*70;
+                $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, 5000));
+                $descricaoitem = mb_strtoupper($descricaoitem);
+                $quantlinhadescricaoitem = round(strlen(pg_result($this->recorddositens, $ii, $this->descricaoitem)) / 70, 0) + 1;
+                if (($this->objpdf->gety() + ($quantlinhadescricaoitem * 3)) > 250) {
+                    $carct = ((250 - $this->objpdf->gety()) / 3) * 70;
                     $descricaoitem = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), 0, $carct));
                     $descricaoitem = mb_strtoupper($descricaoitem);
                     $descricaoitemcontinuacao = preg_replace('/\n/', ' ', substr(pg_result($this->recorddositens, $ii, $this->descricaoitem), $carct, 300000));
@@ -855,12 +849,99 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
 
         // troca de pagina
 
-            $quantlinhadescricaoitem = round(strlen($descricaoitemcontinuacao)/70,0)+1;
+        $quantlinhadescricaoitem = round(strlen($descricaoitemcontinuacao) / 70, 0) + 1;
 
-        $quantlinhadescricaoitem = ceil($quantlinhadescricaoitem/81);
+        $quantlinhadescricaoitem = ceil($quantlinhadescricaoitem / 81);
         if (($this->objpdf->gety() > $this->objpdf->h - 110 && $pagina == 1) || ($this->objpdf->gety() > $this->objpdf->h - 40 && $pagina != 1) || ($pula == 1)) {
             //if ($descricaoitemcontinuacao != "") { // Alterado para controle de itens nao imprimir paginas sem itens(branco)
-                //
+            //
+            if ($pagina == 1) {
+                $this->objpdf->setxy($xcol + 1, $xlin + 187);
+                $this->objpdf->text($xcol + 2, $xlin + 186, 'RESUMO : ', 0, 1, 'L', 0);
+                $this->objpdf->Setfont('Arial', '', 7);
+                $this->objpdf->multicell(135, 3, $this->resumo);
+                $this->objpdf->Setfont('Arial', 'B', 8);
+            }
+
+            if ($pagina == 1) {
+
+                $this->objpdf->text($xcol + 120, $xlin + 211, 'T O T A L');
+                $this->objpdf->SetXY(172, $xlin + 205);
+                $this->objpdf->cell(30, 10, db_formatar($this->valtotal, 'f'), 0, 0, "R");
+
+                // Assinatura documento
+
+
+                $sqlparag = "select db02_texto ";
+                $sqlparag .= "  from db_documento ";
+                $sqlparag .= "       inner join db_docparag on db03_docum = db04_docum ";
+                $sqlparag .= "       inner join db_tipodoc on db08_codigo  = db03_tipodoc ";
+                $sqlparag .= "       inner join db_paragrafo on db04_idparag = db02_idparag ";
+                $sqlparag .= " where db03_tipodoc = 1503 and db03_instit = " . db_getsession("DB_instit") . " order by db04_ordem ";
+
+                $resparag = @db_query($sqlparag);
+
+                if (@pg_numrows($resparag) > 0) {
+                    db_fieldsmemory($resparag, 0);
+
+                    eval($db02_texto);
+                } else {
+                    $sqlparagpadrao = "select db61_texto ";
+                    $sqlparagpadrao .= "  from db_documentopadrao ";
+                    $sqlparagpadrao .= "       inner join db_docparagpadrao  on db62_coddoc   = db60_coddoc ";
+                    $sqlparagpadrao .= "       inner join db_tipodoc         on db08_codigo   = db60_tipodoc ";
+                    $sqlparagpadrao .= "       inner join db_paragrafopadrao on db61_codparag = db62_codparag ";
+                    $sqlparagpadrao .= " where db60_tipodoc = 1503 order by db62_ordem";
+
+                    $resparagpadrao = @db_query($sqlparagpadrao);
+                    if (@pg_numrows($resparagpadrao) > 0) {
+                        db_fieldsmemory($resparagpadrao, 0);
+
+                        eval($db61_texto);
+                    }
+                }
+            }
+
+            if ($this->objpdf->PageNo() == 1) {
+
+                $this->objpdf->text(85, $xlin + 214, 'Continua na Página  ' . ($this->objpdf->PageNo() + 1));
+                $this->objpdf->SetXY(172, $xlin + 205);
+                //$this->objpdf->cell(30, 10, db_formatar($this->valtotal, 'f'), 0, 0, "R");
+
+
+                // Assinatura documento
+
+
+                $sqlparag = "select db02_texto ";
+                $sqlparag .= "  from db_documento ";
+                $sqlparag .= "       inner join db_docparag on db03_docum = db04_docum ";
+                $sqlparag .= "       inner join db_tipodoc on db08_codigo  = db03_tipodoc ";
+                $sqlparag .= "       inner join db_paragrafo on db04_idparag = db02_idparag ";
+                $sqlparag .= " where db03_tipodoc = 1503 and db03_instit = " . db_getsession("DB_instit") . " order by db04_ordem ";
+
+                $resparag = @db_query($sqlparag);
+
+                if (@pg_numrows($resparag) > 0) {
+                    db_fieldsmemory($resparag, 0);
+
+                    eval($db02_texto);
+                } else {
+
+                    $sqlparagpadrao = "select db61_texto ";
+                    $sqlparagpadrao .= "  from db_documentopadrao ";
+                    $sqlparagpadrao .= "       inner join db_docparagpadrao  on db62_coddoc   = db60_coddoc ";
+                    $sqlparagpadrao .= "       inner join db_tipodoc         on db08_codigo   = db60_tipodoc ";
+                    $sqlparagpadrao .= "       inner join db_paragrafopadrao on db61_codparag = db62_codparag ";
+                    $sqlparagpadrao .= " where db60_tipodoc = 1503 order by db62_ordem";
+
+                    $resparagpadrao = @db_query($sqlparagpadrao);
+                    if (@pg_numrows($resparagpadrao) > 0) {
+                        db_fieldsmemory($resparagpadrao, 0);
+
+                        eval($db61_texto);
+                    }
+                }
+
                 if ($pagina == 1) {
                     $this->objpdf->setxy($xcol + 1, $xlin + 187);
                     $this->objpdf->text($xcol + 2, $xlin + 186, 'RESUMO : ', 0, 1, 'L', 0);
@@ -868,212 +949,123 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                     $this->objpdf->multicell(135, 3, $this->resumo);
                     $this->objpdf->Setfont('Arial', 'B', 8);
                 }
+            } else {
+                $this->objpdf->text(85, $xlin + 320, 'Continua na Página ' . ($this->objpdf->PageNo() + 1));
+            }
 
-                if ($pagina == 1) {
+            for ($cont = 0; $cont < $quantlinhadescricaoitem; $cont++) {
+                $descricaoitem = preg_replace('/\n/', ' ', substr($descricaoitemcontinuacao, 0, 5400));
+                $this->objpdf->addpage();
+                $pagina += 1;
 
-                    $this->objpdf->text($xcol + 120, $xlin + 211, 'T O T A L');
-                    $this->objpdf->SetXY(172, $xlin + 205);
-                    $this->objpdf->cell(30, 10, db_formatar($this->valtotal, 'f'), 0, 0, "R");
+                $this->objpdf->settopmargin(1);
+                $xlin = 20;
+                $xcol = 4;
+                //Inserindo usuario e data no rodape
+                $this->objpdf->Setfont('Arial', 'I', 6);
+                $this->objpdf->text($xcol + 3, $xlin + 276, insereRodape());
 
-                    // Assinatura documento
+                $this->objpdf->setfillcolor(245);
+                $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
+                $this->objpdf->setfillcolor(255, 255, 255);
+                $this->objpdf->Setfont('Arial', 'B', 9);
+                $this->objpdf->text(130, $xlin - 13, 'AUTORIZAÇÃO DE EMPENHO N' . CHR(176));
+                $this->objpdf->text(185, $xlin - 13, db_formatar($this->numaut, 's', '0', 6, 'e'));
 
-
-                    $sqlparag = "select db02_texto ";
-                    $sqlparag .= "  from db_documento ";
-                    $sqlparag .= "       inner join db_docparag on db03_docum = db04_docum ";
-                    $sqlparag .= "       inner join db_tipodoc on db08_codigo  = db03_tipodoc ";
-                    $sqlparag .= "       inner join db_paragrafo on db04_idparag = db02_idparag ";
-                    $sqlparag .= " where db03_tipodoc = 1503 and db03_instit = " . db_getsession("DB_instit") . " order by db04_ordem ";
-
-                    $resparag = @db_query($sqlparag);
-
-                    if (@pg_numrows($resparag) > 0) {
-                        db_fieldsmemory($resparag, 0);
-
-                        eval($db02_texto);
-                    } else {
-                        $sqlparagpadrao = "select db61_texto ";
-                        $sqlparagpadrao .= "  from db_documentopadrao ";
-                        $sqlparagpadrao .= "       inner join db_docparagpadrao  on db62_coddoc   = db60_coddoc ";
-                        $sqlparagpadrao .= "       inner join db_tipodoc         on db08_codigo   = db60_tipodoc ";
-                        $sqlparagpadrao .= "       inner join db_paragrafopadrao on db61_codparag = db62_codparag ";
-                        $sqlparagpadrao .= " where db60_tipodoc = 1503 order by db62_ordem";
-
-                        $resparagpadrao = @db_query($sqlparagpadrao);
-                        if (@pg_numrows($resparagpadrao) > 0) {
-                            db_fieldsmemory($resparagpadrao, 0);
-
-                            eval($db61_texto);
-                        }
-                    }
+                if ($this->informa_adic == "PC") {
+                    $this->objpdf->text(137.5, $xlin - 8, 'PROCESSO DE COMPRA N' . CHR(176));
+                    $this->objpdf->text(185, $xlin - 8, db_formatar(pg_result($this->recorddositens, 0, $this->Snumeroproc), 's', '0', 6, 'e'));
                 }
 
-                if ($this->objpdf->PageNo() == 1) {
+                $this->objpdf->Image('imagens/files/' . $this->logo, 5, $xlin - 18, 20);
+                $this->objpdf->Setfont('Arial', 'B', 9);
+                $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
+                $this->objpdf->Setfont('Arial', '', 9);
+                $this->objpdf->text(40, $xlin - 11, $this->enderpref);
+                $this->objpdf->text(40, $xlin - 8, $this->municpref);
+                $this->objpdf->text(40, $xlin - 5, $this->telefpref);
+                $this->objpdf->text(40, $xlin - 2, $this->emailpref);
 
-                    $this->objpdf->text(85, $xlin + 214, 'Continua na Página  ' . ($this->objpdf->PageNo() + 1));
-                    $this->objpdf->SetXY(172, $xlin + 205);
-                    //$this->objpdf->cell(30, 10, db_formatar($this->valtotal, 'f'), 0, 0, "R");
+                $xlin = -35;
+                $this->objpdf->Setfont('Arial', 'B', 8);
 
+                $this->objpdf->rect($xcol, $xlin + 59, 8, 6, 2, 'DF', '12');
+                $this->objpdf->rect($xcol + 8, $xlin + 59, 12, 6, 2, 'DF', '12');
+                $this->objpdf->rect($xcol + 20, $xlin + 59, 15, 6, 2, 'DF', '12');
+                $this->objpdf->rect($xcol + 35, $xlin + 59, 107, 6, 2, 'DF', '12');
+                $this->objpdf->rect($xcol + 142, $xlin + 59, 20, 6, 2, 'DF', '12');
+                $this->objpdf->rect($xcol + 162, $xlin + 59, 20, 6, 2, 'DF', '12');
+                $this->objpdf->rect($xcol + 182, $xlin + 59, 20, 6, 2, 'DF', '12');
 
-                    // Assinatura documento
+                $this->objpdf->rect($xcol, $xlin + 64, 8, 262, 2, 'DF', '34');
+                $this->objpdf->rect($xcol + 8, $xlin + 64, 12, 262, 2, 'DF', '34');
+                $this->objpdf->rect($xcol + 20, $xlin + 64, 15, 262, 2, 'DF', '34');
+                $this->objpdf->rect($xcol + 35, $xlin + 64, 107, 262, 2, 'DF', '34');
+                $this->objpdf->rect($xcol + 142, $xlin + 64, 20, 262, 2, 'DF', '34');
+                $this->objpdf->rect($xcol + 162, $xlin + 64, 20, 262, 2, 'DF', '34');
+                $this->objpdf->rect($xcol + 182, $xlin + 64, 20, 262, 2, 'DF', '34');
 
-
-                    $sqlparag = "select db02_texto ";
-                    $sqlparag .= "  from db_documento ";
-                    $sqlparag .= "       inner join db_docparag on db03_docum = db04_docum ";
-                    $sqlparag .= "       inner join db_tipodoc on db08_codigo  = db03_tipodoc ";
-                    $sqlparag .= "       inner join db_paragrafo on db04_idparag = db02_idparag ";
-                    $sqlparag .= " where db03_tipodoc = 1503 and db03_instit = " . db_getsession("DB_instit") . " order by db04_ordem ";
-
-                    $resparag = @db_query($sqlparag);
-
-                    if (@pg_numrows($resparag) > 0) {
-                        db_fieldsmemory($resparag, 0);
-
-                        eval($db02_texto);
-                    } else {
-
-                        $sqlparagpadrao = "select db61_texto ";
-                        $sqlparagpadrao .= "  from db_documentopadrao ";
-                        $sqlparagpadrao .= "       inner join db_docparagpadrao  on db62_coddoc   = db60_coddoc ";
-                        $sqlparagpadrao .= "       inner join db_tipodoc         on db08_codigo   = db60_tipodoc ";
-                        $sqlparagpadrao .= "       inner join db_paragrafopadrao on db61_codparag = db62_codparag ";
-                        $sqlparagpadrao .= " where db60_tipodoc = 1503 order by db62_ordem";
-
-                        $resparagpadrao = @db_query($sqlparagpadrao);
-                        if (@pg_numrows($resparagpadrao) > 0) {
-                            db_fieldsmemory($resparagpadrao, 0);
-
-                            eval($db61_texto);
-                        }
-                    }
-
-                    if ($pagina == 1) {
-                        $this->objpdf->setxy($xcol + 1, $xlin + 187);
-                        $this->objpdf->text($xcol + 2, $xlin + 186, 'RESUMO : ', 0, 1, 'L', 0);
-                        $this->objpdf->Setfont('Arial', '', 7);
-                        $this->objpdf->multicell(135, 3, $this->resumo);
-                        $this->objpdf->Setfont('Arial', 'B', 8);
-                    }
-                } else {
-                    $this->objpdf->text(85, $xlin + 320, 'Continua na Página ' . ($this->objpdf->PageNo() + 1));
-                }
-
-                for($cont=0;$cont < $quantlinhadescricaoitem;$cont++){
-                    $descricaoitem = preg_replace('/\n/', ' ', substr($descricaoitemcontinuacao, 0, 5400));
-                    $this->objpdf->addpage();
-                    $pagina += 1;
-
-                    $this->objpdf->settopmargin(1);
-                    $xlin = 20;
-                    $xcol = 4;
-                    //Inserindo usuario e data no rodape
-                    $this->objpdf->Setfont('Arial', 'I', 6);
-                    $this->objpdf->text($xcol + 3, $xlin + 276, insereRodape());
-
-                    $this->objpdf->setfillcolor(245);
-                    $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
-                    $this->objpdf->setfillcolor(255, 255, 255);
-                    $this->objpdf->Setfont('Arial', 'B', 9);
-                    $this->objpdf->text(130, $xlin - 13, 'AUTORIZAÇÃO DE EMPENHO N' . CHR(176));
-                    $this->objpdf->text(185, $xlin - 13, db_formatar($this->numaut, 's', '0', 6, 'e'));
-
-                    if ($this->informa_adic == "PC") {
-                        $this->objpdf->text(137.5, $xlin - 8, 'PROCESSO DE COMPRA N' . CHR(176));
-                        $this->objpdf->text(185, $xlin - 8, db_formatar(pg_result($this->recorddositens, 0, $this->Snumeroproc), 's', '0', 6, 'e'));
-                    }
-
-                    $this->objpdf->Image('imagens/files/' . $this->logo, 5, $xlin - 18, 20);
-                    $this->objpdf->Setfont('Arial', 'B', 9);
-                    $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
-                    $this->objpdf->Setfont('Arial', '', 9);
-                    $this->objpdf->text(40, $xlin - 11, $this->enderpref);
-                    $this->objpdf->text(40, $xlin - 8, $this->municpref);
-                    $this->objpdf->text(40, $xlin - 5, $this->telefpref);
-                    $this->objpdf->text(40, $xlin - 2, $this->emailpref);
-
-                    $xlin = -35;
-                    $this->objpdf->Setfont('Arial', 'B', 8);
-
-                    $this->objpdf->rect($xcol, $xlin + 59, 8, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 8, $xlin + 59, 12, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 20, $xlin + 59, 15, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 35, $xlin + 59, 107, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 142, $xlin + 59, 20, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 162, $xlin + 59, 20, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 182, $xlin + 59, 20, 6, 2, 'DF', '12');
-
-                    $this->objpdf->rect($xcol, $xlin + 64, 8, 262, 2, 'DF', '34');
-                    $this->objpdf->rect($xcol + 8, $xlin + 64, 12, 262, 2, 'DF', '34');
-                    $this->objpdf->rect($xcol + 20, $xlin + 64, 15, 262, 2, 'DF', '34');
-                    $this->objpdf->rect($xcol + 35, $xlin + 64, 107, 262, 2, 'DF', '34');
-                    $this->objpdf->rect($xcol + 142, $xlin + 64, 20, 262, 2, 'DF', '34');
-                    $this->objpdf->rect($xcol + 162, $xlin + 64, 20, 262, 2, 'DF', '34');
-                    $this->objpdf->rect($xcol + 182, $xlin + 64, 20, 262, 2, 'DF', '34');
-
-                    //$this->objpdf->rect($xcol, $xlin + 205, 142, 10, 2, 'DF', '34');
-                    //$this->objpdf->rect($xcol + 142, $xlin + 205, 30, 10, 2, 'DF', '34');
-                    //$this->objpdf->rect($xcol + 172, $xlin + 205, 30, 10, 2, 'DF', '34');
+                //$this->objpdf->rect($xcol, $xlin + 205, 142, 10, 2, 'DF', '34');
+                //$this->objpdf->rect($xcol + 142, $xlin + 205, 30, 10, 2, 'DF', '34');
+                //$this->objpdf->rect($xcol + 172, $xlin + 205, 30, 10, 2, 'DF', '34');
 
 
-                    $this->objpdf->sety($xlin + 70);
+                $this->objpdf->sety($xlin + 70);
 
-                    $alt = 5;
+                $alt = 5;
 
-                    $this->objpdf->text($xcol + 1, $xlin + 62, 'SEQ.');
-                    $this->objpdf->text($xcol + 10, $xlin + 62, 'ITEM');
-                    $this->objpdf->text($xcol + 22, $xlin + 62, 'QUANT.');
-                    $this->objpdf->text($xcol + 70, $xlin + 62, 'MATERIAL OU SERVIÇO');
-                    $this->objpdf->text($xcol + 145, $xlin + 62, 'UNIDADE');
-                    $this->objpdf->text(168, $xlin + 62, 'UNITÁRIO');
-                    $this->objpdf->text(190, $xlin + 62, 'TOTAL');
+                $this->objpdf->text($xcol + 1, $xlin + 62, 'SEQ.');
+                $this->objpdf->text($xcol + 10, $xlin + 62, 'ITEM');
+                $this->objpdf->text($xcol + 22, $xlin + 62, 'QUANT.');
+                $this->objpdf->text($xcol + 70, $xlin + 62, 'MATERIAL OU SERVIÇO');
+                $this->objpdf->text($xcol + 145, $xlin + 62, 'UNIDADE');
+                $this->objpdf->text(168, $xlin + 62, 'UNITÁRIO');
+                $this->objpdf->text(190, $xlin + 62, 'TOTAL');
 
-                    /*$this->objpdf->text($xcol + 1, $xlin + 62, 'SEQ.');
+                /*$this->objpdf->text($xcol + 1, $xlin + 62, 'SEQ.');
                     $this->objpdf->text($xcol + 10, $xlin + 62, 'ITEM');
                     $this->objpdf->text($xcol + 22, $xlin + 62, 'QUANT.');
                     $this->objpdf->text($xcol + 70, $xlin + 62, 'MATERIAL OU SERVIÇO');
                     $this->objpdf->text($xcol + 145, $xlin + 62, 'VALOR UNITÁRIO');
                     $this->objpdf->text($xcol + 176, $xlin + 62, 'VALOR TOTAL');*/
-                    //$this->objpdf->text($xcol + 85, $xlin + 320, 'Continuação da Página ' . ($this->objpdf->PageNo() + 1));
+                //$this->objpdf->text($xcol + 85, $xlin + 320, 'Continuação da Página ' . ($this->objpdf->PageNo() + 1));
 
-                    $alt = 4;
-                    $maiscol = 0;
+                $alt = 4;
+                $maiscol = 0;
 
-                    if ($this->informa_adic == "PC") {
-                        if (pg_result($this->recorddositens, $ii, $this->Snumero) != "") {
-                            $descricaoitem .= "\n" . 'SOLICITAÇÃO: ' . pg_result($this->recorddositens, $ii, $this->Snumero);
-                        }
+                if ($this->informa_adic == "PC") {
+                    if (pg_result($this->recorddositens, $ii, $this->Snumero) != "") {
+                        $descricaoitem .= "\n" . 'SOLICITAÇÃO: ' . pg_result($this->recorddositens, $ii, $this->Snumero);
                     }
-
-                    if (pg_result($this->recorddositens, $ii, $this->marca) != '') {
-                        $descricaoitem .= ' - Marca: ' . pg_result($this->recorddositens, $ii, $this->marca);
-                    }
-
-                    $this->objpdf->Setfont('Arial', '', 7);
-                    $this->objpdf->Row(array(
-
-                    "",
-                        "",
-                        "",
-                        $descricaoitem,
-                        "",
-                        "",
-                        ""
-                    ), 3, false, 3);
-                    $this->objpdf->Row(array(
-
-                        "",
-                            "",
-                            "",
-                            "",
-                            "",
-                            "",
-                            ""
-                        ), 3, false, 3);
-                    $descricaoitemcontinuacao = preg_replace('/\n/', ' ', substr($descricaoitemcontinuacao, 5400, 300000));
-
                 }
 
+                if (pg_result($this->recorddositens, $ii, $this->marca) != '') {
+                    $descricaoitem .= ' - Marca: ' . pg_result($this->recorddositens, $ii, $this->marca);
+                }
+
+                $this->objpdf->Setfont('Arial', '', 7);
+                $this->objpdf->Row(array(
+
+                    "",
+                    "",
+                    "",
+                    $descricaoitem,
+                    "",
+                    "",
+                    ""
+                ), 3, false, 3);
+                $this->objpdf->Row(array(
+
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    "",
+                    ""
+                ), 3, false, 3);
+                $descricaoitemcontinuacao = preg_replace('/\n/', ' ', substr($descricaoitemcontinuacao, 5400, 300000));
+            }
         }
     }
     if ($pagina == 1) {
