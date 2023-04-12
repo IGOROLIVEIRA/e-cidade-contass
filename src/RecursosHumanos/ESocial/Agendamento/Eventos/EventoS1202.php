@@ -88,7 +88,7 @@ class EventoS1202 extends EventoBase
 
                     //Informa��es relativas � remunera��o do trabalhador no per�odo de apura��o.
                     $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->remunperapur[0] = new \stdClass(); //Obrigat�rio
-                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->remunperapur[0]->matricula = $aDadosPorMatriculas[$iCont]->matricula; //Opcional
+                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->remunperapur[0]->matricula = $aDadosPorMatriculas[$iCont]->matricula_esocial; //Opcional
 
                     $aDadosValoreRubrica = $this->buscarValorRubrica($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime, $aIdentificador[$iCont2]->idedmdev);
                     if (empty($aDadosValoreRubrica))
@@ -138,7 +138,8 @@ class EventoS1202 extends EventoBase
         end as grauExp,
         rh30_regime,
         rh51_cgcvinculo,
-        rh01_esocial as matricula,
+        rh01_regist as matricula,
+        rh01_esocial as matricula_esocial,
         h13_categoria as codCateg
     from
         rhpessoal

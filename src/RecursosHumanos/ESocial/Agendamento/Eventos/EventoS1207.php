@@ -132,7 +132,8 @@ class EventoS1207 extends EventoBase
         end as grauExp,
         rh30_regime,
         rh51_cgcvinculo,
-        rh01_esocial as matricula,
+        rh01_regist as matricula,
+        rh01_esocial as matricula_esocial,
         h13_categoria as codCateg
     from
         rhpessoal
