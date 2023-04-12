@@ -1,29 +1,8 @@
 <?php
-/**
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2015  DBseller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
+
+use App\Models\Numpref;
+use App\Models\RecibopagaQrcodePix;
+use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
 
 require_once("fpdf151/scpdf.php");
 require_once("fpdf151/impcarne.php");
@@ -62,6 +41,20 @@ $cllistadoc    = new cl_listadoc;
 $iTamNossoNumeroVersao2 = 17;
 $temporizador = date("His", mktime(date("H"), date("i"), date("s"), 0, 0, 0));
 
+$usePixIntegration = false;
+$providerConfig = null;
+/**
+ * @var Numpref $settings
+ */
+$settings = Numpref::query()
+    ->where('k03_anousu', db_getsession("DB_anousu"))
+    ->where('k03_instit', db_getsession("DB_instit"))
+    ->first();
+
+if ($settings->k03_ativo_integracao_pix) {
+    $usePixIntegration = true;
+    $providerConfig = (new ResolvePixProviderService())->execute($settings);
+}
 
   /**
    * $sqlnaogera = $sSqlNaoGera
@@ -1768,6 +1761,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
                   $uvlrmulta = substr($fc_calcula,40,13);
                   $uvlrdesconto = substr($fc_calcula,53,13);
                   $utotal = $uvlrcor + $uvlrjuros + $uvlrmulta - $uvlrdesconto + $taxa_bancaria;
+                  $uqrcode = "";
 
                   $k00_numpar = 0;
 
@@ -1826,6 +1820,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
                     db_inicio_transacao();
 
                     try {
+
                       $oRecibo = new recibo(2,null, 5);
                       $oRecibo->addNumpre($k00_numpre,0);
                       $oRecibo->setNumBco($oRegraEmissao->getCodConvenioCobranca());
@@ -1833,6 +1828,13 @@ for ($vez = 0; $vez <= 1; $vez++) {
                       $oRecibo->setDataVencimentoRecibo($k00_dtvenc);
                       $oRecibo->emiteRecibo();
                       $k03_numpreunica = $oRecibo->getNumpreRecibo();
+
+                      if ($usePixIntegration) {
+                          $recibopagaQrcodePix = RecibopagaQrcodePix::query()
+                              ->where('k176_numnov', $k03_numpreunica)
+                              ->first();
+                          $uqrcode = $recibopagaQrcodePix->k176_qrcode;
+                      }
                     } catch ( Exception $eException ) {
                       db_fim_transacao(true);
                       db_redireciona("db_erros.php?fechar=true&db_erro=Erro2 - Matricula: $j23_matric - Numpre:$j20_numpre - {$eException->getMessage()}");
@@ -1931,6 +1933,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
                 if ($gerar == "dados") {
                   if ($tipo == "txt") {
                     fputs($clabre_arquivo->arquivo,$fc_febraban);
+                    fputs($clabre_arquivo->arquivo,str_pad($uqrcode, 200),200);
                   } elseif ($tipo == "txtbsj") {
                     $linha20 .= str_pad($oConvenio->getNossoNumero(),13," ",STR_PAD_LEFT);
                     $linha20 .= "00";
@@ -1959,6 +1962,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
                 } else {
                   if ($tipo == "txt") {
                     fputs($clabre_arquivo->arquivo,db_contador("BARRASUNICA".$k00_percdes,"CODIGO DE BARRAS",$contador,$maxcols));
+                    fputs($clabre_arquivo->arquivo,db_contador("QRCODEUNICA".$k00_percdes,"QRCODEUNICA " . $k00_percdes,$contador,200));
                   }
                 }
 
@@ -1995,6 +1999,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
                       fputs($clabre_arquivo->arquivo,db_contador("TOTALLIQUNICA".$k00_percdes,"TOTAL - DESCONTO DE " . $k00_percdes,$contador,15));
                       fputs($clabre_arquivo->arquivo,db_contador("CODARREC".$k00_percdes, "NUMERO DE ARRECADACAO",$contador,$iTamCodArrecadao));
                       fputs($clabre_arquivo->arquivo,db_contador("BARRASUNICA".$k00_percdes,"CODIGO DE BARRAS",$contador,$maxcols));
+                      fputs($clabre_arquivo->arquivo,db_contador("QRCODEUNICA".$k00_percdes,"QRCODEUNICA " . $k00_percdes,$contador,200));
                     }
                 } else {
                   if ($tipo == "txt") {
@@ -2108,6 +2113,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
                 }
 
                 $k00_valor += $taxa_bancaria;
+                $qrcode = '';
 
                 if ($gerar == "dados") {
                   ////////
@@ -2180,6 +2186,13 @@ for ($vez = 0; $vez <= 1; $vez++) {
                       $oRecibo->setDataVencimentoRecibo($k00_dtvenc);
                       $oRecibo->emiteRecibo();
                       $k03_numprepar = $oRecibo->getNumpreRecibo();
+
+                        if ($usePixIntegration) {
+                            $recibopagaQrcodePix = RecibopagaQrcodePix::query()
+                                ->where('k176_numnov', $k03_numprepar)
+                                ->first();
+                            $qrcode = $recibopagaQrcodePix->k176_qrcode;
+                        }
                     } catch ( Exception $eException ) {
                       db_fim_transacao(true);
                       db_redireciona("db_erros.php?fechar=true&db_erro=Erro6 - Matricula: $j23_matric - Numpre:$j20_numpre - {$eException->getMessage()}");
@@ -2213,6 +2226,7 @@ for ($vez = 0; $vez <= 1; $vez++) {
                   try{
                     $oConvenio = new convenio($oRegraEmissao->getConvenio(),$k03_numprepar,0,$k00_valor,$vlrbar,$datavencimento,$terceiro);
                   } catch (Exception $eExeption){
+                      var_dump($eException);exit;
                     db_redireciona("db_erros.php?fechar=true&db_erro=Erro6 - Matricula: $j23_matric - Numpre:$j20_numpre - {$eExeption->getMessage()}");
                     exit;
                   }
@@ -2338,15 +2352,18 @@ for ($vez = 0; $vez <= 1; $vez++) {
                   if ($tipo == "txt") {
                     if ($gerarparcelado == true && $achoua ) {
                       fputs($clabre_arquivo->arquivo,$fc_febraban);
+                      fputs($clabre_arquivo->arquivo, str_pad($qrcode, 200));
                       fputs($clabre_arquivo->arquivo, str_pad($k00_numpar,3,"0", STR_PAD_LEFT));
                     } else {
                       fputs($clabre_arquivo->arquivo, str_pad(" ",$maxcols," ", STR_PAD_LEFT));
+                      fputs($clabre_arquivo->arquivo, str_pad(" ",200," ", STR_PAD_LEFT));
                       fputs($clabre_arquivo->arquivo, str_pad(" ",3," ", STR_PAD_LEFT));
                     }
                   }
                 } else {
                   if ($tipo == "txt") {
                     fputs($clabre_arquivo->arquivo, db_contador("BARRASPARC" . str_pad($k00_numpar,3,"0", STR_PAD_LEFT),"CODIGO DE BARRAS DA PARCELA $k00_numpar",$contador,$maxcols));
+                    fputs($clabre_arquivo->arquivo, db_contador("PIXQRCODE". str_pad($k00_numpar,3,"0", STR_PAD_LEFT),"PIXQRCODE DA PARCELA $k00_numpar",$contador,200));
                     fputs($clabre_arquivo->arquivo, db_contador("PARC" . str_pad($k00_numpar,3,"0",STR_PAD_LEFT),"PARCELA " . str_pad($k00_numpar,2),$contador,3));
                   }
                 }
