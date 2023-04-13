@@ -312,6 +312,11 @@ if ($lBloquear) {
             if ($pesqemp == true) {
             ?>
               <table border='0' cellspacing="0" cellpadding="0" style='border:2px inset white; padding-bottom:15px;' width='100%' bgcolor="white" id="dadosDaOrdem">
+                <tr id='tabela'>
+                 
+                    <b>Para detalhamento dos itens da tabela clique sobre a descrição do item.</b>
+                 
+                </tr>
                 <tr class=''>
                   <td class='table_header' title='Marca/desmarca todos' align='center'>
                     <input type='checkbox' style='display:none' id='mtodos' onclick='js_marca(false)'>
@@ -448,7 +453,12 @@ if ($lBloquear) {
                       echo "  <td class='linhagrid' id='e62_item{$e62_sequencial}' align='center'>$e62_item</td>";
 
                       // Item
-                      echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' ondblclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
+                      if($pc01_tabela == 1){
+                        echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' onclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)' style='color:blue'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
+                      }else{
+                        echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' onclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
+                      }
+                      
 
                       // Unidade
                       echo "  <td class='linhagrid' id='m61_abrev{$e62_sequencial}' nowrap align='left' title='$m61_abrev'>{$m61_abrev}</td>";
@@ -890,7 +900,7 @@ if ($lBloquear) {
 
   function js_verificatabela(sequencia,empenho,item,acordo,tabela){
    if( $('itenstabela').style.display == 'none'){
-      if(tabela == 1 && acordo != "block"){
+      if(tabela == 1){
         $('itenstabela').style.display = '';
         $('pc16_codmater').value = "";
         $('pc01_descrmater').value = "";
@@ -904,7 +914,7 @@ if ($lBloquear) {
         js_init(empenho,item);
       }
    }else{
-    if(tabela == 1 && acordo != ""){
+    if(tabela == 1){
         $('itenstabela').style.display = 'none';
   
       }
