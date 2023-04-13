@@ -62,6 +62,9 @@ switch ($oParam->exec) {
                 $aItensLicitacao = array();
                 $rsResultado = $clliclicita->sql_record($clliclicita->sql_query_resultado_pncp($oParam->iLicitacao, $item->l21_ordem));
 
+                if (!pg_numrows($rsResultado)) {
+                    throw new Exception('Dados do Rultado do Iten PNCP não Encontrato! Licitacao:' . $aLicitacao->codigo . "Item seq: " . $item->l21_ordem);
+                }
                 for ($i = 0; $i < pg_numrows($rsResultado); $i++) {
                     $oDadosResultado = db_utils::fieldsMemory($rsResultado, $i);
                     $aItensLicitacao[] = $oDadosResultado;

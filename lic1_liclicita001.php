@@ -430,6 +430,7 @@ if (isset($incluir)) {
 			$clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao; //OC3770
 			$clliclicita->l20_justificativapncp = $l20_justificativapncp;
 			$clliclicita->l20_categoriaprocesso = $l20_categoriaprocesso;
+			$clliclicita->l20_receita = $l20_receita;
 			$clliclicita->incluir(null, null);
 
 			if ($clliclicita->erro_status == "0") {

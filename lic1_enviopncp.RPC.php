@@ -64,8 +64,18 @@ switch ($oParam->exec) {
             foreach ($oParam->aLicitacoes as $aLicitacao) {
                 //licitacao
                 $rsDadosEnvio = $clLicitacao->sql_record($clLicitacao->sql_query_pncp($aLicitacao->codigo));
+
+                if (!pg_numrows($rsDadosEnvio)) {
+                    throw new Exception('Dados de envio do PNCP não Encontrato! Licitacao: ' . $aLicitacao->codigo);
+                }
+
                 //itens
                 $rsDadosEnvioItens = $clLicitacao->sql_record($clLicitacao->sql_query_pncp_itens($aLicitacao->codigo));
+
+                if (!pg_numrows($rsDadosEnvioItens)) {
+                    throw new Exception('Dados dos Itens PNCP não Encontrato! Licitacao: ' . $aLicitacao->codigo);
+                }
+
 
                 //Anexos da Licitacao
                 $rsAnexos = $cllicanexopncp->sql_record($cllicanexopncp->sql_anexos_licitacao($aLicitacao->codigo));
@@ -76,12 +86,12 @@ switch ($oParam->exec) {
 
                     //validaçoes
                     if ($oDadosLicitacao->dataaberturaproposta == '') {
-                        throw new Exception('Data da Abertura de Proposta não informado! Licitacao:' . $aLicitacao->codigo);
+                        throw new Exception('Data da Abertura de Proposta não informado! Licitacao: ' . $aLicitacao->codigo);
                     }
 
                     //valida se existe anexos na licitacao
                     if (pg_numrows($rsAnexos) == 0) {
-                        throw new Exception('Licitação sem Anexos vinculados! Licitação:' . $aLicitacao->codigo);
+                        throw new Exception('Licitação sem Anexos vinculados! Licitação: ' . $aLicitacao->codigo);
                     }
 
                     //continua...
