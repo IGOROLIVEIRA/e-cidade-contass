@@ -35,6 +35,7 @@ require_once("std/db_stdClass.php");
 require_once("dbforms/db_funcoes.php");
 
 define("URL_MENSAGEM_LIC1ANEXOSPNCP", "patrimonial.licitacao.lic1_anexospncp.");
+const PATH_ANEXO_LICITACAO = 'model/licitacao/PNCP/anexoslicitacao/';
 
 $oJson               = new services_json();
 $oParam              = $oJson->decode(str_replace("\\", "", $_POST["json"]));
@@ -88,7 +89,7 @@ try {
     case "download":
 
       $oProcessoDocumento                = new LicitacaoDocumento($oParam->iCodigoDocumento);
-      $oRetorno->sCaminhoDownloadArquivo = "model/licitacao/PNCP/anexoslicitacao/" . $oProcessoDocumento->sNomeDocumento;
+      $oRetorno->sCaminhoDownloadArquivo = PATH_ANEXO_LICITACAO . $oProcessoDocumento->sNomeDocumento;
       $oRetorno->sTituloArquivo          = urlencode($oProcessoDocumento->getNomeDocumento());
 
       break;

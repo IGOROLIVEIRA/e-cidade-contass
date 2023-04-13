@@ -563,7 +563,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         <b>Receita: </b>
                                     </td>
                                     <td>
-                                        <?
+                                        <?php
                                         $aReceita = array(
                                             "t" => "Despesa",
                                             "f" => "Receita"
@@ -578,7 +578,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         <b>Modo de disputa: </b>
                                     </td>
                                     <td>
-                                        <?
+                                        <?php
                                         $aDisputas = array(
                                             "0" => "Selecione",
                                             "1" => "Aberto",
@@ -597,7 +597,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                     <td>
                                         <span>
-                                            <?
+                                            <?php
                                             db_input('l20_numeroconvidado', 3, $Il20_numeroconvidado, true, 'text', $db_opcao, "", "", "#E6E4F1")
                                             ?>
                                         </span>
@@ -611,7 +611,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         <?= @$Ll20_execucaoentrega ?>
                                     </td>
                                     <td>
-                                        <? $al20_diames = array("1" => "Dias", "2" => "Mes");
+                                        <?php $al20_diames = array("1" => "Dias", "2" => "Mes");
                                         db_select("l20_diames", $al20_diames, true, $db_opcao);
                                         db_input('l20_execucaoentrega', 3, $Il20_execucaoentrega, true, 'text', $db_opcao, "");
                                         ?>
@@ -1423,13 +1423,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("respAberProcesso").style.display = "none";
             document.getElementById("respEmissaoEdi").style.display = "none";
             document.getElementById("dataaber").style.display = "none";
+            document.getElementById("receita").style.display = 'none';
+            document.getElementById("dataaberturapncp").style.display = 'none';
+
             if (l12_pncp == 't') {
                 document.getElementById("receita").style.display = '';
                 document.getElementById("dataaberturapncp").style.display = '';
-            } else {
-                document.getElementById("receita").style.display = 'none';
-                document.getElementById("dataaberturapncp").style.display = 'none';
             }
+
             document.getElementById("equipepregao").style.display = 'none';
             document.getElementById("usaregistropreco").style.display = 'none';
             document.getElementById("aceitabilidade").style.display = 'none';
