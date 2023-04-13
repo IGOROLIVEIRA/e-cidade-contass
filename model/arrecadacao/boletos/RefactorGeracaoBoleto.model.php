@@ -930,15 +930,8 @@ class RefactorGeracaoBoleto {
       }
     }
 
-    $this->createPixQRCode();
-
     return $oRetorno;
   }
-
-    public function createPixQRCode($oRecibosEmitidos)
-    {
-
-    }
 
   /**
    * Retorna os Débitos  selecionados no formulário da CGF

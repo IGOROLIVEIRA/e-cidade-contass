@@ -2226,7 +2226,6 @@ for ($vez = 0; $vez <= 1; $vez++) {
                   try{
                     $oConvenio = new convenio($oRegraEmissao->getConvenio(),$k03_numprepar,0,$k00_valor,$vlrbar,$datavencimento,$terceiro);
                   } catch (Exception $eExeption){
-                      var_dump($eException);exit;
                     db_redireciona("db_erros.php?fechar=true&db_erro=Erro6 - Matricula: $j23_matric - Numpre:$j20_numpre - {$eExeption->getMessage()}");
                     exit;
                   }
