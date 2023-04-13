@@ -20,9 +20,6 @@ class ApiPixArrecadacao implements IPixProvider
     private Configuration $configuration;
     private ClientInterface $client;
 
-    public const INDICADOR_CODIGO_BARRAS_NAO = 'N';
-    public const INDICADOR_CODIGO_BARRAS_SIM = 'S';
-
     public function __construct(Configuration $configuration)
     {
         $this->configuration = $configuration->authenticate();
@@ -36,7 +33,8 @@ class ApiPixArrecadacao implements IPixProvider
     public function generatePixArrecadacaoQrCodes(array $payload): PixArrecadacaoResponseDTO
     {
         $payload['numeroConvenio'] = $this->configuration->getNumeroConvenio();
-        $payload['indicadorCodigoBarras'] = self::INDICADOR_CODIGO_BARRAS_NAO;
+        $payload['indicadorCodigoBarras'] = !empty($payload['indicadorCodigoBarras']) ?
+            $payload['indicadorCodigoBarras'] : PixArrecadacaoPayloadDTO::INDICADOR_CODIGO_BARRAS_NAO;
         $payload['codigoSolicitacaoBancoCentralBrasil'] = $this->configuration->getChavePix();
         $pixArrecadacaoPayloadDTO = new PixArrecadacaoPayloadDTO($payload);
         $response = $this->send(

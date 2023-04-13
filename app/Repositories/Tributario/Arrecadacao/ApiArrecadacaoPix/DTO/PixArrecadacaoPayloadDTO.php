@@ -6,6 +6,9 @@ use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IPixPayl
 
 class PixArrecadacaoPayloadDTO implements IPixPayload
 {
+    public const INDICADOR_CODIGO_BARRAS_NAO = 'N';
+    public const INDICADOR_CODIGO_BARRAS_SIM = 'S';
+
     /**
      * @var int
      */
@@ -14,7 +17,7 @@ class PixArrecadacaoPayloadDTO implements IPixPayload
     /**
      * @var string
      */
-    public string $indicadorCodigoBarras;
+    public string $indicadorCodigoBarras = self::INDICADOR_CODIGO_BARRAS_NAO;
 
     /**
      * @var string
@@ -97,8 +100,8 @@ class PixArrecadacaoPayloadDTO implements IPixPayload
                 continue;
             }
 
-            if ($attribute === 'valorOriginalSolicitacao') {
-                $value = number_format($value, 2);
+            if ($attribute === 'valorOriginalSolicitacao' && !is_float($value)) {
+                $value = number_format($value, 2, '.', '');
             }
 
             $this->$attribute = $value;
