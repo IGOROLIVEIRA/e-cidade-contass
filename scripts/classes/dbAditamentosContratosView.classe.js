@@ -2,7 +2,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     var me = this,
         aItensPosicao = new Array();
-    //var totalizador = 0.0;
+
 
     this.lLiberaDotacoes = true;
     this.lLiberaNovosItens = true;
