@@ -316,7 +316,10 @@ if($agrupar=='S'){
 
 $sWhere = "";
 if (isset($fonte) && $fonte != '') {
-  $sWhere .= " and o15_codtri = '{$fonte}' ";
+  if(db_getsession('DB_anousu') > 2022)
+    $sWhere .= " and o15_codigo = '{$fonte}' ";
+  else
+    $sWhere .= " and o15_codtri = '{$fonte}' ";   
   $descr_conta = "CONTAS DA FONTE {$fonte}";
 }
 
