@@ -770,6 +770,9 @@ switch ($oParam->exec) {
       /*
        * Sql que busca os decretos do mes
        */
+      $tiposup = '';
+      if(db_getsession("DB_anousu") > 2022)
+        $tiposup = " and o46_tiposup not in (1017) ";
       $sSqlDecretosMes = "select  distinct o39_codproj as codigovinc,
       '10' as tiporegistro,
       si09_codorgaotce as codorgao,
@@ -782,7 +785,9 @@ switch ($oParam->exec) {
       join db_config on prefeitura  = 't'
       join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
       left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
-      where o39_data between  '$sDataInicial' and '$sDataFinal'";
+      where o39_data between  '$sDataInicial' and '$sDataFinal'
+      $tiposup ";
+     
       $aDecretos = db_utils::getColectionByRecord(db_query($sSqlDecretosMes));
 
       require_once("model/contabilidade/arquivos/sicom/mensal/" . db_getsession("DB_anousu") . "/SicomArquivoLegislacaoCaraterFinanceiro.model.php");
@@ -804,9 +809,13 @@ switch ($oParam->exec) {
        * Fim Lógiga gerar o DEC
        */
     }
-    $oEscritorCSV->zip("DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}");
-    $oEscritorCSV->adicionarArquivo("tmp/DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
-
+   
+    if($aDecretos){
+      $oEscritorCSV->zip("DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}");
+      $oEscritorCSV->adicionarArquivo("tmp/DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
+    }else{
+      $oRetorno->status  = 3;
+    }  
     $oRetorno->itens = $oEscritorCSV->getListaArquivos();
 
     break;

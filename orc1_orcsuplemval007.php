@@ -212,12 +212,12 @@ if (isset($incluir)) {
     if ($iExcesso == "t") {
         if (in_array($tiposup, array(1004, 1025, 1012, 1019, 1009, 1010, 1029))) {
             $fontes = $o58_codigo;
-            if (in_array($o58_codigo, array(118, 119)))
-                $fontes = '118, 119';
-            if (in_array($o58_codigo, array(100, 101, 102)))
-                $fontes = '100, 101, 102';
-            if (in_array($o58_codigo, array(166, 167)))
-                $fontes = '166, 167';
+            if (in_array($o58_codigo, array(118, 119, 15400007,15400000)))
+                $fontes = '118, 119,15400007,15400000';
+            if (in_array($o58_codigo, array(100, 101, 102,15000000,15000001,15000002)))
+                $fontes = '100, 101, 102,15000000,15000001,15000002';
+            if (in_array($o58_codigo, array(166, 167,15420007,154200000)))
+                $fontes = '166, 167,15420007,154200000';
 
             $sSql = "SELECT o70_codigo, SUM(saldo_arrecadado - saldo_inicial) saldo FROM (
                 select
@@ -433,7 +433,7 @@ WHERE o58_anousu=" . db_getsession('DB_anousu') . "
             if ($o50_controlafote1017 == 't') {
                 /*valida fonte (100,101,102,118,119) OC 9112 */
                 // Adicionar Validação da fontes 166 e 167 - OC17881
-                $dotacoes = array(100, 101, 102, 118, 119, 166, 167);
+                $dotacoes = array(100, 101, 102, 118, 119, 166, 167,5000000,5000001,5000002,5400000,5400007,5420007,5420000,);
                 if (!in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38), $dotacoes)) {
                     $sqlerro = true;
                     db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
@@ -484,9 +484,10 @@ WHERE o58_anousu=" . db_getsession('DB_anousu') . "
         }
     }
     db_fim_transacao($sqlerro);
+   
 } elseif (isset($opcao) && $opcao == "excluir") {
 
-
+    
 
     $limpa_dados = true;
     // clicou no exlcuir, já exlcui direto, nem confirma nada
@@ -543,7 +544,7 @@ if ($limpa_dados == true) {
 // --------------------------------------
 // calcula total das reduções
 $oSuplementacao = new Suplementacao($o46_codsup);
-$soma_suplem    = $oSuplementacao->getvalorSuplementacao();
+$soma_suplem    = db_formatar($oSuplementacao->getvalorSuplementacao(),"f");
 // --------------------------------------
 
 
@@ -578,6 +579,7 @@ $soma_suplem    = $oSuplementacao->getvalorSuplementacao();
 <?
 
 if (isset($incluir) || isset($alterar) || isset($excluir)) {
+    
     if ($clorcsuplemval->erro_status == "0") {
         $clorcsuplemval->erro(true, false);
         $db_botao = true;
