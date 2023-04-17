@@ -194,14 +194,21 @@ if(isset($incluir)){
         if(pg_num_rows(db_query($sSqlestrututural))>0){
             $oEstruturalSupl = db_query($sSqlestrututural);
             $oEstruturalSupl = db_utils::fieldsMemory($oEstruturalSupl);
-            if(!(substr($oEstruturalDotacaoEnviada->dl_estrutural, 0,36) ==  substr($oEstruturalSupl->dl_estrutural, 0,36) && substr($oEstruturalDotacaoEnviada->dl_estrutural, 37,4) !=  substr($oEstruturalSupl->dl_estrutural, 37,4))){
+            if(!(substr($oEstruturalDotacaoEnviada->dl_estrutural, 0,36) ==  substr($oEstruturalSupl->dl_estrutural, 0,36) && substr($oEstruturalDotacaoEnviada->dl_estrutural, 37,4) !=  substr($oEstruturalSupl->dl_estrutural, 37,4)) && db_getsession('DB_anousu') < 2023){
                 $sqlerro = true;
                 db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
                 $limpa_dados = false;
 
             }
 
-            if($o50_controlafote1017 == 't') {
+            if(!(substr($oEstruturalDotacaoEnviada->dl_estrutural, 0,36) ==  substr($oEstruturalSupl->dl_estrutural, 0,36) && substr($oEstruturalDotacaoEnviada->dl_estrutural, 37,8) !=  substr($oEstruturalSupl->dl_estrutural, 37,8)) &&  db_getsession('DB_anousu') > 2022){
+                $sqlerro = true;
+                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                $limpa_dados = false;
+
+            }
+
+            if($o50_controlafote1017 == 't' && db_getsession('DB_anousu') < 2023) {
                 /**
                  * OC 9112 - Inicio
                  * OC 10930 - Modifica validação para verificar apenas 2 últimos dígitos das fontes
@@ -247,10 +254,59 @@ if(isset($incluir)){
                  * OC 9112 - Fim
                  */
             }
+
+            if($o50_controlafote1017 == 't' && db_getsession('DB_anousu') > 2022) {
+                /**
+                 * OC 9112 - Inicio
+                 * OC 10930 - Modifica validação para verificar apenas 2 últimos dígitos das fontes
+                 */
+
+                /*valida fonte 15000001 e 15000002*/
+                $validacao = array(5000001, 5000002);
+                if (substr($oEstruturalSupl->dl_estrutural, 38, 7) == 5000000 && !in_array(substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 7), $validacao)) {
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
+
+                /*valida fonte 15000001*/
+                if (substr($oEstruturalSupl->dl_estrutural, 38, 7) == 5000001 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 7) != 5000000) {
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
+
+                /*valida fonte 15000002*/
+                if (substr($oEstruturalSupl->dl_estrutural, 38, 7) == 5000002 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 7) != 5000000) {
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
+
+                /*valida fonte 15400007*/
+                
+                if (substr($oEstruturalSupl->dl_estrutural, 38, 7) == 5400007 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 7) != 5400000) {
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
+
+                /*valida fonte 15400000*/
+                if (substr($oEstruturalSupl->dl_estrutural, 38, 7) == 5400000 && substr($oEstruturalDotacaoEnviada->dl_estrutural, 38, 7) != 5400007) {
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+                }
+
+                /**
+                 * OC 9112 - Fim
+                 */
+            }
         }
     }
 
     if($tiposup == '1001' || $tiposup == '1006'){
+        
         $sSqlEstruturalDotacaoEnviada = "SELECT fc_estruturaldotacao(".db_getsession('DB_anousu').",o58_coddot) AS dl_estrutural
             FROM orcdotacao d
             INNER JOIN orcprojativ p ON p.o55_anousu = ".db_getsession('DB_anousu')."
@@ -297,7 +353,7 @@ if(isset($incluir)){
 //            }
         }
 
-        if($o50_controlafote10011006 == 't'){
+        if($o50_controlafote10011006 == 't' && db_getsession('DB_anousu') < 2023){
             /*valida fonte 100*/
             $validacao = array(100, 101, 102);
 
@@ -422,6 +478,20 @@ if(isset($incluir)){
                 $limpa_dados = false;
             }
         }
+
+        if($o50_controlafote10011006 == 't' && db_getsession('DB_anousu') > 2022){
+                   
+            /*valida diferente*/
+            /* Adicionando a validação das fontes com primeiro digito separado - OC17881 */
+            // $validacao = array(100, 101, 102, 118, 119, 166, 167, 200, 201, 202, 218, 219, 266, 267);
+            // echo substr($oEstruturalDotacaoEnviada->dl_estrutural, 37, 7)." <br>".substr($oEstruturalSupl->dl_estrutural, 37, 7)." <br>";
+            // echo substr($oEstruturalDotacaoEnviada->dl_estrutural, 1, 43)." <br>".substr($oEstruturalSupl->dl_estrutural, 1, 43);exit;
+            if (substr($oEstruturalDotacaoEnviada->dl_estrutural, 37, 7) != substr($oEstruturalSupl->dl_estrutural, 37, 7) || (substr($oEstruturalDotacaoEnviada->dl_estrutural, 0, 43) == substr($oEstruturalSupl->dl_estrutural, 0, 43))){
+                    $sqlerro = true;
+                    db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                    $limpa_dados = false;
+            }
+        }
     }
 
     if($tiposup == 1020 || $tiposup == 1021 || $tiposup == 1022){
@@ -459,7 +529,7 @@ if(isset($incluir)){
               AND o58_anousu = ".db_getsession('DB_anousu')."
               ";
 
-        if(pg_num_rows(db_query($sSqlestrututural))>0){
+        if(pg_num_rows(db_query($sSqlestrututural))>0 && db_getsession('DB_anousu') < 2023){
             $oEstruturalSupl = db_query($sSqlestrututural);
             $oEstruturalSupl = db_utils::fieldsMemory($oEstruturalSupl);
 
@@ -476,6 +546,29 @@ if(isset($incluir)){
             }
 
             if( $tiposup == 1022 && (substr($oEstruturalDotacaoEnviada->dl_estrutural,0,5).substr($oEstruturalDotacaoEnviada->dl_estrutural,13,29) != (substr($oEstruturalSupl->dl_estrutural,0,5).substr($oEstruturalSupl->dl_estrutural,13,29)))){
+                $sqlerro = true;
+                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                $limpa_dados = false;
+            }
+        }
+
+        if(pg_num_rows(db_query($sSqlestrututural))>0 && db_getsession('DB_anousu') > 2022){
+            $oEstruturalSupl = db_query($sSqlestrututural);
+            $oEstruturalSupl = db_utils::fieldsMemory($oEstruturalSupl);
+
+            if( $tiposup == 1020 && (substr($oEstruturalDotacaoEnviada->dl_estrutural,0,28).substr($oEstruturalDotacaoEnviada->dl_estrutural,30,14) != (substr($oEstruturalSupl->dl_estrutural,0,28).substr($oEstruturalSupl->dl_estrutural,30,14)))){
+                $sqlerro = true;
+                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                $limpa_dados = false;
+            }
+            
+            if( $tiposup == 1021 && (substr($oEstruturalDotacaoEnviada->dl_estrutural,0,26).substr($oEstruturalDotacaoEnviada->dl_estrutural,28,16) != (substr($oEstruturalSupl->dl_estrutural,0,26).substr($oEstruturalSupl->dl_estrutural,28,16)))){
+                $sqlerro = true;
+                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
+                $limpa_dados = false;
+            }
+
+            if( $tiposup == 1022 && (substr($oEstruturalDotacaoEnviada->dl_estrutural,0,5).substr($oEstruturalDotacaoEnviada->dl_estrutural,13,31) != (substr($oEstruturalSupl->dl_estrutural,0,5).substr($oEstruturalSupl->dl_estrutural,13,31)))){
                 $sqlerro = true;
                 db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
                 $limpa_dados = false;
@@ -544,6 +637,15 @@ if ($clorcsuplemval->numrows > 0 ){
 
 // --------------------------------------
 
+// --------------------------------------
+// calcula total das reduções
+$oSuplementacao = new Suplementacao($o46_codsup);
+$soma_suplem    = $oSuplementacao->getvalorSuplementacao();
+// 
+$soma_reduz = db_formatar($soma_reduz,"f");
+$totalSuplemRec = db_formatar($soma_suplem - abs($soma_reduz),"f");
+$soma_suplem = db_formatar($soma_suplem,"f");
+
 ?>
     <html>
     <head>
@@ -570,6 +672,7 @@ if ($clorcsuplemval->numrows > 0 ){
 <?
 
 if(isset($incluir) || isset($alterar) || isset($excluir)){
+    
     if($clorcsuplemval->erro_status=="0"){
         $clorcsuplemval->erro(true,false);
         $db_botao=true;

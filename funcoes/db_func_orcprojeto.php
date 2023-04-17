@@ -25,6 +25,6 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos  = "distinct orcprojeto.o39_codproj, orcprojeto.o39_descr, orcprojeto.o39_numero, orcprojeto.o39_data, orcprojeto.o39_anousu as db_o39_anousu, ";
-$campos .= "case when o51_codproj is  null then 'Aberto' else 'Fechado' end as dl_Situacao ";
-?>
+ $campos  = "distinct orcprojeto.o39_codproj, orcprojeto.o39_descr, orcprojeto.o39_numero, orcprojeto.o39_data, orcprojeto.o39_anousu as db_o39_anousu, o39_tiposuplementacao,";
+ $campos .= "case when o51_codproj is  null then 'Aberto' else 'Fechado' end as dl_Situacao ";
+ ?>

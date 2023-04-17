@@ -209,7 +209,20 @@ $clrotulo->label("o15_codigo");
             }
 
             $('retorno').innerHTML = sRetorno;
-        } else {
+        }else if (oRetorno.status == 3){
+            alert("Não há decretos a serem gerados no período informado!");
+            var sRetorno = "<b>Arquivos Gerados:</b><br>";
+            for (var i = 0; i < oRetorno.itens.length; i++) {
+
+                with (oRetorno.itens[i]) {
+
+                    sRetorno += "<a  href='db_download.php?arquivo="+caminho+"'>"+nome+"</a><br>";
+                }
+            }
+
+            $('retorno').innerHTML = sRetorno;
+        } 
+        else {
 
             $('retorno').innerHTML = '';
             alert("Houve um erro no processamento!" + oRetorno.message.urlDecode());
