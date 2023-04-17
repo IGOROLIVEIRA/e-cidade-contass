@@ -2415,9 +2415,12 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.somaAditamentos = () => {
         const tdLista = document.body.querySelectorAll("#oGridItensbody tbody td:nth-child(11)");
-        let soma = 0;
+        soma = 0.0;
         for (let count = 0; count < tdLista.length; count++) {
-            let valorTd = parseFloat(tdLista[count].textContent);
+            let valorMonetario = tdLista[count].textContent;
+            valorMonetario = valorMonetario.replace(".","");
+            valorMonetario = valorMonetario.replace(",",".");
+            let valorTd = parseFloat(valorMonetario);
             if (!tdLista[count].textContent) {
                 valorTd = 0.0;
             }
