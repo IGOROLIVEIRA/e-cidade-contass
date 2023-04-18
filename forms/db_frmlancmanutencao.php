@@ -1,33 +1,7 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
- */
 
-//MODULO: patrim
-
-
+db_app::load("scripts.js, strings.js, prototype.js,datagrid.widget.js, widgets/dbautocomplete.widget.js");
+db_app::load("widgets/windowAux.widget.js");
 
 ?>
 <form class="container" style="width: 600px;" name="form1" method="post" action="<?= $db_action ?>">
@@ -35,20 +9,20 @@
     <legend>Manutenção</legend>
     <table class="form-container">
       <tr>
-        <td nowrap title="<?= @$Tt93_codtran ?>">
-          Código:
+        <td>
+          <? db_ancora("Código", "js_pesquisa_bem(true);", 1); ?>
         </td>
         <td>
           <?
-          db_input('t93_codtran', 8, $It93_codtran, true, 'text', 1, "");
-          db_input('t93_codtran', 40, $It93_codtran, true, 'text', 1, 'style="width: 303px;"');
+          db_input('t52_bem', 8, 1, true, 'text', 1, "onchange='js_pesquisa_bem(false)'");
+          db_input('t52_descr', 40, 3, true, 'text', 1, 'style="width: 303px;"');
 
           ?>
         </td>
       </tr>
       <tr>
         <td nowrap title="<?= @$Tt93_id_usuario ?>">
-          Placa:
+          <? db_ancora("Placa", "js_pesquisa_bem(true);", 1); ?>
         </td>
         <td>
           <?
@@ -56,11 +30,11 @@
           ?>
           <b> Vlr Aquisição: </b>
           <?
-          db_input('t93_id_usuario', 8, $It93_id_usuario, true, 'text', 3, "");
+          db_input('t52_valaqu', 8, '', true, 'text', 3, "");
           ?>
           <b> Vlr Atual: </b>
           <?
-          db_input('t93_id_usuario', 8, $It93_id_usuario, true, 'text', 3, "");
+          db_input('t44_valoratual', 8, '', true, 'text', 3, "");
           ?>
         </td>
 
@@ -75,7 +49,7 @@
           <?
           $tiposmanutencao  = array('Selecione', 'Acréscimo de valor', 'Decréscimo de valor', 'Adição de componente', 'Remoção de componente', 'Manunteção de Imóvel');
 
-          db_select('preferencia_menu', $tiposmanutencao, true, 1, 'style="width: 80px;"');          ?>
+          db_select('tipo_manutencao', $tiposmanutencao, true, 1, 'style="width: 80px;"');          ?>
         </td>
       </tr>
       <tr>
@@ -100,8 +74,8 @@
         </td>
         <td>
           <?
-          db_input('t93_codtran', 8, $It93_codtran, true, 'text', 3, "");
-          db_input('t93_codtran', 40, $It93_codtran, true, 'text', 3, "");
+          db_input('t52_depart', 8, 1, true, 'text', 3, "");
+          db_input('descrdepto', 40, 3, true, 'text', 3, "");
 
           ?>
         </td>
@@ -120,7 +94,7 @@
         </td>
         <td>
           <?
-          db_input('t93_codtran', 8, $It93_codtran, true, 'text', 1, "");
+          db_input('t93_codtran', 8, 1, true, 'text', 1, "");
 
           ?>
         </td>
@@ -134,94 +108,46 @@
 
 </form>
 <script>
-  function ver_depto_destino() {
-    if (document.form1.t94_depart.value == "" || document.form1.t94_depart.value == null) {
+  oAutoComplete = new dbAutoComplete(document.getElementById('t52_descr'), 'com4_pesquisabem.RPC.php');
+  oAutoComplete.setTxtFieldId(document.getElementById('t52_bem'));
+  oAutoComplete.show();
 
-      alert(_M("patrimonial.patrimonio.db_frmbenstransf.infrome_departamento"));
-      document.form1.t94_depart.style.backgroundColor = '#99A9AE';
-      document.form1.t94_depart.focus();
-      return false;
-    } else {
-      document.form1.t94_depart.style.backgroundColor = '';
-      return true;
-    }
-  }
 
-  function js_pesquisat94_depart(mostra) {
+  function js_pesquisa_bem(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo.iframe_benstransf', 'db_iframe_depart', 'func_db_depart.php?funcao_js=parent.js_mostradb_depart1|coddepto|descrdepto&chave_t93_depart=' + document.form1.t93_depart.value + '&db_param=<?= ($db_param) ?>', 'Pesquisa', true);
+      js_OpenJanelaIframe('', 'db_iframe_bens', 'func_benslancmanutencao.php?opcao=todos&funcao_js=parent.js_mostrabem1|t52_bem|t52_descr|t44_valoratual|t52_depart|descrdepto|t52_valaqu', 'Pesquisa', true);
     } else {
-      if (document.form1.t94_depart.value != '') {
-        js_OpenJanelaIframe('top.corpo.iframe_benstransf', 'db_iframe_depart', 'func_db_depart.php?pesquisa_chave=' + document.form1.t94_depart.value + '&funcao_js=parent.js_mostradb_depart&chave_t93_depart=' + document.form1.t93_depart.value + '&db_param=<?= ($db_param) ?>', 'Pesquisa', false);
+      if (document.form1.t52_bem.value != '') {
+        js_OpenJanelaIframe('', 'db_iframe_bens', 'func_benslancmanutencao.php?opcao=todos&pesquisa_chave=' + document.form1.t52_bem.value + '&funcao_js=parent.js_mostrabem', 'Pesquisa', false);
       } else {
-        document.form1.t94_depart.value = '';
+        document.form1.t52_descr.value = '';
       }
     }
   }
 
-  function js_mostradb_depart(chave, erro) {
-    document.form1.depto_destino.value = chave;
+  function js_mostrabem(t52_descr, t44_valoratual, t52_depart, descrdepto, t52_valaqu, erro) {
     if (erro == true) {
-      document.form1.t94_depart.focus();
-      document.form1.t94_depart.value = '';
-    }
-  }
-
-  function js_mostradb_depart1(chave1, chave2) {
-    document.form1.t94_depart.value = chave1;
-    document.form1.depto_destino.value = chave2;
-    db_iframe_depart.hide();
-  }
-
-  function js_pesquisat93_depart(mostra) {
-    if (mostra == true) {
-      js_OpenJanelaIframe('top.corpo.iframe_benstransf', 'db_iframe_depart', 'func_db_depart.php?funcao_js=parent.js_mostradb_depart1t93_depart|coddepto|descrdepto&chave_t93_depart=' + document.form1.t93_depart.value + '&db_param=<?= ($db_param) ?>', 'Pesquisa', true);
-    } else {
-      if (document.form1.t93_depart.value != '') {
-        js_OpenJanelaIframe('top.corpo.iframe_benstransf', 'db_iframe_depart', 'func_db_depart.php?pesquisa_chave=' + document.form1.t93_depart.value + '&funcao_js=parent.js_mostradb_departt93_depart&chave_t93_depart=' + document.form1.t93_depart.value + '&db_param=<?= ($db_param) ?>', 'Pesquisa', false);
-      } else {
-        document.form1.t93_depart.value = '';
-      }
-    }
-  }
-
-  function js_mostradb_departt93_depart(chave, erro) {
-    document.form1.descrdepto.value = chave;
-    if (erro == true) {
-      document.form1.t93_depart.focus();
+      document.form1.t52_bem.focus();
+      document.form1.t52_descr.value = t52_descr;
+      document.form1.t52_bem.value = '';
+      document.form1.t44_valoratual.value = '';
+      document.form1.t52_depart.value = '';
       document.form1.descrdepto.value = '';
-    }
-  }
-
-  function js_mostradb_depart1t93_depart(chave1, chave2) {
-    document.form1.t93_depart.value = chave1;
-    document.form1.descrdepto.value = chave2;
-    db_iframe_depart.hide();
-  }
-
-  function js_pesquisa() {
-    js_OpenJanelaIframe('top.corpo.iframe_benstransf', 'db_iframe_benstransf', 'func_benstransf001.php?funcao_js=parent.js_preenchepesquisa|t93_codtran&t93=true&db_param=<?= ($db_param) ?>&transfdireta=<?= $transfdireta ?>', 'Pesquisa', true);
-  }
-
-  function js_preenchepesquisa(chave) {
-    db_iframe_benstransf.hide();
-    <?
-    if ($db_opcao != 1) {
-      echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave+'&db_param=$db_param'";
-    }
-    ?>
-  }
-
-  function js_imprime() {
-    let param = "<?= $db_param ?>";
-
-    if (param != 'ext' && param == 'int') {
-      jan = window.open('pat2_relbenstransf002.php?t96_codtran=' + document.form1.t93_codtran.value + '&texto_info=true', '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
-      jan.moveTo(0, 0);
+      document.form1.t52_valaqu.value = '';
     } else {
-      jan = window.open('pat2_relbenstransf002.php?t96_codtran=' + document.form1.t93_codtran.value, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
-      jan.moveTo(0, 0);
-      forms / db_frmbenstransfcodigolote.php
+      document.form1.t52_descr.value = t52_descr;
+      document.form1.t44_valoratual.value = js_formatar(t44_valoratual, "f", 2);
+      document.form1.t52_depart.value = t52_depart;
+      document.form1.descrdepto.value = descrdepto;
+      document.form1.t52_valaqu.value = js_formatar(t52_valaqu, "f", 2);
     }
+
+
+  }
+
+  function js_mostrabem1(t52_bem, t52_descr, t44_valoratual, t52_depart, descrdepto, t52_valaqu) {
+    document.form1.t52_bem.value = t52_bem;
+    document.form1.t52_descr.value = t52_descr;
+    db_iframe_bens.hide();
   }
 </script>

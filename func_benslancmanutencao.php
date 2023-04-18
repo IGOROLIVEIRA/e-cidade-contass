@@ -159,137 +159,56 @@ charset=iso-8859-1">
         $campos = "distinct $campos";
         if (!isset($pesquisa_chave)) {
 
+
+          $where = "";
+
+
           if (isset($t64_class) && trim($t64_class) != "") {
             //rotina q retira os pontos do estrutural da classe e busca o código do estrutural na tabela clabens
             $t64_class = str_replace(".", "", $t64_class);
-            $result_t64_codcla = $clclabens->sql_record($clclabens->sql_query_file(null, "t64_codcla as chave_t64_codcla", null, " t64_class = '$t64_class' "));
-            if ($clclabens->numrows > 0) {
-              db_fieldsmemory($result_t64_codcla, 0);
-            } else {
-              $chave_t64_codcla = 'NDA';
-            }
+            $where = " and t64_class = '$t64_class'";
+          }
+
+          if (isset($chave_t52_bem) && trim($chave_t52_bem)) {
+            $where .= " and t52_bem = '$chave_t52_bem'";
+          }
+
+          if (isset($chave_t52_descr) && trim($chave_t52_descr)) {
+            $where .= " and t52_descr like '$chave_t52_descr%'";
           }
 
           if (isset($descrdepto) && trim($descrdepto) != "") {
-
-            //rotina q busca o código do departamento
-            $result_descrdepto = $cldb_depart->sql_record($cldb_depart->sql_query_div(null, "coddepto", null, " descrdepto like '$descrdepto%' and db_depart.instit = " . db_getsession("DB_instit")));
-            $where = "";
-
-            if ($cldb_depart->numrows > 0) {
-
-              for ($i = 0; $i < $cldb_depart->numrows; $i++) {
-                db_fieldsmemory($result_descrdepto, $i);
-                $chave_coddepto[$i] = $coddepto;
-              }
-              $or = "";
-
-              for ($i = 0; $i < sizeof($chave_coddepto); $i++) {
-                $where .= $or . " t52_depart =$chave_coddepto[$i] ";
-                $or = " or ";
-              }
-            } else {
-              $where = 'NDA';
-            }
+            $where .= " and descrdepto like '$descrdepto%'";
           }
 
-          if (isset($chave_t52_bem) && trim($chave_t52_bem) != "") {
-            $sql = $clbens->sql_query(null, $campos, "t52_bem", "t52_bem = $chave_t52_bem $where_instit $where_baixado");
-          } else if (isset($chave_t52_ident) && (trim($chave_t52_ident) != "")) {
-            $sql = $clbens->sql_query(null, $campos, "t52_ident", "t52_ident like '$chave_t52_ident' $where_instit $where_baixado");
-          } else if (isset($chave_t64_codcla) && (trim($chave_t64_codcla) != "")) {
-            if ($chave_t64_codcla == 'NDA') {
-              $sql = $clbens->sql_query("", $campos, "", " t52_codcla = -1 $where_instit $where_baixado");
-            } else {
-              $sql = $clbens->sql_query("", $campos, "", " t52_codcla = $chave_t64_codcla $where_instit $where_baixado");
-            }
-          } else if (isset($chave_t52_descr) && (trim($chave_t52_descr) != "")) {
-            $sql = $clbens->sql_query("", $campos, "t52_descr", " t52_descr like '$chave_t52_descr%' $where_instit $where_baixado");
-          } else if (isset($chave_depto)) {
-
-            if (trim($chave_depto) != "") {
-              $dbwhere = "t52_depart = $chave_depto";
-            }
-
-            if (isset($departamentos) && trim($departamentos) != "") {
-              $dbwhere = "t52_depart in $departamentos";
-            }
-
-            if (isset($chave_div) && trim($chave_div) != "") {
-              $dbwhere .= " and t33_divisao = $chave_div";
-            }
-
-            if (isset($divisoes) && trim($divisoes) != "") {
-              $dbwhere = "t33_divisao in $divisoes";
-            }
-
-            $sql = $clbens->sql_query("", $campos, "t52_bem#t52_descr", "$dbwhere $where_instit $where_baixado");
-          } else if (isset($where) && (trim($where) != "")) {
-            if ($where == 'NDA') {
-              $sql = $clbens->sql_query("", $campos, "", " t52_depart = -1 $where_instit $where_baixado");
-            } else {
-              $sql = $clbens->sql_query("", $campos, "", "$where $where_instit $where_baixado");
-            }
-          } else {
-            if (isset($pesquisar) && trim($pesquisar) != "") {
-              $sql = $clbens->sql_query("", $campos, "t52_bem", "t52_instit = " . db_getsession("DB_instit") . " " . $where_baixado);
-            }
+          if (isset($chave_t52_ident) && trim($chave_t52_ident) != "") {
+            $where .= " and t52_ident =  '$chave_t52_ident'";
           }
 
-          db_lovrot(@$sql, 15, "()", "", $funcao_js);
+
+          $sql = "select bens.t52_bem, bens.t52_codcla, bens.t52_numcgm, bens.t52_valaqu, bens.t52_dtaqu,
+            bens.t52_ident, bens.t52_descr, bens.t52_obs, bens.t52_depart, bens.t52_instit, bens.t52_bensmarca,
+            bens.t52_bensmedida, bens.t52_bensmodelo, case when exists (select 1 from bensbaix where bensbaix.t55_codbem = t52_bem)
+            then 'Baixado'::varchar else 'Ativo'::varchar end as dl_Situação,t44_valoratual,descrdepto from bens join bensdepreciacao on t52_bem = t44_bens
+            inner join db_depart on coddepto = t52_instit where 1=1 $where";
+
+
+          db_lovrot($sql, 15, "()", "", $funcao_js);
         } else {
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
 
-            if (isset($chave_coddepto) && (trim($chave_descrdepto) != "")) {
 
-              $sql    = $clbens->sql_query("", $campos, "", "t52_depart = $pesquisa_chave $where_instit $where_baixado");
-              $result = $clbens->sql_record($sql);
-            } else if (isset($chave_deptos) && (trim($chave_deptos) != "")) {
+            $sql = "select * from bens join bensdepreciacao on t52_bem = t44_bens
+            inner join db_depart on coddepto = t52_instit where t52_bem =
+            $pesquisa_chave and t52_instit = " . db_getsession("DB_instit");
 
-              $where_baixado = " and not exists ( select 1 from bensbaix where bensbaix.t55_codbem = t52_bem )";
+            $rsBem = db_query($sql);
 
-              if (trim($chave_deptos) != "") {
-                $dbwhere = "t52_depart in ($chave_deptos)";
-              }
-
-              if (isset($chave_divs) && trim($chave_divs) != "") {
-                $dbwhere .= " and t33_divisao in ($chave_divs)";
-              }
-
-              $sql    = $clbens->sql_query("", $campos, "", "t52_bem = $pesquisa_chave and " . $dbwhere . " and t52_instit = " . db_getsession("DB_instit") . " " . $where_baixado);
-              $result = $clbens->sql_record($sql);
-              //echo "<script> alert($sql)</script>";
+            if (pg_num_rows($rsBem) != 0) {
+              db_fieldsmemory($rsBem, 0);
+              echo "<script>" . $funcao_js . "('$t52_descr','$t44_valoratual','$t52_depart','$descrdepto','$t52_valaqu',false);</script>";
             } else {
-
-              if (!isset($lRetornoPlaca)) {
-
-                $sql    = $clbens->sql_query(null, $campos, "", "t52_bem = $pesquisa_chave and t52_instit = " . db_getsession("DB_instit") . " " . $where_baixado);
-                $result = $clbens->sql_record($sql);
-              } else {
-
-                $sql    = $clbens->sql_query(null, $campos, "", "t52_ident = '{$pesquisa_chave}' and t52_instit = " . db_getsession("DB_instit"));
-                $result = $clbens->sql_record($sql);
-              }
-            }
-
-            if (!isset($lRetornoPlaca)) {
-
-              if ($clbens->numrows != 0) {
-
-                db_fieldsmemory($result, 0);
-                echo "<script>" . $funcao_js . "('$t52_descr',false);</script>";
-              } else {
-                echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
-              }
-            } else {
-
-              if ($clbens->numrows != 0) {
-
-                db_fieldsmemory($result, 0);
-                echo "<script>" . $funcao_js . "('$t52_ident',false,'$t52_descr');</script>";
-              } else {
-                echo "<script>" . $funcao_js . "('', true);</script>";
-              }
+              echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrada','','','','',true);</script>";
             }
           } else {
             echo "<script>" . $funcao_js . "('',false);</script>";
