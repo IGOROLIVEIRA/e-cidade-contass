@@ -204,7 +204,7 @@ $head5 = "DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO";
 $pdf = new PDF();
 $pdf->Open();
 $pdf->AliasNbPages();
-$pdf->SetAutoPageBreak(false);
+$pdf->SetAutoPageBreak(true);
 $pdf->SetTextColor(0,0,0);
 $pdf->SetFillColor(235);
 $pdf->addpage('P');
@@ -261,6 +261,3 @@ $pdf->cell(95,5,"Serviço Contábil"                                        ,0,0,"
 $pdf->cell(95,5,"Serviço Financeiro"                                      ,0,0,"C",0);
 
 $pdf->Output();
-
-
-?>
