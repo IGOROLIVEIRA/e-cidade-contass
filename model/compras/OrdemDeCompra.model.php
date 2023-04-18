@@ -452,6 +452,20 @@ class OrdemDeCompra {
     $oDaoOrdemItemTabela->l223_codordem = null;
     $oDaoOrdemItemTabela->incluir();
   }
+  public function addItensTabela($item){
+    
+    $oDaoOrdemItemTabela  = new cl_empordemtabela;
+    $oDaoOrdemItemTabela->l223_pcmaterordem = $item->item;
+    $oDaoOrdemItemTabela->l223_pcmatertabela = $item->sequencia;
+    $oDaoOrdemItemTabela->l223_descr = $item->descricao;
+    $oDaoOrdemItemTabela->l223_quant = $item->quantidade;
+    $oDaoOrdemItemTabela->l223_vlrn = $item->vlrn;
+    $oDaoOrdemItemTabela->l223_total = $item->total;
+    $oDaoOrdemItemTabela->l223_numemp = $item->empenho;
+    $oDaoOrdemItemTabela->l223_descr = $item->descricao;
+    $oDaoOrdemItemTabela->l223_codordem = $item->ordem;
+    $oDaoOrdemItemTabela->incluir();
+  }
 
   public function alterarItemTabela($item){
     
@@ -508,8 +522,39 @@ class OrdemDeCompra {
   public function alterarItemTabelaCadastrado($item){
     
     
-    $sqlOrdemItemTabela  = "update empordemtabela set l223_quant = $item->quantidade, l223_vlrn = $item->vlrn, l223_total = $item->total where l223_pcmatertabela = $item->sequencia and l223_pcmaterordem = $item->item and l223_codordem = $item->ordem";
+    $sqlOrdemItemTabela  = "update empordemtabela set l223_descr = '$item->descricao', l223_quant = $item->quantidade, l223_vlrn = $item->vlrn, l223_total = $item->total where l223_pcmatertabela = $item->sequencia and l223_pcmaterordem = $item->item and l223_codordem = $item->ordem";
+    
     db_query($sqlOrdemItemTabela);
+    return true;
+  }
+
+  public function excluirItemTabelaCadastrado($item){
+    
+    
+    $sqlOrdemItemTabela  = "delete from empordemtabela where l223_pcmatertabela = $item->sequencia and l223_pcmaterordem = $item->item and l223_codordem = $item->ordem";
+   
+    db_query($sqlOrdemItemTabela);
+    $oDaoOrdemItemTabela  = new cl_empordemtabela;
+    $sqlOrdemItemTabela  = "select * from empordemtabela where l223_codordem = $item->ordem order by l223_pcmatertabela ASC";
+    $rsOrdemItemTabela = $oDaoOrdemItemTabela->sql_record($sqlOrdemItemTabela);
+    
+    if (count($rsOrdemItemTabela) > 0) {
+      
+      $iTotalItens    = $oDaoOrdemItemTabela->numrows;
+      for ($iRowItem = 0; $iRowItem < $iTotalItens; $iRowItem++) {
+
+        
+
+        $oDadosOrdemItemTabela  = db_utils::fieldsMemory($rsOrdemItemTabela, $iRowItem);
+
+        $seq = $iRowItem +1;
+
+        $sqlOrdemItemTabela  = "update empordemtabela set l223_pcmatertabela = $seq where l223_sequencial = $oDadosOrdemItemTabela->l223_sequencial and l223_codordem = $item->ordem";
+         
+        db_query($sqlOrdemItemTabela);
+
+      }
+    }
     return true;
   }
 

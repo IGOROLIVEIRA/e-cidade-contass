@@ -350,7 +350,11 @@ if ($lBloquear) {
                     $sSQLemp  = "select e60_numemp, ";
                     $sSQLemp .= "       e60_codemp, ";
                     $sSQLemp .= "       e62_item, ";
-                    $sSQLemp .= "       pc01_descrmater, ";
+                    $sSQLemp .= "       (pc01_descrmater || ' - ' ||
+                    (case when pc01_complmater is null
+                    or pc01_complmater = pc01_descrmater then ''
+                    else pc01_complmater
+                  end)) as pc01_descrmater, ";
                     $sSQLemp .= "       e62_sequen, ";
                     $sSQLemp .= "	      e62_descr, ";
                     $sSQLemp .= "	      e62_vlrun, ";
@@ -454,7 +458,7 @@ if ($lBloquear) {
 
                       // Item
                       if($pc01_tabela == 1){
-                        echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' onclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)' style='color:blue'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
+                        echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' onclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)' style='color: rgb(0, 102, 204);'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
                       }else{
                         echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' onclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
                       }
@@ -600,7 +604,7 @@ if ($lBloquear) {
                       </td>
                       <td nowrap>
                         <?
-                        db_input('pc16_codmater', 8, $Ipc16_codmater, true, 'text', 1, " onchange='js_pesquisapc16_codmater(false);'");
+                        db_input('pc16_codmater', 8, $Ipc16_codmater, true, 'text', 1, "");
                         db_input('pc01_descrmater', 50, $Ipc01_descrmater, true, 'text', 1, '');
                         echo "<b>Quantidade<b>";
                         db_input('l223_quant', 5, 0, true, 'text', 1, "onchange='js_calculatotal();'");

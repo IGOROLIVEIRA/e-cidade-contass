@@ -166,8 +166,9 @@ if (isset($oPost->incluir)){
     
     $sSqlTab    = "select sum(l223_total) as totaltabela from empordemtabela where l223_numemp = $oEmpItem->e62_numemp and l223_pcmaterordem = $oEmpItem->e62_item and l223_codordem = 0";
     $rsTabItem  = $clempempitem->sql_record($sSqlTab);
-    if ($clempempitem->numrows == 1) {
-      $oTabItem = db_utils::fieldsMemory($rsTabItem, 0);
+    $oTabItem = db_utils::fieldsMemory($rsTabItem, 0);
+    if ($clempempitem->numrows == 1 && $oTabItem->totaltabela > 0) {
+      
       $sValor         = "valor{$oPost->itensOrdem[$i]}";
       $nValor   = DBNumber::round($oPost->$sValor,2);
               

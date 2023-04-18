@@ -161,6 +161,23 @@ try {
       
     break;
 
+    case "adicionarItensOrdemTabela" :
+
+
+
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+      foreach ($oParam->itens as $oItens) {
+        $oItens->descricao = db_stdClass::normalizeStringJsonEscapeString($oItens->descricao);
+
+        $oOrdemCompraItemTabela->addItensTabela($oItens);
+        $oRetorno->ordem = $oItens->ordem;
+      }
+
+      
+      
+      
+    break;
+
     case "buscaItemOrdemTabela" :
 
       $oOrdemCompraItemTabela = new OrdemDeCompra();
@@ -223,6 +240,25 @@ try {
   
 
         $oOrdemCompraItemTabela->alterarItemTabelaCadastrado($oItens);
+
+        $oRetorno->ordem = $oItens->ordem;
+
+      }
+
+      
+
+    break;
+
+    case "excluirItensOrdemTabela" :
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+
+    
+      
+      foreach ($oParam->itens as $oItens) {
+        
+  
+
+        $oOrdemCompraItemTabela->excluirItemTabelaCadastrado($oItens);
 
         $oRetorno->ordem = $oItens->ordem;
 

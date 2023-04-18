@@ -110,6 +110,11 @@ $clrotulo->label("e62_descr");
                                 <b>Itens</b>
                             </legend>
                             <table style='border:2px inset white' width='100%' cellspacing='0'>
+                            <tr id='tabela'>
+                 
+                    <b>Para detalhamento dos itens da tabela clique sobre a descrição do item.</b>
+                 
+                </tr>
                                 <?
 
                                 if (isset($m51_codordem) && $m51_codordem != "") {
@@ -302,12 +307,19 @@ $clrotulo->label("e62_descr");
 													    <small>
 													        <input id ='coditem_" . $i . "' class ='input__static' value='" . $e62_item . "' disabled></input>
 													    </small>
-                                                    </td>
-													<td	class='linhagrid' align='center' ondblclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela,$i)'>
+                                                    </td>";
+                                                    if($pc01_tabela == 1){
+                                                        echo "<td	class='linhagrid' align='center' onclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela,$i)' style='color: rgb(0, 102, 204);'>
 													    <small>$pc01_descrmater</small>
-                                                    </td>
-
-													<td	class='linhagrid' nowrap align='left' title='$m61_abrev'>
+                                                    </td>";
+                                                      }else{
+                                                        echo "<td	class='linhagrid' align='center' onclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela,$i)'>
+													    <small>$pc01_descrmater</small>
+                                                    </td>";
+                                                      }
+													
+                                                    
+												echo"	<td	class='linhagrid' nowrap align='left' title='$m61_abrev'>
 													    <small>" . (isset($m61_abrev) ? $m61_abrev : '-') . "</small>
                                                     </td>";
 
@@ -477,6 +489,15 @@ $clrotulo->label("e62_descr");
                                             echo "   <td class='linhagrid' nowrap align='left' title='$e62_item'>
                                                     <small>$e62_item</small>
                                                  </td>";
+                                                 if($pc01_tabela == 1){
+                                                    echo "   <td class='linhagrid' align='center' title='$pc01_descrmater' ondblclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)' style='color:blue'>
+                                                    <small>$pc01_descrmater</small>
+                                                 </td>";
+                                                  }else{
+                                                    echo "   <td class='linhagrid' align='center' title='$pc01_descrmater' ondblclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'>
+                                                    <small>$pc01_descrmater</small>
+                                                 </td>";
+                                                  }
                                             echo "   <td class='linhagrid' align='center' title='$pc01_descrmater' ondblclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'>
                                                     <small>$pc01_descrmater</small>
                                                  </td>";
@@ -629,6 +650,13 @@ $clrotulo->label("e62_descr");
                                     
                                 
                                         echo " <tr id='itenstabela{$e62_item}' style='display:none;'>";
+                                        if (isset($m51_codordem) && $m51_codordem != "") {
+
+                                            $resultItem = $clempordemtabela->sql_record($clempordemtabela->sql_query(null, "*", "l223_pcmatertabela", "l223_codordem=$m51_codordem and l223_pcmaterordem=$e62_item"));
+
+                                            $numrowstabela = $clempordemtabela->numrows;
+                                            $sequencia = $numrowstabela +1;
+                                        }
                                         ?>
                                             <td colspan="12">
                                                 <div >
@@ -636,6 +664,37 @@ $clrotulo->label("e62_descr");
                                                     <legend><b>Alterar Item Tabela</b></legend>
                                                     
                                                     <table width='100%'>
+                                                    <tr>
+                                                        <td colspan="7">
+                                                            <?
+                                                            db_ancora("Código do material", "js_pesquisapc16_codmater(true);", 1);
+                                                            ?>
+                                                        
+                                                            <?
+                                                            db_input('codmatertabela', 8, $Ipc16_codmater, true, 'text', 1, "");
+                                                            db_input('descrmater', 50, $Ipc01_descrmater, true, 'text', 1, '');
+                                                            echo "<b>Quantidade<b>";
+                                                            db_input('l223_quant', 5, 0, true, 'text', 1, "onchange='js_calculatotal();'");
+                                                            echo "<b>Unitário<b>";
+                                                            db_input('l223_vlrn', 5, 0, true, 'text', 1, "onchange='js_calculatotal();'");
+                                                            echo "<b>Total<b>";
+                                                            db_input('l223_total', 5, 0, true, 'text', 3, '');
+                                                            db_input('codempenho', 5, 0, true, 'text', 3, '');
+                                                            db_input('sequencia', 5, 0, true, 'text', 3, '');
+                                                            db_input('sequencia_nova', 5, 0, true, 'text', 3, '');
+                                                            db_input('m51_codordem', 5, 0, true, 'text', 3, '');
+                                                            db_input('coditemordemtabela', 5, 0, true, 'text', 3, '');
+                                                            ?>
+                                                        </td>
+                                                        </tr>
+                                                        <tr>
+                                                        <td colspan="7" style="text-align: center;">
+                                                            <input type="button" value='Adicionar Item' id='btnAddItem'>
+                                                            <input type="button" value='Alterar Item' id='btnAlterarItem' style="display:none;">
+                                                            <input type="button" value='Novo Item' id='btnNovoItem' style="display:none;">
+                                                            <input type="button" value='Excluir Item' id='btnExcluirItem' style="display:none;">
+                                                        </td>
+                                                    </tr>  
                                                         <tr>
                                                             <td>
                                                                 
@@ -643,10 +702,6 @@ $clrotulo->label("e62_descr");
                                                                 <?
                                                                     if (isset($m51_codordem) && $m51_codordem != "") {
 
-                                                                        $resultItem = $clempordemtabela->sql_record($clempordemtabela->sql_query(null, "*", "l223_pcmatertabela", "l223_codordem=$m51_codordem and l223_pcmaterordem=$e62_item"));
-
-                                                                        $numrowstabela = $clempordemtabela->numrows;
-                                                                        
                                                                         if ($numrowstabela > 0) {
 
                                                                             echo "   <tr class='bordas'>";
@@ -659,6 +714,7 @@ $clrotulo->label("e62_descr");
                                                                             echo "     <td class='table_header' align='center'><small><b>Quantidade</b></small></td>";
                                                                             echo "     <td class='table_header' align='center'><small><b>Valor Unitário</b></small></td>";
                                                                             echo "     <td class='table_header' align='center'><small><b>Valor Total</b></small></td>";
+                                                                            echo "     <td class='table_header' align='center'><small><b>Ação</b></small></td>";
                                                                             echo "   </tr>";
                                                                             echo " <tbody id='dadostabela' style='height:150px;width:95%;overflow:scroll;overflow-x:hidden;background-color:white'>";
                                                                         } else {
@@ -712,6 +768,12 @@ $clrotulo->label("e62_descr");
                                                                                     echo "	 <td class='linhagrid' align='center'>";
                                                                                     echo "		 <small>";
                                                                                     db_input("l223_total_$e62_item"."$x", 10, 0, true, 'text', 3);
+                                                                                    echo "		 </small>";
+                                                                                    echo "	 </td>";
+                                                                                    echo "	 <td class='linhagrid' align='center'>";
+                                                                                    echo "		 <small>";
+                                                                                    echo " <input type='button' value='A' onclick='js_alterarLinha($x,$e62_item)'>";
+                                                                                    echo " <input type='button' value='E' onclick='js_excluirLinha($x,$e62_item)'>";
                                                                                     echo "		 </small>";
                                                                                     echo "	 </td>";
                                                                                     echo " </tr>";
@@ -1095,7 +1157,7 @@ $clrotulo->label("e62_descr");
 
         function js_verificatabela(obj,sequencia,empenho,item,acordo,tabela,seq){
         if( document.getElementById('itenstabela'+item).style.display == 'none'){
-            if(tabela == 1 && acordo != "block"){
+            if(tabela == 1){
                 document.getElementById('itenstabela'+item).style.display = '';
                 document.getElementById('vltotal_'+seq).disabled = true;
 
@@ -1107,10 +1169,23 @@ $clrotulo->label("e62_descr");
                             document.getElementById('l223_vlrn_'+item+i).disabled = true;
  
                 }
+                
+                $('descrmater').value = "";
+                $('codempenho').value = empenho;
+                $('coditemordemtabela').value = item;
+                $('btnAddItem').observe("click", js_adicionarItem);
+                $('btnAlterarItem').observe("click", js_alterarItem);
+                $('btnNovoItem').observe("click", js_novoItem);
+                $('btnExcluirItem').observe("click", js_excluirItem);    
+                $('codempenho').style.display = 'none';
+                $('sequencia').style.display = 'none';
+                $('sequencia_nova').style.display = 'none';
+                $('m51_codordem').style.display = 'none';
+                $('coditemordemtabela').style.display = 'none';         
 
             }
         }else{
-            if(tabela == 1 && acordo != ""){
+            if(tabela == 1){
                 let aItens = js_getElementbyClass(form1, 'itensEmpenhoTabela'+sequencia);
                 
                 for (let i = 0; i < aItens.length; i++) {
@@ -1215,11 +1290,203 @@ $clrotulo->label("e62_descr");
                             var oAjax = new Ajax.Request(sUrlRC, {
                             method: "post",
                             parameters: 'json=' + Object.toJSON(oParam),
-                            onComplete: js_retornoadicionarItem
+                            onComplete: js_retornoalterarItem
                             });
             
         }
+
+        function js_pesquisapc16_codmater(mostra) {
+
+            if (mostra == true) {
+            js_OpenJanelaIframe('',
+                'db_iframe_pcmater',
+                '../func_pcmatersolicita.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater',
+                'Pesquisar Materias/Serviços',
+                true,
+                '0'
+            );
+            } else {
+
+            if ($F('codmatertabela') != '') {
+
+                js_OpenJanelaIframe('',
+                'db_iframe_pcmater',
+                '../func_pcmatersolicita.php?pesquisa_chave=' +
+                $F('codmatertabela') +
+                '&funcao_js=parent.js_mostrapcmater',
+                'Pesquisar Materiais/Serviços',
+                false, '0'
+                );
+            } else {
+                $('codmatertabela').value = '';
+            }
+            }
+        }
+
+        function js_mostrapcmater(sDescricaoMaterial, Erro) {
+            $('descrmater').value = sDescricaoMaterial;
+            if (Erro == true) {
+                $('codmatertabela').value = "";
+            }
+        }
+
+        function js_mostrapcmater1(iCodigoMaterial, sDescricaoMaterial) {
+            $('codmatertabela').value = iCodigoMaterial;
+            $('descrmater').value = sDescricaoMaterial;
+            db_iframe_pcmater.hide();
+        }
+        
+        
+        function js_alterarLinha(linha,coditemtabela){
+            $('sequencia_nova').value= $('sequencia').value;
+            $('sequencia').value= linha+1;
+            $('coditemordemtabela').value = coditemtabela;
+            $('codmatertabela').value = linha+1;
+            $('descrmater').value = js_stripTags($('l223_descr_'+coditemtabela+''+linha).innerHTML).replace(/\s/g, "");
+            $('l223_quant').value = new Number($('l223_quant_'+coditemtabela+''+linha).value);
+            $('l223_vlrn').value = new Number($('l223_vlrn_'+coditemtabela+''+linha).value);
+            $('l223_total').value = new Number($('l223_total_'+coditemtabela+''+linha).value);
+            $('btnAddItem').style.display = "none";
+            $('btnExcluirItem').style.display = "none";
+            $('btnAlterarItem').style.display = "";
+            $('btnNovoItem').style.display = "";
+        }
+        function js_novoItem(){
+            $('coditemordemtabela').value = "";
+            $('sequencia').value = $('sequencia_nova').value;
+            $('codmatertabela').value = "";
+            $('descrmater').value = "";
+            $('l223_quant').value = "";
+            $('l223_vlrn').value = "";
+            $('l223_total').value = "";
+            $('descrmater').disabled = false;
+            $('l223_quant').disabled = false;
+            $('l223_vlrn').disabled = false;
+            $('l223_total').disabled = false;
+            $('btnAddItem').style.display = "";
+            $('btnAlterarItem').style.display = "none";
+            $('btnNovoItem').style.display = "none";
+            $('btnExcluirItem').style.display = "none";
+        }
+        
+        
+        function js_adicionarItem() {
+
+            if ($F('descrmater') == "") {
+
+            alert('Informe a descrição!');
+            return false;
+
+            }
+            if ($F('l223_quant') == "") {
+
+            alert('Informe a quantidade!');
+            return false;
+
+            }
+            if ($F('l223_vlrn') == "") {
+
+            alert('Informe o valor unitário!');
+            return false;
+
+            }
+            if ($F('l223_total') == 0) {
+
+            alert('Valor total zerado!');
+            return false;
+
+            }
+
+            var aItenss = [];
+            var objitem = {};
+            
+            objitem.ordem = $F('m51_codordem');
+            objitem.descricao = encodeURIComponent(tagString($F('descrmater')));
+            objitem.empenho = $F('codempenho');
+            objitem.item = $F('coditemordemtabela');
+            objitem.sequencia = $F('sequencia');;
+            objitem.quantidade = $F('l223_quant');
+            objitem.vlrn = $F('l223_vlrn');
+            objitem.total = $F('l223_total');             
+            aItenss.push(objitem);
+            
+            
+            
+            
+            js_divCarregando('Aguarde, adicionando item', "msgBox");
+            var oParam = new Object();
+            oParam.itens = aItenss;
+            oParam.exec = "adicionarItensOrdemTabela";
+            var oAjax = new Ajax.Request(sUrlRC, {
+            method: "post",
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_retornoadicionarItem
+            });
+        }
         function js_retornoadicionarItem(oAjax) {
+
+            js_removeObj('msgBox');
+            var oRetorno = eval("(" + oAjax.responseText + ")");
+            if (oRetorno.iStatus == 1) {
+                
+                alert("Usuário: Adicionado(s) item(ns) da Tabela.");
+                window.location ='db_frmmatordemitemaltera.php?m51_codordem='+oRetorno.ordem+'';
+            } else {
+                alert("Usuário: Não concluido as Alterações.");
+            }
+        }
+
+        
+        function js_alterarItem(){
+
+            if ($F('descrmater') == "") {
+
+            alert('Informe o material!');
+            return false;
+
+            }
+            if ($F('l223_quant') == "") {
+
+            alert('Informe a quantidade!');
+            return false;
+
+            }
+            if ($F('l223_vlrn') == "") {
+
+            alert('Informe o valor unitário!');
+            return false;
+
+            }
+            if ($F('l223_total') == 0) {
+
+            alert('Valor total zerado!');
+            return false;
+
+            }
+            
+            var aItenss = [];
+            var objitem = {};
+                                
+            objitem.ordem = $F('m51_codordem');
+            objitem.descricao = encodeURIComponent(tagString($F('descrmater')));
+            objitem.item = $F('coditemordemtabela');
+            objitem.sequencia = $F('sequencia');;
+            objitem.quantidade = $F('l223_quant');
+            objitem.vlrn = $F('l223_vlrn');
+            objitem.total = $F('l223_total');             
+            aItenss.push(objitem);
+            js_divCarregando('Aguarde, alterando item', "msgBox");
+            var oParam = new Object();
+            oParam.itens = aItenss;
+            oParam.exec = "alterarItensOrdemTabela";
+            var oAjax = new Ajax.Request(sUrlRC, {
+            method: "post",
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_retornoalterarItem
+            });
+
+        }
+        function js_retornoalterarItem(oAjax) {
 
             js_removeObj('msgBox');
             var oRetorno = eval("(" + oAjax.responseText + ")");
@@ -1231,6 +1498,116 @@ $clrotulo->label("e62_descr");
                 alert("Usuário: Não concluido as Alterações.");
             }
         }
+
+        function js_excluirItem(){
+            if ($F('codmatertabela') == "") {
+
+            alert('Informe o material!');
+            return false;
+
+            }
+
+            
+            var aItenss = [];
+            var objitem = {};
+                                
+            objitem.ordem = $F('m51_codordem');
+            objitem.item = $F('coditemordemtabela');
+            objitem.sequencia = $F('sequencia');          
+            aItenss.push(objitem);
+            js_divCarregando('Aguarde, excluindo item', "msgBox");
+            var oParam = new Object();
+            oParam.itens = aItenss;
+            oParam.exec = "excluirItensOrdemTabela";
+            var oAjax = new Ajax.Request(sUrlRC, {
+            method: "post",
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_retornoexcluirItem
+            });
+
+        }
+        function js_retornoexcluirItem(oAjax) {
+
+            js_removeObj('msgBox');
+            var oRetorno = eval("(" + oAjax.responseText + ")");
+            if (oRetorno.iStatus == 1) {
+                
+                alert("Usuário: Excluido(s) item(ns) da Tabela.");
+                window.location ='db_frmmatordemitemaltera.php?m51_codordem='+oRetorno.ordem+'';
+            } else {
+                alert("Usuário: Não concluido as Alterações.");
+            }
+        }
+        function js_calculatotal(){
+        quan = $('l223_quant').value;
+        unit =  $('l223_vlrn').value;
+        quan = quan.replace(/,/g, '.');
+        unit = unit.replace(/,/g, '.');
+        let contDot = 0;
+        let novaQuantidade = '';
+        for (cont = 0; cont < quan.length; cont++) {
+
+        if (quan[cont] != '.') {
+            novaQuantidade += quan[cont];
+        } else {
+            contDot += 1;
+            if (contDot > 1) {
+            novaQuantidade += '';
+            } else {
+            novaQuantidade += quan[cont];
+            }
+        }
+        }
+        if (contDot > 1) {
+        alert('Valor Decimal já inserido');
+        }
+        contDot = 0;
+        let novoValorunit = '';
+        for (cont = 0; cont < unit.length; cont++) {
+
+        if (unit[cont] != '.') {
+            novoValorunit += unit[cont];
+        } else {
+            contDot += 1;
+            if (contDot > 1) {
+            novoValorunit += '';
+            } else {
+            novoValorunit += unit[cont];
+            }
+        }
+        }
+
+        if (contDot > 1) {
+        alert('Valor Decimal já inserido');
+        }
+
+        
+        quan = novaQuantidade;
+        unit = novoValorunit;
+        $('l223_quant').value = quan;
+        $('l223_vlrn').value = unit;
+        $('l223_total').value = quan * unit;
+        
+    }
+
+    function js_excluirLinha(linha,coditemtabela){
+        $('sequencia').value= linha+1;
+        $('coditemordemtabela').value = coditemtabela;
+        $('codmatertabela').value = linha+1;
+        $('descrmater').value = js_stripTags($('l223_descr_'+coditemtabela+''+linha).innerHTML).replace(/\s/g, "");
+        $('l223_quant').value = new Number($('l223_quant_'+coditemtabela+''+linha).value);
+        $('l223_vlrn').value = new Number($('l223_vlrn_'+coditemtabela+''+linha).value);
+        $('l223_total').value = new Number($('l223_total_'+coditemtabela+''+linha).value);
+        $('codmatertabela').disabled = true;
+        $('descrmater').disabled = true;
+        $('l223_quant').disabled = true;
+        $('l223_vlrn').disabled = true;
+        $('l223_total').disabled = true;
+        $('btnAddItem').style.display = "none";
+        $('btnAlterarItem').style.display = "none";
+        $('btnNovoItem').style.display = "";
+        $('btnExcluirItem').style.display = "";
+    } 
     </script>
 </body>
 
