@@ -428,6 +428,8 @@ if (isset($m51_codordem) && $m51_codordem != '') {
         let objeto = {};
         let elementChecked = false;
 
+        let selecionado = 0;
+
         for (let count = 0; count < obj.elements.length; count++) {
 
             if (obj.elements[count].id.includes('chk')) {
@@ -470,9 +472,16 @@ if (isset($m51_codordem) && $m51_codordem != '') {
                         aItens.push(objeto);
                     }
                 }
+
+                selecionado = selecionado + 1;
             }
         }
-
+        if(selecionado == 0){
+            alert("Usuário: obrigatório selecionar todos os itens da ordem de compras..");
+            return;
+        }
+        
+        js_divCarregando('Aguarde, gerando ordem de compras', 'msgbox');
         let oParam = new Object();
         let body = document.form1;
         let obs = body.m51_obs.value.toUpperCase();
@@ -494,6 +503,7 @@ if (isset($m51_codordem) && $m51_codordem != '') {
     }
 
     function js_retornoDados(oAjax) {
+        js_removeObj('msgbox');
         let response = eval("(" + oAjax.responseText + ")");
         console.log(response);
         if (!response.erro) {
