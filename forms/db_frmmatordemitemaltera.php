@@ -275,11 +275,11 @@ $clrotulo->label("e62_descr");
 
                                             db_fieldsmemory($resultAcordo, 0);
                                             $pc01_tabela = 0;
-                                            if($numrowAcordo == 1){
+                                            
                                                 $sSQLtabela = "select case when pc01_tabela = false then 0 else 1 end as pc01_tabela from pcmater where pc01_codmater = {$e62_item}";
                                                 $resultTabela   = db_query($sSQLtabela);
                                                 db_fieldsmemory($resultTabela, 0);
-                                              }
+                                              
 
                                         if ($clmatestoqueitemoc->numrows == 0) {
 
@@ -309,11 +309,11 @@ $clrotulo->label("e62_descr");
 													    </small>
                                                     </td>";
                                                     if($pc01_tabela == 1){
-                                                        echo "<td	class='linhagrid' align='center' onclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela,$i)' style='color: rgb(0, 102, 204);'>
+                                                        echo "<td	class='linhagrid' align='center' title='$pc01_descrmater - $pc01_complmater' onclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item, $pc01_tabela,$i)' style='color: rgb(0, 102, 204);'>
 													    <small>$pc01_descrmater</small>
                                                     </td>";
                                                       }else{
-                                                        echo "<td	class='linhagrid' align='center' onclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela,$i)'>
+                                                        echo "<td	class='linhagrid' align='center' title='$pc01_descrmater - $pc01_complmater' onclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item, $pc01_tabela,$i)'>
 													    <small>$pc01_descrmater</small>
                                                     </td>";
                                                       }
@@ -490,15 +490,15 @@ $clrotulo->label("e62_descr");
                                                     <small>$e62_item</small>
                                                  </td>";
                                                  if($pc01_tabela == 1){
-                                                    echo "   <td class='linhagrid' align='center' title='$pc01_descrmater' ondblclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)' style='color:blue'>
+                                                    echo "   <td class='linhagrid' align='center' title='$pc01_descrmater' ondblclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item, $pc01_tabela)' style='color:blue'>
                                                     <small>$pc01_descrmater</small>
                                                  </td>";
                                                   }else{
-                                                    echo "   <td class='linhagrid' align='center' title='$pc01_descrmater' ondblclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'>
+                                                    echo "   <td class='linhagrid' align='center' title='$pc01_descrmater' ondblclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item, $pc01_tabela)'>
                                                     <small>$pc01_descrmater</small>
                                                  </td>";
                                                   }
-                                            echo "   <td class='linhagrid' align='center' title='$pc01_descrmater' ondblclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'>
+                                            echo "   <td class='linhagrid' align='center' title='$pc01_descrmater' ondblclick='js_verificatabela(this,$e62_sequencial,$e60_numemp,$e62_item, $pc01_tabela)'>
                                                     <small>$pc01_descrmater</small>
                                                  </td>";
                                             echo "   <td class='linhagrid' nowrap align='left' title='$m61_abrev'>
@@ -667,7 +667,7 @@ $clrotulo->label("e62_descr");
                                                     <tr>
                                                         <td colspan="7">
                                                             <?
-                                                            db_ancora("Código do material", "js_pesquisapc16_codmater(true);", 1);
+                                                            db_ancora("Cód. material", "js_pesquisapc16_codmater(true);", 1);
                                                             ?>
                                                         
                                                             <?
@@ -1155,7 +1155,7 @@ $clrotulo->label("e62_descr");
             }
         }
 
-        function js_verificatabela(obj,sequencia,empenho,item,acordo,tabela,seq){
+        function js_verificatabela(obj,sequencia,empenho,item,tabela,seq){
         if( document.getElementById('itenstabela'+item).style.display == 'none'){
             if(tabela == 1){
                 document.getElementById('itenstabela'+item).style.display = '';
@@ -1268,7 +1268,7 @@ $clrotulo->label("e62_descr");
                             valortabela += parseFloat(axiliar.replace(',', '.'));
                         }
                         if(valorordem != valortabela && itensMarcados > 0){  
-                            alert("Usuário: A soma dos itens da tabela X "+item+" está divergente do valor total do item Tabela.");
+                            alert("Usuário: A soma dos itens da tabela está divergente do valor total do item Tabela.");
                             return false; 
                         }
                     x = itemprincipal.length;
@@ -1342,7 +1342,7 @@ $clrotulo->label("e62_descr");
             $('sequencia').value= linha+1;
             $('coditemordemtabela').value = coditemtabela;
             $('codmatertabela').value = linha+1;
-            $('descrmater').value = js_stripTags($('l223_descr_'+coditemtabela+''+linha).innerHTML).replace(/\s/g, "");
+            $('descrmater').value = js_stripTags(document.getElementById('l223_descr_'+coditemtabela+''+linha).innerHTML).trim();
             $('l223_quant').value = new Number($('l223_quant_'+coditemtabela+''+linha).value);
             $('l223_vlrn').value = new Number($('l223_vlrn_'+coditemtabela+''+linha).value);
             $('l223_total').value = new Number($('l223_total_'+coditemtabela+''+linha).value);
@@ -1594,7 +1594,7 @@ $clrotulo->label("e62_descr");
         $('sequencia').value= linha+1;
         $('coditemordemtabela').value = coditemtabela;
         $('codmatertabela').value = linha+1;
-        $('descrmater').value = js_stripTags($('l223_descr_'+coditemtabela+''+linha).innerHTML).replace(/\s/g, "");
+        $('descrmater').value = js_stripTags($('l223_descr_'+coditemtabela+''+linha).innerHTML).trim();
         $('l223_quant').value = new Number($('l223_quant_'+coditemtabela+''+linha).value);
         $('l223_vlrn').value = new Number($('l223_vlrn_'+coditemtabela+''+linha).value);
         $('l223_total').value = new Number($('l223_total_'+coditemtabela+''+linha).value);

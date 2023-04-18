@@ -428,11 +428,11 @@ if ($lBloquear) {
                       $iOpcao      = 1;
                       $sClassName  = "normal";
                       db_fieldsmemory($result, $i);
-                      if($numrowAcordo == 1){
+                      
                         $sSQLtabela = "select case when pc01_tabela = false then 0 else 1 end as pc01_tabela from pcmater where pc01_codmater = {$e62_item}";
                         $resultTabela   = db_query($sSQLtabela);
                         db_fieldsmemory($resultTabela, 0);
-                      }
+                      
                       
                       if ($e62_vltot <= 0 || $e62_quant <= 0) {
 
@@ -458,9 +458,9 @@ if ($lBloquear) {
 
                       // Item
                       if($pc01_tabela == 1){
-                        echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' onclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)' style='color: rgb(0, 102, 204);'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
+                        echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' onclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$pc01_tabela)' style='color: rgb(0, 102, 204);'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
                       }else{
-                        echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' onclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$ac26_acordo, $pc01_tabela)'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
+                        echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' onclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$pc01_tabela)'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
                       }
                       
 
@@ -902,7 +902,7 @@ if ($lBloquear) {
 
   }
 
-  function js_verificatabela(sequencia,empenho,item,acordo,tabela){
+  function js_verificatabela(sequencia,empenho,item,tabela){
    if( $('itenstabela').style.display == 'none'){
       if(tabela == 1){
         $('itenstabela').style.display = '';
@@ -923,7 +923,7 @@ if ($lBloquear) {
   
       }
    }
-
+   $('itenstabela').style.display = '';
   }
 
   function js_pesquisapc16_codmater(mostra) {
