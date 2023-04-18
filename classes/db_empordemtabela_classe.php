@@ -305,7 +305,7 @@ class cl_empordemtabela {
        }
      }
      if (trim($this->l223_descr)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l223_descr"])) { 
-      $sql  .= $virgula." l223_descr = $this->l223_descr ";
+      $sql  .= $virgula." l223_descr = '$this->l223_descr' ";
       $virgula = ",";
       if (trim($this->l223_descr) == null ) { 
         $this->erro_sql = " Campo l223_descr não informado.";

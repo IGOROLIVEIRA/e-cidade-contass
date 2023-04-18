@@ -913,9 +913,10 @@ if ($lBloquear) {
         $('itemordem').value = sequencia;
         $('codempenho').value = empenho;
         $('coditemordem').value = item;
+        $('itemordem').style.display = 'none';
         $('codempenho').style.display = 'none';
-        //$('sequencia').style.display = 'none';
-        //$('sequencia_nova').style.display = 'none';
+        $('sequencia').style.display = 'none';
+        $('sequencia_nova').style.display = 'none';
         $('coditemordem').style.display = 'none';
         $('coditemordemtabela').style.display = 'none';
         js_init(empenho,item);
@@ -1190,6 +1191,7 @@ if ($lBloquear) {
     oParam.pcmatertabela = $F('pc16_codmater');
     oParam.quantidade = $F('l223_quant');
     oParam.valorunit = $F('l223_vlrn');
+    oParam.descricao = encodeURIComponent(tagString($F('pc01_descrmater')));
     oParam.codempenho = $F('codempenho') ;
     oParam.coditemtabela = $F('coditemordemtabela') ;
     oParam.exec = "alterarItemOrdemTabela";

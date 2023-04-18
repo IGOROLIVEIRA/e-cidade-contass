@@ -471,6 +471,7 @@ class OrdemDeCompra {
     
     $oDaoOrdemItemTabela  = new cl_empordemtabela;
     $oDaoOrdemItemTabela->l223_pcmaterordem = $item->pcmaterordem;
+    $oDaoOrdemItemTabela->l223_descr = $item->descricao;
     $oDaoOrdemItemTabela->l223_pcmatertabela = $item->pcmatertabela;
     $oDaoOrdemItemTabela->l223_quant = $item->quantidade;
     $oDaoOrdemItemTabela->l223_vlrn = $item->valorunit;
