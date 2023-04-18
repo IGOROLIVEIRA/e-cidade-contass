@@ -46,119 +46,70 @@ $clveicmotoristas->rotulo->label("ve05_codigo");
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
-    <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
-        <tr>
-            <td height="63" align="center" valign="top">
-                <table width="35%" border="0" align="center" cellspacing="0">
-                    <form name="form2" method="post" action="">
-                        <tr>
-                            <td width="4%" align="right" nowrap title="<?= $Tve05_codigo ?>">
-                                <?= $Lve05_codigo ?>
-                            </td>
-                            <td width="96%" align="left" nowrap>
-                                <?
-                                db_input("ve05_codigo", 10, $Ive05_codigo, true, "text", 4, "", "chave_ve05_codigo");
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2" align="center">
-                                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-                                <input name="limpar" type="reset" id="limpar" value="Limpar">
-                                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_veicmotoristas.hide();">
-                            </td>
-                        </tr>
-                    </form>
-                </table>
+<table height="100%" border="0"  align="center" cellspacing="0" bgcolor="#CCCCCC">
+  <tr>
+    <td height="63" align="center" valign="top">
+        <table width="35%" border="0" align="center" cellspacing="0">
+	     <form name="form2" method="post" action="" >
+          <tr>
+            <td width="4%" align="right" nowrap title="<?=$Tve05_codigo?>">
+              <?=$Lve05_codigo?>
             </td>
-        </tr>
-        <tr>
-            <td align="center" valign="top">
-                <?
-                if (!isset($pesquisa_chave)) {
-                    if (isset($campos) == false) {
-                        if (file_exists("funcoes/db_func_veicmotoristas.php") == true) {
-                            include("funcoes/db_func_veicmotoristas.php");
-                        } else {
-                            $campos = "veicmotoristas.*,z01_nome";
-                        }
-                    }
-                    if (isset($chave_ve05_codigo) && (trim($chave_ve05_codigo) != "")) {
-                        $sql = $clveicmotoristas->sql_query($chave_ve05_codigo, $campos, "ve05_codigo");
-                    } else {
-                        $sql = $clveicmotoristas->sql_query("", $campos, "ve05_codigo", "ve05_instit =" . db_getsession('DB_instit'));
-                    }
-                    $repassa = array();
-                    if (isset($chave_ve05_codigo)) {
-                        $repassa = array("chave_ve05_codigo" => $chave_ve05_codigo, "chave_ve05_codigo" => $chave_ve05_codigo);
-                    }
-
-                    db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
-                } else {
-                    if ($pesquisa_chave != null && $pesquisa_chave != "") {
-                        $result = $clveicmotoristas->sql_record($clveicmotoristas->sql_query($pesquisa_chave));
-                        if ($clveicmotoristas->numrows != 0) {
-                            db_fieldsmemory($result, 0);
-                            echo "<script>" . $funcao_js . "('$z01_nome',false);</script>";
-                        } else {
-                            echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
-                        }
-                    } else {
-                        echo "<script>" . $funcao_js . "('',false);</script>";
-                    }
-                }
-                ?>
+            <td width="96%" align="left" nowrap>
+              <?
+		       db_input("ve05_codigo",10,$Ive05_codigo,true,"text",4,"","chave_ve05_codigo");
+		       ?>
             </td>
-        </tr>
-        <tr>
+          </tr>
+          <tr>
             <td colspan="2" align="center">
-                <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
-                <input name="limpar" type="reset" id="limpar" value="Limpar">
-                <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_veicmotoristas.hide();">
-            </td>
-        </tr>
+              <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
+              <input name="limpar" type="reset" id="limpar" value="Limpar" >
+              <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_veicmotoristas.hide();">
+             </td>
+          </tr>
         </form>
-    </table>
-    </td>
-    </tr>
-    <tr>
-        <td align="center" valign="top">
-            <?
-            if (!isset($pesquisa_chave)) {
-                if (isset($campos) == false) {
-                    if (file_exists("funcoes/db_func_veicmotoristas.php") == true) {
-                        include("funcoes/db_func_veicmotoristas.php");
-                    } else {
-                        $campos = "veicmotoristas.*,z01_nome";
-                    }
-                }
-                if (isset($chave_ve05_codigo) && (trim($chave_ve05_codigo) != "")) {
-                    $sql = $clveicmotoristas->sql_query($chave_ve05_codigo, $campos, "ve05_codigo");
-                } else {
-                    $sql = $clveicmotoristas->sql_query("", $campos, "ve05_codigo", "");
-                }
-                $repassa = array();
-                if (isset($chave_ve05_codigo)) {
-                    $repassa = array("chave_ve05_codigo" => $chave_ve05_codigo, "chave_ve05_codigo" => $chave_ve05_codigo);
-                }
-                db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
-            } else {
-                if ($pesquisa_chave != null && $pesquisa_chave != "") {
-                    $result = $clveicmotoristas->sql_record($clveicmotoristas->sql_query($pesquisa_chave));
-                    if ($clveicmotoristas->numrows != 0) {
-                        db_fieldsmemory($result, 0);
-                        echo "<script>" . $funcao_js . "('$z01_nome',false);</script>";
-                    } else {
-                        echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
-                    }
-                } else {
-                    echo "<script>" . $funcao_js . "('',false);</script>";
-                }
-            }
-            ?>
-        </td>
-    </tr>
-    </table>
+        </table>
+      </td>
+  </tr>
+  <tr>
+    <td align="center" valign="top">
+      <?
+      if(!isset($pesquisa_chave)){
+        if(isset($campos)==false){
+           if(file_exists("funcoes/db_func_veicmotoristas.php")==true){
+             include("funcoes/db_func_veicmotoristas.php");
+           }else{
+           $campos = "veicmotoristas.*,z01_nome";
+           }
+        }
+        if(isset($chave_ve05_codigo) && (trim($chave_ve05_codigo)!="") ){
+	         $sql = $clveicmotoristas->sql_query($chave_ve05_codigo,$campos,"ve05_codigo");
+        }else{
+           $sql = $clveicmotoristas->sql_query("",$campos,"ve05_codigo","ve05_instit =".db_getsession('DB_instit'));
+        }
+        $repassa = array();
+        if(isset($chave_ve05_codigo)){
+          $repassa = array("chave_ve05_codigo"=>$chave_ve05_codigo,"chave_ve05_codigo"=>$chave_ve05_codigo);
+        }
+        db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
+      }else{
+        if($pesquisa_chave!=null && $pesquisa_chave!=""){
+          $result = $clveicmotoristas->sql_record($clveicmotoristas->sql_query($pesquisa_chave));
+          if($clveicmotoristas->numrows!=0){
+            db_fieldsmemory($result,0);
+            echo "<script>".$funcao_js."('$z01_nome',false);</script>";
+          }else{
+	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
+          }
+        }else{
+	       echo "<script>".$funcao_js."('',false);</script>";
+        }
+      }
+      ?>
+     </td>
+   </tr>
+</table>
 </body>
 
 </html>
