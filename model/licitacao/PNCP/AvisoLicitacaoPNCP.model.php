@@ -128,7 +128,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
      * 11 - Ata de Registro de Preo
      */
 
-    public function enviarAviso($tipodocumento, $processo, $anexo)
+    public function enviarAviso($processo, $anexo)
     {
 
         $token = $this->login();
@@ -155,8 +155,8 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $headers = array(
             'Content-Type: multipart/form-data',
             'Authorization: ' . $token,
-            'Titulo-Documento: Edital',
-            'Tipo-Documento-Id:' . $tipodocumento
+            'Titulo-Documento: ' . $anexo[0]->l213_descricao,
+            'Tipo-Documento-Id:' . $anexo[0]->l213_sequencial
         );
 
         $optionspncp = array(

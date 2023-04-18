@@ -207,7 +207,6 @@ class cl_liccontroleanexopncp
                                ,$this->l218_sequencialarquivo 
                                ,$this->l218_processodecompras
                                )";
-
         $result = db_query($sql);
 
         if ($result == false) {
