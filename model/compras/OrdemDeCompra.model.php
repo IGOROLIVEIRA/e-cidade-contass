@@ -482,6 +482,26 @@ class OrdemDeCompra {
   public function excluirItemTabela($item){
     $oDaoOrdemItemTabela  = new cl_empordemtabela;
     $oDaoOrdemItemTabela->excluir($item->coditemtabela);
+    $sqlOrdemItemTabela  = "select * from empordemtabela where l223_numemp = $item->codempenho and l223_codordem = 0 order by l223_pcmatertabela ASC";
+    $rsOrdemItemTabela = $oDaoOrdemItemTabela->sql_record($sqlOrdemItemTabela);
+    
+    if (count($rsOrdemItemTabela) > 0) {
+      
+      $iTotalItens    = $oDaoOrdemItemTabela->numrows;
+      for ($iRowItem = 0; $iRowItem < $iTotalItens; $iRowItem++) {
+
+        
+
+        $oDadosOrdemItemTabela  = db_utils::fieldsMemory($rsOrdemItemTabela, $iRowItem);
+
+        $seq = $iRowItem +1;
+
+        $sqlOrdemItemTabela  = "update empordemtabela set l223_pcmatertabela = $seq where l223_sequencial = $oDadosOrdemItemTabela->l223_sequencial and l223_numemp = $item->codempenho and l223_codordem = 0";
+         
+        db_query($sqlOrdemItemTabela);
+
+      }
+    }
   }
 
   public function getItensOrdemTabela($item){

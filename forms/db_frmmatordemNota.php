@@ -613,7 +613,9 @@ if ($lBloquear) {
                         echo "<b>Total<b>";
                         db_input('l223_total', 5, 0, true, 'text', 3, '');
                         db_input('codempenho', 5, 0, true, 'text', 3, '');
+                        db_input('itemordem', 5, 0, true, 'text', 3, '');
                         db_input('sequencia', 5, 0, true, 'text', 3, '');
+                        db_input('sequencia_nova', 5, 0, true, 'text', 3, '');
                         db_input('coditemordem', 5, 0, true, 'text', 3, '');
                         db_input('coditemordemtabela', 5, 0, true, 'text', 3, '');
                         ?>
@@ -908,11 +910,12 @@ if ($lBloquear) {
         $('itenstabela').style.display = '';
         $('pc16_codmater').value = "";
         $('pc01_descrmater').value = "";
-        $('sequencia').value = sequencia;
+        $('itemordem').value = sequencia;
         $('codempenho').value = empenho;
         $('coditemordem').value = item;
         $('codempenho').style.display = 'none';
-        $('sequencia').style.display = 'none';
+        //$('sequencia').style.display = 'none';
+        //$('sequencia_nova').style.display = 'none';
         $('coditemordem').style.display = 'none';
         $('coditemordemtabela').style.display = 'none';
         js_init(empenho,item);
@@ -995,7 +998,7 @@ if ($lBloquear) {
 
     }
 
-    var sequencia = $('sequencia').value;
+    var sequencia = $('itemordem').value;
 
     if ($("chk" + sequencia).checked == false) {
       alert('Selecione o item.');
@@ -1012,7 +1015,7 @@ if ($lBloquear) {
     js_divCarregando('Aguarde, adicionando item', "msgBox");
     var oParam = new Object();
     oParam.pcmaterordem = $F('coditemordem');
-    oParam.pcmatertabela = $F('pc16_codmater');
+    oParam.pcmatertabela = $F('sequencia');
     oParam.quantidade = $F('l223_quant');
     oParam.valorunit = $F('l223_vlrn');
     oParam.codempenho = $F('codempenho') ;
@@ -1112,11 +1115,14 @@ if ($lBloquear) {
 
       }
     }
+    $("sequencia").value = aItens.length + 1;
     oGridItens.renderRows();
     $("valor_total_tabela").innerText = formataValor(valortotal);
   }
 
   function js_alterarLinha(coditemtabela,linha){
+    $('sequencia_nova').value= $('sequencia').value;
+    $('sequencia').value= linha+1;
     $('coditemordemtabela').value = coditemtabela; 
     $('pc16_codmater').value = oGridItens.aRows[linha].aCells[0].getValue();
     $('pc01_descrmater').value = oGridItens.aRows[linha].aCells[2].getValue();
@@ -1124,8 +1130,13 @@ if ($lBloquear) {
     $('l223_vlrn').value = oGridItens.aRows[linha].aCells[4].getValue();
     $('l223_total').value = oGridItens.aRows[linha].aCells[5].getValue();
     $('btnAddItem').style.display = "none";
+    $('btnExcluirItem').style.display = "none";
     $('btnAlterarItem').style.display = "";
     $('btnNovoItem').style.display = "";
+    $('pc16_codmater').disabled = false;
+    $('pc01_descrmater').disabled = false;
+    $('l223_quant').disabled = false;
+    $('l223_vlrn').disabled = false;
   }
 
   function js_excluirLinha(coditemtabela,linha){
@@ -1194,6 +1205,7 @@ if ($lBloquear) {
 
   function js_novoItem(){
     $('coditemordemtabela').value = "";
+    $('sequencia').value = $('sequencia_nova').value;
     $('pc16_codmater').value = "";
     $('pc01_descrmater').value = "";
     $('l223_quant').value = "";
