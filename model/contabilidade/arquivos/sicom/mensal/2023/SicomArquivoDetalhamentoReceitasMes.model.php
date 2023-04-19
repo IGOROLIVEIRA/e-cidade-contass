@@ -290,7 +290,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                             LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int 
                              WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
                                AND o70_instit = " . db_getsession('DB_instit') . "
-                               AND k81_emparlamentar = {$sEmParlamentar}
+                               AND (k81_emparlamentar = '{$sEmParlamentar}' or k81_emparlamentar is null)
                                AND (CASE
                                         WHEN substr(taborc.k02_estorc,1,2) = '49' THEN substr(taborc.k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10) ."'
                                         ELSE substr(taborc.k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8) ."'
