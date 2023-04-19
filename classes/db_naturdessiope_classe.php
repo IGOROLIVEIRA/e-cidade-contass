@@ -19,6 +19,7 @@ class cl_naturdessiope {
     public $c222_natdespecidade = null;
     public $c222_natdespsiope = null;
     public $c222_previdencia = null;
+    public $c222_anousu = null;
     // cria propriedade com as variaveis do arquivo
     public $campos = "
                  c222_natdespecidade = varchar(11) = E-Cidade
@@ -60,7 +61,7 @@ class cl_naturdessiope {
     }
 
     // funcao para inclusao
-    function incluir ($c222_natdespecidade,$c222_natdespsiope, $c222_anousu, $c222_previdencia) {
+    function incluir () {
         $this->atualizacampos();
         if (($this->c222_natdespecidade == null) || ($this->c222_natdespecidade == "") ) {
             $this->erro_sql = " Campo c222_natdespecidade nao declarado.";
@@ -330,7 +331,7 @@ class cl_naturdessiope {
     }
 
     // funcao do sql
-    function sql_query_file ( $c222_natdespecidade=null,$c222_natdespsiope=null,$campos="*",$ordem=null,$dbwhere="") {
+    function sql_query_file ( $c222_natdespecidade=null,$c222_natdespsiope=null,$campos="*",$ordem=null,$dbwhere="", $c222_anousu=null) {
         $sql = "select ";
         if ($campos != "*" ) {
             $campos_sql = explode("#", $campos);
