@@ -26,6 +26,9 @@
  *                                licenca/licenca_pt.txt
  */
 
+ini_set('display_errors', 'on');
+ini_set('display_startup_errors', 'on');
+
 require_once("fpdf151/scpdf.php");
 require_once("fpdf151/impcarne.php");
 require_once("libs/db_sql.php");
@@ -602,10 +605,8 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
 
     $pdf1->informa_adic = $informa_adic;
     $pdf1->imprime();
-    ini_set('display_errors', 'on');
-    ini_set('display_startup_errors', 'on');
+
 }
-exit("acabou o for");
 
 if (isset($argv[1])) {
     $pdf1->objpdf->Output("/tmp/teste.pdf");
@@ -637,3 +638,5 @@ if (isset($argv[1])) {
         $pdf1->objpdf->Output();
     }
 }
+
+exit("acabou o arquivo");
