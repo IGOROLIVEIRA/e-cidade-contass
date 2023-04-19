@@ -25,10 +25,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
-ini_set('display_errors', 'on');
-ini_set('display_startup_errors', 'on');
-
 require_once("fpdf151/scpdf.php");
 require_once("fpdf151/impcarne.php");
 require_once("libs/db_sql.php");
@@ -638,5 +634,3 @@ if (isset($argv[1])) {
         $pdf1->objpdf->Output();
     }
 }
-
-exit("acabou o arquivo");
