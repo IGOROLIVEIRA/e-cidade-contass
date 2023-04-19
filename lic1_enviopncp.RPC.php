@@ -257,11 +257,13 @@ switch ($oParam->exec) {
         try {
             foreach ($oParam->aLicitacoes as $aLicitacao) {
                 $clAvisoLicitacaoPNCP = new AvisoLicitacaoPNCP();
+                $clliccontroleanexopncp = new cl_liccontroleanexopncp();
                 //envia exclusao de aviso
                 $rsApiPNCP = $clAvisoLicitacaoPNCP->excluirAviso(substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
 
                 if ($rsApiPNCP == null) {
                     $clliccontrolepncp->excluir(null, "l213_licitacao = $aLicitacao->codigo");
+                    $clliccontroleanexopncp->excluir_licitacao($aLicitacao->codigo);
 
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Excluido com Sucesso !";
