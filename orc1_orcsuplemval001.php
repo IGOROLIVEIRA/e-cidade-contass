@@ -642,8 +642,9 @@ if ($clorcsuplemval->numrows > 0 ){
 $oSuplementacao = new Suplementacao($o46_codsup);
 $soma_suplem    = $oSuplementacao->getvalorSuplementacao();
 // 
-$soma_reduz = db_formatar($soma_reduz,"f");
+
 $totalSuplemRec = db_formatar($soma_suplem - abs($soma_reduz),"f");
+$soma_reduz = db_formatar($soma_reduz,"f");
 $soma_suplem = db_formatar($soma_suplem,"f");
 
 ?>
