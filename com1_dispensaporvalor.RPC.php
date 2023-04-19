@@ -101,13 +101,13 @@ switch ($oParam->exec) {
                 $clDispensaporvalor->montarDados();
                 //envia para pncp
                 $rsApiPNCP = $clDispensaporvalor->enviarAviso($tipoDocumento, $processo);
+                //$rsApiPNCP = array(201, 'https://treina.pncp.gov.br/pncp-api/v1/orgaos/17316563000196/compras/2022/182');
 
                 if ($rsApiPNCP[0] == 201) {
 
                     //monto o codigo da compra no pncp
-                    $l213_numerocompra = substr(substr($rsApiPNCP[1], 61), 0, -2);
+                    $l213_numerocompra = substr($rsApiPNCP[1], 74);
                     $l213_numerocontrolepncp = '17316563000196-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
-
 
                     //monto o codigo da compra no pncp
                     $clliccontrolepncp = new cl_liccontrolepncp();
@@ -126,6 +126,10 @@ switch ($oParam->exec) {
                     $clliccontrolepncp->l213_anousu = $oDadosLicitacao->anocompra;
                     $clliccontrolepncp->l213_instit = db_getsession('DB_instit');
                     $clliccontrolepncp->incluir();
+
+                    if ($clliccontrolepncp->erro_status == 0) {
+                        throw new Exception($clliccontrolepncp->erro_msg);
+                    }
 
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Enviado com Sucesso !";
