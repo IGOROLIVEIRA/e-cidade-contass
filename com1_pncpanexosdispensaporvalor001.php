@@ -883,12 +883,11 @@ $oRotulo->label("pc80_resumo");
 
         oParametros.exec = 'EnviarDocumentoPNCP';
         oParametros.iCodigoProcesso = iCodigoProcesso;
-        oParametros.iCompradireta = true;
         oParametros.aDocumentos = aDocumentos;
         oParametros.aTipoDocumentos = aTipo;
 
         var oAjax = new Ajax.Request(
-            'lic1_envioanexos.RPC.php', {
+            'com1_envioanexos.RPC.php', {
                 parameters: 'json=' + Object.toJSON(oParametros),
                 method: 'post',
                 asynchronous: false,
@@ -915,7 +914,7 @@ $oRotulo->label("pc80_resumo");
     function js_excluirDocumentoPNCP() {
         const documentosSelecionados = oGridDocumentos.getSelection("object")
         var iSelecionados = documentosSelecionados.length;
-        var iCodigoProcesso = $('l20_codigo').value;
+        var iCodigoProcesso = $('pc80_codproc').value;
         var aDocumentos = [];
         var aTipo = [];
 
@@ -949,12 +948,11 @@ $oRotulo->label("pc80_resumo");
 
         oParametros.exec = 'ExcluirDocumentoPNCP';
         oParametros.iCodigoProcesso = iCodigoProcesso;
-        oParametros.iCompradireta = true;
         oParametros.aDocumentos = aDocumentos;
         oParametros.aTipoDocumentos = aTipo;
 
         var oAjax = new Ajax.Request(
-            'lic1_envioanexos.RPC.php', {
+            'com1_envioanexos.RPC.php', {
                 parameters: 'json=' + Object.toJSON(oParametros),
                 method: 'post',
                 asynchronous: false,
