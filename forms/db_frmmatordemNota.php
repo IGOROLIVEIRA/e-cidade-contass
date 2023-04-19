@@ -927,7 +927,6 @@ if ($lBloquear) {
   
       }
    }
-   $('itenstabela').style.display = '';
   }
 
   function js_pesquisapc16_codmater(mostra) {
