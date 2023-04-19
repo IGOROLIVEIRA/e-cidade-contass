@@ -197,7 +197,7 @@
                     } else {
                         var tabela = "";
                         if (document.form1.e43_ordempagamento.value != '') {
-                            
+
                             tabela = js_linhas_ordem_auxiliar(jsonObj.aOrdem);
                         } else {
 
@@ -308,8 +308,10 @@
     }
 
     function js_mostracodord1(chave1,chave2) {
+
         document.form1.e53_codord.value = chave1;
         document.form1.e50_obs.value = chave2;
+
         var oAjax = new Ajax.Request("func_ordembancariapagamento.RPC.php",
             {
                 method: 'post',
