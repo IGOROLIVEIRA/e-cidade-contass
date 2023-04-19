@@ -24,8 +24,8 @@ class ContratoPNCP extends ModeloBasePNCP
     {
         $oDado = $this->dados;
 
-        if ($oDado->receita = 't')
-            $oDado->receita = true;
+        if ($oDado->receita == '')
+            $oDado->receita = 'f';
 
         $aDadosAPI = array(
             'cnpjCompra'                               => '17316563000196', //$oDado->cnpjcompra,
@@ -39,7 +39,7 @@ class ContratoPNCP extends ModeloBasePNCP
             'niFornecedor'                             => $oDado->nifornecedor,
             'tipoPessoaFornecedor'                     => 'PJ', //$oDado->tipopessoafornecedor,
             'nomeRazaoSocialFornecedor'                => $oDado->nomerazaosocialfornecedor,
-            'receita'                                  => $oDado->receita,
+            'receita'                                  => $oDado->receita == 'f' ? 'false' : 'true',
             'codigoUnidade'                            => '01001', //$oDado->codigounidade,
             'objetoContrato'                           => $oDado->objetocontrato,
             'valorInicial'                             => $oDado->valorinicial,
@@ -59,9 +59,6 @@ class ContratoPNCP extends ModeloBasePNCP
     public function montarRetificacao()
     {
         $oDado = $this->dados;
-
-        if ($oDado->receita = 't')
-            $oDado->receita = true;
 
         $aDadosAPI = array(
             'cnpjCompra'                               => '17316563000196', //$oDado->cnpjcompra,
@@ -101,7 +98,7 @@ class ContratoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = '17316563000196';
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos";
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos";
 
         $method = 'POST';
 
@@ -166,7 +163,7 @@ class ContratoPNCP extends ModeloBasePNCP
 
         $sequencial = $dadosExtras->ac213_sequencialpncp;
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
 
         $method = 'PUT';
 
@@ -228,7 +225,7 @@ class ContratoPNCP extends ModeloBasePNCP
 
         $sequencial = $dadosExtras->e213_sequencialpncp;
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
 
         $method = 'PUT';
 
@@ -286,7 +283,7 @@ class ContratoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = substr($cnpj, 0, 14);
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
 
         $method = 'DELETE';
 
@@ -334,7 +331,7 @@ class ContratoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = substr($dados->ac213_numerocontrolepncp, 0, 14);
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $dados->ac213_ano . "/" . $dados->ac213_sequencialpncp . "/arquivos";
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $dados->ac213_ano . "/" . $dados->ac213_sequencialpncp . "/arquivos";
 
         $method = 'POST';
 
@@ -402,7 +399,7 @@ class ContratoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = substr($dados->ac214_numerocontrolepncp, 0, 14);
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $dados->ac214_ano . "/" . $dados->ac214_sequencialpncp . "/arquivos" . "/" . $dados->ac214_sequencialarquivo;
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $dados->ac214_ano . "/" . $dados->ac214_sequencialpncp . "/arquivos" . "/" . $dados->ac214_sequencialarquivo;
 
         $method = 'DELETE';
 

@@ -58,11 +58,11 @@ abstract class ModeloBasePNCP
      */
     public function login()
     {
-        $url = "https://pncp.gov.br/pncp-api/v1/usuarios/login";
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/usuarios/login";
 
         $curl_data = array(
-            'login' => 'a93f37c7-2301-487f-924f-0f8e6c1f6766',
-            'senha' =>  '2iqoO63Y8iq5C2aI'
+            'login' => 'f96951f1-dc6d-4762-a054-e28188fbf642',
+            'senha' =>  'wAAv1v27F34VEu6Y'
         );
 
         $headers = array(
