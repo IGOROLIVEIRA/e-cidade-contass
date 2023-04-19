@@ -155,7 +155,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $headers = array(
             'Content-Type: multipart/form-data',
             'Authorization: ' . $token,
-            'Titulo-Documento: ' . $anexo[0]->l213_descricao,
+            'Titulo-Documento: ' . utf8_decode($anexo[0]->l213_descricao),
             'Tipo-Documento-Id:' . $anexo[0]->l213_sequencial
         );
 

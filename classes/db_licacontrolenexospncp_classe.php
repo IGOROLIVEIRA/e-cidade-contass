@@ -499,6 +499,42 @@ class cl_liccontroleanexopncp
             }
         }
     }
+
+    // funcao para exclusao 
+    function excluir_processocompra($l218_processodecompras = null)
+    {
+        $this->atualizacampos(true);
+        $sql = " delete from liccontroleanexopncp
+                        where ";
+        $sql2 = "";
+        $sql2 = "l218_processodecompras = $l218_processodecompras";
+        //  echo $sql.$sql2;
+        $result = @pg_exec($sql . $sql2);
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
+            $this->erro_sql   = " nao Excluído. Exclusão Abortada.\\n";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        } else {
+            if (pg_affected_rows($result) == 0) {
+                $this->erro_banco = "";
+                $this->erro_sql = " nao Encontrado. Exclusão não Efetuada.\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "1";
+                return true;
+            } else {
+                $this->erro_banco = "";
+                $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "1";
+                return true;
+            }
+        }
+    }
     // funcao do recordset 
     function sql_record($sql)
     {
