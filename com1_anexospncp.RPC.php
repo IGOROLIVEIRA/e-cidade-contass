@@ -80,7 +80,7 @@ try {
 
                 $oStdDocumento = new stdClass();
                 $oStdDocumento->iCodigoDocumento    = $oProcesso->getCodigo();
-                $oStdDocumento->sDescricaoDocumento = urlencode($oProcesso->getDescricaoTipo());
+                $oStdDocumento->sDescricaoDocumento = urlencode(utf8_decode($oProcesso->getDescricaoTipo()));
 
                 $aDocumentosRetorno[] = $oStdDocumento;
             }
