@@ -208,7 +208,7 @@
          $sqlparagpadrao .= "       inner join db_tipodoc         on db08_codigo   = db60_tipodoc ";
          $sqlparagpadrao .= "       inner join db_paragrafopadrao on db61_codparag = db62_codparag ";
          $sqlparagpadrao .= " where db60_tipodoc = 1502 order by db62_ordem";
-            die($sqlparagpadrao);
+            //die($sqlparagpadrao);
          $resparagpadrao = @pg_query($sqlparagpadrao);
          if (@pg_numrows($resparagpadrao) > 0) {
               db_fieldsmemory($resparagpadrao,0);
@@ -234,7 +234,13 @@
   $iVoltaImp = 0;
 	for($ii = 0;$ii < $this->linhasdositens ;$ii++) {
 	     db_fieldsmemory($this->recorddositens,$ii);
-	     $this->objpdf->Setfont('Arial','',7);
+		 
+		/*Realiza a consulta se o item é tabela e tem itens associados*/
+
+		$sqlItemTabela = "SELECT * FROM empordemtabela where l223_pcmaterordem = ". pg_result($this->recorddositens, $ii, $this->codmater) ." and l223_codordem = ".$this->numordem."order by l223_pcmatertabela";
+		$resItemTabela = @db_query($sqlItemTabela);
+		
+	     $this->objpdf->Setfont('Arial','',8);
 
 	     $descricaoitem = pg_result($this->recorddositens,$ii,$this->descricaoitem); 
              if(pg_result($this->recorddositens,$ii,$this->Snumero)!=""){
@@ -351,6 +357,115 @@
     }else if ($iVoltaImp == 1){
       $sObsItem = $sTextoaImprimir; //resto do texto 
     }
+	//$this->objpdf->sety($xlin+50);
+	if(@pg_numrows($resItemTabela) > 0){
+		$this->objpdf->Setfont('Arial', 'B', 8);
+		$this->objpdf->Row_multicell(array("",
+	                             "",
+	                             "",
+				                       "\nDETALHAMENTO: \n\n","","")
+                           ,3,false,4,0,true);
+		$itempag = 0;
+		for($contitem=0;$contitem < @pg_numrows($resItemTabela);$contitem++){
+			$oDadosItemTabela = db_utils::fieldsMemory($resItemTabela, $contitem);
+			
+			$this->objpdf->Setfont('Arial', '', 8);
+			//$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() + (($itempag*4)*2),($itempag+1)." - ".$oDadosItemTabela->l223_descr);
+			//$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety()+ ($itempag*4)+(($itempag+1)*4), " Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f'));
+			$this->objpdf->Row_multicell(array("","","",
+			($contitem+1)." - ".$oDadosItemTabela->l223_descr . "\n Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário: ".trim(db_formatar($oDadosItemTabela->l223_vlrn,'f'))." - Total: ".trim(db_formatar($oDadosItemTabela->l223_total,'f'))."\n\n","",""
+			), 3, false, 4, 0, true);
+			
+			$posi = $this->objpdf->gety() + (($itempag*4)*2) + ($itempag*4)+(($itempag+1)*4);
+			//// troca de pagina
+			if (($posi > $this->objpdf->h + 50 && $pagina == 1)
+				|| ($posi > $this->objpdf->h + 300 && $pagina != 1)
+			) {
+
+				$this->objpdf->Setfont('Arial','B',7);
+            if ($this->objpdf->PageNo() == 1){
+				if ($this->obs!=""){
+				$this->objpdf->text(90,284-$xlin,'Continua na Página '.($pagina+1));
+				//$this->objpdf->rect($xcol,$xlin+217,202,55,2,'DF','1234');
+				}else $this->objpdf->text(90,$xlin+259,'Continua na Página '.($pagina+1));
+	       
+            }else{
+	       		$this->objpdf->text(110,$xlin+336,'Continua na Página '.($pagina+1));
+			}
+			if($pagina == 1){
+				$xlin = 20;
+				$xcol = 4;
+				$this->objpdf->rect($xcol,    $xlin+205,143, 10,2,'DF','34');
+				$this->objpdf->rect($xcol+143,$xlin+205,30, 10,2,'DF','34');
+				$this->objpdf->rect($xcol+173,$xlin+205,30, 10,2,'DF','34');
+				$this->objpdf->text($xcol+100 ,$xlin+211,'T O T A L   D A   P Á G I N A');
+
+				$this->objpdf->SetXY(173,$xlin+205);
+				$this->objpdf->cell(30 ,10,db_formatar($xtotal,'f'),0,0,"R");   
+
+				$this->objpdf->SetXY(4,$xlin+217);	
+
+				if (isset($texto2) && trim($texto2) != ""){
+				$this->objpdf->multicell(202,4,$texto2,1);
+				}		   
+			}
+			$this->objpdf->addpage();
+			$pagina += 1;	   
+			
+			$this->objpdf->settopmargin(1);
+			$xlin = 20;
+			$xcol = 4;
+		
+			$this->objpdf->setfillcolor(245);
+			$this->objpdf->rect($xcol-2,$xlin-18,206,292,2,'DF','1234');
+			$this->objpdf->setfillcolor(255,255,255);
+			$this->objpdf->Setfont('Arial','B',9);
+			$this->objpdf->text(130,$xlin-13,'ORDEM DE COMPRA N'.CHR(176));
+			$this->objpdf->text(185,$xlin-13,db_formatar($this->numordem,'s','0',6,'e'));
+			$this->objpdf->Image('imagens/files/'.$this->logo,15,$xlin-17,12); 
+			$this->objpdf->Setfont('Arial','B',9);
+			$this->objpdf->text(40,$xlin-15,$this->prefeitura);
+			$this->objpdf->Setfont('Arial','',9);
+			$this->objpdf->text(40,$xlin-11,$this->enderpref);
+			$this->objpdf->text(40,$xlin-8,$this->municpref);
+			$this->objpdf->text(40,$xlin-5,$this->telefpref);
+			$this->objpdf->text(40,$xlin-2,$this->emailpref);
+			
+			$xlin = -30;
+			$this->objpdf->Setfont('Arial','B',8);
+
+			$this->objpdf->rect($xcol    ,$xlin+54,12,6,2,'DF','12');
+			$this->objpdf->rect($xcol+ 12,$xlin+54,17,6,2,'DF','12');
+			$this->objpdf->rect($xcol+ 29,$xlin+54,13,6,2,'DF','12'); //$this->objpdf->rect($xcol+ 27,$xlin+54,11,6,2,'DF','12');
+			$this->objpdf->rect($xcol+ 42,$xlin+54,101,6,2,'DF','12'); //$this->objpdf->rect($xcol+ 38,$xlin+54,104,6,2,'DF','12');
+			$this->objpdf->rect($xcol+143,$xlin+54,30,6,2,'DF','12');
+			$this->objpdf->rect($xcol+173,$xlin+54,30,6,2,'DF','12');
+
+			$this->objpdf->rect($xcol,    $xlin+60,12,252,2,'DF','34');
+			$this->objpdf->rect($xcol+ 12,$xlin+60,17,252,2,'DF','34');
+			$this->objpdf->rect($xcol+ 29,$xlin+60,13,252,2,'DF','34'); //$this->objpdf->rect($xcol+ 27,$xlin+60,11,252,2,'DF','34');
+			$this->objpdf->rect($xcol+ 42,$xlin+60,101,252,2,'DF','34'); //$this->objpdf->rect($xcol+ 38,$xlin+60,104,252,2,'DF','34');
+			$this->objpdf->rect($xcol+143,$xlin+60,30,252,2,'DF','');
+			$this->objpdf->rect($xcol+173,$xlin+60,30,252,2,'DF','34');
+
+			$this->objpdf->sety($xlin+66);
+			$alt = 4;
+
+			$this->objpdf->text($xcol+   2,$xlin+59,'ITEM');
+			$this->objpdf->text($xcol+12.5,$xlin+59,'EMPENHO');
+			$this->objpdf->text($xcol+30.5,$xlin+59,'QUANT');
+			$this->objpdf->text($xcol+  70,$xlin+59,'MATERIAL OU SERVIÇO');
+			$this->objpdf->text($xcol+ 145,$xlin+59,'VALOR UNITÁRIO');
+			$this->objpdf->text($xcol+ 176,$xlin+59,'VALOR TOTAL');
+			$this->objpdf->text($xcol+  43,$xlin+63,'Continuação da Página '.($pagina-1));
+			$this->objpdf->Setfont('Arial','',8);
+
+			$maiscol = 0;
+			$itempag = -1;
+			}
+			$itempag = $itempag + 1;
+		}
+	}
     if ((isset($sObsItem) && $obsitem != '' && $iVoltaImp == 0) || $iVoltaImp == 1){
       
      // if (strlen($sObsItem ) > 1500){  // Tarcisio: Tratamento para resumos maiores que 2000 caracteres 

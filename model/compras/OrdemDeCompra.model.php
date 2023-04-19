@@ -438,4 +438,145 @@ class OrdemDeCompra {
     return $this->oEmpenhoFinanceiro;
   }
 
+
+  public function addItemTabela($item){
+    
+    $oDaoOrdemItemTabela  = new cl_empordemtabela;
+    $oDaoOrdemItemTabela->l223_pcmaterordem = $item->pcmaterordem;
+    $oDaoOrdemItemTabela->l223_pcmatertabela = $item->pcmatertabela;
+    $oDaoOrdemItemTabela->l223_quant = $item->quantidade;
+    $oDaoOrdemItemTabela->l223_vlrn = $item->valorunit;
+    $oDaoOrdemItemTabela->l223_total = round($item->quantidade * $item->valorunit,2);
+    $oDaoOrdemItemTabela->l223_numemp = $item->codempenho;
+    $oDaoOrdemItemTabela->l223_descr = $item->descricao;
+    $oDaoOrdemItemTabela->l223_codordem = null;
+    $oDaoOrdemItemTabela->incluir();
+  }
+  public function addItensTabela($item){
+    
+    $oDaoOrdemItemTabela  = new cl_empordemtabela;
+    $oDaoOrdemItemTabela->l223_pcmaterordem = $item->item;
+    $oDaoOrdemItemTabela->l223_pcmatertabela = $item->sequencia;
+    $oDaoOrdemItemTabela->l223_descr = $item->descricao;
+    $oDaoOrdemItemTabela->l223_quant = $item->quantidade;
+    $oDaoOrdemItemTabela->l223_vlrn = $item->vlrn;
+    $oDaoOrdemItemTabela->l223_total = $item->total;
+    $oDaoOrdemItemTabela->l223_numemp = $item->empenho;
+    $oDaoOrdemItemTabela->l223_descr = $item->descricao;
+    $oDaoOrdemItemTabela->l223_codordem = $item->ordem;
+    $oDaoOrdemItemTabela->incluir();
+  }
+
+  public function alterarItemTabela($item){
+    
+    $oDaoOrdemItemTabela  = new cl_empordemtabela;
+    $oDaoOrdemItemTabela->l223_pcmaterordem = $item->pcmaterordem;
+    $oDaoOrdemItemTabela->l223_descr = $item->descricao;
+    $oDaoOrdemItemTabela->l223_pcmatertabela = $item->pcmatertabela;
+    $oDaoOrdemItemTabela->l223_quant = $item->quantidade;
+    $oDaoOrdemItemTabela->l223_vlrn = $item->valorunit;
+    $oDaoOrdemItemTabela->l223_total = $item->quantidade * $item->valorunit;
+    $oDaoOrdemItemTabela->l223_numemp = $item->codempenho;
+    $oDaoOrdemItemTabela->alterar($item->coditemtabela);
+  }
+
+  public function excluirItemTabela($item){
+    $oDaoOrdemItemTabela  = new cl_empordemtabela;
+    $oDaoOrdemItemTabela->excluir($item->coditemtabela);
+    $sqlOrdemItemTabela  = "select * from empordemtabela where l223_numemp = $item->codempenho and l223_codordem = 0 order by l223_pcmatertabela ASC";
+    $rsOrdemItemTabela = $oDaoOrdemItemTabela->sql_record($sqlOrdemItemTabela);
+    
+    if (count($rsOrdemItemTabela) > 0) {
+      
+      $iTotalItens    = $oDaoOrdemItemTabela->numrows;
+      for ($iRowItem = 0; $iRowItem < $iTotalItens; $iRowItem++) {
+
+        
+
+        $oDadosOrdemItemTabela  = db_utils::fieldsMemory($rsOrdemItemTabela, $iRowItem);
+
+        $seq = $iRowItem +1;
+
+        $sqlOrdemItemTabela  = "update empordemtabela set l223_pcmatertabela = $seq where l223_sequencial = $oDadosOrdemItemTabela->l223_sequencial and l223_numemp = $item->codempenho and l223_codordem = 0";
+         
+        db_query($sqlOrdemItemTabela);
+
+      }
+    }
+  }
+
+  public function getItensOrdemTabela($item){
+    $oDaoOrdemItemTabela  = new cl_empordemtabela;
+    $sqlOrdemItemTabela  = "select * from empordemtabela where l223_pcmaterordem  = $item->pcmaterordem and l223_numemp = $item->codempenho and l223_codordem = 0 order by l223_sequencial";
+    $rsOrdemItemTabela = $oDaoOrdemItemTabela->sql_record($sqlOrdemItemTabela);
+    $aItensEntrada     = array();
+    if ($oDaoOrdemItemTabela->numrows > 0) {
+
+      $iTotalItens    = $oDaoOrdemItemTabela->numrows;
+      for ($iRowItem = 0; $iRowItem < $iTotalItens; $iRowItem++) {
+
+        $oDadosOrdemItemTabela  = db_utils::fieldsMemory($rsOrdemItemTabela, $iRowItem);
+
+        $oItentabela   = new stdClass();
+        $oItentabela->pc01_codmater = $oDadosOrdemItemTabela->pc01_codmater;
+        $oItentabela->l223_descr = $oDadosOrdemItemTabela->l223_descr;
+        $oItentabela->l223_quant = $oDadosOrdemItemTabela->l223_quant;
+        $oItentabela->l223_vlrn = $oDadosOrdemItemTabela->l223_vlrn;
+        $oItentabela->l223_total = $oDadosOrdemItemTabela->l223_total;
+        $oItentabela->l223_sequencial = $oDadosOrdemItemTabela->l223_sequencial;
+
+        $aItensEntrada[]     = $oItentabela;
+
+      }
+    }
+    return $aItensEntrada;
+  }
+
+  public function getValorOrdemTabela($item){
+    
+    $oDaoOrdemItemTabela  = new cl_empordemtabela;
+    $sqlOrdemItemTabela  = "select sum(l223_total) as l223_total from empordemtabela where l223_numemp = $item->iCodigoempenho and l223_pcmaterordem = $item->iCodigoitem and l223_codordem = 0";
+    $rsOrdemItemTabela = $oDaoOrdemItemTabela->sql_record($sqlOrdemItemTabela);
+    $oDadosOrdemItemTabela  = db_utils::fieldsMemory($rsOrdemItemTabela, 0);
+    return $oDadosOrdemItemTabela->l223_total;
+  }
+  public function alterarItemTabelaCadastrado($item){
+    
+    
+    $sqlOrdemItemTabela  = "update empordemtabela set l223_descr = '$item->descricao', l223_quant = $item->quantidade, l223_vlrn = $item->vlrn, l223_total = $item->total where l223_pcmatertabela = $item->sequencia and l223_pcmaterordem = $item->item and l223_codordem = $item->ordem";
+    
+    db_query($sqlOrdemItemTabela);
+    return true;
+  }
+
+  public function excluirItemTabelaCadastrado($item){
+    
+    
+    $sqlOrdemItemTabela  = "delete from empordemtabela where l223_pcmatertabela = $item->sequencia and l223_pcmaterordem = $item->item and l223_codordem = $item->ordem";
+   
+    db_query($sqlOrdemItemTabela);
+    $oDaoOrdemItemTabela  = new cl_empordemtabela;
+    $sqlOrdemItemTabela  = "select * from empordemtabela where l223_codordem = $item->ordem order by l223_pcmatertabela ASC";
+    $rsOrdemItemTabela = $oDaoOrdemItemTabela->sql_record($sqlOrdemItemTabela);
+    
+    if (count($rsOrdemItemTabela) > 0) {
+      
+      $iTotalItens    = $oDaoOrdemItemTabela->numrows;
+      for ($iRowItem = 0; $iRowItem < $iTotalItens; $iRowItem++) {
+
+        
+
+        $oDadosOrdemItemTabela  = db_utils::fieldsMemory($rsOrdemItemTabela, $iRowItem);
+
+        $seq = $iRowItem +1;
+
+        $sqlOrdemItemTabela  = "update empordemtabela set l223_pcmatertabela = $seq where l223_sequencial = $oDadosOrdemItemTabela->l223_sequencial and l223_codordem = $item->ordem";
+         
+        db_query($sqlOrdemItemTabela);
+
+      }
+    }
+    return true;
+  }
+
 }

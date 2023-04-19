@@ -129,6 +129,184 @@ try {
 
     break;
 
+    case "adicionarItemOrdemTabela" :
+
+
+
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+      $oParam->descricao = db_stdClass::normalizeStringJsonEscapeString($oParam->descricao);
+
+      $oOrdemCompraItemTabela->addItemTabela($oParam);
+      
+      $aItens           = $oOrdemCompraItemTabela->getItensOrdemTabela($oParam);
+      
+      $aDadosEntrada       = array();
+      
+      foreach ($aItens as $oItens) {
+        
+        $oDados = new stdClass();
+        $oDados->pc01_codmater         = $oItens->pc01_codmater;
+        $oDados->iQuantidade         = $oItens->l223_quant;
+        $oDados->iUnit       = $oItens->l223_vlrn;
+        $oDados->iValor       = $oItens->l223_total;
+        $oDados->iSequencial= $oItens->l223_sequencial;
+        $oDados->iDescricao = urlencode($oItens->l223_descr);
+
+        $aDadosEntrada[]           = $oDados;
+
+      }
+
+      $oRetorno->itens = $aDadosEntrada;
+      
+      
+    break;
+
+    case "adicionarItensOrdemTabela" :
+
+
+
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+      foreach ($oParam->itens as $oItens) {
+        $oItens->descricao = db_stdClass::normalizeStringJsonEscapeString($oItens->descricao);
+
+        $oOrdemCompraItemTabela->addItensTabela($oItens);
+        $oRetorno->ordem = $oItens->ordem;
+      }
+
+      
+      
+      
+    break;
+
+    case "buscaItemOrdemTabela" :
+
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+      $aItens           = $oOrdemCompraItemTabela->getItensOrdemTabela($oParam);
+      
+      $aDadosEntrada       = array();
+      
+      foreach ($aItens as $oItens) {
+        
+        $oDados = new stdClass();
+        $oDados->pc01_codmater         = $oItens->pc01_codmater;
+        $oDados->iQuantidade         = $oItens->l223_quant;
+        $oDados->iUnit       = $oItens->l223_vlrn;
+        $oDados->iValor       = $oItens->l223_total;
+        $oDados->iSequencial= $oItens->l223_sequencial;
+        $oDados->iDescricao = urlencode($oItens->l223_descr);
+
+        $aDadosEntrada[]           = $oDados;
+
+      }
+
+      $oRetorno->itens = $aDadosEntrada;
+
+    break;
+
+    case "alterarItemOrdemTabela" :
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+
+      $oOrdemCompraItemTabela->alterarItemTabela($oParam);
+      
+      $aItens           = $oOrdemCompraItemTabela->getItensOrdemTabela($oParam);
+      
+      $aDadosEntrada       = array();
+      
+      foreach ($aItens as $oItens) {
+        
+        $oDados = new stdClass();
+        $oDados->pc01_codmater         = $oItens->pc01_codmater;
+        $oDados->iQuantidade         = $oItens->l223_quant;
+        $oDados->iUnit       = $oItens->l223_vlrn;
+        $oDados->iValor       = $oItens->l223_total;
+        $oDados->iSequencial= $oItens->l223_sequencial;
+        $oDados->iDescricao = urlencode($oItens->l223_descr);
+
+        $aDadosEntrada[]           = $oDados;
+
+      }
+
+      $oRetorno->itens = $aDadosEntrada;
+
+    break;
+
+    case "alterarItensOrdemTabela" :
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+
+    
+      
+      foreach ($oParam->itens as $oItens) {
+        
+  
+
+        $oOrdemCompraItemTabela->alterarItemTabelaCadastrado($oItens);
+
+        $oRetorno->ordem = $oItens->ordem;
+
+      }
+
+      
+
+    break;
+
+    case "excluirItensOrdemTabela" :
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+
+    
+      
+      foreach ($oParam->itens as $oItens) {
+        
+  
+
+        $oOrdemCompraItemTabela->excluirItemTabelaCadastrado($oItens);
+
+        $oRetorno->ordem = $oItens->ordem;
+
+      }
+
+      
+
+    break;
+
+    case "excluirItemOrdemTabela" :
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+
+      $oOrdemCompraItemTabela->excluirItemTabela($oParam);
+      
+      $aItens           = $oOrdemCompraItemTabela->getItensOrdemTabela($oParam);
+      
+      $aDadosEntrada       = array();
+      
+      foreach ($aItens as $oItens) {
+        
+        $oDados = new stdClass();
+        $oDados->pc01_codmater         = $oItens->pc01_codmater;
+        $oDados->iQuantidade         = $oItens->l223_quant;
+        $oDados->iUnit       = $oItens->l223_vlrn;
+        $oDados->iValor       = $oItens->l223_total;
+        $oDados->iSequencial= $oItens->l223_sequencial;
+        $oDados->iDescricao = urlencode($oItens->l223_descr);
+
+        $aDadosEntrada[]           = $oDados;
+
+      }
+
+      $oRetorno->itens = $aDadosEntrada;
+
+
+    break;
+
+    case "confereitemtabela" :
+      $oOrdemCompraItemTabela = new OrdemDeCompra();
+      
+      $Valortotal           = $oOrdemCompraItemTabela->getValorOrdemTabela($oParam);
+      
+      
+      $oRetorno->valor = $Valortotal;
+
+
+    break;
+
     default:
       throw new ParameterException("Nenhuma Opção Definida");
     break;

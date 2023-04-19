@@ -79,7 +79,7 @@ function valida_dados(){
  <table>
    <tr>
      <td nowrap title="<?=@$To85_codrec?>"> <? db_ancora(@$Lo85_codrec,"js_pesquisao85_codrec();",$op); ?> </td>
-     <td><? db_input('o85_codrec',8,$Io85_codrec,true,'text',$op,""); ?> </td>
+     <td><? db_input('o85_codrec',26,$Io85_codrec,true,'text',$op,""); ?> </td>
      <td><input type="submit" name="pesquisa_rec"  value="pesquisar"> </td>
   </tr>
   <?
@@ -99,13 +99,13 @@ function valida_dados(){
   </tr>	
   <tr>
      <td nowrap> Recurso: </td>
-     <td><? db_input('o70_codigo',8,"",true,'text',3,"");  ?> </td>
+     <td><? db_input('o70_codigo',26,"",true,'text',3,"");  ?> </td>
      <td colspan=1><? db_input('o15_descr',50,"",true,'text',3,"");  ?> </td>     
   </tr>
   
   <tr>
     <td><b>Valor do Lançamento</b></td>
-    <td><? db_input('o85_valor',10,$Io85_valor,true,'text',1,'','','','text-align:right');  ?> </td>
+    <td><? db_input('o85_valor',26,$Io85_valor,true,'text',1,'','','','text-align:right');  ?> </td>
 
     <td><input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" 
                type="button" id="db_opcao" 
@@ -121,15 +121,17 @@ function valida_dados(){
 <!-- segunda coluna -->
 <td valign=top>
  <fieldset><legend><b>Projeto</b></legend>
- <table width=200px>
-   <tr><td><b>Projeto</b></td><td><? db_input("o39_codproj",6,'',true,'text',3); ?></td></tr>
-   <tr><td><b>Suplementação</b> </td><td><? db_input("o46_codsup",6,'',true,'text',3); ?></td></tr>
+ <table width=390px>
+   <tr><td><b>Projeto</b></td><td><? db_input("o39_codproj",10,'',true,'text',3); ?></td></tr>
+   <tr><td><b>Suplementação</b> </td><td><? db_input("o46_codsup",10,'',true,'text',3); ?></td></tr>
  </table>
  </fieldset>
 
  <fieldset><legend><b>Saldos</b></legend>
- <table width=200px>
+ <table width=300px> 
+    <tr><td><b>Total Suplementado</b></td><td><? db_input("soma_suplem",10,'',true,'text',3,'','','','text-align:right'); ?></td></tr>
     <tr><td><b>Total Receitas</b></td><td><? db_input("soma_receitas",10,'',true,'text',3,'','','','text-align:right'); ?></td></tr>
+    <tr><td><b>Total Suplementado - Receitas</b></td><td><? db_input("totalSuplemRec",10,'',true,'text',3,'','','','text-align:right'); ?></td></tr>
 
  </table>
  </fieldset>
