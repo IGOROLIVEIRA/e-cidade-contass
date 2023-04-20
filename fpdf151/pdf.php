@@ -47,6 +47,8 @@ class PDF extends FPDF
 
   protected $lDateFooter = true;
 
+  public $imprime_rodape = true;
+
   public function showDateFooter($lDateFooter)
   {
     $this->lDateFooter = $lDateFooter;
