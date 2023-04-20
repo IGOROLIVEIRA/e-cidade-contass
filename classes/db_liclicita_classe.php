@@ -1661,18 +1661,12 @@ class cl_liclicita
             $virgula = ",";
         }
 
-        if (trim($this->l20_dataaberproposta != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaberproposta"]))) {
+        if (trim($this->l20_dataaberproposta) == null || trim($this->l20_dataaberproposta) == "") {
+            $sql .= $virgula . " l20_dataaberproposta =null ";
+            $virgula = ",";
+        } else {
             $sql .= $virgula . " l20_dataaberproposta = '$this->l20_dataaberproposta' ";
             $virgula = ",";
-            if (trim($this->l20_dataaberproposta) == null) {
-                $this->erro_sql = " Campo Abertura das Propostas não Informado. ";
-                $this->erro_campo = "l20_dataaberproposta";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
         }
 
         if (trim($this->l20_dataencproposta) == null || trim($this->l20_dataencproposta) == "") {
