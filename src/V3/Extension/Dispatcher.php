@@ -30,28 +30,32 @@ class Dispatcher {
     $extensionData = ExtensionData::restore($request->getExtension());
 
     if (false === $extensionData->exists()) {
-      throw new ResponseException("Extensão não instalada: " . $request->getExtension());
+      throw new ResponseException("ExtensÃ£o nÃ£o instalada: " . $request->getExtension());
+    }
+
+    if (false === $extensionData->isEnabled($request->session()->get('DB_login'))) {
+      throw new ResponseException("ExtensÃ£o desativada: " . $request->getExtension());
     }
 
     if (!file_exists($request->getControllerPath()) || is_dir($request->getControllerPath())) {
-      throw new ResponseException("Arquivo do Controller não encontrado: ". $request->getControllerPath());
+      throw new ResponseException("Arquivo do Controller nÃ£o encontrado: ". $request->getControllerPath());
     }
 
     $class = $request->getController();
     $action = $request->getAction();
 
     if (!class_exists($class)) {
-      throw new ResponseException("Controller inválido: " . $class);
+      throw new ResponseException("Controller invÃ¡lido: " . $class);
     }
 
     if (!method_exists($class, $action)) {
-      throw new ResponseException("Action inválida: ". $class ."::". $action);
+      throw new ResponseException("Action invÃ¡lida: ". $class ."::". $action);
     }
 
     $controller = new $class();
 
     if (!($controller instanceof Controller)) {
-      throw new ResponseException("Controller inválido: " . $class);
+      throw new ResponseException("Controller invÃ¡lido: " . $class);
     }
 
     $controller->setRequest($request);
@@ -84,7 +88,7 @@ class Dispatcher {
 
     // Nao encontrou arquivo no diretorio da extensao nem na raiz
     if (!file_exists($filePath)) {
-      throw new ResponseException('Arquivo não encontrado: ' . $filePath, 404);
+      throw new ResponseException('Arquivo nÃ£o encontrado: ' . $filePath, 404);
     }
 
     $response->setFile($filePath);
