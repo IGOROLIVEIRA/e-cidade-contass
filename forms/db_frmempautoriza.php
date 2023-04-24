@@ -113,6 +113,17 @@ db_app::load("DBFormCache.js");
                     db_input('e54_autori', 10, $Ie54_autori, true, 'text', 3);
                     db_input('o58_codele', 10, $Ie54_autori, true, 'hidden', 3);
                     ?>
+                    
+                    <!-- Inclui data de emissão de autorização -->
+                    <b> Data da Autorização: </b>
+                    <?
+                        if ($db_opcao == 1 && !$e54_emiss) {
+                            $e54_emiss_dia = date("d",db_getsession("DB_datausu"));
+                            $e54_emiss_mes = date("m",db_getsession("DB_datausu"));
+                            $e54_emiss_ano = date("Y",db_getsession("DB_datausu"));
+                        }
+                        db_inputData('e54_emiss', @$e54_emiss_dia, @$e54_emiss_mes, @$e54_emiss_ano, true, 'text', $db_opcao);
+                    ?>
                 </td>
             </tr>
             <tr>
