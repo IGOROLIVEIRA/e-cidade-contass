@@ -76,7 +76,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
     $this->objpdf->setfillcolor(255, 255, 255);
     $this->objpdf->Setfont('Arial', 'B', 9);
-    $this->objpdf->text(130, $xlin - 9.8, 'a AUTORIZA플O DE EMPENHO N' . CHR(176));
+    $this->objpdf->text(130, $xlin - 9.8, 'AUTORIZA플O DE EMPENHO N' . CHR(176));
     $this->objpdf->text(185, $xlin - 9.8, db_formatar($this->numaut, 's', '0', 6, 'e'));
 
     if ($this->informa_adic == "PC") {
@@ -430,7 +430,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
             $this->objpdf->setfillcolor(255, 255, 255);
             $this->objpdf->Setfont('Arial', 'B', 9);
-            $this->objpdf->text(130, $xlin - 13, 'b AUTORIZA플O DE EMPENHO N' . CHR(176));
+            $this->objpdf->text(130, $xlin - 13, ' AUTORIZA플O DE EMPENHO N' . CHR(176));
             $this->objpdf->text(185, $xlin - 13, db_formatar($this->numaut, 's', '0', 6, 'e'));
 
             if ($this->informa_adic == "PC") {
@@ -527,20 +527,20 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->AliasNbPages();
     $this->objpdf->AddPage();
     $this->objpdf->settopmargin(1);
-    $xlin = 20;
+    $xlin = 22;
     $xcol = 4;
 
     //Inserindo usuario e data no rodape
 
 
     $this->objpdf->Setfont('Arial', 'I', 6);
-    $this->objpdf->text($xcol + 3, $xlin + 276, $sRodape);
+    $this->objpdf->text($xcol + 3, $xlin + 272, $sRodape);
 
     $this->objpdf->setfillcolor(245);
-    $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
+    $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 288, 2, 'DF', '1234');
     $this->objpdf->setfillcolor(255, 255, 255);
     $this->objpdf->Setfont('Arial', 'B', 9);
-    $this->objpdf->text(130, $xlin - 9.8, ' AUTORIZA플O DE EMPENHO N' . CHR(176));
+    $this->objpdf->text(130, $xlin - 9.8, 'AUTORIZA플O DE EMPENHO N' . CHR(176));
     $this->objpdf->text(185, $xlin - 9.8, db_formatar($this->numaut, 's', '0', 6, 'e'));
 
     if ($this->informa_adic == "PC") {
@@ -940,7 +940,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
                 $this->objpdf->setfillcolor(255, 255, 255);
                 $this->objpdf->Setfont('Arial', 'B', 9);
-                $this->objpdf->text(130, $xlin - 13, 'd AUTORIZA플O DE EMPENHO N' . CHR(176));
+                $this->objpdf->text(130, $xlin - 13, 'AUTORIZA플O DE EMPENHO N' . CHR(176));
                 $this->objpdf->text(185, $xlin - 13, db_formatar($this->numaut, 's', '0', 6, 'e'));
 
                 if ($this->informa_adic == "PC") {
@@ -968,7 +968,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 $this->objpdf->rect($xcol + 162, $xlin + 59, 20, 6, 2, 'DF', '12');
                 $this->objpdf->rect($xcol + 182, $xlin + 59, 20, 6, 2, 'DF', '12');
 
-                $this->objpdf->rect($xcol, $xlin + 64, 8, 262, 2, 'DF', '34');
+                $this->objpdf->rect($xcol , $xlin + 64, 8, 262, 2, 'DF', '34');
                 $this->objpdf->rect($xcol + 8, $xlin + 64, 12, 262, 2, 'DF', '34');
                 $this->objpdf->rect($xcol + 20, $xlin + 64, 15, 262, 2, 'DF', '34');
                 $this->objpdf->rect($xcol + 35, $xlin + 64, 107, 262, 2, 'DF', '34');
