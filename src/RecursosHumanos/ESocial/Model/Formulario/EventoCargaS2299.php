@@ -5,7 +5,7 @@ namespace ECidade\RecursosHumanos\ESocial\Model\Formulario;
 use ECidade\RecursosHumanos\ESocial\Model\Formulario\EventoCargaInterface;
 
 /**
- * Classe responsável por retornar dados da carga
+ * Classe responsï¿½vel por retornar dados da carga
  * do evento 2299
  * @package ECidade\RecursosHumanos\ESocial\Model\Formulario
  */
@@ -44,7 +44,8 @@ class EventoCargaS2299 implements EventoCargaInterface
 		$sql = "SELECT DISTINCT
 		--ideVinculo
 		z01_cgccpf as cpftrab,
-		rh01_regist as matricula,
+		rh01_esocial as matricula,
+		rh01_regist as matricula_sistema,
 		--infoDeslig
 		rhmotivorescisao.rh173_codigo as mtvDeslig,
 		rh05_recis as dtdeslig,
@@ -141,7 +142,7 @@ class EventoCargaS2299 implements EventoCargaInterface
 		$rsResult = \db_query($sql);
 
         if (!$rsResult) {
-            throw new \Exception("Erro ao buscar Verbas Rescisórias. ".pg_last_error());
+            throw new \Exception("Erro ao buscar Verbas Rescisï¿½rias. ".pg_last_error());
         }
         return $rsResult;
 

@@ -59,10 +59,12 @@ switch ($oParam->exec) {
     }
 
     $aFontesEmenda = array(
-      551000, 552000, 553000, 569000, 570000, 571000, 576000, 576001, 600000, 601000, 602000, 603000, 621000, 631000, 632000, 660000, 661000, 665000, 700000, 700007, 701000, 710000
+      551000, 552000, 553000, 569000, 570000, 571000, 576000, 576001, 600000, 601000, 602000, 603000, 621000, 631000, 632000, 660000, 661000, 665000, 700000, 700007, 701000, 710000, 706000 
     );
 
     $oRetorno->lEmendaParlamentar = in_array(substr($iCodigoRecursoAutorizacao, 1, 6), $aFontesEmenda);
+    $oRetorno->lEmendaIndividual = in_array(substr($iCodigoRecursoAutorizacao, 1, 6), array('706000'));
+    $oRetorno->lEmendaIndividualEBancada = in_array(substr($iCodigoRecursoAutorizacao, 1, 6), array('710000'));
     $oRetorno->lEsferaEmendaParlamentar = substr($iCodigoRecursoAutorizacao, 1, 6) == 665000 ? 't': 'f';
 
     $oRetorno->lFundeb = $lRecursoFundeb;
@@ -73,7 +75,24 @@ switch ($oParam->exec) {
     $oEmpenhoFinanceiro = new EmpenhoFinanceiro($oParam->iSequencialEmpenho);
     $iRecursoDotacao    = $oEmpenhoFinanceiro->getDotacao()->getRecurso();
     $oFinalidade        = $oEmpenhoFinanceiro->getFinalidadePagamentoFundeb();
+    $oAutorizacaoEmpenho       = new AutorizacaoEmpenho($oParam->iCodigoAutorizacaoEmpenho);
+    $iCodigoRecursoAutorizacao = $oAutorizacaoEmpenho->getDotacao()->getRecurso();
+    $iCodigoFundebParametro    = ParametroCaixa::getCodigoRecursoFUNDEB($iInstituicaoSessao);
 
+    $lRecursoFundeb = false;
+    if ($iCodigoFundebParametro == $iCodigoRecursoAutorizacao) {
+      $lRecursoFundeb = true;
+    }
+
+    $aFontesEmenda = array(
+        551000, 552000, 553000, 569000, 570000, 571000, 576000, 576001, 600000, 601000, 602000, 603000, 621000, 631000, 632000, 660000, 661000, 665000, 700000, 700007, 701000, 706000, 710000
+    );
+
+    $oRetorno->lFonte = substr($iCodigoRecursoAutorizacao, 1, 6);
+    $oRetorno->lEmendaParlamentar = in_array(substr($iCodigoRecursoAutorizacao, 1, 6), $aFontesEmenda);
+    $oRetorno->lEmendaIndividual = in_array(substr($iCodigoRecursoAutorizacao, 1, 6), array('706000'));
+    $oRetorno->lEmendaIndividualEBancada = in_array(substr($iCodigoRecursoAutorizacao, 1, 6), array('710000'));
+    $oRetorno->lEsferaEmendaParlamentar = substr($iCodigoRecursoAutorizacao, 1, 6) == 665000 ? 't': 'f';
     $oRetorno->lPossuiFinalidadePagamentoFundeb = false;
     if (!empty($oFinalidade)) {
 

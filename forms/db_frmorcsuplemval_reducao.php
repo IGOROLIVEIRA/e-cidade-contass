@@ -29,6 +29,7 @@
 ?>
 <script>
 // --------------------
+
 function valida_dados(){
 
    if(parseFloat(document.form1.atual_menos_reservado.value) < parseFloat(document.form1.o47_valor.value)){
@@ -102,16 +103,19 @@ function valida_dados(){
 <!-- segunda coluna -->
 <td valign=top>
  <fieldset><legend><b>Projeto</b></legend>
- <table width=200px>
-   <tr><td><b>Projeto</b></td><td><? db_input("o39_codproj",6,'',true,'text',3); ?></td></tr>
-   <tr><td><b>Suplementação</b> </td><td><? db_input("o46_codsup",6,'',true,'text',3); ?></td></tr>
+ <table width=392px>
+   <tr><td><b>Projeto</b></td><td><? db_input("o39_codproj",10,'',true,'text',3); ?></td></tr>
+   <tr><td><b>Suplementação</b> </td><td><? db_input("o46_codsup",10,'',true,'text',3); ?></td></tr>
  </table>
  </fieldset>
 
  <fieldset><legend><b>Saldos</b></legend>
- <table width=200px>
-   <tr><td><b>Total Reduzido</b></td><td><? db_input("soma_reduz",10,'',true,'text',3,'','','','text-align:right'); ?></td></tr>
- </table>
+ <table width=300px>
+      <tr><td><b>Total Suplementado</b></td><td><? db_input("soma_suplem",10,'',true,'text',3,'','','','text-align:right'); ?></td></tr>
+      <tr><td><b>Total Reduzido</b></td><td><? db_input("soma_reduz",10,'',true,'text',3,'','','','text-align:right'); ?></td></tr>
+      <tr><td><b>Total Suplementado - Reduzido</b></td><td><? db_input("totalSuplemRec",10,'',true,'text',3,'','','','text-align:right'); ?></td></tr>
+
+   </table>
  </fieldset>
 
 </td>
@@ -156,6 +160,7 @@ function valida_dados(){
 
 
 <script>
+ 
 function js_pesquisao47_coddot(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('','db_iframe_orcdotacao','func_orcdotacao.php?funcao_js=parent.js_mostraorcdotacao1|o58_coddot','Pesquisa',true,0);

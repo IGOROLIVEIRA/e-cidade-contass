@@ -53,6 +53,7 @@ function extenso($valor = 0, $maiusculas = false)
             $inteiro[$i] = "0" . $inteiro[$i];
 
     $fim = $cont - ($inteiro[$cont - 1] > 0 ? 1 : 2);
+    $rt = '';
     for ($i = 0; $i < $cont; $i++) {
         $valor = $inteiro[$i];
         $rc = (($valor > 100) && ($valor < 200)) ? "cento" : $c[$valor[0]];

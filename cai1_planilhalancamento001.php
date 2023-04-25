@@ -2619,7 +2619,9 @@ if ($oInstit->db21_usasisagua == "t") {
         (sReceita.substr(0, 3) == '424' && sRecurso.substr(0, 7) == '1749014') ||
         (sReceita.substr(0, 3) == '424' && sRecurso.substr(0, 7) == '1749015') ||
         (sReceita.substr(0, 3) == '424' && sRecurso.substr(0, 7) == '1759014') ||
-        (sReceita.substr(0, 3) == '424' && sRecurso.substr(0, 7) == '1759015')
+        (sReceita.substr(0, 3) == '424' && sRecurso.substr(0, 7) == '1759015') ||
+        (sRecurso == '17100000') ||
+        (sRecurso == '17060000')
       );
     } else if ($('anoUsu').value == 2022) {
       lEmendaParlamentarObrigatoria = (
@@ -2755,10 +2757,32 @@ if ($oInstit->db21_usasisagua == "t") {
       document.getElementById("k81_emparlamentar").options[3].selected = true;
     }
 
-    // verificar se a receita for de rendimentos (iniciadas em "41321%") e deixa como padrao informação de emenda sempre 3 - não se aplica,.
-    if (sReceita.substr(0, 5) == '41321') {
+  // verificar se a receita for de rendimentos (iniciadas em "41321%") e deixa como padrao informação de emenda sempre 3 - não se aplica,.
+  if(sReceita.substr(0,5) == '41321'  && !lEmendaParlamentarObrigatoria ){
       document.getElementById("k81_emparlamentar").options[3].selected = true;
     }
+
+    if(sRecurso == '17060000'){
+ 
+      document.getElementById("k81_emparlamentar").options[1].selected = true;
+      document.getElementById("k81_emparlamentar").options[0].setAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[2].setAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[3].setAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[4].setAttribute('disabled','');
+    }else if(sRecurso == '17100000'){
+ 
+      document.getElementById("k81_emparlamentar").options[2].removeAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[3].setAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[4].setAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[0].setAttribute('disabled','');
+    }else{
+      
+      document.getElementById("k81_emparlamentar").options[1].removeAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[2].removeAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[3].removeAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[4].removeAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[0].removeAttribute('disabled','');
+    }  
 
   }
 

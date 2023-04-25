@@ -168,7 +168,9 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                         join db_config on prefeitura  = 't'
                         join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
                         left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
-                    where o39_data between  '$this->sDataInicial' and '$this->sDataFinal'";
+                    where o39_data between  '$this->sDataInicial' and '$this->sDataFinal'
+                    and o46_tiposup not in (1017)";
+                    
         $rsResult10 = db_query($sSql);
 
         $sSqlPrefeitura = "select * from infocomplementaresinstit where  si09_instit =" . db_getsession("DB_instit") . " and si09_tipoinstit = 2";
