@@ -471,13 +471,44 @@ class cl_licanexopncp
     return $sql;
   }
 
-  public function sql_anexos_licitacao($l20_codigo)
+  public function sql_anexos_licitacao_aviso($l20_codigo)
   {
     $sql = "
-       SELECT l216_nomedocumento
+            SELECT l216_nomedocumento,
+            l213_sequencial,
+            l213_descricao,
+            l216_sequencial
         FROM licanexopncp
         INNER JOIN licanexopncpdocumento ON l215_sequencial = l216_licanexospncp
-        where l215_liclicita = {$l20_codigo}
+        INNER JOIN tipoanexo ON l213_sequencial = l216_tipoanexo
+        WHERE l215_liclicita = {$l20_codigo} ORDER BY l213_sequencial limit 1;
+    ";
+    return $sql;
+  }
+
+  public function sql_anexos_licitacao_aviso_todos($l20_codigo)
+  {
+    $sql = "
+          SELECT l216_nomedocumento,
+          l213_sequencial,
+          l213_descricao,
+          l216_sequencial
+      FROM licanexopncp
+      INNER JOIN licanexopncpdocumento ON l215_sequencial = l216_licanexospncp
+      INNER JOIN tipoanexo ON l213_sequencial = l216_tipoanexo
+      WHERE l215_liclicita = {$l20_codigo} ORDER BY l213_sequencial OFFSET  1;
+    ";
+    return $sql;
+  }
+
+  public function sql_anexos_licitacao($l20_codigo, $l216_sequencial)
+  {
+    $sql = "
+       SELECT l216_nomedocumento,l216_tipoanexo,l213_descricao
+        FROM licanexopncp
+        INNER JOIN licanexopncpdocumento ON l215_sequencial = l216_licanexospncp
+        INNER JOIN tipoanexo ON l213_sequencial = l216_tipoanexo
+        where l215_liclicita = {$l20_codigo} and l216_sequencial = $l216_sequencial
     ";
     return $sql;
   }

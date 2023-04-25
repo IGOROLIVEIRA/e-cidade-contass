@@ -471,14 +471,47 @@ class cl_anexocomprapncp
         return $sql;
     }
 
-    public function sql_anexos_licitacao($pc80_codproc)
+    public function sql_anexos_licitacao_compra($pc80_codproc)
     {
         $sql = "
-       SELECT l217_nomedocumento
-       FROM anexocomprapncp
+        SELECT  l217_nomedocumento AS l216_nomedocumento,
+                l213_sequencial,
+                l213_descricao,
+                l217_sequencial
+            FROM anexocomprapncp
+            INNER JOIN comanexopncpdocumento ON l217_licanexospncp = l216_sequencial
+            INNER JOIN tipoanexo ON l213_sequencial = l217_tipoanexo
+            WHERE l216_codproc = $pc80_codproc
+            ORDER BY l213_sequencial limit 1";
+        return $sql;
+    }
+
+    public function sql_anexos_licitacao_aviso_todos($pc80_codproc)
+    {
+        $sql = "
+        SELECT  l217_nomedocumento AS l216_nomedocumento,
+                l213_sequencial,
+                l213_descricao,
+                l217_sequencial
+            FROM anexocomprapncp
+            INNER JOIN comanexopncpdocumento ON l217_licanexospncp = l216_sequencial
+            INNER JOIN tipoanexo ON l213_sequencial = l217_tipoanexo
+            WHERE l216_codproc = $pc80_codproc
+            ORDER BY l213_sequencial OFFSET  1";
+        return $sql;
+    }
+
+    public function sql_anexos_licitacao($pc80_codproc, $l217_sequencial)
+    {
+        $sql = "
+      SELECT    l217_nomedocumento AS l216_nomedocumento,
+                l217_tipoanexo as l216_tipoanexo,
+                l213_descricao
+        FROM anexocomprapncp
         INNER JOIN comanexopncpdocumento ON l217_licanexospncp = l216_sequencial
-        where l216_codproc = {$pc80_codproc}
-    ";
+        INNER JOIN tipoanexo ON l213_sequencial = l217_tipoanexo
+        WHERE l216_codproc = $pc80_codproc and l217_sequencial = $l217_sequencial
+      ";
         return $sql;
     }
 }

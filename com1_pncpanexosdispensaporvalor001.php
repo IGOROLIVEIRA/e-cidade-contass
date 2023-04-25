@@ -124,7 +124,8 @@ $oRotulo->label("pc80_resumo");
             <legend>Documentos Anexados</legend>
             <div id="ctnDbGridDocumentos"></div>
         </fieldset>
-
+        <input type="button" id="btnEnviarPNCP" value="Envia documento para o PNCP" onClick="js_enviarDocumentoPNCP();" />
+        <input type="button" id="btnExcluirPNCP" value="Excluir documento no PNCP" onClick="js_excluirDocumentoPNCP();" />
         <input type="button" id="btnExcluir" value="Excluir Selecionados" onClick="js_excluirSelecionados();" />
         <input type="button" id="btnDownloadAnexos" value="Download" onClick="js_downloadAnexos();" />
 
@@ -643,7 +644,7 @@ $oRotulo->label("pc80_resumo");
                 return false;
             }
 
-            sArquivo += 'js_mostraProcessodecomprasHidden&pesquisa_chave=' + iNumeroLicitacao + '&sCampoRetorno=pc80_codproc';
+            sArquivo += 'js_mostraProcessodecomprasHidden&pesquisa_chave=' + iNumeroLicitacao + '&sCampoRetorno=pc80_resumo';
         }
 
         js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de Licitação', lMostra);
@@ -741,7 +742,7 @@ $oRotulo->label("pc80_resumo");
      * @return void
      */
     function js_mostraProcessodecomprasHidden(descricao, lErro) {
-
+        console.log(descricao);
         /**
          * Nao encontrou Licitacao
          */
@@ -840,6 +841,136 @@ $oRotulo->label("pc80_resumo");
                     $('uploadfile').disabled = false;
                     js_buscarDocumentos();
                     alert(sMensagem);
+                }
+            });
+    }
+
+    function js_enviarDocumentoPNCP() {
+
+        const documentosSelecionados = oGridDocumentos.getSelection("object")
+        var iSelecionados = documentosSelecionados.length;
+        var iCodigoProcesso = $('pc80_codproc').value;
+        var aDocumentos = [];
+        var aTipo = [];
+
+        if (iSelecionados == 0) {
+            alert('Selecione pelo menos arquivo para Enviar')
+            return false
+        }
+        if (!confirm('Confirma o Envio do Documento?')) {
+            return false;
+        }
+
+        if (empty(iCodigoProcesso)) {
+
+            alert('Licitação não informada.');
+            return false;
+        }
+
+        for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
+
+            var iDocumento = documentosSelecionados[iIndice].aCells[0].getValue();
+            aDocumentos.push(iDocumento);
+
+            var iTipo = documentosSelecionados[iIndice].aCells[3].getValue();
+            aTipo.push(iTipo);
+
+        }
+
+        js_divCarregando('Aguarde... Enviando documentos!', 'msgbox');
+
+        var oParametros = new Object();
+
+        oParametros.exec = 'EnviarDocumentoPNCP';
+        oParametros.iCodigoProcesso = iCodigoProcesso;
+        oParametros.aDocumentos = aDocumentos;
+        oParametros.aTipoDocumentos = aTipo;
+
+        var oAjax = new Ajax.Request(
+            'com1_envioanexos.RPC.php', {
+                parameters: 'json=' + Object.toJSON(oParametros),
+                method: 'post',
+                asynchronous: false,
+
+                /**
+                 * 
+                 * Retorno do RPC
+                 */
+                onComplete: function(oAjax) {
+
+                    js_removeObj("msgbox");
+                    var oRetorno = eval('(' + oAjax.responseText + ")");
+
+                    if (oRetorno.status == 1) {
+                        alert("Anexo(s) Enviado(s) com Sucesso!");
+                    } else {
+                        alert(oRetorno.message.urlDecode());
+                    }
+                }
+            });
+
+    }
+
+    function js_excluirDocumentoPNCP() {
+        const documentosSelecionados = oGridDocumentos.getSelection("object")
+        var iSelecionados = documentosSelecionados.length;
+        var iCodigoProcesso = $('pc80_codproc').value;
+        var aDocumentos = [];
+        var aTipo = [];
+
+        if (iSelecionados == 0) {
+            alert('Selecione pelo menos arquivo para Excluir')
+            return false
+        }
+        if (!confirm('Confirma a Exclusão do Documento?')) {
+            return false;
+        }
+
+        if (empty(iCodigoProcesso)) {
+
+            alert('Licitação não informada.');
+            return false;
+        }
+
+        for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
+
+            var iDocumento = documentosSelecionados[iIndice].aCells[0].getValue();
+            aDocumentos.push(iDocumento);
+
+            var iTipo = documentosSelecionados[iIndice].aCells[3].getValue();
+            aTipo.push(iTipo);
+
+        }
+
+        js_divCarregando('Aguarde... Excluindo documentos!', 'msgbox');
+
+        var oParametros = new Object();
+
+        oParametros.exec = 'ExcluirDocumentoPNCP';
+        oParametros.iCodigoProcesso = iCodigoProcesso;
+        oParametros.aDocumentos = aDocumentos;
+        oParametros.aTipoDocumentos = aTipo;
+
+        var oAjax = new Ajax.Request(
+            'com1_envioanexos.RPC.php', {
+                parameters: 'json=' + Object.toJSON(oParametros),
+                method: 'post',
+                asynchronous: false,
+
+                /**
+                 * 
+                 * Retorno do RPC
+                 */
+                onComplete: function(oAjax) {
+
+                    js_removeObj("msgbox");
+                    var oRetorno = eval('(' + oAjax.responseText + ")");
+                    console.log(oRetorno);
+                    if (oRetorno.status == 1) {
+                        alert("Anexo(s) Excluidos(s) com Sucesso!");
+                    } else {
+                        alert(oRetorno.message.urlDecode());
+                    }
                 }
             });
     }

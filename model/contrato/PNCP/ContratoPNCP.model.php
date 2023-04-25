@@ -24,8 +24,8 @@ class ContratoPNCP extends ModeloBasePNCP
     {
         $oDado = $this->dados;
 
-        if ($oDado->receita = 't')
-            $oDado->receita = true;
+        if ($oDado->receita == '')
+            $oDado->receita = 'f';
 
         $aDadosAPI = array(
             'cnpjCompra'                               => '17316563000196', //$oDado->cnpjcompra,
@@ -39,7 +39,7 @@ class ContratoPNCP extends ModeloBasePNCP
             'niFornecedor'                             => $oDado->nifornecedor,
             'tipoPessoaFornecedor'                     => 'PJ', //$oDado->tipopessoafornecedor,
             'nomeRazaoSocialFornecedor'                => $oDado->nomerazaosocialfornecedor,
-            'receita'                                  => $oDado->receita,
+            'receita'                                  => $oDado->receita == 'f' ? 'false' : 'true',
             'codigoUnidade'                            => '01001', //$oDado->codigounidade,
             'objetoContrato'                           => $oDado->objetocontrato,
             'valorInicial'                             => $oDado->valorinicial,
@@ -59,9 +59,6 @@ class ContratoPNCP extends ModeloBasePNCP
     public function montarRetificacao()
     {
         $oDado = $this->dados;
-
-        if ($oDado->receita = 't')
-            $oDado->receita = true;
 
         $aDadosAPI = array(
             'cnpjCompra'                               => '17316563000196', //$oDado->cnpjcompra,
