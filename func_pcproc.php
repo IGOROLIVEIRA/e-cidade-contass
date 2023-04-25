@@ -263,7 +263,7 @@ $sWhereContrato = " and 1 = 1 ";
               if ($itemobras == "true") {
                 echo "<script>" . $funcao_js . "('$pc80_codproc','$pc80_resumo',false);</script>";
               } else {
-                echo "<script>" . $funcao_js . "('$pc80_codproc',false);</script>";
+                echo "<script>" . $funcao_js . "('$pc80_resumo',false);</script>";
               }
             } else {
               echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";

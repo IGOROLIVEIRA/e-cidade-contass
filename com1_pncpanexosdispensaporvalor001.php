@@ -644,7 +644,7 @@ $oRotulo->label("pc80_resumo");
                 return false;
             }
 
-            sArquivo += 'js_mostraProcessodecomprasHidden&pesquisa_chave=' + iNumeroLicitacao + '&sCampoRetorno=pc80_codproc';
+            sArquivo += 'js_mostraProcessodecomprasHidden&pesquisa_chave=' + iNumeroLicitacao + '&sCampoRetorno=pc80_resumo';
         }
 
         js_OpenJanelaIframe('', 'db_iframe_proc', sArquivo, 'Pesquisa de Licitação', lMostra);
@@ -742,7 +742,7 @@ $oRotulo->label("pc80_resumo");
      * @return void
      */
     function js_mostraProcessodecomprasHidden(descricao, lErro) {
-
+        console.log(descricao);
         /**
          * Nao encontrou Licitacao
          */
