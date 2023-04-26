@@ -58,9 +58,65 @@ switch ($oParam->exec) {
         $oDadosAvisoPNCP = db_utils::fieldsMemory($rsAvisoPNCP, 0);
         try {
             foreach ($oParam->aItensLicitacao as $item) {
+                $clliccontrolepncp = new cl_liccontrolepncpitens();
+                //verifica se ja foi enviado resultado do item
+                $rsPNCP = $clliccontrolepncp->sql_record($clliccontrolepncp->sql_query(null, "*", null, "l214_ordem = $item->l21_ordem and l214_licitacao=$oParam->iLicitacao"));
+
+                if (pg_num_rows($rsPNCP)) {
+                    throw new Exception('Rusultado do Iten PNCP ja foi enviado Item seq: ' . $item->l21_ordem);
+                }
 
                 $aItensLicitacao = array();
                 $rsResultado = $clliclicita->sql_record($clliclicita->sql_query_resultado_pncp($oParam->iLicitacao, $item->l21_ordem));
+
+                if (!pg_num_rows($rsResultado)) {
+                    throw new Exception('Dados do Rultado do Iten PNCP não Encontrato! Licitacao:' . $aLicitacao->codigo . "Item seq: " . $item->l21_ordem);
+                }
+                for ($i = 0; $i < pg_num_rows($rsResultado); $i++) {
+                    $oDadosResultado = db_utils::fieldsMemory($rsResultado, $i);
+                    $aItensLicitacao[] = $oDadosResultado;
+                }
+                //classe modelo
+                $clResultadoItensPNCP = new ResultadoItensPNCP($aItensLicitacao);
+                //monta o json com os dados da licitacao
+                $odadosResultado = $clResultadoItensPNCP->montarDados();
+                //envia para pncp
+                $rsApiPNCP = $clResultadoItensPNCP->enviarResultado($odadosResultado, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->l21_ordem);
+
+                if ($rsApiPNCP[1] == '201') {
+                    $clliccontrolepncp->l214_numeroresultado = 1;
+                    $clliccontrolepncp->l214_numerocompra = $oDadosAvisoPNCP->l213_numerocompra;
+                    $clliccontrolepncp->l214_anousu = $oDadosAvisoPNCP->l213_anousu;
+                    $clliccontrolepncp->l214_licitacao = $oParam->iLicitacao;
+                    $clliccontrolepncp->l214_ordem = $item->l21_ordem;
+                    $clliccontrolepncp->incluir();
+
+                    $oRetorno->status  = 1;
+                    $oRetorno->message = "Enviado com Sucesso !";
+                } else {
+                    throw new Exception(utf8_decode($rsApiPNCP[0]));
+                }
+            }
+        } catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
+        break;
+
+    case 'RetificarResultado':
+        /*
+            [iLicitacao] => 499
+        */
+        $clliclicita           = new cl_liclicita();
+        $clliccontrolepncp     = new cl_liccontrolepncp();
+        //Buscos Chave da compra no PNCP
+        $rsAvisoPNCP = $clliccontrolepncp->sql_record($clliccontrolepncp->sql_query(null, "l213_numerocompra,l213_anousu", null, "l213_licitacao = $oParam->iLicitacao limit 1"));
+        $oDadosAvisoPNCP = db_utils::fieldsMemory($rsAvisoPNCP, 0);
+        try {
+            foreach ($oParam->aItensLicitacao as $item) {
+
+                $aItensLicitacao = array();
+                $rsResultado = $clliclicita->sql_record($clliclicita->sql_query_resultado_retifica_pncp($oParam->iLicitacao, $item->l21_ordem));
 
                 if (!pg_numrows($rsResultado)) {
                     throw new Exception('Dados do Rultado do Iten PNCP não Encontrato! Licitacao:' . $aLicitacao->codigo . "Item seq: " . $item->l21_ordem);
@@ -73,8 +129,9 @@ switch ($oParam->exec) {
                 $clResultadoItensPNCP = new ResultadoItensPNCP($aItensLicitacao);
                 //monta o json com os dados da licitacao
                 $odadosResultado = $clResultadoItensPNCP->montarDados();
+
                 //envia para pncp
-                $rsApiPNCP = $clResultadoItensPNCP->enviarResultado($odadosResultado, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->l21_ordem);
+                $rsApiPNCP = $clResultadoItensPNCP->retificarResultado($odadosResultado, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->l21_ordem, $oDadosResultado->l214_numeroresultado);
                 $urlResutltado = explode('x-content-type-options', $rsApiPNCP[0]);
 
                 if ($rsApiPNCP[1] == '201') {

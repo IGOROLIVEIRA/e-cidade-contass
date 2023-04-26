@@ -15,6 +15,7 @@ require_once("classes/cl_licontroleatarppncp.php");
 require_once("model/licitacao/PNCP/AvisoLicitacaoPNCP.model.php");
 require_once("model/licitacao/PNCP/AtaRegistroprecoPNCP.model.php");
 require_once("classes/db_licacontrolenexospncp_classe.php");
+require_once("classes/db_liccontrolepncpitens_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 $oJson             = new services_json();
@@ -258,12 +259,15 @@ switch ($oParam->exec) {
             foreach ($oParam->aLicitacoes as $aLicitacao) {
                 $clAvisoLicitacaoPNCP = new AvisoLicitacaoPNCP();
                 $clliccontroleanexopncp = new cl_liccontroleanexopncp();
+                $clliccontrolepncpitens = new cl_liccontrolepncpitens();
+
                 //envia exclusao de aviso
                 $rsApiPNCP = $clAvisoLicitacaoPNCP->excluirAviso(substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
 
                 if ($rsApiPNCP == null) {
                     $clliccontrolepncp->excluir(null, "l213_licitacao = $aLicitacao->codigo");
                     $clliccontroleanexopncp->excluir_licitacao($aLicitacao->codigo);
+                    $clliccontrolepncpitens->excluir(null, "l214_licitacao = $aLicitacao->codigo");
 
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Excluido com Sucesso !";

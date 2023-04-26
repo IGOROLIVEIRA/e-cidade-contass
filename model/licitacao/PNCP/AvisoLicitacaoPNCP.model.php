@@ -136,7 +136,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = '17316563000196';
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras";
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras";
 
         $method = 'POST';
 
@@ -208,7 +208,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = '17316563000196';
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
         $method = 'PATCH';
 
@@ -264,7 +264,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = '17316563000196';
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
         $method = 'DELETE';
 
@@ -315,7 +315,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = '17316563000196';
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $iCodigocompra . "/arquivos";
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $iCodigocompra . "/arquivos";
 
         $method = 'POST';
 
@@ -374,7 +374,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = '17316563000196';
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$iCodigocompra/arquivos/$iSeqAnexosPNCP";
+        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$iCodigocompra/arquivos/$iSeqAnexosPNCP";
 
         $method = 'DELETE';
 
