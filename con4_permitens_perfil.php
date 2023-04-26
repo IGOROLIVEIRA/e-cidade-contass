@@ -250,12 +250,7 @@ if (isset($atuusuarios) || isset($atuperfil)) {
 												$result = db_query("select codigo,nomeinst from db_config");
 											} else {
 
-												$result = db_query("select c.codigo,c.nomeinst 
-		                   from db_config c where c.codigo = " . db_getsession("DB_instit"));
-
-												//                    $result = db_query("select c.codigo,c.nomeinst 
-												//		                   from db_config c
-												//				        inner join db_userinst u on u.id_instit = c.codigo where u.id_usuario = ".db_getsession("DB_id_usuario"));
+												$result = db_query("select c.codigo,c.nomeinst from db_config c where c.codigo = " . db_getsession("DB_instit"));
 											}
 											for ($i = 0; $i < pg_numrows($result); $i++) {
 												echo "<option " . ($i == 0 ? 'selected' : '') . " value=\"" . pg_result($result, $i, "codigo") . "\">" . pg_result($result, $i, "nomeinst") . "</option>\n";
@@ -309,7 +304,6 @@ if (isset($atuusuarios) || isset($atuperfil)) {
 												$numrows = pg_numrows($result);
 												for ($i = 0; $i < $numrows; $i++) {
 													echo "<option style='text-align:left;color:black;letter-spacing:normal;' value=\"" . pg_result($result, $i, "id_usuario") . "\" onClick=\"document.form1.perfil.value='" . pg_result($result, $i, "nome") . "'\">" . pg_result($result, $i, "nome") . "</option>\n";
-													//echo "<option ".(pg_result($result,$i,"usuext") == 2?"style='color: blue;font-weight:bold'":"")." value=\"".pg_result($result,$i,"id_usuario")."\">".pg_result($result,$i,"login")."</option>\n";
 												}
 												?>
 										</select>
@@ -446,9 +440,7 @@ if (isset($atuusuarios) || isset($atuperfil)) {
 						  
 								todosPerfisSelecionados = false;
 							  }
-						  
-						  
-						  
+
 						  
 							}
 							 </script>";
