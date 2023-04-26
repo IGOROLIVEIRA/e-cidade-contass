@@ -80,7 +80,7 @@ charset=iso-8859-1">
               </td>
               <td width="96%" align="left" nowrap>
                 <?
-                db_input("t52_ident", 20, $It52_ident, true, "text", 4, "", "chave_t52_ident");
+                db_input("chave_t52_ident", 20, $It52_ident, true, "text", 4, "", "chave_t52_ident");
                 ?>
               </td>
             </tr>
@@ -186,11 +186,48 @@ charset=iso-8859-1">
           }
 
 
-          $sql = "select bens.t52_bem, bens.t52_codcla, bens.t52_numcgm, bens.t52_valaqu, bens.t52_dtaqu,
-            bens.t52_ident, bens.t52_descr, bens.t52_obs, bens.t52_depart, bens.t52_instit, bens.t52_bensmarca,
-            bens.t52_bensmedida, bens.t52_bensmodelo, case when exists (select 1 from bensbaix where bensbaix.t55_codbem = t52_bem)
-            then 'Baixado'::varchar else 'Ativo'::varchar end as dl_Situação,t44_valoratual,descrdepto from bens join bensdepreciacao on t52_bem = t44_bens
-            inner join db_depart on coddepto = t52_instit where 1=1 $where";
+          $sql = "select
+          distinct bens.t52_bem,
+          bens.t52_valaqu,
+          bens.t52_dtaqu,
+          bens.t52_ident,
+          bens.t52_descr,
+          bens.t52_obs,
+          db_depart.descrdepto,
+          bens.t52_bensmarca,
+          bens.t52_bensmedida,
+          bens.t52_bensmodelo,
+          t52_depart,
+          t44_valoratual,
+          case
+            when exists
+        (
+            select
+              1
+            from
+              bensbaix
+            where
+              bensbaix.t55_codbem = t52_bem) then 'Baixado'::varchar
+            else 'Ativo'::varchar
+          end as dl_Situação
+        from
+          bens
+        inner join db_depart on
+          db_depart.coddepto = bens.t52_depart
+        inner join bensmarca on
+          bensmarca.t65_sequencial = bens.t52_bensmarca
+        inner join bensmodelo on
+          bensmodelo.t66_sequencial = bens.t52_bensmodelo
+        inner join bensmedida on
+          bensmedida.t67_sequencial = bens.t52_bensmedida
+        inner join bensdepreciacao on
+          t52_bem = t44_bens
+        inner join bensbaix on
+          t55_codbem = t52_bem
+        where
+          t52_instit =  " . db_getsession("DB_instit") . $where . "
+        order by
+          t52_descr";
 
 
           db_lovrot($sql, 15, "()", "", $funcao_js);
@@ -202,13 +239,55 @@ charset=iso-8859-1">
             inner join db_depart on coddepto = t52_instit where t52_bem =
             $pesquisa_chave and t52_instit = " . db_getsession("DB_instit");
 
+            $sql = "select
+            distinct bens.t52_bem,
+            bens.t52_valaqu,
+            bens.t52_dtaqu,
+            bens.t52_ident,
+            bens.t52_descr,
+            bens.t52_obs,
+            db_depart.descrdepto,
+            bens.t52_bensmarca,
+            bens.t52_bensmedida,
+            bens.t52_bensmodelo,
+            t52_depart,
+            t44_valoratual,
+            case
+              when exists
+          (
+              select
+                1
+              from
+                bensbaix
+              where
+                bensbaix.t55_codbem = t52_bem) then 'Baixado'::varchar
+              else 'Ativo'::varchar
+            end as dl_Situação
+          from
+            bens
+          inner join db_depart on
+            db_depart.coddepto = bens.t52_depart
+          inner join bensmarca on
+            bensmarca.t65_sequencial = bens.t52_bensmarca
+          inner join bensmodelo on
+            bensmodelo.t66_sequencial = bens.t52_bensmodelo
+          inner join bensmedida on
+            bensmedida.t67_sequencial = bens.t52_bensmedida
+          inner join bensdepreciacao on
+            t52_bem = t44_bens
+          inner join bensbaix on
+            t55_codbem = t52_bem
+          where
+          t52_bem =
+          $pesquisa_chave and t52_instit = " . db_getsession("DB_instit");
+
             $rsBem = db_query($sql);
 
             if (pg_num_rows($rsBem) != 0) {
               db_fieldsmemory($rsBem, 0);
-              echo "<script>" . $funcao_js . "('$t52_descr','$t44_valoratual','$t52_depart','$descrdepto','$t52_valaqu',false);</script>";
+              echo "<script>" . $funcao_js . "('$t52_descr','$t44_valoratual','$t52_depart','$descrdepto','$t52_valaqu','$t52_ident',false);</script>";
             } else {
-              echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrada','','','','',true);</script>";
+              echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrada','','','','','',true);</script>";
             }
           } else {
             echo "<script>" . $funcao_js . "('',false);</script>";
@@ -222,6 +301,14 @@ charset=iso-8859-1">
 
 </html>
 <script>
+  document.getElementsByClassName('DBLovrotTdCabecalho').item(10).style.display = 'none';
+  document.getElementsByClassName('DBLovrotTdCabecalho').item(11).style.display = 'none'
+
+  for (i = 0; i < 15; i++) {
+    document.getElementById('I' + i + '10').style.display = 'none';
+    document.getElementById('I' + i + '11').style.display = 'none';
+  }
+
   function js_troca(obj) {
     js_mascara02_t64_class();
   }

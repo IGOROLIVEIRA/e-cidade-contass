@@ -36,13 +36,16 @@ require_once("classes/db_pcmater_classe.php");
 $oJson         = new services_json();
 $clpcmater     = new cl_pcmater;
 $sName    = $_POST["string"];
-$sql = $clpcmater->sql_query_desdobra(null,"distinct pc01_codmater as cod,
+$sql = $clpcmater->sql_query_desdobra(
+      null,
+      "distinct pc01_codmater as cod,
                                             pc01_descrmater||
                                             case when pc01_complmater <> '' 
                                                  then ' - '|| pc01_complmater 
-                                           else '' end as label","2",
-               "pc01_descrmater ilike '".$sName."%' and pc07_codele is not null and pc01_ativo is false");
-               echo $sql;
+                                           else '' end as label",
+      "2",
+      "pc01_descrmater ilike '" . $sName . "%' and pc07_codele is not null and pc01_ativo is false"
+);
 $result   = db_query($sql);
 $iNumRows = pg_num_rows($result);
 $array    = db_utils::getColectionByRecord($result);

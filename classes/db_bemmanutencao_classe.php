@@ -25,10 +25,10 @@ class cl_bemmanutencao
   public $t98_idusuario = null;
   public $t98_dataservidor = null;
   public $t98_horaservidor = null;
+  public $t98_tipo = null;
+
   // cria propriedade com as variaveis do arquivo 
   public $campos = "
-                 p202_sequencial = int8 = Sequencial 
-                 p202_tipo = varchar(200) = Tipo 
                  t98_sequencial int8 
                 t98_bem = int8 = Sequencial 
                 t98_data = data = Data 
@@ -37,6 +37,7 @@ class cl_bemmanutencao
                 t98_idusuario = int = Id do usuário
                 t98_dataservidor = date = Data do Servidor
                 t98_horaservidor = time = Horário do Servidor
+                t98_tipo = int4 = Tipo da Manutenção
                  ";
 
   //funcao construtor da classe 
@@ -69,6 +70,7 @@ class cl_bemmanutencao
       $this->t98_vlrmanut = ($this->t98_vlrmanut == "" ? @$GLOBALS["HTTP_POST_VARS"]["t98_vlrmanut"] : $this->t98_vlrmanut);
       $this->t98_dataservidor = ($this->t98_dataservidor == "" ? @$GLOBALS["HTTP_POST_VARS"]["t98_dataservidor"] : $this->t98_dataservidor);
       $this->t98_horaservidor = ($this->t98_horaservidor == "" ? @$GLOBALS["HTTP_POST_VARS"]["t98_horaservidor"] : $this->t98_horaservidor);
+      $this->t98_tipo = ($this->t98_tipo == "" ? @$GLOBALS["HTTP_POST_VARS"]["t98_tipo"] : $this->t98_tipo);
     } else {
     }
   }
@@ -143,8 +145,18 @@ class cl_bemmanutencao
       return false;
     }
 
+    if ($this->t98_tipo == "0") {
+      $this->erro_sql = " Campo Tipo da Manutenção não informado.";
+      $this->erro_campo = "t98_tipo";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
 
-    $sql = "insert into permanexo(
+
+    $sql = "insert into bemmanutencao(
                     t98_sequencial 
                     ,t98_bem 
                     ,t98_data 
@@ -153,16 +165,16 @@ class cl_bemmanutencao
                     ,t98_idusuario 
                     ,t98_dataservidor
                     ,t98_horaservidor
-                values (
-                               $this->t98_sequencial,  
+                    ,t98_tipo)
+                values ($this->t98_sequencial,  
                                $this->t98_bem, 
                                '$this->t98_data', 
                                '$this->t98_descricao', 
                                $this->t98_vlrmanut, 
                                $this->t98_idusuario, 
-                               $this->t98_idusuario,
                                '$this->t98_dataservidor',
-                               '$this->t98_horaservidor' 
+                               '$this->t98_horaservidor' ,
+                               '$this->t98_tipo' 
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -194,21 +206,21 @@ class cl_bemmanutencao
     }
     return true;
   }
-}
-  /*
+
+
 
   // funcao para alteracao
-  function alterar($sequencial = null, $perfis)
+  function alterar($sequencial = null)
   {
     $this->atualizacampos();
-    $sql = " update permanexo set ";
+    $sql = " update bemmanutencao set ";
     $virgula = "";
-    if (trim($this->p202_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["p202_sequencial"])) {
-      $sql  .= $virgula . " p202_sequencial = $this->p202_sequencial ";
+    if (trim($this->t98_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["t98_sequencial"])) {
+      $sql  .= $virgula . " t98_sequencial = $this->t98_sequencial ";
       $virgula = ",";
-      if (trim($this->p202_sequencial) == null) {
+      if (trim($this->t98_sequencial) == null) {
         $this->erro_sql = " Campo Sequencial não informado.";
-        $this->erro_campo = "p202_sequencial";
+        $this->erro_campo = "t98_sequencial";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -216,12 +228,12 @@ class cl_bemmanutencao
         return false;
       }
     }
-    if (trim($this->p202_tipo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["p202_tipo"])) {
-      $sql  .= $virgula . " p202_tipo = '$this->p202_tipo' ";
+    if (trim($this->t98_bem) != "" || isset($GLOBALS["HTTP_POST_VARS"]["t98_bem"])) {
+      $sql  .= $virgula . " t98_bem = $this->t98_bem ";
       $virgula = ",";
-      if (trim($this->p202_tipo) == null) {
-        $this->erro_sql = " Campo Tipo não informado.";
-        $this->erro_campo = "p202_tipo";
+      if (trim($this->t98_bem) == null) {
+        $this->erro_sql = " Campo Codigo do Bem não informado.";
+        $this->erro_campo = "t98_bem";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -229,12 +241,71 @@ class cl_bemmanutencao
         return false;
       }
     }
+
+    if (trim($this->t98_data) != "" || isset($GLOBALS["HTTP_POST_VARS"]["t98_data"])) {
+      $sql  .= $virgula . " t98_data = '$this->t98_data' ";
+      $virgula = ",";
+      if (trim($this->t98_data) == null) {
+        $this->erro_sql = " Campo Data da Manutenção não informado.";
+        $this->erro_campo = "t98_data";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+
+    if (trim($this->t98_descricao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["t98_descricao"])) {
+      $sql  .= $virgula . " t98_descricao = '$this->t98_descricao' ";
+      $virgula = ",";
+      if (trim($this->t98_data) == null) {
+        $this->erro_sql = " Campo Descrição da Manutenção não informado.";
+        $this->erro_campo = "t98_descricao";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+
+    if (trim($this->t98_vlrmanut) != "" || isset($GLOBALS["HTTP_POST_VARS"]["t98_vlrmanut"])) {
+      $sql  .= $virgula . " t98_vlrmanut = $this->t98_vlrmanut ";
+      $virgula = ",";
+      if (trim($this->t98_vlrmanut) == null) {
+        $this->erro_sql = " Campo Valor da Manutenção não informado.";
+        $this->erro_campo = "t98_vlrmanut";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+
+    if (trim($this->t98_tipo) != "" || isset($GLOBALS["HTTP_POST_VARS"]["t98_tipo"])) {
+      $sql  .= $virgula . " t98_tipo = $this->t98_tipo ";
+      $virgula = ",";
+      if (trim($this->t98_tipo) == null) {
+        $this->erro_sql = " Campo Tipo da Manutenção não informado.";
+        $this->erro_campo = "t98_tipo";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+
+
+
     $sql .= " where ";
-    $sql .= "p202_sequencial = $sequencial";
+    $sql .= "t98_sequencial = $sequencial";
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Permissão de anexo nao Alterado. Alteracao Abortada.\\n";
+      $this->erro_sql   = "Manutenção do bem nao Alterado. Alteracao Abortada.\\n";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
@@ -243,20 +314,13 @@ class cl_bemmanutencao
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = "";
-        $this->erro_sql = "Permissão de anexo nao foi Alterado. Alteracao Executada.\\n";
+        $this->erro_sql = "Manutenção do bem nao foi Alterado. Alteracao Executada.\\n";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "1";
+        $this->erro_status = "0";
         $this->numrows_alterar = 0;
         return true;
       } else {
-
-        $result = db_query("delete from perfispermanexo where p203_permanexo = $this->p202_sequencial");
-        for ($i = 0; $i < sizeof($perfis); $i++) {
-          $numeroperfil = intval($perfis[$i]);
-          $sql = "insert into perfispermanexo (p203_permanexo,p203_perfil) values ($this->p202_sequencial,$numeroperfil) ";
-          $result = db_query($sql);
-        }
 
         $this->erro_banco = "";
         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
@@ -268,6 +332,9 @@ class cl_bemmanutencao
       }
     }
   }
+}
+
+  /*
 
   // funcao para exclusao 
   function excluir($sequencial = null, $dbwhere = null)
