@@ -523,12 +523,12 @@ HTML;
                         $totalvalor_inss += $auxInss;
                         $totalvalor_irrf += $auxIrrf;
                         $totaloutrasretencoes += $auxRetencoes;
-                        $totalpatronal += formatNumeroTotais($oNotas->patronal);
+                        $totalpatronal += FormatTotalNumberTwoDecimal($oNotas->patronal);
                         $totale50_valorremuneracao += $oNotas->e50_valorremuneracao;
                         $totalbasepatronal += $oNotas->basepatronal;
                         $totalvalorliquido += $valorliquido;
                         
-                        $oNotas->patronal = formatNumeroTotais($oNotas->patronal);
+                        $oNotas->patronal = FormatTotalNumberTwoDecimal($oNotas->patronal);
 
                         $Geraltotale70_vlrliq += $oNotas->e70_vlrliq;
                         $Geraltotalvalor_inss += $auxInss;
@@ -728,7 +728,7 @@ HTML;
                         $totalvalor_inss += $auxInss;
                         $totalvalor_irrf += $auxIrrf;
                         $totaloutrasretencoes += $auxRetencoes;
-                        $totalpatronal += formatNumeroTotais($oNotas->patronal);
+                        $totalpatronal += FormatTotalNumberTwoDecimal($oNotas->patronal);
                         $totale50_valorremuneracao += $oNotas->e50_valorremuneracao;
                         $totalbasepatronal += $oNotas->basepatronal;
                         $totalvalorliquido += $valorliquido;
@@ -739,7 +739,7 @@ HTML;
                         $oe70_vlrliq = db_formatar($oNotas->e70_vlrliq, "f");
                         $valorliquido = db_formatar($valorliquido, "f");
 
-                        $oNotas->patronal = formatNumero($oNotas->patronal);
+                        $oNotas->patronal = FormatNumberTwoDecimal($oNotas->patronal);
                         $oNotas->basepatronal = db_formatar($oNotas->basepatronal, "f");
                         $oNotas->e50_valorremuneracao = db_formatar($oNotas->e50_valorremuneracao, "f");
                                 
@@ -872,29 +872,21 @@ $mPDF->Output();
 
 db_fim_transacao();
 
-
-function formatNumero($valor)
+function FormatNumberTwoDecimal($value)
     {
-        
-        $valor = str_replace(',', '.', $valor);
-        $valor = floatval($valor);
-        $number = number_format($valor, 3, ',', '.');
-        $number = explode(',',$number);
-        $decimais = $number[0].",".substr($number[1],0,2);
-        
-        return $decimais;
-
-       
+        $value    = str_replace(',', '.', $value);
+        $value    = floatval($value);
+        $number   = number_format($value, 3, ',', '.');
+        $number   = explode(',',$number);
+        $decimals = $number[0].",".substr($number[1],0,2);
+        return $decimals;
     }
-function formatNumeroTotais($valor)
+function FormatTotalNumberTwoDecimal($value)
     {
-
-        $valor = floatval($valor);
-        $number = number_format($valor, 3, ',', '.');
-        $number = explode(',',$number);
-        $decimais = str_replace('.','',$number[0]).".".substr($number[1],0,2);
-        return $decimais;
-
-       
+        $value    = floatval($value);
+        $number   = number_format($value, 3, ',', '.');
+        $number   = explode(',',$number);
+        $decimals = str_replace('.','',$number[0]).".".substr($number[1],0,2);
+        return $decimals;       
     }   
 ?>
