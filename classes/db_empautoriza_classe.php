@@ -1960,10 +1960,4 @@ class cl_empautoriza
         $sql = "select e54_autori from empautoriza where e54_licoutrosorgaos = $lic211_sequencial";
         return $sql;
     }
-
-    function sql_valida_instuicao() {
-        $whereValidaInst = "empautoriza.e54_instit =". db_getsession('DB_instit');
-        $sqlValidaInst = "select empautoriza.e54_instit from empautoriza where ". $whereValidaInst;
-        return $sqlValidaInst;
-    }
 }
