@@ -285,7 +285,7 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
             WHEN liclicita.l20_tipliticacao = 7 THEN 1
             WHEN liclicita.l20_tipliticacao = 9 THEN 8
             ELSE liclicita.l20_tipliticacao
-        END AS tipoLicitacao
+        END AS tipoLicitacao,
        liclicita.l20_naturezaobjeto AS naturezaObjeto,
        liclicita.l20_objeto AS Objeto,
        case when liclicita.l20_naturezaobjeto = '1' or liclicita.l20_naturezaobjeto = '7' then liclicita.l20_regimexecucao else 0 end AS regimeExecucaoObras,
