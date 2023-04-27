@@ -59,8 +59,8 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
             $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
             $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
-            $oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
-            //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
+            $oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
+            //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
             //$oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = $item->codigoregistroimobiliario;
         }
 
