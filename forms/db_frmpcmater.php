@@ -525,9 +525,4 @@ function verPermissaoAlteraServico($iItem)
                 break;
         }
     }
-<<<<<<< HEAD
 </script>
-=======
-  }
-</script>
->>>>>>> f8f7c55a2... OC20094 adicionando validação de grupos e subgrupos na inclusão e alteração de materias
