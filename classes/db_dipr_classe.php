@@ -71,6 +71,7 @@ class cl_dipr
     var $c236_numcgmexecutivo = 0;
     var $c236_numcgmlegislativo = 0;
     var $c236_numcgmgestora = 0;
+    var $c236_numcgmautarquia = 0;
     var $c236_coddipr = 0;
     var $nomeTabela = "dipr";
     // cria propriedade com as variaveis do arquivo
@@ -84,6 +85,7 @@ class cl_dipr
         c236_numcgmexecutivo int8,
         c236_numcgmlegislativo int8,
         c236_numcgmgestora int8,
+        c236_numcgmautarquia int8,
         c236_tipocadastro int8, 
         c236_dtatonormacrirpps date,
         c236_nroatonormasegremassa int8,
@@ -124,6 +126,7 @@ class cl_dipr
             $this->c236_numcgmexecutivo = ($this->c236_numcgmexecutivo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_numcgmexecutivo"] : $this->c236_numcgmexecutivo);
             $this->c236_numcgmlegislativo = ($this->c236_numcgmlegislativo == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_numcgmlegislativo"] : $this->c236_numcgmlegislativo);
             $this->c236_numcgmgestora = ($this->c236_numcgmgestora == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_numcgmgestora"] : $this->c236_numcgmgestora);
+            $this->c236_numcgmautarquia = ($this->c236_numcgmautarquia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_numcgmautarquia"] : $this->c236_numcgmautarquia);
             $this->c236_tipocadastro = ($this->c236_tipocadastro == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_tipocadastro"] : $this->c236_tipocadastro);
             if ($this->c236_dtatonormacrirpps == "") {
                 $this->c236_dtatonormacrirpps_dia = ($this->c236_dtatonormacrirpps_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["c236_dtatonormacrirpps_dia"] : $this->c236_dtatonormacrirpps_dia);
@@ -210,7 +213,10 @@ class cl_dipr
 
         if (!$this->verificaCgmGestora())
             return false;
-            
+        
+        if (!$this->verificaCgmAutarquia())
+            return false;   
+
         if (!$this->verificaTipoCadastro())
             return false;   
         
@@ -241,6 +247,7 @@ class cl_dipr
             $sql .= "c236_numcgmexecutivo, ";
             $sql .= "c236_numcgmlegislativo, ";
             $sql .= "c236_numcgmgestora, ";
+            $sql .= "c236_numcgmautarquia, ";
             $sql .= "c236_tipocadastro, ";
             $sql .= "c236_dtatonormacrirpps, ";
             $sql .= "c236_nroatonormasegremassa, ";
@@ -257,6 +264,7 @@ class cl_dipr
             $sql .= "{$this->c236_numcgmexecutivo}, ";
             $sql .= "{$this->c236_numcgmlegislativo}, ";
             $sql .= "{$this->c236_numcgmgestora}, ";
+            $sql .= "{$this->c236_numcgmautarquia}, ";
             $sql .= "{$this->c236_tipocadastro}, ";
             $sql .= "'{$this->c236_dtatonormacrirpps}', ";
             $sql .= "{$this->c236_nroatonormasegremassa}, ";
@@ -335,6 +343,8 @@ class cl_dipr
         if (!$this->verificaCgmGestora())
             return false;
             
+        if (!$this->verificaCgmAutarquia())
+            return false;    
         if (!$this->verificaTipoCadastro())
             return false;   
         
@@ -432,7 +442,12 @@ class cl_dipr
                 $sql  .= $virgula . " c236_numcgmgestora = '$this->c236_numcgmgestora' ";
                 $virgula = ",";
             }
-    
+
+            if ($this->verificaCgmAutarquia()) {
+                $sql  .= $virgula . " c236_numcgmautarquia = '$this->c236_numcgmautarquia' ";
+                $virgula = ",";
+            }
+               
             if ($this->verificaTipoCadastro()) {
                 $sql  .= $virgula . " c236_tipocadastro = '$this->c236_tipocadastro' ";
                 $virgula = ",";
@@ -484,6 +499,11 @@ class cl_dipr
     
             if ($this->verificaCgmGestora()) {
                 $sql  .= $virgula . " c236_numcgmgestora = '$this->c236_numcgmgestora' ";
+                $virgula = ",";
+            }
+
+            if ($this->verificaCgmAutarquia()) {
+                $sql  .= $virgula . " c236_numcgmautarquia = '$this->c236_numcgmautarquia' ";
                 $virgula = ",";
             }
 
@@ -803,6 +823,15 @@ class cl_dipr
     {
         if ($this->c236_numcgmgestora == null) {
             $this->erroCampo("Campo Unidade Gestora não Informado.", "c236_numcgmgestora");
+            return false;
+        }
+        return true;
+    } 
+
+    function verificaCgmAutarquia()
+    {
+        if ($this->c236_numcgmautarquia == null) {
+            $this->erroCampo("Campo Autarquia não Informado.", "c236_numcgmautarquia");
             return false;
         }
         return true;
