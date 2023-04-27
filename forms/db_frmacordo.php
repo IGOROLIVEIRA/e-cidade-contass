@@ -170,7 +170,7 @@ db_app::load("dbtextFieldData.widget.js");
 
                                             <tr>
                                                 <td nowrap title="<?= @$Tac16_datainclusao ?>">
-                                                    <?= @$Lac16_datainclusao ?>
+                                                    <strong>Data da Inclusão:</strong>
                                                 </td>
                                                 <td>
                                                     <?
@@ -1750,11 +1750,7 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trLicitacao').style.display = "none";
         }
 
-        if (iTipoOrigem == 2 && iOrigem == 3) {
-            //document.getElementById('trLicitacao').style.display = "";
-            document.getElementById('tradesaoregpreco').style.display = "none";
-            document.getElementById('trlicoutroorgao').style.display = "none";
-        }
+        
 
         if ((iTipoOrigem == 2 && iOrigem == 2) || (iTipoOrigem == 3 && iOrigem == 2)) {
             document.getElementById('trLicitacao').style.display = "none";
@@ -1762,11 +1758,7 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
-        if (iTipoOrigem == 3 && iOrigem == 3) {
-            //document.getElementById('trLicitacao').style.display = "";
-            document.getElementById('tradesaoregpreco').style.display = "none";
-            document.getElementById('trlicoutroorgao').style.display = "none";
-        }
+        
 
         if (iOrigem == 3 && iTipoOrigem == 1) {
             document.getElementById('trLicitacao').style.display = "none";
@@ -1786,7 +1778,7 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
-        if(iOrigem == 1 && iTipoOrigem == 2){
+        if(iOrigem == 1 && (iTipoOrigem == 2 || iTipoOrigem == 3)){
             document.getElementById('trLicitacao').style.display = "";
         }else{
             document.getElementById('trLicitacao').style.display = "none";
@@ -1806,6 +1798,12 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('credenciamento').style.display = "";
         } else {
             document.getElementById('credenciamento').style.display = "none";
+        }
+
+        if ((iTipoOrigem == 2 || iTipoOrigem == 3) && iOrigem == 3) {
+            document.getElementById('trLicitacao').style.display = "";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
     }
