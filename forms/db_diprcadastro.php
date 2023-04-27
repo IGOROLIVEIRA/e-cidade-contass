@@ -203,6 +203,23 @@ $cldipr->rotulo->label();
                         ?>
                     </td>
                 </tr>
+                <tr>
+                    <td nowrap>
+                        <?
+                        db_ancora("Autarquia", "js_pesquisac236_numcgm(true, 'autarquia');", $db_opcao);
+                        ?>
+                    </td>
+                    <td>
+                        <?
+                        db_input('c236_numcgmautarquia', 14, $Ic236_numcgmautarquia, true, 'text', $db_opcao, " onchange=js_pesquisac236_numcgm(false,'autarquia');");
+                        if ($c236_numcgmautarquia) {
+                            $resultado = db_query("select z01_nome as z01_nomeautarquia from cgm where z01_numcgm = {$c236_numcgmautarquia}");
+                            db_fieldsmemory($resultado, 0)->z01_nomeautarquia;
+                        }
+                        db_input('z01_nomeautarquia', 40, $Iz01_nome, true, 'text', 3, '', "z01_nomeautarquia");
+                        ?>
+                    </td>
+                </tr>
             </table>
         </fieldset>
         <br>
@@ -244,6 +261,11 @@ $cldipr->rotulo->label();
             preencheGestoraAutomaticamente();
             return;
         }
+
+        if (campo === "autarquia") {
+            preencheAutarquiaAutomaticamente();
+            return;
+        }
     }
 
     function preencheExecutivoAutomaticamente() {
@@ -273,6 +295,15 @@ $cldipr->rotulo->label();
         document.form1.z01_nomegestora.value = '';
     }
 
+    function preencheAutarquiaAutomaticamente() {
+        campo = "autarquia";
+        if (document.form1.c236_numcgmautarquia.value != '') {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_cgm.php?pesquisa_chave=' + document.form1.c236_numcgmautarquia.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
+            return;
+        }
+        document.form1.z01_nomeautarquia.value = '';
+    }
+
     function js_mostracgm(erro, chave) {
         if (campo === "executivo") {
             document.form1.z01_nomeexecutivo.value = chave;
@@ -300,6 +331,15 @@ $cldipr->rotulo->label();
             }
             return;
         }
+
+        if (campo === "autarquia") {
+            document.form1.z01_nomeautarquia.value = chave;
+            if (erro == true) {
+                document.form1.c236_numcgmautarquia.focus();
+                document.form1.c236_numcgmautarquia.value = '';
+            }
+            return;
+        }
     }
 
     function js_mostracgm1(chave1, chave2) {
@@ -316,6 +356,11 @@ $cldipr->rotulo->label();
         if (campo === "gestora") {
             document.form1.c236_numcgmgestora.value = chave1;
             document.form1.z01_nomegestora.value = chave2;
+        }
+
+        if (campo === "autarquia") {
+            document.form1.c236_numcgmautarquia.value = chave1;
+            document.form1.z01_nomeautarquia.value = chave2;
         }
         db_iframe_cgm.hide();
     }

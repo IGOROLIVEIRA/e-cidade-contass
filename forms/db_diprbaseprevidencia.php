@@ -59,7 +59,7 @@ $cldipr->rotulo->label();
                     <td><b>Ente:</b></td>
                     <td>
                         <?php
-                        db_select('c238_tipoente', array(0 => "Selecione", '1' => 'Administração Direta Executivo', '2' => 'Administração Direta Legislativo', '3' => 'Unidade Gestora'), true, 1);
+                        db_select('c238_tipoente', array(0 => "Selecione", '1' => 'Administração Direta Executivo', '2' => 'Administração Direta Legislativo', '3' => 'Unidade Gestora', '4' => 'Autarquia'), true, 1);
                         ?>
                     </td>
                 </tr>
