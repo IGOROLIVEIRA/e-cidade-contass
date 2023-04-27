@@ -48,8 +48,8 @@ switch ($oParam->exec) {
         try {
 
             foreach ($oParam->aContratos as $aContrato) {
-                $clContrato  = db_utils::getDao("acordo");
-                $clacocontrolepncp = db_utils::getDao("acocontratopncp");
+                $clContrato  = new cl_acordo;
+                $clacocontrolepncp = new cl_acocontratopncp;
 
                 //Contrato
                 $rsDadosEnvio = $clContrato->sql_record($clContrato->sql_DadosContrato_PCNP($aContrato->codigo));

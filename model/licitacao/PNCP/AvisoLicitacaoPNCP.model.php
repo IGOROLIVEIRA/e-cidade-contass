@@ -76,7 +76,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         /*
         * Anexos da licitacao
         */
-        $filename = 'model/licitacao/PNCP/arquivos/Compra' . $oDado->numerocompra . '.zip';
+        /*$filename = 'model/licitacao/PNCP/arquivos/Compra' . $oDado->numerocompra . '.zip';
         $zip = new ZipArchive();
         if ($zip->open($filename, ZipArchive::CREATE) !== TRUE) {
             exit("cannot open <$filename>\n");
@@ -84,7 +84,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         foreach ($oDado->anexos as $key => $anexo) {
             $zip->addFile("model/licitacao/PNCP/anexoslicitacao/" . $anexo->l216_nomedocumento, $anexo->l216_nomedocumento);
         }
-        $zip->close();
+        $zip->close();*/
     }
 
     public function montarRetificacao()
@@ -128,7 +128,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
      * 11 - Ata de Registro de Preo
      */
 
-    public function enviarAviso($tipodocumento, $processo)
+    public function enviarAviso($processo, $anexo)
     {
 
         $token = $this->login();
@@ -141,7 +141,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $method = 'POST';
 
         $file = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.json';
-        $filezip = curl_file_create('model/licitacao/PNCP/arquivos/Compra' . $processo . '.zip');
+        $filezip = curl_file_create('model/licitacao/PNCP/anexoslicitacao/' . $anexo[0]->l216_nomedocumento);
 
         $cfile = new \CURLFile($file, 'application/json', 'compra');
         //$cfilezip = new \CURLFile($filezip, 'application/zip', 'documento');
@@ -155,8 +155,8 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $headers = array(
             'Content-Type: multipart/form-data',
             'Authorization: ' . $token,
-            'Titulo-Documento:Compra' . $processo,
-            'Tipo-Documento-Id:' . $tipodocumento
+            'Titulo-Documento: ' . utf8_decode($anexo[0]->l213_descricao),
+            'Tipo-Documento-Id:' . $anexo[0]->l213_sequencial
         );
 
         $optionspncp = array(
@@ -192,20 +192,12 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
         curl_close($chpncp);
 
-        $retorno = explode(':', $contentpncp);
+        $retorno = json_decode($contentpncp);
 
-        //caso erro nos itens
-        if (substr(str_replace('"', '', $retorno[2]), 0, 11) == "itensCompra") {
-            return array(422, $retorno[3]);
+        if ($retorno->status) {
+            return array(422, $retorno->message);
         } else {
-            //erro ao enviar aviso
-            if ($retorno[8]) {
-                return array(422, $retorno[2]);
-            }
-            //caso tenha enviado com sucesso!
-            else {
-                return array(201, $retorno[4]);
-            }
+            return array(201, $retorno->compraUri);
         }
     }
 
@@ -312,6 +304,127 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
         $retorno = json_decode($contentpncp);
 
+        return $retorno;
+    }
+
+    public function enviarAnexos($iTipoAnexo, $sDescricao, $sAnexo, $iAnoCompra, $iCodigocompra)
+    {
+
+        $token = $this->login();
+
+        //aqui sera necessario informar o cnpj da instituicao de envio
+        $cnpj = '17316563000196';
+
+        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $iCodigocompra . "/arquivos";
+
+        $method = 'POST';
+
+        //$file = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.json';
+        //arquivo para envio
+        $filezip = curl_file_create('model/licitacao/PNCP/anexoslicitacao/' . $sAnexo);
+
+        $post_data =  array(
+            'arquivo' => $filezip
+        );
+
+        $chpncp      = curl_init($url);
+
+        $headers = array(
+            'Content-Type: multipart/form-data',
+            'Authorization: ' . $token,
+            'Titulo-Documento: ' . $sDescricao,
+            'Tipo-Documento-Id: ' . $iTipoAnexo
+        );
+
+        $optionspncp = array(
+            CURLOPT_RETURNTRANSFER => 1,            // return web page
+            CURLOPT_POST           => 1,
+            CURLOPT_HEADER         => true,         // don't return headers
+            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
+            CURLOPT_HTTPHEADER     => $headers,
+            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
+            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
+            CURLOPT_TIMEOUT        => 120,          // timeout on response
+            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
+            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
+            CURLOPT_POSTFIELDS     => $post_data,
+            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
+            CURLOPT_SSL_VERIFYPEER => false,        //
+            CURLOPT_VERBOSE        => 1,            //
+            CURLINFO_HEADER_OUT    => true
+        );
+
+        curl_setopt_array($chpncp, $optionspncp);
+        $contentpncp = curl_exec($chpncp);
+        curl_close($chpncp);
+
+        $retorno = explode(':', $contentpncp);
+
+        if ($retorno[5] == ' https') {
+            return array(201, $retorno[6]);
+        } else {
+            return array(422, "Erro ao enviar anexo");
+        }
+    }
+
+    public function excluirAnexos($iAnoCompra, $iCodigocompra, $iSeqAnexosPNCP)
+    {
+        $token = $this->login();
+
+        //aqui sera necessario informar o cnpj da instituicao de envio
+        $cnpj = '17316563000196';
+
+        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$iCodigocompra/arquivos/$iSeqAnexosPNCP";
+
+        $method = 'DELETE';
+
+        $chpncp      = curl_init($url);
+
+        $headers = array(
+            'Content-Type: application/json',
+            'Authorization: ' . $token
+        );
+
+        $optionspncp = array(
+            CURLOPT_RETURNTRANSFER => 1,            // return web page
+            CURLOPT_POST           => 1,
+            CURLOPT_HEADER         => false,         // don't return headers
+            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
+            CURLOPT_HTTPHEADER     => $headers,
+            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
+            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
+            CURLOPT_TIMEOUT        => 120,          // timeout on response
+            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
+            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
+            //CURLOPT_POSTFIELDS     => $oDados,
+            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
+            CURLOPT_SSL_VERIFYPEER => false,        //
+            CURLOPT_VERBOSE        => 1,            //
+            CURLINFO_HEADER_OUT    => true
+        );
+
+
+        curl_setopt_array($chpncp, $optionspncp);
+        $contentpncp = curl_exec($chpncp);
+        /*$err     = curl_errno($chpncp);
+        $errmsg  = curl_error($chpncp);
+        $header  = curl_getinfo($chpncp);
+        $header['errno']   = $err;
+        $header['errmsg']  = $errmsg;
+        $header['header']  = $contentpncp;
+        echo "<pre>";
+        print_r($header);
+        exit;*/
+
+        curl_close($chpncp);
+
+        $retorno = json_decode($contentpncp);
+
+        if ($retorno->status) {
+            return array(422, $retorno->message);
+        } else {
+            return array(201, "Excluido com Sucesso !");
+        }
         return $retorno;
     }
 }

@@ -14,6 +14,7 @@ require_once("classes/db_liccontrolepncp_classe.php");
 require_once("classes/cl_licontroleatarppncp.php");
 require_once("model/licitacao/PNCP/AvisoLicitacaoPNCP.model.php");
 require_once("model/licitacao/PNCP/AtaRegistroprecoPNCP.model.php");
+require_once("classes/db_licacontrolenexospncp_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 $oJson             = new services_json();
@@ -56,8 +57,8 @@ switch ($oParam->exec) {
 
     case 'enviarAviso':
 
-        $clLicitacao  = db_utils::getDao("liclicita");
-        $cllicanexopncp = db_utils::getDao("licanexopncp");
+        $clLicitacao  = new cl_liclicita();
+        $cllicanexopncp = new cl_licanexopncp();
 
         //todas as licitacoes marcadas
         try {
@@ -66,40 +67,34 @@ switch ($oParam->exec) {
                 $rsDadosEnvio = $clLicitacao->sql_record($clLicitacao->sql_query_pncp($aLicitacao->codigo));
 
                 if (!pg_numrows($rsDadosEnvio)) {
-                    throw new Exception('Dados de envio do PNCP não Encontrato! Licitacao: ' . $aLicitacao->codigo);
+                    throw new Exception('Dados de envio do PNCP não Encontrato! Licitacao:' . $aLicitacao->codigo);
                 }
 
                 //itens
                 $rsDadosEnvioItens = $clLicitacao->sql_record($clLicitacao->sql_query_pncp_itens($aLicitacao->codigo));
 
                 if (!pg_numrows($rsDadosEnvioItens)) {
-                    throw new Exception('Dados dos Itens PNCP não Encontrato! Licitacao: ' . $aLicitacao->codigo);
+                    throw new Exception('Dados dos Itens PNCP não Encontrato! Licitacao:' . $aLicitacao->codigo);
                 }
 
-
                 //Anexos da Licitacao
-                $rsAnexos = $cllicanexopncp->sql_record($cllicanexopncp->sql_anexos_licitacao($aLicitacao->codigo));
+                $rsAnexos = $cllicanexopncp->sql_record($cllicanexopncp->sql_anexos_licitacao_aviso($aLicitacao->codigo));
 
                 $aItensLicitacao = array();
-                for ($lic = 0; $lic < pg_numrows($rsDadosEnvio); $lic++) {
+                for ($lic = 0; $lic < pg_num_rows($rsDadosEnvio); $lic++) {
                     $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvio, $lic);
 
                     //validaçoes
                     if ($oDadosLicitacao->dataaberturaproposta == '') {
-                        throw new Exception('Data da Abertura de Proposta não informado! Licitacao: ' . $aLicitacao->codigo);
+                        throw new Exception('Data da Abertura de Proposta não informado! Licitacao:' . $aLicitacao->codigo);
                     }
 
                     //valida se existe anexos na licitacao
-                    if (pg_numrows($rsAnexos) == 0) {
-                        throw new Exception('Licitação sem Anexos vinculados! Licitação: ' . $aLicitacao->codigo);
+                    if (pg_num_rows($rsAnexos) == 0) {
+                        throw new Exception('Licitação sem Anexos vinculados! Licitação:' . $aLicitacao->codigo);
                     }
 
-                    //continua...
-
-                    //$tipoDocumento = $oDadosLicitacao->tipoinstrumentoconvocatorioid;
-                    $processo = $oDadosLicitacao->numerocompra;
-
-                    for ($item = 0; $item < pg_numrows($rsDadosEnvioItens); $item++) {
+                    for ($item = 0; $item < pg_num_rows($rsDadosEnvioItens); $item++) {
                         $oDadosLicitacaoItens = db_utils::fieldsMemory($rsDadosEnvioItens, $item);
                         /*
                         * Aqui eu fiz uma consulta para conseguir o valor estimado do item reservado
@@ -113,7 +108,7 @@ switch ($oParam->exec) {
                     }
 
                     //vinculando os anexos
-                    for ($anex = 0; $anex < pg_numrows($rsAnexos); $anex++) {
+                    for ($anex = 0; $anex < pg_num_rows($rsAnexos); $anex++) {
                         $oAnexos = db_utils::fieldsMemory($rsAnexos, $anex);
                         $aAnexos[] = $oAnexos;
                     }
@@ -126,11 +121,12 @@ switch ($oParam->exec) {
                 $clAvisoLicitacaoPNCP->montarDados();
 
                 //envia para pncp
-                $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarAviso(2, $processo);
+                $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarAviso($oDadosLicitacao->numerocompra, $aAnexos);
 
+                //$rsApiPNCP = array(201, 'https://treina.pncp.gov.br/pncp-api/v1/orgaos/17316563000196/compras/2023/130');
                 if ($rsApiPNCP[0] == 201) {
                     //monto o codigo da compra no pncp
-                    $l213_numerocompra = substr(substr($rsApiPNCP[1], 61), 0, -2);
+                    $l213_numerocompra = substr($rsApiPNCP[1], 74);
                     $l213_numerocontrolepncp = '17316563000196-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
 
                     $clliccontrolepncp = new cl_liccontrolepncp();
@@ -144,11 +140,67 @@ switch ($oParam->exec) {
                     $clliccontrolepncp->l213_instit = db_getsession('DB_instit');
                     $clliccontrolepncp->incluir();
 
-                    $oRetorno->status  = 1;
-                    $oRetorno->message = "Enviado com Sucesso !";
+                    if ($clliccontrolepncp->erro_status == 0) {
+                        throw new Exception($clliccontrolepncp->erro_msg);
+                    }
+                    //somente primeiro anexo obrigatorio para publicar a compra
+                    $clliccontroleanexopncp = new cl_liccontroleanexopncp();
+                    $clliccontroleanexopncp->l218_licitacao  = $aLicitacao->codigo;
+                    $clliccontroleanexopncp->l218_usuario = db_getsession('DB_id_usuario');
+                    $clliccontroleanexopncp->l218_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
+                    $clliccontroleanexopncp->l218_numerocontrolepncp = $l213_numerocontrolepncp;
+                    $clliccontroleanexopncp->l218_tipoanexo = 2;
+                    $clliccontroleanexopncp->l218_instit = db_getsession('DB_instit');
+                    $clliccontroleanexopncp->l218_ano = $oDadosLicitacao->anocompra;
+                    $clliccontroleanexopncp->l218_sequencialpncp = 1;
+                    $clliccontroleanexopncp->l218_sequencialarquivo = $aAnexos[0]->l216_sequencial;
+                    $clliccontroleanexopncp->l218_processodecompras = null;
+                    $clliccontroleanexopncp->incluir();
+
+                    if ($clliccontroleanexopncp->erro_status == 0) {
+                        throw new Exception($clliccontroleanexopncp->erro_msg);
+                    }
+
+                    //Envio restante dos anexos
+                    //Anexos da Licitacao
+                    $rsAnexosRestentes = $cllicanexopncp->sql_record($cllicanexopncp->sql_anexos_licitacao_aviso_todos($aLicitacao->codigo));
+
+                    //Enviando os anexos
+                    for ($anexrest = 0; $anexrest < pg_num_rows($rsAnexosRestentes); $anexrest++) {
+                        $oAnexosrest = db_utils::fieldsMemory($rsAnexosRestentes, $anexrest);
+
+                        $rsApiAnexosPNCP = $clAvisoLicitacaoPNCP->enviarAnexos($oAnexosrest->l213_sequencial, utf8_decode($oAnexosrest->l213_descricao), $oAnexos->l216_nomedocumento, $oDadosLicitacao->anocompra, $l213_numerocompra);
+
+                        if ($rsApiAnexosPNCP[0] == 201) {
+
+                            $sAnexoPNCP = explode('x-content-type-options', $rsApiAnexosPNCP[1]);
+                            $sAnexoPNCP = preg_replace('#\s+#', '', $sAnexoPNCP);
+                            $sAnexoPNCP = explode('/', $sAnexoPNCP[0]);
+                            //inserindo na tabela de controle
+                            $clliccontroleanexopncp = new cl_liccontroleanexopncp();
+                            $clliccontroleanexopncp->l218_licitacao  = $aLicitacao->codigo;
+                            $clliccontroleanexopncp->l218_usuario = db_getsession('DB_id_usuario');
+                            $clliccontroleanexopncp->l218_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
+                            $clliccontroleanexopncp->l218_numerocontrolepncp = $l213_numerocontrolepncp;
+                            $clliccontroleanexopncp->l218_tipoanexo = $oAnexosrest->l213_sequencial;
+                            $clliccontroleanexopncp->l218_instit = db_getsession('DB_instit');
+                            $clliccontroleanexopncp->l218_ano = $oDadosLicitacao->anocompra;
+                            $clliccontroleanexopncp->l218_sequencialpncp = $sAnexoPNCP[11];
+                            $clliccontroleanexopncp->l218_sequencialarquivo = $oAnexosrest->l216_sequencial;
+                            $clliccontroleanexopncp->l218_processodecompras = null;
+                            $clliccontroleanexopncp->incluir();
+
+                            if ($clliccontroleanexopncp->erro_status == 0) {
+                                throw new Exception($clliccontroleanexopncp->erro_msg);
+                            }
+                        }
+                    }
                 } else {
                     throw new Exception(utf8_decode($rsApiPNCP[1]));
                 }
+
+                $oRetorno->status  = 1;
+                $oRetorno->message = "Enviado com Sucesso !";
             }
         } catch (Exception $eErro) {
             $oRetorno->status  = 2;
@@ -166,7 +218,7 @@ switch ($oParam->exec) {
                 //somente licitacoes que ja foram enviadas para pncp
                 $rsDadosEnvio = $clLicitacao->sql_record($clLicitacao->sql_query_pncp($aLicitacao->codigo));
 
-                for ($lic = 0; $lic < pg_numrows($rsDadosEnvio); $lic++) {
+                for ($lic = 0; $lic < pg_num_rows($rsDadosEnvio); $lic++) {
                     $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvio, $lic);
                 }
                 $clAvisoLicitacaoPNCP = new AvisoLicitacaoPNCP($oDadosLicitacao);
@@ -205,11 +257,13 @@ switch ($oParam->exec) {
         try {
             foreach ($oParam->aLicitacoes as $aLicitacao) {
                 $clAvisoLicitacaoPNCP = new AvisoLicitacaoPNCP();
+                $clliccontroleanexopncp = new cl_liccontroleanexopncp();
                 //envia exclusao de aviso
                 $rsApiPNCP = $clAvisoLicitacaoPNCP->excluirAviso(substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
 
                 if ($rsApiPNCP == null) {
                     $clliccontrolepncp->excluir(null, "l213_licitacao = $aLicitacao->codigo");
+                    $clliccontroleanexopncp->excluir_licitacao($aLicitacao->codigo);
 
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Excluido com Sucesso !";
@@ -262,7 +316,7 @@ switch ($oParam->exec) {
                 //licitacao
                 $rsDadosEnvioAta = $clLicitacao->sql_record($clLicitacao->sql_query_ata_pncp($aLicitacao->codigo));
 
-                for ($licAta = 0; $licAta < pg_numrows($rsDadosEnvioAta); $licAta++) {
+                for ($licAta = 0; $licAta < pg_num_rows($rsDadosEnvioAta); $licAta++) {
                     $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvioAta, $licAta);
                     $clAtaRegistroprecoPNCP = new AtaRegistroprecoPNCP($oDadosLicitacao);
                     //monta o json com os dados da licitacao
@@ -308,7 +362,7 @@ switch ($oParam->exec) {
                 //licitacao
                 $rsDadosEnvioAta = $clLicitacao->sql_record($clLicitacao->sql_query_ata_pncp($aLicitacao->codigo));
 
-                for ($licAta = 0; $licAta < pg_numrows($rsDadosEnvioAta); $licAta++) {
+                for ($licAta = 0; $licAta < pg_num_rows($rsDadosEnvioAta); $licAta++) {
                     $oDadosLicitacao = db_utils::fieldsMemory($rsDadosEnvioAta, $licAta);
                     $clAtaRegistroprecoPNCP = new AtaRegistroprecoPNCP($oDadosLicitacao);
                     //monta o json com os dados da licitacao

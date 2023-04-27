@@ -2504,7 +2504,7 @@ class cl_acordo
     public function sql_Contrato_PCNP()
     {
         $sSql = "
-        SELECT DISTINCT ac16_sequencial,
+        SELECT * FROM (SELECT DISTINCT ac16_sequencial,
                         ac213_numerocontrolepncp,
                         l213_numerocompra,
                         cgc AS cnpjCompra,
@@ -2546,6 +2546,7 @@ class cl_acordo
                     JOIN liccontrolepncp ON ac16_licitacao = l213_licitacao
                     LEFT JOIN acocontratopncp ON ac213_contrato = ac16_sequencial
                     WHERE ac16_instit = 1
+                    AND ac16_acordosituacao = 4
                         AND ac16_anousu = " . db_getsession('DB_anousu') . "
         union
                     SELECT DISTINCT ac16_sequencial,
@@ -2594,8 +2595,9 @@ class cl_acordo
                     LEFT JOIN liccontrolepncp ON  l213_processodecompras = pc80_codproc
                     LEFT JOIN acocontratopncp ON ac213_contrato = ac16_sequencial
                     WHERE ac16_instit = 1
+                    AND ac16_acordosituacao = 4
                     AND ac16_anousu = " . db_getsession('DB_anousu') . "
-                    AND pc80_dispvalor = 't'
+                    AND pc80_dispvalor = 't') AS X ORDER BY ac16_sequencial DESC
         ";
 
         return $sSql;

@@ -119,8 +119,8 @@ class GerarAOP extends GerarAM
                         $aCSVAOP12['si139_codctb']              = substr($aAOP12['si139_codctb'], 0, 20) == 0 ? " " : substr($aAOP12['si139_codctb'], 0, 20);
                         $aCSVAOP12['si139_codfontectb']         = substr($this->padLeftZero($aAOP12['si139_codfontectb'], 3) == 0 ? " " : $this->padLeftZero($aAOP12['si139_codfontectb'], 3), 0, 7);
                         $aCSVAOP12['si139_desctipodocumentoop'] = substr($aAOP12['si139_desctipodocumentoop'], 0, 50);
-                        $aCSVAOP12['si139_dtemissao']           = $this->sicomDate($aAOP12['si139_dtemissao']);
-                        $aCSVAOP12['si139_vldocumento']         = $this->sicomNumberReal($aAOP12['si139_vldocumento'], 2);
+                        $aCSVAOP12['si139_dtemissao']           = $this->sicomDate($aAOP10['si137_dtpagamento']);
+                        $aCSVAOP12['si139_vldocumento']         = $this->sicomNumberReal($aAOP11['si138_valoranulacaofonte'], 2);
 
                         $this->sLinha = $aCSVAOP12;
                         $this->adicionaLinha();

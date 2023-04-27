@@ -178,7 +178,7 @@ $sWhereContratos = " and 1 = 1 ";
 
 
                 if (isset($pncp) && trim($pncp) == 1) {
-                    $dbwhere .= " l20_licsituacao = 0 AND ";
+                    $dbwhere .= " ";
                 } else {
                     if (isset($situacao) && trim($situacao) != '' && $cldbusuarios->vefica_adm_user(db_getsession('DB_id_usuario')) != "1") {
 
