@@ -13,7 +13,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 */
 /**
- * Anulações das Ordens de Pagamento Sicom Acompanhamento Mensal
+ * Anulaes das Ordens de Pagamento Sicom Acompanhamento Mensal
  * @author marcelo
  * @package Contabilidade
  */
@@ -308,7 +308,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
 
                     /*
                      * Verifica se o empenho existe na tabela dotacaorpsicom
-                     * Caso exista, busca os dados da dotaÃ§Ã£o.
+                     * Caso exista, busca os dados da dotação.
                      * */
                     $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oAnulacoes->e60_numemp}";
                     $iFonteAlterada = '0';
