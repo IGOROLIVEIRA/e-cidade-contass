@@ -170,23 +170,23 @@ function verPermissaoAlteraServico($iItem)
           $result = $clpcgrupo->sql_record($clpcgrupo->sql_query(null,"pc03_codgrupo,pc03_descrgrupo","pc03_descrgrupo"));
           @db_selectrecord("pc03_codgrupo",$result,true,$db_opcao,"","","","0","js_troca(this.value);");
   */
-                        if (!isset($pc01_codgrupo)) {
-                            if (!isset($pc03_codgrupo)) {
-                                if (isset($pc01_codsubgrupo) &&  ($db_opcao == 2 || $db_opcao == 3)) {
-                                    global $pc01_codgrupo;
-                                    $result = $clpcsubgrupo->sql_record($clpcsubgrupo->sql_query($pc01_codsubgrupo, "pc04_codgrupo as pc01_codgrupo", null, "pc04_codsubgrupo=$pc01_codsubgrupo and pc04_ativo is true"));
-                                    if ($clpcsubgrupo->numrows > 0) {
-                                        db_fieldsmemory($result, 0);
-                                    }
-                                }
-                            }
-                        }
-                        $result = $clpcgrupo->sql_record($clpcgrupo->sql_query(null, "pc03_codgrupo,pc03_descrgrupo", "pc03_descrgrupo", "pc03_ativo is true"));
-                        @db_selectrecord("pc01_codgrupo", $result, true, $db_opcao, "", "", "", "0", "js_troca(this.value);");
-                        ?>
+            if (!isset($pc01_codgrupo)) {
+              if (!isset($pc03_codgrupo)) {
+                if (isset($pc01_codsubgrupo) &&  ($db_opcao == 2 || $db_opcao == 3)) {
+                  global $pc01_codgrupo;
+                  $result = $clpcsubgrupo->sql_record($clpcsubgrupo->sql_query($pc01_codsubgrupo, "pc04_codgrupo as pc01_codgrupo", null, "pc04_codsubgrupo=$pc01_codsubgrupo and pc04_ativo is true and pc04_instit in (". db_getsession('DB_instit').",0)"));
+                  if ($clpcsubgrupo->numrows > 0) {
+                    db_fieldsmemory($result, 0);
+                  }
+                }
+              }
+            }
+            $result = $clpcgrupo->sql_record($clpcgrupo->sql_query(null, "pc03_codgrupo,pc03_descrgrupo", "pc03_descrgrupo", "pc03_ativo is true and pc03_instit in (". db_getsession('DB_instit').",0)"));
+            @db_selectrecord("pc01_codgrupo", $result, true, $db_opcao, "", "", "", "0", "js_troca(this.value);");
+            ?>
 
-                        <?
-                        /*$arr_truefalse = array('f'=>'N�o','t'=>'Sim');
+            <?
+            /*$arr_truefalse = array('f'=>'N�o','t'=>'Sim');
           db_select("pc01_ativo",$arr_truefalse,true,$db_opcao);*/
                         ?>
 
@@ -525,4 +525,9 @@ function verPermissaoAlteraServico($iItem)
                 break;
         }
     }
+<<<<<<< HEAD
 </script>
+=======
+  }
+</script>
+>>>>>>> f8f7c55a2... OC20094 adicionando validação de grupos e subgrupos na inclusão e alteração de materias
