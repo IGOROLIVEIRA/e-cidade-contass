@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -29,8 +29,15 @@
 /**
  * @version $Revision: 1.211 $
  */
- $lNovaEmissao   = false;
- 
+
+use App\Models\Numpref;
+use App\Models\RecibopagaQrcodePix;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Writer\PngWriter;
+
+$lNovaEmissao   = false;
+
 if(isset($_GET['sessao'])){
   $lNovaEmissao   = true;
   require_once("fpdf151/scpdf.php");
@@ -910,9 +917,9 @@ if (!empty($aDados["ver_matric"]) || $matricularecibo > 0 ) {
                                    then proprietario.j13_descr
                                    else ''
                                end as j13_descr,";
-  $sSqlIdentificacao .= ($db21_usadistritounidade == 't' ) ? 
+  $sSqlIdentificacao .= ($db21_usadistritounidade == 't' ) ?
                               "proprietario.j34_distrito||'.'||proprietario.j34_setor||'.'||proprietario.j34_quadra||'.'||proprietario.j34_lote||'.'||proprietario.j01_unidade as sql," : "proprietario.j34_setor||'.'||proprietario.j34_quadra||'.'||proprietario.j34_lote as sql,";
-  $sSqlIdentificacao .= "                               
+  $sSqlIdentificacao .= "
                                proprietario.z01_cgccpf,
                                proprietario.z01_bairro,
                                proprietario.z01_cgmpri as z01_numcgm,
@@ -1549,6 +1556,40 @@ try {
 $codigobarras   = $oConvenio->getCodigoBarra();
 $linhadigitavel = $oConvenio->getLinhaDigitavel();
 $datavencimento = db_formatar($datavencimento,"d");
+
+$pdf1->hasQrCode = false;
+$pdf1 = usePixIntegration($pdf1, $k03_numpre);
+function usePixIntegration(db_impcarne $pdfObject, int $numnov): db_impcarne
+{
+    $numpref = Numpref::query()
+        ->where('k03_anousu', db_getsession("DB_anousu"))
+        ->where('k03_instit', db_getsession("DB_instit"))
+        ->first();
+
+    if (!$numpref->k03_ativo_integracao_pix) {
+        return $pdfObject;
+    }
+
+    $recibopagaQrcodePix = RecibopagaQrcodePix::query()->where('k176_numnov', $numnov)->first();
+
+    $pdfObject->hasQrCode = true;
+
+    $result = Builder::create()
+        ->writer(new PngWriter())
+        ->writerOptions([])
+        ->data($recibopagaQrcodePix->k176_qrcode)
+        ->encoding(new Encoding('UTF-8'))
+        ->size(300)
+        ->margin(10)
+        ->validateResult(false)
+        ->build();
+    $imagePath = "tmp/qrcode{$numnov}.png";
+
+        $result->saveToFile($imagePath);
+
+    $pdfObject->qrcode = $imagePath;
+    return $pdfObject;
+}
 
 if($oRegraEmissao->isCobranca()){
 

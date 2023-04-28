@@ -78,7 +78,7 @@ try {
 
         $oStdDocumento = new stdClass();
         $oStdDocumento->iCodigoDocumento    = $oProcessoLicitacao->getCodigo();
-        $oStdDocumento->sDescricaoDocumento = urlencode($oProcessoLicitacao->getDescricaoTipo());
+        $oStdDocumento->sDescricaoDocumento = urlencode(utf8_decode($oProcessoLicitacao->getDescricaoTipo()));
 
         $aDocumentosRetorno[] = $oStdDocumento;
       }

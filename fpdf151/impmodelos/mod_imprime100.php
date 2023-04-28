@@ -1,7 +1,7 @@
 <?php
 
 if (($this->qtdcarne % 3 ) == 0 ){
-  
+
   $iAlt = 4;
   $this->objpdf->AddPage();
   $top = $this->objpdf->GetY()-3;
@@ -37,7 +37,7 @@ if (($this->qtdcarne % 3 ) == 0 ){
 
   $this->objpdf->Rect(178,$top+6,24,6,'DF');
   $this->objpdf->Text(179,$top+8,"CÁLCULO");
-  $this->objpdf->Text(185,$top+11,$this->descr2);  
+  $this->objpdf->Text(185,$top+11,$this->descr2);
 
   $this->objpdf->SetFont('Arial','',6);
   $this->objpdf->Rect(10,$top+12,107,6,'DF');
@@ -56,7 +56,7 @@ if (($this->qtdcarne % 3 ) == 0 ){
   $this->objpdf->Text(140,$top+17,$this->matricula);
   $this->objpdf->Text(168,$top+17,$this->inscricao);
 
-  $this->objpdf->SetFont('Arial','',6); 
+  $this->objpdf->SetFont('Arial','',6);
   $this->objpdf->Rect(10,$top+18,192,4,'DF');
   $this->objpdf->Text(12,$top+21,"END. DE CORRESPONDÊNCIA: ");
   $this->objpdf->SetFont('Arial','',7);
@@ -74,7 +74,7 @@ if (($this->qtdcarne % 3 ) == 0 ){
   $this->objpdf->Rect(82,$top+26,25,6,'DF');
   $this->objpdf->Rect(107,$top+26,25,6,'DF');
   $this->objpdf->Rect(132,$top+26,25,6,'DF');
-  
+
   $this->objpdf->SetFont('Arial','',6);
   $this->objpdf->Text(12,$top+28,"ALÍQUOTA TERRENO");
   $this->objpdf->Text(37,$top+28,"ÁREA TERRENO");
@@ -128,7 +128,7 @@ if (($this->qtdcarne % 3 ) == 0 ){
   $this->objpdf->Text(82.5,$top+40,"IMPOSTO TERRITORIAL");
   $this->objpdf->Text(109,$top+40,"IMPOSTO PREDIAL");
   $this->objpdf->Text(133,$top+40,"TOTAL IPTU");
-  
+
   $this->objpdf->SetFont('Arial','',7);
   $this->objpdf->Text(16,$top+43,$this->vlvenaltot);
   $this->objpdf->Text(41,$top+43,$this->quadra);
@@ -268,13 +268,28 @@ $this->objpdf->Text(56,$y+41,$this->descr7); // qtd de URM ou valor
 $this->objpdf->RoundedRect(95,$y+1,40,6,2,'DF','1234'); // matricula / inscricao
 $this->objpdf->RoundedRect(136,$y+1,20,6,2,'DF','1234'); // cod. arrecadacao
 $this->objpdf->RoundedRect(157,$y+1,20,6,2,'DF','1234'); // parcela
-$this->objpdf->RoundedRect(178,$y+1,23,6,2,'DF','1234'); // livre
-
+//$this->objpdf->RoundedRect(178,$y+1,23,6,2,'DF','1234'); // livre
+if($this->hasQrCode) {
+    $this->objpdf->RoundedRect(178,$y+1,23,20,2,'DF','1234'); // livre
+    $this->objpdf->RoundedRect(95,$y+22,82,13,2,'DF','1234'); // instrucoes
+    $this->objpdf->RoundedRect(178,$y+22,23,6,2,'DF','1234'); // vencimento
+    $this->objpdf->RoundedRect(178,$y+29,23,6,2,'DF','1234'); // valor
+    $this->objpdf->Image($this->qrcode,181,$y+3, 17, 17, 'png');
+    $this->objpdf->SetFont('Arial','',5);
+    $this->objpdf->Text(180,$y+3,'Pague com QRCode'); // livre
+} else {
+    $this->objpdf->RoundedRect(178,$y+1,23,6,2,'DF','1234'); // livre
+    $this->objpdf->RoundedRect(95,$y+22,106,13,2,'DF','1234'); // instrucoes
+    $this->objpdf->RoundedRect(178,$y+8,23,6,2,'DF','1234'); // vencimento
+    $this->objpdf->RoundedRect(178,$y+15,23,6,2,'DF','1234'); // valor
+    $this->objpdf->SetFont('Arial','',5);
+    $this->objpdf->Text(180,$y+3,$this->titulo13); // livre
+}
 $this->objpdf->RoundedRect(95,$y+8,82,13,2,'DF','1234'); // nome / endereco
-$this->objpdf->RoundedRect(95,$y+22,106,13,2,'DF','1234'); // instrucoes
+//$this->objpdf->RoundedRect(95,$y+22,106,13,2,'DF','1234'); // instrucoes
 
-$this->objpdf->RoundedRect(178,$y+8,23,6,2,'DF','1234'); // vencimento
-$this->objpdf->RoundedRect(178,$y+15,23,6,2,'DF','1234'); // valor
+//$this->objpdf->RoundedRect(178,$y+8,23,6,2,'DF','1234'); // vencimento
+//$this->objpdf->RoundedRect(178,$y+15,23,6,2,'DF','1234'); // valor
 
 
 $this->objpdf->SetFont('Arial','',5);
@@ -292,8 +307,6 @@ $this->objpdf->Text(161,$y+3,$this->titulo10); // parcela
 $this->objpdf->SetFont('Arial','B',7);
 $this->objpdf->Text(162,$y+6,$this->descr10); // parcela e total das parcelas
 
-$this->objpdf->SetFont('Arial','',5);
-$this->objpdf->Text(180,$y+3,$this->titulo13); // livre
 $this->objpdf->SetFont('Arial','B',7);
 $this->objpdf->Text(183,$y+6,$this->descr13); // livre
 
@@ -317,20 +330,44 @@ $this->objpdf->sety($y+25);
 
 // mensagem de instruções da guia prefeitura
 $this->objpdf->SetFont('Arial','B',5);
-$this->objpdf->multicell(100,2,substr($this->descr12_1,0,274)); // Instruções 2 - linha 1
-$this->objpdf->multicell(100,2,$this->descr12_2); // Instruções 2 - linha 2
-$this->objpdf->setxy($xx,$yy);
+//$this->objpdf->multicell(100,2,substr($this->descr12_1,0,274)); // Instruções 2 - linha 1
+//$this->objpdf->multicell(100,2,$this->descr12_2); // Instruções 2 - linha 2
+//$this->objpdf->setxy($xx,$yy);
 
-$this->objpdf->SetFont('Arial','',5);
-$this->objpdf->Text(180,$y+10,$this->titulo14); // vencimento
-$this->objpdf->SetFont('Arial','B',7);
-$this->objpdf->Text(180,$y+13,$this->descr14); // data de vencimento
+//$this->objpdf->SetFont('Arial','',5);
+//$this->objpdf->Text(180,$y+10,$this->titulo14); // vencimento
+//$this->objpdf->SetFont('Arial','B',7);
+//$this->objpdf->Text(180,$y+13,$this->descr14); // data de vencimento
 
-$this->objpdf->SetFont('Arial','',5);
-$this->objpdf->Text(180,$y+17,$this->titulo15); // valor
-$this->objpdf->SetFont('Arial','B',7);
-$this->objpdf->Text(180,$y+20,$this->descr15); // total de URM ou valor
-
+//$this->objpdf->SetFont('Arial','',5);
+//$this->objpdf->Text(180,$y+17,$this->titulo15); // valor
+//$this->objpdf->SetFont('Arial','B',7);
+//$this->objpdf->Text(180,$y+20,$this->descr15); // total de URM ou valor
+if($this->hasQrCode) {
+    $this->objpdf->multicell(78,2,substr($this->descr12_1,0,274)); // Instruções 2 - linha 1
+    $this->objpdf->multicell(78,2,$this->descr12_2); // Instruções 2 - linha 2
+    $this->objpdf->setxy($xx,$yy);
+    $this->objpdf->SetFont('Arial','',5);
+    $this->objpdf->Text(180,$y+24,$this->titulo14); // vencimento
+    $this->objpdf->SetFont('Arial','B',7);
+    $this->objpdf->Text(180,$y+27,$this->descr14); // data de vencimento
+    $this->objpdf->SetFont('Arial','',5);
+    $this->objpdf->Text(180,$y+31,$this->titulo15); // valor
+    $this->objpdf->SetFont('Arial','B',7);
+    $this->objpdf->Text(180,$y+34,$this->descr15); // total de URM ou valor
+} else {
+    $this->objpdf->multicell(100,2,substr($this->descr12_1,0,274)); // Instruções 2 - linha 1
+    $this->objpdf->multicell(100,2,$this->descr12_2); // Instruções 2 - linha 2
+    $this->objpdf->setxy($xx,$yy);
+    $this->objpdf->SetFont('Arial','',5);
+    $this->objpdf->Text(180,$y+10,$this->titulo14); // vencimento
+    $this->objpdf->SetFont('Arial','B',7);
+    $this->objpdf->Text(180,$y+13,$this->descr14); // data de vencimento
+    $this->objpdf->SetFont('Arial','',5);
+    $this->objpdf->Text(180,$y+17,$this->titulo15); // valor
+    $this->objpdf->SetFont('Arial','B',7);
+    $this->objpdf->Text(180,$y+20,$this->descr15); // total de URM ou valor
+}
 $this->objpdf->SetLineWidth(0.05);
 $this->objpdf->SetDash(1,1);
 $this->objpdf->Line(93,$y-15,93,$y+57); // linha tracejada vertical

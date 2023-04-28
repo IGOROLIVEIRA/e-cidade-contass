@@ -769,6 +769,8 @@ class cl_rsp102023
                       CASE
                           WHEN o15_codtri::int4 IN (101, 201) THEN '1001'
                           WHEN o15_codtri::int4 IN (102, 202) THEN '1002'
+                          WHEN o15_codtri::int4 IN (164, 264) THEN '3110'
+                          WHEN o15_codtri::int4 IN (169, 269) THEN '3210'
                           WHEN o15_codtri::int4 IN (118, 166, 218, 266) THEN '1070'
                           ELSE '0000'
                       END AS codco,

@@ -25,7 +25,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 require_once("fpdf151/scpdf.php");
 require_once("fpdf151/impcarne.php");
 require_once("libs/db_sql.php");
@@ -602,6 +601,7 @@ where e55_autori=$e54_autori and pc93_pontuacao=1),'')
 
     $pdf1->informa_adic = $informa_adic;
     $pdf1->imprime();
+
 }
 
 if (isset($argv[1])) {
