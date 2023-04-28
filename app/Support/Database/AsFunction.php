@@ -17,7 +17,7 @@ trait AsFunction
         }
 
         $this->execute(
-            file_get_contents(__DIR__ . "/sqls/functions/{$function}.sql")
+            file_get_contents(__DIR__ . "../../../db/migrations/sqls/functions/{$function}.sql")
         );
     }
 
