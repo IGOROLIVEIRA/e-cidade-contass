@@ -633,6 +633,63 @@ class cl_ops122023
 
     return $sql;
   }
+  /**
+   * @param $reg12
+   * @param $oEmpPago
+   * @param $aInformado
+   * @return array
+   */
+  public function verificaRetencao($reg12, $oEmpPago, $aInformado, $aDataIni, $aDataFim)
+  {
+    /**
+     * Sera feito consulta para ver se houveram retencoes para esse movimento da OP
+     * e essa consulta definira se sera montado o Reg. 13 para esse movimento da OP.
+     */
+    require_once "classes/db_retencaopagordem_classe.php";
+    $clRetencao = new cl_retencaopagordem();
+
+    $sqlReten = $clRetencao->sql_Retencao_OpsReg12($reg12, $oEmpPago, $aDataIni, $aDataFim);
+    $rsReteIsIs = db_query($sqlReten);
+
+    if (pg_num_rows($rsReteIsIs) > 0 && db_utils::fieldsMemory($rsReteIsIs, 0)->descontar > 0) {
+
+      $nVolorOp = $this->get_float_OpValue($rsReteIsIs, $oEmpPago);
+
+      if ($nVolorOp == 0) {
+        $saldopag = db_utils::fieldsMemory($rsReteIsIs, 0)->descontar;
+      } else {
+        $saldopag = $nVolorOp;
+      }
+      $aInformado->retencao = 1;
+      if ($nVolorOp < 0) {
+        $nVolorOp = $oEmpPago->valor;
+        $aInformado->retencao = 0;
+      }
+
+    } else {
+      $nVolorOp = $oEmpPago->valor;
+      $saldopag = $nVolorOp;
+    }
+    return array($sqlReten, $nVolorOp, $saldopag);
+  }
+
+  /**
+   * @param $rsReteIsIs
+   * @param $oEmpPago
+   * @return float
+   */
+  public function get_float_OpValue($rsReteIsIs, $oEmpPago)
+  {
+    $descontar = number_format(db_utils::fieldsMemory($rsReteIsIs, 0)->descontar, 2, '.', '');
+    $descontar = floatval($descontar);
+
+    $valor = number_format($oEmpPago->valor, 2, '.', '');
+    $valor = floatval($valor);
+
+    $nVolorOp = number_format($valor - $descontar);
+    $nVolorOp = floatval($nVolorOp);
+    return $nVolorOp;
+  }
 }
 
 ?>
