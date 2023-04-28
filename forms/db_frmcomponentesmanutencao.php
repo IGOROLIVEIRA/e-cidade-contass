@@ -10,7 +10,7 @@
           <?
           $aItemSistema  = array('Selecione', 'Sim', 'Não');
 
-          db_select('t99_itemsistema', $aItemSistema, true, 1, "style='width: 80px;' onchange='js_descricao(false)'"); ?>
+          db_select('t99_itemsistema', $aItemSistema, true, 1, "style='width: 80px;' onchange='js_selectitemsistema(false)'"); ?>
         </td>
       </tr>
 
@@ -72,10 +72,6 @@
   oGridItens.setHeight(200);
   oGridItens.show($('ctnGridItens'));
 
-  oAutoComplete = new dbAutoComplete(document.getElementById('t99_descricao'), 'com4_pesquisabemdispensatombamento.RPC.php');
-  oAutoComplete.setTxtFieldId(document.getElementById('t99_codbensdispensatombamento'));
-  oAutoComplete.show();
-
   var sUrl = "com4_materialsolicitacao.RPC.php";
 
   var oRequest = new Object();
@@ -126,6 +122,17 @@
 
   }
 
+  function js_selectitemsistema() {
+    if (document.getElementById('t99_itemsistema').value == 1) {
+      oAutoComplete = new dbAutoComplete(document.getElementById('t99_descricao'), 'com4_pesquisabemdispensatombamento.RPC.php');
+      oAutoComplete.setTxtFieldId(document.getElementById('t99_codbensdispensatombamento'));
+      oAutoComplete.show();
+      return true;
+    }
+    document.getElementById('div_lista_t99_descricao').remove();
+  }
+
+
   function js_alterar(indice) {
     document.getElementById('t99_descricao').value = document.getElementsByName("descricao[]")[indice].value;
     document.getElementById('t99_valor').value = document.getElementsByName("valor[]")[indice].value;
@@ -149,7 +156,4 @@
     document.getElementById('db_opcao').value = 'Salvar';
     document.getElementById('db_opcao').name = 'excluir';
   }
-
-
-  function js_descricao() {}
 </script>

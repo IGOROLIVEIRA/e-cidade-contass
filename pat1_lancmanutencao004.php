@@ -55,6 +55,19 @@ if (isset($salvar)) {
     }
 }
 
+if (isset($excluir)) {
+    $db_opcao = 1;
+    db_inicio_transacao();
+
+    $clbemmanutencao->excluir($t98_sequencial);
+
+    if ($clbemmanutencao->erro_status == "0") {
+        db_fim_transacao(true);
+    } else {
+        db_fim_transacao(false);
+    }
+}
+
 ?>
 <html>
 
@@ -108,6 +121,19 @@ if (isset($incluir)) {
         "<script> document.form1.t98_sequencial.value = $clbemmanutencao->t98_sequencial;
         document.getElementById('inserircomponente').disabled = false;
          </script>";
+    }
+}
+if (isset($alterar) || isset($excluir)) {
+    if ($clbemmanutencao->erro_status == "0") {
+        $clbemmanutencao->erro(true, false);
+        $db_botao = true;
+        echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+        if ($clbemmanutencao->erro_campo != "") {
+            echo "<script> document.form1." . $clbemmanutencao->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1." . $clbemmanutencao->erro_campo . ".focus();</script>";
+        }
+    } else {
+        db_msgbox($clbemmanutencao->erro_msg);
     }
 }
 ?>
