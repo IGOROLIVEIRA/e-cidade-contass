@@ -1,4 +1,17 @@
-
+CREATE OR REPLACE FUNCTION public.fc_desconto(
+	integer,
+	date,
+	double precision,
+	double precision,
+	boolean,
+	date,
+	integer,
+	integer)
+    RETURNS double precision
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
 declare
 receita              alias for $1;
   v_data_arre          alias for $2;
@@ -184,3 +197,7 @@ end if;
 end if;
 return round(descon,2);
 end;
+$BODY$;
+
+ALTER FUNCTION public.fc_desconto(integer, date, double precision, double precision, boolean, date, integer, integer)
+    OWNER TO dbportal;

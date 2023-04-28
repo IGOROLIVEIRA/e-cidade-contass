@@ -1,4 +1,17 @@
-
+CREATE OR REPLACE FUNCTION public.fc_desconto(
+	integer,
+	date,
+	double precision,
+	double precision,
+	boolean,
+	date,
+	integer,
+	integer)
+    RETURNS double precision
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
 declare
 receita              alias for $1;
   v_data_arre          alias for $2;
@@ -121,6 +134,7 @@ select k00_dtvenc,
 from recibounica
 where recibounica.k00_numpre = numpre
   and v_data_arre <= fc_proximo_dia_util(recibounica.k00_dtvenc)
+  order by k00_dtvenc
 
     loop
 
@@ -186,3 +200,7 @@ end if;
 end if;
 return round(descon,2);
 end;
+$BODY$;
+
+ALTER FUNCTION public.fc_desconto(integer, date, double precision, double precision, boolean, date, integer, integer)
+    OWNER TO dbportal;
