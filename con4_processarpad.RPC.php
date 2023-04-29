@@ -12,8 +12,10 @@ require_once("libs/db_sessoes.php");
 require_once("model/padArquivoEscritorXML.model.php");
 require_once("model/PadArquivoEscritorCSV.model.php");
 
+// ini_set('display_errors', 'On');
+// error_reporting(E_ALL);
 $oJson    = new services_json();
-$oParam   = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $_POST["json"])));
+$oParam   = $oJson->decode(db_stdClass::db_stripTagsJsonSemEscape(str_replace("\\", "", $_POST["json"])));
 
 $oRetorno = new stdClass();
 $oRetorno->status  = 1;
@@ -570,6 +572,8 @@ switch ($oParam->exec) {
     $sDataInicial = db_getsession("DB_anousu") . "-{$oParam->mesReferencia}-01";
     $sDataFinal   = db_getsession("DB_anousu") . "-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
 
+    $iNumeroRegistro = $oParam->iNumeroRegistro;
+
 
     $deParaNatureza = $oParam->deParaNatureza;
 
@@ -617,6 +621,11 @@ switch ($oParam->exec) {
           $oArquivo->setDataFinal($sDataFinal);
           $oArquivo->setEncerramento($bEncerramento);
           $oArquivo->setDeParaNatureza($deParaNatureza);
+
+          if(db_getsession("DB_anousu") > 2022){
+            $oArquivo->setNumeroRegistro($iNumeroRegistro);
+          }
+
           $oArquivoCsv = new stdClass();
           try {
 
@@ -787,7 +796,7 @@ switch ($oParam->exec) {
       left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
       where o39_data between  '$sDataInicial' and '$sDataFinal'
       $tiposup ";
-     
+
       $aDecretos = db_utils::getColectionByRecord(db_query($sSqlDecretosMes));
 
       require_once("model/contabilidade/arquivos/sicom/mensal/" . db_getsession("DB_anousu") . "/SicomArquivoLegislacaoCaraterFinanceiro.model.php");
@@ -809,13 +818,13 @@ switch ($oParam->exec) {
        * Fim Lógiga gerar o DEC
        */
     }
-   
+
     if($aDecretos){
       $oEscritorCSV->zip("DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}");
       $oEscritorCSV->adicionarArquivo("tmp/DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
     }else{
       $oRetorno->status  = 3;
-    }  
+    }
     $oRetorno->itens = $oEscritorCSV->getListaArquivos();
 
     break;
