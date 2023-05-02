@@ -1,29 +1,13 @@
 <?php
-/**
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBseller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
+
+use App\Models\Numpref;
+use App\Models\RecibopagaQrcodePix;
+use App\Services\Tributario\Arrecadacao\GeneratePixWithQRCodeService;
+use App\Services\Tributario\Arrecadacao\GenerateQrCodeImageService;
+use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Writer\PngWriter;
 
 require_once(modification("fpdf151/scpdf.php"));
 require_once(modification("fpdf151/impcarne.php"));
@@ -176,6 +160,7 @@ db_fieldsmemory($result, 0);
 $pdf1                        = $oRegraEmissao->getObj();
 $pdf1->sMensagemCaixa        = '';
 $pdf1->sMensagemContribuinte = '';
+$pdf1->hasQrCode = false;
 
 if ($oRegraEmissao->getCadTipoConvenio() == 6 ) {
 
@@ -344,6 +329,20 @@ if (isset ($geracarne) && $geracarne == 'banco') {
 
 /******************************************************   F O R   Q   M O N T A   O S   C A R N E S  ******************************************************/
 $aParcelasSemInflatores = array();
+$usePixIntegration = false;
+$providerConfig = null;
+/**
+ * @var Numpref $settings
+ */
+$settings = Numpref::query()
+    ->where('k03_anousu', db_getsession("DB_anousu"))
+    ->where('k03_instit', db_getsession("DB_instit"))
+    ->first();
+
+if ($settings->k03_ativo_integracao_pix) {
+    $usePixIntegration = true;
+    $providerConfig = (new ResolvePixProviderService())->execute($settings);
+}
 
 if ($unica != "1"){
 
@@ -995,6 +994,19 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
         try {
           $oConvenio = new convenio($oRegraEmissao->getConvenio(),$k00_numpre,0,$k00_valor,$vlrbar,$dtvencunic,$iTercDig);
+
+            if ($usePixIntegration) {
+                $body['codigoGuiaRecebimento'] = $k00_numpre.'0';
+                $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
+                $body['valorOriginalSolicitacao'] = $k00_valor;
+                $body['k00_numnov'] = $k00_numpre;
+                $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
+
+                $service = new GeneratePixWithQRCodeService($providerConfig);
+                $service->execute($body);
+                $pdf1 = usePixIntegration($pdf1, $k00_numpre);
+                $pdf1->hasQrCode = true;
+            }
         } catch (Exception $eExeption){
 
           db_redireciona("db_erros.php?fechar=true&db_erro={$eExeption->getMessage()}");
@@ -1438,6 +1450,8 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
         $pdf1->iptz01_ender       = $pdf1->iptnomepri.$pdf1->iptcodpri;
 
         $pdf1->imprime();
+
+        //GERA DA UNICA AQUI
       }
     }
 
@@ -1685,18 +1699,27 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $iNumpar  = 0;
   }
 
-  if ($tipo_debito == 3 && $nValorTot == 0) {
-    $nValorTot = $nValorTot;
-  } else{
-    $nValorTot += $taxabancaria;
-  }
+    $nValorTot = $tipo_debito == 3 && $nValorTot == 0 ? $nValorTot : $nValorTot + $taxabancaria;
 
   try {
     $oConvenio = new convenio($oRegraEmissao->getConvenio(),$iNumpre,$iNumpar,$nValorTot,$vlrbar,$dtVencimento,$iTercDig);
-  } catch (Exception $eExeption){
+      if ($usePixIntegration && $unica !== 1) {
+          $body['codigoGuiaRecebimento'] = $iNumpre.$iNumpar;
+          $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
+          $body['valorOriginalSolicitacao'] = $nValorTot;
+          $body['k00_numpre'] = $iNumpre;
+          $body['k00_numpar'] = $iNumpar;
+          $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
 
-    db_redireciona("db_erros.php?fechar=true&db_erro={$eExeption->getMessage()}");
-    exit;
+          $service = new GeneratePixWithQRCodeService($providerConfig);
+          $service->execute($body);
+          $pdf1 = usePixIntegration($pdf1, $iNumpre, $iNumpar);
+          $pdf1->hasQrCode = true;
+      }
+  } catch (Exception $eExeption) {
+
+      db_redireciona("db_erros.php?fechar=true&db_erro={$eExeption->getMessage()}");
+      exit;
   }
 
   $codigo_barras   = $oConvenio->getCodigoBarra();
@@ -2657,3 +2680,25 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
 db_query("COMMIT");
 $pdf1->objpdf->Output();
+
+function usePixIntegration(db_impcarne $pdfObject, int $numpre, int $numpar = null): db_impcarne
+{
+    $recibopagaQrcodePix = RecibopagaQrcodePix::whereNumpreNumpar($numpre, $numpar)->firstOrFail();
+
+    $pdfObject->hasQrCode = true;
+
+    $builder = Builder::create()
+        ->size(300)
+        ->margin(10)
+        ->validateResult(false)
+        ->writerOptions([])
+        ->writer(new PngWriter())
+        ->encoding(new Encoding('UTF-8'));
+
+    $qrcodeImgService = new GenerateQrCodeImageService($builder);
+
+    $imagePath = $qrcodeImgService->execute($recibopagaQrcodePix->k176_qrcode);
+
+    $pdfObject->qrcode = $imagePath;
+    return $pdfObject;
+}

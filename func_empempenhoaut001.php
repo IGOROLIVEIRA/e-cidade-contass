@@ -67,10 +67,12 @@ $rotulo->label("login");
 $lAcordo = false;
 $iAcordo = "";
 $dbOpcao = 1;
+$instituicao_valida = false;
 
 if (isset($e54_autori) and $e54_autori !=""){
     $res = $clempautoriza->sql_record($clempautoriza->sql_query($e54_autori));
     if ($clempautoriza->numrows > 0 ) {
+        $instituicao_valida = true;
         db_fieldsmemory($res,0,true);
         //-----
         $sql = $clempautidot->sql_query_dotacao($e54_autori,"e56_coddot,o56_elemento,o56_descr,e56_orctiporec, o15_descr,
@@ -116,7 +118,7 @@ if (isset($bAtestoContInt) && $bAtestoContInt == 1) {
         //    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_clonlancam002','func_conlancam002.php?chavepesquisa='+"<?=$e54_autori  ?>",'Pesquisa',true);
         // }
         function js_abre_empempitem(){
-            js_OpenJanelaIframe('CurrentWindow.corpo<?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? '.iframe_db_atestoautoemp' : '' ?>','db_iframe_empempitem','emp1_empempitem005.php?e60_numemp='+"<?=@$e61_numemp ?>"+'&e55_autori='+"<?=@$e54_autori?>",'Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo<?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? '.iframe_db_atestoautoemp' : '' ?>','db_iframe_empempitem','emp1_empempitem005.php?e60_numemp='+"<?=@$e61_numemp ?>"+'&e55_autori='+"<?=@$e54_autori?>"+"&inst_valida=<?=$instituicao_valida ?>",'Pesquisa',true);
             <?= (isset($bAtestoContInt) && $bAtestoContInt == 1) ? "parent.document.getElementById('Jandb_iframe_empempitem').style.zIndex = '2000';" : ""; ?>
         }
         function pesquisa_cgm(){

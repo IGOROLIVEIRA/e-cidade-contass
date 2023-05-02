@@ -1,4 +1,5 @@
 <?php
+
 /**
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -57,9 +58,12 @@ class ControleOrcamentario
             '15000001' => '1001',
             '15000002' => '1002',
             '15400007' => '1070',
+            '25400007' => '1070',
             '15420007' => '1070',
             '18000001' => '1111',
             '18000001' => '1121',
+            '25000001' => '1001',
+            '25000002' => '1002',
         );
     }
 
@@ -152,6 +156,10 @@ class ControleOrcamentario
 
     public function setEmendaParlamentar($iEmendaParlamentar)
     {
+        if (in_array($this->iFonte, array(17060000, 27060000, 17100000, 27100000)) and !$iEmendaParlamentar) {
+            $this->iEmendaParlamentar = 1;
+            return;
+        }
         $this->iEmendaParlamentar = $iEmendaParlamentar;
     }
 

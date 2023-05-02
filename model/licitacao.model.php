@@ -630,7 +630,9 @@ class licitacao
         1 AS origem,
         pc18_codele AS elemento,
         pc23_quant AS quantidade,
-        pc23_valor AS valortotal,
+        (SELECT si02_qtditem * si02_vlprecoreferencia
+        FROM itemprecoreferencia
+        WHERE si02_itemproccompra = pcorcamitemproc.pc31_orcamitem) AS valortotal,
         l20_numero AS numero,
         sum(l213_qtdcontratada) AS l213_qtdcontratada,
         sum(l213_valorcontratado) AS l213_valorcontratado,

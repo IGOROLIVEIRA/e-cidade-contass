@@ -449,5 +449,39 @@ class cl_retencaopagordem {
      }
      return $sql;
   }
+
+    /**
+     * @param $reg12
+     * @param $oEmpPago
+     * @param $aDataIni
+     * @param $aDataFim
+     * @return string
+     */
+    public function sql_Retencao_OpsReg12($reg12, $oEmpPago, $aDataIni, $aDataFim)
+    {
+        /**
+         * UTILIZADO NA GERACAO DO ARQUIVO OPS - SICOM
+         *
+         * Sera feito consulta para ver se houveram retencoes para esse movimento da OP
+         * e essa consulta definira se sera montado o Reg. 13 para esse movimento da OP.
+         */
+
+        $sqlReten = "SELECT sum(e23_valorretencao) AS descontar
+                       FROM retencaopagordem
+                       JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
+                       JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
+                       JOIN retencaoempagemov on e27_retencaoreceitas = e23_sequencial
+                       WHERE e23_recolhido = TRUE";
+
+        if ($reg12->e81_codmov == '') {
+            $sqlReten .= " AND (e20_pagordem) = ({$oEmpPago->ordem})";
+        } else {
+            $sqlReten .= " AND (e20_pagordem , e27_empagemov) = ({$oEmpPago->ordem}, {$reg12->e81_codmov})";
+        }
+
+        $sqlReten .= " AND e23_dtcalculo BETWEEN '$aDataIni' AND '$aDataFim'
+                            GROUP BY e27_empagemov";
+        return $sqlReten;
+    }
 }
 ?>
