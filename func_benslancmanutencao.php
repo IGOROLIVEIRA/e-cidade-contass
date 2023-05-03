@@ -197,9 +197,9 @@ charset=iso-8859-1">
           bensmedida.t67_sequencial = bens.t52_bensmedida
         inner join bensdepreciacao on
           t52_bem = t44_bens
-        inner join bensbaix on
-          t55_codbem = t52_bem
-        where
+        left join bensbaix on
+          t52_bem = t55_codbem 
+        where t55_codbem is null and
           t52_instit =  " . db_getsession("DB_instit") . $where . "
         order by
           t52_descr";
