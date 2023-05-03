@@ -50,7 +50,7 @@
 
     if (mostra == true) {
       js_OpenJanelaIframe('', 'db_iframe_acordo',
-        'func_acordo.php?aditamentos=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto',
+        'func_acordo.php?aditamentos=true&funcao_js=parent.js_mostraAcordo1|ac16_sequencial|ac16_resumoobjeto',
         'Pesquisa', true);
       return;
     }
