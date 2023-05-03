@@ -96,9 +96,9 @@ class ContratoPNCP extends ModeloBasePNCP
         $token = $this->login();
 
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
+        $cnpj =  $this->getCnpj();
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/contratos";
 
         $method = 'POST';
 
@@ -163,7 +163,7 @@ class ContratoPNCP extends ModeloBasePNCP
 
         $sequencial = $dadosExtras->ac213_sequencialpncp;
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
 
         $method = 'PUT';
 
@@ -195,16 +195,6 @@ class ContratoPNCP extends ModeloBasePNCP
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
-        $err     = curl_errno($chpncp);
-        $errmsg  = curl_error($chpncp);
-        $header  = curl_getinfo($chpncp);
-        /*$header['errno']   = $err;
-        $header['errmsg']  = $errmsg;
-        $header['header']  = $contentpncp;
-        echo "<pre>";
-        print_r($header);
-        exit;
-        */
         curl_close($chpncp);
 
         $retorno = explode(':', $contentpncp);
@@ -225,7 +215,7 @@ class ContratoPNCP extends ModeloBasePNCP
 
         $sequencial = $dadosExtras->e213_sequencialpncp;
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
 
         $method = 'PUT';
 
@@ -257,16 +247,6 @@ class ContratoPNCP extends ModeloBasePNCP
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
-        $err     = curl_errno($chpncp);
-        $errmsg  = curl_error($chpncp);
-        $header  = curl_getinfo($chpncp);
-        /*$header['errno']   = $err;
-        $header['errmsg']  = $errmsg;
-        $header['header']  = $contentpncp;
-        echo "<pre>";
-        print_r($header);
-        exit;
-        */
         curl_close($chpncp);
 
         $retorno = explode(':', $contentpncp);
@@ -283,7 +263,7 @@ class ContratoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = substr($cnpj, 0, 14);
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/contratos" . "/" . $ano . "/" . $sequencial;
 
         $method = 'DELETE';
 
@@ -331,7 +311,7 @@ class ContratoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = substr($dados->ac213_numerocontrolepncp, 0, 14);
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $dados->ac213_ano . "/" . $dados->ac213_sequencialpncp . "/arquivos";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/contratos" . "/" . $dados->ac213_ano . "/" . $dados->ac213_sequencialpncp . "/arquivos";
 
         $method = 'POST';
 
@@ -399,7 +379,7 @@ class ContratoPNCP extends ModeloBasePNCP
         //aqui sera necessario informar o cnpj da instituicao de envio
         $cnpj = substr($dados->ac214_numerocontrolepncp, 0, 14);
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/contratos" . "/" . $dados->ac214_ano . "/" . $dados->ac214_sequencialpncp . "/arquivos" . "/" . $dados->ac214_sequencialarquivo;
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/contratos" . "/" . $dados->ac214_ano . "/" . $dados->ac214_sequencialpncp . "/arquivos" . "/" . $dados->ac214_sequencialarquivo;
 
         $method = 'DELETE';
 

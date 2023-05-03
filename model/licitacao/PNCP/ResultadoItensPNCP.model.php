@@ -85,9 +85,9 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         $token = $this->login();
 
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
+        $cnpj =  $this->getCnpj();
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/itens/$seqitem/resultados";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/itens/$seqitem/resultados";
 
         $method = 'POST';
 
@@ -144,10 +144,10 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         $token = $this->login();
 
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
+        $cnpj =  $this->getCnpj();
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/itens/$seqitem/resultados/$seqresultado";
-        exit($url);
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/itens/$seqitem/resultados/$seqresultado";
+
         $method = 'POST';
 
         $chpncp      = curl_init($url);
