@@ -130,13 +130,10 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
     public function enviarAviso($processo, $anexo)
     {
-
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras";
 
         $method = 'POST';
 
@@ -203,12 +200,10 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
     public function enviarRetificacao($oDados, $sCodigoControlePNCP, $iAnoCompra)
     {
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
         $method = 'PATCH';
 
@@ -259,12 +254,11 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
     public function excluirAviso($sCodigoControlePNCP, $iAnoCompra)
     {
+
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
         $method = 'DELETE';
 
@@ -296,9 +290,6 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
-        /*echo "<pre>";
-        print_r(json_decode($contentpncp));
-        exit;*/
 
         curl_close($chpncp);
 
@@ -310,12 +301,10 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
     public function enviarAnexos($iTipoAnexo, $sDescricao, $sAnexo, $iAnoCompra, $iCodigocompra)
     {
 
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $iCodigocompra . "/arquivos";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $iCodigocompra . "/arquivos";
 
         $method = 'POST';
 
@@ -369,12 +358,11 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
     public function excluirAnexos($iAnoCompra, $iCodigocompra, $iSeqAnexosPNCP)
     {
+
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$iCodigocompra/arquivos/$iSeqAnexosPNCP";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$iCodigocompra/arquivos/$iSeqAnexosPNCP";
 
         $method = 'DELETE';
 
