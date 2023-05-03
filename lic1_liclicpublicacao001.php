@@ -66,7 +66,7 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
 }
 
 
-
+var_dump($licitacao);
 ?>
 <html>
 
@@ -283,6 +283,23 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
                 <input name="emite2" type="button" id="emite2" value="Imprimir" onclick="js_emite();">
 
             </form>
+            <form name="form2">
+                <fieldset style="width: 550;">
+                    <legend><strong>Enviar Publicações para Plataforma: </strong></legend>
+                    <table>
+
+                        <tr id="PortalCompras">
+                            <td nowrap title="">
+                                Enviar para Portal de Compras
+                            </td>
+                            <td>
+                                <input name="enviarPortalCompras" type="button" id="enviarPortalCompras" value="Enviar" onclick="js_EnviarPortalDeCompras();">
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+
+            </form>
         </div>
     </center>
 
@@ -323,7 +340,7 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
     function js_mostracgm(erro, chave) {
         document.getElementById(varNomeCampo).value = chave;
         if (erro == true) {
-            //  document.form1.l31_numcgm.focus(); 
+            //  document.form1.l31_numcgm.focus();
             document.getElementById(varNumCampo).value = "";
             document.getElementById(varNomeCampo).value = "";
             alert("Responsável não encontrado!");
@@ -478,6 +495,26 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
         } else {
             return false;
         }
+    }
+
+    function js_EnviarPortalDeCompras() {
+        var sUrl = 'lic1_enviointegracaocompraspublicas.RPC.php';
+        var oParam = new Object();
+        oParam.codigo = "<?= $licitacao?>";
+        oParam.exec = "EnviarPregao";
+        oParam.codigoLicitacao = "2";
+
+        var oAjax = new Ajax.Request(sUrl, {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_retornoportaldecompras
+        });
+
+    }
+
+    function js_retornoportaldecompras(oAjax) {
+        var oRetorno = eval("(" + oAjax.responseText + ")");
+        console.log(oRetorno);
     }
 
     document.getElementById('l20_linkedital').value = "<?php echo $oLicitacao->l20_linkedital ?>";

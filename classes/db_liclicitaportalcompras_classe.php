@@ -1,0 +1,140 @@
+<?php
+
+
+class cl_liclicitaportalcompras
+{
+    // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+
+    public function buscaLicitacoes($codigo)
+    {
+        $sql = "select distinct
+        l20_codigo as id,
+        l20_objeto as objeto,
+        l03_descr as modalidade,
+        l03_pctipocompratribunal as codigomodalidade,
+        case when
+                l03_presencial=true then 1
+                else 2
+        end as tiporealizacao,
+        l20_tipliticacao as tipojulgamento,
+        l20_edital as numeroprocessointerno,
+        l20_numero as numeroprocesso,
+        l20_anousu as anoprocesso,
+        l20_dataaberproposta as datainiciopropostas,
+        l20_dataencproposta as datafinalpropostas,
+        l20_dataaberproposta as datalimiteimpugnacao,
+        l20_dataaberproposta as dataaberturapropostas,
+        l20_dataencproposta as datalimiteesclarecimento,
+        l20_orcsigiloso as orcamentosigiloso,
+        l20_destexclusiva as exclusivompe,
+        case when
+                l20_destexclusiva = 1 then false
+                else true
+        end as aplica147,
+        case when
+                l20_destexclusiva = 1 then false
+                else true
+        end as beneficiolocal,
+        null as exigegarantia,
+        4 as casasdecimais,
+        4 as casasdecimaisquantidade,
+        3 as legislacaoaplicavel,
+        l20_mododisputa as tratamentofaselance,
+        case when
+                l20_criterioadjudicacao = 3 then 1
+                else 2
+        end as tipointervalolance,
+        2 as valorintervalolance,
+        case when
+                l20_tipojulg = 1 then 't'
+                else 'f'
+        end as separarporlotes,
+        case when
+                l20_tipojulg = 1 then '2'
+                else 1
+        end as operacaolote,
+        true as lotes,
+        l04_codigo as numero, /*Gerar contador para definição do número do lote */
+        l04_descricao as descricao,
+        null as exclusivoMPE,
+        null as cotaReservada,
+        null as justificativa,
+        null as itens,
+        null as numeroCatalogoopcional,
+        l04_seq as numero,
+        pc01_codmater as numeroInterno,
+        case when
+                pc01_descrmater=pc01_complmater or pc01_complmater is null then pc01_descrmater
+                else pc01_descrmater||'. '||pc01_complmater
+        end as descricao,
+        1 as natureza,
+        m61_abrev as siglaunidade,
+        4 as valorreferencia,
+        pc11_quant as quantidadetotal,
+        case when
+                pc11_reservado = 't' then pc11_quant
+                else 0
+        end as quantidadecota,
+        null as arquivos,
+        null as tipo,
+        null as extensao,
+        null as nome,
+        null as conteudo,
+        null as pregoeiro,
+        null as autoridadeCompetenteopcional,
+        null as equipeDeApoioopcional,
+        null as documentosHabilitacaoopcional,
+        null as declaracoesopcional,
+        null as origensRecursosopcional,
+        null as cdTipoOrigem,
+        null as numeroOrigem
+        from liclicita
+        join cflicita on l03_codigo=l20_codtipocom
+        join liclicitem on l21_codliclicita = l20_codigo
+        join liclicitemlote on l04_liclicitem=l21_codigo
+        join pcprocitem on pc81_codprocitem=l21_codpcprocitem
+        join solicitem on pc11_codigo=pc81_solicitem
+        join solicitempcmater on pc16_solicitem=pc11_codigo
+        join pcmater on pc01_codmater=pc16_codmater
+        join solicitemunid on pc17_codigo=pc11_codigo
+        join matunid on m61_codmatunid=pc17_unid
+        where l20_codigo=$codigo";
+
+        return $this->sql_record($sql);
+    }
+
+    public function sql_record($sql) {
+        $result = db_query($sql);
+        if($result==false){
+          $this->numrows    = 0;
+          $this->erro_banco = str_replace("\n","",@pg_last_error());
+          $this->erro_sql   = "Erro ao selecionar os registros.";
+          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+          $this->erro_status = "0";
+          return false;
+        }
+        $this->numrows = pg_numrows($result);
+         if($this->numrows==0){
+           $this->erro_banco = "";
+           $this->erro_sql   = "Record Vazio na Tabela:liclicitaproc";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+         }
+        return $result;
+      }
+}
