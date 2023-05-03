@@ -146,5 +146,7 @@ for ($i = 0; $i < pg_numrows($rs_acordo); $i++) {
     $pdf->setfont('arial', 'B', 7);
     $pdf->cell(170, 6, "Valor Total: ", 0, 0, "R", 0);
     $pdf->cell(20, 6, 'R$ ' . number_format($totaladitado, 2, ',', '.'), 0, 1, "C", 0);
+
+    $pdf->AddPage();
 }
 $pdf->Output();
