@@ -117,7 +117,69 @@ if (pg_num_rows($this->rsLotes) > 0) {
         ";
 
         $rsResult = db_query($sSql) or die(pg_last_error());
+        $oResult = db_utils::fieldsMemory($rsResult, 0);
+        $linhas = ceil(strlen($oResult->pc01_descrmater)/115);
+                $addalt = $linhas*3;
+                if (($this->objpdf->gety() > $this->objpdf->h - 20) || $this->objpdf->gety() + $addalt > $this->objpdf->h -20 ) {
+                    $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());
+                    $this->objpdf->Setfont('Arial', '', 7);
+                    $this->objpdf->cell(265, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
+                    $this->objpdf->cell(265, $alt, "sic1_precoreferencia007.php | Emissor: " . db_getsession("DB_login") . " | Exerc: " . db_getsession("DB_anousu") . " | Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
+                    $this->objpdf->cell(20, $alt, "Pg ".$pagina, 0, 1, "R", 1);
+                    $this->objpdf->SetAutoPageBreak(false);
+                    $this->objpdf->AliasNbPages();
+                    $this->objpdf->AddPage('L');
+                    $this->objpdf->settopmargin(1);
+                    $this->objpdf->setleftmargin(4);
+                    $pagina++;
+                    $xlin = 20;
+                    $xcol = 4;
+                    $this->objpdf->sety(150);
+                    $this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2, '#FF0000');
+                    $this->objpdf->setfillcolor(255, 255, 255);
+                    $this->objpdf->Setfont('Arial', '',7);
+                    $this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
+                    $this->objpdf->text(228, $xlin -10, $this->precoreferencia);
+                    $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
+                    $this->objpdf->text(228, $xlin - 6, $this->codpreco);
+                    if($this->pc80_tipoprocesso==1){
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+                    }else{
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+                    }
 
+                    if($this->pc80_criterioadjudicacao==1){
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+                    }else if($this->pc80_criterioadjudicacao==2){
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+                    }else{
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+                    }
+
+
+                    $this->objpdf->text(202, $xlin + 6, 'Data:');
+                    $this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
+                    $this->objpdf->Setfont('Arial', 'B', 7);
+                    $this->objpdf->Line(4,27,287,27);
+            
+            
+                    $this->objpdf->Setfont('Arial', 'BI', 9);
+                    $this->objpdf->Image('imagens/files/' . $this->logo, 10, $xlin - 18, 22);
+                    $this->objpdf->Setfont('Arial', 'BI', 9);
+                    $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
+                    $this->objpdf->Setfont('Arial', 'I', 8);
+                    $this->objpdf->text(40, $xlin - 11, $this->enderpref);
+                    $this->objpdf->text(40, $xlin - 8, $this->municpref . " - MG");
+                    $this->objpdf->text(40, $xlin - 5, $this->telefpref." - CNPJ:");
+                    $this->objpdf->text(40, $xlin - 2, $this->emailpref);
+                    $this->objpdf->text(40, $xlin + 1, $this->url );
+                    $this->objpdf->text(40, $xlin + 4, $this->inscricaoestadualinstituicao);
+            
+            
+                    $this->objpdf->sety($xlin + 15);
+                    $alt = 4;
+                    
+                }
         
 
 
@@ -154,9 +216,8 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 $this->objpdf->setfillcolor(255);
             }
         }
-    }
-?>
-    <?php
+    
+
         for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
             $oResult = db_utils::fieldsMemory($rsResult, $iCont);
@@ -195,6 +256,66 @@ if (pg_num_rows($this->rsLotes) > 0) {
             }
 
             if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {  
+                if (($this->objpdf->gety() > $this->objpdf->h - 20)) {
+                    $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());
+                    $this->objpdf->Setfont('Arial', '', 7);
+                    $this->objpdf->cell(265, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
+                    $this->objpdf->cell(265, $alt, "sic1_precoreferencia007.php | Emissor: " . db_getsession("DB_login") . " | Exerc: " . db_getsession("DB_anousu") . " | Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
+                    $this->objpdf->cell(20, $alt, "Pg ".$pagina, 0, 1, "R", 1);
+                    $this->objpdf->SetAutoPageBreak(false);
+                    $this->objpdf->AliasNbPages();
+                    $this->objpdf->AddPage('L');
+                    $this->objpdf->settopmargin(1);
+                    $this->objpdf->setleftmargin(4);
+                    $pagina++;
+                    $xlin = 20;
+                    $xcol = 4;
+                    $this->objpdf->sety(150);
+                    $this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2, '#FF0000');
+                    $this->objpdf->setfillcolor(255, 255, 255);
+                    $this->objpdf->Setfont('Arial', '',7);
+                    $this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
+                    $this->objpdf->text(228, $xlin -10, $this->precoreferencia);
+                    $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
+                    $this->objpdf->text(228, $xlin - 6, $this->codpreco);
+                    if($this->pc80_tipoprocesso==1){
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+                    }else{
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+                    }
+
+                    if($this->pc80_criterioadjudicacao==1){
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+                    }else if($this->pc80_criterioadjudicacao==2){
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+                    }else{
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+                    }
+
+
+                    $this->objpdf->text(202, $xlin + 6, 'Data:');
+                    $this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
+                    $this->objpdf->Setfont('Arial', 'B', 7);
+                    $this->objpdf->Line(4,27,287,27);
+            
+            
+                    $this->objpdf->Setfont('Arial', 'BI', 9);
+                    $this->objpdf->Image('imagens/files/' . $this->logo, 10, $xlin - 18, 22);
+                    $this->objpdf->Setfont('Arial', 'BI', 9);
+                    $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
+                    $this->objpdf->Setfont('Arial', 'I', 8);
+                    $this->objpdf->text(40, $xlin - 11, $this->enderpref);
+                    $this->objpdf->text(40, $xlin - 8, $this->municpref . " - MG");
+                    $this->objpdf->text(40, $xlin - 5, $this->telefpref." - CNPJ:");
+                    $this->objpdf->text(40, $xlin - 2, $this->emailpref);
+                    $this->objpdf->text(40, $xlin + 1, $this->url );
+                    $this->objpdf->text(40, $xlin + 4, $this->inscricaoestadualinstituicao);
+            
+            
+                    $this->objpdf->sety($xlin + 15);
+                    $alt = 4;
+                    
+                }
                 $descricao = '';
                 $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
                 $addalt = $linhas*3;
@@ -203,7 +324,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                                         $this->objpdf->setfont('arial', '', 7);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
-                $this->objpdf->multicell(180, $alt+ $addalt, $oDadosDaLinha->descricao, "T", "L", 0);
+                $this->objpdf->multicell(180, $alt, $oDadosDaLinha->descricao, "T", "L", 0);
 
                 $this->objpdf->sety($old_y);
                 $this->objpdf->setx(214);
@@ -214,16 +335,74 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->total, 1, 1, "C", 1);
                 
             } else {
-                
                 $descricao = '';
                 $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
                 $addalt = $linhas*3;
                 $old_y = $this->objpdf->gety();
+                if (($this->objpdf->gety() > $this->objpdf->h - 20) ||$this->objpdf->gety() + $addalt > $this->objpdf->h  ) {
+                    $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());
+                    $this->objpdf->Setfont('Arial', '', 7);
+                    $this->objpdf->cell(265, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
+                    $this->objpdf->cell(265, $alt, "sic1_precoreferencia007.php | Emissor: " . db_getsession("DB_login") . " | Exerc: " . db_getsession("DB_anousu") . " | Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
+                    $this->objpdf->cell(20, $alt, "Pg ".$pagina, 0, 1, "R", 1);
+                    $this->objpdf->SetAutoPageBreak(false);
+                    $this->objpdf->AliasNbPages();
+                    $this->objpdf->AddPage('L');
+                    $this->objpdf->settopmargin(1);
+                    $this->objpdf->setleftmargin(4);
+                    $pagina++;
+                    $xlin = 20;
+                    $xcol = 4;
+                    $this->objpdf->sety(150);
+                    $this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2, '#FF0000');
+                    $this->objpdf->setfillcolor(255, 255, 255);
+                    $this->objpdf->Setfont('Arial', '',7);
+                    $this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
+                    $this->objpdf->text(228, $xlin -10, $this->precoreferencia);
+                    $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
+                    $this->objpdf->text(228, $xlin - 6, $this->codpreco);
+                    if($this->pc80_tipoprocesso==1){
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+                    }else{
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+                    }
 
-                                        $this->objpdf->setfont('arial', '', 7);
+                    if($this->pc80_criterioadjudicacao==1){
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+                    }else if($this->pc80_criterioadjudicacao==2){
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+                    }else{
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+                    }
+
+
+                    $this->objpdf->text(202, $xlin + 6, 'Data:');
+                    $this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
+                    $this->objpdf->Setfont('Arial', 'B', 7);
+                    $this->objpdf->Line(4,27,287,27);
+            
+            
+                    $this->objpdf->Setfont('Arial', 'BI', 9);
+                    $this->objpdf->Image('imagens/files/' . $this->logo, 10, $xlin - 18, 22);
+                    $this->objpdf->Setfont('Arial', 'BI', 9);
+                    $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
+                    $this->objpdf->Setfont('Arial', 'I', 8);
+                    $this->objpdf->text(40, $xlin - 11, $this->enderpref);
+                    $this->objpdf->text(40, $xlin - 8, $this->municpref . " - MG");
+                    $this->objpdf->text(40, $xlin - 5, $this->telefpref." - CNPJ:");
+                    $this->objpdf->text(40, $xlin - 2, $this->emailpref);
+                    $this->objpdf->text(40, $xlin + 1, $this->url );
+                    $this->objpdf->text(40, $xlin + 4, $this->inscricaoestadualinstituicao);
+            
+            
+                    $this->objpdf->sety($xlin + 15);
+                    $alt = 4;
+                    
+                }
+                $this->objpdf->setfont('arial', '', 7);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
-                $this->objpdf->multicell(180, $alt+ $addalt, $oDadosDaLinha->descricao, "T", "L", 0);
+                $this->objpdf->multicell(180, $alt, $oDadosDaLinha->descricao, "T", "L", 0);
 
                 $this->objpdf->sety($old_y);
                 $this->objpdf->setx(214);
@@ -234,6 +413,67 @@ if (pg_num_rows($this->rsLotes) > 0) {
             }
         }
         $cabecalho[$oLotes->pc68_sequencial] = $oLotes->pc68_sequencial;
+        if (($this->objpdf->gety() > $this->objpdf->h - 20)) {
+            $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());
+            $this->objpdf->Setfont('Arial', '', 7);
+            $this->objpdf->cell(265, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
+            $this->objpdf->cell(265, $alt, "sic1_precoreferencia007.php | Emissor: " . db_getsession("DB_login") . " | Exerc: " . db_getsession("DB_anousu") . " | Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
+            $this->objpdf->cell(20, $alt, "Pg ".$pagina, 0, 1, "R", 1);
+            $this->objpdf->SetAutoPageBreak(false);
+            $this->objpdf->AliasNbPages();
+            $this->objpdf->AddPage('L');
+            $this->objpdf->settopmargin(1);
+            $this->objpdf->setleftmargin(4);
+            $pagina++;
+            $xlin = 20;
+            $xcol = 4;
+            $this->objpdf->sety(150);
+            $this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2, '#FF0000');
+            $this->objpdf->setfillcolor(255, 255, 255);
+            $this->objpdf->Setfont('Arial', '',7);
+            $this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
+            $this->objpdf->text(228, $xlin -10, $this->precoreferencia);
+            $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
+            $this->objpdf->text(228, $xlin - 6, $this->codpreco);
+            if($this->pc80_tipoprocesso==1){
+                $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+            }else{
+                $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+            }
+
+            if($this->pc80_criterioadjudicacao==1){
+                $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+            }else if($this->pc80_criterioadjudicacao==2){
+                $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+            }else{
+                $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+            }
+
+
+            $this->objpdf->text(202, $xlin + 6, 'Data:');
+            $this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
+            $this->objpdf->Setfont('Arial', 'B', 7);
+            $this->objpdf->Line(4,27,287,27);
+    
+    
+            $this->objpdf->Setfont('Arial', 'BI', 9);
+            $this->objpdf->Image('imagens/files/' . $this->logo, 10, $xlin - 18, 22);
+            $this->objpdf->Setfont('Arial', 'BI', 9);
+            $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
+            $this->objpdf->Setfont('Arial', 'I', 8);
+            $this->objpdf->text(40, $xlin - 11, $this->enderpref);
+            $this->objpdf->text(40, $xlin - 8, $this->municpref . " - MG");
+            $this->objpdf->text(40, $xlin - 5, $this->telefpref." - CNPJ:");
+            $this->objpdf->text(40, $xlin - 2, $this->emailpref);
+            $this->objpdf->text(40, $xlin + 1, $this->url );
+            $this->objpdf->text(40, $xlin + 4, $this->inscricaoestadualinstituicao);
+    
+    
+            $this->objpdf->sety($xlin + 15);
+            $alt = 4;
+            
+        }
+    }
 }else{
 
 
@@ -261,8 +501,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
         $this->objpdf->cell(20, $alt, "TOTAL", 1, 1, "C", 1);
         $this->objpdf->setfillcolor(255);
     }
-    ?>
-    <?php
+    
 
     $sqencia = 0;
     for ($iCont = 0; $iCont < pg_num_rows($this->sqlitens); $iCont++) {
@@ -347,7 +586,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                                         $this->objpdf->setfont('arial', '', 7);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
-                $this->objpdf->multicell(180, $alt+ $addalt, $oDadosDaLinha->descricao, "T", "L", 0);
+                $this->objpdf->multicell(180, $alt, $oDadosDaLinha->descricao, "T", "L", 0);
 
                 $this->objpdf->sety($old_y);
                 $this->objpdf->setx(214);
@@ -375,12 +614,28 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $this->objpdf->sety(150);
                     $this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2, '#FF0000');
                     $this->objpdf->setfillcolor(255, 255, 255);
-                    $this->objpdf->Setfont('Arial', '', 9);
+                    $this->objpdf->Setfont('Arial', '',7);
                     $this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
+                    $this->objpdf->text(228, $xlin -10, $this->precoreferencia);
                     $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
-                    $this->objpdf->text(238, $xlin - 6, $this->codpreco);
-                    $this->objpdf->text(202, $xlin - 2, 'Data:');
-                    $this->objpdf->text(214, $xlin - 2, db_formatar($this->emissao, 'd'));
+                    $this->objpdf->text(228, $xlin - 6, $this->codpreco);
+                    if($this->pc80_tipoprocesso==1){
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+                    }else{
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+                    }
+
+                    if($this->pc80_criterioadjudicacao==1){
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+                    }else if($this->pc80_criterioadjudicacao==2){
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+                    }else{
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+                    }
+
+
+                    $this->objpdf->text(202, $xlin + 6, 'Data:');
+                    $this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
                     $this->objpdf->Setfont('Arial', 'B', 7);
                     $this->objpdf->Line(4,27,287,27);
 
@@ -440,12 +695,28 @@ if (pg_num_rows($this->rsLotes) > 0) {
         $this->objpdf->sety(150);
         $this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2, '#FF0000');
         $this->objpdf->setfillcolor(255, 255, 255);
-        $this->objpdf->Setfont('Arial', 'B', 9);
+        $this->objpdf->Setfont('Arial', '',7);
         $this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
+        $this->objpdf->text(228, $xlin -10, $this->precoreferencia);
         $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
-        $this->objpdf->text(238, $xlin - 6, $this->codpreco);
-        $this->objpdf->text(202, $xlin - 2, 'Data:');
-        $this->objpdf->text(214, $xlin - 2, db_formatar($this->emissao, 'd'));
+        $this->objpdf->text(228, $xlin - 6, $this->codpreco);
+        if($this->pc80_tipoprocesso==1){
+            $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+        }else{
+            $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+        }
+
+        if($this->pc80_criterioadjudicacao==1){
+            $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+        }else if($this->pc80_criterioadjudicacao==2){
+            $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+        }else{
+            $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+        }
+
+
+        $this->objpdf->text(202, $xlin + 6, 'Data:');
+        $this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
         $this->objpdf->Setfont('Arial', 'B', 7);
         $this->objpdf->Line(4,27,287,27);
 
@@ -469,15 +740,15 @@ if (pg_num_rows($this->rsLotes) > 0) {
     }
 }
 $this->objpdf->setfont('arial', '', 7);
-$this->objpdf->cell(265, $alt + $addalt, "VALOR TOTAL ESTIMADO", 1, 0, "L", 1);
-$this->objpdf->cell(20, $alt + $addalt, "R$" . number_format($nTotalItens, 2, ",", "."), 1, 1, "C", 1);
+$this->objpdf->cell(265, $alt, "VALOR TOTAL ESTIMADO", 1, 0, "L", 1);
+$this->objpdf->cell(20, $alt, "R$" . number_format($nTotalItens, 2, ",", "."), 1, 1, "C", 1);
 if ($this->impjust == 't') {
     $this->objpdf->setfillcolor(235);
     $this->objpdf->Setfont('Arial', 'B', 7);
-    $this->objpdf->cell(285, $alt + $addalt, "JUSTIFICATIVA", 1, 1, "L", 1);
+    $this->objpdf->cell(285, $alt , "JUSTIFICATIVA", 1, 1, "L", 1);
     $this->objpdf->setfillcolor(255);
     $this->objpdf->Setfont('Arial', '', 7);
-    $this->objpdf->cell(285, $alt + $addalt, $oResult->si01_justificativa, 1, 0, "L", 1);
+    $this->objpdf->cell(285, $alt, $oResult->si01_justificativa, 1, 0, "L", 1);
 }
 $sSql = "SELECT si01_datacotacao, si01_numcgmcotacao FROM precoreferencia WHERE si01_processocompra = {$this->codpreco}";
 $rsResultData = db_query($sSql) or die(pg_last_error());
