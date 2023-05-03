@@ -184,7 +184,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
             $oDadosRec = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-            $sSql = "SELECT c74_codlan, c70_valor, c53_tipo, o57_fonte, k81_regrepasse, k81_exerc, k81_emparlamentar FROM conlancamrec
+            $sSql = "SELECT c74_codlan, c70_valor, c53_tipo, o57_fonte, k81_regrepasse, k81_exerc, k81_emparlamentar, o15_codtri FROM conlancamrec
                JOIN conlancamdoc ON c71_codlan = c74_codlan
                JOIN conhistdoc ON c71_coddoc = c53_coddoc
                JOIN conlancam ON c70_codlan = c74_codlan
@@ -194,12 +194,13 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                LEFT JOIN corplacaixa ON (corrente.k12_id, corrente.k12_data, corrente.k12_autent) = (k82_id, k82_data, k82_autent)
                LEFT JOIN placaixarec ON k82_seqpla = k81_seqpla
                JOIN orcfontes ON (o70_codfon, o70_anousu) = (o57_codfon, o57_anousu)
+               JOIN orctiporec ON o15_codigo = o70_codigo
                WHERE c74_anousu = ". db_getsession("DB_anousu") ."
                  AND o57_fonte = '{$oDadosRec->o57_fonte}'
                  AND ((c53_tipo = 101 AND substr(o57_fonte,1,2) != '49')
                         OR (c53_tipo = 100 AND substr(o57_fonte,1,2) = '49'))
                  AND c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
-                GROUP BY 1, 2, 3, 4, 5, 6, 7 ORDER BY 4, 3, 6";
+                GROUP BY 1, 2, 3, 4, 5, 6, 7, 8 ORDER BY 4, 3, 6";
 
 
             $rsDocRec = db_query($sSql);
@@ -265,13 +266,13 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
                         $oControleOrcamentario = new ControleOrcamentario();
                         $oControleOrcamentario->setNaturezaReceita($oDadosRec->o57_fonte);
-                        $oControleOrcamentario->setFonte($oDadosRec->o70_codigo); 
+                        $oControleOrcamentario->setFonte($oCodDoc->o15_codtri);
                         $oControleOrcamentario->setEmendaParlamentar($sEmParlamentar);
 
                         /**
                          * agrupar registro 11
                          */
-                        $sHash11 = $oDadosRec->o70_codigo . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar . $oControleOrcamentario->getCodigoPorReceita();
+                        $sHash11 = $oCodDoc->o15_codtri . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar . $oControleOrcamentario->getCodigoPorReceita();
 
                         if (!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
 
