@@ -71,11 +71,12 @@ switch ($oParam->exec) {
                 $arraybensjson = json_encode(DBString::utf8_encode_all($oDados));
 
                 $rsApiPNCP = $clliclicitaPNCP->enviarContrato($arraybensjson);
+                //$rsApiPNCP = array(201, '//pncp.gov.br/pncp-api/v1/orgaos/17316563000196/contratos/2023/2x-content-type-options');
 
                 if ($rsApiPNCP[0] == 201) {
 
                     $clempcontrolepncp = new cl_empempenhopncp();
-                    $sequencial = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 70));
+                    $sequencial = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 63));
                     $e213_numerocontrolepncp = '17316563000196-2-' . str_pad($sequencial, 6, '0', STR_PAD_LEFT) . '/' . $oDadosEmpenho->anocontrato;
 
                     //monto o codigo do contrato no pncp
@@ -88,6 +89,10 @@ switch ($oParam->exec) {
                     $clempcontrolepncp->e213_ano = $oDadosEmpenho->anocontrato;
                     $clempcontrolepncp->e213_sequencialpncp = $sequencial;
                     $clempcontrolepncp->incluir();
+
+                    if ($clempcontrolepncp->erro_status == 0) {
+                        throw new Exception($clempcontrolepncp->erro_msg);
+                    }
 
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Enviado com Sucesso !";
