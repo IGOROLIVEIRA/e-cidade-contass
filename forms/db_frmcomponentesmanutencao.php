@@ -16,7 +16,8 @@
 
       <tr>
         <td>
-          Descrição:
+          <a id="descricao">Descrição:</a>
+          <a id="descricaoancora" href="#" class="dbancora" style="text-decoration:underline; display:none" onclick="js_pesquisa_bem();">Descrição:</a>
         </td>
         <td>
           <?
@@ -122,13 +123,27 @@
 
   }
 
+  function js_pesquisa_bem(mostra) {
+    js_OpenJanelaIframe('', 'db_iframe_bens', 'func_bensdispensados.php?funcao_js=parent.js_mostrabem|e139_sequencial|pc01_descrmater', 'Pesquisa', true);
+  }
+
+  function js_mostrabem(e139_sequencial, pc01_descrmater) {
+    document.form1.t99_codbensdispensatombamento.value = e139_sequencial;
+    document.form1.t99_descricao.value = pc01_descrmater;
+    db_iframe_bens.hide();
+  }
+
   function js_selectitemsistema() {
     if (document.getElementById('t99_itemsistema').value == 1) {
       oAutoComplete = new dbAutoComplete(document.getElementById('t99_descricao'), 'com4_pesquisabemdispensatombamento.RPC.php');
       oAutoComplete.setTxtFieldId(document.getElementById('t99_codbensdispensatombamento'));
       oAutoComplete.show();
+      document.getElementById('descricao').style.display = 'none';
+      document.getElementById('descricaoancora').style.display = '';
       return true;
     }
+    document.getElementById('descricao').style.display = '';
+    document.getElementById('descricaoancora').style.display = 'none';
     document.getElementById('div_lista_t99_descricao').remove();
   }
 

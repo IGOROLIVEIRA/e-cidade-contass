@@ -15,6 +15,9 @@ $db_opcao = 1;
 $db_botao = true;
 $clbemmanutencao = new cl_bemmanutencao;
 
+if (isset($processar)) {
+}
+
 
 if (isset($incluir)) {
 
