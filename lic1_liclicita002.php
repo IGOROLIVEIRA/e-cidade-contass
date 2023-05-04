@@ -564,11 +564,14 @@ if (isset($alterar)) {
             $clliclicita->l20_equipepregao = $l20_equipepregao;
             //$clliclicita->l20_horaaber     = $l20_horaaber;
             $clliclicita->l20_nroedital = $l20_nroedital;
-            $clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao; //OC3770
-            $clliclicita->l20_exercicioedital = $oPost->l20_datacria_ano;
-            $clliclicita->l20_justificativapncp = $oPost->l20_justificativapncp;
-            $clliclicita->l20_categoriaprocesso = $oPost->l20_categoriaprocesso;
-            $clliclicita->l20_receita           = $oPost->l20_receita;
+            $clliclicita->l20_criterioadjudicacao   = $l20_criterioadjudicacao; //OC3770
+            $clliclicita->l20_exercicioedital       = $oPost->l20_datacria_ano;
+            $clliclicita->l20_justificativapncp     = $oPost->l20_justificativapncp;
+            $clliclicita->l20_categoriaprocesso     = $oPost->l20_categoriaprocesso;
+            $clliclicita->l20_receita               = $oPost->l20_receita;
+            $clliclicita->l20_dataaber              = $oPost->l20_dataaber;
+            $clliclicita->l20_recdocumentacao       = $oPost->l20_recdocumentacao;
+
             $clliclicita->alterar($l20_codigo, $descricao);
 
             if ($clliclicita->erro_status == "0") {
