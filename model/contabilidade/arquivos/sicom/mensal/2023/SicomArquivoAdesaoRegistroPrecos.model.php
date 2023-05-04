@@ -507,7 +507,7 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
         }
       }
 
-      $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,
+      $sSql = "select si07_numerolote,si07_precounitario,si07_quantidadelicitada,si07_quantidadeaderida,si07_percentual,
 case when length(z01_cgccpf) = 11 then 1 when length(z01_cgccpf) = 14 then 2 else 0 end as tipodocumento,
 z01_cgccpf,
 CASE 
@@ -535,7 +535,7 @@ where si07_sequencialadesao = {$oDados10->si06_sequencial}";
         $regadesao20->si73_exercicioadesao = substr($oDados10->exercicioadesao, 0, 4);
         $regadesao20->si73_nrolote = $oDados20->si07_numerolote;
         $regadesao20->si73_coditem = $oDados20->coditem;
-        $regadesao20->si73_percdesconto = $oDados20->si07_precounitario;
+        $regadesao20->si73_percdesconto = $oDados20->si07_percentual;
         $regadesao20->si73_tipodocumento = $oDados20->tipodocumento;
         $regadesao20->si73_nrodocumento = $oDados20->z01_cgccpf;
         $regadesao20->si73_instit = db_getsession("DB_instit");
