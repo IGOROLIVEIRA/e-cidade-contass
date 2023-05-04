@@ -49,6 +49,8 @@ $instit = db_getsession("DB_instit");
 
 
 ini_set("error_reporting","E_ALL & ~NOTICE");
+ini_set('display_errors', 'On');
+error_reporting(E_ALL);
 
 $clagata = new cl_dbagata("pessoal/pes2_recferias003.agt");
 
@@ -117,18 +119,18 @@ $xml = $api->getReport();
 $xml["Report"]["DataSet"]["Query"]["Where"] 	= $sWhere;
 
 $api->setReport($xml);
-
 try {
-	$oRecModel = new documentoTemplate(1);
+    $oRecModel = new documentoTemplate(1);
 
 }catch (Exception $oErro){
-	$erro =  $oErro->getMessage();
+    $erro =  $oErro->getMessage();
 	header("Location: db_erros.php?fechar=true&db_erro=$erro");
 }
 
 //ob_start();
 //$ok      = $api->generateReport();
 $ok 		 = $api->parseOpenOffice($oRecModel->getArquivoTemplate());
+echo "aqui";exit;
 
 if($ok==true){
 	$sNomeRelatorio   = "tmp/geraRelatorio".date("YmdHis").db_getsession("DB_id_usuario").".pdf";

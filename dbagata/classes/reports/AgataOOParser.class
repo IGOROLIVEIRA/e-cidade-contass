@@ -60,23 +60,24 @@ class AgataOOParser extends AgataMerge
         }
         else
         {
-            $this->prefix = temp . bar . substr(RemoveExtension($source), 1);
+            $this->prefix = temp . bar . substr(RemoveExtension($source), 0);
         }
 
         $zip      = new PclZip($source);
 
         if (($list = $zip->listContent()) == 0)
         {
-            adie("Error : ".$zip->errorInfo(true));
+            die("Error : ".$zip->errorInfo(true));
         }
 
         recursive_remove_directory($this->prefix);
         if ($zip->extract(PCLZIP_OPT_PATH, $this->prefix) == 0)
         {
-            adie("Error : ".$zip->errorInfo(true));
+            die("Error : ".$zip->errorInfo(true));
         }
 
         $content= file_get_contents($this->prefix . bar . 'content.xml');
+
         if ($content==FALSE)
         {
             new Dialog('Problemas de permissão em '.$this->prefix);

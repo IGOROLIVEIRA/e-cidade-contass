@@ -151,6 +151,10 @@
   // --------------------------------------------------------------------------------
    class PclZip
   {
+    function __construct($p_zipname)
+    {
+        $this->PclZip($p_zipname);
+    }
     // ----- Filename of the zip file
     var $zipname = '';
 
@@ -2668,15 +2672,15 @@
     //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Position in file : ".ftell($this->zip_fd)."'");
 
     // ----- Read each entry
-    for ($i=0; $i<$v_central_dir['entries']; $i++)
+    for ($i=0; $i < $v_central_dir['entries']; $i++)
     {
       // ----- Read the file header
+      $v_header['index'] = $i;
       if (($v_result = $this->privReadCentralFileHeader($v_header)) != 1)
       {
         //--(MAGIC-PclTrace)--//PclTraceFctEnd(__FILE__, __LINE__, $v_result);
         return $v_result;
       }
-      $v_header['index'] = $i;
 
       // ----- Get the only interesting attributes
       $this->privConvertHeader2FileInfo($v_header, $p_list[$i]);
@@ -2875,7 +2879,7 @@
                && ($p_options[PCLZIP_OPT_BY_EREG] != "")) {
           //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extract by ereg '".$p_options[PCLZIP_OPT_BY_EREG]."'");
 
-          if (ereg($p_options[PCLZIP_OPT_BY_EREG], $v_header['stored_filename'])) {
+          if (preg_match($p_options[PCLZIP_OPT_BY_EREG], $v_header['stored_filename'])) {
               //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Filename match the regular expression");
               $v_extract = true;
           }
@@ -4271,7 +4275,7 @@
                && ($p_options[PCLZIP_OPT_BY_EREG] != "")) {
           //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Extract by ereg '".$p_options[PCLZIP_OPT_BY_EREG]."'");
 
-          if (ereg($p_options[PCLZIP_OPT_BY_EREG], $v_header_list[$v_nb_extracted]['stored_filename'])) {
+          if (preg_match($p_options[PCLZIP_OPT_BY_EREG], $v_header_list[$v_nb_extracted]['stored_filename'])) {
               //--(MAGIC-PclTrace)--//PclTraceFctMessage(__FILE__, __LINE__, 3, "Filename match the regular expression");
               $v_found = true;
           }

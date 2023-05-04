@@ -4,7 +4,7 @@
         <properties>
             <title></title>
             <author></author>
-            <date>2012-07-11</date>
+            <date>2012-03-12</date>
             <type>document</type>
             <publishtime/>
         </properties>
@@ -74,21 +74,21 @@
                              then 'Matricula'
                              else case when q02_inscr is not null
                                        then 'Inscrição'
-                                       else 'CGM'
+                                       else null
                                   end
                         end                                                                  as inscricao_matricula,
                         case when j01_matric is not null
                              then 'M'
                              else case when q02_inscr is not null
                                        then 'I'
-                                       else 'C'
+                                       else null
                                   end
                         end                                                                  as tipo_origem,
                         case when j01_matric is not null
                              then j01_matric
                              else case when q02_inscr is not null
                                        then q02_inscr
-                                       else z01_numcgm
+                                       else null
                                   end
                         end                                                                  as codigo_origem,
                         
@@ -140,9 +140,9 @@
                           left join setorloc           on setorloc.j05_codigo             = loteloc.j06_setorloc
                         left join arreinscr            on  arreinscr.k00_numpre           = termo.v07_numpre
                           left join issbase            on arreinscr.k00_inscr             = issbase.q02_inscr
-                  where v60_peticao in ($iCodigoPeticao)  
+                  where v60_peticao = $iCodigoPeticao  
                ) as query_principal
-         
+         where inscricao_matricula is not null
        ) as query_proprietario
        inner join cgm cgm_proprietario on z01_numcgm = query_proprietario.cgm_proprietario;</query>
             <fields>

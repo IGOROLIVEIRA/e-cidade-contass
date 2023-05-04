@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /*******************************************************************************/
@@ -37,7 +37,7 @@ class AgataAPI
         # Define the Agata's Path
         define('AGATA_PATH', substr(__FILE__,0,-33));
         define('OS', strtoupper(substr(PHP_OS, 0, 3)));
-        
+
         if (OS == 'WIN')
         {
             define("bar", '\\');
@@ -63,10 +63,10 @@ class AgataAPI
             define ("cut", ':');
             define("temp", '/tmp');
         }
-        
+
         define('isGui', false);
         define('BREAKLN', "<br>");
-        
+
         if (!is_dir(AGATA_PATH))
         {
             echo "<b>Error</b> : Wrong Path: " . AGATA_PATH;
@@ -76,7 +76,7 @@ class AgataAPI
             //chdir(AGATA_PATH);
             ini_set('include_path', '.' . cut . '/usr/local/lib/php'. cut .
                     AGATA_PATH . cut . AGATA_PATH . '/classes');
-            
+
             include_once AGATA_PATH . "/include/util.inc";
             include_once AGATA_PATH . "/classes/core/AgataCompatibility.class";
             include_once AGATA_PATH . "/classes/core/AgataConnection.class";
@@ -103,25 +103,25 @@ class AgataAPI
     {
         $this->outputPath= $output;
     }
-    
+
     # Getting the output file that will be generated
     function getOutputPath()
     {
         return $this->output;
     }
-    
+
     # Define the callback
     function setCallBack($callback)
     {
         $this->callback = $callback;
     }
-    
+
     # Defining the Report file to interpret
     function setReportPath($report)
     {
         $this->reportPath = $report;
     }
-    
+
     # Alternative way to setReportPath
     function setReport($Report)
     {
@@ -147,13 +147,13 @@ class AgataAPI
             return $Report;
         }
     }
-    
+
     # Return the last error
     function getError()
     {
         return $this->error;
     }
-    
+
     # Return the report parameters
     function getParameters()
     {
@@ -172,7 +172,7 @@ class AgataAPI
             $this->error = 'Cannot read project file.';
             return;
         }
-        
+
         if ($params = @array_keys($Report['Report']['Parameters']))
         {
             foreach ($params as $name)
@@ -180,10 +180,10 @@ class AgataAPI
                 $return[] = "\${$name}";
             }
             return $return;
-        } 
+        }
         return null;
     }
-    
+
     # Choosing the output {html, txt, pdf, csv, sxw}
     function setFormat($format)
     {
@@ -202,7 +202,7 @@ class AgataAPI
         {
             $language = 'en';
         }
-        
+
         # Set the Interface Language
         Trans::SetLanguage($language);
     }
@@ -218,7 +218,7 @@ class AgataAPI
     {
         $this->project = $project;
     }
-    
+
     function fileDialog()
     {
         switch ($this->format)
@@ -254,7 +254,7 @@ class AgataAPI
         }
         readfile($this->outputPath);
     }
-    
+
     function generateReport()
     {
         # Reading the Report
@@ -272,13 +272,13 @@ class AgataAPI
             $this->error = 'Cannot read project file.';
             return;
         }
-        
+
 
         if ($this->parameters)
         {
             $header = $Report['Report']['Header']['Body'];
             $footer = $Report['Report']['Footer']['Body'];
-            
+
             foreach ( $this->parameters as $key => $value )
             {
                 $header = str_replace($key,$value,$header);
@@ -287,9 +287,9 @@ class AgataAPI
             $Report['Report']['Header']['Body'] = $header;
             $Report['Report']['Footer']['Body'] = $footer;
         }
-        
+
         $DataSet = $Report['Report']['DataSet'];
-        
+
         # Process the Query.
         $Query = AgataCore::CreateQuery($Project, $DataSet, $this->parameters);
 
@@ -313,7 +313,7 @@ class AgataAPI
             }
             $myreport->Process();
         }
-        
+
         $this->Query = $Query;
         return true;
     }
@@ -330,7 +330,7 @@ class AgataAPI
             return;
         }
         $this->project = $this->project ? $this->project : $Report['Report']['DataSet']['DataSource']['Name'];
-       
+
         # You can set the Database connection this way, too:
         $Project = @Project::ReadProject($this->project);
         if (!$Project)
@@ -338,10 +338,10 @@ class AgataAPI
             $this->error = 'Cannot read project file.';
             return;
         }
-        
-        
+
+
         $DataSet = $Report['Report']['DataSet'];
-        
+
         # Process the Query.
         $Query = AgataCore::CreateQuery($Project, $DataSet, $this->parameters);
         if (is_agata_error($Query))
@@ -357,7 +357,7 @@ class AgataAPI
             $params[3] = $Query;
             $params[4] = $Report;
             $params[6] = $this->parameters;
-            
+
             $obj = AgataCore::CreateMergedDocument($params, 'Pdf');
             $obj->Generate();
         }
@@ -384,10 +384,10 @@ class AgataAPI
             $this->error = 'Cannot read project file.';
             return;
         }
-        
-        
+
+
         $DataSet = $Report['Report']['DataSet'];
-        
+
         # Process the Query.
         $Query = AgataCore::CreateQuery($Project, $DataSet, $this->parameters);
         if (is_agata_error($Query))
@@ -403,13 +403,13 @@ class AgataAPI
             $params[3] = $Query;
             $params[4] = $Report;
             $params[6] = $this->parameters;
-            
+
             if (!$source)
             {
                 $Report = $this->getReport();
                 $source = $Report['Report']['OpenOffice']['Source'];
             }
-            
+
             $obj = AgataCore::ParseOpenOffice($params, 'Sxw');
             $obj->Generate($source, $this->outputPath);
         }
@@ -420,7 +420,7 @@ class AgataAPI
     function generateLabel()
     {
         $this->format = 'pdf';
- 
+
         # Reading the Report
         $Report = $this->getReport();
         if (!$Report)
@@ -428,7 +428,7 @@ class AgataAPI
             return;
         }
         $this->project = $this->project ? $this->project : $Report['Report']['DataSet']['DataSource']['Name'];
-       
+
         # You can set the Database connection this way, too:
         $Project = @Project::ReadProject($this->project);
         if (!$Project)
@@ -436,10 +436,10 @@ class AgataAPI
             $this->error = 'Cannot read project file.';
             return;
         }
-        
-        
+
+
         $DataSet = $Report['Report']['DataSet'];
-        
+
         # Process the Query.
         $Query = AgataCore::CreateQuery($Project, $DataSet, $this->parameters);
         if (is_agata_error($Query))
@@ -455,7 +455,7 @@ class AgataAPI
             $params[3] = $Query;
             $params[4] = $Report;
             $params[6] = $this->parameters;
-            
+
             $obj = AgataCore::CreateAddressLabel($params);
             $obj->Generate();
         }
