@@ -315,7 +315,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 $oResult2 = db_utils::fieldsMemory($rsResult2,0);
 
         //if($quant_casas == 2){
-        $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $oResult->si02_qtditem;
+        $lTotal = $oResult->si02_vlprecoreferencia * $oResult->si02_qtditem;
         //}else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
 
         $nTotalItens += $lTotal;
@@ -348,7 +348,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 $oDadosDaLinha->descricao = str_replace(';', "", $oResult2->pc01_descrmater);
             }
             //$oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
-            $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+            $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 4, ",", ".");
             if($controle == 0 && $fazerloop==2){
                 $oDadosDaLinha->quantidade = $oResult->si02_qtditem - $valorqtd;
             }else if($controle == 1 && $fazerloop==2){
@@ -358,9 +358,9 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
             }
             $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
             if($controle==0 && $fazerloop==2){
-                $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * ($oResult->si02_qtditem - $valorqtd);
+                $lTotal = $oResult->si02_vlprecoreferencia * ($oResult->si02_qtditem - $valorqtd);
             }else if($controle==1 && $fazerloop==2){
-                $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $valorqtd;
+                $lTotal = $oResult->si02_vlprecoreferencia * $valorqtd;
             }
             $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
 
@@ -510,7 +510,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
             $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
             //if($quant_casas == 2){
-            $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $oResult->pc11_quant;
+            $lTotal = $oResult->si02_vlprecoreferencia * $oResult->pc11_quant;
             //}else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
 
             $nTotalItens += $lTotal;
@@ -524,7 +524,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
             }
             //$oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
-            $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+            $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 4, ",", ".");
             $oDadosDaLinha->quantidade = $oResult->pc11_quant;
             $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
             $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
