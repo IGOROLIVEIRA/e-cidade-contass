@@ -815,7 +815,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                 </tr>
                                 -->
 
-                                <tr id="dataaberturapncp" style="display: none;">
+                                <tr id="dataaberturapncp">
                                     <td>
                                         <b>Data Abertura Proposta :</b>
                                     </td>
