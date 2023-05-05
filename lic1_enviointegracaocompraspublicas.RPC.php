@@ -30,11 +30,7 @@ switch ($oParam->exec) {
                 $results = $cl_liclicitaportalcompras->buscaLicitacoes($codigo);
 
                 var_dump($cl_liclicitaportalcompras->numrows);
-                $licitacaoFabrica->create($results, $cl_liclicitaportalcompras->numrows);
-
-                //var_dump( get_resource_type($results));
-                var_dump((int)$codigo);
-                die();
+                $licitacaoFabrica->criar($results, $cl_liclicitaportalcompras->numrows);
 
             } catch (Exception $oErro) {
 

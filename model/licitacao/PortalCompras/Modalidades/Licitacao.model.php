@@ -1,47 +1,40 @@
 <?php
 
-abstract class Licitacao
+require_once("model/licitacao/PortalCompras/Modalidades/Componentes/Lote.model.php");
+abstract class Licitacao implements \JsonSerializable
 {
-    protected string $id;
-    protected string $objeto;
-    protected int $tipoRealizacao;
-    protected int $numeroProcessoInterno;
-    protected int $numeroProcesso;
-    protected int $anoProcesso;
-    protected string $dataLimiteEsclarecimento;
-    protected string $dataInicioPropostas;
-    protected string $dataFinalPropostas;
-    protected string $dataLimiteImpugnacao;
-    protected string $dataAberturaPropostas;
-    protected string $dataLimiteEsclarecimentos;
-    protected bool $orcamentoSigiloso;
-    protected bool $exclusivoMPE;
-    protected bool $aplicar147;
-    protected bool $beneficioLocal;
-    protected bool $exigeGarantia;
-    protected int $casasDecimais;
-    protected int $casasDecimaisQuantidade;
-    protected int $legislacaoAplicavel;
-    protected int $tratamentoFaseLance;
-    protected int $tipoIntervaloLance;
-    protected float $valorIntervaloLance;
-    protected bool $separarPorLotes;
-    protected int $operacaoLote;
-    protected $lotes;
-    protected $arquivos;
-    protected string $pregoeiro;
-    protected string $autoridadeCompetente;
-    protected array $equipeDeApoio;
-    protected array $documentosHabilitacao;
-    protected array $declaracoes;
-    protected $origensRecursos;
-
-
-     /**
-      *
-      * @return array
-      */
-    abstract public function toArray(): array;
+    protected string     $id;
+    protected ?string    $objeto = null;
+    protected int        $tipoRealizacao;
+    protected int        $numeroProcessoInterno;
+    protected int        $numeroProcesso;
+    protected int        $anoProcesso;
+    protected ?string    $dataLimiteEsclarecimento = null;
+    protected ?string    $dataInicioPropostas = null ;
+    protected ?string    $dataFinalPropostas = null;
+    protected ?string    $dataLimiteImpugnacao = null;
+    protected ?string    $dataAberturaPropostas = null;
+    protected bool       $orcamentoSigiloso;
+    protected bool       $exclusivoMPE;
+    protected bool       $aplicar147;
+    protected bool       $beneficioLocal;
+    protected bool       $exigeGarantia;
+    protected int        $casasDecimais;
+    protected int        $casasDecimaisQuantidade;
+    protected int        $legislacaoAplicavel;
+    protected int        $tratamentoFaseLance;
+    protected int        $tipoIntervaloLance;
+    protected float      $valorIntervaloLance;
+    protected bool       $separarPorLotes;
+    protected int        $operacaoLote;
+    protected array      $lotes;
+    protected            $arquivos;
+    protected ?string    $pregoeiro = null;
+    protected ?string    $autoridadeCompetente = null;
+    protected ?array     $equipeDeApoio = null;
+    protected ?array     $documentosHabilitacao = null;
+    protected ?array     $declaracoes = null;
+    protected            $origensRecursos;
 
     /**
      * Converte datas para padrão ISO08601
@@ -72,23 +65,7 @@ abstract class Licitacao
         return $this;
     }
 
-    /**
-     * Get the value of objeto
-     */
-    public function getObjeto(): string
-    {
-        return $this->objeto;
-    }
 
-    /**
-     * Set the value of objeto
-     */
-    public function setObjeto(string $objeto): self
-    {
-        $this->objeto = $objeto;
-
-        return $this;
-    }
 
     /**
      * Get the value of tipoRealizacao
@@ -145,77 +122,6 @@ abstract class Licitacao
         return $this;
     }
 
-    /**
-     * Get the value of dataInicioPropostas
-     */
-    public function getDataInicioPropostas(): string
-    {
-        return $this->dataInicioPropostas;
-    }
-
-    /**
-     * Set the value of dataInicioPropostas
-     */
-    public function setDataInicioPropostas(string $dataInicioPropostas): self
-    {
-        $this->dataInicioPropostas = $dataInicioPropostas;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of dataFinalPropostas
-     */
-    public function getDataFinalPropostas(): string
-    {
-        return $this->dataFinalPropostas;
-    }
-
-    /**
-     * Set the value of dataFinalPropostas
-     */
-    public function setDataFinalPropostas(string $dataFinalPropostas): self
-    {
-        $this->dataFinalPropostas = $dataFinalPropostas;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of dataLimiteImpugnacao
-     */
-    public function getDataLimiteImpugnacao(): string
-    {
-        return $this->dataLimiteImpugnacao;
-    }
-
-    /**
-     * Set the value of dataLimiteImpugnacao
-     */
-    public function setDataLimiteImpugnacao(string $dataLimiteImpugnacao): self
-    {
-        $this->dataLimiteImpugnacao = $dataLimiteImpugnacao;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of dataAberturaPropostas
-     */
-    public function getDataAberturaPropostas(): string
-    {
-        return $this->dataAberturaPropostas;
-    }
-
-    /**
-     * Set the value of dataAberturaPropostas
-     */
-    public function setDataAberturaPropostas(string $dataAberturaPropostas): self
-    {
-        $this->dataAberturaPropostas = $dataAberturaPropostas;
-
-        return $this;
-    }
 
     /**
      * Get the value of orcamentoSigiloso
@@ -408,9 +314,13 @@ abstract class Licitacao
     /**
      * Set the value of separarPorLotes
      */
-    public function setSepararPorLotes(bool $separarPorLotes): self
+    public function setSepararPorLotes(string $separarPorLotes): self
     {
-        $this->separarPorLotes = $separarPorLotes;
+        if ($separarPorLotes == 't'){
+            $this->separarPorLotes = true;
+        }
+
+        $this->separarPorLotes = false;
 
         return $this;
     }
@@ -425,8 +335,10 @@ abstract class Licitacao
 
     /**
      * Set the value of lotes
+     *
+     * @param Lote[] $lotes
      */
-    public function setLotes($lotes): self
+    public function setLotes(array $lotes): self
     {
         $this->lotes = $lotes;
 
@@ -454,7 +366,7 @@ abstract class Licitacao
     /**
      * Get the value of pregoeiro
      */
-    public function getPregoeiro(): string
+    public function getPregoeiro(): ?string
     {
         return $this->pregoeiro;
     }
@@ -462,7 +374,7 @@ abstract class Licitacao
     /**
      * Set the value of pregoeiro
      */
-    public function setPregoeiro(string $pregoeiro): self
+    public function setPregoeiro(?string $pregoeiro): self
     {
         $this->pregoeiro = $pregoeiro;
 
@@ -472,7 +384,7 @@ abstract class Licitacao
     /**
      * Get the value of autoridadeCompetente
      */
-    public function getAutoridadeCompetente(): string
+    public function getAutoridadeCompetente(): ?string
     {
         return $this->autoridadeCompetente;
     }
@@ -480,7 +392,7 @@ abstract class Licitacao
     /**
      * Set the value of autoridadeCompetente
      */
-    public function setAutoridadeCompetente(string $autoridadeCompetente): self
+    public function setAutoridadeCompetente(?string $autoridadeCompetente): self
     {
         $this->autoridadeCompetente = $autoridadeCompetente;
 
@@ -490,7 +402,7 @@ abstract class Licitacao
     /**
      * Get the value of equipeDeApoio
      */
-    public function getEquipeDeApoio(): array
+    public function getEquipeDeApoio(): ?array
     {
         return $this->equipeDeApoio;
     }
@@ -498,7 +410,7 @@ abstract class Licitacao
     /**
      * Set the value of equipeDeApoio
      */
-    public function setEquipeDeApoio(array $equipeDeApoio): self
+    public function setEquipeDeApoio(?array $equipeDeApoio): self
     {
         $this->equipeDeApoio = $equipeDeApoio;
 
@@ -560,24 +472,6 @@ abstract class Licitacao
     }
 
     /**
-     * Get the value of dataLimiteEsclarecimento
-     */
-    public function getDataLimiteEsclarecimento(): string
-    {
-        return $this->dataLimiteEsclarecimento;
-    }
-
-    /**
-     * Set the value of dataLimiteEsclarecimento
-     */
-    public function setDataLimiteEsclarecimento(string $dataLimiteEsclarecimento): self
-    {
-        $this->dataLimiteEsclarecimento = $dataLimiteEsclarecimento;
-
-        return $this;
-    }
-
-    /**
      * Get the value of exclusivoMPE
      */
     public function isExclusivoMPE(): bool
@@ -627,6 +521,115 @@ abstract class Licitacao
     public function setOrigensRecursos($origensRecursos): self
     {
         $this->origensRecursos = $origensRecursos;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of objeto
+     */
+    public function getObjeto(): ?string
+    {
+        return $this->objeto;
+    }
+
+    /**
+     * Set the value of objeto
+     */
+    public function setObjeto(?string $objeto): self
+    {
+        $this->objeto = $objeto;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of dataLimiteEsclarecimento
+     */
+    public function getDataLimiteEsclarecimento(): ?string
+    {
+        return $this->dataLimiteEsclarecimento;
+    }
+
+    /**
+     * Set the value of dataLimiteEsclarecimento
+     */
+    public function setDataLimiteEsclarecimento(?string $dataLimiteEsclarecimento): self
+    {
+        $this->dataLimiteEsclarecimento = $dataLimiteEsclarecimento;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of dataInicioPropostas
+     */
+    public function getDataInicioPropostas(): ?string
+    {
+        return $this->dataInicioPropostas;
+    }
+
+    /**
+     * Set the value of dataInicioPropostas
+     */
+    public function setDataInicioPropostas(?string $dataInicioPropostas): self
+    {
+        $this->dataInicioPropostas = $dataInicioPropostas;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of dataFinalPropostas
+     */
+    public function getDataFinalPropostas(): ?string
+    {
+        return $this->dataFinalPropostas;
+    }
+
+    /**
+     * Set the value of dataFinalPropostas
+     */
+    public function setDataFinalPropostas(?string $dataFinalPropostas): self
+    {
+        $this->dataFinalPropostas = $dataFinalPropostas;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of dataLimiteImpugnacao
+     */
+    public function getDataLimiteImpugnacao(): ?string
+    {
+        return $this->dataLimiteImpugnacao;
+    }
+
+    /**
+     * Set the value of dataLimiteImpugnacao
+     */
+    public function setDataLimiteImpugnacao(?string $dataLimiteImpugnacao): self
+    {
+        $this->dataLimiteImpugnacao = $dataLimiteImpugnacao;
+
+        return $this;
+    }
+
+
+    /**
+     * Get the value of dataAberturaPropostas
+     */
+    public function getDataAberturaPropostas(): ?string
+    {
+        return $this->dataAberturaPropostas;
+    }
+
+    /**
+     * Set the value of dataAberturaPropostas
+     */
+    public function setDataAberturaPropostas(?string $dataAberturaPropostas): self
+    {
+        $this->dataAberturaPropostas = $dataAberturaPropostas;
 
         return $this;
     }

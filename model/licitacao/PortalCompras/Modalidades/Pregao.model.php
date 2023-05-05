@@ -24,14 +24,12 @@ class Pregao extends Licitacao
         return $this;
     }
 
-
-
     /**
      * Return class in array
      *
      * @return array
      */
-    public function toArray(): array
+    public function jsonSerialize(): array
     {
         return [
             "id"=> $this->id,

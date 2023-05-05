@@ -1,6 +1,6 @@
 <?php
 
-class Item
+class Item implements \JsonSerializable
 {
     /**
      * @var integer|null
@@ -20,7 +20,7 @@ class Item
     /**
      * @var string
      */
-    private string $descricao;
+    private string $descricao = "";
 
     /**
      * @var integer
@@ -115,7 +115,7 @@ class Item
      */
     public function setDescricao(string $descricao): self
     {
-        $this->descricao = $descricao;
+        $this->descricao = mb_convert_encoding($descricao, "UFT-8");
 
         return $this;
     }
@@ -211,20 +211,20 @@ class Item
     }
 
     /**
-     * @return Array
+     * @return array
      */
-    public function toArray(): Array
+    public function jsonSerialize(): array
     {
         return [
                 "numeroCatalogo"=> $this->numeroCatalogo,
                 "numero"=> $this->numero,
                 "numeroInterno"=> $this->numeroInterno,
-                "descricao"=> $this->descricao,
+                "descricao" => $this->descricao,
                 "natureza"=> $this->natureza,
                 "siglaUnidade"=> $this->siglaUnidade,
                 "valorReferencia"=> $this->valorReferencia,
                 "quantidadeTotal"=> $this->quantidadeTotal,
-                "quantidadeCota"=> $this->quantidadeCota,
+                "quantidadeCota"=> $this->quantidadeCota
         ];
     }
 }

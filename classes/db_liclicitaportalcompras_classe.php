@@ -58,27 +58,27 @@ class cl_liclicitaportalcompras
         end as tipointervalolance,
         2 as valorintervalolance,
         case when
-                l20_tipojulg = 1 then 't'
-                else 'f'
+		        l20_tipojulg = 1 then 'f'
+		        else 't'
         end as separarporlotes,
         case when
                 l20_tipojulg = 1 then '2'
                 else 1
         end as operacaolote,
         true as lotes,
-        l04_codigo as numero, /*Gerar contador para definição do número do lote */
-        l04_descricao as descricao,
-        null as exclusivoMPE,
-        null as cotaReservada,
+        l04_codigo as numerolote, /*Gerar contador para definição do número do lote */
+        l04_descricao as descricaolote,
+        l20_destexclusiva as exclusivompe,
+        l21_reservado as cotareservada,
         null as justificativa,
         null as itens,
-        null as numeroCatalogoopcional,
-        l04_seq as numero,
-        pc01_codmater as numeroInterno,
+        null as numerocatalogoopcional,
+        l04_seq as numeroitem,
+        pc01_codmater as numerointerno,
         case when
                 pc01_descrmater=pc01_complmater or pc01_complmater is null then pc01_descrmater
                 else pc01_descrmater||'. '||pc01_complmater
-        end as descricao,
+        end as descricaoitem,
         1 as natureza,
         m61_abrev as siglaunidade,
         4 as valorreferencia,
@@ -110,7 +110,8 @@ class cl_liclicitaportalcompras
         join pcmater on pc01_codmater=pc16_codmater
         join solicitemunid on pc17_codigo=pc11_codigo
         join matunid on m61_codmatunid=pc17_unid
-        where l20_codigo=$codigo";
+        where
+        l20_codigo=$codigo";
 
         return $this->sql_record($sql);
     }
