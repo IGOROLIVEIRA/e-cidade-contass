@@ -114,7 +114,7 @@ switch ($oParam->exec) {
 
                     //monto o codigo da compra no pncp
                     $l213_numerocompra = substr($rsApiPNCP[1], 74);
-                    $l213_numerocontrolepncp = '17316563000196-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
+                    $l213_numerocontrolepncp = db_utils::getCnpj() . '-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
 
                     //monto o codigo da compra no pncp
                     $clliccontrolepncp = new cl_liccontrolepncp();

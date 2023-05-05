@@ -65,8 +65,8 @@ abstract class ModeloBasePNCP
         $url = $this->envs['URL'] . 'usuarios/login';
 
         $curl_data = array(
-            'login' => $this->envs['LOGINPNCP'],
-            'senha' =>  $this->envs['PASSWORDPNCP']
+            'login' => $this->getLogin(),
+            'senha' =>  $this->getPassword()
         );
 
         $headers = array(
@@ -112,9 +112,28 @@ abstract class ModeloBasePNCP
 
     protected function getCnpj()
     {
-        $sqlCnpj = "select db_config.cgc as cgc from db_config where db_config.codigo = " . db_getsession('DB_instit');
+        $sqlCnpj = "SELECT cgm.z01_cgccpf
+        FROM db_config
+        inner join cgm on db_config.numcgm = cgm.z01_numcgm
+        WHERE db_config.codigo = " . db_getsession('DB_instit');
         $rsCnpj = db_query($sqlCnpj);
         $sCNPJ = pg_fetch_row($rsCnpj);
         return $sCNPJ[0];
+    }
+
+    protected function getLogin()
+    {
+        $sqlPNCP = "select l12_loginpncp from licitaparam where l12_instit = " . db_getsession('DB_instit');
+        $rsPNCP = db_query($sqlPNCP);
+        $sPNCP = pg_fetch_row($rsPNCP);
+        return $sPNCP[0];
+    }
+
+    protected function getPassword()
+    {
+        $sqlPNCP = "select l12_passwordpncp from licitaparam where l12_instit = " . db_getsession('DB_instit');
+        $rsPNCP = db_query($sqlPNCP);
+        $sPNCP = pg_fetch_row($rsPNCP);
+        return $sPNCP[0];
     }
 }

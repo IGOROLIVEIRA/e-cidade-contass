@@ -69,7 +69,7 @@ switch ($oParam->exec) {
                 if ($rsApiPNCP[0] == 201) {
                     $anocontrato = substr($rsApiPNCP[1], 65, 4);
                     $ac213_sequencialpncp = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 70));
-                    $ac213_numerocontrolepncp = '17316563000196-2-' . str_pad($ac213_sequencialpncp, 6, '0', STR_PAD_LEFT) . '/' . $anocontrato;
+                    $ac213_numerocontrolepncp = db_utils::getCnpj() . '-2-' . str_pad($ac213_sequencialpncp, 6, '0', STR_PAD_LEFT) . '/' . $anocontrato;
 
                     //monto o codigo do contrato no pncp
                     $clacocontrolepncp->ac213_contrato = $aContrato->codigo;
@@ -205,7 +205,7 @@ switch ($oParam->exec) {
                     $codigocontrato = explode('x-content-type-options', $rsApiPNCP[0]);
                     $clacocontrolepncp = new cl_acocontratopncp();
                     //monto o codigo do contrato no pncp
-                    $ac213_numerocontrolepncp = '17316563000196-1-' . str_pad(substr($codigocontrato[0], 75), 6, '0', STR_PAD_LEFT) . '/' . $oDadosContrato->anocontrato;
+                    $ac213_numerocontrolepncp = db_utils::getCnpj() . '-1-' . str_pad(substr($codigocontrato[0], 75), 6, '0', STR_PAD_LEFT) . '/' . $oDadosContrato->anocontrato;
                     $clacocontrolepncp->ac213_contrato = $aEmpenho->codigo;
                     $clacocontrolepncp->ac213_usuario = db_getsession('DB_id_usuario');
                     $clacocontrolepncp->ac213_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));

@@ -76,7 +76,7 @@ switch ($oParam->exec) {
 
                     $clempcontrolepncp = new cl_empempenhopncp();
                     $sequencial = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 70));
-                    $e213_numerocontrolepncp = '17316563000196-2-' . str_pad($sequencial, 6, '0', STR_PAD_LEFT) . '/' . $oDadosEmpenho->anocontrato;
+                    $e213_numerocontrolepncp = db_utils::getCnpj() . '-2-' . str_pad($sequencial, 6, '0', STR_PAD_LEFT) . '/' . $oDadosEmpenho->anocontrato;
 
                     //monto o codigo do contrato no pncp
                     $clempcontrolepncp->e213_contrato = $aEmpenho->codigo;

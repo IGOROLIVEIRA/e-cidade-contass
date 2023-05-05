@@ -28,7 +28,7 @@ class ContratoPNCP extends ModeloBasePNCP
             $oDado->receita = 'f';
 
         $aDadosAPI = array(
-            'cnpjCompra'                               => '17316563000196', //$oDado->cnpjcompra,
+            'cnpjCompra'                               => $this->getCnpj(), //$oDado->cnpjcompra,
             'anoCompra'                                => $oDado->anocompra,
             'sequencialCompra'                         => $oDado->sequencialcompra,
             'tipoContratoId'                           => $oDado->tipocontratoid,
@@ -61,7 +61,7 @@ class ContratoPNCP extends ModeloBasePNCP
         $oDado = $this->dados;
 
         $aDadosAPI = array(
-            'cnpjCompra'                               => '17316563000196', //$oDado->cnpjcompra,
+            'cnpjCompra'                               => $this->getCnpj(), //$oDado->cnpjcompra,
             'anoCompra'                                => $oDado->anocompra,
             'sequencialCompra'                         => $oDado->sequencialcompra,
             'tipoContratoId'                           => $oDado->tipocontratoid,
