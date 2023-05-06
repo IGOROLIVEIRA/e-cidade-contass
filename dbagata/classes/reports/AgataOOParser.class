@@ -28,7 +28,7 @@ class AgataOOParser extends AgataMerge
 
         $this->dataBreakStyles = array();
         define( 'PCLZIP_TEMPORARY_DIR', temp . '/');
-        require_once 'classes/pclzip/pclzip.lib.php';
+        require_once('classes/pclzip/pclzip.lib.php');
         include_once 'include/util.inc';
         $this->buffer = array();
 
@@ -48,6 +48,7 @@ class AgataOOParser extends AgataMerge
         }
 
         $this->complement = array();
+
         if (!file_exists($source))
         {
             new Dialog('Não encontrou o resource');
@@ -67,6 +68,7 @@ class AgataOOParser extends AgataMerge
 
         if (($list = $zip->listContent()) == 0)
         {
+
             die("Error : ".$zip->errorInfo(true));
         }
 
@@ -78,7 +80,7 @@ class AgataOOParser extends AgataMerge
 
         $content= file_get_contents($this->prefix . bar . 'content.xml');
 
-        if ($content==FALSE)
+        if (!$content)
         {
             new Dialog('Problemas de permissão em '.$this->prefix);
             return;
