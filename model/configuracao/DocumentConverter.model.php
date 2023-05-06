@@ -28,14 +28,14 @@
 Class DocumentConverter{
 
   /**
-   * Path do bin√°rio do libreoffice
+   * Path do bin·rio do libreoffice
    * @var string
    */
   const SOFFICE = '/usr/bin/soffice';
 
     /**
-   * Verifica se o diret√≥rio existe, se tem permiss√£o de escrita ou tenta cria-lo
-   * @param string $dir Path do diret√≥rio
+   * Verifica se o diretÛrio existe, se tem permiss„o de escrita ou tenta cria-lo
+   * @param string $dir Path do diretÛrio
    * @access private
    * @return boolean
    */
@@ -43,26 +43,26 @@ Class DocumentConverter{
   {
     if ( is_dir( $dir ) ){
       if ( ! is_writable( $dir ) ){
-        throw new Exception( 'Diret√≥rio:' . $dir . ', n√£o possui permiss√£o de escrita!');
+        throw new Exception( 'DiretÛrio:' . $dir . ', n„o possui permiss„o de escrita!');
       }
       return true;
     }
     if ( ! mkdir( $dir, 0777, true ) ){
-      throw new Exception( 'Falhou ao criar diret√≥rio:' . $dir );
+      throw new Exception( 'Falhou ao criar diretÛrio:' . $dir );
     }
     return true;
   }
 
   /**
-   * Verifica se o arquivo existe, e se tem permiss√£o de leitura
-   * @param string $file Path do diret√≥rio
+   * Verifica se o arquivo existe, e se tem permiss„o de leitura
+   * @param string $file Path do diretÛrio
    * @access private
    * @return boolean
    */
   private static function checkFile( $file )
   {
     if ( ! is_file( $file ) ){
-      throw new Exception('Arquivo:' . $file . ', n√£o encontrado!');
+      throw new Exception('Arquivo:' . $file . ', n„o encontrado!');
     }
     return true;
   }
@@ -70,7 +70,7 @@ Class DocumentConverter{
   /**
    * Executa comando em um shell
    * @access private
-   * @return string Primeira linha da execu√ß√£o
+   * @return string Primeira linha da execuÁ„o
    */
   private static function execShell( $cmd ){
     $resposta = "";
@@ -95,9 +95,9 @@ Class DocumentConverter{
   }
 
   /**
-   * Verifica vers√£o do libreofice
+   * Verifica vers„o do libreofice
    * @access private
-   * @return string Vers√£o do libreoffice
+   * @return string Vers„o do libreoffice
    */
   private static function checkSoffice()
   {
@@ -107,7 +107,7 @@ Class DocumentConverter{
       $resposta = self::execShell( $cmd );
     } catch (Exception $e) {
       $msg = 'Falhou em executar o soffice em :' . self::SOFFICE . ',';
-      $msg .= ' Verifique se o mesmo est√° instalado';
+      $msg .= ' Verifique se o mesmo est· instalado';
       throw new Exception( $msg );
     }
     return $resposta;
@@ -132,10 +132,10 @@ Class DocumentConverter{
   }
 
   /**
-   * Retorna o filtro a ser utilizado na convers√£o de arquivos do tipo odt/sxw
-   * @param string $output_type Extens√£o do arquivo de sa√≠da
+   * Retorna o filtro a ser utilizado na convers„o de arquivos do tipo odt/sxw
+   * @param string $output_type Extens„o do arquivo de saÌda
    * @access private
-   * @return string Filtro a ser utilizado na convers√£o
+   * @return string Filtro a ser utilizado na convers„o
    */
   private static function getOdtSxwFilters( $output_type ){
     switch ( $output_type ) {
@@ -146,17 +146,17 @@ Class DocumentConverter{
         return 'writer8';
         break;
       default:
-        throw new Exception( 'Tipo de arquivo: ' . $file_type . ', n√£o suportado!' );
+        throw new Exception( 'Tipo de arquivo: ' . $file_type . ', n„o suportado!' );
         break;
     }
   }
 
   /**
-   * Retorna o filtro a ser utilizado na convers√£o de arquivos
+   * Retorna o filtro a ser utilizado na convers„o de arquivos
    * @param string $input_file Arquivo a ser convertido
-   * @param string $output_type Extens√£o do arquivo de sa√≠da
+   * @param string $output_type Extens„o do arquivo de saÌda
    * @access private
-   * @return string Filtro a ser utilizado na convers√£o
+   * @return string Filtro a ser utilizado na convers„o
    */
   private static function getFilter( $input_file, $output_type )
   {
@@ -171,7 +171,7 @@ Class DocumentConverter{
             break;
           default:
             return self::getOdtSxwFilters( $output_type ); // TODO ajustar para retornar exception
-            //throw new Exception( 'Tipo de arquivo: ' . $file_type . ' n√£o suportado!' );
+            //throw new Exception( 'Tipo de arquivo: ' . $file_type . ' n„o suportado!' );
             break;
         }
       } catch (Exception $e) {
@@ -181,26 +181,26 @@ Class DocumentConverter{
 
   /**
    * Verifica se o arquivo existe, se sim tenta remove-lo
-   * @param string $file_output Arquivo de sa√≠da
+   * @param string $file_output Arquivo de saÌda
    * @access private
    * @return boolean
    */
   private static function checkOutput( $file_output ){
     if ( is_file( $file_output ) ){
       if ( ! unlink( $file_output ) ){
-        throw new Exception('Arquivo:' . $file_output . ' j√° existe, sem permiss√µes para sobrescrever!' );
+        throw new Exception('Arquivo:' . $file_output . ' j· existe, sem permissıes para sobrescrever!' );
       }
     }
     return true;
   }
 
   /**
-   * Retorna nome do arquivo e diretorio de sa√≠da
+   * Retorna nome do arquivo e diretorio de saÌda
    * @param string $input_file Arquivo a ser convertido
-   * @param string $output_file Arquivo de sa√≠da
-   * @param string $type Extens√£o do arquivo de sa√≠da
+   * @param string $output_file Arquivo de saÌda
+   * @param string $type Extens„o do arquivo de saÌda
    * @access private
-   * @return array Diret√≥rio e Path do arquivo de sa√≠da
+   * @return array DiretÛrio e Path do arquivo de saÌda
    */
   private static function getOutputName( $input_file, $output_file = null, $type ){
     if ( $output_file == null ){
@@ -224,10 +224,10 @@ Class DocumentConverter{
   }
 
   /**
-   * Executa convers√£o
+   * Executa convers„o
    * @param string $input_file Arquivo a ser convertido
-   * @param string $output_file Arquivo de sa√≠da
-   * @param string $type Extens√£o do arquivo de sa√≠da
+   * @param string $output_file Arquivo de saÌda
+   * @param string $type Extens„o do arquivo de saÌda
    * @access private
    * @return string Path do arquivo convertido
    */
@@ -264,7 +264,7 @@ Class DocumentConverter{
   /**
    * Converte arquivos odt/sxw/doc para pdf
    * @param string $input_file Arquivo a ser convertido
-   * @param string $output_file Arquivo de sa√≠da
+   * @param string $output_file Arquivo de saÌda
    * @access public
    * @return string Path do arquivo convertido
    */
@@ -276,7 +276,7 @@ Class DocumentConverter{
   /**
    * Converte arquivos sxw para odt
    * @param string $input_file Arquivo a ser convertido
-   * @param string $output_file Arquivo de sa√≠da
+   * @param string $output_file Arquivo de saÌda
    * @access public
    * @return string Path do arquivo convertido
    */
