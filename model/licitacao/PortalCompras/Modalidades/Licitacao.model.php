@@ -29,12 +29,20 @@ abstract class Licitacao implements \JsonSerializable
     protected int        $operacaoLote;
     protected array      $lotes;
     protected            $arquivos;
-    protected ?string    $pregoeiro = null;
-    protected ?string    $autoridadeCompetente = null;
-    protected ?array     $equipeDeApoio = null;
-    protected ?array     $documentosHabilitacao = null;
-    protected ?array     $declaracoes = null;
-    protected            $origensRecursos;
+    protected ?string    $pregoeiro = "";
+    protected ?string    $autoridadeCompetente = "";
+    protected ?array     $equipeDeApoio = [];
+    protected ?array     $documentosHabilitacao = [];
+    protected ?array     $declaracoes = [];
+    protected ?array     $origensRecursos = [];
+
+    /**
+     * Retorna os patsh de cada modalidade de licitaçao
+     *
+     * @param string|null $publicKey
+     * @return string
+     */
+    abstract public function getPathPortalCompras(string $publicKey = null): string;
 
     /**
      * Converte datas para padrão ISO08601

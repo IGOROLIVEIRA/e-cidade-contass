@@ -11,6 +11,7 @@ require_once("std/DBTime.php");
 require_once("std/DBDate.php");
 require_once("classes/db_liclicitaportalcompras_classe.php");
 require_once("model/licitacao/PortalCompras/Fabricas/LicitacaoFabrica.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/EnviadorLicitacao.model.php");
 
 $cl_liclicitaportalcompras = new cl_liclicitaportalcompras;
 $licitacaoFabrica = new LicitacaoFabrica;
@@ -26,11 +27,11 @@ $oRetorno->itens   = array();
 switch ($oParam->exec) {
     case 'EnviarPregao':
             try {
-                $codigo = $oParam->codigo;
-                $results = $cl_liclicitaportalcompras->buscaLicitacoes($codigo);
-
-                var_dump($cl_liclicitaportalcompras->numrows);
-                $licitacaoFabrica->criar($results, $cl_liclicitaportalcompras->numrows);
+                $codigo    = $oParam->codigo;
+                $results   = $cl_liclicitaportalcompras->buscaLicitacoes($codigo);
+                $licitacao = $licitacaoFabrica->criar($results, $cl_liclicitaportalcompras->numrows);
+                $enviador  = new EnviadorLicitacao();
+                $resultado = $enviador->enviar($licitacao);
 
             } catch (Exception $oErro) {
 

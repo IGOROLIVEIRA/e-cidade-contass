@@ -8,15 +8,25 @@ require("model/licitacao/PortalCompras/Fabricas/LoteFabrica.model.php");
 
 class PregaoFabrica implements LicitacaoFabricaInterface
 {
+    /**
+     * Undocumented function
+     *
+     * @param resource $dados
+     * @param integer $numlinhas
+     * @return Licitacao
+     */
     public function criar($dados, int $numlinhas): Licitacao
     {
+
         $fabricaLote = new LoteFabrica;
         $pregao = new Pregao();
         $linha = db_utils::fieldsMemory($dados, 0);
+        var_dump((int)$linha->tipoRealizacao);
+
         $pregao->setId($linha->id);
         $pregao->setObjeto($linha->objeto);
-        $pregao->setTipoRealizacao((int)$linha->tipoRealizacao);
-        $pregao->setTipoJulgamento((int)$linha->tipoJulgamento);
+        $pregao->setTipoRealizacao((int)$linha->tiporealizacao);
+        $pregao->setTipoJulgamento((int)$linha->tipojulgamento);
         $pregao->setNumeroProcessoInterno($linha->numeroprocessointerno);
         $pregao->setNumeroProcesso((int)$linha->numeroprocesso);
         $pregao->setAnoProcesso((int)$linha->anoprocesso);

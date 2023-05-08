@@ -51,9 +51,9 @@ class LoteFabrica
                 $descricaoLote = $resultado->descricaolote;
             }
 
-            $lote->setItens(
-                $itemFabrica->criarItemSimples($data,$indiceItemLote)
-            );
+            //$lote->setItens(
+            //    $itemFabrica->criarItemSimples($data,$indiceItemLote)
+            //);
             $indiceItemLote++;
             $lotes[] = $lote;
         }
@@ -72,7 +72,7 @@ class LoteFabrica
         $lotes = [];
         $resultado = db_utils::fieldsMemory($data, 0);
         $itemFabrica = new ItemFabrica();
-
+        var_dump($resultado->cotareservada);
         for ($i = 0; $i < $numrows; $i++) {
             $lote = new Lote();
             $lote->setNumero((int)$resultado->numerolote);

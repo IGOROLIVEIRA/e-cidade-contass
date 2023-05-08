@@ -6,6 +6,11 @@ class Pregao extends Licitacao
 {
     private int $tipoJulgamento;
 
+    public function getPathPortalCompras(string $publicKey = null): string
+    {
+        return "/comprador/$publicKey/processo/pregao";
+    }
+
     /**
      * Get the value of tipoJulgamento
      */
