@@ -87,7 +87,7 @@ switch ($oParam->exec) {
 
                     //validaçoes
                     if ($oDadosLicitacao->dataaberturaproposta == '') {
-                        throw new Exception('Data da Abertura de Proposta não informado! Licitacao:' . $aLicitacao->codigo);
+                        throw new Exception('Data da Abertura de Proposta(l20_dataaberproposta) não informado! Licitacao:' . $aLicitacao->codigo);
                     }
 
                     //valida se existe anexos na licitacao
