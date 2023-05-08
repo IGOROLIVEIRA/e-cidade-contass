@@ -329,7 +329,7 @@ switch ($oParam->exec) {
 
                     //envia para pncp
                     $rsApiPNCP = $clAtaRegistroprecoPNCP->enviarAta($odadosEnvioAta, substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
-                    $urlResutltado = explode('x-content-type-options', $rsApiPNCP[0]);
+                    $urlResutltado = explode('x-content-type-options', trim($rsApiPNCP[0]));
 
                     if ($rsApiPNCP[1] == '201') {
                         $clliccontroleatarppncp = new cl_licontroleatarppncp();
@@ -344,6 +344,10 @@ switch ($oParam->exec) {
                         $clliccontroleatarppncp->l215_anousu = substr($aLicitacao->numerocontrole, 24);
 
                         $clliccontroleatarppncp->incluir();
+
+                        if ($clliccontroleatarppncp->erro_status == 0) {
+                            throw new Exception($clliccontroleatarppncp->erro_msg);
+                        }
 
                         $oRetorno->status  = 1;
                         $oRetorno->situacao = 1;
