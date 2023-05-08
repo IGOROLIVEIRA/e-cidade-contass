@@ -1474,12 +1474,13 @@ class cl_pcproc
     JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
     JOIN pcmater ON pc16_codmater = pc01_codmater
     JOIN solicitemunid ON pc17_codigo=pc11_codigo
+    JOIN db_depart on db_depart.coddepto = pcproc.pc80_depto
     JOIN matunid ON m61_codmatunid=pc17_unid
     LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
     LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
     LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
     LEFT JOIN liccontrolepncp on l213_processodecompras = pc80_codproc
-    WHERE pc80_dispvalor='t'
+    WHERE pc80_dispvalor='t' and db_depart.instit = " . db_getsession('DB_instit') . "
     ORDER BY pc80_codproc desc";
     return $sql;
   }
