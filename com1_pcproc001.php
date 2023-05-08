@@ -401,7 +401,7 @@ if (isset($incluir) || isset($juntar)) {
 }
 
 $oParam = new cl_licitaparam;
-$oParam = $oParam->sql_query(null, '*');
+$oParam = $oParam->sql_query(null, '*', null, "l12_instit = " . db_getsession('DB_instit'));
 $oParam = db_query($oParam);
 $oParam = db_utils::fieldsMemory($oParam);
 $oParam = $oParam->l12_pncp;
