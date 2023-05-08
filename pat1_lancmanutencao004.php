@@ -8,7 +8,6 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_bemmanutencao_classe.php");
 
-
 db_postmemory($HTTP_POST_VARS);
 
 $db_opcao = 1;
@@ -16,6 +15,11 @@ $db_botao = true;
 $clbemmanutencao = new cl_bemmanutencao;
 
 if (isset($processar)) {
+    $clbemmanutencao->t98_bem = $t52_bem;
+    $clbemmanutencao->t98_vlrmanut = $t98_vlrmanut;
+    $clbemmanutencao->t98_tipo = $t98_tipo;
+    $clbemmanutencao->t98_data = implode('-', array_reverse(explode('/', $t98_data)));
+    $clbemmanutencao->processar();
 }
 
 
@@ -32,7 +36,6 @@ if (isset($incluir)) {
     $clbemmanutencao->t98_horaservidor = date("H:i:s");
     $clbemmanutencao->t98_tipo = $t98_tipo;
 
-
     $clbemmanutencao->incluir();
 
     if ($clbemmanutencao->erro_status == "0") {
@@ -46,8 +49,6 @@ if (isset($incluir)) {
 if (isset($salvar)) {
     $db_opcao = 2;
     db_inicio_transacao();
-
-
 
     $clbemmanutencao->alterar($t98_sequencial);
 
@@ -126,7 +127,7 @@ if (isset($incluir)) {
          </script>";
     }
 }
-if (isset($alterar) || isset($excluir)) {
+if (isset($alterar) || isset($excluir) || isset($processar)) {
     if ($clbemmanutencao->erro_status == "0") {
         $clbemmanutencao->erro(true, false);
         $db_botao = true;

@@ -99,8 +99,8 @@
   </fieldset>
   <input id="acao" name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "salvar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Salvar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
   <input name="excluir" type="submit" id="excluir" value="Excluir">
-  <input name="processar" type="button" id="processar" value="Processar" onclick="js_imprime();"> <br>
-  <input disabled style="margin-top: 10px;" name="inserircomponente" type="button" id="inserircomponente" value="Inserir Componente" onclick="js_inserircomponente();">
+  <input name="processar" type="submit" id="processar" value="Processar"> <br>
+  <input disabled style=" margin-top: 10px;" name="inserircomponente" type="button" id="inserircomponente" value="Inserir Componente" onclick="js_inserircomponente();">
 
 </form>
 <script>

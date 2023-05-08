@@ -373,6 +373,101 @@ class cl_bemmanutencao
       }
     }
   }
+
+  function calculoValorManutencao($valormanutencao, $tipomanutencao, $valoratual)
+  {
+    /* Calculo de Manutenção de acréscimo */
+    if ($tipomanutencao == 1 || $tipomanutencao == 3 || $tipomanutencao == 5) {
+      return $valoratual + $valormanutencao;
+    }
+    /* Calculo de Manutenção de decréscimo */
+    return $valoratual - $valormanutencao;
+  }
+
+  function processar()
+  {
+    $oDaoBensDepreciacao         = db_utils::getDao("bensdepreciacao");
+    $oDaoBensHistoricoCalculo    = db_utils::getDao("benshistoricocalculo");
+    $oDaoBensHistoricoCalculoBem = db_utils::getDao("benshistoricocalculobem");
+
+    db_inicio_transacao();
+
+    $rsBensDepreciacao = $oDaoBensDepreciacao->sql_record($oDaoBensDepreciacao->sql_query(null, "t44_sequencial,t44_valorresidual,t44_vidautil,t44_valoratual", null, "t44_bens = $this->t98_bem"));
+    $oDaoBensDepreciacao->t44_sequencial =  db_utils::fieldsMemory($rsBensDepreciacao, 0)->t44_sequencial;
+    $oDaoBensDepreciacao->t44_valoratual = $this->calculoValorManutencao($this->t98_vlrmanut, $this->t98_tipo, db_utils::fieldsMemory($rsBensDepreciacao, 0)->t44_valoratual);
+    $oDaoBensDepreciacao->t44_ultimaavaliacao = implode('-', array_reverse(explode('/', $this->t98_data)));
+    $oDaoBensDepreciacao->alterar($oDaoBensDepreciacao->t44_sequencial);
+
+
+    if ($oDaoBensDepreciacao->erro_status == "0") {
+      db_fim_transacao(true);
+      $this->erro_sql   = "Processamento Abortado.\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $oDaoBensDepreciacao->erro_msg . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $oDaoBensDepreciacao->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    $oDaoBensHistoricoCalculo->t57_mes               = date("m", db_getsession("DB_datausu"));
+    $oDaoBensHistoricoCalculo->t57_ano               = date("Y", db_getsession("DB_datausu"));
+    $oDaoBensHistoricoCalculo->t57_datacalculo       = date("Y-m-d", db_getsession("DB_datausu"));
+    $oDaoBensHistoricoCalculo->t57_usuario           = db_getsession("DB_id_usuario");
+    $oDaoBensHistoricoCalculo->t57_instituicao       = db_getsession("DB_instit");
+    $oDaoBensHistoricoCalculo->t57_tipocalculo       = 3;
+    $oDaoBensHistoricoCalculo->t57_processado        = "true";
+    $oDaoBensHistoricoCalculo->t57_tipoprocessamento = 2;
+    $oDaoBensHistoricoCalculo->t57_ativo             = "true";
+    $oDaoBensHistoricoCalculo->incluir(null);
+
+    if ($oDaoBensHistoricoCalculo->erro_status == "0") {
+      db_fim_transacao(true);
+      $this->erro_sql   = "Processamento Abortado.\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $oDaoBensHistoricoCalculo->erro_msg . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $oDaoBensHistoricoCalculo->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    /**
+     * Calcula percentual a ser depreciado de acordo com o valor atual, valor depreciavel e vida útil
+     */
+    $oCalculoBem = new CalculoBem();
+    $oBemNovo    = new Bem($this->t98_bem);
+    $oBemNovo->setValorAtual($this->calculoValorManutencao($this->t98_vlrmanut, $this->t98_tipo, db_utils::fieldsMemory($rsBensDepreciacao, 0)->t44_valoratual));
+    $oBemNovo->setValorResidual(db_utils::fieldsMemory($rsBensDepreciacao, 0)->t44_valorresidual);
+    $oBemNovo->setVidaUtil(db_utils::fieldsMemory($rsBensDepreciacao, 0)->t44_vidautil);
+    $oCalculoBem->setBem($oBemNovo);
+    $oCalculoBem->calcular();
+    $nPercentualDepreciavel                                = $oCalculoBem->getPercentualDepreciado();
+
+    $oDaoBensHistoricoCalculoBem->t58_percentualdepreciado = "{$nPercentualDepreciavel}";
+    $oDaoBensHistoricoCalculoBem->t58_benstipodepreciacao   = 6;
+    $oDaoBensHistoricoCalculoBem->t58_benshistoricocalculo  = $oDaoBensHistoricoCalculo->t57_sequencial;
+    $oDaoBensHistoricoCalculoBem->t58_bens                  = $this->t98_bem;
+    $oDaoBensHistoricoCalculoBem->t58_valorresidual         = db_utils::fieldsMemory($rsBensDepreciacao, 0)->t44_valorresidual;
+    $oDaoBensHistoricoCalculoBem->t58_valoratual            = $this->calculoValorManutencao($this->t98_vlrmanut, $this->t98_tipo, db_utils::fieldsMemory($rsBensDepreciacao, 0)->t44_valoratual);
+    $oDaoBensHistoricoCalculoBem->t58_valorcalculado        = db_utils::fieldsMemory($rsBensDepreciacao, 0)->t44_valoratual;
+    $oDaoBensHistoricoCalculoBem->t58_valoranterior         = db_utils::fieldsMemory($rsBensDepreciacao, 0)->t44_valoratual;
+    $oDaoBensHistoricoCalculoBem->t58_vidautilanterior      = db_utils::fieldsMemory($rsBensDepreciacao, 0)->t44_vidautil;
+    $oDaoBensHistoricoCalculoBem->t58_valorresidualanterior = db_utils::fieldsMemory($rsBensDepreciacao, 0)->t44_valorresidual;
+
+
+    $oDaoBensHistoricoCalculoBem->incluir(null);
+
+    if ($oDaoBensHistoricoCalculoBem->erro_status == "0") {
+      db_fim_transacao(true);
+      $this->erro_sql   = "Processamento Abortado.\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $oDaoBensHistoricoCalculoBem->erro_msg . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $oDaoBensHistoricoCalculoBem->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    db_fim_transacao(false);
+    $this->erro_msg   = "Usuário: \\n\\nProcessamento efetuado com sucesso. \\n\\n";
+    $this->erro_status = "1";
+    return true;
+  }
 }
 
   /*
