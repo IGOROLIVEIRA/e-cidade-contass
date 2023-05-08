@@ -3888,8 +3888,8 @@ class cl_liclicita
                         JOIN solicitem ON pc11_codigo=pc81_solicitem
                         JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
                         JOIN pcmater ON pc16_codmater = pc01_codmater
-                        JOIN solicitemele ON pc18_solicitem = pc11_codigo
-                        JOIN orcelemento ON o56_codele = pc18_codele
+                        LEFT JOIN solicitemele ON pc18_solicitem = pc11_codigo
+                        LEFT JOIN orcelemento ON o56_codele = pc18_codele
                         AND o56_anousu=l20_anousu
                         JOIN solicitemunid ON pc17_codigo=pc11_codigo
                         JOIN matunid ON m61_codmatunid=pc17_unid
