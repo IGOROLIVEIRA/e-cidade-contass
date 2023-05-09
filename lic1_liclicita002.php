@@ -569,6 +569,7 @@ if (isset($alterar)) {
             $clliclicita->l20_dataaber              = $oPost->l20_dataaber;
             $clliclicita->l20_datacria              = $oPost->l20_datacria;
             $clliclicita->l20_recdocumentacao       = $oPost->l20_dataaberproposta;
+            $clliclicita->l20_dataaberproposta      = $oPost->l20_dataaberproposta;
 
             $clliclicita->alterar($l20_codigo, $descricao);
 
