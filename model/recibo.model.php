@@ -798,7 +798,7 @@ class Recibo
       }
 
     }
-      return true;
+
       /**
        * @var Numpref $settings
        */
