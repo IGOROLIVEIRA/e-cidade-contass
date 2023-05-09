@@ -2435,7 +2435,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
         $sHtml .= "           name='quant_lista' ";
         $sHtml .= "           type='text' ";
         $sHtml .= "           onchange='js_nova_quantidade_linhas( this.value )'";
-        $sHtml .= "           class = 'DBLovrotInputRodape'";
+        $sHtml .= "           class='DBLovrotInputRodape'";
         $sHtml .= "           value='$numlinhas' ";
         $sHtml .= "           size='5'>";
         $sHtml .= "    <label class='DBLovrotBold'>Mostra Diferentes:</label>";
@@ -2443,7 +2443,7 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
         $sHtml .= "           name='mostra_diferentes' ";
         $sHtml .= "           type='checkbox' ";
         $sHtml .= "           onchange='js_lanca_distinct_pesquisa()' ";
-        $sHtml .= "           class = 'DBLovrotInputRodape'>";
+        $sHtml .= "           class='DBLovrotInputRodape'>";
         $sHtml .= "  </td>";
         $sHtml .= "</tr>";
     }

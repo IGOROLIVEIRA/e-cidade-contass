@@ -594,8 +594,9 @@ class cl_ctb222023
                          WHEN substr(o57_fonte,1,2) = '49' THEN substr(o57_fonte,4,8)
                          ELSE substr(o57_fonte,2,8)
                      END AS naturezaReceita,
-                     c70_valor AS vlrreceitacont
-                     ,k81_emparlamentar
+                     c70_valor AS vlrreceitacont,
+                     k81_emparlamentar,
+                     o70_codigo
               FROM conlancamrec
               JOIN conlancam ON c70_codlan = c74_codlan AND c70_anousu = c74_anousu              
               JOIN conlancamcorrente ON c86_conlancam = c70_codlan

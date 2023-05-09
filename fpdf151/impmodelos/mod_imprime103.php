@@ -51,7 +51,7 @@ $this->objpdf->text(130, ($xlin + 6.5), 'PROCESSO LICITÓRIO:' . CHR(176));
 $this->objpdf->text(160, ($xlin + 6.5), $e54_numerl . " MODALIDADE: " . $e54_nummodalidade);
 $this->objpdf->text(130, ($xlin + $linpc - 2.25), 'TIPO DA COMPRA: ');
 $this->objpdf->Setfont('Arial', 'B', 7);
-$this->objpdf->text(153, ($xlin + $linpc - 2.5), db_formatar(pg_result($this->recorddositens,0,$this->sTipoCompra), 's', '0', 6, 'e'));
+$this->objpdf->text(153, ($xlin + $linpc - 2.5), db_formatar(pg_result($this->recorddositens, 0, $this->sTipoCompra), 's', '0', 6, 'e'));
 
 $this->objpdf->Setfont('Arial', 'B', 9);
 $this->objpdf->Image('imagens/files/' . $this->logo, 13, $xlin - 17, 18);
@@ -218,8 +218,10 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     }
     $valorItem = pg_result($this->recorddositens, $ii, $this->vlrunitem);
 
-    if(pg_result($this->recorddositens, $ii, $this->servico) == 't'
-       && pg_result($this->recorddositens, $ii, $this->servicoquantidade) == 'f'){
+    if (
+        pg_result($this->recorddositens, $ii, $this->servico) == 't'
+        && pg_result($this->recorddositens, $ii, $this->servicoquantidade) == 'f'
+    ) {
         $valorItem = $valorItemTotal;
     }
 
@@ -271,7 +273,7 @@ $sqlparagpadrao .= "  from db_documentopadrao ";
 $sqlparagpadrao .= "       inner join db_docparagpadrao  on db62_coddoc   = db60_coddoc ";
 $sqlparagpadrao .= "       inner join db_tipodoc         on db08_codigo   = db60_tipodoc ";
 $sqlparagpadrao .= "       inner join db_paragrafopadrao on db61_codparag = db62_codparag ";
-$sqlparagpadrao .= " where db60_tipodoc = 1502 order by db62_ordem";
+$sqlparagpadrao .= " where db60_tipodoc = 1502 and db60_instit = " . db_getsession('DB_instit') . "order by db62_ordem";
 
 $resparagpadrao = @pg_query($sqlparagpadrao);
 if (@pg_numrows($resparagpadrao) > 0) {

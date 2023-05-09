@@ -1,6 +1,35 @@
 <?php
 global $resparag, $resparagpadrao, $db61_texto, $db02_texto;
 
+/**
+ * Rodapé do Relatório
+ */
+$sSqlMenuAcess  = " select trim(modulo.descricao)||'>'||trim(menu.descricao)||'>'||trim(item.descricao) as menu ";
+$sSqlMenuAcess .= "   from db_menu                                                                              ";
+$sSqlMenuAcess .= "        inner join db_itensmenu as modulo on modulo.id_item = db_menu.modulo                 ";
+$sSqlMenuAcess .= "        inner join db_itensmenu as menu on menu.id_item     = db_menu.id_item                ";
+$sSqlMenuAcess .= "        inner join db_itensmenu as item on item.id_item     = db_menu.id_item_filho          ";
+$sSqlMenuAcess .= "  where id_item_filho = " . db_getsession("DB_itemmenu_acessado");
+$sSqlMenuAcess .= "    and modulo        = " . db_getsession("DB_modulo");
+$rsMenuAcess    = db_query($sSqlMenuAcess);
+$sMenuAcess     = substr(pg_result($rsMenuAcess, 0, "menu"), 0, 50);
+$sNomeArquivo   = $_SERVER["PHP_SELF"];
+$sNomeArquivo   = substr($sNomeArquivo, strrpos($_SERVER["PHP_SELF"], "/") + 1);
+$rsNomeUsuario  = db_query("select nome as nomeusu from db_usuarios where id_usuario = " . db_getsession("DB_id_usuario"));
+$sEmissor       = "";
+if (pg_num_rows($rsNomeUsuario) > 0) {
+    $sEmissor = trim(pg_result($rsNomeUsuario, 0, 0));
+}
+if (empty($sEmissor)) {
+    $sEmissor     = db_getsession("DB_login");
+}
+$sRodape        = " $sMenuAcess ($sNomeArquivo) ";
+$sRodape       .= ' - Base: ' . db_getsession("DB_base"); //.QUAL BASE?
+$sRodape       .= ' - Emissor: ' . substr(ucwords(strtolower($sEmissor)), 0, 30);
+$sRodape       .= ' - Exerc: '   . db_getsession("DB_anousu");
+$sRodape       .= ' - Data: '    . date("d/m/Y", db_getsession("DB_datausu")) . " " . date("H:i:s");
+
+
 if (!function_exists('addCaracter')) {
 
     function addCaracter($sString, $sQuebra = "\n", $iLimite = 86)
@@ -401,7 +430,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
             $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
             $this->objpdf->setfillcolor(255, 255, 255);
             $this->objpdf->Setfont('Arial', 'B', 9);
-            $this->objpdf->text(130, $xlin - 13, 'AUTORIZAÇÃO DE EMPENHO N' . CHR(176));
+            $this->objpdf->text(130, $xlin - 13, ' AUTORIZAÇÃO DE EMPENHO N' . CHR(176));
             $this->objpdf->text(185, $xlin - 13, db_formatar($this->numaut, 's', '0', 6, 'e'));
 
             if ($this->informa_adic == "PC") {
@@ -498,17 +527,17 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
     $this->objpdf->AliasNbPages();
     $this->objpdf->AddPage();
     $this->objpdf->settopmargin(1);
-    $xlin = 20;
+    $xlin = 22;
     $xcol = 4;
 
     //Inserindo usuario e data no rodape
 
 
     $this->objpdf->Setfont('Arial', 'I', 6);
-    $this->objpdf->text($xcol + 3, $xlin + 276, "Emissor : " . db_getsession("DB_login") . " Data: " . date("d/m/Y", db_getsession("DB_datausu")) . "");
+    $this->objpdf->text($xcol + 3, $xlin + 272, $sRodape);
 
     $this->objpdf->setfillcolor(245);
-    $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
+    $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 288, 2, 'DF', '1234');
     $this->objpdf->setfillcolor(255, 255, 255);
     $this->objpdf->Setfont('Arial', 'B', 9);
     $this->objpdf->text(130, $xlin - 9.8, 'AUTORIZAÇÃO DE EMPENHO N' . CHR(176));
@@ -939,7 +968,7 @@ if (strtoupper(trim($this->municpref)) == 'GUAIBA') {
                 $this->objpdf->rect($xcol + 162, $xlin + 59, 20, 6, 2, 'DF', '12');
                 $this->objpdf->rect($xcol + 182, $xlin + 59, 20, 6, 2, 'DF', '12');
 
-                $this->objpdf->rect($xcol, $xlin + 64, 8, 262, 2, 'DF', '34');
+                $this->objpdf->rect($xcol , $xlin + 64, 8, 262, 2, 'DF', '34');
                 $this->objpdf->rect($xcol + 8, $xlin + 64, 12, 262, 2, 'DF', '34');
                 $this->objpdf->rect($xcol + 20, $xlin + 64, 15, 262, 2, 'DF', '34');
                 $this->objpdf->rect($xcol + 35, $xlin + 64, 107, 262, 2, 'DF', '34');

@@ -53,7 +53,7 @@ class GerarOPS extends GerarAM
                 AND si133_instit = " . db_getsession("DB_instit");
     $rsOPS11 = db_query($sSql2);
 
-    $sSql3 = "select * from ops122023 where si134_mes = " . $this->iMes . " and si134_instit = " . db_getsession("DB_instit");
+    $sSql3 = "select * from ops122023 left join ops102023 on si134_reg10 = si132_sequencial where si134_mes = " . $this->iMes . " and si134_instit = " . db_getsession("DB_instit");
     $rsOPS12 = db_query($sSql3);
 
     $sSql4 = "select * from ops132023 where si135_mes = " . $this->iMes . " and si135_instit = " . db_getsession("DB_instit");
@@ -133,7 +133,7 @@ class GerarOPS extends GerarAM
             $aCSVOPS12['si134_codctb']              = substr($aOPS12['si134_codctb'], 0, 20) == 0 ? " " : substr($aOPS12['si134_codctb'], 0, 20);
             $aCSVOPS12['si134_codfontectb']         = substr($this->padLeftZero($aOPS12['si134_codfontectb'], 3) == 0 ? " " : $this->padLeftZero($aOPS12['si134_codfontectb'], 3), 0, 7);
             $aCSVOPS12['si134_desctipodocumentoop'] = substr($aOPS12['si134_desctipodocumentoop'], 0, 50);
-            $aCSVOPS12['si134_dtemissao']           = $this->sicomDate($aOPS12['si134_dtemissao']);
+            $aCSVOPS12['si134_dtemissao']           = $this->sicomDate($aOPS12['si132_dtpagamento']);
             $aCSVOPS12['si134_vldocumento']         = $this->sicomNumberReal($aOPS12['si134_vldocumento'], 2);
 
             $this->sLinha = $aCSVOPS12;

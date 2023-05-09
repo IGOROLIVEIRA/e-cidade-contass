@@ -1074,6 +1074,19 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                 if (oRetorno.lEmendaParlamentar) {
                     $('trEmendaParlamentar').style.display = '';
                     bEmendaParlamentar = true;
+                    if (oRetorno.lEmendaIndividual) {
+                        document.getElementById("e60_emendaparlamentar").disabled = false;
+                        document.getElementById("e60_emendaparlamentar").remove(3);
+                        document.getElementById("e60_emendaparlamentar").remove(3);
+                        document.getElementById("e60_emendaparlamentar").remove(2);
+                        document.getElementById("e60_emendaparlamentar").remove(0);
+                    }
+
+                    if (oRetorno.lEmendaIndividualEBancada) {
+                        document.getElementById("e60_emendaparlamentar").disabled = false;
+                        document.getElementById("e60_emendaparlamentar").remove(3);
+                        document.getElementById("e60_emendaparlamentar").remove(3);
+                    }
                 } else {
                     $('trEmendaParlamentar').style.display = 'none';
                     bEmendaParlamentar = false;

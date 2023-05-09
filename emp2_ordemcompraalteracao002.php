@@ -89,7 +89,7 @@ $num_rows = $clmatordemitem->numrows;
 $pdf = new scpdf();
 $pdf->Open();
 
-$pdf1 = new db_impcarne($pdf, '94');
+$pdf1 = new db_impcarne($pdf, $oParam->pc30_modeloordemcompra);
 $pdf1->objpdf->SetTextColor(0, 0, 0);
 
 $flag_imprime = true;

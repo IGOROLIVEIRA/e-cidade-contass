@@ -71,98 +71,59 @@ class SiopeReceita extends Siope {
     }
 
     /**
-     * Agrupa receitas pela natureza da receita.
+     * agrupaReceitas
+     * Este método agrupa as receitas por natureza, somando os valores correspondentes e criando um novo array com as somas para cada natureza.
      */
-    public function agrupaReceitas() {
-
+    public function agrupaReceitas()
+    {
         $aRecAgrup = array();
 
-        /**
-         * Agrupa receitas do ano corrente.
-         */
         foreach($this->aReceitas as $index => $row) {
             list($natureza, $descricao, $prev_atualizada, $rec_realizada,$ded_fundeb,$outras_ded,$intra) = array_values($row);
-        
-         if($natureza){
-            $iSubTotalPrev      = isset($aRecAgrup[$natureza]['prev_atualizada']) ? $aRecAgrup[$natureza]['prev_atualizada'] : 0;
-            $iSubTotalRec       = isset($aRecAgrup[$natureza]['rec_realizada']) ? $aRecAgrup[$natureza]['rec_realizada'] : 0;
-            $iSubTotalDed       = isset($aRecAgrup[$natureza]['ded_fundeb']) ? $aRecAgrup[$natureza]['ded_fundeb'] : 0;
-            $iSubTotalOutras    = isset($aRecAgrup[$natureza]['outras_ded']) ? $aRecAgrup[$natureza]['outras_ded'] : 0;
-            $iSubTotalIntra     = isset($aRecAgrup[$natureza]['intra']) ? $aRecAgrup[$natureza]['intra'] : 0;
-         
-            $aRecAgrup[$natureza]['natureza']          = $natureza;
-            $aRecAgrup[$natureza]['descricao']         = $descricao;
-            $aRecAgrup[$natureza]['prev_atualizada']   = ($iSubTotalPrev + $prev_atualizada);
-            $aRecAgrup[$natureza]['rec_realizada']     = ($iSubTotalRec + $rec_realizada);
-            $aRecAgrup[$natureza]['ded_fundeb']        = ($iSubTotalDed + $ded_fundeb);
-            $aRecAgrup[$natureza]['outras_ded']        = ($iSubTotalOutras + $outras_ded);
-            $aRecAgrup[$natureza]['intra']             = ($iSubTotalIntra + $intra);
 
-          } 
+            if($natureza){
+                $natureza = substr($natureza,1,8);
+                // verifica se já há somas registradas para essa natureza
+                if (isset($natureza_somas[$natureza])) {
+                    // se sim, soma os valores correspondentes
+                    $prev_atualizada    += $natureza_somas[$natureza]['prev_atualizada'];
+                    $rec_realizada      += $natureza_somas[$natureza]['rec_realizada'];
+                    $ded_fundeb         += $natureza_somas[$natureza]['ded_fundeb'];
+                    $outras_ded         += $natureza_somas[$natureza]['outras_ded'];
+                    $intra              += $natureza_somas[$natureza]['intra'];
+                }
+
+                // registra as somas para essa natureza no array auxiliar
+                $natureza_somas[$natureza] = array(
+                    'prev_atualizada'   => $prev_atualizada,
+                    'rec_realizada'     => $rec_realizada,
+                    'ded_fundeb'        => $ded_fundeb,
+                    'outras_ded'        => $outras_ded,
+                    'intra'             => $intra,
+                    'descricao'         => $descricao,
+                    'natureza'          => $natureza
+                );
+            }
         }
-       
+
+        // agora usar o array $natureza_somas para acessar as somas de cada natureza
+        foreach ($natureza_somas as $natureza => $somas) {
+
+            $aRecAgrup[$natureza]['natureza']          = $somas['natureza'];
+            $aRecAgrup[$natureza]['descricao']         = $somas['descricao'];
+            $aRecAgrup[$natureza]['prev_atualizada']   = $somas['prev_atualizada'];
+            $aRecAgrup[$natureza]['rec_realizada']     = $somas['rec_realizada'];
+            $aRecAgrup[$natureza]['ded_fundeb']        = $somas['ded_fundeb'];
+            $aRecAgrup[$natureza]['outras_ded']        = $somas['outras_ded'];
+            $aRecAgrup[$natureza]['intra']             = $somas['intra'];
+        }
+
 
         foreach ($aRecAgrup as $aAgrupado) {
             $this->aReceitasAgrupadas[$aAgrupado['natureza']] = $aAgrupado;
         }
 
-        if ($this->lOrcada) {
-
-            $aRecAgrupAnoSeg = array();
-
-            /**
-             * Agrupa receitas do ano seguinte.
-             */
-            foreach ($this->aReceitasAnoSeg as $index => $row) {
-
-                list($natureza, $descricao, $rec_orcada) = array_values($row);
-
-                $iSubTotalRecOrc = isset($aRecAgrupAnoSeg[$natureza]['rec_orcada']) ? $aRecAgrupAnoSeg[$natureza]['rec_orcada'] : 0;
-
-                $aRecAgrupAnoSeg[$natureza]['natureza']     = $natureza;
-                $aRecAgrupAnoSeg[$natureza]['descricao']    = $descricao;
-                $aRecAgrupAnoSeg[$natureza]['rec_orcada']   = ($iSubTotalRecOrc + $rec_orcada);
-
-            }
-
-            foreach ($aRecAgrupAnoSeg as $aAgrupado) {
-                $this->aReceitasAnoSegAgrupadas[$aAgrupado['natureza']] = $aAgrupado;
-            }
-
-            /**
-             * Une os dois arrays do ano corrente com o ano seguinte.
-             * ***Pode haver registros no ano seguinte que não estão no ano corrente.***
-             */
-            foreach ($this->aReceitasAgrupadas as $index => $receita) {
-
-                if (isset($this->aReceitasAnoSegAgrupadas[$index])) {
-                    $receita['rec_orcada'] = $this->aReceitasAnoSegAgrupadas[$index]['rec_orcada'];
-                    $this->aReceitasAnoSegAgrupadas[$index]['flag'] = 1;
-                    array_push($this->aReceitasAgrupadasFinal, $receita);
-                } else {
-                    $this->aReceitasAnoSegAgrupadas[$index]['flag'] = 1;
-                    array_push($this->aReceitasAgrupadasFinal, $receita);
-                }
-
-            }
-
-            foreach ($this->aReceitasAnoSegAgrupadas as $index => $receita) {
-
-                if (!isset($receita['flag']) || $receita['flag'] != 1) {
-                    $receita['dot_atualizada'] = isset($this->aReceitasAgrupadas[$index]['prev_atualizada']) ? $this->aReceitasAgrupadas[$index]['prev_atualizada'] : 0;
-                    $receita['empenhado'] = isset($this->aReceitasAgrupadas[$index]['rec_realizada']) ? $this->aReceitasAgrupadas[$index]['rec_realizada'] : 0;
-                    array_push($this->aReceitasAgrupadasFinal, $receita);
-                }
-
-            }
-
-        } else {
-            
-            $this->aReceitasAgrupadasFinal = $this->aReceitasAgrupadas;
-          
-        }
-        
-
+        $this->aReceitasAgrupadasFinal = $this->aReceitasAgrupadas;
     }
 
     /**
@@ -173,20 +134,19 @@ class SiopeReceita extends Siope {
      */
     public function setReceitas()
     {
-        $sHash = null;
         $aReceita = array();
         
         $result = pg_fetch_all(db_receitasaldo(11, 1, 3, true, $this->sFiltros, $this->iAnoUsu, $this->dtIni, $this->dtFim, false, ' * ', true, 0));
 
         /**
          * Identificador da dedução da receita. Obedecer a seguinte codificação:
-         * 91 ? Renúncia;
-         * 92 ? Restituições;
-         * 93 ? Descontos concedidos;
-         * 95 ? FUNDEB;
-         * 96 ? Compensações;
-         * 98 ? Retificações;
-         * 99 ? Outras Deduções.
+         * 91 == Renúncia;
+         * 92 == Restituições;
+         * 93 == Descontos concedidos;
+         * 95 == FUNDEB;
+         * 96 == Compensações;
+         * 98 == Retificações;
+         * 99 == Outras Deduções.
          */
         $deducaoFundeb = 95;
         $outrasDeducoes = array(91, 92, 93, 96, 98, 99);
@@ -220,7 +180,7 @@ class SiopeReceita extends Siope {
 
                 } elseif (in_array(substr($oReceita->o57_fonte, 1, 2), $outrasDeducoes)) {
 
-                    $aReceita[$sHash]['natureza'] = substr($oNaturrecsiope->c225_natrecsiope, 0, 15);
+                    $aReceita[$sHash]['natureza'] = substr($oNaturrecsiope->c225_natrecsiope, 0, 11);
                     
                     $aReceita[$sHash]['descricao']          = $oNaturrecsiope->c225_descricao;
                     $aReceita[$sHash]['prev_atualizada']   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum)) * -1;
@@ -233,7 +193,7 @@ class SiopeReceita extends Siope {
 
                     if (substr($oReceita->o57_fonte, 1, 2) == $deducaoFundeb) {
 
-                        $aReceita[$sHash]['natureza']           = 41 . substr($oNaturrecsiope->c225_natrecsiope, 2, 15);
+                        $aReceita[$sHash]['natureza']           = 41..substr($oNaturrecsiope->c225_natrecsiope, 2, 11);
                         $aReceita[$sHash]['descricao']          = $oNaturrecsiope->c225_descricao;
 
                         $aReceita[$sHash]['prev_atualizada']   -= (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));
@@ -244,7 +204,7 @@ class SiopeReceita extends Siope {
 
                     } else {
 
-                        $aReceita[$sHash]['natureza']           = substr($oNaturrecsiope->c225_natrecsiope, 0, 15);
+                        $aReceita[$sHash]['natureza']           = substr($oNaturrecsiope->c225_natrecsiope, 0, 11);
                         $aReceita[$sHash]['descricao']          = $oNaturrecsiope->c225_descricao;
 
                         $aReceita[$sHash]['prev_atualizada']   += (abs($oReceita->saldo_inicial) + abs($oReceita->saldo_prevadic_acum));

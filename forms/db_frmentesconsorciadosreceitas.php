@@ -226,7 +226,7 @@ function retornoReceita(r) {
 
   } else if (retorno.atualizar) {
 
-    alert(retorno.msg);
+    alert(retorno.msg.urlDecode());
     buscaReceitasCadastradas(<?= $c215_sequencial ?>);
 
   }
@@ -255,7 +255,7 @@ function carregaTabelaReceitas(r) {
       var tr = "";
       tr += '<tr>';
       tr += '<td>' + getTipo(receita.tipo) + '</td>';
-      tr += '<td>' + receita.codReceita + ' - ' + receita.descReceita + '</td>';
+      tr += '<td>' + receita.codReceita + ' - ' + receita.descReceita.urlDecode() + '</td>';
       tr += '<td class="align-right">' + js_formatar(receita.saldo, 'f') + '</td>';
       tr += '<td class="align-right">' + js_formatar(receita.percentual, 'f') + '</td>';
       tr += '<td><input type="button" onclick="excluirReceita(' + receita.sequencial + ');" value="Excluir"></td>';

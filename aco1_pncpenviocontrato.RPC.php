@@ -48,8 +48,8 @@ switch ($oParam->exec) {
         try {
 
             foreach ($oParam->aContratos as $aContrato) {
-                $clContrato  = db_utils::getDao("acordo");
-                $clacocontrolepncp = db_utils::getDao("acocontratopncp");
+                $clContrato  = new cl_acordo;
+                $clacocontrolepncp = new cl_acocontratopncp;
 
                 //Contrato
                 $rsDadosEnvio = $clContrato->sql_record($clContrato->sql_DadosContrato_PCNP($aContrato->codigo));
@@ -68,7 +68,7 @@ switch ($oParam->exec) {
 
                 if ($rsApiPNCP[0] == 201) {
                     $anocontrato = substr($rsApiPNCP[1], 65, 4);
-                    $ac213_sequencialpncp = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 70));
+                    $ac213_sequencialpncp = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 63));
                     $ac213_numerocontrolepncp = '17316563000196-2-' . str_pad($ac213_sequencialpncp, 6, '0', STR_PAD_LEFT) . '/' . $anocontrato;
 
                     //monto o codigo do contrato no pncp

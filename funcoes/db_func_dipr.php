@@ -34,5 +34,6 @@ c236_exercicionormativo,
 c236_numcgmexecutivo
 c236_numcgmlegislativo,
 c236_numcgmgestora,
+c236_numcgmautarquia,
 c236_orgao";
 ?>

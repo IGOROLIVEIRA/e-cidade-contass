@@ -586,12 +586,44 @@ if($dbwhere==""){
                         '189' => 15000090,'190' => 17540000,'191' => 17540000,'192' => 17550000,'193' => 18990130, '132' => 16040000,
                         '133' => 17150000, '134' => 17160000, '135' => 17170000, '136' => 17180000);
 
-    $sSql = "
-      SELECT lpad(o58_funcao,2,'0') AS funcao,
-             lpad(o58_subfuncao,3,'0') AS subfuncao,
-             substring(o56_elemento,2,6) AS natureza,
-             substring(o56_elemento,8,2) AS subelemento,
-             o15_codigo AS fonte,
+                       
+              $case = " substring(o56_elemento,2,6) AS natureza,
+                        substring(o56_elemento,8,2) AS subelemento ";
+             
+              if($nAnoUsu > 2022){
+                $case =" CASE
+                            when o56_elemento in ('3319004020000') then '319004'
+                            when o56_elemento in ('3319004020100') then '319004'
+                            when o56_elemento in ('3319004020200') then '319004'
+                            when o56_elemento in ('3319011020100') then '319011'
+                            when o56_elemento in ('3319011030000') then '319011'
+                            when o56_elemento in ('3319011040000') then '319011'
+                            when o56_elemento in ('3319011050000') then '319011'
+                            when o56_elemento in ('3319011020200') then '319011'
+                            when o56_elemento in ('3319011020000') then '319011'
+                        else substring(o56_elemento,2,6)                  
+                        end AS natureza,
+                        CASE
+                            when o56_elemento in ('3319004020000') then '01'
+                            when o56_elemento in ('3319004020100') then '01'
+                            when o56_elemento in ('3319004020200') then '01'
+                            
+                            when o56_elemento in ('3319011020100') then '01'
+                            when o56_elemento in ('3319011030000') then '01'
+                            
+                            when o56_elemento in ('3319011040000') then '01'
+                            when o56_elemento in ('3319011050000') then '01'
+                            when o56_elemento in ('3319011020200') then '01'
+                            when o56_elemento in ('3319011020000') then '01'
+                        else  substring(o56_elemento,8,2)        
+                        end AS subelemento ";
+              }
+             
+              $sSql = "
+                SELECT lpad(o58_funcao,2,'0') AS funcao,
+                       lpad(o58_subfuncao,3,'0') AS subfuncao,
+                       $case,
+                       o15_codigo AS fonte,
              round(sum(CASE
                      WHEN c71_coddoc = 6 THEN c70_valor*-1
                      ELSE c70_valor
@@ -630,7 +662,7 @@ if($dbwhere==""){
                4,
                5
     ";
-
+             
     $rsConLancamDoc = $this->sql_record($sSql);
 
     $aConLancamDoc = db_utils::getCollectionByRecord($rsConLancamDoc);

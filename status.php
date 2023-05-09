@@ -87,7 +87,6 @@ function js_mostra_log(tipo){
 </script>
 <?php db_app::load("scripts.js, strings.js, prototype.js, estilos.css");
 
-vz
 
 ?>
 </head>
