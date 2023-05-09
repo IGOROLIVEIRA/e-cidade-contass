@@ -191,8 +191,8 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
         $retorno = json_decode($contentpncp);
 
-        if ($retorno->status) {
-            return array(422, $retorno->message);
+        if ($retorno->erros) {
+            return array(422, $retorno->erros[0]->mensagem);
         } else {
             return array(201, $retorno->compraUri);
         }
