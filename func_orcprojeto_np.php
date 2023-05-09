@@ -37,6 +37,7 @@ $clorcprojeto = new cl_orcprojeto;
 $clorcprojeto->rotulo->label("o39_codproj");
 $clorcprojeto->rotulo->label("o39_numero");
 $clorcprojeto->rotulo->label("o39_descr");
+$clorcprojeto->rotulo->label("o39_data");
 $anousu = db_getsession("DB_anousu");
 ?>
 <html>
