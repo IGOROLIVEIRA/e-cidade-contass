@@ -16,20 +16,28 @@ class EnviadorLicitacao implements EnviadorInterface
         $client = new \GuzzleHttp\Client();
         $path = $licitacao->getPathPortalCompras('cc86f9555f1f0134dc4d4df3c45dc457');
         $url = 'https://apipcp.wcompras.com.br'.$path;
-        //echo json_encode($licitacao);
+
         try{
-            $res = $client->post($url, [
+            $response = $client->post($url, [
                     'json' => json_decode(json_encode($licitacao),true)
             ]);
 
+            $resultado = json_decode($response->getBody()->__toString());
+
+            return [
+                'sucess' => 1,
+                'message' => $resultado->message,
+            ];
+
         } catch(GuzzleHttp\Exception\ClientException $e) {
             $message = $e->getMessage();
-            var_dump($message);
+            $messageRaw = substr($message,strpos($message, '{'));
+            $resultado = json_decode($messageRaw);
+
+            return [
+                'sucess' => 1,
+                'message' => "Erro: ".$resultado->message,
+            ];
         }
-
-
-        //echo $res->getStatusCode();
-        // "200"
-        return [];
     }
 }

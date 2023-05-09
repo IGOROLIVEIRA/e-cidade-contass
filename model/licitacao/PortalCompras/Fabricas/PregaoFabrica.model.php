@@ -18,10 +18,10 @@ class PregaoFabrica implements LicitacaoFabricaInterface
     public function criar($dados, int $numlinhas): Licitacao
     {
 
-        $fabricaLote = new LoteFabrica;
+        $loteFabrica = new LoteFabrica;
         $pregao = new Pregao();
         $linha = db_utils::fieldsMemory($dados, 0);
-        var_dump((int)$linha->tipoRealizacao);
+
 
         $pregao->setId($linha->id);
         $pregao->setObjeto($linha->objeto);
@@ -46,10 +46,12 @@ class PregaoFabrica implements LicitacaoFabricaInterface
         $pregao->setTratamentoFaseLance((int) $linha->tratamentofaselance);
         $pregao->setTipoIntervaloLance((int)$linha->tipointervalolance);
         $pregao->setValorIntervaloLance((float)$linha->valorintervalolance);
-        $pregao->setSepararPorLotes((bool)$linha->separarporlotes);
+        $pregao->setSepararPorLotes($linha->separarporlotes);
         $pregao->setOperacaoLote((bool)$linha->operacaolote);
         $pregao->setPregoeiro($linha->pregoeiro);
-        $lotes = $fabricaLote->criar($dados, $numlinhas);
+
+        $lotes = $loteFabrica->criar($dados, $numlinhas);
+
         $pregao->setLotes($lotes);
         return $pregao;
     }

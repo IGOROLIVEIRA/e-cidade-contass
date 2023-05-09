@@ -115,7 +115,8 @@ class Item implements \JsonSerializable
      */
     public function setDescricao(string $descricao): self
     {
-        $this->descricao = mb_convert_encoding($descricao, "UFT-8");
+        //$this->descricao = utf8_encode($descricao);
+        $this->descricao = mb_convert_encoding($descricao, "ISO-8859-1", "UTF-8");
 
         return $this;
     }
@@ -151,7 +152,7 @@ class Item implements \JsonSerializable
      */
     public function setSiglaUnidade(string $siglaUnidade): self
     {
-        $this->siglaUnidade = $siglaUnidade;
+        $this->siglaUnidade =  $siglaUnidade;
 
         return $this;
     }

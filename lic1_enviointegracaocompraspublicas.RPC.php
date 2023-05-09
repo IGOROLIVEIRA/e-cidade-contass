@@ -1,4 +1,7 @@
 <?php
+
+use function GuzzleHttp\json_encode;
+
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 require_once("libs/db_stdlib.php");
@@ -14,14 +17,14 @@ require_once("model/licitacao/PortalCompras/Fabricas/LicitacaoFabrica.model.php"
 require_once("model/licitacao/PortalCompras/Comandos/EnviadorLicitacao.model.php");
 
 $cl_liclicitaportalcompras = new cl_liclicitaportalcompras;
-$licitacaoFabrica = new LicitacaoFabrica;
+$licitacaoFabrica  = new LicitacaoFabrica;
 
 $oJson             = new services_json();
 $oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
-$oRetorno->message = 1;
+$oRetorno->message = '';
 $oRetorno->itens   = array();
 
 switch ($oParam->exec) {
@@ -30,9 +33,12 @@ switch ($oParam->exec) {
                 $codigo    = $oParam->codigo;
                 $results   = $cl_liclicitaportalcompras->buscaLicitacoes($codigo);
                 $licitacao = $licitacaoFabrica->criar($results, $cl_liclicitaportalcompras->numrows);
+
                 $enviador  = new EnviadorLicitacao();
                 $resultado = $enviador->enviar($licitacao);
 
+                $oRetorno->message = $resultado['message'];
+                $oRetorno->status = (int)$resultado['success'];
             } catch (Exception $oErro) {
 
                 $oRetorno->message = $oErro->getMessage();

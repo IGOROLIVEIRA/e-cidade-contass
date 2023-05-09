@@ -65,8 +65,6 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
     $ocultar_box_publicacoes = true;
 }
 
-
-var_dump($licitacao);
 ?>
 <html>
 
@@ -514,7 +512,8 @@ var_dump($licitacao);
 
     function js_retornoportaldecompras(oAjax) {
         var oRetorno = eval("(" + oAjax.responseText + ")");
-        console.log(oRetorno);
+
+        alert(oRetorno.message);
     }
 
     document.getElementById('l20_linkedital').value = "<?php echo $oLicitacao->l20_linkedital ?>";

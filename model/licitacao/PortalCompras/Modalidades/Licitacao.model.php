@@ -45,17 +45,6 @@ abstract class Licitacao implements \JsonSerializable
     abstract public function getPathPortalCompras(string $publicKey = null): string;
 
     /**
-     * Converte datas para padrão ISO08601
-     *
-     * @param string $date
-     * @return string
-     */
-    private function formatDateLicitacao(string $date): string
-    {
-        return date(DATE_ISO8601, strtotime($date));
-    }
-
-    /**
      * Get the value of id
      */
     public function getId(): string
@@ -324,11 +313,11 @@ abstract class Licitacao implements \JsonSerializable
      */
     public function setSepararPorLotes(string $separarPorLotes): self
     {
+        $this->separarPorLotes = false;
+
         if ($separarPorLotes == 't'){
             $this->separarPorLotes = true;
         }
-
-        $this->separarPorLotes = false;
 
         return $this;
     }
@@ -546,7 +535,7 @@ abstract class Licitacao implements \JsonSerializable
      */
     public function setObjeto(?string $objeto): self
     {
-        $this->objeto = $objeto;
+        $this->objeto = utf8_encode($objeto);
 
         return $this;
     }

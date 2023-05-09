@@ -65,7 +65,7 @@ class Lote implements \JsonSerializable
      */
     public function setDescricao(string $descricao): self
     {
-        $this->descricao = mb_convert_encoding($descricao, "UFT-8");
+        $this->descricao = utf8_encode($descricao);
 
         return $this;
     }
@@ -99,9 +99,13 @@ class Lote implements \JsonSerializable
     /**
      * Set the value of cotaReservada
      */
-    public function setcotaReservada(bool $cotaReservada): self
+    public function setcotaReservada(string $cotaReservada): self
     {
-        $this->cotaReservada = $cotaReservada;
+        $this->cotaReservada = true;
+
+        if ($cotaReservada == 'f') {
+            $this->cotaReservada = false;
+        }
 
         return $this;
     }
