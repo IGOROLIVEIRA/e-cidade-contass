@@ -116,7 +116,19 @@ class cl_liclicitaportalcompras
         return $this->sql_record($sql);
     }
 
-    public function sql_record($sql) {
+    public function buscaCodigoModalidade($codigo)
+    {
+        $sql = "select l03_pctipocompratribunal as codigomodalidade
+        from  liclicita
+        join cflicita on l03_codigo=l20_codtipocom
+        where l20_codigo=$codigo";
+
+        return $this->sql_record($sql);
+    }
+
+
+    public function sql_record($sql)
+    {
         $result = db_query($sql);
         if($result==false){
           $this->numrows    = 0;

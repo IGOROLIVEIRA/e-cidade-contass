@@ -32,6 +32,8 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_liclicitemlote_classe.php");
 include("classes/db_liclicita_classe.php");
+require_once("classes/db_liclicitaportalcompras_classe.php");
+require_once("model/licitacao/PortalCompras/Provedor/LigadorClasses.model.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -39,6 +41,9 @@ db_postmemory($HTTP_POST_VARS);
 $clliclicitemlote = new cl_liclicitemlote;
 $clliclicita      = new cl_liclicita;
 $clliccomissaocgm     = new cl_liccomissaocgm;
+$cl_liclicitaportalcompras = new cl_liclicitaportalcompras;
+
+$listaModalidades = LigadorClasses::listaBindModalidades();
 
 if ($licitacao == "") {
     $licitacao = -1;
@@ -64,6 +69,9 @@ $ocultar_box_publicacoes = false;
 if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
     $ocultar_box_publicacoes = true;
 }
+
+$resource = $cl_liclicitaportalcompras->buscaCodigoModalidade($licitacao);
+$codigoModalidade = (db_utils::fieldsMemory($resource, 0))->codigomodalidade;
 
 ?>
 <html>
@@ -281,23 +289,27 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
                 <input name="emite2" type="button" id="emite2" value="Imprimir" onclick="js_emite();">
 
             </form>
-            <form name="form2">
-                <fieldset style="width: 550;">
-                    <legend><strong>Enviar Publicações para Plataforma: </strong></legend>
-                    <table>
+            <?php
 
-                        <tr id="PortalCompras">
-                            <td nowrap title="">
-                                Enviar para Portal de Compras
-                            </td>
-                            <td>
-                                <input name="enviarPortalCompras" type="button" id="enviarPortalCompras" value="Enviar" onclick="js_EnviarPortalDeCompras();">
-                            </td>
-                        </tr>
-                    </table>
-                </fieldset>
+            if (array_key_exists($codigoModalidade, $listaModalidades)):
+            ?>
+                <form name="form2">
+                    <fieldset style="width: 550;">
+                        <legend><strong>Enviar Publicações para Plataforma: </strong></legend>
+                        <table>
 
-            </form>
+                            <tr id="PortalCompras">
+                                <td nowrap title="">
+                                    Enviar para Portal de Compras
+                                </td>
+                                <td>
+                                    <input name="enviarPortalCompras" type="button" id="enviarPortalCompras" value="Enviar" onclick="js_EnviarPortalDeCompras();">
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </form>
+            <?php endif; ?>
         </div>
     </center>
 

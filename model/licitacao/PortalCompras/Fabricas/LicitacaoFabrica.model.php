@@ -3,7 +3,7 @@
 require_once("model/licitacao/PortalCompras/Modalidades/Licitacao.model.php");
 require_once("model/licitacao/PortalCompras/Fabricas/LicitacaoFabricaInterface.model.php");
 require_once("model/licitacao/PortalCompras/Fabricas/PregaoFabrica.model.php");
-
+require_once("model/licitacao/PortalCompras/Provedor/LigadorClasses.model.php");
 class LicitacaoFabrica implements LicitacaoFabricaInterface
 {
     private array $modalidades;
@@ -13,9 +13,7 @@ class LicitacaoFabrica implements LicitacaoFabricaInterface
      */
     public function __construct()
     {
-       $this->modalidades = [
-            '53' => 'PregaoFabrica',
-       ];
+       $this->modalidades = LigadorClasses::listaBindModalidades();
     }
 
     /**
