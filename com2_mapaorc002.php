@@ -356,7 +356,7 @@ if ($modelo == 1) {
 
       $pdf->cell(279, $alt, '', '', 1, "L", 0);
       //            if ($quant_casas == 2) {
-      $total_media += ($total_unit / $iContOrcamento) * $quant;
+      $total_media += round(($total_unit / $iContOrcamento), 4)* $quant;
       $total_mediapercentual += ($total_percentualdesconto / $iContOrcamento);
       $total_mediapercentualtaxa += ($total_percentualdescontotaxa / $iContOrcamento);
       //            } else {
@@ -385,7 +385,7 @@ if ($modelo == 1) {
       //            if ($quant_casas == 2) {
       //                $total_media += round(($total_unit / $iContOrcamento), 2) * $quant;
       //            } else {
-      $total_media += ($total_unit / $iContOrcamento) * $quant;
+      $total_media += round(($total_unit / $iContOrcamento), 4)* $quant;
       //            }
     }
   }
