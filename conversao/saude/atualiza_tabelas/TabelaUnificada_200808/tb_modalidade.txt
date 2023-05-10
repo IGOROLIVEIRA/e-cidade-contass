@@ -1,5 +1,0 @@
-01Ambulatorial                                                                                        200808
-02Hospitalar                                                                                          200808
-03Hospital Dia                                                                                        200808
-04Internação Domiciliar                                                                               200808
-05Assistência Domiciliar                                                                              200808
