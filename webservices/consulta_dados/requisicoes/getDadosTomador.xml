@@ -47,7 +47,7 @@
     <join tipo="left"   tabela="grupocaracteristica"        condicao="db139_sequencial = db140_grupocaracteristica and db139_sequencial = 3 " />
   </juncoes>
   <filtros>
-    <filtro label="cgccpf" condicao="   " obrigatorio="true" />
+    <filtro label="cgccpf" condicao="z01_cgccpf = '$cgccpf" obrigatorio="true" />
   </filtros>
   <agrupamento campos="z01_cgccpf,z01_nomecomple,z01_nome,j88_sigla,z01_ender,z01_numero,z01_compl,z01_bairro,db125_codigosistema,z01_munic,z01_uf,db135_codigo,db70_descricao,z01_cep,z01_telef,z01_email,z01_nomefanta,z01_incest,q02_inscr,db140_descricao" />
   <ordenacao campos="z01_nomecomple desc" />
