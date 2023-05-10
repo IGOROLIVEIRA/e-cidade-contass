@@ -3,38 +3,176 @@
 require_once("model/licitacao/PortalCompras/Modalidades/Componentes/Lote.model.php");
 abstract class Licitacao implements \JsonSerializable
 {
+    /**
+     * @var string       $id
+     */
     protected string     $id;
+
+    /**
+     * @var string|null  $objeo
+     */
     protected ?string    $objeto = null;
+
+    /**
+     * @var integer       $tipoRealizacao
+     */
     protected int        $tipoRealizacao;
+
+    /**
+     * @var integer      $numeroProcessoInterno
+     */
     protected int        $numeroProcessoInterno;
+
+    /**
+     * @var integer      $numeroProcesso
+     */
     protected int        $numeroProcesso;
+
+    /**
+     * @var integer      $anoProcesso
+     */
     protected int        $anoProcesso;
+
+    /**
+     * @var string|null  $dataLimiteEsclarecimento
+     */
     protected ?string    $dataLimiteEsclarecimento = null;
-    protected ?string    $dataInicioPropostas = null ;
+
+    /**
+     * @var string|null  $dataInicioPropostas
+     */
+    protected ?string    $dataInicioPropostas = null;
+
+    /**
+     * @var string|null  $dataFinalPropostas
+     */
     protected ?string    $dataFinalPropostas = null;
+
+    /**
+     * @var string|null  $dataLimiteImpugnacao
+     */
     protected ?string    $dataLimiteImpugnacao = null;
+
+    /**
+     * @var string|null  $dataAberturaPropostas
+     */
     protected ?string    $dataAberturaPropostas = null;
+
+    /**
+     * @var boolean      $orcamentoSigiloso
+     */
     protected bool       $orcamentoSigiloso;
+
+    /**
+     * @var boolean      $exclusivoMPE
+     */
     protected bool       $exclusivoMPE;
+
+    /**
+     * @var boolean      $aplicar147
+     */
     protected bool       $aplicar147;
+
+    /**
+     * @var boolean      $beneficioLocal
+     */
     protected bool       $beneficioLocal;
+    /**
+     * @var boolean      $exigeGarantia
+     */
     protected bool       $exigeGarantia;
+
+    /**
+     * @var integer      $casasDecimais
+     */
     protected int        $casasDecimais;
+
+     /**
+     * @var integer      $casasDecimaisQuantidade
+     */
     protected int        $casasDecimaisQuantidade;
+     /**
+     * @var integer      $legislacaoAplicavel
+     */
     protected int        $legislacaoAplicavel;
+
+     /**
+     * @var integer      $tratamentoFaseLance
+     */
     protected int        $tratamentoFaseLance;
+
+     /**
+     * @var integer      $tipoIntervaloLance
+     */
     protected int        $tipoIntervaloLance;
+
+    /**
+     * @var float        $valorIntervaloLance;
+     */
     protected float      $valorIntervaloLance;
+
+    /**
+     * @var boolean      $separarPorLotes
+     */
     protected bool       $separarPorLotes;
+
+    /**
+     * @var integer      $operacaoLote
+     */
     protected int        $operacaoLote;
+
+    /**
+     * @var array        $lotes
+     */
     protected array      $lotes;
-    protected            $arquivos;
+
+    /**
+     * @var array
+     */
+    protected array      $arquivos = [];
+
+    /**
+     * @var string|null   $pregoeiro
+     */
     protected ?string    $pregoeiro = "";
+
+    /**
+     * @var string|null  $autoridadeCompetente
+     */
     protected ?string    $autoridadeCompetente = "";
+
+    /**
+     * @var array|null   $equipeDeApoio
+     */
     protected ?array     $equipeDeApoio = [];
+
+    /**
+     * @var array|null   $documentosHabilitacao
+     */
     protected ?array     $documentosHabilitacao = [];
+
+    /**
+     * @var array|null   $declaracoes
+     */
     protected ?array     $declaracoes = [];
+
+    /**
+     * @var array|null   $origensRecursos
+     */
     protected ?array     $origensRecursos = [];
+
+    /**
+     * @var array        $envs
+     */
+    protected array      $envs = [];
+
+    /**
+     * Cosntrutor
+     */
+    public function __construct()
+    {
+        $this->envs = parse_ini_file('config/apipcp/.env', true);
+    }
 
     /**
      * Retorna os patsh de cada modalidade de licitaçao
@@ -42,7 +180,7 @@ abstract class Licitacao implements \JsonSerializable
      * @param string|null $publicKey
      * @return string
      */
-    abstract public function getPathPortalCompras(string $publicKey = null): string;
+    abstract public function getUrlPortalCompras(string $publicKey = null): string;
 
     /**
      * Get the value of id

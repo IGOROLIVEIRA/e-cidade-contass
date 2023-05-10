@@ -14,8 +14,7 @@ class EnviadorLicitacao implements EnviadorInterface
     public function enviar(Licitacao $licitacao): array
     {
         $client = new \GuzzleHttp\Client();
-        $path = $licitacao->getPathPortalCompras('cc86f9555f1f0134dc4d4df3c45dc457');
-        $url = 'https://apipcp.wcompras.com.br'.$path;
+        $url = $licitacao->getUrlPortalCompras('cc86f9555f1f0134dc4d4df3c45dc457');
 
         try{
             $response = $client->post($url, [

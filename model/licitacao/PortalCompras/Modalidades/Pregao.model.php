@@ -6,9 +6,14 @@ class Pregao extends Licitacao
 {
     private int $tipoJulgamento;
 
-    public function getPathPortalCompras(string $publicKey = null): string
+    public function __construct()
     {
-        return "/comprador/$publicKey/processo/pregao";
+        parent::__construct();
+    }
+
+    public function getUrlPortalCompras(string $publicKey = null): string
+    {
+        return $this->envs['URL']."/comprador/$publicKey/processo/pregao";
     }
 
     /**
