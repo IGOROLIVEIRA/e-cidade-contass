@@ -256,7 +256,7 @@ class cl_pcmater
     }
 
     if ($this->pc01_codmaterant == null) {
-      $this->pc01_codmaterant = "0";
+      $this->pc01_codmaterant = 'NULL';
     }
 
     if ($pc01_codmater == "" || $pc01_codmater == null) {
