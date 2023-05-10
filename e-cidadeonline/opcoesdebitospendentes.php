@@ -37,24 +37,24 @@ $resultinst = pg_query($sqlinst);
 db_fieldsmemory($resultinst, 0);
 
 // $cgccpf recebe o valor informado no formulário [CPF ou CNPJ]
-// Depois com o preg_replace é retirada a formatação do campo 
+// Depois com o preg_replace é retirada a formatação do campo
 
 if ( !empty ( $cgc ) ) {
-  $cgccpf = ereg_replace("[./-]","",$cgc); 
+  $cgccpf = ereg_replace("[./-]","",$cgc);
 } else if (!empty ( $cpf ) ) {
   $cgccpf = ereg_replace("[./-]","",$cpf);
-  $HTTP_SERVER_VARS['QUERY_STRING'] = ereg_replace("[./-]","",$cpf); 	
-}	
+  $HTTP_SERVER_VARS['QUERY_STRING'] = ereg_replace("[./-]","",$cpf);
+}
 
 // valida se o número da matrícula fornecida é válida
 if ( isset($matricula1) ) {
 
-  $sWhere = "";  
-  $sJoin  = "";      
+  $sWhere = "";
+  $sJoin  = "";
   $sCampo = "";
-  
+
   if ($sConfig["w13_exigecpfcnpj"] == "t") {
-    
+
   if((@$cgccpf == "") and (isset($id_usuario))) {
     $sqlcgccpf    = "select z01_cgccpf as cgccpf from cgm where z01_numcgm = {$id_usuario}";
     $result       = pg_query($sqlcgccpf);
@@ -63,21 +63,21 @@ if ( isset($matricula1) ) {
   }
 
    switch ($db21_regracgmiptu) {
-     
+
      case 0:
-       
+
        $sJoin  .= " left join propri     on j42_matric = j01_matric";
        $sJoin  .= " left join promitente on j41_matric = j01_matric";
        $sJoin  .= " left join cgm cgmpropri  on cgmpropri.z01_numcgm = j42_numcgm";
        $sJoin  .= " left join cgm cgmpromi   on cgmpromi.z01_numcgm = j41_numcgm";
        $sJoin  .= " left join cgm cgmiptu       on cgmiptu.z01_numcgm = j01_numcgm";
-       $sWhere .= " and (trim(cgmpropri.z01_cgccpf) = '{$cgccpf}' or trim(cgmpromi.z01_cgccpf) = '{$cgccpf}'";   
-       $sWhere .= "      or trim(cgmiptu.z01_cgccpf) = '{$cgccpf}' )";   
-       $sCampo .= " j01_numcgm";   
+       $sWhere .= " and (trim(cgmpropri.z01_cgccpf) = '{$cgccpf}' or trim(cgmpromi.z01_cgccpf) = '{$cgccpf}'";
+       $sWhere .= "      or trim(cgmiptu.z01_cgccpf) = '{$cgccpf}' )";
+       $sCampo .= " j01_numcgm";
        break;
-       
+
      case 1:
-       
+
        $sJoin  .= " left join propri        on j42_matric = j01_matric";
        $sJoin  .= " left join cgm cgmoutpropri  on cgmoutpropri.z01_numcgm = j42_numcgm";
        $sJoin  .= " left join cgm cgmiptu       on cgmiptu.z01_numcgm = j01_numcgm";
@@ -86,7 +86,7 @@ if ( isset($matricula1) ) {
        break;
 
      case 2:
-       
+
        $sJoin  .= " left join promitente     on j41_matric = j01_matric";
        $sJoin  .= " left join cgm cgmpromi  on cgmpromi.z01_numcgm = j41_numcgm";
        $sJoin  .= " left join cgm cgmpropri on cgmpropri.z01_numcgm = j01_numcgm";
@@ -95,25 +95,25 @@ if ( isset($matricula1) ) {
        $sCampo .= " j41_numcgm";
        break;
 
-        
+
      }
-   }     
+   }
    $sCampo = " null ";
-   $sql = "select {$sCampo} as q02_numcgm, j01_matric 
-            from iptubase 
+   $sql = "select {$sCampo} as q02_numcgm, j01_matric
+            from iptubase
            left  join issbase   on q02_numcgm = j01_numcgm
-           {$sJoin} 
+           {$sJoin}
    where j01_matric = {$matricula1} {$sWhere}";
   $rsValidaMatricula = pg_query($sql);
   $sResultadoValMat  = pg_num_rows($rsValidaMatricula);
   if (!isset($lVoltar)) {
-  	
+
 	  if ($sResultadoValMat == 0 && (!isset($imob) || $imob == false)) {
 	  	$sMensagem = "Aviso: Os dados informados não conferem. Verifique o número da matrícula ou o CPF/CNPJ indicado!";
 	    db_redireciona("digitamatricula.php?".base64_encode("erroscripts={$sMensagem}"));
 	  }
   }
-  
+
 }
 
 if (isset($id_usuario) && trim($id_usuario) != ""){
@@ -128,8 +128,8 @@ if (pg_num_rows($rsVerificaEscrito) > 0 && $opcao == "i" && !isset($naovalida) )
   } else if (isset($inscricao)) {
     $iInscricao = $inscricao;
   }
- 
-  $sSqlVerifica  = " select q10_numcgm, q10_inscr from escrito where q10_numcgm = {$id_usuario} and q10_inscr =  {$iInscricao} 
+
+  $sSqlVerifica  = " select q10_numcgm, q10_inscr from escrito where q10_numcgm = {$id_usuario} and q10_inscr =  {$iInscricao}
                        union
                      select q02_numcgm, q02_inscr from issbase where q02_numcgm = {$id_usuario} and q02_inscr =  {$iInscricao} ";
   $rsVerificaInscricao = pg_query($sSqlVerifica);
@@ -172,10 +172,10 @@ if (isset ( $id_usuario ) and $id_usuario != "") {
 $ano = date ( "Y" );
 $sqlmenucert = "
 				SELECT i.descricao,i.libcliente
-				FROM db_menu m 
-				INNER JOIN db_permissao p ON p.id_item = m.id_item_filho 
+				FROM db_menu m
+				INNER JOIN db_permissao p ON p.id_item = m.id_item_filho
 				INNER JOIN db_itensmenu i ON i.id_item = m.id_item_filho AND p.anousu = $ano AND p.id_instit = $instit
-				WHERE i.itemativo = 1 
+				WHERE i.itemativo = 1
 				and id_item_filho=5473 $where";
 
 $resultmenucert = pg_query ( $sqlmenucert );
@@ -183,8 +183,8 @@ $linhasmenucert = pg_num_rows ( $resultmenucert );
 
 $sqlmenuissqn = "
 SELECT i.descricao,i.libcliente,p.id_usuario, nome, login
-FROM db_menu m 
-INNER JOIN db_permissao p ON p.id_item = m.id_item_filho 
+FROM db_menu m
+INNER JOIN db_permissao p ON p.id_item = m.id_item_filho
 INNER JOIN db_itensmenu i ON i.id_item = m.id_item_filho AND p.anousu = $ano AND p.id_instit =$instit
 inner join db_usuarios u  ON u.id_usuario = p.id_usuario
 WHERE i.itemativo = 1 and id_item_filho=5465 $where";
@@ -194,8 +194,8 @@ $linhasmenuissqn = pg_num_rows ( $resultmenuissqn );
 
 $sqlmenuretido = "
 SELECT i.descricao,i.libcliente,p.id_usuario, nome, login
-FROM db_menu m 
-INNER JOIN db_permissao p ON p.id_item = m.id_item_filho 
+FROM db_menu m
+INNER JOIN db_permissao p ON p.id_item = m.id_item_filho
 INNER JOIN db_itensmenu i ON i.id_item = m.id_item_filho AND p.anousu = $ano AND p.id_instit =$instit
 inner join db_usuarios u  ON u.id_usuario = p.id_usuario
 WHERE i.itemativo = 1 and id_item_filho=5466 $where";
@@ -204,11 +204,11 @@ $resultmenuretido = pg_query ( $sqlmenuretido );
 $linhasmenuretido = pg_num_rows ( $resultmenuretido );
 
 if (isset ( $referencia ) and $referencia != "") {
-	
+
 	$sqlref = "select * from iptuant where j40_refant = '$referencia' ";
 	$resultref = pg_query ( $sqlref );
 	$linhasref = pg_num_rows ( $resultref );
-	
+
 	if ($linhasref > 0) {
 		db_fieldsmemory ( $resultref, 0 );
 		$matricula1 = $j40_matric;
@@ -228,9 +228,9 @@ if (@ $_COOKIE ["cookie_codigo_cgm"] == "") {
       @$result = $clissbase->sql_record($clissbase->sql_query("", "cgm.z01_numcgm,cgm.z01_nome", "", "issbase.q02_inscr = $inscricaow and trim(cgm.z01_cgccpf) = '$cgccpf'"));
 	  @$linhas1 = $clissbase->numrows;
 	} else if ( !empty ( $codigo_cgm ) || !empty ( $cgc ) || !empty ( $cpf ) ) { //CGM
-	   if ( !empty ( $codigo_cgm )){ 
-	     $condicao = "cgm.z01_numcgm = $codigo_cgm"; 
-	   } else if ( !empty ($cgccpf)) { 
+	   if ( !empty ( $codigo_cgm )){
+	     $condicao = "cgm.z01_numcgm = $codigo_cgm";
+	   } else if ( !empty ($cgccpf)) {
 	     $condicao = "trim(cgm.z01_cgccpf) = '$cgccpf'";
 	   }
      @$result = $clcgm->sql_record($clcgm->sql_query("", "cgm.z01_numcgm,cgm.z01_nome", "", $condicao));
@@ -241,15 +241,15 @@ if (@ $_COOKIE ["cookie_codigo_cgm"] == "") {
 		$sql_exe .= "   from fc_busca_envolvidos(false,{$db21_regracgmiptu},'M',{$matricula1}) ";
 		$sql_exe .= "		 inner join cgm on z01_numcgm = rinumcgm				           ";
 		$sql_exe .= "  where rimatric = {$matricula1}		 								   ";
-		
+
      if ($sConfig["w13_exigecpfcnpj"] == "t") {
        $sql_exe .= " and trim(z01_cgccpf) = '{$cgccpf}' ";
-     }		
+     }
 	 $result = pg_query ( $sql_exe );
 	 $linhas3 = pg_num_rows ( $result );
 
 	}
-	
+
 	if (@$linhas1 != 0 || @$linhas2 != 0 || @$linhas3 != 0)
 	  @db_fieldsmemory ( $result, 0 );
 	  @setcookie ( "cookie_codigo_cgm", $z01_numcgm );
@@ -325,7 +325,7 @@ if (! isset ( $opcao )) {
 		?>
 <script>alert("Acesso a Rotina Iválida. Verifique!"); history.back();</script>
 <?
-	
+
 	} else {
 		$opcao = $HTTP_POST_VARS ["opcao"];
 	}
@@ -338,15 +338,15 @@ if ($opcao == "m") {
 	                &nbsp;<font class=\"links\">Opções Imóvel &gt;</font>\n";
 	db_logs ( "", "", 0, "Listando debitos - consulta por matrícula." );
 	db_mensagem ( "opcoesmatricula_cab", "opcoesmatricula_rod" );
-	
+
 	if (! isset ( $matricula )) {
-		
+
 		if (! isset ( $matricula1 )) {
-			
+
 			db_logs ( "", "", 0, "Acesso a Rotina Invalida." );
 			db_redireciona ( "centro_pref.php?" . base64_encode ( 'erroscripts=Acesso a Rotina Inválido.' ) );
 		}
-		
+
 		$matricula = trim ( $matricula1 );
 		if (! empty ( $cgc )) {
 			$cgccpf = $cgc;
@@ -358,12 +358,12 @@ if ($opcao == "m") {
 			} else {
 				$cgccpf = "";
 			}
-		
+
 		}
 		$cgccpf = str_replace ( ".", "", $cgccpf );
 		$cgccpf = str_replace ( "/", "", $cgccpf );
 		$cgccpf = str_replace ( "-", "", $cgccpf );
-		
+
 		if (! isset ( $matricula ) or empty ( $matricula ) or ! is_int ( 0 + $matricula )) {
 			db_logs ( "", "", 0, "Variável Matricula Invalida." );
 			if (isset ( $referencia )) {
@@ -376,55 +376,55 @@ if ($opcao == "m") {
 			db_redireciona ( "digitamatricula.php?" . base64_encode ( 'erroscripts=Variável CNPJ/CPF Inválida.' ) );
 		}
 		$sql_exe1 = "select ident from db_config where codigo = " . db_getsession ( 'DB_instit' );
-		
+
 		$result222 = pg_exec ( $sql_exe1 ) or die ( "Erro: " . pg_ErrorMessage ( $conn ) );
 		db_fieldsmemory ( $result222, 0 );
-		
+
 		$sWhere = "";
-		
-		
-		// ---- Verifica se é Imobiliária 
-		
+
+
+		// ---- Verifica se é Imobiliária
+
 
 		if ( isset($id_usuario) && (trim($id_usuario) != "") && ( trim($matricula) && isset($matricula) != "") ) {
-			
+
 			$sSqlImobil = " select *							";
 			$sSqlImobil .= "   from imobil					    ";
 			$sSqlImobil .= "  where j44_numcgm = {$id_usuario}  ";
 			$sSqlImobil .= "	  and j44_matric = {$matricula} ";
-			
+
 			$rsImobil = pg_query ( $sSqlImobil );
 			$iLinhaImobil = pg_num_rows ( $rsImobil );
-		
+
 		} else {
 			$iLinhaImobil = 0;
 		}
-		
+
 		// ---- Caso não seja Imobiliária testa CGCCPF
-		
-		
+
+
 		    if ( ($iLinhaImobil == 0) && ($sConfig["w13_exigecpfcnpj"] == "t") && ($db_verifica_ip == "0") ) {
 
 		      $sWhere = " and trim(z01_cgccpf) = '{$cgccpf}'";
 
 		    }
 
-		    
-		// ---- Consulta Proprietário e Promitente conforme parametrização	
-		
-		
+
+		// ---- Consulta Proprietário e Promitente conforme parametrização
+
+
 		$sql_exe = " select cgm.*															  ";
 		$sql_exe .= "   from fc_busca_envolvidos(false,{$db21_regracgmiptu},'M',{$matricula}) ";
 		$sql_exe .= "				 inner join cgm on z01_numcgm = rinumcgm				  ";
 		$sql_exe .= "	 where rimatric = {$matricula}										  ";
-		
+
 		// ---- Caso regra seja 2 e não retornar nenhum promitente, testar CGM da iptubase
-		
+
 		if ($db21_regracgmiptu == 2) {
-		
+
 			$rsTestaEnvol = pg_query ( $sql_exe );
 			$iLinhasEnvol = pg_num_rows ( $rsTestaEnvol );
-			
+
 			if ($iLinhasEnvol == 0) {
 				$sql_exe = " select cgm.*	  													    ";
 				$sql_exe .= "		from propri														";
@@ -444,26 +444,26 @@ if ($opcao == "m") {
 		else {
 			$sql_exe .=	$sWhere;
 		}
-		
+
         // die($sql_exe);
 		$result = pg_query ( $sql_exe );
 		// die($result);
-		
+
 	} else {
-	
+
 		$result = pg_query ( "select * from iptubase,cgm where j01_matric = $matricula and j01_numcgm = z01_numcgm" ) or die ( "Erro: " . pg_ErrorMessage ( $conn ) );
 		$cgccpf = trim ( pg_result ( $result, 0, 'z01_cgccpf' ) );
 	}
-	
+
 	$linhasexe = pg_num_rows ( $result );
-	
+
 	if ($linhasexe == 0) {
 		db_logs ( "$matricula", "", 0, "Dados Inconsistentes. Numero : $matricula" );
 		if (isset ( $referencia )) {
-		
+
 			db_redireciona ( "digitamatricula_arapiraca.php?" . base64_encode ( 'erroscripts=Os dados informados não conferem, verifique!' ) );
 		}
-		
+
 		//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 		//db_redireciona($arquivosel."?".base64_encode('erroscripts=Os dados informados não conferem, verifique!'));
 		$script = false;
@@ -473,7 +473,7 @@ if ($opcao == "m") {
      $xx = pg_result($result, 0, "z01_cgccpf");
      db_msgbox("akiiiii ".$xx);
      $script = true;
-   
+
   }*/
 		db_logs ( "$matricula", "", 0, "Matricula Pesquisada. Numero: $matricula" );
 	/*
@@ -492,14 +492,14 @@ if ($opcao == "m") {
       exit;
     }
  }*/
-		
+
 //PESQUISA INSCRICAO
 } else if ($opcao == "i") {
 	$Caminho = "&nbsp;<a href=\"javascript:history.back()\" class=\"links\">Alvará &gt;</a>
 		                &nbsp;<font class=\"links\">Opções Alvará &gt;</font>\n";
 	db_logs ( "", "", 0, "Listando debitos - consulta por matrícula." );
 	db_mensagem ( "opcoesinscricao_cab", "opcoesinscricao_rod" );
-	
+
 	if (! isset ( $inscricao )) {
 		if (! isset ( $HTTP_POST_VARS ["inscricaow"] )) {
 			db_logs ( "", "", 0, "Acesso a Rotina Invalido" );
@@ -520,7 +520,7 @@ if ($opcao == "m") {
 		$cgccpf = str_replace ( ".", "", $cgccpf );
 		$cgccpf = str_replace ( "/", "", $cgccpf );
 		$cgccpf = str_replace ( "-", "", $cgccpf );
-		
+
 		if (! isset ( $inscricao ) or empty ( $inscricao ) or ! is_int ( 0 + $inscricao )) {
 			db_logs ( "", "$inscricao", 0, "Variavel Inscricao Invalida" );
 			db_redireciona ( "digitainscricao.php?" . base64_encode ( 'erroscripts=Inscrição Inválida.' ) );
@@ -531,11 +531,11 @@ if ($opcao == "m") {
 		}
 		$sql_exe = "select ident from db_config";
 		$result = pg_exec ( $sql_exe ) or die ( "Erro: " . pg_ErrorMessage ( $conn ) );
-		
+
 		if (pg_numrows ( $result ) > 0)
 			db_fieldsmemory ( $result, 0 );
 		$sql_exe = "select * from issbase,cgm
-			                     where q02_inscr = $inscricao 
+			                     where q02_inscr = $inscricao
 			                                         and q02_numcgm = z01_numcgm ";
 		if ($db_verifica_ip == "0") {
 			$sql_exe = $sql_exe . " and trim(z01_cgccpf) = '$cgccpf'";
@@ -543,21 +543,21 @@ if ($opcao == "m") {
 		$result = pg_exec ( $sql_exe ) or die ( "Erro: " . pg_ErrorMessage ( $conn ) );
 	} else {
 
-	
+
 	  if (isset($inscricao) != "") {
-	  
+
 	    $sql  = " select * from issbase,                ";
 	    $sql .= "               cgm                     ";
-	    $sql .= "   where q02_inscr = {$inscricao} and  "; 
+	    $sql .= "   where q02_inscr = {$inscricao} and  ";
 	    $sql .= "	      q02_numcgm = z01_numcgm       ";
 
 		$result = pg_exec ($sql) or die ( "Erro: " . pg_ErrorMessage ( $conn ) );
 	  }
 
-	  
+
 		$cgccpf = trim ( pg_result ( $result, 0, 'z01_cgccpf' ) );
 	}
-	
+
 	if (pg_numrows ( $result ) == 0) {
 		db_logs ( "", "$inscricao", 0, "Dados Inconsistentes na Inscricao Numero: $inscricao" );
 		db_redireciona ( "digitainscricao.php?" . base64_encode ( "id_usuario=''&erroscripts=Dados Inconsistentes na Inscrição Número: " . $inscricao . "." ) );
@@ -570,7 +570,7 @@ if ($opcao == "m") {
 		db_fieldsmemory ( $result, 0 );
 	db_logs ( "", "$inscricao", 0, "Inscricao Pesquisada. Numero: $inscricao" );
 	$inscricaobaixada = @ $q02_dtbaix;
-	
+
 	if (! isset ( $DB_LOGADO ) && $m_publico != 't') {
 		$sql = "select fc_permissaodbpref(" . db_getsession ( "DB_login" ) . ",2,$inscricao)";
 		$result = pg_exec ( $sql );
@@ -584,7 +584,7 @@ if ($opcao == "m") {
 			exit ();
 		}
 	}
-	
+
 // PESQUISA NUMCGM
 } else if ($opcao == "n") {
 	$Caminho = "&nbsp;<a href=\"javascript:history.back()\" class=\"links\">Contribuinte &gt;</a>
@@ -599,7 +599,7 @@ if ($opcao == "m") {
 	}
 	//$cgc = $HTTP_POST_VARS["cgc"];
 	//$cpf = $HTTP_POST_VARS["cpf"];
-	
+
 
 	if (! empty ( $cgc )) {
 		$cgccpf = $cgc;
@@ -613,19 +613,19 @@ if ($opcao == "m") {
 	$cgccpf = str_replace ( ".", "", $cgccpf );
 	$cgccpf = str_replace ( "/", "", $cgccpf );
 	$cgccpf = str_replace ( "-", "", $cgccpf );
-	
+
 	/*if (isset ( $cookie_codigo_cgm )) {
 		$sSqlContribCgm = " select z01_cgccpf from cgm where z01_numcgm = {$cookie_codigo_cgm}";
 		$rsContrubCgm = pg_query ( $sSqlContribCgm );
 		db_fieldsmemory ( $rsContrubCgm, 0 );
 		$cgccpf = $z01_cgccpf;
 	}*/
-	
+
 	if (! isset ( $cgccpf )) {
 		db_logs ( "", "$codigo_cgm", 0, "CNPJ/CPF Invalidos" );
 		db_redireciona ( "digitacontribuinte.php?" . base64_encode ( 'erroscripts=Número do CNPJ/CPF Inválido.' ) );
 	}
-	
+
 	if (! isset ( $sConfig["w13_permconscgm"] ) or @ $sConfig["w13_permconscgm"] == "f") {
 		//inner join iptubase on j01_numcgm = z01_numcgm
 		$sql_exe = "select * from cgm
@@ -649,7 +649,7 @@ if ($opcao == "m") {
 		$script = true;
 	} elseif (pg_numrows ( $result ) == 1) {
 		db_fieldsmemory ( $result, 0 );
-		
+
 	//$sql2 = "select * from iptubase where j01_numcgm = $z01_numcgm";
 	//$result2 = @pg_query($sql2);
 	//if(pg_numrows($result2)==0){
@@ -658,7 +658,7 @@ if ($opcao == "m") {
 	// db_redireciona("digitamatricula.php");
 	//}
 	//exit;
-	
+
 	} else
   if (pg_numrows($result) > 1) {
 		msgbox ( "Inconsistencia de dados, procure a Prefeitura." );
@@ -705,16 +705,16 @@ db_estilosite();
 function js_AbreJanelaRelatorio(squery) {
 
 		if(document.getElementById('rdTipoRelatorio1').checked){
-			query = 'cai3_gerfinanc011.php?'+squery;	
+			query = 'cai3_gerfinanc011.php?'+squery;
 		}else if(document.getElementById('rdTipoRelatorio2').checked){
 			query = 'cai3_gerfinanc013.php?'+squery;
 		}
-		
+
     tipos = document.getElementById('sK00_tipo').value;
     jandb = window.open(query+'&tipos='+tipos,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jandb.moveTo(0,0);
     }
-  
+
 </script>
 
 </head>
@@ -728,17 +728,17 @@ function js_AbreJanelaRelatorio(squery) {
 	</tr>
 	<tr>
 		<td height="200" align="center" valign="middle"><?
-				
+
 		if ($opcao == "i") {
       $sSqlInner  = "inner join arreinscr  on arreinscr.k00_numpre  = arresusp.k00_numpre";
-   	  $sSqlWhere  = "k00_inscr = {$inscricao}"; 		
+   	  $sSqlWhere  = "k00_inscr = {$inscricao}";
 			$result = debitos_tipos_inscricao ( $inscricao );
 			$chave = "inscricao=$inscricao";
 			$valor = $inscricao;
 		}
 		if ($opcao == "m") {
       $sSqlInner  = "inner join arrematric on arrematric.k00_numpre = arresusp.k00_numpre";
-      $sSqlWhere  = "k00_matric = {$matricula}";     		
+      $sSqlWhere  = "k00_matric = {$matricula}";
 		  $result 	  = debitos_tipos_matricula($matricula);
 		  $chave 	  = "matricula=$matricula";
 		  $valor 	  = $matricula;
@@ -748,9 +748,9 @@ function js_AbreJanelaRelatorio(squery) {
 			$chave = "numcgm=$codigo_cgm";
 			$valor = $codigo_cgm;
       $sSqlInner  = "inner join arrenumcgm on arrenumcgm.k00_numpre = arresusp.k00_numpre";
-      $sSqlWhere  = "arrenumcgm.k00_numcgm = {$codigo_cgm}";   		 			  
+      $sSqlWhere  = "arrenumcgm.k00_numcgm = {$codigo_cgm}";
 		}
-		
+
 	    $sSqlVerificaSuspensao  = " select k00_sequencial 	   ";
 	    $sSqlVerificaSuspensao .= "   from arresusp       	   ";
 	    $sSqlVerificaSuspensao .= "   	   inner join suspensao on ar18_sequencial = arresusp.k00_suspensao ";
@@ -758,13 +758,13 @@ function js_AbreJanelaRelatorio(squery) {
 	    $sSqlVerificaSuspensao .= "  where {$sSqlWhere}   	   ";
 	    $sSqlVerificaSuspensao .= "    and ar18_situacao = 1   ";
 			$rsVerificaDebitosSuspensos = pg_query($sSqlVerificaSuspensao);
-			$iNroLinhasDebitosSuspensos = pg_num_rows($rsVerificaDebitosSuspensos);		
-			
-			
+			$iNroLinhasDebitosSuspensos = pg_num_rows($rsVerificaDebitosSuspensos);
+
+
 			//situacao do corte
 			$mensagemcorte = '';
 			if((isset($matricula)) and ($db21_usasisagua == "t")) {
-				require_once ("agu3_conscadastro_002_classe.php");
+				require_once("agu3_conscadastro_002_classe.php");
 	      $Consulta = new ConsultaAguaBase($matricula);
 	      $sqlcorte = $Consulta->GetAguaCorteMatMovSQL();
 	      $resultcorte = pg_exec($sqlcorte) or die($sqlcorte);
@@ -772,15 +772,16 @@ function js_AbreJanelaRelatorio(squery) {
 	        $mensagemcorte = pg_result($resultcorte, 0, "x43_descr");
 	      }
 	      if(trim($mensagemcorte) != '') {
-	        if($sConfig["w13_msgaviso"] == 't') { 
+	        if($sConfig["w13_msgaviso"] == 't') {
 	      	  $msgcortesituacao = "<font color=\"#FF0000\" size=\"3\"><blink>Corte: $mensagemcorte<blink></font>";
 	        }
 	      }
-			}			
-							
-				if ( $result == true ) {
+			}
+
+
+		if ( $result == true ) {
 			$linhas = pg_num_rows ( $result );
-			
+
 			?>
 		<form name="form1" action="">
 		<table width="100%" border="0" bordercolor="#cccccc" cellpadding="5"
@@ -790,10 +791,10 @@ function js_AbreJanelaRelatorio(squery) {
 				<table width="100%" border="0" cellpadding="1" cellspacing="0">
 					<tr class="texto">
 						<td><img src="imagens/icone.gif" border="0"></td>
-						<td>CNPJ/CPF: 
+						<td>CNPJ/CPF:
 						<span class="bold3">
 						  <?
-						    echo (trim($cgccpf) == ''?@$mostraCGCCPF:$cgccpf); 
+						    echo (trim($cgccpf) == ''?@$mostraCGCCPF:$cgccpf);
 						  ?>
 						</span><br>
 						<? if(@$inscricao!=""){?> Inscrição:&nbsp; <span class="bold3"><?=@$inscricao?></span><br>
@@ -805,7 +806,7 @@ function js_AbreJanelaRelatorio(squery) {
 						<td>
 							<?=@$msgcortesituacao ?>
 						</td>
-							
+
 					</tr>
 				</table>
 				</td>
@@ -822,19 +823,19 @@ function js_AbreJanelaRelatorio(squery) {
 					db_fieldsmemory ( $resultmostra, 0 );
 					// echo "<br> $k00_descr  = $k00_recibodbpref..tipo. $k00_tipo";
 				}
-				
+
 				if (@ $k00_tipo == 3)	$k00_agnum = "nivel3";
-				
+
 				if (@ $k00_tipo == 3 && @ $id_usuario != "") {
 					// se tiver logado e tipo = 3 é issqn variavel
-					
+
 
 if (($k00_recibodbpref != "3") and ($linhasmenuissqn > 0)) {
   $aK00_tipo[] = $k00_tipo;
   ?>
 	<tr>
 		<td height="28">
-			<a class='links' 
+			<a class='links'
 			   href="cai3_gerfinanc000.php?
 			   numcgm=<?=$k00_numcgm?>
 			   &tipo=<?=$k00_tipo?>
@@ -862,7 +863,7 @@ if (($k00_recibodbpref != "3") and ($linhasmenuissqn > 0)) {
 }
 
 				}
-				
+
 				//#########  se o  ecritorio tiver logado e digitar a inscrição do cliente
 				/*
  if(isset($logadoescrito)){
@@ -911,7 +912,7 @@ if (($k00_recibodbpref != "3") and ($linhasmenuissqn > 0)) {
 					}
 				} elseif ($k00_tipo != 3 || @ $sConfig["w13_permvarsemlog"] == "t" && @ $id_usuario == "") {
 					// se não for variavel e permite mostrar variavel sem log
-					
+
 
 					if ($k00_recibodbpref != "3") {
 						//Verifica se usa o modulo agua para fazer as demais verificações
@@ -920,7 +921,7 @@ if (($k00_recibodbpref != "3") and ($linhasmenuissqn > 0)) {
 						//Se utilizar o módulo agua tem que verificar a situação do contribuinte.
 						if ($db21_usasisagua == 't'){
 							//Verifico a situação de corte da matrícula em questão.
-							require_once ("agu3_conscadastro_002_classe.php");
+							require_once("agu3_conscadastro_002_classe.php");
 							$Consulta = new ConsultaAguaBase($matricula);
 							$sqlcorte = $Consulta->GetAguaCorteMatMovSQL();
 						  $resultcorte = pg_exec($sqlcorte) or die($sqlcorte);
@@ -929,8 +930,8 @@ if (($k00_recibodbpref != "3") and ($linhasmenuissqn > 0)) {
 					      //echo $x42_codsituacao;
 					      //Verifico se o codigo da situação da matricula esta na tabela de restriçoes configdbprefagua
 					      $w16_recibodbpref = false;
-					      $sExibeDebitos = "select w16_recibodbpref 
-					      										from configdbprefagua 
+					      $sExibeDebitos = "select w16_recibodbpref
+					      										from configdbprefagua
 					      									where w16_instit = $DB_INSTITUICAO and w16_aguacortesituacao = $x42_codsituacao ";
 					      //die($sExibeDebitos);
 					      $rsExibeDebitos = pg_query($sExibeDebitos);
@@ -941,11 +942,11 @@ if (($k00_recibodbpref != "3") and ($linhasmenuissqn > 0)) {
 					      	$lExibe = false;
 					      }
 					    }
-				      
+
 						}
-						
-						
-$iTipo = pg_result(pg_query("select coalesce(w10_tipo,0) from db_confplan"),0,0);						
+
+
+$iTipo = pg_result(pg_query("select coalesce(w10_tipo,0) from db_confplan"),0,0);
 if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 // não mostra este item
 } else if($lExibe){
@@ -978,9 +979,9 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 			</td>
 			</tr>
 			<?
-				
+
 				if ($x == pg_numrows ( $result ) - 1 && $opcao == "m") {
-					
+
 					if ($linhasmenucert > 0) {
 						if ($db21_usasisagua == 't'){
 							/*?>
@@ -994,18 +995,18 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 									href="leituraseconsumo.php?acao=hidrometros&numcgm=<?=@$k00_numcgm?>&matric=<?=@$matricula?>&inscr=<?=@$q02_inscr?>&db_datausu=<?=date ( 'Y-m-d', db_getsession ( 'DB_datausu' ) )?>&id_usuario=<?=@$id_usuario?>&cgccpf=<?=@$cgccpf?>&opcao=<?=$opcao?>"><img
 									src="imagens/pasta2.gif" border="0">Hidrômetros</a></td>
 							</tr>
-							<?*/ 
+							<?*/
 						}
 						?>
 					<tr>
 						<td height="28" valign="middle">
-							<a class='links' href="#" 
+							<a class='links' href="#"
 								 onclick="js_AbreJanelaRelatorio('db_datausu=<?
 						          																					echo $db_datausu."&";
 					            																				  echo "matric=$matricula1";
-					            																				?>')"> 
+					            																				?>')">
 							<img src="imagens/folder4.gif" border="0"> Relatório de Débitos
-							</a>	
+							</a>
 							<input type="radio" id="rdTipoRelatorio1" name="rdTipoRelatorio" value="resumido" checked="checked"><span class="radioOption">Resumido</span>
 							<input type="radio" id="rdTipoRelatorio2" name="rdTipoRelatorio" value="completo"><span class="radioOption">Completo</span>
 						</td>
@@ -1015,13 +1016,13 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 					?>
 			<tr>
 				<td height="28">
-				
+
 				<?
-				
+
 				if((isset($matricula)) and ($db21_usasisagua == "t")) {
 				  //desabilitado para dbpref daeb
 				?>
-					
+
 					<!--<a class='links' href="listabicimovelagua.php?<?=base64_encode ( 'matricula=' . $matricula . '&id_usuario=' . @$id_usuario . '&cgccpf=' .$cgccpf.'' )?>">
 					<img src="imagens/folder1.gif" border="0"> Informa&ccedil;&otilde;es do Im&oacute;vel</a>
 				--><?
@@ -1029,17 +1030,17 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 					<a class='links' href="listabicimovel.php?<?=base64_encode ( 'matricula=' . $matricula . '&id_usuario=' . @$id_usuario . '&cgccpf=' .$cgccpf.'' )?>">
 					<img src="imagens/folder1.gif" border="0"> Informa&ccedil;&otilde;es do Im&oacute;vel</a>
 				<?
-				} 
-				?>	
+				}
+				?>
 				</td>
 			</tr>
 			<?
-					
+
 					$sqldeb = " select * from debcontapedido
-						inner join debcontapedidocgm on d63_codigo =d70_codigo 
-						inner join debcontapedidomatric on d63_codigo =d68_codigo 
+						inner join debcontapedidocgm on d63_codigo =d70_codigo
+						inner join debcontapedidomatric on d63_codigo =d68_codigo
 						where d70_numcgm= $k00_numcgm and d68_matric=$matricula and d63_instit=$instit and d63_status=1";
-					
+
 					$resultdeb = pg_query ( $sqldeb );
 					$linhasdeb = pg_num_rows ( $resultdeb );
 					if ($linhasdeb > 0) {
@@ -1051,13 +1052,13 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 			</tr>
 
 			<?
-					
+
 					}
 				}
 				if ($x == pg_numrows ( $result ) - 1 && $opcao == "i") {
-					
+
 					if ($sConfig["w13_libcarnevariavel"] == 't') {
-						
+
 						?>
 			<tr>
 				<td height="28"><a class='links'
@@ -1067,11 +1068,11 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 			</tr>
 			<?
 					}
-					
+
 					//echo" cgm=  $k00_numcgm ....ins=  $inscricao";
 					$sqldeb = " select * from debcontapedido
-							inner join debcontapedidocgm on d63_codigo =d70_codigo  
-							inner join debcontapedidoinscr on d63_codigo =d69_codigo 
+							inner join debcontapedidocgm on d63_codigo =d70_codigo
+							inner join debcontapedidoinscr on d63_codigo =d69_codigo
 							where d70_numcgm=$k00_numcgm and d69_inscr=$inscricao and d63_instit=1";
 					$resultdeb = pg_query ( $sqldeb );
 					$linhasdeb = pg_num_rows ( $resultdeb );
@@ -1085,7 +1086,7 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 			</tr>
 
 			<?
-					
+
 					}
 				}
 			}
@@ -1110,13 +1111,14 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 			  echo "     <img src='imagens/pasta2.gif' border='0'> DÉBITOS SUSPENSOS</a></td> ";
 			  echo "  </tr> ";
 			}
-	
+
 			?>
 		</table>
 		</form>
 		<input type="submit" value="Voltar" class="botao"
-			onclick="js_voltar();"> <?
-		
+			onclick="js_voltar();">
+ <?
+
 		} else {
 			?>
 		<table width="100%" border="0" bordercolor="#cccccc" cellpadding="5"
@@ -1126,7 +1128,7 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 				<table width="100%" border="0" cellpadding="1" cellspacing="0">
 					<tr class="texto">
 						<td><img src="imagens/icone.gif" border="0"></td>
-						<td>CNPJ/CPF: 
+						<td>CNPJ/CPF:
 						<span class="bold3">
 						<?if(trim($cgccpf) == ''){ echo $mostraCGCCPF; } else {echo $cgccpf;}?>
 						</span><br>
@@ -1135,7 +1137,7 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 						<?}else if(@$matricula!=""){?> Matrícula:&nbsp; <span
 							class="bold3"><?=@$matricula?></span><br>
 							<?}else if(@$codigo_cgm!=""){?> CGM:&nbsp; <span class="bold3"><?=@$codigo_cgm?></span><br>
-							<?}?>						
+							<?}?>
               </span>
             </td>
             <td><?=@$msgcortesituacao?></td>
@@ -1143,7 +1145,7 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 				</table>
 				</td>
 			</tr>
-       <?   
+       <?
          if ($iNroLinhasDebitosSuspensos > 0) {
            echo "<tr> ";
            echo "  <td height='28'><a class='links' ";
@@ -1163,19 +1165,19 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
            echo "     <img src='imagens/pasta2.gif' border='0'> DÉBITOS SUSPENSOS</a></td> ";
            echo "</tr> ";
          } else {
-        ?>      			
+        ?>
 			<tr height="100">
 				<td align="center" class="green">Contribuinte sem Movimentos
 				Pendentes.</td>
 			</tr>
 			<?
          }
-			
+
 			if ($opcao == "m") {
 				?>
 			<form name="form2" action="">
-			
-			
+
+
 			<tr>
 				<td height="28">
 				<?
@@ -1183,7 +1185,7 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 				?>
 					<a class='links' href="listabicimovelagua.php?<?=base64_encode ( 'matricula=' . $matricula . '&id_usuario=' . @$id_usuario  . '&cgccpf=' .$cgccpf.'' )?>">
 					<img src="imagens/folder1.gif" border="0"> Informa&ccedil;&otilde;es do Im&oacute;vel</a></td>
-				<? 
+				<?
 				}else {?>
 					<a class='links' href="listabicimovel.php?<?=base64_encode ( 'matricula=' . $matricula . '&id_usuario=' . @$id_usuario  . '&cgccpf=' .$cgccpf.'' )?>">
 					<img src="imagens/folder1.gif" border="0"> Informa&ccedil;&otilde;es do Im&oacute;vel</a></td>
@@ -1207,7 +1209,7 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 			</tr>
 		</table>
 		<?
-		
+
 		}
 		?>
    </td>
@@ -1217,13 +1219,13 @@ if ($k00_tipo == $iTipo and $linhasmenuretido == 0) {
 	</tr>
 </table>
 </center>
-<?php 
+<?php
 	if(count($aK00_tipo)>0){
 		$virgula = "";
 		$sK00_tipo = "";
 		foreach ($aK00_tipo as $value){
 			$sK00_tipo .= $virgula.$value;
-			$virgula = ","; 
+			$virgula = ",";
 		}
 	}
 ?>
