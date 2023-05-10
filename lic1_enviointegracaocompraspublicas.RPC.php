@@ -34,8 +34,16 @@ switch ($oParam->exec) {
                 $results   = $cl_liclicitaportalcompras->buscaLicitacoes($codigo);
                 $licitacao = $licitacaoFabrica->criar($results, $cl_liclicitaportalcompras->numrows);
 
+                $chaveAcesso = db_utils::fieldsMemory(
+                    $cl_liclicitaportalcompras->buscaChaveDeAcesso(
+                        db_getsession("DB_instit")
+                        )
+                , 0)->chaveacesso;
+
+                $url = $licitacao->getUrlPortalCompras($chaveAcesso);
+
                 $enviador  = new EnviadorLicitacao();
-                $resultado = $enviador->enviar($licitacao);
+                $resultado = $enviador->enviar($licitacao, $url);
 
                 $oRetorno->message = $resultado['message'];
                 $oRetorno->status = (int)$resultado['success'];

@@ -4,6 +4,9 @@ require_once("model/licitacao/PortalCompras/Modalidades/Licitacao.model.php");
 
 class Pregao extends Licitacao
 {
+    /**
+     * @var integer
+     */
     private int $tipoJulgamento;
 
     public function __construct()
@@ -11,6 +14,12 @@ class Pregao extends Licitacao
         parent::__construct();
     }
 
+    /**
+     * Retorna url da APIPCP
+     *
+     * @param string|null $publicKey
+     * @return string
+     */
     public function getUrlPortalCompras(string $publicKey = null): string
     {
         return $this->envs['URL']."/comprador/$publicKey/processo/pregao";

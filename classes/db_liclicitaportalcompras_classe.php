@@ -116,6 +116,17 @@ class cl_liclicitaportalcompras
         return $this->sql_record($sql);
     }
 
+    public function buscaChaveDeAcesso($instituicao)
+    {
+        $sql = "
+        select l12_key_apipcp as chaveacesso
+        from licitaparam
+        where
+        l12_instit = '$instituicao';
+        ";
+        return $this->sql_record($sql);
+    }
+
     public function buscaCodigoModalidade($codigo)
     {
         $sql = "select l03_pctipocompratribunal as codigomodalidade

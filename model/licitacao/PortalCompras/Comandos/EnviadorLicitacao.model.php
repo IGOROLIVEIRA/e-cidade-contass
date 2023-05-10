@@ -11,12 +11,10 @@ class EnviadorLicitacao implements EnviadorInterface
      * @param Licitacao $licitacao
      * @return array
      */
-    public function enviar(Licitacao $licitacao): array
+    public function enviar(Licitacao $licitacao, string $url): array
     {
-        $client = new \GuzzleHttp\Client();
-        $url = $licitacao->getUrlPortalCompras('cc86f9555f1f0134dc4d4df3c45dc457');
-
         try{
+            $client = new \GuzzleHttp\Client();
             $response = $client->post($url, [
                     'json' => json_decode(json_encode($licitacao),true)
             ]);
