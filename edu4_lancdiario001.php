@@ -241,10 +241,6 @@ $db_opcao = 1;
     sContentWindow += "    <legend><b>Frequência Diária</b></legend>";
     sContentWindow += "     <div id='ctnDataGridDiarioClasse'></div>";
     sContentWindow += "   </fieldset>";
-    sContentWindow += "  <fieldset>";
-    sContentWindow += "    <legend><b>Aula Desenvolvida</b></legend>";
-    sContentWindow += "     <div id='ctnAulaDesenvolvida'></div>";
-    sContentWindow += "   </fieldset>";
     sContentWindow += "</div>";
     //sContentWindow += "<div style='text-align:center;padding-top:4px;padding-right:3px;'>";
     //sContentWindow += "  <div style='float:right;clear:both;font-weight:bold'>";
@@ -269,14 +265,6 @@ $db_opcao = 1;
       oWindowDiarioClasse.getContentContainer());
     oMessageBoard.show();
     oWindowDiarioClasse.show();
-
-    oTxtFieldAulaDesenvolvida = document.createElement('input');
-    oTxtFieldAulaDesenvolvida.setAttribute('id', 'oTxtFieldAulaDesenvolvida');
-    oTxtFieldAulaDesenvolvida.setAttribute('value', oRetorno.sAulaData.urlDecode());
-    oTxtFieldAulaDesenvolvida.style.width = '100%';
-    oTxtFieldAulaDesenvolvida.setAttribute('maxLength', 200);
-    $('ctnAulaDesenvolvida').appendChild(oTxtFieldAulaDesenvolvida);
-
 
     $('btnFechar').observe('click', function() {
 
@@ -527,7 +515,6 @@ $db_opcao = 1;
     oParametros.iTurma = oCboTurma.getValue();
     oParametros.aAlunos = aAlunos;
     oParametros.aRegencias = aRegencias;
-    oParametros.sAulaDesenvolvida = encodeURIComponent(tagString($F('oTxtFieldAulaDesenvolvida')));
     var oAjax = new Ajax.Request(sUrlRpc, {
       method: 'post',
       parameters: 'json=' + Object.toJSON(oParametros),

@@ -335,14 +335,14 @@ class cl_licanexopncp
   }
 
   // funcao para exclusao 
-  function excluir($oid = null, $dbwhere = null)
+  function excluir($l215_sequencial = null, $dbwhere = null)
   {
 
     $sql = " delete from licanexopncp
                     where ";
     $sql2 = "";
     if ($dbwhere == null || $dbwhere == "") {
-      $sql2 = "oid = '$oid'";
+      $sql2 = "l215_sequencial = $l215_sequencial";
     } else {
       $sql2 = $dbwhere;
     }

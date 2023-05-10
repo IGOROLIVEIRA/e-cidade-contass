@@ -39,10 +39,10 @@
 	$xx = $this->objpdf->getx();
 	$yy = $this->objpdf->gety();
 	$this->objpdf->setleftmargin(104);
-	$this->objpdf->setrightmargin(2);	
+	$this->objpdf->setrightmargin(2);
 	$this->objpdf->multicell(100,3,$this->secretaria);
 	$this->objpdf->setxy($xx,$yy);
-		
+
 	$this->objpdf->Ln(5);
 
 	$this->objpdf->SetFont('Arial','B',8);
@@ -87,7 +87,7 @@
 	$this->objpdf->Text(32,$y+3,$this->titulo2);// cod. de arrecadação
 	$this->objpdf->SetFont('Arial','B',7);
 	$this->objpdf->Text(33,$y+6,$this->descr2);// numpre
-	
+
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(53,$y+3,$this->titulo5);// Parcela guia contribuinte
 	$this->objpdf->SetFont('Arial','B',7);
@@ -103,7 +103,7 @@
 	$this->objpdf->sety($y+10);
 	$this->objpdf->MultiCell(55,3,$this->descr3_1);// nome do contribuinte
 	$this->objpdf->MultiCell(55,3,$this->descr3_2);// endereço
-	$this->objpdf->MultiCell(55,3,$this->descr17);// Setor/Quadra/Lote	
+	$this->objpdf->MultiCell(55,3,$this->descr17);// Setor/Quadra/Lote
 	$this->objpdf->setxy($xx,$yy);
 
 	$this->objpdf->SetFont('Arial','',5);
@@ -187,7 +187,7 @@
 	$this->objpdf->Text(143,$y+3,$this->titulo10);// parcela
 	$this->objpdf->SetFont('Arial','B',7);
 	$this->objpdf->Text(146,$y+6,$this->descr10);// parcela e total das parcelas
-	
+
 	$this->objpdf->SetFont('Arial','',5);
 	$this->objpdf->Text(159,$y+3,$this->titulo13);// livre
 	$this->objpdf->SetFont('Arial','B',7);
@@ -203,7 +203,7 @@
 	$this->objpdf->sety($y+10);
 	$this->objpdf->MultiCell(97,3,$this->descr11_1);// nome do contribuinte
 	$this->objpdf->MultiCell(97,3,$this->descr11_2);// endereço
-	$this->objpdf->MultiCell(97,3,$this->descr17);// Setor/Quadra/Lote	
+	$this->objpdf->MultiCell(97,3,$this->descr17);// Setor/Quadra/Lote
 	$this->objpdf->setxy($xx,$yy);
 
 	$this->objpdf->SetFont('Arial','',5);
@@ -216,8 +216,15 @@
 	$this->objpdf->sety($y+26);
 
 	// mensagem de instruções da guia prefeitura
-	$this->objpdf->multicell(80,2,$this->descr12_1);// Instruções 2 - linha 1
-	$this->objpdf->multicell(80,2,$this->descr12_2);// Instruções 2 - linha 2
+    if ($this->hasQrCode) {
+        $this->objpdf->multicell(60, 2, $this->descr12_1);// Instruções 2 - linha 1
+        $this->objpdf->multicell(60, 2, $this->descr12_2);// Instruções 2 - linha 2
+        $this->objpdf->multicell(60, 2, "Pague com PIX utilizando o QRCode ao lado ---->");
+        $this->objpdf->Image($this->qrcode,158,$y+24, 17, 17, 'png');
+    } else {
+        $this->objpdf->multicell(80, 2, $this->descr12_1);// Instruções 2 - linha 1
+        $this->objpdf->multicell(80, 2, $this->descr12_2);// Instruções 2 - linha 2
+    }
 	$this->objpdf->setxy($xx,$yy);
 
 	$this->objpdf->SetFont('Arial','',5);
@@ -281,7 +288,7 @@
 	$this->objpdf->setxy($xx,$yy);
 
 	// mensagem do canto inferior direito da guia do banco
-	$y -= 10;		
+	$y -= 10;
 	$this->objpdf->SetFont('Arial','',9);
 	$this->objpdf->Text(105,$y+38,$this->linha_digitavel);
 	$this->objpdf->int25(95,$y+39,$this->codigo_barras,11,0.341);

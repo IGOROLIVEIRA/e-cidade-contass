@@ -815,7 +815,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                 </tr>
                                 -->
 
-                                <tr id="dataaberturapncp" style="display: none;">
+                                <tr id="dataaberturapncp">
                                     <td>
                                         <b>Data Abertura Proposta :</b>
                                     </td>
@@ -1752,13 +1752,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         }
 
         if (document.getElementById('l20_leidalicitacao').value == "1" && l12_pncp == "t") {
-            document.getElementById('dtjs_l20_dataaberproposta').style.display = '';
             for (const s of document.getElementsByClassName("dataabertura")) {
                 s.style.display = '';
             }
 
         } else {
-            document.getElementById('dtjs_l20_dataaberproposta').style.display = 'none';
             for (const s of document.getElementsByClassName("dataabertura")) {
                 s.style.display = 'none';
             }

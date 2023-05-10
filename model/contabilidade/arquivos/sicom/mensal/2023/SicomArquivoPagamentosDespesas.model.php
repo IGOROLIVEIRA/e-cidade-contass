@@ -443,44 +443,10 @@ class SicomArquivoPagamentosDespesas extends SicomArquivoBase implements iPadArq
           $reg12 = db_utils::fieldsMemory($rsPagOrd12, 0);
 
           /**
-           * VERIFICA SE HOUVE RETENCAO NA ORDEM. CASO TENHA O VALOR SERA SUBTRAIDO NO VALOR DO LANCAMENTO.
+           * Sera feito consulta para ver se houveram retencoes para esse movimento da OP
+           * e essa consulta definira se sera montado o Reg. 13 para esse movimento da OP.
            */
-          $sqlReten = "SELECT sum(e23_valorretencao) AS descontar
-                       FROM retencaopagordem
-                       JOIN retencaoreceitas ON e23_retencaopagordem = e20_sequencial
-                       JOIN retencaotiporec ON e23_retencaotiporec = e21_sequencial
-                       JOIN retencaoempagemov on e27_retencaoreceitas = e23_sequencial
-                       WHERE e23_recolhido = TRUE";
-
-          if ($reg12->e81_codmov == ''){
-              $sqlReten .= " AND (e20_pagordem) = ({$oEmpPago->ordem})";
-          } else {
-              $sqlReten .= " AND (e20_pagordem , e27_empagemov) = ({$oEmpPago->ordem}, {$reg12->e81_codmov})";
-          }
-
-          $sqlReten .= " AND e23_dtcalculo BETWEEN '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'
-                            GROUP BY e27_empagemov";
-
-          $rsReteIsIs = db_query($sqlReten);
-
-          if (pg_num_rows($rsReteIsIs) > 0 && db_utils::fieldsMemory($rsReteIsIs, 0)->descontar > 0) {
-
-            $nVolorOp = $oEmpPago->valor - db_utils::fieldsMemory($rsReteIsIs, 0)->descontar;
-            if ($nVolorOp == 0) {
-              $saldopag = db_utils::fieldsMemory($rsReteIsIs, 0)->descontar;
-            } else {
-              $saldopag = $nVolorOp;
-            }
-            $aInformado[$sHash]->retencao = 1;
-            if ($nVolorOp < 0) {
-              $nVolorOp = $oEmpPago->valor;
-              $aInformado[$sHash]->retencao = 0;
-            }
-
-          } else {
-            $nVolorOp = $oEmpPago->valor;
-            $saldopag = $nVolorOp;
-          }
+          list($sqlReten, $nVolorOp, $saldopag) = $clops12->verificaRetencao($reg12, $oEmpPago, $aInformado[$sHash], $this->sDataInicial, $this->sDataFinal);
 
           if (pg_num_rows($rsPagOrd12) > 0 && $reg12->codctb != '') {
             $clops12 = new cl_ops122023();

@@ -37,13 +37,11 @@ class GerarCONCIBANC extends GerarAM
 
 
 
-        // Arquivo será construido.
+       // Arquivo será construido.
         $this->sArquivo = "CONCIBANC";
         $this->abreArquivo();
-
-
-
-        $sqlConcibanc102023  = "	    select case 
+        $dateparts = explode("-",$this->sDataFinal); 
+        $sqlConcibanc102023  = "	    select case
                                             when c61_codtce is not null and c61_codtce != 0 then c61_codtce
                                         else k13_reduz
                                         end as c61_codtce,";
@@ -59,7 +57,9 @@ class GerarCONCIBANC extends GerarAM
 	    $sqlConcibanc102023 .= "                     inner join conplano      on c60_codcon = c61_codcon and c60_anousu=c61_anousu ";
 	    $sqlConcibanc102023 .= "                     left  join conplanoconta on c60_codcon = c63_codcon and c63_anousu=c60_anousu ";
 	    $sqlConcibanc102023 .= "                     left  join infocomplementaresinstit on si09_instit = c61_instit";
-        $sqlConcibanc102023 .= " and c60_codsis = 6 where k13_limite >=	'".$this->sDataInicial."' or k13_limite is null";
+        $sqlConcibanc102023 .= " and c60_codsis = 6 where k13_limite >=	'".$this->sDataInicial."' or k13_limite is null ";
+        $sqlConcibanc102023 .= " and (substr(k13_dtimplantacao,1,4) < '".$dateparts[0]."'";
+        $sqlConcibanc102023 .= " or (substr(k13_dtimplantacao,1,4) = '".$dateparts[0]."' and substr(k13_dtimplantacao,6,2) <= '".$dateparts[1]."'))";
         $sqlConcibanc102023 .= "  ) as x ";
         $sqlConcibanc102023 .= "  group by 1,2 ";
 

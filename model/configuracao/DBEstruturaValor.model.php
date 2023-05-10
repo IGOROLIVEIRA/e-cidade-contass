@@ -340,8 +340,13 @@ class DBEstruturaValor {
       foreach ($aNiveisEstrutura as $iNivel => $oNivel) {
 
         if (isset($aNiveisEstrutural[$iNivel])) {
-          if(db_getsession("DB_anousu") > 2022)
-            $aNiveisEstrutural[$iNivel] = $aNiveisEstrutural[$iNivel]."0"; 
+          
+          if(db_getsession("DB_anousu") > 2022){
+            if(strlen($aNiveisEstrutural[$iNivel]) >= 7){
+              $aNiveisEstrutural[$iNivel] = $aNiveisEstrutural[$iNivel].'0'; 
+            }
+          }
+         
           if ($oNivel->digitos != strlen($aNiveisEstrutural[$iNivel])){
 
             $oValidacao->valida         = false;

@@ -438,6 +438,9 @@ class LicitacaoDocumento
       throw new Exception('Erro ao excluir o Arquivo.');
     }
 
+    $oDaolicanexopncp = db_utils::getDao('licanexopncp');
+    $oDaolicanexopncp->excluir($this->oLicitacaoAnexo);
+
     /*
     *$lExclusao = DBLargeObject::exclusao($this->iOid);
 

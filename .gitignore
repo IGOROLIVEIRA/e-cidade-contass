@@ -47,3 +47,4 @@ model/licitacao/PNCP/anexoslicitacao/*
 model/licitacao/PNCP/arquivos/*
 webservices/*.php
 !webservices/requisicao.webservice.php
+jobs/configuracoes/taskManager/fila/*.xml

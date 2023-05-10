@@ -36,36 +36,47 @@ class AgataAPI
     function AgataAPI()
     {
         # Define the Agata's Path
-        define('AGATA_PATH', substr(__FILE__, 0, -28));
+        define('AGATA_PATH', substr(__FILE__,0,-28));
         define('OS', strtoupper(substr(PHP_OS, 0, 3)));
 
-        if (OS == 'WIN') {
+        if (OS == 'WIN')
+        {
             define("bar", '\\');
             setlocale(LC_ALL, 'POSIX');
-            define("cut", ';');
-            if (is_dir('C:\\temp')) {
+            define ("cut", ';');
+            if (is_dir('C:\\temp'))
+            {
                 define("temp", 'C:\\temp');
-            } else if (is_dir('C:\\windows\\temp')) {
+            }
+            else if (is_dir('C:\\windows\\temp'))
+            {
                 define("temp", 'C:\\windows\\temp');
-            } else {
+            }
+            else
+            {
                 define("temp", 'c:\\winnt\\temp');
             }
-        } else {
+        }
+        else
+        {
             define("bar", '/');
             setlocale(LC_ALL, 'english');
-            define("cut", ':');
-            define("temp", '/tmp');
+            define ("cut", ':');
+            define("temp", 'tmp');
         }
 
         define('isGui', false);
         define('BREAKLN', "<br>");
 
-        if (!is_dir(AGATA_PATH)) {
+        if (!is_dir(AGATA_PATH))
+        {
             echo "<b>Error</b> : Wrong Path: " . AGATA_PATH;
-        } else {
+        }
+        else
+        {
             //chdir(AGATA_PATH);
-            ini_set('include_path', '.' . cut . '/usr/local/lib/php' . cut .
-                AGATA_PATH . cut . AGATA_PATH . '/classes');
+            ini_set('include_path', '.' . cut . '/usr/local/lib/php'. cut .
+                    AGATA_PATH . cut . AGATA_PATH . '/classes');
 
             include_once AGATA_PATH . "/include/util.inc";
             include_once AGATA_PATH . "/classes/core/AgataCompatibility.class";
@@ -93,7 +104,7 @@ class AgataAPI
      */
     function setOutputPath($output)
     {
-        $this->outputPath = $output;
+        $this->outputPath= $output;
     }
 
     /**
@@ -139,11 +150,14 @@ class AgataAPI
         if (isset($this->Report))
         {
             return $this->Report;
-        } else {
+        }
+        else
+        {
             # Reading the Report
             $this->reportPath = str_replace('"', '', $this->reportPath);
             $Report = Report::OpenReport($this->reportPath);
-            if (!$Report['Report']) {
+            if (!$Report['Report'])
+            {
                 $this->error = "Cannot read report file: {$this->reportPath}";
                 return false;
             }
@@ -166,12 +180,15 @@ class AgataAPI
     {
         # Reading the Report
         $Report = $this->getReport();
-        if (!$Report) {
+        if (!$Report)
+        {
             return;
         }
 
-        if ($params = @array_keys($Report['Report']['Parameters'])) {
-            foreach ($params as $name) {
+        if ($params = @array_keys($Report['Report']['Parameters']))
+        {
+            foreach ($params as $name)
+            {
                 $return[] = "\${$name}";
             }
             return $return;
@@ -204,7 +221,8 @@ class AgataAPI
      */
     function setLanguage($language)
     {
-        if (!in_array($language, array('en', 'pt', 'es', 'de', 'fr', 'it', 'se'))) {
+        if (!in_array($language, array('en', 'pt', 'es', 'de', 'fr', 'it', 'se')))
+        {
             $language = 'en';
         }
 
@@ -252,7 +270,8 @@ class AgataAPI
      */
     function fileDialog()
     {
-        switch ($this->format) {
+        switch ($this->format)
+        {
             case ('txt'):
                 $content_type = 'text/plain';
                 break;
@@ -276,8 +295,9 @@ class AgataAPI
                 break;
         }
 
-        $download = 'output.' . $this->format;
-        if ($this->format != 'html') {
+        $download = 'output.'.$this->format;
+        if ($this->format != 'html')
+        {
             header("Content-type: $content_type");
             header("Content-Disposition: attachment; filename=\"$download\"");
         }
@@ -289,13 +309,17 @@ class AgataAPI
      */
     function getProject($Report)
     {
-        if ($this->getDataSource()) {
+        if ($this->getDataSource())
+        {
             $Project = $this->getDataSource();
-        } else {
+        }
+        else
+        {
             $this->project = $this->project ? $this->project : $Report['Report']['DataSet']['DataSource']['Name'];
 
             # You can set the Database connection this way, too:
             $Project = Project::ReadProject($this->project);
+
         }
         return $Project;
     }
@@ -307,12 +331,14 @@ class AgataAPI
     {
         # Reading the Report
         $Report = $this->getReport();
-        if (!$Report) {
+        if (!$Report)
+        {
             return;
         }
 
         $Project = $this->getProject($Report);
-        if (!$Project) {
+        if (!$Project)
+        {
             $this->error = "Cannot read project file: {$this->project}";
             return;
         }
@@ -323,9 +349,10 @@ class AgataAPI
             $header = $Report['Report']['Header']['Body'];
             $footer = $Report['Report']['Footer']['Body'];
 
-            foreach ($this->parameters as $key => $value) {
-                $header = str_replace($key, $value, $header);
-                $footer = str_replace($key, $value, $footer);
+            foreach ( $this->parameters as $key => $value )
+            {
+                $header = str_replace($key,$value,$header);
+                $footer = str_replace($key,$value,$footer);
             }
             $Report['Report']['Header']['Body'] = $header;
             $Report['Report']['Footer']['Body'] = $footer;
@@ -336,10 +363,13 @@ class AgataAPI
         # Process the Query.
         $Query = AgataCore::CreateQuery($Project, $DataSet, $this->parameters);
 
-        if (is_agata_error($Query)) {
+        if (is_agata_error($Query))
+        {
             $this->error = $Query->GetError();
             return;
-        } else {
+        }
+        else
+        {
             $params[0] = $Project;
             $params[1] = null;
             $params[2] = $this->outputPath;
@@ -347,7 +377,8 @@ class AgataAPI
             $params[4] = $Report;
             $params[6] = $this->layout;
             $myreport = AgataCore::CreateReport($this->format, $params);
-            if ($this->format == 'screen') {
+            if ($this->format == 'screen')
+            {
                 $myreport->setCallBack($this->callback);
             }
             $myreport->Process();
@@ -365,14 +396,16 @@ class AgataAPI
     {
         $this->format = 'pdf';
 
-        # Reading the Report
+         # Reading the Report
         $Report = $this->getReport();
-        if (!$Report) {
+        if (!$Report)
+        {
             return;
         }
 
         $Project = $this->getProject($Report);
-        if (!$Project) {
+        if (!$Project)
+        {
             $this->error = "Cannot read project file: {$this->project}";
             return;
         }
@@ -381,10 +414,13 @@ class AgataAPI
 
         # Process the Query.
         $Query = AgataCore::CreateQuery($Project, $DataSet, $this->parameters);
-        if (is_agata_error($Query)) {
+        if (is_agata_error($Query))
+        {
             $this->error = $Query->GetError();
             return;
-        } else {
+        }
+        else
+        {
             $params[0] = $Project;
             $params[1] = null;
             $params[2] = $this->outputPath;
@@ -426,16 +462,19 @@ class AgataAPI
      */
     function parseOpenOffice($source = NULL, $format = 'sxw')
     {
+
         $this->format = $format;
 
         # Reading the Report
         $Report = $this->getReport();
-        if (!$Report) {
+        if (!$Report)
+        {
             return;
         }
 
         $Project = $this->getProject($Report);
-        if (!$Project) {
+        if (!$Project)
+        {
             $this->error = "Cannot read project file: {$this->project}";
             return;
         }
@@ -490,6 +529,7 @@ class AgataAPI
         else
         {
             $obj = AgataCore::ParseOpenOffice($params, 'Sxw');
+
         }
 
         if ($this->detailData)
@@ -497,8 +537,8 @@ class AgataAPI
             $obj->setDetailData($this->detailData);
             $obj->setDetailColumns($this->detailColumns);
         }
-
         $obj->Generate($source, $this->outputPath);
+
         $this->rownum = @$obj->CurrentQuery->rownum;
 
         $this->Query = $Query;
@@ -514,12 +554,14 @@ class AgataAPI
 
         # Reading the Report
         $Report = $this->getReport();
-        if (!$Report) {
+        if (!$Report)
+        {
             return;
         }
 
         $Project = $this->getProject($Report);
-        if (!$Project) {
+        if (!$Project)
+        {
             $this->error = "Cannot read project file: {$this->project}";
             return;
         }
@@ -528,10 +570,13 @@ class AgataAPI
 
         # Process the Query.
         $Query = AgataCore::CreateQuery($Project, $DataSet, $this->parameters);
-        if (is_agata_error($Query)) {
+        if (is_agata_error($Query))
+        {
             $this->error = $Query->GetError();
             return;
-        } else {
+        }
+        else
+        {
             $params[0] = $Project;
             $params[1] = null;
             $params[2] = $this->outputPath;
@@ -555,12 +600,14 @@ class AgataAPI
     {
         # Reading the Report
         $Report = $this->getReport();
-        if (!$Report) {
+        if (!$Report)
+        {
             return;
         }
 
         $Project = $this->getProject($Report);
-        if (!$Project) {
+        if (!$Project)
+        {
             $this->error = "Cannot read project file: {$this->project}";
             return;
         }
@@ -570,10 +617,13 @@ class AgataAPI
         # Process the Query.
         $Query = AgataCore::CreateQuery($Project, $DataSet, $this->parameters);
 
-        if (is_agata_error($Query)) {
+        if (is_agata_error($Query))
+        {
             $this->error = $Query->GetError();
             return;
-        } else {
+        }
+        else
+        {
             $params[0] = $Project;
             $params[1] = null;
             $params[2] = $this->outputPath;
@@ -583,8 +633,9 @@ class AgataAPI
             $PlottedColumns = explode(',', $Report['Report']['Graph']['PlottedColumns']);
             $vetor = MyExplode(trim($Report['Report']['DataSet']['Query']['Select']), _a('Column'), true);
             $i = 1;
-            foreach ($PlottedColumns as $plot) {
-                $result[] = $vetor[$plot + 1];
+            foreach ($PlottedColumns as $plot)
+            {
+                $result[] = $vetor[$plot+1];
                 $i++;
             }
             $params[7] = $result;
