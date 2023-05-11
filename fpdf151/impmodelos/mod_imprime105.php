@@ -599,7 +599,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
 
                 $this->objpdf->sety($old_y);
                 $this->objpdf->setx(194);
-                $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual."%a", 1, 0, "C", 1);
+                $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual."%", 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);

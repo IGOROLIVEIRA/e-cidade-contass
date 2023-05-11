@@ -292,9 +292,9 @@ if ($modelo == 1) {
       if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
         $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
         if (strlen($z01_cgccpf) == 11) {
-          $pdf->cell(224, $alt, $z01_nome . ' - CPF: ' . $z01_cgccpf, 1, 0, "L", 0);
+          $pdf->cell(200, $alt, $z01_nome . ' - CPF: ' . $z01_cgccpf, 1, 0, "L", 0);
         } else {
-          $pdf->cell(224, $alt, $z01_nome . ' - CNPJ: ' . $z01_cgccpf, 1, 0, "L", 0);
+          $pdf->cell(200, $alt, $z01_nome . ' - CNPJ: ' . $z01_cgccpf, 1, 0, "L", 0);
         }
         /*OC3770*/
         if ($pc23_perctaxadesctabela != 0) {
