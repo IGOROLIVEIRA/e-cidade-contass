@@ -523,7 +523,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
             } else {
                 $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
             }
-            //$oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
+            $oDadosDaLinha->descricao = str_replace("\n", "", $oDadosDaLinha->descricao);
             $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 4, ",", ".");
             $oDadosDaLinha->quantidade = $oResult->pc11_quant;
             $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;

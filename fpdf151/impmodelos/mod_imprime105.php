@@ -121,11 +121,13 @@ if (pg_num_rows($this->rsLotes) > 0) {
         $linhas = ceil(strlen($oResult->pc01_descrmater)/115);
                 $addalt = $linhas*3;
                 if (($this->objpdf->gety() > $this->objpdf->h - 20) || $this->objpdf->gety() + $addalt > $this->objpdf->h -20 ) {
-                    $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());
+                    $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());                    
+                    $this->objpdf->Setfont('Arial', '', 5);
+                    $this->objpdf->cell(285, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
+                    $this->objpdf->Setfont('Arial', 'I', 6);
+                    $this->objpdf->cell(265, $alt, "Processo de compras>Preço de Referência sic1_precoreferencia007.php Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
                     $this->objpdf->Setfont('Arial', '', 7);
-                    $this->objpdf->cell(265, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
-                    $this->objpdf->cell(265, $alt, "sic1_precoreferencia007.php | Emissor: " . db_getsession("DB_login") . " | Exerc: " . db_getsession("DB_anousu") . " | Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
-                    $this->objpdf->cell(20, $alt, "Pg ".$pagina, 0, 1, "R", 1);
+                    $this->objpdf->Cell(20, $alt, 'Pág ' . $this->objpdf->PageNo() . '/{nb}', 0, 1, 'R');
                     $this->objpdf->SetAutoPageBreak(false);
                     $this->objpdf->AliasNbPages();
                     $this->objpdf->AddPage('L');
@@ -258,10 +260,12 @@ if (pg_num_rows($this->rsLotes) > 0) {
             if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {  
                 if (($this->objpdf->gety() > $this->objpdf->h - 20)) {
                     $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());
+                    $this->objpdf->Setfont('Arial', '', 5);
+                    $this->objpdf->cell(285, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
+                    $this->objpdf->Setfont('Arial', 'I', 6);
+                    $this->objpdf->cell(265, $alt, "Processo de compras>Preço de Referência sic1_precoreferencia007.php Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
                     $this->objpdf->Setfont('Arial', '', 7);
-                    $this->objpdf->cell(265, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
-                    $this->objpdf->cell(265, $alt, "sic1_precoreferencia007.php | Emissor: " . db_getsession("DB_login") . " | Exerc: " . db_getsession("DB_anousu") . " | Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
-                    $this->objpdf->cell(20, $alt, "Pg ".$pagina, 0, 1, "R", 1);
+                    $this->objpdf->Cell(20, $alt, 'Pág ' . $this->objpdf->PageNo() . '/{nb}', 0, 1, 'R');
                     $this->objpdf->SetAutoPageBreak(false);
                     $this->objpdf->AliasNbPages();
                     $this->objpdf->AddPage('L');
@@ -338,13 +342,15 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 $descricao = '';
                 $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
                 $addalt = $linhas*3;
-                $old_y = $this->objpdf->gety();
+                
                 if (($this->objpdf->gety() > $this->objpdf->h - 20) ||$this->objpdf->gety() + $addalt > $this->objpdf->h  ) {
                     $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());
-                    $this->objpdf->Setfont('Arial', '', 7);
-                    $this->objpdf->cell(265, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
-                    $this->objpdf->cell(265, $alt, "sic1_precoreferencia007.php | Emissor: " . db_getsession("DB_login") . " | Exerc: " . db_getsession("DB_anousu") . " | Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
-                    $this->objpdf->cell(20, $alt, "Pg ".$pagina, 0, 1, "R", 1);
+                    $this->objpdf->Setfont('Arial', '', 5);
+                    $this->objpdf->cell(285, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
+                    $this->objpdf->Setfont('Arial', 'I', 6);
+                    $this->objpdf->cell(265, $alt, "Processo de compras>Preço de Referência sic1_precoreferencia007.php Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
+                    $this->objpdf->Setfont('Arial', '', 7);                    
+                    $this->objpdf->Cell(20, $alt, 'Pág ' . $this->objpdf->PageNo() . '/{nb}', 0, 1, 'R');
                     $this->objpdf->SetAutoPageBreak(false);
                     $this->objpdf->AliasNbPages();
                     $this->objpdf->AddPage('L');
@@ -399,6 +405,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $alt = 4;
                     
                 }
+                $old_y = $this->objpdf->gety();
                 $this->objpdf->setfont('arial', '', 7);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
@@ -415,10 +422,12 @@ if (pg_num_rows($this->rsLotes) > 0) {
         $cabecalho[$oLotes->pc68_sequencial] = $oLotes->pc68_sequencial;
         if (($this->objpdf->gety() > $this->objpdf->h - 20)) {
             $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());
-            $this->objpdf->Setfont('Arial', '', 7);
-            $this->objpdf->cell(265, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
-            $this->objpdf->cell(265, $alt, "sic1_precoreferencia007.php | Emissor: " . db_getsession("DB_login") . " | Exerc: " . db_getsession("DB_anousu") . " | Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
-            $this->objpdf->cell(20, $alt, "Pg ".$pagina, 0, 1, "R", 1);
+            $this->objpdf->Setfont('Arial', '', 5);
+            $this->objpdf->cell(285, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
+            $this->objpdf->Setfont('Arial', 'I', 6);
+            $this->objpdf->cell(265, $alt, "Processo de compras>Preço de Referência sic1_precoreferencia007.php Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
+            $this->objpdf->Setfont('Arial', '', 7);            
+            $this->objpdf->Cell(20, $alt, 'Pág ' . $this->objpdf->PageNo() . '/{nb}', 0, 1, 'R');
             $this->objpdf->SetAutoPageBreak(false);
             $this->objpdf->AliasNbPages();
             $this->objpdf->AddPage('L');
@@ -599,10 +608,12 @@ if (pg_num_rows($this->rsLotes) > 0) {
             } else {
                 if (($this->objpdf->gety() > $this->objpdf->h - 20)) {
                     $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());
-                    $this->objpdf->Setfont('Arial', '', 7);
-                    $this->objpdf->cell(265, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
-                    $this->objpdf->cell(265, $alt, "sic1_precoreferencia007.php | Emissor: " . db_getsession("DB_login") . " | Exerc: " . db_getsession("DB_anousu") . " | Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
-                    $this->objpdf->cell(20, $alt, "Pg ".$pagina, 0, 1, "R", 1);
+                    $this->objpdf->Setfont('Arial', '', 5);
+                    $this->objpdf->cell(285, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
+                    $this->objpdf->Setfont('Arial', 'I', 6);
+                    $this->objpdf->cell(265, $alt, "Processo de compras>Preço de Referência sic1_precoreferencia007.php Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
+                    $this->objpdf->Setfont('Arial', '', 7);                    
+                    $this->objpdf->Cell(20, $alt, 'Pág ' . $this->objpdf->PageNo() . '/{nb}', 0, 1, 'R');
                     $this->objpdf->SetAutoPageBreak(false);
                     $this->objpdf->AliasNbPages();
                     $this->objpdf->AddPage('L');
@@ -665,7 +676,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                                         $this->objpdf->setfont('arial', '', 7);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
-                $this->objpdf->multicell(180, $alt, $oDadosDaLinha->descricao, "T", "L", 0);
+                $this->objpdf->multicell(180, $alt, str_replace("\n","",$oDadosDaLinha->descricao), "T", "L", 0);
 
                 $this->objpdf->sety($old_y);
                 $this->objpdf->setx(214);
@@ -680,10 +691,12 @@ if (pg_num_rows($this->rsLotes) > 0) {
     }
     if (($this->objpdf->gety() > $this->objpdf->h - 20)) {
         $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());
-        $this->objpdf->Setfont('Arial', '', 7);
-        $this->objpdf->cell(265, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
-        $this->objpdf->cell(265, $alt, "sic1_precoreferencia007.php | Emissor: " . db_getsession("DB_login") . " | Exerc: " . db_getsession("DB_anousu") . " | Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
-        $this->objpdf->cell(20, $alt, "Pg ".$pagina, 0, 1, "R", 1);
+        $this->objpdf->Setfont('Arial', '', 5);
+        $this->objpdf->cell(285, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
+        $this->objpdf->Setfont('Arial', 'I', 6);
+        $this->objpdf->cell(265, $alt, "Processo de compras>Preço de Referência sic1_precoreferencia007.php Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
+        $this->objpdf->Setfont('Arial', '', 7);        
+        $this->objpdf->Cell(20, $alt, 'Pág ' . $this->objpdf->PageNo() . '/{nb}', 0, 1, 'R');
         $this->objpdf->SetAutoPageBreak(false);
         $this->objpdf->AliasNbPages();
         $this->objpdf->AddPage('L');
@@ -776,7 +789,8 @@ if (count($dadosAssinatura) > 1) {
 
 
 $this->objpdf->sety(200);
-$this->objpdf->Setfont('Arial', '', 7);
+$this->objpdf->Setfont('Arial', '', 5);
 $this->objpdf->cell(285, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
-$this->objpdf->cell(265, $alt, "sic1_precoreferencia007.php | Emissor: " . db_getsession("DB_login") . " | Exerc: " . db_getsession("DB_anousu") . " | Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
-$this->objpdf->cell(20, $alt, "Pg ".$pagina, 0, 1, "R", 1);
+$this->objpdf->Setfont('Arial', 'I', 6);
+$this->objpdf->cell(265, $alt, "Processo de compras>Preço de Referência sic1_precoreferencia007.php Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
+$this->objpdf->Cell(20, $alt, 'Pág ' . $this->objpdf->PageNo() . '/{nb}', 0, 1, 'R');
