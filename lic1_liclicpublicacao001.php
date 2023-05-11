@@ -297,10 +297,9 @@ $codigoModalidade = (db_utils::fieldsMemory($resource, 0))->codigomodalidade;
                     <fieldset style="width: 550;">
                         <legend><strong>Enviar Publicações para Plataforma: </strong></legend>
                         <table>
-
                             <tr id="PortalCompras">
-                                <td nowrap title="">
-                                    Enviar para Portal de Compras
+                                <td nowrap title="enviarPortalCompras">
+                                    Portal de Compras:
                                 </td>
                                 <td>
                                     <input name="enviarPortalCompras" type="button" id="enviarPortalCompras" value="Enviar" onclick="js_EnviarPortalDeCompras();">

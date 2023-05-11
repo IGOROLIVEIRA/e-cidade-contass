@@ -27,13 +27,12 @@ class EnviadorLicitacao implements EnviadorInterface
             ];
 
         } catch(GuzzleHttp\Exception\ClientException $e) {
-            $message = $e->getMessage();
-            $messageRaw = substr($message,strpos($message, '{'));
-            $resultado = json_decode($messageRaw);
+
+            $resultado = json_decode($e->getResponse()->getBody()->getContents());
 
             return [
-                'sucess' => 1,
-                'message' => "Erro: ".$resultado->message,
+                'success' => 2,
+                'message' => "Erro: ". $resultado->message ,
             ];
         }
     }
