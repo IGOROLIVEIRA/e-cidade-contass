@@ -38,6 +38,9 @@ $clrotulo->label("e60_numemp");
 $clrotulo->label("e60_codemp");
 $clrotulo->label("pc01_descrmater");
 $clrotulo->label("e62_descr");
+//ini_set('display_errors',1);
+//ini_set('display_startup_erros',1);
+//error_reporting(E_ALL);
 ?>
 <form name="form1" method="post">
 
@@ -463,12 +466,21 @@ function js_retornoAnularOrdem(oAjax){
     if (oJson.status == 1) {
 
          alert('Itens anulados com sucesso.');
+         js_reimprime_ordem();
          js_reset();
          js_pesquisa_matordem();
-
     }else{
       alert(js_urldecode(oJson.mensagem))
     }
+}
+
+function js_reimprime_ordem() {
+    const codigoOrdem = document.querySelector('#m51_codordem');
+
+     if(confirm('Deseja imprimir a ordem de compra?')){
+          jan = window.open('emp2_ordemcompra002.php?cods=' + codigoOrdem.value ,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+          jan.moveTo(0,0);
+	 }
 }
 js_pesquisa_matordem();
 function js_reset() {
@@ -477,4 +489,5 @@ function js_reset() {
   $('dados').innerHTML = '';
 
 }
+
 </script>
