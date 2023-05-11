@@ -240,7 +240,8 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
         0,
         false
     );
-    if ($valorItemAnulado == $valorItem && $valorItemAnulado > 0) {
+    //if ($valorItemAnulado == $valorItem && $valorItemAnulado > 0) {
+    if ($valorItemAnulado > 0) {
         $this->objpdf->Setfont('Arial', 'B', 8);
         $this->objpdf->text($this->objpdf->getx() + 61, $this->objpdf->gety() - 3, "(ANULADO)");
         $this->objpdf->Setfont('Arial', '', 8);
