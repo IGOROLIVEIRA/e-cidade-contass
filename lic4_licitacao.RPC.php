@@ -1063,7 +1063,7 @@ switch ($oParam->exec) {
                                     if ($oDaoSolicitemReservado->numrows_incluir) {
                                         //compila\E7\E3o
                                         $oItemAlterado = db_utils::getDao('solicitem');
-                                        $oItemAlterado->pc11_quant = $nova_qtd;
+                                        $oItemAlterado->pc11_quant = $nova_qtd > 0 ? $nova_qtd : '0';
                                         $oItemAlterado->pc11_codigo = $oItem->pc11_codigo;
                                         $oItemAlterado->alterar($oItem->pc11_codigo);
 
