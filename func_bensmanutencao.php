@@ -32,7 +32,7 @@ charset=iso-8859-1">
               </td>
               <td width="96%" align="left" nowrap>
                 <?
-                db_input("chave_e139_sequencial", 10, 1, true, "text", 4, "", "chave_e139_sequencial");
+                db_input("chave_t98_sequencial", 20, 1, true, "text", 4, "", "chave_t98_sequencial");
                 ?>
               </td>
             </tr>
@@ -42,7 +42,7 @@ charset=iso-8859-1">
               </td>
               <td width="96%" align="left" nowrap>
                 <?
-                db_input("pc01_descrmater", 60, 3, true, "text", 4, "", "pc01_descrmater");
+                db_input("chave_t98_descricao", 40, 3, true, "text", 4, "", "chave_t98_descricao");
                 ?>
               </td>
             </tr>
@@ -68,23 +68,24 @@ charset=iso-8859-1">
           $where = "";
 
 
-          if (isset($chave_e139_sequencial) && trim($chave_e139_sequencial)) {
-            $where .= " and e139_sequencial = '$chave_e139_sequencial'";
+          if (isset($chave_t98_sequencial) && trim($chave_t98_sequencial)) {
+            $where .= " and t98_sequencial = '$chave_t98_sequencial'";
           }
 
-          if (isset($chave_pc01_descrmater) && trim($chave_pc01_descrmater)) {
-            $where .= " and pc01_descrmater like '$chave_pc01_descrmater%'";
+          if (isset($chave_t98_descricao) && trim($chave_t98_descricao)) {
+            $where .= " and t98_descricao like '$chave_t98_descricao%'";
           }
 
+          if ($exclusao == true) {
+            $where .= " and t98_manutencaoprocessada = 'f'";
+          }
 
-          $sql = "select e139_sequencial,pc01_descrmater  from bensdispensatombamento
-          inner join matestoqueitem on m71_codlanc = e139_matestoqueitem
-          inner join matestoque on m70_codigo = m71_codmatestoque
-          inner join matmater on m70_codmatmater = m60_codmater
-          inner join transmater on m63_codmatmater = m60_codmater
-          inner join pcmater on pc01_codmater = m63_codpcmater where 1=1 $where order by e139_sequencial";
-
-
+          $sql = "select t98_sequencial, t98_bem, t98_data, t98_vlrmanut, t98_descricao,t98_tipo,t52_ident,t52_descr,t52_valaqu,t44_valoratual,t52_depart,descrdepto,t98_manutencaoprocessada
+          from bemmanutencao
+          inner join bens on t52_bem = t98_bem
+          inner join bensdepreciacao on t44_bens = t98_bem
+          inner join db_depart on coddepto = t52_depart
+          where t98_sequencial in (select max(t98_sequencial) from bemmanutencao where t98_bem=t52_bem) $where order by t98_sequencial";
           db_lovrot($sql, 15, "()", "", $funcao_js);
         }
         ?>
@@ -95,18 +96,6 @@ charset=iso-8859-1">
 
 </html>
 <script>
-  document.getElementsByClassName('DBLovrotTdCabecalho').item(10).style.display = 'none';
-  document.getElementsByClassName('DBLovrotTdCabecalho').item(11).style.display = 'none'
-
-  for (i = 0; i < 15; i++) {
-    document.getElementById('I' + i + '10').style.display = 'none';
-    document.getElementById('I' + i + '11').style.display = 'none';
-  }
-
-  function js_troca(obj) {
-    js_mascara02_t64_class();
-  }
-
   function js_limpar() {
     document.form2.t64_class.value = "";
     document.form2.chave_t52_bem.value = "";
@@ -114,11 +103,3 @@ charset=iso-8859-1">
     document.form2.descrdepto.value = "";
   }
 </script>
-<?
-if (!isset($pesquisa_chave)) {
-?>
-  <script>
-  </script>
-<?
-}
-?>

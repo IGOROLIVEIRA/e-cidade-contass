@@ -10,23 +10,25 @@ include("classes/db_bemmanutencao_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
 
-$db_opcao = 1;
-$db_botao = true;
 $clbemmanutencao = new cl_bemmanutencao;
 
 if (isset($processar)) {
+    $pesquisa_manutencoes = null;
     $clbemmanutencao->t98_bem = $t52_bem;
     $clbemmanutencao->t98_vlrmanut = $t98_vlrmanut;
     $clbemmanutencao->t98_tipo = $t98_tipo;
     $clbemmanutencao->t98_data = implode('-', array_reverse(explode('/', $t98_data)));
-    $clbemmanutencao->processar();
+    $clbemmanutencao->processar($t98_sequencial);
+}
+
+if (isset($desprocessar)) {
+    $pesquisa_manutencoes = null;
+    $clbemmanutencao->t98_bem = $t52_bem;
+    $clbemmanutencao->desprocessar($t98_sequencial);
 }
 
 
 if (isset($incluir)) {
-
-    db_inicio_transacao();
-
     $clbemmanutencao->t98_bem = $t52_bem;
     $clbemmanutencao->t98_data = implode('-', array_reverse(explode('/', $t98_data)));
     $clbemmanutencao->t98_descricao = $t98_descricao;
@@ -35,41 +37,22 @@ if (isset($incluir)) {
     $clbemmanutencao->t98_dataservidor = date("Y-m-d", db_getsession("DB_datausu"));
     $clbemmanutencao->t98_horaservidor = date("H:i:s");
     $clbemmanutencao->t98_tipo = $t98_tipo;
-
     $clbemmanutencao->incluir();
-
-    if ($clbemmanutencao->erro_status == "0") {
-        db_fim_transacao(true);
-    } else {
+    if ($clbemmanutencao->erro_status == "1") {
+        $ocultapesquisa = false;
         $db_opcao = 2;
-        db_fim_transacao(false);
     }
 }
 
 if (isset($salvar)) {
     $db_opcao = 2;
-    db_inicio_transacao();
-
+    $pesquisa_manutencoes = null;
     $clbemmanutencao->alterar($t98_sequencial);
-
-    if ($clbemmanutencao->erro_status == "0") {
-        db_fim_transacao(true);
-    } else {
-        db_fim_transacao(false);
-    }
 }
 
 if (isset($excluir)) {
-    $db_opcao = 1;
-    db_inicio_transacao();
-
     $clbemmanutencao->excluir($t98_sequencial);
-
-    if ($clbemmanutencao->erro_status == "0") {
-        db_fim_transacao(true);
-    } else {
-        db_fim_transacao(false);
-    }
+    if ($clbemmanutencao->erro_status == "1")  $db_opcao = 1;
 }
 
 ?>
@@ -79,10 +62,8 @@ if (isset($excluir)) {
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 
     <?php
-
     db_app::load("scripts.js, strings.js, prototype.js,datagrid.widget.js, widgets/dbautocomplete.widget.js");
     db_app::load("widgets/windowAux.widget.js");
-
     ?>
 
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -112,7 +93,6 @@ if (isset($excluir)) {
 if (isset($incluir)) {
     if ($clbemmanutencao->erro_status == "0") {
         $clbemmanutencao->erro(true, false);
-        $db_botao = true;
         echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
         if ($clbemmanutencao->erro_campo != "") {
             echo "<script> document.form1." . $clbemmanutencao->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
@@ -120,17 +100,16 @@ if (isset($incluir)) {
         }
     } else {
         db_msgbox($clbemmanutencao->erro_msg);
-        $_SESSION["t99_codbemmanutencao"] = $clbemmanutencao->t98_sequencial;
         echo
         "<script> document.form1.t98_sequencial.value = $clbemmanutencao->t98_sequencial;
-        document.getElementById('inserircomponente').disabled = false;
+        parent.document.formaba.componentes.disabled = false;
+        top.corpo.iframe_componentes.location.href = 'pat1_lancmanutencao005.php?t98_sequencial=' + $clbemmanutencao->t98_sequencial;
          </script>";
     }
 }
-if (isset($alterar) || isset($excluir) || isset($processar)) {
+if (isset($salvar) || isset($excluir) || isset($processar) || isset($desprocessar)) {
     if ($clbemmanutencao->erro_status == "0") {
         $clbemmanutencao->erro(true, false);
-        $db_botao = true;
         echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
         if ($clbemmanutencao->erro_campo != "") {
             echo "<script> document.form1." . $clbemmanutencao->erro_campo . ".style.backgroundColor='#99A9AE';</script>";

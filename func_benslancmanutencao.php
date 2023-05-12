@@ -204,15 +204,10 @@ charset=iso-8859-1">
         order by
           t52_descr";
 
-
           db_lovrot($sql, 15, "()", "", $funcao_js);
         } else {
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
 
-
-            $sql = "select * from bens join bensdepreciacao on t52_bem = t44_bens
-            inner join db_depart on coddepto = t52_instit where t52_bem =
-            $pesquisa_chave and t52_instit = " . db_getsession("DB_instit");
 
             $sql = "select
             distinct bens.t52_bem,
@@ -250,11 +245,13 @@ charset=iso-8859-1">
             bensmedida.t67_sequencial = bens.t52_bensmedida
           inner join bensdepreciacao on
             t52_bem = t44_bens
-          inner join bensbaix on
-            t55_codbem = t52_bem
-          where
-          t52_bem =
-          $pesquisa_chave and t52_instit = " . db_getsession("DB_instit");
+          left join bensbaix on
+            t52_bem = t55_codbem 
+          where t55_codbem is null and
+            t52_instit =  1 and t52_bem =
+            $pesquisa_chave
+          order by
+            t52_descr";
 
             $rsBem = db_query($sql);
 

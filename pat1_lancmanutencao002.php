@@ -32,7 +32,6 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("dbforms/db_classesgenericas.php");
 $clcriaabas     = new cl_criaabas;
-$db_opcao = 1;
 
 ?>
 <html>
@@ -61,7 +60,7 @@ $db_opcao = 1;
         $clcriaabas->identifica = array("manutencao" => "Manutenção", "componentes" => "Componentes");
         $clcriaabas->sizecampo  = array("manutencao" => "20", "componentes" => "20");
         $clcriaabas->title      = array("manutencao" => "Manutenção", "componentes" => "Componentes");
-        $clcriaabas->src        = array("manutencao" => "pat1_lancmanutencao004.php?db_opcao=1&ocultapesquisa=true", "componentes" => "pat1_lancmanutencao005.php");
+        $clcriaabas->src        = array("manutencao" => "pat1_lancmanutencao004.php?db_opcao=2&pesquisa_manutencoes=true&ocultaexcluir=true", "componentes" => "pat1_lancmanutencao005.php");
         $clcriaabas->disabled   = array("componentes" => "true");
         $clcriaabas->cria_abas();
         ?>

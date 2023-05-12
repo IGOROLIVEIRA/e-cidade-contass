@@ -9,7 +9,6 @@
         <td>
           <?
           $aItemSistema  = array('Selecione', 'Sim', 'Não');
-
           db_select('t99_itemsistema', $aItemSistema, true, 1, "style='width: 80px;' onchange='js_selectitemsistema(false)'"); ?>
         </td>
       </tr>
@@ -26,13 +25,10 @@
         </td>
       </tr>
 
-
       <?
       db_input('t99_codbensdispensatombamento', 110, 5, true, 'hidden', 1);
       db_input('t99_sequencial', 110, 5, true, 'hidden', 1);
-
       ?>
-
 
       <tr>
         <td>
@@ -92,23 +88,13 @@
 
     var aLinha = new Array();
     for (var i = 0; i < oRetorno.aItens.length; i++) {
-
       aLinha[0] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='sequencial[]' value='" + oRetorno.aItens[i].t99_sequencial + "'>"
-
       aLinha[1] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='codbensdispensatombamento[]' value='" + oRetorno.aItens[i].t99_codbensdispensatombamento + "'>"
-
       aLinha[2] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='itemdosistema[]' value='" + oRetorno.aItens[i].t99_itemsistema.urlDecode() + "'>"
-
       aLinha[3] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='codmaterial[]' value='" + oRetorno.aItens[i].t99_codpcmater + "'>"
-
-
       aLinha[4] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='descricao[]' value='" + oRetorno.aItens[i].t99_descricao.urlDecode() + "'>"
-
       aLinha[5] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='valor[]' value='" + oRetorno.aItens[i].t99_valor + "'>";
-
       aLinha[6] = "<input  type='button' value='A'  onclick='js_alterar(" + i + ")'> <input type='button' name='excluir' value='E' onclick='js_excluir(" + i + ")'>";
-
-
       oGridItens.addRow(aLinha);
 
     }
@@ -116,8 +102,6 @@
     document.getElementById('t99_itemsistema').value = 0;
     document.getElementById('t99_descricao').value = "";
     document.getElementById('t99_valor').value = "";
-
-
 
     oGridItens.renderRows();
 
@@ -166,7 +150,6 @@
     document.getElementById('t99_descricao').disabled = true;
     document.getElementById('t99_valor').disabled = true;
     document.getElementById('t99_itemsistema').disabled = true;
-
     document.getElementById('t99_sequencial').value = document.getElementsByName("sequencial[]")[indice].value;
     document.getElementById('db_opcao').value = 'Salvar';
     document.getElementById('db_opcao').name = 'excluir';

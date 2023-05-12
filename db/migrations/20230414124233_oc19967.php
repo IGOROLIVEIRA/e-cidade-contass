@@ -18,6 +18,15 @@ class Oc19967 extends AbstractMigration
         
         INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao ='Lançamento de Manutenção'),(select max(id_item) from db_itensmenu),1,439);
 
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteração','Alteração','pat1_lancmanutencao002.php',1,1,'Alteração','t');
+
+INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao ='Lançamento de Manutenção'),(select max(id_item) from db_itensmenu),2,439);
+
+        INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Exclusão','Exclusão','pat1_lancmanutencao003.php',1,1,'Exclusão','t');
+
+        INSERT INTO db_menu VALUES((select id_item from db_itensmenu where descricao ='Lançamento de Manutenção'),(select max(id_item) from db_itensmenu),3,439);
+
+
         -- INSERE tabela no dicionario de dados
 INSERT INTO db_sysarquivo VALUES((select max(codarq)+1 from db_sysarquivo),'bemmanutencao','Cadastro de Manutenção de Bens','t98','2023-04-18','Cadastro de Manutenção de Bens',0,'f','f','f','f');
 
@@ -31,6 +40,7 @@ INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 't98_id
 INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 't98_dataservidor','date' ,'Data da Manutenção','', 'Data da Manutenção',8,false, false, false, 1, 'date', 'Data da Manutenção');
 INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 't98_horaservidor','time' ,'Horario da Manutenção','', 'Horario da Manutenção',8,false, false, false, 1, 'time', 'Horario da Manutenção');
 INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 't98_tipo','int4' ,'Tipo da Manutenção','', 'Tipo da Manutenção',5,false, false, false, 1, 'int4', 'Tipo da Manutenção');
+INSERT INTO db_syscampo VALUES ((select max(codcam)+1 from db_syscampo), 't98_manutencaoprocessada','bool' ,'Manutenção Processada','f', 'Manutenção Processada',1,false, false, false, 1, 'bool', 'Manutenção Processada');
 
 
 
@@ -44,6 +54,8 @@ INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select
 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 't98_dataservidor'), 7, 0);
 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 't98_horaservidor'), 8, 0);
 INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 't98_tipo'), 9, 0);
+INSERT INTO db_sysarqcamp (codarq, codcam, seqarq, codsequencia) VALUES ((select max(codarq) from db_sysarquivo), (select codcam from db_syscampo where nomecam = 't98_manutencaoprocessada'), 10, 0);
+
 
 CREATE TABLE bemmanutencao (
 	t98_sequencial int8 not null
@@ -54,7 +66,8 @@ CREATE TABLE bemmanutencao (
     ,t98_idusuario int not null
     ,t98_dataservidor date not null
     ,t98_horaservidor time not null
-    ,t98_tipo int4 not null);
+    ,t98_tipo int4 not null
+    ,t98_manutencaoprocessada bool not null default false);
         
        
 CREATE SEQUENCE bemmanutencao_t98_sequencial_seq

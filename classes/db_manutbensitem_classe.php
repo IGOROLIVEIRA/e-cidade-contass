@@ -86,19 +86,19 @@ class cl_manutbensitem
         return false;
       }
       $this->t99_sequencial = pg_result($result, 0, 0);
-    } else {
-      $result = db_query("select last_value from bemmanutencao_t98_sequencial_seq");
-      if (($result != false) && (pg_result($result, 0, 0) < $this->t99_sequencial)) {
-        $this->erro_sql = " Campo t99_sequencial maior que último número da sequencia.";
-        $this->erro_banco = "Sequencia menor que este número.";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      } else {
-        $this->t99_sequencial = $this->t99_sequencial;
-      }
     }
+
+    $result = db_query("select last_value from bemmanutencao_t98_sequencial_seq");
+    if (($result != false) && (pg_result($result, 0, 0) < $this->t99_sequencial)) {
+      $this->erro_sql = " Campo t99_sequencial maior que último número da sequencia.";
+      $this->erro_banco = "Sequencia menor que este número.";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    $this->t99_sequencial = $this->t99_sequencial;
 
     if ($this->t99_itemsistema == "0") {
       $this->erro_sql = " Campo Item do Sistema não informado.";
@@ -175,6 +175,8 @@ class cl_manutbensitem
                                $this->t99_codbensdispensatombamento, 
                                $this->t99_codbemmanutencao
                       )";
+
+    db_inicio_transacao();
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -183,13 +185,19 @@ class cl_manutbensitem
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_banco = "Componente do bem já Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      } else {
-        $this->erro_sql   = "Componente do bem () nao Incluído. Inclusao Abortada.";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        $this->numrows_incluir = 0;
+
+        db_fim_transacao(true);
+        return false;
       }
+      $this->erro_sql   = "Componente do bem () nao Incluído. Inclusao Abortada.";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
+
+      db_fim_transacao(true);
       return false;
     }
 
@@ -199,14 +207,10 @@ class cl_manutbensitem
     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
-    $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-    if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount)
-      && ($lSessaoDesativarAccount === false))) {
-    }
+
+    db_fim_transacao(false);
     return true;
   }
-
-
 
   // funcao para alteracao
   function alterar($sequencial = null)
@@ -311,9 +315,9 @@ class cl_manutbensitem
       }
     }
 
-
     $sql .= " where ";
     $sql .= "t99_sequencial = $sequencial";
+    db_inicio_transacao();
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -322,27 +326,29 @@ class cl_manutbensitem
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
+      db_fim_transacao(true);
       return false;
-    } else {
-      if (pg_affected_rows($result) == 0) {
-        $this->erro_banco = "";
-        $this->erro_sql = "Componente do bem nao foi Alterado. Alteracao Executada.\\n";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        $this->numrows_alterar = 0;
-        return true;
-      } else {
-
-        $this->erro_banco = "";
-        $this->erro_sql = "Alteração efetuada com Sucesso\\n";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "1";
-        $this->numrows_alterar = pg_affected_rows($result);
-        return true;
-      }
     }
+
+    if (pg_affected_rows($result) == 0) {
+      $this->erro_banco = "";
+      $this->erro_sql = "Componente do bem nao foi Alterado. Alteracao Executada.\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      $this->numrows_alterar = 0;
+      db_fim_transacao(true);
+      return true;
+    }
+
+    $this->erro_banco = "";
+    $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+    $this->erro_status = "1";
+    $this->numrows_alterar = pg_affected_rows($result);
+    db_fim_transacao(false);
+    return true;
   }
 
   function excluir($sequencial = null, $dbwhere = null)
@@ -357,6 +363,8 @@ class cl_manutbensitem
     } else {
       $sql2 = $dbwhere;
     }
+
+    db_inicio_transacao();
     $result = db_query($sql . $sql2);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -365,26 +373,67 @@ class cl_manutbensitem
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
+      db_fim_transacao(true);
       return false;
-    } else {
-      if (pg_affected_rows($result) == 0) {
-        $this->erro_banco = "";
-        $this->erro_sql = "Componente do Bem nao Encontrado. Exclusão não Efetuada.\\n";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "1";
-        $this->numrows_excluir = 0;
-        return true;
-      } else {
-        $this->erro_banco = "";
-        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "1";
-        $this->numrows_excluir = pg_affected_rows($result);
-        return true;
-      }
     }
+    if (pg_affected_rows($result) == 0) {
+      $this->erro_banco = "";
+      $this->erro_sql = "Componente do Bem nao Encontrado. Exclusão não Efetuada.\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      $this->numrows_excluir = 0;
+      db_fim_transacao(true);
+      return false;
+    }
+    $this->erro_banco = "";
+    $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+    $this->erro_status = "1";
+    $this->numrows_excluir = pg_affected_rows($result);
+    db_fim_transacao(false);
+    return true;
+  }
+
+  function excluircomponentes($t99_codbemmanutencao)
+  {
+
+
+    $sql = " delete from manutbensitem
+                    where t99_codbemmanutencao = $t99_codbemmanutencao";
+
+
+    db_inicio_transacao();
+    $result = db_query($sql);
+    if ($result == false) {
+      $this->erro_banco = str_replace("\n", "", @pg_last_error());
+      $this->erro_sql   =  "$sql Componentes do Bem nao Excluído. Exclusão Abortada.\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      $this->numrows_excluir = 0;
+      db_fim_transacao(true);
+      return false;
+    }
+    if (pg_affected_rows($result) == 0) {
+      $this->erro_banco = "";
+      $this->erro_sql = "Componentes do Bem nao Encontrado. Exclusão não Efetuada.\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      $this->numrows_excluir = 0;
+      db_fim_transacao(true);
+      return false;
+    }
+    $this->erro_banco = "";
+    $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+    $this->erro_status = "1";
+    $this->numrows_excluir = pg_affected_rows($result);
+    db_fim_transacao(false);
+    return true;
   }
 
   function sql_query($oid = null, $campos = "*", $ordem = null, $dbwhere = "")
@@ -422,121 +471,3 @@ class cl_manutbensitem
     return $sql;
   }
 }
-
-  /*
-
-  // funcao para exclusao 
-  function excluir($sequencial = null, $dbwhere = null)
-  {
-
-    $protprocessodocumento = db_query("select * from protprocessodocumento where p01_nivelacesso = $sequencial");
-
-    if (pg_num_rows($protprocessodocumento) == 0) {
-      $result = db_query("delete from perfispermanexo where p203_permanexo = $sequencial");
-    } else {
-      $this->erro_msg = "Uusário: permissões de anexo que estejam vinculadas a documentos não podem ser excluidas";
-      $this->erro_status = "0";
-      $this->numrows_excluir = 0;
-      return false;
-    }
-
-
-    $sql = " delete from permanexo
-                    where ";
-    $sql2 = "";
-    if ($dbwhere == null || $dbwhere == "") {
-      $sql2 = "p202_sequencial = $sequencial";
-    } else {
-      $sql2 = $dbwhere;
-    }
-    $result = db_query($sql . $sql2);
-    if ($result == false) {
-      $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   =  "Permissão de anexo nao Excluído. Exclusão Abortada.\\n";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      $this->numrows_excluir = 0;
-      return false;
-    } else {
-      if (pg_affected_rows($result) == 0) {
-        $this->erro_banco = "";
-        $this->erro_sql = "Permissão de anexo nao Encontrado. Exclusão não Efetuada.\\n";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "1";
-        $this->numrows_excluir = 0;
-        return true;
-      } else {
-        $this->erro_banco = "";
-        $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "1";
-        $this->numrows_excluir = pg_affected_rows($result);
-        return true;
-      }
-    }
-  }
-
-  // funcao do recordset 
-  function sql_record($sql)
-  {
-    $result = db_query($sql);
-    if ($result == false) {
-      $this->numrows    = 0;
-      $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Erro ao selecionar os registros.";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    $this->numrows = pg_numrows($result);
-    if ($this->numrows == 0) {
-      $this->erro_banco = "";
-      $this->erro_sql   = "Record Vazio na Tabela:permanexo";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    return $result;
-  }
-
-  // funcao do sql 
- 
-
-  // funcao do sql 
-  function sql_query_file($oid = null, $campos = "*", $ordem = null, $dbwhere = "")
-  {
-    $sql = "select ";
-    if ($campos != "*") {
-      $campos_sql = explode("#", $campos);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
-    } else {
-      $sql .= $campos;
-    }
-    $sql .= " from permanexo ";
-    $sql2 = "";
-    if ($dbwhere == "") {
-    } else if ($dbwhere != "") {
-      $sql2 = " where $dbwhere";
-    }
-    $sql .= $sql2;
-    if ($ordem != null) {
-      $sql .= " order by ";
-      $campos_sql = explode("#", $ordem);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
-    }
-    return $sql;
-  }
-}  */
