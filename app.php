@@ -1,7 +1,5 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
+
 use \ECidade\V3\Extension\Registry;
 use \ECidade\V3\Extension\Front;
 use \ECidade\V3\Extension\Dispatcher;
