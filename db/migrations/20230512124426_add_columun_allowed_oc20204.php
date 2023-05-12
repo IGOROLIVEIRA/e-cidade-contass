@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class AddKeyApipcpColumnLicitaparam extends AbstractMigration
+class AddColumunAllowedOc20204 extends AbstractMigration
 {
     /**
      * Change Method.
@@ -28,10 +28,12 @@ class AddKeyApipcpColumnLicitaparam extends AbstractMigration
     public function up()
     {
         $sql = "
-            begin;
-            alter table licitaparam add l12_key_apipcp varchar(48);
-            commit;
+            BEGIN;
+            ALTER TABLE licitaparam
+                ADD COLUMN l12_acessoapipcp BOOLEAN DEFAULT FALSE;
+            COMMIT;
         ";
+        
 
         $this->execute($sql);
     }

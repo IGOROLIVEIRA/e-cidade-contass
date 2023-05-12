@@ -119,7 +119,7 @@ class cl_liclicitaportalcompras
     public function buscaChaveDeAcesso($instituicao)
     {
         $sql = "
-        select l12_key_apipcp as chaveacesso
+        select l12_keyapipcp as chaveacesso
         from licitaparam
         where
         l12_instit = '$instituicao';
