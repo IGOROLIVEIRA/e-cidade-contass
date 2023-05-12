@@ -12,33 +12,36 @@ $pagina = 1;
 $xlin = 20;
 $xcol = 4;
 $this->objpdf->sety(150);
-$this->objpdf->setfillcolor(235);
-$this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2);
-
-
-$this->objpdf->setfillcolor(255, 255, 255);
+$this->objpdf->SetFillColor(235,235,235);
+$this->objpdf->Rect(200, $xlin - 16, $xcol + 85, 23, 'DF');
+$this->objpdf->setfillcolor(255);
 $this->objpdf->Setfont('Arial', '',7);
-$this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
-$this->objpdf->text(228, $xlin -10, $this->precoreferencia);
+$this->objpdf->text(202, $xlin -10, 'Preço de Referência:');
+$this->objpdf->text(230, $xlin -10, $this->precoreferencia);
 $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
-$this->objpdf->text(228, $xlin - 6, $this->codpreco);
+$this->objpdf->text(230, $xlin - 6, $this->codpreco);
 if($this->pc80_tipoprocesso==1){
-    $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+    $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+    $this->objpdf->text(230, $xlin - 2, 'Por Item');
 }else{
-    $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+    $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+    $this->objpdf->text(230, $xlin - 2, 'Por Lote');
 }
 
 if($this->pc80_criterioadjudicacao==1){
-    $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+    $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+    $this->objpdf->text(230, $xlin + 2, 'Desconto sobre Tabela');
 }else if($this->pc80_criterioadjudicacao==2){
-    $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+    $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+    $this->objpdf->text(230, $xlin + 2, 'Menor Taxa ou percentual');
 }else{
-    $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+    $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação:');
+    $this->objpdf->text(230, $xlin + 2, 'Outros');
 }
 
 
 $this->objpdf->text(202, $xlin + 6, 'Data:');
-$this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
+$this->objpdf->text(230, $xlin + 6, db_formatar($this->datacotacao,'d'));
 $this->objpdf->Setfont('Arial', 'B', 7);
 $this->objpdf->Line(4,27,287,27);
 
@@ -137,30 +140,36 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $xlin = 20;
                     $xcol = 4;
                     $this->objpdf->sety(150);
-                    $this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2, '#FF0000');
+                    $this->objpdf->SetFillColor(235,235,235);
+                    $this->objpdf->Rect(200, $xlin - 16, $xcol + 85, 23, 'DF');
                     $this->objpdf->setfillcolor(255, 255, 255);
                     $this->objpdf->Setfont('Arial', '',7);
-                    $this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
-                    $this->objpdf->text(228, $xlin -10, $this->precoreferencia);
+                    $this->objpdf->text(202, $xlin -10, 'Preço de Referência:');
+                    $this->objpdf->text(230, $xlin -10, $this->precoreferencia);
                     $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
-                    $this->objpdf->text(228, $xlin - 6, $this->codpreco);
+                    $this->objpdf->text(230, $xlin - 6, $this->codpreco);
                     if($this->pc80_tipoprocesso==1){
-                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+                        $this->objpdf->text(230, $xlin - 2, 'Por Item');
                     }else{
-                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+                        $this->objpdf->text(230, $xlin - 2, 'Por Lote');
                     }
 
                     if($this->pc80_criterioadjudicacao==1){
-                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+                        $this->objpdf->text(230, $xlin + 2, 'Desconto sobre Tabela');
                     }else if($this->pc80_criterioadjudicacao==2){
-                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+                        $this->objpdf->text(230, $xlin + 2, 'Menor Taxa ou percentual');
                     }else{
-                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação:');
+                        $this->objpdf->text(230, $xlin + 2, 'Outros');
                     }
 
 
                     $this->objpdf->text(202, $xlin + 6, 'Data:');
-                    $this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
+                    $this->objpdf->text(230, $xlin + 6, db_formatar($this->datacotacao,'d'));
                     $this->objpdf->Setfont('Arial', 'B', 7);
                     $this->objpdf->Line(4,27,287,27);
             
@@ -201,7 +210,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 $this->objpdf->cell(20, $alt, "QUANTIDADE", 1, 0, "C", 1);
                 $this->objpdf->cell(15, $alt, "UNIDADE", 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt, "VLR ESTIMADO", 1, 1, "C", 1);
-                
+                $this->objpdf->setfillcolor(235);
             } else {
                 
                 $this->objpdf->setfont('arial', 'B', 7);
@@ -275,30 +284,36 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $xlin = 20;
                     $xcol = 4;
                     $this->objpdf->sety(150);
-                    $this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2, '#FF0000');
+                    $this->objpdf->SetFillColor(235,235,235);
+                    $this->objpdf->Rect(200, $xlin - 16, $xcol + 85, 23, 'DF');
                     $this->objpdf->setfillcolor(255, 255, 255);
                     $this->objpdf->Setfont('Arial', '',7);
-                    $this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
-                    $this->objpdf->text(228, $xlin -10, $this->precoreferencia);
+                    $this->objpdf->text(202, $xlin -10, 'Preço de Referência:');
+                    $this->objpdf->text(230, $xlin -10, $this->precoreferencia);
                     $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
-                    $this->objpdf->text(228, $xlin - 6, $this->codpreco);
+                    $this->objpdf->text(230, $xlin - 6, $this->codpreco);
                     if($this->pc80_tipoprocesso==1){
-                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+                        $this->objpdf->text(230, $xlin - 2, 'Por Item');
                     }else{
-                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+                        $this->objpdf->text(230, $xlin - 2, 'Por Lote');
                     }
 
                     if($this->pc80_criterioadjudicacao==1){
-                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+                        $this->objpdf->text(230, $xlin + 2, 'Desconto sobre Tabela');
                     }else if($this->pc80_criterioadjudicacao==2){
-                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+                        $this->objpdf->text(230, $xlin + 2, 'Menor Taxa ou percentual');
                     }else{
-                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação:');
+                        $this->objpdf->text(230, $xlin + 2, 'Outros');
                     }
 
 
                     $this->objpdf->text(202, $xlin + 6, 'Data:');
-                    $this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
+                    $this->objpdf->text(230, $xlin + 6, db_formatar($this->datacotacao,'d'));
                     $this->objpdf->Setfont('Arial', 'B', 7);
                     $this->objpdf->Line(4,27,287,27);
             
@@ -332,7 +347,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
 
                 $this->objpdf->sety($old_y);
                 $this->objpdf->setx(214);
-                $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual."%", 1, 0, "C", 1);
+                $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual, 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
@@ -360,30 +375,37 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $xlin = 20;
                     $xcol = 4;
                     $this->objpdf->sety(150);
-                    $this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2, '#FF0000');
+                    
+                    $this->objpdf->SetFillColor(235,235,235);
+                    $this->objpdf->Rect(200, $xlin - 16, $xcol + 85, 23, 'DF');
                     $this->objpdf->setfillcolor(255, 255, 255);
                     $this->objpdf->Setfont('Arial', '',7);
-                    $this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
-                    $this->objpdf->text(228, $xlin -10, $this->precoreferencia);
+                    $this->objpdf->text(202, $xlin -10, 'Preço de Referência:');
+                    $this->objpdf->text(230, $xlin -10, $this->precoreferencia);
                     $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
-                    $this->objpdf->text(228, $xlin - 6, $this->codpreco);
+                    $this->objpdf->text(230, $xlin - 6, $this->codpreco);
                     if($this->pc80_tipoprocesso==1){
-                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+                        $this->objpdf->text(230, $xlin - 2, 'Por Item');
                     }else{
-                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+                        $this->objpdf->text(230, $xlin - 2, 'Por Lote');
                     }
 
                     if($this->pc80_criterioadjudicacao==1){
-                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+                        $this->objpdf->text(230, $xlin + 2, 'Desconto sobre Tabela');
                     }else if($this->pc80_criterioadjudicacao==2){
-                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+                        $this->objpdf->text(230, $xlin + 2, 'Menor Taxa ou percentual');
                     }else{
-                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação:');
+                        $this->objpdf->text(230, $xlin + 2, 'Outros');
                     }
 
 
                     $this->objpdf->text(202, $xlin + 6, 'Data:');
-                    $this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
+                    $this->objpdf->text(230, $xlin + 6, db_formatar($this->datacotacao,'d'));
                     $this->objpdf->Setfont('Arial', 'B', 7);
                     $this->objpdf->Line(4,27,287,27);
             
@@ -437,30 +459,37 @@ if (pg_num_rows($this->rsLotes) > 0) {
             $xlin = 20;
             $xcol = 4;
             $this->objpdf->sety(150);
-            $this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2, '#FF0000');
+            
+            $this->objpdf->SetFillColor(235,235,235);
+            $this->objpdf->Rect(200, $xlin - 16, $xcol + 85, 23, 'DF');
             $this->objpdf->setfillcolor(255, 255, 255);
             $this->objpdf->Setfont('Arial', '',7);
-            $this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
-            $this->objpdf->text(228, $xlin -10, $this->precoreferencia);
+            $this->objpdf->text(202, $xlin -10, 'Preço de Referência:');
+            $this->objpdf->text(230, $xlin -10, $this->precoreferencia);
             $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
-            $this->objpdf->text(228, $xlin - 6, $this->codpreco);
+            $this->objpdf->text(230, $xlin - 6, $this->codpreco);
             if($this->pc80_tipoprocesso==1){
-                $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+                $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+                $this->objpdf->text(230, $xlin - 2, 'Por Item');
             }else{
-                $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+                $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+                $this->objpdf->text(230, $xlin - 2, 'Por Lote');
             }
 
             if($this->pc80_criterioadjudicacao==1){
-                $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+                $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+                $this->objpdf->text(230, $xlin + 2, 'Desconto sobre Tabela');
             }else if($this->pc80_criterioadjudicacao==2){
-                $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+                $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+                $this->objpdf->text(230, $xlin + 2, 'Menor Taxa ou percentual');
             }else{
-                $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+                $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação:');
+                $this->objpdf->text(230, $xlin + 2, 'Outros');
             }
 
 
             $this->objpdf->text(202, $xlin + 6, 'Data:');
-            $this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
+            $this->objpdf->text(230, $xlin + 6, db_formatar($this->datacotacao,'d'));
             $this->objpdf->Setfont('Arial', 'B', 7);
             $this->objpdf->Line(4,27,287,27);
     
@@ -488,6 +517,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
 
     if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {  
         $this->objpdf->setfont('arial', '', 7);
+        $this->objpdf->setfillcolor(235);
         $this->objpdf->cell(15, $alt, "SEQ", 1, 0, "C", 1);
         $this->objpdf->cell(15, $alt, "ITEM", 1, 0, "C", 1);
         $this->objpdf->cell(160, $alt, "DESCRIO DO ITEM", 1, 0, "C", 1);
@@ -496,6 +526,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
         $this->objpdf->cell(20, $alt, "QUANTIDADE", 1, 0, "C", 1);
         $this->objpdf->cell(15, $alt, "UNIDADE", 1, 0, "C", 1);
         $this->objpdf->cell(20, $alt, "VLR ESTIMADO", 1, 1, "C", 1);
+        $this->objpdf->setfillcolor(255);
         
     } else {
         
@@ -599,7 +630,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
 
                 $this->objpdf->sety($old_y);
                 $this->objpdf->setx(194);
-                $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual."%", 1, 0, "C", 1);
+                $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual, 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
@@ -623,30 +654,37 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $xlin = 20;
                     $xcol = 4;
                     $this->objpdf->sety(150);
-                    $this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2, '#FF0000');
+                    
+                    $this->objpdf->SetFillColor(235,235,235);
+                    $this->objpdf->Rect(200, $xlin - 16, $xcol + 85, 23, 'DF');
                     $this->objpdf->setfillcolor(255, 255, 255);
                     $this->objpdf->Setfont('Arial', '',7);
-                    $this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
-                    $this->objpdf->text(228, $xlin -10, $this->precoreferencia);
+                    $this->objpdf->text(202, $xlin -10, 'Preço de Referência:');
+                    $this->objpdf->text(230, $xlin -10, $this->precoreferencia);
                     $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
-                    $this->objpdf->text(228, $xlin - 6, $this->codpreco);
+                    $this->objpdf->text(230, $xlin - 6, $this->codpreco);
                     if($this->pc80_tipoprocesso==1){
-                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+                        $this->objpdf->text(230, $xlin - 2, 'Por Item');
                     }else{
-                        $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+                        $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+                        $this->objpdf->text(230, $xlin - 2, 'Por Lote');
                     }
 
                     if($this->pc80_criterioadjudicacao==1){
-                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+                        $this->objpdf->text(230, $xlin + 2, 'Desconto sobre Tabela');
                     }else if($this->pc80_criterioadjudicacao==2){
-                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+                        $this->objpdf->text(230, $xlin + 2, 'Menor Taxa ou percentual');
                     }else{
-                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+                        $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação:');
+                        $this->objpdf->text(230, $xlin + 2, 'Outros');
                     }
 
 
                     $this->objpdf->text(202, $xlin + 6, 'Data:');
-                    $this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
+                    $this->objpdf->text(230, $xlin + 6, db_formatar($this->datacotacao,'d'));
                     $this->objpdf->Setfont('Arial', 'B', 7);
                     $this->objpdf->Line(4,27,287,27);
 
@@ -679,7 +717,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 $this->objpdf->multicell(180, $alt, str_replace("\n","",$oDadosDaLinha->descricao), "T", "L", 0);
 
                 $this->objpdf->sety($old_y);
-                $this->objpdf->setx(194);
+                $this->objpdf->setx(214);
                 $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
@@ -706,30 +744,37 @@ if (pg_num_rows($this->rsLotes) > 0) {
         $xlin = 20;
         $xcol = 4;
         $this->objpdf->sety(150);
-        $this->objpdf->RoundedRect(200, $xlin - 16, $xcol + 85, 23, 2, '#FF0000');
+        
+        $this->objpdf->SetFillColor(235,235,235);
+        $this->objpdf->Rect(200, $xlin - 16, $xcol + 85, 23, 'DF');
         $this->objpdf->setfillcolor(255, 255, 255);
         $this->objpdf->Setfont('Arial', '',7);
-        $this->objpdf->text(202, $xlin -10, 'Preo de Referncia');
-        $this->objpdf->text(228, $xlin -10, $this->precoreferencia);
+        $this->objpdf->text(202, $xlin -10, 'Preço de Referência:');
+        $this->objpdf->text(230, $xlin -10, $this->precoreferencia);
         $this->objpdf->text(202, $xlin - 6, 'Processo de Compra:');
-        $this->objpdf->text(228, $xlin - 6, $this->codpreco);
+        $this->objpdf->text(230, $xlin - 6, $this->codpreco);
         if($this->pc80_tipoprocesso==1){
-            $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Item');
+            $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+            $this->objpdf->text(230, $xlin - 2, 'Por Item');
         }else{
-            $this->objpdf->text(202, $xlin - 2, 'Tipo - Por Lote');
+            $this->objpdf->text(202, $xlin - 2, 'Tipo:');
+            $this->objpdf->text(230, $xlin - 2, 'Por Lote');
         }
 
         if($this->pc80_criterioadjudicacao==1){
-            $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Desconto sobre Tabela');
+            $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+            $this->objpdf->text(230, $xlin + 2, 'Desconto sobre Tabela');
         }else if($this->pc80_criterioadjudicacao==2){
-            $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Menor Taxa ou percentual');
+            $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação');
+            $this->objpdf->text(230, $xlin + 2, 'Menor Taxa ou percentual');
         }else{
-            $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicao - Outros');
+            $this->objpdf->text(202, $xlin + 2, 'Criterio de Adjudicação:');
+            $this->objpdf->text(230, $xlin + 2, 'Outros');
         }
 
 
         $this->objpdf->text(202, $xlin + 6, 'Data:');
-        $this->objpdf->text(214, $xlin + 6, db_formatar($this->datacotacao,'d'));
+        $this->objpdf->text(230, $xlin + 6, db_formatar($this->datacotacao,'d'));
         $this->objpdf->Setfont('Arial', 'B', 7);
         $this->objpdf->Line(4,27,287,27);
 
