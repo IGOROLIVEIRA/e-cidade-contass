@@ -16,6 +16,7 @@ $clprecoreferencia     = new cl_precoreferencia;
 $clitemprecoreferencia = new cl_itemprecoreferencia;
 $clcondataconf = new cl_condataconf;
 $clliccomissaocgm      = new cl_liccomissaocgm();
+$clprecoreferenciaacount = new cl_precoreferenciaacount;
 
 $db_opcao = 1;
 $db_botao = true;
@@ -204,10 +205,12 @@ if (isset($incluir)) {
             if($oItemOrc->pc23_orcamitem!=""){
                 
                 $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
+                
                 $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
                 $clitemprecoreferencia->si02_precoreferencia = $clprecoreferencia->si01_sequencial;
                 if ($oItemOrc->percreferencia1 == 0 && $oItemOrc->percreferencia2 == 0) {
                     $clitemprecoreferencia->si02_vlpercreferencia = 0;
+                    $clitemprecoreferencia->si02_vltotalprecoreferencia = 0;
                 } else if ($oItemOrc->percreferencia1 > 0 && $oItemOrc->percreferencia2 == 0) {
                     $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia1;
                 } else {
@@ -223,6 +226,7 @@ if (isset($incluir)) {
                 $clitemprecoreferencia->si02_taxa = $oItemOrc->pc01_taxa;
                 $clitemprecoreferencia->si02_criterioadjudicacao = $oItemOrc->pc80_criterioadjudicacao;
                 $clitemprecoreferencia->si02_mediapercentual = $oItemOrc->mediapercentual;
+                $clitemprecoreferencia->si02_vltotalprecoreferencia = number_format($oItemOrc->valor*$oItemOrc->pc23_quant,2);
                 $clitemprecoreferencia->incluir(null);  
             }
         }
@@ -251,11 +255,19 @@ if (isset($incluir)) {
         }
     }
 
+    if(!$sqlerro){
+        $clprecoreferenciaacount->si233_precoreferencia = $clprecoreferencia->si01_sequencial;
+        $clprecoreferenciaacount->si233_acao =  'Incluir';
+        $clprecoreferenciaacount->si233_idusuario = db_getsession("DB_id_usuario");
+        $clprecoreferenciaacount->si233_datahr =  date("Y-m-d", db_getsession("DB_datausu"));
+        $clprecoreferenciaacount->incluir(null);  
+    }
+
     db_fim_transacao($sqlerro);
     if ($clprecoreferencia->erro_status != 0) {
         echo "<script>
       jan = window.open('sic1_precoreferencia007.php?impjust=$si01_impjustificativa&codigo_preco='+{$clprecoreferencia->si01_processocompra}+
-      '&tipoprecoreferencia='+$si01_tipoprecoreferencia+'&quant_casas='+$quant_casas,
+      '&tipoprecoreferencia='+$si01_tipoprecoreferencia,
                     '',
                       'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
       jan.moveTo(0,0);

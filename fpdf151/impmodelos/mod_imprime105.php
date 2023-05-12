@@ -122,7 +122,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
         $rsResult = db_query($sSql) or die(pg_last_error());
         $oResult = db_utils::fieldsMemory($rsResult, 0);
         $linhas = ceil(strlen($oResult->pc01_descrmater)/115);
-                $addalt = $linhas*3;
+                $addalt = $linhas*3.1;
                 if (($this->objpdf->gety() > $this->objpdf->h - 20) || $this->objpdf->gety() + $addalt > $this->objpdf->h -20 ) {
                     $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());                    
                     $this->objpdf->Setfont('Arial', '', 5);
@@ -337,7 +337,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 }
                 $descricao = '';
                 $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
-                $addalt = $linhas*3;
+                $addalt = $linhas*3.1;
                 $old_y = $this->objpdf->gety();
 
                                         $this->objpdf->setfont('arial', '', 7);
@@ -356,7 +356,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
             } else {
                 $descricao = '';
                 $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
-                $addalt = $linhas*3;
+                $addalt = $linhas*3.1;
                 
                 if (($this->objpdf->gety() > $this->objpdf->h - 20) ||$this->objpdf->gety() + $addalt > $this->objpdf->h  ) {
                     $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());
@@ -620,7 +620,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
 
                 $descricao = '';
                 $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
-                $addalt = $linhas*3;
+                $addalt = $linhas*3.1;
                 $old_y = $this->objpdf->gety();
 
                                         $this->objpdf->setfont('arial', '', 7);
@@ -708,7 +708,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 }
                 $descricao = '';
                 $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
-                $addalt = $linhas*3;
+                $addalt = $linhas*3.1;
                 $old_y = $this->objpdf->gety();
 
                                         $this->objpdf->setfont('arial', '', 7);
