@@ -54,6 +54,10 @@ $clrotulo->label("pc01_descrmater");
 
   $aItensColsuta = array();
 
+  $whereDescontoTabela = "";
+
+  if ($iDescontoTabela == 1) $whereDescontoTabela = " AND pc01_tabela = 't'";
+
   $sSQL = "
     SELECT DISTINCT pc01_codmater,
                     pc81_codprocitem,
@@ -73,17 +77,34 @@ $clrotulo->label("pc01_descrmater");
       INNER JOIN solicitempcmater ON pc16_solicitem = pc11_codigo
       INNER JOIN matunid ON m61_codmatunid = pc17_unid
       INNER JOIN pcmater ON pc01_codmater = pc16_codmater
-
-      LEFT JOIN itensregpreco ON si07_item = pc01_codmater
+      LEFT JOIN itensregpreco ON si07_item = pc01_codmater AND si07_sequencialadesao = si06_sequencial
       LEFT JOIN cgm ON z01_numcgm = si07_fornecedor
-        AND si07_sequencialadesao = si06_sequencial
 
-    WHERE si06_sequencial = {$codigoAdesao} AND si06_processocompra = {$iProcessoCompra}
-    ORDER BY pc81_codprocitem, si07_sequencial DESC
+    WHERE si06_sequencial = {$codigoAdesao} AND si06_processocompra = {$iProcessoCompra} $whereDescontoTabela
+    order by pc01_codmater;
   ";
 
   $rsItensProcComp = db_query($sSQL);
 
+  /* SQL para busca dos valores percentuais dos itens */
+
+  $sSQL = "
+  select *
+  from
+  itemprecoreferencia
+  inner join precoreferencia on si01_sequencial = si02_precoreferencia
+  inner join pcmater on si02_coditem = pc01_codmater
+  where
+  si02_precoreferencia = (
+  select
+      si01_sequencial
+  from
+      precoreferencia
+  where
+      si01_processocompra = {$iProcessoCompra}) $whereDescontoTabela order by si02_coditem;
+  ";
+
+  $rsItensPrecoReferencia = db_query($sSQL);
   ?>
 
   <form action="" name="form1" method="post" onsubmit="return validaForm(this);">
@@ -116,17 +137,23 @@ $clrotulo->label("pc01_descrmater");
         <th class="table_header" style="width: 50px;">Item</th>
         <th class="table_header" style="width: 220px;">Descrição Item</th>
         <th class="table_header" style="width: 80px;">Unidade</th>
-        <th class="table_header" style="width: 70px;">Quantidade Aderida</th>
-        <th class="table_header" style="width: 70px;">Quantidade Licitada</th>
-        <th class="table_header" style="width: 70px;">Preço Unitário</th>
+        <th class="table_header coluna_quantidadeaderida" style="width: 70px;">Quantidade Aderida</th>
+        <th class="table_header coluna_quantidadelicitada" style="width: 70px;">Quantidade Licitada</th>
+        <th class="table_header coluna_precounitario" style="width: 70px;">Preço Unitário</th>
         <th class="table_header" style="width: 220px;">Fornecedor Ganhador</th>
-        <th class="table_header" style="width: 70px;">Número do Lote</th>
-        <th class="table_header" style="width: 110px;">Descrição do Lote</th>
+        <th class="table_header coluna_numerolote" style="width: 70px;">Número do Lote</th>
+        <th class="table_header coluna_descricaolote" style="width: 110px;">Descrição do Lote</th>
+        <th class="table_header coluna_percentual" style="width: 110px;">Percentual %</th>
+
         <th class="table_header" style="width: 60px;"></th>
       </tr>
 
-      <?php $aItensProcComp = db_utils::getCollectionByRecord($rsItensProcComp);
+      <?php
+      $aItensProcComp = db_utils::getCollectionByRecord($rsItensProcComp);
+      $aItensPrecoReferencia = db_utils::getCollectionByRecord($rsItensPrecoReferencia);
+
       $iTotalItens = 0;
+      $indice = 0;
       foreach ($aItensProcComp as $key => $oItem) :
 
         $iItem = $oItem->pc01_codmater;
@@ -162,14 +189,14 @@ $clrotulo->label("pc01_descrmater");
             <input type="hidden" name="aItensAdesaoRegPreco[<?= $iItem ?>][codigoUnidade]" value="<?= $oItem->m61_codmatunid ?>">
             <input type="hidden" name="aItensAdesaoRegPreco[<?= $iItem ?>][descricaoUnidade]" value="<?= $oItem->m61_descr ?>">
           </td>
-          <td class="linhagrid">
+          <td class="linhagrid coluna_quantidadeaderida">
             <?= $oItem->pc11_quant ?>
             <input type="hidden" name="aItensAdesaoRegPreco[<?= $iItem ?>][qtdAderida]" value="<?= $oItem->pc11_quant ?>">
           </td>
-          <td class="linhagrid">
+          <td class="linhagrid coluna_quantidadelicitada">
             <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][qtdLicitada]" onkeypress="mascaraQtdLicitada(event,this,<?= $iItem ?>)" onblur="comparaValor(event,this,<?= $iItem ?>)" value="<?= $oItem->si07_quantidadelicitada ?>">
           </td>
-          <td class="linhagrid">
+          <td class="linhagrid coluna_precounitario">
             <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][precoUnitario]" onkeypress="mascaraPrecoUnitario(event,this)" onchange="verificaPrecoUnitario(event,this,<?= $iItem ?>,<?= $oItem->si07_precounitario ?>)" value="<?= $oItem->si07_precounitario ?>">
           </td>
           <td class="linhagrid fornecedor">
@@ -177,11 +204,15 @@ $clrotulo->label("pc01_descrmater");
             <input type="hidden" name="aItensAdesaoRegPreco[<?= $iItem ?>][codigoFornecedor]" value="<?= $oItem->si07_fornecedor ?>">
             <input type="button" value="X" onclick="apagaFornecedor(<?= $iItem ?>);">
           </td>
-          <td class="linhagrid">
+          <td class="linhagrid coluna_numerolote">
             <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][numeroLote]" value="<?= $oItem->si07_numerolote ?>" <?= $iProcessoLote == 2 ? ' readonly class="input-inativo"' : '' ?>>
           </td>
-          <td class="linhagrid">
+          <td class="linhagrid coluna_descricaolote">
             <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][descricaoLote]" value="<?= $oItem->si07_descricaolote ?>" <?= $iProcessoLote == 2 ? ' readonly class="input-inativo"' : '' ?>>
+          </td>
+          <td class="linhagrid coluna_percentual">
+            <?php if ($oItem->si07_percentual == null) $oItem->si07_percentual = $aItensPrecoReferencia[$indice]->si02_mediapercentual; ?>
+            <input type="text" name="aItensAdesaoRegPreco[<?= $iItem ?>][percentual]" onkeypress="mascaraPrecoUnitario(event,this)" value="<?= $oItem->si07_percentual; ?>">
           </td>
           <td class="linhagrid">
             <?php if (!empty($oItem->si07_sequencial)) : ?>
@@ -190,7 +221,8 @@ $clrotulo->label("pc01_descrmater");
           </td>
         </tr>
 
-      <?php endforeach; ?>
+      <?php $indice++;
+      endforeach; ?>
 
       <tr>
         <th colspan="12" class="table_header th_footer">Total de itens: <?= $iTotalItens ?></th>
@@ -207,6 +239,33 @@ $clrotulo->label("pc01_descrmater");
 <script type="text/javascript" src="scripts/prototype.js"></script>
 
 <script>
+  /* Ocultando campos número e descrição do lote caso o processo da adesão seja por lote */
+
+  iProcessoPorLote = <? echo $iProcessoLote; ?>;
+  iDescontoTabela = <? echo $iDescontoTabela; ?>;
+  quantidadeItens = document.getElementsByClassName('coluna_descricaolote').length;
+
+  for (i = 0; i < quantidadeItens; i++) {
+    if (iProcessoPorLote == 2) {
+      document.getElementsByClassName('coluna_descricaolote')[i].style.display = 'none';
+      document.getElementsByClassName('coluna_numerolote')[i].style.display = 'none';
+    }
+
+    if (iDescontoTabela == 1) {
+      document.getElementsByClassName('coluna_quantidadeaderida')[i].style.display = 'none';
+      document.getElementsByClassName('coluna_quantidadelicitada')[i].style.display = 'none';
+      document.getElementsByClassName('coluna_precounitario')[i].style.display = 'none';
+      document.getElementsByClassName('coluna_quantidadeaderida')[i].value = 0;
+      document.getElementsByClassName('coluna_quantidadelicitada')[i].value = 0;
+      document.getElementsByClassName('coluna_precounitario')[i].value = 0;
+    }
+
+    if (iDescontoTabela == 2) {
+      document.getElementsByClassName('coluna_percentual')[i].style.display = 'none';
+    }
+
+  }
+
   function verificaPrecoUnitario(e, oObject, item, valorAntigo) {
 
     var precoUnitario = document.getElementsByName(`aItensAdesaoRegPreco[${item}][precoUnitario]`)[0];
@@ -434,6 +493,7 @@ $clrotulo->label("pc01_descrmater");
 
   function validaForm(fORM) {
 
+    console.log(iDescontoTabela);
     var itens = getItensMarcados();
 
     if (itens.length < 1) {
@@ -447,36 +507,76 @@ $clrotulo->label("pc01_descrmater");
 
     try {
 
+
+
       itens.forEach(function(item) {
 
         var elemento = 'aItensAdesaoRegPreco[' + item.value + ']';
+        var novoItem;
 
-        if (item.value == '' ||
-          fORM[elemento + "[qtdAderida]"].value == '' ||
-          fORM[elemento + "[qtdLicitada]"].value == '' ||
-          fORM[elemento + "[codigoUnidade]"].value == '' ||
-          fORM[elemento + "[precoUnitario]"].value == '' ||
-          fORM[elemento + "[codigoFornecedor]"].value == '' ||
-          fORM[elemento + "[sequencialAdesao]"].value == '' ||
-          fORM[elemento + "[descricaoUnidade]"].value == ''
-        ) {
-          throw new Error('Os dados do item ' + item.value + ' não foram preenchidos corretamente.');
+        if (iDescontoTabela == 1) {
+
+          if (item.value == '' ||
+            fORM[elemento + "[codigoUnidade]"].value == '' ||
+            fORM[elemento + "[codigoFornecedor]"].value == '' ||
+            fORM[elemento + "[sequencialAdesao]"].value == '' ||
+            fORM[elemento + "[descricaoUnidade]"].value == '' ||
+            fORM[elemento + "[percentual]"].value == ''
+          ) {
+            throw new Error('Os dados do item ' + item.value + ' não foram preenchidos corretamente.');
+          }
+
+          novoItem = {
+            si07_item: Number(item.value),
+            si07_unidade: fORM[elemento + "[descricaoUnidade]"].value,
+            si07_sequencial: fORM[elemento + "[sequencial]"].value,
+            si07_numeroitem: fORM[elemento + "[numeroItem]"].value,
+            si07_numerolote: fORM[elemento + "[numeroLote]"].value,
+            si07_codunidade: fORM[elemento + "[codigoUnidade]"].value,
+            si07_fornecedor: fORM[elemento + "[codigoFornecedor]"].value,
+            si07_precounitario: 0,
+            si07_descricaolote: fORM[elemento + "[descricaoLote]"].value,
+            si07_sequencialadesao: fORM[elemento + "[sequencialAdesao]"].value,
+            si07_quantidadeaderida: 0,
+            si07_quantidadelicitada: 0,
+            si07_percentual: fORM[elemento + "[percentual]"].value
+
+          };
+
         }
 
-        var novoItem = {
-          si07_item: Number(item.value),
-          si07_unidade: fORM[elemento + "[descricaoUnidade]"].value,
-          si07_sequencial: fORM[elemento + "[sequencial]"].value,
-          si07_numeroitem: fORM[elemento + "[numeroItem]"].value,
-          si07_numerolote: fORM[elemento + "[numeroLote]"].value,
-          si07_codunidade: fORM[elemento + "[codigoUnidade]"].value,
-          si07_fornecedor: fORM[elemento + "[codigoFornecedor]"].value,
-          si07_precounitario: fORM[elemento + "[precoUnitario]"].value,
-          si07_descricaolote: fORM[elemento + "[descricaoLote]"].value,
-          si07_sequencialadesao: fORM[elemento + "[sequencialAdesao]"].value,
-          si07_quantidadeaderida: fORM[elemento + "[qtdAderida]"].value,
-          si07_quantidadelicitada: fORM[elemento + "[qtdLicitada]"].value
-        };
+        if (iDescontoTabela == 2) {
+          if (item.value == '' ||
+            fORM[elemento + "[qtdAderida]"].value == '' ||
+            fORM[elemento + "[qtdLicitada]"].value == '' ||
+            fORM[elemento + "[codigoUnidade]"].value == '' ||
+            fORM[elemento + "[precoUnitario]"].value == '' ||
+            fORM[elemento + "[codigoFornecedor]"].value == '' ||
+            fORM[elemento + "[sequencialAdesao]"].value == '' ||
+            fORM[elemento + "[descricaoUnidade]"].value == ''
+          ) {
+            throw new Error('Os dados do item ' + item.value + ' não foram preenchidos corretamente.');
+          }
+
+          novoItem = {
+            si07_item: Number(item.value),
+            si07_unidade: fORM[elemento + "[descricaoUnidade]"].value,
+            si07_sequencial: fORM[elemento + "[sequencial]"].value,
+            si07_numeroitem: fORM[elemento + "[numeroItem]"].value,
+            si07_numerolote: fORM[elemento + "[numeroLote]"].value,
+            si07_codunidade: fORM[elemento + "[codigoUnidade]"].value,
+            si07_fornecedor: fORM[elemento + "[codigoFornecedor]"].value,
+            si07_precounitario: fORM[elemento + "[precoUnitario]"].value,
+            si07_descricaolote: fORM[elemento + "[descricaoLote]"].value,
+            si07_sequencialadesao: fORM[elemento + "[sequencialAdesao]"].value,
+            si07_quantidadeaderida: fORM[elemento + "[qtdAderida]"].value,
+            si07_quantidadelicitada: fORM[elemento + "[qtdLicitada]"].value,
+            si07_percentual: "0"
+
+          };
+        }
+
+
 
         itensEnviar.push(novoItem);
 

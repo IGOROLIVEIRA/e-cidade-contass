@@ -142,7 +142,7 @@ if (!$sqlerro) {
                 alert('Inclusão efetuada com sucesso');
                 parent.document.formaba.db_itens.disabled=false;
                 parent.mo_camada('db_itens');
-                (window.CurrentWindow || parent.CurrentWindow).location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
+                parent.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
             </script>";
       }
       //$cladesaoregprecos->erro(true,true);
@@ -202,7 +202,7 @@ if (!$sqlerro) {
     $_SESSION["codigoAdesao"] = $si06_sequencial;
     echo "<script>
         parent.document.formaba.db_itens.disabled=false;
-        (window.CurrentWindow || parent.CurrentWindow).location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
+        parent.CurrentWindow.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
         </script>";
   } else if (isset($chavepesquisa) || isset($_SESSION["codigoAdesao"])) {
     $db_opcao = 2;
