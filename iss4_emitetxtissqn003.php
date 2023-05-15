@@ -25,15 +25,15 @@
  *                                licenca/licenca_pt.txt
  */
 
-require_once("libs/db_utils.php");
-require_once("libs/db_stdlib.php");
-require_once("libs/db_app.utils.php");
-require_once("libs/db_sql.php");
-require_once("libs/db_conecta.php");
-require_once("libs/db_sessoes.php");
-require_once("libs/db_usuariosonline.php");
-require_once("libs/db_libtributario.php");
-require_once("dbforms/db_funcoes.php");
+require_once(modification("libs/db_utils.php"));
+require_once(modification("libs/db_stdlib.php"));
+require_once(modification("libs/db_app.utils.php"));
+require_once(modification("libs/db_sql.php"));
+require_once(modification("libs/db_conecta.php"));
+require_once(modification("libs/db_sessoes.php"));
+require_once(modification("libs/db_usuariosonline.php"));
+require_once(modification("libs/db_libtributario.php"));
+require_once(modification("dbforms/db_funcoes.php"));
 
 db_postmemory($HTTP_POST_VARS);
 db_postmemory($HTTP_SERVER_VARS);
@@ -1164,12 +1164,12 @@ if ( $result == false || pg_num_rows($result) == 0 ) {
         if($gerar == "dados"){
 
           for($imax = 1; $imax <= $maiornumpar; $imax++){
-            geraArrecad(&$clabre_arquivo->arquivo,$q01_numpre,$imax,&$contador,$gerar,$tipodebitoarrecad,$oRegraEmissao->getCadTipoConvenio(),$tipotxt,$taxa_bancaria,$q01_inscr,$z01_nome,$tipodebitoarrecad,$iTotalLinhas20,$nTotalParcelas20,$contador,$anousu,$q03_descr,$aliquota,$q07_ativ);
+            geraArrecad($clabre_arquivo->arquivo,$q01_numpre,$imax,$contador,$gerar,$tipodebitoarrecad,$oRegraEmissao->getCadTipoConvenio(),$tipotxt,$taxa_bancaria,$q01_inscr,$z01_nome,$tipodebitoarrecad,$iTotalLinhas20,$nTotalParcelas20,$contador,$anousu,$q03_descr,$aliquota,$q07_ativ);
           }
         }else{
 
           for($imax = 1; $imax <= $maiornumpar; $imax++){
-            geraArrecad(&$clabre_arquivo->arquivo,$q01_numpre,$imax,&$contador,$gerar,$tipodebitoarrecad,$oRegraEmissao->getCadTipoConvenio(),$tipotxt,$taxa_bancaria,$q01_inscr,$z01_nome,$tipodebitoarrecad,$iTotalLinhas20,$nTotalParcelas20,$contador,$anousu,$q03_descr,$aliquota,$q07_ativ);
+            geraArrecad($clabre_arquivo->arquivo,$q01_numpre,$imax,$contador,$gerar,$tipodebitoarrecad,$oRegraEmissao->getCadTipoConvenio(),$tipotxt,$taxa_bancaria,$q01_inscr,$z01_nome,$tipodebitoarrecad,$iTotalLinhas20,$nTotalParcelas20,$contador,$anousu,$q03_descr,$aliquota,$q07_ativ);
 
           }
         }
@@ -1227,7 +1227,7 @@ if ( $result == false || pg_num_rows($result) == 0 ) {
 
                 for($imaxparcelas=1;$imaxparcelas <= $maiornumparvist; $imaxparcelas++){
 
-                  geraArrecad(&$clabre_arquivo->arquivo,$y69_numpre,$imaxparcelas,&$contador,$gerar,"VISTORIA".$y77_descricao,$oRegraEmissao->getCadTipoConvenio(),$tipotxt,$taxa_bancaria,$q01_inscr,$z01_nome,$tipodebitoarrecad,$iTotalLinhas20,$nTotalParcelas20,$contador,$anousu,$q03_descr,$aliquota,$q07_ativ);
+                  geraArrecad($clabre_arquivo->arquivo,$y69_numpre,$imaxparcelas,$contador,$gerar,"VISTORIA".$y77_descricao,$oRegraEmissao->getCadTipoConvenio(),$tipotxt,$taxa_bancaria,$q01_inscr,$z01_nome,$tipodebitoarrecad,$iTotalLinhas20,$nTotalParcelas20,$contador,$anousu,$q03_descr,$aliquota,$q07_ativ);
 
                 }
               }
@@ -1277,7 +1277,7 @@ if ( $result == false || pg_num_rows($result) == 0 ) {
 
             for($imaxparcelas=1;$imaxparcelas <= $maiornumparvist; $imaxparcelas++){
 
-              geraArrecad(&$clabre_arquivo->arquivo,$y69_numpre,$imaxparcelas,&$contador,$gerar,"VISTORIA".$y77_descricao,$oRegraEmissao->getCadTipoConvenio(),$tipotxt,$taxa_bancaria,$q01_inscr,$z01_nome,$tipodebitoarrecad,$iTotalLinhas20,$nTotalParcelas20,$contador,$anousu,$q03_descr,$aliquota,$q07_ativ);
+              geraArrecad($clabre_arquivo->arquivo,$y69_numpre,$imaxparcelas,$contador,$gerar,"VISTORIA".$y77_descricao,$oRegraEmissao->getCadTipoConvenio(),$tipotxt,$taxa_bancaria,$q01_inscr,$z01_nome,$tipodebitoarrecad,$iTotalLinhas20,$nTotalParcelas20,$contador,$anousu,$q03_descr,$aliquota,$q07_ativ);
 
             }
           }
@@ -1359,7 +1359,7 @@ if ( $result == false || pg_num_rows($result) == 0 ) {
 
                   for($imaxparcelassani=1;$imaxparcelassani <= $maiornumparsani; $imaxparcelassani++){
 
-                    geraArrecad(&$clabre_arquivo->arquivo,$y69_numpre,$imaxparcelassani,&$contador,$gerar,"VISTORIA".$y77_descricao,$oRegraEmissao->getCadTipoConvenio(),$tipotxt,$taxa_bancaria,$q01_inscr,$z01_nome,$tipodebitoarrecad,$iTotalLinhas20,$nTotalParcelas20,$contador,$anousu,$q03_descr,$aliquota,$q07_ativ);
+                    geraArrecad($clabre_arquivo->arquivo,$y69_numpre,$imaxparcelassani,$contador,$gerar,"VISTORIA".$y77_descricao,$oRegraEmissao->getCadTipoConvenio(),$tipotxt,$taxa_bancaria,$q01_inscr,$z01_nome,$tipodebitoarrecad,$iTotalLinhas20,$nTotalParcelas20,$contador,$anousu,$q03_descr,$aliquota,$q07_ativ);
 
                   }
                 }
@@ -1398,7 +1398,7 @@ if ( $result == false || pg_num_rows($result) == 0 ) {
 
               for($imaxparcelassani=1;$imaxparcelassani <= $maiornumparsani; $imaxparcelassani++){
 
-                geraArrecad(&$clabre_arquivo->arquivo,$y69_numpre,$imaxparcelassani,&$contador,$gerar,"VISTORIASANITARIO".$y77_descricao,$oRegraEmissao->getCadTipoConvenio(),$tipotxt,$taxa_bancaria,$q01_inscr,$z01_nome,$tipodebitoarrecad,$iTotalLinhas20,$nTotalParcelas20,$contador,$anousu,$q03_descr,$aliquota,$q07_ativ);
+                geraArrecad($clabre_arquivo->arquivo,$y69_numpre,$imaxparcelassani,$contador,$gerar,"VISTORIASANITARIO".$y77_descricao,$oRegraEmissao->getCadTipoConvenio(),$tipotxt,$taxa_bancaria,$q01_inscr,$z01_nome,$tipodebitoarrecad,$iTotalLinhas20,$nTotalParcelas20,$contador,$anousu,$q03_descr,$aliquota,$q07_ativ);
 
               }
 

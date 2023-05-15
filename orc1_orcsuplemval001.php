@@ -514,7 +514,8 @@ if(isset($incluir)){
               o58_instit,
               o46_codlei,
               o46_codsup,
-              o46_tiposup
+              o46_tiposup,
+	          o47_valor
               FROM orcsuplemval
               JOIN orcdotacao ON o47_anousu=o58_anousu
               AND o47_coddot=o58_coddot
@@ -527,6 +528,7 @@ if(isset($incluir)){
               AND o46_codsup = {$o46_codsup}
               AND o46_tiposup = {$tiposup}
               AND o58_anousu = ".db_getsession('DB_anousu')."
+              order by o47_valor desc
               ";
 
         if(pg_num_rows(db_query($sSqlestrututural))>0 && db_getsession('DB_anousu') < 2023){
@@ -552,14 +554,24 @@ if(isset($incluir)){
             }
         }
 
-        if(pg_num_rows(db_query($sSqlestrututural))>0 && db_getsession('DB_anousu') > 2022){
+        if(pg_num_rows(db_query($sSqlestrututural))>0 && db_getsession('DB_anousu') > 2022){         
             $oEstruturalSupl = db_query($sSqlestrututural);
             $oEstruturalSupl = db_utils::fieldsMemory($oEstruturalSupl);
-
-            if( $tiposup == 1020 && (substr($oEstruturalDotacaoEnviada->dl_estrutural,0,28).substr($oEstruturalDotacaoEnviada->dl_estrutural,30,14) != (substr($oEstruturalSupl->dl_estrutural,0,28).substr($oEstruturalSupl->dl_estrutural,30,14)))){
-                $sqlerro = true;
-                db_msgbox("Usuário, inclusão abortada. Dotação incompatível com o tipo de suplementação utilizada");
-                $limpa_dados = false;
+            
+            if( $tiposup == 1020){
+                if((substr($oEstruturalDotacaoEnviada->dl_estrutural,0,44) == (substr($oEstruturalSupl->dl_estrutural,0,44))) ||
+                  (substr($oEstruturalDotacaoEnviada->dl_estrutural,0,28).substr($oEstruturalDotacaoEnviada->dl_estrutural,30,14) != (substr($oEstruturalSupl->dl_estrutural,0,28).substr($oEstruturalSupl->dl_estrutural,30,14)))){
+                   $sql = "select * from orcsuplemval where o47_codsup = {$o46_codsup}";
+                   if (pg_num_rows(db_query($sql)) >= 1) {
+                        db_msgbox("Usuário: A dotação reduzida é incompatível com a dotação suplementada.");
+                        $sqlerro = true;
+                        $limpa_dados = false;
+                        echo "<script>
+                                parent.mo_camada('reducao');
+                              </script>";
+                              
+                    }
+                }
             }
             
             if( $tiposup == 1021 && (substr($oEstruturalDotacaoEnviada->dl_estrutural,0,26).substr($oEstruturalDotacaoEnviada->dl_estrutural,28,16) != (substr($oEstruturalSupl->dl_estrutural,0,26).substr($oEstruturalSupl->dl_estrutural,28,16)))){

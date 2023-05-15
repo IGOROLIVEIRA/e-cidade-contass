@@ -431,6 +431,9 @@ if (isset($incluir)) {
 			$clliclicita->l20_justificativapncp = $l20_justificativapncp;
 			$clliclicita->l20_categoriaprocesso = $l20_categoriaprocesso;
 			$clliclicita->l20_receita = $l20_receita;
+			$clliclicita->l20_dataaber = $l20_dataaber;
+			$clliclicita->l20_datacria = $l20_datacria;
+			$clliclicita->l20_recdocumentacao = $l20_dataaberproposta;
 			$clliclicita->incluir(null, null);
 
 			if ($clliclicita->erro_status == "0") {

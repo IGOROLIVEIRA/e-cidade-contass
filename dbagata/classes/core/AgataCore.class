@@ -37,7 +37,7 @@ class AgataCore
     /*******************************************************************************/
     static function CreateReport($type, $params)
     {
-        $class = 'Agata' . strtoupper(substr($type, 0, 1)) . substr($type, 1);
+        $class = 'Agata' . strtoupper(substr($type,0,1)) . substr($type,1);
         include_once AGATA_PATH . "/classes/reports/{$class}.class";
         $obj = new $class;
         $obj->SetProperties($params);
@@ -98,41 +98,48 @@ class AgataCore
     /*******************************************************************************/
     static function CreateQuery($agataDB, $DataSet, $ParametersContent)
     {
-
         $sql = Report::SqlFromReport($DataSet);
         $Adjustments = Report::ExtractAdjustments($DataSet);
 
-        if ($ParametersContent) {
+        if ($ParametersContent)
+        {
             // sort to $teste2 comes before that $teste in replace
             krsort($ParametersContent);
-            foreach ($ParametersContent as $Parameter => $Content) {
+            foreach ($ParametersContent as $Parameter => $Content)
+            {
                 // substitui os parametros no offset e limit também
                 $DataSet['Query']['Config']['OffSet'] = str_replace($Parameter, $Content, $DataSet['Query']['Config']['OffSet']);
                 $DataSet['Query']['Config']['Limit']  = str_replace($Parameter, $Content, $DataSet['Query']['Config']['Limit']);
 
                 # Fill the Paramenter content with '' around.
-                if ((substr($Content, 0, 1) != "'") and (substr($Content, 0, -1) != "'")) {
+                if ((substr($Content,0,1) != "'") and (substr($Content,0,-1) != "'"))
+                {
                     $Content = "'$Content'";
                 }
                 $sql = str_replace($Parameter, $Content, $sql);
                 $NewParametersContent[$Parameter] = $Content;
             }
         }
-        if ($sql) {
+        if ($sql)
+        {
             $conn = new AgataConnection;
-            if ($conn->Open($agataDB)) {
+            if ($conn->Open($agataDB))
+            {
                 //Wait::On();
-                if ($DataSet['PreQuery']) {
+                if ($DataSet['PreQuery'])
+                {
                     $conn->CreateQuery($DataSet['PreQuery']);
                 }
                 $query = $conn->CreateQuery($sql);
                 $query->SetOffSet($DataSet['Query']['Config']['OffSet']);
                 $query->SetLimit($DataSet['Query']['Config']['Limit']);
-                if ($DataSet['PosQuery']) {
+                if ($DataSet['PosQuery'])
+                {
                     $conn->CreateQuery($DataSet['PosQuery']);
                 }
                 $result = $query->result;
-                if (!$result) {
+                if (!$result)
+                {
                     $conn->Close();
                     //Wait::Off();
                     return new AgataError(_a('Query Error') . ': ' . $sql);
@@ -143,13 +150,18 @@ class AgataCore
                 $ColumnTypes = $query->GetColumnTypes();
 
                 $i = 1;
-                foreach ($Adjustments as $column => $Adjustment) {
-                    foreach ($Adjustment as $key => $content) {
+                foreach ($Adjustments as $column => $Adjustment)
+                {
+                    foreach ($Adjustment as $key => $content)
+                    {
 
-                        if (($key == 'Function') and $content) {
+                        if (($key == 'Function') and $content)
+                        {
                             $function_name = AgataCore::requireFunction($content);
                             $function_matrix[$i] = $function_name;
-                        } elseif (($key == 'Fross') and $content) {
+                        }
+                        elseif (($key == 'Fross') and $content)
+                        {
                             $cut_hash = explode('#', $content);
                             $database = substr($cut_hash[0], 1);
 
@@ -164,27 +176,30 @@ class AgataCore
                             $definitions = Project::ReadProjectDefinitions($database);
                             $index = "table:$get_table:field:$get_field";
                             $nickname = $definitions[3][$index];
-                            if ($nickname) {
-                                $ColumnNames[$i - 1] = $nickname;
+                            if ($nickname)
+                            {
+                                $ColumnNames[$i -1] = $nickname;
                             }
                             $cross_matrix[$i] = array($database, $get_table, $get_field, $equ_expr);
                         }
                     }
-                    $i++;
+                    $i ++;
                 }
-                if ($cross_matrix) {
+                if ($cross_matrix)
+                {
                     $projects = Project::ReadProjects();
                     $connections = array_unique($connections);
-                    foreach ($connections as $connection) {
+                    foreach($connections as $connection)
+                    {
                         $ext_conn[$connection] = new AgataConnection;
-                        if (!$ext_conn[$connection]->Open($projects[$connection], false)) {
+                        if (!$ext_conn[$connection]->Open($projects[$connection], false))
+                        {
                             $ext_conn[$connection] = null;
                         }
                     }
                 }
 
                 $CurrentQuery = new AgataDataSet;
-
                 $CurrentQuery->FunctionMatrix = $function_matrix;
                 $CurrentQuery->CrossMatrix    = $cross_matrix;
                 $CurrentQuery->ColumnCount    = $ColumnCount;
@@ -199,10 +214,14 @@ class AgataCore
                 //$conn->Close();
                 //@Wait::Off();
                 return $CurrentQuery;
-            } else {
+            }
+            else
+            {
                 return new AgataError(_a('Cannot connect to Database'));
             }
-        } else {
+        }
+        else
+        {
             return new AgataError(_a('Query Error') . BREAKLN . $sql);
         }
     }
@@ -215,11 +234,12 @@ class AgataCore
         $function_dir    = AGATA_PATH . '/functions';
         $function_path   = $function_dir . str_replace('/', bar, $function);
         $function_divide = explode('/', $function);
-        $function_file   = $function_divide[count($function_divide) - 1];
+        $function_file   = $function_divide[count($function_divide) -1];
         $function_dots   = explode('.', $function_file);
         $function_name   = $function_dots[0];
 
-        if (!function_exists($function_name)) {
+        if (!function_exists($function_name))
+        {
             include_once($function_path);
         }
 

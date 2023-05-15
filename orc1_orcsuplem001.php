@@ -201,6 +201,37 @@ function js_preenchepesquisa(chave){
     echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave";
   ?>
 }
+function js_processarSuplementacao(codproj,data,codsup) 
+{
+    var data = String(data).substr(6,2)+"/"+String(data).substr(4,2)+"/"+String(data).substr(0,4);  
+    var oParam               = new Object();
+    oParam.iProjeto          = codproj;
+    oParam.exec              = 'processarSuplementacoes';
+    oParam.dataprocessamento = data;
+    oParam.aSuplementacoes   = new Array();
+    var aSuplementacoes = codsup;
+    oParam.aSuplementacoes.push(codsup);
+    js_divCarregando('Aguarde, pesquisando dados...', 'msgBox');
+    var oAjax   = new Ajax.Request(
+                               'orc4_suplementacoes.RPC.php',
+                                {
+                                    method:'post',
+                                    parameters:'json='+Object.toJSON(oParam),
+                                    onComplete:js_retornoProcessarSuplementacao
+                                }
+                                );
+}
+function js_retornoProcessarSuplementacao(oAjax) 
+{
+   js_removeObj('msgBox');
+   var oRetorno = eval("("+oAjax.responseText+")");
+   if (oRetorno.status == 1) {
+      alert('Suplementação(ões) processadas com sucesso.');
+      location.reload();
+      return js_getSuplementacoesProjeto();
+   }
+   return alert(oRetorno.message.urlDecode());
+}
 </script>
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
@@ -337,6 +368,7 @@ function js_preenchepesquisa(chave){
    <td>USUÁRIO </td>
    <td>ALTERAR </td>
    <td>EXCLUIR </td>
+   <td>PROCESSAR </td>
 
   </tr>
   <?
@@ -363,9 +395,13 @@ function js_preenchepesquisa(chave){
 	    if ($o49_data!='') {
 	       $op='disabled';
 	    }
+     
+     $dataExercursao = implode("", array_reverse(explode("/", $o39_data)));
+
 	  ?>
           <td><input type=button value=Alterar onClick="js_alterar(<?=$o39_codproj?>,<?=$o46_codsup ?>,<?=$o46_tiposup ?>); " <?=$op?> ></td>
           <td><input type=button value=Excluir onClick="js_excluir(<?=$o39_codproj?>,<?=$o46_codsup ?>); " <?=$op?> ></td>
+          <td><input type=button value=Processar onClick="js_processarSuplementacao(<?=$o39_codproj?>,<?=$dataExercursao ?>,<?=$o46_codsup ?>); " <?=$op?> ></td>
 	 </tr>
 	 <?
       }

@@ -740,6 +740,12 @@ class cl_ctb102023
                                   AND db83_tipoconta IN (2, 3) THEN db83_nroseqaplicacao::varchar
                               ELSE ' '
                           END AS nroseqaplicacao,
+                          CASE 
+                              WHEN 
+                                  (SELECT si09_tipoinstit FROM infocomplementaresinstit 
+                                   WHERE si09_instit = {$instit} ) = 5 
+                                  AND db83_tipoconta IN (2,3)
+				             THEN db83_tipoaplicacao::VARCHAR ELSE ' ' END AS tipoaplicacao,
                           db83_descricao AS desccontabancaria,
                           CASE
                               WHEN db83_numconvenio IS NULL THEN 2
@@ -801,6 +807,7 @@ class cl_ctb102023
     $sSqlAplicacaoPrevidencia = "";
     if ($oRegVerifica->si09_tipoinstit == 5) {
       $sSqlAplicacaoPrevidencia = $oRegVerifica->nroseqaplicacao == "" ? "" : " AND si95_nroseqaplicacao = {$oRegVerifica->nroseqaplicacao} ";
+      $sSqlAplicacaoPrevidencia .= $oRegVerifica->tipoaplicacao == "" ? "" : " AND si95_tipoaplicacao::int = {$oRegVerifica->tipoaplicacao} ";
     }
 
     for ($iContAnoReg10 = 2014; $iContAnoReg10 <= $ano; $iContAnoReg10++) {
