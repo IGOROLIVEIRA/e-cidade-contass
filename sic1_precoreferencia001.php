@@ -226,7 +226,7 @@ if (isset($incluir)) {
                 $clitemprecoreferencia->si02_taxa = $oItemOrc->pc01_taxa;
                 $clitemprecoreferencia->si02_criterioadjudicacao = $oItemOrc->pc80_criterioadjudicacao;
                 $clitemprecoreferencia->si02_mediapercentual = $oItemOrc->mediapercentual;
-                $clitemprecoreferencia->si02_vltotalprecoreferencia = number_format($oItemOrc->valor*$oItemOrc->pc23_quant,2);
+                $clitemprecoreferencia->si02_vltotalprecoreferencia = str_replace(',','.',number_format($oItemOrc->valor*$oItemOrc->pc23_quant,2, ',', ''));
                 $clitemprecoreferencia->incluir(null);  
             }
         }

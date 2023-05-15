@@ -16,7 +16,7 @@ class cl_precoreferenciaacount {
   public $erro_campo = null;  
   public $pagina_retorno = null; 
   // cria variaveis do arquivo 
-  public $si233_sequencial = 0; 
+  public $si233_sequencial = null; 
   public $si233_precoreferencia = 0; 
   public $si233_acao = null; 
   public $si233_idusuario = 0; 
@@ -62,9 +62,30 @@ class cl_precoreferenciaacount {
   // funcao para inclusao
   function incluir () { 
       $this->atualizacampos();
-     if ($this->si233_sequencial == null ) { 
-       $this->si233_sequencial = "0";
-     }
+     if ($this->si233_sequencial == "" || $this->si233_sequencial == null) {
+      $result = db_query("select nextval('precoreferenciaacount_si233_sequencial_seq')");
+      if ($result == false) {
+        $this->erro_banco = str_replace("\n", "", @pg_last_error());
+        $this->erro_sql   = "Verifique o cadastro da sequencia: precoreferenciaacount_si233_sequencial_seq do campo: si233_sequencial";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+      $this->si233_sequencial = pg_result($result, 0, 0);
+    } else {
+      $result = db_query("select last_value from precoreferenciaacount_si233_sequencial_seq");
+      if (($result != false) && (pg_result($result, 0, 0) <$this->si233_sequencial)) {
+        $this->erro_sql = " Campo si233_sequencial maior que último número da sequencia.";
+        $this->erro_banco = "Sequencia menor que este número.";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      } else {
+        $this->si233_sequencial = pg_result($result, 0, 0);
+      }
+    }
      if ($this->si233_precoreferencia == null ) { 
        $this->si233_precoreferencia = "0";
      }
@@ -95,8 +116,10 @@ class cl_precoreferenciaacount {
                                ,$this->si233_precoreferencia 
                                ,'$this->si233_acao' 
                                ,$this->si233_idusuario 
-                               ,$this->si233_datahr 
+                               ,'$this->si233_datahr' 
                       )";
+    
+
      $result = db_query($sql); 
      if ($result==false) { 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
