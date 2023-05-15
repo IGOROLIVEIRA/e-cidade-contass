@@ -150,7 +150,7 @@ db_app::load("estilos.css, grid.style.css");
                                     )
                                     ?>
                                     <strong>Hora:</strong>
-                                    <?php db_input('ve62_hora', 5, $Ive62_hora, true, 'text', $db_opcao); ?>
+                                    <?php db_input('ve62_hora', 5, $Ive62_hora, true, 'text', $db_opcao,""); ?>
                                 </td>
 
                             </tr>
@@ -1669,10 +1669,12 @@ db_app::load("estilos.css, grid.style.css");
         var databanco = document.form1.ve62_dtmanut_ano.value + '-' +
             document.form1.ve62_dtmanut_mes.value + '-' +
             document.form1.ve62_dtmanut_dia.value;
+        var horabanco = document.form1.ve62_hora.value;
         var manutencao = document.form1.ve62_codigo.value;
         js_OpenJanelaIframe('CurrentWindow.corpo.iframe_veicmanut', 'db_iframe_ultimamedida',
             'func_veiculos_medida.php?metodo=ultimamedida&veiculo=' + document.form1.ve62_veiculos.value +
             '&data=' + databanco +
+            '&hora=' + horabanco +
             '&manutencao=' + manutencao +
             '&funcao_js=parent.js_mostraultimamedida', 'Pesquisa Ultima Medida', false);
 
@@ -1759,4 +1761,10 @@ db_app::load("estilos.css, grid.style.css");
             if (theEvent.preventDefault) theEvent.preventDefault();
         }
     }
+
+    $('ve62_hora').onblur = function() {
+
+        js_pesquisa_medida();
+
+    };
 </script>
