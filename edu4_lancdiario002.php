@@ -69,7 +69,7 @@ $db_opcao = 1;
     <center>
       <div style='display:table;'>
         <fieldset>
-          <legend style="font-weight: bold">Diário de Classe - Lançamentos Diários </legend>
+          <legend style="font-weight: bold">Diário de Classe - Lançamento Conteúdo </legend>
           <table border='0'>
             <tr>
               <td nowrap title="">
@@ -109,8 +109,8 @@ $db_opcao = 1;
 <script>
   sUrlRpc = "edu4_diarioclasse.RPC.php";
   var iRegente = 0;
+  var iLancamento = "conteudo";
   var aPeriodosAula = new Array();
-  var iLancamento = "frequencia";
   init = function() {
 
     oTxtFieldRegente = new DBTextField("txtFieldRegente ", "oTxtFieldRegente", null, "54");
@@ -213,178 +213,200 @@ $db_opcao = 1;
   };
 
   function js_diarioClasse(oAjax) {
-
-    js_removeObj('msgBox');
-    var oRetorno = eval("(" + oAjax.responseText + ")");
-    if (oRetorno.aPeriodosAulaDia.length == 0) {
-
-      alert('Turma sem períodos de aula cadastrados.');
-      return false;
-    }
-
-    /**
-     *Variavel no escopo globar, Colocada para acessar os periodos de aula na função salvar
-     */
-    aPeriodosAula = oRetorno.aPeriodosAulaDia;
-    $('frmDiarioClasse').disable();
-    oWindowDiarioClasse = new windowAux('wndDiarioClasse',
-      'Diario de Classe',
-      document.body.getWidth() - 10
-    );
-
-    oWindowDiarioClasse.setShutDownFunction(function() {
-
-      oWindowDiarioClasse.destroy();
-      $('frmDiarioClasse').enable();
-    });
-
-    var sContentWindow = "<div>";
-    sContentWindow += "  <fieldset>";
-    sContentWindow += "    <legend><b>Frequência Diária</b></legend>";
-    sContentWindow += "     <div id='ctnDataGridDiarioClasse'></div>";
-    sContentWindow += "   </fieldset>";
-    sContentWindow += "</div>";
-    //sContentWindow += "<div style='text-align:center;padding-top:4px;padding-right:3px;'>";
-    //sContentWindow += "  <div style='float:right;clear:both;font-weight:bold'>";
-    //sContentWindow += "    <span style='background-color:#009600;padding:2px 8px 2px 8px;'>&nbsp;</span>&nbsp;Aluno na escola";
-    //sContentWindow += "    <span style='background-color:#FF0000;padding:2px 8px 2px 8px;'>&nbsp;</span>&nbsp;Aluno ausente na escola";
-    //sContentWindow += "  </div>";
-    sContentWindow += "  <input type='button' value='Salvar' id='btnSalvar' onclick ='js_salvarDiarioClasse()'>";
-    sContentWindow += "  <input type='button' value='Dia Anterior' id='btnDiaAnterior' onclick ='js_diaAnterior()'>";
-    sContentWindow += "  <input type='button' value='Próximo Dia'  id='btnProximoDia'onclick ='js_proximoDia()'>";
-    sContentWindow += "  <input type='button' value='Fechar'       id='btnFechar'>";
-    sContentWindow += '</div>';
-    oWindowDiarioClasse.setContent(sContentWindow);
-
-    var sTurma = oCboTurma.getLabel();
-    var sData = oCboData.getLabel();
-    var sRegente = oTxtFieldRegente.getValue();
-
-    var sMensagem = 'Frequência da Turma <b>' + sTurma + ' dia ' + sData + ' </b>';
-    var oMessageBoard = new DBMessageBoard('msgBoardAcesso',
-      'Lançamento do Diário de Classe - ' + sRegente + ' - ' + oCboDisciplina.getLabel(),
-      sMensagem,
-      oWindowDiarioClasse.getContentContainer());
-    oMessageBoard.show();
-    oWindowDiarioClasse.show();
-
-    $('btnFechar').observe('click', function() {
-
-      oWindowDiarioClasse.destroy();
-      $('frmDiarioClasse').enable();
-    });
-
-    oDBGridDiarioClasse = new DBGrid('idDBGridDiarioClasse');
-    oDBGridDiarioClasse.nameInstance = 'oDBGridDiarioClasse';
-
-    var aHeader = new Array('Nº', 'Aluno', 'Código', 'Situação');
-    var aAligns = new Array('center', 'left', 'center', 'center');
-    var aWidth = new Array('2%', '30%', '5%', '10%');
-    /**
-     *Criamos as colunas com os periodos Dinamicamente para os periodos de Aula.
-     */
-    var iTotalNumeroPeriodos = oRetorno.aPeriodosAulaDia.length;
-    var iTamanhoPeriodo = js_round(20 / iTamanhoPeriodo, 0);
-    if (iTotalNumeroPeriodos == 1) {
-
-      aWidth[3] = '23%';
-      iTamanhoPeriodo = 7;
-    }
-    oRetorno.aPeriodosAulaDia.each(function(oPeriodo, iPeriodo) {
-
-      aHeader.push(oPeriodo.descricao_periodo.urlDecode());
-      aWidth.push(iTamanhoPeriodo + '%');
-      aAligns.push('center');
-    });
-
-    //aHeader.push('Acesso');
-    aHeader.push('');
-    aWidth.push('0%');
-    aAligns.push('center');
-
-    oDBGridDiarioClasse.setCellWidth(aWidth);
-    oDBGridDiarioClasse.setCellAlign(aAligns);
-    oDBGridDiarioClasse.setHeader(aHeader);
-    oDBGridDiarioClasse.setHeight((oWindowDiarioClasse.getHeight() / 1.8));
-    oDBGridDiarioClasse.show($('ctnDataGridDiarioClasse'));
-    oDBGridDiarioClasse.clearAll(true);
-
-    /**
-     * Armazena as informações de data de matrícula e data de saída de cada linha
-     */
-    var aDatasLinhas = new Array();
-
-    /**
-     * Preenchemos a grid com os dados do alunos
-     */
-    oRetorno.aAlunos.each(function(oAluno, iAluno) {
-
-      var aLinha = new Array();
-      aLinha[0] = oAluno.ordem_turma;
-      var sCor = "#FF0000";
-      if (oAluno.acessoescola) {
-        sCor = "#009600";
+      js_removeObj("msgBox");
+      var oRetorno = eval("(" + oAjax.responseText + ")");
+      if (oRetorno.aPeriodosAulaDia.length == 0) {
+          alert("Turma sem períodos de aula cadastrados.");
+          return false;
       }
-
-      var sNecessidade = "";
-      if (oAluno.lTemNecessidade) {
-        sNecessidade = "<b> - NEE</b>";
-      }
-
-      aLinha[1] = "<span>" + oAluno.nome.urlDecode() + sNecessidade + "</span>";
-      aLinha[2] = oAluno.codigo;
-      aLinha[3] = oAluno.situacao.urlDecode();
 
       /**
-       *Criamos os Checkboxes dos Periodos que
+       * Variável no escopo global.
+       * Colocada para acessar os períodos de aula na função salvar.
        */
-      oRetorno.aPeriodosAulaDia.each(function(oPeriodo, iPeriodo) {
+      aPeriodosAula = oRetorno.aPeriodosAulaDia;
+      $("frmDiarioClasse").disable();
+      oWindowDiarioClasse = new windowAux(
+          "wndDiarioClasse",
+          "Diario de Classe",
+          document.body.getWidth() - 10
+      );
 
-        var sCheckboxMarcado = "checked";
-        if (js_search_in_array(oAluno.faltas, oPeriodo.codigo_regencia_periodo)) {
-          sCheckboxMarcado = " ";
-        }
-        var sCheckbox = "<input type='checkbox' value='" + oPeriodo.codigo_regencia_periodo + "'";
-        sCheckbox += " onfocus='js_sinalizarLinhaGrid(this, true)'";
-        sCheckbox += " onblur='js_sinalizarLinhaGrid(this, false)'";
-        if (oAluno.lBloqueioFalta) {
-          sCheckbox += " disabled ";
-        }
-        sCheckbox += sCheckboxMarcado + " >";
-        aLinha.push(sCheckbox);
+      oWindowDiarioClasse.setShutDownFunction(function () {
+          oWindowDiarioClasse.destroy();
+          $("frmDiarioClasse").enable();
       });
-      //aLinha.push("<div style='margin:auto;text-align:center;background-color:" + sCor + ";width:15px;height:80%'>&nbsp;&nbsp;</div>");
-      aLinha.push("");
-      oDBGridDiarioClasse.addRow(aLinha);
-      oDBGridDiarioClasse.aRows[iAluno].sEvents += "onmouseover='js_sinalizarLinhaGrid(this, true);'";
-      oDBGridDiarioClasse.aRows[iAluno].sEvents += "onmouseout='js_sinalizarLinhaGrid(this, false);'";
+
+      var sContentWindow = "<div>";
+      sContentWindow += "  <fieldset style='display: none;'>";
+      sContentWindow += "     <div id='ctnDataGridDiarioClasse'></div>";
+      sContentWindow += "   </fieldset>";
+      sContentWindow += "  <fieldset>";
+      sContentWindow += "    <legend><b>Aula Desenvolvida</b></legend>";
+      sContentWindow += "     <div id='ctnAulaDesenvolvida'></div>";
+      sContentWindow += "   </fieldset>";
+      sContentWindow += "</div>";
+      sContentWindow +=
+          "  <input type='button' value='Salvar' id='btnSalvar' onclick ='js_salvarDiarioClasse()'>";
+      sContentWindow +=
+          "  <input type='button' value='Dia Anterior' id='btnDiaAnterior' onclick ='js_diaAnterior()'>";
+      sContentWindow +=
+          "  <input type='button' value='Próximo Dia'  id='btnProximoDia'onclick ='js_proximoDia()'>";
+      sContentWindow +=
+          "  <input type='button' value='Fechar'       id='btnFechar'>";
+      sContentWindow += "</div>";
+      oWindowDiarioClasse.setContent(sContentWindow);
+
+      var sTurma = oCboTurma.getLabel();
+      var sData = oCboData.getLabel();
+      var sRegente = oTxtFieldRegente.getValue();
+
+      var sMensagem =
+          "Conteúdo da Turma <b>" + sTurma + " dia " + sData + " </b>";
+      var oMessageBoard = new DBMessageBoard(
+          "msgBoardAcesso",
+          "Lançamento do Diário de Classe - " +
+          sRegente +
+          " - " +
+          oCboDisciplina.getLabel(),
+          sMensagem,
+          oWindowDiarioClasse.getContentContainer()
+      );
+      oMessageBoard.show();
+      oWindowDiarioClasse.show();
+
+      oTxtFieldAulaDesenvolvida = document.createElement("textarea");
+      oTxtFieldAulaDesenvolvida.setAttribute("id", "oTxtFieldAulaDesenvolvida");
+      oTxtFieldAulaDesenvolvida.style.width = "100%";
+      oTxtFieldAulaDesenvolvida.style.height = "25vh";
+      oTxtFieldAulaDesenvolvida.setAttribute("maxLength", 200);
+      $("ctnAulaDesenvolvida").appendChild(oTxtFieldAulaDesenvolvida);
+      oTxtFieldAulaDesenvolvida.value = oRetorno.sAulaData.urlDecode();
+
+      $("btnFechar").observe("click", function () {
+          oWindowDiarioClasse.destroy();
+          $("frmDiarioClasse").enable();
+      });
+
+      oDBGridDiarioClasse = new DBGrid("idDBGridDiarioClasse");
+      oDBGridDiarioClasse.nameInstance = "oDBGridDiarioClasse";
+
+      var aHeader = new Array("Nº", "Aluno", "Código", "Situação");
+      var aAligns = new Array("center", "left", "center", "center");
+      var aWidth = new Array("2%", "30%", "5%", "10%");
+      /**
+       *Criamos as colunas com os periodos Dinamicamente para os periodos de Aula.
+       */
+      var iTotalNumeroPeriodos = oRetorno.aPeriodosAulaDia.length;
+      var iTamanhoPeriodo = js_round(20 / iTamanhoPeriodo, 0);
+
+      if (iTotalNumeroPeriodos == 1) {
+          aWidth[3] = "23%";
+          iTamanhoPeriodo = 7;
+      }
+
+      oRetorno.aPeriodosAulaDia.each(function (oPeriodo, iPeriodo) {
+          aHeader.push(oPeriodo.descricao_periodo.urlDecode());
+          aWidth.push(iTamanhoPeriodo + "%");
+          aAligns.push("center");
+      });
+
+      aHeader.push("");
+      aWidth.push("0%");
+      aAligns.push("center");
+
+      oDBGridDiarioClasse.setCellWidth(aWidth);
+      oDBGridDiarioClasse.setCellAlign(aAligns);
+      oDBGridDiarioClasse.setHeader(aHeader);
+      oDBGridDiarioClasse.setHeight(oWindowDiarioClasse.getHeight() / 1.8);
+      oDBGridDiarioClasse.show($("ctnDataGridDiarioClasse"));
+      oDBGridDiarioClasse.clearAll(true);
 
       /**
-       * Dados da linha para adicionar ao hint
+       * Armazena as informações de data de matrícula e data de saída de cada linha
        */
-      var oDadosAluno = new Object();
-      oDadosAluno.iLinha = iAluno;
-      oDadosAluno.data_matricula = oAluno.data_matricula;
-      oDadosAluno.data_saida = oAluno.data_saida;
+      var aDatasLinhas = new Array();
 
-      aDatasLinhas.push(oDadosAluno);
-    });
+      /**
+       * Preenchemos a grid com os dados do alunos
+       */
+      oRetorno.aAlunos.each(function (oAluno, iAluno) {
+          var aLinha = new Array();
+          aLinha[0] = oAluno.ordem_turma;
+          var sCor = "#FF0000";
+          if (oAluno.acessoescola) {
+              sCor = "#009600";
+          }
 
-    oDBGridDiarioClasse.renderRows();
+          var sNecessidade = "";
+          if (oAluno.lTemNecessidade) {
+              sNecessidade = "<b> - NEE</b>";
+          }
 
-    aDatasLinhas.each(function(oDadosData, iLinha) {
+          aLinha[1] =
+              "<span>" + oAluno.nome.urlDecode() + sNecessidade + "</span>";
+          aLinha[2] = oAluno.codigo;
+          aLinha[3] = oAluno.situacao.urlDecode();
 
-      var sHint = "Data de Matrícula: " + js_formatar(oDadosData.data_matricula, 'd');
-      sHint += "<br>Data de Saída: " + js_formatar(oDadosData.data_saida, 'd');
-      var oParametros = {
-        iWidth: '500',
-        oPosition: {
-          sVertical: 'T',
-          sHorizontal: 'L'
-        }
-      };
-      oDBGridDiarioClasse.setHint(iLinha, 1, sHint);
-    });
+          /**
+           *Criamos os Checkboxes dos Periodos que
+           */
+          oRetorno.aPeriodosAulaDia.each(function (oPeriodo, iPeriodo) {
+              var sCheckboxMarcado = "checked";
+              if (
+                  js_search_in_array(
+                      oAluno.faltas,
+                      oPeriodo.codigo_regencia_periodo
+                  )
+              ) {
+                  sCheckboxMarcado = " ";
+              }
+              var sCheckbox =
+                  "<input type='checkbox' value='" +
+                  oPeriodo.codigo_regencia_periodo +
+                  "'";
+              sCheckbox += " onfocus='js_sinalizarLinhaGrid(this, true)'";
+              sCheckbox += " onblur='js_sinalizarLinhaGrid(this, false)'";
+              if (oAluno.lBloqueioFalta) {
+                  sCheckbox += " disabled ";
+              }
+              sCheckbox += sCheckboxMarcado + " >";
+              aLinha.push(sCheckbox);
+          });
+          aLinha.push("");
+          oDBGridDiarioClasse.addRow(aLinha);
+          oDBGridDiarioClasse.aRows[iAluno].sEvents +=
+              "onmouseover='js_sinalizarLinhaGrid(this, true);'";
+          oDBGridDiarioClasse.aRows[iAluno].sEvents +=
+              "onmouseout='js_sinalizarLinhaGrid(this, false);'";
+
+          /**
+           * Dados da linha para adicionar ao hint
+           */
+          var oDadosAluno = new Object();
+          oDadosAluno.iLinha = iAluno;
+          oDadosAluno.data_matricula = oAluno.data_matricula;
+          oDadosAluno.data_saida = oAluno.data_saida;
+
+          aDatasLinhas.push(oDadosAluno);
+      });
+
+      oDBGridDiarioClasse.renderRows();
+
+      aDatasLinhas.each(function (oDadosData, iLinha) {
+          var sHint =
+              "Data de Matrícula: " + js_formatar(oDadosData.data_matricula, "d");
+          sHint +=
+              "<br>Data de Saída: " + js_formatar(oDadosData.data_saida, "d");
+          var oParametros = {
+              iWidth: "500",
+              oPosition: {
+                  sVertical: "T",
+                  sHorizontal: "L",
+              },
+          };
+          oDBGridDiarioClasse.setHint(iLinha, 1, sHint);
+      });
   }
 
   function js_getDatasProfessor() {
@@ -428,7 +450,6 @@ $db_opcao = 1;
     });
   }
 
-
   function js_getTurmasNoDia() {
 
     var oParametros = new Object();
@@ -470,68 +491,74 @@ $db_opcao = 1;
   }
 
   function js_salvarDiarioClasse(lConfirmar) {
-
-    if (lConfirmar == null) {
-      lConfirmar = true;
-    }
-
-    if (lConfirmar) {
-      if (!confirm('Todas as Presenças/Faltas foram informadas?')) {
-        return false;
+      if (lConfirmar == null) {
+          lConfirmar = true;
       }
-    }
 
-    /**
-     * Coletamos os codigos das regencias
-     */
-    var aRegencias = new Array();
-    aPeriodosAula.each(function(oPeriodo, iPeriodo) {
-      aRegencias.push(oPeriodo.codigo_regencia_periodo);
-    });
+      if (lConfirmar) {
+          if (!confirm("Deseja salvar a aula desenvolvida?")) {
+              return false;
+          }
+      }
 
-    var aAlunos = new Array();
-    oDBGridDiarioClasse.aRows.each(function(aLinha, iSeq) {
-
-      var aFaltas = new Array();
-      var iPrimeiraColuna = 4;
-      aPeriodosAula.each(function(oPeriodo, iPeriodo) {
-
-        var iIdColunaPeriodo = aLinha.aCells[iPrimeiraColuna + iPeriodo].sId;
-        var oCheckboxPresenca = $(iIdColunaPeriodo).childNodes[0];
-        if (!oCheckboxPresenca.checked) {
-          aFaltas.push(oCheckboxPresenca.value);
-        }
+      /**
+       * Coletamos os codigos das regencias
+       */
+      var aRegencias = new Array();
+      aPeriodosAula.each(function (oPeriodo, iPeriodo) {
+          aRegencias.push(oPeriodo.codigo_regencia_periodo);
       });
-      oAluno = new Object();
-      oAluno.iCodigo = aLinha.aCells[2].getValue();
-      oAluno.faltas = aFaltas;
-      aAlunos.push(oAluno);
-    });
 
-    js_divCarregando('Aguarde, salvando os dados do Diário de Classe.', 'msgBox');
-    var oParametros = new Object();
-    oParametros.exec = "salvarDiarioClasse";
-    oParametros.iRegente = iRegente;
-    oParametros.dtAula = oCboData.getValue();
-    oParametros.iDisciplina = oCboDisciplina.getValue();
-    oParametros.iTurma = oCboTurma.getValue();
-    oParametros.aAlunos = aAlunos;
-    oParametros.aRegencias = aRegencias;
-    var oAjax = new Ajax.Request(sUrlRpc, {
-      method: 'post',
-      parameters: 'json=' + Object.toJSON(oParametros),
-      onComplete: function(oResponse) {
+      var aAlunos = new Array();
+      oDBGridDiarioClasse.aRows.each(function (aLinha, iSeq) {
+          var aFaltas = new Array();
+          var iPrimeiraColuna = 4;
 
-        js_removeObj('msgBox');
-        var oRetorno = eval("(" + oResponse.responseText + ")");
-        if (oRetorno.status == 1) {
+          aPeriodosAula.each(function (oPeriodo, iPeriodo) {
+              var iIdColunaPeriodo =
+                  aLinha.aCells[iPrimeiraColuna + iPeriodo].sId;
+              var oCheckboxPresenca = $(iIdColunaPeriodo).childNodes[0];
+              if (!oCheckboxPresenca.checked) {
+                  aFaltas.push(oCheckboxPresenca.value);
+              }
+          });
 
-          alert('Diário de Classe Salvo com sucesso.');
-        } else {
-          alert(oRetorno.message.urlDecode());
-        }
-      }
-    });
+          oAluno = new Object();
+          oAluno.iCodigo = aLinha.aCells[2].getValue();
+          oAluno.faltas = aFaltas;
+          aAlunos.push(oAluno);
+      });
+
+      js_divCarregando(
+          "Aguarde, salvando os dados do Diário de Classe.",
+          "msgBox"
+      );
+
+      var oParametros = new Object();
+      oParametros.exec = "salvarDiarioClasse";
+      oParametros.iRegente = iRegente;
+      oParametros.dtAula = oCboData.getValue();
+      oParametros.iDisciplina = oCboDisciplina.getValue();
+      oParametros.iTurma = oCboTurma.getValue();
+      oParametros.aAlunos = aAlunos;
+      oParametros.aRegencias = aRegencias;
+      oParametros.sAulaDesenvolvida = encodeURIComponent(
+          tagString($F("oTxtFieldAulaDesenvolvida"))
+      );
+
+      var oAjax = new Ajax.Request(sUrlRpc, {
+          method: "post",
+          parameters: "json=" + Object.toJSON(oParametros),
+          onComplete: function (oResponse) {
+              js_removeObj("msgBox");
+              var oRetorno = eval("(" + oResponse.responseText + ")");
+              if (oRetorno.status == 1) {
+                  alert("Diário de Classe Salvo com sucesso.");
+              } else {
+                  alert(oRetorno.message.urlDecode());
+              }
+          },
+      });
   }
 
   function js_proximoDia() {
