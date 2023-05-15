@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: licitacao
@@ -52,13 +52,14 @@ class cl_licitaparam
     var $l12_validacadfornecedor = null;
     var $l12_pncp = null;
     var $l12_numeracaomanual = null;
+    var $l12_acessoapipcp = null;
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-                 l12_instit = int4 = Instituição 
-                 l12_escolherprocesso = bool = Escolher Processo de Compras 
-                 l12_escolheprotocolo = bool = Processo de Protocolo do Sistema 
-                 l12_qtdediasliberacaoweb = int4 = Dias de disponibilidade 
+                 l12_instit = int4 = Instituição
+                 l12_escolherprocesso = bool = Escolher Processo de Compras
+                 l12_escolheprotocolo = bool = Processo de Protocolo do Sistema
+                 l12_qtdediasliberacaoweb = int4 = Dias de disponibilidade
                  l12_tipoliberacaoweb = int4 = Disp. licitação na web até o julgamento
                  l12_usuarioadjundica = bool = Emitir usuario no relatorio de adjundicação
                  l12_validacadfornecedor = bool = Validacao no Cadastro de Fornecedor
@@ -86,6 +87,7 @@ class cl_licitaparam
     function atualizacampos($exclusao = false)
     {
         if ($exclusao == false) {
+            var_dump("execução false");
             $this->l12_instit = ($this->l12_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l12_instit"] : $this->l12_instit);
             $this->l12_escolherprocesso = ($this->l12_escolherprocesso == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_escolherprocesso"] : $this->l12_escolherprocesso);
             $this->l12_escolheprotocolo = ($this->l12_escolheprotocolo == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_escolheprotocolo"] : $this->l12_escolheprotocolo);
@@ -95,6 +97,7 @@ class cl_licitaparam
             $this->l12_validacadfornecedor = ($this->l12_validacadfornecedor == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_validacadfornecedor"] : $this->l12_validacadfornecedor);
             $this->l12_pncp = ($this->l12_pncp == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_pncp"] : $this->l12_pncp);
             $this->l12_numeracaomanual = ($this->l12_numeracaomanual == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_numeracaomanual"] : $this->l12_numeracaomanual);
+            $this->l12_acessoapipcp = ($this->l12_acessoapipcp == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_acessoapipcp"] : $this->l12_acessoapipcp);
         } else {
             $this->l12_instit = ($this->l12_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l12_instit"] : $this->l12_instit);
         }
@@ -149,26 +152,28 @@ class cl_licitaparam
             return false;
         }
         $sql = "insert into licitaparam(
-                                       l12_instit 
-                                      ,l12_escolherprocesso 
-                                      ,l12_escolheprotocolo 
-                                      ,l12_qtdediasliberacaoweb 
-                                      ,l12_tipoliberacaoweb 
+                                       l12_instit
+                                      ,l12_escolherprocesso
+                                      ,l12_escolheprotocolo
+                                      ,l12_qtdediasliberacaoweb
+                                      ,l12_tipoliberacaoweb
                                       ,l12_usuarioadjundica
                                       ,l12_validacadfornecedor
                                       ,l12_pncp
                                       ,l12_numeracaomanual
+                                      ,l12_acessoapipcp
                        )
                 values (
-                                $this->l12_instit 
-                               ,'$this->l12_escolherprocesso' 
+                                $this->l12_instit
+                               ,'$this->l12_escolherprocesso'
                                ,'$this->l12_escolheprotocolo'
-                               ," . ($this->l12_qtdediasliberacaoweb == "null" || $this->l12_qtdediasliberacaoweb == "" ? "null" : "'" . $this->l12_qtdediasliberacaoweb . "'") . " 
+                               ," . ($this->l12_qtdediasliberacaoweb == "null" || $this->l12_qtdediasliberacaoweb == "" ? "null" : "'" . $this->l12_qtdediasliberacaoweb . "'") . "
                                ,$this->l12_tipoliberacaoweb
                                ,'$this->l12_usuarioadjundica'
                                ,'$this->l12_validacadfornecedor'
                                ,'$this->l12_pncp'
                                ,'$this->l12_numeracaomanual'
+                               ,'$this->l12_acessoapipcp'
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -286,6 +291,19 @@ class cl_licitaparam
             if (trim($this->l12_numeracaomanual) == null) {
                 $this->erro_sql = " Campo numeracao manual da licitacao nao Informado.";
                 $this->erro_campo = "l12_numeracaomanual";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->l12_acessoapipcp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l12_numeracaomanual"])) {
+            $sql  .= $virgula . " l12_acessoapipcp  = '$this->l12_acessoapipcp' ";
+            $virgula = ",";
+            if (trim($this->l12_acessoapipcp) == null) {
+                $this->erro_sql = " Campo Plataforma eletrônica ativa nao Informado.";
+                $this->erro_campo = "l12_acessoapipcp";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));

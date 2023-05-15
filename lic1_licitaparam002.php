@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -42,9 +42,12 @@ $db_opcao = 22;
 
 $db_botao = false;
 if (isset($alterar)) {
-  db_inicio_transacao();
+    var_dump("if alterar true");
+    db_inicio_transacao();
+
   $result = $cllicitaparam->sql_record($cllicitaparam->sql_query(DB_getsession("DB_instit")));
   if ($result == false || $cllicitaparam->numrows == 0) {
+    var_dump("if result false");
     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
     $cllicitaparam->l12_escolherprocesso = $l12_escolherprocesso;
     $cllicitaparam->l12_escolheprotocolo = $l12_escolheprotocolo;
@@ -54,9 +57,11 @@ if (isset($alterar)) {
     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
     $cllicitaparam->l12_pncp = $l12_pncp;
     $cllicitaparam->l12_numeracaomanual = $l12_numeracaomanual;
+    $cllicitaparam->l12_acessoapipcp = $l12_acessoapipcp;
     $cllicitaparam->l12_instit = DB_getsession("DB_instit");
     $cllicitaparam->incluir(DB_getsession("DB_instit"));
   } else {
+    var_dump("if result false");
     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
     $cllicitaparam->l12_escolherprocesso = $l12_escolherprocesso;
     $cllicitaparam->l12_escolheprotocolo = $l12_escolheprotocolo;
@@ -66,6 +71,8 @@ if (isset($alterar)) {
     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
     $cllicitaparam->l12_pncp = $l12_pncp;
     $cllicitaparam->l12_numeracaomanual = $l12_numeracaomanual;
+    $cllicitaparam->l12_acessoapipcp = $l12_acessoapipcp;
+    var_dump($l12_acessoapipcp);
     $cllicitaparam->l12_instit = DB_getsession("DB_instit");
     $cllicitaparam->alterar(db_getsession("DB_instit"));
   }
@@ -74,6 +81,7 @@ if (isset($alterar)) {
 $db_opcao = 2;
 
 $result = $cllicitaparam->sql_record($cllicitaparam->sql_query(db_getsession("DB_instit")));
+
 
 if ($result != false && $cllicitaparam->numrows > 0) {
   db_fieldsmemory($result, 0);
