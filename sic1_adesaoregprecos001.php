@@ -142,7 +142,7 @@ if (!$sqlerro) {
                 alert('Inclusão efetuada com sucesso');
                 parent.document.formaba.db_itens.disabled=false;
                 parent.mo_camada('db_itens');
-                parent.CurrentWindow.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
+                parent.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
             </script>";
       }
       //$cladesaoregprecos->erro(true,true);
