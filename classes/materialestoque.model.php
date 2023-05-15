@@ -1186,13 +1186,13 @@ class materialEstoque
     }
 
     if ($this->iTipoSaida == 5 && $this->oMaterialGrupo->getCodigoContaDebito() == null && $this->oMaterialGrupo->getCodigoContaCredito() == null) {
-      throw new Exception("Contas não cadastradas para a respectiva saída");
+      throw new Exception("Contas não cadastradas para a respectiva saída321");
     }
 
     $iCodConta = $this->oMaterialGrupo->contasParaSaida($this->iTipoSaida)->codigo;
 
-    if (empty($iCodConta)) {
-      throw new Exception("Contas não cadastradas para a respectiva saída");
+    if (empty($iCodConta) && $this->iTipoSaida != 5) {
+      throw new Exception("Contas não cadastradas para a respectiva saída123");
     }
 
     $oLancamentoAuxiliarEstoque->setContaPcasp($iCodConta);
