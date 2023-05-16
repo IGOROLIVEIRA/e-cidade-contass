@@ -73,12 +73,6 @@ charset=iso-8859-1">
           }
 
 
-          $sql = "select  distinct (t41_placaseq),t52_bem, t52_descr, t44_valoratual, t52_depart, descrdepto, t52_valaqu from
-          bens join bensdepreciacao on t52_bem = t44_bens
-          inner join db_depart on coddepto = t52_instit
-          inner join bensplaca on t41_bem = t52_bem
-          where 1=1 $where";
-
           $sql = "select
           distinct bens.t52_bem,
           bens.t52_valaqu,
@@ -91,8 +85,7 @@ charset=iso-8859-1">
           bens.t52_bensmedida,
           bens.t52_bensmodelo,
           t52_depart,
-          t44_valoratual,
-          t55_codbem,
+          t44_valoratual + t44_valorresidual as t44_valoratual,
           case
             when exists
         (
@@ -116,22 +109,19 @@ charset=iso-8859-1">
           bensmedida.t67_sequencial = bens.t52_bensmedida
         inner join bensdepreciacao on
           t52_bem = t44_bens
-        inner join bensbaix on
-          t55_codbem = t52_bem
-        where
+        left join bensbaix on
+          t52_bem = t55_codbem 
+        where t55_codbem is null and
           t52_instit =  " . db_getsession("DB_instit") . $where . "
         order by
           t52_descr";
+
 
 
           db_lovrot($sql, 15, "()", "", $funcao_js);
         } else {
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
 
-
-            $sql = "select * from bens join bensdepreciacao on t52_bem = t44_bens
-            inner join db_depart on coddepto = t52_instit where t52_bem =
-            $pesquisa_chave and t52_instit = " . db_getsession("DB_instit");
 
             $sql = "select
             distinct bens.t52_bem,
@@ -145,8 +135,7 @@ charset=iso-8859-1">
             bens.t52_bensmedida,
             bens.t52_bensmodelo,
             t52_depart,
-            t44_valoratual,
-            t55_codbem,
+            t44_valoratual + t44_valorresidual as t44_valoratual,
             case
               when exists
           (
@@ -170,10 +159,12 @@ charset=iso-8859-1">
             bensmedida.t67_sequencial = bens.t52_bensmedida
           inner join bensdepreciacao on
             t52_bem = t44_bens
-          inner join bensbaix on
-            t55_codbem = t52_bem
-          where
-            t52_instit =  " . db_getsession("DB_instit") . " and t52_ident = '$pesquisa_chave'";
+          left join bensbaix on
+            t52_bem = t55_codbem 
+          where t55_codbem is null and
+             t52_instit =  " . db_getsession("DB_instit") . " and t52_ident = '$pesquisa_chave'
+          order by
+            t52_descr";
 
 
             $rsBem = db_query($sql);

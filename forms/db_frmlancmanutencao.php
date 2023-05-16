@@ -9,7 +9,7 @@
         <td>
           <?
           db_input('t52_bem', 8, 1, true, 'text', $db_opcao, "onchange='js_pesquisa_bem(false)'");
-          db_input('t52_descr', 40, 3, true, 'text', $db_opcao, 'style="width: 303px;"');
+          db_input('t52_descr', 40, 3, true, 'text', $db_opcao, "style='width: 303px;' onchange='js_pesquisa_descricaobem();'");
           db_input('t98_sequencial', 8, 1, true, 'hidden', 1, "onchange='js_pesquisa_bem(false)'");
           ?>
         </td>
@@ -123,6 +123,21 @@
   oAutoComplete = new dbAutoComplete(document.getElementById('t52_descr'), 'com4_pesquisabem.RPC.php');
   oAutoComplete.setTxtFieldId(document.getElementById('t52_bem'));
   oAutoComplete.show();
+
+  function js_pesquisa_descricaobem() {
+    if (document.getElementById('t52_descr').value == "") {
+      document.form1.t52_descr.value = '';
+      document.form1.t52_bem.value = '';
+      document.form1.t44_valoratual.value = '';
+      document.form1.t52_depart.value = '';
+      document.form1.descrdepto.value = '';
+      document.form1.t52_valaqu.value = '';
+      document.form1.t52_ident.value = '';
+      document.form1.t98_data.value = '';
+      return false;
+    }
+    js_pesquisa_bem();
+  }
 
   function js_mostrabemmanutencao(t98_sequencial, t98_bem, t98_data, t98_vlrmanut, t98_descricao, t98_tipo, t52_ident, t52_descr, t52_valaqu, t44_valoratual, t52_depart, descrdepto, t98_manutencaoprocessada) {
 

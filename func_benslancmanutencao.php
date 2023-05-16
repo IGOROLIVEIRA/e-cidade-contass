@@ -173,7 +173,7 @@ charset=iso-8859-1">
           bens.t52_bensmedida,
           bens.t52_bensmodelo,
           t52_depart,
-          t44_valoratual,
+          t44_valoratual + t44_valorresidual as t44_valoratual,
           case
             when exists
         (
@@ -221,7 +221,7 @@ charset=iso-8859-1">
             bens.t52_bensmedida,
             bens.t52_bensmodelo,
             t52_depart,
-            t44_valoratual,
+            t44_valoratual + t44_valorresidual as t44_valoratual,
             case
               when exists
           (
@@ -248,7 +248,7 @@ charset=iso-8859-1">
           left join bensbaix on
             t52_bem = t55_codbem 
           where t55_codbem is null and
-            t52_instit =  1 and t52_bem =
+            t52_instit = " .  db_getsession("DB_instit") . " and t52_bem =
             $pesquisa_chave
           order by
             t52_descr";

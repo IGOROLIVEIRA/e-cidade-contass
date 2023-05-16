@@ -83,12 +83,6 @@ if (isset($excluir)) {
 
 </html>
 
-<script>
-    //parent.document.formaba.componentes.disabled = false;
-    //top.corpo.iframe_componentes.location.href = 'pat1_lancmanutencao005';
-    //parent.mo_camada('componentes');
-</script>
-
 <?
 if (isset($incluir)) {
     if ($clbemmanutencao->erro_status == "0") {
