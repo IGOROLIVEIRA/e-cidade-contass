@@ -553,6 +553,30 @@ if (isset($alterar)) {
                 $sqlerro = true;
             }
         }
+        		
+		//VALIDAÇOES DE DATAS 
+		$dataaber = DateTime::createFromFormat('d/m/Y', $oPost->l20_dataaber);
+		$datacria = DateTime::createFromFormat('d/m/Y', $oPost->l20_datacria);
+		$dataaberproposta = DateTime::createFromFormat('d/m/Y', $oPost->l20_dataaberproposta);
+		
+
+        if ($dataaberproposta < $dataaber) {
+			$erro_msg = "A data informada no campo Abertura das Propostas deve ser  superior a Data Edital/Convite.";
+			$nomeCampo = "l20_dataaberproposta";
+			$sqlerro = true;
+		}
+
+		if ($dataaber < $datacria) {
+			$erro_msg = "A data inserida no campo Data Emis/Alt Edital/Convite deverá ser maior ou igual a data inserida no campo Data Abertura Proc. Adm.";
+			$nomeCampo = "l20_dataaber";
+			$sqlerro = true;
+		}
+
+		if ($dataaberproposta < $datacria) {
+			$erro_msg = "A data inserida no campo Data Abertura Proposta deverá ser maior ou igual a data inserida no campo Data Abertura Proc. Adm.";
+			$nomeCampo = "l20_dataaberproposta";
+			$sqlerro = true;
+		}
 
         if ($sqlerro == false) {
             $clliclicita->l20_amparolegal       = $oPost->l212_codigo;
