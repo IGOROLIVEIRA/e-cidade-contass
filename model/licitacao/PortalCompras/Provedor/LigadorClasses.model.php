@@ -2,6 +2,11 @@
 
 class LigadorClasses
 {
+    /**
+     * Retorna lista com bind de fabrica e codigo da modalidade tribunal
+     *
+     * @return array
+     */
     public static function listaBindModalidades(): array
     {
         return [

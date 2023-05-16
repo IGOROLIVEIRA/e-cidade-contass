@@ -141,7 +141,7 @@ class cl_liclicitaportalcompras
     public function sql_record($sql)
     {
         $result = db_query($sql);
-        if($result==false){
+        if($result==false || $result == null) {
           $this->numrows    = 0;
           $this->erro_banco = str_replace("\n","",@pg_last_error());
           $this->erro_sql   = "Erro ao selecionar os registros.";

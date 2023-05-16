@@ -511,7 +511,6 @@ $codigoModalidade = (db_utils::fieldsMemory($resource, 0))->codigomodalidade;
         var oParam = new Object();
         oParam.codigo = "<?= $licitacao?>";
         oParam.exec = "EnviarPregao";
-        oParam.codigoLicitacao = "2";
 
         var oAjax = new Ajax.Request(sUrl, {
             method: 'post',

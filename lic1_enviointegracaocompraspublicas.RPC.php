@@ -32,6 +32,11 @@ switch ($oParam->exec) {
             try {
                 $codigo    = $oParam->codigo;
                 $results   = $cl_liclicitaportalcompras->buscaLicitacoes($codigo);
+
+                if (empty($results)) {
+                    throw new Exception("Registro não encontrado");
+                }
+
                 $licitacao = $licitacaoFabrica->criar($results, $cl_liclicitaportalcompras->numrows);
 
                 $chaveAcesso = db_utils::fieldsMemory(
