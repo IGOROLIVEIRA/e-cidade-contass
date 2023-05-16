@@ -33,7 +33,6 @@ class AddColumunAllowedOc20204 extends AbstractMigration
                 ADD COLUMN l12_acessoapipcp BOOLEAN DEFAULT FALSE;
             COMMIT;
         ";
-        
 
         $this->execute($sql);
     }

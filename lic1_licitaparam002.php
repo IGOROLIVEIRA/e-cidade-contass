@@ -42,12 +42,10 @@ $db_opcao = 22;
 
 $db_botao = false;
 if (isset($alterar)) {
-    var_dump("if alterar true");
     db_inicio_transacao();
 
   $result = $cllicitaparam->sql_record($cllicitaparam->sql_query(DB_getsession("DB_instit")));
   if ($result == false || $cllicitaparam->numrows == 0) {
-    var_dump("if result false");
     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
     $cllicitaparam->l12_escolherprocesso = $l12_escolherprocesso;
     $cllicitaparam->l12_escolheprotocolo = $l12_escolheprotocolo;
@@ -61,7 +59,6 @@ if (isset($alterar)) {
     $cllicitaparam->l12_instit = DB_getsession("DB_instit");
     $cllicitaparam->incluir(DB_getsession("DB_instit"));
   } else {
-    var_dump("if result false");
     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
     $cllicitaparam->l12_escolherprocesso = $l12_escolherprocesso;
     $cllicitaparam->l12_escolheprotocolo = $l12_escolheprotocolo;
@@ -72,7 +69,6 @@ if (isset($alterar)) {
     $cllicitaparam->l12_pncp = $l12_pncp;
     $cllicitaparam->l12_numeracaomanual = $l12_numeracaomanual;
     $cllicitaparam->l12_acessoapipcp = $l12_acessoapipcp;
-    var_dump($l12_acessoapipcp);
     $cllicitaparam->l12_instit = DB_getsession("DB_instit");
     $cllicitaparam->alterar(db_getsession("DB_instit"));
   }

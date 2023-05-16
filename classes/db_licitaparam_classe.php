@@ -87,7 +87,6 @@ class cl_licitaparam
     function atualizacampos($exclusao = false)
     {
         if ($exclusao == false) {
-            var_dump("execução false");
             $this->l12_instit = ($this->l12_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l12_instit"] : $this->l12_instit);
             $this->l12_escolherprocesso = ($this->l12_escolherprocesso == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_escolherprocesso"] : $this->l12_escolherprocesso);
             $this->l12_escolheprotocolo = ($this->l12_escolheprotocolo == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_escolheprotocolo"] : $this->l12_escolheprotocolo);
