@@ -40,7 +40,7 @@ if (isset($imprimircsv)) {
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia005.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+    jan = window.open('sic1_precoreferencia005.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -55,7 +55,7 @@ if (isset($imprimirword)) {
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia006.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+    jan = window.open('sic1_precoreferencia006.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -225,6 +225,7 @@ if (isset($alterar)) {
         $clitemprecoreferencia->si02_taxa = $oItemOrc->pc01_taxa;
         $clitemprecoreferencia->si02_criterioadjudicacao = $oItemOrc->pc80_criterioadjudicacao;
         $clitemprecoreferencia->si02_mediapercentual = $oItemOrc->mediapercentual;
+        $clitemprecoreferencia->si02_vltotalprecoreferencia = str_replace(',','.',number_format($oItemOrc->valor*$oItemOrc->pc23_quant,2, ',', ''));
         $clitemprecoreferencia->incluir(null);    
 
        

@@ -122,7 +122,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
         $rsResult = db_query($sSql) or die(pg_last_error());
         $oResult = db_utils::fieldsMemory($rsResult, 0);
         $linhas = ceil(strlen($oResult->pc01_descrmater)/115);
-                $addalt = $linhas*3.1;
+                $addalt = $linhas*4;
                 if (($this->objpdf->gety() > $this->objpdf->h - 20) || $this->objpdf->gety() + $addalt > $this->objpdf->h -20 ) {
                     $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());                    
                     $this->objpdf->Setfont('Arial', '', 5);
@@ -339,7 +339,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 
                 $descricao = '';
                 $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
-                $addalt = $linhas*3.1;
+                $addalt = $linhas*4;
                 $old_y = $this->objpdf->gety();
 
                                         $this->objpdf->setfont('arial', '', 7);
@@ -358,7 +358,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
             } else {
                 $descricao = '';
                 $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
-                $addalt = $linhas*3.1;
+                $addalt = $linhas*4;
                 
                 
                 $old_y = $this->objpdf->gety();
@@ -481,10 +481,64 @@ if (pg_num_rows($this->rsLotes) > 0) {
 
             $controle++;
             $sqencia++;
-            if (($this->objpdf->gety() > $this->objpdf->h - 20)) {
+            $iContadorLinhasCriterios = 0;
+            $iContadorLinhasCriterios = $this->objpdf->NbLines(180,$oDadosDaLinha->descricao);
+            $y = ($iContadorLinhasCriterios * 4) + $this->objpdf->gety();
+            if (($this->objpdf->gety() > $this->objpdf->h - 20) || ($y >  $this->objpdf->h - 20)) {
+                if($y >  $this->objpdf->h - 20){
+                    for($x==0;$iContadorLinhasCriterios>$x;$x++){
+                        if(($x*4 +$this->objpdf->gety()) > $this->objpdf->h - 20){
+                            break;
+                        }
+                    }
+                    $addalt =  $x*4;
+                    if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {
+
+                        $descricao = '';
+                        $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
+                        $addalt = $linhas*4;
+                        $old_y = $this->objpdf->gety();
+    
+                        $this->objpdf->setfont('arial', '', 7);
+                        $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
+                        $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
+                        $this->objpdf->multicell(160, $alt, str_replace("\n","",$oDadosDaLinha->descricao), "T", "L", 0);
+    
+                        $this->objpdf->sety($old_y);
+                        $this->objpdf->setx(194);
+                        $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual, 1, 0, "C", 1);
+                        $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
+                        $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
+                        $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
+                        $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->total, 1, 1, "C", 1);
+    
+                    } else {
+                        
+                        $descricao = '';
+                        $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
+                        
+                        $old_y = $this->objpdf->gety();
+                        
+                        
+                        
+                        $this->objpdf->setfont('arial', '', 7);
+                        $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
+                        $this->objpdf->cell(15, $alt + $addalt, $iContadorLinhasCriterios, 1, 0, "C", 1);
+                        $this->objpdf->multicell(180, $alt, str_replace("\n","",$oDadosDaLinha->descricao), "T", "L", 0);
+    
+                        $this->objpdf->sety($old_y);
+                        $this->objpdf->setx(214);
+                        $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
+                        $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
+                        $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
+                        $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->total, 1, 1, "C", 1);
+    
+                        
+                    }
+                }
                 $this->objpdf->Line(4,$this->objpdf->gety(),287,$this->objpdf->gety());
                 $this->objpdf->Setfont('Arial', '', 5);
-                $this->objpdf->cell(285, $alt, "Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
+                $this->objpdf->cell(285, $alt, $x."Base: ".db_getsession("DB_base"), "T", 1, "L", 1);
                 $this->objpdf->Setfont('Arial', 'I', 6);
                 $this->objpdf->cell(265, $alt, "Processo de compras>Preço de Referência sic1_precoreferencia007.php Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data: " . date("d/m/Y H:i:s", db_getsession("DB_datausu")), 0, 0, "L", 1);
                 $this->objpdf->Setfont('Arial', '', 7);                    
@@ -548,49 +602,100 @@ if (pg_num_rows($this->rsLotes) > 0) {
 
                 $this->objpdf->sety($xlin + 15);
                 $alt = 4;
+
+                if($y >  $this->objpdf->h - 20){
+                    
+                    $addalt = ($iContadorLinhasCriterios-$x)*4;
+                    if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {
+
+                        $descricao = '';
+                        $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
+                        $addalt = $linhas*4;
+                        $old_y = $this->objpdf->gety();
+    
+                        $this->objpdf->setfont('arial', '', 7);
+                        $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
+                        $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
+                        $this->objpdf->multicell(160, $alt, str_replace("\n","",$oDadosDaLinha->descricao), "T", "L", 0);
+    
+                        $this->objpdf->sety($old_y);
+                        $this->objpdf->setx(194);
+                        $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual, 1, 0, "C", 1);
+                        $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
+                        $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
+                        $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
+                        $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->total, 1, 1, "C", 1);
+    
+                    } else {
+                        
+                        $descricao = '';
+                        $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
+                        
+                        $old_y = $this->objpdf->gety();
+                        
+                        
+                        
+                        $this->objpdf->setfont('arial', '', 7);
+                        $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
+                        $this->objpdf->cell(15, $alt + $addalt, $iContadorLinhasCriterios, 1, 0, "C", 1);
+                        $this->objpdf->multicell(180, $alt, str_replace("\n","",$oDadosDaLinha->descricao), "T", "L", 0);
+    
+                        $this->objpdf->sety($old_y);
+                        $this->objpdf->setx(214);
+                        $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
+                        $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
+                        $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
+                        $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->total, 1, 1, "C", 1);
+    
+                        
+                    }
+                }
                 
-            }
+            }else{
 
-            if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {
+                if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {
 
-                $descricao = '';
-                $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
-                $addalt = $linhas*3.1;
-                $old_y = $this->objpdf->gety();
+                    $descricao = '';
+                    $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
+                    $addalt = $linhas*4;
+                    $old_y = $this->objpdf->gety();
 
-                                        $this->objpdf->setfont('arial', '', 7);
-                $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
-                $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
-                $this->objpdf->multicell(160, $alt, str_replace("\n","",$oDadosDaLinha->descricao), "T", "L", 0);
+                    $this->objpdf->setfont('arial', '', 7);
+                    $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
+                    $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
+                    $this->objpdf->multicell(160, $alt, str_replace("\n","",$oDadosDaLinha->descricao), "T", "L", 0);
 
-                $this->objpdf->sety($old_y);
-                $this->objpdf->setx(194);
-                $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual, 1, 0, "C", 1);
-                $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
-                $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
-                $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
-                $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->total, 1, 1, "C", 1);
+                    $this->objpdf->sety($old_y);
+                    $this->objpdf->setx(194);
+                    $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual, 1, 0, "C", 1);
+                    $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
+                    $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
+                    $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
+                    $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->total, 1, 1, "C", 1);
 
-            } else {
-                
-                $descricao = '';
-                $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
-                $addalt = $linhas*3.1;
-                $old_y = $this->objpdf->gety();
+                } else {
+                    
+                    $descricao = '';
+                    $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
+                    
+                    $old_y = $this->objpdf->gety();
+                    
+                    
+                    $addalt =  $iContadorLinhasCriterios*4;
+                    $this->objpdf->setfont('arial', '', 7);
+                    $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
+                    $this->objpdf->cell(15, $alt + $addalt, $iContadorLinhasCriterios, 1, 0, "C", 1);
+                    $this->objpdf->multicell(180, $alt, str_replace("\n","",$oDadosDaLinha->descricao), "T", "L", 0);
 
-                                        $this->objpdf->setfont('arial', '', 7);
-                $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
-                $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
-                $this->objpdf->multicell(180, $alt, str_replace("\n","",$oDadosDaLinha->descricao), "T", "L", 0);
+                    $this->objpdf->sety($old_y);
+                    $this->objpdf->setx(214);
+                    $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
+                    $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
+                    $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
+                    $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->total, 1, 1, "C", 1);
 
-                $this->objpdf->sety($old_y);
-                $this->objpdf->setx(214);
-                $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
-                $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
-                $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
-                $this->objpdf->cell(20, $alt + $addalt, "R$ ".$oDadosDaLinha->total, 1, 1, "C", 1);
-
-                
+                    
+                }
             }
         }
     }
