@@ -67,7 +67,7 @@ $clveiculos      = new cl_veiculos;
     //$hora = db_hora();
   	$hora = "24:59";
   }
-
+  
   if(!isset($veiculo)) {
     $veiculo = null;
   }

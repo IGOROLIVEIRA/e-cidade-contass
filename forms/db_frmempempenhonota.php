@@ -518,7 +518,9 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         <fieldset style="width:500px">
                             <legend><strong><?= @$Le54_resumo ?></strong></legend>
                             <?php
-                            db_textarea('e54_resumo', 3, 10000, $Ie54_resumo, true, 'text', $db_opcao, "", "", "#FFFFFF");
+                            if (empty($e60_resumo))
+                                $e60_resumo = $e54_resumo;
+                            db_textarea('e60_resumo', 3, 109, $Ie54_resumo, true, 'text', $db_opcao,"","","#FFFFFF");
                             ?>
                         </fieldset>
                     </td>
@@ -528,11 +530,10 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         <fieldset style="width:500px">
                             <legend><b>Informações da OP</b></legend>
                             <?php
-
-                            if (isset($e54_resumo)) {
-                                $e50_obs = $e54_resumo;
-                            }
-                            db_textarea('e54_resumo', 3, 10000, $Ie54_resumo, true, 'text', $db_opcao, "", "e50_obs");
+                                if (empty($e50_obs)) { 
+                                    $e50_obs = $e54_resumo;
+                                }
+                                db_textarea('e50_obs', 3, 109, $Ie54_resumo, true, 'text', $db_opcao, "", "e50_obs");
                             ?>
                         </fieldset>
                     </td>
@@ -715,7 +716,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
         width: 83px;
     }
 
-    #e54_resumo {
+    #e54_resumo, #e60_resumo {
         width: 588px;
     }
 
@@ -832,7 +833,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
     }
 
     function js_naoimprimir() {
-        if (document.form1.e54_resumo.value == '') {
+        if (document.form1.e60_resumo.value == '') {
             alert("Campo Resumo nao Informado.");
             return false;
         }
@@ -938,7 +939,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
             return false;
         }
 
-        if (document.form1.e54_resumo.value == '') {
+        if (document.form1.e60_resumo.value == '') {
             alert("Campo Resumo nao Informado.")
             return false;
         }
