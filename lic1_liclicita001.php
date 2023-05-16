@@ -651,6 +651,10 @@ if (isset($incluir)) {
 		db_msgbox($erro_msg);
 		echo "<script> document.form1." . $nomeCampo . ".focus();</script>";
 		echo "<script> document.form1." . $nomeCampo . ".style.backgroundColor='#99A9AE';</script>";
+		if($nomeCampo == "l20_mododisputa"){
+			echo "<script>document.getElementById('disputa').style.display = '';</script>";
+		}
+
 		if ($sqlerro == false) {
 
 			echo "<script>parent.document.getElementById('liclicpublicacoes').style.display = 'block';</script>";

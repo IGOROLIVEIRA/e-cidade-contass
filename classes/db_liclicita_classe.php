@@ -1336,17 +1336,9 @@ class cl_liclicita
         }
 
         if (trim($this->l20_recdocumentacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao"]))) {
-            if ($this->l20_recdocumentacao == null || $this->l20_recdocumentacao == "" and $tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+            if ($this->l20_recdocumentacao == null) {
                 $sql .= $virgula . " l20_recdocumentacao = null ";
                 $virgula = ",";
-            } else if ($this->l20_recdocumentacao < $this->l20_dataaber && $this->l20_codtipocom != 16) {
-                $this->erro_sql = " A data informada no campo  Abertura das Propostas deve ser  superior a   Data Edital/Convite.";
-                $this->erro_campo = "l20_recdocumentacao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
             } else {
                 $sql .= $virgula . " l20_recdocumentacao = ' $this->l20_recdocumentacao '";
                 $virgula = ",";
@@ -1369,42 +1361,6 @@ class cl_liclicita
             } else {
                 $sql .= $virgula . " l20_dataaber ='$this->l20_dataaber' ";
                 $virgula = ",";
-            }
-        }
-
-        if (($this->l20_datacria != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_datacria"])) && ($this->l20_dataaber != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaber"]))) {
-            if ($this->l20_datacria > $this->l20_dataaber and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
-                $this->erro_sql = "A data inserida no campo 'Data Emis/Alt Edital/Convite' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-                $this->erro_campo = "l20_dataaber";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-
-        if ($this->l20_datacria != null  && $this->l20_dataaberproposta != null) {
-            if ($this->l20_datacria > $this->l20_dataaberproposta) {
-                $this->erro_sql = "A data inserida no campo 'Data Abertura das Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-                $this->erro_campo = "l20_dataaberproposta";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-
-        if ($this->l20_dataaberproposta != null  && $this->l20_dataencproposta != null) {
-            if ($this->l20_dataaberproposta > $this->l20_dataencproposta) {
-                $this->erro_sql = "A data inserida no campo 'Data Abertura das Propostas' deverá ser maior ou igual a data inserida no campo ' Data Encerramento Proposta'.";
-                $this->erro_campo = "l20_dataencproposta";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
             }
         }
 
