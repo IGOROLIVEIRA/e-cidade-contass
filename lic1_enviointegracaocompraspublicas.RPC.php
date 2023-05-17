@@ -44,6 +44,9 @@ switch ($oParam->exec) {
                         db_getsession("DB_instit")
                         )
                 , 0)->chaveacesso;
+                if (empty($chaveAcesso)) {
+                    throw new Exception("Chave de acesso não está cadastrada");
+                }
 
                 $url = $licitacao->getUrlPortalCompras($chaveAcesso);
 
