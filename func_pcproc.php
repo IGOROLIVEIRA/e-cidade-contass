@@ -232,6 +232,10 @@ $sWhereContrato = " and 1 = 1 ";
             $sql .=  " and pc80_situacao = $iAtivo";
           }
 
+          if (isset($adesaoregpreco)) {
+            if ($descontotabela == 1) $sql .=  " and pc80_criterioadjudicacao = 1";
+          }
+
           $sql .= " and $sWhereSolicitaAnuAndPrecoRef order by pc80_codproc desc ";
           $repassa = array("dataini" => $dataini, "datafim" => $datafim);
 

@@ -502,7 +502,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       */
       if ($oEmpenho10->despdeclicitacao == "4") {
 
-        if ($oEmpenho10->si06_departamento == null) {
+        if ($oEmpenho10->si06_departamento == NULL && $oEmpenho10->si06_sequencial != NULL) {
           $sCodSubAdesao = $this->getCodunidadesubrespAdesao($oEmpenho10->si06_sequencial, false);
         } else {
           $sCodSubAdesao = $this->getCodunidadesubrespAdesao($oEmpenho10->si06_sequencial, true);

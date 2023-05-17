@@ -482,7 +482,7 @@ if (isset($confirmar) && trim($confirmar) != "") {
 
       
     }
-    $result_l218codigo = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where l218_pcorcamitemlic not in ('.$codpcorcamitemlic.')');
+    $result_l218codigo = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where l218_pcorcamitemlic not in ('.$codpcorcamitemlic.') and l218_codigolicitacao='.$l20_codigo.' and l218_motivoanulacao=\'\'');
     for($y=0;$y<$clsituacaoitemlic->numrows;$y++){
       db_fieldsmemory($result_l218codigo,$y);
       $clsituacaoitemlic->l219_codigo= $l218_codigo;

@@ -71,9 +71,9 @@ $HTTP_SERVER_VARS['SERVER_PORT']           = '80';
 $HTTP_SERVER_VARS['REMOTE_ADDR']           = $_SERVER['REMOTE_ADDR'];//'127.0.0.1';
 $HTTP_SERVER_VARS['DOCUMENT_ROOT']         = '/var/www';
 $HTTP_SERVER_VARS['SERVER_ADMIN']          = 'webmaster@localhost';
-$HTTP_SERVER_VARS['SCRIPT_FILENAME']       = '/var/www/dbportal_prj/webservices/requisicao.webservice.php';
-$HTTP_SERVER_VARS['SCRIPT_NAME']           = '/var/www/dbportal_prj/webservices/requisicao.webservice.php';
-$HTTP_SERVER_VARS['PHP_SELF']              = 'dbportal_prj/webservices/requisicao.webservice.php';
+$HTTP_SERVER_VARS['SCRIPT_FILENAME']       = '/var/www/e-cidade/webservices/requisicao.webservice.php';
+$HTTP_SERVER_VARS['SCRIPT_NAME']           = '/var/www/e-cidade/webservices/requisicao.webservice.php';
+$HTTP_SERVER_VARS['PHP_SELF']              = 'e-cidade/webservices/requisicao.webservice.php';
 $HTTP_SERVER_VARS['REQUEST_URI']           = '';
 $HTTP_SERVER_VARS['HTTP_HOST']             = 'localhost';
 
@@ -85,6 +85,14 @@ require_once(modification("libs/db_stdlib.php"));
 require_once(modification("dbforms/db_funcoes.php"));
 require_once(modification("libs/db_utils.php"));
 require_once("libs/db_autoload.php");
+$eloquent = new EloquentBootstrap(
+    $DB_SERVIDOR,
+    $DB_BASE,
+    $DB_USUARIO,
+    $DB_SENHA,
+    $DB_PORTA
+);
+$eloquent->bootstrap();
 
 $conn           = pg_connect("host=$DB_SERVIDOR dbname=$DB_BASE port=$DB_PORTA user=$DB_USUARIO password=$DB_SENHA");
 $rsStartSession = pg_query("select fc_startsession()");
@@ -116,6 +124,6 @@ require_once(modification("model/webservices/DBWebService.model.php"));
 
 require_once(modification("libs/db_conecta.php"));
 $oSoapServer = new SoapServer(null,
-    array('uri' => 'http://localhost/dbportal_prj'));
+    array('uri' => 'http://localhost/e-cidade'));
 $oSoapServer->setClass("DBWebService");
 $oSoapServer->handle();
