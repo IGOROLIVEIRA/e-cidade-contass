@@ -19,24 +19,27 @@ $clpcproc = new cl_pcproc();
  *
  */
 
-
 $sql = "select nomeinst,
-bairro,
-cgc,
-trim(ender)||','||trim(cast(numero as text)) as ender,
-upper(munic) as munic,
-uf,
-telef,
-email,
-url,
-logo, 
-db12_extenso
-from db_config 
-inner join db_uf on db12_uf = uf
-where codigo = ".db_getsession("DB_instit");
+                 bairro,
+                 cgc,
+                 trim(ender)||','||trim(cast(numero as text)) as ender,
+                 upper(munic) as munic,
+                 uf,
+                 telef,
+                 email,
+                 url,
+                 logo, 
+                 db12_extenso
+          from db_config 
+                 inner join db_uf on db12_uf = uf
+          where codigo = ".db_getsession("DB_instit");
 $result = db_query($sql);
 db_fieldsmemory($result,0);
 
+/**
+ * BUSCO O VALOR TOTAL DO PRECO DE REFERENCIA
+ *
+ */
 /**
  * BUSCO TIPO DE PRECO DE REFERENCIA
  */
@@ -107,7 +110,7 @@ left join processocompraloteitem on
 left join processocompralote on
 			pc68_sequencial = pc69_processocompralote
 AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
-WHERE pc81_codproc = {$solicitacaocompras}
+WHERE pc81_codproc = {$processodecompras}
   AND pc10_instit = " . db_getsession("DB_instit") . "
 ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
@@ -138,7 +141,7 @@ JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
 JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-WHERE pc80_codproc = {$solicitacaocompras} {$sCondCrit} and pc23_vlrun <> 0
+WHERE pc80_codproc = {$processodecompras} {$sCondCrit} and pc23_vlrun <> 0
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
 ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
 $resultpreco = db_query($sSql) or die(pg_last_error());
@@ -153,10 +156,10 @@ for ($iCont = 0; $iCont < pg_num_rows($resultpreco); $iCont++) {
 }
 
 /**
- * BUSCO O VALOR TOTAL DO PRECO DE REFERENCIA
+ * BUSCO O RESUMO DE REFERENCIA
  *
  */
-$sqlObjeto = "select pc80_resumo as objeto from pcproc where pc80_codproc = $solicitacaocompras";
+$sqlObjeto = "select pc80_resumo as objeto from pcproc where pc80_codproc = $processodecompras";
 $resultObjeto = db_query($sqlObjeto);
 db_fieldsmemory($resultObjeto,0);
 
@@ -175,40 +178,86 @@ INNER JOIN pcdotac ON pcdotac.pc13_codigo = solicitem.pc11_codigo
 INNER JOIN orcdotacao ON (orcdotacao.o58_anousu,orcdotacao.o58_coddot) = (pcdotac.pc13_anousu,pcdotac.pc13_coddot)
 INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
 INNER JOIN orcelemento on (orcelemento.o56_codele,orcelemento.o56_anousu) = (orcdotacao.o58_codele,orcdotacao.o58_anousu)
-WHERE pc80_codproc = $solicitacaocompras";
+WHERE pc80_codproc = $processodecompras";
 $resultDotacao = db_query($sqlDotacao);
+//db_criatabela($resultDotacao);exit;
+/**
+ * BUSCO O TEXTO NO CADASTRO DE PARAGRAFOS
+ *
+ */
+$sqlparag = "select db02_texto AS db02_texto1
+	from db_documento 
+	inner join db_docparag on db03_docum = db04_docum
+	inner join db_tipodoc on db08_codigo  = db03_tipodoc
+	inner join db_paragrafo on db04_idparag = db02_idparag 
+	where db02_idparag = (SELECT db02_idparag
+FROM db_documento
+INNER JOIN db_docparag ON db03_docum = db04_docum
+INNER JOIN db_tipodoc ON db08_codigo = db03_tipodoc
+INNER JOIN db_paragrafo ON db04_idparag = db02_idparag
+WHERE db02_descr LIKE 'DECLARAÇÃO DE REC. ORC. E FINANCEIRO TEXTO1') and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
+$resparag = pg_query($sqlparag);
+db_fieldsmemory( $resparag, 0 );
+$head5 = "DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO";
 
-$head5 = "SOLICITAÇÃO DE PARECER DE DISPONIBILIDADE FINANCEIRA";
 
 $pdf = new PDF();
 $pdf->Open();
 $pdf->AliasNbPages();
-$pdf->SetAutoPageBreak(false);
+$pdf->SetAutoPageBreak(true);
 $pdf->SetTextColor(0,0,0);
 $pdf->SetFillColor(235);
-$pdf->addPage('P');
+$pdf->addpage('P');
 $alt = 3;
 $pdf->SetFont('arial','B',14);
-$pdf->ln($alt + 4);
-$pdf->cell(190,4,"SOLICITAÇÃO DE PARECER DE DISPONIBILIDADE FINANCEIRA",0,1,"C",0);
-$pdf->ln($alt + 4);
+$pdf->ln($alt+6);
+$pdf->x = 30;
+$pdf->Cell(160,6,"DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO",0,1,"C",0);
+$pdf->ln($alt+3);
+$pdf->x = 30;
 $pdf->SetFont('arial','',11);
+$pdf->MultiCell(160,5,"     Examinando  as  Dotações  constantes  do  orçamento  fiscal  e  levando-se  em  conta  o objeto que se  pretende  contratar, ".mb_strtoupper($objeto,'ISO-8859-1')." , no valor total estimado de R$ ".trim(db_formatar($nTotalItens,'f'))." em atendimento aos dispositivos da Lei 8666/93, informo que existe dotações das quais correrão a despesas:",0,"J",0);
+
+$pdf->ln($alt+3);
 $pdf->x = 30;
-$pdf->cell(190,5,"De: Pregoeira/ Comissão permanente de Licitação"  ,0,1,"L",0);
+
+$pdf->cell(20,6,"Ficha"                           ,1,0,"C",1);
+$pdf->cell(40,6,"Cód. orçamentário"               ,1,0,"C",1);
+$pdf->cell(60,6,"Projeto Atividade"               ,1,0,"C",1);
+$pdf->cell(40,6,"Fonte de Recurso"                ,1,1,"C",1);
+$pdf->setfont('arial','',11);
 $pdf->x = 30;
-$pdf->cell(190,5,"Para: Setor contábil"                             ,0,1,"L",0);
-$pdf->ln($alt + 4);
+
+if(pg_num_rows($resultDotacao) != 0){
+    for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
+        $pdf->x = 30;
+        $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
+        $pdf->cell(20, 6, $oDadosDotacoes->ficha,           1, 0, "C", 0);
+        $pdf->cell(40, 6, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
+        $pdf->cell(60, 6, $oDadosDotacoes->projetoativ,     1, 0, "C", 0);
+        $pdf->cell(40, 6, $oDadosDotacoes->fonterecurso,    1, 1, "C", 0);
+    }
+}else{
+    $pdf->x = 30;
+    $pdf->setfont('arial','b',11);
+    $pdf->cell(190,6,"Nenhum Registro Encontrato."     ,0,1,"C",0);
+}
+$pdf->ln($alt+3);
+
+$pdf->setfont('arial','',11);
 $pdf->x = 30;
-$pdf->MultiCell(160,5,"     Solicito ao departamento contábil se há no orçamento vigente, disponibilidade financeira que atenda ".mb_strtoupper($objeto,'ISO-8859-1').", no valor total estimado de R$".trim(db_formatar($nTotalItens,'f')),0,"J",0);
-$pdf->ln($alt + 20);
+
+$pdf->MultiCell(160,5,"que as despesas atendem ao disposto nos artigos 16 e 17 da Lei Complementar Federal 101/2000, uma vez, foi considerado o impacto na execução orçamentária e também está de acordo com a previsão do Plano Plurianual e da Lei de Diretrizes Orçamentárias para exercício. Informamos ainda que foi verificado o impacto financeiro da despesa e sua inclusão na programação deste órgão.",0,"J",0);
+$pdf->ln($alt+9);
+
 $data = db_getsession('DB_datausu');
 $sDataExtenso     = db_dataextenso($data);
-$pdf->cell(190,4,$munic.','.strtoupper($sDataExtenso)                      ,0,1,"C",0);
+$pdf->x = 30;
+$pdf->cell(160,4,$munic.','.strtoupper($sDataExtenso)                     ,0,1,"C",0);
 $pdf->ln($alt+20);
-$pdf->cell(190,5,"________________________"                                ,0,1,"C",0);
-$pdf->cell(190,5,"Presidente da CPL"                                       ,0,1,"C",0);
-$pdf->cell(190,5,"e/ou Presidente da Comissão de Licitação"                ,0,1,"C",0);
+$pdf->cell(95,4,"________________________"                                ,0,0,"C",0);
+$pdf->cell(95,4,"________________________"                                ,0,1,"C",0);
+$pdf->cell(95,5,"Serviço Contábil"                                        ,0,0,"C",0);
+$pdf->cell(95,5,"Serviço Financeiro"                                      ,0,0,"C",0);
 
 $pdf->Output();
-
-?>

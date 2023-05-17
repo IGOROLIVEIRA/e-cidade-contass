@@ -1,5 +1,4 @@
 <?
-ini_set('display_errors','on');
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -50,16 +49,16 @@ if (!isset($pesquisar)) {
   $iMes = date("m", db_getsession("DB_datausu"));
   $iAno = date("Y", db_getsession("DB_datausu"));
 
-  $dataini_dia = "01";
-  $dataini_mes = $iMes;
-  $dataini_ano = $iAno;
+  $dataini_dias = "01";
+  $dataini_mess = $iMes;
+  $dataini_anos = $iAno;
 
-  $datafim_dia = $iDia;
-  $datafim_mes = $iMes;
-  $datafim_ano = $iAno;
+  $datafim_dias = $iDia;
+  $datafim_mess = $iMes;
+  $datafim_anos = $iAno;
 
-  $dataini = "{$dataini_ano}-{$dataini_mes}-01"; // Primeiro Dia do Mes
-  $datafim = "{$datafim_ano}-{$datafim_mes}-{$datafim_dia}";
+  $datainis = "{$dataini_anos}-{$dataini_mess}-01"; // Primeiro Dia do Mes
+  $datafims = "{$datafim_anos}-{$datafim_mess}-{$datafim_dias}";
 }
 $sWhereContrato = " and 1 = 1 ";
 
@@ -227,7 +226,7 @@ $sWhereContrato = " and 1 = 1 ";
             $sql = $clpcproc->sql_query_proc_orc("", $campos, null, " db_depart.instit = " . db_getsession("DB_instit") . $dbwhere . $where_lic . $dbwherepncp . " $where_data $sWhereContrato ");
           } else {
 
-            $sql = $clpcproc->sql_query_proc_orc("", $campos, null, " db_depart.instit = " . db_getsession("DB_instit") . $dbwhere . $where_lic . $dbwherepncp . " and pc80_data between '{$dataini}' and '{$datafim}' $sWhereContrato ");
+            $sql = $clpcproc->sql_query_proc_orc("", $campos, null, " db_depart.instit = " . db_getsession("DB_instit") . $dbwhere . $where_lic . $dbwherepncp . " $sWhereContrato ");
           }
           if (isset($iAtivo) && !empty($iAtivo)) {
             $sql .=  " and pc80_situacao = $iAtivo";
@@ -236,7 +235,7 @@ $sWhereContrato = " and 1 = 1 ";
           if (isset($adesaoregpreco)) {
             if ($descontotabela == 1) $sql .=  " and pc80_criterioadjudicacao = 1";
           }
-          if (isset($relorc)) {
+          
 
           $sql .= " and $sWhereSolicitaAnuAndPrecoRef order by pc80_codproc desc ";
           $repassa = array("dataini" => $dataini, "datafim" => $datafim);
