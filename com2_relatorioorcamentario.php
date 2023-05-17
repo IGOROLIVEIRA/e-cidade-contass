@@ -52,7 +52,17 @@ $clrotulo->label("pc80_codproc");
             <legend><strong>Relatório de Recursos Orçamentarios</strong></legend>
 
             <table>
-                <tr>
+                <tr id='trsolicitacao'>
+                    <td style="font-weight: bolder;" >
+                        <? db_ancora("Solicitação : ","js_pesquisapc80_codproc(true);",1);?>
+                    </td>
+                    <td>
+                        <?
+                        db_input("pc80_codproc", 10, $Ipc80_codproc,true,"text",4,"onchange='js_pesquisapc80_codproc(false);'");
+                        ?>
+                    </td>
+                </tr>
+                <tr style="display: none;" id='trprocessocompra'>
                     <td style="font-weight: bolder;" >
                         <? db_ancora("Processos de Compra : ","js_pesquisapc80_codproc(true);",1);?>
                     </td>
@@ -70,7 +80,7 @@ $clrotulo->label("pc80_codproc");
                         <?$iTipoRelatorio = array(
                             1=>"Solicitação de Disponibilização Financeira",
                             2 =>"Declaração de Recursos Orçamentários");
-                        db_select("tiporelatorio",$iTipoRelatorio,true,1,"");
+                        db_select("tiporelatorio",$iTipoRelatorio,true,1,"onchange='js_trocarelatoria(this.value);'");
                         ?>
                     </td>
                 </tr>
@@ -91,10 +101,10 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
 
     function js_pesquisapc80_codproc(mostra){
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc','Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcprocrelorc.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc','Pesquisa',true);
         }else{
             if(document.form1.pc80_codproc.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?pesquisa_chave='+document.form1.pc80_codproc.value+'&funcao_js=parent.js_mostrapcproc','Pesquisa',false);
+                js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcprocrelorc.php?pesquisa_chave='+document.form1.pc80_codproc.value+'&funcao_js=parent.js_mostrapcproc','Pesquisa',false);
             }else{
                 document.form1.pc80_codproc.value = '';
             }
@@ -147,6 +157,17 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
             var jan = window.open('com2_relatorioorcamentario003.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
                 'width='+(screen.availWidth - 5)+', scrollbars=1');
             jan.moveTo(0, 0);
+        }
+
+    }
+
+    function js_trocarelatoria(iTipo){
+        if(iTipo == 1){
+            document.getElementById('trsolicitacao').style.display= "";
+            document.getElementById('trprocessocompra').style.display= "none";
+        }else if(iTipo == 2){
+            document.getElementById('trprocessocompra').style.display= "";
+            document.getElementById('trsolicitacao').style.display= "none";
         }
 
     }
