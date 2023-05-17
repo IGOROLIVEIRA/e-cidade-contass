@@ -64,6 +64,13 @@ WHERE cflicita.l03_codigo = $oLicitacao->l20_codtipocom");
 $tribunal = db_utils::fieldsMemory($tribunal, 0);
 $tribunal = $tribunal->l44_sequencial;
 
+$acessoPcpResource = db_query("
+select lic.l12_acessoapipcp as acessopcp
+from licitacao.licitaparam as lic
+where l12_instit =".db_getsession("DB_instit")
+);
+
+$acessoPcp = (db_utils::fieldsMemory($acessoPcpResource, 0))->acessopcp;
 
 $ocultar_box_publicacoes = false;
 if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
@@ -291,7 +298,8 @@ $codigoModalidade = (db_utils::fieldsMemory($resource, 0))->codigomodalidade;
             </form>
             <?php
 
-            if (array_key_exists($codigoModalidade, $listaModalidades)):
+            if ($acessoPcp == 't' &&
+                array_key_exists($codigoModalidade, $listaModalidades)):
             ?>
                 <form name="form2">
                     <fieldset style="width: 550;">

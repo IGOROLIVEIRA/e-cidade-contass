@@ -175,7 +175,7 @@ abstract class Licitacao implements \JsonSerializable
     }
 
     /**
-     * Retorna os patsh de cada modalidade de licitaçao
+     * Retorna os path de cada modalidade de licitaçao
      *
      * @param string|null $publicKey
      * @return string
@@ -269,9 +269,13 @@ abstract class Licitacao implements \JsonSerializable
     /**
      * Set the value of orcamentoSigiloso
      */
-    public function setOrcamentoSigiloso(bool $orcamentoSigiloso): self
+    public function setOrcamentoSigiloso(?string $orcamentoSigiloso): self
     {
-        $this->orcamentoSigiloso = $orcamentoSigiloso;
+        $this->orcamentoSigiloso = false;
+
+        if($orcamentoSigiloso == 't') {
+            $this->orcamentoSigiloso = true;
+        }
 
         return $this;
     }
@@ -287,9 +291,12 @@ abstract class Licitacao implements \JsonSerializable
     /**
      * Set the value of aplicar147
      */
-    public function setAplicar147(bool $aplicar147): self
+    public function setAplicar147(?string $aplicar147): self
     {
-        $this->aplicar147 = $aplicar147;
+        $this->aplicar147 = false;
+        if ($aplicar147 == 't') {
+            $this->aplicar147 = true;
+        }
 
         return $this;
     }
@@ -305,9 +312,13 @@ abstract class Licitacao implements \JsonSerializable
     /**
      * Set the value of beneficioLocal
      */
-    public function setBeneficioLocal(bool $beneficioLocal): self
+    public function setBeneficioLocal(?string $beneficioLocal): self
     {
-        $this->beneficioLocal = $beneficioLocal;
+        $this->beneficioLocal = false;
+
+        if ($beneficioLocal == 't') {
+            $this->beneficioLocal = true;
+        }
 
         return $this;
     }
@@ -323,9 +334,13 @@ abstract class Licitacao implements \JsonSerializable
     /**
      * Set the value of exigeGarantia
      */
-    public function setExigeGarantia(bool $exigeGarantia): self
+    public function setExigeGarantia(?string $exigeGarantia): self
     {
-        $this->exigeGarantia = $exigeGarantia;
+        $this->exigeGarantia = false;
+
+        if ($exigeGarantia == 't') {
+            $this->exigeGarantia = true;
+        }
 
         return $this;
     }
@@ -449,11 +464,11 @@ abstract class Licitacao implements \JsonSerializable
     /**
      * Set the value of separarPorLotes
      */
-    public function setSepararPorLotes(string $separarPorLotes): self
+    public function setSepararPorLotes(?string $separarPorLotes): self
     {
         $this->separarPorLotes = false;
 
-        if ($separarPorLotes == 't'){
+        if ($separarPorLotes == 't') {
             $this->separarPorLotes = true;
         }
 
@@ -617,9 +632,12 @@ abstract class Licitacao implements \JsonSerializable
     /**
      * Set the value of exclusivoMPE
      */
-    public function setExclusivoMPE(bool $exclusivoMPE): self
+    public function setExclusivoMPE(?string $exclusivoMPE): self
     {
-        $this->exclusivoMPE = $exclusivoMPE;
+        $this->exclusivoMPE = false;
+        if ($exclusivoMPE == 't') {
+            $this->exclusivoMPE = true;
+        }
 
         return $this;
     }

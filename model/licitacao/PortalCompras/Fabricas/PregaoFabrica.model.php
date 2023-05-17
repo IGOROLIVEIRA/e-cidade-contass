@@ -36,10 +36,10 @@ class PregaoFabrica implements LicitacaoFabricaInterface
         $pregao->setDataAberturaPropostas($linha->dataaberturapropostas);
         $pregao->setDataLimiteEsclarecimento($linha->datalimiteesclarecimento);
         $pregao->setOrcamentoSigiloso((bool)$linha->orcamentosigiloso);
-        $pregao->setExclusivoMPE((bool)$linha->exclusivompe);
-        $pregao->setAplicar147((bool)$linha->aplicar147);
-        $pregao->setBeneficioLocal((bool)$linha->beneficio);
-        $pregao->setExigeGarantia((bool)$linha->exigegarantia);
+        $pregao->setExclusivoMPE($linha->exclusivompe);
+        $pregao->setAplicar147($linha->aplicar147);
+        $pregao->setBeneficioLocal($linha->beneficio);
+        $pregao->setExigeGarantia($linha->exigegarantia);
         $pregao->setCasasDecimais((int)$linha->casasdecimais);
         $pregao->setCasasDecimaisQuantidade((int)$linha->casadecimaisquantidade);
         $pregao->setLegislacaoAplicavel((int)$linha->legislacaoaplicavel);
@@ -47,7 +47,7 @@ class PregaoFabrica implements LicitacaoFabricaInterface
         $pregao->setTipoIntervaloLance((int)$linha->tipointervalolance);
         $pregao->setValorIntervaloLance((float)$linha->valorintervalolance);
         $pregao->setSepararPorLotes($linha->separarporlotes);
-        $pregao->setOperacaoLote((bool)$linha->operacaolote);
+        $pregao->setOperacaoLote($linha->operacaolote);
         $pregao->setPregoeiro($linha->pregoeiro);
 
         $lotes = $loteFabrica->criar($dados, $numlinhas);

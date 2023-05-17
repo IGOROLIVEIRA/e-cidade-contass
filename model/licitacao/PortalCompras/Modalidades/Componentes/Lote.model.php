@@ -15,12 +15,12 @@ class Lote implements \JsonSerializable
     /**
      * @var boolean
      */
-    private bool $exclusivoMPE;
+    private bool $exclusivoMPE = false;
 
     /**
      * @var boolean
      */
-    private bool $cotaReservada;
+    private bool $cotaReservada = false;
 
     /**
      * @var string
@@ -81,9 +81,13 @@ class Lote implements \JsonSerializable
     /**
      * Set the value of exclusivoMPE
      */
-    public function setExclusivoMPE(bool $exclusivoMPE): self
+    public function setExclusivoMPE(?string $exclusivoMPE): self
     {
-        $this->exclusivoMPE = $exclusivoMPE;
+        $this->cotaReservada = false;
+
+        if ($exclusivoMPE == 't') {
+            $this->cotaReservada = false;
+        }
 
         return $this;
     }
@@ -93,18 +97,19 @@ class Lote implements \JsonSerializable
      */
     public function iscotaReservada(): bool
     {
+
         return $this->cotaReservada;
     }
 
     /**
      * Set the value of cotaReservada
      */
-    public function setcotaReservada(string $cotaReservada): self
+    public function setcotaReservada(?string $cotaReservada): self
     {
-        $this->cotaReservada = true;
+        $this->cotaReservada = false;
 
-        if ($cotaReservada == 'f') {
-            $this->cotaReservada = false;
+        if ($cotaReservada == 't') {
+            $this->cotaReservada = true;
         }
 
         return $this;

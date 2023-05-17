@@ -38,7 +38,10 @@ class cl_liclicitaportalcompras
         l20_dataaberproposta as dataaberturapropostas,
         l20_dataencproposta as datalimiteesclarecimento,
         l20_orcsigiloso as orcamentosigiloso,
-        l20_destexclusiva as exclusivompe,
+        case when
+		        l20_destexclusiva = 1 then true
+		        else false
+        end as exclusivompe,
         case when
                 l20_destexclusiva = 1 then false
                 else true
@@ -68,7 +71,10 @@ class cl_liclicitaportalcompras
         true as lotes,
         l04_codigo as numerolote, /*Gerar contador para definição do número do lote */
         l04_descricao as descricaolote,
-        l20_destexclusiva as exclusivompe,
+        case when
+		        l21_reservado is not null and l21_reservado = true  then true
+		        else false
+        end as exclusivompelote,
         l21_reservado as cotareservada,
         null as justificativa,
         null as itens,

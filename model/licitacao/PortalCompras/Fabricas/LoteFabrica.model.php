@@ -46,7 +46,7 @@ class LoteFabrica
                 $lote = new Lote();
                 $lote->setNumero($numeroLote);
                 $lote->setDescricao($resultado->descricaolote);
-                $lote->setExclusivoMPE((bool)$resultado->exclusivompe);
+                $lote->setExclusivoMPE($resultado->exclusivompelote);
                 $lote->setcotaReservada($resultado->cotareservada);
                 $lote->setJustificativa("");
                 $descricaoLote = $resultado->descricaolote;
@@ -82,7 +82,7 @@ class LoteFabrica
             $lote = new Lote();
             $lote->setNumero($i);
             $lote->setDescricao($resultado->descricaolote);
-            $lote->setExclusivoMPE((bool)$resultado->exclusivompe);
+            $lote->setExclusivoMPE($resultado->exclusivompe);
             $lote->setcotaReservada($resultado->cotareservada);
             $lote->setJustificativa("");
             $lote->setItens($itemFabrica->criarItemSimples($data, $i));
