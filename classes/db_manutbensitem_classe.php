@@ -101,7 +101,7 @@ class cl_manutbensitem
     $this->t99_sequencial = $this->t99_sequencial;
 
     if ($this->t99_itemsistema == "0") {
-      $this->erro_sql = " Campo Item do Sistema não informado.";
+      $this->erro_sql = " Informe a origem do item.";
       $this->erro_campo = "t99_itemsistema";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";

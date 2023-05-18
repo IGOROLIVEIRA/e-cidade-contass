@@ -67,7 +67,6 @@ if (isset($excluir)) {
 <body bgcolor=#CCCCCC>
 
     <?
-    echo $teste;
     include("forms/db_frmcomponentesmanutencao.php");
     ?>
 
@@ -87,7 +86,7 @@ if (isset($inserir)) {
         }
     } else {
         db_msgbox($cl_manutbensitem->erro_msg);
-        db_redireciona("pat1_lancmanutencao005.php");
+        db_redireciona("pat1_lancmanutencao005.php?t98_sequencial='$t98_sequencial;");
     }
 }
 if (isset($alterar) || isset($excluir)) {
@@ -101,6 +100,7 @@ if (isset($alterar) || isset($excluir)) {
         }
     } else {
         db_msgbox($cl_manutbensitem->erro_msg);
+        db_redireciona("pat1_lancmanutencao005.php?t98_sequencial='$t98_sequencial;");
     }
 }
 ?>

@@ -475,10 +475,9 @@ class cl_bemmanutencao
       $this->erro_status = "0";
       return false;
     }
-
-    $oDaoBensHistoricoCalculo->t57_mes               = substr($this->t98_data, 3, 2);
-    $oDaoBensHistoricoCalculo->t57_ano               = substr($this->t98_data, 6, 4);
-    $oDaoBensHistoricoCalculo->t57_datacalculo       = implode('-', array_reverse(explode('/', $this->t98_data)));
+    $oDaoBensHistoricoCalculo->t57_mes               = substr($this->t98_data, 5, 2);
+    $oDaoBensHistoricoCalculo->t57_ano               = substr($this->t98_data, 0, 4);
+    $oDaoBensHistoricoCalculo->t57_datacalculo       = $this->t98_data;
     $oDaoBensHistoricoCalculo->t57_usuario           = db_getsession("DB_id_usuario");
     $oDaoBensHistoricoCalculo->t57_instituicao       = db_getsession("DB_instit");
     $oDaoBensHistoricoCalculo->t57_tipocalculo       = 3;

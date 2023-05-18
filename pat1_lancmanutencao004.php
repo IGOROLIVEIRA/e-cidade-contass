@@ -19,12 +19,26 @@ if (isset($processar)) {
     $clbemmanutencao->t98_tipo = $t98_tipo;
     $clbemmanutencao->t98_data = implode('-', array_reverse(explode('/', $t98_data)));
     $clbemmanutencao->processar($t98_sequencial);
+    if ($clbemmanutencao->erro_status == "1") {
+        $ocultaexcluir = true;
+        $ocultainserircomponente = true;
+        $ocultaprocessar = false;
+        $ocultasalvar = true;
+        $db_opcao = 2;
+    }
 }
 
 if (isset($desprocessar)) {
     $pesquisa_manutencoes = null;
     $clbemmanutencao->t98_bem = $t52_bem;
     $clbemmanutencao->desprocessar($t98_sequencial);
+    if ($clbemmanutencao->erro_status == "1") {
+        $ocultaexcluir = false;
+        $ocultainserircomponente = false;
+        $ocultasalvar = false;
+        $ocultaprocessar = false;
+        $db_opcao = 2;
+    }
 }
 
 
@@ -40,14 +54,22 @@ if (isset($incluir)) {
     $clbemmanutencao->incluir();
     if ($clbemmanutencao->erro_status == "1") {
         $ocultapesquisa = false;
+        $ocultaexcluir = false;
+        $ocultainserircomponente = false;
+        $ocultaprocessar = false;
         $db_opcao = 2;
     }
 }
 
 if (isset($salvar)) {
-    $db_opcao = 2;
-    $pesquisa_manutencoes = null;
     $clbemmanutencao->alterar($t98_sequencial);
+    if ($clbemmanutencao->erro_status == "1") {
+        $ocultapesquisa = false;
+        $ocultainserircomponente = false;
+        $ocultaprocessar = false;
+        $pesquisa_manutencoes = false;
+        $db_opcao = 2;
+    }
 }
 
 if (isset($excluir)) {
@@ -84,6 +106,7 @@ if (isset($excluir)) {
 </html>
 
 <?
+
 if (isset($incluir)) {
     if ($clbemmanutencao->erro_status == "0") {
         $clbemmanutencao->erro(true, false);
@@ -101,7 +124,60 @@ if (isset($incluir)) {
          </script>";
     }
 }
-if (isset($salvar) || isset($excluir) || isset($processar) || isset($desprocessar)) {
+if (isset($processar)) {
+    if ($clbemmanutencao->erro_status == "0") {
+        $clbemmanutencao->erro(true, false);
+        echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+        if ($clbemmanutencao->erro_campo != "") {
+            echo "<script> document.form1." . $clbemmanutencao->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1." . $clbemmanutencao->erro_campo . ".focus();</script>";
+        }
+    } else {
+        db_msgbox($clbemmanutencao->erro_msg);
+        echo
+        "<script> 
+        document.getElementById('processamento').value = 'Desprocessar';
+        document.getElementById('processamento').name = 'desprocessar';
+        </script>
+        ";
+    }
+}
+if (isset($desprocessar)) {
+    if ($clbemmanutencao->erro_status == "0") {
+        $clbemmanutencao->erro(true, false);
+        echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+        if ($clbemmanutencao->erro_campo != "") {
+            echo "<script> document.form1." . $clbemmanutencao->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1." . $clbemmanutencao->erro_campo . ".focus();</script>";
+        }
+    } else {
+        db_msgbox($clbemmanutencao->erro_msg);
+        echo
+        "<script> 
+        document.getElementById('processamento').value = 'Processar';
+        document.getElementById('processamento').name = 'processar';
+        </script>
+        ";
+    }
+}
+if (isset($excluir)) {
+    if ($clbemmanutencao->erro_status == "0") {
+        $clbemmanutencao->erro(true, false);
+        echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+        if ($clbemmanutencao->erro_campo != "") {
+            echo "<script> document.form1." . $clbemmanutencao->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+            echo "<script> document.form1." . $clbemmanutencao->erro_campo . ".focus();</script>";
+        }
+    } else {
+        db_msgbox($clbemmanutencao->erro_msg);
+        echo
+        "<script> 
+        js_limparCampos();
+        </script>
+        ";
+    }
+}
+if (isset($salvar)) {
     if ($clbemmanutencao->erro_status == "0") {
         $clbemmanutencao->erro(true, false);
         echo "<script> document.form1.db_opcao.disabled=false;</script>  ";

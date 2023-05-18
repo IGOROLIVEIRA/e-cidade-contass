@@ -56,6 +56,17 @@
     </tr>
   </table>
 
+  <?php
+  if ($cl_manutbensitem->erro_status != "0") {
+    echo "
+      <script>
+      document.getElementById('t99_itemsistema').value = 0;
+      document.getElementById('t99_descricao').value = '';
+      document.getElementById('t99_valor').value = '';
+      document.getElementById('t99_sequencial').value = '';
+       </script>";
+  }
+  ?>
 
 </form>
 <script>
@@ -96,12 +107,7 @@
       aLinha[5] = " <input style='text-align:center; width:90%; border:none;' readonly='' type='text' name='valor[]' value='" + oRetorno.aItens[i].t99_valor + "'>";
       aLinha[6] = "<input  type='button' value='A'  onclick='js_alterar(" + i + ")'> <input type='button' name='excluir' value='E' onclick='js_excluir(" + i + ")'>";
       oGridItens.addRow(aLinha);
-
     }
-
-    document.getElementById('t99_itemsistema').value = 0;
-    document.getElementById('t99_descricao').value = "";
-    document.getElementById('t99_valor').value = "";
 
     oGridItens.renderRows();
 
@@ -141,6 +147,7 @@
     document.getElementById('t99_codbensdispensatombamento').value = document.getElementsByName("codbensdispensatombamento[]")[indice].value;
     document.getElementById('db_opcao').value = 'Salvar';
     document.getElementById('db_opcao').name = 'alterar';
+    js_selectitemsistema();
   }
 
   function js_excluir(indice) {
@@ -151,7 +158,7 @@
     document.getElementById('t99_valor').disabled = true;
     document.getElementById('t99_itemsistema').disabled = true;
     document.getElementById('t99_sequencial').value = document.getElementsByName("sequencial[]")[indice].value;
-    document.getElementById('db_opcao').value = 'Salvar';
+    document.getElementById('db_opcao').value = 'Excluir';
     document.getElementById('db_opcao').name = 'excluir';
   }
 </script>

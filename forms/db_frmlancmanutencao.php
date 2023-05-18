@@ -97,7 +97,7 @@
   <input <?= ($ocultaexcluir == true ? 'style=" display: none;"' : "") ?> name="excluir" type="submit" id="excluir" value="Excluir">
   <input <?= ($ocultaprocessar == true ? 'style=" display: none;"' : "") ?> id="processamento" name="processar" type="submit" value="Processar">
   <input <?= ($ocultapesquisa == true ? 'style=" display: none;"' : "") ?> name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();"><br>
-  <input <?= ($ocultainserircomponente == true ? 'style=" display: none;"' : "") ?> <?= ($db_opcao == 2 ? "" : "disabled") ?> style=" margin-top: 10px;" name="inserircomponente" type="button" id="inserircomponente" value="Inserir Componente" onclick="js_inserircomponente();">
+  <input <?= ($ocultainserircomponente == true ? 'style=" display: none;"' : "") ?> style=" margin-top: 10px;" name="inserircomponente" type="button" id="inserircomponente" value="Inserir Componente" onclick="js_inserircomponente();">
 
   <?php
   if (isset($pesquisa_manutencoes) && $db_opcao == 3) {
@@ -123,6 +123,20 @@
   oAutoComplete = new dbAutoComplete(document.getElementById('t52_descr'), 'com4_pesquisabem.RPC.php');
   oAutoComplete.setTxtFieldId(document.getElementById('t52_bem'));
   oAutoComplete.show();
+
+  function js_limparCampos() {
+    document.form1.t52_descr.value = '';
+    document.form1.t52_bem.value = '';
+    document.form1.t44_valoratual.value = '';
+    document.form1.t52_depart.value = '';
+    document.form1.descrdepto.value = '';
+    document.form1.t52_valaqu.value = '';
+    document.form1.t52_ident.value = '';
+    document.form1.t98_data.value = '';
+    document.form1.t98_descricao.value = '';
+    document.form1.t98_vlrmanut.value = '';
+    document.form1.t98_tipo.value = 0;
+  }
 
   function js_pesquisa_descricaobem() {
     if (document.getElementById('t52_descr').value == "") {
@@ -267,7 +281,7 @@
 
   function js_inserircomponente() {
     parent.document.formaba.componentes.disabled = false;
-    top.corpo.iframe_componentes.location.href = 'pat1_lancmanutencao005.php';
+    top.corpo.iframe_componentes.location.href = 'pat1_lancmanutencao005.php?t98_sequencial=' + document.getElementById('t98_sequencial').value;
     parent.mo_camada('componentes');
   }
 </script>
