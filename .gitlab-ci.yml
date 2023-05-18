@@ -512,15 +512,15 @@ codanorte:
     only:
         - master
 
-pmserranopolis:
-    stage: deploy
-    script:
-        - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
-        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.108 "cd /var/www/e-cidade && git checkout . && git pull origin master "'
-        - 'ssh -p22 contass@10.251.27.108 "cd /var/www/e-cidade && git checkout . && php deploy_git.php "'
-    environment: production
-    only:
-        - master
+# pmserranopolis:
+#     stage: deploy
+#     script:
+#         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
+#         - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.108 "cd /var/www/e-cidade && git checkout . && git pull origin master "'
+#         - 'ssh -p22 contass@10.251.27.108 "cd /var/www/e-cidade && git checkout . && php deploy_git.php "'
+#     environment: production
+#     only:
+#         - master
 
 pmsantafe:
     stage: deploy
@@ -715,6 +715,16 @@ pmgraomogolv3:
         - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
         - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.119 "cd /var/www/e-cidade && git pull origin ecidade_v3 && ./composer.phar update && ./composer.phar install "'
         - 'ssh -p22 contass@10.251.27.119 "cd /var/www/e-cidade && php deploy_git.php"'
+    environment: production
+    only:
+        - ecidade_v3
+
+pmserranopolisv3:
+    stage: deploy
+    script:
+        - 'ssh-add <(echo "$PRODUCTION_PRIVATE_KEY")'
+        - 'ssh -o StrictHostKeyChecking=no contass@10.251.27.126 "cd /var/www/e-cidade && git pull origin ecidade_v3 && ./composer.phar update && ./composer.phar install "'
+        - 'ssh -p22 contass@10.251.27.126 "cd /var/www/e-cidade && php deploy_git.php"'
     environment: production
     only:
         - ecidade_v3
