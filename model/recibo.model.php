@@ -798,7 +798,7 @@ class Recibo
       }
 
     }
-    return true;
+
       /**
        * @var Numpref $settings
        */
@@ -810,7 +810,7 @@ class Recibo
       /**
        * Não gera qrcode para recibos de desconto
        */
-      if (!$settings->k03_ativo_integracao_pix || $nDescontoReciboWeb > 0) {
+      if (!$settings->k03_ativo_integracao_pix) {
           return true;
       }
 

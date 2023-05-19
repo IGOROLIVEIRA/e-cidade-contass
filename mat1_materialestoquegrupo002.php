@@ -35,78 +35,77 @@ require_once("libs/db_app.utils.php");
 require_once("libs/db_utils.php");
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<?
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <?
   db_app::load("scripts.js, prototype.js, widgets/windowAux.widget.js,strings.js,widgets/dbtextField.widget.js,
                dbmessageBoard.widget.js,dbautocomplete.widget.js,dbcomboBox.widget.js,
                datagrid.widget.js, prototype.maskedinput.js, DBViewEstruturaValor.js, DBViewMaterialGrupo.js");
   db_app::load("estilos.css,grid.style.css");
   ?>
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-    <center>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+  <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+    <tr>
+      <td width="360" height="18">&nbsp;</td>
+      <td width="263">&nbsp;</td>
+      <td width="25">&nbsp;</td>
+      <td width="140">&nbsp;</td>
+    </tr>
+  </table>
+  <center>
     <div id='ctnTela'>
     </div>
-    </center>
-</table>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+  </center>
+  </table>
+  <?
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
 </body>
+
 </html>
 <script>
-oCadastroGrupo = new DBViewMaterialGrupo('','oCadastroGrupo', $('ctnTela'));
-oCadastroGrupo.onSaveComplete = function (oRetorno) {
-
-  oCadastroGrupo.dbViewEstrutural.txtDescricao.setValue('');
-  oCadastroGrupo.dbViewEstrutural.txtEstrutural.setValue(0);
-  oCadastroGrupo.dbViewEstrutural.cboTipoEstrutural.setValue(1);
-  oCadastroGrupo.cboAtivo.setValue(1);
-  oCadastroGrupo.txtCodigoConta.setValue('');
-  oCadastroGrupo.txtDescricaoConta.setValue('');
-  oCadastroGrupo.txtCodigoContaVPD.setValue('');
-  oCadastroGrupo.txtDescricaoContaVPD.setValue('');
-  $('txtEstrutural').focus();
-  alert('Operação realizada com sucesso.');
-}
-
-oCadastroGrupo.onBeforeSave = function (oGrupo) {
-  
-  var lRetorno = true; 
-  if (oGrupo.sDescricao == "") {
-    
-    alert('Informe a descrição do Grupo.');
-    return false;
+  oCadastroGrupo = new DBViewMaterialGrupo('', 'oCadastroGrupo', $('ctnTela'));
+  oCadastroGrupo.onSaveComplete = function(oRetorno) {
+    alert('Operação realizada com sucesso.');
   }
-  
-  if (oGrupo.sEstrutural == "" || oGrupo.sEstrutural == $F('txtMascara')) {
-    alert('Estrutural Inválido');
-    return false;
+
+  oCadastroGrupo.onBeforeSave = function(oGrupo) {
+
+    var lRetorno = true;
+    if (oGrupo.sDescricao == "") {
+
+      alert('Informe a descrição do Grupo.');
+      return false;
+    }
+
+    if (oGrupo.sEstrutural == "" || oGrupo.sEstrutural == $F('txtMascara')) {
+      alert('Estrutural Inválido');
+      return false;
+    }
+    return true;
   }
-  return true;
-}
-getDados = function (iCodigo) {
-  
-  db_iframe_materialestoquegrupo.hide();
-  oCadastroGrupo.getDados(iCodigo);
-}
-$('btnPesquisar').observe("click", function() {
-  js_OpenJanelaIframe('', 
-                      'db_iframe_materialestoquegrupo', 
-                      'func_materialestoquegrupo.php?funcao_js=parent.getDados|m65_sequencial', 
-                      'Pesquisar Grupos/Subgrupos',
-                      true
-                     );
-})
+  getDados = function(iCodigo) {
+
+    db_iframe_materialestoquegrupo.hide();
+    oCadastroGrupo.getDados(iCodigo);
+  }
+  js_OpenJanelaIframe('',
+    'db_iframe_materialestoquegrupo',
+    'func_materialestoquegrupo.php?funcao_js=parent.getDados|m65_sequencial',
+    'Pesquisar Grupos/Subgrupos',
+    true
+  );
+  $('btnPesquisar').observe("click", function() {
+    js_OpenJanelaIframe('',
+      'db_iframe_materialestoquegrupo',
+      'func_materialestoquegrupo.php?funcao_js=parent.getDados|m65_sequencial',
+      'Pesquisar Grupos/Subgrupos',
+      true
+    );
+  })
 </script>

@@ -1479,6 +1479,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("respEmissaoEdi").style.display = "none";
 
         } else {
+            var codigo_lei = document.form1.l20_leidalicitacao.value;
+
+            if (codigo_lei == 1) {
+                document.getElementById("disputa").style.display = '';
+            }
             document.getElementById("respCondProcesso").style.display = '';
             document.getElementById("l20_tipliticacao").style.display = '';
             document.getElementById("l20_tipnaturezaproced").style.display = '';
