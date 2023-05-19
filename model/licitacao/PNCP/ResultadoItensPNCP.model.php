@@ -40,6 +40,8 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         $oDadosAPI->indicadorSubcontratacao         = $oDado[0]->indicadorsubcontratacao == 2 ? 'false' : 'true';
         $oDadosAPI->ordemClassificacaoSrp           = 1;
         $oDadosAPI->dataResultado                   = $this->formatDate($oDado[0]->dataresultado);
+        $oDadosAPI->situacaoCompraItemResultadoId   = 1;
+
         //naturezaJuridicaId faltando campo nao obrigatorio
 
         /*echo "<pre>";
@@ -148,7 +150,7 @@ class ResultadoItensPNCP extends ModeloBasePNCP
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/itens/$seqitem/resultados/$seqresultado";
 
-        $method = 'POST';
+        $method = 'PUT';
 
         $chpncp      = curl_init($url);
 
@@ -189,11 +191,10 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         print_r($header);
         exit;*/
         $retorno = explode(':', $contentpncp);
-
-        if (substr($retorno[0], 7, 3) == 201) {
-            return array($retorno[5] . $retorno[6], substr($retorno[0], 7, 3));
+        if (substr($retorno[0], 7, 3) == '200') {
+            return array(201, "Enviado com Sucesso!");
         } else {
-            return array($retorno[17], substr($retorno[0], 7, 3));
+            return array($retorno[17], $retorno[22]);
         }
     }
 }

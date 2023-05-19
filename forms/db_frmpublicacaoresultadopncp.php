@@ -7,6 +7,18 @@ db_app::load("estilos.css, grid.style.css");
     <table border="0">
         <tr>
             <td>
+                <strong>Tipo: </strong>
+            </td>
+            <td>
+                <select name="tipo" id="tipo" style="width: 91px;" onchange="js_verificatipo();">
+                    <option value="0">Selecione</option>
+                    <option value="1">Inclusão</option>
+                    <option value="2">Retificação</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <?
                 db_ancora('Licitação:', "js_pesquisal20_codigo(true);", $db_opcao);
                 ?>
@@ -31,12 +43,6 @@ db_app::load("estilos.css, grid.style.css");
                 <strong>Ambiente: </strong>
                 <select name="ambiente" id="ambiente">
                     <option value="1">Ambiente de Homologao Externa</option>
-                </select>
-
-                <strong>Tipo: </strong>
-                <select name="tipo" id="tipo">
-                    <option value="1">Inclusão</option>
-                    <option value="2">Retificação</option>
                 </select>
             </td>
         </tr>
@@ -69,8 +75,12 @@ db_app::load("estilos.css, grid.style.css");
     }
 
     function js_pesquisal20_codigo(mostra) {
-        if (mostra == true) {
+        let tipo = document.getElementById('tipo').value;
+
+        if (mostra == true && tipo != 0) {
             js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_liclicita', 'func_licitensresultado.php?funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto', 'Pesquisa', true);
+        }else{
+            alert('Selecione o Tipo.');
         }
     }
 
@@ -85,6 +95,7 @@ db_app::load("estilos.css, grid.style.css");
         oGridItens.clearAll(true);
         var oParam = new Object();
         oParam.iLicitacao = $F('l20_codigo');
+        oParam.iTipo = $F('tipo');
         oParam.exec = "getItens";
         js_divCarregando('Aguarde, pesquisando Itens', 'msgBox');
         var oAjax = new Ajax.Request(
@@ -192,12 +203,17 @@ db_app::load("estilos.css, grid.style.css");
                 onComplete: js_returnEnvPncp
             }
         );
-
-        function js_returnEnvPncp(oAjax) {
-            js_removeObj('msgBox');
-            var oRetornoResultado = eval('(' + oAjax.responseText + ")");
-
-            alert(oRetornoResultado.message.urlDecode());
-        }
     }
+
+    function js_returnEnvPncp(oAjax) {
+        js_removeObj('msgBox');
+        var oRetornoResultado = eval('(' + oAjax.responseText + ")");
+
+        alert(oRetornoResultado.message.urlDecode());
+    }
+
+    function js_verificatipo(){
+        js_getItens();
+    }
+
 </script>
