@@ -294,7 +294,7 @@ $sqlparagpadrao .= "  from db_documentopadrao ";
 $sqlparagpadrao .= "       inner join db_docparagpadrao  on db62_coddoc   = db60_coddoc ";
 $sqlparagpadrao .= "       inner join db_tipodoc         on db08_codigo   = db60_tipodoc ";
 $sqlparagpadrao .= "       inner join db_paragrafopadrao on db61_codparag = db62_codparag ";
-$sqlparagpadrao .= " where db60_tipodoc = 1502 order by db62_ordem";
+$sqlparagpadrao .= " where db60_tipodoc = 1502 and db60_instit = " . db_getsession('DB_instit') . "order by db62_ordem";
 
 $resparagpadrao = @pg_query($sqlparagpadrao);
 if (@pg_numrows($resparagpadrao) > 0) {

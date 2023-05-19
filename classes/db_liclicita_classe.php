@@ -442,19 +442,6 @@ class cl_liclicita
             return false;
         }
 
-        //        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-        //            if ($this->l20_dtpubratificacao == null) {
-        //                $this->erro_sql = "Voc? informou um tipo de 'INEXIGIBILIDADE ou Dispensa de Licitacao'. Para este tipo ?  \\n\\n obrigatorio preencher a  Data Publica??o Termo Ratifica??o";
-        //                $this->erro_campo = "l20_dtpubratificacao";
-        //                $this->erro_banco = "";
-        //                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-        //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        //                $this->erro_status = "0";
-        //                return false;
-        //            }
-        //        }
-
-
         if ($this->l20_condicoespag == null || $this->l20_condicoespag == "") {
             $this->erro_sql = " Campo condicoes de pagamento nao Informado.";
             $this->erro_campo = "l20_condicoespag";
@@ -478,18 +465,6 @@ class cl_liclicita
             }
         }
 
-        //        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-        //            if ($this->l20_dtpubratificacao == null || $this->l20_dtpubratificacao == "") {
-        //                $this->erro_sql = " Voc? marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Raz?o";
-        //                $this->erro_campo = "l20_dtpubratificacao";
-        //                $this->erro_banco = "";
-        //                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-        //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        //                $this->erro_status = "0";
-        //                return false;
-        //            }
-        //        }
-
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
             if ($this->l20_tipoprocesso == null || $this->l20_tipoprocesso == "" || $this->l20_tipoprocesso == 0) {
                 $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo";
@@ -503,18 +478,6 @@ class cl_liclicita
         } else {
             $this->l20_tipoprocesso = 0;
         }
-
-        //        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-        //            if (trim($this->l20_veicdivulgacao) == null || (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50)) {
-        //                $this->erro_sql = "Usu?rio: \\n\\n O campo veiculo de divulga??o deve ter no m?nimo 5 caracteres e no m?ximo 50 \\n\\n";
-        //                $this->erro_campo = "l20_veicdivulgacao";
-        //                $this->erro_banco = "";
-        //                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-        //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        //                $this->erro_status = "0";
-        //                return false;
-        //            }
-        //        }
 
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
 
@@ -589,105 +552,6 @@ class cl_liclicita
         if ($this->l20_horaaber == null) {
             $this->l20_horaaber = $this->l20_horacria;
         }
-        // validacao sicom
-        /*
-        if ($this->l20_dtpublic != null) {
-            // aqui
-            if ($this->l20_dtpublic < $this->l20_datacria) {
-                //  A data da publicacao em diario oficial nao deve ser superior  ou igual a data de criacao.
-                $this->erro_sql = " A Data da Publica??o em Edital Veiculo 1 deve ser anterior a Data de Recebimento da Documenta??o";
-                $this->erro_campo = "l20_datapublicacao1";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        */
-
-        /*
-
-        if ($this->l20_datapublicacao2 != null) {
-            if ($this->l20_datapublicacao2 > $this->l20_recdocumentacao) {
-                //  A data da publicacao em diario oficial nao deve ser superior  ou igual a data de criacao.
-                $this->erro_sql = " A Data da Publica??o em Edital Veiculo 2 deve ser anterior a Data de Recebimento da Documenta??o";
-                $this->erro_campo = "l20_datapublicacao2";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        */
-
-        /*
-        if ($this->l20_datapublicacao1 != null) {
-            if ($this->l20_datacria > $this->l20_datapublicacao1) {
-
-                $this->erro_sql = " A data da publica??o em Edital Veiculo 1 deve ser superior  ou igual a data de cria??o.";
-                $this->erro_campo = "l20_datapublicacao1";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        } */
-        /*
-
-        if ($this->l20_datapublicacao2 != null) {
-            if ($this->l20_datacria > $this->l20_datapublicacao2) {
-
-                $this->erro_sql = " A data da publica??o em Edital Veiculo 2 deve ser superior ou igual a data de cria??o.";
-                $this->erro_campo = "l20_datapublicacao2";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        } */
-        //alterado
-        if ($this->l20_recdocumentacao != null) {
-            if ($tribunal != 50) {
-                if ($this->l20_recdocumentacao < $this->l20_dataaber && $this->l20_codtipocom != 16) {
-
-                    $this->erro_sql = " A data informada no campo  Abertura das Propostas deve ser  superior a   Data Edital/Convite.";
-                    $this->erro_campo = "l20_recdocumentacao";
-                    $this->erro_banco = "";
-                    $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
-            }
-        }
-
-        if ($this->l20_datacria != null && $this->l20_dataaber != null) {
-            if ($this->l20_dataaber < $this->l20_datacria) {
-                $this->erro_sql = "A data inserida no campo 'Data Emis/Alt Edital/Convite' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-                $this->erro_campo = "l20_dataaber";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-
-        if ($this->l20_dataaberproposta != null && $this->l20_datacria != null) {
-            if ($this->l20_dataaberproposta < $this->l20_datacria) {
-                $this->erro_sql = "A data inserida no campo 'Data Abertura Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-                $this->erro_campo = "l20_dataaberproposta";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
 
         if ($this->l20_dataaberproposta == "null" || $this->l20_dataaberproposta == "" and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
             $this->erro_sql = "Campo Abertura das Propostas não Informado";
@@ -697,18 +561,6 @@ class cl_liclicita
             $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
-        }
-
-        if ($this->l20_dataencproposta != null && $this->l20_dataaberproposta != null) {
-            if ($this->l20_dataaberproposta < $this->l20_dataencproposta) {
-                $this->erro_sql = "A data inserida no campo 'Data Encerramento Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-                $this->erro_campo = "l20_dataencproposta";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
         }
 
         if ($this->l20_dataaber == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
@@ -855,16 +707,6 @@ class cl_liclicita
         } else {
             $this->l20_datapublicacao2 = "'$this->l20_datapublicacao2'";
         }
-        /*
-        if ($this->l20_dtpublic == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
-            $this->erro_sql = " Campo Data de Publica??o em Di?rio Oficial n?o Informado.";
-            $this->erro_campo = "l20_dtpublic";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        } */
 
         if ($this->l20_recdocumentacao == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
             $this->l20_recdocumentacao = 'null';
@@ -873,15 +715,6 @@ class cl_liclicita
         if ($this->l20_numeroconvidado == null) {
             $this->l20_numeroconvidado = 'null';
         }
-        /*if ($this->l20_descontotab == null) {
-            $this->erro_sql = " Campo Desconto Tabela n?o Informado.";
-            $this->erro_campo = "l20_descontotab";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }*/
 
         if ($this->l20_naturezaobjeto == null) {
             $this->erro_sql = " Campo Natureza do Objeto não Informado.";
@@ -1371,11 +1204,11 @@ class cl_liclicita
         }
 
         if (trim($this->l20_dtpubratificacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpubratificacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
-            if (trim($this->l20_numeroconvidado == null)) {
+            if (trim($this->l20_dtpubratificacao == null)) {
                 $sql .= $virgula . " l20_dtpubratificacao = null ";
                 $virgula = ",";
             } else {
-                $sql .= $virgula . " l20_dtpubratificacao = $this->l20_dtpubratificacao ";
+                $sql .= $virgula . " l20_dtpubratificacao = '$this->l20_dtpubratificacao' ";
                 $virgula = ",";
             }
         }
@@ -1503,17 +1336,9 @@ class cl_liclicita
         }
 
         if (trim($this->l20_recdocumentacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao"]))) {
-            if ($this->l20_recdocumentacao == null || $this->l20_recdocumentacao == "" and $tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+            if ($this->l20_recdocumentacao == null) {
                 $sql .= $virgula . " l20_recdocumentacao = null ";
                 $virgula = ",";
-            } else if ($this->l20_recdocumentacao < $this->l20_dataaber && $this->l20_codtipocom != 16) {
-                $this->erro_sql = " A data informada no campo  Abertura das Propostas deve ser  superior a   Data Edital/Convite.";
-                $this->erro_campo = "l20_recdocumentacao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
             } else {
                 $sql .= $virgula . " l20_recdocumentacao = ' $this->l20_recdocumentacao '";
                 $virgula = ",";
@@ -1536,42 +1361,6 @@ class cl_liclicita
             } else {
                 $sql .= $virgula . " l20_dataaber ='$this->l20_dataaber' ";
                 $virgula = ",";
-            }
-        }
-
-        if (($this->l20_datacria != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_datacria"])) && ($this->l20_dataaber != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaber"]))) {
-            if ($this->l20_datacria > $this->l20_dataaber and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
-                $this->erro_sql = "A data inserida no campo 'Data Emis/Alt Edital/Convite' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-                $this->erro_campo = "l20_dataaber";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-
-        if ($this->l20_datacria != null  && $this->l20_dataaberproposta != null) {
-            if ($this->l20_datacria > $this->l20_dataaberproposta) {
-                $this->erro_sql = "A data inserida no campo 'Data Abertura das Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-                $this->erro_campo = "l20_dataaberproposta";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-
-        if ($this->l20_dataaberproposta != null  && $this->l20_dataencproposta != null) {
-            if ($this->l20_dataaberproposta > $this->l20_dataencproposta) {
-                $this->erro_sql = "A data inserida no campo 'Data Abertura das Propostas' deverá ser maior ou igual a data inserida no campo ' Data Encerramento Proposta'.";
-                $this->erro_campo = "l20_dataencproposta";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
             }
         }
 
@@ -3776,8 +3565,7 @@ class cl_liclicita
        CASE
             WHEN l03_pctipocompratribunal IN (110,51,53,52,50,102) THEN 1
             WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa != 5 THEN 2
-            WHEN l03_pctipocompratribunal = 100 AND liclicita.l20_mododisputa != 5 THEN 3
-            WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa = 5 THEN 3
+            WHEN l03_pctipocompratribunal = 100 THEN 3
        END AS tipoInstrumentoConvocatorioId,
        CASE
            WHEN l03_pctipocompratribunal = 110 THEN 2

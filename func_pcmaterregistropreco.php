@@ -239,7 +239,7 @@ if (isset($o56_codele) and trim($o56_codele) != '') {
                     $campos = "pc11_codigo as pc11_codigo,
                  pcmater.pc01_codmater,
                  pcmater.pc01_descrmater,
-
+                 pcmater.pc01_complmater,
                  pc11_resum,pc23_vlrun,o56_codele,o56_elemento,substr(o56_descr,1,40) as o56_descr,
                  pcsubgrupo.pc04_descrsubgrupo as DB_pc04_descrsubgrupo,
                  pcmater.pc01_servico,

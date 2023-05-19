@@ -389,9 +389,9 @@ class SicomArquivoAberturaLicitacao extends SicomArquivoBase implements iPadArqu
             $claberlic10->si46_linkedital = $oDados10->linkPublic;
             $claberlic10->si46_diariooficialdivulgacao = $oDados10->divulgacaoDo;
             if ($oDados10->lei == 1) {
-                $claberlic10->si46_modoDisputa = $oDados10->mododisputa;
+                $claberlic10->si46_mododisputa = $oDados10->mododisputa;
             } else {
-                $claberlic10->si46_modoDisputa = "";
+                $claberlic10->si46_mododisputa = "";
             }
 
             $claberlic10->si46_instit = db_getsession("DB_instit");

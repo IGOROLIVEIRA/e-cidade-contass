@@ -34,7 +34,7 @@ switch ($oParam->exec){
       $oNovoEntesReceitas->c216_percentual      = $oParam->dados->percentual;
       $oNovoEntesReceitas->c216_anousu          = db_getsession('DB_anousu');
 
-      $oNovoEntesReceitas->incluir();
+      $oNovoEntesReceitas->incluir(null);
 
       if ($oNovoEntesReceitas->erro_status != 1) {
         throw new Exception($oNovoEntesReceitas->msg, 1);
@@ -80,7 +80,7 @@ switch ($oParam->exec){
         $oNovaReceita->sequencial   = $oReceita->c216_sequencial;
         $oNovaReceita->tipo         = $oReceita->c216_tiporeceita;
         $oNovaReceita->codReceita   = $oReceita->c216_receita;
-        $oNovaReceita->descReceita  = $oReceita->o57_descr;
+        $oNovaReceita->descReceita  = urlencode($oReceita->o57_descr);
         $oNovaReceita->percentual   = $oReceita->c216_percentual;
         $oNovaReceita->saldo        = $oReceita->c216_saldo3112;
 
@@ -105,7 +105,7 @@ switch ($oParam->exec){
         throw new Exception($oEntesReceitas->erro_msg, 1);
       } else {
         $oRetorno->atualizar = true;
-        $oRetorno->msg = 'Excluído com sucesso.';
+        $oRetorno->msg = urlencode('Excluído com sucesso.');
       }
 
     } catch (Exception $e) {

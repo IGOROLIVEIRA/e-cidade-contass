@@ -14,7 +14,7 @@ require_once("classes/db_itensregpreco_classe.php");
 db_postmemory($_POST);
 
 $oJson             = new services_json();
-$oParam            = $oJson->decode(str_replace("\\","",$_POST["json"]));
+$oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
@@ -43,7 +43,7 @@ try {
         $oItemRegPreco->si07_sequencialadesao   = $oItem->si07_sequencialadesao;
         $oItemRegPreco->si07_quantidadeaderida  = $oItem->si07_quantidadeaderida;
         $oItemRegPreco->si07_quantidadelicitada = $oItem->si07_quantidadelicitada;
-
+        $oItemRegPreco->si07_percentual = $oItem->si07_percentual;
         db_inicio_transacao();
 
         if (empty($oItem->si07_sequencial)) {
@@ -62,10 +62,9 @@ try {
         }
 
         $oRetorno->sucesso = utf8_encode("Informações salvas com sucesso!");
-
       }
 
-    break; // salvar
+      break; // salvar
 
 
     case 'excluir':
@@ -87,17 +86,12 @@ try {
 
       $oRetorno->sucesso = utf8_encode("Item excluído do processo de adesão de registro de preço!");
 
-    break;
-
+      break;
   }
-
 } catch (Exception $e) {
 
   $oRetorno->erro   = utf8_encode($e->getMessage());
   $oRetorno->status = $e->getCode();
-
 }
 
 echo $oJson->encode($oRetorno);
-
-?>

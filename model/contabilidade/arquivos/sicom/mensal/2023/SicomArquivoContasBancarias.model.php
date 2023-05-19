@@ -200,18 +200,10 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
       $aHash .= $oRegistro10->c63_dvconta;
       $aHash .= $oRegistro10->tipoconta;
 
-
-      // Instituição RPPS.
-      if ($oRegistro10->si09_tipoinstit == 5) {
-        $aHash .= $oRegistro10->tipoaplicacao;
-      
       // Instituição RPPS.
       if ($oRegistro10->si09_tipoinstit == 5) {
         $aHash .= $oRegistro10->tipoaplicacao;
         $aHash .= $oRegistro10->nroseqaplicacao;
-        $aHash .= $oRegistro10->nroseqaplicacao;
-      }
-      $aHash .= $oRegistro10->nroseqaplicacao;
       }
 
       if (!isset($aBancosAgrupados[$aHash])) {

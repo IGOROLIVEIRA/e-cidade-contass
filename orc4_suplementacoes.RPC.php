@@ -211,7 +211,7 @@ switch ($oParam->exec) {
 
             db_fim_transacao(true);
             $oRetorno->status  = 2;
-            $oRetorno->message = urlencode($eErro->getMessage());
+            $oRetorno->message = $eErro->getMessage();
         }
         break;
     case 'getSuplementacao':
