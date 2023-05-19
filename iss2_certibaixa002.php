@@ -140,8 +140,40 @@ $sqlparag = "select *
 $resparag = db_query($sqlparag);
 
 if (pg_numrows($resparag) == 0) {
-  db_redireciona('db_erros.php?fechar=true&db_erro=Configure o documento de baixa de alvara!');
-  exit();
+
+  if($q60_templatebaixaalvaranormal == null) {
+
+    db_msgbox(_M($sCaminhoMensagem."documento_template_nao_existe"));
+    exit;
+  }
+
+  $iDocumentoTemplate = $q60_templatebaixaalvaranormal;
+
+  if($q11_oficio == 't') {
+
+    if($q60_templatebaixaalvaraoficial != null) {
+
+      $iDocumentoTemplate = $q60_templatebaixaalvaraoficial;
+    }
+  }
+
+  ini_set("error_reporting","E_ALL & ~NOTICE");
+
+  $sDescrDoc        = date("YmdHis").db_getsession("DB_id_usuario");
+  $sNomeRelatorio   = "tmp/CertidaoBaixaInscricao{$sDescrDoc}.pdf";
+  $sCaminhoSalvoSxw = "tmp/CertidaoBaixaInscricao_{$sDescrDoc}_{$inscr}.sxw";
+
+  $sAgt             = "issqn/certidao_baixa_inscricao.agt";
+
+  $aParam           = array();
+  $aParam['$inscr'] = $inscr;
+
+  db_stdClass::oo2pdf(46, $iDocumentoTemplate, $sAgt, $aParam, $sCaminhoSalvoSxw, $sNomeRelatorio);
+
+  exit;
+
+  //db_redireciona('db_erros.php?fechar=true&db_erro=Configure o documento de baixa de alvara!');
+  //exit();
 }
 
 $numrows = pg_numrows($resparag);
