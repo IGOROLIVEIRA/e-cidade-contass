@@ -758,7 +758,7 @@ switch ($oParam->exec) {
                 $oContrato->setDataReajuste($oParam->contrato->dtReajuste);
                 $oContrato->setPeriodoreajuste($oParam->contrato->sPeriodoreajuste);
                 $oContrato->setIndiceReajuste($oParam->contrato->iIndicereajuste);
-                $oContrato->setDescricaoReajuste($oParam->contrato->sDescricaoreajuste);
+                $oContrato->setDescricaoReajuste(db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sDescricaoreajuste));
                 $oContrato->setDescricaoIndice($oParam->contrato->sDescricaoindice);
                 $oContrato->save();
                 /*
