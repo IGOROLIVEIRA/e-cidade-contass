@@ -31,7 +31,11 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDadosAPI->codigoUnidadeCompradora         = '01001'; //$oDado->codigounidadecompradora;
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
-        $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
+        if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
+            $oDadosAPI->modoDisputaId                   = 4;
+        }else{
+            $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
+        }
         $oDadosAPI->numeroCompra                    = $oDado->numerocompra;
         $oDadosAPI->anoCompra                       = $oDado->anocompra;
         $oDadosAPI->numeroProcesso                  = $oDado->numeroprocesso;
@@ -58,7 +62,11 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
             $oDadosAPI->itensCompra[$key]->orcamentoSigiloso           = $item->l21_sigilo == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
-            $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
+            if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
+                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = 1;
+            }else{
+                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
+            }
             //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
             $oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
             //$oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = utf8_encode($item->codigoregistroimobiliario);
