@@ -78,8 +78,6 @@ $q60_templatebaixaalvaraoficial = $oParissqn->q60_templatebaixaalvaraoficial;
 
 $iDocumentoTemplate = $q60_templatebaixaalvaranormal;
 
-ini_set("error_reporting","E_ALL & ~NOTICE");
-
 $sDescrDoc        = date("YmdHis").db_getsession("DB_id_usuario");
 $sNomeRelatorio   = "tmp/CertidaoBaixaInscricao{$sDescrDoc}.pdf";
 
@@ -157,8 +155,6 @@ if (pg_numrows($resparag) == 0) {
     }
   }
 
-  ini_set("error_reporting","E_ALL & ~NOTICE");
-
   $sDescrDoc        = date("YmdHis").db_getsession("DB_id_usuario");
   $sNomeRelatorio   = "tmp/CertidaoBaixaInscricao{$sDescrDoc}.pdf";
   $sCaminhoSalvoSxw = "tmp/CertidaoBaixaInscricao_{$sDescrDoc}_{$inscr}.sxw";
@@ -172,8 +168,6 @@ if (pg_numrows($resparag) == 0) {
 
   exit;
 
-  //db_redireciona('db_erros.php?fechar=true&db_erro=Configure o documento de baixa de alvara!');
-  //exit();
 }
 
 $numrows = pg_numrows($resparag);
