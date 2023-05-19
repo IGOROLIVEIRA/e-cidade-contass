@@ -178,6 +178,14 @@ INNER JOIN orcelemento on (orcelemento.o56_codele,orcelemento.o56_anousu) = (orc
 WHERE pc80_codproc = $solicitacaocompras";
 $resultDotacao = db_query($sqlDotacao);
 
+ /**
+* BUSCO O TEXTO NO CADASTRO DE PARAGRAFOS
+*
+*/
+$sqlparag = "select db02_texto from db_paragrafo inner join db_docparag on db02_idparag = db04_idparag inner join db_documento on db04_docum = db03_docum where db03_descr='SOLICITACAO DE DISPO. FINANCEIRA2' and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
+$resparag = db_query($sqlparag);
+
+
 $head5 = "SOLICITAÇÃO DE PARECER DE DISPONIBILIDADE FINANCEIRA";
 
 $pdf = new PDF();
@@ -199,7 +207,12 @@ $pdf->x = 30;
 $pdf->cell(190,5,"Para: Setor contábil"                             ,0,1,"L",0);
 $pdf->ln($alt + 4);
 $pdf->x = 30;
-$pdf->MultiCell(160,5,"     Solicito ao departamento contábil se há no orçamento vigente, disponibilidade financeira que atenda ".mb_strtoupper($objeto,'ISO-8859-1').", no valor total estimado de R$".trim(db_formatar($nTotalItens,'f')),0,"J",0);
+if(pg_num_rows($resparag) != 0){
+    db_fieldsmemory( $resparag, 0 );
+    eval($db02_texto);
+}else{
+    $pdf->MultiCell(160,5,"     Solicito ao departamento contábil se há no orçamento vigente, disponibilidade financeira que atenda ".mb_strtoupper($objeto,'ISO-8859-1').", no valor total estimado de R$".trim(db_formatar($nTotalItens,'f')),0,"J",0);
+}
 $pdf->ln($alt + 20);
 $data = db_getsession('DB_datausu');
 $sDataExtenso     = db_dataextenso($data);

@@ -154,6 +154,13 @@ db_postmemory($HTTP_POST_VARS);
  $resultObjeto = db_query($sqlObjeto);
  db_fieldsmemory($resultObjeto,0);
 
+ /**
+* BUSCO O TEXTO NO CADASTRO DE PARAGRAFOS
+*
+*/
+$sqlparag = "select db02_texto from db_paragrafo inner join db_docparag on db02_idparag = db04_idparag inner join db_documento on db04_docum = db03_docum where db03_descr='SOLICITACAO DE DISPO. FINANCEIRA1' and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
+$resparag = db_query($sqlparag);
+
 ?>
 
 <?php
@@ -219,7 +226,12 @@ header("Content-Disposition: attachment; Filename=Solicitacao_Parecer_Financeiro
 
             <div>
                 <?php
+                if(pg_num_rows($resparag) != 0){
+                    db_fieldsmemory( $resparag, 0 );
+                    eval($db02_texto);
+                }else{
                     echo "<p>Solicito ao departamento contábil se há no orçamento vigente, disponibilidade financeira que atenda ".mb_strtoupper($objeto,'ISO-8859-1').", no valor total estimado de R$ ".trim(db_formatar($nTotalItens,'f')).".</p>";       
+                }
                 ?>
             </div>
             <br>

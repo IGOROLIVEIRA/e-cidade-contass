@@ -182,22 +182,11 @@ WHERE pc80_codproc = $processodecompras";
 $resultDotacao = db_query($sqlDotacao);
 //db_criatabela($resultDotacao);exit;
 /**
- * BUSCO O TEXTO NO CADASTRO DE PARAGRAFOS
- *
- */
-$sqlparag = "select db02_texto AS db02_texto1
-	from db_documento 
-	inner join db_docparag on db03_docum = db04_docum
-	inner join db_tipodoc on db08_codigo  = db03_tipodoc
-	inner join db_paragrafo on db04_idparag = db02_idparag 
-	where db02_idparag = (SELECT db02_idparag
-FROM db_documento
-INNER JOIN db_docparag ON db03_docum = db04_docum
-INNER JOIN db_tipodoc ON db08_codigo = db03_tipodoc
-INNER JOIN db_paragrafo ON db04_idparag = db02_idparag
-WHERE db02_descr LIKE 'DECLARAÇÃO DE REC. ORC. E FINANCEIRO TEXTO1') and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
-$resparag = pg_query($sqlparag);
-db_fieldsmemory( $resparag, 0 );
+* BUSCO O TEXTO NO CADASTRO DE PARAGRAFOS
+*
+*/
+$sqlparag = "select db02_texto from db_paragrafo inner join db_docparag on db02_idparag = db04_idparag inner join db_documento on db04_docum = db03_docum where db03_descr='DECLARACAO DE REC. ORC. E FINANCEIRO2' and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
+$resparag = db_query($sqlparag);
 $head5 = "DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO";
 
 
@@ -216,8 +205,12 @@ $pdf->Cell(160,6,"DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO",0,1,"C",0);
 $pdf->ln($alt+3);
 $pdf->x = 30;
 $pdf->SetFont('arial','',11);
-$pdf->MultiCell(160,5,"     Examinando  as  Dotações  constantes  do  orçamento  fiscal  e  levando-se  em  conta  o objeto que se  pretende  contratar, ".mb_strtoupper($objeto,'ISO-8859-1')." , no valor total estimado de R$ ".trim(db_formatar($nTotalItens,'f'))." em atendimento aos dispositivos da Lei 8666/93, informo que existe dotações das quais correrão a despesas:",0,"J",0);
-
+if(pg_num_rows($resparag) != 0){
+    $paragr1 = db_utils::fieldsMemory($resparag, 0);
+    eval($paragr1->db02_texto);
+}else{
+    $pdf->MultiCell(160,5,"     Examinando  as  Dotações  constantes  do  orçamento  fiscal  e  levando-se  em  conta  o objeto que se  pretende  contratar, ".mb_strtoupper($objeto,'ISO-8859-1')." , no valor total estimado de R$ ".trim(db_formatar($nTotalItens,'f'))." em atendimento aos dispositivos da Lei 8666/93, informo que existe dotações das quais correrão a despesas:",0,"J",0);
+}
 $pdf->ln($alt+3);
 $pdf->x = 30;
 
@@ -246,8 +239,12 @@ $pdf->ln($alt+3);
 
 $pdf->setfont('arial','',11);
 $pdf->x = 30;
-
-$pdf->MultiCell(160,5,"que as despesas atendem ao disposto nos artigos 16 e 17 da Lei Complementar Federal 101/2000, uma vez, foi considerado o impacto na execução orçamentária e também está de acordo com a previsão do Plano Plurianual e da Lei de Diretrizes Orçamentárias para exercício. Informamos ainda que foi verificado o impacto financeiro da despesa e sua inclusão na programação deste órgão.",0,"J",0);
+if(pg_num_rows($resparag) != 0){
+    $paragr1 = db_utils::fieldsMemory($resparag, 1);
+    eval($paragr1->db02_texto);
+}else{
+    $pdf->MultiCell(160,5,"que as despesas atendem ao disposto nos artigos 16 e 17 da Lei Complementar Federal 101/2000, uma vez, foi considerado o impacto na execução orçamentária e também está de acordo com a previsão do Plano Plurianual e da Lei de Diretrizes Orçamentárias para exercício. Informamos ainda que foi verificado o impacto financeiro da despesa e sua inclusão na programação deste órgão.",0,"J",0);
+}
 $pdf->ln($alt+9);
 
 $data = db_getsession('DB_datausu');
