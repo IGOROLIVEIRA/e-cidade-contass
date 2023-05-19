@@ -688,6 +688,7 @@ if($linhasIptunump >0 ){
         $n = "N";
         $arr_multa_juros[$k00_numpre][$k00_numpar]['juros'] = $pvlrjuros;
         $arr_multa_juros[$k00_numpre][$k00_numpar]['multa'] = $pvlrmulta;
+        $arr_multa_juros[$k00_numpre][$k00_numpar]['corre'] = $pvlrcor;
 
       }
       $vt['CHECK0']    = $NP;
@@ -1941,7 +1942,7 @@ where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limi
 
           $pdf1->descr15   = ($ninfla == '' ? 'R$  '.db_formatar($k00_valor, 'f') : $ninfla.'  '.$k00_valor);
           $pdf1->valtotal  = db_formatar($k00_valor, 'f');
-          $valor_origem = $k00_valor + $pvlrdesconto - $arr_multa_juros[$k00_numpre][$k00_numpar]['juros'] - $arr_multa_juros[$k00_numpre][$k00_numpar]['multa'];
+          $valor_origem = $arr_multa_juros[$k00_numpre][$k00_numpar]['corre'];
           $pdf1->valororigem = db_formatar($valor_origem, 'f');
           $pdf1->valorDesconto = db_formatar($pvlrdesconto, 'f');
           $pdf1->valortotal = db_formatar($k00_valor, 'f');
