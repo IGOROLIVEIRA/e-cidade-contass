@@ -100,7 +100,7 @@ class PixArrecadacaoPayloadDTO implements IPixPayload
                 continue;
             }
 
-            if ($attribute === 'valorOriginalSolicitacao' && !is_float($value)) {
+            if ($attribute === 'valorOriginalSolicitacao') {
                 $value = number_format($value, 2, '.', '');
             }
 
