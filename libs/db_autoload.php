@@ -1,6 +1,4 @@
 <?php
-
-require_once('vendor/autoload.php');
 function db_autoload($sClassName) {
 
   $aIncludeDirs = array();
