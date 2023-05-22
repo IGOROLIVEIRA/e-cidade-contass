@@ -500,15 +500,15 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $descricao = substr($oDadosDaLinha->descricao,0,$x*180);
                     if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {
 
-                        $descricao = '';
+                        
                         $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
-                        $addalt = $linhas*4;
+                        $descricao = substr($oDadosDaLinha->descricao,0,$x*115);
                         $old_y = $this->objpdf->gety();
     
                         $this->objpdf->setfont('arial', '', 7);
                         $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
                         $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
-                        $this->objpdf->multicell(160, $alt, mb_strtoupper(str_replace("\n","",$oDadosDaLinha->descricao)), "T", "J", 0);
+                        $this->objpdf->multicell(160, $alt, mb_strtoupper(str_replace("\n","",$descricao)), "T", "J", 0);
     
                         $this->objpdf->sety($old_y);
                         $this->objpdf->setx(194);
@@ -618,15 +618,15 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $addalt = ($iContadorLinhasCriterios-$x)*4;
                     if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {
 
-                        $descricao = '';
+                        
                         $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
-                        $addalt = $linhas*4;
+                        $descricao = substr($oDadosDaLinha->descricao,$x*115,strlen($oDadosDaLinha->descricao));
                         $old_y = $this->objpdf->gety();
     
                         $this->objpdf->setfont('arial', '', 7);
                         $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
                         $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
-                        $this->objpdf->multicell(160, $alt, mb_strtoupper(str_replace("\n","",$oDadosDaLinha->descricao)), "T", "J", 0);
+                        $this->objpdf->multicell(160, $alt, mb_strtoupper(str_replace("\n","",$descricao)), "T", "J", 0);
     
                         $this->objpdf->sety($old_y);
                         $this->objpdf->setx(194);
@@ -673,7 +673,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $linhas = ceil(strlen($oDadosDaLinha->descricao)/115);
                     
                     $old_y = $this->objpdf->gety();
-
+                    $addalt =  $iContadorLinhasCriterios*4;
                     $this->objpdf->setfont('arial', '', 7);
                     $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
                     $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);

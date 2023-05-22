@@ -376,7 +376,7 @@ if ($modelo == 1) {
       /*FIM - OC3770*/
 
       //if ($quant_casas == 2) {
-      $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento) * $quant, 2), 2, ',', '.'), 0, 1, "R", 0);
+      $pdf->cell(20, $alt, number_format(round((round($total_unit / $iContOrcamento, 4)) * $quant, 2), 2, ',', '.'), 0, 1, "R", 0);
       //            } else {
       //                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 3) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
       //            }
@@ -385,7 +385,7 @@ if ($modelo == 1) {
       //            if ($quant_casas == 2) {
       //                $total_media += round(($total_unit / $iContOrcamento), 2) * $quant;
       //            } else {
-      $total_media += round(($total_unit / $iContOrcamento)* $quant, 4);
+      $total_media += round((round($total_unit / $iContOrcamento, 4))* $quant, 4);
       //            }
     }
   }
