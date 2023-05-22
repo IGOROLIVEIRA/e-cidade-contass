@@ -21,7 +21,11 @@ class PregaoFabrica implements LicitacaoFabricaInterface
         $loteFabrica = new LoteFabrica;
         $pregao = new Pregao();
         $linha = db_utils::fieldsMemory($dados, 0);
+        $legislacaoAplicavel = (int)$linha->legislacaoaplicavel;
 
+        if ($linha->codigomodalidade == '52') {
+            $legislacaoAplicavel = 6;
+        }
 
         $pregao->setId($linha->id);
         $pregao->setObjeto($linha->objeto);
@@ -42,7 +46,7 @@ class PregaoFabrica implements LicitacaoFabricaInterface
         $pregao->setExigeGarantia($linha->exigegarantia);
         $pregao->setCasasDecimais((int)$linha->casasdecimais);
         $pregao->setCasasDecimaisQuantidade((int)$linha->casadecimaisquantidade);
-        $pregao->setLegislacaoAplicavel((int)$linha->legislacaoaplicavel);
+        $pregao->setLegislacaoAplicavel($legislacaoAplicavel);
         $pregao->setTratamentoFaseLance((int) $linha->tratamentofaselance);
         $pregao->setTipoIntervaloLance((int)$linha->tipointervalolance);
         $pregao->setValorIntervaloLance((float)$linha->valorintervalolance);
