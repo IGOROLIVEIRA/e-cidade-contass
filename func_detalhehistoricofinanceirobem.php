@@ -43,29 +43,37 @@ $sCamposBuscaHistoricoFinanceiro .= "     then 'Automático' ";
 $sCamposBuscaHistoricoFinanceiro .= "     else 'Manual' end as t57_tipoprocessamento ,";
 $sCamposBuscaHistoricoFinanceiro .= "case when t57_tipocalculo = 1 ";
 $sCamposBuscaHistoricoFinanceiro .= "     then 'Depreciação' ";
-$sCamposBuscaHistoricoFinanceiro .= "     else 'Reavaliação' end as t57_tipocalculo ,";
+$sCamposBuscaHistoricoFinanceiro .= " when t57_tipocalculo = 2  then 'Reavaliação'";
+$sCamposBuscaHistoricoFinanceiro .= "     else 'Manutenção' end as t57_tipocalculo ,";
 $sCamposBuscaHistoricoFinanceiro .= "CASE WHEN t57_processado IS FALSE ";
 $sCamposBuscaHistoricoFinanceiro .= "     THEN 'Desprocessado' ";
 $sCamposBuscaHistoricoFinanceiro .= "     ELSE 'Processado' END as t57_processado, ";
 $sCamposBuscaHistoricoFinanceiro .= "fc_mesextenso(t57_mes, 'sigla') || '/' || t57_ano AS dl_Competencia";
 $sWhereBuscaHistoricoFinanceiro   = " t58_bens = {$oGet->t52_bem} ";
 $sOrder                           =  "t57_ano desc, t57_mes desc";
-$sSqlBuscaHistoricoFinanceiro     = $oDaoBensHistoricoCalculoBem->sql_query(null, $sCamposBuscaHistoricoFinanceiro,
-                                                                            $sOrder, $sWhereBuscaHistoricoFinanceiro);
+$sSqlBuscaHistoricoFinanceiro     = $oDaoBensHistoricoCalculoBem->sql_query(
+  null,
+  $sCamposBuscaHistoricoFinanceiro,
+  $sOrder,
+  $sWhereBuscaHistoricoFinanceiro
+);
 ?>
 <html>
+
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-  <body>
-    <center>
-      <fieldset>
-        <legend style='font-weight:bold'>Historico Financeiro</legend>
-        <?php
-          db_lovrot($sSqlBuscaHistoricoFinanceiro, 15, "", "");
-        ?>
-      </fieldset>
-    </center>
-  </body>
+
+<body>
+  <center>
+    <fieldset>
+      <legend style='font-weight:bold'>Historico Financeiro</legend>
+      <?php
+      db_lovrot($sSqlBuscaHistoricoFinanceiro, 15, "", "");
+      ?>
+    </fieldset>
+  </center>
+</body>
+
 </html>

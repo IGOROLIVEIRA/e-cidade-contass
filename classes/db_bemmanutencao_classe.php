@@ -558,52 +558,20 @@ class cl_bemmanutencao
      * status encontrado na tabela benshistoricocalculobem
      */
     $oDaoBensHistoricoCalculoBem = db_utils::getDao("benshistoricocalculobem");
-    $sWhere                      = "t58_bens = $this->t98_bem";
-    $sWhere                     .= " and t58_benstipodepreciacao = 6";
+    $sWhere                      = "t58_bens = $this->t98_bem and t58_benstipodepreciacao = 6";
     $sOrder                      = "t58_sequencial desc";
     $sSqlBensHistoricoCalculoBem = $oDaoBensHistoricoCalculoBem->sql_query_file(null, "*", $sOrder, $sWhere);
     $rsBensHistoricoCalculoBem   = $oDaoBensHistoricoCalculoBem->sql_record($sSqlBensHistoricoCalculoBem);
-    $iTotalBem                   = $oDaoBensHistoricoCalculoBem->numrows;
-
-    if ($iTotalBem == 0) {
-      $this->erro_sql   = "Desprocessamento Abortado.\\n";
-      $this->erro_msg   = "Usuário: \\n\\n " . $oDaoBensHistoricoCalculoBem->erro_msg . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $oDaoBensHistoricoCalculoBem->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-
-    $nValorAtualAnterior     = 0;
-    $iCodigoBem              = 0;
-    $nValorCalculado         = 0;
-    $nPercentualAnterior     = 0;
-    $nValorAnterior          = 0;
-    $iTipoDepreciacao        = 0;
-    $nValorResidualAnterior  = 0;
-
-    for ($iRowBem = 0; $iRowBem < $iTotalBem; $iRowBem++) {
-
-      $oStdBem = db_utils::fieldsMemory($rsBensHistoricoCalculoBem, $iRowBem);
-      if ($oStdBem->t58_benstipodepreciacao == 6) {
-
-        $iVidaUtilAterior = $oStdBem->t58_vidautilanterior;
-        $nValorAtualAnterior     = $oStdBem->t58_valoratual;
-        $iCodigoBem              = $oStdBem->t58_bens;
-        $nValorCalculado         = $oStdBem->t58_valorcalculado;
-        $nPercentualAnterior     = $oStdBem->t58_percentualdepreciado;
-        $nValorAnterior          = $oStdBem->t58_valoranterior;
-        $iTipoDepreciacao        = $oStdBem->t58_benstipodepreciacao;
-        $nValorResidualAnterior  = $oStdBem->t58_valorresidualanterior;
-
-        break;
-      }
-    }
 
 
-    /**
-     * Vida útil anterior é guardada na tabela benshistoricocaculculobem, durante processamento
-     */
     $iVidaUtilAterior         = db_utils::fieldsMemory($rsBensHistoricoCalculoBem, 0)->t58_vidautilanterior;
+    $nValorAtualAnterior     = db_utils::fieldsMemory($rsBensHistoricoCalculoBem, 0)->t58_valoratual;
+    $iCodigoBem              = db_utils::fieldsMemory($rsBensHistoricoCalculoBem, 0)->t58_bens;
+    $nValorCalculado         = db_utils::fieldsMemory($rsBensHistoricoCalculoBem, 0)->t58_valorcalculado;
+    $nPercentualAnterior     = db_utils::fieldsMemory($rsBensHistoricoCalculoBem, 0)->t58_percentualdepreciado;
+    $nValorAnterior          = db_utils::fieldsMemory($rsBensHistoricoCalculoBem, 0)->t58_valoranterior;
+    $iTipoDepreciacao        = db_utils::fieldsMemory($rsBensHistoricoCalculoBem, 0)->t58_benstipodepreciacao;
+    $nValorResidualAnterior  = db_utils::fieldsMemory($rsBensHistoricoCalculoBem, 0)->t58_valorresidualanterior;
 
 
     /**
@@ -611,7 +579,7 @@ class cl_bemmanutencao
      */
     $oDaoBensDepreciacao                           = db_utils::getDao("bensdepreciacao");
     $oDaoBensDepreciacao->t44_vidautil             = $iVidaUtilAterior;
-    $oDaoBensDepreciacao->t44_valoratual           = $nValorAtualAnterior;
+    $oDaoBensDepreciacao->t44_valoratual           = $nValorAnterior;
     $oDaoBensDepreciacao->t44_valorresidual        = $nValorResidualAnterior;
     $oDaoBensDepreciacao->t44_ultimaavaliacao      = date("Y-m-d", db_getsession("DB_datausu"));
 
