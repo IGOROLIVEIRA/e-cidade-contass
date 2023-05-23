@@ -92,13 +92,13 @@ switch ($oParam->exec) {
             $email->IsHTML(true);
             $email->IsSMTP();
 
-            $email->Host = "webmail.cmbh.mg.gov.br";
-            $email->Port = 587;
+            $email->Host = "smtp.gmail.com";
+            $email->Port = 465;
             $email->SMTPAuth = true;
             $email->SMTPSecure = 'tls';
 
             $email->Username = 'sistemaecidade@cmbh.mg.gov.br';
-            $email->Password = '$ecidmail#19';
+            $email->Password = '$Ecid%6548';
 
             $email->From = "divgef.notafiscal@cmbh.mg.gov.br";
             $email->FromName = "SECCEO";
