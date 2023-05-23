@@ -94,8 +94,7 @@ class ApiPixArrecadacao implements IPixProvider
         $queryParams = [];
         $headerParams = [];
 
-        $appKeyIndex = 'gw-app-key';
-        $queryParams[$appKeyIndex] = $this->configuration->getApplicationKey();
+        $queryParams['gw-dev-app-key'] = $this->configuration->getApplicationKey();
 
         $headerParams['Content-Type'] = "application/json";
         $headerParams['Authorization'] = 'Bearer ' . $authorization;
