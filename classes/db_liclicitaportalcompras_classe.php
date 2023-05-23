@@ -1,6 +1,4 @@
 <?php
-
-
 class cl_liclicitaportalcompras
 {
     // cria variaveis de erro
@@ -19,11 +17,13 @@ class cl_liclicitaportalcompras
 
     public function buscaLicitacoes($codigo)
     {
-        $sql = "select distinct
+        $sql = "
+        select distinct
         l20_codigo as id,
         l20_objeto as objeto,
         l03_descr as modalidade,
         l03_pctipocompratribunal as codigomodalidade,
+        l20_tipnaturezaproced as naturezaprocedimento,
         case when
                 l03_presencial=true then 2
                 else 1
@@ -38,10 +38,7 @@ class cl_liclicitaportalcompras
         l20_dataaberproposta as dataaberturapropostas,
         l20_dataencproposta as datalimiteesclarecimento,
         l20_orcsigiloso as orcamentosigiloso,
-        case when
-		        l20_destexclusiva = 1 then true
-		        else false
-        end as exclusivompe,
+        l20_destexclusiva as exclusivompe,
         case when
                 l20_destexclusiva = 1 then false
                 else true
@@ -71,10 +68,7 @@ class cl_liclicitaportalcompras
         true as lotes,
         l04_codigo as numerolote, /*Gerar contador para definição do número do lote */
         l04_descricao as descricaolote,
-        case when
-		        l21_reservado is not null and l21_reservado = true  then true
-		        else false
-        end as exclusivompelote,
+        l20_destexclusiva as exclusivompe,
         l21_reservado as cotareservada,
         null as justificativa,
         null as itens,
@@ -105,17 +99,27 @@ class cl_liclicitaportalcompras
         null as declaracoesopcional,
         null as origensRecursosopcional,
         null as cdTipoOrigem,
-        null as numeroOrigem
+        null as numeroOrigem,
+        case when
+                si02_criterioadjudicacao=3 then si02_vlprecoreferencia
+                else si02_vlpercreferencia
+        end as valorreferencia,
+        pc54_datatermino as prazovalidade
         from liclicita
         join cflicita on l03_codigo=l20_codtipocom
         join liclicitem on l21_codliclicita = l20_codigo
         join liclicitemlote on l04_liclicitem=l21_codigo
         join pcprocitem on pc81_codprocitem=l21_codpcprocitem
         join solicitem on pc11_codigo=pc81_solicitem
+        join solicita on pc10_numero = pc11_numero
         join solicitempcmater on pc16_solicitem=pc11_codigo
         join pcmater on pc01_codmater=pc16_codmater
         join solicitemunid on pc17_codigo=pc11_codigo
         join matunid on m61_codmatunid=pc17_unid
+        join pcorcamitemproc on pc31_pcprocitem=pc81_codprocitem
+        join pcorcamitem on pc22_orcamitem=pc31_orcamitem
+        join itemprecoreferencia on si02_itemproccompra=pc22_orcamitem
+        left join solicitaregistropreco on pc54_solicita=pc10_numero
         where
         l20_codigo=$codigo";
 

@@ -1,15 +1,20 @@
 <?php
 
-
 require_once("model/licitacao/PortalCompras/Modalidades/Licitacao.model.php");
 require_once("model/licitacao/PortalCompras/Fabricas/LicitacaoFabricaInterface.model.php");
 require_once("model/licitacao/PortalCompras/Modalidades/Pregao.model.php");
-require("model/licitacao/PortalCompras/Fabricas/LoteFabrica.model.php");
+require("model/licitacao/PortalCompras/Fabricas/RegistroPrecosFabrica.model.php");
+require("model/licitacao/PortalCompras/Comandos/ValidadorTipoPregao.model.php");
 
 class PregaoFabrica implements LicitacaoFabricaInterface
 {
+    const MODO = [
+        '1' => 'criarPregaoNormal',
+        '2' => 'criarResgistroPreco'
+    ];
+
     /**
-     * Undocumented function
+     * Strategy de Pregão
      *
      * @param resource $dados
      * @param integer $numlinhas
@@ -17,15 +22,25 @@ class PregaoFabrica implements LicitacaoFabricaInterface
      */
     public function criar($dados, int $numlinhas): Licitacao
     {
+        $naturezaProcedimento = (db_utils::fieldsMemory($dados, 0))->naturezaprocedimento;
+        $modoCriacao = self::MODO[$naturezaProcedimento];
 
+        return $this->{$modoCriacao}($dados, $numlinhas);
+    }
+
+    /**
+     * Cria Pregão Normal
+     *
+     * @param resource $dados
+     * @param integer $numlinhas
+     * @return Licitacao
+     */
+    public function criarPregaoNormal($dados, int $numlinhas): Licitacao
+    {
         $loteFabrica = new LoteFabrica;
         $pregao = new Pregao();
         $linha = db_utils::fieldsMemory($dados, 0);
-        $legislacaoAplicavel = (int)$linha->legislacaoaplicavel;
-
-        if ($linha->codigomodalidade == '52') {
-            $legislacaoAplicavel = 6;
-        }
+        $legislacaoAplicavel = (new ValidadorTipoPregao)->execute((int)$linha->tiporealizacao);
 
         $pregao->setId($linha->id);
         $pregao->setObjeto($linha->objeto);
@@ -58,5 +73,18 @@ class PregaoFabrica implements LicitacaoFabricaInterface
 
         $pregao->setLotes($lotes);
         return $pregao;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param [type] $dados
+     * @param integer $numlinhas
+     * @return Licitacao
+     */
+    public function criarResgistroPreco($dados, int $numlinhas): Licitacao
+    {
+        $registroPrFabrica = new RegistroPrecosFabrica();
+        return $registroPrFabrica->criar($dados, $numlinhas);
     }
 }
