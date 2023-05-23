@@ -60,18 +60,18 @@ $clrotulo->label("ac16_resumoobjeto");
                 </td>
             </tr>
             <tr id="trreajuste" style="display: none;">
-                <td >
+                <td>
                     <b>Percentual de Reajuste:</b>
-              
-                    
+
+
 
                 </td>
-                <td >
-                <?
+                <td>
+                    <?
                     db_input('si03_percentualreajuste', 10, 4, true, 'text', $db_opcao, "")
                     ?>
                     <b>Índice Reajuste:</b>
-               
+
                     <?
                     $x = array("0" => "Selecione", "1" => "IPCA", "2" => "INPC", "3" => "INCC", "4" => "IGP-M", "5" => "IGP-DI", "6" => "Outro");
                     db_select('si03_indicereajuste', $x, true, $db_opcao, "onchange='js_indicereajuste()'");
@@ -80,13 +80,13 @@ $clrotulo->label("ac16_resumoobjeto");
             </tr>
             <tr id="trdescricaoreajuste" style="display: none;">
 
-                
-                    <td>
-                        <b>Descriçao do Índice:</b>
-                    </td>
-                    <td>
-                        <?
-                        db_textarea('si03_descricaoindice', 3, 58, $Isi03_descricaoindice, true, 'text', $db_opcao, "style='resize: none'", "", "", "300");
+
+                <td>
+                    <b>Descriçao do Índice:</b>
+                </td>
+                <td>
+                    <?
+                    db_textarea('si03_descricaoindice', 3, 58, $Isi03_descricaoindice, true, 'text', $db_opcao, "style='resize: none'", "", "", "300");
                     ?>
                 </td>
             </tr>
@@ -427,14 +427,14 @@ $clrotulo->label("ac16_resumoobjeto");
             licitacao: chave1
         }
 
-        new AjaxRequest(sUrlRpc, oParam, function (oRetorno, lErro) {
-            if(oRetorno.lei==1){
-                $('justificativa').style.display = '';
-            }else{
-                $('justificativa').style.display = 'none';
-            }
+        new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
+                if (oRetorno.lei == 1) {
+                    $('justificativa').style.display = '';
+                } else {
+                    $('justificativa').style.display = 'none';
+                }
 
-        }).setMessage("Aguarde, pesquisando acordos.")
+            }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
         $('ac16_sequencial').value = chave1;
         $('ac16_resumoobjeto').value = chave2;
@@ -1205,8 +1205,8 @@ $clrotulo->label("ac16_resumoobjeto");
             }
             if ($("si03_indicereajuste").value == "6") {
                 if ($("si03_descricaoindice").value == "") {
-                return alert("Obrigatório informar a Descrição do Indice.");
-            }
+                    return alert("Obrigatório informar a Descrição do Indice.");
+                }
             }
         }
 
@@ -1231,7 +1231,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oApostila.justificativa = $("si03_justificativa").value;
         oApostila.percentualreajuste = $("si03_percentualreajuste").value;
         oApostila.indicereajuste = $("si03_indicereajuste").value;
-        oApostila.descricaoindice = $("si03_descricaoindice").value;
+        oApostila.descricaoindice = encodeURIComponent(tagString($("si03_descricaoindice").value));
 
 
         var oParam = {
@@ -1341,15 +1341,15 @@ $clrotulo->label("ac16_resumoobjeto");
             .execute();
     }
 
-    function js_indicereajuste(){
-       indice = $("si03_indicereajuste").value;
-       if(indice==6){
-        document.getElementById("trdescricaoreajuste").style.display = '';
-       }else{
-        document.getElementById("trdescricaoreajuste").style.display = 'none';
-        $("si03_descricaoindice").value = "";
-       }
-        
+    function js_indicereajuste() {
+        indice = $("si03_indicereajuste").value;
+        if (indice == 6) {
+            document.getElementById("trdescricaoreajuste").style.display = '';
+        } else {
+            document.getElementById("trdescricaoreajuste").style.display = 'none';
+            $("si03_descricaoindice").value = "";
+        }
+
     }
 
     function js_changeTipoApostila(iTipo) {
@@ -1407,7 +1407,7 @@ $clrotulo->label("ac16_resumoobjeto");
             }
             if (iTipo == "01") {
                 document.getElementById('trreajuste').style.display = "";
-            }else{
+            } else {
                 document.getElementById('trreajuste').style.display = "none";
                 $("si03_percentualreajuste").value = "";
                 $("si03_indicereajuste").options[0].selected = true;
