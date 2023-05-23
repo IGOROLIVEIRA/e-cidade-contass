@@ -61,9 +61,9 @@ if (isset($uploadfile)) {
         return false;
     }
 
-    if ($extensao == ".pdf") {
+    //if ($extensao == ".pdf") {
         $novo_nome = md5(time()) . $extensao;
-    }
+    //}
 
     // Seta o nome do arquivo destino do upload
     $arquivoDocument = db_removeAcentuacao("model/licitacao/PNCP/anexoslicitacao/$novo_nome");
