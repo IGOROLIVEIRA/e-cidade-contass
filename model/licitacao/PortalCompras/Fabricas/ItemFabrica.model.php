@@ -5,7 +5,7 @@ require_once("model/licitacao/PortalCompras/Modalidades/Componentes/Item.model.p
 class ItemFabrica
 {
     /**
-     * Undocumented function
+     * Criar item
      *
      * @param resource $dados
      * @param integer $linhaAtual
@@ -14,7 +14,6 @@ class ItemFabrica
     public function criarItemSimples($dados, int $linhaAtual): Item
     {
         $resultado = db_utils::fieldsMemory($dados, $linhaAtual);
-
 
         $item = new Item();
         $item->setNumero($linhaAtual + 1);

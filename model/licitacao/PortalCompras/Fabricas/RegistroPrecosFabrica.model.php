@@ -3,6 +3,7 @@
 require_once("model/licitacao/PortalCompras/Modalidades/Licitacao.model.php");
 require_once("model/licitacao/PortalCompras/Fabricas/LicitacaoFabricaInterface.model.php");
 require_once("model/licitacao/PortalCompras/Modalidades/RegistroPrecos.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/CalculaDiferencaData.model.php");
 
 class RegistroPrecosFabrica implements LicitacaoFabricaInterface
 {
@@ -16,6 +17,7 @@ class RegistroPrecosFabrica implements LicitacaoFabricaInterface
     {
         $loteFabrica = new LoteFabrica;
         $registroPreco = new RegistroPrecos();
+        $calcudadora = new CalculaDiferencaData();
         $linha = db_utils::fieldsMemory($dados, 0);
 
         $registroPreco->setId($linha->id);
@@ -37,13 +39,14 @@ class RegistroPrecosFabrica implements LicitacaoFabricaInterface
         $registroPreco->setSepararPorLotes($linha->separarporlotes);
         $registroPreco->setOperacaoLote($linha->operacaolote);
 
-        $registroPreco->setPrazoValidade($linha->prazovalidade);
+        $prazoValidade = $calcudadora->meses($linha->datainicio, $linha->datatermino);
+        $registroPreco->setPrazoValidade($prazoValidade);
 
         $registroPreco->setValorReferencia((float)$linha->valorreferencia);
 
         $lotes = $loteFabrica->criar($dados, $numlinhas);
-
         $registroPreco->setLotes($lotes);
+
         return $registroPreco;
     }
 }

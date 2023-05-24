@@ -104,7 +104,8 @@ class cl_liclicitaportalcompras
                 si02_criterioadjudicacao=3 then si02_vlprecoreferencia
                 else si02_vlpercreferencia
         end as valorreferencia,
-        pc54_datatermino as prazovalidade
+        pc54_datainicio as datainicio,
+        pc54_datatermino as datatermino
         from liclicita
         join cflicita on l03_codigo=l20_codtipocom
         join liclicitem on l21_codliclicita = l20_codigo

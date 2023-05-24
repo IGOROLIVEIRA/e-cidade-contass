@@ -60,7 +60,7 @@ class PregaoFabrica implements LicitacaoFabricaInterface
         $pregao->setBeneficioLocal($linha->beneficio);
         $pregao->setExigeGarantia($linha->exigegarantia);
         $pregao->setCasasDecimais((int)$linha->casasdecimais);
-        $pregao->setCasasDecimaisQuantidade((int)$linha->casadecimaisquantidade);
+        $pregao->setCasasDecimaisQuantidade((int)$linha->casasdecimaisquantidade);
         $pregao->setLegislacaoAplicavel($legislacaoAplicavel);
         $pregao->setTratamentoFaseLance((int) $linha->tratamentofaselance);
         $pregao->setTipoIntervaloLance((int)$linha->tipointervalolance);

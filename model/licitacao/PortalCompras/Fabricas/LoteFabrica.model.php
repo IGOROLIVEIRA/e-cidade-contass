@@ -6,7 +6,7 @@ require_once("model/licitacao/PortalCompras/Fabricas/ItemFabrica.model.php");
 class LoteFabrica
 {
     /**
-     * Undocumented function
+     * Define qual estregia que irá criar lotes
      *
      * @param resource $data
      * @param integer $numrows
@@ -23,7 +23,7 @@ class LoteFabrica
     }
 
    /**
-    * Undocumented function
+    * Cria lotes separado por descricao
     *
     * @param resource $data
     * @param integer $numrows
@@ -66,7 +66,7 @@ class LoteFabrica
     }
 
     /**
-     * Undocumented function
+     * Cria lote separado por item
      *
      * @param resource $data
      * @param integer $numrows
