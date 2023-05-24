@@ -27,6 +27,7 @@ class cl_licobras
   public $obr01_linkobra = null;
   public $obr01_instit = 0;
   public $obr01_licitacaosistema = null;
+  public $obr01_licitacaolote = null;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  obr01_sequencial = int4 = Sequencial
@@ -37,6 +38,7 @@ class cl_licobras
                  obr01_dtinicioatividades = date = Data Inicio das Ativ. do Eng na Obra
                  obr01_instit = int4 = Instituição
                  obr01_licitacaosistema = int4 = Tipo de licitacao
+                 obr01_licitacaolote = int4 = Numero do lote
                  ";
 
   //funcao construtor da classe
@@ -76,6 +78,7 @@ class cl_licobras
       $this->obr01_linkobra = ($this->obr01_linkobra == "" ? @$GLOBALS["HTTP_POST_VARS"]["obr01_linkobra"] : $this->obr01_linkobra);
       $this->obr01_instit = ($this->obr01_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["obr01_instit"] : $this->obr01_instit);
       $this->obr01_licitacaosistema = ($this->obr01_licitacaosistema == "" ? @$GLOBALS["HTTP_POST_VARS"]["obr01_licitacaosistema"] : $this->obr01_licitacaosistema);
+      $this->obr01_licitacaolote = ($this->obr01_licitacaolote == "" ? @$GLOBALS["HTTP_POST_VARS"]["obr01_licitacaolote"] : $this->obr01_licitacaolote);
     }
   }
 
@@ -151,6 +154,15 @@ class cl_licobras
       $this->erro_status = "0";
       return false;
     }
+    if ($this->obr01_licitacaolote == null) {
+      $this->erro_sql = " Campo Instituição não informado.";
+      $this->erro_campo = "obr01_licitacaolote";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
     $sql = "insert into licobras(
                                        obr01_sequencial
                                       ,obr01_licitacao
@@ -160,6 +172,7 @@ class cl_licobras
                                       ,obr01_dtinicioatividades
                                       ,obr01_instit
                                       ,obr01_licitacaosistema
+                                      ,obr01_licitacaolote
                        )
                 values (
                                 $this->obr01_sequencial
@@ -170,6 +183,7 @@ class cl_licobras
                                ," . ($this->obr01_dtinicioatividades == "null" || $this->obr01_dtinicioatividades == "" ? "null" : "'" . $this->obr01_dtinicioatividades . "'") . "
                                ,$this->obr01_instit
                                ,$this->obr01_licitacaosistema
+                               ,$this->obr01_licitacaolote
                       )";
     $result = db_query($sql);
     if ($result == false) {

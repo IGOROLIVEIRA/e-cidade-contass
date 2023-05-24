@@ -46,6 +46,10 @@ if(isset($incluir)){
             throw new Exception ("Nº Obra não informado!");
         }
 
+        if($obr01_licitacaolote == 0){
+                throw new Exception ("Usuário: Informe o lote da licitação.");
+        }
+
         $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null,"obr01_numeroobra","obr01_numeroobra desc limit 1","obr01_numeroobra = $obr01_numeroobra"));
 
         if(pg_num_rows($resultobras) > 0){
@@ -59,6 +63,7 @@ if(isset($incluir)){
         $cllicobras->obr01_linkobra            = $obr01_linkobra;
         $cllicobras->obr01_instit              = db_getsession('DB_instit');
         $cllicobras->obr01_licitacaosistema       = $obr01_licitacaosistema;
+        $cllicobras->obr01_licitacaolote       = $obr01_licitacaolote;
         $cllicobras->incluir();
 
         if($cllicobras->erro_status == 0){

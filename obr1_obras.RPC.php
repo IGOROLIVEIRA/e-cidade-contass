@@ -237,6 +237,25 @@ switch ($oParam->exec) {
             $oRetorno->message = urlencode("Responsável Excluido com sucesso.");
         }
         break;
+    case 'buscarLotes':
+        $clliclicita = new cl_liclicita();
+        
+        if($oParam->iLicitacao!=""){
+            $resultLotes = $clliclicita->sql_record('select * from liclicitemlote where l04_liclicitem in (select l21_codigo from liclicitem where l21_codliclicita = '.$oParam->iLicitacao.' )');
+            if (pg_num_rows($resultLotes) == 0) {
+                $oRetorno->status = 2;
+            }else{
+                for ($iCont = 0; $iCont < pg_num_rows($resultLotes); $iCont++) {
+                    $oDadosLotes = db_utils::fieldsMemory($resultLotes, $iCont);
+                    $lotes                        = new stdClass();
+                    $lotes->descricao = $oDadosLotes->l04_descricao;
+                    $lotes->numlote = $oDadosLotes->l04_numerolote;
+                    $lotes->total = pg_num_rows($resultLotes);
+                    $oRetorno->itens[] = $lotes;
+                }
+            }
+        }
+        break;
 
     case 'getDadosResponsavel':
         $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
