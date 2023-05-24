@@ -6,6 +6,7 @@ use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IPixProv
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO\PixArrecadacaoPayloadDTO;
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO\PixArrecadacaoResponseDTO;
 use BusinessException;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
@@ -36,6 +37,11 @@ class ApiPixArrecadacao implements IPixProvider
         $payload['indicadorCodigoBarras'] = !empty($payload['indicadorCodigoBarras']) ?
             $payload['indicadorCodigoBarras'] : PixArrecadacaoPayloadDTO::INDICADOR_CODIGO_BARRAS_NAO;
         $payload['codigoSolicitacaoBancoCentralBrasil'] = $this->configuration->getChavePix();
+
+        if (!empty($payload['k00_dtvenc'])) {
+            $payload['quantidadeSegundoExpiracao'] = $this->getExpirationSecondsQuantity($payload['k00_dtvenc']);
+        }
+
         $pixArrecadacaoPayloadDTO = new PixArrecadacaoPayloadDTO($payload);
         $response = $this->send(
             $pixArrecadacaoPayloadDTO,
@@ -107,5 +113,15 @@ class ApiPixArrecadacao implements IPixProvider
             $headerParams,
             $httpBody
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getExpirationSecondsQuantity(string $dateExpiration): int
+    {
+        $now = new \DateTime('NOW');
+        $future = new \DateTime($dateExpiration);
+        return $future->getTimestamp() - $now->getTimestamp();
     }
 }

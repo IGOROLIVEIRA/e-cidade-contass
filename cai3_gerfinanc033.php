@@ -1001,6 +1001,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
                 $body['valorOriginalSolicitacao'] = $k00_valor;
                 $body['k00_numnov'] = $k00_numpre;
                 $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
+                $body['k00_dtvenc'] = $dtvencunic;
 
                 $service = new GeneratePixWithQRCodeService($providerConfig);
                 $service->execute($body);
@@ -1710,6 +1711,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
           $body['k00_numpre'] = $iNumpre;
           $body['k00_numpar'] = $iNumpar;
           $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
+          $body['k00_dtvenc'] = $dtVencimento;
 
           $service = new GeneratePixWithQRCodeService($providerConfig);
           $service->execute($body);
