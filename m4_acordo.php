@@ -418,7 +418,37 @@ if (isset($alterar)) {
       $clmanutencaoacordo->incluir();
     }
 
-    if ($sqlerro == false && $ac16_adesaoregpreco != null) {
+    if ($ac16_tipoorigem == 1) {
+
+      db_query("UPDATE empautoriza
+      SET e54_adesaoregpreco = null, e54_numerl = null, e54_nummodalidade = null,e54_codlicitacao = null,e54_licoutrosorgaos = null,e54_codcom = null
+      where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
+
+      db_query("UPDATE empempenho
+      SET e60_numerol = null,e60_codcom = null
+      where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
+    }
+
+    if ($ac16_tipoorigem == 2 || $ac16_tipoorigem == 3) {
+
+      $rsLiclicita = db_query("select l03_codcom,l20_edital,l20_anousu from liclicita 
+      inner join cflicita on l03_codigo = l20_codtipocom where l20_codigo = $ac16_licitacao;");
+      $l20_edital = db_utils::fieldsMemory($rsLiclicita, 0)->l20_edital;
+      $l20_anousu = db_utils::fieldsMemory($rsLiclicita, 0)->l20_anousu;
+      $pc50_codcom = db_utils::fieldsMemory($rsLiclicita, 0)->l03_codcom;
+
+      $e54_numerl = "$l20_edital/$l20_anousu";
+
+      db_query("UPDATE empautoriza
+      SET e54_adesaoregpreco = null,e54_nummodalidade = null,e54_licoutrosorgaos = null,e54_numerl = '$e54_numerl', e54_codcom = $pc50_codcom, e54_codlicitacao = $ac16_licitacao
+      where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
+
+      db_query("UPDATE empempenho
+      SET e60_numerol = '$e54_numerl',e60_codcom = $pc50_codcom
+      where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
+    }
+
+    if ($ac16_tipoorigem == 4) {
       $rsPc50_codcom = db_query("select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = 104;");
       $pc50_codcom = db_utils::fieldsMemory($rsPc50_codcom, 0)->pc50_codcom;
 
@@ -431,7 +461,31 @@ if (isset($alterar)) {
       $e54_numerl = "$si06_numeroadm/$si06_anomodadm";
 
       db_query("UPDATE empautoriza
-      SET e54_adesaoregpreco = $ac16_adesaoregpreco, e54_numerl = '$e54_numerl', e54_nummodalidade = $si06_nummodadm, e54_codcom = $pc50_codcom
+      SET e54_adesaoregpreco = $ac16_adesaoregpreco, e54_numerl = '$e54_numerl', e54_nummodalidade = $si06_nummodadm, e54_codcom = $pc50_codcom,e54_nummodalidade = null,e54_licoutrosorgaos = null,e54_codlicitacao = null
+      where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
+
+      db_query("UPDATE empempenho
+      SET e60_numerol = '$e54_numerl',e60_codcom = $pc50_codcom
+      where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
+    }
+
+    if ($ac16_tipoorigem == 5 || $ac16_tipoorigem == 6 || $ac16_tipoorigem == 7 || $ac16_tipoorigem == 8 || $ac16_tipoorigem == 9) {
+
+      $aCodtribunal = array(5 => "105", 6 => "106", 7 => "107", 8 => "108", 9 => "109");
+      $pc50_pctipocompratribunal = $aCodtribunal[$ac16_tipoorigem];
+
+
+      $rsPc50_codcom = db_query("select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = $pc50_pctipocompratribunal;");
+      $pc50_codcom = db_utils::fieldsMemory($rsPc50_codcom, 0)->pc50_codcom;
+
+      $rsLiclicita = db_query("select lic211_processo,lic211_anousu from liclicitaoutrosorgaos where lic211_sequencial = $ac16_licoutroorgao;");
+      $l20_edital = db_utils::fieldsMemory($rsLiclicita, 0)->lic211_processo;
+      $l20_anousu = db_utils::fieldsMemory($rsLiclicita, 0)->lic211_anousu;
+
+      $e54_numerl = "$l20_edital/$l20_anousu";
+
+      db_query("UPDATE empautoriza
+      SET e54_adesaoregpreco = null,e54_nummodalidade = null,e54_licoutrosorgaos = $ac16_licoutroorgao,e54_numerl = '$e54_numerl', e54_codcom = $pc50_codcom, e54_codlicitacao = null
       where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
 
       db_query("UPDATE empempenho
