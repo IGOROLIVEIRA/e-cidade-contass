@@ -160,6 +160,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
 
             Filtros = "";
             Filtros += "solicitacaocompras="+solicitacaocompras;
+            Filtros += "&tipo=1";
 
             var jan = window.open('com2_relatorioorcamentario002.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
                 'width='+(screen.availWidth - 5)+', scrollbars=1');
@@ -176,6 +177,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
 
             Filtros = "";
             Filtros += "processodecompras="+processodecompras;
+            Filtros += "&tipo=1";
 
             var jan = window.open('com2_relatorioorcamentario003.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
                 'width='+(screen.availWidth - 5)+', scrollbars=1');
@@ -197,6 +199,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
 
             Filtros = "";
             Filtros += "solicitacaocompras="+solicitacaocompras;
+            Filtros += "&tipo=2";
 
             var jan = window.open('com2_relatorioorcamentario004.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
                 'width='+(screen.availWidth - 5)+', scrollbars=1');
@@ -213,6 +216,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
 
             Filtros = "";
             Filtros += "processodecompras="+processodecompras;
+            Filtros += "&tipo=2";
 
             var jan = window.open('com2_relatorioorcamentario005.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
                 'width='+(screen.availWidth - 5)+', scrollbars=1');

@@ -185,7 +185,7 @@ $resultDotacao = db_query($sqlDotacao);
 * BUSCO O TEXTO NO CADASTRO DE PARAGRAFOS
 *
 */
-$sqlparag = "select db02_texto from db_paragrafo inner join db_docparag on db02_idparag = db04_idparag inner join db_documento on db04_docum = db03_docum where db03_descr='DECLARACAO DE REC. ORC. E FINANCEIRO2' and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
+$sqlparag = "select db02_texto from db_paragrafo inner join db_docparag on db02_idparag = db04_idparag inner join db_documento on db04_docum = db03_docum where db03_descr='DECLARACAO DE REC. ORC. E FINANCEIRO1' and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
 $resparag = db_query($sqlparag);
 $head5 = "DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO";
 
@@ -208,8 +208,6 @@ $pdf->SetFont('arial','',11);
 if(pg_num_rows($resparag) != 0){
     $paragr1 = db_utils::fieldsMemory($resparag, 0);
     eval($paragr1->db02_texto);
-}else{
-    $pdf->MultiCell(160,5,"     Examinando  as  Dotações  constantes  do  orçamento  fiscal  e  levando-se  em  conta  o objeto que se  pretende  contratar, ".mb_strtoupper($objeto,'ISO-8859-1')." , no valor total estimado de R$ ".trim(db_formatar($nTotalItens,'f'))." em atendimento aos dispositivos da Lei 8666/93, informo que existe dotações das quais correrão a despesas:",0,"J",0);
 }
 $pdf->ln($alt+3);
 $pdf->x = 30;
@@ -242,8 +240,6 @@ $pdf->x = 30;
 if(pg_num_rows($resparag) != 0){
     $paragr1 = db_utils::fieldsMemory($resparag, 1);
     eval($paragr1->db02_texto);
-}else{
-    $pdf->MultiCell(160,5,"que as despesas atendem ao disposto nos artigos 16 e 17 da Lei Complementar Federal 101/2000, uma vez, foi considerado o impacto na execução orçamentária e também está de acordo com a previsão do Plano Plurianual e da Lei de Diretrizes Orçamentárias para exercício. Informamos ainda que foi verificado o impacto financeiro da despesa e sua inclusão na programação deste órgão.",0,"J",0);
 }
 $pdf->ln($alt+9);
 
@@ -252,9 +248,9 @@ $sDataExtenso     = db_dataextenso($data);
 $pdf->x = 30;
 $pdf->cell(160,4,$munic.','.strtoupper($sDataExtenso)                     ,0,1,"C",0);
 $pdf->ln($alt+20);
-$pdf->cell(95,4,"________________________"                                ,0,0,"C",0);
-$pdf->cell(95,4,"________________________"                                ,0,1,"C",0);
-$pdf->cell(95,5,"Serviço Contábil"                                        ,0,0,"C",0);
-$pdf->cell(95,5,"Serviço Financeiro"                                      ,0,0,"C",0);
+if(pg_num_rows($resparag) != 0){
+    $paragr1 = db_utils::fieldsMemory($resparag, 2);
+    eval($paragr1->db02_texto);
+}
 
 $pdf->Output();

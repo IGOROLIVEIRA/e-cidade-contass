@@ -249,8 +249,6 @@ header("Content-Disposition: attachment; Filename=Declaracao_Recursos_Orcamentar
                     echo "<p style='text-align:justify'>";
                     eval($db02_texto);
                     echo "</p>";
-                }else{
-                    echo "<p style='text-align:justify'> Examinando  as  Dotações  constantes  do  orçamento  fiscal  e  levando-se  em  conta  o objeto que se  pretende  contratar, ".mb_strtoupper($objeto,'ISO-8859-1')." , no valor total estimado de R$ ".trim(db_formatar($nTotalItens,'f'))." em atendimento aos dispositivos da Lei 8666/93, informo que existe dotações das quais correrão a despesas:</p>";       
                 }
                     
                 ?>
@@ -286,8 +284,6 @@ header("Content-Disposition: attachment; Filename=Declaracao_Recursos_Orcamentar
                 if(pg_num_rows($resparag) != 0){
                     db_fieldsmemory( $resparag, 1 );
                     echo "<p style='text-align:justify'>".eval($db02_texto)."</p";
-                }else{
-                    echo "<p style='text-align:justify'> que as despesas atendem ao disposto nos artigos 16 e 17 da Lei Complementar Federal 101/2000, uma vez, foi considerado o impacto na execução orçamentária e também está de acordo com a previsão do Plano Plurianual e da Lei de Diretrizes Orçamentárias para exercício. Informamos ainda que foi verificado o impacto financeiro da despesa e sua inclusão na programação deste órgão.</p>";
                 }
                 ?>
             </div>
@@ -306,12 +302,12 @@ header("Content-Disposition: attachment; Filename=Declaracao_Recursos_Orcamentar
             <br>
             <div style="text-align: center;">
             <table width="100%" border="0">
-                <tr>
-                <td style="text-align: center;">  _________________________________________   
-                <p>Serviço contábil</p></td>
-                <td style="text-align: center;">  _________________________________________  
-                <p>Serviço Financeiro</p></td>
-             
+                <?php
+            if(pg_num_rows($resparag) != 0){
+                    db_fieldsmemory( $resparag, 2);
+                    echo "<p style='text-align:justify'>".eval($db02_texto)."</p";
+                }
+             ?>
             </div>
             <?php
 

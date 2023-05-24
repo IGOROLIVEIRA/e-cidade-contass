@@ -8,6 +8,15 @@ $oGet = db_utils::postMemory($_GET);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
 
+
+/**
+ * BUSCO PROCESSO DE COMPRAS
+ */
+
+ $rscodproc = "select distinct pc81_codproc from pcprocitem where pc81_solicitem in (select pc11_codigo from solicitem where pc11_numero =  {$solicitacaocompras})";
+ $resultCodproc = db_query($rscodproc);
+ $codigo_preco    = db_utils::fieldsMemory($resultCodproc, 0)->pc81_codproc;
+
 /**
  * BUSCO DADOS DA INSTITUICAO
  *
@@ -101,7 +110,7 @@ db_postmemory($HTTP_POST_VARS);
  left join processocompralote on
              pc68_sequencial = pc69_processocompralote
  AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
- WHERE pc81_codproc = {$solicitacaocompras}
+ WHERE pc81_codproc = {$codigo_preco}
    AND pc10_instit = " . db_getsession("DB_instit") . "
  ORDER BY pc11_seq) as x GROUP BY
                  pc01_codmater,
@@ -132,7 +141,7 @@ db_postmemory($HTTP_POST_VARS);
  JOIN pcmater ON pc16_codmater = pc01_codmater
  JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
  JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
- WHERE pc80_codproc = {$solicitacaocompras} {$sCondCrit} and pc23_vlrun <> 0
+ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
  GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
  ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
  $resultpreco = db_query($sSql) or die(pg_last_error());
@@ -150,7 +159,7 @@ db_postmemory($HTTP_POST_VARS);
   * BUSCO O VALOR TOTAL DO PRECO DE REFERENCIA
   *
   */
- $sqlObjeto = "select pc80_resumo as objeto from pcproc where pc80_codproc = $solicitacaocompras";
+ $sqlObjeto = "select pc80_resumo as objeto from pcproc where pc80_codproc = $codigo_preco";
  $resultObjeto = db_query($sqlObjeto);
  db_fieldsmemory($resultObjeto,0);
 
@@ -165,7 +174,7 @@ $resparag = db_query($sqlparag);
 
 <?php
 header("Content-type: application/vnd.ms-word; charset=UTF-8");
-header("Content-Disposition: attachment; Filename=Solicitacao_Parecer_Financeiro_".$solicitacaocompras.".doc");
+header("Content-Disposition: attachment; Filename=Solicitacao_Parecer_Financeiro_".$codigo_preco.".doc");
 ?>
 
     <!DOCTYPE html>
@@ -216,21 +225,19 @@ header("Content-Disposition: attachment; Filename=Solicitacao_Parecer_Financeiro
                 <tr>
             </table>
             <hr  style="border: 6px solid #000000;">
-            <div style="text-align: center;">
-                <strong>SOLICITAÇÃO DE PARECER DE DISPONIBILIDADE FINANCEIRA</strong>
-            </div>
-        
-            <div>
-                <p>De: Pregoeira/ Comissão permanente de Licitação<br>Para: Setor contábil</p>
-            </div>
+            <?php
+                if(pg_num_rows($resparag) != 0){
+                    db_fieldsmemory( $resparag, 0 );
+                    eval($db02_texto);
+                }  
+
+            ?>
 
             <div>
                 <?php
                 if(pg_num_rows($resparag) != 0){
-                    db_fieldsmemory( $resparag, 0 );
+                    db_fieldsmemory( $resparag, 1 );
                     eval($db02_texto);
-                }else{
-                    echo "<p>Solicito ao departamento contábil se há no orçamento vigente, disponibilidade financeira que atenda ".mb_strtoupper($objeto,'ISO-8859-1').", no valor total estimado de R$ ".trim(db_formatar($nTotalItens,'f')).".</p>";       
                 }
                 ?>
             </div>
@@ -247,16 +254,11 @@ header("Content-Disposition: attachment; Filename=Solicitacao_Parecer_Financeiro
             <br>
             <br>
             <br>
-            <div style="text-align: center;">
-             <center>  _________________________________________  </center> 
-                <p>Presidente da CPL<br>e/ou Presidente da Comissão de Licitação</p>
-            </div>
             <?php
-
-
-           
-                    
-                   
+                if(pg_num_rows($resparag) != 0){
+                    db_fieldsmemory( $resparag, 2 );
+                    eval($db02_texto);
+                }  
 
             ?>
             </table>
