@@ -3,13 +3,13 @@
 
 require_once("fpdf151/pdf.php");
 
-$where = "";
+$where = "where obr01_instit =" . db_getsession("DB_instit");
 
 if ($obr02_seqobra != "") $where = "where  obr01_sequencial = $obr02_seqobra";
 
-$sSqlObras = db_query("select distinct on (obr01_numeroobra) * from licobras 
+$sSqlObras = db_query("select distinct on (obr01_numeroobra) * from licobras
 inner join liclicita on l20_codigo = obr01_licitacao
-left join acordo on l20_codigo = ac16_licitacao 
+left join acordo on l20_codigo = ac16_licitacao
 left join cflicita on l20_codtipocom = l03_codigo
 left join licobrasmedicao on obr01_sequencial = obr03_seqobra $where order by obr01_numeroobra;");
 
