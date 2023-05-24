@@ -50,7 +50,7 @@ $sCamposBuscaHistoricoFinanceiro .= "     THEN 'Desprocessado' ";
 $sCamposBuscaHistoricoFinanceiro .= "     ELSE 'Processado' END as t57_processado, ";
 $sCamposBuscaHistoricoFinanceiro .= "fc_mesextenso(t57_mes, 'sigla') || '/' || t57_ano AS dl_Competencia";
 $sWhereBuscaHistoricoFinanceiro   = " t58_bens = {$oGet->t52_bem} ";
-$sOrder                           =  "t57_ano desc, t57_mes desc";
+$sOrder                           =  "t58_sequencial desc";
 $sSqlBuscaHistoricoFinanceiro     = $oDaoBensHistoricoCalculoBem->sql_query(
   null,
   $sCamposBuscaHistoricoFinanceiro,

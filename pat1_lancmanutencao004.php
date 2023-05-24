@@ -62,6 +62,7 @@ if (isset($incluir)) {
 }
 
 if (isset($salvar)) {
+    $clbemmanutencao->t98_bem = $t52_bem;
     $clbemmanutencao->alterar($t98_sequencial);
     if ($clbemmanutencao->erro_status == "1") {
         $ocultapesquisa = false;
@@ -73,6 +74,7 @@ if (isset($salvar)) {
 }
 
 if (isset($excluir)) {
+    $clbemmanutencao->t98_bem = $t52_bem;
     $clbemmanutencao->excluir($t98_sequencial);
     if ($clbemmanutencao->erro_status == "1")  $db_opcao = 1;
 }

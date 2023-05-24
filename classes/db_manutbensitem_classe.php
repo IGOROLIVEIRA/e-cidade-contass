@@ -73,6 +73,24 @@ class cl_manutbensitem
   // funcao para inclusao
   function incluir()
   {
+
+    $rsBemmanutencao = db_query("select t98_bem from bemmanutencao where t98_sequencial = $this->t99_codbemmanutencao");
+    $t98_bem = db_utils::fieldsMemory($rsBemmanutencao, 0)->t98_bem;
+
+    $rsBenshistoricocalculobem = db_query("select * from benshistoricocalculobem
+    inner join benshistoricocalculo on t58_benshistoricocalculo = t57_sequencial
+    where t58_bens = " . $t98_bem . " and t57_sequencial > (select max(t57_sequencial) from benshistoricocalculo where t57_tipocalculo = 3)");
+
+    if (pg_num_rows($rsBenshistoricocalculobem) > 0) {
+      $this->erro_sql = "Componente não pode ser incluido! Existem movimentações financeiras lançadas!.";
+      $this->erro_campo = "";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
     $this->atualizacampos();
 
     if ($this->t99_sequencial == "" || $this->t99_sequencial == null) {
@@ -215,6 +233,25 @@ class cl_manutbensitem
   // funcao para alteracao
   function alterar($sequencial = null)
   {
+
+    $rsBemmanutencao = db_query("select t98_bem from bemmanutencao where t98_sequencial = $this->t99_codbemmanutencao");
+    $t98_bem = db_utils::fieldsMemory($rsBemmanutencao, 0)->t98_bem;
+
+    $rsBenshistoricocalculobem = db_query("select * from benshistoricocalculobem
+    inner join benshistoricocalculo on t58_benshistoricocalculo = t57_sequencial
+    where t58_bens = " . $t98_bem . " and t57_sequencial > (select max(t57_sequencial) from benshistoricocalculo where t57_tipocalculo = 3)");
+
+    if (pg_num_rows($rsBenshistoricocalculobem) > 0) {
+      $this->erro_sql = "Componente não pode ser alterado! Existem movimentações financeiras lançadas!.";
+      $this->erro_campo = "";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+
     $this->atualizacampos();
     $sql = " update manutbensitem set ";
     $virgula = "";
@@ -354,6 +391,22 @@ class cl_manutbensitem
   function excluir($sequencial = null, $dbwhere = null)
   {
 
+    $rsBemmanutencao = db_query("select t98_bem from bemmanutencao where t98_sequencial = $this->t99_codbemmanutencao");
+    $t98_bem = db_utils::fieldsMemory($rsBemmanutencao, 0)->t98_bem;
+
+    $rsBenshistoricocalculobem = db_query("select * from benshistoricocalculobem
+    inner join benshistoricocalculo on t58_benshistoricocalculo = t57_sequencial
+    where t58_bens = " . $t98_bem . " and t57_sequencial > (select max(t57_sequencial) from benshistoricocalculo where t57_tipocalculo = 3)");
+
+    if (pg_num_rows($rsBenshistoricocalculobem) > 0) {
+      $this->erro_sql = "Componente não pode ser excluido! Existem movimentações financeiras lançadas!.";
+      $this->erro_campo = "";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
 
     $sql = " delete from manutbensitem
                     where ";

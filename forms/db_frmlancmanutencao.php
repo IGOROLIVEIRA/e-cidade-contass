@@ -9,7 +9,7 @@
         <td>
           <?
           db_input('t52_bem', 8, 1, true, 'text', $db_opcao, "onchange='js_pesquisa_bem(false)'");
-          db_input('t52_descr', 40, 3, true, 'text', $db_opcao, "style='width: 303px;' onchange='js_pesquisa_descricaobem();'");
+          db_input('t52_descr', 52, 3, true, 'text', $db_opcao, "onchange='js_pesquisa_descricaobem();'");
           db_input('t98_sequencial', 8, 1, true, 'hidden', 1, "onchange='js_pesquisa_bem(false)'");
           ?>
         </td>
@@ -67,7 +67,7 @@
         <td>
           <?
           db_input('t52_depart', 8, 1, true, 'text', 3, "");
-          db_input('descrdepto', 40, 3, true, 'text', 3, "");
+          db_input('descrdepto', 52, 3, true, 'text', 3, "");
 
           ?>
         </td>
