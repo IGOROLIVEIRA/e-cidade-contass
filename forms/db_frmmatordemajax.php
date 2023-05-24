@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Público para Gestão Municipal
  *  Copyright (C) 2014  DBseller Serviços de Informática
@@ -38,9 +38,6 @@ $clrotulo->label("e60_numemp");
 $clrotulo->label("e60_codemp");
 $clrotulo->label("pc01_descrmater");
 $clrotulo->label("e62_descr");
-//ini_set('display_errors',1);
-//ini_set('display_startup_erros',1);
-//error_reporting(E_ALL);
 ?>
 <form name="form1" method="post">
 
