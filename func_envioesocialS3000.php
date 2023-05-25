@@ -1,31 +1,5 @@
 <?php
 
-/**
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
-
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -34,11 +8,7 @@ require_once("dbforms/db_funcoes.php");
 require_once("classes/db_esocialenvio_classe.php");
 require_once("classes/db_esocialrecibo_classe.php");
 include("dbforms/db_classesgenericas.php");
-$clcaracter         = new cl_caracter;
 $cliframe_seleciona = new cl_iframe_seleciona;
-$clcaracter->rotulo->label();
-$clrotulo = new rotulocampo;
-$clrotulo->label("rh213_protocolo");
 
 db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
@@ -88,19 +58,8 @@ $iInstit = db_getsession("DB_instit");
                     //}
 
                     $sql = $clesocialenvio->sql_query(null, $campos, "rh213_sequencial desc", "{$dbwhere}");
-                    //db_lovrot($sql, 15, "()", "", "");
-                    db_lovrot($sql, 20, "()", "", $funcao_js, "", "NoMe", array(), false);
-                    // $cliframe_seleciona->chaves  = "rh213_sequencial";
-                    // $cliframe_seleciona->campos  = $campos;
-                    // $cliframe_seleciona->legenda       = "Dados";
-                    // $cliframe_seleciona->sql     = $sql;
-                    // //$cliframe_seleciona->sql_marca = $sqlmarca;
-                    // $cliframe_seleciona->iframe_height ="600";
-                    // $cliframe_seleciona->iframe_width  ="800";
-                    // //$cliframe_seleciona->dbscript      = "";
-                    // $cliframe_seleciona->iframe_nome ="dados";
-                    // $cliframe_seleciona->marcador      = true;
-                    // $cliframe_seleciona->iframe_seleciona(1);
+                    db_lovrot($sql, 20, "()", "", $funcao_js, "", "NoMe", array(), false,"",true);
+                
                     ?>
                 </fieldset>
             </td>
@@ -121,77 +80,69 @@ $iInstit = db_getsession("DB_instit");
 
     function js_processar() {
 
-        let result = confirm('Atenção: Confirmar envio das informações do mês ' + parent.parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
+        let result = confirm('Atenção: Confirmar envio das informações do mêss ' + parent.parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
 
         if (!result) {
             return false;
         }
 
-
         const table = document.getElementById("TabDbLov");
         const checkboxes = table.querySelectorAll(".checkbox");
-
 
         let selectedRowsData = [];
 
         for (let i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].checked) {
                 let rowData = {};
-                rowData[i] = checkboxes[i].parentNode.nextSibling.textContent;
+                rowData["codigo"] = checkboxes[i].parentNode.nextSibling.textContent;
+                rowData["evento"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.textContent;
+                rowData["recibo"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
+                rowData["entrega"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
+                rowData["protocolo"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
+                //rowData["dados"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
+                rowData["processamento"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
                 selectedRowsData.push(rowData);
             }
         }
-        console.log(selectedRowsData);
-        return selectedRowsData;
 
+        if (selectedRowsData.length == 0) {
 
+            alert("Nenhuma linha foi selecionada");
+            return false;
+        }
 
-        // if ($F('anofolha').length < 4 || parseInt($("mesfolha").value) < 1 || parseInt($("mesfolha").value) > 12) {
+        if (parent.document.getElementById('anofolha').length < 4 || parseInt(parent.document.getElementById("mesfolha").value) < 1 || parseInt(parent.document.getElementById("mesfolha").value) > 12) {
 
-        //     alert("Início Validade inválido.");
-        //     return false;
-        // }
+        alert("Início Validade inválido.");
+        return false;
+        }
 
-        // if ($("cboEmpregador").value == '') {
+        if (parent.document.getElementById("cboEmpregador").value == '') {
 
-        //     alert("Selecione um empregador");
-        //     return false;
-        // }
+        alert("Selecione um empregador");
+        return false;
+        }
 
-        // if ($("tpAmb").value == '') {
+        if (parent.document.getElementById("tpAmb").value == '') {
 
-        //     alert("Selecione um Ambiente de envio");
-        //     return false;
-        // }
-
-        // let sSelectedFase = getRadioOption();
-        // let aArquivosSelecionados = new Array();
-        // let aArquivos = $$(`#${sSelectedFase} :input[type='checkbox']`);
-        // aArquivos.each(function(oElemento, iIndice) {
-
-        //     if (oElemento.checked) {
-        //         aArquivosSelecionados.push(oElemento.value.toUpperCase());
-        //     }
-        // });
-        // if (aArquivosSelecionados.length == 0) {
-
-        //     alert("Nenhum arquivo foi selecionado para ser gerado");
-        //     return false;
-        // }
+        alert("Selecione um Ambiente de envio");
+        return false;
+        }
 
         js_divCarregando('Aguarde, processando arquivos', 'msgBox');
         var oParam = new Object();
-        oParam.exec = "transmitir";
-        oParam.arquivos = aArquivosSelecionados;
-        oParam.empregador = $("cboEmpregador").value;
-        oParam.iAnoValidade = $("anofolha").value;
-        oParam.iMesValidade = $("mesfolha").value;
-        oParam.tpAmb = $("tpAmb").value;
-        oParam.modo = $("modo").value;
-        oParam.dtalteracao = $("dt_alteracao").value;
-        oParam.indapuracao = $("indapuracao").value;
-        oParam.tppgto = $("tppgto").value;
-        oParam.tpevento = $("tpevento").value;
+        oParam.exec = "excluir";
+        oParam.arquivos = ['S3000'];
+        oParam.empregador = parent.document.getElementById('cboEmpregador').value;
+        oParam.iAnoValidade = parent.document.getElementById('anofolha').value;
+        oParam.iMesValidade = parent.document.getElementById('mesfolha').value;
+        oParam.tpAmb = parent.document.getElementById('tpAmb').value;
+        oParam.modo = parent.document.getElementById('modo').value;
+        oParam.dtalteracao = parent.document.getElementById('dt_alteracao').value;
+        oParam.indapuracao = parent.document.getElementById("indapuracao").value;
+        oParam.tppgto = parent.document.getElementById('tppgto').value;
+        oParam.tpevento = parent.document.getElementById('tpevento').value;
+        oParam.eventosParaExcluir = selectedRowsData;
         var oAjax = new Ajax.Request("eso4_esocialapi.RPC.php", {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParam),
