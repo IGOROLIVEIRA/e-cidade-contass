@@ -58,10 +58,15 @@ class ApiPixArrecadacao implements IPixProvider
         $request = $this->createRequest($body, $authorization);
 
         try {
-            $response = $this->client->send($request);
+            $response = $this->client->send($request, ['verify' => false]);
 
         } catch (ClientException | RequestException $e) {
             $message = 'Erro ao integrar com API pix da Instituição Financeira habilidata.';
+
+            if (empty($e->getResponse())) {
+                throw new BusinessException($message. ' Detalhes: '.utf8_decode($e->getMessage()));
+            }
+
             $error = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
 
             if (in_array($e->getResponse()->getStatusCode(), [401, 403])) {
@@ -120,8 +125,9 @@ class ApiPixArrecadacao implements IPixProvider
      */
     private function getExpirationSecondsQuantity(string $dateExpiration): int
     {
-        $now = new \DateTime('NOW');
+        $now = new \DateTime(date('Y-m-d'));
         $future = new \DateTime($dateExpiration);
-        return $future->getTimestamp() - $now->getTimestamp();
+        $diff = $future->getTimestamp() - $now->getTimestamp();
+        return $diff > 0 ? $diff : 3600;
     }
 }
