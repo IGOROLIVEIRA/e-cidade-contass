@@ -4606,4 +4606,19 @@ class Acordo
     ////            exit;
     //    }
 
+    public function adicionarItemAcordoObra($licitacao,$acodo,$item){
+        $oDaoLicobras = db_query("select * from licobras where obr01_licitacao = {$licitacao}");
+        $oDaoParametro = db_utils::fieldsMemory($oDaoLicobras,0);
+        $oDaoAcordoitem = db_query("select ac20_sequencial from acordoitem where ac20_acordoposicao= (select ac26_sequencial from acordoposicao where ac26_acordo = {$acodo}) and ac20_pcmater= {$item}");
+        $oDaoAcordoitem = db_utils::fieldsMemory($oDaoAcordoitem,0);
+        if(pg_num_rows($oDaoLicobras)!=0){
+            $clacordoobra = new cl_acordoobra();
+            $clacordoobra->obr08_acordo = $acodo;
+            $clacordoobra->obr08_acordoitem = $oDaoAcordoitem ->ac20_sequencial;
+            $clacordoobra->obr08_licobras = $oDaoParametro->obr01_numeroobra;
+            $clacordoobra->obr08_liclicitemlote = $oDaoParametro->obr01_licitacaolote;
+            $clacordoobra->incluir(null);
+        }
+    }
+
 }

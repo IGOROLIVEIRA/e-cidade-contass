@@ -1440,6 +1440,8 @@ switch ($oParam->exec) {
                             } else {
                                 $oPosicao->adicionarItemDeLicitacao($oItem->codigo, $oItem);
                             }
+                            //var_dump($oPosicao[]);
+                            $oContrato->adicionarItemAcordoObra($iLicitacao,$iCodigoAcordo,$oItem->codigomaterial);
                         } else if ($oContrato->getOrigem() == 1) {
 
                             $oPosicao->adicionarItemDeProcesso($oItem->codigo, $oItem);
