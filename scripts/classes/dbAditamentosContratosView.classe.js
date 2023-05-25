@@ -1158,7 +1158,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             veiculodivulgacao: me.oTxtVeiculoDivulgacao.getValue(),
             percentualreajuste: me.oPercentualReajuste.getValue(),
             indicereajuste: me.oIndiceReajuste.getValue(),
-            descricaoindice: encodeURIComponent(tagString(me.oTxtDescricaoIndice.getValue())),
+            descricaoindice:  me.oTxtDescricaoIndice.getValue(),  //decodeURIComponent(encodeURIComponent(me.oTxtDescricaoIndice.getValue())),  //encodeURIComponent(tagString(me.oTxtDescricaoIndice.getValue())),
             justificativa: $('oTxtJustificativa').getValue(),
             tipoaditamento: me.iTipoAditamento,
             sNumeroAditamento: me.oTxtNumeroAditamento.getValue(),

@@ -1231,7 +1231,7 @@ $clrotulo->label("ac16_resumoobjeto");
         oApostila.justificativa = $("si03_justificativa").value;
         oApostila.percentualreajuste = $("si03_percentualreajuste").value;
         oApostila.indicereajuste = $("si03_indicereajuste").value;
-        oApostila.descricaoindice = encodeURIComponent(tagString($("si03_descricaoindice").value));
+        oApostila.descricaoindice = decodeURIComponent(encodeURIComponent($("si03_descricaoindice").value));
 
 
         var oParam = {
