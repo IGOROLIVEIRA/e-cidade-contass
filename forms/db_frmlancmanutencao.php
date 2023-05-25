@@ -76,7 +76,7 @@
         <td colspan="2" title="<?= @$Tt93_obs ?>">
           <fieldset class="separator">
             <legend>Descrição</legend>
-            <?php db_textarea("t98_descricao", 10, 50, 3, true, "text", $db_opcao, null, null, null, 500); ?>
+            <?php db_textarea("t98_descricao", 10, 50, 0, true, "text", $db_opcao, null, null, null, 500); ?>
           </fieldset>
         </td>
       </tr>

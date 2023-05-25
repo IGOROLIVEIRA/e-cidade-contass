@@ -80,7 +80,12 @@ charset=iso-8859-1">
             $where .= " and t98_manutencaoprocessada = 'f'";
           }
 
-          $sql = "select t98_sequencial, t98_bem, t98_data, t98_vlrmanut, t98_descricao,t98_tipo,t52_ident,t52_descr,t52_valaqu,t44_valoratual,t52_depart,descrdepto,t98_manutencaoprocessada
+          $sql = "select t98_sequencial, t98_bem, t98_data, t98_vlrmanut, t98_descricao, CASE WHEN t98_tipo = 1 THEN 'Acréscimo de Valor' 
+          WHEN t98_tipo = 2 THEN 'Decréscimo de Valor' 
+          WHEN t98_tipo = 3 THEN 'Adição de Componente' 
+          WHEN t98_tipo = 4 THEN 'Remoção de Componente' 
+  WHEN t98_tipo = 5 THEN 'Manutenção de Imóvel' 
+      END as TipoManutencao,t52_ident,t52_descr,t98_manutencaoprocessada,t52_valaqu,t44_valoratual,t52_depart,descrdepto,t98_tipo
           from bemmanutencao
           inner join bens on t52_bem = t98_bem
           inner join bensdepreciacao on t44_bens = t98_bem
@@ -96,6 +101,22 @@ charset=iso-8859-1">
 
 </html>
 <script>
+  document.getElementsByClassName('DBLovrotInputCabecalho').item(5).value = 'Tipo de Manutenção';
+  document.getElementsByClassName('DBLovrotTdCabecalho').item(9).style.display = 'none';
+  document.getElementsByClassName('DBLovrotTdCabecalho').item(10).style.display = 'none';
+  document.getElementsByClassName('DBLovrotTdCabecalho').item(11).style.display = 'none';
+  document.getElementsByClassName('DBLovrotTdCabecalho').item(12).style.display = 'none';
+  document.getElementsByClassName('DBLovrotTdCabecalho').item(13).style.display = 'none';
+
+
+  for (i = 0; i < 15; i++) {
+    document.getElementById('I' + i + '9').style.display = 'none';
+    document.getElementById('I' + i + '10').style.display = 'none';
+    document.getElementById('I' + i + '11').style.display = 'none';
+    document.getElementById('I' + i + '12').style.display = 'none';
+    document.getElementById('I' + i + '13').style.display = 'none';
+  }
+
   function js_limpar() {
     document.form2.t64_class.value = "";
     document.form2.chave_t52_bem.value = "";
