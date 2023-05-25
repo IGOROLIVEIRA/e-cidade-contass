@@ -7,6 +7,17 @@ db_app::load("estilos.css, grid.style.css");
     <table border="0">
         <tr>
             <td>
+                <strong>Tipo: </strong>
+            </td>
+            <td>
+                <select name="tipo" id="tipo" onchange="js_verificatipo();">
+                    <option value="1">Inclusão</option>
+                    <option value="2">Retificação</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <?
                 db_ancora('Dispensa:', "js_pesquisapc80_codproc(true);", $db_opcao);
                 ?>
@@ -31,12 +42,6 @@ db_app::load("estilos.css, grid.style.css");
                 <strong>Ambiente: </strong>
                 <select name="ambiente" id="ambiente">
                     <option value="1">Ambiente de Homologao Externa</option>
-                </select>
-
-                <strong>Tipo: </strong>
-                <select name="tipo" id="tipo">
-                    <option value="1">Inclusão</option>
-                    <option value="2">Retificação</option>
                 </select>
             </td>
         </tr>
@@ -200,5 +205,8 @@ db_app::load("estilos.css, grid.style.css");
             alert(oRetornoResultado.message.urlDecode());
             window.location.href = "com1_pncpresultadodispensaporvalor001.php";
         }
+    }
+    function js_verificatipo(){
+        js_getItens();
     }
 </script>

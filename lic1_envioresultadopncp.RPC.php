@@ -158,10 +158,8 @@ switch ($oParam->exec) {
                     if ($rsApiPNCP[0] != 201) {
                         throw new Exception(utf8_decode($rsApiPNCP[1]));
                     }
-                }
 
-                //RETIFICAR O ITEM ALTERANDO A SITUACAO
-                foreach ($oParam->aItensLicitacao as $item) {
+                    //RETIFICAR O ITEM ALTERANDO A SITUACAO
 
                     $aItensRetificaItemLicitacao = array();
                     $rsItensRetificacao = $clliclicita->sql_record($clliclicita->sql_query_pncp_itens_retifica_situacao($oParam->iLicitacao, $item->l21_ordem));

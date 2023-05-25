@@ -76,22 +76,41 @@ switch ($oParam->exec) {
                 $rsApiPNCP = $clResultadoItensPNCP->enviarResultado($odadosResultado, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->pc11_seq);
                 $urlResutltado = explode('x-content-type-options', $rsApiPNCP[0]);
 
-                if ($rsApiPNCP[1] == '201') {
-                    $clliccontrolepncpitens = new cl_liccontrolepncpitens();
-                    $l214_numeroresultado = substr($urlResutltado[0], 96);
-                    $clliccontrolepncpitens->l214_numeroresultado = $l214_numeroresultado;
-                    $clliccontrolepncpitens->l214_numerocompra = $oDadosAvisoPNCP->l213_numerocompra;
-                    $clliccontrolepncpitens->l214_anousu = $oDadosAvisoPNCP->l213_anousu;
-                    $clliccontrolepncpitens->l214_licitacao = $oParam->iLicitacao;
-                    $clliccontrolepncpitens->l214_ordem = $item->pc11_seq;
-                    $clliccontrolepncpitens->l214_pcproc = $oParam->iPcproc;
-                    $clliccontrolepncpitens->incluir();
+                $clliccontrolepncpitens = new cl_liccontrolepncpitens();
+                $l214_numeroresultado = substr($urlResutltado[0], 96);
+                $clliccontrolepncpitens->l214_numeroresultado = $l214_numeroresultado;
+                $clliccontrolepncpitens->l214_numerocompra = $oDadosAvisoPNCP->l213_numerocompra;
+                $clliccontrolepncpitens->l214_anousu = $oDadosAvisoPNCP->l213_anousu;
+                $clliccontrolepncpitens->l214_licitacao = $oParam->iLicitacao;
+                $clliccontrolepncpitens->l214_ordem = $item->pc11_seq;
+                $clliccontrolepncpitens->l214_pcproc = $oParam->iPcproc;
+                $clliccontrolepncpitens->incluir();
 
-                    $oRetorno->status  = 1;
-                    $oRetorno->message = "Enviado com Sucesso !";
-                } else {
-                    throw new Exception(utf8_decode($rsApiPNCP[0]));
+                if ($rsApiPNCP[0] != 201) {
+                    throw new Exception(utf8_decode($rsApiPNCP[1]));
                 }
+
+                //RETIFICAR O ITEM ALTERANDO A SITUACAO
+
+                $aItensRetificaItemLicitacao = array();
+                $rsItensRetificacao = $clpcproc->sql_record($clpcproc->sql_query_pncp_itens_retifica_situacao($oParam->iPcproc,$item->pc01_codmater, $item->pc11_seq));
+            
+                for ($i = 0; $i < pg_numrows($rsItensRetificacao); $i++) {
+                    $oDadosResultado = db_utils::fieldsMemory($rsItensRetificacao, $i);
+                    $aItensRetificaItemLicitacao[] = $oDadosResultado;
+                }
+                
+                //classe modelo
+                $clResultadoItensPNCP = new RetificaitensPNCP($aItensRetificaItemLicitacao);
+                //monta o json com os dados da licitacao
+                $odadosResultado = $clResultadoItensPNCP->montarDados();
+            
+                //envia para pncp
+                $rsApiretitensPNCP = $clResultadoItensPNCP->retificarItem($odadosResultado, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->l21_ordem);
+                if ($rsApiretitensPNCP[0] != 201) {
+                    throw new Exception(utf8_decode($rsApiretitensPNCP[1]));
+                }
+            
             }
         } catch (Exception $eErro) {
             $oRetorno->status  = 2;

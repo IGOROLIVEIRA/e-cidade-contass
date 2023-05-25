@@ -3738,6 +3738,7 @@ class cl_liclicita
                 END AS itemCategoriaId,
                 pcmater.pc01_regimobiliario AS codigoRegistroImobiliario,
                 l217_codsituacao as situacaoCompraItemId,
+                l218_motivoanulacao as justificativa,
                 l217_sequencial
         FROM liclicita
         JOIN db_depart ON coddepto=l20_codepartamento
