@@ -70,9 +70,9 @@ class PixArrecadacaoPayloadDTO implements IPixPayload
     public string $nomeDevedor;
 
     /**
-     * @var string
+     * @var int
      */
-    public string $quantidadeSegundoExpiracao;
+    public int $quantidadeSegundoExpiracao;
 
     /**
      * @var array
