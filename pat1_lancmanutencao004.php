@@ -148,6 +148,12 @@ if (isset($desprocessar)) {
     if ($clbemmanutencao->erro_status == "0") {
         $clbemmanutencao->erro(true, false);
         echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+        echo
+        "<script> 
+        document.getElementById('processamento').value = 'Desprocessar';
+        document.getElementById('processamento').name = 'desprocessar';
+        </script>
+        ";
         if ($clbemmanutencao->erro_campo != "") {
             echo "<script> document.form1." . $clbemmanutencao->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
             echo "<script> document.form1." . $clbemmanutencao->erro_campo . ".focus();</script>";
