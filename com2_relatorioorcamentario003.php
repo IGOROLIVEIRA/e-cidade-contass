@@ -58,12 +58,22 @@ where
     and pc68_sequencial is not null
     order by pc68_sequencial asc");
 
-$tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
 
 
 $rsResultado = db_query("select pc80_criterioadjudicacao from pcproc where pc80_codproc = {$codigo_preco}");
 $criterio    = db_utils::fieldsMemory($rsResultado, 0)->pc80_criterioadjudicacao;
 $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : "";
+
+$rsTipopreco = db_query("select si01_tipoprecoreferencia from precoreferencia where si01_processocompra = {$codigo_preco}");
+$resultTipopreco    = db_utils::fieldsMemory($rsTipopreco, 0)->si01_tipoprecoreferencia;
+
+if($resultTipopreco==3){
+    $tipoReferencia = " (min(pc23_vlrun)) ";
+}else if($resultTipopreco==2){
+    $tipoReferencia = " (max(pc23_vlrun)) ";
+}else{
+    $tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
+}
 
 /**
  * GET ITENS
@@ -118,7 +128,7 @@ ORDER BY pc11_seq) as x GROUP BY
                 pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq ) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
-                {$tipoReferencia} as si02_vlprecoreferencia,
+                {$tipoReferencia} as si02_vltotalprecoreferencia,
                                      case when pc80_criterioadjudicacao = 1 then
                      round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
                      when pc80_criterioadjudicacao = 2 then
@@ -151,7 +161,7 @@ for ($iCont = 0; $iCont < pg_num_rows($resultpreco); $iCont++) {
        $oResult = db_utils::fieldsMemory($resultpreco, $iCont);
 
        //    if($quant_casas){
-       $lTotal = round($oResult->si02_vlprecoreferencia, 2) * $oResult->pc11_quant;
+       $lTotal = round($oResult->si02_vltotalprecoreferencia * $oResult->pc11_quant, 2);
        $nTotalItens += $lTotal;
 }
 

@@ -17,6 +17,7 @@ db_postmemory($HTTP_POST_VARS);
  $resultCodproc = db_query($rscodproc);
  $codigo_preco    = db_utils::fieldsMemory($resultCodproc, 0)->pc81_codproc;
 
+if(pg_num_rows($resultCodproc)!=0){
 /**
  * BUSCO DADOS DA INSTITUICAO
  *
@@ -58,12 +59,23 @@ db_postmemory($HTTP_POST_VARS);
      and pc68_sequencial is not null
      order by pc68_sequencial asc");
  
- $tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
+ 
  
  
  $rsResultado = db_query("select pc80_criterioadjudicacao from pcproc where pc80_codproc = {$codigo_preco}");
  $criterio    = db_utils::fieldsMemory($rsResultado, 0)->pc80_criterioadjudicacao;
  $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : "";
+
+ $rsTipopreco = db_query("select si01_tipoprecoreferencia from precoreferencia where si01_processocompra = {$codigo_preco}");
+$resultTipopreco    = db_utils::fieldsMemory($rsTipopreco, 0)->si01_tipoprecoreferencia;
+
+if($resultTipopreco==3){
+    $tipoReferencia = " (min(pc23_vlrun)) ";
+}else if($resultTipopreco==2){
+    $tipoReferencia = " (max(pc23_vlrun)) ";
+}else{
+    $tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
+}
  
  /**
   * GET ITENS
@@ -118,7 +130,7 @@ db_postmemory($HTTP_POST_VARS);
                  pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq ) as matquan join
  (SELECT DISTINCT
                  pc11_seq,
-                 {$tipoReferencia} as si02_vlprecoreferencia,
+                 {$tipoReferencia} as si02_vltotalprecoreferencia,
                                       case when pc80_criterioadjudicacao = 1 then
                       round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
                       when pc80_criterioadjudicacao = 2 then
@@ -151,7 +163,7 @@ db_postmemory($HTTP_POST_VARS);
         $oResult = db_utils::fieldsMemory($resultpreco, $iCont);
  
         //    if($quant_casas){
-        $lTotal = round($oResult->si02_vlprecoreferencia, 2) * $oResult->pc11_quant;
+        $lTotal = round($oResult->si02_vltotalprecoreferencia * $oResult->pc11_quant, 2);
         $nTotalItens += $lTotal;
  }
  
@@ -162,7 +174,7 @@ db_postmemory($HTTP_POST_VARS);
  $sqlObjeto = "select pc80_resumo as objeto from pcproc where pc80_codproc = $codigo_preco";
  $resultObjeto = db_query($sqlObjeto);
  db_fieldsmemory($resultObjeto,0);
-
+}
  /**
 * BUSCO O TEXTO NO CADASTRO DE PARAGRAFOS
 *
@@ -174,7 +186,7 @@ $resparag = db_query($sqlparag);
 
 <?php
 header("Content-type: application/vnd.ms-word; charset=UTF-8");
-header("Content-Disposition: attachment; Filename=Solicitacao_Parecer_Financeiro_".$codigo_preco.".doc");
+header("Content-Disposition: attachment; Filename=Solicitacao_Parecer_Financeiro_".$solicitacaocompras.".doc");
 ?>
 
     <!DOCTYPE html>
