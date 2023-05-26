@@ -98,9 +98,9 @@ begin
             loop
 
                 perform j34_area,
-                       case when coalesce(j36_testle, 0) > 0 then j36_testle else coalesce(j36_testad, 0) end,
-                       j81_valorterreno,
-                       j81_valorconstr
+                    case when coalesce(j36_testle, 0) > 0 then j36_testle else coalesce(j36_testad, 0) end,
+                    j81_valorterreno,
+                    j81_valorconstr
                 from lote
                          inner join testpri on j49_idbql = j34_idbql
                          inner join face on j37_face = j49_face
