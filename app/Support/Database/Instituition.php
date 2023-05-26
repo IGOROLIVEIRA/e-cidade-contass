@@ -4,10 +4,10 @@ namespace App\Support\Database;
 
 trait Instituition
 {
-    public function getInstituicaoByCnpj(string $cnpj = NULL): ?string
+    public function getInstituicaoByCnpj(string $cnpj = NULL): array
     {
         if (empty($cnpj)) {
-            return null;
+            return [];
         }
         return $this->fetchRow("select codigo from db_config where cgc = '{$cnpj}'");
     }
