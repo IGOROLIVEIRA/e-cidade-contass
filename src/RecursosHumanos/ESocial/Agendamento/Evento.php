@@ -8,21 +8,21 @@ class Evento
 {
 
     /**
-     * Cï¿½digo do Evento do eSocial
+     * Código do Evento do eSocial
      *
      * @var integer
      */
     private $tipoEvento;
 
     /**
-     * Cï¿½digo do empregador
+     * Código do empregador
      *
      * @var integer
      */
     private $empregador;
 
     /**
-     * Cï¿½digo do responsavel pelo evento
+     * Código do responsavel pelo evento
      * @var mixed
      */
     private $responsavelPreenchimento;
@@ -49,7 +49,7 @@ class Evento
     private $tpAmb;
 
     /**
-     * Inï¿½cio Validade das informaï¿½ï¿½es
+     * Início Validade das informações
      *
      * @var string
      */
@@ -77,6 +77,13 @@ class Evento
      */
     private $tppgto;
 
+    private $tpevento;
+    
+    /**
+     * @var array
+     */
+    private $aDadosExclusao;
+
 
     /**
      * Undocumented function
@@ -97,11 +104,12 @@ class Evento
         $dt_alteracao = null,
         $indapuracao = null,
         $tppgto = null,
-        $tpevento = null
+        $tpevento = null,
+        $aDadosExclusao = null
     ) {
         /**
          * @todo pesquisar exite na fila um evento do tipo: $tipoEvento para o : $responsavelPreenchimento
-         * @todo Nï¿½o existido, cria uma agenda e inclui na tabela
+         * @todo Não existido, cria uma agenda e inclui na tabela
          * @todo se houver e os $dados forem iguais ( usar md5 ), desconsidera
          * @todo se houver e os $dados forem diferentes ( usar md5 ), altera / inclui novo registro e reagenda
          *
@@ -118,6 +126,7 @@ class Evento
         $this->indapuracao              = $indapuracao;
         $this->tppgto                   = $tppgto;
         $this->tpevento                 = $tpevento;
+        $this->aDadosExclusao           = $aDadosExclusao;
 
         $dado = json_encode(\DBString::utf8_encode_all($this->dado));
         if (is_null($dado)) {
@@ -138,10 +147,11 @@ class Evento
         $where = implode(" and ", $where);
         $dao   = new \cl_esocialenvio();
         $sql   = $dao->sql_query_file(null, "*", null, $where);
-        $rs    = db_query($sql);
 
+        $rs    = db_query($sql);
+        
         if (!$rs) {
-            throw new \Exception("Erro ao buscar registros do evento para verificaï¿½ï¿½o.");
+            throw new \Exception("Erro ao buscar registros do evento para verificação.");
         }
 
         if (pg_num_rows($rs) > 0 && $this->modo === 'INC') {
@@ -179,11 +189,9 @@ class Evento
         if (is_object($dados) || count($dados) > 0) {
             $daoFilaEsocial->incluir(null);
             if ($daoFilaEsocial->erro_status == 0) {
-                throw new \Exception("Nï¿½o foi possï¿½vel adicionar na fila. \n {$daoFilaEsocial->erro_msg}");
+                throw new \Exception("Não foi possível adicionar na fila. \n {$daoFilaEsocial->erro_msg}");
             }
         }
-
-        $this->adicionarTarefa($daoFilaEsocial->rh213_sequencial);
     }
 
     public function adicionarEventoExclusao()
@@ -245,8 +253,9 @@ class Evento
         $evento->setIndApuracao($this->indapuracao);
         $evento->setTppgto($this->tppgto);
         $evento->setTpevento($this->tpevento);
+        $evento->setDadosExclusao($this->aDadosExclusao);
         if (!is_object($evento)) {
-            throw new \Exception("Objeto S{$this->tipoEvento} nï¿½o encontrado.");
+            throw new \Exception("Objeto S{$this->tipoEvento} não encontrado.");
         }
         return $evento->montarDados();
     }
