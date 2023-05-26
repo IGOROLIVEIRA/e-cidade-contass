@@ -3564,7 +3564,7 @@ class cl_liclicita
        WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) AS codigoUnidadeCompradora,
        CASE
             WHEN l03_pctipocompratribunal IN (110,51,53,52,50,102) THEN 1
-            WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa != 5 THEN 2
+            WHEN l03_pctipocompratribunal = 101 THEN 2
             WHEN l03_pctipocompratribunal = 100 THEN 3
        END AS tipoInstrumentoConvocatorioId,
        CASE

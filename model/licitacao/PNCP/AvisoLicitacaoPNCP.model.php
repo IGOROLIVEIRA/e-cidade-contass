@@ -32,7 +32,11 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
         if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
-            $oDadosAPI->modoDisputaId                   = 4;
+            if($oDado->tipoinstrumentoconvocatorioid == "2"){
+                $oDadosAPI->modoDisputaId                   = 4;
+            }else{
+                $oDadosAPI->modoDisputaId                   = 5;
+            }
         }else{
             $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
         }
@@ -63,7 +67,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
             $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
             if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
-                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = 1;
+                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = 7;
             }else{
                 $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
             }
