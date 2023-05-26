@@ -91,8 +91,8 @@ class EventoS3000 extends EventoBase
                 $iSequencial++;
             }
         }
-        // echo '<pre>';
-        // var_dump($aDadosAPI);exit;
+        //echo '<pre>';
+        //var_dump($aDadosAPI);exit;
         return $aDadosAPI;
     }
 

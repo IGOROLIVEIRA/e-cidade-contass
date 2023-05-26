@@ -80,11 +80,11 @@ $iInstit = db_getsession("DB_instit");
 
     function js_processar() {
 
-        let result = confirm('Atenção: Confirmar envio das informações do mêss ' + parent.parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
+        // let result = confirm('Atenção: Confirmar envio das informações do mêss ' + parent.parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
 
-        if (!result) {
-            return false;
-        }
+        // if (!result) {
+        //     return false;
+        // }
 
         const table = document.getElementById("TabDbLov");
         const checkboxes = table.querySelectorAll(".checkbox");
@@ -94,13 +94,13 @@ $iInstit = db_getsession("DB_instit");
         for (let i = 0; i < checkboxes.length; i++) {
             if (checkboxes[i].checked) {
                 let rowData = {};
-                rowData["codigo"] = checkboxes[i].parentNode.nextSibling.textContent;
-                rowData["evento"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.textContent;
-                rowData["recibo"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
-                rowData["entrega"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
-                rowData["protocolo"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
+                rowData["codigo"] = checkboxes[i].parentNode.nextSibling.textContent.replace(/\s/g, "");
+                rowData["evento"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.textContent.replace(/\s/g, "");
+                rowData["recibo"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent.replace(/\s/g, "");
+                rowData["entrega"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent.replace(/\s/g, "");
+                rowData["protocolo"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent.replace(/\s/g, "");
                 //rowData["dados"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
-                rowData["processamento"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
+                //rowData["processamento"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
                 selectedRowsData.push(rowData);
             }
         }
@@ -143,9 +143,10 @@ $iInstit = db_getsession("DB_instit");
         oParam.tppgto = parent.document.getElementById('tppgto').value;
         oParam.tpevento = parent.document.getElementById('tpevento').value;
         oParam.eventosParaExcluir = selectedRowsData;
+        console.log(oParam);
         var oAjax = new Ajax.Request("eso4_esocialapi.RPC.php", {
             method: 'post',
-            parameters: 'json=' + Object.toJSON(oParam),
+            parameters: 'json=' + JSON.stringify(oParam),
             onComplete: js_retornoProcessamento
         });
 
