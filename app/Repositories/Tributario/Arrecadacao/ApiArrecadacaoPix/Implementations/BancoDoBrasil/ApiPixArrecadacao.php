@@ -6,6 +6,7 @@ use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IPixProv
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO\PixArrecadacaoPayloadDTO;
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO\PixArrecadacaoResponseDTO;
 use BusinessException;
+use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\ClientException;
@@ -36,6 +37,11 @@ class ApiPixArrecadacao implements IPixProvider
         $payload['indicadorCodigoBarras'] = !empty($payload['indicadorCodigoBarras']) ?
             $payload['indicadorCodigoBarras'] : PixArrecadacaoPayloadDTO::INDICADOR_CODIGO_BARRAS_NAO;
         $payload['codigoSolicitacaoBancoCentralBrasil'] = $this->configuration->getChavePix();
+
+        if (!empty($payload['k00_dtvenc'])) {
+            $payload['quantidadeSegundoExpiracao'] = $this->getExpirationSecondsQuantity($payload['k00_dtvenc']);
+        }
+
         $pixArrecadacaoPayloadDTO = new PixArrecadacaoPayloadDTO($payload);
         $response = $this->send(
             $pixArrecadacaoPayloadDTO,
@@ -52,10 +58,15 @@ class ApiPixArrecadacao implements IPixProvider
         $request = $this->createRequest($body, $authorization);
 
         try {
-            $response = $this->client->send($request);
+            $response = $this->client->send($request, ['verify' => false]);
 
         } catch (ClientException | RequestException $e) {
             $message = 'Erro ao integrar com API pix da Instituição Financeira habilidata.';
+
+            if (empty($e->getResponse())) {
+                throw new BusinessException($message. ' Detalhes: '.utf8_decode($e->getMessage()));
+            }
+
             $error = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
 
             if (in_array($e->getResponse()->getStatusCode(), [401, 403])) {
@@ -107,5 +118,16 @@ class ApiPixArrecadacao implements IPixProvider
             $headerParams,
             $httpBody
         );
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getExpirationSecondsQuantity(string $dateExpiration): int
+    {
+        $now = new \DateTime(date('Y-m-d'));
+        $future = new \DateTime($dateExpiration);
+        $diff = $future->getTimestamp() - $now->getTimestamp();
+        return $diff > 0 ? $diff : 3600;
     }
 }

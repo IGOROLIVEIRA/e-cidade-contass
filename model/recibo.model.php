@@ -820,6 +820,7 @@ class Recibo
       $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
       $body['valorOriginalSolicitacao'] = $this->getTotalReciboComTaxaExpediente();
       $body['k00_numnov'] = $this->getNumpreRecibo();
+      $body['k00_dtvenc'] = $this->getDataVencimentoRecibo();
       $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
 
       $service = new GeneratePixWithQRCodeService($providerConfig);
