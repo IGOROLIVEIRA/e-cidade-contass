@@ -158,8 +158,10 @@ switch ($oParam->exec) {
                     if ($rsApiPNCP[0] != 201) {
                         throw new Exception(utf8_decode($rsApiPNCP[1]));
                     }
+                }
 
-                    //RETIFICAR O ITEM ALTERANDO A SITUACAO
+                //RETIFICAR O ITEM ALTERANDO A SITUACAO
+                foreach ($oParam->aItensLicitacao as $item) {
 
                     $aItensRetificaItemLicitacao = array();
                     $rsItensRetificacao = $clliclicita->sql_record($clliclicita->sql_query_pncp_itens_retifica_situacao($oParam->iLicitacao, $item->l21_ordem));
@@ -172,10 +174,10 @@ switch ($oParam->exec) {
                     //classe modelo
                     $clResultadoItensPNCP = new RetificaitensPNCP($aItensRetificaItemLicitacao);
                     //monta o json com os dados da licitacao
-                    $odadosResultado = $clResultadoItensPNCP->montarDados();
+                    $odadosItensRetifica = $clResultadoItensPNCP->montarDados();
 
                     //envia para pncp
-                    $rsApiretitensPNCP = $clResultadoItensPNCP->retificarItem($odadosResultado, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->l21_ordem);
+                    $rsApiretitensPNCP = $clResultadoItensPNCP->retificarItem($odadosItensRetifica, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->l21_ordem);
                     if ($rsApiretitensPNCP[0] != 201) {
                         throw new Exception(utf8_decode($rsApiretitensPNCP[1]));
                     }

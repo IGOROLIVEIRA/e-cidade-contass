@@ -44,7 +44,7 @@ class RetificaitensPNCP extends ModeloBasePNCP
         //$oDadosAPI->itemCategoriaId             = 3;
         $oDadosAPI->itemCategoriaId             = $oDado[0]->itemcategoriaid;
         if($oDado[0]->itemcategoriaid == '3'){
-            $oDadosAPI->justificativa               = $oDado[0]->justificativa;
+            $oDadosAPI->justificativa               = utf8_encode($oDado[0]->justificativa);
         }
         //$oDadosAPI->codigoRegistroImobiliario   = utf8_encode($oDado[0]->codigoregistroimobiliario);
         $aDadosAPI = json_encode($oDadosAPI);

@@ -89,7 +89,8 @@ switch ($oParam->exec) {
                 if ($rsApiPNCP[0] != 201) {
                     throw new Exception(utf8_decode($rsApiPNCP[1]));
                 }
-
+            }
+            foreach ($oParam->aItensLicitacao as $item) {
                 //RETIFICAR O ITEM ALTERANDO A SITUACAO
 
                 $aItensRetificaItemLicitacao = array();
