@@ -234,27 +234,6 @@ class cl_bemmanutencao
   {
     $this->atualizacampos();
 
-    $rsManutencoesProcessadas = db_query("select * from benshistoricocalculobem
-    inner join benshistoricocalculo on t58_benshistoricocalculo = t57_sequencial
-    where t58_bens = $this->t98_bem and t57_sequencial in (select t57_sequencial from benshistoricocalculo where t57_tipocalculo = 3);");
-
-    if (pg_num_rows($rsManutencoesProcessadas) > 0) {
-      $rsBenshistoricocalculobem = db_query("select * from benshistoricocalculobem
-      inner join benshistoricocalculo on t58_benshistoricocalculo = t57_sequencial
-      where t58_bens = " . $this->t98_bem . " and t57_sequencial > (select max(t57_sequencial) from benshistoricocalculo where t57_tipocalculo = 3)");
-
-      if (pg_num_rows($rsBenshistoricocalculobem) > 0) {
-        $this->erro_sql = "Manutenção não pode ser alterada! Existem movimentações financeiras lançadas!.";
-        $this->erro_campo = "";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-
-
     $sql = " update bemmanutencao set ";
     $virgula = "";
     if (trim($this->t98_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["t98_sequencial"])) {
@@ -398,27 +377,6 @@ class cl_bemmanutencao
   function excluir($sequencial = null, $dbwhere = null)
   {
 
-    $rsManutencoesProcessadas = db_query("select * from benshistoricocalculobem
-    inner join benshistoricocalculo on t58_benshistoricocalculo = t57_sequencial
-    where t58_bens = $this->t98_bem and t57_sequencial in (select t57_sequencial from benshistoricocalculo where t57_tipocalculo = 3);");
-
-    if (pg_num_rows($rsManutencoesProcessadas) > 0) {
-      $rsBenshistoricocalculobem = db_query("select * from benshistoricocalculobem
-      inner join benshistoricocalculo on t58_benshistoricocalculo = t57_sequencial
-      where t58_bens = " . $this->t98_bem . " and t57_sequencial > (select max(t57_sequencial) from benshistoricocalculo where t57_tipocalculo = 3)");
-
-      if (pg_num_rows($rsBenshistoricocalculobem) > 0) {
-        $this->erro_sql = "Manutenção não pode ser alterada! Existem movimentações financeiras lançadas!.";
-        $this->erro_campo = "";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-
-
     db_inicio_transacao();
 
     $rsmanutbensitem = db_query("select * from manutbensitem where t99_codbemmanutencao = $sequencial");
@@ -497,26 +455,6 @@ class cl_bemmanutencao
 
   function processar($t98_sequencial)
   {
-
-    $rsManutencoesProcessadas = db_query("select * from benshistoricocalculobem
-    inner join benshistoricocalculo on t58_benshistoricocalculo = t57_sequencial
-    where t58_bens = $this->t98_bem and t57_sequencial in (select t57_sequencial from benshistoricocalculo where t57_tipocalculo = 3);");
-
-    if (pg_num_rows($rsManutencoesProcessadas) > 0) {
-      $rsBenshistoricocalculobem = db_query("select * from benshistoricocalculobem
-      inner join benshistoricocalculo on t58_benshistoricocalculo = t57_sequencial
-      where t58_bens = " . $this->t98_bem . " and t57_sequencial > (select max(t57_sequencial) from benshistoricocalculo where t57_tipocalculo = 3)");
-
-      if (pg_num_rows($rsBenshistoricocalculobem) > 0) {
-        $this->erro_sql = "Manutenção não pode ser alterada! Existem movimentações financeiras lançadas!.";
-        $this->erro_campo = "";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
 
 
     $oDaoBensDepreciacao         = db_utils::getDao("bensdepreciacao");
@@ -618,26 +556,6 @@ class cl_bemmanutencao
 
   function desprocessar($t98_sequencial)
   {
-
-    $rsManutencoesProcessadas = db_query("select * from benshistoricocalculobem
-    inner join benshistoricocalculo on t58_benshistoricocalculo = t57_sequencial
-    where t58_bens = $this->t98_bem and t57_sequencial in (select t57_sequencial from benshistoricocalculo where t57_tipocalculo = 3);");
-
-    if (pg_num_rows($rsManutencoesProcessadas) > 0) {
-      $rsBenshistoricocalculobem = db_query("select * from benshistoricocalculobem
-      inner join benshistoricocalculo on t58_benshistoricocalculo = t57_sequencial
-      where t58_bens = " . $this->t98_bem . " and t57_sequencial > (select max(t57_sequencial) from benshistoricocalculo where t57_tipocalculo = 3)");
-
-      if (pg_num_rows($rsBenshistoricocalculobem) > 0) {
-        $this->erro_sql = "Manutenção não pode ser alterada! Existem movimentações financeiras lançadas!.";
-        $this->erro_campo = "";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
 
 
     /**

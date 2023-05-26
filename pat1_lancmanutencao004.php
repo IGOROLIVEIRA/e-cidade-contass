@@ -140,6 +140,8 @@ if (isset($processar)) {
         "<script> 
         document.getElementById('processamento').value = 'Desprocessar';
         document.getElementById('processamento').name = 'desprocessar';
+        parent.document.formaba.componentes.disabled = true;
+        js_bloquearCampos();
         </script>
         ";
     }
@@ -164,6 +166,7 @@ if (isset($desprocessar)) {
         "<script> 
         document.getElementById('processamento').value = 'Processar';
         document.getElementById('processamento').name = 'processar';
+        parent.document.formaba.componentes.disabled = false;
         </script>
         ";
     }

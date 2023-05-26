@@ -138,6 +138,27 @@
     document.form1.t98_tipo.value = 0;
   }
 
+  function js_bloquearCampos() {
+    document.form1.t52_descr.setAttribute("readonly", "readonly");
+    document.form1.t52_bem.setAttribute("readonly", "readonly");
+    document.form1.t44_valoratual.setAttribute("readonly", "readonly");
+    document.form1.t52_depart.setAttribute("readonly", "readonly");
+    document.form1.descrdepto.setAttribute("readonly", "readonly");
+    document.form1.t52_valaqu.setAttribute("readonly", "readonly");
+    document.form1.t52_ident.setAttribute("readonly", "readonly");
+    document.form1.t98_data.setAttribute("readonly", "readonly");
+    document.form1.t98_descricao.setAttribute("readonly", "readonly");
+    document.form1.t98_vlrmanut.setAttribute("readonly", "readonly");
+    document.form1.t98_tipo.setAttribute("readonly", "readonly");
+    document.form1.t52_descr.style.backgroundColor = "#DEB887";
+    document.form1.t52_bem.style.backgroundColor = "#DEB887";
+    document.form1.t52_ident.style.backgroundColor = "#DEB887";
+    document.form1.t98_tipo.style.backgroundColor = "#DEB887";
+    document.form1.t98_data.style.backgroundColor = "#DEB887";
+    document.form1.t98_descricao.style.backgroundColor = "#DEB887";
+    document.form1.t98_vlrmanut.style.backgroundColor = "#DEB887";
+  }
+
   function js_pesquisa_descricaobem() {
     if (document.getElementById('t52_descr').value == "") {
       document.form1.t52_descr.value = '';
@@ -158,7 +179,13 @@
     if (t98_manutencaoprocessada == 't') {
       document.getElementById('processamento').value = "Desprocessar";
       document.getElementById('processamento').name = "desprocessar";
+      document.getElementById('db_opcao').style.display = "none";
+      document.getElementById('inserircomponente').style.display = "none";
+      parent.document.formaba.componentes.disabled = true;
+      js_bloquearCampos();
     }
+
+    t98_manutencaoprocessada == 't' ? parent.document.formaba.componentes.disabled = true : parent.document.formaba.componentes.disabled = false;
 
     document.form1.t98_sequencial.value = t98_sequencial;
     document.form1.t52_bem.value = t98_bem;
@@ -172,7 +199,6 @@
     document.form1.t98_tipo.value = t98_tipo;
     document.form1.t52_depart.value = t52_depart;
     document.form1.descrdepto.value = descrdepto;
-    parent.document.formaba.componentes.disabled = false;
     top.corpo.iframe_componentes.location.href = 'pat1_lancmanutencao005.php?t98_sequencial=' + t98_sequencial;
     db_iframe_bensmanutencao.hide();
   }
