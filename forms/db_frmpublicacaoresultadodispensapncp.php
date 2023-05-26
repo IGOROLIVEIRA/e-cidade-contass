@@ -90,6 +90,7 @@ db_app::load("estilos.css, grid.style.css");
         oGridItens.clearAll(true);
         var oParam = new Object();
         oParam.iPcproc = $F('pc80_codproc');
+        oParam.iTipo = $F('tipo');
         oParam.exec = "getItens";
         js_divCarregando('Aguarde, pesquisando Itens', 'msgBox');
         var oAjax = new Ajax.Request(

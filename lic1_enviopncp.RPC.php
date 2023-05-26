@@ -90,6 +90,10 @@ switch ($oParam->exec) {
                         throw new Exception('Data da Abertura de Proposta(l20_dataaberproposta) não informado! Licitacao:' . $aLicitacao->codigo);
                     }
 
+                    if ($oDadosLicitacao->dataencerramentoproposta == '') {
+                        throw new Exception('Data Encerramento Proposta(l20_dataencproposta) não informado! Licitacao:' . $aLicitacao->codigo);
+                    }
+
                     //valida se existe anexos na licitacao
                     if (pg_num_rows($rsAnexos) == 0) {
                         throw new Exception('Licitação sem Anexos vinculados! Licitação:' . $aLicitacao->codigo);
