@@ -61,10 +61,13 @@ class EventoS3000 extends EventoBase
 
                 $std->infoexclusao = $infoexclusao;
 
-                if ($infoexclusao->tpevento == 'S-1200' || $infoexclusao->tpevento == 'S-1202' || $infoexclusao->tpevento == 'S-1207') {
+                if ($infoexclusao->tpevento == 'S-1200' || $infoexclusao->tpevento == 'S-1202' || $infoexclusao->tpevento == 'S-1207' || $infoexclusao->tpevento == 'S-1210') {
 
                     $idefolhapagto = new \stdClass();
-                    $idefolhapagto->indapuracao = $this->indapuracao;
+
+                    if($infoexclusao->tpevento != 'S-1210')
+                        $idefolhapagto->indapuracao = $this->indapuracao;
+
                     $idefolhapagto->perapur = $ano . '-' . $mes;
                     if ($this->indapuracao == 2) {
                         $idefolhapagto->perapur         = $ano;
@@ -91,8 +94,8 @@ class EventoS3000 extends EventoBase
                 $iSequencial++;
             }
         }
-        //echo '<pre>';
-        //var_dump($aDadosAPI);exit;
+        // echo '<pre>';
+        // var_dump($aDadosAPI);exit;
         return $aDadosAPI;
     }
 

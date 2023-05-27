@@ -378,14 +378,21 @@ try {
     }
 
     function js_S3000(e){
+        var button = document.getElementById("btnEnviar");
         if (e.checked) {
-        console.log("Checkbox está marcado");
-        js_OpenJanelaIframe('top.corpo', 'iframe_envio_s3000', 'func_envioesocialS3000.php', 'Pesquisa', true);
+            document.getElementById('indapuracao_col').style.display = 'inline';
+            console.log("Checkbox está marcado");
+            js_OpenJanelaIframe('top.corpo', 'iframe_envio_s3000', 'func_envioesocialS3000.php', 'Pesquisa', true);
+            button.disabled = true;
         } else {
-        console.log("Checkbox não está marcado");
+            document.getElementById('indapuracao_col').style.display = 'none';
+            console.log("Checkbox não está marcado");
+            button.disabled = false;
         }
 
     }
+
+    
 
     checkFase('');
 </script>
