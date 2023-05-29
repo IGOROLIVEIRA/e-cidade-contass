@@ -1274,7 +1274,6 @@ if ($situacao == 2) {
                     }
 
                     $codInstituicao = array(Instituicao::COD_CLI_CURRAL_DE_DENTRO,
-                    						Instituicao::COD_CLI_BURITIZEIRO,
                     						Instituicao::COD_CLI_NOVAPORTEIRINHA,
                     						Instituicao::COD_CLI_MONTEAZUL,
                     						Instituicao::COD_CLI_PEDRASDEMARIADACRUZ,

@@ -58,6 +58,10 @@ class Auth implements IAuth
 
             $message =
                 'Erro de autenticação com API pix da Instituição Financeira habilidata.';
+
+            if (empty($e->getResponse())) {
+                throw new BusinessException($message. ' Detalhes: '.utf8_decode($e->getMessage()));
+            }
             $error = \GuzzleHttp\json_decode($e->getResponse()->getBody()->getContents());
 
             if (in_array($e->getResponse()->getStatusCode(), [401, 403])) {
@@ -86,7 +90,7 @@ class Auth implements IAuth
      */
     protected function createHttpClientOption()
     {
-        $options = [];
+        $options = ['verify' => false];
         if ($this->debug) {
             $filename = 'tmp/'.date('Y-m-d').'_pixlog.log';
             $options[RequestOptions::DEBUG] = fopen($filename, 'a');

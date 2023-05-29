@@ -810,7 +810,7 @@ class Recibo
       /**
        * Não gera qrcode para recibos de desconto
        */
-      if (!$settings->k03_ativo_integracao_pix || $nDescontoReciboWeb > 0) {
+      if (!$settings->k03_ativo_integracao_pix) {
           return true;
       }
 
@@ -820,6 +820,7 @@ class Recibo
       $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
       $body['valorOriginalSolicitacao'] = $this->getTotalReciboComTaxaExpediente();
       $body['k00_numnov'] = $this->getNumpreRecibo();
+      $body['k00_dtvenc'] = $this->getDataVencimentoRecibo();
       $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
 
       $service = new GeneratePixWithQRCodeService($providerConfig);

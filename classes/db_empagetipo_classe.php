@@ -837,7 +837,7 @@ class cl_empagetipo {
          $iFonteEmpenho= substr($iFonteEmpenho,1,3);
         //  echo $iFonteEmpenho;exit; 
       if($iFonteEmpenho == '100' || $iFonteEmpenho == '200' || substr($iFonteEmpenho, 1, 7) == '5000000') {
-      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('100','200','15000000','25000000')) and";
+      $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('100','200','15000000','15000001','15000002','15700000','15710000','15720000','15750000','16310000','16320000','16330000','16360000','16650000','17000000','17010000','17020000','17030000','25000000','25000001','25000002','25700000','25710000','25720000','25750000','26310000','26320000','26330000','26360000','26650000','27000000','27010000','27020000','27030000')) and";
       
       } 
       elseif($iFonteEmpenho == '101' || $iFonteEmpenho == '201' || substr($iFonteEmpenho, 1, 7) == '5000001') {
