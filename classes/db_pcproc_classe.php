@@ -931,6 +931,61 @@ class cl_pcproc
     return $sql;
   }
 
+  function sql_query_proc_orc($pc80_codproc = null, $campos = "*", $ordem = null, $dbwhere = "")
+  {
+    $sql = "select ";
+    if ($campos != "*") {
+      $campos_sql = explode("#", $campos);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= " from pcproc ";
+    $sql .= "      inner join db_usuarios          on db_usuarios.id_usuario              = pcproc.pc80_usuario";
+    $sql .= "      inner join db_depart            on db_depart.coddepto                  = pcproc.pc80_depto and db_depart.instit = " . db_getsession("DB_instit");
+    $sql .= "      inner join db_departorg         on db_departorg.db01_coddepto          = db_depart.coddepto";
+    $sql .= "                                     and db_departorg.db01_anousu            = " . db_getsession("DB_anousu");
+    $sql .= "      inner join orcorgao             on orcorgao.o40_orgao                  = db_departorg.db01_orgao";
+    $sql .= "                                     and orcorgao.o40_anousu                 = db_departorg.db01_anousu";
+    $sql .= "      inner join pcprocitem           on pcprocitem.pc81_codproc             = pcproc.pc80_codproc";
+    $sql .= "      inner join precoreferencia      on si01_processocompra = pcproc.pc80_codproc";
+    $sql .= "      left  join acordopcprocitem     on pcprocitem.pc81_codprocitem         = acordopcprocitem.ac23_pcprocitem";
+    $sql .= "      left  join solicitem            on solicitem.pc11_codigo               = pcprocitem.pc81_solicitem";
+    $sql .= "      left  join solicitemprot        on solicitemprot.pc49_solicitem        = solicitem.pc11_codigo";
+    $sql .= "      left  join proctransferproc     on proctransferproc.p63_codproc        = solicitemprot.pc49_protprocesso";
+    $sql .= "      left  join proctransfer         on proctransfer.p62_codtran            = proctransferproc.p63_codtran";
+    $sql .= "      left  join proctransand         on proctransand.p64_codtran            = proctransfer.p62_codtran";
+    $sql .= "      left  join solicita             on solicita.pc10_numero                = solicitem.pc11_numero";
+    $sql .= "      left  join liclicitem           on pcprocitem.pc81_codprocitem         = liclicitem.l21_codpcprocitem";
+    $sql .= "      left  join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
+    $sql .= "      left  join empautitem           on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
+    $sql .= "                                     and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
+    $sql .= "      left  join empautoriza          on empautoriza.e54_autori              = empautitem.e55_autori";
+    $sql2 = "";
+    if ($dbwhere == "") {
+      if ($pc80_codproc != null) {
+        $sql2 .= " where pcproc.pc80_codproc = $pc80_codproc ";
+      }
+    } else if ($dbwhere != "") {
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if ($ordem != null) {
+      $sql .= " order by ";
+      $campos_sql = explode("#", $ordem);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
+
 
   function sql_query_usudepart($pc80_codproc = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
