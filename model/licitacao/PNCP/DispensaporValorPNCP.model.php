@@ -165,8 +165,8 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         $retorno = json_decode($contentpncp);
 
-        if ($retorno->erros) {
-            return array(422, $retorno->erros[0]->mensagem);
+        if ($retorno->status) {
+            return array(422, $retorno->message);
         } else {
             return array(201, $retorno->compraUri);
         }

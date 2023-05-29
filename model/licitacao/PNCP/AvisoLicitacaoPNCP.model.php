@@ -66,10 +66,15 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
             $oDadosAPI->itensCompra[$key]->orcamentoSigiloso           = $item->l21_sigilo == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
+            //DISPENSA E INEXIGIBILIDADE
             if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
-                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = 7;
+                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = 7;
             }else{
-                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
+                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = $item->criteriojulgamentoid;
+            }
+            //CONCURSO
+            if($oDado->modalidadeid == "3"){
+                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = 8;
             }
             //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
             $oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
@@ -198,13 +203,10 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         echo "<pre>";
         print_r($header);
         exit;*/
-
-        curl_close($chpncp);
-
         $retorno = json_decode($contentpncp);
 
-        if ($retorno->erros) {
-            return array(422, $retorno->erros[0]->mensagem);
+        if ($retorno->status) {
+            return array(422, $retorno->message);
         } else {
             return array(201, $retorno->compraUri);
         }
