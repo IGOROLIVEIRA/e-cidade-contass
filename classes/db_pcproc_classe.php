@@ -1474,12 +1474,13 @@ class cl_pcproc
     JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
     JOIN pcmater ON pc16_codmater = pc01_codmater
     JOIN solicitemunid ON pc17_codigo=pc11_codigo
+    JOIN db_depart on db_depart.coddepto = pcproc.pc80_depto
     JOIN matunid ON m61_codmatunid=pc17_unid
     LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
     LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
     LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
     LEFT JOIN liccontrolepncp on l213_processodecompras = pc80_codproc
-    WHERE pc80_dispvalor='t'
+    WHERE pc80_dispvalor='t' and db_depart.instit = " . db_getsession('DB_instit') . "
     ORDER BY pc80_codproc desc";
     return $sql;
   }
@@ -1525,6 +1526,70 @@ class cl_pcproc
           AND pc24_pontuacao = 1
           ORDER BY pc11_seq";
 
+    return $sql;
+  }
+
+  public function sql_query_pncp_itens_retifica_situacao($iPcproc, $iPcmater, $iSeq)
+  {
+    $sql  = "SELECT DISTINCT solicitem.pc11_seq AS numeroItem,
+                    CASE
+                        WHEN pcmater.pc01_servico='t' THEN 'S'
+                        ELSE 'M'
+                    END AS materialOuServico,
+                    5 AS tipoBeneficioId,
+                    FALSE AS incentivoProdutivoBasico,
+                            pcmater.pc01_descrmater AS descricao,
+                            matunid.m61_descr AS unidadeMedida,
+                            solicitem.pc11_vlrun AS valorUnitarioEstimado,
+                            pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
+                            pcmater.pc01_codmater,
+                            solicitem.pc11_numero,
+                            solicitem.pc11_reservado,
+                            solicitem.pc11_quant,
+                            FALSE AS l21_sigilo,
+                      CASE
+                          WHEN substring(o56_elemento
+                                         FROM 0
+                                         FOR 8) IN
+                                   (SELECT DISTINCT substring(o56_elemento
+                                                              FROM 0
+                                                              FOR 8)
+                                    FROM orcelemento
+                                    WHERE o56_elemento LIKE '%3449061%') THEN 1
+                          WHEN substring(o56_elemento
+                                         FROM 0
+                                         FOR 8) IN
+                                   (SELECT DISTINCT substring(o56_elemento
+                                                              FROM 0
+                                                              FOR 8)
+                                    FROM orcelemento
+                                    WHERE o56_elemento LIKE '%3449052%') THEN 2
+                          ELSE 3
+                      END AS itemCategoriaId,
+                      pcmater.pc01_regimobiliario AS codigoRegistroImobiliario,
+                      2 as situacaoCompraItemId
+                    FROM pcproc
+                    JOIN pcprocitem ON pc81_codproc=pc80_codproc
+                    JOIN solicitem ON pc11_codigo=pc81_solicitem
+                    JOIN solicitemele ON pc18_solicitem = pc11_codigo
+                    JOIN orcelemento ON o56_codele = pc18_codele
+                    AND o56_anousu=EXTRACT(YEAR
+                              FROM pcproc.pc80_data)
+                    JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+                    JOIN pcmater ON pc16_codmater = pc01_codmater
+                    JOIN solicitemunid ON pc17_codigo=pc11_codigo
+                    JOIN matunid ON m61_codmatunid=pc17_unid
+                    LEFT  JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+                    LEFT  JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+                    LEFT  JOIN pcorcam ON pc22_codorc = pc20_codorc
+                    LEFT  JOIN pcorcamforne ON pc20_codorc = pc21_codorc
+                    LEFT  JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+                    AND pc23_orcamforne = pc21_orcamforne
+                    LEFT JOIN pcorcamjulg ON pc24_orcamitem = pc22_orcamitem
+                    AND pc24_orcamforne = pc21_orcamforne
+                    WHERE pcproc.pc80_codproc = $iPcproc
+                      AND solicitem.pc11_seq = $iSeq
+                      AND pcmater.pc01_codmater = $iPcmater";
     return $sql;
   }
 

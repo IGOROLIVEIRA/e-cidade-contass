@@ -13,7 +13,7 @@ $cltipoanexo = new cl_tipoanexo;
 $clanexocomprapncp = new cl_anexocomprapncp;
 
 db_postmemory($HTTP_POST_VARS);
-parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
+parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
 
 /**
  * Codigo do precesso informado por GET
