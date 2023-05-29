@@ -63,10 +63,10 @@ class cl_acordoobra {
   function incluir () { 
       $this->atualizacampos();
      if($this->obr08_sequencial == "" || $this->obr08_sequencial == null ){
-       $result = db_query("select nextval('acordoposicao_obr08_sequencial_seq')");
+       $result = db_query("select nextval('acordoobra_obr08_sequencial_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: acordoposicao_obr08_sequencial_seq do campo: obr08_sequencial";
+         $this->erro_sql   = "Verifique o cadastro da sequencia: acordoobra_obr08_sequencial_seq do campo: obr08_sequencial";
          $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
@@ -74,7 +74,7 @@ class cl_acordoobra {
        }
        $this->obr08_sequencial = pg_result($result,0,0);
      }else{
-       $result = db_query("select last_value from acordoposicao_obr08_sequencial_seq");
+       $result = db_query("select last_value from acordoobra_obr08_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $this->obr08_sequencial)){
          $this->erro_sql = " Campo obr08_sequencial maior que ltimo nmero da sequencia.";
          $this->erro_banco = "Sequencia menor que este nmero.";
@@ -334,7 +334,7 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
   }
 
   // funcao do sql 
-  function sql_query ( $oid = null,$campos="acordoobra.oid,*",$ordem=null,$dbwhere="") { 
+  function sql_query ( $obr08_sequencial = null,$campos="acordoobra.obr08_sequencial,*",$ordem=null,$dbwhere="") { 
      $sql = "select ";
      if ($campos != "*" ) {
        $campos_sql = explode("#", $campos);
@@ -349,8 +349,8 @@ $sql .= "oid = '$oid'";     $result = db_query($sql);
      $sql .= " from acordoobra ";
      $sql2 = "";
      if ($dbwhere=="") {
-       if ( $oid != "" && $oid != null) {
-          $sql2 = " where acordoobra.oid = '$oid'";
+       if ( $obr08_sequencial != "" && $obr08_sequencial != null) {
+          $sql2 = " where acordoobra.obr08_sequencial = '$obr08_sequencial'";
        }
      } else if ($dbwhere != "") {
        $sql2 = " where $dbwhere";

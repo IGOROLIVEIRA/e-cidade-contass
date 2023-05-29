@@ -140,7 +140,7 @@ class cl_liclicitemlote
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l04_numerolote == "" || $this->l04_numerolote == null) {
+        
             $result = db_query("select nextval('liclicitemlote_l04_numerolote_seq')");
             if ($result == false) {
                 $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -151,19 +151,7 @@ class cl_liclicitemlote
                 return false;
             }
             $this->l04_numerolote = pg_result($result, 0, 0);
-        } else {
-            $result = db_query("select last_value from liclicitemlote_l04_numerolote_seq");
-            if (($result != false) && (pg_result($result, 0, 0) < $this->l04_numerolote)) {
-                $this->erro_sql = " Campo l04_numerolote maior que último número da sequencia.";
-                $this->erro_banco = "Sequencia menor que este número.";
-                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            } else {
-                $this->l04_numerolote = $this->l04_numerolote;
-            }
-        }
+        
         $sql = "insert into liclicitemlote(
                                        l04_codigo
                                       ,l04_liclicitem

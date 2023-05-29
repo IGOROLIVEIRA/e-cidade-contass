@@ -1441,7 +1441,11 @@ switch ($oParam->exec) {
                                 $oPosicao->adicionarItemDeLicitacao($oItem->codigo, $oItem);
                             }
                             //var_dump($oPosicao[]);
-                            $oContrato->adicionarItemAcordoObra($iLicitacao,$iCodigoAcordo,$oItem->codigomaterial);
+                            if($oContrato->getNaturezaAcordo($iCodigoAcordo) == 1)
+                                $iExisteLicobras = $oContrato->adicionarItemAcordoObra($iLicitacao,$iCodigoAcordo,$oItem->codigomaterial);
+                                if (!$iExisteLicobras) {
+                                    throw new Exception("Usuário: Licitacao sem obra vinculada!");
+                                }
                         } else if ($oContrato->getOrigem() == 1) {
 
                             $oPosicao->adicionarItemDeProcesso($oItem->codigo, $oItem);
@@ -1498,6 +1502,8 @@ switch ($oParam->exec) {
                 $oPosicao->removerItem($oParam->material->iCodigo);
 
                 $oContrato->atualizaValorContratoPorTotalItens();
+                
+                $oContrato->removerAcordoobra($oParam->material->iCodigo);
 
                 db_fim_transacao(false);
             } catch (Exception $eErro) {

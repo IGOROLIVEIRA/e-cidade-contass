@@ -57,6 +57,7 @@ if (isset($alterar)) {
 
     db_inicio_transacao();
     $db_opcao = 2;
+    $cllicobras->obr01_licitacaolote       = $obr01_licitacaolote;
     $cllicobras->alterar($obr01_sequencial);
 
     if ($cllicobras->erro_status == 0) {
@@ -80,7 +81,8 @@ if (isset($alterar)) {
               l20_objeto,
               obr01_dtlancamento,
               obr01_licitacaosistema,
-              obr01_linkobra";
+              obr01_linkobra,
+              obr01_licitacaolote as licitacaolote";
   $result = $cllicobras->sql_record($cllicobras->sql_query_pesquisa(null, $campos, null, "obr01_sequencial=$chavepesquisa"));
   db_fieldsmemory($result, 0);
   $db_botao = true;

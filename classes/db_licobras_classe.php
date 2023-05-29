@@ -300,6 +300,19 @@ class cl_licobras
         return false;
       }
     }
+    if (trim($this->obr01_licitacaolote) != "" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_licitacaolote"])) {
+      $sql  .= $virgula . " obr01_licitacaolote = '$this->obr01_licitacaolote' ";
+      $virgula = ",";
+      if (trim($this->obr01_licitacaolote) == null) {
+        $this->erro_sql = " Campo Link da Obra não informado.";
+        $this->erro_campo = "obr01_licitacaolote";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
     if (trim($this->obr01_instit) != "" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_instit"])) {
       $sql  .= $virgula . " obr01_instit = $this->obr01_instit ";
       $virgula = ",";
@@ -487,7 +500,8 @@ class cl_licobras
               l20_objeto,
               obr01_dtlancamento,
               obr01_licitacaosistema,
-              obr01_linkobra";
+              obr01_linkobra,
+              obr01_licitacaolote";
     $sql .= " from licobras ";
     $sql .= " inner join licobraslicitacao on obr07_sequencial = obr01_licitacao ";
     $sql .= " left join liclicita on l20_codigo = obr01_licitacao ";

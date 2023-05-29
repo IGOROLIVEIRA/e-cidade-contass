@@ -64,6 +64,7 @@ $cllicobras->rotulo->label();
                         <?
                         $aValores = array(0 => 'Selecione');
                         db_select('obr01_licitacaolote', $aValores, true, $db_opcao," onchange=''");
+                        db_input('licitacaolote', 10, $Iobr05_sequencial, true, 'text', 3, "");
                         ?>
                     </td>
                 </tr>
@@ -245,6 +246,7 @@ $cllicobras->rotulo->label();
 
     js_carregarlic();
     js_CarregaResponsaveis();
+    js_carregalote();
 
     function js_novaobra() {
         document.location.href = 'obr1_licobras001.php'
@@ -260,6 +262,7 @@ $cllicobras->rotulo->label();
 
         if (licitacaosistema == '0' && db_opcao == '1') {
             alert("selecione o tipo de licitacao.");
+            document.getElementById('obr01_licitacao').value = '';
             return;
         }
         //console.log(licitacaosistema);
@@ -315,19 +318,28 @@ $cllicobras->rotulo->label();
         document.form1.l03_descr.value = descrcompra;
         document.form1.l20_numero.value = numero;
         document.form1.l20_objeto.value = objeto;
-        if(julgamento==3){
+        let db_opcao = <?= $db_opcao ?>;
+
+        if(julgamento==3 && db_opcao != 33){
             js_preenchedescricaolote(codigo)
+        }else{
+            document.getElementById('licitacaolote').value = '';
+                document.getElementById('trdescricaolote').style.display = 'none';
         }
         
         db_iframe_licobras.hide();
     }
 
-    function js_preencheLicitacao2(objeto,numero,descrcompra,julgamento,erro) {
+    function js_preencheLicitacao2(objeto,numero,descrcompra,erro,julgamento,codigo) {
         document.form1.l03_descr.value = descrcompra;
         document.form1.l20_numero.value = numero;
         document.form1.l20_objeto.value = objeto;
-        document.getElementById('trdescricaolote').style.display = '';
-        alert(julgamento);
+        if(julgamento==3 && db_opcao != 33){
+            js_preenchedescricaolote(codigo)
+        }else{
+            document.getElementById('licitacaolote').value = '';
+                document.getElementById('trdescricaolote').style.display = 'none';
+        }
         if(erro==true){
             alert("Nenhuma licitação encontrada.");
             document.form1.z01_nome.focus();
@@ -344,7 +356,6 @@ $cllicobras->rotulo->label();
         document.form1.l03_descr.value = descrcompra;
         //      document.form1.l20_numero.value = numero;
         document.form1.l20_objeto.value = objeto;
-        document.getElementById('trdescricaolote').style.display = '';
         db_iframe_licobraslicitacao.hide();
     }
 
@@ -352,8 +363,6 @@ $cllicobras->rotulo->label();
         document.form1.l03_descr.value = descrcompra;
         document.form1.l20_objeto.value = objeto;
         document.form1.l20_numero.value = numero;
-        document.getElementById('trdescricaolote').style.display = '';
-        alert(julgamento);
         if(erro==true){
             alert("Nenhuma licitação encontrada.");
             document.form1.obr01_licitacao.focus();
@@ -410,6 +419,18 @@ $cllicobras->rotulo->label();
             js_pesquisa_liclicita(false);
             js_pesquisa_responsavel(false);
         }
+    }
+
+    function js_carregalote(){
+        let db_opcao = <?= $db_opcao ?>;
+        
+        if($F('obr01_licitacao')=="" || $F('obr01_licitacao')==null){
+            document.getElementById('trdescricaolote').style.display = 'none';
+            
+        }else if(db_opcao == 1 || db_opcao == 2) {
+            js_preenchedescricaolote($F('obr01_licitacao'));
+        }
+        document.getElementById('licitacaolote').style.display = 'none';
     }
 
     function js_salvarResponsaveis() {
@@ -597,10 +618,15 @@ $cllicobras->rotulo->label();
             alert("Codigo licitacao vazio!")
             return false;
         }
+        obra = $F('obr01_sequencial');
+        if ($F('obr01_sequencial')==null || $F('obr01_sequencial')=="") {
+           obra = 0;
+        }
 
         var oParam        = new Object();
         oParam.exec       = 'buscarLotes';
         oParam.iLicitacao = licitacao;
+        oParam.iObra = obra;
         js_divCarregando('Aguarde... Buscando lotes','msgbox');
         var oAjax         = new Ajax.Request(
             'obr1_obras.RPC.php',
@@ -615,20 +641,34 @@ $cllicobras->rotulo->label();
         var oRetorno = eval('('+oAjax.responseText+")");
 
         if(oRetorno.status == 1){
-            oRetorno.itens.each(function (lotes, iSeq) {
-                if(lotes.total == 1){
-                    $("obr01_licitacaolote").options.remove(0);
-                    $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao,lotes.numlote);
-                }else{
-                    
-                    $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao,lotes.numlote);
-                }
-            });
-            document.getElementById('trdescricaolote').style.display = '';
-        }else{
+            if(oRetorno.itens.length>0){
+                oRetorno.itens.each(function (lotes, iSeq) {
+                    if(lotes.total == 1){
+                        $("obr01_licitacaolote").options.remove(0);
+                        $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao,lotes.numlote);
+                    }else{
+                        
+                        $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao,lotes.numlote);
+                    }
+                    if($F('licitacaolote')==lotes.numlote && $F('obr01_sequencial')!=""){
+                        $("obr01_licitacaolote").options[iSeq+1].selected = true;
+                    }
+                });
+                
+                document.getElementById('licitacaolote').value = oRetorno.itens.length;
+                document.getElementById('trdescricaolote').style.display = '';
+            }else{
+                document.getElementById('licitacaolote').value = '';
+                document.getElementById('trdescricaolote').style.display = 'none';
+            }       
+        }else if(oRetorno.status == 2){
             document.getElementById('trdescricaolote').style.display = 'none';
             document.getElementById('trdescricaolote').value = '';
+        }else if(oRetorno.status == 3){
+            document.getElementById('licitacaolote').value = 1;
+            document.getElementById('trdescricaolote').style.display = '';
         }
+        
 
         js_removeObj("msgbox");
 
