@@ -7,7 +7,7 @@ class Oc18387 extends AbstractMigration
     
     public function up()
     {
-        $sql='BEGIN;
+        /*$sql='BEGIN;
         
         insert into db_documento values ((select max(db03_docum)+1 from db_documento),\'SOLICITACAO DE DISPO. FINANCEIRA1\',1,8);
 insert into db_paragrafo values ((select max(db02_idparag)+1 from db_paragrafo),\'PARTE1\',\'if($tipo==1){$pdf->x = 30;$pdf->cell(190,5,"De: Pregoeira/ Comissão permanente de Licitação",0,1,"L",0);$pdf->x = 30;$pdf->cell(190,5,"Para: Setor contábil",0,1,"L",0);}else if($tipo==2){echo "<div style=\'text-align: center;\'><strong>SOLICITAÇÃO DE PARECER DE DISPONIBILIDADE FINANCEIRA</strong></div><div><p>De: Pregoeira/ Comissão permanente de Licitação<br>Para: Setor contábil</p></div>";}\',0,0,1,1,1,\'J\',3,8);
@@ -29,7 +29,7 @@ insert into db_docparag values ((select max(db03_docum) from db_documento),(sele
         
         COMMIT:';
 
-        $this->execute($sql);
+        $this->execute($sql);*/
 
     }
 }
