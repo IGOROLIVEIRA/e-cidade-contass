@@ -194,7 +194,7 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         if (substr($retorno[0], 7, 3) == '200') {
             return array(201, "Enviado com Sucesso!");
         } else {
-            return array($retorno[17], $retorno[22]);
+            return array(422, $retorno[17]);
         }
     }
 }

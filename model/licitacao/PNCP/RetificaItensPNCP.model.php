@@ -22,9 +22,8 @@ class RetificaitensPNCP extends ModeloBasePNCP
 
     public function montarDados()
     {
-        //ini_set('display_errors', 'on');
         $aDadosAPI = array();
-
+        
         $oDado = $this->dados;
 
         $vlrtotal = $oDado[0]->pc11_quant * $oDado[0]->valorunitarioestimado;
@@ -39,14 +38,23 @@ class RetificaitensPNCP extends ModeloBasePNCP
         $oDadosAPI->orcamentoSigiloso           = $oDado[0]->l21_sigilo == 'f' ? 'false' : 'true';
         $oDadosAPI->valorUnitarioEstimado       = $oDado[0]->valorunitarioestimado;
         $oDadosAPI->valorTotal                  = $vlrtotal;
-        $oDadosAPI->situacaoCompraItemId        = $oDado[0]->situacaocompraitemid;
-        $oDadosAPI->criterioJulgamentoId        = $oDado[0]->criteriojulgamentoid;
-        //$oDadosAPI->itemCategoriaId             = 3;
+        $oDadosAPI->situacaoCompraItemId        = $oDado[0]->situacaocompraitemid;    
+           
+        //DISPENSA E INEXIGIBILIDADE
+        if($oDado[0]->modalidadeid == "8" || $oDado[0]->modalidadeid == "9"){
+        $oDadosAPI->criterioJulgamentoId        = 7;
+        }else{
+            $oDadosAPI->criterioJulgamentoId    = $oDado[0]->itemcategoriaid;
+        }
+        //CONCURSO
+        if($oDado[0]->modalidadeid == "3"){
+            $oDadosAPI->criterioJulgamentoId    = 8;
+        }
         $oDadosAPI->itemCategoriaId             = $oDado[0]->itemcategoriaid;
         if($oDado[0]->itemcategoriaid == '3'){
-            $oDadosAPI->justificativa               = utf8_encode($oDado[0]->justificativa);
+            $oDadosAPI->justificativa           = utf8_encode($oDado[0]->justificativa);
         }
-        //$oDadosAPI->codigoRegistroImobiliario   = utf8_encode($oDado[0]->codigoregistroimobiliario);
+
         $aDadosAPI = json_encode($oDadosAPI);
 
         return $aDadosAPI;
@@ -112,7 +120,7 @@ class RetificaitensPNCP extends ModeloBasePNCP
         if (substr($retorno[0], 7, 3) == '200') {
             return array(201, "Enviado com Sucesso!");
         } else {
-            return array($retorno[17], $retorno[22]);
+            return array(422, $retorno[17]);
         }
     }
 }

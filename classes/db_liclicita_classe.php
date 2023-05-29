@@ -3739,7 +3739,17 @@ class cl_liclicita
                 pcmater.pc01_regimobiliario AS codigoRegistroImobiliario,
                 l217_codsituacao as situacaoCompraItemId,
                 l218_motivoanulacao as justificativa,
-                l217_sequencial
+                l217_sequencial,
+                CASE
+                    WHEN l03_pctipocompratribunal = 110 THEN 2
+                    WHEN l03_pctipocompratribunal = 51 THEN 3
+                    WHEN l03_pctipocompratribunal = 53 THEN 6
+                    WHEN l03_pctipocompratribunal = 52 THEN 7
+                    WHEN l03_pctipocompratribunal = 50 THEN 5
+                    WHEN l03_pctipocompratribunal = 101 THEN 8
+                    WHEN l03_pctipocompratribunal = 100 THEN 9
+                    WHEN l03_pctipocompratribunal = 102 THEN 12
+                END AS modalidadeId
         FROM liclicita
         JOIN db_depart ON coddepto=l20_codepartamento
         JOIN db_config ON codigo=instit

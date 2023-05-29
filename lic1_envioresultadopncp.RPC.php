@@ -140,10 +140,10 @@ switch ($oParam->exec) {
                     $aItensLicitacao = array();
                     $rsResultado = $clliclicita->sql_record($clliclicita->sql_query_resultado_retifica_pncp($oParam->iLicitacao, $item->l21_ordem));
 
-                    if (!pg_numrows($rsResultado)) {
+                    if (!pg_num_rows($rsResultado)) {
                         continue;
                     }
-                    for ($i = 0; $i < pg_numrows($rsResultado); $i++) {
+                    for ($i = 0; $i < pg_num_rows($rsResultado); $i++) {
                         $oDadosResultado = db_utils::fieldsMemory($rsResultado, $i);
                         $aItensLicitacao[] = $oDadosResultado;
                     }
@@ -166,7 +166,7 @@ switch ($oParam->exec) {
                     $aItensRetificaItemLicitacao = array();
                     $rsItensRetificacao = $clliclicita->sql_record($clliclicita->sql_query_pncp_itens_retifica_situacao($oParam->iLicitacao, $item->l21_ordem));
 
-                    for ($i = 0; $i < pg_numrows($rsItensRetificacao); $i++) {
+                    for ($i = 0; $i < pg_num_rows($rsItensRetificacao); $i++) {
                         $oDadosResultado = db_utils::fieldsMemory($rsItensRetificacao, $i);
                         $aItensRetificaItemLicitacao[] = $oDadosResultado;
                     }
