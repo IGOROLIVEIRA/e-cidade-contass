@@ -83,7 +83,7 @@
   var sUrl = "com4_materialsolicitacao.RPC.php";
 
   var oRequest = new Object();
-  oRequest.t98_sequencial = top.corpo.iframe_manutencao.document.form1.t98_sequencial.value;
+  oRequest.t98_sequencial = CurrentWindow.corpo.iframe_manutencao.document.form1.t98_sequencial.value;
   oRequest.exec = "getItens";
   var oAjax = new Ajax.Request(
     "com4_manutbensitem.RPC.php", {

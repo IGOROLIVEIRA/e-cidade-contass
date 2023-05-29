@@ -199,7 +199,7 @@
     document.form1.t98_tipo.value = t98_tipo;
     document.form1.t52_depart.value = t52_depart;
     document.form1.descrdepto.value = descrdepto;
-    top.corpo.iframe_componentes.location.href = 'pat1_lancmanutencao005.php?t98_sequencial=' + t98_sequencial;
+    CurrentWindow.corpo.iframe_componentes.location.href = 'pat1_lancmanutencao005.php?t98_sequencial=' + t98_sequencial;
     db_iframe_bensmanutencao.hide();
   }
 
@@ -307,7 +307,7 @@
 
   function js_inserircomponente() {
     parent.document.formaba.componentes.disabled = false;
-    top.corpo.iframe_componentes.location.href = 'pat1_lancmanutencao005.php?t98_sequencial=' + document.getElementById('t98_sequencial').value;
+    CurrentWindow.corpo.iframe_componentes.location.href = 'pat1_lancmanutencao005.php?t98_sequencial=' + document.getElementById('t98_sequencial').value;
     parent.mo_camada('componentes');
   }
 </script>

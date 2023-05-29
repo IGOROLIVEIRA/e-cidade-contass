@@ -122,7 +122,7 @@ if (isset($incluir)) {
         echo
         "<script> document.form1.t98_sequencial.value = $clbemmanutencao->t98_sequencial;
         parent.document.formaba.componentes.disabled = false;
-        top.corpo.iframe_componentes.location.href = 'pat1_lancmanutencao005.php?t98_sequencial=' + $clbemmanutencao->t98_sequencial;
+        CurrentWindow.corpo.iframe_componentes.location.href = 'pat1_lancmanutencao005.php?t98_sequencial=' + $clbemmanutencao->t98_sequencial;
          </script>";
     }
 }
