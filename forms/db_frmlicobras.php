@@ -318,9 +318,10 @@ $cllicobras->rotulo->label();
         document.form1.l03_descr.value = descrcompra;
         document.form1.l20_numero.value = numero;
         document.form1.l20_objeto.value = objeto;
-        let db_opcao = <?= $db_opcao ?>;
+        
 
-        if(julgamento==3 && db_opcao != 33){
+        if(julgamento==3){
+            
             js_preenchedescricaolote(codigo)
         }else{
             document.getElementById('licitacaolote').value = '';
@@ -331,23 +332,28 @@ $cllicobras->rotulo->label();
     }
 
     function js_preencheLicitacao2(objeto,numero,descrcompra,erro,julgamento,codigo) {
-        document.form1.l03_descr.value = descrcompra;
-        document.form1.l20_numero.value = numero;
-        document.form1.l20_objeto.value = objeto;
-        if(julgamento==3 && db_opcao != 33){
-            js_preenchedescricaolote(codigo)
-        }else{
-            document.getElementById('licitacaolote').value = '';
+            document.form1.l03_descr.value = descrcompra;
+            document.form1.l20_numero.value = numero;
+            document.form1.l20_objeto.value = objeto;
+            
+            if(julgamento==3){
+                
+                    js_preenchedescricaolote(codigo);
+                
+                
+            }else{
+                document.getElementById('licitacaolote').value = '';
+                    document.getElementById('trdescricaolote').style.display = 'none';
+            }
+            if(erro==true){
+                alert("Nenhuma licitação encontrada.");
+                document.form1.z01_nome.focus();
+                document.form1.l03_descr.value = "";
+                document.form1.l20_numero.value = "";
+                document.form1.l20_objeto.value = "";
                 document.getElementById('trdescricaolote').style.display = 'none';
-        }
-        if(erro==true){
-            alert("Nenhuma licitação encontrada.");
-            document.form1.z01_nome.focus();
-            document.form1.l03_descr.value = "";
-            document.form1.l20_numero.value = "";
-            document.form1.l20_objeto.value = "";
-            document.getElementById('trdescricaolote').style.display = 'none';
-        }
+            }
+        
         
     }
 
@@ -422,13 +428,9 @@ $cllicobras->rotulo->label();
     }
 
     function js_carregalote(){
-        let db_opcao = <?= $db_opcao ?>;
         
         if($F('obr01_licitacao')=="" || $F('obr01_licitacao')==null){
             document.getElementById('trdescricaolote').style.display = 'none';
-            
-        }else if(db_opcao == 1 || db_opcao == 2) {
-            js_preenchedescricaolote($F('obr01_licitacao'));
         }
         document.getElementById('licitacaolote').style.display = 'none';
     }
@@ -643,15 +645,22 @@ $cllicobras->rotulo->label();
         if(oRetorno.status == 1){
             if(oRetorno.itens.length>0){
                 oRetorno.itens.each(function (lotes, iSeq) {
-                    if(lotes.total == 1){
-                        $("obr01_licitacaolote").options.remove(0);
-                        $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao,lotes.numlote);
+                    if(!document.getElementById("obr01_licitacaolote_select_descr")){
+                        if(lotes.total == 1){
+                            $("obr01_licitacaolote").options.remove(0);
+                            $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao,lotes.numlote);
+                        }else{
+                            
+                            $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao,lotes.numlote);
+                        }
+                        if($F('licitacaolote')==lotes.numlote && $F('obr01_sequencial')!=""){
+                            $("obr01_licitacaolote").options[iSeq+1].selected = true;
+                        }
                     }else{
-                        
-                        $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao,lotes.numlote);
-                    }
-                    if($F('licitacaolote')==lotes.numlote && $F('obr01_sequencial')!=""){
-                        $("obr01_licitacaolote").options[iSeq+1].selected = true;
+                        if($F('licitacaolote')==lotes.numlote && $F('obr01_sequencial')!=""){
+                            document.getElementById('obr01_licitacaolote_select_descr').value = lotes.descricao;
+                            document.getElementById('obr01_licitacaolote_select_descr').style.width = "711px";
+                        }
                     }
                 });
                 

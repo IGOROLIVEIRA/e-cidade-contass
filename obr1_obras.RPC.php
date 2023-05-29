@@ -240,7 +240,7 @@ switch ($oParam->exec) {
     case 'buscarLotes':
         $clliclicita = new cl_liclicita();
         
-        if($oParam->iLicitacao!=""){
+        if($oParam->iLicitacao!="" || $oParam->iLicitacao!=null){
             $oRetorno->status = 3;
             $resultLotes = $clliclicita->sql_record('select DISTINCT l04_numerolote,l04_descricao from liclicitemlote where l04_liclicitem in (select l21_codigo from liclicitem where l21_codliclicita = '.$oParam->iLicitacao.' and l04_numerolote > 0 )');
             if (pg_num_rows($resultLotes) == 0) {

@@ -66,6 +66,7 @@ if(isset($excluir)){
    $db_opcao = 3;
    $result = $cllicobras->sql_record($cllicobras->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
+   $licitacaolote = $obr01_licitacaolote;
    $db_botao = true;
 }
 ?>

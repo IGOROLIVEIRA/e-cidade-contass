@@ -3890,6 +3890,15 @@ class Acordo
         }
 
         /**
+         * Remover dos vinculos com obras
+         */
+        $oDaoAcordoObra= new cl_acordoobra();
+        $oDaoAcordoObra->excluir(null, "obr08_acordo = {$this->getCodigoAcordo()}");
+        if ($oDaoAcordoObra->erro_status == 0) {
+            throw new BusinessException($oDaoAcordoObra->erro_msg);
+        }
+
+        /**
          * Remove o acordo
          */
         $oDaoAcordo->excluir($this->getCodigoAcordo());
