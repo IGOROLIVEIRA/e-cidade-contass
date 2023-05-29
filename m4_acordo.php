@@ -461,7 +461,7 @@ if (isset($alterar)) {
       $e54_numerl = "$si06_numeroadm/$si06_anomodadm";
 
       db_query("UPDATE empautoriza
-      SET e54_adesaoregpreco = $ac16_adesaoregpreco, e54_numerl = '$e54_numerl', e54_nummodalidade = $si06_nummodadm, e54_codcom = $pc50_codcom,e54_nummodalidade = null,e54_licoutrosorgaos = null,e54_codlicitacao = null
+      SET e54_adesaoregpreco = $ac16_adesaoregpreco, e54_numerl = '$e54_numerl', e54_nummodalidade = $si06_nummodadm, e54_codcom = $pc50_codcom,e54_licoutrosorgaos = null,e54_codlicitacao = null
       where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
 
       db_query("UPDATE empempenho
