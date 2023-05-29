@@ -29,5 +29,7 @@ insert into db_docparag values ((select max(db03_docum) from db_documento),(sele
         
         COMMIT:';
 
+        $this->execute($sql);
+
     }
 }
