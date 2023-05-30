@@ -11,7 +11,8 @@ class LigadorClasses
     {
         return [
             '53' => 'PregaoFabrica',
-            '52' => 'PregaoFabrica'
+            '52' => 'PregaoFabrica',
+            '101' => 'DispensaFabrica'
        ];
     }
 }
