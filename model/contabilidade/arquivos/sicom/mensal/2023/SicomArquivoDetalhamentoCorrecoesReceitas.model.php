@@ -127,7 +127,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
         $db_filtro = "o70_instit = " . db_getsession("DB_instit");
         $rsResult10 = db_receitasaldo(11, 1, 3, true, $db_filtro, db_getsession("DB_anousu"), $this->sDataInicial, $this->sDataFinal, false, ' * ', true, 0);
-        // db_criatabela($rsResult10);
+        //  db_criatabela($rsResult10);
 
         $sSql = "select si09_codorgaotce from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit");
         $rsResult = db_query($sSql);
@@ -201,14 +201,15 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                         OR (c53_tipo = 100 AND substr(o57_fonte,1,2) = '49'))
                  AND c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
                 GROUP BY 1, 2, 3, 4, 5, 6, 7, 8 ORDER BY 4, 3, 6";
-
+                // echo $sSql . "<br/>";
+                // echo "<br/><br/><br/>";
 
             $rsDocRec = db_query($sSql);
 
             $oCodDoc = db_utils::fieldsMemory($rsDocRec, 0);
 
             if (($oCodDoc->c53_tipo == 101 && substr($oDadosRec->o57_fonte, 0, 2) != '49') || ($oCodDoc->c53_tipo == 100 && substr($oDadosRec->o57_fonte, 0, 2) == '49')) {
-
+                
                 if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
 
                     $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
@@ -245,7 +246,6 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
                         $iIdentDeducao = (substr($oDadosRec->o57_fonte, 0, 2) == 49) ? substr($oDadosRec->o57_fonte, 1, 2) : "0";
                         $sHash10 = $iIdentDeducao . $sNaturezaReceita . substr($oDadosRec->o70_concarpeculiar, -2);
-                        // echo $sHash10.' '.$iIdentDeducao . $sNaturezaReceita . substr($oDadosRec->o70_concarpeculiar, -2) . $sRegRepasse . $oCodDoc2->k81_exerc . $sEmParlamentar.' '.$oCodDoc2->c70_valor.'<br>';
 
                         if (!isset($aDadosAgrupados[$sHash10])) {
                             $oDados10 = new stdClass();
@@ -316,7 +316,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                     INNER JOIN conplanocontabancaria ON c56_codcon = c60_codcon AND c56_anousu = c60_anousu
                                     INNER JOIN contabancaria on contabancaria.db83_sequencial = c56_contabancaria
                                     LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int 
-                                    WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
+                                    WHERE o15_codigo  = " . $oDadosRec->o70_codigo . "
                                         AND o70_instit = " . db_getsession('DB_instit') . "
                                         AND (CASE
                                                 WHEN substr(taborc.k02_estorc,1,2) = '49' THEN substr(taborc.k02_estorc,2,10) = '". substr($oDadosRec->o57_fonte,1,10)."'
@@ -369,14 +369,13 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                             }
 
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
-
+                     
                             if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {
-                                
 
                                 $aDados = new stdClass();
                                 $aDados->si26_tiporegistro = 11;
                                 $aDados->si26_codreceita = $oCodFontRecursos->o70_codrec;
-                                $aDados->si26_codfontrecursos = $oCodFontRecursos->o15_codtri;
+                                $aDados->si26_codfontrecursos = $oCodFontRecursos->o15_codtri ? $oCodFontRecursos->o15_codtri : substr($oDadosRec->o70_codigo, 0, 7);
                                 $aDados->si26_codigocontroleorcamentario = $oControleOrcamentario->getCodigoPorReceita();
                                 if(strlen($oCodFontRecursos->z01_cgccpf) == 11){
                                     $aDados->si26_tipodocumento = 1;
@@ -392,9 +391,8 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                 $aDados->si26_dataassinaturacontratoop = $oCodFontRecursos->op01_dataassinaturacop;
                                 $aDados->si26_vlarrecadadofonte = $oCodDoc2->c70_valor;
                                 $aDados->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-
+                            
                                 $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11] = $aDados;
-
                             }
 
                         } elseif (array_key_exists($sHash10.$sHash11, $aDadosAgrupados[$sHash10]->Reg11[$sHash11])) {
@@ -438,7 +436,6 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
             foreach ($oDados10->Reg11 as $aDados11) {
                 foreach ($aDados11 as $oDados11) {
-
 
                     if (in_array($oDados10->si25_naturezareceita, $aRectceSaudEduc) &&
                         ($oDados10->si25_identificadordeducao == 0 || $oDados10->si25_identificadordeducao == '91' || $oDados10->si25_identificadordeducao == '')

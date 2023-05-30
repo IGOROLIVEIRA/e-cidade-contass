@@ -706,13 +706,13 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     * Buscas os lote do item
                     */
                     if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3) {
-                        $sSqlItemLote = "select l04_descricao 
-                        from liclicitemlote 
-                        inner join liclicitem on l21_codigo = l04_liclicitem 
-                        inner join liclicita on l21_codliclicita = l20_codigo 
-                        inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem 
-                        inner join solicitem on pc11_codigo = pc81_solicitem 
-                        inner join solicitempcmater on pc16_solicitem =pc11_codigo 
+                        $sSqlItemLote = "select l04_descricao
+                        from liclicitemlote
+                        inner join liclicitem on l21_codigo = l04_liclicitem
+                        inner join liclicita on l21_codliclicita = l20_codigo
+                        inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem
+                        inner join solicitem on pc11_codigo = pc81_solicitem
+                        inner join solicitempcmater on pc16_solicitem =pc11_codigo
                         where l20_codigo = " . $oDados10->ac16_licitacao . " and pc16_codmater = " . $iCodPcmater;
 
                         $rsItemLote = db_query($sSqlItemLote);
@@ -893,7 +893,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $clcontratos12->si85_codorgao = $oDadosReg12->si85_codorgao; //campo 03
                     $clcontratos12->si85_codunidadesub = $oDadosReg12->si85_codunidadesub; //campo 04
                     $clcontratos12->si85_codfuncao = $oDadosReg12->si85_codfuncao; //campo 05
-                    $clcontratos12->si85_codsubfuncao = $oDadosReg12->si85_codsubfuncao; //campo 06 
+                    $clcontratos12->si85_codsubfuncao = $oDadosReg12->si85_codsubfuncao; //campo 06
                     $clcontratos12->si85_codprograma = $oDadosReg12->si85_codprograma; //campo 07
                     $clcontratos12->si85_idacao = $oDadosReg12->si85_idacao; //campo 08
                     $clcontratos12->si85_idsubacao = $oDadosReg12->si85_idsubacao; //campo 09
@@ -1082,7 +1082,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
                             $valortotaladitado += $oAcordoItem->getValorAditado();
                         } else {
-                            //CALCULO O VALOR DO PRIMEIRO REGISTRO 20 
+                            //CALCULO O VALOR DO PRIMEIRO REGISTRO 20
                             //2 = reequilibrio 5 = reajuste
                             if ($oAcordoPosicao->getTipo() == 2 || $oAcordoPosicao->getTipo() == 5) {
                                 $iQuantidadeAditada = $oAcordoItem->getQuantidade();
@@ -1160,20 +1160,20 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             * Buscas os lote do item
                             */
                             if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3) {
-                                $sSqlItemLote = "select l04_descricao 
-                                from liclicitemlote 
-                                inner join liclicitem on l21_codigo = l04_liclicitem 
-                                inner join liclicita on l21_codliclicita = l20_codigo 
-                                inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem 
-                                inner join solicitem on pc11_codigo = pc81_solicitem 
-                                inner join solicitempcmater on pc16_solicitem =pc11_codigo 
+                                $sSqlItemLote = "select l04_descricao
+                                from liclicitemlote
+                                inner join liclicitem on l21_codigo = l04_liclicitem
+                                inner join liclicita on l21_codliclicita = l20_codigo
+                                inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem
+                                inner join solicitem on pc11_codigo = pc81_solicitem
+                                inner join solicitempcmater on pc16_solicitem =pc11_codigo
                                 where l20_codigo = " . $oDados10->ac16_licitacao . " and pc16_codmater = " . $iCodPcmater;
 
                                 $rsItemLote = db_query($sSqlItemLote);
                                 $oItemLote = db_utils::fieldsMemory($rsItemLote, 0);
                             }
 
-                            /** 
+                            /**
                              * busca itens obra;
                              */
                             $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
@@ -1326,7 +1326,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             }
 
             /*
-            *SOMENTE DOS TIPOS 11 e 14 
+            *SOMENTE DOS TIPOS 11 e 14
             */ else {
                 //var_dump($oAcordoPosicao->getTipo());
                 $clcontratos20->si87_tiporegistro = 20; //campo 01
@@ -1386,7 +1386,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
                             $valortotaladitado += $oAcordoItem->getValorAditado();
                         } else {
-                            //CALCULO O VALOR DO PRIMEIRO REGISTRO 20 
+                            //CALCULO O VALOR DO PRIMEIRO REGISTRO 20
                             //2 = reequilibrio 5 = reajuste
                             if ($oAcordoPosicao->getTipo() == 2 || $oAcordoPosicao->getTipo() == 5) {
                                 $iQuantidadeAditada = $oAcordoItem->getQuantidade();
@@ -1458,20 +1458,20 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             * Buscas os lote do item
                             */
                             if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3) {
-                                $sSqlItemLote = "select l04_descricao 
-                                from liclicitemlote 
-                                inner join liclicitem on l21_codigo = l04_liclicitem 
-                                inner join liclicita on l21_codliclicita = l20_codigo 
-                                inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem 
-                                inner join solicitem on pc11_codigo = pc81_solicitem 
-                                inner join solicitempcmater on pc16_solicitem =pc11_codigo 
+                                $sSqlItemLote = "select l04_descricao
+                                from liclicitemlote
+                                inner join liclicitem on l21_codigo = l04_liclicitem
+                                inner join liclicita on l21_codliclicita = l20_codigo
+                                inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem
+                                inner join solicitem on pc11_codigo = pc81_solicitem
+                                inner join solicitempcmater on pc16_solicitem =pc11_codigo
                                 where l20_codigo = " . $oDados10->ac16_licitacao . " and pc16_codmater = " . $iCodPcmater;
 
                                 $rsItemLote = db_query($sSqlItemLote);
                                 $oItemLote = db_utils::fieldsMemory($rsItemLote, 0);
                             }
 
-                            /** 
+                            /**
                              * busca itens obra;
                              */
                             $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
@@ -1654,20 +1654,20 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 * Buscas os lote do item
                                 */
                                 if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3) {
-                                    $sSqlItemLote = "select l04_descricao 
-                                    from liclicitemlote 
-                                    inner join liclicitem on l21_codigo = l04_liclicitem 
-                                    inner join liclicita on l21_codliclicita = l20_codigo 
-                                    inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem 
-                                    inner join solicitem on pc11_codigo = pc81_solicitem 
-                                    inner join solicitempcmater on pc16_solicitem =pc11_codigo 
+                                    $sSqlItemLote = "select l04_descricao
+                                    from liclicitemlote
+                                    inner join liclicitem on l21_codigo = l04_liclicitem
+                                    inner join liclicita on l21_codliclicita = l20_codigo
+                                    inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem
+                                    inner join solicitem on pc11_codigo = pc81_solicitem
+                                    inner join solicitempcmater on pc16_solicitem =pc11_codigo
                                     where l20_codigo = " . $oDados10->ac16_licitacao . " and pc16_codmater = " . $iCodPcmater;
 
                                     $rsItemLote = db_query($sSqlItemLote);
                                     $oItemLote = db_utils::fieldsMemory($rsItemLote, 0);
                                 }
 
-                                /** 
+                                /**
                                  * busca itens obra;
                                  */
                                 $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
@@ -1767,20 +1767,20 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 * Buscas os lote do item
                                 */
                                 if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3) {
-                                    $sSqlItemLote = "select l04_descricao 
-                                    from liclicitemlote 
-                                    inner join liclicitem on l21_codigo = l04_liclicitem 
-                                    inner join liclicita on l21_codliclicita = l20_codigo 
-                                    inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem 
-                                    inner join solicitem on pc11_codigo = pc81_solicitem 
-                                    inner join solicitempcmater on pc16_solicitem =pc11_codigo 
+                                    $sSqlItemLote = "select l04_descricao
+                                    from liclicitemlote
+                                    inner join liclicitem on l21_codigo = l04_liclicitem
+                                    inner join liclicita on l21_codliclicita = l20_codigo
+                                    inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem
+                                    inner join solicitem on pc11_codigo = pc81_solicitem
+                                    inner join solicitempcmater on pc16_solicitem =pc11_codigo
                                     where l20_codigo = " . $oDados10->ac16_licitacao . " and pc16_codmater = " . $iCodPcmater;
 
                                     $rsItemLote = db_query($sSqlItemLote);
                                     $oItemLote = db_utils::fieldsMemory($rsItemLote, 0);
                                 }
 
-                                /** 
+                                /**
                                  * busca itens obra;
                                  */
                                 $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
@@ -1877,7 +1877,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 }
                                 $iCodPcmater = $oAcordoItem->getMaterial()->getMaterial();
 
-                                /** 
+                                /**
                                  * busca itens obra;
                                  */
                                 $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";

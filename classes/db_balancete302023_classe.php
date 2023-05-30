@@ -31,7 +31,7 @@ class cl_balancete302023
   var $si242_naturezadespesa = 0;
   var $si242_subelemento = null;
   var $si242_codfontrecursos = 0;
-  var $si242_tipodespesarpps = 0;
+  var $si242_codco = 0;
   var $si242_saldoinicialcde = 0;
   var $si242_naturezasaldoinicialcde = null;
   var $si242_totaldebitoscde = 0;
@@ -43,31 +43,31 @@ class cl_balancete302023
   var $si242_reg10 = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si242_sequencial = int8 = si242_sequencial 
-                 si242_tiporegistro = int8 = si242_tiporegistro 
-                 si242_contacontaabil = int8 = si242_contacontaabil 
-                 si242_codfundo = varchar(8) = si242_codfundo 
-                 si242_codorgao = varchar(2) = si242_codorgao 
-                 si242_codunidadesub = varchar(8) = si242_codunidadesub 
-                 si242_codfuncao = varchar(2) = si242_codfuncao 
-                 si242_codsubfuncao = varchar(3) = si242_codsubfuncao 
-                 si242_codprograma = text = si242_codprograma 
-                 si242_idacao = varchar(4) = si242_idacao 
-                 si242_idsubacao = varchar(4) = si242_idsubacao 
-                 si242_naturezadespesa = int8 = si242_naturezadespesa 
-                 si242_subelemento = varchar(2) = si242_subelemento 
-                 si242_codfontrecursos = int8 = si242_codfontrecursos 
-                 si242_tipodespesarpps = int4 = si242_tipodespesarpps
-                 si242_saldoinicialcde = float8 = si242_saldoinicialcde 
-                 si242_naturezasaldoinicialcde = varchar(1) = si242_naturezasaldoinicialcde 
-                 si242_totaldebitoscde = float8 = si242_totaldebitoscde 
-                 si242_totalcreditoscde = float8 = si242_totalcreditoscde 
-                 si242_saldofinalcde = float8 = si242_saldofinalcde 
-                 si242_naturezasaldofinalcde = varchar(1) = si242_naturezasaldofinalcde 
-                 si242_mes = int8 = si242_mes 
-                 si242_instit = int8 = si242_instit 
+                 si242_sequencial = int8 = si242_sequencial
+                 si242_tiporegistro = int8 = si242_tiporegistro
+                 si242_contacontaabil = int8 = si242_contacontaabil
+                 si242_codfundo = varchar(8) = si242_codfundo
+                 si242_codorgao = varchar(2) = si242_codorgao
+                 si242_codunidadesub = varchar(8) = si242_codunidadesub
+                 si242_codfuncao = varchar(2) = si242_codfuncao
+                 si242_codsubfuncao = varchar(3) = si242_codsubfuncao
+                 si242_codprograma = text = si242_codprograma
+                 si242_idacao = varchar(4) = si242_idacao
+                 si242_idsubacao = varchar(4) = si242_idsubacao
+                 si242_naturezadespesa = int8 = si242_naturezadespesa
+                 si242_subelemento = varchar(2) = si242_subelemento
+                 si242_codfontrecursos = int8 = si242_codfontrecursos
+                 si242_codco = int8 = si242_codco
+                 si242_saldoinicialcde = float8 = si242_saldoinicialcde
+                 si242_naturezasaldoinicialcde = varchar(1) = si242_naturezasaldoinicialcde
+                 si242_totaldebitoscde = float8 = si242_totaldebitoscde
+                 si242_totalcreditoscde = float8 = si242_totalcreditoscde
+                 si242_saldofinalcde = float8 = si242_saldofinalcde
+                 si242_naturezasaldofinalcde = varchar(1) = si242_naturezasaldofinalcde
+                 si242_mes = int8 = si242_mes
+                 si242_instit = int8 = si242_instit
                  ";
-  
+
   //funcao construtor da classe
   function cl_balancete302023()
   {
@@ -75,7 +75,7 @@ class cl_balancete302023
     $this->rotulo = new rotulo("balancete302023");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
+
   //funcao erro
   function erro($mostra, $retorna)
   {
@@ -86,7 +86,7 @@ class cl_balancete302023
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -105,7 +105,6 @@ class cl_balancete302023
       $this->si242_naturezadespesa = ($this->si242_naturezadespesa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_naturezadespesa"] : $this->si242_naturezadespesa);
       $this->si242_subelemento = ($this->si242_subelemento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_subelemento"] : $this->si242_subelemento);
       $this->si242_codfontrecursos = ($this->si242_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_codfontrecursos"] : $this->si242_codfontrecursos);
-      $this->si242_tipodespesarpps = ($this->si242_tipodespesarpps == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_tipodespesarpps"] : $this->si242_tipodespesarpps);
       $this->si242_saldoinicialcde = ($this->si242_saldoinicialcde == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_saldoinicialcde"] : $this->si242_saldoinicialcde);
       $this->si242_naturezasaldoinicialcde = ($this->si242_naturezasaldoinicialcde == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_naturezasaldoinicialcde"] : $this->si242_naturezasaldoinicialcde);
       $this->si242_totaldebitoscde = ($this->si242_totaldebitoscde == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_totaldebitoscde"] : $this->si242_totaldebitoscde);
@@ -118,7 +117,7 @@ class cl_balancete302023
       $this->si242_sequencial = ($this->si242_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si242_sequencial"] : $this->si242_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si242_sequencial)
   {
@@ -130,7 +129,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_contacontaabil == null) {
@@ -140,7 +139,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_codorgao == null) {
@@ -150,7 +149,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_codunidadesub == null) {
@@ -160,7 +159,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_codfuncao == null) {
@@ -170,7 +169,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_codsubfuncao == null) {
@@ -180,7 +179,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_codprograma == null) {
@@ -190,7 +189,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_idacao == null) {
@@ -200,7 +199,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_idsubacao == null) {
@@ -213,7 +212,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_subelemento == null) {
@@ -223,7 +222,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_codfontrecursos == null) {
@@ -233,12 +232,10 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    if ($this->si242_tipodespesarpps == null) {
-      $this->si242_tipodespesarpps = 0;
-    }
+
     if ($this->si242_saldoinicialcde == null) {
       $this->erro_sql = " Campo si242_saldoinicialcde não informado.";
       $this->erro_campo = "si242_saldoinicialcde";
@@ -246,7 +243,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_naturezasaldoinicialcde == null) {
@@ -256,7 +253,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_totaldebitoscde == null) {
@@ -266,7 +263,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_totalcreditoscde == null) {
@@ -276,7 +273,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_saldofinalcde == null) {
@@ -286,7 +283,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_naturezasaldofinalcde == null) {
@@ -296,7 +293,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_mes == null) {
@@ -306,7 +303,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si242_instit == null) {
@@ -316,10 +313,10 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     if ($si242_sequencial == "" || $si242_sequencial == null) {
       $result = db_query("select nextval('balancete302023_si242_sequencial_seq')");
       if ($result == false) {
@@ -329,7 +326,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si242_sequencial = pg_result($result, 0, 0);
@@ -341,7 +338,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si242_sequencial = $si242_sequencial;
@@ -353,58 +350,58 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $sql = "insert into balancete302023(
-                                       si242_sequencial 
-                                      ,si242_tiporegistro 
-                                      ,si242_contacontaabil 
+                                       si242_sequencial
+                                      ,si242_tiporegistro
+                                      ,si242_contacontaabil
                                       ,si242_codfundo
-                                      ,si242_codorgao 
-                                      ,si242_codunidadesub 
-                                      ,si242_codfuncao 
-                                      ,si242_codsubfuncao 
-                                      ,si242_codprograma 
-                                      ,si242_idacao 
-                                      ,si242_idsubacao 
-                                      ,si242_naturezadespesa 
-                                      ,si242_subelemento 
-                                      ,si242_codfontrecursos 
-                                      ,si242_tipodespesarpps
-                                      ,si242_saldoinicialcde 
-                                      ,si242_naturezasaldoinicialcde 
-                                      ,si242_totaldebitoscde 
-                                      ,si242_totalcreditoscde 
-                                      ,si242_saldofinalcde 
-                                      ,si242_naturezasaldofinalcde 
-                                      ,si242_mes 
+                                      ,si242_codorgao
+                                      ,si242_codunidadesub
+                                      ,si242_codfuncao
+                                      ,si242_codsubfuncao
+                                      ,si242_codprograma
+                                      ,si242_idacao
+                                      ,si242_idsubacao
+                                      ,si242_naturezadespesa
+                                      ,si242_subelemento
+                                      ,si242_codfontrecursos
+                                      ,si242_codco
+                                      ,si242_saldoinicialcde
+                                      ,si242_naturezasaldoinicialcde
+                                      ,si242_totaldebitoscde
+                                      ,si242_totalcreditoscde
+                                      ,si242_saldofinalcde
+                                      ,si242_naturezasaldofinalcde
+                                      ,si242_mes
                                       ,si242_instit
                                       ,si242_reg10
                        )
                 values (
-                                $this->si242_sequencial 
-                               ,$this->si242_tiporegistro 
-                               ,$this->si242_contacontaabil 
+                                $this->si242_sequencial
+                               ,$this->si242_tiporegistro
+                               ,$this->si242_contacontaabil
                                ,'$this->si242_codfundo'
-                               ,'$this->si242_codorgao' 
-                               ,'$this->si242_codunidadesub' 
-                               ,'$this->si242_codfuncao' 
-                               ,'$this->si242_codsubfuncao' 
-                               ,'$this->si242_codprograma' 
-                               ,'$this->si242_idacao' 
-                               ,'$this->si242_idsubacao' 
-                               ,$this->si242_naturezadespesa 
-                               ,'$this->si242_subelemento' 
-                               ,$this->si242_codfontrecursos 
-                               ,$this->si242_tipodespesarpps
-                               ,$this->si242_saldoinicialcde 
-                               ,'$this->si242_naturezasaldoinicialcde' 
-                               ,$this->si242_totaldebitoscde 
-                               ,$this->si242_totalcreditoscde 
-                               ,$this->si242_saldofinalcde 
-                               ,'$this->si242_naturezasaldofinalcde' 
-                               ,$this->si242_mes 
+                               ,'$this->si242_codorgao'
+                               ,'$this->si242_codunidadesub'
+                               ,'$this->si242_codfuncao'
+                               ,'$this->si242_codsubfuncao'
+                               ,'$this->si242_codprograma'
+                               ,'$this->si242_idacao'
+                               ,'$this->si242_idsubacao'
+                               ,$this->si242_naturezadespesa
+                               ,'$this->si242_subelemento'
+                               ,$this->si242_codfontrecursos
+                               ,$this->si242_codco
+                               ,$this->si242_saldoinicialcde
+                               ,'$this->si242_naturezasaldoinicialcde'
+                               ,$this->si242_totaldebitoscde
+                               ,$this->si242_totalcreditoscde
+                               ,$this->si242_saldofinalcde
+                               ,'$this->si242_naturezasaldofinalcde'
+                               ,$this->si242_mes
                                ,$this->si242_instit
                                ,$this->si242_reg10
                       )";
@@ -424,7 +421,7 @@ class cl_balancete302023
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -434,10 +431,10 @@ class cl_balancete302023
     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si242_sequencial = null)
   {
@@ -454,7 +451,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -468,7 +465,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -482,7 +479,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -496,7 +493,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -510,7 +507,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -524,7 +521,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -538,7 +535,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -552,7 +549,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -566,7 +563,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -580,7 +577,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -594,7 +591,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -608,7 +605,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -622,7 +619,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -636,24 +633,11 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
-    if (trim($this->si242_tipodespesarpps) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_tipodespesarpps"])) {
-      $sql .= $virgula . " si242_tipodespesarpps = $this->si242_tipodespesarpps ";
-      $virgula = ",";
-      if (trim($this->si242_tipodespesarpps) == null) {
-        $this->erro_sql = " Campo si242_tipodespesarpps não informado.";
-        $this->erro_campo = "si242_tipodespesarpps";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
-        $this->erro_status = "0";
-        
-        return false;
-      }
-    }
+
     if (trim($this->si242_saldoinicialcde) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si242_saldoinicialcde"])) {
       $sql .= $virgula . " si242_saldoinicialcde = $this->si242_saldoinicialcde ";
       $virgula = ",";
@@ -664,7 +648,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -678,7 +662,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -692,7 +676,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -706,7 +690,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -720,7 +704,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -734,7 +718,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -748,7 +732,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -762,7 +746,7 @@ class cl_balancete302023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -781,7 +765,7 @@ class cl_balancete302023
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -792,7 +776,7 @@ class cl_balancete302023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -802,12 +786,12 @@ class cl_balancete302023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao para exclusao
   function excluir($si242_sequencial = null, $dbwhere = null)
   {
@@ -834,7 +818,7 @@ class cl_balancete302023
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -845,7 +829,7 @@ class cl_balancete302023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -855,12 +839,12 @@ class cl_balancete302023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao do recordset
   function sql_record($sql)
   {
@@ -873,7 +857,7 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $this->numrows = pg_numrows($result);
@@ -883,13 +867,13 @@ class cl_balancete302023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
+
   // funcao do sql
   function sql_query($si242_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -925,10 +909,10 @@ class cl_balancete302023
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
-  
+
   // funcao do sql
   function sql_query_file($si242_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -964,7 +948,7 @@ class cl_balancete302023
         $virgula = ",";
       }
     }
-    
+
     return $sql;
   }
 }

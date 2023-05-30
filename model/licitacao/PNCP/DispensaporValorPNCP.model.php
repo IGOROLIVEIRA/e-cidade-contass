@@ -60,8 +60,6 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
             $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
             $oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
-            //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
-            //$oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = $item->codigoregistroimobiliario;
         }
 
         $aDadosAPI = $oDadosAPI;
@@ -72,19 +70,6 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
             unlink($arquivo);
         }
         file_put_contents($arquivo, json_encode($aDadosAPI));
-
-        /*
-        * Anexos da licitacao
-        
-        $filename = 'model/licitacao/PNCP/arquivos/Compra' . $oDado->numerocompra . '.zip';
-        $zip = new ZipArchive();
-        if ($zip->open($filename, ZipArchive::CREATE) !== TRUE) {
-            exit("cannot open <$filename>\n");
-        }
-        foreach ($oDado->anexos as $key => $anexo) {
-            $zip->addFile("model/licitacao/PNCP/anexoslicitacao/" . $anexo->l217_nomedocumento, $anexo->l217_nomedocumento);
-        }
-        $zip->close();*/
     }
 
     public function montarRetificacao()
@@ -130,10 +115,9 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
+        $cnpj =  $this->getCnpj();
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras";
 
         $method = 'POST';
 
@@ -177,16 +161,6 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
-        /*$err     = curl_errno($chpncp);
-        $errmsg  = curl_error($chpncp);
-        $header  = curl_getinfo($chpncp);
-        $header['errno']   = $err;
-        $header['errmsg']  = $errmsg;
-        $header['header']  = $contentpncp;
-        echo "<pre>";
-        print_r($header);
-        exit;*/
-
         curl_close($chpncp);
 
         $retorno = json_decode($contentpncp);
@@ -203,9 +177,9 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         $token = $this->login();
 
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
+        $cnpj =  $this->getCnpj();
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
         $method = 'PATCH';
 
@@ -237,16 +211,6 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
-        $err     = curl_errno($chpncp);
-        $errmsg  = curl_error($chpncp);
-        $header  = curl_getinfo($chpncp);
-        /*$header['errno']   = $err;
-        $header['errmsg']  = $errmsg;
-        $header['header']  = $contentpncp;
-        echo "<pre>";
-        print_r($header);
-        exit;
-        */
         curl_close($chpncp);
 
         $retorno = json_decode($contentpncp);
@@ -259,9 +223,9 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         $token = $this->login();
 
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
+        $cnpj =  $this->getCnpj();
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
         $method = 'DELETE';
 
@@ -293,10 +257,6 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
-        /*echo "<pre>";
-        print_r(json_decode($contentpncp));
-        exit;*/
-
         curl_close($chpncp);
 
         $retorno = json_decode($contentpncp);
@@ -310,13 +270,12 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         $token = $this->login();
 
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
+        $cnpj =  $this->getCnpj();
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $iCodigocompra . "/arquivos";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $iCodigocompra . "/arquivos";
 
         $method = 'POST';
 
-        //$file = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.json';
         //arquivo para envio
         $filezip = curl_file_create('model/licitacao/PNCP/anexoslicitacao/' . $sAnexo);
 
@@ -369,9 +328,9 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         $token = $this->login();
 
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
+        $cnpj =  $this->getCnpj();
 
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$iCodigocompra/arquivos/$iSeqAnexosPNCP";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$iCodigocompra/arquivos/$iSeqAnexosPNCP";
 
         $method = 'DELETE';
 

@@ -1834,7 +1834,7 @@ switch ($oParam->exec) {
                     $clacoanexopncp = new cl_acoanexopncp();
 
                     //monto o codigo dos arquivos do anexo no pncp
-                    $ac214_numerocontrolepncp = '17316563000196-2-' . $codigocontrato[9] . '/' . $codigocontrato[8];
+                    $ac214_numerocontrolepncp = db_utils::getCnpj() . '-2-' . $codigocontrato[9] . '/' . $codigocontrato[8];
                     $clacoanexopncp->ac214_acordo  = $Documentos;
                     $clacoanexopncp->ac214_usuario = db_getsession('DB_id_usuario');
                     $clacoanexopncp->ac214_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));

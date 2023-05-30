@@ -3564,7 +3564,7 @@ class cl_liclicita
        WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) AS codigoUnidadeCompradora,
        CASE
             WHEN l03_pctipocompratribunal IN (110,51,53,52,50,102) THEN 1
-            WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa != 5 THEN 2
+            WHEN l03_pctipocompratribunal = 101 THEN 2
             WHEN l03_pctipocompratribunal = 100 THEN 3
        END AS tipoInstrumentoConvocatorioId,
        CASE
@@ -3693,6 +3693,95 @@ class cl_liclicita
         return $sql;
     }
 
+    public function sql_query_pncp_itens_retifica_situacao ($l20_codigo,$ordem){
+        $sql = "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
+                CASE
+                    WHEN pcmater.pc01_servico='t' THEN 'S'
+                    ELSE 'M'
+                END AS materialOuServico,
+                COALESCE ((case when liclicita.l20_destexclusiva = 1 then 1 else null end),
+                        (case when liclicita.l20_subcontratacao = 1 then 2 else null end),
+                        (case when liclicitem.l21_reservado = 't' then 3 ELSE null end),
+                        4) AS tipoBeneficioId,
+                FALSE AS incentivoProdutivoBasico,
+                pcmater.pc01_descrmater AS descricao,
+                matunid.m61_descr AS unidadeMedida,
+                si02_vlprecoreferencia AS valorUnitarioEstimado,
+                liclicita.l20_tipliticacao AS criterioJulgamentoId,
+                pcmater.pc01_codmater,
+                solicitem.pc11_numero,
+                solicitem.pc11_reservado,
+                solicitem.pc11_quant,
+                liclicita.l20_codigo,
+                CASE
+                    WHEN liclicitem.l21_sigilo IS NOT NULL THEN liclicitem.l21_sigilo
+                    ELSE 'f'
+                END AS l21_sigilo,
+                CASE
+                    WHEN substring(o56_elemento
+                                    FROM 0
+                                    FOR 8) IN
+                            (SELECT DISTINCT substring(o56_elemento
+                                                        FROM 0
+                                                        FOR 8)
+                            FROM orcelemento
+                            WHERE o56_elemento LIKE '%3449061%') THEN 1
+                    WHEN substring(o56_elemento
+                                    FROM 0
+                                    FOR 8) IN
+                            (SELECT DISTINCT substring(o56_elemento
+                                                        FROM 0
+                                                        FOR 8)
+                            FROM orcelemento
+                            WHERE o56_elemento LIKE '%3449052%') THEN 2
+                    ELSE 3
+                END AS itemCategoriaId,
+                pcmater.pc01_regimobiliario AS codigoRegistroImobiliario,
+                l217_codsituacao as situacaoCompraItemId,
+                l218_motivoanulacao as justificativa,
+                l217_sequencial,
+                CASE
+                    WHEN l03_pctipocompratribunal = 110 THEN 2
+                    WHEN l03_pctipocompratribunal = 51 THEN 3
+                    WHEN l03_pctipocompratribunal = 53 THEN 6
+                    WHEN l03_pctipocompratribunal = 52 THEN 7
+                    WHEN l03_pctipocompratribunal = 50 THEN 5
+                    WHEN l03_pctipocompratribunal = 101 THEN 8
+                    WHEN l03_pctipocompratribunal = 100 THEN 9
+                    WHEN l03_pctipocompratribunal = 102 THEN 12
+                END AS modalidadeId
+        FROM liclicita
+        JOIN db_depart ON coddepto=l20_codepartamento
+        JOIN db_config ON codigo=instit
+        JOIN infocomplementaresinstit ON si09_instit=instit
+        JOIN liclicitem ON l21_codliclicita=l20_codigo
+        JOIN pcprocitem ON pc81_codprocitem=l21_codpcprocitem
+        JOIN pcproc ON pc80_codproc=pc81_codproc
+        JOIN solicitem ON pc11_codigo=pc81_solicitem
+        JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+        JOIN pcmater ON pc16_codmater = pc01_codmater
+        LEFT JOIN solicitemele ON pc18_solicitem = pc11_codigo
+        LEFT JOIN orcelemento ON o56_codele = pc18_codele
+        AND o56_anousu=l20_anousu
+        JOIN solicitemunid ON pc17_codigo=pc11_codigo
+        JOIN matunid ON m61_codmatunid=pc17_unid
+        LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+        LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+        LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+        LEFT JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+        LEFT JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+        LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo
+        INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+        LEFT JOIN situacaoitemcompra ON l218_codigolicitacao=l20_codigo
+        AND l218_liclicitem=l21_codigo
+        LEFT JOIN situacaoitemlic ON l219_codigo=l218_codigo
+        LEFT JOIN situacaoitem ON l217_sequencial=l219_situacao
+        WHERE liclicita.l20_codigo = $l20_codigo
+        AND liclicitem.l21_ordem = $ordem
+        ORDER BY l217_sequencial desc limit 1";
+        return $sql;
+    }
+
     public function sql_query_valor_item_reservado($pc11_numero = null, $pc01_codmater = false)
     {
 
@@ -3764,6 +3853,52 @@ class cl_liclicita
             LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
             WHERE l21_codliclicita = $l20_codigo
             AND pc24_pontuacao =1
+
+            ORDER BY l21_ordem";
+
+        return $sql;
+    }
+
+    public function sql_query_item_pncp_retifica($l20_codigo)
+    {
+
+        $sql  = " SELECT    pc01_codmater,
+                            l21_ordem,
+                            pc01_descrmater,
+                            CASE
+                                WHEN l20_tipojulg = 3 THEN l04_descricao
+                                ELSE NULL
+                            END AS l04_descricao,
+                            cgm.z01_numcgm,
+                            cgm.z01_nome,
+                            matunid.m61_descr,
+                            solicitem.pc11_quant,
+                            pcorcamval.pc23_valor
+            FROM liclicitem
+            INNER JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
+            INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+            LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem
+            INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+            INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+            INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+            INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+            INNER JOIN licsituacao ON l08_sequencial = l20_licsituacao
+            INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+            INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+            INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+            INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+            LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+            LEFT JOIN pcorcamitem ON pc22_orcamitem = pc26_orcamitem
+            LEFT JOIN pcorcam ON pc20_codorc = pc22_codorc
+            LEFT JOIN pcorcamforne ON pc21_codorc = pc20_codorc
+            LEFT JOIN cgm ON pc21_numcgm = z01_numcgm
+            LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+            AND pc23_orcamforne=pc21_orcamforne
+            LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+            AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne AND pc24_pontuacao =1
+            LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+            LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+            WHERE l21_codliclicita = $l20_codigo
 
             ORDER BY l21_ordem";
 
