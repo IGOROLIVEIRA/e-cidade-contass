@@ -13,7 +13,7 @@ class Oc20041 extends PostgresMigration
 
     public function up()
     {
-        if (empty($this->getInstituicaoByCnpj(self::PMMONTALVANIA))) {
+        if (empty($this->checkInstituicaoExists(self::PMMONTALVANIA))) {
             return;
         }
         $this->createFunction('public.fc_iptu_calculavvc_montalvania_2023', '2023-05-26');
@@ -21,7 +21,7 @@ class Oc20041 extends PostgresMigration
 
     public function down()
     {
-        if (empty($this->getInstituicaoByCnpj(self::PMMONTALVANIA))) {
+        if (empty($this->checkInstituicaoExists(self::PMMONTALVANIA))) {
             return;
         }
         $this->createFunction('public.fc_iptu_calculavvc_montalvania_2023', '2023-01-01');
