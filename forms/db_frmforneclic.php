@@ -27,6 +27,12 @@
 
 //MODULO: patrim
 include("dbforms/db_classesgenericas.php");
+include("classes/db_licitaparam_classe.php");
+
+$cllicitaparam = new cl_licitaparam;
+$rsParamLic = $cllicitaparam->sql_record($cllicitaparam->sql_query(null, "*", null, "l12_instit = " . db_getsession('DB_instit')));
+db_fieldsmemory($rsParamLic, 0)->l12_validafornecedor_emailtel;
+
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 $clpcorcamforne->rotulo->label();
 $clpcorcamfornelic->rotulo->label();
@@ -91,6 +97,7 @@ if (isset($db_opcaoal)) {
                 </td>
                 <td>
                     <?
+                    db_input('l12_validafornecedor_emailtel', 10, $Il12_validafornecedor_emailtel, true, 'hidden', 3, "");
                     db_input('solic', 40, "", true, 'hidden', 3);
                     db_input('l20_codigo', 8, $Il20_codigo, true, 'text', 3)
                     ?>
@@ -294,7 +301,7 @@ if (isset($db_opcaoal)) {
 
     function js_pesquisapc21_numcgm(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('', 'func_nome', 'func_pcforne.php?validaRepresentante=true&orderName=true&funcao_js=parent.js_mostracgm1|pc60_numcgm|z01_nome', 'Pesquisa', true);
+            js_OpenJanelaIframe('', 'func_nome', 'func_pcforne.php?validaRepresentante=true&orderName=true&funcao_js=parent.js_mostracgm1|pc60_numcgm|z01_nome|z01_telef|z01_email', 'Pesquisa', true);
         } else {
             if (document.form1.pc21_numcgm.value != '') {
                 js_OpenJanelaIframe('', 'func_nome', 'func_pcforne.php?validaRepresentante=true&orderName=true&pesquisa_chave=' + document.form1.pc21_numcgm.value + '&iParam=true&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
@@ -304,7 +311,14 @@ if (isset($db_opcaoal)) {
         }
     }
 
-    function js_mostracgm(chave, chave2) {
+    function js_mostracgm(chave, chave2, chave3, chave4) {
+
+        if ((chave3.trim() == '' || chave4.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
+            alert("Usuário: Selecione um fornecedor que possua Email e telefone cadastrado.");
+            $('pc21_numcgm').value = '';
+            return false;
+        }
+
         if (chave2 == true) {
             document.form1.pc21_numcgm.focus();
             document.form1.pc21_numcgm.value = '';
@@ -314,7 +328,13 @@ if (isset($db_opcaoal)) {
         }
     }
 
-    function js_mostracgm1(chave1, chave2) {
+    function js_mostracgm1(chave1, chave2, chave3, chave4) {
+        if ((chave3.trim() == '' || chave4.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
+            func_nome.hide();
+            alert("Usuário: Selecione um fornecedor que possua Email e telefone cadastrado.");
+            $('pc21_numcgm').value = '';
+            return false;
+        }
         document.form1.pc21_numcgm.value = chave1;
         document.form1.z01_nome.value = chave2;
         func_nome.hide();

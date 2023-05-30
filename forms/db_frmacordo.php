@@ -27,6 +27,12 @@
 
 require_once("libs/db_libdicionario.php");
 require_once("libs/db_utils.php");
+include("classes/db_licitaparam_classe.php");
+
+$cllicitaparam = new cl_licitaparam;
+$rsParamLic = $cllicitaparam->sql_record($cllicitaparam->sql_query(null, "*", null, "l12_instit = " . db_getsession('DB_instit')));
+db_fieldsmemory($rsParamLic, 0)->l12_validafornecedor_emailtel;
+
 
 //MODULO: Acordos
 $clacordo->rotulo->label();
@@ -164,6 +170,9 @@ db_app::load("dbtextFieldData.widget.js");
                                                 <td>
                                                     <?
                                                     db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 3, "");
+                                                    ?>
+                                                    <?
+                                                    db_input('l12_validafornecedor_emailtel', 10, $Il12_validafornecedor_emailtel, true, 'hidden', 3, "");
                                                     ?>
                                                 </td>
                                             </tr>
@@ -1450,7 +1459,7 @@ db_app::load("dbtextFieldData.widget.js");
             } else {
                 js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
                     'db_iframe_contratado',
-                    'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm|z01_cgccpf',
+                    'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm|z01_cgccpf|z01_telef|z01_email',
                     'CGM Contratado',
                     true,
                     '0');
@@ -1468,7 +1477,7 @@ db_app::load("dbtextFieldData.widget.js");
             js_OpenJanelaIframe(
                 '(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
                 'db_iframe_contratado',
-                'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
+                'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf|z01_telef|z01_email',
                 'Pesquisa',
                 true,
                 '0',
@@ -1536,7 +1545,15 @@ db_app::load("dbtextFieldData.widget.js");
         }
     }
 
-    function js_mostracontratado1(chave1, chave2, z01_cgccpf) {
+    function js_mostracontratado1(chave1, chave2, z01_cgccpf, z01_telef, z01_email) {
+
+
+        if ((z01_telef.trim() == '' || z01_email.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
+            db_iframe_contratado.hide();
+            alert("Usuário: Selecione um fornecedor que possua Email e telefone cadastrado.");
+            $('ac16_contratado').value = '';
+            return false;
+        }
 
         if (z01_cgccpf.length = 11) {
             if (z01_cgccpf == '00000000000') {
