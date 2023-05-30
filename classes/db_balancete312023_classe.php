@@ -23,7 +23,7 @@ class cl_balancete312023
   var $si243_codfundo = null;
   var $si243_naturezareceita = 0;
   var $si243_codfontrecursos = 0;
-  var $si243_emendaparlamentar = 0;
+  var $si243_codco = 0;
   var $si243_saldoinicialcre = 0;
   var $si243_naturezasaldoinicialcre = null;
   var $si243_totaldebitoscre = 0;
@@ -43,7 +43,7 @@ class cl_balancete312023
                  si243_codfundo = varchar(8) = si243_codfundo
                  si243_naturezareceita = int8 = si243_naturezareceita
                  si243_codfontrecursos = int8 = si243_codfontrecursos
-                 si243_emendaparlamentar = int4 = si243_emendaparlamentar
+                 si243_codco = int8 = si243_codco
                  si243_nrocontratoop = varchar(30) = si243_nrocontratoop,
                  si243_dataassinaturacontratoop = date = si243_dataassinaturacontratoop,
                  si243_saldoinicialcre = float8 = si243_saldoinicialcre
@@ -85,7 +85,6 @@ class cl_balancete312023
       $this->si243_codfundo = ($this->si243_codfundo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_codfundo"] : $this->si243_codfundo);
       $this->si243_naturezareceita = ($this->si243_naturezareceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_naturezareceita"] : $this->si243_naturezareceita);
       $this->si243_codfontrecursos = ($this->si243_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_codfontrecursos"] : $this->si243_codfontrecursos);
-      $this->si243_emendaparlamentar = ($this->si243_emendaparlamentar == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_emendaparlamentar"] : $this->si243_emendaparlamentar);
       $this->si243_saldoinicialcre = ($this->si243_saldoinicialcre == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_saldoinicialcre"] : $this->si243_saldoinicialcre);
       $this->si243_naturezasaldoinicialcre = ($this->si243_naturezasaldoinicialcre == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_naturezasaldoinicialcre"] : $this->si243_naturezasaldoinicialcre);
       $this->si243_totaldebitoscre = ($this->si243_totaldebitoscre == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_totaldebitoscre"] : $this->si243_totaldebitoscre);
@@ -143,16 +142,7 @@ class cl_balancete312023
 
       return false;
     }
-    if ($this->si243_emendaparlamentar == null) {
-        $this->erro_sql = " Campo si243_emendaparlamentar não informado.";
-        $this->erro_campo = "si243_emendaparlamentar";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
-        $this->erro_status = "0";
 
-        return false;
-      }
     if ($this->si243_saldoinicialcre == null) {
       $this->erro_sql = " Campo si243_saldoinicialcre não informado.";
       $this->erro_campo = "si243_saldoinicialcre";
@@ -282,7 +272,7 @@ class cl_balancete312023
                                       ,si243_codfundo
                                       ,si243_naturezareceita
                                       ,si243_codfontrecursos
-                                      ,si243_emendaparlamentar
+                                      ,si243_codco
                                       ,si243_nrocontratoop
                                       ,si243_dataassinaturacontratoop
                                       ,si243_saldoinicialcre
@@ -302,7 +292,7 @@ class cl_balancete312023
                                ,'$this->si243_codfundo'
                                ,$this->si243_naturezareceita
                                ,$this->si243_codfontrecursos
-                               ,$this->si243_emendaparlamentar
+                               ,$this->si243_codco
                                ,".($this->si243_nrocontratoop == "null" || $this->si243_nrocontratoop == ""?"null":"'".$this->si243_nrocontratoop."'")."
                                ,".($this->si243_dataassinaturacontratoop == "null" || $this->si243_dataassinaturacontratoop == ""?"null":"'".$this->si243_dataassinaturacontratoop."'")."
                                ,$this->si243_saldoinicialcre
@@ -435,20 +425,7 @@ class cl_balancete312023
         return false;
       }
     }
-    if (trim($this->si243_emendaparlamentar) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si243_emendaparlamentar"])) {
-        $sql .= $virgula . " si243_emendaparlamentar = $this->si243_emendaparlamentar ";
-        $virgula = ",";
-        if (trim($this->si243_emendaparlamentar) == null) {
-          $this->erro_sql = " Campo si243_emendaparlamentar não informado.";
-          $this->erro_campo = "si243_emendaparlamentar";
-          $this->erro_banco = "";
-          $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-          $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
-          $this->erro_status = "0";
 
-          return false;
-        }
-      }
     if (trim($this->si243_saldoinicialcre) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si243_saldoinicialcre"])) {
       $sql .= $virgula . " si243_saldoinicialcre = $this->si243_saldoinicialcre ";
       $virgula = ",";

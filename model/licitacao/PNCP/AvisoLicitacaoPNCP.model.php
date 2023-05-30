@@ -31,7 +31,15 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDadosAPI->codigoUnidadeCompradora         = '01001'; //$oDado->codigounidadecompradora;
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
-        $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
+        if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
+            if($oDado->tipoinstrumentoconvocatorioid == "2"){
+                $oDadosAPI->modoDisputaId                   = 4;
+            }else{
+                $oDadosAPI->modoDisputaId                   = 5;
+            }
+        }else{
+            $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
+        }
         $oDadosAPI->numeroCompra                    = $oDado->numerocompra;
         $oDadosAPI->anoCompra                       = $oDado->anocompra;
         $oDadosAPI->numeroProcesso                  = $oDado->numeroprocesso;
@@ -58,7 +66,16 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
             $oDadosAPI->itensCompra[$key]->orcamentoSigiloso           = $item->l21_sigilo == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
-            $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
+            //DISPENSA E INEXIGIBILIDADE
+            if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
+                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = 7;
+            }else{
+                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = $item->criteriojulgamentoid;
+            }
+            //CONCURSO
+            if($oDado->modalidadeid == "3"){
+                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = 8;
+            }
             //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
             $oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
             //$oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = utf8_encode($item->codigoregistroimobiliario);
@@ -130,13 +147,10 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
     public function enviarAviso($processo, $anexo)
     {
-
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras";
 
         $method = 'POST';
 
@@ -189,9 +203,6 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         echo "<pre>";
         print_r($header);
         exit;*/
-
-        curl_close($chpncp);
-
         $retorno = json_decode($contentpncp);
 
         if ($retorno->status) {
@@ -203,12 +214,10 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
     public function enviarRetificacao($oDados, $sCodigoControlePNCP, $iAnoCompra)
     {
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
         $method = 'PATCH';
 
@@ -259,12 +268,11 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
     public function excluirAviso($sCodigoControlePNCP, $iAnoCompra)
     {
+
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
         $method = 'DELETE';
 
@@ -296,9 +304,6 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
-        /*echo "<pre>";
-        print_r(json_decode($contentpncp));
-        exit;*/
 
         curl_close($chpncp);
 
@@ -310,12 +315,10 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
     public function enviarAnexos($iTipoAnexo, $sDescricao, $sAnexo, $iAnoCompra, $iCodigocompra)
     {
 
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $iCodigocompra . "/arquivos";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $iCodigocompra . "/arquivos";
 
         $method = 'POST';
 
@@ -369,12 +372,11 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
     public function excluirAnexos($iAnoCompra, $iCodigocompra, $iSeqAnexosPNCP)
     {
+
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$iCodigocompra/arquivos/$iSeqAnexosPNCP";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$iCodigocompra/arquivos/$iSeqAnexosPNCP";
 
         $method = 'DELETE';
 

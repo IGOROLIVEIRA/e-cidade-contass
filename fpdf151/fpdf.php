@@ -2265,6 +2265,22 @@ class FPDF
         //Set the array of column alignments
         $this->aligns = $a;
     }
+
+    function SetLegends($data, $format)  // legendas para os graficos
+    {
+            $this->legends=array();
+            $this->wLegend=0;
+            $this->sum=array_sum($data);
+            $this->NbVal=count($data);
+            foreach($data as $l=>$val)
+            {
+                    $p=sprintf('%.2f',$val/$this->sum*100).'%';
+                    $legend=str_replace(array('%l','%v','%p'),array($l,$val,$p),$format);
+                    $this->legends[]=$legend;
+                    $this->wLegend=max($this->GetStringWidth($legend),$this->wLegend);
+            }
+    }
+
     function RoundedRect($x, $y, $w, $h, $r, $style = '', $angle = '1234')
     {
         $k = $this->k;
