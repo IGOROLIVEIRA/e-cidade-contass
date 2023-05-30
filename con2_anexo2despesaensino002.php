@@ -330,8 +330,9 @@ ob_start();
             }
         </style>
     </head>
-    <body> 
-        <div class="ritz " >
+
+    <body>
+        <div class="ritz ">
             <div class="title-relatorio">
                 <strong>Anexo III</strong><br />
                 <strong>Demonstrativo dos Gastos com Manutenção e Desenvolvimento do Ensino</strong><br />
@@ -368,9 +369,9 @@ ob_start();
                         $nValorTotalGeral = 0;
                         foreach ($aSubFuncoes as $iSubFuncao) {
                             $oReceitaeDespesaEnsino->setAnousu($anousu);
-                            $oReceitaeDespesaEnsino->setiSubFuncao($iSubFuncao);
-                            $oReceitaeDespesaEnsino->setsFuncao($sFuncao);
-                            $oReceitaeDespesaEnsino->setaFontes($aFonte);
+                            $oReceitaeDespesaEnsino->setSubFuncao($iSubFuncao);
+                            $oReceitaeDespesaEnsino->setFuncao($sFuncao);
+                            $oReceitaeDespesaEnsino->setFontes($aFonte);
                             $oReceitaeDespesaEnsino->setInstits($instits);
                             $dadosLinha1 = $oReceitaeDespesaEnsino->getLinha1FuncaoeSubfuncao();
                             $sDescrSubfuncao                       = $dadosLinha1['0']; 
@@ -393,13 +394,13 @@ ob_start();
                              */
                             
                             foreach ($dadosLinha1['1'] as $oDespesaPrograma) {
-                                $oReceitaeDespesaEnsino->setoDespesaPrograma($oDespesaPrograma);
-                                $oReceitaeDespesaEnsino->setfSubTotal($fSubTotal);
-                                $oReceitaeDespesaEnsino->setnValorTotalPago($nValorTotalPago);
-                                $oReceitaeDespesaEnsino->setnValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
-                                $oReceitaeDespesaEnsino->setnValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
-                                $oReceitaeDespesaEnsino->setnValorTotalGeral($nValorTotalGeral);
-                                $dadoslinha2                  = $oReceitaeDespesaEnsino->getLinha2FuncaoeSubfuncao();                         
+                                $oReceitaeDespesaEnsino->setDespesaPrograma($oDespesaPrograma);
+                                $oReceitaeDespesaEnsino->setSubTotal($fSubTotal);
+                                $oReceitaeDespesaEnsino->setValorTotalPago($nValorTotalPago);
+                                $oReceitaeDespesaEnsino->setValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
+                                $oReceitaeDespesaEnsino->setValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
+                                $oReceitaeDespesaEnsino->setValorTotalGeral($nValorTotalGeral);
+                                $dadoslinha2                  = $oReceitaeDespesaEnsino->getLinha2FuncaoeSubfuncao();
                                 $oPrograma                    = $dadoslinha2['0'];
                                 $fSubTotal                   += $dadoslinha2['1'];
                                 $nValorPago                   = $dadoslinha2['2'];
@@ -448,9 +449,9 @@ ob_start();
                         $sFuncao2     = "12";
                         foreach ($aSubFuncoes2 as $iSubFuncao) {
                             $oReceitaeDespesaEnsino->setAnousu($anousu);
-                            $oReceitaeDespesaEnsino->setiSubFuncao($iSubFuncao);
-                            $oReceitaeDespesaEnsino->setsFuncao($sFuncao2);
-                            $oReceitaeDespesaEnsino->setaFontes($aFonte2);
+                            $oReceitaeDespesaEnsino->setSubFuncao($iSubFuncao);
+                            $oReceitaeDespesaEnsino->setFuncao($sFuncao2);
+                            $oReceitaeDespesaEnsino->setFontes($aFonte2);
                             $oReceitaeDespesaEnsino->setInstits($instits);
                             $dadosLinha1 = $oReceitaeDespesaEnsino->getLinha1FuncaoeSubfuncao();
                             $nValorPagoSubFuncao                   = $dadosLinha1['2'];
@@ -471,13 +472,13 @@ ob_start();
                              * @todo para cada subfuncao lista os programas
                              */
                             foreach ($dadosLinha1['1'] as $oDespesaPrograma) {
-                                $oReceitaeDespesaEnsino->setoDespesaPrograma($oDespesaPrograma);
-                                $oReceitaeDespesaEnsino->setfSubTotal($fSubTotal);
-                                $oReceitaeDespesaEnsino->setnValorTotalPago($nValorTotalPago);
-                                $oReceitaeDespesaEnsino->setnValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
-                                $oReceitaeDespesaEnsino->setnValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
-                                $oReceitaeDespesaEnsino->setnValorTotalGeral($nValorTotalGeral);
-                                $dadoslinha2                  = $oReceitaeDespesaEnsino->getLinha2FuncaoeSubfuncao();                         
+                                $oReceitaeDespesaEnsino->setDespesaPrograma($oDespesaPrograma);
+                                $oReceitaeDespesaEnsino->setSubTotal($fSubTotal);
+                                $oReceitaeDespesaEnsino->setValorTotalPago($nValorTotalPago);
+                                $oReceitaeDespesaEnsino->setValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
+                                $oReceitaeDespesaEnsino->setValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
+                                $oReceitaeDespesaEnsino->setValorTotalGeral($nValorTotalGeral);
+                                $dadoslinha2                  = $oReceitaeDespesaEnsino->getLinha2FuncaoeSubfuncao();
                                 $oPrograma                    = $dadoslinha2['0'];
                                 $fSubTotal                   += $dadoslinha2['1'];
                                 $nValorPago                   = $dadoslinha2['2'];
@@ -524,9 +525,9 @@ ob_start();
                          *
                          */
                         foreach ($aSubFuncoes as $iSubFuncao) {
-                            $oReceitaeDespesaEnsino->setiSubFuncao($iSubFuncao);
-                            $oReceitaeDespesaEnsino->setsFuncao($sFuncao);
-                            $oReceitaeDespesaEnsino->setaFonteFundeb($aFonteFundeb);
+                            $oReceitaeDespesaEnsino->setSubFuncao($iSubFuncao);
+                            $oReceitaeDespesaEnsino->setFuncao($sFuncao);
+                            $oReceitaeDespesaEnsino->setFonteFundeb($aFonteFundeb);
                             $oReceitaeDespesaEnsino->setInstits($instits);
                             $dadoslinha3 =  $oReceitaeDespesaEnsino->getLinha1FuncaoFundeb();
                             $aDespesasProgramas = $dadoslinha3['1'];
@@ -548,11 +549,11 @@ ob_start();
                              * @todo para cada subfuncao lista os programas
                              */
                             foreach ($aDespesasProgramas as $oDespesaPrograma) {
-                                $oReceitaeDespesaEnsino->setoDespesaPrograma($oDespesaPrograma);
-                                $oReceitaeDespesaEnsino->setnValorTotalPago($nValorTotalPago);
-                                $oReceitaeDespesaEnsino->setnValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
-                                $oReceitaeDespesaEnsino->setnValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
-                                $oReceitaeDespesaEnsino->setnValorTotalGeral($nValorTotalGeral);
+                                $oReceitaeDespesaEnsino->setDespesaPrograma($oDespesaPrograma);
+                                $oReceitaeDespesaEnsino->setValorTotalPago($nValorTotalPago);
+                                $oReceitaeDespesaEnsino->setValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
+                                $oReceitaeDespesaEnsino->setValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
+                                $oReceitaeDespesaEnsino->setValorTotalGeral($nValorTotalGeral);
                                 $dadoslinha3 =  $oReceitaeDespesaEnsino->getLinha2FuncaoFundeb();
 
                                 $oPrograma                    = $dadoslinha3['0'];
@@ -635,8 +636,8 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">7 - DESPESAS CUSTEADAS COM SUPERÁVIT DO FUNDEB ATÉ O PRIMEIRO QUADRIMESTRE - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $oReceitaeDespesaEnsino->setdtini($dtini);
-                                    $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                                     $oReceitaeDespesaEnsino->setInstits($instits);
                                     $nValorCusteadoSuperavit = $oReceitaeDespesaEnsino->getLinha7DespesasCusteadaSuperavitDoFundeb();
                                     $nTotalAplicadoEntrada = $nTotalAplicadoEntrada + $nValorCusteadoSuperavit;
@@ -648,8 +649,8 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">8 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                             <?php
-                                $oReceitaeDespesaEnsino->setdtini($dtini);
-                                $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                                $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                                 $oReceitaeDespesaEnsino->setInstits($instits);
                                 $dadosLinha8 = $oReceitaeDespesaEnsino->getLinha8RestosaPagarInscritosFonte101();
                                 $nTotalAplicadoEntrada = $nTotalAplicadoEntrada + $dadosLinha8;
@@ -664,9 +665,9 @@ ob_start();
                             $nLiqAPagar101 = 0;
                             $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
                             if($dtfim == $dtfimExercicio){
-                                $oReceitaeDespesaEnsino->setaFontes(array("'101','15000001','201','25000001'"));
-                                $oReceitaeDespesaEnsino->setdtini($dtini);
-                                $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                                $oReceitaeDespesaEnsino->setFontes(array("'101','15000001','201','25000001'"));
+                                $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                                 $oReceitaeDespesaEnsino->setInstits($instits);
                                 $oReceitaeDespesaEnsino->setTipo('ambos');
                                 $nLiqAPagar101 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
@@ -684,13 +685,13 @@ ob_start();
                             $aSubFuncoes2 = array(122,272,271,361,365,366,367,843);
                             $sFuncao2     = "12";
                             if($dtfim == $dtfimExercicio){
-                                $oReceitaeDespesaEnsino->setaFontes(array("'136','17180000'"));
-                                $oReceitaeDespesaEnsino->setdtini($dtini);
-                                $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                                $oReceitaeDespesaEnsino->setFontes(array("'136','17180000'"));
+                                $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                                 $oReceitaeDespesaEnsino->setInstits($instits);
                                 $oReceitaeDespesaEnsino->setTipo('ambos');
-                                $oReceitaeDespesaEnsino->setsFuncao($sFuncao2);
-                                $oReceitaeDespesaEnsino->setaSubFuncoes($aSubFuncoes2);
+                                $oReceitaeDespesaEnsino->setFuncao($sFuncao2);
+                                $oReceitaeDespesaEnsino->setSubFuncoes($aSubFuncoes2);
                                 $nLiqAPagar136 = $oReceitaeDespesaEnsino->getEmpenhosApagarNovo();
                             }
                             echo db_formatar($nLiqAPagar136, "f");
@@ -704,9 +705,9 @@ ob_start();
                             $nLiqAPagar118_119 = 0;
                             $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
                             if($dtfim == $dtfimExercicio){
-                                $oReceitaeDespesaEnsino->setaFontes(array("'118','119','1118','1119','15400007','15400000'"));
-                                $oReceitaeDespesaEnsino->setdtini($dtini);
-                                $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                                $oReceitaeDespesaEnsino->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
+                                $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                                 $oReceitaeDespesaEnsino->setInstits($instits);
                                 $oReceitaeDespesaEnsino->setTipo('ambos');
                                 $nLiqAPagar118_119 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
@@ -719,8 +720,8 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">9 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO SEM DISPONIBILIDADE FINANCEIRA</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                             <?php
-                                $oReceitaeDespesaEnsino->setdtini($dtini);
-                                $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                                $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                                 $oReceitaeDespesaEnsino->setInstits($instits);
                                 $dadosLinha9 = $oReceitaeDespesaEnsino->getLinha9RestosaPagarInscritoSemDis();
                                 $nRPIncritosSemDesponibilidade101     = $dadosLinha9['0'];
@@ -736,9 +737,9 @@ ob_start();
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                             <?php
                             $nRPIncritosSemDesponibilidade101 = 0;
-                            $oReceitaeDespesaEnsino->setaFontes(array("'101','15000001','201','25000001'"));
-                            $oReceitaeDespesaEnsino->setdtini($dtini);
-                            $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                            $oReceitaeDespesaEnsino->setFontes(array("'101','15000001','201','25000001'"));
+                            $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                            $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                             $oReceitaeDespesaEnsino->setInstits($instits);
                             $oReceitaeDespesaEnsino->setTipo('lqd');
                             $nLiqAPagar101 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
@@ -770,9 +771,9 @@ ob_start();
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                             <?php
                             $nRPIncritosSemDesponibilidade136 = 0;
-                            $oReceitaeDespesaEnsino->setaFontes(array("'136','17180000'"));
-                            $oReceitaeDespesaEnsino->setdtini($dtini);
-                            $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                            $oReceitaeDespesaEnsino->setFontes(array("'136','17180000'"));
+                            $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                            $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                             $oReceitaeDespesaEnsino->setInstits($instits);
                             $oReceitaeDespesaEnsino->setTipo('lqd');
                             $nLiqAPagar136 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
@@ -804,9 +805,9 @@ ob_start();
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                             <?php
                             $nRPIncritosSemDesponibilidade118_119 = 0;
-                            $oReceitaeDespesaEnsino->setaFontes(array("'118','119','1118','1119','15400007','15400000'"));
-                            $oReceitaeDespesaEnsino->setdtini($dtini);
-                            $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                            $oReceitaeDespesaEnsino->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
+                            $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                            $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                             $oReceitaeDespesaEnsino->setInstits($instits);
                             $oReceitaeDespesaEnsino->setTipo('lqd');
                             $nLiqAPagar118_119 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
@@ -839,8 +840,8 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">10 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736)</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $oReceitaeDespesaEnsino->setdtini($dtini);
-                                    $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                                     $oReceitaeDespesaEnsino->setInstits($instits);
                                     $nValorRecursoTotal = $oReceitaeDespesaEnsino->getLinha10RestoaPagarSemDis();
                                     $nTotalAplicadoEntrada = $nTotalAplicadoEntrada + $nValorRecursoTotal;
@@ -852,9 +853,9 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">10.1 - RECURSOS DE IMPOSTOS</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $oReceitaeDespesaEnsino->setaFontes(array("'101','1101','15000001'","'201','25000001'"));
-                                    $oReceitaeDespesaEnsino->setdtini($dtini);
-                                    $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                                    $oReceitaeDespesaEnsino->setFontes(array("'101','1101','15000001'", "'201','25000001'"));
+                                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                                     $oReceitaeDespesaEnsino->setInstits($instits);
                                     $nValorRecursoImposto = $oReceitaeDespesaEnsino->getRestosSemDisponilibidadeFundeb();
                                     echo db_formatar($nValorRecursoImposto, "f");
@@ -865,9 +866,9 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">10.2 - RECUSOS DO AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº 123/2022</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $oReceitaeDespesaEnsino->setaFontes(array("'136','17180000'"));
-                                    $oReceitaeDespesaEnsino->setdtini($dtini);
-                                    $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                                    $oReceitaeDespesaEnsino->setFontes(array("'136','17180000'"));
+                                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                                     $oReceitaeDespesaEnsino->setInstits($instits);
                                     $nValorRecursoImposto = $oReceitaeDespesaEnsino->getRestosSemDisponilibidadeFundeb(array("'136','17180000'"), $dtini, $dtfim, $instits);
                                     echo db_formatar($nValorRecursoFundeb, "f");
@@ -878,9 +879,9 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">10.3 - RECURSOS DO FUNDEB</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $oReceitaeDespesaEnsino->setaFontes(array("'118','119','15400007','15400000','1118','1119'","'218','219','25400007','25400000'"));
-                                    $oReceitaeDespesaEnsino->setdtini($dtini);
-                                    $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                                    $oReceitaeDespesaEnsino->setFontes(array("'118','119','15400007','15400000','1118','1119'", "'218','219','25400007','25400000'"));
+                                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                                     $oReceitaeDespesaEnsino->setInstits($instits);
                                     $nValorRecursoImposto = $oReceitaeDespesaEnsino->getRestosSemDisponilibidadeFundeb();
                                     echo db_formatar($nValorRecursoFundeb, "f");
@@ -891,8 +892,8 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">11 - CANCELAMENTO, NO EXERCÍCIO, DE RESTOS A PAGAR INSCRITOS COM DISPONIBILIDADE FINANCEIRA</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $oReceitaeDespesaEnsino->setdtini($dtini);
-                                    $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                                     $oReceitaeDespesaEnsino->setInstits($instits);
                                     $dadosLinha11 = $oReceitaeDespesaEnsino->getLinha11CancelamentodeRestoaPagar();
                                     $nValorRecursoTotal101 = $dadosLinha11['0'];
@@ -900,7 +901,7 @@ ob_start();
                                     $nValorRecursoTotal118 = $dadosLinha11['2'];
                                     $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nValorRecursoTotal101 + $nValorRecursoTotal136 + $nValorRecursoTotal118;
                                     echo db_formatar($nValorRecursoTotal101 + $nValorRecursoTotal136 + $nValorRecursoTotal118, "f");
-                                   
+                                 
                                 ?>
                             </td>
                         </tr>

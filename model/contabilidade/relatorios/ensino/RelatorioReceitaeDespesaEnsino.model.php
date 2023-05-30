@@ -50,16 +50,15 @@ class RelatorioReceitaeDespesaEnsino
     private $nValorTotalGeral;
     private $aFonteFundeb;
 
-    public function setaFontes($aFontes) {
-        $this->aFontes = [];
+    public function setFontes($aFontes) {
 		$this->aFontes = $aFontes;
 	}
 
-    public function setdtini($dtini) {
+    public function setDataInicial($dtini) {
 		$this->dtini = $dtini;
 	}
 
-    public function setdtfim($dtfim) {
+    public function setDataFinal($dtfim) {
 		$this->dtfim = $dtfim;
 	}
 
@@ -71,19 +70,15 @@ class RelatorioReceitaeDespesaEnsino
 		$this->tipo = $tipo;
 	}
 
-    public function setsFuncao($sFuncao) {
+    public function setFuncao($sFuncao) {
 		$this->sFuncao = $sFuncao;
 	}
 
-    public function setaSubFuncoes($aSubFuncoes) {
+    public function setSubFuncoes($aSubFuncoes) {
 		$this->aSubFuncoes = $aSubFuncoes;
 	}
 
-    public function setaInstits($aInstits) {
-		$this->aInstits = $aInstits;
-	}
-
-    public function setnFonte($nFonte) {
+    public function setFonte($nFonte) {
 		$this->nFonte = $nFonte;
 	}
 
@@ -91,35 +86,35 @@ class RelatorioReceitaeDespesaEnsino
 		$this->anousu = $anousu;
 	}
 
-    public function setiSubFuncao($iSubFuncao) {
+    public function setSubFuncao($iSubFuncao) {
 		$this->iSubFuncao = $iSubFuncao;
 	}
 
-    public function setoDespesaPrograma($oDespesaPrograma) {
+    public function setDespesaPrograma($oDespesaPrograma) {
 		$this->oDespesaPrograma = $oDespesaPrograma;
 	}
 
-    public function setfSubTotal($fSubTotal) {
+    public function setSubTotal($fSubTotal) {
 		$this->fSubTotal = $fSubTotal;
 	}
  
-    public function setnValorTotalPago($nValorTotalPago) {
+    public function setValorTotalPago($nValorTotalPago) {
 		$this->nValorTotalPago = $nValorTotalPago;
 	}
  
-    public function setnValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado) {
+    public function setValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado) {
 		$this->$nValorTotalEmpenhadoENaoLiquidado = $nValorTotalEmpenhadoENaoLiquidado;
 	}
  
-    public function setnValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar) {
+    public function setValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar) {
 		$this->nValorTotalLiquidadoAPagar = $nValorTotalLiquidadoAPagar;
 	}
  
-    public function setnValorTotalGeral($nValorTotalGeral) {
+    public function setValorTotalGeral($nValorTotalGeral) {
 		$this->nValorTotalGeral = $nValorTotalGeral;
 	}
  
-    public function setaFonteFundeb($aFonteFundeb) {
+    public function setFonteFundeb($aFonteFundeb) {
 		$this->aFonteFundeb = $aFonteFundeb;
 	}
   
@@ -127,7 +122,7 @@ class RelatorioReceitaeDespesaEnsino
     {
        
     }
-   
+    /*Calcula as Despesas Custeados Com Superavit */
     public static function getDespesasCusteadosComSuperavit($aFontes, $dtini, $dtfim, $instits)
     {
        
@@ -147,8 +142,8 @@ class RelatorioReceitaeDespesaEnsino
         }
         return $valorEmpPagoSuperavit;
     }
-
-    public function getEmpenhosApagar()
+    /*Calcula Empenhos a Paga */
+    public function getEmpenhosAPagar()
     {
         $clempempenho = new cl_empempenho();
         $sSqlOrder = "";
@@ -169,8 +164,8 @@ class RelatorioReceitaeDespesaEnsino
         }
         return $valorEmpNaoLQDAPagar;
     }
-
-    public function getEmpenhosApagarNovo()
+    /*Calcula Empenhos a Paga das sub funções*/
+    public function getEmpenhosAPagarNovo()
     {
         $clempempenho = new cl_empempenho();
         $sSqlOrder = "";
@@ -197,7 +192,7 @@ class RelatorioReceitaeDespesaEnsino
         }
         return $valorEmpNaoLQDAPagar;
     }
-
+     /*Calcula os Restos a Pagar Sem Disponibilidade do Fundeb*/
     public function getRestosSemDisponilibidadeFundeb()
     {
         $iSaldoRestosAPagarSemDisponibilidade = 0;
@@ -225,7 +220,7 @@ class RelatorioReceitaeDespesaEnsino
         }
         return $iSaldoRestosAPagarSemDisponibilidade;
     }
-
+    /*Calcula o Saldo do Plano Conta Fonte Fundeb */
     public static function getSaldoPlanoContaFonteFundeb($nFonte, $dtini, $dtfim, $aInstits)
     {
         $where = " c61_instit in ({$aInstits})";
@@ -248,7 +243,7 @@ class RelatorioReceitaeDespesaEnsino
         }
         return $nTotalAnterior;
     }
-
+    /*Calcula o Cancelamento de Restos a Pagar Com Disponibilidade */
     public function getCancelamentoRestosComDisponilibidade($aFontes, $dtini, $dtfim, $instits)
     {
         $clempresto = new cl_empresto();
@@ -263,7 +258,7 @@ class RelatorioReceitaeDespesaEnsino
         }
         return $valorRpAnulado;
     }
-
+   /*Calcula o Saldo a Pagar De todas as Fontes */
     public function getSaldoApagarGeral()
     {
         
@@ -282,7 +277,7 @@ class RelatorioReceitaeDespesaEnsino
         }
         return $nValorRpPago;
     }
-
+    /*Calcula a linha 1 - EDUCAÇÃO 12 - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS, das Despesa de Ensino */
     public function getLinha1FuncaoeSubfuncao()
     {
         $sDescrSubfuncao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$this->iSubFuncao}'"), 0)->o53_descr;
@@ -300,7 +295,7 @@ class RelatorioReceitaeDespesaEnsino
         return array($sDescrSubfuncao, $aDespesasProgramas, $nValorPagoSubFuncao, $nValorEmpenhadoENaoLiquidadoSubFuncao, $nValorLiquidadoAPagarSubFuncao, $nValorTotalSubFuncao);
 
     }
-
+    /*Calcula a linha 2 - EDUCAÇÃO 12 - AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº 123/2022, das Despesa de Ensino */
     public function getLinha2FuncaoeSubfuncao()
     {
         $oPrograma = new Programa($this->oDespesaPrograma->o58_programa, $this->oDespesaPrograma->o58_anousu);
@@ -316,7 +311,7 @@ class RelatorioReceitaeDespesaEnsino
 
         return array($oPrograma, $fSubTotal, $nValorPago, $nValorEmpenhadoENaoLiquidado, $nValorLiquidadoAPagar, $nValorTotal, $nValorTotalPago, $this->nValorTotalEmpenhadoENaoLiquidado, $this->nValorTotalLiquidadoAPagar, $nValorTotalGeral);
     }
-
+    /*Calcula a linha 3 - EDUCAÇÃO 12 - FUNDEB, das Despesa de Ensino */
     public function getLinha1FuncaoFundeb()
     {
         $sDescrSubfuncao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$this->iSubFuncao}'"), 0)->o53_descr;
@@ -334,7 +329,7 @@ class RelatorioReceitaeDespesaEnsino
 
         return array($sDescrSubfuncao, $aDespesasProgramas, $nValorPagoSubFuncao, $nValorEmpenhadoENaoLiquidadoSubFuncao, $nValorLiquidadoAPagarSubFuncao, $nValorTotalSubFuncao);
     }
-
+    /*Calcula a linha 3 - EDUCAÇÃO 12 - FUNDEB, das Despesa de Ensino */
     public function getLinha2FuncaoFundeb()
     {
         $oPrograma = new Programa($this->oDespesaPrograma->o58_programa, $this->oDespesaPrograma->o58_anousu);
@@ -349,48 +344,48 @@ class RelatorioReceitaeDespesaEnsino
 
         return array($oPrograma, $nValorPago, $nValorEmpenhadoENaoLiquidado, $nValorLiquidadoAPagar, $nValorTotal, $nValorTotalPago, $nValorTotalEmpenhadoENaoLiquidado, $nValorTotalLiquidadoAPagar, $nValorTotalGeral);
     }
-
+    /*Calcula a linha 7 - DESPESAS CUSTEADAS COM SUPERÁVIT DO FUNDEB ATÉ O PRIMEIRO QUADRIMESTRE - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS, das Despesa de Ensino */
     public function getLinha7DespesasCusteadaSuperavitDoFundeb()
     {
         $nValorCusteadoSuperavit = self::getDespesasCusteadosComSuperavit(array("'218','219','25400007','25400000'"), $this->dtini, $this->dtfim, $this->instits);
         return $nValorCusteadoSuperavit;
     }
-
+    /*Calcula a linha 8 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO, das Despesa de Ensino */
     public function getLinha8RestosaPagarInscritosFonte101()
     {
         $nLiqAPagarPrecessado = 0;
         $nLiqAPagarNaoPrecessado = 0;
         $dtfimExercicio = db_getsession("DB_anousu") . "-12-31";
         if ($this->dtfim == $dtfimExercicio) {
-            $this->setaFontes(array("'101','15000001','201','25000001'"));
+            $this->setFontes(array("'101','15000001','201','25000001'"));
             $this->setTipo('ambos');
-            $nLiqAPagarPrecessado = self::getEmpenhosApagar();
-            $this->setaFontes(array("'118','119','1118','1119','15400007','15400000'"));
-            $nLiqAPagarNaoPrecessado = self::getEmpenhosApagar();
-            $this->setaFontes(array("'136','17180000'"));
-            $nLiqAPagar136 = self::getEmpenhosApagar();
+            $nLiqAPagarPrecessado = self::getEmpenhosAPagar();
+            $this->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
+            $nLiqAPagarNaoPrecessado = self::getEmpenhosAPagar();
+            $this->setFontes(array("'136','17180000'"));
+            $nLiqAPagar136 = self::getEmpenhosAPagar();
         }
         return $nLiqAPagarPrecessado + $nLiqAPagarNaoPrecessado + $nLiqAPagar136;
     }
-
+    /*Calcula a linha 9 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO SEM DISPONIBILIDADE FINANCEIRA, das Despesa de Ensino */
     public function getLinha9RestosaPagarInscritoSemDis()
     {
         $dtfimExercicio = db_getsession("DB_anousu") . "-12-31";
         if ($this->dtfim == $dtfimExercicio) {
-            $this->setaFontes(array("'101','15000001','201','25000001'"));
+            $this->setFontes(array("'101','15000001','201','25000001'"));
             $nSaldoApagarGeral101 = self::getSaldoApagarGeral();
-            $this->setaFontes(array("'136','17180000'"));
+            $this->setFontes(array("'136','17180000'"));
             $nSaldoApagarGeral136 = self::getSaldoApagarGeral();
-            $this->setaFontes(array("'118','119','1118','1119','15400007','15400000'"));
+            $this->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
             $nSaldoApagarGeral118_119 = self::getSaldoApagarGeral();
         }
 
         $nRPIncritosSemDesponibilidade101 = 0;
-        $this->setaFontes(array("'101','15000001','201','25000001'"));
+        $this->setFontes(array("'101','15000001','201','25000001'"));
         $this->setTipo('lqd');
-        $nLiqAPagar101 = self::getEmpenhosApagar();
+        $nLiqAPagar101 = self::getEmpenhosAPagar();
         $this->setTipo('');
-        $nNaoLiqAPagar101 = self::getEmpenhosApagar();
+        $nNaoLiqAPagar101 = self::getEmpenhosAPagar();
         $aTotalPago101 = $nLiqAPagar101 + $nNaoLiqAPagar101;
 
         if ($this->dtfim == $dtfimExercicio) {
@@ -410,11 +405,11 @@ class RelatorioReceitaeDespesaEnsino
             }
         }
         $nRPIncritosSemDesponibilidade136 = 0;
-        $this->setaFontes(array("'136','17180000'"));
+        $this->setFontes(array("'136','17180000'"));
         $this->setTipo('lqd');
-        $nLiqAPagar136 = self::getEmpenhosApagar();
+        $nLiqAPagar136 = self::getEmpenhosAPagar();
         $this->setTipo('');
-        $nNaoLiqAPagar136 = self::getEmpenhosApagar();
+        $nNaoLiqAPagar136 = self::getEmpenhosAPagar();
         $aTotalPago136 = $nLiqAPagar136 + $nNaoLiqAPagar136;
 
         if ($this->dtfim == $dtfimExercicio) {
@@ -434,11 +429,11 @@ class RelatorioReceitaeDespesaEnsino
             }
         }
         $nRPIncritosSemDesponibilidade118_119 = 0;
-        $this->setaFontes(array("'118','119','1118','1119','15400007','15400000'"));
+        $this->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
         $this->setTipo('lqd');
-        $nLiqAPagar118_119 = self::getEmpenhosApagar();
+        $nLiqAPagar118_119 = self::getEmpenhosAPagar();
         $this->setTipo('');
-        $nNaoLiqAPagar118_119 = self::getEmpenhosApagar();
+        $nNaoLiqAPagar118_119 = self::getEmpenhosAPagar();
         $aTotalPago118_119 = $nLiqAPagar118_119 + $nNaoLiqAPagar118_119;
 
         if ($this->dtfim == $dtfimExercicio) {
@@ -459,12 +454,12 @@ class RelatorioReceitaeDespesaEnsino
         }
         return array($nRPIncritosSemDesponibilidade101, $nRPIncritosSemDesponibilidade136, $nRPIncritosSemDesponibilidade118_119, $nRPSemDesponibilidade101, $nRPSemDesponibilidade136, $nRPSemDesponibilidade118_119);
     }
-
+    /*Calcula a linha 10 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736), das Despesa de Ensino */
     public function getLinha10RestoaPagarSemDis()
     {
         return $nValorRecursoTotal = self::getRestosSemDisponilibidadeFundeb(array("'101','15000001','1101'", "'201','25000001'", "'118','119','1118','1119','15400007','15400000'", "'218','219','25400007','25400000'"), $this->dtini, $this->dtfim, $this->instits);
     }
-
+   /*Calcula a linha 11 - CANCELAMENTO, NO EXERCÍCIO, DE RESTOS A PAGAR INSCRITOS COM DISPONIBILIDADE FINANCEIRA, das Despesa de Ensino */
     public function getLinha11CancelamentodeRestoaPagar()
     {
         $valorDescontos101 = self::getSaldoPlanoContaFonteFundeb("'101','1101','201','15000001','25000001'", $this->dtini, $this->dtfim, $this->instits);
