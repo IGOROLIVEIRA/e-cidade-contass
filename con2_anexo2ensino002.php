@@ -39,6 +39,7 @@ require_once("classes/db_slip_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
 require_once("classes/db_empresto_classe.php");
 require_once("classes/db_empempenho_classe.php");
+require_once("model/contabilidade/relatorios/ensino/RelatorioReceitaeDespesaEnsino.model.php");
 $clrotulo = new rotulocampo;
 
 db_postmemory($HTTP_POST_VARS);
@@ -47,7 +48,7 @@ $dtini = implode("-", array_reverse(explode("/", $DBtxt21)));
 $dtfim = implode("-", array_reverse(explode("/", $DBtxt22)));
 
 $clinfocomplementaresinstit = new cl_infocomplementaresinstit();
-
+$clSlip = new cl_slip();
 $instits = str_replace('-', ', ', $db_selinstit);
 $aInstits = explode(",", $instits);
 if (count($aInstits) > 1) {
@@ -74,6 +75,8 @@ $iInstituicoes = implode(',', $ainstitunticoes);
 
 $rsTipoinstit = $clinfocomplementaresinstit->sql_record($clinfocomplementaresinstit->sql_query(null, "si09_sequencial,si09_tipoinstit", null, "si09_instit in( {$instits})"));
 
+$oReceitaeDespesaEnsino = new RelatorioReceitaeDespesaEnsino();
+
 /**
  * busco o tipo de instituicao
  */
@@ -95,133 +98,11 @@ $aSubFuncao = array(122,272,271,361,365,366,367,843);
 $sFuncao     = "12";
 $aFontes      = array("'101','118','119','1101','1118','1119','15000001','15400007','15400000'");
 
-function getSaldoPlanoContaFonteAnexo($nFonte, $dtIni, $dtFim, $aInstits){
-    $where = " c61_instit in ({$aInstits})" ;
-    if(db_getsession("DB_anousu") > 2022){
-        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ($nFonte) ) ";
-    }else{
-        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
-    }
-    $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
-    $nTotalAnterior = 0;
-    for($x = 0; $x < pg_numrows($result); $x++){
-        $oPlanoConta = db_utils::fieldsMemory($result, $x);
-        if( ( $oPlanoConta->movimento == "S" )
-            && ( ( $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0 ) ) {
-            continue;
-        }
-        if(substr($oPlanoConta->estrutural,1,14) == '00000000000000'){
-            if($oPlanoConta->sinal_anterior == "C")
-                $nTotalAnterior -= $oPlanoConta->saldo_anterior;
-            else {
-                $nTotalAnterior += $oPlanoConta->saldo_anterior;
-            }
-        }
-    }
-    return $nTotalAnterior;
-}
-
-function getRestosSemDisponilibidadeAnexo($aFontes, $dtIni, $dtFim, $aInstits) {
-    $iSaldoRestosAPagarSemDisponibilidade = 0;
-
-    foreach($aFontes as $sFonte){
-        db_inicio_transacao();
-        $clEmpResto = new cl_empresto();
-        $sSqlOrder = "";
-        $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
-        $sSqlWhere = " o15_codtri in ($sFonte) group by 1 ";
-        if(db_getsession("DB_anousu") > 2022)
-            $sSqlWhere = " o15_codigo in ($sFonte) group by 1 ";
-        $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
-        $nValorRpPago = 0;
-        foreach($aEmpRestos as $oResto){
-            $nValorRpPago += $oResto->pagorpp + $oResto->pagorpnp;
-        }
-        $nTotalAnterior = getSaldoPlanoContaFonteAnexo($sFonte, $dtIni, $dtFim, $aInstits);
-        $nSaldo = 0;
-        if($nValorRpPago > $nTotalAnterior){
-            $nSaldo = $nValorRpPago - $nTotalAnterior ;
-        }
-        $iSaldoRestosAPagarSemDisponibilidade += $nSaldo;
-        db_query("drop table if exists work_pl");
-        db_fim_transacao();
-    }
-
-    return  $iSaldoRestosAPagarSemDisponibilidade;
-}
-
-function getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dtfim, $aInstits) {
-    $clSlip = new cl_slip();
-    $nValorAplicado = 0;
-    // despesas pagas
-    $aDespesasAplicada = getSaldoDespesa(null, "o58_funcao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in (".implode(",",$aSubFuncao).") and o15_codtri in (".implode(",",$aFontes).") and o58_instit in ($instits) group by 1,2");
-    if(db_getsession("DB_anousu") > 2022)
-        $aDespesasAplicada = getSaldoDespesa(null, "o58_funcao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in (".implode(",",$aSubFuncao).") and o15_codigo in (".implode(",",$aFontes).") and o58_instit in ($instits) group by 1,2");
-    $nValorAplicado = count($aDespesasAplicada[0]) > 0 ? $aDespesasAplicada[0]->pago : 0;
-
-    $nTotalReceitasRecebidasFundeb = 0;
-    $nDevolucaoRecursoFundeb = 0;
-    $rsSlip = $clSlip->sql_record($clSlip->sql_query_fundeb($dtini, $dtfim, $aInstits));
-    $nDevolucaoRecursoFundeb = db_utils::fieldsMemory($rsSlip, 0)->k17_valor;
-
-    $nTransferenciaRecebidaFundeb = 0;
-    $aTransferenciasRecebidasFundeb = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '417515001%'");
-    $nTransferenciaRecebidaFundeb = count($aTransferenciasRecebidasFundeb) > 0 ? $aTransferenciasRecebidasFundeb[0]->saldo_arrecadado_acumulado : 0;
-
-    $aTotalContribuicaoFundeb = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495%'");
-    $nTotalContribuicaoFundeb = count($aTotalContribuicaoFundeb) > 0 ? $aTotalContribuicaoFundeb[0]->saldo_arrecadado_acumulado : 0;
-
-    $nTotalReceitasRecebidasFundeb = abs($nDevolucaoRecursoFundeb) + abs($nTransferenciaRecebidaFundeb);
-    $nResulatadoLiquidoTransfFundeb = $nTotalReceitasRecebidasFundeb-abs($nTotalContribuicaoFundeb);
-    $nValorAplicado = $nValorAplicado - $nResulatadoLiquidoTransfFundeb;
-
-    $clempempenho = new cl_empempenho();
-    $sSqlOrder = "";
-    $sCampos = " o15_codtri, sum(vlrpag) as vlrpag";
-    $aFontesSuperavit = array("'201','218','219','25000001','25400007','25400000'");
-    $sSqlWhere = " o15_codtri in (".implode(",", $aFontesSuperavit).") group by 1";
-    if(db_getsession("DB_anousu") > 2022)
-        $sSqlWhere = " o15_codigo in (".implode(",", $aFontesSuperavit).") group by 1";  
-    $dtFimQuadrimestre = db_getsession("DB_anousu")."-04-30";
-    $aEmpPagoSuperavit = $clempempenho->getDespesasCusteadosComSuperavit(db_getsession("DB_anousu"), $dtini, $dtFimQuadrimestre, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
-    $valorEmpPagoSuperavit = 0;
-    foreach($aEmpPagoSuperavit as $oEmp){
-        $valorEmpPagoSuperavit += $oEmp->vlrpag;
-    }
-    $nValorAplicado = $nValorAplicado + $valorEmpPagoSuperavit;
-
-    $aFontes = array("'101','1101','15000001'","'201','25000001'","'118','119','1118','1119','15400007','15400000'","'218','219','25400007','25400000'");
-    $nValorPagoSemDisponibilidade = getRestosSemDisponilibidadeAnexo($aFontes, $dtini, $dtfim, $instits);
-
-    $nValorAplicado = $nValorAplicado + $nValorPagoSemDisponibilidade;
-
-    $clempresto = new cl_empresto();
-    $sSqlOrder = "";
-    $sCampos = " o15_codtri, sum(vlranu) as vlranu ";
-    $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
-    if(db_getsession("DB_anousu") > 2022)
-        $sSqlWhere = " o15_codigo in (".implode(",", $aFontes).") group by 1";
-    $aFontes =array("'101','118','119','1101','1118','1119','201','218','219','15000001','15400007','15400000','25000001','25400007','25400000'");
-
-    $aEmpRestos = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
-    $valorRpAnulado = 0;
-    foreach($aEmpRestos as $oEmpResto){
-        $valorRpAnulado += $oEmpResto->vlranu;
-    }
-    $nValorAplicado = $nValorAplicado - $valorRpAnulado;
-
-    return $nValorAplicado;
-}
-
-
 $sWhereReceita      = "o70_instit in ({$instits})";
 $rsReceitas = db_receitasaldo(11, 1, 3, true, $sWhereReceita, $anousu, $dtini, $dtfim, false, ' * ', true, 0);
 $aReceitas = db_utils::getColectionByRecord($rsReceitas);
 db_query("drop table if exists work_receita");
 criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
-
-
-//$result = db_planocontassaldo_matriz(db_getsession("DB_anousu"),($DBtxt21_ano.'-'.$DBtxt21_mes.'-'.$DBtxt21_dia),$dtfim,false,$where);
 
 if ($anousu >=2022){
 $aReceitasImpostos = array(
@@ -235,7 +116,7 @@ $aReceitasImpostos = array(
     array('1.1.1.2.50.0.6 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Juros de Mora', 'text', '411125006%', ''),
     array('1.1.1.2.50.0.7 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Multas da Dívida Ativa', 'text', '411125007%', ''),
     array('1.1.1.2.50.0.8 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Juros de Mora da Dívida Ativa', 'text', '411125008%', ''),
-    array('(-) Deduções da Receita do IPTU', 'text', '49%11125001%',''),
+    array('(-) Deduções da Receita do IPTU', 'text', '49%111250%',''),
     array('1.2 - Receita resultante do Imposto sobre Transmissão Inter Vivos (ITBI)', 'subtitle', '41112530%', '49%1112530%'),
     array('1.1.1.2.53.0.1 - Impostos sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Principal', 'text', '411125301%',''),
     array('1.1.1.2.53.0.2 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas e Juros de Mora', 'text', '411125302%',''),
@@ -245,7 +126,7 @@ $aReceitasImpostos = array(
     array('1.1.1.2.53.0.6 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Juros de Mora', 'text', '411125306%',''),
     array('1.1.1.2.53.0.7 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas da Dívida Ativa', 'text', '411125307%',''),
     array('1.1.1.2.53.0.8 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -Juros de Mora da Dívida Ativa', 'text', '411125308%',''),
-    array('(-) Deduções da Receita do ITBI', 'text', '49%1112530%',''),
+    array('(-) Deduções da Receita do ITBI', 'text', '49%111253%',''),
     array('1.3 - Receita resultante do Imposto sobre Serviços de Qualquer Natureza (ISS)', 'subtitle', '4111451%', '49%111451%'),
     array('1.1.1.4.51.1.1 - Imposto sobre Serviços de Qualquer Natureza - Principal', 'text', '411145111%',''),
     array('1.1.1.4.51.1.2 - Imposto sobre Serviços de Qualquer Natureza - Multas e Juros de Mora', 'text', '411145112%',''),
@@ -277,7 +158,7 @@ $aReceitasImpostos = array(
     array('1.1.1.2.01.1.6 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Juros de Mora', 'text', '411120116%',''),
     array('1.1.1.2.01.1.7 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados -Multas da Dívida Ativa', 'text', '411120117%',''),
     array('1.1.1.2.01.1.8 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Juros de Mora da Dívida Ativa', 'text', '411120118%',''),
-    array('(-) Deduções da Receita do ITR ', 'text', '49%1112011%',''),
+    array('(-) Deduções da Receita do ITR ', 'text', '49%111201%',''),
 );
 
 $aReceitasTransferencias = array(
@@ -305,7 +186,7 @@ $aReceitasImpostos = array(
     array('1.1.1.8.01.1.5 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Multas', 'text', '411180115%', ''),
     array('1.1.1.8.01.1.6 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Juros de Mora', 'text', '411180116%', ''),
     array('1.1.1.8.01.1.7 - Imposto Sobre a Propriedade Predial e Territorial Urbana - Multas da Dívida Ativa', 'text', '411180117%', ''),
-    array('(-) Deduções da Receita do IPTU', 'text', '49%1118011%',''),
+    array('(-) Deduções da Receita do IPTU', 'text', '49%111801%',''),
     array('1.2 - Receita resultante do Imposto sobre Transmissão Inter Vivos (ITBI)', 'subtitle', '41118014%', '49%1118014%'),
     array('1.1.1.8.01.4.1 - Impostos sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Principal', 'text', '411180141%',''),
     array('1.1.1.8.01.4.2 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas e Juros de Mora', 'text', '411180142%',''),
@@ -315,7 +196,7 @@ $aReceitasImpostos = array(
     array('1.1.1.8.01.4.6 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Juros de Mora', 'text', '411180146%',''),
     array('1.1.1.8.01.4.7 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis - Multas da Dívida Ativa', 'text', '411180147%',''),
     array('1.1.1.8.01.4.8 - Imposto sobre Transmissão Inter Vivos de Bens Imóveis e de Direitos Reais sobre Imóveis -Juros de Mora da Dívida Ativa', 'text', '411180148%',''),
-    array('(-) Deduções da Receita do ITBI', 'text', '49%1118014%',''),
+    array('(-) Deduções da Receita do ITBI', 'text', '49%111801%',''),
     array('1.3 - Receita resultante do Imposto sobre Serviços de Qualquer Natureza (ISS)', 'subtitle', '4111802%', '49%111802%'),
     array('1.1.1.8.02.3.1 - Imposto sobre Serviços de Qualquer Natureza - Principal', 'text', '411180231%',''),
     array('1.1.1.8.02.3.2 - Imposto sobre Serviços de Qualquer Natureza - Multas e Juros de Mora', 'text', '411180232%',''),
@@ -347,7 +228,7 @@ $aReceitasImpostos = array(
     array('1.1.1.2.01.1.6 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Juros de Mora', 'text', '411120116%',''),
     array('1.1.1.2.01.1.7 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados -Multas da Dívida Ativa', 'text', '411120117%',''),
     array('1.1.1.2.01.1.8 - Imposto sobre a Propriedade Territorial Rural - Municípios Conveniados - Juros de Mora da Dívida Ativa', 'text', '411120118%',''),
-    array('(-) Deduções da Receita do ITR ', 'text', '49%1112011%',''),
+    array('(-) Deduções da Receita do ITR ', 'text', '49%111201%',''),
 );
 
 $aReceitasTransferencias = array(
@@ -383,10 +264,11 @@ $aReceitasTransferencias = array(
  * Nenhum dos parâmetros é obrigatório
  */
 
-
 $mPDF = new mpdf('', '', 0, '', 10, 10, 20, 10, 5, 11);
-
-
+// DEFINE O FUSO HORARIO COMO O HORARIO DE BRASILIA
+date_default_timezone_set('America/Sao_Paulo');
+// CRIA UMA VARIAVEL E ARMAZENA A HORA ATUAL DO FUSO-HORÀRIO DEFINIDO (BRASÍLIA)
+$dataLocal = date('d/m/Y H:i:s', time());
 $header = "
 <header>
     <div style=\"font-family:Arial\">
@@ -414,7 +296,7 @@ $footer = "
     <div style='border-top:1px solid #000;width:100%;font-family:sans-serif;font-size:10px;height:10px;'>
         <div style='text-align:left;font-style:italic;width:90%;float:left;'>
             Financeiro>Contabilidade>Relatórios de Acompanhamento>Receita Ensino - Anexo II
-            Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data:" . date("d/m/Y H:i:s", db_getsession("DB_datausu"))  . "
+            Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data:" . $dataLocal . "
         <div style='text-align:right;float:right;width:10%;'>
             {PAGENO}
         </div>
@@ -667,7 +549,7 @@ ob_start();
                     if ($receita[1] == 'title') {
                         echo "";
                     } else {
-                        echo db_formatar(abs($nTotalReceita), "f");
+                        echo db_formatar(($nTotalReceita), "f");
                     }
                     echo "    </td>";
                     echo " </tr>";
@@ -704,10 +586,118 @@ ob_start();
                     <td class="footer-total-row-valor"><?php echo db_formatar($nTotalReceitaTransferencia + $nTotalReceitaImpostos, "f"); ?></td>
                 </tr>
                  <?php
-                    $nValorAplicado = getDespesaEnsino($sFuncao, $aSubFuncao, $aFontes, $instits, $dtini, $dtfim, $aInstits);
-                    $valorAplicacaoDevida = ($nTotalReceitaTransferencia + $nTotalReceitaImpostos)*0.25 ;
-                    $nDiferencaAplicacao = $nValorAplicado - $valorAplicacaoDevida;
-                    $nPercentualAplicado = ($nValorAplicado/ ($nTotalReceitaTransferencia + $nTotalReceitaImpostos))*100;
+                    $nTotalAplicadoEntrada = 0;
+                    $nTotalAplicadoSaida   = 0;
+                    $nValorTotalPago       = 0;
+                    $aFontes      = array("'101','1101','15000001','201','25000001'");
+                    foreach ($aSubFuncao as $iSubFuncao) {
+                        $oReceitaeDespesaEnsino->setAnousu($anousu);
+                        $oReceitaeDespesaEnsino->setiSubFuncao($iSubFuncao);
+                        $oReceitaeDespesaEnsino->setsFuncao($sFuncao);
+                        $oReceitaeDespesaEnsino->setaFontes($aFontes);
+                        $oReceitaeDespesaEnsino->setInstits($instits);
+                        $dadosLinha1 = $oReceitaeDespesaEnsino->getLinha1FuncaoeSubfuncao();
+                        if (count($dadosLinha1['1']) > 0) {
+                            foreach ($dadosLinha1['1'] as $oDespesaPrograma) {
+                                $oReceitaeDespesaEnsino->setoDespesaPrograma($oDespesaPrograma);
+                                $oReceitaeDespesaEnsino->setfSubTotal($fSubTotal);
+                                $oReceitaeDespesaEnsino->setnValorTotalPago($nValorTotalPago);
+                                $oReceitaeDespesaEnsino->setnValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
+                                $oReceitaeDespesaEnsino->setnValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
+                                $oReceitaeDespesaEnsino->setnValorTotalGeral($nValorTotalGeral);
+                                $dadoslinha2                  = $oReceitaeDespesaEnsino->getLinha2FuncaoeSubfuncao();                         
+                                $nValorTotalPago             += $dadoslinha2['6'];
+                        }
+                    }
+                   }
+                   $aFonte2      = array("'136','17180000'");
+                   $aSubFuncoes2 = array(122,272,271,361,365,366,367,843);
+                   $sFuncao2     = "12";
+                   foreach ($aSubFuncoes2 as $iSubFuncao) {
+                        $oReceitaeDespesaEnsino->setAnousu($anousu);
+                        $oReceitaeDespesaEnsino->setiSubFuncao($iSubFuncao);
+                        $oReceitaeDespesaEnsino->setsFuncao($sFuncao);
+                        $oReceitaeDespesaEnsino->setaFontes($aFonte2);
+                        $oReceitaeDespesaEnsino->setInstits($instits);
+                        $dadosLinha1 = $oReceitaeDespesaEnsino->getLinha1FuncaoeSubfuncao();
+                        if (count($dadosLinha1['1']) > 0) {
+                            foreach ($dadosLinha1['1'] as $oDespesaPrograma) {
+                                $oReceitaeDespesaEnsino->setoDespesaPrograma($oDespesaPrograma);
+                                $oReceitaeDespesaEnsino->setfSubTotal($fSubTotal);
+                                $oReceitaeDespesaEnsino->setnValorTotalPago($nValorTotalPago);
+                                $oReceitaeDespesaEnsino->setnValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
+                                $oReceitaeDespesaEnsino->setnValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
+                                $oReceitaeDespesaEnsino->setnValorTotalGeral($nValorTotalGeral);
+                                $dadoslinha2                  = $oReceitaeDespesaEnsino->getLinha2FuncaoeSubfuncao();
+                                $nValorTotalPago             += $dadoslinha2['6'];
+                            }
+                        }
+                   }
+                   $aFonteFundeb      = array("'118','119','1118','1119','15400007','15400000'");
+                   $aSubFuncoes = array(122,272,271,361,365,366,367,843);
+                   foreach ($aSubFuncoes as $iSubFuncao) {
+                        $oReceitaeDespesaEnsino->setiSubFuncao($iSubFuncao);
+                        $oReceitaeDespesaEnsino->setsFuncao($sFuncao);
+                        $oReceitaeDespesaEnsino->setaFonteFundeb($aFonteFundeb);
+                        $oReceitaeDespesaEnsino->setInstits($instits);
+                        $dadoslinha3 =  $oReceitaeDespesaEnsino->getLinha1FuncaoFundeb();
+                        $aDespesasProgramas = $dadoslinha3['1'];
+                        if (count($aDespesasProgramas) > 0) {
+                            foreach ($aDespesasProgramas as $oDespesaPrograma) {
+                                $oReceitaeDespesaEnsino->setoDespesaPrograma($oDespesaPrograma);
+                                $oReceitaeDespesaEnsino->setnValorTotalPago($nValorTotalPago);
+                                $oReceitaeDespesaEnsino->setnValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
+                                $oReceitaeDespesaEnsino->setnValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
+                                $oReceitaeDespesaEnsino->setnValorTotalGeral($nValorTotalGeral);
+                                $dadoslinha3                  =  $oReceitaeDespesaEnsino->getLinha2FuncaoFundeb();
+                                $nValorTotalPago             += $dadoslinha3['5'];
+                            }
+                        }
+                   } 
+                   $nTotalAplicadoEntrada  = $nValorTotalPago;
+                   $oReceitaeDespesaEnsino->setdtini($dtini);
+                   $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                   $oReceitaeDespesaEnsino->setInstits($instits);
+                   $nTotalAplicadoEntrada += $oReceitaeDespesaEnsino->getLinha7DespesasCusteadaSuperavitDoFundeb();
+                   $nTotalAplicadoEntrada += $oReceitaeDespesaEnsino->getLinha8RestosaPagarInscritosFonte101();
+                   $nTotalAplicadoEntrada += $oReceitaeDespesaEnsino->getLinha10RestoaPagarSemDis();
+
+                   $nTotalReceitasRecebidasFundeb = 0;
+                   $nContribuicaoFundeb = 0;
+                   
+                   $nDevolucaoRecursoFundeb = 0;
+                   $rsSlip = $clSlip->sql_record($clSlip->sql_query_fundeb($dtini, $dtfim, $aInstits));
+                   $nDevolucaoRecursoFundeb = db_utils::fieldsMemory($rsSlip, 0)->k17_valor;
+                   
+                   $nTransferenciaRecebidaFundeb = 0;
+                   
+                   $aTransferenciasRecebidasFundeb = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '417515001%'");
+                   
+                   $nTransferenciaRecebidaFundeb = count($aTransferenciasRecebidasFundeb) > 0 ? $aTransferenciasRecebidasFundeb[0]->saldo_arrecadado_acumulado : 0;
+                   
+                   $aTotalContribuicaoFundeb = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495%'");
+                   $nTotalContribuicaoFundeb = count($aTotalContribuicaoFundeb) > 0 ? $aTotalContribuicaoFundeb[0]->saldo_arrecadado_acumulado : 0;
+                   
+                   $nTotalReceitasRecebidasFundeb = abs($nDevolucaoRecursoFundeb) + abs($nTransferenciaRecebidaFundeb);
+                   $nResulatadoLiquidoTransfFundeb = $nTotalReceitasRecebidasFundeb-abs($nTotalContribuicaoFundeb);
+                   $nTotalAplicadoSaida = $nResulatadoLiquidoTransfFundeb;
+                  
+                   $dadosLinha9 = $oReceitaeDespesaEnsino->getLinha9RestosaPagarInscritoSemDis();
+                   $nRPIncritosSemDesponibilidade101     = $dadosLinha9['0'];
+                   $nRPIncritosSemDesponibilidade136     = $dadosLinha9['1'];
+                   $nRPIncritosSemDesponibilidade118_119 = $dadosLinha9['2'];
+                   $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nRPIncritosSemDesponibilidade101 + $nRPIncritosSemDesponibilidade136 + $nRPIncritosSemDesponibilidade118_119;      
+                      
+                   $dadosLinha11 = $oReceitaeDespesaEnsino->getLinha11CancelamentodeRestoaPagar();
+                   $nValorRecursoTotal101 = $dadosLinha11['0'];
+                   $nValorRecursoTotal136 = $dadosLinha11['1'];
+                   $nValorRecursoTotal118 = $dadosLinha11['2'];
+                   $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nValorRecursoTotal101 + $nValorRecursoTotal136 + $nValorRecursoTotal118;
+                   
+                   $nValorAplicado =  $nTotalAplicadoEntrada + ($nTotalAplicadoSaida * -1);
+                   $valorAplicacaoDevida = ($nTotalReceitaTransferencia + $nTotalReceitaImpostos)*0.25 ;
+                   $nDiferencaAplicacao = $nValorAplicado - $valorAplicacaoDevida;
+                   $nPercentualAplicado = ($nValorAplicado/ ($nTotalReceitaTransferencia + $nTotalReceitaImpostos))*100;
                  ?>
                 <tr style='height:20px;'>
                     <td class="footer-total-row" colspan="8">B - Aplicação Devida (art. 212 da CF/88) 25%</td>
