@@ -136,7 +136,7 @@ $clrotulo->label('DBtxt25');
   
    var aRetorno = eval("("+oAjax.responseText+")");
    var sExpReg  = new RegExp('\\\\n','g');
-  
+
    if ( aRetorno.lErro ) {
      alert(aRetorno.sMsg.urlDecode().replace(sExpReg,'\n'));
      return false;
@@ -178,8 +178,8 @@ $clrotulo->label('DBtxt25');
   
    var aRetorno = eval("("+oAjax.responseText+")");
    var sExpReg  = new RegExp('\\\\n','g');
-    
-  
+		console.log("Teste com Barbara");
+		console.log(aRetorno);
    if ( aRetorno.lErro ) {
      alert(aRetorno.sMsg.urlDecode().replace(sExpReg,'\n'));
      return false;
