@@ -592,19 +592,19 @@ ob_start();
                     $aFontes      = array("'101','1101','15000001','201','25000001'");
                     foreach ($aSubFuncao as $iSubFuncao) {
                         $oReceitaeDespesaEnsino->setAnousu($anousu);
-                        $oReceitaeDespesaEnsino->setiSubFuncao($iSubFuncao);
-                        $oReceitaeDespesaEnsino->setsFuncao($sFuncao);
-                        $oReceitaeDespesaEnsino->setaFontes($aFontes);
+                        $oReceitaeDespesaEnsino->setSubFuncao($iSubFuncao);
+                        $oReceitaeDespesaEnsino->setFuncao($sFuncao);
+                        $oReceitaeDespesaEnsino->setFontes($aFontes);
                         $oReceitaeDespesaEnsino->setInstits($instits);
                         $dadosLinha1 = $oReceitaeDespesaEnsino->getLinha1FuncaoeSubfuncao();
                         if (count($dadosLinha1['1']) > 0) {
                             foreach ($dadosLinha1['1'] as $oDespesaPrograma) {
-                                $oReceitaeDespesaEnsino->setoDespesaPrograma($oDespesaPrograma);
-                                $oReceitaeDespesaEnsino->setfSubTotal($fSubTotal);
-                                $oReceitaeDespesaEnsino->setnValorTotalPago($nValorTotalPago);
-                                $oReceitaeDespesaEnsino->setnValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
-                                $oReceitaeDespesaEnsino->setnValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
-                                $oReceitaeDespesaEnsino->setnValorTotalGeral($nValorTotalGeral);
+                                $oReceitaeDespesaEnsino->setDespesaPrograma($oDespesaPrograma);
+                                $oReceitaeDespesaEnsino->setSubTotal($fSubTotal);
+                                $oReceitaeDespesaEnsino->setValorTotalPago($nValorTotalPago);
+                                $oReceitaeDespesaEnsino->setValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
+                                $oReceitaeDespesaEnsino->setValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
+                                $oReceitaeDespesaEnsino->setValorTotalGeral($nValorTotalGeral);
                                 $dadoslinha2                  = $oReceitaeDespesaEnsino->getLinha2FuncaoeSubfuncao();                         
                                 $nValorTotalPago             += $dadoslinha2['6'];
                         }
@@ -615,19 +615,19 @@ ob_start();
                    $sFuncao2     = "12";
                    foreach ($aSubFuncoes2 as $iSubFuncao) {
                         $oReceitaeDespesaEnsino->setAnousu($anousu);
-                        $oReceitaeDespesaEnsino->setiSubFuncao($iSubFuncao);
-                        $oReceitaeDespesaEnsino->setsFuncao($sFuncao);
-                        $oReceitaeDespesaEnsino->setaFontes($aFonte2);
+                        $oReceitaeDespesaEnsino->setSubFuncao($iSubFuncao);
+                        $oReceitaeDespesaEnsino->setFuncao($sFuncao);
+                        $oReceitaeDespesaEnsino->setFontes($aFonte2);
                         $oReceitaeDespesaEnsino->setInstits($instits);
                         $dadosLinha1 = $oReceitaeDespesaEnsino->getLinha1FuncaoeSubfuncao();
                         if (count($dadosLinha1['1']) > 0) {
                             foreach ($dadosLinha1['1'] as $oDespesaPrograma) {
-                                $oReceitaeDespesaEnsino->setoDespesaPrograma($oDespesaPrograma);
-                                $oReceitaeDespesaEnsino->setfSubTotal($fSubTotal);
-                                $oReceitaeDespesaEnsino->setnValorTotalPago($nValorTotalPago);
-                                $oReceitaeDespesaEnsino->setnValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
-                                $oReceitaeDespesaEnsino->setnValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
-                                $oReceitaeDespesaEnsino->setnValorTotalGeral($nValorTotalGeral);
+                                $oReceitaeDespesaEnsino->setDespesaPrograma($oDespesaPrograma);
+                                $oReceitaeDespesaEnsino->setSubTotal($fSubTotal);
+                                $oReceitaeDespesaEnsino->setValorTotalPago($nValorTotalPago);
+                                $oReceitaeDespesaEnsino->setValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
+                                $oReceitaeDespesaEnsino->setValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
+                                $oReceitaeDespesaEnsino->setValorTotalGeral($nValorTotalGeral);
                                 $dadoslinha2                  = $oReceitaeDespesaEnsino->getLinha2FuncaoeSubfuncao();
                                 $nValorTotalPago             += $dadoslinha2['6'];
                             }
@@ -636,27 +636,27 @@ ob_start();
                    $aFonteFundeb      = array("'118','119','1118','1119','15400007','15400000'");
                    $aSubFuncoes = array(122,272,271,361,365,366,367,843);
                    foreach ($aSubFuncoes as $iSubFuncao) {
-                        $oReceitaeDespesaEnsino->setiSubFuncao($iSubFuncao);
-                        $oReceitaeDespesaEnsino->setsFuncao($sFuncao);
-                        $oReceitaeDespesaEnsino->setaFonteFundeb($aFonteFundeb);
+                        $oReceitaeDespesaEnsino->setSubFuncao($iSubFuncao);
+                        $oReceitaeDespesaEnsino->setFuncao($sFuncao);
+                        $oReceitaeDespesaEnsino->setFonteFundeb($aFonteFundeb);
                         $oReceitaeDespesaEnsino->setInstits($instits);
                         $dadoslinha3 =  $oReceitaeDespesaEnsino->getLinha1FuncaoFundeb();
                         $aDespesasProgramas = $dadoslinha3['1'];
                         if (count($aDespesasProgramas) > 0) {
                             foreach ($aDespesasProgramas as $oDespesaPrograma) {
-                                $oReceitaeDespesaEnsino->setoDespesaPrograma($oDespesaPrograma);
-                                $oReceitaeDespesaEnsino->setnValorTotalPago($nValorTotalPago);
-                                $oReceitaeDespesaEnsino->setnValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
-                                $oReceitaeDespesaEnsino->setnValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
-                                $oReceitaeDespesaEnsino->setnValorTotalGeral($nValorTotalGeral);
+                                $oReceitaeDespesaEnsino->setDespesaPrograma($oDespesaPrograma);
+                                $oReceitaeDespesaEnsino->setValorTotalPago($nValorTotalPago);
+                                $oReceitaeDespesaEnsino->setValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
+                                $oReceitaeDespesaEnsino->setValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
+                                $oReceitaeDespesaEnsino->setValorTotalGeral($nValorTotalGeral);
                                 $dadoslinha3                  =  $oReceitaeDespesaEnsino->getLinha2FuncaoFundeb();
                                 $nValorTotalPago             += $dadoslinha3['5'];
                             }
                         }
                    } 
                    $nTotalAplicadoEntrada  = $nValorTotalPago;
-                   $oReceitaeDespesaEnsino->setdtini($dtini);
-                   $oReceitaeDespesaEnsino->setdtfim($dtfim);
+                   $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                   $oReceitaeDespesaEnsino->setDataFinal($dtfim);
                    $oReceitaeDespesaEnsino->setInstits($instits);
                    $nTotalAplicadoEntrada += $oReceitaeDespesaEnsino->getLinha7DespesasCusteadaSuperavitDoFundeb();
                    $nTotalAplicadoEntrada += $oReceitaeDespesaEnsino->getLinha8RestosaPagarInscritosFonte101();
