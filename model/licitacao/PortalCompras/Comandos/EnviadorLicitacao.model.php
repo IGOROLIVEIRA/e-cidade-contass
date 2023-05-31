@@ -18,7 +18,6 @@ class EnviadorLicitacao implements EnviadorInterface
             $response = $client->post($url, [
                     'json' => json_decode(json_encode($licitacao),true)
             ]);
-
             $resultado = json_decode($response->getBody()->__toString());
 
             return [

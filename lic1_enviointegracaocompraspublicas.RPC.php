@@ -15,9 +15,11 @@ require_once("std/DBDate.php");
 require_once("classes/db_liclicitaportalcompras_classe.php");
 require_once("model/licitacao/PortalCompras/Fabricas/LicitacaoFabrica.model.php");
 require_once("model/licitacao/PortalCompras/Comandos/EnviadorLicitacao.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/ValidadorAcessoApi.model.php");
 
 $cl_liclicitaportalcompras = new cl_liclicitaportalcompras;
 $licitacaoFabrica  = new LicitacaoFabrica;
+$validadorAcessoApi = new ValidadorAcessoApi();
 
 $oJson             = new services_json();
 $oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
@@ -30,24 +32,15 @@ $oRetorno->itens   = array();
 switch ($oParam->exec) {
     case 'EnviarPregao':
             try {
-                $codigo    = $oParam->codigo;
-                $results   = $cl_liclicitaportalcompras->buscaLicitacoes($codigo);
 
-                if (empty($results)) {
-                    throw new Exception("Registro não encontrado");
-                }
+                $codigo    = $oParam->codigo;
+
+                $chaveAcesso = $validadorAcessoApi->getChaveAcesso();
+
+                $results   = $cl_liclicitaportalcompras->buscaLicitacoes($codigo);
+                $validadorAcessoApi->execute($results);
 
                 $licitacao = $licitacaoFabrica->criar($results, $cl_liclicitaportalcompras->numrows);
-
-                $chaveAcesso = db_utils::fieldsMemory(
-                    $cl_liclicitaportalcompras->buscaChaveDeAcesso(
-                        db_getsession("DB_instit")
-                        )
-                , 0)->chaveacesso;
-                if (empty($chaveAcesso)) {
-                    throw new Exception("Chave de acesso não está cadastrada");
-                }
-
                 $url = $licitacao->getUrlPortalCompras($chaveAcesso);
 
                 $enviador  = new EnviadorLicitacao();
@@ -56,7 +49,6 @@ switch ($oParam->exec) {
                 $oRetorno->message = $resultado['message'];
                 $oRetorno->status = (int)$resultado['success'];
             } catch (Exception $oErro) {
-
                 $oRetorno->message = $oErro->getMessage();
                 $oRetorno->status  = 2;
             }

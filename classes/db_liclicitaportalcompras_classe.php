@@ -24,6 +24,7 @@ class cl_liclicitaportalcompras
         l03_descr as modalidade,
         l03_pctipocompratribunal as codigomodalidade,
         l20_tipnaturezaproced as naturezaprocedimento,
+        l20_licsituacao as situacao,
         case when
                 l03_presencial=true then 2
                 else 1
