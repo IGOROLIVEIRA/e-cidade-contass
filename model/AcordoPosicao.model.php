@@ -712,7 +712,7 @@ class AcordoPosicao
      * @param integer $iLicitem codigo do item da licitacao
      * @return AcordoItem
      */
-    public function adicionarItemDeLicitacao($iLicitem, $oItemAcordo = null)
+    public function adicionarItemDeLicitacao($iLicitem, $oItemAcordo = null, $valorunitario)
     {
 
         $oDaoLiclicitem = db_utils::getDao("liclicitem");
@@ -737,7 +737,7 @@ class AcordoPosicao
             if ($oItemLicitacao->pc17_unid == '') {
                 $oItem->setUnidade(1);
             }
-            $oItem->setValorUnitario($oItemLicitacao->pc23_vlrun);
+            $oItem->setValorUnitario($valorunitario);
             $oItem->setOrigem($oItemLicitacao->l21_codigo, 2);
             $oItem->setValorTotal($oItemLicitacao->pc23_quant * $oItemLicitacao->pc23_vlrun);
             $oItem->setResumo($oItemLicitacao->pc11_resum);
@@ -921,7 +921,7 @@ class AcordoPosicao
      * @param integer $iCodprocItem codigo do item do Processo
      * @return AcordoItem
      */
-    public function adicionarItemDeProcesso($iCodprocItem, $oItemAcordo = null)
+    public function adicionarItemDeProcesso($iCodprocItem, $oItemAcordo = null, $valorunitario)
     {
 
         $oDaoLiclicitem = db_utils::getDao("pcprocitem");
@@ -942,7 +942,7 @@ class AcordoPosicao
                 $oItem->setUnidade(1);
             }
 
-            $oItem->setValorUnitario($oItemLicitacao->pc23_vlrun);
+            $oItem->setValorUnitario($valorunitario);
             $oItem->setOrigem($oItemLicitacao->pc81_codprocitem, 1);
             $oItem->setValorTotal($oItemLicitacao->pc23_quant * $oItemLicitacao->pc23_vlrun);
             $oItem->setResumo($oItemLicitacao->pc11_resum);

@@ -1386,6 +1386,7 @@ switch ($oParam->exec) {
 
     case "adicionarItensOrigem":
 
+
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
 
             $oContrato              = $_SESSION["oContrato"];
@@ -1405,7 +1406,24 @@ switch ($oParam->exec) {
                     $iVigenciaInicial = db_formatar($oContrato->getDataInicial(), 'd');
                     $iVigenciaFinal   = db_formatar($oContrato->getDataFinal(), 'd');
 
+                    $aMenoresValoresUnitarios = array();
+
                     foreach ($oParam->aLista as $iIndice => $oItem) {
+                        if (array_key_exists($oItem->codigomaterial, $aMenoresValoresUnitarios)) {
+
+                            if ($oItem->valorunitario < $aMenoresValoresUnitarios[$oItem->codigomaterial]) {
+                                $aMenoresValoresUnitarios[$oItem->codigomaterial] = $oItem->valorunitario;
+                            }
+                            continue;
+                        }
+                        $aMenoresValoresUnitarios[$oItem->codigomaterial] = $oItem->valorunitario;
+                    }
+
+
+                    foreach ($oParam->aLista as $iIndice => $oItem) {
+
+
+                        $oItem->valorunitario = $aMenoresValoresUnitarios[$oItem->codigomaterial];
 
                         if ($iTipocompraTribunal == "103" || $iTipocompraTribunal == "102") {
                             $iExecucaoInicial = db_formatar($oContrato->getDataInicial(), 'd');
@@ -1438,7 +1456,7 @@ switch ($oParam->exec) {
                             if ($iTipocompraTribunal == "103" || $iTipocompraTribunal == "102") {
                                 $oPosicao->adicionarItemDeCredenciamento($iLicitacao, $iContratado, $oItem->codigo, $oItem, $iCodigoAcordo, $iTipocompraTribunal);
                             } else {
-                                $oPosicao->adicionarItemDeLicitacao($oItem->codigo, $oItem);
+                                $oPosicao->adicionarItemDeLicitacao($oItem->codigo, $oItem, $oItem->valorunitario);
                             }
 
                             if($oContrato->getNaturezaAcordo($iCodigoAcordo) == 1){
@@ -1469,7 +1487,7 @@ switch ($oParam->exec) {
                             }
                         } else if ($oContrato->getOrigem() == 1) {
 
-                            $oPosicao->adicionarItemDeProcesso($oItem->codigo, $oItem);
+                            $oPosicao->adicionarItemDeProcesso($oItem->codigo, $oItem, $oItem->valorunitario);
                         }
                     }
                     $oContrato->atualizaValorContratoPorTotalItens();
