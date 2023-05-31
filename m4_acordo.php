@@ -431,16 +431,17 @@ if (isset($alterar)) {
 
     if ($ac16_tipoorigem == 2 || $ac16_tipoorigem == 3) {
 
-      $rsLiclicita = db_query("select l03_codcom,l20_edital,l20_anousu from liclicita 
+      $rsLiclicita = db_query("select l03_codcom,l20_edital,l20_anousu,l20_numero from liclicita 
       inner join cflicita on l03_codigo = l20_codtipocom where l20_codigo = $ac16_licitacao;");
       $l20_edital = db_utils::fieldsMemory($rsLiclicita, 0)->l20_edital;
       $l20_anousu = db_utils::fieldsMemory($rsLiclicita, 0)->l20_anousu;
+      $l20_numero = db_utils::fieldsMemory($rsLiclicita, 0)->l20_numero;
       $pc50_codcom = db_utils::fieldsMemory($rsLiclicita, 0)->l03_codcom;
 
       $e54_numerl = "$l20_edital/$l20_anousu";
 
       db_query("UPDATE empautoriza
-      SET e54_adesaoregpreco = null,e54_nummodalidade = null,e54_licoutrosorgaos = null,e54_numerl = '$e54_numerl', e54_codcom = $pc50_codcom, e54_codlicitacao = $ac16_licitacao
+      SET e54_adesaoregpreco = null,e54_nummodalidade = $l20_numero,e54_licoutrosorgaos = null,e54_numerl = '$e54_numerl', e54_codcom = $pc50_codcom, e54_codlicitacao = $ac16_licitacao
       where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
 
       db_query("UPDATE empempenho
@@ -478,14 +479,16 @@ if (isset($alterar)) {
       $rsPc50_codcom = db_query("select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = $pc50_pctipocompratribunal;");
       $pc50_codcom = db_utils::fieldsMemory($rsPc50_codcom, 0)->pc50_codcom;
 
-      $rsLiclicita = db_query("select lic211_processo,lic211_anousu from liclicitaoutrosorgaos where lic211_sequencial = $ac16_licoutroorgao;");
+      $rsLiclicita = db_query("select lic211_processo,lic211_anousu,lic211_numero from liclicitaoutrosorgaos where lic211_sequencial = $ac16_licoutroorgao;");
       $l20_edital = db_utils::fieldsMemory($rsLiclicita, 0)->lic211_processo;
       $l20_anousu = db_utils::fieldsMemory($rsLiclicita, 0)->lic211_anousu;
+      $lic211_numero = db_utils::fieldsMemory($rsLiclicita, 0)->lic211_numero;
+
 
       $e54_numerl = "$l20_edital/$l20_anousu";
 
       db_query("UPDATE empautoriza
-      SET e54_adesaoregpreco = null,e54_nummodalidade = null,e54_licoutrosorgaos = $ac16_licoutroorgao,e54_numerl = '$e54_numerl', e54_codcom = $pc50_codcom, e54_codlicitacao = null
+      SET e54_adesaoregpreco = null,e54_nummodalidade = $lic211_numero,e54_licoutrosorgaos = $ac16_licoutroorgao,e54_numerl = '$e54_numerl', e54_codcom = $pc50_codcom, e54_codlicitacao = null
       where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
 
       db_query("UPDATE empempenho
