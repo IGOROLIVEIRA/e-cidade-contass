@@ -1,7 +1,5 @@
 <?php
 
-ini_set('display_errors', 'on');
-
 require_once("fpdf151/pdf.php");
 require_once("libs/db_utils.php");
 
@@ -88,7 +86,6 @@ echo <<<HTML
                 <th style="text-align:center"><strong>Valor Total</strong></th>
             </tr>
 HTML;
-
 
 for ($i=0;$i<pg_num_rows($sSqlItens);$i++) {
     $oDadosItens = db_utils::fieldsMemory($sSqlItens, $i);
