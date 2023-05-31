@@ -144,7 +144,7 @@ if (isset($alterar) && !$sqlerro) {
   }
 
   	// Alteracoes para Oc19462
-	if ($sqlerro == false) {
+	  if ($sqlerro == false) {
         $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$e54_numcgm} and z09_tipo = 1");
         db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
 
@@ -175,18 +175,20 @@ if (isset($alterar) && !$sqlerro) {
         }
     }
 
-    if ($sqlerro == false) 
+    if ($sqlerro == false) {
         if ($e54_emiss > date("Y-m-d")) {
             $erro_msg = "Usuário: ALTERAÇÃO NO EFETUATA! A DATA DA AUTORIZAÇÃO NO PODE SER POSTERIOR A DATA DO SISTEMA";
             $sqlerro = true;
         }
+    }
 
-    if ($sqlerro == false)
+    if ($sqlerro == false) {
         if (date("Y", strtotime($e54_emiss)) <> date("Y")) {
             $erro_msg = "Usuário: ALTERAÇÃO NO EFETUATA! A DATA DA AUTORIZAÇÃO DEVE PERMANCER NO EXERCÍCIO ATUAL";
             $sqlerro = true;
         }
-	// Final das alteracoes para Oc19462
+    }
+	  // Final das alteracoes para Oc19462
 
   db_inicio_transacao();
 
