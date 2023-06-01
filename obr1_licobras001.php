@@ -48,9 +48,10 @@ if(isset($incluir)){
 
         if($obr01_licitacaolote == 0 && $licitacaolote != ""){
                 throw new Exception ("Usuário: Informe o lote da licitação.");
-        }else{
-            $obr01_licitacaolote = "";
         }
+        
+        $obr01_licitacaolote = "";
+        
 
         $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null,"obr01_numeroobra","obr01_numeroobra desc limit 1","obr01_numeroobra = $obr01_numeroobra"));
 

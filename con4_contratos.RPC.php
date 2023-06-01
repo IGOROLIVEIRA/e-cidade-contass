@@ -1440,7 +1440,7 @@ switch ($oParam->exec) {
                             } else {
                                 $oPosicao->adicionarItemDeLicitacao($oItem->codigo, $oItem);
                             }
-                            //var_dump($oPosicao[]);
+
                             if($oContrato->getNaturezaAcordo($iCodigoAcordo) == 1){
                                 $iExisteLicobras = $oContrato->adicionarItemAcordoObra($iLicitacao,$iCodigoAcordo,$oItem->codigomaterial);
                                 if (!$iExisteLicobras) {
@@ -1524,7 +1524,7 @@ switch ($oParam->exec) {
 
                 $oContrato->atualizaValorContratoPorTotalItens();
                 
-                $oContrato->removerAcordoobra($oParam->material->iCodigo);
+                $oContrato->removerAcordoObra($oParam->material->iCodigo);
 
                 db_fim_transacao(false);
             } catch (Exception $eErro) {

@@ -4594,26 +4594,6 @@ class Acordo
         $sNatureza = db_utils::fieldsMemory($rsNatureza, 0)->ac02_acordonatureza;
         return $sNatureza;
     }
-    //
-    //    function getSaldosItens($iAcordo,$iPosicao){
-    //            $oContrato = new Acordo($iAcordo);
-    //            $aItens    = array();
-    //
-    //            foreach ($oContrato->getPosicoes() as $oPosicaoContrato) {
-    //
-    //                if ($oPosicaoContrato->getCodigo() == $iPosicao) {
-    //
-    //                    foreach ($oPosicaoContrato->getItens() as $oItem) {
-    //                        $oItemRetorno                 = new stdClass();
-    //                        $oItemRetorno->saldos         = $oItem->getSaldosItem($oItem->getCodigo());
-    //                        echo "<pre>";
-    //                        print_r($oItemRetorno);
-    //                        $itens[]                      = $oItemRetorno;
-    //                    }
-    //                }
-    //            }
-    ////            exit;
-    //    }
 
     public function adicionarItemAcordoObra($licitacao,$acodo,$item){
         $clacordoobra = new cl_acordoobra();
@@ -4633,14 +4613,14 @@ class Acordo
             }
             
             return true;
-        }else{
-            return false;
         }
         
+        return false;
     }
 
-    public function removerAcordoobra($item){
-        db_query("delete from acordoobra where obr08_acordoitem = {$item}");  
+    public function removerAcordoObra($item){
+        $clacordoobra = new cl_acordoobra();
+        $clacordoobra->excluir(null,"obr08_acordoitem = {$item}");
     }
 
 }

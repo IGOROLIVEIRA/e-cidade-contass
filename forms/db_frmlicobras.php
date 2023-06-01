@@ -62,7 +62,7 @@ $cllicobras->rotulo->label();
                     </td>
                     <td>
                         <?
-                        $aValores = array(0 => 'Selecione');
+                        $aValores = [0 => 'Selecione'];
                         db_select('obr01_licitacaolote', $aValores, true, $db_opcao," onchange=''");
                         db_input('licitacaolote', 10, $Iobr05_sequencial, true, 'text', 3, "");
                         ?>
@@ -312,49 +312,41 @@ $cllicobras->rotulo->label();
     /**
      * funcao para preencher licitacao  da ancora
      */
-    function js_preencheLicitacao(codigo,objeto,numero,descrcompra,julgamento)
+    function js_preencheLicitacao(codigo, objeto, numero, descrcompra, julgamento)
     {
         document.form1.obr01_licitacao.value = codigo;
         document.form1.l03_descr.value = descrcompra;
         document.form1.l20_numero.value = numero;
         document.form1.l20_objeto.value = objeto;
-        
-
         if(julgamento==3){
-            
             js_preenchedescricaolote(codigo)
         }else{
             document.getElementById('licitacaolote').value = '';
-                document.getElementById('trdescricaolote').style.display = 'none';
+            document.getElementById('trdescricaolote').style.display = 'none';
         }
         
         db_iframe_licobras.hide();
     }
 
-    function js_preencheLicitacao2(objeto,numero,descrcompra,erro,julgamento,codigo) {
-            document.form1.l03_descr.value = descrcompra;
-            document.form1.l20_numero.value = numero;
-            document.form1.l20_objeto.value = objeto;
-            
-            if(julgamento==3){
-                
-                    js_preenchedescricaolote(codigo);
-                
-                
-            }else{
-                document.getElementById('licitacaolote').value = '';
-                    document.getElementById('trdescricaolote').style.display = 'none';
-            }
-            if(erro==true){
-                alert("Nenhuma licitação encontrada.");
-                document.form1.z01_nome.focus();
-                document.form1.l03_descr.value = "";
-                document.form1.l20_numero.value = "";
-                document.form1.l20_objeto.value = "";
-                document.getElementById('trdescricaolote').style.display = 'none';
-            }
+    function js_preencheLicitacao2(objeto, numero, descrcompra, erro, julgamento, codigo) {
+        document.form1.l03_descr.value = descrcompra;
+        document.form1.l20_numero.value = numero;
+        document.form1.l20_objeto.value = objeto;
         
-        
+        if(julgamento==3){
+        js_preenchedescricaolote(codigo);  
+        }else{
+            document.getElementById('licitacaolote').value = '';
+            document.getElementById('trdescricaolote').style.display = 'none';
+        }
+        if(erro === true){
+            alert("Nenhuma licitação encontrada.");
+            document.form1.z01_nome.focus();
+            document.form1.l03_descr.value = "";
+            document.form1.l20_numero.value = "";
+            document.form1.l20_objeto.value = "";
+            document.getElementById('trdescricaolote').style.display = 'none';
+        }       
     }
 
     function js_preencheLicitacaoanterior(codigo, objeto, descrcompra) {
@@ -365,11 +357,11 @@ $cllicobras->rotulo->label();
         db_iframe_licobraslicitacao.hide();
     }
 
-    function js_preencheLicitacaoanterior2(descrcompra,objeto,numero,julgamento,erro) {
+    function js_preencheLicitacaoanterior2(descrcompra, objeto, numero, julgamento, erro) {
         document.form1.l03_descr.value = descrcompra;
         document.form1.l20_objeto.value = objeto;
         document.form1.l20_numero.value = numero;
-        if(erro==true){
+        if(erro === true){
             alert("Nenhuma licitação encontrada.");
             document.form1.obr01_licitacao.focus();
             document.form1.l03_descr.value = "";
