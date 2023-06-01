@@ -63,7 +63,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
      * @var array Fontes encerradas
      */
     protected $aFontesEncerradas = array(
-        "00" => "00", "01" => "01", "02" => "02", "03" => "03", "04" => "04", "05" => "05", "06" => "06", "07" => "07", "08" => "08", "12" => "12", "13" => "13", "16" => "16", "17" => "17", "18" => "18", "19" => "19", "20" => "20", "21" => "21", "22" => "22", "23" => "23", "24" => "24", "29" => "29", "30" => "30", "31" => "31", "32" => "32", "33" => "33", "34" => "34", "35" => "35", "36" => "36", "42" => "42", "43" => "43", "44" => "44", "45" => "45", "46" => "46", "47" => "47", "53" => "53", "54" => "54", "55" => "55", "56" => "56", "57" => "57", "58" => "58", "59" => "59", "60" => "60","61" => "61", "62" => "62", "63" => "63", "64" => "64", "65" => "65", "66" => "66", "67" => "67", "68" => "68", "69" => "69", "70" => "70", "71" => "71", "72" => "72", "73" => "73", "74" => "74", "75" => "75", "76" => "76", "77" => "77", "78" => "78", "79" => "79", "80" => "80", "81" => "81", "82" => "82", "83" => "83", "84" => "84", "85" => "85", "86" => "86", "87" => "87", "88" => "88", "89" => "89", "90" => "90", "91" => "91", "92" => "92", "93" => "93",
+        "100" => "100", "101" => "101", "102" => "102", "103" => "103", "104" => "104", "105" => "105", "106" => "106", "107" => "107", "108" => "108", "112" => "112", "113" => "113", "116" => "116", "117" => "117", "118" => "118", "119" => "119", "120" => "120", "121" => "121", "122" => "122", "123" => "123", "124" => "124", "129" => "129", "130" => "130", "131" => "131", "132" => "132", "133" => "133", "134" => "134", "135" => "135", "136" => "136", "142" => "142", "143" => "143", "144" => "144", "145" => "145", "146" => "146", "147" => "147", "153" => "153", "154" => "154", "155" => "155", "156" => "156", "157" => "157", "158" => "158", "159" => "159", "160" => "160","161" => "161", "162" => "162", "163" => "163", "164" => "164", "165" => "165", "166" => "166", "167" => "167", "168" => "168", "169" => "169", "170" => "170", "171" => "171", "172" => "172", "173" => "173", "174" => "174", "175" => "175", "176" => "176", "177" => "177", "178" => "178", "179" => "179", "180" => "180", "181" => "181", "182" => "182", "183" => "183", "184" => "184", "185" => "185", "186" => "186", "187" => "187", "188" => "188", "189" => "189", "190" => "190", "191" => "191", "192" => "192", "193" => "193",
+        "200" => "100", "201" => "101", "202" => "102", "203" => "103", "204" => "104", "205" => "105", "206" => "106", "207" => "107", "208" => "108", "212" => "112", "213" => "113", "216" => "116", "217" => "117", "218" => "118", "219" => "119", "220" => "120", "221" => "121", "222" => "122", "223" => "123", "224" => "124", "229" => "129", "230" => "130", "231" => "131", "232" => "132", "233" => "133", "234" => "134", "235" => "135", "236" => "136", "242" => "142", "243" => "143", "244" => "144", "245" => "145", "246" => "146", "247" => "147", "253" => "153", "254" => "154", "255" => "155", "256" => "156", "257" => "157", "258" => "158", "259" => "159", "260" => "160","261" => "161", "262" => "162", "263" => "163", "264" => "164", "265" => "165", "266" => "166", "267" => "167", "268" => "168", "269" => "169", "270" => "170", "271" => "171", "272" => "172", "273" => "173", "274" => "174", "275" => "175", "276" => "176", "277" => "177", "278" => "178", "279" => "179", "280" => "180", "281" => "181", "282" => "182", "283" => "183", "284" => "184", "285" => "185", "286" => "186", "287" => "187", "288" => "188", "289" => "189", "290" => "190", "291" => "191", "292" => "192", "293" => "193",
     );
 
 
@@ -1568,14 +1569,14 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             $clDeParaFonte       = new DeParaRecurso();
                             $saldoFinalRsp       = ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos) == '' ? 0 : ($oReg14Saldo->saldoanterior + $oReg14Saldo->debitos - $oReg14Saldo->creditos);
 
-                            $bFonteEncerrada2020 = in_array(substr($oReg14->codfontrecursos, 0, 1), $this->aFontesEncerradas2020);
+                            $bFonteEncerrada2020 = in_array($oReg14->codfontrecursos, $this->aFontesEncerradas2020);
                             $iFonte              = $oReg14->codfontrecursos;
 
                             if ($bFonteEncerrada2020) {
                                 $iFonte = substr($oReg14->codfontrecursos, 0, 1) . '59';
                             }
 
-                            $bFonteEncerrada                 = in_array(substr($iFonte, 0, 1), $this->aFontesEncerradas);
+                            $bFonteEncerrada                 = in_array($iFonte, $this->aFontesEncerradas);
                             $bRPaPagarNaoTransfere           = in_array(substr($oContas10->si177_contacontaabil, 0, 4), $aContasNaoTransfereSaldoRP) && $oReg14->anoinscricao == 2022;
                             $bRPaPagar                       = in_array(substr($oContas10->si177_contacontaabil, 0, 4), $aContasTransfereSaldoRP) ;
                             $bTransfereRPAnterior            = $bFonteEncerrada && $bRPaPagar && $oReg14->anoinscricao <= 2022 && $nMes == '01' && !$bRPaPagarNaoTransfere;
@@ -1614,10 +1615,10 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                     $obalancete14->si181_naturezadespesa   = substr($aDotacaoRpSicom[0]->si177_naturezadespesa, 0, 6);
                                     $obalancete14->si181_subelemento       = $aDotacaoRpSicom[0]->si177_subelemento;
                                     $obalancete14->si181_codfontrecursos   = $aDotacaoRpSicom[0]->si177_codfontrecursos;
-                                    if (in_array(substr($aDotacaoRpSicom[0]->si177_codfontrecursos, 0, 1), $this->aFontesEncerradas2020)) {
+                                    if (in_array($aDotacaoRpSicom[0]->si177_codfontrecursos, $this->aFontesEncerradas2020)) {
                                         $obalancete14->si181_codfontrecursos = substr($aDotacaoRpSicom[0]->si177_codfontrecursos, 0, 1) . '59';
                                     }
-                                    if (in_array(substr($obalancete14->si181_codfontrecursos, 0, 1), $this->aFontesEncerradas)) {
+                                    if (in_array($obalancete14->si181_codfontrecursos, $this->aFontesEncerradas)) {
                                         $clDeParaFonte = new DeParaRecurso;
                                         $obalancete14->si181_codfontrecursos = substr($clDeParaFonte->getDePara($obalancete14->si181_codfontrecursos), 0, 7);
                                     }
@@ -2255,7 +2256,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                     $rsReg18saldos = db_query($sSqlReg18saldos) or die($sSqlReg18saldos);
                     //OC12114
-                    $bFonteEncerrada  = in_array(substr($objContasfr->codfontrecursos, 0, 1), $this->aFontesEncerradas);
+                    $bFonteEncerrada  = in_array($objContasfr->codfontrecursos, $this->aFontesEncerradas);
 
                     $bCorrecaoFonte   = ($bFonteEncerrada && $nMes == '01' && db_getsession("DB_anousu") == 2023);
                     $clDeParaFonte = new DeParaRecurso();
@@ -3099,7 +3100,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
             foreach ($oDado10->reg14 as $reg14) {
 
-                $bTransfereRPAnterior = in_array(substr($reg14->si181_codfontrecursos, 0, 1), $this->aFontesEncerradas)
+                $bTransfereRPAnterior = in_array($reg14->si181_codfontrecursos, $this->aFontesEncerradas)
                                         && in_array(substr($reg14->si181_contacontabil, 0, 4), $aContasTransfereSaldoRP)
                                         && $reg14->si181_anoinscricao <= 2022
                                         && $reg14->si181_mes == '01';
@@ -3258,10 +3259,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                     throw new Exception($obalreg17->erro_msg);
                 }
             }
-
             foreach ($oDado10->reg18 as $reg18) {
-
-                $bCorrecaoFonte = (in_array(substr($reg18->si185_codfontrecursos, 0, 1), $this->aFontesEncerradas) && $nMes == '01' && db_getsession("DB_anousu") == 2023);
+                $bCorrecaoFonte = (in_array($reg18->si185_codfontrecursos, $this->aFontesEncerradas) && $nMes == '01' && db_getsession("DB_anousu") == 2023);
 
                 $obalreg18 = new cl_balancete182023();
 
