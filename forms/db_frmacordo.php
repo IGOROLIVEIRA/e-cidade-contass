@@ -1549,8 +1549,7 @@ db_app::load("dbtextFieldData.widget.js");
 
 
         if ((z01_telef.trim() == '' || z01_email.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
-            db_iframe_contratado.hide();
-            alert("Usuário: Selecione um fornecedor que possua Email e telefone cadastrado.");
+            alert("Usuário: Inclusão abortada. O Fornecedor selecionado não possui Email e Telefone no seu cadastro.");
             $('ac16_contratado').value = '';
             return false;
         }

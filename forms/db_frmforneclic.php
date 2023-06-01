@@ -314,7 +314,7 @@ if (isset($db_opcaoal)) {
     function js_mostracgm(chave, chave2, chave3, chave4) {
 
         if ((chave3.trim() == '' || chave4.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
-            alert("Usuário: Selecione um fornecedor que possua Email e telefone cadastrado.");
+            alert("Usuário: Inclusão abortada. O Fornecedor selecionado não possui Email e Telefone no seu cadastro.");
             $('pc21_numcgm').value = '';
             return false;
         }
@@ -330,8 +330,7 @@ if (isset($db_opcaoal)) {
 
     function js_mostracgm1(chave1, chave2, chave3, chave4) {
         if ((chave3.trim() == '' || chave4.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
-            func_nome.hide();
-            alert("Usuário: Selecione um fornecedor que possua Email e telefone cadastrado.");
+            alert("Usuário: Inclusão abortada. O Fornecedor selecionado não possui Email e Telefone no seu cadastro.");
             $('pc21_numcgm').value = '';
             return false;
         }
