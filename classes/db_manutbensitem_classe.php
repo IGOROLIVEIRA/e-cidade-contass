@@ -89,7 +89,7 @@ class cl_manutbensitem
       $this->t99_sequencial = pg_result($result, 0, 0);
     }
 
-    $result = db_query("select last_value from bemmanutencao_t98_sequencial_seq");
+    $result = db_query("select last_value from manutbensitem_t99_sequencial_seq");
     if (($result != false) && (pg_result($result, 0, 0) < $this->t99_sequencial)) {
       $this->erro_sql = " Campo t99_sequencial maior que último número da sequencia.";
       $this->erro_banco = "Sequencia menor que este número.";
