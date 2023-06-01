@@ -1456,18 +1456,23 @@ db_app::load("dbtextFieldData.widget.js");
 
             if (nLicitacao == '') {
                 js_pesquisaac16_contratado(true);
-            } else {
-                js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
-                    'db_iframe_contratado',
-                    'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm|z01_cgccpf|z01_telef|z01_email',
-                    'CGM Contratado',
-                    true,
-                    '0');
+                return;
             }
-        } else {
-            nLicitacao == '';
-            js_pesquisaac16_contratado(true);
+
+            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
+                'db_iframe_contratado',
+                'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm|z01_cgccpf|z01_telef|z01_email',
+                'CGM Contratado',
+                true,
+                '0');
+
+            return;
+
         }
+
+        nLicitacao == '';
+        js_pesquisaac16_contratado(true);
+
     }
 
     function js_pesquisaac16_contratado(mostra) {
@@ -1484,25 +1489,30 @@ db_app::load("dbtextFieldData.widget.js");
                 '1'
             );
 
-        } else {
+            return;
 
-            if ($('ac16_contratado').value != '') {
-
-                js_OpenJanelaIframe(
-                    '(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
-                    'db_iframe_contratado',
-                    'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
-                    'Pesquisa',
-                    false,
-                    '0',
-                    '1'
-                );
-
-            } else {
-                $('nomecontratado').value = '';
-            }
         }
+
+        if ($('ac16_contratado').value != '') {
+
+            js_OpenJanelaIframe(
+                '(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
+                'db_iframe_contratado',
+                'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
+                'Pesquisa',
+                false,
+                '0',
+                '1'
+            );
+
+            return;
+
+        }
+
+        $('nomecontratado').value = '';
+
     }
+
 
     function js_mostracontratado(erro, chave, z01_cgccpf) {
 
@@ -1545,7 +1555,7 @@ db_app::load("dbtextFieldData.widget.js");
         }
     }
 
-    function js_mostracontratado1(chave1, chave2, z01_cgccpf, z01_telef, z01_email) {
+    function js_mostracontratado1(nomecontratado, ac16_contratado, z01_cgccpf, z01_telef, z01_email) {
 
 
         if ((z01_telef.trim() == '' || z01_email.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
@@ -1568,13 +1578,9 @@ db_app::load("dbtextFieldData.widget.js");
             }
         }
 
-        $('ac16_contratado').value = chave2;
-        $('nomecontratado').value = chave1;
+        $('ac16_contratado').value = ac16_contratado;
+        $('nomecontratado').value = nomecontratado;
         oContrato.verificaLicitacoes();
-
-        if ($('ac16_origem').value == 6) {
-            //js_MostraEmpenhos();
-        }
 
         db_iframe_contratado.hide();
     }
@@ -1766,7 +1772,7 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trLicitacao').style.display = "none";
         }
 
-        
+
 
         if ((iTipoOrigem == 2 && iOrigem == 2) || (iTipoOrigem == 3 && iOrigem == 2)) {
             document.getElementById('trLicitacao').style.display = "none";
@@ -1774,7 +1780,7 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
-        
+
 
         if (iOrigem == 3 && iTipoOrigem == 1) {
             document.getElementById('trLicitacao').style.display = "none";
@@ -1794,9 +1800,9 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
-        if(iOrigem == 1 && (iTipoOrigem == 2 || iTipoOrigem == 3)){
+        if (iOrigem == 1 && (iTipoOrigem == 2 || iTipoOrigem == 3)) {
             document.getElementById('trLicitacao').style.display = "";
-        }else{
+        } else {
             document.getElementById('trLicitacao').style.display = "none";
         }
 

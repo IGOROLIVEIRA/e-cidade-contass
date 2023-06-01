@@ -302,20 +302,21 @@ if (isset($db_opcaoal)) {
     function js_pesquisapc21_numcgm(mostra) {
         if (mostra == true) {
             js_OpenJanelaIframe('', 'func_nome', 'func_pcforne.php?validaRepresentante=true&orderName=true&funcao_js=parent.js_mostracgm1|pc60_numcgm|z01_nome|z01_telef|z01_email', 'Pesquisa', true);
-        } else {
-            if (document.form1.pc21_numcgm.value != '') {
-                js_OpenJanelaIframe('', 'func_nome', 'func_pcforne.php?validaRepresentante=true&orderName=true&pesquisa_chave=' + document.form1.pc21_numcgm.value + '&iParam=true&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
-            } else {
-                document.form1.z01_nome.value = '';
-            }
+            return true;
         }
+        if (document.form1.pc21_numcgm.value != '') {
+            js_OpenJanelaIframe('', 'func_nome', 'func_pcforne.php?validaRepresentante=true&orderName=true&pesquisa_chave=' + document.form1.pc21_numcgm.value + '&iParam=true&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
+            return true;
+        }
+        document.form1.z01_nome.value = '';
     }
 
-    function js_mostracgm(chave, chave2, chave3, chave4) {
+    function js_mostracgm(chave, chave2, z01_telef, z01_email) {
 
-        if ((chave3.trim() == '' || chave4.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
+        if ((z01_telef.trim() == '' || z01_email.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
             alert("Usuário: Inclusão abortada. O Fornecedor selecionado não possui Email e Telefone no seu cadastro.");
             $('pc21_numcgm').value = '';
+            $('z01_nome').value = '';
             return false;
         }
 
@@ -323,19 +324,19 @@ if (isset($db_opcaoal)) {
             document.form1.pc21_numcgm.focus();
             document.form1.pc21_numcgm.value = '';
             document.form1.z01_nome.value = chave;
-        } else {
-            document.form1.z01_nome.value = chave2;
+            return false;
         }
+        document.form1.z01_nome.value = chave2;
     }
 
-    function js_mostracgm1(chave1, chave2, chave3, chave4) {
-        if ((chave3.trim() == '' || chave4.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
+    function js_mostracgm1(pc21_numcgm, z01_nome, z01_telef, z01_email) {
+        if ((z01_telef.trim() == '' || z01_email.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
             alert("Usuário: Inclusão abortada. O Fornecedor selecionado não possui Email e Telefone no seu cadastro.");
             $('pc21_numcgm').value = '';
             return false;
         }
-        document.form1.pc21_numcgm.value = chave1;
-        document.form1.z01_nome.value = chave2;
+        document.form1.pc21_numcgm.value = pc21_numcgm;
+        document.form1.z01_nome.value = z01_nome;
         func_nome.hide();
     }
 
