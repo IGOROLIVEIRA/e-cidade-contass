@@ -379,7 +379,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         l20_edital,
         l20_anousu,
         lic211_sequencial,
-        lic211_numero,
+        lic211_processo,
         lic211_anousu,
         lic211_codunisubres,
         lic211_codorgaoresplicit,
@@ -502,7 +502,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       */
       if ($oEmpenho10->despdeclicitacao == "4") {
 
-        if ($oEmpenho10->si06_departamento == null) {
+        if ($oEmpenho10->si06_departamento == NULL && $oEmpenho10->si06_sequencial != NULL) {
           $sCodSubAdesao = $this->getCodunidadesubrespAdesao($oEmpenho10->si06_sequencial, false);
         } else {
           $sCodSubAdesao = $this->getCodunidadesubrespAdesao($oEmpenho10->si06_sequencial, true);
@@ -685,14 +685,14 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         if ($oEmpenho10->despdeclicitacao != 9) {
           $oDadosEmpenho10->si106_codorgaoresplicit = $oEmpenho10->lic211_codorgaoresplicit;
           $oDadosEmpenho10->si106_codunidadesubresplicit = $oEmpenho10->lic211_codunisubres; // campo 30
-          $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->lic211_numero; // campo 31
+          $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->lic211_processo; // campo 31
           $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->lic211_anousu; // campo 32
 
         } else {
           $oDadosEmpenho10->si106_despdeclicitacao = $oEmpenho10->despdeclicitacao; // campo 29
           $oDadosEmpenho10->si106_codorgaoresplicit = '';
           $oDadosEmpenho10->si106_codunidadesubresplicit = ''; // campo 30
-          $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->lic211_numero; // campo 31
+          $oDadosEmpenho10->si106_nroprocessolicitatorio = $oEmpenho10->lic211_processo; // campo 31
           $oDadosEmpenho10->si106_exercicioprocessolicitatorio = $oEmpenho10->lic211_anousu; // campo 32
         }
       }

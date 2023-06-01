@@ -931,6 +931,61 @@ class cl_pcproc
     return $sql;
   }
 
+  function sql_query_proc_orc($pc80_codproc = null, $campos = "*", $ordem = null, $dbwhere = "")
+  {
+    $sql = "select ";
+    if ($campos != "*") {
+      $campos_sql = explode("#", $campos);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    } else {
+      $sql .= $campos;
+    }
+    $sql .= " from pcproc ";
+    $sql .= "      inner join db_usuarios          on db_usuarios.id_usuario              = pcproc.pc80_usuario";
+    $sql .= "      inner join db_depart            on db_depart.coddepto                  = pcproc.pc80_depto and db_depart.instit = " . db_getsession("DB_instit");
+    $sql .= "      inner join db_departorg         on db_departorg.db01_coddepto          = db_depart.coddepto";
+    $sql .= "                                     and db_departorg.db01_anousu            = " . db_getsession("DB_anousu");
+    $sql .= "      inner join orcorgao             on orcorgao.o40_orgao                  = db_departorg.db01_orgao";
+    $sql .= "                                     and orcorgao.o40_anousu                 = db_departorg.db01_anousu";
+    $sql .= "      inner join pcprocitem           on pcprocitem.pc81_codproc             = pcproc.pc80_codproc";
+    $sql .= "      inner join precoreferencia      on si01_processocompra = pcproc.pc80_codproc";
+    $sql .= "      left  join acordopcprocitem     on pcprocitem.pc81_codprocitem         = acordopcprocitem.ac23_pcprocitem";
+    $sql .= "      left  join solicitem            on solicitem.pc11_codigo               = pcprocitem.pc81_solicitem";
+    $sql .= "      left  join solicitemprot        on solicitemprot.pc49_solicitem        = solicitem.pc11_codigo";
+    $sql .= "      left  join proctransferproc     on proctransferproc.p63_codproc        = solicitemprot.pc49_protprocesso";
+    $sql .= "      left  join proctransfer         on proctransfer.p62_codtran            = proctransferproc.p63_codtran";
+    $sql .= "      left  join proctransand         on proctransand.p64_codtran            = proctransfer.p62_codtran";
+    $sql .= "      left  join solicita             on solicita.pc10_numero                = solicitem.pc11_numero";
+    $sql .= "      left  join liclicitem           on pcprocitem.pc81_codprocitem         = liclicitem.l21_codpcprocitem";
+    $sql .= "      left  join empautitempcprocitem on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
+    $sql .= "      left  join empautitem           on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
+    $sql .= "                                     and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
+    $sql .= "      left  join empautoriza          on empautoriza.e54_autori              = empautitem.e55_autori";
+    $sql2 = "";
+    if ($dbwhere == "") {
+      if ($pc80_codproc != null) {
+        $sql2 .= " where pcproc.pc80_codproc = $pc80_codproc ";
+      }
+    } else if ($dbwhere != "") {
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if ($ordem != null) {
+      $sql .= " order by ";
+      $campos_sql = explode("#", $ordem);
+      $virgula = "";
+      for ($i = 0; $i < sizeof($campos_sql); $i++) {
+        $sql .= $virgula . $campos_sql[$i];
+        $virgula = ",";
+      }
+    }
+    return $sql;
+  }
+
 
   function sql_query_usudepart($pc80_codproc = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -1474,12 +1529,13 @@ class cl_pcproc
     JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
     JOIN pcmater ON pc16_codmater = pc01_codmater
     JOIN solicitemunid ON pc17_codigo=pc11_codigo
+    JOIN db_depart on db_depart.coddepto = pcproc.pc80_depto
     JOIN matunid ON m61_codmatunid=pc17_unid
     LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
     LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
     LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
     LEFT JOIN liccontrolepncp on l213_processodecompras = pc80_codproc
-    WHERE pc80_dispvalor='t'
+    WHERE pc80_dispvalor='t' and db_depart.instit = " . db_getsession('DB_instit') . "
     ORDER BY pc80_codproc desc";
     return $sql;
   }
@@ -1525,6 +1581,70 @@ class cl_pcproc
           AND pc24_pontuacao = 1
           ORDER BY pc11_seq";
 
+    return $sql;
+  }
+
+  public function sql_query_pncp_itens_retifica_situacao($iPcproc, $iPcmater, $iSeq)
+  {
+    $sql  = "SELECT DISTINCT solicitem.pc11_seq AS numeroItem,
+                    CASE
+                        WHEN pcmater.pc01_servico='t' THEN 'S'
+                        ELSE 'M'
+                    END AS materialOuServico,
+                    5 AS tipoBeneficioId,
+                    FALSE AS incentivoProdutivoBasico,
+                            pcmater.pc01_descrmater AS descricao,
+                            matunid.m61_descr AS unidadeMedida,
+                            solicitem.pc11_vlrun AS valorUnitarioEstimado,
+                            pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
+                            pcmater.pc01_codmater,
+                            solicitem.pc11_numero,
+                            solicitem.pc11_reservado,
+                            solicitem.pc11_quant,
+                            FALSE AS l21_sigilo,
+                      CASE
+                          WHEN substring(o56_elemento
+                                         FROM 0
+                                         FOR 8) IN
+                                   (SELECT DISTINCT substring(o56_elemento
+                                                              FROM 0
+                                                              FOR 8)
+                                    FROM orcelemento
+                                    WHERE o56_elemento LIKE '%3449061%') THEN 1
+                          WHEN substring(o56_elemento
+                                         FROM 0
+                                         FOR 8) IN
+                                   (SELECT DISTINCT substring(o56_elemento
+                                                              FROM 0
+                                                              FOR 8)
+                                    FROM orcelemento
+                                    WHERE o56_elemento LIKE '%3449052%') THEN 2
+                          ELSE 3
+                      END AS itemCategoriaId,
+                      pcmater.pc01_regimobiliario AS codigoRegistroImobiliario,
+                      2 as situacaoCompraItemId
+                    FROM pcproc
+                    JOIN pcprocitem ON pc81_codproc=pc80_codproc
+                    JOIN solicitem ON pc11_codigo=pc81_solicitem
+                    JOIN solicitemele ON pc18_solicitem = pc11_codigo
+                    JOIN orcelemento ON o56_codele = pc18_codele
+                    AND o56_anousu=EXTRACT(YEAR
+                              FROM pcproc.pc80_data)
+                    JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+                    JOIN pcmater ON pc16_codmater = pc01_codmater
+                    JOIN solicitemunid ON pc17_codigo=pc11_codigo
+                    JOIN matunid ON m61_codmatunid=pc17_unid
+                    LEFT  JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+                    LEFT  JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+                    LEFT  JOIN pcorcam ON pc22_codorc = pc20_codorc
+                    LEFT  JOIN pcorcamforne ON pc20_codorc = pc21_codorc
+                    LEFT  JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+                    AND pc23_orcamforne = pc21_orcamforne
+                    LEFT JOIN pcorcamjulg ON pc24_orcamitem = pc22_orcamitem
+                    AND pc24_orcamforne = pc21_orcamforne
+                    WHERE pcproc.pc80_codproc = $iPcproc
+                      AND solicitem.pc11_seq = $iSeq
+                      AND pcmater.pc01_codmater = $iPcmater";
     return $sql;
   }
 

@@ -2545,7 +2545,7 @@ class cl_acordo
                     JOIN db_config ON codigo=instit
                     JOIN liccontrolepncp ON ac16_licitacao = l213_licitacao
                     LEFT JOIN acocontratopncp ON ac213_contrato = ac16_sequencial
-                    WHERE ac16_instit = 1
+                    WHERE ac16_instit = " . db_getsession('DB_instit') . "
                     AND ac16_acordosituacao = 4
                         AND ac16_anousu = " . db_getsession('DB_anousu') . "
         union
@@ -2594,7 +2594,7 @@ class cl_acordo
                     JOIN db_config ON codigo=instit
                     LEFT JOIN liccontrolepncp ON  l213_processodecompras = pc80_codproc
                     LEFT JOIN acocontratopncp ON ac213_contrato = ac16_sequencial
-                    WHERE ac16_instit = 1
+                    WHERE ac16_instit = " . db_getsession('DB_instit') . "
                     AND ac16_acordosituacao = 4
                     AND ac16_anousu = " . db_getsession('DB_anousu') . "
                     AND pc80_dispvalor = 't') AS X ORDER BY ac16_sequencial DESC
@@ -2695,7 +2695,7 @@ class cl_acordo
                 JOIN db_config ON codigo=instit
                 LEFT JOIN liccontrolepncp ON l213_processodecompras = pc80_codproc
                 LEFT JOIN acocontratopncp ON ac213_contrato = ac16_sequencial
-                WHERE ac16_instit = 1
+                WHERE ac16_instit = " . db_getsession('DB_instit') . "
                     and ac16_sequencial = $iContratocodigo
                     AND ac16_anousu = " . db_getsession('DB_anousu') . "
                     AND pc80_dispvalor = 't'

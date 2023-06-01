@@ -35,587 +35,576 @@ include("classes/db_tabrec_classe.php");
 
 parse_str(base64_decode($HTTP_SERVER_VARS["QUERY_STRING"]));
 
-$cltabrec = new cl_tabrec;
+$cltabrec = new cl_tabrec();
 $cltabrec->rotulo->label("k02_codigo");
 
-$clrotulo        = new rotulocampo;
+$clrotulo = new rotulocampo();
 $clrotulo->label('v70_sequencial');
 $clrotulo->label('v70_codforo');
 
-if(isset($Parcelamento) && $Parcelamento != ""){
-  $sql=" select v07_numpre from termo where v07_parcel = $Parcelamento";
-  $result=db_query($sql);
-  $numrows=pg_num_rows($result);
-  if ($numrows>0){
-      db_fieldsmemory($result,0);
-      $numpre = $v07_numpre;
-  }
+if (isset($Parcelamento) && $Parcelamento != "") {
+    $sql = " select v07_numpre from termo where v07_parcel = $Parcelamento";
+    $result = db_query($sql);
+    $numrows = pg_num_rows($result);
+    if ($numrows > 0) {
+        db_fieldsmemory($result, 0);
+        $numpre = $v07_numpre;
+    }
 }
 
 ?>
-<html>
+<html lang="pt-br">
 <head>
-<title>Documento sem t&iacute;tulo</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<script language="JavaScript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+    <title>Documento sem t&iacute;tulo</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+    <script language="JavaScript" src="scripts/scripts.js"></script>
+    <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <script>
-   function js_imprime() {
-      jandb = window.open('cai3_gerfinanc014.php?<?
-        if(isset($matric)){
-           echo "matric=$matric";
-        }else if(isset($inscr)){
-           echo "inscr=$inscr";
-        }else if(isset($numcgm)){
-           echo "numcgm=$numcgm";
-        }else {
-           echo "numpre=$numpre";
-        }
+    function js_imprime() {
+        const jandb = window.open('cai3_gerfinanc014.php?<?php
+            if (isset($matric)) {
+                echo "matric=$matric";
+            } else if (isset($inscr)) {
+                echo "inscr=$inscr";
+            } else if (isset($numcgm)) {
+                echo "numcgm=$numcgm";
+            } else {
+                echo "numpre=$numpre";
+            }
 
-        if(!empty($HTTP_POST_VARS["datainicial_dia"])) {
-  				 echo "&datainicial=".$datainicial = $HTTP_POST_VARS['datainicial_ano']."-".$HTTP_POST_VARS['datainicial_mes']."-".$HTTP_POST_VARS['datainicial_dia'];
-  				 echo "&datafinal=".$datafinal = $HTTP_POST_VARS['datafinal_ano']."-".$HTTP_POST_VARS['datafinal_mes']."-".$HTTP_POST_VARS['datafinal_dia'];
-        }
-  			if(!empty($HTTP_POST_VARS['k02_codigo'])) {
-  			 	 echo "&k02_codigo=".$HTTP_POST_VARS['k02_codigo'];
-        }
-  			if(!empty($HTTP_POST_VARS['conta'])) {
-  				 echo "&conta=".$HTTP_POST_VARS['conta'];
-        }
+            if (!empty($HTTP_POST_VARS["datainicial_dia"])) {
+                echo "&datainicial=" . $datainicial = $HTTP_POST_VARS['datainicial_ano'] . "-" . $HTTP_POST_VARS['datainicial_mes'] . "-" . $HTTP_POST_VARS['datainicial_dia'];
+                echo "&datafinal=" . $datafinal = $HTTP_POST_VARS['datafinal_ano'] . "-" . $HTTP_POST_VARS['datafinal_mes'] . "-" . $HTTP_POST_VARS['datafinal_dia'];
+            }
+            if (!empty($HTTP_POST_VARS['k02_codigo'])) {
+                echo "&k02_codigo=" . $HTTP_POST_VARS['k02_codigo'];
+            }
+            if (!empty($HTTP_POST_VARS['conta'])) {
+                echo "&conta=" . $HTTP_POST_VARS['conta'];
+            }
 
-        if(!empty($HTTP_POST_VARS['v70_sequencial'])) {
-  				 echo "&v70_sequencial=".$HTTP_POST_VARS['v70_sequencial'];
-        }
-      ?>','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-      jandb.moveTo(0,0);
-   }
+            if (!empty($HTTP_POST_VARS['v70_sequencial'])) {
+                echo "&v70_sequencial=" . $HTTP_POST_VARS['v70_sequencial'];
+            }
+            ?>', '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+        jandb.moveTo(0, 0);
+    }
 </script>
 
 
-<body bgcolor=#CCCCCC bgcolor="#CCCCCC" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="parent.document.getElementById('processando').style.visibility = 'hidden'">
+<body bgcolor=#CCCCCC bgcolor="#CCCCCC" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"
+      onLoad="parent.document.getElementById('processando').style.visibility = 'hidden'">
 <center>
-<?
-if(isset($tipo_cert) && !isset($HTTP_POST_VARS["procurar"])) {
-?>
-<br><br>
-<form name="form1" method="post" >
-  <table width="420" border="0" cellspacing="0" cellpadding="0">
-    <tr>
-     <td width="20%" class="tabs" nowrap><strong>Data Inicial:</strong></td>
-     <td width="80%" class="tabs">
-      <? db_inputdata("datainicial",'','','',true,'text',2); ?>
-     </td>
-    </tr>
-    <tr>
-      <td class="tabs" nowrap><strong>Data Final:</strong></td>
-      <td class="tabs">
-       <? db_inputdata("datafinal",date('d',db_getsession("DB_datausu")),date('m',db_getsession("DB_datausu")),date('Y',db_getsession("DB_datausu")),true,'text',2); ?>
-      </td>
-    </tr>
-    <tr>
-      <td class="tabs">
-        <? db_ancora("<font color=blue><b>Receita:</b></font>", "js_pesquisareceita(true);", 1); ?>
-      </td>
-      <td class="tabs" colspan=2>
-			  <? db_input('k02_codigo', 10, $Ik02_codigo, true, 'text', 1); ?>
-      </td>
-    </tr>
-    <tr>
-      <td class="tabs" nowrap><strong>Conta:</strong></td>
-      <td class="tabs"><input type="text" name="conta" size=10></td>
-    </tr>
-    <tr>
-      <td align="left" nowrap title="<?=@$Tv70_codforo?>" >
-        <?db_ancora(@$Lv70_codforo, "js_pesquisaprocessoforo(true);", 4);?>
-      </td>
-      <td align="left">
-        <?
-          db_input("v70_sequencial",  10, $Iv70_sequencial, true, "text", 4, "onchange='js_pesquisaprocessoforo(false);'");
-          db_input("v70_codforo",    25, $Iv70_codforo,  true, "text", 3, "");
+    <?php
+    if (isset($tipo_cert) && !isset($HTTP_POST_VARS["procurar"])) {
         ?>
-      </td>
-    </tr>
-    <tr>
-      <td class="tabs" nowrap>&nbsp;</td>
-      <td height="30" class="tabs"><input name="procurar" type="submit" id="procurar" value="Procurar"></td>
-    </tr>
-  </table>
-</form>
+    <br><br>
+        <form name="form1" method="post">
+            <table width="420" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="20%" class="tabs" nowrap><strong>Data Inicial:</strong></td>
+                    <td width="80%" class="tabs">
+                        <?php db_inputdata("datainicial", '', '', '', true, 'text', 2); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tabs" nowrap><strong>Data Final:</strong></td>
+                    <td class="tabs">
+                        <?php db_inputdata("datafinal", date('d', db_getsession("DB_datausu")), date('m', db_getsession("DB_datausu")), date('Y', db_getsession("DB_datausu")), true, 'text', 2); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tabs">
+                        <?php db_ancora("<font color=blue><b>Receita:</b></font>", "js_pesquisareceita(true);", 1); ?>
+                    </td>
+                    <td class="tabs" colspan=2>
+                        <?php db_input('k02_codigo', 10, $Ik02_codigo, true, 'text', 1); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tabs" nowrap><strong>Conta:</strong></td>
+                    <td class="tabs"><input type="text" name="conta" size=10></td>
+                </tr>
+                <tr>
+                    <td align="left" nowrap title="<?= @$Tv70_codforo ?>">
+                        <?php db_ancora(@$Lv70_codforo, "js_pesquisaprocessoforo(true);", 4); ?>
+                    </td>
+                    <td align="left">
+                        <?php
+                        db_input("v70_sequencial", 10, $Iv70_sequencial, true, "text", 4, "onchange='js_pesquisaprocessoforo(false);'");
+                        db_input("v70_codforo", 25, $Iv70_codforo, true, "text", 3, "");
+                        ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tabs" nowrap>&nbsp;</td>
+                    <td height="30" class="tabs"><input name="procurar" type="submit" id="procurar" value="Procurar">
+                    </td>
+                </tr>
+            </table>
+        </form>
 
-<script>
+        <script>
 
-document.form1.datainicial_dia.focus();
+            document.form1.datainicial_dia.focus();
 
-function js_validar() {
+            function js_validar() {
 
-  var F = document.form1;
+                var F = document.form1;
 
-  if(F.k02_codigo.value == "" && F.conta.value == "" && (F.datainicial_dia.value == "" || F.datainicial_mes.value == "" || F.datainicial_ano.value == "" || F.datafinal_dia.value == "" || F.datafinal_mes.value == "" || F.datafinal_ano.value == "")) {
-    alert("Informe algum campo");
-	  F.datainicial_dia.select();
-    return false;
-  }
+                if (F.k02_codigo.value === "" && F.conta.value === "" && (F.datainicial_dia.value === "" || F.datainicial_mes.value === "" || F.datainicial_ano.value === "" || F.datafinal_dia.value === "" || F.datafinal_mes.value === "" || F.datafinal_ano.value === "")) {
+                    alert("Informe algum campo");
+                    F.datainicial_dia.select();
+                    return false;
+                }
 
-}
+            }
 
-</script>
-<?
-} else {
+        </script>
+    <?php
+    } else {
 
-	$aWherePagamento    = array();
-	$sWhereNumpreNormal = "";
-	$sWhereNumprePgto   = "";
-
-
-  if (isset($numcgm)) {
-
-    $sInnerPagamento   = " inner join arrenumcgm on arrenumcgm.k00_numpre = arrepaga.k00_numpre";
-    $aWherePagamento[] = " arrenumcgm.k00_numcgm = ".$numcgm;
-
-  } else if(isset($matric)) {
-
-    $sInnerPagamento   = " inner join arrematric on arrematric.k00_numpre = arrepaga.k00_numpre";
-    $aWherePagamento[] = " arrematric.k00_matric = ".$matric;
-
-  } else if(isset($inscr)) {
-
-    $sInnerPagamento   = " inner join arreinscr on arreinscr.k00_numpre   = arrepaga.k00_numpre";
-    $aWherePagamento[] = " arreinscr.k00_inscr   = ".$inscr;
-
-  } else if (isset($numpre)) {
-
-    $sInnerPagamento    = "";
-    $sWhereNumpreNormal = " and arrepaga.k00_numpre   = ".$numpre;
-
-    $sWhereNumprePgto   = " and (  arrepaga.k00_numpre = {$numpre} ";
-    $sWhereNumprePgto  .= "     or arreckey.k00_numpre = {$numpre} ";
-    $sWhereNumprePgto  .= "     )                                  ";
-
-  }
-
-	if (!empty($HTTP_POST_VARS["datainicial_dia"])) {
-
-    $datainicial       = $HTTP_POST_VARS["datainicial_ano"]."-".$HTTP_POST_VARS["datainicial_mes"]."-".$HTTP_POST_VARS["datainicial_dia"];
-	  $datafinal         = $HTTP_POST_VARS["datafinal_ano"]  ."-".$HTTP_POST_VARS["datafinal_mes"]  ."-".$HTTP_POST_VARS["datafinal_dia"];
-    $aWherePagamento[] = " arrepaga.k00_dtpaga between '$datainicial' and '$datafinal' ";
-	}
-
-	if (!empty($HTTP_POST_VARS["k02_codigo"])) {
-	  $aWherePagamento[] = " arrepaga.k00_receit = ".$HTTP_POST_VARS["k02_codigo"];
-	}
-
-	if (!empty($HTTP_POST_VARS["conta"])) {
-	  $aWherePagamento[] = " arrepaga.k00_conta = ".$HTTP_POST_VARS["conta"];
-	}
-
-  if (!empty($HTTP_POST_VARS["v70_sequencial"])) {
-
-    $sInnerPagamento .= " inner join ( select distinct";
-    $sInnerPagamento .= "                     case ";
-    $sInnerPagamento .= "                       when termo.v07_numpre is null ";
-    $sInnerPagamento .= "                         then inicialnumpre.v59_numpre";
-    $sInnerPagamento .= "                       else termo.v07_numpre";
-    $sInnerPagamento .= "                     end as numpre ";
-    $sInnerPagamento .= "                from processoforoinicial ";
-    $sInnerPagamento .= "                left join termoini      on inicial          = v71_inicial ";
-    $sInnerPagamento .= "                left join termo         on termo.v07_parcel = termoini.parcel ";
-    $sInnerPagamento .= "                left join inicialnumpre on inicialnumpre.v59_inicial = v71_inicial ";
-    $sInnerPagamento .= "               where processoforoinicial.v71_processoforo = {$HTTP_POST_VARS["v70_sequencial"]}";
-    $sInnerPagamento .= "            ) as processoforo on processoforo.numpre = arrepaga.k00_numpre ";
-
-	  //$aWherePagamento[] = " processoforoinicial.v71_processoforo = ".$HTTP_POST_VARS["v70_sequencial"];
-	}
-
-	$sWherePagamento = implode(" and ", $aWherePagamento);
-
-	if (trim($sWherePagamento) != '') {
-	  $sWherePagamento = " and ".$sWherePagamento;
-	}
-
-  $sSqlPagamentos  = " select distinct
-                              arrepaga.k00_numpre,
-                              arrepaga.k00_numpar,
-                              arrepaga.k00_numtot,
-                              case when arrecant.k00_dtvenc is null then arrepaga.k00_dtvenc else arrecant.k00_dtvenc end as k00_dtvenc,
-                              case when arrecant.k00_dtoper is null then arrepaga.k00_dtoper else arrecant.k00_dtoper end as k00_dtoper,
-                              arrepaga.k00_receit,
-                              k02_drecei,
-                              arrepaga.k00_hist,
-                              k01_descr,
-                              arrepaga.k00_valor,
-                              arrepaga.k00_conta,
-                              arrepaga.k00_dtpaga,
-                              arrecant.k00_tipo,
-                              coalesce(disbanco.dtpago,k00_dtpaga) as efetpagto,
-                              'NORMAL'                             as tipopagamento,
-                              0                                    as abatimento,
-                              0                                    as numpreabatimento
-                         from arrepaga
-                              {$sInnerPagamento}
-                              left  join arrecant      on arrecant.k00_numpre   = arrepaga.k00_numpre
-                                                      and arrecant.k00_numpar   = arrepaga.k00_numpar
-                                                      and arrecant.k00_receit   = arrepaga.k00_receit
-                                                      and arrecant.k00_hist    <> 918
-                              inner join arreinstit    on arreinstit.k00_numpre = arrepaga.k00_numpre
-                                                      and arreinstit.k00_instit = ".db_getsession('DB_instit')."
-                              inner join tabrec        on tabrec.k02_codigo     = arrepaga.k00_receit
-                              inner join tabrecjm      on tabrecjm.k02_codjm    = tabrec.k02_codjm
-                              inner join histcalc      on histcalc.k01_codigo   = arrepaga.k00_hist
-                              left  join arreidret     on arreidret.k00_numpre  = arrepaga.k00_numpre
-                                                      and arreidret.k00_numpar  = arrepaga.k00_numpar
-                              left  join disbanco      on disbanco.idret        = arreidret.idret
-                        where not exists ( select 1
-                                             from abatimentorecibo
-                                                  inner join abatimento on abatimento.k125_sequencial = abatimentorecibo.k127_abatimento
-                                            where abatimentorecibo.k127_numprerecibo = arrepaga.k00_numpre
-                                              and abatimento.k125_tipoabatimento     = 1
-                                             limit 1 )
-                              {$sWhereNumpreNormal}
-                              {$sWherePagamento}
-                     group by arrepaga.k00_numpre,
-                              arrepaga.k00_numpar,
-                              arrepaga.k00_numtot,
-                              arrepaga.k00_hist,
-                              arrepaga.k00_receit,
-                              k02_drecei,
-                              k01_descr,
-                              arrepaga.k00_conta,
-                              arrepaga.k00_dtpaga,
-                              arrecant.k00_tipo,
-                              arrepaga.k00_dtoper,
-                              arrecant.k00_dtoper,
-                              disbanco.dtpago,
-                              k00_dtpaga,
-                              arrepaga.k00_dtvenc,
-                              arrecant.k00_dtvenc,
-                              arrepaga.k00_valor
-
-                     union all
-
-                       select distinct
-                              arreckey.k00_numpre,
-                              arreckey.k00_numpar,
-                              case
-											          when arrecad.k00_numtot is not null then arrecad.k00_numtot
-											          when arrecant.k00_numtot is not null then arrecant.k00_numtot
-											        	else arrepaga.k00_numtot
-											        end as k00_numtot,
-											        case
-											          when arrecad.k00_dtvenc is not null then arrecad.k00_dtvenc
-											          when arrecant.k00_dtvenc is not null then arrecant.k00_dtvenc
-											        	else arrepaga.k00_dtvenc
-											        end as k00_dtvenc,
-											        case
-											          when arrecad.k00_dtoper is not null then arrecad.k00_dtoper
-											          when arrecant.k00_dtoper is not null then arrecant.k00_dtoper
-											        	else arrepaga.k00_dtoper
-											        end as k00_dtoper,
-                              arreckey.k00_receit,
-                              tabrec.k02_drecei,
-                              arreckey.k00_hist,
-                              histcalc.k01_descr,
-                              ( abatimentoarreckey.k128_valorabatido +
-                                abatimentoarreckey.k128_correcao     +
-                                abatimentoarreckey.k128_juros        +
-                                abatimentoarreckey.k128_multa  ) as valorabatido,
-                              arrepaga.k00_conta,
-                              arrepaga.k00_dtpaga,
-                              case when arrecad.k00_tipo is not null then arrecad.k00_tipo else arrecant.k00_tipo end as k00_tipo,
-                              coalesce(disbanco.dtpago,k00_dtpaga) as efetpagto,
-                              'PARCIAL'                            as tipopagamento,
-                              abatimento.k125_sequencial           as abatimento,
-                              arrepaga.k00_numpre                  as numpreabatimento
-                         from abatimentorecibo
-                              inner join abatimento         on abatimento.k125_sequencial         = abatimentorecibo.k127_abatimento
-															inner join abatimentodisbanco on abatimentodisbanco.k132_abatimento = abatimento.k125_sequencial
-                              inner join disbanco           on disbanco.idret                     = abatimentodisbanco.k132_idret
-                              inner join abatimentoarreckey on abatimentoarreckey.k128_abatimento = abatimento.k125_sequencial
-                              inner join arreckey           on arreckey.k00_sequencial            = abatimentoarreckey.k128_arreckey
-                              inner join tabrec             on tabrec.k02_codigo                  = arreckey.k00_receit
-                              inner join histcalc           on histcalc.k01_codigo                = arreckey.k00_hist
-                              left  join arrepaga           on arrepaga.k00_numpre                = abatimentorecibo.k127_numprerecibo
-                              inner join arreinstit         on arreinstit.k00_numpre              = arrepaga.k00_numpre
-                                                           and arreinstit.k00_instit              = ".db_getsession('DB_instit')."
-                              left  join arrecant           on arrecant.k00_numpre                = arreckey.k00_numpre
-                                                           and arrecant.k00_numpar                = arreckey.k00_numpar
-                                                           and arrecant.k00_receit                = arreckey.k00_receit
-                              left  join arrecad            on arrecad.k00_numpre                 = arreckey.k00_numpre
-                                                           and arrecad.k00_numpar                 = arreckey.k00_numpar
-                                                           and arrecad.k00_receit                 = arreckey.k00_receit
-                              {$sInnerPagamento}
-                        where abatimento.k125_tipoabatimento = 1
-                              {$sWhereNumprePgto}
-                              {$sWherePagamento}
-                     order by efetpagto,
-                              k00_numpre,
-                              k00_numpar    ";
-//  	echo $sSqlPagamentos; exit;
-	$rsPagamentos    = db_query($sSqlPagamentos);
-	$iRowsPagamentos = pg_num_rows($rsPagamentos);
-
-  $ConfCor1   = "#EFE029";
-  $ConfCor2   = "#E4F471";
-	$numpre_cor = "";
-	$numpre_par = "";
-	$qcor       = $ConfCor1;
-
-  if ($iRowsPagamentos > 0) {
-
-	?>
-	<table width="100%" border="0" cellspacing="0" cellpadding="3">
-    <tr bgcolor="#ffcc66">
-      <th width="2%"  nowrap>MI</th>
-      <th width="5%"  nowrap>Tipo</th>
-      <th width="7%"  nowrap>Numpre</th>
-      <th width="5%"  nowrap>Operacao</th>
-      <th width="2%"  nowrap>Par</th>
-      <th width="2%"  nowrap>Tot</th>
-      <th width="7%"  nowrap>Venc</th>
-      <th width="3%"  nowrap>Hist</th>
-      <th width="20%" nowrap>Descri&ccedil;&atilde;o</th>
-      <th width="3%"  nowrap>Rec.</th>
-      <th width="20%" nowrap>Descri&ccedil;&atilde;o</th>
-      <th width="7%"  nowrap>Valor</th>
-      <th width="3%"  nowrap>Cont</th>
-      <th width="7%"  nowrap>Dtpagto</th>
-      <th width="7%"  nowrap>Efetpagto</th>
-    </tr>
-	<?
-    $totalpago = 0;
-
-    for ($iInd=0; $iInd < $iRowsPagamentos; $iInd++) {
-
-      $oPagamento = db_utils::fieldsMemory($rsPagamentos,$iInd);
+        $aWherePagamento = array();
+        $sWhereNumpreNormal = "";
+        $sWhereNumprePgto = "";
 
 
-     	if ( trim($oPagamento->k00_tipo) == '' ) {
+        if (isset($numcgm)) {
 
-      	$oPagamento->k00_tipo = 0;
+            $sInnerPagamento = " inner join arrenumcgm on arrenumcgm.k00_numpre = arrepaga.k00_numpre";
+            $aWherePagamento[] = " arrenumcgm.k00_numcgm = " . $numcgm;
 
-        $sSqlTipo = "select k00_tipo
-                       from recibo
-                      where k00_numpre = $oPagamento->k00_numpre
-                      limit 1";
+        } else if (isset($matric)) {
 
-      	$rsTipo  = db_query($sSqlTipo);
+            $sInnerPagamento = " inner join arrematric on arrematric.k00_numpre = arrepaga.k00_numpre";
+            $aWherePagamento[] = " arrematric.k00_matric = " . $matric;
 
-      	if (pg_numrows($rsTipo) > 0) {
-      	  $oPagamento->k00_tipo = db_utils::fieldsMemory($rsTipo,0)->k00_tipo;
-      	}
-     	}
+        } else if (isset($inscr)) {
 
-      if($numpre_cor==""){
- 		    $numpre_cor = $oPagamento->k00_numpre;
-		    $numpre_par = $oPagamento->k00_numpar;
-	    }
+            $sInnerPagamento = " inner join arreinscr on arreinscr.k00_numpre   = arrepaga.k00_numpre";
+            $aWherePagamento[] = " arreinscr.k00_inscr   = " . $inscr;
 
-	    if($numpre_cor != $oPagamento->k00_numpre || $numpre_par != $oPagamento->k00_numpar ){
+        } else if (isset($numpre)) {
 
-        $numpre_cor = $oPagamento->k00_numpre;
-		    $numpre_par = $oPagamento->k00_numpar;
+            $sInnerPagamento = "";
+            $sWhereNumpreNormal = " and arrepaga.k00_numpre   = " . $numpre;
 
-        if($qcor == $ConfCor1) {
-		      $qcor = $ConfCor2;
+            $sWhereNumprePgto = " and (  arrepaga.k00_numpre = {$numpre} ";
+            $sWhereNumprePgto .= "     or arreckey.k00_numpre = {$numpre} ";
+            $sWhereNumprePgto .= "     )                                  ";
+
+        }
+
+        if (!empty($HTTP_POST_VARS["datainicial_dia"])) {
+
+            $datainicial = $HTTP_POST_VARS["datainicial_ano"] . "-" . $HTTP_POST_VARS["datainicial_mes"] . "-" . $HTTP_POST_VARS["datainicial_dia"];
+            $datafinal = $HTTP_POST_VARS["datafinal_ano"] . "-" . $HTTP_POST_VARS["datafinal_mes"] . "-" . $HTTP_POST_VARS["datafinal_dia"];
+            $aWherePagamento[] = " arrepaga.k00_dtpaga between '$datainicial' and '$datafinal' ";
+        }
+
+        if (!empty($HTTP_POST_VARS["k02_codigo"])) {
+            $aWherePagamento[] = " arrepaga.k00_receit = " . $HTTP_POST_VARS["k02_codigo"];
+        }
+
+        if (!empty($HTTP_POST_VARS["conta"])) {
+            $aWherePagamento[] = " arrepaga.k00_conta = " . $HTTP_POST_VARS["conta"];
+        }
+
+        if (!empty($HTTP_POST_VARS["v70_sequencial"])) {
+
+            $sInnerPagamento .= " inner join ( select distinct";
+            $sInnerPagamento .= "                     case ";
+            $sInnerPagamento .= "                       when termo.v07_numpre is null ";
+            $sInnerPagamento .= "                         then inicialnumpre.v59_numpre";
+            $sInnerPagamento .= "                       else termo.v07_numpre";
+            $sInnerPagamento .= "                     end as numpre ";
+            $sInnerPagamento .= "                from processoforoinicial ";
+            $sInnerPagamento .= "                left join termoini      on inicial          = v71_inicial ";
+            $sInnerPagamento .= "                left join termo         on termo.v07_parcel = termoini.parcel ";
+            $sInnerPagamento .= "                left join inicialnumpre on inicialnumpre.v59_inicial = v71_inicial ";
+            $sInnerPagamento .= "               where processoforoinicial.v71_processoforo = {$HTTP_POST_VARS["v70_sequencial"]}";
+            $sInnerPagamento .= "            ) as processoforo on processoforo.numpre = arrepaga.k00_numpre ";
+        }
+
+        $sWherePagamento = implode(" and ", $aWherePagamento);
+
+        if (trim($sWherePagamento) != '') {
+            $sWherePagamento = " and " . $sWherePagamento;
+        }
+
+        $sSqlPagamentos = " select distinct
+                                  arrepaga.k00_numpre,
+                                  arrepaga.k00_numpar,
+                                  arrepaga.k00_numtot,
+                                  case when arrecant.k00_dtvenc is null then arrepaga.k00_dtvenc else arrecant.k00_dtvenc end as k00_dtvenc,
+                                  case when arrecant.k00_dtoper is null then arrepaga.k00_dtoper else arrecant.k00_dtoper end as k00_dtoper,
+                                  arrepaga.k00_receit,
+                                  k02_drecei,
+                                  arrepaga.k00_hist,
+                                  k01_descr,
+                                  arrepaga.k00_valor,
+                                  arrepaga.k00_conta,
+                                  arrepaga.k00_dtpaga,
+                                  arrecant.k00_tipo,
+                                  coalesce(disbanco.dtpago,k00_dtpaga) as efetpagto,
+                                  'NORMAL'                             as tipopagamento,
+                                  0                                    as abatimento,
+                                  0                                    as numpreabatimento
+                             from arrepaga
+                                  {$sInnerPagamento}
+                                  left  join arrecant      on arrecant.k00_numpre   = arrepaga.k00_numpre
+                                                          and arrecant.k00_numpar   = arrepaga.k00_numpar
+                                                          and arrecant.k00_receit   = arrepaga.k00_receit
+                                                          and arrecant.k00_hist    <> 918
+                                  inner join arreinstit    on arreinstit.k00_numpre = arrepaga.k00_numpre
+                                                          and arreinstit.k00_instit = " . db_getsession('DB_instit') . "
+                                  inner join tabrec        on tabrec.k02_codigo     = arrepaga.k00_receit
+                                  inner join tabrecjm      on tabrecjm.k02_codjm    = tabrec.k02_codjm
+                                  inner join histcalc      on histcalc.k01_codigo   = arrepaga.k00_hist
+                                  left  join arreidret     on arreidret.k00_numpre  = arrepaga.k00_numpre
+                                                          and arreidret.k00_numpar  = arrepaga.k00_numpar
+                                  left  join disbanco      on disbanco.idret        = arreidret.idret
+                            where not exists ( select 1
+                                                 from abatimentorecibo
+                                                      inner join abatimento on abatimento.k125_sequencial = abatimentorecibo.k127_abatimento
+                                                where abatimentorecibo.k127_numprerecibo = arrepaga.k00_numpre
+                                                  and abatimento.k125_tipoabatimento     = 1
+                                                 limit 1 )
+                                  {$sWhereNumpreNormal}
+                                  {$sWherePagamento}
+                         group by arrepaga.k00_numpre,
+                                  arrepaga.k00_numpar,
+                                  arrepaga.k00_numtot,
+                                  arrepaga.k00_hist,
+                                  arrepaga.k00_receit,
+                                  k02_drecei,
+                                  k01_descr,
+                                  arrepaga.k00_conta,
+                                  arrepaga.k00_dtpaga,
+                                  arrecant.k00_tipo,
+                                  arrepaga.k00_dtoper,
+                                  arrecant.k00_dtoper,
+                                  disbanco.dtpago,
+                                  k00_dtpaga,
+                                  arrepaga.k00_dtvenc,
+                                  arrecant.k00_dtvenc,
+                                  arrepaga.k00_valor
+
+                         union all
+
+                           select distinct
+                                  arreckey.k00_numpre,
+                                  arreckey.k00_numpar,
+                                  case
+                                                          when arrecad.k00_numtot is not null then arrecad.k00_numtot
+                                                          when arrecant.k00_numtot is not null then arrecant.k00_numtot
+                                                            else arrepaga.k00_numtot
+                                                        end as k00_numtot,
+                                                        case
+                                                          when arrecad.k00_dtvenc is not null then arrecad.k00_dtvenc
+                                                          when arrecant.k00_dtvenc is not null then arrecant.k00_dtvenc
+                                                            else arrepaga.k00_dtvenc
+                                                        end as k00_dtvenc,
+                                                        case
+                                                          when arrecad.k00_dtoper is not null then arrecad.k00_dtoper
+                                                          when arrecant.k00_dtoper is not null then arrecant.k00_dtoper
+                                                            else arrepaga.k00_dtoper
+                                                        end as k00_dtoper,
+                                  arreckey.k00_receit,
+                                  tabrec.k02_drecei,
+                                  arreckey.k00_hist,
+                                  histcalc.k01_descr,
+                                  ( abatimentoarreckey.k128_valorabatido +
+                                    abatimentoarreckey.k128_correcao     +
+                                    abatimentoarreckey.k128_juros        +
+                                    abatimentoarreckey.k128_multa  ) as valorabatido,
+                                  arrepaga.k00_conta,
+                                  arrepaga.k00_dtpaga,
+                                  case when arrecad.k00_tipo is not null then arrecad.k00_tipo else arrecant.k00_tipo end as k00_tipo,
+                                  coalesce(disbanco.dtpago,k00_dtpaga) as efetpagto,
+                                  'PARCIAL'                            as tipopagamento,
+                                  abatimento.k125_sequencial           as abatimento,
+                                  arrepaga.k00_numpre                  as numpreabatimento
+                             from abatimentorecibo
+                                  inner join abatimento         on abatimento.k125_sequencial         = abatimentorecibo.k127_abatimento
+                                                                inner join abatimentodisbanco on abatimentodisbanco.k132_abatimento = abatimento.k125_sequencial
+                                  inner join disbanco           on disbanco.idret                     = abatimentodisbanco.k132_idret
+                                  inner join abatimentoarreckey on abatimentoarreckey.k128_abatimento = abatimento.k125_sequencial
+                                  inner join arreckey           on arreckey.k00_sequencial            = abatimentoarreckey.k128_arreckey
+                                  inner join tabrec             on tabrec.k02_codigo                  = arreckey.k00_receit
+                                  inner join histcalc           on histcalc.k01_codigo                = arreckey.k00_hist
+                                  left  join arrepaga           on arrepaga.k00_numpre                = abatimentorecibo.k127_numprerecibo
+                                  inner join arreinstit         on arreinstit.k00_numpre              = arrepaga.k00_numpre
+                                                               and arreinstit.k00_instit              = " . db_getsession('DB_instit') . "
+                                  left  join arrecant           on arrecant.k00_numpre                = arreckey.k00_numpre
+                                                               and arrecant.k00_numpar                = arreckey.k00_numpar
+                                                               and arrecant.k00_receit                = arreckey.k00_receit
+                                  left  join arrecad            on arrecad.k00_numpre                 = arreckey.k00_numpre
+                                                               and arrecad.k00_numpar                 = arreckey.k00_numpar
+                                                               and arrecad.k00_receit                 = arreckey.k00_receit
+                                  {$sInnerPagamento}
+                            where abatimento.k125_tipoabatimento = 1
+                                  {$sWhereNumprePgto}
+                                  {$sWherePagamento}
+                         order by efetpagto,
+                                  k00_numpre,
+                                  k00_numpar    ";
+
+        $rsPagamentos = db_query($sSqlPagamentos);
+        $iRowsPagamentos = pg_num_rows($rsPagamentos);
+
+        $ConfCor1 = "#EFE029";
+        $ConfCor2 = "#E4F471";
+        $numpre_cor = "";
+        $numpre_par = "";
+        $qcor = $ConfCor1;
+
+        if ($iRowsPagamentos > 0) {
+
+        ?>
+            <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                <tr bgcolor="#ffcc66">
+                    <th width="2%" nowrap>MI</th>
+                    <th width="5%" nowrap>Tipo</th>
+                    <th width="7%" nowrap>Numpre</th>
+                    <th width="5%" nowrap>Operacao</th>
+                    <th width="2%" nowrap>Par</th>
+                    <th width="2%" nowrap>Tot</th>
+                    <th width="7%" nowrap>Venc</th>
+                    <th width="3%" nowrap>Hist</th>
+                    <th width="20%" nowrap>Descri&ccedil;&atilde;o</th>
+                    <th width="3%" nowrap>Rec.</th>
+                    <th width="20%" nowrap>Descri&ccedil;&atilde;o</th>
+                    <th width="7%" nowrap>Valor</th>
+                    <th width="3%" nowrap>Cont</th>
+                    <th width="7%" nowrap>Dtpagto</th>
+                    <th width="7%" nowrap>Efetpagto</th>
+                </tr>
+                <?php
+                $totalpago = 0;
+
+                for ($iInd = 0; $iInd < $iRowsPagamentos; $iInd++) {
+
+                    $oPagamento = db_utils::fieldsMemory($rsPagamentos, $iInd);
+
+
+                    if (trim($oPagamento->k00_tipo) == '') {
+
+                        $oPagamento->k00_tipo = 0;
+
+                        $sSqlTipo = "select k00_tipo
+                           from recibo
+                          where k00_numpre = $oPagamento->k00_numpre
+                          limit 1";
+
+                        $rsTipo = db_query($sSqlTipo);
+
+                        if (pg_numrows($rsTipo) > 0) {
+                            $oPagamento->k00_tipo = db_utils::fieldsMemory($rsTipo, 0)->k00_tipo;
+                        }
+                    }
+
+                    if ($numpre_cor == "") {
+                        $numpre_cor = $oPagamento->k00_numpre;
+                        $numpre_par = $oPagamento->k00_numpar;
+                    }
+
+                    if ($numpre_cor != $oPagamento->k00_numpre || $numpre_par != $oPagamento->k00_numpar) {
+
+                        $numpre_cor = $oPagamento->k00_numpre;
+                        $numpre_par = $oPagamento->k00_numpar;
+
+                        if ($qcor == $ConfCor1) {
+                            $qcor = $ConfCor2;
+                        } else {
+                            $qcor = $ConfCor1;
+                        }
+                    }
+
+                    $aHistorico = array();
+                    $sSqlHistorico = " select k00_dtoper as dtlhist,
+                                        k00_hora,
+                                        login,
+                                        k00_histtxt as k00_histtxt
+                                   from arrehist
+                                                  left outer join db_usuarios on id_usuario = k00_id_usuario
+                                            where k00_numpre = $oPagamento->k00_numpre
+                                              and (    k00_numpar = $oPagamento->k00_numpar
+                                                    or k00_numpar = 0
+                                                  )
+                                     order by k00_dtoper,
+                                                k00_hora desc
+                                              limit 1 ";
+
+                    $rsHistorico = db_query($sSqlHistorico);
+                    $iRowsHistorico = pg_num_rows($rsHistorico);
+
+                    if ($iRowsHistorico > 0) {
+
+                        for ($iIndHist = 0; $iIndHist < $iRowsHistorico; $iIndHist++) {
+
+                            $oHistorico = db_utils::fieldsMemory($rsHistorico, $iIndHist);
+                            $aHistorico[] = $oHistorico->dtlhist . " "
+                                . $oHistorico->k00_hora . " "
+                                . $oHistorico->login . " "
+                                . $oHistorico->k00_histtxt;
+
+                        }
+                    }
+
+                    $sHistorico = implode("\n", $aHistorico);
+                    $sHistorico = ($sHistorico != "" ? str_replace("\n", '', $sHistorico) : "");
+                    $sHistorico = ($sHistorico != "" ? str_replace("\r", '', $sHistorico) : "");
+
+                    ?>
+
+                    <tr bgcolor="<?= $qcor ?>">
+                        <td align="center" nowrap>
+                            <a href="#"
+                               onClick="parent.js_mostradetalhes('cai3_gerfinanc025.php?<?= base64_encode($oPagamento->k00_tipo . "#" . $oPagamento->k00_numpre . "#" . $oPagamento->k00_numpar . "#" . $oPagamento->numpreabatimento) ?>','','width=600,height=500,scrollbars=1')">
+                                MI
+                            </a>
+                        </td>
+                        <td align="center" nowrap>
+                            <?php
+                            if (trim($oPagamento->abatimento) != 0) {
+                                db_ancora('PARCIAL', "parent.js_consultaOrigemAbatimento($oPagamento->abatimento)", 1, '');
+                            } else {
+                                echo "NORMAL";
+                            }
+                            ?>
+                        </td>
+                        <td align="right" nowrap>
+                            <a OnMouseOut="parent.js_label('false','');"
+                               OnMouseOver="parent.js_label('true','<?= $sHistorico ?>');"
+                               href="javascript:parent.document.getElementById('processando').style.visibility = 'visible';history.back()">
+                                <?= $oPagamento->k00_numpre ?>
+                            </a>
+                        </td>
+                        <td align="center" nowrap><?= db_formatar($oPagamento->k00_dtoper, "d") ?>    </td>
+                        <td align="right" nowrap><?= $oPagamento->k00_numpar ?>                     </td>
+                        <td align="right" nowrap><?= $oPagamento->k00_numtot ?>                     </td>
+                        <td align="center" nowrap><?= db_formatar($oPagamento->k00_dtvenc, "d") ?>    </td>
+                        <td align="right" nowrap><?= $oPagamento->k00_hist ?>                       </td>
+                        <td align="left" nowrap><?= str_pad($oPagamento->k01_descr, 20) ?>          </td>
+                        <td align="center" nowrap><?= $oPagamento->k00_receit ?>                     </td>
+                        <td align="left" nowrap><?= str_pad($oPagamento->k02_drecei, 40) ?>         </td>
+                        <td align="right" nowrap><?= db_formatar(($oPagamento->k00_valor * -1), "f") ?></td>
+                        <td align="center" nowrap><?= $oPagamento->k00_conta ?>                      </td>
+                        <td align="center" nowrap><?= db_formatar($oPagamento->k00_dtpaga, "d") ?>    </td>
+                        <td align="center" nowrap><?= db_formatar($oPagamento->efetpagto, 'd') ?>     </td>
+                    </tr>
+                    <?php
+
+                    $totalpago += $oPagamento->k00_valor;
+                }
+
+                ?>
+
+                <tr bgcolor="#ffcc66">
+                    <th align="center" colspan="11" nowrap>Total Pago</th>
+                    <th nowrap><?= db_formatar(($totalpago * -1), 'f') ?></th>
+                    <th nowrap></th>
+                    <th nowrap></th>
+                    <th nowrap></th>
+                </tr>
+                <tr>
+                    <td colspan="11" align="center" class="tabs"><input type="button" name="imprimir" value="Imprimir"
+                                                                        onclick="js_imprime()"></td>
+                </tr>
+            </table>
+            <?php
         } else {
-          $qcor = $ConfCor1;
+            $DB_ERRO = "Não existe pagamentos efetuados para este numpre.";
         }
-	    }
-
-		  $aHistorico    = array();
-		  $sSqlHistorico = " select k00_dtoper as dtlhist,
-		                            k00_hora,
-		                            login,
-		                            k00_histtxt as k00_histtxt
-		                       from arrehist
-							                  left outer join db_usuarios on id_usuario = k00_id_usuario
-							            where k00_numpre = $oPagamento->k00_numpre
-							              and (    k00_numpar = $oPagamento->k00_numpar
-							                    or k00_numpar = 0
-							                  )
-					             order by k00_dtoper,
-						                    k00_hora desc
-						                  limit 1 ";
-
-      $rsHistorico    = db_query($sSqlHistorico);
-      $iRowsHistorico = pg_num_rows($rsHistorico);
-
-      if ($iRowsHistorico > 0){
-
-		    for($iIndHist=0; $iIndHist< $iRowsHistorico; $iIndHist++){
-
-		      $oHistorico   = db_utils::fieldsMemory($rsHistorico,$iIndHist);
-		      $aHistorico[] = $oHistorico->dtlhist ." "
-		                     .$oHistorico->k00_hora." "
-		                     .$oHistorico->login." "
-		                     .$oHistorico->k00_histtxt;
-
-        }
-		  }
-
-		  $sHistorico = implode("\n",$aHistorico);
-      $sHistorico = ($sHistorico!=""?str_replace("\n",'',$sHistorico):"");
-      $sHistorico = ($sHistorico!=""?str_replace("\r",'',$sHistorico):"");
-
-	  ?>
-
-    <tr bgcolor="<?=$qcor?>">
-      <td align="center" nowrap >
-      <a href="#" onClick="parent.js_mostradetalhes('cai3_gerfinanc025.php?<?=base64_encode($oPagamento->k00_tipo."#".$oPagamento->k00_numpre."#".$oPagamento->k00_numpar."#".$oPagamento->numpreabatimento)?>','','width=600,height=500,scrollbars=1')">
-      MI
-      </a>
-      </td>
-      <td align="center" nowrap >
-        <?php
-          if ( trim($oPagamento->abatimento) != 0 ) {
-            db_ancora('PARCIAL',"js_consultaOrigemAbatimento($oPagamento->abatimento)",1,'');
-          } else {
-            echo "NORMAL";
-          }
-        ?>
-      </td>
-      <td align="right"  nowrap >
-        <a OnMouseOut="parent.js_label('false','');"
-           OnMouseOver="parent.js_label('true','<?=$sHistorico?>');"
-           href="javascript:parent.document.getElementById('processando').style.visibility = 'visible';history.back()">
-             <?=$oPagamento->k00_numpre?>
-        </a>
-      </td>
-      <td align="center" nowrap ><?=db_formatar($oPagamento->k00_dtoper,"d")?>    </td>
-      <td align="right"  nowrap ><?=$oPagamento->k00_numpar?>                     </td>
-      <td align="right"  nowrap ><?=$oPagamento->k00_numtot?>                     </td>
-      <td align="center" nowrap ><?=db_formatar($oPagamento->k00_dtvenc,"d")?>    </td>
-      <td align="right"  nowrap ><?=$oPagamento->k00_hist?>                       </td>
-      <td align="left"   nowrap ><?=str_pad($oPagamento->k01_descr,20)?>          </td>
-      <td align="center" nowrap ><?=$oPagamento->k00_receit?>                     </td>
-      <td align="left"   nowrap ><?=str_pad($oPagamento->k02_drecei,40)?>         </td>
-      <td align="right"  nowrap ><?=db_formatar(($oPagamento->k00_valor*-1),"f")?></td>
-      <td align="center" nowrap ><?=$oPagamento->k00_conta?>                      </td>
-      <td align="center" nowrap ><?=db_formatar($oPagamento->k00_dtpaga,"d")?>    </td>
-      <td align="center" nowrap ><?=db_formatar($oPagamento->efetpagto,'d')?>     </td>
-    </tr>
-    <?
-
-      $totalpago += $oPagamento->k00_valor;
-  	}
-
-	  ?>
-
-    <tr bgcolor="#ffcc66">
-      <th align="center" colspan="11" nowrap>Total Pago</th>
-      <th nowrap><?=db_formatar(($totalpago*-1),'f')?></th>
-      <th nowrap></th>
-      <th nowrap></th>
-      <th nowrap></th>
-    </tr>
-    <tr>
-      <td  colspan="11" align="center" class="tabs"><input type="button" name="imprimir" value="Imprimir" onclick="js_imprime()"></td>
-    </tr>
-</table>
- <?
-  } else {
-	  $DB_ERRO = "Não existe pagamentos efetuados para este numpre.";
-  }
-}
-?>
+    }
+    ?>
 </center>
 </body>
 </html>
-<?
+<?php
 
-if(isset($DB_ERRO)) {
-  ?>
-  <script>
-    alert('<?=$DB_ERRO?>');
-    parent.document.getElementById('processando').style.visibility = 'visible';
-	history.back();
-  </script>
-<!--
-
-//-->
-</script>
-  <?
+if (isset($DB_ERRO)) {
+    ?>
+    <script>
+        alert('<?=$DB_ERRO?>');
+        parent.document.getElementById('processando').style.visibility = 'visible';
+        history.back();
+    </script>
+    <?php
 }
 ?>
-  <script>
-      function js_pesquisareceita(lMostra){
+<script>
+    function js_pesquisareceita(lMostra) {
 
-        var sQuery = '?funcao_js=parent.debitos.js_mostrareceitas|k02_codigo';
-<?
-          if(isset($matric)){
-             echo "sQuery += '&matric={$matric}';";
-          }else if(isset($inscr)){
-             echo "sQuery += '&inscr={$inscr}';";
-          }else if(isset($numcgm)){
-             echo "sQuery += '&numcgm={$numcgm}';";
-          }else {
-             echo "sQuery += '&numpre={$numpre}';";
-          }
-?>
-        if (lMostra) {
-          var sUrl = 'func_tabrecpagamentosefetivados.php'+sQuery;
-          js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_pagamentosefetivados',sUrl,'Pesquisa',true);
-
+        let sQuery = '?funcao_js=parent.debitos.js_mostrareceitas|k02_codigo';
+        <?php
+        if (isset($matric)) {
+            echo "sQuery += '&matric={$matric}';";
+        } elseif (isset($inscr)) {
+            echo "sQuery += '&inscr={$inscr}';";
+        } elseif (isset($numcgm)) {
+            echo "sQuery += '&numcgm={$numcgm}';";
+        } else {
+            echo "sQuery += '&numpre={$numpre}';";
         }
-      }
-
-
-    function js_mostrareceitas(chave){
-      document.form1.k02_codigo.value = chave;
-      CurrentWindow.corpo.db_iframe_pagamentosefetivados.hide();
+        ?>
+        if (lMostra) {
+            const sUrl = 'func_tabrecpagamentosefetivados.php' + sQuery;
+            js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_pagamentosefetivados', sUrl, 'Pesquisa', true);
+        }
     }
 
 
-    function js_consultaOrigemAbatimento(iAbatimento) {
-
-      var sUrl = 'func_origemabatimentoparcial.php?iAbatimento='+iAbatimento+'&sOrigem=recibo';
-
-      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_abatimento',sUrl,'Origem Pagamento Parcial',true);
+    function js_mostrareceitas(chave) {
+        document.form1.k02_codigo.value = chave;
+        CurrentWindow.corpo.db_iframe_pagamentosefetivados.hide();
     }
 
     function js_pesquisaprocessoforo(mostra) {
 
-    	var sQuery = "";
-    	<?
-    	   if (isset($matric)) {
-    	     echo "sQuery += '&matric={$matric}';";
-    	   }else if(isset($inscr)){
-    	      echo "sQuery += '&inscr={$inscr}';";
-    	   }else if(isset($numcgm)){
-    	      echo "sQuery += '&numcgm={$numcgm}';";
-    	   }else {
-    	      echo "sQuery += '&numpre={$numpre}';";
-    	   }
-    	?>
+        let sQuery = "";
+        <?php
+        if (isset($matric)) {
+            echo "sQuery += '&matric={$matric}';";
+        } else if (isset($inscr)) {
+            echo "sQuery += '&inscr={$inscr}';";
+        } else if (isset($numcgm)) {
+            echo "sQuery += '&numcgm={$numcgm}';";
+        } else {
+            echo "sQuery += '&numpre={$numpre}';";
+        }
+        ?>
 
-  	  if (mostra == true) {
+        if (mostra === true) {
 
-  		  var sUrl = 'func_processoforo.php?lAnuladas=false&funcao_js=parent.js_mostraprocessoforo1|v70_sequencial|v70_codforo'+sQuery;
-  	    js_OpenJanelaIframe('', 'db_iframe_processoforo', sUrl, 'Pesquisa', true);
-  	  } else {
+            const sUrl = 'func_processoforo.php?lAnuladas=false&funcao_js=parent.js_mostraprocessoforo1|v70_sequencial|v70_codforo' + sQuery;
+            js_OpenJanelaIframe('', 'db_iframe_processoforo', sUrl, 'Pesquisa', true);
+        } else {
 
-  	    if (document.form1.v70_sequencial.value != '') {
+            if (document.form1.v70_sequencial.value !== '') {
 
-  	      var sUrl = 'func_processoforo.php?pesquisa_chave='+document.form1.v70_sequencial.value+'&funcao_js=parent.js_mostraprocessoforo&lAnuladas=false'+sQuery;
-  	      js_OpenJanelaIframe('', 'db_iframe_processoforo', sUrl, 'Pesquisa', false);
-  	    }
-  	  }
-  	}
-
-  function js_mostraprocessoforo(chave,erro,chave2){
-
-    document.form1.v70_codforo.value = chave;
-    if(erro==true){
-      document.form1.v70_codforo.focus();
-      document.form1.v70_codforo.value = '';
+                const sUrl = 'func_processoforo.php?pesquisa_chave=' + document.form1.v70_sequencial.value + '&funcao_js=parent.js_mostraprocessoforo&lAnuladas=false' + sQuery;
+                js_OpenJanelaIframe('', 'db_iframe_processoforo', sUrl, 'Pesquisa', false);
+            }
+        }
     }
-    db_iframe_processoforo.hide();
-  }
 
-  function js_mostraprocessoforo1(chave1,chave2){
-    document.form1.v70_sequencial.value = chave1;
-    document.form1.v70_codforo.value = chave2;
-    db_iframe_processoforo.hide();
-  }
+    function js_mostraprocessoforo(chave, erro, chave2) {
 
-  </script>
+        document.form1.v70_codforo.value = chave;
+        if (erro === true) {
+            document.form1.v70_codforo.focus();
+            document.form1.v70_codforo.value = '';
+        }
+        db_iframe_processoforo.hide();
+    }
+
+    function js_mostraprocessoforo1(chave1, chave2) {
+        document.form1.v70_sequencial.value = chave1;
+        document.form1.v70_codforo.value = chave2;
+        db_iframe_processoforo.hide();
+    }
+
+</script>

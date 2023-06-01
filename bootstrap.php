@@ -18,10 +18,14 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'definitions.php';
 // DEFAULT AUTOLOADING
 //
 
-// ecidade
-require_once(ECIDADE_PATH . 'libs/db_autoload.php');
 // composer
 require_once(ECIDADE_PATH . 'vendor/autoload.php');
+
+// ecidade
+require_once(ECIDADE_PATH . 'libs/db_autoload.php');
+
+// eloquent
+require_once (ECIDADE_PATH . 'config/ORM/Eloquent/bootstrap.php');
 
 //
 // END DEFAULT AUTOLOADING

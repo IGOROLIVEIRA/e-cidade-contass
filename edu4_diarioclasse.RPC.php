@@ -38,6 +38,7 @@ require_once("libs/db_stdlibwebseller.php");
 require_once("model/webservices/ControleAcessoAluno.model.php");
 require_once("model/educacao/avaliacao/iFormaObtencao.interface.php");
 require_once("model/educacao/avaliacao/iElementoAvaliacao.interface.php");
+
 db_app::import("educacao.*");
 db_app::import("educacao.censo.DisciplinaCenso");
 db_app::import("exceptions.*");
@@ -46,11 +47,10 @@ db_app::import("educacao.avaliacao.*");
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
 $oRetorno->message = "";
-
-
 $iEscola        = db_getsession("DB_coddepto");
 $oJson          = new services_json();
 $oParam         = $oJson->decode(str_replace("\\", "", $_POST["json"]));
+
 switch ($oParam->exec) {
 
   case 'getDisciplinasRegenteEscola':
@@ -81,7 +81,8 @@ switch ($oParam->exec) {
     $sWhereNaoFuncionario .= " and rechumanoescola.ed75_i_escola = {$iEscola}                   ";
 
     $sWhereRegenciaHorario  = "    ed58_ativo is true      ";
-    $sWhereRegenciaHorario .= " and ed59_c_freqglob <> 'A' ";
+    $sCondicaoLancamento = " and ed59_c_freqglob <> ";
+    $sWhereRegenciaHorario .= $oParam->iLancamento === "conteudo" ? $sCondicaoLancamento . " 'F' " : $sCondicaoLancamento . " 'A' ";
 
     $sWhereSubstituto  = " {$sWhereRegenciaHorario}";
     $sWhereSubstituto .= " and '{$sDtLogin}' >= ed322_periodoinicial ";
@@ -93,16 +94,17 @@ switch ($oParam->exec) {
     $sCampos .= " ed232_c_descr as descricao_disciplina";
 
     $oDaoRegenciaHorario    = db_utils::getDao("regenciahorario");
-    $sSqlDisciplinasRegente = $oDaoRegenciaHorario->sql_query_disciplinas_cgm($sCampos,
-                                                                              "descricao_disciplina",
-                                                                              $sWhereFuncionario,
-                                                                              $sWhereNaoFuncionario,
-                                                                              $sWhereRegenciaHorario,
-                                                                              $sWhereSubstituto);
-
-     $rsDisciplinasRegente = $oDaoRegenciaHorario->sql_record($sSqlDisciplinasRegente);
-     $oRetorno->itens      = db_utils::getCollectionByRecord($rsDisciplinasRegente, false, false, true);
-     break;
+    $sSqlDisciplinasRegente = $oDaoRegenciaHorario->sql_query_disciplinas_cgm(
+        $sCampos,
+        "descricao_disciplina",
+        $sWhereFuncionario,
+        $sWhereNaoFuncionario,
+        $sWhereRegenciaHorario,
+        $sWhereSubstituto
+    );
+    $rsDisciplinasRegente = $oDaoRegenciaHorario->sql_record($sSqlDisciplinasRegente);
+    $oRetorno->itens      = db_utils::getCollectionByRecord($rsDisciplinasRegente, false, false, true);
+    break;
 
   case 'getDatasProfessorDisciplina':
 
@@ -112,14 +114,16 @@ switch ($oParam->exec) {
     if (isset($_SESSION["DIAS_LETIVOS_ESCOLA"])) {
       unset($_SESSION["DIAS_LETIVOS_ESCOLA"]);
     }
-    $aDiasSemana = array (0 => "DOMINGO",
-                          1 => "SEGUNDA",
-                          2 => "TERÇA",
-                          3 => "QUARTA",
-                          4 => "QUINTA",
-                          5 => "SEXTA",
-                          6 => "SÁBADO"
-                         );
+
+    $aDiasSemana = array(
+        0 => "DOMINGO",
+        1 => "SEGUNDA",
+        2 => "TERÇA",
+        3 => "QUARTA",
+        4 => "QUINTA",
+        5 => "SEXTA",
+        6 => "SÁBADO",
+    );
     $aDiasLetivos = array();
 
     $sCampoRegente  = " distinct ed20_i_codigo ";

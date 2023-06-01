@@ -1863,7 +1863,7 @@ for($Ipessoal=0;$Ipessoal<count($pessoal);$Ipessoal++){
 
       if (!db_empty($r14_valor) && ($r14_valor > 0 || $r14_pd == 2)) {
 
-         if ( $r14_pd == 2 ) { echo "<br>if<br>";
+         if ( $r14_pd == 2 ) {
             $tot_desc += round($r14_valor,2);
          } else {"<br>else<br>";
             $tot_prov += round($r14_valor,2);
@@ -8424,7 +8424,6 @@ function le_var_bxxx($formula=null, $area0=null, $area1=null, $sigla=null, $sigl
                         /*OC6996*/
                         if ($rubrica == "R931") {//2000 3999
                           if($tpgto == "f") {
-                             echo "<br>rubrica: $rubrica - campo_rubrica: $campo_rubrica<br>";
                              $valor += round($transacao[0][$sigla2."_valor"],2);
                           }
                         }

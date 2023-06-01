@@ -11,7 +11,6 @@ use \ECidade\V3\Extension\Exceptions\ResponseException;
 use \ECidade\V3\Extension\Glob;
 use \ECidade\V3\Error\EntityFactory;
 use \ECidade\V3\Error\Renderer as ErrorRenderer;
-use Illuminate\Database\Capsule\Manager;
 
 try {
 
@@ -159,29 +158,19 @@ try {
     $userLoggedIn = $session->has('DB_id_usuario');
 
     if ($userLoggedIn) {
-        $capsule = new Manager();
-
-        $capsule->addConnection([
-            'driver' => 'pgsql',
-            'host' => $session->get('DB_servidor'),
-            'database' => $session->get('DB_NBASE', $session->get('DB_base')),
-            'username' => $session->get('DB_user'),
-            'password' => $session->get('DB_senha'),
-            'port' => $session->get('DB_porta'),
-            'charset' => 'latin1',
-            'collation' => 'pt_BR',
-            'prefix' => '',
-            'strict' => false,
-            'prefix_indexes' => true,
-            'search_path' => 'public',
-        ]);
-
-        $capsule->setAsGlobal();
-        $capsule->bootEloquent();
+        $eloquent = new EloquentBootstrap(
+            $session->get('DB_servidor'),
+            $session->get('DB_NBASE', $session->get('DB_base')),
+            $session->get('DB_user'),
+            $session->get('DB_senha'),
+            $session->get('DB_porta')
+        );
+        $eloquent->bootstrap();
     }
     /**
      * End Eloquent bootstrap
      */
+
   // Remove todas as variaveis criadas neste arquivo
   // para nao ter impacto em outros arquivos, exemplo: iniciar sessao no db_conecta.php
   unset($_SESSION, $front, $request, $response, $router, $config);
