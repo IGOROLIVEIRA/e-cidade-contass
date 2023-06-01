@@ -1741,10 +1741,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         var oRetorno = eval("(" + oAjax.responseText + ")");
         codigotribunal = oRetorno.l03_pctipocompratribunal;
         presencial = oRetorno.l03_presencial;
+        let lei = document.getElementById('l20_leidalicitacao').value;
 
         var l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
 
-        if (presencial == 't' && l12_pncp == 't') {
+        if (presencial == 't' && l12_pncp == 't' && lei == 1) {
             document.getElementById('justificativapncp').style.display = '';
         } else {
             document.getElementById('justificativapncp').style.display = 'none';
@@ -1756,7 +1757,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById('dataencerramentopncp').style.display = '';
         }
 
-        if (document.getElementById('l20_leidalicitacao').value == "1" && l12_pncp == "t") {
+        if (lei == "1" && l12_pncp == "t") {
             for (const s of document.getElementsByClassName("dataabertura")) {
                 s.style.display = '';
             }
