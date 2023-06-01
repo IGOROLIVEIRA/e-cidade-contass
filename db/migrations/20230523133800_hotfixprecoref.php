@@ -27,13 +27,16 @@ class Hotfixprecoref extends AbstractMigration
 
         ALTER TABLE itemprecoreferencia ADD si02_vltotalprecoreferencia float;
 
+        UPDATE itemprecoreferencia SET si02_vltotalprecoreferencia = (si02_vlprecoreferencia * si02_qtditem) WHERE si02_tabela = 'f' AND si02_taxa = 'f';
+        
+        UPDATE itemprecoreferencia SET si02_vltotalprecoreferencia = si02_vlprecoreferencia WHERE si02_tabela = 't' OR si02_taxa = 't';
+
         CREATE TABLE precoreferenciaacount(
         si233_sequencial                int8  default 0,
         si233_precoreferencia           int8  default 0,
         si233_acao              varchar(50) NOT NULL ,
         si233_idusuario         int8  default 0,
         si233_datahr            date);
-
 
         CREATE SEQUENCE precoreferenciaacount_si233_sequencial_seq
         INCREMENT 1

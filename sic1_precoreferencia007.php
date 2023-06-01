@@ -54,14 +54,11 @@ $precoreferencia = db_utils::fieldsMemory($rsResult, 0)->si02_precoreferencia;
 $datacotacao = db_utils::fieldsMemory($rsResult, 0)->si01_datacotacao;
 
 $sqlV = "select pc11_numero, pc11_reservado, pc11_quant, pc16_codmater, pc80_criterioadjudicacao, pc80_tipoprocesso
-        from pcproc inner join pcprocitem on
-          pc80_codproc = pc81_codproc
-        inner join solicitem on
-          pc81_solicitem = pc11_codigo
-        inner join solicitempcmater on
-          pc11_codigo = pc16_solicitem
-        inner join pcmater on
-          pc16_codmater = pc01_codmater
+        from pcproc 
+        inner join pcprocitem on pc80_codproc = pc81_codproc
+        inner join solicitem on pc81_solicitem = pc11_codigo
+        inner join solicitempcmater on pc11_codigo = pc16_solicitem
+        inner join pcmater on pc16_codmater = pc01_codmater
         where pc80_codproc = {$codigo_preco} and pc11_reservado = true;";
 
 $rsResultV = db_query($sqlV) or die(pg_last_error());
@@ -74,58 +71,57 @@ for ($j = 0; $j < pg_num_rows($rsResultV); $j++) {
 }
 $quantLinhas = count($arrayValores);
 if ($codigoItem == "") {
+  for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+    $oResult = db_utils::fieldsMemory($rsResult, $iCont);
+    $sSql = "select pc23_quant, pc11_reservado, pc01_codmater, pc01_tabela, pc01_taxa, m61_codmatunid, pc80_criterioadjudicacao
+              from pcproc 
+              join pcprocitem on pc80_codproc = pc81_codproc
+              join solicitem on pc81_solicitem = pc11_codigo
+              join solicitempcmater on pc11_codigo = pc16_solicitem
+              join pcmater on pc16_codmater = pc01_codmater
+              join solicitemunid on pc11_codigo = pc17_codigo
+              join matunid on pc17_unid = m61_codmatunid
+              join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
+              join pcorcamitem on pc31_orcamitem = pc22_orcamitem
+              join pcorcamval on pc22_orcamitem = pc23_orcamitem
+              where pc23_orcamitem = $oResult->si02_itemproccompra  and (pc23_vlrun <> 0 or  pc23_percentualdesconto <> 0)
+              group by pc23_quant, pc31_pcprocitem, pc11_reservado, pc11_seq, pc01_codmater, pc01_tabela, pc01_taxa, m61_codmatunid, pc80_criterioadjudicacao;";
+              
+    $rsResultee = db_query($sSql);
+    $resultado = db_utils::fieldsMemory($rsResultee, 0);
 
-    for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
-        $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-        $sSql = "select pc23_quant, pc11_reservado, pc01_codmater, pc01_tabela, pc01_taxa, m61_codmatunid, pc80_criterioadjudicacao
-                from pcproc 
-                join pcprocitem on pc80_codproc = pc81_codproc
-                join solicitem on pc81_solicitem = pc11_codigo
-                join solicitempcmater on pc11_codigo = pc16_solicitem
-                join pcmater on pc16_codmater = pc01_codmater
-                join solicitemunid on pc11_codigo = pc17_codigo
-                join matunid on pc17_unid = m61_codmatunid
-                join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
-                join pcorcamitem on pc31_orcamitem = pc22_orcamitem
-                join pcorcamval on pc22_orcamitem = pc23_orcamitem
-                where pc23_orcamitem = $oResult->si02_itemproccompra  and (pc23_vlrun <> 0 or  pc23_percentualdesconto <> 0)
-                group by pc23_quant, pc31_pcprocitem, pc11_reservado, pc11_seq, pc01_codmater, pc01_tabela, pc01_taxa, m61_codmatunid, pc80_criterioadjudicacao;";
-        $rsResultee = db_query($sSql);
-        $resultado = db_utils::fieldsMemory($rsResultee, 0);
-
-        if ($resultado->pc11_reservado == "") {
-          $valor = "f";
-        } else {
-          $valor = $resultado->pc11_reservado;
-        }
-        $sql = " update itemprecoreferencia set ";
-        $sql .= "si02_coditem = " . $resultado->pc01_codmater;
-        $sql .= ",si02_qtditem = " . $resultado->pc23_quant;
-        $sql .= ",si02_codunidadeitem = " . $resultado->m61_codmatunid;
-        $sql .= ",si02_reservado = '" . $valor . "'";
-        $sql .= ",si02_tabela = '" . $resultado->pc01_tabela . "'";
-        $sql .= ",si02_taxa = '" . $resultado->pc01_taxa . "'";
-        $sql .= ",si02_criterioadjudicacao = " . $resultado->pc80_criterioadjudicacao;
-        $sql .= " where si02_sequencial = " . $oResult->si02_sequencial;
-
-        $rsResultado = db_query($sql);
+    if ($resultado->pc11_reservado == "") {
+      $valor = "f";
+    } else {
+      $valor = $resultado->pc11_reservado;
     }
-    $sSql = "select * from itemprecoreferencia inner join precoreferencia on si01_sequencial = si02_precoreferencia
-            where si02_precoreferencia = (select si01_sequencial from precoreferencia where si01_processocompra = {$codigo_preco});";
-    $rsResult = db_query($sSql) or die(pg_last_error());
+    $sql = " update itemprecoreferencia set ";
+    $sql .= "si02_coditem = " . $resultado->pc01_codmater;
+    $sql .= ",si02_qtditem = " . $resultado->pc23_quant;
+    $sql .= ",si02_codunidadeitem = " . $resultado->m61_codmatunid;
+    $sql .= ",si02_reservado = '" . $valor . "'";
+    $sql .= ",si02_tabela = '" . $resultado->pc01_tabela . "'";
+    $sql .= ",si02_taxa = '" . $resultado->pc01_taxa . "'";
+    $sql .= ",si02_criterioadjudicacao = " . $resultado->pc80_criterioadjudicacao;
+    $sql .= " where si02_sequencial = " . $oResult->si02_sequencial;
+    $rsResultado = db_query($sql);
+  }
+  $sSql = "select * from itemprecoreferencia inner join precoreferencia on si01_sequencial = si02_precoreferencia
+          where si02_precoreferencia = (select si01_sequencial from precoreferencia where si01_processocompra = {$codigo_preco});";
+  $rsResult = db_query($sSql) or die(pg_last_error());
 }
 
 $sqlProc = "select pc80_criterioadjudicacao, pc80_tipoprocesso
-        from pcproc
-        where pc80_codproc = {$codigo_preco}";
+            from pcproc
+            where pc80_codproc = {$codigo_preco}";
 
 $rsLotes = db_query("select distinct  pc68_sequencial,pc68_nome
-                      from pcproc
-                      join pcprocitem on pc80_codproc = pc81_codproc
-                      left join processocompraloteitem on pc69_pcprocitem = pcprocitem.pc81_codprocitem
-                      left join processocompralote on pc68_sequencial = pc69_processocompralote
-                      where pc80_codproc = {$codigo_preco} and pc68_sequencial is not null
-                      order by pc68_sequencial asc");
+                    from pcproc
+                    join pcprocitem on pc80_codproc = pc81_codproc
+                    left join processocompraloteitem on pc69_pcprocitem = pcprocitem.pc81_codprocitem
+                    left join processocompralote on pc68_sequencial = pc69_processocompralote
+                    where pc80_codproc = {$codigo_preco} and pc68_sequencial is not null
+                    order by pc68_sequencial asc");
 
 $rsResultProc = db_query($sqlProc) or die(pg_last_error());
 $oDadosProc = db_utils::fieldsMemory($rsResultProc, 0);
