@@ -468,7 +468,7 @@ function js_validar() {
       <td align="center" nowrap >
         <?php
           if ( trim($oPagamento->abatimento) != 0 ) {
-            db_ancora('PARCIAL',"js_consultaOrigemAbatimento($oPagamento->abatimento)",1,'');
+            db_ancora('PARCIAL',"parent.js_consultaOrigemAbatimento($oPagamento->abatimento)",1,'');
           } else {
             echo "NORMAL";
           }
@@ -563,14 +563,6 @@ if(isset($DB_ERRO)) {
     function js_mostrareceitas(chave){
       document.form1.k02_codigo.value = chave;
       CurrentWindow.corpo.db_iframe_pagamentosefetivados.hide();
-    }
-
-
-    function js_consultaOrigemAbatimento(iAbatimento) {
-
-      var sUrl = 'func_origemabatimentoparcial.php?iAbatimento='+iAbatimento+'&sOrigem=recibo';
-
-      js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_abatimento',sUrl,'Origem Pagamento Parcial',true);
     }
 
     function js_pesquisaprocessoforo(mostra) {
