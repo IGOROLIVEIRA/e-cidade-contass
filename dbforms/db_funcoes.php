@@ -318,23 +318,24 @@ function db_textarea($nome, $dbsizelinha = 1, $dbsizecoluna = 1, $dbvalidatipo, 
   }
 }
 
-function db_ancora($nome, $js_script, $db_opcao, $style = "", $varnome="") {
+function db_ancora($nome, $js_script, $db_opcao, $style = "", $varnome="")
+{
     //#00#//db_ancora
-    //#10#//Coloca uma âncora no Label do campo e executa uma função JAVASCRIPT para pesquisa do arquivo em referencia
+    //#10#//Coloca uma ?ncora no Label do campo e executa uma fun??o JAVASCRIPT para pesquisa do arquivo em referencia
     //#15#//db_ancora($nome,$js_script,$db_opcao,$style="");
-    //#20#//Nome : Nome do campo da documentação do sistema ou do arquivo
-    //#20#//Script : Função JAVASCRIPT que será executado no onclik do objeto label
-    //#20#//Opcao : *db_opcao* do programa a ser executado neste objeto input, inclusão(1) alteração(2) exclusão(3)
-    //#20#//Style : Opção para programador mudar o estilo da âncora
+    //#20#//Nome : Nome do campo da documenta??o do sistema ou do arquivo
+    //#20#//Script : Fun??o JAVASCRIPT que ser? executado no onclik do objeto label
+    //#20#//Opcao : *db_opcao* do programa a ser executado neste objeto input, inclus?o(1) altera??o(2) exclus?o(3)
+    //#20#//Style : Op??o para programador mudar o estilo da ?ncora
     if (($db_opcao < 3) || ($db_opcao == 4)) {
-        if($varnome	!=""){
+        if ($varnome !="") {
             ?>
-            <a id="<?=$varnome?>" class='DBAncora' style='text-decoration:underline;<?=trim($style) != "" ? ";$style" : ""?>' onclick="<?=$js_script?>"><?=$nome?></a>
-            <?
-        }else{
+    <a href='#' id="<?=$varnome?>" class='dbancora' style='text-decoration:underline;<?=trim($style) != "" ? ";$style" : ""?>' onclick="<?=$js_script?>"><?=$nome?></a>
+  <?php
+        } else {
             ?>
-            <a class='DBAncora'  style='text-decoration:underline;<?=trim($style) != "" ? ";$style" : ""?>' onclick="<?=$js_script?>"><?=$nome?></a>
-            <?
+         <a href='#' class='dbancora'  style='text-decoration:underline;<?=trim($style) != "" ? ";$style" : ""?>' onclick="<?=$js_script?>"><?=$nome?></a>
+       <?php
         }
     } else {
         echo $nome;
