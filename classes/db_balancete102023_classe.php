@@ -594,19 +594,14 @@ class cl_balancete102023
   }
 
   // funcao do sql
-  function sql_query($si177_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
+  function sql_query($si177_sequencial = null, $campos_filtro = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
-    if ($campos != "*") {
-      $campos_sql = split("#", $campos);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
-    } else {
-      $sql .= $campos;
+    $campos = "*";
+    if ($campos_filtro != "*") {
+        $campos = $campos_filtro;
     }
+    $sql .= $campos;
     $sql .= " from balancete102023 ";
     $sql2 = "";
     if ($dbwhere == "") {
@@ -620,32 +615,21 @@ class cl_balancete102023
     }
     $sql .= $sql2;
     if ($ordem != null) {
-      $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
+      $sql .= "  order by {$ordem}";
     }
 
     return $sql;
   }
 
   // funcao do sql
-  function sql_query_file($si177_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
+  function sql_query_file($si177_sequencial = null, $campos_filtro = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
-    if ($campos != "*") {
-      $campos_sql = split("#", $campos);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
-    } else {
-      $sql .= $campos;
+    $campos = "*";
+    if ($campos_filtro != "*") {
+        $campos = $campos_filtro;
     }
+    $sql .= $campos;
     $sql .= " from balancete102023 ";
     $sql2 = "";
     if ($dbwhere == "") {
@@ -659,129 +643,78 @@ class cl_balancete102023
     }
     $sql .= $sql2;
     if ($ordem != null) {
-      $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
+      $sql .= " order by {$ordem}";
     }
 
     return $sql;
   }
 
-  function sql_query_reg10_com_saldo($debugEstrut=null, $whereNumRegistro=null, $sWhere10=null, $nAnoUsu, $nMes, $iInstit)
+  function sql_query_reg10_saldo_janeiro($sDataInicial, $sDataFinal, $sEncerramento, $iAnoUsu, $codcon)
   {
-    $sqlReg10  = "select tiporegistro, ";
-    $sqlReg10 .= "    contacontabil, ";
-    $sqlReg10 .= "    coalesce(saldoinicialano, 0) saldoinicialano, ";
-    $sqlReg10 .= "    coalesce(debito, 0) debito, ";
-    $sqlReg10 .= "    coalesce(credito, 0) credito, ";
-    $sqlReg10 .= "    codcon, ";
-    $sqlReg10 .= "    c61_reduz, ";
-    $sqlReg10 .= "    c60_nregobrig, ";
-    $sqlReg10 .= "    c60_identificadorfinanceiro, ";
-    $sqlReg10 .= "    case ";
-    $sqlReg10 .= "        when c60_naturezasaldo = 1 then 'D' ";
-    $sqlReg10 .= "        when c60_naturezasaldo = 2 then 'C' ";
-    $sqlReg10 .= "        else 'C' ";
-    $sqlReg10 .= "    end as c60_naturezasaldo ";
-    $sqlReg10 .= "from ( ";
-    $sqlReg10 .= "        select 10 as tiporegistro, ";
-    $sqlReg10 .= "            case ";
-    $sqlReg10 .= "                when c209_tceestrut is null then substr(c60_estrut, 1, 9) ";
-    $sqlReg10 .= "                else c209_tceestrut ";
-    $sqlReg10 .= "            end as contacontabil, ";
-    $sqlReg10 .= "            (c62_vlrdeb - c62_vlrcre) as saldoinicialano, ";
-    $sqlReg10 .= "            c61_reduz, ";
-    $sqlReg10 .= "            c60_nregobrig, ";
-    $sqlReg10 .= "            c60_codcon as codcon, ";
-    $sqlReg10 .= "            c60_identificadorfinanceiro, ";
-    $sqlReg10 .= "            c60_naturezasaldo, ";
-    $sqlReg10 .= "            sum(case when conlancamvalcredito.c69_valor != 0 then conlancamvalcredito.c69_valor else 0 end) as credito, ";
-    $sqlReg10 .= "            sum(case when conlancamvaldebito.c69_valor != 0 then conlancamvaldebito.c69_valor else 0 end) as debito ";
-    $sqlReg10 .= "        from conplano ";
-    $sqlReg10 .= "            inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu ";
-    $sqlReg10 .= "            inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu ";
-    $sqlReg10 .= "             left join vinculopcasptce on substr(c60_estrut, 1, 9) = c209_pcaspestrut ";
-    $sqlReg10 .= "             left join conlancamval conlancamvaldebito on conlancamvaldebito.c69_debito = c62_reduz  ";
-    $sqlReg10 .= "                   and c62_anousu= conlancamvaldebito.c69_anousu ";
-    $sqlReg10 .= "                   and DATE_PART('YEAR', conlancamvaldebito.c69_data) = {$nAnoUsu} ";
-    $sqlReg10 .= "                   and DATE_PART('MONTH', conlancamvaldebito.c69_data) <= {$nMes} ";
-    $sqlReg10 .= "             left join conlancamval conlancamvalcredito on conlancamvalcredito.c69_credito = c62_reduz  ";
-    $sqlReg10 .= "                   and c62_anousu= conlancamvalcredito.c69_anousu ";
-    $sqlReg10 .= "                   and DATE_PART('YEAR', conlancamvalcredito.c69_data) = {$nAnoUsu} ";
-    $sqlReg10 .= "                   and DATE_PART('MONTH', conlancamvalcredito.c69_data) <= {$nMes} ";
-    $sqlReg10 .= "        where {$debugEstrut}  {$whereNumRegistro}  c61_instit = {$iInstit} and c60_anousu = {$nAnoUsu} {$sWhere10} ";
-    $sqlReg10 .= "        group by 1, 2, 3, 4, 5, 6, 7, 8 ";
-    $sqlReg10 .= "    ) as x ";
-    $sqlReg10 .= "where debito != 0 or credito != 0 or saldoinicialano != 0 ";
-    $sqlReg10 .= "order by contacontabil ";
-
-    return $sqlReg10;
+    $sSql = " select sinal_anterior,sinal_final,sum(saldoinicial) saldoinicial, sum(debitos) debitos, sum(creditos) creditos from(SELECT estrut_mae,
+                                           estrut,
+                                           c61_reduz,
+                                           c61_codcon,
+                                           c61_codigo,
+                                           c60_descr,
+                                           c60_finali,
+                                           c61_instit,
+                                           round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoinicial,
+                                           round(substr(fc_planosaldonovo,17,14)::float8,2)::float8 AS debitos,
+                                           round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
+                                           round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
+                                           substr(fc_planosaldonovo,59,1)::varchar(1) AS sinal_anterior,
+                                           substr(fc_planosaldonovo,60,1)::varchar(1) AS sinal_final
+                                    FROM
+                                      (SELECT p.c60_estrut AS estrut_mae,
+                                              p.c60_estrut AS estrut,
+                                              c61_reduz,
+                                              c61_codcon,
+                                              c61_codigo,
+                                              p.c60_descr,
+                                              p.c60_finali,
+                                              r.c61_instit,
+                                              fc_planosaldonovo(" . $iAnoUsu . ",c61_reduz,'" . $sDataInicial . "','" . $sDataFinal . "',{$sEncerramento})
+                                       FROM conplanoexe e
+                                       INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
+                                       AND r.c61_reduz = c62_reduz
+                                       INNER JOIN conplano p ON r.c61_codcon = c60_codcon
+                                       AND r.c61_anousu = c60_anousu
+                                       LEFT OUTER JOIN consistema ON c60_codsis = c52_codsis
+                                       WHERE c62_anousu = " . db_getsession('DB_anousu') . "
+                                         AND c61_instit IN (" . db_getsession('DB_instit') . ")
+						 AND c61_codcon = {$codcon} ) AS x) as y where saldoinicial > 0 or debitos > 0 or creditos > 0 group by 1,2";
+    return $sSql;
   }
+
   function sql_query_reg10($debugEstrut=null, $whereNumRegistro=null, $sWhere10=null, $nAnoUsu, $nMes, $iInstit)
   {
-    $sqlReg10  = "select distinct tiporegistro, ";
-    $sqlReg10 .= "    contacontabil, ";
-    $sqlReg10 .= "    codcon, ";
-    $sqlReg10 .= "    c61_reduz, ";
-    $sqlReg10 .= "    c60_nregobrig, ";
-    $sqlReg10 .= "    c60_identificadorfinanceiro, ";
-    $sqlReg10 .= "    case ";
-    $sqlReg10 .= "        when c60_naturezasaldo = 1 then 'D' ";
-    $sqlReg10 .= "        when c60_naturezasaldo = 2 then 'C' ";
-    $sqlReg10 .= "        else 'C' ";
-    $sqlReg10 .= "    end as c60_naturezasaldo, c62_vlrcre, c62_vlrdeb, movimento ";
-    $sqlReg10 .= "from ( ";
-    $sqlReg10 .= "        select 10 as tiporegistro, ";
-    $sqlReg10 .= "            case ";
-    $sqlReg10 .= "                when c209_tceestrut is null then substr(c60_estrut, 1, 9) ";
-    $sqlReg10 .= "                else c209_tceestrut ";
-    $sqlReg10 .= "            end as contacontabil, ";
-    $sqlReg10 .= "            c61_reduz, ";
-    $sqlReg10 .= "            c60_nregobrig, ";
-    $sqlReg10 .= "            c60_codcon as codcon, ";
-    $sqlReg10 .= "            c60_identificadorfinanceiro, ";
-    $sqlReg10 .= "            c60_naturezasaldo, c62_vlrcre, c62_vlrdeb, sum(conlancamval.c69_valor) as movimento";
-    $sqlReg10 .= "        from conplano ";
-    $sqlReg10 .= "            inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu ";
-    $sqlReg10 .= "            inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu ";
-    $sqlReg10 .= "             left join vinculopcasptce on substr(c60_estrut, 1, 9) = c209_pcaspestrut ";
-    $sqlReg10 .= "             left join conlancamval on (c61_reduz = c69_credito or c61_reduz = c69_debito) and c69_anousu = c61_anousu ";
-    $sqlReg10 .= "        where {$debugEstrut}  {$whereNumRegistro}  c61_instit = {$iInstit} and c60_anousu = {$nAnoUsu} {$sWhere10} ";
-    $sqlReg10 .= "     group by 1, 2, 3, 4, 5, 6, 7, 8, 9 ";
-    $sqlReg10 .= "    ) as x ";
-    $sqlReg10 .= " where c62_vlrcre != 0 or c62_vlrdeb != 0 or movimento != 0 ";
-    $sqlReg10 .= " order by contacontabil ";
-
+    $sqlReg10 = "select ";
+    $sqlReg10 .= "       tiporegistro, ";
+    $sqlReg10 .= "       contacontabil, ";
+    $sqlReg10 .= "       coalesce(saldoinicialano,0) saldoinicialano, ";
+    $sqlReg10 .= "       coalesce(debito,0) debito, ";
+    $sqlReg10 .= "       coalesce(credito,0) credito, ";
+    $sqlReg10 .= "       codcon, ";
+    $sqlReg10 .= "       c61_reduz, ";
+    $sqlReg10 .= "       c60_nregobrig, ";
+    $sqlReg10 .= "       c60_identificadorfinanceiro, ";
+    $sqlReg10 .= "       case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' else 'C' end as c60_naturezasaldo ";
+    $sqlReg10 .= "            from ";
+    $sqlReg10 .= "               (select 10 as tiporegistro, ";
+    $sqlReg10 .= "                       case when c209_tceestrut is null then substr(c60_estrut,1,9) else c209_tceestrut end as contacontabil, ";
+    $sqlReg10 .= "                       (select sum(c69_valor) as credito from conlancamval where c69_credito = c61_reduz and DATE_PART('YEAR',c69_data) = " . $nAnoUsu . " and  DATE_PART('MONTH',c69_data) <= {$nMes}) as credito, ";
+    $sqlReg10 .= "                       (select sum(c69_valor) as debito from conlancamval where c69_debito = c61_reduz and DATE_PART('YEAR',c69_data) = " . $nAnoUsu . " and  DATE_PART('MONTH',c69_data) <= {$nMes}) as debito, ";
+    $sqlReg10 .= "                       (c62_vlrdeb - c62_vlrcre) as saldoinicialano,c61_reduz, c60_nregobrig, ";
+    $sqlReg10 .= "                       c60_codcon as codcon, c60_identificadorfinanceiro,c60_naturezasaldo ";
+    $sqlReg10 .= "                 from contabilidade.conplano ";
+    $sqlReg10 .= "			inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . $iInstit ;
+    $sqlReg10 .= "           inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu ";
+    $sqlReg10 .= "           left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut ";
+    $sqlReg10 .= "                where {$debugEstrut} {$whereNumRegistro} c60_anousu = " . $nAnoUsu . " {$sWhere10} ) as x ";
+    $sqlReg10 .= "           where  debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil ";
+//echo $sqlReg10;
     return $sqlReg10;
-  }
-
-  public function rs_query_saldo_registro10($sDataInicial, $sDataFinal, $oCodcon)
-  {
-    $sSqlSaldoAnt  = " select sinal_anterior, sinal_final, sum(saldoinicial) saldoinicial, sum(debitos) debitos, sum(creditos) creditos ";
-    $sSqlSaldoAnt .= "   from (SELECT     ";
-    $sSqlSaldoAnt .= "                                       round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoinicial, ";
-    $sSqlSaldoAnt .= "                                       round(substr(fc_planosaldonovo,17,14)::float8,2)::float8 AS debitos, ";
-    $sSqlSaldoAnt .= "                                       round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos, ";
-    $sSqlSaldoAnt .= "                                       round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final, ";
-    $sSqlSaldoAnt .= "                                       substr(fc_planosaldonovo,59,1)::varchar(1) AS sinal_anterior, ";
-    $sSqlSaldoAnt .= "                                       substr(fc_planosaldonovo,60,1)::varchar(1) AS sinal_final ";
-    $sSqlSaldoAnt .= "                                FROM ";
-    $sSqlSaldoAnt .= "                                  (SELECT ";
-    $sSqlSaldoAnt .= "                                    fc_planosaldonovo(" . db_getsession('DB_anousu') . ",c61_reduz,'" . $sDataInicial . "','" . $sDataFinal . "', false) ";
-    $sSqlSaldoAnt .= "  FROM conplanoexe e ";
-    $sSqlSaldoAnt .= "       INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu ";
-    $sSqlSaldoAnt .= "       AND r.c61_reduz = c62_reduz ";
-    $sSqlSaldoAnt .= "       INNER JOIN conplano p ON r.c61_codcon = c60_codcon ";
-    $sSqlSaldoAnt .= "       AND r.c61_anousu = c60_anousu ";
-    $sSqlSaldoAnt .= "  WHERE c62_anousu = " . db_getsession('DB_anousu') . " ";
-    $sSqlSaldoAnt .= "    AND c61_instit IN (" . db_getsession('DB_instit') . ") ";
-	$sSqlSaldoAnt .= "    AND c61_codcon = {$oCodcon} ) AS x) as y where saldoinicial > 0 or debitos > 0 or creditos > 0 group by 1,2 ";
-
-    return $this->sql_record($sSqlSaldoAnt);
   }
 
 }

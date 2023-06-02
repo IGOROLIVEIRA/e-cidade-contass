@@ -1117,7 +1117,7 @@ if ($lBloquear) {
     }
     $("sequencia").value = aItens.length + 1;
     oGridItens.renderRows();
-    $("valor_total_tabela").innerText = formataValor(valortotal);
+    $("valor_total_tabela").innerText = formataValor(round(valortotal,2));
   }
 
   function js_alterarLinha(coditemtabela,linha){

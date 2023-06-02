@@ -1440,6 +1440,33 @@ switch ($oParam->exec) {
                             } else {
                                 $oPosicao->adicionarItemDeLicitacao($oItem->codigo, $oItem);
                             }
+
+                            if($oContrato->getNaturezaAcordo($iCodigoAcordo) == 1){
+                                $iExisteLicobras = $oContrato->adicionarItemAcordoObra($iLicitacao,$iCodigoAcordo,$oItem->codigomaterial);
+                                if (!$iExisteLicobras) {
+
+                                    $clliclicitemlote = new cl_liclicitemlote();
+                                    $rsLiclicitemlite   = $clliclicitemlote->sql_record("select
+                                    l04_descricao
+                                from
+                                    liclicita
+                                inner join liclicitem on
+                                    l21_codliclicita = l20_codigo
+                                inner join liclicitemlote on
+                                    l04_liclicitem = l21_codigo
+                                inner join pcprocitem on
+                                    l21_codpcprocitem = pc81_codprocitem
+                                inner join solicitempcmater on
+                                    pc81_solicitem = pc16_solicitem
+                                where
+                                    l20_codigo = {$iLicitacao} and pc16_codmater = {$oItem->codigomaterial};");
+            
+                                $oDaoLicitemlote = db_utils::fieldsMemory($rsLiclicitemlite, 0);
+
+                                    
+                                    throw new Exception("Usuário: o lote {$oDaoLicitemlote->l04_descricao} da licitação {$iLicitacao} não possuí obra cadastrada!");
+                                }
+                            }
                         } else if ($oContrato->getOrigem() == 1) {
 
                             $oPosicao->adicionarItemDeProcesso($oItem->codigo, $oItem);
@@ -1496,6 +1523,8 @@ switch ($oParam->exec) {
                 $oPosicao->removerItem($oParam->material->iCodigo);
 
                 $oContrato->atualizaValorContratoPorTotalItens();
+                
+                $oContrato->removerAcordoObra($oParam->material->iCodigo);
 
                 db_fim_transacao(false);
             } catch (Exception $eErro) {

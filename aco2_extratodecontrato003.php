@@ -1,7 +1,5 @@
 <?php
 
-//ini_set('display_errors', 'on');
-
 require_once("fpdf151/pdf.php");
 require_once("libs/db_utils.php");
 
@@ -17,10 +15,13 @@ $clacordoposicao     = new cl_acordoposicao;
 $clacordoitem        = new cl_acordoitem;
 
 $sSql = db_query("select distinct ac16_sequencial, ac16_numero||'/'||ac16_anousu numcontrato,descrdepto,ac16_dataassinatura,z01_nome,ac16_valor,ac16_datainicio,ac16_datafim,ac16_objeto from acordo inner join db_depart on coddepto = ac16_coddepto inner join cgm on z01_numcgm = ac16_contratado inner join acordoposicao on ac26_acordo = ac16_sequencial and ac26_acordoposicaotipo = 1 where ac16_sequencial = " . $sequencial);
+$sSqlItens = db_query("select ac20_ordem,ac20_pcmater,pc01_descrmater,m61_descr,ac20_quantidade,ac20_valorunitario,ac20_valortotal from acordoitem inner join  acordoposicao on ac26_sequencial = ac20_acordoposicao and ac26_acordoposicaotipo = 1 inner join acordo on ac16_sequencial = ac26_acordo inner join pcmater on pc01_codmater = ac20_pcmater inner join matunid ON m61_codmatunid = ac20_matunid where ac16_sequencial = " . $sequencial . " order by ac20_ordem");
 
-if (pg_numrows($sSql) == 0) {
+if (pg_num_rows($sSql) == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado.');
 }
+header("Content-type: application/vnd.ms-word; charset=UTF-8");
+header("Content-Disposition: attachment; Filename=extratodecontrato.doc");
 
 $oDados = db_utils::fieldsMemory($sSql, 0, true);
 
@@ -86,23 +87,20 @@ echo <<<HTML
             </tr>
 HTML;
 
-$sSqlItens = db_query("select ac20_ordem,ac20_pcmater,pc01_descrmater,m61_descr,ac20_quantidade,ac20_valorunitario,ac20_valortotal from acordoitem inner join  acordoposicao on ac26_sequencial = ac20_acordoposicao and ac26_acordoposicaotipo = 1 inner join acordo on ac16_sequencial = ac26_acordo inner join pcmater on pc01_codmater = ac20_pcmater inner join matunid ON m61_codmatunid = ac20_matunid where ac16_sequencial = " . $sequencial . " order by ac20_ordem");
-
-for ($i=0;$i<pg_numrows($sSqlItens);$i++) {
-
+for ($i=0;$i<pg_num_rows($sSqlItens);$i++) {
     $oDadosItens = db_utils::fieldsMemory($sSqlItens, $i);
-
-    echo"<tr>";
-    echo"<td>".$oDadosItens->ac20_ordem."</td>";
-    echo"<td>".$oDadosItens->ac20_pcmater."</td>";
-    echo"<td style='text-align:left'>".$oDadosItens->pc01_descrmater."</td>";
-    echo"<td>".$oDadosItens->m61_descr."</td>";
-    echo"<td>".$oDadosItens->ac20_quantidade."</td>";
-    echo"<td>".$oDadosItens->ac20_valorunitario."</td>";
-    echo"<td>".$oDadosItens->ac20_valortotal."</td>";
-
+echo <<<HTML
+    <tr>
+        <th>{$oDadosItens->ac20_ordem}</th>
+        <th>{$oDadosItens->ac20_pcmater}</th>
+        <th style='text-align:left'>{$oDadosItens->pc01_descrmater}</th>
+        <th>{$oDadosItens->m61_descr}</th>
+        <th>{$oDadosItens->ac20_quantidade}</th>
+        <th>{$oDadosItens->ac20_valorunitario}</th>
+        <th>{$oDadosItens->ac20_valortotal}</th>
+    </tr>
+HTML;
 }
-
 echo <<<HTML
         </table>
         </center>
@@ -111,5 +109,3 @@ echo <<<HTML
     </html>
 HTML;
 
-header("Content-type: application/vnd.ms-word; charset=UTF-8");
-header("Content-Disposition: attachment; Filename=extratodecontrato.doc");

@@ -20,6 +20,7 @@ class cl_itemprecoreferencia {
    var $si02_precoreferencia = 0;
    var $si02_itemproccompra = 0;
    var $si02_vlprecoreferencia = 0;
+   var $si02_vltotalprecoreferencia = 0;
    var $si02_vlpercreferencia = 0;
    var $si02_coditem = 0;
    //var $si02_descritem = null;
@@ -44,6 +45,7 @@ class cl_itemprecoreferencia {
                  si02_taxa = bool = Taxa
                  si02_criterioadjudicacao = int8 = criterio 
                  si02_mediapercentual = float8 = Media percentual
+                 si02_vltotalprecoreferencia = float8 = Valor total do preco de referencia
                  ";
    //funcao construtor da classe
    function cl_itemprecoreferencia() {
@@ -67,6 +69,7 @@ class cl_itemprecoreferencia {
        $this->si02_precoreferencia = ($this->si02_precoreferencia == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_precoreferencia"]:$this->si02_precoreferencia);
        $this->si02_itemproccompra = ($this->si02_itemproccompra == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_itemproccompra"]:$this->si02_itemproccompra);
        $this->si02_vlprecoreferencia = ($this->si02_vlprecoreferencia == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_vlprecoreferencia"]:$this->si02_vlprecoreferencia);
+       $this->si02_vltotalprecoreferencia = ($this->si02_vltotalprecoreferencia == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_vltotalprecoreferencia"]:$this->si02_vltotalprecoreferencia);
        $this->si02_coditem = ($this->si02_coditem == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_coditem"]:$this->si02_coditem);
        //$this->si02_descritem = ($this->si02_descritem == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_descritem"]:$this->si02_descritem);
        $this->si02_qtditem = ($this->si02_qtditem == ""?@$GLOBALS["HTTP_POST_VARS"]["si02_qtditem"]:$this->si02_qtditem);
@@ -110,6 +113,15 @@ class cl_itemprecoreferencia {
        $this->erro_status = "0";
        return false;
      }
+     if($this->si02_vltotalprecoreferencia == null ){
+      $this->erro_sql = " Campo Valor Total do preco de referencia nao Informado.";
+      $this->erro_campo = "si02_vltotalprecoreferencia";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      if($this->si02_coditem == null ){
       $this->erro_sql = " Campo codigo do item do material não informado.";
       $this->erro_campo = "si02_coditem";
@@ -216,6 +228,7 @@ class cl_itemprecoreferencia {
                                       ,si02_taxa
                                       ,si02_criterioadjudicacao
                                       ,si02_mediapercentual
+                                      ,si02_vltotalprecoreferencia
                        )
                 values (
                                 $this->si02_sequencial
@@ -231,6 +244,7 @@ class cl_itemprecoreferencia {
                                ,'$this->si02_taxa'
                                ,$this->si02_criterioadjudicacao
                                ,$this->si02_mediapercentual
+                               ,$this->si02_vltotalprecoreferencia
                       )";
                  
      $result = db_query($sql);
@@ -268,6 +282,7 @@ class cl_itemprecoreferencia {
        $resac = db_query("insert into db_acount values($acount,2010196,2009255,'','".AddSlashes(pg_result($resaco,0,'si02_precoreferencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010196,2009258,'','".AddSlashes(pg_result($resaco,0,'si02_itemproccompra'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010196,2009257,'','".AddSlashes(pg_result($resaco,0,'si02_vlprecoreferencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,2010196,2009257,'','".AddSlashes(pg_result($resaco,0,'si02_vltotalprecoreferencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
    }
@@ -330,6 +345,19 @@ class cl_itemprecoreferencia {
          return false;
        }
      }
+     if(trim($this->si02_vltotalprecoreferencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si02_vltotalprecoreferencia"])){
+      $sql  .= $virgula." si02_vltotalprecoreferencia = $this->si02_vltotalprecoreferencia ";
+      $virgula = ",";
+      if(trim($this->si02_vltotalprecoreferencia) == null ){
+        $this->erro_sql = " Campo Valor Total do preco de referencia nao Informado.";
+        $this->erro_campo = "si02_vltotalprecoreferencia";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      if(trim($this->si02_vlpercreferencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["si02_vlpercreferencia"])){
        $sql  .= $virgula." si02_vlpercreferencia = $this->si02_vlpercreferencia ";
        $virgula = ",";
@@ -377,6 +405,8 @@ class cl_itemprecoreferencia {
            $resac = db_query("insert into db_acount values($acount,2010196,2009258,'".AddSlashes(pg_result($resaco,$conresaco,'si02_itemproccompra'))."','$this->si02_itemproccompra',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["si02_vlprecoreferencia"]) || $this->si02_vlprecoreferencia != "")
            $resac = db_query("insert into db_acount values($acount,2010196,2009257,'".AddSlashes(pg_result($resaco,$conresaco,'si02_vlprecoreferencia'))."','$this->si02_vlprecoreferencia',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["si02_vltotalprecoreferencia"]) || $this->si02_vltotalprecoreferencia != "")
+           $resac = db_query("insert into db_acount values($acount,2010196,2009257,'".AddSlashes(pg_result($resaco,$conresaco,'si02_vltotalprecoreferencia'))."','$this->si02_vltotalprecoreferencia',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");  
        }
      }
      
@@ -429,6 +459,7 @@ class cl_itemprecoreferencia {
          $resac = db_query("insert into db_acount values($acount,2010196,2009255,'','".AddSlashes(pg_result($resaco,$iresaco,'si02_precoreferencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010196,2009258,'','".AddSlashes(pg_result($resaco,$iresaco,'si02_itemproccompra'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010196,2009257,'','".AddSlashes(pg_result($resaco,$iresaco,'si02_vlprecoreferencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,2010196,2009257,'','".AddSlashes(pg_result($resaco,$iresaco,'si02_vltotalprecoreferencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
      }
      $sql = " delete from itemprecoreferencia

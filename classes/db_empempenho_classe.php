@@ -2499,7 +2499,7 @@ class cl_empempenho
         $sSql .= "             inner join conhistdoc   on c53_coddoc = c71_coddoc                                                                                            ";
         $sSql .= "             inner join conlancam    on c70_codlan = c75_codlan                                                                                            ";
         $sSql .= "             inner join empempenho   on e60_numemp = c75_numemp                                                                                            ";
-        $sSql .= "        where e60_anousu = $iAnoUsu and c75_data between '$sDataInicial' and '$sDataFinal'                                                                ";
+        $sSql .= "        where e60_anousu = $iAnoUsu and e60_emiss between '$sDataInicial' and '$sDataFinal'                                                                ";
         $sSql .= "             and  e60_instit in ($sInstituicoes)                                                                                                          ";
         $sSql .= "        group by c75_numemp, c70_anousu                                                                                                                    ";
         $sSql .= "        ) as x on x.c75_numemp = e60_numemp                                                                                                               ";

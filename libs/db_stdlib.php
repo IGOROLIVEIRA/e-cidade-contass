@@ -2843,6 +2843,7 @@ function db_extenso($valor = 0, $maiusculas = false)
 
     $valor = number_format($valor, 2, ".", ".");
     $inteiro = explode(".", $valor);
+
     for ($i = 0; $i < count($inteiro); $i++)
         for ($ii = strlen($inteiro[$i]); $ii < 3; $ii++)
             $inteiro[$i] = "0" . $inteiro[$i];
@@ -2869,14 +2870,8 @@ function db_extenso($valor = 0, $maiusculas = false)
 
     if (!$maiusculas) {
         return ($rt ? $rt : "zero");
-    } else { /*
-                  Trocando o " E " por " e ", fica muito + apresentável!
-                  Rodrigo Cerqueira, rodrigobc@fte.com.br
-                  */
-        if ($rt)
-            $rt = preg_replace(" E ", " e ", ucwords($rt));
-
-        return (($rt) ? ($rt) : "Zero");
+    } else {
+        return ($rt ? $rt : "Zero");
     }
 
 }
