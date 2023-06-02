@@ -21,19 +21,43 @@ trait LegacyPath
             'cal' => 'calendario',
             'cin' => 'controle_interno',
             'com' => 'compras',
+            'con' => 'contabilidade',
+            'conf' => 'configuracao',
+            'contr' => 'contribuinte',
+            'cus' => 'custos',
+            'div' => 'divida_ativa',
+            'dv' => 'diversos',
+            'dvr' => 'diversos',
+            'edu' => 'educacao',
             'amb' => 'meioambiente'
         ];
     }
+
     public function getNewPath(string $file): string
     {
         if(!strpos($file, '_')) {
             return $file;
         }
-        $prefix = substr($file, 0 ,3);
+        $prefix = $this->getPrefix($file);
         $map = $this->pathMap();
         if(!array_key_exists($prefix, $map)) {
             return $file;
         }
         return $this->resources_path. DS . $this->resources_legacy_path . DS . $map[$prefix] . DS . $file;
+    }
+
+    private function getPrefix(string $fileName): string
+    {
+        $prefix = '';
+
+        for ($i = 0; $i < strlen($fileName); $i++){
+            $caracter = $fileName[$i];
+            if (is_numeric($caracter)) {
+               break;
+            }
+            $prefix .= $caracter;
+        }
+
+        return $prefix;
     }
 }
