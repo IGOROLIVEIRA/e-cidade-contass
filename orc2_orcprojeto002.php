@@ -25,14 +25,14 @@
  *                                licenca/licenca_pt.txt
  */
 
- include("fpdf151/pdf1.php");
- include("fpdf151/assinatura.php");
- include("libs/db_app.utils.php");
- include("libs/db_utils.php");
- include("classes/db_orcsuplem_classe.php");
- include("libs/db_liborcamento.php");
- include("classes/db_db_config_classe.php");
- include("classes/db_db_paragrafo_classe.php");
+ require_once(modification("fpdf151/pdf1.php"));
+ require_once(modification("fpdf151/assinatura.php"));
+ require_once(modification("libs/db_app.utils.php"));
+ require_once(modification("libs/db_utils.php"));
+ require_once(modification("classes/db_orcsuplem_classe.php"));
+ require_once(modification("libs/db_liborcamento.php"));
+ require_once(modification("classes/db_db_config_classe.php"));
+ require_once(modification("classes/db_db_paragrafo_classe.php"));
  db_app::import("orcamento.suplementacao.*");
  $classinatura = new cl_assinatura;
  $cldbconfig    = new cl_db_config;
@@ -48,7 +48,7 @@
  $projeto = (isset($o46_codlei)&&!empty($o46_codlei))?$o46_codlei:'null';
  $ano_anterior = ($anousu -1);
  $tem_superavit = false;
- $processados = (isset($processados)&&!empty($processados))?$processados:'null'; 
+ $processados = (isset($processados)&&!empty($processados))?$processados:'null';
 ///////////////////////////////////////////
 // defini a classe abaixo pra poder tirar o timpre conforme o caso
 class PDF_TIMBRE extends pdf1 {
@@ -83,7 +83,7 @@ if ($timbre =='s'){
 if($processados == 2){ // não processados
   $valorp = "and orcsuplem.o46_data is not null";
   $valorp.= " and o49_codsup is null ";
-}  
+}
 if($processados == 3){ // todos
 $valorp = "and orcsuplem.o46_data is not null";
 }
@@ -101,16 +101,16 @@ $valorp = "and orcsuplem.o46_data is not null";
                 inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                                and orcsuplemtipo.o48_coddocsup >  0
                                                left outer join orcsuplemlan on
-                                               o49_codsup = orcsuplem.o46_codsup                          
+                                               o49_codsup = orcsuplem.o46_codsup
                 where o39_codproj=$projeto
-                     $valorp                                     
+                     $valorp
 	  order by o46_data
 	  limit 1
          ";
-      
+
   $res= $auxiliar->sql_record($sql);
   db_fieldsmemory($res,0);
-//  db_criatabela($res);exit; 
+//  db_criatabela($res);exit;
   $xtipo = $o48_tiposup;
   // $xdata = $o46_data;
   $xdata = $o39_data;
@@ -122,9 +122,9 @@ $valorp = "and orcsuplem.o46_data is not null";
   // }else{
   //   $tipo_sup = 'Crédito Especial';
   // }
- 
+
   if($xtipo == 1006 ||  $xtipo == 1007 || $xtipo == 1008 ||  $xtipo == 1009 ||$xtipo == 1010 ||  $xtipo == 1023 || $xtipo == 1024 ||  $xtipo == 1025 || $xtipo == 1012){
-    $tipo_sup = 'Crédito Especial';  
+    $tipo_sup = 'Crédito Especial';
   }elseif ($xtipo == 1011 ||  $xtipo == 1018 || $xtipo == 1019 ||  $xtipo == 2026 ||$xtipo == 1013){
     $tipo_sup = 'Crédito Extraordinário';
   }else{
@@ -157,13 +157,13 @@ $valorp = "and orcsuplem.o46_data is not null";
                 inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_coddocsup >  0
                                       left outer join orcsuplemlan on
-                                      o49_codsup = orcsuplem.o46_codsup                          
+                                      o49_codsup = orcsuplem.o46_codsup
        where o39_codproj=$projeto
-            
-            $valorp	                             
+
+            $valorp
 	       group by o139_orcprojeto,o39_numero,o39_data,o39_lei,o39_compllei,o39_leidata,o45_numlei, ano_lei
          ";
-  // echo $sql; exit;          
+  // echo $sql; exit;
   $res= $auxiliar->sql_record($sql);
   //db_criatabela($res);exit;
 
@@ -186,6 +186,7 @@ $valorp = "and orcsuplem.o46_data is not null";
     $oSuplementacao = new Suplementacao($oSuplem->o46_codsup);
     $total_suplementado += $oSuplementacao->getvalorSuplementacao();
   }
+
   unset($oSuplementacao);
  /////////////////////////////////////////////////////////
 
@@ -226,7 +227,7 @@ $valorp = "and orcsuplem.o46_data is not null";
                  where o48_retificado = $projeto
                 ";
      $res_retif = db_query($sql);
-     if (pg_numrows($res_retif)>0){
+     if (pg_num_rows($res_retif)>0){
      	 db_fieldsmemory($res_retif,0,true);
          $pdf->setX(20);
          $pdf->multicell(170,4,"Este projeto foi retificado pelo projeto $o48_projeto em $o48_data referente ao Decreto/Lei $o39_numero de $o39_data",'B','J','0',20);
@@ -242,7 +243,7 @@ $valorp = "and orcsuplem.o46_data is not null";
                  where o48_projeto = $projeto
                 ";
      $res_retif = db_query($sql);
-     if (pg_numrows($res_retif)>0){
+     if (pg_num_rows($res_retif)>0){
      	 db_fieldsmemory($res_retif,0,true);
      	 if (strlen($o48_texto) >1 ){
               $pdf->setX(20);
@@ -263,7 +264,7 @@ $valorp = "and orcsuplem.o46_data is not null";
         if ($si09_tipoinstit == 4 || $si09_tipoinstit == 5 || $si09_tipoinstit == 51) {
           $txt = "$pref, PRESIDENTE DO $nomeinst localizado no município de $munic, $uf, no uso de suas atribuições legais e de conformidade legal";
           return $txt;
-        }  
+        }
           $txt = "$pref, PREFEITO MUNICIPAL DE $munic, $uf, no uso de suas atribuições legais e de conformidade com a Lei Municipal $o45_numlei";
           return $txt;
     }
@@ -274,7 +275,7 @@ $valorp = "and orcsuplem.o46_data is not null";
       $txt="Art $artigo. - Fica aberto $tipo_sup ".
               "na importância de  R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado,true)." ) ".
             "sob a seguinte classificação econômica e programática ";
-      return $txt;    
+      return $txt;
 
    }
    function tipoProjetoLei($txt,$tipo_sup,$pdf,$artigo,$total_suplementado){
@@ -288,7 +289,7 @@ $valorp = "and orcsuplem.o46_data is not null";
       $txt="Art $artigo. -  Fica o Poder Executivo Municipal autorizado a abrir $tipo_sup ".
           "na importância de  R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado,true)." ) ".
     "sob a seguinte classificação econômica e programática ";
-      return $txt; 
+      return $txt;
   }
   function verificarComllei($o39_compllei,$txt){
       if($o39_compllei != ""){
@@ -307,22 +308,22 @@ $valorp = "and orcsuplem.o46_data is not null";
 
   function verificarProjetoTipo($projeto_tipo,$si09_tipoinstit,$pref,$nomeinst,$munic,$uf,$o45_numlei,$tipo_sup,$pdf,$artigo,$total_suplementado,$o39_compllei){
       if ($projeto_tipo == "1"){ // decreto
-        
+
         $txt = verificarTipoDeInstituicao($si09_tipoinstit,$pref,$nomeinst,$munic,$uf,$o45_numlei) ;
 
-        verificarComllei($o39_compllei,$txt); 
+        verificarComllei($o39_compllei,$txt);
 
         $txt = tipoProjetoDecreto($txt,$tipo_sup,$pdf,$artigo,$total_suplementado);
         return $txt;
-      } 
-      $txt = verificarTipoDeInstituicao($si09_tipoinstit,$pref,$nomeinst,$munic,$uf,$o45_numlei) ;  
+      }
+      $txt = verificarTipoDeInstituicao($si09_tipoinstit,$pref,$nomeinst,$munic,$uf,$o45_numlei) ;
 
       $txt = tipoProjetoLei($txt,$tipo_sup,$pdf,$artigo,$total_suplementado);
-      return $txt;    
+      return $txt;
  }
 
  $txt = verificarProjetoTipo($projeto_tipo,$si09_tipoinstit,$pref,$nomeinst,$munic,$uf,$o45_numlei,$tipo_sup,$pdf,$artigo,$total_suplementado,$o39_compllei);
-    
+
 ////////// primeiro artigo, das suplementações
 //       $artigo = $artigo +1;
 //    $txt="Art $artigo. -  Fica o Poder Executivo Municipal autorizado a abrir $tipo_sup ".
@@ -363,9 +364,9 @@ $valorp = "and orcsuplem.o46_data is not null";
 		            inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
 		                                      and orcsuplemtipo.o48_coddocsup >  0
                                           left outer join orcsuplemlan on
-                                          o49_codsup = orcsuplem.o46_codsup                          
+                                          o49_codsup = orcsuplem.o46_codsup
          	where o39_codproj=$projeto
-               	
+
                 $valorp
 	     	 group by o47_coddot,
 	               o46_tiposup,
@@ -411,9 +412,9 @@ $valorp = "and orcsuplem.o46_data is not null";
                 inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                           and orcsuplemtipo.o48_coddocsup >  0
                                           left outer join orcsuplemlan on
-                                          o49_codsup = orcsuplem.o46_codsup                          
+                                          o49_codsup = orcsuplem.o46_codsup
           where o39_codproj=$projeto
-                
+
                 $valorp
          group by 3,
                  o46_tiposup,
@@ -493,9 +494,9 @@ $valorp = "and orcsuplem.o46_data is not null";
               inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_coddocred >  0
                                       left outer join orcsuplemlan on
-                                      o49_codsup = orcsuplem.o46_codsup                         
+                                      o49_codsup = orcsuplem.o46_codsup
          where o39_codproj=$projeto
-       
+
          $valorp
 	 group by o39_codproj,
                   o39_texto,
@@ -508,7 +509,7 @@ $valorp = "and orcsuplem.o46_data is not null";
 	          o47_anousu
          order by o58_orgao,o58_unidade,o58_projativ
          ";
-//  echo $sql;exit;     
+//  echo $sql;exit;
  $res= $auxiliar->sql_record($sql);
  $tem_reduz = 0;
  if ($auxiliar->numrows>0 ) {
@@ -565,7 +566,7 @@ $valorp = "and orcsuplem.o46_data is not null";
                                       left outer join orcsuplemlan on
                                       o49_codsup = orcsuplem.o46_codsup
           where o39_codproj=$projeto
-          
+
           $valorp
          ";
 
@@ -586,12 +587,12 @@ $valorp = "and orcsuplem.o46_data is not null";
               inner join orcsuplemtipo on o48_tiposup = orcsuplem.o46_tiposup
                                       and orcsuplemtipo.o48_arrecadmaior >  0
                                       left outer join orcsuplemlan on
-                                      o49_codsup = orcsuplem.o46_codsup                         
+                                      o49_codsup = orcsuplem.o46_codsup
           where o39_codproj=$projeto
-         
+
           $valorp
-         ";    
-  //  echo  $sql." union all {$sSqlPPA}";exit;     
+         ";
+  //  echo  $sql." union all {$sSqlPPA}";exit;
    $res= $auxiliar->sql_record($sql." union all {$sSqlPPA}");
    // db_criatabela($res);
    if ($auxiliar->numrows > 0 ) {
