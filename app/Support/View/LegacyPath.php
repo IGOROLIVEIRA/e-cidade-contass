@@ -29,6 +29,7 @@ trait LegacyPath
             'dv' => 'diversos',
             'dvr' => 'diversos',
             'edu' => 'educacao',
+            'emp' => 'empenho',
             'amb' => 'meioambiente'
         ];
     }
