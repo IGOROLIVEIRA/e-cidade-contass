@@ -42,7 +42,6 @@
  $aux      = new cl_orcsuplem;
 
  parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
- // print_r($HTTP_SERVER_VARS["QUERY_STRING"]);die();
 
  $anousu = db_getsession("DB_anousu");
  $projeto = (isset($o46_codlei)&&!empty($o46_codlei))?$o46_codlei:'null';
@@ -110,18 +109,8 @@ $valorp = "and orcsuplem.o46_data is not null";
 
   $res= $auxiliar->sql_record($sql);
   db_fieldsmemory($res,0);
-//  db_criatabela($res);exit;
   $xtipo = $o48_tiposup;
-  // $xdata = $o46_data;
   $xdata = $o39_data;
-
-  // if($xtipo < 1006 ||  $xtipo > 1014 ){
-  //   $tipo_sup = 'Crédito Suplementar';
-  // }elseif ($xtipo == 1014){
-  //   $tipo_sup = 'Crédito de Transferência';
-  // }else{
-  //   $tipo_sup = 'Crédito Especial';
-  // }
 
   if($xtipo == 1006 ||  $xtipo == 1007 || $xtipo == 1008 ||  $xtipo == 1009 ||$xtipo == 1010 ||  $xtipo == 1023 || $xtipo == 1024 ||  $xtipo == 1025 || $xtipo == 1012){
     $tipo_sup = 'Crédito Especial';
@@ -163,9 +152,7 @@ $valorp = "and orcsuplem.o46_data is not null";
             $valorp
 	       group by o139_orcprojeto,o39_numero,o39_data,o39_lei,o39_compllei,o39_leidata,o45_numlei, ano_lei
          ";
-  // echo $sql; exit;
   $res= $auxiliar->sql_record($sql);
-  //db_criatabela($res);exit;
 
   if ($auxiliar->numrows > 0 ){
        db_fieldsmemory($res,0,true);
@@ -193,27 +180,26 @@ $valorp = "and orcsuplem.o46_data is not null";
     if ($projeto_tipo == "1"){
           $projeto_tipo_texto ="DECRETO";
           $txt="Abre $tipo_sup na importancia de ".
-         "R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado,true).") e da outras providências. ";
+         "R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado, true).") e da outras providências. ";
 
     }else if ($projeto_tipo == "2") {
        $projeto_tipo_texto ="PROJETO DE LEI";
        $txt="Autoriza o Poder Executivo Municipal a abrir $tipo_sup na importancia de ".
-         "R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado,true).") e da outras providências. ";
+         "R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado, true).") e da outras providências. ";
     }else {
     	// tipo 3 = retificador
     	if   (strlen(trim($o39_lei))>0) {
     		  $projeto_tipo_texto ="PROJETO DE LEI";
               $txt="Autoriza o Poder Executivo Municipal a abrir $tipo_sup na importancia de ".
-              "R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado,true).") e da outras providências. ";
+              "R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado, true).") e da outras providências. ";
     	} else {
     	      $projeto_tipo_texto ="DECRETO ".$o39_numero;
               $txt="Abre $tipo_sup na importancia de ".
-              "R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado,true).") e da outras providências. ";
+              "R$ ".db_formatar($total_suplementado,'f')." (".db_extenso($total_suplementado, true).") e da outras providências. ";
     	}
     }
 
     $pdf->setX(20);
-    //$pdf->Cell(170,4,$projeto_tipo_texto." ".($projeto_tipo == 1?$o39_numero."/".substr($o39_data,6,4):''),0,1,"C",'1');
     $pdf->Cell(170,4,$projeto_tipo_texto." ".($projeto_tipo == 1?$o39_numero:'').strtoupper(" de ".substr($o39_data,0,2)." de ".db_mes(substr($o39_data,3,2))." de ".substr($o39_data,6,4)),0,1,"C",'1');
     $pdf->Ln(7);
 
@@ -431,7 +417,6 @@ $valorp = "and orcsuplem.o46_data is not null";
                 o15_codigo,
                 o15_descr
         order by o58_orgao,o58_unidade,o58_projativ,o56_elemento ";
-  //  echo $sql." union all {$sSqlDotacaoPPA}";exit;
   $res= $auxiliar->sql_record($sql." union all {$sSqlDotacaoPPA}");
   $total = 0;
   if ($auxiliar->numrows > 0 ){
@@ -509,7 +494,6 @@ $valorp = "and orcsuplem.o46_data is not null";
 	          o47_anousu
          order by o58_orgao,o58_unidade,o58_projativ
          ";
-//  echo $sql;exit;
  $res= $auxiliar->sql_record($sql);
  $tem_reduz = 0;
  if ($auxiliar->numrows>0 ) {
@@ -592,16 +576,13 @@ $valorp = "and orcsuplem.o46_data is not null";
 
           $valorp
          ";
-  //  echo  $sql." union all {$sSqlPPA}";exit;
    $res= $auxiliar->sql_record($sql." union all {$sSqlPPA}");
-   // db_criatabela($res);
    if ($auxiliar->numrows > 0 ) {
        ///////////////////////////////////////////////
        for ($x=0;$x < $auxiliar->numrows ;$x++){
 	       db_fieldsmemory($res,$x);
  	       $pdf->setX(20);
          $pdf->Cell(120,4,"$o85_codrec - $o57_descr (arrecadação à maior)",0,0,"L",'0');
-	       //$pdf->setX(20);
   	     $pdf->Cell(50,4,db_formatar($o85_valor,'f'),0,1,"R",'0');
          $total += $o85_valor;
 	       $pdf->setX(20);
@@ -630,35 +611,20 @@ $valorp = "and orcsuplem.o46_data is not null";
 
 
    if ($projeto_tipo == "1" && strtoupper(trim($munic)) == "SAPIRANGA"){
-   // texto de sapiranga
-//      $pdf->Ln(10);
-//      $artigo = $artigo +1;
-//      $txt="Art $artigo. - Este Decreto entrara em vigor na data de sua publicação.";
-//      $artigo += 1;
-//      $pdf->setX(40);
-//      $pdf->multicell(170,4,$txt,'0','J','0',20);
+
 
       $sec =  "";
       $ass_sec = $classinatura->assinatura(1006,$sec);
 
       $pdf->Ln(5);
-      //$txt = "GABINETE DO PREFEITO MUNICIPAL DE ".strtoupper($munic)." AOS ".substr($xdata,8,2)." DIAS DO MÊS DE ".strtoupper(db_mes(substr($xdata,5,2)))." DE ".date('Y').".";
       $txt = "GABINETE DO PREFEITO MUNICIPAL DE ".strtoupper($munic)." AOS ".substr($xdata,8,2)." DIAS DO MÊS DE ".strtoupper(db_mes(substr($xdata,5,2)))." DE ".substr($xdata,0,4).".";
       $pdf->multicell(180,4,$txt,'0','J','0',20);
       $pdf->Ln(10);
       $pdf->multicell(0,4,$pref."\n"."PREFEITO MUNICIPAL",'0','C','0');
       $pdf->Ln(10);
       $pdf->multicell(0,4,"Registre-se e cumpra-se",'0','L','0');
-  //    $pdf->multicell(0,4,"\n\n\n"."FERNANDO FERREIRA DA CUNHA"."\n"."Secretario Municipal de Administração",'0','L','0');
       $pdf->multicell(0,3,"\n\n\n".strtoupper($ass_sec),'0','L','0');
    }else if ($projeto_tipo == "1" && strtoupper(trim($munic)) == "BAGE"){
-   // texto de sapiranga
-//      $pdf->Ln(10);
-//      $artigo = $artigo +1;
-//      $txt="Art $artigo. - Este Decreto entrara em vigor na data de sua publicação.";
-//      $artigo += 1;
-//      $pdf->setX(40);
-//      $pdf->multicell(170,4,$txt,'0','J','0',20);
 
       $sec =  "";
       $ass_sec = $classinatura->assinatura(1002,$sec);
@@ -669,7 +635,6 @@ $valorp = "and orcsuplem.o46_data is not null";
       $pdf->multicell(180,4,$txt,'0','J','0');
       $pdf->Ln(10);
       $pdf->multicell(0,4,$pref."\n"."PREFEITO MUNICIPAL",'0','C','0');
-  //    $pdf->multicell(0,4,"\n\n\n"."FERNANDO FERREIRA DA CUNHA"."\n"."Secretario Municipal de Administração",'0','L','0');
       $pdf->multicell(0,3,"\n\n\n".strtoupper($ass_sec),'0','L','0');
       $pdf->Ln(10);
       $pdf->multicell(0,4,"Registre-se e cumpra-se",'0','L','0');
@@ -712,7 +677,6 @@ $valorp = "and orcsuplem.o46_data is not null";
       } else {
         $pdf->multicell(160,4,$pref."\n"."Prefeito Municipal ",'0','C','0');
       }
-     // $pdf->multicell(160,4,$pref."\n"."Prefeito(a) Municipal em Exercício ",'0','C','0');
       $linha = $pdf->gety();
       $pdf->multicell(100,4,"\n\n".ucfirst($ass_adm),'0','C','0');
       $pdf->sety($linha);
@@ -724,9 +688,6 @@ $valorp = "and orcsuplem.o46_data is not null";
  // assinaturas
  // include("dbforms/db_assinaturas_balancetes.php");
 
-// $pdf->setfont('arial','',6);
-
- // if($)
  if($ass=='s'){
 
     if ($si09_tipoinstit == 3 || $si09_tipoinstit == 4 || $si09_tipoinstit == 5 || $si09_tipoinstit == 51) {
@@ -747,7 +708,6 @@ $valorp = "and orcsuplem.o46_data is not null";
          $pdf->addpage($pdf->CurOrientation);
 
       $largura = $pdf->w;
-      // print_r($largura);die();
 
       $pos = $pdf->gety();
       $pdf->multicell($largura,5,ucwords($ass_pref),0,"C",0,0);
