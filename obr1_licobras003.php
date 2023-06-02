@@ -14,6 +14,7 @@ $cllicobras = new cl_licobras;
 $cllicobrasresponsaveis = new cl_licobrasresponsaveis();
 $cllicobrasituacao = new cl_licobrasituacao();
 $cllicobrasmedicao = new cl_licobrasmedicao();
+$clacordoobra = new cl_acordoobra();
 $db_botao = false;
 $db_opcao = 33;
 if(isset($excluir)){
@@ -41,6 +42,12 @@ if(isset($excluir)){
       $valida = true;
     }
 
+    $resultAcordoobra = $clacordoobra->sql_record("select * from acordoobra where obr08_licobras = $obr01_sequencial");
+    if (pg_num_rows($resultAcordoobra) > 0){
+      throw new Exception ("Usuário: Exclusão Abortada! Existe Acordo vinculado a esta obra.");
+      $valida = true;
+    }
+
     if($valida == false){
       $cllicobras->excluir($obr01_sequencial);
       if($cllicobras->erro_status == 0){
@@ -59,6 +66,7 @@ if(isset($excluir)){
    $db_opcao = 3;
    $result = $cllicobras->sql_record($cllicobras->sql_query($chavepesquisa));
    db_fieldsmemory($result,0);
+   $licitacaolote = $obr01_licitacaolote;
    $db_botao = true;
 }
 ?>

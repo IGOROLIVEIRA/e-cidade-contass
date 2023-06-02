@@ -3890,6 +3890,15 @@ class Acordo
         }
 
         /**
+         * Remover dos vinculos com obras
+         */
+        $oDaoAcordoObra= new cl_acordoobra();
+        $oDaoAcordoObra->excluir(null, "obr08_acordo = {$this->getCodigoAcordo()}");
+        if ($oDaoAcordoObra->erro_status == 0) {
+            throw new BusinessException($oDaoAcordoObra->erro_msg);
+        }
+
+        /**
          * Remove o acordo
          */
         $oDaoAcordo->excluir($this->getCodigoAcordo());
@@ -4585,25 +4594,33 @@ class Acordo
         $sNatureza = db_utils::fieldsMemory($rsNatureza, 0)->ac02_acordonatureza;
         return $sNatureza;
     }
-    //
-    //    function getSaldosItens($iAcordo,$iPosicao){
-    //            $oContrato = new Acordo($iAcordo);
-    //            $aItens    = array();
-    //
-    //            foreach ($oContrato->getPosicoes() as $oPosicaoContrato) {
-    //
-    //                if ($oPosicaoContrato->getCodigo() == $iPosicao) {
-    //
-    //                    foreach ($oPosicaoContrato->getItens() as $oItem) {
-    //                        $oItemRetorno                 = new stdClass();
-    //                        $oItemRetorno->saldos         = $oItem->getSaldosItem($oItem->getCodigo());
-    //                        echo "<pre>";
-    //                        print_r($oItemRetorno);
-    //                        $itens[]                      = $oItemRetorno;
-    //                    }
-    //                }
-    //            }
-    ////            exit;
-    //    }
+
+    public function adicionarItemAcordoObra($licitacao,$acodo,$item){
+        $clacordoobra = new cl_acordoobra();
+        $oDaoLicobras = $clacordoobra->sql_record("select * from licobras inner join liclicitemlote on l04_numerolote = obr01_licitacaolote inner join liclicitem on l21_codigo = l04_liclicitem inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem inner join solicitempcmater on pc81_solicitem = pc16_solicitem  where obr01_licitacao =  {$licitacao} and pc16_codmater= {$item}");
+        $oDaoParametro = db_utils::fieldsMemory($oDaoLicobras,0);
+        if(pg_num_rows($oDaoLicobras)>0){
+            $oDaoAcordoitem = db_query("select ac20_sequencial from acordoitem where ac20_acordoposicao= (select ac26_sequencial from acordoposicao where ac26_acordo = {$acodo}) and ac20_pcmater= {$item}");
+            $oDaoAcordoitem = db_utils::fieldsMemory($oDaoAcordoitem,0);
+            
+            if(pg_num_rows($oDaoLicobras) != 0){
+                
+                $clacordoobra->obr08_acordo = $acodo;
+                $clacordoobra->obr08_acordoitem = $oDaoAcordoitem ->ac20_sequencial;
+                $clacordoobra->obr08_licobras = $oDaoParametro->obr01_sequencial;
+                $clacordoobra->obr08_liclicitemlote = $oDaoParametro->obr01_licitacaolote;
+                $clacordoobra->incluir(null);
+            }
+            
+            return true;
+        }
+        
+        return false;
+    }
+
+    public function removerAcordoObra($item){
+        $clacordoobra = new cl_acordoobra();
+        $clacordoobra->excluir(null,"obr08_acordoitem = {$item}");
+    }
 
 }
