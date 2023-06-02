@@ -1,12 +1,14 @@
 <?php
 namespace ECidade\V3\Extension;
 
+use App\Support\View\LegacyPath;
 use \ECidade\V3\Extension\Registry;
 use \ECidade\V3\Window\Session;
 use \ECidade\V3\Window\Window;
 
 class Front {
 
+  use LegacyPath;
   private $sPath;
   private $sFile;
   private $windowId;
@@ -132,7 +134,7 @@ class Front {
    * @return string
    */
   public function getPath() {
-    return $this->sPath;
+    return $this->getNewPath($this->sPath);
   }
 
   /**
