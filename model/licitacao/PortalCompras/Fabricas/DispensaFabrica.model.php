@@ -2,7 +2,7 @@
 
 require_once("model/licitacao/PortalCompras/Modalidades/Licitacao.model.php");
 require_once("model/licitacao/PortalCompras/Fabricas/LicitacaoFabricaInterface.model.php");
-require_once("model/licitacao/PortalCompras/Comandos/ValidadorCamposBool.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/ValidaCamposBool.model.php");
 require_once("model/licitacao/PortalCompras/Modalidades/Dispensa.model.php");
 
 class DispensaFabrica implements LicitacaoFabricaInterface
@@ -19,7 +19,7 @@ class DispensaFabrica implements LicitacaoFabricaInterface
         $loteFabrica = new LoteFabrica;
         $dispensa = new Dispensa;
 
-        $validadorBool = new ValidadorCamposBool;
+        $validaBool = new ValidaCamposBool;
 
         $linha = db_utils::fieldsMemory($dados, 0);
 
@@ -29,13 +29,13 @@ class DispensaFabrica implements LicitacaoFabricaInterface
         $dispensa->setNumeroProcessoInterno($linha->numeroprocessointerno);
         $dispensa->setNumeroProcesso((int)$linha->numeroprocesso);
         $dispensa->setAnoProcesso((int)$linha->anoprocesso);
-        $dispensa->setOrcamentoSigiloso($validadorBool->execute($linha->orcamentosigiloso));
-        $dispensa->setSepararPorLotes($validadorBool->execute($linha->separarporlotes));
+        $dispensa->setOrcamentoSigiloso($validaBool->execute($linha->orcamentosigiloso));
+        $dispensa->setSepararPorLotes($validaBool->execute($linha->separarporlotes));
         $dispensa->setOperacaoLote((int)$linha->operacaolote);
         $dispensa->setCasasDecimais((int)$linha->casasdecimais);
         $dispensa->setCasasDecimaisQuantidade((int)$linha->casasdecimaisquantidade);
-        $dispensa->setAceitaPropostaSuperior($validadorBool->execute($linha->aceitapropostasuperior));
-        $dispensa->setPossuiTempoAleatorio($validadorBool->execute($linha->possuitempoaleatorio));
+        $dispensa->setAceitaPropostaSuperior($validaBool->execute($linha->aceitapropostasuperior));
+        $dispensa->setPossuiTempoAleatorio($validaBool->execute($linha->possuitempoaleatorio));
         $dispensa->setCodigoEnquadramentoJuridico(10);
 
         $lotes = $loteFabrica->criar($dados, $numlinhas);

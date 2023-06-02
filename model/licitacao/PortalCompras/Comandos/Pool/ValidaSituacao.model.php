@@ -2,7 +2,7 @@
 
 require_once("model/licitacao/PortalCompras/Comandos/ValidadorAcessoApiInterface.model.php");
 
-class ValidadorSituacao implements ValidadorAcessoApiInterface
+class ValidaSituacao implements ValidaAcessoApiInterface
 {
      /**
      * Verifica se a licitacao esta agendada

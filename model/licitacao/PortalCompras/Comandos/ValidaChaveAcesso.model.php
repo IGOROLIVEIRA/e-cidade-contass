@@ -3,7 +3,7 @@
 require_once("model/licitacao/PortalCompras/Comandos/ValidadorAcessoApiInterface.model.php");
 require_once("classes/db_liclicitaportalcompras_classe.php");
 
-class ValidadorChaveAcesso
+class ValidaChaveAcesso
 {
     /**
      * Valida se existe chave de acesso a api

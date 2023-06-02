@@ -1,6 +1,6 @@
 <?php
 
-class ValidadorTipoPregao
+class ValidaTipoPregao
 {
     /**
      * Undocumented function

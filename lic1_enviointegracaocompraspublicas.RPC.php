@@ -14,12 +14,12 @@ require_once("std/DBTime.php");
 require_once("std/DBDate.php");
 require_once("classes/db_liclicitaportalcompras_classe.php");
 require_once("model/licitacao/PortalCompras/Fabricas/LicitacaoFabrica.model.php");
-require_once("model/licitacao/PortalCompras/Comandos/EnviadorLicitacao.model.php");
-require_once("model/licitacao/PortalCompras/Comandos/ValidadorAcessoApi.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/EnviaLicitacaoPcp.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/ValidaAcessoApi.model.php");
 
 $cl_liclicitaportalcompras = new cl_liclicitaportalcompras;
 $licitacaoFabrica  = new LicitacaoFabrica;
-$validadorAcessoApi = new ValidadorAcessoApi();
+$validaAcessoApi = new ValidaAcessoApi();
 
 $oJson             = new services_json();
 $oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
@@ -35,16 +35,16 @@ switch ($oParam->exec) {
 
                 $codigo    = $oParam->codigo;
 
-                $chaveAcesso = $validadorAcessoApi->getChaveAcesso();
+                $chaveAcesso = $validaAcessoApi->getChaveAcesso();
 
                 $results   = $cl_liclicitaportalcompras->buscaLicitacoes($codigo);
-                $validadorAcessoApi->execute($results);
+                $validaAcessoApi->execute($results);
 
                 $licitacao = $licitacaoFabrica->criar($results, $cl_liclicitaportalcompras->numrows);
                 $url = $licitacao->getUrlPortalCompras($chaveAcesso);
 
-                $enviador  = new EnviadorLicitacao();
-                $resultado = $enviador->enviar($licitacao, $url);
+                $enviador  = new EnviaLicitacaoPcp();
+                $resultado = $enviador->execute($licitacao, $url);
 
                 $oRetorno->message = $resultado['message'];
                 $oRetorno->status = (int)$resultado['success'];

@@ -1,6 +1,6 @@
 <?php
 
-interface ValidadorAcessoApiInterface
+interface ValidaAcessoApiInterface
 {
     /**
      * Executa pool de validações

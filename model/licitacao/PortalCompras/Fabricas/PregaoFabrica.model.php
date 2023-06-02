@@ -4,7 +4,7 @@ require_once("model/licitacao/PortalCompras/Modalidades/Licitacao.model.php");
 require_once("model/licitacao/PortalCompras/Fabricas/LicitacaoFabricaInterface.model.php");
 require_once("model/licitacao/PortalCompras/Modalidades/Pregao.model.php");
 require("model/licitacao/PortalCompras/Fabricas/RegistroPrecosFabrica.model.php");
-require("model/licitacao/PortalCompras/Comandos/ValidadorTipoPregao.model.php");
+require("model/licitacao/PortalCompras/Comandos/ValidaTipoPregao.model.php");
 
 class PregaoFabrica implements LicitacaoFabricaInterface
 {
@@ -42,7 +42,7 @@ class PregaoFabrica implements LicitacaoFabricaInterface
         $loteFabrica = new LoteFabrica;
         $pregao = new Pregao();
         $linha = db_utils::fieldsMemory($dados, 0);
-        $legislacaoAplicavel = (new ValidadorTipoPregao)->execute((int)$linha->tiporealizacao);
+        $legislacaoAplicavel = (new ValidaTipoPregao)->execute((int)$linha->tiporealizacao);
 
         $pregao->setId($linha->id);
         $pregao->setObjeto($linha->objeto);

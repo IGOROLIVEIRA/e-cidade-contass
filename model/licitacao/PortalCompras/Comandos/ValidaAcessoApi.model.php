@@ -1,28 +1,28 @@
 <?php
 
-require_once("model/licitacao/PortalCompras/Comandos/ValidadorAcessoApiInterface.model.php");
-require_once("model/licitacao/PortalCompras/Comandos/ValidadorChaveAcesso.model.php");
-require_once("model/licitacao/PortalCompras/Comandos/Pool/ValidadorResultadoVazio.model.php");
-require_once("model/licitacao/PortalCompras/Comandos/Pool/ValidadorSituacao.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/ValidaAcessoApiInterface.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/ValidaChaveAcesso.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/Pool/ValidaResultadoVazio.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/Pool/ValidaSituacao.model.php");
 
-class ValidadorAcessoApi implements ValidadorAcessoApiInterface
+class ValidaAcessoApi implements ValidaAcessoApiInterface
 {
     /**
-     * @var ValidadorAcessoApiInterface[]
+     * @var ValidaAcessoApiInterface[]
      */
     private array $pool = [];
 
     /**
      * @var ValidadorChaveAcesso
      */
-    private ValidadorChaveAcesso $validadorChaveAcesso;
+    private ValidaChaveAcesso $validaChaveAcesso;
 
     public function __construct()
     {
-        $this->validadorChaveAcesso = new ValidadorChaveAcesso();
+        $this->validaChaveAcesso = new ValidaChaveAcesso();
         $this->pool = [
-            new ValidadorResultadoVazio(),
-            new ValidadorSituacao()
+            new ValidaResultadoVazio(),
+            new ValidaSituacao()
         ];
     }
 
@@ -51,7 +51,7 @@ class ValidadorAcessoApi implements ValidadorAcessoApiInterface
     public function getChaveAcesso(): string
     {
         try{
-            return $this->validadorChaveAcesso->execute();
+            return $this->validaChaveAcesso->execute();
         } catch (Exception $e){
             throw new Exception($e->getMessage());
         }

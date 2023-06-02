@@ -1,7 +1,6 @@
 <?php
 
-
-class ValidadorCamposBool
+class ValidaCamposBool
 {
     /**
      * Undocumented function

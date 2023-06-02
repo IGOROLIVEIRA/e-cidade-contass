@@ -1,9 +1,9 @@
 <?php
 
-require_once("model/licitacao/PortalCompras/Comandos/EnviadorInterface.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/EnviaLicitacaoPcpInterface.model.php");
 require_once("model/licitacao/PortalCompras/Modalidades/Licitacao.model.php");
 
-class EnviadorLicitacao implements EnviadorInterface
+class EnviaLicitacaoPcp implements EnviaLicitacaoPcpInterface
 {
     /**
      * Envia para portal de compras
@@ -11,7 +11,7 @@ class EnviadorLicitacao implements EnviadorInterface
      * @param Licitacao $licitacao
      * @return array
      */
-    public function enviar(Licitacao $licitacao, string $url): array
+    public function execute(Licitacao $licitacao, string $url): array
     {
         try{
             $client = new \GuzzleHttp\Client();
