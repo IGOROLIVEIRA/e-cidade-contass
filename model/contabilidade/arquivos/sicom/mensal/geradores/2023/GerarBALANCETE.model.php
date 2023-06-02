@@ -61,7 +61,7 @@ class GerarBALANCETE extends GerarAM
                   si181_reg10,
                   si181_codco
                   FROM balancete142023
-                  JOIN empempenho ON e60_codemp::int8 = si181_nroempenho::int8 AND e60_anousu = si181_anoinscricao
+                  JOIN empempenho ON e60_codemp::int8 = si181_nroempenho::int8 AND e60_anousu = si181_anoinscricao and si181_instit=e60_instit
                   WHERE si181_mes = " . $this->iMes . "
                     AND si181_instit =" . db_getsession("DB_instit");
         $rsBALANCETE14 = db_query($sSql4);
