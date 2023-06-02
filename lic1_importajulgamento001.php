@@ -77,7 +77,7 @@ db_postmemory($HTTP_POST_VARS);
                         </tr>
                         <tr>
                             <td colspan="2" align="center">
-                                <input disabled="true" name="emite3" id="emite3" type="button" value="Processar" onclick="js_importa()">
+                                <input disabled="true" name="btn_processar" id="btn_processar" type="button" value="Processar" onclick="js_processa_julgamento()">
                             </td>
                         </tr>
                     </table>
@@ -101,12 +101,12 @@ db_postmemory($HTTP_POST_VARS);
         function js_mostraliclicita1(chave1) {
             document.form1.l20_codigo.value = chave1;
             db_iframe_liclicita.hide();
-            js_busca_dados_liclicita(chave1,"BuscarDados","js_retornoimportarjulgamento");
+            js_busca_dados_liclicita(chave1,"BuscarDados","js_retornobuscarlicitacao");
         }
 
         function js_processa_julgamento() {
             codigo = document.form1.l20_codigo.value;
-            js_busca_dados_liclicita(codigo,"BuscarDados","js_retornoimportarjulgamento");
+            js_busca_dados_liclicita(codigo,"ProcessaJulgamento","js_retornoimportarjulgamento");
         }
 
         function js_busca_dados_liclicita(codigo, opcao, funcaoRetorno) {
@@ -123,12 +123,19 @@ db_postmemory($HTTP_POST_VARS);
             var oAjax = new Ajax.Request(sUrl, parametros);
         }
 
-        function js_retornoimportarjulgamento(oAjax) {
+        function js_retornobuscarlicitacao(oAjax) {
             var oRetorno = eval("(" + oAjax.responseText + ")");
 
             document.form1.l03_descr.value = oRetorno.message.modalidade;
             document.form1.l20_objeto.value = oRetorno.message.objeto;
             document.form1.l20_numero.value = oRetorno.message.numero;
+            document.form1.btn_processar.disabled = false;
+        }
+
+        function js_retornoimportarjulgamento() {
+            var oRetorno = eval("(" + oAjax.responseText + ")");
+
+            console.log("processou");
         }
     </script>
 </body>

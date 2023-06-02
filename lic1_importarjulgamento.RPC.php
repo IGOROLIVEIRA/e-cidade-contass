@@ -11,6 +11,7 @@ require_once("libs/db_sessoes.php");
 require_once("std/DBTime.php");
 require_once("std/DBDate.php");
 require_once("classes/db_liclicitaimportarjulgamento_classe.php");
+require_once("model/licitacao/PortalCompras/Comandos/BuscaJulgamento.model.php");
 
 $cl_liclcitaimportarjulgamento = new cl_liclicitaimportarjulgamento();
 
@@ -42,7 +43,8 @@ switch ($oParam->exec) {
     case 'ProcessaJulgamento':
         try{
             $codigo = $oParam->codigo;
-
+            $buscador = new BuscaJulgamento();
+            $buscador->execute((int)$codigo, "cc86f9555f1f0134dc4d4df3c45dc457");
 
         } catch(Exception $oErro) {
             $oRetorno->message = $oErro->getMessage();
