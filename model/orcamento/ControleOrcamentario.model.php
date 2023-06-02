@@ -189,13 +189,11 @@ class ControleOrcamentario
     {
         if (array_key_exists($this->iFonte, $this->deParaFonteCompleta))
             $this->sCodigo = $this->deParaFonteCompleta[$this->iFonte];
-
         return;
     }
 
     public function setCodigoPorFonte6Digitos()
     {
-
         $iFonte6Digitos = substr($this->iFonte, 1, 6);
         if (array_key_exists($iFonte6Digitos, $this->deParaFonte6Digitos))
             if (array_key_exists($this->iEmendaParlamentar, $this->deParaFonte6Digitos[$iFonte6Digitos]))
@@ -220,6 +218,12 @@ class ControleOrcamentario
         $this->setCodigoPorFonte();
         $this->setCodigoPorFonte6Digitos();
         $this->setCodigoPorFonte6DigitosEEsfera();
+        return $this->sCodigo;
+    }
+
+    public function getCodigoParaDotacao()
+    {
+        $this->setCodigoPorFonte();
         return $this->sCodigo;
     }
 }
