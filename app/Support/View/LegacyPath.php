@@ -18,6 +18,9 @@ trait LegacyPath
             'bib' => 'biblioteca',
             'cad' => 'cadastro',
             'cai' => 'caixa',
+            'cal' => 'calendario',
+            'cin' => 'controle_interno',
+            'com' => 'compras',
             'amb' => 'meioambiente'
         ];
     }
