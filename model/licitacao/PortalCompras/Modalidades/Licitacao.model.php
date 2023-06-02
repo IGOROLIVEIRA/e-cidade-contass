@@ -167,7 +167,7 @@ abstract class Licitacao implements \JsonSerializable
     protected array      $envs = [];
 
     /**
-     * Cosntrutor
+     * Construtor
      */
     public function __construct()
     {

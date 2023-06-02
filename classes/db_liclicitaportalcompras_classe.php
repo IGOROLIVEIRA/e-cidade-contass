@@ -151,7 +151,6 @@ class cl_liclicitaportalcompras
         return $this->sql_record($sql);
     }
 
-
     public function sql_record($sql)
     {
         $result = db_query($sql);
