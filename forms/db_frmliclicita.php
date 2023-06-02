@@ -270,48 +270,18 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             echo "<script> document.getElementById('l20_numero').style.display = 'none'; </script>";
                                             echo "<script> document.getElementById('txtNumeracao').style.display = 'none'; </script>";
                                         }
+                                        
                                         ?>
-                                        <?php if ($l20_anousu >= 2020 && $db_opcao == 2 || $l20_anousu == null && $db_opcao == 1) : ?>
-                                            <span id="linha_nroedital">
-
-                                                <strong>Edital:</strong>
-                                                <?
-                                                $mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1
+                                        <span id="linha_nroedital">
+                                            <strong>Edital:</strong>
+                                                <?php
+                                                    $mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1
                                                     || db_getsession('DB_anousu') >= 2021 ? 3 : 1;
-                                                db_input('l20_nroedital', 10, 1, true, 'text', $bloqueianumeracoes, "");
+                                                    db_input('l20_nroedital', 10, 1, true, 'text', $bloqueianumeracoes, "");
                                                 ?>
-                                            </span>
-                                        <?php endif; ?>
-
-
+                                        </span>
                                     </td>
                                 </tr>
-                                <!--
-                                <tr>
-                                    <td nowrap title="<?= @$Tl20_numero ?>">
-                                        <?= @$Ll20_numero ?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        db_input('l20_numero', 10, $Il20_numero, true, 'text', 3, "");
-                                        ?>
-                                    </td>
-                                </tr> -->
-                                <?php if ($l20_anousu >= 2020 && $db_opcao == 2 || $l20_anousu == null && $db_opcao == 1) : ?>
-                                    <!--
-                                <tr id="linha_nroedital">
-                                    <td nowrap title="<?= @$Tl20_nroedital ?>">
-                                        <?= @$Ll20_nroedital ?>
-                                    </td>
-                                    <td>
-                                        <?
-                                        $mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1
-                                            || db_getsession('DB_anousu') >= 2021 ? 3 : 1;
-                                        db_input('l20_nroedital', 10, $Il20_nroedital, true, 'text', $mostra, "");
-                                        ?>
-                                    </td>
-                                </tr> -->
-                                <?php endif; ?>
                                 <tr>
                                     <td nowrap title="<?= @$Tl20_codepartamento ?>">
                                         <?
@@ -1254,7 +1224,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     document.form1.l20_prazoentrega.style.backgroundColor = '#FFFFFF';
     document.form1.l20_condicoespag.style.backgroundColor = '#FFFFFF';
     document.form1.l20_local.style.backgroundColor = '#E6E4F1';
-    document.getElementById('linha_nroedital').style.display = 'none';
     buscamodalidade = false;
 
     let elemento = document.getElementById('l20_tipnaturezaproced');
@@ -1301,7 +1270,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
 
     function js_retornolicitacao(oAjax) {
-
 
         var oRetornoNatu = document.getElementById("l20_naturezaobjeto").value;
         var oRetornoamparo = document.getElementById("l212_codigo").value;
@@ -1425,6 +1393,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("dataaber").style.display = "none";
             document.getElementById("receita").style.display = 'none';
             document.getElementById("dataaberturapncp").style.display = 'none';
+            document.getElementById("dispensa").style.display = '';
+            document.getElementById("l20_tipoprocesso").disabled = false;
+            document.form1.l20_justificativa.style.backgroundColor = '#FFFFFF ';
+            document.form1.l20_razao.style.backgroundColor = '#FFFFFF ';
+            document.getElementById("l20_justificativa").disabled = false;
+            document.getElementById("l20_razao").disabled = false;
+            document.getElementById("recdocumentacao").style.display = 'none';
 
             if (l12_pncp == 't') {
                 document.getElementById("receita").style.display = '';
@@ -1452,13 +1427,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             listaNatureza.add(new Option('7- Compras Para Obras e/ou Serviços de Engenharia', 7));
 
             document.querySelector("#l20_naturezaobjeto").value = oRetornoNatu;
-            document.form1.l20_justificativa.style.backgroundColor = '#FFFFFF ';
-            document.form1.l20_razao.style.backgroundColor = '#FFFFFF ';
-            document.getElementById("l20_justificativa").disabled = false;
-            document.getElementById("l20_razao").disabled = false;
-            document.getElementById("l20_tipoprocesso").disabled = false;
-            document.getElementById("dispensa").style.display = 'block';
-            document.getElementById("recdocumentacao").style.display = 'none';
+
 
             /*Demandas sicom 2016*/
             document.form1.l20_numeroconvidado.style.display = 'none';
@@ -1480,6 +1449,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         } else {
             var codigo_lei = document.form1.l20_leidalicitacao.value;
+            document.getElementById("linha_nroedital").style.display = '';
 
             if (codigo_lei == 1) {
                 document.getElementById("disputa").style.display = '';
@@ -1497,7 +1467,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("equipepregao").style.display = '';
             document.getElementById("usaregistropreco").style.display = '';
             document.getElementById("aceitabilidade").style.display = '';
-            document.getElementById("linha_nroedital").style.display = '';
+            
             if (l12_pncp == 't') {
                 document.getElementById("receita").style.display = '';
             } else {
@@ -1557,12 +1527,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         if (anousu >= 2021) {
             aModalidades.push('102', '103');
-        }
-
-        if (aModalidades.includes(oRetorno.tribunal) && anousu >= 2020) {
-            document.getElementById('linha_nroedital').style.display = '';
-        } else {
-            document.getElementById('linha_nroedital').style.display = 'none';
         }
 
         let listaExecucoes = document.getElementById('l20_regimexecucao').options;
@@ -2282,6 +2246,13 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         if (document.getElementById('l20_codtipocomdescr').value != 99) numeracaopreenchida = true;
         js_ProcCod_l20_codtipocom('l20_codtipocomdescr', 'l20_codtipocom');
 
+        let l12_pncp = <? echo '"' . $l12_pncp . '"';      ?>;
+
+        if (lei == 1 && l12_pncp == 't') {
+            document.getElementById("amparolegal").style.display = "";
+        }else{
+            document.getElementById("amparolegal").style.display = "none";
+        }
     }
 
     function limitaTextareacpro(valor) {
