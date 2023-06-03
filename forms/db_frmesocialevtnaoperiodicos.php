@@ -81,7 +81,7 @@
                         <label for="S2420">S-2420 - Cadastro de Benefício - Entes Públicos - Término</label><br>
                     </td>
                     <td>
-                        <input type="checkbox" value="S3000" id="S3000" />
+                        <input type="checkbox" value="S3000" id="S3000" onclick="js_S3000(this)" />
                         <label for="S3000">S-3000 - Exclusão de Eventos</label><br>
                     </td>
                 </tr>
