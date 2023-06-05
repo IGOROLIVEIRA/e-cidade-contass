@@ -272,7 +272,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         }
                                         
                                         ?>
-                                        <span id="linha_nroedital">
+                                        <span id="linha_nroedital" style="display:none;">
                                             <strong>Edital:</strong>
                                                 <?php
                                                     $mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1
@@ -1023,14 +1023,14 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             </table>
             <table>
                 <!--
-                                <tr>
-                                    <td>
-                                        <?= @$Ll20_procadmin ?>
-                                    </td>
-                                    <td>
-                                        <? db_input('l20_procadmin', 21, $Il20_procadmin, true, 'text', $db_opcao, "") ?>
-                                    </td>
-                                </tr> -->
+                <tr>
+                    <td>
+                        <?= @$Ll20_procadmin ?>
+                    </td>
+                    <td>
+                        <? db_input('l20_procadmin', 21, $Il20_procadmin, true, 'text', $db_opcao, "") ?>
+                    </td>
+                </tr> -->
                 <tr id="procSis">
                     <td nowrap title="<?= @$Tl34_protprocesso ?>">
                         <?
@@ -1206,15 +1206,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
     </center>
 
-    <?/*
-   if ($db_opcao==2 || $db_opcao==22){
-        $jscript = "onClick='return js_confirmar();'";
-   } else {
-        $jscript = "";
-   }<?=$jscript?>*/
-    ?>
-
-
     <input name="<?= ($db_opcao == 1 ? 'incluir' : ($db_opcao == 2 || $db_opcao == 22 ? 'alterar' : 'excluir')) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? 'Incluir' : ($db_opcao == 2 || $db_opcao == 22 ? 'Alterar' : 'Excluir')) ?>" <?= ($db_botao == false ? 'disabled' : '') ?> onClick="return js_confirmadatas()">
     <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
 </form>
@@ -1270,7 +1261,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
 
     function js_retornolicitacao(oAjax) {
-
+        
         var oRetornoNatu = document.getElementById("l20_naturezaobjeto").value;
         var oRetornoamparo = document.getElementById("l212_codigo").value;
         if (oRetornoNatu == 1) {
@@ -1379,8 +1370,20 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         } else {
             document.getElementById("respAvaliaBens").style.display = "none";
         }
-
+        
         if (oRetorno.tribunal == 100 || oRetorno.tribunal == 101 || oRetorno.tribunal == 102 || oRetorno.tribunal == 103) {
+            if(oRetorno.tribunal == 102 || oRetorno.tribunal == 103){
+                document.getElementById("linha_nroedital").style.display = '';
+            }else{
+                document.getElementById("linha_nroedital").style.display = 'none';
+            }
+
+            if (l12_pncp == 't') {
+                document.getElementById("receita").style.display = '';
+            } else {
+                document.getElementById("receita").style.display = 'none';
+            }
+            document.getElementById("dataaberturapncp").style.display = "none";
             document.getElementById("respCondProcesso").style.display = "none";
             document.getElementById("l20_tipliticacao").style.display = "none";
             document.getElementById("l20_tipnaturezaproced").style.display = "none";
@@ -1391,8 +1394,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("respAberProcesso").style.display = "none";
             document.getElementById("respEmissaoEdi").style.display = "none";
             document.getElementById("dataaber").style.display = "none";
-            document.getElementById("receita").style.display = 'none';
-            document.getElementById("dataaberturapncp").style.display = 'none';
             document.getElementById("dispensa").style.display = '';
             document.getElementById("l20_tipoprocesso").disabled = false;
             document.form1.l20_justificativa.style.backgroundColor = '#FFFFFF ';
@@ -1401,17 +1402,9 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("l20_razao").disabled = false;
             document.getElementById("recdocumentacao").style.display = 'none';
 
-            if (l12_pncp == 't') {
-                document.getElementById("receita").style.display = '';
-                document.getElementById("dataaberturapncp").style.display = '';
-            }
-
             document.getElementById("equipepregao").style.display = 'none';
             document.getElementById("usaregistropreco").style.display = 'none';
             document.getElementById("aceitabilidade").style.display = 'none';
-            document.getElementById("linha_nroedital").style.display = 'none';
-
-
 
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
             listaNatureza.remove(7);
@@ -1717,8 +1710,9 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
         if (l12_pncp == 't') {
             document.getElementById('categoriaprocesso').style.display = '';
-            document.getElementById('dataaberturapncp').style.display = '';
-            document.getElementById('dataencerramentopncp').style.display = '';
+            document.getElementById("dataaberturapncp").style.display = '';
+            document.getElementById("dataencerramentopncp").style.display = '';
+            document.getElementById("receita").style.display = '';
         }
 
         if (lei == "1" && l12_pncp == "t") {
