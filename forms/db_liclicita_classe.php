@@ -342,24 +342,9 @@ class cl_liclicita
       return false;
     }
 
-
-
-
-    if ($tribunal == 100 || $tribunal == 101 ||  $tribunal == 102) {
-      if ($this->l20_razao == null || $this->l20_razao == "") {
-        $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
-        $this->erro_campo = "l20_razao";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-
     if ($tribunal == 100 || $tribunal == 101 ||  $tribunal == 102) {
       if ($this->l20_dtpubratificacao == null || $this->l20_dtpubratificacao == "") {
-        $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
+        $this->erro_sql = "Campo Data de publicacao termo de ratificacao não informado";
         $this->erro_campo = "l20_dtpubratificacao";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -374,7 +359,7 @@ class cl_liclicita
 
     if ($tribunal == 100 || $tribunal == 101 ||  $tribunal == 102) {
       if ($this->l20_veicdivulgacao == null || $this->l20_veicdivulgacao == "") {
-        $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
+        $this->erro_sql = "Campo veiculo de divulgação não informado.";
         $this->erro_campo = "l20_veicdivulgacao";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -386,24 +371,9 @@ class cl_liclicita
       $this->l20_veicdivulgacao = null;
     }
 
-
-    if ($tribunal == 100 || $tribunal == 101 ||  $tribunal == 102) {
-      if ($this->l20_justificativa == null || $this->l20_justificativa == "") {
-        $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
-        $this->erro_campo = "l20_justificativa";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-
-
-
     if ($tribunal == 100 || $tribunal == 101 ||  $tribunal == 102) {
       if ($this->l20_tipoprocesso == null || $this->l20_tipoprocesso == "") {
-        $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
+        $this->erro_sql = "Campo Tipo de Processo não informado";
         $this->erro_campo = "l20_tipoprocesso";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -1155,23 +1125,6 @@ class cl_liclicita
         return false;
       }
     }
-
-    // echo $sql ;exit;
-
-    if ($tribunal == 100 || $tribunal == 101 ||  $tribunal == 102) {
-      $sql  .= $virgula . " l20_razao = '$this->l20_razao' ";
-      $virgula = ",";
-      if ($this->l20_razao == null || $this->l20_razao == "") {
-        $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
-        $this->erro_campo = "l20_razao";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }
-
 
     if (trim($this->l20_numero != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_numero"]))) {
       $sql  .= $virgula . " l20_numero = $this->l20_numero ";
