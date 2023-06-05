@@ -12,6 +12,7 @@ require_once("std/DBTime.php");
 require_once("std/DBDate.php");
 require_once("classes/db_liclicitaimportarjulgamento_classe.php");
 require_once("model/licitacao/PortalCompras/Comandos/BuscaJulgamento.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/ValidaChaveAcesso.model.php");
 
 $cl_liclcitaimportarjulgamento = new cl_liclicitaimportarjulgamento();
 
@@ -33,6 +34,7 @@ switch ($oParam->exec) {
                 $resultado['modalidade'] = utf8_encode($resource->modalidade);
                 $resultado['numero'] = $resource->numeroprocesso.'/'.$resource->anoprocesso;
                 $resultado['objeto'] = utf8_encode($resource->objeto);
+                $resultado['situacao'] = $resource->situacao;
                 $oRetorno->message = $resultado;
                 $oRetorno->status = 1;
             } catch (Exception $oErro) {
@@ -43,9 +45,12 @@ switch ($oParam->exec) {
     case 'ProcessaJulgamento':
         try{
             $codigo = $oParam->codigo;
-            $buscador = new BuscaJulgamento();
-            $buscador->execute((int)$codigo, "cc86f9555f1f0134dc4d4df3c45dc457");
+            $chaveAcesso = (new ValidaChaveAcesso)->execute();
 
+            //$buscador = new BuscaJulgamento();
+            //$buscador->execute((int)$codigo, "cc86f9555f1f0134dc4d4df3c45dc457");
+            $oRetorno->message = "processou";
+            $oRetorno->status = 1;
         } catch(Exception $oErro) {
             $oRetorno->message = $oErro->getMessage();
             $oRetorno->status  = 2;

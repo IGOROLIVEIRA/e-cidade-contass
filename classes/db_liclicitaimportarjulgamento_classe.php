@@ -22,6 +22,7 @@ class cl_liclicitaimportarjulgamento
         l20_objeto as objeto,
         l20_numero as numeroprocesso,
         l20_anousu as anoprocesso,
+        l20_licsituacao as situacao,
         l03_descr as modalidade
         from liclicita
         join cflicita on l03_codigo=l20_codtipocom

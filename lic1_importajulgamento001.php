@@ -99,7 +99,6 @@ db_postmemory($HTTP_POST_VARS);
         }
 
         function js_mostraliclicita1(chave1) {
-            document.form1.l20_codigo.value = chave1;
             db_iframe_liclicita.hide();
             js_busca_dados_liclicita(chave1,"BuscarDados","js_retornobuscarlicitacao");
         }
@@ -110,7 +109,7 @@ db_postmemory($HTTP_POST_VARS);
         }
 
         function js_busca_dados_liclicita(codigo, opcao, funcaoRetorno) {
-            var sUrl = 'lic1_importarjulgamento.RPC.php';
+            var sUrl = 'lic1_importajulgamento.RPC.php';
             var oParam = new Object();
             oParam.codigo = codigo;
             oParam.exec = opcao;
@@ -124,18 +123,27 @@ db_postmemory($HTTP_POST_VARS);
         }
 
         function js_retornobuscarlicitacao(oAjax) {
-            var oRetorno = eval("(" + oAjax.responseText + ")");
+            let oRetorno = eval("(" + oAjax.responseText + ")");
+            const numero = oRetorno.message.numero;
+            if (oRetorno.message.situacao != 0) {
+                return alert(`
+                O processo ${numero} deve estar com a situação "Em Andamento" para poder ser importado
+                `)
+            }
 
+            document.form1.l20_codigo.value = oRetorno.message.id;
             document.form1.l03_descr.value = oRetorno.message.modalidade;
             document.form1.l20_objeto.value = oRetorno.message.objeto;
             document.form1.l20_numero.value = oRetorno.message.numero;
             document.form1.btn_processar.disabled = false;
         }
 
-        function js_retornoimportarjulgamento() {
-            var oRetorno = eval("(" + oAjax.responseText + ")");
-
+        function js_retornoimportarjulgamento(oAjax) {
+            let oRetorno = eval("(" + oAjax.responseText + ")");
+            alert(oRetorno.message);
             console.log("processou");
         }
+
+
     </script>
 </body>

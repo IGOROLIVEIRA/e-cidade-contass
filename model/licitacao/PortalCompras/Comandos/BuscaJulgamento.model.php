@@ -18,7 +18,7 @@ class BuscaJulgamento
         $client = new GuzzleHttp\Client();
         $res = $client->request('GET', $url,[]);
 
-        var_dump($res->getBody()->__toString());
-        die();
+        //var_dump($res->getBody()->__toString());
+        //die();
     }
 }

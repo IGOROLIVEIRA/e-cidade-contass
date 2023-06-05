@@ -11,7 +11,7 @@ class ValidaChaveAcesso
      * @param resource|null $results
      * @return string
      */
-    public function execute($results = null): string
+    public function execute(): string
     {
         $cl_liclicitaportalcompras = new cl_liclicitaportalcompras;
         $chaveAcesso = db_utils::fieldsMemory(
@@ -21,7 +21,7 @@ class ValidaChaveAcesso
         , 0)->chaveacesso;
 
         if (empty($chaveAcesso)) {
-            throw new Exception(utf8_encode("Chave de acesso não esta cadastrada"));
+            throw new Exception(utf8_encode("Parâmetros de integração não localizados, favor entrar em contato com o suporte"));
         }
         return $chaveAcesso;
     }
