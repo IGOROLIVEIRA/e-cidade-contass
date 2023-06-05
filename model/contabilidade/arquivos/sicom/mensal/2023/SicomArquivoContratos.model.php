@@ -763,7 +763,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         $aDadosAgrupados[$sHash] = $oContrato11;
                     } else {
                         $aDadosAgrupados[$sHash]->si84_quantidadeitem += $oItens->getQuantidade();
-                        $aDadosAgrupados[$sHash]->si84_valorunitarioitem = $oItens->getValorUnitario();
+                        $aDadosAgrupados[$sHash]->si84_valorunitarioitem += $oItens->getValorUnitario();
                     }
                 }
 
