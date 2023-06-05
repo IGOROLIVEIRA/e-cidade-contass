@@ -7,13 +7,13 @@ class Hotfixprecoref extends AbstractMigration
     
     public function up()
     {
-        $sql = "Begin;
+       /* $sql = "Begin;
 
 
         ALTER TABLE itemprecoreferencia ADD CONSTRAINT itemprecoreferencia_precoreferencia_fk
         FOREIGN KEY (si02_precoreferencia) REFERENCES precoreferencia (si01_sequencial);
 
-        ALTER TABLE itemprecoreferencia ADD CONSTRAINT itemprecoreferencia_pcorcamval_fk
+        ALTER TABLE itemprecoreferencia ADD CONSTRAINT itemprecoreferencia_pcorcamitem_fk
         FOREIGN KEY (si02_itemproccompra) REFERENCES pcorcamitem (pc22_orcamitem);
 
         ALTER TABLE precoreferencia ADD CONSTRAINT precoreferencia_pcproc_fk
@@ -47,7 +47,7 @@ class Hotfixprecoref extends AbstractMigration
         
         commit;";
 
-        $this->execute($sql);
+        $this->execute($sql);*/
 
     }
 }
