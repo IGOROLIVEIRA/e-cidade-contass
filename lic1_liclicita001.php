@@ -188,6 +188,22 @@ if (isset($incluir)) {
 		}
 	}
 
+	if ($oPost->modalidade_tribunal == 100 || $oPost->modalidade_tribunal == 101 || $oPost->modalidade_tribunal == 102 || $oPost->modalidade_tribunal == 103) {
+		if ($oPost->l20_razao == '') {
+			$erro_msg .= 'Campo Razão não informado';
+			$sqlerro = true;
+		}
+
+		if ($oPost->l20_justificativa == '') {
+			$erro_msg .= 'Campo Justificativa não informado';
+			$sqlerro = true;
+		}
+
+		if ($oPost->l20_tipoprocesso == '') {
+			$erro_msg .= 'Campo Tipo de Processo não informado';
+			$sqlerro = true;
+		}
+	}
 
 	/*
    Validações dos membros da licitação

@@ -936,7 +936,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                         ?>
                     </td>
                     <td>
-                        <span id="usaregistropreco">
+                        <span style="display:none" id="usaregistropreco">
                             <strong>Usa Registro de Preço:</strong>
                             <?
                             if (!isset($l20_usaregistropreco)) {
@@ -975,7 +975,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 db_input('l20_liccomissao', 10, $Il20_liccomissao, true, 'hidden', $db_opcao, " onchange='js_pesquisal20_liccomissao(false);'")
 
                 ?>
-                <tr style="padding-bottom:70px important!;" id="equipepregao">
+                <tr style="display:none" id="trequipepregao">
                     <td nowrap title="<?= @$Tl20_equipepregao ?>">
                         <?
                         db_ancora(@$Ll20_equipepregao, "js_pesquisal20_equipepregao(true);", $db_opcao);
@@ -1380,14 +1380,16 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
             if (l12_pncp == 't') {
                 document.getElementById("receita").style.display = '';
+                document.getElementById("dataaberturapncp").style.display = '';
             } else {
                 document.getElementById("receita").style.display = 'none';
+                document.getElementById("dataaberturapncp").style.display = 'none';
             }
-            document.getElementById("dataaberturapncp").style.display = "none";
             document.getElementById("respCondProcesso").style.display = "none";
             document.getElementById("l20_tipliticacao").style.display = "none";
             document.getElementById("l20_tipnaturezaproced").style.display = "none";
-            //document.getElementById("l20_regimexecucao").style.display = "none";
+            document.getElementById("usaregistropreco").style.display = 'none';
+            document.getElementById("trequipepregao").style.display = 'none';
             document.getElementById("l20_criterioadjudicacao").style.display = "none";
             document.getElementById("disputa").style.display = "none";
             document.getElementById("respAutoProcesso").style.display = '';
@@ -1401,9 +1403,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("l20_justificativa").disabled = false;
             document.getElementById("l20_razao").disabled = false;
             document.getElementById("recdocumentacao").style.display = 'none';
-
-            document.getElementById("equipepregao").style.display = 'none';
-            document.getElementById("usaregistropreco").style.display = 'none';
             document.getElementById("aceitabilidade").style.display = 'none';
 
             let listaNatureza = document.getElementById('l20_naturezaobjeto').options;
@@ -1428,7 +1427,6 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.form1.dtjs_l20_dataaber.style.display = 'none';
             document.form1.l20_recdocumentacao.style.display = 'none';
             document.form1.dtjs_l20_recdocumentacao.style.display = 'none';
-            document.form1.l20_usaregistropreco.style.display = 'none';
             document.form1.l20_local.style.display = 'none';
             document.getElementById("tipolicitacao").style.display = 'none';
             document.getElementById("tipnaturezaproced").style.display = 'none';
@@ -1457,7 +1455,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("respEmissaoEdi").style.display = '';
             document.getElementById("dataaber").style.display = '';
             document.getElementById("dataaberturapncp").style.display = '';
-            document.getElementById("equipepregao").style.display = '';
+            document.getElementById("trequipepregao").style.display = '';
             document.getElementById("usaregistropreco").style.display = '';
             document.getElementById("aceitabilidade").style.display = '';
             
@@ -1504,13 +1502,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.form1.l20_recdocumentacao.style.display = 'inline';
             document.form1.dtjs_l20_recdocumentacao.style.display = 'inline';
             document.form1.l20_usaregistropreco.style.display = 'inline';
-            document.form1.l20_equipepregao.style.display = 'inline';
             document.form1.l20_local.style.display = 'inline';
             document.getElementById("tipnaturezaproced").style.display = 'inline';
             document.getElementById("descontotab").style.display = 'inline';
             document.getElementById("numeroconvidado").style.display = 'inline';
             document.getElementById("recdocumentacao").style.display = 'inline';
-            document.getElementById("equipepregao").style.display = 'inline';
             document.getElementById("local").style.display = 'inline';
 
         }
@@ -2017,7 +2013,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         document.form1.l20_equipepregao.value = iCodigoProcesso;
         db_iframe_proc.hide();
 
-        let modalidade = document.form1.modalidade_tribunal.value; //document.form1.l20_codtipocomdescr.value;
+        let modalidade = document.form1.modalidade_tribunal.value;
 
         if (modalidade == 52 || modalidade == 53) {
             verificaMembrosModalidade("pregao");
