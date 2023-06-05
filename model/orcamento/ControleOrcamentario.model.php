@@ -42,6 +42,7 @@ class ControleOrcamentario
     private $iEsferaEmendaParlamentar;
     private $deParaFonte6Digitos;
     private $deParaFonte6DigitosEEsfera;
+    private $tipodespesaEmpRPPS;
 
     public function __construct()
     {
