@@ -52,14 +52,12 @@ $iInstit = db_getsession("DB_instit");
                     $dbwhere = "rh213_empregador = (SELECT numcgm FROM db_config WHERE codigo = {$iInstit})";
                     $campos = "rh213_sequencial,rh213_evento,rh215_recibo,rh215_dataentrega as dl_entrega,
                     rh213_protocolo as dl_protocolo, rh213_dados,rh213_dataprocessamento,rh213_msgretorno";
-
-                    //if (isset($situacao) && !empty($situacao)) {
                     $dbwhere .= " and rh213_situacao = 2";
-                    //}
-
+                    
+                    
                     $sql = $clesocialenvio->sql_query(null, $campos, "rh213_sequencial desc", "{$dbwhere}");
-                    db_lovrot($sql, 20, "()", "", $funcao_js, "", "NoMe", array(), false,"",true);
-                
+                    
+                    db_lovrot($sql, 15, "()", "", "","","NoMe",array(), false,array(), true);
                     ?>
                 </fieldset>
             </td>
@@ -80,12 +78,6 @@ $iInstit = db_getsession("DB_instit");
 
     function js_processar() {
 
-        // let result = confirm('Atenção: Confirmar envio das informações do mêss ' + parent.parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
-
-        // if (!result) {
-        //     return false;
-        // }
-
         const table = document.getElementById("TabDbLov");
         const checkboxes = table.querySelectorAll(".checkbox");
 
@@ -99,8 +91,6 @@ $iInstit = db_getsession("DB_instit");
                 rowData["recibo"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent.replace(/\s/g, "");
                 rowData["entrega"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent.replace(/\s/g, "");
                 rowData["protocolo"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent.replace(/\s/g, "");
-                //rowData["dados"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
-                //rowData["processamento"] = checkboxes[i].parentNode.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.nextSibling.textContent;
                 selectedRowsData.push(rowData);
             }
         }
