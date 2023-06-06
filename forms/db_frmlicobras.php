@@ -640,17 +640,17 @@ $cllicobras->rotulo->label();
                     if(!document.getElementById("obr01_licitacaolote_select_descr")){
                         if(lotes.total == 1){
                             $("obr01_licitacaolote").options.remove(0);
-                            $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao,lotes.numlote);
+                            $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao.urlDecode(),lotes.numlote);
                         }else{
                             
-                            $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao,lotes.numlote);
+                            $("obr01_licitacaolote").options[iSeq+1] = new Option(lotes.descricao.urlDecode(),lotes.numlote);
                         }
                         if($F('licitacaolote')==lotes.numlote && $F('obr01_sequencial')!=""){
                             $("obr01_licitacaolote").options[iSeq+1].selected = true;
                         }
                     }else{
                         if($F('licitacaolote')==lotes.numlote && $F('obr01_sequencial')!=""){
-                            document.getElementById('obr01_licitacaolote_select_descr').value = lotes.descricao;
+                            document.getElementById('obr01_licitacaolote_select_descr').value = lotes.descricao.urlDecode();
                             document.getElementById('obr01_licitacaolote_select_descr').style.width = "711px";
                         }
                     }

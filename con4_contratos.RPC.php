@@ -1520,11 +1520,12 @@ switch ($oParam->exec) {
 
                 db_inicio_transacao();
 
+                $oContrato->removerAcordoObra($oParam->material->iCodigo);
+
                 $oPosicao->removerItem($oParam->material->iCodigo);
 
                 $oContrato->atualizaValorContratoPorTotalItens();
                 
-                $oContrato->removerAcordoObra($oParam->material->iCodigo);
 
                 db_fim_transacao(false);
             } catch (Exception $eErro) {
