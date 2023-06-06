@@ -104,11 +104,6 @@ $clrotulo->label("o74_descricao");
       <td colspan="2" style="text-align: center;">
         <input type='button' value='Salvar' id='btnSalvar'>
         <input type='button' value='Imprimir' id='btnImprimir'>
-        <?
-          if ($lBtnShowBtnConsulta) {
-           echo "<input type='button' value='Pesquisar' id='btnConsultar'>"; 
-          }
-        ?>
       </td>
     </tr>
   </table>        
@@ -169,8 +164,8 @@ function js_pesquisar() {
 
   js_OpenJanelaIframe('',
                       'db_iframe_registropreco',
-                      'func_solicitaregistropreco.php?funcao_js=parent.js_completaPesquisa|pc54_solicita'+
-                      '&anuladas=0&estimativas=0&numero='+$('pc10_numero').value,
+                      'func_alterarsolicitaregistropreco.php?funcao_js=parent.js_completaPesquisa|pc54_solicita'+
+                      '&numero='+$('pc10_numero').value,
                       'Abertura de Registro de Preço',
                       false,
                       0);
@@ -226,7 +221,6 @@ $('btnImprimir').observe("click", js_imprimir);
 if ($lBtnShowBtnConsulta) {
 
   echo "js_pesquisar();\n";
-  echo "\$('btnConsultar').observe('click', js_pesquisar);\n";
   echo "parent.iframe_itens.location.href='com4_alteraraberturaitens.php'";
    
 }

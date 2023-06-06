@@ -545,6 +545,8 @@ class cl_solicitaregistropreco {
      if (!empty($ordem)) {
        $sql .= " order by {$ordem}";
      }
+     print_r($sql);
+     exit;
      return $sql;
   }
 

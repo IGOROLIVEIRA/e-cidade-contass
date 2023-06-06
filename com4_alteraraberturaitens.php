@@ -78,45 +78,6 @@ $db_opcao           = 1;
       <tr>
         <td>
           <fieldset>
-            <legend><strong>Importar Itens</strong></legend>
-            <form name="form2" id='form2' method="post" action="" enctype="multipart/form-data">
-
-              <table align="left" style="margin-left:44px;">
-                <tr>
-                  <td>
-                    <b> Importar Itens: </b>
-                    <select id="importaritens" name="importaritens" onchange="importar()" ali>
-                      <option value="1" selected>Não</option>
-                      <option value="2">Sim</option>
-                    </select>
-                  </td>
-                  <td id="anexarimportacao" style="display: none;">
-                    <b style="margin-left:100px;"> Importar xls: </b>
-                    <?php
-                    db_input("uploadfile", 30, 0, true, "file", 1);
-                    db_input("namefile", 31, 0, true, "hidden", 1);
-
-                    ?>
-                  </td>
-                </tr>
-              </table>
-              <table id="inputimportacao" style="display: none;margin-top: 30px;margin-left: -200px;" align="left">
-                <tr>
-                  <td>
-                    <input name='exportar' type='button' id="exportar" value="Gerar Planilha" onclick="gerar()" />
-                    <input name='processar' type='button' id="Processar" value="Processar" onclick="processarItens()" />
-                  </td>
-                </tr>
-              </table>
-            </form>
-            <div id='anexo' style='display:none'></div>
-          </fieldset>
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <fieldset>
             <legend>
               <b>Adicionar Item</b>
             </legend>
@@ -170,7 +131,6 @@ $db_opcao           = 1;
       <tr>
         <td colspan="2" style="text-align: center;">
           <input type="button" value="Salvar Itens" id='btnSalvarItens'>
-          <input type='button' value='Exportar Planilha' id='exportarPlanilha' onclick="exportar()">
         </td>
       </tr>
     </table>
@@ -244,36 +204,6 @@ $db_opcao           = 1;
   var aItensAbertura = new Array();
   var iIndiceAlteracao = 0;
 
-  /***
-   * ROTINA PARA SALVAR ANEXO
-   */
-
-  function js_salvarAnexo() {
-    let iFrame = document.createElement("iframe");
-    iFrame.src = 'func_uploadfilexls.php?clone=form2';
-    iFrame.id = 'uploadIframe';
-    $('anexo').appendChild(iFrame);
-  }
-  $('uploadfile').observe("change", js_salvarAnexo);
-
-  function processarItens() {
-
-    if (document.getElementById('uploadfile').value == "")
-      return alert('Nenhum arquivo selecionado');
-
-    js_divCarregando('Aguarde, adicionando item', "msgBox");
-    var oParam = new Object();
-    oParam.exec = "processaritens";
-    oParam.iSolicitacao = parent.iframe_registro.document.getElementById('pc10_numero').value;
-    var oAjax = new Ajax.Request(sUrlRC, {
-      method: "post",
-      parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: js_retornoprocessaritens
-    });
-
-
-  }
-
   function js_retornoprocessaritens(oAjax) {
 
     js_removeObj('msgBox');
@@ -306,11 +236,6 @@ $db_opcao           = 1;
 
   function gerar() {
     window.location.href = "com4_xlsitensaberturaplanilha.php";
-  }
-
-  function exportar() {
-
-    window.location.href = "com4_xlsexportacaoaberturaplanilha.php?pc11_numero=" + parent.iframe_registro.document.getElementById('pc10_numero').value;
   }
 
   function js_init() {
