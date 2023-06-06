@@ -10,7 +10,8 @@ select
 	l20_numero,
 	l03_descr,
 	l20_dtpubratificacao,
-	l20_objeto
+	l20_objeto,
+    l20_anousu
 from
 	liclicita
 inner join cflicita on
@@ -65,28 +66,29 @@ $pdf->ln(6);
 $pdf->setfont('arial', 'b', 8);
 $pdf->cell(20, 3, 'PROCESSO:', 0, 0, "R", 0);
 $pdf->setfont('arial', '', 8);
-$pdf->cell(60, 3, $liclicita->l20_edital, 0, 1, "L", 0);
+$pdf->cell(60, 3, "$liclicita->l20_edital/$liclicita->l20_anousu", 0, 1, "L", 0);
 $pdf->ln(1);
 
 $pdf->setfont('arial', 'b', 8);
 $pdf->cell(36.6, 3, 'DATA DE RATIFICAÇÃO:', 0, 0, "R", 0);
 $pdf->setfont('arial', '', 8);
-$pdf->cell(60, 3, "$liclicita->l20_dtpubratificacao", 0, 1, "L", 0);
+$pdf->cell(60, 3, implode('/', array_reverse(explode('-', $liclicita->l20_dtpubratificacao))), 0, 1, "L", 0);
+$pdf->ln(1);
+
+$pdf->setfont('arial', 'b', 8);
+$pdf->cell(23, 3, 'MODALIDADE:', 0, 0, "R", 0);
+$pdf->setfont('arial', '', 8);
+$pdf->cell(60, 3, "$liclicita->l20_numero - $liclicita->l03_descr", 0, 1, "L", 0);
 $pdf->ln(1);
 
 $pdf->setfont('arial', 'b', 8);
 $pdf->cell(15.4, 3, 'OBJETO:', 0, 0, "R", 0);
 $pdf->setfont('arial', '', 8);
-$pdf->cell(60, 3, "$liclicita->l20_objeto", 0, 0, "L", 0);
+$pdf->MultiCell(180, 3, $liclicita->l20_objeto, 0, "L", 0);
 
-$pdf->setfont('arial', 'b', 8);
-$pdf->cell(20, -10, 'MODALIDADE :', 0, 0, "R", 0);
-$pdf->setfont('arial', '', 8);
-$pdf->cell(60, -10, "$liclicita->l20_numero - $liclicita->l03_descr", 0, 1, "L", 0);
+$pdf->Line(10,  $pdf->GetY(), 200,  $pdf->GetY());
 
-$pdf->Line(10, 55, 200, 55);
-
-$pdf->ln(20);
+$pdf->ln(5);
 
 $fornecedor;
 $total = 0;
@@ -110,12 +112,17 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
         $pdf->ln(6);
     }
 
-    $pdf->cell(20, 5, $item->pc11_seq, 1, 0, "C", 0);
-    $pdf->cell(90, 5, substr($item->pc01_descrmater, 0, 62), 1, 0, "L", 0);
-    $pdf->cell(20, 5, $item->m61_descr, 1, 0, "C", 0);
-    $pdf->cell(20, 5, $item->si02_qtditem, 1, 0, "C", 0);
-    $pdf->cell(20, 5, 'R$ ' . number_format($item->si02_vlprecoreferencia, 2, ',', '.'), 1, 0, "C", 0);
-    $pdf->cell(20, 5, 'R$ ' . number_format($item->si02_vltotalprecoreferencia, 2, ',', '.'), 1, 1, "C", 0);
+    $altura = $pdf->NbLines(90, $item->pc01_descrmater);
+
+    $pdf->cell(20, 5 * $altura, $item->pc11_seq, 1, 0, "C", 0);
+    $y =  $pdf->GetY();
+    $pdf->MultiCell(90, 5, $item->pc01_descrmater, 1, "L", 2);
+    $pdf->SetY($y);
+    $pdf->SetX(120);
+    $pdf->cell(20, 5 * $altura, $item->m61_descr, 1, 0, "C", 0);
+    $pdf->cell(20, 5 * $altura, $item->si02_qtditem, 1, 0, "C", 0);
+    $pdf->cell(20, 5 * $altura, 'R$ ' . number_format($item->si02_vlprecoreferencia, 2, ',', '.'), 1, 0, "C", 0);
+    $pdf->cell(20, 5 * $altura, 'R$ ' . number_format($item->si02_vltotalprecoreferencia, 2, ',', '.'), 1, 1, "C", 0);
 
     $total += $item->si02_vltotalprecoreferencia;
     $proximofornecedor = db_utils::fieldsMemory($rsItensCredenciados, $i + 1)->l205_fornecedor;
