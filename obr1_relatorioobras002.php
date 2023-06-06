@@ -55,7 +55,7 @@ for ($i = 0; $i < pg_num_rows($sSqlObras); $i++) {
 
     $oDadosObra = db_utils::fieldsMemory($sSqlObras, $i);
 
-    $altura = $oPDF->NbLines(70, $oDadosObra->l20_objeto);
+
 
     $oPDF->setfont('arial', 'b', 8);
     $oPDF->cell(280, $iAlt, "Obra: $oDadosObra->obr01_numeroobra", 1, 0, "L", 1);
@@ -70,6 +70,7 @@ for ($i = 0; $i < pg_num_rows($sSqlObras); $i++) {
     $oPDF->setfont('arial', '', 8);
 
     if ($oDadosObra->obr01_licitacaosistema == 1) {
+        $altura = $oPDF->NbLines(70, $oDadosObra->l20_objeto);
         $oPDF->cell(70, $iAlt * $altura, empty($oDadosObra->l20_edital) == true ? "-" :  "$oDadosObra->l20_edital/$oDadosObra->l20_anousu", 1, 0, "C", 2);
         $oPDF->cell(70, $iAlt * $altura, empty($oDadosObra->l20_numero) == true ? "-" : "$oDadosObra->l03_descr - $oDadosObra->l20_numero", 1, 0, "C", 2);
         $y =  $oPDF->GetY();
@@ -78,6 +79,7 @@ for ($i = 0; $i < pg_num_rows($sSqlObras); $i++) {
     }
 
     if ($oDadosObra->obr01_licitacaosistema == 2) {
+        $altura = $oPDF->NbLines(70, $oDadosObra->obr07_objeto);
         $oPDF->cell(70, $iAlt * $altura, empty($oDadosObra->obr07_processo) == true ? "-" :  "$oDadosObra->obr07_processo/$oDadosObra->obr07_exercicio", 1, 0, "C", 2);
         $oPDF->cell(70, $iAlt * $altura, empty($oDadosObra->l44_descricao) == true ? "-" : "$oDadosObra->l44_descricao", 1, 0, "C", 2);
         $y =  $oPDF->GetY();
