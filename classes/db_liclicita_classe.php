@@ -664,7 +664,9 @@ class cl_liclicita
             }
         }
 
-
+        if ($this->l20_tipoprocesso == null) {
+            $this->l20_tipoprocesso = 'null';
+        }
 
         if ($this->l20_numeroconvidado == null) {
             $this->l20_numeroconvidado = 'null';
