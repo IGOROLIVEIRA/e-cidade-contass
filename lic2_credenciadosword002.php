@@ -2,6 +2,8 @@
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 
+ini_set("display_errors", "on");
+
 /* Consulta para informações da licitação. */
 $rsLicitacao = db_query("
 select
@@ -45,11 +47,12 @@ inner join matunid on
 where
 	l21_codliclicita = $l20_codigo
 order by
-	pc11_seq,l205_fornecedor;
+    l205_fornecedor,pc11_seq;
 ");
 
 $liclicita->l20_dtpubratificacao = implode('/', array_reverse(explode('-', $liclicita->l20_dtpubratificacao)));
-
+header("Content-type: application/vnd.ms-word; charset=UTF-8");
+header("Content-Disposition: attachment; Filename=credenciamento.doc");
 echo <<<HTML
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/html">
@@ -131,7 +134,3 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
         echo "<br><br><br>";
     }
 }
-
-
-header("Content-type: application/vnd.ms-word; charset=UTF-8");
-header("Content-Disposition: attachment; Filename=credenciamento.doc");

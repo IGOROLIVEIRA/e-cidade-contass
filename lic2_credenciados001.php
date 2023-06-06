@@ -82,9 +82,8 @@ db_app::load("scripts.js,windowAux.widget.js, prototype.js");
   }
 
   function js_mostraliclicita(chave, erro) {
-    document.form1.l20_codigo.value = chave;
     if (erro == true) {
-      alert('Licitação não encontrada.');
+      alert('Usuário: Licitação não encontrada.');
       document.form1.l20_codigo.value = '';
       document.form1.l20_codigo.focus();
     }

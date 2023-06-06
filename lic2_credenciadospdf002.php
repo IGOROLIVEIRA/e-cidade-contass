@@ -47,7 +47,7 @@ inner join matunid on
 where
 	l21_codliclicita = $l20_codigo
 order by
-	pc11_seq,l205_fornecedor;
+	l205_fornecedor,pc11_seq;
 ");
 
 
@@ -66,19 +66,19 @@ $pdf->ln(6);
 $pdf->setfont('arial', 'b', 8);
 $pdf->cell(20, 3, 'PROCESSO:', 0, 0, "R", 0);
 $pdf->setfont('arial', '', 8);
-$pdf->cell(60, 3, "$liclicita->l20_edital/$liclicita->l20_anousu", 0, 1, "L", 0);
+$pdf->cell(30, 3, "$liclicita->l20_edital/$liclicita->l20_anousu", 0, 0, "L", 0);
+
+$pdf->setfont('arial', 'b', 8);
+$pdf->cell(30, 3, 'MODALIDADE:', 0, 0, "R", 0);
+$pdf->setfont('arial', '', 8);
+$pdf->cell(60, 3, "$liclicita->l20_numero - $liclicita->l03_descr", 0, 1, "L", 0);
 $pdf->ln(1);
 
 $pdf->setfont('arial', 'b', 8);
 $pdf->cell(36.6, 3, 'DATA DE RATIFICAÇÃO:', 0, 0, "R", 0);
 $pdf->setfont('arial', '', 8);
-$pdf->cell(60, 3, implode('/', array_reverse(explode('-', $liclicita->l20_dtpubratificacao))), 0, 1, "L", 0);
-$pdf->ln(1);
+$pdf->cell(30, 3, implode('/', array_reverse(explode('-', $liclicita->l20_dtpubratificacao))), 0, 1, "L", 0);
 
-$pdf->setfont('arial', 'b', 8);
-$pdf->cell(23, 3, 'MODALIDADE:', 0, 0, "R", 0);
-$pdf->setfont('arial', '', 8);
-$pdf->cell(60, 3, "$liclicita->l20_numero - $liclicita->l03_descr", 0, 1, "L", 0);
 $pdf->ln(1);
 
 $pdf->setfont('arial', 'b', 8);
