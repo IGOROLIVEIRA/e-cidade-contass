@@ -1183,7 +1183,7 @@ class cl_balancete142023
                                 e60_codemp nroempenho,
                                 e60_numemp numemp,
                                 e60_anousu anoinscricao,
-                                o58_orgao,o58_unidade
+                                o58_orgao,o58_unidade, e60_emendaparlamentar, e60_esferaemendaparlamentar
                                 from conlancamval
                                 inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
                                 inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
@@ -1220,7 +1220,7 @@ class cl_balancete142023
                                 e60_codemp nroempenho,
                                 e60_numemp numemp,
                                 e60_anousu anoinscricao,
-                                o58_orgao,o58_unidade
+                                o58_orgao,o58_unidade, e60_emendaparlamentar, e60_esferaemendaparlamentar
                                 from conlancamval
                                 inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
                                 inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
@@ -1257,7 +1257,7 @@ class cl_balancete142023
                                     e60_codemp nroempenho,
                                     e60_numemp numemp,
                                     e60_anousu anoinscricao,
-                                    o58_orgao,o58_unidade
+                                    o58_orgao,o58_unidade, e60_emendaparlamentar, e60_esferaemendaparlamentar
                                     from contacorrentedetalhe
                                     inner join empempenho on e60_numemp = c19_numemp
                                     inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot

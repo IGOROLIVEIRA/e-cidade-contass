@@ -747,6 +747,7 @@ class cl_balancete312023
                                 c60_descr,
                                 c60_estrut,
                                 o15_codtri,
+                                o15_codigo,
                                 op01_numerocontratoopc,
                                 op01_dataassinaturacop,
                                 case when c19_emparlamentar is not null then c19_emparlamentar else 3 end as c19_emparlamentar

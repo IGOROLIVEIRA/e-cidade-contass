@@ -244,15 +244,15 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         }
 
         if (in_array($fonte, array('15400007', '15420007'))) {
-            return 1111;
+            return 1070;
         }
 
         if (in_array($fonte, array('18000001'))) {
-            return 1111;
+            return 1070;
         }
 
         if (in_array($fonte, array('18000000')) && $tipodespesaEmpRPPS == 1) {
-            return 1111;
+            return 1070;
         }
 
         if (in_array($fonte, array('18000000')) && $tipodespesaEmpRPPS == 2) {
@@ -310,7 +310,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
     public function getCodcoByFonteRegistro31($fonte, $sNaturezaReceita, $emenda)
     {
-        $aReceitas = array('171', '241');
+        $aReceitas = array('171' => '171', '241' => '241');
         if (in_array(substr($sNaturezaReceita, 0, 3), $aReceitas) && $emenda == 1) {
             return 3110;
         }
@@ -323,7 +323,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             return 7000;
         }
 
-        $aReceitas = array('172', '242');
+        $aReceitas = array('172' => '172', '242' => '242');
         if (in_array(substr($sNaturezaReceita, 0, 3), $aReceitas) && $emenda == 1) {
             return 3210;
         }
@@ -334,6 +334,18 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
         if (in_array(substr($sNaturezaReceita, 0, 3), $aReceitas) && $emenda == 4) {
             return 7001;
+        }
+
+        if (substr($fonte, 0, 4) == '1710' && $emenda == 2) {
+            return 3220;
+        }
+
+        if (substr($fonte, 0, 4) == '1710') {
+            return 3210;
+        }
+
+        if (substr($fonte, 0, 4) == '1706') {
+            return 3110;
         }
 
         return 0;
@@ -1590,6 +1602,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 $oControleOrcamentario = new ControleOrcamentario();
                                 $clDeParaFonte       = new DeParaRecurso();
                                 $oControleOrcamentario->setFonte($clDeParaFonte->getDePara($oReg14->codfontrecursos));
+                                $oControleOrcamentario->setEmendaParlamentar($oReg14->e60_emendaparlamentar);
+                                $oControleOrcamentario->setEsferaEmendaParlamentar($oReg14->e60_esferaemendaparlamentar);
                                 $obalancete14->si181_codco                   = $oControleOrcamentario->getCodigoParaEmpenho();
                                 $obalancete14->si181_instit                  = db_getsession("DB_instit");
                                 $obalancete14->si181_mes                     = $nMes;
@@ -1625,6 +1639,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
                                     $clDeParaFonte         = new DeParaRecurso();
                                     $oControleOrcamentario->setFonte($clDeParaFonte->getDePara($oReg14->codfontrecursos));
+                                    $oControleOrcamentario->setEmendaParlamentar($oReg14->e60_emendaparlamentar);
+                                    $oControleOrcamentario->setEsferaEmendaParlamentar($oReg14->e60_esferaemendaparlamentar);
                                     $obalancete14Transf->si181_codco                   = $oControleOrcamentario->getCodigoParaEmpenho();
                                     $obalancete14Transf->si181_saldoinicialrsp         = $oReg14Saldo->saldoanterior;
                                     $obalancete14Transf->si181_naturezasaldoinicialrsp = $oReg14Saldo->saldoanterior >= 0 ? 'D' : 'C';
@@ -3063,7 +3079,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 $obalancete31->si243_codfundo                   = $sCodFundo;
                                 $obalancete31->si243_naturezareceita            = str_replace(" ", "", $sNaturezaReceita);
                                 $obalancete31->si243_codfontrecursos            = $objContas->o15_codtri;
-                                $obalancete31->si243_codco                      = $this->getCodcoByFonteRegistro31($obalancete31->si243_codfontrecursos, $obalancete31->si243_naturezareceita, $objContas->c19_emparlamentar);
+                                $obalancete31->si243_codco                      = $this->getCodcoByFonteRegistro31($objContas->o15_codigo, $obalancete31->si243_naturezareceita, $objContas->c19_emparlamentar);
                                 $obalancete31->si243_nrocontratoop              = "$objContas->op01_numerocontratoopc";
                                 $obalancete31->si243_dataassinaturacontratoop   = "$objContas->op01_dataassinaturacop";
                                 $obalancete31->si243_saldoinicialcre            = $oReg31Saldo->saldoanterior;
