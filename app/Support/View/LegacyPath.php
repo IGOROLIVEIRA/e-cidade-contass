@@ -35,6 +35,10 @@ trait LegacyPath
             'far' => 'farmacia',
             'fis' => 'fiscal',
             'ges' => 'gestor_bi',
+            'hab' => 'habitacao',
+            'inf' => 'inflatores',
+            'ipa' => 'ipasem',
+            'iss' => 'issqn',
             'amb' => 'meioambiente'
         ];
     }
