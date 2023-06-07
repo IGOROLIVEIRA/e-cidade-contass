@@ -29,7 +29,12 @@ trait LegacyPath
             'dv' => 'diversos',
             'dvr' => 'diversos',
             'edu' => 'educacao',
+            'esc' => 'educacao',
+            'eso' => 'educacao',
             'emp' => 'empenho',
+            'far' => 'farmacia',
+            'fis' => 'fiscal',
+            'ges' => 'gestor_bi',
             'amb' => 'meioambiente'
         ];
     }
