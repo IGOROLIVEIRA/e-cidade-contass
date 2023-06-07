@@ -340,11 +340,11 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             return 3220;
         }
 
-        if (substr($fonte, 0, 4) == '1710') {
+        if ($fonte == '1710010') {
             return 3210;
         }
 
-        if (substr($fonte, 0, 4) == '1706') {
+        if ($fonte == '17060000') {
             return 3110;
         }
 
@@ -2909,6 +2909,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
 
                 $rsDotacoes = db_query($sSqlDotacoes) or die(pg_last_error());
+
                 for ($iCont30 = 0; $iCont30 < pg_num_rows($rsDotacoes); $iCont30++) {
 
                     $oReg30 = db_utils::fieldsMemory($rsDotacoes, $iCont30);
@@ -2976,8 +2977,10 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 }
                             }
 
+                            $codCo = $this->getCodCoByFonteRegistro30($oReg30->o15_codigo, $oReg30->tipodespesaemprpps, $oReg30->e60_emendaparlamentar);
+
                             $sHash30 = '30' . $oContas10->si177_contacontaabil . $oReg30->codorgao . $oReg30->codunidadesub . $oReg30->codfuncao . $oReg30->codsubfuncao . $oReg30->codprograma;
-                            $sHash30 .= $oReg30->idacao . $oReg30->idsubacao . $sElemento . $sSubElemento . $oReg30->codfontrecursos . $oReg30->e60_tipodespesa;
+                            $sHash30 .= $oReg30->idacao . $oReg30->idsubacao . $sElemento . $sSubElemento . $oReg30->codfontrecursos . $oReg30->e60_tipodespesa . $codCo;
 
                             if (!isset($aContasReg10[$reg10Hash]->reg30[$sHash30])) {
 
@@ -2996,7 +2999,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 $obalancete30->si242_naturezadespesa         = $sElemento;
                                 $obalancete30->si242_subelemento             = $sSubElemento;
                                 $obalancete30->si242_codfontrecursos         = $oReg30->codfontrecursos;
-                                $obalancete30->si242_codco                   = $this->getCodCoByFonteRegistro30($oReg30->o15_codigo, $oReg30->tipodespesaemprpps, $oReg30->e60_emendaparlamentar);
+                                $obalancete30->si242_codco                   = $codCo;
                                 $obalancete30->si242_saldoinicialcde         = $oReg30Saldo->saldoanterior;
                                 $obalancete30->si242_naturezasaldoinicialcde = $oReg30Saldo->saldoanterior > 0 ? 'D' : 'C';
                                 $obalancete30->si242_totaldebitoscde         = $oReg30Saldo->debitos;
