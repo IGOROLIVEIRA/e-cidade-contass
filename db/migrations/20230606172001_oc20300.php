@@ -1,0 +1,34 @@
+<?php
+
+use Classes\PostgresMigration;
+
+class Oc20300 extends PostgresMigration
+{
+
+    public function up()
+    {
+        $sql = <<<SQL
+
+        BEGIN;       
+
+        -- Cria a tabela ignora_cgm_tomador, para inclusão dos numcgm que serão ignorados na consulta na getDadosTomador.xml
+              
+        CREATE TABLE issqn.ignora_cgm_tomador (numcgm int8 NOT NULL DEFAULT 0, CONSTRAINT ignora_cgm_tomador_numcgm_pk PRIMARY KEY (numcgm));
+
+        
+        -- Inclui numcgms da entidade prefeitura na tabela ignora_cgm_tomador exceto o cgm da prefeitura do parametro db_config
+              
+        INSERT INTO ignora_cgm_tomador (numcgm) 
+        SELECT z01_numcgm FROM cgm 
+        WHERE z01_cgccpf IN (SELECT cgc FROM db_config WHERE prefeitura = true)
+        AND z01_numcgm NOT EXISTS (SELECT numcgm FROM db_config WHERE prefeitura = true)
+        AND z01_numcgm NOT EXISTS (SELECT numcgm FROM ignora_cgm_tomador);         
+        
+        
+        COMMIT;        
+
+    SQL;
+        $this->execute($sql);
+    }
+
+}

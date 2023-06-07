@@ -48,6 +48,7 @@
   </juncoes>
   <filtros>
     <filtro label="cgccpf" condicao="z01_cgccpf = '$cgccpf'" obrigatorio="true" />
+    <filtro label="" condicao="z01_numcgm not exists (select numcgm from ignora_cgm_tomador)" obrigatorio="false" />
   </filtros>
   <agrupamento campos="z01_cgccpf,z01_nomecomple,z01_nome,j88_sigla,z01_ender,z01_numero,z01_compl,z01_bairro,db125_codigosistema,z01_munic,z01_uf,db135_codigo,db70_descricao,z01_cep,z01_telef,z01_email,z01_nomefanta,z01_incest,q02_inscr,db140_descricao" />
   <ordenacao campos="z01_nomecomple desc" />
