@@ -61,10 +61,13 @@ $sWhereContratos = " and 1 = 1 ";
         <tr>
             <td align="center" valign="top">
                 <?
-                $sSql = "
+                $sSql = "SELECT ac16_sequencial,
+                                ac16_objeto,
+                                ac213_numerocontrolepncp
+                FROM acocontratopncp
+                INNER JOIN acordo ON ac16_sequencial = ac213_contrato
                 ";
-                die($sql);
-                db_lovrot($sql, 15, "()", "", $funcao_js);
+                db_lovrot($sSql, 15, "()", "", $funcao_js);
                 ?>
             </td>
         </tr>

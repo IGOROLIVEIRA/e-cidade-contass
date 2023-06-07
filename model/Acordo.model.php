@@ -2162,6 +2162,74 @@ class Acordo
         return $this->aPosicoes;
     }
 
+     /**
+     * retorna dados para envio do PNCP termo de Aditamentos
+     * @return AcordoPosicao[]
+     */
+    function getDadosTermosPncp($iCodigoPosicao)
+    {
+        $oDaoAcordoPosicao = db_utils::getDao("acordoposicao");
+        $sSqlPosicao       = $oDaoAcordoPosicao->getTermoContrato($iCodigoPosicao);
+        $rsPosicao = $oDaoAcordoPosicao->sql_record($sSqlPosicao);
+        $oDadosRetornoPNPC = array();
+
+        for ($i = 0; $i < pg_num_rows($rsPosicao); $i++) {
+            $oDadosPncp      = db_utils::fieldsMemory($rsPosicao, $i);
+            $oDadosRetornoPNPC[] = $oDadosPncp;
+        }
+
+
+        $iTotalPosicaoAnterior = 0;
+        $iTotalPosicaoAditivo = 0;
+        $valortotaladitado = 0;
+        $iValorAditado = 0; 
+        /**
+         * AQUI IREI CALCULAR O VALOR ADITADO DO REGISTRO 20
+         */
+
+        $oPosicao          = new AcordoPosicao($iCodigoPosicao);
+        foreach ($oPosicao->getItens() as $oAcordoItem) {
+            if ($oAcordoItem->getQuantiAditada() != 0 || $oAcordoItem->getValorAditado() != 0) {
+                $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnteriors($oPosicao->getNumeroAditamento());
+                $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
+                
+                $sqlServico = "select pc01_servico, ac20_servicoquantidade
+                    from acordoitem
+                    inner join pcmater on pc01_codmater = ac20_pcmater
+                    inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
+                    where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
+                    and ac26_sequencial = {$iCodigoPosicao}";
+                $rsMatServicoR21  = db_query($sqlServico);
+                
+                $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
+                if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                    $valortotaladitado += $oAcordoItem->getValorAditado();
+                } else {
+                    //CALCULO O VALOR DO PRIMEIRO REGISTRO 20
+                    //2 = reequilibrio 5 = reajuste
+                    if ($oPosicao->getTipo() == 2 || $oPosicao->getTipo() == 5) {
+                        $iQuantidadeAditada = $oAcordoItem->getQuantidade();
+                        $iValorAditado += $oAcordoItem->getValorTotalPosicaoAnterior($iCodigoPosicao) - $oAcordoItem->getValorTotal();
+                    } else {
+                        $iQuantidadeAditada = $oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oPosicao->getNumeroAditamento());
+                    }
+                    $valortotaladitado += $oAcordoItem->getValorAditado();
+                }
+            }
+        }
+       $oDadosRetornoPNPC[0]->valorAcrescido = $valortotaladitado;
+        
+       var_dump($iTotalPosicaoAditivo);
+       exit;
+       if ($iTotalPosicaoAditivo > 0) {
+            $oDadosRetornoPNPC[0]->qualificacaoAcrescimoSupressao = 'true';
+       } else {
+            $oDadosRetornoPNPC[0]->qualificacaoAcrescimoSupressao = 'false';
+       }
+        
+       return $oDadosRetornoPNPC;
+    }
+
     /**
      * retorna todas as posic�es de Apostilamento do acordo
      * @return AcordoPosicao[]

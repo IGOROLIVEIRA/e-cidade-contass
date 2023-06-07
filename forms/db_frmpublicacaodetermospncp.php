@@ -34,7 +34,7 @@ db_app::load("estilos.css, grid.style.css");
         </tr>
     </table>
     </br>
-    <input type="button" value="Processar" onclick="js_getItens();">
+    <input type="button" value="Processar" onclick="js_getTermos();">
     </br>
 
     <table style="width: 100%">
@@ -52,7 +52,7 @@ db_app::load("estilos.css, grid.style.css");
         <div id='cntgriditens'></div>
     </fieldset>
     </br>
-    <input type="button" value="Enviar para PNCP" onclick="js_enviarresultado();">
+    <input type="button" value="Enviar para PNCP" onclick="js_enviarTermo();">
 </form>
 <script>
     function js_showGrid() {
@@ -62,9 +62,9 @@ db_app::load("estilos.css, grid.style.css");
         if (opcao != 2) {
             oGridItens.setCheckbox(0);
         }
-        oGridItens.setCellAlign(new Array("center", "center", "center", "center", "center", 'center', 'center', 'center', 'center'));
-        oGridItens.setCellWidth(new Array("5%", "5%", "35%", '15%', '5%', '25%', '15%', '8%', '8%'));
-        oGridItens.setHeader(new Array("Código", "Ordem", "Material", "Lote", "CGM", "Fornecedores", "Unidade", "Qtde Licitada", "Valor Licitado"));
+        oGridItens.setCellAlign(new Array("center", "center", "center", "center", "center", 'center'));
+        oGridItens.setCellWidth(new Array("5%", "15%", "5%", '25%', '15%', '35%'));
+        oGridItens.setHeader(new Array("Código", "Vigência", "Número", "Tipo de Alteração", "Data de inclusão", "Justificativa"));
         oGridItens.hasTotalValue = false;
         oGridItens.show($('cntgriditens'));
 
@@ -90,16 +90,16 @@ db_app::load("estilos.css, grid.style.css");
         db_iframe_liclicita.hide();
     }
 
-    function js_getItens() {
+    function js_getTermos() {
 
         oGridItens.clearAll(true);
         var oParam = new Object();
-        oParam.iLicitacao = $F('ac16_sequencial');
+        oParam.iContrato = $F('ac16_sequencial');
         oParam.iTipo = $F('tipo');
-        oParam.exec = "getItens";
+        oParam.exec = "getTermos";
         js_divCarregando('Aguarde, pesquisando Itens', 'msgBox');
         var oAjax = new Ajax.Request(
-            'lic1_envioresultadopncp.RPC.php', {
+            'aco1_enviotermospncp.RPC.php', {
                 method: 'post',
                 parameters: 'json=' + Object.toJSON(oParam),
                 onComplete: js_retornoGetItens
@@ -123,18 +123,15 @@ db_app::load("estilos.css, grid.style.css");
         if (oRetornoitens.status == 1) {
 
             var seq = 0;
-            oRetornoitens.itens.each(function(oLinha, iLinha) {
+            oRetornoitens.dados.each(function(oLinha, iLinha) {
                 seq++;
                 var aLinha = new Array();
-                aLinha[0] = oLinha.pc01_codmater;
-                aLinha[1] = oLinha.l21_ordem;
-                aLinha[2] = oLinha.pc01_descrmater.urlDecode();
-                aLinha[3] = oLinha.l04_descricao.urlDecode();
-                aLinha[4] = oLinha.z01_numcgm;
-                aLinha[5] = oLinha.z01_nome.urlDecode();
-                aLinha[6] = oLinha.m61_descr;
-                aLinha[7] = oLinha.pc11_quant;
-                aLinha[8] = oLinha.pc23_valor;
+                aLinha[0] = oLinha.codigo;
+                aLinha[1] = oLinha.vigencia.urlDecode();
+                aLinha[2] = oLinha.numeroAditamento;
+                aLinha[3] = oLinha.situacao.urlDecode();
+                aLinha[4] = oLinha.data;
+                aLinha[5] = oLinha.Justificativa.urlDecode();
                 oGridItens.addRow(aLinha);
 
             });
@@ -165,10 +162,10 @@ db_app::load("estilos.css, grid.style.css");
 
     js_showGrid();
 
-    function js_enviarresultado() {
-        var aItensLicitacao = oGridItens.getSelection("object");
+    function js_enviarTermo() {
+        var aTermo = oGridItens.getSelection("object");
 
-        if (aItensLicitacao.length == 0) {
+        if (aTermo.length == 0) {
             alert('Nenhum item Selecionado');
             return false;
         }
@@ -177,27 +174,27 @@ db_app::load("estilos.css, grid.style.css");
 
         var oParam = new Object();
         if (tipo == 1) {
-            oParam.exec = "enviarResultado";
+            oParam.exec = "enviarTermo";
         } else {
-            oParam.exec = "RetificarResultado";
+            oParam.exec = "retificarTermo";
         }
         oParam.ambiente = $F('ambiente');
-        oParam.aItensLicitacao = new Array();
-        oParam.iLicitacao = $F('ac16_sequencial');
+        oParam.aTermo = new Array();
+        oParam.iContrato = $F('ac16_sequencial');
 
-        for (var i = 0; i < aItensLicitacao.length; i++) {
+        for (var i = 0; i < aTermo.length; i++) {
 
-            with(aItensLicitacao[i]) {
-                var itemResultado = new Object();
-                itemResultado.pc01_codmater = aCells[1].getValue();
-                itemResultado.l21_ordem = aCells[2].getValue();
-                oParam.aItensLicitacao.push(itemResultado);
+            with(aTermo[i]) {
+                var iTermos = new Object();
+                iTermos.codigo = aCells[1].getValue();
+                iTermos.numero = aCells[3].getValue();
+                oParam.aTermo.push(iTermos);
             }
         }
 
         js_divCarregando('Aguarde, Enviando Resultado Itens', 'msgBox');
         var oAjax = new Ajax.Request(
-            'lic1_envioresultadopncp.RPC.php', {
+            'aco1_enviotermospncp.RPC.php', {
                 method: 'post',
                 parameters: 'json=' + Object.toJSON(oParam),
                 onComplete: js_returnEnvPncp
@@ -213,7 +210,7 @@ db_app::load("estilos.css, grid.style.css");
     }
 
     function js_verificatipo(){
-        js_getItens();
+        js_getTermos();
     }
 
 </script>

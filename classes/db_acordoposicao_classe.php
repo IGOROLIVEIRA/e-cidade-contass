@@ -902,5 +902,48 @@ class cl_acordoposicao {
         return $sSql;
   }
 
+
+  public function getTermoContrato($iCodigotermo){
+    $sql = "
+            SELECT CASE
+                  WHEN ac26_acordoposicaotipo IN (15,16,17) THEN 3
+                  ELSE 2
+              END AS tipoTermoContratoId,
+              ac26_numero AS numeroTermoContrato,
+              ac16_objeto AS objetoTermoContrato,
+              ac35_dataassinaturatermoaditivo AS dataAssinatura,
+              CASE
+                  WHEN ac26_acordoposicaotipo IN (6,13) THEN TRUE
+                  ELSE FALSE
+              END AS qualificacaoVigencia,
+              FALSE AS qualificacaoFornecedor,
+                        CASE
+                            WHEN ac26_acordoposicaotipo IN (2,5,7,14,15,16) THEN TRUE
+                            ELSE FALSE
+                        END AS qualificacaoReajuste,
+                        cgm.z01_cgccpf AS niFornecedor,
+                        CASE
+                            WHEN length(trim(cgm.z01_cgccpf)) = 14 THEN 'PJ'
+                            ELSE 'PF'
+                        END AS tipoPessoaFornecedor,
+                        cgm.z01_nome AS nomeRazaoSocialFornecedor,
+                        ac16_datainicio AS dataVigenciaInicio,
+                        ac16_datafim AS dataVigenciaFim
+        FROM acordoposicao
+        INNER JOIN acordo ON acordo.ac16_sequencial = acordoposicao.ac26_acordo
+        INNER JOIN acordoposicaotipo ON acordoposicaotipo.ac27_sequencial = acordoposicao.ac26_acordoposicaotipo
+        INNER JOIN cgm ON cgm.z01_numcgm = acordo.ac16_contratado
+        INNER JOIN db_depart ON db_depart.coddepto = acordo.ac16_coddepto
+        INNER JOIN acordogrupo ON acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
+        INNER JOIN acordosituacao ON acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
+        LEFT JOIN acordocomissao ON acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
+        LEFT JOIN acordovigencia ON ac26_sequencial = ac18_acordoposicao
+        LEFT JOIN acordoposicaoaditamento ON ac26_sequencial = ac35_acordoposicao
+        WHERE acordoposicao.ac26_sequencial = $iCodigotermo
+    ";
+
+    return $sql;
+  }
+
 }
 ?>
