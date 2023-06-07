@@ -108,7 +108,6 @@ if (isset($alterar) || isset($excluir) || isset($incluir) || isset($verificado))
     }
   }
 
-  //VERIFICA CPF E CNPJ ZERADOS OC 7037
   if (isset($incluir)) {
     $result_cgmzerado = db_query("select z01_cgccpf from cgm where z01_numcgm = {$pc21_numcgm}");
     db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
@@ -125,6 +124,12 @@ if (isset($alterar) || isset($excluir) || isset($incluir) || isset($verificado))
         $sqlerro = true;
         $erro_msg = "ERRO: Número do CPF está zerado. Corrija o CGM do fornecedor e tente novamente";
       }
+    }
+
+    $rsPcfornereprlegal = db_query("select * from pcfornereprlegal where pc81_cgmforn = $pc21_numcgm and pc81_cgmresp = $pc21_numcgm");
+    if (pg_num_rows($rsPcfornereprlegal) > 0) {
+      $sqlerro = true;
+      $erro_msg = "Usuário: No cadastro do fornecedor selecionado, o CGM do Representante está o mesmo CGM do Fornecedor. Corrija o cadastro e selecione novamente o fornecedor.";
     }
   }
   //FIM OC 7037
@@ -213,7 +218,7 @@ if (isset($incluir)) {
     $result_natureza = db_query("select l20_tipnaturezaproced from liclicita where l20_codigo=$l20_codigo");
     $tiponaturezaproced = db_utils::fieldsMemory($result_natureza, 0);
 
-    if($tiponaturezaproced->l20_tipnaturezaproced==1){
+    if ($tiponaturezaproced->l20_tipnaturezaproced == 1) {
 
       for ($i = 0; $i < $quantidade_itens; $i++) {
         $item = db_utils::fieldsMemory($itens, $i);
@@ -228,7 +233,7 @@ if (isset($incluir)) {
           exit;
         }
       }
-    }  
+    }
   }
 
 

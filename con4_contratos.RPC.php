@@ -590,6 +590,11 @@ switch ($oParam->exec) {
 
             db_inicio_transacao();
 
+            $rsPcfornereprlegal = db_query("select * from pcfornereprlegal where pc81_cgmforn = {$oParam->contrato->iContratado} and pc81_cgmresp = {$oParam->contrato->iContratado}");
+            if (pg_num_rows($rsPcfornereprlegal) > 0) {
+                throw new Exception("Usuário: No cadastro do fornecedor selecionado, o CGM do Representante está o mesmo CGM do Fornecedor. Corrija o cadastro e selecione novamente o fornecedor.");
+            }
+
             $lAcordoValido            = true;
             $sMessagemInvalido        = '';
 
@@ -665,7 +670,7 @@ switch ($oParam->exec) {
                 $result_tipoparticipacao1 = db_query("select pc81_cgmforn,pc81_tipopart from pcforne inner join pcfornereprlegal on pc81_cgmforn = pc60_numcgm where pc60_numcgm = {$oParam->contrato->iContratado} and pc81_tipopart = 1");
 
                 if (pg_num_rows($result_tipoparticipacao1) == 0) {
-                    throw new Exception('É necessário cadastrar o representante legal e demais membros para o fornecedor.');
+                    throw new Exception("É necessário cadastrar o representante legal e demais membros para o fornecedor.");
                 }
 
                 $result_tipoparticipacao2 = db_query("select pc81_cgmforn,pc81_tipopart from pcforne inner join pcfornereprlegal on pc81_cgmforn = pc60_numcgm where pc60_numcgm = {$oParam->contrato->iContratado} and pc81_tipopart = 2");
