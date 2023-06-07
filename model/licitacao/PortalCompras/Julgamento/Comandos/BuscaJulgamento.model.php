@@ -12,13 +12,19 @@ class BuscaJulgamento
         $this->envs = parse_ini_file('config/apipcp/.env', true);
     }
 
-    public function execute(int $codigo, string $publicKey)
+    /**
+     * Undocumented function
+     *
+     * @param integer $codigo
+     * @param string $publicKey
+     * @return array
+     */
+    public function execute(int $codigo, string $publicKey): array
     {
         $url = $this->envs['URL']."/comprador/$publicKey/processo/$codigo?idExterno=true";
         $client = new GuzzleHttp\Client();
         $res = $client->request('GET', $url,[]);
 
-        //var_dump($res->getBody()->__toString());
-        //die();
+        return json_decode($res->getBody()->__toString(),true);
     }
 }

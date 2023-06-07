@@ -1,0 +1,73 @@
+<?php
+
+require_once("model/licitacao/PortalCompras/Julgamento/Lotes.model.php");
+
+
+class Julgamento
+{
+
+    private int    $idJulgamento;
+    /**
+     * @var string
+     */
+    private string $dataProposta;
+
+    /**
+     * @var Lote[] $lotes
+     */
+    private array  $lotes;
+
+    /**
+     * Get the value of dataProposta
+     */
+    public function getDataProposta(): string
+    {
+        return $this->dataProposta;
+    }
+
+    /**
+     * Set the value of dataProposta
+     */
+    public function setDataProposta(string $dataProposta): self
+    {
+        $this->dataProposta = $dataProposta;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of lotes
+     */
+    public function getLotes(): array
+    {
+        return $this->lotes;
+    }
+
+    /**
+     * Set the value of lotes
+     */
+    public function setLotes(array $lotes): self
+    {
+        $this->lotes = $lotes;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of idJulgamento
+     */
+    public function getIdJulgamento(): int
+    {
+        return $this->idJulgamento;
+    }
+
+    /**
+     * Set the value of idJulgamento
+     */
+    public function setIdJulgamento(int $idJulgamento): self
+    {
+        $this->idJulgamento = $idJulgamento;
+
+        return $this;
+    }
+}
