@@ -39,6 +39,9 @@ trait LegacyPath
             'inf' => 'inflatores',
             'ipa' => 'ipasem',
             'iss' => 'issqn',
+            'itb' => 'itbi',
+            'itbi' => 'itbi',
+            'jur' => 'juridico',
             'amb' => 'meioambiente'
         ];
     }
