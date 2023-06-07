@@ -308,8 +308,35 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         return 0;
     }
 
+    public function getCodcoByRegistro17($fonte)
+    {
+        $aFontes = array("1706000" => "1706000",  "2706000" => "2706000");
+        if (in_array($fonte, $aFontes)) {
+            return 3110;
+        }
+
+        $aFontes = array("1710000" => "1710000",  "2710000" => "2710000");
+        if (in_array($fonte, $aFontes)) {
+            return 3210;
+        }
+
+        return 0;
+    }
     public function getCodcoByFonteRegistro31($fonte, $sNaturezaReceita, $emenda)
     {
+        if (substr($fonte, 0, 4) == '1710' && $emenda == 2) {
+            return 3220;
+        }
+
+        if (substr($fonte, 0, 4) == '1710' && ($emenda == 1 || $emenda == 4) ) {
+
+            return 3210;
+        }
+
+        if ($fonte == '17060000') {
+            return 3110;
+        }
+
         $aReceitas = array('171' => '171', '241' => '241');
         if (in_array(substr($sNaturezaReceita, 0, 3), $aReceitas) && $emenda == 1) {
             return 3110;
@@ -334,18 +361,6 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
         if (in_array(substr($sNaturezaReceita, 0, 3), $aReceitas) && $emenda == 4) {
             return 7001;
-        }
-
-        if (substr($fonte, 0, 4) == '1710' && $emenda == 2) {
-            return 3220;
-        }
-
-        if ($fonte == '1710010') {
-            return 3210;
-        }
-
-        if ($fonte == '17060000') {
-            return 3110;
         }
 
         return 0;
@@ -2036,7 +2051,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 
 
                     $objContasctb = db_utils::fieldsMemory($rsCtb, $iCtb);
-                    $sHash17 = '17' . $objContasctb->contacontabil . $objContasctb->atributosf . $objContasctb->codctb . $objContasctb->codfontrecursos;
+                    $codCo = $this->getCodcoByRegistro17($objContasctb->codfontrecursos);
+                    $sHash17 = '17' . $objContasctb->contacontabil . $objContasctb->atributosf . $objContasctb->codctb . $objContasctb->codfontrecursos . $codCo;
+
 
                     /**
                      * Os resultados da consulta serao sempre os mesmos para cada iteracao do reg10.
@@ -2054,19 +2071,19 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                         if (!isset($aContasReg10[$reg10Hash]->reg17[$sHash17])) {
 
                             $obalancete17 = new stdClass();
-                            $obalancete17->si184_tiporegistro = 17;
-                            $obalancete17->si184_contacontabil = $objContasctb->contacontabil;
-                            $obalancete17->si184_codfundo = $sCodFundo;
-                            $obalancete17->si184_atributosf = $objContasctb->atributosf;
-                            $obalancete17->si184_codctb = $objContasctb->codctb;
-                            $obalancete17->si184_codfontrecursos = $objContasctb->codfontrecursos;
-                            $obalancete17->si184_codco = $objContasctb->codco ? $objContasctb->codco : 0;
-                            $obalancete17->si184_saldoinicialctb = $objContasctb->saldoinicial;
+                            $obalancete17->si184_tiporegistro            = 17;
+                            $obalancete17->si184_contacontabil           = $objContasctb->contacontabil;
+                            $obalancete17->si184_codfundo                = $sCodFundo;
+                            $obalancete17->si184_atributosf              = $objContasctb->atributosf;
+                            $obalancete17->si184_codctb                  = $objContasctb->codctb;
+                            $obalancete17->si184_codfontrecursos         = $objContasctb->codfontrecursos;
+                            $obalancete17->si184_codco                   = $codCo;
+                            $obalancete17->si184_saldoinicialctb         = $objContasctb->saldoinicial;
                             $obalancete17->si184_naturezasaldoinicialctb = $objContasctb->natursaldoinicial;
-                            $obalancete17->si184_totaldebitosctb = $objContasctb->debitos;
-                            $obalancete17->si184_totalcreditosctb = $objContasctb->creditos;
-                            $obalancete17->si184_totaldebitosctb = $bIsRPPS ? $objContasctb->debitos : ($objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0);
-                            $obalancete17->si184_totalcreditosctb = $bIsRPPS ? $objContasctb->creditos : ($objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0);
+                            $obalancete17->si184_totaldebitosctb         = $objContasctb->debitos;
+                            $obalancete17->si184_totalcreditosctb        = $objContasctb->creditos;
+                            $obalancete17->si184_totaldebitosctb         = $bIsRPPS ? $objContasctb->debitos : ($objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0);
+                            $obalancete17->si184_totalcreditosctb        = $bIsRPPS ? $objContasctb->creditos : ($objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0);
 
                             $obalancete17->si184_saldofinalctb = $objContasctb->saldofinal;
                             $obalancete17->si184_naturezasaldofinalctb = $objContasctb->natursaldofinal;
@@ -3028,10 +3045,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             if($oContas10->nregobrig == 31){
                 $clBalancete31 = new cl_balancete312023();
 
-                $sSqlVinculoContaOrcamento = $clBalancete31->sql_query_vinculo_conta_orcamento();
+                $sSqlVinculoContaOrcamento = $clBalancete31->sql_query_vinculo_conta_orcamento($oContas10->contas);
 
                 $rsVinculoContaOrcamento = db_query($sSqlVinculoContaOrcamento) or die($sSqlVinculoContaOrcamento);
-
                 //Constante da contacorrente or?ament?ria
                 $nContaCorrente = 100;
 
@@ -3042,6 +3058,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                     $clBalancete31 = new cl_balancete312023();
                     $sSqlReg31saldos = $clBalancete31->sql_query_reg31_saldos($oContas10->contas, $nContaCorrente, $objContas->c60_estrut, $nMes, $sWhereEncerramento);
                     $rsReg31saldos = db_query($sSqlReg31saldos) or die($sSqlReg31saldos);
+
 
                     for ($iContSaldo31 = 0; $iContSaldo31 < pg_num_rows($rsReg31saldos); $iContSaldo31++) {
 
@@ -3071,8 +3088,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 * DADOS PARA GERA??O DO REGISTRO 31 C?lula da Receita ? Execu??o
                                 * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 31
                                 */
-
-                            $sHash31 = '31' . $oContas10->si177_contacontaabil . $sNaturezaReceita . $objContas->o15_codtri;
+                            $codCo                      = $this->getCodcoByFonteRegistro31($objContas->o15_codigo, $obalancete31->si243_naturezareceita, $objContas->c19_emparlamentar);
+                            $sHash31 = '31' . $oContas10->si177_contacontaabil . $sNaturezaReceita . $objContas->o15_codtri. $codCo;
 
                             if (!isset($aContasReg10[$reg10Hash]->reg31[$sHash31])) {
 
@@ -3082,7 +3099,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 $obalancete31->si243_codfundo                   = $sCodFundo;
                                 $obalancete31->si243_naturezareceita            = str_replace(" ", "", $sNaturezaReceita);
                                 $obalancete31->si243_codfontrecursos            = $objContas->o15_codtri;
-                                $obalancete31->si243_codco                      = $this->getCodcoByFonteRegistro31($objContas->o15_codigo, $obalancete31->si243_naturezareceita, $objContas->c19_emparlamentar);
+                                $obalancete31->si243_codco                      = $codCo;
                                 $obalancete31->si243_nrocontratoop              = "$objContas->op01_numerocontratoopc";
                                 $obalancete31->si243_dataassinaturacontratoop   = "$objContas->op01_dataassinaturacop";
                                 $obalancete31->si243_saldoinicialcre            = $oReg31Saldo->saldoanterior;

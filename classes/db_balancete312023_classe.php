@@ -740,7 +740,7 @@ class cl_balancete312023
     return $sql;
   }
 
-  function sql_query_vinculo_conta_orcamento()
+  function sql_query_vinculo_conta_orcamento($aContas)
   {
             $sSqlVinculoContaOrcamento = " SELECT DISTINCT ON (c60_estrut) k81_conta,
                                 c60_codcon,
@@ -751,11 +751,11 @@ class cl_balancete312023
                                 op01_numerocontratoopc,
                                 op01_dataassinaturacop,
                                 case when c19_emparlamentar is not null then c19_emparlamentar else 3 end as c19_emparlamentar
-                            FROM conplanoorcamento
+                            FROM orcreceita
+                            INNER JOIN conplanoorcamento on o70_codfon = c60_codcon and o70_anousu = c60_anousu
                             INNER JOIN conplanoorcamentoanalitica ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
                             INNER JOIN orctiporec ON c61_codigo = o15_codigo
                             LEFT JOIN contacorrentedetalhe ON c19_estrutural = c60_estrut AND c61_anousu = c19_conplanoreduzanousu
-                            LEFT JOIN orcreceita on o70_codfon = c61_codcon and o70_anousu = c60_anousu
                             LEFT JOIN taborc on taborc.k02_anousu=o70_anousu and taborc.k02_codrec=o70_codrec
                             LEFT JOIN tabrec on tabrec.k02_codigo=taborc.k02_codigo
                             LEFT JOIN placaixarec on k81_receita = tabrec.k02_codigo
@@ -765,6 +765,7 @@ class cl_balancete312023
                             LEFT JOIN contabancaria ON c56_contabancaria=db83_sequencial
                             LEFT JOIN db_operacaodecredito ON db83_codigoopcredito=op01_sequencial
                                 WHERE substr(c60_estrut,1 ,1 ) in ('4')
+                                AND c19_reduz IN (" . implode(',', $aContas) . ")
                                 AND conplanoorcamentoanalitica.c61_instit = " . db_getsession('DB_instit') . "
                                 AND conplanoorcamentoanalitica.c61_anousu = " . db_getsession("DB_anousu");
             return $sSqlVinculoContaOrcamento;
