@@ -73,6 +73,7 @@ trait LegacyPath
             'tre' => 'transporteescolar',
             'tri' => 'tributario',
             'vac' => 'vacina',
+            'vei' => 'veiculos',
             'amb' => 'meioambiente'
         ];
     }
