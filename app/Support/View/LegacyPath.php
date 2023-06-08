@@ -45,6 +45,7 @@ trait LegacyPath
             'jur' => 'juridico',
             'lab' => 'laboratorio',
             'lic' => 'licitacao',
+            'rat' => 'licitacao',
             'mar' => 'marcas',
             'mat' => 'materiais',
             'mer' => 'merenda',
@@ -54,6 +55,11 @@ trait LegacyPath
             'ouv' => 'ouvidoria',
             'pat' => 'patrimonio',
             'pes' => 'pessoal',
+            'pre' => 'prefeitura',
+            'pro' => 'protocolo',
+            'prot' => 'protocolo',
+            'rec' => 'recursoshumanos',
+            'sau' => 'saude',
             'amb' => 'meioambiente'
         ];
     }
