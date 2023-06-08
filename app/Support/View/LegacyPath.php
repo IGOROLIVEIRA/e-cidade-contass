@@ -49,6 +49,11 @@ trait LegacyPath
             'mat' => 'materiais',
             'mer' => 'merenda',
             'not' => 'notificacoes',
+            'obr' => 'obras',
+            'orc' => 'orcamento',
+            'ouv' => 'ouvidoria',
+            'pat' => 'patrimonio',
+            'pes' => 'pessoal',
             'amb' => 'meioambiente'
         ];
     }
