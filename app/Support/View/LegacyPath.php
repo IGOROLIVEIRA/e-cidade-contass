@@ -46,6 +46,9 @@ trait LegacyPath
             'lab' => 'laboratorio',
             'lic' => 'licitacao',
             'mar' => 'marcas',
+            'mat' => 'materiais',
+            'mer' => 'merenda',
+            'not' => 'notificacoes',
             'amb' => 'meioambiente'
         ];
     }
