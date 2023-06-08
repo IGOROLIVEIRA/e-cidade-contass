@@ -43,6 +43,9 @@ trait LegacyPath
             'itb' => 'itbi',
             'itbi' => 'itbi',
             'jur' => 'juridico',
+            'lab' => 'laboratorio',
+            'lic' => 'licitacao',
+            'mar' => 'marcas',
             'amb' => 'meioambiente'
         ];
     }
@@ -82,6 +85,13 @@ trait LegacyPath
 
     private function isFuncFile(string $fileName): bool
     {
-        return substr($fileName, 0, 4) === 'func';
+        if (substr($fileName, 0, 4) === 'func') {
+            return true;
+        }
+
+        if (substr($fileName, 0, 7) === 'db_func') {
+            return true;
+        }
+        return false;
     }
 }

@@ -25,34 +25,39 @@
  *                                licenca/licenca_pt.txt 
  */
 
-include("libs/db_sql.php");
-//include("fpdf151/fpdf.php");
-require_once('fpdf151/PDF_Label.php');
-db_postmemory($HTTP_SERVER_VARS);
-parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
+require_once("libs/db_stdlib.php");
+require_once("libs/db_utils.php");
+require_once("std/db_stdClass.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("libs/db_libsys.php");
+require_once('dbagata/classes/core/AgataAPI.class');
+require_once("model/documentoTemplate.model.php");
 
-$inicial = 1000;
-$final   = 1100;
+ini_set("error_reporting","E_ALL & ~NOTICE");
 
-//name		= nome da etiqueta
-//paper-size	= tipo de pagina
-//metric	= sistema de medida
-//marginLeft	= margem esquerda
-//marginTop	= margem de cima
-//NX		= numero de etiquetas horizontal
-//NY		= numero de etiquetas vertical
-//SpaceX	= espaco entre etiquetas(lados)
-//SpaceY	= espaco entre etiquetas(altura)
-//width		= largura da etiqueta
-//height	= altura da etiqueta
-//font-size	= tamanho da fonte
+$oGet    = db_utils::postMemory($_GET);
 
-$pdf = new PDF_Label (array('name'=>'5164','paper-size'=>'a3','metric'=>'mm','marginLeft'=>20,'marginTop'=>0,'NX'=>2,'NY'=>12,'SpaceX'=>2,'SpaceY'=>6,'width'=>81,'height'=>26,'font-size'=>9),1,1);
-//$pdf = new PDF_Label('8600', 'mm', 2, 12);
-$pdf->Open();
-$pdf->_Line_Height = 6 ;
-for($x=$inicial;$x < $final;$x++){
-	$pdf->Add_PDF_Label(sprintf("                            PROTOCOLO\nN".chr(176).": %s  _________________ Lv: ______________\nData: _______/_______/_______\nAss.: _____________________________________ ", "$x"));
-	$pdf->Add_PDF_Label(sprintf("                            PROTOCOLO\nN".chr(176).": %s  _________________ Lv: ______________\nData: _______/_______/_______\nAss.: _____________________________________ ", "$x"));
+$clagata = new cl_dbagata("licitacao/minutas.agt");
+$api     = $clagata->api;
+
+$sCaminhoSalvoSxw = "tmp/minuta_licitacao_{$oGet->iLicitacao}.sxw";
+$api->setOutputPath($sCaminhoSalvoSxw);
+$api->setParameter('$licitacao',$oGet->iLicitacao);
+
+try {
+	$oDocumentoTemplate = new documentoTemplate(8,$oGet->iCodDocumento); 
+} catch (Exception $eException) {
+	$sErroMsg  = $eException->getMessage();
+  db_redireciona("db_erros.php?fechar=true&db_erro={$sErroMsg}");
 }
-$pdf->Output();
+
+$lProcessado = $api->parseOpenOffice($oDocumentoTemplate->getArquivoTemplate());
+
+if ( $lProcessado ) {
+  db_redireciona($sCaminhoSalvoSxw);
+} else {
+	db_redireciona("db_erros.php?fechar=true&db_erro=Falha ao gera relatório !!!");
+}
+?>
