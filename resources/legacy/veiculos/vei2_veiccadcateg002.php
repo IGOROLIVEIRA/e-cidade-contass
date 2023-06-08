@@ -24,25 +24,58 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt 
  *                                licenca/licenca_pt.txt 
  */
+
+include("fpdf151/pdf.php");
+include("libs/db_sql.php");
+include("classes/db_veiccadcateg_classe.php");
+$clveiccadcateg = new cl_veiccadcateg;
+$clveiccadcateg->rotulo->label();
+$clrotulo = new rotulocampo;
+$clrotulo->label('');
+parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
+if($ordem == "a") {
+	$desc_ordem = "Alfabética";
+	$order_by = "ve32_descr";
+}else {
+	$desc_ordem = "Numérica";
+	$order_by = "ve32_codigo";
+}
+$head3 = "CADASTRO DE CATEGORIA";
+$head5 = "ORDEM $desc_ordem";
+$result = $clveiccadcateg->sql_record($clveiccadcateg->sql_query(null,"*",$order_by));
+if ($clveiccadcateg->numrows == 0){
+   db_redireciona('db_erros.php?fechar=true&db_erro=Não existem categorias cadastradas.');
+}
+$pdf = new PDF(); 
+$pdf->Open(); 
+$pdf->AliasNbPages(); 
+$total = 0;
+$pdf->setfillcolor(235);
+$pdf->setfont('arial','b',8);
+$troca = 1;
+$alt = 4;
+$total = 0;
+$p=0;
+for($x = 0; $x < $clveiccadcateg->numrows;$x++){
+   db_fieldsmemory($result,$x);
+   if ($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
+      $pdf->addpage();
+      $pdf->setfont('arial','b',8);
+      $pdf->cell(40,$alt,$RLve32_codigo,1,0,"C",1);
+      $pdf->cell(0,$alt,$RLve32_descr,1,1,"L",1); 
+      $troca = 0;
+   }
+   $pdf->setfont('arial','',7);
+   $pdf->cell(40,$alt,$ve32_codigo,0,0,"C",$p);
+   $pdf->cell(0,$alt,$ve32_descr,0,1,"L",$p);
+   if ($p==0){
+   	$p=1;
+   }else{
+   	$p=0;
+   }   
+   $total++;
+}
+$pdf->setfont('arial','b',8);
+$pdf->cell(0,$alt,'TOTAL DE REGISTROS  :  '.$total,"T",0,"R",0);
+$pdf->Output();
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
-<head>
-<title>Verifica&ccedil;&atilde;o de navegador - Internet Explorer</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-</head>
-
-<body>
-<script>
-ver = navigator.appVersion;
-ver = ver.substr(ver.indexOf("MSIE"));
-ver = ver.substr(0,ver.search(";"));
-ver = ver.substr(5);
-document.open();
-var str = '<table border="0" cellspacing="0" cellpadding="0">  <tr>    <td>Nome:</td>    <td>'+navigator.appName+'</td>  </tr>  <tr>    <td>Versão:</td>    <td>'+ver+'</td>  </tr>  <tr>    <td>&nbsp;</td>    <td>&nbsp;</td>  </tr></table>';
-document.write(str);
-document.close();
-</script>
-
-</body>
-</html>

@@ -61,6 +61,7 @@ trait LegacyPath
             'pro' => 'protocolo',
             'prot' => 'protocolo',
             'rec' => 'recursoshumanos',
+            'rh' => 'recursoshumanos',
             'sau' => 'saude',
             'sec' => 'secretariadeeducacao',
             'sic' => 'sicom',
