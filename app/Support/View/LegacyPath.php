@@ -67,6 +67,12 @@ trait LegacyPath
             'sit' => 'site',
             'soc' => 'social',
             'tel' => 'teleatend',
+            'tes' => 'teste',
+            'tfd' => 'tfd',
+            'tra' => 'transito',
+            'tre' => 'transporteescolar',
+            'tri' => 'tributario',
+            'vac' => 'vacina',
             'amb' => 'meioambiente'
         ];
     }
