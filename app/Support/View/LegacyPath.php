@@ -22,8 +22,10 @@ trait LegacyPath
             'cal' => 'calendario',
             'cin' => 'controle_interno',
             'com' => 'compras',
+            'sol' => 'compras',
             'con' => 'contabilidade',
             'conf' => 'configuracao',
+            'sys' => 'configuracao',
             'contr' => 'contribuinte',
             'cus' => 'custos',
             'div' => 'divida_ativa',
@@ -60,6 +62,11 @@ trait LegacyPath
             'prot' => 'protocolo',
             'rec' => 'recursoshumanos',
             'sau' => 'saude',
+            'sec' => 'secretariadeeducacao',
+            'sic' => 'sicom',
+            'sit' => 'site',
+            'soc' => 'social',
+            'tel' => 'teleatend',
             'amb' => 'meioambiente'
         ];
     }
