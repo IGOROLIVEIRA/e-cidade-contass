@@ -6,6 +6,7 @@ trait LegacyPath
 {
     protected string $resources_path = 'resources';
     protected string $resources_legacy_path = 'legacy';
+    protected string $resources_func_path = 'func_files';
 
     private function pathMap(): array
     {
@@ -51,6 +52,11 @@ trait LegacyPath
         if(!strpos($file, '_')) {
             return $file;
         }
+
+        if ($this->isFuncFile($file)) {
+            return $this->resources_path. DS . $this->resources_legacy_path . DS . $this->resources_func_path . DS . $file;
+        }
+
         $prefix = $this->getPrefix($file);
         $map = $this->pathMap();
         if(!array_key_exists($prefix, $map)) {
@@ -72,5 +78,10 @@ trait LegacyPath
         }
 
         return $prefix;
+    }
+
+    private function isFuncFile(string $fileName): bool
+    {
+        return substr($fileName, 0, 4) === 'func';
     }
 }
