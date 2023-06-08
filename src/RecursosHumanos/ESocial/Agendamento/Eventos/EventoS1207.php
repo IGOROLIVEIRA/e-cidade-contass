@@ -78,7 +78,7 @@ class EventoS1207 extends EventoBase
                         $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfs13'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
                     }
 
-                    $std->dmdev[$seqdmdev]->nrbeneficio = $aDadosPorMatriculas[$iCont]->matricula; //Obrigat�rio
+                    $std->dmdev[$seqdmdev]->nrbeneficio = $aDadosPorMatriculas[$iCont]->matricula_esocial; //Obrigat�rio
 
                     //Informa��es relativas ao per�odo de apura��o.
                     $std->dmdev[$seqdmdev]->infoperapur = new \stdClass(); //Opcional

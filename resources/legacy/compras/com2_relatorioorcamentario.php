@@ -53,6 +53,28 @@ $clrotulo->label("pc80_codproc");
 
             <table>
                 <tr>
+                    <td>
+                        <strong>Tipo de Relatório</strong>
+                    </td>
+                    <td>
+                        <?$iTipoRelatorio = array(
+                            1=>"Solicitação de Disponibilização Financeira",
+                            2 =>"Declaração de Recursos Orçamentários");
+                        db_select("tiporelatorio",$iTipoRelatorio,true,1,"onchange='js_trocarelatoria(this.value);'");
+                        ?>
+                    </td>
+                </tr>
+                <tr id='trsolicitacao'>
+                    <td style="font-weight: bolder;" >
+                        <? db_ancora("Solicitação : ","js_pesquisapc10_numero(true);",1);?>
+                    </td>
+                    <td>
+                        <?
+                        db_input('pc10_numero',8,$Ipc10_numero,true,"text",1,"onchange='js_pesquisapc10_numero(false);'");
+                        ?>
+                    </td>
+                </tr>
+                <tr style="display: none;" id='trprocessocompra'>
                     <td style="font-weight: bolder;" >
                         <? db_ancora("Processos de Compra : ","js_pesquisapc80_codproc(true);",1);?>
                     </td>
@@ -62,23 +84,13 @@ $clrotulo->label("pc80_codproc");
                         ?>
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <strong>Tipo de Relatório</strong>
-                    </td>
-                    <td>
-                        <?$iTipoRelatorio = array(
-                            1=>"Solicitação de Disponibilização Financeira",
-                            2 =>"Declaração de Recursos Orçamentários");
-                        db_select("tiporelatorio",$iTipoRelatorio,true,1,"");
-                        ?>
-                    </td>
-                </tr>
+                
             </table>
         </fieldset>
     </form>
     <br>
-    <input type="button" name="btnEmitir" id="btnEmitir" value="Emitir" onclick="js_emitirProcesso();">
+    <input type="button" name="btnEmitir" id="btnEmitir" value="Emitir PDF" onclick="js_emitirProcessoPDF();">
+    <input type="button" name="btnEmitir" id="btnEmitir" value="Emitir WORD" onclick="js_emitirProcessoWORD();">
 </center>
 <?php
 db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
@@ -91,10 +103,10 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
 
     function js_pesquisapc80_codproc(mostra){
         if(mostra==true){
-            js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc','Pesquisa',true);
+            js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcprocrelorc.php?funcao_js=parent.js_mostrapcproc1|pc80_codproc','Pesquisa',true);
         }else{
             if(document.form1.pc80_codproc.value != ''){
-                js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcproc.php?pesquisa_chave='+document.form1.pc80_codproc.value+'&funcao_js=parent.js_mostrapcproc','Pesquisa',false);
+                js_OpenJanelaIframe('top.corpo','db_iframe_pcproc','func_pcprocrelorc.php?pesquisa_chave='+document.form1.pc80_codproc.value+'&funcao_js=parent.js_mostrapcproc','Pesquisa',false);
             }else{
                 document.form1.pc80_codproc.value = '';
             }
@@ -107,26 +119,48 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
         }
     }
     function js_mostrapcproc1(chave1,x){
-        document.form1.pc80_codproc.value = chave1;
+        document.getElementById('pc80_codproc').value= chave1;
         db_iframe_pcproc.hide();
+    }
+    function js_pesquisapc10_numero(mostra){
+        qry = "&nada=true";
+        if(mostra==true){
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero'+qry,'Pesquisa',true);
+        }else{
+            if(document.form1.pc10_numero.value!=""){
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem&pesquisa_chave='+document.form1.pc10_numero.value+qry,'Pesquisa',false);
+            }else{
+            document.form1.pc10_numero.value = "";
+            }
+        }
+    }
+    function js_mostrapcorcamitem1(chave1,chave2){
+        document.form1.pc10_numero.value = chave1;
+        db_iframe_solicita.hide();
+    }
+    function js_mostrapcorcamitem(chave1,erro){
+        if(erro==true){
+            document.form1.pc10_numero.value = "";
+        }
     }
 
     /**
      * Validamos as informações do formulário e reemitimos o documento do processo de compra
      */
-    function js_emitirProcesso() {
+    function js_emitirProcessoPDF() {
         let tiporelatorio = $F('tiporelatorio');
 
         if(tiporelatorio == 1){
-            processodecompras = $F('pc80_codproc');
+            solicitacaocompras = $F('pc10_numero');
 
-            if(processodecompras == ""){
-                alert("Processo de Compras não informado.");
+            if(solicitacaocompras == ""){
+                alert("Solicitação de Compras não informado.");
                 return;
             }
 
             Filtros = "";
-            Filtros += "processodecompras="+processodecompras;
+            Filtros += "solicitacaocompras="+solicitacaocompras;
+            Filtros += "&tipo=1";
 
             var jan = window.open('com2_relatorioorcamentario002.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
                 'width='+(screen.availWidth - 5)+', scrollbars=1');
@@ -143,10 +177,63 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
 
             Filtros = "";
             Filtros += "processodecompras="+processodecompras;
+            Filtros += "&tipo=1";
 
             var jan = window.open('com2_relatorioorcamentario003.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
                 'width='+(screen.availWidth - 5)+', scrollbars=1');
             jan.moveTo(0, 0);
+        }
+
+
+    }
+    function js_emitirProcessoWORD() {
+        let tiporelatorio = $F('tiporelatorio');
+
+        if(tiporelatorio == 1){
+            solicitacaocompras = $F('pc10_numero');
+
+            if(solicitacaocompras == ""){
+                alert("Solicitação de Compras não informado.");
+                return;
+            }
+
+            Filtros = "";
+            Filtros += "solicitacaocompras="+solicitacaocompras;
+            Filtros += "&tipo=2";
+
+            var jan = window.open('com2_relatorioorcamentario004.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
+                'width='+(screen.availWidth - 5)+', scrollbars=1');
+            jan.moveTo(0, 0);
+        }
+
+        if(tiporelatorio == 2){
+            processodecompras = $F('pc80_codproc');
+
+            if(processodecompras == ""){
+                alert("Processo de Compras não informado.");
+                return;
+            }
+
+            Filtros = "";
+            Filtros += "processodecompras="+processodecompras;
+            Filtros += "&tipo=2";
+
+            var jan = window.open('com2_relatorioorcamentario005.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
+                'width='+(screen.availWidth - 5)+', scrollbars=1');
+            jan.moveTo(0, 0);
+        }
+
+    }
+
+    function js_trocarelatoria(iTipo){
+        if(iTipo == 1){
+            document.getElementById('trsolicitacao').style.display= "";
+            document.getElementById('trprocessocompra').style.display= "none";
+            document.getElementById('pc80_codproc').value= "";
+        }else if(iTipo == 2){
+            document.getElementById('trprocessocompra').style.display= "";
+            document.getElementById('trsolicitacao').style.display= "none";
+            document.getElementById('pc10_numero').value= "";
         }
 
     }

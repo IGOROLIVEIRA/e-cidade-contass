@@ -274,7 +274,7 @@ class AcordoPosicao
         return $this;
     }
 
-        /**
+    /**
      * retorna o numero do aditamento
      *
      * @access public
@@ -301,7 +301,7 @@ class AcordoPosicao
     }
 
 
-        /**
+    /**
      * retorna o numero do aditamento
      *
      * @access public
@@ -482,7 +482,7 @@ class AcordoPosicao
         return $this;
     }
 
-        /**
+    /**
      * retorna a situacao da posição
      * @return integer
      */
@@ -714,7 +714,7 @@ class AcordoPosicao
      */
     public function adicionarItemDeLicitacao($iLicitem, $oItemAcordo = null)
     {
-        
+
         $oDaoLiclicitem = db_utils::getDao("liclicitem");
         $sSqlDadosItem  = $oDaoLiclicitem->sql_query_soljulg($iLicitem);
         $rsDadosItem    = $oDaoLiclicitem->sql_record($sSqlDadosItem);
@@ -727,7 +727,7 @@ class AcordoPosicao
             $oItem->setCodigoPosicao($this->getCodigo());
             $oItem->setMaterial(new MaterialCompras($oItemLicitacao->pc01_codmater));
             $oItem->setElemento($oItemLicitacao->pc18_codele);
-            if($oItemLicitacao->pc18_codele == ''){
+            if ($oItemLicitacao->pc18_codele == '') {
                 $rsDadosEle    = $oDaoPcmaterele->sql_record("select pc07_codele from pcmaterele where pc07_codmater = $oItemLicitacao->pc01_codmater limit 1");
                 $oEleItem = db_utils::fieldsMemory($rsDadosEle, 0);
                 $oItem->setElemento($oEleItem->pc07_codele);
@@ -749,7 +749,7 @@ class AcordoPosicao
             $sSqlDotacoes     = $oDaoDotacoesItem->sql_query_dotreserva($oItemLicitacao->pc11_codigo);
             $rsDotacoes       = db_query($sSqlDotacoes);
             $aDotacoes        = db_utils::getCollectionByRecord($rsDotacoes);
-            
+
             foreach ($aDotacoes as $oDotacaoItem) {
                 //echo "<pre>"; echo $oItemLicitacao->pc23_vlrun;exit;
                 $oDotacao    = new stdClass();
@@ -760,7 +760,7 @@ class AcordoPosicao
                 * solicitado por Danilo
                 */
 
-                        /*
+                /*
                 * calcula o percentual da dotação em relacao ao valor total
                 */
                 //        $nPercentualDotacao = 100;
@@ -1243,7 +1243,7 @@ class AcordoPosicao
      */
     function salvarSaldoAditamento($nValorSaldo, $dtAssinatura, $dtPublicacao, $sDescricaoAlteracao, $sVeiculoDivulgacao, $datareferencia, $sJustificativa)
     {
-        
+
 
         if (!empty($this->iCodigo)) {
 
@@ -1882,7 +1882,7 @@ class AcordoPosicao
             $oDaoApostilamento->si03_justificativa = $oApostila->justificativa;
             $oDaoApostilamento->si03_indicereajuste = $oApostila->indicereajuste;
             $oDaoApostilamento->si03_percentualreajuste = $oApostila->percentualreajuste;
-            $oDaoApostilamento->si03_descricaoindice = $oApostila->descricaoindice;
+            $oDaoApostilamento->si03_descricaoindice = db_stdClass::normalizeStringJsonEscapeString($oApostila->descricaoindice);
             if ($oApostila->datareferencia == "") {
                 $oDaoApostilamento->si03_datareferencia = $oDaoApostilamento->si03_dataapostila;
             } else {

@@ -51,7 +51,7 @@ $this->objpdf->text(130, ($xlin + 6.5), 'PROCESSO LICITÓRIO:' . CHR(176));
 $this->objpdf->text(160, ($xlin + 6.5), $e54_numerl . " MODALIDADE: " . $e54_nummodalidade);
 $this->objpdf->text(130, ($xlin + $linpc - 2.25), 'TIPO DA COMPRA: ');
 $this->objpdf->Setfont('Arial', 'B', 7);
-$this->objpdf->text(153, ($xlin + $linpc - 2.5), db_formatar(pg_result($this->recorddositens, 0, $this->sTipoCompra), 's', '0', 6, 'e'));
+$this->objpdf->text(153, ($xlin + $linpc - 2.5), db_formatar(pg_result($this->recorddositens,0,$this->sTipoCompra), 's', '0', 6, 'e'));
 
 $this->objpdf->Setfont('Arial', 'B', 9);
 $this->objpdf->Image('imagens/files/' . $this->logo, 13, $xlin - 17, 18);
@@ -206,6 +206,8 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     $valorItem = db_utils::fieldsMemory($resItens, 0)->m52_valor;
     $qtdAnulada = db_utils::fieldsMemory($resItens, 0)->m36_qtd;
 
+
+
     //valorAnulado
     if ($valorItemAnulado) {
         $valorItemTotal = pg_result($this->recorddositens, $ii, $this->valoritem) - $valorItemAnulado;
@@ -218,29 +220,47 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     }
     $valorItem = pg_result($this->recorddositens, $ii, $this->vlrunitem);
 
-    if (
-        pg_result($this->recorddositens, $ii, $this->servico) == 't'
-        && pg_result($this->recorddositens, $ii, $this->servicoquantidade) == 'f'
-    ) {
+    if(pg_result($this->recorddositens, $ii, $this->servico) == 't'
+       && pg_result($this->recorddositens, $ii, $this->servicoquantidade) == 'f'){
         $valorItem = $valorItemTotal;
     }
+    $complemento ='';
+    /*Realiza a consulta se o item é tabela e tem itens associados*/
+
+		$sqlItemTabela = "SELECT * FROM empordemtabela where l223_pcmaterordem = ". pg_result($this->recorddositens, $ii, $this->codmater) ." and l223_codordem = ".$this->numordem."order by l223_pcmatertabela";
+		$resItemTabela = @db_query($sqlItemTabela);
+
+		if(@pg_numrows($resItemTabela) > 0){
+            $complemento ="DETALHAMENTO: \n";
+            for($contitem=0;$contitem < @pg_numrows($resItemTabela);$contitem++){
+                $oDadosItemTabela = db_utils::fieldsMemory($resItemTabela, $contitem);
+
+                $this->objpdf->Setfont('Arial', '', 8);
+                //$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() + (($itempag*4)*2),($itempag+1)." - ".$oDadosItemTabela->l223_descr);
+                //$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety()+ ($itempag*4)+(($itempag+1)*4), " Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f'));
+                $complemento .= ($contitem+1)." - ".$oDadosItemTabela->l223_descr . "\n Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f')."\n";
+
+
+            }
+        }
 
     $this->objpdf->Row(
         array(
             pg_result($this->recorddositens, $ii, $this->codmater),
             $qtdItem,
             pg_result($this->recorddositens, $ii, $this->unid),
-            pg_result($this->recorddositens, $ii, $this->descricaoitem) . pg_result($this->recorddositens, $ii, $this->pc01_complmater) . "\n" . 'Marca: ' . pg_result($this->recorddositens, $ii, $this->obs_ordcom_orcamval),
+            pg_result($this->recorddositens, $ii, $this->descricaoitem) . pg_result($this->recorddositens, $ii, $this->pc01_complmater) . "\n" . 'Marca: ' . pg_result($this->recorddositens, $ii, $this->obs_ordcom_orcamval). "\n"  . $complemento,
             db_formatar($valorItem, 'v', " ", $this->numdec),
             db_formatar($valorItemTotal, 'f')
         ),
         5,
         true,
-        8,
+        5,
         0,
-        false
+        true
     );
-    if ($valorItemAnulado == $valorItem && $valorItemAnulado > 0) {
+   
+    if ($valorItemAnulado > 0) {
         $this->objpdf->Setfont('Arial', 'B', 8);
         $this->objpdf->text($this->objpdf->getx() + 61, $this->objpdf->gety() - 3, "(ANULADO)");
         $this->objpdf->Setfont('Arial', '', 8);

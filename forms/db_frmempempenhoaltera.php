@@ -332,15 +332,29 @@ $clrotulo->label("e60_datasentenca");
 
 
             <tr>
-                <td nowrap title="<?=@$Te60_resumo?>" colspan="2">
-                    <fieldset>
-                        <legend><b><?=@$Le60_resumo?></b></legend>
-                        <?
-                        db_textarea('e60_resumo',8,90,$Ie60_resumo,true,'text',$db_opcao,"")
-                        ?>
-                    </fieldset>
+            <td nowrap title="<?= @$Te54_resumo ?>" valign='top' colspan="2">
+                <fieldset style="width:500px">
+                    <legend><strong>Resumo:</strong></legend>
+                    <?php
+                    if (empty($e60_resumo))
+                        $e60_resumo = $e54_resumo;
+                    db_textarea('e60_resumo', 3, 109, $Ie54_resumo, true, 'text', $db_opcao,"","","#FFFFFF");
+                    ?>
+                </fieldset>
                 </td>
-            </tr>
+                </tr>
+
+                <tr>
+                <td nowrap title="<?= @$Te54_resumo ?>" valign='top' colspan="2">
+
+                <fieldset style="width:500px">
+                    <legend><strong>Informaes da OP:</strong></legend>
+                    <?php
+                    db_textarea('e60_informacaoop', 3, 109, $Ie54_resumo, true, 'text', $db_opcao,"","","#FFFFFF");
+                    ?>
+                </fieldset>
+                </td>
+                </tr>
             <?
             $anousu = db_getsession("DB_anousu");
 
@@ -439,7 +453,7 @@ $clrotulo->label("e60_datasentenca");
 </form>
 
 <style>
-    #e60_tipodespesa{ width: 140px; }#e60_codtipodescr{width: 342px}#e63_codhistdescr{width: 342px}#pc50_descr{width: 333px}#e44_tipo{width: 228px;}#e57_codhistdescr{width: 158px;}#e54_codtipodescr{width: 158px;}#e54_codtipo{width: 67px;}#e54_tipol{width: 67px;}#e54_tipoldescr{width: 158px;}#e54_codcom{width: 67px;}#z01_nome{width: 333px;}#e54_destin{width: 424px;}#e54_gestaut{width: 67px;}#e54_nomedodepartamento{width: 354px;}#ac16_resumoobjeto{width: 364px;}#e60_numconvenio{width: 83px;}#e54_resumo{width: 588px;}#e50_obs{width: 588px;}#e56_codele{width: 140px}
+    #e60_tipodespesa{ width: 140px; }#e60_codtipodescr{width: 342px}#e63_codhistdescr{width: 342px}#pc50_descr{width: 333px}#e44_tipo{width: 228px;}#e57_codhistdescr{width: 158px;}#e54_codtipodescr{width: 158px;}#e54_codtipo{width: 67px;}#e54_tipol{width: 67px;}#e54_tipoldescr{width: 158px;}#e54_codcom{width: 67px;}#z01_nome{width: 333px;}#e54_destin{width: 424px;}#e54_gestaut{width: 67px;}#e54_nomedodepartamento{width: 354px;}#ac16_resumoobjeto{width: 364px;}#e60_numconvenio{width: 83px;}#e54_resumo,#e60_resumo,#e60_informacaoop{width: 588px;}#e50_obs{width: 588px;}#e56_codele{width: 140px}
 </style>
 
 
@@ -553,8 +567,6 @@ $clrotulo->label("e60_datasentenca");
         $("e56_codele").style.width       = "100%";
     }
     $("e60_destin").style.width       = "100%";
-    $("e60_resumo").style.width       = "100%";
-
 
 
     function js_verificaFinalidadeEmpenho() {

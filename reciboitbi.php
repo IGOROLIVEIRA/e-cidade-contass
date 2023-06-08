@@ -1082,6 +1082,7 @@ if ($usePixIntegration) {
     $body['listaInformacaoAdicional'] = [
         ['codigoInformacaoAdicional' => 'ITBI', 'textoInformacaoAdicional' => 'ITBI #'.$itbi]
     ];
+    $body['k00_dtvenc'] = $pdf1->datavencimento;
 
     $service = new GeneratePixWithQRCodeService($providerConfig);
 

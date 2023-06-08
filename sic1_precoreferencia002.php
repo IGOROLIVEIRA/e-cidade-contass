@@ -13,6 +13,7 @@ db_postmemory($HTTP_POST_VARS);
 $clprecoreferencia = new cl_precoreferencia;
 $clitemprecoreferencia = new cl_itemprecoreferencia;
 $clliccomissaocgm      = new cl_liccomissaocgm();
+$clprecoreferenciaacount = new cl_precoreferenciaacount;
 $db_opcao = 22;
 $db_botao = false;
 
@@ -25,7 +26,7 @@ if (isset($imprimir)) {
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia004.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+        jan = window.open('sic1_precoreferencia007.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -40,7 +41,7 @@ if (isset($imprimircsv)) {
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia005.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+    jan = window.open('sic1_precoreferencia005.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -55,7 +56,7 @@ if (isset($imprimirword)) {
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia006.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+    jan = window.open('sic1_precoreferencia006.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -134,16 +135,6 @@ if (isset($alterar)) {
     
     for ($iCont = 0; $iCont < $cont; $iCont++) {
         $valor = $arrayValores[$iCont];
-        /*$sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
-            round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
-            round($sFuncao(pc23_percentualdesconto),2) as percreferencia2
-                from pcproc
-                join pcprocitem on pc80_codproc = pc81_codproc
-                join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
-                join pcorcamitem on pc31_orcamitem = pc22_orcamitem
-                join pcorcamval on pc22_orcamitem = pc23_orcamitem
-                where pc80_codproc = $si01_processocompra and pc23_orcamitem = $valor group by pc23_orcamitem";*/
-                
 
         $sSql = "select
                     pc23_orcamitem,
@@ -225,6 +216,7 @@ if (isset($alterar)) {
         $clitemprecoreferencia->si02_taxa = $oItemOrc->pc01_taxa;
         $clitemprecoreferencia->si02_criterioadjudicacao = $oItemOrc->pc80_criterioadjudicacao;
         $clitemprecoreferencia->si02_mediapercentual = $oItemOrc->mediapercentual;
+        $clitemprecoreferencia->si02_vltotalprecoreferencia = str_replace(',','.',number_format($oItemOrc->valor*$oItemOrc->pc23_quant,2, ',', ''));
         $clitemprecoreferencia->incluir(null);    
 
        
@@ -242,30 +234,18 @@ if (isset($alterar)) {
         $clprecoreferencia->erro_status = "0";
         $clprecoreferencia->erro_campo = "si01_cotacaoitem";
     }
-    /*  
-    $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
-                round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
-                round($sFuncao(pc23_percentualdesconto),2) as percreferencia2,
-                si02_sequencial as sequencial
-                from pcproc
-                join pcprocitem on pc80_codproc = pc81_codproc
-                join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
-                join pcorcamitem on pc31_orcamitem = pc22_orcamitem
-                join pcorcamval on pc22_orcamitem = pc23_orcamitem
-                join itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-                where pc80_codproc = $si01_processocompra and pc23_vlrun > 0 group by pc23_orcamitem, si02_sequencial";
-
-    $rsResult = db_query($sSql);
-
-    for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
-
-        $oItem = db_utils::fieldsMemory($rsResult, $iCont);
-        $clitemprecoreferencia->si02_vlprecoreferencia = $oItem->valor;
-        $clitemprecoreferencia->alterar($oItem->sequencial);
-    }*/
+    
 
     if ($clitemprecoreferencia->numrows > 0) {
         $clprecoreferencia->alterar($si01_sequencial);
+    }
+
+    if(!$sqlerro){
+        $clprecoreferenciaacount->si233_precoreferencia = $si01_sequencial;
+        $clprecoreferenciaacount->si233_acao =  'Alterar';
+        $clprecoreferenciaacount->si233_idusuario = db_getsession("DB_id_usuario");
+        $clprecoreferenciaacount->si233_datahr =  date("Y-m-d", db_getsession("DB_datausu"));
+        $clprecoreferenciaacount->incluir(null);  
     }
 
     db_fim_transacao();

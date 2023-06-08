@@ -39,7 +39,7 @@ $cltipoanexo = new cl_tipoanexo;
 $cllicanexopncp = new cl_licanexopncp;
 
 db_postmemory($HTTP_POST_VARS);
-parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
+parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
 
 /**
  * Codigo do precesso informado por GET

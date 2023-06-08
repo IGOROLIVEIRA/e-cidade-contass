@@ -79,7 +79,7 @@ switch ($oParam->exec) {
                     $clliccontroleanexopncp = new cl_liccontroleanexopncp();
 
                     //monto o codigo dos arquivos do anexo no pncp
-                    $l218_numerocontrolepncp = '17316563000196-2-' . str_pad($sAnexoPNCP[9], 6, '0', STR_PAD_LEFT) . '/' . $sAnexoPNCP[8];
+                    $l218_numerocontrolepncp = db_utils::getCnpj() . '-2-' . str_pad($sAnexoPNCP[9], 6, '0', STR_PAD_LEFT) . '/' . $sAnexoPNCP[8];
                     $clliccontroleanexopncp->l218_licitacao  = null;
                     $clliccontroleanexopncp->l218_usuario = db_getsession('DB_id_usuario');
                     $clliccontroleanexopncp->l218_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));

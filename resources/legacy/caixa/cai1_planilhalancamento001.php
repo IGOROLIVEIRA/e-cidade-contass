@@ -2256,7 +2256,7 @@ if ($oInstit->db21_usasisagua == "t") {
         (iContaReceita == 15420007 && iConta == 15400007) || (iContaReceita == 15420000 && iConta == 15400007) || (iContaReceita == 15420007 && iConta == 15400000) || (iContaReceita == 15420000 && iConta == 15400000) || (iContaReceita == 15400007 && iConta == 15400000) ||
         (iContaReceita == 15000001 && iConta == 15000000) || (iContaReceita == 15000002 && iConta == 15000000) || (iContaReceita == 16590000 && iConta == 16000000) || (iContaReceita == 16590000 && iConta == 16020000) || (iContaReceita == 16040000 && iConta == 16000000) ||
         (iContaReceita == 16040000 && iConta == 16020000) || (iContaReceita == 16590000 && iConta == 16010000) || (iContaReceita == 16590000 && iConta == 16030000) || (iContaReceita == 17070000 && iConta == 15000000) || (iContaReceita == 17040000 && iConta == 17040000) ||
-        (iContaReceita == 17080000 && iConta == 15000000)
+        (iContaReceita == 17080000 && iConta == 15000000  || $('estrutural').value.substr(0, 9) == 411130311)
       ) {
         $('notificacao').setStyle({
           display: 'none'
@@ -2765,25 +2765,24 @@ if ($oInstit->db21_usasisagua == "t") {
     if(sRecurso == '17060000'){
  
       document.getElementById("k81_emparlamentar").options[1].selected = true;
-      document.getElementById("k81_emparlamentar").options[0].setAttribute('disabled','');
-      document.getElementById("k81_emparlamentar").options[2].setAttribute('disabled','');
-      document.getElementById("k81_emparlamentar").options[3].setAttribute('disabled','');
-      document.getElementById("k81_emparlamentar").options[4].setAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[0].setAttribute('hidden','');
+      document.getElementById("k81_emparlamentar").options[2].setAttribute('hidden','');
+      document.getElementById("k81_emparlamentar").options[3].setAttribute('hidden','');
+      document.getElementById("k81_emparlamentar").options[4].setAttribute('hidden','');
     }else if(sRecurso == '17100000'){
  
-      document.getElementById("k81_emparlamentar").options[2].removeAttribute('disabled','');
-      document.getElementById("k81_emparlamentar").options[3].setAttribute('disabled','');
-      document.getElementById("k81_emparlamentar").options[4].setAttribute('disabled','');
-      document.getElementById("k81_emparlamentar").options[0].setAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[2].removeAttribute('hidden','');
+      document.getElementById("k81_emparlamentar").options[3].setAttribute('hidden','');
+      document.getElementById("k81_emparlamentar").options[4].setAttribute('hidden','');
+      document.getElementById("k81_emparlamentar").options[0].setAttribute('hidden','');
     }else{
       
-      document.getElementById("k81_emparlamentar").options[1].removeAttribute('disabled','');
-      document.getElementById("k81_emparlamentar").options[2].removeAttribute('disabled','');
-      document.getElementById("k81_emparlamentar").options[3].removeAttribute('disabled','');
-      document.getElementById("k81_emparlamentar").options[4].removeAttribute('disabled','');
-      document.getElementById("k81_emparlamentar").options[0].removeAttribute('disabled','');
+      document.getElementById("k81_emparlamentar").options[1].removeAttribute('hidden','');
+      document.getElementById("k81_emparlamentar").options[2].removeAttribute('hidden','');
+      document.getElementById("k81_emparlamentar").options[3].removeAttribute('hidden','');
+      document.getElementById("k81_emparlamentar").options[4].removeAttribute('hidden','');
+      document.getElementById("k81_emparlamentar").options[0].removeAttribute('hidden','');
     }  
-
   }
 
   function js_verificaRegularizaRepasse() {

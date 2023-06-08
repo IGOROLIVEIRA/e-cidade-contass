@@ -265,6 +265,20 @@ class db_impcarne extends cl_assinatura
     public $numpre = null;
     public $valtotal = null;
 
+    // VARIAVEIS PARA EMISSAO PRECO REFERENCIA
+
+     public $inscricaoestadualinstituicao = 0;
+     public $codpreco = 0;
+     public $precoreferencia = 0;
+     public $datacotacao = 0;
+     public $pc80_tipoprocesso = 0;
+     public $pc80_criterioadjudicacao = 0;
+     public $impjust = 0;
+     public $tipoprecoreferencia = 0;
+     public $rsLotes = null;
+     public $sqlitens = null;
+
+
     //////  VARIÁVEIS PARA EMISSAO DE ALVARÁ
 
     public $cabecalhoDet = null;

@@ -758,8 +758,8 @@ switch ($oParam->exec) {
                 $oContrato->setDataReajuste($oParam->contrato->dtReajuste);
                 $oContrato->setPeriodoreajuste($oParam->contrato->sPeriodoreajuste);
                 $oContrato->setIndiceReajuste($oParam->contrato->iIndicereajuste);
-                $oContrato->setDescricaoReajuste($oParam->contrato->sDescricaoreajuste);
-                $oContrato->setDescricaoIndice($oParam->contrato->sDescricaoindice);
+                $oContrato->setDescricaoReajuste(db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sDescricaoreajuste));
+                $oContrato->setDescricaoIndice(db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sDescricaoindice));
                 $oContrato->save();
                 /*
                * verificamos se existe empenhos a serem vinculados na seção
@@ -1440,6 +1440,33 @@ switch ($oParam->exec) {
                             } else {
                                 $oPosicao->adicionarItemDeLicitacao($oItem->codigo, $oItem);
                             }
+
+                            if($oContrato->getNaturezaAcordo($iCodigoAcordo) == 1){
+                                $iExisteLicobras = $oContrato->adicionarItemAcordoObra($iLicitacao,$iCodigoAcordo,$oItem->codigomaterial);
+                                if (!$iExisteLicobras) {
+
+                                    $clliclicitemlote = new cl_liclicitemlote();
+                                    $rsLiclicitemlite   = $clliclicitemlote->sql_record("select
+                                    l04_descricao
+                                from
+                                    liclicita
+                                inner join liclicitem on
+                                    l21_codliclicita = l20_codigo
+                                inner join liclicitemlote on
+                                    l04_liclicitem = l21_codigo
+                                inner join pcprocitem on
+                                    l21_codpcprocitem = pc81_codprocitem
+                                inner join solicitempcmater on
+                                    pc81_solicitem = pc16_solicitem
+                                where
+                                    l20_codigo = {$iLicitacao} and pc16_codmater = {$oItem->codigomaterial};");
+            
+                                $oDaoLicitemlote = db_utils::fieldsMemory($rsLiclicitemlite, 0);
+
+                                    
+                                    throw new Exception("Usuário: o lote {$oDaoLicitemlote->l04_descricao} da licitação {$iLicitacao} não possuí obra cadastrada!");
+                                }
+                            }
                         } else if ($oContrato->getOrigem() == 1) {
 
                             $oPosicao->adicionarItemDeProcesso($oItem->codigo, $oItem);
@@ -1493,9 +1520,12 @@ switch ($oParam->exec) {
 
                 db_inicio_transacao();
 
+                $oContrato->removerAcordoObra($oParam->material->iCodigo);
+
                 $oPosicao->removerItem($oParam->material->iCodigo);
 
                 $oContrato->atualizaValorContratoPorTotalItens();
+                
 
                 db_fim_transacao(false);
             } catch (Exception $eErro) {
@@ -1805,7 +1835,7 @@ switch ($oParam->exec) {
                     $clacoanexopncp = new cl_acoanexopncp();
 
                     //monto o codigo dos arquivos do anexo no pncp
-                    $ac214_numerocontrolepncp = '17316563000196-2-' . $codigocontrato[9] . '/' . $codigocontrato[8];
+                    $ac214_numerocontrolepncp = db_utils::getCnpj() . '-2-' . $codigocontrato[9] . '/' . $codigocontrato[8];
                     $clacoanexopncp->ac214_acordo  = $Documentos;
                     $clacoanexopncp->ac214_usuario = db_getsession('DB_id_usuario');
                     $clacoanexopncp->ac214_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));

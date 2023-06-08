@@ -171,10 +171,11 @@ if (isset($oPost->incluir)){
       
       $sValor         = "valor{$oPost->itensOrdem[$i]}";
       $nValor   = DBNumber::round($oPost->$sValor,2);
+      $nTabela = round($oTabItem->totaltabela,2) ;
               
-      if($oTabItem->totaltabela != $nValor){
+      if($nTabela != $nValor){
         $sqlerro  = true;
-        $erro_msg = "Usuário: A soma dos itens da tabela X $oEmpItem->e62_item está divergente do valor total do item Tabela.";
+        $erro_msg = "Usuário: A soma dos itens da tabela $oEmpItem->e62_item está divergente do valor total do item Tabela.";
         break;
       }else{
         $sSqlEmp    = "update empordemtabela set l223_codordem = $codigo where l223_numemp = $oEmpItem->e62_numemp and l223_pcmaterordem = $oEmpItem->e62_item and l223_codordem = 0";
@@ -261,10 +262,10 @@ if (isset($oPost->incluir)){
   </tr>
 </table>
 </center>
-<?
+<?php
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
-<?
+<?php
 if (isset($incluir)){
   if($sqlerro == true){
     db_msgbox($erro_msg);

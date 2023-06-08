@@ -1544,6 +1544,7 @@ switch ($oParam->exec) {
                                     $seqlote++;
                                     $clliclicitemlote->l04_seq = $seqlote;
                                 }
+                                $oDaoLoteReservado->l04_numerolote = null;
                                 $clliclicitemlote->incluir(null);
 
                                 if ($clliclicitemlote->erro_status == 0) {
@@ -1568,6 +1569,7 @@ switch ($oParam->exec) {
                                     $oDaoLoteReservado->l04_descricao = $clliclicitemlotereservado->l04_descricao;
                                     $oDaoLoteReservado->l04_liclicitem = $clliclicitemlotereservado->l04_liclicitem;
                                     $oDaoLoteReservado->l04_seq = $seqlotereservado;
+                                    $oDaoLoteReservado->l04_numerolote = null;
                                     $oDaoLoteReservado->incluir(null);
 
                                     if (!$oDaoLoteReservado->numrows_incluir) {

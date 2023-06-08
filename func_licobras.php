@@ -105,7 +105,8 @@ $cllicobras = new cl_licobras;
                   l20_objeto,
                   obr01_dtlancamento,
                   obr01_licitacaosistema,
-                  obr01_linkobra";
+                  obr01_linkobra,
+                  obr01_licitacaolote";
       if (isset($chave_obr01_sequencial) && (trim($chave_obr01_sequencial) != "")) {
         $sql = $cllicobras->sql_query_pesquisa($chave_obr01_sequencial, $campos, null, null);
       } else if (isset($chave_obr01_numeroobra) && (trim($chave_obr01_numeroobra) != "")) {

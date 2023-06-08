@@ -543,6 +543,7 @@ class cl_rhpeslocaltrab {
      $sql .= " from rhpeslocaltrab ";
      $sql .= "      inner join rhpessoalmov on rh56_seqpes=rh02_seqpes ";
      $sql .= "      left  join rhlocaltrab  on  rhlocaltrab.rh55_codigo = rhpeslocaltrab.rh56_localtrab";
+     $sql .= "      and rh55_instit = rhpessoalmov.rh02_instit ";
      $sql .= "      left  join rhpessoal on rh01_regist=rh02_regist ";
      $sql .= "      left  join rhpessoalmov a on a.rh02_regist=rh01_regist
                                              and a.rh02_anousu=".$anonovo."

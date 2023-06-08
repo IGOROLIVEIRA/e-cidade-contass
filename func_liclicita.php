@@ -584,7 +584,7 @@ $sWhereContratos = " and 1 = 1 ";
 
                                     if ($clliclicita->numrows != 0) {
                                         db_fieldsmemory($result, 0);
-                                        echo "<script>" . $funcao_js . "('$l20_objeto','$l20_numero','$l03_descr',false);</script>";
+                                        echo "<script>" . $funcao_js . "('$l20_objeto','$l20_numero','$l03_descr',false,'$l20_tipojulg','$l20_codigo');</script>";
                                     } else {
                                         echo "<script>" . $funcao_js . "('Chave(" . $pesquisa_chave . ") não Encontrado','Chave(" . $pesquisa_chave . ") não Encontrado','Chave(" . $pesquisa_chave . ") não Encontrado',true);</script>";
                                     }

@@ -98,7 +98,7 @@ $cllicitaparam->rotulo->label();
               </tr>
               <tr>
                 <td>
-                  <strong>Validação no Cadastro de Fornecedores</strong>
+                  <strong>Validação no Cadastro de Fornecedores (Telefone/Email/Conta Bancária)</strong>
                 </td>
                 <td>
                   <?
@@ -126,6 +126,17 @@ $cllicitaparam->rotulo->label();
                   <?
                   $x = array("f" => "NAO", "t" => "SIM");
                   db_select('l12_numeracaomanual', $x, true, $db_opcao, "");
+                  ?>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Validação no Cadastro de Fornecedores (Telefone/Email)</strong>
+                </td>
+                <td>
+                  <?
+                  $x = array("f" => "NAO", "t" => "SIM");
+                  db_select('l12_validafornecedor_emailtel', $x, true, $db_opcao, "");
                   ?>
                 </td>
               </tr>

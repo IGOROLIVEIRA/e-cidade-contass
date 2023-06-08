@@ -110,6 +110,7 @@ $db_opcao = 1;
   sUrlRpc = "edu4_diarioclasse.RPC.php";
   var iRegente = 0;
   var aPeriodosAula = new Array();
+  var iLancamento = "frequencia";
   init = function() {
 
     oTxtFieldRegente = new DBTextField("txtFieldRegente ", "oTxtFieldRegente", null, "54");
@@ -133,6 +134,7 @@ $db_opcao = 1;
     var oParametros = new Object();
     oParametros.exec = 'getDisciplinasRegenteEscola';
     oParametros.iRegente = iRegente;
+    oParametros.iLancamento = iLancamento;
 
     js_divCarregando('Aguarde, pesquisando disciplinas...<br>Esse procedimento pode levar algum tempo.', 'msgBox')
     var oAjax = new Ajax.Request(sUrlRpc, {

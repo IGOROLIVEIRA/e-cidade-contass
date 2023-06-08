@@ -15,8 +15,11 @@ require_once("classes/cl_licontroleatarppncp.php");
 require_once("model/licitacao/PNCP/AvisoLicitacaoPNCP.model.php");
 require_once("model/licitacao/PNCP/AtaRegistroprecoPNCP.model.php");
 require_once("classes/db_licacontrolenexospncp_classe.php");
+require_once("classes/db_liccontrolepncpitens_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
+$envs = parse_ini_file('config/PNCP/.env', true);
+
 $oJson             = new services_json();
 $oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oErro             = new stdClass();
@@ -66,14 +69,14 @@ switch ($oParam->exec) {
                 //licitacao
                 $rsDadosEnvio = $clLicitacao->sql_record($clLicitacao->sql_query_pncp($aLicitacao->codigo));
 
-                if (!pg_numrows($rsDadosEnvio)) {
+                if (!pg_num_rows($rsDadosEnvio)) {
                     throw new Exception('Dados de envio do PNCP não Encontrato! Licitacao:' . $aLicitacao->codigo);
                 }
 
                 //itens
                 $rsDadosEnvioItens = $clLicitacao->sql_record($clLicitacao->sql_query_pncp_itens($aLicitacao->codigo));
 
-                if (!pg_numrows($rsDadosEnvioItens)) {
+                if (!pg_num_rows($rsDadosEnvioItens)) {
                     throw new Exception('Dados dos Itens PNCP não Encontrato! Licitacao:' . $aLicitacao->codigo);
                 }
 
@@ -86,7 +89,11 @@ switch ($oParam->exec) {
 
                     //validaçoes
                     if ($oDadosLicitacao->dataaberturaproposta == '') {
-                        throw new Exception('Data da Abertura de Proposta não informado! Licitacao:' . $aLicitacao->codigo);
+                        throw new Exception('Data da Abertura de Proposta(l20_dataaberproposta) não informado! Licitacao:' . $aLicitacao->codigo);
+                    }
+
+                    if ($oDadosLicitacao->dataencerramentoproposta == '') {
+                        throw new Exception('Data Encerramento Proposta(l20_dataencproposta) não informado! Licitacao:' . $aLicitacao->codigo);
                     }
 
                     //valida se existe anexos na licitacao
@@ -123,13 +130,18 @@ switch ($oParam->exec) {
                 //envia para pncp
                 $rsApiPNCP = $clAvisoLicitacaoPNCP->enviarAviso($oDadosLicitacao->numerocompra, $aAnexos);
 
-                //$rsApiPNCP = array(201, 'https://pncp.gov.br/pncp-api/v1/orgaos/17316563000196/compras/2023/13');
+                //$rsApiPNCP = array(201, 'https://treina.pncp.gov.br/pncp-api/v1/orgaos/17316563000196/compras/2023/130');
 
                 if ($rsApiPNCP[0] == 201) {
-                    //monto o codigo da compra no pncp
-                    $l213_numerocompra = substr($rsApiPNCP[1], 67);
+                    //Ambiente de testes
+                    if($envs['APP_ENV'] === 'T'){
+                        $l213_numerocompra = substr($rsApiPNCP[1], 74);
+                    }else{
+                    //Ambiente de Producao
+                        $l213_numerocompra = substr($rsApiPNCP[1], 67);
+                    }
 
-                    $l213_numerocontrolepncp = '17316563000196-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
+                    $l213_numerocontrolepncp = db_utils::getCnpj() . '-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
 
                     $clliccontrolepncp = new cl_liccontrolepncp();
                     $clliccontrolepncp->l213_licitacao = $aLicitacao->codigo;
@@ -260,12 +272,15 @@ switch ($oParam->exec) {
             foreach ($oParam->aLicitacoes as $aLicitacao) {
                 $clAvisoLicitacaoPNCP = new AvisoLicitacaoPNCP();
                 $clliccontroleanexopncp = new cl_liccontroleanexopncp();
+                $clliccontrolepncpitens = new cl_liccontrolepncpitens();
+
                 //envia exclusao de aviso
                 $rsApiPNCP = $clAvisoLicitacaoPNCP->excluirAviso(substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
 
                 if ($rsApiPNCP == null) {
                     $clliccontrolepncp->excluir(null, "l213_licitacao = $aLicitacao->codigo");
                     $clliccontroleanexopncp->excluir_licitacao($aLicitacao->codigo);
+                    $clliccontrolepncpitens->excluir(null, "l214_licitacao = $aLicitacao->codigo");
 
                     $oRetorno->status  = 1;
                     $oRetorno->message = "Excluido com Sucesso !";
@@ -326,12 +341,18 @@ switch ($oParam->exec) {
 
                     //envia para pncp
                     $rsApiPNCP = $clAtaRegistroprecoPNCP->enviarAta($odadosEnvioAta, substr($aLicitacao->numerocontrole, 17, -5), substr($aLicitacao->numerocontrole, 24));
-                    $urlResutltado = explode('x-content-type-options', $rsApiPNCP[0]);
+                    $urlResutltado = explode('x-content-type-options', trim($rsApiPNCP[0]));
 
                     if ($rsApiPNCP[1] == '201') {
                         $clliccontroleatarppncp = new cl_licontroleatarppncp();
-                        $l215_ata = substr($urlResutltado[0], 86);
-                        $l215_numerocontrolepncp = '17316563000196-1-' . substr($aLicitacao->numerocontrole, 17, -5) . '/' . substr($aLicitacao->numerocontrole, 24) . '-' . str_pad($l215_ata, 6, '0', STR_PAD_LEFT);
+                        //Ambiente de testes
+                        if($envs['APP_ENV'] === 'T'){
+                            $l215_ata = substr($urlResutltado[0],85);
+                        }else{
+                            //Ambiente de Producao
+                            $l215_ata = substr($urlResutltado[0],79);
+                        }
+                        $l215_numerocontrolepncp = db_utils::getCnpj() . '-1-' . substr($aLicitacao->numerocontrole, 17, -5) . '/' . substr($aLicitacao->numerocontrole, 24) . '-' . str_pad($l215_ata, 6, '0', STR_PAD_LEFT);
                         $clliccontroleatarppncp->l215_licitacao = $aLicitacao->codigo;
                         $clliccontroleatarppncp->l215_usuario = db_getsession("DB_id_usuario");
                         $clliccontroleatarppncp->l215_dtlancamento = date("Y-m-d", db_getsession("DB_datausu"));
@@ -339,8 +360,12 @@ switch ($oParam->exec) {
                         $clliccontroleatarppncp->l215_situacao = 1;
                         $clliccontroleatarppncp->l215_ata = $l215_ata;
                         $clliccontroleatarppncp->l215_anousu = substr($aLicitacao->numerocontrole, 24);
-
+                        
                         $clliccontroleatarppncp->incluir();
+
+                        if ($clliccontroleatarppncp->erro_status == 0) {
+                            throw new Exception($clliccontroleatarppncp->erro_msg);
+                        }
 
                         $oRetorno->status  = 1;
                         $oRetorno->situacao = 1;
@@ -375,8 +400,14 @@ switch ($oParam->exec) {
 
                     if ($rsApiPNCP[0] == '201') {
                         $clliccontroleatarppncp = new cl_licontroleatarppncp();
-                        $l215_ata = substr($urlResutltado[0], 86);
-                        $l215_numerocontrolepncp = '17316563000196-1-' . substr($aLicitacao->numerocontrole, 17, -5) . '/' . substr($aLicitacao->numerocontrole, 24) . '-' . str_pad($aLicitacao->numeroata, 6, '0', STR_PAD_LEFT);
+                        //Ambiente de testes
+                        if($envs['APP_ENV'] === 'T'){
+                            $l215_ata = substr($urlResutltado[0],85);
+                        }else{
+                            //Ambiente de Producao
+                            $l215_ata = substr($urlResutltado[0],79);
+                        }
+                        $l215_numerocontrolepncp = db_utils::getCnpj() . '-1-' . substr($aLicitacao->numerocontrole, 17, -5) . '/' . substr($aLicitacao->numerocontrole, 24) . '-' . str_pad($aLicitacao->numeroata, 6, '0', STR_PAD_LEFT);
 
                         $clliccontroleatarppncp->l215_licitacao = $aLicitacao->codigo;
                         $clliccontroleatarppncp->l215_usuario = db_getsession("DB_id_usuario");
