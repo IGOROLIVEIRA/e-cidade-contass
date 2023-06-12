@@ -58,6 +58,12 @@
             "bin/v3/extension/pack DBug",
             "bin/v3/extension/unpack dbug-package.tar.gz true",
             "bin/v3/extension/install DBug"
+        ],
+        "install-v3": [
+            "bin/v3/extension/install Desktop "
+        ],
+        "migrate": [
+            "vendor/robmorgan/phinx/bin/phinx migrate -e e-cidade"
         ]
     },
     "config": {

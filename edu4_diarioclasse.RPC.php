@@ -81,8 +81,8 @@ switch ($oParam->exec) {
     $sWhereNaoFuncionario .= " and rechumanoescola.ed75_i_escola = {$iEscola}                   ";
 
     $sWhereRegenciaHorario  = "    ed58_ativo is true      ";
-    $sCondicaoLancamento = " and ed59_c_freqglob <> ";
-    $sWhereRegenciaHorario .= $oParam->iLancamento === "conteudo" ? $sCondicaoLancamento . " 'F' " : $sCondicaoLancamento . " 'A' ";
+    $sCondicaoLancamento = $oParam->iLancamento === "frequencia" ? " and ed59_c_freqglob in " : " and ed59_c_freqglob <> ";
+    $sWhereRegenciaHorario .= $oParam->iLancamento === "frequencia" ? $sCondicaoLancamento . " ('F', 'I') " : $sCondicaoLancamento . " 'F' ";
 
     $sWhereSubstituto  = " {$sWhereRegenciaHorario}";
     $sWhereSubstituto .= " and '{$sDtLogin}' >= ed322_periodoinicial ";

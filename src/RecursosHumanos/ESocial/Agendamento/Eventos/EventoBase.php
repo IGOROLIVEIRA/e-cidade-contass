@@ -66,6 +66,11 @@ abstract class EventoBase
         $this->tpevento = $tpevento;
     }
 
+    public function setDadosExclusao($aDadosExclusao)
+    {
+        $this->aDadosExclusao = $aDadosExclusao;
+    }
+
     /**
      * Retorna dados no formato necessario para envio
      * pela API sped-esocial

@@ -1651,7 +1651,7 @@ function db_indexOf($str, $proc)
  *                                    </pre>
  * @return mixed                      HTML com a estrutura do datagrid
  */
-function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_self", $campos_layer = "", $NomeForm = "NoMe", $variaveis_repassa = array(), $automatico = true, $totalizacao = array())
+function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_self", $campos_layer = "", $NomeForm = "NoMe", $variaveis_repassa = array (), $automatico = true, $totalizacao = array(), $marcar = false) 
 {
     global $BrowSe;
     //cor do cabecalho
@@ -2110,6 +2110,9 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
     if ($NumRows > 0) {
 
         $sHtml .= "<tr>";
+        if($marcar === true) {
+           $sHtml .= "<td><input type='checkbox' id='select-all'></td>";
+        }
 
         // se foi passado funcao
         if ($campos_layer != "") {
@@ -2163,6 +2166,10 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
     for ($i = 0; $i < $NumRows; $i++) {
 
         $sHtml .= '<tr>';
+
+        if($marcar === true) {
+          $sHtml .= "<td><input type='checkbox' class='checkbox'></td>";
+        }
 
         if ($arquivo == "()") {
 

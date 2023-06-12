@@ -48,3 +48,6 @@ model/licitacao/PNCP/arquivos/*
 webservices/*.php
 !webservices/requisicao.webservice.php
 jobs/configuracoes/taskManager/fila/*.xml
+cache/menus/*
+cache/forms/*
+cache/preferencias/*

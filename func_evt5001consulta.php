@@ -145,10 +145,8 @@ if (!isset($chave_rh218_perapurmes)) {
                     else z01_nome end as z01_nome,
                     rh218_regist,
                     rh218_numcgm as dl_Cgm,
-                    rh218_codcateg,
-                    CASE WHEN rh218_indapuracao = 1 THEN 'Mensal'::varchar ELSE '13º Salário'::varchar END AS rh218_indapuracao,
-                    rh218_nrrecarqbase,
-                    rh218_tpcr,       
+                    rh218_codcateg,  
+                    rh218_vlrbasecalc,
                     rh218_vrdescseg,
                     rh218_vrcpseg, 
                     (rh218_vrdescseg - rh218_vrcpseg) as dl_Diferença";

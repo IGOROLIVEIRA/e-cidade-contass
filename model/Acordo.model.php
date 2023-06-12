@@ -404,32 +404,32 @@ class Acordo
      */
     protected $iReajuste;
 
-       /**
+    /**
      *  Criterio Reajuste
      */
     protected $iCriterioreajuste;
 
-       /**
+    /**
      *  Data Reajuste 
      */
     protected $dtReajuste;
 
-       /**
+    /**
      *  Periodo Reajuste
      */
     protected $sPeriodoreajuste;
 
-       /**
+    /**
      *  Indice Reajuste
      */
     protected $iIndicereajuste;
 
-       /**
+    /**
      *   Descricao Reajuste
      */
     protected $sDescricaoreajuste;
 
-       /**
+    /**
      *  Descricao Indice
      */
     protected $sDescricaoindice;
@@ -586,7 +586,7 @@ class Acordo
         return $this;
     }
 
-        /**
+    /**
      * @return mixed
      */
     public function getReajuste()
@@ -603,7 +603,7 @@ class Acordo
         return $this;
     }
 
-            /**
+    /**
      * @return mixed
      */
     public function getCriterioReajuste()
@@ -620,7 +620,7 @@ class Acordo
         return $this;
     }
 
-                /**
+    /**
      * @return mixed
      */
     public function getDataReajuste()
@@ -637,7 +637,7 @@ class Acordo
         return $this;
     }
 
-                    /**
+    /**
      * @return mixed
      */
     public function getPeriodoreajuste()
@@ -654,7 +654,7 @@ class Acordo
         return $this;
     }
 
-                        /**
+    /**
      * @return mixed
      */
     public function getIndiceReajuste()
@@ -671,7 +671,7 @@ class Acordo
         return $this;
     }
 
-                            /**
+    /**
      * @return mixed
      */
     public function getDescricaoReajuste()
@@ -687,8 +687,8 @@ class Acordo
         $this->sDescricaoreajuste = $sDescricaoreajuste;
         return $this;
     }
-    
-                            /**
+
+    /**
      * @return mixed
      */
     public function getDescricaoIndice()
@@ -704,7 +704,7 @@ class Acordo
         $this->sDescricaoindice = $sDescricaoindice;
         return $this;
     }
-    
+
 
     /**
      * @return mixed
@@ -3385,7 +3385,7 @@ class Acordo
         $oNovaPosicao->setVigenciaAlterada($sVigenciaalterada);
         $oNovaPosicao->setPercentualReajuste($sPercentualReajuste);
         $oNovaPosicao->setIndiceReajusteacordo($iIndiceReajusteacordo);
-        $oNovaPosicao->setDescricaoIndiceacordo($sDescricaoIndiceacordo);
+        $oNovaPosicao->setDescricaoIndiceacordo(db_stdClass::normalizeStringJsonEscapeString($sDescricaoIndiceacordo));
 
         $oNovaPosicao->save();
 
@@ -4471,7 +4471,7 @@ class Acordo
         $oNovaPosicao->setPosicaoPeriodo($dtVigenciaInicial, $dtVigenciaFinal, $this->getPeriodoComercial());
         $oNovaPosicao->setPercentualReajuste($oApostila->percentualreajuste);
         $oNovaPosicao->setIndiceReajusteacordo($oApostila->indicereajuste);
-        $oNovaPosicao->setDescricaoIndiceacordo($oApostila->descricaoindice);
+        $oNovaPosicao->setDescricaoIndiceacordo(db_stdClass::normalizeStringJsonEscapeString($oApostila->descricaoindice));
         $oNovaPosicao->save();
 
         /**
@@ -4597,6 +4597,11 @@ class Acordo
 
     public function adicionarItemAcordoObra($licitacao,$acodo,$item){
         $clacordoobra = new cl_acordoobra();
+        $oDaoLicobras = $clacordoobra->sql_record("select l20_tipojulg from liclicita where l20_codigo= {$licitacao}");
+        $oDaoParametro = db_utils::fieldsMemory($oDaoLicobras,0);
+        if($oDaoParametro->l20_tipojulg == 1){
+            return true;
+        }
         $oDaoLicobras = $clacordoobra->sql_record("select * from licobras inner join liclicitemlote on l04_numerolote = obr01_licitacaolote inner join liclicitem on l21_codigo = l04_liclicitem inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem inner join solicitempcmater on pc81_solicitem = pc16_solicitem  where obr01_licitacao =  {$licitacao} and pc16_codmater= {$item}");
         $oDaoParametro = db_utils::fieldsMemory($oDaoLicobras,0);
         if(pg_num_rows($oDaoLicobras)>0){
@@ -4621,6 +4626,7 @@ class Acordo
     public function removerAcordoObra($item){
         $clacordoobra = new cl_acordoobra();
         $clacordoobra->excluir(null,"obr08_acordoitem = {$item}");
+        return true;
     }
 
 }

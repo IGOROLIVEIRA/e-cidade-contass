@@ -105,6 +105,16 @@ if (isset($incluir)) {
       }
     }
 
+    db_fieldsmemory($rsParamLic, 0)->l12_validafornecedor_emailtel;
+
+    if ($l12_validafornecedor_emailtel == "t") {
+
+      if ($z01_telef == "" || $z01_email == "") {
+        db_msgbox("Usuário: Cadastro do fornecedor incompleto, preencha email e telefone. ");
+        $sqlerro = true;
+      }
+    }
+
     /**
      * alterando email e telefone OC15701
      */

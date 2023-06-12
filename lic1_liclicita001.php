@@ -171,7 +171,7 @@ if (isset($incluir)) {
 	$aCf = db_utils::getColectionByRecord($clcflicita->sql_record($sSql));
 	$sPresencial = $aCf[0]->l03_presencial;
 
-	if ($sPresencial == 't' && $l12_pncp == 't') {
+	if ($sPresencial == 't' && $l12_pncp == 't' && $l20_leidalicitacao == 1) {
 		if ($oPost->l20_justificativapncp == '' || $oPost->l20_justificativapncp == null) {
 			$erro_msg .= 'Campo Justificativa PNCP não informado\n\n';
 			$sqlerro = true;
@@ -188,6 +188,22 @@ if (isset($incluir)) {
 		}
 	}
 
+	if ($oPost->modalidade_tribunal == 100 || $oPost->modalidade_tribunal == 101 || $oPost->modalidade_tribunal == 102 || $oPost->modalidade_tribunal == 103) {
+		if ($oPost->l20_razao == '') {
+			$erro_msg .= 'Campo Razão não informado';
+			$sqlerro = true;
+		}
+
+		if ($oPost->l20_justificativa == '') {
+			$erro_msg .= 'Campo Justificativa não informado';
+			$sqlerro = true;
+		}
+
+		if ($oPost->l20_tipoprocesso == '') {
+			$erro_msg .= 'Campo Tipo de Processo não informado';
+			$sqlerro = true;
+		}
+	}
 
 	/*
    Validações dos membros da licitação

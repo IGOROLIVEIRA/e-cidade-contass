@@ -55,6 +55,7 @@ if (isset($alterar)) {
     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
     $cllicitaparam->l12_pncp = $l12_pncp;
     $cllicitaparam->l12_numeracaomanual = $l12_numeracaomanual;
+    $cllicitaparam->l12_validafornecedor_emailtel = $l12_validafornecedor_emailtel;
     $cllicitaparam->l12_acessoapipcp = $l12_acessoapipcp;
     $cllicitaparam->l12_instit = DB_getsession("DB_instit");
     $cllicitaparam->incluir(DB_getsession("DB_instit"));
@@ -68,6 +69,7 @@ if (isset($alterar)) {
     $cllicitaparam->l12_validacadfornecedor = $l12_validacadfornecedor;
     $cllicitaparam->l12_pncp = $l12_pncp;
     $cllicitaparam->l12_numeracaomanual = $l12_numeracaomanual;
+    $cllicitaparam->l12_validafornecedor_emailtel = $l12_validafornecedor_emailtel;
     $cllicitaparam->l12_acessoapipcp = $l12_acessoapipcp;
     $cllicitaparam->l12_instit = DB_getsession("DB_instit");
     $cllicitaparam->alterar(db_getsession("DB_instit"));

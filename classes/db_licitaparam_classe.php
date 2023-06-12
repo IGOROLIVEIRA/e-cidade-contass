@@ -52,6 +52,7 @@ class cl_licitaparam
     var $l12_validacadfornecedor = null;
     var $l12_pncp = null;
     var $l12_numeracaomanual = null;
+    var $l12_validafornecedor_emailtel = null;
     var $l12_acessoapipcp = null;
 
     // cria propriedade com as variaveis do arquivo
@@ -65,6 +66,7 @@ class cl_licitaparam
                  l12_validacadfornecedor = bool = Validacao no Cadastro de Fornecedor
                  l12_pncp = bool = Validacao PNCP
                  l12_numeracaomanual = bool = Numeração Manual na Licitação
+                 l12_validafornecedor_emailtel = bool = Numeração Manual na Licitação
                  ";
     //funcao construtor da classe
     function cl_licitaparam()
@@ -96,6 +98,7 @@ class cl_licitaparam
             $this->l12_validacadfornecedor = ($this->l12_validacadfornecedor == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_validacadfornecedor"] : $this->l12_validacadfornecedor);
             $this->l12_pncp = ($this->l12_pncp == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_pncp"] : $this->l12_pncp);
             $this->l12_numeracaomanual = ($this->l12_numeracaomanual == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_numeracaomanual"] : $this->l12_numeracaomanual);
+            $this->l12_validafornecedor_emailtel = ($this->l12_validafornecedor_emailtel == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_validafornecedor_emailtel"] : $this->l12_validafornecedor_emailtel);
             $this->l12_acessoapipcp = ($this->l12_acessoapipcp == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_acessoapipcp"] : $this->l12_acessoapipcp);
         } else {
             $this->l12_instit = ($this->l12_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l12_instit"] : $this->l12_instit);
@@ -159,7 +162,8 @@ class cl_licitaparam
                                       ,l12_usuarioadjundica
                                       ,l12_validacadfornecedor
                                       ,l12_pncp
-                                      ,l12_numeracaomanual
+                                      ,l12_numeracaomanual,
+                                      ,l12_validafornecedor_emailtel
                                       ,l12_acessoapipcp
                        )
                 values (
@@ -172,6 +176,7 @@ class cl_licitaparam
                                ,'$this->l12_validacadfornecedor'
                                ,'$this->l12_pncp'
                                ,'$this->l12_numeracaomanual'
+                               ,'$this->l12_validafornecedor_emailtel'
                                ,'$this->l12_acessoapipcp'
                       )";
         $result = db_query($sql);
@@ -329,6 +334,19 @@ class cl_licitaparam
             if (trim($this->l12_usuarioadjundica) == null) {
                 $this->erro_sql = "Emitir usuário no relatório de adjudicação.";
                 $this->erro_campo = "l12_usuarioadjundica";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->l12_validafornecedor_emailtel) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l12_validafornecedor_emailtel"])) {
+            $sql  .= $virgula . " l12_validafornecedor_emailtel = '$this->l12_validafornecedor_emailtel' ";
+            $virgula = ",";
+            if (trim($this->l12_validafornecedor_emailtel) == null) {
+                $this->erro_sql = " Campo validação de fornecedor nao Informado.";
+                $this->erro_campo = "l12_validafornecedor_emailtel";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
