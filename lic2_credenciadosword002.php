@@ -96,7 +96,8 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
     $item = db_utils::fieldsMemory($rsItensCredenciados, $i);
 
     if ($fornecedor != $item->l205_fornecedor) {
-        $descricaofornecedor = $item->z01_nome . " - CNPJ: " . $item->z01_cgccpf . " - Data do Credenciamento: " . implode('/', array_reverse(explode('-', $item->l205_datacred)));
+        $cpfcnpj = strlen($item->z01_cgccpf) == 14 ? "CNPJ" : "CPF";
+        $descricaofornecedor = $item->z01_nome . " - $cpfcnpj: " . $item->z01_cgccpf . " - Data do Credenciamento: " . implode('/', array_reverse(explode('-', $item->l205_datacred)));
         echo " <div style='font-size:11px;font-weight: bold;'>
          $descricaofornecedor</div> ";
         echo '
@@ -129,7 +130,7 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
 
     if ($proximofornecedor != $item->l205_fornecedor) {
         $total = 'R$ ' . number_format($total, 2, ',', '.');
-        echo "<td style='border:none;' colspan='2' align='left' > Total: $total </td>";
+        echo "<td style='border:none;' colspan='6' align='right' > Total: $total </td>";
         echo '</table> </div>';
         echo "<br><br><br>";
     }

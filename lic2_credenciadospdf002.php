@@ -99,7 +99,8 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
     if ($fornecedor != $item->l205_fornecedor) {
         $pdf->ln(3);
         $pdf->setfont('arial', 'b', 8);
-        $pdf->cell(160, 6, "$item->z01_nome - CNPJ: $item->z01_cgccpf - Data do Credenciamento: " . implode('/', array_reverse(explode('-', $item->l205_datacred))), 0, 1, "L", 0);
+        $cpfcnpj = strlen($item->z01_cgccpf) == 14 ? "CNPJ" : "CPF";
+        $pdf->cell(160, 6, "$item->z01_nome - $cpfcnpj: $item->z01_cgccpf - Data do Credenciamento: " . implode('/', array_reverse(explode('-', $item->l205_datacred))), 0, 1, "L", 0);
         $pdf->setfont('arial', 'B', 7);
         $pdf->cell(20, 6, "Item", 1, 0, "C", 1);
         $pdf->cell(90, 6, "Descrição", 1, 0, "C", 1);
@@ -129,7 +130,7 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
 
     if ($proximofornecedor != $item->l205_fornecedor) {
         $total = 'R$ ' . number_format($total, 2, ',', '.');
-        $pdf->cell(20, 6, "Total:  $total", 0, 0, "L", 0);
+        $pdf->cell(190, 6, "Total:  $total", 0, 0, "R", 0);
         $pdf->ln(6);
     }
 }
