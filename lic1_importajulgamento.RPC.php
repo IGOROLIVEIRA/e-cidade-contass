@@ -13,6 +13,7 @@ require_once("std/DBDate.php");
 require_once("classes/db_liclicitaimportarjulgamento_classe.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Comandos/BuscaJulgamento.model.php");
 require_once("model/licitacao/PortalCompras/Comandos/ValidaChaveAcesso.model.php");
+require_once("model/licitacao/PortalCompras/Julgamento/Fabricas/JulgamentoFabrica.model.php");
 
 $cl_liclcitaimportarjulgamento = new cl_liclicitaimportarjulgamento();
 
@@ -46,10 +47,12 @@ switch ($oParam->exec) {
         try{
             $codigo = $oParam->codigo;
             $chaveAcesso = (new ValidaChaveAcesso)->execute();
+            $julgamentoFabrica = new JulgamentoFabrica();
 
             $buscador = new BuscaJulgamento();
             $dados = $buscador->execute((int)$codigo, $chaveAcesso);
-            $dadosFiltrados = 
+            $julgamento = $julgamentoFabrica->criar($dados);
+
             $oRetorno->message = "processou";
             $oRetorno->status = 1;
         } catch(Exception $oErro) {

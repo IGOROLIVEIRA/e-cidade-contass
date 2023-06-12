@@ -14,9 +14,13 @@ class JulgamentoFabrica
     {
         $julgamento = new Julgamento();
 
-        $julgamento->setIdJulgamento((int)$dados['_id']);
+        $julgamento->setId((int)$dados['_id']);
+
+        $julgamento->setNumero($dados['NUMERO']);
 
         $julgamento->setDataProposta($dados['dataInicioPropostas']);
+
+        $julgamento->setHoraProposta($dados['horaInicioPropostas']);
 
         return $julgamento;
 

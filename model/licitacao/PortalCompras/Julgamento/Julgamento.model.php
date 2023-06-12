@@ -5,12 +5,24 @@ require_once("model/licitacao/PortalCompras/Julgamento/Lotes.model.php");
 
 class Julgamento
 {
-
+    /**
+     * @var integer
+     */
     private int    $idJulgamento;
     /**
      * @var string
      */
     private string $dataProposta;
+
+    /**
+     * @var string
+     */
+    private string $horaProposta;
+
+    /**
+     * @var string
+     */
+    private string $numero;
 
     /**
      * @var Lote[] $lotes
@@ -56,7 +68,7 @@ class Julgamento
     /**
      * Get the value of idJulgamento
      */
-    public function getIdJulgamento(): int
+    public function getId(): int
     {
         return $this->idJulgamento;
     }
@@ -64,9 +76,47 @@ class Julgamento
     /**
      * Set the value of idJulgamento
      */
-    public function setIdJulgamento(int $idJulgamento): self
+    public function setId(int $idJulgamento): self
     {
         $this->idJulgamento = $idJulgamento;
+
+        return $this;
+    }
+
+
+
+    /**
+     * Get the value of numero
+     */
+    public function getNumero(): string
+    {
+        return $this->numero;
+    }
+
+    /**
+     * Set the value of numero
+     */
+    public function setNumero(string $numero): self
+    {
+        $this->numero = $numero;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of horaProposta
+     */
+    public function getHoraProposta(): string
+    {
+        return $this->horaProposta;
+    }
+
+    /**
+     * Set the value of horaProposta
+     */
+    public function setHoraProposta(string $horaProposta): self
+    {
+        $this->horaProposta = $horaProposta;
 
         return $this;
     }

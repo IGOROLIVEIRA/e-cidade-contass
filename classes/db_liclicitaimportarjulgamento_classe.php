@@ -19,8 +19,8 @@ class cl_liclicitaimportarjulgamento
     public string $pc20_dtate;
     public string $pc20_hrate;
     public string $pc20_obs;
-    public string $pc20_prazoentrega;//data inicio proposta
-    public int    $pc20_cotacaoprevia = 1;//1
+    public ?string $pc20_prazoentrega = null;
+    public int    $pc20_cotacaoprevia = 1;
     public int    $pc20_codorc;
 
     //pcorcamforne
@@ -94,6 +94,15 @@ class cl_liclicitaimportarjulgamento
         return $this->sql_record($sql);
     }
 
+    public function buscaNumCgm(string $cpnj)
+    {
+        $sql = "
+        select  z01_numcgm as numcgm from protocolo.db_cgmcpf where z01_cpf = '$cnpj'
+        ";
+
+        return $this->sql_record($sql);
+    }
+
 
     public function sql_record($sql)
     {
@@ -119,59 +128,58 @@ class cl_liclicitaimportarjulgamento
         return $result;
       }
 
-      public function inserir(array $dados)
+
+      public function inserePcorcam()
       {
-
-      }
-
-      private function inserePcorcam()
-      {
-        $this->pc20_obs =  'ORCAMENTO IMPORTADO - ID idLicitacao - NR_PROCESSO';
-
+        $sequencia = $this->buscaNovoValSeq('pcorcam_pc20_codorc_seq');
         $insert = "INSERT INTO
-        pcorcam(pc20_dtate, pc20_hrate, pc20_obs, pc20_prazoentrega, pc20_validadeorcamento, pc20_cotacaoprevia )
-        VALUES ($this->pc20_dtate, $this->pc20_hrate, $this->pc20_prazoentrega, NULL, 1 )
+        pcorcam(pc20_codorc, pc20_dtate, pc20_hrate, pc20_obs, pc20_prazoentrega, pc20_validadeorcamento, pc20_cotacaoprevia )
+        VALUES ($sequencia ,$this->pc20_dtate, $this->pc20_hrate, $this->pc20_prazoentrega, NULL, 1 )
         RETURNING pc20_codorc;";
 
         return pg_exec($insert);
       }
 
-      private function inserePcorcamforne()
+      public function inserePcorcamforne()
       {
+        $sequencia = $this->buscaNovoValSeq('pcorcamforne_pc21_orcamforne_seq');
         $insert = "INSERT INTO
-        pcorcamforne(pc21_codorc, pc21_numcgm, pc21_importado, pc21_prazoent, pc21_validadorc)
-        VALUES($this->pc21_codorc, $this->pc21_numcgm, true, NULL, NULL)
+        pcorcamforne(pc21_orcamforne,pc21_codorc, pc21_numcgm, pc21_importado, pc21_prazoent, pc21_validadorc)
+        VALUES($sequencia,$this->pc21_codorc, $this->pc21_numcgm, true, NULL, NULL)
         RETURNING pc21_orcamforne
         ";
         return pg_exec($insert);
       }
 
-      private function insereHabilitacaoforn()
+      public function insereHabilitacaoforn()
       {
-       $insert = "INSERT INTO
-       habilitacaoforn(l206_fornecedor, l206_licitacao, l206_representante, l206_datahab,
-       l206_numcertidaoinss, l206_dataemissaoinss, l206_datavalidadeinss, l206_numcertidaofgts, l206_dataemissaofgts
-       l206_datavalidadefgts, l206_numcertidaocndt, l206_dataemissaocndt, l206_datavalidadecndt)
-       VALUES(
-        $this->l206_fornecedor, $this->l206_licitacao, $this->l206_represente, $this->l206_dathab,
-        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
-        )
-        RETURNING l206_sequencia
-       ";
-       return pg_exec($insert);
-      }
-
-      private function inserePcorcamitem()
-      {
+        $sequencia = $this->buscaNovoValSeq('habilitacaoforn_l206_sequencial_seq');
         $insert = "INSERT INTO
-        pcorcamitem(pc22_codorc)
-        VALUES($this->pc22_codorc)
-        RETURNING pc26_orcamitem
+        habilitacaoforn(l206_sequencial, l206_fornecedor, l206_licitacao, l206_representante, l206_datahab,
+        l206_numcertidaoinss, l206_dataemissaoinss, l206_datavalidadeinss, l206_numcertidaofgts, l206_dataemissaofgts
+        l206_datavalidadefgts, l206_numcertidaocndt, l206_dataemissaocndt, l206_datavalidadecndt)
+        VALUES(
+         $sequencia ,$this->l206_fornecedor, $this->l206_licitacao, $this->l206_represente, $this->l206_dathab,
+         NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
+         )
+         RETURNING l206_sequencial
         ";
         return pg_exec($insert);
       }
 
-      private function inserePcorcamval()
+      public function inserePcorcamitem()
+      {
+        $sequencia = $this->buscaNovoValSeq('pcorcamitem_pc22_orcamitem_seq');
+
+        $insert = "INSERT INTO
+        pcorcamitem(pc22_orcamitem, pc22_codorc)
+        VALUES($sequencia ,$this->pc22_codorc)
+        RETURNING pc22_orcamitem
+        ";
+        return pg_exec($insert);
+      }
+
+      public function inserePcorcamval()
       {
         $insert = "INSERT INTO
         pcorcamval(pc23_orcamforne, pc23_orcamitem, pc23_valor, pc23_quant,
@@ -183,13 +191,19 @@ class cl_liclicitaimportarjulgamento
         return pg_exec($insert);
       }
 
-      private function inserePcorcamjulg()
+      public function inserePcorcamjulg()
       {
         $insert = "INSERT INTO
         pcorcamjulg(pc24_orcamitem, pc24_orcamitem,pc24_pontuacao)
         VALUES($this->pc24_orcamitem, $this->pc24_orcamitem, $this->pc24_pontuacao)
         ";
         return pg_exec($insert);
+      }
+
+      private function buscaNovoValSeq(string $sequencia)
+      {
+        $result_seq = pg_query("select nextval('$sequencia')as sequencia");
+   	    return (db_utils::fieldsMemory($result_seq,0))->sequencia;
       }
 
 }
