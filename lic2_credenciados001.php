@@ -6,9 +6,6 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 
-
-$clrotulo = new rotulocampo;
-$clrotulo->label("l20_codigo");
 db_app::load("scripts.js,windowAux.widget.js, prototype.js");
 ?>
 

@@ -21,6 +21,8 @@ where
 
 $liclicita = db_utils::fieldsMemory($rsLicitacao, 0);
 
+/* Consulta para informações dos itens da licitação. */
+
 $rsItensCredenciados = db_query("
 select
 	*
@@ -90,13 +92,18 @@ $pdf->Line(10,  $pdf->GetY(), 200,  $pdf->GetY());
 
 $pdf->ln(5);
 
-$fornecedor;
+// Variável referente ao fornecedor da iteração atual dos itens.
+$fornecedoratual;
+// Variável referente ao valor total dos itens de determinado fornecedor.
 $total = 0;
 
 for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
     $item = db_utils::fieldsMemory($rsItensCredenciados, $i);
 
-    if ($fornecedor != $item->l205_fornecedor) {
+    /* Caso fornecedor da iteração atual ainda não foi emitido no relatório
+        gerar cabeçalho com as informações do fornecedor acima das células referente aos itens  .*/
+
+    if ($fornecedoratual != $item->l205_fornecedor) {
         $pdf->ln(3);
         $pdf->setfont('arial', 'b', 8);
         $cpfcnpj = strlen($item->z01_cgccpf) == 14 ? "CNPJ" : "CPF";
@@ -108,10 +115,12 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
         $pdf->cell(20, 6, "Quantidade", 1, 0, "C", 1);
         $pdf->cell(20, 6, "Valor Unitário", 1, 0, "C", 1);
         $pdf->cell(20, 6, "Valor Total", 1, 0, "C", 1);
-        $fornecedor = $item->l205_fornecedor;
+        $fornecedoratual = $item->l205_fornecedor;
         $total = 0;
         $pdf->ln(6);
     }
+
+    /* Calculo para altura da celula conforme o tamanho da descricao  do item */
 
     $altura = $pdf->NbLines(90, $item->pc01_descrmater);
 
@@ -122,11 +131,14 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
     $pdf->SetX(120);
     $pdf->cell(20, 5 * $altura, $item->m61_descr, 1, 0, "C", 0);
     $pdf->cell(20, 5 * $altura, $item->si02_qtditem, 1, 0, "C", 0);
-    $pdf->cell(20, 5 * $altura, 'R$ ' . number_format($item->si02_vlprecoreferencia, 2, ',', '.'), 1, 0, "C", 0);
-    $pdf->cell(20, 5 * $altura, 'R$ ' . number_format($item->si02_vltotalprecoreferencia, 2, ',', '.'), 1, 1, "C", 0);
+    $pdf->cell(20, 5 * $altura, $item->si02_vlprecoreferencia, 1, 0, "C", 0);
+    $pdf->cell(20, 5 * $altura, $item->si02_vltotalprecoreferencia, 1, 1, "C", 0);
 
     $total += $item->si02_vltotalprecoreferencia;
     $proximofornecedor = db_utils::fieldsMemory($rsItensCredenciados, $i + 1)->l205_fornecedor;
+
+    /* Caso fornecedor diferente na próxima posição da iteração 
+       inserir célula de valor total.*/
 
     if ($proximofornecedor != $item->l205_fornecedor) {
         $total = 'R$ ' . number_format($total, 2, ',', '.');

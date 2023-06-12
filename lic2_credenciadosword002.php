@@ -2,8 +2,6 @@
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 
-ini_set("display_errors", "on");
-
 /* Consulta para informações da licitação. */
 $rsLicitacao = db_query("
 select
@@ -20,6 +18,8 @@ where
 	l20_codigo = $l20_codigo;");
 
 $liclicita = db_utils::fieldsMemory($rsLicitacao, 0);
+
+/* Consulta para informações dos itens da licitação. */
 
 $rsItensCredenciados = db_query("
 select
@@ -89,11 +89,16 @@ echo <<<HTML
   
 HTML;
 
+// Variável referente ao fornecedor da iteração atual dos itens.
 $fornecedor = 0;
+// Variável referente ao valor total dos itens de determinado fornecedor.
 $total = 0;
 
 for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
     $item = db_utils::fieldsMemory($rsItensCredenciados, $i);
+
+    /* Caso fornecedor da iteração atual ainda não foi emitido no relatório
+        gerar cabeçalho com as informações do fornecedor acima das células referente aos itens  .*/
 
     if ($fornecedor != $item->l205_fornecedor) {
         $cpfcnpj = strlen($item->z01_cgccpf) == 14 ? "CNPJ" : "CPF";
@@ -120,13 +125,16 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
     echo "<td>" . substr($item->pc01_descrmater, 0, 62) . "</td>";
     echo "<td style='text-align:left'>" . $item->m61_descr . "</td>";
     echo "<td>" . $item->si02_qtditem . "</td>";
-    echo "<td>" . 'R$ ' . number_format($item->si02_vlprecoreferencia, 2, ',', '.') . "</td>";
-    echo "<td>" . 'R$ ' . number_format($item->si02_vltotalprecoreferencia, 2, ',', '.') . "</td>";
+    echo "<td>" . $item->si02_vlprecoreferencia . "</td>";
+    echo "<td>" . $item->si02_vltotalprecoreferencia . "</td>";
     echo "</tr>";
 
 
     $proximofornecedor = db_utils::fieldsMemory($rsItensCredenciados, $i + 1)->l205_fornecedor;
     $total += $item->si02_vltotalprecoreferencia;
+
+    /* Caso fornecedor diferente na próxima posição da iteração 
+       inserir célula de valor total.*/
 
     if ($proximofornecedor != $item->l205_fornecedor) {
         $total = 'R$ ' . number_format($total, 2, ',', '.');
