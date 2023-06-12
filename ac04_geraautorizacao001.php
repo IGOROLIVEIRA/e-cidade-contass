@@ -64,6 +64,7 @@ $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
 $clrotulo->label("e54_adesaoregpreco");
 
+
 // funcao do sql
 function sql_query_file($c99_anousu = null, $c99_instit = null, $campos = "*", $ordem = null, $dbwhere = "")
 {
@@ -156,7 +157,7 @@ if ($x->consultarDataDoSistema == true) {
                 <tr>
                     <td width="100%">
                         <table width="100%">
-                            <tr style="text-align: center;">
+                            <tr style="text-align: left;">
                                 <td title="<?php echo $Tac16_sequencial; ?>">
                                     <?php db_ancora($Lac16_sequencial, "js_pesquisaac16_sequencial(true);", 1); ?>
                                     <span id='ctnTxtCodigoAcordo'></span>
@@ -164,8 +165,21 @@ if ($x->consultarDataDoSistema == true) {
 
                                 </td>
 
+                                <td>
+                                    <b>Data da Autorização: </b>
+                                    <?php
+
+                                    $iDia = date("d", db_getsession("DB_datausu"));
+                                    $iMes = date("m", db_getsession("DB_datausu"));
+                                    $iAno = date("Y", db_getsession("DB_datausu"));
+
+                                    db_inputdata('e54_emissao', $iDia, $iMes, $iAno, true, 'text', 1, "");
+
+                                    ?>
+                                </td>
+
                             </tr>
-                            <tr style="text-align: center;">
+                            <tr style="text-align: left;">
                                 <td title="<?php echo $Tac16_sequencial; ?>">
                                     <b>Fornecedor: </b>
                                     <span id='ctnTxtCgm'></span>
@@ -1408,6 +1422,7 @@ if ($x->consultarDataDoSistema == true) {
             oParam.dados.resumo = encodeURIComponent(tagString($F('e54_resumo')));
             oParam.dados.iCaracteristicaPeculiar = $F("iSequenciaCaracteristica");
             oParam.dados.tipoempenho = $F('e54_codtipo');
+            oParam.dados.sDataEmissao = document.getElementById('e54_emissao').value;
         }
 
         for (var i = 0; i < aItens.length; i++) {
@@ -1682,6 +1697,29 @@ if ($x->consultarDataDoSistema == true) {
     document.getElementById('oGridItensSelectAll').addEventListener('click', event => {
         js_somaItens();
     })
+
+    document.getElementById('e54_emissao').onchange = js_validaDataAutorizacao;
+
+
+    /* Rotina para validacao de data de autorização */
+    function js_validaDataAutorizacao() {
+        var oParam = new Object();
+        oParam.e54_emiss = document.getElementById('e54_emissao').value;
+        oParam.ac16_sequencial = document.getElementById('oTxtCodigoAcordo').value;
+        var oAjax = new Ajax.Request('ac04_validadataautorizacao.RPC.php', {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_retornoValidacaoDataAutorizacao
+        });
+    }
+
+    function js_retornoValidacaoDataAutorizacao(oAjax) {
+        var oRetorno = JSON.parse(oAjax.responseText);
+        if (oRetorno.status == 2) {
+            alert(oRetorno.erro.urlDecode());
+            document.getElementById('e54_emissao').value = '';
+        }
+    }
 </script>
 <?php
 db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
