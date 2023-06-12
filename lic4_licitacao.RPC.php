@@ -515,7 +515,7 @@ switch ($oParam->exec) {
             $sCampos .= " m61_descr, pc01_codmater, pc01_descrmater, e54_autori,e55_quant,  {$sBuscaFornecedor}";
 
             $sOrdem   = " l21_ordem ";
-            $sWhere   = " l21_codliclicita = {$oParam->iCodigoLicitacao} ";
+            $sWhere   = " pc11_quant > 0 and l21_codliclicita = {$oParam->iCodigoLicitacao} ";
 
             /**
              * adicionado essa condição pois licitações do tipo 102 e 103 nao tem julgamento OC8339
