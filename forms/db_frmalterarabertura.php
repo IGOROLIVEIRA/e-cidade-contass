@@ -133,7 +133,7 @@ function js_salvarAbertura() {
    }
    js_divCarregando("Aguarde, salvando abertura Registro de Preço.","msgBox");
    var oParam  = new Object();
-   oParam.exec = "salvarAbertura";
+   oParam.exec = "salvarAberturamanutencao";
    oParam.datainicio  = $F('pc54_datainicio');
    oParam.datatermino = $F('pc54_datatermino');
    oParam.liberado    = $('pc54_liberado').checked;
@@ -152,9 +152,7 @@ function js_retornoSalvarabertura(oAjax) {
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 1) {
      
-     parent.iframe_itens.location.href='com4_alteraraberturaitens.php';
-     $('pc10_numero').value = oRetorno.iCodigoSolicita;
-     parent.mo_camada('itens');
+    alert("Abertura salva com sucesso!");
   } else {
    alert(oRetorno.message.urlDecode());
   }

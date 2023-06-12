@@ -99,13 +99,6 @@ $db_opcao           = 1;
                 </td>
               </tr>
               <tr>
-                <td>
-                </td>
-                <td>
-                  <input type='button' id='btnOutrasInf' value='Mais Informações'>
-                </td>
-              </tr>
-              <tr>
                 <td colspan="2" style="text-align: center;">
                   <input type="button" value='Adicionar Item' id='btnAddItem'>
                   <input type="button" value='Alterar Item' id='btnAlterarItem' style="display: none;">
@@ -252,7 +245,6 @@ $db_opcao           = 1;
     $('btnAddItem').observe("click", js_adicionarItem);
     $('btnAlterarItem').observe("click", js_alterarItem);
     $('pc17_unid').style.height = $('pc01_descrmater').style.height + "px";
-    $('btnOutrasInf').observe("click", js_maisInformacoes);
     js_parametros();
 
   }
@@ -319,7 +311,7 @@ $db_opcao           = 1;
     oParam.sPgto = encodeURIComponent(tagString($F('pc11_pgto')));
     oParam.iUnidade = $F('pc17_unid');
     oParam.nQuantUnidade = $F('pc17_quant');
-    oParam.exec = "adicionarItemAbertura";
+    oParam.exec = "adicionarItemmanutencao";
     var oAjax = new Ajax.Request(sUrlRC, {
       method: "post",
       parameters: 'json=' + Object.toJSON(oParam),
@@ -533,21 +525,6 @@ $db_opcao           = 1;
       onComplete: js_retornoparametro,
       assynchronous: false
     });
-  }
-
-  function js_maisInformacoes() {
-
-    $('pc11_resum').value = "";
-    $('pc11_just').value = "";
-    $('pc11_pgto').value = "";
-    $('pc11_prazo').value = "";
-
-    windowAuxiliar.show(10, 10);
-    $('pc11_prazo').focus();
-    $('btnFecharWindowAux').onclick = function() {
-      windowAuxiliar.hide();
-    }
-
   }
 
   function js_makeWindow() {

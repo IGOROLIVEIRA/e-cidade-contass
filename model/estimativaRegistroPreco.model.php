@@ -424,7 +424,7 @@ class estimativaRegistroPreco extends solicitacaoCompra
    * @return void
    */
 
-  public function anular($sMotivo)
+  public function anular($sMotivo, $sProcessoAdministrativo = null)
   {
 
     $lSolicitaAnulada = $this->isAnulada();

@@ -1,4 +1,5 @@
 <?php
+//ini_set('display_errors','on');
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -93,7 +94,24 @@ switch ($oParam->exec) {
       $oRetorno->status  = 2;
     }
     break;
+  case "salvarAberturamanutencao":
 
+      try {
+  
+        db_inicio_transacao();    
+        $oSolicita =  $_SESSION["oSolicita"];
+        $iCodAbertura = $oSolicita->getCodigoSolicitacao();
+        $aberturaRegistro = new aberturaRegistroPreco();
+        $aberturaRegistro->alterarResumoAbertura(db_stdClass::normalizeStringJsonEscapeString($oParam->resumo),$iCodAbertura);
+        $aberturaRegistro->alterarDataAbertura($oParam,$iCodAbertura);
+        db_fim_transacao(false);
+      } catch (Exception $eErro) {
+  
+        db_fim_transacao(true);
+        $oRetorno->message = urlencode($eErro->getMessage());
+        $oRetorno->status  = 2;
+      }
+    break;
   case "salvarEstimativa":
 
     try {
@@ -252,6 +270,80 @@ switch ($oParam->exec) {
           $oItemRetono->indice = $iIndice;
           $oItemRetono->temestimativa = $lTemEstimativa;
 
+          $oRetorno->itens[] = $oItemRetono;
+        }
+      }
+    } catch (Exception $eErro) {
+
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+    }
+
+    break;
+  case "adicionarItemmanutencao":
+    try {
+
+      db_inicio_transacao();
+      
+
+      //VALIDANDO SE JÁ FOI ADD O ITEM
+      $iControle = 0;
+      $validaItens = $oSolicita->getItens();
+      if (count($validaItens) > 0) {
+        foreach ($validaItens as $row) {
+          if ($oParam->iCodigoItem == $row->getCodigoMaterial()) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode("O item $oParam->iCodigoItem já foi adicionado!!");
+            $iControle = 1;
+          }
+        }
+      }
+      if ($iControle == 0) {
+        //Abertura
+        $iCodAbertura = $oSolicita->getCodigoSolicitacao();
+        db_inicio_transacao();
+        //solicita aqui tem a alteracao do resumo pc10_numero
+        
+
+        
+
+
+        //solicitem aqui tem a quantidade, valor, serviquantidade e reservado
+        $aberturaRegistro = new aberturaRegistroPreco();
+        $aberturaRegistro->adicionarItemmanutencao($iCodAbertura,$oParam);
+
+        //solicitempcmater vinculo da pcmater com a solicitem
+
+        //solicitemunid vinculo com a unidade 
+
+        //solicitemvinculo
+
+        //solicitavinculo aqui vc consegue os vinculos com as estimativas e compilação pc53_solicitapai verificar o tipo 3 abertura - 4 estimativa - 6 compilacao
+
+        //estimativas
+        db_fim_transacao(false);
+        $lTemEstimativa = false;
+        $aitens = $oSolicita->getItens();
+        if ($oSolicita instanceof aberturaRegistroPreco) {
+          if ($oSolicita->hasEstimativas()) {
+            $lTemEstimativa = true;
+          }
+        }
+        foreach ($aitens as $iIndice => $oItem) {
+
+          $oItemRetono = new stdClass;
+          $oItemRetono->codigoitem        = $oItem->getCodigoMaterial();
+          $oItemRetono->descricaoitem     = $oItem->getDescricaoMaterial();
+          $oItemRetono->quantidade        = $oItem->getQuantidade();
+          $oItemRetono->automatico        = $oItem->isAutomatico();
+          $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+          $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+          $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+          $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
+          $oItemRetono->unidade           = $oItem->getUnidade();
+          $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
+          $oItemRetono->indice            = $iIndice;
+          $oItemRetono->temestimativa     = $lTemEstimativa;
           $oRetorno->itens[] = $oItemRetono;
         }
       }

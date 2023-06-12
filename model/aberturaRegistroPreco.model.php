@@ -188,6 +188,7 @@ class aberturaRegistroPreco extends solicitacaoCompra {
       $oDaoSolicitem = db_utils::getDao("solicitem");
       $sSqlItens     = $oDaoSolicitem->sql_query_mat(null,"*","pc11_seq", "pc11_numero={$this->iCodigoSolicitacao}");
       $rsItens       = $oDaoSolicitem->sql_record($sSqlItens);
+      
       if ($oDaoSolicitem->numrows > 0) {
 
         for ($iItem = 0; $iItem < $oDaoSolicitem->numrows; $iItem++) {
@@ -210,7 +211,7 @@ class aberturaRegistroPreco extends solicitacaoCompra {
    * @return
    */
 
-  public function anular($sMotivo) {
+  public function anular($sMotivo, $sProcessoAdministrativo = null) {
 
   	$lSolicitaAnulada = $this->isAnulada();
 
@@ -646,5 +647,77 @@ class aberturaRegistroPreco extends solicitacaoCompra {
    */
   public function getFormaDeControle() {
     return $this->iFormaControle;
+  }
+
+  public function alterarResumoAbertura($iResumo,$iCodigoAbertura) {
+    
+    $oDaoSolicitacao = db_utils::getDao("solicita");
+    $oDaoSolicitacao->pc10_resumo = $iResumo;
+    $oDaoSolicitacao->pc10_numero = $iCodigoAbertura;
+    $oDaoSolicitacao->alterar($iCodigoAbertura);
+
+    
+  }
+
+  public function alterarDataAbertura($iAbertura,$iCodigoAbertura){
+    $oDaoAberturaPreco = db_utils::getDao("solicitaregistropreco");
+    $rsSolicitaAbertura = $oDaoAberturaPreco->sql_record($oDaoAberturaPreco->sql_query_file(null,'pc54_sequencial',null,'pc54_solicita ='.$iCodigoAbertura));
+    $oDaoSolicitaAbeutra = db_utils::fieldsmemory($rsSolicitaAbertura, 0);
+    $oDaoAberturaPreco->pc54_datainicio  = implode("-", array_reverse(explode("/", $iAbertura->datainicio)));
+    $oDaoAberturaPreco->pc54_datatermino = implode("-", array_reverse(explode("/", $iAbertura->datatermino)));
+    $oDaoAberturaPreco->pc54_liberado    = $iAbertura->liberado == 't'?true:false;;
+    $oDaoAberturaPreco->pc54_sequencial    = $oDaoSolicitaAbeutra->pc54_sequencial;
+    $oDaoAberturaPreco->alterar($oDaoSolicitaAbeutra->pc54_sequencial);
+  }
+
+  public function adicionarItemmanutencao($iCodigoAbertura,$item){
+    /**
+     * Incluimos na tabela solicitem
+     */
+    $oDaoSolicitem                         = db_utils::getDao("solicitem");
+    $rsOrdem = $oDaoSolicitem->sql_record($oDaoSolicitem->sql_query_file(null,'max(pc11_seq) + 1 as pc11_seq',null,'pc11_numero='.$iCodigoAbertura));
+    $oDaoOrdem = db_utils::fieldsmemory($rsOrdem, 0);
+    $oDaoSolicitem->pc11_just              = null;
+    $oDaoSolicitem->pc11_liberado          = true;
+    $oDaoSolicitem->pc11_pgto              = null;
+    $oDaoSolicitem->pc11_prazo             = null;
+    $oDaoSolicitem->pc11_quant             = '0';
+    $oDaoSolicitem->pc11_vlrun             = '0';
+    $oDaoSolicitem->pc11_seq               = $oDaoOrdem->pc11_seq;
+    $oDaoSolicitem->pc11_resum             = null;
+    $oDaoSolicitem->pc11_servicoquantidade = false;
+    $oDaoSolicitem->pc11_reservado = false;
+    $oDaoSolicitem->pc11_numero  = $iCodigoAbertura;
+    $oDaoSolicitem->incluir(null);
+    
+    if ($oDaoSolicitem->erro_status == 0) {
+      throw new Exception("Erro ao salvar item {$item->iCodigoItem}!\nErro Retornado:{$oDaoSolicitem->erro_msg}");
+    }
+
+
+    /**
+     * incluimos na tabela solicitempcmater
+     */
+    $oDaosolicitemPcMater = db_utils::getDao("solicitempcmater");
+    $oDaosolicitemPcMater->incluir($item->iCodigoItem,$oDaoSolicitem->pc11_codigo);
+    if ($oDaosolicitemPcMater->erro_status == 0) {
+      throw new Exception("Erro ao salvar item {$item->iCodigoItem}!\nErro Retornado:{$oDaosolicitemPcMater->erro_msg}");
+    }
+
+    /**
+     * Salvamos as informacoes da Unidade do material
+     */
+    $oDaosolicitemUnid = db_utils::getDao("solicitemunid");
+    $oDaosolicitemUnid->pc17_codigo = $oDaoSolicitem->pc11_codigo;
+    $oDaosolicitemUnid->pc17_quant = '0';
+    $oDaosolicitemUnid->pc17_unid  = $item->iUnidade;
+    $oDaosolicitemUnid->incluir($oDaoSolicitem->pc11_codigo);
+    if ($oDaosolicitemUnid->erro_status == 0) {
+      throw new Exception("Erro ao salvar item {$item->iCodigoItem}!\nErro Retornado:{$oDaosolicitemUnid->erro_msg}");
+    }
+
+    
+
+    return true;
   }
 }
