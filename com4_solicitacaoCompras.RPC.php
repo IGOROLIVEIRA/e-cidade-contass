@@ -1,5 +1,5 @@
 <?php
-//ini_set('display_errors','on');
+ini_set('display_errors','on');
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -200,6 +200,7 @@ switch ($oParam->exec) {
 
         $oRetorno->itens[] = $oItemRetono;
       }
+      db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'ALTERACAO DE ITEM REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,2)");
       db_fim_transacao(false);
     } catch (Exception $eErro) {
 
@@ -283,12 +284,24 @@ switch ($oParam->exec) {
   case "adicionarItemmanutencao":
     try {
 
-      db_inicio_transacao();
       
+      $iCodAbertura = $oSolicita->getCodigoSolicitacao();
 
       //VALIDANDO SE JÁ FOI ADD O ITEM
       $iControle = 0;
       $validaItens = $oSolicita->getItens();
+      $rsItens       = db_query("select * from solicitem inner  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo inner  join pcmater  on pcmater.pc01_codmater = solicitempcmater.pc16_codmater where pc11_numero = $iCodAbertura");
+      
+      if (pg_num_rows($rsItens) > 0) {
+        
+        for ($iItem = 0; $iItem < pg_num_rows($rsItens); $iItem++) {
+
+          $oItem = db_utils::fieldsMemory($rsItens, $iItem, false, false, true);
+          $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
+          $validaItens[]   = $oItemSolicitacao;
+
+        }
+      }
       if (count($validaItens) > 0) {
         foreach ($validaItens as $row) {
           if ($oParam->iCodigoItem == $row->getCodigoMaterial()) {
@@ -300,7 +313,7 @@ switch ($oParam->exec) {
       }
       if ($iControle == 0) {
         //Abertura
-        $iCodAbertura = $oSolicita->getCodigoSolicitacao();
+        
         db_inicio_transacao();
         //solicita aqui tem a alteracao do resumo pc10_numero
         
@@ -321,14 +334,28 @@ switch ($oParam->exec) {
         //solicitavinculo aqui vc consegue os vinculos com as estimativas e compilação pc53_solicitapai verificar o tipo 3 abertura - 4 estimativa - 6 compilacao
 
         //estimativas
+
+        //log
+
+        db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'INCLUSAO DE ITEM REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,1)");
+
         db_fim_transacao(false);
         $lTemEstimativa = false;
-        $aitens = $oSolicita->getItens();
-        if ($oSolicita instanceof aberturaRegistroPreco) {
-          if ($oSolicita->hasEstimativas()) {
-            $lTemEstimativa = true;
-          }
+        //$aitens = $oSolicita->getItens();
+        
+      $rsItens       = db_query("select * from solicitem inner  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo inner  join pcmater  on pcmater.pc01_codmater = solicitempcmater.pc16_codmater where pc11_numero = $iCodAbertura");
+      
+      if (pg_num_rows($rsItens) > 0) {
+        
+        for ($iItem = 0; $iItem < pg_num_rows($rsItens); $iItem++) {
+
+          $oItem = db_utils::fieldsMemory($rsItens, $iItem, false, false, true);
+          $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
+          $aitens[]   = $oItemSolicitacao;
+
         }
+      }
+
         foreach ($aitens as $iIndice => $oItem) {
 
           $oItemRetono = new stdClass;
@@ -479,6 +506,7 @@ switch ($oParam->exec) {
         $oItemRetono->temestimativa     = $lTemEstimativa;
         $oRetorno->itens[] = $oItemRetono;
       }
+      db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'EXCLUSAO DE ITEM REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,3)");
     } catch (Exception $eErro) {
 
 
@@ -542,6 +570,7 @@ switch ($oParam->exec) {
         $oItemRetono->temestimativa     = $lTemEstimativa;
         $oRetorno->itens[] = $oItemRetono;
       }
+      db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'ALTERACAO DE ITEM REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,2)");
       db_fim_transacao(false);
     } catch (Exception $eErro) {
 

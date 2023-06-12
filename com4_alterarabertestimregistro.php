@@ -90,7 +90,7 @@ db_app::load("widgets/windowAux.widget.js");
             <tr>
               <td nowrap title="Estimativa" width="100%">
                  <?
-                  db_ancora("<b>Estimativa de Registro:</b>","js_pesquisarEstimativa();",1);
+                  db_ancora("<b>Estimativa de Registro:</b>","",1);
                  ?>
               </td>
               <td>

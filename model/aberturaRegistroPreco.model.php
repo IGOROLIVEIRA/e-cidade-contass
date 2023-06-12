@@ -683,7 +683,7 @@ class aberturaRegistroPreco extends solicitacaoCompra {
     $oDaoSolicitem->pc11_prazo             = null;
     $oDaoSolicitem->pc11_quant             = '0';
     $oDaoSolicitem->pc11_vlrun             = '0';
-    $oDaoSolicitem->pc11_seq               = $oDaoOrdem->pc11_seq;
+    $oDaoSolicitem->pc11_seq               = 2;
     $oDaoSolicitem->pc11_resum             = null;
     $oDaoSolicitem->pc11_servicoquantidade = false;
     $oDaoSolicitem->pc11_reservado = false;
