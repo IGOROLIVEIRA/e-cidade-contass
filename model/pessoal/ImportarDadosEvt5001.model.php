@@ -58,7 +58,12 @@ class ImportarDadosEvt5001
      */
     protected $dadosEvento;
 
-    public function __construct($sFile = null, $oXml = null, $dadosEvento)
+    const BASE_CALC_CONTRIB_PREVID_NORMAL = "11";
+    const BASE_CALC_CONTRIB_PREVID_ADICIONAL_15_ANOS = "12";
+    const BASE_CALC_CONTRIB_PREVID_ADICIONAL_20_ANOS = "13";
+    const BASE_CALC_CONTRIB_PREVID_ADICIONAL_25_ANOS = "14";
+
+    public function __construct($sFile = null, $oXml = null, $dadosEvento = null)
     {
         $this->sFile = $sFile;
         $this->bImportViaEnvioEsocial = empty($sFile);
@@ -77,18 +82,19 @@ class ImportarDadosEvt5001
         $aPerApur = explode("-", $this->oXml->evtBasesTrab->ideEvento->perApur);
         $this->evt5001consulta->rh218_perapurano = $aPerApur[0];
         $this->evt5001consulta->rh218_perapurmes = isset($aPerApur[1]) ? $aPerApur[1] : null;
-        $this->evt5001consulta->rh218_indapuracao = $this->oXml->evtBasesTrab->ideEvento->indApuracao;
         $this->evt5001consulta->rh218_numcgm = $this->getCgm($this->oXml->evtBasesTrab->ideTrabalhador->cpfTrab);
         $this->evt5001consulta->rh218_regist = null;
         if (!empty($this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->matricula)) {
             $this->evt5001consulta->rh218_regist = $this->getMatricula($this->oXml->evtBasesTrab->ideTrabalhador->cpfTrab, $this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->matricula);
         }
         $this->evt5001consulta->rh218_codcateg = $this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->codCateg;
-        $this->evt5001consulta->rh218_nrrecarqbase = $this->oXml->evtBasesTrab->ideEvento->nrRecArqBase;
-        $this->evt5001consulta->rh218_tpcr = $this->oXml->evtBasesTrab->infoCpCalc->tpCR;
         $this->evt5001consulta->rh218_vrdescseg = $this->oXml->evtBasesTrab->infoCpCalc->vrDescSeg;
         $this->evt5001consulta->rh218_vrcpseg = $this->oXml->evtBasesTrab->infoCpCalc->vrCpSeg;
         $this->evt5001consulta->rh218_instit = $this->getInstitCgm($this->dadosEvento->rh213_empregador);
+        $this->evt5001consulta->rh218_vlrbasecalc = $this->getValorBaseCalcContribSocial($this->oXml);
+        if (!empty($this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->infoBaseCS)) {
+            $this->evt5001consulta->rh218_regist = $this->getMatricula($this->oXml->evtBasesTrab->ideTrabalhador->cpfTrab, $this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->matricula);
+        }
         if (!empty($this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->matricula)) {
             $this->evt5001consulta->rh218_instit = $this->getInstitMatricula($this->evt5001consulta->rh218_regist);
         }
@@ -174,5 +180,25 @@ class ImportarDadosEvt5001
             throw new Exception("instituição do Empregador não encontrada.");
         }
         return $instit;
+    }
+
+    /**
+     * @param object
+     * @return float
+     */
+    protected function getValorBaseCalcContribSocial($oXml)
+    {
+        $oInfoCategIncid = $oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid;
+        $nValorBase = 0;
+        foreach ($oInfoCategIncid->infoBaseCS as $oInfoBaseCS) {
+            if (in_array($oInfoBaseCS->tpValor, array(self::BASE_CALC_CONTRIB_PREVID_NORMAL, 
+                self::BASE_CALC_CONTRIB_PREVID_ADICIONAL_15_ANOS, 
+                self::BASE_CALC_CONTRIB_PREVID_ADICIONAL_20_ANOS, 
+                self::BASE_CALC_CONTRIB_PREVID_ADICIONAL_25_ANOS
+            ))) {
+                $nValorBase += floatval($oInfoBaseCS->valor);
+            }
+        }
+        return $nValorBase;
     }
 }
