@@ -427,8 +427,8 @@ $db_opcao           = 1;
     document.getElementById('btnAddItem').style.display = "none";
     document.getElementById('pc16_codmater').value = oRow.aCells[1].content;
     document.getElementById('pc01_descrmater').value = oRow.aCells[2].content;
-    document.getElementById('pc16_codmater').disabled = true
-    document.getElementById('pc01_descrmater').disabled = true;
+    //document.getElementById('pc16_codmater').disabled = true
+    //document.getElementById('pc01_descrmater').disabled = true;
     document.getElementById('pc17_unid').value = oRow.aCells[3].content;
   }
 
@@ -446,10 +446,11 @@ $db_opcao           = 1;
     var oParam = new Object();
 
     oParam.iUnidade = $F('pc17_unid');
-    oParam.iCodigoItem = $F('pc16_codmater');
+    oParam.iCodigoItem = oGridItens.aRows[iIndiceAlteracao].aCells[1].content;
+    oParam.iCodigoItemNovo = $F('pc16_codmater');
     oParam.iIndice = iIndiceAlteracao;
 
-    oParam.exec = "alterarItemAbertura";
+    oParam.exec = "alterarItemAberturaManutencao";
     var oAjax = new Ajax.Request(sUrlRC, {
       method: "post",
       parameters: 'json=' + Object.toJSON(oParam),
