@@ -909,7 +909,7 @@ class cl_acordoposicao {
                   WHEN ac26_acordoposicaotipo IN (15,16,17) THEN 3
                   ELSE 2
               END AS tipoTermoContratoId,
-              ac26_numero AS numeroTermoContrato,
+              ac26_numeroaditamento AS numeroTermoContrato,
               ac16_objeto AS objetoTermoContrato,
               ac35_dataassinaturatermoaditivo AS dataAssinatura,
               CASE

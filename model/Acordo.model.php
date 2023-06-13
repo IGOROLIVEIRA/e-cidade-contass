@@ -2218,13 +2218,12 @@ class Acordo
             }
         }
        $oDadosRetornoPNPC[0]->valorAcrescido = $valortotaladitado;
-        
-       var_dump($iTotalPosicaoAditivo);
-       exit;
+       $oDadosRetornoPNPC[0]->qualificacaoinformativo = 'false';
+
        if ($iTotalPosicaoAditivo > 0) {
-            $oDadosRetornoPNPC[0]->qualificacaoAcrescimoSupressao = 'true';
+            $oDadosRetornoPNPC[0]->qualificacaoacrescimosupressao = 'true';
        } else {
-            $oDadosRetornoPNPC[0]->qualificacaoAcrescimoSupressao = 'false';
+            $oDadosRetornoPNPC[0]->qualificacaoacrescimosupressao = 'false';
        }
         
        return $oDadosRetornoPNPC;
