@@ -5,12 +5,12 @@ class Lote implements \JsonSerializable
     /**
      * @var integer
      */
-    private int $numero;
+    private int $numero = 0;
 
     /**
      * @var string
      */
-    private string $descricao;
+    private string $descricao = "";
 
     /**
      * @var boolean
@@ -25,7 +25,7 @@ class Lote implements \JsonSerializable
     /**
      * @var string
      */
-    private string $justificativa;
+    private string $justificativa = "";
 
     /**
      * Undocumented variable

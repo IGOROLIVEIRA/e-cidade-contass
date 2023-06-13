@@ -16,7 +16,7 @@ class ItemFabrica
         $resultado = db_utils::fieldsMemory($dados, $linhaAtual);
 
         $item = new Item();
-        $item->setNumero($linhaAtual + 1);
+        $item->setNumero((int)$resultado->numeroitem);
         $item->setNumeroInterno((int)$resultado->numerointerno);
         $item->setDescricao($resultado->descricaoitem);
         $item->setNatureza((int)$resultado->natureza);

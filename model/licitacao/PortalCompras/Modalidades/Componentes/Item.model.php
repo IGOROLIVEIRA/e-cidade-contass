@@ -10,12 +10,12 @@ class Item implements \JsonSerializable
     /**
      * @var integer
      */
-    private int $numero;
+    private int $numero = 0;
 
     /**
      * @var integer
      */
-    private int $numeroInterno;
+    private int $numeroInterno = 0;
 
     /**
      * @var string
@@ -25,7 +25,7 @@ class Item implements \JsonSerializable
     /**
      * @var integer
      */
-    private int $natureza;
+    private int $natureza = 1;
 
     /**
      * @var string

@@ -77,7 +77,7 @@ class cl_liclicitaportalcompras
         null as itens,
         null as numerocatalogoopcional,
         l04_seq as numeroitem,
-        pc01_codmater as numerointerno,
+        l21_ordem as numerointerno,
         case when
                 pc01_descrmater=pc01_complmater or pc01_complmater is null then pc01_descrmater
                 else pc01_descrmater||'. '||pc01_complmater
@@ -106,7 +106,7 @@ class cl_liclicitaportalcompras
         case when
                 si02_criterioadjudicacao=3 then si02_vlprecoreferencia
                 else si02_vlpercreferencia
-        end as valorreferencia,
+        end as valorReferencia,
         pc54_datainicio as datainicio,
         pc54_datatermino as datatermino
         from liclicita
@@ -120,9 +120,9 @@ class cl_liclicitaportalcompras
         join pcmater on pc01_codmater=pc16_codmater
         join solicitemunid on pc17_codigo=pc11_codigo
         join matunid on m61_codmatunid=pc17_unid
-        join pcorcamitemproc on pc31_pcprocitem=pc81_codprocitem
-        join pcorcamitem on pc22_orcamitem=pc31_orcamitem
-        join itemprecoreferencia on si02_itemproccompra=pc22_orcamitem
+        left join pcorcamitemproc on pc31_pcprocitem=pc81_codprocitem
+        left join pcorcamitem on pc22_orcamitem=pc31_orcamitem
+        left join itemprecoreferencia on si02_itemproccompra=pc22_orcamitem
         left join solicitaregistropreco on pc54_solicita=pc10_numero
         where
         l20_codigo=$codigo";
