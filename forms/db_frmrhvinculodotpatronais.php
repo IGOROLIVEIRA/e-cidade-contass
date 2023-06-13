@@ -41,7 +41,7 @@ $aCodTab = array(
         <tr>
             <td colspan='4' style="text-align: center" nowrap title="<?=@$Trh171_codtab?>">
                 <b>Prêvidencia:</b> 
-                <? db_select('rh171_codtab', $aCodTab, true, 1) ?>
+                <? db_select('rh171_codtab', $aCodTab, true, $db_opcao_orig) ?>
             </td>
         </tr>
         <tr>
