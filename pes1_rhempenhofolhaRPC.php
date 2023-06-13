@@ -320,25 +320,25 @@ try {
       $sListaPrev = implode(",",$aNovaListaPrev);
       
       db_inicio_transacao();
-      /*
+      
   	  $oDadosEmpenhoFolha->excluiDadosEmpenhosPrev($oPost->sTipo,
   	                                               $oPost->iAnoFolha,
   	                                               $oPost->iMesFolha,
   	                                               $sListaPrev,
   	                                               db_getsession('DB_instit'));    
-  	  */
-  	  $retorno = $oDadosEmpenhoFolha->geraDadosEmpenhosPrev($oPost->sTipo,
+													
+  	  $oDadosEmpenhoFolha->geraDadosEmpenhosPrev($oPost->sTipo,
   	                                             $oPost->iAnoFolha,
   	                                             $oPost->iMesFolha,
   	                                             $sListaPrev,
   	                                             db_getsession('DB_instit'));
-                                                 
 
   	  db_fim_transacao(false);
   	                                             
-  	  $aRetorno = array("lErro" => false,
-                        // "sMsg"  => urlencode($sMsgErro),
-                        "sListaPrev" => $retorno);
+  	  	$aRetorno = array(
+			'lErro' => false,
+            'sMsg' => urlencode($sMsgErro),
+			'sListaPrev' => $sListaPrev);
       
     break;
     case 'consultarEmpenhosPrev':

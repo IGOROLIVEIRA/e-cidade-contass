@@ -76,7 +76,7 @@ $clrotulo->label('DBtxt25');
 		         $sql .= "            and r33_mesusu = {$mesfolha} ";
 		         $sql .= "            and r33_codtab > 2           ";
 		         $sql .= "            and r33_instit = ".db_getsession('DB_instit') ;
-		         
+		
 		         $rsPrev = db_query($sql);
 		         
 		         db_multiploselect("r33_codtab", "r33_nome", "nselecionados", "selecionados", $rsPrev, array(), 4, 250);
@@ -178,8 +178,6 @@ $clrotulo->label('DBtxt25');
   
    var aRetorno = eval("("+oAjax.responseText+")");
    var sExpReg  = new RegExp('\\\\n','g');
-		console.log("Teste com Barbara");
-		console.log(aRetorno);
    if ( aRetorno.lErro ) {
      alert(aRetorno.sMsg.urlDecode().replace(sExpReg,'\n'));
      return false;

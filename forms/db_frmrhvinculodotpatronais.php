@@ -18,6 +18,12 @@ $aMeses = array(
   "13" => "13º Salário"
 );
 
+
+$aCodTab = array(
+    "1" => "INSS",
+    "2" => "Previdência",
+);
+
 ?>
 
 <form name="form1" method="post" action="">
@@ -30,6 +36,12 @@ $aMeses = array(
                 <?=@$Lrh171_mes?>
                 <? db_select('rh171_mes', $aMeses, true, $db_opcao_orig) ?>
                 <input name="rh171_sequencial" type="hidden" value="<?=@$rh171_sequencial?>">
+            </td>
+        </tr>
+        <tr>
+            <td colspan='4' style="text-align: center" nowrap title="<?=@$Trh171_codtab?>">
+                <b>Prêvidencia:</b> 
+                <? db_select('rh171_codtab', $aCodTab, true, 1) ?>
             </td>
         </tr>
         <tr>
