@@ -90,12 +90,12 @@ $resultdivide = db_query($conn, $sqldivide);
 $mostra=0;
 
 $sql_correto = "select * from cgmcorreto where z10_proc is false order by z10_data, z10_hora, z10_codigo";
-$result_correto = db_query($sql_correto) or die(db_logduplos("sql 1: " . pg_ErrorMessage()));
+$result_correto = db_query($sql_correto) or die(db_logduplos("sql 1: " . pg_last_error()));
 
-for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_correto++) {
+for ($record_correto=0; $record_correto < pg_num_rows($result_correto); $record_correto++) {
   db_fieldsmemory($result_correto,$record_correto);
   db_logduplos("\n\n\n\n\n\n");
-  db_logduplos(" processando cgm correto: " . $z10_numcgm . " - codigo: $z10_codigo - $record_correto/" . pg_numrows($result_correto) . "...");
+  db_logduplos(" processando cgm correto: " . $z10_numcgm . " - codigo: $z10_codigo - $record_correto/" . pg_num_rows($result_correto) . "...");
 
   // Grava usuario que agendou o duplos na sessao
   $sqlsessao = "select fc_putsession('DB_id_usuario', '$z10_login');";
@@ -113,9 +113,9 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
 
 
   $sql_errado = "select * from cgmerrado where z11_codigo = $z10_codigo";
-  $result_errado = db_query($sql_errado) or die(db_logduplos("sql 2: " . pg_ErrorMessage()));
+  $result_errado = db_query($sql_errado) or die(db_logduplos("sql 2: " . pg_last_error()));
 
-  for ($record_errado=0; $record_errado < pg_numrows($result_errado); $record_errado++) {
+  for ($record_errado=0; $record_errado < pg_num_rows($result_errado); $record_errado++) {
     db_fieldsmemory($result_errado,$record_errado);
     db_logduplos("            cgm errado.: " . $z11_numcgm . " - codigo: $z10_codigo...");
     sleep(3);
@@ -171,19 +171,19 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                           where z10_numcgm = $v_cgmerrado";
 
       $rsCgmCorreto   = db_query($sSqlCgmCorreto);
-      if (pg_numrows($rsCgmCorreto) > 0) {
-        for ($y=0; $y < pg_numrows($rsCgmCorreto); $y++) {
+      if (pg_num_rows($rsCgmCorreto) > 0) {
+        for ($y=0; $y < pg_num_rows($rsCgmCorreto); $y++) {
           db_fieldsmemory($rsCgmCorreto,$y);
           db_logduplos("processando tabela cgmcorreto");
 
           $sql_corretoant = "update cgmcorreto set z10_numcgm = $v_cgmcerto where z10_codigo = $codcorreto_ant";
-          $query_corretoant = db_query($sql_corretoant) or die(db_logduplos("sql 3: " . pg_ErrorMessage()));
+          $query_corretoant = db_query($sql_corretoant) or die(db_logduplos("sql 3: " . pg_last_error()));
         }
       }
 
-      $result_campos = db_query($sql1) or die(db_logduplos("sql 4: " . pg_ErrorMessage()));
+      $result_campos = db_query($sql1) or die(db_logduplos("sql 4: " . pg_last_error()));
 
-      for ($record_campos=0; $record_campos < pg_numrows($result_campos); $record_campos++) {
+      for ($record_campos=0; $record_campos < pg_num_rows($result_campos); $record_campos++) {
         db_fieldsmemory($result_campos,$record_campos);
 
         $v_log .= "processando tabela $nomearq";
@@ -196,9 +196,9 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
         $sql2 .= " where relname not like 'pg_%' ";
         $sql2 .= "   and relkind = 'r' ";
         $sql2 .= "   and relname = '$nomearq' order by relname";
-        $result_relname = db_query($sql2) or die(db_logduplos("sql 5: " . pg_ErrorMessage()));
+        $result_relname = db_query($sql2) or die(db_logduplos("sql 5: " . pg_last_error()));
 
-        if (pg_numrows($result_relname)==0) {
+        if (pg_num_rows($result_relname)==0) {
           $v_log .= "          tabela $nomearq nao encontrada no banco...\n";
           if (($codarq == 343 or $codarq ==  959) and $mostra == 1) {
             db_logduplos("... tabela $nomearq nao encontrada no banco...");
@@ -214,7 +214,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
           $sql30 .= "  from db_sysprikey ";
           $sql30 .= "  inner join db_syscampo on db_syscampo.codcam = db_sysprikey.codcam ";
           $sql30 .= "  where db_sysprikey.codarq = $codarq";
-          $result_quantpk = db_query($sql30) or die(db_logduplos("sql 7: " . pg_ErrorMessage()));
+          $result_quantpk = db_query($sql30) or die(db_logduplos("sql 7: " . pg_last_error()));
           db_fieldsmemory($result_quantpk,0);
 
           if (($codarq == 343 or $codarq ==  959 or $codarq == 66) and $mostra == 1) {
@@ -229,29 +229,29 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
           $sql3 .= " where db_sysprikey.codarq = $codarq and ";
           $sql3 .= "	db_sysprikey.codcam = $codcam";
 
-          $result_pk = db_query($sql3) or die(db_logduplos("sql 8: " . pg_ErrorMessage()));
+          $result_pk = db_query($sql3) or die(db_logduplos("sql 8: " . pg_last_error()));
 
           if (($codarq == 343 or $codarq ==  959 or $codarq == 66) and $mostra == 1) {
-            //            echo "nomearq:  $nomearq - codarq: $codarq - codcam: $codcam - tamanho: " . pg_numrows($result_pk) . " - quantpk: $v_quantpk\n";
+            //            echo "nomearq:  $nomearq - codarq: $codarq - codcam: $codcam - tamanho: " . pg_num_rows($result_pk) . " - quantpk: $v_quantpk\n";
             //	    echo $sql3 . "\n";
           }
 
 
-          if (pg_numrows($result_pk) > 0 and $v_quantpk >= 1) {
+          if (pg_num_rows($result_pk) > 0 and $v_quantpk >= 1) {
 
             db_logduplos("   11 - achou pk em " . $nomearq );
 
             db_fieldsmemory($result_pk,0);
             $v_comando = $v_comando . $v_nomepk . " = " . $v_cgmerrado;
 
-            $result_comando = db_query($v_comando) or die(db_logduplos("sql 9: " . pg_ErrorMessage()));
-            db_logduplos("executando comando: $v_comando - " . (pg_numrows($result_comando) > 0?"encontrou " . pg_numrows($result_comando) . " registros":"nao encontrou nenhum registro"));
+            $result_comando = db_query($v_comando) or die(db_logduplos("sql 9: " . pg_last_error()));
+            db_logduplos("executando comando: $v_comando - " . (pg_num_rows($result_comando) > 0?"encontrou " . pg_num_rows($result_comando) . " registros":"nao encontrou nenhum registro"));
 
-            $v_log .= "executando comando: $v_comando - " . (pg_numrows($result_comando) > 0?"encontrou " . pg_numrows($result_comando) . " registros":"nao encontrou nenhum registro". "\n");
+            $v_log .= "executando comando: $v_comando - " . (pg_num_rows($result_comando) > 0?"encontrou " . pg_num_rows($result_comando) . " registros":"nao encontrou nenhum registro". "\n");
 
-            if (pg_numrows($result_comando) > 0) {
+            if (pg_num_rows($result_comando) > 0) {
 
-              for ($record_conteudo=0; $record_conteudo < pg_numrows($result_comando); $record_conteudo++) {
+              for ($record_conteudo=0; $record_conteudo < pg_num_rows($result_comando); $record_conteudo++) {
                 db_fieldsmemory($result_comando,$record_conteudo);
 
                 $v_campos = "select * from " . $nomearq . " where " . $v_nomepk . " = " . $v_cgmcerto;
@@ -264,7 +264,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                 if (($codarq == 343 or $codarq ==  959 or $codarq == 66) and $mostra == 1) {
                   db_logduplos("sql4: $sql4");
                 }
-                $result_nomecam_pk = db_query($sql4) or die(db_logduplos("sql 10: " . pg_ErrorMessage()));
+                $result_nomecam_pk = db_query($sql4) or die(db_logduplos("sql 10: " . pg_last_error()));
 
                 $campos_pk = $v_cgmerrado;
 
@@ -272,20 +272,20 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                 eval($executar);
 
                 $v_campos2 = "";
-                for ($record_nomecam_pk=0; $record_nomecam_pk < pg_numrows($result_nomecam_pk); $record_nomecam_pk++) {
+                for ($record_nomecam_pk=0; $record_nomecam_pk < pg_num_rows($result_nomecam_pk); $record_nomecam_pk++) {
                   db_fieldsmemory($result_nomecam_pk,$record_nomecam_pk);
                   $v_campos2 .= " and $nomecam_pk = " . (strpos("-".$conteudo_pk, "char") > 0?"'".$$nomecam_pk."'":$$nomecam_pk);
                   $campos_pk .= ", " . (strpos("-".$conteudo_pk, "char") > 0?"'".$$nomecam_pk."'":$$nomecam_pk);
                 }
 
                 db_logduplos("     1 - " . $v_campos . $v_campos2 );
-                $result_campos2 = db_query($v_campos . $v_campos2) or die(db_logduplos("sql 1x: " . pg_ErrorMessage()));
+                $result_campos2 = db_query($v_campos . $v_campos2) or die(db_logduplos("sql 1x: " . pg_last_error()));
 
-                if (pg_numrows($result_campos2) > 0) {
+                if (pg_num_rows($result_campos2) > 0) {
                   $sql55 = "select * from $nomearq where $nomecam = $v_cgmerrado " . $v_campos2;
 
-                  $result55 = db_query($sql55) or die(db_logduplos("sql 11: " . pg_ErrorMessage()));
-                  if (pg_numrows($result55) > 0) {
+                  $result55 = db_query($sql55) or die(db_logduplos("sql 11: " . pg_last_error()));
+                  if (pg_num_rows($result55) > 0) {
 
                     $sql5 = "delete from $nomearq where $nomecam = $v_cgmerrado " . $v_campos2;
                     echo $nomearq."\n";
@@ -315,7 +315,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                   if(pg_num_rows($rescadescrito) == 0) {
                     // alterar escrito para cgmcorreto
                     $sqlaltesc = "update escrito set q10_numcgm =$v_cgmcerto  where q10_numcgm = $v_cgmerrado";
-                    $resultaltesc = db_query($sqlaltesc) or die(db_logduplos("sql 12: " . pg_ErrorMessage()));
+                    $resultaltesc = db_query($sqlaltesc) or die(db_logduplos("sql 12: " . pg_last_error()));
                     db_logduplos("$sqlaltesc ");
                   }
                   break;
@@ -341,22 +341,22 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                     if(pg_num_rows($res) == 0) {
                       db_logduplos("$sqladvog");
                       $sqladvog ="insert into advog (v57_numcgm,v57_oab) values ($v_cgmcerto,'CGM $v_cgmcerto')";
-                      $resultadvog= db_query($sqladvog) or die(db_logduplos("sql 13: " . pg_ErrorMessage()));
+                      $resultadvog= db_query($sqladvog) or die(db_logduplos("sql 13: " . pg_last_error()));
                     }
 
                     // alterar inical para cgmcorreto
                     $sqlaltini = "update inicial set v50_advog =$v_cgmcerto  where v50_advog = $v_cgmerrado";
-                    $resultaltini = db_query($sqlaltini) or die(db_logduplos("sql 14: " . pg_ErrorMessage()));
+                    $resultaltini = db_query($sqlaltini) or die(db_logduplos("sql 14: " . pg_last_error()));
                     db_logduplos("$sqlaltini ");
 
                     // deletar advog com cgmerrado
                     $sqldeladvog= "delete from advog where v57_numcgm = $v_cgmerrado";
-                    $resultdeladvog= db_query($sqldeladvog) or die(db_logduplos("sql 14: " . pg_ErrorMessage()));
+                    $resultdeladvog= db_query($sqldeladvog) or die(db_logduplos("sql 14: " . pg_last_error()));
                     db_logduplos("$sqldeladvog ");
 
                     // ALTERAR ADVOG PARA OAB CORRETA
                     $sqlaltadvog = "update advog set v57_oab = '$v57_oab' where v57_numcgm = $v_cgmcerto";
-                    $resultaltadvog = db_query($sqlaltadvog) or die(db_logduplos("sql 16: " . pg_ErrorMessage()));
+                    $resultaltadvog = db_query($sqlaltadvog) or die(db_logduplos("sql 16: " . pg_last_error()));
                     db_logduplos("$sqlaltadvog ");
 
                     db_logduplos("advog e inicial ok.......");
@@ -382,19 +382,19 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                       db_logduplos("- cadescrito possui escrito ");
                       $sqlcadesc ="insert into cadescrito (q86_numcgm) values ($v_cgmcerto)";
                       db_logduplos("$sqlcadesc");
-                      $resultcadesc= db_query($sqlcadesc) or die(db_logduplos("sql 17: " . pg_ErrorMessage()));
+                      $resultcadesc= db_query($sqlcadesc) or die(db_logduplos("sql 17: " . pg_last_error()));
                     }
 
                     // alterar escrito para cgmcorreto
                     $sqlaltesc = "update escrito set q10_numcgm =$v_cgmcerto  where q10_numcgm = $v_cgmerrado";
-                    $resultaltesc = db_query($sqlaltesc) or die(db_logduplos("sql 18: " . pg_ErrorMessage()));
+                    $resultaltesc = db_query($sqlaltesc) or die(db_logduplos("sql 18: " . pg_last_error()));
                     db_logduplos("$sqlaltesc ");
 
                   }
 
                   // deletar cadescrito com cgmerrado
                   $sqldelcadesc= "delete from cadescrito where q86_numcgm = $v_cgmerrado";
-                  $resultdelcadesc= db_query($sqldelcadesc) or die(db_logduplos("sql 19: " . pg_ErrorMessage()));
+                  $resultdelcadesc= db_query($sqldelcadesc) or die(db_logduplos("sql 19: " . pg_last_error()));
                   db_logduplos("$sqldelcadesc ");
 
                   //echo "cadescrito e escrito ok.......";
@@ -410,15 +410,15 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
 
                     $ins = "insert into graficas select $v_cgmcerto,y20_id_usuario,y20_data
                       from graficas where y20_grafica = $v_cgmerrado";
-                    $rsGraNovo = db_query($ins) or die (db_logduplos("sql 20: " . pg_ErrorMessage()));
+                    $rsGraNovo = db_query($ins) or die (db_logduplos("sql 20: " . pg_last_error()));
                     db_logduplos("$ins");
                     if ($rsGraNovo){
                       $updateAidof = "update aidof set y08_numcgm = $v_cgmcerto where y08_numcgm = $v_cgmerrado;";
-                      $rsAidof     = db_query($updateAidof) or die (db_logduplos("sql 21: " . pg_ErrorMessage()));
+                      $rsAidof     = db_query($updateAidof) or die (db_logduplos("sql 21: " . pg_last_error()));
 
                       db_logduplos($updateAidof);
                       $deleteGraficas = "delete from  graficas where y20_grafica = $v_cgmerrado ";
-                      $rsGraficas     = db_query($deleteGraficas) or die (db_logduplos("sql 22: " . pg_ErrorMessage()));
+                      $rsGraficas     = db_query($deleteGraficas) or die (db_logduplos("sql 22: " . pg_last_error()));
                       db_logduplos($Deletegraficas);
                     }
                   }
@@ -432,7 +432,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                   $rsFunerariaSepultamentoErrado    = db_query($sSqlFunerariaSepultamentoErrado);
 
                   //verifica se a funeraria possui sepultamentos ligados a ela
-                  if (pg_numrows($rsFunerariaSepultamentoErrado) > 0) {
+                  if (pg_num_rows($rsFunerariaSepultamentoErrado) > 0) {
 
                     //verifica se há cadastro da funerária correta no sistema, se sim, altera a funeraria do sepultamento
                     //e deleta o registro da funeraria errada
@@ -499,7 +499,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                    *
                    */
 
-                  if (pg_numrows($rsPcForne) == 0 && pg_numrows($rsPcForneErrado) > 0) {
+                  if (pg_num_rows($rsPcForne) == 0 && pg_num_rows($rsPcForneErrado) > 0) {
                     $sSqlPcForne = "insert into pcforne (pc60_numcgm,
                       pc60_dtlanc,
                       pc60_obs,
@@ -519,21 +519,21 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
 
                   $sSqlPcForneCertif = "select * from pcfornecertif where pc74_pcforne = $v_cgmerrado";
                   $rsPcForneCertif = db_query($sSqlPcForneCertif);
-                  if (pg_numrows($rsPcForneCertif) > 0) {
+                  if (pg_num_rows($rsPcForneCertif) > 0) {
                     $sSqlPcForneCertif = "update pcfornecertif set pc74_pcforne = $v_cgmcerto where pc74_pcforne = $v_cgmerrado";
                     $rsPcForneCertif = db_query($sSqlPcForneCertif);
                   }
 
                   $sSqlPcForneSubGrupo = "select * from pcfornesubgrupo where pc76_pcforne = $v_cgmerrado";
                   $rsPcForneSubGrupo = db_query($sSqlPcForneSubGrupo);
-                  if ( pg_numrows($rsPcForneSubGrupo) > 0 ){
+                  if ( pg_num_rows($rsPcForneSubGrupo) > 0 ){
                     $sSqlPcForneSubGrupo = "update pcfornesubgrupo set pc76_pcforne = $v_cgmcerto where pc76_pcforne = $v_cgmerrado";
                     $rsPcForneSubGrupo = db_query($sSqlPcForneSubGrupo);
                   }
 
                   $sSqlPcForneMov = "select * from pcfornemov where pc62_numcgm = $v_cgmerrado";
                   $rsPcForneMov = db_query($sSqlPcForneMov);
-                  if ( pg_numrows($rsPcForneMov) > 0 ){
+                  if ( pg_num_rows($rsPcForneMov) > 0 ){
                     $sSqlPcForneMov = "update pcfornemov set pc62_numcgm = $v_cgmcerto where pc62_numcgm = $v_cgmerrado";
                     $rsPcForneMov = db_query($sSqlPcForneMov);
                   }
@@ -628,7 +628,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                             '$r52_adiantamento13',
                             $r52_percadiantamento13
                           )";
-                        $rsSqlPensaoInserir = db_query($sSqlPensaoInserir) or die(db_logduplos("sql 593: " . pg_ErrorMessage()));
+                        $rsSqlPensaoInserir = db_query($sSqlPensaoInserir) or die(db_logduplos("sql 593: " . pg_last_error()));
                         db_logduplos("      5 - Inserir pensao nova para o CGM correto: $sSqlPensaoInserir");
                         $v_log .= $sSqlPensaoInserir . "\n";
                       }
@@ -640,7 +640,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                     $sSqlUpdatePensaoRetencao = " update pensaoretencao
                       set rh77_numcgm = {$v_cgmcerto}
                       where rh77_numcgm = {$v_cgmerrado}";
-                    $rsUpdatePensaoRetencao   = db_query($sSqlUpdatePensaoRetencao) or die(db_logduplos("sql 606: " . pg_ErrorMessage()));
+                    $rsUpdatePensaoRetencao   = db_query($sSqlUpdatePensaoRetencao) or die(db_logduplos("sql 606: " . pg_last_error()));
 
                     db_logduplos("      5 - Altera pensaoretencao do CGM errado para o CGM correto: $sSqlUpdatePensaoRetencao");
                     $v_log .= $sSqlPensaoInserir . "\n";
@@ -650,7 +650,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                      * Excluo as pensões do cgm errado
                      */
                     $sSqlExclusaoPensao = "delete from pensao where r52_numcgm = $v_cgmerrado";
-                    $rsExcluirPensao    = db_query($sSqlExclusaoPensao) or die(db_logduplos("sql 615: " . pg_ErrorMessage()));
+                    $rsExcluirPensao    = db_query($sSqlExclusaoPensao) or die(db_logduplos("sql 615: " . pg_last_error()));
                     db_logduplos("      5 - Excluir a pensao do CGM errado: $sSqlExclusaoPensao");
                     $v_log .= $sSqlExclusaoPensao . "\n";
                   }
@@ -660,11 +660,11 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                 case "cgmdoc":
                   $sSqlCgmDocCorreto = "SELECT z02_i_cgm FROM cgmdoc WHERE z02_i_cgm = $v_errado;";
                   db_logduplos("      5 - Consulta cgmdoc pelo CGM errado: $sSqlCgmDocCorreto");
-                  $rsCgmDocCorreto   = db_query($sSqlCgmDocCorreto) or die(db_logduplos("sql 619: " . pg_ErrorMessage()));
+                  $rsCgmDocCorreto   = db_query($sSqlCgmDocCorreto) or die(db_logduplos("sql 619: " . pg_last_error()));
                   if (pg_num_rows ($rsCgmDocCorreto) > 0) {
                     $sSqlExcluirCgmDoc = "DELETE FROM cgmdoc WHERE z02_i_cgm = $v_cgmerrado;";
                     db_logduplos ("   6 - Excluindo cgmdoc do CGM errado: $sSqlExcluirCgmDoc");
-                    $rsExcluirCgmDoc   = db_query($sSqlExcluirCgmDoc) or die(db_logduplos("sql 619: " . pg_ErrorMessage()));
+                    $rsExcluirCgmDoc   = db_query($sSqlExcluirCgmDoc) or die(db_logduplos("sql 619: " . pg_last_error()));
                   }
                   break;
                   // se não for advog e nem cadescrito
@@ -675,7 +675,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                     db_logduplos("      5 - $sql5");
                     if ($sql5 != "") {
                       $v_log .= $sql5 . "\n";
-                      $result = db_query($sql5) or die(db_logduplos("sql 23: " . pg_ErrorMessage()));
+                      $result = db_query($sql5) or die(db_logduplos("sql 23: " . pg_last_error()));
                     }
 
                   }
@@ -691,7 +691,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                   db_logduplos("      5 - $sql5");
                   if ($sql5 != "") {
                     $v_log .= $sql5 . "\n";
-                    $result = db_query($sql5) or die(db_logduplos("sql 24: " . pg_ErrorMessage()));
+                    $result = db_query($sql5) or die(db_logduplos("sql 24: " . pg_last_error()));
                   }
 
                   break;
@@ -705,10 +705,10 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
 
             db_logduplos("   11 - nao achou pk em " . $nomearq );
             $sql9 = "select $nomecam from $nomearq where $nomecam = $v_cgmerrado";
-            $result9 = db_query($sql9) or die(db_logduplos("sql 25: $sql9 \n" . pg_ErrorMessage()));
-            $v_log .= "comando executado: $sql9 - " . (pg_numrows($result9) > 0?"encontrou " . pg_numrows($result9) . " registros":"nao encontrou nenhum registro");
+            $result9 = db_query($sql9) or die(db_logduplos("sql 25: $sql9 \n" . pg_last_error()));
+            $v_log .= "comando executado: $sql9 - " . (pg_num_rows($result9) > 0?"encontrou " . pg_num_rows($result9) . " registros":"nao encontrou nenhum registro");
 
-            if (pg_numrows($result9) > 0) {
+            if (pg_num_rows($result9) > 0) {
 
               switch ($nomearq) {
 
@@ -737,7 +737,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                   where cm32_i_numcgm = $v_cgmerrado";
                 $rsLegistaErrado   = db_query($sSqlLegistaErrado);
 
-                if (pg_numrows($rsLegistaCorreto) == 0 && pg_numrows($rsLegistaErrado) > 0) {
+                if (pg_num_rows($rsLegistaCorreto) == 0 && pg_num_rows($rsLegistaErrado) > 0) {
 
                   $iCrm     = pg_result($rsLegistaErrado,0,2);
                   $iLegista = pg_result(db_query("select nextval('cem_legista_seq')"),0,0);
@@ -748,11 +748,11 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                 {$v_cgmcerto},
                 {$iCrm})";
 
-                  $QueryLegista = db_query($sSqlLegista)    or die (db_logduplos("sql 26: $sSqlLegista" . pg_ErrorMessage()));
+                  $QueryLegista = db_query($sSqlLegista)    or die (db_logduplos("sql 26: $sSqlLegista" . pg_last_error()));
 
                 }
 
-                if ( pg_numrows($rsLegistaErrado) > 0 ) {
+                if ( pg_num_rows($rsLegistaErrado) > 0 ) {
                   $iLegistaErrado = pg_result($rsLegistaErrado,0,0);
 
                   $sSqlSepultamentosLegistas = "update sepultamentos set cm01_i_medico = $iLegista where cm01_i_medico = $iLegistaErrado";
@@ -760,7 +760,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                 }
 
                 $sSqlLegistaDel = "delete from legista where cm32_i_numcgm = $v_cgmerrado";
-                $QueryLegista = db_query($sSqlLegistaDel) or die (db_logduplos("sql 27: $sSqlLegistaDel" . pg_ErrorMessage()));
+                $QueryLegista = db_query($sSqlLegistaDel) or die (db_logduplos("sql 27: $sSqlLegistaDel" . pg_last_error()));
 
                 break;
 
@@ -775,7 +775,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                   $sql_Empageformacgm = "update empageformacgm set e28_numcgm = $v_cgmcerto
                     where e28_numcgm = ".$v_cgmerrado;
                 }
-                $rsEmpageformacgm = db_query($sql_Empageformacgm) or die (db_logduplos("sql 37: " . pg_ErrorMessage()));
+                $rsEmpageformacgm = db_query($sql_Empageformacgm) or die (db_logduplos("sql 37: " . pg_last_error()));
                 db_logduplos("$sql_Empageformacgm");
                 break;
 
@@ -783,15 +783,15 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
 
                 $sSqlSocios = "select * from socios where q95_cgmpri = $v_cgmcerto";
                 $rRsSocios  = db_query($sSqlSocios);
-                if ( pg_numrows($rRsSocios) > 0) {
+                if ( pg_num_rows($rRsSocios) > 0) {
                   $sSqlSocios = "delete from socios where q95_cgmpri = $v_cgmcerto";
-                  $rRsSocios  = db_query($sSqlSocios) or die ('Erro excluido Sócios'.pg_ErrorMessage());
+                  $rRsSocios  = db_query($sSqlSocios) or die ('Erro excluido Sócios'.pg_last_error());
                 }
 
                 $sSqlIss = "update issbase set q02_numcgm = $v_cgmcerto where q02_numcgm = " . $v_cgmerrado;
                 db_logduplos("     12 - " . $sSqlIss );
 
-                $rResultIss = db_query($sSqlIss) or die(db_logduplos("\nsql: $sSqlIss\n" . pg_ErrorMessage()));
+                $rResultIss = db_query($sSqlIss) or die(db_logduplos("\nsql: $sSqlIss\n" . pg_last_error()));
                 if (pg_affected_rows($rResultIss) == 0) {
                   db_logduplos("erro ao dar update na tabela issbase...");
                   db_logduplos("comando: $sSqlIss");
@@ -803,11 +803,11 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
               case "cgmdoc":
                 $sSqlCgmDocCorreto = "SELECT z02_i_cgm FROM cgmdoc WHERE z02_i_cgm = $v_cgmerrado;";
                 db_logduplos("      5 - Consulta cgmdoc pelo CGM certo: $sSqlPensaoErrado");
-                $rsCgmDocCorreto   = db_query($sSqlCgmDocCorreto) or die(db_logduplos("sql 619: " . pg_ErrorMessage()));
+                $rsCgmDocCorreto   = db_query($sSqlCgmDocCorreto) or die(db_logduplos("sql 619: " . pg_last_error()));
                 if (pg_num_rows ($rsCgmDocCorreto) > 0) {
                   $sSqlExcluirCgmDoc = "DELETE FROM cgmdoc WHERE z02_i_cgm = $v_cgmerrado;";
                   db_logduplos ("   6 - Excluindo cgmdoc do CGM errado: $sSqlExcluirCgmDoc");
-                  $rsExcluirCgmDoc   = db_query($sSqlExcluirCgmDoc) or die(db_logduplos("sql 619: " . pg_ErrorMessage()));
+                  $rsExcluirCgmDoc   = db_query($sSqlExcluirCgmDoc) or die(db_logduplos("sql 619: " . pg_last_error()));
                 }
                 break;
 
@@ -819,7 +819,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                 $sSqlDadosArrecadInstituicao .= "  from arreinstit ";
                 $sSqlDadosArrecadInstituicao .= "       inner join arrecad on arrecad.k00_numpre = arreinstit.k00_numpre ";
                 $sSqlDadosArrecadInstituicao .= " where arrecad.k00_numcgm = {$v_cgmerrado}";
-                $rsDadosArrecadInstituicao   = db_query($sSqlDadosArrecadInstituicao) or die (db_logduplos("\nsql: $sql18\n" . pg_ErrorMessage()));
+                $rsDadosArrecadInstituicao   = db_query($sSqlDadosArrecadInstituicao) or die (db_logduplos("\nsql: $sql18\n" . pg_last_error()));
                 for ($iInd = 0; $iInd < pg_num_rows($rsDadosArrecadInstituicao); $iInd ++) {
                   $oDadosArrecadInstituicao = db_utils::fieldsMemory($rsDadosArrecadInstituicao, $iInd);
                   db_query("select fc_putsession('DB_instit', '{$oDadosArrecadInstituicao->k00_instit}')");
@@ -828,7 +828,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                     set k00_numcgm = $v_cgmcerto
                     where k00_numcgm = $v_cgmerrado
                     and k00_numpre = {$oDadosArrecadInstituicao->k00_numpre}";
-                  $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_ErrorMessage()));
+                  $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_last_error()));
 
                 }
 
@@ -938,7 +938,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                             $r52_valres,
                             '$r52_adiantamento13',
                             $r52_percadiantamento13)";
-                        $rsSqlPensaoInserir = db_query($sSqlPensaoInserir) or die(db_logduplos("Erro: " . pg_ErrorMessage()));
+                        $rsSqlPensaoInserir = db_query($sSqlPensaoInserir) or die(db_logduplos("Erro: " . pg_last_error()));
                         db_logduplos("Pensao: Inserindo a pensao nova para o CGM CORRETO({$v_cgmcerto}) na competencia({$r52_anousu}/{$r52_mesusu})");
                         $v_log .= $sSqlPensaoInserir . "\n";
                       }
@@ -948,7 +948,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                      * Substitui os dados da pensao retenção do cgm errado para o cgm correto.
                      */
                     $sSqlUpdatePensaoRetencao = "update pensaoretencao set rh77_numcgm = {$v_cgmcerto} where rh77_numcgm = {$v_cgmerrado}";
-                    $rsUpdatePensaoRetencao   = db_query($sSqlUpdatePensaoRetencao) or die(db_logduplos("Erro: " . pg_ErrorMessage()));
+                    $rsUpdatePensaoRetencao   = db_query($sSqlUpdatePensaoRetencao) or die(db_logduplos("Erro: " . pg_last_error()));
 
                     db_logduplos("Pensao: Alterando a pensao retencao do CGM ERRADO para o CGM CORRETO");
                     $v_log .= $sSqlPensaoInserir . "\n";
@@ -1003,7 +1003,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                      * Excluí as pensões do cgm errado.
                      */
                     $sSqlExclusaoPensao = "delete from pensao where r52_numcgm = {$v_cgmerrado}";
-                    $rsExcluirPensao    = db_query($sSqlExclusaoPensao) or die(db_logduplos("sql 615: " . pg_ErrorMessage()));
+                    $rsExcluirPensao    = db_query($sSqlExclusaoPensao) or die(db_logduplos("sql 615: " . pg_last_error()));
                     db_logduplos("Pensao: Excluído a pensao do CGM ERRADO ({$v_cgmerrado})");
                     $v_log .= $sSqlExclusaoPensao . "\n";
                   }
@@ -1015,7 +1015,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
                 $sql9 = "update $nomearq set $nomecam = $v_cgmcerto where $nomecam = " . $v_cgmerrado;
                 db_logduplos("     12 - " . $sql9 );
 
-                $result9 = db_query($sql9) or die(db_logduplos("\nsql: $sql9\n" . pg_ErrorMessage()));
+                $result9 = db_query($sql9) or die(db_logduplos("\nsql: $sql9\n" . pg_last_error()));
                 if (pg_affected_rows($result9) == 0) {
                   db_logduplos("erro ao dar update na tabela $nomearq...");
                   db_logduplos("comando: $sql9");
@@ -1040,10 +1040,10 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
     }
 
     $sql18 = "update issbase set q02_inscr = q02_inscr where q02_numcgm = $v_cgmcerto";
-    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_ErrorMessage()));
+    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_last_error()));
 
     $sql18 = "update iptubase set j01_matric = j01_matric where j01_numcgm = $v_cgmcerto";
-    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_ErrorMessage()));
+    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_last_error()));
 
     $sSqlDadosArrecadInstituicao  = "select distinct ";
     $sSqlDadosArrecadInstituicao .= "       arreinstit.k00_numpre, ";
@@ -1051,7 +1051,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
     $sSqlDadosArrecadInstituicao .= "  from arreinstit ";
     $sSqlDadosArrecadInstituicao .= "       inner join arrecad on arrecad.k00_numpre = arreinstit.k00_numpre ";
     $sSqlDadosArrecadInstituicao .= " where arrecad.k00_numcgm = {$v_cgmerrado}";
-    $rsDadosArrecadInstituicao   = db_query($sSqlDadosArrecadInstituicao) or die(db_logduplos("\nsql: $sql18\n" . pg_ErrorMessage()));
+    $rsDadosArrecadInstituicao   = db_query($sSqlDadosArrecadInstituicao) or die(db_logduplos("\nsql: $sql18\n" . pg_last_error()));
     for ($iInd = 0; $iInd < pg_num_rows($rsDadosArrecadInstituicao); $iInd ++) {
       $oDadosArrecadInstituicao = db_utils::fieldsMemory($rsDadosArrecadInstituicao, $iInd);
 
@@ -1061,7 +1061,7 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
         set k00_numcgm = $v_cgmcerto
         where k00_numcgm = $v_cgmerrado
         and k00_numpre = {$oDadosArrecadInstituicao->k00_numpre}";
-      $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_ErrorMessage()));
+      $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_last_error()));
 
     }
 
@@ -1072,37 +1072,37 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
       set k00_numcgm = $v_cgmcerto
       where k00_numcgm = $v_cgmerrado
       and not exists ( select 1 from arreinstit where arreinstit.k00_numpre = arrecad.k00_numpre)";
-      $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_ErrorMessage()));
+      $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_last_error()));
 
       $sql18 = "select k00_numpre as k00_numpre_numcgm from arrenumcgm where k00_numcgm = $v_cgmerrado";
-    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_ErrorMessage()));
+    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_last_error()));
 
-    for ($contanumcgm = 0; $contanumcgm < pg_numrows($result18); $contanumcgm++) {
+    for ($contanumcgm = 0; $contanumcgm < pg_num_rows($result18); $contanumcgm++) {
       db_fieldsmemory($result18, $contanumcgm);
 
       $sql118 = "select * from arrenumcgm where k00_numcgm = $v_cgmcerto and k00_numpre = $k00_numpre_numcgm";
-      $result118 = db_query($sql118) or die(db_logduplos("\nsql: $sql118\n" . pg_ErrorMessage()));
+      $result118 = db_query($sql118) or die(db_logduplos("\nsql: $sql118\n" . pg_last_error()));
 
-      if (pg_numrows($result118) == 0) {
+      if (pg_num_rows($result118) == 0) {
         $sql1118 = "update arrenumcgm set k00_numcgm = $v_cgmcerto where k00_numcgm = $v_cgmerrado and k00_numpre = $k00_numpre_numcgm";
       } else {
         $sql1118 = "delete from arrenumcgm where k00_numcgm = $v_cgmerrado and k00_numpre = $k00_numpre_numcgm";
       }
-      $result1118 = db_query($sql1118) or die(db_logduplos("\nsql: $sql1118\n" . pg_ErrorMessage()));
+      $result1118 = db_query($sql1118) or die(db_logduplos("\nsql: $sql1118\n" . pg_last_error()));
 
     }
 
     $sql18 = "delete from db_cgmruas where z01_numcgm = $v_cgmerrado";
-    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_ErrorMessage()));
+    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_last_error()));
 
     $sql18 = "delete from db_cgmbairro where z01_numcgm = $v_cgmerrado";
-    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_ErrorMessage()));
+    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_last_error()));
 
     $sql18 = "delete from db_cgmcgc where z01_numcgm = $v_cgmerrado";
-    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_ErrorMessage()));
+    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_last_error()));
 
     $sql18 = "delete from db_cgmcpf where z01_numcgm = $v_cgmerrado";
-    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_ErrorMessage()));
+    $result18 = db_query($sql18) or die(db_logduplos("\nsql: $sql18\n" . pg_last_error()));
 
     //************  inclui este pedaço para incluir na cgmalt ************
     $sqlcgmalt = " insert into cgmalt(
@@ -1154,22 +1154,22 @@ for ($record_correto=0; $record_correto < pg_numrows($result_correto); $record_c
       where z01_numcgm = $v_cgmerrado";
 
     $v_log .= $sqlcgmalt;
-    $result = db_query($sqlcgmalt) or die(db_logduplos("sql 39: $sqlcgmalt\n" . pg_ErrorMessage()));
+    $result = db_query($sqlcgmalt) or die(db_logduplos("sql 39: $sqlcgmalt\n" . pg_last_error()));
     //echo "**** incluiu $v_cgmerrado na cgmalt ****";
     db_logduplos("**** incluiu $v_cgmerrado na cgmalt ****");
     //die("$sqlcgmalt");
     //*********************************
     $sql6 = "delete from cgm where z01_numcgm = $v_cgmerrado";
     $v_log .= $sql6;
-    $result = db_query($sql6) or die(db_logduplos("sql 40: $sql6\n" . pg_ErrorMessage()));
+    $result = db_query($sql6) or die(db_logduplos("sql 40: $sql6\n" . pg_last_error()));
 
     $v_lognew = addSlashes($v_log);
     $sql7 = "insert into cgmerradolog values ($z10_codigo, $z11_numcgm, '$v_lognew');";
-    $result = db_query($sql7) or die(db_logduplos($sql7."---- sql: " . pg_ErrorMessage()));
+    $result = db_query($sql7) or die(db_logduplos($sql7."---- sql: " . pg_last_error()));
 
   }
   $sql8 = "update cgmcorreto set z10_proc = true where z10_codigo = $z10_codigo";
-  $result = db_query($sql8) or die(db_logduplos("sql 41: " . pg_ErrorMessage()));
+  $result = db_query($sql8) or die(db_logduplos("sql 41: " . pg_last_error()));
 
   //Habilita trigger da aguabase
   db_query("select fc_putsession('__status_tr_agua_atualizaiptubase', 'enable');");

@@ -237,6 +237,41 @@ switch ($oParam->exec) {
             $oRetorno->message = urlencode("Responsável Excluido com sucesso.");
         }
         break;
+    case 'buscarLotes':
+        $clliclicita = new cl_liclicita();
+        
+        if($oParam->iLicitacao!="" || $oParam->iLicitacao!=null){
+            $oRetorno->status = 3;
+            $resultLotes = $clliclicita->sql_record('select DISTINCT l04_numerolote,l04_descricao from liclicitemlote where l04_liclicitem in (select l21_codigo from liclicitem where l21_codliclicita = '.$oParam->iLicitacao.' and l04_numerolote > 0 )');
+            if (pg_num_rows($resultLotes) == 0) {
+                $oRetorno->status = 2;
+            }else{
+                $resultLicobras = $clliclicita->sql_record('select DISTINCT obr01_licitacaolote from licobras where obr01_licitacao = '.$oParam->iLicitacao);
+                for ($iCont = 0; $iCont < pg_num_rows($resultLotes); $iCont++) {
+                    $oDadosLotes = db_utils::fieldsMemory($resultLotes, $iCont);
+                    $contrele = 0;
+                    if($oParam->iObra == 0){
+                        for ($iContLicobras = 0; $iContLicobras < pg_num_rows($resultLicobras); $iContLicobras++) {
+                            $oDadosLicobras = db_utils::fieldsMemory($resultLicobras, $iContLicobras);
+                            if($oDadosLicobras->obr01_licitacaolote == $oDadosLotes->l04_numerolote){
+                                $contrele=1;
+                            }
+                        }
+                    }
+                    if($contrele == 0){
+                        
+                        $oRetorno->status = 1;
+                        $lotes                        = new stdClass();
+                        $lotes->descricao = urlencode($oDadosLotes->l04_descricao);
+                        $lotes->numlote = $oDadosLotes->l04_numerolote;
+                        $lotes->total = pg_num_rows($resultLotes);
+                        $oRetorno->itens[] = $lotes;
+                    }    
+                }
+                
+            }
+        }
+        break;
 
     case 'getDadosResponsavel':
         $cllicobrasresponsaveis = new cl_licobrasresponsaveis();

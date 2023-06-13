@@ -76,7 +76,7 @@ $cliccategoriaprocesso = new cl_liccategoriaprocesso;
 $db_opcao = 1;
 $db_botao = true;
 
-$oParamNumManual = db_query("select * from licitaparam;");
+$oParamNumManual = db_query("select * from licitaparam where l12_instit = " . db_getsession("DB_instit"));
 $oParamNumManual = db_utils::fieldsmemory($oParamNumManual, 0);
 $l12_numeracaomanual = $oParamNumManual->l12_numeracaomanual;
 
@@ -171,7 +171,7 @@ if (isset($incluir)) {
 	$aCf = db_utils::getColectionByRecord($clcflicita->sql_record($sSql));
 	$sPresencial = $aCf[0]->l03_presencial;
 
-	if ($sPresencial == 't' && $l12_pncp == 't') {
+	if ($sPresencial == 't' && $l12_pncp == 't' && $l20_leidalicitacao == 1) {
 		if ($oPost->l20_justificativapncp == '' || $oPost->l20_justificativapncp == null) {
 			$erro_msg .= 'Campo Justificativa PNCP não informado\n\n';
 			$sqlerro = true;
@@ -188,6 +188,22 @@ if (isset($incluir)) {
 		}
 	}
 
+	if ($oPost->modalidade_tribunal == 100 || $oPost->modalidade_tribunal == 101 || $oPost->modalidade_tribunal == 102 || $oPost->modalidade_tribunal == 103) {
+		if ($oPost->l20_razao == '') {
+			$erro_msg .= 'Campo Razão não informado';
+			$sqlerro = true;
+		}
+
+		if ($oPost->l20_justificativa == '') {
+			$erro_msg .= 'Campo Justificativa não informado';
+			$sqlerro = true;
+		}
+
+		if ($oPost->l20_tipoprocesso == '') {
+			$erro_msg .= 'Campo Tipo de Processo não informado';
+			$sqlerro = true;
+		}
+	}
 
 	/*
    Validações dos membros da licitação
@@ -654,7 +670,7 @@ if (isset($incluir)) {
 		db_msgbox($erro_msg);
 		echo "<script> document.form1." . $nomeCampo . ".focus();</script>";
 		echo "<script> document.form1." . $nomeCampo . ".style.backgroundColor='#99A9AE';</script>";
-		if($nomeCampo == "l20_mododisputa"){
+		if ($nomeCampo == "l20_mododisputa") {
 			echo "<script>document.getElementById('disputa').style.display = '';</script>";
 		}
 

@@ -71,11 +71,17 @@ $aux_conta	 = new cl_arquivo_auxiliar;
                     <strong>Tipo:</strong>
                 </td>
                 <td>
-                    <select name="iTipo" id="iTipo">
+					<select name="iTipo" id="iTipo">
                         <option value="">Todos</option>
-                        <option value="1">Saúde</option>
-                        <option value="2">Educação</option>
-                        <option value="3">Fundeb</option>
+                        <option value="1">Saúde 15%</option>
+                        <option value="9">Vinculados à Saúde</option>
+                        <option value="2">Educação 25%</option>
+                        <option value="11">Vinculados à Educação</option>                        
+                        <option value="5">Fundeb 70%</option>
+                        <option value="6">Fundeb 30%</option>
+                        <option value="8">Cide</option>
+                        <option value="7">Multas de Transito</option>
+                        <option value="10">Vinculados à Assistencia</option>
                         <option value="4">Geral</option>
                     </select>
                 </td>

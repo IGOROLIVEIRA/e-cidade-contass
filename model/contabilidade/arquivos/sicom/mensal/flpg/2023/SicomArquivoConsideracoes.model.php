@@ -90,11 +90,13 @@ class SicomArquivoConsideracoes extends SicomArquivoBase implements iPadArquivoB
       $clconsid10 = new cl_consid102023();
       $oDados10 = db_utils::fieldsMemory($rsResult10, $iCont10);
 
-      $clconsid10->si158_tiporegistro          = 10;
-      $clconsid10->si158_codarquivo            = $oDados10->si171_codarquivo;
-      $clconsid10->si158_consideracoes         = $oDados10->si171_consideracoes;
-      $clconsid10->si158_mesreferenciaconsid   = $this->sDataFinal['5'].$this->sDataFinal['6'];
-      $clconsid10->si158_instit                = db_getsession("DB_instit");
+      $clconsid10->si158_tiporegistro              = 10;
+      $clconsid10->si158_codarquivo                = $oDados10->si171_codarquivo;
+      $clconsid10->si158_consideracoes             = $oDados10->si171_consideracoes;
+      $clconsid10->si158_exercicioreferenciaconsid = $oDados10->si171_anousu;
+      $clconsid10->si158_mesreferenciaconsid       = $oDados10->si171_mesreferencia;
+      $clconsid10->si158_mes                       = $this->sDataFinal['5'].$this->sDataFinal['6'];
+      $clconsid10->si158_instit                    = db_getsession("DB_instit");
 
       $clconsid10->incluir(null);
       if ($clconsid10->erro_status == 0) {

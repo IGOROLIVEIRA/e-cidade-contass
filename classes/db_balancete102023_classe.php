@@ -31,20 +31,20 @@ class cl_balancete102023
   var $si177_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si177_sequencial = int8 = si177_sequencial 
-                 si177_tiporegistro = int8 = si177_tiporegistro 
-                 si177_contacontaabil = int8 = si177_contacontaabil 
-                 si177_codfundo = varchar(8) = si177_codfundo 
-                 si177_saldoinicial = float8 = si177_saldoinicial 
-                 si177_naturezasaldoinicial = varchar(1) = si177_naturezasaldoinicial 
-                 si177_totaldebitos = float8 = si177_totaldebitos 
-                 si177_totalcreditos = float8 = si177_totalcreditos 
-                 si177_saldofinal = float8 = si177_saldofinal 
-                 si177_naturezasaldofinal = varchar(1) = si177_naturezasaldofinal 
-                 si177_mes = int8 = si177_mes 
-                 si177_instit = int8 = si177_instit 
+                 si177_sequencial = int8 = si177_sequencial
+                 si177_tiporegistro = int8 = si177_tiporegistro
+                 si177_contacontaabil = int8 = si177_contacontaabil
+                 si177_codfundo = varchar(8) = si177_codfundo
+                 si177_saldoinicial = float8 = si177_saldoinicial
+                 si177_naturezasaldoinicial = varchar(1) = si177_naturezasaldoinicial
+                 si177_totaldebitos = float8 = si177_totaldebitos
+                 si177_totalcreditos = float8 = si177_totalcreditos
+                 si177_saldofinal = float8 = si177_saldofinal
+                 si177_naturezasaldofinal = varchar(1) = si177_naturezasaldofinal
+                 si177_mes = int8 = si177_mes
+                 si177_instit = int8 = si177_instit
                  ";
-  
+
   //funcao construtor da classe
   function cl_balancete102023()
   {
@@ -52,7 +52,7 @@ class cl_balancete102023
     $this->rotulo = new rotulo("balancete102023");
     $this->pagina_retorno = basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  
+
   //funcao erro
   function erro($mostra, $retorna)
   {
@@ -63,7 +63,7 @@ class cl_balancete102023
       }
     }
   }
-  
+
   // funcao para atualizar campos
   function atualizacampos($exclusao = false)
   {
@@ -84,7 +84,7 @@ class cl_balancete102023
       $this->si177_sequencial = ($this->si177_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si177_sequencial"] : $this->si177_sequencial);
     }
   }
-  
+
   // funcao para inclusao
   function incluir($si177_sequencial)
   {
@@ -96,7 +96,7 @@ class cl_balancete102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si177_contacontaabil == null) {
@@ -106,7 +106,7 @@ class cl_balancete102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si177_saldoinicial == null) {
@@ -116,7 +116,7 @@ class cl_balancete102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si177_naturezasaldoinicial == null) {
@@ -126,7 +126,7 @@ class cl_balancete102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si177_totaldebitos == null) {
@@ -136,7 +136,7 @@ class cl_balancete102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si177_totalcreditos == null) {
@@ -146,7 +146,7 @@ class cl_balancete102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si177_saldofinal == null) {
@@ -156,7 +156,7 @@ class cl_balancete102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si177_naturezasaldofinal == null) {
@@ -166,7 +166,7 @@ class cl_balancete102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si177_mes == null) {
@@ -176,7 +176,7 @@ class cl_balancete102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($this->si177_instit == null) {
@@ -186,20 +186,19 @@ class cl_balancete102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     if ($si177_sequencial == "" || $si177_sequencial == null) {
       $result = db_query("select nextval('balancete102023_si177_sequencial_seq')");
-      
+
       if ($result == false) {
-        $this->erro_banco = str_replace("
-", "", @pg_last_error());
+        $this->erro_banco = str_replace("", "", @pg_last_error());
         $this->erro_sql = "Verifique o cadastro da sequencia: balancete102023_si177_sequencial_seq do campo: si177_sequencial";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
       $this->si177_sequencial = pg_result($result, 0, 0);
@@ -211,7 +210,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       } else {
         $this->si177_sequencial = $si177_sequencial;
@@ -223,42 +222,41 @@ class cl_balancete102023
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
     $sql = "insert into balancete102023(
-                                       si177_sequencial 
-                                      ,si177_tiporegistro 
-                                      ,si177_contacontaabil 
-                                      ,si177_codfundo 
-                                      ,si177_saldoinicial 
-                                      ,si177_naturezasaldoinicial 
-                                      ,si177_totaldebitos 
-                                      ,si177_totalcreditos 
-                                      ,si177_saldofinal 
-                                      ,si177_naturezasaldofinal 
-                                      ,si177_mes 
-                                      ,si177_instit 
+                                       si177_sequencial
+                                      ,si177_tiporegistro
+                                      ,si177_contacontaabil
+                                      ,si177_codfundo
+                                      ,si177_saldoinicial
+                                      ,si177_naturezasaldoinicial
+                                      ,si177_totaldebitos
+                                      ,si177_totalcreditos
+                                      ,si177_saldofinal
+                                      ,si177_naturezasaldofinal
+                                      ,si177_mes
+                                      ,si177_instit
                        )
                 values (
-                                $this->si177_sequencial 
-                               ,$this->si177_tiporegistro 
-                               ,$this->si177_contacontaabil 
+                                $this->si177_sequencial
+                               ,$this->si177_tiporegistro
+                               ,$this->si177_contacontaabil
                                ,'$this->si177_codfundo'
-                               ,$this->si177_saldoinicial 
-                               ,'$this->si177_naturezasaldoinicial' 
-                               ,$this->si177_totaldebitos 
-                               ,$this->si177_totalcreditos 
-                               ,$this->si177_saldofinal 
-                               ,'$this->si177_naturezasaldofinal' 
-                               ,$this->si177_mes 
-                               ,$this->si177_instit 
+                               ,$this->si177_saldoinicial
+                               ,'$this->si177_naturezasaldoinicial'
+                               ,$this->si177_totaldebitos
+                               ,$this->si177_totalcreditos
+                               ,$this->si177_saldofinal
+                               ,'$this->si177_naturezasaldofinal'
+                               ,$this->si177_mes
+                               ,$this->si177_instit
                       )";
-    
+
     $result = db_query($sql);
     if ($result == false) {
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
         $this->erro_sql = "balancete102023 ($this->si177_sequencial) nao Incluído. Inclusao Abortada.";
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
@@ -271,7 +269,7 @@ class cl_balancete102023
       }
       $this->erro_status = "0";
       $this->numrows_incluir = 0;
-      
+
       return false;
     }
     $this->erro_banco = "";
@@ -281,34 +279,10 @@ class cl_balancete102023
     $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
-    $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-    if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount) && ($lSessaoDesativarAccount === false))) {
-      
-      $resaco = $this->sql_record($this->sql_query_file($this->si177_sequencial));
-      if (($resaco != false) || ($this->numrows != 0)) {
-        /*
-                 $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                 $acount = pg_result($resac,0,0);
-                 $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-                 $resac = db_query("insert into db_acountkey values($acount,2011701,'$this->si177_sequencial','I')");
-                 $resac = db_query("insert into db_acount values($acount,1010192,2011701,'','".AddSlashes(pg_result($resaco,0,'si177_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")"); echo pg_last_error();
-                 $resac = db_query("insert into db_acount values($acount,1010192,2011712,'','".AddSlashes(pg_result($resaco,0,'si177_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                 $resac = db_query("insert into db_acount values($acount,1010192,2011702,'','".AddSlashes(pg_result($resaco,0,'si177_contacontaabil'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                 $resac = db_query("insert into db_acount values($acount,1010192,2011703,'','".AddSlashes(pg_result($resaco,0,'si177_saldoinicial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                 $resac = db_query("insert into db_acount values($acount,1010192,2011704,'','".AddSlashes(pg_result($resaco,0,'si177_naturezasaldoinicial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                 $resac = db_query("insert into db_acount values($acount,1010192,2011705,'','".AddSlashes(pg_result($resaco,0,'si177_totaldebitos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                 $resac = db_query("insert into db_acount values($acount,1010192,2011706,'','".AddSlashes(pg_result($resaco,0,'si177_totalcreditos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                 $resac = db_query("insert into db_acount values($acount,1010192,2011707,'','".AddSlashes(pg_result($resaco,0,'si177_saldofinal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                 $resac = db_query("insert into db_acount values($acount,1010192,2011708,'','".AddSlashes(pg_result($resaco,0,'si177_naturezasaldofinal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                 $resac = db_query("insert into db_acount values($acount,1010192,2011709,'','".AddSlashes(pg_result($resaco,0,'si177_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                 $resac = db_query("insert into db_acount values($acount,1010192,2011710,'','".AddSlashes(pg_result($resaco,0,'si177_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-               */
-      }
-    }
-    
+
     return true;
   }
-  
+
   // funcao para alteracao
   function alterar($si177_sequencial = null)
   {
@@ -325,7 +299,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -339,7 +313,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -353,7 +327,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -367,7 +341,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -381,7 +355,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -395,7 +369,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -409,7 +383,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -423,7 +397,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -437,7 +411,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -451,7 +425,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -465,7 +439,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -479,7 +453,7 @@ class cl_balancete102023
         $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "0";
-        
+
         return false;
       }
     }
@@ -487,55 +461,17 @@ class cl_balancete102023
     if ($si177_sequencial != null) {
       $sql .= " si177_sequencial = $this->si177_sequencial";
     }
-    $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
-    if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount) && ($lSessaoDesativarAccount === false))) {
-      
-      $resaco = $this->sql_record($this->sql_query_file($this->si177_sequencial));
-      if ($this->numrows > 0) {
-        
-        for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-          /*
-          $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-          $acount = pg_result($resac,0,0);
-          $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-          $resac = db_query("insert into db_acountkey values($acount,2011701,'$this->si177_sequencial','A')");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si177_sequencial"]) || $this->si177_sequencial != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2011701,'".AddSlashes(pg_result($resaco,$conresaco,'si177_sequencial'))."','$this->si177_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si177_tiporegistro"]) || $this->si177_tiporegistro != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2011712,'".AddSlashes(pg_result($resaco,$conresaco,'si177_tiporegistro'))."','$this->si177_tiporegistro',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si177_contacontaabil"]) || $this->si177_contacontaabil != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2011702,'".AddSlashes(pg_result($resaco,$conresaco,'si177_contacontaabil'))."','$this->si177_contacontaabil',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si177_saldoinicial"]) || $this->si177_saldoinicial != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2011703,'".AddSlashes(pg_result($resaco,$conresaco,'si177_saldoinicial'))."','$this->si177_saldoinicial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si177_naturezasaldoinicial"]) || $this->si177_naturezasaldoinicial != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2011704,'".AddSlashes(pg_result($resaco,$conresaco,'si177_naturezasaldoinicial'))."','$this->si177_naturezasaldoinicial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si177_totaldebitos"]) || $this->si177_totaldebitos != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2011705,'".AddSlashes(pg_result($resaco,$conresaco,'si177_totaldebitos'))."','$this->si177_totaldebitos',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si177_totalcreditos"]) || $this->si177_totalcreditos != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2011706,'".AddSlashes(pg_result($resaco,$conresaco,'si177_totalcreditos'))."','$this->si177_totalcreditos',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si177_saldofinal"]) || $this->si177_saldofinal != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2011707,'".AddSlashes(pg_result($resaco,$conresaco,'si177_saldofinal'))."','$this->si177_saldofinal',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si177_naturezasaldofinal"]) || $this->si177_naturezasaldofinal != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2011708,'".AddSlashes(pg_result($resaco,$conresaco,'si177_naturezasaldofinal'))."','$this->si177_naturezasaldofinal',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si177_mes"]) || $this->si177_mes != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2011709,'".AddSlashes(pg_result($resaco,$conresaco,'si177_mes'))."','$this->si177_mes',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          if(isset($GLOBALS["HTTP_POST_VARS"]["si177_instit"]) || $this->si177_instit != "")
-            $resac = db_query("insert into db_acount values($acount,1010192,2011710,'".AddSlashes(pg_result($resaco,$conresaco,'si177_instit'))."','$this->si177_instit',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-*/
-        }
-      }
-    }
+
     $result = db_query($sql);
     if ($result == false) {
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       $this->erro_sql = "balancete102023 nao Alterado. Alteracao Abortada.\n";
       $this->erro_sql .= "Valores : " . $this->si177_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -546,7 +482,7 @@ class cl_balancete102023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -556,51 +492,30 @@ class cl_balancete102023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao para exclusao
   function excluir($si177_sequencial = null, $dbwhere = null)
   {
-    
+
     $lSessaoDesativarAccount = db_getsession("DB_desativar_account", false);
     if (!isset($lSessaoDesativarAccount) || (isset($lSessaoDesativarAccount) && ($lSessaoDesativarAccount === false))) {
-      
+
       if ($dbwhere == null || $dbwhere == "") {
-        
+
         $resaco = $this->sql_record($this->sql_query_file($si177_sequencial));
       } else {
-        
+
         $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
-        
-      }
-      if (($resaco != false) || ($this->numrows != 0)) {
-        
-        
-        for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-          /*$resac  = db_query("select nextval('db_acount_id_acount_seq') as acount");
-          $acount = pg_result($resac,0,0);
-          $resac  = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
-          $resac  = db_query("insert into db_acountkey values($acount,2011701,'$si177_sequencial','E')");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2011701,'','".AddSlashes(pg_result($resaco,$iresaco,'si177_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")"); echo pg_last_error();
-          $resac  = db_query("insert into db_acount values($acount,1010192,2011712,'','".AddSlashes(pg_result($resaco,$iresaco,'si177_tiporegistro'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2011702,'','".AddSlashes(pg_result($resaco,$iresaco,'si177_contacontaabil'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2011703,'','".AddSlashes(pg_result($resaco,$iresaco,'si177_saldoinicial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2011704,'','".AddSlashes(pg_result($resaco,$iresaco,'si177_naturezasaldoinicial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2011705,'','".AddSlashes(pg_result($resaco,$iresaco,'si177_totaldebitos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2011706,'','".AddSlashes(pg_result($resaco,$iresaco,'si177_totalcreditos'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2011707,'','".AddSlashes(pg_result($resaco,$iresaco,'si177_saldofinal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2011708,'','".AddSlashes(pg_result($resaco,$iresaco,'si177_naturezasaldofinal'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2011709,'','".AddSlashes(pg_result($resaco,$iresaco,'si177_mes'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          $resac  = db_query("insert into db_acount values($acount,1010192,2011710,'','".AddSlashes(pg_result($resaco,$iresaco,'si177_instit'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");*/
-        }
+
       }
     }
-    
-    
+
+
     $sql = " delete from balancete102023
                     where ";
     $sql2 = "";
@@ -616,15 +531,14 @@ class cl_balancete102023
     }
     $result = db_query($sql . $sql2);
     if ($result == false) {
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       $this->erro_sql = "balancete102023 nao Excluído. Exclusão Abortada.\n";
       $this->erro_sql .= "Valores : " . $si177_sequencial;
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
-      
+
       return false;
     } else {
       if (pg_affected_rows($result) == 0) {
@@ -635,7 +549,7 @@ class cl_balancete102023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
-        
+
         return true;
       } else {
         $this->erro_banco = "";
@@ -645,118 +559,162 @@ class cl_balancete102023
         $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
-        
+
         return true;
       }
     }
   }
-  
+
   // funcao do recordset
   function sql_record($sql)
   {
     $result = db_query($sql);
     if ($result == false) {
       $this->numrows = 0;
-      $this->erro_banco = str_replace("
-", "", @pg_last_error());
+      $this->erro_banco = str_replace("", "", @pg_last_error());
       $this->erro_sql = "Erro ao selecionar os registros.";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    $this->numrows = pg_numrows($result);
+    $this->numrows = pg_num_rows($result);
     if ($this->numrows == 0) {
       $this->erro_banco = "";
       $this->erro_sql = "Record Vazio na Tabela:balancete102023";
       $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
       $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
       $this->erro_status = "0";
-      
+
       return false;
     }
-    
+
     return $result;
   }
-  
-  // funcao do sql
-  function sql_query($si177_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
-  {
-    $sql = "select ";
-    if ($campos != "*") {
-      $campos_sql = split("#", $campos);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
-    } else {
-      $sql .= $campos;
-    }
-    $sql .= " from balancete102023 ";
-    $sql2 = "";
-    if ($dbwhere == "") {
-      if ($si177_sequencial != null) {
-        $sql2 .= " where balancete102023.si177_sequencial = $si177_sequencial ";
-      }
-    } else {
-      if ($dbwhere != "") {
-        $sql2 = " where $dbwhere";
-      }
-    }
-    $sql .= $sql2;
-    if ($ordem != null) {
-      $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
-    }
-    
-    return $sql;
-  }
-  
-  // funcao do sql
-  function sql_query_file($si177_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
-  {
-    $sql = "select ";
-    if ($campos != "*") {
-      $campos_sql = split("#", $campos);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
-    } else {
-      $sql .= $campos;
-    }
-    $sql .= " from balancete102023 ";
-    $sql2 = "";
-    if ($dbwhere == "") {
-      if ($si177_sequencial != null) {
-        $sql2 .= " where balancete102023.si177_sequencial = $si177_sequencial ";
-      }
-    } else {
-      if ($dbwhere != "") {
-        $sql2 = " where $dbwhere";
-      }
-    }
-    $sql .= $sql2;
-    if ($ordem != null) {
-      $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
-      $virgula = "";
-      for ($i = 0; $i < sizeof($campos_sql); $i++) {
-        $sql .= $virgula . $campos_sql[$i];
-        $virgula = ",";
-      }
-    }
-    
-    return $sql;
-  }
-}
 
-?>
+  // funcao do sql
+  function sql_query($si177_sequencial = null, $campos_filtro = "*", $ordem = null, $dbwhere = "")
+  {
+    $sql = "select ";
+    $campos = "*";
+    if ($campos_filtro != "*") {
+        $campos = $campos_filtro;
+    }
+    $sql .= $campos;
+    $sql .= " from balancete102023 ";
+    $sql2 = "";
+    if ($dbwhere == "") {
+      if ($si177_sequencial != null) {
+        $sql2 .= " where balancete102023.si177_sequencial = $si177_sequencial ";
+      }
+    } else {
+      if ($dbwhere != "") {
+        $sql2 = " where $dbwhere";
+      }
+    }
+    $sql .= $sql2;
+    if ($ordem != null) {
+      $sql .= "  order by {$ordem}";
+    }
+
+    return $sql;
+  }
+
+  // funcao do sql
+  function sql_query_file($si177_sequencial = null, $campos_filtro = "*", $ordem = null, $dbwhere = "")
+  {
+    $sql = "select ";
+    $campos = "*";
+    if ($campos_filtro != "*") {
+        $campos = $campos_filtro;
+    }
+    $sql .= $campos;
+    $sql .= " from balancete102023 ";
+    $sql2 = "";
+    if ($dbwhere == "") {
+      if ($si177_sequencial != null) {
+        $sql2 .= " where balancete102023.si177_sequencial = $si177_sequencial ";
+      }
+    } else {
+      if ($dbwhere != "") {
+        $sql2 = " where $dbwhere";
+      }
+    }
+    $sql .= $sql2;
+    if ($ordem != null) {
+      $sql .= " order by {$ordem}";
+    }
+
+    return $sql;
+  }
+
+  function sql_query_reg10_saldo_janeiro($sDataInicial, $sDataFinal, $sEncerramento, $iAnoUsu, $codcon)
+  {
+    $sSql = " select sinal_anterior,sinal_final,sum(saldoinicial) saldoinicial, sum(debitos) debitos, sum(creditos) creditos from(SELECT estrut_mae,
+                                           estrut,
+                                           c61_reduz,
+                                           c61_codcon,
+                                           c61_codigo,
+                                           c60_descr,
+                                           c60_finali,
+                                           c61_instit,
+                                           round(substr(fc_planosaldonovo,3,14)::float8,2)::float8 AS saldoinicial,
+                                           round(substr(fc_planosaldonovo,17,14)::float8,2)::float8 AS debitos,
+                                           round(substr(fc_planosaldonovo,31,14)::float8,2)::float8 AS creditos,
+                                           round(substr(fc_planosaldonovo,45,14)::float8,2)::float8 AS saldo_final,
+                                           substr(fc_planosaldonovo,59,1)::varchar(1) AS sinal_anterior,
+                                           substr(fc_planosaldonovo,60,1)::varchar(1) AS sinal_final
+                                    FROM
+                                      (SELECT p.c60_estrut AS estrut_mae,
+                                              p.c60_estrut AS estrut,
+                                              c61_reduz,
+                                              c61_codcon,
+                                              c61_codigo,
+                                              p.c60_descr,
+                                              p.c60_finali,
+                                              r.c61_instit,
+                                              fc_planosaldonovo(" . $iAnoUsu . ",c61_reduz,'" . $sDataInicial . "','" . $sDataFinal . "',{$sEncerramento})
+                                       FROM conplanoexe e
+                                       INNER JOIN conplanoreduz r ON r.c61_anousu = c62_anousu
+                                       AND r.c61_reduz = c62_reduz
+                                       INNER JOIN conplano p ON r.c61_codcon = c60_codcon
+                                       AND r.c61_anousu = c60_anousu
+                                       LEFT OUTER JOIN consistema ON c60_codsis = c52_codsis
+                                       WHERE c62_anousu = " . db_getsession('DB_anousu') . "
+                                         AND c61_instit IN (" . db_getsession('DB_instit') . ")
+						 AND c61_codcon = {$codcon} ) AS x) as y where saldoinicial > 0 or debitos > 0 or creditos > 0 group by 1,2";
+    return $sSql;
+  }
+
+  function sql_query_reg10($debugEstrut=null, $whereNumRegistro=null, $sWhere10=null, $nAnoUsu, $nMes, $iInstit)
+  {
+    $sqlReg10 = "select ";
+    $sqlReg10 .= "       tiporegistro, ";
+    $sqlReg10 .= "       contacontabil, ";
+    $sqlReg10 .= "       coalesce(saldoinicialano,0) saldoinicialano, ";
+    $sqlReg10 .= "       coalesce(debito,0) debito, ";
+    $sqlReg10 .= "       coalesce(credito,0) credito, ";
+    $sqlReg10 .= "       codcon, ";
+    $sqlReg10 .= "       c61_reduz, ";
+    $sqlReg10 .= "       c60_nregobrig, ";
+    $sqlReg10 .= "       c60_identificadorfinanceiro, ";
+    $sqlReg10 .= "       case when c60_naturezasaldo = 1 then 'D' when c60_naturezasaldo = 2 then 'C' else 'C' end as c60_naturezasaldo ";
+    $sqlReg10 .= "            from ";
+    $sqlReg10 .= "               (select 10 as tiporegistro, ";
+    $sqlReg10 .= "                       case when c209_tceestrut is null then substr(c60_estrut,1,9) else c209_tceestrut end as contacontabil, ";
+    $sqlReg10 .= "                       (select sum(c69_valor) as credito from conlancamval where c69_credito = c61_reduz and DATE_PART('YEAR',c69_data) = " . $nAnoUsu . " and  DATE_PART('MONTH',c69_data) <= {$nMes}) as credito, ";
+    $sqlReg10 .= "                       (select sum(c69_valor) as debito from conlancamval where c69_debito = c61_reduz and DATE_PART('YEAR',c69_data) = " . $nAnoUsu . " and  DATE_PART('MONTH',c69_data) <= {$nMes}) as debito, ";
+    $sqlReg10 .= "                       (c62_vlrdeb - c62_vlrcre) as saldoinicialano,c61_reduz, c60_nregobrig, ";
+    $sqlReg10 .= "                       c60_codcon as codcon, c60_identificadorfinanceiro,c60_naturezasaldo ";
+    $sqlReg10 .= "                 from contabilidade.conplano ";
+    $sqlReg10 .= "			inner join conplanoreduz on c61_codcon = c60_codcon and c61_anousu = c60_anousu and c61_instit = " . $iInstit ;
+    $sqlReg10 .= "           inner join conplanoexe on c62_reduz = c61_reduz and c61_anousu = c62_anousu ";
+    $sqlReg10 .= "           left join vinculopcasptce on substr(c60_estrut,1,9) = c209_pcaspestrut ";
+    $sqlReg10 .= "                where {$debugEstrut} {$whereNumRegistro} c60_anousu = " . $nAnoUsu . " {$sWhere10} ) as x ";
+    $sqlReg10 .= "           where  debito != 0 or credito != 0 or saldoinicialano != 0 order by contacontabil ";
+//echo $sqlReg10;
+    return $sqlReg10;
+  }
+
+}
