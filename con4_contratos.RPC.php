@@ -515,12 +515,12 @@ switch ($oParam->exec) {
         break;
 
     case "verificaCredenciamentoTermo":
-
+        
         $clcredenciamentotermo = new cl_credenciamentotermo;
-        $rsLicitacao           = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null, '*', null, "l212_licitacao = {$oParam->iLicitacao}"));
+        $rsLicitacao           = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,'*',null,"l212_licitacao = {$oParam->iLicitacao}"));
         db_fieldsmemory($rsLicitacao, 0)->l212_sequencial;
 
-        if ($l212_sequencial != null) {
+        if($l212_sequencial != null){
             $oRetorno->status    = 2;
             $oRetorno->message   = urlencode("Licitação com Termo de Credenciamento vinculado.");
         }
@@ -1342,7 +1342,7 @@ switch ($oParam->exec) {
     case "getItensOrigem":
 
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
-
+            
             $oContrato = $_SESSION["oContrato"];
 
             $oDataInicialAcordo        = new DBDate($oContrato->getDataInicial());
@@ -1361,13 +1361,13 @@ switch ($oParam->exec) {
             }
 
             $iTipocompraTribunal = $oContrato->getTipoCompraTribunal($oContrato->getLicitacao());
-
+            
             if ($oContrato->getOrigem() == 2) {
 
                 if ($iTipocompraTribunal == "103" || $iTipocompraTribunal == "102") {
                     $aItens = licitacao::getItensPorFornecedorCredenciamento($oContrato->getContratado()->getCodigo(), $oContrato->getLicitacao());
                 } else {
-                    $aItens = licitacao::getItensPorFornecedor($oContrato->getLicitacao(), $oContrato->getContratado()->getCodigo(), 0);
+                    $aItens = licitacao::getItensPorFornecedor($oContrato->getLicitacao(), $oContrato->getContratado()->getCodigo(), 0);  
                 }
             } else {
 
@@ -1385,7 +1385,6 @@ switch ($oParam->exec) {
         break;
 
     case "adicionarItensOrigem":
-
 
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
 
@@ -1406,24 +1405,7 @@ switch ($oParam->exec) {
                     $iVigenciaInicial = db_formatar($oContrato->getDataInicial(), 'd');
                     $iVigenciaFinal   = db_formatar($oContrato->getDataFinal(), 'd');
 
-                    $aMenoresValoresUnitarios = array();
-
                     foreach ($oParam->aLista as $iIndice => $oItem) {
-                        if (array_key_exists($oItem->codigomaterial, $aMenoresValoresUnitarios)) {
-
-                            if ($oItem->valorunitario < $aMenoresValoresUnitarios[$oItem->codigomaterial]) {
-                                $aMenoresValoresUnitarios[$oItem->codigomaterial] = $oItem->valorunitario;
-                            }
-                            continue;
-                        }
-                        $aMenoresValoresUnitarios[$oItem->codigomaterial] = $oItem->valorunitario;
-                    }
-
-
-                    foreach ($oParam->aLista as $iIndice => $oItem) {
-
-
-                        $oItem->valorunitario = $aMenoresValoresUnitarios[$oItem->codigomaterial];
 
                         if ($iTipocompraTribunal == "103" || $iTipocompraTribunal == "102") {
                             $iExecucaoInicial = db_formatar($oContrato->getDataInicial(), 'd');
@@ -1456,7 +1438,7 @@ switch ($oParam->exec) {
                             if ($iTipocompraTribunal == "103" || $iTipocompraTribunal == "102") {
                                 $oPosicao->adicionarItemDeCredenciamento($iLicitacao, $iContratado, $oItem->codigo, $oItem, $iCodigoAcordo, $iTipocompraTribunal);
                             } else {
-                                $oPosicao->adicionarItemDeLicitacao($oItem->codigo, $oItem, $oItem->valorunitario);
+                                $oPosicao->adicionarItemDeLicitacao($oItem->codigo, $oItem);
                             }
 
                             if($oContrato->getNaturezaAcordo($iCodigoAcordo) == 1){
@@ -1487,7 +1469,7 @@ switch ($oParam->exec) {
                             }
                         } else if ($oContrato->getOrigem() == 1) {
 
-                            $oPosicao->adicionarItemDeProcesso($oItem->codigo, $oItem, $oItem->valorunitario);
+                            $oPosicao->adicionarItemDeProcesso($oItem->codigo, $oItem);
                         }
                     }
                     $oContrato->atualizaValorContratoPorTotalItens();
@@ -1714,25 +1696,25 @@ switch ($oParam->exec) {
         try {
 
             if (!isset($oParam->iAcordo) || empty($oParam->iAcordo)) {
-                throw new ParameterException(_M($sCaminhoMensagens . 'acordo_nao_informado'));
+                throw new ParameterException(_M($sCaminhoMensagens . 'acordo_nao_informado')); 
             }
 
             db_inicio_transacao();
             /**
              * Alteração OC15013
              */
-            $result1 = $clempempenhocontrato->sql_record($clempempenhocontrato->sql_query(null, "e100_numemp", "", "e100_acordo=$oParam->iAcordo"));
-            db_fieldsmemory($result1, 0);
-            if ($e100_numemp != "") {
+            $result1 = $clempempenhocontrato->sql_record($clempempenhocontrato->sql_query(null,"e100_numemp","","e100_acordo=$oParam->iAcordo"));
+            db_fieldsmemory($result1,0);
+            if($e100_numemp!=""){
 
-                $result = $clempelemento->sql_record($clempelemento->sql_query($e100_numemp, null, "*", "e64_codele"));
-                db_fieldsmemory($result, 0);
-
-                if ($e64_vlremp != $e64_vlranu) {
-                    throw new ParameterException(('Acordo não pode ser excluido.'));
+                $result = $clempelemento->sql_record($clempelemento->sql_query($e100_numemp,null,"*","e64_codele"));
+                db_fieldsmemory($result,0);
+            
+                if($e64_vlremp!=$e64_vlranu){
+                    throw new ParameterException(('Acordo não pode ser excluido.'));  
                 }
             }
-
+            
             $oAcordo = new Acordo($oParam->iAcordo);
             $oAcordo->remover();
 
