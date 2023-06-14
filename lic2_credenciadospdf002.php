@@ -131,8 +131,8 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
     $pdf->SetX(120);
     $pdf->cell(20, 5 * $altura, $item->m61_descr, 1, 0, "C", 0);
     $pdf->cell(20, 5 * $altura, $item->si02_qtditem, 1, 0, "C", 0);
-    $pdf->cell(20, 5 * $altura, $item->si02_vlprecoreferencia, 1, 0, "C", 0);
-    $pdf->cell(20, 5 * $altura, $item->si02_vltotalprecoreferencia, 1, 1, "C", 0);
+    $pdf->cell(20, 5 * $altura, valorFormatado($item->si02_vlprecoreferencia, 4), 1, 0, "C", 0);
+    $pdf->cell(20, 5 * $altura, valorFormatado($item->si02_vltotalprecoreferencia, 2), 1, 1, "C", 0);
 
     $total += $item->si02_vltotalprecoreferencia;
     $proximofornecedor = db_utils::fieldsMemory($rsItensCredenciados, $i + 1)->l205_fornecedor;
@@ -145,6 +145,16 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
         $pdf->cell(190, 6, "Total:  $total", 0, 0, "R", 0);
         $pdf->ln(6);
     }
+}
+
+function valorFormatado($valor, $casasdecimais)
+{
+    /* Verifica se o valor é inteiro */
+    if (strpos($valor, '.') == false) {
+        return $valor;
+    }
+
+    return number_format($valor, $casasdecimais, ',', '');
 }
 
 $pdf->Output();
