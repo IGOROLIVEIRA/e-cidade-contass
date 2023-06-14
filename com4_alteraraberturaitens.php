@@ -461,17 +461,9 @@ $db_opcao           = 1;
 
   function js_excluirLinha(iSeq) {
 
-    var oRow = oGridItens.aRows[iSeq];
-    var sMsg = 'Confirma a Exclusão do item ' + oRow.aCells[0].getValue() + '-' + oRow.aCells[2].getValue() + "?";
-    if (aItensAbertura[iSeq].temestimativa) {
-      sMsg += '\nExistem Estimativas Lançadas para esse Item.';
-    }
-    if (!confirm(sMsg)) {
-      return false;
-    }
     js_divCarregando('Aguarde, removendo item', "msgBox");
     var oParam = new Object();
-    oParam.exec = "excluirItens";
+    oParam.exec = "excluirItensManutencao";
     oParam.iItemRemover = iSeq;
     var oAjax = new Ajax.Request(sUrlRC, {
       method: "post",

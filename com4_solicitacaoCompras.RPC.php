@@ -590,6 +590,85 @@ switch ($oParam->exec) {
       $aitens = $oSolicita->getItens();
     }
     break;
+  case "excluirItensManutencao":
+
+    try {
+
+      db_inicio_transacao();
+      $oSolicita = $_SESSION["oSolicita"];
+      //VALIDANDO SE JÁ FOI ADD O ITEM
+      $iControle = 0;
+      $aItens = $oSolicita->getItens();
+      $descricao = '';
+      if (isset($aItens[$oParam->iItemRemover])) {
+        $rsPcmater = db_query("select pc16_codmater from solicitempcmater where pc16_solicitem = ".$aItens[$oParam->iItemRemover]->getCodigoItemSolicitacao());
+        
+        $pcmater = db_utils::fieldsMemory($rsPcmater, 0)->pc16_codmater;
+        $rsVinculo = db_query("select pc55_solicitemfilho from solicitemvinculo where pc55_solicitempai = ".$aItens[$oParam->iItemRemover]->getCodigoItemSolicitacao());
+        for ($iItens = 0; $iItens < pg_num_rows($rsVinculo); $iItens++) {
+
+          $pc55_solicitemfilho = db_utils::fieldsMemory($rsVinculo, $iItens)->pc55_solicitemfilho;
+          $rsItemQuant = db_query("select pc11_quant,pc10_depto from solicitem inner join solicita on pc10_numero=pc11_numero where pc11_codigo = ".$pc55_solicitemfilho);
+          $quantidade = db_utils::fieldsMemory($rsItemQuant, 0)->pc11_quant;
+          
+          if($quantidade != 0){
+            
+            $iControle = 1;
+            $codDepartamento = db_utils::fieldsMemory($rsItemQuant, 0)->pc10_depto;
+            $rsDepart = db_query("select descrdepto from db_depart where coddepto = ".$codDepartamento);
+            $descrDepart = db_utils::fieldsMemory($rsDepart, 0)->descrdepto;
+            $descricao .= "\n $pc55_solicitemfilho departamento $descrDepart ";
+          }
+          
+        }
+      }
+      
+      
+      if($iControle == 1){
+        $oRetorno->status  = 2;
+        $oRetorno->message = urlencode("Exclusão abortada. Este item possui quantidade lançada na(s) estimativa(s)".$descricao);
+      }
+        
+
+      if ($iControle == 0) {
+        $oSolicita->removerItem($oParam->iItemRemover);
+        db_fim_transacao(false);
+        $lTemEstimativa = false;
+        $aitens = $oSolicita->getItens();
+        if ($oSolicita instanceof aberturaRegistroPreco) {
+          if ($oSolicita->hasEstimativas()) {
+            $lTemEstimativa = true;
+          }
+        }
+        foreach ($aitens as $iIndice => $oItem) {
+
+          $oItemRetono = new stdClass;
+          $oItemRetono->codigoitem        = $oItem->getCodigoMaterial();
+          $oItemRetono->descricaoitem     = $oItem->getDescricaoMaterial();
+          $oItemRetono->quantidade        = $oItem->getQuantidade();
+          $oItemRetono->automatico        = $oItem->isAutomatico();
+          $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+          $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+          $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+          $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
+          $oItemRetono->unidade           = $oItem->getUnidade();
+          $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
+          $oItemRetono->indice            = $iIndice;
+          $oItemRetono->temestimativa     = $lTemEstimativa;
+          $oRetorno->itens[] = $oItemRetono;
+        }
+        $iDescricaoLog = 'EXCLUSAO ITEM '.$oParam->iCodigoItem;
+        db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'".$iDescricaoLog." REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,3)");
+      }
+    } catch (Exception $eErro) {
+
+
+      db_fim_transacao(true);
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+      $aitens = $oSolicita->getItens();
+    }
+    break;
   case "salvarItensValor":
 
     try {

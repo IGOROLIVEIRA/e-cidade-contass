@@ -501,6 +501,30 @@ class aberturaRegistroPreco extends solicitacaoCompra {
     return $this;
   }
 
+  public function verificarItem($iSeq) {
+
+    if ($iSeq >= 0) {
+
+      $aItens = $this->getItens();
+      if (isset($aItens[$iSeq])) {
+        $rsPcmater = db_query("select pc16_codmater from solicitempcmater where pc16_solicitem = ".$aItens[$iSeq]->getCodigoItemSolicitacao());
+        $pcmater = db_utils::fieldsMemory($rsPcmater, 0)->pc16_codmater;
+        $rsVinculo = db_query("select pc55_solicitemfilho from solicitemvinculo where pc55_solicitempai = ".$aItens[$iSeq]->getCodigoItemSolicitacao());
+        for ($iItens = 0; $iItens < pg_num_rows($rsVinculo); $iItens++) {
+
+          $pc55_solicitemfilho = db_utils::fieldsMemory($rsVinculo, $iItens)->pc55_solicitemfilho;
+          $rsItemQuant = db_query("select pc11_quant from solicitem where pc11_codigo = ".$pc55_solicitemfilho);
+          $quantidade = db_utils::fieldsMemory($rsItemQuant, 0)->pc11_quant;
+          if($quantidade != 0){
+            return true;
+          }
+          
+        }
+      }
+    }
+    return false;
+  }
+
   public function removerItemVinculadoNoItemDaAbertura($iCodigoItemAbertura) {
 
     $oDaoVinculo         = new cl_solicitemvinculo();
