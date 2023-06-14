@@ -14,7 +14,7 @@ class ValidaFornecedores
     public function execute(array $ranking): void
     {
         $fornecedores = [];
-        $mensagem = "Fornecedores não localizados:";
+        $mensagem = "Fornecedores não localizados: ";
         $cl_liclicitaimportarjulgamento =  new cl_liclicitaimportarjulgamento();
         foreach ($ranking as $posicao) {
             $resultado = $cl_liclicitaimportarjulgamento->buscaFornecedor($posicao['IdFornecedor']);

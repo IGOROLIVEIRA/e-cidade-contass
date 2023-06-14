@@ -1,99 +1,50 @@
 <?php
 
-require_once("model/licitacao/PortalCompras/Julgamento/Lance.model.php");
-require_once("model/licitacao/PortalCompras/Julgamento/Ranking.model.php");
-require_once("model/licitacao/PortalCompras/Julgamento/Proposta.model.php");
 
 class Lote
 {
     /**
      * @var integer
      */
-    private int   $idLote;
+    private int   $id;
 
     /**
-     * @var Proposta[]
+     * @var array
      */
-    private array $propostas;
+    private array $items;
 
     /**
-     * @var Lance[]
+     * Get the value of items
      */
-    private array $lances = [];
-
-    /**
-     * @var Ranking[]
-     */
-    private array $ranking;
-
-    /**
-     * Get the value of idLote
-     */
-    public function getIdLote(): int
+    public function getItems(): array
     {
-        return $this->idLote;
+        return $this->items;
     }
 
     /**
-     * Set the value of idLote
+     * Set the value of items
      */
-    public function setIdLote(int $idLote): self
+    public function setItems(array $items): self
     {
-        $this->idLote = $idLote;
+        $this->items = $items;
 
         return $this;
     }
 
     /**
-     * Get the value of lances
+     * Get the value of id
      */
-    public function getLances(): array
+    public function getId(): int
     {
-        return $this->lances;
+        return $this->id;
     }
 
     /**
-     * Set the value of lances
+     * Set the value of id
      */
-    public function setLances(array $lances): self
+    public function setId(int $id): self
     {
-        $this->lances = $lances;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of ranking
-     */
-    public function getRanking(): array
-    {
-        return $this->ranking;
-    }
-
-    /**
-     * Set the value of ranking
-     */
-    public function setRanking(array $ranking): self
-    {
-        $this->ranking = $ranking;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of propostas
-     */
-    public function getPropostas(): array
-    {
-        return $this->propostas;
-    }
-
-    /**
-     * Set the value of propostas
-     */
-    public function setPropostas(array $propostas): self
-    {
-        $this->propostas = $propostas;
+        $this->id = $id;
 
         return $this;
     }

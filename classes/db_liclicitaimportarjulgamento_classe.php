@@ -37,7 +37,7 @@ class cl_liclicitaimportarjulgamento
 
     //pcorcamitemlic
     public int    $pc22_liclicitem;
-    public int    $pc22_orcamitem;
+    public int    $pc22_codorc;
 
     //pcorcamitemlic
     public int    $pc26_liclicitem;
@@ -86,15 +86,15 @@ class cl_liclicitaimportarjulgamento
         return $this->sql_record($sql);
     }
 
-    public function buscaFornecedor($cpnj)
+    public function buscaFornecedor($cnpj)
     {
         $sql = "
-        select pc60_cnpjcpf from pcforne where pc60_cnpjcpf ='$cpnj'
+        select pc60_cnpjcpf from pcforne where pc60_cnpjcpf ='$cnpj'
         ";
         return $this->sql_record($sql);
     }
 
-    public function buscaNumCgm(string $cpnj)
+    public function buscaNumCgm(string $cnpj)
     {
         $sql = "
         select  z01_numcgm as numcgm from protocolo.db_cgmcpf where z01_cpf = '$cnpj'
@@ -102,6 +102,45 @@ class cl_liclicitaimportarjulgamento
 
         return $this->sql_record($sql);
     }
+
+    public function buscaCpfCnpj(string $numcgm)
+    {
+        $sql = "
+        select z01_cpf from protocolo.db_cgmcpf where z01_numcgm = '$numcgm'
+        ";
+
+        return $this->sql_record($sql);
+    }
+
+
+    public function buscaL21codigo(int $codigo)
+    {
+        $sql = "
+        select
+	        l21_codigo
+        from liclicita
+            join cflicita on l03_codigo=l20_codtipocom
+            join liclicitem on l21_codliclicita = l20_codigo
+            join liclicitemlote on l04_liclicitem=l21_codigo
+            join pcprocitem on pc81_codprocitem=l21_codpcprocitem
+            join solicitem on pc11_codigo=pc81_solicitem
+            join solicita on pc10_numero = pc11_numero
+            join solicitempcmater on pc16_solicitem=pc11_codigo
+            join pcmater on pc01_codmater=pc16_codmater
+            join solicitemunid on pc17_codigo=pc11_codigo
+            join matunid on m61_codmatunid=pc17_unid
+            left join pcorcamitemproc on pc31_pcprocitem=pc81_codprocitem
+            left join pcorcamitem on pc22_orcamitem=pc31_orcamitem
+            left join itemprecoreferencia on si02_itemproccompra=pc22_orcamitem
+            left join solicitaregistropreco on pc54_solicita=pc10_numero
+        where
+            l04_seq = $codigo
+       order by l21_ordem;
+        ";
+
+        return $this->sql_record($sql);
+    }
+
 
 
     public function sql_record($sql)
@@ -174,6 +213,17 @@ class cl_liclicitaimportarjulgamento
         $insert = "INSERT INTO
         pcorcamitem(pc22_orcamitem, pc22_codorc)
         VALUES($sequencia ,$this->pc22_codorc)
+        RETURNING pc22_orcamitem
+        ";
+        return pg_exec($insert);
+      }
+
+
+      public function inserePcorcamitemlic()
+      {
+        $insert = "INSERT INTO
+        pcorcamitemlic(pc26_liclicitem, pc26_orcamitem)
+        VALUES($this->pc26_liclicitem, $this->pc26_orcamitem)
         RETURNING pc22_orcamitem
         ";
         return pg_exec($insert);

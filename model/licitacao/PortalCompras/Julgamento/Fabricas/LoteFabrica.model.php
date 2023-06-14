@@ -2,6 +2,7 @@
 
 require_once("model/licitacao/PortalCompras/Julgamento/Lote.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Fabricas/PropostaFabrica.model.php");
+require_once("model/licitacao/PortalCompras/Fabricas/ItemFabrica.model.php");
 
 class LoteFabrica
 {
@@ -14,16 +15,12 @@ class LoteFabrica
     public function criar(array $dados): Lote
     {
         $lote = new Lote();
-        $propostaFabrica = new PropostaFabrica();
-        $rankingFabrica = new RankingFabrica();
+        $itemFabrica = new ItemFabrica();
 
-        $lote->setIdLote($dados['IdLote']);
+        $lote->setId($dados['NR_LOTE']);
 
-        $propostas = $propostaFabrica->criarLista($dados['Propostas']);
-        $lote->setPropostas($propostas);
-
-        $ranking = $rankingFabrica->criarLista($dados['Ranking']);
-        $lote->setRanking($ranking);
+        $itens = $itemFabrica->criarLista($dados['itens']);
+        $lote->setItems($itens);
 
         return $lote;
     }
