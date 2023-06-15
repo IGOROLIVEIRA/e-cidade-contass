@@ -92,9 +92,6 @@ class ImportarDadosEvt5001
         $this->evt5001consulta->rh218_vrcpseg = $this->oXml->evtBasesTrab->infoCpCalc->vrCpSeg;
         $this->evt5001consulta->rh218_instit = $this->getInstitCgm($this->dadosEvento->rh213_empregador);
         $this->evt5001consulta->rh218_vlrbasecalc = $this->getValorBaseCalcContribSocial($this->oXml);
-        if (!empty($this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->infoBaseCS)) {
-            $this->evt5001consulta->rh218_regist = $this->getMatricula($this->oXml->evtBasesTrab->ideTrabalhador->cpfTrab, $this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->matricula);
-        }
         if (!empty($this->oXml->evtBasesTrab->infoCp->ideEstabLot->infoCategIncid->matricula)) {
             $this->evt5001consulta->rh218_instit = $this->getInstitMatricula($this->evt5001consulta->rh218_regist);
         }
