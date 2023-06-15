@@ -458,8 +458,9 @@ if ($modelo == 1) {
   } else if ($sOrigem == "processo") {
     $sSqlItens = "SELECT DISTINCT pc22_orcamitem,
                 pc01_descrmater,
+                pc01_codmater,
                 pc11_resum,
-                pc11_quant,
+                pc11_numero,
                 m61_descr,
 
     (SELECT coalesce(sum(val.pc23_valor),0)/CASE
@@ -492,7 +493,7 @@ WHERE pc22_codorc= $orcamento
 ORDER BY pc11_seq";
   }
   $result_itens = $clpcorcamitem->sql_record($sSqlItens);
-  //    echo $sSqlItens; db_criatabela($result_itens);exit;
+      //echo $sSqlItens; db_criatabela($result_itens);exit;
 
   $numrows_itens = $clpcorcamitem->numrows;
   if ($numrows_itens == 0) {
@@ -542,6 +543,12 @@ ORDER BY pc11_seq";
   $total_quant = 0;
   for ($i = 0; $i < $numrows_itens; $i++) {
     db_fieldsmemory($result_itens, $i);
+    if ($sOrigem == "solicitacao") {
+      
+    } else if ($sOrigem == "processo") {
+      $result_itenss = $clpcorcamitem->sql_record("select  sum(pc11_quant) as pc11_quant from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc11_numero=$pc11_numero and pc16_codmater=$pc01_codmater");
+      db_fieldsmemory($result_itenss, 0);
+    }
 
     $total_quant += $pc11_quant;
   }
@@ -607,6 +614,13 @@ ORDER BY pc11_seq";
     }
     $alt = 4;
     $pdf->setfont('arial', '', 7);
+
+    if ($sOrigem == "solicitacao") {
+      
+    } else if ($sOrigem == "processo") {
+      $result_itenss = $clpcorcamitem->sql_record("select  sum(pc11_quant) as pc11_quant from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc11_numero=$pc11_numero and pc16_codmater=$pc01_codmater");
+      db_fieldsmemory($result_itenss, 0);
+    }
     $pdf->cell(7, $alt, $pc11_seq, 1, 0, "C", 0);
     $pdf->cell(60, $alt, substr($pc01_descrmater . " - " . $pc11_resum, 0, 38), 1, 0, "L", 0);
     $pdf->cell(15, $alt, $m61_descr, 1, 0, "C", 0);

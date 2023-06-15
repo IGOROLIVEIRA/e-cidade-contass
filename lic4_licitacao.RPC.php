@@ -803,7 +803,7 @@ switch ($oParam->exec) {
 
         $sSqlMarcados = $oDaoProcItem->sql_query_pcmater('null', 'DISTINCT pc81_codprocitem', '', $sWhere, true);
         $rsMarcados = db_query($sSqlMarcados);
-
+        //print_r($sSqlMarcados);
         for ($count = 0; $count < pg_numrows($rsSql); $count++) {
 
             $oItem = db_utils::fieldsMemory($rsSql, $count);
