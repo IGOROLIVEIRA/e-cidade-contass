@@ -916,4 +916,62 @@ class cl_homologacaoadjudica
         $oResultdt = db_query($sSql);
         return db_utils::getColectionByRecord($oResultdt);
     }
+
+    /**
+     * Função responsável por verificar se existem itens com o mesmo código e 
+     * valores unitários diferentes julgados para o mesmo fornecedor.
+     * @param int $iLicitacao - Código da Licitação.
+     * @param int $iRotina - 1 Adjudicação(Inclusão/Alteração), 2 - Homologação(Inclusão), 3 Homologação(Alteração).
+     * @param int $iHomologacao - Código da Homologação.
+     * @param string $sItensHomologados - código dos itens homologados durante a inclusão da homologação
+     * @return Exception
+     **/
+    function validacaoItensComFornecedorIgual($iLicitacao, $iRotina, $iHomologacao, $sItensHomologados)
+    {
+
+        $sCampos = "DISTINCT pc01_codmater,cgmforncedor.z01_numcgm,cgmforncedor.z01_nome,pc23_valor";
+        $sOrder = "pc01_codmater";
+
+        /* Consulta dos itens conforme a rotina executada */
+
+        if ($iRotina == 1) {
+            $sWhere = " liclicitem.l21_codliclicita = $iLicitacao and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
+            $rsItens = $this->sql_record($this->sql_query_itens_semhomologacao(null, $sCampos, $sOrder, $sWhere));
+        }
+
+        if ($iRotina == 2) {
+            $sWhere = "pc81_codprocitem in ($sItensHomologados) and liclicitem.l21_codliclicita = $iLicitacao and pc24_pontuacao = 1 AND pc81_codprocitem not in (select l203_item from homologacaoadjudica
+            inner join itenshomologacao on l203_homologaadjudicacao = l202_sequencial where l202_licitacao = $iLicitacao)";
+            $rsItens = $this->sql_record($this->sql_query_itens_semhomologacao(null, $sCampos, $sOrder, $sWhere));
+        }
+
+        if ($iRotina == 3) {
+            $sWhere = " liclicitem.l21_codliclicita = $iLicitacao and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = $iHomologacao";
+            $rsItens = $this->sql_record($this->sql_query_itens_comhomologacao(null, $sCampos, $sOrder, $sWhere));
+        }
+
+        /* Array responsável por armazenar o código do item/codigo do fornecedor associado com o valor unitário de cada item*/
+        $aItens = array();
+        $sItensInvalidos = "";
+
+        /* Percorrendo sobre os itens e verificando se existem itens com 
+           mesmo fornecedor e valores unitarios diferentes */
+
+        for ($i = 0; $i < pg_num_rows($rsItens); $i++) {
+            $oItem = db_utils::fieldsMemory($rsItens, $i);
+            // indíce do array com o código do item/código do fornecedor
+            $indice = $oItem->pc01_codmater . $oItem->z01_numcgm;
+
+            if (array_key_exists($indice, $aItens)) {
+
+                if (strcmp($oItem->pc23_valor, $aItens[$indice]) != 0) {
+                    $sItensInvalidos .= "\nItem $oItem->pc01_codmater - Fornecedor $oItem->z01_nome";
+                }
+            }
+
+            $aItens[$indice] = $oItem->pc23_valor;
+        }
+
+        if ($sItensInvalidos != "") throw new Exception("Usuário: Inclusão abortada, esta licitação possui itens com o mesmo código e valores unitários divergentes julgados para o mesmo fornecedor." . $sItensInvalidos);
+    }
 }

@@ -423,16 +423,19 @@ db_app::load("estilos.css, grid.style.css");
 
         oParam.aItens = new Array();
         oParam.exec = "homologarLicitacao";
-
+        oParam.sCodigoItens = "";
         for (var i = 0; i < aItens.length; i++) {
 
             with(aItens[i]) {
                 var oItem = new Object();
                 oItem.codigo = aCells[0].getValue();
                 oItem.fornecedor = aCells[5].getValue();
+                oParam.sCodigoItens += aCells[0].getValue() + ",";
                 oParam.aItens.push(oItem);
             }
         }
+
+        oParam.sCodigoItens = oParam.sCodigoItens.substring(0, oParam.sCodigoItens.length - 1);
 
         js_divCarregando('Aguarde, Homologando Licitacao', 'msgBox');
         var oAjax = new Ajax.Request(
