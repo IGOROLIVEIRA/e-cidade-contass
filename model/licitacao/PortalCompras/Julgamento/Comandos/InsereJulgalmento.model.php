@@ -4,6 +4,14 @@ require_once("model/licitacao/PortalCompras/Julgamento/Julgamento.model.php");
 require_once("classes/db_liclicitaimportarjulgamento_classe.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Proposta.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Item.model.php");
+require_once("model/licitacao/PortalCompras/Julgamento/Ranking.model.php");
+require_once("classes/db_pcorcam_classe.php");
+require_once("classes/db_pcorcamitem_classe.php");
+require_once("classes/db_pcorcamitemproc_classe.php");
+require_once("classes/db_pcorcamforne_classe.php");
+require_once("classes/db_pcorcamval_classe.php");
+require_once("classes/db_pcorcamjulg_classe.php");
+require_once("classes/db_habilitacaoforn_classe.php");
 
 class InsereJulgamento
 {
@@ -19,138 +27,189 @@ class InsereJulgamento
 
     public function execute(Julgamento $julgamento)
     {
+        $clpcorcam = new cl_pcorcam;
+
         $idJulgamento = $julgamento->getId();
         $numero = $julgamento->getNumero();
         $this->dao->pc20_obs = "ORCAMENTO IMPORTADO -"
             . $idJulgamento
             ." - ". $numero;
-        $this->dao->pc20_dtate = $julgamento->getDataProposta();
-        $this->dao->pc20_hrate = $julgamento->getHoraProposta();
+        $clpcorcam->pc20_dtate = $julgamento->getDataProposta();
+        $clpcorcam->pc20_hrate = $julgamento->getHoraProposta();
         $lotes = $julgamento->getLotes();
         $itens = array_map(fn(Lote $lote) => $lote->getItems(), $lotes);
         $quantidadeItens = count($itens);
-        //$propostas = array_map(fn(Item $item) => $item->getPropostas(), $itens);
-        //$idForncedores = array_map(fn(Proposta $proposta) => $proposta->getIdFornecedor(), $propostas);
 
         try{
-            pg_exec('begin');
+            db_inicio_transacao();
 
-            $idOrcamento = $this->dao->inserePcorcam();
-            $this->dao->pc21_codorc = $idOrcamento;
-            $this->dao->pc22_codorc = $idOrcamento;
+            $clpcorcam->incluir(null);
 
-         /*    $idPcorcamforne = $this->lidaPcorcamforne($idForncedores);
+            $idPcorcam = (int)$clpcorcam->pc20_codorc;
 
-            $idLiclicitem = $this->lidaLiclicitem($quantidadeItens);
-
-            $idPcorcamitemlic = $this->lidaPcorcamitemlic($idLiclicitem, $itens);
- */
             /** @var Item[] $itens */
             foreach($itens as $item) {
                 $propostas = $item->getPropostas();
+                $tipoJulgamento = $item->getTipoJulgamento();
+                $ranking = $item->getRanking();
 
                 foreach($propostas as $proposta) {
-                    $idPcorcamforne = $this->lidaPcorcamforne($proposta);
-                    $idLiclicitem = $this->lidaLiclicitem();
-                    $idPcorcamitemlic = $this->lidaPcorcamitemlic($item->getId(), $idLiclicitem);
+                    $numcgmResource = $this->dao->buscaNumCgm($proposta->getIdFornecedor());
+                    $numcgm = (db_utils::fieldsMemory($numcgmResource, 0))->numcgm;
 
+                    $idPcorcamforne   = $this->lidaPcorcamforne($numcgm, $idPcorcam);
+                    $idPcorcamitem    = $this->lidaPcorcamitem($idPcorcam);
+                    $idPcorcamitemlic = $this->lidaPcorcamitemlic($item->getId(), $idPcorcamitem);
+                    $idPcorcamval     = $this->lidaPcorcamval(
+                        $proposta,
+                        $idPcorcamforne,
+                        $idPcorcamitem,
+                        $tipoJulgamento
+                    );
+                    $this->lidaPcorcamjulg(
+                        $proposta,
+                        $ranking,
+                        $idPcorcamitem,
+                        $idPcorcamforne
+                    );
 
+                    $this->lidaHabilitacaoforn(
+                        $numcgm,
+                        $idJulgamento,
+                    );
                 }
             }
 
-            pg_exec("commit");
+            db_fim_transacao(false);
 
         } catch(Exception $e) {
-
-            pg_exec('rollback');
+            db_fim_transacao(true);
+            throw new Exception($e->getMessage());
         }
     }
 
-    //private function lidaPcorcamforne(array $idForncedores): array
-    private function lidaPcorcamforne(Proposta $proposta): int
+
+    private function lidaPcorcamforne(string $numcgm, int $idPcorcam): int
     {
-        /* $idPcorcamforne = [];
+        $clpcorcamforne             = new cl_pcorcamforne;
+        $clpcorcamforne->pc21_codorc     = $idPcorcam;
+        $clpcorcamforne->pc21_numcgm     = $numcgm;
+        $clpcorcamforne->pc21_importado  = true;
+        $clpcorcamforne->pc21_prazoent   = null;
+        $clpcorcamforne->pc21_validadorc = null;
+        $clpcorcamforne->incluir(null);
 
-        foreach($idForncedores as $id) {
-            $numcgmResource = $this->dao->buscaNumCgm($id);
-            $numcgm = (db_utils::fieldsMemory($numcgmResource, 0))->numcgm;
-            $this->dao->pc21_numcgm = $numcgm;
-            $idPcorcamforne[] = $this->dao->inserePcorcamforne();
+        if ($clpcorcamforne->erro_status == 0) {
+            throw new Exception($clpcorcamforne->erro_msg);
         }
 
-        return $idPcorcamforne; */;
-        $numcgmResource = $this->dao->buscaNumCgm($proposta->getIdFornecedor());
-        $this->dao->pc21_numcgm = (db_utils::fieldsMemory($numcgmResource, 0))->numcgm;
-        return $this->dao->inserePcorcamforne();
+        return (int)$clpcorcamforne->pc21_orcamforne;
     }
 
-    //private function lidaLiclicitem(int $quantidadeItens): array
-    private function lidaLiclicitem(): int
+    private function lidaPcorcamitem(int $idPcorcam): int
     {
-        /* $idLiclicitem = [];
+        $clpcorcamitem              = new cl_pcorcamitem;
+        $clpcorcamitem->pc22_codorc = $idPcorcam;
+		$clpcorcamitem->incluir(null);
 
-        for ($i = 0; $i < $quantidadeItens; $i++) {
-            $idLiclicitem[] = $this->dao->inserePcorcamitem();
+        if ($clpcorcamitem->erro_status == 0 ) {
+            throw new Exception($clpcorcamitem->erro_msg);
         }
 
-        return $idLiclicitem; */
-        return $this->dao->inserePcorcamitem();
+        return $clpcorcamitem->pc22_orcamitem;
     }
 
-    //private function lidaPcorcamitemlic(array $idLiclicitem, array $itens)
     private function lidaPcorcamitemlic(int $id, int $idPcorcamitem ): int
     {
-       /*  $idPcorcamitemlic = [];
-        $indice = 0;
-
-        foreach($itens as $item) {
-            $this->dao->pc26_liclicitem = $this->dao->buscaL21codigo(
-                $item->getId()
-            );
-
-            $this->dao->pc26_orcamitem = $idLiclicitem[$indice];
-
-            $idPcorcamitemlic[] = $this->dao->inserePcorcamitemlic();
-
-            $indice++;
-
-        }
-
-        return $idPcorcamitemlic; */
-        $this->dao->pc26_liclicitem = $this->dao->buscaL21codigo(
-
+        $clpcorcamitemlic                  = new cl_pcorcamitemlic;
+        $clpcorcamitemlic->pc26_liclicitem = $this->dao->buscaL21codigo(
+            $id
         );
 
-        $this->dao->pc26_orcamitem = $idLiclicitem[$indice];
+        $clpcorcamitemlic->pc26_orcamitem  = $idPcorcamitem;
+        $clpcorcamitemlic->incluir(null);
 
-        return $this->dao->inserePcorcamitemlic();
+        if ($clpcorcamitemlic->erro_status == 0 ) {
+            throw new Exception($clpcorcamitemlic->erro_msg);
+        }
+
+        return (int)$clpcorcamitemlic->pc26_liclicitem;
     }
 
-    //private function lidaPcorcamval(array $proposta)
-    private function lidaPcorcamval(Proposta $proposta, int $orcamforne, int $orcamitem )
+    private function lidaPcorcamval(Proposta $proposta, int $idOrcamforne, int $idOrcamitem, int $tipoJulgamento )
     {
-       /*  foreach($propostas as $proposta) {
-            $this->pc23_orcamforne =
-            $this->pc23_orcamitem =
-            $this->pc23_valor =
-            $this->pc23_quant =
-            $this->pc23_obs =
-            $this->pc23_vlrun =
-            $this->pc23_validmin =
-            $this->pc23_percentualdesconto =
-            $this->pc23_perctaxadesctabela =
+        $clpcorcamval                          = new cl_pcorcamval;
+        $clpcorcamval->pc23_valor              = $proposta->getValorTotal();
+        $clpcorcamval->pc23_quant              = $proposta->getQuantidade();
+        $clpcorcamval->pc23_obs                = $proposta->getMarca();
+        $clpcorcamval->pc23_vlrun              = $proposta->getValorUnitario();
+        $clpcorcamval->pc23_validmin           = null;
+        $clpcorcamval->pc23_perctaxadesctabela = null;
+        $clpcorcamval->pc23_percentualdesconto = $tipoJulgamento == 1 ? $proposta->getValorDesconto()
+            : null;
 
-        } */
-            $this->dao->pc23_orcamforne =
-            $this->dao->pc23_orcamitem =
-            $this->dao->pc23_valor = $proposta->getValorTotal();
-            $this->dao->pc23_quant = $proposta->getQuantidade();
-            $this->dao->pc23_obs = $proposta->getMarca();
-            $this->dao->pc23_vlrun = $proposta->getVlRun();
-            $this->dao->pc23_validmin = null
-            $this->dao->pc23_percentualdesconto = $proposta->getPercentualDesconto();
-            $this->dao->pc23_perctaxadesctabela = $proposta->getPercentualTaxa();
+        $clpcorcamval->incluir($idOrcamforne, $idOrcamitem);
+
+        if ($clpcorcamval->erro_status == 0 ) {
+            throw new Exception($clpcorcamval->erro_msg);
+        }
+
     }
 
+    private function lidaPcorcamjulg(Proposta $proposta, Array $ranking, int $idPcorcamitem, int $idPcorcamforne): void
+    {
+        $cnpj            = $proposta->getIdFornecedor();
+        $posicaoFiltrada = array_filter($ranking, function(Ranking $posicao) use($cnpj) {
+            return $posicao->getIdFornecedor() == $cnpj;
+        });
 
+        $clpcorcamjulg                  = new cl_pcorcamjulg;
+        $clpcorcamjulg->pc24_pontuacao  = $posicaoFiltrada;
+
+        $clpcorcamjulg->incluir($idPcorcamitem, $idPcorcamforne);
+
+        if ($clpcorcamjulg->erro_status == 0 ) {
+            throw new Exception($clpcorcamjulg->erro_msg);
+        }
+    }
+
+    private function lidaHabilitacaoforn(
+        string $numcgm,
+        int $idJulgamento
+    ): void {
+        $clhabilitacaoforn = new cl_habilitacaoforn;
+        $clhabilitacaoforn->l206_fornecedor        = $numcgm;
+        $clhabilitacaoforn->l206_licitacao        = $idJulgamento;
+        $clhabilitacaoforn->l206_representante    = "teste";
+        $clhabilitacaoforn->l206_datahab          = "21-12-2021";
+        $clhabilitacaoforn->l206_numcertidaoinss  = null;
+        $clhabilitacaoforn->l206_dataemissaoinss  = null;
+        $clhabilitacaoforn->l206_datavalidadeinss = null;
+        $clhabilitacaoforn->l206_numcertidaofgts  = null;
+        $clhabilitacaoforn->l206_dataemissaofgts  = null;
+        $clhabilitacaoforn->l206_datavalidadefgts = null;
+        $clhabilitacaoforn->l206_numcertidaocndt  = null;
+        $clhabilitacaoforn->l206_dataemissaocndt  = null;
+        $clhabilitacaoforn->l206_datavalidadecndt = null;
+
+        $$clhabilitacaoforn->incluir(null);
+
+        if ($clhabilitacaoforn->erro_status == 0 ) {
+            throw new Exception($clhabilitacaoforn->erro_msg);
+        }
+
+    }
+
+    private function lidaLiclicitasituacao(int $idJulgamento): void
+    {
+        $clliclicitasituacao   = new cl_liclicitasituacao;
+        $clliclicitasituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
+        $clliclicitasituacao->l11_hora        = db_hora();
+        $clliclicitasituacao->l11_obs         = "Julgamento importado plataforma eletrônica";
+        $clliclicitasituacao->l11_licsituacao = 13;
+        $clliclicitasituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
+        $clliclicitasituacao->l11_liclicita   = $idJulgamento;
+        $clliclicitasituacao->incluir(null);
+
+    }
 }

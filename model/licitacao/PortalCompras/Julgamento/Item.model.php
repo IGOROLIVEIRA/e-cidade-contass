@@ -7,24 +7,27 @@ require_once("model/licitacao/PortalCompras/Julgamento/Proposta.model.php");
 class Item
 {
     /**
-     * @var integer
+     * @var integer $id
      */
     private int $id;
 
     /**
-     * @var Proposta[]
+     * @var Proposta[] $propostas
      */
     private array $propostas;
 
     /**
-     * @var Lance[]
+     * @var Lance[] $lances
      */
     private array $lances = [];
 
     /**
-     * @var Ranking[]
+     * @var Ranking[] $ranking
      */
     private array $ranking;
+
+    /** @var int $tipoJulgamento */
+    private int $tipoJulgamento;
 
     /**
      * Get the value of lances
@@ -94,6 +97,24 @@ class Item
     public function setId(int $id): self
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of tipoJulgamento
+     */
+    public function getTipoJulgamento(): int
+    {
+        return $this->tipoJulgamento;
+    }
+
+    /**
+     * Set the value of tipoJulgamento
+     */
+    public function setTipoJulgamento(int $tipoJulgamento): self
+    {
+        $this->tipoJulgamento = $tipoJulgamento;
 
         return $this;
     }

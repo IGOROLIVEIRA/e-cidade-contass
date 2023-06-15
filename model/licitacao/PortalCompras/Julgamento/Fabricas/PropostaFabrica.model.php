@@ -39,9 +39,11 @@ class PropostaFabrica
      */
     public function criarLista(array $propostasArray): array
     {
-        $listaProposta = [];
+        $listaPropostas = [];
         foreach($propostasArray as $proposta) {
-            $listaPropostas[] = $this->criar($proposta);
+            if((bool)$proposta['valido'] == true) {
+                $listaPropostas[] = $this->criar($proposta);
+            }
         }
 
         return $listaPropostas;

@@ -58,7 +58,7 @@ class cl_liclicitaimportarjulgamento
     //pcorcamjulg
     public int    $pc24_orcamitem;
     public int    $pc24_orcamforne;
-    public int    $pc24_posicao;
+    public int    $pc24_pontuacao;
 
     //liclicitasituacao
     public int    $l11_sequencial;
@@ -198,7 +198,7 @@ class cl_liclicitaimportarjulgamento
         l206_numcertidaoinss, l206_dataemissaoinss, l206_datavalidadeinss, l206_numcertidaofgts, l206_dataemissaofgts
         l206_datavalidadefgts, l206_numcertidaocndt, l206_dataemissaocndt, l206_datavalidadecndt)
         VALUES(
-         $sequencia ,$this->l206_fornecedor, $this->l206_licitacao, $this->l206_represente, $this->l206_dathab,
+         $sequencia ,$this->l206_fornecedor, $this->l206_licitacao, $this->l206_representante, $this->l206_datahab,
          NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL
          )
          RETURNING l206_sequencial
