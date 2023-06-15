@@ -330,12 +330,12 @@ function db_ancora($nome, $js_script, $db_opcao, $style = "", $varnome="")
     if (($db_opcao < 3) || ($db_opcao == 4)) {
         if ($varnome !="") {
             ?>
-    <a href='#' id="<?=$varnome?>" class='dbancora' style='text-decoration:underline;<?=trim($style) != "" ? ";$style" : ""?>' onclick="<?=$js_script?>"><?=$nome?></a>
-  <?php
+            <a id="<?=$varnome?>" class='DBAncora' style='text-decoration:underline;<?=trim($style) != "" ? ";$style" : ""?>' onclick="<?=$js_script?>"><?=$nome?></a>
+            <?php
         } else {
             ?>
-         <a href='#' class='dbancora'  style='text-decoration:underline;<?=trim($style) != "" ? ";$style" : ""?>' onclick="<?=$js_script?>"><?=$nome?></a>
-       <?php
+            <a class='DBAncora'  style='text-decoration:underline;<?=trim($style) != "" ? ";$style" : ""?>' onclick="<?=$js_script?>"><?=$nome?></a>
+            <?php
         }
     } else {
         echo $nome;

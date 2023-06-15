@@ -40,7 +40,7 @@ class documentoTemplate  {
 
   	global $conn;
 
-  	require_once(modification('dbforms/db_funcoes.php'));
+  	require_once('dbforms/db_funcoes.php');
 
   	if((int)$iTipo == "" || (int)$iTipo == 0) {
 			throw new Exception('Valor do tipo Informado não válido!');

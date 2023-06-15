@@ -108,7 +108,7 @@ class cl_despesaexercicioanterior
             $this->erro_status = "0";
             return false;
         }
-        if ($this->c233_mes == null) {
+        if ($this->c233_mes == null || $this->c233_mes == 0) {
             $this->erro_sql = " Campo Mes nao Informado.";
             $this->erro_campo = "c233_mes";
             $this->erro_banco = "";

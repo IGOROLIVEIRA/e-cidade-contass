@@ -64,20 +64,6 @@ parent.parent.Desktop.Session.updateGlobal({
     </operation>
   </file>
 
-  <file path="dbforms/db_funcoes.php">
-
-    <operation error="log">
-      <search><![CDATA[<a href='#' id="<?=$varnome?>" class='dbancora']]></search>
-      <add><![CDATA[<a id="<?=$varnome?>" class='DBAncora']]></add>
-    </operation>
-
-    <operation error="log">
-      <search><![CDATA[<a href='#' class='dbancora']]></search>
-      <add><![CDATA[<a class='DBAncora']]></add>
-    </operation>
-
-  </file>
-
   <file path="libs/db_stdlib.php">
 
     <operation error="log">
