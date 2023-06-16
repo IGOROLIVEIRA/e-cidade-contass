@@ -125,8 +125,10 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
     echo "<td>" . substr($item->pc01_descrmater, 0, 62) . "</td>";
     echo "<td style='text-align:left'>" . $item->m61_descr . "</td>";
     echo "<td>" . $item->si02_qtditem . "</td>";
-    echo "<td>" . valorFormatado($item->si02_vlprecoreferencia, 4) . "</td>";
-    echo "<td>" . valorFormatado($item->si02_vltotalprecoreferencia, 2) . "</td>";
+    $item->si02_vlprecoreferencia = strpos($item->si02_vlprecoreferencia, '.') == false ? $item->si02_vlprecoreferencia : db_formatar("$item->si02_vlprecoreferencia", 'f', " ", 0, "e", 4);
+    $item->si02_vltotalprecoreferencia = strpos($item->si02_vltotalprecoreferencia, '.') == false ? $item->si02_vltotalprecoreferencia : db_formatar("$item->si02_vltotalprecoreferencia", 'f', " ", 0, "e", 2);
+    echo "<td>" . $item->si02_vlprecoreferencia . "</td>";
+    echo "<td>" . $item->si02_vltotalprecoreferencia . "</td>";
     echo "</tr>";
 
 
@@ -142,14 +144,4 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
         echo '</table> </div>';
         echo "<br><br><br>";
     }
-}
-
-function valorFormatado($valor, $casasdecimais)
-{
-    /* Verifica se o valor é inteiro */
-    if (strpos($valor, '.') == false) {
-        return $valor;
-    }
-
-    return number_format($valor, $casasdecimais, ',', '');
 }
