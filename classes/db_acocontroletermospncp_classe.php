@@ -19,21 +19,23 @@ class cl_acocontroletermospncp
     // cria variaveis do arquivo 
     public $l214_sequencial = 0;
     public $l214_numerotermo = 0;
-    public $l214_numecontrato = null;
+    public $l214_numcontratopncp = null;
     public $l213_usuario = null;
     public $l213_dtlancamento = null;
     public $l214_anousu = null;
     public $l214_acordo = 0;
+    public $l214_numeroaditamento = 0;
     public $l214_instit = null;
     // cria propriedade com as variaveis do arquivo 
     public $campos = "
                  l214_sequencial = int8 = l214_sequencial 
                  l214_numerotermo = int8 = l214_numerotermo 
-                 l214_numecontrato = int8 = codigo contrato pncp
+                 l214_numcontratopncp = int8 = codigo contrato pncp
                  l213_usuario = int8 = usuario
                  l213_dtlancamento = date = data de envio
                  l214_anousu = int8 = ano da compra
                  l214_acordo = int8 = l214_acordo 
+                 l214_numeroaditamento = int8 = numero do aditamento no ecidade
                  l214_instit = int8 = l214_instit
                  ";
 
@@ -62,11 +64,12 @@ class cl_acocontroletermospncp
         if ($exclusao == false) {
             $this->l214_sequencial = ($this->l214_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_sequencial"] : $this->l214_sequencial);
             $this->l214_numerotermo = ($this->l214_numerotermo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_numerotermo"] : $this->l214_numerotermo);
-            $this->l214_numecontrato = ($this->l214_numecontrato == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_numecontrato"] : $this->l214_numecontrato);
+            $this->l214_numcontratopncp = ($this->l214_numcontratopncp == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_numcontratopncp"] : $this->l214_numcontratopncp);
             $this->l213_usuario = ($this->l213_usuario == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_usuario"] : $this->l213_usuario);
             $this->l213_dtlancamento = ($this->l213_dtlancamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["l213_dtlancamento"] : $this->l213_dtlancamento);
             $this->l214_anousu = ($this->l214_anousu == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_anousu"] : $this->l214_anousu);
             $this->l214_acordo = ($this->l214_acordo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_acordo"] : $this->l214_acordo);
+            $this->l214_numeroaditamento = ($this->l214_numeroaditamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_numeroaditamento"] : $this->l214_numeroaditamento);
             $this->l214_instit = ($this->l214_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_instit"] : $this->l214_instit);
         }
     }
@@ -90,9 +93,9 @@ class cl_acocontroletermospncp
             $this->erro_status = "0";
             return false;
         }
-        if ($this->l214_numecontrato == null) {
-            $this->erro_sql = " Campo l214_numecontrato não informado.";
-            $this->erro_campo = "l214_numecontrato";
+        if ($this->l214_numcontratopncp == null) {
+            $this->erro_sql = " Campo l214_numcontratopncp não informado.";
+            $this->erro_campo = "l214_numcontratopncp";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -152,21 +155,23 @@ class cl_acocontroletermospncp
         $sql = "insert into acocontroletermospncp(
                                        l214_sequencial 
                                       ,l214_numerotermo 
-                                      ,l214_numecontrato 
+                                      ,l214_numcontratopncp 
                                       ,l213_usuario 
                                       ,l213_dtlancamento
                                       ,l214_anousu 
                                       ,l214_acordo
+                                      ,l214_numeroaditamento
                                       ,l214_instit
                        )
                 values (
                                 $this->l214_sequencial 
                                ,$this->l214_numerotermo 
-                               ,$this->l214_numecontrato
+                               ,$this->l214_numcontratopncp
                                ,$this->l213_usuario
                                ,'$this->l213_dtlancamento'
                                ,$this->l214_anousu
                                ,$this->l214_acordo
+                               ,$this->l214_numeroaditamento
                                ,$this->l214_instit 
                       )";
         $result = db_query($sql);

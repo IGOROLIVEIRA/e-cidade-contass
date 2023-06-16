@@ -13,7 +13,7 @@ db_app::load("estilos.css, grid.style.css");
                 <select name="tipo" id="tipo" style="width: 91px;" onchange="js_verificatipo();">
                     <option value="0">Selecione</option>
                     <option value="1">Inclusão</option>
-                    <!-- <option value="2">Retificação</option> -->
+                    <option value="2">Exclusão</option>
                 </select>
             </td>
         </tr>
@@ -62,9 +62,9 @@ db_app::load("estilos.css, grid.style.css");
         if (opcao != 2) {
             oGridItens.setCheckbox(0);
         }
-        oGridItens.setCellAlign(new Array("center", "center", "center", "center", "center", 'center'));
-        oGridItens.setCellWidth(new Array("5%", "15%", "5%", '25%', '15%', '35%'));
-        oGridItens.setHeader(new Array("Código", "Vigência", "Número", "Tipo de Alteração", "Data de inclusão", "Justificativa"));
+        oGridItens.setCellAlign(new Array("center", "center", "center", "center", "center", 'center', 'center'));
+        oGridItens.setCellWidth(new Array("5%", "10%", "5%", '25%', '15%','5%', '35%'));
+        oGridItens.setHeader(new Array("Código", "Vigência", "Número", "Tipo de Alteração", "Data de inclusão", "Nº Termo PNCP","Justificativa"));
         oGridItens.hasTotalValue = false;
         oGridItens.show($('cntgriditens'));
 
@@ -131,7 +131,8 @@ db_app::load("estilos.css, grid.style.css");
                 aLinha[2] = oLinha.numeroAditamento;
                 aLinha[3] = oLinha.situacao.urlDecode();
                 aLinha[4] = oLinha.data;
-                aLinha[5] = oLinha.Justificativa.urlDecode();
+                aLinha[5] = oLinha.numtermopncp;
+                aLinha[6] = oLinha.Justificativa.urlDecode();
                 oGridItens.addRow(aLinha);
 
             });
@@ -171,28 +172,31 @@ db_app::load("estilos.css, grid.style.css");
         }
 
         let tipo = $F('tipo');
-
         var oParam = new Object();
-        if (tipo == 1) {
-            oParam.exec = "enviarTermo";
-        } else {
-            oParam.exec = "retificarTermo";
-        }
         oParam.ambiente = $F('ambiente');
         oParam.aTermo = new Array();
         oParam.iContrato = $F('ac16_sequencial');
-
-        for (var i = 0; i < aTermo.length; i++) {
-
-            with(aTermo[i]) {
-                var iTermos = new Object();
-                iTermos.codigo = aCells[1].getValue();
-                iTermos.numero = aCells[3].getValue();
-                oParam.aTermo.push(iTermos);
+        if (tipo == 1) {
+            oParam.exec = "enviarTermo";
+            for (var i = 0; i < aTermo.length; i++) {
+                with(aTermo[i]) {
+                    var iTermos = new Object();
+                    iTermos.codigo = Number(aCells[1].getValue());
+                    oParam.aTermo.push(iTermos);
+                }
+            }
+        } else {
+            oParam.exec = "excluirTermo";
+            for (var i = 0; i < aTermo.length; i++) {
+                with(aTermo[i]) {
+                    var iTermos = new Object();
+                    iTermos.codigotermo = Number(aCells[6].getValue());
+                    oParam.aTermo.push(iTermos);
+                }
             }
         }
 
-        js_divCarregando('Aguarde, Enviando Resultado Itens', 'msgBox');
+        js_divCarregando('Aguarde, Processando', 'msgBox');
         var oAjax = new Ajax.Request(
             'aco1_enviotermospncp.RPC.php', {
                 method: 'post',
@@ -205,8 +209,8 @@ db_app::load("estilos.css, grid.style.css");
     function js_returnEnvPncp(oAjax) {
         js_removeObj('msgBox');
         var oRetornoResultado = eval('(' + oAjax.responseText + ")");
-
         alert(oRetornoResultado.message.urlDecode());
+        js_verificatipo();
     }
 
     function js_verificatipo(){

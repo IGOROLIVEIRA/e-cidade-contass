@@ -8,9 +8,8 @@ use ECidade\Patrimonial\Licitacao\PNCP\ModeloBasePNCP;
  * @package  ECidade\model\licitacao\PNCP
  * @author   Mario Junior
  */
-class TermdoeContrato extends ModeloBasePNCP
+class TermodeContrato extends ModeloBasePNCP
 {
-
     /**
      *
      * @param \stdClass $dados
@@ -22,9 +21,9 @@ class TermdoeContrato extends ModeloBasePNCP
 
     public function montarDados()
     {
-        //ini_set('display_errors', 'on');
-        $aDadosAPI = array();
 
+        $aDadosAPI = array();
+        
         $oDado = $this->dados;
 
         $oDadosAPI                                          = new \stdClass;
@@ -60,9 +59,8 @@ class TermdoeContrato extends ModeloBasePNCP
 
     public function montarRetificacao()
     {
-        //ini_set('display_errors', 'on');
+
         $aDadosAPI = array();
-        
         $oDado = $this->dados;
 
         $oDadosAPI                                          = new \stdClass;
@@ -130,19 +128,9 @@ class TermdoeContrato extends ModeloBasePNCP
             CURLINFO_HEADER_OUT    => true
         );
 
-
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
         curl_close($chpncp);
-        /*$err     = curl_errno($chpncp);
-        $errmsg  = curl_error($chpncp);
-        $header  = curl_getinfo($chpncp);
-        $header['errno']   = $err;
-        $header['errmsg']  = $errmsg;
-        $header['header']  = $contentpncp;
-        echo "<pre>";
-        print_r($header);
-        exit;*/
 
         $retorno = explode(':', $contentpncp);
         
@@ -153,8 +141,44 @@ class TermdoeContrato extends ModeloBasePNCP
         }
     }
 
-    public function retificarResultado($oDados, $sCodigoControlePNCP, $iAnoContrato, $seqitem, $seqresultado)
+    public function excluirTermo($iAnoContrato, $iCodigoContrato, $iCodigoTermo)
     {
-        ///nada
+        $token = $this->login();
+
+        $url = $this->envs['URL'] . "orgaos/" . $this->getCnpj() . "/contratos/$iAnoContrato/$iCodigoContrato/termos/$iCodigoTermo";
+
+        $method = 'DELETE';
+
+        $chpncp = curl_init($url);
+
+        $headers = array(
+            'Content-Type: application/json',
+            'Authorization: ' . $token
+        );
+
+        $optionspncp = array(
+            CURLOPT_RETURNTRANSFER => 1,            // return web page
+            CURLOPT_POST           => 1,
+            CURLOPT_HEADER         => true,         // don't return headers
+            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
+            CURLOPT_HTTPHEADER     => $headers,
+            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
+            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
+            CURLOPT_TIMEOUT        => 120,          // timeout on response
+            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
+            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
+            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
+            CURLOPT_SSL_VERIFYPEER => false,        //
+            CURLOPT_VERBOSE        => 1,            //
+            CURLINFO_HEADER_OUT    => true
+        );
+
+        curl_setopt_array($chpncp, $optionspncp);
+        $contentpncp = curl_exec($chpncp);
+        curl_close($chpncp);
+
+        $retorno = json_decode($contentpncp);
+
+        return $retorno;
     }
 }

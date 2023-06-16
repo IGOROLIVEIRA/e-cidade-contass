@@ -4420,16 +4420,8 @@ class Acordo
         $rsSaldos    = db_query($sSqlSaldos);
 
         $oCalculoSaldo                       = db_utils::fieldsMemory($rsSaldos, 0);
-        //        $oSaldo->valorautorizado             = $oCalculoSaldo->valorautorizado;
-        //        $oSaldo->valorexecutado              = $oCalculoSaldo->valorexecutado;
         $oSaldo->quantidadeautorizada        = $oCalculoSaldo->quantidadeautorizada;
         $oSaldo->quantidadeexecutada         = $oCalculoSaldo->quantidadeexecutada;
-        //        $oSaldo->valorautorizar             -= $oSaldo->valorautorizado;
-        //        $oSaldo->quantidadeautorizar        -= $oSaldo->quantidadeautorizada;
-        //        $oSaldo->valorexecutar              -= $oSaldo->valorexecutado;
-        //        $oSaldo->quantidadeexecutar         -= $oSaldo->quantidadeexecutada;
-        //        $oSaldo->quantidadeautorizadamanual  = $oCalculoSaldo->quantidadeautorizadamanual;
-        //        $oSaldo->valorautorizadomanual       = $oCalculoSaldo->valorautorizado;
         return $oSaldo->quantidadeautorizada;
     }
 
@@ -4688,6 +4680,20 @@ class Acordo
     public function removerAcordoObra($item){
         $clacordoobra = new cl_acordoobra();
         $clacordoobra->excluir(null,"obr08_acordoitem = {$item}");
+    }
+
+    public function getNumeroTermoPNCP($iAcordo,$iNumeroAditamento){
+        $sql = "select l214_numerotermo from acocontroletermospncp where l214_acordo = {$iAcordo} and l214_numeroaditamento = {$iNumeroAditamento}";
+        $rsTermos = db_query($sql);
+        $oDadosTermo = db_utils::fieldsMemory($rsTermos, 0);
+        return $oDadosTermo->l214_numerotermo;
+    }
+
+    public function getCodigoContratoPNCP($iAcordo){
+        $sql = "select l214_numcontratopncp from acocontroletermospncp where l214_acordo = {$iAcordo}";
+        $rsCodControle = db_query($sql);
+        $oDados = db_utils::fieldsMemory($rsCodControle, 0);
+        return $oDados->l214_numcontratopncp;
     }
 
 }

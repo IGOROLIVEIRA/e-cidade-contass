@@ -27,18 +27,16 @@ switch ($oParam->exec) {
 
         $oAcordo = new Acordo($oParam->iContrato);
         $aDadosTermos = $oAcordo->getPosicoesAditamentos();
-
-        if($oParam->iTipo == "1"){
-            foreach ($aDadosTermos as $oTermo) {
-                $oItemTermo = new stdClass();
-                $oItemTermo->codigo = $oTermo->getCodigo();
-                $oItemTermo->vigencia = urlencode($oTermo->getVigenciaInicial() . " até " . $oTermo->getVigenciaFinal());
-                $oItemTermo->numeroAditamento = $oTermo->getNumeroAditamento();
-                $oItemTermo->situacao = urlencode($oTermo->getDescricaoTipo());
-                $oItemTermo->data = $oTermo->getData();
-                $oItemTermo->Justificativa = urlencode($oTermo->getJusitificativa());
-                $oRetorno->dados[] = $oItemTermo;
-            }
+        foreach ($aDadosTermos as $oTermo) {
+            $oItemTermo = new stdClass();
+            $oItemTermo->codigo = $oTermo->getCodigo();
+            $oItemTermo->vigencia = urlencode($oTermo->getVigenciaInicial() . " até " . $oTermo->getVigenciaFinal());
+            $oItemTermo->numeroAditamento = $oTermo->getNumeroAditamento();
+            $oItemTermo->situacao = urlencode($oTermo->getDescricaoTipo());
+            $oItemTermo->data = $oTermo->getData();
+            $oItemTermo->Justificativa = urlencode($oTermo->getJusitificativa());
+            $oItemTermo->numtermopncp = $oAcordo->getNumeroTermoPNCP($oParam->iContrato,$oTermo->getNumeroAditamento());
+            $oRetorno->dados[] = $oItemTermo;
         }
         break;
     case 'enviarTermo':
@@ -52,14 +50,14 @@ switch ($oParam->exec) {
 
         try {
             foreach ($oParam->aTermo as $termo) {
-            
+                
                 $aDadosTermos = $oAcordo->getDadosTermosPncp($termo->codigo);
                 
                 //classe modelo
-                $clTermodeContrato = new TermdoeContrato($aDadosTermos);
+                $clTermodeContrato = new TermodeContrato($aDadosTermos);
                 //monta o json com os dados da licitacao
                 $oDadosTermo = $clTermodeContrato->montarDados();
-
+                
                 //envia para pncp
                 $rsApiPNCP = $clTermodeContrato->enviarTermo($oDadosTermo, $oDadosAvisoPNCP->ac213_sequencialpncp, $oDadosAvisoPNCP->ac213_ano);
                 
@@ -70,11 +68,12 @@ switch ($oParam->exec) {
 
                     $cl_acocontroletermospncp = new cl_acocontroletermospncp();
                     $cl_acocontroletermospncp->l214_numerotermo = $l214_numerotermo[11];
-                    $cl_acocontroletermospncp->l214_numecontrato = $oDadosAvisoPNCP->ac213_sequencialpncp;
+                    $cl_acocontroletermospncp->l214_numcontratopncp = $oDadosAvisoPNCP->ac213_sequencialpncp;
                     $cl_acocontroletermospncp->l213_usuario = db_getsession('DB_id_usuario');
                     $cl_acocontroletermospncp->l213_dtlancamento = date('Y-m-d', db_getsession('DB_datausu'));
                     $cl_acocontroletermospncp->l214_anousu = $oDadosAvisoPNCP->ac213_ano;
                     $cl_acocontroletermospncp->l214_acordo = $oParam->iContrato;
+                    $cl_acocontroletermospncp->l214_numeroaditamento = $aDadosTermos[0]->numerotermocontrato;
                     $cl_acocontroletermospncp->l214_instit = db_getsession('DB_instit');
                     $cl_acocontroletermospncp->incluir();
 
@@ -90,8 +89,34 @@ switch ($oParam->exec) {
         }
         break;
 
-    case 'retificarTermo':
-        exit("back");
+    case 'excluirTermo':
+        $oAcordo = new Acordo($oParam->iContrato);
+
+        try {
+            foreach ($oParam->aTermo as $termo) {
+
+                if($termo->codigotermo == 0){
+                    throw new Exception(utf8_decode("Termo de número $termo->codigotermo não existe."));
+                }
+
+                //envia para pncp
+                $clTermodeContrato = new TermodeContrato();
+                $rsApiPNCP = $clTermodeContrato->excluirTermo($oAcordo->getAno(),$oAcordo->getCodigoContratoPNCP($oParam->iContrato),$termo->codigotermo);
+
+                if ($rsApiPNCP == null) {
+                    $cl_acocontroletermospncp = new cl_acocontroletermospncp();
+                    $cl_acocontroletermospncp->excluir(null, "l214_acordo = $oParam->iContrato and l214_numerotermo = $termo->codigotermo");
+
+                    $oRetorno->status  = 1;
+                    $oRetorno->message = "Excluido com Sucesso !";
+                } else {
+                    throw new Exception(utf8_decode($rsApiPNCP->message));
+                }
+            }
+        }catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }
         break;
 }
 echo json_encode($oRetorno);
