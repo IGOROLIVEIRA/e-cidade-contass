@@ -590,8 +590,11 @@ switch ($oParam->exec) {
 
             db_inicio_transacao();
 
-            $rsPcfornereprlegal = db_query("select * from pcfornereprlegal where pc81_cgmforn = {$oParam->contrato->iContratado} and pc81_cgmresp = {$oParam->contrato->iContratado}");
-            if (pg_num_rows($rsPcfornereprlegal) > 0) {
+            $rsCgmforn = db_query("select z01_cgccpf from cgm where z01_numcgm = {$oParam->contrato->iContratado}");
+            $sCnpjFornecedor  = db_utils::fieldsMemory($rsCgmforn, 0)->z01_cgccpf;
+            $rsPcfornereprlegal = db_query("select * from pcfornereprlegal inner join cgm on z01_numcgm = pc81_cgmresp where pc81_cgmforn = $pc21_numcgm and z01_cgccpf = $sCnpjFornecedor");
+
+            if (strlen($sCnpjFornecedor) == 14 && pg_num_rows($rsPcfornereprlegal) > 0) {
                 throw new Exception("Usuário: No cadastro do fornecedor selecionado, o CGM do Representante está o mesmo CGM do Fornecedor. Corrija o cadastro e selecione novamente o fornecedor.");
             }
 
