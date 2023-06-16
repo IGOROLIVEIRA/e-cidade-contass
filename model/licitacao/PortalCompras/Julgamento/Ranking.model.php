@@ -2,7 +2,14 @@
 
 class Ranking
 {
+    /**
+     * @var string $idFornecedor
+     */
     private string $idFornecedor;
+
+    /**
+     * @var integer $posicao
+     */
     private int $posicao;
 
     /**

@@ -16,14 +16,14 @@ require_once("classes/db_liclicita_classe.php");
 
 class InsereJulgamento
 {
-    private $climpojulgamento;
+    private $climportjulgamento;
 
     /**
      * Metodo construtor
      */
     public function __construct()
     {
-        $this->climpojulgamento = new cl_liclicitaimportarjulgamento;
+        $this->climportjulgamento = new cl_liclicitaimportarjulgamento;
     }
 
     /**
@@ -116,7 +116,12 @@ class InsereJulgamento
      */
     private function buscaNumcgm(string $cnpj): string
     {
-        $numcgmResource = $this->climpojulgamento->buscaNumCgm($cnpj);
+        $numcgmResource = $this->climportjulgamento->buscaNumCgm($cnpj);
+
+        if ($this->climportjulgamento->erro_status == 0) {
+            throw new Exception($this->climportjulgamento->erro_msg);
+        }
+
         $numcgm = (db_utils::fieldsMemory($numcgmResource, 0))->numcgm;
         return $numcgm;
     }
@@ -132,6 +137,20 @@ class InsereJulgamento
     private function lidaPcorcamforne(string $numcgm, int $idPcorcam): int
     {
         $clpcorcamforne                  = new cl_pcorcamforne;
+
+        $result = $clpcorcamforne->sql_record(
+            $clpcorcamforne->sql_query_file(
+            null,
+            "pc21_orcamforne",
+            null,
+            " pc21_numcgm = '$numcgm' and pc21_codorc = '$idPcorcam'"
+             )
+        );
+
+        if (!empty($result)) {
+            return (int)(db_utils::fieldsMemory($result, 0))->pc21_orcamforne;
+        }
+
         $clpcorcamforne->pc21_codorc     = $idPcorcam;
         $clpcorcamforne->pc21_numcgm     = $numcgm;
         $clpcorcamforne->pc21_importado  = true;
@@ -175,7 +194,7 @@ class InsereJulgamento
     private function lidaPcorcamitemlic(int $id, int $idPcorcamitem ): int
     {
         $clpcorcamitemlic                  = new cl_pcorcamitemlic;
-        $clpcorcamitemlic->pc26_liclicitem = $this->climpojulgamento->buscaL21codigo(
+        $clpcorcamitemlic->pc26_liclicitem = $this->climportjulgamento->buscaL21codigo(
             $id
         );
 
@@ -212,7 +231,7 @@ class InsereJulgamento
 
         $clpcorcamval->incluir($idOrcamforne, $idOrcamitem);
 
-        if ( $clpcorcamval->erro_status  != '1' ) {
+        if ($clpcorcamval->erro_status  != '1') {
             throw new Exception($clpcorcamval->erro_msg);
         }
     }
@@ -277,7 +296,7 @@ class InsereJulgamento
 
         $$clhabilitacaoforn->incluir(null);
 
-        if ( $clhabilitacaoforn->erro_status  != '1' ) {
+        if ($clhabilitacaoforn->erro_status  != '1') {
             throw new Exception($clhabilitacaoforn->erro_msg);
         }
 

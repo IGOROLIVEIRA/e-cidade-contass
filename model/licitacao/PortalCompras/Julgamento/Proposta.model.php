@@ -2,19 +2,74 @@
 
 class Proposta
 {
+    /**
+     * @var integer $idItem
+     */
     private int    $idItem;
+
+    /**
+     * @var string $data
+     */
     private string $data;
+
+    /**
+     * @var string $horas
+     */
     private string $horas;
+
+    /**
+     * @var string $idFornecedor
+     */
     private string $idFornecedor;
+
+    /**
+     * @var string $modelo
+     */
     private string $modelo;
+
+    /**
+     * @var string $marca
+     */
     private string $marca;
+
+    /**
+     * @var string $fabricante
+     */
     private string $fabricante;
+
+    /**
+     * @var string $detalhamento
+     */
     private string $detalhamento;
+
+    /**
+     * @var string $validadeProposta
+     */
     private string $validadeProposta;
+
+    /**
+     * @var integer $quantidade
+     */
     private int    $quantidade;
+
+    /**
+     * @var float  $valorDesconto
+     */
     private float  $valorDesconto = 0.0;
+
+    /**
+     * @var float  $valorUnitario
+     */
     private float  $valorUnitario;
+
+    /**
+     * @var float  $valorTotal
+     */
     private float  $valorTotal;
+
+    /**
+     * @var bool $valido
+     */
     private bool   $valido = true;
 
 
@@ -211,7 +266,7 @@ class Proposta
      */
     public function setValorTotal(float $valorTotal): self
     {
-        $this->valorTotal = $valorTotal;
+        $this->valorTotal = round($valorTotal,4);
 
         return $this;
     }

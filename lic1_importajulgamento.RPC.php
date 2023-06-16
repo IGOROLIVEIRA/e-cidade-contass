@@ -14,6 +14,7 @@ require_once("classes/db_liclicitaimportarjulgamento_classe.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Comandos/BuscaJulgamento.model.php");
 require_once("model/licitacao/PortalCompras/Comandos/ValidaChaveAcesso.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Fabricas/JulgamentoFabrica.model.php");
+require_once("model/licitacao/PortalCompras/Julgamento/Comandos/InsereJulgalmento.model.php");
 
 $cl_liclcitaimportarjulgamento = new cl_liclicitaimportarjulgamento();
 
@@ -53,7 +54,10 @@ switch ($oParam->exec) {
             $dados = $buscador->execute((int)$codigo, $chaveAcesso);
             $julgamento = $julgamentoFabrica->criar($dados);
 
-            $oRetorno->message = "processou";
+            $insereJugalmento = new InsereJulgamento();
+            $insereJugalmento->execute($julgamento);
+
+            $oRetorno->message = "Julgamento inserido com sucesso";
             $oRetorno->status = 1;
         } catch(Exception $oErro) {
             $oRetorno->message = $oErro->getMessage();
