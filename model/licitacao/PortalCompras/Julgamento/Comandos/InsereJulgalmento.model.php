@@ -12,33 +12,42 @@ require_once("classes/db_pcorcamforne_classe.php");
 require_once("classes/db_pcorcamval_classe.php");
 require_once("classes/db_pcorcamjulg_classe.php");
 require_once("classes/db_habilitacaoforn_classe.php");
+require_once("classes/db_liclicita_classe.php");
 
 class InsereJulgamento
 {
-    private $dao;
+    private $climpojulgamento;
 
     /**
      * Metodo construtor
      */
     public function __construct()
     {
-        $this->dao = new cl_liclicitaimportarjulgamento;
+        $this->climpojulgamento = new cl_liclicitaimportarjulgamento;
     }
 
+    /**
+     * Inser Julgamento
+     *
+     * @param Julgamento $julgamento
+     * @return void
+     * @throws Exception
+     */
     public function execute(Julgamento $julgamento)
     {
         $clpcorcam = new cl_pcorcam;
 
         $idJulgamento = $julgamento->getId();
         $numero = $julgamento->getNumero();
-        $this->dao->pc20_obs = "ORCAMENTO IMPORTADO -"
+        $clpcorcam->pc20_obs = "ORCAMENTO IMPORTADO -"
             . $idJulgamento
             ." - ". $numero;
         $clpcorcam->pc20_dtate = $julgamento->getDataProposta();
         $clpcorcam->pc20_hrate = $julgamento->getHoraProposta();
         $lotes = $julgamento->getLotes();
         $itens = array_map(fn(Lote $lote) => $lote->getItems(), $lotes);
-        $quantidadeItens = count($itens);
+        $participantes = $julgamento->getParticipantes();
+        $dataAbertura = $julgamento->getDataAberturaProposta();
 
         try{
             db_inicio_transacao();
@@ -53,9 +62,9 @@ class InsereJulgamento
                 $tipoJulgamento = $item->getTipoJulgamento();
                 $ranking = $item->getRanking();
 
+                /** @var Proposta[] $propostas */
                 foreach($propostas as $proposta) {
-                    $numcgmResource = $this->dao->buscaNumCgm($proposta->getIdFornecedor());
-                    $numcgm = (db_utils::fieldsMemory($numcgmResource, 0))->numcgm;
+                    $numcgm = $this->buscaNumcgm($proposta->getIdFornecedor());
 
                     $idPcorcamforne   = $this->lidaPcorcamforne($numcgm, $idPcorcam);
                     $idPcorcamitem    = $this->lidaPcorcamitem($idPcorcam);
@@ -73,12 +82,23 @@ class InsereJulgamento
                         $idPcorcamforne
                     );
 
-                    $this->lidaHabilitacaoforn(
-                        $numcgm,
-                        $idJulgamento,
-                    );
                 }
             }
+
+            /** @var Participantes[] $participantes */
+            foreach($participantes as $participante) {
+                $numcgm = $this->buscaNumcgm($participante->getCnpj());
+                $representanteLegal = $participante->getRepresentanteLegal();
+                $this->lidaHabilitacaoforn(
+                    $numcgm,
+                    $idJulgamento,
+                    $representanteLegal,
+                    $dataAbertura
+                );
+            }
+
+            $this->lidaLiclicitasituacao($idJulgamento);
+            $this->lidaLiclicita($idJulgamento);
 
             db_fim_transacao(false);
 
@@ -88,10 +108,30 @@ class InsereJulgamento
         }
     }
 
+    /**
+     * Busca Numcgm
+     *
+     * @param string $cnpj
+     * @return string
+     */
+    private function buscaNumcgm(string $cnpj): string
+    {
+        $numcgmResource = $this->climpojulgamento->buscaNumCgm($cnpj);
+        $numcgm = (db_utils::fieldsMemory($numcgmResource, 0))->numcgm;
+        return $numcgm;
+    }
 
+    /**
+     * Cuida de inserir na Pcorcamforne
+     *
+     * @param string $numcgm
+     * @param integer $idPcorcam
+     * @return integer
+     * @throws Exception
+     */
     private function lidaPcorcamforne(string $numcgm, int $idPcorcam): int
     {
-        $clpcorcamforne             = new cl_pcorcamforne;
+        $clpcorcamforne                  = new cl_pcorcamforne;
         $clpcorcamforne->pc21_codorc     = $idPcorcam;
         $clpcorcamforne->pc21_numcgm     = $numcgm;
         $clpcorcamforne->pc21_importado  = true;
@@ -99,43 +139,65 @@ class InsereJulgamento
         $clpcorcamforne->pc21_validadorc = null;
         $clpcorcamforne->incluir(null);
 
-        if ($clpcorcamforne->erro_status == 0) {
+        if ($clpcorcamforne->erro_status  != '1') {
             throw new Exception($clpcorcamforne->erro_msg);
         }
 
         return (int)$clpcorcamforne->pc21_orcamforne;
     }
 
+    /**
+     * Cuida de inserir na Pcorcamitem
+     *
+     * @param integer $idPcorcam
+     * @return integer
+     */
     private function lidaPcorcamitem(int $idPcorcam): int
     {
         $clpcorcamitem              = new cl_pcorcamitem;
         $clpcorcamitem->pc22_codorc = $idPcorcam;
 		$clpcorcamitem->incluir(null);
 
-        if ($clpcorcamitem->erro_status == 0 ) {
+        if ( $clpcorcamitem->erro_status  != '1' ) {
             throw new Exception($clpcorcamitem->erro_msg);
         }
 
         return $clpcorcamitem->pc22_orcamitem;
     }
 
+    /**
+     * Cuida de inserir na Pcorcamitemlic
+     *
+     * @param integer $id
+     * @param integer $idPcorcamitem
+     * @return integer
+     */
     private function lidaPcorcamitemlic(int $id, int $idPcorcamitem ): int
     {
         $clpcorcamitemlic                  = new cl_pcorcamitemlic;
-        $clpcorcamitemlic->pc26_liclicitem = $this->dao->buscaL21codigo(
+        $clpcorcamitemlic->pc26_liclicitem = $this->climpojulgamento->buscaL21codigo(
             $id
         );
 
         $clpcorcamitemlic->pc26_orcamitem  = $idPcorcamitem;
         $clpcorcamitemlic->incluir(null);
 
-        if ($clpcorcamitemlic->erro_status == 0 ) {
+        if ($clpcorcamitemlic->erro_status  != '1') {
             throw new Exception($clpcorcamitemlic->erro_msg);
         }
 
         return (int)$clpcorcamitemlic->pc26_liclicitem;
     }
 
+    /**
+     * Cuida de inserir na Pcorcamval
+     *
+     * @param Proposta $proposta
+     * @param integer $idOrcamforne
+     * @param integer $idOrcamitem
+     * @param integer $tipoJulgamento
+     * @return void
+     */
     private function lidaPcorcamval(Proposta $proposta, int $idOrcamforne, int $idOrcamitem, int $tipoJulgamento )
     {
         $clpcorcamval                          = new cl_pcorcamval;
@@ -150,12 +212,21 @@ class InsereJulgamento
 
         $clpcorcamval->incluir($idOrcamforne, $idOrcamitem);
 
-        if ($clpcorcamval->erro_status == 0 ) {
+        if ( $clpcorcamval->erro_status  != '1' ) {
             throw new Exception($clpcorcamval->erro_msg);
         }
-
     }
 
+    /**
+     * Cuida de inserir na Pcorcamjulg
+     *
+     * @param Proposta $proposta
+     * @param Array $ranking
+     * @param integer $idPcorcamitem
+     * @param integer $idPcorcamforne
+     * @return void
+     * @throws Exception
+     */
     private function lidaPcorcamjulg(Proposta $proposta, Array $ranking, int $idPcorcamitem, int $idPcorcamforne): void
     {
         $cnpj            = $proposta->getIdFornecedor();
@@ -168,20 +239,32 @@ class InsereJulgamento
 
         $clpcorcamjulg->incluir($idPcorcamitem, $idPcorcamforne);
 
-        if ($clpcorcamjulg->erro_status == 0 ) {
+        if ( $clpcorcamjulg->erro_status  != '1' ) {
             throw new Exception($clpcorcamjulg->erro_msg);
         }
     }
 
+    /**
+     * Cuida de inserir na Habilitacaoforn
+     *
+     * @param string $numcgm
+     * @param integer $idJulgamento
+     * @param string $representanteLegal
+     * @param string $dataHab
+     * @return void
+     * @throws Exception
+     */
     private function lidaHabilitacaoforn(
         string $numcgm,
-        int $idJulgamento
+        int $idJulgamento,
+        string $representanteLegal,
+        string $dataHab
     ): void {
         $clhabilitacaoforn = new cl_habilitacaoforn;
         $clhabilitacaoforn->l206_fornecedor        = $numcgm;
         $clhabilitacaoforn->l206_licitacao        = $idJulgamento;
-        $clhabilitacaoforn->l206_representante    = "teste";
-        $clhabilitacaoforn->l206_datahab          = "21-12-2021";
+        $clhabilitacaoforn->l206_representante    = $representanteLegal;
+        $clhabilitacaoforn->l206_datahab          = $dataHab;
         $clhabilitacaoforn->l206_numcertidaoinss  = null;
         $clhabilitacaoforn->l206_dataemissaoinss  = null;
         $clhabilitacaoforn->l206_datavalidadeinss = null;
@@ -194,12 +277,19 @@ class InsereJulgamento
 
         $$clhabilitacaoforn->incluir(null);
 
-        if ($clhabilitacaoforn->erro_status == 0 ) {
+        if ( $clhabilitacaoforn->erro_status  != '1' ) {
             throw new Exception($clhabilitacaoforn->erro_msg);
         }
 
     }
 
+    /**
+     * Cuida de inserir na Liclicitasituacao
+     *
+     * @param integer $idJulgamento
+     * @return void
+     * @throws Exception
+     */
     private function lidaLiclicitasituacao(int $idJulgamento): void
     {
         $clliclicitasituacao   = new cl_liclicitasituacao;
@@ -211,5 +301,28 @@ class InsereJulgamento
         $clliclicitasituacao->l11_liclicita   = $idJulgamento;
         $clliclicitasituacao->incluir(null);
 
+        if ( $clliclicitasituacao->erro_status  != '1' ) {
+            throw new Exception($clliclicitasituacao->erro_msg);
+        }
+    }
+
+    /**
+     * Cuida de inserir na Liclicit
+     *
+     * @param integer $l20_codigo
+     * @return void
+     * @throws Exception
+     */
+    private function lidaLiclicita(int $l20_codigo)
+    {
+        $clliclicita          = new cl_liclicita;
+
+        $clliclicita->l20_codigo  = $l20_codigo;
+        $clliclicita->l20_licsituacao = '1';
+        $clliclicita->alterar_liclicitajulgamento($l20_codigo);
+
+        if ( $clliclicita->erro_status  != '1' ) {
+            throw new Exception($clliclicita->erro_msg);
+        }
     }
 }

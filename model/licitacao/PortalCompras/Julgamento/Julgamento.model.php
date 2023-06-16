@@ -1,26 +1,28 @@
 <?php
 
 require_once("model/licitacao/PortalCompras/Julgamento/Lotes.model.php");
+require_once("model/licitacao/PortalCompras/Julgamento/Participante.model.php");
 
 
 class Julgamento
 {
     /**
-     * @var integer
+     * @var integer $idJulgamento
      */
     private int    $idJulgamento;
+
     /**
-     * @var string
+     * @var string $dataProposta
      */
     private string $dataProposta;
 
     /**
-     * @var string
+     * @var string $horaProposta
      */
     private string $horaProposta;
 
     /**
-     * @var string
+     * @var string $numero
      */
     private string $numero;
 
@@ -28,6 +30,16 @@ class Julgamento
      * @var Lote[] $lotes
      */
     private array  $lotes;
+
+   /**
+    * @var string  $dataAberturaProposta
+    */
+    private string $dataAberturaProposta;
+
+    /**
+     * @var Participante[] $participantes
+     */
+    private array $participantes;
 
     /**
      * Get the value of dataProposta
@@ -117,6 +129,42 @@ class Julgamento
     public function setHoraProposta(string $horaProposta): self
     {
         $this->horaProposta = $horaProposta;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of dataAberturaProposta
+     */
+    public function getDataAberturaProposta(): string
+    {
+        return $this->dataAberturaProposta;
+    }
+
+    /**
+     * Set the value of dataAberturaProposta
+     */
+    public function setDataAberturaProposta(string $dataAberturaProposta): self
+    {
+        $this->dataAberturaProposta = $dataAberturaProposta;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of participantes
+     */
+    public function getParticipantes(): array
+    {
+        return $this->participantes;
+    }
+
+    /**
+     * Set the value of participantes
+     */
+    public function setParticipantes(array $participantes): self
+    {
+        $this->participantes = $participantes;
 
         return $this;
     }
