@@ -125,6 +125,8 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
     echo "<td>" . substr($item->pc01_descrmater, 0, 62) . "</td>";
     echo "<td style='text-align:left'>" . $item->m61_descr . "</td>";
     echo "<td>" . $item->si02_qtditem . "</td>";
+    $item->si02_vlprecoreferencia = strpos($item->si02_vlprecoreferencia, '.') == false ? $item->si02_vlprecoreferencia : db_formatar("$item->si02_vlprecoreferencia", 'f', " ", 0, "e", 4);
+    $item->si02_vltotalprecoreferencia = strpos($item->si02_vltotalprecoreferencia, '.') == false ? $item->si02_vltotalprecoreferencia : db_formatar("$item->si02_vltotalprecoreferencia", 'f', " ", 0, "e", 2);
     echo "<td>" . $item->si02_vlprecoreferencia . "</td>";
     echo "<td>" . $item->si02_vltotalprecoreferencia . "</td>";
     echo "</tr>";
