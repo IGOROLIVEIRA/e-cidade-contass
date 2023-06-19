@@ -96,7 +96,8 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
     $oLibDocumento->l20_edital = $resultLici->l20_edital;
     $oLibDocumento->l20_anousu = $resultLici->l20_anousu;
     $oLibDocumento->l20_objeto = $resultLici->l20_objeto;
-
+    $oLibDocumento->l03_descr = $resultLici->l03_descr;
+    $oLibDocumento->l44_descricao = strtoupper($resultLici->l44_descricao);
     $oLibDocumento->l20_numero = $resultLici->l20_numero;
     $oLibDocumento->z01_nome = $nome;
     

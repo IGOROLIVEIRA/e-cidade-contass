@@ -116,29 +116,25 @@
     $oLibDocumento->l20_anousu = $resultLici->l20_anousu;
     $oLibDocumento->l20_objeto = $resultLici->l20_objeto;
     $oLibDocumento->l44_descricao = strtoupper($resultLici->l44_descricao);
+    $oLibDocumento->l03_descr = $resultLici->l03_descr;
 
     $oLibDocumento->l20_numero = $resultLici->l20_numero;
     $oLibDocumento->z01_nome = $nome;
 
     $aParagrafos = $oLibDocumento->getDocParagrafos();
 
-
-    // echo $sSql;
-
-    // db_criatabela($rsResult);
-
     $sSql = "select si01_datacotacao FROM pcproc
-JOIN pcprocitem ON pc80_codproc = pc81_codproc
-JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
-JOIN solicitem ON pc81_solicitem = pc11_codigo
-JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
-JOIN pcmater ON pc16_codmater = pc01_codmater
-JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
+                JOIN pcprocitem ON pc80_codproc = pc81_codproc
+                JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+                JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+                JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+                JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+                JOIN solicitem ON pc81_solicitem = pc11_codigo
+                JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
+                JOIN pcmater ON pc16_codmater = pc01_codmater
+                JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+                JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+                WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
 
     $rsResultData = db_query($sSql) or die(pg_last_error());
 
