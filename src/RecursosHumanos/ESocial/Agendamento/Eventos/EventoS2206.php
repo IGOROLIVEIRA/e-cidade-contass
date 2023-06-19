@@ -62,24 +62,31 @@ class EventoS2206 extends EventoBase
                 // }
                 // $oDadosAPI->evtAltContratual->infoCeletista->aprend = empty($oDados->aprend) ? null : $oDados->aprend;
             // } else {
-                //var_dump($oDados->rh02_plansegreg);exit;
                 //if ($oDados->rh02_plansegreg) {
                     // $oDadosAPI->evtAltContratual->infoEstatutario = $oDados->infoEstatutario;
                     $oDadosAPI->evtAltContratual->infoEstatutario->tpPlanRP = $oDados->rh02_plansegreg;
                     $oDadosAPI->evtAltContratual->infoEstatutario->indTetoRGPS = 'N';
-                    $oDadosAPI->evtAltContratual->infoEstatutario->indAbonoPerm = $oDados->indabonoperm;
+                    $oDadosAPI->evtAltContratual->infoEstatutario->indAbonoPerm = ($oDados->rh02_abonopermanencia == 'f')? 'N' : 'S';
                 //}
             // }
 
-            if (!empty($oDados->infoContrato)) {
+            // if (!empty($oDados->infoContrato)) {
 
-                $oDadosAPI->evtAltContratual->infoContrato = $oDados->infoContrato;
-                $oDadosAPI->evtAltContratual->infoContrato->nmCargo = $oDados->infoContrato->nmCargo;
-                $oDadosAPI->evtAltContratual->infoContrato->acumCargo = $oDados->infoContrato->acumCargo;
-                $oDadosAPI->evtAltContratual->infoContrato->codCateg = $oDados->infoContrato->codCateg;
+                //$oDadosAPI->evtAltContratual->infoContrato = $oDados->infoContrato;
+                $oDadosAPI->evtAltContratual->infoContrato->nmCargo = $oDados->nmcargo;
+                $oDadosAPI->evtAltContratual->infoContrato->CBOCargo = $oDados->cbocargo;
+                //$oDadosAPI->evtAltContratual->infoContrato->codCateg = $oDados->infoContrato->codCateg;
 
-                $oDadosAPI->evtAltContratual->infoContrato->vrSalFx = $oDados->remuneracao->vrSalFx;
-                $oDadosAPI->evtAltContratual->infoContrato->undSalFixo = $oDados->remuneracao->undSalFixo;
+                $oDadosAPI->evtAltContratual->infoContrato->nmFuncao = $oDados->nmcargo;
+                $oDadosAPI->evtAltContratual->infoContrato->CBOFuncao = $oDados->cbocargo;
+
+                $oDadosAPI->evtAltContratual->infoContrato->acumCargo = $oDados->acumcargo;
+
+                $oDadosAPI->evtAltContratual->infoContrato->codCateg = $oDados->h13_categoria;
+
+                $oDadosAPI->evtAltContratual->infoContrato->vrSalFx = $oDados->rh02_salari;
+                $oDadosAPI->evtAltContratual->infoContrato->undSalFixo = $oDados->undsalfixo;
+                
                 $oDadosAPI->evtAltContratual->infoContrato->dscSalVar = empty($oDados->remuneracao->dscSalVar) ? null : $oDados->remuneracao->dscSalVar;
 
                 $oDadosAPI->evtAltContratual->infoContrato->tpContr = $oDados->duracao->tpContr;
@@ -104,7 +111,7 @@ class EventoS2206 extends EventoBase
                 $oDadosAPI->evtAltContratual->infoContrato->observacoes = empty($oDados->observacoes) ? null : array($oDados->observacoes);
 
                 $oDadosAPI->evtAltContratual->infoContrato->treiCap = empty($oDados->treiCap) ? null : array($oDados->treiCap);
-            }
+            //}
 
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;

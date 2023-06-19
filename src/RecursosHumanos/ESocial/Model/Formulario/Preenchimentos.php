@@ -674,277 +674,8 @@ class Preenchimentos
                 z01_cgccpf as cpfTrab,
                 z01_nome as nmTrab,
                 rh01_sexo as sexo,
-                CASE WHEN rh01_raca = 2 THEN 1
-                WHEN rh01_raca = 4 THEN 2
-                WHEN rh01_raca = 6 THEN 4
-                WHEN rh01_raca = 8 THEN 3
-                WHEN rh01_raca = 1 THEN 5
-                WHEN rh01_raca = 9 THEN 6
-                END AS racaCor,
-                case when rh01_estciv = 1 then 1
-                when rh01_estciv = 2 then 2
-                when rh01_estciv = 5 then 3
-                when rh01_estciv = 4 then 4
-                when rh01_estciv = 3 then 5
-                else 1
-                end as estCiv,
-                case when rh01_instru = 1 then 01
-                when rh01_instru = 2 then 02
-                when rh01_instru = 3 then 03
-                when rh01_instru = 4 then 04
-                when rh01_instru = 5 then 05
-                when rh01_instru = 6 then 06
-                when rh01_instru = 7 then 07
-                when rh01_instru = 8 then 08
-                when rh01_instru = 9 then 09
-                when rh01_instru = 10 then 11
-                when rh01_instru = 11 then 12
-                    when rh01_instru = 12 then 10
-                when rh01_instru = 0 then 01
-                end as grauInstr,
-                '' as nmSoc,
-
-            rh01_nasc as dtNascto,
-            case when rh01_nacion = 10 then 105
-                 when rh01_nacion = 20 then 105
-                 when rh01_nacion = 21 then 063
-                 when rh01_nacion = 22 then 097
-                 when rh01_nacion = 23 then 158
-                 when rh01_nacion = 24 then 586
-                 when rh01_nacion = 25 then 845
-                 when rh01_nacion = 26 then 850
-                 when rh01_nacion = 27 then 169
-                 when rh01_nacion = 28 then 589
-                 when rh01_nacion = 29 then 239
-                 when rh01_nacion = 30 then 023
-                 when rh01_nacion = 31 then 087
-                 when rh01_nacion = 32 then 367
-                 when rh01_nacion = 34 then 149
-                 when rh01_nacion = 35 then 245
-                 when rh01_nacion = 36 then 249
-                 when rh01_nacion = 37 then 275
-                 when rh01_nacion = 38 then 767
-                 when rh01_nacion = 39 then 386
-                 when rh01_nacion = 40 then 341
-                 when rh01_nacion = 41 then 399
-                 when rh01_nacion = 42 then 160
-                 when rh01_nacion = 43 then 190
-                 when rh01_nacion = 44 then 676
-                 when rh01_nacion = 45 then 607
-                 when rh01_nacion = 46 then 576
-                 when rh01_nacion = 47 then 361
-                 when rh01_nacion = 60 then 040
-                 when rh01_nacion = 61 then 177
-                 when rh01_nacion = 62 then 756
-                 when rh01_nacion = 63 then 289
-                 when rh01_nacion = 64 then 728
-                 end as paisNascto,
-            105 as paisnac,
-            (SELECT j88_sigla from cgm intcgm
-            inner join patrimonio.cgmendereco as cgmendereco on (intcgm.z01_numcgm=cgmendereco.z07_numcgm)
-            inner join configuracoes.endereco as endereco on (cgmendereco.z07_endereco = endereco.db76_sequencial)
-            inner join cadenderlocal on cadenderlocal.db75_sequencial = db76_sequencial
-            inner join cadenderbairrocadenderrua on db87_sequencial = db75_cadenderbairrocadenderrua
-             inner join cadenderbairro     on  db73_sequencial  = db87_cadenderbairro
-             inner join cadenderrua        on  db74_sequencial  = db87_cadenderrua
-             inner join cadendermunicipio  on  db72_sequencial  = db73_cadendermunicipio
-             inner join cadendermunicipio  as a on a.db72_sequencial = db74_cadendermunicipio
-             inner join cadenderestado     on  db71_sequencial  = a.db72_cadenderestado
-             inner join cadenderpais       on  db70_sequencial  = db71_cadenderpais
-             inner join cadenderruaruastipo on db85_cadenderrua = db74_sequencial
-             inner join ruastipo           on  j88_codigo       = db85_ruastipo
-            where z01_numcgm = intcgm.z01_numcgm limit 1) as tpLograd,
-                z01_ender as dscLograd,
-                z01_numero  as nrLograd,
-                z01_compl as complemento,
-                z01_bairro as bairro,
-                rpad(z01_cep,8,'0') as cep,case when (SELECT
-                db125_codigosistema
-            from
-                cadendermunicipio
-            inner join cadendermunicipiosistema on
-                cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial
-                and cadendermunicipiosistema.db125_db_sistemaexterno = 4
-            inner join cadenderestado on
-                cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial
-            inner join cadenderpais on
-                cadenderestado.db71_cadenderpais = cadenderpais.db70_sequencial
-            inner join cadenderpaissistema on
-                cadenderpais.db70_sequencial = cadenderpaissistema.db135_db_cadenderpais
-            where
-                to_ascii(db72_descricao) = trim(cgm.z01_munic)
-            order by
-                db72_sequencial asc limit 1) is not null then (SELECT
-                db125_codigosistema
-            from
-                cadendermunicipio
-            inner join cadendermunicipiosistema on
-                cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial
-                and cadendermunicipiosistema.db125_db_sistemaexterno = 4
-            inner join cadenderestado on
-                cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial
-            inner join cadenderpais on
-                cadenderestado.db71_cadenderpais = cadenderpais.db70_sequencial
-            inner join cadenderpaissistema on
-                cadenderpais.db70_sequencial = cadenderpaissistema.db135_db_cadenderpais
-            where
-                to_ascii(db72_descricao) = trim(cgm.z01_munic)
-            order by
-                db72_sequencial asc limit 1)
-                else
-                ( SELECT
-                db125_codigosistema
-            from
-                cadendermunicipio
-            inner join cadendermunicipiosistema on
-                cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial
-                and cadendermunicipiosistema.db125_db_sistemaexterno = 4
-            inner join cadenderestado on
-                cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial
-            inner join cadenderpais on
-                cadenderestado.db71_cadenderpais = cadenderpais.db70_sequencial
-            inner join cadenderpaissistema on
-                cadenderpais.db70_sequencial = cadenderpaissistema.db135_db_cadenderpais
-            where
-                to_ascii(db72_descricao) = ( SELECT to_ascii(db72_descricao) from cadenderparam inner join cadenderpais on cadenderpais.db70_sequencial = cadenderparam.db99_cadenderpais inner join cadenderestado on cadenderestado.db71_sequencial = cadenderparam.db99_cadenderestado inner join cadendermunicipio on cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial inner join cadenderpais as p on p.db70_sequencial = cadenderestado.db71_cadenderpais inner join cadenderestado as a on a.db71_sequencial = cadendermunicipio.db72_cadenderestado INNER JOIN cadendermunicipiosistema ON cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial where db125_db_sistemaexterno = 4 and db72_sequencial = ( SELECT db125_cadendermunicipio FROM cadendermunicipiosistema INNER JOIN cadenderparam ON db125_cadendermunicipio = db99_cadendermunicipio AND db125_db_sistemaexterno = 4 LIMIT 1) order by db72_descricao asc limit 1)
-                and cadenderestado.db71_descricao = (SELECT cadenderestado.db71_descricao from cadenderparam inner join cadenderpais on cadenderpais.db70_sequencial = cadenderparam.db99_cadenderpais inner join cadenderestado on cadenderestado.db71_sequencial = cadenderparam.db99_cadenderestado inner join cadendermunicipio on cadendermunicipio.db72_cadenderestado = cadenderestado.db71_sequencial inner join cadenderpais as p on p.db70_sequencial = cadenderestado.db71_cadenderpais inner join cadenderestado as a on a.db71_sequencial = cadendermunicipio.db72_cadenderestado INNER JOIN cadendermunicipiosistema ON cadendermunicipiosistema.db125_cadendermunicipio = cadendermunicipio.db72_sequencial where db125_db_sistemaexterno = 4 and db72_sequencial = ( SELECT db125_cadendermunicipio FROM cadendermunicipiosistema INNER JOIN cadenderparam ON db125_cadendermunicipio = db99_cadendermunicipio AND db125_db_sistemaexterno = 4 LIMIT 1) limit 1)
-            order by
-                db72_sequencial asc limit 1)
-                end as codMunic,
-                case when trim(z01_uf) = '' then 'MG'
-                when z01_uf is null then 'MG'
-                else z01_uf
-                end as uf,
-            case when rh02_deficientefisico = true and rh02_tipodeficiencia = 1  then 'S'
-                else 'N'
-                end as defFisica,
-            case when rh02_deficientefisico = false then 'N'
-                when rh02_deficientefisico = true and rh02_tipodeficiencia = 0 then 'N'
-                when rh02_deficientefisico = true and rh02_tipodeficiencia = 3 then 'S'
-                else 'N'
-                end as defVisual,
-            case when rh02_deficientefisico = false then 'N'
-                when rh02_deficientefisico = true and rh02_tipodeficiencia = 0 then 'N'
-                when rh02_deficientefisico = true and rh02_tipodeficiencia = 2 then 'S'
-                else 'N'
-                end as defAuditiva,
-            case when rh02_deficientefisico = false then 'N'
-                when rh02_deficientefisico = true and rh02_tipodeficiencia = 0 then 'N'
-                when rh02_deficientefisico = true and rh02_tipodeficiencia = 7 then 'S'
-                else 'N'
-                end as defMental,
-            case when rh02_deficientefisico = false then 'N'
-                when rh02_deficientefisico = true and rh02_tipodeficiencia = 0 then 'N'
-                when rh02_deficientefisico = true and rh02_tipodeficiencia = 4 then 'S'
-                else 'N'
-                end as defIntelectual,
-            case when rh02_deficientefisico = false then 'N'
-                when rh02_deficientefisico = true and rh02_tipodeficiencia = 0 then 'N'
-                when rh02_deficientefisico = true and rh02_tipodeficiencia = 6 then 'S'
-                else 'N'
-                end as reabReadap,
-            case when rh02_cotadeficiencia = 't' then 'S'
-                when rh02_cotadeficiencia = 'f' then 'N'
-                end as infoCota,
-                '' as observacao,
-
-                z01_telef as fonePrinc,
-                z01_email as emailPrinc,
-
                 rh01_regist as matricula,
-                case when rh30_regime = 1 or rh30_regime = 3 then 2
-                when rh30_regime = 2 then 1
-                end as tpRegTrab,
-                case when r33_tiporegime = '1' then 1
-                when r33_tiporegime = '2' then 2
-                end as tpRegPrev,
-                case when DATE_PART('YEAR',rh01_admiss) < 2021 then 'S'
-               	when DATE_PART('YEAR',rh01_admiss) = 2021 and DATE_PART('MONTH',rh01_admiss) < 11 then 'S'
-               	when DATE_PART('YEAR',rh01_admiss) = 2021 and DATE_PART('MONTH',rh01_admiss) = 11 and DATE_PART('DAY',rh01_admiss) <= 21  then 'S'
-                else 'N'
-                end as cadIni,
-                case when (h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then rh01_admiss
-                end as dtAdm,
-                case when (h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and (rh01_tipadm = 1 or rh01_tipadm = 2) then 1
-                when (h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and (rh01_tipadm = 3 or rh01_tipadm = 4) then 3
-                end as tpAdmissao,
-                case when (h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then 1
-                end as indAdmissao,
-                '' as nrProcTrab,
-                case when (h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then 1
-                end as tpRegJor,
-                case when (h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then 1
-                end as natAtividade,
-                case when (h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then rh116_cnpj
-                end as cnpjSindCategProf,
-
-                rh15_data as dtOpcFGTS,
-
-                case when h13_categoria = 301 then 1
-                when h13_categoria = 302 then 2
-                when h13_categoria = 303 then 6
-                when h13_categoria = 306 then 7
-                when h13_categoria = 309 then 99
-                end as tpProv,
-                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309) then rh01_admiss
-                end as dtExercicio,
-                case when r33_tiporegime = '2' then 0
-                else 1
-                end as tpPlanRP,
-                case when r33_tiporegime = '2' then 'N'
-                end as indTetoRGPS,
-                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309) and rh02_abonopermanencia = 'f' and r33_tiporegime = '2' then 'N'
-                when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309) and rh02_abonopermanencia = 't' and r33_tiporegime = '2' then 'S'
-                end as indAbonoPerm,
-                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309) then rh02_datainicio
-                end as dtIniAbono,
-
-             case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then rh37_descr
-                end as nmCargo,
-                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then rh37_cbo
-                end as CBOCargo,
-                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then rh01_admiss
-                end as dtIngrCargo,
-                 case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and rh30_naturezaregime = 2 and rh04_descr is null then rh37_descr
-                     when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and rh30_naturezaregime = 2 and rh04_descr is not null then rh04_descr
-                     when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and rh30_naturezaregime = 2 and h13_tipocargo = 6 and h13_dscapo = 'SCM' and rh04_descr is not null then rh04_descr
-                     when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and rh30_naturezaregime = 2 and h13_tipocargo = 6 and h13_dscapo = 'SCM' and rh04_descr is null then rh37_descr
-                END as nmFuncao,
-                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and rh30_naturezaregime = 2 and rh04_cbo is null then rh37_cbo
-                     when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and rh30_naturezaregime = 2 and rh04_cbo is not null then rh04_cbo
-                end as CBOFuncao,
-                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and rh37_reqcargo in (1,2,3,5) then 'S'
-                     when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and rh37_reqcargo in (4,6,7,8) then 'N'
-                end as acumCargo,
-                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then h13_categoria
-                end as codCateg,
-
-                case when h13_categoria = 101 then rh02_salari
-                end as vrSalFx,
-                case when h13_categoria = 101 and rh02_tipsal = 'M' then 5
-                when h13_categoria = 101 and rh02_tipsal = 'Q' then 4
-                when h13_categoria = 101 and rh02_tipsal = 'D' then 2
-                when h13_categoria = 101 and rh02_tipsal = 'H' then 1
-                end as undSalFixo,
-
-                case when h13_categoria = 101 and h13_tipocargo = 7 or rh164_datafim is not null then 2
-                when h13_categoria = 101 then 1
-                end as tpContr,
-                rh164_datafim as dtTerm,
-                case when h13_categoria = 101 and h13_tipocargo = 7 or rh164_datafim is not null then 'S'
-                end as clauAssec,
-
-                1 as tpinsc_localtrabgeral,
-                cgc as nrinsc_localtrabgeral,
-                nomeinst as desccomp_localtrabgeral,
-
-                rh02_hrssem as qtdHrsSem,
-                rh02_tipojornada as tpJornada,
-                0 as tmpParc,
-                case when rh02_horarionoturno = 'f' then 'N'
-                when rh02_horarionoturno = 't' then 'S'
-                end as horNoturno,
-                jt_descricao as dscJorn,
+                
 
                 rh02_salari,
                 rh02_funcao,
@@ -953,9 +684,22 @@ class Preenchimentos
                 rh01_rhsindicato,
                 rh116_cnpj,
                 rh02_plansegreg,
-                case when rh02_abonopermanencia = 'f' then 'N'
-                else 'S'
-                end as indabonoperm
+                rh02_abonopermanencia,
+                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then rh37_cbo
+                end as CBOCargo,
+                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then rh37_descr
+                end as nmCargo,
+                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and rh37_reqcargo in (1,2,3,5) then 'S'
+                     when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and rh37_reqcargo in (4,6,7,8) then 'N'
+                end as acumCargo,
+
+                h13_categoria,
+                
+                case when rh02_tipsal = 'M' then 5
+                when rh02_tipsal = 'Q' then 4
+                when rh02_tipsal = 'D' then 2
+                when rh02_tipsal = 'H' then 1
+                end as undSalFixo
                         from
                             rhpessoal
                         left join rhpessoalmov on
