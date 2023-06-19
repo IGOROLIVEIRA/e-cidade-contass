@@ -23,6 +23,7 @@ class cl_licobraslicitacao
     public $obr07_objeto = null;
     public $obr07_tipoprocesso = 0;
     public $obr07_instit = 0;
+    public $obr07_modalidade = null;
     // cria propriedade com as variaveis do arquivo
     public $campos = "
                  obr07_sequencial = int8 = Cód. Sequencial 
@@ -31,6 +32,7 @@ class cl_licobraslicitacao
                  obr07_objeto = text = Objeto 
                  obr07_tipoprocesso = int8 = Tipo Processo 
                  obr07_instit = int8 = instit 
+                 obr07_modalidade = int = Modalidade
                  ";
 
     //funcao construtor da classe
@@ -62,6 +64,7 @@ class cl_licobraslicitacao
             $this->obr07_objeto = ($this->obr07_objeto == "" ? @$GLOBALS["HTTP_POST_VARS"]["obr07_objeto"] : $this->obr07_objeto);
             $this->obr07_tipoprocesso = ($this->obr07_tipoprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["obr07_tipoprocesso"] : $this->obr07_tipoprocesso);
             $this->obr07_instit = ($this->obr07_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["obr07_instit"] : $this->obr07_instit);
+            $this->obr07_modalidade = ($this->obr07_modalidade == "" ? @$GLOBALS["HTTP_POST_VARS"]["obr07_modalidade"] : $this->obr07_modalidade);
         } else {
         }
     }
@@ -70,6 +73,9 @@ class cl_licobraslicitacao
     function incluir()
     {
         $this->atualizacampos();
+
+        if ($this->validacaoNumeroModalidade() == false) return false;
+
         if ($this->obr07_sequencial == null) {
             $result = db_query("select nextval('licobraslicitacao_obr07_sequencial_seq')");
             if ($result == false) {
@@ -127,13 +133,24 @@ class cl_licobraslicitacao
             $this->erro_status = "0";
             return false;
         }
+        if ($this->obr07_modalidade == null) {
+            $this->erro_sql = " Campo Modalidade não informado.";
+            $this->erro_campo = "obr07_modalidade";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
         $sql = "insert into licobraslicitacao(
                                        obr07_sequencial 
                                       ,obr07_processo 
                                       ,obr07_exercicio 
                                       ,obr07_objeto 
                                       ,obr07_tipoprocesso 
-                                      ,obr07_instit 
+                                      ,obr07_instit
+                                      ,obr07_modalidade 
                        )
                 values (
                                 $this->obr07_sequencial 
@@ -141,7 +158,8 @@ class cl_licobraslicitacao
                                ,$this->obr07_exercicio 
                                ,'$this->obr07_objeto' 
                                ,$this->obr07_tipoprocesso 
-                               ,$this->obr07_instit 
+                               ,$this->obr07_instit
+                               ,$this->obr07_modalidade 
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -177,6 +195,11 @@ class cl_licobraslicitacao
     function alterar($obr07_sequencial = null)
     {
         $this->atualizacampos();
+        $rsLicobraslicitacao = db_query("select * from licobraslicitacao where obr07_modalidade = $this->obr07_modalidade and obr07_exercicio = $this->obr07_exercicio and obr07_tipoprocesso = $this->obr07_tipoprocesso and obr07_sequencial = $obr07_sequencial");
+        if (pg_num_rows($rsLicobraslicitacao) < 1) {
+            if ($this->validacaoNumeroModalidade() == false) return false;
+        }
+
         $sql = " update licobraslicitacao set ";
         $virgula = "";
         if (trim($this->obr07_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["obr07_sequencial"])) {
@@ -250,6 +273,19 @@ class cl_licobraslicitacao
             if (trim($this->obr07_instit) == null) {
                 $this->erro_sql = " Campo instit não informado.";
                 $this->erro_campo = "obr07_instit";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->obr07_modalidade) != "" || isset($GLOBALS["HTTP_POST_VARS"]["obr07_modalidade"])) {
+            $sql  .= $virgula . " obr07_modalidade = $this->obr07_modalidade ";
+            $virgula = ",";
+            if (trim($this->obr07_modalidade) == null) {
+                $this->erro_sql = " Campo Modalidade não informado.";
+                $this->erro_campo = "obr07_modalidade";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -424,5 +460,21 @@ class cl_licobraslicitacao
             }
         }
         return $sql;
+    }
+
+    function validacaoNumeroModalidade()
+    {
+
+        $rsLicobraslicitacao = db_query("select * from licobraslicitacao where obr07_modalidade = $this->obr07_modalidade and obr07_exercicio = $this->obr07_exercicio and obr07_tipoprocesso = $this->obr07_tipoprocesso");
+        if (pg_num_rows($rsLicobraslicitacao) > 0) {
+            $this->erro_sql = "Já existe a modalidade $this->obr07_modalidade para o ano de exercício e tipo de processo informado .";
+            $this->erro_campo = "obr07_modalidade";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        return true;
     }
 }

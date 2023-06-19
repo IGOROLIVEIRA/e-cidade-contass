@@ -17,6 +17,7 @@ if (isset($incluir)) {
   $cllicobraslicitacao->obr07_exercicio       = $obr07_exercicio;
   $cllicobraslicitacao->obr07_objeto          = $obr07_objeto;
   $cllicobraslicitacao->obr07_tipoprocesso    = $obr07_tipoprocesso;
+  $cllicobraslicitacao->obr07_modalidade      = $obr07_modalidade;
   $cllicobraslicitacao->obr07_instit          = db_getsession("DB_instit");
   $cllicobraslicitacao->incluir();
   db_fim_transacao();

@@ -38,6 +38,16 @@ $cllicobraslicitacao->rotulo->label();
                 </td>
             </tr>
             <tr>
+                <td nowrap title="<?= @$Tobr07_modalidade ?>">
+                    <?= @$Lobr07_modalidade ?>
+                </td>
+                <td>
+                    <?
+                    db_input('obr07_modalidade', 11, $Iobr07_modalidade, true, 'text', $db_opcao, "")
+                    ?>
+                </td>
+            </tr>
+            <tr>
                 <td nowrap title="<?= @$Tobr07_objeto ?>">
                     <?= @$Lobr07_objeto ?>
                 </td>
