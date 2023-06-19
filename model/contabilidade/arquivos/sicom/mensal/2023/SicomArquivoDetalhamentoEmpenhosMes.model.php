@@ -578,7 +578,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
           $oDadosEmpenho10->si106_nrosequencialtermoaditivo = ''; // campo 22
         } else {
           $oDadosEmpenho10->si106_codunidadesubrespcontrato = $oEmpenho10->manutac_codunidsubanterior; // campo 19
-          $oDadosEmpenho10->si106_nrocontrato = $oEmpenho10->nrocontrato; // campo 20
+          $oDadosEmpenho10->si106_nrocontrato = substr($oEmpenho10->nrocontrato,0,14); // campo 20
           $oDadosEmpenho10->si106_dtassinaturacontrato = $oEmpenho10->dataassinaturacontrato; // campo 21
           $oDadosEmpenho10->si106_nrosequencialtermoaditivo = $oEmpenho10->nrosequencialtermoaditivo; // campo 22
         }
@@ -614,7 +614,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         } else {
           $oDadosEmpenho10->si106_codunidadesubrespcontrato = $oDadosEmpenho10->manutac_codunidsubanterior; // campo 19
         }
-        $oDadosEmpenho10->si106_nrocontrato = $oEmpenho10->nrocontrato; // campo 20
+        $oDadosEmpenho10->si106_nrocontrato = substr($oEmpenho10->nrocontrato,0,14); // campo 20
         $oDadosEmpenho10->si106_dtassinaturacontrato = $oEmpenho10->dataassinaturacontrato; // campo 21
         $oDadosEmpenho10->si106_nrosequencialtermoaditivo = ''; // campo 22
 
