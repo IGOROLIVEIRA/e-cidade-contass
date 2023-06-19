@@ -3900,7 +3900,7 @@ class cl_liclicita
                 AND pc24_pontuacao =1
                 LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
                 LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-                WHERE l21_codliclicita = 736
+                WHERE l21_codliclicita = $l20_codigo
                     AND pc24_pontuacao = 1
                 UNION
                 SELECT pc01_codmater,
@@ -3941,7 +3941,7 @@ class cl_liclicita
                 AND pc24_pontuacao =1
                 LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
                 LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-                WHERE l21_codliclicita = 736
+                WHERE l21_codliclicita = $l20_codigo
                     AND pc23_orcamitem NOT IN
                         (SELECT pc24_orcamitem
                         FROM pcorcamjulg)
