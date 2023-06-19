@@ -176,15 +176,15 @@ if (isset($alterar) && !$sqlerro) {
     }
 
     if ($sqlerro == false) {
-        if ($e54_emiss > date("Y-m-d")) {
-            $erro_msg = "Usuário: ALTERAÇÃO NO EFETUATA! A DATA DA AUTORIZAÇÃO NO PODE SER POSTERIOR A DATA DO SISTEMA";
-            $sqlerro = true;
-        }
+      if ($e54_emiss > date("Y-m-d", db_getsession("DB_datausu"))) {
+          $erro_msg = "Usuário: ALTERAÇÃO NÃO EFETUADA! A DATA DA AUTORIZAÇÃO NÃO PODE SER POSTERIOR A DATA DO SISTEMA";
+          $sqlerro = true;
+      }
     }
 
     if ($sqlerro == false) {
-        if (date("Y", strtotime($e54_emiss)) <> date("Y")) {
-            $erro_msg = "Usuário: ALTERAÇÃO NO EFETUATA! A DATA DA AUTORIZAÇÃO DEVE PERMANCER NO EXERCÍCIO ATUAL";
+        if (date("Y", strtotime($e54_emiss)) <> date("Y", db_getsession("DB_datausu"))) {
+            $erro_msg = "Usuário: ALTERAÇÃO NÃO EFETUADA! A DATA DA AUTORIZAÇÃO DEVE PERMANECER NO EXERCÍCIO ATUAL";
             $sqlerro = true;
         }
     }
