@@ -1,6 +1,7 @@
 <?php
 
 require_once("fpdf151/pdf.php");
+require_once("libs/db_stdlib.php");
 
 /* Consulta para informações da licitação. */
 
@@ -131,8 +132,8 @@ for ($i = 0; $i < pg_numrows($rsItensCredenciados); $i++) {
     $pdf->SetX(120);
     $pdf->cell(20, 5 * $altura, $item->m61_descr, 1, 0, "C", 0);
     $pdf->cell(20, 5 * $altura, $item->si02_qtditem, 1, 0, "C", 0);
-    $pdf->cell(20, 5 * $altura, $item->si02_vlprecoreferencia, 1, 0, "C", 0);
-    $pdf->cell(20, 5 * $altura, $item->si02_vltotalprecoreferencia, 1, 1, "C", 0);
+    $pdf->cell(20, 5 * $altura, strpos($item->si02_vlprecoreferencia, '.') == false ? $item->si02_vlprecoreferencia : trim(db_formatar("$item->si02_vlprecoreferencia", 'f', " ", " ", "", 4)), 1, 0, "C", 0);
+    $pdf->cell(20, 5 * $altura, strpos($item->si02_vltotalprecoreferencia, '.') == false ? $item->si02_vltotalprecoreferencia : trim(db_formatar("$item->si02_vltotalprecoreferencia", 'f', " ", 0, "e", 2)), 1, 1, "C", 0);
 
     $total += $item->si02_vltotalprecoreferencia;
     $proximofornecedor = db_utils::fieldsMemory($rsItensCredenciados, $i + 1)->l205_fornecedor;

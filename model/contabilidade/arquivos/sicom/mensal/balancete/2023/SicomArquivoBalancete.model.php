@@ -324,6 +324,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
     }
     public function getCodcoByFonteRegistro31($fonte, $sNaturezaReceita, $emenda)
     {
+
         if (substr($fonte, 0, 4) == '1710' && $emenda == 2) {
             return 3220;
         }
@@ -333,7 +334,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             return 3210;
         }
 
-        if ($fonte == '17060000') {
+        if ($fonte == '1706000') {
             return 3110;
         }
 
@@ -3044,11 +3045,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             }
             if($oContas10->nregobrig == 31){
                 $clBalancete31 = new cl_balancete312023();
-
                 $sSqlVinculoContaOrcamento = $clBalancete31->sql_query_vinculo_conta_orcamento($oContas10->contas);
-
                 $rsVinculoContaOrcamento = db_query($sSqlVinculoContaOrcamento) or die($sSqlVinculoContaOrcamento);
-                //Constante da contacorrente or?ament?ria
+                 //Constante da contacorrente or?ament?ria
                 $nContaCorrente = 100;
 
                 for ($iContVinculo = 0; $iContVinculo < pg_num_rows($rsVinculoContaOrcamento); $iContVinculo++) {
@@ -3056,9 +3055,12 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                     $objContas = db_utils::fieldsMemory($rsVinculoContaOrcamento, $iContVinculo);
 
                     $clBalancete31 = new cl_balancete312023();
-                    $sSqlReg31saldos = $clBalancete31->sql_query_reg31_saldos($oContas10->contas, $nContaCorrente, $objContas->c60_estrut, $nMes, $sWhereEncerramento);
+                    $whereEmenda = " AND c19_emparlamentar is null ";
+                    if($objContas->c19_emparlamentar != 0){
+                        $whereEmenda = " AND c19_emparlamentar = {$objContas->c19_emparlamentar} ";
+                    }
+                    $sSqlReg31saldos = $clBalancete31->sql_query_reg31_saldos($oContas10->contas, $nContaCorrente, $objContas->c60_estrut, $nMes, $sWhereEncerramento, $whereEmenda);
                     $rsReg31saldos = db_query($sSqlReg31saldos) or die($sSqlReg31saldos);
-
 
                     for ($iContSaldo31 = 0; $iContSaldo31 < pg_num_rows($rsReg31saldos); $iContSaldo31++) {
 
@@ -3088,7 +3090,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 * DADOS PARA GERA??O DO REGISTRO 31 C?lula da Receita ? Execu??o
                                 * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 31
                                 */
-                            $codCo                      = $this->getCodcoByFonteRegistro31($objContas->o15_codigo, $obalancete31->si243_naturezareceita, $objContas->c19_emparlamentar);
+                            $codCo                      = $this->getCodcoByFonteRegistro31($objContas->o15_codtri, $obalancete31->si243_naturezareceita, $objContas->c19_emparlamentar);
                             $sHash31 = '31' . $oContas10->si177_contacontaabil . $sNaturezaReceita . $objContas->o15_codtri. $codCo;
 
                             if (!isset($aContasReg10[$reg10Hash]->reg31[$sHash31])) {
