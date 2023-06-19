@@ -929,8 +929,8 @@ class cl_homologacaoadjudica
     function validacaoItensComFornecedorIgual($iLicitacao, $iRotina, $iHomologacao, $sItensHomologados)
     {
 
-        $sCampos = "DISTINCT pc01_codmater,cgmforncedor.z01_numcgm,cgmforncedor.z01_nome,pc23_valor";
-        $sOrder = "pc01_codmater";
+        $sCampos = "pc81_codprocitem,pc01_codmater,cgmforncedor.z01_numcgm,cgmforncedor.z01_nome,pc23_vlrun";
+        $sOrder = "pc81_codprocitem";
 
         /* Consulta dos itens conforme a rotina executada */
 
@@ -964,12 +964,12 @@ class cl_homologacaoadjudica
 
             if (array_key_exists($indice, $aItens)) {
 
-                if (strcmp($oItem->pc23_valor, $aItens[$indice]) != 0) {
-                    $sItensInvalidos .= "\nItem $oItem->pc01_codmater - Fornecedor $oItem->z01_nome";
+                if (strcmp($oItem->pc23_vlrun, $aItens[$indice]) != 0) {
+                    $sItensInvalidos .= "\nItem $oItem->pc81_codprocitem - Fornecedor $oItem->z01_nome";
                 }
             }
 
-            $aItens[$indice] = $oItem->pc23_valor;
+            $aItens[$indice] = $oItem->pc23_vlrun;
         }
 
         if ($sItensInvalidos != "") throw new Exception("Usuário: Inclusão abortada, esta licitação possui itens com o mesmo código e valores unitários divergentes julgados para o mesmo fornecedor." . $sItensInvalidos);
