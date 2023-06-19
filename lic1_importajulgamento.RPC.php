@@ -75,6 +75,7 @@ switch ($oParam->exec) {
             $oRetorno->message = "Julgamento inserido com sucesso";
             $oRetorno->status = 1;
         } catch(Exception $oErro) {
+
             $oRetorno->message = $oErro->getMessage();
             $oRetorno->status  = 2;
         }

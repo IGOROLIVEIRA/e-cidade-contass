@@ -15,7 +15,7 @@ class Ranking
     /**
      * Get the value of idFornecedor
      */
-    public function getIdFornecedor(): int
+    public function getIdFornecedor(): string
     {
         return $this->idFornecedor;
     }

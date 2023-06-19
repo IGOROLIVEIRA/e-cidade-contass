@@ -13,6 +13,11 @@ class Participante
     private string $representanteLegal;
 
     /**
+     * @var string
+     */
+    private string $razaoSocial;
+
+    /**
      * Get the value of cnpj
      */
     public function getCnpj(): string
@@ -44,6 +49,24 @@ class Participante
     public function setRepresentanteLegal(string $representanteLegal): self
     {
         $this->representanteLegal = $representanteLegal;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of razaoSocial
+     */
+    public function getRazaoSocial(): string
+    {
+        return $this->razaoSocial;
+    }
+
+    /**
+     * Set the value of razaoSocial
+     */
+    public function setRazaoSocial(string $razaoSocial): self
+    {
+        $this->razaoSocial = $razaoSocial;
 
         return $this;
     }
