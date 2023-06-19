@@ -267,7 +267,6 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
 
                 $sSqlMov = "select * from w_relabastecimentoveiculos where ve01_codigo = {$ve01_codigo} and coddepto = {$coddepto} and ve70_origemgasto = {$ve70_origemgasto} and cgmposto = {$cgmposto}";
                 $rSqlMov = db_query($sSqlMov);
-                //echo $sSqlMov;db_criatabela($rSqlMov);exit;
                 $total = 0;
                 $nTotalCombustivel = 0;
                 $nTotalValorAbastecido = 0;
