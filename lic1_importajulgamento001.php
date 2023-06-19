@@ -123,7 +123,9 @@ db_postmemory($HTTP_POST_VARS);
         }
 
         function js_retornobuscarlicitacao(oAjax) {
+            console.log("chegou no retorno");
             let oRetorno = eval("(" + oAjax.responseText + ")");
+            console.log(oRetorno);
             const numero = oRetorno.message.numero;
             if (oRetorno.message.situacao != 0) {
                 return alert(`

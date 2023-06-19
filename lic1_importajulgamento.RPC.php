@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 require_once("libs/db_stdlib.php");
@@ -15,6 +19,7 @@ require_once("model/licitacao/PortalCompras/Julgamento/Comandos/BuscaJulgamento.
 require_once("model/licitacao/PortalCompras/Comandos/ValidaChaveAcesso.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Fabricas/JulgamentoFabrica.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Comandos/InsereJulgalmento.model.php");
+require_once("model/licitacao/PortalCompras/Julgamento/Comandos/ValidaFornecedores.model.php");
 
 $cl_liclcitaimportarjulgamento = new cl_liclicitaimportarjulgamento();
 
@@ -39,6 +44,7 @@ switch ($oParam->exec) {
                 $resultado['situacao'] = $resource->situacao;
                 $oRetorno->message = $resultado;
                 $oRetorno->status = 1;
+
             } catch (Exception $oErro) {
                 $oRetorno->message = $oErro->getMessage();
                 $oRetorno->status  = 2;
@@ -49,10 +55,19 @@ switch ($oParam->exec) {
             $codigo = $oParam->codigo;
             $chaveAcesso = (new ValidaChaveAcesso)->execute();
             $julgamentoFabrica = new JulgamentoFabrica();
+            $validadorFornecedores = new ValidaFornecedores();
 
             $buscador = new BuscaJulgamento();
+
             $dados = $buscador->execute((int)$codigo, $chaveAcesso);
-            $julgamento = $julgamentoFabrica->criar($dados);
+
+            if ($dados['success'] === false) {
+                throw new Exception($dados['message']);
+            }
+
+            $julgamento = $julgamentoFabrica->criar($dados['message']);
+
+            $validadorFornecedores->execute($julgamento);
 
             $insereJugalmento = new InsereJulgamento();
             $insereJugalmento->execute($julgamento);
@@ -64,5 +79,7 @@ switch ($oParam->exec) {
             $oRetorno->status  = 2;
         }
 }
+
+
 
 echo json_encode($oRetorno);

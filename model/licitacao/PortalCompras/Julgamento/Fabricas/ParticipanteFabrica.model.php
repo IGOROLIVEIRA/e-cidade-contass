@@ -13,9 +13,8 @@ class ParticipanteFabrica
     public function criar(array $dados): Participante
     {
         $participante = new Participante;
-
         $participante->setCnpj($dados['CPF']);
-        $participante->setRepresentanteLegal($dados['RepresentanteLegal']['nome']);
+        $participante->setRepresentanteLegal($dados['RepresentanteLegal']['Nome']);
 
         return $participante;
     }

@@ -41,7 +41,7 @@ class PropostaFabrica
     {
         $listaPropostas = [];
         foreach($propostasArray as $proposta) {
-            if((bool)$proposta['valido'] == true) {
+            if((bool)$proposta['Valido'] == true) {
                 $listaPropostas[] = $this->criar($proposta);
             }
         }

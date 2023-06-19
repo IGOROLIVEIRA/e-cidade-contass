@@ -2,7 +2,7 @@
 
 require_once("model/licitacao/PortalCompras/Julgamento/Lote.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Fabricas/PropostaFabrica.model.php");
-require_once("model/licitacao/PortalCompras/Fabricas/ItemFabrica.model.php");
+require_once("model/licitacao/PortalCompras/Julgamento/Fabricas/ItemFabrica.model.php");
 
 class LoteFabrica
 {

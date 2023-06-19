@@ -2,6 +2,7 @@
 
 require_once("model/licitacao/PortalCompras/Julgamento/Item.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Comandos/ValidaTipoJulgamento.model.php");
+require_once("model/licitacao/PortalCompras/Julgamento/Fabricas/RankingFabrica.model.php");
 
 class ItemFabrica
 {
@@ -16,7 +17,6 @@ class ItemFabrica
         $item = new Item();
         $propostaFabrica = new PropostaFabrica();
         $rankingFabrica = new RankingFabrica();
-
 
         $item->setId($dados['_id']);
 
