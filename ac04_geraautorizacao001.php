@@ -173,7 +173,7 @@ if ($x->consultarDataDoSistema == true) {
                                     $iMes = date("m", db_getsession("DB_datausu"));
                                     $iAno = date("Y", db_getsession("DB_datausu"));
 
-                                    db_inputdata('e54_emissao', $iDia, $iMes, $iAno, true, 'text', 1, "");
+                                    db_inputdata('e54_emissao', $iDia, $iMes, $iAno, true, 'text', 3, "");
 
                                     ?>
                                 </td>
@@ -467,19 +467,21 @@ if ($x->consultarDataDoSistema == true) {
      */
     function js_mostraacordo(chave1, chave2, chave3, chave4) {
 
-
+        // caso não encontre o contrato pesquisado
+        if (chave4 == true) {
+            oGridItens.clearAll(true);
+            oTxtCgm.setValue("");
+            return false;
+        }
 
         oTxtCodigoAcordo.setValue(chave1);
         oTxtDescricaoAcordo.setValue(chave2);
         oTxtDescricaoFornecedor.setValue(chave3);
         oTxtCgm.setValue(chave4);
+        document.getElementById('e54_emissao').readOnly = '';
+        document.getElementById('e54_emissao').style.backgroundColor = 'white';
         js_getUltimaPosicao();
 
-        // caso não encontre o contrato pesquisado
-        if (chave4 == true) {
-            oGridItens.clearAll(true);
-            oTxtCgm.setValue("");
-        }
 
     }
 
@@ -492,6 +494,8 @@ if ($x->consultarDataDoSistema == true) {
         oTxtDescricaoAcordo.setValue(chave2);
         oTxtCgm.setValue(chave4);
         oTxtDescricaoFornecedor.setValue(chave3);
+        document.getElementById('e54_emissao').readOnly = '';
+        document.getElementById('e54_emissao').style.backgroundColor = 'white';
         db_iframe_acordo.hide();
         js_getUltimaPosicao();
     }
@@ -1464,6 +1468,8 @@ if ($x->consultarDataDoSistema == true) {
 
     function js_buscarInformacoesAutorizacao() {
 
+        if (document.getElementById('e54_emissao').value == '') return alert('Usuário: preencha o campo data da autorização.')
+
         var aItens = oGridItens.getSelection("object");
 
 
@@ -1698,11 +1704,11 @@ if ($x->consultarDataDoSistema == true) {
         js_somaItens();
     })
 
-    document.getElementById('e54_emissao').onchange = js_validaDataAutorizacao;
+    document.getElementById('e54_emissao').onchange = js_validaDataAutorizacao
 
 
-    /* Rotina para validacao de data de autorização */
     function js_validaDataAutorizacao() {
+        if (this.value == '') return alert('Usuário: preencha a data da autorização de empenho.')
         var oParam = new Object();
         oParam.e54_emiss = document.getElementById('e54_emissao').value;
         oParam.ac16_sequencial = document.getElementById('oTxtCodigoAcordo').value;
