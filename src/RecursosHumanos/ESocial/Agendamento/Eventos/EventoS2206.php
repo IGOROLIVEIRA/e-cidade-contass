@@ -87,30 +87,23 @@ class EventoS2206 extends EventoBase
                 $oDadosAPI->evtAltContratual->infoContrato->vrSalFx = $oDados->rh02_salari;
                 $oDadosAPI->evtAltContratual->infoContrato->undSalFixo = $oDados->undsalfixo;
                 
-                $oDadosAPI->evtAltContratual->infoContrato->dscSalVar = empty($oDados->remuneracao->dscSalVar) ? null : $oDados->remuneracao->dscSalVar;
+                //$oDadosAPI->evtAltContratual->infoContrato->dscSalVar = empty($oDados->remuneracao->dscSalVar) ? null : $oDados->remuneracao->dscSalVar;
 
-                $oDadosAPI->evtAltContratual->infoContrato->tpContr = $oDados->duracao->tpContr;
-                $oDadosAPI->evtAltContratual->infoContrato->dtTerm = empty($oDados->duracao->dtTerm) ? null : $oDados->duracao->dtTerm;
-                $oDadosAPI->evtAltContratual->infoContrato->objDet = empty($oDados->duracao->objDet) ? null : $oDados->duracao->objDet;
+                $oDadosAPI->evtAltContratual->infoContrato->tpContr = $oDados->tpcontr;
+                $oDadosAPI->evtAltContratual->infoContrato->dtTerm = empty($oDados->dtterm) ? null : $oDados->dtterm;
+                //$oDadosAPI->evtAltContratual->infoContrato->objDet = empty($oDados->duracao->objDet) ? null : $oDados->duracao->objDet;
 
-                $oDadosAPI->evtAltContratual->infoContrato->localTrabGeral = empty($oDados->localTrabGeral) ? null : $oDados->localTrabGeral;
+                $oDadosAPI->evtAltContratual->infoContrato->localtrabgeral->tpinsc   = 1;
+                $oDadosAPI->evtAltContratual->infoContrato->localtrabgeral->nrinsc   = $oDados->nrinsc_localtrabgeral;
+                $oDadosAPI->evtAltContratual->infoContrato->localtrabgeral->desccomp = $oDados->desccomp_localtrabgeral;
 
-                $oDadosAPI->evtAltContratual->infoContrato->localTrabDom = empty($oDados->localTrabDom) ? null : $oDados->localTrabDom;
 
-                if (empty($oDados->horContratual) && !empty($oDados->infoCeletista)) {
-                    $oDadosAPI->evtAltContratual->infoContrato->horContratual = $oDados->horContratual;
-                    //$oDadosAPI->evtAltContratual->vinculo->infoContrato->horContratual->horario = $this->buscarHorarios($oDados->vinculo->matricula);
-                } else {
-                    $oDadosAPI->evtAltContratual->infoContrato->horContratual = null;
-                }
-
-                $oDadosAPI->evtAltContratual->infoContrato->alvaraJudicial = empty($oDados->alvaraJudicial) ? null : $oDados->alvaraJudicial;
-
-                $oDadosAPI->evtAltContratual->infoContrato->observacoes = empty($oDados->observacoes) ? null : array($oDados->observacoes);
-
-                $oDadosAPI->evtAltContratual->infoContrato->observacoes = empty($oDados->observacoes) ? null : array($oDados->observacoes);
-
-                $oDadosAPI->evtAltContratual->infoContrato->treiCap = empty($oDados->treiCap) ? null : array($oDados->treiCap);
+                $oDadosAPI->evtAltContratual->infoContrato->horcontratual->qtdhrssem  = $oDados->rh02_hrsssem;
+                $oDadosAPI->evtAltContratual->infoContrato->horcontratual->tpjornada  = $oDados->rh02_tipojornada;
+                $oDadosAPI->evtAltContratual->infoContrato->horcontratual->tmpparc    = 0;
+                $oDadosAPI->evtAltContratual->infoContrato->horcontratual->hornoturno = $oDados->rh02_horarionoturno;
+                $oDadosAPI->evtAltContratual->infoContrato->horcontratual->dscjorn    = $oDados->jt_nome;
+                
             //}
 
             $aDadosAPI[] = $oDadosAPI;

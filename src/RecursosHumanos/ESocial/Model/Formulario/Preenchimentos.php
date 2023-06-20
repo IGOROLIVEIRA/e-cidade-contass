@@ -699,7 +699,17 @@ class Preenchimentos
                 when rh02_tipsal = 'Q' then 4
                 when rh02_tipsal = 'D' then 2
                 when rh02_tipsal = 'H' then 1
-                end as undSalFixo
+                end as undSalFixo,
+                case when h13_tipocargo = 7 or rh164_datafim is not null then 2
+                else 1
+                end as tpContr,
+                rh164_datafim as dtTerm,
+                cgc as nrinsc_localtrabgeral,
+                nomeinst as desccomp_localtrabgeral,
+                rh02_hrssem,
+                rh02_tipojornada,
+                rh02_horarionoturno,
+                jt_nome
                         from
                             rhpessoal
                         left join rhpessoalmov on
