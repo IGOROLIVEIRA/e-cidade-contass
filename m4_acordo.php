@@ -403,8 +403,6 @@ if (isset($alterar)) {
       $sqlerro = true;
     }
 
-    if (!empty($manutac_codunidsubanterior)) {
-
       $sSqlMaxmanutac = $clmanutencaoacordo->sql_query_file(null, "max(manutac_sequencial)", null, "manutac_acordo = $ac16_sequencial");
       $clmanutencaoacordo->sql_record($sSqlMaxmanutac);
 
@@ -414,9 +412,8 @@ if (isset($alterar)) {
 
       $clmanutencaoacordo->manutac_acordo = $ac16_sequencial;
       $clmanutencaoacordo->manutac_codunidsubanterior = $manutac_codunidsubanterior;
-
+      $clmanutencaoacordo->manutac_numeroant = $manutac_numeroant;
       $clmanutencaoacordo->incluir();
-    }
 
     if ($ac16_tipoorigem == 1) {
 
@@ -844,6 +841,16 @@ if (isset($alterar)) {
               <td>
                 <?
                 db_input('manutac_codunidsubanterior', 10, $Imanutac_codunidsubanterior, true, 'text', 2, "");
+                ?>
+              </td>
+            </tr>
+            <tr>
+              <td nowrap title="">
+                <strong>Nº Contrato Anterior:</strong>
+              </td>
+              <td>
+                <?
+                db_input('manutac_numeroant', 10, $Imanutac_numeroant, true, 'text', 2, "");
                 ?>
               </td>
             </tr>

@@ -386,6 +386,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     adesaoregprecos.si06_numeroadm as numeroproc,
                     liclicita.l20_codigo,
                     liclicita.l20_edital,
+                    manutencaolicitacao.manutlic_editalant,
                     liclicita.l20_anousu,
                     liclicita.l20_codepartamento,
                     liclicita.l20_naturezaobjeto,
@@ -440,13 +441,15 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 					  lic211_processo,
 					  lic211_anousu,
                       si06_departamento,
-                      manutac_codunidsubanterior
+                      manutac_codunidsubanterior,
+                      manutac_numeroant
                 FROM acordoitem
                 INNER JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
                 INNER JOIN acordo ON ac16_sequencial = ac26_acordo
                 LEFT JOIN acordoliclicitem ON ac24_acordoitem = ac20_sequencial
                 LEFT JOIN liclicitem ON l21_codigo = ac24_liclicitem
                 LEFT JOIN liclicita ON l21_codliclicita = l20_codigo
+                LEFT JOIN manutencaolicitacao on manutlic_licitacao = l20_codigo
                 LEFT JOIN liclicitaoutrosorgaos ON lic211_sequencial = ac16_licoutroorgao
                 LEFT JOIN db_departorg ON l20_codepartamento = db01_coddepto
                 AND db01_anousu = " . db_getsession("DB_anousu") . "
@@ -557,6 +560,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos10->si83_codunidadesubresp = $sCodUnidadeM;
             }
 
+            /*
+            *verifica se existe codigo anterior para processo
+            *OC20603
+            */
+            if($oDados10->manutlic_editalant != ''){
+                $oDados10->l20_edital = $oDados10->manutlic_editalant;
+            }
+
             $clcontratos10->si83_tiporegistro = 10; //campo 01
             $clcontratos10->si83_codcontrato = $oDados10->ac16_sequencial; //campo 03
             $clcontratos10->si83_codorgao = $sCodorgao; //campo 04
@@ -565,7 +576,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             } else {
                 $clcontratos10->si83_codunidadesub = $sCodUnidade; //campo 05
             }
-            $clcontratos10->si83_nrocontrato = $oDados10->ac16_numeroacordo; //campo 06
+            $clcontratos10->si83_nrocontrato = $oDados10->manutac_acordo =='' ? $oDados10->ac16_numeroacordo : $oDados10->manutac_acordo; //campo 06
             $clcontratos10->si83_exerciciocontrato = $oDados10->ac16_anousu; //campo 07
             $clcontratos10->si83_dataassinatura = $oDados10->ac16_dataassinatura; //campo 08
             $clcontratos10->si83_contdeclicitacao = $oDados10->contdeclicitacao; //campo 09
@@ -970,6 +981,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 ac26_descricaoindice,
                 ac02_acordonatureza,
                 manutac_codunidsubanterior,
+                manutac_numeroant,
                 ac35_datareferencia
         FROM acordoposicaoaditamento
         INNER JOIN acordoposicao ON ac26_sequencial = ac35_acordoposicao
@@ -1031,7 +1043,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 } else {
                     $clcontratos20->si87_codunidadesub = $oDados20->manutac_codunidsubanterior; //campo 04
                 }
-                $clcontratos20->si87_nrocontrato = $oDados20->ac16_numero; //campo 05
+                $clcontratos20->si87_nrocontrato = $oDados20->manutac_numeroant == '' ? $oDados20->ac16_numero : $oDados20->manutac_numeroant; //campo 05
                 $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura; //campo 06
                 $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento; //campo 07
                 $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo; //campo 08
@@ -1337,7 +1349,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 } else {
                     $clcontratos20->si87_codunidadesub = $oDados20->manutac_codunidsubanterior; //campo 04
                 }
-                $clcontratos20->si87_nrocontrato = $oDados20->ac16_numero; //campo 05
+                $clcontratos20->si87_nrocontrato = $oDados20->manutac_numeroant =='' ? $oDados20->ac16_numero : $oDados20->manutac_numeroant; //campo 05
                 $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura; //campo 06
                 $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento; //campo 07
                 $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo; //campo 08
@@ -2052,7 +2064,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
        si03_indicereajuste,
        si03_percentualreajuste,
        si03_descricaoindice,
-       manutac_codunidsubanterior
+       manutac_codunidsubanterior,
+       manutac_numeroant
         FROM apostilamento
         INNER JOIN acordo ON si03_acordo=ac16_sequencial
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
@@ -2095,7 +2108,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             } else {
                 $clcontratos30->si89_codunidadesub = $oDados30->manutac_codunidsubanterior; //campo 03
             }
-            $clcontratos30->si89_nrocontrato = $oDados30->ac16_numeroacordo; //campo 04
+            $clcontratos30->si89_nrocontrato = $oDados30->manutac_numeroant =='' ? $oDados30->ac16_numeroacordo : $oDados30->manutac_numeroant; //campo 04
             $clcontratos30->si89_dtassinaturacontoriginal = $oDados30->si03_dataassinacontrato; //campo 05
             $clcontratos30->si89_tipoapostila = $oDados30->si03_tipoapostila; //campo 06
             $clcontratos30->si89_nroseqapostila = $oDados30->si03_numapostilamento; //campo 07
@@ -2173,7 +2186,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos40->si91_codunidadesub              = $sCodUnidadeSub; //campo 03
             }
 
-            $clcontratos40->si91_nrocontrato                = $oDados40->ac16_numeroacordo; //campo 04
+            $clcontratos40->si91_nrocontrato                = $oDados40->manutac_acordo =='' ? $oDados40->ac16_numeroacordo : $oDados40->manutac_acordo; //campo 04
             $clcontratos40->si91_dtassinaturacontoriginal   = $oDados40->ac16_dataassinatura; //campo 05
             $clcontratos40->si91_datarescisao               = $oDados40->ac16_datarescisao; //campo 06
             $clcontratos40->si91_valorcancelamentocontrato  = $oDados40->ac16_valorrescisao; //campo 07

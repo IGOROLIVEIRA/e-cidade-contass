@@ -19,6 +19,7 @@ class cl_manutencaolicitacao
   // cria variaveis do arquivo
   var $manutlic_sequencial = 0;
   var $manutlic_codunidsubanterior = null;
+  var $manutlic_editalant = null;
   var $manutlic_licitacao = 0;
 
   // cria propriedade com as variaveis do arquivo
@@ -26,6 +27,7 @@ class cl_manutencaolicitacao
                  manutlic_sequencial = int8 = Sequencial
                  manutlic_codunidsubanterior = int4 = Cod unid sub anterior
                  manutlic_licitacao = int8 = Numeração
+                 manutlic_editalant = varchar = numero do processo anterior
                  ";
 
   //funcao construtor da classe
@@ -53,6 +55,7 @@ class cl_manutencaolicitacao
     $this->manutlic_sequencial = ($this->manutlic_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["manutlic_sequencial"] : $this->manutlic_sequencial);
     $this->manutlic_codunidsubanterior = ($this->manutlic_codunidsubanterior == "" ? @$GLOBALS["HTTP_POST_VARS"]["manutlic_codunidsubanterior"] : $this->manutlic_codunidsubanterior);
     $this->manutlic_licitacao = ($this->manutlic_licitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["manutlic_licitacao"] : $this->manutlic_licitacao);
+    $this->manutlic_editalant = ($this->manutlic_editalant == "" ? @$GLOBALS["HTTP_POST_VARS"]["manutlic_editalant"] : $this->manutlic_editalant);
   }
 
   // funcao para inclusao aqui
@@ -89,11 +92,13 @@ class cl_manutencaolicitacao
                                  manutlic_sequencial
                 ,manutlic_codunidsubanterior
                 ,manutlic_licitacao
+                ,manutlic_editalant
                        )
                 values (
                          $this->manutlic_sequencial
                 ,'$this->manutlic_codunidsubanterior'
                 ,$this->manutlic_licitacao
+                ,'$this->manutlic_editalant'
                       )";
 
     $result = db_query($sql);
