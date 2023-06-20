@@ -2,6 +2,7 @@
 
 namespace ECidade\RecursosHumanos\ESocial\Agendamento\Eventos;
 
+use DateTime;
 use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 
 /**
@@ -31,43 +32,44 @@ class EventoS2206 extends EventoBase
     {
         $aDadosAPI = array();
         $iSequencial = 1;
+        
         foreach ($this->dados as $oDados) {
-
             $oDadosAPI                                   = new \stdClass;
             $oDadosAPI->evtAltContratual                      = new \stdClass;
             $oDadosAPI->evtAltContratual->sequencial          = $iSequencial;
             $oDadosAPI->evtAltContratual->modo                = $this->modo;
-            $oDadosAPI->evtAltContratual->dtAlteracao         = implode('-', array_reverse(explode('/', $this->dt_alteracao))); //'2021-01-29'; //$oDados->altContratual->dtAlteracao;
+            $oDadosAPI->evtAltContratual->dtAlteracao         = $this->contarDias($this->dataDoSistema())? $this->dataDoSistema() : null; //implode('-', array_reverse(explode('/', $this->dt_alteracao))); //'2021-01-29'; //$oDados->altContratual->dtAlteracao;
             $oDadosAPI->evtAltContratual->indRetif            = 1;
             $oDadosAPI->evtAltContratual->nrRecibo            = null;
-            $oDadosAPI->evtAltContratual->cpfTrab             = $oDados->ideVinculo->cpfTrab;
-            $oDadosAPI->evtAltContratual->matricula           = $oDados->ideVinculo->matricula;
+            $oDadosAPI->evtAltContratual->cpfTrab             = $oDados->cpfTrab;
+            $oDadosAPI->evtAltContratual->matricula           = $oDados->matricula;
 
-            $oDadosAPI->evtAltContratual->altContratual->dtEf                = $oDados->altContratual->dtEf;
-            $oDadosAPI->evtAltContratual->altContratual->dscAlt              = $oDados->altContratual->dscAlt;
+            $oDadosAPI->evtAltContratual->dtef                = $this->dataDoSistema();
+            $oDadosAPI->evtAltContratual->dscalt              = $this->comparaDados($oDados->matricula,$oDados->rh02_salari,$oDados->rh02_funcao,$oDados->rh20_cargo);
 
-            $oDadosAPI->evtAltContratual->tpRegPrev = $oDados->vinculo->tpRegPrev;
+            $oDadosAPI->evtAltContratual->tpRegPrev = $oDados->r33_tiporegime;
 
-            if (!empty($oDados->infoCeletista)) {
-                $oDadosAPI->evtAltContratual->infoCeletista->tpRegJor = $oDados->infoCeletista->tpRegJor;
-                $oDadosAPI->evtAltContratual->infoCeletista->natAtividade = $oDados->infoCeletista->natAtividade;
-                $oDadosAPI->evtAltContratual->infoCeletista->dtBase = $oDados->infoCeletista->dtBase;
-                $oDadosAPI->evtAltContratual->infoCeletista->cnpjSindCategProf = $oDados->infoCeletista->cnpjSindCategProf;
+            //if (!empty($oDados->infoCeletista)) {
+                $oDadosAPI->evtAltContratual->infoCeletista->tpRegJor = 1;
+                $oDadosAPI->evtAltContratual->infoCeletista->natAtividade = 1;
+                //$oDadosAPI->evtAltContratual->infoCeletista->dtBase = //SEMPRE EM BRANCO;
+                $oDadosAPI->evtAltContratual->infoCeletista->cnpjSindCategProf = $oDados->rh116_cnpj;
 
-                if (!empty($oDados->trabTemporario)) {
+                // if (!empty($oDados->trabTemporario)) {
 
-                    $oDadosAPI->evtAltContratual->infoCeletista->trabTemporario = $oDados->trabTemporario;
-                    $oDadosAPI->evtAltContratual->infoCeletista->trabTemporario->justContr = $oDados->trabTemporario->justContr;
-                }
-                $oDadosAPI->evtAltContratual->infoCeletista->aprend = empty($oDados->aprend) ? null : $oDados->aprend;
-            } else {
-                if (!empty($oDadosAPI->evtAltContratual->infoEstatutario->tpPlanRP)) {
+                //     $oDadosAPI->evtAltContratual->infoCeletista->trabTemporario = $oDados->trabTemporario;
+                //     $oDadosAPI->evtAltContratual->infoCeletista->trabTemporario->justContr = $oDados->trabTemporario->justContr;
+                // }
+                // $oDadosAPI->evtAltContratual->infoCeletista->aprend = empty($oDados->aprend) ? null : $oDados->aprend;
+            // } else {
+                //var_dump($oDados->rh02_plansegreg);exit;
+                //if ($oDados->rh02_plansegreg) {
                     // $oDadosAPI->evtAltContratual->infoEstatutario = $oDados->infoEstatutario;
-                    $oDadosAPI->evtAltContratual->infoEstatutario->tpPlanRP = $oDados->infoEstatutario->tpPlanRP;
-                    $oDadosAPI->evtAltContratual->infoEstatutario->indTetoRGPS = $oDados->infoEstatutario->indTetoRGPS;
-                    $oDadosAPI->evtAltContratual->infoEstatutario->indAbonoPerm = $oDados->infoEstatutario->indAbonoPerm;
-                }
-            }
+                    $oDadosAPI->evtAltContratual->infoEstatutario->tpPlanRP = $oDados->rh02_plansegreg;
+                    $oDadosAPI->evtAltContratual->infoEstatutario->indTetoRGPS = 'N';
+                    $oDadosAPI->evtAltContratual->infoEstatutario->indAbonoPerm = $oDados->indabonoperm;
+                //}
+            // }
 
             if (!empty($oDados->infoContrato)) {
 
@@ -107,9 +109,9 @@ class EventoS2206 extends EventoBase
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
-        // echo '<pre>';
-        // print_r($aDadosAPI);
-        // exit;
+        echo '<pre>';
+        print_r($aDadosAPI);
+        exit;
         return $aDadosAPI;
     }
 
@@ -227,5 +229,67 @@ class EventoS2206 extends EventoBase
             $aAfastamentos[] = $oAfastamentoFormatado;
         }
         return $aAfastamentos;
+    }
+
+    private function dataDoSistema($formato = "Y-m-d"){
+        return date($formato,db_getsession("DB_datausu"));
+    }
+
+    private function contarDias($data) {
+        
+        $dataAtual = new DateTime();
+        $dataFornecida = new DateTime($data);
+        $intervalo = $dataFornecida->diff($dataAtual);
+        $diferenca = $intervalo->days;
+    
+        if ($diferenca > 180) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private function subtrairMes($data) {
+        $dataObj = new DateTime($data);
+        $dataObj->modify('-1 month');
+        return $dataObj->format('Y-m-d');
+    }
+
+    private function comparaDados($matricula, $rh02_salari_origem, $rh02_funcao_origem, $rh02_carga_origem)
+    {
+        $dTMesAnterior = $this->subtrairMes($this->dataDosistema("Y-m-d"));
+
+        list($ano, $mes, $dia) = explode('-', $dTMesAnterior);
+
+        $sql = "SELECT rh02_salari, rh02_funcao, rh20_cargo
+        FROM rhpessoalmov
+        left join rhpescargo   on rhpescargo.rh20_seqpes   = rhpessoalmov.rh02_seqpes
+        WHERE 1=1 
+        AND rh02_regist     = $matricula
+        AND rh02_anousu = $ano
+        AND rh02_mesusu = $mes
+        ";
+
+        $rs = \db_query($sql);
+        // echo $sql;
+        // db_criatabela($rs);
+        // exit;
+        if (!$rs) {
+            throw new \Exception("Erro na busca no evt2206");
+        }
+        $oDados = \db_utils::getCollectionByRecord($rs);
+
+        // Comparar valores obtidos com os valores de origem
+        $salari = $oDados->rh02_salari;
+        $funcao = $oDados->rh02_funcao;
+        $carga = $oDados->rh02_carga;
+
+        if ($salari != $rh02_salari_origem) {
+            return "reajuste salarial";
+        } elseif ($funcao != $rh02_funcao_origem || $carga != $rh02_carga_origem) {
+            return "alteração de cargo";
+        }
+
+        return ""; // Não houve alterações
     }
 }
