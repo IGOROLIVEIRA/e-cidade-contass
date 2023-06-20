@@ -39,19 +39,19 @@ db_postmemory($HTTP_POST_VARS);
                             </td>
                             <td>
                                 <?php
-                                    db_input("l20_codigo", 8, $Il20_codigo, true, "text", 3, "onchange='js_pesquisa_liclicita(false);'","","#FFF","width:80px");
+                                    db_input("l20_codigo", 8, $Il20_codigo, true, "text", 1, "onchange='js_pesquisa_liclicita(false);'","","#FFF","width:80px");
                                 ?>
                                 <b>
                                     Modalidade:
                                 </b>
                                 <?php
-                                db_input("l03_descr", 8, $Il03_descr, true, "text", 3,"","","#FFF","width: 300px;");
+                                db_input("l03_descr", 8, $Il03_descr, true, "text", 3,"","","","width: 300px;");
                                 ?>
                                 <b>
                                     N°:
                                 </b>
                                 <?php
-                                db_input("l20_numero", 8, $Il20_numero, true, "text", 3,"","","#FFF","width: 100px;");
+                                db_input("l20_numero", 8, $Il20_numero, true, "text", 3,"","","","width: 100px;");
                                 ?>
                             </td>
 
@@ -71,7 +71,7 @@ db_postmemory($HTTP_POST_VARS);
                             <td colspan="2">
                                 <?php
                                     $pc67_motivo = "";
-                                    db_textarea("l20_objeto",10,100,"",true,"text",1,"","","","");
+                                    db_textarea("l20_objeto",10,100,"",true,"text",3,"","","#DEB887","");
                                 ?>
                             </td>
                         </tr>
@@ -96,6 +96,16 @@ db_postmemory($HTTP_POST_VARS);
                     document.form1.l20_codigo.value = '';
                 }
             }
+        }
+
+        function js_mostraliclicita(_, erro) {
+            if (erro == true) {
+                document.form1.l20_codigo.value = '';
+                document.form1.l20_codigo.focus();
+                return;
+            }
+            codigo = document.form1.l20_codigo.value;
+            js_busca_dados_liclicita(codigo,"BuscarDados","js_retornobuscarlicitacao");
         }
 
         function js_mostraliclicita1(chave1) {
@@ -123,9 +133,9 @@ db_postmemory($HTTP_POST_VARS);
         }
 
         function js_retornobuscarlicitacao(oAjax) {
-            console.log("chegou no retorno");
+            
             let oRetorno = eval("(" + oAjax.responseText + ")");
-            console.log(oRetorno);
+
             const numero = oRetorno.message.numero;
             if (oRetorno.message.situacao != 0) {
                 return alert(`
@@ -145,7 +155,5 @@ db_postmemory($HTTP_POST_VARS);
             alert(oRetorno.message);
             console.log("processou");
         }
-
-
     </script>
 </body>
