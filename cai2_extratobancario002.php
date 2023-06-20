@@ -1322,16 +1322,22 @@ if($imprime_pdf == 'p'){
 	$pdf->SetTextColor(0,0,0);
 	$pdf->setfillcolor(235);
 	$pdf->AutoPageBreak = false;
-	$pdf->AddPage("L");
+	$quebrar_contas == 'n'? $pdf->AddPage("L"):AddWithoutPageNumber($pdf,"L");
 
 	$quebra_data = "";
+	$contaquebra = 0;
 	$lQuebra_Historico = false;
 	foreach ($aContas as $oConta) {
 		$lImprimeSaldo = true;
-		if ($pdf->GetY() > $pdf->h - 25){
+		if ($quebrar_contas == 'n' && $pdf->GetY() > $pdf->h - 25){
 
-			$pdf->AddPage("L");
+			$quebrar_contas == 'n'? $pdf->AddPage("L"):AddWithoutPageNumber($pdf,"L");
+
 		}
+		if ($quebrar_contas == 's' && $oConta->k13_reduz != $contaquebra && $contaquebra != 0){
+			AddWithoutPageNumber($pdf,"L");	
+		}
+		$contaquebra = $oConta->k13_reduz;
 
 		imprimeConta($pdf,$oConta,$lImprimeSaldo);
 		$lImprimeSaldo = false;
@@ -1355,7 +1361,7 @@ if($imprime_pdf == 'p'){
 
 					if ($pdf->GetY() > $pdf->h - 25){
 
-						$pdf->AddPage("L");
+						$quebrar_contas == 'n'? $pdf->AddPage("L"):AddWithoutPageNumber($pdf,"L");
 
 						imprimeConta($pdf,$oConta,$lImprimeSaldo);
 						imprimeCabecalho($pdf);
@@ -1386,7 +1392,7 @@ if($imprime_pdf == 'p'){
 						if(!isset($oMovimento->agrupado)){
 							if ($pdf->GetY() > $pdf->h - 25){
 
-								$pdf->AddPage("L");
+								$quebrar_contas == 'n'? $pdf->AddPage("L"):AddWithoutPageNumber($pdf,"L");
 
 								imprimeConta($pdf,$oConta,$lImprimeSaldo);
 								imprimeCabecalho($pdf);
@@ -1398,7 +1404,7 @@ if($imprime_pdf == 'p'){
 							$pdf->ln();
 							if ($pdf->GetY() > $pdf->h - 25){
 
-								$pdf->AddPage("L");
+								$quebrar_contas == 'n'? $pdf->AddPage("L"):AddWithoutPageNumber($pdf,"L");
 
 								imprimeConta($pdf,$oConta,$lImprimeSaldo);
 								imprimeCabecalho($pdf);
@@ -1411,7 +1417,7 @@ if($imprime_pdf == 'p'){
 							$pdf->ln();
 							if ($pdf->GetY() > $pdf->h - 25){
 
-								$pdf->AddPage("L");
+								$quebrar_contas == 'n'? $pdf->AddPage("L"):AddWithoutPageNumber($pdf,"L");
 
 								imprimeConta($pdf,$oConta,$lImprimeSaldo);
 								imprimeCabecalho($pdf);
@@ -1428,7 +1434,7 @@ if($imprime_pdf == 'p'){
 								while ($oMovimento->historico!=""){
 									$lh = $lh + 1 ;
 									if ($pdf->gety() > $pdf->h - 25){
-										$pdf->addPage("L");
+										$quebrar_contas == 'n'? $pdf->AddPage("L"):AddWithoutPageNumber($pdf,"L");
 										$lQuebra_Historico = true;
 									}
 									$pdf->Cell(20,5,"",0,0,"C",0);
@@ -1465,17 +1471,18 @@ if($imprime_pdf == 'p'){
 		$saldo_dia_final = 0;
 		imprimeTotalMovConta($pdf,$oConta->debitado,$oConta->creditado,$oConta->atual);
 		$pdf->Ln(5);
+	
 	}
 
 	if ($pdf->GetY() > $pdf->h - 25){
 
-		$pdf->AddPage("L");
+		$quebrar_contas == 'n'? $pdf->AddPage("L"): AddWithoutPageNumber($pdf,"L");
 
 	}
 
 
     // die;
-	$pdf->Output();
+	$quebrar_contas == 'n'? $pdf->Output(): OutputWithoutPageNumber($pdf);
 	exit();
 }else{
 	//aqui vai gerar o txt
@@ -1891,4 +1898,245 @@ function condicao_retencao($bloco_query) {
 
     return $sql;
 }
+
+function AddWithoutPageNumber($pdf,$orientation = '', $size = '')
+{
+	// Start a new page
+	if ($pdf->state == 0)
+		$pdf->Open();
+
+	$family = $pdf->FontFamily;
+	$style = $pdf->FontStyle . ($pdf->underline ? 'U' : '');
+	$fontsize = $pdf->FontSizePt;
+	$lw = $pdf->LineWidth;
+	$dc = $pdf->DrawColor;
+	$fc = $pdf->FillColor;
+	$tc = $pdf->TextColor;
+	$cf = $pdf->ColorFlag;
+
+	if ($pdf->page > 0) {
+		// Page footer
+		$pdf->InFooter = true;
+		Footer($pdf);
+		$pdf->InFooter = false;
+		// Close page
+		$pdf->_endpage();
+	}
+	// Start new page
+	$pdf->_beginpage($orientation, $size);
+	// Set line cap style to square
+	$pdf->_out('2 J');
+	// Set line width
+	$pdf->LineWidth = $lw;
+	$pdf->_out(sprintf('%.2F w', $lw * $pdf->k));
+	// Set font
+	if ($family)
+		$pdf->SetFont($family, $style, $fontsize);
+	// Set colors
+	$pdf->DrawColor = $dc;
+	if ($dc != '0 G')
+		$pdf->_out($dc);
+	$pdf->FillColor = $fc;
+	if ($fc != '0 g')
+		$pdf->_out($fc);
+	$pdf->TextColor = $tc;
+	$pdf->ColorFlag = $cf;
+	// Page header
+	$pdf->InHeader = true;
+	$pdf->Header();
+	$pdf->InHeader = false;
+
+	// Restore line width
+	if ($pdf->LineWidth != $lw) {
+		$pdf->LineWidth = $lw;
+		$pdf->_out(sprintf('%.2F w', $lw * $pdf->k));
+	}
+	// Restore font
+	if ($family)
+		$pdf->SetFont($family, $style, $fontsize);
+	// Restore colors
+	if ($pdf->DrawColor != $dc) {
+		$pdf->DrawColor = $dc;
+		$pdf->_out($dc);
+	}
+	if ($pdf->FillColor != $fc) {
+		$pdf->FillColor = $fc;
+		$pdf->_out($fc);
+	}
+	$pdf->TextColor = $tc;
+	$pdf->ColorFlag = $cf;
+}
+
+//Page footer
+function Footer($pdf)
+{
+  //#00#//footer
+  //#10#//Este método é usado para criar o rodapé da página. Ele é automaticamente chamado por |addPage|
+  //#10#//e |close| e não deve ser chamado diretamente pela aplicação. A  implementação  em  FPDF  está
+  //#10#//vazia, então você  deve  criar  uma  subclasse  e  sobrepor  o  método  se  você  quiser   um
+  //#10#//processamento específico.
+  //#15#//footer()
+  //#99#//Exemplo:
+  //#99#//class PDF extends FPDF
+  //#99#//{
+  //#99#//  function Footer()
+  //#99#//  {
+  //#99#//    Vai para 1.5 cm da borda inferior
+  //#99#//      $pdf->SetY(-15);
+  //#99#//    Seleciona Arial itálico 8
+  //#99#//      $pdf->SetFont('Arial','I',8);
+  //#99#//    Imprime o número da página centralizado
+  //#99#//      $pdf->Cell(0,10,'Page '.$pdf->PageNo(),0,0,'C');
+  //#99#//  }
+  //#99#//}
+  global $conn;
+  global $result;
+  global $url;
+  
+
+	/*
+	   * Modificação para exibir o caminho do menu
+	   * na base do relatório
+	   */
+	//$sSqlMenuAcess = "SELECT fc_montamenu(funcao) as menu from db_itensmenu where id_item =".db_getsession("DB_itemmenu_acessado");
+	$sSqlMenuAcess = " select trim(modulo.descricao)||'>'||trim(menu.descricao)||'>'||trim(item.descricao) as menu
+						   from db_menu
+						  inner join db_itensmenu as modulo on modulo.id_item = db_menu.modulo
+						  inner join db_itensmenu as menu on menu.id_item = db_menu.id_item
+						  inner join db_itensmenu as item on item.id_item = db_menu.id_item_filho
+						  where id_item_filho = " . db_getsession("DB_itemmenu_acessado") . "
+							and modulo = " . db_getsession("DB_modulo");
+
+	$rsMenuAcess   = db_query($conn, $sSqlMenuAcess);
+	$sMenuAcess    = substr(pg_result($rsMenuAcess, 0, "menu"), 0, 50);
+
+	//Position at 1.5 cm from bottom
+	$pdf->SetFont('Arial', '', 5);
+	$pdf->text(10, $pdf->h - 8, 'Base: ' . @$GLOBALS["DB_NBASE"]);
+	$pdf->SetFont('Arial', 'I', 6);
+	$pdf->SetY(-10);
+	$nome = @$GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"];
+	$nome = substr($nome, strrpos($nome, "/") + 1);
+	$result_nomeusu = db_query($conn, "select nome as nomeusu from db_usuarios where id_usuario =" . db_getsession("DB_id_usuario"));
+	if (pg_numrows($result_nomeusu) > 0) {
+	  $nomeusu = pg_result($result_nomeusu, 0, 0);
+	}
+	if (isset($nomeusu) && $nomeusu != "") {
+	  $emissor = $nomeusu;
+	} else {
+	  $emissor = @$GLOBALS["DB_login"];
+	}
+	$sDataSistema = '';
+	$lDateFooter = true;
+	if ($lDateFooter) {
+	  $sDataSistema = '  Exerc: ' . db_getsession("DB_anousu") . '   Data: ' . date("d-m-Y", db_getsession("DB_datausu")) . " - " . date("H:i:s");
+	}
+	$pdf->Cell(0, 10, $sMenuAcess . "  " . $nome . '   Emissor: ' . substr(ucwords(strtolower($emissor)), 0, 30) . $sDataSistema, "T", 0, 'L'); 
+}
+
+function OutputWithoutPageNumber($pdf,$file='',$download=false,$mostrar=false)
+//#00#//output
+//#10#//Salva um documento PDF em um arquivo local ou envia-o para o browser. Neste último caso, o  plug-in  será  usado
+//#10#//(se instalado) ou um download (caixa de diálogo "Salvar como") será apresentada.
+//#10#//O método primeiro chama |close|, se necessário para terminar o documento.
+//#15#//output($file='',$download=false)
+//#20#//file         : O nome do arquivo. Se vazio ou não informado, o documento será enviado ao browser para que ele  o
+//#20#//               use com o plug-in (se instalado).
+//#20#//download     : Se file for informado, indica que ele deve ser salvo localmente  (false) ou  mostrar a  caixa  de
+//#20#//               diálogo "Salvar como" no browser. Valor padrão: false.
+
+{
+	if($file=='')
+	  $file = $pdf->GeraArquivoTemp();
+
+  //Output PDF to file or browser
+  global $HTTP_ENV_VARS;
+
+  if($pdf->state<3)
+  	CloseWithoutPageNumber($pdf);
+  if($file=='')
+  {
+	//Send to browser
+	Header('Content-Type: application/pdf');
+				header("Expires: Mon, 26 Jul 2001 05:00:00 GMT");              // Date in the past
+				header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modified
+				header("Cache-Control: no-store, no-cache, must-revalidate");  // HTTP/1.1
+				header("Cache-Control: post-check=0, pre-check=0", false);
+				header("Pragma: no-cache");                                    // HTTP/1.0
+				header("Cache-control: private");
+
+
+	if(headers_sent())
+		$pdf->Error('Some data has already been output to browser, can\'t send PDF file');
+	Header('Content-Length: '.strlen($pdf->buffer));
+	echo $pdf->buffer;
+
+  }
+  else
+  {
+		  if($download)
+	{
+
+		   if(isset($HTTP_ENV_VARS['HTTP_USER_AGENT']) and strpos($HTTP_ENV_VARS['HTTP_USER_AGENT'],'MSIE 5.5'))
+			 Header('Content-Type: application/dummy');
+		   else
+			 Header('Content-Type: application/octet-stream');
+		   if(headers_sent())
+		   	 $pdf->Error('Some data has already been output to browser, can\'t send PDF file');
+			 Header('Content-Length: '.strlen($pdf->buffer));
+			 Header('Content-disposition: attachment; filename='.$file);
+	   echo $pdf->buffer;
+	}
+	else
+	{
+
+		  ////////// NÃO RETIRAR ESSE IF SEM FALAR COM MARLON
+		  ////////// NECESSÁRIO PARA PROGRAMA DO MÓDULO PESSOAL
+		  ////////// geração de arquivos BB
+		  if($mostrar == false){
+		header('Content-Type: application/pdf');
+		header("Expires: Mon, 26 Jul 2001 05:00:00 GMT");              // Date in the past
+		header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modified
+		header("Cache-Control: no-store, no-cache, must-revalidate");  // HTTP/1.1
+		header("Cache-Control: post-check=0, pre-check=0", false);
+		header("Pragma: no-cache");                                    // HTTP/1.0
+		header("Cache-control: private");
+		echo $pdf->buffer;
+		  }
+
+
+	  //Save file locally
+	  $f=fopen($file,'wb');
+	  if(!$f)
+	  	$pdf->Error('Unable to create output file: '.$file);
+	  fwrite($f,$pdf->buffer,strlen($pdf->buffer));
+	  fclose($f);
+
+	  	$pdf->arquivo_retorno  = $file;
+
+//echo "<script>location.href='tmp/".$file."'</script>";
+
+
+	}
+  }
+}
+
+function CloseWithoutPageNumber($pdf)
+{
+	// Terminate document
+	if ($pdf->state == 3)
+		return;
+	if ($pdf->page == 0)
+		AddWithoutPageNumber($pdf);
+	// Page footer
+	$pdf->InFooter = true;
+	Footer($pdf);
+	$pdf->InFooter = false;
+	// Close page
+	$pdf->_endpage();
+	// Close document
+	$pdf->_enddoc();
+}
+
+
 ?>
