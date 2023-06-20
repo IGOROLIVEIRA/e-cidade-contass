@@ -417,8 +417,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
         LEFT JOIN manutencaolicitacao ON manutlic_licitacao = l20_codigo
         LEFT JOIN liclicitaoutrosorgaos ON lic211_sequencial = e54_licoutrosorgaos
-        WHERE 
-        e60_codemp = '1291' and
+        WHERE
         e60_anousu = " . db_getsession("DB_anousu") . "
         AND o56_anousu = " . db_getsession("DB_anousu") . "
         AND o58_anousu = " . db_getsession("DB_anousu") . "
@@ -433,9 +432,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
     $aCaracteres = array("Â°", chr(13), chr(10), "'", ";");
     // matriz de entrada
-    /**
-     * matriz de entrada
-     */
+    
     $what = array(
       'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û',
       'Ä', 'Ã', 'À', 'Á', 'Â', 'Ê', 'Ë', 'È', 'É', 'Ï', 'Ì', 'Í', 'Ö', 'Õ', 'Ò', 'Ó', 'Ô', 'Ü', 'Ù', 'Ú', 'Û',
