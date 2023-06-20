@@ -2148,8 +2148,7 @@ class Acordo
     {
 
         $oDaoAcordoPosicao = db_utils::getDao("acordoposicao");
-        $sSqlPosicao       = $oDaoAcordoPosicao->sql_query_file(null, "ac26_sequencial", 'ac26_numero', "ac26_acordo = {$this->getCodigoAcordo()} and ac26_numeroaditamento != '' and ac26_numeroaditamento is not null");
-
+        $sSqlPosicao       = $oDaoAcordoPosicao->sql_query_file(null, "ac26_sequencial", 'ac26_numero', "ac26_acordo = {$this->getCodigoAcordo()} and ac26_acordoposicaotipo not in (1)");
         $rsPosicao = $oDaoAcordoPosicao->sql_record($sSqlPosicao);
         for ($i = 0; $i < $oDaoAcordoPosicao->numrows; $i++) {
 

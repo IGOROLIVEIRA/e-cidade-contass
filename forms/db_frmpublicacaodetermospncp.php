@@ -131,7 +131,7 @@ db_app::load("estilos.css, grid.style.css");
                 aLinha[2] = oLinha.numeroAditamento;
                 aLinha[3] = oLinha.situacao.urlDecode();
                 aLinha[4] = oLinha.data;
-                aLinha[5] = oLinha.numtermopncp;
+                aLinha[5] = Number(oLinha.numtermopncp);
                 aLinha[6] = oLinha.Justificativa.urlDecode();
                 oGridItens.addRow(aLinha);
 
