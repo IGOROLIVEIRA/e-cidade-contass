@@ -125,6 +125,7 @@ $clrotulo->label("pc01_descrmater");
 
                 <table style="display: none" id="myTable" class="display nowrap">
                     <thead>
+<<<<<<< HEAD
                         <tr>
                             <th data-orderable="false"></th>
                             <th data-orderable="false">Código</th>
@@ -139,6 +140,22 @@ $clrotulo->label("pc01_descrmater");
                             <th data-orderable="false">Total</th>
                             <th data-orderable="false" style="display:none;">Teste</th>
                         </tr>
+=======
+                    <tr>
+                        <th data-orderable="false"></th>
+                        <th data-orderable="false">Código</th>
+                        <th data-orderable="false">Item</th>
+                        <th data-orderable="false">Descrição</th>
+                        <th data-orderable="false">Unidade</th>
+                        <th data-orderable="false">Marca</th>
+                        <th data-orderable="false">Controla Qtd.</th>
+                        <th data-orderable="false">Qtdd</th>
+                        <th data-orderable="false">Vlr. Unit.</th>
+                        <th data-orderable="false">Desc. %</th>
+                        <th data-orderable="false">Total</th>
+                        <th data-orderable="false" style="display:none;">Teste</th>
+                    </tr>
+>>>>>>> 9fd961db1... OC20614 - pause
                     </thead>
                 </table>
             </div>
@@ -336,7 +353,7 @@ $clrotulo->label("pc01_descrmater");
         const item = origem.id.split('_');
         const id = item[1];
 
-        if ($('#servico_' + id).val() == 1) {
+        if ($('#servico_' + id).val() == 0) {
             $('#qtd_' + id).val(1);
             $('#qtd_' + id).attr('readonly', true);
         } else {
