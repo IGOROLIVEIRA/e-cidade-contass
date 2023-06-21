@@ -1708,7 +1708,8 @@ if ($x->consultarDataDoSistema == true) {
 
 
     function js_validaDataAutorizacao() {
-        if (this.value == '') return alert('Usuário: preencha a data da autorização de empenho.')
+        if (this.value == '') return alert('Usuário: preencha a data da autorização de empenho.');
+        js_divCarregando('Aguarde, realziando validação da data de autorização', 'msgbox');
         var oParam = new Object();
         oParam.e54_emiss = document.getElementById('e54_emissao').value;
         oParam.ac16_sequencial = document.getElementById('oTxtCodigoAcordo').value;
@@ -1725,6 +1726,7 @@ if ($x->consultarDataDoSistema == true) {
             alert(oRetorno.erro.urlDecode());
             document.getElementById('e54_emissao').value = '';
         }
+        js_removeObj("msgbox");
     }
 </script>
 <?php
