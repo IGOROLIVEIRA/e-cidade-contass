@@ -166,7 +166,7 @@ class cl_liclicitaportalcompras
         $this->numrows = pg_numrows($result);
          if($this->numrows==0){
            $this->erro_banco = "";
-           $this->erro_sql   = "Record Vazio na Tabela:liclicitaproc";
+           $this->erro_sql   = "Record Vazio na tabela.";
            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
            $this->erro_status = "0";

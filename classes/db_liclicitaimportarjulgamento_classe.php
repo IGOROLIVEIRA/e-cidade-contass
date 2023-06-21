@@ -73,23 +73,23 @@ class cl_liclicitaimportarjulgamento
     public function buscarModalidadeComObjeto($codigo)
     {
         $sql = "select distinct
-        l20_codigo as id,
-        l20_objeto as objeto,
-        l20_numero as numeroprocesso,
-        l20_anousu as anoprocesso,
-        l20_licsituacao as situacao,
-        l03_descr as modalidade
-        from liclicita
-        join cflicita on l03_codigo=l20_codtipocom
-        where
-        l20_codigo=".$codigo;
+                l20_codigo as id,
+                l20_objeto as objeto,
+                l20_numero as numeroprocesso,
+                l20_anousu as anoprocesso,
+                l20_licsituacao as situacao,
+                l03_descr as modalidade
+            from liclicita
+            join cflicita on l03_codigo=l20_codtipocom
+            where
+                l20_codigo=".$codigo;
         return $this->sql_record($sql);
     }
 
     public function buscaFornecedor($cnpj)
     {
         $sql = "
-        select pc60_cnpjcpf from pcforne where pc60_cnpjcpf ='$cnpj'
+            select pc60_cnpjcpf from pcforne where pc60_cnpjcpf ='$cnpj'
         ";
         return $this->sql_record($sql);
     }
@@ -97,7 +97,7 @@ class cl_liclicitaimportarjulgamento
     public function buscaNumCgm(string $cnpj)
     {
         $sql = "
-        select  z01_numcgm as numcgm from protocolo.db_cgmcpf where z01_cpf = '$cnpj'
+            select  z01_numcgm as numcgm from cgm where z01_cgccpf = '$cnpj'
         ";
 
         return $this->sql_record($sql);
@@ -106,17 +106,17 @@ class cl_liclicitaimportarjulgamento
     public function buscaCpfCnpj(string $numcgm)
     {
         $sql = "
-        select z01_cpf from protocolo.db_cgmcpf where z01_numcgm = '$numcgm'
+            select z01_cpf from protocolo.db_cgmcpf where z01_numcgm = '$numcgm'
         ";
 
         return $this->sql_record($sql);
     }
 
-    public function buscaL21codigo(int $codigo)
+    public function buscaL21codigo(int $l21Ordem, int $codigo)
     {
         $sql = "
         select
-	        l21_codigo
+	        l21_codigo as idliclicitem
         from liclicita
             join cflicita on l03_codigo=l20_codtipocom
             join liclicitem on l21_codliclicita = l20_codigo
@@ -133,7 +133,7 @@ class cl_liclicitaimportarjulgamento
             left join itemprecoreferencia on si02_itemproccompra=pc22_orcamitem
             left join solicitaregistropreco on pc54_solicita=pc10_numero
         where
-            l04_seq = $codigo
+            l21_ordem = $l21Ordem and l20_codigo = $codigo
        order by l21_ordem;
         ";
 
@@ -152,15 +152,19 @@ class cl_liclicitaimportarjulgamento
           $this->erro_status = "0";
           return false;
         }
+
         $this->numrows = pg_numrows($result);
-         if($this->numrows==0){
+
+         if($this->numrows==0) {
            $this->erro_banco = "";
-           $this->erro_sql   = "Record Vazio na Tabela:liclicitaproc";
+           $this->erro_sql   = "Record vazio";
            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
            $this->erro_status = "0";
            return false;
          }
+
+         $this->erro_status = "1";
         return $result;
       }
 }

@@ -1,9 +1,5 @@
 <?php
 
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
-
 require_once("dbforms/db_funcoes.php");
 require_once("libs/JSON.php");
 require_once("libs/db_stdlib.php");
@@ -69,13 +65,16 @@ switch ($oParam->exec) {
 
             $validadorFornecedores->execute($julgamento);
 
-            $insereJugalmento = new InsereJulgamento();
-            $insereJugalmento->execute($julgamento);
+            $insereJugalmento = new  InsereJulgamento;
+            $resultado = $insereJugalmento->execute($julgamento);
+
+            if ($resultado['success'] === false) {
+                throw new Exception($resultado['message']);
+            }
 
             $oRetorno->message = "Julgamento inserido com sucesso";
             $oRetorno->status = 1;
         } catch(Exception $oErro) {
-
             $oRetorno->message = $oErro->getMessage();
             $oRetorno->status  = 2;
         }

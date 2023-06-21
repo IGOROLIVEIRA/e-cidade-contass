@@ -146,7 +146,8 @@ class Julgamento
      */
     public function setDataAberturaProposta(string $dataAberturaProposta): self
     {
-        $this->dataAberturaProposta = $dataAberturaProposta;
+        $date = DateTime::createFromFormat('d/m/Y', $dataAberturaProposta);
+        $this->dataAberturaProposta = $date->format('Y-m-d');
 
         return $this;
     }

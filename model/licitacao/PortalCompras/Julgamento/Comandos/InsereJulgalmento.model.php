@@ -3,7 +3,6 @@
 require_once("model/licitacao/PortalCompras/Julgamento/Julgamento.model.php");
 require_once("classes/db_liclicitaimportarjulgamento_classe.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Proposta.model.php");
-//require_once("model/licitacao/PortalCompras/Julgamento/Item.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Ranking.model.php");
 require_once("classes/db_pcorcam_classe.php");
 require_once("classes/db_pcorcamitem_classe.php");
@@ -30,10 +29,9 @@ class InsereJulgamento
      * Inser Julgamento
      *
      * @param Julgamento $julgamento
-     * @return void
-     * @throws Exception
+     * @return array
      */
-    public function execute(Julgamento $julgamento)
+    public function execute(Julgamento $julgamento): array
     {
         $clpcorcam = new cl_pcorcam;
 
@@ -45,9 +43,11 @@ class InsereJulgamento
         $clpcorcam->pc20_dtate = $julgamento->getDataProposta();
         $clpcorcam->pc20_hrate = $julgamento->getHoraProposta();
         $lotes = $julgamento->getLotes();
-        $itens = array_map(fn(Lote $lote) => $lote->getItems(), $lotes);
+
         $participantes = $julgamento->getParticipantes();
         $dataAbertura = $julgamento->getDataAberturaProposta();
+
+
 
         try{
             db_inicio_transacao();
@@ -56,35 +56,41 @@ class InsereJulgamento
 
             $idPcorcam = (int)$clpcorcam->pc20_codorc;
 
-            /** @var Item[] $itens */
-            foreach($itens as $item) {
-                $propostas = $item->getPropostas();
-                $tipoJulgamento = $item->getTipoJulgamento();
-                $ranking = $item->getRanking();
+            foreach($lotes as $lote) {
+                $itens = $lote->getItems();
 
-                /** @var Proposta[] $propostas */
-                foreach($propostas as $proposta) {
-                    $numcgm = $this->buscaNumcgm($proposta->getIdFornecedor());
+                /** @var Item[] $itens */
+                foreach($itens as $item) {
+                    $propostas = $item->getPropostas();
+                    $tipoJulgamento = $item->getTipoJulgamento();
+                    $ranking = $item->getRanking();
 
-                    $idPcorcamforne   = $this->lidaPcorcamforne($numcgm, $idPcorcam);
                     $idPcorcamitem    = $this->lidaPcorcamitem($idPcorcam);
-                    $idPcorcamitemlic = $this->lidaPcorcamitemlic($item->getId(), $idPcorcamitem);
-                    $idPcorcamval     = $this->lidaPcorcamval(
-                        $proposta,
-                        $idPcorcamforne,
-                        $idPcorcamitem,
-                        $tipoJulgamento
-                    );
-                    $this->lidaPcorcamjulg(
-                        $proposta,
-                        $ranking,
-                        $idPcorcamitem,
-                        $idPcorcamforne
-                    );
+                    $this->lidaPcorcamitemlic($item->getId(), $idPcorcamitem, $idJulgamento);
 
+                    /** @var Proposta[] $propostas */
+                    foreach($propostas as $proposta) {
+                        $numcgm = $this->buscaNumcgm($proposta->getIdFornecedor());
+                        //var_dump($numcgm);
+                        $idPcorcamforne   = $this->lidaPcorcamforne($numcgm, $idPcorcam);
+
+                        $this->lidaPcorcamval(
+                            $proposta,
+                            $idPcorcamforne,
+                            $idPcorcamitem,
+                            $tipoJulgamento
+                        );
+                        $this->lidaPcorcamjulg(
+                            $proposta,
+                            $ranking,
+                            $idPcorcamitem,
+                            $idPcorcamforne
+                        );
+                    }
                 }
             }
 
+            //var_dump("chegou aqui");
             /** @var Participantes[] $participantes */
             foreach($participantes as $participante) {
                 $numcgm = $this->buscaNumcgm($participante->getCnpj());
@@ -101,10 +107,16 @@ class InsereJulgamento
             $this->lidaLiclicita($idJulgamento);
 
             db_fim_transacao(false);
-
+            //var_dump("sucesso");
+            return ['success' => true];
         } catch(Exception $e) {
+            //var_dump("erro");
+            //var_dump(utf8_encode($e->getMessage()));
             db_fim_transacao(true);
-            throw new Exception($e->getMessage());
+            return [
+                'success' => false,
+                 'message' =>utf8_encode($e->getMessage())
+            ];
         }
     }
 
@@ -118,8 +130,8 @@ class InsereJulgamento
     {
         $numcgmResource = $this->climportjulgamento->buscaNumCgm($cnpj);
 
-        if ($this->climportjulgamento->erro_status == 0) {
-            throw new Exception($this->climportjulgamento->erro_msg);
+        if ((int)$this->climportjulgamento->erro_status === 0) {
+            throw new Exception('Numcgm: '.$this->climportjulgamento->erro_msg);
         }
 
         $numcgm = (db_utils::fieldsMemory($numcgmResource, 0))->numcgm;
@@ -153,15 +165,15 @@ class InsereJulgamento
 
         $clpcorcamforne->pc21_codorc     = $idPcorcam;
         $clpcorcamforne->pc21_numcgm     = $numcgm;
-        $clpcorcamforne->pc21_importado  = true;
+        $clpcorcamforne->pc21_importado  = 't';
         $clpcorcamforne->pc21_prazoent   = null;
         $clpcorcamforne->pc21_validadorc = null;
         $clpcorcamforne->incluir(null);
 
-        if ($clpcorcamforne->erro_status  != '1') {
-            throw new Exception($clpcorcamforne->erro_msg);
+        if ((int)$clpcorcamforne->erro_status  !== 1) {
+            throw new Exception("Pcorcamforne ".$clpcorcamforne->erro_msg. $clpcorcamforne->erro_campo);
         }
-
+        var_dump((int)$clpcorcamforne->pc21_orcamforne);
         return (int)$clpcorcamforne->pc21_orcamforne;
     }
 
@@ -177,8 +189,8 @@ class InsereJulgamento
         $clpcorcamitem->pc22_codorc = $idPcorcam;
 		$clpcorcamitem->incluir(null);
 
-        if ( $clpcorcamitem->erro_status  != '1' ) {
-            throw new Exception($clpcorcamitem->erro_msg);
+        if ( (int)$clpcorcamitem->erro_status  !== 1 ) {
+            throw new Exception("Pcorcamitem ".$clpcorcamitem->erro_msg);
         }
 
         return $clpcorcamitem->pc22_orcamitem;
@@ -191,18 +203,25 @@ class InsereJulgamento
      * @param integer $idPcorcamitem
      * @return integer
      */
-    private function lidaPcorcamitemlic(int $id, int $idPcorcamitem ): int
+    private function lidaPcorcamitemlic(int $id, int $idPcorcamitem, int $idJulgamento  ): int
     {
         $clpcorcamitemlic                  = new cl_pcorcamitemlic;
-        $clpcorcamitemlic->pc26_liclicitem = $this->climportjulgamento->buscaL21codigo(
-            $id
+        $result = $this->climportjulgamento->buscaL21codigo(
+            $id,
+            $idJulgamento
         );
+
+        if (empty($result)) {
+            throw new Exception("Pcorcamitemlic - erro ao buscar pc26_liclicitem");
+        }
+
+        $clpcorcamitemlic->pc26_liclicitem = (int)(db_utils::fieldsMemory($result, 0))->idliclicitem;
 
         $clpcorcamitemlic->pc26_orcamitem  = $idPcorcamitem;
         $clpcorcamitemlic->incluir(null);
 
-        if ($clpcorcamitemlic->erro_status  != '1') {
-            throw new Exception($clpcorcamitemlic->erro_msg);
+        if ((int)$clpcorcamitemlic->erro_status  !== 1) {
+            throw new Exception("Pcorcamitemlic ".$clpcorcamitemlic->erro_msg);
         }
 
         return (int)$clpcorcamitemlic->pc26_liclicitem;
@@ -231,8 +250,8 @@ class InsereJulgamento
 
         $clpcorcamval->incluir($idOrcamforne, $idOrcamitem);
 
-        if ($clpcorcamval->erro_status  != '1') {
-            throw new Exception($clpcorcamval->erro_msg);
+        if ((int)$clpcorcamval->erro_status  !== 1) {
+            throw new Exception("Pcorcamval ".$clpcorcamval->erro_msg);
         }
     }
 
@@ -249,17 +268,18 @@ class InsereJulgamento
     private function lidaPcorcamjulg(Proposta $proposta, Array $ranking, int $idPcorcamitem, int $idPcorcamforne): void
     {
         $cnpj            = $proposta->getIdFornecedor();
-        $posicaoFiltrada = array_filter($ranking, function(Ranking $posicao) use($cnpj) {
+        $rankingFiltrado = array_filter($ranking, function(Ranking $posicao) use($cnpj) {
             return $posicao->getIdFornecedor() == $cnpj;
         });
+        $posicaoFiltrada = (reset($rankingFiltrado))->getPosicao();
 
         $clpcorcamjulg                  = new cl_pcorcamjulg;
         $clpcorcamjulg->pc24_pontuacao  = $posicaoFiltrada;
 
         $clpcorcamjulg->incluir($idPcorcamitem, $idPcorcamforne);
 
-        if ( $clpcorcamjulg->erro_status  != '1' ) {
-            throw new Exception($clpcorcamjulg->erro_msg);
+        if ((int)$clpcorcamjulg->erro_status  !== 1) {
+            throw new Exception("Pcorcamjulg ".$clpcorcamjulg->erro_msg);
         }
     }
 
@@ -277,13 +297,15 @@ class InsereJulgamento
         string $numcgm,
         int $idJulgamento,
         string $representanteLegal,
-        string $dataHab
+        string $dataHabilitacao
     ): void {
+
+        var_dump($dataHabilitacao);
         $clhabilitacaoforn = new cl_habilitacaoforn;
         $clhabilitacaoforn->l206_fornecedor        = $numcgm;
         $clhabilitacaoforn->l206_licitacao        = $idJulgamento;
         $clhabilitacaoforn->l206_representante    = $representanteLegal;
-        $clhabilitacaoforn->l206_datahab          = $dataHab;
+        $clhabilitacaoforn->l206_datahab          = $dataHabilitacao;
         $clhabilitacaoforn->l206_numcertidaoinss  = null;
         $clhabilitacaoforn->l206_dataemissaoinss  = null;
         $clhabilitacaoforn->l206_datavalidadeinss = null;
@@ -294,10 +316,10 @@ class InsereJulgamento
         $clhabilitacaoforn->l206_dataemissaocndt  = null;
         $clhabilitacaoforn->l206_datavalidadecndt = null;
 
-        $$clhabilitacaoforn->incluir(null);
+        $clhabilitacaoforn->incluir(null);
 
-        if ($clhabilitacaoforn->erro_status  != '1') {
-            throw new Exception($clhabilitacaoforn->erro_msg);
+        if ((int)$clhabilitacaoforn->erro_status  !== 1) {
+            throw new Exception("Habilitacaoforn ".$clhabilitacaoforn->erro_msg);
         }
 
     }
@@ -315,13 +337,13 @@ class InsereJulgamento
         $clliclicitasituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
         $clliclicitasituacao->l11_hora        = db_hora();
         $clliclicitasituacao->l11_obs         = "Julgamento importado plataforma eletrônica";
-        $clliclicitasituacao->l11_licsituacao = 13;
+        $clliclicitasituacao->l11_licsituacao = 1;
         $clliclicitasituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
         $clliclicitasituacao->l11_liclicita   = $idJulgamento;
         $clliclicitasituacao->incluir(null);
 
-        if ( $clliclicitasituacao->erro_status  != '1' ) {
-            throw new Exception($clliclicitasituacao->erro_msg);
+        if ((int)$clliclicitasituacao->erro_status  !== 1) {
+            throw new Exception("Liclicitasituacao". $clliclicitasituacao->erro_msg);
         }
     }
 
@@ -340,8 +362,8 @@ class InsereJulgamento
         $clliclicita->l20_licsituacao = '1';
         $clliclicita->alterar_liclicitajulgamento($l20_codigo);
 
-        if ( $clliclicita->erro_status  != '1' ) {
-            throw new Exception($clliclicita->erro_msg);
+        if ((int)$clliclicita->erro_status  !== 1) {
+            throw new Exception("Liclicita ". $clliclicita->erro_msg);
         }
     }
 }
