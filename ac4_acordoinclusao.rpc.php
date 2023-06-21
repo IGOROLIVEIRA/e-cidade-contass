@@ -650,6 +650,19 @@ try {
 
       break;
 
+    case "validacaoCadastroFornecedor":
+
+      $rsCgmforn = db_query("select z01_cgccpf from cgm where z01_numcgm = {$oParam->iFornecedor}");
+      $sCnpjFornecedor  = db_utils::fieldsMemory($rsCgmforn, 0)->z01_cgccpf;
+
+      $rsPcfornereprlegal = db_query("select * from pcfornereprlegal inner join cgm on z01_numcgm = pc81_cgmresp where pc81_cgmforn = {$oParam->iFornecedor} and z01_cgccpf = '$sCnpjFornecedor'");
+
+      if (strlen($sCnpjFornecedor) == 14 && pg_num_rows($rsPcfornereprlegal) > 0) {
+        throw new Exception("Usuário: No cadastro do fornecedor selecionado, o CGM do Representante está o mesmo CNPJ do CGM do Fornecedor. Corrija o cadastro e selecione novamente o fornecedor.");
+      }
+
+      break;
+
     default:
       throw new ParameterException("Nenhuma Opção Definida");
       break;

@@ -131,7 +131,7 @@ if (isset($alterar) || isset($excluir) || isset($incluir) || isset($verificado))
     $rsPcfornereprlegal = db_query("select * from pcfornereprlegal inner join cgm on z01_numcgm = pc81_cgmresp where pc81_cgmforn = $pc21_numcgm and z01_cgccpf = '$sCnpjFornecedor'");
     if (strlen($sCnpjFornecedor) == 14 && pg_num_rows($rsPcfornereprlegal) > 0) {
       $sqlerro = true;
-      $erro_msg = "Usuário: No cadastro do fornecedor selecionado, o CGM do Representante está o mesmo CGM do Fornecedor. Corrija o cadastro e selecione novamente o fornecedor.";
+      $erro_msg = "Usuário: No cadastro do fornecedor selecionado, o CGM do Representante está o mesmo CNPJ do CGM do Fornecedor. Corrija o cadastro e selecione novamente o fornecedor.";
     }
   }
   //FIM OC 7037
