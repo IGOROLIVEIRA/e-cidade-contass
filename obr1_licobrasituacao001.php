@@ -62,8 +62,21 @@ if (isset($incluir)) {
     }
 
     if ($obr02_situacao == "1") {
-      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null, "*", null, "obr02_seqobra = $obr02_seqobra"));
-      if (pg_num_rows($resultSituacao) > 0) {
+
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null, "obr02_dtsituacao as dtsituacao1", null, "obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
+
+      db_fieldsmemory($resultSituacao, 0);
+      $datasituacao1 = (implode("/", (array_reverse(explode("-", $dtsituacao1)))));
+
+      /* Verificando se a situação iniciada foi cadastrada no mesmo mês da situação a ser inclusa. */
+      if (substr($obr02_dtsituacao, 3, 2) == substr($datasituacao1, 3, 2) && substr($obr02_dtsituacao, 6, 4) == substr($datasituacao1, 6, 4)) {
+        throw new Exception('A obra não poderá estar "NÃO INICIADA" e "INICIADA" no mesmo mês de cadastro.');
+      }
+
+      $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null, "obr02_situacao as situacao", "obr02_situacao", "obr02_seqobra = $obr02_seqobra"));
+      db_fieldsmemory($resultSituacao, 0);
+
+      if (pg_num_rows($resultSituacao) > 2 || pg_num_rows($resultSituacao) == 1 && $situacao == "1") {
         throw new Exception("Obra já iniciada!");
         $sqlerro = true;
       }
@@ -71,13 +84,16 @@ if (isset($incluir)) {
 
     if ($obr02_situacao == "2") {
       $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null, "obr02_dtsituacao as dtsituacao1", null, "obr02_seqobra = $obr02_seqobra and obr02_situacao = 1"));
-      if (pg_num_rows($resultSituacao) <= 0) {
-        throw new Exception("Obra sem cadastro inicial informado!");
-        $sqlerro = true;
-      }
 
       db_fieldsmemory($resultSituacao, 0);
       $data1 = (implode("/", (array_reverse(explode("-", $dtsituacao1)))));
+
+      /* Verificando se a situação iniciada foi cadastrada no mesmo mês da situação a ser inclusa. */
+      if (substr($obr02_dtsituacao, 3, 2) == substr($data1, 3, 2) && substr($obr02_dtsituacao, 6, 4) == substr($data1, 6, 4)) {
+        throw new Exception('A obra não poderá estar "INICIADA" e "NÃO INICIADA" no mesmo mês de cadastro.');
+      }
+
+
       $datasituacao1 = DateTime::createFromFormat('d/m/Y', $data1);
 
       if ($dtsituacao <= $datasituacao1) {
