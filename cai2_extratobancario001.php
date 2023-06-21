@@ -103,6 +103,7 @@ function js_relatorio2() {
   query += "&receitaspor="+F.receitaspor.value;
   query += "&pagempenhos="+F.pagempenhos.value;
   query += "&imprime_pdf="+F.imprime_pdf.value;
+  query += "&quebrar_contas="+F.quebrar_contas.value;
   //query += "&conta="+F.k13_conta.value;
   query += "&somente_contas_bancarias="+F.somente_contas_bancarias.value;
   query += "&exibir_retencoes="+F.exibir_retencoes.value;
@@ -255,6 +256,13 @@ function js_relatorio2() {
         <td><?
                $matriz = array("p"=>"pdf","t"=>"csv");
                db_select("imprime_pdf",$matriz,true,1);
+        ?></td>
+      </tr>
+	  <tr>
+        <td nowrap align="right"><b>Quebrar páginas por Contas:</b></td>
+        <td><?
+               $matriz = array("s"=>"sim","n"=>"nao");
+               db_select("quebrar_contas",$matriz,true,1);
         ?></td>
       </tr>
 		</table>
