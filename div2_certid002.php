@@ -1,30 +1,4 @@
 <?
-/*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
- */
-
 include("fpdf151/pdf.php");
 include("libs/db_sql.php");
 include("classes/db_certid_classe.php");
@@ -129,7 +103,7 @@ if ($ordem=="t") {
       if ($rela=="c") {
         $pdf->cell(20,$alt,'Codigo',1,0,"C",1);
         $pdf->cell(30,$alt,'Data de Lançamento',1,0,"C",1);
-        $pdf->cell(90,$alt,'Nome/Razão Social',1,0,"C",1);
+        $pdf->cell(90,$alt,'Nome/Razão Social  CPF/CNPJ',1,0,"C",1);
         $pdf->cell(40,$alt,'Numpre',1,1,"C",1);
       }
       $troca = 0;
@@ -165,11 +139,11 @@ if ($ordem=="t") {
                                     v07_numpre,
                                   	case 
 																		  when a.j01_numcgm is not null
-														            then (select z01_nome from cgm where z01_numcgm = a.j01_numcgm)
+														            then (select CONCAT(z01_nome,' ',z01_cgccpf) as z01_nome from cgm where z01_numcgm = a.j01_numcgm)
 															        when q02_numcgm is not null
-																		    then (select z01_nome from cgm where z01_numcgm = q02_numcgm)
+																		    then (select CONCAT(z01_nome,' ',z01_cgccpf) as z01_nome from cgm where z01_numcgm = q02_numcgm)
 																			else 
-																		    (select z01_nome from cgm where z01_numcgm = v07_numcgm)
+																		    (select CONCAT(z01_nome,' ',z01_cgccpf) as z01_nome from cgm where z01_numcgm = v07_numcgm)
 																		end as z01_nome
                                from certter
                                     inner join certid on certid.v13_certid = certter.v14_certid
@@ -203,11 +177,11 @@ if ($ordem=="t") {
                                     v03_descr,
 																		case 
 																		  when a.j01_numcgm is not null
-														            then (select z01_nome from cgm where z01_numcgm = a.j01_numcgm)
+														            then (select CONCAT(z01_nome,' ',z01_cgccpf) as z01_nome from cgm where z01_numcgm = a.j01_numcgm)
 															        when q02_numcgm is not null
-																		    then (select z01_nome from cgm where z01_numcgm = q02_numcgm)
+																		    then (select CONCAT(z01_nome,' ',z01_cgccpf) as z01_nome from cgm where z01_numcgm = q02_numcgm)
 																			else 
-																		    (select z01_nome from cgm where z01_numcgm = v01_numcgm)
+																		    (select CONCAT(z01_nome,' ',z01_cgccpf) as z01_nome from cgm where z01_numcgm = v01_numcgm)
 																		end as z01_nome
                                from certdiv
                                     inner join certid on certid.v13_certid = v14_certid
@@ -234,7 +208,7 @@ if ($ordem=="t") {
             if ($rela=="c") {
               $pdf->cell(20,$alt,'Codigo',1,0,"C",1);
               $pdf->cell(30,$alt,'Data de Lançamento',1,0,"C",1);
-              $pdf->cell(90,$alt,'Nome/Razão Social',1,0,"C",1);
+              $pdf->cell(90,$alt,'Nome/Razão Social CPF/CNPJ',1,0,"C",1);
               $pdf->cell(40,$alt,'Numpre',1,1,"C",1);
             }
             $troca = 0;
@@ -290,7 +264,7 @@ if ($ordem=="p") {
       if ($rela=="c") {
         $pdf->cell(20,$alt,'Codigo',1,0,"C",1);
         $pdf->cell(30,$alt,'Data de Lançamento',1,0,"C",1);
-        $pdf->cell(90,$alt,'Nome/Razão Social',1,0,"C",1);
+        $pdf->cell(90,$alt,'Nome/Razão Social CPF/CNPJ',1,0,"C",1);
         $pdf->cell(40,$alt,'Numpre',1,1,"C",1);
       }
       $troca = 0;
@@ -316,7 +290,7 @@ if ($ordem=="p") {
                                   v07_parcel,
                                   v07_dtlanc,
                                   v07_numpre,
-                                  z01_nome
+                                  CONCAT(z01_nome,' ',z01_cgccpf) as z01_nome
                              from certter
                                   inner join certid on certid.v13_certid = certter.v14_certid
 																	                 and certid.v13_instit = ".db_getsession('DB_instit')." 
@@ -337,7 +311,7 @@ if ($ordem=="p") {
           if ($rela=="c") {
             $pdf->cell(20,$alt,'Codigo',1,0,"C",1);
             $pdf->cell(30,$alt,'Data de Lançamento',1,0,"C",1);
-            $pdf->cell(90,$alt,'Nome/Razão Social',1,0,"C",1);
+            $pdf->cell(90,$alt,'Nome/Razão Social CPF/CNPJ',1,0,"C",1);
             $pdf->cell(40,$alt,'Numpre',1,1,"C",1);
           }
           $troca = 0;
@@ -395,7 +369,7 @@ if ($ordem=="d") {
       if ($rela=="c") {
         $pdf->cell(20,$alt,'Codigo',1,0,"C",1);
         $pdf->cell(30,$alt,'Data de Lançamento',1,0,"C",1);
-        $pdf->cell(90,$alt,'Nome/Razão Social',1,0,"C",1);
+        $pdf->cell(90,$alt,'Nome/Razão Social CPF/CNPJ',1,0,"C",1);
         $pdf->cell(40,$alt,'Numpre',1,1,"C",1);
       }
       $troca = 0;
@@ -419,7 +393,7 @@ if ($ordem=="d") {
                                   v01_numpre,
                                   v01_dtinsc,
                                   v03_descr,
-                                  z01_nome
+                                  CONCAT(z01_nome,' ',z01_cgccpf) as z01_nome
                              from certdiv
                                   inner join certid on v13_certid = v14_certid
 																	                 and v13_instit = ".db_getsession('DB_instit')." 
@@ -441,7 +415,7 @@ if ($ordem=="d") {
           if ($rela=="c") {
             $pdf->cell(20,$alt,'Codigo',1,0,"C",1);
             $pdf->cell(30,$alt,'Data de Lançamento',1,0,"C",1);
-            $pdf->cell(90,$alt,'Nome/Razão Social',1,0,"C",1);
+            $pdf->cell(90,$alt,'Nome/Razão Social CPF/CNPJ',1,0,"C",1);
             $pdf->cell(40,$alt,'Numpre',1,1,"C",1);
           }
           $troca = 0;
