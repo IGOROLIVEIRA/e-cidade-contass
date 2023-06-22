@@ -54,6 +54,19 @@ if ( isset($opcao) && $opcao == "alterar" ) {
   }
 }
 ?>
+
+<?php
+	$ano_sistema = db_getsession("DB_anousu");
+	if($rh25_anousu != $ano_sistema && $db_opcao == 2){
+		echo '<script language="javascript">
+			alert("Ação não permitida! Altere a data do sistema para que seja possível alterar esse registro.");
+		document.location.href = "pes1_rhlotavinc001.php?chavepesquisa="+document.form1.rh25_codigo.value+"&db_opcaoal=true";
+		</script>';
+
+		header("Refresh:0");
+	}
+?>
+
 <form name="form1" method="post" action="">
 	<center>
 		<table border="0" >
