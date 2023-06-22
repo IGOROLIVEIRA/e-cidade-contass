@@ -325,8 +325,6 @@ $clrotulo->label("pc01_descrmater");
         });
     }
 
-    console.log($(this).find("input[type='checkbox']"));
-
     function js_mudaTabela(campo) {
         js_loadTable();
     }
@@ -336,12 +334,12 @@ $clrotulo->label("pc01_descrmater");
         const item = origem.id.split('_');
         const id = item[1];
 
-        if ($('#servico_' + id).val() == 0) {
+        if ($('#servico_' + id).val() == 1) {
+            $('#qtd_' + id).val();
+            $('#qtd_' + id).attr('readonly', false);
+        } else {
             $('#qtd_' + id).val(1);
             $('#qtd_' + id).attr('readonly', true);
-        } else {
-            $('#qtd_' + id).val(0);
-            $('#qtd_' + id).attr('readonly', false);
         }
 
     }
