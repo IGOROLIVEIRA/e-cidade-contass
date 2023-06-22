@@ -75,6 +75,8 @@ class cl_licobraslicitacao
         $this->atualizacampos();
 
         if ($this->validacaoNumeroModalidade() == false) return false;
+        if ($this->validacaoNumeroProcesso() == false) return false;
+
 
         if ($this->obr07_sequencial == null) {
             $result = db_query("select nextval('licobraslicitacao_obr07_sequencial_seq')");
@@ -198,6 +200,11 @@ class cl_licobraslicitacao
         $rsLicobraslicitacao = db_query("select * from licobraslicitacao where obr07_modalidade = $this->obr07_modalidade and obr07_exercicio = $this->obr07_exercicio and obr07_tipoprocesso = $this->obr07_tipoprocesso and obr07_sequencial = $obr07_sequencial");
         if (pg_num_rows($rsLicobraslicitacao) < 1) {
             if ($this->validacaoNumeroModalidade() == false) return false;
+        }
+
+        $rsLicobraslicitacao = db_query("select * from licobraslicitacao where obr07_processo = $this->obr07_processo and obr07_exercicio = $this->obr07_exercicio and obr07_tipoprocesso = $this->obr07_tipoprocesso and obr07_sequencial = $obr07_sequencial");
+        if (pg_num_rows($rsLicobraslicitacao) < 1) {
+            if ($this->validacaoNumeroProcesso() == false) return false;
         }
 
         $sql = " update licobraslicitacao set ";
@@ -469,6 +476,22 @@ class cl_licobraslicitacao
         if (pg_num_rows($rsLicobraslicitacao) > 0) {
             $this->erro_sql = "Já existe a modalidade $this->obr07_modalidade para o ano de exercício e tipo de processo informado .";
             $this->erro_campo = "obr07_modalidade";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+        return true;
+    }
+
+    function validacaoNumeroProcesso()
+    {
+
+        $rsLicobraslicitacao = db_query("select * from licobraslicitacao where obr07_processo = $this->obr07_processo and obr07_exercicio = $this->obr07_exercicio and obr07_tipoprocesso = $this->obr07_tipoprocesso");
+        if (pg_num_rows($rsLicobraslicitacao) > 0) {
+            $this->erro_sql = "Já existe o processo licitátorio $this->obr07_processo para o ano de exercício e tipo de processo informado .";
+            $this->erro_campo = "obr07_processo";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
             $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
