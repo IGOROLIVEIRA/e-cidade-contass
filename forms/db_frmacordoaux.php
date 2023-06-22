@@ -42,7 +42,7 @@ $clrotulo->label("l20_objeto");
 
 if ($db_opcao == 1) {
     $db_action = "aco1_acordo004.php";
-    $ac50_sequencial=1;
+    $ac50_sequencial = 1;
 } else if ($db_opcao == 2 || $db_opcao == 22) {
     $db_action = "aco1_acordo005.php";
 } else if ($db_opcao == 3 || $db_opcao == 33) {
@@ -1282,31 +1282,36 @@ db_app::load("dbtextFieldData.widget.js");
             js_OpenJanelaIframe(
                 'CurrentWindow.corpo.iframe_acordo',
                 'db_iframe_contratado',
-                'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
+                'func_pcforne.php?validacaoCadastroFornecedor=true&validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
                 'Pesquisa',
                 true,
                 '0',
                 '1'
             );
 
-        } else {
+            return;
 
-            if ($('ac16_contratado').value != '') {
-
-                js_OpenJanelaIframe(
-                    'CurrentWindow.corpo.iframe_acordo',
-                    'db_iframe_contratado',
-                    'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
-                    'Pesquisa',
-                    false,
-                    '0',
-                    '1'
-                );
-
-            } else {
-                $('nomecontratado').value = '';
-            }
         }
+
+        if ($('ac16_contratado').value != '') {
+
+
+            js_OpenJanelaIframe(
+                'CurrentWindow.corpo.iframe_acordo',
+                'db_iframe_contratado',
+                'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
+                'Pesquisa',
+                false,
+                '0',
+                '1'
+            );
+
+            return;
+
+        }
+
+        $('nomecontratado').value = '';
+
     }
 
     function js_mostracontratado(erro, chave, z01_cgccpf) {
@@ -1351,6 +1356,28 @@ db_app::load("dbtextFieldData.widget.js");
     }
 
     function js_mostracontratado1(chave1, chave2, z01_cgccpf) {
+
+        /* Verificando se o fornecedor possui os representantes legais com o mesmo CNPJ do Fornecedor.*/
+        console.log()
+        var oParametros = new Object();
+        oParametros.exec = 'validacaoCadastroFornecedor';
+        oParametros.iFornecedor = chave2;
+        var validacaoCadastroFornecedor;
+        var oAjax = new Ajax.Request("ac4_acordoinclusao.rpc.php", {
+            method: "post",
+            asynchronous: false,
+            parameters: 'json=' + Object.toJSON(oParametros),
+            onComplete: function(oAjax) {
+                var oRetorno = eval("(" + oAjax.responseText + ")");
+                if (oRetorno.iStatus == 2) {
+                    validacaoCadastroFornecedor = false;
+                    alert(oRetorno.sMessage.urlDecode());
+                }
+
+            }
+        });
+
+        if (validacaoCadastroFornecedor == false) return false;
 
         if (z01_cgccpf.length = 11) {
             if (z01_cgccpf == '00000000000') {
@@ -1596,15 +1623,32 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
-        if (iTipoOrigem == 4 && iOrigem == 1) {
-            document.getElementById('tradesaoregpreco').style.display = "";
-            document.getElementById('trLicitacao').style.display = "none";
-            document.getElementById('trlicoutroorgao').style.display = "none";
-        }
+        <<
+        <<
+        <<
+        < HEAD
+            ===
+            ===
+            =
+            if (iOrigem == 1 && iTipoOrigem == 2) {
+                document.getElementById('trLicitacao').style.display = "";
+            } else {
+                document.getElementById('trLicitacao').style.display = "none";
+            }
 
-        if(iOrigem == 1 && iTipoOrigem == 2){
+            >>>
+            >>>
+            >
+        6608623e0...OC20394 inclusao de validacao do fornecedor na rotina de contratos quando o parametro liberar cadastro de contrtato sem vigencia esta ativo
+            if (iTipoOrigem == 4 && iOrigem == 1) {
+                document.getElementById('tradesaoregpreco').style.display = "";
+                document.getElementById('trLicitacao').style.display = "none";
+                document.getElementById('trlicoutroorgao').style.display = "none";
+            }
+
+        if (iOrigem == 1 && iTipoOrigem == 2) {
             document.getElementById('trLicitacao').style.display = "";
-        }else{
+        } else {
             document.getElementById('trLicitacao').style.display = "none";
         }
 
