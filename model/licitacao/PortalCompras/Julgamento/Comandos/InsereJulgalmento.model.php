@@ -3,6 +3,7 @@
 require_once("model/licitacao/PortalCompras/Julgamento/Julgamento.model.php");
 require_once("classes/db_liclicitaimportarjulgamento_classe.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Proposta.model.php");
+require_once("model/licitacao/PortalCompras/Julgamento/Lance.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Ranking.model.php");
 require_once("classes/db_pcorcam_classe.php");
 require_once("classes/db_pcorcamitem_classe.php");
@@ -47,8 +48,6 @@ class InsereJulgamento
         $participantes = $julgamento->getParticipantes();
         $dataAbertura = $julgamento->getDataAberturaProposta();
 
-
-
         try{
             db_inicio_transacao();
 
@@ -64,18 +63,21 @@ class InsereJulgamento
                     $propostas = $item->getPropostas();
                     $tipoJulgamento = $item->getTipoJulgamento();
                     $ranking = $item->getRanking();
+                    $lances = $item->getLances();
 
                     $idPcorcamitem    = $this->lidaPcorcamitem($idPcorcam);
                     $this->lidaPcorcamitemlic($item->getId(), $idPcorcamitem, $idJulgamento);
 
                     /** @var Proposta[] $propostas */
                     foreach($propostas as $proposta) {
-                        $numcgm = $this->buscaNumcgm($proposta->getIdFornecedor());
-                        //var_dump($numcgm);
+                        $idFornecedor = $proposta->getIdFornecedor();
+                        $numcgm = $this->buscaNumcgm($idFornecedor);
+
                         $idPcorcamforne   = $this->lidaPcorcamforne($numcgm, $idPcorcam);
 
                         $this->lidaPcorcamval(
                             $proposta,
+                            $lances[$idFornecedor],
                             $idPcorcamforne,
                             $idPcorcamitem,
                             $tipoJulgamento
@@ -90,7 +92,6 @@ class InsereJulgamento
                 }
             }
 
-            //var_dump("chegou aqui");
             /** @var Participantes[] $participantes */
             foreach($participantes as $participante) {
                 $numcgm = $this->buscaNumcgm($participante->getCnpj());
@@ -107,11 +108,8 @@ class InsereJulgamento
             $this->lidaLiclicita($idJulgamento);
 
             db_fim_transacao(false);
-            //var_dump("sucesso");
             return ['success' => true];
         } catch(Exception $e) {
-            //var_dump("erro");
-            //var_dump(utf8_encode($e->getMessage()));
             db_fim_transacao(true);
             return [
                 'success' => false,
@@ -173,7 +171,7 @@ class InsereJulgamento
         if ((int)$clpcorcamforne->erro_status  !== 1) {
             throw new Exception("Pcorcamforne ".$clpcorcamforne->erro_msg. $clpcorcamforne->erro_campo);
         }
-        var_dump((int)$clpcorcamforne->pc21_orcamforne);
+
         return (int)$clpcorcamforne->pc21_orcamforne;
     }
 
@@ -236,13 +234,13 @@ class InsereJulgamento
      * @param integer $tipoJulgamento
      * @return void
      */
-    private function lidaPcorcamval(Proposta $proposta, int $idOrcamforne, int $idOrcamitem, int $tipoJulgamento )
+    private function lidaPcorcamval(Proposta $proposta, Lance $lance, int $idOrcamforne, int $idOrcamitem, int $tipoJulgamento )
     {
         $clpcorcamval                          = new cl_pcorcamval;
-        $clpcorcamval->pc23_valor              = $proposta->getValorTotal();
+        $clpcorcamval->pc23_valor              = $lance->getValorTotal();
         $clpcorcamval->pc23_quant              = $proposta->getQuantidade();
         $clpcorcamval->pc23_obs                = $proposta->getMarca();
-        $clpcorcamval->pc23_vlrun              = $proposta->getValorUnitario();
+        $clpcorcamval->pc23_vlrun              = $lance->getValorUnitario();
         $clpcorcamval->pc23_validmin           = null;
         $clpcorcamval->pc23_perctaxadesctabela = null;
         $clpcorcamval->pc23_percentualdesconto = $tipoJulgamento == 1 ? $proposta->getValorDesconto()
@@ -299,9 +297,14 @@ class InsereJulgamento
         string $representanteLegal,
         string $dataHabilitacao
     ): void {
-
-        var_dump($dataHabilitacao);
         $clhabilitacaoforn = new cl_habilitacaoforn;
+        $query = $clhabilitacaoforn->sql_query( null, "l206_sequencial", null, $dbwhere=" l206_fornecedor = $numcgm and l206_licitacao = $idJulgamento");
+        $result = $clhabilitacaoforn->sql_record($query);
+
+        if(!empty($result)) {
+            return;
+        }
+
         $clhabilitacaoforn->l206_fornecedor        = $numcgm;
         $clhabilitacaoforn->l206_licitacao        = $idJulgamento;
         $clhabilitacaoforn->l206_representante    = $representanteLegal;

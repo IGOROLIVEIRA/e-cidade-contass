@@ -3,6 +3,7 @@
 require_once("model/licitacao/PortalCompras/Julgamento/Item.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Comandos/ValidaTipoJulgamento.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Fabricas/RankingFabrica.model.php");
+require_once("model/licitacao/PortalCompras/Julgamento/Fabricas/LanceFabrica.model.php");
 
 class ItemFabrica
 {
@@ -17,6 +18,7 @@ class ItemFabrica
         $item = new Item();
         $propostaFabrica = new PropostaFabrica();
         $rankingFabrica = new RankingFabrica();
+        $lanceFabrica = new LanceFabrica();
 
         $item->setId($dados['_id']);
 
@@ -28,6 +30,9 @@ class ItemFabrica
 
         $tipoJulgamento = (new ValidaTipoJulgamento)->execute($dados['tipoJulgamento']);
         $item->setTipoJulgamento($tipoJulgamento);
+
+        $lances = $lanceFabrica->criarLista($dados['Lances']);
+        $item->setLances($lances);
 
         return $item;
     }

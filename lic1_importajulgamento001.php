@@ -105,16 +105,19 @@ db_postmemory($HTTP_POST_VARS);
                 return;
             }
             codigo = document.form1.l20_codigo.value;
+            js_divCarregando('carregando.', 'msgbox');
             js_busca_dados_liclicita(codigo,"BuscarDados","js_retornobuscarlicitacao");
         }
 
         function js_mostraliclicita1(chave1) {
             db_iframe_liclicita.hide();
+            js_divCarregando('carregando.', 'msgbox');
             js_busca_dados_liclicita(chave1,"BuscarDados","js_retornobuscarlicitacao");
         }
 
         function js_processa_julgamento() {
             codigo = document.form1.l20_codigo.value;
+            js_divCarregando('carregando. Esse processo por demorar alguns minutos', 'msgbox');
             js_busca_dados_liclicita(codigo,"ProcessaJulgamento","js_retornoimportarjulgamento");
         }
 
@@ -133,7 +136,7 @@ db_postmemory($HTTP_POST_VARS);
         }
 
         function js_retornobuscarlicitacao(oAjax) {
-            
+            js_removeObj('msgbox');
             let oRetorno = eval("(" + oAjax.responseText + ")");
 
             const numero = oRetorno.message.numero;
@@ -151,9 +154,10 @@ db_postmemory($HTTP_POST_VARS);
         }
 
         function js_retornoimportarjulgamento(oAjax) {
+            js_removeObj('msgbox');
+
             let oRetorno = eval("(" + oAjax.responseText + ")");
             alert(oRetorno.message);
-            console.log("processou");
         }
     </script>
 </body>
