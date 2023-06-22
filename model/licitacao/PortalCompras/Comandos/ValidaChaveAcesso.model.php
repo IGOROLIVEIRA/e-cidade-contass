@@ -1,6 +1,6 @@
 <?php
 
-require_once("model/licitacao/PortalCompras/Comandos/ValidadorAcessoApiInterface.model.php");
+require_once("model/licitacao/PortalCompras/Comandos/ValidaAcessoApiInterface.model.php");
 require_once("classes/db_liclicitaportalcompras_classe.php");
 
 class ValidaChaveAcesso
