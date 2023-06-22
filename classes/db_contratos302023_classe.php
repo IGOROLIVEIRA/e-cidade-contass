@@ -222,7 +222,7 @@ class cl_contratos302023
                                ,$this->si89_tiporegistro 
                                ,'$this->si89_codorgao' 
                                ,'$this->si89_codunidadesub' 
-                               ,$this->si89_nrocontrato 
+                               ,'$this->si89_nrocontrato' 
                                ," . ($this->si89_dtassinaturacontoriginal == "null" || $this->si89_dtassinaturacontoriginal == "" ? "null" : "'" . $this->si89_dtassinaturacontoriginal . "'") . " 
                                ,'$this->si89_tipoapostila' 
                                ,$this->si89_nroseqapostila 

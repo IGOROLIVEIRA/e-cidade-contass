@@ -2,7 +2,7 @@
 
 namespace ECidade\Patrimonial\Protocolo\Procedimentos\Parametros\Repositorio;
 
-require_once(modification('dbforms/db_funcoes.php'));
+require_once('dbforms/db_funcoes.php');
 require_once(modification('libs/db_stdlib.php'));
 require_once(modification('libs/db_conecta.php'));
 

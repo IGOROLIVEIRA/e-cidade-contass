@@ -392,7 +392,7 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
 		liclicita.l20_anousu as exercicioLicitacao,
 		liclicita.l20_edital as nroProcessoLicitatorio,
 		pctipocompratribunal.l44_codigotribunal as tipoProcesso,
-		liclicitemlote.l04_codigo as nroLote,
+		liclicitemlote.l04_numerolote as nroLote,
 		liclicitemlote.l04_descricao as dscLote,
     manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
 		FROM liclicita
@@ -406,9 +406,10 @@ class SicomArquivoDispensaInexigibilidade extends SicomArquivoBase implements iP
     LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
 		WHERE db_config.codigo= " . db_getsession("DB_instit") . " AND (liclicita.l20_licsituacao = 1 OR liclicita.l20_licsituacao = 10)
 		AND liclicita.l20_tipojulg = 3
+    AND liclicitemlote.l04_numerolote IS NOT NULL
 		AND liclicita.l20_codigo={$oDados10->codlicitacao}";
 
-      $rsResult11 = db_query($sSql); //db_criatabela($rsResult11);
+      $rsResult11 = db_query($sSql);
       $aDadosAgrupados11 = array();
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
 

@@ -324,6 +324,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
     }
     public function getCodcoByFonteRegistro31($fonte, $sNaturezaReceita, $emenda)
     {
+
         if (substr($fonte, 0, 4) == '1710' && $emenda == 2) {
             return 3220;
         }
@@ -333,7 +334,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             return 3210;
         }
 
-        if ($fonte == '17060000') {
+        if ($fonte == '1706000') {
             return 3110;
         }
 
@@ -1996,7 +1997,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                  * Caso seja RPPS, descrever as regras que barbara me passou
                  */
 
-                $sSqlCtb = "    SELECT distinct 17 AS tiporegistro,
+                $sSqlCtb = "    SELECT 17 AS tiporegistro,
                                             (SELECT CASE
                                                 WHEN c209_tceestrut IS NULL THEN substr(c60_estrut,1,9)
                                                 ELSE c209_tceestrut
@@ -2030,19 +2031,17 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                             CASE
                                                 WHEN si96_vlsaldofinalfonte < 0 THEN 'C'
                                                 ELSE 'D'
-                                            END AS natursaldofinal,
-                                            si98_codco as codco
+                                            END AS natursaldofinal
                                         FROM
                                             (SELECT *
                                                 FROM ctb202023
                                                 LEFT JOIN ctb212023 ON si96_sequencial = si97_reg20
-                                                LEFT JOIN ctb222023 ON si97_sequencial = si98_reg21
                                                 WHERE si96_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
                                                     AND si96_instit = " . db_getsession("DB_instit") . ") AS xx
                                         ORDER BY codctb";
 
                 $rsCtb = db_query($sSqlCtb) or die($sSqlCtb);
-
+//db_criatabela($rsCtb);
                 if (pg_num_rows($rsCtb) == 0) {
                     throw new Exception("Gere o arquivo CTB mensal para prosseguir com a gera??o do balancete");
                 }
@@ -2082,27 +2081,27 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                             $obalancete17->si184_naturezasaldoinicialctb = $objContasctb->natursaldoinicial;
                             $obalancete17->si184_totaldebitosctb         = $objContasctb->debitos;
                             $obalancete17->si184_totalcreditosctb        = $objContasctb->creditos;
-                            $obalancete17->si184_totaldebitosctb         = $bIsRPPS ? $objContasctb->debitos : ($objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0);
-                            $obalancete17->si184_totalcreditosctb        = $bIsRPPS ? $objContasctb->creditos : ($objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0);
+                            $obalancete17->si184_totaldebitosctb         = $objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0;
+                            $obalancete17->si184_totalcreditosctb        = $objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0;
 
-                            $obalancete17->si184_saldofinalctb = $objContasctb->saldofinal;
+                            $obalancete17->si184_saldofinalctb         = $objContasctb->saldofinal;
                             $obalancete17->si184_naturezasaldofinalctb = $objContasctb->natursaldofinal;
-                            $obalancete17->si184_instit = db_getsession("DB_instit");
-                            $obalancete17->si184_mes = $nMes;
+                            $obalancete17->si184_instit                = db_getsession("DB_instit");
+                            $obalancete17->si184_mes                   = $nMes;
 
                             $aContasReg10[$reg10Hash]->reg17[$sHash17] = $obalancete17;
 
-                            $aContasReg10[$reg10Hash]->si177_saldoinicial += $objContasctb->saldoinicial;
-                            $aContasReg10[$reg10Hash]->si177_totaldebitos += $bIsRPPS ? $objContasctb->debitos : ($objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0);
-                            $aContasReg10[$reg10Hash]->si177_totalcreditos += $bIsRPPS ? $objContasctb->creditos : ($objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0);
-                            $aContasReg10[$reg10Hash]->si177_saldofinal += $objContasctb->saldofinal;
+                            $aContasReg10[$reg10Hash]->si177_saldoinicial  += $objContasctb->saldoinicial;
+                            $aContasReg10[$reg10Hash]->si177_totaldebitos  += $objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0;
+                            $aContasReg10[$reg10Hash]->si177_totalcreditos += $objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0;
+                            $aContasReg10[$reg10Hash]->si177_saldofinal    += $objContasctb->saldofinal;
                         } else {
 
-                            $aContasReg10[$reg10Hash]->reg17[$sHash17]->si184_totaldebitosctb += $bIsRPPS ? $objContasctb->debitos : ($objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0);
-                            $aContasReg10[$reg10Hash]->reg17[$sHash17]->si184_totalcreditosctb += $bIsRPPS ? $objContasctb->creditos : ($objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0);
+                            $aContasReg10[$reg10Hash]->reg17[$sHash17]->si184_totaldebitosctb  += $objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0;
+                            $aContasReg10[$reg10Hash]->reg17[$sHash17]->si184_totalcreditosctb += $objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0;
 
-                            $aContasReg10[$reg10Hash]->si177_totaldebitos += $bIsRPPS ? $objContasctb->debitos : ($objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0);
-                            $aContasReg10[$reg10Hash]->si177_totalcreditos += $bIsRPPS ? $objContasctb->creditos : ($objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0);
+                            $aContasReg10[$reg10Hash]->si177_totaldebitos  += $objContasctb->tipoentrsaida == 1 ? $objContasctb->vlentrsaida : 0;
+                            $aContasReg10[$reg10Hash]->si177_totalcreditos += $objContasctb->tipoentrsaida == 2 ? $objContasctb->vlentrsaida : 0;
                         }
                     }
                 }
@@ -3044,11 +3043,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             }
             if($oContas10->nregobrig == 31){
                 $clBalancete31 = new cl_balancete312023();
-
                 $sSqlVinculoContaOrcamento = $clBalancete31->sql_query_vinculo_conta_orcamento($oContas10->contas);
-
                 $rsVinculoContaOrcamento = db_query($sSqlVinculoContaOrcamento) or die($sSqlVinculoContaOrcamento);
-                //Constante da contacorrente or?ament?ria
+                 //Constante da contacorrente or?ament?ria
                 $nContaCorrente = 100;
 
                 for ($iContVinculo = 0; $iContVinculo < pg_num_rows($rsVinculoContaOrcamento); $iContVinculo++) {
@@ -3056,9 +3053,12 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                     $objContas = db_utils::fieldsMemory($rsVinculoContaOrcamento, $iContVinculo);
 
                     $clBalancete31 = new cl_balancete312023();
-                    $sSqlReg31saldos = $clBalancete31->sql_query_reg31_saldos($oContas10->contas, $nContaCorrente, $objContas->c60_estrut, $nMes, $sWhereEncerramento);
+                    $whereEmenda = " AND c19_emparlamentar is null ";
+                    if($objContas->c19_emparlamentar != 0){
+                        $whereEmenda = " AND c19_emparlamentar = {$objContas->c19_emparlamentar} ";
+                    }
+                    $sSqlReg31saldos = $clBalancete31->sql_query_reg31_saldos($oContas10->contas, $nContaCorrente, $objContas->c60_estrut, $nMes, $sWhereEncerramento, $whereEmenda);
                     $rsReg31saldos = db_query($sSqlReg31saldos) or die($sSqlReg31saldos);
-
 
                     for ($iContSaldo31 = 0; $iContSaldo31 < pg_num_rows($rsReg31saldos); $iContSaldo31++) {
 
@@ -3088,7 +3088,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 * DADOS PARA GERA??O DO REGISTRO 31 C?lula da Receita ? Execu??o
                                 * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 31
                                 */
-                            $codCo                      = $this->getCodcoByFonteRegistro31($objContas->o15_codigo, $obalancete31->si243_naturezareceita, $objContas->c19_emparlamentar);
+                            $codCo                      = $this->getCodcoByFonteRegistro31($objContas->o15_codtri, $obalancete31->si243_naturezareceita, $objContas->c19_emparlamentar);
                             $sHash31 = '31' . $oContas10->si177_contacontaabil . $sNaturezaReceita . $objContas->o15_codtri. $codCo;
 
                             if (!isset($aContasReg10[$reg10Hash]->reg31[$sHash31])) {

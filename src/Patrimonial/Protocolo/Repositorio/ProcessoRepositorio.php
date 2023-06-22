@@ -2,7 +2,7 @@
 
 namespace ECidade\Patrimonial\Protocolo\Repositorio;
 
-require_once(modification('dbforms/db_funcoes.php'));
+require_once('dbforms/db_funcoes.php');
 require_once(modification('libs/db_stdlib.php'));
 require_once(modification('libs/db_conecta.php'));
 
@@ -56,11 +56,11 @@ class ProcessoRepositorio
     public static function vencidos()
     {
         $query = "
-            SELECT * 
+            SELECT *
             FROM ultimas_movimentacoes_processos_vencidos
             WHERE TO_CHAR(NOW(), 'YYYY-MM-DD') = TO_CHAR(ultima_data + (
-                SELECT p101_diasprazo 
-                FROM mensageriaprocesso 
+                SELECT p101_diasprazo
+                FROM mensageriaprocesso
                 LIMIT 1
             ), 'YYYY-MM-DD')
         ";
@@ -150,12 +150,12 @@ class ProcessoRepositorio
         self::construirFiltro($aFiltros, $sQuery);
 
         $sQuery = "
-            SELECT COUNT(codigo_processo) AS total, 
-                   codigo_departamento, 
+            SELECT COUNT(codigo_processo) AS total,
+                   codigo_departamento,
                    descricao_departamento,
-                   (SELECT ARRAY_TO_JSON(ARRAY_AGG(DISTINCT db_usuarios.nome)) 
+                   (SELECT ARRAY_TO_JSON(ARRAY_AGG(DISTINCT db_usuarios.nome))
                     FROM gestaodepartamentoprocesso
-                    LEFT JOIN db_usuarios ON id_usuario = p103_db_usuarios 
+                    LEFT JOIN db_usuarios ON id_usuario = p103_db_usuarios
                     WHERE p103_db_depart = codigo_departamento) AS responsaveis
             FROM ultimas_movimentacoes_processos_vencidos
             WHERE {$sQuery} codigo_departamento IN ({$sDepartamentos})

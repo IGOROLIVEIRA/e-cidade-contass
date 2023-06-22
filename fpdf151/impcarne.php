@@ -519,6 +519,12 @@ class db_impcarne extends cl_assinatura
     public $Scodemp = null;         // descri��o da anula��o
     public $resumo_item = null;         // resumo de item de SC em aut. de licita��o
     public $informa_adic = null;         // informa��es adicionais de autoriza��o: PC - aut. de processo de compras
+    public $unid = null; // unidade do item
+    public $servico = null; // tipo servico
+    public $servicoquantidade = null; // forma de controle do item
+    public $autori = null; // Numero da autorizacao
+    public $e60_emiss = null; // data da emissao do empenho
+    public $pc01_complmater = null; //Descricao do complimento do item
     //                                        AU - somente autoriza��o
     public $obs_ordcom_orcamval = null;      // Observacao de ordem de compra lan�a valores
 

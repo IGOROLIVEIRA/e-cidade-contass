@@ -283,9 +283,9 @@ try {
       $oEnte      = db_utils::fieldsMemory($rsEntesCon, 0);
 
       $oInfoRelatorio->aHeader = array();
-      $oInfoRelatorio->aHeader[1] = 'Relatório de Rateio';
+      $oInfoRelatorio->aHeader[1] = 'Relatorio de Rateio';
       $oInfoRelatorio->aHeader[3] = 'Ente: ' . $oEnte->z01_nome;
-      $oInfoRelatorio->aHeader[4] = 'Mês: ' . $aMeses[intval($_GET['mes'])];
+      $oInfoRelatorio->aHeader[4] = 'Mes: ' . $aMeses[intval($_GET['mes'])];
 
       require_once('con2_relatoriorateio002_pdf.php');
 

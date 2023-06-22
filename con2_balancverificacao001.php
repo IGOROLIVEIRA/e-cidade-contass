@@ -308,7 +308,8 @@ $clrotulo->label('DBtxt22');
         var oDataFinal   = new Date(oForm.DBtxt22_ano.value, oForm.DBtxt22_mes.value, oForm.DBtxt22_dia.value, 0, 0, 0);
 
         var sPeriodoInicial = oForm.DBtxt21_ano.value + '-' + oForm.DBtxt21_mes.value + '-' + oForm.DBtxt21_dia.value;
-        var sPeriodoFinal   = oForm.DBtxt22_ano.value + '-' + oForm.DBtxt22_mes.value + '-' + oForm.DBtxt22_dia.value;
+        var sPeriodoFinal   = oForm.DBtxt22.value.split("/");
+        sPeriodoFinal   = sPeriodoFinal[2] + '-' + sPeriodoFinal[1] + '-' + sPeriodoFinal[0];
 
         /**
          * Validações
