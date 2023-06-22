@@ -231,6 +231,7 @@ $clrotulo->label("pc01_descrmater");
             return false;
         }
 
+
         var oParam = new Object();
         oParam.action = "salvar";
         oParam.autori = $('#e55_autori').val();
@@ -242,7 +243,12 @@ $clrotulo->label("pc01_descrmater");
         $("#mytable tr").each(function() {
 
             if ($(this).find("input[type='checkbox']").is(":checked")) {
+                let servico = $(this).find("td").eq(6).find("select").val();
 
+                if(servico == 0){
+                    alert("Campo Controla Qtd. não informado.");
+                    return false;
+                }
                 oDados.id = $(this).find("td").eq(1).html();
                 oDados.descr = $(this).find("td").eq(3).find("input").val();
                 oDados.unidade = $(this).find("td").eq(4).find("select").val();
@@ -334,14 +340,20 @@ $clrotulo->label("pc01_descrmater");
         const item = origem.id.split('_');
         const id = item[1];
 
-        if ($('#servico_' + id).val() == 1) {
-            $('#qtd_' + id).val();
+        if ($('#servico_' + id).val() == 't') {
+            //$('#qtd_' + id).val(0);
             $('#qtd_' + id).attr('readonly', false);
-        } else {
+        } 
+
+        if ($('#servico_' + id).val() == 'f') {
             $('#qtd_' + id).val(1);
             $('#qtd_' + id).attr('readonly', true);
         }
 
+        if ($('#servico_' + id).val() == 0) {
+            $('#qtd_' + id).val();
+            $('#qtd_' + id).attr('readonly', true);
+        }
     }
 
     function js_desconto(obj) {
