@@ -1358,7 +1358,6 @@ db_app::load("dbtextFieldData.widget.js");
     function js_mostracontratado1(chave1, chave2, z01_cgccpf) {
 
         /* Verificando se o fornecedor possui os representantes legais com o mesmo CNPJ do Fornecedor.*/
-        console.log()
         var oParametros = new Object();
         oParametros.exec = 'validacaoCadastroFornecedor';
         oParametros.iFornecedor = chave2;
