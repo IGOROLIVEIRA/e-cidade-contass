@@ -1466,9 +1466,31 @@ if ($x->consultarDataDoSistema == true) {
         })
     }
 
+
     function js_buscarInformacoesAutorizacao() {
 
+
         if (document.getElementById('e54_emissao').value == '') return alert('Usuário: preencha o campo data da autorização.')
+
+        erroValidacaoDataAutorizacao = false;
+
+        var oParam = new Object();
+        oParam.e54_emiss = document.getElementById('e54_emissao').value;
+        oParam.ac16_sequencial = document.getElementById('oTxtCodigoAcordo').value;
+        var oAjax = new Ajax.Request('ac04_validadataautorizacao.RPC.php', {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            asynchronous: false,
+            onComplete: function(oAjax) {
+                var oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
+                if (oRetorno.status == "2") {
+                    erroValidacaoDataAutorizacao = true;
+                    alert(oRetorno.erro.urlDecode());
+                }
+            }
+        });
+
+        if (erroValidacaoDataAutorizacao == true) return false;
 
         var aItens = oGridItens.getSelection("object");
 
