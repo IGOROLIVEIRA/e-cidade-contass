@@ -84,7 +84,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             LIMIT 1) AS codunidadesubresp,
             si06_codunidadesubant
             FROM adesaoregprecos
-            JOIN acordo on ac16_adesaoregpreco = si06_sequencial
+            LEFT JOIN acordo on ac16_adesaoregpreco = si06_sequencial
             JOIN cgm orgaogerenciador ON si06_orgaogerenciador = orgaogerenciador.z01_numcgm
             JOIN cgm responsavel ON si06_cgm = responsavel.z01_numcgm
             INNER JOIN pcproc ON si06_processocompra = pc80_codproc
