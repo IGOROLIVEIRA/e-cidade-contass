@@ -1,6 +1,6 @@
 <?php
 
-require_once("model/licitacao/PortalCompras/Julgamento/Lotes.model.php");
+require_once("model/licitacao/PortalCompras/Julgamento/Lote.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Participante.model.php");
 
 
