@@ -117,7 +117,7 @@ class cl_licobraslicitacao
             $this->erro_status = "0";
             return false;
         }
-        if ($this->obr07_tipoprocesso == null) {
+        if ($this->obr07_tipoprocesso == null || $this->obr07_tipoprocesso == 0) {
             $this->erro_sql = " Campo Tipo Processo não informado.";
             $this->erro_campo = "obr07_tipoprocesso";
             $this->erro_banco = "";
@@ -202,7 +202,7 @@ class cl_licobraslicitacao
             if ($this->validacaoNumeroModalidade() == false) return false;
         }
 
-        $rsLicobraslicitacao = db_query("select * from licobraslicitacao where obr07_processo = $this->obr07_processo and obr07_exercicio = $this->obr07_exercicio and obr07_tipoprocesso = $this->obr07_tipoprocesso and obr07_sequencial = $obr07_sequencial");
+        $rsLicobraslicitacao = db_query("select * from licobraslicitacao where obr07_processo = $this->obr07_processo and obr07_exercicio = $this->obr07_exercicio and obr07_sequencial = $obr07_sequencial");
         if (pg_num_rows($rsLicobraslicitacao) < 1) {
             if ($this->validacaoNumeroProcesso() == false) return false;
         }
@@ -261,7 +261,7 @@ class cl_licobraslicitacao
                 return false;
             }
         }
-        if (trim($this->obr07_tipoprocesso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["obr07_tipoprocesso"])) {
+        if (trim($this->obr07_tipoprocesso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["obr07_tipoprocesso"]) ||  $this->obr07_tipoprocesso == 0) {
             $sql  .= $virgula . " obr07_tipoprocesso = $this->obr07_tipoprocesso ";
             $virgula = ",";
             if (trim($this->obr07_tipoprocesso) == null) {
@@ -488,9 +488,9 @@ class cl_licobraslicitacao
     function validacaoNumeroProcesso()
     {
 
-        $rsLicobraslicitacao = db_query("select * from licobraslicitacao where obr07_processo = $this->obr07_processo and obr07_exercicio = $this->obr07_exercicio and obr07_tipoprocesso = $this->obr07_tipoprocesso");
+        $rsLicobraslicitacao = db_query("select * from licobraslicitacao where obr07_processo = $this->obr07_processo and obr07_exercicio = $this->obr07_exercicio");
         if (pg_num_rows($rsLicobraslicitacao) > 0) {
-            $this->erro_sql = "Já existe o processo licitátorio $this->obr07_processo para o ano de exercício e tipo de processo informado .";
+            $this->erro_sql = "Já existe o processo licitátorio $this->obr07_processo para o ano de exercício informado.";
             $this->erro_campo = "obr07_processo";
             $this->erro_banco = "";
             $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";

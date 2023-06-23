@@ -65,6 +65,7 @@ $cllicobraslicitacao->rotulo->label();
                     <?
                     $result = $clpctipocompratribunal->sql_record($clpctipocompratribunal->sql_query(null, "l44_sequencial,l44_descricao", null, "l44_uf = 'MG'"));
                     db_selectrecord('obr07_tipoprocesso', $result, true, 2, "", "", "", "0", "");
+                    echo "<script> document.getElementById('obr07_tipoprocessodescr')[0].text = 'Selecione'; </script>";
                     ?>
                 </td>
             </tr>
