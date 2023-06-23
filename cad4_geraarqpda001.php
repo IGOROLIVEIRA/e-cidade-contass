@@ -1,30 +1,4 @@
 <?
-/*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
- */
-
 require ("fpdf151/scpdf.php");
 require ("libs/db_conecta.php");
 include ("libs/db_sessoes.php");
@@ -54,7 +28,6 @@ $clrotulo->label("j34_quadra");
 $clrotulo->label("j34_setor");
 
 db_postmemory($HTTP_POST_VARS);
-//db_postmemory($HTTP_POST_VARS,2);
 
 $clruas = new cl_ruas;
 $clbairro = new cl_bairro;
@@ -104,8 +77,8 @@ if (isset ($gerar)) {
                             z01_nome,
                             z01_ender,
                             j34_setor,
-			    j34_quadra,
-			    j34_lote,
+							j34_quadra,
+							j34_lote,
                             j34_zona,
                             j01_idbql,
                             j39_idcons,
@@ -127,7 +100,7 @@ if (isset ($gerar)) {
                           left join testadanumero on j01_idbql = j15_idbql
                           left join ruas as a on a.j14_codigo=j49_codigo
                           left join iptuconstr on j01_matric = j39_matric and j39_dtdemo is null
-			  left join ruas as b on b.j14_codigo = j39_codigo
+			  		 left join ruas as b on b.j14_codigo = j39_codigo
                      where j01_baixa is null
 				";
 		if($j34_setor!="")
@@ -147,7 +120,7 @@ if (isset ($gerar)) {
 				$descricao_erro .= "Não existe matricula cadastrada!";
 			}
 		}
-			$nomedoarquivo = "tmp/".$gerar."_matricula".$anousu."_".date("Y-m-d_His", db_getsession("DB_datausu")).".txt";
+			$nomedoarquivo = "tmp/Gerar_arquivo_matricula_".$anousu."_".date("Y-m-d_His", db_getsession("DB_datausu")).".txt";
 				$erro = false;
 				$descricao_erro = false;
 				set_time_limit(0);
@@ -237,8 +210,7 @@ if (isset ($gerar)) {
 			echo "<script>alert('$descricao_erro');</script>";
 		}		
 function db_contador($apelido, $expressao, $contador, $valor) {
-	global $contador;
-	//  echo "x: $contador - valor: $valor<br>";
+	global $contador;	
 	$contadorant = $contador +1;
 	$contador += $valor;
 	return str_pad($apelido, 30)." - ".str_pad($expressao, 80)." - ".str_pad($valor, 4, "0", STR_PAD_LEFT)." - ".str_pad($contadorant, 4, "0", STR_PAD_LEFT)." - ".str_pad($contador, 4, "0", STR_PAD_LEFT)."\n";
@@ -278,7 +250,7 @@ function db_contador($apelido, $expressao, $contador, $valor) {
 if(isset($gerar)){
   echo "<tr>   
     <td colspan=3 align=\"center\"><br><br>
-      <a href=\"$nomedoarquivo\">Clique com o Botão Direito do Mouse e Salve</a>
+      <a target='_blank' href=\"$nomedoarquivo\">Clique com o Botão Direito do Mouse e Salve</a>
     </td>      
   </tr>";
 } 
