@@ -7,10 +7,10 @@ class ValidaSituacao implements ValidaAcessoApiInterface
      /**
      * Verifica se a licitacao esta agendada
      *
-     * @param resource|null $results
+     * @param resource $results
      * @return void
      */
-    public function execute($results = null): void
+    public function execute($results): void
     {
       $situacao =  db_utils::fieldsMemory($results,0)->situacao;
       if((int)$situacao != 0) {

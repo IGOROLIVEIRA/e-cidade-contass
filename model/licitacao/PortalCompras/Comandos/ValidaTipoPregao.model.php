@@ -10,10 +10,6 @@ class ValidaTipoPregao
      */
     public function execute(int $tipoPregao): int
     {
-        if ($tipoPregao == 2) {
-            return 6;
-        }
-
-        return 3;
+        return $tipoPregao === 2 ? 6 : 3;
     }
 }

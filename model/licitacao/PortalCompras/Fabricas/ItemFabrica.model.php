@@ -26,4 +26,5 @@ class ItemFabrica
         $item->setQuantidadeCota((float)$resultado->quantidadecota);
         return $item;
     }
+
 }

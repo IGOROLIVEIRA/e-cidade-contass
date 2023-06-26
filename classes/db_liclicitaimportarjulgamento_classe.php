@@ -153,7 +153,7 @@ class cl_liclicitaimportarjulgamento
           return false;
         }
 
-        $this->numrows = pg_numrows($result);
+        $this->numrows = pg_num_rows($result);
 
          if($this->numrows==0) {
            $this->erro_banco = "";

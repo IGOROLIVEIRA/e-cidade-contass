@@ -7,10 +7,10 @@ class ValidaResultadoVazio implements ValidaAcessoApiInterface
      /**
      * Verifica se resultado é vazio
      *
-     * @param resource|null $results
+     * @param resource $results
      * @return void
      */
-    public function execute($results = null): void
+    public function execute($results): void
     {
         if (empty($results)) {
             throw new Exception("Registro não encontrado");

@@ -29,16 +29,16 @@ class ValidaAcessoApi implements ValidaAcessoApiInterface
     /**
      * Executa pool de validações
      *
-     * @param resource|null $results
+     * @param resource $results
      * @return void
      */
-    public function execute($results = null): void
+    public function execute($results): void
     {
         try{
             foreach($this->pool as $validador){
                 $validador->execute($results);
             }
-        } catch(Exception $e){
+        } catch(Exception $e) {
             throw new Exception(utf8_encode($e->getMessage()));
         }
     }

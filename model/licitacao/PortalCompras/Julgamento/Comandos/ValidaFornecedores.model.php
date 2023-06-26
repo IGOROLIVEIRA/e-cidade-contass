@@ -2,7 +2,6 @@
 
 require_once("classes/db_liclicitaimportarjulgamento_classe.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Proposta.model.php");
-//require_once("model/licitacao/PortalCompras/Julgamento/Item.model.php");
 require_once("model/licitacao/PortalCompras/Julgamento/Ranking.model.php");
 
 class ValidaFornecedores

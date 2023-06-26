@@ -10,9 +10,6 @@ class ValidaCamposBool
      */
     public function execute(string $valor = null): bool
     {
-        if ($valor == 't') {
-            return true;
-        }
-        return false;
+        return $valor === 't';
     }
 }
