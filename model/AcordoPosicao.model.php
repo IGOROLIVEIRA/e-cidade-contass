@@ -203,6 +203,9 @@ class AcordoPosicao
      */
     protected $sVigenciaalterada; //OC5304
 
+
+    protected  $sJustificativa;
+
     /**
      * Constante do caminho da mensagem do model
      * @var string
@@ -245,6 +248,8 @@ class AcordoPosicao
             $this->setNumeroAditamento($oDadosPosicao->ac26_numeroaditamento);
             $this->setNumeroApostilamento($oDadosPosicao->ac26_numeroapostilamento);
             $this->setVigenciaAlterada($oDadosPosicao->ac26_vigenciaalterada);
+            $this->setJustificativa($oDadosPosicao->ac35_justificativa);
+
         }
     }
 
@@ -274,12 +279,19 @@ class AcordoPosicao
         return $this;
     }
 
-        /**
-     * retorna o numero do aditamento
-     *
-     * @access public
-     * @return void
-     */
+    public function getJusitificativa()
+    {
+
+        return $this->sJustificativa;
+    }
+
+    public function setJustificativa($sJustificativa)
+    {
+
+        $this->sJustificativa = $sJustificativa;
+        return $this;
+    }
+
     public function getPercentualReajuste()
     {
 
