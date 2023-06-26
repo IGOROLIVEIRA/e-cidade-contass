@@ -4681,8 +4681,8 @@ class Acordo
         $clacordoobra->excluir(null,"obr08_acordoitem = {$item}");
     }
 
-    public function getNumeroTermoPNCP($iAcordo,$iNumeroAditamento){
-        $sql = "select l214_numerotermo from acocontroletermospncp where l214_acordo = {$iAcordo} and l214_numeroaditamento = {$iNumeroAditamento}";
+    public function getNumeroTermoPNCP($iAcordo,$iPosicao){
+        $sql = "select l214_numerotermo from acocontroletermospncp where l214_acordo = {$iAcordo} and l214_acordoposicao = {$iPosicao}";
         $rsTermos = db_query($sql);
         $oDadosTermo = db_utils::fieldsMemory($rsTermos, 0);
         return $oDadosTermo->l214_numerotermo;

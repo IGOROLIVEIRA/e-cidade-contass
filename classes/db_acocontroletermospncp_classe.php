@@ -25,6 +25,7 @@ class cl_acocontroletermospncp
     public $l214_anousu = null;
     public $l214_acordo = 0;
     public $l214_numeroaditamento = 0;
+    public $l214_acordoposicao = null;
     public $l214_instit = null;
     // cria propriedade com as variaveis do arquivo 
     public $campos = "
@@ -36,6 +37,7 @@ class cl_acocontroletermospncp
                  l214_anousu = int8 = ano da compra
                  l214_acordo = int8 = l214_acordo 
                  l214_numeroaditamento = int8 = numero do aditamento no ecidade
+                 l214_acordoposicao = int8 = acordoposicao
                  l214_instit = int8 = l214_instit
                  ";
 
@@ -70,6 +72,7 @@ class cl_acocontroletermospncp
             $this->l214_anousu = ($this->l214_anousu == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_anousu"] : $this->l214_anousu);
             $this->l214_acordo = ($this->l214_acordo == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_acordo"] : $this->l214_acordo);
             $this->l214_numeroaditamento = ($this->l214_numeroaditamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_numeroaditamento"] : $this->l214_numeroaditamento);
+            $this->l214_acordoposicao = ($this->l214_acordoposicao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_acordoposicao"] : $this->l214_acordoposicao);
             $this->l214_instit = ($this->l214_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l214_instit"] : $this->l214_instit);
         }
     }
@@ -161,6 +164,7 @@ class cl_acocontroletermospncp
                                       ,l214_anousu 
                                       ,l214_acordo
                                       ,l214_numeroaditamento
+                                      ,l214_acordoposicao
                                       ,l214_instit
                        )
                 values (
@@ -172,6 +176,7 @@ class cl_acocontroletermospncp
                                ,$this->l214_anousu
                                ,$this->l214_acordo
                                ,$this->l214_numeroaditamento
+                               ,$this->l214_acordoposicao
                                ,$this->l214_instit 
                       )";
         $result = db_query($sql);

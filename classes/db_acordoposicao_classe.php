@@ -671,6 +671,7 @@ class cl_acordoposicao {
      $sql .= "      left join acordocomissao  on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
      $sql .= "      left  join acordovigencia  on  ac26_sequencial                = ac18_acordoposicao";
      $sql .= "      left  join acordoposicaoaditamento  on  ac26_sequencial       = ac35_acordoposicao";
+     $sql .= "      left join apostilamento ON si03_acordoposicao                 = ac26_sequencial";
      $sql2 = "";
      if($dbwhere==""){
        if($ac26_sequencial!=null ){
@@ -909,9 +910,15 @@ class cl_acordoposicao {
                   WHEN ac26_acordoposicaotipo IN (15,16,17) THEN 3
                   ELSE 2
               END AS tipoTermoContratoId,
-              ac26_numeroaditamento AS numeroTermoContrato,
+              CASE
+                WHEN ac26_numeroaditamento = '' THEN si03_numapostilamento
+                ELSE ac26_numeroaditamento::int
+              END AS numeroTermoContrato,
               ac16_objeto AS objetoTermoContrato,
-              ac35_dataassinaturatermoaditivo AS dataAssinatura,
+              CASE
+                WHEN ac35_dataassinaturatermoaditivo IS NULL THEN si03_dataapostila
+                ELSE ac35_dataassinaturatermoaditivo
+              END AS dataAssinatura,
               CASE
                   WHEN ac26_acordoposicaotipo IN (6,13) THEN TRUE
                   ELSE FALSE
@@ -939,6 +946,7 @@ class cl_acordoposicao {
         LEFT JOIN acordocomissao ON acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
         LEFT JOIN acordovigencia ON ac26_sequencial = ac18_acordoposicao
         LEFT JOIN acordoposicaoaditamento ON ac26_sequencial = ac35_acordoposicao
+        LEFT JOIN apostilamento ON si03_acordoposicao = ac26_sequencial
         WHERE acordoposicao.ac26_sequencial = $iCodigotermo
     ";
 

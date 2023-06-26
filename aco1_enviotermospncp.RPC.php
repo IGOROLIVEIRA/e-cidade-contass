@@ -31,11 +31,17 @@ switch ($oParam->exec) {
             $oItemTermo = new stdClass();
             $oItemTermo->codigo = $oTermo->getCodigo();
             $oItemTermo->vigencia = urlencode($oTermo->getVigenciaInicial() . " até " . $oTermo->getVigenciaFinal());
-            $oItemTermo->numeroAditamento = $oTermo->getNumeroAditamento();
+
+            if($oTermo->getTipo() == '15' || $oTermo->getTipo() == '16' || $oTermo->getTipo() == '17'){
+                $oItemTermo->numeroAditamento = $oTermo->getNumeroApostilamento();
+                $oItemTermo->numtermopncp = $oAcordo->getNumeroTermoPNCP($oParam->iContrato,$oTermo->getCodigo());
+            }else{
+                $oItemTermo->numeroAditamento = $oTermo->getNumeroAditamento();
+                $oItemTermo->numtermopncp = $oAcordo->getNumeroTermoPNCP($oParam->iContrato,$oTermo->getCodigo());
+            }
             $oItemTermo->situacao = urlencode($oTermo->getDescricaoTipo());
             $oItemTermo->data = $oTermo->getData();
             $oItemTermo->Justificativa = urlencode($oTermo->getJusitificativa());
-            $oItemTermo->numtermopncp = $oAcordo->getNumeroTermoPNCP($oParam->iContrato,$oTermo->getNumeroAditamento());
             $oRetorno->dados[] = $oItemTermo;
         }
         break;
@@ -74,6 +80,7 @@ switch ($oParam->exec) {
                     $cl_acocontroletermospncp->l214_anousu = $oDadosAvisoPNCP->ac213_ano;
                     $cl_acocontroletermospncp->l214_acordo = $oParam->iContrato;
                     $cl_acocontroletermospncp->l214_numeroaditamento = $aDadosTermos[0]->numerotermocontrato;
+                    $cl_acocontroletermospncp->l214_acordoposicao = $termo->codigo;
                     $cl_acocontroletermospncp->l214_instit = db_getsession('DB_instit');
                     $cl_acocontroletermospncp->incluir();
 
