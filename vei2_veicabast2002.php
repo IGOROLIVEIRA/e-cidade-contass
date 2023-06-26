@@ -304,7 +304,6 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
                     $contralakmfinal = $medida_devolucao;
 
                 }
-
                 $pdf->setfont('arial', 'b', 10);
                 $pdf->cell(180, $alt, "Totalizadores", 1, 0, "L", 0);
                 $pdf->cell(30, $alt, "{$nTotalCombustivel} Litros", 1, 0, "C", 0);
@@ -313,9 +312,19 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
                 $pdf->cell(24, $alt, number_format(($nTotalConsumoMedio / $iContMov), 2, ',', '') . " Km/L", "BRT", 1, "R", 0);
                 $pdf->ln();
             }
+            $nTotalCombustivelGeral += $nTotalCombustivel;
+            $nTotalValorAbastecidoGeral += $nTotalValorAbastecido;
+            $nMedia = $nTotalConsumoMedio / $iContMov;
+            $nTotalMedia += $nMedia;
         }
     }
 }
-
+$pdf->setfont('arial', 'b', 10);
+$pdf->cell(180, $alt, "Total Geral", 1, 0, "L", 0);
+$pdf->cell(30, $alt, "{$nTotalCombustivelGeral} Litros", 1, 0, "C", 0);
+$pdf->cell(30, $alt, "R$ " . number_format($nTotalValorAbastecidoGeral, 2, ',', '.'), 1, 0, "C", 0);
+$pdf->cell(20, $alt, "Média:", "LTB", 0, "R", 0);
+$pdf->cell(24, $alt, number_format(($nTotalMedia), 2, ',', '') . " Km/L", "BRT", 1, "R", 0);
+$pdf->ln();
 $pdf->Output();
 ?>

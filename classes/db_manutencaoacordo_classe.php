@@ -18,6 +18,7 @@ class cl_manutencaoacordo
   var $pagina_retorno = null;
   // cria variaveis do arquivo
   var $manutac_sequencial = 0;
+  var $manutac_numeroant = null;
   var $manutac_codunidsubanterior = null;
   var $manutac_acordo = 0;
 
@@ -26,6 +27,7 @@ class cl_manutencaoacordo
                  manutac_sequencial = int8 = Sequencial
                  manutac_codunidsubanterior = int4 = Cod unid sub anterior
                  manutac_acordo = int8 = Numeração
+                 manutac_numeroant = varchar = numero do contrato anterior
                  ";
 
   //funcao construtor da classe
@@ -53,6 +55,7 @@ class cl_manutencaoacordo
     $this->manutac_sequencial = ($this->manutac_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["manutac_sequencial"] : $this->manutac_sequencial);
     $this->manutac_codunidsubanterior = ($this->manutac_codunidsubanterior == "" ? @$GLOBALS["HTTP_POST_VARS"]["manutac_codunidsubanterior"] : $this->manutac_codunidsubanterior);
     $this->manutac_acordo = ($this->manutac_acordo == "" ? @$GLOBALS["HTTP_POST_VARS"]["manutac_acordo"] : $this->manutac_acordo);
+    $this->manutac_numeroant = ($this->manutac_numeroant == "" ? @$GLOBALS["HTTP_POST_VARS"]["manutac_numeroant"] : $this->manutac_numeroant);
   }
 
   // funcao para inclusao aqui
@@ -89,11 +92,13 @@ class cl_manutencaoacordo
                                  manutac_sequencial
                 ,manutac_codunidsubanterior
                 ,manutac_acordo
+                ,manutac_numeroant
                        )
                 values (
                          $this->manutac_sequencial
                 ,'$this->manutac_codunidsubanterior'
                 ,$this->manutac_acordo
+                ,'$this->manutac_numeroant'
                       )";
 
     $result = db_query($sql);

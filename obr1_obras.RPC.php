@@ -262,7 +262,7 @@ switch ($oParam->exec) {
                         
                         $oRetorno->status = 1;
                         $lotes                        = new stdClass();
-                        $lotes->descricao = $oDadosLotes->l04_descricao;
+                        $lotes->descricao = urlencode($oDadosLotes->l04_descricao);
                         $lotes->numlote = $oDadosLotes->l04_numerolote;
                         $lotes->total = pg_num_rows($resultLotes);
                         $oRetorno->itens[] = $lotes;

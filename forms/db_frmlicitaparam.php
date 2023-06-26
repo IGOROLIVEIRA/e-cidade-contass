@@ -1,28 +1,28 @@
-<?
+<?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -43,7 +43,7 @@ $cllicitaparam->rotulo->label();
                   <?= @$Ll12_escolherprocesso ?>
                 </td>
                 <td>
-                  <?
+                  <?php
                   $x = array("f" => "NAO", "t" => "SIM");
                   db_select('l12_escolherprocesso', $x, true, $db_opcao, "");
                   ?>
@@ -55,7 +55,7 @@ $cllicitaparam->rotulo->label();
                   <?= @$Ll12_escolheprotocolo ?>
                 </td>
                 <td>
-                  <?
+                  <?php
                   $x = array("f" => "NAO", "t" => "SIM");
                   db_select('l12_escolheprotocolo', $x, true, $db_opcao, "");
                   ?>
@@ -78,7 +78,7 @@ $cllicitaparam->rotulo->label();
                   <strong>Emitir usuário no relatório de adjudicação:</strong>
                 </td>
                 <td>
-                  <?
+                  <?php
                   $x = array("f" => "NAO", "t" => "SIM");
                   db_select('l12_usuarioadjundica', $x, true, $db_opcao, "");
                   ?>
@@ -91,17 +91,17 @@ $cllicitaparam->rotulo->label();
                   <?= @$Ll12_qtdediasliberacaoweb ?>
                 </td>
                 <td>
-                  <?
+                  <?php
                   db_input('l12_qtdediasliberacaoweb', 5, 0, true, 'text', $db_opcao);
                   ?>
                 </td>
               </tr>
               <tr>
                 <td>
-                  <strong>Validação no Cadastro de Fornecedores</strong>
+                  <strong>Validação no Cadastro de Fornecedores (Telefone/Email/Conta Bancária)</strong>
                 </td>
                 <td>
-                  <?
+                  <?php
                   $x = array("f" => "NAO", "t" => "SIM");
                   db_select('l12_validacadfornecedor', $x, true, $db_opcao, "");
                   ?>
@@ -112,7 +112,7 @@ $cllicitaparam->rotulo->label();
                   <strong>Validação do PNCP</strong>
                 </td>
                 <td>
-                  <?
+                  <?php
                   $x = array("f" => "NAO", "t" => "SIM");
                   db_select('l12_pncp', $x, true, $db_opcao, "");
                   ?>
@@ -123,9 +123,31 @@ $cllicitaparam->rotulo->label();
                   <strong>Numeração Manual na Licitação</strong>
                 </td>
                 <td>
-                  <?
+                  <?php
                   $x = array("f" => "NAO", "t" => "SIM");
                   db_select('l12_numeracaomanual', $x, true, $db_opcao, "");
+                  ?>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Validação no Cadastro de Fornecedores (Telefone/Email)</strong>
+                </td>
+                <td>
+                  <?
+                  $x = array("f" => "NAO", "t" => "SIM");
+                  db_select('l12_validafornecedor_emailtel', $x, true, $db_opcao, "");
+                  ?>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Plataforma eletrônica ativa</strong>
+                </td>
+                <td>
+                  <?php
+                  $x = array("f" => "NAO", "t" => "SIM");
+                  db_select('l12_acessoapipcp', $x, true, $db_opcao, "");
                   ?>
                 </td>
               </tr>

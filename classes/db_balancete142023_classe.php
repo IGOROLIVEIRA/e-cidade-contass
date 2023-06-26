@@ -1091,7 +1091,7 @@ class cl_balancete142023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1114,7 +1114,7 @@ class cl_balancete142023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1130,7 +1130,7 @@ class cl_balancete142023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1153,7 +1153,7 @@ class cl_balancete142023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -1183,7 +1183,7 @@ class cl_balancete142023
                                 e60_codemp nroempenho,
                                 e60_numemp numemp,
                                 e60_anousu anoinscricao,
-                                o58_orgao,o58_unidade
+                                o58_orgao,o58_unidade, e60_emendaparlamentar, e60_esferaemendaparlamentar
                                 from conlancamval
                                 inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
                                 inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
@@ -1201,7 +1201,8 @@ class cl_balancete142023
                                 and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}";
 
 
-                if ($sEstrutural == "5312" || $sEstrutural == "5322" || $sEstrutural == "6311" || $sEstrutural == "6321" | $sEstrutural == "6313") {
+                if ($sEstrutural == "5312" || $sEstrutural == "5322" || $sEstrutural == "6311" || $sEstrutural == "6321" || $sEstrutural == "6313"
+                                           || $sEstrutural == "5317" | $sEstrutural == "5327" || $sEstrutural == "6317" || $sEstrutural == "6327") {
                                 $sSqlRestos .= " union ";
                                 $sSqlRestos .= " select distinct
                                 e60_coddot,
@@ -1220,7 +1221,7 @@ class cl_balancete142023
                                 e60_codemp nroempenho,
                                 e60_numemp numemp,
                                 e60_anousu anoinscricao,
-                                o58_orgao,o58_unidade
+                                o58_orgao,o58_unidade, e60_emendaparlamentar, e60_esferaemendaparlamentar
                                 from conlancamval
                                 inner join contacorrentedetalheconlancamval on c28_conlancamval = c69_sequen
                                 inner join contacorrentedetalhe on c19_sequencial = c28_contacorrentedetalhe
@@ -1257,7 +1258,7 @@ class cl_balancete142023
                                     e60_codemp nroempenho,
                                     e60_numemp numemp,
                                     e60_anousu anoinscricao,
-                                    o58_orgao,o58_unidade
+                                    o58_orgao,o58_unidade, e60_emendaparlamentar, e60_esferaemendaparlamentar
                                     from contacorrentedetalhe
                                     inner join empempenho on e60_numemp = c19_numemp
                                     inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot

@@ -336,7 +336,7 @@ FOOTER;
 
     return array_reduce($aArrayAux, function ($str, $item) {
 
-      $item = empty($item) ? '&nbsp;' : htmlentities($item);
+      $item = empty($item) ? '&nbsp;' : htmlentities($item, ENT_QUOTES, 'ISO-8859-1');
       return $str . "<p>{$item}</p>\n";
 
     }, '');
