@@ -64,7 +64,7 @@ $cllicobraslicitacao->rotulo->label();
   </form>
   <?
   if (!isset($pesquisa_chave)) {
-    if (isset($campos) == false) {
+    if (!isset($campos)) {
       if (file_exists("funcoes/db_func_licobraslicitacao.php") == true) {
         include("funcoes/db_func_licobraslicitacao.php");
       } else {
