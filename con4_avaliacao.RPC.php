@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("dbforms/db_funcoes.php");
@@ -43,12 +43,12 @@ $oRetorno->status  = 1;
 $oRetorno->message = 1;
 $oRetorno->itens   = array();
 switch($oParam->exec) {
-  
+
   case "getDadosAvaliacao":
-    
+
     $oAvaliacao                                    = new Avaliacao($oParam->iAvaliacao);
     $_SESSION["oAvaliacao_{$oParam->iAvaliacao}"]  = $oAvaliacao;
-    
+
     $oRetorno->avaliacao             = new stdClass();
     $oRetorno->avaliacao->descricao  = urlencode($oAvaliacao->getDescricao());
     $oRetorno->avaliacao->observacao = urlencode($oAvaliacao->getObservacao());
@@ -61,13 +61,13 @@ switch($oParam->exec) {
       $oGrupo = new stdClass();
       $oGrupo->codigo    = $oGrupoTemp->getGrupo();
       $oGrupo->descricao = urlencode($oGrupoTemp->getDescricao());
-      
+
       $oRetorno->avaliacao->grupos[] = $oGrupo;
     }
     break;
 
   case "getPerguntasPorGrupo":
-    
+
     $oAvaliacao          = $_SESSION["oAvaliacao_{$oParam->iAvaliacao}"];
     $oRetorno->perguntas = array();
     foreach ($oAvaliacao->getPerguntas($oParam->iGrupo) as $oPerguntaTemp) {
@@ -78,19 +78,22 @@ switch($oParam->exec) {
        $oPergunta->obrigatoria = $oPerguntaTemp->isObrigatoria();
        $oPergunta->tipo        = $oPerguntaTemp->getTipo();
        $oPergunta->respostas   = $oPerguntaTemp->getRespostas();
+       foreach ($oPergunta->respostas as $oResposta) {
+           $oResposta->descricaoresposta = urlencode($oResposta->descricaoresposta);
+       }
        array_push($oRetorno->perguntas, $oPergunta);
     }
     break;
-    
+
   case "salvarRepostas":
-    
+
     $oAvaliacao = $_SESSION["oAvaliacao_{$oParam->iAvaliacao}"];
     $aPerguntas = $oAvaliacao->getPerguntas();
-    
+
     foreach ($oAvaliacao->getPerguntas() as $oPergunta) {
-      
+
       foreach ($oParam->perguntas as $oResposta) {
-        
+
         if ($oPergunta->getCodigo() == $oResposta->codigo) {
           $oPergunta->setResposta($oResposta->respostas);
         }
@@ -98,13 +101,13 @@ switch($oParam->exec) {
     }
     $_SESSION["oAvaliacao_{$oParam->iAvaliacao}"] = $oAvaliacao;
     break;
-    
+
   case "salvarAvaliacao" :
 
     $oAvaliacao = $_SESSION["oAvaliacao_{$oParam->iAvaliacao}"];
-    
+
     try {
-      
+
       db_inicio_transacao();
       foreach ($oAvaliacao->getPerguntas() as $oPergunta) {
         $oPergunta->salvarRespostas();
