@@ -520,6 +520,8 @@ $codigoModalidade = (db_utils::fieldsMemory($resource, 0))->codigomodalidade;
         oParam.codigo = "<?= $licitacao?>";
         oParam.exec = "EnviarPregao";
 
+        js_divCarregando('Aguarde...', 'msgbox');
+
         var oAjax = new Ajax.Request(sUrl, {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParam),
@@ -529,6 +531,7 @@ $codigoModalidade = (db_utils::fieldsMemory($resource, 0))->codigomodalidade;
     }
 
     function js_retornoportaldecompras(oAjax) {
+        js_removeObj('msgbox');
         var oRetorno = eval("(" + oAjax.responseText + ")");
 
         alert(oRetorno.message);
