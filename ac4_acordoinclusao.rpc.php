@@ -51,7 +51,7 @@ require_once("model/contabilidade/contacorrente/ContaCorrenteDetalhe.model.php")
 require_once("model/empenho/EmpenhoFinanceiro.model.php");
 
 $oJson                  = new services_json();
-$oParam                 = $oJson->decode(str_replace("\\","",$_POST["json"]));
+$oParam                 = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 
 $oRetorno               = new stdClass();
 $oRetorno->iStatus      = 1;
@@ -63,32 +63,32 @@ try {
 
   switch ($oParam->exec) {
 
-    case "getFormasControle" :
+    case "getFormasControle":
 
       $aFormasControle = array();
       $aFormasControle = getValoresPadroesCampo('ac20_tipocontrole');
 
       foreach ($aFormasControle as $iFormasControle => $oFormasControle) {
 
-         $oDadosFormaControle = new stdClass();
-         $oDadosFormaControle->iValor     = $iFormasControle;
-         $oDadosFormaControle->sDescricao = urlencode($oFormasControle);
-         $oDadosFormaControle->iD         = $oParam->iD;
-         $aDadosRetorno[] = $oDadosFormaControle;
+        $oDadosFormaControle = new stdClass();
+        $oDadosFormaControle->iValor     = $iFormasControle;
+        $oDadosFormaControle->sDescricao = urlencode($oFormasControle);
+        $oDadosFormaControle->iD         = $oParam->iD;
+        $aDadosRetorno[] = $oDadosFormaControle;
       }
       $oRetorno->aDadosRetorno = $aDadosRetorno;
-    break;
+      break;
 
 
-    case 'vincularEmpenhos' :
+    case 'vincularEmpenhos':
 
       db_inicio_transacao();
-      $iOrigem                = $oParam->iOrigem;                     ;
+      $iOrigem                = $oParam->iOrigem;;
       $sEmpenhos              = implode(", ", $oParam->sListaEmpenhos);
-      $iNumCgm                = $oParam->iNumCgm;                     ;
+      $iNumCgm                = $oParam->iNumCgm;;
       $iAcordo                = $oParam->iAcordo;
 
-      $aEmpenhosVincular      = $oParam->sListaEmpenhos;//array();
+      $aEmpenhosVincular      = $oParam->sListaEmpenhos; //array();
       $aEmpenhosVinculados    = array();
 
       $oDaoAcordoEmpEmpitem     = db_utils::getDao("acordoempempitem");
@@ -130,7 +130,7 @@ try {
           $iTotalEstorno       = db_utils::fieldsMemory($rsBuscaLancamentos, 0)->total_estorno;
           unset($oDaoConlancamEmp);
 
-          if ( $iTotalInclusao != $iTotalEstorno ) {
+          if ($iTotalInclusao != $iTotalEstorno) {
             throw new Exception(_M("{$sCaminhoMensagens}desvincular_empenho_com_lancamento"), null);
           }
         }
@@ -154,21 +154,21 @@ try {
               if ($oDaAcordoItemPrevisao->erro_status == "0") {
 
                 $oErro->erro_msg = $oDaAcordoItemPrevisao->erro_msg;
-                throw new Exception(_M($sCaminhoMensagens."acordo_item_previsao_excluir", $oErro));
+                throw new Exception(_M($sCaminhoMensagens . "acordo_item_previsao_excluir", $oErro));
               }
               // primeiro excluimos da acordoempempitem
-              $oDaoAcordoEmpEmpitem->excluir(null,"ac44_acordoitem = {$oDesvincular->acordoitem} " );
+              $oDaoAcordoEmpEmpitem->excluir(null, "ac44_acordoitem = {$oDesvincular->acordoitem} ");
               if ($oDaoAcordoEmpEmpitem->erro_status == "0") {
 
                 $oErro->erro_msg = $oDaoAcordoEmpEmpitem->erro_msg;
-                throw new Exception(_M($sCaminhoMensagens."acordo_empempitem_excluir", $oErro));
+                throw new Exception(_M($sCaminhoMensagens . "acordo_empempitem_excluir", $oErro));
               }
               // excluimos da AcordoItemPeriodo
               $oDaoAcordoItemPeriodo->excluir(null, "ac41_acordoitem = {$oDesvincular->acordoitem}");
               if ($oDaoAcordoItemPeriodo->erro_status == "0") {
 
                 $oErro->erro_msg = $oDaoAcordoItemPeriodo->erro_msg;
-                throw new Exception(_M($sCaminhoMensagens."acordo_item_periodo_excluir", $oErro));
+                throw new Exception(_M($sCaminhoMensagens . "acordo_item_periodo_excluir", $oErro));
               }
               // excluimos da AcodoItemDotacao
               $oDaoAcordoItemDotacao->excluir(null, "ac22_acordoitem = {$oDesvincular->acordoitem}");
@@ -183,18 +183,18 @@ try {
               if ($oDaoAcordoItem->erro_status == "0") {
 
                 $oErro->erro_msg = $oDaoAcordoItem->erro_msg;
-                throw new Exception(_M($sCaminhoMensagens."acordo_item_excluir", $oErro));
+                throw new Exception(_M($sCaminhoMensagens . "acordo_item_excluir", $oErro));
               }
             }
           }
         }
 
         $oDaoEmpEmpenhoContrato = new cl_empempenhocontrato();
-        $oDaoEmpEmpenhoContrato->excluir (null, "e100_numemp = {$oDadosDesvincular->e100_numemp} and e100_acordo = {$iAcordo} ");
+        $oDaoEmpEmpenhoContrato->excluir(null, "e100_numemp = {$oDadosDesvincular->e100_numemp} and e100_acordo = {$iAcordo} ");
         if ($oDaoEmpEmpenhoContrato->erro_status == "0") {
 
           $oErro->erro_msg = $oDaoEmpEmpenhoContrato->erro_msg;
-          throw new Exception(_M($sCaminhoMensagens."empempenho_contrato_excluir", $oErro));
+          throw new Exception(_M($sCaminhoMensagens . "empempenho_contrato_excluir", $oErro));
         }
       }
       // percorremos os empenhos selecionados,
@@ -219,13 +219,13 @@ try {
         if ($oDaoEmpenhoContrato->numrows == 0) {
 
           $oDaoEmpenho = db_utils::getDao("empempenho");
-          $sSqlEmpenho = $oDaoEmpenho->sql_query_file($oEmpenhosVincular,"e60_vlrliq");
+          $sSqlEmpenho = $oDaoEmpenho->sql_query_file($oEmpenhosVincular, "e60_vlrliq");
           $rsEmpenho   = db_query($sSqlEmpenho);
-//          if (db_utils::fieldsMemory($rsEmpenho,0)->e60_vlrliq > 0) {
-//            throw new Exception("Já existe Liquidação para o Empenho: {$oEmpenhosVincular}.");
-//          }
+          //          if (db_utils::fieldsMemory($rsEmpenho,0)->e60_vlrliq > 0) {
+          //            throw new Exception("Já existe Liquidação para o Empenho: {$oEmpenhosVincular}.");
+          //          }
 
-//          OC 3982 - Comentado em atendimento a demanda.
+          //          OC 3982 - Comentado em atendimento a demanda.
 
           $oDaoEmpenhoContrato->e100_numemp = $oEmpenhosVincular;
           $oDaoEmpenhoContrato->e100_acordo = $iAcordo;
@@ -233,7 +233,7 @@ try {
           if ($oDaoEmpenhoContrato->erro_status == 0) {
 
             $oErro->erro_msg = $oDaoEmpenhoContrato->erro_msg;
-            throw new Exception(_M($sCaminhoMensagens."erro_vincular_empenho_contrato", $oErro));
+            throw new Exception(_M($sCaminhoMensagens . "erro_vincular_empenho_contrato", $oErro));
           }
 
           $oDaoAcordo = db_utils::getDao('acordo');
@@ -244,19 +244,19 @@ try {
 
           $aDocumentos = array();
 
-          for ($iCont=0; $iCont < pg_num_rows($result); $iCont++) {
-            $aDocumentos[] =  db_utils::fieldsMemory($result,$iCont)->c71_coddoc;
+          for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
+            $aDocumentos[] =  db_utils::fieldsMemory($result, $iCont)->c71_coddoc;
           }
 
           $acordoLancamento = true;
 
-          if ((in_array(2,$aDocumentos) || in_array(3,$aDocumentos) || in_array(204,$aDocumentos) || in_array(206,$aDocumentos))) {
+          if ((in_array(2, $aDocumentos) || in_array(3, $aDocumentos) || in_array(204, $aDocumentos) || in_array(206, $aDocumentos))) {
             $acordoLancamento = false;
           }
 
           /**
-          * Criar lancamento contabil para o vinculo do contrato com o empenho
-          */
+           * Criar lancamento contabil para o vinculo do contrato com o empenho
+           */
           $oDataImplantacao = new DBDate(date("Y-m-d", db_getsession('DB_datausu')));
           $oInstituicao     = InstituicaoRepository::getInstituicaoByCodigo(db_getsession('DB_instit'));
           if (ParametroIntegracaoPatrimonial::possuiIntegracaoContrato($oDataImplantacao, $oInstituicao) && $acordoLancamento == true) {
@@ -276,26 +276,23 @@ try {
               $oContaCorrente->setAcordo($oAcordo);
               $oLancamentoAuxiliarAcordo->setContaCorrenteDetalhe($oContaCorrente);
               $oEventoContabilAcordo->executaLancamento($oLancamentoAuxiliarAcordo);
-
             }
-
           }
-
         }
 
         $oEmpenhoFinanceiro = new EmpenhoFinanceiro($oEmpenhosVincular);
         $nValorTotalEmpenhos += $oEmpenhoFinanceiro->getValorEmpenho();
       }
       // como dito comparamos os 2 valores
-      if ( round($nValorTotalEmpenhos, 2) > round($nValorAcordo, 2)) {
-        throw new Exception(_M($sCaminhoMensagens."valor_total_empenhos_maior_valor_acordo"));
+      if (round($nValorTotalEmpenhos, 2) > round($nValorAcordo, 2)) {
+        throw new Exception(_M($sCaminhoMensagens . "valor_total_empenhos_maior_valor_acordo"));
       }
 
       db_fim_transacao(false);
 
-      $oRetorno->sMessage = _M($sCaminhoMensagens.'empenho_vinculado_com_sucesso');
+      $oRetorno->sMessage = _M($sCaminhoMensagens . 'empenho_vinculado_com_sucesso');
 
-    break;
+      break;
 
     case "getEmpenhosVinculadosAcordo":
 
@@ -323,7 +320,7 @@ try {
           $oDadosRetorno->e60_numemp = $oEmpenho->e60_numemp;
           $oDadosRetorno->e60_codemp = $oEmpenho->e60_codemp;
           $oDadosRetorno->e60_anousu = $oEmpenho->e60_anousu;
-          $oDadosRetorno->e60_emiss  = db_formatar($oEmpenho->e60_emiss, "d") ;
+          $oDadosRetorno->e60_emiss  = db_formatar($oEmpenho->e60_emiss, "d");
           $oDadosRetorno->e60_vlremp = db_formatar($oEmpenho->e60_vlremp, "f");
           $oDadosRetorno->e60_resumo = urlencode($oEmpenho->e60_resumo);
           $oDadosRetorno->lVinculado = $oEmpenho->lvinculado;
@@ -339,23 +336,25 @@ try {
 
           $oDaoEmpenho        = db_utils::getDao('empempenho');
           $sSequencialEmpenho = implode(", ", $aEmpenhosVinculadosSessao->aIncluir);
-          $sSqlEmpenhoSessao  = $oDaoEmpenho->sql_query_empenhocontrato(null,
-                                                                       "{$sCamposContrato}",
-                                                                       $sOrderContrato,
-                                                                       "e60_numemp in ({$sSequencialEmpenho})");
+          $sSqlEmpenhoSessao  = $oDaoEmpenho->sql_query_empenhocontrato(
+            null,
+            "{$sCamposContrato}",
+            $sOrderContrato,
+            "e60_numemp in ({$sSequencialEmpenho})"
+          );
           $rsEmpenhoSessao = $oDaoEmpenho->sql_record($sSqlEmpenhoSessao);
           for ($iTotalEmpenho = 0; $iTotalEmpenho < $oDaoEmpenho->numrows; $iTotalEmpenho++) {
 
-          $oEmpenho      = db_utils::fieldsMemory($rsEmpenhoSessao, $iTotalEmpenho);
-          $oDadosRetorno = new stdClass();
-          $oDadosRetorno->e60_numemp = $oEmpenho->e60_numemp;
-          $oDadosRetorno->e60_codemp = $oEmpenho->e60_codemp;
-          $oDadosRetorno->e60_anousu = $oEmpenho->e60_anousu;
-          $oDadosRetorno->e60_emiss  = db_formatar($oEmpenho->e60_emiss, "d") ;
-          $oDadosRetorno->e60_vlremp = db_formatar($oEmpenho->e60_vlremp, "f");
-          $oDadosRetorno->e60_resumo = urlencode($oEmpenho->e60_resumo);
-          $oDadosRetorno->lVinculado = $oEmpenho->lvinculado;
-          $aDadosRetorno[] = $oDadosRetorno;
+            $oEmpenho      = db_utils::fieldsMemory($rsEmpenhoSessao, $iTotalEmpenho);
+            $oDadosRetorno = new stdClass();
+            $oDadosRetorno->e60_numemp = $oEmpenho->e60_numemp;
+            $oDadosRetorno->e60_codemp = $oEmpenho->e60_codemp;
+            $oDadosRetorno->e60_anousu = $oEmpenho->e60_anousu;
+            $oDadosRetorno->e60_emiss  = db_formatar($oEmpenho->e60_emiss, "d");
+            $oDadosRetorno->e60_vlremp = db_formatar($oEmpenho->e60_vlremp, "f");
+            $oDadosRetorno->e60_resumo = urlencode($oEmpenho->e60_resumo);
+            $oDadosRetorno->lVinculado = $oEmpenho->lvinculado;
+            $aDadosRetorno[] = $oDadosRetorno;
           }
         }
       }
@@ -371,8 +370,8 @@ try {
       $iNumCgm                 = $oParam->iNumCgm;
       $iCodigoEmpenho          = $oParam->iCodigoEmpenho;
       $iNumeroEmpenho          = $oParam->iNumeroEmpenho;
-      $dtInicial               = implode("-", array_reverse(explode("/",$oParam->dtInicial)));
-      $dtFinal                 = implode("-", array_reverse(explode("/",$oParam->dtFinal)))  ;
+      $dtInicial               = implode("-", array_reverse(explode("/", $oParam->dtInicial)));
+      $dtFinal                 = implode("-", array_reverse(explode("/", $oParam->dtFinal)));
       $iAcordo                 = $oParam->iAcordo;
       $sListaEmpenhosVinculado = "";
 
@@ -403,7 +402,7 @@ try {
           $oDadosRetorno->e60_numemp = $oEmpenho->e60_numemp;
           $oDadosRetorno->e60_codemp = $oEmpenho->e60_codemp;
           $oDadosRetorno->e60_anousu = $oEmpenho->e60_anousu;
-          $oDadosRetorno->e60_emiss  = db_formatar($oEmpenho->e60_emiss, "d") ;
+          $oDadosRetorno->e60_emiss  = db_formatar($oEmpenho->e60_emiss, "d");
           $oDadosRetorno->e60_vlremp = db_formatar($oEmpenho->e60_vlremp, "f");
           $oDadosRetorno->e60_resumo = urlencode($oEmpenho->e60_resumo);
           $oDadosRetorno->lVinculado = $oEmpenho->lvinculado;
@@ -419,7 +418,7 @@ try {
           $oDaoEmpenho         = db_utils::getDao('empempenho');
           $sSequencialEmpenho  = implode(", ", $aEmpenhosVinculadosSessao->aIncluir);
           $sWhere              = "e60_numemp in ({$sSequencialEmpenho})";
-          $sSqlEmpenhoSessao   = $oDaoEmpenho->sql_query_empenhocontrato(null,"{$sCamposContrato}",$sOrderContrato, $sWhere);
+          $sSqlEmpenhoSessao   = $oDaoEmpenho->sql_query_empenhocontrato(null, "{$sCamposContrato}", $sOrderContrato, $sWhere);
           $rsEmpenhoSessao = $oDaoEmpenho->sql_record($sSqlEmpenhoSessao);
 
           for ($iTotalEmpenho = 0; $iTotalEmpenho < $oDaoEmpenho->numrows; $iTotalEmpenho++) {
@@ -429,15 +428,15 @@ try {
             $oDadosRetorno->e60_numemp = $oEmpenho->e60_numemp;
             $oDadosRetorno->e60_codemp = $oEmpenho->e60_codemp;
             $oDadosRetorno->e60_anousu = $oEmpenho->e60_anousu;
-            $oDadosRetorno->e60_emiss  = db_formatar($oEmpenho->e60_emiss, "d") ;
+            $oDadosRetorno->e60_emiss  = db_formatar($oEmpenho->e60_emiss, "d");
             $oDadosRetorno->e60_vlremp = db_formatar($oEmpenho->e60_vlremp, "f");
             $oDadosRetorno->e60_resumo = urlencode($oEmpenho->e60_resumo);
             $oDadosRetorno->lVinculado = $oEmpenho->lvinculado;
             $aDadosRetorno[] = $oDadosRetorno;
-            }
           }
         }
-      $sWhere  = "e60_numcgm = {$iNumCgm}  AND e60_instit = ".db_getsession("DB_instit");
+      }
+      $sWhere  = "e60_numcgm = {$iNumCgm}  AND e60_instit = " . db_getsession("DB_instit");
 
       /*
        * aqui verificamos se os empenhos selecionados para o acordo a ser alterado
@@ -457,10 +456,10 @@ try {
 
           if ($sListaEmpenhosVinculado != "") {
 
-           $sWhere .= "and e60_numemp not in ($sListaEmpenhosVinculado) ";
+            $sWhere .= "and e60_numemp not in ($sListaEmpenhosVinculado) ";
           }
         }
-      }  else {
+      } else {
 
         $sWhere .= " and e60_numemp not in (select e100_numemp from empempenhocontrato) ";
       }
@@ -474,7 +473,7 @@ try {
           $sSqlJaVinculados  = $oDaoEmpEmpenhoContrato->sql_query_file(null, $sCampoJaVinculado, null, "e100_acordo = {$iAcordo}");
           $rsJaVinculados    = $oDaoEmpEmpenhoContrato->sql_record($sSqlJaVinculados);
           $sVinculados       = db_utils::fieldsMemory($rsJaVinculados, 0)->e100_numemp;
-          $sVinculados       = $sVinculados . (!empty($sVinculados) ? ", " : '' ) . $iCodigoEmpenho;
+          $sVinculados       = $sVinculados . (!empty($sVinculados) ? ", " : '') . $iCodigoEmpenho;
         } else {
           $sVinculados = $iCodigoEmpenho;
         }
@@ -498,17 +497,16 @@ try {
           $aJaVinculados = array($sVinculados);
 
           foreach ($aVinculados as $oVinculados) {
-            $aJaVinculados[] = $oVinculados->e60_codemp. "::varchar";
+            $aJaVinculados[] = $oVinculados->e60_codemp . "::varchar";
           }
 
           $sVinculados = implode($aJaVinculados, ",");
           $sWhere .= "and e60_codemp in ({$sVinculados}) ";
         } else {
 
-          $sVinculados   = "$iNumeroEmpenho::varchar";//$sVinculados = "";
+          $sVinculados   = "$iNumeroEmpenho::varchar"; //$sVinculados = "";
           $sWhere .= "and e60_codemp = '{$iNumeroEmpenho}' ";
         }
-
       }
 
       if ((isset($dtInicial) &&  $dtInicial != null) && (isset($dtFinal) &&  $dtFinal != null)) {
@@ -543,7 +541,7 @@ try {
       $rsEmpenho   = $oDaoEmpenho->sql_record($sSqlEmpenho);
 
       if ($oDaoEmpenho->numrows == 0) {
-        throw new BusinessException(_M($sCaminhoMensagens."nenhum_empenho_encontrado"));
+        throw new BusinessException(_M($sCaminhoMensagens . "nenhum_empenho_encontrado"));
       }
 
       for ($iTotalEmpenho = 0; $iTotalEmpenho < $oDaoEmpenho->numrows; $iTotalEmpenho++) {
@@ -552,7 +550,7 @@ try {
         $oDadosRetorno = new stdClass();
         $oDadosRetorno->e60_numemp = $oEmpenho->e60_numemp;
         $oDadosRetorno->e60_codemp = $oEmpenho->e60_codemp;
-        $oDadosRetorno->e60_emiss  = db_formatar($oEmpenho->e60_emiss, "d") ;
+        $oDadosRetorno->e60_emiss  = db_formatar($oEmpenho->e60_emiss, "d");
         $oDadosRetorno->e60_vlremp = db_formatar($oEmpenho->e60_vlremp, "f");
         $oDadosRetorno->e60_resumo = urlencode($oEmpenho->e60_resumo);
         $oDadosRetorno->lVinculado = $oEmpenho->lvinculado;
@@ -560,7 +558,7 @@ try {
       }
       $oRetorno->aDadosRetorno = $aDadosRetorno;
 
-    break;
+      break;
 
     case "getItensEmpenhosAindaNaoVinculados":
 
@@ -574,16 +572,16 @@ try {
       $sWhere             .= " and ac44_empempitem is null";
 
       $oDaoEmpenhoContrato = db_utils::getDao("empempenhocontrato");
-      $sSqlEmpenhoItens    = $oDaoEmpenhoContrato->sql_query_itensContratoEmpenho( null, "*", null, $sWhere);
+      $sSqlEmpenhoItens    = $oDaoEmpenhoContrato->sql_query_itensContratoEmpenho(null, "*", null, $sWhere);
 
       $rsEmpenhoItens      = $oDaoEmpenhoContrato->sql_record($sSqlEmpenhoItens);
       $aItem               = null;
 
-      if($oDaoEmpenhoContrato->numrows > 0) {
+      if ($oDaoEmpenhoContrato->numrows > 0) {
 
         $aItem = array();
 
-        for($iItem = 0; $iItem < $oDaoEmpenhoContrato->numrows; $iItem++) {
+        for ($iItem = 0; $iItem < $oDaoEmpenhoContrato->numrows; $iItem++) {
 
           $oItem                     = db_utils::fieldsMemory($rsEmpenhoItens, $iItem);
 
@@ -597,7 +595,7 @@ try {
       }
       $oRetorno->aItensEmpenhos = $aItem;
 
-    break;
+      break;
 
     case "verificaTipoAcordo":
 
@@ -606,10 +604,10 @@ try {
       $rsAcordo   = $oDAOAcordo->sql_record($sSQLAcordo);
 
       if ($oDAOAcordo->numrows != 1) {
-        throw new Execption(_M($sCaminhoMensagens."verifica_tipo_acordo"));
+        throw new Execption(_M($sCaminhoMensagens . "verifica_tipo_acordo"));
       }
       $oRetorno->iTipoAcordo = db_utils::fieldsMemory($rsAcordo, 0)->ac16_origem;
-    break;
+      break;
 
     case "salvaVinculoItensEmpenho":
 
@@ -630,63 +628,70 @@ try {
 
           $oErro->iCodigoMaterial = $oStdItem->iCodigoMaterial;
           $oErro->iEmpenho        = $oStdItem->iEmpenho;
-          throw new Exception(_M($sCaminhoMensagens."erro_data_inicial" , $oErro));
+          throw new Exception(_M($sCaminhoMensagens . "erro_data_inicial", $oErro));
         }
 
         if (db_formatar($oStdItem->dtFinal, "d") > $dtDataFinalPosicao) {
 
           $oErro->iCodigoMaterial = $oStdItem->iCodigoMaterial;
           $oErro->iEmpenho        = $oStdItem->iEmpenho;
-          throw new Exception(_M($sCaminhoMensagens."erro_data_final" , $oErro));
+          throw new Exception(_M($sCaminhoMensagens . "erro_data_final", $oErro));
         }
 
         if (db_formatar($oStdItem->dtInicial, "d") > db_formatar($oStdItem->dtFinal, "d")) {
 
           $oErro->iCodigoMaterial = $oStdItem->iCodigoMaterial;
           $oErro->iEmpenho        = $oStdItem->iEmpenho;
-          throw new Exception(_M($sCaminhoMensagens."erro_data_final_material" , $oErro));
+          throw new Exception(_M($sCaminhoMensagens . "erro_data_final_material", $oErro));
         }
         $oPosicao->adicionarItemDeEmpenho($oStdItem->iEmpenhoItem, $oStdItem);
       }
       db_fim_transacao(false);
 
-    break;
+      break;
+
+    case "validacaoCadastroFornecedor":
+
+      $rsCgmforn = db_query("select z01_cgccpf from cgm where z01_numcgm = {$oParam->iFornecedor}");
+      $sCnpjFornecedor  = db_utils::fieldsMemory($rsCgmforn, 0)->z01_cgccpf;
+
+      $rsPcfornereprlegal = db_query("select * from pcfornereprlegal inner join cgm on z01_numcgm = pc81_cgmresp where pc81_cgmforn = {$oParam->iFornecedor} and z01_cgccpf = '$sCnpjFornecedor'");
+
+      if (strlen($sCnpjFornecedor) == 14 && pg_num_rows($rsPcfornereprlegal) > 0) {
+        throw new Exception("Usuário: No cadastro do fornecedor selecionado, o CGM do Representante está o mesmo CNPJ do CGM do Fornecedor. Corrija o cadastro e selecione novamente o fornecedor.");
+      }
+
+      break;
 
     default:
       throw new ParameterException("Nenhuma Opção Definida");
-    break;
+      break;
   }
 
   $oRetorno->sMessage = urlencode($oRetorno->sMessage);
   echo $oJson->encode($oRetorno);
-
-} catch (Exception $eErro){
+} catch (Exception $eErro) {
 
   $oRetorno->iStatus  = 2;
   $oRetorno->sMessage = urlencode($eErro->getMessage());
   db_fim_transacao(true);
   echo $oJson->encode($oRetorno);
-
-}catch (DBException $eErro){
-
-  db_fim_transacao(true);
-  $oRetorno->iStatus  = 2;
-  $oRetorno->sMessage = urlencode($eErro->getMessage());
-  echo $oJson->encode($oRetorno);
-
-}catch (ParameterException $eErro){
+} catch (DBException $eErro) {
 
   db_fim_transacao(true);
   $oRetorno->iStatus  = 2;
   $oRetorno->sMessage = urlencode($eErro->getMessage());
   echo $oJson->encode($oRetorno);
+} catch (ParameterException $eErro) {
 
-}catch (BusinessException $eErro){
+  db_fim_transacao(true);
+  $oRetorno->iStatus  = 2;
+  $oRetorno->sMessage = urlencode($eErro->getMessage());
+  echo $oJson->encode($oRetorno);
+} catch (BusinessException $eErro) {
 
   db_fim_transacao(true);
   $oRetorno->iStatus  = 2;
   $oRetorno->sMessage = urlencode($eErro->getMessage());
   echo $oJson->encode($oRetorno);
 }
-
-?>
