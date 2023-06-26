@@ -166,6 +166,7 @@ class cl_empparametro
             $this->e30_prazoentordcompra = ($this->e30_prazoentordcompra == "" ? @$GLOBALS["HTTP_POST_VARS"]["e30_prazoentordcompra"] : $this->e30_prazoentordcompra);
             $this->e30_obrigactapagliq = ($this->e30_obrigactapagliq == "f" ? @$GLOBALS["HTTP_POST_VARS"]["e30_obrigactapagliq"] : $this->e30_obrigactapagliq);
             $this->e30_empordemcron = ($this->e30_empordemcron == "f" ? @$GLOBALS["HTTP_POST_VARS"]["e30_empordemcron"] : $this->e30_empordemcron);
+            $this->e30_liquidacaodataanterior = ($this->e30_liquidacaodataanterior == "f"?@$GLOBALS["HTTP_POST_VARS"]["e30_liquidacaodataanterior"]:$this->e30_liquidacaodataanterior);
         } else {
         }
     }
@@ -915,6 +916,19 @@ class cl_empparametro
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if(trim($this->e30_liquidacaodataanterior)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e30_liquidacaodataanterior"])){
+            $sql  .= $virgula." e30_liquidacaodataanterior = '$this->e30_liquidacaodataanterior' ";
+            $virgula = ",";
+            if(trim($this->e30_liquidacaodataanterior) == null ){
+                $this->erro_sql = " Campo liquidacao com data anterior nao Informado.";
+                $this->erro_campo = "e30_liquidacaodataanterior";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
                 $this->erro_status = "0";
                 return false;
             }
