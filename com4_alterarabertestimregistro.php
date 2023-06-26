@@ -90,7 +90,7 @@ db_app::load("widgets/windowAux.widget.js");
             <tr>
               <td nowrap title="Estimativa" width="100%">
                  <?
-                  db_ancora("<b>Estimativa de Registro:</b>","",1);
+                  db_ancora("<b>Estimativa de Registro:</b>","js_pesquisarEstimativa();",1);
                  ?>
               </td>
               <td>
@@ -164,7 +164,7 @@ function js_confirma(){
 
   if($('pc10_numeroabertura').value === "" ){
     var pc10_numero = $('pc10_numeroestimativa').value;
-    var sUrl  = 'com4_aberturaregistro002.php';
+    var sUrl  = 'com4_alteraestimativaregistro002.php';
   }
 
   sUrl += '?pc10_numero='+pc10_numero;

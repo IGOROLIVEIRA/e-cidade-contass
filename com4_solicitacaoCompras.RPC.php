@@ -590,6 +590,48 @@ switch ($oParam->exec) {
       $aitens = $oSolicita->getItens();
     }
     break;
+  case "alterarItens":
+
+    try {
+
+      db_inicio_transacao();
+      $oSolicita = $_SESSION["oSolicita"];
+      $iCodAbertura = $oSolicita->getCodigoSolicitacao();
+      $aitens = $oSolicita->getItens();
+      
+
+      //solicitem aqui tem a quantidade, valor, serviquantidade e reservado
+      $estimativaRegistro = new estimativaRegistroPreco();
+      
+
+      foreach ($aitens as $iIndice => $oItem) {
+
+        $oItemRetono = new stdClass;
+        $oItemRetono->codigoitem        = $oItem->getCodigoMaterial();
+        $oItemRetono->descricaoitem     = $oItem->getDescricaoMaterial();
+        $oItemRetono->quantidade        = $oItem->getQuantidade();
+        $oItemRetono->automatico        = $oItem->isAutomatico();
+        $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+        $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+        $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+        $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
+        $oItemRetono->unidade           = $oItem->getUnidade();
+        $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
+        $oItemRetono->indice            = $iIndice;
+        $oItemRetono->temestimativa     = $lTemEstimativa;
+        $oRetorno->itens[] = $oItemRetono;
+      }
+      $iDescricaoLog = 'EXCLUSAO ITEM '.$oParam->iCodigoItem;
+      db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'".$iDescricaoLog." REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,3)");
+    } catch (Exception $eErro) {
+
+
+      db_fim_transacao(true);
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+      $aitens = $oSolicita->getItens();
+    }
+    break;
   case "excluirItensManutencao":
 
     try {
