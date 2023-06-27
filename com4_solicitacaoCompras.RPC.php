@@ -356,7 +356,7 @@ switch ($oParam->exec) {
     break;
   case "adicionarItemmanutencao":
     try {
-
+      $aberturaRegistro = new aberturaRegistroPreco();
       
       $iCodAbertura = $oSolicita->getCodigoSolicitacao();
 
@@ -373,8 +373,11 @@ switch ($oParam->exec) {
           $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
           $validaItens[]   = $oItemSolicitacao;
 
+          $aberturaRegistro->ordenarItemmanutencao($oItem->pc11_codigo,$iItem+1);
+
         }
       }
+
       if (count($validaItens) > 0) {
         foreach ($validaItens as $row) {
           if ($oParam->iCodigoItem == $row->getCodigoMaterial()) {
@@ -395,8 +398,8 @@ switch ($oParam->exec) {
         $iDescricaoLog = 'ADICIONADO ITEM '.$oParam->iCodigoItem;
 
         //solicitem aqui tem a quantidade, valor, serviquantidade e reservado
-        $aberturaRegistro = new aberturaRegistroPreco();
-        $aberturaRegistro->adicionarItemmanutencao($iCodAbertura,$oParam);
+        
+        $aberturaRegistro->adicionarItemmanutencao($iCodAbertura,$oParam,pg_num_rows($rsItens)+1,3);
 
         //solicitempcmater vinculo da pcmater com a solicitem
 
@@ -407,6 +410,17 @@ switch ($oParam->exec) {
         //solicitavinculo aqui vc consegue os vinculos com as estimativas e compilação pc53_solicitapai verificar o tipo 3 abertura - 4 estimativa - 6 compilacao
 
         //estimativas
+
+          $rsVinculoSolicita = db_query("select pc53_solicitafilho,pc10_solicitacaotipo from solicitavinculo inner join solicita on pc10_numero = pc53_solicitafilho  where pc53_solicitapai = $iCodAbertura order by pc53_solicitafilho ");
+          for ($iItens = 0; $iItens < pg_num_rows($rsVinculoSolicita); $iItens++) {
+            
+            $pc53_solicitafilho = db_utils::fieldsMemory($rsVinculoSolicita, $iItens)->pc53_solicitafilho;
+            $pc10_solicitacaotipo = db_utils::fieldsMemory($rsVinculoSolicita, $iItens)->pc10_solicitacaotipo;
+            $aberturaRegistro->adicionarItemmanutencao($pc53_solicitafilho,$oParam,pg_num_rows($rsItens)+1,$pc10_solicitacaotipo);
+            
+          }
+        
+
 
         //log
 
@@ -635,8 +649,12 @@ switch ($oParam->exec) {
   case "excluirItensManutencao":
 
     try {
-
       db_inicio_transacao();
+
+      
+      
+
+      
       $oSolicita = $_SESSION["oSolicita"];
       //VALIDANDO SE JÁ FOI ADD O ITEM
       $iControle = 0;
@@ -675,13 +693,26 @@ switch ($oParam->exec) {
       if ($iControle == 0) {
         $oSolicita->removerItem($oParam->iItemRemover);
         db_fim_transacao(false);
+        $aberturaRegistro = new aberturaRegistroPreco();
+      
+      $iCodAbertura = $oSolicita->getCodigoSolicitacao();
+     
+        
         $lTemEstimativa = false;
-        $aitens = $oSolicita->getItens();
-        if ($oSolicita instanceof aberturaRegistroPreco) {
-          if ($oSolicita->hasEstimativas()) {
-            $lTemEstimativa = true;
-          }
+        $rsItens       = db_query("select * from solicitem inner  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo inner  join pcmater  on pcmater.pc01_codmater = solicitempcmater.pc16_codmater where pc11_numero = $iCodAbertura order by pc11_codigo");
+      
+      if (pg_num_rows($rsItens) > 0) {
+        
+        for ($iItem = 0; $iItem < pg_num_rows($rsItens); $iItem++) {
+
+          $oItem = db_utils::fieldsMemory($rsItens, $iItem, false, false, true);
+          $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
+          $aitens[]   = $oItemSolicitacao;
+
+          $aberturaRegistro->ordenarItemmanutencao($oItem->pc11_codigo,$iItem+1);
+
         }
+      }
         foreach ($aitens as $iIndice => $oItem) {
 
           $oItemRetono = new stdClass;

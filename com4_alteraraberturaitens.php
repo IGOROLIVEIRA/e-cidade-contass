@@ -101,6 +101,7 @@ $db_opcao           = 1;
               <tr>
                 <td colspan="2" style="text-align: center;">
                   <input type="button" value='Adicionar Item' id='btnAddItem'>
+                  <input type="button" value='Novo Item' id='btnNovoItem' style="display: none;">
                   <input type="button" value='Alterar Item' id='btnAlterarItem' style="display: none;">
 
                 </td>
@@ -243,6 +244,7 @@ $db_opcao           = 1;
     js_makeWindow();
     $('btnSalvarItens').observe("click", js_salvarItens);
     $('btnAddItem').observe("click", js_adicionarItem);
+    $('btnNovoItem').observe("click", js_novoItem);
     $('btnAlterarItem').observe("click", js_alterarItem);
     $('pc17_unid').style.height = $('pc01_descrmater').style.height + "px";
     js_parametros();
@@ -319,11 +321,24 @@ $db_opcao           = 1;
     });
   }
 
+    /**
+   * Novo Item
+   */
+  function js_novoItem() {
+    document.getElementById('btnNovoItem').style.display = "none";
+    document.getElementById('btnAlterarItem').style.display = "none";
+    document.getElementById('btnAddItem').style.display = "";
+    document.getElementById('pc16_codmater').value = "";
+    document.getElementById('pc01_descrmater').value = "";
+
+  }
+
   function js_retornoalterarItem(oAjax) {
 
     var oRetorno = eval("(" + oAjax.responseText + ")");
     if (oRetorno.status == 1) {
       alert('Alteração Realizada com Sucesso');
+      document.getElementById('btnNovoItem').style.display = "none";
       document.getElementById('btnAddItem').style.display = "";
       document.getElementById('btnAlterarItem').style.display = "none";
       document.getElementById('pc16_codmater').disabled = false
@@ -341,7 +356,7 @@ $db_opcao           = 1;
     js_removeObj('msgBox');
     var oRetorno = eval("(" + oAjax.responseText + ")");
     if (oRetorno.status == 1) {
-
+      alert('Adicionado com Sucesso');
       js_preencheGrid(oRetorno.itens);
       js_limparForm();
 
@@ -349,6 +364,20 @@ $db_opcao           = 1;
       alert(oRetorno.message.urlDecode());
     }
   }
+
+  function js_retornoexcluirItem(oAjax) {
+
+js_removeObj('msgBox');
+var oRetorno = eval("(" + oAjax.responseText + ")");
+if (oRetorno.status == 1) {
+  alert('Excluído com Sucesso');
+  js_preencheGrid(oRetorno.itens);
+  js_limparForm();
+
+} else {
+  alert(oRetorno.message.urlDecode());
+}
+}
 
   function js_preencheGrid(aItens) {
     aItensAbertura = aItens;
@@ -425,6 +454,7 @@ $db_opcao           = 1;
     iIndiceAlteracao = iSeq;
     document.getElementById('btnAlterarItem').style.display = "";
     document.getElementById('btnAddItem').style.display = "none";
+    document.getElementById('btnNovoItem').style.display = "";
     document.getElementById('pc16_codmater').value = oRow.aCells[1].content;
     document.getElementById('pc01_descrmater').value = oRow.aCells[2].content;
     //document.getElementById('pc16_codmater').disabled = true
@@ -460,6 +490,9 @@ $db_opcao           = 1;
   }
 
   function js_excluirLinha(iSeq) {
+    if(!confirm("Deseja realmente Excluir o item "+oGridItens.aRows[iSeq].aCells[2].content+"?")) {
+    return true;
+  } 
 
     js_divCarregando('Aguarde, removendo item', "msgBox");
     var oParam = new Object();
@@ -468,7 +501,7 @@ $db_opcao           = 1;
     var oAjax = new Ajax.Request(sUrlRC, {
       method: "post",
       parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: js_retornoadicionarItem
+      onComplete: js_retornoexcluirItem
     });
 
   }
@@ -572,7 +605,7 @@ $db_opcao           = 1;
     var oAjax = new Ajax.Request(sUrlRC, {
       method: "post",
       parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: js_retornoadicionarItem
+      onComplete: js_retornoalterarItem
     });
   }
 

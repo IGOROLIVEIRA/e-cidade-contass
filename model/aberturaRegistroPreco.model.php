@@ -694,7 +694,7 @@ class aberturaRegistroPreco extends solicitacaoCompra {
     $oDaoAberturaPreco->alterar($oDaoSolicitaAbeutra->pc54_sequencial);
   }
 
-  public function adicionarItemmanutencao($iCodigoAbertura,$item){
+  public function adicionarItemmanutencao($iCodigoAbertura,$item,$iUltimoseq,$tipo){
     /**
      * Incluimos na tabela solicitem
      */
@@ -707,7 +707,7 @@ class aberturaRegistroPreco extends solicitacaoCompra {
     $oDaoSolicitem->pc11_prazo             = null;
     $oDaoSolicitem->pc11_quant             = '0';
     $oDaoSolicitem->pc11_vlrun             = '0';
-    $oDaoSolicitem->pc11_seq               = 2;
+    $oDaoSolicitem->pc11_seq               = $iUltimoseq;
     $oDaoSolicitem->pc11_resum             = null;
     $oDaoSolicitem->pc11_servicoquantidade = false;
     $oDaoSolicitem->pc11_reservado = false;
@@ -739,9 +739,54 @@ class aberturaRegistroPreco extends solicitacaoCompra {
     if ($oDaosolicitemUnid->erro_status == 0) {
       throw new Exception("Erro ao salvar item {$item->iCodigoItem}!\nErro Retornado:{$oDaosolicitemUnid->erro_msg}");
     }
-
+    
+    if($tipo == 4){
+      /**
+     * Salvamos as informacoes da Unidade do material
+     */
+      $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
+      $rsSolicitemAbertura = $oDaoSolicitemVinculo->sql_record("select pc11_codigo from solicitem inner join solicitavinculo on pc53_solicitapai = pc11_numero inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc53_solicitafilho = $iCodigoAbertura and pc16_codmater=$item->iCodigoItem");
+      $oDaoSolicitemAbertura = db_utils::fieldsmemory($rsSolicitemAbertura, 0);
+      $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemAbertura->pc11_codigo;
+      $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitem->pc11_codigo;
+      $oDaoSolicitemVinculo->incluir(null);
+    }
+    if($tipo == 6){
+      /**
+           * Salvamos as informacoes da Unidade do material
+           */
+          $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
+          $rsSolicitemAbertura = $oDaoSolicitemVinculo->sql_record("select pc11_codigo,pc11_numero from solicitem inner join solicitavinculo on pc53_solicitapai = pc11_numero inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc53_solicitafilho = $iCodigoAbertura and pc16_codmater=$item->iCodigoItem");
+          $oDaoSolicitemAbertura = db_utils::fieldsmemory($rsSolicitemAbertura, 0);
+          
+          $rsVinculoSolicita = db_query("select pc53_solicitafilho from solicitavinculo inner join solicita on pc10_numero = pc53_solicitafilho  where pc53_solicitapai = $oDaoSolicitemAbertura->pc11_numero and pc10_solicitacaotipo = 4 order by pc53_solicitafilho ");
+          for ($iCont = 0; $iCont < pg_num_rows($rsVinculoSolicita); $iCont++) {
+            
+            $pc53_solicitafilho = db_utils::fieldsMemory($rsVinculoSolicita, $iCont)->pc53_solicitafilho;
+            $rsSolicitemAbertura = $oDaoSolicitemVinculo->sql_record("select pc11_codigo,pc11_numero from solicitem  inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc11_numero = $pc53_solicitafilho and pc16_codmater=$item->iCodigoItem");
+            $oDaoSolicitemAbertura = db_utils::fieldsmemory($rsSolicitemAbertura, 0);
+            $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemAbertura->pc11_codigo;
+            $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitem->pc11_codigo;
+            $oDaoSolicitemVinculo->incluir(null);
+            
+          }
+    }
     
 
     return true;
+  }
+
+  public function ordenarItemmanutencao($iCodigoSolicitem,$iSequencia){
+    /**
+     * Orderna Item Abertura
+     */
+    $oDaoSolicitem                         = db_utils::getDao("solicitem");
+    $oDaoSolicitem->pc11_codigo            = $iCodigoSolicitem;
+    $oDaoSolicitem->pc11_seq               = $iSequencia;
+    $oDaoSolicitem->alterar($iCodigoSolicitem);
+    
+    if ($oDaoSolicitem->erro_status == 0) {
+      throw new Exception("Erro ao salsssvar item {$item->iCodigoItem}!\nErro Retornado:{$oDaoSolicitem->erro_msg}");
+    }
   }
 }
