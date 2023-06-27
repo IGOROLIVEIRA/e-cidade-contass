@@ -120,6 +120,16 @@ $val = false;
             <?
             db_input('pc80_codproc', 8, $Ipc80_codproc, true, 'text', 3);
             ?>
+             <b>Data: </b>
+             <?php
+
+              $iDia = date("d", db_getsession("DB_datausu"));
+              $iMes = date("m", db_getsession("DB_datausu"));
+              $iAno = date("Y", db_getsession("DB_datausu"));
+
+              db_inputdata('pc80_data', $iDia, $iMes, $iAno, true, 'text', 1, "");
+
+              ?>
           </td>
         </tr>
         <tr>
@@ -154,21 +164,6 @@ $val = false;
             db_select('pc80_situacao', $aOpcoesSituacao, true, '', 'style="width:100%"');
             ?>
           </td>
-          <td>
-            <b>Data: </b>
-          </td>
-          <td>
-            <?php
-
-            $iDia = date("d", db_getsession("DB_datausu"));
-            $iMes = date("m", db_getsession("DB_datausu"));
-            $iAno = date("Y", db_getsession("DB_datausu"));
-
-            db_inputdata('pc80_data', $iDia, $iMes, $iAno, true, 'text', 1, "");
-
-            ?>
-          </td>
-
         </tr>
         <tr>
           <td align="left">

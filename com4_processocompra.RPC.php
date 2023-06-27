@@ -161,8 +161,8 @@ try {
       $rsDataSolicitacao = db_query("select pc10_data from solicita where pc10_numero = $iSolicitacao;");
       $dataSolicitacao = db_utils::fieldsMemory($rsDataSolicitacao,0)->pc10_data;
 
-      if($data > $dataSolicitacao){
-        throw new Exception("Usuário: a data do processo de compra não pode ser maior que a data da solicitação.");
+      if($data < $dataSolicitacao){
+        throw new Exception("Usuário: a data do processo de compra não pode ser menor que a data da solicitação.");
       }
 
       if (empty($iSequencialProcessoCompra)) {
