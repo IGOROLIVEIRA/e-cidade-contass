@@ -830,7 +830,7 @@ class AutorizacaoEmpenho
         $oDaoEmpAutoriza->e54_destin  = $this->getDestino();
         $oDaoEmpAutoriza->e54_tipol   = $this->getTipoLicitacao();
         $oDaoEmpAutoriza->e54_numerl  = $this->getNumeroLicitacao();
-        $oDaoEmpAutoriza->e54_emiss   = implode('-', array_reverse(explode('/', $this->getDataAutorizacao())));  //date("Y-m-d", db_getsession("DB_datausu"));
+        $oDaoEmpAutoriza->e54_emiss   = implode('-', array_reverse(explode('/', $this->getDataAutorizacao())));
         $oDaoEmpAutoriza->e54_instit  = db_getsession("DB_instit");
         $oDaoEmpAutoriza->e54_depto   = db_getsession("DB_coddepto");
         $oDaoEmpAutoriza->e54_praent  = $this->getPrazoEntrega();
