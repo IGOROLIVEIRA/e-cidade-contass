@@ -1,29 +1,31 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
+
+use App\Services\Tributario\Notificacoes\GenerateArDigitalService;
 
 require_once ("libs/db_stdlib.php");
 require_once ("libs/db_conecta.php");
@@ -50,7 +52,7 @@ $oGet             = db_utils::postMemory($_GET);
  * Carateres a serem escapados nos textos de mensagem
  */
 $aEscape         = array("\r\n", "\n", "\r", ";","\t");
-                
+
 $clNotificacao   = new cl_notificacao();
 $clArretipo      = new cl_notificacao();
 
@@ -71,6 +73,7 @@ $nEspacamento        = $oGet->espacamento;
 $sEstiloFonte        = $oGet->estilofonte;
 $iTamanhoFonte       = $oGet->tamanhofonte;
 $lServicoAr          = isset($oGet->lServAr) ? $oGet->lServAr : '';
+$lServicoArDigital   = !empty($oGet->lServArDigital);
 $lGeraBoleto         = $oGet->lBoleto == 1 ? true : false;
 $dtDtVencimento      = isset($oGet->datavenc) ? $oGet->datavenc : date('Y-m-d', db_getsession('DB_datausu'));
 $dtDtVencimentoBanco = implode("-",array_reverse(explode("/",$dtDtVencimento)));
@@ -88,14 +91,14 @@ if($sOrdenar == 'a') {
 } else {
     $sOrderBy = 'codigo_notificacao';
 }
-   
+
 if($iTratamento > 1) {
-   
+
     $sSqlTratamento       = "update cfiptu                                            ";
     $sSqlTratamento      .= "   set j18_ordendent = " . ($iTratamento - 10)."         ";
     $sSqlTratamento      .= " where j18_anousu    = " . db_getsession("DB_anousu");
     $rsTratamentoEndereco = db_query($sSqlTratamento) or die('Erro tratamento de endereço.');
-     
+
 }
 $rsNotificacao   = $clNotificacao->sql_record($clNotificacao->sql_query_lista_notificacoes($iCodLista,
                                                                                            $sOrderBy,
@@ -117,23 +120,23 @@ db_criatermometro("termometro", "Concluido...", "blue", 1);
 flush();
 
 if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
-   
+
     $aNotificacoes = db_utils::getCollectionByRecord($rsNotificacao);
-   
+
     //gera arquivo
     try {
-       
+
         $clNotiEmissao         = new cl_notiemissao();
     $clNotiEmissaoReg      = new cl_notiemissaoreg();
-   
+
     db_inicio_transacao();
-   
+
     $clNotiEmissao->k136_notificatipogeracao = 1; //1 = NOTIFICAÇÕES TXT CORREIOS
     $clNotiEmissao->k136_recibo              = $lGeraBoleto == true ? 'true' : 'false';
     $clNotiEmissao->k136_data                = date('Y-m-d', db_getsession('DB_datausu'));;
     $clNotiEmissao->k136_usuario             = db_getsession('DB_id_usuario');
     $clNotiEmissao->incluir(null);
-   
+
     if($clNotiEmissao->erro_status == 0) {
       throw new ErrorException($clNotiEmissao->erro_msg);
     }
@@ -141,16 +144,16 @@ if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
     $oHeader->identificador = '0';
     $oHeader->dados_arquivo = 'ARQUIVOS DE ' . date('d/m/Y' , db_getsession('DB_datausu')) . ' ' . date('H:i:s');
     $oHeader->versao_layout = '0';
-   
+
     if ( $oLayoutTxt->setByLineOfDBUtils($oHeader,1,"0") == false ) {
       throw new ErrorException (_M('tributario.notificacoes.not2_geratxtcorreios002.erro_gerar_header'));
     }
-   
+
     $iQtdeNotificacoes = count($aNotificacoes);
     $iTermometro       = 0;
-   
+
     foreach ($aNotificacoes as $oNotificacao) {
-       
+
         db_atutermometro($iTermometro,
                          $iQtdeNotificacoes,
                          "termometro",
@@ -166,46 +169,43 @@ if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
         $sSqlNumpresNotificacao = $clNotificacao->sql_query_debitos_notificacao($oNotificacao->codigo_notificacao, $sCampos);
       $rsNumpresNotificacao   = $clNotificacao->sql_record($sSqlNumpresNotificacao);
         $aNumpresNotificacao    = db_utils::getCollectionByRecord($rsNumpresNotificacao);
-           
+
         foreach ($aNumpresNotificacao as $oNumpreNotificacao) {
-           
+
             $clNotiEmissaoReg->k137_notiemissao = $clNotiEmissao->k136_sequencial;
           $clNotiEmissaoReg->k137_notificacao = $oNotificacao->codigo_notificacao;
           $clNotiEmissaoReg->k137_numpre      = $oNumpreNotificacao->numpre;
           $clNotiEmissaoReg->incluir(null);
-         
+
           if($clNotiEmissaoReg->erro_status == 0) {
             throw new ErrorException($clNotiEmissaoReg->erro_msg);
           }
-         
+
         }
         /**
          * Busca os débitos (numpre, numpar e tipo) da notificacao para geracao do recibo
          */
         $sSqlDebitosNotificacao = $clNotificacao->sql_query_debitos_notificacao($oNotificacao->codigo_notificacao,
-                                                                              "distinct 
-                                                                               k53_numpre   as numpre,    
-                                                                               k53_numpar   as numpar,    
+                                                                              "distinct
+                                                                               k53_numpre   as numpre,
+                                                                               k53_numpar   as numpar,
                                                                                k22_tipo     as tipo_debito");
         $rsDebitosNotificacao   = $clNotificacao->sql_record($sSqlDebitosNotificacao);
         /**
          * Para se houver erro de query
          */
       if ( $clNotificacao->erro_status == "0") {
-        
         $oParms = new stdClass();
         $oParms->sqlDebitosNotificacao = $sSqlDebitosNotificacao;
         throw new ErrorException (_M('tributario.notificacoes.not2_geratxtcorreios002.erro_executar_sql', $oParms));
       }
-     
+
       $aDebitosNotificacao = db_utils::getCollectionByRecord($rsDebitosNotificacao);
       /**
        * Cria novo recibo e busca seus dados
        */
       if ( $lGeraBoleto ) {
         $oDadosBoleto = geraBoleto($oNotificacao->codigo_notificacao, $aDebitosNotificacao, $dtDtVencimentoBanco);
-        echo "<PRE>";
-        //print_r($oDadosBoleto);
       }
 
       /**
@@ -258,18 +258,18 @@ if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
       $oRegistro_1->identificador_correio = '';
       $oRegistro_1->documento             = '';
       $oRegistro_1->internacional         = '';
-                        
+
       if ( $oLayoutTxt->setByLineOfDBUtils($oRegistro_1, 3, 1) == false ) {
         throw new ErrorException (_M('tributario.notificacoes.not2_geratxtcorreios002.erro_gerar_detalhe_1'));
       }
-       
+
       /**
        * Texto telegrama
        */
       $oRegistro_2 = new stdClass();
       $oRegistro_2->identificador = 2;
       $oRegistro_2->texto         = str_replace($aEscape, '', $oNotificacao->texto_campo);
-     
+
       if ( $oLayoutTxt->setByLineOfDBUtils($oRegistro_2,3,2) == false ) {
         throw new ErrorException (_M('tributario.notificacoes.not2_geratxtcorreios002.erro_gerar_detalhe_2'));
       }
@@ -307,8 +307,8 @@ if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
 
       if ( $oLayoutTxt->setByLineOfDBUtils($oRegistro_3,3,3) == false ) {
         throw new ErrorException (_M('tributario.notificacoes.not2_geratxtcorreios002.erro_gerar_detalhe_3'));
-      }     
-     
+      }
+
       /**
        * Dados da carta e do remetente
        */
@@ -354,22 +354,22 @@ if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
       $oRegistro_4->internacional           = '';
       $oRegistro_4->img_cabecalho           = '';
       $oRegistro_4->img_rodape              = '';
-    
+
       if ( $oLayoutTxt->setByLineOfDBUtils($oRegistro_4,3,4) == false ) {
         throw new ErrorException (_M('tributario.notificacoes.not2_geratxtcorreios002.erro_gerar_detalhe_4'));
-      }       
-     
+      }
+
       /**
        * Texto da carta
        */
       $oRegistro_5 = new stdClass();
       $oRegistro_5->identificador = 5;
       $oRegistro_5->texto         = str_replace($aEscape, '', $oNotificacao->texto_campo);
-     
+
       if ( $oLayoutTxt->setByLineOfDBUtils($oRegistro_5,3, 5) == false ) {
         throw new ErrorException (_M('tributario.notificacoes.not2_geratxtcorreios002.erro_gerar_detalhe_5'));
       }
-     
+
       /**
        * Destinatário da carta
        */
@@ -421,14 +421,14 @@ if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
         if ( $oLayoutTxt->setByLineOfDBUtils($oRegistro_7, 3, 7) == false ) {
           throw new ErrorException (_M('tributario.notificacoes.not2_geratxtcorreios002.erro_gerar_detalhe_7'));
         }
-       
-        $oRegistro_8 = new stdClass();                                                               
-        $oRegistro_8->identificador           = 8;                                                   
-        $oRegistro_8->instrucoes              = $oDadosBoleto->sInstrucoes;                          
+
+        $oRegistro_8 = new stdClass();
+        $oRegistro_8->identificador           = 8;
+        $oRegistro_8->instrucoes              = $oDadosBoleto->sInstrucoes;
         if ( $oLayoutTxt->setByLineOfDBUtils($oRegistro_8, 3, 8) == false ) {
           throw new ErrorException (_M('tributario.notificacoes.not2_geratxtcorreios002.erro_gerar_detalhe_8'));
-        }             
-                                                                                                     
+        }
+
         $oRegistro_9 = new stdClass();
         $oRegistro_9->identificador          = 9;
         $oRegistro_9->codigo_linha_digitavel = $oDadosBoleto->sLinhaDigitavel;
@@ -437,7 +437,7 @@ if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
         $oRegistro_9->valor_documento        = $oDadosBoleto->nValorRecibo;
         $oRegistro_9->especie_documento      = $oDadosBoleto->sEspecieDocumento;
         $oRegistro_9->aceite                 = 'N';
-       
+
         if ( $oDadosBoleto->iCadTipoConvenio == 5 ) {
           $aNossoNumero                      = explode("-",$oDadosBoleto->iNossoNumero);
           $oRegistro_9->nosso_numero         = $aNossoNumero[0];
@@ -446,7 +446,7 @@ if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
           $oRegistro_9->nosso_numero         = $oDadosBoleto->iNossoNumero;
           $oRegistro_9->nosso_numero_dv      = '';
         }
-       
+
         $oRegistro_9->data_processamento     = $dtOperacao;
         $oRegistro_9->data_vencimento        = $oDadosBoleto->dtOperacaoRecibo;
         $oRegistro_9->uso_banco              = '';
@@ -457,8 +457,14 @@ if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
       }
     }
 
+    if ($lServicoArDigital) {
+        $nomeArquivoPostagem = '';
+        $nomeArquivoPrevisaoPostagem = '';
+        $service = new GenerateArDigitalService($aNotificacoes);
+    }
+
     db_fim_transacao();
- 
+
     echo "<script>";
     echo "  var listagem;";
     echo "  listagem = '$sNomeArquivo#Download arquivo TXT (notificações para os correios)';";
@@ -467,13 +473,13 @@ if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
     echo "</script>";
 
     } catch (Exception  $oErroMsg) {
-     
+
     db_fim_transacao(true);
     db_msgbox($oErroMsg->getMessage());
-     
+
   }
-   
-   
+
+
 } else {
 
     $oParms = new stdClass();
@@ -498,7 +504,7 @@ function geraBoleto($iCodigoNotificacao, $aDebitosNotificacao, $dtVenvimento) {
    */
   if ( count($aDebitosNotificacao) == 0 ) {
     throw new ErrorException(_M('tributario.notificacoes.not2_geratxtcorreios002.nenhum_debito_vinculado'));
-  } 
+  }
 
   /**
    * Tipo de emissão de recibo de notificação
@@ -509,7 +515,7 @@ function geraBoleto($iCodigoNotificacao, $aDebitosNotificacao, $dtVenvimento) {
   $clReciboPaga          = new cl_recibopaga();
   $clArretipo            = new cl_arretipo();
   $iTipoDebito           = $aDebitosNotificacao[0]->tipo_debito;
-                        
+
   $rsArretipo            = $clArretipo->sql_record($clArretipo->sql_query_file($iTipoDebito," k00_tercdigrecnormal as terceiro_digito_recibo, k00_msgrecibo as msg_recibo"));
   /**
    * Disapara erro quando não acha valor do terceiro digito do recibo
@@ -523,7 +529,7 @@ function geraBoleto($iCodigoNotificacao, $aDebitosNotificacao, $dtVenvimento) {
   $oArretipo             = db_utils::fieldsMemory($rsArretipo,0);
   $iTerceiroDigitoRecibo = $oArretipo->terceiro_digito_recibo;
   $sMsgRecibo            = $oArretipo->msg_recibo;
- 
+
   /**
    * Valida regra de emissao a ser utilizada
    */
@@ -531,7 +537,7 @@ function geraBoleto($iCodigoNotificacao, $aDebitosNotificacao, $dtVenvimento) {
   $oRegraEmissao->getCadTipoConvenio();
 
   $oRecibo= new recibo(2, null, 27);
- 
+
   /**
    * Adiciona Numpre ao Recibo
    */
@@ -543,23 +549,23 @@ function geraBoleto($iCodigoNotificacao, $aDebitosNotificacao, $dtVenvimento) {
   $oRecibo->setDataVencimentoRecibo($dtVenvimento);
   $oRecibo->setExercicioRecibo     (substr($dtVenvimento, 0, 4) );
   $oRecibo->emiteRecibo            ();
- 
- 
+
+
   $sSqlDadosRecibosGerado = $clReciboPaga->sql_query_file(null, "sum(k00_valor) as valor_recibo", null, "k00_numnov = {$oRecibo->getNumpreRecibo()}");
   $rsDadosRecibosGerado   = $clReciboPaga->sql_record($sSqlDadosRecibosGerado);
- 
+
   if ( $clReciboPaga->erro_status == "0" ) {
 
     $oParms = new stdClass();
     $oParms->sErro = $clReciboPaga->erro_sql;
     throw new Exception(_M('tributario.notificacoes.not2_geratxtcorreios002.erro_gerar_recibo', $oParms));
   }
- 
- 
+
+
   $nValorReciboGerado     = db_utils::fieldsMemory($rsDadosRecibosGerado,0)->valor_recibo;
   $sValorCodigoBarras     = str_pad( number_format( $nValorReciboGerado, 2, "", "" ), 11, "0", STR_PAD_LEFT);
   /**
-   * Pega dados do convenio 
+   * Pega dados do convenio
    */
   $oConvenio = new convenio($oRegraEmissao->getConvenio(),
                             $oRecibo->getNumpreRecibo(),
@@ -569,7 +575,7 @@ function geraBoleto($iCodigoNotificacao, $aDebitosNotificacao, $dtVenvimento) {
                             $dtVenvimento,
                             $iTerceiroDigitoRecibo
                             );
- 
+
   $oRetorno  = new stdClass();
   $oRetorno->sLinhaDigitavel       = str_replace(" ", "", $oConvenio->getLinhaDigitavel());
   $oRetorno->sCodigoBarras         = $oConvenio->getCodigoBarra();
@@ -589,9 +595,9 @@ function geraBoleto($iCodigoNotificacao, $aDebitosNotificacao, $dtVenvimento) {
   $oRetorno->nValorRecibo          = $nValorReciboGerado;
   $oRetorno->iNossoNumero          = $oConvenio->getNossoNumero();
   $oRetorno->iNossoNumeroDV        = "";
-  $oRetorno->iNumpreRecibo         = $oRecibo->getNumpreRecibo();  
+  $oRetorno->iNumpreRecibo         = $oRecibo->getNumpreRecibo();
   $oRetorno->iCadTipoConvenio      = $oRegraEmissao->getCadTipoConvenio();
- 
+
   return $oRetorno;
 }
 ?>
