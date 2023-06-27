@@ -29,7 +29,7 @@
  * @author $Author: dbmauricio $
  * @version $Revision: 1.6 $
  */
-require_once("std/db_stdClass.php");
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
@@ -41,7 +41,7 @@ require_once("libs/JSON.php");
 define("MENSAGENS", "patrimonial.compras.com4_processocompra.");
 
 $oJson                  = new services_json();
-$oParam                 = $oJson->decode(str_replace("\\", "", $_POST["json"]));
+$oParam                 = $oJson->decode(str_replace("\\","",$_POST["json"]));
 $oRetorno               = new stdClass();
 $oRetorno->erro         = false;
 $oRetorno->sMessage     = '';
@@ -96,13 +96,7 @@ try {
       $oRetorno->pc80_tipoprocesso = $oProcessoCompra->getTipoProcesso();
       /*OC3770*/
       $oRetorno->pc80_criterioadjudicacao = $oProcessoCompra->getCriterioAdjudicacao();
-      $oRetorno->pc80_numdispensa = $oProcessoCompra->getNumerodispensa();
-      $oRetorno->pc80_dispvalor = $oProcessoCompra->getDispensaPorValor();
-      $oRetorno->pc80_orcsigiloso = $oProcessoCompra->getOrcSigiloso();
-      $oRetorno->pc80_subcontratacao = $oProcessoCompra->getSubContratacao();
-      $oRetorno->pc80_dadoscomplementares = urlencode($oProcessoCompra->getDadosComplementares());
-      $oRetorno->pc80_amparolegal = urlencode($oProcessoCompra->getAmparoLegal());
-      $oRetorno->pc80_categoriaprocesso = $oProcessoCompra->getCategoriaProcesso();
+
 
       $aLotes = array();
       foreach ($oProcessoCompra->getLotes() as $oLotesProcessoCompra) {
@@ -110,7 +104,7 @@ try {
       }
       $oRetorno->aLotes = $aLotes;
 
-      break;
+    break;
 
     case "getItens":
 
@@ -161,21 +155,24 @@ try {
       $sDadosComplementares      = $oParam->pc80_dadoscomplementares;
       $iAmparolegal              = $oParam->pc80_amparolegal;
       $iCategoriaprocesso        = $oParam->pc80_categoriaprocesso;
+      $data = implode("-", array_reverse(explode("/", $oParam->data)));
+      $iSolicitacao = $oParam->iSolicitacao;
 
+      $rsDataSolicitacao = db_query("select pc10_data from solicita where pc10_numero = $iSolicitacao;");
+      $dataSolicitacao = db_utils::fieldsMemory($rsDataSolicitacao,0)->pc10_data;
+
+      if($data > $dataSolicitacao){
+        throw new Exception("Usuário: a data do processo de compra não pode ser maior que a data da solicitação.");
+      }
 
       if (empty($iSequencialProcessoCompra)) {
         throw new DBException(_M(MENSAGENS . "nao_informado_processo_compra"));
       }
 
       $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
-
-      /*if ($oProcessoCompra->getNumerodispensa() != '0' && ($oProcessoCompra->getNumerodispensa() == $oParam->pc80_numdispensa)) {
-        throw new DBException(_M(MENSAGENS . 'dispensa_ja_existe'));
-      }*/
-
       $oProcessoCompra->setResumo($sResumo);
       $oProcessoCompra->setCriterioAdjudicacao($sCriterioAjudicacao);
-
+      $oProcessoCompra->setDataEmissao($data);
       $oProcessoCompra->setNumerodispensa($iNumdispensa);
       $oProcessoCompra->setDispensaPorValor($sDiepensaValor);
       $oProcessoCompra->setOrcSigiloso($sOrcsigiloso);
@@ -183,20 +180,18 @@ try {
       $oProcessoCompra->setDadosComplementares($sDadosComplementares);
       $oProcessoCompra->setAmparoLegal($iAmparolegal);
       $oProcessoCompra->setCategoriaProcesso($iCategoriaprocesso);
-
-
       foreach ($aLotes as $oStdLote) {
 
         $oLote = $oProcessoCompra->getLotePorCodigo($oStdLote->lote);
         if (empty($oLote)) {
-          throw new BusinessException(_M(MENSAGENS . 'lote_nao_encontrado'));
+          throw new BusinessException(_M(MENSAGENS.'lote_nao_encontrado'));
         }
         $oLote->removerItens();
         foreach ($oStdLote->itens as $iCodigoItem) {
 
           $oItem = $oProcessoCompra->getItemPorCodigo($iCodigoItem);
           if (empty($oItem)) {
-            throw new BusinessException(_M(MENSAGENS . 'item_nao_encontrado'));
+            throw new BusinessException(_M(MENSAGENS.'item_nao_encontrado'));
           }
           $oLote->adicionarItem($oItem);
         }
@@ -254,7 +249,9 @@ try {
   }
 
   db_fim_transacao(false);
-} catch (Exception $eErro) {
+
+
+} catch (Exception $eErro){
 
   db_fim_transacao(true);
   $oRetorno->erro     = true;
