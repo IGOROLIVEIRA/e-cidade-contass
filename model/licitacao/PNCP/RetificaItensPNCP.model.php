@@ -44,7 +44,7 @@ class RetificaitensPNCP extends ModeloBasePNCP
         if($oDado[0]->modalidadeid == "8" || $oDado[0]->modalidadeid == "9"){
         $oDadosAPI->criterioJulgamentoId        = 7;
         }else{
-            $oDadosAPI->criterioJulgamentoId    = $oDado[0]->itemcategoriaid;
+            $oDadosAPI->criterioJulgamentoId    = $oDado[0]->criteriojulgamentoid;
         }
         //CONCURSO
         if($oDado[0]->modalidadeid == "3"){
@@ -116,11 +116,11 @@ class RetificaitensPNCP extends ModeloBasePNCP
         print_r($header);
         exit;*/
         $retorno = explode(':', $contentpncp);
-
+        
         if (substr($retorno[0], 7, 3) == '200') {
             return array(201, "Enviado com Sucesso!");
         } else {
-            return array(422, $retorno[17]);
+            return array(422, "Retificacao do Item Erro:".$retorno[22]);
         }
     }
 }

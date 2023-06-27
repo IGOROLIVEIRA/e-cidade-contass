@@ -98,11 +98,23 @@ $cllicobras = new cl_licobras;
       $campos = "obr01_sequencial,
                   obr01_numeroobra,
                   obr01_licitacao,
-                  l20_edital,
-                  l03_descr,
-                  l20_numero,
+                  CASE WHEN l20_edital IS NOT NULL
+                    THEN l20_edital 
+                    ELSE obr07_processo
+                   END                         AS l20_edital, 
+                  CASE WHEN l03_descr IS NOT NULL
+                    THEN l03_descr 
+                    ELSE l44_descricao
+                   END                         AS l03_descr,
+                  CASE WHEN l20_numero IS NOT NULL
+                   THEN l20_numero 
+                   ELSE obr07_modalidade
+                  END                         AS l20_numero,
                   ac16_sequencial,
-                  l20_objeto,
+                  CASE WHEN l20_objeto IS NOT NULL
+                    THEN l20_objeto 
+                    ELSE obr07_objeto
+                   END                         AS l20_objeto,
                   obr01_dtlancamento,
                   obr01_licitacaosistema,
                   obr01_linkobra,

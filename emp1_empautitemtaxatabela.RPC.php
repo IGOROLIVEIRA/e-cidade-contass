@@ -110,6 +110,7 @@ switch ($_POST["action"]) {
     FROM
       (SELECT distinct pcmater.pc01_codmater,
                         pcmater.pc01_descrmater,
+                        pcmater.pc01_servico,
                         z01_numcgm,
                         matunid.m61_codmatunid,
                        case
@@ -159,6 +160,7 @@ switch ($_POST["action"]) {
         }
         $sqlQuery .= "UNION SELECT distinct pcmater.pc01_codmater,
                         pcmater.pc01_descrmater,
+                        pcmater.pc01_servico,
                         z01_numcgm,
                         matunid.m61_codmatunid,
                        case
@@ -249,13 +251,20 @@ switch ($_POST["action"]) {
                     $selectservico = "<select id='servico_{$oDados->pc01_codmater}' onchange='js_servico(this)' >";
                 }
 
-                if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
-                    $selectservico .= "<option value='1' selected='selected'>Sim</option>";
-                    $selectservico .= "<option value='0'>" . utf8_encode('Não') . "</option>";
-                } else {
-                    $selectservico .= "<option value='1'>Sim</option>";
-                    $selectservico .= "<option value='0' selected='selected'>" . utf8_encode('Não') . "</option>";
+                if($oDados->pc01_servico == 'f'){
+                    $selectservico .= "<option value='t' selected='selected'>Sim</option>";
+                }else{
+                    if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
+                        $selectservico .= "<option value='0' selected='selected'>Selecione</option>";
+                        $selectservico .= "<option value='t'>Sim</option>";
+                        $selectservico .= "<option value='f'>" . utf8_encode('Não') . "</option>";
+                    } else{
+                        $selectservico .= "<option value='0' selected='selected'>Selecione</option>";
+                        $selectservico .= "<option value='t'>Sim</option>";
+                        $selectservico .= "<option value='f'>" . utf8_encode('Não') . "</option>";
+                    }
                 }
+
                 $selectservico .= "</select>";
 
                 if ($oDados->pc01_codmater == $oDadosEmpAutItem->e55_item)

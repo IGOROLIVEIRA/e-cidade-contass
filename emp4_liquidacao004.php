@@ -122,24 +122,24 @@ $clempempenholiberado = new cl_empempenholiberado;
 $lBloquear = false;
 $result    = $clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu")));
 if ($result != false && $clempparametro->numrows > 0) {
-  $oParam = db_utils::fieldsMemory($result, 0);
+    $oParam = db_utils::fieldsMemory($result, 0);
 }
 if ($oParam->e30_liberaempenho == 't') {
 
-  if (isset($objJson->iEmpenho) && !empty($objJson->iEmpenho)) {
-    $sCampos = "empempenholiberado.*";
-    $sWhere  = "e22_numemp = {$objJson->iEmpenho} ";
-    $sWhere .= " AND EXISTS(SELECT 1 FROM empempenholiberado WHERE e22_numemp= e60_numemp)";
-    $sWhere .= " AND NOT EXISTS(SELECT 1 FROM desdobramentosliberadosordemcompra WHERE pc33_codele = e64_codele ";
-    $sWhere .= " AND pc33_anousu = " . db_getsession("DB_anousu") . ")";
+    if (isset($objJson->iEmpenho) && !empty($objJson->iEmpenho)) {
+        $sCampos = "empempenholiberado.*";
+        $sWhere  = "e22_numemp = {$objJson->iEmpenho} ";
+        $sWhere .= " AND EXISTS(SELECT 1 FROM empempenholiberado WHERE e22_numemp= e60_numemp)";
+        $sWhere .= " AND NOT EXISTS(SELECT 1 FROM desdobramentosliberadosordemcompra WHERE pc33_codele = e64_codele ";
+        $sWhere .= " AND pc33_anousu = " . db_getsession("DB_anousu") . ")";
 
-    $sSqlEmpenhosLiberados  = $clempempenholiberado->sql_query(null, $sCampos, null, $sWhere);
-    $rsSqlEmpenhosLiberados = $clempempenholiberado->sql_record($sSqlEmpenhosLiberados);
+        $sSqlEmpenhosLiberados  = $clempempenholiberado->sql_query(null, $sCampos, null, $sWhere);
+        $rsSqlEmpenhosLiberados = $clempempenholiberado->sql_record($sSqlEmpenhosLiberados);
 
-    if ($clempempenholiberado->numrows == 0) {
-      $lBloquear = true;
+        if ($clempempenholiberado->numrows == 0) {
+            $lBloquear = true;
+        }
     }
-  }
 }
 //var_dump($lBloquear);exit("saiu");
 
@@ -149,157 +149,87 @@ db_fieldsmemory($result_cgmzerado, 0)->z01_cgccpf;
 $zerado = false;
 
 if (strlen($z01_cgccpf) == 14) {
-  $tipofornec = 'cnpj';
-  if ($z01_cgccpf == '00000000000000') {
-    $zerado = true;
-  }
+    $tipofornec = 'cnpj';
+    if ($z01_cgccpf == '00000000000000') {
+        $zerado = true;
+    }
 }
 
 if (strlen($z01_cgccpf) == 11) {
-  $tipofornec = 'cpf';
-  if ($z01_cgccpf == '00000000000') {
-    $zerado = true;
-  }
+    $tipofornec = 'cpf';
+    if ($z01_cgccpf == '00000000000') {
+        $zerado = true;
+    }
 }
 
 //FIM OC 7037
 
 switch ($objJson->method) {
 
-  case "getEmpenhos":
+    case "getEmpenhos":
 
-    $lValidaNotasEmpenho = false;
+        $lValidaNotasEmpenho = false;
 
-    $oDaoElementos        = db_utils::getDao('orcelemento');
-    $sWhereEmpenho        = " e60_numemp =  {$objJson->iEmpenho}";
-    $sSqlBuscaElemento    = $oDaoElementos->sql_query_estrut_empenho(null, "substr(o56_elemento,1,7) AS o56_elemento", null, $sWhereEmpenho);
-    $rsBuscaElemento      = $oDaoElementos->sql_record($sSqlBuscaElemento);
+        $oDaoElementos        = db_utils::getDao('orcelemento');
+        $sWhereEmpenho        = " e60_numemp =  {$objJson->iEmpenho}";
+        $sSqlBuscaElemento    = $oDaoElementos->sql_query_estrut_empenho(null, "substr(o56_elemento,1,7) AS o56_elemento", null, $sWhereEmpenho);
+        $rsBuscaElemento      = $oDaoElementos->sql_record($sSqlBuscaElemento);
 
-    $sSqlBuscaDesdobramento    = $oDaoElementos->sql_query_estrut_empenho(null, "substr(o56_elemento,1,9) AS o56_elemento", null, $sWhereEmpenho);
-    $rsBuscaDesdobramento      = $oDaoElementos->sql_record($sSqlBuscaDesdobramento);
+        $sSqlBuscaDesdobramento    = $oDaoElementos->sql_query_estrut_empenho(null, "substr(o56_elemento,1,9) AS o56_elemento", null, $sWhereEmpenho);
+        $rsBuscaDesdobramento      = $oDaoElementos->sql_record($sSqlBuscaDesdobramento);
 
-    $oDaoPatriInst    = db_utils::getDao('cfpatriinstituicao');
-    $sWherePatriInst  = " t59_instituicao = " . db_getsession('DB_instit');
-    $sSqlPatriInst    = $oDaoPatriInst->sql_query_file(null, "t59_dataimplanatacaodepreciacao", null, $sWherePatriInst);
-    $rsPatriInst      = $oDaoPatriInst->sql_record($sSqlPatriInst);
+        $oDaoPatriInst    = db_utils::getDao('cfpatriinstituicao');
+        $sWherePatriInst  = " t59_instituicao = " . db_getsession('DB_instit');
+        $sSqlPatriInst    = $oDaoPatriInst->sql_query_file(null, "t59_dataimplanatacaodepreciacao", null, $sWherePatriInst);
+        $rsPatriInst      = $oDaoPatriInst->sql_record($sSqlPatriInst);
 
-    if ($oDaoPatriInst->numrows > 0) {
+        if ($oDaoPatriInst->numrows > 0) {
 
-      $dtImplantacao = db_utils::fieldsMemory($rsPatriInst, 0)->t59_dataimplanatacaodepreciacao;
-      if (!empty($dtImplantacao)) {
-        $lValidaNotasEmpenho = true;
-      }
-    }
-
-    // Condição de validação dos empenhos
-    // Verificar data do sistema
-    $dtServidor = date('d-m-Y', DB_getsession('DB_datausu'));
-
-    // Verificar data da última liquidação
-    $sSqlLiquidados = 'SELECT e50_data as dtultimaliquidacao FROM pagordem WHERE e50_numemp = ' . $objJson->iEmpenho . ' ORDER BY e50_data LIMIT 1';
-    $rsLiquidados = pg_query($sSqlLiquidados);
-    if (@pg_num_rows($rsLiquidados) > 0)
-        db_fieldsmemory($rsLiquidados, 0);
-
-    // Verificar parametro do sistema
-    $clcaiparametro = new cl_caiparametro;
-    $rsCaiParametro = $clcaiparametro->sql_record(
-        $clcaiparametro->sql_query(
-            db_getsession('DB_instit'), 
-            'k29_liquidacaodataanterior',
-            null,
-            '')
-        );
-
-    if (@pg_num_rows($rsCaiParametro) > 0)
-        db_fieldsmemory($rsCaiParametro, 0);
-
-    $bPermitidoLiquidacao = true;
-    if ($k29_liquidacaodataanterior == 'f') {
-        if (date("Y-m-d", strtotime($dtServidor)) < $dtultimaliquidacao) {
-            $bPermitidoLiquidacao = false;
-        }   
-    }
-
-    $oDaoEmpNota      = db_utils::getDao('empnota');
-    $sWhereBuscaNotas = " e69_numemp = {$objJson->iEmpenho} ";
-    $sSqlBuscaNotas   = $oDaoEmpNota->sql_query_elemento_patrimonio(null, "empnota.* ", null, $sWhereBuscaNotas);
-    $rsBuscaNotas     = $oDaoEmpNota->sql_record($sSqlBuscaNotas);
-    $aBuscaNotas      = db_utils::getCollectionByRecord($rsBuscaNotas);
-    $aNotasEmpenho    = array();
-    $oGrupoElemento   = new stdClass();
-
-    if (count($aBuscaNotas) > 0 && $lValidaNotasEmpenho) {
-
-      foreach ($aBuscaNotas as $oNota) {
-
-        $oDaoEmpNotaItemBensPendente      = db_utils::getDao('empnotaitembenspendente');
-        $sWhereBuscaItensForaDoPatrimonio = " e69_codnota = {$oNota->e69_codnota} and e136_sequencial is null "
-          . " and e139_sequencial is null and m73_cancelado is false ";
-
-        $sSqlBuscaItensForaDoPatrimonio = $oDaoEmpNotaItemBensPendente->sql_query_patrimonio(
-          null,
-          "e69_codnota",
-          null,
-          $sWhereBuscaItensForaDoPatrimonio
-        );
-        $rsBuscaItensForaDoPatrimonio = $oDaoEmpNotaItemBensPendente->sql_record($sSqlBuscaItensForaDoPatrimonio);
-        if ($oDaoEmpNotaItemBensPendente->numrows > 0) {
-          $aNotasEmpenho[] = $oNota->e69_codnota;
+            $dtImplantacao = db_utils::fieldsMemory($rsPatriInst, 0)->t59_dataimplanatacaodepreciacao;
+            if (!empty($dtImplantacao)) {
+                $lValidaNotasEmpenho = true;
+            }
         }
-      }
-    }
 
-    $objEmpenho->operacao = $objJson->operacao;
-    if (isset($objJson->itens)) {
-      $item = 1;
-    }
-    $objEmpenho->setEmpenho($objJson->iEmpenho);
+        $oDaoEmpNota      = db_utils::getDao('empnota');
+        $sWhereBuscaNotas = " e69_numemp = {$objJson->iEmpenho} ";
+        $sSqlBuscaNotas   = $oDaoEmpNota->sql_query_elemento_patrimonio(null, "empnota.* ", null, $sWhereBuscaNotas);
+        $rsBuscaNotas     = $oDaoEmpNota->sql_record($sSqlBuscaNotas);
+        $aBuscaNotas      = db_utils::getCollectionByRecord($rsBuscaNotas);
+        $aNotasEmpenho    = array();
+        $oGrupoElemento   = new stdClass();
 
-    if (count($aNotasEmpenho) > 0 && $lValidaNotasEmpenho) {
+        if (count($aBuscaNotas) > 0 && $lValidaNotasEmpenho) {
 
-      //echo $objEmpenho->empenho2Json('',$item, $aNotasEmpenho);
-      $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item, $aNotasEmpenho));
-      $oGrupoElemento->iGrupo = "";
-      $oGrupoElemento->sGrupo = "";
-      $oEmpenho->oGrupoElemento = $oGrupoElemento;
-      $oEmpenho->LiberadoLic = $lBloquear;
-      $oEmpenho->Zerado = $zerado;
-      $oEmpenho->Tipofornec = $tipofornec;
-      $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
-      echo $json->encode($oEmpenho);
-    } else {
+            foreach ($aBuscaNotas as $oNota) {
 
-      $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item));
-      $oGrupoContaOrcamento = GrupoContaOrcamento::getGrupoConta($oEmpenho->e64_codele, db_getsession("DB_anousu"));
+                $oDaoEmpNotaItemBensPendente      = db_utils::getDao('empnotaitembenspendente');
+                $sWhereBuscaItensForaDoPatrimonio = " e69_codnota = {$oNota->e69_codnota} and e136_sequencial is null "
+                    . " and e139_sequencial is null and m73_cancelado is false ";
 
-      $oEmpenhoFinanceiro = new EmpenhoFinanceiro($oEmpenho->e60_numemp);
-      if ($oGrupoContaOrcamento && !$oEmpenhoFinanceiro->isEmpenhoPassivo()) {
+                $sSqlBuscaItensForaDoPatrimonio = $oDaoEmpNotaItemBensPendente->sql_query_patrimonio(
+                    null,
+                    "e69_codnota",
+                    null,
+                    $sWhereBuscaItensForaDoPatrimonio
+                );
+                $rsBuscaItensForaDoPatrimonio = $oDaoEmpNotaItemBensPendente->sql_record($sSqlBuscaItensForaDoPatrimonio);
+                if ($oDaoEmpNotaItemBensPendente->numrows > 0) {
+                    $aNotasEmpenho[] = $oNota->e69_codnota;
+                }
+            }
+        }
 
-        $iGrupo = $oGrupoContaOrcamento->getCodigo();
-        $sDescricao = $oGrupoContaOrcamento->getDescricao();
+        $objEmpenho->operacao = $objJson->operacao;
+        if (isset($objJson->itens)) {
+            $item = 1;
+        }
+        $objEmpenho->setEmpenho($objJson->iEmpenho);
 
-        /**
-         * Caso o empennho seja dos grupos abaixo, nao devemos permitir a liquidacao
-         * do mesmo atraves da rotina de liquidacao sem ordem de compra
-         */
-        if ($iGrupo != "") {
+        if (count($aNotasEmpenho) > 0 && $lValidaNotasEmpenho) {
 
-          if (in_array($iGrupo, array(7, 8, 9))) {
-
-
-            $oGrupoElemento->iGrupo = $iGrupo;
-            $oGrupoElemento->sGrupo = urlencode($sDescricao);
-            $oEmpenho->oGrupoElemento = $oGrupoElemento;
-            $oEmpenho->LiberadoLic = $lBloquear;
-            $oEmpenho->Zerado = $zerado;
-            $oEmpenho->Tipofornec = $tipofornec;
-            $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
-            echo $json->encode($oEmpenho);
-          } else {
-
-            //echo $objEmpenho->empenho2Json('',$item);
-            $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item));
+            //echo $objEmpenho->empenho2Json('',$item, $aNotasEmpenho);
+            $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item, $aNotasEmpenho));
             $oGrupoElemento->iGrupo = "";
             $oGrupoElemento->sGrupo = "";
             $oEmpenho->oGrupoElemento = $oGrupoElemento;
@@ -308,228 +238,304 @@ switch ($objJson->method) {
             $oEmpenho->Tipofornec = $tipofornec;
             $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
             echo $json->encode($oEmpenho);
-          }
-        }
-      } else {
-        // echo $objEmpenho->empenho2Json('',$item);
-        $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item));
-        $oEmpenho->sEstrutural = db_utils::fieldsMemory($rsBuscaElemento, 0)->o56_elemento;
-        $oEmpenho->sDesdobramento = db_utils::fieldsMemory($rsBuscaDesdobramento, 0)->o56_elemento;
+        } else {
 
-        $oGrupoElemento->iGrupo = "";
-        $oGrupoElemento->sGrupo = "";
-        $oEmpenho->oGrupoElemento = $oGrupoElemento;
-        $oEmpenho->LiberadoLic = $lBloquear;
-        $oEmpenho->Zerado = $zerado;
-        $oEmpenho->Tipofornec = $tipofornec;
-        $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
-        echo $json->encode($oEmpenho);
-      }
-    }
-    break;
+            $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item));
+            $oGrupoContaOrcamento = GrupoContaOrcamento::getGrupoConta($oEmpenho->e64_codele, db_getsession("DB_anousu"));
 
-  case "liquidarAjax":
+            $oEmpenhoFinanceiro = new EmpenhoFinanceiro($oEmpenho->e60_numemp);
+            if ($oGrupoContaOrcamento && !$oEmpenhoFinanceiro->isEmpenhoPassivo()) {
 
-    if (isset($objJson->z01_credor) && !empty($objJson->z01_credor)) {
-      $objEmpenho->setCredor($objJson->z01_credor);
-    }
+                $iGrupo = $oGrupoContaOrcamento->getCodigo();
+                $sDescricao = $oGrupoContaOrcamento->getDescricao();
 
-    try {
+                /**
+                 * Caso o empennho seja dos grupos abaixo, nao devemos permitir a liquidacao
+                 * do mesmo atraves da rotina de liquidacao sem ordem de compra
+                 */
+                if ($iGrupo != "") {
 
-      $dtDataSessao = date("Y-m-d", $dtDataSessao);
-      $oDaoConlancamEmp = new cl_conlancamemp();
-      $sWhereEmpenho  = "     conlancamemp.c75_numemp = {$objJson->iEmpenho} ";
-      $sWhereEmpenho .= " and conhistdoc.c53_tipo     = 200 ";
-      $sWhereEmpenho .= " and conlancam.c70_data      > '{$dtDataSessao}' ";
-      $sSqlBuscaDocumentos = $oDaoConlancamEmp->sql_query_documentos(null, "conhistdoc.*", 1, $sWhereEmpenho);
-      $rsBuscaDocumentos = $oDaoConlancamEmp->sql_record($sSqlBuscaDocumentos);
+                    if (in_array($iGrupo, array(7, 8, 9))) {
 
-      if ($oDaoConlancamEmp->numrows > 0) {
-        throw new Exception("Não é possível realizar o lançamento contábil com data anterior a data dos lançamentos de controle de liquidação.");
-      }
 
-      $sHistorico = db_stdClass::normalizeStringJsonEscapeString($objJson->historico); //addslashes(stripslashes(utf8_decode()))
-      $oRetorno   = $objEmpenho->liquidarAjax($objJson->iEmpenho, $objJson->notas, $sHistorico, $objJson->e50_compdesp, $objJson->e83_codtipo, $objJson->cattrabalhador, $objJson->numempresa, $objJson->contribuicaoPrev, $objJson->cattrabalhadorremuneracao, $objJson->valorremuneracao, $objJson->valordesconto, $objJson->competencia);
-      $oDadosRetorno = $json->decode(str_replace("\\", "", $oRetorno));
+                        $oGrupoElemento->iGrupo = $iGrupo;
+                        $oGrupoElemento->sGrupo = urlencode($sDescricao);
+                        $oEmpenho->oGrupoElemento = $oGrupoElemento;
+                        $oEmpenho->LiberadoLic = $lBloquear;
+                        $oEmpenho->Zerado = $zerado;
+                        $oEmpenho->Tipofornec = $tipofornec;
+                        $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
+                        echo $json->encode($oEmpenho);
+                    } else {
 
-      if ($oRetorno !== false) {
+                        //echo $objEmpenho->empenho2Json('',$item);
+                        $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item));
+                        $oGrupoElemento->iGrupo = "";
+                        $oGrupoElemento->sGrupo = "";
+                        $oEmpenho->oGrupoElemento = $oGrupoElemento;
+                        $oEmpenho->LiberadoLic = $lBloquear;
+                        $oEmpenho->Zerado = $zerado;
+                        $oEmpenho->Tipofornec = $tipofornec;
+                        $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
+                        echo $json->encode($oEmpenho);
+                    }
+                }
+            } else {
+                // echo $objEmpenho->empenho2Json('',$item);
+                $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item));
+                $oEmpenho->sEstrutural = db_utils::fieldsMemory($rsBuscaElemento, 0)->o56_elemento;
+                $oEmpenho->sDesdobramento = db_utils::fieldsMemory($rsBuscaDesdobramento, 0)->o56_elemento;
 
-        if ($oDadosRetorno->erro == 1) {
-
-          //caso procedimento com sucesso  vincula o processo administrativo
-          $sProcessoAdministrativo = addslashes(db_stdClass::normalizeStringJson($objJson->e03_numeroprocesso));
-
-          if (!empty($sProcessoAdministrativo)) {
-
-            $aOrdensGeradas = explode(",", $oDadosRetorno->sOrdensGeradas);
-
-            foreach ($aOrdensGeradas as $iIndOrdensGeradas => $iOrdem) {
-
-              $oDaoPagordemProcesso = new cl_pagordemprocesso();
-              $oDaoPagordemProcesso->e03_numeroprocesso = $sProcessoAdministrativo;
-              $oDaoPagordemProcesso->e03_pagordem = $iOrdem;
-              $oDaoPagordemProcesso->incluir(null);
-              if ($oDaoPagordemProcesso->erro_status == 0) {
-                throw new Exception($oDaoPagordemProcesso->erro_msg);
-              }
+                $oGrupoElemento->iGrupo = "";
+                $oGrupoElemento->sGrupo = "";
+                $oEmpenho->oGrupoElemento = $oGrupoElemento;
+                $oEmpenho->LiberadoLic = $lBloquear;
+                $oEmpenho->Zerado = $zerado;
+                $oEmpenho->Tipofornec = $tipofornec;
+                $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
+                echo $json->encode($oEmpenho);
             }
-          }
+        }
+        break;
 
-          echo $oRetorno;
+    case "liquidarAjax":
+
+        if (isset($objJson->z01_credor) && !empty($objJson->z01_credor)) {
+            $objEmpenho->setCredor($objJson->z01_credor);
         }
 
-        /**[Extensao OrdenadorDespesa] inclusao_ordenador_1*/
-      }
+        try {
+            // Condição de validação dos empenhos
+            // Verificar data do sistema
+            $dtServidor = date('d-m-Y', DB_getsession('DB_datausu'));
+            $chave = true;
 
+            // Verificar data da última liquidação
+            $sSqlLiquidados = 'SELECT e50_data as dtultimaliquidacao FROM pagordem WHERE e50_numemp = ' . $objJson->iEmpenho . ' ORDER BY e50_data DESC LIMIT 1 ';
+            $rsLiquidados = pg_query($sSqlLiquidados);
 
-      if ($objEmpenho->lSqlErro && !empty($objEmpenho->sMsgErro)) {
-        throw new Exception($objEmpenho->sMsgErro);
-      }
-    } catch (Exception $eErro) {
-
-      $oRetorno = $json->encode(array("sMensagem" => urlencode($eErro->getMessage()), "lErro" => true));
-      echo $oRetorno;
-    }
-
-    break;
-
-  case "geraOC":
-
-    $z01_credor = $objJson->z01_credor;
-    $sHistorico = db_stdClass::normalizeStringJsonEscapeString($objJson->historico);
-    $objEmpenho->setEmpenho($objJson->iEmpenho);
-    $objEmpenho->setCredor($z01_credor);
-    $chave = true;
-
-    /**
-     * Pode ser que o método gerarOrdemCompra retorne false ou um JSON
-     */
-    $oRetorno = $objEmpenho->gerarOrdemCompra(
-      $objJson->e69_nota,
-      $objJson->valorTotal,
-      $objJson->notas,
-      true,
-      $objJson->e69_dtnota,
-      $sHistorico,
-      true,
-      $objJson->oInfoNota,
-      $objJson->e69_notafiscaleletronica,
-      $objJson->e69_chaveacesso,
-      $objJson->e69_nfserie,
-      $objJson->e50_compdesp,
-      $objJson->e83_codtipo,
-      true,
-      $objJson->iCgmEmitente,
-      $objJson->cattrabalhador,
-      $objJson->numempresa,
-      $objJson->contribuicaoPrev,
-      $objJson->cattrabalhadorremuneracao,
-      $objJson->valorremuneracao,
-      $objJson->valordesconto,
-      $objJson->competencia
-    );
-    if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->e69_notafiscaleletronica != 2 && $objJson->e69_notafiscaleletronica != 3) {
-      $ufs = array(
-
-        11 => "RO", 12 => "AC", 13 => "AM", 14 => "RR", 15 => "PA", 16 => "AP", 17 => "TO", 21 => "MA", 22 => "PI",
-        23 => "CE", 24 => "RN", 25 => "PB", 26 => "PE", 27 => "AL", 28 => "SE", 29 => "BA", 31 => "MG", 32 => "ES",
-        33 => "RJ", 35 => "SP", 41 => "PR", 42 => "SC", 43 => "RS", 50 => "MS", 51 => "MT", 52 => "GO", 53 => "DF"
-
-      );
-
-      $ufKey   = substr($objJson->e69_chaveacesso, 0, 2);
-      $dataKey = substr($objJson->e69_chaveacesso, 2, 4);
-      $cnpjKey = substr($objJson->e69_chaveacesso, 6, 14);
-      $nfKey   = substr($objJson->e69_chaveacesso, 25, 9);
-
-      $oDaoCgm   = db_utils::getDao("cgm");
-
-      // Condicao da OC17910
-      if ($objJson->iCgmEmitente > "0")
-        $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->iCgmEmitente);
-      else
-        $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->cgm);
-      $rsCgm     = $oDaoCgm->sql_record($sSqlCgm);
-      $oDadosCgm = db_utils::fieldsMemory($rsCgm, 0);
-
-
-      $key  = (array_key_exists($ufKey, $ufs)) ? $ufKey : 0;
-      $data = substr(implode("", array_reverse(explode("/", $objJson->e69_dtnota))), 2, 4);
-
-      if ($ufs[$key] != $oDadosCgm->z01_uf) {
-        $chave = false;
-        $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique a Cidade e o Estado do Fornecedor!";
-      } else if (strcmp($data, $dataKey)) {
-        $chave = false;
-        $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique a data da Nota Fiscal!";
-      } else if (strcmp(str_pad($objJson->e69_nota, 9, "0", STR_PAD_LEFT), $nfKey)) {
-        $chave = false;
-        $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique o Número da Nota!";
-      } else if ($objJson->e69_notafiscaleletronica == 1) {
-        if (strcmp($oDadosCgm->z01_cgccpf, $cnpjKey)) {
-          $chave = false; //
-          $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique o CNPJ do Fornecedor!";
-        }
-      }
-    }
-
-    if ($chave !== false) {
-
-      if ($oRetorno !== false) {
-
-
-        //caso procedimento com sucesso  vincula o processo administrativo
-        $sProcessoAdministrativo = addslashes(stripslashes(utf8_decode($objJson->e03_numeroprocesso)));
-        $oDadosRetorno = $json->decode(str_replace("\\", "", $oRetorno));
-
-        if ($oDadosRetorno->erro != 2) {
-
-          if (!empty($sProcessoAdministrativo)) {
-
-            $oDaoPagordemProcesso = new cl_pagordemprocesso();
-            $oDaoPagordemProcesso->e03_numeroprocesso = $sProcessoAdministrativo;
-            $oDaoPagordemProcesso->e03_pagordem = $oDadosRetorno->e50_codord;
-            $oDaoPagordemProcesso->incluir(null);
-            if ($oDaoPagordemProcesso->erro_status == 0) {
-              throw new Exception($oDaoPagordemProcesso->erro_msg);
+            if (@pg_num_rows($rsLiquidados) > 0) {
+                db_fieldsmemory($rsLiquidados, 0);
+            
+                if ($oParam->e30_liquidacaodataanterior == 'f') {
+                    if (date("Y-m-d", strtotime($dtServidor)) < date("Y-m-d", strtotime($dtultimaliquidacao))) {
+                        throw new Exception("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
+                    }
+                }
             }
-          }
-          /**[Extensao OrdenadorDespesa] inclusao_ordenador_2*/
+
+            $dtDataSessao = date("Y-m-d", $dtDataSessao);
+            $oDaoConlancamEmp = new cl_conlancamemp();
+            $sWhereEmpenho  = "     conlancamemp.c75_numemp = {$objJson->iEmpenho} ";
+            $sWhereEmpenho .= " and conhistdoc.c53_tipo     = 200 ";
+            $sWhereEmpenho .= " and conlancam.c70_data      > '{$dtDataSessao}' ";
+            $sSqlBuscaDocumentos = $oDaoConlancamEmp->sql_query_documentos(null, "conhistdoc.*", 1, $sWhereEmpenho);
+            $rsBuscaDocumentos = $oDaoConlancamEmp->sql_record($sSqlBuscaDocumentos);
+
+            if ($oDaoConlancamEmp->numrows > 0) {
+                throw new Exception("Não é possível realizar o lançamento contábil com data anterior a data dos lançamentos de controle de liquidação.");
+            }
+
+            $sHistorico = db_stdClass::normalizeStringJsonEscapeString($objJson->historico); //addslashes(stripslashes(utf8_decode()))
+            $oRetorno   = $objEmpenho->liquidarAjax($objJson->iEmpenho, $objJson->notas, $sHistorico, $objJson->e50_compdesp, $objJson->e83_codtipo, $objJson->cattrabalhador, $objJson->numempresa, $objJson->contribuicaoPrev, $objJson->cattrabalhadorremuneracao, $objJson->valorremuneracao, $objJson->valordesconto, $objJson->competencia);
+            $oDadosRetorno = $json->decode(str_replace("\\", "", $oRetorno));
+
+            if ($oRetorno !== false) {
+
+                if ($oDadosRetorno->erro == 1) {
+
+                    //caso procedimento com sucesso  vincula o processo administrativo
+                    $sProcessoAdministrativo = addslashes(db_stdClass::normalizeStringJson($objJson->e03_numeroprocesso));
+
+                    if (!empty($sProcessoAdministrativo)) {
+
+                        $aOrdensGeradas = explode(",", $oDadosRetorno->sOrdensGeradas);
+
+                        foreach ($aOrdensGeradas as $iIndOrdensGeradas => $iOrdem) {
+
+                            $oDaoPagordemProcesso = new cl_pagordemprocesso();
+                            $oDaoPagordemProcesso->e03_numeroprocesso = $sProcessoAdministrativo;
+                            $oDaoPagordemProcesso->e03_pagordem = $iOrdem;
+                            $oDaoPagordemProcesso->incluir(null);
+                            if ($oDaoPagordemProcesso->erro_status == 0) {
+                                throw new Exception($oDaoPagordemProcesso->erro_msg);
+                            }
+                        }
+                    }
+
+                    echo $oRetorno;
+                }
+
+                /**[Extensao OrdenadorDespesa] inclusao_ordenador_1*/
+            }
+
+
+            if ($objEmpenho->lSqlErro && !empty($objEmpenho->sMsgErro)) {
+                throw new Exception($objEmpenho->sMsgErro);
+            }
+        } catch (Exception $eErro) {
+
+            $oRetorno = $json->encode(array("sMensagem" => urlencode($eErro->getMessage()), "lErro" => true));
+            echo $oRetorno;
         }
 
-        echo $oRetorno;
-      } else {
+        break;
 
-        $retorno = array("erro" => 2, "mensagem" => urlencode($objEmpenho->sMsgErro), "e50_codord" => null);
-        echo $json->encode($retorno);
-      }
-    } else {
-      $retorno = array("erro" => 2, "mensagem" => urlencode($objEmpenho->sMsgErro), "e50_codord" => null);
-      echo $json->encode($retorno);
-    }
+    case "geraOC":
+        // Condição de validação dos empenhos
+        // Verificar data do sistema
+        $dtServidor = date('d-m-Y', DB_getsession('DB_datausu'));
+        $chave = true;
 
-    break;
+        // Verificar data da última liquidação
+        $sSqlLiquidados = 'SELECT e50_data as dtultimaliquidacao FROM pagordem WHERE e50_numemp = ' . $objJson->iEmpenho . ' ORDER BY e50_data DESC LIMIT 1 ';
+        $rsLiquidados = pg_query($sSqlLiquidados);
 
-  case "verificaacordo":
+        if (@pg_num_rows($rsLiquidados) > 0)
+            db_fieldsmemory($rsLiquidados, 0);
+        
+        if ($oParam->e30_liquidacaodataanterior == 'f') {
+            if (date("Y-m-d", strtotime($dtServidor)) < date("Y-m-d", strtotime($dtultimaliquidacao))) {
+                $chave = false;
+                $objEmpenho->sMsgErro = "Não é permitido liquidar com data anterior ao último lançamento de liquidação.";
+            }
+        }
 
-    /*CASE CRIADA PARA VERIFICAR SE O PARAMETRO DO CONTRATO - RETORNO POR POSICAO ESTA ATIVO E SE O EMPENHO TEM VINCULO COM UM ACORDO
+        $z01_credor = $objJson->z01_credor;
+        $sHistorico = db_stdClass::normalizeStringJsonEscapeString($objJson->historico);
+        $objEmpenho->setEmpenho($objJson->iEmpenho);
+        $objEmpenho->setCredor($z01_credor);
+
+        /**
+         * Pode ser que o método gerarOrdemCompra retorne false ou um JSON
+         */
+        $oRetorno = $objEmpenho->gerarOrdemCompra(
+            $objJson->e69_nota,
+            $objJson->valorTotal,
+            $objJson->notas,
+            true,
+            $objJson->e69_dtnota,
+            $sHistorico,
+            true,
+            $objJson->oInfoNota,
+            $objJson->e69_notafiscaleletronica,
+            $objJson->e69_chaveacesso,
+            $objJson->e69_nfserie,
+            $objJson->e50_compdesp,
+            $objJson->e83_codtipo,
+            true,
+            $objJson->iCgmEmitente,
+            $objJson->cattrabalhador,
+            $objJson->numempresa,
+            $objJson->contribuicaoPrev,
+            $objJson->cattrabalhadorremuneracao,
+            $objJson->valorremuneracao,
+            $objJson->valordesconto,
+            $objJson->competencia
+        );
+
+        if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->e69_notafiscaleletronica != 2 && $objJson->e69_notafiscaleletronica != 3) {
+            $ufs = array(
+
+                11 => "RO", 12 => "AC", 13 => "AM", 14 => "RR", 15 => "PA", 16 => "AP", 17 => "TO", 21 => "MA", 22 => "PI",
+                23 => "CE", 24 => "RN", 25 => "PB", 26 => "PE", 27 => "AL", 28 => "SE", 29 => "BA", 31 => "MG", 32 => "ES",
+                33 => "RJ", 35 => "SP", 41 => "PR", 42 => "SC", 43 => "RS", 50 => "MS", 51 => "MT", 52 => "GO", 53 => "DF"
+
+            );
+
+            $ufKey   = substr($objJson->e69_chaveacesso, 0, 2);
+            $dataKey = substr($objJson->e69_chaveacesso, 2, 4);
+            $cnpjKey = substr($objJson->e69_chaveacesso, 6, 14);
+            $nfKey   = substr($objJson->e69_chaveacesso, 25, 9);
+
+            $oDaoCgm   = db_utils::getDao("cgm");
+
+            // Condicao da OC17910
+            if ($objJson->iCgmEmitente > "0")
+                $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->iCgmEmitente);
+            else
+                $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->cgm);
+            $rsCgm     = $oDaoCgm->sql_record($sSqlCgm);
+            $oDadosCgm = db_utils::fieldsMemory($rsCgm, 0);
+
+
+            $key  = (array_key_exists($ufKey, $ufs)) ? $ufKey : 0;
+            $data = substr(implode("", array_reverse(explode("/", $objJson->e69_dtnota))), 2, 4);
+
+            if ($ufs[$key] != $oDadosCgm->z01_uf) {
+                $chave = false;
+                $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique a Cidade e o Estado do Fornecedor!";
+            } else if (strcmp($data, $dataKey)) {
+                $chave = false;
+                $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique a data da Nota Fiscal!";
+            } else if (strcmp(str_pad($objJson->e69_nota, 9, "0", STR_PAD_LEFT), $nfKey)) {
+                $chave = false;
+                $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique o Número da Nota!";
+            } else if ($objJson->e69_notafiscaleletronica == 1) {
+                if (strcmp($oDadosCgm->z01_cgccpf, $cnpjKey)) {
+                    $chave = false; //
+                    $objEmpenho->sMsgErro   = "Chave de acesso inválida!\nVerifique o CNPJ do Fornecedor!";
+                }
+            }
+        }
+
+        if ($chave !== false) {
+
+            if ($oRetorno !== false) {
+
+
+                //caso procedimento com sucesso  vincula o processo administrativo
+                $sProcessoAdministrativo = addslashes(stripslashes(utf8_decode($objJson->e03_numeroprocesso)));
+                $oDadosRetorno = $json->decode(str_replace("\\", "", $oRetorno));
+
+                if ($oDadosRetorno->erro != 2) {
+
+                    if (!empty($sProcessoAdministrativo)) {
+
+                        $oDaoPagordemProcesso = new cl_pagordemprocesso();
+                        $oDaoPagordemProcesso->e03_numeroprocesso = $sProcessoAdministrativo;
+                        $oDaoPagordemProcesso->e03_pagordem = $oDadosRetorno->e50_codord;
+                        $oDaoPagordemProcesso->incluir(null);
+                        if ($oDaoPagordemProcesso->erro_status == 0) {
+                            throw new Exception($oDaoPagordemProcesso->erro_msg);
+                        }
+                    }
+                    /**[Extensao OrdenadorDespesa] inclusao_ordenador_2*/
+                }
+
+                echo $oRetorno;
+            } else {
+
+                $retorno = array("erro" => 2, "mensagem" => urlencode($objEmpenho->sMsgErro), "e50_codord" => null);
+                echo $json->encode($retorno);
+            }
+        } else {
+            $retorno = array("erro" => 2, "mensagem" => urlencode($objEmpenho->sMsgErro), "e50_codord" => null);
+            echo $json->encode($retorno);
+        }
+
+        break;
+
+    case "verificaacordo":
+
+        /*CASE CRIADA PARA VERIFICAR SE O PARAMETRO DO CONTRATO - RETORNO POR POSICAO ESTA ATIVO E SE O EMPENHO TEM VINCULO COM UM ACORDO
       CAMPO - pc01_liberarsaldoposicao
       FALSE - RETORNA PARA POSICAO FINAL
       TRUE - RETORNA PARA POSICAO VINCULADA
     */
 
-    $Sqlparemetrosaldo = $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('', 'pc01_liberarsaldoposicao'));
-    $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
-    $aItens = $objJson->itensAnulados;
-    $iStatus = 1;
-    $nMensagem = 'Usuário: ';
+        $Sqlparemetrosaldo = $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('', 'pc01_liberarsaldoposicao'));
+        $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
+        $aItens = $objJson->itensAnulados;
+        $iStatus = 1;
+        $nMensagem = 'Usuário: ';
 
-    //VERIFICA O PARAMETRO DO SALDO POR POSICAO
-    if ($resulparemetrosaldo->pc01_liberarsaldoposicao == 'f' && pg_num_rows($Sqlparemetrosaldo) > 0) {
+        //VERIFICA O PARAMETRO DO SALDO POR POSICAO
+        if ($resulparemetrosaldo->pc01_liberarsaldoposicao == 'f' && pg_num_rows($Sqlparemetrosaldo) > 0) {
 
-      for ($iInd = 0; $iInd < count($aItens); $iInd++) {
-        //INICIA A VERERIFICAÇAO DE TODOS AS LANAÇAMENTOS CASO NAO EXISTA ELE FINALIZA POIS NAO PERTENCE A UM ACORDO OU NAO EXISTE LANCAMENTO
-        $acordoMaterial = db_query("SELECT ac26_acordo, ac20_pcmater
+            for ($iInd = 0; $iInd < count($aItens); $iInd++) {
+                //INICIA A VERERIFICAÇAO DE TODOS AS LANAÇAMENTOS CASO NAO EXISTA ELE FINALIZA POIS NAO PERTENCE A UM ACORDO OU NAO EXISTE LANCAMENTO
+                $acordoMaterial = db_query("SELECT ac26_acordo, ac20_pcmater
             FROM acordoitemexecutadoempautitem
             JOIN acordoitemexecutado ON ac19_acordoitemexecutado=ac29_sequencial
             JOIN acordoitem ON ac29_acordoitem=ac20_sequencial
@@ -541,15 +547,15 @@ switch ($objJson->method) {
             JOIN empempitem ON e62_numemp=e61_numemp and ac20_pcmater=e62_item
             WHERE e62_sequencial = {$aItens[$iInd]->e62_sequencial}");
 
-        $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial, 0);
+                $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial, 0);
 
-        if (pg_num_rows($acordoMaterial) == 0) {
-          break;
-        }
+                if (pg_num_rows($acordoMaterial) == 0) {
+                    break;
+                }
 
-        $DaoacordoItem = db_utils::getDao('acordoitem');
+                $DaoacordoItem = db_utils::getDao('acordoitem');
 
-        $ItemUltimaPosicao = $DaoacordoItem->sql_record("
+                $ItemUltimaPosicao = $DaoacordoItem->sql_record("
             SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade,pc01_servico
             FROM acordoitem
             inner join pcmater on pc01_codmater = ac20_pcmater
@@ -561,55 +567,55 @@ switch ($objJson->method) {
             WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo})
             AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
 
-        if (pg_num_rows($ItemUltimaPosicao) == 0) {
-          break;
-        }
+                if (pg_num_rows($ItemUltimaPosicao) == 0) {
+                    break;
+                }
 
-        $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
+                $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
 
 
-        $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
+                $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
 
-        if (pg_num_rows($empempaut) == 0) {
-          break;
-        }
+                if (pg_num_rows($empempaut) == 0) {
+                    break;
+                }
 
-        $rsempempaut = db_utils::fieldsMemory($empempaut, 0);
+                $rsempempaut = db_utils::fieldsMemory($empempaut, 0);
 
-        $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
+                $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
 
-        if (pg_num_rows($empautitem) == 0) {
-          break;
-        }
+                if (pg_num_rows($empautitem) == 0) {
+                    break;
+                }
 
-        $rsempautitem = db_utils::fieldsMemory($empautitem, 0);
+                $rsempautitem = db_utils::fieldsMemory($empautitem, 0);
 
-        $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) as itemexecutado from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
+                $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) as itemexecutado from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
 
-        if (pg_num_rows($acordoitemexecutadoempautitem) == 0) {
-          break;
-        }
+                if (pg_num_rows($acordoitemexecutadoempautitem) == 0) {
+                    break;
+                }
 
-        $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem, 0);
+                $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem, 0);
 
-        $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->itemexecutado}");
+                $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->itemexecutado}");
 
-        if (pg_num_rows($acordoitemexecutado) == 0) {
-          break;
-        }
+                if (pg_num_rows($acordoitemexecutado) == 0) {
+                    break;
+                }
 
-        $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado, 0);
+                $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado, 0);
 
-        $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$rsacordoitemexecutado->ac29_acordoitem}");
+                $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$rsacordoitemexecutado->ac29_acordoitem}");
 
-        if (pg_num_rows($acordoitem) == 0) {
+                if (pg_num_rows($acordoitem) == 0) {
 
-          break;
-        }
+                    break;
+                }
 
-        $rsacordoitem = db_utils::fieldsMemory($acordoitem, 0);
+                $rsacordoitem = db_utils::fieldsMemory($acordoitem, 0);
 
-        $ItemAtualPosicao = $DaoacordoItem->sql_record("
+                $ItemAtualPosicao = $DaoacordoItem->sql_record("
             SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade
             FROM acordoitem
             JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
@@ -617,84 +623,84 @@ switch ($objJson->method) {
             AND ac26_sequencial ={$rsacordoitem->ac20_acordoposicao}
             AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
 
-        if (pg_num_rows($ItemAtualPosicao) == 0) {
-          break;
-        }
+                if (pg_num_rows($ItemAtualPosicao) == 0) {
+                    break;
+                }
 
-        $ItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
+                $ItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
 
-        $Dadosemp = $DaoacordoItem->sql_record("select e62_servicoquantidade,pcmater.pc01_servico from empempitem 
+                $Dadosemp = $DaoacordoItem->sql_record("select e62_servicoquantidade,pcmater.pc01_servico from empempitem
         inner join pcmater on
         pcmater.pc01_codmater = empempitem.e62_item
         where e62_numemp = $objJson->iEmpenho and pc01_codmater= $rsacordoMaterial->ac20_pcmater");
 
-        if (pg_num_rows($Dadosemp) == 0) {
-          break;
+                if (pg_num_rows($Dadosemp) == 0) {
+                    break;
+                }
+
+                $rsDadosemp = db_utils::fieldsMemory($Dadosemp, 0);
+                //FINALIZA A VERIFICACAO
+                //CASO CHEGUE AQUI FAZ A COMPARACAO DOS DADOS DO EMPENHO COM A ULTIMA POSICAO SE TEM ALGUMA ALTERACAO
+
+
+                if ($rsDadosemp->e62_servicoquantidade != $ItemUltimaPosicao->ac20_servicoquantidade) {
+                    $nMensagem = "Usuário: Não será possível a anulação do empenho.\n\nMotivo: A forma de controle do item " . $rsacordoMaterial->ac20_pcmater . " no empenho é diferente da posição atual do contrato!";
+                    $iStatus = 2;
+                    echo $json->encode(array("mensagem" => urlencode($nMensagem), "status" => $iStatus));
+                    return;
+                }
+                if ($ItemUltimaPosicao->ac20_servicoquantidade == 'f' && $ItemUltimaPosicao->pc01_servico == 't') {
+                } else if ($ItemUltimaPosicao->ac20_valorunitario != $ItemAtualPosicao->ac20_valorunitario) {
+                    $nMensagem .= "Item " . $rsacordoMaterial->ac20_pcmater . ": O valor unitário atual do contrato é " . $ItemUltimaPosicao->ac20_valorunitario . " e o valor unitário do item a ser anulado é " . $ItemAtualPosicao->ac20_valorunitario . ". Ao anular os itens do empenho, o valor unitario será o " . $ItemUltimaPosicao->ac20_valorunitario . ".\n\n";
+                    $iStatus = 3;
+                }
+            }
+        }
+        echo $json->encode(array("mensagem" => urlencode($nMensagem), "status" => $iStatus));
+
+
+        break;
+
+    case "anularEmpenho":
+
+
+        $Sqlparemetrosaldo = $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('', 'pc01_liberarsaldoposicao'));
+        $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
+        $aItens = $objJson->itensAnulados;
+
+
+        $objEmpenho->buscaUltimoDocumentoExecutadoDoc($objJson->iEmpenho, 21, date('Y-m-d', db_getsession('DB_datausu')));
+        if ($objEmpenho->lSqlErro) {
+            $nMensagem = urlencode($objEmpenho->sErroMsg);
+            $iStatus = 2;
+        } else {
+            $objEmpenho->setRecriarSaldo($objJson->lRecriarReserva);
+            $objEmpenho->anularEmpenho(
+                $objJson->itensAnulados,
+                $objJson->nValor,
+                $objJson->sMotivo,
+                $objJson->aSolicitacoes,
+                $objJson->iTipoAnulacao
+            );
+            if ($objEmpenho->lSqlErro) {
+
+                $nMensagem = urlencode($objEmpenho->sErroMsg);
+                $iStatus = 2;
+            } else {
+                $nMensagem = '';
+                $iStatus = 1;
+            }
         }
 
-        $rsDadosemp = db_utils::fieldsMemory($Dadosemp, 0);
-        //FINALIZA A VERIFICACAO       
-        //CASO CHEGUE AQUI FAZ A COMPARACAO DOS DADOS DO EMPENHO COM A ULTIMA POSICAO SE TEM ALGUMA ALTERACAO
 
 
-        if ($rsDadosemp->e62_servicoquantidade != $ItemUltimaPosicao->ac20_servicoquantidade) {
-          $nMensagem = "Usuário: Não será possível a anulação do empenho.\n\nMotivo: A forma de controle do item " . $rsacordoMaterial->ac20_pcmater . " no empenho é diferente da posição atual do contrato!";
-          $iStatus = 2;
-          echo $json->encode(array("mensagem" => urlencode($nMensagem), "status" => $iStatus));
-          return;
-        }
-        if ($ItemUltimaPosicao->ac20_servicoquantidade == 'f' && $ItemUltimaPosicao->pc01_servico == 't') {
-        } else if ($ItemUltimaPosicao->ac20_valorunitario != $ItemAtualPosicao->ac20_valorunitario) {
-          $nMensagem .= "Item " . $rsacordoMaterial->ac20_pcmater . ": O valor unitário atual do contrato é " . $ItemUltimaPosicao->ac20_valorunitario . " e o valor unitário do item a ser anulado é " . $ItemAtualPosicao->ac20_valorunitario . ". Ao anular os itens do empenho, o valor unitario será o " . $ItemUltimaPosicao->ac20_valorunitario . ".\n\n";
-          $iStatus = 3;
-        }
-      }
-    }
-    echo $json->encode(array("mensagem" => urlencode($nMensagem), "status" => $iStatus));
+        if ($resulparemetrosaldo->pc01_liberarsaldoposicao == 'f' && pg_num_rows($Sqlparemetrosaldo) > 0 && $iStatus == 1) {
 
+            db_inicio_transacao();
 
-    break;
+            for ($iInd = 0; $iInd < count($aItens); $iInd++) {
 
-  case "anularEmpenho":
-
-
-    $Sqlparemetrosaldo = $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('', 'pc01_liberarsaldoposicao'));
-    $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
-    $aItens = $objJson->itensAnulados;
-
-
-    $objEmpenho->buscaUltimoDocumentoExecutadoDoc($objJson->iEmpenho, 21, date('Y-m-d', db_getsession('DB_datausu')));
-    if ($objEmpenho->lSqlErro) {
-      $nMensagem = urlencode($objEmpenho->sErroMsg);
-      $iStatus = 2;
-    } else {
-      $objEmpenho->setRecriarSaldo($objJson->lRecriarReserva);
-      $objEmpenho->anularEmpenho(
-        $objJson->itensAnulados,
-        $objJson->nValor,
-        $objJson->sMotivo,
-        $objJson->aSolicitacoes,
-        $objJson->iTipoAnulacao
-      );
-      if ($objEmpenho->lSqlErro) {
-
-        $nMensagem = urlencode($objEmpenho->sErroMsg);
-        $iStatus = 2;
-      } else {
-        $nMensagem = '';
-        $iStatus = 1;
-      }
-    }
-
-
-
-    if ($resulparemetrosaldo->pc01_liberarsaldoposicao == 'f' && pg_num_rows($Sqlparemetrosaldo) > 0 && $iStatus == 1) {
-
-      db_inicio_transacao();
-
-      for ($iInd = 0; $iInd < count($aItens); $iInd++) {
-
-        $acordoMaterial = db_query("SELECT ac26_acordo, ac20_pcmater
+                $acordoMaterial = db_query("SELECT ac26_acordo, ac20_pcmater
             FROM acordoitemexecutadoempautitem
             JOIN acordoitemexecutado ON ac19_acordoitemexecutado=ac29_sequencial
             JOIN acordoitem ON ac29_acordoitem=ac20_sequencial
@@ -706,11 +712,11 @@ switch ($objJson->method) {
             JOIN empempitem ON e62_numemp=e61_numemp and ac20_pcmater=e62_item
             WHERE e62_sequencial = {$aItens[$iInd]->e62_sequencial}");
 
-        $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial, 0);
+                $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial, 0);
 
-        $DaoacordoItemDotacao = db_utils::getDao('acordoitemdotacao');
+                $DaoacordoItemDotacao = db_utils::getDao('acordoitemdotacao');
 
-        $Dotacao = $DaoacordoItemDotacao->sql_record("SELECT ac22_sequencial,ac22_valor,ac22_quantidade
+                $Dotacao = $DaoacordoItemDotacao->sql_record("SELECT ac22_sequencial,ac22_valor,ac22_quantidade
             FROM acordoitemdotacao
             JOIN acordoitem ON ac20_sequencial = ac22_acordoitem
             JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
@@ -720,15 +726,15 @@ switch ($objJson->method) {
             (SELECT max(ac26_sequencial)
             FROM acordoposicao
             WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo} and ac26_acordoposicaotipo <> 1)");
-        if (pg_num_rows($Dotacao) == 0) {
-          break;
-        }
+                if (pg_num_rows($Dotacao) == 0) {
+                    break;
+                }
 
-        $Dotacao = db_utils::fieldsMemory($Dotacao, 0);
+                $Dotacao = db_utils::fieldsMemory($Dotacao, 0);
 
-        $DaoacordoItem = db_utils::getDao('acordoitem');
+                $DaoacordoItem = db_utils::getDao('acordoitem');
 
-        $ItemUltimaPosicao = $DaoacordoItem->sql_record("
+                $ItemUltimaPosicao = $DaoacordoItem->sql_record("
             SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade,pc01_servico
             FROM acordoitem
             inner join pcmater on pc01_codmater = ac20_pcmater
@@ -739,115 +745,115 @@ switch ($objJson->method) {
             FROM acordoposicao
             WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo})
             AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
-        $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
+                $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
 
 
-        $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
+                $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
 
-        if (pg_num_rows($empempaut) == 0) {
-          print_r('erro empaut');
-          break;
+                if (pg_num_rows($empempaut) == 0) {
+                    print_r('erro empaut');
+                    break;
+                }
+
+                $rsempempaut = db_utils::fieldsMemory($empempaut, 0);
+
+                $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
+
+                if (pg_num_rows($empautitem) == 0) {
+                    print_r('erro empautitem');
+                    break;
+                }
+
+                $rsempautitem = db_utils::fieldsMemory($empautitem, 0);
+
+                $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) as itemexecutado from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
+
+                if (pg_num_rows($acordoitemexecutadoempautitem) == 0) {
+                    print_r('erro executempaut');
+                    break;
+                }
+
+                $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem, 0);
+
+                $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->itemexecutado}");
+
+                if (pg_num_rows($acordoitemexecutado) == 0) {
+                    print_r('erro itemexecutad');
+                    break;
+                }
+
+                $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado, 0);
+
+                $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$rsacordoitemexecutado->ac29_acordoitem}");
+
+                if (pg_num_rows($acordoitem) == 0) {
+                    print_r('erro acordoitem');
+                    break;
+                }
+                $rsacordoitem = db_utils::fieldsMemory($acordoitem, 0);
+                //VERIFICA SE A POSICAO DE CRIACAO DO EMPENHO É DIFERENTE DA POSICAO FINAL DO ACORDO
+                if ($rsacordoitem->ac20_acordoposicao != $ItemUltimaPosicao->ac20_acordoposicao) {
+
+
+                    $DaoacordoItem = db_utils::getDao('acordoitemexecutado');
+                    if ($ItemUltimaPosicao->ac20_servicoquantidade == 'f' && $ItemUltimaPosicao->pc01_servico == 't') {
+                        //CRIA UMA POSICAO NA TABELA acordoitemexecutado CONTROLADO POR VALOR
+                        $DaoacordoItem->ac29_acordoitem = $ItemUltimaPosicao->ac20_sequencial;
+                        $DaoacordoItem->ac29_quantidade = -1;
+                        $DaoacordoItem->ac29_valor = ($aItens[$iInd]->vlrtot) * -1;
+                        $DaoacordoItem->ac29_tipo = 1;
+                        $DaoacordoItem->ac29_observacao = 'liberarsaldoposicao';
+                        $DaoacordoItem->ac29_automatico = 't';
+                        $DaoacordoItem->ac29_datainicial = date('Y-m-d', db_getsession('DB_datausu'));
+                        $DaoacordoItem->ac29_datafinal = date('Y-m-d', db_getsession('DB_datausu'));
+                        $DaoacordoItem->incluir();
+                    } else {
+                        //CRIA UMA POSICAO NA TABELA acordoitemexecutado CONTROLADO POR QUANTIDADE
+                        $DaoacordoItem->ac29_acordoitem = $ItemUltimaPosicao->ac20_sequencial;
+                        $DaoacordoItem->ac29_quantidade = $aItens[$iInd]->quantidade * -1;
+                        $DaoacordoItem->ac29_valor = ($aItens[$iInd]->quantidade * $ItemUltimaPosicao->ac20_valorunitario) * -1;
+                        $DaoacordoItem->ac29_tipo = 1;
+                        $DaoacordoItem->ac29_observacao = 'liberarsaldoposicao';
+                        $DaoacordoItem->ac29_automatico = 't';
+                        $DaoacordoItem->ac29_datainicial = date('Y-m-d', db_getsession('DB_datausu'));
+                        $DaoacordoItem->ac29_datafinal = date('Y-m-d', db_getsession('DB_datausu'));
+                        $DaoacordoItem->incluir();
+                    }
+                }
+            }
         }
 
-        $rsempempaut = db_utils::fieldsMemory($empempaut, 0);
-
-        $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
-
-        if (pg_num_rows($empautitem) == 0) {
-          print_r('erro empautitem');
-          break;
+        if ($iStatus == 2) {
+            db_fim_transacao(true);
+        } else {
+            db_fim_transacao(false);
+            $nMensagem = '';
+            $iStatus = 1;
         }
 
-        $rsempautitem = db_utils::fieldsMemory($empautitem, 0);
+        echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
 
-        $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) as itemexecutado from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
+        break;
 
-        if (pg_num_rows($acordoitemexecutadoempautitem) == 0) {
-          print_r('erro executempaut');
-          break;
-        }
+    case "verificaRP":
 
-        $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem, 0);
-
-        $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->itemexecutado}");
-
-        if (pg_num_rows($acordoitemexecutado) == 0) {
-          print_r('erro itemexecutad');
-          break;
-        }
-
-        $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado, 0);
-
-        $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$rsacordoitemexecutado->ac29_acordoitem}");
-
-        if (pg_num_rows($acordoitem) == 0) {
-          print_r('erro acordoitem');
-          break;
-        }
-        $rsacordoitem = db_utils::fieldsMemory($acordoitem, 0);
-        //VERIFICA SE A POSICAO DE CRIACAO DO EMPENHO É DIFERENTE DA POSICAO FINAL DO ACORDO
-        if ($rsacordoitem->ac20_acordoposicao != $ItemUltimaPosicao->ac20_acordoposicao) {
-
-
-          $DaoacordoItem = db_utils::getDao('acordoitemexecutado');
-          if ($ItemUltimaPosicao->ac20_servicoquantidade == 'f' && $ItemUltimaPosicao->pc01_servico == 't') {
-            //CRIA UMA POSICAO NA TABELA acordoitemexecutado CONTROLADO POR VALOR
-            $DaoacordoItem->ac29_acordoitem = $ItemUltimaPosicao->ac20_sequencial;
-            $DaoacordoItem->ac29_quantidade = -1;
-            $DaoacordoItem->ac29_valor = ($aItens[$iInd]->vlrtot) * -1;
-            $DaoacordoItem->ac29_tipo = 1;
-            $DaoacordoItem->ac29_observacao = 'liberarsaldoposicao';
-            $DaoacordoItem->ac29_automatico = 't';
-            $DaoacordoItem->ac29_datainicial = date('Y-m-d', db_getsession('DB_datausu'));
-            $DaoacordoItem->ac29_datafinal = date('Y-m-d', db_getsession('DB_datausu'));
-            $DaoacordoItem->incluir();
-          } else {
-            //CRIA UMA POSICAO NA TABELA acordoitemexecutado CONTROLADO POR QUANTIDADE
-            $DaoacordoItem->ac29_acordoitem = $ItemUltimaPosicao->ac20_sequencial;
-            $DaoacordoItem->ac29_quantidade = $aItens[$iInd]->quantidade * -1;
-            $DaoacordoItem->ac29_valor = ($aItens[$iInd]->quantidade * $ItemUltimaPosicao->ac20_valorunitario) * -1;
-            $DaoacordoItem->ac29_tipo = 1;
-            $DaoacordoItem->ac29_observacao = 'liberarsaldoposicao';
-            $DaoacordoItem->ac29_automatico = 't';
-            $DaoacordoItem->ac29_datainicial = date('Y-m-d', db_getsession('DB_datausu'));
-            $DaoacordoItem->ac29_datafinal = date('Y-m-d', db_getsession('DB_datausu'));
-            $DaoacordoItem->incluir();
-          }
-        }
-      }
-    }
-
-    if ($iStatus == 2) {
-      db_fim_transacao(true);
-    } else {
-      db_fim_transacao(false);
-      $nMensagem = '';
-      $iStatus = 1;
-    }
-
-    echo $json->encode(array("mensagem" => $nMensagem, "status" => $iStatus));
-
-    break;
-
-  case "verificaRP":
-
-    /*CASE CRIADA PARA VERIFICAR SE O PARAMETRO DO CONTRATO - RETORNO POR POSICAO ESTA ATIVO E SE O EMPENHO TEM VINCULO COM UM ACORDO
+        /*CASE CRIADA PARA VERIFICAR SE O PARAMETRO DO CONTRATO - RETORNO POR POSICAO ESTA ATIVO E SE O EMPENHO TEM VINCULO COM UM ACORDO
       CAMPO - pc01_liberarsaldoposicao
       FALSE - RETORNA PARA POSICAO FINAL
       TRUE - RETORNA PARA POSICAO VINCULADA
     */
 
-    $Sqlparemetrosaldo = $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('', 'pc01_liberarsaldoposicao'));
-    $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
-    $aItens = $objJson->aItens;
-    $iStatus = 1;
-    $nMensagem = 'Usuário: ';
+        $Sqlparemetrosaldo = $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('', 'pc01_liberarsaldoposicao'));
+        $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
+        $aItens = $objJson->aItens;
+        $iStatus = 1;
+        $nMensagem = 'Usuário: ';
 
-    //VERIFICA O PARAMETRO DO SALDO POR POSICAO
-    if ($resulparemetrosaldo->pc01_liberarsaldoposicao == 'f' && pg_num_rows($Sqlparemetrosaldo) > 0 && $iStatus == 1) {
-      for ($iInd = 0; $iInd < count($aItens); $iInd++) {
-        //INICIA A VERERIFICAÇAO DE TODOS AS LANAÇAMENTOS CASO NAO EXISTA ELE FINALIZA POIS NAO PERTENCE A UM ACORDO OU NAO EXISTE LANCAMENTO
-        $acordoMaterial = db_query("SELECT ac26_acordo, ac20_pcmater
+        //VERIFICA O PARAMETRO DO SALDO POR POSICAO
+        if ($resulparemetrosaldo->pc01_liberarsaldoposicao == 'f' && pg_num_rows($Sqlparemetrosaldo) > 0 && $iStatus == 1) {
+            for ($iInd = 0; $iInd < count($aItens); $iInd++) {
+                //INICIA A VERERIFICAÇAO DE TODOS AS LANAÇAMENTOS CASO NAO EXISTA ELE FINALIZA POIS NAO PERTENCE A UM ACORDO OU NAO EXISTE LANCAMENTO
+                $acordoMaterial = db_query("SELECT ac26_acordo, ac20_pcmater
             FROM acordoitemexecutadoempautitem
             JOIN acordoitemexecutado ON ac19_acordoitemexecutado=ac29_sequencial
             JOIN acordoitem ON ac29_acordoitem=ac20_sequencial
@@ -859,16 +865,16 @@ switch ($objJson->method) {
 		        JOIN empempitem ON e62_numemp=e61_numemp and ac20_pcmater=e62_item
 		        WHERE e62_sequencial = {$aItens[$iInd]->iCodItem}");
 
-        $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial, 0);
+                $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial, 0);
 
-        if (pg_num_rows($acordoMaterial) == 0) {
-          break;
-        }
+                if (pg_num_rows($acordoMaterial) == 0) {
+                    break;
+                }
 
 
-        $DaoacordoItem = db_utils::getDao('acordoitem');
+                $DaoacordoItem = db_utils::getDao('acordoitem');
 
-        $ItemUltimaPosicao = $DaoacordoItem->sql_record("
+                $ItemUltimaPosicao = $DaoacordoItem->sql_record("
             SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade,pc01_servico
             FROM acordoitem
             inner join pcmater on pc01_codmater = ac20_pcmater
@@ -880,58 +886,58 @@ switch ($objJson->method) {
             WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo})
             AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
 
-        if (pg_num_rows($ItemUltimaPosicao) == 0) {
-          break;
-        }
+                if (pg_num_rows($ItemUltimaPosicao) == 0) {
+                    break;
+                }
 
-        $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
-
-
-        $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
-
-        if (pg_num_rows($empempaut) == 0) {
-          break;
-        }
+                $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
 
 
-        $rsempempaut = db_utils::fieldsMemory($empempaut, 0);
+                $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
+
+                if (pg_num_rows($empempaut) == 0) {
+                    break;
+                }
 
 
-        $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
-
-        if (pg_num_rows($empautitem) == 0) {
-          break;
-        }
-
-        $rsempautitem = db_utils::fieldsMemory($empautitem, 0);
+                $rsempempaut = db_utils::fieldsMemory($empempaut, 0);
 
 
-        $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) as itemexecutado from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
+                $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
 
-        if (pg_num_rows($acordoitemexecutadoempautitem) == 0) {
-          break;
-        }
+                if (pg_num_rows($empautitem) == 0) {
+                    break;
+                }
 
-        $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem, 0);
+                $rsempautitem = db_utils::fieldsMemory($empautitem, 0);
 
-        $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->itemexecutado}");
 
-        if (pg_num_rows($acordoitemexecutado) == 0) {
-          break;
-        }
+                $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) as itemexecutado from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
 
-        $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado, 0);
+                if (pg_num_rows($acordoitemexecutadoempautitem) == 0) {
+                    break;
+                }
 
-        $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$rsacordoitemexecutado->ac29_acordoitem}");
+                $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem, 0);
 
-        if (pg_num_rows($acordoitem) == 0) {
+                $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->itemexecutado}");
 
-          break;
-        }
+                if (pg_num_rows($acordoitemexecutado) == 0) {
+                    break;
+                }
 
-        $rsacordoitem = db_utils::fieldsMemory($acordoitem, 0);
+                $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado, 0);
 
-        $ItemAtualPosicao = $DaoacordoItem->sql_record("
+                $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$rsacordoitemexecutado->ac29_acordoitem}");
+
+                if (pg_num_rows($acordoitem) == 0) {
+
+                    break;
+                }
+
+                $rsacordoitem = db_utils::fieldsMemory($acordoitem, 0);
+
+                $ItemAtualPosicao = $DaoacordoItem->sql_record("
             SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade
             FROM acordoitem
             JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
@@ -939,92 +945,92 @@ switch ($objJson->method) {
             AND ac26_sequencial ={$rsacordoitem->ac20_acordoposicao}
             AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
 
-        if (pg_num_rows($ItemAtualPosicao) == 0) {
-          break;
-        }
+                if (pg_num_rows($ItemAtualPosicao) == 0) {
+                    break;
+                }
 
-        $ItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
+                $ItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
 
 
-        $Dadosemp = $DaoacordoItem->sql_record("select e62_servicoquantidade,pcmater.pc01_servico from empempitem 
+                $Dadosemp = $DaoacordoItem->sql_record("select e62_servicoquantidade,pcmater.pc01_servico from empempitem
             inner join pcmater on
             pcmater.pc01_codmater = empempitem.e62_item
             where e62_numemp = $objJson->iEmpenho and pc01_codmater= $rsacordoMaterial->ac20_pcmater");
 
-        if (pg_num_rows($Dadosemp) == 0) {
-          break;
+                if (pg_num_rows($Dadosemp) == 0) {
+                    break;
+                }
+
+                $rsDadosemp = db_utils::fieldsMemory($Dadosemp, 0);
+                //FINALIZA A VERIFICACAO
+                //CASO CHEGUE AQUI FAZ A COMPARACAO DOS DADOS DO EMPENHO COM A ULTIMA POSICAO SE TEM ALGUMA ALTERACAO
+
+                if ($rsDadosemp->e62_servicoquantidade != $ItemUltimaPosicao->ac20_servicoquantidade) {
+                    $nMensagem = "Usuário: Não será possível a anulação do empenho.\n\nMotivo: A forma de controle do item " . $rsacordoMaterial->ac20_pcmater . " no empenho é diferente da posição atual do contrato!";
+                    $iStatus = 2;
+                    echo $json->encode(array("sMensagem" => urlencode($nMensagem), "iStatus" => $iStatus));
+                    return;
+                }
+                if ($ItemUltimaPosicao->ac20_servicoquantidade == 'f' && $ItemUltimaPosicao->pc01_servico == 't') {
+                } else if ($ItemUltimaPosicao->ac20_valorunitario != $ItemAtualPosicao->ac20_valorunitario) {
+                    $nMensagem .= "Item " . $rsacordoMaterial->ac20_pcmater . ": O valor unitário atual do contrato é " . $ItemUltimaPosicao->ac20_valorunitario . " e o valor unitário do item a ser anulado é " . $ItemAtualPosicao->ac20_valorunitario . ". Ao anular os itens do empenho, o valor unitario será o " . $ItemUltimaPosicao->ac20_valorunitario . ".\n\n";
+                    $iStatus = 3;
+                }
+            }
         }
 
-        $rsDadosemp = db_utils::fieldsMemory($Dadosemp, 0);
-        //FINALIZA A VERIFICACAO       
-        //CASO CHEGUE AQUI FAZ A COMPARACAO DOS DADOS DO EMPENHO COM A ULTIMA POSICAO SE TEM ALGUMA ALTERACAO      
 
-        if ($rsDadosemp->e62_servicoquantidade != $ItemUltimaPosicao->ac20_servicoquantidade) {
-          $nMensagem = "Usuário: Não será possível a anulação do empenho.\n\nMotivo: A forma de controle do item " . $rsacordoMaterial->ac20_pcmater . " no empenho é diferente da posição atual do contrato!";
-          $iStatus = 2;
-          echo $json->encode(array("sMensagem" => urlencode($nMensagem), "iStatus" => $iStatus));
-          return;
+        echo $json->encode(array("sMensagem" => urlencode($nMensagem), "iStatus" => $iStatus, "iTipo" => $objJson->iTipo));
+
+
+        break;
+
+    case "getDadosRP":
+
+        if ($objEmpenho->getDadosRP($objJson->iTipoRP)) {
+            echo $json->encode($objEmpenho->dadosEmpenho);
+        } else {
+            echo $json->encode(array("status" => 2, "sMensagem" => urlencode($objEmpenho->sErroMsg)));
         }
-        if ($ItemUltimaPosicao->ac20_servicoquantidade == 'f' && $ItemUltimaPosicao->pc01_servico == 't') {
-        } else if ($ItemUltimaPosicao->ac20_valorunitario != $ItemAtualPosicao->ac20_valorunitario) {
-          $nMensagem .= "Item " . $rsacordoMaterial->ac20_pcmater . ": O valor unitário atual do contrato é " . $ItemUltimaPosicao->ac20_valorunitario . " e o valor unitário do item a ser anulado é " . $ItemAtualPosicao->ac20_valorunitario . ". Ao anular os itens do empenho, o valor unitario será o " . $ItemUltimaPosicao->ac20_valorunitario . ".\n\n";
-          $iStatus = 3;
-        }
-      }
-    }
+        break;
+
+    case "estornarRP":
+
+        try {
+
+            $Sqlparemetrosaldo = $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('', 'pc01_liberarsaldoposicao'));
+            $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
+            $aItens = $objJson->aItens;
+
+            $objEmpenho->buscaUltimoDocumentoExecutadoDoc($objJson->iEmpenho, 21, date('Y-m-d', db_getsession('DB_datausu')));
+
+            if ($objEmpenho->lSqlErro) {
+                $sMensagem = urlencode($objEmpenho->sErroMsg);
+                $iStatus = 2;
+            } else {
+
+                db_inicio_transacao();
+                $objEmpenho->estornarRP(
+                    $objJson->iTipo,
+                    $objJson->aNotas,
+                    $objJson->sValorEstornar,
+                    $objJson->sMotivo,
+                    $objJson->aItens,
+                    $objJson->tipoAnulacao,
+                    $objJson->sAto,
+                    $objJson->dDataAto
+                );
+
+                $iStatus = 1;
+                $sMensagem = "Empenho estornado com sucesso";
+            }
+
+            if ($resulparemetrosaldo->pc01_liberarsaldoposicao == 'f' && pg_num_rows($Sqlparemetrosaldo) > 0 && $iStatus == 1) {
 
 
-    echo $json->encode(array("sMensagem" => urlencode($nMensagem), "iStatus" => $iStatus, "iTipo" => $objJson->iTipo));
+                for ($iInd = 0; $iInd < count($aItens); $iInd++) {
 
-
-    break;
-
-  case "getDadosRP":
-
-    if ($objEmpenho->getDadosRP($objJson->iTipoRP)) {
-      echo $json->encode($objEmpenho->dadosEmpenho);
-    } else {
-      echo $json->encode(array("status" => 2, "sMensagem" => urlencode($objEmpenho->sErroMsg)));
-    }
-    break;
-
-  case "estornarRP":
-
-    try {
-
-      $Sqlparemetrosaldo = $paremetrosaldo->sql_record($paremetrosaldo->sql_query_file('', 'pc01_liberarsaldoposicao'));
-      $resulparemetrosaldo  = db_utils::fieldsMemory($Sqlparemetrosaldo, 0);
-      $aItens = $objJson->aItens;
-
-      $objEmpenho->buscaUltimoDocumentoExecutadoDoc($objJson->iEmpenho, 21, date('Y-m-d', db_getsession('DB_datausu')));
-
-      if ($objEmpenho->lSqlErro) {
-        $sMensagem = urlencode($objEmpenho->sErroMsg);
-        $iStatus = 2;
-      } else {
-
-        db_inicio_transacao();
-        $objEmpenho->estornarRP(
-          $objJson->iTipo,
-          $objJson->aNotas,
-          $objJson->sValorEstornar,
-          $objJson->sMotivo,
-          $objJson->aItens,
-          $objJson->tipoAnulacao,
-          $objJson->sAto,
-          $objJson->dDataAto
-        );
-
-        $iStatus = 1;
-        $sMensagem = "Empenho estornado com sucesso";
-      }
-
-      if ($resulparemetrosaldo->pc01_liberarsaldoposicao == 'f' && pg_num_rows($Sqlparemetrosaldo) > 0 && $iStatus == 1) {
-
-
-        for ($iInd = 0; $iInd < count($aItens); $iInd++) {
-
-          $acordoMaterial = db_query("SELECT ac26_acordo, ac20_pcmater
+                    $acordoMaterial = db_query("SELECT ac26_acordo, ac20_pcmater
               FROM acordoitemexecutadoempautitem
               JOIN acordoitemexecutado ON ac19_acordoitemexecutado=ac29_sequencial
               JOIN acordoitem ON ac29_acordoitem=ac20_sequencial
@@ -1036,16 +1042,16 @@ switch ($objJson->method) {
               JOIN empempitem ON e62_numemp=e61_numemp and ac20_pcmater=e62_item
               WHERE e62_sequencial = {$aItens[$iInd]->iCodItem}");
 
-          $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial, 0);
+                    $rsacordoMaterial = db_utils::fieldsMemory($acordoMaterial, 0);
 
-          if (pg_num_rows($acordoMaterial) == 0) {
-            break;
-          }
+                    if (pg_num_rows($acordoMaterial) == 0) {
+                        break;
+                    }
 
 
-          $DaoacordoItem = db_utils::getDao('acordoitem');
+                    $DaoacordoItem = db_utils::getDao('acordoitem');
 
-          $ItemUltimaPosicao = $DaoacordoItem->sql_record("
+                    $ItemUltimaPosicao = $DaoacordoItem->sql_record("
               SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade,pc01_servico
               FROM acordoitem
               inner join pcmater on pc01_codmater = ac20_pcmater
@@ -1057,59 +1063,59 @@ switch ($objJson->method) {
               WHERE ac26_acordo = {$rsacordoMaterial->ac26_acordo})
               AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
 
-          if (pg_num_rows($ItemUltimaPosicao) == 0) {
-            break;
-          }
+                    if (pg_num_rows($ItemUltimaPosicao) == 0) {
+                        break;
+                    }
 
-          $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
-
-
-          $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
-
-          if (pg_num_rows($empempaut) == 0) {
-            break;
-          }
+                    $ItemUltimaPosicao = db_utils::fieldsMemory($ItemUltimaPosicao, 0);
 
 
-          $rsempempaut = db_utils::fieldsMemory($empempaut, 0);
+                    $empempaut = db_query("select e61_autori from empempaut where e61_numemp = {$objJson->iEmpenho}");
+
+                    if (pg_num_rows($empempaut) == 0) {
+                        break;
+                    }
 
 
-          $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
-
-          if (pg_num_rows($empautitem) == 0) {
-            break;
-          }
-
-          $rsempautitem = db_utils::fieldsMemory($empautitem, 0);
+                    $rsempempaut = db_utils::fieldsMemory($empempaut, 0);
 
 
-          $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) as itemexecutado from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
+                    $empautitem = db_query("select e55_sequen from empautitem where e55_autori = {$rsempempaut->e61_autori} and e55_item = {$rsacordoMaterial->ac20_pcmater}");
 
-          if (pg_num_rows($acordoitemexecutadoempautitem) == 0) {
-            break;
-          }
+                    if (pg_num_rows($empautitem) == 0) {
+                        break;
+                    }
 
-          $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem, 0);
-
-          $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->itemexecutado}");
-
-          if (pg_num_rows($acordoitemexecutado) == 0) {
-            break;
-          }
-
-          $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado, 0);
-
-          $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$rsacordoitemexecutado->ac29_acordoitem}");
-
-          if (pg_num_rows($acordoitem) == 0) {
-
-            break;
-          }
-
-          $rsacordoitem = db_utils::fieldsMemory($acordoitem, 0);
+                    $rsempautitem = db_utils::fieldsMemory($empautitem, 0);
 
 
-          $ItemAtualPosicao = $DaoacordoItem->sql_record("
+                    $acordoitemexecutadoempautitem = db_query("select min(ac19_acordoitemexecutado) as itemexecutado from acordoitemexecutadoempautitem  where ac19_autori = {$rsempempaut->e61_autori} and ac19_sequen = {$rsempautitem->e55_sequen}");
+
+                    if (pg_num_rows($acordoitemexecutadoempautitem) == 0) {
+                        break;
+                    }
+
+                    $rsacordoitemexecutadoempautitem = db_utils::fieldsMemory($acordoitemexecutadoempautitem, 0);
+
+                    $acordoitemexecutado = db_query("select ac29_acordoitem from acordoitemexecutado where ac29_sequencial = {$rsacordoitemexecutadoempautitem->itemexecutado}");
+
+                    if (pg_num_rows($acordoitemexecutado) == 0) {
+                        break;
+                    }
+
+                    $rsacordoitemexecutado = db_utils::fieldsMemory($acordoitemexecutado, 0);
+
+                    $acordoitem = db_query("select ac20_acordoposicao from acordoitem where ac20_sequencial = {$rsacordoitemexecutado->ac29_acordoitem}");
+
+                    if (pg_num_rows($acordoitem) == 0) {
+
+                        break;
+                    }
+
+                    $rsacordoitem = db_utils::fieldsMemory($acordoitem, 0);
+
+
+                    $ItemAtualPosicao = $DaoacordoItem->sql_record("
               SELECT ac20_sequencial,ac20_quantidade,ac20_valortotal,ac20_valorunitario,ac20_acordoposicao,ac20_servicoquantidade
               FROM acordoitem
               JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
@@ -1117,203 +1123,203 @@ switch ($objJson->method) {
               AND ac26_sequencial ={$rsacordoitem->ac20_acordoposicao}
               AND ac20_pcmater = {$rsacordoMaterial->ac20_pcmater} ");
 
-          if (pg_num_rows($ItemAtualPosicao) == 0) {
-            break;
-          }
+                    if (pg_num_rows($ItemAtualPosicao) == 0) {
+                        break;
+                    }
 
-          $ItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
+                    $ItemAtualPosicao = db_utils::fieldsMemory($ItemAtualPosicao, 0);
 
 
-          $Dadosemp = $DaoacordoItem->sql_record("select e62_servicoquantidade,pcmater.pc01_servico from empempitem 
+                    $Dadosemp = $DaoacordoItem->sql_record("select e62_servicoquantidade,pcmater.pc01_servico from empempitem
           inner join pcmater on
           pcmater.pc01_codmater = empempitem.e62_item
           where e62_numemp = $objJson->iEmpenho and pc01_codmater= $rsacordoMaterial->ac20_pcmater");
 
-          if (pg_num_rows($Dadosemp) == 0) {
-            break;
-          }
+                    if (pg_num_rows($Dadosemp) == 0) {
+                        break;
+                    }
 
-          $rsDadosemp = db_utils::fieldsMemory($Dadosemp, 0);
-
-
-          //VERIFICA SE A POSICAO DE CRIACAO DO EMPENHO É DIFERENTE DA POSICAO FINAL DO ACORDO
-          if ($rsacordoitem->ac20_acordoposicao != $ItemUltimaPosicao->ac20_acordoposicao) {
+                    $rsDadosemp = db_utils::fieldsMemory($Dadosemp, 0);
 
 
-            $DaoacordoItem = db_utils::getDao('acordoitemexecutado');
-            if ($ItemUltimaPosicao->ac20_servicoquantidade == 'f' && $ItemUltimaPosicao->pc01_servico == 't') {
-              //CRIA UMA POSICAO NA TABELA acordoitemexecutado CONTROLADO POR VALOR
-              $DaoacordoItem->ac29_acordoitem = $ItemUltimaPosicao->ac20_sequencial;
-              $DaoacordoItem->ac29_quantidade = -1;
-              $DaoacordoItem->ac29_valor = ($aItens[$iInd]->vlrtot) * -1;
-              $DaoacordoItem->ac29_tipo = 1;
-              $DaoacordoItem->ac29_observacao = 'liberarsaldoposicao';
-              $DaoacordoItem->ac29_automatico = 't';
-              $DaoacordoItem->ac29_datainicial = date('Y-m-d', db_getsession('DB_datausu'));
-              $DaoacordoItem->ac29_datafinal = date('Y-m-d', db_getsession('DB_datausu'));
-              $DaoacordoItem->incluir();
-            } else {
-              //CRIA UMA POSICAO NA TABELA acordoitemexecutado CONTROLADO POR QUANTIDADE
-              $DaoacordoItem->ac29_acordoitem = $ItemUltimaPosicao->ac20_sequencial;
-              $DaoacordoItem->ac29_quantidade = $aItens[$iInd]->quantidade * -1;
-              $DaoacordoItem->ac29_valor = ($aItens[$iInd]->quantidade * $ItemUltimaPosicao->ac20_valorunitario) * -1;
-              $DaoacordoItem->ac29_tipo = 1;
-              $DaoacordoItem->ac29_observacao = 'liberarsaldoposicao';
-              $DaoacordoItem->ac29_automatico = 't';
-              $DaoacordoItem->ac29_datainicial = date('Y-m-d', db_getsession('DB_datausu'));
-              $DaoacordoItem->ac29_datafinal = date('Y-m-d', db_getsession('DB_datausu'));
-              $DaoacordoItem->incluir();
+                    //VERIFICA SE A POSICAO DE CRIACAO DO EMPENHO É DIFERENTE DA POSICAO FINAL DO ACORDO
+                    if ($rsacordoitem->ac20_acordoposicao != $ItemUltimaPosicao->ac20_acordoposicao) {
+
+
+                        $DaoacordoItem = db_utils::getDao('acordoitemexecutado');
+                        if ($ItemUltimaPosicao->ac20_servicoquantidade == 'f' && $ItemUltimaPosicao->pc01_servico == 't') {
+                            //CRIA UMA POSICAO NA TABELA acordoitemexecutado CONTROLADO POR VALOR
+                            $DaoacordoItem->ac29_acordoitem = $ItemUltimaPosicao->ac20_sequencial;
+                            $DaoacordoItem->ac29_quantidade = -1;
+                            $DaoacordoItem->ac29_valor = ($aItens[$iInd]->vlrtot) * -1;
+                            $DaoacordoItem->ac29_tipo = 1;
+                            $DaoacordoItem->ac29_observacao = 'liberarsaldoposicao';
+                            $DaoacordoItem->ac29_automatico = 't';
+                            $DaoacordoItem->ac29_datainicial = date('Y-m-d', db_getsession('DB_datausu'));
+                            $DaoacordoItem->ac29_datafinal = date('Y-m-d', db_getsession('DB_datausu'));
+                            $DaoacordoItem->incluir();
+                        } else {
+                            //CRIA UMA POSICAO NA TABELA acordoitemexecutado CONTROLADO POR QUANTIDADE
+                            $DaoacordoItem->ac29_acordoitem = $ItemUltimaPosicao->ac20_sequencial;
+                            $DaoacordoItem->ac29_quantidade = $aItens[$iInd]->quantidade * -1;
+                            $DaoacordoItem->ac29_valor = ($aItens[$iInd]->quantidade * $ItemUltimaPosicao->ac20_valorunitario) * -1;
+                            $DaoacordoItem->ac29_tipo = 1;
+                            $DaoacordoItem->ac29_observacao = 'liberarsaldoposicao';
+                            $DaoacordoItem->ac29_automatico = 't';
+                            $DaoacordoItem->ac29_datainicial = date('Y-m-d', db_getsession('DB_datausu'));
+                            $DaoacordoItem->ac29_datafinal = date('Y-m-d', db_getsession('DB_datausu'));
+                            $DaoacordoItem->incluir();
+                        }
+                    }
+                }
+
+                if ($iStatus == 2) {
+                    db_fim_transacao(true);
+                } else {
+                    db_fim_transacao(false);
+                    $nMensagem = '';
+                    $iStatus = 1;
+                }
             }
-          }
-        }
+        } catch (Exception $e) {
 
-        if ($iStatus == 2) {
-          db_fim_transacao(true);
+            $iStatus = 2;
+            $sMensagem = urlencode($e->getMessage());
+            db_fim_transacao(true);
+        }
+        echo $json->encode(array("sMensagem" => $sMensagem, "iStatus" => $iStatus));
+        break;
+
+    case "getDadosRP":
+
+        if ($objEmpenho->getDados($objJson->iEmpenho)) {
+
+            $rsNotas = $objEmpenho->getNotas($objJson->iEmpenho);
+            if ($rsNotas) {
+
+                for ($iNotas = 0; $iNotas < $objEmpenho->iNumRowsNotas; $iNotas++) {
+
+                    $oNota = db_utils::fieldsMemory($rsNotas, $iNotas);
+                    $oNota->temMovimentoConfigurado = false;
+                    $oNota->temRetencao = false;
+                    $oNota->VlrRetencao = 0;
+                    /**
+                     * Pesquisamos se existem algum movimento para essa nota.
+                     */
+                    $sWhereIni = "e50_codord = {$oNota->e50_codord} and e97_codforma is not null";
+                    $sWhereIni .= " and corempagemov.k12_codmov is null and e81_cancelado is null";
+                    $sJoin = " left join empagenotasordem on e81_codmov         = e43_empagemov  ";
+                    $sJoin .= " left join empageordem      on e43_ordempagamento = e42_sequencial ";
+                    $aMOvimentos = $oAgendaPagamento->getMovimentosAgenda($sWhereIni, $sJoin, false, false);
+                    if (count($aMOvimentos) > 0) {
+
+                        $oNota->temMovimentoConfigurado = true;
+                    }
+
+                    //Verifica se a nota possui retenções lançadas
+                    $oRetencao = new retencaoNota($oNota->e69_codnota);
+                    if ($oNota->e50_codord != "" && $oRetencao->getValorRetencao($oNota->e50_codord) > 0) {
+
+                        $oNota->temRetencao = true;
+                        $oNota->VlrRetencao = $oRetencao->getValorRetencao($oNota->e50_codord);
+                    }
+                    $objEmpenho->dadosEmpenho->aNotas[] = $oNota;
+                }
+            }
+
+            echo $json->encode($objEmpenho->dadosEmpenho);
         } else {
-          db_fim_transacao(false);
-          $nMensagem = '';
-          $iStatus = 1;
+            echo $json->encode(array("status" => 2, "sMensagem" => urlencode($objEmpenho->sErroMsg)));
         }
-      }
-    } catch (Exception $e) {
+        break;
 
-      $iStatus = 2;
-      $sMensagem = urlencode($e->getMessage());
-      db_fim_transacao(true);
-    }
-    echo $json->encode(array("sMensagem" => $sMensagem, "iStatus" => $iStatus));
-    break;
+    case "getDadosNotas":
 
-  case "getDadosRP":
+        if ($objEmpenho->getDados($objJson->iEmpenho)) {
 
-    if ($objEmpenho->getDados($objJson->iEmpenho)) {
+            $rsNotas = $objEmpenho->getNotas($objJson->iEmpenho);
+            if ($rsNotas) {
 
-      $rsNotas = $objEmpenho->getNotas($objJson->iEmpenho);
-      if ($rsNotas) {
+                for ($iNotas = 0; $iNotas < $objEmpenho->iNumRowsNotas; $iNotas++) {
 
-        for ($iNotas = 0; $iNotas < $objEmpenho->iNumRowsNotas; $iNotas++) {
+                    $oNota = db_utils::fieldsMemory($rsNotas, $iNotas);
+                    $oNota->temMovimentoConfigurado = false;
+                    $oNota->temRetencao = false;
+                    $oNota->VlrRetencao = 0;
+                    /**
+                     * Pesquisamos se existem algum movimento para essa nota.
+                     */
+                    $sWhereIni = "e50_codord = {$oNota->e50_codord} and e97_codforma is not null";
+                    $sWhereIni .= " and corempagemov.k12_codmov is null and e81_cancelado is null";
+                    $sJoin = " left join empagenotasordem on e81_codmov         = e43_empagemov  ";
+                    $sJoin .= " left join empageordem      on e43_ordempagamento = e42_sequencial ";
+                    $aMOvimentos = $oAgendaPagamento->getMovimentosAgenda($sWhereIni, $sJoin, false, false);
+                    if (count($aMOvimentos) > 0) {
 
-          $oNota = db_utils::fieldsMemory($rsNotas, $iNotas);
-          $oNota->temMovimentoConfigurado = false;
-          $oNota->temRetencao = false;
-          $oNota->VlrRetencao = 0;
-          /**
-           * Pesquisamos se existem algum movimento para essa nota.
-           */
-          $sWhereIni = "e50_codord = {$oNota->e50_codord} and e97_codforma is not null";
-          $sWhereIni .= " and corempagemov.k12_codmov is null and e81_cancelado is null";
-          $sJoin = " left join empagenotasordem on e81_codmov         = e43_empagemov  ";
-          $sJoin .= " left join empageordem      on e43_ordempagamento = e42_sequencial ";
-          $aMOvimentos = $oAgendaPagamento->getMovimentosAgenda($sWhereIni, $sJoin, false, false);
-          if (count($aMOvimentos) > 0) {
+                        $oNota->temMovimentoConfigurado = true;
+                    }
 
-            $oNota->temMovimentoConfigurado = true;
-          }
+                    //Verifica se a nota possui retenções lançadas
+                    $oRetencao = new retencaoNota($oNota->e69_codnota);
+                    if ($oNota->e50_codord != "" && $oRetencao->getValorRetencao($oNota->e50_codord) > 0) {
+                        $oNota->temRetencao = true;
+                        $oNota->VlrRetencao = $oRetencao->getValorRetencao($oNota->e50_codord);
+                    }
 
-          //Verifica se a nota possui retenções lançadas
-          $oRetencao = new retencaoNota($oNota->e69_codnota);
-          if ($oNota->e50_codord != "" && $oRetencao->getValorRetencao($oNota->e50_codord) > 0) {
-
-            $oNota->temRetencao = true;
-            $oNota->VlrRetencao = $oRetencao->getValorRetencao($oNota->e50_codord);
-          }
-          $objEmpenho->dadosEmpenho->aNotas[] = $oNota;
+                    $objEmpenho->dadosEmpenho->aNotas[] = $oNota;
+                }
+            }
         }
-      }
 
-      echo $json->encode($objEmpenho->dadosEmpenho);
-    } else {
-      echo $json->encode(array("status" => 2, "sMensagem" => urlencode($objEmpenho->sErroMsg)));
-    }
-    break;
+        $objEmpenho->dadosEmpenho->isRestoPagar = $objEmpenho->dadosEmpenho->e60_anousu < db_getsession("DB_anousu");
 
-  case "getDadosNotas":
+        echo $json->encode($objEmpenho->dadosEmpenho);
+        break;
 
-    if ($objEmpenho->getDados($objJson->iEmpenho)) {
+    case "getItensNota":
 
-      $rsNotas = $objEmpenho->getNotas($objJson->iEmpenho);
-      if ($rsNotas) {
+        /**
+         * Busca os ITENS da nota
+         */
+        $oDadosRetorno = new stdClass();
+        $objEmpenho->setEncode(true);
+        $aItens = $objEmpenho->getItensNota($objJson->iCodNota);
 
-        for ($iNotas = 0; $iNotas < $objEmpenho->iNumRowsNotas; $iNotas++) {
+        /** Pegar o total dos valores de retenção para esta OP */
+        /** Retornar esses valores no JSON */
+        $oRetencao = new retencaoNota($objJson->iCodNota);
+        $oOrdemPag = new cl_pagordem();
+        $nValorOP = $oRetencao->getValorOP();
 
-          $oNota = db_utils::fieldsMemory($rsNotas, $iNotas);
-          $oNota->temMovimentoConfigurado = false;
-          $oNota->temRetencao = false;
-          $oNota->VlrRetencao = 0;
-          /**
-           * Pesquisamos se existem algum movimento para essa nota.
-           */
-          $sWhereIni = "e50_codord = {$oNota->e50_codord} and e97_codforma is not null";
-          $sWhereIni .= " and corempagemov.k12_codmov is null and e81_cancelado is null";
-          $sJoin = " left join empagenotasordem on e81_codmov         = e43_empagemov  ";
-          $sJoin .= " left join empageordem      on e43_ordempagamento = e42_sequencial ";
-          $aMOvimentos = $oAgendaPagamento->getMovimentosAgenda($sWhereIni, $sJoin, false, false);
-          if (count($aMOvimentos) > 0) {
+        $sQueryQtdMovOP = $oOrdemPag->sql_query_movimento(
+            null,
+            "COUNT(e50_codord) as total",
+            null,
+            " (e50_codord = {$oRetencao->getCodOrd()}) AND (e81_cancelado IS NULL) "
+        );
+        $nValorRetencoes = $oRetencao->getRetencoesFromCodOrd(true);
+        $nQtdMocOP = db_utils::fieldsMemory(db_query($sQueryQtdMovOP), 0)->total;
 
-            $oNota->temMovimentoConfigurado = true;
-          }
+        if (!$aItens) {
 
-          //Verifica se a nota possui retenções lançadas
-          $oRetencao = new retencaoNota($oNota->e69_codnota);
-          if ($oNota->e50_codord != "" && $oRetencao->getValorRetencao($oNota->e50_codord) > 0) {
-            $oNota->temRetencao = true;
-            $oNota->VlrRetencao = $oRetencao->getValorRetencao($oNota->e50_codord);
-          }
+            $oDadosRetorno->status = 1;
+            $oDadosRetorno->sMensagem = "Não foi possível recuperar os itens da nota!";
+        } else {
 
-          $objEmpenho->dadosEmpenho->aNotas[] = $oNota;
+            $oDadosRetorno->status    = 2;
+            $oDadosRetorno->iCodNota  = $objJson->iCodNota;
+            $oDadosRetorno->iCodNota  = $objJson->iCodNota;
+            $oDadosRetorno->iEmpenho  = $objJson->iEmpenho;
+            $oDadosRetorno->aItens    = $aItens;
+            $oDadosRetorno->nRetencoes  = $nValorRetencoes;
+            $oDadosRetorno->nValorOP    = $nValorOP;
+            $oDadosRetorno->nQtdMovOP   = $nQtdMocOP;
         }
-      }
-    }
 
-    $objEmpenho->dadosEmpenho->isRestoPagar = $objEmpenho->isRestoPagar() || $objEmpenho->dadosEmpenho->e60_anousu < db_getsession("DB_anousu");
+        echo $json->encode($oDadosRetorno);
+        break;
 
-    echo $json->encode($objEmpenho->dadosEmpenho);
-    break;
-
-  case "getItensNota":
-
-    /**
-     * Busca os ITENS da nota
-     */
-    $oDadosRetorno = new stdClass();
-    $objEmpenho->setEncode(true);
-    $aItens = $objEmpenho->getItensNota($objJson->iCodNota);
-
-    /** Pegar o total dos valores de retenção para esta OP */
-    /** Retornar esses valores no JSON */
-    $oRetencao = new retencaoNota($objJson->iCodNota);
-    $oOrdemPag = new cl_pagordem();
-    $nValorOP = $oRetencao->getValorOP();
-
-    $sQueryQtdMovOP = $oOrdemPag->sql_query_movimento(
-      null,
-      "COUNT(e50_codord) as total",
-      null,
-      " (e50_codord = {$oRetencao->getCodOrd()}) AND (e81_cancelado IS NULL) "
-    );
-    $nValorRetencoes = $oRetencao->getRetencoesFromCodOrd(true);
-    $nQtdMocOP = db_utils::fieldsMemory(db_query($sQueryQtdMovOP), 0)->total;
-
-    if (!$aItens) {
-
-      $oDadosRetorno->status = 1;
-      $oDadosRetorno->sMensagem = "Não foi possível recuperar os itens da nota!";
-    } else {
-
-      $oDadosRetorno->status    = 2;
-      $oDadosRetorno->iCodNota  = $objJson->iCodNota;
-      $oDadosRetorno->iCodNota  = $objJson->iCodNota;
-      $oDadosRetorno->iEmpenho  = $objJson->iEmpenho;
-      $oDadosRetorno->aItens    = $aItens;
-      $oDadosRetorno->nRetencoes  = $nValorRetencoes;
-      $oDadosRetorno->nValorOP    = $nValorOP;
-      $oDadosRetorno->nQtdMovOP   = $nQtdMocOP;
-    }
-
-    echo $json->encode($oDadosRetorno);
-    break;
-
-  default:
-    echo $objEmpenho->$method($objJson->iEmpenho, $objJson->notas, $objJson->historico);
-    break;
+    default:
+        echo $objEmpenho->$method($objJson->iEmpenho, $objJson->notas, $objJson->historico);
+        break;
 }

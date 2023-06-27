@@ -64,7 +64,7 @@ $cllicobraslicitacao->rotulo->label();
   </form>
   <?
   if (!isset($pesquisa_chave)) {
-    if (isset($campos) == false) {
+    if (!isset($campos)) {
       if (file_exists("funcoes/db_func_licobraslicitacao.php") == true) {
         include("funcoes/db_func_licobraslicitacao.php");
       } else {
@@ -121,6 +121,8 @@ $cllicobraslicitacao->rotulo->label();
 if (!isset($pesquisa_chave)) {
 ?>
   <script>
+    document.getElementsByClassName('DBLovrotInputCabecalho').item(5).value = 'Modalidade';
+    document.getElementsByClassName('DBLovrotTdCabecalho').item(3).style.width = '500px';
   </script>
 <?
 }

@@ -2148,8 +2148,7 @@ class Acordo
     {
 
         $oDaoAcordoPosicao = db_utils::getDao("acordoposicao");
-        $sSqlPosicao       = $oDaoAcordoPosicao->sql_query_file(null, "ac26_sequencial", 'ac26_numero', "ac26_acordo = {$this->getCodigoAcordo()} and ac26_numeroaditamento != '' and ac26_numeroaditamento is not null");
-
+        $sSqlPosicao       = $oDaoAcordoPosicao->sql_query_file(null, "ac26_sequencial", 'ac26_numero', "ac26_acordo = {$this->getCodigoAcordo()} and ac26_acordoposicaotipo not in (1)");
         $rsPosicao = $oDaoAcordoPosicao->sql_record($sSqlPosicao);
         for ($i = 0; $i < $oDaoAcordoPosicao->numrows; $i++) {
 
@@ -2160,6 +2159,73 @@ class Acordo
         }
 
         return $this->aPosicoes;
+    }
+
+     /**
+     * retorna dados para envio do PNCP termo de Aditamentos
+     * @return AcordoPosicao[]
+     */
+    function getDadosTermosPncp($iCodigoPosicao)
+    {
+        $oDaoAcordoPosicao = db_utils::getDao("acordoposicao");
+        $sSqlPosicao       = $oDaoAcordoPosicao->getTermoContrato($iCodigoPosicao);
+        $rsPosicao = $oDaoAcordoPosicao->sql_record($sSqlPosicao);
+        $oDadosRetornoPNPC = array();
+
+        for ($i = 0; $i < pg_num_rows($rsPosicao); $i++) {
+            $oDadosPncp      = db_utils::fieldsMemory($rsPosicao, $i);
+            $oDadosRetornoPNPC[] = $oDadosPncp;
+        }
+
+
+        $iTotalPosicaoAnterior = 0;
+        $iTotalPosicaoAditivo = 0;
+        $valortotaladitado = 0;
+        $iValorAditado = 0; 
+        /**
+         * AQUI IREI CALCULAR O VALOR ADITADO DO REGISTRO 20
+         */
+
+        $oPosicao          = new AcordoPosicao($iCodigoPosicao);
+        foreach ($oPosicao->getItens() as $oAcordoItem) {
+            if ($oAcordoItem->getQuantiAditada() != 0 || $oAcordoItem->getValorAditado() != 0) {
+                $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnteriors($oPosicao->getNumeroAditamento());
+                $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
+                
+                $sqlServico = "select pc01_servico, ac20_servicoquantidade
+                    from acordoitem
+                    inner join pcmater on pc01_codmater = ac20_pcmater
+                    inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
+                    where ac20_pcmater = {$oAcordoItem->getMaterial()->getCodigo()}
+                    and ac26_sequencial = {$iCodigoPosicao}";
+                $rsMatServicoR21  = db_query($sqlServico);
+                
+                $matServico = db_utils::fieldsMemory($rsMatServicoR21, 0);
+                if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
+                    $valortotaladitado += $oAcordoItem->getValorAditado();
+                } else {
+                    //CALCULO O VALOR DO PRIMEIRO REGISTRO 20
+                    //2 = reequilibrio 5 = reajuste
+                    if ($oPosicao->getTipo() == 2 || $oPosicao->getTipo() == 5) {
+                        $iQuantidadeAditada = $oAcordoItem->getQuantidade();
+                        $iValorAditado += $oAcordoItem->getValorTotalPosicaoAnterior($iCodigoPosicao) - $oAcordoItem->getValorTotal();
+                    } else {
+                        $iQuantidadeAditada = $oAcordoItem->getQuantidade() - $oAcordoItem->getQuantidadePosicaoAnterior($oPosicao->getNumeroAditamento());
+                    }
+                    $valortotaladitado += $oAcordoItem->getValorAditado();
+                }
+            }
+        }
+       $oDadosRetornoPNPC[0]->valorAcrescido = $valortotaladitado;
+       $oDadosRetornoPNPC[0]->qualificacaoinformativo = 'false';
+
+       if ($iTotalPosicaoAditivo > 0) {
+            $oDadosRetornoPNPC[0]->qualificacaoacrescimosupressao = 'true';
+       } else {
+            $oDadosRetornoPNPC[0]->qualificacaoacrescimosupressao = 'false';
+       }
+        
+       return $oDadosRetornoPNPC;
     }
 
     /**
@@ -4353,16 +4419,8 @@ class Acordo
         $rsSaldos    = db_query($sSqlSaldos);
 
         $oCalculoSaldo                       = db_utils::fieldsMemory($rsSaldos, 0);
-        //        $oSaldo->valorautorizado             = $oCalculoSaldo->valorautorizado;
-        //        $oSaldo->valorexecutado              = $oCalculoSaldo->valorexecutado;
         $oSaldo->quantidadeautorizada        = $oCalculoSaldo->quantidadeautorizada;
         $oSaldo->quantidadeexecutada         = $oCalculoSaldo->quantidadeexecutada;
-        //        $oSaldo->valorautorizar             -= $oSaldo->valorautorizado;
-        //        $oSaldo->quantidadeautorizar        -= $oSaldo->quantidadeautorizada;
-        //        $oSaldo->valorexecutar              -= $oSaldo->valorexecutado;
-        //        $oSaldo->quantidadeexecutar         -= $oSaldo->quantidadeexecutada;
-        //        $oSaldo->quantidadeautorizadamanual  = $oCalculoSaldo->quantidadeautorizadamanual;
-        //        $oSaldo->valorautorizadomanual       = $oCalculoSaldo->valorautorizado;
         return $oSaldo->quantidadeautorizada;
     }
 
@@ -4377,9 +4435,9 @@ class Acordo
         $sCampos        = "ac20_ordem, sum(case when ac26_acordoposicaotipo <> " . AcordoPosicao::TIPO_REEQUILIBRIO . " then ac20_quantidade else 0 end) as quantidade, ";
         $sCampos .= "sum(ac20_valortotal) as valortotal, ";
         $sCampos .= "pc01_descrmater, pc01_codmater, max(ac20_sequencial) as codigo, max(ac20_acordoposicao) as posicao, ";
-        $sCampos .= "m61_codmatunid, m61_abrev ";
+        $sCampos .= "m61_codmatunid, m61_abrev,ac20_valorunitario ";
         $sWhere       = "ac16_sequencial = {$this->getCodigo()} and ac26_acordoposicaotipo = 1";
-        $sGroup       = "group by ac20_ordem, pc01_descrmater, pc01_codmater, m61_codmatunid, m61_abrev ";
+        $sGroup       = "group by ac20_ordem, pc01_descrmater, pc01_codmater, m61_codmatunid, m61_abrev,ac20_valorunitario ";
         $sSqlItens    = $oDaoAcordoitem->sql_query_transparencia($sCampos, "ac20_ordem", $sWhere . $sGroup);
         $rsItem       = $oDaoAcordoitem->sql_record($sSqlItens);
         $iTotalLinhas = $oDaoAcordoitem->numrows;
@@ -4395,6 +4453,7 @@ class Acordo
             $oItem->setUnidade($oDadosItem->m61_codmatunid);
             $oItem->setDescricaoUnidade($oDadosItem->m61_abrev);
             $oItem->setOrdem($oDadosItem->ac20_ordem);
+            $oItem->setValorUnitario($oDadosItem->ac20_valorunitario);
             $aItens[] = $oItem;
         }
         return $aItens;
@@ -4627,6 +4686,20 @@ class Acordo
         $clacordoobra = new cl_acordoobra();
         $clacordoobra->excluir(null,"obr08_acordoitem = {$item}");
         return true;
+    }
+
+    public function getNumeroTermoPNCP($iAcordo,$iPosicao){
+        $sql = "select l214_numerotermo from acocontroletermospncp where l214_acordo = {$iAcordo} and l214_acordoposicao = {$iPosicao}";
+        $rsTermos = db_query($sql);
+        $oDadosTermo = db_utils::fieldsMemory($rsTermos, 0);
+        return $oDadosTermo->l214_numerotermo;
+    }
+
+    public function getCodigoContratoPNCP($iAcordo){
+        $sql = "select l214_numcontratopncp from acocontroletermospncp where l214_acordo = {$iAcordo}";
+        $rsCodControle = db_query($sql);
+        $oDados = db_utils::fieldsMemory($rsCodControle, 0);
+        return $oDados->l214_numcontratopncp;
     }
 
 }
