@@ -18,7 +18,7 @@ class Flight extends LegacyModel
 ```
 
 ### Account de Dados do E-cidade
-Mas e como fica os logs do e-cidade? Para solucionar essa dor, foi criada uma `Trait` chamada `LegacyAccount`. Fazendo o uso dessa `trait` o model irá realizar os logs de accout legady do e-cidade de forma automática para os eventos de `save`, `update` e `delete`:
+Mas e como fica os logs do e-cidade? Para solucionar essa dor, foi criada uma `Trait` chamada `LegacyAccount`. Fazendo o uso dessa `trait` o model irá realizar os logs de accout legacy do e-cidade de forma automática para os eventos de `save`, `update` e `delete`:
 
 ```php
 
