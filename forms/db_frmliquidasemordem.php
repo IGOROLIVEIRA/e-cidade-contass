@@ -191,6 +191,7 @@ if (USE_PCASP) {
                      id='dadosnotacomplementar'>Outros Dados</a>
                 </td>
               </tr>
+              <input type="hidden" value="true" name="permitido_Liquidacao" id="permitido_Liquidacao"/>
               <tr>
                 <td nowrap><b>Número da Nota:</b></td>
                 <td colspan='2'><?db_input('e69_numnota', 19, '', true, 'text', 1,"","","","",20); ?>            
@@ -1019,14 +1020,6 @@ function validarVinculos(){
     saida += "<tr style='height:auto'><td>&nbsp;</td></tr>";
     $('dados').innerHTML          = saida;
 
-
-    // Condição de período
-    if (obj.bPermitidoLiquidacao == false) {
-        alert("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
-        $('confirmar').disabled = true;
-        return false;
-    }
-
     $('pesquisar').disabled = false;
     if (iTotItens == 0 && lLiberaItemLiquidacao) {
 
@@ -1082,10 +1075,15 @@ function validarVinculos(){
   }
 
   function js_liquidar(metodo) {
-
     itens = js_getElementbyClass(form1,'chkmarca');
     notas = '';
     sV    = '';
+
+    // Condição de período
+    console.log($F('permitido_Liquidacao'));
+
+
+
     if ($F('e69_numnota') == ''){
 
       alert('Preencha o número da nota.');
@@ -1292,6 +1290,13 @@ function validarVinculos(){
           return false;
         }
       }
+    
+    console.log($F('permitido_Liquidacao'));
+    if ($F('permitido_Liquidacao') == 'false') {
+        alert("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
+        $('confirmar').disabled = true;
+        return false;
+    }
 
       /* Extensao [CotaMensalLiquidacao] - Parte 4 */
 
@@ -2001,5 +2006,4 @@ function js_mostraCatTrabalhadorremuneracao1(chave1,chave2){
     $('contribuicaoPrev').style.width =' 489px';
     $('aIncide').style.width =' 120px';
     $('multiplosvinculos').style.width =' 120px';
-
 </script>

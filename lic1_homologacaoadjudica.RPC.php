@@ -29,23 +29,28 @@ $oRetorno->status  = 1;
 switch ($oParam->exec) {
     case 'adjudicarLicitacao':
 
-        $clhomologacaoadjudica = new cl_homologacaoadjudica();
-        $clliclicita           = new cl_liclicita();
-        $cllicitemobra         = new cl_licitemobra();
-        $clparecerlicitacao    = new cl_parecerlicitacao();
-        $clprecomedio          = new cl_precomedio();
-        $clcondataconf         = new cl_condataconf;
-        $clliclicitasituacao   = new cl_liclicitasituacao;
-        $clliccomissaocgm      = new cl_liccomissaocgm();
-
-        $l202_licitacao = $oParam->iLicitacao;
-        $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
-        $dtjulglic = (implode("/", (array_reverse(explode("-", $rsDataJulg[0]->l11_data)))));
-        $dataJulgamentoLicitacao = DateTime::createFromFormat('d/m/Y', $dtjulglic);
-        $data = (implode("/", (array_reverse(explode("-", $oParam->dtAdjudicacao)))));
-        $l202_dataAdjudicacao = DateTime::createFromFormat('d/m/Y', $data);
 
         try {
+
+            $clhomologacaoadjudica = new cl_homologacaoadjudica();
+            $clhomologacaoadjudica->validacaoItensComFornecedorIgual($oParam->iLicitacao, 1, null, null);
+
+            $clliclicita           = new cl_liclicita();
+            $cllicitemobra         = new cl_licitemobra();
+            $clparecerlicitacao    = new cl_parecerlicitacao();
+            $clprecomedio          = new cl_precomedio();
+            $clcondataconf         = new cl_condataconf;
+            $clliclicitasituacao   = new cl_liclicitasituacao;
+            $clliccomissaocgm      = new cl_liccomissaocgm();
+
+            $l202_licitacao = $oParam->iLicitacao;
+            $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
+            $dtjulglic = (implode("/", (array_reverse(explode("-", $rsDataJulg[0]->l11_data)))));
+            $dataJulgamentoLicitacao = DateTime::createFromFormat('d/m/Y', $dtjulglic);
+            $data = (implode("/", (array_reverse(explode("-", $oParam->dtAdjudicacao)))));
+            $l202_dataAdjudicacao = DateTime::createFromFormat('d/m/Y', $data);
+
+
             //Verifica se os fornecedores vencedores estÃo habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
                 throw new Exception("Procedimento abortado. Verifique os fornecedores habilitados.");
@@ -207,23 +212,26 @@ switch ($oParam->exec) {
 
     case 'alteraradjudicarLicitacao':
 
-        $clhomologacaoadjudica = new cl_homologacaoadjudica();
-        $clliclicita           = new cl_liclicita();
-        $cllicitemobra         = new cl_licitemobra();
-        $clparecerlicitacao    = new cl_parecerlicitacao();
-        $clprecomedio          = new cl_precomedio();
-        $clcondataconf         = new cl_condataconf;
-        $clliclicitasituacao   = new cl_liclicitasituacao;
-        $clliccomissaocgm      = new cl_liccomissaocgm();
-
-        $l202_licitacao = $oParam->iLicitacao;
-        $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
-        $dtjulglic = (implode("/", (array_reverse(explode("-", $rsDataJulg[0]->l11_data)))));
-        $dataJulgamentoLicitacao = DateTime::createFromFormat('d/m/Y', $dtjulglic);
-        $data = (implode("/", (array_reverse(explode("-", $oParam->dtAdjudicacao)))));
-        $l202_dataAdjudicacao = DateTime::createFromFormat('d/m/Y', $data);
-
         try {
+
+            $clhomologacaoadjudica = new cl_homologacaoadjudica();
+            $clhomologacaoadjudica->validacaoItensComFornecedorIgual($oParam->iLicitacao, 1, null, null);
+
+            $clliclicita           = new cl_liclicita();
+            $cllicitemobra         = new cl_licitemobra();
+            $clparecerlicitacao    = new cl_parecerlicitacao();
+            $clprecomedio          = new cl_precomedio();
+            $clcondataconf         = new cl_condataconf;
+            $clliclicitasituacao   = new cl_liclicitasituacao;
+            $clliccomissaocgm      = new cl_liccomissaocgm();
+
+            $l202_licitacao = $oParam->iLicitacao;
+            $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
+            $dtjulglic = (implode("/", (array_reverse(explode("-", $rsDataJulg[0]->l11_data)))));
+            $dataJulgamentoLicitacao = DateTime::createFromFormat('d/m/Y', $dtjulglic);
+            $data = (implode("/", (array_reverse(explode("-", $oParam->dtAdjudicacao)))));
+            $l202_dataAdjudicacao = DateTime::createFromFormat('d/m/Y', $data);
+
             //Verifica se os fornecedores vencedores estão habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
                 throw new Exception("Procedimento abortado. Verifique os fornecedores habilitados.");
@@ -480,7 +488,6 @@ switch ($oParam->exec) {
         $sWhere = " liclicitem.l21_codliclicita = {$oParam->iLicitacao} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
         $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null, $campos, "l04_descricao,pc11_seq,z01_nome", $sWhere));
 
-
         /**
          * VERIFICO SE A LICITACAO E LOTE
          */
@@ -511,40 +518,45 @@ switch ($oParam->exec) {
         break;
 
     case 'homologarLicitacao':
-        $clhomologacaoadjudica = new cl_homologacaoadjudica();
-        $clliclicita           = new cl_liclicita();
-        $cllicitemobra         = new cl_licitemobra();
-        $clparecerlicitacao    = new cl_parecerlicitacao();
-        $clprecomedio          = new cl_precomedio();
-        $clcondataconf         = new cl_condataconf;
-        $clliclicitasituacao   = new cl_liclicitasituacao;
-        $clitenshomologacao    = new cl_itenshomologacao();
-        $clliccomissaocgm      = new cl_liccomissaocgm();
-        $clsituacaoitemlic     = new cl_situacaoitemlic();
-
-        $l202_licitacao = $oParam->iLicitacao;
-        $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
-        $dtjulglic = (implode("/", (array_reverse(explode("-", $rsDataJulg[0]->l11_data)))));
-        $dataJulgamentoLicitacao = DateTime::createFromFormat('d/m/Y', $dtjulglic);
-        $data = (implode("/", (array_reverse(explode("-", $oParam->dtHomologacao)))));
-        $l202_datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
-        $rsDataAdjudica = $clhomologacaoadjudica->getdataAdjudicacao($l202_licitacao);
-        $dtadjudicaca = (implode("/", (array_reverse(explode("-", $rsDataAdjudica[0]->l202_dataadjudicacao)))));
-        $datadeAdjudicacao = DateTime::createFromFormat('d/m/Y', $dtadjudicaca);
-
-        /**
-         * VERIFICA SE E REGISTRO DE PREÇO
-         */
-
-        $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
-        $l20_tipnaturezaproced  = db_utils::fieldsMemory($result, 0)->l20_tipnaturezaproced;
-
-        /**
-         * VALIDAÇÃO COM EDITAL
-         */
-        $l20_cadinicial  = db_utils::fieldsMemory($result, 0)->l20_cadinicial;
-
         try {
+
+
+            $clhomologacaoadjudica = new cl_homologacaoadjudica();
+            $clhomologacaoadjudica->validacaoItensComFornecedorIgual($oParam->iLicitacao, 2, null, $oParam->sCodigoItens);
+
+            $clliclicita           = new cl_liclicita();
+            $cllicitemobra         = new cl_licitemobra();
+            $clparecerlicitacao    = new cl_parecerlicitacao();
+            $clprecomedio          = new cl_precomedio();
+            $clcondataconf         = new cl_condataconf;
+            $clliclicitasituacao   = new cl_liclicitasituacao;
+            $clitenshomologacao    = new cl_itenshomologacao();
+            $clliccomissaocgm      = new cl_liccomissaocgm();
+            $clsituacaoitemlic     = new cl_situacaoitemlic();
+
+            $l202_licitacao = $oParam->iLicitacao;
+            $rsDataJulg = $clhomologacaoadjudica->verificadatajulgamento($l202_licitacao);
+            $dtjulglic = (implode("/", (array_reverse(explode("-", $rsDataJulg[0]->l11_data)))));
+            $dataJulgamentoLicitacao = DateTime::createFromFormat('d/m/Y', $dtjulglic);
+            $data = (implode("/", (array_reverse(explode("-", $oParam->dtHomologacao)))));
+            $l202_datahomologacao = DateTime::createFromFormat('d/m/Y', $data);
+            $rsDataAdjudica = $clhomologacaoadjudica->getdataAdjudicacao($l202_licitacao);
+            $dtadjudicaca = (implode("/", (array_reverse(explode("-", $rsDataAdjudica[0]->l202_dataadjudicacao)))));
+            $datadeAdjudicacao = DateTime::createFromFormat('d/m/Y', $dtadjudicaca);
+
+            /**
+             * VERIFICA SE E REGISTRO DE PREÇO
+             */
+
+            $result = $clliclicita->sql_record($clliclicita->sql_query($l202_licitacao));
+            $l20_tipnaturezaproced  = db_utils::fieldsMemory($result, 0)->l20_tipnaturezaproced;
+
+            /**
+             * VALIDAÇÃO COM EDITAL
+             */
+            $l20_cadinicial  = db_utils::fieldsMemory($result, 0)->l20_cadinicial;
+
+
             //Verifica se os fornecedores vencedores estÃo habilitados
             if (!$clhomologacaoadjudica->validaFornecedoresHabilitados($l202_licitacao)) {
                 throw new Exception("Procedimento abortado. Verifique os fornecedores habilitados.");
@@ -770,7 +782,10 @@ switch ($oParam->exec) {
         break;
 
     case 'alterarHomologacao':
+
         $clhomologacaoadjudica = new cl_homologacaoadjudica();
+        $clhomologacaoadjudica->validacaoItensComFornecedorIgual($oParam->iLicitacao, 3, null, $oParam->sCodigoItens);
+
         $clliclicita           = new cl_liclicita();
         $cllicitemobra         = new cl_licitemobra();
         $clparecerlicitacao    = new cl_parecerlicitacao();
