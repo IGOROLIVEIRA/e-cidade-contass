@@ -3,20 +3,21 @@
 
 require_once("fpdf151/pdf.php");
 
-$where = "";
+$where = "where obr01_instit =" . db_getsession("DB_instit");
 
 if ($obr02_seqobra != "") $where = "where  obr01_sequencial = $obr02_seqobra";
 
-$sSqlObras = db_query("select distinct on (obr01_numeroobra) * from licobras 
-inner join liclicita on l20_codigo = obr01_licitacao
-left join acordo on l20_codigo = ac16_licitacao 
+$sSqlObras = db_query("select distinct on (obr01_numeroobra) * from licobras
+left join liclicita on l20_codigo = obr01_licitacao
+left join licobraslicitacao on obr07_sequencial = obr01_licitacao
+left join acordo on l20_codigo = ac16_licitacao
 left join cflicita on l20_codtipocom = l03_codigo
+left join pctipocompratribunal on l44_sequencial = obr07_tipoprocesso
 left join licobrasmedicao on obr01_sequencial = obr03_seqobra $where order by obr01_numeroobra;");
 
 if (pg_numrows($sSqlObras) == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Nenhum registro encontrado.');
 }
-
 
 $head2 = "Obras";
 $oPDF = new PDF('Landscape', 'mm', 'A4');
@@ -54,12 +55,12 @@ for ($i = 0; $i < pg_num_rows($sSqlObras); $i++) {
 
     $oDadosObra = db_utils::fieldsMemory($sSqlObras, $i);
 
-    $altura = $oPDF->NbLines(70, $oDadosObra->l20_objeto);
+
 
     $oPDF->setfont('arial', 'b', 8);
     $oPDF->cell(280, $iAlt, "Obra: $oDadosObra->obr01_numeroobra", 1, 0, "L", 1);
     $oPDF->ln();
-    $oPDF->cell(70, $iAlt, ' Licitação ', 1, 0, "C", 3);
+    $oPDF->cell(70, $iAlt, 'Licitação', 1, 0, "C", 3);
     $oPDF->cell(70, $iAlt, 'Modalidade ', 1, 0, "C", 3);
     $oPDF->cell(70, $iAlt, 'Objeto ', 1, 0, "C", 2);
     $oPDF->cell(35, $iAlt, 'Contrato ', 1, 0, "C", 3);
@@ -67,12 +68,25 @@ for ($i = 0; $i < pg_num_rows($sSqlObras); $i++) {
 
     $oPDF->ln();
     $oPDF->setfont('arial', '', 8);
-    $oPDF->cell(70, $iAlt * $altura, empty($oDadosObra->l20_edital) == true ? "-" :  "$oDadosObra->l20_edital/$oDadosObra->l20_anousu", 1, 0, "C", 2);
-    $oPDF->cell(70, $iAlt * $altura, empty($oDadosObra->l20_numero) == true ? "-" : "$oDadosObra->l03_descr - $oDadosObra->l20_numero", 1, 0, "C", 2);
-    $y =  $oPDF->GetY();
-    $x =  $oPDF->GetX();
 
-    $oPDF->MultiCell(70, $iAlt, $oDadosObra->l20_objeto, 1, "L", 2);
+    if ($oDadosObra->obr01_licitacaosistema == 1) {
+        $altura = $oPDF->NbLines(70, $oDadosObra->l20_objeto);
+        $oPDF->cell(70, $iAlt * $altura, empty($oDadosObra->l20_edital) == true ? "-" :  "$oDadosObra->l20_edital/$oDadosObra->l20_anousu", 1, 0, "C", 2);
+        $oPDF->cell(70, $iAlt * $altura, empty($oDadosObra->l20_numero) == true ? "-" : "$oDadosObra->l03_descr - $oDadosObra->l20_numero", 1, 0, "C", 2);
+        $y =  $oPDF->GetY();
+        $x =  $oPDF->GetX();
+        $oPDF->MultiCell(70, $iAlt, $oDadosObra->l20_objeto, 1, "L", 2);
+    }
+
+    if ($oDadosObra->obr01_licitacaosistema == 2) {
+        $altura = $oPDF->NbLines(70, $oDadosObra->obr07_objeto);
+        $oPDF->cell(70, $iAlt * $altura, empty($oDadosObra->obr07_processo) == true ? "-" :  "$oDadosObra->obr07_processo/$oDadosObra->obr07_exercicio", 1, 0, "C", 2);
+        $oPDF->cell(70, $iAlt * $altura, empty($oDadosObra->l44_descricao) == true ? "-" : "$oDadosObra->l44_descricao", 1, 0, "C", 2);
+        $y =  $oPDF->GetY();
+        $x =  $oPDF->GetX();
+        $oPDF->MultiCell(70, $iAlt, $oDadosObra->obr07_objeto, 1, "L", 2);
+    }
+
     $oPDF->SetY($y);
     $oPDF->SetX(220);
 

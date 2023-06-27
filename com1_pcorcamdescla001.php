@@ -37,6 +37,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 $clpcorcamdescla      = new cl_pcorcamdescla;
 $clsituacaoitemcompra = new cl_situacaoitemcompra;
+$clsituacaoitemlic     = new cl_situacaoitemlic;
 $db_opcao = 1;
 $db_botao = true;
 
@@ -67,6 +68,14 @@ if(isset($incluir)){
         $erro_msg = $clsituacaoitemcompra->erro_msg;
         break;
        }
+       $result_l218codigo = $clsituacaoitemlic->sql_record('select l218_codigo from situacaoitemcompra where l218_pcorcamitemlic = '.$vetor[$i]);
+       db_fieldsmemory($result_l218codigo,0);
+       $clsituacaoitemlic->l219_codigo= $l218_codigo;
+       $clsituacaoitemlic->l219_situacao=3;
+       $clsituacaoitemlic->l219_hora = db_hora();
+       $clsituacaoitemlic->l219_data = date('Y-m-d',db_getsession('DB_datausu'));
+       $clsituacaoitemlic->l219_id_usuario = db_getsession('DB_id_usuario');
+       $clsituacaoitemlic->incluir();
   }
 
   if (trim($erro_msg)!=""){

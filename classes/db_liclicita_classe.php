@@ -442,19 +442,6 @@ class cl_liclicita
             return false;
         }
 
-        //        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-        //            if ($this->l20_dtpubratificacao == null) {
-        //                $this->erro_sql = "Voc? informou um tipo de 'INEXIGIBILIDADE ou Dispensa de Licitacao'. Para este tipo ?  \\n\\n obrigatorio preencher a  Data Publica??o Termo Ratifica??o";
-        //                $this->erro_campo = "l20_dtpubratificacao";
-        //                $this->erro_banco = "";
-        //                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-        //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        //                $this->erro_status = "0";
-        //                return false;
-        //            }
-        //        }
-
-
         if ($this->l20_condicoespag == null || $this->l20_condicoespag == "") {
             $this->erro_sql = " Campo condicoes de pagamento nao Informado.";
             $this->erro_campo = "l20_condicoespag";
@@ -464,57 +451,6 @@ class cl_liclicita
             $this->erro_status = "0";
             return false;
         }
-
-
-        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-            if ($this->l20_razao == null || $this->l20_razao == "") {
-                $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Razão";
-                $this->erro_campo = "l20_razao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-
-        //        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-        //            if ($this->l20_dtpubratificacao == null || $this->l20_dtpubratificacao == "") {
-        //                $this->erro_sql = " Voc? marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo,Justificativa e Raz?o";
-        //                $this->erro_campo = "l20_dtpubratificacao";
-        //                $this->erro_banco = "";
-        //                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-        //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        //                $this->erro_status = "0";
-        //                return false;
-        //            }
-        //        }
-
-        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-            if ($this->l20_tipoprocesso == null || $this->l20_tipoprocesso == "" || $this->l20_tipoprocesso == 0) {
-                $this->erro_sql = " Você marcou  um tipo de modalidade  que obriga o preenchimento dos dados: Tipo de Processo";
-                $this->erro_campo = "l20_tipoprocesso";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        } else {
-            $this->l20_tipoprocesso = 0;
-        }
-
-        //        if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
-        //            if (trim($this->l20_veicdivulgacao) == null || (strlen($this->l20_veicdivulgacao) < 5 || strlen($this->l20_veicdivulgacao) > 50)) {
-        //                $this->erro_sql = "Usu?rio: \\n\\n O campo veiculo de divulga??o deve ter no m?nimo 5 caracteres e no m?ximo 50 \\n\\n";
-        //                $this->erro_campo = "l20_veicdivulgacao";
-        //                $this->erro_banco = "";
-        //                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-        //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        //                $this->erro_status = "0";
-        //                return false;
-        //            }
-        //        }
 
         if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
 
@@ -589,105 +525,6 @@ class cl_liclicita
         if ($this->l20_horaaber == null) {
             $this->l20_horaaber = $this->l20_horacria;
         }
-        // validacao sicom
-        /*
-        if ($this->l20_dtpublic != null) {
-            // aqui
-            if ($this->l20_dtpublic < $this->l20_datacria) {
-                //  A data da publicacao em diario oficial nao deve ser superior  ou igual a data de criacao.
-                $this->erro_sql = " A Data da Publica??o em Edital Veiculo 1 deve ser anterior a Data de Recebimento da Documenta??o";
-                $this->erro_campo = "l20_datapublicacao1";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        */
-
-        /*
-
-        if ($this->l20_datapublicacao2 != null) {
-            if ($this->l20_datapublicacao2 > $this->l20_recdocumentacao) {
-                //  A data da publicacao em diario oficial nao deve ser superior  ou igual a data de criacao.
-                $this->erro_sql = " A Data da Publica??o em Edital Veiculo 2 deve ser anterior a Data de Recebimento da Documenta??o";
-                $this->erro_campo = "l20_datapublicacao2";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-        */
-
-        /*
-        if ($this->l20_datapublicacao1 != null) {
-            if ($this->l20_datacria > $this->l20_datapublicacao1) {
-
-                $this->erro_sql = " A data da publica??o em Edital Veiculo 1 deve ser superior  ou igual a data de cria??o.";
-                $this->erro_campo = "l20_datapublicacao1";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        } */
-        /*
-
-        if ($this->l20_datapublicacao2 != null) {
-            if ($this->l20_datacria > $this->l20_datapublicacao2) {
-
-                $this->erro_sql = " A data da publica??o em Edital Veiculo 2 deve ser superior ou igual a data de cria??o.";
-                $this->erro_campo = "l20_datapublicacao2";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        } */
-        //alterado
-        if ($this->l20_recdocumentacao != null) {
-            if ($tribunal != 50) {
-                if ($this->l20_recdocumentacao < $this->l20_dataaber && $this->l20_codtipocom != 16) {
-
-                    $this->erro_sql = " A data informada no campo  Abertura das Propostas deve ser  superior a   Data Edital/Convite.";
-                    $this->erro_campo = "l20_recdocumentacao";
-                    $this->erro_banco = "";
-                    $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                    $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                    $this->erro_status = "0";
-                    return false;
-                }
-            }
-        }
-
-        if ($this->l20_datacria != null && $this->l20_dataaber != null) {
-            if ($this->l20_dataaber < $this->l20_datacria) {
-                $this->erro_sql = "A data inserida no campo 'Data Emis/Alt Edital/Convite' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-                $this->erro_campo = "l20_dataaber";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-
-        if ($this->l20_dataaberproposta != null && $this->l20_datacria != null) {
-            if ($this->l20_dataaberproposta < $this->l20_datacria) {
-                $this->erro_sql = "A data inserida no campo 'Data Abertura Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-                $this->erro_campo = "l20_dataaberproposta";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
 
         if ($this->l20_dataaberproposta == "null" || $this->l20_dataaberproposta == "" and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
             $this->erro_sql = "Campo Abertura das Propostas não Informado";
@@ -697,18 +534,6 @@ class cl_liclicita
             $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
-        }
-
-        if ($this->l20_dataencproposta != null && $this->l20_dataaberproposta != null) {
-            if ($this->l20_dataaberproposta < $this->l20_dataencproposta) {
-                $this->erro_sql = "A data inserida no campo 'Data Encerramento Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-                $this->erro_campo = "l20_dataencproposta";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
         }
 
         if ($this->l20_dataaber == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
@@ -839,7 +664,9 @@ class cl_liclicita
             }
         }
 
-
+        if ($this->l20_tipoprocesso == null) {
+            $this->l20_tipoprocesso = 'null';
+        }
 
         if ($this->l20_numeroconvidado == null) {
             $this->l20_numeroconvidado = 'null';
@@ -855,16 +682,6 @@ class cl_liclicita
         } else {
             $this->l20_datapublicacao2 = "'$this->l20_datapublicacao2'";
         }
-        /*
-        if ($this->l20_dtpublic == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
-            $this->erro_sql = " Campo Data de Publica??o em Di?rio Oficial n?o Informado.";
-            $this->erro_campo = "l20_dtpublic";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        } */
 
         if ($this->l20_recdocumentacao == null and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
             $this->l20_recdocumentacao = 'null';
@@ -873,15 +690,6 @@ class cl_liclicita
         if ($this->l20_numeroconvidado == null) {
             $this->l20_numeroconvidado = 'null';
         }
-        /*if ($this->l20_descontotab == null) {
-            $this->erro_sql = " Campo Desconto Tabela n?o Informado.";
-            $this->erro_campo = "l20_descontotab";
-            $this->erro_banco = "";
-            $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            $this->erro_status = "0";
-            return false;
-        }*/
 
         if ($this->l20_naturezaobjeto == null) {
             $this->erro_sql = " Campo Natureza do Objeto não Informado.";
@@ -1503,17 +1311,9 @@ class cl_liclicita
         }
 
         if (trim($this->l20_recdocumentacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_recdocumentacao"]))) {
-            if ($this->l20_recdocumentacao == null || $this->l20_recdocumentacao == "" and $tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
+            if ($this->l20_recdocumentacao == null) {
                 $sql .= $virgula . " l20_recdocumentacao = null ";
                 $virgula = ",";
-            } else if ($this->l20_recdocumentacao < $this->l20_dataaber && $this->l20_codtipocom != 16) {
-                $this->erro_sql = " A data informada no campo  Abertura das Propostas deve ser  superior a   Data Edital/Convite.";
-                $this->erro_campo = "l20_recdocumentacao";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
             } else {
                 $sql .= $virgula . " l20_recdocumentacao = ' $this->l20_recdocumentacao '";
                 $virgula = ",";
@@ -1536,42 +1336,6 @@ class cl_liclicita
             } else {
                 $sql .= $virgula . " l20_dataaber ='$this->l20_dataaber' ";
                 $virgula = ",";
-            }
-        }
-
-        if (($this->l20_datacria != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_datacria"])) && ($this->l20_dataaber != null || isset($GLOBALS["HTTP_POST_VARS"]["l20_dataaber"]))) {
-            if ($this->l20_datacria > $this->l20_dataaber and $tribunal != 100 and $tribunal != 101 and $tribunal != 102 and $tribunal != 103) {
-                $this->erro_sql = "A data inserida no campo 'Data Emis/Alt Edital/Convite' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-                $this->erro_campo = "l20_dataaber";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-
-        if ($this->l20_datacria != null  && $this->l20_dataaberproposta != null) {
-            if ($this->l20_datacria > $this->l20_dataaberproposta) {
-                $this->erro_sql = "A data inserida no campo 'Data Abertura das Proposta' deverá ser maior ou igual a data inserida no campo 'Data Abertura Proc. Adm.'.";
-                $this->erro_campo = "l20_dataaberproposta";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
-            }
-        }
-
-        if ($this->l20_dataaberproposta != null  && $this->l20_dataencproposta != null) {
-            if ($this->l20_dataaberproposta > $this->l20_dataencproposta) {
-                $this->erro_sql = "A data inserida no campo 'Data Abertura das Propostas' deverá ser maior ou igual a data inserida no campo ' Data Encerramento Proposta'.";
-                $this->erro_campo = "l20_dataencproposta";
-                $this->erro_banco = "";
-                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-                $this->erro_status = "0";
-                return false;
             }
         }
 
@@ -3775,9 +3539,8 @@ class cl_liclicita
        WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) AS codigoUnidadeCompradora,
        CASE
             WHEN l03_pctipocompratribunal IN (110,51,53,52,50,102) THEN 1
-            WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa != 5 THEN 2
-            WHEN l03_pctipocompratribunal = 100 AND liclicita.l20_mododisputa != 5 THEN 3
-            WHEN l03_pctipocompratribunal = 101 AND liclicita.l20_mododisputa = 5 THEN 3
+            WHEN l03_pctipocompratribunal = 101 THEN 2
+            WHEN l03_pctipocompratribunal = 100 THEN 3
        END AS tipoInstrumentoConvocatorioId,
        CASE
            WHEN l03_pctipocompratribunal = 110 THEN 2
@@ -3888,8 +3651,8 @@ class cl_liclicita
                         JOIN solicitem ON pc11_codigo=pc81_solicitem
                         JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
                         JOIN pcmater ON pc16_codmater = pc01_codmater
-                        JOIN solicitemele ON pc18_solicitem = pc11_codigo
-                        JOIN orcelemento ON o56_codele = pc18_codele
+                        LEFT JOIN solicitemele ON pc18_solicitem = pc11_codigo
+                        LEFT JOIN orcelemento ON o56_codele = pc18_codele
                         AND o56_anousu=l20_anousu
                         JOIN solicitemunid ON pc17_codigo=pc11_codigo
                         JOIN matunid ON m61_codmatunid=pc17_unid
@@ -3902,6 +3665,95 @@ class cl_liclicita
                         INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
                         WHERE liclicita.l20_codigo = $l20_codigo
                         ORDER BY numeroitem";
+        return $sql;
+    }
+
+    public function sql_query_pncp_itens_retifica_situacao ($l20_codigo,$ordem){
+        $sql = "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
+                CASE
+                    WHEN pcmater.pc01_servico='t' THEN 'S'
+                    ELSE 'M'
+                END AS materialOuServico,
+                COALESCE ((case when liclicita.l20_destexclusiva = 1 then 1 else null end),
+                        (case when liclicita.l20_subcontratacao = 1 then 2 else null end),
+                        (case when liclicitem.l21_reservado = 't' then 3 ELSE null end),
+                        4) AS tipoBeneficioId,
+                FALSE AS incentivoProdutivoBasico,
+                pcmater.pc01_descrmater AS descricao,
+                matunid.m61_descr AS unidadeMedida,
+                si02_vlprecoreferencia AS valorUnitarioEstimado,
+                liclicita.l20_tipliticacao AS criterioJulgamentoId,
+                pcmater.pc01_codmater,
+                solicitem.pc11_numero,
+                solicitem.pc11_reservado,
+                solicitem.pc11_quant,
+                liclicita.l20_codigo,
+                CASE
+                    WHEN liclicitem.l21_sigilo IS NOT NULL THEN liclicitem.l21_sigilo
+                    ELSE 'f'
+                END AS l21_sigilo,
+                CASE
+                    WHEN substring(o56_elemento
+                                    FROM 0
+                                    FOR 8) IN
+                            (SELECT DISTINCT substring(o56_elemento
+                                                        FROM 0
+                                                        FOR 8)
+                            FROM orcelemento
+                            WHERE o56_elemento LIKE '%3449061%') THEN 1
+                    WHEN substring(o56_elemento
+                                    FROM 0
+                                    FOR 8) IN
+                            (SELECT DISTINCT substring(o56_elemento
+                                                        FROM 0
+                                                        FOR 8)
+                            FROM orcelemento
+                            WHERE o56_elemento LIKE '%3449052%') THEN 2
+                    ELSE 3
+                END AS itemCategoriaId,
+                pcmater.pc01_regimobiliario AS codigoRegistroImobiliario,
+                l217_codsituacao as situacaoCompraItemId,
+                l218_motivoanulacao as justificativa,
+                l217_sequencial,
+                CASE
+                    WHEN l03_pctipocompratribunal = 110 THEN 2
+                    WHEN l03_pctipocompratribunal = 51 THEN 3
+                    WHEN l03_pctipocompratribunal = 53 THEN 6
+                    WHEN l03_pctipocompratribunal = 52 THEN 7
+                    WHEN l03_pctipocompratribunal = 50 THEN 5
+                    WHEN l03_pctipocompratribunal = 101 THEN 8
+                    WHEN l03_pctipocompratribunal = 100 THEN 9
+                    WHEN l03_pctipocompratribunal = 102 THEN 12
+                END AS modalidadeId
+        FROM liclicita
+        JOIN db_depart ON coddepto=l20_codepartamento
+        JOIN db_config ON codigo=instit
+        JOIN infocomplementaresinstit ON si09_instit=instit
+        JOIN liclicitem ON l21_codliclicita=l20_codigo
+        JOIN pcprocitem ON pc81_codprocitem=l21_codpcprocitem
+        JOIN pcproc ON pc80_codproc=pc81_codproc
+        JOIN solicitem ON pc11_codigo=pc81_solicitem
+        JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+        JOIN pcmater ON pc16_codmater = pc01_codmater
+        LEFT JOIN solicitemele ON pc18_solicitem = pc11_codigo
+        LEFT JOIN orcelemento ON o56_codele = pc18_codele
+        AND o56_anousu=l20_anousu
+        JOIN solicitemunid ON pc17_codigo=pc11_codigo
+        JOIN matunid ON m61_codmatunid=pc17_unid
+        LEFT JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+        LEFT JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+        LEFT JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+        LEFT JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+        LEFT JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+        LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo
+        INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+        LEFT JOIN situacaoitemcompra ON l218_codigolicitacao=l20_codigo
+        AND l218_liclicitem=l21_codigo
+        LEFT JOIN situacaoitemlic ON l219_codigo=l218_codigo
+        LEFT JOIN situacaoitem ON l217_sequencial=l219_situacao
+        WHERE liclicita.l20_codigo = $l20_codigo
+        AND liclicitem.l21_ordem = $ordem
+        ORDER BY l217_sequencial desc limit 1";
         return $sql;
     }
 
@@ -3982,6 +3834,97 @@ class cl_liclicita
         return $sql;
     }
 
+    public function sql_query_item_pncp_retifica($l20_codigo)
+    {
+
+        $sql  = " SELECT pc01_codmater,
+                        l21_ordem,
+                        pc24_pontuacao,
+                        pc01_descrmater,
+                        CASE
+                            WHEN l20_tipojulg = 3 THEN l04_descricao
+                            ELSE NULL
+                        END AS l04_descricao,
+                        cgm.z01_numcgm,
+                        cgm.z01_nome,
+                        matunid.m61_descr,
+                        solicitem.pc11_quant,
+                        pcorcamval.pc23_valor
+                FROM liclicitem
+                INNER JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
+                INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+                LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem
+                INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+                INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+                INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+                INNER JOIN licsituacao ON l08_sequencial = l20_licsituacao
+                INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+                INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+                LEFT JOIN pcorcamitem ON pc22_orcamitem = pc26_orcamitem
+                LEFT JOIN pcorcam ON pc20_codorc = pc22_codorc
+                LEFT JOIN pcorcamforne ON pc21_codorc = pc20_codorc
+                LEFT JOIN cgm ON pc21_numcgm = z01_numcgm
+                LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+                AND pc23_orcamforne=pc21_orcamforne
+                INNER JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+                AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+                AND pc24_pontuacao =1
+                LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                WHERE l21_codliclicita = $l20_codigo
+                    AND pc24_pontuacao = 1
+                UNION
+                SELECT pc01_codmater,
+                        l21_ordem,
+                        pc24_pontuacao,
+                        pc01_descrmater,
+                        CASE
+                            WHEN l20_tipojulg = 3 THEN l04_descricao
+                            ELSE NULL
+                        END AS l04_descricao,
+                        cgm.z01_numcgm,
+                        cgm.z01_nome,
+                        matunid.m61_descr,
+                        solicitem.pc11_quant,
+                        pcorcamval.pc23_valor
+                FROM liclicitem
+                INNER JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
+                INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+                LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem
+                INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+                INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+                INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+                INNER JOIN licsituacao ON l08_sequencial = l20_licsituacao
+                INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+                INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+                LEFT JOIN pcorcamitem ON pc22_orcamitem = pc26_orcamitem
+                LEFT JOIN pcorcam ON pc20_codorc = pc22_codorc
+                LEFT JOIN pcorcamforne ON pc21_codorc = pc20_codorc
+                LEFT JOIN cgm ON pc21_numcgm = z01_numcgm
+                LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+                AND pc23_orcamforne=pc21_orcamforne
+                LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+                AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+                AND pc24_pontuacao =1
+                LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                WHERE l21_codliclicita = $l20_codigo
+                    AND pc23_orcamitem NOT IN
+                        (SELECT pc24_orcamitem
+                        FROM pcorcamjulg)
+                ORDER BY l21_ordem";
+
+        return $sql;
+    }
+
     public function sql_query_resultado_pncp($l20_codigo, $ordem)
     {
 
@@ -4032,6 +3975,68 @@ class cl_liclicita
                 AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne AND pc24_pontuacao = 1
                 LEFT  JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
                 LEFT  JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                WHERE l21_codliclicita = $l20_codigo
+                    AND l21_ordem = $ordem
+                    and l202_datahomologacao is not null
+                    AND pc24_pontuacao = 1
+                ORDER BY l21_ordem";
+
+        return $sql;
+    }
+
+    public function sql_query_resultado_retifica_pncp($l20_codigo, $ordem)
+    {
+
+        $sql  = "SELECT pcorcamval.pc23_quant AS quantidadeHomologada,
+                        pcorcamval.pc23_vlrun AS valorUnitarioHomologado,
+                        pcorcamval.pc23_valor AS valorTotalHomologado,
+                        pcorcamval.pc23_percentualdesconto AS percentualDesconto,
+                        CASE
+                            WHEN length(trim(cgm.z01_cgccpf)) = 14 THEN 'PJ'
+                            ELSE 'PF'
+                        END AS tipoPessoaId,
+                        cgm.z01_cgccpf AS niFornecedor,
+                        cgm.z01_nome AS nomeRazaoSocialFornecedor,
+                        CASE
+                            WHEN pc31_liclicitatipoempresa = 2 THEN 1
+                            WHEN pc31_liclicitatipoempresa = 3 THEN 2
+                            ELSE 3
+                        END AS porteFornecedorId,
+                        'BRA' AS codigoPais,
+                        liclicita.l20_subcontratacao AS indicadorSubcontratacao, 
+                        CASE
+                            WHEN pc50_pctipocompratribunal IN (100,101,102,103) THEN l20_dtpubratificacao
+                            ELSE l202_datahomologacao
+                        END AS dataResultado,
+                        l214_numeroresultado
+                FROM liclicitem
+                INNER JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
+                INNER JOIN pcprocitem ON liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem
+                LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem
+                INNER JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+                INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+                INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+                INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+                LEFT JOIN homologacaoadjudica ON l202_licitacao = l20_codigo
+                INNER JOIN licsituacao ON l08_sequencial = l20_licsituacao
+                INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
+                INNER JOIN pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom
+                INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                LEFT JOIN pcorcamitemlic ON l21_codigo = pc26_liclicitem
+                LEFT JOIN pcorcamitem ON pc22_orcamitem = pc26_orcamitem
+                LEFT JOIN pcorcam ON pc20_codorc = pc22_codorc
+                LEFT JOIN pcorcamforne ON pc21_codorc = pc20_codorc
+                LEFT JOIN cgm ON pc21_numcgm = z01_numcgm
+                LEFT JOIN pcorcamfornelic ON pc31_orcamforne = pc21_orcamforne
+                LEFT JOIN pcorcamval ON pc26_orcamitem = pc23_orcamitem
+                AND pc23_orcamforne=pc21_orcamforne
+                LEFT JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+                AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne AND pc24_pontuacao = 1
+                LEFT  JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                LEFT  JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                INNER JOIN liccontrolepncpitens ON liccontrolepncpitens.l214_licitacao = l21_codliclicita
+                AND l214_ordem = l21_ordem
                 WHERE l21_codliclicita = $l20_codigo
                     AND l21_ordem = $ordem
                     and l202_datahomologacao is not null

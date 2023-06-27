@@ -44,144 +44,158 @@ $clcgm = new cl_cgm;
 db_postmemory($HTTP_POST_VARS);
 $db_opcao = 22;
 $db_botao = false;
-if(isset($alterar)){
-  $sqlerro=false;
+if (isset($alterar)) {
+  $sqlerro = false;
 
-  $rsParamLic = $cllicitaparam->sql_record($cllicitaparam->sql_query(null,"*",null,"l12_instit = ".db_getsession('DB_instit')));
-        db_fieldsmemory($rsParamLic, 0)->l12_validacadfornecedor;
+  $rsParamLic = $cllicitaparam->sql_record($cllicitaparam->sql_query(null, "*", null, "l12_instit = " . db_getsession('DB_instit')));
+  db_fieldsmemory($rsParamLic, 0)->l12_validacadfornecedor;
 
-        if($l12_validacadfornecedor == "t"){
+  if ($l12_validacadfornecedor == "t") {
 
-          if($z01_telef == ""){
-            db_msgbox("Usuï¿½rio: Campo Email nï¿½o informado !");
-            $sqlerro = true;
-          }
+    if ($z01_telef == "") {
+      db_msgbox("Usuï¿½rio: Campo Email nï¿½o informado !");
+      $sqlerro = true;
+    }
 
-          if($z01_email == ""){
-            db_msgbox("Usuï¿½rio: Campo Telefone nï¿½o informado !");
-            $sqlerro = true;
-          }
+    if ($z01_email == "") {
+      db_msgbox("Usuï¿½rio: Campo Telefone nï¿½o informado !");
+      $sqlerro = true;
+    }
 
-          /**
-           * Verifica conta bancaria
-           */
-          $rsContaBancaria = $clpcfornecon->sql_record($clpcfornecon->sql_query(null,"*",null,"pc63_numcgm={$pc60_numcgm}"));
-          //db_criatabela($rsContaBancaria);exit;
-          if(pg_numrows($rsContaBancaria) == 0) {
-            db_msgbox("Usuï¿½rio: E necessario cadastrar ao menos uma conta bancaria !");
-            $sqlerro = true;
+    /**
+     * Verifica conta bancaria
+     */
+    $rsContaBancaria = $clpcfornecon->sql_record($clpcfornecon->sql_query(null, "*", null, "pc63_numcgm={$pc60_numcgm}"));
+    //db_criatabela($rsContaBancaria);exit;
+    if (pg_numrows($rsContaBancaria) == 0) {
+      db_msgbox("Usuï¿½rio: E necessario cadastrar ao menos uma conta bancaria !");
+      $sqlerro = true;
 
-            echo "
+      echo "
               <script>
                   function js_db_libera(){
                     parent.document.formaba.pcfornecon.disabled=false;
-                    top.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=".@$pc60_numcgm."';
+                    top.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=" . @$pc60_numcgm . "';
                 ";
-            echo"}\n
+      echo "}\n
                 js_db_libera();
               </script>\n
             ";
-          }
-        }
+    }
+  }
+
+  db_fieldsmemory($rsParamLic, 0)->l12_validafornecedor_emailtel;
+
+  if ($l12_validafornecedor_emailtel == "t") {
+
+    if ($z01_telef == "" || $z01_email == "") {
+      $clpcforne->erro_msg = "Usuário: Cadastro do fornecedor incompleto, preencha email e telefone. ";
+      $sqlerro = true;
+    }
+  }
+
   /**
-  * alterando email e telefone OC15701
-  */
-  if($sqlerro == false){
+   * alterando email e telefone OC15701
+   */
+  if ($sqlerro == false) {
     $clcgm->z01_numcgm = $pc60_numcgm;
     $clcgm->z01_email = $z01_email;
     $clcgm->z01_telef = $z01_telef;
     $clcgm->alterar($pc60_numcgm);
   }
   db_inicio_transacao();
-  if($sqlerro == false){
+  if ($sqlerro == false) {
     $clpcforne->alterar($pc60_numcgm);
-    if($clpcforne->erro_status==0){
-      $sqlerro=true;
+    if ($clpcforne->erro_status == 0) {
+      $sqlerro = true;
     }
   }
 
   $erro_msg = $clpcforne->erro_msg;
   db_fim_transacao($sqlerro);
-   $db_opcao = 2;
-   $db_botao = true;
-}else if(isset($chavepesquisa)){
-   $db_opcao = 2;
-   $db_botao = true;
-   $result = $clpcforne->sql_record($clpcforne->sql_query($chavepesquisa));
-   db_fieldsmemory($result,0);
+  $db_opcao = 2;
+  $db_botao = true;
+} else if (isset($chavepesquisa)) {
+  $db_opcao = 2;
+  $db_botao = true;
+  $result = $clpcforne->sql_record($clpcforne->sql_query($chavepesquisa));
+  db_fieldsmemory($result, 0);
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<br />
-    <center>
-    	<?
-    	 include("forms/db_frmpcforne.php");
-    	?>
-    </center>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+  <br />
+  <center>
+    <?
+    include("forms/db_frmpcforne.php");
+    ?>
+  </center>
 
 </body>
+
 </html>
 <?
-if(isset($alterar)){
-  if($sqlerro==true){
+if (isset($alterar)) {
+  if ($sqlerro == true) {
     db_msgbox($erro_msg);
-    if($clpcforne->erro_campo!=""){
-      echo "<script> document.form1.".$clpcforne->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$clpcforne->erro_campo.".focus();</script>";
+    if ($clpcforne->erro_campo != "") {
+      echo "<script> document.form1." . $clpcforne->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $clpcforne->erro_campo . ".focus();</script>";
     };
-  }else{
-   db_msgbox($erro_msg);
+  } else {
+    db_msgbox($erro_msg);
   }
 }
-if(isset($chavepesquisa)){
- echo "
+if (isset($chavepesquisa)) {
+  echo "
   <script>
       function js_db_libera(){
 
          parent.document.formaba.pcfornemov.disabled=false;
-         CurrentWindow.corpo.iframe_pcfornemov.location.href='com1_pcfornemov001.php?pc62_numcgm=".@$pc60_numcgm."';
+         CurrentWindow.corpo.iframe_pcfornemov.location.href='com1_pcfornemov001.php?pc62_numcgm=" . @$pc60_numcgm . "';
          parent.document.formaba.subgrupo.disabled=false;
-         CurrentWindow.corpo.iframe_subgrupo.location.href='com1_pcfornesub001.php?pc76_pcforne=".@$pc60_numcgm."';
+         CurrentWindow.corpo.iframe_subgrupo.location.href='com1_pcfornesub001.php?pc76_pcforne=" . @$pc60_numcgm . "';
          parent.document.formaba.pcfornecon.disabled=false;
-         CurrentWindow.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=".@$pc60_numcgm."';
-         CurrentWindow.corpo.iframe_pcforneidentificacaocredor.location.href='com1_pcfornetipoidentificacaocredorgenerica001.php?pc81_cgmforn=".@$pc60_numcgm."';
+         CurrentWindow.corpo.iframe_pcfornecon.location.href='com1_pcfornecon001.php?pc63_numcgm=" . @$pc60_numcgm . "';
+         CurrentWindow.corpo.iframe_pcforneidentificacaocredor.location.href='com1_pcfornetipoidentificacaocredorgenerica001.php?pc81_cgmforn=" . @$pc60_numcgm . "';
          parent.document.formaba.pcforneidentificacaocredor.disabled=false;
      ";
-    //Alterado o modulo de 28 para 39 - cod modulo incorreto (Ocorrencia 2213)
+  //Alterado o modulo de 28 para 39 - cod modulo incorreto (Ocorrencia 2213)
 
-    /** Mario Junior
-     *  comentado parte do codigo que impedia usuario comum alterar e incluir contass banco;
-     * $permissao=db_permissaomenu(db_getsession("DB_anousu"),39,5002);
-     */
+  /** Mario Junior
+   *  comentado parte do codigo que impedia usuario comum alterar e incluir contass banco;
+   * $permissao=db_permissaomenu(db_getsession("DB_anousu"),39,5002);
+   */
 
-     $permissao=true;
-     if ($permissao=='true'){
-     	    echo"
+  $permissao = true;
+  if ($permissao == 'true') {
+    echo "
                 parent.document.formaba.pcfornereprlegal.disabled=false;
-         	      CurrentWindow.corpo.iframe_pcfornereprlegal.location.href='com1_pcfornereprlegal001.php?pc81_cgmforn=".@$pc60_numcgm."';
+         	      CurrentWindow.corpo.iframe_pcfornereprlegal.location.href='com1_pcfornereprlegal001.php?pc81_cgmforn=" . @$pc60_numcgm . "';
          	";
-     	if(isset($liberaaba)){
-          echo "  parent.mo_camada('pcfornereprlegal');";
-     	}
-     }else{
-     	if(isset($liberaaba)){
-        	echo "  parent.mo_camada('pcfornemov');";
-     	}
-     }
- echo"}\n
+    if (isset($liberaaba)) {
+      echo "  parent.mo_camada('pcfornereprlegal');";
+    }
+  } else {
+    if (isset($liberaaba)) {
+      echo "  parent.mo_camada('pcfornemov');";
+    }
+  }
+  echo "}\n
     js_db_libera();
   </script>\n
  ";
 }
- if($db_opcao==22||$db_opcao==33){
-    echo "<script>document.form1.pesquisar.click();</script>";
- }
+if ($db_opcao == 22 || $db_opcao == 33) {
+  echo "<script>document.form1.pesquisar.click();</script>";
+}
 ?>

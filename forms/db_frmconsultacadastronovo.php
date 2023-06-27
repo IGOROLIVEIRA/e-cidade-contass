@@ -285,7 +285,7 @@ function js_comTeclaEnter(evt) {
     <table width="100%" border="0" cellspacing="0" cellpadding="0">
       <tr>
         <td colspan="2">
-        <fieldset><legend> <b>Dados referentes a matr�cula</b></legend>
+        <fieldset><legend> <b>Dados referentes a matrícula</b></legend>
         <table border="0">
 
 
@@ -392,7 +392,7 @@ function js_comTeclaEnter(evt) {
 
       <tr>
         <td colspan="3" align="left" valign="top" nowrap><?$db_opcao=1; ?>
-        <fieldset><legend> <b>Dados referentes ao registro de im�veis</b></legend>
+        <fieldset><legend> <b>Dados referentes ao registro de imóveis</b></legend>
         <table>
           </tr>
           <tr>

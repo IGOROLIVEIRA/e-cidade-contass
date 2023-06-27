@@ -232,7 +232,7 @@ class estimativaRegistroPreco extends solicitacaoCompra
       $oDaoAberturaPreco->incluir(null);
     }
     if ($oDaoAberturaPreco->erro_status == 0) {
-      throw new Exception("Erro ao salvar Abertura de Registro de Preço!\n{$oDaoSolicitacao->erro_msg}");
+      throw new Exception("Erro ao salvar Abertura de Registro de Preço!\n{$oDaoAberturaPreco->erro_msg}");
     }
 
     unset($oDaoAberturaPreco);

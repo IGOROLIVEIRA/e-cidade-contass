@@ -1,0 +1,170 @@
+<?php
+class cl_liclicitaimportarjulgamento
+{
+  // cria variaveis de erro
+   public $rotulo     = null;
+   public $query_sql  = null;
+   public $numrows    = 0;
+   public $numrows_incluir = 0;
+   public $numrows_alterar = 0;
+   public $numrows_excluir = 0;
+   public $erro_status= null;
+   public $erro_sql   = null;
+   public $erro_banco = null;
+   public $erro_msg   = null;
+   public $erro_campo = null;
+   public $pagina_retorno = null;
+
+    //pcorcam
+    public string $pc20_dtate;
+    public string $pc20_hrate;
+    public string $pc20_obs;
+    public ?string $pc20_prazoentrega = null;
+    public int    $pc20_cotacaoprevia = 1;
+    public int    $pc20_codorc;
+
+    //pcorcamforne
+    public int    $pc21_codorc;
+    public int    $pc21_numcgm;
+    public bool   $pc21_importado = true;
+    public int    $pc21_orcamforne;
+
+    //habilitacaoforne
+    public int    $l206_fornecedor;
+    public int    $l206_licitacao;
+    public int    $l206_representante;
+    public string $l206_datahab;
+
+    //pcorcamitemlic
+    public int    $pc22_liclicitem;
+    public int    $pc22_codorc;
+
+    //pcorcamitemlic
+    public int    $pc26_liclicitem;
+    public int    $pc26_orcamitem;
+
+
+    //pcorcamval
+    public int    $pc23_orcamforne;
+    public int    $pc23_orcamitem;
+    public float  $pc23_valor;
+    public int    $pc23_quant;
+    public string $pc23_obs;
+    public float  $pc23_vlrun;
+    public float  $pc23_validmin;
+    public float  $pc23_percentualdesconto;
+    public float  $pc23_perctaxadesctabela;
+
+    //pcorcamjulg
+    public int    $pc24_orcamitem;
+    public int    $pc24_orcamforne;
+    public int    $pc24_pontuacao;
+
+    //liclicitasituacao
+    public int    $l11_sequencial;
+    public int    $l11_idusuario;
+    public int    $l11_licsituacao;
+    public int    $l11_liclicita;
+    public string $l11_obs;
+    public string $l11_data;
+    public string $l11_hora;
+
+
+    public function buscarModalidadeComObjeto($codigo)
+    {
+        $sql = "select distinct
+                l20_codigo as id,
+                l20_objeto as objeto,
+                l20_numero as numeroprocesso,
+                l20_anousu as anoprocesso,
+                l20_licsituacao as situacao,
+                l03_descr as modalidade
+            from liclicita
+            join cflicita on l03_codigo=l20_codtipocom
+            where
+                l20_codigo=".$codigo;
+        return $this->sql_record($sql);
+    }
+
+    public function buscaFornecedor($cnpj)
+    {
+        $sql = "
+            select pc60_cnpjcpf from pcforne where pc60_cnpjcpf ='$cnpj'
+        ";
+        return $this->sql_record($sql);
+    }
+
+    public function buscaNumCgm(string $cnpj)
+    {
+        $sql = "
+            select  z01_numcgm as numcgm from cgm where z01_cgccpf = '$cnpj'
+        ";
+
+        return $this->sql_record($sql);
+    }
+
+    public function buscaCpfCnpj(string $numcgm)
+    {
+        $sql = "
+            select z01_cpf from protocolo.db_cgmcpf where z01_numcgm = '$numcgm'
+        ";
+
+        return $this->sql_record($sql);
+    }
+
+    public function buscaL21codigo(int $l21Ordem, int $codigo)
+    {
+        $sql = "
+        select
+	        l21_codigo as idliclicitem
+        from liclicita
+            join cflicita on l03_codigo=l20_codtipocom
+            join liclicitem on l21_codliclicita = l20_codigo
+            join liclicitemlote on l04_liclicitem=l21_codigo
+            join pcprocitem on pc81_codprocitem=l21_codpcprocitem
+            join solicitem on pc11_codigo=pc81_solicitem
+            join solicita on pc10_numero = pc11_numero
+            join solicitempcmater on pc16_solicitem=pc11_codigo
+            join pcmater on pc01_codmater=pc16_codmater
+            join solicitemunid on pc17_codigo=pc11_codigo
+            join matunid on m61_codmatunid=pc17_unid
+            left join pcorcamitemproc on pc31_pcprocitem=pc81_codprocitem
+            left join pcorcamitem on pc22_orcamitem=pc31_orcamitem
+            left join itemprecoreferencia on si02_itemproccompra=pc22_orcamitem
+            left join solicitaregistropreco on pc54_solicita=pc10_numero
+        where
+            l21_ordem = $l21Ordem and l20_codigo = $codigo
+       order by l21_ordem;
+        ";
+
+        return $this->sql_record($sql);
+    }
+
+    public function sql_record($sql)
+    {
+        $result = db_query($sql);
+        if($result==false || $result == null) {
+          $this->numrows    = 0;
+          $this->erro_banco = str_replace("\n","",@pg_last_error());
+          $this->erro_sql   = "Erro ao selecionar os registros.";
+          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+          $this->erro_status = "0";
+          return false;
+        }
+
+        $this->numrows = pg_num_rows($result);
+
+         if($this->numrows==0) {
+           $this->erro_banco = "";
+           $this->erro_sql   = "Record vazio";
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           return false;
+         }
+
+         $this->erro_status = "1";
+        return $result;
+      }
+}

@@ -347,5 +347,20 @@ abstract class DBPessoal {
   public static function setEstruturaFolhaPagamento($lSuplementar) {
     db_putsession("DB_COMPLEMENTAR", $lSuplementar);
   }
+
+  /**
+   * Arredonda o valor para duas casas decimais 
+   * sem arredondar para mais ou para menos
+   * 
+   * @param floar $valor
+   * @return float 
+   */
+  public static function arredondarValor($valor) {
+    $aVlr = explode(".", $valor);
+    if (strlen($aVlr[1]) > 2) {
+      return floor(($valor*100))/100;
+    }
+    return $valor;
+  }
   
 }

@@ -2674,6 +2674,13 @@ function js_mostradetalhes(chave){
   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_mostrainscr',chave,'Pesquisa',true, 20, 0, document.body.clientWidth, document.body.clientHeight - 30);
 }
 
+function js_consultaOrigemAbatimento(iAbatimento) {
+
+    const sUrl = 'func_origemabatimentoparcial.php?iAbatimento='+iAbatimento+'&sOrigem=recibo';
+
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_abatimento',sUrl,'Origem Pagamento Parcial',true,20,0, document.body.clientWidth, document.body.clientHeight - 30);
+}
+
 //-------------func Situação Fiscal - Por /*Rogerio Baum*/ -----------------------
 
 function js_situacao_fiscal(cod,tipo){

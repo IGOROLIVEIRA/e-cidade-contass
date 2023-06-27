@@ -43,9 +43,18 @@ try {
             for ($i = 0; $i < pg_num_rows($result); $i++) {
                 $oFonte = db_utils::fieldsMemory($result, $i);
                 $aFonte[] = $oFonte;
+                $oRetorno->valor += $oFonte->c241_valor;
             }
             ksort($aFonte);
             $oRetorno->fonte = $aFonte;
+
+            $oOrcSuplemVal = new OrcSuplemValRepositoryLegacy($anousu, $instit);
+            $oTipoSuplemenetacaoSuperavitDeficit = new TipoSuplementacaoSuperavitDeficitRepositoryLegacy();
+            $oRetorno->suple = $oOrcSuplemVal->pegarArrayValorPelaFonteSuplementadoPorTipoSup($oTipoSuplemenetacaoSuperavitDeficit->pegarTipoSup());
+            $array = json_decode(json_encode($oRetorno->suple), true);
+            foreach ($array as $arraydados){
+                $oRetorno->suplementado += $arraydados['valor'];
+            }
             
             break;
 

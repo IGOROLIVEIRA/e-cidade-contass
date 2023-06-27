@@ -77,22 +77,60 @@ if (isset($iTipo) && $iTipo != '') {
     
     if ($iTipo == 1) {
         
-        $sWhere .= " and o15_codigo in (102, 202) ";
-        $sTipoPasta = "Saúde (102, 202)";
+        $sWhere .= " and o15_codigo in (102,202,15000002,25000002,148,149,150,151,152) ";
+        $sTipoPasta = "Saúde 15% ";
 
     } elseif ($iTipo == 2) {
 
-        $sWhere .= " and o15_codigo in (101, 201) ";
-        $sTipoPasta = "Educação (101, 201)";
+        $sWhere .= " and o15_codigo in (101, 201, 15000001,25000001) ";
+        $sTipoPasta = "Educação 25% ";
 
     } elseif ($iTipo == 3) {
         
-        $sWhere .= " and o15_codigo in (118, 119, 218, 219) ";
-        $sTipoPasta = "Fundeb (118, 119, 218, 219)";
+        $sWhere .= " and o15_codigo in (118,119, 218, 219,166,167,266,267,15400007,25400007,15400000,25400000,15420007,25420007,15420000,25420000) ";
+        $sTipoPasta = "Fundeb (70% e 30%) ";
 
     } elseif ($iTipo == 4) {
-        $sWhere .= " and o15_codigo not in (101, 102, 118, 119, 202, 201, 218, 219) ";
+        $sWhere .= " and ( o15_codigo not in (101, 102, 118, 119, 202, 201, 218, 219,166,167,266,267,157, 17520000,257, 27520000,116, 17500000,216,27500000,15000002,25000002,15000001,25000001,15400007,25400007,15400000,25400000,15420007,25420007,15420000,25420000, 159, 153, 132, 155, 121, 123, 176, 177, 179, 180, 178, 112, 259, 253, 232, 255, 221, 223, 276, 277, 279, 280, 278, 212,148,149,150,151,152,129, 156, 142, 229, 256, 242,107, 147, 143, 144, 145, 146, 122, 171, 172, 175, 174, 173, 120, 106, 113, 207, 247, 243, 244, 245, 246, 222, 271, 272 ,275 ,274 ,273 ,220 ,206 ,213)) ";
+        $sWhere .= " and ( SUBSTRING(o15_codtri,1, 4) not in ('1600', '1601', '1602', '1603', '1604', '1621', '1622', '1631', '1632', '1633', '1634', '1635', '1636', '1659', '2600', '2601', '2602', '2603', '2604', '2621', '2622', '2631', '2632', '2633', '2634', '2635', '2636', '2659','1660', '1661', '1662', '1665', '1669', '2660', '2661', '2662', '2665', '2669','1541', '1543', '1544', '1550', '1551', '1552', '1553', '1569', '1570', '1571', '1572', '1573', '1574', '1575', '1576', '1599', '2541', '2543', '2544', '2550', '2551', '2552', '2553', '2569', '2570', '2571', '2572', '2573', '2574', '2575', '2576', '2599')) ";
+        $sTipoPasta = "Geral ";
+    } elseif ($iTipo == 5) {
+        
+        $sWhere .= " and o15_codigo in (118, 218,166,266,15400007,25400007,15420007,25420007) ";
+        $sTipoPasta = "Fundeb 70% ";
+
+    } elseif ($iTipo == 6) {
+        
+        $sWhere .= " and o15_codigo in (119, 219,167,267, 15400000,25400000,15420000,25420000) ";
+        $sTipoPasta = "Fundeb 30% ";
+
+    } elseif ($iTipo == 7) {
+        
+        $sWhere .= " and o15_codigo in (157, 17520000,257, 27520000) ";
+        $sTipoPasta = "Multas de Transito ";
+
+    } elseif ($iTipo == 8) {
+        
+        $sWhere .= " and o15_codigo in (116, 17500000,216,27500000) ";
+        $sTipoPasta = "CIDE ";
+
+    } elseif ($iTipo == 9) {
+        
+        $sWhere .= " and (( SUBSTRING(o15_codtri,1, 4) in ('1600', '1601', '1602', '1603', '1604', '1621', '1622', '1631', '1632', '1633', '1634', '1635', '1636', '1659', '2600', '2601', '2602', '2603', '2604', '2621', '2622', '2631', '2632', '2633', '2634', '2635', '2636', '2659'))  or o15_codigo in ('159', '153', '132', '155', '121', '123', '176', '177', '179', '180', '178', '112', '259', '253', '232', '255', '221', '223', '276', '277', '279', '280', '278', '212 ')) ";
+        $sTipoPasta = "Vinculados à Saúde ";
+
+    }elseif ($iTipo == 10) {
+        
+        $sWhere .= " and (( SUBSTRING(o15_codtri,1, 4) in ('1660', '1661', '1662', '1665', '1669', '2660', '2661', '2662', '2665', '2669'))  or o15_codigo in ('129', '156', '142', '229', '256', '242')) ";
+        $sTipoPasta = "Vinculados à Assistencia ";
+
+    }elseif ($iTipo == 11) {
+        
+        $sWhere .= " and (( SUBSTRING(o15_codtri,1, 4) in ('1541', '1543', '1544', '1550', '1551', '1552', '1553', '1569', '1570', '1571', '1572', '1573', '1574', '1575', '1576', '1599', '2541', '2543', '2544', '2550', '2551', '2552', '2553', '2569', '2570', '2571', '2572', '2573', '2574', '2575', '2576', '2599'))  or o15_codigo in ('107', '147', '143', '144', '145', '146', '122', '171', '172', '175', '174', '173', '120', '106', '113', '207', '247', '243', '244', '245', '246', '222', '271', '272 ','275 ','274 ','273 ','220 ','206 ','213 ')) ";
+        $sTipoPasta = "Vinculados à Educação ";
+
     }
+
 
 }
 
@@ -132,7 +170,7 @@ if ($iRestosPagar != 2) {
             o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_projativ,
             o58_funcao,o58_programa,
             o55_descr,
-            o15_codtri,o15_descr,o15_tipo,
+            o15_codtri,o15_codigo,o15_descr,o15_tipo,
             o56_elemento,
                             o56_descr,
                             e50_data,
@@ -174,7 +212,7 @@ if ($iRestosPagar != 2) {
                 END AS z01_nome,
                 k12_valor,k12_cheque,e60_anousu,coremp.k12_autent,coremp.k12_data,k13_conta,
                 k13_descr,o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_projativ,o58_funcao,
-                o58_programa,o55_descr,o15_codtri,o15_descr,o15_tipo,o56_elemento,o56_descr,e50_data,
+                o58_programa,o55_descr,o15_codtri,o15_codigo,o15_descr,o15_tipo,o56_elemento,o56_descr,e50_data,
                 CASE
                     WHEN e60_anousu < " . db_getsession("DB_anousu") . " THEN 'RP'
                     ELSE 'Emp'
@@ -215,7 +253,7 @@ if ($iRestosPagar != 2) {
             o58_coddot,o58_orgao,o58_unidade,o58_subfuncao,o58_projativ,
             o58_funcao,o58_programa,
             o55_descr,
-            o15_codtri,o15_descr,o15_tipo,
+            o15_codtri,o15_codigo,o15_descr,o15_tipo,
             o56_elemento,
                             o56_descr,
                             e50_data,
@@ -280,7 +318,7 @@ if ($iRestosPagar != 2) {
                     str_pad($oResult->o58_funcao, 2, "0", STR_PAD_LEFT) . str_pad($oResult->o58_subfuncao, 3, "0", STR_PAD_LEFT) .
                     str_pad($oResult->o58_programa, 4, "0", STR_PAD_LEFT) . str_pad($oResult->o58_projativ, 4, "0", STR_PAD_LEFT) .
                     str_pad($oResult->o56_elemento, 6, "0", STR_PAD_LEFT) . " - " . $oResult->o56_descr, 1, 0, "C", 1);
-                $pdf->Cell(97, $tam, substr($oResult->o15_codtri.' - '.$oResult->o15_descr,0,55), 1, 1, "C", 1);
+                $pdf->Cell(97, $tam, substr($oResult->o15_codigo.' - '.$oResult->o15_descr,0,55), 1, 1, "C", 1);
 
                 $pdf->Cell(20, $tam, "Empenho", 1, 0, "C", 1);
                 $pdf->Cell(17, $tam, "Data Emp", 1, 0, "C", 1);

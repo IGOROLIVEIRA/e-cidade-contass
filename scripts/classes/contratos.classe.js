@@ -621,8 +621,8 @@ contrato = function () {
         oParam.contrato.iCriterioreajuste         = iCriterioreajuste;
         oParam.contrato.dtReajuste                = dtReajuste;
         oParam.contrato.iIndicereajuste           = iIndicereajuste;
-        oParam.contrato.sDescricaoreajuste        = sDescricaoreajuste;
-        oParam.contrato.sDescricaoindice          = sDescricaoindice;
+        oParam.contrato.sDescricaoreajuste        = encodeURIComponent(tagString(sDescricaoreajuste));
+        oParam.contrato.sDescricaoindice          = encodeURIComponent(tagString(sDescricaoindice));
         oParam.contrato.sPeriodoreajuste          = sPeriodoreajuste;
         js_divCarregando('Aguarde, salvando dados do contrato','msgbox');
         var oAjax   = new Ajax.Request(

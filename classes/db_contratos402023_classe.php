@@ -183,7 +183,7 @@ class cl_contratos402023 {
                                ,$this->si91_tiporegistro
                                ,'$this->si91_codorgao'
                                ,'$this->si91_codunidadesub'
-                               ,$this->si91_nrocontrato
+                               ,'$this->si91_nrocontrato'
                                ,".($this->si91_dtassinaturacontoriginal == "null" || $this->si91_dtassinaturacontoriginal == ""?"null":"'".$this->si91_dtassinaturacontoriginal."'")."
                                ,".($this->si91_datarescisao == "null" || $this->si91_datarescisao == ""?"null":"'".$this->si91_datarescisao."'")."
                                ,$this->si91_valorcancelamentocontrato

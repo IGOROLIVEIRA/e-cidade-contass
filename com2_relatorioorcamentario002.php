@@ -38,6 +38,15 @@ $result = db_query($sql);
 db_fieldsmemory($result,0);
 
 /**
+ * BUSCO PROCESSO DE COMPRAS
+ */
+
+ $rscodproc = "select distinct pc81_codproc from pcprocitem where pc81_solicitem in (select pc11_codigo from solicitem where pc11_numero =  {$solicitacaocompras})";
+ $resultCodproc = db_query($rscodproc);
+ $codigo_preco    = db_utils::fieldsMemory($resultCodproc, 0)->pc81_codproc;
+
+if(pg_num_rows($resultCodproc)!=0){
+/**
  * BUSCO TIPO DE PRECO DE REFERENCIA
  */
 
@@ -55,12 +64,25 @@ where
     and pc68_sequencial is not null
     order by pc68_sequencial asc");
 
-$tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
+
 
 
 $rsResultado = db_query("select pc80_criterioadjudicacao from pcproc where pc80_codproc = {$codigo_preco}");
 $criterio    = db_utils::fieldsMemory($rsResultado, 0)->pc80_criterioadjudicacao;
 $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : "";
+
+
+$rsTipopreco = db_query("select si01_tipoprecoreferencia from precoreferencia where si01_processocompra = {$codigo_preco}");
+$resultTipopreco    = db_utils::fieldsMemory($rsTipopreco, 0)->si01_tipoprecoreferencia;
+
+if($resultTipopreco==3){
+    $tipoReferencia = " (min(pc23_vlrun)) ";
+}else if($resultTipopreco==2){
+    $tipoReferencia = " (max(pc23_vlrun)) ";
+}else{
+    $tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
+}
+
 
 /**
  * GET ITENS
@@ -107,7 +129,7 @@ left join processocompraloteitem on
 left join processocompralote on
 			pc68_sequencial = pc69_processocompralote
 AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
-WHERE pc81_codproc = {$processodecompras}
+WHERE pc81_codproc = {$codigo_preco}
   AND pc10_instit = " . db_getsession("DB_instit") . "
 ORDER BY pc11_seq) as x GROUP BY
                 pc01_codmater,
@@ -115,7 +137,7 @@ ORDER BY pc11_seq) as x GROUP BY
                 pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq ) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
-                {$tipoReferencia} as si02_vlprecoreferencia,
+                {$tipoReferencia} as si02_vltotalprecoreferencia,
                                      case when pc80_criterioadjudicacao = 1 then
                      round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
                      when pc80_criterioadjudicacao = 2 then
@@ -138,7 +160,7 @@ JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
 JOIN pcmater ON pc16_codmater = pc01_codmater
 JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
 JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-WHERE pc80_codproc = {$processodecompras} {$sCondCrit} and pc23_vlrun <> 0
+WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
 GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
 ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
 $resultpreco = db_query($sSql) or die(pg_last_error());
@@ -148,7 +170,7 @@ for ($iCont = 0; $iCont < pg_num_rows($resultpreco); $iCont++) {
        $oResult = db_utils::fieldsMemory($resultpreco, $iCont);
 
        //    if($quant_casas){
-       $lTotal = round($oResult->si02_vlprecoreferencia, 2) * $oResult->pc11_quant;
+       $lTotal = round($oResult->si02_vltotalprecoreferencia * $oResult->pc11_quant, 2);
        $nTotalItens += $lTotal;
 }
 
@@ -156,7 +178,7 @@ for ($iCont = 0; $iCont < pg_num_rows($resultpreco); $iCont++) {
  * BUSCO O VALOR TOTAL DO PRECO DE REFERENCIA
  *
  */
-$sqlObjeto = "select pc80_resumo as objeto from pcproc where pc80_codproc = $processodecompras";
+$sqlObjeto = "select pc80_resumo as objeto from pcproc where pc80_codproc = $codigo_preco";
 $resultObjeto = db_query($sqlObjeto);
 db_fieldsmemory($resultObjeto,0);
 
@@ -175,8 +197,16 @@ INNER JOIN pcdotac ON pcdotac.pc13_codigo = solicitem.pc11_codigo
 INNER JOIN orcdotacao ON (orcdotacao.o58_anousu,orcdotacao.o58_coddot) = (pcdotac.pc13_anousu,pcdotac.pc13_coddot)
 INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
 INNER JOIN orcelemento on (orcelemento.o56_codele,orcelemento.o56_anousu) = (orcdotacao.o58_codele,orcdotacao.o58_anousu)
-WHERE pc80_codproc = $processodecompras";
+WHERE pc80_codproc = $codigo_preco";
 $resultDotacao = db_query($sqlDotacao);
+}
+ /**
+* BUSCO O TEXTO NO CADASTRO DE PARAGRAFOS
+*
+*/
+$sqlparag = "select db02_texto from db_paragrafo inner join db_docparag on db02_idparag = db04_idparag inner join db_documento on db04_docum = db03_docum where db03_descr='SOLICITACAO DE DISPO. FINANCEIRA1' and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
+$resparag = db_query($sqlparag);
+
 
 $head5 = "SOLICITAÇÃO DE PARECER DE DISPONIBILIDADE FINANCEIRA";
 
@@ -193,21 +223,25 @@ $pdf->ln($alt + 4);
 $pdf->cell(190,4,"SOLICITAÇÃO DE PARECER DE DISPONIBILIDADE FINANCEIRA",0,1,"C",0);
 $pdf->ln($alt + 4);
 $pdf->SetFont('arial','',11);
-$pdf->x = 30;
-$pdf->cell(190,5,"De: Pregoeira/ Comissão permanente de Licitação"  ,0,1,"L",0);
-$pdf->x = 30;
-$pdf->cell(190,5,"Para: Setor contábil"                             ,0,1,"L",0);
+if(pg_num_rows($resparag) != 0){
+    db_fieldsmemory( $resparag, 0 );
+    eval($db02_texto);
+}
 $pdf->ln($alt + 4);
 $pdf->x = 30;
-$pdf->MultiCell(160,5,"     Solicito ao departamento contábil se há no orçamento vigente, disponibilidade financeira que atenda ".mb_strtoupper($objeto,'ISO-8859-1').", no valor total estimado de R$".trim(db_formatar($nTotalItens,'f')),0,"J",0);
+if(pg_num_rows($resparag) != 0){
+    db_fieldsmemory( $resparag, 1 );
+    eval($db02_texto);
+}
 $pdf->ln($alt + 20);
 $data = db_getsession('DB_datausu');
 $sDataExtenso     = db_dataextenso($data);
 $pdf->cell(190,4,$munic.','.strtoupper($sDataExtenso)                      ,0,1,"C",0);
 $pdf->ln($alt+20);
-$pdf->cell(190,5,"________________________"                                ,0,1,"C",0);
-$pdf->cell(190,5,"Presidente da CPL"                                       ,0,1,"C",0);
-$pdf->cell(190,5,"e/ou Presidente da Comissão de Licitação"                ,0,1,"C",0);
+if(pg_num_rows($resparag) != 0){
+    db_fieldsmemory( $resparag, 2 );
+    eval($db02_texto);
+}
 
 $pdf->Output();
 

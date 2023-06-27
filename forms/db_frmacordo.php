@@ -27,6 +27,12 @@
 
 require_once("libs/db_libdicionario.php");
 require_once("libs/db_utils.php");
+include("classes/db_licitaparam_classe.php");
+
+$cllicitaparam = new cl_licitaparam;
+$rsParamLic = $cllicitaparam->sql_record($cllicitaparam->sql_query(null, "*", null, "l12_instit = " . db_getsession('DB_instit')));
+db_fieldsmemory($rsParamLic, 0)->l12_validafornecedor_emailtel;
+
 
 //MODULO: Acordos
 $clacordo->rotulo->label();
@@ -164,6 +170,9 @@ db_app::load("dbtextFieldData.widget.js");
                                                 <td>
                                                     <?
                                                     db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 3, "");
+                                                    ?>
+                                                    <?
+                                                    db_input('l12_validafornecedor_emailtel', 10, $Il12_validafornecedor_emailtel, true, 'hidden', 3, "");
                                                     ?>
                                                 </td>
                                             </tr>
@@ -1447,18 +1456,23 @@ db_app::load("dbtextFieldData.widget.js");
 
             if (nLicitacao == '') {
                 js_pesquisaac16_contratado(true);
-            } else {
-                js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
-                    'db_iframe_contratado',
-                    'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm|z01_cgccpf',
-                    'CGM Contratado',
-                    true,
-                    '0');
+                return;
             }
-        } else {
-            nLicitacao == '';
-            js_pesquisaac16_contratado(true);
+
+            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
+                'db_iframe_contratado',
+                'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm|z01_cgccpf|z01_telef|z01_email',
+                'CGM Contratado',
+                true,
+                '0');
+
+            return;
+
         }
+
+        nLicitacao == '';
+        js_pesquisaac16_contratado(true);
+
     }
 
     function js_pesquisaac16_contratado(mostra) {
@@ -1468,32 +1482,37 @@ db_app::load("dbtextFieldData.widget.js");
             js_OpenJanelaIframe(
                 '(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
                 'db_iframe_contratado',
-                'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
+                'func_pcforne.php?validacaoCadastroFornecedor=true&validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf|z01_telef|z01_email',
                 'Pesquisa',
                 true,
                 '0',
                 '1'
             );
 
-        } else {
+            return;
 
-            if ($('ac16_contratado').value != '') {
-
-                js_OpenJanelaIframe(
-                    '(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
-                    'db_iframe_contratado',
-                    'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
-                    'Pesquisa',
-                    false,
-                    '0',
-                    '1'
-                );
-
-            } else {
-                $('nomecontratado').value = '';
-            }
         }
+
+        if ($('ac16_contratado').value != '') {
+
+            js_OpenJanelaIframe(
+                '(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
+                'db_iframe_contratado',
+                'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
+                'Pesquisa',
+                false,
+                '0',
+                '1'
+            );
+
+            return;
+
+        }
+
+        $('nomecontratado').value = '';
+
     }
+
 
     function js_mostracontratado(erro, chave, z01_cgccpf) {
 
@@ -1536,7 +1555,35 @@ db_app::load("dbtextFieldData.widget.js");
         }
     }
 
-    function js_mostracontratado1(chave1, chave2, z01_cgccpf) {
+    function js_mostracontratado1(nomecontratado, ac16_contratado, z01_cgccpf, z01_telef, z01_email) {
+
+        /* Verificando se o fornecedor possui os representantes legais com o mesmo CNPJ do Fornecedor.*/
+
+        var oParametros = new Object();
+        oParametros.exec = 'validacaoCadastroFornecedor';
+        oParametros.iFornecedor = ac16_contratado;
+        var validacaoCadastroFornecedor;
+        var oAjax = new Ajax.Request("ac4_acordoinclusao.rpc.php", {
+            method: "post",
+            asynchronous: false,
+            parameters: 'json=' + Object.toJSON(oParametros),
+            onComplete: function(oAjax) {
+                var oRetorno = eval("(" + oAjax.responseText + ")");
+                if (oRetorno.iStatus == 2) {
+                    validacaoCadastroFornecedor = false;
+                    alert(oRetorno.sMessage.urlDecode());
+                }
+
+            }
+        });
+
+        if (validacaoCadastroFornecedor == false) return false;
+
+        if ((z01_telef.trim() == '' || z01_email.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
+            alert("Usuário: Inclusão abortada. O Fornecedor selecionado não possui Email e Telefone no seu cadastro.");
+            $('ac16_contratado').value = '';
+            return false;
+        }
 
         if (z01_cgccpf.length = 11) {
             if (z01_cgccpf == '00000000000') {
@@ -1552,13 +1599,9 @@ db_app::load("dbtextFieldData.widget.js");
             }
         }
 
-        $('ac16_contratado').value = chave2;
-        $('nomecontratado').value = chave1;
+        $('ac16_contratado').value = ac16_contratado;
+        $('nomecontratado').value = nomecontratado;
         oContrato.verificaLicitacoes();
-
-        if ($('ac16_origem').value == 6) {
-            //js_MostraEmpenhos();
-        }
 
         db_iframe_contratado.hide();
     }
@@ -1750,7 +1793,7 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trLicitacao').style.display = "none";
         }
 
-        
+
 
         if ((iTipoOrigem == 2 && iOrigem == 2) || (iTipoOrigem == 3 && iOrigem == 2)) {
             document.getElementById('trLicitacao').style.display = "none";
@@ -1758,7 +1801,7 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
-        
+
 
         if (iOrigem == 3 && iTipoOrigem == 1) {
             document.getElementById('trLicitacao').style.display = "none";
@@ -1778,9 +1821,9 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
-        if(iOrigem == 1 && (iTipoOrigem == 2 || iTipoOrigem == 3)){
+        if (iOrigem == 1 && (iTipoOrigem == 2 || iTipoOrigem == 3)) {
             document.getElementById('trLicitacao').style.display = "";
-        }else{
+        } else {
             document.getElementById('trLicitacao').style.display = "none";
         }
 

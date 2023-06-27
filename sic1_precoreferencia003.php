@@ -10,6 +10,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clprecoreferencia = new cl_precoreferencia;
 $clpcproc = new cl_pcproc;
+$clprecoreferenciaacount = new cl_precoreferenciaacount;
 $db_botao = false;
 $db_opcao = 33;
 if(isset($excluir)){
@@ -19,6 +20,13 @@ if(isset($excluir)){
   $rSql = $clpcproc->sql_record($sSql);
   if(!$clpcproc->numrows){
     $clprecoreferencia->excluir($si01_sequencial);
+
+    $clprecoreferenciaacount->si233_precoreferencia = $si01_sequencial;
+    $clprecoreferenciaacount->si233_acao =  'Excluir';
+    $clprecoreferenciaacount->si233_idusuario = db_getsession("DB_id_usuario");
+    $clprecoreferenciaacount->si233_datahr =  date("Y-m-d", db_getsession("DB_datausu"));
+    $clprecoreferenciaacount->incluir(null);  
+    
   }else{
     $db_botao = true;
     $db_opcao = 33;

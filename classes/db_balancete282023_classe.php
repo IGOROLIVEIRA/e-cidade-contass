@@ -33,6 +33,8 @@
 		var $si198_mes = 0;
 		var $si198_instit = 0;
 		var $si198_reg10 = null;
+        var $si198_codfontrecursos = null;
+        var $si197_reg10 = null;
 		// cria propriedade com as variaveis do arquivo
 		var $campos = "
                  si198_sequencial = int8 = Sequencial
@@ -40,15 +42,15 @@
                  si198_contacontabil = int8 = Código da Conta Contábil
                  si198_codfundo = varchar(8) = Código identificador do Fundo
                  si198_codctb = int8 = Código identificador da conta
-                 si198_codfontrecursos = int8 = Código da Fonte 
-                 si198_saldoinicialctbfonte = float8 = Saldo no inicio do mes 
-                 si198_naturezasaldoinicialctbfonte = varchar(1) = Natureza do saldo inicial 
+                 si198_codfontrecursos = int8 = Código da Fonte
+                 si198_saldoinicialctbfonte = float8 = Saldo no inicio do mes
+                 si198_naturezasaldoinicialctbfonte = varchar(1) = Natureza do saldo inicial
                  si198_totaldebitosctbfonte = float8 = Total de débitos
-                 si198_totalcreditosctbfonte = float8 = Total de créditos  
-                 si198_saldofinalctbfonte = float8 = Saldo final no mês 
-                 si198_naturezasaldofinalctbfonte = varchar(1) = Natureza do saldo final 
-                 si198_mes = int8 = si198_mes 
-                 si198_instit = int8 = si198_instit 
+                 si198_totalcreditosctbfonte = float8 = Total de créditos
+                 si198_saldofinalctbfonte = float8 = Saldo final no mês
+                 si198_naturezasaldofinalctbfonte = varchar(1) = Natureza do saldo final
+                 si198_mes = int8 = si198_mes
+                 si198_instit = int8 = si198_instit
                  ";
 
 		//funcao construtor da classe
@@ -233,8 +235,7 @@
 			if ($si198_sequencial == "" || $si198_sequencial == null) {
 				$result = db_query("select nextval('balancete282023_si198_sequencial_seq')");
 				if ($result == false) {
-					$this->erro_banco = str_replace("
-", "", @pg_last_error());
+					$this->erro_banco = str_replace("", "", @pg_last_error());
 					$this->erro_sql = "Verifique o cadastro da sequencia: balancete282023_si198_sequencial_seq do campo: si198_sequencial";
 					$this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
 					$this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
@@ -267,43 +268,42 @@
 				return false;
 			}
 			$sql = "insert into balancete282023(
-                                       si198_sequencial 
-                                      ,si198_tiporegistro 
-                                      ,si198_contacontabil 
+                                       si198_sequencial
+                                      ,si198_tiporegistro
+                                      ,si198_contacontabil
                                       ,si198_codfundo
                                       ,si198_codctb
                                       ,si198_codfontrecursos
-                                      ,si198_saldoinicialctbfonte 
-                                      ,si198_naturezasaldoinicialctbfonte 
-                                      ,si198_totaldebitosctbfonte 
-                                      ,si198_totalcreditosctbfonte 
-                                      ,si198_saldofinalctbfonte 
-                                      ,si198_naturezasaldofinalctbfonte 
-                                      ,si198_mes 
+                                      ,si198_saldoinicialctbfonte
+                                      ,si198_naturezasaldoinicialctbfonte
+                                      ,si198_totaldebitosctbfonte
+                                      ,si198_totalcreditosctbfonte
+                                      ,si198_saldofinalctbfonte
+                                      ,si198_naturezasaldofinalctbfonte
+                                      ,si198_mes
                                       ,si198_instit
                                       ,si198_reg10
                        )
                 values (
-                                $this->si198_sequencial 
-                               ,$this->si198_tiporegistro 
-                               ,$this->si198_contacontabil 
+                                $this->si198_sequencial
+                               ,$this->si198_tiporegistro
+                               ,$this->si198_contacontabil
                                ,'$this->si198_codfundo'
                                ,$this->si198_codctb
                                ,$this->si198_codfontrecursos
-                               ,$this->si198_saldoinicialctbfonte 
-                               ,'$this->si198_naturezasaldoinicialctbfonte' 
-                               ,$this->si198_totaldebitosctbfonte 
-                               ,$this->si198_totalcreditosctbfonte 
-                               ,$this->si198_saldofinalctbfonte 
-                               ,'$this->si198_naturezasaldofinalctbfonte' 
-                               ,$this->si198_mes 
+                               ,$this->si198_saldoinicialctbfonte
+                               ,'$this->si198_naturezasaldoinicialctbfonte'
+                               ,$this->si198_totaldebitosctbfonte
+                               ,$this->si198_totalcreditosctbfonte
+                               ,$this->si198_saldofinalctbfonte
+                               ,'$this->si198_naturezasaldofinalctbfonte'
+                               ,$this->si198_mes
                                ,$this->si198_instit
                                ,$this->si198_reg10
                       )";
 			$result = db_query($sql);
 			if ($result == false) {
-				$this->erro_banco = str_replace("
-", "", @pg_last_error());
+				$this->erro_banco = str_replace("", "", @pg_last_error());
 				if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
 					$this->erro_sql = "balancete282023 ($this->si198_sequencial) nao Incluído. Inclusao Abortada.";
 					$this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";

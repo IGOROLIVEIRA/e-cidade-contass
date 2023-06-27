@@ -65,7 +65,13 @@ if($q60_modalvara == 9) {
 	$sNomeRelatorio   = "tmp/geraAlvara{$sDescrDoc}.pdf";
 	$sCaminhoSalvoSxw = "tmp/alvara_{$sDescrDoc}_{$oGet->inscricao}.sxw";
 
-	$sAgt = "issqn/alvara.agt";
+  $codInstituicao = array(Instituicao::COD_CLI_LAGOADOSPATOS);
+
+  $sAgt = "issqn/alvara.agt";
+
+  if (in_array($oInstit->getCodigoCliente(), $codInstituicao)) {
+    $sAgt = "issqn/alvara_modelo001.agt";
+  }
 
 	/**
    * Retorna se o Alvara pode ser Impresso

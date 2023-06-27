@@ -58,12 +58,22 @@ where
     and pc68_sequencial is not null
     order by pc68_sequencial asc");
 
-$tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
 
 
 $rsResultado = db_query("select pc80_criterioadjudicacao from pcproc where pc80_codproc = {$codigo_preco}");
 $criterio    = db_utils::fieldsMemory($rsResultado, 0)->pc80_criterioadjudicacao;
 $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : "";
+
+$rsTipopreco = db_query("select si01_tipoprecoreferencia from precoreferencia where si01_processocompra = {$codigo_preco}");
+$resultTipopreco    = db_utils::fieldsMemory($rsTipopreco, 0)->si01_tipoprecoreferencia;
+
+if($resultTipopreco==3){
+    $tipoReferencia = " (min(pc23_vlrun)) ";
+}else if($resultTipopreco==2){
+    $tipoReferencia = " (max(pc23_vlrun)) ";
+}else{
+    $tipoReferencia = " (sum(pc23_vlrun)/count(pc23_orcamforne)) ";
+}
 
 /**
  * GET ITENS
@@ -118,7 +128,7 @@ ORDER BY pc11_seq) as x GROUP BY
                 pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq ) as matquan join
 (SELECT DISTINCT
                 pc11_seq,
-                {$tipoReferencia} as si02_vlprecoreferencia,
+                {$tipoReferencia} as si02_vltotalprecoreferencia,
                                      case when pc80_criterioadjudicacao = 1 then
                      round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
                      when pc80_criterioadjudicacao = 2 then
@@ -151,7 +161,7 @@ for ($iCont = 0; $iCont < pg_num_rows($resultpreco); $iCont++) {
        $oResult = db_utils::fieldsMemory($resultpreco, $iCont);
 
        //    if($quant_casas){
-       $lTotal = round($oResult->si02_vlprecoreferencia, 2) * $oResult->pc11_quant;
+       $lTotal = round($oResult->si02_vltotalprecoreferencia * $oResult->pc11_quant, 2);
        $nTotalItens += $lTotal;
 }
 
@@ -182,22 +192,11 @@ WHERE pc80_codproc = $processodecompras";
 $resultDotacao = db_query($sqlDotacao);
 //db_criatabela($resultDotacao);exit;
 /**
- * BUSCO O TEXTO NO CADASTRO DE PARAGRAFOS
- *
- */
-$sqlparag = "select db02_texto AS db02_texto1
-	from db_documento 
-	inner join db_docparag on db03_docum = db04_docum
-	inner join db_tipodoc on db08_codigo  = db03_tipodoc
-	inner join db_paragrafo on db04_idparag = db02_idparag 
-	where db02_idparag = (SELECT db02_idparag
-FROM db_documento
-INNER JOIN db_docparag ON db03_docum = db04_docum
-INNER JOIN db_tipodoc ON db08_codigo = db03_tipodoc
-INNER JOIN db_paragrafo ON db04_idparag = db02_idparag
-WHERE db02_descr LIKE 'DECLARAÇÃO DE REC. ORC. E FINANCEIRO TEXTO1') and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
-$resparag = pg_query($sqlparag);
-db_fieldsmemory( $resparag, 0 );
+* BUSCO O TEXTO NO CADASTRO DE PARAGRAFOS
+*
+*/
+$sqlparag = "select db02_texto from db_paragrafo inner join db_docparag on db02_idparag = db04_idparag inner join db_documento on db04_docum = db03_docum where db03_descr='DECLARACAO DE REC. ORC. E FINANCEIRO1' and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
+$resparag = db_query($sqlparag);
 $head5 = "DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO";
 
 
@@ -216,8 +215,10 @@ $pdf->Cell(160,6,"DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO",0,1,"C",0);
 $pdf->ln($alt+3);
 $pdf->x = 30;
 $pdf->SetFont('arial','',11);
-$pdf->MultiCell(160,5,"     Examinando  as  Dotações  constantes  do  orçamento  fiscal  e  levando-se  em  conta  o objeto que se  pretende  contratar, ".mb_strtoupper($objeto,'ISO-8859-1')." , no valor total estimado de R$ ".trim(db_formatar($nTotalItens,'f'))." em atendimento aos dispositivos da Lei 8666/93, informo que existe dotações das quais correrão a despesas:",0,"J",0);
-
+if(pg_num_rows($resparag) != 0){
+    $paragr1 = db_utils::fieldsMemory($resparag, 0);
+    eval($paragr1->db02_texto);
+}
 $pdf->ln($alt+3);
 $pdf->x = 30;
 
@@ -246,8 +247,10 @@ $pdf->ln($alt+3);
 
 $pdf->setfont('arial','',11);
 $pdf->x = 30;
-
-$pdf->MultiCell(160,5,"que as despesas atendem ao disposto nos artigos 16 e 17 da Lei Complementar Federal 101/2000, uma vez, foi considerado o impacto na execução orçamentária e também está de acordo com a previsão do Plano Plurianual e da Lei de Diretrizes Orçamentárias para exercício. Informamos ainda que foi verificado o impacto financeiro da despesa e sua inclusão na programação deste órgão.",0,"J",0);
+if(pg_num_rows($resparag) != 0){
+    $paragr1 = db_utils::fieldsMemory($resparag, 1);
+    eval($paragr1->db02_texto);
+}
 $pdf->ln($alt+9);
 
 $data = db_getsession('DB_datausu');
@@ -255,9 +258,9 @@ $sDataExtenso     = db_dataextenso($data);
 $pdf->x = 30;
 $pdf->cell(160,4,$munic.','.strtoupper($sDataExtenso)                     ,0,1,"C",0);
 $pdf->ln($alt+20);
-$pdf->cell(95,4,"________________________"                                ,0,0,"C",0);
-$pdf->cell(95,4,"________________________"                                ,0,1,"C",0);
-$pdf->cell(95,5,"Serviço Contábil"                                        ,0,0,"C",0);
-$pdf->cell(95,5,"Serviço Financeiro"                                      ,0,0,"C",0);
+if(pg_num_rows($resparag) != 0){
+    $paragr1 = db_utils::fieldsMemory($resparag, 2);
+    eval($paragr1->db02_texto);
+}
 
 $pdf->Output();

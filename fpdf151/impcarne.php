@@ -265,6 +265,20 @@ class db_impcarne extends cl_assinatura
     public $numpre = null;
     public $valtotal = null;
 
+    // VARIAVEIS PARA EMISSAO PRECO REFERENCIA
+
+     public $inscricaoestadualinstituicao = 0;
+     public $codpreco = 0;
+     public $precoreferencia = 0;
+     public $datacotacao = 0;
+     public $pc80_tipoprocesso = 0;
+     public $pc80_criterioadjudicacao = 0;
+     public $impjust = 0;
+     public $tipoprecoreferencia = 0;
+     public $rsLotes = null;
+     public $sqlitens = null;
+
+
     //////  VARIÁVEIS PARA EMISSAO DE ALVARÁ
 
     public $cabecalhoDet = null;
@@ -505,6 +519,12 @@ class db_impcarne extends cl_assinatura
     public $Scodemp = null;         // descriï¿½ï¿½o da anulaï¿½ï¿½o
     public $resumo_item = null;         // resumo de item de SC em aut. de licitaï¿½ï¿½o
     public $informa_adic = null;         // informaï¿½ï¿½es adicionais de autorizaï¿½ï¿½o: PC - aut. de processo de compras
+    public $unid = null; // unidade do item
+    public $servico = null; // tipo servico
+    public $servicoquantidade = null; // forma de controle do item
+    public $autori = null; // Numero da autorizacao
+    public $e60_emiss = null; // data da emissao do empenho
+    public $pc01_complmater = null; //Descricao do complimento do item
     //                                        AU - somente autorizaï¿½ï¿½o
     public $obs_ordcom_orcamval = null;      // Observacao de ordem de compra lanï¿½a valores
 

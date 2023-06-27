@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Público para Gestão Municipal
  *  Copyright (C) 2014  DBseller Serviços de Informática
@@ -463,12 +463,21 @@ function js_retornoAnularOrdem(oAjax){
     if (oJson.status == 1) {
 
          alert('Itens anulados com sucesso.');
+         js_reimprime_ordem();
          js_reset();
          js_pesquisa_matordem();
-
     }else{
       alert(js_urldecode(oJson.mensagem))
     }
+}
+
+function js_reimprime_ordem() {
+    const codigoOrdem = document.querySelector('#m51_codordem');
+
+     if(confirm('Deseja imprimir a ordem de compra?')){
+          jan = window.open('emp2_ordemcompra002.php?cods=' + codigoOrdem.value ,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+          jan.moveTo(0,0);
+	 }
 }
 js_pesquisa_matordem();
 function js_reset() {
@@ -477,4 +486,5 @@ function js_reset() {
   $('dados').innerHTML = '';
 
 }
+
 </script>

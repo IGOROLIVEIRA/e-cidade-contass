@@ -98,7 +98,7 @@ class EventoS2200 extends EventoBase
             $oDadosAPI->evtAdmissao->deficiencia->infoCota = empty($oDados->infocota) ? null : $oDados->infocota;
             $oDadosAPI->evtAdmissao->deficiencia->observacao = empty($oDados->observacao) ? null : $oDados->observacao;
 
-            $oDadosAPI->evtAdmissao->dependente = $this->buscarDependentes($oDados->matricula, $oDados->tpRegPrev);
+            $oDadosAPI->evtAdmissao->dependente = $this->buscarDependentes($oDados->matricula, $oDados->tpregprev);
 
             if (empty($oDadosAPI->evtAdmissao->dependente)) {
                 unset($oDadosAPI->evtAdmissao->dependente);

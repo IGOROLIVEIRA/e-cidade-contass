@@ -1651,7 +1651,7 @@ function db_indexOf($str, $proc)
  *                                    </pre>
  * @return mixed                      HTML com a estrutura do datagrid
  */
-function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_self", $campos_layer = "", $NomeForm = "NoMe", $variaveis_repassa = array(), $automatico = true, $totalizacao = array())
+function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_self", $campos_layer = "", $NomeForm = "NoMe", $variaveis_repassa = array (), $automatico = true, $totalizacao = array(), $marcar = false) 
 {
     global $BrowSe;
     //cor do cabecalho
@@ -2110,6 +2110,9 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
     if ($NumRows > 0) {
 
         $sHtml .= "<tr>";
+        if($marcar === true) {
+           $sHtml .= "<td><input type='checkbox' id='select-all'></td>";
+        }
 
         // se foi passado funcao
         if ($campos_layer != "") {
@@ -2163,6 +2166,10 @@ function db_lovrot($query, $numlinhas, $arquivo = "", $filtro = "%", $aonde = "_
     for ($i = 0; $i < $NumRows; $i++) {
 
         $sHtml .= '<tr>';
+
+        if($marcar === true) {
+          $sHtml .= "<td><input type='checkbox' class='checkbox'></td>";
+        }
 
         if ($arquivo == "()") {
 
@@ -2843,6 +2850,7 @@ function db_extenso($valor = 0, $maiusculas = false)
 
     $valor = number_format($valor, 2, ".", ".");
     $inteiro = explode(".", $valor);
+
     for ($i = 0; $i < count($inteiro); $i++)
         for ($ii = strlen($inteiro[$i]); $ii < 3; $ii++)
             $inteiro[$i] = "0" . $inteiro[$i];
@@ -2869,14 +2877,8 @@ function db_extenso($valor = 0, $maiusculas = false)
 
     if (!$maiusculas) {
         return ($rt ? $rt : "zero");
-    } else { /*
-                  Trocando o " E " por " e ", fica muito + apresentável!
-                  Rodrigo Cerqueira, rodrigobc@fte.com.br
-                  */
-        if ($rt)
-            $rt = preg_replace(" E ", " e ", ucwords($rt));
-
-        return (($rt) ? ($rt) : "Zero");
+    } else {
+        return ($rt ? $rt : "Zero");
     }
 
 }

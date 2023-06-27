@@ -193,13 +193,13 @@ if (!empty($oGet->lEstorno) && $oGet->lEstorno == 'true') {
             </td>
           </tr>
           <tr>
-          <td title="<?php echo $Tt52_dtaqu ?>"><?= $lEstorno ? "Data do estorno: " : $Lt52_dtaqu; ?></td>
-          <td colspan="6">
-            <?php
-            db_inputdata('t52_dtaqu', @$t52_dtaqu_dia, @$t52_dtaqu_mes, @$t52_dtaqu_ano, true, 'text', $db_opcao, "");
-            ?>
-          </td>
-        </tr>
+            <td title="<?php echo $Tt52_dtaqu ?>"><?= $lEstorno ? "Data do estorno: " : $Lt52_dtaqu; ?></td>
+            <td colspan="6">
+              <?php
+              db_inputdata('t52_dtaqu', @$t52_dtaqu_dia, @$t52_dtaqu_mes, @$t52_dtaqu_ano, true, 'text', $db_opcao, "");
+              ?>
+            </td>
+          </tr>
           <tr>
             <td nowrap title="<?php echo $Te139_justificativa; ?>" colspan="2">
               <fieldset style="margin-top:10px;">
@@ -343,8 +343,8 @@ if (!empty($oGet->lEstorno) && $oGet->lEstorno == 'true') {
        */
       if (empty($('t52_dtaqu').value)) {
 
-      alert(_M(MENSAGENS + 'data_nao_informada'));
-      return false;
+        alert(_M(MENSAGENS + 'data_nao_informada'));
+        return false;
       }
 
       /**

@@ -386,6 +386,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     adesaoregprecos.si06_numeroadm as numeroproc,
                     liclicita.l20_codigo,
                     liclicita.l20_edital,
+                    manutencaolicitacao.manutlic_editalant,
                     liclicita.l20_anousu,
                     liclicita.l20_codepartamento,
                     liclicita.l20_naturezaobjeto,
@@ -440,13 +441,15 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
 					  lic211_processo,
 					  lic211_anousu,
                       si06_departamento,
-                      manutac_codunidsubanterior
+                      manutac_codunidsubanterior,
+                      manutac_numeroant
                 FROM acordoitem
                 INNER JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
                 INNER JOIN acordo ON ac16_sequencial = ac26_acordo
                 LEFT JOIN acordoliclicitem ON ac24_acordoitem = ac20_sequencial
                 LEFT JOIN liclicitem ON l21_codigo = ac24_liclicitem
                 LEFT JOIN liclicita ON l21_codliclicita = l20_codigo
+                LEFT JOIN manutencaolicitacao on manutlic_licitacao = l20_codigo
                 LEFT JOIN liclicitaoutrosorgaos ON lic211_sequencial = ac16_licoutroorgao
                 LEFT JOIN db_departorg ON l20_codepartamento = db01_coddepto
                 AND db01_anousu = " . db_getsession("DB_anousu") . "
@@ -557,6 +560,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos10->si83_codunidadesubresp = $sCodUnidadeM;
             }
 
+            /*
+            *verifica se existe codigo anterior para processo
+            *OC20603
+            */
+            if($oDados10->manutlic_editalant != ''){
+                $oDados10->l20_edital = $oDados10->manutlic_editalant;
+            }
+
             $clcontratos10->si83_tiporegistro = 10; //campo 01
             $clcontratos10->si83_codcontrato = $oDados10->ac16_sequencial; //campo 03
             $clcontratos10->si83_codorgao = $sCodorgao; //campo 04
@@ -565,7 +576,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             } else {
                 $clcontratos10->si83_codunidadesub = $sCodUnidade; //campo 05
             }
-            $clcontratos10->si83_nrocontrato = $oDados10->ac16_numeroacordo; //campo 06
+            $clcontratos10->si83_nrocontrato = $oDados10->manutac_acordo =='' ? $oDados10->ac16_numeroacordo : $oDados10->manutac_acordo; //campo 06
             $clcontratos10->si83_exerciciocontrato = $oDados10->ac16_anousu; //campo 07
             $clcontratos10->si83_dataassinatura = $oDados10->ac16_dataassinatura; //campo 08
             $clcontratos10->si83_contdeclicitacao = $oDados10->contdeclicitacao; //campo 09
@@ -655,14 +666,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos10->si83_periodicidadereajuste = $oDados10->ac16_periodoreajuste; //campo 24
                 $clcontratos10->si83_tipocriterioreajuste = $oDados10->ac16_criterioreajuste; //campo 25
                 if ($oDados10->ac16_criterioreajuste == 2 || $oDados10->ac16_criterioreajuste == 3) {
-                    $clcontratos10->si83_dscreajuste = $oDados10->ac16_descricaoreajuste; //campo 28
+                    $clcontratos10->si83_dscreajuste = $this->removeCaracteres($oDados10->ac16_descricaoreajuste); //campo 28
                     $clcontratos10->si83_indiceunicoreajuste = 0; //campo 27
                     $clcontratos10->si83_dscindice = ''; //campo 26
                 } else {
                     $clcontratos10->si83_dscreajuste = ''; //campo 28
                     $clcontratos10->si83_indiceunicoreajuste = $oDados10->ac16_indicereajuste; //campo 27
                     if ($oDados10->ac16_indicereajuste == 6) {
-                        $clcontratos10->si83_dscindice = $oDados10->ac16_descricaoindice; //campo 26
+                        $clcontratos10->si83_dscindice = $this->removeCaracteres($oDados10->ac16_descricaoindice); //campo 26
                     } else {
                         $clcontratos10->si83_dscindice = ''; //campo 26
                     }
@@ -706,13 +717,13 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     * Buscas os lote do item
                     */
                     if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3) {
-                        $sSqlItemLote = "select l04_descricao 
-                        from liclicitemlote 
-                        inner join liclicitem on l21_codigo = l04_liclicitem 
-                        inner join liclicita on l21_codliclicita = l20_codigo 
-                        inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem 
-                        inner join solicitem on pc11_codigo = pc81_solicitem 
-                        inner join solicitempcmater on pc16_solicitem =pc11_codigo 
+                        $sSqlItemLote = "select l04_descricao
+                        from liclicitemlote
+                        inner join liclicitem on l21_codigo = l04_liclicitem
+                        inner join liclicita on l21_codliclicita = l20_codigo
+                        inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem
+                        inner join solicitem on pc11_codigo = pc81_solicitem
+                        inner join solicitempcmater on pc16_solicitem =pc11_codigo
                         where l20_codigo = " . $oDados10->ac16_licitacao . " and pc16_codmater = " . $iCodPcmater;
 
                         $rsItemLote = db_query($sSqlItemLote);
@@ -763,7 +774,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         $aDadosAgrupados[$sHash] = $oContrato11;
                     } else {
                         $aDadosAgrupados[$sHash]->si84_quantidadeitem += $oItens->getQuantidade();
-                        $aDadosAgrupados[$sHash]->si84_valorunitarioitem += $oItens->getValorUnitario();
+                        $aDadosAgrupados[$sHash]->si84_valorunitarioitem = $oItens->getValorUnitario();
                     }
                 }
 
@@ -893,7 +904,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $clcontratos12->si85_codorgao = $oDadosReg12->si85_codorgao; //campo 03
                     $clcontratos12->si85_codunidadesub = $oDadosReg12->si85_codunidadesub; //campo 04
                     $clcontratos12->si85_codfuncao = $oDadosReg12->si85_codfuncao; //campo 05
-                    $clcontratos12->si85_codsubfuncao = $oDadosReg12->si85_codsubfuncao; //campo 06 
+                    $clcontratos12->si85_codsubfuncao = $oDadosReg12->si85_codsubfuncao; //campo 06
                     $clcontratos12->si85_codprograma = $oDadosReg12->si85_codprograma; //campo 07
                     $clcontratos12->si85_idacao = $oDadosReg12->si85_idacao; //campo 08
                     $clcontratos12->si85_idsubacao = $oDadosReg12->si85_idsubacao; //campo 09
@@ -970,6 +981,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 ac26_descricaoindice,
                 ac02_acordonatureza,
                 manutac_codunidsubanterior,
+                manutac_numeroant,
                 ac35_datareferencia
         FROM acordoposicaoaditamento
         INNER JOIN acordoposicao ON ac26_sequencial = ac35_acordoposicao
@@ -1031,7 +1043,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 } else {
                     $clcontratos20->si87_codunidadesub = $oDados20->manutac_codunidsubanterior; //campo 04
                 }
-                $clcontratos20->si87_nrocontrato = $oDados20->ac16_numero; //campo 05
+                $clcontratos20->si87_nrocontrato = $oDados20->manutac_numeroant == '' ? $oDados20->ac16_numero : $oDados20->manutac_numeroant; //campo 05
                 $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura; //campo 06
                 $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento; //campo 07
                 $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo; //campo 08
@@ -1051,7 +1063,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $clcontratos20->si87_indiceunicoreajuste = ''; //campo 14
                 }
                 if ($oDados20->ac26_indicereajuste == '6') {
-                    $clcontratos20->si87_dscreajuste = $oDados20->ac26_descricaoindice; //campo 15
+                    $clcontratos20->si87_dscreajuste = $this->removeCaracteres($oDados20->ac26_descricaoindice); //campo 15
                 } else {
                     $clcontratos20->si87_dscreajuste = ''; //campo 15
                 }
@@ -1082,7 +1094,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
                             $valortotaladitado += $oAcordoItem->getValorAditado();
                         } else {
-                            //CALCULO O VALOR DO PRIMEIRO REGISTRO 20 
+                            //CALCULO O VALOR DO PRIMEIRO REGISTRO 20
                             //2 = reequilibrio 5 = reajuste
                             if ($oAcordoPosicao->getTipo() == 2 || $oAcordoPosicao->getTipo() == 5) {
                                 $iQuantidadeAditada = $oAcordoItem->getQuantidade();
@@ -1160,20 +1172,20 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             * Buscas os lote do item
                             */
                             if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3) {
-                                $sSqlItemLote = "select l04_descricao 
-                                from liclicitemlote 
-                                inner join liclicitem on l21_codigo = l04_liclicitem 
-                                inner join liclicita on l21_codliclicita = l20_codigo 
-                                inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem 
-                                inner join solicitem on pc11_codigo = pc81_solicitem 
-                                inner join solicitempcmater on pc16_solicitem =pc11_codigo 
+                                $sSqlItemLote = "select l04_descricao
+                                from liclicitemlote
+                                inner join liclicitem on l21_codigo = l04_liclicitem
+                                inner join liclicita on l21_codliclicita = l20_codigo
+                                inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem
+                                inner join solicitem on pc11_codigo = pc81_solicitem
+                                inner join solicitempcmater on pc16_solicitem =pc11_codigo
                                 where l20_codigo = " . $oDados10->ac16_licitacao . " and pc16_codmater = " . $iCodPcmater;
 
                                 $rsItemLote = db_query($sSqlItemLote);
                                 $oItemLote = db_utils::fieldsMemory($rsItemLote, 0);
                             }
 
-                            /** 
+                            /**
                              * busca itens obra;
                              */
                             $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
@@ -1245,7 +1257,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                 $clcontratos21->si88_coditemsinapi = null; //campo 06
                                 $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela; //campo 08
+                                $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
                             }
                             $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                             $clcontratos21->incluir(null);
@@ -1311,7 +1323,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                     $clcontratos21->si88_coditemsinapi = null; //campo 06
                                     $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                    $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela; //campo 08
+                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
                                 }
                                 $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                                 $clcontratos21->incluir(null);
@@ -1326,7 +1338,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             }
 
             /*
-            *SOMENTE DOS TIPOS 11 e 14 
+            *SOMENTE DOS TIPOS 11 e 14
             */ else {
                 //var_dump($oAcordoPosicao->getTipo());
                 $clcontratos20->si87_tiporegistro = 20; //campo 01
@@ -1337,7 +1349,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 } else {
                     $clcontratos20->si87_codunidadesub = $oDados20->manutac_codunidsubanterior; //campo 04
                 }
-                $clcontratos20->si87_nrocontrato = $oDados20->ac16_numero; //campo 05
+                $clcontratos20->si87_nrocontrato = $oDados20->manutac_numeroant =='' ? $oDados20->ac16_numero : $oDados20->manutac_numeroant; //campo 05
                 $clcontratos20->si87_dtassinaturacontoriginal = $oDados20->ac16_dataassinatura; //campo 06
                 $clcontratos20->si87_nroseqtermoaditivo = $oDados20->ac26_numeroaditamento; //campo 07
                 $clcontratos20->si87_dtassinaturatermoaditivo = $oDados20->ac35_dataassinaturatermoaditivo; //campo 08
@@ -1357,7 +1369,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $clcontratos20->si87_indiceunicoreajuste = ''; //campo 14
                 }
                 if ($oDados20->ac26_indicereajuste == '6') {
-                    $clcontratos20->si87_dscreajuste = $oDados20->ac26_descricaoindice; //campo 15
+                    $clcontratos20->si87_dscreajuste = $this->removeCaracteres($oDados20->ac26_descricaoindice); //campo 15
                 } else {
                     $clcontratos20->si87_dscreajuste = ''; //campo 15
                 }
@@ -1386,7 +1398,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         if ($matServico->pc01_servico == "t" && $matServico->ac20_servicoquantidade == "f") {
                             $valortotaladitado += $oAcordoItem->getValorAditado();
                         } else {
-                            //CALCULO O VALOR DO PRIMEIRO REGISTRO 20 
+                            //CALCULO O VALOR DO PRIMEIRO REGISTRO 20
                             //2 = reequilibrio 5 = reajuste
                             if ($oAcordoPosicao->getTipo() == 2 || $oAcordoPosicao->getTipo() == 5) {
                                 $iQuantidadeAditada = $oAcordoItem->getQuantidade();
@@ -1458,20 +1470,20 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             * Buscas os lote do item
                             */
                             if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3) {
-                                $sSqlItemLote = "select l04_descricao 
-                                from liclicitemlote 
-                                inner join liclicitem on l21_codigo = l04_liclicitem 
-                                inner join liclicita on l21_codliclicita = l20_codigo 
-                                inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem 
-                                inner join solicitem on pc11_codigo = pc81_solicitem 
-                                inner join solicitempcmater on pc16_solicitem =pc11_codigo 
+                                $sSqlItemLote = "select l04_descricao
+                                from liclicitemlote
+                                inner join liclicitem on l21_codigo = l04_liclicitem
+                                inner join liclicita on l21_codliclicita = l20_codigo
+                                inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem
+                                inner join solicitem on pc11_codigo = pc81_solicitem
+                                inner join solicitempcmater on pc16_solicitem =pc11_codigo
                                 where l20_codigo = " . $oDados10->ac16_licitacao . " and pc16_codmater = " . $iCodPcmater;
 
                                 $rsItemLote = db_query($sSqlItemLote);
                                 $oItemLote = db_utils::fieldsMemory($rsItemLote, 0);
                             }
 
-                            /** 
+                            /**
                              * busca itens obra;
                              */
                             $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
@@ -1549,7 +1561,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                 $clcontratos21->si88_coditemsinapi = null; //campo 06
                                 $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela; //campo 08
+                                $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
                             }
                             $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                             $clcontratos21->incluir(null);
@@ -1614,7 +1626,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                     $clcontratos21->si88_coditemsinapi = null; //campo 06
                                     $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                    $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela; //campo 08
+                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
                                 }
                                 $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                                 $clcontratos21->incluir(null);
@@ -1654,20 +1666,20 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 * Buscas os lote do item
                                 */
                                 if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3) {
-                                    $sSqlItemLote = "select l04_descricao 
-                                    from liclicitemlote 
-                                    inner join liclicitem on l21_codigo = l04_liclicitem 
-                                    inner join liclicita on l21_codliclicita = l20_codigo 
-                                    inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem 
-                                    inner join solicitem on pc11_codigo = pc81_solicitem 
-                                    inner join solicitempcmater on pc16_solicitem =pc11_codigo 
+                                    $sSqlItemLote = "select l04_descricao
+                                    from liclicitemlote
+                                    inner join liclicitem on l21_codigo = l04_liclicitem
+                                    inner join liclicita on l21_codliclicita = l20_codigo
+                                    inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem
+                                    inner join solicitem on pc11_codigo = pc81_solicitem
+                                    inner join solicitempcmater on pc16_solicitem =pc11_codigo
                                     where l20_codigo = " . $oDados10->ac16_licitacao . " and pc16_codmater = " . $iCodPcmater;
 
                                     $rsItemLote = db_query($sSqlItemLote);
                                     $oItemLote = db_utils::fieldsMemory($rsItemLote, 0);
                                 }
 
-                                /** 
+                                /**
                                  * busca itens obra;
                                  */
                                 $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
@@ -1737,7 +1749,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                     $clcontratos21->si88_coditemsinapi = null; //campo 06
                                     $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                    $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela; //campo 08
+                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
                                 }
                                 $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                                 $clcontratos21->incluir(null);
@@ -1767,20 +1779,20 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 * Buscas os lote do item
                                 */
                                 if ($oDados10->ac16_origem == self::ORIGEM_LICITACAO && $oDados10->l20_tipojulg == 3) {
-                                    $sSqlItemLote = "select l04_descricao 
-                                    from liclicitemlote 
-                                    inner join liclicitem on l21_codigo = l04_liclicitem 
-                                    inner join liclicita on l21_codliclicita = l20_codigo 
-                                    inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem 
-                                    inner join solicitem on pc11_codigo = pc81_solicitem 
-                                    inner join solicitempcmater on pc16_solicitem =pc11_codigo 
+                                    $sSqlItemLote = "select l04_descricao
+                                    from liclicitemlote
+                                    inner join liclicitem on l21_codigo = l04_liclicitem
+                                    inner join liclicita on l21_codliclicita = l20_codigo
+                                    inner join pcprocitem on l21_codpcprocitem = pc81_codprocitem
+                                    inner join solicitem on pc11_codigo = pc81_solicitem
+                                    inner join solicitempcmater on pc16_solicitem =pc11_codigo
                                     where l20_codigo = " . $oDados10->ac16_licitacao . " and pc16_codmater = " . $iCodPcmater;
 
                                     $rsItemLote = db_query($sSqlItemLote);
                                     $oItemLote = db_utils::fieldsMemory($rsItemLote, 0);
                                 }
 
-                                /** 
+                                /**
                                  * busca itens obra;
                                  */
                                 $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
@@ -1851,7 +1863,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                     $clcontratos21->si88_coditemsinapi = null; //campo 06
                                     $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                    $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela; //campo 08
+                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
                                 }
                                 $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                                 $clcontratos21->incluir(null);
@@ -1877,7 +1889,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 }
                                 $iCodPcmater = $oAcordoItem->getMaterial()->getMaterial();
 
-                                /** 
+                                /**
                                  * busca itens obra;
                                  */
                                 $sqlItemobra = "select * from licitemobra where obr06_pcmater = $iCodPcmater";
@@ -1948,7 +1960,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                     $clcontratos21->si88_coditemsinapi = null; //campo 06
                                     $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                    $clcontratos21->si88_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela; //campo 08
+                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
                                 }
                                 $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                                 $clcontratos21->incluir(null);
@@ -1987,7 +1999,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         $clcontratos20->si87_nroseqtermoaditivo = $dados->ac26_numeroaditamento;
                         $clcontratos20->si87_dtassinaturatermoaditivo =  $dados->ac35_dataassinaturatermoaditivo;
                         $clcontratos20->si87_tipotermoaditivo = $dados->si87_tipotermoaditivo;
-                        $clcontratos20->si87_dscalteracao = $dados->si87_dscalteracao;
+                        $clcontratos20->si87_dscalteracao = $this->removeCaracteres($dados->si87_dscalteracao);
                         $clcontratos20->si87_novadatatermino = $dados->si87_novadatatermino;
                         $clcontratos20->si87_tipoalteracaovalor = $dados->tipoalteracao;
                         $clcontratos20->si87_valoraditivo = $dados->valoraditamento;
@@ -2015,7 +2027,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                     $clcontratos21->si88_tipomaterial = $dados->si88_tipomaterial;
                     $clcontratos21->si88_coditemsinapi = $dados->si88_coditemsinapi;
                     $clcontratos21->si88_coditemsimcro = $dados->si88_coditemsimcro;
-                    $clcontratos21->si88_descoutrosmateriais = $dados->si88_descoutrosmateriais;
+                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($dados->si88_descoutrosmateriais);
                     $clcontratos21->si88_itemplanilha = $dados->si88_itemplanilha;
                     $clcontratos21->incluir(null);
 
@@ -2052,7 +2064,8 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
        si03_indicereajuste,
        si03_percentualreajuste,
        si03_descricaoindice,
-       manutac_codunidsubanterior
+       manutac_codunidsubanterior,
+       manutac_numeroant
         FROM apostilamento
         INNER JOIN acordo ON si03_acordo=ac16_sequencial
         LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
@@ -2095,7 +2108,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             } else {
                 $clcontratos30->si89_codunidadesub = $oDados30->manutac_codunidsubanterior; //campo 03
             }
-            $clcontratos30->si89_nrocontrato = $oDados30->ac16_numeroacordo; //campo 04
+            $clcontratos30->si89_nrocontrato = $oDados30->manutac_numeroant =='' ? $oDados30->ac16_numeroacordo : $oDados30->manutac_numeroant; //campo 04
             $clcontratos30->si89_dtassinaturacontoriginal = $oDados30->si03_dataassinacontrato; //campo 05
             $clcontratos30->si89_tipoapostila = $oDados30->si03_tipoapostila; //campo 06
             $clcontratos30->si89_nroseqapostila = $oDados30->si03_numapostilamento; //campo 07
@@ -2110,7 +2123,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos30->si89_indiceunicoreajuste = ''; //campo 12
             }
             if ($oDados30->si03_indicereajuste == '6') {
-                $clcontratos30->si89_dscreajuste = $oDados30->si03_descricaoindice; //campo 13
+                $clcontratos30->si89_dscreajuste = $this->removeCaracteres($oDados30->si03_descricaoindice); //campo 13
             } else {
                 $clcontratos30->si89_dscreajuste = ''; //campo 13
             }
@@ -2173,7 +2186,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos40->si91_codunidadesub              = $sCodUnidadeSub; //campo 03
             }
 
-            $clcontratos40->si91_nrocontrato                = $oDados40->ac16_numeroacordo; //campo 04
+            $clcontratos40->si91_nrocontrato                = $oDados40->manutac_acordo =='' ? $oDados40->ac16_numeroacordo : $oDados40->manutac_acordo; //campo 04
             $clcontratos40->si91_dtassinaturacontoriginal   = $oDados40->ac16_dataassinatura; //campo 05
             $clcontratos40->si91_datarescisao               = $oDados40->ac16_datarescisao; //campo 06
             $clcontratos40->si91_valorcancelamentocontrato  = $oDados40->ac16_valorrescisao; //campo 07

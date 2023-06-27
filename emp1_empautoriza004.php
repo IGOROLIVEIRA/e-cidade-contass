@@ -161,7 +161,23 @@ if (isset($incluir)) {
     $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$e54_numcgm} and z09_tipo = 1");
     db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
 
-    $e54_emiss   = date("Y-m-d", db_getsession("DB_datausu"));
+    // Mudança da OC19462
+    $e54_emiss = implode("-", array_reverse(explode("/", $e54_emiss)));
+
+    if ($sqlerro == false) {
+      if ($e54_emiss > date("Y-m-d", db_getsession("DB_datausu"))) {
+          $erro_msg = "Usuário: ALTERAÇÃO NÃO EFETUADA! A DATA DA AUTORIZAÇÃO NÃO PODE SER POSTERIOR A DATA DO SISTEMA";
+          $sqlerro = true;
+      }
+  }
+
+  if ($sqlerro == false) {
+      if (date("Y", strtotime($e54_emiss)) <> date("Y", db_getsession("DB_datausu"))) {
+          $erro_msg = "Usuário: ALTERAÇÃO NÃO EFETUADA! A DATA DA AUTORIZAÇÃO DEVE PERMANECER NO EXERCÍCIO ATUAL";
+          $sqlerro = true;
+      }
+  }
+	// Final da Mudança da Oc19462
 
     if ($e54_emiss < $z09_datacadastro) {
       $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
@@ -203,7 +219,7 @@ if (isset($incluir)) {
     $clempautoriza->e54_tipoautorizacao = $tipodeautorizacao;
     $clempautoriza->e54_adesaoregpreco = $e54_adesaoregpreco;
     $clempautoriza->e54_tipoorigem = $e54_tipoorigem;
-    $clempautoriza->e54_emiss   = date("Y-m-d", db_getsession("DB_datausu"));
+	$clempautoriza->e54_emiss = $e54_emiss; // Mudança referente a Oc19462
     $clempautoriza->e54_codtipo = $e54_codtipo;
     $clempautoriza->e54_instit  = db_getsession("DB_instit");
     $clempautoriza->e54_depto   = db_getsession("DB_coddepto");
@@ -310,7 +326,7 @@ if (isset($incluir)) {
     $clempautoriza->e54_adesaoregpreco = $e54_adesaoregpreco;
     $clempautoriza->e54_tipoautorizacao = $e54_tipoautorizacao;
     $clempautoriza->e54_tipoorigem = $e54_tipoorigem;
-    $clempautoriza->e54_emiss  = date("Y-m-d", db_getsession("DB_datausu"));
+    $clempautoriza->e54_emiss = $e54_emiss; // Mudança referente a Oc19462
     //db_msgbox(date("Y-m-d",db_getsession("DB_datausu")));
     $clempautoriza->e54_codtipo = $e54_codtipo;
     $clempautoriza->e54_instit = db_getsession("DB_instit");

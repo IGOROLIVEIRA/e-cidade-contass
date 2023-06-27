@@ -29,7 +29,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
 }
 
 ?>
-<fieldset style="width: 700px; margin-top: 0px;">
+<fieldset style="width: 650px; margin-top: 0px;">
   <legend><b>Informações do Orgão Gerenciador</b></legend>
   <form name="form1" method="post" action="">
     <center>
@@ -428,10 +428,10 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
 
   function js_pesquisasi06_processocompra(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('', 'db_iframe_pcproc', 'func_pcproc.php?lFiltroPrecoRef=1&filtrovinculo=true&funcao_js=parent.js_mostrapcproc1|pc80_codproc', 'Pesquisa', true);
+      js_OpenJanelaIframe('', 'db_iframe_pcproc', 'func_pcproc.php?lFiltroPrecoRef=1&adesaoregpreco=1&descontotabela=' + document.form1.si06_descontotabela.value + '&filtrovinculo=true&funcao_js=parent.js_mostrapcproc1|pc80_codproc', 'Pesquisa', true);
     } else {
       if (document.form1.si06_processocompra.value != '') {
-        js_OpenJanelaIframe('', 'db_iframe_pcproc', 'func_pcproc.php?lFiltroPrecoRef=1&filtrovinculo=true&pesquisa_chave=' + document.form1.si06_processocompra.value + '&funcao_js=parent.js_mostrapcproc', 'Pesquisa', false);
+        js_OpenJanelaIframe('', 'db_iframe_pcproc', 'func_pcproc.php?lFiltroPrecoRef=1&adesaoregpreco=1&descontotabela=' + document.form1.si06_descontotabela.value + '&filtrovinculo=true&pesquisa_chave=' + document.form1.si06_processocompra.value + '&funcao_js=parent.js_mostrapcproc', 'Pesquisa', false);
       }
     }
   }

@@ -16,6 +16,7 @@ require_once("classes/db_empempenho_classe.php");
 require_once("model/licitacao.model.php");
 
 db_app::import("configuracao.DBDepartamento");
+$envs = parse_ini_file('config/PNCP/.env', true);
 $oJson             = new services_json();
 $oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oErro             = new stdClass();
@@ -71,13 +72,19 @@ switch ($oParam->exec) {
                 $arraybensjson = json_encode(DBString::utf8_encode_all($oDados));
 
                 $rsApiPNCP = $clliclicitaPNCP->enviarContrato($arraybensjson);
-                //$rsApiPNCP = array(201, '//pncp.gov.br/pncp-api/v1/orgaos/17316563000196/contratos/2023/2x-content-type-options');
-
+                
                 if ($rsApiPNCP[0] == 201) {
-
+                    
                     $clempcontrolepncp = new cl_empempenhopncp();
-                    $sequencial = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 63));
-                    $e213_numerocontrolepncp = '17316563000196-2-' . str_pad($sequencial, 6, '0', STR_PAD_LEFT) . '/' . $oDadosEmpenho->anocontrato;
+                    
+                    //Ambiente de testes
+                    if($envs['APP_ENV'] === 'T'){
+                        $sequencial = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 70));
+                    }else{
+                    //Ambiente de Producao
+                        $sequencial = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 63));
+                    }
+                    $e213_numerocontrolepncp = db_utils::getCnpj() . '-2-' . str_pad($sequencial, 6, '0', STR_PAD_LEFT) . '/' . $oDadosEmpenho->anocontrato;
 
                     //monto o codigo do contrato no pncp
                     $clempcontrolepncp->e213_contrato = $aEmpenho->codigo;

@@ -23,7 +23,7 @@ class cl_balancete312023
   var $si243_codfundo = null;
   var $si243_naturezareceita = 0;
   var $si243_codfontrecursos = 0;
-  var $si243_emendaparlamentar = 0;
+  var $si243_codco = 0;
   var $si243_saldoinicialcre = 0;
   var $si243_naturezasaldoinicialcre = null;
   var $si243_totaldebitoscre = 0;
@@ -43,7 +43,7 @@ class cl_balancete312023
                  si243_codfundo = varchar(8) = si243_codfundo
                  si243_naturezareceita = int8 = si243_naturezareceita
                  si243_codfontrecursos = int8 = si243_codfontrecursos
-                 si243_emendaparlamentar = int4 = si243_emendaparlamentar
+                 si243_codco = int8 = si243_codco
                  si243_nrocontratoop = varchar(30) = si243_nrocontratoop,
                  si243_dataassinaturacontratoop = date = si243_dataassinaturacontratoop,
                  si243_saldoinicialcre = float8 = si243_saldoinicialcre
@@ -85,7 +85,6 @@ class cl_balancete312023
       $this->si243_codfundo = ($this->si243_codfundo == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_codfundo"] : $this->si243_codfundo);
       $this->si243_naturezareceita = ($this->si243_naturezareceita == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_naturezareceita"] : $this->si243_naturezareceita);
       $this->si243_codfontrecursos = ($this->si243_codfontrecursos == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_codfontrecursos"] : $this->si243_codfontrecursos);
-      $this->si243_emendaparlamentar = ($this->si243_emendaparlamentar == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_emendaparlamentar"] : $this->si243_emendaparlamentar);
       $this->si243_saldoinicialcre = ($this->si243_saldoinicialcre == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_saldoinicialcre"] : $this->si243_saldoinicialcre);
       $this->si243_naturezasaldoinicialcre = ($this->si243_naturezasaldoinicialcre == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_naturezasaldoinicialcre"] : $this->si243_naturezasaldoinicialcre);
       $this->si243_totaldebitoscre = ($this->si243_totaldebitoscre == "" ? @$GLOBALS["HTTP_POST_VARS"]["si243_totaldebitoscre"] : $this->si243_totaldebitoscre);
@@ -143,16 +142,7 @@ class cl_balancete312023
 
       return false;
     }
-    if ($this->si243_emendaparlamentar == null) {
-        $this->erro_sql = " Campo si243_emendaparlamentar não informado.";
-        $this->erro_campo = "si243_emendaparlamentar";
-        $this->erro_banco = "";
-        $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-        $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
-        $this->erro_status = "0";
 
-        return false;
-      }
     if ($this->si243_saldoinicialcre == null) {
       $this->erro_sql = " Campo si243_saldoinicialcre não informado.";
       $this->erro_campo = "si243_saldoinicialcre";
@@ -282,7 +272,7 @@ class cl_balancete312023
                                       ,si243_codfundo
                                       ,si243_naturezareceita
                                       ,si243_codfontrecursos
-                                      ,si243_emendaparlamentar
+                                      ,si243_codco
                                       ,si243_nrocontratoop
                                       ,si243_dataassinaturacontratoop
                                       ,si243_saldoinicialcre
@@ -302,7 +292,7 @@ class cl_balancete312023
                                ,'$this->si243_codfundo'
                                ,$this->si243_naturezareceita
                                ,$this->si243_codfontrecursos
-                               ,$this->si243_emendaparlamentar
+                               ,$this->si243_codco
                                ,".($this->si243_nrocontratoop == "null" || $this->si243_nrocontratoop == ""?"null":"'".$this->si243_nrocontratoop."'")."
                                ,".($this->si243_dataassinaturacontratoop == "null" || $this->si243_dataassinaturacontratoop == ""?"null":"'".$this->si243_dataassinaturacontratoop."'")."
                                ,$this->si243_saldoinicialcre
@@ -435,20 +425,7 @@ class cl_balancete312023
         return false;
       }
     }
-    if (trim($this->si243_emendaparlamentar) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si243_emendaparlamentar"])) {
-        $sql .= $virgula . " si243_emendaparlamentar = $this->si243_emendaparlamentar ";
-        $virgula = ",";
-        if (trim($this->si243_emendaparlamentar) == null) {
-          $this->erro_sql = " Campo si243_emendaparlamentar não informado.";
-          $this->erro_campo = "si243_emendaparlamentar";
-          $this->erro_banco = "";
-          $this->erro_msg = "Usuário: \n\n " . $this->erro_sql . " \n\n";
-          $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \n\n " . $this->erro_banco . " \n"));
-          $this->erro_status = "0";
 
-          return false;
-        }
-      }
     if (trim($this->si243_saldoinicialcre) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si243_saldoinicialcre"])) {
       $sql .= $virgula . " si243_saldoinicialcre = $this->si243_saldoinicialcre ";
       $virgula = ",";
@@ -690,7 +667,7 @@ class cl_balancete312023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -713,7 +690,7 @@ class cl_balancete312023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -729,7 +706,7 @@ class cl_balancete312023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -752,7 +729,7 @@ class cl_balancete312023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -761,6 +738,124 @@ class cl_balancete312023
     }
 
     return $sql;
+  }
+
+  function sql_query_vinculo_conta_orcamento($aContas)
+  {
+            $sSqlVinculoContaOrcamento = " SELECT DISTINCT c60_estrut
+                                c60_estrut,
+                                o15_codtri,
+                                op01_numerocontratoopc,
+                                op01_dataassinaturacop,
+                                c19_emparlamentar
+                                FROM orcreceita
+                            INNER JOIN conplanoorcamento on o70_codfon = c60_codcon and o70_anousu = c60_anousu
+                            INNER JOIN conplanoorcamentoanalitica ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                            INNER JOIN orctiporec ON c61_codigo = o15_codigo
+                            INNER JOIN contacorrentedetalhe ON c19_estrutural = c60_estrut AND c61_anousu = c19_conplanoreduzanousu
+                            LEFT JOIN taborc on taborc.k02_anousu=o70_anousu and taborc.k02_codrec=o70_codrec
+                            LEFT JOIN tabrec on tabrec.k02_codigo=taborc.k02_codigo
+                            LEFT JOIN placaixarec on k81_receita = tabrec.k02_codigo
+                            LEFT JOIN saltes ON k13_conta=k81_conta
+                            LEFT JOIN conplanoreduz on k13_reduz=conplanoreduz.c61_reduz and conplanoreduz.c61_anousu=c60_anousu
+                            LEFT JOIN conplanocontabancaria ON c56_codcon=conplanoreduz.c61_codcon and conplanoreduz.c61_anousu=c56_anousu
+                            LEFT JOIN contabancaria ON c56_contabancaria=db83_sequencial
+                            LEFT JOIN db_operacaodecredito ON db83_codigoopcredito=op01_sequencial
+                                WHERE substr(c60_estrut,1 ,1 ) in ('4')
+                                AND c19_reduz IN (" . implode(',', $aContas) . ")
+                                AND conplanoorcamentoanalitica.c61_instit = " . db_getsession('DB_instit') . "
+                                AND conplanoorcamentoanalitica.c61_anousu = " . db_getsession("DB_anousu");
+            return $sSqlVinculoContaOrcamento;
+  }
+
+  function sql_query_reg31_saldos($aContas, $nContaCorrente, $sEstrut, $nMes, $sWhereEncerramento, $whereEmenda)
+  {
+            $sSqlReg31saldos = " SELECT
+                (SELECT case when round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) = '0.00' then null else round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) end AS saldoinicial
+                FROM
+                    (SELECT
+                    (SELECT CASE WHEN c29_debito > 0 THEN c29_debito WHEN c29_credito > 0 THEN -1 * c29_credito ELSE 0 END AS saldoanterior
+                        FROM contacorrente
+                        INNER JOIN contacorrentedetalhe ON contacorrente.c17_sequencial = contacorrentedetalhe.c19_contacorrente
+                        INNER JOIN contacorrentesaldo ON contacorrentesaldo.c29_contacorrentedetalhe = contacorrentedetalhe.c19_sequencial
+                        AND contacorrentesaldo.c29_mesusu = 0 and contacorrentesaldo.c29_anousu = " . db_getsession("DB_anousu") . " and c19_conplanoreduzanousu = " . db_getsession("DB_anousu") . "
+                        WHERE c19_reduz IN (" . implode(',', $aContas) . ")
+                        AND c17_sequencial = {$nContaCorrente}
+                        {$whereEmenda}
+                        AND c19_estrutural = '{$sEstrut}') AS saldoimplantado,
+
+                    (SELECT sum(c69_valor) AS debito
+                        FROM conlancamval
+                        INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                        AND conlancam.c70_anousu = conlancamval.c69_anousu
+                        INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                        INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                        INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                        INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                        WHERE c28_tipo = 'D'
+                            AND DATE_PART('MONTH',c69_data) < " . $nMes . "
+                            AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
+                            AND c19_contacorrente = {$nContaCorrente}
+                            AND c19_reduz IN (" . implode(',', $aContas) . ")
+                            AND c19_estrutural = '{$sEstrut}'
+                            {$whereEmenda}
+                            {$sWhereEncerramento}
+                        GROUP BY c28_tipo) AS debitoatual,
+
+                    (SELECT sum(c69_valor) AS credito
+                        FROM conlancamval
+                        INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                        AND conlancam.c70_anousu = conlancamval.c69_anousu
+                        INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                        INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                        INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                        INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                        WHERE c28_tipo = 'C'
+                            AND DATE_PART('MONTH',c69_data) < " . $nMes . "
+                            AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
+                            AND c19_contacorrente = {$nContaCorrente}
+                            AND c19_reduz IN (" . implode(',', $aContas) . ")
+                            AND c19_estrutural = '{$sEstrut}'
+                            {$whereEmenda}
+                            {$sWhereEncerramento}
+                        GROUP BY c28_tipo) AS creditoatual) AS movi) AS saldoanterior,
+
+                (SELECT sum(c69_valor)
+                FROM conlancamval
+                INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                AND conlancam.c70_anousu = conlancamval.c69_anousu
+                INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                WHERE c28_tipo = 'C'
+                    AND DATE_PART('MONTH',c69_data) = " . $nMes . "
+                    AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
+                    AND c19_contacorrente = {$nContaCorrente}
+                    AND c19_reduz IN (" . implode(',', $aContas) . ")
+                    AND c19_estrutural = '{$sEstrut}'
+                    {$whereEmenda}
+                    {$sWhereEncerramento}
+                GROUP BY c28_tipo) AS creditos,
+
+                (SELECT sum(c69_valor)
+                FROM conlancamval
+                INNER JOIN conlancam ON conlancam.c70_codlan = conlancamval.c69_codlan
+                AND conlancam.c70_anousu = conlancamval.c69_anousu
+                INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+                INNER JOIN conhistdoc ON conlancamdoc.c71_coddoc = conhistdoc.c53_coddoc
+                INNER JOIN contacorrentedetalheconlancamval ON contacorrentedetalheconlancamval.c28_conlancamval = conlancamval.c69_sequen
+                INNER JOIN contacorrentedetalhe ON contacorrentedetalhe.c19_sequencial = contacorrentedetalheconlancamval.c28_contacorrentedetalhe
+                WHERE c28_tipo = 'D'
+                    AND DATE_PART('MONTH',c69_data) = " . $nMes . "
+                    AND DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . "
+                    AND c19_contacorrente = {$nContaCorrente}
+                    AND c19_reduz IN (" . implode(',', $aContas) . ")
+                    AND c19_estrutural = '{$sEstrut}'
+                    {$whereEmenda}
+                    {$sWhereEncerramento}
+                GROUP BY c28_tipo) AS debitos";
+        return $sSqlReg31saldos;
   }
 }
 

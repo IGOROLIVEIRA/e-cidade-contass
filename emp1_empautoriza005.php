@@ -73,6 +73,9 @@ $clpcparam                        = new cl_pcparam;
 $clconcarpeculiar                 = new cl_concarpeculiar;
 $oDaoEmpenhoProcessoAdminitrativo = new cl_empautorizaprocesso;
 
+// Informação acrescida referente a Oc19462
+$e54_emiss = implode("-", array_reverse(explode("/", $e54_emiss)));
+
 $sUrlEmpenho      = "emp1_empempenho001.php";
 $rsemparam = $clempparametro->sql_record($clempparametro->sql_query(db_getsession("DB_anousu")));
 
@@ -139,17 +142,53 @@ if (isset($alterar) && !$sqlerro) {
       }
     }
   }
-  if ($sqlerro == false) {
-    $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$e54_numcgm} and z09_tipo = 1");
-    db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
 
-    $e54_emiss = date("Y-m-d", db_getsession("DB_datausu"));
+  	// Alteracoes para Oc19462
+	  if ($sqlerro == false) {
+        $result_dtcadcgm = db_query("select z09_datacadastro from historicocgm where z09_numcgm = {$e54_numcgm} and z09_tipo = 1");
+        db_fieldsmemory($result_dtcadcgm, 0)->z09_datacadastro;
 
-    if ($e54_emiss < $z09_datacadastro) {
-      $erro_msg = "Usuário: A data de cadastro do CGM informado é superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
-      $sqlerro = true;
+        if ($e54_emiss < $z09_datacadastro) {
+            $erro_msg = "Usuário: A data de cadastro do CGM informado superior a data do procedimento que está sendo realizado. Corrija a data de cadastro do CGM e tente novamente!";
+            $sqlerro = true;
+        }
     }
+
+    if ($sqlerro == false) {
+        $result = $clorcreservaaut->sql_record(
+            $clorcreservaaut->sql_query_file(null, "o83_codres as o80_codres", "", "o83_autori = $e54_autori")
+        );
+      
+        if ($clorcreservaaut->numrows > 0) {
+            db_fieldsmemory($result, 0);
+            $result = $clorcreserva->sql_record(
+                $clorcreserva->sql_query_file($o80_codres)
+            );
+            
+            if ($clorcreserva->numrows > 0) {
+                db_fieldsmemory($result, 0);
+                if ($e54_emiss != $o80_dtini) {
+                    $erro_msg = "Usuário: DATA NÃO ALTERADA. Autorização possui Reserva de Saldo na Dotação. É necessário cancelar a Reserva para alterar a data da Autorização!";
+                    $sqlerro = true;
+                }
+            }
+        }
+    }
+
+    if ($sqlerro == false) {
+      if ($e54_emiss > date("Y-m-d", db_getsession("DB_datausu"))) {
+          $erro_msg = "Usuário: ALTERAÇÃO NÃO EFETUADA! A DATA DA AUTORIZAÇÃO NÃO PODE SER POSTERIOR A DATA DO SISTEMA";
+          $sqlerro = true;
+      }
   }
+
+  if ($sqlerro == false) {
+      if (date("Y", strtotime($e54_emiss)) <> date("Y", db_getsession("DB_datausu"))) {
+          $erro_msg = "Usuário: ALTERAÇÃO NÃO EFETUADA! A DATA DA AUTORIZAÇÃO DEVE PERMANECER NO EXERCÍCIO ATUAL";
+          $sqlerro = true;
+      }
+  }
+	  // Final das alteracoes para Oc19462
 
   db_inicio_transacao();
 
