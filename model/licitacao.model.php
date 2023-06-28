@@ -789,10 +789,6 @@ class licitacao
         $sCampos .= "case when trim(pc23_obs) <> '' then pc23_obs";
         $sCampos .= "     else pc10_resumo ";
         $sCampos .= " end as observacao,";
-
-        //$sCampos .= "case when trim(pc11_resum) <> '' then pc11_resum";
-        //$sCampos .= "     else pc10_resumo ";
-        //$sCampos .= " end as observacao,";
         $sCampos .= "pc10_resumo as observacao_solicita,";
         $sCampos .= "pc23_vlrun as valorunitariofornecedor,";
         $sCampos .= "pc23_quant as quantfornecedor,";
@@ -808,8 +804,6 @@ class licitacao
         $sCampos .= "o56_descr as descricaoelemento,";
         $sCampos .= "o56_elemento as elemento,";
         $sCampos .= "pc28_solicitem as itemanulado";
-
-
         $sOrder = "z01_numcgm,pc13_coddot,pc18_codele, pc19_sequencial,l21_ordem, pc19_orctiporec,pc13_sequencial";
         $sWhere = "l20_codigo = {$this->iCodLicitacao} and pc24_pontuacao = 1 and pc10_instit = " . db_getsession("DB_instit");
 
@@ -1043,38 +1037,6 @@ class licitacao
                  */
                 $oSaldo = $this->getValoresParciais($oItem->codigoprocesso, $oDados->dotacao, $oDados->contrapartida);
 
-                /*if ($nNovoValorReserva > 0 && ($oSaldo->nValorAutorizacao > 0 && $oSaldo->nValorAutorizacao + $oItem->valortotal < $oSaldo->nValorItemJulgado)) {
-
-                  $oDaoOrcReserva->o80_anousu = db_getsession("DB_anousu");
-                  $oDaoOrcReserva->o80_coddot = $oDados->dotacao;
-                  $oDaoOrcReserva->o80_dtfim  = db_getsession("DB_anousu")."-12-31";
-                  $oDaoOrcReserva->o80_dtini  = date("Y-m-d", db_getsession("DB_datausu"));
-                  $oDaoOrcReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
-                  $oDaoOrcReserva->o80_valor  = number_format( (float) $nNovoValorReserva, 2, '.', '');
-                  $oDaoOrcReserva->o80_descr  = "Reserva item Solicitacao";
-                  $oDaoOrcReserva->o80_justificativa  = "Reserva item Solicitacao";
-                  $oDaoOrcReserva->incluir(null);
-
-                  if ($oDaoOrcReserva->erro_status == 0) {
-
-                    $sMsgErro  = "não foi possivel gerar reserva para a dotação: {$oDados->dotacao}.\n";
-                    $sMsgErro .= $oDaoOrcReserva->erro_msg;
-                    throw new Exception($sMsgErro);
-                  }
-
-
-                  /*$oDaoOrcReservaSol->o82_codres    = $oDaoOrcReserva->o80_codres;
-                  $oDaoOrcReservaSol->o82_pcdotac   = $oDados->pcdotac;
-                  $oDaoOrcReservaSol->o82_solicitem = $oDados->codigoitemsolicitacao;
-                  $oDaoOrcReservaSol->incluir(null);
-                  if ($oDaoOrcReservaSol->erro_status == 0) {
-
-                    $sMsgErro  = "não foi possivel gerar reserva para a dotação: {$oDados->dotacao}.\n";
-                    $sMsgErro .= $oDaoOrcReservaSol->erro_msg;
-                    throw new Exception($sMsgErro);
-                  }
-
-                }*/
             }
             /**
              * Salvamos a Autorizacao;
@@ -1085,15 +1047,12 @@ class licitacao
              * Conforme Solicitado pela ocorrência 1892, o resumo deve ser a informação preenchida na primeira tela do menu Mod. Licitação >> Procedimentos >> Gera autorização
              * @see: Ocorrência 1892
              */
-            //$rsPcdotac = $oDaoPcdotac->sql_record($oDaoPcdotac->sql_query_solicita(null, null, null, "pc10_resumo", null, "pc13_sequencial = {$oItem->pcdotac}"));
-            //$sResumo   = $oDaoPcdotac->numrows > 0 ? db_utils::fieldsMemory($rsPcdotac, 0)->pc10_resumo : $oDados->resumo;
             $sResumo = $oDados->resumo;
             $oAutorizacao = new AutorizacaoEmpenho();
             /**
              * não pode-se setar o codigo da reserva da soLicitação na Autorizacao.
              * A autorizacao gera um codigo de reserva quando inclusa
              */
-            //$oAutorizacao->setCodigoReserva($iCodigoReserva);
             $oAutorizacao->setDesdobramento($oDados->elemento);
             $oAutorizacao->setDotacao($oDados->dotacao);
             $oAutorizacao->setContraPartida($oDados->contrapartida);
@@ -1123,18 +1082,19 @@ class licitacao
             $oAutorizacao->setCondicaoPagamento($oDados->condicaopagamento);
             $oAutorizacao->setNumeroLicitacao("{$oDadosLicitacao->l20_edital}/{$oDadosLicitacao->l20_anousu}");
             $oAutorizacao->setModalidade($oDadosLicitacao->l20_numero);
+            $oAutorizacao->setDataAutorizacao(date("Y-m-d",db_getsession('DB_datausu')));
             /**
              * Verifico o tipo de origem dalic4_editaldocumentos compra pelo codigo do tribunal
              *  @OC7425
-             *  1 ? não ou dispensa por valor (art. 24, I e II da Lei 8.666/93);
-             *  2 ? Licitação;
-             *  3 ? Dispensa ou Inexigibilidade;
-             *  4 ? Adesão à ata de registro de preços;
-             *  5 ? Licitação realizada por outro órgão ou entidade;
-             *  6 ? Dispensa ou Inexigibilidade realizada por outro órgão ou entidade;
-             *  7 ? Licitação - Regime Diferenciado de Contratações Públicas ? RDC, conforme Lei no 12.462/2011
-             *  8 ? Licitação realizada por consorcio público
-             *  9 ? Licitação realizada por outro ente da federação
+             *  1 - não ou dispensa por valor (art. 24, I e II da Lei 8.666/93);
+             *  2 - Licitação;
+             *  3 - Dispensa ou Inexigibilidade;
+             *  4 - Adesão à ata de registro de preços;
+             *  5 - Licitação realizada por outro órgão ou entidade;
+             *  6 - Dispensa ou Inexigibilidade realizada por outro órgão ou entidade;
+             *  7 - Licitação - Regime Diferenciado de Contratações Públicas - RDC, conforme Lei no 12.462/2011
+             *  8 - Licitação realizada por consorcio público
+             *  9 - Licitação realizada por outro ente da federação
              */
             $tipoLicitacao = array(52, 48, 49, 50, 51, 53, 54);
             $tipoDispensaInex = array(100, 101, 102);
@@ -1407,10 +1367,6 @@ class licitacao
 
         $rsModalidade    = $oDaoModalidade->sql_record($sSqlModalidade);
         if ($oDaoModalidade->numrows <= 0) {
-
-            //$sMensagem  = "ERRO [ 0 ] - Verifique faixa de valores da Modalidade {$iModalidade} - ";
-            //$sMensagem .= licitacao::getDescricaoModalidade($iModalidade)->l03_descr." .";
-            //throw new Exception($sMensagem);
             /*
              * se caso nao encontre faixa de valor pra modalidade, significa
              * que ela não sera controlada por valores.

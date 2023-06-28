@@ -850,7 +850,6 @@ class AutorizacaoEmpenho
         $oDaoEmpAutoriza->e54_tipoautorizacao = $this->getSTipoautorizacao();
         $oDaoEmpAutoriza->e54_licoutrosorgaos = $this->getSLicoutrosorgaos();
         $oDaoEmpAutoriza->e54_adesaoregpreco = $this->getSAdesaoregpreco();
-
         /**
          * Verifica se a propriedade iAutorizacao está setada. Se não estiver
          * é incluido um novo registro, do contrários é feita a alteração
