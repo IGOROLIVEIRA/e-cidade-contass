@@ -87,7 +87,14 @@ if (empty ($e60_numemp)) {
                                     </tr>
                                     <tr>
                                         <td><b>Motivo:</b></td>
-                                        <td nowrap colspan='3'><textarea name='motivo' rows='1' cols='55'  id='motivo' ></textarea></td>
+                                        <td nowrap colspan='3'><textarea name='motivo' rows='1' cols='55'  id='motivo' maxlength="1000" onkeydown="js_contaCaracteres(this.value)" onkeyup="js_contaCaracteres(this.value)" onchange="js_contaCaracteres(this.value)" ></textarea></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" colspan = "5">
+                                            <b>  Caracteres Digitados : </b>
+                                                <input type="text" name="obsdig" id="obsdig" size="3" value="0" disabled>
+                                            <b> - Limite 1000  </b>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -211,6 +218,50 @@ if (empty ($e60_numemp)) {
                 </table>
 </form>
 <script>
+    function js_contaCaracteres(sTexto){
+        const rAcentos = /[а-ьз]/gi;
+        let bPossueAcento = rAcentos.test(sTexto);
+        if (bPossueAcento){
+            let sNovaString = sTexto.replace(rAcentos, function(match) {
+            const mapaSubstituicao = {
+            "б": "a", "а": "a",
+            "в": "a", "г": "a",
+            "й": "e", "и": "e",
+            "к": "e", "н": "i",
+            "м": "i", "о": "i",
+            "?": "i", "ц": "o",
+            "у": "o", "т": "o",
+            "ф": "o", "х": "o",
+            "ъ": "u", "щ": "u",
+            "ь": "u", "?": "u",
+            "ы": "u", "з": "c",
+            "?": "e", "Б": "A",
+            "В": "A", "А": "A",
+            "Й": "E", "Г": "A",
+            "К": "E", "И": "E",
+            "М": "I", "Н": "I",
+            "?": "I", "Ц": "O",
+            "У": "O", "О": "I",
+            "Ф": "O", "Т": "O",
+            "Ъ": "U", "Х": "O",
+            "Ы": "U", "Щ": "U",
+            "Ь": "U", "?": "U",
+            "?": "E", "З": "C",
+            };
+            let correspondencia = mapaSubstituicao[match];
+            if (correspondencia === undefined){
+                correspondencia = "";
+            }
+            return correspondencia;
+            });
+            sTexto = sNovaString
+            document.getElementById("motivo").value = sTexto;
+        }
+        const rCharEspecial = /[^a-z0-9]/gi;
+        let aCaracteresEspeciais = sTexto.match(rCharEspecial) ?? [];
+        document.getElementById("obsdig").value = sTexto.length - aCaracteresEspeciais.length;
+    }
+
     function js_pesquisa(){
         js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp','Pesquisa',true);
         //js_consultaEmpenho(38118);
@@ -625,6 +676,14 @@ if (empty ($e60_numemp)) {
             document.getElementById('e94_empanuladotipodescr').focus()
             return
         }
+
+        //verifica se o campo "Motivo" possue mais de 8 caracteres.
+        if (document.getElementById('obsdig').value < 8) {
+            alert("O motivo deve ter no mнnimo 8 caracteres.")
+            document.getElementById('motivo').focus()
+            return
+        }
+
 
         //validamos se existe solicitacao de anulacao. caso exista, e nao foi atendida confirmar se o usuбrio
         //se realmente vai deixar sem atendar a solicitracao.
