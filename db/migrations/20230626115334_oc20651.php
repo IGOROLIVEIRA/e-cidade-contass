@@ -28,7 +28,7 @@ class Oc20651 extends AbstractMigration
     public function up()
     {
         $sql = "
-        begin
+        begin;
             alter table pcorcam add column pc20_importado boolean;
         commit;
         ";

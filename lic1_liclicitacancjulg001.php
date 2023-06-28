@@ -39,6 +39,8 @@ require_once("classes/db_liclicitasituacao_classe.php");
 require_once("model/compilacaoRegistroPreco.model.php");
 require_once("model/licitacao.model.php");
 require_once("classes/db_registroprecojulgamento_classe.php");
+require_once("model/licitacao/PortalCompras/Julgamento/Comandos/VerificaJulgamento.model.php");
+require_once("model/licitacao/PortalCompras/Julgamento/Comandos/CancelaJulgamento.model.php");
 
 $clliclicita          = new cl_liclicita;
 $clpcorcamjulg        = new cl_pcorcamjulg;
@@ -61,219 +63,227 @@ db_postmemory($HTTP_POST_VARS);
 $action   = "lic1_liclicitacancjulg001.php";
 $erro_msg = "";
 
-if (isset($l20_codigo) && trim($l20_codigo) != "") {
-
-  $sqlerro = false;
-
-  db_inicio_transacao();
-  $oLicitacao = new licitacao($l20_codigo);
-
-  try {
-
-    $oRegistroPreco = $oLicitacao->getCompilacaoRegistroPreco();
-    $lRegistroPreco = true;
-  } catch (Exception $eErro) {
-    $lRegistroPreco = false;
-  }
-
-  /**
-   * Verificamos se o existem algum contrato ativo para a licitacao.
-   * caso exista, não devemos
-   */
-  $oDaoAcordoliclicitem = db_utils::getDao("acordoliclicitem");
-  $sSqlAcordoWhere      = "l21_codliclicita = {$l20_codigo} and (ac16_acordosituacao  not in (2,3))";
-  $sSqlDadosAcordo      = $oDaoAcordoliclicitem->sql_query_acordo(null, "ac26_acordo", null, $sSqlAcordoWhere);
-  $rsDadosAcordo = $oDaoAcordoliclicitem->sql_record($sSqlDadosAcordo);
-  if ($oDaoAcordoliclicitem->numrows > 0) {
-
-    $iNumeroAcordo = db_utils::fieldsMemory($rsDadosAcordo, 0)->ac26_acordo;
-    $sqlerro       = true;
-    $erro_msg      = "a Licitação está vinculada ao acordo {$iNumeroAcordo}, ";
-    $erro_msg     .= "Não será possivel cancelar o julgamento da Solicitação";
-  }
-  $sql = "select pcorcamjulg.pc24_orcamitem,
-                 pcorcamjulg.pc24_orcamforne
-            from pcorcamjulg
-                 inner join pcorcamitemlic on pcorcamitemlic.pc26_orcamitem = pcorcamjulg.pc24_orcamitem
-                 inner join liclicitem     on liclicitem.l21_codigo         = pcorcamitemlic.pc26_liclicitem
-           where liclicitem.l21_codliclicita = ".$l20_codigo;
 
 
+if (isset($l20_codigo) && trim($l20_codigo) != "" ) {
+    $importado = ( new VerificaJulgamento)->getIdJulgamentoImportado((int)$l20_codigo);
+    if (!$importado['status']) {
+        $sqlerro = false;
 
-    $res_pcorcamjulg = $clpcorcamjulg->sql_record($sql);
+        db_inicio_transacao();
+        $oLicitacao = new licitacao($l20_codigo);
 
+        try {
 
-    if ($lRegistroPreco) {
-
-      $aRegistroPreco = $oRegistroPreco->getRegistrosdePreco();
-      if (count($aRegistroPreco) > 0) {
-
-        $sSolicitacaoGeradas = "";
-        $sVirgula            = "";
-        foreach ($aRegistroPreco as $oDadosRegistroPreco) {
-
-          $sSolicitacaoGeradas .= $sVirgula.$oDadosRegistroPreco->getCodigo();
-          $sVirgula             = ", ";
+          $oRegistroPreco = $oLicitacao->getCompilacaoRegistroPreco();
+          $lRegistroPreco = true;
+        } catch (Exception $eErro) {
+          $lRegistroPreco = false;
         }
 
-        $sqlerro  = true;
-        $erro_msg  = "Não é possí­vel cancelar o julgamento. Licitação {$l20_codigo} ";
-        $erro_msg .= "possui vinculo com as seguintes solicitações: {$sSolicitacaoGeradas}.";
-      }
+        /**
+         * Verificamos se o existem algum contrato ativo para a licitacao.
+         * caso exista, não devemos
+         */
+        $oDaoAcordoliclicitem = db_utils::getDao("acordoliclicitem");
+        $sSqlAcordoWhere      = "l21_codliclicita = {$l20_codigo} and (ac16_acordosituacao  not in (2,3))";
+        $sSqlDadosAcordo      = $oDaoAcordoliclicitem->sql_query_acordo(null, "ac26_acordo", null, $sSqlAcordoWhere);
+        $rsDadosAcordo = $oDaoAcordoliclicitem->sql_record($sSqlDadosAcordo);
+        if ($oDaoAcordoliclicitem->numrows > 0) {
 
-      if (!$sqlerro) {
-
-        $aReequilibrios = $oRegistroPreco->getReequilibrios();
-        if (count($aReequilibrios) > 0) {
-
-          $erro_msg = "Não é possí­vel cancelar o julgamento, Licitação {$l20_codigo}, possui reequilírios.";
-          $sqlerro  = true;
+          $iNumeroAcordo = db_utils::fieldsMemory($rsDadosAcordo, 0)->ac26_acordo;
+          $sqlerro       = true;
+          $erro_msg      = "a Licitação está vinculada ao acordo {$iNumeroAcordo}, ";
+          $erro_msg     .= "Não será possivel cancelar o julgamento da Solicitação";
         }
-      }
-    }
+        $sql = "select pcorcamjulg.pc24_orcamitem,
+                       pcorcamjulg.pc24_orcamforne
+                  from pcorcamjulg
+                       inner join pcorcamitemlic on pcorcamitemlic.pc26_orcamitem = pcorcamjulg.pc24_orcamitem
+                       inner join liclicitem     on liclicitem.l21_codigo         = pcorcamitemlic.pc26_liclicitem
+                 where liclicitem.l21_codliclicita = ".$l20_codigo;
 
-    if ($sqlerro == false) {
 
-      if ($clpcorcamjulg->numrows > 0) {
 
-        $numrows = $clpcorcamjulg->numrows;
-        for($i = 0; $i < $numrows; $i++) {
+          $res_pcorcamjulg = $clpcorcamjulg->sql_record($sql);
 
-          db_fieldsmemory($res_pcorcamjulg,$i);
-          $clpcorcamjulg->excluir($pc24_orcamitem, $pc24_orcamforne);
 
-          if ($clpcorcamjulg->erro_status == 0){
-            $erro_msg = $clpcorcamjulg->erro_msg;
-            $sqlerro  = true;
-            break;
-          }
-
-          $sWhereLogJulgamento = "pc93_pcorcamitem = {$pc24_orcamitem} and pc93_pcorcamforne = {$pc24_orcamforne}";
-          $sSqlLogJulgamento   = $oDaoLogJulgamentoItem->sql_query_file(null, "pc93_pcorcamjulgamentolog",
-                                                                        null, $sWhereLogJulgamento);
-
-          $rsLogJulgamento     = $oDaoLogJulgamentoItem->sql_record($sSqlLogJulgamento);
-          if ($oDaoLogJulgamentoItem->numrows > 0) {
-
-            $pc93_pcorcamjulgamentolog = db_utils::fieldsMemory($rsLogJulgamento, 0)->pc93_pcorcamjulgamentolog;
-
-            $oDaoLogJulgamento->pc92_sequencial = $pc93_pcorcamjulgamentolog;
-            $oDaoLogJulgamento->pc92_ativo      = 'false';
-            $oDaoLogJulgamento->alterar($pc93_pcorcamjulgamentolog);
-            if ($oDaoLogJulgamento->erro_status == 0) {
-
-              $erro_msg = $oDaoLogJulgamento->erro_msg;
-              $sqlerro  = true;
-              break;
-            }
-          }
-
-          /**
-           * Verifica se a licitação usa Registro de Preco. Caso use, é excluido também os registros
-           * da tabela registroprecojulgamento.
-           */
           if ($lRegistroPreco) {
 
-            $sWhereExcluir = " pc65_orcamitem = {$pc24_orcamitem} and pc65_orcamforne = {$pc24_orcamforne} ";
-            $oDaoRegistPrecoJulg->excluir(null, $sWhereExcluir);
-            if ($oDaoRegistPrecoJulg->erro_status == "0") {
+            $aRegistroPreco = $oRegistroPreco->getRegistrosdePreco();
+            if (count($aRegistroPreco) > 0) {
 
-              $erro_msg = $clpcorcamjulg->erro_msg;
+              $sSolicitacaoGeradas = "";
+              $sVirgula            = "";
+              foreach ($aRegistroPreco as $oDadosRegistroPreco) {
+
+                $sSolicitacaoGeradas .= $sVirgula.$oDadosRegistroPreco->getCodigo();
+                $sVirgula             = ", ";
+              }
+
               $sqlerro  = true;
-              break;
+              $erro_msg  = "Não é possí­vel cancelar o julgamento. Licitação {$l20_codigo} ";
+              $erro_msg .= "possui vinculo com as seguintes solicitações: {$sSolicitacaoGeradas}.";
+            }
+
+            if (!$sqlerro) {
+
+              $aReequilibrios = $oRegistroPreco->getReequilibrios();
+              if (count($aReequilibrios) > 0) {
+
+                $erro_msg = "Não é possí­vel cancelar o julgamento, Licitação {$l20_codigo}, possui reequilírios.";
+                $sqlerro  = true;
+              }
             }
           }
-        }
-      }
-    }
 
-    if ($sqlerro == false) {
+          if ($sqlerro == false) {
 
-      $sql = "select pcorcamtroca.pc25_codtroca
-                from pcorcamtroca
-                     inner join pcorcamitemlic on pcorcamitemlic.pc26_orcamitem = pcorcamtroca.pc25_orcamitem
-                     inner join liclicitem     on liclicitem.l21_codigo         = pcorcamitemlic.pc26_liclicitem
-               where liclicitem.l21_codliclicita = ".$l20_codigo;
+            if ($clpcorcamjulg->numrows > 0) {
 
-      $res_pcorcamtroca = $clpcorcamtroca->sql_record($sql);
+              $numrows = $clpcorcamjulg->numrows;
+              for($i = 0; $i < $numrows; $i++) {
 
-      if ($clpcorcamtroca->numrows > 0){
+                db_fieldsmemory($res_pcorcamjulg,$i);
+                $clpcorcamjulg->excluir($pc24_orcamitem, $pc24_orcamforne);
 
-        $numrows = $clpcorcamtroca->numrows;
-        for($i = 0; $i < $numrows; $i++){
+                if ($clpcorcamjulg->erro_status == 0){
+                  $erro_msg = $clpcorcamjulg->erro_msg;
+                  $sqlerro  = true;
+                  break;
+                }
 
-          db_fieldsmemory($res_pcorcamtroca,$i);
-          $clpcorcamtroca->excluir($pc25_codtroca);
-          if ($clpcorcamtroca->erro_status == 0){
+                $sWhereLogJulgamento = "pc93_pcorcamitem = {$pc24_orcamitem} and pc93_pcorcamforne = {$pc24_orcamforne}";
+                $sSqlLogJulgamento   = $oDaoLogJulgamentoItem->sql_query_file(null, "pc93_pcorcamjulgamentolog",
+                                                                              null, $sWhereLogJulgamento);
 
-            $erro_msg = $clpcorcamtroca->erro_msg;
-            $sqlerro  = true;
-            break;
+                $rsLogJulgamento     = $oDaoLogJulgamentoItem->sql_record($sSqlLogJulgamento);
+                if ($oDaoLogJulgamentoItem->numrows > 0) {
+
+                  $pc93_pcorcamjulgamentolog = db_utils::fieldsMemory($rsLogJulgamento, 0)->pc93_pcorcamjulgamentolog;
+
+                  $oDaoLogJulgamento->pc92_sequencial = $pc93_pcorcamjulgamentolog;
+                  $oDaoLogJulgamento->pc92_ativo      = 'false';
+                  $oDaoLogJulgamento->alterar($pc93_pcorcamjulgamentolog);
+                  if ($oDaoLogJulgamento->erro_status == 0) {
+
+                    $erro_msg = $oDaoLogJulgamento->erro_msg;
+                    $sqlerro  = true;
+                    break;
+                  }
+                }
+
+                /**
+                 * Verifica se a licitação usa Registro de Preco. Caso use, é excluido também os registros
+                 * da tabela registroprecojulgamento.
+                 */
+                if ($lRegistroPreco) {
+
+                  $sWhereExcluir = " pc65_orcamitem = {$pc24_orcamitem} and pc65_orcamforne = {$pc24_orcamforne} ";
+                  $oDaoRegistPrecoJulg->excluir(null, $sWhereExcluir);
+                  if ($oDaoRegistPrecoJulg->erro_status == "0") {
+
+                    $erro_msg = $clpcorcamjulg->erro_msg;
+                    $sqlerro  = true;
+                    break;
+                  }
+                }
+              }
+            }
           }
+
+          if ($sqlerro == false) {
+
+            $sql = "select pcorcamtroca.pc25_codtroca
+                      from pcorcamtroca
+                           inner join pcorcamitemlic on pcorcamitemlic.pc26_orcamitem = pcorcamtroca.pc25_orcamitem
+                           inner join liclicitem     on liclicitem.l21_codigo         = pcorcamitemlic.pc26_liclicitem
+                     where liclicitem.l21_codliclicita = ".$l20_codigo;
+
+            $res_pcorcamtroca = $clpcorcamtroca->sql_record($sql);
+
+            if ($clpcorcamtroca->numrows > 0){
+
+              $numrows = $clpcorcamtroca->numrows;
+              for($i = 0; $i < $numrows; $i++){
+
+                db_fieldsmemory($res_pcorcamtroca,$i);
+                $clpcorcamtroca->excluir($pc25_codtroca);
+                if ($clpcorcamtroca->erro_status == 0){
+
+                  $erro_msg = $clpcorcamtroca->erro_msg;
+                  $sqlerro  = true;
+                  break;
+                }
+              }
+            }
+          }
+
+          if ($sqlerro == false){
+
+            $clliclicita->l20_codigo  = $l20_codigo;
+            $clliclicita->l20_licsituacao = '0';
+            $clliclicita->alterar_liclicitajulgamento($l20_codigo);
+
+            if ($clliclicita->erro_status == 0) {
+
+              $erro_msg = $clliclicita->erro_msg;
+              $sqlerro  = true;
+            }
+
+          }
+
+          if ($sqlerro == false) {
+
+        		  $l11_sequencial = '';
+            $clliclicitasituacao->l11_id_usuario  = DB_getSession("DB_id_usuario");
+            $clliclicitasituacao->l11_licsituacao = '0';
+            $clliclicitasituacao->l11_liclicita   = $clliclicita->l20_codigo;
+        		  $clliclicitasituacao->l11_obs         = "Julgamento da licitaÃ§Ã£o cancelado.";
+            $clliclicitasituacao->l11_data        = date("Y-m-d",DB_getSession("DB_datausu"));
+            $clliclicitasituacao->l11_hora        = DB_hora();
+        	    $clliclicitasituacao->incluir($l11_sequencial);
+            if ($clliclicitasituacao->erro_status == 0){
+        		  	$erro_msg = $clliclicitasituacao->erro_msg;
+              $sqlerro  = true;
+        	    }
+
         }
-      }
+
+        if ($sqlerro == false) {
+
+        	if (isset($_SESSION["modeloataselecionadojulgamento"])) {
+        		unset($_SESSION["modeloataselecionadojulgamento"]);
+        	}
+
+        	$sWhere = "l39_liclicita = {$l20_codigo} and l39_posicaoinicial is true";
+        	$clliclicitaata->excluir(null, $sWhere);
+        	if ($clliclicitaata->erro_status == 0) {
+
+        		$erro_msg = $clliclicitaata->erro_msg;
+            $sqlerro  = true;
+        	}
+        }
+
+
+        $sql =  " l219_codigo in (select l218_codigo from situacaoitemcompra where l218_codigolicitacao = ".$l20_codigo.") and l219_situacao = 4";
+        $res_situacaoitemlic = $clsituacaoitemlic->excluir(null,$sql);
+         if ($clsituacaoitemlic->erro_status == 0) {
+          $sqlerro = true;
+          $erro_msg = $clsituacaoitemlic->erro_msg;
+        }
+
+
+        if ($sqlerro == false){
+          $erro_msg = "Exclusao feita com sucesso.";
+        }
+
+        db_fim_transacao($sqlerro);
+
+    } else {
+        $result = (new CancelaJulgamento)->execute($importado['id'], (int)$l20_codigo);
+        $erro_msg = $result['message'];
     }
-
-    if ($sqlerro == false){
-
-      $clliclicita->l20_codigo  = $l20_codigo;
-      $clliclicita->l20_licsituacao = '0';
-      $clliclicita->alterar_liclicitajulgamento($l20_codigo);
-
-      if ($clliclicita->erro_status == 0) {
-
-        $erro_msg = $clliclicita->erro_msg;
-        $sqlerro  = true;
-      }
-
-    }
-
-    if ($sqlerro == false) {
-
-		  $l11_sequencial = '';
-      $clliclicitasituacao->l11_id_usuario  = DB_getSession("DB_id_usuario");
-      $clliclicitasituacao->l11_licsituacao = '0';
-      $clliclicitasituacao->l11_liclicita   = $clliclicita->l20_codigo;
-		  $clliclicitasituacao->l11_obs         = "Julgamento da licitaÃ§Ã£o cancelado.";
-      $clliclicitasituacao->l11_data        = date("Y-m-d",DB_getSession("DB_datausu"));
-      $clliclicitasituacao->l11_hora        = DB_hora();
-	    $clliclicitasituacao->incluir($l11_sequencial);
-      if ($clliclicitasituacao->erro_status == 0){
-		  	$erro_msg = $clliclicitasituacao->erro_msg;
-        $sqlerro  = true;
-	    }
-
-  }
-
-  if ($sqlerro == false) {
-
-  	if (isset($_SESSION["modeloataselecionadojulgamento"])) {
-  		unset($_SESSION["modeloataselecionadojulgamento"]);
-  	}
-
-  	$sWhere = "l39_liclicita = {$l20_codigo} and l39_posicaoinicial is true";
-  	$clliclicitaata->excluir(null, $sWhere);
-  	if ($clliclicitaata->erro_status == 0) {
-
-  		$erro_msg = $clliclicitaata->erro_msg;
-      $sqlerro  = true;
-  	}
-  }
-
-
-  $sql =  " l219_codigo in (select l218_codigo from situacaoitemcompra where l218_codigolicitacao = ".$l20_codigo.") and l219_situacao = 4";
-  $res_situacaoitemlic = $clsituacaoitemlic->excluir(null,$sql);
-   if ($clsituacaoitemlic->erro_status == 0) {
-    $sqlerro = true;
-    $erro_msg = $clsituacaoitemlic->erro_msg;
-  }
-
-
-  if ($sqlerro == false){
-    $erro_msg = "Exclusao feita com sucesso.";
-  }
-
-  db_fim_transacao($sqlerro);
 }
 ?>
 <html>
