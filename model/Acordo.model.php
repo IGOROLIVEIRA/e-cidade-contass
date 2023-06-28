@@ -2452,6 +2452,8 @@ class Acordo
                 $oAutorizacaoEmpenho->setSTipoautorizacao($oDadosAutorizacao->sTipoautorizacao);
                 $oAutorizacaoEmpenho->setValor($nValorAutorizacao);
                 $oAutorizacaoEmpenho->setSAdesaoregpreco($oDadosAutorizacao->iSequencial);
+                $oAutorizacaoEmpenho->setDataAutorizacao($oDadosAutorizacao->sDataEmissao);
+
                 $iSeq        = 1;
                 $nValorTotal = 0;
 

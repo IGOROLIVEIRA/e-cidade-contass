@@ -37,6 +37,13 @@ class AutorizacaoEmpenho
 {
 
     /**
+     * Data da autorizacao
+     *
+     * @var string
+     */
+    protected $sDataAutorizacao;
+
+    /**
      * Código da Autorização
      *
      * @var integer
@@ -744,6 +751,24 @@ class AutorizacaoEmpenho
         return $this->sCondicaoPagamento;
     }
 
+    /**
+     * Seta a Data de Autorizacao
+     * @param string $sDataAutorizacao
+     */
+    public function setDataAutorizacao($sDataAutorizacao)
+    {
+        $this->sDataAutorizacao = $sDataAutorizacao;
+    }
+
+    /**
+     * Retorna a Data de Autorizacao.
+     * @return string
+     */
+    public function getDataAutorizacao()
+    {
+        return $this->sDataAutorizacao;
+    }
+
     public static function getServicoControladoQuantidade($iSolicitem)
     {
 
@@ -805,7 +830,7 @@ class AutorizacaoEmpenho
         $oDaoEmpAutoriza->e54_destin  = $this->getDestino();
         $oDaoEmpAutoriza->e54_tipol   = $this->getTipoLicitacao();
         $oDaoEmpAutoriza->e54_numerl  = $this->getNumeroLicitacao();
-        $oDaoEmpAutoriza->e54_emiss   = date("Y-m-d", db_getsession("DB_datausu"));
+        $oDaoEmpAutoriza->e54_emiss   = implode('-', array_reverse(explode('/', $this->getDataAutorizacao())));
         $oDaoEmpAutoriza->e54_instit  = db_getsession("DB_instit");
         $oDaoEmpAutoriza->e54_depto   = db_getsession("DB_coddepto");
         $oDaoEmpAutoriza->e54_praent  = $this->getPrazoEntrega();

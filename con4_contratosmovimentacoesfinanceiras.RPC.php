@@ -418,6 +418,7 @@ switch ($oParam->exec) {
             }
             $oParam->dados->sTipoautorizacao = 2;
 
+
             $oRetorno->itens  = $oContrato->processarAutorizacoes($oParam->aItens, $oParam->lProcessar, $oParam->dados);
 
             db_fim_transacao(false);
