@@ -351,8 +351,10 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                      if(oRetorno.iConfirm == 1){
 
                        if(confirm(sMsg)){
+                        console.log('entrou na linha 354');
                          js_emiteReciboCarne(oParam,true,false);
                        } else {
+                        console.log('entrou na linha 357');
                          js_emiteReciboCarne(oParam,false,true);
                        }
                      }
@@ -360,6 +362,7 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                       js_emiteGuiaItbi(oParam);
                      }
                      else {
+                      console.log('entrou na linha 365');
                        js_emiteReciboCarne(oParam,true);
                      }
                    }
