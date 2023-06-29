@@ -127,7 +127,7 @@ db_app::load("estilos.css, grid.style.css");
                 aLinha[3] = oLinha.pc68_nome.urlDecode();
                 aLinha[4] = oLinha.z01_numcgm;
                 aLinha[5] = oLinha.z01_nome.urlDecode();
-                aLinha[6] = oLinha.m61_descr;
+                aLinha[6] = oLinha.m61_descr.urlDecode();
                 aLinha[7] = oLinha.pc23_quant;
                 aLinha[8] = oLinha.pc23_valor;
                 oGridItens.addRow(aLinha);
