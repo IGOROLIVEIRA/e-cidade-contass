@@ -808,10 +808,8 @@ class Preenchimentos
        date_part('year', rh01_admiss) as rh01_admiss_ano,
        rh02_tipobeneficio AS tpbeneficio,
        CASE
-           WHEN rh02_plansegreg = 1 THEN 1
-           WHEN rh02_plansegreg = 2 THEN 2
-           WHEN rh02_plansegreg = 3 THEN 3
-           WHEN rh02_plansegreg = 0 THEN 0
+           WHEN rh02_plansegreg IS NULL THEN 0
+           ELSE rh02_plansegreg
        END AS tpplanrp,
        rh02_descratobeneficio AS dsc,
        CASE
