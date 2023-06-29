@@ -37,10 +37,10 @@ switch ($oParam->exec) {
             $oItem->pc01_codmater                   = $oItensLicitacao->pc01_codmater;
             $oItem->pc11_seq                        = $oItensLicitacao->pc11_seq;
             $oItem->pc01_descrmater                 = urlencode($oItensLicitacao->pc01_descrmater);
-            $oItem->pc68_nome                       = $oItensLicitacao->pc68_nome;
+            $oItem->pc68_nome                       = urlencode($oItensLicitacao->pc68_nome);
             $oItem->z01_numcgm                      = $oItensLicitacao->z01_numcgm;
             $oItem->z01_nome                        = urlencode($oItensLicitacao->z01_nome);
-            $oItem->m61_descr                       = $oItensLicitacao->m61_descr;
+            $oItem->m61_descr                       = urlencode($oItensLicitacao->m61_descr);
             $oItem->pc23_quant                      = $oItensLicitacao->pc23_quant;
             $oItem->pc23_valor                      = $oItensLicitacao->pc23_valor;
             $itens[]                                = $oItem;
