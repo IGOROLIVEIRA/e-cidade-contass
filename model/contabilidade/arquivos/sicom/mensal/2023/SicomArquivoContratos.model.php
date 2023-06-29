@@ -1364,7 +1364,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos20->si87_tipotermoaditivo = $this->getTipoTermoAditivo($oAcordoPosicao); //campo 10
                 $clcontratos20->si87_dscalteracao = substr($this->removeCaracteres($oDados20->ac35_descricaoalteracao), 0, 250); //campo 11
                 $oDataTermino = new DBDate($oAcordoPosicao->getVigenciaFinal()); //317
-                if (in_array($oAcordoPosicao->getTipo(), array(6, 13))) {
+                if (in_array($oAcordoPosicao->getTipo(), array(6, 13,14))) {
                     $clcontratos20->si87_novadatatermino = $oDataTermino->getDate(); //campo 12
                 } else {
                     $clcontratos20->si87_novadatatermino = ""; //campo 12
