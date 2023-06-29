@@ -212,12 +212,7 @@ function dbViewAvaliacao(iAvaliacao, iGrupoResposta, oNode) {
 
               var oLabel       = document.createElement("label");
               oLabel.htmlFor   = "resposta"+codigoresposta;
-
-              //Na segunda requisição Ajax o espaço entre as palavras recebe o enconding %2B inserido por um
-              //sinal de soma/adição. Por isso é feito um tratamento na string para substituir o enconding por uma
-              //string vazia.
-              var substituiSinalAdicaoEncodado = descricaoresposta.replace(/%2B/g, ' ');
-              oLabel.innerHTML = substituiSinalAdicaoEncodado.urlDecode();
+              oLabel.innerHTML = descricaoresposta.urlDecode();
               oResposta.appendChild(oLabel);
 
               if (aceitatexto) {
@@ -255,7 +250,8 @@ function dbViewAvaliacao(iAvaliacao, iGrupoResposta, oNode) {
 
           $('rolPerguntas'+me.iAvaliacao).appendChild(oRowPergunta);
           $('rolPerguntas'+me.iAvaliacao).appendChild(oRowResposta);
-
+        }
+      }
 
           /**
            *Hack para o bug do Firefox 3.
@@ -265,11 +261,7 @@ function dbViewAvaliacao(iAvaliacao, iGrupoResposta, oNode) {
           var oCellhack           = document.createElement("td");
           oCellhack.innerHTML = '&nbsp';
           oRowHack.appendChild(oCellhack);
-          $('rolPerguntas'+me.iAvaliacao).appendChild(oRowPergunta);
-          $('rolPerguntas'+me.iAvaliacao).appendChild(oRowResposta);
           $('rolPerguntas'+me.iAvaliacao).appendChild(oRowHack);
-        }
-      }
     }
     if (!me.enabled()){
       me.disable();
