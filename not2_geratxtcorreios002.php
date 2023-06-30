@@ -25,6 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
+use App\Repositories\Tributario\Arrecadacao\ArDigital\DTO\ArDigitalServicePayloadDTO;
 use App\Services\Tributario\Notificacoes\GenerateArDigitalService;
 
 require_once ("libs/db_stdlib.php");
@@ -151,7 +152,7 @@ if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
 
     $iQtdeNotificacoes = count($aNotificacoes);
     $iTermometro       = 0;
-
+    $arDigitalPayload = [];
     foreach ($aNotificacoes as $oNotificacao) {
 
         db_atutermometro($iTermometro,
@@ -455,19 +456,40 @@ if($rsNotificacao && pg_num_rows($rsNotificacao) > 0) {
           throw new ErrorException (_M('tributario.notificacoes.not2_geratxtcorreios002.erro_gerar_detalhe_9'));
         }
       }
+
+        $arDigitalDTO = new ArDigitalServicePayloadDTO();
+        $arDigitalDTO->nomeDestinatario = $oNotificacao->nome_cgm_origem;
+        $arDigitalDTO->nomeLogradouroDestinatario = $oNotificacao->endereco_cgm_origem;
+        $arDigitalDTO->numeroLogradouro = $oNotificacao->numero_endereco_cgm_origem;
+        $arDigitalDTO->bairroDestinatario = $oNotificacao->bairro_endereco_cgm_origem;
+        $arDigitalDTO->complementoEnderecoDestinatario = $oNotificacao->complemento_endereco_cgm_origem;
+        $arDigitalDTO->cidadeDestinatario = $oNotificacao->cidade_endereco_cgm_origem;
+        $arDigitalDTO->estadoDestinatario = $oNotificacao->uf_endereco_cgm_origem;
+        $arDigitalDTO->cepDestino = $oNotificacao->cep_cgm_origem;
+        $arDigitalPayload[] = $arDigitalDTO;
     }
 
-    if ($lServicoArDigital) {
-        $nomeArquivoPostagem = '';
-        $nomeArquivoPrevisaoPostagem = '';
-        $service = new GenerateArDigitalService($aNotificacoes);
-    }
+        $arDigitalJs = '';
+        if ($lServicoArDigital && !empty($arDigitalPayload)) {
+            $service = new GenerateArDigitalService();
+            try {
+                $filesArDigital = $service->execute($arDigitalPayload);
+                $fileListaPostagem = $filesArDigital->arquivoPostagem;
+                $filePrevisaoPostagem = $filesArDigital->arquivoPrevisaoPostagem;
+                $arDigitalJs = "  listagem += '|$fileListaPostagem#Download arquivo TXT (AR Digital - Lista de Postagem)'; ";
+                $arDigitalJs .= "  listagem += '|$filePrevisaoPostagem#Download arquivo TXT (AR Digital - Previsao de Postagem)'; ";
+            } catch (BusinessException | Exception $exception) {
+                $sMsg = 'Erro ao gerar AR Digital: ' . $exception->getMessage();
+                throw new ErrorException ($sMsg);
+            }
+        }
 
     db_fim_transacao();
 
     echo "<script>";
     echo "  var listagem;";
     echo "  listagem = '$sNomeArquivo#Download arquivo TXT (notificações para os correios)';";
+    echo $arDigitalJs;
     echo "  js_montarlista(listagem,'form1');";
     echo "  parent.fechar()";
     echo "</script>";
