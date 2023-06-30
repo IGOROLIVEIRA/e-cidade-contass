@@ -501,8 +501,14 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             if ($sSubUnidade == 1) {
                 $sCodUnidade .= str_pad($sSubUnidade, 3, "0", STR_PAD_LEFT);
             }
-
-            if (($oDados10->ac16_origem == self::ORIGEM_MANUAL || $oDados10->ac16_origem == self::ORIGEM_PROCESSO_COMPRAS) && $oDados10->departmanual != null) {
+            
+            /*
+            * Origem
+            * 1 - manual
+            * 2 - licitacao
+            * 3 - processo de compra
+            */
+            if (in_array($oDados10->ac16_origem, array(1, 2, 3)) && $oDados10->departmanual != null) {
 
                 $sSqlManual = "select CASE WHEN o40_codtri = '0'
                      OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS db01_orgao,

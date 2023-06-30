@@ -277,6 +277,7 @@ class db_impcarne extends cl_assinatura
      public $tipoprecoreferencia = 0;
      public $rsLotes = null;
      public $sqlitens = null;
+     public $quantLinhas = 0;
 
 
     //////  VARIÁVEIS PARA EMISSAO DE ALVARÁ

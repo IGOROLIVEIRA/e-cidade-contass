@@ -156,6 +156,14 @@ db_postmemory($HTTP_POST_VARS);
     </td>
   </tr>
   <tr>
+    <td>
+      <strong>Mostrar Lotação:</strong>
+    </td>
+    <td>
+      <input type="checkbox" name="mostrarLotacao" />
+    </td>
+  </tr>
+  <tr>
     <td colspan="2" align = "center">
       <input style="margin-top: 15px;"  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
     </td>
@@ -249,6 +257,7 @@ function js_emite(){
   qry+= "&anof="+document.form1.anof.value;
   qry+= "&mesf="+document.form1.mesf.value;
   qry+= "&mostrarJornada="+document.form1.mostrarJornada.checked;
+  qry+= "&mostrarLotacao="+document.form1.mostrarLotacao.checked;
 
   if(document.form1.complementar){
     qry+= "&semest="+document.form1.complementar.value;
