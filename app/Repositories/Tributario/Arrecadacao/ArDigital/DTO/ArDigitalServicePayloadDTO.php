@@ -8,31 +8,31 @@ class ArDigitalServicePayloadDTO
 
     public string $dataColeta;
 
-    public string $numeroContrato = '0000000222';
+    public string $numeroContrato = '0000000000';
 
-    public string $codigoAdministrativo = '00000222';
+    public string $codigoAdministrativo = '00000000';
 
     public string $cepDestino = '00000000';
 
-    public string $codigoServico = '40622';
+    public string $codigoServico = '0000';
 
     public string $codigoPais = '10';
 
-    public string $codServicoAdicional1 = '01';
+    public string $codServicoAdicional1 = '00';
 
-    public string $codServicoAdicional2 = '02';
+    public string $codServicoAdicional2 = '00';
 
-    public string $codServicoAdicional3 = '03';
+    public string $codServicoAdicional3 = '00';
 
     public string $valorDeclarado = '00000,00';
 
-    public string $numeroEtiqueta = '331000689';
+    public string $numeroEtiqueta = '000000000';
 
-    public string $peso = '00100';
+    public string $peso = '00000';
 
-    public string $numeroLogradouro = '000010';
+    public string $numeroLogradouro = '000000';
 
-    public string $numeroCartaoPostagem = '00000000222';
+    public string $numeroCartaoPostagem = '00000000000';
 
     public string $numeroNotaFiscal = '0000000';
 
