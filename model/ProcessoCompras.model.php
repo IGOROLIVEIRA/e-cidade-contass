@@ -1075,6 +1075,7 @@ class ProcessoCompras
             $oAutorizacao->setTelefone($oDados->sTelefone);
             $oAutorizacao->setTipoCompra($oDados->tipocompra);
             $oAutorizacao->setPrazoEntrega($oDados->prazoentrega);
+            $oAutorizacao->setDataAutorizacao(date('Y-m-d',db_getsession('DB_datausu')));
 
             if ($oDadosRegistroPreco[0]->l20_usaregistropreco == 't') {
                 $oAutorizacao->setNumeroLicitacao($oDadosRegistroPreco[0]->l20_edital . '/' . $oDadosRegistroPreco[0]->l20_anousu);

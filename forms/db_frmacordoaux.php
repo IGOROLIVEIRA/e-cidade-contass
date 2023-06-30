@@ -1621,24 +1621,12 @@ db_app::load("dbtextFieldData.widget.js");
             //document.getElementById('trLicitacao').style.display = "";
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
-
-        <<
-        <<
-        <<
-        < HEAD
-            ===
-            ===
-            =
             if (iOrigem == 1 && iTipoOrigem == 2) {
                 document.getElementById('trLicitacao').style.display = "";
             } else {
                 document.getElementById('trLicitacao').style.display = "none";
             }
 
-            >>>
-            >>>
-            >
-        6608623e0...OC20394 inclusao de validacao do fornecedor na rotina de contratos quando o parametro liberar cadastro de contrtato sem vigencia esta ativo
             if (iTipoOrigem == 4 && iOrigem == 1) {
                 document.getElementById('tradesaoregpreco').style.display = "";
                 document.getElementById('trLicitacao').style.display = "none";
