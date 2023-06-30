@@ -355,13 +355,15 @@ foreach ($aConsulta as $servidor) {
     $pdf->cell(15, $alt, " " . $servidor->rh01_regist, "0", 0, "L", 0);
     $pdf->cell(35, $alt, $servidor->z01_nome, "0", 0, "L", 0);
 
-    $pdf->ln();
-    $pdf->setfont("arial", "B", 10);
-    $pdf->cell(25, $alt, "Lotação", "0", 0, "L", 0);
-    $pdf->cell(1, $alt, ":", "0", 0, "L", 0);
-    $pdf->setfont("arial", "", 10);
-    $pdf->cell(15, $alt, " " . $servidor->r70_estrut, "0", 0, "L", 0);
-    $pdf->cell(35, $alt, $servidor->r70_descr, "0", 0, "L", 0);
+    if ($mostrarLotacao == "true"){
+        $pdf->ln();
+        $pdf->setfont("arial", "B", 10);
+        $pdf->cell(25, $alt, "Lotação", "0", 0, "L", 0);
+        $pdf->cell(1, $alt, ":", "0", 0, "L", 0);
+        $pdf->setfont("arial", "", 10);
+        $pdf->cell(15, $alt, " " . $servidor->r70_estrut, "0", 0, "L", 0);
+        $pdf->cell(35, $alt, $servidor->r70_descr, "0", 0, "L", 0);
+    }
 
     $pdf->ln();
     $pdf->setfont("arial", "B", 10);
