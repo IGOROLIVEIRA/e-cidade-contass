@@ -1,4 +1,5 @@
 <?php
+ini_set('display_errors','on');
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
