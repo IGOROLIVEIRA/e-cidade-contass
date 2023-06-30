@@ -91,7 +91,14 @@ if ($sfileName == "emp4_anularrpproc.php"){
                         <tr>
                             <td><b>Jusitificativa:</b></td>
                             <td colspan='4'>
-                                <textarea id="motivo" name="motivo" rows="2" cols="70"></textarea>
+                                <textarea id="motivo" name="motivo" rows="2" cols="70" onkeydown="js_contaCaracteres(this.value)" onkeyup="js_contaCaracteres(this.value)" onchange="js_contaCaracteres(this.value)"></textarea>
+                        </tr>
+                        <tr>
+                            <td align="right" colspan = "5">
+                                <b>  Caracteres Digitados : </b>
+                                    <input type="text" name="obsdig" id="obsdig" size="3" value="0" disabled>
+                                <b> - Limite 1000  </b>
+                            </td>
                         </tr>
                         <tr>
                             <td>
@@ -163,7 +170,7 @@ if ($sfileName == "emp4_anularrpproc.php"){
         <tr style="display:<?=$sMostraItens;?>">
             <td colspan='2'>
                 <fieldset><legend><b>Itens do Empenho</b></legend>
-                    <table style='border:2px inset white;backgorund-color:white;' width='100%' cellspacing='0'>
+                    <table style='border:2px inset white;background-color:white;' width='100%' cellspacing='0'>
                         <thead>
                         <tr>
                             <th class='table_header'><input type='checkbox'  style='display:none'
@@ -208,6 +215,48 @@ if ($sfileName == "emp4_anularrpproc.php"){
     <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
 </form>
 <script>
+    function js_contaCaracteres(sTexto){
+
+        const rAcentos = /[а-ьз]/gi;
+        let bPossueAcento = rAcentos.test(sTexto);
+        if (bPossueAcento){
+            let sNovaString = sTexto.replace(rAcentos, function(match) {
+            const mapaSubstituicao = {
+            "б": "a", "а": "a",
+            "в": "a", "г": "a",
+            "й": "e", "и": "e",
+            "к": "e", "н": "i",
+            "м": "i", "о": "i",
+            "ц": "o", "т": "o",
+            "у": "o", "х": "o",
+            "ф": "o", "щ": "u",
+            "ъ": "u", "з": "c",
+            "ь": "u", "А": "A", 
+            "ы": "u", "Г": "A",
+            "Б": "A", "И": "E",
+            "В": "A", "Н": "I",
+            "Й": "E", "О": "I",
+            "К": "E", "Т": "O",
+            "М": "I", "Х": "O",
+            "Ц": "O", "Щ": "U",
+            "У": "O", "Ы": "U",
+            "Ф": "O", "Ь": "U",
+            "Ъ": "U", "З": "C",
+            };
+            let correspondencia = mapaSubstituicao[match];
+            if (correspondencia === undefined){
+                correspondencia = "";
+            }
+            return correspondencia;
+            });
+            sTexto = sNovaString
+            document.getElementById("motivo").value = sTexto;
+        }
+        const rCharEspecial = /[^a-z0-9]/gi;
+        let aCaracteresEspeciais = sTexto.match(rCharEspecial) ?? [];
+        document.getElementById("obsdig").value = sTexto.length - aCaracteresEspeciais.length;
+    }
+
     iTipoRP = <?=$iTipoResto;?>;
     function js_pesquisa(){
 
@@ -420,6 +469,8 @@ if ($sfileName == "emp4_anularrpproc.php"){
             return
         }
 
+
+
         var iEmpenho      = $F('e60_numemp');
         var nSaldoEmpenho = js_strToFloat($('saldoRP').value);
         var sAto          = new String($F('ato'));
@@ -440,7 +491,15 @@ if ($sfileName == "emp4_anularrpproc.php"){
          * caso nao selecionou nenhuma, devemos cancelar a operacao.
          * - o usuбrio deve preencher o campo motivo.
          * - Valor das notas nao pode ser maior que o saldo restante.
+         * - verificar se o campo "Motivo" possue mais de 8 caracteres.
          */
+        //verifica se o campo "Motivo" possue mais de 8 caracteres.
+        if (document.getElementById('obsdig').value < 8) {
+            alert("O motivo deve ter no mнnimo 8 caracteres.")
+            document.getElementById('motivo').focus()
+            return
+        }
+
         if (!confirm("Confirma Anulaзгo do Empenho?")) {
             return false;
         }
@@ -468,6 +527,7 @@ if ($sfileName == "emp4_anularrpproc.php"){
             return false;
 
         }
+
 
         /*
          * Vamos percorrer as notas de RP existentes no empenho

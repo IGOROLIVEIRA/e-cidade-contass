@@ -709,7 +709,8 @@ class Preenchimentos
                 rh02_hrssem,
                 rh02_tipojornada,
                 rh02_horarionoturno,
-                jt_nome
+                jt_nome,
+                rh30_regime
                         from
                             rhpessoal
                         left join rhpessoalmov on
@@ -772,6 +773,7 @@ class Preenchimentos
                                                             and rescisao.r59_caub         = rhpesrescisao.rh05_caub::char(2)
                         where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902')
                         and rh30_vinculo = 'A'
+                        and rh05_recis is null
                         ";
         if ($matricula != null) {
             $sql .= "and rh01_regist in ($matricula) ";
@@ -808,10 +810,8 @@ class Preenchimentos
        date_part('year', rh01_admiss) as rh01_admiss_ano,
        rh02_tipobeneficio AS tpbeneficio,
        CASE
-           WHEN rh02_plansegreg = 1 THEN 1
-           WHEN rh02_plansegreg = 2 THEN 2
-           WHEN rh02_plansegreg = 3 THEN 3
-           WHEN rh02_plansegreg = 0 THEN 0
+           WHEN rh02_plansegreg IS NULL THEN 0
+           ELSE rh02_plansegreg
        END AS tpplanrp,
        rh02_descratobeneficio AS dsc,
        CASE

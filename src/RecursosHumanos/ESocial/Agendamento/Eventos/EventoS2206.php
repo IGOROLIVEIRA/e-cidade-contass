@@ -34,6 +34,11 @@ class EventoS2206 extends EventoBase
         $iSequencial = 1;
         
         foreach ($this->dados as $oDados) {
+
+            if($this->comparaDados($oDados->matricula,$oDados->rh02_salari,$oDados->rh02_funcao,$oDados->rh20_cargo) == false){
+                continue;
+            }
+
             $oDadosAPI                                   = new \stdClass;
             $oDadosAPI->evtAltContratual                      = new \stdClass;
             $oDadosAPI->evtAltContratual->sequencial          = $iSequencial;
@@ -41,7 +46,7 @@ class EventoS2206 extends EventoBase
             $oDadosAPI->evtAltContratual->dtAlteracao         = $this->contarDias($this->dataDoSistema())? $this->dataDoSistema() : null; //implode('-', array_reverse(explode('/', $this->dt_alteracao))); //'2021-01-29'; //$oDados->altContratual->dtAlteracao;
             $oDadosAPI->evtAltContratual->indRetif            = 1;
             $oDadosAPI->evtAltContratual->nrRecibo            = null;
-            $oDadosAPI->evtAltContratual->cpfTrab             = $oDados->cpfTrab;
+            $oDadosAPI->evtAltContratual->cpfTrab             = $oDados->cpftrab;
             $oDadosAPI->evtAltContratual->matricula           = $oDados->matricula;
 
             $oDadosAPI->evtAltContratual->dtef                = $this->dataDoSistema();
@@ -49,7 +54,7 @@ class EventoS2206 extends EventoBase
 
             $oDadosAPI->evtAltContratual->tpRegPrev = $oDados->r33_tiporegime;
 
-            //if (!empty($oDados->infoCeletista)) {
+            if ($oDados->rh30_regime == 2) {
                 $oDadosAPI->evtAltContratual->infoCeletista->tpRegJor = 1;
                 $oDadosAPI->evtAltContratual->infoCeletista->natAtividade = 1;
                 //$oDadosAPI->evtAltContratual->infoCeletista->dtBase = //SEMPRE EM BRANCO;
@@ -61,14 +66,14 @@ class EventoS2206 extends EventoBase
                 //     $oDadosAPI->evtAltContratual->infoCeletista->trabTemporario->justContr = $oDados->trabTemporario->justContr;
                 // }
                 // $oDadosAPI->evtAltContratual->infoCeletista->aprend = empty($oDados->aprend) ? null : $oDados->aprend;
-            // } else {
-                //if ($oDados->rh02_plansegreg) {
-                    // $oDadosAPI->evtAltContratual->infoEstatutario = $oDados->infoEstatutario;
-                    $oDadosAPI->evtAltContratual->infoEstatutario->tpPlanRP = $oDados->rh02_plansegreg;
-                    $oDadosAPI->evtAltContratual->infoEstatutario->indTetoRGPS = 'N';
-                    $oDadosAPI->evtAltContratual->infoEstatutario->indAbonoPerm = ($oDados->rh02_abonopermanencia == 'f')? 'N' : 'S';
-                //}
-            // }
+            } else {
+                
+                // $oDadosAPI->evtAltContratual->infoEstatutario = $oDados->infoEstatutario;
+                $oDadosAPI->evtAltContratual->infoEstatutario->tpPlanRP = intval($oDados->rh02_plansegreg);
+                $oDadosAPI->evtAltContratual->infoEstatutario->indTetoRGPS = 'N';
+                $oDadosAPI->evtAltContratual->infoEstatutario->indAbonoPerm = ($oDados->rh02_abonopermanencia == 'f')? 'N' : 'S';
+            }
+            
 
             // if (!empty($oDados->infoContrato)) {
 
@@ -84,8 +89,10 @@ class EventoS2206 extends EventoBase
 
                 $oDadosAPI->evtAltContratual->infoContrato->codCateg = $oDados->h13_categoria;
 
-                $oDadosAPI->evtAltContratual->infoContrato->vrSalFx = $oDados->rh02_salari;
-                $oDadosAPI->evtAltContratual->infoContrato->undSalFixo = $oDados->undsalfixo;
+                if (!empty($oDados->rh02_salari) && !empty($oDados->undsalfixo)) {
+                    $oDadosAPI->evtAltContratual->infoContrato->vrSalFx = number_format($oDados->rh02_salari, 2, ".", "");
+                    $oDadosAPI->evtAltContratual->infoContrato->undSalFixo = $oDados->undsalfixo;
+                }
                 
                 //$oDadosAPI->evtAltContratual->infoContrato->dscSalVar = empty($oDados->remuneracao->dscSalVar) ? null : $oDados->remuneracao->dscSalVar;
 
@@ -98,10 +105,10 @@ class EventoS2206 extends EventoBase
                 $oDadosAPI->evtAltContratual->infoContrato->localtrabgeral->desccomp = $oDados->desccomp_localtrabgeral;
 
 
-                $oDadosAPI->evtAltContratual->infoContrato->horcontratual->qtdhrssem  = $oDados->rh02_hrsssem;
-                $oDadosAPI->evtAltContratual->infoContrato->horcontratual->tpjornada  = $oDados->rh02_tipojornada;
+                $oDadosAPI->evtAltContratual->infoContrato->horcontratual->qtdhrssem  = empty($oDados->rh02_hrssem) ? null : $oDados->rh02_hrssem; $oDados->rh02_hrssem;
+                $oDadosAPI->evtAltContratual->infoContrato->horcontratual->tpjornada  = empty($oDados->rh02_tipojornada) ? null : intval($oDados->rh02_tipojornada);
                 $oDadosAPI->evtAltContratual->infoContrato->horcontratual->tmpparc    = 0;
-                $oDadosAPI->evtAltContratual->infoContrato->horcontratual->hornoturno = $oDados->rh02_horarionoturno;
+                $oDadosAPI->evtAltContratual->infoContrato->horcontratual->hornoturno = ($oDados->rh02_horarionoturno == 'f') ? 'N' : 'S';
                 $oDadosAPI->evtAltContratual->infoContrato->horcontratual->dscjorn    = $oDados->jt_nome;
                 
             //}
@@ -109,9 +116,9 @@ class EventoS2206 extends EventoBase
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
-        echo '<pre>';
-        print_r($aDadosAPI);
-        exit;
+        // echo '<pre>';
+        // print_r($aDadosAPI);
+        // exit;
         return $aDadosAPI;
     }
 
@@ -284,12 +291,15 @@ class EventoS2206 extends EventoBase
         $funcao = $oDados->rh02_funcao;
         $carga = $oDados->rh02_carga;
 
-        if ($salari != $rh02_salari_origem) {
+        if ($salari !== $rh02_salari_origem) {
             return "reajuste salarial";
-        } elseif ($funcao != $rh02_funcao_origem || $carga != $rh02_carga_origem) {
+        }
+        
+        if ($funcao !== $rh02_funcao_origem || $carga !== $rh02_carga_origem) {
             return "alteração de cargo";
         }
-
-        return ""; // Não houve alterações
+        
+        return false;
+        
     }
 }
