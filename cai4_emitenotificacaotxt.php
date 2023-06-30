@@ -1,7 +1,6 @@
 <?php
 
 use App\Repositories\Tributario\Arrecadacao\ArDigital\DTO\ArDigitalServicePayloadDTO;
-use App\Repositories\Tributario\Arrecadacao\ArDigital\DTO\ArquivoPostagemDTO;
 use App\Services\Tributario\Notificacoes\GenerateArDigitalService;
 
 require_once("libs/db_sql.php");
@@ -24,56 +23,6 @@ require_once("fpdf151/scpdf.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $lServicoArDigital = $_GET['lServArDigital'] === 'true';
-
-//$notificacao = new ArquivoPostagemDTO();
-//$notificacao->numeroLogradouro = '236';
-//$notificacao->nomeDestinatario = 'Rodrigo';
-//$notificacao->numeroCelularDestinatario = '38992210750';
-//$notificacao->nomeLogradouroDestinatario = 'Rua G';
-//$notificacao->complementoEnderecoDestinatario = 'Casa';
-//$notificacao->bairroDestinatario = 'Alcides Rabelo';
-//$notificacao->cidadeDestinatario = 'Montes Claros';
-//$notificacao->estadoDestinatario = 'MG';
-//$notificacao->cepDestino = '39401841';
-//
-//$notificacao2 = new ArquivoPostagemDTO();
-//$notificacao2->numeroLogradouro = '2363';
-//$notificacao2->nomeDestinatario = 'Rodrigow';
-//$notificacao2->numeroCelularDestinatario = '38992210710';
-//$notificacao2->nomeLogradouroDestinatario = 'Rua G';
-//$notificacao2->complementoEnderecoDestinatario = 'Casa';
-//$notificacao2->bairroDestinatario = 'Alcides Rabelo';
-//$notificacao2->cidadeDestinatario = 'Montes Claros';
-//$notificacao2->estadoDestinatario = 'MG';
-//$notificacao2->cepDestino = '39401841';
-//
-//$notificacoes = [
-//    $notificacao,
-//    $notificacao2
-//];
-//var_dump($lServicoArDigital);
-//var_dump(empty($notificacoes));
-//var_dump(($lServicoArDigital && !empty($notificacoes)));
-//$fileListaPostagem = '';
-//if ($lServicoArDigital && !empty($notificacoes)) {
-//    $service = new GenerateArDigitalService();
-//    try {
-//        $filesArDigital = $service->execute($notificacoes);
-//        $fileListaPostagem = $filesArDigital[0];
-//        $filePrevisaoPostagem = $filesArDigital[1];
-//    } catch (BusinessException | Exception $exception) {
-//        $sMsg = 'Erro ao gerar AR Digital: ' . $exception->getMessage();
-//        die($sMsg);
-//        db_redireciona("db_erros.php?fechar=true&db_erro={$sMsg}");
-//        exit;
-//    }
-//}
-//echo "<script>";
-//echo " let listagem = '$fileListaPostagem#Download arquivo TXT (AR Digital - Lista de Postagem)';	 ";
-//echo " listagem += '|$filePrevisaoPostagem#Download arquivo TXT (AR Digital - Previsao de Postagem)';	 ";
-//echo "  parent.js_montarlista(listagem,'form1');";
-//echo "</script>";
-//exit('aquiiiii');
 
 $clrotulo = new rotulocampo;
 $clrotulo->label("k60_codigo");
