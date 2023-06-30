@@ -1,5 +1,4 @@
 <?php
-ini_set('display_errors','on');
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 include("libs/db_sessoes.php");
@@ -82,7 +81,7 @@ if (isset($alterar)) {
 
     $clitemprecoreferencia->excluir(null, "si02_precoreferencia = $si01_sequencial");
     /**
-     * Atualização do valor dos itens do preço referência
+     * Atualizao do valor dos itens do preo referncia
      */
     
     if ($si01_tipoprecoreferencia == '1') {
@@ -231,7 +230,7 @@ if (isset($alterar)) {
     }
     if($cont == 0){
         $sqlerro = true;
-        $clprecoreferencia->erro_msg    = 'Quantidade de orçamentos cadastrados é menor que a quantidade de cotação selecionada.';
+        $clprecoreferencia->erro_msg    = 'Quantidade de oramentos cadastrados  menor que a quantidade de cotao selecionada.';
         $clprecoreferencia->erro_status = "0";
         $clprecoreferencia->erro_campo = "si01_cotacaoitem";
     }
