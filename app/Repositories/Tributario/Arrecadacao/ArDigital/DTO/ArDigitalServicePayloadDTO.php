@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Tributario\Arrecadacao\ArDigital\DTO;
 
-class ArquivoPostagemDTO
+class ArDigitalServicePayloadDTO
 {
     public string $codigoGrafica = '01';
 
@@ -63,29 +63,4 @@ class ArquivoPostagemDTO
     public string $cidadeDestinatario = '';
 
     public string $estadoDestinatario = '';
-
-    public function __construct($data = null)
-    {
-        if (empty($data)) {
-            return;
-        }
-        $this->fill($data);
-    }
-
-    /**
-     * Business logic to fill the payload
-     * @param array $data
-     * @return void
-     */
-    public function fill(array $data): void
-    {
-        foreach ($data as $attribute => $value) {
-
-            if (!property_exists((new self()), $attribute)) {
-                continue;
-            }
-
-            $this->$attribute = $value;
-        }
-    }
 }

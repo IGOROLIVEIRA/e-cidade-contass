@@ -1,5 +1,6 @@
 <?php
 
+use App\Repositories\Tributario\Arrecadacao\ArDigital\DTO\ArDigitalServicePayloadDTO;
 use App\Repositories\Tributario\Arrecadacao\ArDigital\DTO\ArquivoPostagemDTO;
 use App\Services\Tributario\Notificacoes\GenerateArDigitalService;
 
@@ -638,7 +639,7 @@ for($indx=0;$indx < $numrows; $indx++) {
 
     }
 
-    $notificacao = new ArquivoPostagemDTO();
+    $notificacao = new ArDigitalServicePayloadDTO();
     $impostos = '';
     $virgula  = '';
     $xvalor   = 0;
@@ -695,6 +696,7 @@ for($indx=0;$indx < $numrows; $indx++) {
         $notificacao->complementoEnderecoDestinatario = $z01_compl;
         $notificacao->cidadeDestinatario = $z01_munic;
         $notificacao->estadoDestinatario = $z01_uf;
+        $notificacao->cepDestino = $z01_cep;
         $notificacoes[] = $notificacao;
     }
 
@@ -1379,8 +1381,8 @@ for($indx=0;$indx < $numrows; $indx++) {
         $service = new GenerateArDigitalService();
         try {
             $filesArDigital = $service->execute($notificacoes);
-            $fileListaPostagem = $filesArDigital[0];
-            $filePrevisaoPostagem = $filesArDigital[1];
+            $fileListaPostagem = $filesArDigital->arquivoPostagem;
+            $filePrevisaoPostagem = $filesArDigital->arquivoPrevisaoPostagem;
             $arDigitalJs = "  listagem += '|$fileListaPostagem#Download arquivo TXT (AR Digital - Lista de Postagem)'; ";
             $arDigitalJs .= "  listagem += '|$filePrevisaoPostagem#Download arquivo TXT (AR Digital - Previsao de Postagem)'; ";
         } catch (BusinessException | Exception $exception) {

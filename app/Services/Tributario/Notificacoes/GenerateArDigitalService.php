@@ -2,6 +2,7 @@
 
 namespace App\Services\Tributario\Notificacoes;
 
+use App\Repositories\Tributario\Arrecadacao\ArDigital\DTO\ArDigitalServicePayloadDTO;
 use App\Repositories\Tributario\Arrecadacao\ArDigital\DTO\ArDigitalServiceResponseDTO;
 use App\Repositories\Tributario\Arrecadacao\ArDigital\DTO\ArquivoPostagemDTO;
 use App\Repositories\Tributario\Arrecadacao\ArDigital\DTO\ArquivoPrevisaoPostagemDetalheDTO;
@@ -22,22 +23,28 @@ class GenerateArDigitalService
     }
 
     /**
-     * @param ArquivoPostagemDTO[] $data
+     * @param ArDigitalServicePayloadDTO[] $data
      * @throws BusinessException
      * @throws Exception
-     * @return array
+     * @return ArDigitalServiceResponseDTO
      */
-    public function execute(array $data): array
+    public function execute(array $data): ArDigitalServiceResponseDTO
     {
         $arquivoPostagem = $this->generateArquivoPostagem($data);
         $arquiviPrevisaoPostagem = $this->generateArquivoPrevisaoPostagem($data);
-        return [$arquivoPostagem, $arquiviPrevisaoPostagem];
+        return (new ArDigitalServiceResponseDTO($arquivoPostagem, $arquiviPrevisaoPostagem));
     }
 
+    /**
+     * @param ArDigitalServicePayloadDTO[] $data
+     * @return string
+     * @throws BusinessException
+     */
     private function generateArquivoPostagem(array $data): string
     {
         foreach ($data as $item) {
-            $registro3 = $this->arquivoPostagem->getListaDePostagemInstance($item);
+            $arquivoPostagemDTO = new ArquivoPostagemDTO((array) $item);
+            $registro3 = $this->arquivoPostagem->getListaDePostagemInstance($arquivoPostagemDTO);
             $this->arquivoPostagem->setRegistrosListaPostagem($registro3);
         }
         $content = $this->arquivoPostagem->toString();
@@ -48,7 +55,7 @@ class GenerateArDigitalService
     }
 
     /**
-     * @param ArquivoPostagemDTO[] $data
+     * @param ArDigitalServicePayloadDTO[] $data
      * @return string
      * @throws Exception
      */
