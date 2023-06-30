@@ -709,7 +709,8 @@ class Preenchimentos
                 rh02_hrssem,
                 rh02_tipojornada,
                 rh02_horarionoturno,
-                jt_nome
+                jt_nome,
+                rh30_regime
                         from
                             rhpessoal
                         left join rhpessoalmov on
@@ -772,6 +773,7 @@ class Preenchimentos
                                                             and rescisao.r59_caub         = rhpesrescisao.rh05_caub::char(2)
                         where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902')
                         and rh30_vinculo = 'A'
+                        and rh05_recis is null
                         ";
         if ($matricula != null) {
             $sql .= "and rh01_regist in ($matricula) ";
