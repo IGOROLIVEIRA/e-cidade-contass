@@ -99,6 +99,7 @@ switch ($oParam->exec) {
             $anoAtual = $data[0];
             $anoAnterior = $data[0] - 1;
             $controleDataEmp = 0;
+            $controleDataEmpenho = 0;
             $controleAno = 0;
             $controleVerificarEmp = 0;
 
@@ -112,6 +113,27 @@ switch ($oParam->exec) {
             $opVeic = 0;
             $b = 0;
             $ve = 0;
+            
+            //verifica data do empenho
+
+            foreach($resultadoPlanilha as $key => $row){
+                $codEmpenho = explode("/",$resultadoEmpenho[$key]);
+                $codEmp = $codEmpenho[0];
+                $anoEmp = $codEmpenho[1];
+
+                $rsEmpenho = $clempempenho->sql_record($clempempenho->sql_query_file(null,"e60_emiss",null,"e60_codemp ='$codEmp' and e60_anousu = $anoEmp and e60_instit = " .db_getsession('DB_instit')));
+                $resultEmpenho = db_utils::fieldsMemory($rsEmpenho, 0);
+
+                $dtAbastecimento = (implode("/",(array_reverse(explode("-",$row->data)))));
+                $dtAbastecimento = DateTime::createFromFormat('d/m/Y', $dtAbastecimento);
+
+                $dtEmpenho = (implode("/",(array_reverse(explode("-",$resultEmpenho->e60_emiss)))));
+                $dtEmpenho = DateTime::createFromFormat('d/m/Y', $dtEmpenho);
+
+                if($dtAbastecimento < $dtEmpenho){
+                    $controleDataEmpenho = 1;
+                }
+            }
 
 
             //verifica Baixa de Veiculos 
@@ -688,7 +710,7 @@ switch ($oParam->exec) {
              * ###########################################INICIOOO IMPORTACAO#################################################################################
              */
 
-            if ($controle == 0 && $controleDataEmp == 0 && $controleAno == 0  && $controleVerificarEmp == 0 && $controleIguais == 0 && $controle1 == 0 && $opBaixaCompleta == 0 && $opBaixa == 0 && $opKm == 0 && $opVeic == 0 && $controleCom == 0 && $deixarInserir == 0 && $controleData == 0) {
+            if ($controle == 0 && $controleDataEmpenho == 0 && $controleDataEmp == 0 && $controleAno == 0  && $controleVerificarEmp == 0 && $controleIguais == 0 && $controle1 == 0 && $opBaixaCompleta == 0 && $opBaixa == 0 && $opKm == 0 && $opVeic == 0 && $controleCom == 0 && $deixarInserir == 0 && $controleData == 0) {
                 $emp = 0;
                 foreach ($resultadoPlanilha as $chave => $row) {
                     $test1       = $row->placa;
@@ -865,6 +887,10 @@ switch ($oParam->exec) {
                 } else if ($controleData == 1) {
                     $oRetorno->status = 6;
                     $oRetorno->message = urlencode("Usuário: Abastecimento não incluído, data de liberação de validação do empenho maior do que data da Emissão do empenho");
+                    $erro = true;
+                } else if ($controleDataEmpenho == 1){
+                    $oRetorno->status = 6;
+                    $oRetorno->message = urlencode("Usuário: Data do empenho e posterior a data do abastecimento");
                     $erro = true;
                 } else if ($controleAno == 1) {
                     $oRetorno->status = 2;
