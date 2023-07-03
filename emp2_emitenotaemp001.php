@@ -75,10 +75,12 @@ $db_opcao = 1;
                 query += "&e60_codemp=" + obj.e60_codemp.value;
             } else {
                 if ((obj.dtini_dia.value != '') && (obj.dtini_dia.value != '') && (obj.dtini_mes.value != '')) {
-                    query += "&dtini_dia=" + obj.dtini_dia.value + "&dtini_mes=" + obj.dtini_mes.value + "&dtini_ano=" + obj.dtini_ano.value;
+                    var sDtini = obj.dtini.value.split("/");
+                    query += "&dtini_dia=" + sDtini[0] + "&dtini_mes=" + sDtini[1] + "&dtini_ano=" + sDtini[2];
                 }
                 if ((obj.dtfim_dia.value != '') && (obj.dtfim_mes.value != '') && (obj.dtfim_ano.value != '')) {
-                    query += "&dtfim_dia=" + obj.dtfim_dia.value + "&dtfim_mes=" + obj.dtfim_mes.value + "&dtfim_ano=" + obj.dtfim_ano.value;
+                    var sDtfim = obj.dtfim.value.split("/");
+                    query += "&dtfim_dia=" + sDtfim[0] + "&dtfim_mes=" + sDtfim[1] + "&dtfim_ano=" + sDtfim[2];
                 }
             }
             if (query == '') {

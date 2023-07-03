@@ -64,6 +64,9 @@ function js_imprime(){
     return false;
   }
  query = parent.iframe_filtro.js_pesquisa(); 
+ var sPeriodoInicial = document.form1.data1.value.split("/");
+ var sPeriodoFinal   = document.form1.data2.value.split("/");
+ 
 // alert(query);
  jan = window.open('emp2_empliqpag02.php?pag='+document.form1.pag.checked+
                                             '&liq='+document.form1.liq.checked+
@@ -74,12 +77,12 @@ function js_imprime(){
 					    '&mostraritem='+document.form1.mostraritem.value+
 					    '&com_ou_sem='+document.form1.com_ou_sem.value+
 					    '&listacredor='+listacredor+
-					    '&dataini='+document.form1.data1_ano.value+'-'
-					               +document.form1.data1_mes.value+'-'
-					               +document.form1.data1_dia.value+
-					    '&datafin='+document.form1.data2_ano.value+'-'
-					               +document.form1.data2_mes.value+'-'
-					               +document.form1.data2_dia.value+'&'
+					    '&dataini='+sPeriodoInicial[2]+'-'
+					               +sPeriodoInicial[1]+'-'
+					               +sPeriodoInicial[0]+
+					    '&datafin='+sPeriodoFinal[2]+'-'
+					               +sPeriodoFinal[1]+'-'
+					               +sPeriodoFinal[0]+'&'
 						       +query
 					    ,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
  jan.moveTo(0,0);
