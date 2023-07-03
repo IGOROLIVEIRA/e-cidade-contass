@@ -162,7 +162,7 @@ class cl_licitaparam
                                       ,l12_usuarioadjundica
                                       ,l12_validacadfornecedor
                                       ,l12_pncp
-                                      ,l12_numeracaomanual,
+                                      ,l12_numeracaomanual
                                       ,l12_validafornecedor_emailtel
                                       ,l12_acessoapipcp
                        )
