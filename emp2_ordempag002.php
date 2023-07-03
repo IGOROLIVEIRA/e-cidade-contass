@@ -49,11 +49,11 @@ $where1 = "";
 $where2 = "";
 $where3 = "";
 $where4 = "";
-if (($data!="--")&&($data1!="--")) {
+if (($data!="undefined")&&($data1!="undefined")) {
   $where ="    e50_data  between '$data' and '$data1'  ";
-}else if ($data!="--"){
+}else if ($data!="undefined"){
   $where="    e50_data >= '$data'  ";
-}else if ($data1!="--"){
+}else if ($data1!="undefined"){
   $where="    e50_data <= '$data1'   ";
 }
 
@@ -75,17 +75,17 @@ if (($numempini!="")&&($numempfim!="")) {
 }
 
 //die($dt_emp_ini);
-if (($dt_emp_ini!="--")&&($dt_emp_fim!="--")) {
+if (($dt_emp_ini!="undefined")&&($dt_emp_fim!="undefined")) {
   $where3 =" and e60_emiss  between '$dt_emp_ini' and '$dt_emp_fim'  ";
-}else if ($dt_emp_ini!="--"){
+}else if ($dt_emp_ini!="undefined"){
   $where3=" and e60_emiss >= '$dt_emp_ini'  ";
-}else if ($dt_emp_fim!="--"){
+}else if ($dt_emp_fim!="undefined"){
   $where3=" and e60_emiss <= '$dt_emp_fim'   ";
 }
 
 if (($e60_numcgm!="--")&&($e60_numcgm!="--")&&($e60_numcgm!="")) {
   $where4 =" and e60_numcgm = $e60_numcgm ";
-}else if ($dt_emp_ini!="--"&&($dt_emp_ini!="")){
+}else if ($dt_emp_ini!="undefined"&&($dt_emp_ini!="")){
   $where4 =" and e60_numcgm >= $e60_numcgm ";
 }else if ($e60_numcgm!="--"&&($e60_numcgm!="")){
   $where4 =" and e60_numcgm <= $e60_numcgm ";
