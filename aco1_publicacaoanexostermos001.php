@@ -110,18 +110,18 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
 </html>
 <script type="text/javascript">
 
-  var oGridDocumentos = new DBGrid('gridDocumentos');
+  const oGridDocumentos = new DBGrid('gridDocumentos');
 
   oGridDocumentos.nameInstance = "oGridDocumentos";
   oGridDocumentos.setCheckbox(0);
-  oGridDocumentos.setCellAlign(new Array( "center", "center", "center"));
+  oGridDocumentos.setCellAlign(["center", "center", "center"]);
   oGridDocumentos.setCellWidth(["30%", "30%", "30%"]);
-  oGridDocumentos.setHeader(new Array( "Código", "Tipo", "Ação"));
+  oGridDocumentos.setHeader(["Código", "Tipo", "Ação"]);
   oGridDocumentos.allowSelectColumns(true);
   oGridDocumentos.show($('ctnDbGridDocumentos'));
 
   function js_pesquisatermo(mostra){
-    if(mostra==true){
+    if(mostra===true){
       js_OpenJanelaIframe('CurrentWindow.corpo',
       'db_iframe_acocontroletermospncp',
       'func_pesquisatermospncp.php?pesquisa=true&funcao_js=parent.js_preencheTermos|l214_sequencial|ac16_objeto',
@@ -147,7 +147,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
   */
   $("uploadfile").observe('change', function() {
 
-    var iFrame = document.createElement("iframe");
+    let iFrame = document.createElement("iframe");
     iFrame.src = 'func_uploadtermos.php?clone=form';
     iFrame.id  = 'uploadIframe';
     $('anexo').appendChild(iFrame);
@@ -155,11 +155,11 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
   });
 
   function js_getAnexo() {
-    var oParam        = new Object();
+    let oParam        = {};
     oParam.exec       = 'getAnexos';
     oParam.sequencial = $F('l214_sequencial');
     js_divCarregando('Aguarde... Carregando Foto','msgbox');
-    var oAjax         = new Ajax.Request(
+    let oAjax         = new Ajax.Request(
         'con1_anexostermos.RPC.php',
         { parameters: 'json='+Object.toJSON(oParam),
             asynchronous:false,
@@ -170,14 +170,14 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
 
   function js_retornoGetAnexo(oAjax) {
     js_removeObj("msgbox");
-    var oRetorno = eval('('+oAjax.responseText+")");
+    let oRetorno = eval('('+oAjax.responseText+")");
     oGridDocumentos.clearAll(true);
 
-    if (oRetorno.dados.length == 0) {
+    if (oRetorno.dados.length === 0) {
         return false;
     }
     oRetorno.dados.each(function (oDocumento, iSeq) {
-        var aLinha = new Array();
+        let aLinha = [];
         aLinha[0]  = oDocumento.iCodigo;
         aLinha[1]  = decodeURIComponent(oDocumento.sTipo.replace(/\+/g,  " "));
         aLinha[2]  = '<input type="button" value="E" onclick="js_excluirAnexo('+oDocumento.iCodigo+')"><input type="button" value="Download" onclick="js_DownloadAnexo('+oDocumento.iCodigo+')">';
@@ -187,17 +187,17 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
   }
 
   function js_salvarDocumento() {
-    if ($F('ac56_tipoanexo') == 0) {
+    if ($F('ac56_tipoanexo') === 0) {
       alert('Selecione o tipo de anexo!');
       return false;
     }
-    var oParam        = new Object();
+    let oParam        = {};
     oParam.exec       = 'salvarDocumento';
     oParam.sequencial = $F('l214_sequencial');
     oParam.tipoanexo  = $F('ac56_tipoanexo');
     oParam.arquivo    = $F('namefile');
     js_divCarregando('Aguarde... Salvando Documento','msgbox');
-    var oAjax         = new Ajax.Request('con1_anexostermos.RPC.php',{
+    let oAjax         = new Ajax.Request('con1_anexostermos.RPC.php',{
               parameters: 'json='+Object.toJSON(oParam),
               method: 'post',
               asynchronous:false,
@@ -207,8 +207,8 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
 
   function js_retornoSalvarFoto(oAjax) {
     js_removeObj("msgbox");
-    var oRetorno = eval('('+oAjax.responseText+")");
-    if (oRetorno.status == 1) {
+    let oRetorno = eval('('+oAjax.responseText+")");
+    if (oRetorno.status === 1) {
         $('uploadfile').value     = '';
         js_getAnexo();
     } else {
@@ -222,11 +222,11 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
       return false;
     }
 
-    var oParam             = new Object();
+    let oParam             = {};
     oParam.exec            = 'excluirAnexo';
     oParam.codAnexo = iCodigoDocumento;
     js_divCarregando('Aguarde... excluindo foto','msgbox');
-    var oAjax        = new Ajax.Request(
+    let oAjax        = new Ajax.Request(
       'con1_anexostermos.RPC.php',
       { asynchronous:false,
         parameters: 'json='+Object.toJSON(oParam),
@@ -237,9 +237,9 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
 
   function js_retornoexcuirAnexo(oAjax) {
     js_removeObj("msgbox");
-    var oRetorno = eval('('+oAjax.responseText+")");
+    let oRetorno = eval('('+oAjax.responseText+")");
 
-    if (oRetorno.status == 2) {
+    if (oRetorno.status === 2) {
       alert(oRetorno.message);
     }else {
       alert("Anexo excluido com Sucesso !");
@@ -251,11 +251,11 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
     if (!confirm('Deseja realizar o Download do Documento?')) {
       return false;
     }
-    var oParam             = new Object();
+    let oParam             = {};
     oParam.exec            = 'downloadDocumento';
     oParam.codAnexo        = iCodigo;
     js_divCarregando('Aguarde... realizando Download do documento','msgbox');
-    var oAjax        = new Ajax.Request(
+    let oAjax        = new Ajax.Request(
       'con1_anexostermos.RPC.php',
       { asynchronous:false,
         parameters: 'json='+Object.toJSON(oParam),
@@ -267,11 +267,77 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
   function js_downloadDocumento(oAjax) {
 
     js_removeObj("msgbox");
-    var oRetorno = eval('('+oAjax.responseText+")");
-    if (oRetorno.status == 2) {
+    let oRetorno = eval('('+oAjax.responseText+")");
+    if (oRetorno.status === 2) {
       alert("Não foi possivel carregar o documento:\n "+ oRetorno.message);
     }
     window.open("db_download.php?arquivo="+oRetorno.nomearquivo);
+  }
+
+  function js_enviarDocumentoPNCP() {
+
+      const documentosSelecionados = oGridDocumentos.getSelection("object")
+      let iSelecionados = documentosSelecionados.length;
+      let iCodigoTermo = $('l214_sequencial').value;
+      let aDocumentos = [];
+      let aTipo = [];
+
+      if (iSelecionados === 0) {
+          alert('Selecione pelo menos arquivo para Enviar')
+          return false
+      }
+
+      if (!confirm('Confirma o Envio do Documento?')) {
+          return false;
+      }
+
+      if (empty(iCodigoTermo)) {
+          alert('Licitação não informada.');
+          return false;
+      }
+
+      for (let iIndice = 0; iIndice < iSelecionados; iIndice++) {
+
+          let iDocumento = documentosSelecionados[iIndice].aCells[0].getValue();
+          aDocumentos.push(iDocumento);
+
+          let iTipo = documentosSelecionados[iIndice].aCells[3].getValue();
+          aTipo.push(iTipo);
+
+      }
+
+      js_divCarregando('Aguarde... Enviando documentos!', 'msgbox');
+
+      let oParametros = {};
+
+      oParametros.exec = 'EnviarDocumentoPNCP';
+      oParametros.iCodigoProcesso = iCodigoProcesso;
+      oParametros.aDocumentos = aDocumentos;
+      oParametros.aTipoDocumentos = aTipo;
+
+      let oAjax = new Ajax.Request(
+          'lic1_envioanexos.RPC.php', {
+              parameters: 'json=' + Object.toJSON(oParametros),
+              method: 'post',
+              asynchronous: false,
+
+              /**
+               *
+               * Retorno do RPC
+               */
+              onComplete: function(oAjax) {
+
+                  js_removeObj("msgbox");
+                  let oRetorno = eval('(' + oAjax.responseText + ")");
+                  console.log(oRetorno);
+                  if (oRetorno.status === 1) {
+                      alert("Anexo(s) Enviado(s) com Sucesso!");
+                  } else {
+                      alert(oRetorno.message.urlDecode());
+                  }
+              }
+          });
+
   }
 
 </script>
