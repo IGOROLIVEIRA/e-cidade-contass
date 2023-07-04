@@ -2661,8 +2661,9 @@ class dadosEmpenhoFolha {
                     and rh171_instit        = {$iInstit}
                     and rh171_anousu        = {$iAnoUsu}";
 
-		if ($sListaPrev != '')
-			$sWhere .= " AND rh171_codtab IN ($sListaPrev) ";
+		if ($sListaPrev != '') {
+			  $sWhere .= " AND rh171_codtab IN ($sListaPrev) ";
+    }
 
         if(!empty($iPrograma)){
             $sWhere .= " and rh171_programaorig = {$iPrograma}   ";

@@ -4,9 +4,9 @@ use Phinx\Migration\AbstractMigration;
 
 class Oc20254 extends AbstractMigration
 {
-    const PMPEDRAS = 'NRO_CNPJ';
-    const PMSAOFRANCISCO = 'NRO_CNPJ';
-    const PMJURAMENTO = 'NRO_CNPJ';
+    const PMPEDRAS = '25209156000108';
+    const PMSAOFRANCISCO = '22679153000140';
+    const PMJURAMENTO = '18017368000128';
 
     public function up()
     {
