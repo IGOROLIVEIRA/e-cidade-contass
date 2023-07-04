@@ -465,10 +465,15 @@ try {
             if (document.getElementById('tipo_col').style.display == 'none') {
                 document.getElementById('tipo_col').style.display = 'inline';
             }
+        } else if ((document.getElementById('evento').value == 'S1299')) {
+            if (document.getElementById('transDCTFWeb_col').style.display == 'none') {
+                document.getElementById('transDCTFWeb_col').style.display = 'inline';
+            }
         } else {
             document.getElementById('indapuracao_col').style.display = 'none';
             document.getElementById('tppgto_col').style.display = 'none'
             document.getElementById('tipo_col').style.display = 'none';
+            document.getElementById('transDCTFWeb_col').style.display = 'none';
         }
     }
 

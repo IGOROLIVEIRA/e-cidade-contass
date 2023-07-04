@@ -66,6 +66,11 @@ abstract class EventoBase
         $this->tpevento = $tpevento;
     }
 
+    public function setTransDCTFWeb($transDCTFWeb)
+    {
+        $this->transDCTFWeb = $transDCTFWeb;
+    }
+
     public function setDadosExclusao($aDadosExclusao)
     {
         $this->aDadosExclusao = $aDadosExclusao;
