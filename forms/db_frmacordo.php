@@ -1482,7 +1482,7 @@ db_app::load("dbtextFieldData.widget.js");
             js_OpenJanelaIframe(
                 '(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
                 'db_iframe_contratado',
-                'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf|z01_telef|z01_email',
+                'func_pcforne.php?validacaoCadastroFornecedor=true&validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf|z01_telef|z01_email',
                 'Pesquisa',
                 true,
                 '0',
@@ -1557,6 +1557,27 @@ db_app::load("dbtextFieldData.widget.js");
 
     function js_mostracontratado1(nomecontratado, ac16_contratado, z01_cgccpf, z01_telef, z01_email) {
 
+        /* Verificando se o fornecedor possui os representantes legais com o mesmo CNPJ do Fornecedor.*/
+
+        var oParametros = new Object();
+        oParametros.exec = 'validacaoCadastroFornecedor';
+        oParametros.iFornecedor = ac16_contratado;
+        var validacaoCadastroFornecedor;
+        var oAjax = new Ajax.Request("ac4_acordoinclusao.rpc.php", {
+            method: "post",
+            asynchronous: false,
+            parameters: 'json=' + Object.toJSON(oParametros),
+            onComplete: function(oAjax) {
+                var oRetorno = eval("(" + oAjax.responseText + ")");
+                if (oRetorno.iStatus == 2) {
+                    validacaoCadastroFornecedor = false;
+                    alert(oRetorno.sMessage.urlDecode());
+                }
+
+            }
+        });
+
+        if (validacaoCadastroFornecedor == false) return false;
 
         if ((z01_telef.trim() == '' || z01_email.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
             alert("Usuário: Inclusão abortada. O Fornecedor selecionado não possui Email e Telefone no seu cadastro.");

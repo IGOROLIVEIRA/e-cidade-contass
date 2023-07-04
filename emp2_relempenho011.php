@@ -426,8 +426,13 @@ $anousu = db_getsession("DB_anousu");
         document.form1.listalicita.value = listalicita;
         document.form1.listaacordo.value = listaacordo;
 
-        document.form1.datacredor.value=document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value;
-        document.form1.datacredor1.value=document.form1.data11_ano.value+'-'+document.form1.data11_mes.value+'-'+document.form1.data11_dia.value;
+        var sPeriodoInicial = document.form1.data1.value.split("/");
+        sPeriodoInicial     = sPeriodoInicial[2]+'-'+sPeriodoInicial[1]+'-'+sPeriodoInicial[0];
+        var sPeriodoFinal   = document.form1.data11.value.split("/");
+        sPeriodoFinal       = sPeriodoFinal[2]+'-'+sPeriodoFinal[1]+'-'+sPeriodoFinal[0];     
+
+        document.form1.datacredor.value=sPeriodoInicial;
+        document.form1.datacredor1.value=sPeriodoFinal;
 
         document.form1.dataesp11.value=document.form1.dataesp1_ano.value+'-'+document.form1.dataesp1_mes.value+'-'+document.form1.dataesp1_dia.value;
         document.form1.dataesp22.value=document.form1.dataesp2_ano.value+'-'+document.form1.dataesp2_mes.value+'-'+document.form1.dataesp2_dia.value;
@@ -486,7 +491,10 @@ $anousu = db_getsession("DB_anousu");
         <?
         if ($testdt=='com'){
         ?>
-
+        var sPeriodoInicial = document.form1.data1.value.split("/");
+        sPeriodoInicial     = sPeriodoInicial[2]+'-'+sPeriodoInicial[1]+'-'+sPeriodoInicial[0];
+        var sPeriodoFinal   = document.form1.data11.value.split("/");
+        sPeriodoFinal       = sPeriodoFinal[2]+'-'+sPeriodoFinal[1]+'-'+sPeriodoFinal[0];      
         jan = window.open('emp2_relempenho002.php?tipoemp='+tipoemp
             +'&listacredor='+listacredor
             +'&listagestor='+listagestor
@@ -497,8 +505,8 @@ $anousu = db_getsession("DB_anousu");
             +'&listacom='+listacom
             +'&listalicita='+listalicita
             +'&listaacordo='+listaacordo
-            +'&datacredor='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value
-            +'&datacredor1='+document.form1.data11_ano.value+'-'+document.form1.data11_mes.value+'-'+document.form1.data11_dia.value
+            +'&datacredor='+sPeriodoInicial
+            +'&datacredor1='+sPeriodoFinal
             +'&dataesp1='+document.form1.dataesp1_ano.value+'-'+document.form1.dataesp1_mes.value+'-'+document.form1.dataesp1_dia.value
             +'&dataesp2='+document.form1.dataesp2_ano.value+'-'+document.form1.dataesp2_mes.value+'-'+document.form1.dataesp2_dia.value
             +'&processar='+document.form1.processar.value
@@ -513,6 +521,10 @@ $anousu = db_getsession("DB_anousu");
         <?
         }else{
         ?>
+         var sPeriodoInicial = document.form1.data1.value.split("/");
+         sPeriodoInicial     = sPeriodoInicial[2]+'-'+sPeriodoInicial[1]+'-'+sPeriodoInicial[0];
+         var sPeriodoFinal   = document.form1.data11.value.split("/");
+         sPeriodoFinal       = sPeriodoFinal[2]+'-'+sPeriodoFinal[1]+'-'+sPeriodoFinal[0];    
         jan = window.open('emp2_relempenho002.php?tipoemp='+tipoemp
             +'&listacredor='+listacredor
             +'&listagestor='+listagestor
@@ -523,8 +535,8 @@ $anousu = db_getsession("DB_anousu");
             +'&listacom='+listacom
             +'&listalicita='+listalicita
             +'&listaacordo='+listaacordo
-            +'&datacredor='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value
-            +'&datacredor1='+document.form1.data11_ano.value+'-'+document.form1.data11_mes.value+'-'+document.form1.data11_dia.value
+            +'&datacredor='+sPeriodoInicial
+            +'&datacredor1='+sPeriodoInicial
             +'&processar='+document.form1.processar.value
             +'&vercredor='+parent.iframe_g2.document.form1.ver.value
             +'&verhist='+parent.iframe_g3.document.form1.ver.value

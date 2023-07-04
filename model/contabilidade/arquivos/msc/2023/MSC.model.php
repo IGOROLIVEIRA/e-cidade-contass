@@ -155,7 +155,7 @@ class MSC {
   public function getIC6() {
     return $this->iIC6;
   }
-  
+
   //Tipo6
   public function setTipoIC6($sTipoIC6) {
     $this->sTipoIC6 = $sTipoIC6;
@@ -170,7 +170,7 @@ class MSC {
   public function getIC7() {
     return $this->iIC7;
   }
-  
+
   //Tipo6
   public function setTipoIC7($sTipoIC7) {
     $this->sTipoIC7 = $sTipoIC7;
@@ -178,7 +178,7 @@ class MSC {
   public function getTipoIC7() {
     return $this->sTipoIC7;
   }
- 
+
   //Valor
   public function setValor($iValor) {
     $this->iValor = $iValor;
@@ -546,7 +546,7 @@ class MSC {
          left join vinculopcaspmsc on (substr(p.c60_estrut,1,9), p.c60_anousu) = (c210_pcaspestrut, c210_anousu)
          where {$this->getTipoMatriz()} (c60_infcompmsc is null or c60_infcompmsc = 0 or c60_infcompmsc = 1) and c62_anousu = ".$iAno." and r.c61_reduz is not null order by p.c60_estrut
        ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0) ";
-     
+
     $rsResult = db_query($sSQL);
     // echo $sSQL;
     $aCampos  = array("conta", "po", "null", "null", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
@@ -608,7 +608,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
     $aCampos  = array("conta", "po", "fp", "fr", "null", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-    
+
     if ($rsResult) {
       return $this->getDadosIC(2, $aCampos, $rsResult);
     } else {
@@ -634,14 +634,14 @@ class MSC {
         END AS po,
         case when c60_identificadorfinanceiro = 'F' then 1 else 2 end as fp,
         o15_codstnnovo as fr,
-        case 
+        case
             WHEN o15_codtri IN ('101','1101','201') THEN '1001'
             WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
             WHEN o15_codtri IN ('102','1102','202') THEN '1002'
             WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
             WHEN o15_codtri IN ('118','1118', '218', '166', '266') THEN '1070'
             WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
-            else '' 
+            else ''
         end as co,
       round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
@@ -687,7 +687,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
     $aCampos  = array("conta", "po", "fp", "fr", "co", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-    
+
     if ($rsResult) {
       return $this->getDadosIC(4, $aCampos, $rsResult);
     } else {
@@ -707,7 +707,7 @@ class MSC {
         ELSE 10131
         END AS po,
         o15_codstnnovo as fr,
-        co,        
+        co,
       round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
       'beginning_balance' AS tipovalor_si,
       substr(fc_saldocontacorrente,107,1)::varchar(1) AS nat_vlr_si,
@@ -731,14 +731,14 @@ class MSC {
       from
     (select case when c210_mscestrut is null then substr(p.c60_estrut,1,9) else c210_mscestrut end as estrut,
             db21_tipoinstit,
-        case 
+        case
             WHEN o15_codtri IN ('101','1101','201') THEN '1001'
             WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
             WHEN o15_codtri IN ('102','1102','202') THEN '1002'
             WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
             WHEN o15_codtri IN ('118','1118', '218', '166', '266') THEN '1070'
             WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
-            else '' 
+            else ''
         end as co,
       c61_reduz,
       c61_codcon,
@@ -758,7 +758,7 @@ class MSC {
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
-    
+
     $aCampos  = array("conta", "po", "fp", "fr", "co", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
@@ -779,13 +779,7 @@ class MSC {
                                	WHEN db21_tipoinstit IN (2) THEN 20231
                                	ELSE 10131
                            	END AS po,
-                            CASE
-                            	WHEN o15_codtri = '124' THEN
-                                   	CASE
-                                    	WHEN substr(natreceita,1,6) = '172810' OR substr(natreceita,1,6) = '242810' THEN 15200000
-                                       	ELSE 15100000 END
-                               	ELSE o15_codstnnovo
-                           	END AS fr,
+                            o15_codstnnovo AS fr,
                            	natreceita AS nr,
                            	round(substr(fc_saldocontacorrente,43,15)::float8,2)::float8 AS saldoinicial,
                            	'beginning_balance' AS tipovalor_si,
@@ -859,7 +853,7 @@ class MSC {
 				WHERE (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 //  echo $sSQL;exit;
     $rsResult = db_query($sSQL);
-    
+
     $aCampos  = array("conta", "po", "fr", "nr", "co", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
 
     if ($rsResult) {
@@ -978,7 +972,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
     $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "co", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-   
+
     if ($rsResult) {
       return $this->getDadosIC(7, $aCampos, $rsResult);
     } else {
@@ -1094,7 +1088,7 @@ class MSC {
 
     $rsResult = db_query($sSQL);
     $aCampos  = array("conta", "po", "fs", "fr", "nd", "es", "co", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-    
+
     if ($rsResult) {
       return $this->getDadosIC(7, $aCampos, $rsResult);
     } else {
@@ -1150,9 +1144,9 @@ class MSC {
       ) as movgeral) as movfinal where (saldoinicial <> 0 or debito <> 0 or credito <> 0)";
 
     $rsResult = db_query($sSQL);
-   
+
     $aCampos  = array("conta", "po", "fp", "dc", "fr", "null", "null", "null", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-    
+
     if ($rsResult) {
       return $this->getDadosIC(8, $aCampos, $rsResult);
     } else {
@@ -1199,7 +1193,7 @@ class MSC {
                        round(substr(fc_saldocontacorrente,91,15)::float8,2)::float8 AS saldofinal,
                        'ending_balance' AS tipovalor_sf,
                        substr(fc_saldocontacorrente,111,1)::varchar(1) AS nat_vlr_sf,
-                       CASE 
+                       CASE
                          WHEN db21_tipoinstit IN (6)
                                  AND estrut IN ($this->sContasRPPSIC09)
                                  AND c211_elemdespestrut IN ($this->sNaturezasRPPS) THEN
@@ -1212,7 +1206,7 @@ class MSC {
                                  WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
                                  WHEN o15_codtri IN ('118','1118', '218', '166', '266') THEN '1070'
                                  WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
-                               ELSE '' 
+                               ELSE ''
                              END
                          WHEN o15_codtri IN ('101','1101','201') THEN '1001'
                          WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
@@ -1268,7 +1262,7 @@ class MSC {
 
 $rsResult = db_query($sSQL);
 $aCampos  = array("conta", "po", "fs", "fr", "nd", "co", "ai", "es", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-    
+
     if ($rsResult) {
       return $this->getDadosIC(9, $aCampos, $rsResult);
     } else {
@@ -1317,7 +1311,7 @@ $aCampos  = array("conta", "po", "fs", "fr", "nd", "co", "ai", "es", "saldoinici
                            round(substr(fc_saldocontacorrente,91,15)::float8,2)::float8 AS saldofinal,
                            'ending_balance' AS tipovalor_sf,
                            substr(fc_saldocontacorrente,111,1)::varchar(1) AS nat_vlr_sf,
-                           CASE 
+                           CASE
                              WHEN db21_tipoinstit IN (6)
                                  AND estrut IN ($this->sContasRPPSIC09)
                                  AND c211_elemdespestrut IN ($this->sNaturezasRPPS) THEN
@@ -1330,7 +1324,7 @@ $aCampos  = array("conta", "po", "fs", "fr", "nd", "co", "ai", "es", "saldoinici
                                    WHEN o15_codigo IN ('15000002', '25000002') THEN '1002'
                                    WHEN o15_codtri IN ('118', '1118', '218', '166', '266') THEN '1070'
                                    WHEN o15_codigo IN ('15400007', '25400007', '15420007', '25420007') THEN '1070'
-                                 ELSE '' 
+                                 ELSE ''
                                END
                              WHEN o15_codtri IN ('101','1101','201') THEN '1001'
                              WHEN o15_codigo IN ('15000001', '25000001') THEN '1001'
@@ -1396,11 +1390,11 @@ $aCampos  = array("conta", "po", "fs", "fr", "nd", "co", "ai", "es", "saldoinici
                             AND r.c61_reduz IS NOT NULL
                         ORDER BY p.c60_estrut ) AS movgeral) AS movfinal
               WHERE (saldoinicial <> 0 OR debito <> 0 OR credito <> 0)";
-          
+
     $rsResult = db_query($sSQL);
     $aCampos  = array("conta", "po", "fs", "fr", "nd", "co", "ai", "es", "saldoinicial", "tipovalor_si", "nat_vlr_si", "debito", "tipovalordeb", "credito", "tipovalorcred", "saldofinal", "tipovalor_sf", "nat_vlr_sf");
-   
-   
+
+
     if ($rsResult) {
       return $this->getDadosIC(9, $aCampos, $rsResult);
     } else {

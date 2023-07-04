@@ -48,6 +48,20 @@ class SicomArquivoJulgamentoLicitacao extends SicomArquivoBase implements iPadAr
 		return $this->iCodigoLayout;
 	}
 
+	public function getDataJulgamento($l20_codigo)
+	{
+		$sql = "SELECT l11_sequencial,
+					   l11_data
+				FROM liclicitasituacao
+				WHERE l11_liclicita=$l20_codigo
+					AND l11_licsituacao=1
+				ORDER BY l11_sequencial DESC
+				LIMIT 1";
+		$rsResult = db_query($sql);
+		$oDataJulgamento = db_utils::fieldsMemory($rsResult, 0);
+		return $oDataJulgamento->l11_data;
+	}
+
 	/**
 	 *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
 	 */
@@ -564,7 +578,7 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
    WHERE db01_coddepto=l20_codepartamento and db01_anousu=" . db_getsession("DB_anousu") . " LIMIT 1) as codUnidadeSubResp,
 	liclicita.l20_anousu as exercicioLicitacao,
 	liclicita.l20_edital as nroProcessoLicitatorio,
-	liclicitasituacao.l11_data as dtJulgamento,
+	liclicita.l20_codigo,
 	'1' as PresencaLicitantes,
 	(case when pc31_renunrecurso is null then 2 else pc31_renunrecurso end) as renunciaRecurso,
 	liclicita.l20_leidalicitacao as leidalicitacao,
@@ -576,7 +590,7 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
 	LEFT  JOIN  pcorcamfornelic on liclicita.l20_codigo=pcorcamfornelic.pc31_liclicita
 	LEFT JOIN infocomplementaresinstit on db_config.codigo = infocomplementaresinstit.si09_instit
 	LEFT JOIN manutencaolicitacao on (manutencaolicitacao.manutlic_licitacao = liclicita.l20_codigo)
-	WHERE db_config.codigo= " . db_getsession("DB_instit") . "  AND liclicitasituacao.l11_licsituacao = 1
+	WHERE db_config.codigo= " . db_getsession("DB_instit") . "  AND l20_licsituacao in (1,10)
 	AND liclicita.l20_codigo in (" . implode(",", $aLicitacoes) . ")";
 
 		$rsResult40 = db_query($sSql);
@@ -599,7 +613,7 @@ ELSE (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1
 				}
 				$oDados40->si62_exerciciolicitacao = $oResult40->exerciciolicitacao;
 				$oDados40->si62_nroprocessolicitatorio = $oResult40->nroprocessolicitatorio;
-				$oDados40->si62_dtjulgamento = $oResult40->dtjulgamento;
+				$oDados40->si62_dtjulgamento = $this->getDataJulgamento($oResult40->l20_codigo);
 				if ($oResult40->leidalicitacao == 2) {
 					$oDados40->si62_presencalicitantes = $oResult40->presencalicitantes;
 					$oDados40->si62_renunciarecurso = $oResult40->renunciarecurso;

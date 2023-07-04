@@ -662,6 +662,133 @@ class Preenchimentos
         return \db_utils::getCollectionByRecord($rs);
     }
 
+
+    /**
+     * @param integer $codigoFormulario
+     * @return stdClass[]
+     */
+    public function buscarPreenchimentoS2206($codigoFormulario, $matricula = null)
+    {
+        $sql = "SELECT distinct
+                rh02_instit AS instituicao,
+                z01_cgccpf as cpfTrab,
+                z01_nome as nmTrab,
+                rh01_sexo as sexo,
+                rh01_regist as matricula,
+                
+
+                rh02_salari,
+                rh02_funcao,
+                rh20_cargo,
+                r33_tiporegime,
+                rh01_rhsindicato,
+                rh116_cnpj,
+                rh02_plansegreg,
+                rh02_abonopermanencia,
+                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then rh37_cbo
+                end as CBOCargo,
+                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) then rh37_descr
+                end as nmCargo,
+                case when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and rh37_reqcargo in (1,2,3,5) then 'S'
+                     when (h13_categoria = 301 or h13_categoria = 302 or h13_categoria = 303 or h13_categoria = 306 or h13_categoria = 309 or h13_categoria = 101 or h13_categoria = 106 or h13_categoria = 111) and rh37_reqcargo in (4,6,7,8) then 'N'
+                end as acumCargo,
+
+                h13_categoria,
+                
+                case when rh02_tipsal = 'M' then 5
+                when rh02_tipsal = 'Q' then 4
+                when rh02_tipsal = 'D' then 2
+                when rh02_tipsal = 'H' then 1
+                end as undSalFixo,
+                case when h13_tipocargo = 7 or rh164_datafim is not null then 2
+                else 1
+                end as tpContr,
+                rh164_datafim as dtTerm,
+                cgc as nrinsc_localtrabgeral,
+                nomeinst as desccomp_localtrabgeral,
+                rh02_hrssem,
+                rh02_tipojornada,
+                rh02_horarionoturno,
+                jt_nome,
+                rh30_regime
+                        from
+                            rhpessoal
+                        left join rhpessoalmov on
+                            rh02_anousu = fc_getsession('DB_anousu')::int
+                            and rh02_mesusu = date_part('month',fc_getsession('DB_datausu')::date)
+                            and rh02_regist = rh01_regist
+                            and rh02_instit = fc_getsession('DB_instit')::int
+                        left join rhlota on
+                            rhlota.r70_codigo = rhpessoalmov.rh02_lota
+                            and rhlota.r70_instit = rhpessoalmov.rh02_instit
+                        inner join cgm on
+                            cgm.z01_numcgm = rhpessoal.rh01_numcgm
+                        inner join db_config on
+                            db_config.codigo = rhpessoal.rh01_instit
+                        inner join rhestcivil on
+                            rhestcivil.rh08_estciv = rhpessoal.rh01_estciv
+                        inner join rhraca on
+                            rhraca.rh18_raca = rhpessoal.rh01_raca
+                        left join rhfuncao on
+                            rhfuncao.rh37_funcao = rhpessoalmov.rh02_funcao
+                            and rhfuncao.rh37_instit = rhpessoalmov.rh02_instit
+                        left join rhpescargo   on rhpescargo.rh20_seqpes   = rhpessoalmov.rh02_seqpes
+                        left join rhcargo      on rhcargo.rh04_codigo      = rhpescargo.rh20_cargo
+                            and rhcargo.rh04_instit      = rhpessoalmov.rh02_instit
+                        inner join rhinstrucao on
+                            rhinstrucao.rh21_instru = rhpessoal.rh01_instru
+                        inner join rhnacionalidade on
+                            rhnacionalidade.rh06_nacionalidade = rhpessoal.rh01_nacion
+                        left join rhpesrescisao on
+                            rh02_seqpes = rh05_seqpes
+                        left join rhsindicato on
+                            rh01_rhsindicato = rh116_sequencial
+                        inner join rhreajusteparidade on
+                            rhreajusteparidade.rh148_sequencial = rhpessoal.rh01_reajusteparidade
+                        left join rhpesdoc on
+                            rhpesdoc.rh16_regist = rhpessoal.rh01_regist
+                        left join rhdepend  on  rhdepend.rh31_regist = rhpessoal.rh01_regist
+                        left join rhregime ON rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
+                        left join rhpesfgts ON rhpesfgts.rh15_regist = rhpessoal.rh01_regist
+                        inner join tpcontra ON tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+                        left  join rhcontratoemergencial on rh163_matricula = rh01_regist
+                        left  join rhcontratoemergencialrenovacao on rh164_contratoemergencial = rh163_sequencial
+                        left join jornadadetrabalho on jt_sequencial = rh02_jornadadetrabalho
+                        left join db_cgmbairro on cgm.z01_numcgm = db_cgmbairro.z01_numcgm
+                        left join bairro on bairro.j13_codi = db_cgmbairro.j13_codi
+                        left join db_cgmruas on cgm.z01_numcgm = db_cgmruas.z01_numcgm
+                        left join ruas on ruas.j14_codigo = db_cgmruas.j14_codigo
+                        left join ruastipo on j88_codigo = j14_tipo
+                        left  outer join (
+                                        SELECT distinct r33_codtab,r33_nome,r33_tiporegime
+                                                            from inssirf
+                                                            where     r33_anousu = (SELECT r11_anousu from cfpess where r11_instit = fc_getsession('DB_instit')::int order by r11_anousu desc limit 1)
+                                                                    and r33_mesusu = (SELECT r11_mesusu from cfpess where r11_instit = fc_getsession('DB_instit')::int order by r11_anousu desc, r11_mesusu desc limit 1)
+                                                                    and r33_instit = fc_getsession('DB_instit')::int
+                                                            ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
+                        left  join rescisao      on rescisao.r59_anousu       = rhpessoalmov.rh02_anousu
+                                                            and rescisao.r59_mesusu       = rhpessoalmov.rh02_mesusu
+                                                            and rescisao.r59_regime       = rhregime.rh30_regime
+                                                            and rescisao.r59_causa        = rhpesrescisao.rh05_causa
+                                                            and rescisao.r59_caub         = rhpesrescisao.rh05_caub::char(2)
+                        where h13_categoria in ('101', '106', '111', '301', '302', '303', '305', '306', '309', '312', '313', '902')
+                        and rh30_vinculo = 'A'
+                        and rh05_recis is null
+                        ";
+        if ($matricula != null) {
+            $sql .= "and rh01_regist in ($matricula) ";
+        }
+
+        $rs = \db_query($sql);
+        // echo $sql;
+        // db_criatabela($rs);
+        // exit;
+        if (!$rs) {
+            throw new \Exception("Erro ao buscar os preenchimentos do S2206");
+        }
+        return \db_utils::getCollectionByRecord($rs);
+    }
+
     /**
      * @param integer $codigoFormulario
      * @return stdClass[]
@@ -683,10 +810,8 @@ class Preenchimentos
        date_part('year', rh01_admiss) as rh01_admiss_ano,
        rh02_tipobeneficio AS tpbeneficio,
        CASE
-           WHEN rh02_plansegreg = 1 THEN 1
-           WHEN rh02_plansegreg = 2 THEN 2
-           WHEN rh02_plansegreg = 3 THEN 3
-           WHEN rh02_plansegreg = 0 THEN 0
+           WHEN rh02_plansegreg IS NULL THEN 0
+           ELSE rh02_plansegreg
        END AS tpplanrp,
        rh02_descratobeneficio AS dsc,
        CASE

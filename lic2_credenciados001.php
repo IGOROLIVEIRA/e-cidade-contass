@@ -98,7 +98,7 @@ db_app::load("scripts.js,windowAux.widget.js, prototype.js");
     var iHeight = 200;
     var iWidth = 300;
     windowFormatoRelatorio = new windowAux('windowFormatoRelatorio',
-      'Gerar Relagório ',
+      'Gerar Relatório ',
       iWidth,
       iHeight
     );

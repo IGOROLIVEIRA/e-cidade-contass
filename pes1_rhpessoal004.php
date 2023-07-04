@@ -564,6 +564,7 @@ if (isset($incluir)) {
 
 </html>
 <script>
+document.getElementById('rh01_esocial').value = '';
     // form - formulário onde estão os campos
     // foco - campo que receberá foco no início
     // tfoco- true se programador quer que campo informado receba o foco e false se não quer

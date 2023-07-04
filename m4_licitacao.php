@@ -241,6 +241,7 @@ if (isset($alterar)) {
 
     $clmanutencaolicitacao->manutlic_licitacao = $l20_codigo;
     $clmanutencaolicitacao->manutlic_codunidsubanterior = $manutlic_codunidsubanterior;
+    $clmanutencaolicitacao->manutlic_editalant = $manutlic_editalant;   
 
     $clmanutencaolicitacao->incluir();
 
@@ -446,7 +447,16 @@ if (isset($alterar)) {
                       ?>
                     </td>
                   </tr>
-                  
+                  <tr>
+                    <td nowrap title="">
+                      <strong>Nº Processo Anterior:</strong>
+                    </td>
+                    <td>
+                      <?
+                      db_input('manutlic_editalant', 10, $Il20_editalant, true, 'text', 2, "");
+                      ?>
+                    </td>
+                  </tr>
               <?php
               if ($chavepesquisa2 != 101) :
                 if ($chavepesquisa2 != 100) :

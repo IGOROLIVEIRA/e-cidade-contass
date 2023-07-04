@@ -666,4 +666,42 @@ class cl_evt5001consulta
     $result = db_query($sql);
     return db_utils::fieldsMemory($result, 0)->codigo;
   }
+
+  /**
+   * @return string
+   */ 
+  public function getCamposRelConsulta()
+  {
+    return "rh218_sequencial,
+                    case when z01_cgccpf is null then (select z01_cgccpf from cgm where z01_numcgm = rh218_numcgm)
+                    else z01_cgccpf end as z01_cgccpf,
+                    case when z01_nome is null then (select z01_nome from cgm where z01_numcgm = rh218_numcgm)
+                    else z01_nome end as z01_nome,
+                    rh218_regist,
+                    rh218_numcgm,
+                    rh218_codcateg,  
+                    rh218_vlrbasecalc,
+                    rh218_vrdescseg,
+                    rh218_vrcpseg, 
+                    (rh218_vrdescseg - rh218_vrcpseg) as diferenca,
+                    (select sum(valor) from (select r14_valor as valor from gerfsal where gerfsal.r14_anousu = evt5001consulta.rh218_perapurano
+            and gerfsal.r14_mesusu = evt5001consulta.rh218_perapurmes::integer
+            and gerfsal.r14_regist = evt5001consulta.rh218_regist
+            and gerfsal.r14_rubric = 'R992'
+            union
+            select r48_valor as valor from gerfcom where gerfcom.r48_anousu = evt5001consulta.rh218_perapurano
+            and gerfcom.r48_mesusu = evt5001consulta.rh218_perapurmes::integer
+            and gerfcom.r48_regist = evt5001consulta.rh218_regist
+            and gerfcom.r48_rubric = 'R992'
+            union
+            select r20_valor as valor from gerfres where gerfres.r20_anousu = evt5001consulta.rh218_perapurano
+            and gerfres.r20_mesusu = evt5001consulta.rh218_perapurmes::integer
+            and gerfres.r20_regist = evt5001consulta.rh218_regist
+            and gerfres.r20_rubric = 'R992'
+            union
+            select r35_valor as valor from gerfs13 where gerfs13.r35_anousu = evt5001consulta.rh218_perapurano
+            and gerfs13.r35_mesusu = evt5001consulta.rh218_perapurmes::integer
+            and gerfs13.r35_regist = evt5001consulta.rh218_regist
+            and gerfs13.r35_rubric = 'R992') as x limit 1) as vlr_sistema";
+  } 
 }

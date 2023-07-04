@@ -515,13 +515,6 @@ function js_saida(oAjax){
     var iNumEmpOld = $F('e60_numemp');
     obj  = eval("("+oAjax.responseText+")");
 
-    // Condição de período
-    if (obj.bPermitidoLiquidacao == false) {
-        alert("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
-        $('confirmar').disabled = true;
-        return false;
-    }
-
     $('e60_codemp').value = obj.e60_codemp;
     $('e60_numemp').value = obj.e60_numemp;
     $('e60_numcgm').value = js_decodeUrl(obj.e60_numcgm);
@@ -861,12 +854,6 @@ function js_saidaLiquidacao(oAjax){
     $('pesquisar').disabled = false;
     $('confirmar').disabled = false;
     obj      = eval("("+oAjax.responseText+")");
-
-    if (obj.bPermitidoLiquidacao == false) {
-        alert("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
-        $('confirmar').disabled = true;
-        return false;
-    }
 
     if (obj.lErro == true) {
       alert(obj.sMensagem.urlDecode()); return false;

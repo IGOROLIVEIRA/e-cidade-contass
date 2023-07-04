@@ -273,18 +273,22 @@ try {
                         Tipo::DESLIGAMENTO,
                         Tipo::CD_BENEF_IN,
                         Tipo::BENEFICIOS_ENTESPUBLICOS,
+                        Tipo::ALTERACAO_CONTRATO,
                     )
                 )) {
+                    
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(
                         Tipo::getTipoFormulario($arquivo),
                         empty($oParam->matricula) ? null : $oParam->matricula,
                         empty($oParam->cgm) ? null : $oParam->cgm,
                         empty($oParam->tpevento) ? null : $oParam->tpevento
                     );
+                    
                     if (current($dadosDoPreenchimento) instanceof \ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento) {
                         $formatter = FormatterFactory::get($arquivo);
                         $dadosDoPreenchimento = $formatter->formatar($dadosDoPreenchimento);
                     }
+                    
                     foreach (array_chunk($dadosDoPreenchimento, 50) as $aTabela) {
                         $eventoFila = new Evento(
                             $arquivo,
