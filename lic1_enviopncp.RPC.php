@@ -17,7 +17,6 @@ require_once("model/licitacao/PNCP/AtaRegistroprecoPNCP.model.php");
 require_once("classes/db_licacontrolenexospncp_classe.php");
 require_once("classes/db_liccontrolepncpitens_classe.php");
 
-db_app::import("configuracao.DBDepartamento");
 $envs = parse_ini_file('config/PNCP/.env', true);
 
 $oJson             = new services_json();
@@ -360,7 +359,7 @@ switch ($oParam->exec) {
                         $clliccontroleatarppncp->l215_situacao = 1;
                         $clliccontroleatarppncp->l215_ata = $l215_ata;
                         $clliccontroleatarppncp->l215_anousu = substr($aLicitacao->numerocontrole, 24);
-                        
+
                         $clliccontroleatarppncp->incluir();
 
                         if ($clliccontroleatarppncp->erro_status == 0) {
