@@ -36,7 +36,7 @@ if (isset($incluir)) {
 
     if ($oDaoRhVinculoDotPatronais->numrows > 0) {
         echo 'erro<br>';
-        $clrhvinculodotpatronais->erro_msg      = "J? existe de/para cadastrado para dota??o original informada.";
+        $clrhvinculodotpatronais->erro_msg      = "Já existe de/para cadastrado para dotação original informada.";
         $clrhvinculodotpatronais->erro_status   = 0;
         $sql_erro = true;
 

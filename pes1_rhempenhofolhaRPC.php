@@ -335,10 +335,7 @@ try {
 
   	  db_fim_transacao(false);
   	                                             
-  	  	$aRetorno = array(
-			'lErro' => false,
-            'sMsg' => urlencode($sMsgErro),
-			'sListaPrev' => $sListaPrev);
+  	  	$aRetorno = array('lErro' => false, 'sMsg' => urlencode($sMsgErro));
       
     break;
     case 'consultarEmpenhosPrev':
