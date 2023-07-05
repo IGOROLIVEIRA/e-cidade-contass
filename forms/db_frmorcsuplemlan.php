@@ -33,7 +33,7 @@ $clrotulo->label("nome");
 
 include("dbforms/db_classesgenericas.php");
 $cliframe_seleciona = new cl_iframe_seleciona;
-
+$o39_data = implode("/", array_reverse(explode("-", $o39_data)));;
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -52,7 +52,7 @@ $cliframe_seleciona = new cl_iframe_seleciona;
        <?=@$Lo49_data?>
     </td>
     <td>
-       <? db_inputdata('o49_data',@$o49_data_dia,@$o49_data_mes,@$o49_data_ano,true,'text',$db_opcao,"") ?>
+       <? db_input('o49_data',9,"",true,'text',3,"") ?>
     </td>
   </tr>
   <tr>
@@ -89,7 +89,8 @@ $cliframe_seleciona = new cl_iframe_seleciona;
  </form>
 <script>
 
-
+var data = "<?php print $o39_data; ?>";
+document.getElementById("o49_data").value = data;
 function js_processa(){
   obj = document.form1;
   if (obj.o49_data_dia.value!='' && obj.o49_data_mes.value!='' && obj.o49_data_ano.value!='' ){
@@ -106,10 +107,12 @@ function js_pesquisao39_codproj(mostra){
   }
 }
 function js_mostraprojeto(chave,erro){
+
    <?
       echo " location.href = '".basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])."?chavepesquisa='+chave; ";
    ?>
    db_iframe_orcprojeto.hide();
+     
 }
 function js_initGrid() {
 

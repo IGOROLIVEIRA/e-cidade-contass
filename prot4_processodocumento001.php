@@ -33,6 +33,18 @@ require_once("libs/db_usuariosonline.php");
 require_once("libs/db_app.utils.php");
 require_once("dbforms/db_funcoes.php");
 
+$protocolosigiloso = db_query("select * from protparam");
+$protocolosigiloso = db_utils::fieldsMemory($protocolosigiloso, 0);
+
+if ($protocolosigiloso->p90_protocolosigiloso == "f") {
+  require_once("prot4_processodocumentoantigo001.php");
+  exit;
+}
+
+
+$departamento  = db_getsession('DB_coddepto', false);
+$iInstit     = db_getsession('DB_instit');
+$adm = db_getsession('DB_administrador');
 $iOpcaoProcesso = 1;
 $lExibirMenus   = true;
 
@@ -64,6 +76,13 @@ $oDaoProtprocessodocumento->rotulo->label();
 
 $oRotulo->label("p58_numero");
 $oRotulo->label("z01_nome");
+
+$allpermissoes = array();
+
+$rsAllPermissoes = db_query("select * from permanexo;");
+for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
+  $allpermissoes[pg_result($rsAllPermissoes, $i, "p202_sequencial")] = urlencode(pg_result($rsAllPermissoes, $i, "p202_tipo"));
+}
 ?>
 <html>
 
@@ -74,6 +93,19 @@ $oRotulo->label("z01_nome");
   db_app::load("estilos.css, grid.style.css");
   db_app::load("scripts.js, prototype.js, strings.js, datagrid.widget.js");
   ?>
+
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/AjaxRequest.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbautocomplete.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextFieldData.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBHint.widget.js"></script>
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
@@ -113,6 +145,47 @@ $oRotulo->label("z01_nome");
           </tr>
 
           <tr>
+            <td>
+              Nível de Acesso:
+            </td>
+            <td>
+              <?
+
+              if ($adm == 1) {
+                $rsPermissoes = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
+                inner join db_permherda p203_perfil on p203_perfil = id_perfil
+                inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial order by p203_permanexo; 
+               ");
+                $numrows = pg_numrows($rsPermissoes);
+              } else {
+                $usuario = db_getsession('DB_id_usuario');
+                $rsPermissoes = db_query("select distinct p203_permanexo,p202_sequencial,p202_tipo  from perfispermanexo
+                inner join db_permherda p203_perfil on p203_perfil = id_perfil
+                inner join permanexo  p203_permanexo on p203_permanexo  = p202_sequencial where id_usuario = $usuario or p202_sequencial = 1 order by p202_sequencial; 
+               ");
+                $numrows = pg_numrows($rsPermissoes);
+              }
+
+
+
+              for ($i = 0; $i < $numrows; $i++) {
+                $permissoes[pg_result($rsPermissoes, $i, "p202_sequencial")] = pg_result($rsPermissoes, $i, "p202_tipo");
+              }
+
+
+              db_select(
+                'p01_nivelacesso',
+                $permissoes,
+                true,
+                $db_opcao,
+                "style='width:48%;'"
+              );
+
+              ?>
+            </td>
+          </tr>
+
+          <tr>
             <td nowrap title="<?php echo $Tp01_descricao; ?>">
               <?php echo $Lp01_descricao; ?>
             </td>
@@ -146,6 +219,28 @@ $oRotulo->label("z01_nome");
 
 </html>
 <script type="text/javascript">
+  var descricaoDocumento = "";
+  var permissaoDocumentos = new Map();
+
+
+
+
+  /**
+   * Inserindo ID nos options do select de nível de acesso
+   */
+
+  var select = document.getElementById('p01_nivelacesso');
+  for (var i = 0; i < select.options.length; i++) {
+    var value = select.options[i].value;
+    select.options[i].setAttribute("id", value);
+  }
+
+  /**
+   * Criação de variavel para armazenamento dos niveis de acesso que o usuário possui permissão
+   */
+  const niveisdeacesso = document.getElementById('p01_nivelacesso').innerHTML;
+
+
   /**
    * Pesquisa processo do protocolo e depois os documentos anexados
    */
@@ -166,10 +261,12 @@ $oRotulo->label("z01_nome");
   oGridDocumentos.nameInstance = "oGridDocumentos";
   oGridDocumentos.setCheckbox(0);
   oGridDocumentos.setCellAlign(new Array("center", "left", "left", "center"));
-  oGridDocumentos.setCellWidth(["10%", "30%", "30%", "30%"]);
+  oGridDocumentos.setCellWidth(["10%", "20%", "30%", "40%"]);
   oGridDocumentos.setHeader(new Array("Código", "Descrição", "Departamento", "Ação"));
   oGridDocumentos.allowSelectColumns(true);
   oGridDocumentos.show($('ctnDbGridDocumentos'));
+  var anexosSigilosos = new Array();
+
 
   /**
    * Buscar documentos do processo
@@ -177,7 +274,10 @@ $oRotulo->label("z01_nome");
    */
   function js_buscarDocumentos() {
 
+    var departamentoLogado = <?php print_r($departamento) ?>;
+    var adm = <?php print_r($adm) ?>;
     var iCodigoProcesso = $('p58_codproc').value;
+    anexosSigilosos = new Array();
 
     if (empty(iCodigoProcesso)) {
       return false;
@@ -203,7 +303,6 @@ $oRotulo->label("z01_nome");
 
           js_removeObj("msgbox");
           var oRetorno = eval('(' + oAjax.responseText + ")");
-
           var sMensagem = oRetorno.sMensagem.urlDecode();
 
           if (oRetorno.iStatus > 1) {
@@ -215,39 +314,75 @@ $oRotulo->label("z01_nome");
           oGridDocumentos.clearAll(true);
           var iDocumentos = oRetorno.aDocumentosVinculados.length;
 
+
           for (var iIndice = 0; iIndice < iDocumentos; iIndice++) {
 
             var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
             var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
 
-            if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento == 0) {
+            permissaoDocumentos.set(oDocumento.iCodigoDocumento, oDocumento.permissao);
 
-              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
+            var sHTMLBotoes = '';
+
+            if (oDocumento.nivelacesso == '1') {
+
+              sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
+              sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
               sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+            } else {
 
-              $bBloquea = false;
+              anexosSigilosos.push(iIndice);
 
-            } else if (oDocumento.iDepartUsuario != oDocumento.iDepart && oRetorno.andamento > 0) {
 
-              var sHTMLBotoes = '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+              if (adm == 1) {
 
-              $bBloquea = false;
+                sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
+                sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
+                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
-            } else if (oDocumento.iDepartUsuario == oDocumento.iDepart && oRetorno.andamento > 0) {
+              } else if (departamentoLogado == oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
+                sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
+              } else if (departamentoLogado == oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
+                sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
+                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+              } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
+                sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+              } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
+                sHTMLBotoes += '<input type="button" value="Detalhes" onClick="js_detalhes(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\');" />  ';
+              }
 
-              var sHTMLBotoes = '<input type="button" value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\');" />  ';
-              sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
 
-              $bBloquea = false;
             }
 
+            var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento.urlDecode(), sHTMLBotoes];
+            oGridDocumentos.addRow(aLinha, false, false);
 
-
-            var aLinha = [oDocumento.iCodigoDocumento, sDescricaoDocumento.urlDecode(), oDocumento.iDepart + ' - ' + oDocumento.sDepartamento, sHTMLBotoes];
-            oGridDocumentos.addRow(aLinha, false, $bBloquea);
           }
 
+
           oGridDocumentos.renderRows();
+
+          for (var iIndice = iDocumentos; iIndice > 0; iIndice--) {
+            var oDocumento = oRetorno.aDocumentosVinculados[iIndice - 1];
+            var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
+            idLinha = `gridDocumentosrow${iIndice-1}cell1`;
+            linha = document.getElementById(idLinha);
+            linha.setAttribute("title", sDescricaoDocumento.urlDecode());
+            idLinha = `gridDocumentosrow${iIndice-1}cell2`;
+            linha = document.getElementById(idLinha);
+            linha.setAttribute("title", oDocumento.iDepart + ' - ' + oDocumento.sDepartamento.urlDecode());
+          }
+
+
+
+          for (var i = 0; i < anexosSigilosos.length; i++) {
+            linhaAnexo = anexosSigilosos[i];
+            document.getElementById('gridDocumentosrowgridDocumentos' + linhaAnexo).style.color = "red";
+
+          }
+
+          document.getElementById('p01_nivelacesso').innerHTML = niveisdeacesso;
+
         }
       }
     );
@@ -264,6 +399,16 @@ $oRotulo->label("z01_nome");
     var iSelecionados = documentosSelecionados.length;
     var iCodigoProcesso = $('p58_codproc').value;
     var aDocumentos = [];
+
+    for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
+
+      if (anexosSigilosos.includes(documentosSelecionados[iIndice].getRowNumber()) == true) {
+        alert("Usuário sem permissão para excluir documento selecionado.");
+        return false;
+      }
+
+    }
+
 
     if (iSelecionados == 0) {
 
@@ -461,9 +606,16 @@ $oRotulo->label("z01_nome");
     }
 
     if (codigosDosDocumentos.length == '1') {
-      js_downloadDocumento(codigosDosDocumentos[0])
-      js_removeObj("msgbox");
-      return false
+      if (permissaoDocumentos.get(codigosDosDocumentos[0]) == true) {
+        js_downloadDocumento(codigosDosDocumentos[0])
+        js_removeObj("msgbox");
+        return false;
+      } else {
+        alert('Sem permissão para fazer o download do documento selecionado');
+        js_removeObj("msgbox");
+        return false;
+      }
+
     }
 
     let documentos = []
@@ -478,8 +630,10 @@ $oRotulo->label("z01_nome");
 
       oCodigoDocumento.exec = 'download'
       oCodigoDocumento.iCodigoDocumento = codigoDoDocumento
+      if (permissaoDocumentos.get(codigoDoDocumento) == true) {
+        urlDosArquivos.push(js_arquivos(oCodigoDocumento))
 
-      urlDosArquivos.push(js_arquivos(oCodigoDocumento))
+      }
     })
 
     js_ziparAnexos(urlDosArquivos, nomeDoZip => {
@@ -499,12 +653,27 @@ $oRotulo->label("z01_nome");
    * @param string sDescricaoDocumento
    * @return void
    */
-  function js_alterarDocumento(iCodigoDocumento, sDescricaoDocumento) {
-
+  function js_alterarNivelAcessoDocumento(iCodigoDocumento, sDescricaoDocumento, nivelAcesso) {
+    $('btnSalvar').disabled = false;
     $('namefile').value = '';
     $('uploadfile').value = '';
     $('uploadfile').disabled = true;
     $('p01_descricao').value = sDescricaoDocumento.urlDecode();
+
+    document.getElementById('p01_nivelacesso').innerHTML = niveisdeacesso;
+
+    descricaoDocumento = sDescricaoDocumento;
+    var select = document.querySelector('#p01_nivelacesso');
+    for (var i = 0; i < select.options.length; i++) {
+      if (select.options[i].value == nivelAcesso) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+
+    $('p01_descricao').disabled = true;
+    $('p01_nivelacesso').disabled = false;
+
 
     /**
      * Altera acao do botao salvar
@@ -514,7 +683,133 @@ $oRotulo->label("z01_nome");
 
       var iCodigoProcesso = $('p58_codproc').value;
       var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
-      var oParametros = new Object();
+      var iNivelAcesso = $('p01_nivelacesso').value;
+
+      var oParam = new Object();
+
+      if (empty(iCodigoProcesso)) {
+
+        alert(_M(MENSAGENS + 'erro_processo_nao_informado'));
+        return false;
+      }
+      /*
+      if (empty(sDescricaoDocumento)) {
+
+        alert(_M(MENSAGENS + 'erro_descricao_nao_informada'));
+        return false;
+      }
+      */
+
+      js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
+
+      oParam.exec = 'salvarDocumento';
+      oParam.iCodigoDocumento = iCodigoDocumento;
+      oParam.iCodigoProcesso = iCodigoProcesso;
+      oParam.sDescricaoDocumento = sDescricaoDocumento;
+      oParam.iNivelAcesso = iNivelAcesso;
+
+
+      var oAjax = new Ajax.Request(
+        sUrlRpc, {
+          parameters: 'json=' + Object.toJSON(oParam),
+          method: 'post',
+          asynchronous: false,
+          onComplete: function(oAjax) {
+
+            js_removeObj("msgbox");
+            var oRetorno = eval('(' + oAjax.responseText + ")");
+            var sMensagem = oRetorno.sMensagem.urlDecode();
+
+            if (oRetorno.iStatus > 1) {
+              document.getElementById('p01_nivelacesso').innerHTML = niveisdeacesso;
+              alert(sMensagem);
+              return false;
+            }
+
+            $('btnSalvar').onclick = js_salvar;
+            $('namefile').value = '';
+            $('uploadfile').value = '';
+            $('uploadfile').disabled = false;
+            $('p01_descricao').value = '';
+
+            alert(sMensagem);
+            js_buscarDocumentos();
+          }
+        });
+
+      $('p01_descricao').disabled = false;
+      $('p01_nivelacesso').disabled = false;
+
+
+
+    }
+  }
+
+  function js_detalhes(iCodigoDocumento, sDescricaoDocumento, nivelAcesso) {
+    $('p01_descricao').value = sDescricaoDocumento.urlDecode();
+    var select = document.querySelector('#p01_nivelacesso');
+    for (var i = 0; i < select.options.length; i++) {
+      if (select.options[i].value == nivelAcesso) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+
+    var permissoes = <?= json_encode($allpermissoes); ?>;
+
+    var selectnivelacesso = document.querySelector('#p01_nivelacesso');
+    selectnivelacesso.options[select.options.length] = new Option(permissoes[nivelAcesso].urlDecode(), nivelAcesso);
+    document.getElementById("p01_nivelacesso").value = nivelAcesso;
+
+    $('p01_descricao').disabled = true;
+    $('p01_nivelacesso').disabled = true;
+    $('btnSalvar').disabled = true;
+
+
+  }
+
+
+
+  /**
+   * Altera descricao de um documento
+   * @param integer iCodigoDocumento
+   * @param string sDescricaoDocumento
+   * @return void
+   */
+  function js_alterarDocumento(iCodigoDocumento, sDescricaoDocumento, nivelAcesso) {
+    $('btnSalvar').disabled = false;
+    $('namefile').value = '';
+    $('uploadfile').value = '';
+    $('uploadfile').disabled = true;
+    $('p01_descricao').value = sDescricaoDocumento.urlDecode();
+    var select = document.querySelector('#p01_nivelacesso');
+    for (var i = 0; i < select.options.length; i++) {
+      if (select.options[i].value == nivelAcesso) {
+        select.selectedIndex = i;
+        break;
+      }
+    }
+
+    var permissoes = <?= json_encode($allpermissoes); ?>;
+    var selectnivelacesso = document.querySelector('#p01_nivelacesso');
+    selectnivelacesso.options[select.options.length] = new Option(permissoes[nivelAcesso].urlDecode(), nivelAcesso);
+    document.getElementById("p01_nivelacesso").value = nivelAcesso;
+
+    $('p01_descricao').disabled = false;
+    $('p01_nivelacesso').disabled = true;
+
+
+    /**
+     * Altera acao do botao salvar
+     * @return void
+     */
+    $('btnSalvar').onclick = function() {
+
+      var iCodigoProcesso = $('p58_codproc').value;
+      var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
+      var iNivelAcesso = $('p01_nivelacesso').value;
+
+      var oParam = new Object();
 
       if (empty(iCodigoProcesso)) {
 
@@ -530,14 +825,16 @@ $oRotulo->label("z01_nome");
 
       js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
 
-      oParametros.exec = 'salvarDocumento';
-      oParametros.iCodigoDocumento = iCodigoDocumento;
-      oParametros.iCodigoProcesso = iCodigoProcesso;
-      oParametros.sDescricaoDocumento = sDescricaoDocumento;
+      oParam.exec = 'salvarDocumento';
+      oParam.iCodigoDocumento = iCodigoDocumento;
+      oParam.iCodigoProcesso = iCodigoProcesso;
+      oParam.sDescricaoDocumento = sDescricaoDocumento;
+      oParam.iNivelAcesso = iNivelAcesso;
+
 
       var oAjax = new Ajax.Request(
         sUrlRpc, {
-          parameters: 'json=' + Object.toJSON(oParametros),
+          parameters: 'json=' + Object.toJSON(oParam),
           method: 'post',
           asynchronous: false,
           onComplete: function(oAjax) {
@@ -547,7 +844,7 @@ $oRotulo->label("z01_nome");
             var sMensagem = oRetorno.sMensagem.urlDecode();
 
             if (oRetorno.iStatus > 1) {
-
+              document.getElementById('p01_nivelacesso').innerHTML = niveisdeacesso;
               alert(sMensagem);
               return false;
             }
@@ -562,6 +859,9 @@ $oRotulo->label("z01_nome");
             js_buscarDocumentos();
           }
         });
+
+      $('p01_descricao').disabled = false;
+      $('p01_nivelacesso').disabled = false;
 
     }
   }
@@ -646,7 +946,10 @@ $oRotulo->label("z01_nome");
    * @return void
    */
   function js_mostraProcesso(iCodigoProcesso, iNumeroProcesso, sNome) {
-
+    $('btnSalvar').disabled = false;
+    $('p01_descricao').disabled = false;
+    $('p01_nivelacesso').disabled = false;
+    $('p01_nivelacesso').value = "1";
     $('p58_codproc').value = iCodigoProcesso;
     $('p58_numero').value = iNumeroProcesso;
     $('z01_nome').value = sNome;
@@ -676,6 +979,12 @@ $oRotulo->label("z01_nome");
       $('uploadfile').disabled = false;
       oGridDocumentos.clearAll(true);
     }
+
+    $('p01_descricao').disabled = false;
+    $('p01_nivelacesso').disabled = false;
+    $('p01_nivelacesso').value = "1";
+    $('btnSalvar').disabled = false;
+
 
     $('p58_codproc').value = iCodigoProcesso;
     $('z01_nome').value = sNome;
@@ -707,7 +1016,10 @@ $oRotulo->label("z01_nome");
     var iCodigoProcesso = $('p58_codproc').value;
     var iCodigoDocumento = $('p01_sequencial').value;
     var sDescricaoDocumento = encodeURIComponent(tagString($('p01_descricao').value));
+
     var sCaminhoArquivo = $('namefile').value;
+    var iNivelAcesso = $('p01_nivelacesso').value;
+
 
     if (empty(iCodigoProcesso)) {
 
@@ -727,7 +1039,7 @@ $oRotulo->label("z01_nome");
       return false;
     }
 
-    js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
+    //js_divCarregando(_M(MENSAGENS + 'mensagem_salvando_documento'), 'msgbox');
 
     var oParametros = new Object();
 
@@ -736,6 +1048,7 @@ $oRotulo->label("z01_nome");
     oParametros.iCodigoProcesso = iCodigoProcesso;
     oParametros.sDescricaoDocumento = sDescricaoDocumento;
     oParametros.sCaminhoArquivo = sCaminhoArquivo;
+    oParametros.iNivelAcesso = iNivelAcesso;
 
     var oAjax = new Ajax.Request(
       sUrlRpc, {
@@ -744,12 +1057,13 @@ $oRotulo->label("z01_nome");
         asynchronous: false,
         onComplete: function(oAjax) {
 
-          js_removeObj("msgbox");
+          //js_removeObj("msgbox");
           var oRetorno = eval('(' + oAjax.responseText + ")");
+
           var sMensagem = oRetorno.sMensagem.urlDecode();
 
           if (oRetorno.iStatus > 1) {
-
+            document.getElementById('p01_nivelacesso').innerHTML = niveisdeacesso;
             alert(sMensagem);
             return false;
           }
@@ -758,10 +1072,13 @@ $oRotulo->label("z01_nome");
           $('uploadfile').value = '';
           $('uploadfile').disabled = false;
           $('p01_descricao').value = '';
+          document.querySelector('#p01_nivelacesso').selectedIndex = 0;
 
           alert(sMensagem);
           js_buscarDocumentos();
+
         }
       });
+
   }
 </script>

@@ -82,6 +82,25 @@ if (isset($incluir)) {
 					$sqlerro = true;
 					$limpa_dados = false;
 				}
+			
+			}else if(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo == 15400007 or db_utils::fieldsMemory($rsFonte, 0)->o58_codigo == 15400000){
+				if($o70_codigo != 15400007 and $o70_codigo != 15400000){
+					db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
+					$sqlerro = true;
+					$limpa_dados = false;
+				}
+			}else if(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo == 15420007 or db_utils::fieldsMemory($rsFonte, 0)->o58_codigo == 15420000){
+				if($o70_codigo != 15420007 and $o70_codigo != 15420000){
+					db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
+					$sqlerro = true;
+					$limpa_dados = false;
+				}
+			}else if(db_utils::fieldsMemory($rsFonte, 0)->o58_codigo == 15000000 or db_utils::fieldsMemory($rsFonte, 0)->o58_codigo ==15000001 or db_utils::fieldsMemory($rsFonte, 0)->o58_codigo == 15000002){
+				if($o70_codigo != 15000000 and $o70_codigo != 15000001 and $o70_codigo != 15000002){
+					db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
+					$sqlerro = true;
+					$limpa_dados = false;
+				}
 			}else if ($o70_codigo != db_utils::fieldsMemory($rsFonte, 0)->o58_codigo) {
 				db_msgbox("Não é possível incluir receita com fonte diferente da fonte das dotações suplementadas");
 				$sqlerro = true;
@@ -170,8 +189,15 @@ $oDadosProjeto    = db_utils::fieldsMemory($rsDadosProjeto, 0);
 //--------------------------------------
 // calcula total das reduções de receita
 $oSuplementacao = new Suplementacao($o46_codsup);
-$soma_receitas  = $oSuplementacao->getValorReceita();
+$soma_receitas  = db_formatar($oSuplementacao->getValorReceita(),"f");
 //--------------------------------------
+// --------------------------------------
+// calcula total das reduções
+$oSuplementacao = new Suplementacao($o46_codsup);
+$soma_suplem    = db_formatar($oSuplementacao->getvalorSuplementacao(),"f");
+// 
+$totalSuplemRec = db_formatar($oSuplementacao->getvalorSuplementacao() - abs($oSuplementacao->getValorReceita()),"f");
+
 ?>
 <html>
 

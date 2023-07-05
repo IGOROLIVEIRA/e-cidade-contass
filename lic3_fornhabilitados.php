@@ -41,13 +41,14 @@ $clhabilitacao->rotulo->label();
 
 $oGet                = db_utils::postMemory($_GET);
 
-$campos = "cgm.z01_numcgm,cgm.z01_nome,l206_datahab,l206_numcertidaoinss,l206_numcertidaofgts,l206_numcertidaocndt";
-$sql = $clhabilitacao->sql_query(null,$campos,"z01_nome","l206_licitacao = {$oGet->l20_codigo}");
+$campos = "cgm.z01_numcgm,cgm.z01_nome,l206_datahab,l206_numcertidaoinss,l206_numcertidaofgts,l206_numcertidaocndt,z01_telef,z01_email";
+$sql = $clhabilitacao->sql_query(null, $campos, "z01_nome", "l206_licitacao = {$oGet->l20_codigo}");
 
 $sFuncaoJS = isset($oGet->funcao_js) ? $oGet->funcao_js : "";
 
 ?>
 <html>
+
 <head>
   <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
@@ -62,15 +63,17 @@ $sFuncaoJS = isset($oGet->funcao_js) ? $oGet->funcao_js : "";
     }
   </style>
 </head>
-<body bgcolor="#cccccc" onload="">
-    <div style="display: table; float:left; margin-left:10%;">
-      <fieldset>
-        <legend><b>Fornecedores Habilitados</b></legend>
 
-        <?
-        db_lovrot($sql, 15, "()", "", $sFuncaoJS);
-        ?>
-      </fieldset>
-    </div>
+<body bgcolor="#cccccc" onload="">
+  <div style="display: table; float:left; margin-left:10%;">
+    <fieldset>
+      <legend><b>Fornecedores Habilitados</b></legend>
+
+      <?
+      db_lovrot($sql, 15, "()", "", $sFuncaoJS);
+      ?>
+    </fieldset>
+  </div>
 </body>
+
 </html>

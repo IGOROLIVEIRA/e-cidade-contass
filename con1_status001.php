@@ -35,71 +35,67 @@ db_postmemory($HTTP_POST_VARS);
 $cldb_config = new cl_db_config;
 $db_opcao = 1;
 $db_botao = true;
-if(isset($alterar)){
+if (isset($alterar)) {
   db_inicio_transacao();
-  $cldb_config->alterar($codigo);
+  $cldb_config->alterar(db_getsession("DB_instit"));
   db_fim_transacao();
 }
 
-$result_status = $cldb_config->sql_record($cldb_config->sql_query_file(
-                                                                       null,
-                                                                       "
-                                                                        codigo, 
-                                                                        db21_ativo
-                                                                       ",
-                                                                       "",
-                                                                       " prefeitura = true "));
-if($cldb_config->numrows > 0){
+$result_status = db_query("select codigo, db21_ativo from db_config where codigo = " . db_getsession("DB_instit"));
+if (pg_num_rows($result_status) > 0) {
   db_fieldsmemory($result_status, 0);
-}else{
+} else {
   $db_botao = false;
 }
 ?>
 <html>
+
 <head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
-<table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-  <tr> 
-    <td width="360" height="18">&nbsp;</td>
-    <td width="263">&nbsp;</td>
-    <td width="25">&nbsp;</td>
-    <td width="140">&nbsp;</td>
-  </tr>
-</table>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
-      <center>
-      <?
-      include("forms/db_frmstatus.php");
-      ?>
-      </center>
-    </td>
-  </tr>
-</table>
-<?
-db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
-?>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
+    <tr>
+      <td width="360" height="18">&nbsp;</td>
+      <td width="263">&nbsp;</td>
+      <td width="25">&nbsp;</td>
+      <td width="140">&nbsp;</td>
+    </tr>
+  </table>
+  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+      <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+        <center>
+          <?
+          include("forms/db_frmstatus.php");
+          ?>
+        </center>
+      </td>
+    </tr>
+  </table>
+  <?
+  db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  ?>
 </body>
+
 </html>
 <?
-if(isset($incluir)){
-  if($cldb_config->erro_status=="0"){
-    $cldb_config->erro(true,false);
-    $db_botao=true;
+if (isset($incluir)) {
+  if ($cldb_config->erro_status == "0") {
+    $cldb_config->erro(true, false);
+    $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($cldb_config->erro_campo!=""){
-      echo "<script> document.form1.".$cldb_config->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$cldb_config->erro_campo.".focus();</script>";
+    if ($cldb_config->erro_campo != "") {
+      echo "<script> document.form1." . $cldb_config->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
+      echo "<script> document.form1." . $cldb_config->erro_campo . ".focus();</script>";
     };
-  }else{
-    $cldb_config->erro(true,true);
+  } else {
+    $cldb_config->erro(true, true);
   };
 };
 ?>

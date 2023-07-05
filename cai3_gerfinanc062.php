@@ -288,7 +288,7 @@ if (($k03_tipo == 5 || $k03_tipo == 6 || $k03_tipo == 13 || $k03_tipo == 16 || $
 	if(trim($k40_dtreparc) != ""){
 		$dDataatual   = date("Ymd",db_getsession("DB_datausu"));
 
-		$dDataLimite  = preg_replace("-","",$k40_dtreparc);
+		$dDataLimite  = str_replace("-","",$k40_dtreparc);
 		if ($dDataatual > $dDataLimite && $k03_tipo != 5) {
 
 			$lValidaReparcelamento 		= true;

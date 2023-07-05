@@ -56,6 +56,9 @@ class cl_acordoposicao {
    var $ac26_numeroaditamento = null;
    var $ac26_numeroapostilamento = null;
    var $ac26_vigenciaalterada = null;//OC5304
+   var $ac26_percentualreajuste = 0;//LeiauteAM2023
+   var $ac26_indicereajuste = null;//LeiauteAM2023
+   var $ac26_descricaoindice = null;//LeiauteAM2023
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ac26_sequencial = int4 = Código Sequencial
@@ -67,7 +70,10 @@ class cl_acordoposicao {
                  ac26_emergencial = bool = Posição Emergencial
                  ac26_observacao = text = Observação
                  ac26_numeroaditamento = varchar(20) = Número do aditamento
+                 ac26_percentualreajuste = varchar(20) = Número do aditamento
+                 ac26_descricaoindice = varchar(20) = Número do aditamento
                  ac26_numeroapostilamento = varchar(20) = Número do apostilamento
+                 ac26_vigenciaalterada = varchar(1) = Caso vigência alterada
                  ac26_vigenciaalterada = varchar(1) = Caso vigência alterada
                  ";
    //funcao construtor da classe
@@ -104,6 +110,9 @@ class cl_acordoposicao {
        $this->ac26_emergencial = ($this->ac26_emergencial == "f"?@$GLOBALS["HTTP_POST_VARS"]["ac26_emergencial"]:$this->ac26_emergencial);
        $this->ac26_observacao = ($this->ac26_observacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_observacao"]:$this->ac26_observacao);
        $this->ac26_numeroaditamento = ($this->ac26_numeroaditamento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_numeroaditamento"]:$this->ac26_numeroaditamento);
+       $this->ac26_percentualreajuste = ($this->ac26_percentualreajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_percentualreajuste"]:$this->ac26_percentualreajuste);
+       $this->ac26_indicereajuste = ($this->ac26_indicereajuste == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_indicereajuste"]:$this->ac26_indicereajuste);
+       $this->ac26_descricaoindice = ($this->ac26_descricaoindice == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_descricaoindice"]:$this->ac26_descricaoindice);
        $this->ac26_numeroapostilamento = ($this->ac26_numeroapostilamento == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_numeroapostilamento"]:$this->ac26_numeroapostilamento);
      }else{
        $this->ac26_sequencial = ($this->ac26_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["ac26_sequencial"]:$this->ac26_sequencial);
@@ -204,6 +213,9 @@ class cl_acordoposicao {
                                       ,ac26_numeroaditamento
                                       ,ac26_numeroapostilamento
                                       ,ac26_vigenciaalterada
+                                      ,ac26_indicereajuste
+                                      ,ac26_percentualreajuste
+                                      ,ac26_descricaoindice
                        )
                 values (
                                 $this->ac26_sequencial
@@ -217,7 +229,11 @@ class cl_acordoposicao {
                                ,'$this->ac26_numeroaditamento'
                                ,'$this->ac26_numeroapostilamento'
                                ,'$this->ac26_vigenciaalterada'
+                               ," . ($this->ac26_indicereajuste == "null" || $this->ac26_indicereajuste == "" ? '0' :  $this->ac26_indicereajuste )."
+                               ," . ($this->ac26_percentualreajuste == "null" || $this->ac26_percentualreajuste == "" ? 'null' : "'" . $this->ac26_percentualreajuste . "'") . "
+                               ," . ($this->ac26_descricaoindice == "null" || $this->ac26_descricaoindice == "" ? 'null' : "'" . $this->ac26_descricaoindice . "'") . "
                       )";
+
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -655,6 +671,7 @@ class cl_acordoposicao {
      $sql .= "      left join acordocomissao  on  acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao";
      $sql .= "      left  join acordovigencia  on  ac26_sequencial                = ac18_acordoposicao";
      $sql .= "      left  join acordoposicaoaditamento  on  ac26_sequencial       = ac35_acordoposicao";
+     $sql .= "      left join apostilamento ON si03_acordoposicao                 = ac26_sequencial";
      $sql2 = "";
      if($dbwhere==""){
        if($ac26_sequencial!=null ){
@@ -884,6 +901,56 @@ class cl_acordoposicao {
       order by
         e54_autori;";
         return $sSql;
+  }
+
+
+  public function getTermoContrato($iCodigotermo){
+    $sql = "
+            SELECT CASE
+                  WHEN ac26_acordoposicaotipo IN (15,16,17) THEN 3
+                  ELSE 2
+              END AS tipoTermoContratoId,
+              CASE
+                WHEN ac26_numeroaditamento = '' THEN si03_numapostilamento
+                ELSE ac26_numeroaditamento::int
+              END AS numeroTermoContrato,
+              ac16_objeto AS objetoTermoContrato,
+              CASE
+                WHEN ac35_dataassinaturatermoaditivo IS NULL THEN si03_dataapostila
+                ELSE ac35_dataassinaturatermoaditivo
+              END AS dataAssinatura,
+              CASE
+                  WHEN ac26_acordoposicaotipo IN (6,13) THEN TRUE
+                  ELSE FALSE
+              END AS qualificacaoVigencia,
+              FALSE AS qualificacaoFornecedor,
+                        CASE
+                            WHEN ac26_acordoposicaotipo IN (2,5,7,14,15,16) THEN TRUE
+                            ELSE FALSE
+                        END AS qualificacaoReajuste,
+                        cgm.z01_cgccpf AS niFornecedor,
+                        CASE
+                            WHEN length(trim(cgm.z01_cgccpf)) = 14 THEN 'PJ'
+                            ELSE 'PF'
+                        END AS tipoPessoaFornecedor,
+                        cgm.z01_nome AS nomeRazaoSocialFornecedor,
+                        ac16_datainicio AS dataVigenciaInicio,
+                        ac16_datafim AS dataVigenciaFim
+        FROM acordoposicao
+        INNER JOIN acordo ON acordo.ac16_sequencial = acordoposicao.ac26_acordo
+        INNER JOIN acordoposicaotipo ON acordoposicaotipo.ac27_sequencial = acordoposicao.ac26_acordoposicaotipo
+        INNER JOIN cgm ON cgm.z01_numcgm = acordo.ac16_contratado
+        INNER JOIN db_depart ON db_depart.coddepto = acordo.ac16_coddepto
+        INNER JOIN acordogrupo ON acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
+        INNER JOIN acordosituacao ON acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
+        LEFT JOIN acordocomissao ON acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
+        LEFT JOIN acordovigencia ON ac26_sequencial = ac18_acordoposicao
+        LEFT JOIN acordoposicaoaditamento ON ac26_sequencial = ac35_acordoposicao
+        LEFT JOIN apostilamento ON si03_acordoposicao = ac26_sequencial
+        WHERE acordoposicao.ac26_sequencial = $iCodigotermo
+    ";
+
+    return $sql;
   }
 
 }

@@ -57,9 +57,9 @@ class AtaRegistroprecoPNCP extends ModeloBasePNCP
         $token = $this->login();
 
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
+        $cnpj =  $this->getCnpj();
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $sCodigoControlePNCP . "/atas";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $sCodigoControlePNCP . "/atas";
 
         $method = 'POST';
 
@@ -107,9 +107,9 @@ class AtaRegistroprecoPNCP extends ModeloBasePNCP
         $token = $this->login();
 
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
+        $cnpj =  $this->getCnpj();
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $sCodigoControlePNCP . "/atas/$iCodigoAta";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $sCodigoControlePNCP . "/atas/$iCodigoAta";
 
         $method = 'PUT';
 
@@ -158,9 +158,9 @@ class AtaRegistroprecoPNCP extends ModeloBasePNCP
         $token = $this->login();
 
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
+        $cnpj =  $this->getCnpj();
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/atas/$iCodigoAta";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/atas/$iCodigoAta";
 
         $method = 'DELETE';
 

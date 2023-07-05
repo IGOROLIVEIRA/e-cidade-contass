@@ -37,9 +37,11 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         $oDadosAPI->nomeRazaoSocialFornecedor       = utf8_encode($oDado[0]->nomerazaosocialfornecedor);
         $oDadosAPI->porteFornecedorId               = $oDado[0]->portefornecedorid;
         $oDadosAPI->codigoPais                      = $oDado[0]->codigopais;
-        $oDadosAPI->indicadorSubcontratacao         = $oDado[0]->indicadorsubcontratacao == 'f' ? 'false' : 'true';
+        $oDadosAPI->indicadorSubcontratacao         = $oDado[0]->indicadorsubcontratacao == 2 ? 'false' : 'true';
         $oDadosAPI->ordemClassificacaoSrp           = 1;
         $oDadosAPI->dataResultado                   = $this->formatDate($oDado[0]->dataresultado);
+        $oDadosAPI->situacaoCompraItemResultadoId   = 1;
+
         //naturezaJuridicaId faltando campo nao obrigatorio
 
         /*echo "<pre>";
@@ -85,10 +87,10 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         $token = $this->login();
 
         //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
+        $cnpj =  $this->getCnpj();
 
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/itens/$seqitem/resultados";
-
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/itens/$seqitem/resultados";
+        
         $method = 'POST';
 
         $chpncp      = curl_init($url);
@@ -120,6 +122,15 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
         curl_close($chpncp);
+        /*$err     = curl_errno($chpncp);
+        $errmsg  = curl_error($chpncp);
+        $header  = curl_getinfo($chpncp);
+        $header['errno']   = $err;
+        $header['errmsg']  = $errmsg;
+        $header['header']  = $contentpncp;
+        echo "<pre>";
+        print_r($header);
+        exit;*/
 
         $retorno = explode(':', $contentpncp);
 
@@ -127,6 +138,63 @@ class ResultadoItensPNCP extends ModeloBasePNCP
             return array($retorno[5] . $retorno[6], substr($retorno[0], 7, 3));
         } else {
             return array($retorno[17], substr($retorno[0], 7, 3));
+        }
+    }
+
+    public function retificarResultado($oDados, $sCodigoControlePNCP, $iAnoCompra, $seqitem, $seqresultado)
+    {
+        $token = $this->login();
+
+        //aqui sera necessario informar o cnpj da instituicao de envio
+        $cnpj =  $this->getCnpj();
+
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/itens/$seqitem/resultados/$seqresultado";
+
+        $method = 'PUT';
+
+        $chpncp      = curl_init($url);
+
+        $headers = array(
+            'Content-Type: application/json',
+            'Authorization: ' . $token
+        );
+
+        $optionspncp = array(
+            CURLOPT_RETURNTRANSFER => 1,            // return web page
+            CURLOPT_POST           => 1,
+            CURLOPT_HEADER         => true,         // don't return headers
+            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
+            CURLOPT_HTTPHEADER     => $headers,
+            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
+            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
+            CURLOPT_TIMEOUT        => 120,          // timeout on response
+            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
+            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
+            CURLOPT_POSTFIELDS     => $oDados,
+            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
+            CURLOPT_SSL_VERIFYPEER => false,        //
+            CURLOPT_VERBOSE        => 1,            //
+            CURLINFO_HEADER_OUT    => true
+        );
+
+
+        curl_setopt_array($chpncp, $optionspncp);
+        $contentpncp = curl_exec($chpncp);
+        curl_close($chpncp);
+        /*$err     = curl_errno($chpncp);
+        $errmsg  = curl_error($chpncp);
+        $header  = curl_getinfo($chpncp);
+        $header['errno']   = $err;
+        $header['errmsg']  = $errmsg;
+        $header['header']  = $contentpncp;
+        echo "<pre>";
+        print_r($header);
+        exit;*/
+        $retorno = explode(':', $contentpncp);
+        if (substr($retorno[0], 7, 3) == '200') {
+            return array(201, "Enviado com Sucesso!");
+        } else {
+            return array(422, $retorno[17]);
         }
     }
 }

@@ -31,9 +31,9 @@ $cldipr->rotulo->label();
 <form name="form1" method="post" action="">
     <center>
         <br />
-        <fieldset style="width: 850px;">
+        <fieldset style="width: 950px;">
             <legend><b>Informações Previdenciárias - DIPR</b></legend>
-            <table border="0" width="850px;">
+            <table border="0" width="950px;">
                 <tr>
                     <td>
                         <b>Sequencial</b>
@@ -45,12 +45,22 @@ $cldipr->rotulo->label();
                     </td>
                 </tr>
 
+                <tr  id="TipodeCadastro">
+                    <td><b>Tipo de Cadastro:</b></td>
+                    <td>
+                        <?php
+                        $aTipocadastro = array(1 => "Cadastro Inicial", 2 => "Alteração de Cadastro");
+                        db_select('c236_tipocadastro', $aTipocadastro, true, 1, "style='width:120px'");
+                        ?>
+                    </td>
+                </tr>
+
                 <tr>
                     <td><b>O ente possui segregação da massa instituída por lei?:</b></td>
                     <td>
                         <?php
                         $aSegregacaoLei = array(0 => "Selecione", 't' => "Sim", 'f' => "Não");
-                        db_select('c236_massainstituida', $aSegregacaoLei, true, 1, "style='width:120px'");
+                        db_select('c236_massainstituida', $aSegregacaoLei, true, 1, "onchange='verificarCampos()'");
                         ?>
                     </td>
                 </tr>
@@ -66,7 +76,9 @@ $cldipr->rotulo->label();
                 </tr>
 
                 <tr id="LinhaNumeroAtoNormativo">
-                    <td><b>Número do ato normativo:</b></td>
+                    <td><b>
+                        <?= db_getsession("DB_anousu") < 2023 ? "Número do ato normativo:" : "Ato normativo de criação do RPPS:"?>
+                    </b></td>
                     <td>
                         <?php
                         db_input("c236_atonormativo", 14, "0", true, "text", $db_opcao, "", "", "", "", 6);
@@ -74,6 +86,61 @@ $cldipr->rotulo->label();
                     </td>
                 </tr>
 
+                <tr  id="Dataatonormativo">
+                    <td><b>Data do ato normativo de criação do RPPS:</b></td>
+                    <td>
+                        <?php
+                         db_inputdata('c236_dtatonormacrirpps',@$c236_dtatonormacrirpps_dia,@$c236_dtatonormacrirpps_mes,@$c236_dtatonormacrirpps_ano, true, 'text', $db_opcao, "");
+                        ?>
+                    </td>
+                </tr>
+
+                <tr id="NumeroAtoNormativo">
+                    <td><b>Número do ato normativo que implementou ou desfez a segregação da massa:</b></td>
+                    <td>
+                        <?php
+                        db_input("c236_nroatonormasegremassa", 14, "0", true, "text", $db_opcao, "", "", "", "", 6);
+                        ?>
+                    </td>
+                </tr>
+
+                <tr  id="Dataatoimplementou">
+                    <td><b>Data do ato normativo que implementou ou desfez a segregação da massa:</b></td>
+                    <td>
+                        <?php
+                         db_inputdata('c236_dtatonormasegremassa',@$c236_dtatonormasegremassa_dia,@$c236_dtatonormasegremassa_mes,@$c236_dtatonormasegremassa_ano, true, 'text', $db_opcao, "");
+                         ?>
+                    </td>
+                </tr>
+
+                <tr  id="NecessidadeEquacionamento">
+                    <td><b>Houve necessidade de implementar plano de equacionamento de déficit atuarial?:</b></td>
+                    <td>
+                        <?php
+                        $aNecessidadeequacionamento = array(0 => "Selecione",1 => "Sim", 2 => "Não");
+                        db_select('c236_planodefatuarial', $aNecessidadeequacionamento, true, 1, "onchange='verificarCampos()'");
+                        ?>
+                    </td>
+                </tr>
+
+                <tr id="AtoNormativoEquacional">
+                    <td><b>Ato normativo que estabeleceu o plano de equacionamento do déficit atuarial:</b></td>
+                    <td>
+                        <?php
+                        db_input("c236_atonormplanodefat", 14, "0", true, "text", $db_opcao, "", "", "", "", 6);
+                        ?>
+                    </td>
+                </tr>
+
+                <tr  id="Dataatoequacional">
+                    <td><b>Data do ato normativo que estabeleceu o plano de equacionamento do déficit atuarial:</b></td>
+                    <td>
+                        <?php
+                         db_inputdata('c236_dtatoplanodefat',@$c236_dtatoplanodefat_dia,@$c236_dtatoplanodefat_mes,@$c236_dtatoplanodefat_ano, true, 'text', $db_opcao, "");
+                         ?>
+                    </td>
+                </tr>
+                
                 <tr id="LinhaExercicioAtoNormativo">
                     <td><b>Exercício do ato normativo:</b></td>
                     <td>
@@ -136,6 +203,23 @@ $cldipr->rotulo->label();
                         ?>
                     </td>
                 </tr>
+                <tr>
+                    <td nowrap>
+                        <?
+                        db_ancora("Autarquia", "js_pesquisac236_numcgm(true, 'autarquia');", $db_opcao);
+                        ?>
+                    </td>
+                    <td>
+                        <?
+                        db_input('c236_numcgmautarquia', 14, $Ic236_numcgmautarquia, true, 'text', $db_opcao, " onchange=js_pesquisac236_numcgm(false,'autarquia');");
+                        if ($c236_numcgmautarquia) {
+                            $resultado = db_query("select z01_nome as z01_nomeautarquia from cgm where z01_numcgm = {$c236_numcgmautarquia}");
+                            db_fieldsmemory($resultado, 0)->z01_nomeautarquia;
+                        }
+                        db_input('z01_nomeautarquia', 40, $Iz01_nome, true, 'text', 3, '', "z01_nomeautarquia");
+                        ?>
+                    </td>
+                </tr>
             </table>
         </fieldset>
         <br>
@@ -146,6 +230,7 @@ $cldipr->rotulo->label();
 </form>
 
 <script>
+    var ano = "<?php echo db_getsession("DB_anousu"); ?>";
     // Declarando uma variavel global
     campo = "";
     // Verificando se campos condicionais devem aparecer
@@ -174,6 +259,11 @@ $cldipr->rotulo->label();
 
         if (campo === "gestora") {
             preencheGestoraAutomaticamente();
+            return;
+        }
+
+        if (campo === "autarquia") {
+            preencheAutarquiaAutomaticamente();
             return;
         }
     }
@@ -205,6 +295,15 @@ $cldipr->rotulo->label();
         document.form1.z01_nomegestora.value = '';
     }
 
+    function preencheAutarquiaAutomaticamente() {
+        campo = "autarquia";
+        if (document.form1.c236_numcgmautarquia.value != '') {
+            js_OpenJanelaIframe('top.corpo', 'db_iframe_cgm', 'func_cgm.php?pesquisa_chave=' + document.form1.c236_numcgmautarquia.value + '&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
+            return;
+        }
+        document.form1.z01_nomeautarquia.value = '';
+    }
+
     function js_mostracgm(erro, chave) {
         if (campo === "executivo") {
             document.form1.z01_nomeexecutivo.value = chave;
@@ -232,6 +331,15 @@ $cldipr->rotulo->label();
             }
             return;
         }
+
+        if (campo === "autarquia") {
+            document.form1.z01_nomeautarquia.value = chave;
+            if (erro == true) {
+                document.form1.c236_numcgmautarquia.focus();
+                document.form1.c236_numcgmautarquia.value = '';
+            }
+            return;
+        }
     }
 
     function js_mostracgm1(chave1, chave2) {
@@ -248,6 +356,11 @@ $cldipr->rotulo->label();
         if (campo === "gestora") {
             document.form1.c236_numcgmgestora.value = chave1;
             document.form1.z01_nomegestora.value = chave2;
+        }
+
+        if (campo === "autarquia") {
+            document.form1.c236_numcgmautarquia.value = chave1;
+            document.form1.z01_nomeautarquia.value = chave2;
         }
         db_iframe_cgm.hide();
     }
@@ -275,7 +388,32 @@ $cldipr->rotulo->label();
 
         mostrarLinha('LinhaNumeroAtoNormativo');
         mostrarLinha('LinhaExercicioAtoNormativo');
+        
         return;
+    }
+    function verificarCampos() {
+        if (document.form1.c236_massainstituida.value === "f") {
+            ocultarLinha('NumeroAtoNormativo');
+            ocultarLinha('Dataatoimplementou');
+            document.form1.c236_nroatonormasegremassa.value = '';
+            document.form1.c236_dtatonormasegremassa.value = '';
+        }
+        if(document.form1.c236_massainstituida.value === "t" && ano > 2022){
+            mostrarLinha('NumeroAtoNormativo');
+            mostrarLinha('Dataatoimplementou');
+        }
+        if (document.form1.c236_planodefatuarial.value != 1) {
+            ocultarLinha('AtoNormativoEquacional');
+            ocultarLinha('Dataatoequacional');
+            document.form1.c236_atonormplanodefat.value = '';
+            document.form1.c236_dtatoplanodefat.value = '';
+        }
+        if(document.form1.c236_planodefatuarial.value == 1 && ano > 2022){
+            mostrarLinha('AtoNormativoEquacional');
+            mostrarLinha('Dataatoequacional');
+        }
+        return;
+                
     }
 
     function ocultarLinha(identificador) {
@@ -289,4 +427,38 @@ $cldipr->rotulo->label();
     function alterarDisplayDaLinha(identificador, display) {
         document.getElementById(identificador).style.display = display;
     }
+
+    function MostrarCampos2023(){
+       if(ano > 2022){
+          mostrarLinha('TipodeCadastro');
+          mostrarLinha('Dataatonormativo');
+          ocultarLinha('LinhaExercicioAtoNormativo');
+          if (document.form1.c236_massainstituida.value != "t"){
+            ocultarLinha('NumeroAtoNormativo');
+            ocultarLinha('Dataatoimplementou');
+            document.form1.c236_nroatonormasegremassa.value = '';
+            document.form1.c236_dtatonormasegremassa.value = '';
+          }
+          if (document.form1.c236_planodefatuarial.value != 1){
+            ocultarLinha('AtoNormativoEquacional');
+            ocultarLinha('Dataatoequacional');
+            document.form1.c236_atonormplanodefat.value = '';
+            document.form1.c236_dtatoplanodefat.value = '';
+          }    
+       }else{
+          ocultarLinha('TipodeCadastro');
+          ocultarLinha('Dataatonormativo');
+          ocultarLinha('NumeroAtoNormativo');
+          ocultarLinha('Dataatoimplementou');
+          ocultarLinha('AtoNormativoEquacional');
+          ocultarLinha('Dataatoequacional');
+          document.form1.c236_nroatonormasegremassa.value = '';
+          document.form1.c236_dtatonormasegremassa.value = '';
+          document.form1.c236_dtatoplanodefat.value = '';
+       }
+    }
+    MostrarCampos2023();
+    document.getElementById('c236_massainstituida').style='width:120px';
+    document.getElementById('c236_planodefatuarial').style='width:120px';
+    
 </script>

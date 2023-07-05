@@ -90,9 +90,9 @@ if ($iAnoUsu < 2021) {
     }
 
     let iAnoUsu = <?= $iAnoUsu ?>;
-    
+
     if (iAnoUsu >= 2021) {
-        document.getElementById("c222_previdencia").disabled        = true;        
+        document.getElementById("c222_previdencia").disabled        = true;
         document.getElementById("c222_natdespecidade").maxLength    = 15;
         document.getElementById("c222_natdespsiope").maxLength      = 15;
     }

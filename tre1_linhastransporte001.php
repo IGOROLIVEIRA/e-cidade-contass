@@ -32,6 +32,7 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_app.utils.php");
 require_once ("dbforms/db_funcoes.php");
+require_once(modification("classes/db_cgm_classe.php"));
 
 $iOpcao = 1;
 ?>

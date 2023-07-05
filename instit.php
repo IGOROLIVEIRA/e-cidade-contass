@@ -89,16 +89,16 @@ if (session_is_registered("DB_uol_hora")) {
 $oSkin = new SkinService();
 include($oSkin->getPathFile("instit.php"));
 
-if ($tem_atualizacoes) {
+// if ($tem_atualizacoes) {
 
-  $sScriptChangelog  = "<script src=\"scripts/classes/configuracao/DBViewReleaseNote.classe.js\" type=\"text/javascript\"></script>\n";
-  $sScriptChangelog .= "<script type=\"text/javascript\">\n";
-  $sScriptChangelog .= " var oDBReleaseNote = new DBViewReleaseNote(null, true); \n";
-  $sScriptChangelog .= " oDBReleaseNote.show();                                  \n";
-  $sScriptChangelog .= "</script>";
+//   $sScriptChangelog  = "<script src=\"scripts/classes/configuracao/DBViewReleaseNote.classe.js\" type=\"text/javascript\"></script>\n";
+//   $sScriptChangelog .= "<script type=\"text/javascript\">\n";
+//   $sScriptChangelog .= " var oDBReleaseNote = new DBViewReleaseNote(null, true); \n";
+//   $sScriptChangelog .= " oDBReleaseNote.show();                                  \n";
+//   $sScriptChangelog .= "</script>";
 
-  echo $sScriptChangelog;
-}
+//   echo $sScriptChangelog;
+// }
 
 ?>
 

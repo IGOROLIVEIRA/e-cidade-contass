@@ -31,10 +31,11 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
-parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
+parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
 $clrotulo = new rotulocampo;
 $lFail    = false;
 if (isset($uploadfile)) {
+
     // Nome do novo arquivo
     $nomearq = $_FILES["uploadfile"]["name"];
 
@@ -43,16 +44,26 @@ if (isset($uploadfile)) {
 
     $extensao = strtolower(substr($nomearq, -4));
 
-    if ($extensao != ".pdf") {
+    /*if ($extensao != ".pdf") {
         db_msgbox("Arquivo inválido! O arquivo selecionado deve ser do tipo PDF");
+        unlink($nometmp);
+        $lFail = true;
+        return false;
+    }*/
+
+    $size = $_FILES["uploadfile"]["size"];
+
+    //31,457,280 referente a 30mb tamanho maximo permitido pelo PNCP
+    if ($size > 31457280) {
+        db_msgbox("Arquivo inválido! Tamanho maximo permitido pelo PNCP e 30MB");
         unlink($nometmp);
         $lFail = true;
         return false;
     }
 
-    if ($extensao == ".pdf") {
+    //if ($extensao == ".pdf") {
         $novo_nome = md5(time()) . $extensao;
-    }
+    //}
 
     // Seta o nome do arquivo destino do upload
     $arquivoDocument = db_removeAcentuacao("model/licitacao/PNCP/anexoslicitacao/$novo_nome");

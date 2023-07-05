@@ -58,6 +58,7 @@ $clrhmotivorescisao = new cl_rhmotivorescisao;
       } else {
           $sql = $clrhmotivorescisao->sql_query(null, $campos, null, "");
       }
+
       $repassa = array();
       echo '<div class="container">';
       echo '  <fieldset>';
@@ -65,6 +66,7 @@ $clrhmotivorescisao = new cl_rhmotivorescisao;
       db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
       echo '  </fieldset>';
       echo '</div>';
+
   } else {
       if ($pesquisa_chave != null && $pesquisa_chave != "") {
           $result = $clrhmotivorescisao->sql_record($clrhmotivorescisao->sql_query($pesquisa_chave));
@@ -76,6 +78,7 @@ $clrhmotivorescisao = new cl_rhmotivorescisao;
           }
       } elseif ($pesquisa_chave_codigo != null && $pesquisa_chave_codigo != "") {
           $result = $clrhmotivorescisao->sql_record($clrhmotivorescisao->sql_query(null, "rh173_descricao", null, "rh173_codigo = '{$pesquisa_chave_codigo}'"));
+
           if ($clrhmotivorescisao->numrows != 0) {
               db_fieldsmemory($result, 0);
               echo "<script>" . $funcao_js . "('$rh173_descricao',false);</script>";

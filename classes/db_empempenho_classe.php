@@ -75,12 +75,6 @@ class cl_empempenho
     var $e60_convenio = null;
     var $e60_numconvenio = null;
     var $e60_dataconvenio = null;
-    var $e60_dataconvenio_dia = null;
-    var $e60_dataconvenio_mes = null;
-    var $e60_dataconvenio_ano = null;
-    var $e60_datasentenca_dia = null;
-    var $e60_datasentenca_mes = null;
-    var $e60_datasentenca_ano = null;
     /*OC4604 - LQD*/
     var $e60_datasentenca = null;
     var $e60_tipodespesa = null;
@@ -89,6 +83,10 @@ class cl_empempenho
     var $e60_id_usuario = null;
     var $e60_vlrutilizado = 0;
     /*FIM - OC4401*/
+    /** OC19656 */
+    var $e60_emendaparlamentar = null;
+    var $e60_esferaemendaparlamentar = null;
+    /** FIM - OC19656 */
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  e60_numemp = int4 = Número
@@ -119,13 +117,11 @@ class cl_empempenho
                  e60_dataconvenio = date = Data Convênio
                  e60_datasentenca = date = Data Senteça Judicial
                  e60_id_usuario = int4 = Número
-                 e60_e60_tipodespesa = int8 = tipo de despesa
+                 e60_tipodespesa = int8 = tipo de despesa
+                 e60_emendaparlamentar = int8 = emenda parlamentar
+                 e60_esferaemendaparlamentar = int8 = esfera emenda parlamentar
                  e60_vlrutilizado = float8 = Valor utilizado
                  ";
-    function __construct()
-    {
-        $this->cl_empempenho();
-    }
     //funcao construtor da classe
     function cl_empempenho()
     {
@@ -207,6 +203,8 @@ class cl_empempenho
             $this->e60_numemp = ($this->e60_numemp == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_numemp"] : $this->e60_numemp);
         }
         $this->e60_tipodespesa = ($this->e60_tipodespesa == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_tipodespesa"] : $this->e60_tipodespesa);
+        $this->e60_emendaparlamentar = ($this->e60_emendaparlamentar == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_emendaparlamentar"] : $this->e60_emendaparlamentar);
+        $this->e60_esferaemendaparlamentar = ($this->e60_esferaemendaparlamentar == "" ? @$GLOBALS["HTTP_POST_VARS"]["e60_esferaemendaparlamentar"] : $this->e60_esferaemendaparlamentar);
     }
     // funcao para inclusao
     function incluir($e60_numemp)
@@ -414,6 +412,12 @@ class cl_empempenho
         if ($this->e60_vlrutilizado == null) {
             $this->e60_vlrutilizado = 0;
         }
+        if ($this->e60_emendaparlamentar == null) {
+            $this->e60_emendaparlamentar = 0;
+        }
+        if ($this->e60_esferaemendaparlamentar == null) {
+            $this->e60_esferaemendaparlamentar = 0;
+        }
         $sql = "insert into empempenho(
                                        e60_numemp
                                       ,e60_codemp
@@ -444,6 +448,8 @@ class cl_empempenho
                                       ,e60_datasentenca
                                       ,e60_id_usuario
                                       ,e60_tipodespesa
+                                      ,e60_emendaparlamentar
+                                      ,e60_esferaemendaparlamentar
                                       ,e60_vlrutilizado
                        )
                 values (
@@ -476,6 +482,8 @@ class cl_empempenho
                                ," . ($this->e60_datasentenca == "null" || $this->e60_datasentenca == "" ? "null" : "'" . $this->e60_datasentenca . "'") . "
                                ,$this->e60_id_usuario
                                ,$this->e60_tipodespesa
+                               ,$this->e60_emendaparlamentar
+                               ,$this->e60_esferaemendaparlamentar
                                ,$this->e60_vlrutilizado
                       )";
         $result = db_query($sql);
@@ -837,6 +845,32 @@ class cl_empempenho
                 return false;
             }
         }
+        if (trim($this->e60_emendaparlamentar) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_emendaparlamentar"])) {
+            $sql  .= $virgula . " e60_emendaparlamentar = " . ($this->e60_emendaparlamentar == '' ? 'null' : $this->e60_emendaparlamentar);
+            $virgula = ",";
+            if (trim($this->e60_emendaparlamentar) == null) {
+                $this->erro_sql = " Campo Emenda Parlamentar não Informado.";
+                $this->erro_campo = "e60_emendaparlamentar";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->e60_esferaemendaparlamentar) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_esferaemendaparlamentar"])) {
+            $sql  .= $virgula . " e60_esferaemendaparlamentar = " . ($this->e60_esferaemendaparlamentar == '' ? 'null' : $this->e60_esferaemendaparlamentar);
+            $virgula = ",";
+            if (trim($this->e60_emendaparlamentar) == null) {
+                $this->erro_sql = " Campo Esfera Emenda Parlamentar não Informado.";
+                $this->erro_campo = "e60_esfera emendaparlamentar";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
         if (trim($this->e60_dataconvenio) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["e60_dataconvenio_dia"] != "")) {
             $sql  .= $virgula . " e60_dataconvenio = '$this->e60_dataconvenio' ";
             $virgula = ",";
@@ -1116,7 +1150,6 @@ class cl_empempenho
         $sql .= "       left join acordo   on empempenhocontrato.e100_acordo = acordo.ac16_sequencial ";
         $sql .= "       left join convconvenios on convconvenios.c206_sequencial = empempenho.e60_numconvenio ";
         $sql .= "       left join empresto on e91_numemp = e60_numemp";
-
         $sql2 = "";
         if ($dbwhere == "") {
             if ($e60_numemp != null) {
@@ -2351,12 +2384,18 @@ class cl_empempenho
 
         $codigo = $dados->sigla == 'e60' ? "'{$codigo}'" :  $codigo;
 
-        $sSQL = "
-          select {$dados->campo}
-           from {$dados->tabela}
-            join orcdotacao on (o58_coddot, o58_anousu) = ({$dados->sigla}_coddot, {$dados->sigla}_anousu)
-             where {$dados->campo} = {$codigo} and {$dados->sigla}_anousu = {$ano}
-              and o58_codigo in (122,123,124,142,163,171,172,173,176,177,178,181,182,183)";
+        $sSQL = " SELECT {$dados->campo}
+                    FROM {$dados->tabela}
+                  JOIN orcdotacao ON (o58_coddot, o58_anousu) = ({$dados->sigla}_coddot, {$dados->sigla}_anousu)
+                  WHERE {$dados->campo} = {$codigo} AND {$dados->sigla}_anousu = {$ano} ";
+
+        $and = " AND o58_codigo IN (122, 123, 124, 142, 163, 171, 172, 173, 176, 177, 178, 181, 182, 183)";
+
+        if ($ano > 2022) {
+            $and = " AND o58_codigo IN (15700000, 16310000, 17000000, 16650000, 17130070, 15710000, 15720000, 15750000, 16320000, 16330000, 16360000, 17010000, 17020000, 17030000)";
+        }
+
+        $sSQL .= $and;
 
         return pg_num_rows(db_query($sSQL));
     }
@@ -2460,7 +2499,7 @@ class cl_empempenho
         $sSql .= "             inner join conhistdoc   on c53_coddoc = c71_coddoc                                                                                            ";
         $sSql .= "             inner join conlancam    on c70_codlan = c75_codlan                                                                                            ";
         $sSql .= "             inner join empempenho   on e60_numemp = c75_numemp                                                                                            ";
-        $sSql .= "        where e60_anousu = $iAnoUsu and c75_data between '$sDataInicial' and '$sDataFinal'                                                                ";
+        $sSql .= "        where e60_anousu = $iAnoUsu and e60_emiss between '$sDataInicial' and '$sDataFinal'                                                                ";
         $sSql .= "             and  e60_instit in ($sInstituicoes)                                                                                                          ";
         $sSql .= "        group by c75_numemp, c70_anousu                                                                                                                    ";
         $sSql .= "        ) as x on x.c75_numemp = e60_numemp                                                                                                               ";
@@ -2499,7 +2538,7 @@ class cl_empempenho
         $sSql .= "        e60_anousu,                                                                                                                                       ";
         $sSql .= "        c70_anousu,                                                                                                                                       ";
         $sSql .= "        e60_numcgm,                                                                                                                                       ";
-        $sSql .= "        e58_coddot,                                                                                                                                       ";
+        $sSql .= "        o58_coddot,                                                                                                                                       ";
         $sSql .= "        e60_instit,                                                                                                                                       ";
         $sSql .= "        o58_funcao,                                                                                                                                       ";
         $sSql .= "        o58_subfuncao,                                                                                                                                    ";
@@ -2507,6 +2546,7 @@ class cl_empempenho
         $sSql .= "        o58_programa,                                                                                                                                     ";
         $sSql .= "        o54_descr as descprograma,                                                                                                                        ";
         $sSql .= "        o15_codtri,                                                                                                                                       ";
+        $sSql .= "        o15_codigo,                                                                                                                                       ";                                                                                                                                     
         $sSql .= "        o56_elemento,                                                                                                                                     ";
         $sSql .= "        coalesce(e60_vlremp,0) as e60_vlremp,                                                                                                             ";
         $sSql .= "        coalesce(e60_vlranu,0) as e60_vlranu,                                                                                                             ";

@@ -256,7 +256,7 @@ db_app::load("estilos.css, grid.style.css");
                 aLinha[3] = oLinha.l04_descricao.urlDecode();
                 aLinha[4] = oLinha.z01_numcgm;
                 aLinha[5] = oLinha.z01_nome.urlDecode();
-                aLinha[6] = oLinha.m61_descr;
+                aLinha[6] = oLinha.m61_descr.urlDecode();
                 aLinha[7] = oLinha.pc11_quant;
                 aLinha[8] = oLinha.pc23_valor;
                 oGridItens.addRow(aLinha);
@@ -317,6 +317,58 @@ db_app::load("estilos.css, grid.style.css");
         }
     }
 
+    function js_gerarRelatorio() {
+
+        var iHeight = 200;
+        var iWidth = 300;
+        windowDotacaoItem = new windowAux('wndDotacoesItem',
+            'Gerar Relagório ',
+            iWidth,
+            iHeight
+        );
+
+        var sContent = "<div style='margin-top:30px;'>";
+        sContent += "<fieldset>";
+        sContent += "<legend>Gerar Relatório de Homologação em:</legend>";
+        sContent += "  <div id=''>";
+        sContent += "  <input type='checkbox' id='pdf' name='PDF'>";
+        sContent += "  <label>PDF</label>";
+        sContent += "  </div>";
+        sContent += "  <div id=''>";
+        sContent += "  <input type='checkbox' id='word' name='WORD'>";
+        sContent += "  <label>WORD</label>";
+        sContent += "  </div>";
+        sContent += "</fieldset>";
+        sContent += "<center>";
+        sContent += "<input type='button' id='btnGerar' value='Confirmar' onclick='gerar()'>";
+        sContent += "</center>";
+        sContent += "</div>";
+        windowDotacaoItem.setContent(sContent);
+        windowDotacaoItem.show();
+
+    }
+
+    function gerar() {
+        var pdf = document.getElementById("pdf");
+        var word = document.getElementById("word");
+        var ilicita = document.getElementById("l202_licitacao").value;
+        var sequencial = document.getElementById("l202_sequencial").value;
+        var nome = document.getElementById("respHomolognome").value;
+        var data = document.getElementById("l202_datahomologacao").value;
+        var valor = document.getElementById('valor').value;
+
+        if (pdf.checked) {
+            jan = window.open('lic1_homologacaoadjudica004.php?impjust=$impjustificativa&codigo_preco=' + ilicita + '&nome=' + nome + '&sequencial=' + sequencial + '&data=' + data + '&valor=' + valor + '&quant_casas=2&tipoprecoreferencia=',
+                'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+            jan.moveTo(0, 0);
+        } else if (word.checked) {
+            jan = window.open('lic1_homologacaoadjudica005.php?impjust=$impjustificativa&codigo_preco=' + ilicita + '&nome=' + nome + '&sequencial=' + sequencial + '&data=' + data + '&valor=' + valor + '&quant_casas=2&tipoprecoreferencia=',
+                'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+            jan.moveTo(0, 0);
+        }
+        windowDotacaoItem.destroy();
+    }
+
     function js_getReponsavel() {
 
         var oParam = new Object();
@@ -371,16 +423,19 @@ db_app::load("estilos.css, grid.style.css");
 
         oParam.aItens = new Array();
         oParam.exec = "homologarLicitacao";
-
+        oParam.sCodigoItens = "";
         for (var i = 0; i < aItens.length; i++) {
 
             with(aItens[i]) {
                 var oItem = new Object();
                 oItem.codigo = aCells[0].getValue();
                 oItem.fornecedor = aCells[5].getValue();
+                oParam.sCodigoItens += aCells[0].getValue() + ",";
                 oParam.aItens.push(oItem);
             }
         }
+
+        oParam.sCodigoItens = oParam.sCodigoItens.substring(0, oParam.sCodigoItens.length - 1);
 
         js_divCarregando('Aguarde, Homologando Licitacao', 'msgBox');
         var oAjax = new Ajax.Request(
@@ -534,59 +589,6 @@ db_app::load("estilos.css, grid.style.css");
         document.getElementById(varNomeCampo).value = chave2;
         db_iframe_cgm.hide();
     }
-
-    function js_gerarRelatorio() {
-
-        var iHeight = 200;
-        var iWidth = 300;
-        windowDotacaoItem = new windowAux('wndDotacoesItem',
-            'Gerar Relagório ',
-            iWidth,
-            iHeight
-        );
-
-        var sContent = "<div style='margin-top:30px;'>";
-        sContent += "<fieldset>";
-        sContent += "<legend>Gerar Relatório de Homologação em:</legend>";
-        sContent += "  <div id=''>";
-        sContent += "  <input type='checkbox' id='pdf' name='PDF'>";
-        sContent += "  <label>PDF</label>";
-        sContent += "  </div>";
-        sContent += "  <div id=''>";
-        sContent += "  <input type='checkbox' id='word' name='WORD'>";
-        sContent += "  <label>WORD</label>";
-        sContent += "  </div>";
-        sContent += "</fieldset>";
-        sContent += "<center>";
-        sContent += "<input type='button' id='btnGerar' value='Confirmar' onclick='gerar()'>";
-        sContent += "</center>";
-        sContent += "</div>";
-        windowDotacaoItem.setContent(sContent);
-        windowDotacaoItem.show();
-
-    }
-
-    function gerar() {
-        var pdf = document.getElementById("pdf");
-        var word = document.getElementById("word");
-        var ilicita = document.getElementById("l202_licitacao").value;
-        var sequencial = document.getElementById("l202_sequencial").value;
-        var nome = document.getElementById("respHomolognome").value;
-        var data = document.getElementById("l202_datahomologacao").value;
-        var valor = document.getElementById('valor').value;
-
-        if (pdf.checked) {
-            jan = window.open('lic1_homologacaoadjudica004.php?impjust=$impjustificativa&codigo_preco=' + ilicita + '&nome=' + nome + '&sequencial=' + sequencial + '&data=' + data + '&valor=' + valor + '&quant_casas=2&tipoprecoreferencia=',
-                'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
-            jan.moveTo(0, 0);
-        } else if (word.checked) {
-            jan = window.open('lic1_homologacaoadjudica005.php?impjust=$impjustificativa&codigo_preco=' + ilicita + '&nome=' + nome + '&sequencial=' + sequencial + '&data=' + data + '&valor=' + valor + '&quant_casas=2&tipoprecoreferencia=',
-                'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
-            jan.moveTo(0, 0);
-        }
-        windowDotacaoItem.destroy();
-    }
-
 
     js_showGrid();
 </script>

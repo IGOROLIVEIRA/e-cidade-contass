@@ -30,6 +30,8 @@ function verPermissaoAlteraServico($iItem)
         return false;
     }
 }
+$oParamLicicita = db_stdClass::getParametro('licitaparam', array(db_getsession("DB_instit")));
+$l12_pncp = $oParamLicicita[0]->l12_pncp;
 ?>
 <script>
     function js_troca() {
@@ -43,6 +45,11 @@ function verPermissaoAlteraServico($iItem)
         pcmater0011.location.href = 'com1_pcmater0011.php?db_opcao=' + opc + '&codigomater=' + mat + '&codsubgrupo=' + val + '&codele=' + ele;
     }
 </script>
+<style>
+    #pc01_regimobiliario {
+        background-color: #e6e4f1;
+    }
+</style>
 <form name="form1" method="post" action="" onsubmit="return js_check()">
     <input type="hidden" name="codeles" value=<?= @$coluna ?>>
     <center>
@@ -84,7 +91,11 @@ function verPermissaoAlteraServico($iItem)
                                 ?>
                         <b>Tipo:</b>
                         <?
-                        $x = array("f" => "Material", "t" => "Serviço/Material Permanente");
+                        if ($db_opcao == 1) {
+                            $x = array("selecione" => "Selecione", "f" => "Material", "t" => "Serviço/Material Permanente");
+                        } else {
+                            $x = array("f" => "Material", "t" => "Serviço/Material Permanente");
+                        }
                         if (isset($pc01_codmater)) {
                             if (verPermissaoAlteraServico($pc01_codmater)) {
                                 db_select("pc01_servico", $x, true, 3);
@@ -146,38 +157,23 @@ function verPermissaoAlteraServico($iItem)
                     <td><?= $Lpc03_codgrupo ?> </td>
                     <td align='left'>
                         <?
-                        //com query_file na classe
-                        /*
-	  if (!isset($pc013_codgrupo)){
-             if(isset($pc01_codsubgrupo) &&  ($db_opcao == 2 || $db_opcao == 3)){
-                 global $pc03_codgrupo;
-                 // echo "<script>alert('".$clpcsubgrupo->sql_query($pc01_codsubgrupo,"pc04_codgrupo as pc01_codgrupo")."'</script>";
-                 $result = $clpcsubgrupo->sql_record($clpcsubgrupo->sql_query($pc01_codsubgrupo,"pc04_codgrupo as pc03_codgrupo"));
-                 if ($clpcsubgrupo->numrows > 0 ){
-	            db_fieldsmemory($result,0);
-	         }
+            if (!isset($pc01_codgrupo)) {
+              if (!isset($pc03_codgrupo)) {
+                if (isset($pc01_codsubgrupo) &&  ($db_opcao == 2 || $db_opcao == 3)) {
+                  global $pc01_codgrupo;
+                  $result = $clpcsubgrupo->sql_record($clpcsubgrupo->sql_query($pc01_codsubgrupo, "pc04_codgrupo as pc01_codgrupo", null, "pc04_codsubgrupo=$pc01_codsubgrupo and pc04_ativo is true and pc04_instit in (". db_getsession('DB_instit').",0)"));
+                  if ($clpcsubgrupo->numrows > 0) {
+                    db_fieldsmemory($result, 0);
+                  }
+                }
               }
-	  }
-          $result = $clpcgrupo->sql_record($clpcgrupo->sql_query(null,"pc03_codgrupo,pc03_descrgrupo","pc03_descrgrupo"));
-          @db_selectrecord("pc03_codgrupo",$result,true,$db_opcao,"","","","0","js_troca(this.value);");
-  */
-                        if (!isset($pc01_codgrupo)) {
-                            if (!isset($pc03_codgrupo)) {
-                                if (isset($pc01_codsubgrupo) &&  ($db_opcao == 2 || $db_opcao == 3)) {
-                                    global $pc01_codgrupo;
-                                    $result = $clpcsubgrupo->sql_record($clpcsubgrupo->sql_query($pc01_codsubgrupo, "pc04_codgrupo as pc01_codgrupo", null, "pc04_codsubgrupo=$pc01_codsubgrupo and pc04_ativo is true"));
-                                    if ($clpcsubgrupo->numrows > 0) {
-                                        db_fieldsmemory($result, 0);
-                                    }
-                                }
-                            }
-                        }
-                        $result = $clpcgrupo->sql_record($clpcgrupo->sql_query(null, "pc03_codgrupo,pc03_descrgrupo", "pc03_descrgrupo", "pc03_ativo is true"));
-                        @db_selectrecord("pc01_codgrupo", $result, true, $db_opcao, "", "", "", "0", "js_troca(this.value);");
-                        ?>
+            }
+            $result = $clpcgrupo->sql_record($clpcgrupo->sql_query(null, "pc03_codgrupo,pc03_descrgrupo", "pc03_descrgrupo", "pc03_ativo is true and pc03_instit in (". db_getsession('DB_instit').",0)"));
+            @db_selectrecord("pc01_codgrupo", $result, true, $db_opcao, "", "", "", "0", "js_troca(this.value);");
+            ?>
 
-                        <?
-                        /*$arr_truefalse = array('f'=>'Não','t'=>'Sim');
+            <?
+            /*$arr_truefalse = array('f'=>'Não','t'=>'Sim');
           db_select("pc01_ativo",$arr_truefalse,true,$db_opcao);*/
                         ?>
 
@@ -289,6 +285,19 @@ function verPermissaoAlteraServico($iItem)
                                     ?>
                 </td>
                 </tr>
+                <?php if ($l12_pncp == 't') : ?>
+                <tr>
+                    <td>
+                        <strong>Reg. Imobiliário</strong>
+                    </td>
+                    <td>
+                        <?
+                        db_textarea('pc01_regimobiliario', 0, 75, '', true, 'text', $db_opcao, "onkeyup = 'return js_validaCaracteres(this.value, pc01_justificativa.id)';", '', '', '255');
+                        ?>
+                    </td>
+                </tr>
+                <?php endif ?>
+                
                 <? if ($db_opcao == 22 || $db_opcao == 2) : ?>
                     <tr>
                         <td><b>Justificativa da Alteração:</b></td>
@@ -409,7 +418,7 @@ function verPermissaoAlteraServico($iItem)
         if (opcao != 1) {
             filtra_atuais = true;
         }
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_pcmater', 'func_pcmater.php?funcao_js=parent.js_preenchepesquisa|pc01_codmater&vertudo=true&filtra_atuais=' + filtra_atuais, 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_pcmater', 'func_pcmater.php?funcao_js=parent.js_preenchepesquisa|pc01_codmater&vertudo=true&filtra_atuais=' + filtra_atuais, 'Pesquisa', true);
     }
 
     function js_preenchepesquisa(chave) {
@@ -489,10 +498,6 @@ function verPermissaoAlteraServico($iItem)
                 erro = true;
             }
         }
-
-        // if(erro){
-        //   alert('Caractere não permitido para inclusão!');
-        // }
 
         novoTexto = novoTexto.join('');
 

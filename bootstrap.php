@@ -3,7 +3,6 @@
 use \ECidade\Core\Autoloader as EcidadeAutoloader;
 use \ECidade\Core\Config as AppConfig;
 use \ECidade\V3\Extension\Registry;
-use \ECidade\V3\Extension\Loader as Ecidade3Autoloader;
 use \ECidade\V3\Extension\Logger;
 use \ECidade\V3\Extension\Container;
 use \ECidade\V3\Error\Handler\Error as ErrorHandler;
@@ -19,10 +18,14 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . 'definitions.php';
 // DEFAULT AUTOLOADING
 //
 
-// ecidade
-require_once(ECIDADE_PATH . 'libs/db_autoload.php');
 // composer
 require_once(ECIDADE_PATH . 'vendor/autoload.php');
+
+// ecidade
+require_once(ECIDADE_PATH . 'libs/db_autoload.php');
+
+// eloquent
+require_once (ECIDADE_PATH . 'config/ORM/Eloquent/bootstrap.php');
 
 //
 // END DEFAULT AUTOLOADING

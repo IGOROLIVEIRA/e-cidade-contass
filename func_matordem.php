@@ -123,7 +123,7 @@ $clrotulo->label('z01_nome');
            }
        }
        if (isset($chave_m51_codordem) && (trim($chave_m51_codordem)!="") ) {
-	         $sql = $clmatordem->sql_query_numemp(null,$campos,"m51_codordem"," m53_codordem is null and m51_codordem = {$chave_m51_codordem} and $where_instit");
+	         $sql = $clmatordem->sql_query_numemp(null,$campos,"m51_codordem DESC"," m53_codordem is null and m51_codordem = {$chave_m51_codordem} and $where_instit");
        } else if (isset($chave_e60_codemp) && (trim($chave_e60_codemp)!="") ) {
 	       $arr = explode("/",$chave_e60_codemp);
 	       
@@ -135,16 +135,16 @@ $clrotulo->label('z01_nome');
 		        $dbwhere_ano = "";
 	       }
 	       
-         $sql = $clmatordem->sql_query_numemp("",$campos,"m51_codordem"," m53_codordem is null and  e60_codemp='".$arr[0]."'$dbwhere_ano and $where_instit");
+         $sql = $clmatordem->sql_query_numemp("",$campos,"m51_codordem DESC"," m53_codordem is null and  e60_codemp='".$arr[0]."'$dbwhere_ano and $where_instit");
          
         } else if(isset($chave_e60_numemp) && (trim($chave_e60_numemp)!="") ){
-           $sql = $clmatordem->sql_query_numemp("",$campos,"m51_codordem","m53_codordem is null and $chave_e60_numemp=matordemitem.m52_numemp and $where_instit");
+           $sql = $clmatordem->sql_query_numemp("",$campos,"m51_codordem DESC","m53_codordem is null and $chave_e60_numemp=matordemitem.m52_numemp and $where_instit");
         } else if(isset($chave_z01_nome) && (trim($chave_z01_nome)!="") ){
-           $sql = $clmatordem->sql_query_numemp("",$campos,"m51_codordem"," m53_codordem is null and z01_nome like '$chave_z01_nome%' and $where_instit");
+           $sql = $clmatordem->sql_query_numemp("",$campos,"m51_codordem DESC"," m53_codordem is null and z01_nome like '$chave_z01_nome%' and $where_instit");
         } else if(isset($chave_m51_data) && (trim($chave_m51_data)!="") ){
 	         $sql = $clmatordem->sql_query_numemp("",$campos,"m51_data"," m51_data like '$chave_m51_data%' and   m53_codordem is null and $where_instit");
         } else{
-           $sql = $clmatordem->sql_query_numemp("",$campos,"m51_codordem","m53_codordem is null and $where_instit");
+           $sql = $clmatordem->sql_query_numemp("",$campos,"m51_codordem DESC","m53_codordem is null and $where_instit");
         }
         db_lovrot($sql,15,"()","",$funcao_js);
       }else{

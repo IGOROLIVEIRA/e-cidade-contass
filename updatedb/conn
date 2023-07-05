@@ -18,6 +18,8 @@ e-cidade			5432	cii-amaje
 e-cidade			5432	mctrans
 e-cidade            5432    cmarinos
 e-cidade            5432    pmlagoadospatos
+e-cidade            5432    pmjuramento
+
 
 e-cidade            5432    pmsaoromao
 
@@ -33,6 +35,8 @@ pmjanuaria_consulta    5432    prefeituras
 
 pmsaojoaomissoes       5432    prefeituras2
 pmcurraldedentro       5432    prefeituras2
+pmcurraldedentro_consulta 5432 prefeituras2
+pmnovaporteirinha_consulta 5432 prefeituras2
 
 cmnavarro			5432    cmnavarro
 cmfranciscodumont		5432    cmnavarro
@@ -102,4 +106,36 @@ e-cidade            5432    pmserranopolis
 
 e-cidade            5432    pmsantafeminas
 
+e-cidade            5432    pmsantafeminasv3
+
+e-cidade            5432    pmsaogoncalov3
+
 e-cidade            5432    pmcurraldentro
+
+e-cidade            5432    pmsaojoaodapontev3
+
+e-cidade            5432    pmverdelandiav3
+
+e-cidade            5432    pmgraomogolv3
+
+e-cidade            5432    pmpiraporav3
+
+e-cidade-treinamento   5432 e-cidadev3
+pmfranciscodumont      5432 e-cidadev3
+pmsaogoncalodoriopreto 5432 e-cidadev3
+cismesf                5432 e-cidadev3
+cias                   5432 e-cidadev3
+treinamento_consorcio  5432 e-cidadev3
+
+e-cidade            5432 pmmonteazulv3
+
+e-cidade            5432 pmmontalvaniav3
+e-cidade            5432 pmpedrasdemariadacruzv3
+e-cidade            5432 pmsaoromaov3
+e-cidade            5432 pmserranopolisv3
+e-cidade            5432 codanortev3
+
+e-cidade            5432 pmubaiv3
+e-cidade            5432 pmclarodoscpocoes
+e-cidade            5432 pmvarzelandiav3
+e-cidade            5432 pmibiracatuv3

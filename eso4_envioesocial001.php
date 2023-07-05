@@ -225,11 +225,11 @@ try {
 
     function js_processar() {
 
-        let result = confirm('Atenção: Confirmar envio das informações do mês ' + parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
+        //let result = confirm('Atenção: Confirmar envio das informações do mês ' + parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
 
-        if (!result) {
-            return false;
-        }
+        // if (!result) {
+        //     return false;
+        // }
 
         if ($F('anofolha').length < 4 || parseInt($("mesfolha").value) < 1 || parseInt($("mesfolha").value) > 12) {
 
@@ -376,6 +376,23 @@ try {
             document.getElementById('dtalteracao').style.display = 'none';
         }
     }
+
+    function js_S3000(e){
+        var button = document.getElementById("btnEnviar");
+        if (e.checked) {
+            document.getElementById('indapuracao_col').style.display = 'inline';
+            console.log("Checkbox está marcado");
+            js_OpenJanelaIframe('top.corpo', 'iframe_envio_s3000', 'func_envioesocialS3000.php', 'Pesquisa', true);
+            button.disabled = true;
+        } else {
+            document.getElementById('indapuracao_col').style.display = 'none';
+            console.log("Checkbox não está marcado");
+            button.disabled = false;
+        }
+
+    }
+
+    
 
     checkFase('');
 </script>

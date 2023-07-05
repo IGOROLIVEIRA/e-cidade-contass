@@ -80,7 +80,7 @@ if ($clpcparam->numrows > 0) {
 }
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
-$resultItem = $clmatordemitem->sql_record($clmatordemitem->sql_query_servico(null, "*",
+$resultItem = $clmatordemitem->sql_record($clmatordemitem->sql_query_emiteordem(null, "*",
 	"m52_sequen ASC", 'm51_codordem = ' . $iOrdem . ($itens != '' ? ' and m52_sequen in ('.$itens.')' : '')));
 db_fieldsmemory($resultItem, 0);
 
@@ -89,7 +89,7 @@ $num_rows = $clmatordemitem->numrows;
 $pdf = new scpdf();
 $pdf->Open();
 
-$pdf1 = new db_impcarne($pdf, '94');
+$pdf1 = new db_impcarne($pdf, $oParam->pc30_modeloordemcompra);
 $pdf1->objpdf->SetTextColor(0, 0, 0);
 
 $flag_imprime = true;
@@ -156,6 +156,10 @@ $pdf1->condpag = 'e54_conpag';
 $pdf1->destino = 'e54_destin';
 $pdf1->obs_ordcom_orcamval = "e55_marca";
 $pdf1->sOrigem = $iOrigem . " - " . $sOrigem;
+$pdf1->servico        = 'pc01_servico';
+$pdf1->servicoquantidade = 'e62_servicoquantidade';
+$pdf1->autori         = 'e61_autori';
+$pdf1->e60_emiss      = $e60_emiss;
 $anousu = db_getsession("DB_anousu");
 $result_numdec = $clempparametro->sql_record($clempparametro->sql_query_file($anousu));
 
@@ -181,6 +185,7 @@ $pdf1->Snumeroproc = "pc81_codproc";
 $pdf1->Snumero = "pc11_numero";
 $pdf1->obs_ordcom_orcamval = "pc23_obs";
 
+$pdf1->pc01_complmater  = 'pc01_complmater';
 $pdf1->imprime();
 
 

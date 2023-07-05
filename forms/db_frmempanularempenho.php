@@ -87,7 +87,14 @@ if (empty ($e60_numemp)) {
                                     </tr>
                                     <tr>
                                         <td><b>Motivo:</b></td>
-                                        <td nowrap colspan='3'><textarea name='motivo' rows='1' cols='55'  id='motivo' ></textarea></td>
+                                        <td nowrap colspan='3'><textarea name='motivo' rows='1' cols='55'  id='motivo' maxlength="1000" onkeydown="js_contaCaracteres(this.value)" onkeyup="js_contaCaracteres(this.value)" onchange="js_contaCaracteres(this.value)" ></textarea></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" colspan = "5">
+                                            <b>  Caracteres Digitados : </b>
+                                                <input type="text" name="obsdig" id="obsdig" size="3" value="0" disabled>
+                                            <b> - Limite 1000  </b>
+                                        </td>
                                     </tr>
                                     <tr>
                                         <td>
@@ -211,6 +218,50 @@ if (empty ($e60_numemp)) {
                 </table>
 </form>
 <script>
+    function js_contaCaracteres(sTexto){
+        const rAcentos = /[а-ьз]/gi;
+        let bPossueAcento = rAcentos.test(sTexto);
+        if (bPossueAcento){
+            let sNovaString = sTexto.replace(rAcentos, function(match) {
+            const mapaSubstituicao = {
+            "б": "a", "а": "a",
+            "в": "a", "г": "a",
+            "й": "e", "и": "e",
+            "к": "e", "н": "i",
+            "м": "i", "о": "i",
+            "?": "i", "ц": "o",
+            "у": "o", "т": "o",
+            "ф": "o", "х": "o",
+            "ъ": "u", "щ": "u",
+            "ь": "u", "?": "u",
+            "ы": "u", "з": "c",
+            "?": "e", "Б": "A",
+            "В": "A", "А": "A",
+            "Й": "E", "Г": "A",
+            "К": "E", "И": "E",
+            "М": "I", "Н": "I",
+            "?": "I", "Ц": "O",
+            "У": "O", "О": "I",
+            "Ф": "O", "Т": "O",
+            "Ъ": "U", "Х": "O",
+            "Ы": "U", "Щ": "U",
+            "Ь": "U", "?": "U",
+            "?": "E", "З": "C",
+            };
+            let correspondencia = mapaSubstituicao[match];
+            if (correspondencia === undefined){
+                correspondencia = "";
+            }
+            return correspondencia;
+            });
+            sTexto = sNovaString
+            document.getElementById("motivo").value = sTexto;
+        }
+        const rCharEspecial = /[^a-z0-9]/gi;
+        let aCaracteresEspeciais = sTexto.match(rCharEspecial) ?? [];
+        document.getElementById("obsdig").value = sTexto.length - aCaracteresEspeciais.length;
+    }
+
     function js_pesquisa(){
         js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_empempenho','func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp','Pesquisa',true);
         //js_consultaEmpenho(38118);
@@ -352,45 +403,48 @@ if (empty ($e60_numemp)) {
                 saida += "<td class='linhagrid' id='saldo"+obj.data[i].e62_sequen+"'  style='text-align:right'>"+obj.data[i].saldo+"</td>";
                 saida += "<td class='linhagrid' id='saldovlr"+obj.data[i].e62_sequen+"' style='text-align:right'>"+js_formatar(obj.data[i].e62_vlrtot, 'f')+"</td>";
 
-                if(obj.data[i].pc01_servico == 't' && obj.data[i].servicoquantidade == 'f'){
-                    lDisabledQuantidade = ' disabled';
-                    sDisableValor       = ' ';
+                if(obj.data[i].pc01_servico == 't'){
+                    if(obj.data[i].servicoquantidade == 'f'){
+                        lDisabledQuantidade = ' disabled';
+                        sDisableValor       = ' ';
 
-                    saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-                    saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
-                    saida += " value='1' readonly style='text-align:right;background-color:#DEB887;' size='5' onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)' ></td>";
-
-
-                    saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-                    saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
-                    saida += " value='" + obj.data[i].e62_vlrtot + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)'></td></tr>";
-
-                }else if(obj.data[i].pc01_servico == 't' && obj.data[i].servicoquantidade == 't'){
-                    lDisabledQuantidade = ' ';
-                    sDisableValor       = ' disabled';
-
-                    saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-                    saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
-                    saida += " value='"+obj.data[i].saldo+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
+                        saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+                        saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
+                        saida += " value='1' readonly style='text-align:right;background-color:#DEB887;' size='5' onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)' ></td>";
 
 
-                    saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-                    saida += "<input type='text' "+lDisabled+" style='text-align:right; background-color:#DEB887' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
-                    saida += " value='" + obj.data[i].e62_vlrtot + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
+                        saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+                        saida += "<input type='text' "+lDisabled+" style='text-align:right' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
+                        saida += " value='" + obj.data[i].e62_vlrtot + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,1)'></td></tr>";  
+                    }    
+                    if(obj.data[i].servicoquantidade == 't'){
+                        lDisabledQuantidade = ' ';
+                        sDisableValor       = ' disabled';
 
-                }else if(obj.data[i].pc01_servico == 'f' && obj.data[i].servicoquantidade == 'f'){
-                    lDisabledQuantidade = ' ';
-                    sDisableValor       = ' disabled';
-
-                    saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-                    saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
-                    saida += " value='"+obj.data[i].saldo+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
+                        saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+                        saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
+                        saida += " value='"+obj.data[i].saldo+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
 
 
-                    saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
-                    saida += "<input type='text' "+lDisabled+" style='text-align:right;background-color:#DEB887;' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
-                    saida += " value='" + obj.data[i].e62_vlrtot + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
+                        saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+                        saida += "<input type='text' "+lDisabled+" style='text-align:right; background-color:#DEB887' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
+                        saida += " value='" + obj.data[i].e62_vlrtot + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
+                    }     
+                }
+                if(obj.data[i].pc01_servico == 'f'){ 
+                   
+                        lDisabledQuantidade = ' ';
+                        sDisableValor       = ' disabled';
 
+                        saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+                        saida += "<input type='text' name='qtdesol"+obj.data[i].e62_sequen+"' "+lDisabledQuantidade+" id='qtdesol"+obj.data[i].e62_sequen+"'";
+                        saida += " value='"+obj.data[i].saldo+"' style='text-align:right' size='5' oninput=\"js_ValidaCampos(this, 4, 'Quantidade', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",1,2)'></td>";
+
+
+                        saida += "<td class='linhagrid' style='text-align:center;width:10%'>";
+                        saida += "<input type='text' "+lDisabled+" style='text-align:right;background-color:#DEB887;' name='vlrtot"+obj.data[i].e62_sequen+"' "+sDisableValor+" id='vlrtot"+obj.data[i].e62_sequen+"'";
+                        saida += " value='" + obj.data[i].e62_vlrtot + "' size='5' class='valores' oninput=\"js_ValidaCampos(this, 4, 'Valor Total', '', '', event);\" onblur='js_calculaValor("+obj.data[i].e62_sequen+",2,2)'></td></tr>";
+                       
                 }
 
             }
@@ -622,6 +676,14 @@ if (empty ($e60_numemp)) {
             document.getElementById('e94_empanuladotipodescr').focus()
             return
         }
+
+        //verifica se o campo "Motivo" possue mais de 8 caracteres.
+        if (document.getElementById('obsdig').value < 8) {
+            alert("O motivo deve ter no mнnimo 8 caracteres.")
+            document.getElementById('motivo').focus()
+            return
+        }
+
 
         //validamos se existe solicitacao de anulacao. caso exista, e nao foi atendida confirmar se o usuбrio
         //se realmente vai deixar sem atendar a solicitracao.

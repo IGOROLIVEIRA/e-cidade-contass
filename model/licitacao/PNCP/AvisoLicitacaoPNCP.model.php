@@ -31,14 +31,22 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDadosAPI->codigoUnidadeCompradora         = '01001'; //$oDado->codigounidadecompradora;
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
-        $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
+        if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
+            if($oDado->tipoinstrumentoconvocatorioid == "2"){
+                $oDadosAPI->modoDisputaId                   = 4;
+            }else{
+                $oDadosAPI->modoDisputaId                   = 5;
+            }
+        }else{
+            $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
+        }
         $oDadosAPI->numeroCompra                    = $oDado->numerocompra;
         $oDadosAPI->anoCompra                       = $oDado->anocompra;
         $oDadosAPI->numeroProcesso                  = $oDado->numeroprocesso;
         $oDadosAPI->objetoCompra                    = utf8_encode($oDado->objetocompra);
         $oDadosAPI->informacaoComplementar          = $oDado->informacaocomplementar;
         $oDadosAPI->srp                             = $oDado->srp == 'f' ? 'false' : 'true';
-        $oDadosAPI->orcamentoSigiloso               = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';
+        $oDadosAPI->justificativaPresencial         = utf8_encode($oDado->justificativapresencial);
         $oDadosAPI->dataAberturaProposta            = $this->formatDate($oDado->dataaberturaproposta);
         $oDadosAPI->dataEncerramentoProposta        = $this->formatDate($oDado->dataencerramentoproposta);
         $oDadosAPI->amparoLegalId                   = $oDado->amparolegalid;
@@ -46,6 +54,8 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         //ITENS
         $vlrtotal = 0;
         foreach ($oDado->itensCompra as $key => $item) {
+            $vlrtotal = $item->pc11_quant * $item->valorunitarioestimado;
+
             $oDadosAPI->itensCompra[$key]->numeroItem                  = $item->numeroitem;
             $oDadosAPI->itensCompra[$key]->materialOuServico           = $item->materialouservico;
             $oDadosAPI->itensCompra[$key]->tipoBeneficioId             = $item->tipobeneficioid;
@@ -53,10 +63,22 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
             $oDadosAPI->itensCompra[$key]->descricao                   = utf8_encode($item->descricao);
             $oDadosAPI->itensCompra[$key]->quantidade                  = $item->pc11_quant;
             $oDadosAPI->itensCompra[$key]->unidadeMedida               = utf8_encode($item->unidademedida);
+            $oDadosAPI->itensCompra[$key]->orcamentoSigiloso           = $item->l21_sigilo == 'f' ? 'false' : 'true';
             $oDadosAPI->itensCompra[$key]->valorUnitarioEstimado       = $item->valorunitarioestimado;
-            $vlrtotal = $item->pc11_quant * $item->valorunitarioestimado;
             $oDadosAPI->itensCompra[$key]->valorTotal                  = $vlrtotal;
-            $oDadosAPI->itensCompra[$key]->criterioJulgamentoId        = $item->criteriojulgamentoid;
+            //DISPENSA E INEXIGIBILIDADE
+            if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
+                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = 7;
+            }else{
+                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = $item->criteriojulgamentoid;
+            }
+            //CONCURSO
+            if($oDado->modalidadeid == "3"){
+                $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = 8;
+            }
+            //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
+            $oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
+            //$oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = utf8_encode($item->codigoregistroimobiliario);
         }
 
         $aDadosAPI = $oDadosAPI;
@@ -71,7 +93,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         /*
         * Anexos da licitacao
         */
-        $filename = 'model/licitacao/PNCP/arquivos/Compra' . $oDado->numerocompra . '.zip';
+        /*$filename = 'model/licitacao/PNCP/arquivos/Compra' . $oDado->numerocompra . '.zip';
         $zip = new ZipArchive();
         if ($zip->open($filename, ZipArchive::CREATE) !== TRUE) {
             exit("cannot open <$filename>\n");
@@ -79,7 +101,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         foreach ($oDado->anexos as $key => $anexo) {
             $zip->addFile("model/licitacao/PNCP/anexoslicitacao/" . $anexo->l216_nomedocumento, $anexo->l216_nomedocumento);
         }
-        $zip->close();
+        $zip->close();*/
     }
 
     public function montarRetificacao()
@@ -90,21 +112,24 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDado = $this->dados;
 
         $oDadosAPI                                  = new \stdClass;
-        $oDadosAPI->codigoUnidadeCompradora         = '01001'; //$oDado->codigounidadecompradora;
+        //$oDadosAPI->codigoUnidadeCompradora         = '01001'; 
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
         $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
         $oDadosAPI->numeroCompra                    = $oDado->numerocompra;
-        $oDadosAPI->anoCompra                       = $oDado->anocompra;
         $oDadosAPI->numeroProcesso                  = $oDado->numeroprocesso;
-        $oDadosAPI->objetoCompra                    = $this->formatText($oDado->objetocompra);
+        $oDadosAPI->situacaoCompraId                = $oDado->situacaocompraid;
+        $oDadosAPI->objetoCompra                    = utf8_encode($oDado->objetocompra);
         $oDadosAPI->informacaoComplementar          = $oDado->informacaocomplementar;
+        //$oDadosAPI->cnpjOrgaoSubRogado            = $oDado->cnpjOrgaoSubRogado;
+        //$oDadosAPI->codigoUnidadeSubRogada        = $oDado->codigoUnidadeSubRogada;
         $oDadosAPI->srp                             = $oDado->srp == 'f' ? 'false' : 'true';
-        $oDadosAPI->orcamentoSigiloso               = $oDado->orcamentosigiloso == 'f' ? 'false' : 'true';
         $oDadosAPI->dataAberturaProposta            = $this->formatDate($oDado->dataaberturaproposta);
         $oDadosAPI->dataEncerramentoProposta        = $this->formatDate($oDado->dataencerramentoproposta);
         $oDadosAPI->amparoLegalId                   = $oDado->amparolegalid;
         $oDadosAPI->linkSistemaOrigem               = $oDado->linksistemaorigem;
+        //$oDadosAPI->justificativa                   = $oDado->justificativa;
+        $oDadosAPI->justificativaPresencial         = utf8_encode($oDado->justificativapresencial);
 
         $aDadosAPI = json_encode($oDadosAPI);
 
@@ -120,20 +145,17 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
      * 11 - Ata de Registro de Preo
      */
 
-    public function enviarAviso($tipodocumento, $processo)
+    public function enviarAviso($processo, $anexo)
     {
-
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras";
 
         $method = 'POST';
 
         $file = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.json';
-        $filezip = curl_file_create('model/licitacao/PNCP/arquivos/Compra' . $processo . '.zip');
+        $filezip = curl_file_create('model/licitacao/PNCP/anexoslicitacao/' . $anexo[0]->l216_nomedocumento);
 
         $cfile = new \CURLFile($file, 'application/json', 'compra');
         //$cfilezip = new \CURLFile($filezip, 'application/zip', 'documento');
@@ -147,8 +169,8 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $headers = array(
             'Content-Type: multipart/form-data',
             'Authorization: ' . $token,
-            'Titulo-Documento:Compra' . $processo,
-            'Tipo-Documento-Id:' . $tipodocumento
+            'Titulo-Documento: ' . utf8_decode($anexo[0]->l213_descricao),
+            'Tipo-Documento-Id:' . $anexo[0]->l213_sequencial
         );
 
         $optionspncp = array(
@@ -181,22 +203,21 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         echo "<pre>";
         print_r($header);
         exit;*/
-
-        curl_close($chpncp);
-
         $retorno = json_decode($contentpncp);
 
-        return $retorno;
+        if ($retorno->status) {
+            return array(422, $retorno->message);
+        } else {
+            return array(201, $retorno->compraUri);
+        }
     }
 
     public function enviarRetificacao($oDados, $sCodigoControlePNCP, $iAnoCompra)
     {
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
         $method = 'PATCH';
 
@@ -228,16 +249,16 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
-        $err     = curl_errno($chpncp);
+        /*$err     = curl_errno($chpncp);
         $errmsg  = curl_error($chpncp);
         $header  = curl_getinfo($chpncp);
-        /*$header['errno']   = $err;
+        $header['errno']   = $err;
         $header['errmsg']  = $errmsg;
         $header['header']  = $contentpncp;
         echo "<pre>";
         print_r($header);
-        exit;
-        */
+        exit;*/
+
         curl_close($chpncp);
 
         $retorno = json_decode($contentpncp);
@@ -247,12 +268,11 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
     public function excluirAviso($sCodigoControlePNCP, $iAnoCompra)
     {
+
+        $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        //aqui sera necessario informar o cnpj da instituicao de envio
-        $cnpj = '17316563000196';
-
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
         $method = 'DELETE';
 
@@ -284,14 +304,129 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
-        /*echo "<pre>";
-        print_r(json_decode($contentpncp));
+
+        curl_close($chpncp);
+
+        $retorno = json_decode($contentpncp);
+
+        return $retorno;
+    }
+
+    public function enviarAnexos($iTipoAnexo, $sDescricao, $sAnexo, $iAnoCompra, $iCodigocompra)
+    {
+
+        $cnpj =  $this->getCnpj();
+        $token = $this->login();
+
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $iCodigocompra . "/arquivos";
+
+        $method = 'POST';
+
+        //$file = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.json';
+        //arquivo para envio
+        $filezip = curl_file_create('model/licitacao/PNCP/anexoslicitacao/' . $sAnexo);
+
+        $post_data =  array(
+            'arquivo' => $filezip
+        );
+
+        $chpncp      = curl_init($url);
+
+        $headers = array(
+            'Content-Type: multipart/form-data',
+            'Authorization: ' . $token,
+            'Titulo-Documento: ' . $sDescricao,
+            'Tipo-Documento-Id: ' . $iTipoAnexo
+        );
+
+        $optionspncp = array(
+            CURLOPT_RETURNTRANSFER => 1,            // return web page
+            CURLOPT_POST           => 1,
+            CURLOPT_HEADER         => true,         // don't return headers
+            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
+            CURLOPT_HTTPHEADER     => $headers,
+            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
+            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
+            CURLOPT_TIMEOUT        => 120,          // timeout on response
+            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
+            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
+            CURLOPT_POSTFIELDS     => $post_data,
+            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
+            CURLOPT_SSL_VERIFYPEER => false,        //
+            CURLOPT_VERBOSE        => 1,            //
+            CURLINFO_HEADER_OUT    => true
+        );
+
+        curl_setopt_array($chpncp, $optionspncp);
+        $contentpncp = curl_exec($chpncp);
+        curl_close($chpncp);
+
+        $retorno = explode(':', $contentpncp);
+
+        if ($retorno[5] == ' https') {
+            return array(201, $retorno[6]);
+        } else {
+            return array(422, "Erro ao enviar anexo");
+        }
+    }
+
+    public function excluirAnexos($iAnoCompra, $iCodigocompra, $iSeqAnexosPNCP)
+    {
+
+        $cnpj =  $this->getCnpj();
+        $token = $this->login();
+
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$iCodigocompra/arquivos/$iSeqAnexosPNCP";
+
+        $method = 'DELETE';
+
+        $chpncp      = curl_init($url);
+
+        $headers = array(
+            'Content-Type: application/json',
+            'Authorization: ' . $token
+        );
+
+        $optionspncp = array(
+            CURLOPT_RETURNTRANSFER => 1,            // return web page
+            CURLOPT_POST           => 1,
+            CURLOPT_HEADER         => false,         // don't return headers
+            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
+            CURLOPT_HTTPHEADER     => $headers,
+            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
+            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
+            CURLOPT_TIMEOUT        => 120,          // timeout on response
+            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
+            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
+            //CURLOPT_POSTFIELDS     => $oDados,
+            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
+            CURLOPT_SSL_VERIFYPEER => false,        //
+            CURLOPT_VERBOSE        => 1,            //
+            CURLINFO_HEADER_OUT    => true
+        );
+
+
+        curl_setopt_array($chpncp, $optionspncp);
+        $contentpncp = curl_exec($chpncp);
+        /*$err     = curl_errno($chpncp);
+        $errmsg  = curl_error($chpncp);
+        $header  = curl_getinfo($chpncp);
+        $header['errno']   = $err;
+        $header['errmsg']  = $errmsg;
+        $header['header']  = $contentpncp;
+        echo "<pre>";
+        print_r($header);
         exit;*/
 
         curl_close($chpncp);
 
         $retorno = json_decode($contentpncp);
 
+        if ($retorno->status) {
+            return array(422, $retorno->message);
+        } else {
+            return array(201, "Excluido com Sucesso !");
+        }
         return $retorno;
     }
 }

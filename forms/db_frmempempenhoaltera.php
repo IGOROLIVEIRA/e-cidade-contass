@@ -252,6 +252,43 @@ $clrotulo->label("e60_datasentenca");
                     ?>
                 </td>
             </tr>
+
+           <!-- Campos referentes ao sicom 2023 - OC20029  -->
+           <tr id="trEmendaParlamentar" style="display: none;">
+                <td nowrap title="Referente a Emenda Parlamentar">
+                    <strong>Referente a Emenda Parlamentar:</strong>
+                </td>
+                <td>
+                    <?
+                        $arr  = array(
+                            '0' => 'Selecione', 
+                            '1' => '1 - Emenda Parlamentar Individual', 
+                            '2' => '2 - Emenda Parlamentar de Bancada ou Bloco',
+                            '3' => '3 - No se aplica',
+                            '4' => '4 - Emenda No Impositiva');
+
+                        db_select("e60_emendaparlamentar", $arr, true, 1, "onchange='js_verificaresfera();'");
+                        ?>
+                </td>
+            </tr>
+
+            <tr id="trEsferaEmendaParlamentar" style="display: none;">
+                <td nowrap title="Esfera da Emenda Parlamentar">
+                    <strong>Esfera da Emenda Parlamentar:</strong>
+                </td>
+                <td>
+                    <?
+                        $arr  = array(
+                            '0' => 'Selecione', 
+                            '1' => '1 - Unio', 
+                            '2' => '2 - Estados');
+
+                        db_select("e60_esferaemendaparlamentar", $arr, true, 1);
+                        ?>
+                </td>
+            </tr>
+            <!-- Final dos campos referentes ao sicom 2023 - OC20029 -->
+
             <tr id="trFinalidadeFundeb" style="display: none;">
                 <td><b>Finalidade:</b></td>
                 <td>
@@ -295,15 +332,29 @@ $clrotulo->label("e60_datasentenca");
 
 
             <tr>
-                <td nowrap title="<?=@$Te60_resumo?>" colspan="2">
-                    <fieldset>
-                        <legend><b><?=@$Le60_resumo?></b></legend>
-                        <?
-                        db_textarea('e60_resumo',8,90,$Ie60_resumo,true,'text',$db_opcao,"")
-                        ?>
-                    </fieldset>
+            <td nowrap title="<?= @$Te54_resumo ?>" valign='top' colspan="2">
+                <fieldset style="width:500px">
+                    <legend><strong>Resumo:</strong></legend>
+                    <?php
+                    if (empty($e60_resumo))
+                        $e60_resumo = $e54_resumo;
+                    db_textarea('e60_resumo', 3, 109, $Ie54_resumo, true, 'text', $db_opcao,"","","#FFFFFF");
+                    ?>
+                </fieldset>
                 </td>
-            </tr>
+                </tr>
+
+                <tr>
+                <td nowrap title="<?= @$Te54_resumo ?>" valign='top' colspan="2">
+
+                <fieldset style="width:500px">
+                    <legend><strong>Informaes da OP:</strong></legend>
+                    <?php
+                    db_textarea('e60_informacaoop', 3, 109, $Ie54_resumo, true, 'text', $db_opcao,"","","#FFFFFF");
+                    ?>
+                </fieldset>
+                </td>
+                </tr>
             <?
             $anousu = db_getsession("DB_anousu");
 
@@ -402,11 +453,24 @@ $clrotulo->label("e60_datasentenca");
 </form>
 
 <style>
-    #e60_tipodespesa{ width: 140px; }#e60_codtipodescr{width: 342px}#e63_codhistdescr{width: 342px}#pc50_descr{width: 333px}#e44_tipo{width: 228px;}#e57_codhistdescr{width: 158px;}#e54_codtipodescr{width: 158px;}#e54_codtipo{width: 67px;}#e54_tipol{width: 67px;}#e54_tipoldescr{width: 158px;}#e54_codcom{width: 67px;}#z01_nome{width: 333px;}#e54_destin{width: 424px;}#e54_gestaut{width: 67px;}#e54_nomedodepartamento{width: 354px;}#ac16_resumoobjeto{width: 364px;}#e60_numconvenio{width: 83px;}#e54_resumo{width: 588px;}#e50_obs{width: 588px;}#e56_codele{width: 140px}
+    #e60_tipodespesa{ width: 140px; }#e60_codtipodescr{width: 342px}#e63_codhistdescr{width: 342px}#pc50_descr{width: 333px}#e44_tipo{width: 228px;}#e57_codhistdescr{width: 158px;}#e54_codtipodescr{width: 158px;}#e54_codtipo{width: 67px;}#e54_tipol{width: 67px;}#e54_tipoldescr{width: 158px;}#e54_codcom{width: 67px;}#z01_nome{width: 333px;}#e54_destin{width: 424px;}#e54_gestaut{width: 67px;}#e54_nomedodepartamento{width: 354px;}#ac16_resumoobjeto{width: 364px;}#e60_numconvenio{width: 83px;}#e54_resumo,#e60_resumo,#e60_informacaoop{width: 588px;}#e50_obs{width: 588px;}#e56_codele{width: 140px}
 </style>
 
 
 <script>
+    var lEsferaEmendaParlamentar = 'f';
+    var bEmendaParlamentar = false;
+    var bEsferaEmendaParlamentar = false;
+
+    function js_verificaresfera() {
+        if ($F('e60_emendaparlamentar') != 3 && lEsferaEmendaParlamentar == 't') {
+            $('trEsferaEmendaParlamentar').style.display = '';
+            bEsferaEmendaParlamentar = true;
+        } else {
+            $('trEsferaEmendaParlamentar').style.display = 'none';
+            bEsferaEmendaParlamentar = false;
+        }
+    }
 
     /*===========================================
     =            pesquisa 54_gestaut            =
@@ -503,8 +567,6 @@ $clrotulo->label("e60_datasentenca");
         $("e56_codele").style.width       = "100%";
     }
     $("e60_destin").style.width       = "100%";
-    $("e60_resumo").style.width       = "100%";
-
 
 
     function js_verificaFinalidadeEmpenho() {
@@ -513,6 +575,7 @@ $clrotulo->label("e60_datasentenca");
         var oParam                = new Object();
         oParam.exec               = "getFinalidadePagamentoFundebEmpenho";
         oParam.iSequencialEmpenho = $F('e60_numemp');
+        oParam.iCodigoAutorizacaoEmpenho = $F('e54_autori');
 
         new Ajax.Request('emp4_empenhofinanceiro004.RPC.php',
             {method: 'post',
@@ -521,6 +584,29 @@ $clrotulo->label("e60_datasentenca");
 
                     js_removeObj("msgBox");
                     var oRetorno = eval("("+oAjax.responseText+")");
+
+                    lEsferaEmendaParlamentar = oRetorno.lEsferaEmendaParlamentar;
+  
+                    js_verificaresfera();
+                    if (oRetorno.lEmendaParlamentar) {
+                        $('trEmendaParlamentar').style.display = '';
+                        bEmendaParlamentar = true;
+                        if (oRetorno.lEmendaIndividual) {
+                            document.getElementById("e60_emendaparlamentar").disabled = false;
+                            document.getElementById("e60_emendaparlamentar").remove(3);
+                            document.getElementById("e60_emendaparlamentar").remove(3);
+                            document.getElementById("e60_emendaparlamentar").remove(2);
+                        }
+
+                        if (oRetorno.lEmendaIndividualEBancada) {
+                            document.getElementById("e60_emendaparlamentar").disabled = false;
+                            document.getElementById("e60_emendaparlamentar").remove(3);
+                            document.getElementById("e60_emendaparlamentar").remove(3);
+                        }
+                    } else {
+                        $('trEmendaParlamentar').style.display = 'none';
+                        bEmendaParlamentar = false;
+                    }
 
                     if (!oRetorno.lPossuiFinalidadePagamentoFundeb) {
 

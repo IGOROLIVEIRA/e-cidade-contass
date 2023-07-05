@@ -186,7 +186,7 @@ $rotulo->label("z01_cgccpf");
 
             $anoant = db_getsession("DB_anousu") - 1;
 
-            $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
+            $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000') ";
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
             $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "')";
             $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')";
@@ -206,7 +206,7 @@ $rotulo->label("z01_cgccpf");
 
             $anoant = db_getsession("DB_anousu") - 1;
 
-            $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
+            $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000') ";
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
             $dbwhere .= " and (date_part('year',empempenho.e60_emiss) = date_part('year', date '" . $dataAbastecimento . "')";
             $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $dataAbastecimento . "')";
@@ -344,6 +344,21 @@ $rotulo->label("z01_cgccpf");
              INNER JOIN matordemitemanu ON m36_matordemitem = m52_codlanc
              WHERE m52_numemp = e60_numemp)
             and e60_vlremp > e60_vlranu ";
+
+            if (isset($chave_e60_codemp) && $chave_e60_codemp != "") {
+              $dbwhere .= " AND e60_codemp = '$chave_e60_codemp'";
+            }
+            if (isset($chave_z01_cgccpf) && $chave_z01_cgccpf != "") {
+              $dbwhere .= " AND z01_cgccpf = '$chave_z01_cgccpf'";
+            }
+            if (isset($chave_z01_nome) && $chave_z01_nome != "") {
+              $dbwhere .= " AND z01_nome LIKE '%$chave_z01_nome%'";
+            }
+            if (isset($chave_e60_numemp) && !empty($chave_e60_numemp)) {
+              $dbwhere .= " AND e60_numemp=$chave_e60_numemp ";
+            }
+
+
             $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
 
             $sql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
@@ -389,7 +404,7 @@ $rotulo->label("z01_cgccpf");
 
                 $anoant = db_getsession("DB_anousu") - 1;
 
-                $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') ";
+                $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000') ";
                 $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
                 $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "')";
                 $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')";
@@ -404,7 +419,7 @@ $rotulo->label("z01_cgccpf");
 
                 $anoant = db_getsession("DB_anousu") - 1;
 
-                $dbwhere .= "(elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000')";
+                $dbwhere .= "(elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000')";
                 $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
                 $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $dataAbastecimento . "')";
                 $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $dataAbastecimento . "')";

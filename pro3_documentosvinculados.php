@@ -25,39 +25,44 @@
  *                                licenca/licenca_pt.txt 
  */
 
-  require_once("libs/db_stdlib.php");
-  require_once("libs/db_utils.php");
-  require_once("libs/db_app.utils.php");
-  require_once("libs/db_conecta.php");
-  require_once("libs/db_sessoes.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_app.utils.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+$departamento  = db_getsession('DB_coddepto', false);
+$adm = db_getsession('DB_administrador');
+
 
 ?>
 <html>
-  <head>
-    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-    <meta http-equiv="Expires" CONTENT="0">
-    <?php
-      db_app::load("scripts.js, strings.js, prototype.js, estilos.css");
-      db_app::load("datagrid.widget.js, grid.style.css, widgets/DBDownload.widget.js");
-    ?>
-  </head>
-  <body style="background-color: #ccc; margin-top: 10px">
+
+<head>
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <?php
+  db_app::load("scripts.js, strings.js, prototype.js, estilos.css");
+  db_app::load("datagrid.widget.js, grid.style.css, widgets/DBDownload.widget.js");
+  ?>
+</head>
+
+<body style="background-color: #ccc; margin-top: 10px">
   <center>
     <fieldset style="width: 98%;">
       <legend><b>Documentos Vinculados</b></legend>
       <div id="ctnGridDocumentosVinculados">
       </div>
     </fieldset>
-  </body>
-  </center>
+</body>
+</center>
+
 </html>
 
 <script>
-  
   var sUrlRPC = "prot4_processodocumento.RPC.php";
-  var oGet    = js_urlToObject();
-  
+  var oGet = js_urlToObject();
+
 
   var oGridDocumento = new DBGrid('oGridDocumento');
   oGridDocumento.nameInstance = "oGridDocumento";
@@ -73,13 +78,16 @@
 
     js_divCarregando(_M("patrimonial.protocolo.prot4_processodocumento.carregando_documentos"), "msgBox");
 
-    var oParam = {"exec":"carregarDocumentos", "iCodigoProcesso":oGet.codigo_processo};
+    var oParam = {
+      "exec": "carregarDocumentos",
+      "iCodigoProcesso": oGet.codigo_processo
+    };
 
-    new Ajax.Request(sUrlRPC, 
-                     {method: 'post', 
-                      parameters: 'json='+Object.toJSON(oParam),
-                      onComplete: preencherGridComDocumentos
-                     });
+    new Ajax.Request(sUrlRPC, {
+      method: 'post',
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: preencherGridComDocumentos
+    });
   }
 
   /**
@@ -87,23 +95,51 @@
    */
   function preencherGridComDocumentos(oAjax) {
 
+    var departamentoLogado = <?php print_r($departamento) ?>;
+    var adm = <?php print_r($adm) ?>;
+
     js_removeObj("msgBox");
-    var oRetorno = eval("("+oAjax.responseText+")");
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+    anexosSigilosos = new Array();
+
     oGridDocumento.clearAll(true);
 
     var iTotalRegistros = oRetorno.aDocumentosVinculados.length;
 
     for (var iDocumento = 0; iDocumento < iTotalRegistros; iDocumento++) {
-      
+
       var oDocumento = oRetorno.aDocumentosVinculados[iDocumento];
 
       var aLinha = new Array();
-      aLinha[0]  = oDocumento.iCodigoDocumento;
-      aLinha[1]  = oDocumento.sDescricaoDocumento.urlDecode();
-      aLinha[2]  = "<input type='button' id='btnDownload"+oDocumento.iCodigoDocumento+"' value='Download' onclick='downloadDocumento("+oDocumento.iCodigoDocumento+");' />";
+      aLinha[0] = oDocumento.iCodigoDocumento;
+      aLinha[1] = oDocumento.sDescricaoDocumento.urlDecode();
+
+      if (oDocumento.nivelacesso == '1') {
+        aLinha[2] = "<input type='button' id='btnDownload" + oDocumento.iCodigoDocumento + "' value='Download' onclick='downloadDocumento(" + oDocumento.iCodigoDocumento + ");' />";
+      } else {
+        anexosSigilosos.push(iDocumento);
+        if (adm == 1) {
+          aLinha[2] = "<input type='button' id='btnDownload" + oDocumento.iCodigoDocumento + "' value='Download' onclick='downloadDocumento(" + oDocumento.iCodigoDocumento + ");' />";
+        } else if (departamentoLogado == oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
+          aLinha[2] = "";
+        } else if (departamentoLogado == oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
+          aLinha[2] = "<input type='button' id='btnDownload" + oDocumento.iCodigoDocumento + "' value='Download' onclick='downloadDocumento(" + oDocumento.iCodigoDocumento + ");' />";
+        } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
+          aLinha[2] = "<input type='button' id='btnDownload" + oDocumento.iCodigoDocumento + "' value='Download' onclick='downloadDocumento(" + oDocumento.iCodigoDocumento + ");' />";
+        } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
+          aLinha[2] = "";
+        }
+
+      }
+
       oGridDocumento.addRow(aLinha);
     }
+
     oGridDocumento.renderRows();
+    for (var i = 0; i < anexosSigilosos.length; i++) {
+      linhaAnexo = anexosSigilosos[i];
+      document.getElementById('oGridDocumentorowoGridDocumento' + linhaAnexo).style.color = "red";
+    }
   }
 
   /** 
@@ -113,23 +149,26 @@
   function downloadDocumento(iCodigoDocumento) {
 
     js_divCarregando(_M("patrimonial.protocolo.prot4_processodocumento.salvando_em_disco"), "msgBox");
-    var oParam = {"exec":"download", "iCodigoDocumento":iCodigoDocumento};
+    var oParam = {
+      "exec": "download",
+      "iCodigoDocumento": iCodigoDocumento
+    };
 
-    new Ajax.Request(sUrlRPC, 
-                     {method: 'post', 
-                      parameters: 'json='+Object.toJSON(oParam),
-                      onComplete: mostrarDocumento
-                     });
+    new Ajax.Request(sUrlRPC, {
+      method: 'post',
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: mostrarDocumento
+    });
   }
 
   function mostrarDocumento(oAjax) {
 
     js_removeObj("msgBox");
-    var oRetorno = eval("("+oAjax.responseText+")");
+    var oRetorno = eval("(" + oAjax.responseText + ")");
 
     var sCaminhoDownloadArquivo = oRetorno.sCaminhoDownloadArquivo.urlDecode();
 
-    window.open("db_download.php?arquivo="+sCaminhoDownloadArquivo);
+    window.open("db_download.php?arquivo=" + sCaminhoDownloadArquivo);
     /*
     var oDBDownload = new DBDownload();
     oDBDownload.addFile(oRetorno.sCaminhoDownloadArquivo.urlDecode(), oRetorno.sTituloArquivo.urlDecode());

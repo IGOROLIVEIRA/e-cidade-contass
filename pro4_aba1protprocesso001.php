@@ -47,8 +47,8 @@ db_app::import("protocolo.ProcessoProtocoloNumeracao");
 //db_postmemory($HTTP_SERVER_VARS);
 //db_postmemory($HTTP_POST_VARS);
 
-$oPost = db_utils::postMemory($_POST,0);
-$oGet  = db_utils::postMemory($_GET,0);
+$oPost = db_utils::postMemory($_POST, 0);
+$oGet  = db_utils::postMemory($_GET, 0);
 
 $clprotprocesso    = new cl_protprocesso;
 $clprotparam       = new cl_protparam;
@@ -69,11 +69,11 @@ $p58_dtproc_mes = date("m", db_getsession("DB_datausu"));
 $p58_dtproc_ano = date("Y", db_getsession("DB_datausu"));
 
 
-$result = $clnumeracaotipoproc->sql_record($clnumeracaotipoproc->sql_query('','*','',"p200_tipoproc = $p58_codigo and p200_ano = ".db_getsession("DB_anousu")  ));
+$result = $clnumeracaotipoproc->sql_record($clnumeracaotipoproc->sql_query('', '*', '', "p200_tipoproc = $p58_codigo and p200_ano = " . db_getsession("DB_anousu")));
 
 if ($clnumeracaotipoproc->numrows != null || $clnumeracaotipoproc->numrows != "") {
-  db_fieldsmemory($result,0);
-  $p58_numeracao = $p200_numeracao+1;
+  db_fieldsmemory($result, 0);
+  $p58_numeracao = $p200_numeracao + 1;
 }
 
 if (isset($oGet->incpro) && $oGet->incpro != "") {
@@ -87,199 +87,200 @@ if (isset($oGet->incpro) && $oGet->incpro != "") {
 
 if (isset($oPost->btnincluir) && $oPost->btnincluir == 1) {
   $incpro = false;
-  if($sqlerro == false){
-   $lSqlErro = false;
-   db_inicio_transacao();
+  if ($sqlerro == false) {
+    $lSqlErro = false;
+    db_inicio_transacao();
 
-     $iNumeroProcesso = '';
-     try {
-       $iNumeroProcesso = ProcessoProtocoloNumeracao::getProximoNumero();
-     } catch (Exception $eErro) {
+    $iNumeroProcesso = '';
+    try {
+      $iNumeroProcesso = ProcessoProtocoloNumeracao::getProximoNumero();
+    } catch (Exception $eErro) {
 
-       $lSqlErro = true;
-       $sMsgErro = $eErro->getMessage();
-     }
-     if ($lSqlErro == false) {
-       $clprotprocesso->p58_hora       = db_hora();
-       $clprotprocesso->p58_id_usuario = db_getsession("DB_id_usuario");
-       $clprotprocesso->p58_coddepto   = db_getsession("DB_coddepto");
-       $clprotprocesso->p58_interno    = 'false' ;
-       $clprotprocesso->p58_publico    = 'false' ;
-       $clprotprocesso->p58_instit     = db_getsession("DB_instit");
-       $clprotprocesso->p58_numero     = "{$iNumeroProcesso}";
-       $clprotprocesso->p58_ano        = db_getsession("DB_anousu");
-       $clprotprocesso->p58_numeracao  = $p58_numeracao;
-       $clprotprocesso->incluir($p58_codproc);
+      $lSqlErro = true;
+      $sMsgErro = $eErro->getMessage();
+    }
+    if ($lSqlErro == false) {
+      $clprotprocesso->p58_hora       = db_hora();
+      $clprotprocesso->p58_id_usuario = db_getsession("DB_id_usuario");
+      $clprotprocesso->p58_coddepto   = db_getsession("DB_coddepto");
+      $clprotprocesso->p58_interno    = 'false';
+      $clprotprocesso->p58_publico    = 'false';
+      $clprotprocesso->p58_instit     = db_getsession("DB_instit");
+      $clprotprocesso->p58_numero     = "{$iNumeroProcesso}";
+      $clprotprocesso->p58_ano        = db_getsession("DB_anousu");
+      $clprotprocesso->p58_numeracao  = $p58_numeracao;
+      $clprotprocesso->incluir($p58_codproc);
 
-       $p58_codproc = $clprotprocesso->p58_codproc;
+      $p58_codproc = $clprotprocesso->p58_codproc;
 
-       $result = $clnumeracaotipoproc->sql_record($clnumeracaotipoproc->sql_query('','*','',"p200_tipoproc = $p58_codproc"));
-       db_fieldsmemory($result,0);
+      $result = $clnumeracaotipoproc->sql_record($clnumeracaotipoproc->sql_query('', '*', '', "p200_tipoproc = $p58_codproc"));
+      db_fieldsmemory($result, 0);
 
-       $clnumeracaotipoproc->p200_codigo = $p200_codigo;
-       $clnumeracaotipoproc->p200_numeracao = $p58_numeracao;
-       $clnumeracaotipoproc->alterar($p200_codigo);
+      $clnumeracaotipoproc->p200_codigo = $p200_codigo;
+      $clnumeracaotipoproc->p200_numeracao = $p58_numeracao;
+      $clnumeracaotipoproc->alterar($p200_codigo);
 
 
-       if ( $clprotprocesso->erro_status == '0' ) {
-         $lSqlErro = true;
-         $sMsgErro = $clprotprocesso->erro_msg;
-       }
-     }
+      if ($clprotprocesso->erro_status == '0') {
+        $lSqlErro = true;
+        $sMsgErro = $clprotprocesso->erro_msg;
+      }
+    }
 
-     if (isset($oPost->docs) && $oPost->docs != "") {
-       if ($lSqlErro == false) {
-          $chaves = explode("#",$oPost->docs);
-          $chave  = count($chaves);
-          for($x = 0; $x < $chave-1; $x++){
-             $clprocprocessodoc->p81_codproc = $p58_codproc;
-             $clprocprocessodoc->p81_coddoc  = $chaves[$x];
-             $clprocprocessodoc->p81_doc     = 't';
-             $clprocprocessodoc->incluir($p58_codproc,$chaves[$x]);
+    if (isset($oPost->docs) && $oPost->docs != "") {
+      if ($lSqlErro == false) {
+        $chaves = explode("#", $oPost->docs);
+        $chave  = count($chaves);
+        for ($x = 0; $x < $chave - 1; $x++) {
+          $clprocprocessodoc->p81_codproc = $p58_codproc;
+          $clprocprocessodoc->p81_coddoc  = $chaves[$x];
+          $clprocprocessodoc->p81_doc     = 't';
+          $clprocprocessodoc->incluir($p58_codproc, $chaves[$x]);
+        }
+        if ($clprocprocessodoc->erro_status == '0') {
+          $lSqlErro = true;
+          $sMsgErro = $clprocprocessodoc->erro_msg;
+        }
+      }
+    }
+
+    if (isset($oPost->ndocs) && $oPost->ndocs != "") {
+      if ($lSqlErro == false) {
+        $chaves = explode("#", $oPost->ndocs);
+        $chave  = count($chaves);
+
+        for ($i = 0; $i < $chave - 1; $i++) {
+          $HTTP_POST_VARS['p81_doc']      = 'f';
+          $clprocprocessodoc->p81_codproc = $p58_codproc;
+          $clprocprocessodoc->p81_coddoc  = $chaves[$i];
+          $clprocprocessodoc->p81_doc     = 'f';
+          $clprocprocessodoc->incluir($p58_codproc, $chaves[$i]);
+        }
+
+        if ($clprocprocessodoc->erro_status == '0') {
+          $lSqlErro = true;
+          $sMsgErro = $clprocprocessodoc->erro_msg;
+        }
+      }
+    }
+
+    if ($lSqlErro == false) {
+      $sSql  = "select p54_codigo, p54_codcam from procvar where p54_codigo = $p58_codigo;";
+      $rsSql = db_query($sSql);
+      $iSql  = pg_num_rows($rsSql);
+      if ($iSql > 0) {
+        while ($ln = pg_fetch_array($rsSql)) {
+          $sSqlCam = "select nomecam,rotulo from db_syscampo where codcam = " . $ln["p54_codcam"];
+          $rsSqlCam = db_query($sSqlCam);
+          if (pg_numrows($rsSqlCam) > 0) {
+            $nomecam = trim(pg_result($rsSqlCam, 0, "nomecam"));
+            $rotulo = trim(pg_result($rsSqlCam, 0, "rotulo"));
+
+            $p55_codproc = $clprotprocesso->p58_codproc;
+            $p55_codvar = $ln["p54_codigo"];
+            $p55_codcam = $ln["p54_codcam"];
+
+            $clproctipovar->p55_conteudo = $$nomecam;
+            $clproctipovar->incluir($p55_codproc, $p55_codvar, $p55_codcam);
+
+            if ($clproctipovar->erro_status == '0') {
+              $lSqlErro = true;
+              $sMsgErro = "INFORMAR OS DADOS COMPLEMENTARES - Campo: $rotulo";
+            }
           }
-          if ( $clprocprocessodoc->erro_status == '0' ) {
-            $lSqlErro = true;
-            $sMsgErro = $clprocprocessodoc->erro_msg;
-          }
-       }
-     }
+        }
+      }
 
-     if (isset($oPost->ndocs) && $oPost->ndocs != "") {
-       if ($lSqlErro == false) {
-         $chaves = explode("#",$oPost->ndocs);
-         $chave  = count($chaves);
+      if ($clprocprocessodoc->erro_status == '0') {
+        $lSqlErro = true;
+        $sMsgErro = $clprocprocessodoc->erro_msg;
+      }
+    }
 
-         for( $i = 0; $i < $chave-1; $i++){
-            $HTTP_POST_VARS['p81_doc']      = 'f';
-            $clprocprocessodoc->p81_codproc = $p58_codproc;
-            $clprocprocessodoc->p81_coddoc  = $chaves[$i];
-            $clprocprocessodoc->p81_doc     = 'f';
-            $clprocprocessodoc->incluir($p58_codproc,$chaves[$i]);
-         }
-
-         if ( $clprocprocessodoc->erro_status == '0' ) {
-           $lSqlErro = true;
-           $sMsgErro = $clprocprocessodoc->erro_msg;
-         }
-       }
-     }
-
-     if ($lSqlErro == false) {
-       $sSql  = "select p54_codigo, p54_codcam from procvar where p54_codigo = $p58_codigo;";
-       $rsSql = db_query($sSql);
-       $iSql  = pg_num_rows($rsSql);
-       if ($iSql > 0) {
-          while ($ln = pg_fetch_array($rsSql)){
-              $sSqlCam = "select nomecam,rotulo from db_syscampo where codcam = ".$ln["p54_codcam"];
-              $rsSqlCam = db_query($sSqlCam);
-              if (pg_numrows($rsSqlCam) > 0) {
-                 $nomecam = trim(pg_result($rsSqlCam,0,"nomecam"));
-                 $rotulo = trim(pg_result($rsSqlCam,0,"rotulo"));
-
-                 $p55_codproc = $clprotprocesso->p58_codproc;
-                 $p55_codvar = $ln["p54_codigo"];
-                 $p55_codcam = $ln["p54_codcam"];
-
-                 $clproctipovar->p55_conteudo = $$nomecam;
-                 $clproctipovar->incluir($p55_codproc,$p55_codvar,$p55_codcam);
-
-                if ( $clproctipovar->erro_status == '0' ) {
-                   $lSqlErro = true;
-                   $sMsgErro = "INFORMAR OS DADOS COMPLEMENTARES - Campo: $rotulo";
-                }
-              }
-          }
-       }
-
-       if ( $clprocprocessodoc->erro_status == '0' ) {
-         $lSqlErro = true;
-         $sMsgErro = $clprocprocessodoc->erro_msg;
-       }
-     }
-
-/** Extensão : Inicio [tramite_inicial_automatico] */
-/** Extensão : Fim [tramite_inicial_automatico] */
+    /** Extensão : Inicio [tramite_inicial_automatico] */
+    /** Extensão : Fim [tramite_inicial_automatico] */
 
 
     db_fim_transacao($lSqlErro);
-
   }
 }
 
 
 ?>
 <html>
-<head>
-<title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<meta http-equiv="Expires" CONTENT="0">
-<script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-<script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<link href="estilos.css" rel="stylesheet" type="text/css">
-</head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" <?=$sOnLoad;?> >
-<form name="form1" method="post" action="">
-<br /><br />
-<center>
-<table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
-      <?php
-         require_once("forms/db_frmprotprocesso.php");
-      ?>
-    </td>
-  </tr>
-</table>
-</center>
-</form>
-<script>
-function js_mostratipoproc1(chave1,chave2){
-  var sUrl = "pro4_aba1protprocesso001.php?incpro=1&p58_codigo="+chave1+"&p51_descr="+chave2;
-  parent.iframe_dadosprocesso.location.href = sUrl;
-  parent.document.formaba.dadosprocesso.disabled      = false;
-  parent.document.formaba.processosapensados.disabled = true;
-}
 
-function js_pesquisa(){
-  db_iframe.jan.location.href = "func_tipoproc.php?grupo=1&funcao_js=parent.js_mostratipoproc1|0|1";
-  db_iframe.mostraMsg();
-  db_iframe.show();
-  db_iframe.focus();
-  parent.document.formaba.dadosprocesso.disabled      = false;
-  parent.document.formaba.processosapensados.disabled = true;
-}
-</script>
+<head>
+  <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Expires" CONTENT="0">
+  <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
+  <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
+  <link href="estilos.css" rel="stylesheet" type="text/css">
+</head>
+
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" <?= $sOnLoad; ?>>
+  <form name="form1" method="post" action="">
+    <br /><br />
+    <center>
+      <table width="790" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td height="430" align="center" valign="top" bgcolor="#CCCCCC">
+            <?php
+            require_once("forms/db_frmprotprocesso.php");
+            ?>
+          </td>
+        </tr>
+      </table>
+    </center>
+  </form>
+  <script>
+    function js_mostratipoproc1(chave1, chave2) {
+      var sUrl = "pro4_aba1protprocesso001.php?incpro=1&p58_codigo=" + chave1 + "&p51_descr=" + chave2;
+      parent.iframe_dadosprocesso.location.href = sUrl;
+      parent.document.formaba.dadosprocesso.disabled = false;
+      parent.document.formaba.processosapensados.disabled = true;
+    }
+
+    function js_pesquisa() {
+      db_iframe.jan.location.href = "func_tipoproc.php?grupo=1&funcao_js=parent.js_mostratipoproc1|0|1";
+      db_iframe.mostraMsg();
+      db_iframe.show();
+      db_iframe.focus();
+      parent.document.formaba.dadosprocesso.disabled = false;
+      parent.document.formaba.processosapensados.disabled = true;
+    }
+  </script>
 </body>
 <?
 
 if (isset($oPost->btnincluir) && $oPost->btnincluir == 1) {
-   if ( isset($sMsgErro) && $lSqlErro === true) {
-      db_msgbox($sMsgErro);
-      if (isset($oPost->p58_codigo) && $oPost->p58_codigo == "") {
-      	 db_redireciona("pro4_aba1protprocesso001.php");
+  if (isset($sMsgErro) && $lSqlErro === true) {
+    db_msgbox($sMsgErro);
+    if (isset($oPost->p58_codigo) && $oPost->p58_codigo == "") {
+      db_redireciona("pro4_aba1protprocesso001.php");
+    }
+  } else {
+
+    if (isset($lSqlErro) && $lSqlErro === false) {
+
+      $sMsg  = "Inclusao efetuada com Sucesso\\n";
+      //$sMsg .= "Processo  : {$iNumeroProcesso}/".db_getsession("DB_anousu")."\\n";
+      $sMsg .= "Processo  : {$p58_numeracao}/" . db_getsession("DB_anousu") . "\\n";
+
+      if (!empty($oPost->docs)) {
+        $sMsg .= "Documento : {$oPost->docs} \\n";
       }
-   } else {
+      $sMsg .= "Administrador: 1";
+      db_msgbox($sMsg);
 
-      if ( isset($lSqlErro) && $lSqlErro === false) {
+      echo "<script> window.open('pro4_capaprocesso.php?codproc=$p58_codproc','','location=0'); </script>";
 
-        $sMsg  = "Inclusao efetuada com Sucesso\\n";
-        $sMsg .= "Processo  : {$iNumeroProcesso}/".db_getsession("DB_anousu")."\\n";
-        //$sMsg .= "Processo  : {$p58_numeracao}/".db_getsession("DB_anousu")."\\n";
+      $result_param = $clprotparam->sql_record($clprotparam->sql_query_file());
+      if ($clprotparam->numrows > 0) {
+        db_fieldsmemory($result_param, 0);
 
-        if (!empty($oPost->docs)) {
-          $sMsg .= "Documento : {$oPost->docs} \\n";
-        }
-        $sMsg .= "Administrador: 1";
-        db_msgbox($sMsg);
-
-        echo "<script> window.open('pro4_capaprocesso.php?codproc=$p58_codproc','','location=0'); </script>";
-
-        $result_param = $clprotparam->sql_record($clprotparam->sql_query_file());
-        if ($clprotparam->numrows> 0) {
-           db_fieldsmemory($result_param,0);
-
-           if ($p90_emiterecib == "t") {
-              echo " <script>
+        if ($p90_emiterecib == "t") {
+          echo " <script>
                         var sUrl1 = 'pro4_aba2protprocesso001.php?p58_codproc=$clprotprocesso->p58_codproc';
                   			var sUrl2 = 'pro4_aba1protprocesso002.php?alt=1&chavepesquisa=$clprotprocesso->p58_codproc';
 
@@ -292,23 +293,21 @@ if (isset($oPost->btnincluir) && $oPost->btnincluir == 1) {
                      			parent.mo_camada('processosapensados');
                   			} else {
                      			parent.iframe_dadosprocesso.location.href           = sUrl2;
-                     			window.open('pro4_capaprocesso.php?codproc=".$clprotprocesso->p58_codproc."','','location=0');
+                     			window.open('pro4_capaprocesso.php?codproc=" . $clprotprocesso->p58_codproc . "','','location=0');
                         }
                      </script> ";
-
-           }
-
-        } else {
-        	echo "<script>
+        }
+      } else {
+        echo "<script>
         	        parent.iframe_dadosprocesso.location.href = 'pro4_aba1protprocesso001.php';
         	      </script>";
-        }
-
-      } else {
-      	db_msgbox($sMsgErro);
-      	db_redireciona("pro4_aba1protprocesso001.php");
       }
-   }
+    } else {
+      db_msgbox($sMsgErro);
+      db_redireciona("pro4_aba1protprocesso001.php");
+    }
+  }
 }
 ?>
+
 </html>

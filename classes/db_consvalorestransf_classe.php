@@ -22,6 +22,7 @@ class cl_consvalorestransf {
    var $c201_codfontrecursos = 0;
    var $c201_valortransf = 0;
    var $c201_enviourelatorios = 'f';
+   var $c201_codacompanhamento = 0;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  c201_sequencial = int8 = Código Sequencial
@@ -30,6 +31,7 @@ class cl_consvalorestransf {
                  c201_codfontrecursos = int8 = Código da fonte de recursos
                  c201_valortransf = float8 = Valor Transferido
                  c201_enviourelatorios = bool = Enviou Relatórios
+                 c201_codacompanhamento = int8 = Código de acompanhamento
                  ";
    //funcao construtor da classe
    function cl_consvalorestransf() {
@@ -55,7 +57,8 @@ class cl_consvalorestransf {
        $this->c201_codfontrecursos = ($this->c201_codfontrecursos == ""?@$GLOBALS["HTTP_POST_VARS"]["c201_codfontrecursos"]:$this->c201_codfontrecursos);
        $this->c201_valortransf = ($this->c201_valortransf == ""?@$GLOBALS["HTTP_POST_VARS"]["c201_valortransf"]:$this->c201_valortransf);
        $this->c201_enviourelatorios = ($this->c201_enviourelatorios == "f"?@$GLOBALS["HTTP_POST_VARS"]["c201_enviourelatorios"]:$this->c201_enviourelatorios);
-     }else{
+       $this->c201_codacompanhamento = ($this->c201_codacompanhamento == "f"?@$GLOBALS["HTTP_POST_VARS"]["c201_codacompanhamento"]:$this->c201_codacompanhamento);
+    }else{
        $this->c201_sequencial = ($this->c201_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["c201_sequencial"]:$this->c201_sequencial);
      }
    }
@@ -89,18 +92,43 @@ class cl_consvalorestransf {
        $this->erro_status = "0";
        return false;
      }
+     if(db_getsession("DB_anousu") > 2022) {
+      /**
+      * adicionado para verificar o tamanho do campo
+      */
+      if(strlen($this->c201_codfontrecursos) != 7 ){ 
+        $this->erro_sql = " Campo fonte de recursos deve conter 7 dígitos.";
+        $this->erro_campo = "c201_codfontrecursos";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+      if($this->c201_codacompanhamento == null ){ 
+        $this->erro_sql = " Campo Código de acompanhamento nao Informado.";
+        $this->erro_campo = "c201_codacompanhamento";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+   }else{
      /**
       * adicionado para verificar o tamanho do campo
       */
-     if(strlen($this->c201_codfontrecursos) != 3 ){
-       $this->erro_sql = " Campo fonte de recursos deve conter 3 dígitos.";
-       $this->erro_campo = "c201_codfontrecursos";
-       $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-       $this->erro_status = "0";
-       return false;
-     }
+      if(strlen($this->c201_codfontrecursos) != 3 ){ 
+      $this->erro_sql = " Campo fonte de recursos deve conter 3 dígitos.";
+      $this->erro_campo = "c201_codfontrecursos";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+
+   }
+  }
      if($this->c201_valortransf == null ){
        $this->erro_sql = " Campo Valor Transferido nao Informado.";
        $this->erro_campo = "c201_valortransf";
@@ -159,6 +187,7 @@ class cl_consvalorestransf {
                                       ,c201_valortransf
                                       ,c201_enviourelatorios
                                       ,c201_anousu
+                                      ,c201_codacompanhamento
                        )
                 values (
                                 $this->c201_sequencial
@@ -168,6 +197,7 @@ class cl_consvalorestransf {
                                ,$this->c201_valortransf
                                ,'$this->c201_enviourelatorios'
                                ,".db_getsession("DB_anousu")."
+                               ,'$this->c201_codacompanhamento'
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -204,7 +234,8 @@ class cl_consvalorestransf {
        $resac = db_query("insert into db_acount values($acount,2010218,2009414,'','".AddSlashes(pg_result($resaco,0,'c201_mescompetencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010218,2009415,'','".AddSlashes(pg_result($resaco,0,'c201_valortransf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,2010218,2009416,'','".AddSlashes(pg_result($resaco,0,'c201_enviourelatorios'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     }
+       $resac = db_query("insert into db_acount values($acount,2010218,2009416,'','".AddSlashes(pg_result($resaco,0,'c201_codacompanhamento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      }
      return true;
    }
    // funcao para alteracao
@@ -266,16 +297,43 @@ class cl_consvalorestransf {
        /**
         * adicionado para verificar o tamanho do campo
         */
-       if(strlen($this->c201_codfontrecursos) != 3 ){
-         $this->erro_sql = " Campo fonte de recursos deve conter 3 dígitos.";
-         $this->erro_campo = "c201_codfontrecursos";
-         $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-         $this->erro_status = "0";
-         return false;
+        if(db_getsession('DB_anousu') > 2022){
+          if(strlen($this->c201_codfontrecursos) != 7 ){ 
+            $this->erro_sql = " Campo fonte de recursos deve conter 7 dígitos.";
+            $this->erro_campo = "c201_codfontrecursos";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+          }
+        }else{
+          if(strlen($this->c201_codfontrecursos) != 3 ){ 
+            $this->erro_sql = " Campo fonte de recursos deve conter 3 dígitos.";
+            $this->erro_campo = "c201_codfontrecursos";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_status = "0";
+            return false;
+          } 
+        } 
        }
-     }
+       if(db_getsession('DB_anousu') > 2022){
+          if(trim($this->c201_codacompanhamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c201_codacompanhamento"])){ 
+            $sql  .= $virgula." c201_codacompanhamento = $this->c201_codacompanhamento ";
+            $virgula = ",";
+            if(trim($this->c201_codacompanhamento) == null ){ 
+              $this->erro_sql = " Campo Código da acompanhamento nao Informado.";
+              $this->erro_campo = "c201_codacompanhamento";
+              $this->erro_banco = "";
+              $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+              $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+              $this->erro_status = "0";
+              return false;
+            }
+          }
+        }
      if(trim($this->c201_valortransf)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c201_valortransf"])){
        $sql  .= $virgula." c201_valortransf = $this->c201_valortransf ";
        $virgula = ",";
@@ -323,7 +381,9 @@ class cl_consvalorestransf {
            $resac = db_query("insert into db_acount values($acount,2010218,2009415,'".AddSlashes(pg_result($resaco,$conresaco,'c201_valortransf'))."','$this->c201_valortransf',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["c201_enviourelatorios"]) || $this->c201_enviourelatorios != "")
            $resac = db_query("insert into db_acount values($acount,2010218,2009416,'".AddSlashes(pg_result($resaco,$conresaco,'c201_enviourelatorios'))."','$this->c201_enviourelatorios',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
+         if(isset($GLOBALS["HTTP_POST_VARS"]["c201_codacompanhamento"]) || $this->c201_codacompanhamento != "")
+           $resac = db_query("insert into db_acount values($acount,2010218,2009416,'".AddSlashes(pg_result($resaco,$conresaco,'c201_codacompanhamento'))."','$this->c201_codacompanhamento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         }
      }
      $result = db_query($sql);
      if($result==false){
@@ -375,7 +435,8 @@ class cl_consvalorestransf {
          $resac = db_query("insert into db_acount values($acount,2010218,2009414,'','".AddSlashes(pg_result($resaco,$iresaco,'c201_mescompetencia'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010218,2009415,'','".AddSlashes(pg_result($resaco,$iresaco,'c201_valortransf'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,2010218,2009416,'','".AddSlashes(pg_result($resaco,$iresaco,'c201_enviourelatorios'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
+         $resac = db_query("insert into db_acount values($acount,2010218,2009416,'','".AddSlashes(pg_result($resaco,$iresaco,'c201_codacompanhamento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        }
      }
      $sql = " delete from consvalorestransf
                     where ";

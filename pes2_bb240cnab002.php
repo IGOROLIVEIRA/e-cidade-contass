@@ -38,7 +38,6 @@ require_once("libs/db_utils.php");
 parse_str(base64_decode($HTTP_SERVER_VARS["QUERY_STRING"]));
 db_postmemory($HTTP_POST_VARS);
 
-$cllayouts_bb  = new cl_layouts_bb;
 $clfolha       = new cl_folha;
 $clpensao      = new cl_pensao;
 $clrharqbanco  = new cl_rharqbanco;
@@ -431,7 +430,7 @@ if ($sqlerro == false) {
     $rsDados   = db_query($sSql);
 
     if ( pg_num_rows($rsDados) == 0){
-      continue;
+      //continue;
     }
 
     /**

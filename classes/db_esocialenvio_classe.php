@@ -47,7 +47,7 @@ class cl_esocialenvio
                  rh213_protocolo = int4 = Número do Protocolo
                  ";
     //funcao construtor da classe
-    public function cl_esocialenvio()
+    public function __construct()
     {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo("esocialenvio");

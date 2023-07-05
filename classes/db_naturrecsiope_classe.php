@@ -18,6 +18,7 @@ class cl_naturrecsiope {
     // cria variaveis do arquivo
     public $c224_natrececidade = null;
     public $c224_natrecsiope = null;
+    public $c224_anousu = null;
     // cria propriedade com as variaveis do arquivo
     public $campos = "
                  c224_natrececidade = varchar(15) = E-Cidade
@@ -310,7 +311,7 @@ class cl_naturrecsiope {
     }
 
     // funcao do sql
-    function sql_query_file ( $c224_natrececidade=null,$c224_natrecsiope=null,$campos="*",$ordem=null,$dbwhere="") {
+    function sql_query_file ( $c224_natrececidade=null,$c224_natrecsiope=null,$campos="*",$ordem=null,$dbwhere="",$c224_anousu="") {
         $sql = "select ";
         if ($campos != "*" ) {
             $campos_sql = explode("#", $campos);
@@ -407,6 +408,21 @@ class cl_naturrecsiope {
                 $sql .= $virgula.$campos_sql[$i];
                 $virgula = ",";
             }
+        }
+
+        if ($c224_anousu > 2022) {
+            $sql = "SELECT  CASE 
+                                WHEN c224_natrececidade IS NOT NULL THEN substr(c224_natrececidade,1,12)
+                                ELSE substr(o57_fonte,1,12)
+                            END AS c225_natrecsiope,
+                            CASE 
+                                WHEN c224_natrececidade IS NOT NULL THEN c225_descricao
+                                ELSE o57_descr
+                            END AS c225_descricao
+                    FROM (SELECT '{$c224_natrececidade}'::varchar AS o57_fonte, '{$campos}'::varchar AS o57_descr) AS principal
+                    LEFT JOIN naturrecsiope ON o57_fonte = c224_natrececidade AND c224_anousu = {$c224_anousu}
+                    LEFT JOIN elerecsiope ON substr(naturrecsiope.c224_natrecsiope, 1, 11) = elerecsiope.c225_natrecsiope AND naturrecsiope.c224_anousu = elerecsiope.c225_anousu";
+
         }
         return $sql;
     }

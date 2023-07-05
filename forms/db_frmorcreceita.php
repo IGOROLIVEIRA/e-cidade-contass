@@ -153,147 +153,147 @@ if ($db_opcao == 1) {
                     $clestrutura->db_opcao = $db_opcao;
                     $clestrutura->estrutura('o50_estrutreceita');
 
-                    db_input('o57_descr', 40, $Io57_descr, true, 'text', 3, '');
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td colspan='2' align='center'>
-                    <?
-                    if ((isset($atualizar) || isset($o50_estrutreceita)) && empty($cadastrado) && empty($negado)) {
-                        $matriz = explode(".", $o50_estrutreceita);
-                        $inicia = false; //variavel que indica que o nivel não tem mais filhos
-                        $tam = (count($matriz) - 1);
-                        $codigos = '';
-                        for ($i = $tam; $i >= 0; $i--) {
-                            $codigo = ''; //monta os codigos para a pesquisa
-                            if ($matriz[$i] != "0" || $inicia == true) {
-                                $inicia = true;
-                                for ($x = $i; $x >= 0; $x--) {
-                                    $codigo = $matriz[$x] . $codigo;
-                                }
-                                for ($y = strlen($codigo); $y < 15; $y++) {
-                                    $codigo = $codigo . "0";
-                                }
-                            }
-                            if ($inicia == true) {
-                                $codigos = $codigo . "#" . $codigos;
-                            }
-                        }
-                        $matriz02 = explode("#", $codigos);
-                        $tam = count($matriz02);
-                        $espaco = 3;
-                        $esp = '';
-                        for ($i = 0; $i < $tam; $i++) {
-                            if ($matriz02[$i] == '') {
-                                continue;
-                            }
+  db_input('o57_descr',60,$Io57_descr,true,'text',3,'');
+?>
+    </td>
+  </tr>
+  <tr>
+    <td colspan='2' align='center'>
+<?
+if((isset($atualizar) || isset($o50_estrutreceita)) && empty($cadastrado)&& empty($negado)){
+  $matriz= explode(".",$o50_estrutreceita);
+  $inicia=false;//variavel que indica que o nivel não tem mais filhos
+  $tam=(count($matriz)-1);
+  $codigos='';
+  for($i=$tam; $i>=0; $i--){
+    $codigo='';//monta os codigos para a pesquisa
+    if($matriz[$i]!="0" || $inicia==true){
+      $inicia=true;
+      for($x=$i; $x>=0; $x--){
+	  $codigo=$matriz[$x].$codigo;
+      }
+      for($y=strlen($codigo); $y<15; $y++){
+	$codigo=$codigo."0";
+      }
+    }
+    if($inicia==true){
+      $codigos=$codigo."#".$codigos;
+    }
+  }
+  $matriz02= explode("#",$codigos);
+  $tam=count($matriz02);
+  $espaco=3;
+  $esp='';
+  for($i=0; $i<$tam; $i++){
+      if($matriz02[$i]==''){
+	continue;
+      }
 
-                            for ($s = 0; $s < $espaco; $s++) {
-                                $esp = $esp . "&nbsp;";
-                            }
-                            $result = $clorcfontes->sql_record($clorcfontes->sql_query_file(null, null, 'o57_fonte,o57_descr', '', "o57_fonte='" . $matriz02[$i] . "' and o57_anousu = " . db_getsession("DB_anousu")));
-                            if ($clorcfontes->numrows > 0) {
-                                db_fieldsmemory($result, 0);
-                                if (empty($prim)) {
-                                    echo "
-                                            <tr>
-                                                <td  align='left'><b>Detalhamento:</b></td>
-                                                <td><small>" . db_formatar($o57_fonte, "receita_int") . "</small></td>
-                                                <td><small>$esp $o57_descr</small></td>
-                                            </tr>
-                                        ";
-                                    $prim = "false";
-                                } else {
-                                    echo "
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                                <td><small>" . db_formatar($o57_fonte, "receita_int") . "</small></td>
-                                                <td><small>$esp $o57_descr</small></td>
-                                            </tr>
-                                        ";
-                                }
-                            } else {
-                                $nops = true;
-                                if (empty($prim)) {
-                                    echo "
-                                            <tr>
-                                                <td  align='left'><b>Detalhamento:</b></td>
-                                                <td><small> " . db_formatar($matriz02[$i], "receita_int") . "</small></td>
-                                                <td><small>$esp Não encontrado</small></td>
-                                            </tr>
-                                        ";
-                                    $prim = "false";
-                                } else {
-                                    echo "
-                                            <tr>
-                                                <td>&nbsp;</td>
-                                                <td><small> " . db_formatar($matriz02[$i], "receita_int") . "</small></td>
-                                                <td><small>$esp Não encontrado</small></td>
-                                            </tr>
-                                        ";
-                                }
-                            }
-                        }
-                    }
-                    ?>
-            <tr>
-                <td nowrap title="<?= @$To70_codigo ?>">
-                    <?
-                    db_ancora(@$Lo70_codigo, "js_pesquisao70_codigo(true);", $db_opcao);
-                    ?>
-                </td>
-                <td colspan='2'>
-                    <?
-                    if ($db_opcao == 1)
-                        db_input('o70_codigo', 4, $Io70_codigo, true, 'text', 3, " onchange='js_pesquisao70_codigo(false);'");
-                    else
-                        db_input('o70_codigo', 4, $Io70_codigo, true, 'text', $db_opcao, " onchange='js_pesquisao70_codigo(false);'");
+      for($s=0; $s<$espaco; $s++){
+         $esp=$esp."&nbsp;";
+      }
+      $result=$clorcfontes->sql_record($clorcfontes->sql_query_file(null,null,'o57_fonte,o57_descr','',"o57_fonte='".$matriz02[$i]."' and o57_anousu = ".db_getsession("DB_anousu")));
+      if($clorcfontes->numrows>0){
+	db_fieldsmemory($result,0);
+        if(empty($prim)){
+  	  echo"
+	    <tr>
+	      <td  align='left'><b>Detalhamento:</b></td>
+	      <td><small>".db_formatar($o57_fonte,"receita_int")."</small></td>
+	      <td><small>$esp $o57_descr</small></td>
+	    </tr>
+	   ";
+	   $prim="false";
+        }else{
+	    echo "
+		 <tr>
+		  <td>&nbsp;</td>
+		  <td><small>".db_formatar($o57_fonte,"receita_int")."</small></td>
+		  <td><small>$esp $o57_descr</small></td>
+		</tr>
+	    ";
+	}
+      }else{
+	$nops=true;
+        if(empty($prim)){
+  	  echo"
+	    <tr>
+	      <td  align='left'><b>Detalhamento:</b></td>
+	      <td><small> ".db_formatar($matriz02[$i],"receita_int")."</small></td>
+	      <td><small>$esp Não encontrado</small></td>
+	    </tr>
+	   ";
+	   $prim="false";
+	}else{
+	  echo "
+	       <tr>
+		<td>&nbsp;</td>
+		<td><small> ".db_formatar($matriz02[$i],"receita_int")."</small></td>
+		<td><small>$esp Não encontrado</small></td>
+	      </tr>
+	  ";
+	}
+      }
+  }
+}
+?>
+  <tr>
+    <td nowrap title="<?=@$To70_codigo?>">
+       <?
+       db_ancora(@$Lo70_codigo,"js_pesquisao70_codigo(true);",$db_opcaoNovo);
+       ?>
+    </td>
+    <td colspan='2'>
+<?
+if($db_opcao == 1)
+  db_input('o70_codigo',8,$Io70_codigo,true,'text',3," onchange='js_pesquisao70_codigo(false);'");
+else
+  db_input('o70_codigo',8,$Io70_codigo,true,'text',$db_opcaoNovo," onchange='js_pesquisao70_codigo(false);'");
 
-                    db_input('o15_descr', 30, $Io15_descr, true, 'text', 3, '');
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap title="<?= @$To70_valor ?>">
-                    <?= @$Lo70_valor ?>
-                </td>
-                <td>
-                    <?
-                    db_input('o70_valor', 15, $Io70_valor, true, 'text', $db_opcao, "")
-                    ?>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap title="<?= @$To70_reclan ?>">
-                    <?= @$Lo70_reclan ?>
-                </td>
-                <td>
-                    <?
-                    $x = array("f" => "NAO", "t" => "SIM");
-                    db_select('o70_reclan', $x, true, $db_opcao, "");
-                    ?>
-                </td>
-            </tr>
-            <?
-            if ($anousu > 2007) {
-            ?>
-                <tr>
-                    <td nowrap title="<?= @$To70_concarpeculiar ?>"><?
-                                                                    db_ancora(@$Lo70_concarpeculiar, "js_pesquisao70_concarpeculiar(true);", $db_opcao);
-                                                                    ?></td>
-                    <td colspan="2">
-                        <?
-                        db_input("o70_concarpeculiar", 10, $Io70_concarpeculiar, true, "text", $db_opcao, "onChange='js_pesquisao70_concarpeculiar(false);'");
-                        db_input("c58_descr", 50, 0, true, "text", 3);
-                        ?>
-                    </td>
-                </tr>
-            <?
-            } else {
-                $o70_concarpeculiar = 0;
-                db_input("o70_concarpeculiar", 10, 0, true, "hidden", 3, "");
-            }
+db_input('o15_descr',74,$Io15_descr,true,'text',3,'');
+?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$To70_valor?>">
+       <?=@$Lo70_valor?>
+    </td>
+    <td>
+<?
+db_input('o70_valor',15,$Io70_valor,true,'text',$db_opcaoNovo,"")
+?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$To70_reclan?>">
+       <?=@$Lo70_reclan?>
+    </td>
+    <td>
+<?
+$x = array("f"=>"NAO","t"=>"SIM");
+db_select('o70_reclan',$x,true,$db_opcaoNovo,"");
+?>
+    </td>
+  </tr>
+<?
+   if ($anousu > 2007){
+?>
+  <tr>
+    <td nowrap title="<?=@$To70_concarpeculiar?>"><?
+       db_ancora(@$Lo70_concarpeculiar,"js_pesquisao70_concarpeculiar(true);",$db_opcaoNovo);
+    ?></td>
+    <td colspan="2">
+    <?
+      db_input("o70_concarpeculiar",10,$Io70_concarpeculiar,true,"text",$db_opcaoNovo,"onChange='js_pesquisao70_concarpeculiar(false);'");
+      db_input("c58_descr",72,0,true,"text",3);
+    ?>
+    </td>
+  </tr>
+<?
+  } else {
+    $o70_concarpeculiar = 0;
+    db_input("o70_concarpeculiar",10,0,true,"hidden",3,"");
+  }
 
             $o70_instit = db_getsession('DB_instit');
             db_input('o70_instit', 2, $Io70_instit, true, 'hidden', $db_opcao);
@@ -316,13 +316,16 @@ if ($db_opcao == 1) {
 
 </form>
 <script>
-    <?
-    if (isset($nops)) {
-    ?>
-        alert('Inclusão não permitida. Pois existe um nivel que não foi encontrado!');
-    <?
-    }
-    ?>
+
+<?
+  if(isset($nops)){
+?>
+    alert('Inclusão não permitida. Pois existe um nivel que não foi encontrado!');
+<?
+  }
+?>
+function js_pesquisao70_concarpeculiar(mostra){
+  if (mostra==true) {
 
     function js_pesquisao70_concarpeculiar(mostra) {
         if (mostra == true) {
@@ -349,6 +352,50 @@ if ($db_opcao == 1) {
             document.form1.o70_concarpeculiar.value = '';
         }
     }
+  }
+}
+function js_atualiza(){
+      obj=document.createElement('input');
+      obj.setAttribute('name','atualizar');
+      obj.setAttribute('type','hidden');
+      obj.setAttribute('value',"atualizar");
+      document.form1.appendChild(obj);
+      document.form1.submit();
+}
+function js_mostraorcfontes(chave,chave1,chave2,chave3,erro){
+
+  document.form1.o57_descr.value = chave;
+
+  if(!empty(chave2)) {
+      document.form1.o70_codigo.value = chave2;
+      document.form1.o15_descr.value = chave3;
+    }else{
+      document.form1.o70_codigo.value = '';
+      document.form1.o15_descr.value = '';
+    }
+  if(erro==true){
+    document.form1.o50_estrutreceita.focus();
+    //document.form1.o50_estrutreceita.value = '';
+
+  js_atualiza();
+  }else{
+     js_atualiza();
+  }
+}
+function js_mostraorcfontes1(chave1,chave2,chave3,chave4){
+  db_iframe_orcfontes.hide();
+  document.form1.o50_estrutreceita.value = chave1;
+  document.form1.o57_descr.value = chave2;
+  if(!empty(chave3) && !empty(chave4)) {
+    document.form1.o70_codigo.value = chave3;
+    document.form1.o15_descr.value = chave4;
+  }else{
+    document.form1.o70_codigo.value = '';
+    document.form1.o15_descr.value = '';
+  }
+  js_mascara02_o50_estrutreceita(chave1);
+  js_atualiza();
+}
 
     function js_mostraconcarpeculiar1(chave1, chave2) {
         document.form1.o70_concarpeculiar.value = chave1;
@@ -460,6 +507,7 @@ if ($db_opcao == 1) {
    alert('Selecione o último nível!');\n
    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_orcfontes','func_orcfontes.php?chave_o57_fonte=$codigo&funcao_js=parent.js_mostraorcfontes1|o57_fonte|o57_descr|c61_codigo|o15_descr','Pesquisa',true);
   ";
-    }
-    ?>
+}
+?>
+js_mostraconcarpeculiar1('000','NÃO SE APLICA');
 </script>

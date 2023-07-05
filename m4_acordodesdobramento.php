@@ -68,14 +68,7 @@ if (isset($alterar)) {
 </head>
 
 <body bgcolor="#CCCCCC">
-    <?php
-    $sContass = explode(".", db_getsession("DB_login"));
 
-    if ($sContass[1] != 'contass') {
-        echo "<br><center><br><H2>Essa rotina apenas pode ser usada por usuários da contass</h2></center>";
-    } else {
-
-    ?>
 
         <form name="form1" method="post" action="">
             <div class="container">
@@ -271,5 +264,4 @@ if (isset($alterar)) {
     }
 </script>
 
-<?
-    }
+

@@ -80,7 +80,7 @@ if (isset($pesquisa_conta)){
             </td>
             <td width="96%" align="left" nowrap> 
               <?
-		       db_input("o15_codigo",4,$Io15_codigo,true,"text",4,"","chave_o15_codigo");
+		       db_input("o15_codigo",8,$Io15_codigo,true,"text",4,"","chave_o15_codigo");
 		       ?>
             </td>
           </tr>
@@ -141,6 +141,7 @@ if (isset($pesquisa_conta)){
         }else if(isset($chave_o15_descr) && (trim($chave_o15_descr)!="") ){
 	         $sql = $clorctiporec->sql_query(null,$campos,"o15_descr"," o15_descr like '$chave_o15_descr%' " . $dbwhere);
         }else{
+           $dbwhere .= " and (o15_datalimite is null or o15_datalimite > '".date('Y-m-d',db_getsession('DB_datausu'))."')"; 
            $sql = $clorctiporec->sql_query("",$campos,"o15_codigo"," 1 = 1 " . $dbwhere);
         }
 

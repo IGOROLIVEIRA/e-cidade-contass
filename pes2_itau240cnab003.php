@@ -155,10 +155,10 @@ if ($clrharqbanco->numrows > 0) {
   if($iTipoLayout == 1){
     $db_layouttxt = new db_layouttxt($layoutimprime, "tmp/" . $nomearquivo, "A");
   }else{
-    $db_layouttxt = new db_layouttxt($layoutimprime, "tmp/" . $nomearquivo, "A D E");  
+    $db_layouttxt = new db_layouttxt($layoutimprime, "tmp/" . $nomearquivo, "A D E");
   }
 
-  
+
 
   if ($db90_codban == "104") {
     if (trim($rh34_convenio) == '003881') {
@@ -175,7 +175,7 @@ if ($clrharqbanco->numrows > 0) {
   $indicaambcliente = "P";
   //////
 
-  db_setaPropriedadesLayoutTxt(&$db_layouttxt, 1);
+  db_setaPropriedadesLayoutTxt($db_layouttxt, 1);
   $iQuantidadeLinhasArquivo++;
 } else {
   $sqlerro = true;
@@ -388,7 +388,7 @@ if ($sqlerro == false) {
       $formalancamento = "03";
     }
     ///// HEADER DO LOTE
-    db_setaPropriedadesLayoutTxt(&$db_layouttxt, 2);
+    db_setaPropriedadesLayoutTxt($db_layouttxt, 2);
     $iQuantidadeLinhasArquivo++;
     $iQuantidadeLote++;
     ///// FINAL DO HEADER DO LOTE
@@ -453,7 +453,7 @@ if ($sqlerro == false) {
       $finalidade = getFinalidade($rh02_codreg);
 //      $sequencialreg = "      ";
       ///// REGISTRO A
-      db_setaPropriedadesLayoutTxt(&$db_layouttxt, 3, $posicao);
+      db_setaPropriedadesLayoutTxt($db_layouttxt, 3, $posicao);
       $iQuantidadeLinhasArquivo++;
       $iQuantidadeLote++;
       ///// FINAL DO REGISTRO A
@@ -477,9 +477,9 @@ if ($sqlerro == false) {
       $sForcaBranco = "   ";
 
       if($iTipoLayout <> 1){
-      
+
       ///// REGISTRO D
-      db_setaPropriedadesLayoutTxt(&$db_layouttxt, 3, "D");
+      db_setaPropriedadesLayoutTxt($db_layouttxt, 3, "D");
       $iQuantidadeLinhasArquivo++;
       $iQuantidadeLote++;
       ///// FINAL DO REGISTRO D
@@ -524,7 +524,7 @@ if ($sqlerro == false) {
             $iContadorLinhaE = 1;
             $iEnviou = 1;
             $quanttraillerE++;
-            db_setaPropriedadesLayoutTxt(&$db_layouttxt, 3, "E");
+            db_setaPropriedadesLayoutTxt($db_layouttxt, 3, "E");
             $iQuantidadeLinhasArquivo++;
             $iQuantidadeLote++;
             $descricao1 = "";
@@ -543,7 +543,7 @@ if ($sqlerro == false) {
         //Se tiver menos de 4 registros na linha gera a linha do mesmo jeito
         if ($iEnviou == 0) {
           $quanttraillerE++;
-          db_setaPropriedadesLayoutTxt(&$db_layouttxt, 3, "E");
+          db_setaPropriedadesLayoutTxt($db_layouttxt, 3, "E");
           $iQuantidadeLinhasArquivo++;
           $iQuantidadeLote++;
 
@@ -551,7 +551,7 @@ if ($sqlerro == false) {
       }
 
 
-      
+
 
       /**
        *  Linhas de Descontos
@@ -591,7 +591,7 @@ if ($sqlerro == false) {
             $iEnviou = 1;
             ///// REGISTRO E
             $quanttraillerE++;
-            db_setaPropriedadesLayoutTxt(&$db_layouttxt, 3, "E");
+            db_setaPropriedadesLayoutTxt($db_layouttxt, 3, "E");
             $iQuantidadeLinhasArquivo++;
             $iQuantidadeLote++;
             ///// FINAL DO REGISTRO E
@@ -612,7 +612,7 @@ if ($sqlerro == false) {
         if ($iEnviou == 0) {
           ///// REGISTRO E
           $quanttraillerE++;
-          db_setaPropriedadesLayoutTxt(&$db_layouttxt, 3, "E");
+          db_setaPropriedadesLayoutTxt($db_layouttxt, 3, "E");
           $iQuantidadeLinhasArquivo++;
           $iQuantidadeLote++;
           ///// FINAL DO REGISTRO E
@@ -665,7 +665,7 @@ if ($sqlerro == false) {
 
     //$quantidadetotallote = $quantidadetotallote - 2;
     ///// TRAILLER DE LOTE
-    db_setaPropriedadesLayoutTxt(&$db_layouttxt, 4);
+    db_setaPropriedadesLayoutTxt($db_layouttxt, 4);
     $iQuantidadeLinhasArquivo++;
     ///// FINAL DO TRAILLER DE LOTE
 
@@ -734,7 +734,7 @@ if ($sqlerro == false) {
       $formalancamento = "03";
     }
     ///// HEADER DO LOTE
-    db_setaPropriedadesLayoutTxt(&$db_layouttxt, 2);
+    db_setaPropriedadesLayoutTxt($db_layouttxt, 2);
     $iQuantidadeLinhasArquivo++;
     $iQuantidadeLote++;
     ///// FINAL DO HEADER DO LOTE
@@ -798,7 +798,7 @@ if ($sqlerro == false) {
       $dataprocessamento = $datadedeposito;
       $finalidade = getFinalidade($rh02_codreg);
       ///// REGISTRO A
-      db_setaPropriedadesLayoutTxt(&$db_layouttxt, 3, $posicao);
+      db_setaPropriedadesLayoutTxt($db_layouttxt, 3, $posicao);
       $iQuantidadeLote++;
       $iQuantidadeLinhasArquivo++;
       ///// FINAL DO REGISTRO A
@@ -822,13 +822,13 @@ if ($sqlerro == false) {
         $anofolha = db_mesfolha() . db_anofolha();
         $sForcaBranco = "   ";
 
-        
+
         ///// REGISTRO D
-        db_setaPropriedadesLayoutTxt(&$db_layouttxt, 3, "D");
+        db_setaPropriedadesLayoutTxt($db_layouttxt, 3, "D");
         $iQuantidadeLinhasArquivo++;
         $iQuantidadeLote++;
         ///// FINAL DO REGISTRO D
-      
+
 
         /**
          * Registro E (Rubricas do Contra-cheque)
@@ -870,7 +870,7 @@ if ($sqlerro == false) {
               $iContadorLinhaE = 1;
               $iEnviou = 1;
               $quanttraillerE++;
-              db_setaPropriedadesLayoutTxt(&$db_layouttxt, 3, "E");
+              db_setaPropriedadesLayoutTxt($db_layouttxt, 3, "E");
               $iQuantidadeLinhasArquivo++;
               $iQuantidadeLote++;
               $descricao1 = "";
@@ -889,7 +889,7 @@ if ($sqlerro == false) {
           //Se tiver menos de 4 registros na linha gera a linha do mesmo jeito
           if ($iEnviou == 0) {
             $quanttraillerE++;
-            db_setaPropriedadesLayoutTxt(&$db_layouttxt, 3, "E");
+            db_setaPropriedadesLayoutTxt($db_layouttxt, 3, "E");
             $iQuantidadeLinhasArquivo++;
             $iQuantidadeLote++;
 
@@ -944,7 +944,7 @@ if ($sqlerro == false) {
 
     //$quantidadetotallote = $quantidadetotallote - 2;
     ///// TRAILLER DE LOTE
-    db_setaPropriedadesLayoutTxt(&$db_layouttxt, 4);
+    db_setaPropriedadesLayoutTxt($db_layouttxt, 4);
     $iQuantidadeLinhasArquivo++;
     ///// FINAL DO TRAILLER DE LOTE
 
@@ -988,7 +988,7 @@ if ($sqlerro == false) {
 
   ///// TRAILLER DE ARQUIVO
   $loteservico = '9999';
-  db_setaPropriedadesLayoutTxt(&$db_layouttxt, 5);
+  db_setaPropriedadesLayoutTxt($db_layouttxt, 5);
   ///// FINAL DO TRAILLER DE ARQUIVO
   //////////////////////////////////
   $pdf->Output($nomearquivo_impressao,false,true);

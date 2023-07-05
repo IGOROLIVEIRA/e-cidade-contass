@@ -337,6 +337,13 @@ foreach ($aExcesso as $fonte => $data) {
         db_formatar("119", "recurso") : $fonte;
     $fonte = $fonte == 166 ? db_formatar("166", "recurso") . " / " .
         db_formatar("167", "recurso") : $fonte;
+    $fonte = $fonte == 15000000 ? db_formatar("15000000", "recurso") . " / " .
+        db_formatar("15000001", "recurso") . " / " .
+        db_formatar("15000002", "recurso") : $fonte;
+    $fonte = $fonte == 15400007 ? db_formatar("15400007", "recurso") . " / " .
+        db_formatar("15400000", "recurso") : $fonte;
+    $fonte = $fonte == 15420007 ? db_formatar("15420007", "recurso") . " / " .
+        db_formatar("15420000", "recurso") : $fonte;    
 
     $pdf->cell(24, $alt, db_formatar($fonte, 'recurso'), 0, 0, "C", 0);
     $pdf->cell(24, $alt, db_formatar($data["A"], 'f'), 0, 0, "R", 0);
@@ -397,6 +404,15 @@ function fonteAgrupada($fonte)
 
     if ($fonte == 167)
         return 166;
+
+    if (in_array($fonte, array(15000001, 15000002)))
+        return 15000000;
+
+    if ($fonte == 15400000)
+        return 15400007;
+
+    if ($fonte == 15420000)
+        return 15420007;    
 
     return $fonte;
 }

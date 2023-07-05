@@ -41,7 +41,10 @@ class cl_apostilamento
   var $si03_datareferencia_mes = null;
   var $si03_datareferencia_ano = null;
   var $si03_datareferencia = null;
-  // cria propriedade com as variaveis do arquivo
+  var $si03_indicereajuste = 0;
+  var $si03_percentualreajuste = null;
+  var $si03_descricaoindice = null;
+  // cria propriedade com as variaveis do arquivo 
   var $campos = "
                  si03_sequencial = int8 = Codigo Sequencial 
                  si03_licitacao = int8 = Numero da licitacao 
@@ -59,6 +62,9 @@ class cl_apostilamento
                  si03_acordoposicao = int8 = Acordo Posicao 
                  si03_acordo = int8 = Acordo 
                  si03_datareferencia = date = Data de Referencia 
+                 si03_indicereajuste = int8 = Indice de Reajuste 
+                 si03_percentualreajuste = varchar = Percentual Reajuste 
+                 si03_descricaoindice = varchar = Percentual Reajuste 
 
                  ";
   //funcao construtor da classe
@@ -104,6 +110,9 @@ class cl_apostilamento
       }
       $this->si03_descrapostila = ($this->si03_descrapostila == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_descrapostila"] : $this->si03_descrapostila);
       $this->si03_justificativa = ($this->si03_justificativa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_justificativa"] : $this->si03_justificativa);
+      $this->si03_indicereajuste = ($this->si03_indicereajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_indicereajuste"] : $this->si03_indicereajuste);
+      $this->si03_percentualreajuste = ($this->si03_percentualreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_percentualreajuste"] : $this->si03_percentualreajuste);
+      $this->si03_descricaoindice = ($this->si03_descricaoindice == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_descricaoindice"] : $this->si03_descricaoindice);
       $this->si03_tipoalteracaoapostila = ($this->si03_tipoalteracaoapostila == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_tipoalteracaoapostila"] : $this->si03_tipoalteracaoapostila);
       $this->si03_numapostilamento = ($this->si03_numapostilamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_numapostilamento"] : $this->si03_numapostilamento);
       $this->si03_valorapostila = ($this->si03_valorapostila == "" ? @$GLOBALS["HTTP_POST_VARS"]["si03_valorapostila"] : $this->si03_valorapostila);
@@ -126,7 +135,7 @@ class cl_apostilamento
       $this->erro_sql = " Campo N Contrato nao Informado.";
       $this->erro_campo = "si03_numcontrato";
       $this->erro_banco = "";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -135,7 +144,7 @@ class cl_apostilamento
       $this->erro_sql = " Campo Data Ass Contrato nao Informado.";
       $this->erro_campo = "si03_dataassinacontrato_dia";
       $this->erro_banco = "";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -144,7 +153,7 @@ class cl_apostilamento
       $this->erro_sql = " Campo TIpo de Apostila nao Informado.";
       $this->erro_campo = "si03_tipoapostila";
       $this->erro_banco = "";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -153,7 +162,7 @@ class cl_apostilamento
       $this->erro_sql = " Campo Data da Apostila nao Informado.";
       $this->erro_campo = "si03_dataapostila_dia";
       $this->erro_banco = "";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -162,7 +171,7 @@ class cl_apostilamento
       $this->erro_sql = " Campo Data de Referencia nao Informado.";
       $this->erro_campo = "si03_datareferencia_dia";
       $this->erro_banco = "";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -171,7 +180,7 @@ class cl_apostilamento
       $this->erro_sql = " Campo Descricao das alteracoes nao Informado.";
       $this->erro_campo = "si03_descrapostila";
       $this->erro_banco = "";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -180,7 +189,7 @@ class cl_apostilamento
       $this->erro_sql = " Campo Tipo de Alteracao Apostila nao Informado.";
       $this->erro_campo = "si03_tipoalteracaoapostila";
       $this->erro_banco = "";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -189,7 +198,7 @@ class cl_apostilamento
       $this->erro_sql = " Campo Numero  Seq. Apostila nao Informado.";
       $this->erro_campo = "si03_numapostilamento";
       $this->erro_banco = "";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -198,7 +207,7 @@ class cl_apostilamento
       $this->erro_sql = " Campo Valor da Aposlila nao Informado.";
       $this->erro_campo = "si03_valorapostila";
       $this->erro_banco = "";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -207,7 +216,7 @@ class cl_apostilamento
       $this->erro_sql = " Campo Instituio nao Informado.";
       $this->erro_campo = "si03_instit";
       $this->erro_banco = "";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -217,7 +226,7 @@ class cl_apostilamento
       if ($result == false) {
         $this->erro_banco = str_replace("\n", "", @pg_last_error());
         $this->erro_sql   = "Verifique o cadastro da sequencia: apostilamento_si03_sequencial_seq do campo: si03_sequencial";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -226,9 +235,9 @@ class cl_apostilamento
     } else {
       $result = db_query("select last_value from apostilamento_si03_sequencial_seq");
       if (($result != false) && (pg_result($result, 0, 0) < $si03_sequencial)) {
-        $this->erro_sql = " Campo si03_sequencial maior que ltimo nÃºmero da sequencia.";
-        $this->erro_banco = "Sequencia menor que este nÃºmero.";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_sql = " Campo si03_sequencial maior que ltimo número da sequencia.";
+        $this->erro_banco = "Sequencia menor que este número.";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -239,7 +248,7 @@ class cl_apostilamento
     if (($this->si03_sequencial == null) || ($this->si03_sequencial == "")) {
       $this->erro_sql = " Campo si03_sequencial nao declarado.";
       $this->erro_banco = "Chave Primaria zerada.";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -261,6 +270,9 @@ class cl_apostilamento
                                       ,si03_acordo
                                       ,si03_datareferencia
                                       ,si03_justificativa 
+                                      ,si03_indicereajuste 
+                                      ,si03_percentualreajuste 
+                                      ,si03_descricaoindice 
 
                        )
                 values (
@@ -280,19 +292,23 @@ class cl_apostilamento
                                ," . ($this->si03_acordo == null || $this->si03_acordo == "" ? "null" : $this->si03_acordo) . "
                                ,'$this->si03_datareferencia' 
                                ,'$this->si03_justificativa' 
+                               ,$this->si03_indicereajuste 
+                               ,'$this->si03_percentualreajuste' 
+                               ," . ($this->si03_descricaoindice == "null" || $this->si03_descricaoindice == "" ? "null" : "'" . $this->si03_descricaoindice . "'") . " 
 
                       )";
+
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
         $this->erro_sql   = "apostilamento ($this->si03_sequencial) nao Includo. Inclusao Abortada.";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_banco = "apostilamento j Cadastrado";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       } else {
         $this->erro_sql   = "apostilamento ($this->si03_sequencial) nao Includo. Inclusao Abortada.";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       }
       $this->erro_status = "0";
@@ -302,7 +318,7 @@ class cl_apostilamento
     $this->erro_banco = "";
     $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
     $this->erro_sql .= "Valores : " . $this->si03_sequencial;
-    $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
     $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
     $this->erro_status = "1";
     $this->numrows_incluir = pg_affected_rows($result);
@@ -339,7 +355,7 @@ class cl_apostilamento
         $this->erro_sql = " Campo Codigo Sequencial nao Informado.";
         $this->erro_campo = "si03_sequencial";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -359,7 +375,7 @@ class cl_apostilamento
         $this->erro_sql = " Campo N Contrato nao Informado.";
         $this->erro_campo = "si03_numcontrato";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -372,7 +388,7 @@ class cl_apostilamento
         $this->erro_sql = " Campo Data Ass Contrato nao Informado.";
         $this->erro_campo = "si03_dataassinacontrato_dia";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -385,7 +401,7 @@ class cl_apostilamento
           $this->erro_sql = " Campo Data Ass Contrato nao Informado.";
           $this->erro_campo = "si03_dataassinacontrato_dia";
           $this->erro_banco = "";
-          $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
           $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
           $this->erro_status = "0";
           return false;
@@ -399,7 +415,7 @@ class cl_apostilamento
         $this->erro_sql = " Campo Data de Referencia nao Informado.";
         $this->erro_campo = "si03_datareferencia_dia";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -412,7 +428,7 @@ class cl_apostilamento
           $this->erro_sql = " Campo Data de Referencia nao Informado.";
           $this->erro_campo = "si03_dataapostila_dia";
           $this->erro_banco = "";
-          $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
           $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
           $this->erro_status = "0";
           return false;
@@ -426,7 +442,7 @@ class cl_apostilamento
         $this->erro_sql = " Campo TIpo de Apostila nao Informado.";
         $this->erro_campo = "si03_tipoapostila";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -439,7 +455,7 @@ class cl_apostilamento
         $this->erro_sql = " Campo Data da Apostila nao Informado.";
         $this->erro_campo = "si03_dataapostila_dia";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -452,7 +468,7 @@ class cl_apostilamento
           $this->erro_sql = " Campo Data da Apostila nao Informado.";
           $this->erro_campo = "si03_dataapostila_dia";
           $this->erro_banco = "";
-          $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
           $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
           $this->erro_status = "0";
           return false;
@@ -466,7 +482,7 @@ class cl_apostilamento
         $this->erro_sql = " Campo Descricao das alteracoes nao Informado.";
         $this->erro_campo = "si03_descrapostila";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -479,12 +495,13 @@ class cl_apostilamento
         $this->erro_sql = " Campo Descricao das alteracoes nao Informado.";
         $this->erro_campo = "si03_justificativa";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
       }
     }
+
     if (trim($this->si03_tipoalteracaoapostila) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si03_tipoalteracaoapostila"])) {
       $sql  .= $virgula . " si03_tipoalteracaoapostila = $this->si03_tipoalteracaoapostila ";
       $virgula = ",";
@@ -492,7 +509,7 @@ class cl_apostilamento
         $this->erro_sql = " Campo Tipo de Alteracao Apostila nao Informado.";
         $this->erro_campo = "si03_tipoalteracaoapostila";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -505,7 +522,7 @@ class cl_apostilamento
         $this->erro_sql = " Campo Numero  Seq. Apostila nao Informado.";
         $this->erro_campo = "si03_numapostilamento";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -518,7 +535,7 @@ class cl_apostilamento
         $this->erro_sql = " Campo Valor da Aposlila nao Informado.";
         $this->erro_campo = "si03_valorapostila";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -531,7 +548,7 @@ class cl_apostilamento
         $this->erro_sql = " Campo Instituio nao Informado.";
         $this->erro_campo = "si03_instit";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -544,7 +561,7 @@ class cl_apostilamento
         $this->erro_sql = " Campo N Contrato nao Informado.";
         $this->erro_campo = "si03_numcontrato";
         $this->erro_banco = "";
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "0";
         return false;
@@ -600,7 +617,7 @@ class cl_apostilamento
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "apostilamento nao Alterado. Alteracao Abortada.\\n";
       $this->erro_sql .= "Valores : " . $this->si03_sequencial;
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_alterar = 0;
@@ -610,7 +627,7 @@ class cl_apostilamento
         $this->erro_banco = "";
         $this->erro_sql = "apostilamento nao foi Alterado. Alteracao Executada.\\n";
         $this->erro_sql .= "Valores : " . $this->si03_sequencial;
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = 0;
@@ -619,7 +636,7 @@ class cl_apostilamento
         $this->erro_banco = "";
         $this->erro_sql = "Alteracao efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $this->si03_sequencial;
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_alterar = pg_affected_rows($result);
@@ -672,7 +689,7 @@ class cl_apostilamento
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "apostilamento nao Excludo. Excluso Abortada.\\n";
       $this->erro_sql .= "Valores : " . $si03_sequencial;
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       $this->numrows_excluir = 0;
@@ -682,7 +699,7 @@ class cl_apostilamento
         $this->erro_banco = "";
         $this->erro_sql = "apostilamento nao Encontrado. Excluso no Efetuada.\\n";
         $this->erro_sql .= "Valores : " . $si03_sequencial;
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = 0;
@@ -691,7 +708,7 @@ class cl_apostilamento
         $this->erro_banco = "";
         $this->erro_sql = "Excluso efetuada com Sucesso\\n";
         $this->erro_sql .= "Valores : " . $si03_sequencial;
-        $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
         $this->numrows_excluir = pg_affected_rows($result);
@@ -707,7 +724,7 @@ class cl_apostilamento
       $this->numrows    = 0;
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "Erro ao selecionar os registros.";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -716,7 +733,7 @@ class cl_apostilamento
     if ($this->numrows == 0) {
       $this->erro_banco = "";
       $this->erro_sql   = "Record Vazio na Tabela:apostilamento";
-      $this->erro_msg   = "UsuÃ¡rio: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
       return false;
@@ -728,7 +745,7 @@ class cl_apostilamento
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -753,7 +770,7 @@ class cl_apostilamento
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -767,7 +784,7 @@ class cl_apostilamento
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -788,7 +805,7 @@ class cl_apostilamento
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];

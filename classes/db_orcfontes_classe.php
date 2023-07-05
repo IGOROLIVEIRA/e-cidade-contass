@@ -734,4 +734,22 @@ class cl_orcfontes {
 
   }
 
+  public function sql_InstrumentoPlanejamento($sCampos = '*', $anousu, $instit, $sOrdem = null) {
+
+    $sSqlReceita =  " SELECT {$sCampos} FROM orcfontes f ";
+    $sSqlReceita .= " JOIN orcreceita r ON (f.o57_codfon, f.o57_anousu) = (r.o70_codfon, o70_anousu) ";
+    $sSqlReceita .= " JOIN orctiporec t ON r.o70_codigo = t.o15_codigo ";
+    $sSqlReceita .= " JOIN conplanoorcamento cp on f.o57_codfon = cp.c60_codcon ";
+    $sSqlReceita .= " WHERE f.o57_anousu = {$anousu} ";
+    $sSqlReceita .= "   AND cp.c60_anousu = {$anousu} ";
+    $sSqlReceita .= "   AND r.o70_instit = {$instit}";
+
+    
+    if (!empty($sOrdem)) {
+      $sSqlReceita .= " ORDER BY {$sOrdem} ";
+    }
+
+    return $sSqlReceita;
+  }
+
 }

@@ -203,6 +203,9 @@ class AcordoPosicao
      */
     protected $sVigenciaalterada; //OC5304
 
+
+    protected  $sJustificativa;
+
     /**
      * Constante do caminho da mensagem do model
      * @var string
@@ -245,6 +248,8 @@ class AcordoPosicao
             $this->setNumeroAditamento($oDadosPosicao->ac26_numeroaditamento);
             $this->setNumeroApostilamento($oDadosPosicao->ac26_numeroapostilamento);
             $this->setVigenciaAlterada($oDadosPosicao->ac26_vigenciaalterada);
+            $this->setJustificativa($oDadosPosicao->ac35_justificativa);
+
         }
     }
 
@@ -271,6 +276,66 @@ class AcordoPosicao
     {
 
         $this->sNumeroAditamento = $sNumeroAditamento;
+        return $this;
+    }
+
+    public function getJusitificativa()
+    {
+
+        return $this->sJustificativa;
+    }
+
+    public function setJustificativa($sJustificativa)
+    {
+
+        $this->sJustificativa = $sJustificativa;
+        return $this;
+    }
+
+    public function getPercentualReajuste()
+    {
+
+        return $this->sPercentualReajuste;
+    }
+
+    /**
+     * Define numero do aditamento
+     *
+     * @param string $sPercentualReajuste
+     * @access public
+     * @return void
+     */
+    public function setPercentualReajuste($sPercentualReajuste)
+    {
+
+        $this->sPercentualReajuste = $sPercentualReajuste;
+        return $this;
+    }
+
+
+        /**
+     * retorna o numero do aditamento
+     *
+     * @access public
+     * @return void
+     */
+    public function getDescricaoIndiceacordo()
+    {
+
+        return $this->sDescricaoIndiceacordo;
+    }
+
+    /**
+     * Define numero do aditamento
+     *
+     * @param string $sDescricaoIndiceacordo
+     * @access public
+     * @return void
+     */
+    public function setDescricaoIndiceacordo($sDescricaoIndiceacordo)
+    {
+
+        $this->sDescricaoIndiceacordo = $sDescricaoIndiceacordo;
         return $this;
     }
 
@@ -426,6 +491,28 @@ class AcordoPosicao
     {
 
         $this->iSituacao = $iSituacao;
+        return $this;
+    }
+
+        /**
+     * retorna a situacao da posição
+     * @return integer
+     */
+    public function getIndiceReajusteacordo()
+    {
+
+        return $this->iIndiceReajusteacordo;
+    }
+
+    /**
+     * retorna a situação da posição
+     * @param integer $iIndiceReajusteacordo
+     * @return AcordoPosicao
+     */
+    public function setIndiceReajusteacordo($iIndiceReajusteacordo)
+    {
+
+        $this->iIndiceReajusteacordo = $iIndiceReajusteacordo;
         return $this;
     }
 
@@ -980,6 +1067,9 @@ class AcordoPosicao
         $oDaoPosicao->ac26_observacao        = $this->sObservacao;
         $oDaoPosicao->ac26_numeroapostilamento = $this->getNumeroApostilamento();
         $oDaoPosicao->ac26_vigenciaalterada = $this->getVigenciaAlterada();
+        $oDaoPosicao->ac26_indicereajuste = $this->getIndiceReajusteacordo();
+        $oDaoPosicao->ac26_percentualreajuste = $this->getPercentualReajuste();
+        $oDaoPosicao->ac26_descricaoindice = $this->getDescricaoIndiceacordo();
         $iCodigo                             = $this->getCodigo();
 
         if (empty($iCodigo)) {
@@ -1802,6 +1892,9 @@ class AcordoPosicao
             $oDaoApostilamento->si03_acordoposicao = $this->getCodigo();
             $oDaoApostilamento->si03_numcontrato = "null";
             $oDaoApostilamento->si03_justificativa = $oApostila->justificativa;
+            $oDaoApostilamento->si03_indicereajuste = $oApostila->indicereajuste;
+            $oDaoApostilamento->si03_percentualreajuste = $oApostila->percentualreajuste;
+            $oDaoApostilamento->si03_descricaoindice = db_stdClass::normalizeStringJsonEscapeString($oApostila->descricaoindice);
             if ($oApostila->datareferencia == "") {
                 $oDaoApostilamento->si03_datareferencia = $oDaoApostilamento->si03_dataapostila;
             } else {

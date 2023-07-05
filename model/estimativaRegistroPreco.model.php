@@ -154,17 +154,7 @@ class estimativaRegistroPreco extends solicitacaoCompra
   {
 
     $sCampoOrdem = 'pc11_codigo';
-    switch (ParametroRegistroPreco::getOrdenacaoEstimativa()) {
 
-      case 1:
-
-        $sCampoOrdem = 'pc11_codigo';
-        break;
-      case 2:
-
-        $sCampoOrdem = 'pc01_descrmater';
-        break;
-    }
     if ($this->iCodigoSolicitacao != "" && count($this->aItens) == 0) {
 
       $oDaoSolicitem = db_utils::getDao("solicitem");
@@ -242,7 +232,7 @@ class estimativaRegistroPreco extends solicitacaoCompra
       $oDaoAberturaPreco->incluir(null);
     }
     if ($oDaoAberturaPreco->erro_status == 0) {
-      throw new Exception("Erro ao salvar Abertura de Registro de Preço!\n{$oDaoSolicitacao->erro_msg}");
+      throw new Exception("Erro ao salvar Abertura de Registro de Preço!\n{$oDaoAberturaPreco->erro_msg}");
     }
 
     unset($oDaoAberturaPreco);

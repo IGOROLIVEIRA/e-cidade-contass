@@ -144,9 +144,11 @@ class GerarCONV extends GerarAM
          *
          * Registros 30
          */
+        $totalregisto30 = 0;
         for ($iCont4 = 0; $iCont4 < pg_num_rows($rsCONV30); $iCont4++) {
 
             $aCONV30 = pg_fetch_array($rsCONV30, $iCont4);
+            $totalregisto30 = $aCONV30['si203_vlprevisao'];
 
             $aCSVCONV30['si203_tiporegistro']                 = $this->padLeftZero($aCONV30['si203_tiporegistro'], 2);
             $aCSVCONV30['si203_codreceita']                   = $aCONV30['si203_codreceita'];
@@ -165,22 +167,24 @@ class GerarCONV extends GerarAM
             for ($iCont5 = 0; $iCont5 < pg_num_rows($rsCONV31); $iCont5++) {
 
                 $aCONV31 = pg_fetch_array($rsCONV31, $iCont5);
+               
+                if ($aCONV30['si203_codreceita'] == $aCONV31['si204_codreceita']){ 
+                   $totalregisto30 -= $aCONV31['si204_vlprevisaoconvenio'];
+                   if($totalregisto30 >= 0){ 
+                      $aCSVCONV31['si204_tiporegistro']                 = $this->padLeftZero($aCONV31['si204_tiporegistro'], 2);
+                      $aCSVCONV31['si204_codreceita'] = $aCONV31['si204_codreceita'];
+                      $aCSVCONV31['si204_prevorcamentoassin'] = $aCONV31['si204_prevorcamentoassin'];
+                      $aCSVCONV31['si204_nroconvenio'] = $aCONV31['si204_nroconvenio'];
+                      $aCSVCONV31['si204_dataassinatura'] = $this->sicomDate($aCONV31['si204_dataassinatura']);
+                      $aCSVCONV31['si204_vlprevisaoconvenio'] = $this->sicomNumberReal($aCONV31['si204_vlprevisaoconvenio'], 2);
 
-                if ($aCONV30['si203_codreceita'] == $aCONV31['si204_codreceita']) {
-
-                    $aCSVCONV31['si204_tiporegistro']                 = $this->padLeftZero($aCONV31['si204_tiporegistro'], 2);
-                    $aCSVCONV31['si204_codreceita'] = $aCONV31['si204_codreceita'];
-                    $aCSVCONV31['si204_prevorcamentoassin'] = $aCONV31['si204_prevorcamentoassin'];
-                    $aCSVCONV31['si204_nroconvenio'] = $aCONV31['si204_nroconvenio'];
-                    $aCSVCONV31['si204_dataassinatura'] = $this->sicomDate($aCONV31['si204_dataassinatura']);
-                    $aCSVCONV31['si204_vlprevisaoconvenio'] = $this->sicomNumberReal($aCONV31['si204_vlprevisaoconvenio'], 2);
-
-                    $this->sLinha = $aCSVCONV31;
-                    $this->adicionaLinha();
-
+                      $this->sLinha = $aCSVCONV31;
+                      $this->adicionaLinha();
+                   }  
                 }
 
             }
+            $totalregisto30 = 0;
 
         }
 

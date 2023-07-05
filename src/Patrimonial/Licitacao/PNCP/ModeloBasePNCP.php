@@ -19,6 +19,8 @@ abstract class ModeloBasePNCP
      */
     protected $dados;
 
+    protected $envs;
+
     /**
      *
      * @param \stdClass $dados
@@ -26,6 +28,7 @@ abstract class ModeloBasePNCP
     public function __construct($dados)
     {
         $this->dados = $dados;
+        $this->envs = parse_ini_file('config/PNCP/.env', true);
     }
 
     /**
@@ -41,13 +44,13 @@ abstract class ModeloBasePNCP
     abstract public function montarRetificacao();
 
 
-    public function formatDate($date)
+    protected function formatDate($date)
     {
         $date = \DateTime::createFromFormat('Y-m-d', $date);
         return $date->format('Y-m-d\TH:i:s');
     }
 
-    public function formatText($text)
+    protected function formatText($text)
     {
         return preg_replace(array("/(�|�|�|�|�)/", "/(�|�|�|�|�)/", "/(�|�|�|�)/", "/(�|�|�|�)/", "/(�|�|�|�)/", "/(�|�|�|�)/", "/(�|�|�|�|�)/", "/(�|�|�|�|�)/", "/(�|�|�|�)/", "/(�|�|�|�)/", "/(�)/", "/(�)/", "/(�)/", "/(�)/", "/(-)/"), explode(" ", "a A e E i I o O u U n c C N "), $text);
     }
@@ -56,13 +59,14 @@ abstract class ModeloBasePNCP
      * Realiza o login com Usuario e Senha da Instituicao na api do PNCP
      * @return token de acesso valido por 60 minutos
      */
-    public function login()
+    protected function login()
     {
-        $url = "https://treina.pncp.gov.br/pncp-api/v1/usuarios/login";
+
+        $url = $this->envs['URL'] . 'usuarios/login';
 
         $curl_data = array(
-            'login' => 'f96951f1-dc6d-4762-a054-e28188fbf642',
-            'senha' =>  'wAAv1v27F34VEu6Y'
+            'login' => $this->getLogin(),
+            'senha' =>  $this->getPassword()
         );
 
         $headers = array(
@@ -101,8 +105,35 @@ abstract class ModeloBasePNCP
         $header['header']  = $content;
 
         $aHeader = explode(':', $content);
-        $token = substr($aHeader[5], 1, -24);
+        $token = substr($aHeader[5], 1, -9);
 
         return $token;
+    }
+
+    protected function getCnpj()
+    {
+        $sqlCnpj = "SELECT cgm.z01_cgccpf
+        FROM db_config
+        inner join cgm on db_config.numcgm = cgm.z01_numcgm
+        WHERE db_config.codigo = " . db_getsession('DB_instit');
+        $rsCnpj = db_query($sqlCnpj);
+        $sCNPJ = pg_fetch_row($rsCnpj);
+        return $sCNPJ[0];
+    }
+
+    protected function getLogin()
+    {
+        $sqlPNCP = "select l12_loginpncp from licitaparam where l12_instit = " . db_getsession('DB_instit');
+        $rsPNCP = db_query($sqlPNCP);
+        $sPNCP = pg_fetch_row($rsPNCP);
+        return $sPNCP[0];
+    }
+
+    protected function getPassword()
+    {
+        $sqlPNCP = "select l12_passwordpncp from licitaparam where l12_instit = " . db_getsession('DB_instit');
+        $rsPNCP = db_query($sqlPNCP);
+        $sPNCP = pg_fetch_row($rsPNCP);
+        return $sPNCP[0];
     }
 }

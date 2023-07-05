@@ -55,6 +55,8 @@ require_once("classes/db_condataconf_classe.php");
 require_once("classes/db_liccomissaocgm_classe.php");
 require_once("classes/db_liccategoriaprocesso_classe.php");
 
+
+
 include("classes/db_decretopregao_classe.php");
 
 db_postmemory($HTTP_POST_VARS);
@@ -74,6 +76,24 @@ $cliccategoriaprocesso = new cl_liccategoriaprocesso;
 $db_opcao = 1;
 $db_botao = true;
 
+$oParamNumManual = db_query("select * from licitaparam where l12_instit = " . db_getsession("DB_instit"));
+$oParamNumManual = db_utils::fieldsmemory($oParamNumManual, 0);
+$l12_numeracaomanual = $oParamNumManual->l12_numeracaomanual;
+
+if ($l12_numeracaomanual == 't' && !isset($incluir)) {
+	$instit     = db_getsession("DB_instit");
+	$anousu     = db_getsession("DB_anousu");
+
+	$result_numgeral = $clpccflicitanum->sql_record($clpccflicitanum->sql_query_file(null, "*", null, "l24_instit=$instit and l24_anousu=$anousu"));
+	db_fieldsmemory($result_numgeral, 0);
+	$l20_edital = $l24_numero + 1;
+
+	$result_numedital = $clpccfeditalnum->sql_record($clpccfeditalnum->sql_query_file(null, "l47_numero", null, "l47_instit=$instit and l47_anousu=$anousu and l47_timestamp = (select max(l47_timestamp) from pccfeditalnum)"));
+	db_fieldsmemory($result_numedital, 0);
+	$l20_nroedital = $l47_numero + 1;
+}
+
+
 if (isset($incluir)) {
 
 	$oPost = db_utils::postmemory($_POST);
@@ -87,6 +107,33 @@ if (isset($incluir)) {
 	$aTipoLicNatProc = array(50, 48, 49, 53, 52, 54);
 
 	$erro_msg = '';
+
+	/*
+    * Verificação de erros ao inserir numerações manualmente.
+  	*/
+	if ($l12_numeracaomanual == 't') {
+		$anousu = db_getsession("DB_anousu");
+		$instit     = db_getsession("DB_instit");
+		$oProcessoLicitatorio = db_query("select * from liclicita where l20_edital = $l20_edital and l20_anousu = $anousu and l20_instit = $instit;");
+		if (pg_num_rows($oProcessoLicitatorio) > 0) {
+			$erro_msg .= "Já existe licitação com o processo licitatório número $l20_edital\n\n";
+			$sqlerro = true;
+		}
+
+		$oNumeracao = db_query("select * from liclicita where l20_numero = $l20_numero and l20_anousu = $anousu and l20_instit = $instit and l20_codtipocom = $l20_codtipocom;");
+		if (pg_num_rows($oNumeracao) > 0) {
+			$erro_msg .= "Já existe licitação com a modalidade $l20_codtipocom numeração $l20_numero\n\n";
+			$sqlerro = true;
+		}
+
+		if (in_array($modalidade_tribunal, array(48, 49, 50, 52, 53, 54))) {
+			$oEdital = db_query("select * from liclicita where l20_anousu = $anousu and l20_instit = $instit and l20_nroedital = $l20_nroedital;");
+			if (pg_num_rows($oEdital) > 0) {
+				$erro_msg .= "Já existe licitação com o edital $l20_nroedital\n\n";
+				$sqlerro = true;
+			}
+		}
+	}
 
 
 	/*
@@ -106,13 +153,31 @@ if (isset($incluir)) {
 	}
 	$oParamLicicita = db_stdClass::getParametro('licitaparam', array(db_getsession("DB_instit")));
 	$l12_pncp = $oParamLicicita[0]->l12_pncp;
-	
+
 	if ($l20_leidalicitacao == 1 && $l12_pncp == 't') {
-		if($oPost->l212_codigo == 0){
+		if ($oPost->l212_codigo == 0) {
 			$erro_msg .= 'Campo Amparo Legal não informado\n\n';
 			$sqlerro = true;
 		}
 	}
+
+	if ($l20_categoriaprocesso == 0 && $l12_pncp == 't') {
+		$erro_msg .= 'Campo categoria do processo não informado\n\n';
+		$sqlerro = true;
+	}
+
+	//verifica modalidades e presencial
+	$sSql = $clcflicita->sql_query_file(null, 'l03_presencial', '', "l03_codigo = $oPost->l20_codtipocom");
+	$aCf = db_utils::getColectionByRecord($clcflicita->sql_record($sSql));
+	$sPresencial = $aCf[0]->l03_presencial;
+
+	if ($sPresencial == 't' && $l12_pncp == 't' && $l20_leidalicitacao == 1) {
+		if ($oPost->l20_justificativapncp == '' || $oPost->l20_justificativapncp == null) {
+			$erro_msg .= 'Campo Justificativa PNCP não informado\n\n';
+			$sqlerro = true;
+		}
+	}
+
 	/*
     Verifica se o Campo "Natureza do Objeto" no foi selecionado.
   */
@@ -123,13 +188,19 @@ if (isset($incluir)) {
 		}
 	}
 
-	/*
-    Verifica se o campo "Regime de execução" foi selecionado
-  */
+	if ($oPost->modalidade_tribunal == 100 || $oPost->modalidade_tribunal == 101 || $oPost->modalidade_tribunal == 102 || $oPost->modalidade_tribunal == 103) {
+		if ($oPost->l20_razao == '') {
+			$erro_msg .= 'Campo Razão não informado';
+			$sqlerro = true;
+		}
 
-	if ($oPost->l20_naturezaobjeto == 1 || $oPost->l20_naturezaobjeto == 7) {
-		if ($oPost->l20_regimexecucao == 0) {
-			$erro_msg .= 'Campo Regime da Execução não selecionado\n\n';
+		if ($oPost->l20_justificativa == '') {
+			$erro_msg .= 'Campo Justificativa não informado';
+			$sqlerro = true;
+		}
+
+		if ($oPost->l20_tipoprocesso == '') {
+			$erro_msg .= 'Campo Tipo de Processo não informado';
 			$sqlerro = true;
 		}
 	}
@@ -174,6 +245,16 @@ if (isset($incluir)) {
 				$sqlerro = true;
 			}
 		}
+
+		/*
+    	Verifica se o campo "Regime de execução" foi selecionado
+  		*/
+		if ($oPost->l20_naturezaobjeto == 1 || $oPost->l20_naturezaobjeto == 7) {
+			if ($oPost->l20_regimexecucao == 0) {
+				$erro_msg .= 'Campo Regime da Execução não selecionado\n\n';
+				$sqlerro = true;
+			}
+		}
 	} else if ($oPost->modalidade_tribunal == 100 || $oPost->modalidade_tribunal == 101 || $oPost->modalidade_tribunal == 102 || $oPost->modalidade_tribunal == 103) {
 		if ($respAutocodigo == "") {
 			$erro_msg .= 'Responsável pela condução do processo não informado\n\n';
@@ -189,14 +270,12 @@ if (isset($incluir)) {
 		}
 	}
 
-
-
 	db_inicio_transacao();
 
-
-	$anousu     = date('Y', db_getsession("DB_datausu"));
 	$instit     = db_getsession("DB_instit");
 	$anousu     = db_getsession("DB_anousu");
+	$l20_anousu = db_getsession("DB_anousu");
+
 
 	if (in_array(db_utils::fieldsMemory($clcflicita->sql_record($clcflicita->sql_query($l20_codtipocomdescr, "distinct l03_pctipocompratribunal")), 0)->l03_pctipocompratribunal, array("52", "53"))) {
 		$result = $cldecretopregao->sql_record($cldecretopregao->sql_query('', '*'));
@@ -206,7 +285,6 @@ if (isset($incluir)) {
 		}
 	}
 	//verifica se as duas modalidades esto configuradas.
-
 	$result_modalidade = $clpccflicitapar->sql_record($clpccflicitapar->sql_query_modalidade(null, "*", null, "l25_codcflicita = $l20_codtipocom and l25_anousu = $anousu and l03_instit = $instit"));
 	if ($clpccflicitapar->numrows == 0) {
 		$erro_msg = "Verifique se esta configurado a numeração de licitação por modalidade.";
@@ -240,29 +318,31 @@ if (isset($incluir)) {
 
 	//numeracao por modalidade
 	if ($sqlerro == false) {
-
 		if ($clpccflicitapar->numrows > 0) {
 			db_fieldsmemory($result_modalidade, 0, 2);
-			$l20_numero = $l25_numero + 1;
+			if ($l12_numeracaomanual != 't') {
+				$l20_numero = $l25_numero + 1;
+			}
 		} else {
 			$erro_msg = "Configure a numeração de licitação por modalidade.";
 			$sqlerro = true;
 		}
 
-		// if ($sqlerro == false){
-		// #1
-		// $clpccflicitapar->l25_numero=$l25_numero+1;
-		// $clpccflicitapar->alterar_where(null,"l25_codigo = $l25_codigo and l25_anousu = $anousu");
-		// }
-
 		//numeração geral
 
 		if ($clpccflicitanum->numrows > 0) {
 			db_fieldsmemory($result_numgeral, 0);
-			$l20_edital = $l24_numero + 1;
+			if ($l12_numeracaomanual != 't') {
+				$l20_edital = $l24_numero + 1;
+			}
 		} else {
 			$erro_msg = "Configure a numeração de licitação por edital.";
 			$sqlerro = true;
+		}
+
+		if (!in_array($modalidade_tribunal, array(48, 49, 50, 52, 53, 54))) {
+			$l20_nroedital = "null";
+			$oPost->l20_nroedital = "null";
 		}
 
 		if (db_getsession('DB_anousu') >= 2020) {
@@ -277,7 +357,9 @@ if (isset($incluir)) {
 				db_fieldsmemory($result_numedital, 0);
 
 				if (in_array($modalidade_tribunal, $aModalidades)) {
-					$l20_nroedital = $l47_numero + 1;
+					if ($l12_numeracaomanual != 't') {
+						$l20_nroedital = $l47_numero + 1;
+					}
 				}
 			} else {
 				if (in_array($modalidade_tribunal, $aModalidades)) {
@@ -286,15 +368,6 @@ if (isset($incluir)) {
 				}
 			}
 		}
-
-		// if ($sqlerro == false){
-		// #2
-		// $clpccflicitanum->l24_numero=$l24_numero+1;
-		// $clpccflicitanum->alterar_where(null,"l24_instit=$instit and l24_anousu=$anousu");
-		// } else {
-		//   $sqlerro = true;
-		// }
-
 
 		//verifica se ja existe licitacao por modalidade
 		$sqlveriflicitamod = $clpccflicitapar->sql_query_mod_licita(null, "l25_numero as xx", null, "l20_instit=$instit and l25_anousu=$anousu and l20_codtipocom=$l20_codtipocom and l20_numero=$l20_numero and l20_anousu=$anousu");
@@ -323,18 +396,6 @@ if (isset($incluir)) {
 			}
 		}
 
-
-		//    /**
-		//     * Verificar Encerramento Periodo Contabil
-		//     */
-		//    if (!empty($l20_dtpubratificacao)) {
-		//			$clcondataconf = new cl_condataconf;
-		//	    if (!$clcondataconf->verificaPeriodoContabil($l20_dtpubratificacao)) {
-		//	      $erro_msg = $clcondataconf->erro_msg;
-		//	      $sqlerro  = true;
-		//	    }
-		//    }
-
 		/**
 		 * Verificar Encerramento Periodo Patrimonial
 		 */
@@ -361,6 +422,32 @@ if (isset($incluir)) {
 				$sqlerro = true;
 			}
 		}
+		
+		//VALIDAÇOES DE DATAS 
+		$dataaber = DateTime::createFromFormat('d/m/Y', $l20_dataaber);
+		$datacria = DateTime::createFromFormat('d/m/Y', $l20_datacria);
+		$dataaberproposta = DateTime::createFromFormat('d/m/Y', $l20_dataaberproposta);
+		$aMod = array("100","101","102","103");
+
+		if (!in_array($modalidade_tribunal, $aMod)) {
+			if ($dataaberproposta < $dataaber) {
+				$erro_msg = "A data informada no campo Abertura das Propostas deve ser  superior a Data Edital/Convite.";
+				$nomeCampo = "l20_dataaberproposta";
+				$sqlerro = true;
+			}
+
+			if ($dataaber < $datacria) {
+				$erro_msg = "A data inserida no campo Data Emis/Alt Edital/Convite deverá ser maior ou igual a data inserida no campo Data Abertura Proc. Adm.";
+				$nomeCampo = "l20_dataaber";
+				$sqlerro = true;
+			}
+
+			if ($dataaberproposta < $datacria) {
+				$erro_msg = "A data inserida no campo Data Abertura Proposta deverá ser maior ou igual a data inserida no campo Data Abertura Proc. Adm.";
+				$nomeCampo = "l20_dataaberproposta";
+				$sqlerro = true;
+			}
+		}
 
 		if ($sqlerro == false) {
 			$clliclicita->l20_amparolegal      	  =  $oPost->l212_codigo;
@@ -368,6 +455,10 @@ if (isset($incluir)) {
 			$clliclicita->l20_edital      	  =  $l20_edital;
 			if ($anousu >= 2020) {
 				if (in_array($modalidade_tribunal, $aModalidades)) {
+					$clliclicita->l20_nroedital      	=  $l20_nroedital;
+				} else {
+					$l20_nroedital = "null";
+					$oPost->l20_nroedital = "null";
 					$clliclicita->l20_nroedital      	=  $l20_nroedital;
 				}
 				$clliclicita->l20_exercicioedital =  $anousu;
@@ -377,6 +468,12 @@ if (isset($incluir)) {
 			$clliclicita->l20_instit      = db_getsession("DB_instit");
 
 			$clliclicita->l20_criterioadjudicacao = $l20_criterioadjudicacao; //OC3770
+			$clliclicita->l20_justificativapncp = $l20_justificativapncp;
+			$clliclicita->l20_categoriaprocesso = $l20_categoriaprocesso;
+			$clliclicita->l20_receita = $l20_receita;
+			$clliclicita->l20_dataaber = $l20_dataaber;
+			$clliclicita->l20_datacria = $l20_datacria;
+			$clliclicita->l20_recdocumentacao = $l20_dataaberproposta;
 			$clliclicita->incluir(null, null);
 
 			if ($clliclicita->erro_status == "0") {
@@ -384,7 +481,7 @@ if (isset($incluir)) {
 				$sqlerro = true;
 			}
 		}
-
+		
 		if (!$sqlerro && $lprocsis == 's') {
 
 			$clliclicitaproc->l34_liclicita    = $clliclicita->l20_codigo;
@@ -418,18 +515,65 @@ if (isset($incluir)) {
 			$codigo   = $clliclicita->l20_codigo;
 			$tipojulg = $clliclicita->l20_tipojulg;
 
-			$clpccflicitapar->l25_numero = $l25_numero + 1;
-			$clpccflicitapar->alterar_where(null, "l25_codigo = $l25_codigo and l25_anousu = $anousu");
+			if ($l12_numeracaomanual == 't') {
 
-			$clpccflicitanum->l24_numero = $l24_numero + 1;
-			$clpccflicitanum->alterar_where(null, "l24_instit=$instit and l24_anousu=$anousu");
+				/* Verificação da numeração do processo licitatório cujo o seu subsequente não tenha sido utilizado
+				    e atualização na tabela responsável por fazer o controle desta numeração  */
+				do {
+					$l20_edital = $l20_edital + 1;
+					$oLicitacao = db_query("select * from liclicita where l20_anousu = $anousu and l20_instit = $instit and l20_edital = $l20_edital;");
+					if (pg_num_rows($oLicitacao) == 0) {
+						$clpccflicitanum->l24_numero = $l20_edital - 1;
+						$clpccflicitanum->alterar_where(null, "l24_instit=$instit and l24_anousu=$anousu");
+						break;
+					}
+				} while (1);
 
-			if (db_getsession('DB_anousu') >= 2020) {
-				if (in_array($modalidade_tribunal, $aModalidades)) {
-					$clpccfeditalnum->l47_numero = $l47_numero + 1;
-					$clpccfeditalnum->l47_instit = db_getsession('DB_instit');
-					$clpccfeditalnum->l47_anousu = db_getsession('DB_anousu');
-					$clpccfeditalnum->incluir(null);
+				/* Verificação da numeração da licitação cujo o seu subsequente não tenha sido utilizado
+				    e atualização na tabela responsável por fazer o controle desta numeração  */
+
+				do {
+					$l20_numero = $l20_numero + 1;
+					$oLicitacao = db_query("select * from liclicita where l20_numero = $l20_numero and l20_anousu = $anousu and l20_instit = $instit and l20_codtipocom = $l20_codtipocom;");
+					if (pg_num_rows($oLicitacao) == 0) {
+						$clpccflicitapar->l25_numero = $l20_numero - 1;
+						$clpccflicitapar->alterar_where(null, "l25_codigo = $l25_codigo and l25_anousu = $anousu");
+						break;
+					}
+				} while (1);
+
+				/* Verificação da numeração do edital cujo o seu subsequente não tenha sido utilizado
+				    e atualização na tabela responsável por fazer o controle desta numeração  */
+
+				do {
+					$l20_nroedital = $l20_nroedital + 1;
+					$oLicitacao = db_query("select * from liclicita where l20_anousu = $anousu and l20_instit = $instit and l20_nroedital = $l20_nroedital;");
+					if (pg_num_rows($oLicitacao) == 0) {
+						if (db_getsession('DB_anousu') >= 2020) {
+							if (in_array($modalidade_tribunal, $aModalidades)) {
+								$clpccfeditalnum->l47_numero = $l20_nroedital - 1;
+								$clpccfeditalnum->l47_instit = db_getsession('DB_instit');
+								$clpccfeditalnum->l47_anousu = db_getsession('DB_anousu');
+								$clpccfeditalnum->incluir(null);
+							}
+						}
+						break;
+					}
+				} while (1);
+			} else {
+				$clpccflicitapar->l25_numero = $l25_numero + 1;
+				$clpccflicitapar->alterar_where(null, "l25_codigo = $l25_codigo and l25_anousu = $anousu");
+
+				$clpccflicitanum->l24_numero = $l24_numero + 1;
+				$clpccflicitanum->alterar_where(null, "l24_instit=$instit and l24_anousu=$anousu");
+
+				if (db_getsession('DB_anousu') >= 2020) {
+					if (in_array($modalidade_tribunal, $aModalidades)) {
+						$clpccfeditalnum->l47_numero = $l47_numero + 1;
+						$clpccfeditalnum->l47_instit = db_getsession('DB_instit');
+						$clpccfeditalnum->l47_anousu = db_getsession('DB_anousu');
+						$clpccfeditalnum->incluir(null);
+					}
 				}
 			}
 		}
@@ -474,7 +618,7 @@ if (isset($incluir)) {
 			}
 		}
 
-		// db_fim_transacao(false);
+
 		db_fim_transacao($sqlerro);
 	}
 }
@@ -522,10 +666,14 @@ if (isset($incluir)) {
 			echo "<script> document.form1." . $clliclicita->erro_campo . ".focus();</script>";
 		}
 	} else {
-
+		echo $erro_msg;
 		db_msgbox($erro_msg);
 		echo "<script> document.form1." . $nomeCampo . ".focus();</script>";
 		echo "<script> document.form1." . $nomeCampo . ".style.backgroundColor='#99A9AE';</script>";
+		if ($nomeCampo == "l20_mododisputa") {
+			echo "<script>document.getElementById('disputa').style.display = '';</script>";
+		}
+
 		if ($sqlerro == false) {
 
 			echo "<script>parent.document.getElementById('liclicpublicacoes').style.display = 'block';</script>";

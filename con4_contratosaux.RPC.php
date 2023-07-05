@@ -671,6 +671,13 @@ switch ($oParam->exec) {
                 $oContrato->setiAdesaoregpreco($oParam->contrato->iAdesaoregpreco);
                 $oContrato->setValorContrato($oParam->contrato->nValorContrato);
                 $oContrato->setDataInclusao(date("Y-m-d"));
+                $oContrato->setReajuste($oParam->contrato->iReajuste);
+                $oContrato->setCriterioReajuste($oParam->contrato->iCriterioreajuste);
+                $oContrato->setDataReajuste($oParam->contrato->dtReajuste);
+                $oContrato->setPeriodoreajuste($oParam->contrato->sPeriodoreajuste);
+                $oContrato->setIndiceReajuste($oParam->contrato->iIndicereajuste);
+                $oContrato->setDescricaoReajuste($oParam->contrato->sDescricaoreajuste);
+                $oContrato->setDescricaoIndice($oParam->contrato->sDescricaoindice);
                 $oContrato->save();
 
                 /*
@@ -863,6 +870,13 @@ switch ($oParam->exec) {
             $oDadosContrato->iLicoutroorgao               = $oContrato->getiLicoutroorgao();
             $oDadosContrato->iAdesaoregpreco              = $oContrato->getiAdesaoregpreco();
             $oDadosContrato->nValorContrato               = $oContrato->getValorContrato();
+            $oDadosContrato->iReajuste                    = $oContrato->getReajuste();
+            $oDadosContrato->iCriterioreajuste            = $oContrato->getCriterioReajuste();
+            $oDadosContrato->dtReajuste                   = $oContrato->getDataReajuste();
+            $oDadosContrato->sPeriodoreajuste             = $oContrato->getPeriodoreajuste();
+            $oDadosContrato->iIndicereajuste              = $oContrato->getIndiceReajuste();
+            $oDadosContrato->sDescricaoreajuste           = urlencode($oContrato->getDescricaoReajuste());
+            $oDadosContrato->sDescricaoindice             = urlencode($oContrato->getDescricaoIndice());
 
             $oRetorno->contrato = $oDadosContrato;
         } catch (Exception $eErro) {
@@ -1197,7 +1211,7 @@ switch ($oParam->exec) {
             } else {
 
                 $aItens = ProcessoCompras::getItensPorFornecedor(
-                    $oContrato->getLicitacao(),
+                    $_SESSION["dadosSelecaoAcordo"],
                     $oContrato->getContratado()->getCodigo(),
                     0
                 );

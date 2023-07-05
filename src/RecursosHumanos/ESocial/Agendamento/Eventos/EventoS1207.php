@@ -62,8 +62,8 @@ class EventoS1207 extends EventoBase
             for ($iCont = 0; $iCont < count($aDadosPorMatriculas); $iCont++) {
                 $aIdentificador = $this->buscarIdentificador($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime);
                 for ($iCont2 = 0; $iCont2 < count($aIdentificador); $iCont2++) {
-                    //dentificação de cada um dos demonstrativos de valores devidos ao beneficiário.
-                    $std->dmdev[$seqdmdev] = new \stdClass(); //Obrigatório
+                    //dentificaï¿½ï¿½o de cada um dos demonstrativos de valores devidos ao beneficiï¿½rio.
+                    $std->dmdev[$seqdmdev] = new \stdClass(); //Obrigatï¿½rio
 
                     if ($aIdentificador[$iCont2]->idedmdev == 1) {
                         $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfsal'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
@@ -78,17 +78,17 @@ class EventoS1207 extends EventoBase
                         $std->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas[$iCont]->matricula . 'gerfs13'; //uniqid(); //$aIdentificador[$iCont2]->idedmdev; //Obrigat?rio
                     }
 
-                    $std->dmdev[$seqdmdev]->nrbeneficio = $aDadosPorMatriculas[$iCont]->matricula; //Obrigatório
+                    $std->dmdev[$seqdmdev]->nrbeneficio = $aDadosPorMatriculas[$iCont]->matricula_esocial; //Obrigatï¿½rio
 
-                    //Informações relativas ao período de apuração.
+                    //Informaï¿½ï¿½es relativas ao perï¿½odo de apuraï¿½ï¿½o.
                     $std->dmdev[$seqdmdev]->infoperapur = new \stdClass(); //Opcional
 
-                    //Identificação da unidade do órgão público na qual o beneficiário possui provento ou pensão.
-                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0] = new \stdClass(); //Obrigatório
-                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->tpinsc = 1; //Obrigatório e igual a 1
-                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->nrinsc = $aDadosPorMatriculas[$iCont]->nrinsc; //Obrigatório
+                    //Identificaï¿½ï¿½o da unidade do ï¿½rgï¿½o pï¿½blico na qual o beneficiï¿½rio possui provento ou pensï¿½o.
+                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0] = new \stdClass(); //Obrigatï¿½rio
+                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->tpinsc = 1; //Obrigatï¿½rio e igual a 1
+                    $std->dmdev[$seqdmdev]->infoperapur->ideestab[0]->nrinsc = $aDadosPorMatriculas[$iCont]->nrinsc; //Obrigatï¿½rio
 
-                    //Rubricas que compõem o provento ou pensão do beneficiário.
+                    //Rubricas que compï¿½em o provento ou pensï¿½o do beneficiï¿½rio.
                     $aDadosValoreRubrica = $this->buscarValorRubrica($aDadosPorMatriculas[$iCont]->matricula, $aDadosPorMatriculas[$iCont]->rh30_regime, $aIdentificador[$iCont2]->idedmdev);
                     for ($iCont4 = 0; $iCont4 < count($aDadosValoreRubrica); $iCont4++) {
                         //Rubricas que comp?em a remunera??o do trabalhador.
@@ -133,6 +133,7 @@ class EventoS1207 extends EventoBase
         rh30_regime,
         rh51_cgcvinculo,
         rh01_regist as matricula,
+        rh01_esocial as matricula_esocial,
         h13_categoria as codCateg
     from
         rhpessoal

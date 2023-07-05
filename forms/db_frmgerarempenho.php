@@ -174,6 +174,12 @@ $clrotulo->label('DBtxt25');
 </form>
 
 <script>
+
+// desktop, remove loading criado antes de dar location.href
+if (CurrentWindow && CurrentWindow.ECIDADE_DESKTOP) {
+  js_removeObj("msgBox");
+}
+
 $('mesfolha').maxLength = 2;
 $('anofolha').maxLength = 4;
 

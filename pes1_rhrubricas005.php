@@ -451,10 +451,10 @@ if (isset($chavepesquisa)) {
           function js_db_libera(){
             /*
             parent.document.formaba.rhrubelemento.disabled=false;
-            top.corpo.iframe_rhrubelemento.location.href='pes1_rhrubelemento001.php?rh23_rubric=" . @$rh27_rubric . "';
+            (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_rhrubelemento.location.href='pes1_rhrubelemento001.php?rh23_rubric=" . @$rh27_rubric . "';
             */
             parent.document.formaba.rhbases.disabled=false;
-            top.corpo.iframe_rhbases.location.href='pes1_rhbases004.php?r09_rubric=" . @$rh27_rubric . "';
+            (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_rhbases.location.href='pes1_rhbases004.php?r09_rubric=" . @$rh27_rubric . "';
        ";
     if (isset($liberaaba)) {
         echo "  parent.mo_camada('rhbases');";

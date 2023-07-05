@@ -81,7 +81,6 @@ if ($ordenar == "depart") {
 } else if ($ordenar == "data") {
     $ordem = "t52_dtaqu";
     $info .= "Data de Aquisição";
-
 } else if ($ordenar == "orgao") {
     $ordem = "db01_orgao,db01_unidade,t52_depart, t52_ident";
     $info .= "Órgão";
@@ -101,10 +100,10 @@ if ($bens_convenio == "T") {
     $head7 = "Bens: Com Convênio";
 }
 
-if($cgmFornecedor){
-  if(!$head5){
-    $head6 = 'CGM: '.utf8_decode($nomeFornecedor);
-  }else $head5 = 'CGM: '.utf8_decode($nomeFornecedor);
+if ($cgmFornecedor) {
+    if (!$head5) {
+        $head6 = 'CGM: ' . utf8_decode($nomeFornecedor);
+    } else $head5 = 'CGM: ' . utf8_decode($nomeFornecedor);
 }
 
 if (isset($quebra_por) && $quebra_por != "" && $imp_classi == "S") {
@@ -115,11 +114,9 @@ if (isset($quebra_por) && $quebra_por != "" && $imp_classi == "S") {
         } else {
             $ordem .= "t52_depart,t33_divisao," . $ordem;
         }
-
     } else if ($quebra_por == 3) {
         $ordem = $ordem == "" ? "t64_class" : "t64_class," . $ordem;
     }
-
 }
 
 //if($q_pagina == 'departamento'){
@@ -136,9 +133,8 @@ if (isset($divisao) && trim($divisao) != "" && $divisao != 0) {
     } else {
         $where_instit .= " t33_divisao = $divisao ";
     }
-
 }
-if(isset($descr)){
+if (isset($descr)) {
     $where_instit .= " and t52_descr ilike '$descr' ";
 }
 //die($where_instit);
@@ -227,7 +223,7 @@ if ($t07_confplaca == 1 or $t07_confplaca == 4) {
                           inner join bensplacaimpressa on bensplacaimpressa.t73_bensplaca = bensplaca.t41_codigo
                     where t41_bem = t52_bem) as totaletiquetas";
 }
-
+$ordem .= ',t33_divisao';
 if (isset($orgaos) && isset($unidades) && isset($departamentos)) {
 
     $campos .= ",o40_descr,o40_orgao,o41_unidade,o41_descr,db01_orgao,db01_unidade";
@@ -260,7 +256,6 @@ if (isset($orgaos) && isset($unidades) && isset($departamentos)) {
     } else {
         $sqlrelatorio = $clbens->sql_query_orgao(null, "$campos", $ordem, "$where_instit");
     }
-
 } else {
     $campos = "distinct " . $campos;
 
@@ -286,11 +281,12 @@ if (isset($orgaos) && isset($unidades) && isset($departamentos)) {
     }
 }
 
-if($cgmFornecedor){
-  if($where_instit){{
-    $where_instit .= ' and ';
-    $where_instit .=  ' t52_numcgm = '.$cgmFornecedor.' ';
-  }}
+if ($cgmFornecedor) {
+    if ($where_instit) { {
+            $where_instit .= ' and ';
+            $where_instit .=  ' t52_numcgm = ' . $cgmFornecedor . ' ';
+        }
+    }
 }
 
 //$sqlrelatorio = $clbens->sql_query(null,"$campos",$ordem,"$where_instit");
@@ -405,7 +401,6 @@ for ($x = 0; $x < $numrows; $x++) {
                 if ($ident == 0) {
                     $valortotal += $t52_valaqu;
                     $contaregistro++;
-
                 } else {
                     if ($ident == $t52_depart) {
                         $contaregistro++;
@@ -418,7 +413,7 @@ for ($x = 0; $x < $numrows; $x++) {
 
                 $identifica = $t52_depart;
                 $ident = 2;
-            }//fim quebra por departamento
+            } //fim quebra por departamento
 
             //quebra por placa
             if ($ordenar == "placa") {
@@ -453,13 +448,12 @@ for ($x = 0; $x < $numrows; $x++) {
                     } else {
                         $valortotal += $t52_valaqu;
                         $contaregistro++;
-
                     }
                 }
 
                 $identifica = $t52_ident;
                 $ident = 2;
-            }//fim quebra por placa
+            } //fim quebra por placa
 
 
             //quebra por bem
@@ -481,14 +475,12 @@ for ($x = 0; $x < $numrows; $x++) {
                         $imprime_total_parcial = true;
                         $contaregistro = 0;
                         $valortotal = 0;
-
                     }
                 }
 
                 if ($ident == 0) {
                     $valortotal += $t52_valaqu;
                     $contaregistro++;
-
                 } else {
                     if ($ident == $t52_bem) {
                         $contaregistro++;
@@ -496,13 +488,12 @@ for ($x = 0; $x < $numrows; $x++) {
                     } else {
                         $valortotal += $t52_valaqu;
                         $contaregistro++;
-
                     }
                 }
 
                 $identifica = $t52_bem;
                 $ident = 2;
-            }//fim quebra por bem
+            } //fim quebra por bem
 
             //quebra por classificação
             if ($ordenar == "classi") {
@@ -544,7 +535,7 @@ for ($x = 0; $x < $numrows; $x++) {
 
                 $identifica = $t64_class;
                 $ident = 2;
-            }//fim quebra por classificação
+            } //fim quebra por classificação
 
 
             //quebra por data aquisição
@@ -567,14 +558,12 @@ for ($x = 0; $x < $numrows; $x++) {
                         $quebra_pagina = false;
                         $contaregistro = 0;
                         $valortotal = 0;
-
                     }
                 }
 
                 if ($ident == 0) {
                     $valortotal += $t52_valaqu;
                     $contaregistro++;
-
                 } else {
                     if ($ident == $t52_dtaqu) {
                         $contaregistro++;
@@ -582,13 +571,12 @@ for ($x = 0; $x < $numrows; $x++) {
                     } else {
                         $valortotal += $t52_valaqu;
                         $contaregistro++;
-
                     }
                 }
 
                 $identifica = $t52_dtaqu;
                 $ident = 2;
-            }//fim quebra por data aquisição
+            } //fim quebra por data aquisição
 
 
         } else if ($q_pagina == 'orgao') {
@@ -614,14 +602,12 @@ for ($x = 0; $x < $numrows; $x++) {
                     $quebra_pagina = false;
                     $contaregistro = 0;
                     $valortotal = 0;
-
                 }
             }
 
             if ($ident == 0) {
                 $valortotal += $t52_valaqu;
                 $contaregistro++;
-
             } else {
                 if ($ident == $o40_orgao) {
                     $contaregistro++;
@@ -629,7 +615,6 @@ for ($x = 0; $x < $numrows; $x++) {
                 } else {
                     $valortotal += $t52_valaqu;
                     $contaregistro++;
-
                 }
             }
             $identifica = $o40_orgao;
@@ -658,14 +643,12 @@ for ($x = 0; $x < $numrows; $x++) {
                     $quebra_pagina = false;
                     $contaregistro = 0;
                     $valortotal = 0;
-
                 }
             }
 
             if ($ident == 0) {
                 $valortotal += $t52_valaqu;
                 $contaregistro++;
-
             } else {
                 if ($ident == $o41_unidade) {
                     $contaregistro++;
@@ -673,7 +656,6 @@ for ($x = 0; $x < $numrows; $x++) {
                 } else {
                     $valortotal += $t52_valaqu;
                     $contaregistro++;
-
                 }
             }
             $identifica = $o41_unidade;
@@ -702,14 +684,12 @@ for ($x = 0; $x < $numrows; $x++) {
                     $quebra_pagina = false;
                     $contaregistro = 0;
                     $valortotal = 0;
-
                 }
             }
 
             if ($ident == 0) {
                 $valortotal += $t52_valaqu;
                 $contaregistro++;
-
             } else {
                 if ($ident == $t52_depart) {
                     $contaregistro++;
@@ -717,7 +697,6 @@ for ($x = 0; $x < $numrows; $x++) {
                 } else {
                     $valortotal += $t52_valaqu;
                     $contaregistro++;
-
                 }
             }
             $identifica = $t52_depart;
@@ -755,8 +734,6 @@ for ($x = 0; $x < $numrows; $x++) {
                     $pdf->cell(20, $alt, "Unidade", 0, 0, "L", 0);
                     $pdf->cell(30, $alt, $o41_unidade . " - " . $o41_descr, 0, 1, "L", 0);
                     $pdf->Ln(3);
-
-
                 } else {
                     orgao_cabecalho($pdf, $RLt52_descr, $RLt52_ident, $RLt52_depart, $alt);
                     $lCabecalho = true;
@@ -812,7 +789,7 @@ for ($x = 0; $x < $numrows; $x++) {
             $pdf->x = $pos_x + 65;
             $pdf->y = $pos_y;
         } else {
-            $pdf->cell(65, $alt, substr($t52_descr, 0, 40), 0, 0, "L", $p);
+            $pdf->cell(65, $alt * $tam, substr($t52_descr, 0, 40), 0, 0, "L", $p);
         }
 
 
@@ -822,19 +799,24 @@ for ($x = 0; $x < $numrows; $x++) {
         $pdf->cell(20, $alt * $tam, $t52_ident, 0, 0, "C", $p);
         $pdf->cell(60, $alt * $tam, $t52_depart . "-" . substr($descrdepto, 0, 36), 0, 0, "L", $p);
         $pdf->cell(48, $alt * $tam, $t33_divisao . "-" . substr($t30_descr, 0, 27), 0, 0, "L", $p);
-        $pdf->cell(15, $alt * $tam, $t53_ntfisc, 0, 1, "C", $p);
+        $pdf->cell(15, $alt * $tam, substr($t53_ntfisc, 0, 10), 0, 1, "C", $p);
 
         if ($flag_forn == true) {
-            $pdf->cell(20, $alt, $t52_numcgm, 0, 0, "C", $p);
-            $pdf->cell(100, $alt, $z01_nome, 0, 0, "L", $p);
+            $at52_descr = quebrar_texto($t52_obs, 103);
+            $tam2 = count($at52_descr);
+
+            $pdf->cell(20, $alt * $tam2, $t52_numcgm, 0, 0, "C", $p);
+            $pdf->cell(100, $alt * $tam2, $z01_nome, 0, 0, "L", $p);
             $pdf->multicell(158, $alt, $t52_obs, 0, "L", $p);
+
             //$x = $pdf->x;
             //$y = $pdf->y;
-            //echo $x ." / ".$y;exit;
+            //echo $tam2;
             //$pdf->x = 263;
             //$pdf->y = $pdf->y-$alt;
             //$pdf->cell(15,$alt,"",0,1,"L",$p);
-            //$pdf->y = $y;
+
+            $pdf->cell(278, $alt, "", 0, 1, "L", $p);
             //$pdf->x = $x;
         }
 
@@ -852,7 +834,6 @@ for ($x = 0; $x < $numrows; $x++) {
 
         $total++;
         $totalvalor += $t52_valaqu;
-
     } else if (($quebra_por == 2 || $quebra_por == 3) && $imp_classi == "S") {
         //die('aqui');
         if (isset($orgaos) && isset($unidades) && isset($departamentos)) {
@@ -897,7 +878,6 @@ for ($x = 0; $x < $numrows; $x++) {
                 $pdf->setfont('arial', 'b', 10);
                 $pdf->cell(30, $alt, "Órgão", 0, 0, "L", 0);
                 $pdf->cell(30, $alt, $o40_orgao . " - " . $o40_descr, 0, 1, "L", 0);
-
             }
 
             if ($iUnidade != $o41_unidade) {
@@ -935,7 +915,6 @@ for ($x = 0; $x < $numrows; $x++) {
                 $pdf->setfont('arial', 'b', 10);
                 $pdf->cell(30, $alt, "Unidade", 0, 0, "L", 0);
                 $pdf->cell(30, $alt, $o41_unidade . " - " . $o41_descr, 0, 1, "L", 0);
-
             }
             $pdf->Ln(3);
             //orgao_cabecalho($pdf,$RLt52_descr,$RLt52_ident,$RLt52_depart,$alt);
@@ -1035,7 +1014,6 @@ for ($x = 0; $x < $numrows; $x++) {
                 if ($quebra_por == 3 && isset($orgaos)) {
                     unset($aClassiImpressos[$class_anterior]);
                 }
-
             }
             $aClassiImpressos[$t64_class]["descricao"] = $descrdepto;
             $aClassiImpressos[$t64_class]["vlr_total"] = $t52_valaqu;
@@ -1043,7 +1021,6 @@ for ($x = 0; $x < $numrows; $x++) {
             $pdf->setfont('arial', 'b', 8);
             $pdf->cell(100, $alt, "Classificação: " . $t64_class . " - " . $t64_descr, 0, 1, "L", 0);
             $lCabecalho = true;
-
         }
 
         if ($x == 0 && $quebra_por == 3) {
@@ -1071,7 +1048,7 @@ for ($x = 0; $x < $numrows; $x++) {
             $pdf->cell(20, $alt, "Placa", 1, 0, "C", 1);
             $pdf->cell(60, $alt, "Departamento", 1, 0, "C", 1);
             $pdf->cell(60, $alt, "Divisao", 1, 0, "C", 1);
-//            $pdf->cell(15, $alt, "Pl. Ident ", 1, 1, "C", 1);
+            //            $pdf->cell(15, $alt, "Pl. Ident ", 1, 1, "C", 1);
             $pdf->cell(15, $alt, "Nota F.", 1, 1, "C", 1);
             //Imprime classificação
             if ($quebra_por == 2) {
@@ -1114,7 +1091,7 @@ for ($x = 0; $x < $numrows; $x++) {
             $pdf->x = $pos_x + 65;
             $pdf->y = $pos_y;
         } else {
-            $pdf->cell(65, $alt, substr($t52_descr, 0, 40), 0, 0, "L", $background);
+            $pdf->cell(65, $alt * $tam, substr($t52_descr, 0, 40), 0, 0, "L", $background);
         }
 
         $pdf->cell(20, $alt * $tam, db_formatar($t52_valaqu, "f"), 0, 0, "R", $background);
@@ -1178,7 +1155,6 @@ for ($x = 0; $x < $numrows; $x++) {
                 $total += $aDeptosImpressos[$key]["qtd_total"];
                 $totalvalor += $aDeptosImpressos[$key]["vlr_total"];
             }
-
         }
 
         if ($x + 1 == $numrows && $quebra_por == 3) {
@@ -1196,14 +1172,11 @@ for ($x = 0; $x < $numrows; $x++) {
                 foreach ($aClassiImpressos as $key => $value) {
                     $total += $aClassiImpressos[$key]["qtd_total"];
                     $totalvalor += $aClassiImpressos[$key]["vlr_total"];
-
                 }
-
             } else {
                 $total = $iTotal;
                 $totalvalor = $fSoma;
             }
-
         }
         //$total++;
         //$totalvalor += $t52_valaqu;
@@ -1254,5 +1227,4 @@ function quebrar_texto($texto, $tamanho)
     }
     $aTextoNovo[] = $string_atual;
     return $aTextoNovo;
-
 }

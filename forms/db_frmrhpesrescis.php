@@ -138,7 +138,7 @@ $clrotulo->label("rh02_codreg");
           <td colspan="3" nowrap>
             <?php
             db_input('rh173_codigo', 6, $Irh173_codigo, true, 'text', 3, "onChange='js_pesquisarMotivorescisao(false);'");
-            db_input('rh173_descricao', 48, $Irh173_descricao, true, 'text', 3, "");
+            db_input('rh173_descricao', 48, $Irh173_descricao, true, 'text', 3, "js_DescricaoCompleta();");
             ?>
           </td>
         </tr>
@@ -256,6 +256,39 @@ function js_pesquisarMotivorescisao(mostra) {
     document.form1.rh173_descricao.value = descricao;
     db_iframe_rhmotivorescisao.hide();
   }
+
+  function js_showHint() {
+    
+    var oDivHint = document.createElement("DIV");
+    oDivHint.setAttribute("id",'testeHint');
+    oDivHint.style.position   = "fixed";
+    oDivHint.style.right      = 500;
+    oDivHint.style.top        = 230; 
+    oDivHint.style.zIndex     = "0";
+    oDivHint.style.visibility = 'visible';
+    oDivHint.style.fontFamily = 'Verdana, Arial, Helvetica, sans-serif'; 
+    oDivHint.style.fontSize   = '15px'; 
+    oDivHint.style.border     = '1px solid';
+        
+    oDivHint.innerHTML = ' <table border="0"  style="background-color: #FFFFCC; border-collapse: collapse;"> '
+                        +'    <tr> '
+                        +'      <td  style="font-family: Verdana, Arial, Helvetica, sans-serif; font-size: 12px; color: #000000; font-weight: bold;"> '
+                        +'        '+document.form1.rh173_descricao.value+''
+                        +'      </td> '
+                        +'    </tr> '
+                        +' </table> ';
+                      
+    document.body.appendChild(oDivHint);
+    document.getElementById('rh173_descricao').onmouseout = function(){document.body.removeChild(oDivHint);};
+  }
+
+  function js_DescricaoCompleta(){
+  
+    document.getElementById('rh173_descricao').onmouseover = function(){js_showHint(document.form1.rh173_descricao.value,"");}
+  
+  }
+  
+  js_DescricaoCompleta();
 
   function js_mostraAfastaMotivo(descricao, error) {
     document.form1.rh173_descricao.value = descricao;

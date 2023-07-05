@@ -151,6 +151,9 @@ class cl_orctiporec {
      if($this->o15_datalimite == null ){
        $this->o15_datalimite = "null";
      }
+     if($this->o15_codstn == null ){
+      $this->o15_codstn = "null";
+    }
      if($this->o15_db_estruturavalor == null ){
        $this->erro_sql = " Campo Código da Estrutura nao Informado.";
        $this->erro_campo = "o15_db_estruturavalor";
@@ -672,5 +675,34 @@ class cl_orctiporec {
      }
      return $sql;
   }
+
+  function validaFontesAno ( $ano=null, $campos="*", $ordem=null)
+  {
+    $sql = "SELECT ";
+    if($campos != "*" ){
+      $sql .= $campos;
+    }
+    $sql .= " FROM orctiporec ";
+
+    $dbwhere = " WHERE o15_codtri IN ('122','123','124','142','163', '171', '172', '173','176', '177', '178', '181', '182', '183')";
+
+    if($ano < 2021){
+      $dbwhere = " WHERE o15_codtri IN ('122','123','124','142','163')";
+    }
+    
+    if ($ano > 2022) {
+      $dbwhere = " WHERE o15_codtri IN ('1570000', '1571000', '1572000', '1575000', '1631000', '1632000', '1633000', '1636000', '1665000', '1700000', '1701000', '1702000', '1703000')";
+    }
+    
+    $order = " ORDER BY 1";
+
+    if($ordem != null ){
+      $order = " ORDER BY $ordem";      
+    }
+    $sql .= $dbwhere . $order;
+    
+
+    return $sql;
+ }
 }
 ?>

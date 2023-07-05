@@ -3,12 +3,18 @@
 <?php
 
 $clorctiporec = new cl_orctiporec();
-$sql = "select distinct concat('1', substring(o15_codtri, 2, 2)) as o15_codtri from orctiporec o1 where o15_codtri != '' and o15_codtri::int >= 100 AND o15_codtri::int <= 299 AND (o15_datalimite IS NULL OR o15_datalimite <= '" . db_getsession("DB_anousu") . "-12-31') order by concat('1', substring(o15_codtri, 2, 2))";
+
+// Condição necessária devido a mudança do modelo de fonte de recursos no TCE-MG em 2023
+if (db_getsession("DB_anousu") <= 2022) {
+    $sql = "select distinct concat('1', substring(o15_codtri, 2, 2)) as o15_codtri from orctiporec o1 where o15_codtri != '' and o15_codtri::int >= 100 AND o15_codtri::int <= 299 AND (o15_datalimite IS NULL OR o15_datalimite >= '" . db_getsession("DB_anousu") . "-12-31') order by concat('1', substring(o15_codtri, 2, 2))";
+} else {
+    $sql = "select distinct concat('1', substring(o15_codtri, 2)) as o15_codtri from orctiporec o1 where o15_codtri != '' AND o15_codtri::int > 999999 AND (o15_datalimite IS NULL OR o15_datalimite <= '" . db_getsession("DB_anousu") . "-12-31') order by concat('1', substring(o15_codtri, 2))";
+}
 
 $recursos = $clorctiporec->sql_record($sql);
 
 ?>
-<form name="form1" method="post" action="" style="" onsubmit="return validaForm(this);">
+<form name="form1" method="post" action="" onsubmit="return validaForm(this);">
     <fieldset style="width:0px">
         <legend align="center">
             <strong>Quadro do Superávit / Déficit Financeiro</strong>
@@ -55,6 +61,23 @@ $recursos = $clorctiporec->sql_record($sql);
             ?>
 
         <?php endforeach; ?>
+        <tr>
+                <td class="linhagrid">
+                    <?= "TOTAL" ?>
+                    <input type="hidden" name="Total" value="Total" id="">
+                </td>
+
+                <td class="linhagrid">
+                    <input type="text" readonly="true" style="width: 100px; background: #DEB887; text-align: right" name="aFonteTotalValor" value="0.00" size="16" maxlength="" >
+                </td>
+                <td class="linhagrid">
+                    <input type="text" readonly="true" style="width: 100px; background: #DEB887; text-align: right" name="aFonteTotalSuplementado"  value="0.00" size="16" maxlength="" >
+                </td>
+                
+                <td class="linhagrid">
+                    <input type="text" readonly="true" style="width: 100px; background: #DEB887; text-align: right" name="aFonteTotalSaldo"  value="0.00" size="16" maxlength="" >
+                </td>
+            </tr>
         </table>
         <center>
             <input type="submit" value="Salvar" id="btmSalvar" name="incluir">
@@ -97,9 +120,9 @@ function js_carregarValores(oRetorno) {
     for (var [key, fonte] of Object.entries(valores.fonte)) {
         var valor = parseFloat(fonte.c241_valor);
         if (document.form1['aFonte[' + fonte.c241_fonte + '][valor]']) {
-            document.form1['aFonte[' + fonte.c241_fonte + '][valor]'].value = valor.toFixed(2);
+            document.form1['aFonte[' + fonte.c241_fonte + '][valor]'].value = valor.toLocaleString('pt-BR',  { minimumFractionDigits: 2, maximumFractionDigits: 2});
             var valor = fonte.c241_valor - document.form1['aFonte[' + fonte.c241_fonte + '][suplementado]'].value;
-            document.form1['aFonte[' + fonte.c241_fonte + '][saldo]'].value = valor.toFixed(2);
+            document.form1['aFonte[' + fonte.c241_fonte + '][saldo]'].value = valor.toLocaleString('pt-BR',  { minimumFractionDigits: 2, maximumFractionDigits: 2});
         }
     }
 
@@ -108,18 +131,21 @@ function js_carregarValores(oRetorno) {
         if (document.form1['aFonte[' + fonte.c241_fonte + '][valor]']) {
             document.form1['aFonte[' + fonte.c241_fonte + '][valor]'].value = fonte.c241_valor;
             var valor = fonte.c241_valor - document.form1['aFonte[' + fonte.c241_fonte + '][suplementado]'].value;
-            document.form1['aFonte[' + fonte.c241_fonte + '][saldo]'].value = valor.toFixed(2);
+            document.form1['aFonte[' + fonte.c241_fonte + '][saldo]'].value = valor.toLocaleString('pt-BR',  { minimumFractionDigits: 2, maximumFractionDigits: 2});
         }
-    });
+    });   
+    document.form1['aFonteTotalSaldo'].value =  (valores.valor - valores.suplementado).toLocaleString('pt-BR',  { minimumFractionDigits: 2, maximumFractionDigits: 2});    
+    document.form1['aFonteTotalValor'].value =  valores.valor.toLocaleString('pt-BR',  { minimumFractionDigits: 2, maximumFractionDigits: 2});
+    document.form1['aFonteTotalSuplementado'].value = valores.suplementado.toLocaleString('pt-BR',  { minimumFractionDigits: 2, maximumFractionDigits: 2});
 }
 
 function js_carregarValoresSuplementados(oRetorno) {
     var valores = JSON.parse(oRetorno.responseText.urlDecode());
     valores.fonte.forEach(function(fonte, b) {
         if (document.form1['aFonte[' + fonte.fonte + '][suplementado]']) {
-            document.form1['aFonte[' + fonte.fonte + '][suplementado]'].value = fonte.valor;
+            document.form1['aFonte[' + fonte.fonte + '][suplementado]'].value = parseFloat(fonte.valor).toLocaleString('pt-BR',  { minimumFractionDigits: 2, maximumFractionDigits: 2});
             var valor = document.form1['aFonte[' + fonte.fonte + '][valor]'].value - fonte.valor;
-            document.form1['aFonte[' + fonte.fonte + '][saldo]'].value = valor.toFixed(2);
+            document.form1['aFonte[' + fonte.fonte + '][saldo]'].value = valor.toLocaleString('pt-BR',  { minimumFractionDigits: 2, maximumFractionDigits: 2});
         }
     });
 }

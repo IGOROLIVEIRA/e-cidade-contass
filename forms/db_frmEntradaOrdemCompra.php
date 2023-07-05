@@ -1593,6 +1593,49 @@ if (count($aParametrosEmpenho) > 0) {
    */
   function js_confirmaEntrada() {
 
+    var aItens = js_getElementbyClass(form1, "chkmarca", "checked==true");
+    if (aItens.length == 0) {
+
+      alert('Selecione ao menos um item para dar entrada');
+      return false;
+
+    }
+
+    /* Armazenando itens selecioandos em variável */
+
+    var sJsonItens = "";
+    sVirgula = "";
+
+    for (var i = 0; i < aItens.length; i++) {
+
+      iIndice = aItens[i].id.split("_");
+      sJsonItens += sVirgula + '{"iCodLanc":' + aItens[i].value + ',"iIndiceEntrada":' + iIndice[1] + '}';
+      sVirgula = ", ";
+
+    }
+
+    /* Requisição Ajax responsável por emitir mensagem informativa 
+     * quando o elemento da dotação não for o requisitado e o tipo no cadastro do material for false */
+
+
+    var sJson = '{"method":"validaEntrada","m51_codordem":"' + $F('m51_codordem') + '","aItens":[' + sJsonItens + ']}';
+    validaentrada = true;
+    var oAjax = new Ajax.Request("mat4_matordemRPC.php", {
+      method: 'post',
+      parameters: 'json=' + sJson,
+      asynchronous: false,
+      onSuccess: function(oAjax) {
+        var oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
+        if (!confirm(oRetorno.mensagem.urlDecode())) {
+          validaentrada = false;
+        }
+
+      }
+    });
+
+    if (validaentrada == false) return false;
+
+
     if (confirm('Confirma a entrada dos Itens Selecionados no estoque?')) {
 
       //Número da nota, é obrigatorio
@@ -1662,16 +1705,6 @@ if (count($aParametrosEmpenho) > 0) {
 
       }
 
-      /*
-       * pegamos as notas selecionadas pelo usuário e enviamos para a classe fazer validações necessárias
-       */
-      var aItens = js_getElementbyClass(form1, "chkmarca", "checked==true");
-      if (aItens.length == 0) {
-
-        alert('Selecione ao menos um item para dar entrada');
-        return false;
-
-      }
 
       var sJsonItens = "";
       sVirgula = "";
@@ -1802,6 +1835,27 @@ if (count($aParametrosEmpenho) > 0) {
 
     }
   }
+
+  function js_validaentrada() {
+    sJsonItens = '{"iCodLanc":116712,"iIndiceEntrada":0}';
+    var sJson = '{"method":"validaEntrada","m51_codordem":"' + $F('m51_codordem') + '","aItens":[' + sJsonItens + ']}';
+    encerrarExecucao = false;
+    var oAjax = new Ajax.Request("mat4_matordemRPC.php", {
+      method: 'post',
+      parameters: 'json=' + sJson,
+      asynchronous: false,
+      onSuccess: function(oAjax) {
+        var oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
+        console.log(oRetorno);
+        if (!confirm(oRetorno.mensagem.urlDecode())) {
+          encerrarExecucao = true;
+          return false;
+        }
+
+      }
+    });
+  }
+
   /**
    * Função de retorno da requisicão da confirmação da entrada da ordem de compra
    * no estoque

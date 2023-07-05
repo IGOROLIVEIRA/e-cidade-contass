@@ -42,9 +42,12 @@ extension/modification/data/cache/user/*
 extension/modification/data/file/file-type-modification.data
 extension/data/config.data
 extension/modification/data/modification/dbportal-v3-desktop.data
-composer.lock
 webservices/environments/
 model/licitacao/PNCP/anexoslicitacao/*
 model/licitacao/PNCP/arquivos/*
 webservices/*.php
 !webservices/requisicao.webservice.php
+jobs/configuracoes/taskManager/fila/*.xml
+cache/menus/*
+cache/forms/*
+cache/preferencias/*

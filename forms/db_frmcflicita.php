@@ -156,6 +156,16 @@ if ($db_opcao == 1) {
           ?>
         </td>
       </tr>
+      <tr>
+        <td>
+          <strong>Presencial:</strong>
+        </td>
+        <td>
+          <?
+          db_select("l03_presencial", array("t" => "Sim", "f" => "Não"), true, $db_opcao);
+          ?>
+        </td>
+      </tr>
     </table>
   </fieldset>
   <table>

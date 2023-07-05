@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "linhatransporte.tre06_sequencial,linhatransporte.tre06_nome,linhatransporte.tre06_abreviatura";
+$campos = "linhatransporte.tre06_sequencial,linhatransporte.tre06_nome,linhatransporte.tre06_abreviatura,linhatransporte.tre06_datalimite,linhatransporte.tre06_kmidaevolta,linhatransporte.tre06_valorkm,linhatransporte.tre06_numcgm";
 ?>

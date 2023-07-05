@@ -389,4 +389,16 @@ class db_utils
 
         return $valor;
     }
+
+    static function getCnpj()
+    {
+        $sqlCnpj = "SELECT cgm.z01_cgccpf
+        FROM db_config
+        inner join cgm on db_config.numcgm = cgm.z01_numcgm
+        WHERE db_config.codigo = " . db_getsession('DB_instit');
+
+        $rsCnpj = db_query($sqlCnpj);
+        $sCNPJ = pg_fetch_row($rsCnpj);
+        return $sCNPJ[0];
+    }
 }

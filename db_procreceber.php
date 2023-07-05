@@ -68,10 +68,14 @@ $db_botao = true;
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <center>
 <table width="790" border="0" cellspacing="0" cellpadding="0">
+    
     <tr>
         <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
             <center>
                 <table cellspacing = 0>
+                    
+                            <h2 style="margin-bottom: 10px;margin-top: 10px;color:red;">Processos a receber no Departamento</h2>
+                   
                     <tr>
                         <td title="<?=$Tp63_codtran;?>">
                             <?=$Lp63_codtran;?>
@@ -211,7 +215,7 @@ $db_botao = true;
                     echo "</table>";
                     echo "  <tr>";
 
-                    db_redireciona();
+                    echo "<script>parent.location.href = 'db_procreceber.php';</script>";
 
                 } else {
 

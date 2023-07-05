@@ -293,14 +293,7 @@ class cl_dividaconsolidada
       return false;
     }
     if ($this->si167_contratodeclei == null) {
-      $this->erro_sql = " Campo Contrato decorrente de Lei de Autorização nao Informado.";
-      $this->erro_campo = "si167_contratodeclei";
-      $this->erro_banco = "";
-      $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-
-      return false;
+        $this->si167_contratodeclei = 2;
     }
     if ($this->si167_objetocontratodivida == null) {
       $this->erro_sql = " Campo Objeto do  contrato nao Informado.";

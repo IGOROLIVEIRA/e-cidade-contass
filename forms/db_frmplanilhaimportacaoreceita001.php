@@ -57,6 +57,7 @@
 </form>
 
 <script type="text/javascript">
+    js_removeObj('msgBox');
     // Função de verificação dos campos preenchidos
     function js_verificar() {
         if ($F("layout") == 0) {

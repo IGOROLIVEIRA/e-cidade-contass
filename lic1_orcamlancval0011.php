@@ -484,7 +484,8 @@ if ($clempparametro->numrows > 0) {
                                 $ordem,
                                 "pc20_codorc={$pc20_codorc}
                                                             and pc21_orcamforne = {$pc21_orcamforne}
-                                                            and l21_situacao = 0 {$dbwhere}"
+                                                            and l21_situacao = 0 {$dbwhere}
+                                                            and pc11_quant > 0"
                             );
                             $result_itens  = $clpcorcamitem->sql_record($sSqlItens);
                             $numrows_itens = $clpcorcamitem->numrows;
@@ -676,7 +677,7 @@ if ($clempparametro->numrows > 0) {
                                     if ($l20_usaregistropreco == 't') {
                                         $db_opcaoquant = 3;
                                     }
-                                    db_input("qtde_$pc22_orcamitem", 10, $Ipc23_quant, true, 'text',3, "onchange='js_verquant(this.name,this.value,$pc11_quant,$pc22_orcamitem);js_somavalor();'");
+                                    db_input("qtde_$pc22_orcamitem", 10, $Ipc23_quant, true, 'text', 3, "onchange='js_verquant(this.name,this.value,$pc11_quant,$pc22_orcamitem);js_somavalor();'");
                                     echo "</td> ";
 
                                     /*OC3770*/

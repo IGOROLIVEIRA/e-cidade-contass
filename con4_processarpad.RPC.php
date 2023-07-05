@@ -12,8 +12,10 @@ require_once("libs/db_sessoes.php");
 require_once("model/padArquivoEscritorXML.model.php");
 require_once("model/PadArquivoEscritorCSV.model.php");
 
+// ini_set('display_errors', 'On');
+// error_reporting(E_ALL);
 $oJson    = new services_json();
-$oParam   = $oJson->decode(db_stdClass::db_stripTagsJson(str_replace("\\", "", $_POST["json"])));
+$oParam   = $oJson->decode(db_stdClass::db_stripTagsJsonSemEscape(str_replace("\\", "", $_POST["json"])));
 
 $oRetorno = new stdClass();
 $oRetorno->status  = 1;
@@ -341,9 +343,9 @@ switch ($oParam->exec) {
         $iAnoReferencia = db_getsession('DB_anousu');
 
         $sSql  = "SELECT si09_codorgaotce AS codorgao
-      FROM db_config
-      LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
-      WHERE codigo = " . db_getsession("DB_instit");
+        FROM db_config
+        LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
+        WHERE codigo = " . db_getsession("DB_instit");
 
         $rsOrgao = db_query($sSql);
         $sOrgao  = str_pad(db_utils::fieldsMemory($rsOrgao, 0)->codorgao, 2, "0", STR_PAD_LEFT);
@@ -429,16 +431,16 @@ switch ($oParam->exec) {
             } catch (Exception $eErro) {
 
               $oRetorno->status  = 2;
-              $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
+              $sGetMessage       = "\nArquivo: {$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n{$eErro->getMessage()}";
               $oRetorno->message = urlencode(str_replace("\\n", "\n", $sGetMessage));
             }
           }
         }
 
         /*$oEscritorCSV->zip("AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}");
-      $oEscritorCSV->adicionarArquivo("tmp/AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
-      $oEscritorProgramasCSV->zip("AIP_{$sInst}_{$iAnoReferencia}");
-      $oEscritorProgramasCSV->adicionarArquivo("tmp/AIP_{$sInst}_{$iAnoReferencia}.zip", "AIP_{$sInst}_{$iAnoReferencia}.zip");*/
+        $oEscritorCSV->adicionarArquivo("tmp/AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "AM_{$sInst}_{$sOrgao}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
+        $oEscritorProgramasCSV->zip("AIP_{$sInst}_{$iAnoReferencia}");
+        $oEscritorProgramasCSV->adicionarArquivo("tmp/AIP_{$sInst}_{$iAnoReferencia}.zip", "AIP_{$sInst}_{$iAnoReferencia}.zip");*/
 
         $aListaArquivos = " ";
         foreach ($aArrayArquivos as $oArquivo) {
@@ -538,7 +540,7 @@ switch ($oParam->exec) {
             } catch (Exception $eErro) {
 
               $oRetorno->status  = 2;
-              $sGetMessage       = "Arquivo:{$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
+              $sGetMessage       = "\nArquivo: {$oArquivo->getNomeArquivo()} retornou com erro: \\n \\n {$eErro->getMessage()}";
               $oRetorno->message = urlencode(str_replace("\\n", "\n", $sGetMessage));
             }
           }
@@ -569,6 +571,8 @@ switch ($oParam->exec) {
     $iUltimoDiaMes = date("d", mktime(0, 0, 0, $oParam->mesReferencia + 1, 0, db_getsession("DB_anousu")));
     $sDataInicial = db_getsession("DB_anousu") . "-{$oParam->mesReferencia}-01";
     $sDataFinal   = db_getsession("DB_anousu") . "-{$oParam->mesReferencia}-{$iUltimoDiaMes}";
+
+    $iNumeroRegistro = $oParam->iNumeroRegistro;
 
 
     $deParaNatureza = $oParam->deParaNatureza;
@@ -617,6 +621,11 @@ switch ($oParam->exec) {
           $oArquivo->setDataFinal($sDataFinal);
           $oArquivo->setEncerramento($bEncerramento);
           $oArquivo->setDeParaNatureza($deParaNatureza);
+
+          if(db_getsession("DB_anousu") > 2022){
+            $oArquivo->setNumeroRegistro($iNumeroRegistro);
+          }
+
           $oArquivoCsv = new stdClass();
           try {
 
@@ -770,6 +779,9 @@ switch ($oParam->exec) {
       /*
        * Sql que busca os decretos do mes
        */
+      $tiposup = '';
+      if(db_getsession("DB_anousu") > 2022)
+        $tiposup = " and o46_tiposup not in (1017) ";
       $sSqlDecretosMes = "select  distinct o39_codproj as codigovinc,
       '10' as tiporegistro,
       si09_codorgaotce as codorgao,
@@ -782,7 +794,9 @@ switch ($oParam->exec) {
       join db_config on prefeitura  = 't'
       join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
       left join infocomplementaresinstit on si09_instit = " . db_getsession("DB_instit") . "
-      where o39_data between  '$sDataInicial' and '$sDataFinal'";
+      where o39_data between  '$sDataInicial' and '$sDataFinal'
+      $tiposup ";
+
       $aDecretos = db_utils::getColectionByRecord(db_query($sSqlDecretosMes));
 
       require_once("model/contabilidade/arquivos/sicom/mensal/" . db_getsession("DB_anousu") . "/SicomArquivoLegislacaoCaraterFinanceiro.model.php");
@@ -804,9 +818,13 @@ switch ($oParam->exec) {
        * Fim Lógiga gerar o DEC
        */
     }
-    $oEscritorCSV->zip("DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}");
-    $oEscritorCSV->adicionarArquivo("tmp/DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
 
+    if($aDecretos){
+      $oEscritorCSV->zip("DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}");
+      $oEscritorCSV->adicionarArquivo("tmp/DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip", "DECRETOSLEIS_{$sInst}_{$oParam->mesReferencia}_{$iAnoReferencia}.zip");
+    }else{
+      $oRetorno->status  = 3;
+    }
     $oRetorno->itens = $oEscritorCSV->getListaArquivos();
 
     break;

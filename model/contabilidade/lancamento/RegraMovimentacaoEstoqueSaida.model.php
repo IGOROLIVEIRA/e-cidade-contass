@@ -34,7 +34,8 @@ require_once("interfaces/IRegraLancamentoContabil.interface.php");
  * @subpackage lancamento
  * @version $Revision: 1.10 $
  */
-class RegraMovimentacaoEstoqueSaida implements IRegraLancamentoContabil {
+class RegraMovimentacaoEstoqueSaida implements IRegraLancamentoContabil
+{
 
   /**
    * Retorna um objeto RegraLancamentoContabil
@@ -44,16 +45,17 @@ class RegraMovimentacaoEstoqueSaida implements IRegraLancamentoContabil {
    * @param ILancamentoAuxiliar $oLancamentoAuxiliar
    * @return RegraLancamentoContabil
    */
-  public function getRegraLancamento($iCodigoDocumento, $iCodigoLancamento, ILancamentoAuxiliar $oLancamentoAuxiliar) {
+  public function getRegraLancamento($iCodigoDocumento, $iCodigoLancamento, ILancamentoAuxiliar $oLancamentoAuxiliar)
+  {
 
     $oMaterial = $oLancamentoAuxiliar->getMaterial();
     $oGrupo = $oMaterial->getGrupo();
 
-  	if(!isset($oGrupo)){
-  		$sMsgErro  = "Grupo não configurado para material - ";
-  		$sMsgErro .= $oMaterial->getcodMater() . '. ';
-  		throw new BusinessException($sMsgErro);
-  	}
+    if (!isset($oGrupo)) {
+      $sMsgErro  = "Grupo não configurado para material - ";
+      $sMsgErro .= $oMaterial->getcodMater() . '. ';
+      throw new BusinessException($sMsgErro);
+    }
 
     $oPlanoContaVPD = $oGrupo->getContaVPD($oMaterial->getTipoSaida());
     if (empty($oPlanoContaVPD)) {
@@ -64,15 +66,29 @@ class RegraMovimentacaoEstoqueSaida implements IRegraLancamentoContabil {
     $iContaDebito   = $oGrupo->getContaAtivo($oMaterial->getTipoSaida())->getReduzido();
     $iEstruturalVPD = substr($oPlanoContaVPD->getEstrutural(), 0, 1);
 
-    if (empty($iContaCredito) ||
+    if (
+      (empty($iContaCredito) ||
         $iContaCredito == $iContaDebito ||
-        $iEstruturalVPD <> 3) {
+        $iEstruturalVPD <> 3) && $oMaterial->getTipoSaida() != 5
+    ) {
 
       $sMsgErro  = "Conta VPD (Variação Patrimonial Diminutiva) não configurada para o grupo ";
       $sMsgErro .= $oGrupo->getCodigo() . ' - ';
       $sMsgErro .= $oGrupo->getDescricao() . '.';
-    	throw new BusinessException($sMsgErro);
+      throw new BusinessException($sMsgErro);
     }
+
+    if (
+      (empty($iContaCredito) ||
+        $iContaCredito == $iContaDebito) && $oMaterial->getTipoSaida() == 5
+    ) {
+
+      $sMsgErro  = "Conta VPD (Variação Patrimonial Diminutiva) não configurada para o grupo ";
+      $sMsgErro .= $oGrupo->getCodigo() . ' - ';
+      $sMsgErro .= $oGrupo->getDescricao() . '.';
+      throw new BusinessException($sMsgErro);
+    }
+
 
     $oRegraLancamentoContabil = new RegraLancamentoContabil();
     $oRegraLancamentoContabil->setContaCredito($iContaCredito);
@@ -80,8 +96,8 @@ class RegraMovimentacaoEstoqueSaida implements IRegraLancamentoContabil {
 
     if ($oLancamentoAuxiliar->isSaida()) {
 
-    	$oRegraLancamentoContabil->setContaCredito($iContaDebito);
-    	$oRegraLancamentoContabil->setContaDebito($iContaCredito);
+      $oRegraLancamentoContabil->setContaCredito($iContaDebito);
+      $oRegraLancamentoContabil->setContaDebito($iContaCredito);
     }
 
     return $oRegraLancamentoContabil;

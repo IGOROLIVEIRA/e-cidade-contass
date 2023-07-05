@@ -1,29 +1,13 @@
 <?php
-/**
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBseller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
+
+use App\Models\Numpref;
+use App\Models\RecibopagaQrcodePix;
+use App\Services\Tributario\Arrecadacao\GeneratePixWithQRCodeService;
+use App\Services\Tributario\Arrecadacao\GenerateQrCodeImageService;
+use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\Writer\PngWriter;
 
 require_once(modification("fpdf151/scpdf.php"));
 require_once(modification("fpdf151/impcarne.php"));
@@ -176,6 +160,7 @@ db_fieldsmemory($result, 0);
 $pdf1                        = $oRegraEmissao->getObj();
 $pdf1->sMensagemCaixa        = '';
 $pdf1->sMensagemContribuinte = '';
+$pdf1->hasQrCode = false;
 
 if ($oRegraEmissao->getCadTipoConvenio() == 6 ) {
 
@@ -344,6 +329,20 @@ if (isset ($geracarne) && $geracarne == 'banco') {
 
 /******************************************************   F O R   Q   M O N T A   O S   C A R N E S  ******************************************************/
 $aParcelasSemInflatores = array();
+$usePixIntegration = false;
+$providerConfig = null;
+/**
+ * @var Numpref $settings
+ */
+$settings = Numpref::query()
+    ->where('k03_anousu', db_getsession("DB_anousu"))
+    ->where('k03_instit', db_getsession("DB_instit"))
+    ->first();
+
+if ($settings->k03_ativo_integracao_pix) {
+    $usePixIntegration = true;
+    $providerConfig = (new ResolvePixProviderService())->execute($settings);
+}
 
 if ($unica != "1"){
 
@@ -598,7 +597,7 @@ for ($volta = 1; $volta < sizeof($numpres); $volta ++) {
                             j22_pontos,
                    sum(j22_valor) as j22_valor,
                    sum(j22_vm2) as j22_vm2,
-                   (select j21_valor from iptucalv 
+                   (select j21_valor from iptucalv
 inner join cfiptu on j21_anousu = j18_anousu and j21_receit = j18_rpredi
 where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limit 1) as totaliptu
           from iptucalc
@@ -620,7 +619,7 @@ order by iptucalc.j23_anousu desc limit 1
      $Iptucalc = db_query($sqlIptucalc);//db_criatabela($Iptucalc);exit;
      $oIptucalc = db_utils::fieldsMemory($Iptucalc, 0);
 
-     $rsDescrQuadro = db_query("select j17_descr||' - R$'||j21_valor as descrquadro from iptucalv 
+     $rsDescrQuadro = db_query("select j17_descr||' - R$'||j21_valor as descrquadro from iptucalv
 inner join cfiptu on j21_anousu = j18_anousu inner join iptucalh on j21_codhis = j17_codhis
 where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}");
 
@@ -705,7 +704,21 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->pql_localizacao = $pql_localizacao;
     $bql                   = ($db21_usadistritounidade == 't' ? 'DSQLU: '.$j34_distrito.'-':'SQL: ').$j34_setor.'-'.$j34_quadra.'-'.$j34_lote.($db21_usadistritounidade == 't' ? '-'.$j01_unidade:"")." ".($pql_localizacao!=""?"PQL: $pql_localizacao":"");
 
-    if (isset ($impmodelo) && $impmodelo == 30) {
+    if (isset ($impmodelo) && $pdf1->impmodelo == 30) {
+      $sqlparag  = " select db02_texto                                             ";
+      $sqlparag .= "   from db_documento                                           ";
+      $sqlparag .= "        inner join db_docparag  on db03_docum   = db04_docum   ";
+      $sqlparag .= "        inner join db_tipodoc   on db08_codigo  = db03_tipodoc ";
+      $sqlparag .= "        inner join db_paragrafo on db04_idparag = db02_idparag ";
+      $sqlparag .= " where db03_tipodoc = 1040 ";
+      $sqlparag .= "   and db03_instit = ".db_getsession("DB_instit")." ";
+      $sqlparag .= " order by db04_ordem ";
+      $resparag = db_query($sqlparag);
+
+      if (pg_numrows($resparag) > 0) {
+        db_fieldsmemory($resparag, 0);
+        $pdf1->secretaria = $db02_texto;
+      }
 
       if ($k00_tipo != 6) {
         $iNumeroOrigem = $j01_matric;
@@ -911,9 +924,14 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
         db_fieldsmemory($resultfin, $unicont);
         $vlrhis       = db_formatar($uvlrhis, 'f');
+        $pdf1->valororigem = $vlrhis;
         $vlrdesconto  = db_formatar($uvlrdesconto, 'f');
+        $pdf1->valorDesconto = $vlrdesconto;
         $utotal      += $taxabancaria;
         $vlrtotal     = db_formatar($utotal, 'f');
+        $pdf1->valortotal = $vlrtotal;
+        $pdf1->valorJuros = db_formatar($uvlrjuros, 'f');
+        $pdf1->valorMulta = db_formatar($uvlrmulta, 'f');
         $vlrbar       = db_formatar(str_replace('.', '', str_pad(number_format($utotal, 2, "", "."), 11, "0", STR_PAD_LEFT)), 's', '0', 11, 'e');
 
         $sqlvalor     = "select k00_impval, k00_tercdigcarneunica from arretipo where k00_tipo = $tipo_debito";
@@ -976,6 +994,20 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
         try {
           $oConvenio = new convenio($oRegraEmissao->getConvenio(),$k00_numpre,0,$k00_valor,$vlrbar,$dtvencunic,$iTercDig);
+
+            if ($usePixIntegration) {
+                $body['codigoGuiaRecebimento'] = $k00_numpre.'0';
+                $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
+                $body['valorOriginalSolicitacao'] = $k00_valor;
+                $body['k00_numnov'] = $k00_numpre;
+                $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
+                $body['k00_dtvenc'] = $dtvencunic;
+
+                $service = new GeneratePixWithQRCodeService($providerConfig);
+                $service->execute($body);
+                $pdf1 = usePixIntegration($pdf1, $k00_numpre);
+                $pdf1->hasQrCode = true;
+            }
         } catch (Exception $eExeption){
 
           db_redireciona("db_erros.php?fechar=true&db_erro={$eExeption->getMessage()}");
@@ -1328,6 +1360,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
         }
 
         $pdf1->descr12_2           = '- PARCELA ÚNICA COM '.$k00_percdes.'% DE DESCONTO';
+        $pdf1->descr4_2            = '- PARCELA ÚNICA COM '.$k00_percdes.'% DE DESCONTO';
         $pdf1->prehistoricoparcela = ' PARCELA ÚNICA COM '.$k00_percdes.'% DE DESCONTO';
         $pdf1->linha_digitavel     = $linha_digitavel;
         $pdf1->codigo_barras       = $codigo_barras;
@@ -1418,6 +1451,8 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
         $pdf1->iptz01_ender       = $pdf1->iptnomepri.$pdf1->iptcodpri;
 
         $pdf1->imprime();
+
+        //GERA DA UNICA AQUI
       }
     }
 
@@ -1665,18 +1700,28 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $iNumpar  = 0;
   }
 
-  if ($tipo_debito == 3 && $nValorTot == 0) {
-    $nValorTot = $nValorTot;
-  } else{
-    $nValorTot += $taxabancaria;
-  }
+    $nValorTot = $tipo_debito == 3 && $nValorTot == 0 ? $nValorTot : $nValorTot + $taxabancaria;
 
   try {
     $oConvenio = new convenio($oRegraEmissao->getConvenio(),$iNumpre,$iNumpar,$nValorTot,$vlrbar,$dtVencimento,$iTercDig);
-  } catch (Exception $eExeption){
+      if ($usePixIntegration && $unica !== 1) {
+          $body['codigoGuiaRecebimento'] = $iNumpre.$iNumpar;
+          $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
+          $body['valorOriginalSolicitacao'] = $nValorTot;
+          $body['k00_numpre'] = $iNumpre;
+          $body['k00_numpar'] = $iNumpar;
+          $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
+          $body['k00_dtvenc'] = $dtVencimento;
 
-    db_redireciona("db_erros.php?fechar=true&db_erro={$eExeption->getMessage()}");
-    exit;
+          $service = new GeneratePixWithQRCodeService($providerConfig);
+          $service->execute($body);
+          $pdf1 = usePixIntegration($pdf1, $iNumpre, $iNumpar);
+          $pdf1->hasQrCode = true;
+      }
+  } catch (Exception $eExeption) {
+
+      db_redireciona("db_erros.php?fechar=true&db_erro={$eExeption->getMessage()}");
+      exit;
   }
 
   $codigo_barras   = $oConvenio->getCodigoBarra();
@@ -1850,6 +1895,12 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
   unset($pdf1->arrayreduzreceitas);
   unset($pdf1->arraydescrreceitas);
   unset($pdf1->arrayvalreceitas);
+    $pdf1->valororigem = db_formatar('0', 'f');
+    $pdf1->valorJuros = db_formatar('0', 'f');
+    $pdf1->valorMulta = db_formatar('0', 'f');
+    $pdf1->valorDesconto = db_formatar('0', 'f');
+    $pdf1->valortotal = db_formatar('0', 'f');
+    $pdf1->descr4_2 = "";
 
   $nTotalDebito = 0;
   $vlrhonorarios = 0;
@@ -1862,12 +1913,12 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->arraydescrreceitas[$x] = $descrreceita;
 
     $sqlHono = "select db21_honorarioadvocaticio
-                  from db_config 
+                  from db_config
                   where prefeitura = true and codigo = ".db_getsession("DB_instit");
     db_fieldsmemory($sqlHono, 0);
 
     if($codreceita == $db21_honorarioadvocaticio){
-       $vlrhonorarios += $valor_corrigido; 
+       $vlrhonorarios += $valor_corrigido;
     }
 
     if ($k00_hist != 918) {
@@ -1891,7 +1942,8 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $nDesconto     += $valor_desconto;
   }
 
-  $pdf1->valororigem = db_formatar($vlrhistorico,"f");
+    $pdf1->valororigem = db_formatar($vlrhistorico, "f");
+    $pdf1->valortotal = db_formatar($valreceita, 'f');
 
   if(isset($vlrjuros) && $vlrjuros != "" && $vlrjuros !=0){
 
@@ -1901,6 +1953,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->arrayreduzreceitas[] = "";
     $pdf1->arraydescrreceitas[] = "Juros : ";
     $pdf1->arrayvalreceitas[]   = $vlrjuros;
+      $pdf1->valorJuros = db_formatar($vlrjuros, 'f');
   }
   if(isset($vlrmulta) && $vlrmulta != "" && $vlrmulta != 0){
 
@@ -1910,6 +1963,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->arrayreduzreceitas[] = "";
     $pdf1->arraydescrreceitas[] = "Multa : ";
     $pdf1->arrayvalreceitas[]   = $vlrmulta;
+      $pdf1->valorMulta = db_formatar($vlrmulta, 'f');
   }
   if(isset($nDesconto) && $nDesconto != "" && $nDesconto != 0){
 
@@ -1919,6 +1973,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
     $pdf1->arrayreduzreceitas[] = "";
     $pdf1->arraydescrreceitas[] = "Desconto : ";
     $pdf1->arrayvalreceitas[]   = $nDesconto;
+      $pdf1->valorDesconto = db_formatar($nDesconto, 'f');
   }
   /***********************************************************************************************/
 
@@ -2551,7 +2606,7 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
       $pdf1->descr4_2  = $vlrhonorarios > 0 ? "Valor da parcela   R$".db_formatar($nTotalDebito-$vlrhonorarios,"f")." + R$".db_formatar($vlrhonorarios,"f")."\n" : "Valor da parcela                       R$".db_formatar($nTotalDebito,"f")."\n";
       $pdf1->descr4_2 .= "Juro (mora + fincanciamento) R$".db_formatar($vlrjuros,"f")."\n";
       $pdf1->descr4_2 .= "Multa                                          R$".db_formatar($vlrmulta,"f")."\n";
-            
+
     }
   }
 
@@ -2627,3 +2682,25 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
 db_query("COMMIT");
 $pdf1->objpdf->Output();
+
+function usePixIntegration(db_impcarne $pdfObject, int $numpre, int $numpar = null): db_impcarne
+{
+    $recibopagaQrcodePix = RecibopagaQrcodePix::whereNumpreNumpar($numpre, $numpar)->firstOrFail();
+
+    $pdfObject->hasQrCode = true;
+
+    $builder = Builder::create()
+        ->size(300)
+        ->margin(10)
+        ->validateResult(false)
+        ->writerOptions([])
+        ->writer(new PngWriter())
+        ->encoding(new Encoding('UTF-8'));
+
+    $qrcodeImgService = new GenerateQrCodeImageService($builder);
+
+    $imagePath = $qrcodeImgService->execute($recibopagaQrcodePix->k176_qrcode);
+
+    $pdfObject->qrcode = $imagePath;
+    return $pdfObject;
+}

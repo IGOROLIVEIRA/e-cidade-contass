@@ -61,6 +61,7 @@ class DadosESocial
             case Tipo::BENEFICIOS_ENTESPUBLICOS:
             case Tipo::PAGAMENTOS_RENDIMENTOS:
             case Tipo::TSV_INICIO:
+            case Tipo::ALTERACAO_CONTRATO:
                 return $this->buscaPreenchimentos($matricula, $cgm, $tipoevento);
                 break;
             default:
@@ -119,6 +120,7 @@ class DadosESocial
             case Tipo::ESTABELECIMENTOS:
             case Tipo::ALTERACAODEDADOS:
             case Tipo::ALTERACAO_CONTRATO:
+                return $preenchimento->buscarPreenchimentoS2206($formularioId, $matricula);
             case Tipo::TSV_ALT_CONTR:
                 return $preenchimento->buscarUltimoPreenchimentoInstituicao($formularioId, $matricula);
             case Tipo::CADASTRAMENTO_INICIAL:

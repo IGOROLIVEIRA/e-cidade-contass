@@ -76,53 +76,73 @@ class cl_acordo
     var $ac16_datareferencia_ano = null;
     var $ac16_datareferencia = null;
     var $ac16_providencia = null;
+    var $ac16_reajuste = null;
+    var $ac16_criterioreajuste = null;
+    var $ac16_datareajuste = null;
+    var $ac16_periodoreajuste = null;
+    var $ac16_datareajuste_dia = null;
+    var $ac16_datareajuste_mes = null;
+    var $ac16_datareajuste_ano = null;
+    var $ac16_indicereajuste = null;
+    var $ac16_descricaoreajuste = null;
+    var $ac16_descricaoindice = null;
     /**
      * A descrição do status do campo ac16_providencia podem ser checados na tabela providencia
      */
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
-        ac16_sequencial = int4 = Acordo
-        ac16_acordosituacao = int4 = Acordo Situação
-        ac16_coddepto = int4 = Código Departamento
-        ac16_numero = varchar(60) = Número
-        ac16_anousu = int4 = Ano Exercícios
-        ac16_dataassinatura = date = Data da Assinatura
-        ac16_datapublicacao = date = Data Publicação
-        ac16_contratado = int4 = Contratado
-        ac16_datainicio = date = Data de Início
-        ac16_datafim = date = Data de Fim
-        ac16_resumoobjeto = varchar(50) = Resumo Objeto
-        ac16_objeto = text = Objeto do Contrato
-        ac16_instit = int4 = Instituição
-        ac16_acordocomissao = int4 = Acordo Comissão
-        ac16_lei = varchar(60) = Lei
-        ac16_acordogrupo = int4 = Acordo Grupo
-        ac16_origem = int4 = Origem
-        ac16_qtdrenovacao = float8 = Quantidade de Renovação
-        ac16_tipounidtempo = int4 = Unidade do Tempo
-        ac16_deptoresponsavel = int4 = Departamento Responsável
-        ac16_numeroprocesso = varchar(60) = Numero do Processo
-        ac16_periodocomercial = bool = Período Comercial
-        ac16_qtdperiodo = float8 = Quantidade do Período de Vigência
-        ac16_tipounidtempoperiodo = int4 = Tipo de Período de Vigência
-        ac16_acordocategoria = int4 = Acordo Categoria
-        ac16_acordoclassificacao = int4 = Sequencial da Classificação do Contrato
-        ac16_numeroacordo = int4 = Número do acordo
-        ac16_valor = float8 = Valor do acordo
-        ac16_tipoorigem = int8 = Tipo de Origem acordo
-        ac16_formafornecimento = Forma de fornecimento acordo
-        ac16_formapagamento = Forma de pagamento acordo
-        ac16_veiculodivulgacao = varchar(50) = Veículo de divulgação
-        ac16_datarescisao = date = Data Rescisão
-        ac16_valorrescisao = float8 = Valor da rescisão do acordo
-        ac16_semvigencia = bool = Contrato criado sem Vigência
-        ac16_licoutroorgao = int8 = licitacao de outros orgaos
-        ac16_adesaoregpreco = int8 = adesao de registro de precos
-        ac16_tipocadastro   = int8 = tipo de cadastro
-        ac16_providencia = int4 = Status da Providência do Acordo
-        ac16_datareferencia = date = Data de referência para geração do SICOM
- ";
+    ac16_sequencial = int4 = Acordo
+    ac16_acordosituacao = int4 = Acordo Situação
+    ac16_coddepto = int4 = Código Departamento
+    ac16_numero = varchar(60) = Número
+    ac16_anousu = int4 = Ano Exercício
+    ac16_dataassinatura = date = Data da Assinatura
+    ac16_datapublicacao = date = Data Publicação
+    ac16_contratado = int4 = Contratado
+    ac16_datainicio = date = Data de Início
+    ac16_datafim = date = Data de Fim
+    ac16_resumoobjeto = varchar(50) = Resumo Objeto
+    ac16_objeto = text = Objeto do Contrato
+    ac16_instit = int4 = Instituição
+    ac16_acordocomissao = int4 = Acordo Comissão
+    ac16_lei = varchar(60) = Lei
+    ac16_acordogrupo = int4 = Acordo Grupo
+    ac16_origem = int4 = Origem
+    ac16_qtdrenovacao = float8 = Quantidade de Renovação
+    ac16_tipounidtempo = int4 = Unidade do Tempo
+    ac16_deptoresponsavel = int4 = Departamento Responsável
+    ac16_numeroprocesso = varchar(60) = Numero do Processo
+    ac16_periodocomercial = bool = Período Comercial
+    ac16_qtdperiodo = float8 = Quantidade do Período de Vigência
+    ac16_tipounidtempoperiodo = int4 = Tipo de Período de Vigência
+    ac16_acordocategoria = int4 = Acordo Categoria
+    ac16_acordoclassificacao = int4 = Sequencial da Classificação do Contrato
+    ac16_numeroacordo = int4 = Número do acordo
+    ac16_valor = float8 = Valor do acordo
+    ac16_tipoorigem = int8 = Tipo de Origem acordo
+    ac16_formafornecimento = Forma de fornecimento acordo
+    ac16_formapagamento = Forma de pagamento acordo
+    ac16_veiculodivulgacao = varchar(50) = Veículo de divulgação
+    ac16_datarescisao = date = Data Rescisão
+    ac16_valorrescisao = float8 = Valor da rescisão do acordo
+    ac16_semvigencia = bool = Contrato criado sem vigência
+    ac16_licoutroorgao = int8 = licitacao de outros orgaos
+    ac16_adesaoregpreco = int8 = adesao de registro de precos
+    ac16_tipocadastro   = int8 = tipo de cadastro
+    ac16_providencia = int4 = Status da Providência do Acordo
+    ac16_datareferencia = date = Data de referência para geração do SICOM
+    ac16_reajuste = boll = possui reajuste
+    ac16_criterioreajuste = 
+    ac16_datareajuste = ;
+    ac16_periodoreajuste = ;
+    ac16_datareajuste_dia = ;
+    ac16_datareajuste_mes = ;
+    ac16_datareajuste_ano = ;
+    ac16_indicereajuste = ;
+    ac16_descricaoreajuste = ;
+    ac16_descricaoindice = ;
+    ";
     //funcao construtor da classe
     function cl_acordo()
     {
@@ -160,6 +180,14 @@ class cl_acordo
                     $this->ac16_dataassinatura = $this->ac16_dataassinatura_ano . "-" . $this->ac16_dataassinatura_mes . "-" . $this->ac16_dataassinatura_dia;
                 }
             }
+            if ($this->ac16_datareajuste == "") {
+                $this->ac16_datareajuste_dia = ($this->ac16_datareajuste_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareajuste_dia"] : $this->ac16_datareajuste_dia);
+                $this->ac16_datareajuste_mes = ($this->ac16_datareajuste_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareajuste_mes"] : $this->ac16_datareajuste_mes);
+                $this->ac16_datareajuste_ano = ($this->ac16_datareajuste_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareajuste_ano"] : $this->ac16_datareajuste_ano);
+                if ($this->ac16_datareajuste_dia != "") {
+                    $this->ac16_datareajuste = $this->ac16_datareajuste_ano . "-" . $this->ac16_datareajuste_mes . "-" . $this->ac16_datareajuste_dia;
+                }
+            }
             if ($this->ac16_datapublicacao == "") {
                 $this->ac16_datapublicacao_dia = ($this->ac16_datapublicacao_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_dia"] : $this->ac16_datapublicacao_dia);
                 $this->ac16_datapublicacao_mes = ($this->ac16_datapublicacao_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_mes"] : $this->ac16_datapublicacao_mes);
@@ -192,6 +220,12 @@ class cl_acordo
             $this->ac16_lei = ($this->ac16_lei == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_lei"] : $this->ac16_lei);
             $this->ac16_acordogrupo = ($this->ac16_acordogrupo == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_acordogrupo"] : $this->ac16_acordogrupo);
             $this->ac16_origem = ($this->ac16_origem == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_origem"] : $this->ac16_origem);
+            $this->ac16_reajuste = ($this->ac16_reajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_reajuste"] : $this->ac16_reajuste);
+            $this->ac16_criterioreajuste = ($this->ac16_criterioreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_criterioreajuste"] : $this->ac16_criterioreajuste);
+            $this->ac16_periodoreajust = ($this->ac16_periodoreajust == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_periodoreajust"] : $this->ac16_periodoreajust);
+            $this->ac16_indicereajuste = ($this->ac16_indicereajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_indicereajuste"] : $this->ac16_indicereajuste);
+            $this->ac16_descricaoreajuste = ($this->ac16_descricaoreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_descricaoreajuste"] : $this->ac16_descricaoreajuste);
+            $this->ac16_descricaoindice = ($this->ac16_descricaoindice == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_descricaoindice"] : $this->ac16_descricaoindice);
             $this->ac16_qtdrenovacao = ($this->ac16_qtdrenovacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_qtdrenovacao"] : $this->ac16_qtdrenovacao);
             $this->ac16_tipounidtempo = ($this->ac16_tipounidtempo == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_tipounidtempo"] : $this->ac16_tipounidtempo);
             $this->ac16_deptoresponsavel = ($this->ac16_deptoresponsavel == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_deptoresponsavel"] : $this->ac16_deptoresponsavel);
@@ -367,6 +401,16 @@ class cl_acordo
             $this->erro_status = "0";
             return false;
         }
+        if ($this->ac16_reajuste == null || !$this->ac16_reajuste) {
+            $this->erro_sql = " Campo reajuste não informado.";
+            $this->erro_campo = "ac16_reajuste";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
         if ($this->ac16_qtdrenovacao == null) {
             $this->ac16_qtdrenovacao = "null";
             //     $this->erro_sql = " Campo Quantidade de Renovação não informado.";
@@ -522,6 +566,13 @@ class cl_acordo
      ,ac16_licoutroorgao
      ,ac16_adesaoregpreco
      ,ac16_tipocadastro
+     ,ac16_reajuste
+     ,ac16_criterioreajuste 
+     ,ac16_datareajuste
+     ,ac16_indicereajuste
+     ,ac16_periodoreajuste
+     ,ac16_descricaoreajuste
+     ,ac16_descricaoindice
      )
      values (
      $this->ac16_sequencial
@@ -560,6 +611,13 @@ class cl_acordo
      ," . ($this->ac16_licoutroorgao == "" ? 'null' : $this->ac16_licoutroorgao) . "
      ," . ($this->ac16_adesaoregpreco == "" ? 'null' : $this->ac16_adesaoregpreco) . "
      ,$this->ac16_tipocadastro
+     ," . ($this->ac16_reajuste == 1 ? "'t'" : "'f'") . "
+     ," . ($this->ac16_criterioreajuste == "null" || $this->ac16_criterioreajuste == "" ? "" : $this->ac16_criterioreajuste) . "
+     ," . ($this->ac16_datareajuste == "null" || $this->ac16_datareajuste == "" ? 'null' : "'" . $this->ac16_datareajuste . "'") . "
+     ," . ($this->ac16_indicereajuste == "null" || $this->ac16_indicereajuste == "" ? "" : $this->ac16_indicereajuste) . "
+     ," . ($this->ac16_periodoreajuste == "null" || $this->ac16_periodoreajuste == "" ? "''" : "'" . $this->ac16_periodoreajuste . "'") . "
+     ," . ($this->ac16_descricaoreajuste == "null" || $this->ac16_descricaoreajuste == "" ? 'null' : "'" . $this->ac16_descricaoreajuste . "'") . "
+     ," . ($this->ac16_descricaoindice == "null" || $this->ac16_descricaoindice == "" ? 'null' : "'" . $this->ac16_descricaoindice . "'") . "
      )";
 
         $result = db_query($sql);
@@ -867,6 +925,7 @@ class cl_acordo
                 return false;
             }
         }
+
         if (trim($this->ac16_qtdrenovacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_qtdrenovacao"])) {
             $sql  .= $virgula . " ac16_qtdrenovacao = $this->ac16_qtdrenovacao ";
             $virgula = ",";
@@ -2442,130 +2501,214 @@ class cl_acordo
         return $sSql;
     }
 
-    public function sql_Contrato_PCNP($si172_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
+    public function sql_Contrato_PCNP()
     {
-        $sSql = "select ";
-        if ($campos != "*") {
-            $campos_sql = explode("#", $campos);
-            $virgula = "";
-            for ($i = 0; $i < sizeof($campos_sql); $i++) {
-                $sSql .= $virgula . $campos_sql[$i];
-                $virgula = ",";
-            }
-        } else {
-            $sSql .= $campos;
-        }
-        
-        if (!empty($dbwhere)) {
-            $ano = db_getsession("DB_anousu");
-            $dbwhere = " {$dbwhere} and ac16_anousu = {$ano} ";
-        }
-        
-        $sSql .= "
-        cgc as cnpjCompra,
-        ac16_anousu as anoCompra,
-        l213_numerocompra as sequencialCompra,
-        ac16_acordocategoria as tipoContratoId,
-        ac16_numero as numeroContratoEmpenho,
-        ac16_anousu as anoContrato,
-        l20_edital||'/'||l20_anousu as processo,
-        ac16_acordogrupo as categoriaProcessoId,
-        false as receita,
-        z01_cgccpf as niFornecedor,
-        null as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
-        z01_nome as nomeRazaoSocialFornecedor,
-        null as niFornecedorSubContratado,
-        null as tipoPessoaFornecedorSubContratado,
-        null as nomeRazaoSocialFornecedorSubContratado,
-        ac16_objeto as objetoContrato,
-        null as informacaoComplementar,
-        ac16_valor as valorInicial,
-        ac16_qtdperiodo as numeroParcelas,
-        null as valorParcela,
-        ac16_valor as valorGlobal,
-        null as valorAcumulado,
-        ac16_dataassinatura as dataAssinatura,
-        ac16_datainicio as dataVigenciaInicio,
-        ac16_datafim as datavigenciaFim,
-        null as identificadorCipi,
-        null as urlCipi
-        from acordo
-        join acordocategoria on ac50_sequencial=ac16_acordocategoria
-        join liclicita on l20_codigo = ac16_licitacao
-        join db_depart on coddepto=ac16_deptoresponsavel
-        join db_departorg on db01_coddepto=coddepto
-        join cgm on z01_numcgm=ac16_contratado
-        join cgmtipoempresa on z03_numcgm=z01_numcgm
-        join tipoempresa on db98_sequencial=z03_tipoempresa
-        join db_config on codigo=instit
-        join liccontrolepncp on ac16_licitacao = l213_licitacao
-        left join acocontratopncp on ac213_contrato = ac16_sequencial
-        where $dbwhere
-        order by ac213_numerocontrolepncp desc
+        $sSql = "
+        SELECT * FROM (SELECT DISTINCT ac16_sequencial,
+                        ac213_numerocontrolepncp,
+                        l213_numerocompra,
+                        cgc AS cnpjCompra,
+                        ac16_anousu AS anoCompra,
+                        l213_numerocompra AS sequencialCompra,
+                        ac16_acordocategoria AS tipoContratoId,
+                        ac16_numero AS numeroContratoEmpenho,
+                        ac16_anousu AS anoContrato,
+                        l20_edital||'/'||l20_anousu AS processo,
+                        ac16_acordogrupo AS categoriaProcessoId,
+                        l20_receita AS receita,
+                         z01_cgccpf AS niFornecedor,
+                         NULL AS tipoPessoaFornecedor,
+                         z01_nome AS nomeRazaoSocialFornecedor,
+                         NULL AS niFornecedorSubContratado,
+                         NULL AS tipoPessoaFornecedorSubContratado,
+                         NULL AS nomeRazaoSocialFornecedorSubContratado,
+                         ac16_objeto AS objetoContrato,
+                         NULL AS informacaoComplementar,
+                         ac16_valor AS valorInicial,
+                         ac16_qtdperiodo AS numeroParcelas,
+                         NULL AS valorParcela,
+                         ac16_valor AS valorGlobal,
+                         NULL AS valorAcumulado,
+                         ac16_dataassinatura AS dataAssinatura,
+                         ac16_datainicio AS dataVigenciaInicio,
+                         ac16_datafim AS datavigenciaFim,
+                         NULL AS identificadorCipi,
+                         NULL AS urlCipi
+                    FROM acordo
+                    JOIN acordocategoria ON ac50_sequencial=ac16_acordocategoria
+                    JOIN liclicita ON l20_codigo = ac16_licitacao
+                    JOIN db_depart ON coddepto=ac16_deptoresponsavel
+                    JOIN db_departorg ON db01_coddepto=coddepto
+                    JOIN cgm ON z01_numcgm=ac16_contratado
+                    JOIN cgmtipoempresa ON z03_numcgm=z01_numcgm
+                    JOIN tipoempresa ON db98_sequencial=z03_tipoempresa
+                    JOIN db_config ON codigo=instit
+                    JOIN liccontrolepncp ON ac16_licitacao = l213_licitacao
+                    LEFT JOIN acocontratopncp ON ac213_contrato = ac16_sequencial
+                    WHERE ac16_instit = " . db_getsession('DB_instit') . "
+                    AND ac16_acordosituacao = 4
+                        AND ac16_anousu = " . db_getsession('DB_anousu') . "
+        union
+                    SELECT DISTINCT ac16_sequencial,
+                            ac213_numerocontrolepncp,
+                            l213_numerocompra,
+                            cgc AS cnpjCompra,
+                            ac16_anousu AS anoCompra,
+                            l213_numerocompra AS sequencialCompra,
+                            ac16_acordocategoria AS tipoContratoId,
+                            ac16_numero AS numeroContratoEmpenho,
+                            ac16_anousu AS anoContrato,
+                            pc80_numdispensa||'/'||EXTRACT(YEAR FROM pcproc.pc80_data) AS processo,
+                            ac16_acordogrupo AS categoriaProcessoId,
+                            FALSE AS receita,
+                            z01_cgccpf AS niFornecedor,
+                            NULL AS tipoPessoaFornecedor,
+                            z01_nome AS nomeRazaoSocialFornecedor,
+                            NULL AS niFornecedorSubContratado,
+                            NULL AS tipoPessoaFornecedorSubContratado,
+                            NULL AS nomeRazaoSocialFornecedorSubContratado,
+                            ac16_objeto AS objetoContrato,
+                            NULL AS informacaoComplementar,
+                            ac16_valor AS valorInicial,
+                            ac16_qtdperiodo AS numeroParcelas,
+                            NULL AS valorParcela,
+                            ac16_valor AS valorGlobal,
+                            NULL AS valorAcumulado,
+                            ac16_dataassinatura AS dataAssinatura,
+                            ac16_datainicio AS dataVigenciaInicio,
+                            ac16_datafim AS datavigenciaFim,
+                            NULL AS identificadorCipi,
+                            NULL AS urlCipi
+                    FROM acordo
+                    JOIN acordocategoria ON ac50_sequencial=ac16_acordocategoria
+                    join acordoposicao on ac26_acordo = ac16_sequencial
+                    join acordoitem on ac20_acordoposicao=ac26_sequencial
+                    join acordopcprocitem on ac23_acordoitem=ac20_sequencial
+                    join pcprocitem on pc81_codprocitem = ac23_pcprocitem
+                    join pcproc on pc81_codproc = pc80_codproc
+                    JOIN db_depart ON coddepto=ac16_deptoresponsavel
+                    JOIN db_departorg ON db01_coddepto=coddepto
+                    JOIN cgm ON z01_numcgm=ac16_contratado
+                    LEFT JOIN cgmtipoempresa ON z03_numcgm=z01_numcgm
+                    JOIN tipoempresa ON db98_sequencial=z03_tipoempresa
+                    JOIN db_config ON codigo=instit
+                    LEFT JOIN liccontrolepncp ON  l213_processodecompras = pc80_codproc
+                    LEFT JOIN acocontratopncp ON ac213_contrato = ac16_sequencial
+                    WHERE ac16_instit = " . db_getsession('DB_instit') . "
+                    AND ac16_acordosituacao = 4
+                    AND ac16_anousu = " . db_getsession('DB_anousu') . "
+                    AND pc80_dispvalor = 't') AS X ORDER BY ac16_sequencial DESC
         ";
-      
+
         return $sSql;
     }
 
-    public function sql_DadosContrato_PCNP($aContratocodigo)
-    {            
-        $ano = db_getsession("DB_anousu");
-        $dbwhere = " ac16_anousu = {$ano} and ac16_sequencial = {$aContratocodigo} ";
-               
-        $sSql = " select 
-        ac16_sequencial,
-        ac213_numerocontrolepncp,      
-        cgc as cnpjCompra,
-        ac16_anousu as anoCompra,
-        l213_numerocompra as sequencialCompra,
-        ac16_acordocategoria as tipoContratoId,
-        ac16_numero as numeroContratoEmpenho,
-        ac16_anousu as anoContrato,
-        l20_edital||'/'||l20_anousu as processo,
-        ac16_acordogrupo as categoriaProcessoId,
-        true as receita,
-        db01_unidade as codigoUnidade,
-        z01_cgccpf as niFornecedor,
-        null as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
-        z01_nome as nomeRazaoSocialFornecedor,
-        null as niFornecedorSubContratado,
-        null as tipoPessoaFornecedorSubContratado,
-        null as nomeRazaoSocialFornecedorSubContratado,
-        ac16_objeto as objetoContrato,
-        null as informacaoComplementar,
-        ac16_valor as valorInicial,
-        ac16_qtdperiodo as numeroParcelas,
-        0 as valorParcela,
-        ac16_valor as valorGlobal,
-        null as valorAcumulado,
-        ac16_dataassinatura as dataAssinatura,
-        ac16_datainicio as dataVigenciaInicio,
-        ac16_datafim as datavigenciaFim,
-        null as identificadorCipi,
-        null as urlCipi
-        from acordo
-        join acordocategoria on ac50_sequencial=ac16_acordocategoria
-        join liclicita on l20_codigo = ac16_licitacao
-        join db_depart on coddepto=ac16_deptoresponsavel
-        join db_departorg on db01_coddepto=coddepto
-        join cgm on z01_numcgm=ac16_contratado
-        join cgmtipoempresa on z03_numcgm=z01_numcgm
-        join tipoempresa on db98_sequencial=z03_tipoempresa
-        join db_config on codigo=instit
-        join liccontrolepncp on ac16_licitacao = l213_licitacao
-        left join acocontratopncp on ac213_contrato = ac16_sequencial
-        where $dbwhere
+    public function sql_DadosContrato_PCNP($iContratocodigo)
+    {
+        $sSql = "SELECT ac16_sequencial,
+                        ac213_numerocontrolepncp,
+                        cgc AS cnpjCompra,
+                        l213_anousu AS anoCompra,
+                        l213_numerocompra AS sequencialCompra,
+                        ac16_acordocategoria AS tipoContratoId,
+                        ac16_numero AS numeroContratoEmpenho,
+                        ac16_anousu AS anoContrato,
+                        l20_edital||'/'||l20_anousu AS processo,
+                        ac16_acordogrupo AS categoriaProcessoId,
+                        l20_receita AS receita,
+                        db01_unidade AS codigoUnidade,
+                        z01_cgccpf AS niFornecedor,
+                        NULL AS tipoPessoaFornecedor,
+                        z01_nome AS nomeRazaoSocialFornecedor,
+                        NULL AS niFornecedorSubContratado,
+                        NULL AS tipoPessoaFornecedorSubContratado,
+                        NULL AS nomeRazaoSocialFornecedorSubContratado,
+                        ac16_objeto AS objetoContrato,
+                        NULL AS informacaoComplementar,
+                        ac16_valor AS valorInicial,
+                        ac16_qtdperiodo AS numeroParcelas,
+                        0 AS valorParcela,
+                        ac16_valor AS valorGlobal,
+                        NULL AS valorAcumulado,
+                        ac16_dataassinatura AS dataAssinatura,
+                        ac16_datainicio AS dataVigenciaInicio,
+                        ac16_datafim AS datavigenciaFim,
+                        NULL AS identificadorCipi,
+                        NULL AS urlCipi
+            FROM acordo
+            JOIN acordocategoria ON ac50_sequencial=ac16_acordocategoria
+            JOIN liclicita ON l20_codigo = ac16_licitacao
+            JOIN db_depart ON coddepto=ac16_deptoresponsavel
+            JOIN db_departorg ON db01_coddepto=coddepto
+            AND db01_anousu = ac16_anousu
+            JOIN cgm ON z01_numcgm=ac16_contratado
+            JOIN cgmtipoempresa ON z03_numcgm=z01_numcgm
+            JOIN tipoempresa ON db98_sequencial=z03_tipoempresa
+            JOIN db_config ON codigo=instit
+            JOIN liccontrolepncp ON ac16_licitacao = l213_licitacao
+            LEFT JOIN acocontratopncp ON ac213_contrato = ac16_sequencial
+            WHERE ac16_anousu = " . db_getsession('DB_anousu') . "
+                AND ac16_sequencial = $iContratocodigo
+        UNION
+            SELECT DISTINCT ac16_sequencial,
+                            ac213_numerocontrolepncp,
+                            cgc AS cnpjCompra,
+                            l213_anousu AS anoCompra,
+                            l213_numerocompra AS sequencialCompra,
+                            ac16_acordocategoria AS tipoContratoId,
+                            ac16_numero AS numeroContratoEmpenho,
+                            ac16_anousu AS anoContrato,
+                            pc80_numdispensa||'/'||EXTRACT(YEAR FROM pcproc.pc80_data) AS processo,
+                            ac16_acordogrupo AS categoriaProcessoId,
+                            FALSE AS receita,
+                            db01_unidade AS codigoUnidade,
+                            z01_cgccpf AS niFornecedor,
+                            NULL AS tipoPessoaFornecedor,
+                            z01_nome AS nomeRazaoSocialFornecedor,
+                            NULL AS niFornecedorSubContratado,
+                            NULL AS tipoPessoaFornecedorSubContratado,
+                            NULL AS nomeRazaoSocialFornecedorSubContratado,
+                            pc80_resumo AS objetoContrato,
+                            NULL AS informacaoComplementar,
+                            ac16_valor AS valorInicial,
+                            ac16_qtdperiodo AS numeroParcelas,
+                            0 AS valorParcela,
+                            ac16_valor AS valorGlobal,
+                            NULL AS valorAcumulado,
+                            ac16_dataassinatura AS dataAssinatura,
+                            ac16_datainicio AS dataVigenciaInicio,
+                            ac16_datafim AS datavigenciaFim,
+                            NULL AS identificadorCipi,
+                            NULL AS urlCipi
+                FROM acordo
+                JOIN acordocategoria ON ac50_sequencial=ac16_acordocategoria
+                JOIN acordoposicao ON ac26_acordo = ac16_sequencial
+                JOIN acordoitem ON ac20_acordoposicao=ac26_sequencial
+                JOIN acordopcprocitem ON ac23_acordoitem=ac20_sequencial
+                JOIN pcprocitem ON pc81_codprocitem = ac23_pcprocitem
+                JOIN pcproc ON pc81_codproc = pc80_codproc
+                JOIN db_depart ON coddepto=ac16_deptoresponsavel  
+                JOIN db_departorg ON db01_coddepto=coddepto AND db01_anousu = ac16_anousu
+                JOIN cgm ON z01_numcgm=ac16_contratado
+                LEFT JOIN cgmtipoempresa ON z03_numcgm=z01_numcgm
+                JOIN tipoempresa ON db98_sequencial=z03_tipoempresa
+                JOIN db_config ON codigo=instit
+                LEFT JOIN liccontrolepncp ON l213_processodecompras = pc80_codproc
+                LEFT JOIN acocontratopncp ON ac213_contrato = ac16_sequencial
+                WHERE ac16_instit = " . db_getsession('DB_instit') . "
+                    and ac16_sequencial = $iContratocodigo
+                    AND ac16_anousu = " . db_getsession('DB_anousu') . "
+                    AND pc80_dispvalor = 't'
         ";
-   
         return $sSql;
     }
 
     public function sql_query_pncp($aContratocodigo)
-    {            
+    {
         $ano = db_getsession("DB_anousu");
         $instituicao = db_getsession('DB_instit');
         $dbwhere = " ac16_instit =  {$instituicao} and ac16_anousu = {$ano} ";
-               
+
         $sSql = " select 
         ac16_sequencial, 
         ac213_numerocontrolepncp,
@@ -2578,7 +2721,7 @@ class cl_acordo
         ac16_anousu as anoContrato,
         l20_edital||'/'||l20_anousu as processo,
         ac16_acordogrupo as categoriaProcessoId,
-        true as receita,
+        l20_receita as receita,
         db01_unidade as codigoUnidade,
         z01_cgccpf as niFornecedor,
         null as tipoPessoaFornecedor, /*verificar se'pessoa juridica gerar PJ se Fisica gerar PF se diferente gear PE*/
@@ -2618,102 +2761,268 @@ class cl_acordo
     function sql_query_publicacaoEmpenho_pncp($campos = "*", $ordem = null, $dbwhere = "", $groupby = null)
     {
         $ano  = db_getsession("DB_anousu");
-        $sql  = "select
-                e60_numemp,  
-                ac213_numerocontrolepncp,  
-                z01_cgccpf as cnpjCompra,
-                e60_anousu as anoCompra,
-                l213_numerocompra as sequencialCompra,
-                7 as tipoContratoId,
-                e60_codemp as numeroContratoEmpenho,
-                e60_anousu as anoContrato,
-                l20_edital||'/'||l20_anousu as processo,
-                l20_categoriaprocesso as categoriaProcessoId,
-                false as receita,
-                01001 as codigoUnidade,
-                z01_cgccpf as niFornecedor,
-                case when length(trim(z01_cgccpf)) = 14 then 'PJ' 
-                        when length(trim(z01_cgccpf)) = 11 then 'PF' 
-                else 
-                        'PE' end as tipoPessoaFornecedor,
-                z01_nome as nomeRazaoSocialFornecedor,
-                null as niFornecedorSubContratado,
-                null as tipoPessoaFornecedorSubContratado,
-                null as nomeRazaoSocialFornecedorSubContratado,
-                l20_objeto as objetoContrato,
-                null as informacaoComplementar,
-                0 as valorParcela,
-                null as dataVigenciaInicio,
-                null as dataVigenciaFim,
-                null as dataAssinatura,
-                e60_vlremp as valorInicial,
-                e60_vlremp as valorGlobal,
-                null as numeroParcelas
-                from empempenho
-                join cgm on z01_numcgm = e60_numcgm
-                join empempaut on e61_numemp=e60_numemp
-                join empautoriza on e54_autori=e61_autori
-                left join liclicita on l20_codigo = e54_codlicitacao
-                left join liccontrolepncp on l20_codigo = l213_licitacao
-                left join acocontratopncp on ac213_contrato = e60_numemp
-                where e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' and l20_codigo is not null ";
+        $sql  = "SELECT e60_numemp,
+            l213_numerocontrolepncp,
+            z01_cgccpf AS cnpjCompra,
+            e60_anousu AS anoCompra,
+            l213_numerocompra AS sequencialCompra,
+            7 AS tipoContratoId,
+            e60_codemp AS numeroContratoEmpenho,
+            e60_anousu AS anoContrato,
+            l20_edital||'/'||l20_anousu AS processo,
+            l20_categoriaprocesso AS categoriaProcessoId,
+            l20_receita AS receita,
+            01001 AS codigoUnidade,
+            z01_cgccpf AS niFornecedor,
+            CASE
+                WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                ELSE 'PE'
+            END AS tipoPessoaFornecedor,
+            z01_nome AS nomeRazaoSocialFornecedor,
+            NULL AS niFornecedorSubContratado,
+            NULL AS tipoPessoaFornecedorSubContratado,
+            NULL AS nomeRazaoSocialFornecedorSubContratado,
+            l20_objeto AS objetoContrato,
+            NULL AS informacaoComplementar,
+            0 AS valorParcela,
+            NULL AS dataVigenciaInicio,
+            NULL AS dataVigenciaFim,
+            NULL AS dataAssinatura,
+            e60_vlremp AS valorInicial,
+            e60_vlremp AS valorGlobal,
+            NULL AS numeroParcelas
+    FROM empempenho
+    JOIN cgm ON z01_numcgm = e60_numcgm
+    JOIN empempaut ON e61_numemp=e60_numemp
+    JOIN empautoriza ON e54_autori=e61_autori
+    LEFT JOIN liclicita ON l20_codigo = e54_codlicitacao
+    JOIN liccontrolepncp ON l20_codigo = l213_licitacao
+    WHERE e60_emiss >='$ano-01-01'
+        AND e60_emiss <='$ano-12-31'
+        AND l20_codigo IS NOT NULL
+    UNION
+    SELECT e60_numemp,
+            l213_numerocontrolepncp,
+            z01_cgccpf AS cnpjCompra,
+            e60_anousu AS anoCompra,
+            l213_numerocompra AS sequencialCompra,
+            7 AS tipoContratoId,
+            e60_codemp AS numeroContratoEmpenho,
+            e60_anousu AS anoContrato,
+            l20_edital||'/'||l20_anousu AS processo,
+            l20_categoriaprocesso AS categoriaProcessoId,
+            l20_receita AS receita,
+            01001 AS codigoUnidade,
+            z01_cgccpf AS niFornecedor,
+            CASE
+                WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                ELSE 'PE'
+            END AS tipoPessoaFornecedor,
+            z01_nome AS nomeRazaoSocialFornecedor,
+            NULL AS niFornecedorSubContratado,
+            NULL AS tipoPessoaFornecedorSubContratado,
+            NULL AS nomeRazaoSocialFornecedorSubContratado,
+            l20_objeto AS objetoContrato,
+            NULL AS informacaoComplementar,
+            0 AS valorParcela,
+            NULL AS dataVigenciaInicio,
+            NULL AS dataVigenciaFim,
+            NULL AS dataAssinatura,
+            e60_vlremp AS valorInicial,
+            e60_vlremp AS valorGlobal,
+            NULL AS numeroParcelas
+    FROM empempenho
+    JOIN cgm ON z01_numcgm = e60_numcgm
+    JOIN empempaut ON e61_numemp=e60_numemp
+    JOIN empautoriza ON e54_autori=e61_autori
+    join empautitempcprocitem on e73_autori = e54_autori
+    join pcprocitem on e73_pcprocitem= pc81_codprocitem
+    join liclicitem on pc81_codprocitem=l21_codpcprocitem
+    LEFT JOIN liclicita ON l20_codigo = l21_codliclicita
+    JOIN liccontrolepncp ON l20_codigo = l213_licitacao
+    WHERE e60_emiss >='$ano-01-01'
+        AND e60_emiss <='$ano-12-31'
+        AND l20_codigo IS NOT NULL
+    UNION
+    SELECT e60_numemp,
+            l213_numerocontrolepncp,
+            z01_cgccpf AS cnpjCompra,
+            e60_anousu AS anoCompra,
+            l213_numerocompra AS sequencialCompra,
+            7 AS tipoContratoId,
+            e60_codemp AS numeroContratoEmpenho,
+            e60_anousu AS anoContrato,
+            pc80_numdispensa||'/'||EXTRACT(YEAR FROM pcproc.pc80_data) AS processo,
+            null AS categoriaProcessoId,
+            FALSE AS receita,
+            01001 AS codigoUnidade,
+            z01_cgccpf AS niFornecedor,
+            CASE
+                WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                ELSE 'PE'
+            END AS tipoPessoaFornecedor,
+            z01_nome AS nomeRazaoSocialFornecedor,
+            NULL AS niFornecedorSubContratado,
+            NULL AS tipoPessoaFornecedorSubContratado,
+            NULL AS nomeRazaoSocialFornecedorSubContratado,
+            pc80_resumo AS objetoContrato,
+            NULL AS informacaoComplementar,
+            0 AS valorParcela,
+            NULL AS dataVigenciaInicio,
+            NULL AS dataVigenciaFim,
+            NULL AS dataAssinatura,
+            e60_vlremp AS valorInicial,
+            e60_vlremp AS valorGlobal,
+            NULL AS numeroParcelas
+    FROM empempenho
+    JOIN cgm ON z01_numcgm = e60_numcgm
+    JOIN empempaut ON e61_numemp=e60_numemp
+    JOIN empautoriza ON e54_autori=e61_autori
+    join empautitempcprocitem on e73_autori = e54_autori
+    join pcprocitem on e73_pcprocitem= pc81_codprocitem
+    join pcproc on pc80_codproc=pc81_codproc
+    JOIN liccontrolepncp ON pc80_codproc = l213_processodecompras
+    WHERE e60_emiss >='$ano-01-01'
+        AND e60_emiss <='$ano-12-31'
+        AND pc80_codproc IS NOT NULL ";
 
-                if (!empty($dbwhere))
-                    $sql .= " and {$dbwhere} ";
-                      
-                if (!empty($ordem)) {
-                    $sql .= " order by {$ordem} ";
-                }        
-                
-                return $sql;
+        return $sql;
     }
 
     function sql_query_pncp_empenho($codigoempenho)
     {
-        
+
         $ano  = db_getsession("DB_anousu");
-        $sql  = "select
-                e60_numemp,  
-                ac213_numerocontrolepncp,  
-                z01_cgccpf as cnpjCompra,
-                e60_anousu as anoCompra,
-                l213_numerocompra as sequencialCompra,
-                7 as tipoContratoId,
-                e60_codemp as numeroContratoEmpenho,
-                e60_anousu as anoContrato,
-                l20_edital||'/'||l20_anousu as processo,
-                l20_categoriaprocesso as categoriaProcessoId,
-                false as receita,
-                01001 as codigoUnidade,
-                z01_cgccpf as niFornecedor,
-                case when length(trim(z01_cgccpf)) = 14 then 'PJ' 
-                        when length(trim(z01_cgccpf)) = 11 then 'PF' 
-                else 
-                        'PE' end as tipoPessoaFornecedor,
-                z01_nome as nomeRazaoSocialFornecedor,
-                null as niFornecedorSubContratado,
-                null as tipoPessoaFornecedorSubContratado,
-                null as nomeRazaoSocialFornecedorSubContratado,
-                l20_objeto as objetoContrato,
-                null as informacaoComplementar,
-                0 as valorParcela,
-                null as dataVigenciaInicio,
-                null as dataVigenciaFim,
-                null as dataAssinatura,
-                e60_vlremp as valorInicial,
-                e60_vlremp as valorGlobal,
-                null as numeroParcelas
-                from empempenho
-                join cgm on z01_numcgm = e60_numcgm
-                join empempaut on e61_numemp=e60_numemp
-                join empautoriza on e54_autori=e61_autori
-                left join liclicita on l20_codigo = e54_codlicitacao
-                left join liccontrolepncp on l20_codigo = l213_licitacao
-                left join acocontratopncp on ac213_contrato = e60_numemp
-                where e60_numemp = {$codigoempenho} and e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' ";       
-              
-                return $sql;
+        $sql  = "SELECT e60_numemp,
+                    l213_numerocontrolepncp,
+                    z01_cgccpf AS cnpjCompra,
+                    e60_anousu AS anoCompra,
+                    l213_numerocompra AS sequencialCompra,
+                    7 AS tipoContratoId,
+                    e60_codemp AS numeroContratoEmpenho,
+                    e60_anousu AS anoContrato,
+                    l20_edital||'/'||l20_anousu AS processo,
+                    l20_categoriaprocesso AS categoriaProcessoId,
+                    l20_receita AS receita,
+                            01001 AS codigoUnidade,
+                            z01_cgccpf AS niFornecedor,
+                            CASE
+                                WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                                WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                                ELSE 'PE'
+                            END AS tipoPessoaFornecedor,
+                            z01_nome AS nomeRazaoSocialFornecedor,
+                            NULL AS niFornecedorSubContratado,
+                            NULL AS tipoPessoaFornecedorSubContratado,
+                            NULL AS nomeRazaoSocialFornecedorSubContratado,
+                            e60_resumo AS objetoContrato,
+                            NULL AS informacaoComplementar,
+                            0 AS valorParcela,
+                            e60_emiss AS dataVigenciaInicio,
+                            e60_emiss AS dataVigenciaFim,
+                            e60_emiss AS dataAssinatura,
+                            e60_vlremp AS valorInicial,
+                            e60_vlremp AS valorGlobal,
+                            1 AS numeroParcelas
+            FROM empempenho
+            JOIN cgm ON z01_numcgm = e60_numcgm
+            JOIN empempaut ON e61_numemp=e60_numemp
+            JOIN empautoriza ON e54_autori=e61_autori
+            LEFT JOIN liclicita ON l20_codigo = e54_codlicitacao
+            JOIN liccontrolepncp ON l20_codigo = l213_licitacao
+            WHERE e60_numemp = {$codigoempenho}
+                AND e60_emiss >='$ano-01-01'
+                AND e60_emiss <='$ano-12-31'
+            UNION
+            SELECT e60_numemp,
+                    l213_numerocontrolepncp,
+                    z01_cgccpf AS cnpjCompra,
+                    e60_anousu AS anoCompra,
+                    l213_numerocompra AS sequencialCompra,
+                    7 AS tipoContratoId,
+                    e60_codemp AS numeroContratoEmpenho,
+                    e60_anousu AS anoContrato,
+                    l20_edital||'/'||l20_anousu AS processo,
+                    l20_categoriaprocesso AS categoriaProcessoId,
+                    FALSE AS receita,
+                            01001 AS codigoUnidade,
+                            z01_cgccpf AS niFornecedor,
+                            CASE
+                                WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                                WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                                ELSE 'PE'
+                            END AS tipoPessoaFornecedor,
+                            z01_nome AS nomeRazaoSocialFornecedor,
+                            NULL AS niFornecedorSubContratado,
+                            NULL AS tipoPessoaFornecedorSubContratado,
+                            NULL AS nomeRazaoSocialFornecedorSubContratado,
+                            e60_resumo AS objetoContrato,
+                            NULL AS informacaoComplementar,
+                            0 AS valorParcela,
+                            e60_emiss AS dataVigenciaInicio,
+                            e60_emiss AS dataVigenciaFim,
+                            e60_emiss AS dataAssinatura,
+                            e60_vlremp AS valorInicial,
+                            e60_vlremp AS valorGlobal,
+                            1 AS numeroParcelas
+            FROM empempenho
+            JOIN cgm ON z01_numcgm = e60_numcgm
+            JOIN empempaut ON e61_numemp=e60_numemp
+            JOIN empautoriza ON e54_autori=e61_autori
+            JOIN empautitempcprocitem ON e73_autori = e54_autori
+            JOIN pcprocitem ON e73_pcprocitem= pc81_codprocitem
+            JOIN liclicitem ON pc81_codprocitem=l21_codpcprocitem
+            LEFT JOIN liclicita ON l20_codigo = l21_codliclicita
+            JOIN liccontrolepncp ON l20_codigo = l213_licitacao
+            WHERE e60_numemp = {$codigoempenho}
+                AND e60_emiss >='$ano-01-01'
+                AND e60_emiss <='$ano-12-31'
+            UNION
+            SELECT e60_numemp,
+                    l213_numerocontrolepncp,
+                    z01_cgccpf AS cnpjCompra,
+                    e60_anousu AS anoCompra,
+                    l213_numerocompra AS sequencialCompra,
+                    7 AS tipoContratoId,
+                    e60_codemp AS numeroContratoEmpenho,
+                    e60_anousu AS anoContrato,
+                    pc80_numdispensa||'/'||EXTRACT(YEAR FROM pcproc.pc80_data) AS processo,
+                    null AS categoriaProcessoId,
+                    FALSE AS receita,
+                                01001 AS codigoUnidade,
+                                z01_cgccpf AS niFornecedor,
+                                CASE
+                                    WHEN length(trim(z01_cgccpf)) = 14 THEN 'PJ'
+                                    WHEN length(trim(z01_cgccpf)) = 11 THEN 'PF'
+                                    ELSE 'PE'
+                                END AS tipoPessoaFornecedor,
+                                z01_nome AS nomeRazaoSocialFornecedor,
+                                NULL AS niFornecedorSubContratado,
+                                NULL AS tipoPessoaFornecedorSubContratado,
+                                NULL AS nomeRazaoSocialFornecedorSubContratado,
+                                e60_resumo AS objetoContrato,
+                                NULL AS informacaoComplementar,
+                                0 AS valorParcela,
+                                e60_emiss AS dataVigenciaInicio,
+                                e60_emiss AS dataVigenciaFim,
+                                e60_emiss AS dataAssinatura,
+                                e60_vlremp AS valorInicial,
+                                e60_vlremp AS valorGlobal,
+                                1 AS numeroParcelas
+            FROM empempenho
+            JOIN cgm ON z01_numcgm = e60_numcgm
+            JOIN empempaut ON e61_numemp=e60_numemp
+            JOIN empautoriza ON e54_autori=e61_autori
+            JOIN empautitempcprocitem ON e73_autori = e54_autori
+            JOIN pcprocitem ON e73_pcprocitem= pc81_codprocitem
+            JOIN pcproc ON pc80_codproc=pc81_codproc
+            JOIN liccontrolepncp ON pc80_codproc = l213_processodecompras
+            WHERE e60_numemp = {$codigoempenho}
+                AND e60_emiss >='$ano-01-01'
+                AND e60_emiss <='$ano-12-31'";
+        return $sql;
     }
-
-
 }

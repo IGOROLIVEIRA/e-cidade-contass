@@ -212,14 +212,14 @@ class cl_empautoriza
             return false;
         }
         //
-        //           if($this->e54_codcom == null ){    
+        //           if($this->e54_codcom == null ){
         //           $this->erro_sql = " Campo Tipo de compr4 nao Informad0.".$this->e54_codcom.$_SESSION["e54_codcom"]."t99=>".$this->e54_codcom."<=";
         //           $this->erro_campo = "e54_codcom";
         //           $this->erro_banco = "";
         //           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
         //           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         //           $this->erro_status = "0";
-        //           return false; 
+        //           return false;
         //         }
         /**
          * removido validação pois outras rotinas que utilizam essa classe para inserir estavam passando nessa validação
@@ -427,7 +427,7 @@ class cl_empautoriza
                                    ," . ($this->e54_tipoautorizacao == "null" || $this->e54_tipoautorizacao == "" ? "null" : "'" . $this->e54_tipoautorizacao . "'") . "
                                    ,'$this->e54_desconto'
                                    ,$this->e54_numerotermo
-                                   
+
                           )";
         $result = db_query($sql);
         if ($result == false) {
@@ -1063,10 +1063,10 @@ class cl_empautoriza
         $sql2 = "";
         if ($dbwhere == "") {
             if ($e54_autori != null) {
-                $sql2 .= " where empautoriza.e54_autori = $e54_autori ";
+            $sql2 .= " where empautoriza.e54_autori = $e54_autori and empautoriza.e54_instit =". db_getsession('DB_instit')." ";
             }
         } else if ($dbwhere != "") {
-            $sql2 = " where $dbwhere";
+            $sql2 = " where $dbwhere and empautoriza.e54_instit =". db_getsession('DB_instit')." ";
         }
         $sql .= $sql2;
         if ($ordem != null) {
@@ -1095,8 +1095,10 @@ class cl_empautoriza
         }
 
         if (!empty($sWhere)) {
-            $sql .= " where {$sWhere} ";
+            $sql .= " where {$sWhere}";
         }
+
+
 
         if (!empty($sOrdem)) {
             $sql .= " order by {$sOrdem} ";

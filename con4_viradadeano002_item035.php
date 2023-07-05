@@ -52,7 +52,8 @@ if ($sqlerro == false) {
         $oDaoPccflicitapar->l25_numero = '0';
         $oDaoPccflicitapar->incluir(null);
         if ($oDaoPccflicitapar->erro_status == "0") {
-          throw new Exception("Erro ao processar item 35!\n{$oDaoPccflicitapar->erro_msg}");
+          $erro_msg .=$oDaoPccflicitapar->erro_msg;
+          $sqlerro=true;
         }
         
       }
@@ -74,7 +75,8 @@ if ($sqlerro == false) {
         $oDaoMaterialestoquegrupoconta->m66_codconvpd = $oDados->m66_codconvpd;
         $oDaoMaterialestoquegrupoconta->incluir(null);
         if ($oDaoMaterialestoquegrupoconta->erro_status == "0") {
-          throw new Exception("Erro ao processar item 35!\n{$oDaoMaterialestoquegrupoconta->erro_msg}");
+          $erro_msg .=$oDaoMaterialestoquegrupoconta->erro_msg;
+          $sqlerro=true;
         }
       }
     }
@@ -96,17 +98,18 @@ if ($sqlerro == false) {
         $oDaoClabensconplano->t86_anousudepreciacao = $oDados->t86_anousu +1;
         $oDaoClabensconplano->incluir(null);
         if ($oDaoClabensconplano->erro_status == "0") {
-          throw new Exception("Erro ao processar item 35!\n{$oDaoClabensconplano->erro_msg}");
+          $erro_msg .=$oDaoClabensconplano->erro_msg;
+          $sqlerro=true;
         }
       }
     }
 
-    $sWhereexiste    = " ac03_anousu = {$ano}";
+    $sWhereexiste    = " ac03_anousu = {$ano} and ac03_instit= ".db_getsession('DB_instit');
     $sSqlDadosexiste = $oDaoAcordogruponumeracao->sql_query_file( null, "*", null, $sWhereexiste );
     $rsDadosexiste   = db_query($sSqlDadosexiste);
     if(pg_numrows($rsDadosexiste)==0){
 
-      $sWhereOrigem    = " ac03_anousu = {$iAnoOrigem}";
+      $sWhereOrigem    = " ac03_anousu = {$iAnoOrigem} and ac03_instit= ".db_getsession('DB_instit');
       $sSqlDadosOrigem = $oDaoAcordogruponumeracao->sql_query_file( null, "*", null, $sWhereOrigem );
       $rsDadosOrigem   = db_query($sSqlDadosOrigem);
       for($x=0;$x<pg_numrows($rsDadosOrigem);$x++){
@@ -117,7 +120,8 @@ if ($sqlerro == false) {
         $oDaoAcordogruponumeracao->ac03_instit = db_getsession("DB_instit");
         $oDaoAcordogruponumeracao->incluir(null);
         if ($oDaoAcordogruponumeracao->erro_status == "0") {
-          throw new Exception("Erro ao processar item 35!\n{$oDaoAcordogruponumeracao->erro_msg}");
+          $erro_msg .=$oDaoAcordogruponumeracao->erro_msg;
+          $sqlerro=true;
         }
       }
     }
@@ -139,7 +143,8 @@ if ($sqlerro == false) {
         $oDaoNumeracaotipoproc->p200_tipoproc = $oDados->p200_tipoproc;
         $oDaoNumeracaotipoproc->incluir(null);
         if ($oDaoNumeracaotipoproc->erro_status == "0") {
-          throw new Exception("Erro ao processar item 35!\n{$oDaoNumeracaotipoproc->erro_msg}");
+          $erro_msg .= $oDaoNumeracaotipoproc->erro_msg;
+          $sqlerro=true;
         }
       }
     }

@@ -316,7 +316,7 @@ class Recurso {
 
     if (db_getsession("DB_anousu") > 2022){
         $oDaoOrcTipoRec->o15_codtri = substr($oDaoOrcTipoRec->o15_codtri,0,7);
-        $iCodigoRecurso             = substr($iCodigoRecurso,0,7);
+        $iCodigoRecurso             = substr($iCodigoRecurso,0,8);
       }
 
     if ($oDaoOrcTipoRec->numrows > 0 && !$this->lNovo) {

@@ -116,29 +116,25 @@
     $oLibDocumento->l20_anousu = $resultLici->l20_anousu;
     $oLibDocumento->l20_objeto = $resultLici->l20_objeto;
     $oLibDocumento->l44_descricao = strtoupper($resultLici->l44_descricao);
+    $oLibDocumento->l03_descr = $resultLici->l03_descr;
 
     $oLibDocumento->l20_numero = $resultLici->l20_numero;
     $oLibDocumento->z01_nome = $nome;
 
     $aParagrafos = $oLibDocumento->getDocParagrafos();
 
-
-    // echo $sSql;
-
-    // db_criatabela($rsResult);
-
     $sSql = "select si01_datacotacao FROM pcproc
-JOIN pcprocitem ON pc80_codproc = pc81_codproc
-JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
-JOIN solicitem ON pc81_solicitem = pc11_codigo
-JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
-JOIN pcmater ON pc16_codmater = pc01_codmater
-JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
+                JOIN pcprocitem ON pc80_codproc = pc81_codproc
+                JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
+                JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
+                JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+                JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
+                JOIN solicitem ON pc81_solicitem = pc11_codigo
+                JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
+                JOIN pcmater ON pc16_codmater = pc01_codmater
+                JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+                JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
+                WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
 
     $rsResultData = db_query($sSql) or die(pg_last_error());
 
@@ -518,6 +514,14 @@ HTML;
 
             </div>
             <?php
+
+            setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+            date_default_timezone_set('America/Sao_Paulo');
+            $sSqlDataAdjudicacao = "select distinct l202_dataadjudicacao as dataadjudicacao from homologacaoadjudica where l202_licitacao = {$codigo_preco} and l202_dataadjudicacao is not null";
+            $rsDataAdjudicacao = db_query($sSqlDataAdjudicacao);
+            db_fieldsmemory($rsDataAdjudicacao,0);
+            $dataformatada = strftime('%d de %B de %Y',strtotime($dataadjudicacao));
+
             $data = date('d/m/Y');
             $data = explode("/", $data);
 
@@ -582,7 +586,7 @@ HTML;
             <br>
             <br>
             <div style="text-align: right; margin-right: 5px;">
-                <? echo $resultado->munic; ?>, <? echo $diausu ?> de <? echo $mes; ?> de <? echo $anousu; ?>
+                <? echo $resultado->munic; ?>, <? echo $dataformatada; ?>
             </div>
             <?php
 

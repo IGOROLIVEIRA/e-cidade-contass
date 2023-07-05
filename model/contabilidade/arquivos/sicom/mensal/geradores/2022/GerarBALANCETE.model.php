@@ -60,7 +60,7 @@ class GerarBALANCETE extends GerarAM
                   si181_instit,
                   si181_reg10
                   FROM balancete142022
-                  JOIN empempenho ON e60_codemp::int8 = si181_nroempenho::int8 AND e60_anousu = si181_anoinscricao
+                  JOIN empempenho ON e60_codemp::int8 = si181_nroempenho::int8 AND e60_anousu = si181_anoinscricao and si181_instit=e60_instit
                   WHERE si181_mes = " . $this->iMes . "
                     AND si181_instit =" . db_getsession("DB_instit");
         $rsBALANCETE14 = db_query($sSql4);
@@ -314,7 +314,7 @@ class GerarBALANCETE extends GerarAM
 
                     $aBALACETE18 = pg_fetch_array($rsBALANCETE18, $iCont18);
 
-                    if (($aBALACETE18['si185_reg10'] == $aBALACETE10['si177_sequencial']) 
+                    if (($aBALACETE18['si185_reg10'] == $aBALACETE10['si177_sequencial'])
                          && ($aBALACETE18['si185_saldoinicialfr'] != 0 || $aBALACETE18['si185_totaldebitosfr'] != 0 || $aBALACETE18['si185_totalcreditosfr'] != 0)) {
 
                         $aCSVBALANCETE18['si185_tiporegistro']            = $this->padLeftZero($aBALACETE18['si185_tiporegistro'], 2);

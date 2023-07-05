@@ -60,7 +60,7 @@ $cldipr->rotulo->label();
                     <td><b>Ente:</b></td>
                     <td>
                         <?php
-                        db_select('c237_tipoente', array(0 => "Selecione", '1' => 'Administração Direta Executivo', '2' => 'Administração Direta Legislativo', '3' => 'Unidade Gestora'), true, 1);
+                        db_select('c237_tipoente', array(0 => "Selecione", '1' => 'Administração Direta Executivo', '2' => 'Administração Direta Legislativo', '3' => 'Unidade Gestora', '4' => 'Autarquia'), true, 1);
                         ?>
                     </td>
                 </tr>
@@ -124,7 +124,10 @@ $cldipr->rotulo->label();
                     <td><b>Tipo de fundo:</b></td>
                     <td>
                         <?php
-                        db_select('c237_tipofundo', array(0 => "Selecione", '1' => 'Fundo em Capitalização (Plano Previdenciário)', '2' => 'Fundo em Repartição (Plano Financeiro)', '3' => 'Responsabilidade do tesouro municipal'), true, 1, "");
+                        if(db_getsession("DB_anousu") < 2023)
+                            db_select('c237_tipofundo', array(0 => "Selecione", '1' => 'Fundo em Capitalização (Plano Previdenciário)', '2' => 'Fundo em Repartição (Plano Financeiro)', '3' => 'Responsabilidade do tesouro municipal'), true, 1, "");
+                        else
+                            db_select('c237_tipofundo', array(0 => "Selecione", '1' => 'Fundo em Capitalização (Plano Previdenciário)', '2' => 'Fundo em Repartição (Plano Financeiro)'), true, 1, "");
                         ?>
                     </td>
                 </tr>

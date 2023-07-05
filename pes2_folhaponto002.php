@@ -325,6 +325,26 @@ $alt = 4;
 $pdf->SetAutoPageBreak('on', 0);
 $pdf->line(2, 148.5, 208, 148.5);
 
+//query responsável por retornar os feriados municipais 
+$query_feriados = 
+"select r62_calend, r62_data from calendf where r62_calend = 1 order by r62_data ";
+
+//realiza a consulta
+$feriadosMunicipais = db_query($query_feriados);
+
+//retorna os registros da consulta
+$_feriados =  db_utils::getCollectionByRecord($feriadosMunicipais);
+
+$dataFeriado = array();
+
+foreach($_feriados as $feriado){
+    $e = explode("-",$feriado->r62_data);
+    $dataFeriado[] = $e[2].'/'.$e[1];
+}
+
+#Adiciona os feriados nacionais ao array
+array_push($dataFeriado, '01/01', '07/04', '21/04', '01/05', '07/09', '12/10', '02/11', '15/11', '25/12');
+
 foreach ($aConsulta as $servidor) {
     $pdf->addpage();
 
@@ -335,13 +355,15 @@ foreach ($aConsulta as $servidor) {
     $pdf->cell(15, $alt, " " . $servidor->rh01_regist, "0", 0, "L", 0);
     $pdf->cell(35, $alt, $servidor->z01_nome, "0", 0, "L", 0);
 
-    $pdf->ln();
-    $pdf->setfont("arial", "B", 10);
-    $pdf->cell(25, $alt, "Lotação", "0", 0, "L", 0);
-    $pdf->cell(1, $alt, ":", "0", 0, "L", 0);
-    $pdf->setfont("arial", "", 10);
-    $pdf->cell(15, $alt, " " . $servidor->r70_estrut, "0", 0, "L", 0);
-    $pdf->cell(35, $alt, $servidor->r70_descr, "0", 0, "L", 0);
+    if ($mostrarLotacao == "true"){
+        $pdf->ln();
+        $pdf->setfont("arial", "B", 10);
+        $pdf->cell(25, $alt, "Lotação", "0", 0, "L", 0);
+        $pdf->cell(1, $alt, ":", "0", 0, "L", 0);
+        $pdf->setfont("arial", "", 10);
+        $pdf->cell(15, $alt, " " . $servidor->r70_estrut, "0", 0, "L", 0);
+        $pdf->cell(35, $alt, $servidor->r70_descr, "0", 0, "L", 0);
+    }
 
     $pdf->ln();
     $pdf->setfont("arial", "B", 10);
@@ -406,6 +428,7 @@ foreach ($aConsulta as $servidor) {
 
     $pdf->ln();
     $controle = 0;
+
     foreach ($aDias as $aDia) {
 
         $data = date("D", strtotime($anoControle[$controle] . "-" . implode("-", array_reverse(explode("/", $aDia)))));
@@ -419,7 +442,10 @@ foreach ($aConsulta as $servidor) {
             $pdf->cell(28, 5, "Sábado", "1", 0, "C", 0);
         } else if ($data == 'Sun') {
             $pdf->cell(28, 5, "Domingo", "1", 0, "C", 0);
-        } else {
+        }else if(in_array($aDia, $dataFeriado)){
+            $pdf->cell(28, 5, "FERIADO", "1", 0, "C", 0);
+        }
+        else{
             $pdf->cell(28, 5, "", "1", 0, "C", 0);
         }
 
@@ -429,7 +455,10 @@ foreach ($aConsulta as $servidor) {
             $pdf->cell(28, 5, "Sábado", "1", 0, "C", 0);
         } else if ($data == 'Sun') {
             $pdf->cell(28, 5, "Domingo", "1", 0, "C", 0);
-        } else {
+        }else if(in_array($aDia, $dataFeriado)){
+            $pdf->cell(28, 5, "FERIADO", "1", 0, "C", 0);
+        }
+        else{
             $pdf->cell(28, 5, "", "1", 0, "C", 0);
         }
 
@@ -439,24 +468,30 @@ foreach ($aConsulta as $servidor) {
             $pdf->cell(28, 5, "Sábado", "1", 0, "C", 0);
         } else if ($data == 'Sun') {
             $pdf->cell(28, 5, "Domingo", "1", 0, "C", 0);
-        } else {
+        }else if(in_array($aDia, $dataFeriado)){
+            $pdf->cell(28, 5, "FERIADO", "1", 0, "C", 0);
+        }else{
             $pdf->cell(28, 5, "", "1", 0, "C", 0);
         }
 
         $pdf->cell(11, 5, "", "1", 0, "C", 0);
 
-
         if ($data == 'Sat') {
             $pdf->cell(28, 5, "Sábado", "1", 0, "C", 0);
         } else if ($data == 'Sun') {
             $pdf->cell(28, 5, "Domingo", "1", 0, "C", 0);
-        } else {
+        }else if(in_array($aDia, $dataFeriado)){
+            $pdf->cell(28, 5, "FERIADO", "1", 0, "C", 0);
+        }
+        else{
             $pdf->cell(28, 5, "", "1", 0, "C", 0);
         }
 
         $pdf->cell(17, 5, "", "1", 0, "C", 0);
         $pdf->ln();
     }
+
+
 
     $pdf->ln();
     $pdf->cell(60, 5, "Ass: _________________________________", "0", 0, "C", 0);

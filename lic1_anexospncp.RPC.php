@@ -35,6 +35,7 @@ require_once("std/db_stdClass.php");
 require_once("dbforms/db_funcoes.php");
 
 define("URL_MENSAGEM_LIC1ANEXOSPNCP", "patrimonial.licitacao.lic1_anexospncp.");
+const PATH_ANEXO_LICITACAO = 'model/licitacao/PNCP/anexoslicitacao/';
 
 $oJson               = new services_json();
 $oParam              = $oJson->decode(str_replace("\\", "", $_POST["json"]));
@@ -50,7 +51,7 @@ try {
 
   switch ($oParam->exec) {
 
-    
+
     case "salvarDocumento":
 
       $oLicitacaoAnexo = new LicitacaoAnexo($oParam->iCodigoLicitacao);
@@ -66,32 +67,29 @@ try {
       }
 
       $oRetorno->sMensagem = urlencode($oLicitacaoDocumento->salvar());
-      
-
       break;
-    
+
     case "carregarDocumentos":
 
       $oProcessoProtocolo    = new LicitacaoAnexo($oParam->iCodigoProcesso);
-
       $aDocumentosVinculados = $oProcessoProtocolo->getDocumentos();
       $aDocumentosRetorno    = array();
       foreach ($aDocumentosVinculados as $oProcessoLicitacao) {
 
         $oStdDocumento = new stdClass();
         $oStdDocumento->iCodigoDocumento    = $oProcessoLicitacao->getCodigo();
-        $oStdDocumento->sDescricaoDocumento = $oProcessoLicitacao->getDescricaoTipo();
+        $oStdDocumento->sDescricaoDocumento = urlencode(utf8_decode($oProcessoLicitacao->getDescricaoTipo()));
 
         $aDocumentosRetorno[] = $oStdDocumento;
       }
       $oRetorno->aDocumentosVinculados = $aDocumentosRetorno;
 
       break;
-      
+
     case "download":
 
       $oProcessoDocumento                = new LicitacaoDocumento($oParam->iCodigoDocumento);
-      $oRetorno->sCaminhoDownloadArquivo = $oProcessoDocumento->download();
+      $oRetorno->sCaminhoDownloadArquivo = PATH_ANEXO_LICITACAO . $oProcessoDocumento->sNomeDocumento;
       $oRetorno->sTituloArquivo          = urlencode($oProcessoDocumento->getNomeDocumento());
 
       break;
@@ -100,11 +98,9 @@ try {
       $nomeDoZip = '/tmp/anexos-' . time() . '.zip';
       $zip = new ZipArchive();
       if ($zip->open($nomeDoZip, ZipArchive::CREATE) === true) {
-
         foreach ($oParam->arquivos as $oArquivo) {
           $zip->addFile($oArquivo->sCaminhoDownloadArquivo, $oArquivo->sTituloArquivo);
         }
-
         $zip->close();
       }
 
@@ -113,74 +109,35 @@ try {
 
     case "excluir":
 
-        
-  
-          $oProcessoDocumento = new LicitacaoDocumento($oParam->iCodigoDocumento);
-  
-        
-            $oProcessoDocumento->excluir();
-           
-  
-        
-  
-       
-          $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
-        
-  
-        break;
+      $oProcessoDocumento = new LicitacaoDocumento($oParam->iCodigoDocumento);
+      $oProcessoDocumento->excluir();
+      $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
+      break;
 
     case "alterardocumento":
+      $oProcessoDocumento = new LicitacaoDocumento();
+      $oProcessoDocumento->alterartipo($oParam->iCodigoDocumento, $oParam->itipoanexo);
+      $oRetorno->sMensagm = urlencode('Alteração realizada com sucesso!');
+      break;
 
-        
-  
-          $oProcessoDocumento = new LicitacaoDocumento();
-  
-        
-            $oProcessoDocumento->alterartipo($oParam->iCodigoDocumento,$oParam->itipoanexo);
-           
-  
-        
-  
-       
-          $oRetorno->sMensagem = urlencode('Alteração realizada com sucesso!');
-        
-  
-        break;
-      case "excluirDocumento":
-
-          $aDocumentosNaoExcluidos = array();
-    
-          foreach ($oParam->aDocumentosExclusao as $iCodigoDocumento) {
-          
-    
-            $oProcessoDocumento = new LicitacaoDocumento($iCodigoDocumento);
-
-              $oProcessoDocumento->excluir();
-
-    
-          }
-    
-          $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
-    
-          break;
+    case "excluirDocumento":
+      $aDocumentosNaoExcluidos = array();
+      foreach ($oParam->aDocumentosExclusao as $iCodigoDocumento) {
+        $oProcessoDocumento = new LicitacaoDocumento($iCodigoDocumento);
+        $oProcessoDocumento->excluir();
+      }
+      $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
+      break;
 
     case "buscardocumento":
-
       $oProcessoDocumento = new LicitacaoDocumento($oParam->iCodigoDocumento);
-  
-      $oRetorno->idtipo =$oProcessoDocumento->buscartipo();
-
+      $oRetorno->idtipo = $oProcessoDocumento->buscartipo();
       break;
 
     case "verifica":
-     
-
-        $oProcessoDocumento = new LicitacaoDocumento();
-    
-        $oRetorno->idtipo =$oProcessoDocumento->verificavinculo($oParam->iCodigoDocumento);
-  
-        break;
-    
+      $oProcessoDocumento = new LicitacaoDocumento();
+      $oRetorno->idtipo = $oProcessoDocumento->verificavinculo($oParam->iCodigoDocumento);
+      break;
 
     case "apagarZip":
       if (file_exists($oParam->nomeDoZip) && unlink($oParam->nomeDoZip)) {
@@ -189,8 +146,6 @@ try {
         $oRetorno->zipApagado = 0;
       }
       break;
-
-
   }
 
   /**

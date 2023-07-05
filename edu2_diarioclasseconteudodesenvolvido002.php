@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("fpdf151/scpdf.php");
@@ -68,7 +68,7 @@ if ($iCodigoReferencia != null) {
 $oDadosCabecalho               = new stdClass();
 $oDadosCabecalho->sEscola      = $sNomeEscola;
 $oDadosCabecalho->iAnoExecucao = $oCalendario->getAnoExecucao();
-$oDadosCabecalho->sEtapa       = $aEtapas[0]->getEtapa()->getNome();
+
 $oDadosCabecalho->sTurma       = $oTurma->getDescricao();
 $oDadosCabecalho->sTurno       = $oTurma->getTurno()->getDescricao();
 $oDadosCabecalho->sPeriodo     = '';
@@ -110,7 +110,9 @@ if (count($aDisciplinas) > 0) {
 	foreach ($aDisciplinas as $iRegencia) {
 
 		$oRegencia                        = RegenciaRepository::getRegenciaByCodigo($iRegencia);
-		$oDadosCabecalho->sNomeDisciplina = $oRegencia->getDisciplina()->getNomeDisciplina();
+
+        $oDadosCabecalho->sNomeDisciplina = $oRegencia->getDisciplina()->getNomeDisciplina();
+        $oDadosCabecalho->sEtapa       = $oRegencia->getEtapa()->getNome();
 
 		$oDadosCabecalho->sNomeProfessor = '';
 		if (count($oRegencia->getDocentes()) > 0) {
@@ -158,7 +160,7 @@ function imprimeCabecalho($oPdf, $oDadosCabecalho)
 	$oDepartamento = new DBDepartamento(db_getsession("DB_coddepto"));
 	$iDepartamento = $oDepartamento->getCodigo();
 
-	$result = db_query("select ed05_t_texto, 
+	$result = db_query("select ed05_t_texto,
 							   ed05_d_publicado,
 							   ed05_i_aparecerelatorio,
 							   ed05_i_ano,
@@ -166,7 +168,7 @@ function imprimeCabecalho($oPdf, $oDadosCabecalho)
 							   ed05_c_numero,
 							   ed05_c_finalidade,
 							   ed83_c_descr as dl_tipo,
-							   case 
+							   case
 							   		when ed05_c_competencia='F' then 'FEDERAL'
 									when ed05_c_competencia='E' then 'ESTADUAL'
 									else 'MUNICIPAL'
@@ -279,7 +281,7 @@ function imprimeDiario($oPdf, $aConteudoDesenvolvido, $oDadosCabecalho)
 					$oPdf->Cell(20,  5, db_formatar($oConteudo->ed300_datalancamento, 'd'), 1, 0,"C");
 					$oPdf->Cell(255, 5, $oConteudo->ed300_auladesenvolvida, 1, 1,"L");
 					unset($aConteudoDesenvolvido[$iIndice]);
-					
+
 					$oPdf->SetAutoPageBreak(true,5);
 				}
 			}

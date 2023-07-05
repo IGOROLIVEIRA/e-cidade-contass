@@ -48,6 +48,7 @@ switch ($oParam->exec) {
 
             $oDados = db_utils::fieldsMemory($rsModalidade, 0);
             $oRetorno->l03_pctipocompratribunal = $oDados->l03_pctipocompratribunal;
+            $oRetorno->l03_presencial = $oDados->l03_presencial;
         }
 
 
@@ -514,7 +515,7 @@ switch ($oParam->exec) {
             $sCampos .= " m61_descr, pc01_codmater, pc01_descrmater, e54_autori,e55_quant,  {$sBuscaFornecedor}";
 
             $sOrdem   = " l21_ordem ";
-            $sWhere   = " l21_codliclicita = {$oParam->iCodigoLicitacao} ";
+            $sWhere   = " pc11_quant > 0 and l21_codliclicita = {$oParam->iCodigoLicitacao} ";
 
             /**
              * adicionado essa condição pois licitações do tipo 102 e 103 nao tem julgamento OC8339
@@ -802,7 +803,7 @@ switch ($oParam->exec) {
 
         $sSqlMarcados = $oDaoProcItem->sql_query_pcmater('null', 'DISTINCT pc81_codprocitem', '', $sWhere, true);
         $rsMarcados = db_query($sSqlMarcados);
-
+        //print_r($sSqlMarcados);
         for ($count = 0; $count < pg_numrows($rsSql); $count++) {
 
             $oItem = db_utils::fieldsMemory($rsSql, $count);
@@ -838,7 +839,6 @@ switch ($oParam->exec) {
 
     case 'insereItens':
 
-
         $aItens = $oParam->aItens;
 
         db_inicio_transacao();
@@ -862,7 +862,7 @@ switch ($oParam->exec) {
             }
 
             if (strlen(trim($itens_incluidos)) > 0) {
-                $arr_itens = split(",", $itens_incluidos);
+                $arr_itens = explode(",", $itens_incluidos);
             }
         }
 
@@ -945,26 +945,26 @@ switch ($oParam->exec) {
                                     if ($l20_usaregistropreco == 't') {
 
                                         $rsSolicitemControle = $oDaoSolicitemReservado->sql_record("select
-                    abertura.pc55_solicitempai as vinculopai,
-                    abertura.pc55_solicitemfilho as vinculofilho,
-                    itemdaabertura.pc11_codigo as itemdaabertura,
-                    itemdaabertura.pc11_numero as itemdaaberturanumero,
-                    itemdaestimativa.pc11_codigo as itemdaestimativa,
-                    itemdaestimativa.pc11_numero as itemdaestimativanumero,
-                    itemdaestimativa.pc11_quant as itemdaestimativaqtd,
-                    vinculo.pc55_solicitempai,
-                    vinculo.pc55_solicitemfilho
-                    from solicitem as compilacao
-                    join solicita as compsolicita on compsolicita.pc10_numero=compilacao.pc11_numero
-                    left join solicitemvinculo as vinculo on vinculo.pc55_solicitemfilho = compilacao.pc11_codigo
-                    left join solicitem as itemdaestimativa on itemdaestimativa.pc11_codigo = vinculo.pc55_solicitempai
-                    left join solicita as estisolicita on estisolicita.pc10_numero = itemdaestimativa.pc11_numero
-                    left join solicitemvinculo as abertura on abertura.pc55_solicitemfilho=vinculo.pc55_solicitempai
-                    left join solicitem as itemdaabertura on itemdaabertura.pc11_codigo = abertura.pc55_solicitempai
-                    left join solicita as solabertura on solabertura.pc10_numero = itemdaabertura.pc11_numero
-                    left join solicitemregistropreco on pc57_solicitem=compilacao.pc11_codigo
-                    where
-                    compilacao.pc11_codigo = $oItem->pc11_codigo");
+                                            abertura.pc55_solicitempai as vinculopai,
+                                            abertura.pc55_solicitemfilho as vinculofilho,
+                                            itemdaabertura.pc11_codigo as itemdaabertura,
+                                            itemdaabertura.pc11_numero as itemdaaberturanumero,
+                                            itemdaestimativa.pc11_codigo as itemdaestimativa,
+                                            itemdaestimativa.pc11_numero as itemdaestimativanumero,
+                                            itemdaestimativa.pc11_quant as itemdaestimativaqtd,
+                                            vinculo.pc55_solicitempai,
+                                            vinculo.pc55_solicitemfilho
+                                            from solicitem as compilacao
+                                            join solicita as compsolicita on compsolicita.pc10_numero=compilacao.pc11_numero
+                                            left join solicitemvinculo as vinculo on vinculo.pc55_solicitemfilho = compilacao.pc11_codigo
+                                            left join solicitem as itemdaestimativa on itemdaestimativa.pc11_codigo = vinculo.pc55_solicitempai
+                                            left join solicita as estisolicita on estisolicita.pc10_numero = itemdaestimativa.pc11_numero
+                                            left join solicitemvinculo as abertura on abertura.pc55_solicitemfilho=vinculo.pc55_solicitempai
+                                            left join solicitem as itemdaabertura on itemdaabertura.pc11_codigo = abertura.pc55_solicitempai
+                                            left join solicita as solabertura on solabertura.pc10_numero = itemdaabertura.pc11_numero
+                                            left join solicitemregistropreco on pc57_solicitem=compilacao.pc11_codigo
+                                            where
+                                            compilacao.pc11_codigo = $oItem->pc11_codigo");
 
                                         $oItemControle = db_utils::fieldsMemory($rsSolicitemControle, 0);
                                     }
@@ -1063,7 +1063,7 @@ switch ($oParam->exec) {
                                     if ($oDaoSolicitemReservado->numrows_incluir) {
                                         //compila\E7\E3o
                                         $oItemAlterado = db_utils::getDao('solicitem');
-                                        $oItemAlterado->pc11_quant = $nova_qtd;
+                                        $oItemAlterado->pc11_quant = $nova_qtd > 0 ? $nova_qtd : '0';
                                         $oItemAlterado->pc11_codigo = $oItem->pc11_codigo;
                                         $oItemAlterado->alterar($oItem->pc11_codigo);
 
@@ -1419,6 +1419,12 @@ switch ($oParam->exec) {
                             $clliclicitem->l21_codpcprocitem = $aItens[$count]->codprocitem;
                             $clliclicitem->l21_situacao      = "0";
                             $clliclicitem->l21_ordem         = $seq;
+                            if ($aItens[$count]->sigilo == 1) {
+                                $clliclicitem->l21_sigilo        = "t";
+                            } else {
+                                $clliclicitem->l21_sigilo        = "f";
+                            }
+
                             $clliclicitem->incluir(null);
 
                             if (!$clliclicitem->erro_status) {
@@ -1538,6 +1544,7 @@ switch ($oParam->exec) {
                                     $seqlote++;
                                     $clliclicitemlote->l04_seq = $seqlote;
                                 }
+                                $oDaoLoteReservado->l04_numerolote = null;
                                 $clliclicitemlote->incluir(null);
 
                                 if ($clliclicitemlote->erro_status == 0) {
@@ -1562,6 +1569,7 @@ switch ($oParam->exec) {
                                     $oDaoLoteReservado->l04_descricao = $clliclicitemlotereservado->l04_descricao;
                                     $oDaoLoteReservado->l04_liclicitem = $clliclicitemlotereservado->l04_liclicitem;
                                     $oDaoLoteReservado->l04_seq = $seqlotereservado;
+                                    $oDaoLoteReservado->l04_numerolote = null;
                                     $oDaoLoteReservado->incluir(null);
 
                                     if (!$oDaoLoteReservado->numrows_incluir) {

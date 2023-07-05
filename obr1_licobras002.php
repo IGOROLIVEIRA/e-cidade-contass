@@ -11,6 +11,7 @@ include("classes/db_condataconf_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $cllicobras = new cl_licobras;
+$clliclicitemlote = new cl_liclicitemlote;
 $clhomologacaoadjudica = new cl_homologacaoadjudica();
 $clcondataconf = new cl_condataconf;
 
@@ -54,9 +55,23 @@ if (isset($alterar)) {
       throw new Exception("Usuário: Numero da Obra ja utilizado !");
     }
 
+    $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null, "obr01_licitacaolote", null, "obr01_licitacao = $obr01_licitacao"));
+   
+    for($x=0;$x<pg_num_rows($resultobras);$x++){
+      $oDaoObra = db_utils::fieldsMemory($resultobras, $x);
+      $resullote = $clliclicitemlote->sql_record("select l04_descricao from liclicitemlote where l04_numerolote = ".$oDaoObra->obr01_licitacaolote);
+      $oDaoLote = db_utils::fieldsMemory($resullote, 0);
+      if ($oDaoObra->obr01_licitacaolote == $obr01_licitacaolote) {
+        throw new Exception("Usuário: Lote ".$oDaoLote->l04_descricao." já utilizado em outra Obra: ".$l20_objeto."!");
+      }
+    }
+      
+
+
 
     db_inicio_transacao();
     $db_opcao = 2;
+    $cllicobras->obr01_licitacaolote       = $obr01_licitacaolote;
     $cllicobras->alterar($obr01_sequencial);
 
     if ($cllicobras->erro_status == 0) {
@@ -80,7 +95,8 @@ if (isset($alterar)) {
               l20_objeto,
               obr01_dtlancamento,
               obr01_licitacaosistema,
-              obr01_linkobra";
+              obr01_linkobra,
+              obr01_licitacaolote as licitacaolote";
   $result = $cllicobras->sql_record($cllicobras->sql_query_pesquisa(null, $campos, null, "obr01_sequencial=$chavepesquisa"));
   db_fieldsmemory($result, 0);
   $db_botao = true;
@@ -160,7 +176,7 @@ if (isset($alterar)) {
   if ($cllicobras->erro_status == "0") {
     $cllicobras->erro(true, false);
     $db_botao = true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
+    //echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
     if ($cllicobras->erro_campo != "") {
       echo "<script> document.form1." . $cllicobras->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
       echo "<script> document.form1." . $cllicobras->erro_campo . ".focus();</script>";

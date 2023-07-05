@@ -354,13 +354,15 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->sety(255);
     $this->objpdf->Setfont('Arial', 'B', 10);
     $this->objpdf->cell(30, 20,"Avisos", "LTB", 0, "C");
-    $this->objpdf->Setfont('Arial', '', 8);    
-    if ($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMMONTALVANIA){
+    $this->objpdf->Setfont('Arial', '', 8);  
+    
+    $codInstituicao = array(Instituicao::COD_CLI_PMMONTALVANIA, Instituicao::COD_CLI_PMJURAMENTO);
+    if (in_array($oInstit->getCodigoCliente(), $codInstituicao)){
         $this->objpdf->rect(40, $this->yOld + 30, 100, 20);
         $this->objpdf->MultiCell(100, 5,$this->texto_aviso, 0, "L");
         $this->objpdf->rect(140, $this->yOld + 30, 60, 20);
         $this->objpdf->setX(160);
-        $this->objpdf->cell(30, 5,"Servidor(a) Emitente", 0, "C");
+        $this->objpdf->cell(30, 16,"Servidor(a) Emitente", 0, "C");
     }else{
         $this->objpdf->rect(40, $this->yOld + 30, 160, 20);
         $this->objpdf->MultiCell(165, 5,$this->texto_aviso, 0, "L");

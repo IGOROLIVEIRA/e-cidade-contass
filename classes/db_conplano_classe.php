@@ -129,7 +129,7 @@ class cl_conplano {
     }
   }
   // funcao para inclusao
-  function incluir ($c60_codcon,$c60_anousu,$subtipo,$iTipoConta){
+  function incluir ($c60_codcon=null, $c60_anousu=null, $subtipo=null, $iTipoConta=null){
     $this->atualizacampos();
     if($this->c60_estrut == null ){
       $this->erro_sql = " Campo Estrutural nao Informado.";

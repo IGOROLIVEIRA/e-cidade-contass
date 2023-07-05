@@ -93,7 +93,7 @@ if($sqlerro==false) {
           $seq_ant = $rh25_codlotavinc;
           $rh25_anousu      = $anodestino;
           $clrhlotavinc->rh25_codigo   = $rh25_codigo;
-          $clrhlotavinc->rh25_vinculo  = $rh25_vinculo;
+          $clrhlotavinc->rh25_vinculo  = ($rh25_vinculo == NULL || $rh25_vinculo == '' ? ' ' : $rh25_vinculo);
           $clrhlotavinc->rh25_anousu   = $anodestino;
           $clrhlotavinc->rh25_projativ = $rh25_projativ;
           $clrhlotavinc->rh25_recurso  = $rh25_recurso;

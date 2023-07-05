@@ -189,7 +189,7 @@ class Request {
     }
 
     return $this->params;
-  } 
+  }
 
   public function setUri($uri) {
     return $this->uri = $uri;

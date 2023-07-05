@@ -181,17 +181,19 @@ class AcordoRescisao extends AcordoMovimentacao
         for ($iDot = 0; $iDot < $oDaoPcProcitem->numrows; $iDot++) {
 
           $oDadosDotacao = db_utils::fieldsMemory($rsDotacoes, $iDot);
-          $oDaoReservalSolicitacao->excluir(null, "o82_codres={$oDadosDotacao->o80_codres}");
-          if ($oDaoReservalSolicitacao->erro_status == 0) {
+          if($oDadosDotacao->o80_codres != null){
+           $oDaoReservalSolicitacao->excluir(null, "o82_codres={$oDadosDotacao->o80_codres}");
+            if ($oDaoReservalSolicitacao->erro_status == 0) {
 
             $sErroMsg = "Houve um erro ao remover a reserva de saldo da solicitacao\n{$oDaoReservalSolicitacao->erro_msg}";
             throw new Exception($sErroMsg);
-          }
-          $oDaoReserva->excluir($oDadosDotacao->o80_codres);
-          if ($oDaoReserva->erro_status == 0) {
+            }
+            $oDaoReserva->excluir($oDadosDotacao->o80_codres);
+            if ($oDaoReserva->erro_status == 0) {
 
-            $sErroMsg = "Houve um erro ao remover a reserva de saldo da solicitacao\n{$oDaoReserva->erro_msg}";
-            throw new Exception($sErroMsg);
+              $sErroMsg = "Houve um erro ao remover a reserva de saldo da solicitacao\n{$oDaoReserva->erro_msg}";
+              throw new Exception($sErroMsg);
+            }
           }
         }
         $oItem->reservarSaldos();

@@ -267,7 +267,7 @@ criarWorkReceita($sWhereReceita, array($anousu), $dtini, $dtfim);
 $agrupa_estrutural = false;
 $encerramento = false;
 $where = " c61_instit in ({$instits})";
-$where .= " and (c61_codigo = '102' or c61_codigo = '1102') ";
+$where .= " and (c61_codigo = '102' or c61_codigo = '1102' or c61_codigo = '15000002') ";
 
 $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), ($DBtxt21_ano . '-' . $DBtxt21_mes . '-' . $DBtxt21_dia), $dtfim, false, $where);
 

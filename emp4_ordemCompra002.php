@@ -153,7 +153,7 @@ if (isset($oPost->incluir)){
    */
   for ($i=0; $i < count($oPost->itensOrdem); $i++) {
 
-    $sSqlEmp    = "select e62_numemp, e62_sequen from empempitem where e62_sequencial = {$oPost->itensOrdem[$i]}";
+    $sSqlEmp    = "select e62_item,e62_numemp, e62_sequen from empempitem where e62_sequencial = {$oPost->itensOrdem[$i]}";
     $rsEmpItem  = $clempempitem->sql_record($sSqlEmp);
     if ($clempempitem->numrows == 1) {
       $oEmpItem = db_utils::fieldsMemory($rsEmpItem, 0);
@@ -163,6 +163,28 @@ if (isset($oPost->incluir)){
       $erro_msg = "Item {$oPost->itensOrdem[$i]} não encontrado no Empenho.Operacao cancelada.";
       break;
     }
+    
+    $sSqlTab    = "select sum(l223_total) as totaltabela from empordemtabela where l223_numemp = $oEmpItem->e62_numemp and l223_pcmaterordem = $oEmpItem->e62_item and l223_codordem = 0";
+    $rsTabItem  = $clempempitem->sql_record($sSqlTab);
+    $oTabItem = db_utils::fieldsMemory($rsTabItem, 0);
+    if ($clempempitem->numrows == 1 && $oTabItem->totaltabela > 0) {
+      
+      $sValor         = "valor{$oPost->itensOrdem[$i]}";
+      $nValor   = DBNumber::round($oPost->$sValor,2);
+      $nTabela = round($oTabItem->totaltabela,2) ;
+              
+      if($nTabela != $nValor){
+        $sqlerro  = true;
+        $erro_msg = "Usuário: A soma dos itens da tabela $oEmpItem->e62_item está divergente do valor total do item Tabela.";
+        break;
+      }else{
+        $sSqlEmp    = "update empordemtabela set l223_codordem = $codigo where l223_numemp = $oEmpItem->e62_numemp and l223_pcmaterordem = $oEmpItem->e62_item and l223_codordem = 0";
+        db_query($sSqlEmp);
+      }
+    }
+
+    
+    
     if (!$sqlerro) {
 
       /**
@@ -208,6 +230,10 @@ if (isset($oPost->incluir)){
 <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
+<?
+  db_app::load("scripts.js, strings.js, prototype.js,datagrid.widget.js, widgets/dbautocomplete.widget.js");
+  db_app::load("widgets/windowAux.widget.js");
+  ?>
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/strings.js"></script>
@@ -236,10 +262,10 @@ if (isset($oPost->incluir)){
   </tr>
 </table>
 </center>
-<?
+<?php
 db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
-<?
+<?php
 if (isset($incluir)){
   if($sqlerro == true){
     db_msgbox($erro_msg);

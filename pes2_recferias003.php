@@ -24,13 +24,14 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-phpinfo();
+
 require ("libs/db_stdlib.php");
 require ("libs/db_utils.php");
 require ("libs/db_conecta.php");
 include ("libs/db_sessoes.php");
 include ("libs/db_usuariosonline.php");
 include ("libs/db_libsys.php");
+
 include_once 'dbagata/classes/core/AgataAPI.class';
 require ("model/documentoTemplate.model.php");
 require_once("std/db_stdClass.php");
@@ -48,7 +49,9 @@ if(strlen($oPost->mes)==1){
 $instit = db_getsession("DB_instit");
 
 
-ini_set("error_reporting","E_ALL & ~NOTICE");
+//ini_set("error_reporting","E_ALL & ~NOTICE");
+//ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
 
 $clagata = new cl_dbagata("pessoal/pes2_recferias003.agt");
 
@@ -111,7 +114,6 @@ if ( $sTipo == "m" ) {
 
 }
 
-
 $xml = $api->getReport();
 
 $xml["Report"]["DataSet"]["Query"]["Where"] 	= $sWhere;
@@ -119,29 +121,26 @@ $xml["Report"]["DataSet"]["Query"]["Where"] 	= $sWhere;
 $api->setReport($xml);
 
 try {
-	$oRecModel = new documentoTemplate(1);
 
+    $oRecModel = new documentoTemplate(1);
+    $ok = false;
+    $ok 		 = $api->parseOpenOffice($oRecModel->getArquivoTemplate());
+
+    if($ok){
+        $sNomeRelatorio   = "tmp/geraRelatorio".date("YmdHis").db_getsession("DB_id_usuario").".pdf";
+
+        $sComandoConverte = db_stdClass::ex_oo2pdf($sCaminhoSalvoSxw, $sNomeRelatorio);
+
+        if (!$sComandoConverte) {
+            db_redireciona("db_erros.php?fechar=true&db_erro=Falha ao gera PDF");
+        }else{
+            db_redireciona($sNomeRelatorio);
+        }
+    }else {
+        db_redireciona("db_erros.php?fechar=true&db_erro=Falha ao gera relatório !!!");
+    }
 }catch (Exception $oErro){
-	$erro =  $oErro->getMessage();
-	header("Location: db_erros.php?fechar=true&db_erro=$erro");
+    $erro =  $oErro->getMessage();
+    header("Location: db_erros.php?fechar=true&db_erro=$erro");
 }
-
-//ob_start();
-//$ok      = $api->generateReport();
-$ok 		 = $api->parseOpenOffice($oRecModel->getArquivoTemplate());
-
-if($ok==true){
-	$sNomeRelatorio   = "tmp/geraRelatorio".date("YmdHis").db_getsession("DB_id_usuario").".pdf";
-
-	$sComandoConverte = db_stdClass::ex_oo2pdf($sCaminhoSalvoSxw, $sNomeRelatorio);
-
-	if (!$sComandoConverte) {
-		db_redireciona("db_erros.php?fechar=true&db_erro=Falha ao gera PDF");
-	}else{
-		db_redireciona($sNomeRelatorio);
-	}
-}else {
-	db_redireciona("db_erros.php?fechar=true&db_erro=Falha ao gera relatório !!!");
-}
-
 ?>

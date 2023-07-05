@@ -53,6 +53,30 @@ class LinhaTransporte {
   protected $sAbreviatura;
 
   /**
+   * Data Limite da Linha de Transporte
+   * @var string
+   */
+  protected $sDatalimite;
+
+  /**
+   * KM ida e volta da Linha de Transporte
+   * @var string
+   */
+  protected $sKmidaevolta;
+
+  /**
+   * Valor do KM da Linha de Transporte
+   * @var string
+   */
+  protected $sValorkm;
+
+  /**
+   * Valor do CGM da Linha de Transporte
+   * @var string
+   */
+  protected $sNumcgm;
+
+  /**
    * Array com instâncias de itinerários
    * @var array
    */
@@ -80,7 +104,10 @@ class LinhaTransporte {
         $this->iCodigo      = $oLinhaTransporte->tre06_sequencial;
         $this->setNome($oLinhaTransporte->tre06_nome);
         $this->setAbreviatura($oLinhaTransporte->tre06_abreviatura);
-
+        $this->setDatalimite($oLinhaTransporte->tre06_datalimite);
+        $this->setKmidaevolta($oLinhaTransporte->tre06_kmidaevolta);
+        $this->setValorkm($oLinhaTransporte->tre06_valorkm);
+        $this->setNumcgm($oLinhaTransporte->tre06_numcgm);
       }
     }
   }
@@ -110,6 +137,38 @@ class LinhaTransporte {
   }
 
   /**
+   * Retorna a data limite da Linha de Transporte
+   * @return string
+   */
+  public function getDatalimite() {
+    return $this->sDatalimite;
+  }
+
+  /**
+   * Retorna a km ida e volta da Linha de Transporte
+   * @return string
+   */
+  public function getKmidaevolta() {
+    return $this->sKmidaevolta;
+  }
+
+  /**
+   * Retorna a Valor do km da Linha de Transporte
+   * @return string
+   */
+  public function getValorkm() {
+    return $this->sValorkm;
+  }
+
+   /**
+   * Retorna o o numero do CGM da Linha de Transporte
+   * @return string
+   */
+  public function getNumcgm() {
+    return $this->sNumcgm;
+  }
+
+  /**
    * Define o nome da Linha de Transporte
    * @param string $sNome
    */
@@ -123,6 +182,38 @@ class LinhaTransporte {
    */
   public function setAbreviatura($sAbreviatura) {
     $this->sAbreviatura = $sAbreviatura;
+  }
+
+  /**
+   * Define a data limite da Linha de Transporte
+   * @param string $sDatalimite
+   */
+  public function setDatalimite($sDatalimite) {
+    $this->sDatalimite = $sDatalimite;
+  }
+
+  /**
+   * Define a km ida e volta da Linha de Transporte
+   * @param string $sKmidaevolta
+   */
+  public function setKmidaevolta($sKmidaevolta) {
+    $this->sKmidaevolta = $sKmidaevolta;
+  }
+
+  /**
+   * Define a valor do km da Linha de Transporte
+   * @param string $sValorkm
+   */
+  public function setValorkm($sValorkm) {
+    $this->sValorkm = $sValorkm;
+  }
+
+  /**
+   * Define o numero do CGM da Linha de Transporte
+   * @param string $sNumcgm
+   */
+  public function setNumcgm($sNumcgm) {
+    $this->sNumcgm = $sNumcgm;
   }
 
   /**
@@ -158,7 +249,7 @@ class LinhaTransporte {
    * @throws BusinessException
    */
   public function salvar() {
-
+    
     if (!db_utils::inTransaction()) {
       throw new DBException('Não existe transação com o banco de dados.');
     }
@@ -175,10 +266,13 @@ class LinhaTransporte {
      * Verificamos se ha uma linha de transporte cadastrado com o mesmo nome informado
      */
     $sWhereLinhaTransporte = "tre06_nome = trim('{$this->getNome()}')";
+    
     $sSqlLinhaTransporte   = $oDaoLinhaTransporte->sql_query_file(null, "tre06_sequencial", null, $sWhereLinhaTransporte);
     $rsLinhaTransporte     = $oDaoLinhaTransporte->sql_record($sSqlLinhaTransporte);
-    
-    if ($oDaoLinhaTransporte->numrows > 0) {
+
+    $sequencial     = db_utils::fieldsMemory($rsLinhaTransporte, 0)->tre06_sequencial;
+   
+    if ($oDaoLinhaTransporte->numrows > 0 && $sequencial != $this->getCodigo()){
       
       $sMensagem = 'educacao.transporteescolar.LinhaTransporte.nome_existente';
       throw new BusinessException(_M($sMensagem));
@@ -186,6 +280,10 @@ class LinhaTransporte {
     
     $oDaoLinhaTransporte->tre06_nome        = $this->getNome();
     $oDaoLinhaTransporte->tre06_abreviatura = $this->getAbreviatura();
+    $oDaoLinhaTransporte->tre06_datalimite  = $this->getDatalimite();
+    $oDaoLinhaTransporte->tre06_kmidaevolta = $this->getKmidaevolta();
+    $oDaoLinhaTransporte->tre06_valorkm     = $this->getValorkm();
+    $oDaoLinhaTransporte->tre06_numcgm      = $this->getNumcgm();
     
     if (empty($this->iCodigo)) {
 

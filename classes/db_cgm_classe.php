@@ -862,10 +862,10 @@ class cl_cgm {
             $sql  .= $virgula." z01_nasc = '$this->z01_nasc' ";
             $virgula = ",";
         }     else{
-            if(isset($GLOBALS["HTTP_POST_VARS"]["z01_nasc_dia"])){
+            
                 $sql  .= $virgula." z01_nasc = null ";
                 $virgula = ",";
-            }
+            
         }
         if(trim($this->z01_pai)!="" || isset($GLOBALS["HTTP_POST_VARS"]["z01_pai"])){
             $sql  .= $virgula." z01_pai = '$this->z01_pai' ";

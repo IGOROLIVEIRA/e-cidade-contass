@@ -184,10 +184,9 @@ for ($x = 0; $x < $linhas; $x++) {
   $head7 = "Dia / Mês Limite Movimentação: $ed233_c_limitemov";
   $pdf->addpage();
   $pdf->setfont('arial', 'b', 8);
-  $limite     = 55;
+  $limite     = 53;
   $somacampos = 0;
   $cont       = 0;
-
   if ($active == "SIM") {
     $condicao = " AND ed60_c_situacao='MATRICULADO'";
   } else {
@@ -205,6 +204,34 @@ for ($x = 0; $x < $linhas; $x++) {
       $sWhere
     )
   );
+
+  /*Busca regente responsavel pela turma*/
+  $sCampos = "case when ed20_i_tiposervidor = 1 then cgmrh.z01_nome else cgmcgm.z01_nome end as z01_nome";
+  $result3 = $clregenteconselho->sql_record(
+    $clregenteconselho->sql_query(
+      "",
+      $sCampos,
+      "",
+      "ed235_i_turma = $ed57_i_codigo"
+    )
+  );
+
+  /*informações sobre o relatório e turma - inicio*/
+  $pdf->setfont('arial', 'b', 10);
+  $pdf->cell(195, 6, "LISTA OFICIAL DAS TURMAS", 0, 1, "C", 0);
+  $pdf->setfont('arial', 'b', 8);
+  $pdf->cell(65,5,"Turma: $ed57_c_descr",0,0,"L",0);
+  $pdf->cell(65,5,"Curso: $ed29_i_codigo - $ed29_c_descr",0,0,"C",0);
+  $pdf->cell(65,5,"Etapa: $ed11_c_descr",0,1,"C",0);
+  
+  if ($clregenteconselho->numrows > 0) {
+    db_fieldsmemory($result3, 0);
+    $pdf->cell(190, 4, "Regente: " . $z01_nome, 0, 1, "L", 0);
+  } else {
+    $pdf->cell(190, 4, "Regente: _________________________________________________________________", 0, 1, "L", 0);
+  }
+  /*informações sobre a turma - fim*/
+
   $pdf->setfont('arial', 'b', 8);
   $pdf->cell(15, 4, "Cod", 1, 0, "C", 0);
   $pdf->cell(20, 4, "Dt.Entrada", 1, 0, "C", 0);
@@ -313,22 +340,6 @@ for ($x = 0; $x < $linhas; $x++) {
   $pdf->cell(95, 4, "ID = Idade no ano  I = Aluno de Inclusão", 0, 1, "R", 0);
   $pdf->setfont('arial', '', 8);
   $pdf->cell(190, 4, "", 0, 1, "L", 0);
-  $sCampos = "case when ed20_i_tiposervidor = 1 then cgmrh.z01_nome else cgmcgm.z01_nome end as z01_nome";
-  $result3 = $clregenteconselho->sql_record(
-    $clregenteconselho->sql_query(
-      "",
-      $sCampos,
-      "",
-      "ed235_i_turma = $ed57_i_codigo"
-    )
-  );
-  if ($clregenteconselho->numrows > 0) {
-
-    db_fieldsmemory($result3, 0);
-    $pdf->cell(190, 4, "CONSELHEIRO: " . $z01_nome, 0, 1, "L", 0);
-  } else {
-    $pdf->cell(190, 4, "CONSELHEIRO: _________________________________________________________________", 0, 1, "L", 0);
-  }
 }
 $pdf->Output();
 ?>

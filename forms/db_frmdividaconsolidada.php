@@ -30,7 +30,6 @@ $clrotulo->label("l20_codigo");
                </td>
                <td>
                 <?
-//db_textarea('si167_nroleiautorizacao',0,0,$Isi167_nroleiautorizacao,true,'text',$db_opcao,"")
                 db_input('si167_nroleiautorizacao',14,$Isi167_nrodocumentocredor,true,'text',$db_opcao,"")
                 ?>
               </td>
@@ -102,51 +101,73 @@ $clrotulo->label("l20_codigo");
         ?>
       </td>
     </tr>
+    <? if(db_getsession("DB_anousu") < 2023 ) {
+        echo " <tr> ";
+        echo "    <td nowrap title=".$Tsi167_contratodeclei."> ";
+        echo $Lsi167_contratodeclei;
+        echo "    </td> ";
+        echo "    <td> ";
+        $x = array("1"=>"Sim","2"=>"Não");
+         db_select('si167_contratodeclei',$x,true,$db_opcao,"");
 
-    <tr>
-      <td nowrap title="<?=@$Tsi167_contratodeclei?>">
-       <?=@$Lsi167_contratodeclei?>
-     </td>
-     <td>
-      <?
-      $x = array("1"=>"Sim","2"=>"NÃ£o");
-      db_select('si167_contratodeclei',$x,true,$db_opcao,"");
-//db_input('si167_contratodeclei',1,$Isi167_contratodeclei,true,'text',$db_opcao,"")
-      ?>
-    </td>
-  </tr>
+        echo "    </td> ";
+        echo "</tr> ";
+    } ?>
   <tr>
     <td nowrap title="<?=@$Tsi167_tipolancamento?>">
      <?=@$Lsi167_tipolancamento?>
    </td>
    <td>
     <?
-    if(db_getsession("DB_anousu") >= 2018 ){
+    if(db_getsession("DB_anousu") >= 2018 && db_getsession("DB_anousu") <= 2022){
+        $x = array(
+          "01" => "01 D&#237;vida Mobili&#225;ria;",
+          "02" => "02 D&#237;vida Contratual de PPP;",
+          "03" => "03 D&#237;vida Contratual de Aquisi&#231;&#227;oFinanciada de Bens e Arrendamento Mercantil Financeiro;",
+          "04" => "04 D&#237;vida Contratual de Empr&#233;stimos;",
+          "05" => "05 D&#237;vida Contratual de Financiamentos;",
+          "06" => "06 D&#237;vida Contratual de Antecipa&#231;&#227;o de Receita pela Venda a Termo de Bens e Servi&#231;os;",
+          "07" => "07 D&#237;vida Contratual de Assun&#231;&#227;o, Reconhecimento e Confiss&#227;o de D&#237;vidas (LRF, art. 29, &#167; 1&#186;);",
+          "08" => "08 D&#237;vida Contratual de Opera&#231;&#245;es de cr&#233;dito previstas no art. 7&#186; &#167; 3&#186; da RSF n&#186; 43/2001;",
+          "09" => "09 D&#237;vida Contratual de Parcelamento e Renegocia&#231;&#227;o de D&#237;vidas de Tributos;",
+          "10" => "10 D&#237;vida Contratual de Parcelamento e Renegocia&#231;&#227;o de D&#237;vidas de Contribui&#231;&#245;es Previdenci&#225;rias;",
+          "11" => "11 D&#237;vida Contratual de Parcelamento e Renegocia&#231;&#227;o de D&#237;vidas de Demais Contribui&#231;&#245;es Sociais;",
+          "12" => "12 D&#237;vida Contratual de Parcelamento e Renegocia&#231;&#227;o de D&#237;vidas do FGTS;",
+          "13" => "13 D&#237;vida Contratual de Parcelamento e Renegocia&#231;&#227;o de D&#237;vida com Institui&#231;&#227;o n&#227;o Financeira;",
+          "14" => "14 D&#237;vida Contratual com Institui&#231;&#227;o Financeira;",
+          "15" => "15 Demais D&#237;vidas Contratuais;",
+          "16" => "16 Outras Opera&#231;&#245;es de Cr&#233;dito sujeitasao limite;",
+          "17" => "17 Precat&#243;rios Posteriores a 05/05/2000 (inclusive) - Vencidos e n&#227;o Pagos;",
+          "18" => "18 Precat&#243;rios Posteriores a 05/05/2000 (N&#227;o inclu&#237;dos na DC);",
+          "19" => "19 Reestrutura&#231;&#227;o da Dívida do Munic&#237;pio;",
+          "20" => "20 Outras D&#237;vidas;",
+          "21" => "21 Outras Opera&#231;&#245;es de Cr&#233;dito n&#227;o Sujeitas ao Limite Para Fins de Contratação;",
+          "22" => "22 Opera&#231;&#245;es Vedadas;",
+          "23" => "23 Precat&#243;rios Anteriores a 05/05/2000;",
+          "24" => "24 Apropria&#231;&#227;o de Dep&#243;sitos Judiciais - LC 151/2015;",
+
+          );
+      }else if(db_getsession("DB_anousu") > 2022 ){
       $x = array(
-"01" => "01 D&#237;vida Mobili&#225;ria;",
+        "01" => "01 D&#237;vida Mobili&#225;ria;",
         "02" => "02 D&#237;vida Contratual de PPP;",
-        "03" => "03 D&#237;vida Contratual de Aquisi&#231;&#227;oFinanciada de Bens;",
-        "04" => "04 D&#237;vida Contratualde Empr&#233;stimos;",
-        "05" => "05 D&#237;vida Contratualde Financiamentos;",
-        "06" => "06 D&#237;vida Contratualde Antecipa&#231;&#227;o de Receita pela Venda a Termo de Bens e Servi&#231;os;",
-        "07" => "07 D&#237;vida Contratualde Assun&#231;&#227;o, Reconhecimento e Confiss&#227;o de D&#237;vidas (LRF, art. 29, &#167; 1&#186;);",
-        "08" => "08 D&#237;vida Contratualde Opera&#231;&#245;es de cr&#233;dito previstas no art. 7&#186; &#167; 3&#186; da RSF n&#186; 43/2001;",
-        "09" => "09 D&#237;vida Contratualde Parcelamento e Renegocia&#231;&#227;o de D&#237;vidas de Tributos;",
-        "10" => "10 D&#237;vida Contratualde Parcelamento e Renegocia&#231;&#227;o de D&#237;vidas de Contribui&#231;&#245;es Sociais Previdenci&#225;rias;",
-        "11" => "11 D&#237;vida Contratualde Parcelamento e Renegocia&#231;&#227;o de D&#237;vidas deOutras Contribui&#231;&#245;es Sociais;",
-        "12" => "12 D&#237;vida Contratualde Parcelamento e Renegocia&#231;&#227;o de D&#237;vidas do FGTS;",
-        "13" => "13 D&#237;vida Contratualde Parcelamento e Renegocia&#231;&#227;o de D&#237;vida com Institui&#231;&#227;o n&#227;o Financeira; (Vide Manual de Demonstrativos Fiscais. Ex.: Cemig, Copasa, etc);",
-        "14" => "14 D&#237;vida Contratualcom Institui&#231;&#227;o Financeira;",
+        "03" => "03 D&#237;vida Contratual de Aquisi&#231;&#227;o Financiada de Bens e Arrendamento Mercantil Financeiro;",
+        "04" => "04 D&#237;vida Contratual de Empr&#233;stimos;",
+        "06" => "06 D&#237;vida Contratual de Antecipa&#231;&#227;o de Receita pela Venda a Termo de Bens e Servi&#231;os;",
+        "07" => "07 D&#237;vida Contratual de Assun&#231;&#227;o, Reconhecimento e Confiss&#227;o de D&#237;vidas (LRF, art. 29, &#167; 1&#186;);",
+        "09" => "09 D&#237;vida Contratual de Parcelamento e Renegocia&#231;&#227;o de D&#237;vidas de Tributos;",
+        "10" => "10 D&#237;vida Contratual de Parcelamento e Renegocia&#231;&#227;o de D&#237;vidas de Contribui&#231;&#245;es Previdenci&#225;rias;",
+        "11" => "11 D&#237;vida Contratual de Parcelamento e Renegocia&#231;&#227;o de D&#237;vidas de Demais Contribui&#231;&#245;es Sociais;",
+        "12" => "12 D&#237;vida Contratual de Parcelamento e Renegocia&#231;&#227;o de D&#237;vidas do FGTS;",
+        "13" => "13 D&#237;vida Contratual de Parcelamento e Renegocia&#231;&#227;o de D&#237;vida com Institui&#231;&#227;o n&#227;o Financeira;",
         "15" => "15 Demais D&#237;vidas Contratuais;",
-        "16" => "16 Outras Opera&#231;&#245;es de Cr&#233;dito sujeitasao limite;",
         "17" => "17 Precat&#243;rios Posteriores a 05/05/2000 (inclusive) - Vencidos e n&#227;o Pagos;",
-        "18" => "18 Precat&#243;rios Posteriores a 05/05/2000 (N&#227;o inclu&#237;dos na DC);Vide Manual de ,Demonstrativos Fiscais - MDF",
-        "19" => "19 Reestrutura&#231;&#227;o Fiscal dos Munic&#237;pios;",
+        "18" => "18 Precat&#243;rios Posteriores a 05/05/2000 (N&#227;o inclu&#237;dos na DC);",
+        "19" => "19 Reestrutura&#231;&#227;o da Dívida do Munic&#237;pio;",
         "20" => "20 Outras D&#237;vidas;",
-        "21" => "21 Outras Opera&#231;&#245;es de Cr&#233;dito n&#227;o Sujeitas ao Limite (Exemplo: Programa de Ilumina&#231;&#227;o P&#250;blica â€“ RELUZ. Conforme MDF.);",
-        "22" => "22 Opera&#231;&#245;es de Cr&#233;dito Vedadas;",
+        "21" => "21 Outras Opera&#231;&#245;es de Cr&#233;dito n&#227;o Sujeitas ao Limite Para Fins de Contratação;",
+        "22" => "22 Opera&#231;&#245;es Vedadas;",
         "23" => "23 Precat&#243;rios Anteriores a 05/05/2000;",
-        "24" => "24 Apropria&#231;&#227;o de Dep&#243;sitos Judiciais - LC 151/2015;",
 
         );
     }else{
@@ -330,7 +351,7 @@ $clrotulo->label("l20_codigo");
 <input name="importar" type="button" id="importar" value="Importar" onclick="js_importar();" <?=($db_opcao!=1?"disabled":"") ?>>
 </form>
 <script>
-
+  var aTipoObrigaSubTipo = [01, 03, 04, 06, 07, 21];
   function verificaTipoLancamento(select) {
     var nTipoLancamento = parseInt(select.value);
     var si167_subtipo   = document.getElementById('si167_subtipo');
@@ -344,12 +365,10 @@ $clrotulo->label("l20_codigo");
 
     si167_subtipo.innerHTML = sOptions;
 
-    if( !((nTipoLancamento >= 1) && (nTipoLancamento <= 15)) ) {
-      si167_subtipo.value = '';
-      si167_subtipo.setAttribute('disabled',true);
-    } else {
-      si167_subtipo.value = 1;
-      si167_subtipo.removeAttribute('disabled');
+    si167_subtipo.hidden=false;
+
+    if(!aTipoObrigaSubTipo.includes(nTipoLancamento) ) {
+        si167_subtipo.hidden=true;
     }
 
   }

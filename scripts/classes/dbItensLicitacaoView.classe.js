@@ -53,9 +53,9 @@ function dbViewItensLicitacao(sNomeInstance, oNode, destinacaoExclusiva) {
         me.oGridItens = new DBGrid('oGridItens');
         me.oGridItens.nameInstance = me.sInstance + '.oGridItens';
         me.oGridItens.setCheckbox(0);
-        me.oGridItens.setCellAlign(['center', 'center', 'center', 'center','center', 'center', "center", 'center']);
-        me.oGridItens.setCellWidth(["7%", '8%', "30%", "17%", "10%", "10%", "8%", "10%", ""]);
-        me.oGridItens.setHeader(["Código", "Nº Item", "Descrição", "Complemento do Item", "Qtde", "Unidade", "ME/EPP", "Qtde Exclusiva", ""]);
+        me.oGridItens.setCellAlign(['center', 'center', 'center', 'center','center', 'center', "center", 'center', 'center']);
+        me.oGridItens.setCellWidth(["7%", '8%', "30%", "17%", "10%", "10%", "8%", "10%", "10%", ""]);
+        me.oGridItens.setHeader(["Código", "Nº Item", "Descrição", "Complemento do Item", "Qtde", "Unidade", "ME/EPP", "Qtde Exclusiva", "Sigiloso", ""]);
         me.oGridItens.setHeight(200);
         me.oGridItens.show($('ctnGridItens'));
         
@@ -110,8 +110,12 @@ function dbViewItensLicitacao(sNomeInstance, oNode, destinacaoExclusiva) {
             
             aLinha[7] = oInputQuantidade;
             aLinha[7].lDisabled = oItem.marcado;
+
+            aLinha[8] = new DBComboBox('Sigilo' + iSeq, 'Sigilo' + iSeq,null,'100%');
+            aLinha[8].addItem('f', 'Não');
+            aLinha[8].addItem('t', 'Sim');
             
-            aLinha[8] = oItem.procitem;
+            aLinha[9] = oItem.procitem;
             
             if(oItem.marcado){
                 aSelecionados.push(iSeq);
@@ -179,6 +183,8 @@ function dbViewItensLicitacao(sNomeInstance, oNode, destinacaoExclusiva) {
 
             if(valor > valorCelula){
                 alert('Qtde Exclusiva informada é maior que a quantidade do item.');
+                document.getElementById(`quantidade${sequencial}`).value = '';
+                document.getElementById(`quantidade${sequencial}`).focus();
                 return;
             }
 

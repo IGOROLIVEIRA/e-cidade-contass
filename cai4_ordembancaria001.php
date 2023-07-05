@@ -37,11 +37,8 @@ if ($incluir) {
 			</SCRIPT>";
 	}
 
-	echo "<script>CurrentWindow.corpo.iframe_db_pagamento.location.href='cai4_ordempagamentos001.php?k00_codigo='+".$oOrdem->k00_codigo.";</script>";
-	echo "<script>parent.document.formaba.db_pagamento.disabled=false;
-	parent.mo_camada('db_pagamento');
-  js_db_libera();
-	</script>";
+	echo "<script>parent.CurrentWindow.corpo.iframe_db_pagamento.location.href='cai4_ordempagamentos001.php?k00_codigo='+".$oOrdem->k00_codigo.";</script>";
+	echo "<script>parent.document.formaba.db_pagamento.disabled=false; parent.mo_camada('db_pagamento'); </script>";
 
 }
 

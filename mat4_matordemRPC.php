@@ -174,7 +174,7 @@ if ($method == "getDados") {
         $clmatestoquedev->m45_codmatrequi = $m40_codigo;
         $clmatestoquedev->m45_codatendrequi = $m42_codigo;
 
-        $clmatestoquedev->incluir();
+        $clmatestoquedev->incluir(null);
         $erro_msg = $clmatestoquedev->erro_msg;
 
 
@@ -192,7 +192,7 @@ if ($method == "getDados") {
           $clmatestoqueini->m80_codtipo        = "18";
           $clmatestoqueini->m80_coddepto       = db_getsession("DB_coddepto");
 
-          $clmatestoqueini->incluir();
+          $clmatestoqueini->incluir(null);
 
 
           if ($clmatestoqueini->erro_status == 0) {
@@ -555,6 +555,61 @@ if ($method == "getDados") {
 } else if ($method == "desmarcarItem") {
 
   $_SESSION["matordem{$objJson->m51_codordem}"][$objJson->iCodLanc][$objJson->iIndice]->checked = "";
+} else if ($method == "validaEntrada") {
+
+  try {
+
+
+    $anousu =  db_getsession('DB_anousu');
+
+    /* Consulta do elemento da dotação */
+
+    $rs_elemento = db_query("select o56_elemento from empempenho
+       inner join orcdotacao on e60_coddot = o58_coddot
+       inner join orcelemento on o56_codele = o58_codele
+       where e60_numemp = (select m52_numemp from matordem
+       inner join matordemitem on m52_codordem = m51_codordem
+       where m51_codordem = $objJson->m51_codordem limit 1) and o56_anousu = $anousu limit 1;");
+
+    $elemento = db_utils::fieldsMemory($rs_elemento, 0)->o56_elemento;
+    $elemento = substr("$elemento", 0, 7);
+
+    if (
+      $elemento != "3339030" && $elemento != "3449030" && $elemento != "3339130" &&
+      $elemento != "3339230" && $elemento != "3339330" && $elemento != "3339430" &&
+      $elemento != "3339530" && $elemento != "3339630" && $elemento != "3339032" &&
+      $elemento != "3337230" && $elemento != "3337232"
+    ) {
+
+      /* consultando os itens da ordem de compra que possuem o campo tipo no cadastro do material com o valor false */
+
+      $codigoslancamento = "";
+      foreach ($objJson->aItens as $item) {
+        $codigoslancamento .= $item->iCodLanc . ",";
+      }
+      $codigoslancamento = rtrim($codigoslancamento, ",");
+
+      $rsitens = db_query("select pc01_codmater from pcmater where pc01_codmater in
+          (select distinct e62_item from empempitem
+          inner join matordemitem on e62_numemp = m52_numemp 
+          inner join pcmater on e62_item = pc01_codmater 
+          where m52_codlanc in ($codigoslancamento)) and pc01_servico = 'f';");
+
+      if (pg_numrows($rsitens) > 0) {
+
+        $codigoitens = "";
+        foreach (db_utils::getCollectionByRecord($rsitens) as $material) {
+          $codigoitens .= $material->pc01_codmater . ",";
+        }
+        $codigoitens = rtrim($codigoitens, ",");
+        throw new Exception("Usuário: Os itens $codigoitens estão cadastrados no compras como Material, a sua entrada irá gerar estoque. Deseja continuar?");
+      }
+    }
+  } catch (Exception $eError) {
+
+    db_fim_transacao(true);
+    echo $json->encode(array("mensagem" => urlencode($eError->getMessage()), "status" => 2));
+  }
 } else if ($method == "confirmarEntrada") {
   try {
 
@@ -624,7 +679,9 @@ if ($method == "getDados") {
     if ($haConsumo) {
 
       $clmatrequi->m40_auto  = 'false';
-      $clmatrequi->m40_almox = $objJson->m51_depto;
+      $codseq_dbalmox = db_query("select m91_codigo from db_almox where m91_depto = {$objJson->m51_depto}");
+      $ocodseq_dbalmox = db_utils::fieldsMemory($codseq_dbalmox, 0);
+      $clmatrequi->m40_almox = $ocodseq_dbalmox->m91_codigo;
       if (empty($objJson->codDeptoConsumo)) {
         $clmatrequi->m40_depto = $objJson->m51_depto;
       } else {

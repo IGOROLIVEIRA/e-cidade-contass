@@ -255,6 +255,18 @@ if ($lBloquear) {
                   db_input("programa", 45, @$Iprograma, true, 'text', 3, '');
                   ?>
                 </td>
+                <td nowrap align="right" title="<?= @$Te60_codemp ?>">
+                <?
+                db_ancora("Empenho:", "js_pesquisaEmpenho({$e60_numemp});", "1");
+                ?>
+                </td>
+                <td>
+                  <? 
+                  $sSql = db_query("select e60_codemp||'/'||e60_anousu as numempano from empempenho where e60_numemp = $e60_numemp");
+                  db_fieldsmemory($sSql, 0, true);
+                  db_input('numempano', 20, $Ie60_codemp, true, 'text', 3) 
+                  ?>
+                </td>
               </tr>
               <tr>
                 <td align='right'><b>Obs:</b></td>
@@ -300,14 +312,17 @@ if ($lBloquear) {
             if ($pesqemp == true) {
             ?>
               <table border='0' cellspacing="0" cellpadding="0" style='border:2px inset white; padding-bottom:15px;' width='100%' bgcolor="white" id="dadosDaOrdem">
+                <tr id='tabela'>
+                 
+                    <b>Para detalhamento dos itens da tabela clique sobre a descrição do item.</b>
+                 
+                </tr>
                 <tr class=''>
                   <td class='table_header' title='Marca/desmarca todos' align='center'>
                     <input type='checkbox' style='display:none' id='mtodos' onclick='js_marca(false)'>
                     <a onclick='js_marca(true)' style='cursor:pointer'><b>M</b></a>
                   </td>
                   <td class='table_header' align='center'><b>Seq.</b></td>
-                  <td class='table_header' align='center'><b>N. Empenho</b></td>
-                  <td class='table_header' align='center'><b>Seq .Empenho</b></td>
                   <td class='table_header' align='center'><b>Cod. Item</b></td>
                   <td class='table_header' align='center' style='width:26%'><b>Item</b></td>
                   <td class='table_header' align='center'><b>Unid.</b></td>
@@ -335,7 +350,11 @@ if ($lBloquear) {
                     $sSQLemp  = "select e60_numemp, ";
                     $sSQLemp .= "       e60_codemp, ";
                     $sSQLemp .= "       e62_item, ";
-                    $sSQLemp .= "       pc01_descrmater, ";
+                    $sSQLemp .= "       (pc01_descrmater || ' - ' ||
+                    (case when pc01_complmater is null
+                    or pc01_complmater = pc01_descrmater then ''
+                    else pc01_complmater
+                  end)) as pc01_descrmater, ";
                     $sSQLemp .= "       e62_sequen, ";
                     $sSQLemp .= "	      e62_descr, ";
                     $sSQLemp .= "	      e62_vlrun, ";
@@ -367,6 +386,34 @@ if ($lBloquear) {
 
                     $numrows  = pg_num_rows($result);
 
+
+                    $sSQLacordo = "select
+                    distinct ac26_acordo
+                  from
+                    acordoposicao
+                  inner join acordoitem on
+                    ac20_acordoposicao = ac26_sequencial
+                  inner join acordoitemexecutado on
+                    ac20_sequencial = ac29_acordoitem
+                  inner join acordoitemexecutadoempautitem on
+                    ac29_sequencial = ac19_acordoitemexecutado
+                  inner join empautitem on
+                    e55_sequen = ac19_sequen
+                    and ac19_autori = e55_autori
+                  inner join empautoriza on
+                    e54_autori = e55_autori
+                  left join empempaut on
+                    e61_autori = e54_autori
+                  left join empempenho on
+                    e61_numemp = e60_numemp
+                  where
+                    e60_numemp = {$e60_numemp}";
+                    $resultAcordo   = db_query($sSQLacordo);
+
+                    $numrowAcordo  = pg_num_rows($resultAcordo);
+
+                    db_fieldsmemory($resultAcordo, 0);
+
                     $sClassName = 'normal';
                     $sChecked   = '';
                     //      if ($numrows == 1) {
@@ -381,6 +428,12 @@ if ($lBloquear) {
                       $iOpcao      = 1;
                       $sClassName  = "normal";
                       db_fieldsmemory($result, $i);
+                      
+                        $sSQLtabela = "select case when pc01_tabela = false then 0 else 1 end as pc01_tabela from pcmater where pc01_codmater = {$e62_item}";
+                        $resultTabela   = db_query($sSQLtabela);
+                        db_fieldsmemory($resultTabela, 0);
+                      
+                      
                       if ($e62_vltot <= 0 || $e62_quant <= 0) {
 
                         $disabled   = " disabled ";
@@ -399,19 +452,17 @@ if ($lBloquear) {
                       // Sequencia
                       echo "  <td class='linhagrid' id='sequen{$e62_sequencial}' align='center'>$e62_sequen</td>";
 
-                      // Número do empenho
-                      echo "  <td class='linhagrid' align='center'>";
-                      db_ancora($e60_codemp, "js_pesquisaEmpenho({$e60_numemp});", "1");
-                      echo "	</td>";
-
-                      // Sequência do empenho
-                      echo "  <td class='linhagrid'id='empenho{$e62_sequencial}' align='center'>$e60_numemp</td>";
 
                       // Código do item
-                      echo "  <td class='linhagrid' align='center'><small>$e62_item</small></td>";
+                      echo "  <td class='linhagrid' id='e62_item{$e62_sequencial}' align='center'>$e62_item</td>";
 
                       // Item
-                      echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
+                      if($pc01_tabela == 1){
+                        echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' onclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$pc01_tabela)' style='color: rgb(0, 102, 204);'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
+                      }else{
+                        echo "  <td class='linhagrid' id='e62_descr{$e62_sequencial}' nowrap align='left' title='$pc01_descrmater' onclick='js_verificatabela($e62_sequencial,$e60_numemp,$e62_item,$pc01_tabela)'><small>" . substr($pc01_descrmater, 0, 20) . "&nbsp;</small></td>";
+                      }
+                      
 
                       // Unidade
                       echo "  <td class='linhagrid' id='m61_abrev{$e62_sequencial}' nowrap align='left' title='$m61_abrev'>{$m61_abrev}</td>";
@@ -541,6 +592,62 @@ if ($lBloquear) {
                   <!--        </tr>-->
                 </tbody>
               </table>
+              <div id="itenstabela" style="display:none">
+                <fieldset>
+                  <legend><b>Adicionar Item</b></legend>
+                  <table>
+                    <tr>
+                      <td>
+                        <?
+                        db_ancora("Código do material", "js_pesquisapc16_codmater(true);", 1);
+                        ?>
+                      </td>
+                      <td nowrap>
+                        <?
+                        db_input('pc16_codmater', 8, $Ipc16_codmater, true, 'text', 1, "");
+                        db_input('pc01_descrmater', 50, $Ipc01_descrmater, true, 'text', 1, '');
+                        echo "<b>Quantidade<b>";
+                        db_input('l223_quant', 5, 0, true, 'text', 1, "onchange='js_calculatotal();'");
+                        echo "<b>Unitário<b>";
+                        db_input('l223_vlrn', 5, 0, true, 'text', 1, "onchange='js_calculatotal();'");
+                        echo "<b>Total<b>";
+                        db_input('l223_total', 5, 0, true, 'text', 3, '');
+                        db_input('codempenho', 5, 0, true, 'text', 3, '');
+                        db_input('itemordem', 5, 0, true, 'text', 3, '');
+                        db_input('sequencia', 5, 0, true, 'text', 3, '');
+                        db_input('sequencia_nova', 5, 0, true, 'text', 3, '');
+                        db_input('coditemordem', 5, 0, true, 'text', 3, '');
+                        db_input('coditemordemtabela', 5, 0, true, 'text', 3, '');
+                        ?>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colspan="2" style="text-align: center;">
+                        <input type="button" value='Adicionar Item' id='btnAddItem'>
+                        <input type="button" value='Alterar Item' id='btnAlterarItem' style="display:none;">
+                        <input type="button" value='Novo Item' id='btnNovoItem' style="display:none;">
+                        <input type="button" value='Excluir Item' id='btnExcluirItem' style="display:none;">
+                      </td>
+                    </tr>                   
+                  </table>
+                  <table width='100%'>
+                    <tr>
+                      <td>
+                        <fieldset>
+                          <legend>
+                            <b>Itens</b>
+                          </legend>
+                          <div id='gridItensSolicitacao'>
+
+                          </div>
+                          <div style="float: left; width: 100%; text-align: right">
+                            <b>Valor total: </b><span id="valor_total_tabela">0.00</span>
+                          </div>
+                        </fieldset>
+                      </td>
+                    </tr>
+                  </table>
+              </div>
 
               <div style="display: block;height: auto; background-color:#EEEFF2; border-top:1px solid #444444; padding: 6px 42px 19px 10px;">
                 <div style="float: left; width: 50%; text-align: left">
@@ -565,6 +672,26 @@ if ($lBloquear) {
 </form>
 </center>
 <script>
+  
+  var sUrlRC = 'com4_ordemdecompra001.RPC.php';
+
+  function js_init(empenho,item) {
+
+  oGridItens = new DBGrid('gridItens');
+  oGridItens.nameInstance = "gridItens";
+  oGridItens.setCellAlign(new Array("center", "center","center", "center", "center", "center", "center"));
+  oGridItens.setCellWidth(new Array("6%","6%", "40%", "10%", "10%", "10%", "10%"));
+  oGridItens.setHeader(new Array("Ordem", "Cod Material", "Descrição", "Quantidade", "Valor Unitário", "Valor Total", "Ação"));
+  oGridItens.aHeaders[1].lDisplayed = false;
+  oGridItens.show($('gridItensSolicitacao'));
+  $('btnAddItem').observe("click", js_adicionarItem);
+  $('btnAlterarItem').observe("click", js_alterarItem);
+  $('btnNovoItem').observe("click", js_novoItem);
+  $('btnExcluirItem').observe("click", js_excluirItem);
+  js_pesquisaitemtabela(empenho,item);
+
+  }
+
   function js_validaQuantidade(evt, lFraciona, obj) {
     t = document.all ? event.keyCode : evt.which;
     if (obj.value.indexOf(".") != -1 && t == 46) {
@@ -775,6 +902,403 @@ if ($lBloquear) {
     }
 
 
+  }
+
+  function js_verificatabela(sequencia,empenho,item,tabela){
+   if( $('itenstabela').style.display == 'none'){
+      if(tabela == 1){
+        $('itenstabela').style.display = '';
+        $('pc16_codmater').value = "";
+        $('pc01_descrmater').value = "";
+        $('itemordem').value = sequencia;
+        $('codempenho').value = empenho;
+        $('coditemordem').value = item;
+        $('itemordem').style.display = 'none';
+        $('codempenho').style.display = 'none';
+        $('sequencia').style.display = 'none';
+        $('sequencia_nova').style.display = 'none';
+        $('coditemordem').style.display = 'none';
+        $('coditemordemtabela').style.display = 'none';
+        js_init(empenho,item);
+      }
+   }else{
+    if(tabela == 1){
+        $('itenstabela').style.display = 'none';
+  
+      }
+   }
+  }
+
+  function js_pesquisapc16_codmater(mostra) {
+
+    if (mostra == true) {
+      js_OpenJanelaIframe('',
+        'db_iframe_pcmater',
+        'func_pcmatersolicita.php?funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater',
+        'Pesquisar Materias/Serviços',
+        true,
+        '0'
+      );
+    } else {
+
+      if ($F('pc16_codmater') != '') {
+
+        js_OpenJanelaIframe('',
+          'db_iframe_pcmater',
+          'func_pcmatersolicita.php?pesquisa_chave=' +
+          $F('pc16_codmater') +
+          '&funcao_js=parent.js_mostrapcmater',
+          'Pesquisar Materiais/Serviços',
+          false, '0'
+        );
+      } else {
+        $('pc16_codmater').value = '';
+      }
+    }
+    }
+
+    function js_mostrapcmater(sDescricaoMaterial, Erro) {
+    $('pc01_descrmater').value = sDescricaoMaterial;
+    if (Erro == true) {
+      $('pc16_codmater').value = "";
+    }
+    }
+
+    function js_mostrapcmater1(iCodigoMaterial, sDescricaoMaterial) {
+
+    $('pc16_codmater').value = iCodigoMaterial;
+    $('pc01_descrmater').value = sDescricaoMaterial;
+    db_iframe_pcmater.hide();
+  }
+
+  function js_adicionarItem() {
+
+    if ($F('pc01_descrmater') == "") {
+
+      alert('Informe a descrição!');
+      return false;
+
+    }
+    if ($F('l223_quant') == "") {
+
+    alert('Informe a quantidade!');
+    return false;
+
+    }
+    if ($F('l223_vlrn') == "") {
+
+    alert('Informe o valor unitário!');
+    return false;
+
+    }
+    if ($F('l223_total') == 0) {
+
+    alert('Valor total zerado!');
+    return false;
+
+    }
+
+    var sequencia = $('itemordem').value;
+
+    if ($("chk" + sequencia).checked == false) {
+      alert('Selecione o item.');
+      return false;
+    }
+
+    var valorcompar = parseFloat($("valor_total_tabela").innerText) + ($F('l223_quant') * $F('l223_vlrn'));
+
+    if( valorcompar > parseFloat($("valor" + sequencia).value)){
+      alert('Usuário: O valor total dos itens ultrapassa o valor total do item tabela.');
+      return false;
+    }
+    
+    js_divCarregando('Aguarde, adicionando item', "msgBox");
+    var oParam = new Object();
+    oParam.pcmaterordem = $F('coditemordem');
+    oParam.pcmatertabela = $F('sequencia');
+    oParam.quantidade = $F('l223_quant');
+    oParam.valorunit = $F('l223_vlrn');
+    oParam.codempenho = $F('codempenho') ;
+    oParam.descricao = encodeURIComponent(tagString($F('pc01_descrmater')));
+    oParam.exec = "adicionarItemOrdemTabela";
+    var oAjax = new Ajax.Request(sUrlRC, {
+      method: "post",
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: js_retornoadicionarItem
+    });
+  }
+
+  function js_retornoadicionarItem(oAjax) {
+
+    js_removeObj('msgBox');
+    var oRetorno = eval("(" + oAjax.responseText + ")");
+    if (oRetorno.iStatus == 1) {
+
+      js_preencheGrid(oRetorno.itens);
+      js_limparForm();
+
+    } else {
+      alert(oRetorno.message.urlDecode());
+    }
+  }
+
+  function js_pesquisaitemtabela(empenho,item){
+    if (empenho == "") {
+
+    alert('Numero de empenho vazio');
+    return false;
+
+    }
+    if (item == "") {
+
+    alert('Item vazio');
+    return false;
+
+    }
+
+    js_divCarregando('Aguarde, adicionando item', "msgBox");
+    var oParam = new Object();
+    oParam.pcmaterordem = item;
+    oParam.codempenho = empenho;
+    oParam.exec = "buscaItemOrdemTabela";
+    var oAjax = new Ajax.Request(sUrlRC, {
+      method: "post",
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: js_retornoadicionarItem
+    });
+  }
+
+  function js_limparForm() {
+
+    $('coditemordemtabela').value = "";
+    $('pc16_codmater').value = "";
+    $('pc01_descrmater').value = "";
+    $('l223_quant').value = "";
+    $('l223_vlrn').value = "";
+    $('l223_total').value = "";
+    $('btnAddItem').style.display = "";
+    $('btnAlterarItem').style.display = "none";
+    $('btnNovoItem').style.display = "none";
+    $('btnExcluirItem').style.display = "none";
+    $('pc16_codmater').disabled = false;
+    $('pc01_descrmater').disabled = false;
+    $('l223_quant').disabled = false;
+    $('l223_vlrn').disabled = false;
+    $('l223_total').disabled = false;
+    $('btnFecharWindowAux').onclick = function() {
+      windowAuxiliar.hide();
+    }
+
+  }
+
+  function js_preencheGrid(aItens) {
+
+    aItensAbertura = aItens;
+    oGridItens.clearAll(true);
+    valortotal = 0;
+    for (var i = 0; i < aItens.length; i++) {
+
+      with(aItens[i]) {
+
+        var aLinha = new Array();
+        aLinha[0] = i + 1;
+        aLinha[1] = pc01_codmater;
+        aLinha[2] = iDescricao.urlDecode();
+        aLinha[3] = iQuantidade;
+        aLinha[4] = iUnit;
+        aLinha[5] = iValor;
+        aLinha[6] = "<input type='button' value='A' onclick='js_alterarLinha(" + iSequencial + ", " + i + ")'>";
+        aLinha[6] += "<input type='button' value='E' onclick='js_excluirLinha(" + iSequencial + ", " + i + ")'>";
+        valortotal += Number(iValor);
+        oGridItens.addRow(aLinha);
+        oGridItens.aRows[i].aCells[0].sStyle += "background-color:#DED5CB;font-weight:bold;padding:1px";
+
+      }
+    }
+    $("sequencia").value = aItens.length + 1;
+    oGridItens.renderRows();
+    $("valor_total_tabela").innerText = formataValor(round(valortotal,2));
+  }
+
+  function js_alterarLinha(coditemtabela,linha){
+    $('sequencia_nova').value= $('sequencia').value;
+    $('sequencia').value= linha+1;
+    $('coditemordemtabela').value = coditemtabela; 
+    $('pc16_codmater').value = oGridItens.aRows[linha].aCells[0].getValue();
+    $('pc01_descrmater').value = oGridItens.aRows[linha].aCells[2].getValue();
+    $('l223_quant').value = oGridItens.aRows[linha].aCells[3].getValue();
+    $('l223_vlrn').value = oGridItens.aRows[linha].aCells[4].getValue();
+    $('l223_total').value = oGridItens.aRows[linha].aCells[5].getValue();
+    $('btnAddItem').style.display = "none";
+    $('btnExcluirItem').style.display = "none";
+    $('btnAlterarItem').style.display = "";
+    $('btnNovoItem').style.display = "";
+    $('pc16_codmater').disabled = false;
+    $('pc01_descrmater').disabled = false;
+    $('l223_quant').disabled = false;
+    $('l223_vlrn').disabled = false;
+  }
+
+  function js_excluirLinha(coditemtabela,linha){
+    $('coditemordemtabela').value = coditemtabela; 
+    $('pc16_codmater').value = oGridItens.aRows[linha].aCells[0].getValue();
+    $('pc01_descrmater').value = oGridItens.aRows[linha].aCells[2].getValue();
+    $('l223_quant').value = oGridItens.aRows[linha].aCells[3].getValue();
+    $('l223_vlrn').value = oGridItens.aRows[linha].aCells[4].getValue();
+    $('l223_total').value = oGridItens.aRows[linha].aCells[5].getValue();
+    $('pc16_codmater').disabled = true;
+    $('pc01_descrmater').disabled = true;
+    $('l223_quant').disabled = true;
+    $('l223_vlrn').disabled = true;
+    $('l223_total').disabled = true;
+    $('btnAddItem').style.display = "none";
+    $('btnAlterarItem').style.display = "none";
+    $('btnNovoItem').style.display = "";
+    $('btnExcluirItem').style.display = "";
+  }
+
+  function js_alterarItem(){
+
+    if ($F('pc16_codmater') == "") {
+
+      alert('Informe o material!');
+      return false;
+
+    }
+    if ($F('l223_quant') == "") {
+
+    alert('Informe a quantidade!');
+    return false;
+
+    }
+    if ($F('l223_vlrn') == "") {
+
+    alert('Informe o valor unitário!');
+    return false;
+
+    }
+    if ($F('l223_total') == 0) {
+
+    alert('Valor total zerado!');
+    return false;
+
+    }
+    
+    js_divCarregando('Aguarde, adicionando item', "msgBox");
+    var oParam = new Object();
+    oParam.pcmaterordem = $F('coditemordem');
+    oParam.pcmatertabela = $F('pc16_codmater');
+    oParam.quantidade = $F('l223_quant');
+    oParam.valorunit = $F('l223_vlrn');
+    oParam.descricao = encodeURIComponent(tagString($F('pc01_descrmater')));
+    oParam.codempenho = $F('codempenho') ;
+    oParam.coditemtabela = $F('coditemordemtabela') ;
+    oParam.exec = "alterarItemOrdemTabela";
+    var oAjax = new Ajax.Request(sUrlRC, {
+      method: "post",
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: js_retornoadicionarItem
+    });
+
+
+    
+  }
+
+  function js_novoItem(){
+    $('coditemordemtabela').value = "";
+    $('sequencia').value = $('sequencia_nova').value;
+    $('pc16_codmater').value = "";
+    $('pc01_descrmater').value = "";
+    $('l223_quant').value = "";
+    $('l223_vlrn').value = "";
+    $('l223_total').value = "";
+    $('pc16_codmater').disabled = false;
+    $('pc01_descrmater').disabled = false;
+    $('l223_quant').disabled = false;
+    $('l223_vlrn').disabled = false;
+    $('l223_total').disabled = false;
+    $('btnAddItem').style.display = "";
+    $('btnAlterarItem').style.display = "none";
+    $('btnNovoItem').style.display = "none";
+    $('btnExcluirItem').style.display = "none";
+  }
+
+  function js_excluirItem(){
+    if ($F('pc16_codmater') == "") {
+
+      alert('Informe o material!');
+      return false;
+
+    }
+
+    
+    js_divCarregando('Aguarde, adicionando item', "msgBox");
+    var oParam = new Object();
+    oParam.pcmaterordem = $F('coditemordem');
+    oParam.pcmatertabela = $F('pc16_codmater');
+    oParam.quantidade = $F('l223_quant');
+    oParam.valorunit = $F('l223_vlrn');
+    oParam.codempenho = $F('codempenho') ;
+    oParam.coditemtabela = $F('coditemordemtabela') ;
+    oParam.exec = "excluirItemOrdemTabela";
+    var oAjax = new Ajax.Request(sUrlRC, {
+      method: "post",
+      parameters: 'json=' + Object.toJSON(oParam),
+      onComplete: js_retornoadicionarItem
+    });
+
+  }
+
+  function js_calculatotal(){
+    quan = $('l223_quant').value;
+    unit =  $('l223_vlrn').value;
+    quan = quan.replace(/,/g, '.');
+    unit = unit.replace(/,/g, '.');
+    let contDot = 0;
+    let novaQuantidade = '';
+    for (cont = 0; cont < quan.length; cont++) {
+
+      if (quan[cont] != '.') {
+        novaQuantidade += quan[cont];
+      } else {
+        contDot += 1;
+        if (contDot > 1) {
+          novaQuantidade += '';
+        } else {
+          novaQuantidade += quan[cont];
+        }
+      }
+    }
+    if (contDot > 1) {
+      alert('Valor Decimal já inserido');
+    }
+    contDot = 0;
+    let novoValorunit = '';
+    for (cont = 0; cont < unit.length; cont++) {
+
+      if (unit[cont] != '.') {
+        novoValorunit += unit[cont];
+      } else {
+        contDot += 1;
+        if (contDot > 1) {
+          novoValorunit += '';
+        } else {
+          novoValorunit += unit[cont];
+        }
+      }
+    }
+
+    if (contDot > 1) {
+      alert('Valor Decimal já inserido');
+    }
+
+    
+    quan = novaQuantidade;
+    unit = novoValorunit;
+    $('l223_quant').value = quan;
+    $('l223_vlrn').value = round(unit,4);
+    $('l223_total').value = round(quan * unit,2);
+    
   }
 
   function js_verifica(max, quan, nome, valoruni, numemp, sequencia) {

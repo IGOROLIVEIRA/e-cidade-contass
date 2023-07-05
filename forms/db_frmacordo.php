@@ -27,6 +27,12 @@
 
 require_once("libs/db_libdicionario.php");
 require_once("libs/db_utils.php");
+include("classes/db_licitaparam_classe.php");
+
+$cllicitaparam = new cl_licitaparam;
+$rsParamLic = $cllicitaparam->sql_record($cllicitaparam->sql_query(null, "*", null, "l12_instit = " . db_getsession('DB_instit')));
+db_fieldsmemory($rsParamLic, 0)->l12_validafornecedor_emailtel;
+
 
 //MODULO: Acordos
 $clacordo->rotulo->label();
@@ -42,6 +48,7 @@ $clrotulo->label("l20_objeto");
 
 if ($db_opcao == 1) {
     $db_action = "aco1_acordo004.php";
+    $ac50_sequencial = 1;
 } else if ($db_opcao == 2 || $db_opcao == 22) {
     $db_action = "aco1_acordo005.php";
 } else if ($db_opcao == 3 || $db_opcao == 33) {
@@ -89,6 +96,15 @@ db_app::load("dbtextFieldData.widget.js");
     #ac16_tipoorigem,
     #ac16_lei {
         width: 410px;
+    }
+
+    #ac16_reajuste,
+    #ac16_periodoreajuste {
+        width: 90px;
+    }
+
+    #ac16_criterioreajuste {
+        width: 130px;
     }
 
     #l20_objeto,
@@ -155,12 +171,15 @@ db_app::load("dbtextFieldData.widget.js");
                                                     <?
                                                     db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 3, "");
                                                     ?>
+                                                    <?
+                                                    db_input('l12_validafornecedor_emailtel', 10, $Il12_validafornecedor_emailtel, true, 'hidden', 3, "");
+                                                    ?>
                                                 </td>
                                             </tr>
 
                                             <tr>
                                                 <td nowrap title="<?= @$Tac16_datainclusao ?>">
-                                                    <?= @$Lac16_datainclusao ?>
+                                                    <strong>Data da Inclusão:</strong>
                                                 </td>
                                                 <td>
                                                     <?
@@ -488,7 +507,7 @@ db_app::load("dbtextFieldData.widget.js");
                                                     ?>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <tr style="display: none;">
                                                 <td nowrap title="Tipo de Instrumento">
                                                     <?
                                                     db_ancora('<b>Tipo Instrumento:</b>', "onchange=js_pesquisaac50_descricao(true)", $db_opcao);
@@ -527,6 +546,115 @@ db_app::load("dbtextFieldData.widget.js");
                                                 <td>
                                                     <?
                                                     db_textarea('ac16_formapagamento', 3, 48, $Iac16_objeto, true, 'text', $db_opcao, "", "", "", "100");
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <table>
+                                                        <tr>
+                                                            <td id='tdpossuireajuste' width="300px">
+                                                                <b>Possui Critério Reajuste:</b>
+
+                                                                <?
+                                                                $aPossui = array(
+                                                                    0 => 'Selecione',
+                                                                    1 => 'Sim',
+                                                                    2 => 'Não'
+                                                                );
+                                                                db_select('ac16_reajuste', $aPossui, true, $db_opcao, "onchange='js_possuireajuste()'", "");
+                                                                ?>
+                                                            </td>
+
+                                                            <td width="23%" id='tdcriterioreajuste' style="display: inline;">
+                                                                <b>Critério de Reajuste:</b>
+
+                                                                <?
+                                                                $aCriterios = array(
+                                                                    0 => 'Selecione',
+                                                                    1 => 'Índice Único',
+                                                                    2 => 'Cesta de Índices',
+                                                                    3 => 'Índice Específico'
+                                                                );
+                                                                db_select('ac16_criterioreajuste', $aCriterios, true, $db_opcao, "onchange='js_criterio()'", "");
+                                                                ?>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <table border="0">
+                                                        <tr id='trdatareajuste'>
+                                                            <td width="140px">
+                                                                <b>Data Base Reajuste:</b>
+                                                            </td>
+                                                            <td width="160px">
+                                                                <?
+                                                                db_inputdata(
+                                                                    'ac16_datareajuste',
+                                                                    @$ac16_datareajuste_dia,
+                                                                    @$ac16_datareajuste_mes,
+                                                                    @$ac16_datareajuste_ano,
+                                                                    true,
+                                                                    'text',
+                                                                    $iCampo,
+                                                                    "onchange='return js_somardias();'",
+                                                                    "",
+                                                                    "",
+                                                                    "return parent.js_somardias();"
+                                                                );
+                                                                ?>
+                                                            </td>
+
+                                                            <td id='tdindicereajuste'>
+                                                                <b>Índice de Reajuste:</b>
+
+                                                                <?
+                                                                $aIndice = array(
+                                                                    0 => 'Selecione',
+                                                                    1 => 'IPCA',
+                                                                    2 => 'INPC',
+                                                                    3 => 'INCC',
+                                                                    4 => 'IGP-M',
+                                                                    5 => 'IGP-DI',
+                                                                    6 => 'Outro'
+                                                                );
+                                                                db_select('ac16_indicereajuste', $aIndice, true, $db_opcao, "onchange='js_indicereajuste()'", "");
+                                                                ?>
+                                                            </td>
+                                                        </tr>
+                                                        <tr id='trperiodoreajuste'>
+                                                            <td width="140px">
+                                                                <b>Período do Reajuste:</b>
+                                                            </td>
+                                                            <td>
+                                                                <?
+                                                                db_input('ac16_periodoreajuste', 12, 1, true, $db_opcao, "", "", "", "", "", 2);
+                                                                ?>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                            <tr id='trdescricaoreajuste'>
+                                                <td>
+                                                    <b> Descrição do Critério de Reajuste </b>
+                                                </td>
+                                                <td>
+                                                    <?
+                                                    db_textarea('ac16_descricaoreajuste', 3, 69, '', true, 'text', $db_opcao, "", "", "", "300");
+                                                    ?>
+                                                </td>
+                                            </tr>
+                                            <tr id='trdescricaoindicereajuste'>
+                                                <td>
+                                                    <b> Descrição do Índice de Reajuste </b>
+                                                </td>
+                                                <td>
+                                                    <?
+                                                    db_textarea('ac16_descricaoindice', 3, 69, '', true, 'text', $db_opcao, "", "", "", "300");
                                                     ?>
                                                 </td>
                                             </tr>
@@ -684,6 +812,25 @@ db_app::load("dbtextFieldData.widget.js");
     var sCaminhoMensagens = "patrimonial.contratos.db_frmacordo";
 
     $('trValorAcordo').style.display = 'none';
+
+    <?
+    if ($db_opcao != 1) {
+
+        echo "$('tdcriterioreajuste').style.display = '';
+            $('trdatareajuste').style.display = '';
+            $('trperiodoreajuste').style.display = '';
+            $('trdescricaoreajuste').style.display = '';
+            $('tdindicereajuste').style.display = 'none';
+            $('trdescricaoindicereajuste').style.display = '';";
+    } else {
+        echo "$('tdcriterioreajuste').style.display = 'none';
+            $('trdatareajuste').style.display = 'none';
+            $('trperiodoreajuste').style.display = 'none';
+            $('trdescricaoreajuste').style.display = 'none';
+            $('tdindicereajuste').style.display = 'none';
+            $('trdescricaoindicereajuste').style.display = 'none';";
+    }
+    ?>
 
     function js_validaCampoValor() {
 
@@ -1016,6 +1163,8 @@ db_app::load("dbtextFieldData.widget.js");
         js_getEmpenhosVinculados();
     }
 
+
+
     //função para chamada da grid que tera erros e avisos
 
     function js_montaGridEmpenhos() {
@@ -1098,6 +1247,7 @@ db_app::load("dbtextFieldData.widget.js");
             //alert(5555);
             //$('ac16_origem').disabled        = true;
         }
+
 
     }
 
@@ -1294,6 +1444,7 @@ db_app::load("dbtextFieldData.widget.js");
 
     }
 
+
     /**
      * funcao para mostrar fornecedores habilitados quando origem do acordo for manual
      */
@@ -1305,18 +1456,23 @@ db_app::load("dbtextFieldData.widget.js");
 
             if (nLicitacao == '') {
                 js_pesquisaac16_contratado(true);
-            } else {
-                js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
-                    'db_iframe_contratado',
-                    'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm|z01_cgccpf',
-                    'CGM Contratado',
-                    true,
-                    '0');
+                return;
             }
-        } else {
-            nLicitacao == '';
-            js_pesquisaac16_contratado(true);
+
+            js_OpenJanelaIframe('(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
+                'db_iframe_contratado',
+                'lic3_fornhabilitados.php?l20_codigo=' + nLicitacao + '&funcao_js=parent.js_mostracontratado1|z01_nome|z01_numcgm|z01_cgccpf|z01_telef|z01_email',
+                'CGM Contratado',
+                true,
+                '0');
+
+            return;
+
         }
+
+        nLicitacao == '';
+        js_pesquisaac16_contratado(true);
+
     }
 
     function js_pesquisaac16_contratado(mostra) {
@@ -1326,32 +1482,37 @@ db_app::load("dbtextFieldData.widget.js");
             js_OpenJanelaIframe(
                 '(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
                 'db_iframe_contratado',
-                'func_pcforne.php?validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
+                'func_pcforne.php?validacaoCadastroFornecedor=true&validaRepresentante=true&funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf|z01_telef|z01_email',
                 'Pesquisa',
                 true,
                 '0',
                 '1'
             );
 
-        } else {
+            return;
 
-            if ($('ac16_contratado').value != '') {
-
-                js_OpenJanelaIframe(
-                    '(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
-                    'db_iframe_contratado',
-                    'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
-                    'Pesquisa',
-                    false,
-                    '0',
-                    '1'
-                );
-
-            } else {
-                $('nomecontratado').value = '';
-            }
         }
+
+        if ($('ac16_contratado').value != '') {
+
+            js_OpenJanelaIframe(
+                '(window.CurrentWindow || parent.CurrentWindow).corpo.iframe_acordo',
+                'db_iframe_contratado',
+                'func_pcforne.php?validaRepresentante=true&pesquisa_chave=' + $F('ac16_contratado') + 'funcao_js=parent.js_mostracontratado1|z01_nome|pc60_numcgm|z01_cgccpf',
+                'Pesquisa',
+                false,
+                '0',
+                '1'
+            );
+
+            return;
+
+        }
+
+        $('nomecontratado').value = '';
+
     }
+
 
     function js_mostracontratado(erro, chave, z01_cgccpf) {
 
@@ -1394,7 +1555,35 @@ db_app::load("dbtextFieldData.widget.js");
         }
     }
 
-    function js_mostracontratado1(chave1, chave2, z01_cgccpf) {
+    function js_mostracontratado1(nomecontratado, ac16_contratado, z01_cgccpf, z01_telef, z01_email) {
+
+        /* Verificando se o fornecedor possui os representantes legais com o mesmo CNPJ do Fornecedor.*/
+
+        var oParametros = new Object();
+        oParametros.exec = 'validacaoCadastroFornecedor';
+        oParametros.iFornecedor = ac16_contratado;
+        var validacaoCadastroFornecedor;
+        var oAjax = new Ajax.Request("ac4_acordoinclusao.rpc.php", {
+            method: "post",
+            asynchronous: false,
+            parameters: 'json=' + Object.toJSON(oParametros),
+            onComplete: function(oAjax) {
+                var oRetorno = eval("(" + oAjax.responseText + ")");
+                if (oRetorno.iStatus == 2) {
+                    validacaoCadastroFornecedor = false;
+                    alert(oRetorno.sMessage.urlDecode());
+                }
+
+            }
+        });
+
+        if (validacaoCadastroFornecedor == false) return false;
+
+        if ((z01_telef.trim() == '' || z01_email.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
+            alert("Usuário: Inclusão abortada. O Fornecedor selecionado não possui Email e Telefone no seu cadastro.");
+            $('ac16_contratado').value = '';
+            return false;
+        }
 
         if (z01_cgccpf.length = 11) {
             if (z01_cgccpf == '00000000000') {
@@ -1410,13 +1599,9 @@ db_app::load("dbtextFieldData.widget.js");
             }
         }
 
-        $('ac16_contratado').value = chave2;
-        $('nomecontratado').value = chave1;
+        $('ac16_contratado').value = ac16_contratado;
+        $('nomecontratado').value = nomecontratado;
         oContrato.verificaLicitacoes();
-
-        if ($('ac16_origem').value == 6) {
-            //js_MostraEmpenhos();
-        }
 
         db_iframe_contratado.hide();
     }
@@ -1608,11 +1793,7 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trLicitacao').style.display = "none";
         }
 
-        if (iTipoOrigem == 2 && iOrigem == 3) {
-            document.getElementById('trLicitacao').style.display = "";
-            document.getElementById('tradesaoregpreco').style.display = "none";
-            document.getElementById('trlicoutroorgao').style.display = "none";
-        }
+
 
         if ((iTipoOrigem == 2 && iOrigem == 2) || (iTipoOrigem == 3 && iOrigem == 2)) {
             document.getElementById('trLicitacao').style.display = "none";
@@ -1620,11 +1801,7 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
-        if (iTipoOrigem == 3 && iOrigem == 3) {
-            document.getElementById('trLicitacao').style.display = "";
-            document.getElementById('tradesaoregpreco').style.display = "none";
-            document.getElementById('trlicoutroorgao').style.display = "none";
-        }
+
 
         if (iOrigem == 3 && iTipoOrigem == 1) {
             document.getElementById('trLicitacao').style.display = "none";
@@ -1634,7 +1811,7 @@ db_app::load("dbtextFieldData.widget.js");
 
         if (iOrigem == 1) {
             document.getElementById('tradesaoregpreco').style.display = "none";
-            document.getElementById('trLicitacao').style.display = "";
+            //document.getElementById('trLicitacao').style.display = "";
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
 
@@ -1643,6 +1820,13 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('trLicitacao').style.display = "none";
             document.getElementById('trlicoutroorgao').style.display = "none";
         }
+
+        if (iOrigem == 1 && (iTipoOrigem == 2 || iTipoOrigem == 3)) {
+            document.getElementById('trLicitacao').style.display = "";
+        } else {
+            document.getElementById('trLicitacao').style.display = "none";
+        }
+
 
         if (iTipoOrigem != 4) {
             document.form1.ac16_adesaoregpreco.value = "";
@@ -1659,6 +1843,67 @@ db_app::load("dbtextFieldData.widget.js");
             document.getElementById('credenciamento').style.display = "none";
         }
 
+        if ((iTipoOrigem == 2 || iTipoOrigem == 3) && iOrigem == 3) {
+            document.getElementById('trLicitacao').style.display = "";
+            document.getElementById('tradesaoregpreco').style.display = "none";
+            document.getElementById('trlicoutroorgao').style.display = "none";
+        }
+
+    }
+
+    /*
+     *função para veiricar se possui reajuste e habilitar novas entradas
+     */
+    function js_possuireajuste() {
+
+        iPossuicriterio = document.form1.ac16_reajuste.value;
+        if (iPossuicriterio == 1) {
+            document.getElementById('tdcriterioreajuste').style.display = 'inline';
+            document.getElementById('trdatareajuste').style.display = 'inline';
+            document.getElementById('trperiodoreajuste').style.display = 'inline';
+        } else {
+            document.getElementById('tdcriterioreajuste').style.display = 'none';
+            document.getElementById('trdatareajuste').style.display = 'none';
+            document.getElementById('trperiodoreajuste').style.display = 'none';
+            document.getElementById('trdescricaoreajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoreajuste').value = '';
+            document.form1.ac16_indicereajuste.options[0].selected = true;
+            document.form1.ac16_criterioreajuste.options[0].selected = true;
+            document.getElementById('ac16_periodoreajuste').value = '';
+            document.getElementById('ac16_datareajuste').value = null;
+        }
+    }
+
+    function js_indicereajuste() {
+        iIndicereajuste = document.form1.ac16_indicereajuste.value;
+        if (iIndicereajuste == 6) {
+            document.getElementById('trdescricaoindicereajuste').style.display = '';
+        } else {
+            document.getElementById('trdescricaoindicereajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoindice').value = '';
+        }
+    }
+
+    function js_criterio() {
+        icriterio = document.form1.ac16_criterioreajuste.value;
+
+        if (icriterio == 1) {
+            document.getElementById('tdindicereajuste').style.display = 'inline';
+            document.getElementById('trdescricaoreajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoreajuste').value = '';
+        } else if (icriterio == 2 || icriterio == 3) {
+            document.getElementById('tdindicereajuste').style.display = 'none';
+            document.getElementById('trdescricaoreajuste').style.display = '';
+            document.form1.ac16_indicereajuste.options[0].selected = true;
+            document.getElementById('trdescricaoindicereajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoindice').value = '';
+        } else {
+            document.getElementById('trdescricaoreajuste').style.display = 'none';
+            document.getElementById('tdindicereajuste').style.display = 'none';
+            document.form1.ac16_indicereajuste.options[0].selected = true;
+            document.getElementById('trdescricaoindicereajuste').style.display = 'none';
+            document.getElementById('ac16_descricaoindice').value = '';
+        }
     }
 
     function js_verificaorigem() {

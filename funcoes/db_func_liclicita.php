@@ -36,5 +36,6 @@ $campos = "distinct liclicita.l20_codigo,
 					liclicita.l20_datacria as dl_Data_Abertura_Proc_Adm,
 					liclicita.l20_dataaber as dl_Data_Emis_Alt_Edital_Convite,
 					liclicita.l20_dtpublic as dl_Data_Publicação_DO,
-					liclicita.l20_objeto";
+					liclicita.l20_objeto,
+					liclicita.l20_tipojulg";
 ?>

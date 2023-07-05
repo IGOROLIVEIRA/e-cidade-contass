@@ -1,4 +1,5 @@
 <?
+//ini_set('display_errors','on');
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -52,6 +53,7 @@ $clmatordemanu                = new cl_matordemanu;
 $clmatordemitem                = new cl_matordemitem;
 $cldb_almoxdepto            = new cl_db_almoxdepto;
 $clmatestoqueitemoc         = new cl_matestoqueitemoc;
+$clempempitem		      = new cl_empempitem;
 $oJson                      = new services_json();
 
 $dados = $oJson->decode(str_replace("\\", "", $json));
@@ -88,6 +90,25 @@ if (isset($dados->altera)) {
         }
 
         $valor_total += $objeto->m52_valor;
+
+        if(isset($dados->itens[$count]->coditem)){
+            $sSqlTab    = "select sum(l223_total) as totaltabela from empordemtabela where l223_pcmaterordem = ".$dados->itens[$count]->coditem." and l223_codordem = ".$objeto->m51_codordem;
+            
+            $rsTabItem  = $clempempitem->sql_record($sSqlTab);
+            $oTabItem = db_utils::fieldsMemory($rsTabItem, 0);
+            $nTabela = round($oTabItem->totaltabela,2) ; 
+            
+            if ($clempempitem->numrows == 1 && $oTabItem->totaltabela > 0) {
+            
+            $nValor   = DBNumber::round($objeto->m52_valor,2); 
+            
+                if($nTabela != $nValor){
+                    $sqlerro  = true;
+                    $erro_msg = "Usuário: A soma dos itens da tabela está divergente do valor total do item Tabela.";
+                    break;
+                }
+            }
+        }
     }
 
     /*
@@ -102,8 +123,9 @@ if (isset($dados->altera)) {
     $sItens = substr($sItens, 0, strlen($sItens) - 1);
 
     $result_ordem = $clmatordem->sql_record($clmatordem->sql_query_file("", "*", "", "m51_codordem = $dados->m51_codordem"));
-    db_fieldsmemory($result_ordem, 0);
 
+    db_fieldsmemory($result_ordem, 0);
+    
     $dataemp = $clmatordem->getDataEmp($m51_codordem);
 
     $dataempenho = DateTime::createFromFormat('d/m/Y', $dataemp);
@@ -112,7 +134,7 @@ if (isset($dados->altera)) {
     if ($dataordemcompra < $dataempenho) {
         $sqlerro = true;
         $erro_msg = "Data da ordem não pode ser anterior a data de emissão do empenho.";
-    } else {
+    } else if($sqlerro == false){
 
         $clmatordem->m51_codordem    = $m51_codordem;
         $clmatordem->m51_data        = $dados->m51_data;

@@ -425,7 +425,7 @@ db_postmemory($HTTP_POST_VARS);
 	  	    $rsSqlOpPaga = db_query($sqlOpPaga);
 
 
-			$sqlTipoDocumento = "select e45_tipo 
+			$sqlTipoDocumento = "select e45_tipo
 							from pagordem
 							join conlancamord ON c80_codord = e50_codord
 							join conlancamdoc on c71_codlan = c80_codlan
@@ -433,14 +433,14 @@ db_postmemory($HTTP_POST_VARS);
 							where
 							e50_codord = {$e50_codord} limit 1";
 			$rsSqlTipoDocumento = db_query($sqlTipoDocumento);
-			
+
 			if(pg_num_rows($rsSqlTipoDocumento) > 0){
 				$TipoDocumento = db_utils::fieldsMemory($rsSqlTipoDocumento, 0)->e45_tipo;
-				if($TipoDocumento == 4){				
+				if($TipoDocumento == 4){
 					echo "<script> alert('Empenho classificado no tipo de evento PRESTAÇÃO DE CONTAS. A exclusão não poderá ser efetuada!');</script>";
 					db_redireciona('emp1_emppagamentoexcluirpagamento001.php');
 				}
-			}	
+			}
 
 	  	    if(pg_num_rows($rsSqlOpPaga) > 0){
 

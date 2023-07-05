@@ -196,25 +196,25 @@ if (count($aParagrafos) == 0) {
 }
 
 $dados1 = db_query($conn, "select ed18_c_nome,
-                                   j14_nome,
-                                   ed18_i_numero,
-                                   j13_descr,
-                                   ed261_c_nome,
-                                   ed260_c_sigla,
-                                   ed18_c_email,
-                                   ed18_c_logo,
-                                   ed18_codigoreferencia
-                             from escola
-                              inner join bairro  on  bairro.j13_codi = escola.ed18_i_bairro
-                              inner join ruas  on  ruas.j14_codigo = escola.ed18_i_rua
-                              inner join db_depart  on  db_depart.coddepto = escola.ed18_i_codigo
-                              inner join censouf  on  censouf.ed260_i_codigo = escola.ed18_i_censouf
-                              inner join censomunic  on  censomunic.ed261_i_codigo = escola.ed18_i_censomunic
-                              left join ruascep on ruascep.j29_codigo = ruas.j14_codigo
-                              left join logradcep on logradcep.j65_lograd = ruas.j14_codigo
-                              left join ceplogradouros on ceplogradouros.cp06_codlogradouro = logradcep.j65_ceplog
-                              left join ceplocalidades on ceplocalidades.cp05_codlocalidades = ceplogradouros.cp06_codlocalidade
-                             where ed18_i_codigo = " . db_getsession("DB_coddepto"));
+                                  j14_nome,
+                                  ed18_i_numero,
+                                  j13_descr,
+                                  ed261_c_nome,
+                                  ed260_c_sigla,
+                                  ed18_c_email,
+                                  ed18_c_logo,
+                                  ed18_codigoreferencia
+                           from escola
+                           inner join bairro  on  bairro.j13_codi = escola.ed18_i_bairro
+                           inner join ruas  on  ruas.j14_codigo = escola.ed18_i_rua
+                           inner join db_depart  on  db_depart.coddepto = escola.ed18_i_codigo
+                           inner join censouf  on  censouf.ed260_i_codigo = escola.ed18_i_censouf
+                           inner join censomunic  on  censomunic.ed261_i_codigo = escola.ed18_i_censomunic
+                           left join ruascep on ruascep.j29_codigo = ruas.j14_codigo
+                           left join logradcep on logradcep.j65_lograd = ruas.j14_codigo
+                           left join ceplogradouros on ceplogradouros.cp06_codlogradouro = logradcep.j65_ceplog
+                           left join ceplocalidades on ceplocalidades.cp05_codlocalidades = ceplogradouros.cp06_codlocalidade
+                           where ed18_i_codigo = " . db_getsession("DB_coddepto"));
 
 $cidadeescola = trim(pg_result($dados1, 0, "ed261_c_nome"));
 $estadoescola = trim(pg_result($dados1, 0, "ed260_c_sigla"));
@@ -295,72 +295,6 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
   $oPdf->Ln(1);
   $oPdf->Cell("192", $oParametros->iAlturaLinha, "Diretor (a) nº Aut. ou Secretário (a) Escolar nº Aut.", 0, 1, "C");
 
-
-
-  /* 
-  if ($oParametros->lExibeGradeAluno) { 
-
-    /**
-     * Calculamos se a grade de de horário do aluno caberá na página atual.
-     
-    if (((count($aGradeHorario) * $oParametros->iAlturaLinha) + $oPdf->GetY() + 10) > $oPdf->h - 20) {
-      $oPdf->AddPage();
-    }
-
-    $oPdf->setX(85);
-    $oPdf->setfont('arial', 'b', 9);
-    $oPdf->Cell(50, $oParametros->iAlturaLinha, "TURNO PRINCIPAL", 1, 1, "C", 1);
-    $lImprimeTurno = true;
-    foreach ($aGradeHorario as $oGradeHorario) {
-
-      $sString = "{$oGradeHorario->iPeriodo}º - {$oGradeHorario->sHoraInicio} / {$oGradeHorario->sHoraFim}";
-      $oPdf->setfont('arial', '', 9);
-
-      if ($oGradeHorario->lPrincipal) {
-
-        if ($lImprimeTurno) {
-
-          $oPdf->setX(85);
-          $oPdf->Cell(50, $oParametros->iAlturaLinha, $oGradeHorario->sTurno, 1, 1, "C", 1);
-          $lImprimeTurno = false;
-        }
-        $oPdf->setX(85);
-        $oPdf->Cell(50, $oParametros->iAlturaLinha, $sString, 1, 1, "C");
-      }
-    }
-
-    $oPdf->Ln();
-
-    /*
-     * Verificamos se tem turno adicional
-     
-    if ($oTurma->temTurnoAdicional() != "") {
-
-      $oPdf->setX(85);
-      $oPdf->setfont('arial', 'b', 9);
-      $oPdf->Cell(50, $oParametros->iAlturaLinha, "TURNO ADICIONAL", 1, 1, "C", 1);
-      $lImprimeTurno = true;
-      foreach ($aGradeHorario as $oGradeHorario) {
-
-        $sString = "{$oGradeHorario->iPeriodo}º - {$oGradeHorario->sHoraInicio} / {$oGradeHorario->sHoraFim}";
-        $oPdf->setfont('arial', '', 9);
-
-        if (!$oGradeHorario->lPrincipal) {
-
-          if ($lImprimeTurno) {
-
-            $oPdf->setX(85);
-            $oPdf->Cell(50, $oParametros->iAlturaLinha, $oGradeHorario->sTurno, 1, 1, "C", 1);
-            $lImprimeTurno = false;
-          }
-          $oPdf->setX(85);
-          $oPdf->Cell(50, $oParametros->iAlturaLinha, $sString, 1, 1, "C");
-        }
-      }
-    }
-  }
-  */
-
   /**
    * Calculo para verificar se os dados da assinatura caberão na pagina atual
    */
@@ -369,34 +303,9 @@ foreach ($aDadosAlunos as $oDadosAlunos) {
   }
 
   $oPdf->SetY($oPdf->h - 40);
-  /*
-  $oDiaAtual  = new DBDate(date("Y-m-d"));
-  $sMunicipio = $oTurma->getEscola()->getDepartamento()->getInstituicao()->getMunicipio();
 
-  $DiaExtenso  = " {$sMunicipio}, " . $oDiaAtual->getDia() . " de " . DBDate::getMesExtenso((int)$oDiaAtual->getMes());
-  $DiaExtenso .= "  de " . $oDiaAtual->getAno();
-
-
-  $oPdf->Cell("192", $oParametros->iAlturaLinha, $DiaExtenso, 0, 1, "C");
-  
-  $oPdf->ln($oParametros->iAlturaLinha * 3);
-
-  $result = db_query("select * from db_usuarios where id_usuario = " . db_getsession("DB_id_usuario"));
-  $emissor = db_utils::fieldsMemory($result, 0)->nome;
-
-  $oPdf->Cell("192", $oParametros->iAlturaLinha, $emissor, 0, 1, "C");
-
-  $oPdf->Line(50, $oPdf->GetY(), 152, $oPdf->GetY());
-  */
   $oPdf->ln($oParametros->iAlturaLinha);
 
-
-  /*
-  if ($oParametros->lTemDiretor) {
-    $oPdf->Cell("192", $oParametros->iAlturaLinha, $oParametros->sDiretor, 0, 1, "C");
-    $oPdf->Cell("192", $oParametros->iAlturaLinha, $oParametros->sCargo,   0, 1, "C");
-  }
-  */
 }
 
 $oPdf->Output();

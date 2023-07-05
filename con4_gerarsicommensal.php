@@ -17,6 +17,7 @@ $clrotulo->label("o124_descricao");
 $clrotulo->label("o124_sequencial");
 $clrotulo->label("o15_descr");
 $clrotulo->label("o15_codigo");
+$anoUsu = db_getsession("DB_anousu");
 ?>
 <html>
 <head>
@@ -159,6 +160,9 @@ $clrotulo->label("o15_codigo");
 
                             <input type="checkbox" value="ResponsaveisLicitacao" id="ResponsaveisLicitacao" />
                             <label for="ResponsaveisLicitacao">RESPLIC - Responsáveis pela Licitação</label><br>
+
+                            <input type="checkbox" value="ParticipantesLicitacao" id="ParticipantesLicitacao" />
+                            <label for="ParticipantesLicitacao">PARTLIC - Participantes da Licitação</label><br>
 
                             <input type="checkbox" value="HabilitacaoLicitacao" id="HabilitacaoLicitacao" />
                             <label for="HabilitacaoLicitacao">HABLIC - Habilitação da Licitação</label><br>
@@ -345,7 +349,7 @@ $clrotulo->label("o15_codigo");
         }
 
         if (iMesReferencia.value == 0) {
-            
+
             alert("Selecione um Mês Referência para geração do(s) arquivo(s)!");
             return false;
         }
@@ -499,7 +503,11 @@ $clrotulo->label("o15_codigo");
     }
     function js_mostraMetaEncerramento(mes){
 
-        let iAno = parseInt(parent.bstatus.document.getElementById('dtanousu').innerHTML);
+
+        let iAno = <?=$anoUsu; ?>;
+        if(parent?.CurrentWindow?.bstatus.document.getElementById('dtanousu') !== null) {
+            iAno = parseInt(parent.CurrentWindow.bstatus.document.getElementById('dtanousu').innerHTML);
+        }
 
         if (mes == 12){
 

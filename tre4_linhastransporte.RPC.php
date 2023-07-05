@@ -69,6 +69,10 @@ try {
         $oLinhaTransporte = new LinhaTransporte($oParam->iCodigo);
         $oLinhaTransporte->setNome(db_stdClass::normalizeStringJsonEscapeString($oParam->sNome));
         $oLinhaTransporte->setAbreviatura(db_stdClass::normalizeStringJsonEscapeString($oParam->sAbreviatura));
+        $oLinhaTransporte->setDatalimite(db_stdClass::normalizeStringJsonEscapeString($oParam->sDatalimite));
+        $oLinhaTransporte->setKmidaevolta(db_stdClass::normalizeStringJsonEscapeString($oParam->sKmidaevolta));
+        $oLinhaTransporte->setValorkm(db_stdClass::normalizeStringJsonEscapeString($oParam->sValorkm));
+        $oLinhaTransporte->setNumcgm(db_stdClass::normalizeStringJsonEscapeString($oParam->sNumcgm));
         $oLinhaTransporte->salvar();
 
         if (empty($oParam->iCodigo)) {

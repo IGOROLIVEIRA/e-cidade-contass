@@ -1,35 +1,16 @@
 <?php
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBSeller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
+
+use App\Models\Arretipo;
+use App\Models\Numpref;
+use App\Services\Tributario\Arrecadacao\GeneratePixWithQRCodeService;
+use App\Services\Tributario\Arrecadacao\ResolvePixProviderService;
 
 /**
  * Classe responsável pela manutenção de recibos do sistema
  * @package Caixa
  */
-class Recibo {
+class Recibo
+{
 
   const TIPOEMISSAO_RECIBO_AVULSO = 1;
   const TIPOEMISSAO_RECIBO_CGF    = 2;
@@ -183,7 +164,7 @@ class Recibo {
    * @param integer
    *
    */
-  function __construct($iTipoEmissao = null, $iNumCgm = null, $iTipo = 1, $iNumnov = null) {
+  public function __construct($iTipoEmissao = null, $iNumCgm = null, $iTipo = 1, $iNumnov = null) {
 
   	if ($iNumnov != null) {
 
@@ -203,6 +184,7 @@ class Recibo {
         $this->setExercicioRecibo     (date("Y", strtotime($oRecibo->k00_dtoper)));
         $this->setConta               ($oRecibo->k00_conta);
         $this->setTipoEmissao         ($oRecibo->tipo_emissao);
+        $this->iNumCgm = $oRecibo->k00_numcgm;
         $sSqlDebitosRecibo            = $oDaoReciboPaga->sql_query_file(null," distinct k00_numpre, k00_numpar ",
                                                                         null," k00_numnov = {$iNumnov} ");
         $rsDebitosRecibo              = $oDaoReciboPaga->sql_record($sSqlDebitosRecibo);
@@ -531,6 +513,7 @@ class Recibo {
       throw new Exception("Erro [0] - Não existe Transação Ativa.");
     }
 
+    $nDescontoReciboWeb = 0;
 
     if ($this->iTipoEmissao == 1) {
 
@@ -815,6 +798,39 @@ class Recibo {
       }
 
     }
+
+      /**
+       * @var Numpref $settings
+       */
+      $settings = Numpref::query()
+          ->where('k03_anousu', db_getsession("DB_anousu"))
+          ->where('k03_instit', db_getsession("DB_instit"))
+          ->first();
+
+      /**
+       * Não gera qrcode para recibos de desconto
+       */
+      if (!$settings->k03_ativo_integracao_pix) {
+          return true;
+      }
+
+      $providerConfig = (new ResolvePixProviderService())->execute($settings);
+
+      $body['codigoGuiaRecebimento'] = $this->getNumpreRecibo();
+      $body['descricaoSolicitacaoPagamento'] = "Arrecadacao Pix";
+      $body['valorOriginalSolicitacao'] = $this->getTotalReciboComTaxaExpediente();
+      $body['k00_numnov'] = $this->getNumpreRecibo();
+      $body['k00_dtvenc'] = $this->getDataVencimentoRecibo();
+      $body['k03_instituicao_financeira'] = $settings->k03_instituicao_financeira;
+
+      $service = new GeneratePixWithQRCodeService($providerConfig);
+
+      try {
+          $service->execute($body);
+      } catch (Exception $e) {
+          throw new \BusinessException('Erro ao gerar QRCode: '. $e->getMessage());
+      }
+
     return true;
   }
 
@@ -1022,6 +1038,20 @@ class Recibo {
 
     return db_utils::fieldsMemory($rsBuscaRecibo, 0)->soma_k00_valor;
   }
+
+    /**
+     * Retorna o total do recibo incluindo a taxa de expediente
+     * vinculada ao tipo de debito
+     * @return float
+     */
+    public function getTotalReciboComTaxaExpediente(): float
+    {
+        $totalRecibo = (float) $this->getTotalRecibo();
+        $debitos = current($this->getDebitosRecibo());
+        $arretipo = Arretipo::query()->where('k00_tipo', $debitos->k00_tipo)->firstOrFail();
+        $valorTaxaExpediente = (float) $arretipo->k00_txban;
+        return $totalRecibo + $valorTaxaExpediente;
+    }
 
   /**
    * Cancela o Recibo

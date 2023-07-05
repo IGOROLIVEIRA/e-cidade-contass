@@ -100,6 +100,16 @@ class cl_acordoaux {
     var $ac16_licoutroorgao = null;
     var $ac16_adesaoregpreco = null;
     var $ac16_tipocadastro = null;
+    var $ac16_reajuste = null;
+    var $ac16_criterioreajuste = null;
+    var $ac16_datareajuste = null;
+    var $ac16_periodoreajuste = null;
+    var $ac16_datareajuste_dia = null;
+    var $ac16_datareajuste_mes = null;
+    var $ac16_datareajuste_ano = null;
+    var $ac16_indicereajuste = null;
+    var $ac16_descricaoreajuste = null;
+    var $ac16_descricaoindice = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  ac16_sequencial = int4 = Acordo
@@ -140,6 +150,16 @@ class cl_acordoaux {
                  ac16_licoutroorgao = int8 = licitacao de outros orgaos
                  ac16_adesaoregpreco = int8 = adesao de registro de precos
                  ac16_tipocadastro   = int8 = tipo de cadastro
+                 ac16_reajuste = boll = possui reajuste
+                 ac16_criterioreajuste = 
+                 ac16_datareajuste = ;
+                 ac16_periodoreajuste = ;
+                 ac16_datareajuste_dia = ;
+                 ac16_datareajuste_mes = ;
+                 ac16_datareajuste_ano = ;
+                 ac16_indicereajuste = ;
+                 ac16_descricaoreajuste = ;
+                 ac16_descricaoindice = ;
                  ";
    //funcao construtor da classe
    function cl_acordoaux() {
@@ -172,6 +192,14 @@ class cl_acordoaux {
             $this->ac16_dataassinatura = $this->ac16_dataassinatura_ano."-".$this->ac16_dataassinatura_mes."-".$this->ac16_dataassinatura_dia;
          }
        }
+       if ($this->ac16_datareajuste == "") {
+        $this->ac16_datareajuste_dia = ($this->ac16_datareajuste_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareajuste_dia"] : $this->ac16_datareajuste_dia);
+        $this->ac16_datareajuste_mes = ($this->ac16_datareajuste_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareajuste_mes"] : $this->ac16_datareajuste_mes);
+        $this->ac16_datareajuste_ano = ($this->ac16_datareajuste_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareajuste_ano"] : $this->ac16_datareajuste_ano);
+          if ($this->ac16_datareajuste_dia != "") {
+              $this->ac16_datareajuste = $this->ac16_datareajuste_ano . "-" . $this->ac16_datareajuste_mes . "-" . $this->ac16_datareajuste_dia;
+          }
+        }
        if($this->ac16_datapublicacao == ""){
          $this->ac16_datapublicacao_dia = ($this->ac16_datapublicacao_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_dia"]:$this->ac16_datapublicacao_dia);
          $this->ac16_datapublicacao_mes = ($this->ac16_datapublicacao_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_mes"]:$this->ac16_datapublicacao_mes);
@@ -204,6 +232,12 @@ class cl_acordoaux {
        $this->ac16_lei = ($this->ac16_lei == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_lei"]:$this->ac16_lei);
        $this->ac16_acordogrupo = ($this->ac16_acordogrupo == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_acordogrupo"]:$this->ac16_acordogrupo);
        $this->ac16_origem = ($this->ac16_origem == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_origem"]:$this->ac16_origem);
+       $this->ac16_reajuste = ($this->ac16_reajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_reajuste"] : $this->ac16_reajuste);
+       $this->ac16_criterioreajuste = ($this->ac16_criterioreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_criterioreajuste"] : $this->ac16_criterioreajuste);
+       $this->ac16_periodoreajuste = ($this->ac16_periodoreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_periodoreajuste"] : $this->ac16_periodoreajuste);
+       $this->ac16_indicereajuste = ($this->ac16_indicereajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_indicereajuste"] : $this->ac16_indicereajuste);
+       $this->ac16_descricaoreajuste = ($this->ac16_descricaoreajuste == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_descricaoreajuste"] : $this->ac16_descricaoreajuste);
+       $this->ac16_descricaoindice = ($this->ac16_descricaoindice == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_descricaoindice"] : $this->ac16_descricaoindice);
        $this->ac16_qtdrenovacao = ($this->ac16_qtdrenovacao == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_qtdrenovacao"]:$this->ac16_qtdrenovacao);
        $this->ac16_tipounidtempo = ($this->ac16_tipounidtempo == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_tipounidtempo"]:$this->ac16_tipounidtempo);
        $this->ac16_deptoresponsavel = ($this->ac16_deptoresponsavel == ""?@$GLOBALS["HTTP_POST_VARS"]["ac16_deptoresponsavel"]:$this->ac16_deptoresponsavel);
@@ -681,6 +715,64 @@ class cl_acordoaux {
         }
        $virgula = ",";
      }
+     
+      if (empty($this->ac16_reajuste)) {
+        $sql  .= $virgula." ac16_reajuste = null ";
+      } else {
+        $sql  .= $virgula." ac16_reajuste =  ". ($this->ac16_reajuste == 1 ? "'t'" : "'f'");
+      }
+      $virgula = ",";
+
+    if (empty($this->ac16_criterioreajuste)) {
+      $sql  .= $virgula." ac16_criterioreajuste = null ";
+    } else {
+      $sql  .= $virgula." ac16_criterioreajuste = '$this->ac16_criterioreajuste' ";
+    }
+    $virgula = ",";
+
+    if (empty($this->ac16_datareajuste)) {
+      $sql  .= $virgula." ac16_datareajuste = null ";
+    } else {
+      $sql  .= $virgula." ac16_datareajuste = '$this->ac16_datareajuste' ";
+    }
+    $virgula = ",";
+   
+    if (empty($this->ac16_periodoreajuste)) {
+      $sql  .= $virgula." ac16_periodoreajuste = null ";
+    } else {
+      $sql  .= $virgula." ac16_periodoreajuste = '$this->ac16_periodoreajuste' ";
+    }
+    $virgula = ",";
+   
+
+   
+    if (empty($this->ac16_indicereajuste)) {
+      $sql  .= $virgula." ac16_indicereajuste = null ";
+    } else {
+      $sql  .= $virgula." ac16_indicereajuste = '$this->ac16_indicereajuste' ";
+    }
+    $virgula = ",";
+   
+
+   
+    if (empty($this->ac16_descricaoreajuste)) {
+      $sql  .= $virgula." ac16_descricaoreajuste = null ";
+    } else {
+      $sql  .= $virgula." ac16_descricaoreajuste = '$this->ac16_descricaoreajuste' ";
+    }
+    $virgula = ",";
+   
+
+  
+    if (empty($this->ac16_descricaoindice)) {
+      $sql  .= $virgula." ac16_descricaoindice = null ";
+    } else {
+      $sql  .= $virgula." ac16_descricaoindice = '$this->ac16_descricaoindice' ";
+    }
+    $virgula = ",";
+   
+
+
 
      if(trim($this->ac16_datapublicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ac16_datapublicacao_dia"] !="") ){
        $sql  .= $virgula." ac16_datapublicacao = '$this->ac16_datapublicacao' ";
@@ -1099,6 +1191,7 @@ class cl_acordoaux {
          }
        }
      }
+
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());

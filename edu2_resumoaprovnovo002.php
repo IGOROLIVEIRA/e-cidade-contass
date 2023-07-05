@@ -150,8 +150,12 @@ foreach( $oDadosRelatorio->aEstruturaGeral as $oDisciplina ) {
           /**
            * Percorre as avaliações do aluno na disciplina, imprimindo o resultado de cada período
            */
+
+          $calcFaltas = 0;
+
           foreach( $oGrade->aAvaliacoes as $oAvaliacao ) {
             imprimeAvaliacao( $oPdf, $oAvaliacao, $oDadosRelatorio );
+            $calcFaltas += $oAvaliacao->iFaltas;
           }
 
           $iColunasEmBranco = $oDadosRelatorio->iMaximoPeriodosPagina - count( $aPaginaPeriodo );
@@ -173,7 +177,7 @@ foreach( $oDadosRelatorio->aEstruturaGeral as $oDisciplina ) {
           /**
            * Imprime as informações do resultado final do aluno na disciplina
            */
-          imprimeResultado( $oPdf, $oGrade, $oDadosRelatorio );
+          imprimeResultado( $oPdf, $oGrade, $oDadosRelatorio, $calcFaltas);
         }
       }
 
@@ -223,6 +227,15 @@ foreach( $oDadosRelatorio->aEstruturaGeral as $oDisciplina ) {
 
         $oPdf->SetFont( 'arial', '', 7 );
         $oPdf->Cell( 280, 4, $sLegenda, 'T', 1, 'L' );
+
+        /**
+         *  Informar assinatura e data do professor
+         */
+        $sAssinatura  = "Assinatura do Professor: _____________________________________________________________ ";
+        $sAssinatura .= "em ___/___/___";
+
+        $oPdf->SetFont( 'arial', 'b', 10 );
+        $oPdf->Cell( 280, 10, $sAssinatura, 0, 0, 'L' );
       }
     }
   }
@@ -279,7 +292,7 @@ function linhaSubCabecalho( FpdfMultiCellBorder $oPdf, $aPaginaPeriodo, $oDadosR
     $sNomeAluno      = 'Nome do Aluno';
     $sFalta          = 'Ft';
     $sAproveitamento = 'Aprov';
-    $sFrequencia     = '% Freq';
+    $sFrequencia     = 'Faltas';
     $sResultadoFinal = 'RF';
     $sFormaAvaliacao = 'AVAL.';
   }
@@ -416,7 +429,7 @@ function imprimeNotaParcial( FpdfMultiCellBorder $oPdf, $oGrade, $oDadosRelatori
  * @param $oGrade
  * @param $oDadosRelatorio
  */
-function imprimeResultado( FpdfMultiCellBorder $oPdf, $oGrade, $oDadosRelatorio ) {
+function imprimeResultado( FpdfMultiCellBorder $oPdf, $oGrade, $oDadosRelatorio, $calcFaltas ) {
 
   if( $oDadosRelatorio->sSituacaoAlunoAtual == 'MATRICULADO' ) {
 
@@ -424,7 +437,7 @@ function imprimeResultado( FpdfMultiCellBorder $oPdf, $oGrade, $oDadosRelatorio 
     $iColunaResultadoFinal = $oDadosRelatorio->iColunaResultadoFinal;
 
     $oPdf->Cell( $iColunaResultadoFinal / 3, $iAltura, $oGrade->sAproveitamentoFinal, 1, 0, 'C' );
-    $oPdf->Cell( $iColunaResultadoFinal / 3, $iAltura, $oGrade->sFrequencia,          1, 0, 'C' );
+    $oPdf->Cell( $iColunaResultadoFinal / 3, $iAltura, $calcFaltas,                   1, 0, 'C' );
     $oPdf->Cell( $iColunaResultadoFinal / 3, $iAltura, $oGrade->sResultadoFinal,      1, 1, 'C' );
   } else {
 

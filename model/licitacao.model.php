@@ -374,72 +374,6 @@ class licitacao
                 break;
         }
 
-
-
-        /**
-         * incluimos o log dos itens da licitacap
-         */
-        $sXMl                        = $this->itensToXml();
-        $oDaoitensLog                = db_utils::getDao("liclicitaitemlog");
-        $oDaoitensLog->l14_liclicita = $this->iCodLicitacao;
-        $oDaoitensLog->l14_xml       = $sXMl;
-        $oDaoitensLog->incluir($this->iCodLicitacao);
-
-        if ($oDaoitensLog->erro_status == 0) {
-
-            $sErro = "Erro ao alterar status da Licitação:\n\n Erro tÃ©cnico: erro ao incluir log dos itens /{$oDaoitensLog->erro_msg}";
-            throw new Exception($sErro, 1);
-        }
-
-        /**
-         * Percorremos todos os itens da licitacao e o excluimos.
-         */
-        $oDaoLicitaItens     = db_utils::getDao("liclicitem");
-        $oDaoLicitaItensLote = db_utils::getDao("liclicitemlote");
-        $sSqlItens           = $oDaoLicitaItens->sql_query_file(
-            null,
-            "distinct *",
-            "l21_codigo",
-            "l21_codliclicita={$this->iCodLicitacao}"
-        );
-
-        $rsItens = $oDaoLicitaItens->sql_record($sSqlItens);
-        $aItens  = db_utils::getCollectionByRecord($rsItens);
-
-        foreach ($aItens as $oItem) {
-
-            /**
-             * Excluimos os lotes
-             */
-            $oDaoLicitaItensLote->excluir(null, "l04_liclicitem={$oItem->l21_codigo}");
-
-            if ($oDaoLicitaItensLote->erro_status == 0) {
-
-                $sErro = "Erro ao alterar status da Licitação:\n\n Erro tÃ©cnico: erro ao excluir lotes /{$oDaoLicitaItensLote->erro_msg}";
-                throw new Exception($sErro, 2);
-            }
-
-            /**
-             * Excluimos o item na tabela liclicitemanu 23/07/2015
-             */
-            $oDaoLiclicitemanu              = db_utils::getDao("liclicitemanu");
-            $oDaoLiclicitemanu->excluir('', "l07_liclicitem = " . $oItem->l21_codigo);
-            if ($oDaoLiclicitemanu->erro_status == 0) {
-                $sErro = "Erro ao excluir item da tabela liclicitemanu:\n\n Erro tÃ©cnico: erro ao excluir item /{$oDaoLiclicitemanu->erro_msg}";
-                throw new Exception($sErro, 3);
-            }
-
-            /**
-             * Excluimos o item
-             */
-            $oDaoLicitaItens->excluir($oItem->l21_codigo);
-            if ($oDaoLicitaItens->erro_status == 0) {
-
-                $sErro = "Erro ao alterar status da Licitação:\n\n Erro tÃ©cnico: erro ao excluir item /{$oDaoLicitaItens->erro_msg}";
-                throw new Exception($sErro, 3);
-            }
-        }
-
         /**
          * Incluimos a situacao  para licitacao
          */
@@ -471,16 +405,6 @@ class licitacao
             $sErro = "Erro ao alterar status da Licitação:\n\n Erro tÃ©cnico: erro ao incluir nova situação /{$oDaolicSituacao->erro_msg}";
             throw new Exception($sErro, 5);
         }
-        $oDaoSituacaoitemcompra = db_utils::getDao("situacaoitemcompra");
-
-        $rsSituacaoitemcompra = $oDaoSituacaoitemcompra->sql_query_file(null, "l218_codigo", null, "l218_codigolicitacao = {$this->iCodLicitacao}");
-        $aElementos    = db_utils::getCollectionByRecord($rsSituacaoitemcompra);
-
-        $oDaoSituacaoitemlic = db_utils::getDao("situacaoitemlic");
-
-
-
-
         return true;
     }
 
@@ -490,187 +414,33 @@ class licitacao
     public function retornaAndamento($sObservacao = "")
     {
 
-        /**
-         * Buscamos as informacoes dos itens na tabela liclicitem log e
-         * incluimos novamente nos lotes e itens.
-         */
-        $oDaoitensLog   = db_utils::getDao("liclicitaitemlog");
-        $oDaoAutoriza   = db_utils::getDao("empautitem");
-        $oDaoPcProcItem = db_utils::getDao("pcprocitem");
-        $sSqlLog        = $oDaoitensLog->sql_query_file($this->iCodLicitacao);
-        $rsLog          = $oDaoitensLog->sql_record($sSqlLog);
+        $oDaoLiclicita                  = db_utils::getDao("liclicita");
+        $oDaoLiclicita->l20_codigo      = $this->iCodLicitacao;
+        $oDaoLiclicita->l20_licsituacao = "0";
+        $oDaoLiclicita->alterar_situacao($this->iCodLicitacao);
 
-        if ($oDaoitensLog->numrows == 1) {
+        if ($oDaoLiclicita->erro_status == 0) {
 
-            $oLog = db_utils::fieldsMemory($rsLog, 0);
-            $oXML = new SimpleXMLElement($oLog->l14_xml);
-            $sItensLicita  = null;
-            $sVirgula      = "";
-            foreach ($oXML->item as $oItem) {
+            $sErro = "erro ao incluir licitação deserta:\n{$oDaoLiclicita->erro_msg}";
+            throw new Exception($sErro, 4);
+        }
 
-                $sItensLicita .= $sVirgula . $oItem->l21_codpcprocitem;
-                $sVirgula = ",";
-            }
-            /*
-             * Verificamos se as itens da Licitação já possui um orçamento realizado para ela
-             * caso esse orçamento já exista, não podemos incluir esse soLicitação como deserta.
-             */
-            $oDaoLiclicita = db_utils::getDao("liclicita");
-            $sWhere = "pc26_liclicitem is null and pc31_pcprocitem in($sItensLicita)  and pc23_orcamitem is null ";
-            $sSqlLicitaOrcamento = $oDaoLiclicita->sql_query_pcodireta(null, " distinct pc81_codproc ", null, $sWhere);
-            $rsLicitaOrcamento   = $oDaoLiclicita->sql_record($sSqlLicitaOrcamento);
-            //echo $sSqlLicitaOrcamento;exit;
+        /*
+        * incluimos a situação
+        */
+        $oDaolicSituacao = db_utils::getDao("liclicitasituacao");
+        $oDaolicSituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
+        $oDaolicSituacao->l11_hora        = db_hora();
+        $oDaolicSituacao->l11_licsituacao = "0";
+        $oDaolicSituacao->l11_obs         = $sObservacao;
+        $oDaolicSituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
+        $oDaolicSituacao->l11_liclicita   = $this->iCodLicitacao;
+        $oDaolicSituacao->incluir(null);
 
-            if ($oDaoLiclicita->numrows > 0) {
+        if ($oDaolicSituacao->erro_status == 0) {
 
-                $sMsg     = "Licitação {$this->iCodLicitacao} já possui valores lançados em Compra Direta\\nCancelamento não Realizado";
-                throw new Exception($sMsg, 5);
-            }
-            /*
-             * Verificamos se as itens da Licitação ja esta incluso em outra licitacao
-             * caso esse orçamento já exista, não podemos incluir esse solicitação como deserta.
-             */
-            $oDaoLiclicitem = db_utils::getDao("liclicitem");
-            $sWhere         = "l21_codpcprocitem in($sItensLicita)";
-            $sSqlLicita     = $oDaoLiclicitem->sql_query_file(null, " distinct l21_codliclicita ", null, $sWhere);
-            $rsLicita       = $oDaoLiclicitem->sql_record($sSqlLicita);
-
-            if ($oDaoLiclicitem->numrows > 0) {
-
-                $sLicita  = "";
-                $sVirgula = "";
-
-                for ($i = 0; $i < $oDaoLiclicitem->numrows; $i++) {
-
-                    $oLicita  = db_utils::fieldsMemory($rsLicita, $i);
-                    $sLicita .= $sVirgula . $oLicita->l21_codliclicita;
-                    $sVirgula = ", ";
-                    unset($oLicita);
-                }
-
-                $sMsg  = "Itens da licitação {$this->iCodLicitacao} já lançados nas licitações {$sLicita}";
-                $sMsg .= "\\nCancelamento não Realizado";
-                throw new Exception($sMsg, 5);
-            }
-            foreach ($oXML->item as $oItem) {
-
-                $oDaoLiclicitem   = db_utils::getDao("liclicitem");
-
-                /*
-                 * percorremos os itens que cadastramos no xml e validamos pelas seguintes regras:
-                 * 1 - o Processo de compras nao pode estar em nenhum orcamento.
-                 * 2 - não pode estar em nenhuma outra licitacao.
-                 * 3 - não pode estar excluido;
-                 */
-                $sSqlVerificaItem = $oDaoLiclicitem->sql_query_file(
-                    null,
-                    "*",
-                    null,
-                    "l21_codpcprocitem = {$oItem->l21_codpcprocitem}"
-                );
-                $rsVerificaItem   = $oDaoLiclicitem->sql_record($sSqlVerificaItem);
-
-                if ($oDaoLiclicitem->numrows > 0) {
-
-                    $oLicitacao = db_utils::fieldsMemory($rsVerificaItem, 0);
-                    $sMsg       = "O item " . utf8_decode($oItem->pc01_descrmater) . " foi incluso na licitação";
-                    $sMsg      .= " {$oLicitacao->l21_codliclicita}.\nProcesso cancelado";
-                    throw new Exception($sMsg, 6);
-                }
-                /**
-                 * Verificamos se o item está incluso em alguma autorização de empenho
-                 */
-                $sSqlAutoriza  = $oDaoAutoriza->sql_query_autoriza(
-                    null,
-                    null,
-                    "e54_autori",
-                    null,
-                    " e55_sequen = {$oItem->l21_codpcprocitem}
-          and e54_anulad is null"
-                );
-                $rsAutoriza   = $oDaoAutoriza->sql_record($sSqlAutoriza);
-
-                if ($oDaoAutoriza->numrows > 0) {
-
-                    $oAutoriza  = db_utils::fieldsMemory($rsAutoriza, 0);
-                    $sMsg       = "Erro ao Cancelar situação. Item {$oItem->l21_codpcprocitem} já está autorizado para empenho ";
-                    $sMsg      .= "na autorização {$oAutoriza->e54_autori}";
-                    throw new Exception($sMsg, 3);
-                }
-                /**
-                 * Validamos se o o item do processo de compras ainda existe.
-                 */
-                $sSqlItem    = $oDaoPcProcItem->sql_query_file(utf8_decode($oItem->l21_codpcprocitem));
-                $rsITem      = $oDaoPcProcItem->sql_record($sSqlItem);
-
-                if ($oDaoPcProcItem->numrows == 0) {
-
-                    $sMsg       = "Erro ao Cancelar situação. Processo de Compras({$oItem->pc81_codproc}) excluído";
-                    throw new Exception($sMsg, 6);
-                }
-                $oDaoLiclicitem->l21_codigo        = utf8_decode($oItem->l21_codigo);
-                $oDaoLiclicitem->l21_codliclicita  = $oItem->l21_codliclicita;
-                $oDaoLiclicitem->l21_codpcprocitem = utf8_decode($oItem->l21_codpcprocitem);
-                $oDaoLiclicitem->l21_situacao      = "$oItem->l21_situacao";
-                $oDaoLiclicitem->l21_ordem         = utf8_decode($oItem->l21_ordem);
-                $oDaoLiclicitem->incluir($oItem->l21_codigo);
-
-                if ($oDaoLiclicitem->erro_status == 0) {
-
-                    $sErro = "Erro ao excluir licitação deserta:\n{$oDaoLiclicitem->erro_msg}";
-                    throw new Exception($sErro, 2);
-                }
-                /*
-                 * incluimos os lotes do item
-                 */
-                $sequencial = 0;
-                foreach ($oItem->lote as $oLote) {
-
-                    $sequencial++;
-                    $oDaoliclicitemlote = db_utils::getDao("liclicitemlote");
-                    $oDaoliclicitemlote->l04_codigo     = utf8_decode($oLote["l04_codigo"]);
-                    $oDaoliclicitemlote->l04_liclicitem = utf8_decode($oLote["l04_liclicitem"]);
-                    $oDaoliclicitemlote->l04_descricao  = utf8_decode($oLote["l04_descricao"]);
-                    $oDaoliclicitemlote->l04_seq = $sequencial;
-                    $oDaoliclicitemlote->incluir(utf8_decode($oLote["l04_codigo"]));
-
-                    if ($oDaoliclicitemlote->erro_status == 0) {
-
-                        $sErro = "erro ao excluir licitação deserta:\n{$oDaoliclicitemlote->erro_msg}";
-                        throw new Exception($sErro, 3);
-                    }
-                }
-            }
-            $oDaoitensLog->excluir($this->iCodLicitacao);
-            $oDaoLiclicita                  = db_utils::getDao("liclicita");
-            $oDaoLiclicita->l20_codigo      = $this->iCodLicitacao;
-            $oDaoLiclicita->l20_licsituacao = "0";
-            $oDaoLiclicita->alterar_situacao($this->iCodLicitacao);
-
-            if ($oDaoLiclicita->erro_status == 0) {
-
-                $sErro = "erro ao incluir licitação deserta:\n{$oDaoLiclicita->erro_msg}";
-                throw new Exception($sErro, 4);
-            }
-            /*
-             * incluimos a situação
-             */
-            $oDaolicSituacao = db_utils::getDao("liclicitasituacao");
-            $oDaolicSituacao->l11_data        = date("Y-m-d", db_getsession("DB_datausu"));
-            $oDaolicSituacao->l11_hora        = db_hora();
-            $oDaolicSituacao->l11_licsituacao = "0";
-            $oDaolicSituacao->l11_obs         = $sObservacao;
-            $oDaolicSituacao->l11_id_usuario  = db_getsession("DB_id_usuario");
-            $oDaolicSituacao->l11_liclicita   = $this->iCodLicitacao;
-            $oDaolicSituacao->incluir(null);
-
-            if ($oDaolicSituacao->erro_status == 0) {
-
-                $sErro = "erro ao incluir licitação deserta:\n{$oDaolicSituacao->erro_msg}";
-                throw new Exception($sErro, 5);
-            }
-        } else {
-            throw new Exception("Licitação sem Log gerado!", 1);
+            $sErro = "erro ao incluir licitação deserta:\n{$oDaolicSituacao->erro_msg}";
+            throw new Exception($sErro, 5);
         }
     }
 
@@ -721,15 +491,6 @@ class licitacao
 
         $oDaoLicilicitem  = db_utils::getDao("liclicitem");
 
-        //echo ("<pre>".print_r($aLicitacoes, 1)."</pre>");
-        //echo count($aLicitacoes); die();
-        /*
-        if (count($aLicitacoes) > 1) {
-          $sLista = implode(",", $aLicitacoes);
-        } else {
-          $sLista = implode("", $aLicitacoes);
-        }
-         */
         $sLista = $aLicitacoes;
         $sCampos          = "l21_codigo as codigo, pc01_codmater as codigomaterial,";
         $sCampos         .= "pc01_descrmater as material, pc23_vlrun as valorunitario,";
@@ -869,7 +630,9 @@ class licitacao
         1 AS origem,
         pc18_codele AS elemento,
         pc23_quant AS quantidade,
-        pc23_valor AS valortotal,
+        (SELECT si02_qtditem * si02_vlprecoreferencia
+        FROM itemprecoreferencia
+        WHERE si02_itemproccompra = pcorcamitemproc.pc31_orcamitem) AS valortotal,
         l20_numero AS numero,
         sum(l213_qtdcontratada) AS l213_qtdcontratada,
         sum(l213_valorcontratado) AS l213_valorcontratado,
@@ -1026,10 +789,6 @@ class licitacao
         $sCampos .= "case when trim(pc23_obs) <> '' then pc23_obs";
         $sCampos .= "     else pc10_resumo ";
         $sCampos .= " end as observacao,";
-
-        //$sCampos .= "case when trim(pc11_resum) <> '' then pc11_resum";
-        //$sCampos .= "     else pc10_resumo ";
-        //$sCampos .= " end as observacao,";
         $sCampos .= "pc10_resumo as observacao_solicita,";
         $sCampos .= "pc23_vlrun as valorunitariofornecedor,";
         $sCampos .= "pc23_quant as quantfornecedor,";
@@ -1045,8 +804,6 @@ class licitacao
         $sCampos .= "o56_descr as descricaoelemento,";
         $sCampos .= "o56_elemento as elemento,";
         $sCampos .= "pc28_solicitem as itemanulado";
-
-
         $sOrder = "z01_numcgm,pc13_coddot,pc18_codele, pc19_sequencial,l21_ordem, pc19_orctiporec,pc13_sequencial";
         $sWhere = "l20_codigo = {$this->iCodLicitacao} and pc24_pontuacao = 1 and pc10_instit = " . db_getsession("DB_instit");
 
@@ -1280,38 +1037,6 @@ class licitacao
                  */
                 $oSaldo = $this->getValoresParciais($oItem->codigoprocesso, $oDados->dotacao, $oDados->contrapartida);
 
-                /*if ($nNovoValorReserva > 0 && ($oSaldo->nValorAutorizacao > 0 && $oSaldo->nValorAutorizacao + $oItem->valortotal < $oSaldo->nValorItemJulgado)) {
-
-                  $oDaoOrcReserva->o80_anousu = db_getsession("DB_anousu");
-                  $oDaoOrcReserva->o80_coddot = $oDados->dotacao;
-                  $oDaoOrcReserva->o80_dtfim  = db_getsession("DB_anousu")."-12-31";
-                  $oDaoOrcReserva->o80_dtini  = date("Y-m-d", db_getsession("DB_datausu"));
-                  $oDaoOrcReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
-                  $oDaoOrcReserva->o80_valor  = number_format( (float) $nNovoValorReserva, 2, '.', '');
-                  $oDaoOrcReserva->o80_descr  = "Reserva item Solicitacao";
-                  $oDaoOrcReserva->o80_justificativa  = "Reserva item Solicitacao";
-                  $oDaoOrcReserva->incluir(null);
-
-                  if ($oDaoOrcReserva->erro_status == 0) {
-
-                    $sMsgErro  = "não foi possivel gerar reserva para a dotação: {$oDados->dotacao}.\n";
-                    $sMsgErro .= $oDaoOrcReserva->erro_msg;
-                    throw new Exception($sMsgErro);
-                  }
-
-
-                  /*$oDaoOrcReservaSol->o82_codres    = $oDaoOrcReserva->o80_codres;
-                  $oDaoOrcReservaSol->o82_pcdotac   = $oDados->pcdotac;
-                  $oDaoOrcReservaSol->o82_solicitem = $oDados->codigoitemsolicitacao;
-                  $oDaoOrcReservaSol->incluir(null);
-                  if ($oDaoOrcReservaSol->erro_status == 0) {
-
-                    $sMsgErro  = "não foi possivel gerar reserva para a dotação: {$oDados->dotacao}.\n";
-                    $sMsgErro .= $oDaoOrcReservaSol->erro_msg;
-                    throw new Exception($sMsgErro);
-                  }
-
-                }*/
             }
             /**
              * Salvamos a Autorizacao;
@@ -1322,15 +1047,12 @@ class licitacao
              * Conforme Solicitado pela ocorrência 1892, o resumo deve ser a informação preenchida na primeira tela do menu Mod. Licitação >> Procedimentos >> Gera autorização
              * @see: Ocorrência 1892
              */
-            //$rsPcdotac = $oDaoPcdotac->sql_record($oDaoPcdotac->sql_query_solicita(null, null, null, "pc10_resumo", null, "pc13_sequencial = {$oItem->pcdotac}"));
-            //$sResumo   = $oDaoPcdotac->numrows > 0 ? db_utils::fieldsMemory($rsPcdotac, 0)->pc10_resumo : $oDados->resumo;
             $sResumo = $oDados->resumo;
             $oAutorizacao = new AutorizacaoEmpenho();
             /**
              * não pode-se setar o codigo da reserva da soLicitação na Autorizacao.
              * A autorizacao gera um codigo de reserva quando inclusa
              */
-            //$oAutorizacao->setCodigoReserva($iCodigoReserva);
             $oAutorizacao->setDesdobramento($oDados->elemento);
             $oAutorizacao->setDotacao($oDados->dotacao);
             $oAutorizacao->setContraPartida($oDados->contrapartida);
@@ -1360,18 +1082,19 @@ class licitacao
             $oAutorizacao->setCondicaoPagamento($oDados->condicaopagamento);
             $oAutorizacao->setNumeroLicitacao("{$oDadosLicitacao->l20_edital}/{$oDadosLicitacao->l20_anousu}");
             $oAutorizacao->setModalidade($oDadosLicitacao->l20_numero);
+            $oAutorizacao->setDataAutorizacao(date("Y-m-d",db_getsession('DB_datausu')));
             /**
              * Verifico o tipo de origem dalic4_editaldocumentos compra pelo codigo do tribunal
              *  @OC7425
-             *  1 ? não ou dispensa por valor (art. 24, I e II da Lei 8.666/93);
-             *  2 ? Licitação;
-             *  3 ? Dispensa ou Inexigibilidade;
-             *  4 ? Adesão à ata de registro de preços;
-             *  5 ? Licitação realizada por outro órgão ou entidade;
-             *  6 ? Dispensa ou Inexigibilidade realizada por outro órgão ou entidade;
-             *  7 ? Licitação - Regime Diferenciado de Contratações Públicas ? RDC, conforme Lei no 12.462/2011
-             *  8 ? Licitação realizada por consorcio público
-             *  9 ? Licitação realizada por outro ente da federação
+             *  1 - não ou dispensa por valor (art. 24, I e II da Lei 8.666/93);
+             *  2 - Licitação;
+             *  3 - Dispensa ou Inexigibilidade;
+             *  4 - Adesão à ata de registro de preços;
+             *  5 - Licitação realizada por outro órgão ou entidade;
+             *  6 - Dispensa ou Inexigibilidade realizada por outro órgão ou entidade;
+             *  7 - Licitação - Regime Diferenciado de Contratações Públicas - RDC, conforme Lei no 12.462/2011
+             *  8 - Licitação realizada por consorcio público
+             *  9 - Licitação realizada por outro ente da federação
              */
             $tipoLicitacao = array(52, 48, 49, 50, 51, 53, 54);
             $tipoDispensaInex = array(100, 101, 102);
@@ -1551,13 +1274,17 @@ class licitacao
         return $this->iNumeroEdital;
     }
 
-    public function alterarObservacaoSituacao($iSequencialLicitacaoSituacao, $sObservacao)
+    public function alterarObservacaoSituacao($iSequencialLicitacao, $sObservacao)
     {
 
         $oDaoLicLicitaSituacao = db_utils::getDao('liclicitasituacao');
+        //busco a ultima situacao deserta
+        $sSqlSituacao = $oDaoLicLicitaSituacao->sql_query(null, "l11_sequencial", null, "l11_liclicita = {$iSequencialLicitacao} and l11_licsituacao = 3 ORDER BY l11_sequencial desc limit 1");
+        $rsSequencialLiclicitasituacao = $oDaoLicLicitaSituacao->sql_record($sSqlSituacao);
+        $iSequencialLicitacaoSituacao = db_utils::fieldsMemory($rsSequencialLiclicitasituacao, 0);
         $oDaoLicLicitaSituacao->l11_obs        = "{$sObservacao}";
-        $oDaoLicLicitaSituacao->l11_sequencial = $iSequencialLicitacaoSituacao;
-        $oDaoLicLicitaSituacao->alterar($iSequencialLicitacaoSituacao);
+        $oDaoLicLicitaSituacao->l11_sequencial = $iSequencialLicitacaoSituacao->l11_sequencial;
+        $oDaoLicLicitaSituacao->alterar($iSequencialLicitacaoSituacao->l11_sequencial);
 
         if ($oDaoLicLicitaSituacao->erro_status == 0) {
 
@@ -1640,10 +1367,6 @@ class licitacao
 
         $rsModalidade    = $oDaoModalidade->sql_record($sSqlModalidade);
         if ($oDaoModalidade->numrows <= 0) {
-
-            //$sMensagem  = "ERRO [ 0 ] - Verifique faixa de valores da Modalidade {$iModalidade} - ";
-            //$sMensagem .= licitacao::getDescricaoModalidade($iModalidade)->l03_descr." .";
-            //throw new Exception($sMensagem);
             /*
              * se caso nao encontre faixa de valor pra modalidade, significa
              * que ela não sera controlada por valores.
