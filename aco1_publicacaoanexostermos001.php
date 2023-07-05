@@ -280,7 +280,6 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
       let iSelecionados = documentosSelecionados.length;
       let iCodigoTermo = $('l214_sequencial').value;
       let aDocumentos = [];
-      let aTipo = [];
 
       if (iSelecionados === 0) {
           alert('Selecione pelo menos arquivo para Enviar')
@@ -292,7 +291,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
       }
 
       if (empty(iCodigoTermo)) {
-          alert('Licitação não informada.');
+          alert('Termo não informado.');
           return false;
       }
 
@@ -301,9 +300,6 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
           let iDocumento = documentosSelecionados[iIndice].aCells[0].getValue();
           aDocumentos.push(iDocumento);
 
-          let iTipo = documentosSelecionados[iIndice].aCells[3].getValue();
-          aTipo.push(iTipo);
-
       }
 
       js_divCarregando('Aguarde... Enviando documentos!', 'msgbox');
@@ -311,12 +307,11 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
       let oParametros = {};
 
       oParametros.exec = 'EnviarDocumentoPNCP';
-      oParametros.iCodigoProcesso = iCodigoProcesso;
+      oParametros.iCodigoTermo = iCodigoTermo;
       oParametros.aDocumentos = aDocumentos;
-      oParametros.aTipoDocumentos = aTipo;
 
       let oAjax = new Ajax.Request(
-          'lic1_envioanexos.RPC.php', {
+          'con1_envioanexostermos.RPC.php', {
               parameters: 'json=' + Object.toJSON(oParametros),
               method: 'post',
               asynchronous: false,
@@ -340,4 +335,67 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
 
   }
 
+  function js_excluirDocumentoPNCP(){
+
+      const documentosSelecionados = oGridDocumentos.getSelection("object")
+      var iSelecionados = documentosSelecionados.length;
+      var iCodigoTermo = $('l214_sequencial').value;
+      var aDocumentos = [];
+
+      if (iSelecionados== 0) {
+          alert('Selecione pelo menos um arquivo para Excluir')
+          return false
+      }
+
+      if (!confirm('Confirma a Exclusão do Documento?')) {
+          return false;
+      }
+
+      if (empty(iCodigoTermo)) {
+          alert('Termo não informado.');
+          return false;
+      }
+
+      for (let iIndice = 0; iIndice < iSelecionados; iIndice++) {
+          let iDocumento = documentosSelecionados[iIndice].aCells[0].getValue();
+          aDocumentos.push(iDocumento);
+      }
+
+      js_divCarregando('Aguarde... Excluindo documentos!', 'msgbox');
+
+      let oParametros = {}
+
+      oParametros.exec = 'ExcluirDocumentoPNCP';
+      oParametros.iCodigoTermo = iCodigoTermo;
+      oParametros.aDocumentos = aDocumentos;
+
+      let oAjax = new Ajax.Request(
+          'con1_envioanexostermos.RPC.php', {
+              parameters: 'json=' + Object.toJSON(oParametros),
+              method: 'post',
+              asynchronous: false,
+
+              /**
+               *
+               * Retorno do RPC
+               */
+              onComplete: function(oAjax) {
+
+                  js_removeObj("msgbox");
+                  let oRetorno = eval('(' + oAjax.responseText + ")");
+                  let sMensagem = oRetorno.message.urlDecode();
+                  let status = oRetorno.status;
+                  for (let cont = 0; cont <= oRetorno.length; cont++) {
+                      document.write(oRetorno[cont] + "<br>");
+                  }
+                  if (oRetorno.status == 2) {
+                      alert(sMensagem);
+                      return false;
+                  }
+                  alert("Documento(s) Excluido(s) com Sucesso do PNCP!");
+
+              }
+          });
+
+  }
 </script>

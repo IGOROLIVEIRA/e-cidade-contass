@@ -25,6 +25,27 @@ class Oc20692 extends AbstractMigration
             MAXVALUE 9223372036854775807
             START 1
             CACHE 1;
+
+            CREATE TABLE controleanexostermospncp(
+                        ac57_sequencial int8,
+                        ac57_acordo int8,
+                        ac57_usuario int8,
+                        ac57_dataenvio date,
+                        ac57_sequencialtermo int8,
+                        ac57_tipoanexo int8,
+                        ac57_instit int8,
+                        ac57_ano int8,
+                        ac57_sequencialpncp int8,
+                        ac57_sequencialarquivo int8
+                        );
+
+            CREATE SEQUENCE controleanexostermospncp_ac57_sequencial_seq
+            INCREMENT 1
+            MINVALUE 1
+            MAXVALUE 9223372036854775807
+            START 1
+            CACHE 1;
+
         ";
 
         $this->execute($sql);
