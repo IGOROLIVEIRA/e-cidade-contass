@@ -335,6 +335,8 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
 
           oParam.oDadosForm.k00_dtoper = $F('k00_dtoper');
 
+          
+
           var oAjax2 = new Ajax.Request("cai3_emitecarne.RPC.php",
               {method    : 'post',
                parameters: 'json='+Object.toJSON(oParam),
@@ -351,10 +353,8 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                      if(oRetorno.iConfirm == 1){
 
                        if(confirm(sMsg)){
-                        console.log('entrou na linha 354');
                          js_emiteReciboCarne(oParam,true,false);
                        } else {
-                        console.log('entrou na linha 357');
                          js_emiteReciboCarne(oParam,false,true);
                        }
                      }
@@ -362,7 +362,6 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                       js_emiteGuiaItbi(oParam);
                      }
                      else {
-                      console.log('entrou na linha 365');
                        js_emiteReciboCarne(oParam,true);
                      }
                    }
@@ -412,7 +411,6 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                                                 var sUrl    = 'cai3_emiterecibo.php?json='+Object.toJSON(oRetorno);
 
                                                 if ((oRetorno.recibos_emitidos.length == 1 && oRetorno.aSessoesCarne.length == '0') && !lForcajanela) {
-
                                                   var lForcarVencimento = $('forcarvencimento').checked;
                                                   sUrl    = 'cai3_gerfinanc003.php';
                                                   sUrl   += debitos.location.search;
@@ -430,7 +428,7 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                                                   oJanela = window.open(sUrl,'reciboweb2','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
                                                   oJanela.moveTo(0,0);
                                                 } else if (((oRetorno.recibos_emitidos.length == 0 || oRetorno.aSessoesRecibo.length == 0) && oRetorno.aSessoesCarne.length == 0)) {
-
+                                                  //TO-DO: Para refactor: este else if está completamente vazio(??)
                                                 } else {
                                                   /**
                                                    * Cria Janela

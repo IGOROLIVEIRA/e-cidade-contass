@@ -3,6 +3,8 @@ require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
+
+
 require_once("libs/db_utils.php");
 require_once("dbforms/db_funcoes.php");
 
@@ -209,7 +211,7 @@ if( isset($HTTP_POST_VARS["db_opcao"]) ) {
  * Verifica de existe alguma diferença entre os dois objetos apartir das
  * propriedades do primeiro objeto passado por parâmetro
  *
- * @param  objetc $oObject1
+ * @param  object $oObject1
  * @param  object $oObject2
  * @return boolean
  */
@@ -231,4 +233,7 @@ function hasDiffObject($oObject1,$oObject2){
   return $lDiff;
 
 }
+
+
+
 ?>
