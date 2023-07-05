@@ -770,6 +770,16 @@ class aberturaRegistroPreco extends solicitacaoCompra {
             $oDaoSolicitemVinculo->incluir(null);
             
           }
+
+          $oDaoPcProcItem = db_utils::getDao('pcprocitem');
+          $rsPcProcItem = $oDaoPcProcItem->sql_record("select distinct pc81_codproc from pcprocitem where pc81_solicitem in (select pc11_codigo from solicitem where pc11_numero = $iCodigoAbertura)");
+          $pc81_codproc = db_utils::fieldsmemory($rsPcProcItem, 0)->pc81_codproc;
+          
+          if($pc81_codproc != null && pg_num_rows($rsPcProcItem) != 0){
+            $oDaoPcProcItem->pc81_codproc = $pc81_codproc;
+            $oDaoPcProcItem->pc81_solicitem = $oDaoSolicitem->pc11_codigo;
+            $oDaoPcProcItem->incluir(null);
+          }          
     }
     
 

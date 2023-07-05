@@ -397,19 +397,12 @@ switch ($oParam->exec) {
         
         $iDescricaoLog = 'ADICIONADO ITEM '.$oParam->iCodigoItem;
 
-        //solicitem aqui tem a quantidade, valor, serviquantidade e reservado
+        //Abertura
         
         $aberturaRegistro->adicionarItemmanutencao($iCodAbertura,$oParam,pg_num_rows($rsItens)+1,3);
 
-        //solicitempcmater vinculo da pcmater com a solicitem
 
-        //solicitemunid vinculo com a unidade 
-
-        //solicitemvinculo
-
-        //solicitavinculo aqui vc consegue os vinculos com as estimativas e compilação pc53_solicitapai verificar o tipo 3 abertura - 4 estimativa - 6 compilacao
-
-        //estimativas
+        //estimativas compilacao e vinculos 
 
           $rsVinculoSolicita = db_query("select pc53_solicitafilho,pc10_solicitacaotipo from solicitavinculo inner join solicita on pc10_numero = pc53_solicitafilho  where pc53_solicitapai = $iCodAbertura order by pc53_solicitafilho ");
           for ($iItens = 0; $iItens < pg_num_rows($rsVinculoSolicita); $iItens++) {
@@ -419,6 +412,8 @@ switch ($oParam->exec) {
             $aberturaRegistro->adicionarItemmanutencao($pc53_solicitafilho,$oParam,pg_num_rows($rsItens)+1,$pc10_solicitacaotipo);
             
           }
+        
+        //processo de compras
         
 
 
