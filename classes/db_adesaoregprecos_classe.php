@@ -698,33 +698,14 @@ class cl_adesaoregprecos
         }
       }
     }
-    if (trim($this->si06_publicacaoaviso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_publicacaoaviso_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si06_publicacaoaviso_dia"] != "")) {
+    if (trim($this->si06_publicacaoaviso) != "") {
       $sql  .= $virgula . " si06_publicacaoaviso = '$this->si06_publicacaoaviso' ";
       $virgula = ",";
-      if (trim($this->si06_publicacaoaviso) == null) {
-        $this->erro_sql = " Campo Publicação Aviso nao Informado.";
-        $this->erro_campo = "si06_publicacaoaviso_dia";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    } else {
-      if (isset($GLOBALS["HTTP_POST_VARS"]["si06_publicacaoaviso_dia"])) {
+    }else{
         $sql  .= $virgula . " si06_publicacaoaviso = null ";
         $virgula = ",";
-        if (trim($this->si06_publicacaoaviso) == null) {
-          $this->erro_sql = " Campo Publicação Aviso nao Informado.";
-          $this->erro_campo = "si06_publicacaoaviso_dia";
-          $this->erro_banco = "";
-          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-          $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-          $this->erro_status = "0";
-          return false;
-        }
-      }
     }
+
     if (trim($this->si06_objetoadesao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_objetoadesao"])) {
       $sql  .= $virgula . " si06_objetoadesao = '$this->si06_objetoadesao' ";
       $virgula = ",";
