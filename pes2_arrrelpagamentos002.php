@@ -46,10 +46,13 @@ $head5 = "TOTALIZADO POR: $tipo_totalizacao";
 //$lotacao = 's';
 
 if($lotacao == 's'){
- $ordem = "codigo, r70_estrut , r38_banco, r38_agenc, r38_nome ";
+ $ordem = "r70_estrut , r38_banco, r38_agenc, r38_nome ";
+}else if($lotacao == 'r'){
+  $ordem = "codigo, r38_banco, r38_agenc, r38_nome ";
 }else{
- $ordem = "codigo, r38_banco, r38_agenc, r38_nome ";
+ $ordem = "r38_banco, r38_agenc, r38_nome asc";
 }
+
 $where = '';
 
 if($matricula != 0){
@@ -168,7 +171,7 @@ for($x = 0; $x < pg_numrows($result);$x++){
               $troca = 1;
               $xlota = $r38_banco . $r38_agenc;
               $pdf->cell(155, $alt, '', 'T', 0, "C", 0);
-              $pdf->cell(15, $alt, 'TOTAL DO RECURSO', 'T', 0, "R", 0);
+              $pdf->cell(15, $alt, 'TOTAL', 'T', 0, "R", 0);
               $pdf->cell(20, $alt, db_formatar($tot_age, 'f'), 'T', 1, "R", 0);
               $pdf->cell(155, $alt, '', 0, 0, "C", 0);
               $pdf->cell(15, $alt, 'TOTAL DE FUNC.', 0, 0, "R", 0);

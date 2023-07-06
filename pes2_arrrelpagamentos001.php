@@ -80,7 +80,7 @@ function js_emitecsv(){
         </td>
         <td align="left">
           <?
-          $v = array("s"=>"Lotação", "n"=>"Nenhum", 'r' => 'Recurso');
+          $v = array("s"=>"Lotação", "n"=>"Banco", 'r' => 'Recurso');
           db_select('lotacao',$v,true,4,"");
           ?>
         </td>
