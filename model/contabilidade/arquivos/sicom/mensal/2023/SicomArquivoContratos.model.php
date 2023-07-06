@@ -501,7 +501,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             if ($sSubUnidade == 1) {
                 $sCodUnidade .= str_pad($sSubUnidade, 3, "0", STR_PAD_LEFT);
             }
-            
+
             /*
             * Origem
             * 1 - manual
@@ -782,7 +782,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         } elseif ($oDadosItensObra->obr06_tabela == "3") {
                             $oContrato11->si84_coditemsinapi = null; //campo 06
                             $oContrato11->si84_coditemsimcro = null; //campo 07
-                            $oContrato11->si84_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela; //campo 08
+                            $oContrato11->si84_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
                         }
                         $oContrato11->si84_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                         $aDadosAgrupados[$sHash] = $oContrato11;
