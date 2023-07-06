@@ -67,7 +67,7 @@ if (isset($imprimirword)) {
 $datesistema = date("d/m/Y", db_getsession('DB_datausu'));
 
 if (isset($alterar) && $si01_datacotacao > $datesistema) {
-    $msg = "Data da Cotao maior que data do Sistema";
+    $msg = "Data da Cotação maior que data do Sistema";
     unset($alterar);
     db_msgbox($msg);
 }
