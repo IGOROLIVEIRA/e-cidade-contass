@@ -3,7 +3,7 @@
 //CLASSE DA ENTIDADE adesaoregprecos
 class cl_adesaoregprecos
 {
-  // cria variaveis de erro 
+  // cria variaveis de erro
   var $rotulo     = null;
   var $query_sql  = null;
   var $numrows    = 0;
@@ -16,7 +16,7 @@ class cl_adesaoregprecos
   var $erro_msg   = null;
   var $erro_campo = null;
   var $pagina_retorno = null;
-  // cria variaveis do arquivo 
+  // cria variaveis do arquivo
   var $si06_sequencial = 0;
   var $si06_orgaogerenciador = 0;
   var $si06_modalidade = 0;
@@ -64,41 +64,41 @@ class cl_adesaoregprecos
 
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si06_sequencial = int8 = Sequencial 
-                 si06_orgaogerenciador = int8 = Orgão Gerenciador 
-                 si06_modalidade = int8 = Modalidade 
-                 si06_numeroprc = int8 = Número do PRC 
-                 si06_numlicitacao = int8 = Núm. Licitação 
-                 si06_dataadesao = date = Data de Adesão 
-                 si06_dataata = date = Data da Ata 
-                 si06_datavalidade = date = Data Validade 
-                 si06_publicacaoaviso = date = Publicação Aviso 
-                 si06_objetoadesao = text = Objeto da Adesão 
-                 si06_orgarparticipante = int8 = Orgão integra a ata de Registro de Preço 
-                 si06_cgm = int8 = Responsável pela Aprovação 
-                 si06_descontotabela = int8 = Desconto em Tabela 
-                 si06_numeroadm = int8 = Número do ADM 
-                 si06_dataabertura = date = Data da Abertura 
-                 si06_processocompra = int8 = Processo de compra 
-                 si06_fornecedor = int8 = Fornecedor 
-                 si06_processoporlote = int8 = Processo por Lote 
-                 si06_edital = int8 = Número do edital 
-                 si06_exercicioedital = int8 = Exercício do edital 
-                 si06_cadinicial = int4 = Cadastro Inicial 
-                 si06_anocadastro = int4 = Ano cadastro 
+                 si06_sequencial = int8 = Sequencial
+                 si06_orgaogerenciador = int8 = Orgão Gerenciador
+                 si06_modalidade = int8 = Modalidade
+                 si06_numeroprc = int8 = Número do PRC
+                 si06_numlicitacao = int8 = Núm. Licitação
+                 si06_dataadesao = date = Data de Adesão
+                 si06_dataata = date = Data da Ata
+                 si06_datavalidade = date = Data Validade
+                 si06_publicacaoaviso = date = Publicação Aviso
+                 si06_objetoadesao = text = Objeto da Adesão
+                 si06_orgarparticipante = int8 = Orgão integra a ata de Registro de Preço
+                 si06_cgm = int8 = Responsável pela Aprovação
+                 si06_descontotabela = int8 = Desconto em Tabela
+                 si06_numeroadm = int8 = Número do ADM
+                 si06_dataabertura = date = Data da Abertura
+                 si06_processocompra = int8 = Processo de compra
+                 si06_fornecedor = int8 = Fornecedor
+                 si06_processoporlote = int8 = Processo por Lote
+                 si06_edital = int8 = Número do edital
+                 si06_exercicioedital = int8 = Exercício do edital
+                 si06_cadinicial = int4 = Cadastro Inicial
+                 si06_anocadastro = int4 = Ano cadastro
                  si06_leidalicitacao = int4 = Lei de licitacao
                  si06_anomodadm = int4 = Ano do Processo
                  si06_nummodadm = int8 = Numero Modalidade
                  si06_departamento = int8 = codigo do departamento responsavel
                  ";
-  //funcao construtor da classe 
+  //funcao construtor da classe
   function cl_adesaoregprecos()
   {
     //classes dos rotulos dos campos
     $this->rotulo = new rotulo("adesaoregprecos");
     $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
   }
-  //funcao erro 
+  //funcao erro
   function erro($mostra, $retorna)
   {
     if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -268,15 +268,7 @@ class cl_adesaoregprecos
       $this->erro_status = "0";
       return false;
     }
-    if ($this->si06_publicacaoaviso == null) {
-      $this->erro_sql = " Campo Publicação Aviso nao Informado.";
-      $this->erro_campo = "si06_publicacaoaviso_dia";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+
     if ($this->si06_objetoadesao == null) {
       $this->erro_sql = " Campo Objeto da Adesão nao Informado.";
       $this->erro_campo = "si06_objetoadesao";
@@ -430,21 +422,21 @@ class cl_adesaoregprecos
     }
 
     $sql = "insert into adesaoregprecos(
-                                       si06_sequencial 
-                                      ,si06_orgaogerenciador 
-                                      ,si06_modalidade 
-                                      ,si06_numeroprc 
-                                      ,si06_numlicitacao 
-                                      ,si06_dataadesao 
-                                      ,si06_dataata 
-                                      ,si06_datavalidade 
-                                      ,si06_publicacaoaviso 
-                                      ,si06_objetoadesao 
-                                      ,si06_orgarparticipante 
-                                      ,si06_cgm 
-                                      ,si06_descontotabela 
-                                      ,si06_numeroadm 
-                                      ,si06_dataabertura 
+                                       si06_sequencial
+                                      ,si06_orgaogerenciador
+                                      ,si06_modalidade
+                                      ,si06_numeroprc
+                                      ,si06_numlicitacao
+                                      ,si06_dataadesao
+                                      ,si06_dataata
+                                      ,si06_datavalidade
+                                      ,si06_publicacaoaviso
+                                      ,si06_objetoadesao
+                                      ,si06_orgarparticipante
+                                      ,si06_cgm
+                                      ,si06_descontotabela
+                                      ,si06_numeroadm
+                                      ,si06_dataabertura
                                       ,si06_processocompra
                                       ,si06_processoporlote
                                       ,si06_instit
@@ -460,20 +452,20 @@ class cl_adesaoregprecos
                        )
                 values (
                                 $this->si06_sequencial
-                               ,$this->si06_orgaogerenciador 
-                               ,$this->si06_modalidade 
-                               ,$this->si06_numeroprc 
-                               ,$this->si06_numlicitacao 
-                               ," . ($this->si06_dataadesao == "null" || $this->si06_dataadesao == "" ? "null" : "'" . $this->si06_dataadesao . "'") . " 
-                               ," . ($this->si06_dataata == "null" || $this->si06_dataata == "" ? "null" : "'" . $this->si06_dataata . "'") . " 
-                               ," . ($this->si06_datavalidade == "null" || $this->si06_datavalidade == "" ? "null" : "'" . $this->si06_datavalidade . "'") . " 
-                               ," . ($this->si06_publicacaoaviso == "null" || $this->si06_publicacaoaviso == "" ? "null" : "'" . $this->si06_publicacaoaviso . "'") . " 
-                               ,'$this->si06_objetoadesao' 
-                               ,$this->si06_orgarparticipante 
-                               ,$this->si06_cgm 
-                               ,$this->si06_descontotabela 
-                               ,$this->si06_numeroadm 
-                               ," . ($this->si06_dataabertura == "null" || $this->si06_dataabertura == "" ? "null" : "'" . $this->si06_dataabertura . "'") . " 
+                               ,$this->si06_orgaogerenciador
+                               ,$this->si06_modalidade
+                               ,$this->si06_numeroprc
+                               ,$this->si06_numlicitacao
+                               ," . ($this->si06_dataadesao == "null" || $this->si06_dataadesao == "" ? "null" : "'" . $this->si06_dataadesao . "'") . "
+                               ," . ($this->si06_dataata == "null" || $this->si06_dataata == "" ? "null" : "'" . $this->si06_dataata . "'") . "
+                               ," . ($this->si06_datavalidade == "null" || $this->si06_datavalidade == "" ? "null" : "'" . $this->si06_datavalidade . "'") . "
+                               ," . ($this->si06_publicacaoaviso == "null" || $this->si06_publicacaoaviso == "" ? "null" : "'" . $this->si06_publicacaoaviso . "'") . "
+                               ,'$this->si06_objetoadesao'
+                               ,$this->si06_orgarparticipante
+                               ,$this->si06_cgm
+                               ,$this->si06_descontotabela
+                               ,$this->si06_numeroadm
+                               ," . ($this->si06_dataabertura == "null" || $this->si06_dataabertura == "" ? "null" : "'" . $this->si06_dataabertura . "'") . "
                                ,$this->si06_processocompra
                                ,$this->si06_processoporlote
                                ," . db_getsession("DB_instit") . "
@@ -1025,7 +1017,7 @@ class cl_adesaoregprecos
       }
     }
   }
-  // funcao para exclusao 
+  // funcao para exclusao
   function excluir($si06_sequencial = null, $dbwhere = null)
   {
     if ($dbwhere == null || $dbwhere == "") {
@@ -1104,7 +1096,7 @@ class cl_adesaoregprecos
       }
     }
   }
-  // funcao do recordset 
+  // funcao do recordset
   function sql_record($sql)
   {
     $result = db_query($sql);
@@ -1128,7 +1120,7 @@ class cl_adesaoregprecos
     }
     return $result;
   }
-  // funcao do sql 
+  // funcao do sql
   function sql_query($si06_sequencial = null, $campos = "si06_sequencial, si06_orgaogerenciador, db_depart.descrdepto as descricaodepartamento,si06_modalidade, si06_numeroprc, si06_numlicitacao, si06_dataadesao, si06_dataata, si06_datavalidade, si06_publicacaoaviso, si06_objetoadesao, si06_orgarparticipante, si06_cgm, si06_descontotabela, si06_numeroadm, si06_anomodadm,si06_nummodadm, si06_dataabertura, si06_processocompra, si06_fornecedor, cgm.z01_nome as z01_nomeorg, cgm.z01_nome as z01_nomef, c.z01_nome as z01_nomeresp, pc80_data", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
@@ -1170,7 +1162,7 @@ class cl_adesaoregprecos
     }
     return $sql;
   }
-  // funcao do sql 
+  // funcao do sql
   function sql_query_file($si06_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";

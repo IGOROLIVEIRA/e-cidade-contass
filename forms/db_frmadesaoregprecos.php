@@ -29,6 +29,11 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
 }
 
 ?>
+<style>
+    #si06_publicacaoaviso{
+        background-color: #E6E4F1;
+    }
+</style>
 <fieldset style="width: 650px; margin-top: 0px;">
   <legend><b>Informações do Orgão Gerenciador</b></legend>
   <form name="form1" method="post" action="">
