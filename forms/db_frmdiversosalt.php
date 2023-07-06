@@ -16,8 +16,6 @@ $dia=date('d',db_getsession("DB_datausu"));
 $mes=date('m',db_getsession("DB_datausu"));
 $ano=date('Y',db_getsession("DB_datausu"));
 
-
-
 ?>
 
 <script>
@@ -430,259 +428,248 @@ if ( $db_opcao == 1 ) {
     </table>
     </fieldset>
   <input name="db_opcao"  type="submit" id="db_opcao"  value="<?=($db_opcao==1?"Incluir":($db_opcao==2 || $db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?>  <?=($db_opcao!=3?"onclick='return js_verifica();'":"")?> >
-  <!-- TODO: Descobrir como chamar a função de emitir recibo -->
-  <input name="enviar" type="button" id="enviar" value="Recibo"    onclick="js_emiteRecibo();" >
+  <input name="enviar" type="<?=($db_opcao==1?"hidden":"button")?>" id="emite-recibo-diverso-button" value="Recibo"    onclick="js_emiteRecibo();" >
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar"    onclick="js_pesquisa();" >
-  <input name="novo-diverso" type="button" id="novo-diverso" value="Novo" onclick="js_novoDiverso();">
+  <input name="novo-diverso" type="<?=($db_opcao==1?"hidden":"button")?>" id="novo-diverso" value="Novo" onclick="js_novoDiverso();">
   <input name="voltar"    type="button" id="voltar"    value="Voltar"       onclick="js_volta();" >
 
 </form>
 
 <script>
 
-function js_emiteRecibo() {
+  function js_emiteRecibo() {
 
-  form = document.form1;
+    form = document.form1;
 
-  //montando objeto oParam para requisição post cai3_emitecarne.RPC.php
-  oParam = new Object();
-  
-  oParam.exec = "validaRecibo";
-  oParam.lNovoRecibo = true;
+    //montando objeto oParam para requisição post cai3_emitecarne.RPC.php
+    oParam = new Object();
+    
+    oParam.exec = "validaRecibo";
+    oParam.lNovoRecibo = true;
 
-  oParam.oDadosForm  = document.form1.serialize(true);
+    oParam.oDadosForm  = document.form1.serialize(true);
 
-  oParam.oDadosForm["H_ANOUSU"] = "<?=db_getsession("DB_anousu")?>";
+    oParam.oDadosForm["H_ANOUSU"] = "<?=db_getsession("DB_anousu")?>";
 
-  oParam.oDadosForm["H_DATAUSU"] = "<?=db_getsession("DB_datausu")?>";
+    oParam.oDadosForm["H_DATAUSU"] = "<?=db_getsession("DB_datausu")?>";
 
-  oParam.oDadosForm["datausu"] = "<?=date("Y-m-d",db_getsession("DB_datausu"))?>";
+    oParam.oDadosForm["datausu"] = "<?=date("Y-m-d",db_getsession("DB_datausu"))?>";
 
-  // forcar vencimento
-  oParam.oDadosForm.forcarvencimento = 'false';
+    // forcar vencimento
+    oParam.oDadosForm.forcarvencimento = 'false';
 
-  // data da operação d/m/Y
-  oParam.oDadosForm.k00_dtoper = form.dv05_oper.value;
+    // data da operação d/m/Y
+    oParam.oDadosForm.k00_dtoper = form.dv05_oper.value;
 
-  oParam.oDadosForm.k00_formemissao = 2;
+    oParam.oDadosForm.k00_formemissao = 2;
 
-  //numpre
-  oParam.oDadosForm.k00_numpre = form.dv05_numpre.value;
-  
-  oParam.oDadosForm.k03_parcelamento = "f";
+    //numpre
+    oParam.oDadosForm.k00_numpre = form.dv05_numpre.value;
+    
+    oParam.oDadosForm.k03_parcelamento = "f";
 
-  oParam.oDadosForm.k03_permparc = "t";
+    oParam.oDadosForm.k03_permparc = "t";
 
-  //diverso é sempre grupo 7
-  oParam.oDadosForm.k03_tipo = 7;
+    //diverso é sempre grupo 7
+    oParam.oDadosForm.k03_tipo = 7;
 
-  //tipo_debito de diverso é sempre 25
-  oParam.oDadosForm.tipo_debito = 25;
-  oParam.oDadosForm.tipo= 25;
+    //tipo_debito de diverso é sempre 25
+    oParam.oDadosForm.tipo_debito = 25;
+    oParam.oDadosForm.tipo= 25;
 
-  // processar desconto recibo
-  oParam.oDadosForm.processarDescontoRecibo ='false';
+    // processar desconto recibo
+    oParam.oDadosForm.processarDescontoRecibo ='false';
 
-  //verifica numcgm
-  oParam.oDadosForm.ver_numcgm = form.dv05_numcgm.value;
+    //verifica numcgm
+    oParam.oDadosForm.ver_numcgm = form.dv05_numcgm.value;
 
-  //cai3_emitecarne.RPC.php só aceita formulário de checkboxes
-  oParam.oDadosForm["CHECK0"] = "N"+form.dv05_numpre.value+"P1R0";
+    //cai3_emitecarne.RPC.php só aceita formulário de checkboxes
+    oParam.oDadosForm["CHECK0"] = "N"+form.dv05_numpre.value+"P1R0";
 
-  oParam.oDadosForm["_VALORES0"] = form.dv05_valor.value;
+    oParam.oDadosForm["_VALORES0"] = form.dv05_valor.value;
 
-  console.log(oParam); 
+    var oAjax2 = new Ajax.Request("cai3_emitecarne.RPC.php",
+      {
+        method: 'post',
+        parameters: 'json=' + Object.toJSON(oParam),
+        onComplete:
+          function (oAjax2) {
 
-  var oAjax2 = new Ajax.Request("cai3_emitecarne.RPC.php",
-    {
-      method: 'post',
-      parameters: 'json=' + Object.toJSON(oParam),
-      onComplete:
-        function (oAjax2) {
-
-          var oRetorno = eval("(" + oAjax2.responseText + ")");
-          oParam.oDadosForm.k00_numpre = oRetorno.aNumpresForm[0];
-          var sMsg = oRetorno.message.urlDecode().replace("/\\n/g", "\n");
-          if (oRetorno.status == 2) {
-            alert(sMsg);
-          } else {      
-            js_emiteReciboCarne(oParam, true);
-            
+            var oRetorno = eval("(" + oAjax2.responseText + ")");
+            oParam.oDadosForm.k00_numpre = oRetorno.aNumpresForm[0];
+            var sMsg = oRetorno.message.urlDecode().replace("/\\n/g", "\n");
+            if (oRetorno.status == 2) {
+              alert(sMsg);
+            } else {      
+              js_emiteReciboCarne(oParam, true);
+              
+            }
           }
-        }
-    });
+      });
 
-  function js_emiteReciboCarne(oParam, lNovoRecibo, lForcajanela) {
-    js_divCarregando('Processando...', 'msgBox');
-    oParam.exec = "geraRecibo_Carne";
-    oParam.lNovoRecibo = lNovoRecibo;
-    var oAjax = new Ajax.Request("cai3_emitecarne.RPC.php",
-        {
-          method: 'post',
-          parameters: 'json=' + Object.toJSON(oParam),
-          onComplete:
-            function (oAjax) {
-              js_removeObj('msgBox');
-              var oRetorno = eval("(" + oAjax.responseText + ")");
-              if (oRetorno.status == 2) {
-                alert(oRetorno.message.urlDecode().replace("/\\n/gm", "\n"));
-                console.log("linha 528");
-              } else {
-                var lMostra = true;
-                console.log("linha 531");
-                var sUrl = 'cai3_emiterecibo.php?json=' + Object.toJSON(oRetorno);
+    function js_emiteReciboCarne(oParam, lNovoRecibo, lForcajanela) {
+      js_divCarregando('Processando...', 'msgBox');
+      oParam.exec = "geraRecibo_Carne";
+      oParam.lNovoRecibo = lNovoRecibo;
+      var oAjax = new Ajax.Request("cai3_emitecarne.RPC.php",
+          {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete:
+              function (oAjax) {
+                js_removeObj('msgBox');
+                var oRetorno = eval("(" + oAjax.responseText + ")");
+                if (oRetorno.status == 2) {
 
-                if ((oRetorno.recibos_emitidos.length == 1 && oRetorno.aSessoesCarne.length == '0') && !lForcajanela) {
-                  
-                  
+                  alert(oRetorno.message.urlDecode().replace("/\\n/gm", "\n"));
 
-                  console.log("linha 537");
-
-                  sUrl = 'cai3_gerfinanc003.php';
-                  sUrl += '?numcgm=' + oParam.oDadosForm.ver_numcgm;
-                  sUrl += '&tipo=' + oParam.oDadosForm.tipo_debito;
-                  sUrl += '&emrec=t&agnum=t&agpar=f&certidao=&k03_tipo='+oParam.oDadosForm.k03_tipo;
-                  sUrl += '&perfil_procuradoria=1';
-                  console.log("linha 544");
-                  sUrl += '&k00_tipo=' + oParam.oDadosForm.tipo_debito;
-                  sUrl += '&db_datausu=' + oParam.oDadosForm["datausu"];
-                  sUrl += '&sessao=' + oRetorno.aSessoesRecibo[0];
-                  sUrl += '&reemite_recibo=true';
-                  sUrl += '&forcarvencimento=' + oParam.oDadosForm.forcarvencimento;
-                  sUrl += '&k03_numpre=' + oRetorno.recibos_emitidos[0];
-                  sUrl += '&k03_numnov=' + oRetorno.recibos_emitidos[0];
-
-                  console.log("linha 553");
-                 
-                  oJanela = window.open(sUrl, 'reciboweb2', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
-                  
-                  oJanela.moveTo(0, 0);
-                 
-                } else if (((oRetorno.recibos_emitidos.length == 0 || oRetorno.aSessoesRecibo.length == 0) && oRetorno.aSessoesCarne.length == 1) && !lForcajanela) {
-                  console.log("linha 560");
-                  sUrl = 'cai3_gerfinanc033.php' + debitos.location.search + '&sessao=' + oRetorno.aSessoesCarne[0];
-                  oJanela = window.open(sUrl, 'reciboweb2', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
-                  oJanela.moveTo(0, 0);
-                } else if (((oRetorno.recibos_emitidos.length == 0 || oRetorno.aSessoesRecibo.length == 0) && oRetorno.aSessoesCarne.length == 0)) {
-                  //TO-DO: Para refactor: este else if está completamente vazio(??)
-                  console.log("linha 566");
                 } else {
-                  /**
-                   * Cria Janela
-                   */
+                  var lMostra = true;
+                  
+                  var sUrl = 'cai3_emiterecibo.php?json=' + Object.toJSON(oRetorno);
 
-                   console.log("linha 572");
-                  var windowEmissao = new windowAux('janelaRecibo', 'Emissão de Recibos / Carnês', screen.availWidth - 40, 550);
-                  windowEmissao.setContent("<div id='messageRecibo'></div><div id='conteudoRecibo'></div>");
-                  windowEmissao.setShutDownFunction(function () {
-                    document.body.removeChild(document.getElementById('janelaRecibo'));
-                  });
-                  windowEmissao.show(25, 10);
+                  if ((oRetorno.recibos_emitidos.length == 1 && oRetorno.aSessoesCarne.length == '0') && !lForcajanela) {
+                    sUrl = 'cai3_gerfinanc003.php';
+                    sUrl += '?numcgm=' + oParam.oDadosForm.ver_numcgm;
+                    sUrl += '&tipo=' + oParam.oDadosForm.tipo_debito;
+                    sUrl += '&emrec=t&agnum=t&agpar=f&certidao=&k03_tipo='+oParam.oDadosForm.k03_tipo;
+                    sUrl += '&perfil_procuradoria=1';
+                    sUrl += '&k00_tipo=' + oParam.oDadosForm.tipo_debito;
+                    sUrl += '&db_datausu=' + oParam.oDadosForm["datausu"];
+                    sUrl += '&sessao=' + oRetorno.aSessoesRecibo[0];
+                    sUrl += '&reemite_recibo=true';
+                    sUrl += '&forcarvencimento=' + oParam.oDadosForm.forcarvencimento;
+                    sUrl += '&k03_numpre=' + oRetorno.recibos_emitidos[0];
+                    sUrl += '&k03_numnov=' + oRetorno.recibos_emitidos[0];
+                  
+                    oJanela = window.open(sUrl, 'reciboweb2', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+                    
+                    oJanela.moveTo(0, 0);
+                  
+                  } else if (((oRetorno.recibos_emitidos.length == 0 || oRetorno.aSessoesRecibo.length == 0) && oRetorno.aSessoesCarne.length == 1) && !lForcajanela) {
+                  
+                    sUrl = 'cai3_gerfinanc033.php' + debitos.location.search + '&sessao=' + oRetorno.aSessoesCarne[0];
+                    oJanela = window.open(sUrl, 'reciboweb2', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+                    oJanela.moveTo(0, 0);
 
-                  var oMessageBoard = new DBMessageBoard('msgboard1', 'Impressão de Recibos/ Carnês', 'Clique no botão emitir no carnê ou recibo selecionado. ', $('messageRecibo'));
-                  oMessageBoard.show();
-                  var oIframeConteudo = document.createElement("iframe");
-                  oIframeConteudo.src = sUrl;
-                  oIframeConteudo.frameBorder = 0;
-                  oIframeConteudo.id = 'db_iframe_recibos';
-                  oIframeConteudo.name = 'db_iframe_recibos';
-                  oIframeConteudo.scrolling = 'auto';
-                  oIframeConteudo.width = (screen.availWidth - 50) + 'px';
-                  var Altura = $('janelaRecibo').clientHeight - $('msgboard1').clientHeight - 35;
-                  oIframeConteudo.height = Altura + 'px';
+                  } else if (((oRetorno.recibos_emitidos.length == 0 || oRetorno.aSessoesRecibo.length == 0) && oRetorno.aSessoesCarne.length == 0)) {
+                    //TO-DO: Para refactor: este else if está completamente vazio(??)
+                  } else {
+                    /**
+                     * Cria Janela
+                     */
+                    var windowEmissao = new windowAux('janelaRecibo', 'Emissão de Recibos / Carnês', screen.availWidth - 40, 550);
+                    windowEmissao.setContent("<div id='messageRecibo'></div><div id='conteudoRecibo'></div>");
+                    windowEmissao.setShutDownFunction(function () {
+                      document.body.removeChild(document.getElementById('janelaRecibo'));
+                    });
+                    windowEmissao.show(25, 10);
 
-                  $('conteudoRecibo').appendChild(oIframeConteudo);
+                    var oMessageBoard = new DBMessageBoard('msgboard1', 'Impressão de Recibos/ Carnês', 'Clique no botão emitir no carnê ou recibo selecionado. ', $('messageRecibo'));
+                    oMessageBoard.show();
+                    var oIframeConteudo = document.createElement("iframe");
+                    oIframeConteudo.src = sUrl;
+                    oIframeConteudo.frameBorder = 0;
+                    oIframeConteudo.id = 'db_iframe_recibos';
+                    oIframeConteudo.name = 'db_iframe_recibos';
+                    oIframeConteudo.scrolling = 'auto';
+                    oIframeConteudo.width = (screen.availWidth - 50) + 'px';
+                    var Altura = $('janelaRecibo').clientHeight - $('msgboard1').clientHeight - 35;
+                    oIframeConteudo.height = Altura + 'px';
+
+                    $('conteudoRecibo').appendChild(oIframeConteudo);
+                  }
                 }
               }
-            }
+          }
+        );
+        if ((elem = debitos.document.getElementById("geracarne"))) {
+          elem.parentNode.removeChild(elem);
         }
-      );
-      if ((elem = debitos.document.getElementById("geracarne"))) {
-        elem.parentNode.removeChild(elem);
+      }
+
+  }
+
+
+  function js_pesquisaProcedencia(lMostra){
+
+    if (lMostra) {
+
+      js_OpenJanelaIframe('',
+                          'db_iframe_procedencia',
+                          'func_procdiver.php?funcao_js=parent.js_mostraProcedencia1|dv09_procdiver|dv09_descr',
+                          'Pesquisar CGM',
+                          true);
+    } else {
+
+      if($('dv05_procdiver').value != ''){
+        js_OpenJanelaIframe('',
+                            'db_iframe_procedencia',
+                            'func_procdiver.php?pesquisa_chave=' + document.getElementById("dv05_procdiver").value +
+                            '&funcao_js=parent.js_mostraProcedencia',
+                            'Pesquisa',
+                            false);
+      } else {
+        $("dv05_procdiver").value = '';
       }
     }
+  }
 
-}
+  function js_mostraProcedencia(chave, erro){
+    if (erro == true) {
 
-
-function js_pesquisaProcedencia(lMostra){
-
-  if (lMostra) {
-
-     js_OpenJanelaIframe('',
-                         'db_iframe_procedencia',
-                         'func_procdiver.php?funcao_js=parent.js_mostraProcedencia1|dv09_procdiver|dv09_descr',
-                         'Pesquisar CGM',
-                         true);
-  } else {
-
-    if($('dv05_procdiver').value != ''){
-       js_OpenJanelaIframe('',
-                           'db_iframe_procedencia',
-                           'func_procdiver.php?pesquisa_chave=' + document.getElementById("dv05_procdiver").value +
-                           '&funcao_js=parent.js_mostraProcedencia',
-                           'Pesquisa',
-                           false);
-    } else {
+      $('dv05_procdiver').focus();
       $("dv05_procdiver").value = '';
+      $('dv09_descr')    .value = chave;
+
+    } else {
+      $('dv09_descr').value = chave;
     }
   }
-}
 
-function js_mostraProcedencia(chave, erro){
-  if (erro == true) {
+  function js_mostraProcedencia1(iCodigoProcedencia, sDescricaoProcedencia) {
 
-    $('dv05_procdiver').focus();
-    $("dv05_procdiver").value = '';
-    $('dv09_descr')    .value = chave;
-
-  } else {
-    $('dv09_descr').value = chave;
+    $('dv05_procdiver').value   = iCodigoProcedencia;
+    $('dv09_descr').value       = sDescricaoProcedencia;
+    db_iframe_procedencia.hide();
   }
-}
-
-function js_mostraProcedencia1(iCodigoProcedencia, sDescricaoProcedencia) {
-
-  $('dv05_procdiver').value   = iCodigoProcedencia;
-  $('dv09_descr').value       = sDescricaoProcedencia;
-  db_iframe_procedencia.hide();
-}
 
 
-function js_volta() {
-  location.href = "dvr3_diversos00<?=($db_opcao == 2 ? 6 : 4) ?>.php";
-}
-<?
-echo "js_trocatotal();";
+  function js_volta() {
+    location.href = "dvr3_diversos00<?=($db_opcao == 2 ? 6 : 4) ?>.php";
+  }
+  <?
+  echo "js_trocatotal();";
 
-if( isset($xxx) && $xxx == "ok" && !isset($HTTP_POST_VARS["db_opcao"])) {
-  $sMsg = _M('tributario.diversos.db_frmdiversosalt.informe_valor_corrigido_total');
-  echo "
-     function js_xxx(){
-    	  document.form1.dv05_valor.value='';
-	      document.form1.dv05_valor.focus();
-          alert({$sMsg});
-	}
-	js_xxx();
-  ";
-}
-?>
-function js_pesquisa(){
-  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_diversos.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
-}
-function js_preenchepesquisa(chave) {
+  if( isset($xxx) && $xxx == "ok" && !isset($HTTP_POST_VARS["db_opcao"])) {
+    $sMsg = _M('tributario.diversos.db_frmdiversosalt.informe_valor_corrigido_total');
+    echo "
+      function js_xxx(){
+          document.form1.dv05_valor.value='';
+          document.form1.dv05_valor.focus();
+            alert({$sMsg});
+    }
+    js_xxx();
+    ";
+  }
+  ?>
+  function js_pesquisa(){
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe','func_diversos.php?funcao_js=parent.js_preenchepesquisa|0','Pesquisa',true);
+  }
+  function js_preenchepesquisa(chave) {
 
-  db_iframe.hide();
-  <? if ( $db_opcao !=1 ){ ?>
-    location.href = '<?= basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])?>'+"?chavepesquisa=" + chave;
-  <? }  ?>
-}
+    db_iframe.hide();
+    <? if ( $db_opcao !=1 ){ ?>
+      location.href = '<?= basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"])?>'+"?chavepesquisa=" + chave;
+    <? }  ?>
+  }
 
 </script>
+
 <?
-if ( (!isset($dv05_numtot) || $dv05_numtot < 2 ) && $db_opcao != 22 && $db_opcao != 33 ){
-  echo "<script>js_di();</script>";
-}
+  if ( (!isset($dv05_numtot) || $dv05_numtot < 2 ) && $db_opcao != 22 && $db_opcao != 33 ){
+    echo "<script>js_di();</script>";
+  }
 ?>
 <script>
 
