@@ -37,7 +37,8 @@ class RecibopagaQrcodePix extends LegacyModel
         'k176_dtcriacao',
         'k176_qrcode',
         'k176_hist',
-        'k176_instituicao_financeira'
+        'k176_instituicao_financeira',
+        'k176_codigo_conciliacao_recebedor'
     ];
 
     public function scopeWhereNumpreNumpar(Builder $query, int $numpre, int $numpar = null): Builder

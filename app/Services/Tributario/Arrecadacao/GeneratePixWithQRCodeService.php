@@ -27,7 +27,8 @@ class GeneratePixWithQRCodeService
                 'k176_dtcriacao' => (new DateTime($response->timestampCriacaoSolicitacao))->format('Y-m-d'),
                 'k176_qrcode' => $response->qrCode,
                 'k176_hist' => json_encode($response),
-                'k176_instituicao_financeira' => $data['k03_instituicao_financeira']
+                'k176_instituicao_financeira' => $data['k03_instituicao_financeira'],
+                'k176_codigo_conciliacao_recebedor' => $response->codigoConciliacaoSolicitante
             ]
         );
     }
