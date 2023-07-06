@@ -301,7 +301,8 @@ try {
                             empty($oParam->dtalteracao) ? null : $oParam->dtalteracao,
                             $oParam->indapuracao,
                             $oParam->tppgto,
-                            $oParam->tpevento
+                            $oParam->tpevento,
+                            $oParam->transDCTFWeb
                         );
                         $eventoFila->adicionarFila();
                     }
@@ -326,7 +327,8 @@ try {
                             empty($oParam->dtalteracao) ? null : $oParam->dtalteracao,
                             $oParam->indapuracao,
                             $oParam->tppgto,
-                            $oParam->tpevento
+                            $oParam->tpevento,
+                            $oParam->transDCTFWeb
                         );
                         $eventoFila->adicionarFila();
                     }

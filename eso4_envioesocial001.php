@@ -135,6 +135,12 @@ try {
                                                     <option value="2">Contabilidade</option>
                                                 </select>
                                             </td>
+                                            <td align="left" id="transDCTFWeb_col" style="display:none"><label>transDCTFWeb:</label>
+                                                <select name="transDCTFWeb" id="transDCTFWeb" style="width: 25%;">
+                                                    <option value="S">Sim</option>
+                                                    <option value="N">Não</option>
+                                                </select>
+                                            </td>
                                         </tr>
                                     </table>
                                 </fieldset>
@@ -277,6 +283,7 @@ try {
         oParam.indapuracao = $("indapuracao").value;
         oParam.tppgto = $("tppgto").value;
         oParam.tpevento = $("tpevento").value;
+        oParam.transDCTFWeb = $("transDCTFWeb").value;
         var oAjax = new Ajax.Request("eso4_esocialapi.RPC.php", {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParam),
@@ -331,12 +338,27 @@ try {
     }
 
     function js_alt() {
+        const indapuracaoCol = document.getElementById('indapuracao_col');
+        const tppgtoCol = document.getElementById('tppgto_col');
+        const tipoCol = document.getElementById('tipo_col');
+        const transDCTFWeb = document.getElementById('transDCTFWeb_col');
 
-        if (document.getElementById('S1200').checked && document.getElementById('S1210').checked) {
-            document.getElementById('indapuracao_col').style.display = 'inline';
-            document.getElementById('tppgto_col').style.display = 'inline';
-            document.getElementById('tipo_col').style.display = 'inline';
-            return true;
+        if (document.getElementById('S1200').checked || 
+        document.getElementById('S1202').checked || 
+        document.getElementById('S1207').checked || 
+        document.getElementById('S1210').checked ||
+        document.getElementById('S1299').checked
+        ) 
+        {
+            indapuracaoCol.style.display = 'inline';
+            tppgtoCol.style.display = 'inline';
+            tipoCol.style.display = 'inline';
+            transDCTFWeb.style.display = 'inline';
+        } else {
+            indapuracaoCol.style.display = 'none';
+            tppgtoCol.style.display = 'none';
+            tipoCol.style.display = 'none';
+            transDCTFWeb.style.display = 'none';
         }
 
         if (document.getElementById('S1200').checked) {

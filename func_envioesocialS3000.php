@@ -132,6 +132,7 @@ $iInstit = db_getsession("DB_instit");
         oParam.indapuracao = parent.document.getElementById("indapuracao").value;
         oParam.tppgto = parent.document.getElementById('tppgto').value;
         oParam.tpevento = parent.document.getElementById('tpevento').value;
+        oParam.transDCTFWeb = parent.document.getElementById('transDCTFWeb').value;
         oParam.eventosParaExcluir = selectedRowsData;
         console.log(oParam);
         var oAjax = new Ajax.Request("eso4_esocialapi.RPC.php", {

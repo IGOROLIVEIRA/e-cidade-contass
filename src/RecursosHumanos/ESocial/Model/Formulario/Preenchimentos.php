@@ -1230,6 +1230,71 @@ WHERE rh30_vinculo IN ('I',
         return \db_utils::getCollectionByRecord($rs);
     }
 
+    /**
+     * @param integer $codigoFormulario
+     * @return stdClass[]
+     */
+    public function buscarPreenchimentoS1299($codigoFormulario, $matricula = null, $cgm = null, $tipoevento = null)
+    {
+        $ano = date("Y", db_getsession("DB_datausu"));
+        $mes = date("m", db_getsession("DB_datausu"));
+
+        $anofolha = db_anofolha();
+        $mesfolha = db_mesfolha();
+
+            $sql = "SELECT distinct z01_cgccpf from rhpessoal
+            left join rhpessoalmov on
+                rh02_anousu = fc_getsession('DB_anousu')::int
+                and rh02_mesusu = date_part('month', fc_getsession('DB_datausu')::date)
+                and rh02_regist = rh01_regist
+                and rh02_instit = fc_getsession('DB_instit')::int
+            left join rhinssoutros on
+	rh51_seqpes = rh02_seqpes
+    inner join cgm on
+        cgm.z01_numcgm = rhpessoal.rh01_numcgm
+    inner join db_config on
+	db_config.codigo = rhpessoal.rh01_instit
+    left join rhpesrescisao on
+	rh02_seqpes = rh05_seqpes
+    left join rhregime on
+        rhregime.rh30_codreg = rhpessoalmov.rh02_codreg
+    inner join tpcontra on
+        tpcontra.h13_codigo = rhpessoalmov.rh02_tpcont
+            left  outer join (
+                    SELECT distinct r33_codtab,r33_nome,r33_tiporegime
+                                        from inssirf
+                                        where     r33_anousu = $anofolha
+                                            and r33_mesusu = $mesfolha
+                                            and r33_instit = fc_getsession('DB_instit')::int
+                                    ) as x on r33_codtab = rhpessoalmov.rh02_tbprev+2
+             where 1=1
+                and ((rh05_recis is not null
+                and date_part('month', rh05_recis) = date_part('month', fc_getsession('DB_datausu')::date)
+                and date_part('year', rh05_recis) = date_part('year', fc_getsession('DB_datausu')::date)
+                )
+                or
+                rh05_recis is null
+                ) ";
+
+            if ($matricula != null) {
+                $sql .= " and cgm.z01_cgccpf in (select z01_cgccpf from cgm join rhpessoal on cgm.z01_numcgm = rhpessoal.rh01_numcgm where rh01_regist in ($matricula)) ";
+            }
+
+            $sql .= ' limit 1';
+        
+        $rs = \db_query($sql);
+        // echo $sql;
+        // db_criatabela($rs);
+        // exit;
+        if (!$rs) {
+            throw new \Exception("Erro ao buscar os preenchimentos do S1210");
+        }
+        /**
+         * @todo busca os empregadores da institui??o e adicona para cada rubriuca
+         */
+        return \db_utils::getCollectionByRecord($rs);
+    }
+
     public function buscarPreenchimentoS2230($codigoFormulario, $matricula)
     {
         $sql = "
