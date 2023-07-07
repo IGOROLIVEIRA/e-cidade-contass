@@ -781,7 +781,7 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
       continue;
     }
 
-    $oParag->writeText( &$pdf );
+    $oParag->writeText( $pdf );
 
   }
 
@@ -810,13 +810,13 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
 
     if($oParag->oParag->db02_descr == "ass_adv1"){
       $pdf->SetX(30);
-      $oParag->writeText( &$pdf );
+      $oParag->writeText( $pdf );
     }
 
     if($oParag->oParag->db02_descr == "ass_adv2"){
       $pdf->SetY(($pdf->getY()-10));
       $pdf->SetX(130);
-      $oParag->writeText( &$pdf );
+      $oParag->writeText( $pdf );
     }
 
     if($oParag->oParag->db02_descr == "ASSINATURAS_CODIGOPHP"){
