@@ -25,10 +25,10 @@ class Detalhe
             $this->format($this->arquivoPrevisaoPostagemDetalheDTO->numeroDoObjeto, 9) .
             $this->arquivoPrevisaoPostagemDetalheDTO->paisDeOrigem .
             $this->arquivoPrevisaoPostagemDetalheDTO->codigoDaOperacao .
-            $this->format($this->arquivoPrevisaoPostagemDetalheDTO->conteudo, 16) .
-            $this->format($this->arquivoPrevisaoPostagemDetalheDTO->nomeDestinatario, 40) .
-            $this->format($this->arquivoPrevisaoPostagemDetalheDTO->enderecoDestinatario, 40) .
-            $this->format($this->arquivoPrevisaoPostagemDetalheDTO->cidade, 40) .
+            $this->format($this->arquivoPrevisaoPostagemDetalheDTO->conteudo, 16, ' ') .
+            $this->format($this->arquivoPrevisaoPostagemDetalheDTO->nomeDestinatario, 40, ' ', STR_PAD_RIGHT) .
+            $this->format($this->arquivoPrevisaoPostagemDetalheDTO->enderecoDestinatario, 40, ' ', STR_PAD_RIGHT) .
+            $this->format($this->arquivoPrevisaoPostagemDetalheDTO->cidade, 30, ' ', STR_PAD_RIGHT) .
             $this->arquivoPrevisaoPostagemDetalheDTO->uf .
             $this->format($this->arquivoPrevisaoPostagemDetalheDTO->cep, 8) .
             $this->filler('0', 8) .

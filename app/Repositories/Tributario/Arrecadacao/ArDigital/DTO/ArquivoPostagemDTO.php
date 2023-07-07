@@ -4,17 +4,17 @@ namespace App\Repositories\Tributario\Arrecadacao\ArDigital\DTO;
 
 class ArquivoPostagemDTO
 {
-    public string $codigoGrafica = '01';
+    public string $codigoGrafica = '04';
 
     public string $dataColeta;
 
-    public string $numeroContrato = '0000000000';
+    public string $numeroContrato = '9912458442';
 
-    public string $codigoAdministrativo = '00000000';
+    public string $codigoAdministrativo = '19069090';
 
     public string $cepDestino = '00000000';
 
-    public string $codigoServico = '0000';
+    public string $codigoServico = '11401';
 
     public string $codigoPais = '10';
 
@@ -32,11 +32,11 @@ class ArquivoPostagemDTO
 
     public string $numeroLogradouro = '000000';
 
-    public string $numeroCartaoPostagem = '00000000000';
+    public string $numeroCartaoPostagem = '00074681443';
 
     public string $numeroNotaFiscal = '0000000';
 
-    public string $siglaServico = 'SD';
+    public string $siglaServico = 'BH';
 
     public string $comprimentoObjeto = '00000';
 

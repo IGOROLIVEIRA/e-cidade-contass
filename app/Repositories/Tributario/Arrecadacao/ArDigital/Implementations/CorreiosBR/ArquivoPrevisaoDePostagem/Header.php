@@ -8,7 +8,7 @@ final class Header
 {
     use StringUtils;
 
-    public string $codigoDoCliente = '0000';
+    public string $codigoDoCliente = '8443';
     public string $nomeDoCliente = '';
     public string $dataGeracao = '';
     /**
@@ -24,8 +24,8 @@ final class Header
         return
             ArquivoPrevisaoPostagem::TIPO_REGISTRO_HEADER .
             $this->format($this->codigoDoCliente, 4) .
-            $this->filler('0', 14) .
-            $this->format($this->nomeDoCliente, 40) .
+            $this->filler('0', 15) .
+            $this->format($this->nomeDoCliente, 40, ' ', STR_PAD_RIGHT) .
             date('Ymd') .
             $this->format($this->quantidadeRegistros, 6) .
             $this->filler('0', 100) .
