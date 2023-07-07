@@ -326,7 +326,7 @@ try {
   	                                               $oPost->iMesFolha,
   	                                               $sListaPrev,
   	                                               db_getsession('DB_instit'));    
-  	  
+													
   	  $oDadosEmpenhoFolha->geraDadosEmpenhosPrev($oPost->sTipo,
   	                                             $oPost->iAnoFolha,
   	                                             $oPost->iMesFolha,
@@ -335,8 +335,7 @@ try {
 
   	  db_fim_transacao(false);
   	                                             
-  	  $aRetorno = array( "lErro"=>false,
-                         "sMsg" =>urlencode($sMsgErro));
+  	  	$aRetorno = array('lErro' => false, 'sMsg' => urlencode($sMsgErro));
       
     break;
     case 'consultarEmpenhosPrev':

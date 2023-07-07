@@ -3330,19 +3330,24 @@ class dadosEmpenhoFolha {
 	}
 	
 	
-  /**
-   * Gera dados para empenhos da folha referente a Previdência ( rubricas = R992 )
-   *
-   * @param string  $sTipo      Tipo de Folha ( m = Mensal ou d = 13º )
-   * @param integer $iAnoUsu    Exercício da Folha
-   * @param integer $iMesUsu    Mês da Folha
-   * @param string  $sListaPrev Lista de Previdências 
-   * @param integer $iInstit    Instituição
-   */	
-  public function geraDadosEmpenhosPrev($sTipo='',$iAnoUsu='',$iMesUsu='',$sListaPrev='',$iInstit=''){
-    
+    /**
+     * Gera dados para empenhos da folha referente a Previdência ( rubricas = R992 )
+     *
+     * @param string  $sTipo      Tipo de Folha ( m = Mensal ou d = 13º )
+     * @param integer $iAnoUsu    Exercício da Folha
+     * @param integer $iMesUsu    Mês da Folha
+     * @param string  $sListaPrev Lista de Previdências 
+     * @param integer $iInstit    Instituição
+     */	
+    public function geraDadosEmpenhosPrev(
+        $sTipo = '', 
+        $iAnoUsu = '', 
+        $iMesUsu = '', 
+        $sListaPrev = '', 
+        $iInstit = '')
+    {
     $sMsgErro = 'Geração de empenhos da previdência abortada';
-    
+
     if ( !db_utils::inTransaction() ){
       throw new DBException("{$sMsgErro}\nnenhuma transação encontrada!");
     }

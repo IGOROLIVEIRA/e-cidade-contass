@@ -26,6 +26,7 @@ class cl_rhvinculodotpatronais {
   public $rh171_recursoorig = 0; 
   public $rh171_recursonov = 0; 
   public $rh171_mes = 0; 
+  public $rh171_codtab = 0; 
   public $rh171_anousu = 0; 
   public $rh171_instit = 0; 
   public $rh171_programaorig = 0;
@@ -46,6 +47,7 @@ class cl_rhvinculodotpatronais {
                  rh171_recursoorig = int8 = Recurso 
                  rh171_recursonov = int8 = Recurso 
                  rh171_mes = int8 = Mês 
+                 rh171_codtab = int8 = Codigo da Tabela 
                  rh171_anousu = int8 = Ano 
                  rh171_instit = int8 = Instituição 
                  rh171_programaorig = int8 = Programa
@@ -86,6 +88,7 @@ class cl_rhvinculodotpatronais {
        $this->rh171_recursoorig = ($this->rh171_recursoorig == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_recursoorig"]:$this->rh171_recursoorig);
        $this->rh171_recursonov = ($this->rh171_recursonov == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_recursonov"]:$this->rh171_recursonov);
        $this->rh171_mes = ($this->rh171_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_mes"]:$this->rh171_mes);
+       $this->rh171_codtab = ($this->rh171_codtab == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_codtab"]:$this->rh171_codtab);
        $this->rh171_anousu = ($this->rh171_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_anousu"]:$this->rh171_anousu);
        $this->rh171_instit = ($this->rh171_instit == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_instit"]:$this->rh171_instit);
        $this->rh171_programaorig = ($this->rh171_programaorig == ""?@$GLOBALS["HTTP_POST_VARS"]["rh171_programaorig"]:$this->rh171_programaorig);
@@ -182,6 +185,15 @@ class cl_rhvinculodotpatronais {
        $this->erro_status = "0";
        return false;
      }
+     if ($this->rh171_codtab == null ) { 
+       $this->erro_sql = " Campo Previdencia não informado.";
+       $this->erro_campo = "rh171_codtab";
+       $this->erro_banco = "";
+       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       return false;
+     }
      if ($this->rh171_anousu == null ) { 
        $this->erro_sql = " Campo Ano não informado.";
        $this->erro_campo = "rh171_anousu";
@@ -255,6 +267,7 @@ class cl_rhvinculodotpatronais {
                                       ,rh171_recursoorig 
                                       ,rh171_recursonov 
                                       ,rh171_mes 
+                                      ,rh171_codtab
                                       ,rh171_anousu 
                                       ,rh171_instit 
                                       ,rh171_programaorig
@@ -275,6 +288,7 @@ class cl_rhvinculodotpatronais {
                                ,$this->rh171_recursoorig 
                                ,$this->rh171_recursonov 
                                ,$this->rh171_mes 
+                               ,$this->rh171_codtab 
                                ,$this->rh171_anousu 
                                ,$this->rh171_instit 
                                ,$this->rh171_programaorig
@@ -318,7 +332,7 @@ class cl_rhvinculodotpatronais {
 
   // funcao para alteracao
   function alterar ( $rh171_sequencial=null, $rh171_orgaoorig=null, $rh171_unidadeorig=null, $rh171_projativorig=null, $rh171_recursoorig=null,
-                    $rh171_programaorig=null, $rh171_funcaoorig=null, $rh171_subfuncaoorig=null, $rh171_mes=null, $rh171_anousu=null, $rh171_instit=null ) { 
+                    $rh171_programaorig=null, $rh171_funcaoorig=null, $rh171_subfuncaoorig=null, $rh171_mes=null,  $rh171_anousu=null, $rh171_instit=null, $rh171_codtab=null ) { 
       $this->atualizacampos();
 
       $sql = " update rhvinculodotpatronais set ";
@@ -446,6 +460,21 @@ class cl_rhvinculodotpatronais {
          return false;
        }
      }
+     if ($rh171_codtab != null) {
+        $sql  .= $virgula." rh171_codtab = $rh171_codtab ";
+     } else if (trim($this->rh171_codtab)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh171_codtab"])) { 
+       $sql  .= $virgula." rh171_codtab = $this->rh171_codtab ";
+       $virgula = ",";
+       if (trim($this->rh171_codtab) == null ) { 
+         $this->erro_sql = " Campo Previdencia não informado.";
+         $this->erro_campo = "rh171_codtab";
+         $this->erro_banco = "";
+         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "0";
+         return false;
+       }
+     }
      if (trim($this->rh171_anousu)!="" || isset($GLOBALS["HTTP_POST_VARS"]["rh171_anousu"])) { 
        $sql  .= $virgula." rh171_anousu = $this->rh171_anousu ";
        $virgula = ",";
@@ -555,6 +584,9 @@ class cl_rhvinculodotpatronais {
         if($rh171_mes!=null){
             $sql .= " and  rh171_mes = $rh171_mes";
         }
+        if($rh171_codtab!=null){
+            $sql .= " and  rh171_codtab = $rh171_codtab";
+        }
         if($rh171_anousu!=null){
             $sql .= " and  rh171_anousu = $rh171_anousu";
         }
@@ -562,7 +594,6 @@ class cl_rhvinculodotpatronais {
             $sql .= " and  rh171_instit = $rh171_instit";
         }
      }
-
      $result = db_query($sql);
 
      if ($result==false) { 
@@ -596,7 +627,7 @@ class cl_rhvinculodotpatronais {
 
   // funcao para exclusao 
   function excluir ( $rh171_sequencial=null, $rh171_orgaoorig=null, $rh171_unidadeorig=null, $rh171_projativorig=null, $rh171_recursoorig=null,
-                    $rh171_programaorig=null, $rh171_funcaoorig=null, $rh171_subfuncaoorig=null, $rh171_mes=null, $rh171_anousu=null, $rh171_instit=null ,$dbwhere=null) { 
+                    $rh171_programaorig=null, $rh171_funcaoorig=null, $rh171_subfuncaoorig=null, $rh171_mes=null, $rh171_anousu=null, $rh171_instit=null, $rh171_codtab=null,$dbwhere=null) { 
 
      $sql = " delete from rhvinculodotpatronais
                     where ";
@@ -651,6 +682,12 @@ class cl_rhvinculodotpatronais {
             $sql2 .= " and ";
           }
           $sql2 .= " rh171_mes = $rh171_mes ";
+        }
+        if($rh171_codtab != ""){
+          if($sql2!=""){
+            $sql2 .= " and ";
+          }
+          $sql2 .= " rh171_codtab = $rh171_codtab ";
         }
         if($rh171_anousu != ""){
           if($sql2!=""){
