@@ -113,39 +113,30 @@ switch ($oParam->exec) {
             $opVeic = 0;
             $b = 0;
             $ve = 0;
-
+            
             //verifica data do empenho
 
             foreach($resultadoPlanilha as $key => $row){
                 $codEmpenho = explode("/",$resultadoEmpenho[$key]);
                 $codEmp = $codEmpenho[0];
-                $anoEmp = intval($codEmpenho[1]);
+                $anoEmp = $codEmpenho[1];
 
                 $rsEmpenho = $clempempenho->sql_record($clempempenho->sql_query_file(null,"e60_emiss",null,"e60_codemp ='$codEmp' and e60_anousu = $anoEmp and e60_instit = " .db_getsession('DB_instit')));
                 $resultEmpenho = db_utils::fieldsMemory($rsEmpenho, 0);
 
-                $aDateAbast = explode("-",$row->data);
-                $anoAbast = intval($aDateAbast[0]);
-                $mesAbast = intval($aDateAbast[1]);
-
                 $dtAbastecimento = (implode("/",(array_reverse(explode("-",$row->data)))));
-                $dtAbastecimento = DateTime::createFromFormat('Y', $dtAbastecimento);
-                $aDateEmp = explode("-",$resultEmpenho->e60_emiss);
+                $dtAbastecimento = DateTime::createFromFormat('d/m/Y', $dtAbastecimento);
 
-                $mesEmp = intval($aDateEmp[1]);
                 $dtEmpenho = (implode("/",(array_reverse(explode("-",$resultEmpenho->e60_emiss)))));
                 $dtEmpenho = DateTime::createFromFormat('d/m/Y', $dtEmpenho);
 
-                if($anoEmp <= $anoAbast){
-                    if($mesEmp > $mesAbast){
-                        $controleDataEmpenho = 1;
-                    }
-                }else{
+                if($dtAbastecimento < $dtEmpenho){
                     $controleDataEmpenho = 1;
                 }
             }
 
-            //verifica Baixa de Veiculos
+
+            //verifica Baixa de Veiculos 
             foreach ($resultadoPlanilha as $row) {
                 $opNumBaixa  =  0;
                 $test1       = $row->placa;
@@ -395,7 +386,7 @@ switch ($oParam->exec) {
                         break;
                     }
                 }
-                //final
+                //final 
 
                 if ($clempempenho->numrows == 0) {
                     $controleVerificarEmp = 1;
@@ -566,7 +557,7 @@ switch ($oParam->exec) {
 
 
                 if ($codVeic == null) {
-                    //faz a busca do veiculo por placa
+                    //faz a busca do veiculo por placa 
                     $resultadoVeiculo = $clveiculos->sql_record($clveiculos->sql_query(null, "*", null, "ve01_placa like '$test1'"));
                     $resultVeiculo = db_utils::fieldsMemory($resultadoVeiculo, 0);
 
@@ -664,7 +655,7 @@ switch ($oParam->exec) {
                 }
             }
 
-            //Valida o tipo de combustivel
+            //Valida o tipo de combustivel 
             $arrayComb = array();
             $com = 0;
             $controleCom = 0;
@@ -798,7 +789,7 @@ switch ($oParam->exec) {
                     $clveicretirada->ve60_destinonovo          = null;
                     $clveicretirada->ve60_importado            = "t";
                     $clveicretirada->incluir(null);
-
+                    
                     $clveicabast                       = new cl_veicabast();
                     $clveicabast->ve70_veiculos        = $codigoVeic;
                     $clveicabast->ve70_veiculoscomb    = $codCombust;
@@ -846,7 +837,7 @@ switch ($oParam->exec) {
                     $clveicdevolucao->ve61_medidadevol       = $medidasaida;
                     $clveicdevolucao->ve61_importado         = "t";
                     $clveicdevolucao->incluir(null);
-
+                    
                     $verificarposto = $clveiccadpostoexterno->sql_record($clveiccadpostoexterno->sql_query_file(null, "*", null, "ve34_numcgm = $resultEmpenho->e60_numcgm"));
                     if ($clveiccadpostoexterno->numrows == 0) {
 
@@ -875,7 +866,7 @@ switch ($oParam->exec) {
                         $clveicabastposto->ve71_nota = $nota;
                         $clveicabastposto->incluir(null);
                     }
-
+                    
                     db_fim_transacao();
 
                     if ($erro == false) {
@@ -926,7 +917,7 @@ switch ($oParam->exec) {
 
                     //echo "<pre>";
                     //var_dump($codigo->codigo);
-                    //exit;
+                    //exit;    
 
                     $oRetorno->itens = $arrayRetornoPlanilha;
                 } else if ($controleIguais == 1) {
