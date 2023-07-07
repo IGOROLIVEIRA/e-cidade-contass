@@ -2046,7 +2046,9 @@ class empenho {
    */
   function gerarOrdemCompra($iNumNota, $nTotal,$aItens,$lLiquidar=false,$dDataNota = null, $sHistorico = null,
                             $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null,
-                            $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true, $iCgmEmitente = 0, $iCattrabalhador = null,$iNumempresa = null, $iContribuicaoPrev = null,$iCattrabalhadorremuneracao = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null ){
+                            $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true, $iCgmEmitente = 0,
+                            $iCattrabalhador = null,$iNumempresa = null, $iContribuicaoPrev = null, $iCattrabalhadorremuneracao = null,
+                            $iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null){
     $this->lSqlErro  = false;
     $this->sErroMsg  = '';
     $this->iPagOrdem = '';
@@ -2075,9 +2077,13 @@ class empenho {
       $oDataEmpenho = db_utils::fieldsMemory($rsValidaDataEmp,0);
 
       if ( $e69_dtnota < $oDataEmpenho->e60_emiss ) {
-        $this->lSqlErro = true;
-        $this->sMsgErro = "Data da nota inferior a data do empenho!";
-        return false;
+
+        $o56_elemento = pg_fetch_object(db_query((cl_empelemento::sql_query($this->numemp, null, "o56_elemento"))))->o56_elemento;
+        if (!preg_match('/^.{5}92/', $o56_elemento)){
+          $this->lSqlErro = true;
+          $this->sMsgErro = "Data da nota inferior a data do empenho!";
+          return false;
+        }
       }
     }
 
