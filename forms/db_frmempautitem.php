@@ -159,7 +159,7 @@ function js_troca(codele) {
 </script>
 <form name="form1" method="post" action="">
 <center>
-<fieldset style="margin-top:5px; width:45%;">
+<fieldset style="margin-top:5px; width:55%;">
   <legend><b>Ítens</b></legend>
   <table border="0" cellpadding='0' cellspacing='0' >
     <tr style="height: 20px;">
@@ -183,9 +183,8 @@ function js_troca(codele) {
 	 <? db_ancora(@$Le55_item,"js_pesquisae55_item(true);",$db_opcao); ?>
       </td>
       <td>
-         <?  db_input('e55_item',8,$Ie55_item,true,'text',$db_opcao," onchange='js_pesquisae55_item(false);'")  ?>
-	       <?  db_input('pc01_descrmater',52,$Ipc01_descrmater,true,'text',3,'')	 ?>
-
+         <?php  db_input('e55_item',8,$Ie55_item,true,'text',$db_opcao," onchange='js_pesquisae55_item(false);'")  ?>
+	     <?php  db_input('pc01_descrmater',52,$Ipc01_descrmater,true,'text',3,'','','','width: 492px')	 ?>
       </td>
     </tr>
     <tr>
@@ -202,7 +201,7 @@ function js_troca(codele) {
          db_select("e55_unid", $result_unidade, true, $db_opcao,"")
       ?>
       <label style="margin-left: 20px"><b>Marca:</b></label>
-      <? db_input('e55_marca',20,$Ie55_marca,true,'text',$db_opcao,'','','','',100)	 ?>
+      <? db_input('e55_marca',20,$Ie55_marca,true,'text',$db_opcao,'','','','width: 336px',100)	 ?>
       </td>
     </tr>
 
@@ -255,7 +254,7 @@ function js_troca(codele) {
     }
     $clempautitem->erro_msg=$ero;
     db_input('elemento01',20,0,true,'text',3);
-    db_input('o56_descr',40,0,true,'text',3);
+    db_input('o56_descr',40,0,true,'text',3,'','','','margin-left: 1px; width: 336px;');
     if (isset($numrows99) && $numrows99>0) {
       for($i=0; $i<$numrows99; $i++){
         db_fieldsmemory($result99,$i);
@@ -282,7 +281,7 @@ function js_troca(codele) {
             } else {
                 $db_opcao_e55_quant = $db_opcao;
             }
-            db_input('e55_quant',8,$Ie55_quant,true,'text',$db_opcao_e55_quant,"onchange=\"js_calcula('quant');\"");
+            db_input('e55_quant',8,$Ie55_quant,true,'text',$db_opcao_e55_quant,"onchange=\"js_calcula('quant');\"",'','','width: 106px');
         ?>
         <script>
           ///Controla a validação de vírgulas e pontos.
@@ -531,7 +530,7 @@ function js_pesquisae55_item(mostra){
     js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&taxatabela=false&funcao_js=parent.js_mostrapcmater1|pc01_codmater|pc01_descrmater|pc07_codele"+qry,'Pesquisa',true,"0","1");
   }else{
      if(document.form1.e55_item.value != ''){
-        js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&taxatabela=false&pesquisa_chave='+document.form1.e55_item.value+'&funcao_js=parent.js_mostrapcmater"+qry,'Pesquisa',false);
+        js_OpenJanelaIframe('top.corpo.iframe_empautitem','db_iframe_pcmaterele',"func_pcmaterelelibaut.php?iCodigoAutorizacao="+$F('e55_autori')+"&taxatabela=false&pesquisa_chave='+document.form1.e55_item.value+'&funcao_js=parent.js_mostrapcmater"+qry,'Pesquisa',false);
      }else{
        document.form1.pc01_descrmater.value = '';
        document.form1.submit();
@@ -573,7 +572,7 @@ function js_preenchepesquisa(chave,chave1){
 
 <?
   if(isset($incluir) || isset($alterar) || isset($excluir) ) {
-    echo "\n\nCurrentWindow.corpo.iframe_empautidot.location.href =  'emp1_empautidot001.php?anulacao=true&e56_autori=$e55_autori';\n";
+    echo "\n\ntop.corpo.iframe_empautidot.location.href =  'emp1_empautidot001.php?anulacao=true&e56_autori=$e55_autori';\n";
   }
 ?>
 

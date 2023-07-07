@@ -1,29 +1,29 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
+* E-cidade Software Publico para Gestao Municipal
+* Copyright (C) 2014 DBselller Servicos de Informatica
+* www.dbseller.com.br
+* e-cidade@dbseller.com.br
+*
+* Este programa e software livre; voce pode redistribui-lo e/ou
+* modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+* publicada pela Free Software Foundation; tanto a versao 2 da
+* Licenca como (a seu criterio) qualquer versao mais nova.
+*
+* Este programa e distribuido na expectativa de ser util, mas SEM
+* QUALQUER GARANTIA; sem mesmo a garantia implicita de
+* COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+* PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+* detalhes.
+*
+* Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+* junto com este programa; se nao, escreva para a Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+* 02111-1307, USA.
+*
+* Copia da licenca no diretorio licenca/licenca_en.txt
+* licenca/licenca_pt.txt
+*/
 
 //MODULO: empenho
 $clempautoriza->rotulo->label();
@@ -113,7 +113,7 @@ db_app::load("DBFormCache.js");
                     db_input('e54_autori', 10, $Ie54_autori, true, 'text', 3);
                     db_input('o58_codele', 10, $Ie54_autori, true, 'hidden', 3);
                     ?>
-                    
+
                     <!-- Inclui data de emissão de autorização -->
                     <b> Data da Autorização: </b>
                     <?
@@ -257,6 +257,7 @@ db_app::load("DBFormCache.js");
 */
                     $result = $clpctipocompra->sql_record($clpctipocompra->sql_query_file(null, "pc50_codcom as e54_codcom,pc50_descr"));
                     db_selectrecord("e54_codcom", $result, true, isset($emprocesso) && $emprocesso == true ? "1" : $db_opcao, "", "", "", "", "js_verificatipocompratribunal(this.value)");
+                    //db_input('e54_codcom', 48, $Iz01_nome, true, 'text', 3, '');
                     ?>
                 </td>
             </tr>
@@ -440,6 +441,9 @@ db_app::load("DBFormCache.js");
 
 </form>
 <script>
+    window.onload = function() {
+        js_desabilitaSelect();
+    }
     var opcao = <?php echo $db_opcao ?>;
     if (opcao == 1 && document.getElementById('e54_autori').value == "") {
         js_verificatipocompratribunal(document.getElementById('e54_codcom').value);
@@ -1072,6 +1076,20 @@ db_app::load("DBFormCache.js");
         if (erro == true) {
             document.form1.si06_objetoadesao.focus();
         }
+    }
+
+    function js_desabilitaSelect() {
+
+        const e54_codcom = document.querySelector('#e54_codcom');
+        const e54_codcomdescr = document.querySelector('#e54_codcomdescr');
+
+        let atributos = "background-color:#DEB887; pointer-events: none; touch-action: none;";
+
+        e54_codcom.style.cssText = atributos;
+        e54_codcom.setAttribute('readonly', 'true');
+
+        e54_codcomdescr.style.cssText = atributos;
+        e54_codcomdescr.setAttribute('readonly', 'true');
     }
 
     function js_mostrarancora() {
