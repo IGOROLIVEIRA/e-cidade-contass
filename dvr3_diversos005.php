@@ -17,6 +17,7 @@ require_once("dbforms/db_funcoes.php");
 
 db_postmemory($HTTP_SERVER_VARS);
 db_postmemory($HTTP_POST_VARS);
+$iInstituicao = db_getsession("DB_instit");
 $cldiversos = new cl_diversos;
 $clinflan = new cl_inflan;
 $clprocdiver= new cl_procdiver;
@@ -163,7 +164,7 @@ if($cldiversos->erro_status=="0"){
 }else{
   $cldiversos->erro(true,false);
   //redireciona para tela de alteração do registro recém criado
-  db_redireciona("dvr3_diversos006.php&iInstitId=1&iAreaId=1&iModuloId=1444?chavepesquisa=".$cldiversos->dv05_coddiver);
+  db_redireciona("dvr3_diversos006.php&iInstitId=".$iInstituicao."&iAreaId=1&iModuloId=1444?chavepesquisa=".$cldiversos->dv05_coddiver);
 };
 }
 ?>

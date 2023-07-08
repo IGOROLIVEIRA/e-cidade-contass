@@ -335,8 +335,6 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
 
           oParam.oDadosForm.k00_dtoper = $F('k00_dtoper');
 
-          
-
           var oAjax2 = new Ajax.Request("cai3_emitecarne.RPC.php",
               {method    : 'post',
                parameters: 'json='+Object.toJSON(oParam),

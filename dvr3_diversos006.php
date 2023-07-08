@@ -3,8 +3,6 @@ require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
-
-
 require_once("libs/db_utils.php");
 require_once("dbforms/db_funcoes.php");
 
@@ -175,8 +173,6 @@ $HTTP_SERVER_VARS['QUERY_STRING']="";
 </html>
 <?php
 
-
-
 if ( $lErro ) {
   db_msgbox($sMsgErro);
 }
@@ -188,8 +184,6 @@ if( $db_opcao==22 && !$lErro ) {
 if( isset($HTTP_POST_VARS["db_opcao"]) ) {
 
   if( $cldiversos->erro_status == "0" ) {
-
-  
     $cldiversos->erro(true, false);
     $db_botao = true;
     echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
@@ -233,7 +227,4 @@ function hasDiffObject($oObject1,$oObject2){
   return $lDiff;
 
 }
-
-
-
 ?>

@@ -1,6 +1,8 @@
 <?php
 
 require_once("libs/db_sessoes.php");
+require_once("libs/db_stdlib.php");
+
 
 //MODULO: diversos
 $cldiversos->rotulo->label();
@@ -15,6 +17,10 @@ $clrotulo->label("dv05_procdiver");
 $dia=date('d',db_getsession("DB_datausu"));
 $mes=date('m',db_getsession("DB_datausu"));
 $ano=date('Y',db_getsession("DB_datausu"));
+
+//consulta tipo debito
+$Idv09_tipo_sql = db_query("select dv09_tipo from procdiver where dv09_procdiver = $dv05_procdiver;");
+$Idv09_tipo = db_utils::fieldsMemory($Idv09_tipo_sql, 0)->dv09_tipo;
 
 ?>
 
@@ -473,9 +479,10 @@ if ( $db_opcao == 1 ) {
     //diverso é sempre grupo 7
     oParam.oDadosForm.k03_tipo = 7;
 
-    //tipo_debito de diverso é sempre 25
-    oParam.oDadosForm.tipo_debito = 25;
-    oParam.oDadosForm.tipo= 25;
+    //tipo_debito é uma coluna dv09_tipo da tabela procdiver que é relacionada com a coluna dv05_procdiver da tabela diversos
+     
+    oParam.oDadosForm.tipo_debito = "<?=$Idv09_tipo?>";
+    oParam.oDadosForm.tipo= "<?=$Idv09_tipo?>"; 
 
     // processar desconto recibo
     oParam.oDadosForm.processarDescontoRecibo ='false';
@@ -589,7 +596,6 @@ if ( $db_opcao == 1 ) {
       }
 
   }
-
 
   function js_pesquisaProcedencia(lMostra){
 
