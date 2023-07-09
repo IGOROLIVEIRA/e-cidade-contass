@@ -28,6 +28,8 @@ class Tipo
     const REMUNERACAO_SERVIDOR = 13;
     const BENEFICIOS_ENTESPUBLICOS = 14;
     const PAGAMENTOS_RENDIMENTOS = 15;
+    const REABERTURA_EVENTOS = 21;
+    const FECHAMENTO_EVENTOS = 22;
     const REGISTRO_PRELIMINAR = 24;
     const CADASTRAMENTO_INICIAL = 37;
     const ESTABELECIMENTOS = 26;
@@ -39,6 +41,7 @@ class Tipo
     const AFASTAMENTO_TEMPORARIO = 40;
     const CADASTRO_BENEFICIO = 49;
     const DESLIGAMENTO = 25;
+    const EXCLUSAO_EVENTOS = 53;
 
 
     /**
