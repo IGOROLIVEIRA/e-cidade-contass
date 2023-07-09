@@ -274,6 +274,9 @@ try {
                         Tipo::CD_BENEF_IN,
                         Tipo::BENEFICIOS_ENTESPUBLICOS,
                         Tipo::ALTERACAO_CONTRATO,
+                        Tipo::EXCLUSAO_EVENTOS,
+                        Tipo::REABERTURA_EVENTOS,
+                        Tipo::FECHAMENTO_EVENTOS,
                     )
                 )) {
                     

@@ -451,29 +451,29 @@ try {
     }
 
     function js_alt_evento() {
-        if ((document.getElementById('evento').value == 'S1200' || document.getElementById('evento').value == 'S1202' || document.getElementById('evento').value == 'S1207')) {
-            if (document.getElementById('indapuracao_col').style.display == 'none') {
-                document.getElementById('indapuracao_col').style.display = 'inline';
+        const eventoValue = document.getElementById('evento').value;
+        const indapuracaoCol = document.getElementById('indapuracao_col');
+        const tppgtoCol = document.getElementById('tppgto_col');
+        const tipoCol = document.getElementById('tipo_col');
+
+        if (eventoValue === 'S1200' || eventoValue === 'S1202' || eventoValue === 'S1207' || eventoValue === 'S1299') {
+            if (indapuracaoCol.style.display === 'none') {
+                indapuracaoCol.style.display = 'inline';
             }
-            if (document.getElementById('tipo_col').style.display == 'none') {
-                document.getElementById('tipo_col').style.display = 'inline';
+            if (tipoCol.style.display === 'none') {
+                tipoCol.style.display = 'inline';
             }
-        } else if ((document.getElementById('evento').value == 'S1210')) {
-            if (document.getElementById('tppgto_col').style.display == 'none') {
-                document.getElementById('tppgto_col').style.display = 'inline';
+        } else if (eventoValue === 'S1210') {
+            if (tppgtoCol.style.display === 'none') {
+                tppgtoCol.style.display = 'inline';
             }
-            if (document.getElementById('tipo_col').style.display == 'none') {
-                document.getElementById('tipo_col').style.display = 'inline';
-            }
-        } else if ((document.getElementById('evento').value == 'S1299')) {
-            if (document.getElementById('transDCTFWeb_col').style.display == 'none') {
-                document.getElementById('transDCTFWeb_col').style.display = 'inline';
+            if (tipoCol.style.display === 'none') {
+                tipoCol.style.display = 'inline';
             }
         } else {
-            document.getElementById('indapuracao_col').style.display = 'none';
-            document.getElementById('tppgto_col').style.display = 'none'
-            document.getElementById('tipo_col').style.display = 'none';
-            document.getElementById('transDCTFWeb_col').style.display = 'none';
+            indapuracaoCol.style.display = 'none';
+            tppgtoCol.style.display = 'none';
+            tipoCol.style.display = 'none';
         }
     }
 
