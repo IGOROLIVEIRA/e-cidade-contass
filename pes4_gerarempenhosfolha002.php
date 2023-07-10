@@ -317,7 +317,7 @@ db_app::load("estilos.css");
                                                                          "o40_anousu=".db_getsession("DB_anousu")."
                                                                          and o40_instit=".db_getsession("DB_instit")));
               db_selectrecord("rh72_orgao",$result,true,2,"","","","0","js_getUnidades();");
-             ?>
+              ?>
               </td>
             </tr>
             <tr>
@@ -714,6 +714,7 @@ function js_retornoConsultaEmpenhos(oResponse) {
      oLinhaFinal.style.height='auto';
      oLinhaFinal.id          ='fixFF';
      oLinhaFinal.innerHTML   ='<TD>&nbsp;</td>';
+
      $('listaEmpenhos').appendChild(oLinhaFinal);
 
      if (lReservadoSaldo && lBotoes) {
