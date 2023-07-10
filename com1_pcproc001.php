@@ -86,12 +86,12 @@ if (isset($incluir) || isset($juntar)) {
     }
 
     if (isset($incluir)) {
-      $clpcproc->pc80_data          = date("Y-m-d",db_getsession("DB_datausu"));
+      $pc80_data          = date("Y-m-d",db_getsession("DB_datausu"));
       $rsDataSolicitacao = db_query("select pc10_data from solicita where pc10_numero = $pc10_numero;");
       $dataSolicitacao = db_utils::fieldsMemory($rsDataSolicitacao,0)->pc10_data;
       $clpcproc->pc80_data = implode("-", array_reverse(explode("/", $pc80_data)));
 
-      if($clpcproc->pc80_data < $dataSolicitacao){
+      if($pc80_data < $dataSolicitacao){
         $erro_msg .= "Usurio: a data do processo de compra no pode ser menor que a data da solicitao.";
         $sqlerro  = true;
       }
@@ -101,6 +101,7 @@ if (isset($incluir) || isset($juntar)) {
       $clpcproc->pc80_resumo                = $pc10_resumo;
       $clpcproc->pc80_numdispensa           = $pc80_numdispensa;
       $clpcproc->pc80_dispvalor             = $pc80_dispvalor;
+      $clpcproc->pc80_data                  = date("Y-m-d",db_getsession("DB_datausu"));
       $clpcproc->pc80_orcsigiloso           = $pc80_orcsigiloso;
       $clpcproc->pc80_subcontratacao        = $pc80_subcontratacao;
       $clpcproc->pc80_dadoscomplementares   = $pc80_dadoscomplementares;
