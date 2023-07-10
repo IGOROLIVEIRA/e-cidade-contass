@@ -169,7 +169,7 @@ function js_troca(codele) {
 <form name="form1" method="post" action="">
 <center>
 <fieldset style="margin-top:5px; width:55%;">
-  <legend><b>Ítens</b></legend>
+  <legend><b>Itens</b></legend>
   <table border="0" cellpadding='0' cellspacing='0' >
     <tr style="height: 20px;">
       <td nowrap title="<?=@$Te55_autori?>">
