@@ -343,7 +343,7 @@ $clrotulo->label("pc01_descrmater");
         if ($('#servico_' + id).val() == 't') {
             //$('#qtd_' + id).val(0);
             $('#qtd_' + id).attr('readonly', false);
-        } 
+        }
 
         if ($('#servico_' + id).val() == 'f') {
             $('#qtd_' + id).val(1);
@@ -490,7 +490,7 @@ $clrotulo->label("pc01_descrmater");
                     elementos.elementos.forEach(function(oElementos, ele) {
                         let option = document.createElement('option');
                         option.value = oElementos.pc07_codele;
-                        option.text = oElementos.o56_descr;
+                        option.text = oElementos.o56_descr.urlDecode();
                         select.append(option);
                     })
                 } else {
