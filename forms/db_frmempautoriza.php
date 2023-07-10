@@ -152,7 +152,7 @@ db_app::load("DBFormCache.js");
                         2 => 'Decorrente de Licitação de Outro Órgão',
                         4 => 'Adesão à ata de Registro de Preços'
                     );
-                    db_select('e54_tipoautorizacao', $valores, true, $db_opcao, "onchange='js_mostrarancora();'");
+                    db_select('e54_tipoautorizacao', $valores, true, $db_opcao, "onchange='js_handleChangeTipoAutorizacao()'");
                     ?>
                 </td>
             </tr>
@@ -253,8 +253,8 @@ db_app::load("DBFormCache.js");
                     }
 
                     /*
-* alterado para liberar o campo tipo de compra para alteracao
-*/
+                    * alterado para liberar o campo tipo de compra para alteracao
+                    */
                     $result = $clpctipocompra->sql_record($clpctipocompra->sql_query_file(null, "pc50_codcom as e54_codcom,pc50_descr"));
                     db_selectrecord("e54_codcom", $result, true, isset($emprocesso) && $emprocesso == true ? "1" : $db_opcao, "", "", "", "", "js_verificatipocompratribunal(this.value)");
                     //db_input('e54_codcom', 48, $Iz01_nome, true, 'text', 3, '');
@@ -441,9 +441,6 @@ db_app::load("DBFormCache.js");
 
 </form>
 <script>
-    window.onload = function() {
-        js_desabilitaSelect();
-    }
     var opcao = <?php echo $db_opcao ?>;
     if (opcao == 1 && document.getElementById('e54_autori').value == "") {
         js_verificatipocompratribunal(document.getElementById('e54_codcom').value);
@@ -1078,7 +1075,32 @@ db_app::load("DBFormCache.js");
         }
     }
 
-    function js_desabilitaSelect() {
+    function js_handleChangeTipoAutorizacao() {
+        js_mostrarancora();
+        js_desabilitaTipoCompra();
+
+        const e54_tipoautorizacao = document.querySelector('#e54_tipoautorizacao');
+        if (e54_tipoautorizacao.value == '1') {
+            js_habilitaTipoCompra();
+            console.log('habilitou')
+            console.log(e54_tipoautorizacao.value);
+        }
+    }
+
+    function js_habilitaTipoCompra() {
+        const e54_codcom = document.querySelector('#e54_codcom');
+        const e54_codcomdescr = document.querySelector('#e54_codcomdescr');
+
+        let atributos = "background-color:#FFF; pointer-events: auto; touch-action: auto;";
+
+        e54_codcom.style.cssText = atributos;
+        e54_codcom.removeAttribute('readonly');
+
+        e54_codcomdescr.style.cssText = atributos;
+        e54_codcomdescr.removeAttribute('readonly');
+    }
+
+    function js_desabilitaTipoCompra() {
 
         const e54_codcom = document.querySelector('#e54_codcom');
         const e54_codcomdescr = document.querySelector('#e54_codcomdescr');
@@ -1217,6 +1239,7 @@ db_app::load("DBFormCache.js");
 
 
     function js_verificatipocompratribunal(value) {
+        console.log(value);
         var sUrlRPC = 'com4_tipocompra.RPC.php';
         var pc50_codcom = value;
         js_divCarregando('Aguarde, carregando informações...', 'msgbox');
@@ -1242,12 +1265,24 @@ db_app::load("DBFormCache.js");
             document.form1.e54_nummodalidade.value = '';
             document.form1.e54_numerl.value = '';
         } else if (oRetorno.tipocompratribunal != 13) {
-            document.getElementById('trdadoslicitacao').style.display = '';
-            document.getElementById('e54_codcom').value = oRetorno.tipocompra;
-            document.getElementById('e54_codcomdescr').value = oRetorno.tipocompra;
+           validaTipoAutorizacao(oRetorno);
         }
         js_removeObj('msgbox');
+    }
 
+    function validaTipoAutorizacao(oRetorno) {
+        let tipoAutorizacao = document.getElementById('e54_tipoautorizacao').value;
+
+        if (tipoAutorizacao === '1') {
+            alert('Tipo de compra inválido para este tipo de autorização');
+            document.getElementById('e54_codcom').value = '';
+            document.getElementById('e54_codcomdescr').value = '';
+            return;
+        }
+
+        document.getElementById('trdadoslicitacao').style.display = '';
+        document.getElementById('e54_codcom').value = oRetorno.tipocompra;
+        document.getElementById('e54_codcomdescr').value = oRetorno.tipocompra;
     }
 
     function js_tipocompra(codigotipocompratribunal) {

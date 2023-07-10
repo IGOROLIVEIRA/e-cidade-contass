@@ -448,8 +448,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         $arr  = array(
                             '0' => 'Selecione',
                             '1' => '1 - União',
-                            '2' => '2 - Estados'
-                        );
+                            '2' => '2 - Estados');
 
                         db_select("e60_esferaemendaparlamentar", $arr, true, 1);
                         ?>
@@ -530,7 +529,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         <fieldset style="width:500px">
                             <legend><b>Informações da OP</b></legend>
                             <?php
-                                if (empty($e50_obs)) { 
+                                if (empty($e50_obs)) {
                                     $e50_obs = $e54_resumo;
                                 }
                                 db_textarea('e50_obs', 3, 109, $Ie54_resumo, true, 'text', $db_opcao, "", "e50_obs");
@@ -731,14 +730,76 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 </style>
 
 <script>
-    var lEsferaEmendaParlamentar = 'f';
-    var bEmendaParlamentar = false;
-    var bEsferaEmendaParlamentar = false;
+window.onload = function () {
+    js_desabilitaTipoCompra();
+}
 
-    function js_verificaresfera() {
-        if ($F('e60_emendaparlamentar') != 3 && lEsferaEmendaParlamentar == 't') {
-            $('trEsferaEmendaParlamentar').style.display = '';
-            bEsferaEmendaParlamentar = true;
+function js_desabilitaTipoCompra() {
+
+const e54_codcom = document.querySelector('#e54_codcom');
+const e54_codcomdescr = document.querySelector('#e54_codcomdescr');
+
+let atributos = "background-color:#DEB887; pointer-events: none; touch-action: none;";
+
+e54_codcom.style.cssText = atributos;
+e54_codcom.setAttribute('readonly', 'true');
+
+e54_codcomdescr.style.cssText = atributos;
+e54_codcomdescr.setAttribute('readonly', 'true');
+}
+
+// executar a primeira vez
+document.form1.e54_gestaut.value = '<?= $iCodDepartamentoAtual ?>';
+document.form1.e54_nomedodepartamento.value = '<?= $sNomDepartamentoAtual ?>';
+
+var lEsferaEmendaParlamentar = 'f';
+var bEmendaParlamentar = false;
+var bEsferaEmendaParlamentar = false;
+
+function js_verificaresfera() {
+    if ($F('e60_emendaparlamentar') != 3 && lEsferaEmendaParlamentar == 't') {
+        $('trEsferaEmendaParlamentar').style.display = '';
+        bEsferaEmendaParlamentar = true;
+    } else {
+        $('trEsferaEmendaParlamentar').style.display = 'none';
+        bEsferaEmendaParlamentar = false;
+    }
+}
+
+    function js_pesquisarRecursoDotacao() {
+
+js_divCarregando("Aguarde, verificando recurso da dotação...", "msgBox");
+var oParam = new Object();
+oParam.exec = "validarRecursoDotacaoPorAutorizacao";
+oParam.iCodigoAutorizacaoEmpenho = $F('e54_autori');
+
+new Ajax.Request('emp4_empenhofinanceiro004.RPC.php', {
+    method: 'post',
+    parameters: 'json=' + Object.toJSON(oParam),
+    onComplete: function(oAjax) {
+
+        js_removeObj("msgBox");
+        var oRetorno = eval("(" + oAjax.responseText + ")");
+
+        lEsferaEmendaParlamentar = oRetorno.lEsferaEmendaParlamentar;
+        js_verificaresfera();
+
+        if (oRetorno.lEmendaParlamentar) {
+            $('trEmendaParlamentar').style.display = '';
+            bEmendaParlamentar = true;
+            if (oRetorno.lEmendaIndividual) {
+                document.getElementById("e60_emendaparlamentar").disabled = false;
+                document.getElementById("e60_emendaparlamentar").remove(3);
+                document.getElementById("e60_emendaparlamentar").remove(3);
+                document.getElementById("e60_emendaparlamentar").remove(2);
+                document.getElementById("e60_emendaparlamentar").remove(0);
+            }
+
+            if (oRetorno.lEmendaIndividualEBancada) {
+                document.getElementById("e60_emendaparlamentar").disabled = false;
+                document.getElementById("e60_emendaparlamentar").remove(3);
+                document.getElementById("e60_emendaparlamentar").remove(3);
+            }
         } else {
             $('trEsferaEmendaParlamentar').style.display = 'none';
             bEsferaEmendaParlamentar = false;
@@ -1053,65 +1114,13 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
     // $('e44_tipo').style.width = "100%";
     // $('e50_obs').style.width = "100%";
 
-
-    function js_pesquisarRecursoDotacao() {
-
-        js_divCarregando("Aguarde, verificando recurso da dotação...", "msgBox");
-        var oParam = new Object();
-        oParam.exec = "validarRecursoDotacaoPorAutorizacao";
-        oParam.iCodigoAutorizacaoEmpenho = $F('e54_autori');
-
-        new Ajax.Request('emp4_empenhofinanceiro004.RPC.php', {
-            method: 'post',
-            parameters: 'json=' + Object.toJSON(oParam),
-            onComplete: function(oAjax) {
-
-                js_removeObj("msgBox");
-                var oRetorno = eval("(" + oAjax.responseText + ")");
-
-                lEsferaEmendaParlamentar = oRetorno.lEsferaEmendaParlamentar;
-
-                js_verificaresfera();
-                if (oRetorno.lEmendaParlamentar) {
-                    $('trEmendaParlamentar').style.display = '';
-                    bEmendaParlamentar = true;
-                    if (oRetorno.lEmendaIndividual) {
-                        document.getElementById("e60_emendaparlamentar").disabled = false;
-                        document.getElementById("e60_emendaparlamentar").remove(3);
-                        document.getElementById("e60_emendaparlamentar").remove(3);
-                        document.getElementById("e60_emendaparlamentar").remove(2);
-                        document.getElementById("e60_emendaparlamentar").remove(0);
-                    }
-
-                    if (oRetorno.lEmendaIndividualEBancada) {
-                        document.getElementById("e60_emendaparlamentar").disabled = false;
-                        document.getElementById("e60_emendaparlamentar").remove(3);
-                        document.getElementById("e60_emendaparlamentar").remove(3);
-                    }
-                } else {
-                    $('trEmendaParlamentar').style.display = 'none';
-                    bEmendaParlamentar = false;
-                }
-
-                if (oRetorno.lFundeb) {
-                    $('trFinalidadeFundeb').style.display = '';
-                } else {
-                    $('trFinalidadeFundeb').style.display = 'none';
-                }
-
-            }
-        });
-    }
-
-    js_pesquisarRecursoDotacao();
-
     function js_ValidaCampos() {
         var numero = document.form1.e60_codemp.value;
         if (numero % 1 !== 0) {
-            alert("Campo de Número do Empenho informar apenas números inteiros.");
-            document.form1.e60_codemp.focus();
-            document.form1.e60_codemp.value = '';
-            return false;
+             alert("Campo de Número do Empenho informar apenas números inteiros.");
+             document.form1.e60_codemp.focus();
+                document.form1.e60_codemp.value = '';
+             return false;
         }
     }
 

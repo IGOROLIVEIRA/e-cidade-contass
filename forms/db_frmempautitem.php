@@ -157,6 +157,15 @@ function js_troca(codele) {
   document.form1.o56_descr.value = descricao;
 }
 </script>
+<style>
+    #e55_autori, #e55_sequen, #e55_item {
+        width: 92px;
+    }
+
+    #pc01_descrmater, #e55_marca {
+        width: 492px;
+    }
+</style>
 <form name="form1" method="post" action="">
 <center>
 <fieldset style="margin-top:5px; width:55%;">
@@ -184,26 +193,32 @@ function js_troca(codele) {
       </td>
       <td>
          <?php  db_input('e55_item',8,$Ie55_item,true,'text',$db_opcao," onchange='js_pesquisae55_item(false);'")  ?>
-	     <?php  db_input('pc01_descrmater',52,$Ipc01_descrmater,true,'text',3,'','','','width: 492px')	 ?>
+	     <?php  db_input('pc01_descrmater',52,$Ipc01_descrmater,true,'text',3)	 ?>
       </td>
     </tr>
     <tr>
       <td><b>Unidade:</b></td>
-      <td style = 'width: 100px'>
-      <?
-	       $result_unidade = array ();
-	       $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
-           $numrows_unid = $clmatunid->numrows;
-           for ($i = 0; $i < $numrows_unid; $i++){
-                            db_fieldsmemory($result_sql_unid, $i);
-                            $result_unidade[$m61_codmatunid] = $m61_descr;
-           }
-         db_select("e55_unid", $result_unidade, true, $db_opcao,"")
-      ?>
-      <label style="margin-left: 20px"><b>Marca:</b></label>
-      <? db_input('e55_marca',20,$Ie55_marca,true,'text',$db_opcao,'','','','width: 336px',100)	 ?>
-      </td>
+      <td style = 'width: 106px'>
+        <?php
+            $result_unidade = array ();
+            $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
+            $numrows_unid = $clmatunid->numrows;
+            for ($i = 0; $i < $numrows_unid; $i++){
+                                db_fieldsmemory($result_sql_unid, $i);
+                                $result_unidade[$m61_codmatunid] = $m61_descr;
+            }
+            db_select("e55_unid", $result_unidade, true, $db_opcao,"")
+        ?>
     </tr>
+    <tr>
+        <td>
+            <label><b>Marca:</b></label>
+
+      </td>
+      <td>
+        <?php db_input('e55_marca',20,$Ie55_marca,true,'text',$db_opcao,'','','','',100)	 ?>
+      </td>
+   </tr>
 
 <?if( isset($e55_item) && $e55_item!='' && (empty($liberado) || (isset($liberado) && $liberado==true) ) ){?>
     <tr style="height: 20px;">
