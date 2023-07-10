@@ -86,6 +86,7 @@ if (isset($incluir) || isset($juntar)) {
     }
 
     if (isset($incluir)) {
+      $clpcproc->pc80_data          = date("Y-m-d",db_getsession("DB_datausu"));
       $rsDataSolicitacao = db_query("select pc10_data from solicita where pc10_numero = $pc10_numero;");
       $dataSolicitacao = db_utils::fieldsMemory($rsDataSolicitacao,0)->pc10_data;
       $clpcproc->pc80_data = implode("-", array_reverse(explode("/", $pc80_data)));
