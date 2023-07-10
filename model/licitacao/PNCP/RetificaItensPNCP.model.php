@@ -40,7 +40,7 @@ class RetificaitensPNCP extends ModeloBasePNCP
         $oDadosAPI->valorTotal                  = $vlrtotal;
         $oDadosAPI->situacaoCompraItemId        = $oDado[0]->situacaocompraitemid;
         $oDadosAPI->criterioJulgamentoId        = $oDado[0]->criteriojulgamentoid;
-var_dump($vlrtotal);
+
         //DISPENSA E INEXIGIBILIDADE
         if($oDado[0]->modalidadeid == "8" || $oDado[0]->modalidadeid == "9"){
             $oDadosAPI->situacaoCompraItemId        = $vlrtotal > 0 ? 2 : 4;
