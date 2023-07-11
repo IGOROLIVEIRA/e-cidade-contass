@@ -1218,7 +1218,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
                 document.getElementById('btnRemoveItem').style.disabled = false;
                 oItemAdicionar.quantidade    = js_strToFloat(oSelecionados[iIndice].aCells[6].getValue());
-
                 oItemAdicionar.valorunitario = js_strToFloat(oSelecionados[iIndice].aCells[7].getValue());
                 oItemAdicionar.valor = oItemAdicionar.quantidade * oItemAdicionar.valorunitario;
                 var nQuantidadeA = js_strToFloat(oSelecionados[iIndice].aCells[4].getValue());
@@ -2097,23 +2096,24 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.calculaValorTotal = function (iLinha) {
         var aLinha = me.oGridItens.aRows[iLinha],
             nQuantidade  = aLinha.aCells[6].getValue().getNumber(),
-            nUnitario    = aLinha.aCells[7].getValue().getNumber(),
+            nUnitario    = js_strToFloat(aLinha.aCells[7].getValue()),
             nQuantidadeA = aLinha.aCells[4].getValue().getNumber(),//OC5304
             nUnitarioA   = Number(aLinha.aCells[5].getValue().split('.').join("").replace(",","."));//OC5304
             valor1 = nQuantidade.toString();
             valor = valor1.split('.');
 
-            if(valor.length>1){
-                casas = valor[1].length;
-            }else{
-                casas = 2;
-            }
+        if(valor.length>1){
+            casas = valor[1].length;
+        }else{
+            casas = 2;
+        }
 
         aItensPosicao[iLinha].novaquantidade  = nQuantidade;
         aItensPosicao[iLinha].novounitario    = nUnitario;
 
         nValorTotal = nQuantidade * nUnitario;
         valorTotal  = nQuantidadeA * nUnitarioA;
+
 
         aLinha.aCells[8].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
 
