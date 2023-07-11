@@ -91,7 +91,7 @@ if (isset($incluir) || isset($juntar)) {
       $clpcproc->pc80_data = implode("-", array_reverse(explode("/", $pc80_data)));
 
       if($clpcproc->pc80_data < $dataSolicitacao){
-        $erro_msg .= "Usurio: a data do processo de compra no pode ser menor que a data da solicitao.";
+        $erro_msg .= "Usurio: a data do processo de compra no pode ser menor que a data da solicitação.";
         $sqlerro  = true;
       }
 
