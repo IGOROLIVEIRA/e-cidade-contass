@@ -141,6 +141,6 @@ e-cidade            5432 pmvarzelandiav3
 e-cidade            5432 pmibiracatuv3
 
 
-ammesf              5432 e-cidadev3
-cisame              5432 e-cidadev3
-e-cidade-zerada-2023              5432 e-cidadev3
+ammesf                  5432 e-cidadev3-prod
+cisame                  5432 e-cidadev3-prod
+e-cidade-zerada-2023    5432 e-cidadev3-prod
