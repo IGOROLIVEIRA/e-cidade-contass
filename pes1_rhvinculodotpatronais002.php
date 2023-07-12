@@ -8,6 +8,7 @@ include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clrhvinculodotpatronais = new cl_rhvinculodotpatronais;
+$clinssirf = new cl_inssirf;
 $db_opcao   = 22;
 $db_botao   = false;
 $iAnoUsu    = db_getsession("DB_anousu");
@@ -22,7 +23,7 @@ if (isset($alterar)) {
         
         $clrhvinculodotpatronais->alterar(null, $rh171_orgaoorig, $rh171_unidadeorig, $rh171_projativorig,
                                             $rh171_recursoorig, $rh171_programaorig, $rh171_funcaoorig, $rh171_subfuncaoorig,
-                                            $iContMes, $iAnoUsu, $iInstit);
+                                            $iContMes, $iAnoUsu, $iInstit, $rh171_codtab);
         
         if ($clrhvinculodotpatronais->erro_status == 0) {
             $sql_erro = true;

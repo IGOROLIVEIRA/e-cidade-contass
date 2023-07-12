@@ -183,6 +183,8 @@ function dbViewItensLicitacao(sNomeInstance, oNode, destinacaoExclusiva) {
 
             if(valor > valorCelula){
                 alert('Qtde Exclusiva informada é maior que a quantidade do item.');
+                document.getElementById(`quantidade${sequencial}`).value = '';
+                document.getElementById(`quantidade${sequencial}`).focus();
                 return;
             }
 

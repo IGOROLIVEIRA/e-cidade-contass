@@ -484,7 +484,8 @@ if ($clempparametro->numrows > 0) {
                                 $ordem,
                                 "pc20_codorc={$pc20_codorc}
                                                             and pc21_orcamforne = {$pc21_orcamforne}
-                                                            and l21_situacao = 0 {$dbwhere}"
+                                                            and l21_situacao = 0 {$dbwhere}
+                                                            and pc11_quant > 0"
                             );
                             $result_itens  = $clpcorcamitem->sql_record($sSqlItens);
                             $numrows_itens = $clpcorcamitem->numrows;

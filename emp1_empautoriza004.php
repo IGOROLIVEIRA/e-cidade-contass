@@ -165,18 +165,18 @@ if (isset($incluir)) {
     $e54_emiss = implode("-", array_reverse(explode("/", $e54_emiss)));
 
     if ($sqlerro == false) {
-      if ($e54_emiss > date("Y-m-d", db_getsession("DB_datausu"))) {
-          $erro_msg = "Usuário: ALTERAÇÃO NÃO EFETUADA! A DATA DA AUTORIZAÇÃO NÃO PODE SER POSTERIOR A DATA DO SISTEMA";
-          $sqlerro = true;
-      }
-  }
+        if ($e54_emiss > date("Y-m-d", db_getsession("DB_datausu"))) {
+            $erro_msg = "Usuário: ALTERAÇÃO NÃO EFETUADA! A DATA DA AUTORIZAÇÃO NÃO PODE SER POSTERIOR A DATA DO SISTEMA";
+            $sqlerro = true;
+        }
+    }
 
-  if ($sqlerro == false) {
-      if (date("Y", strtotime($e54_emiss)) <> date("Y", db_getsession("DB_datausu"))) {
-          $erro_msg = "Usuário: ALTERAÇÃO NÃO EFETUADA! A DATA DA AUTORIZAÇÃO DEVE PERMANECER NO EXERCÍCIO ATUAL";
-          $sqlerro = true;
-      }
-  }
+    if ($sqlerro == false) {
+        if (date("Y", strtotime($e54_emiss)) <> date("Y", db_getsession("DB_datausu"))) {
+            $erro_msg = "Usuário: ALTERAÇÃO NÃO EFETUADA! A DATA DA AUTORIZAÇÃO DEVE PERMANECER NO EXERCÍCIO ATUAL";
+            $sqlerro = true;
+        }
+    }
 	// Final da Mudança da Oc19462
 
     if ($e54_emiss < $z09_datacadastro) {

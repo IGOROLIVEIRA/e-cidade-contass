@@ -471,7 +471,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 LEFT JOIN manutencaoacordo ON manutac_acordo = ac16_sequencial
                 WHERE ac16_datareferencia <= '{$this->sDataFinal}'
                 AND ac16_datareferencia >= '{$this->sDataInicial}'
-                and ac16_sequencial = 1561
                 AND ac16_instit = " . db_getsession("DB_instit");
         $rsResult10 = db_query($sSql);
 

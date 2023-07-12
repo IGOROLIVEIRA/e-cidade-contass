@@ -274,6 +274,9 @@ try {
                         Tipo::CD_BENEF_IN,
                         Tipo::BENEFICIOS_ENTESPUBLICOS,
                         Tipo::ALTERACAO_CONTRATO,
+                        Tipo::EXCLUSAO_EVENTOS,
+                        Tipo::REABERTURA_EVENTOS,
+                        Tipo::FECHAMENTO_EVENTOS,
                     )
                 )) {
                     
@@ -301,7 +304,8 @@ try {
                             empty($oParam->dtalteracao) ? null : $oParam->dtalteracao,
                             $oParam->indapuracao,
                             $oParam->tppgto,
-                            $oParam->tpevento
+                            $oParam->tpevento,
+                            $oParam->transDCTFWeb
                         );
                         $eventoFila->adicionarFila();
                     }
@@ -326,7 +330,8 @@ try {
                             empty($oParam->dtalteracao) ? null : $oParam->dtalteracao,
                             $oParam->indapuracao,
                             $oParam->tppgto,
-                            $oParam->tpevento
+                            $oParam->tpevento,
+                            $oParam->transDCTFWeb
                         );
                         $eventoFila->adicionarFila();
                     }

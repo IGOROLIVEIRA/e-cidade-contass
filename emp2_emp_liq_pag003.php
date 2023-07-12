@@ -95,6 +95,9 @@ function js_imprime(){
    imprime_filtro = 'sim';
  }
 
+ var sPeriodoInicial = document.form1.data1.value.split("/");
+ var sPeriodoFinal   = document.form1.data2.value.split("/");
+
  var sURL  = 'emp2_emp_liq_pag002.php?db_selinstit='+sel_instit;
      sURL += '&pag='+document.form1.pag.checked;
      sURL += '&estpag='+document.form1.estpag.checked;
@@ -113,8 +116,8 @@ function js_imprime(){
 	   sURL += '&mostraritem='+document.form1.mostraritem.value;
 	   sURL += '&com_ou_sem='+document.form1.com_ou_sem.value;
 	   sURL += '&listacredor='+listacredor;
-	   sURL += '&dataini='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value;
-  	 sURL += '&datafin='+document.form1.data2_ano.value+'-'+document.form1.data2_mes.value+'-'+document.form1.data2_dia.value;
+	   sURL += '&dataini='+sPeriodoInicial[2]+'-'+sPeriodoInicial[1]+'-'+sPeriodoInicial[0];
+  	 sURL += '&datafin='+sPeriodoFinal[2]+'-'+sPeriodoFinal[1]+'-'+sPeriodoFinal[0];
   	 sURL += '&filtra_despesa='+filtra_despesa;
   	 sURL += '&imprime_filtro='+imprime_filtro;
   	 sURL += '&sDadosFornecedor='+$F('dados_fornecedor');
