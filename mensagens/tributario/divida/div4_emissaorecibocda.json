@@ -12,7 +12,6 @@
   "erro_cartorio_diferente"               : "Há recibo(s) emitido(s) para está CDA usando um Cartório diferente.",
   "recibo_valido"                         : "Há um recibo válido para esta Certidão.",
   "sem_certidoes_validas"                 : "Não há certidões válidas para emissão.",
-  "emissao_sucesso"                       : "Recibo(s) emitido(s) com sucesso.",
   "certidao_com_inicial"                  : "Há uma Inicial vinculada a esta Certidão.",
   "pagamento_parcial"                     : "Esta Certidão possui Pagamento Parcial.",
   "limite_receitas"                       : "O número de receitas ultrapassou o espaço limite do carne para Certidão [codigo_certidao]."
