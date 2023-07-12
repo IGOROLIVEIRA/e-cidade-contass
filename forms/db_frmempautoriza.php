@@ -487,6 +487,11 @@ db_app::load("DBFormCache.js");
 
     function js_validaLicitacao() {
 
+        if ($('e54_codcomdescr').value === '' || $('e54_codcomdescr').value === '') {
+            alert("Usuário:\nO Tipo de Compra deve ser informado");
+            return false;
+        }
+
         if (codigotribunal != 13 && $('e54_tipoautorizacao').value == '1') {
             alert("Usuário:\nO tipo de compra selecionado não pode ser utilizado para autorização direta. Gentileza alterar para o tipo de autorização adequado");
             return false;
@@ -1082,8 +1087,7 @@ db_app::load("DBFormCache.js");
         const e54_tipoautorizacao = document.querySelector('#e54_tipoautorizacao');
         if (e54_tipoautorizacao.value == '1') {
             js_habilitaTipoCompra();
-            console.log('habilitou')
-            console.log(e54_tipoautorizacao.value);
+
         }
     }
 
@@ -1095,9 +1099,11 @@ db_app::load("DBFormCache.js");
 
         e54_codcom.style.cssText = atributos;
         e54_codcom.removeAttribute('readonly');
+        e54_codcom.value = '';
 
         e54_codcomdescr.style.cssText = atributos;
         e54_codcomdescr.removeAttribute('readonly');
+        e54_codcomdescr.value = '';
     }
 
     function js_desabilitaTipoCompra() {
