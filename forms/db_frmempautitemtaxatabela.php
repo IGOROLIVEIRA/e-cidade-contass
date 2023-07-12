@@ -158,7 +158,8 @@ $clrotulo->label("pc01_descrmater");
         var table = $('#myTable').DataTable({
             bAutoWidth: false,
             bInfo: false,
-            searchable: false,
+            searching: false,
+            info: false,
             paging: false,
             processing: true,
             serverSide: true,
@@ -322,7 +323,7 @@ $clrotulo->label("pc01_descrmater");
             success: function(data) {
 
                 let response = JSON.parse(data);
-                alert(response.message);
+                alert(response.message.urlDecode());
                 //top.corpo.iframe_empautitem.location.reload();
                 top.corpo.iframe_empautoriza.location.reload();
                 //window.location.reload();

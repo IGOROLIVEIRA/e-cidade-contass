@@ -255,13 +255,11 @@ switch ($_POST["action"]) {
                     $selectservico .= "<option value='t' selected='selected'>Sim</option>";
                 }else{
                     if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
-                        $selectservico .= "<option value='0' selected='selected'>Selecione</option>";
-                        $selectservico .= "<option value='t'>Sim</option>";
+                        $selectservico .= "<option value='t' selected='selected'>Sim</option>";
                         $selectservico .= "<option value='f'>" . utf8_encode('Não') . "</option>";
                     } else{
-                        $selectservico .= "<option value='0' selected='selected'>Selecione</option>";
                         $selectservico .= "<option value='t'>Sim</option>";
-                        $selectservico .= "<option value='f'>" . utf8_encode('Não') . "</option>";
+                        $selectservico .= "<option value='f' selected='selected'>" . utf8_encode('Não') . "</option>";
                     }
                 }
 
@@ -346,8 +344,9 @@ switch ($_POST["action"]) {
         $rsEleTabela = db_query($sqlElementosTabela);
 
         $oElementos = db_utils::getCollectionByRecord($rsEleTabela);
+        $rsElemen = array();
+
         if (pg_numrows($rsEle) > 0) {
-            $rsElemen = array();
             foreach ($oElementos as $row) {
                 if ($row->pc07_codele == $codEle) {
                     $rsElemen[0]->pc07_codele = $row->pc07_codele;
@@ -358,7 +357,15 @@ switch ($_POST["action"]) {
 
             $oRetorno->elementos = $rsElemen;
         } else {
-            $oRetorno->elementos = $oElementos;
+            foreach ($oElementos as $row) {
+                    $rsEle = new stdClass();
+                    $rsEle->pc07_codele = $row->pc07_codele;
+                    $rsEle->o56_descr = urlencode($row->o56_descr);
+                    $rsEle->o56_elemento = $row->o56_elemento;
+                    $rsElemen[] = $rsEle;
+            }
+
+            $oRetorno->elementos = $rsElemen;
         }
 
 
