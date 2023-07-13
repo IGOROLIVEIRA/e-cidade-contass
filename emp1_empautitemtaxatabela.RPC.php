@@ -257,9 +257,13 @@ switch ($_POST["action"]) {
                     if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
                         $selectservico .= "<option value='t' selected='selected'>Sim</option>";
                         $selectservico .= "<option value='f'>" . utf8_encode('Não') . "</option>";
-                    } else{
+                    } elseif($oDadosEmpAutItem->e55_servicoquantidade == 'f'){
                         $selectservico .= "<option value='t'>Sim</option>";
                         $selectservico .= "<option value='f' selected='selected'>" . utf8_encode('Não') . "</option>";
+                    }else{
+                        $selectservico .= "<option value='0' selected='selected'>Selecione</option>";
+                        $selectservico .= "<option value='t'>Sim</option>";
+                        $selectservico .= "<option value='f'>" . utf8_encode('Não') . "</option>";
                     }
                 }
 
