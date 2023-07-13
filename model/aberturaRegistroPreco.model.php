@@ -192,7 +192,6 @@ class aberturaRegistroPreco extends solicitacaoCompra {
       if ($oDaoSolicitem->numrows > 0) {
 
         for ($iItem = 0; $iItem < $oDaoSolicitem->numrows; $iItem++) {
-
           $oItem = db_utils::fieldsMemory($rsItens, $iItem, false, false, true);
           $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
           $this->aItens[]   = $oItemSolicitacao;

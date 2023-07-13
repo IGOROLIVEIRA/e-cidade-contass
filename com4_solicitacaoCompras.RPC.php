@@ -237,10 +237,6 @@ switch ($oParam->exec) {
         $oUnid = db_utils::fieldsMemory($rsUnid, 0);
         $iDescricaoLog .= ' UNIDADE '.$oUnid->m61_descr;
 
-        $aItens    = $oSolicita->getItens();
-        $oItem     = $aItens[$oParam->iIndice];
-        db_query("update solicitempcmater set pc16_codmater = ".$oParam->iCodigoItemNovo." where pc16_solicitem = ".$oItem->getCodigoItemSolicitacao());
-        db_query("update solicitemunid set pc17_unid = ".$oParam->iUnidade." where pc17_codigo= ".$oItem->getCodigoItemSolicitacao());
         $rsItens       = db_query("select * from solicitem inner  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo inner  join pcmater  on pcmater.pc01_codmater = solicitempcmater.pc16_codmater where pc11_numero = ".$oSolicita->getCodigoSolicitacao()." order by pc11_codigo");
         
         if (pg_num_rows($rsItens) > 0) {
@@ -249,12 +245,61 @@ switch ($oParam->exec) {
 
             $oItem = db_utils::fieldsMemory($rsItens, $iItem, false, false, true);
             $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
-            $aitens[]   = $oItemSolicitacao;
-
+            $aItens[]   = $oItemSolicitacao;
+            unset($oItem);
           }
         }
 
-        foreach ($aitens as $iIndice => $oItem) {
+        $oItem     = $aItens[$oParam->iIndice];
+        db_query("update solicitempcmater set pc16_codmater = ".$oParam->iCodigoItemNovo." where pc16_solicitem = ".$oItem->getCodigoItemSolicitacao());
+        db_query("update solicitemunid set pc17_unid = ".$oParam->iUnidade." where pc17_codigo= ".$oItem->getCodigoItemSolicitacao());
+
+        //estimativas compilacao e vinculos 
+        
+        $rsVinculoSolicita = db_query("select pc53_solicitafilho,pc10_solicitacaotipo from solicitavinculo inner join solicita on pc10_numero = pc53_solicitafilho  where pc53_solicitapai = ".$oSolicita->getCodigoSolicitacao()." order by pc53_solicitafilho ");
+        for ($iItens = 0; $iItens < pg_num_rows($rsVinculoSolicita); $iItens++) {
+          
+          
+          $pc53_solicitafilho = db_utils::fieldsMemory($rsVinculoSolicita, $iItens)->pc53_solicitafilho;
+          $rsItens       = db_query("select pc11_codigo from solicitem where pc11_numero = ".$pc53_solicitafilho." order by pc11_codigo");
+        
+          
+          if (pg_num_rows($rsItens) > 0) {
+            
+            for ($iItem = 0; $iItem < pg_num_rows($rsItens); $iItem++) {
+
+              $oItem = db_utils::fieldsMemory($rsItens, $iItem);
+              $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
+              $aitens[]   = $oItemSolicitacao;
+              unset($oItem);
+            }
+          }
+
+          $oItem     = $aitens[$oParam->iIndice];
+         
+          db_query("update solicitempcmater set pc16_codmater = ".$oParam->iCodigoItemNovo." where pc16_solicitem = ".$oItem->getCodigoItemSolicitacao());
+          db_query("update solicitemunid set pc17_unid = ".$oParam->iUnidade." where pc17_codigo= ".$oItem->getCodigoItemSolicitacao());
+          unset($aitens);
+          
+        }
+
+
+
+        $rsItens       = db_query("select * from solicitem inner  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo inner  join pcmater  on pcmater.pc01_codmater = solicitempcmater.pc16_codmater where pc11_numero = ".$oSolicita->getCodigoSolicitacao()." order by pc11_codigo");
+        
+        if (pg_num_rows($rsItens) > 0) {
+          
+          for ($iItem = 0; $iItem < pg_num_rows($rsItens); $iItem++) {
+
+            $oItem = db_utils::fieldsMemory($rsItens, $iItem, false, false, true);
+            $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
+            $aItensAbertura[]   = $oItemSolicitacao;
+            unset($oItem);
+          }
+        }
+        
+
+        foreach ($aItensAbertura as $iIndice => $oItem) {
 
           $oItemRetono = new stdClass;
           $oItemRetono->codigoitem = $oItem->getCodigoMaterial();
