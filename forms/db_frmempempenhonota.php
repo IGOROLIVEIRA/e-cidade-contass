@@ -234,7 +234,7 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
                         }
 
                         $result = $clpctipocompra->sql_record($clpctipocompra->sql_query_file(null, "pc50_codcom as e54_codcom,pc50_descr"));
-                        db_selectrecord("e54_codcom", $result, true, $db_opcao, "", "", "", "", "js_reload(this.value)");
+                        db_selectrecord("e54_codcom", $result, true, $db_opcao, "", "", "", "", "js_verificaTipoCompra(this.value, 'js_validaMudancaTipoCompra');");
 
                         ?>
                     </td>
@@ -731,21 +731,49 @@ if (isset($chavepesquisa) && $db_opcao == 1) {
 
 <script>
 window.onload = function () {
-    js_desabilitaTipoCompra();
+    let codigoTipoCompra =  $F('e54_codcom');
+
+    if (codigoTipoCompra) {
+        js_divCarregando('Aguarde, carregando informações...', 'msgbox');
+        js_verificaTipoCompra(codigoTipoCompra, 'js_handleTipoAutorizacao');
+    }
+
+}
+
+function js_verificaTipoCompra(codigoTipoCompra, funcaoRetorno) {
+    let sUrlRPC = 'com4_tipocompra.RPC.php';
+        const oParam = new Object();
+        oParam.sExecucao = 'getTipocompratribunal';
+        oParam.Codtipocom = codigoTipoCompra;
+
+        var oAjax = new Ajax.Request(sUrlRPC, {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: window[funcaoRetorno]
+        });
+}
+
+function js_handleTipoAutorizacao(oAjax) {
+    oRetorno = eval("(" + oAjax.responseText + ")");
+
+    if (oRetorno.tipocompratribunal != 13) {
+        js_desabilitaTipoCompra();
+    }
+    js_removeObj('msgbox');
 }
 
 function js_desabilitaTipoCompra() {
 
-const e54_codcom = document.querySelector('#e54_codcom');
-const e54_codcomdescr = document.querySelector('#e54_codcomdescr');
+    const e54_codcom = document.querySelector('#e54_codcom');
+    const e54_codcomdescr = document.querySelector('#e54_codcomdescr');
 
-let atributos = "background-color:#DEB887; pointer-events: none; touch-action: none;";
+    let atributos = "background-color:#DEB887; pointer-events: none; touch-action: none;";
 
-e54_codcom.style.cssText = atributos;
-e54_codcom.setAttribute('readonly', 'true');
+    e54_codcom.style.cssText = atributos;
+    e54_codcom.setAttribute('readonly', 'true');
 
-e54_codcomdescr.style.cssText = atributos;
-e54_codcomdescr.setAttribute('readonly', 'true');
+    e54_codcomdescr.style.cssText = atributos;
+    e54_codcomdescr.setAttribute('readonly', 'true');
 }
 
 // executar a primeira vez
@@ -894,6 +922,11 @@ new Ajax.Request('emp4_empenhofinanceiro004.RPC.php', {
     }
 
     function js_naoimprimir() {
+        if (!document.querySelector('#e54_codcom').value) {
+            alert("Campo Tipo de Compra nao Informado.")
+            return false;
+        }
+
         if (document.form1.e60_resumo.value == '') {
             alert("Campo Resumo nao Informado.");
             return false;
@@ -990,6 +1023,12 @@ new Ajax.Request('emp4_empenhofinanceiro004.RPC.php', {
     }
 
     function js_valida() {
+
+        if (!document.querySelector('#e54_codcom').value) {
+            alert("Campo Tipo de Compra nao Informado.")
+            return false;
+        }
+
         if (bEmendaParlamentar && document.form1.e60_emendaparlamentar.value == 0) {
             alert("Campo Emenda Parlamentar nao Informado.")
             return false;
@@ -1158,5 +1197,18 @@ new Ajax.Request('emp4_empenhofinanceiro004.RPC.php', {
         document.form1.e60_numconvenio.value = chave1;
         document.form1.c206_objetoconvenio.value = chave2;
         db_iframe_convconvenios.hide();
+    }
+
+    function js_validaMudancaTipoCompra(oAjax) {
+        let result = eval("(" + oAjax.responseText + ")");
+
+        if (result.tipocompratribunal != 13) {
+            alert('Tipo de compra inválido para este tipo de autorização');
+            document.querySelector('#e54_codcom').value = '';
+            document.querySelector('#e54_codcomdescr').value = '';
+
+            return;
+        }
+        js_reload(document.querySelector('#e54_codcom').value);
     }
 </script>

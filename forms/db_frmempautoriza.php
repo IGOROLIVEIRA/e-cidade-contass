@@ -1239,13 +1239,10 @@ db_app::load("DBFormCache.js");
                 document.getElementById('trdadoslicitacao').style.display = ' ';
             }
         }
-
     }
 
-
-
     function js_verificatipocompratribunal(value) {
-        console.log(value);
+
         var sUrlRPC = 'com4_tipocompra.RPC.php';
         var pc50_codcom = value;
         js_divCarregando('Aguarde, carregando informações...', 'msgbox');
