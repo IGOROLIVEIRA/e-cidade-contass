@@ -80,6 +80,42 @@ if (isset($opcao) && $opcao=="alterar") {
 }
 ?>
 
+<style>
+     @media screen and (min-width: 1281px) and (max-width: 1440px) {
+        #e55_autori, #e55_sequen, #e55_item {
+            width: 92px;
+        }
+
+        #pc01_descrmater, #e55_marca, #e55_descr {
+            width: 492px;
+        }
+
+        #e55_vltot {
+            width: 119px;
+        }
+        #o56_descr {
+            margin-left: 1px;
+            width: 337px;
+        }
+        #e55_quant {
+            width: 106px;
+        }
+    }
+    @media screen and  (max-width: 1280px) {
+         #pc01_descrmater, #e55_marca, #e55_descr {
+             width: 400px;
+         }
+
+         #e55_vltot, #e55_vluni, #e55_quant {
+             width: 81px;
+         }
+         #o56_descr {
+             margin-left: 1px;
+             width: 240px;
+         }
+    }
+</style>
+
 <script type="text/javascript" src="scripts/scripts.js"></script>
 <script type="text/javascript" src="scripts/prototype.js"></script>
 
@@ -157,15 +193,7 @@ function js_troca(codele) {
   document.form1.o56_descr.value = descricao;
 }
 </script>
-<style>
-    #e55_autori, #e55_sequen, #e55_item {
-        width: 92px;
-    }
 
-    #pc01_descrmater, #e55_marca {
-        width: 492px;
-    }
-</style>
 <form name="form1" method="post" action="">
 <center>
 <fieldset style="margin-top:5px; width:55%;">
@@ -269,7 +297,7 @@ function js_troca(codele) {
     }
     $clempautitem->erro_msg=$ero;
     db_input('elemento01',20,0,true,'text',3);
-    db_input('o56_descr',40,0,true,'text',3,'','','','margin-left: 1px; width: 336px;');
+    db_input('o56_descr',40,0,true,'text',3,'','','','');
     if (isset($numrows99) && $numrows99>0) {
       for($i=0; $i<$numrows99; $i++){
         db_fieldsmemory($result99,$i);
@@ -296,7 +324,7 @@ function js_troca(codele) {
             } else {
                 $db_opcao_e55_quant = $db_opcao;
             }
-            db_input('e55_quant',8,$Ie55_quant,true,'text',$db_opcao_e55_quant,"onchange=\"js_calcula('quant');\"",'','','width: 106px');
+            db_input('e55_quant',8,$Ie55_quant,true,'text',$db_opcao_e55_quant,"onchange=\"js_calcula('quant');\"",'','','');
         ?>
         <script>
           ///Controla a validação de vírgulas e pontos.
