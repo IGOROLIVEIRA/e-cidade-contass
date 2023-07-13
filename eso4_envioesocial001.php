@@ -357,7 +357,7 @@ try {
             tipoCol.style.display = 'inline';
         } else if (document.getElementById('S1210').checked) {
             indapuracaoCol.style.display = 'inline';
-            tppgtoCol.style.display = 'none';
+            tppgtoCol.style.display = 'inline';
             transDCTFWeb.style.display = 'none';
             tipoCol.style.display = 'none';
         } else {
