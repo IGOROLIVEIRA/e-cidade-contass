@@ -35,19 +35,19 @@ class cl_aop122023
   var $si139_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si139_sequencial = int8 = sequencial 
-                 si139_tiporegistro = int8 = Tipo do  registro 
-                 si139_codreduzido = int8 = Código  Identificador da  Ordem 
-                 si139_tipodocumento = varchar(2) = Tipo do Documento 
-                 si139_nrodocumento = varchar(15) = Número do  documento 
-                 si139_codctb = int8 = Código Identificador da Conta Bancária 
-                 si139_codfontectb = int8 = Código da fonte de recursos 
-                 si139_dtemissao = date = Data de emissão do documento 
+                 si139_sequencial = int8 = sequencial
+                 si139_tiporegistro = int8 = Tipo do  registro
+                 si139_codreduzido = int8 = Código  Identificador da  Ordem
+                 si139_tipodocumento = varchar(2) = Tipo do Documento
+                 si139_nrodocumento = varchar(15) = Número do  documento
+                 si139_codctb = int8 = Código Identificador da Conta Bancária
+                 si139_codfontectb = int8 = Código da fonte de recursos
+                 si139_dtemissao = date = Data de emissão do documento
                  si139_vldocumento = float8 = Valor da OP associado ao documento
-                 si139_desctipodocumentoop = varchar(50) = Descrição  
-                 si139_mes = int8 = Mês 
-                 si139_reg10 = int8 = reg10 
-                 si139_instit = int4 = Instituição 
+                 si139_desctipodocumentoop = varchar(50) = Descrição
+                 si139_mes = int8 = Mês
+                 si139_reg10 = int8 = reg10
+                 si139_instit = int4 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -186,34 +186,34 @@ class cl_aop122023
       return false;
     }
     $sql = "insert into aop122023(
-                                       si139_sequencial 
-                                      ,si139_tiporegistro 
-                                      ,si139_codreduzido 
-                                      ,si139_tipodocumento 
-                                      ,si139_nrodocumento 
-                                      ,si139_codctb 
-                                      ,si139_codfontectb 
-                                      ,si139_dtemissao 
-                                      ,si139_vldocumento 
+                                       si139_sequencial
+                                      ,si139_tiporegistro
+                                      ,si139_codreduzido
+                                      ,si139_tipodocumento
+                                      ,si139_nrodocumento
+                                      ,si139_codctb
+                                      ,si139_codfontectb
+                                      ,si139_dtemissao
+                                      ,si139_vldocumento
                                       ,si139_desctipodocumentoop
-                                      ,si139_mes 
-                                      ,si139_reg10 
-                                      ,si139_instit 
+                                      ,si139_mes
+                                      ,si139_reg10
+                                      ,si139_instit
                        )
                 values (
-                                $this->si139_sequencial 
-                               ,$this->si139_tiporegistro 
-                               ,$this->si139_codreduzido 
-                               ,'$this->si139_tipodocumento' 
-                               ,'$this->si139_nrodocumento' 
-                               ,$this->si139_codctb 
-                               ,$this->si139_codfontectb 
+                                $this->si139_sequencial
+                               ,$this->si139_tiporegistro
+                               ,$this->si139_codreduzido
+                               ,'$this->si139_tipodocumento'
+                               ,'$this->si139_nrodocumento'
+                               ,$this->si139_codctb
+                               ,$this->si139_codfontectb
                                ," . ($this->si139_dtemissao == "null" || $this->si139_dtemissao == "" ? "null" : "'" . $this->si139_dtemissao . "'") . "
                                ,$this->si139_vldocumento
-                               ,'$this->si139_desctipodocumentoop' 
-                               ,$this->si139_mes 
-                               ,$this->si139_reg10 
-                               ,$this->si139_instit 
+                               ,'$this->si139_desctipodocumentoop'
+                               ,$this->si139_mes
+                               ,$this->si139_reg10
+                               ,$this->si139_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -564,7 +564,7 @@ class cl_aop122023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -586,7 +586,7 @@ class cl_aop122023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -602,7 +602,7 @@ class cl_aop122023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -623,7 +623,7 @@ class cl_aop122023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -633,6 +633,71 @@ class cl_aop122023
 
     return $sql;
   }
-}
 
-?>
+    public function sqlReg12($oEmpPago, $iAnoUsu)
+    {
+        $sSql12 = " SELECT
+                    12 AS tiporegistro,
+                    coremp.k12_codord AS codreduzidoop,
+                    CASE
+                        WHEN e96_codigo = 4
+                        AND c60_codsis = 5 THEN 5
+                        WHEN e96_codigo = 1 THEN 5
+                        WHEN e96_codigo = 2 THEN 1
+                        ELSE 99
+                    END AS tipodocumentoop,
+                    CASE
+                        WHEN e96_codigo = 2 THEN e86_cheque
+                        ELSE NULL
+                    END AS nrodocumento,
+                    c61_reduz AS codctb,
+                    o15_codigo AS codfontectb,
+                    e50_data AS dtemissao,
+                    corrente.k12_valor AS vldocumento,
+                    CASE
+                        WHEN c60_codsis = 5 THEN ''
+                        ELSE e96_descr
+                    END desctipodocumentoop,
+                    c23_conlancam AS codlan,
+                    e81_codmov,
+                    e81_numdoc
+                FROM corrente
+                JOIN coremp ON (coremp.k12_autent, coremp.k12_data, coremp.k12_id) = (corrente.k12_autent, corrente.k12_data, corrente.k12_id)
+                JOIN conplanoreduz ON c61_reduz = k12_conta
+                JOIN conplano ON c61_codcon = c60_codcon AND c61_anousu = c60_anousu
+                LEFT JOIN conplanoconta ON c63_codcon = c60_codcon AND c60_anousu = c63_anousu
+                JOIN corgrupocorrente ON corgrupocorrente.k105_autent = corrente.k12_autent AND corgrupocorrente.k105_data = corrente.k12_data
+                    AND (corgrupocorrente.k105_data, corgrupocorrente.k105_id) = (corrente.k12_data, corrente.k12_id)
+                JOIN conlancamcorgrupocorrente ON c23_corgrupocorrente = corgrupocorrente.k105_sequencial
+                JOIN pagordem ON (k12_empen, k12_codord) = (e50_numemp, e50_codord)
+                INNER JOIN empempenho ON empempenho.e60_numemp = e50_numemp
+                INNER JOIN empagemov ON empempenho.e60_numemp = empagemov.e81_numemp
+                INNER JOIN empord ON empord.e82_codmov = empagemov.e81_codmov
+                LEFT JOIN empagemovforma ON empagemovforma.e97_codmov = empagemov.e81_codmov
+                LEFT JOIN empageforma ON empageforma.e96_codigo = empagemovforma.e97_codforma
+                LEFT JOIN empageconf ON empageconf.e86_codmov = empagemov.e81_codmov
+                JOIN orcdotacao ON (o58_coddot, o58_anousu) = (e60_coddot, e60_anousu)
+                JOIN orctiporec ON o58_codigo = o15_codigo
+                WHERE k12_codord = {$oEmpPago->ordem}
+                  AND c23_conlancam = {$oEmpPago->lancamento}
+                  AND c61_anousu = {$iAnoUsu}
+                  AND e81_cancelado IS NULL";
+
+        return db_query ($sSql12);
+    }
+
+    public function getUnionPagFont($reg12, $iAno, $sDataFinal, $iInstit, $iAnousu)
+    {
+        return " SELECT DISTINCT 'ctb10{$iAno}' as ano, si95_codctb  AS contapag, o15_codtri AS fonte from conplanoconta
+                JOIN conplanoreduz ON c61_codcon = c63_codcon AND c61_anousu = c63_anousu
+                JOIN orctiporec ON c61_codigo = o15_codigo
+                JOIN ctb10{$iAno} ON si95_banco = c63_banco
+                        AND substring(si95_agencia,'([0-9]{1,99})')::integer = substring(c63_agencia,'([0-9]{1,99})')::integer
+                        AND coalesce(si95_digitoverificadoragencia, '') = coalesce(c63_dvagencia, '')
+                        AND si95_contabancaria = c63_conta::int8
+                        AND si95_digitoverificadorcontabancaria = c63_dvconta
+                        AND si95_tipoconta::int8 = (case when c63_tipoconta in (2,3) then 2 else 1 end) join ctb20{$iAno} on si96_codctb = si95_codctb AND si96_mes = si95_mes
+                WHERE si95_instit =  {$iInstit} AND c61_reduz = {$reg12->codctb} AND c61_anousu = {$iAnousu}
+                  AND si95_mes <='{$sDataFinal}'";
+    }
+}
