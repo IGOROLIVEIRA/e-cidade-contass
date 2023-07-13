@@ -493,11 +493,11 @@ function pes4_geracalculo003($calcula_parcial=null,$calcula_pensao=null) {
           // R982 BASE IRF 13O SAL (BRUTA) BASE -
           // R983 BASE IRF FERIAS BASE -
           
-		  $y1 = ( ($opcao_geral == 1 || $opcao_geral == 8 )? 1: ( $opcao_geral == 5 ? 2: 3 ) );
+		  $y1 = ( ($opcao_geral == 1 || $opcao_geral == 8 || $opcao_geral == 4 )? 1: ( $opcao_geral == 5 ? 2: 3 ) );
 		  
-		  if ($icalc == 2 && $opcao_geral != 4) {
+		  if ($icalc == 2) {
 		  	
-   		    $rubrica1 = ( ($opcao_geral == 1 || $opcao_geral == 8 ) ? "R985": ( $opcao_geral == 5 ? "R986": "R987" ) );
+   		    $rubrica1 = ( ($opcao_geral == 1 || $opcao_geral == 8 || $opcao_geral == 4 ) ? "R985": ( $opcao_geral == 5 ? "R986": "R987" ) );
    		    $rubrica  = ( ($opcao_geral == 1 || $opcao_geral == 8 ) ? "R981": ( $opcao_geral == 5 ? "R982": "R983" ) );
           
 	        //echo "<BR> entrando no ajusta_previdencia() --> $rubrica1";
@@ -506,8 +506,8 @@ function pes4_geracalculo003($calcula_parcial=null,$calcula_pensao=null) {
 		    //echo "<BR> saiu do ajusta_previdencia()";
 		    
           }
-          
-		  if ( ( $icalc == 2 ) && $opcao_geral == 1 ) {
+
+		  if ( ( $icalc == 2 ) && ($opcao_geral == 1 || $opcao_geral == 4) ) {
 		  	
 		    if($db21_codcli == 17){
 
