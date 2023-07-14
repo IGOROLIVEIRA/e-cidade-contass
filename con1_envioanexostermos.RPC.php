@@ -102,7 +102,7 @@ switch ($oParam->exec) {
 
             try {
 
-                $rsAnexos = $clcontroleanexostermospncp->sql_record($clcontroleanexostermospncp->sql_query(null, " * ", null, "l214_sequencial = $oParam->iCodigoTermo and ac57_sequencial=$iDocumentos"));
+                $rsAnexos = $clcontroleanexostermospncp->sql_record($clcontroleanexostermospncp->sql_query(null, " * ", null, "l214_sequencial = $oParam->iCodigoTermo and ac57_sequencialarquivo=$iDocumentos"));
                 $oDadosAnexo = db_utils::fieldsMemory($rsAnexos, 0);
 
                 if (pg_num_rows($rsAnexos) == null) {

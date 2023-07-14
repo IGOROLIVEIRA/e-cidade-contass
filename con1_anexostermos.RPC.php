@@ -40,7 +40,7 @@ switch ($oParam->exec) {
              * Abre um arquivo em formato binario somente leitura
              */
             $rDocumento = fopen($oParam->arquivo, "rb");
-            
+
             /**
              * Pega todo o conteúdo do arquivo e coloca no resource
              */
@@ -60,7 +60,7 @@ switch ($oParam->exec) {
             $oObjetoBanco = pg_lo_open($conn, $oOidBanco, "w");
             pg_lo_write($oObjetoBanco, $rDadosDocumento);
             pg_lo_close($oObjetoBanco);
-            
+
             $oRetorno->message = "Anexo Salvo com Sucesso !";
 
             db_fim_transacao();
@@ -81,7 +81,7 @@ switch ($oParam->exec) {
             WHEN ac56_tipoanexo = 15 THEN 'Termo de Apostilamento'
             WHEN ac56_tipoanexo = 17 THEN 'Nota de Empenho'
         END AS ac56_tipoanexo";
-        
+
         $resultAnexos = $cl_anexotermospncp->sql_record($cl_anexotermospncp->sql_query(null, $campos, null, "ac56_acocontroletermospncp = $oParam->sequencial"));
 
         for ($iCont = 0; $iCont < pg_num_rows($resultAnexos); $iCont++) {
@@ -89,7 +89,7 @@ switch ($oParam->exec) {
 
             $oDocumentos      = new stdClass();
             $oDocumentos->iCodigo = $oDadosAnexo->ac56_sequencial;
-            $oDocumentos->sTipo   = $oDadosAnexo->ac56_tipoanexo;
+            $oDocumentos->sTipo   = urlencode($oDadosAnexo->ac56_tipoanexo);
             $oRetorno->dados[]    = $oDocumentos;
         }
 

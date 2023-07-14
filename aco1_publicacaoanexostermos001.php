@@ -146,14 +146,11 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
   * Cria um listener para subir a imagem, e criar um preview da mesma
   */
   $("uploadfile").observe('change', function() {
-
-    js_divCarregando('Aguarde... Carregando Foto','msgbox');
-
-    let iFrame = document.createElement("iframe");
-    iFrame.src = 'func_uploadtermos.php?clone=form';
-    iFrame.id  = 'uploadIframe';
-    $('anexo').appendChild(iFrame);
       startLoading();
+      let iFrame = document.createElement("iframe");
+      iFrame.src = 'func_uploadtermos.php?clone=form';
+      iFrame.id  = 'uploadIframe';
+      $('anexo').appendChild(iFrame);
   });
 
   function startLoading() {
@@ -189,7 +186,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
     oRetorno.dados.each(function (oDocumento, iSeq) {
         let aLinha = [];
         aLinha[0]  = oDocumento.iCodigo;
-        aLinha[1]  = decodeURIComponent(oDocumento.sTipo.replace(/\+/g,  " "));
+        aLinha[1]  = oDocumento.sTipo.urlDecode();
         aLinha[2]  = '<input type="button" value="E" onclick="js_excluirAnexo('+oDocumento.iCodigo+')"><input type="button" value="Download" onclick="js_DownloadAnexo('+oDocumento.iCodigo+')">';
         oGridDocumentos.addRow(aLinha);
     });
