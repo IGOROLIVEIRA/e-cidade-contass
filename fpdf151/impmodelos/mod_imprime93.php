@@ -485,11 +485,12 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
 
   $this->objpdf->Setfont('Arial', 'B', 7);
   $mais   = $this->objpdf->NbLines(95, db_formatar($selemento, 'elemento') . " - " . $sdelemento);
+  
   $mostra = $xlin;
   $x      = $this->muda_pag3($pagina, $mostra, $xcol, "false", $contapagina, $mais);
 
   if (isset($selemento) && trim($selemento) != "") {
-    $this->objpdf->Row(array('', '', '', db_formatar($selemento, 'elemento') . " - " . $sdelemento, '', ''), 3, false, 4);
+    $this->objpdf->Row(array('', '', '', db_formatar($selemento, 'elemento') . " - " . $sdelemento." - ".$mais, '', ''), 3, false, 4);
   }
 
   $mais   = $this->objpdf->NbLines(95, $scodpcmater . $descricaoitem . $barran);
@@ -589,8 +590,8 @@ if ($contapagina == 1) {
 //  $this->objpdf->rect($xcol + 172, $xlin + 224.7, 30, 10.8, 2, 'DF', '34');
 //  $this->objpdf->text($xcol + 120, $xlin + 230.7, 'T O T A L');
 //  $this->objpdf->text(180, $xlin + 230, db_formatar($xtotal, 'f'));
-  $this->objpdf->rect($xcol, $xlin + 237, 102, 33, 2, 'DF', '1234');
-  $this->objpdf->rect($xcol + 103, $xlin + 237, 99, 33, 2, 'DF', '1234');
+  $this->objpdf->rect($xcol, $xlin + 243, 102, 33, 2, 'DF', '1234');
+  $this->objpdf->rect($xcol + 103, $xlin + 243, 99, 33, 2, 'DF', '1234');
   $this->objpdf->setfillcolor(0, 0, 0);
   $this->objpdf->setfillcolor(0, 0, 0);
   $this->objpdf->text($xcol + 23, $xlin + 244, strtoupper($this->municpref) . ', ' . substr($this->emissao, 8, 2) . ' DE ' . strtoupper(db_mes(substr($this->emissao, 5, 2))) . ' DE ' . substr($this->emissao, 0, 4) . '.');
@@ -598,13 +599,13 @@ if ($contapagina == 1) {
   $this->objpdf->text($xcol + 45, $xlin + 268, substr($this->Sorgao, 0, 35));
   $this->objpdf->text($xcol + 135, $xlin + 256, "ORDENADOR DA DESPESA", 0, 4);
 } else {
-  $this->objpdf->rect($xcol, $xlin + 237, 102, 33, 2, 'DF', '1234');
-  $this->objpdf->rect($xcol + 103, $xlin + 237, 99, 33, 2, 'DF', '1234');
+  $this->objpdf->rect($xcol, $xlin + 243, 102, 29, 2, 'DF', '1234');
+  $this->objpdf->rect($xcol + 103, $xlin + 243, 99, 29, 2, 'DF', '1234');
   $this->objpdf->setfillcolor(0, 0, 0);
   $this->objpdf->setfillcolor(0, 0, 0);
-  $this->objpdf->text($xcol + 23, $xlin + 244, strtoupper($this->municpref) . ', ' . substr($this->emissao, 8, 2) . ' DE ' . strtoupper(db_mes(substr($this->emissao, 5, 2))) . ' DE ' . substr($this->emissao, 0, 4) . '.');
+  $this->objpdf->text($xcol + 23, $xlin + 248, strtoupper($this->municpref) . ', ' . substr($this->emissao, 8, 2) . ' DE ' . strtoupper(db_mes(substr($this->emissao, 5, 2))) . ' DE ' . substr($this->emissao, 0, 4) . '.');
   $this->objpdf->text($xcol + 43, $xlin + 256, "AUTORIZO", 0, 4);
-  $this->objpdf->text($xcol + 45, $xlin + 268, substr($this->Sorgao, 0, 35));
+  $this->objpdf->text($xcol + 23, $xlin + 268, substr($this->Sorgao, 0, 35));
   $this->objpdf->text($xcol + 135, $xlin + 256, "ORDENADOR DA DESPESA", 0, 4);
 //  $this->objpdf->text($xcol + 120, $xlin + 268, 'T O T A L');
 //  $this->objpdf->text($xcol + 180, $xlin + 268, db_formatar($xtotal, "f"));

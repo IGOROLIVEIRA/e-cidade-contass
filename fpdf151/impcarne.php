@@ -1220,137 +1220,128 @@ class db_impcarne extends cl_assinatura
                   	                  inner join db_paragrafopadrao on db61_codparag = db62_codparag
                 	               where db60_tipodoc = 1400 and db60_instit = cast(" . db_getsession("DB_instit") . " as integer) order by db62_ordem";
 
-                    $resparagpadrao = @db_query($sqlparagpadrao);
+          $resparagpadrao = @db_query($sqlparagpadrao);
 
-                    if (@pg_numrows($resparagpadrao) > 0) {
-                        db_fieldsmemory($resparagpadrao, 0);
+          if (@pg_numrows($resparagpadrao) > 0) {
+            db_fieldsmemory($resparagpadrao, 0);
 
-                        eval($db61_texto);
-                        $flag_rodape = true;
-                    }
-                }
-            }
-            $contapagina += 1;
-            $this->objpdf->addpage();
-            $pagina += 1;
-            $muda_pag = true;
+            eval($db61_texto);
+            $flag_rodape = true;
+          }
+        }
+      }
+      $contapagina += 1;
+      $this->objpdf->addpage();
+      $pagina += 1;
+      $muda_pag = true;
 
-            $this->objpdf->settopmargin(1);
-            $xlin = 20;
-            $xcol = 4;
-
-
-            $getlogo = db_getnomelogo();
-            $logo = ($getlogo == false ? '' : $getlogo);
-
-            // Imprime cabeï¿½alho com dados sobre a prefeitura se mudar de pï¿½gina
-            $this->objpdf->setfillcolor(245);
-            $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
-            $this->objpdf->setfillcolor(255, 255, 255);
-            $this->objpdf->Setfont('Arial', 'B', 9);
-            $this->objpdf->text(130, $xlin - 13, 'PROCESSO DE COMPRA N' . CHR(176));
-            $this->objpdf->text(185, $xlin - 13, db_formatar($this->Snumero, 's', '0', 6, 'e'));
-            $this->objpdf->Setfont('Arial', 'B', 7);
-            $this->objpdf->text(130, $xlin - 9, 'ORGAO');
-            $this->objpdf->text(142, $xlin - 9, ': ' . substr($this->Sorgao, 0, 35));
-            $this->objpdf->text(130, $xlin - 5, 'UNIDADE');
-            $this->objpdf->text(142, $xlin - 5, ': ' . substr($this->Sunidade, 0, 35));
-            $this->objpdf->Setfont('Arial', 'B', 9);
-            $this->objpdf->Image('imagens/files/' . $logo, 15, $xlin - 17, 12);
-            $this->objpdf->Setfont('Arial', 'B', 9);
-            $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
-            $this->objpdf->Setfont('Arial', '', 9);
-            $this->objpdf->text(40, $xlin - 11, $this->enderpref);
-            $this->objpdf->text(40, $xlin - 8, $this->municpref);
-            $this->objpdf->text(40, $xlin - 5, $this->telefpref);
-            $this->objpdf->text(40, $xlin - 2, $this->emailpref);
-            $this->objpdf->text(40, $xlin + 1, db_formatar($this->cgcpref, 'cnpj'));
-            //      $this->objpdf->text(40,$xlin+2,'Continuaï¿½ï¿½o da Pï¿½gina '.($contapagina-1));
-            $this->objpdf->text(130, $xlin + 2, 'Página ' . $contapagina);
-
-            $xlin = 0;
-            if ((isset($fornec) && $fornec == "false") || !isset($fornec)) {
-                $this->objpdf->Setfont('Arial', 'B', 8);
-
-                if ($mod == 1) {
-
-                    // Caixas dos label's
-                    $this->objpdf->rect($xcol, $xlin + 24, 10, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 10, $xlin + 24, 12, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 22, $xlin + 24, 22, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 44, $xlin + 24, 98, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 142, $xlin + 24, 30, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 172, $xlin + 24, 30, 6, 2, 'DF', '12');
+      $this->objpdf->settopmargin(1);
+      $xlin = 20;
+      $xcol = 4;
 
 
-                    // Caixa dos itens
-                    $this->objpdf->rect($xcol, $xlin + 30, 10, 262, 2, 'DF', '34');
-                    // Caixa da quantidade
-                    $this->objpdf->rect($xcol + 10, $xlin + 30, 12, 262, 2, 'DF', '34');
-                    $this->objpdf->rect($xcol + 22, $xlin + 30, 22, 262, 2, 'DF', '34');
-                    // Caixa dos materiais ou servicos
-                    $this->objpdf->rect($xcol + 44, $xlin + 30, 98, 262, 2, 'DF', '34');
-                    // Caixa dos valores unitario
-                    $this->objpdf->rect($xcol + 142, $xlin + 30, 30, 262, 2, 'DF', '');
-                    // Caixa dos valores totais dos iten
-                    $this->objpdf->rect($xcol + 172, $xlin + 30, 30, 262, 2, 'DF', '34');
+      $getlogo = db_getnomelogo();
+      $logo    = ($getlogo == false ? '' : $getlogo);
 
-                    $this->objpdf->sety($xlin + 66);
-                    $alt = 4;
+      // Imprime cabeï¿½alho com dados sobre a prefeitura se mudar de pï¿½gina
+      $this->objpdf->setfillcolor(245);
+      $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 290, 2, 'DF', '1234');
+      $this->objpdf->setfillcolor(255, 255, 255);
+      $this->objpdf->Setfont('Arial', 'B', 9);
+      $this->objpdf->text(130, $xlin - 13, 'PROCESSO DE COMPRA N' . CHR(176));
+      $this->objpdf->text(185, $xlin - 13, db_formatar($this->Snumero, 's', '0', 6, 'e'));
+      $this->objpdf->Setfont('Arial', 'B', 7);
+      $this->objpdf->text(130, $xlin - 9, 'ORGAO');
+      $this->objpdf->text(142, $xlin - 9, ': ' . substr($this->Sorgao, 0, 35));
+      $this->objpdf->text(130, $xlin - 5, 'UNIDADE');
+      $this->objpdf->text(142, $xlin - 5, ': ' . substr($this->Sunidade, 0, 35));
+      $this->objpdf->Setfont('Arial', 'B', 9);
+      $this->objpdf->Image('imagens/files/' . $logo, 15, $xlin - 17, 12);
+      $this->objpdf->Setfont('Arial', 'B', 9);
+      $this->objpdf->text(40, $xlin - 15, $this->prefeitura);
+      $this->objpdf->Setfont('Arial', '', 9);
+      $this->objpdf->text(40, $xlin - 11, $this->enderpref);
+      $this->objpdf->text(40, $xlin - 8, $this->municpref);
+      $this->objpdf->text(40, $xlin - 5, $this->telefpref);
+      $this->objpdf->text(40, $xlin - 2, $this->emailpref);
+      $this->objpdf->text(40, $xlin + 1, db_formatar($this->cgcpref, 'cnpj'));
+      //      $this->objpdf->text(40,$xlin+2,'Continuaï¿½ï¿½o da Pï¿½gina '.($contapagina-1));
+      $this->objpdf->text(130, $xlin + 2, 'Página ' . $contapagina);
 
-                    $this->objpdf->Setfont('Arial', 'B', 8);
-                    $this->objpdf->text($xcol + 2, $xlin + 28, 'ITEM');
-                    $this->objpdf->text($xcol + 11, $xlin + 28, 'QUANT');
-                    $this->objpdf->text($xcol + 30, $xlin + 28, 'REF');
-                    $this->objpdf->text($xcol + 70, $xlin + 28, 'MATERIAL OU SERVIÇO');
-                    $this->objpdf->text($xcol + 145, $xlin + 28, 'VALOR UNITÁRIO');
-                    $this->objpdf->text($xcol + 176, $xlin + 28, 'VALOR TOTAL');
+      $xlin = 0;
+      if ((isset($fornec) && $fornec == "false") || !isset($fornec)) {
+        $this->objpdf->Setfont('Arial', 'B', 8);
 
-                    $maiscol = 0;
-                    $xlin = 20;
-                    // Seta altura nova para impressão dos dados
-                    $this->objpdf->sety($xlin + 11);
-                    $this->objpdf->setleftmargin(3);
-                    $x = true;
-                    $this->objpdf->Setfont('Arial', '', 7);
-                } else {
+        if ($mod == 1) {
 
-                    // Caixas dos label's
-                    $this->objpdf->rect($xcol, $xlin + 32, 10, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 10, $xlin + 32, 30, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 40, $xlin + 32, 25, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 65, $xlin + 32, 107, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 172, $xlin + 32, 30, 6, 2, 'DF', '12');
+          // Caixas dos label's
+          $this->objpdf->rect($xcol, $xlin + 24, 10, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 10, $xlin + 24, 12, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 22, $xlin + 24, 22, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 44, $xlin + 24, 158, 6, 2, 'DF', '12');
 
-                    $menos = 0;
-                    $getdoy = 32;
 
-                    $this->objpdf->rect($xcol, $xlin + 32, 10, 262, 2, 'DF', '34');
-                    $this->objpdf->rect($xcol + 10, $xlin + 32, 30, 262, 2, 'DF', '34');
-                    $this->objpdf->rect($xcol + 40, $xlin + 32, 25, 262, 2, 'DF', '34');
-                    $this->objpdf->rect($xcol + 65, $xlin + 32, 107, 262, 2, 'DF', '34');
-                    $this->objpdf->rect($xcol + 172, $xlin + 32, 30, 262, 2, 'DF', '34');
+          // Caixa dos itens
+          $this->objpdf->rect($xcol,    $xlin + 30, 10, 233, 2, 'DF', '34');
+          // Caixa da quantidade
+          $this->objpdf->rect($xcol + 10, $xlin + 30, 12, 233, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 22, $xlin + 30, 22, 233, 2, 'DF', '34');
+          // Caixa dos materiais ou servicos
+          $this->objpdf->rect($xcol + 44, $xlin + 30, 158, 233, 2, 'DF', '34');
 
-                    $this->objpdf->sety($xlin + 28);
+          $this->objpdf->sety($xlin + 66);
+          $alt = 4;
 
-                    // Label das colunas
-                    $this->objpdf->Setfont('Arial', 'B', 8);
-                    $this->objpdf->text($xcol + 2, $xlin + $getdoy + 4, 'ITEM');
-                    $this->objpdf->text($xcol + 14, $xlin + $getdoy + 4, 'QUANTIDADES');
-                    $this->objpdf->text($xcol + 50, $xlin + $getdoy + 4, 'REF');
-                    $this->objpdf->text($xcol + 105, $xlin + $getdoy + 4, 'MATERIAL OU SERVIÇO');
-                    $this->objpdf->text($xcol + 176, $xlin + $getdoy + 4, 'VALOR TOTAL');
+          $this->objpdf->Setfont('Arial', 'B', 8);
+          $this->objpdf->text($xcol +   2, $xlin + 28, 'ITEM');
+          $this->objpdf->text($xcol +  11, $xlin + 28, 'QUANT');
+          $this->objpdf->text($xcol +  30, $xlin + 28, 'REF');
+          $this->objpdf->text($xcol +  70, $xlin + 28, 'MATERIAL OU SERVssIÇO');
+          //$this->objpdf->text($xcol + 145, $xlin + 28, 'VALOR UNITÁRIO');
+          //$this->objpdf->text($xcol + 176, $xlin + 28, 'VALOR TOTAL');
 
-                    $maiscol = 0;
-                    $xlin = 20;
-                    // Seta altura nova para impressão dos dados
-                    $this->objpdf->sety($xlin + 20);
-                    $this->objpdf->setleftmargin(3);
-                    $x = true;
-                    $this->objpdf->Setfont('Arial', '', 7);
-                }
-            } else if (isset($fornec) && $fornec == "true") {
-            }
+          $maiscol = 0;
+          $xlin = 20;
+          // Seta altura nova para impressão dos dados
+          $this->objpdf->sety($xlin + 11);
+          $this->objpdf->setleftmargin(3);
+          $x = true;
+          $this->objpdf->Setfont('Arial', 'B', 7);
+        } else {
+
+          // Caixas dos label's
+          $this->objpdf->rect($xcol, $xlin + 32, 10, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 10, $xlin + 32, 30, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 40, $xlin + 32, 25, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 65, $xlin + 32, 107, 6, 2, 'DF', '12');
+          $this->objpdf->rect($xcol + 172, $xlin + 32, 30, 6, 2, 'DF', '12');
+
+          $menos = 0;
+          $getdoy = 32;
+
+          $this->objpdf->rect($xcol, $xlin + 32, 10, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 10, $xlin + 32, 30, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 40, $xlin + 32, 25, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 65, $xlin + 32, 107, 262, 2, 'DF', '34');
+          $this->objpdf->rect($xcol + 172, $xlin + 32, 30, 262, 2, 'DF', '34');
+
+          $this->objpdf->sety($xlin + 28);
+
+          // Label das colunas
+          $this->objpdf->Setfont('Arial', 'B', 8);
+          $this->objpdf->text($xcol + 2, $xlin + $getdoy + 4, 'ITEM');
+          $this->objpdf->text($xcol + 14, $xlin + $getdoy + 4, 'QUANTIDADES');
+          $this->objpdf->text($xcol + 50, $xlin + $getdoy + 4, 'REF');
+          $this->objpdf->text($xcol + 105, $xlin + $getdoy + 4, 'MATERIAL OU SERVIÇO');
+          $this->objpdf->text($xcol + 176, $xlin + $getdoy + 4, 'VALOR TOTAL');
+
+          $maiscol = 0;
+          $xlin = 20;
+          // Seta altura nova para impressão dos dados
+          $this->objpdf->sety($xlin + 20);
+          $this->objpdf->setleftmargin(3);
+          $x = true;
+          $this->objpdf->Setfont('Arial', '', 7);
         }
         return $x;
     }
