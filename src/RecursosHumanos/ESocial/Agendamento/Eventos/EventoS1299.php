@@ -63,8 +63,8 @@ class EventoS1299 extends EventoBase
                 //beneficiários no período de apuração?
                 //Se for igual a [S], deve existir evento de remuneração (S-1200, S-1202, S-1207, S-2299 ou S-2399)
                 //para o período de apuração. Caso contrário, não deve existir evento de remuneração.
-
-                $std->infofech->evtpgtos = 'S';  //obrigatorio
+                if($this->evtpgtos == 'S')
+                    $std->infofech->evtpgtos = $this->evtpgtos;  //obrigatorio
                 //Possui informações relativas a remuneração de trabalhadores ou provento/pensão de beneficiários no período de apuração?
                 //Se for igual a [S], deve existir evento de remuneração (S-1200, S-1202, S-1207, S-2299 ou S-2399) para o
                 //período de apuração, considerando o campo {indGuia}(1299_ideEvento_indGuia). Caso contrário, não deve existir

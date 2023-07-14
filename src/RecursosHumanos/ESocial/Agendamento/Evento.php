@@ -80,6 +80,8 @@ class Evento
     private $tpevento;
 
     private $transDCTFWeb;
+
+    private $evtpgtos;
     
     /**
      * @var array
@@ -108,6 +110,7 @@ class Evento
         $tppgto = null,
         $tpevento = null,
         $transDCTFWeb = null,
+        $evtpgtos = null,
         $aDadosExclusao = null
     ) {
         /**
@@ -130,6 +133,7 @@ class Evento
         $this->tppgto                   = $tppgto;
         $this->tpevento                 = $tpevento;
         $this->transDCTFWeb             = $transDCTFWeb;
+        $this->evtpgtos                 = $evtpgtos;
         $this->aDadosExclusao           = $aDadosExclusao;
 
         $dado = json_encode(\DBString::utf8_encode_all($this->dado));
@@ -258,6 +262,7 @@ class Evento
         $evento->setTppgto($this->tppgto);
         $evento->setTpevento($this->tpevento);
         $evento->setTransDCTFWeb($this->transDCTFWeb);
+        $evento->setEvtpgtos($this->evtpgtos);
         $evento->setDadosExclusao($this->aDadosExclusao);
         if (!is_object($evento)) {
             throw new \Exception("Objeto S{$this->tipoEvento} não encontrado.");

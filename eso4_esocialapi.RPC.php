@@ -304,7 +304,8 @@ try {
                             $oParam->indapuracao,
                             $oParam->tppgto,
                             $oParam->tpevento,
-                            $oParam->transDCTFWeb
+                            $oParam->transDCTFWeb,
+                            $oParam->evtpgtos,
                         );
                         $eventoFila->adicionarFila();
                     }
@@ -330,7 +331,8 @@ try {
                             $oParam->indapuracao,
                             $oParam->tppgto,
                             $oParam->tpevento,
-                            $oParam->transDCTFWeb
+                            $oParam->transDCTFWeb,
+                            $oParam->evtpgtos
                         );
                         $eventoFila->adicionarFila();
                     }
