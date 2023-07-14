@@ -147,12 +147,22 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"], $result);
   */
   $("uploadfile").observe('change', function() {
 
+    js_divCarregando('Aguarde... Carregando Foto','msgbox');
+
     let iFrame = document.createElement("iframe");
     iFrame.src = 'func_uploadtermos.php?clone=form';
     iFrame.id  = 'uploadIframe';
     $('anexo').appendChild(iFrame);
-
+      startLoading();
   });
+
+  function startLoading() {
+      js_divCarregando('Aguarde... Enviando documento.', 'msgbox');
+  }
+
+  function endLoading() {
+      js_removeObj('msgbox');
+  }
 
   function js_getAnexo() {
     let oParam        = {};
