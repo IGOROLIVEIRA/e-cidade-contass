@@ -141,6 +141,12 @@ try {
                                                     <option value="N">Não</option>
                                                 </select>
                                             </td>
+                                            <td align="left" id="evtpgtos_col" style="display:none"><label>evtpgtos:</label>
+                                                <select name="evtpgtos" id="evtpgtos" style="width: 25%;">
+                                                    <option value="S">Sim</option>
+                                                    <option value="N">Não</option>
+                                                </select>
+                                            </td>
                                         </tr>
                                     </table>
                                 </fieldset>
@@ -342,6 +348,7 @@ try {
         const tppgtoCol = document.getElementById('tppgto_col');
         const tipoCol = document.getElementById('tipo_col');
         const transDCTFWeb = document.getElementById('transDCTFWeb_col');
+        const evtpgtos     = document.getElementById('evtpgtos_col');
 
         if (document.getElementById('S1200').checked) {
             indapuracaoCol.style.display = 'inline';
@@ -360,11 +367,18 @@ try {
             tppgtoCol.style.display = 'inline';
             transDCTFWeb.style.display = 'none';
             tipoCol.style.display = 'none';
+        } else if (document.getElementById('S1299').checked) {
+            indapuracaoCol.style.display = 'inline';
+            tppgtoCol.style.display = 'none';
+            transDCTFWeb.style.display = 'inline';
+            tipoCol.style.display = 'none';
+            evtpgtos.style.display = 'inline';
         } else {
             indapuracaoCol.style.display = 'none';
             tppgtoCol.style.display = 'none';
             transDCTFWeb.style.display = 'none';
             tipoCol.style.display = 'none';
+            evtpgtos.style.display = 'none';
         }
 
         if (document.getElementById('S1200').checked) {
