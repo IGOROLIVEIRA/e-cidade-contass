@@ -279,6 +279,7 @@ try {
                         Tipo::FECHAMENTO_EVENTOS,
                     )
                 )) {
+                    
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(
                         Tipo::getTipoFormulario($arquivo),
                         empty($oParam->matricula) ? null : $oParam->matricula,
@@ -330,7 +331,8 @@ try {
                             $oParam->indapuracao,
                             $oParam->tppgto,
                             $oParam->tpevento,
-                            $oParam->transDCTFWeb
+                            $oParam->transDCTFWeb,
+                            $oParam->evtpgtos
                         );
                         $eventoFila->adicionarFila();
                     }
@@ -374,6 +376,8 @@ try {
                         $oParam->indapuracao,
                         $oParam->tppgto,
                         $oParam->tpevento,
+                        $oParam->transDCTFWeb,
+                        $oParam->evtpgtos,
                         $evento
                     );
                     
