@@ -287,9 +287,10 @@ try {
         oParam.modo = $("modo").value;
         oParam.dtalteracao = $("dt_alteracao").value;
         oParam.indapuracao = $("indapuracao").value;
-        oParam.tppgto = $("tppgto").value;
-        oParam.tpevento = $("tpevento").value;
+        oParam.tppgto       = $("tppgto").value;
+        oParam.tpevento     = $("tpevento").value;
         oParam.transDCTFWeb = $("transDCTFWeb").value;
+        oParam.evtpgtos     = $("evtpgtos").value;
         var oAjax = new Ajax.Request("eso4_esocialapi.RPC.php", {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParam),
