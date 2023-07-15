@@ -279,7 +279,6 @@ try {
                         Tipo::FECHAMENTO_EVENTOS,
                     )
                 )) {
-                    
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(
                         Tipo::getTipoFormulario($arquivo),
                         empty($oParam->matricula) ? null : $oParam->matricula,
