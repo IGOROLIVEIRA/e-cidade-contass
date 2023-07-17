@@ -1,13 +1,13 @@
 <?php
 
-use App\Providers\RouteServiceProvider;
 use DBSeller\Legacy\PHP53\Emulate;
 use ECidade\Api\V1\APIServiceProvider;
 use Silex\Application;
+use Symfony\Component\Debug\ErrorHandler;
+use Symfony\Component\Debug\ExceptionHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use Silex\Provider\ServiceControllerServiceProvider;
 use \ECidade\V3\Extension\Registry;
 use \ECidade\V3\Extension\Front;
 use \ECidade\V3\Extension\Request as EcidadeRequest;
@@ -28,7 +28,14 @@ $front->createWindow();
 
 $app = new Application();
 $app['request'] = $request;
-$app['debug'] = true;
+$app['debug'] = false;
+
+/**
+ * Converting Errors to Exceptions
+ * @see https://github.com/silexphp/Silex/blob/master/doc/cookbook/error_handler.rst#converting-errors-to-exceptions
+ */
+ErrorHandler::register();
+ExceptionHandler::register($app['debug']);
 
 $app['class.loader'] = Registry::get('app.loader');
 
@@ -45,7 +52,7 @@ if (!ini_get('register_globals')) {
 $app->before(function (Request $request, Application $app) {
     Registry::get('app.request')->session()->start();
     $_SESSION['DB_login'] = 'dbseller';
-    $_SESSION['DB_id_usuario'] = 'dbseller';
+    $_SESSION['DB_id_usuario'] = '1';
     $_SESSION['DB_servidor'] = 'localhost';
     $_SESSION['DB_base'] = 'pmburitizeiro';
     $_SESSION['DB_user'] = 'dbportal';
@@ -57,6 +64,23 @@ $app->before(function (Request $request, Application $app) {
     $_SESSION['DB_anousu'] =  date('Y', time());
     $_SESSION['DB_uol_hora'] = time();
     $_SESSION['DB_instit'] = 1;
+    $_SESSION['DB_acessado'] = '1325613';
+    $_SESSION['DB_datausu'] = time();
+    $_SESSION['DB_ip'] = '127.0.0.1';
+
+    $eloquent = new EloquentBootstrap(
+        $_SESSION['DB_servidor'],
+        $_SESSION['DB_base'],
+        $_SESSION['DB_user'],
+        $_SESSION['DB_senha'],
+        $_SESSION['DB_porta']
+    );
+
+    $eloquent->bootstrap();
+
+    /**
+     * End Eloquent bootstrap
+     */
 
     /**
      * @see https://tools.ietf.org/html/rfc7235#section-3.1
@@ -69,7 +93,22 @@ $app->before(function (Request $request, Application $app) {
     require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . "libs/db_conecta.php");
     require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . "libs/db_sessoes.php");
 
+    global $conn;
+//    $conn = pg_connect("host={$_SESSION['DB_servidor']} dbname={$_SESSION['DB_base']} port={$_SESSION['DB_porta']} user={$_SESSION['DB_user']} password={$_SESSION['DB_senha']}");
+    $conn = $eloquent->manager->getDatabaseManager()->getPdo()->;
+
     Registry::get('app.request')->session()->close();
+});
+
+/**
+ * Parsing the request body
+ * @see https://github.com/silexphp/Silex/blob/master/doc/cookbook/json_request_body.rst#parsing-the-request-body
+ */
+$app->before(function (Request $request) {
+    if (0 === strpos($request->headers->get('Content-Type'), 'application/json')) {
+        $data = json_decode($request->getContent(), true);
+        $request->request->replace(is_array($data) ? $data : array());
+    }
 });
 
 // app api version1 routes

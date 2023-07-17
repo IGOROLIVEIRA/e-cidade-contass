@@ -41,12 +41,17 @@ class RecibopagaQrcodePix extends LegacyModel
         'k176_codigo_conciliacao_recebedor'
     ];
 
-    public function scopeWhereNumpreNumpar(Builder $query, int $numpre, int $numpar = null): Builder
+    public function scopeWhereNumpreNumpar(Builder $query, int $numpre, int $numpar = null): void
     {
         if ($numpar === null) {
-            return $query->where('k176_numnov', $numpre);
+            $query->where('k176_numnov', $numpre);
         }
 
-        return $query->where('k176_numpre', $numpre)->where('k176_numpar', $numpar);
+        $query->where('k176_numpre', $numpre)->where('k176_numpar', $numpar);
+    }
+
+    public function scopeOfCodigoConciliacaoRecebedor(Builder $query, string $code): void
+    {
+        $query->where('k176_codigo_conciliacao_recebedor', $code);
     }
 }
