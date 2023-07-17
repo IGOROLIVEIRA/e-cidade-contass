@@ -32,7 +32,7 @@ switch ($_POST["action"]) {
 
         $iAnoSessao         = db_getsession('DB_anousu');
 
-        $sqlElementosTabela = "select distinct pc07_codele,o56_descr,o56_elemento from pctabela 
+        $sqlElementosTabela = "select distinct pc07_codele,o56_descr,o56_elemento from pctabela
         inner join pctabelaitem on pc95_codtabela = pc94_sequencial
         inner join pcmaterele on pc07_codmater = pc95_codmater
         LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
@@ -255,10 +255,12 @@ switch ($_POST["action"]) {
                     $selectservico .= "<option value='t' selected='selected'>Sim</option>";
                 }else{
                     if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
-                        $selectservico .= "<option value='0' selected='selected'>Selecione</option>";
-                        $selectservico .= "<option value='t'>Sim</option>";
+                        $selectservico .= "<option value='t' selected='selected'>Sim</option>";
                         $selectservico .= "<option value='f'>" . utf8_encode('Não') . "</option>";
-                    } else{
+                    } elseif($oDadosEmpAutItem->e55_servicoquantidade == 'f'){
+                        $selectservico .= "<option value='t'>Sim</option>";
+                        $selectservico .= "<option value='f' selected='selected'>" . utf8_encode('Não') . "</option>";
+                    }else{
                         $selectservico .= "<option value='0' selected='selected'>Selecione</option>";
                         $selectservico .= "<option value='t'>Sim</option>";
                         $selectservico .= "<option value='f'>" . utf8_encode('Não') . "</option>";
@@ -280,7 +282,7 @@ switch ($_POST["action"]) {
                 $itemRows[] = $selectservico;
 
                 if ($oDadosEmpAutItem->e55_servicoquantidade == 't') {
-                    $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='1' onkeyup='js_calcula(this)' readonly maxlength='10' style='width: 80px' />";
+                    $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' onkeyup='js_calcula(this)' readonly maxlength='10' style='width: 80px' />";
                 } else {
                     if ($oDadosEmpAutItem->e55_vlrun != "") {
                         $itemRows[] = "<input type='text' id='qtd_{$oDados->pc01_codmater}' value='{$oDadosEmpAutItem->e55_quant}' maxlength='10' readonly style='background-color: #DEB887; width: 80px' />";
@@ -335,7 +337,7 @@ switch ($_POST["action"]) {
         }
 
 
-        $sqlElementosTabela = "select distinct pc07_codele,o56_descr,o56_elemento from pctabela 
+        $sqlElementosTabela = "select distinct pc07_codele,o56_descr,o56_elemento from pctabela
         inner join pctabelaitem on pc95_codtabela = pc94_sequencial
         inner join pcmaterele on pc07_codmater = pc95_codmater
         LEFT JOIN orcelemento ON orcelemento.o56_codele = pcmaterele.pc07_codele
@@ -346,19 +348,28 @@ switch ($_POST["action"]) {
         $rsEleTabela = db_query($sqlElementosTabela);
 
         $oElementos = db_utils::getCollectionByRecord($rsEleTabela);
+        $rsElemen = array();
+
         if (pg_numrows($rsEle) > 0) {
-            $rsElemen = array();
             foreach ($oElementos as $row) {
                 if ($row->pc07_codele == $codEle) {
                     $rsElemen[0]->pc07_codele = $row->pc07_codele;
-                    $rsElemen[0]->o56_descr = $row->o56_descr;
+                    $rsElemen[0]->o56_descr = urlencode($row->o56_descr);
                     $rsElemen[0]->o56_elemento = $row->o56_elemento;
                 }
             }
 
             $oRetorno->elementos = $rsElemen;
         } else {
-            $oRetorno->elementos = $oElementos;
+            foreach ($oElementos as $row) {
+                    $rsEle = new stdClass();
+                    $rsEle->pc07_codele = $row->pc07_codele;
+                    $rsEle->o56_descr = urlencode($row->o56_descr);
+                    $rsEle->o56_elemento = $row->o56_elemento;
+                    $rsElemen[] = $rsEle;
+            }
+
+            $oRetorno->elementos = $rsElemen;
         }
 
 

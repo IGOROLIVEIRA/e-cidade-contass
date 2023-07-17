@@ -826,274 +826,290 @@ class cda {
 
   protected function getDebitosDivida($lRemissao = false) {
 
-     $sqlDadosDivida  = "select divida.*,  ";
-     $sqlDadosDivida .= "       certdiv.*, ";
-     $sqlDadosDivida .= "       lote.*,    ";
-     $sqlDadosDivida .= "       coalesce(certidmassa.v13_certid) as v13_certidmassa, ";
-     $sqlDadosDivida .= "       coalesce(arrematric.k00_matric,0) as matric, ";
-     $sqlDadosDivida .= "       coalesce(arreinscr.k00_inscr,0) as inscr, ";
-     $sqlDadosDivida .= "       v03_descr, ";
-     $sqlDadosDivida .= "       v13_dtemis, ";
-     $sqlDadosDivida .= "       v24_procedagrupa, ";
-     $sqlDadosDivida .= "       v03_tributaria, ";
-     $sqlDadosDivida .= "       k01_descr ";
-     $sqlDadosDivida .= "  from certdiv  ";
-     $sqlDadosDivida .= "       inner join divida           on v14_coddiv             = v01_coddiv ";
-     $sqlDadosDivida .= "                                  and v01_instit             = ".db_getsession('DB_instit');
-     $sqlDadosDivida .= "       left join certid            on certid.v13_certid      = certdiv.v14_certid ";
-     $sqlDadosDivida .= "                                  and certid.v13_instit      = ".db_getsession('DB_instit');
-     $sqlDadosDivida .= "       left join certidmassa       on certidmassa.v13_certid = certid.v13_certid ";
-     $sqlDadosDivida .= "       left join arrematric        on arrematric.k00_numpre  = divida.v01_numpre ";
-     $sqlDadosDivida .= "       left join iptubase a        on arrematric.k00_matric  = a.j01_matric ";
-     $sqlDadosDivida .= "       left join lote              on lote.j34_idbql         = a.j01_idbql ";
-     $sqlDadosDivida .= "       left join arreinscr         on arreinscr.k00_numpre   =  divida.v01_numpre ";
-     $sqlDadosDivida .= "       left join proced            on proced.v03_codigo      = divida.v01_proced ";
-     $sqlDadosDivida .= "                                  and proced.v03_instit      = ".db_getsession('DB_instit');
-     $sqlDadosDivida .= "       left join procedenciaagrupa on v03_codigo             = v24_proced ";
-     $sqlDadosDivida .= "       left join arrecad           on arrecad.k00_numpre     = divida.v01_numpre";
-     $sqlDadosDivida .= "                                  and arrecad.k00_numpar     = divida.v01_numpar";
-     $sqlDadosDivida .= "       left join histcalc          on histcalc.k01_codigo    = arrecad.k00_hist";
-     $sqlDadosDivida .= " where v14_certid = {$this->getCodigo()}";
-     $sqlDadosDivida .= " order by v03_tributaria,v01_exerc, v01_proced,v01_numpre,v01_numpar,v24_procedagrupa ";
+    $sqlDadosDivida  = "select divida.*,  ";
+    $sqlDadosDivida .= "       certdiv.*, ";
+    $sqlDadosDivida .= "       lote.*,    ";
+    $sqlDadosDivida .= "       coalesce(certidmassa.v13_certid) as v13_certidmassa, ";
+    $sqlDadosDivida .= "       coalesce(arrematric.k00_matric,0) as matric, ";
+    $sqlDadosDivida .= "       coalesce(arreinscr.k00_inscr,0) as inscr, ";
+    $sqlDadosDivida .= "       v03_descr, ";
+    $sqlDadosDivida .= "       v13_dtemis, ";
+    $sqlDadosDivida .= "       v24_procedagrupa, ";
+    $sqlDadosDivida .= "       v03_tributaria, ";
+    $sqlDadosDivida .= "       k01_descr ";
+    $sqlDadosDivida .= "  from certdiv  ";
+    $sqlDadosDivida .= "       inner join divida           on v14_coddiv             = v01_coddiv ";
+    $sqlDadosDivida .= "                                  and v01_instit             = ".db_getsession('DB_instit');
+    $sqlDadosDivida .= "       left join certid            on certid.v13_certid      = certdiv.v14_certid ";
+    $sqlDadosDivida .= "                                  and certid.v13_instit      = ".db_getsession('DB_instit');
+    $sqlDadosDivida .= "       left join certidmassa       on certidmassa.v13_certid = certid.v13_certid ";
+    $sqlDadosDivida .= "       left join arrematric        on arrematric.k00_numpre  = divida.v01_numpre ";
+    $sqlDadosDivida .= "       left join iptubase a        on arrematric.k00_matric  = a.j01_matric ";
+    $sqlDadosDivida .= "       left join lote              on lote.j34_idbql         = a.j01_idbql ";
+    $sqlDadosDivida .= "       left join arreinscr         on arreinscr.k00_numpre   =  divida.v01_numpre ";
+    $sqlDadosDivida .= "       left join proced            on proced.v03_codigo      = divida.v01_proced ";
+    $sqlDadosDivida .= "                                  and proced.v03_instit      = ".db_getsession('DB_instit');
+    $sqlDadosDivida .= "       left join procedenciaagrupa on v03_codigo             = v24_proced ";
+    $sqlDadosDivida .= "       left join arrecad           on arrecad.k00_numpre     = divida.v01_numpre";
+    $sqlDadosDivida .= "                                  and arrecad.k00_numpar     = divida.v01_numpar";
+    $sqlDadosDivida .= "       left join histcalc          on histcalc.k01_codigo    = arrecad.k00_hist";
+    $sqlDadosDivida .= " where v14_certid = {$this->getCodigo()}";
+    $sqlDadosDivida .= " order by v03_tributaria,v01_exerc, v01_proced,v01_numpre,v01_numpar,v24_procedagrupa ";
 
-     $rsDadosDivida   = $this->oDaoCertid->sql_record($sqlDadosDivida);
-     $aDebitos        = array();
+    //adiciona consulta da última notificação preliminar gerada para a certidão
+    $sqlNotificacaoDivida  = " select  notificacao.k50_notifica as k50_notifica, ";
+    $sqlNotificacaoDivida .= "         notificacao.k50_dtemite  as k50_dtemite ";
+    $sqlNotificacaoDivida .= " from certdiv ";             
+    $sqlNotificacaoDivida .= " left join divida on certdiv.v14_coddiv = divida.v01_coddiv ";
+    $sqlNotificacaoDivida .= " left join notidebitos on notidebitos.k53_numpre = divida.v01_numpre ";
+    $sqlNotificacaoDivida .= " left join notificacao on notificacao.k50_notifica = notidebitos.k53_notifica ";
+    $sqlNotificacaoDivida .= " where certdiv.v14_certid = {$this->getCodigo()} ";
+    $sqlNotificacaoDivida .= " order by k50_dtemite desc limit 1 ";
 
-     if ($this->oDaoCertid->numrows > 0) {
+    //salva consultas
+    $rsNotificacaoDivida  =  $this->oDaoCertid->sql_record($sqlNotificacaoDivida);
+    $rsDadosDivida        = $this->oDaoCertid->sql_record($sqlDadosDivida);
 
-       for ($i = 0; $i < $this->oDaoCertid->numrows; $i++) {
+    $aDebitos        = array();
 
-         $oDivida = db_utils::fieldsmemory($rsDadosDivida, $i);
+    if ($this->oDaoCertid->numrows > 0) {
 
-         /**
-          * Verificamos o debito, e o corrigimos (rodamos fc_calcula)
-          */
-         if ($lRemissao){
+      for ($i = 0; $i < $this->oDaoCertid->numrows; $i++) {
 
-           $dataemis = mktime(0,0,0,substr($oDivida->v13_dtemis,5,2),
-                                    substr($oDivida->v13_dtemis,8,2),
-                                    substr($oDivida->v13_dtemis,0,4)
-                              );
-           $anoemis  = substr($oDivida->v13_dtemis,0,4);
-           $xmes     = substr($oDivida->v13_dtemis,5,2);
-           $xdia     = substr($oDivida->v13_dtemis,8,2);
-           $xano     = substr($oDivida->v13_dtemis,0,4);
+        $oDivida = db_utils::fieldsmemory($rsDadosDivida, $i);
 
-         } else {
+        /**
+        * Verificamos o debito, e o corrigimos (rodamos fc_calcula)
+        */
+        if ($lRemissao){
 
-           $dataemis = db_getsession("DB_datausu");
-           $anoemis  = db_getsession("DB_anousu");
-           $xmes = date('m');
-           $xdia = date('d');
-           $xano = date('Y');
+          $dataemis = mktime(0,0,0,substr($oDivida->v13_dtemis,5,2),
+                                  substr($oDivida->v13_dtemis,8,2),
+                                  substr($oDivida->v13_dtemis,0,4)
+                            );
+          $anoemis  = substr($oDivida->v13_dtemis,0,4);
+          $xmes     = substr($oDivida->v13_dtemis,5,2);
+          $xdia     = substr($oDivida->v13_dtemis,8,2);
+          $xano     = substr($oDivida->v13_dtemis,0,4);
 
-         }
+        } else {
+
+          $dataemis = db_getsession("DB_datausu");
+          $anoemis  = db_getsession("DB_anousu");
+          $xmes = date('m');
+          $xdia = date('d');
+          $xano = date('Y');
+
+        }
 
 
-         if ( $this->isComposicao() ) {
+        if ( $this->isComposicao() ) {
 
 
-           $sSqlVerificaArrecad = "select arrecad.*,
+          $sSqlVerificaArrecad = "select arrecad.*,
+                                        arrecadcompos.k00_vlrhist  as vlrhis,
+                                        (arrecadcompos.k00_vlrhist + arrecadcompos.k00_correcao) as vlrcor,
+                                        arrecadcompos.k00_juros    as vlrjuros,
+                                        arrecadcompos.k00_multa    as vlrmulta
+                                    from arrecad
+                                        inner join arreckey      on arrecad.k00_numpre         = arreckey.k00_numpre
+                                                                and arrecad.k00_numpar         = arreckey.k00_numpar
+                                                                and arrecad.k00_receit         = arreckey.k00_receit
+                                        inner join arrecadcompos on arrecadcompos.k00_arreckey = arreckey.k00_sequencial
+                                        inner join tabrec        on tabrec.k02_codigo          = arrecad.k00_receit
+                                  where arrecad.k00_numpre = {$oDivida->v01_numpre}
+                                    and arrecad.k00_numpar = {$oDivida->v01_numpar}
+                                  order by arrecad.k00_numpre,
+                                            arrecad.k00_numpar,
+                                            arrecad.k00_receit ";
+
+          $rsArrecad = db_query($sSqlVerificaArrecad) or die($sSqlVerificaArrecad);
+
+
+          if ( pg_num_rows($rsArrecad) == 0 ) {
+
+            $sSqlVerificaArreold = "select arreold.*,
                                           arrecadcompos.k00_vlrhist  as vlrhis,
                                           (arrecadcompos.k00_vlrhist + arrecadcompos.k00_correcao) as vlrcor,
                                           arrecadcompos.k00_juros    as vlrjuros,
                                           arrecadcompos.k00_multa    as vlrmulta
-                                     from arrecad
-                                          inner join arreckey      on arrecad.k00_numpre         = arreckey.k00_numpre
-                                                                  and arrecad.k00_numpar         = arreckey.k00_numpar
-                                                                  and arrecad.k00_receit         = arreckey.k00_receit
+                                      from arreold
+                                          inner join arreckey      on arreold.k00_numpre         = arreckey.k00_numpre
+                                                                  and arreold.k00_numpar         = arreckey.k00_numpar
+                                                                  and arreold.k00_receit         = arreckey.k00_receit
                                           inner join arrecadcompos on arrecadcompos.k00_arreckey = arreckey.k00_sequencial
-                                          inner join tabrec        on tabrec.k02_codigo          = arrecad.k00_receit
-                                    where arrecad.k00_numpre = {$oDivida->v01_numpre}
-                                      and arrecad.k00_numpar = {$oDivida->v01_numpar}
-                                    order by arrecad.k00_numpre,
-                                             arrecad.k00_numpar,
-                                             arrecad.k00_receit ";
+                                          inner join tabrec        on tabrec.k02_codigo          = arreold.k00_receit
+                                    where arreold.k00_numpre = {$oDivida->v01_numpre}
+                                      and arreold.k00_numpar = {$oDivida->v01_numpar}
+                                    order by arreold.k00_numpre,
+                                              arreold.k00_numpar,
+                                              arreold.k00_receit ";
 
-           $rsArrecad = db_query($sSqlVerificaArrecad) or die($sSqlVerificaArrecad);
+            $rsArrecad = db_query($sSqlVerificaArreold) or die($sSqlVerificaArreold);
 
+          } else {
 
-           if ( pg_num_rows($rsArrecad) == 0 ) {
+            throw new Exception("certidao ({$this->getCodigo()}) com Débitos pagos ou cancelados, consulte pagamentos!");
+            exit;
 
-	           $sSqlVerificaArreold = "select arreold.*,
-	                                          arrecadcompos.k00_vlrhist  as vlrhis,
-	                                          (arrecadcompos.k00_vlrhist + arrecadcompos.k00_correcao) as vlrcor,
-	                                          arrecadcompos.k00_juros    as vlrjuros,
-	                                          arrecadcompos.k00_multa    as vlrmulta
-	                                     from arreold
-	                                          inner join arreckey      on arreold.k00_numpre         = arreckey.k00_numpre
-	                                                                  and arreold.k00_numpar         = arreckey.k00_numpar
-	                                                                  and arreold.k00_receit         = arreckey.k00_receit
-	                                          inner join arrecadcompos on arrecadcompos.k00_arreckey = arreckey.k00_sequencial
-	                                          inner join tabrec        on tabrec.k02_codigo          = arreold.k00_receit
-	                                    where arreold.k00_numpre = {$oDivida->v01_numpre}
-	                                      and arreold.k00_numpar = {$oDivida->v01_numpar}
-	                                    order by arreold.k00_numpre,
-	                                             arreold.k00_numpar,
-	                                             arreold.k00_receit ";
+          }
 
-	           $rsArrecad = db_query($sSqlVerificaArreold) or die($sSqlVerificaArreold);
+        } else {
 
-           } else {
+          $sSqlVerificaArrecad = "select * from arrecad where k00_numpre = {$oDivida->v01_numpre}";
+          $rsArrecad          = db_query($sSqlVerificaArrecad) or die($sSqlVerificaArrecad);
+          if (pg_num_rows($rsArrecad) > 0) {
+            $rsArrecad  = debitos_numpre($oDivida->v01_numpre,0,0,
+                                          $dataemis,
+                                          $anoemis,$oDivida->v01_numpar,
+                                          "",
+                                          "",
+                                          " and y.k00_hist <> 918");
+          } else {
 
-             throw new Exception("certidao ({$this->getCodigo()}) com Débitos pagos ou cancelados, consulte pagamentos!");
-             exit;
+            $sSqlVerificaArrecad = "select * from arreold where k00_numpre = $oDivida->v01_numpre";
+            $rsArrecad = db_query($sSqlVerificaArrecad) or die($sSqlVerificaArrecad);
+            if (pg_num_rows($rsArrecad) > 0) {
 
-           }
+              $rsArrecad = debitos_numpre_old($oDivida->v01_numpre,0,0,
+                                              $dataemis,
+                                              $anoemis,
+                                              $oDivida->v01_numpar,'',''
+                                              );
+            } else {
 
-         } else {
+              /**
+              * TODO Verificar com evandro o porque dessa logica
+              */
+              $sqlprocuraarreforo  = "select k00_numpre,
+                                            k00_numpar,
+                                            k00_numcgm,
+                                            k00_dtoper,
+                                            k00_receit,
+                                            k00_hist,
+                                            k00_valor,
+                                            k00_dtvenc,
+                                            k00_numtot,
+                                            k00_numdig,
+                                            k00_tipo
+                                        from arreforo
+                                      where k00_certidao = {$this->getCodigo()}";
+              $resultprocuraarreforo = db_query($sqlprocuraarreforo) or die($sqlprocuraarreforo);
+              if (pg_num_rows($resultprocuraarreforo) > 0) {
+                  $sqlInsertArreold = "insert into arreold (k00_numpre,k00_numpar,
+                                                            k00_numcgm,k00_dtoper,
+                                                            k00_receit,
+                                                            k00_hist,
+                                                            k00_valor,
+                                                            k00_dtvenc,
+                                                            k00_numtot,
+                                                            k00_numdig,
+                                                            k00_tipo )
+                                                            {$sqlprocuraarreforo}
+                                                            and not exists ( select 1
+                                                                              from arreold
+                                                                              where arreold.k00_numpre = arreforo.k00_numpre
+                                                                                and arreold.k00_numpar = arreforo.k00_numpar
+                                                                                and arreold.k00_receit = arreforo.k00_receit)";
+                  db_query($sqlInsertArreold) or die($sqlInsertArreold);
+                  $rsArrecad = debitos_numpre_old($oDivida->v01_numpre,0,0,$dataemis,$anoemis,$oDivida->v01_numpar,'','');
 
-           $sSqlVerificaArrecad = "select * from arrecad where k00_numpre = {$oDivida->v01_numpre}";
-	         $rsArrecad          = db_query($sSqlVerificaArrecad) or die($sSqlVerificaArrecad);
-	         if (pg_num_rows($rsArrecad) > 0) {
-              $rsArrecad  = debitos_numpre($oDivida->v01_numpre,0,0,
-                                           $dataemis,
-                                           $anoemis,$oDivida->v01_numpar,
-                                           "",
-                                           "",
-                                           " and y.k00_hist <> 918");
-	         } else {
+              } else {
 
-	           $sSqlVerificaArrecad = "select * from arreold where k00_numpre = $oDivida->v01_numpre";
-	           $rsArrecad = db_query($sSqlVerificaArrecad) or die($sSqlVerificaArrecad);
-	           if (pg_num_rows($rsArrecad) > 0) {
+                throw new Exception("certidao ({$this->getCodigo()}) com Débitos pagos ou cancelados, consulte pagamentos!");
+                exit;
 
-	              $rsArrecad = debitos_numpre_old($oDivida->v01_numpre,0,0,
-	                                              $dataemis,
-	                                              $anoemis,
-	                                              $oDivida->v01_numpar,'',''
-	                                             );
-	           } else {
+              }
+            }
+          }
+        }
 
-	             /**
-	              * TODO Verificar com evandro o porque dessa logica
-	              */
-	             $sqlprocuraarreforo  = "select k00_numpre,
-	                                            k00_numpar,
-	                                            k00_numcgm,
-	                                            k00_dtoper,
-	                                            k00_receit,
-	                                            k00_hist,
-	                                            k00_valor,
-	                                            k00_dtvenc,
-	                                            k00_numtot,
-	                                            k00_numdig,
-	                                            k00_tipo
-	                                       from arreforo
-	                                      where k00_certidao = {$this->getCodigo()}";
-	             $resultprocuraarreforo = db_query($sqlprocuraarreforo) or die($sqlprocuraarreforo);
-	             if (pg_num_rows($resultprocuraarreforo) > 0) {
-	                 $sqlInsertArreold = "insert into arreold (k00_numpre,k00_numpar,
-	                                                           k00_numcgm,k00_dtoper,
-	                                                           k00_receit,
-	                                                           k00_hist,
-	                                                           k00_valor,
-	                                                           k00_dtvenc,
-	                                                           k00_numtot,
-	                                                           k00_numdig,
-	                                                           k00_tipo )
-	                                                           {$sqlprocuraarreforo}
-	                                                           and not exists ( select 1
-	                                                                              from arreold
-	                                                                             where arreold.k00_numpre = arreforo.k00_numpre
-	                                                                               and arreold.k00_numpar = arreforo.k00_numpar
-	                                                                               and arreold.k00_receit = arreforo.k00_receit)";
-	                  db_query($sqlInsertArreold) or die($sqlInsertArreold);
-	                  $rsArrecad = debitos_numpre_old($oDivida->v01_numpre,0,0,$dataemis,$anoemis,$oDivida->v01_numpar,'','');
+        if ($rsArrecad){
+          $iNumRowsArrecad = pg_num_rows($rsArrecad);
+        } else {
+          $iNumRowsArrecad = 0;
+        }
 
-	             } else {
+        /**
+        * percorremos os debitos da arrecad
+        */
+        for ($iArrecad = 0;$iArrecad < $iNumRowsArrecad; $iArrecad++) {
 
-	               throw new Exception("certidao ({$this->getCodigo()}) com Débitos pagos ou cancelados, consulte pagamentos!");
-	               exit;
+          //salva dados da consulta da notificação preliminar vinculada ao débito
+          $oNotificacaoDivida                = db_utils::fieldsmemory($rsNotificacaoDivida, $iArrecad);
 
-	             }
-	           }
-	         }
-         }
+          $oDadosDebitoAtualizado            = db_utils::fieldsmemory($rsArrecad ,$iArrecad);
+          $oDividaCda                        = new stdClass();
+          $oDividaCda->exercicio             = $oDivida->v01_exerc;
+          $oDividaCda->livro                 = $oDivida->v01_livro;
+          $oDividaCda->codigodivida          = $oDivida->v01_coddiv;
+          $oDividaCda->folha                 = $oDivida->v01_folha;
+          $oDividaCda->certidmassa           = $oDivida->v13_certidmassa;
+          $oDividaCda->observacao            = $oDivida->v01_obs . "\nNº da Notificação Preliminar: " . $oNotificacaoDivida->k50_notifica . "\nData da Notificação Preliminar: " . db_formatar($oNotificacaoDivida->k50_dtemite, 'd');
+          $oDividaCda->procedenciaagrupar    = $oDivida->v24_procedagrupa;
 
-         if ($rsArrecad){
-           $iNumRowsArrecad = pg_num_rows($rsArrecad);
-         } else {
-           $iNumRowsArrecad = 0;
-         }
+          if ($oDivida->v03_tributaria == "t" || $oDivida->v03_tributaria == 1) {
+            $oDividaCda->procedenciatributaria = true;
+          } else {
+            $oDividaCda->procedenciatributaria = false;
+          }
 
-         /**
-          * percorremos os debitos da arrecad
-          */
-         for ($iArrecad = 0;$iArrecad < $iNumRowsArrecad; $iArrecad++) {
+          if ($oDivida->matric != 0) {
 
-           $oDadosDebitoAtualizado            = db_utils::fieldsmemory($rsArrecad ,$iArrecad);
-           $oDividaCda                        = new stdClass();
-           $oDividaCda->exercicio             = $oDivida->v01_exerc;
-           $oDividaCda->livro                 = $oDivida->v01_livro;
-           $oDividaCda->codigodivida          = $oDivida->v01_coddiv;
-           $oDividaCda->folha                 = $oDivida->v01_folha;
-           $oDividaCda->certidmassa           = $oDivida->v13_certidmassa;
-           $oDividaCda->observacao            = $oDivida->v01_obs . "\nProcesso:" . $oDivida->v01_processo . " Data:" . db_formatar($oDivida->v01_dtprocesso, 'd');
-           $oDividaCda->procedenciaagrupar    = $oDivida->v24_procedagrupa;
+            $oDividaCda->origem       = "mat";
+            $oDividaCda->codigoorigem = $oDivida->matric;
 
-           if ($oDivida->v03_tributaria == "t" || $oDivida->v03_tributaria == 1) {
-             $oDividaCda->procedenciatributaria = true;
-           } else {
-           	 $oDividaCda->procedenciatributaria = false;
-           }
+            if (isset($oDivida->j34_setor) && $oDivida->j34_setor != "" && isset($oDivida->j34_quadra)
+                && $oDivida->j34_quadra != "" && isset($oDivida->j34_lote) && $oDivida->j34_lote != "") {
+              $oDividaCda->origemdebito = $oDivida->j34_setor."/".$oDivida->j34_quadra."/".$oDivida->j34_lote;
+            } else {
+              $oDividaCda->origemdebito = $oDivida->j34_lote;
+            }
 
-           if ($oDivida->matric != 0) {
+          } elseif ($oDivida->inscr != 0) {
 
-             $oDividaCda->origem       = "mat";
-             $oDividaCda->codigoorigem = $oDivida->matric;
+            $oDividaCda->origem       = "inscr";
+            $oDividaCda->codigoorigem = $oDivida->inscr;
+            $oDividaCda->origemdebito = ucfirst($oDividaCda->origem)." - ".$oDivida->inscr;
 
-             if (isset($oDivida->j34_setor) && $oDivida->j34_setor != "" && isset($oDivida->j34_quadra)
-                 && $oDivida->j34_quadra != "" && isset($oDivida->j34_lote) && $oDivida->j34_lote != "") {
-               $oDividaCda->origemdebito = $oDivida->j34_setor."/".$oDivida->j34_quadra."/".$oDivida->j34_lote;
-             } else {
-               $oDividaCda->origemdebito = $oDivida->j34_lote;
-             }
+          } else {
 
-           } elseif ($oDivida->inscr != 0) {
+            $oDividaCda->origem       = "cgm";
+            $oDividaCda->codigoorigem = $oDivida->v01_numcgm;
+            $oDividaCda->origemdebito = ucfirst($oDividaCda->origem)." - ".$oDivida->v01_numcgm;
 
-             $oDividaCda->origem       = "inscr";
-             $oDividaCda->codigoorigem = $oDivida->inscr;
-             $oDividaCda->origemdebito = ucfirst($oDividaCda->origem)." - ".$oDivida->inscr;
+          }
 
-           } else {
+          $oDividaCda->procedencia       = $oDivida->v03_descr;
+          $oDividaCda->procedenciaHist   = $oDivida->k01_descr;
+          $oDividaCda->codigoprocedencia = $oDivida->v01_proced;
 
-             $oDividaCda->origem       = "cgm";
-             $oDividaCda->codigoorigem = $oDivida->v01_numcgm;
-             $oDividaCda->origemdebito = ucfirst($oDividaCda->origem)." - ".$oDivida->v01_numcgm;
-
-           }
-
-           $oDividaCda->procedencia       = $oDivida->v03_descr;
-           $oDividaCda->procedenciaHist   = $oDivida->k01_descr;
-           $oDividaCda->codigoprocedencia = $oDivida->v01_proced;
-
-           $dDataLancamento = $this->getDataLancamentoDebito($oDadosDebitoAtualizado->k00_numpre, $oDadosDebitoAtualizado->k00_numpar);
-           if ($dDataLancamento == '') {
-           	$dDataLancamento = $oDadosDebitoAtualizado->k00_dtoper;
-           }
+          $dDataLancamento = $this->getDataLancamentoDebito($oDadosDebitoAtualizado->k00_numpre, $oDadosDebitoAtualizado->k00_numpar);
+          if ($dDataLancamento == '') {
+          $dDataLancamento = $oDadosDebitoAtualizado->k00_dtoper;
+          }
 
 
-           $oDividaCda->datalancamento    = $dDataLancamento;
-           $oDividaCda->datainscricao     = $oDivida->v01_dtinsc;
-           $oDividaCda->datavencimento    = $oDadosDebitoAtualizado->k00_dtvenc;
-           $oDividaCda->dataoperacao      = $oDadosDebitoAtualizado->k00_dtoper;
-           $oDividaCda->numpre            = $oDadosDebitoAtualizado->k00_numpre;
-           $oDividaCda->numpar            = $oDadosDebitoAtualizado->k00_numpar;
-           $oDividaCda->valorcorrecao     = $oDadosDebitoAtualizado->vlrcor - $oDadosDebitoAtualizado->vlrhis;
-           $oDividaCda->valorhistorico    = $oDadosDebitoAtualizado->vlrhis;
-           $oDividaCda->valorcorrigido    = $oDadosDebitoAtualizado->vlrcor;
-           $oDividaCda->valormulta        = $oDadosDebitoAtualizado->vlrmulta;
-           $oDividaCda->valorjuros        = $oDadosDebitoAtualizado->vlrjuros;
-           $oDividaCda->valortotal        = $oDadosDebitoAtualizado->vlrjuros +
-                                            $oDadosDebitoAtualizado->vlrmulta +
-                                            $oDadosDebitoAtualizado->vlrcor;
-           $aDebitos[]                    = $oDividaCda;
-         }
-       }
-     }
+          $oDividaCda->datalancamento    = $dDataLancamento;
+          $oDividaCda->datainscricao     = $oDivida->v01_dtinsc;
+          $oDividaCda->datavencimento    = $oDadosDebitoAtualizado->k00_dtvenc;
+          $oDividaCda->dataoperacao      = $oDadosDebitoAtualizado->k00_dtoper;
+          $oDividaCda->numpre            = $oDadosDebitoAtualizado->k00_numpre;
+          $oDividaCda->numpar            = $oDadosDebitoAtualizado->k00_numpar;
+          $oDividaCda->valorcorrecao     = $oDadosDebitoAtualizado->vlrcor - $oDadosDebitoAtualizado->vlrhis;
+          $oDividaCda->valorhistorico    = $oDadosDebitoAtualizado->vlrhis;
+          $oDividaCda->valorcorrigido    = $oDadosDebitoAtualizado->vlrcor;
+          $oDividaCda->valormulta        = $oDadosDebitoAtualizado->vlrmulta;
+          $oDividaCda->valorjuros        = $oDadosDebitoAtualizado->vlrjuros;
+          $oDividaCda->valortotal        = $oDadosDebitoAtualizado->vlrjuros +
+                                          $oDadosDebitoAtualizado->vlrmulta +
+                                          $oDadosDebitoAtualizado->vlrcor;
+          $aDebitos[]                    = $oDividaCda;
+        }
+      }
+    }
 
-     return $aDebitos;
+    return $aDebitos;
   }
 
 

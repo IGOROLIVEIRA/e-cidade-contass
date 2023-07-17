@@ -78,7 +78,7 @@ $clrotulo->label("nomeinst");
        db_inputdata('c99_data',@$c99_data_dia,@$c99_data_mes,@$c99_data_ano,true,'text',$db_opcao,"")
        ?>
 
-        <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
+        <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" onClick='js_validac99_data();' type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
     </td>
     <td>
 
@@ -154,5 +154,12 @@ function js_datapat(){
     document.getElementById("c99_alterar2").setAttribute("name", 2);
     alert(document.getElementById("c99_alterar2").getAttribute("name"));
     document.form1.submit();
+}
+function js_validac99_data()
+{
+  var sData = document.getElementById("c99_data").value.split("/");
+  document.getElementById("c99_data_dia").value = sData[0];
+  document.getElementById("c99_data_mes").value = sData[1];
+  document.getElementById("c99_data_ano").value = sData[2];
 }
 </script>

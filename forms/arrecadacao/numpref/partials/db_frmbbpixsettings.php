@@ -194,20 +194,19 @@ $style = ((int)$k03_instituicao_financeira) === InstituicaoFinanceiraApiPix::BAN
 </table>
 <script type="text/javascript">
     function validaCamposBB() {
-        console.log('aqui');
         return [
-            {field: 'k177_numero_convenio', label: 'Número convênio'},
-            {field: 'k177_develop_application_key', label: 'Develop Application Key'},
             {field: 'k177_url_api', label: 'URL Api'},
             {field: 'k177_url_oauth', label: ' URL OAuth'},
+            {field: 'k177_develop_application_key', label: 'Develop Application Key'},
             {field: 'k177_client_id', label: ' Client ID'},
             {field: 'k177_client_secret', label: 'Client Secret'},
-            {field: 'k177_ambiente', label: 'Ambiente'},
+            {field: 'k177_numero_convenio', label: 'Número convênio'},
             {field: 'k177_chave_pix', label: 'Chave PIX'}
         ].every(({field, label}) => {
-            if ($F(field).trim() === '') {
+            const element = document.getElementById(field);
+            if (element.value.trim() === '') {
                 alert(_M(MENSAGENS + "campo_nao_informado", {sCampo: label}));
-                $(field).focus();
+                element.focus();
                 return false;
             }
             return true;

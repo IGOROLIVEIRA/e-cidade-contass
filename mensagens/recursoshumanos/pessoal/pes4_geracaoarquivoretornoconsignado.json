@@ -5,5 +5,5 @@
   "folha_nao_virada"                   : "A folha encontra-se aberta. Favor efetuar o fechamento.",
   "competencia_informada_ultrapassada" : "A competência informada não pode ser maior que a atual.",
   "arquivo_nao_importado"              : "Nenhum arquivo importado nesta competência.",
-  "erro_gerar_arquivo"                 : "Erro ao gerar arquivo".
+  "erro_gerar_arquivo"                 : "Erro ao gerar arquivo"
 }

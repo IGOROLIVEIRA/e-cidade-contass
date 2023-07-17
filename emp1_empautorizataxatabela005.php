@@ -403,8 +403,8 @@ if (isset($chavepesquisa)) {
               function js_bloqueia(recar){
                 parent.document.formaba.empautitem.disabled=false;\n
                 parent.document.formaba.empautidot.disabled=false;\n
-                (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?criterioadjudicacao=true&db_opcaoal=33&e55_autori=$e54_autori';\n
-                (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?criterioadjudicacao=true&anulacao=true&db_opcao=33&e56_autori=$e54_autori';\n
+                (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_empautitem.location.href='emp1_empautitemtaxatabela001.php?criterioadjudicacao=true&db_opcaoal=33&e55_autori=$e54_autori&e54_desconto=$e54_desconto';\n
+                (window.CurrentWindow || parent.CurrentWindow).corpo.iframe_empautidot.location.href='emp1_empautidottaxatabela001.php?criterioadjudicacao=true&anulacao=true&db_opcao=33&e56_autori=$e54_autori&e54_desconto=$e54_desconto';\n
               }
               js_bloqueia();
             </script>

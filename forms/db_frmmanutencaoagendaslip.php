@@ -175,7 +175,7 @@ $db_opcao = 1;
                 <td >
                   <?
                   $data = explode("-",date("d-m-Y",DB_getsession("DB_datausu")));
-                  db_inputdata("e42_dtpagamento",$data[0],$data[1],$data[2],true,"text", 1);
+                  db_inputdata("e42_dtpagamento",$data[0],$data[1],$data[2],true,"text", 1,"onchange=js_comparaDataSlip()", "", "", "","","", "js_comparaDataSlip()");
                   ?>
                 </td>
 
@@ -432,10 +432,6 @@ $db_opcao = 1;
     oParam.k145_numeroprocesso = encodeURIComponent(tagString($F("k145_numeroprocesso")));
     oParam.lBuscaCheque        = true;
 
-    // Teste de Informação
-    console.log("Mostrando o oParam");
-    console.log(oParam);
-
     var sParam           = js_objectToJson(oParam);
     js_divCarregando("Aguarde, pesquisando Movimentos.","msgBox");
     url       = 'emp4_manutencaoPagamentoRPC.php';
@@ -459,10 +455,6 @@ $db_opcao = 1;
     gridNotas.clearAll(true);
     var iRowAtiva     = 0;
     var iTotalizador  = 0;
-
-    // Teste de retorno
-    console.log("Mostrando o oResponse");
-    console.log(oResponse);
 
     if (oResponse.status == 1) {
 
@@ -559,29 +551,40 @@ $db_opcao = 1;
     gridNotas              = new DBGrid("gridNotas");
     gridNotas.nameInstance = "gridNotas";
 	let iTotalItens = gridNotas.length;
-    gridNotas.selectSingle = function (oCheckbox,sRow,oRow,lVerificaSaldo,iTotalItens) {
+    gridNotas.selectSingle = function (oCheckbox,sRow,oRow,lVerificaSaldo,iTotalItens,flagSelectAll) {
       if (lVerificaSaldo == null) {
         var lVerificaSaldo = true;
       }
       if (oCheckbox.checked ) {
 
-        oRow.isSelected    = true;
-        $(sRow).className  += 'marcado';
-        oRow.isSelected    = true;
-        if (oRow.aCells[4].getValue() != "") {
-          if ($('ctapag'+oRow.sValue) && lVerificaSaldo) {
-            js_getSaldos($('ctapag'+oRow.sValue));
-          } else if (lVerificaSaldo) {
-            js_getSaldosMov(oRow.aCells[4].getValue(),oRow.aCells[4].getContent());
+        if(js_comparadata($F('e42_dtpagamento'),oRow.aCells[9].getValue(),"<")){
+          
+          if(flagSelectAll != true) {
+          alert("Data de pagamento anterior a data do SLIP. O item não pode ser selecionado.");
           }
-        }
-        if (lVerificaSaldo) {
-          $('TotalForCol10').innerHTML = js_formatar(gridNotas.sum(10).toFixed(2),'f');
-        }
-        $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML)+1;
+          oCheckbox.checked = false;
+          oRow.isSelected   = false;
+          
+        } else {
 
+          oRow.isSelected    = true;
+          $(sRow).className  += 'marcado';
+          oRow.isSelected    = true;
+          if (oRow.aCells[4].getValue() != "") {
+            if ($('ctapag'+oRow.sValue) && lVerificaSaldo) {
+              js_getSaldos($('ctapag'+oRow.sValue));
+            } else if (lVerificaSaldo) {
+              js_getSaldosMov(oRow.aCells[4].getValue(),oRow.aCells[4].getContent());
+            }
+          }
+          if (lVerificaSaldo) {
+            $('TotalForCol10').innerHTML = js_formatar(gridNotas.sum(10).toFixed(2),'f');
+          }
+          $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML)+1;
+        }
+          
       } else {
-
+        
         $(sRow).className = oRow.getClassName();
         oRow.isSelected   = false;
         $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML)-1;
@@ -611,7 +614,7 @@ $db_opcao = 1;
               if (!itens[i].checked) {
 
                 itens[i].checked=true;
-                this.selectSingle($(itens[i].id), (sLinha+i), this.aRows[i], false);
+                this.selectSingle($(itens[i].id), (sLinha+i), this.aRows[i], false, iTotalItens, true);
 
               }
 
@@ -621,7 +624,7 @@ $db_opcao = 1;
             if (itens[i].checked) {
 
               itens[i].checked=false;
-              this.selectSingle($(itens[i].id), (sLinha+i), this.aRows[i], false);
+              this.selectSingle($(itens[i].id), (sLinha+i), this.aRows[i], false, iTotalItens, true);
             }
           }
         }
@@ -898,12 +901,14 @@ $db_opcao = 1;
       return false;
 
     }
-    if (js_comparadata(sDataDia,$F('e42_dtpagamento'),">")) {
 
-      alert("Data Informada Inválida.\nData menor que a data do sistema");
-      return false;
+    //Comentado devido a OC20697
+    // if (js_comparadata(sDataDia,$F('e42_dtpagamento'),">")) {
 
-    }
+    //   alert("Data Informada Inválida.\nData menor que a data do sistema");
+    //   return false;
+
+    // }
 
 
     var oEnvio                 = new Object();
@@ -1022,14 +1027,8 @@ $db_opcao = 1;
       }
     }
 
-	// console.log(oEnvio);return false;
     js_divCarregando("Aguarde, Configurando Movimentos.","msgBox");
     js_liberaBotoes(false);
-
-    // Teste do oRetorno
-    console.log("Mostrando o oEnvio");
-    console.log(oEnvio);
-    console.log("Mostrando a url " + url);
 
     var sJson = js_objectToJson(oEnvio);
     var oAjax = new Ajax.Request(
@@ -1047,10 +1046,6 @@ $db_opcao = 1;
     js_removeObj("msgBox");
     js_liberaBotoes(true);
     var oRetorno = eval("("+oAjax.responseText+")");
-
-    // Teste do oRetorno
-    console.log("Mostrando o oRetorno");
-    console.log(oRetorno);
 
     if (oRetorno.status == 1) {
 
@@ -1469,8 +1464,6 @@ $db_opcao = 1;
 
         aMovimentos.each(function (aMovimento) {
 
-            console.log(aMovimento);
-
             if (aMovimento.getClassName() == 'configurada' && aMovimento.aCells[7].getValue() == 2) {
                 return;
             } else {
@@ -1487,6 +1480,16 @@ $db_opcao = 1;
 
     }
 
+  function js_comparaDataSlip(){
+    let slipSelecinados = gridNotas.getSelection("object");
+    for (let i = 0; i < slipSelecinados.length; i++) {
+      if(js_comparadata($F('e42_dtpagamento'),slipSelecinados[i].aCells[9].getValue(), "<")){
+        document.getElementById('e42_dtpagamento').value = ""
+        alert("Slips selecionados possuem data anterior a data de pagamento desejada.");
+        break;
+      }
+    }
+  }
 
   js_init();
 </script>
