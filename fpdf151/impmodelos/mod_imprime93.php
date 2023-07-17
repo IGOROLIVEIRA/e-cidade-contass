@@ -604,7 +604,7 @@ if ($contapagina == 1) {
   $this->objpdf->setfillcolor(0, 0, 0);
   $this->objpdf->text($xcol + 23, $xlin + 249, strtoupper($this->municpref) . ', ' . substr($this->emissao, 8, 2) . ' DE ' . strtoupper(db_mes(substr($this->emissao, 5, 2))) . ' DE ' . substr($this->emissao, 0, 4) . '.');
   $this->objpdf->text($xcol + 43, $xlin + 256, "AUTORIZO", 0, 4);
-  $this->objpdf->text($xcol + 45, $xlin + 268, substr($this->Sorgao, 0, 35));
+  $this->objpdf->text($xcol + 23, $xlin + 268, substr($this->Sorgao, 0, 35));
   $this->objpdf->text($xcol + 135, $xlin + 256, "ORDENADOR DA DESPESA", 0, 4);
 }
 

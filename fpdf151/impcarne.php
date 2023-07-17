@@ -1301,7 +1301,7 @@ class db_impcarne extends cl_assinatura
                     $this->objpdf->Setfont('Arial', 'B', 8);
                     $this->objpdf->text($xcol + 2, $xlin + 28, 'ITEM');
                     $this->objpdf->text($xcol + 11, $xlin + 28, 'QUANT');
-                    $this->objpdf->text($xcol + 30, $xlin + 28, 'REF');
+                    $this->objpdf->text($xcol + 26, $xlin + 28, 'UNIDADE');
                     $this->objpdf->text($xcol + 70, $xlin + 28, 'MATERIAL OU SERVIÇO');
                     //$this->objpdf->text($xcol + 145, $xlin + 28, 'VALOR UNITÁRIO');
                     //$this->objpdf->text($xcol + 176, $xlin + 28, 'VALOR TOTAL');
