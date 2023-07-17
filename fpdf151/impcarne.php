@@ -1312,7 +1312,7 @@ class db_impcarne extends cl_assinatura
                     $this->objpdf->sety($xlin + 11);
                     $this->objpdf->setleftmargin(3);
                     $x = true;
-                    $this->objpdf->Setfont('Arial', 'B', 7);
+                    $this->objpdf->Setfont('Arial', '', 7);
                 } else {
 
                     // Caixas dos label's

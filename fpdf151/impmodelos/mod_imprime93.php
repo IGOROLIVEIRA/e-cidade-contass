@@ -545,6 +545,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     // $mais = $this->objpdf->NbLines(95,$resum);
     $mais = 0;
     $mostra = $xlin;
+    $iContadorLinhasCriterios = 0;
 
     while ($resum != "") {
       $alturapaginafunc = $this->objpdf->h  - 58;
@@ -552,9 +553,15 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
         $alturapaginafunc = $this->objpdf->h - 30;
       }
       $alturapaginafunc = (int)$alturapaginafunc;
+      $iContadorLinhasCriterios = (239.4 - $this->objpdf->gety())/3;
 
       $resum = $this->objpdf->Row_multicell(array('', '', '', stripslashes($resum), '', ''), 3, false, $dist, 0, true, true, 3, $alturapaginafunc);
 
+      if($resum != "" && $iContadorLinhasCriterios >2){
+        $resummenor = substr($resum, 0, $iContadorLinhasCriterios * 125);
+        $resum = substr($resum, $iContadorLinhasCriterios * 125,strlen($resum));
+        $this->objpdf->Row_multicell(array('',  '', '', stripslashes($resummenor), '', ''), 3, false, $dist, 0, true, true, 3, $alturapaginafunc);
+      }
       $x = $this->muda_pag3($pagina, $mostra, $xcol, "false", $contapagina, $mais);
     }
   }
