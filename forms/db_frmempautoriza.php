@@ -117,12 +117,12 @@ db_app::load("DBFormCache.js");
                     <!-- Inclui data de emissão de autorização -->
                     <b> Data da Autorização: </b>
                     <?
-                        if ($db_opcao == 1 && !$e54_emiss) {
-                            $e54_emiss_dia = date("d",db_getsession("DB_datausu"));
-                            $e54_emiss_mes = date("m",db_getsession("DB_datausu"));
-                            $e54_emiss_ano = date("Y",db_getsession("DB_datausu"));
-                        }
-                        db_inputData('e54_emiss', @$e54_emiss_dia, @$e54_emiss_mes, @$e54_emiss_ano, true, 'text', $db_opcao);
+                    if ($db_opcao == 1 && !$e54_emiss) {
+                        $e54_emiss_dia = date("d", db_getsession("DB_datausu"));
+                        $e54_emiss_mes = date("m", db_getsession("DB_datausu"));
+                        $e54_emiss_ano = date("Y", db_getsession("DB_datausu"));
+                    }
+                    db_inputData('e54_emiss', @$e54_emiss_dia, @$e54_emiss_mes, @$e54_emiss_ano, true, 'text', $db_opcao);
                     ?>
                 </td>
             </tr>
@@ -252,12 +252,8 @@ db_app::load("DBFormCache.js");
                         }
                     }
 
-                    /*
-                    * alterado para liberar o campo tipo de compra para alteracao
-                    */
                     $result = $clpctipocompra->sql_record($clpctipocompra->sql_query_file(null, "pc50_codcom as e54_codcom,pc50_descr"));
                     db_selectrecord("e54_codcom", $result, true, isset($emprocesso) && $emprocesso == true ? "1" : $db_opcao, "", "", "", "", "js_verificatipocompratribunal(this.value)");
-                    //db_input('e54_codcom', 48, $Iz01_nome, true, 'text', 3, '');
                     ?>
                 </td>
             </tr>
@@ -1268,7 +1264,7 @@ db_app::load("DBFormCache.js");
             document.form1.e54_nummodalidade.value = '';
             document.form1.e54_numerl.value = '';
         } else if (oRetorno.tipocompratribunal != 13) {
-           validaTipoAutorizacao(oRetorno);
+            validaTipoAutorizacao(oRetorno);
         }
         js_removeObj('msgbox');
     }
