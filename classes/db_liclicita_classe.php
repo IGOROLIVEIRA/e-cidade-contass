@@ -3621,25 +3621,7 @@ class cl_liclicita
                                         WHEN liclicitem.l21_sigilo IS NOT NULL THEN liclicitem.l21_sigilo
                                         ELSE 'f'
                                     END AS l21_sigilo,
-                                    CASE
-                                        WHEN substring(o56_elemento
-                                                        FROM 0
-                                                        FOR 8) IN
-                                                (SELECT DISTINCT substring(o56_elemento
-                                                                            FROM 0
-                                                                            FOR 8)
-                                                FROM orcelemento
-                                                WHERE o56_elemento LIKE '%3449061%') THEN 1
-                                        WHEN substring(o56_elemento
-                                                        FROM 0
-                                                        FOR 8) IN
-                                                (SELECT DISTINCT substring(o56_elemento
-                                                                            FROM 0
-                                                                            FOR 8)
-                                                FROM orcelemento
-                                                WHERE o56_elemento LIKE '%3449052%') THEN 2
-                                        ELSE 3
-                                    END AS itemCategoriaId,
+                                    3 AS itemCategoriaId,
                                     pcmater.pc01_regimobiliario AS codigoRegistroImobiliario
                         FROM liclicita
                         JOIN db_depart ON coddepto=l20_codepartamento
@@ -3668,7 +3650,8 @@ class cl_liclicita
         return $sql;
     }
 
-    public function sql_query_pncp_itens_retifica_situacao ($l20_codigo,$ordem){
+    public function sql_query_pncp_itens_retifica_situacao($l20_codigo, $ordem)
+    {
         $sql = "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
                 CASE
                     WHEN pcmater.pc01_servico='t' THEN 'S'
@@ -3944,7 +3927,7 @@ class cl_liclicita
                             ELSE 3
                         END AS porteFornecedorId,
                         'BRA' AS codigoPais,
-                        liclicita.l20_subcontratacao AS indicadorSubcontratacao, 
+                        liclicita.l20_subcontratacao AS indicadorSubcontratacao,
                         CASE
                             WHEN pc50_pctipocompratribunal IN (100,101,102,103) THEN l20_dtpubratificacao
                             ELSE l202_datahomologacao
@@ -4003,7 +3986,7 @@ class cl_liclicita
                             ELSE 3
                         END AS porteFornecedorId,
                         'BRA' AS codigoPais,
-                        liclicita.l20_subcontratacao AS indicadorSubcontratacao, 
+                        liclicita.l20_subcontratacao AS indicadorSubcontratacao,
                         CASE
                             WHEN pc50_pctipocompratribunal IN (100,101,102,103) THEN l20_dtpubratificacao
                             ELSE l202_datahomologacao
@@ -4052,7 +4035,7 @@ class cl_liclicita
                         l221_exercicio AS anoAta,
                         l221_dataini AS dataAssinatura,
                         l221_dataini AS dataVigenciaInicio,
-                        l221_datafinal AS dataVigenciaFim  
+                        l221_datafinal AS dataVigenciaFim
         FROM licatareg
         WHERE l221_licitacao = $l20_codigo";
 
@@ -4385,7 +4368,7 @@ class cl_liclicita
         case
             when length(trim(z01_cgccpf)) = 14 then 'PJ'
             when length(trim(z01_cgccpf)) = 11 then 'PF'
-            else 
+            else
                             'PE'
         end as tipoPessoaFornecedor,
         z01_nome as nomeRazaoSocialFornecedor,
@@ -4405,12 +4388,12 @@ class cl_liclicita
                          (
             select
                 (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 +
-                          (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date))) > 0 then 
+                          (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date))) > 0 then
                           (
             select
                 (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 +
                           (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date)))
-            else 
+            else
                          1
             end as numeroParcelas
         from
@@ -4421,10 +4404,10 @@ class cl_liclicita
         left join liclicitem on
             liclicitem.l21_codpcprocitem = empautitempcprocitem.e73_pcprocitem
         inner join empautoriza on
-            empautoriza.e54_autori = empautitem.e55_autori                    
+            empautoriza.e54_autori = empautitem.e55_autori
         left join liclicita on
         liclicitem.l21_codliclicita = liclicita.l20_codigo
-		or 
+		or
 		liclicita.l20_codigo = empautoriza.e54_codlicitacao
         left join cflicita on
             liclicita.l20_codtipocom = cflicita.l03_codigo
@@ -4439,7 +4422,7 @@ class cl_liclicita
             or e54_codlicitacao = l213_licitacao
         join empempenhopncp on
             e213_contrato = e60_numemp
-                
+
         where e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' ";
 
         return $sql;
