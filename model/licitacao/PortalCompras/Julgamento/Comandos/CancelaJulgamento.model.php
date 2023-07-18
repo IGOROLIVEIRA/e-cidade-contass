@@ -5,18 +5,22 @@ require_once("classes/db_liclicitaimportarjulgamento_classe.php");
 class CancelaJulgamento
 {
     /**
-     * Undocumented function
+     * Executa cancelamento de julgamento
      *
      * @param integer $pc20_codorc
      * @param integer $l20_codigo
      * @return array
      */
-    public function execute(int $pc20_codorc, int $l20_codigo): array
+    public function execute(int $pc20_codorc, int $l20_codigo, bool $lRegistroPreco): array
     {
 
         $climportjulgamento = new cl_liclicitaimportarjulgamento;
 
-        $climportjulgamento->cancelaJulgamento($pc20_codorc, $l20_codigo);
+        if ($lRegistroPreco) {
+            $climportjulgamento->cancelaJulgamentoRegistroPreco($pc20_codorc, $l20_codigo);
+        } else {
+            $climportjulgamento->cancelaJulgamentoComum($pc20_codorc, $l20_codigo);
+        }
 
         if ($climportjulgamento->erro_status === 0) {
             return [
@@ -30,5 +34,4 @@ class CancelaJulgamento
             'messagem' => "Julgamento cancelado com sucesso"
         ];
     }
-
 }
