@@ -64,9 +64,9 @@ $sql = "select   k13_reduz,
 		                     inner join conplanoreduz on c61_anousu=c62_anousu and c61_reduz = c62_reduz and c61_instit = " . db_getsession("DB_instit") . "
 	                         inner join conplano      on c60_codcon = c61_codcon and c60_anousu=c61_anousu
 	                         left  join conplanoconta on c60_codcon = c63_codcon and c63_anousu=c60_anousu ";
-if($conta_nova != "" and $conta_nova != 0) {
-    $sql .= "where c61_reduz = {$conta_nova} ";
-}if($conta_nova == 0) {
+if($conta_nova !== "()") {
+    $sql .= "where c61_reduz in {$conta_nova} ";
+}if($conta_nova === "()") {
     $sql .= "where c61_reduz > 0 ";
 }
 $sql .= "  ) as x ";
@@ -88,7 +88,9 @@ for($linha=0; $linha<$numrows; $linha++) {
     $aContas[$k13_reduz]->c63_agencia = $c63_agencia . '-' . $c63_dvagencia;
 }
 
-$sqlPendencias = "SELECT
+foreach ($aContas as $oConta){
+
+    $sqlPendencias = "SELECT
                       *
                   FROM
                       conciliacaobancariapendencia
@@ -107,17 +109,18 @@ $sqlPendencias = "SELECT
                       AND '{$data_final}' AND k172_dataconciliacao IS NULL)
                       OR (k172_dataconciliacao > '{$data_final}' AND  k173_data <= '{$data_final}')
                       OR (k172_dataconciliacao IS NULL AND k173_data <= '{$data_inicial}'))
-                      AND k173_conta = {$k13_reduz} ";
+                      AND k173_conta = {$oConta->k13_reduz} ";
+
 $query = pg_query($sqlPendencias);
 
 while ($row = pg_fetch_object($query)) {
-    if ($row->k173_tipolancamento == 1)
+    if ($row->k173_tipolancamento == 1) 
         $lancamentos[$row->k173_mov][] = $row;
     else
-        $pendencias[$row->k173_mov][] = $row;
+        $oConta->pendencias[$row->k173_mov][] = $row;
 }
 
-$sql = query_lancamentos($k13_reduz, $data_inicial, $data_final);
+$sql = query_lancamentos($oConta->k13_reduz, $data_inicial, $data_final);
 
 $query = pg_query($sql);
 
@@ -140,9 +143,9 @@ while ($row = pg_fetch_object($query)) {
     $data->k173_documento = (!$row->cheque AND $row->cheque == "0") ? "" : $row->cheque;
     $data->k173_historico = descricaoHistorico($row->tipo, $row->codigo, $row->historico);
     $data->k173_valor = abs($valor);
-    $lancamentos[$movimento][] = $data;
+    $oConta->lancamentos[$movimento][] = $data;
 }
-
+}
 // Definindo a impressão
 $pdf = new PDF();
 $pdf->Open();
@@ -151,106 +154,11 @@ $pdf->SetTextColor(0,0,0);
 $pdf->setfillcolor(235);
 $pdf->AutoPageBreak = false;
 $pdf->AddPage("L");
-
-foreach ($aContas as $oConta) {
-    if ($pdf->GetY() > $pdf->h - 25){
-        $pdf->AddPage("L");
-    }
-
-    $totalMovimentacaoGeral = 0;
-    imprimeConta($pdf,$oConta);
-    imprimeCabecalho($pdf);
-    $saldo_extrato = saldo_extrato_bancario($k13_reduz, $data_inicial, $data_final);
-    imprimeSaldoExtratoBancario($pdf, $saldo_extrato);
-    $pdf->Ln(5);
-    $totalMovimentacaoGeral += $saldo_extrato;
-
-    imprimeCabecalhoSub($pdf, "(2) ENTRADAS NÃO CONSIDERADAS PELO BANCO");
-    $totalMovimentacao = 0;
-    foreach ($lancamentos[1] as $lancamento) {
-        if ($pdf->GetY() > $pdf->h - 25) {
-            $pdf->AddPage("L");
-            imprimeConta($pdf,$oConta);
-            imprimeCabecalho($pdf);
-        }
-        $pdf->Cell(25, 5, db_formatar($lancamento->k173_data, "d"), "T", 0, "C", 0);
-        $pdf->Cell(25, 5, $lancamento->k173_codigo, "T", 0, "C", 0);
-        $pdf->Cell(25, 5, $lancamento->k173_documento, "T", 0, "C", 0);
-        $pdf->Cell(179, 5, $lancamento->k173_historico, "T", 0, "L", 0);
-        $pdf->Cell(25, 5, db_formatar($lancamento->k173_valor, "f"), "T", 0, "R", 0);
-        $totalMovimentacao += $lancamento->k173_valor;
-        $totalMovimentacaoGeral += $lancamento->k173_valor;
-        $pdf->Ln(5);
-	  }
-    imprimeTotalMovConta($pdf, $totalMovimentacao, 2);
-    $pdf->Ln(5);
-
-    // Saídas não consideradas pela contabilidade
-    imprimeCabecalhoSub($pdf, "(3) SAÍDAS NÃO CONSIDERADAS PELA CONTABILIDADE");
-    $totalMovimentacao = 0;
-	  foreach ($pendencias[2] as $lancamento) {
-        if ($pdf->GetY() > $pdf->h - 25){
-            $pdf->AddPage("L");
-            imprimeConta($pdf,$oConta);
-            imprimeCabecalho($pdf);
-        }
-        $pdf->Cell(25, 5, db_formatar($lancamento->k173_data, "d"), "T", 0, "C", 0);
-        $pdf->Cell(25, 5, $lancamento->k173_codigo, "T", 0, "C", 0);
-        $pdf->Cell(25, 5, $lancamento->k173_documento, "T", 0, "C", 0);
-        $pdf->Cell(179, 5, $lancamento->k173_historico, "T", 0, "L", 0);
-        $pdf->Cell(25, 5, db_formatar($lancamento->k173_valor, "f"), "T", 0, "R", 0);
-        $totalMovimentacao += $lancamento->k173_valor;
-        $totalMovimentacaoGeral += $lancamento->k173_valor;
-        $pdf->Ln(5);
-	  }
-    imprimeTotalMovConta($pdf, $totalMovimentacao, 3);
-    $pdf->Ln(5);
-
-	  // Saídas não consideradas pelo banco
-    imprimeCabecalhoSub($pdf, "(4) SAÍDAS NÃO CONSIDERADAS PELO BANCO");
-    $totalMovimentacao = 0;
-	  foreach ($lancamentos[2] as $lancamento) {
-        if ($pdf->GetY() > $pdf->h - 25){
-            $pdf->AddPage("L");
-            imprimeConta($pdf,$oConta);
-            imprimeCabecalho($pdf);
-        }
-        $pdf->Cell(25, 5, db_formatar($lancamento->k173_data, "d"), "T", 0, "C", 0);
-        $pdf->Cell(25, 5, ($lancamento->k173_codigo == "0" OR $lancamento->k173_codigo == NULL) ? "" : $lancamento->k173_codigo, "T", 0, "C", 0);
-        $pdf->Cell(25, 5, $lancamento->k173_documento, "T", 0, "C", 0);
-        $pdf->Cell(179, 5, $lancamento->k173_historico, "T", 0, "L", 0);
-        $pdf->Cell(25, 5, db_formatar($lancamento->k173_valor, "f"), "T", 0, "R", 0);
-        $totalMovimentacao += $lancamento->k173_valor;
-        $totalMovimentacaoGeral -= $lancamento->k173_valor;
-        $pdf->Ln(5);
-	  }
-    imprimeTotalMovConta($pdf, $totalMovimentacao, 4);
-    $pdf->Ln(5);
-
-    // Entradas não consideradas pela contabilidade
-    imprimeCabecalhoSub($pdf, "(5) ENTRADAS NÃO CONSIDERADAS PELA CONTABILIDADE");
-    $totalMovimentacao = 0;
-	  foreach ($pendencias[1] as $lancamento) {
-		    if ($pdf->GetY() > $pdf->h - 25) {
-            $pdf->AddPage("L");
-            imprimeConta($pdf,$oConta);
-            imprimeCabecalho($pdf);
-		    }
-        $pdf->Cell(25, 5, db_formatar($lancamento->k173_data, "d"), "T", 0, "C", 0);
-        $pdf->Cell(25, 5, ($lancamento->k173_codigo == "0" OR $lancamento->k173_codigo == NULL) ? "" : $lancamento->k173_codigo, "T", 0, "C", 0);
-        $pdf->Cell(25, 5, $lancamento->k173_documento, "T", 0, "C", 0);
-        $pdf->Cell(179, 5, $lancamento->k173_historico, "T", 0, "L", 0);
-        $pdf->Cell(25, 5, db_formatar($lancamento->k173_valor, "f"), "T", 0, "R", 0);
-        $totalMovimentacao += $lancamento->k173_valor;
-        $totalMovimentacaoGeral -= $lancamento->k173_valor;
-        $pdf->Ln(5);
-	  }
-    imprimeTotalMovConta($pdf, $totalMovimentacao, 5);
-    $pdf->Ln(5);
-    imprimeTotalMovContabilidade($pdf, $totalMovimentacaoGeral);
-    $pdf->Ln(5);
+if($quebrar_contas === "s"){
+    $pdf->showPageFooter(false);
 }
 
+//Pega linhas de assinatura
 $sqlparagpadrao  = " select db61_texto ";
 $sqlparagpadrao .= " from db_documentopadrao ";
 $sqlparagpadrao .= "     inner join db_docparagpadrao  on db62_coddoc   = db60_coddoc ";
@@ -261,14 +169,136 @@ $sqlparagpadrao .= " where db60_tipodoc = 1507 and db60_instit = " . db_getsessi
 $resparagpadrao = @db_query($sqlparagpadrao);
 if (@pg_numrows($resparagpadrao) > 0) {
     db_fieldsmemory($resparagpadrao, 0);
-    // echo $db61_texto;
-    if ($pdf->GetY() > $pdf->h - 35) {
-        $pdf->AddPage("L");
+}
+foreach ($aContas as $oConta) {
+    //Testa se a conta tem pendencia de conciliação
+    $contaComPendencia = false;
+    if (count($oConta->lancamentos[1]) > 0 || count($oConta->lancamentos[2]) > 0 || count($oConta->pendencias[1]) > 0 || count($oConta->pendencias[2]) > 0){
+        $contaComPendencia = true;
     }
-    @eval($db61_texto);
+
+    if(($somente_capa_com_pendencia === "s" && $contaComPendencia) || $somente_capa_com_pendencia !== "s"){
+        if ($pdf->GetY() > $pdf->h - 25){
+            $pdf->AddPage("L");
+        }
+
+        $totalMovimentacaoGeral = 0;
+        imprimeConta($pdf,$oConta);
+        imprimeCabecalho($pdf);
+        $saldo_extrato = saldo_extrato_bancario($oConta->k13_reduz, $data_inicial, $data_final);
+        imprimeSaldoExtratoBancario($pdf, $saldo_extrato);
+        $pdf->Ln(5);
+        $totalMovimentacaoGeral += $saldo_extrato;
+
+        imprimeCabecalhoSub($pdf, "(2) ENTRADAS NÃO CONSIDERADAS PELO BANCO");
+        $totalMovimentacao = 0;
+        foreach ($oConta->lancamentos[1] as $lancamento) {
+            if ($pdf->GetY() > $pdf->h - 25) {
+                $pdf->AddPage("L");
+                imprimeConta($pdf,$oConta);
+                imprimeCabecalho($pdf);
+            }
+            $pdf->Cell(25, 5, db_formatar($lancamento->k173_data, "d"), "T", 0, "C", 0);
+            $pdf->Cell(25, 5, $lancamento->k173_codigo, "T", 0, "C", 0);
+            $pdf->Cell(25, 5, $lancamento->k173_documento, "T", 0, "C", 0);
+            $pdf->Cell(179, 5, $lancamento->k173_historico, "T", 0, "L", 0);
+            $pdf->Cell(25, 5, db_formatar($lancamento->k173_valor, "f"), "T", 0, "R", 0);
+            $totalMovimentacao += $lancamento->k173_valor;
+            $totalMovimentacaoGeral += $lancamento->k173_valor;
+            $pdf->Ln(5);
+        }
+        imprimeTotalMovConta($pdf, $totalMovimentacao, 2);
+        $pdf->Ln(5);
+
+        // Saídas não consideradas pela contabilidade
+        imprimeCabecalhoSub($pdf, "(3) SAÍDAS NÃO CONSIDERADAS PELA CONTABILIDADE");
+        $totalMovimentacao = 0;
+        foreach ($oConta->pendencias[2] as $lancamento) {
+            if ($pdf->GetY() > $pdf->h - 25){
+                $pdf->AddPage("L");
+                imprimeConta($pdf,$oConta);
+                imprimeCabecalho($pdf);
+            }
+            $pdf->Cell(25, 5, db_formatar($lancamento->k173_data, "d"), "T", 0, "C", 0);
+            $pdf->Cell(25, 5, $lancamento->k173_codigo, "T", 0, "C", 0);
+            $pdf->Cell(25, 5, $lancamento->k173_documento, "T", 0, "C", 0);
+            $pdf->Cell(179, 5, $lancamento->k173_historico, "T", 0, "L", 0);
+            $pdf->Cell(25, 5, db_formatar($lancamento->k173_valor, "f"), "T", 0, "R", 0);
+            $totalMovimentacao += $lancamento->k173_valor;
+            $totalMovimentacaoGeral += $lancamento->k173_valor;
+            $pdf->Ln(5);
+        }
+        imprimeTotalMovConta($pdf, $totalMovimentacao, 3);
+        $pdf->Ln(5);
+
+        // Saídas não consideradas pelo banco
+        imprimeCabecalhoSub($pdf, "(4) SAÍDAS NÃO CONSIDERADAS PELO BANCO");
+        $totalMovimentacao = 0;
+        foreach ($oConta->lancamentos[2] as $lancamento) {
+            if ($pdf->GetY() > $pdf->h - 25){
+                $pdf->AddPage("L");
+                imprimeConta($pdf,$oConta);
+                imprimeCabecalho($pdf);
+            }
+            $pdf->Cell(25, 5, db_formatar($lancamento->k173_data, "d"), "T", 0, "C", 0);
+            $pdf->Cell(25, 5, ($lancamento->k173_codigo == "0" OR $lancamento->k173_codigo == NULL) ? "" : $lancamento->k173_codigo, "T", 0, "C", 0);
+            $pdf->Cell(25, 5, $lancamento->k173_documento, "T", 0, "C", 0);
+            $pdf->Cell(179, 5, $lancamento->k173_historico, "T", 0, "L", 0);
+            $pdf->Cell(25, 5, db_formatar($lancamento->k173_valor, "f"), "T", 0, "R", 0);
+            $totalMovimentacao += $lancamento->k173_valor;
+            $totalMovimentacaoGeral -= $lancamento->k173_valor;
+            $pdf->Ln(5);
+        }
+        imprimeTotalMovConta($pdf, $totalMovimentacao, 4);
+        $pdf->Ln(5);
+
+        // Entradas não consideradas pela contabilidade
+        imprimeCabecalhoSub($pdf, "(5) ENTRADAS NÃO CONSIDERADAS PELA CONTABILIDADE");
+        $totalMovimentacao = 0;
+        foreach ($oConta->pendencias[1] as $lancamento) {
+                if ($pdf->GetY() > $pdf->h - 25) {
+                $pdf->AddPage("L");
+                imprimeConta($pdf,$oConta);
+                imprimeCabecalho($pdf);
+                }
+            $pdf->Cell(25, 5, db_formatar($lancamento->k173_data, "d"), "T", 0, "C", 0);
+            $pdf->Cell(25, 5, ($lancamento->k173_codigo == "0" OR $lancamento->k173_codigo == NULL) ? "" : $lancamento->k173_codigo, "T", 0, "C", 0);
+            $pdf->Cell(25, 5, $lancamento->k173_documento, "T", 0, "C", 0);
+            $pdf->Cell(179, 5, $lancamento->k173_historico, "T", 0, "L", 0);
+            $pdf->Cell(25, 5, db_formatar($lancamento->k173_valor, "f"), "T", 0, "R", 0);
+            $totalMovimentacao += $lancamento->k173_valor;
+            $totalMovimentacaoGeral -= $lancamento->k173_valor;
+            $pdf->Ln(5);
+        }
+        imprimeTotalMovConta($pdf, $totalMovimentacao, 5);
+        $pdf->Ln(5);
+        imprimeTotalMovContabilidade($pdf, $totalMovimentacaoGeral);
+        $pdf->Ln(5);
+
+        if($quebrar_contas === "s"){
+            if ($db61_texto) {
+                if ($pdf->GetY() > $pdf->h - 35) {
+                    $pdf->AddPage("L");
+                }
+                @eval($db61_texto);
+                //Testa se é o ultimo elemento para evitar ultima pagina em branco
+                if($oConta !== end($aContas)){
+                    $pdf->AddPage("L");
+                }
+            }
+        }
+    }
 }
 
-// die;
+    if($quebrar_contas !== "s"){
+        if ($db61_texto) {
+            if ($pdf->GetY() > $pdf->h - 35) {
+                $pdf->AddPage("L");
+            }
+            @eval($db61_texto);
+        }
+    }
+
 $pdf->Output();
 exit();
 
