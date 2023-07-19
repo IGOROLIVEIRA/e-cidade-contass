@@ -352,7 +352,7 @@ abstract class DBPessoal {
    * Arredonda o valor para duas casas decimais 
    * sem arredondar para mais ou para menos
    * 
-   * @param floar $valor
+   * @param float $valor
    * @return float 
    */
   public static function arredondarValor($valor) {
@@ -361,6 +361,27 @@ abstract class DBPessoal {
       return floor(($valor*100))/100;
     }
     return $valor;
+  }
+
+  /**
+   * Retorna uma string com os parâmetros do post 
+   * formatados para serem usados como uma nova url
+   * 
+   * @param object $oPost
+   * @return string 
+   */
+  public static function getPostParamAsUrl($oPost) {
+    $aPostParams = array();
+    foreach ($oPost as $key => $value) {
+      if ($key == "opcao_geral" && $oPost->opcao_geral == 4) {
+        $value = 1;
+      }
+      if ($key == "opcao_geral" && $oPost->opcao_geral == 1) {
+        $value = 4;
+      }
+      $aPostParams[] = "{$key}={$value}";
+    }
+    return implode("&", $aPostParams);
   }
   
 }
