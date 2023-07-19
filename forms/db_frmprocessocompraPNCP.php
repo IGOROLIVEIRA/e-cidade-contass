@@ -209,7 +209,7 @@ $clrotulo->label("descrdepto");
                         </td>
                         <td>
                             <?php
-                            $sql = "SELECT * FROM amparolegal 
+                            $sql = "SELECT * FROM amparolegal
                         WHERE l212_codigo IN
                                 (SELECT l213_amparo
                                  FROM amparocflicita
@@ -816,6 +816,7 @@ $clrotulo->label("descrdepto");
                 pc80_dadoscomplementares: oCampos.pc80_dadoscomplementares.value,
                 pc80_amparolegal: oCampos.pc80_amparolegal.value,
                 pc80_categoriaprocesso: oCampos.pc80_categoriaprocesso.value,
+                iSolicitacao: document.getElementById('oGridItensrow0cell0').innerText,
                 aItens: aItensLote
             }
 
