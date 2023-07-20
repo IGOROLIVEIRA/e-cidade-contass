@@ -663,7 +663,6 @@ switch ($oParam->exec) {
       $oRetorno->itens  = $aArrayArquivos;
       if ($bEncerramento)
         $oRetorno->calculos = getCalculoEncerramento();
-      // var_dump($oRetorno);
     }
 
 

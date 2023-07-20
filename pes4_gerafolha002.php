@@ -121,6 +121,9 @@ if(!isset($r110_lotaci)){
 if(!isset($r110_lotacf)){
   $r110_lotacf = '    ';
 }
+if ($opcao_gml == "m") {
+  $aMatriculasAtivas = explode(",", $faixa_regis); 
+}
 
 if ($opcao_gml == 'm') {
   $where = " ";
@@ -169,6 +172,15 @@ if ($opcao_gml == 'm') {
         $faixa_regis .= $separa.$pessoal[$Ipessoal]["rh01_regist"];
         $separa = ",";
       }
+    }
+  }
+}
+
+$iMatriculaCalcular = null;
+if (!isset($oGet->calculo_matricula_ajuste)) {
+  foreach ($aMatriculasAtivas as $iMatric) {
+    if(!strpos($faixa_regis, $iMatric)) {
+      $iMatriculaCalcular = $iMatric;
     }
   }
 }
@@ -412,6 +424,18 @@ if (count($aMatriculasVerificar) > 0) {
 $aMatriculasVerificar = $oVerificacaoFolha->verificaServidoresRubricaR928($matriculas, $opcao_geral);
 if (count($aMatriculasVerificar) > 0) {
   db_msgbox("Existem servidores com Insuficiência de saldo, Rubrica R928. Matrículas (".implode(",", $aMatriculasVerificar).")");
+}
+
+if (!empty($iMatriculaCalcular) && $opcao_geral == 1) {
+  $oDaoRescisao = db_utils::getDao("rhpesrescisao");
+  $sSqlRescisao = $oDaoRescisao->sql_servidor_rescisao(null,  "rh05_seqpes", null, "rh01_regist = {$iMatriculaCalcular} AND (date_part('year',rh05_recis)::varchar || lpad(date_part('month',rh05_recis)::varchar,2,'0'))::integer = {$anousu}{$mesusu}");
+  $rsRescisaoResult = db_query($sSqlRescisao);
+}
+
+if (!empty($iMatriculaCalcular) && ($opcao_geral == 4 || ($opcao_geral == 1 && pg_num_rows($rsRescisaoResult) > 0))) {
+  $sPostParams = DBPessoal::getPostParamAsUrl($oPost);
+  $sPostParams .= "&calculo_matricula_ajuste=1";
+  echo "<script>window.location.href='?{$sPostParams}'</script>";
 }
 
 if(!isset($oGet->lAutomatico)){
