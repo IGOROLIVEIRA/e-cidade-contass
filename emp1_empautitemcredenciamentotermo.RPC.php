@@ -152,6 +152,7 @@ switch ($_POST["action"]) {
                 }
 
                 $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$vlr_total}' readonly style='background-color: #DEB887; width: 80px' />";
+                $itemRows[] = "<input style='display: none;' type='text' id='servicoquantidade_{$oDados->pc01_codmater}' value='{$oDados->pc11_servicoquantidade}' width: 80px' />";
                 $employeeData[] = $itemRows;
             }
 
@@ -260,7 +261,7 @@ switch ($_POST["action"]) {
                 $clempautitem->e55_quant  = $item['qtd'];
                 $clempautitem->e55_unid   = $item['unidade'];
                 $clempautitem->e55_marca  = $item['marca'];
-                $clempautitem->e55_servicoquantidade  = 'f';
+                $clempautitem->e55_servicoquantidade  = $item['servicoquantidade'];
                 $clempautitem->e55_vlrun  = $item['vlrunit'];
                 $clempautitem->e55_vltot  = $item['total'];
                 $clempautitem->e55_sequen = $Seq + 1;
@@ -296,7 +297,7 @@ switch ($_POST["action"]) {
                 $clempautitem->e55_quant  = $item['qtd'];
                 $clempautitem->e55_unid   = $item['unidade'];
                 $clempautitem->e55_marca  = $item['marca'];
-                $clempautitem->e55_servicoquantidade = 'f';
+                $clempautitem->e55_servicoquantidade = $item['servicoquantidade'];
                 $clempautitem->e55_vlrun  = $item['vlrunit'];
                 $clempautitem->e55_vltot  = $item['total'];
 
