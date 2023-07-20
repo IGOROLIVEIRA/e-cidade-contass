@@ -283,6 +283,7 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 
     });
     $('sReferencia').style.width =' 100%';
+    $('sReferencia').value = 2;
 
 </script>
 </html>
