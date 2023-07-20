@@ -452,57 +452,6 @@ class cl_ext302023
     if ($si126_sequencial != null) {
       $sql .= " si126_sequencial = $this->si126_sequencial";
     }
-    $resaco = $this->sql_record($this->sql_query_file($this->si126_sequencial));
-    if ($this->numrows > 0) {
-//      for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
-//        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-//        $acount = pg_result($resac, 0, 0);
-//        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-//        $resac = db_query("insert into db_acountkey values($acount,2010865,'$this->si126_sequencial','A')");
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_sequencial"]) || $this->si126_sequencial != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010865,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_sequencial')) . "','$this->si126_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_tiporegistro"]) || $this->si126_tiporegistro != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010866,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_tiporegistro')) . "','$this->si126_tiporegistro'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_codext"]) || $this->si126_codext != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010867,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_codext')) . "','$this->si126_codext'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_codreduzidoop"]) || $this->si126_codreduzidoop != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010868,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_codreduzidoop')) . "','$this->si126_codreduzidoop'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_nroop"]) || $this->si126_nroop != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010869,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_nroop')) . "','$this->si126_nroop'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_dtpagamento"]) || $this->si126_dtpagamento != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010870,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_dtpagamento')) . "','$this->si126_dtpagamento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_tipodocumentocredor"]) || $this->si126_tipodocumentocredor != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010871,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_tipodocumentocredor')) . "','$this->si126_tipodocumentocredor'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_nrodocumento"]) || $this->si126_nrodocumento != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010872,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_nrodocumento')) . "','$this->si126_nrodocumento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_vlop"]) || $this->si126_vlop != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010873,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_vlop')) . "','$this->si126_vlop'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_especificacaoop"]) || $this->si126_especificacaoop != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010874,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_especificacaoop')) . "','$this->si126_especificacaoop'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_cpfresppgto"]) || $this->si126_cpfresppgto != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010875,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_cpfresppgto')) . "','$this->si126_cpfresppgto'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_mes"]) || $this->si126_mes != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010876,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_mes')) . "','$this->si126_mes'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_reg21"]) || $this->si126_reg21 != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2010877,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_reg21')) . "','$this->si126_reg21'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//        if (isset($GLOBALS["HTTP_POST_VARS"]["si126_instit"]) || $this->si126_instit != "") {
-//          $resac = db_query("insert into db_acount values($acount,2010355,2011639,'" . AddSlashes(pg_result($resaco, $conresaco, 'si126_instit')) . "','$this->si126_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        }
-//      }
-    }
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("", "", @pg_last_error());
@@ -542,35 +491,7 @@ class cl_ext302023
   // funcao para exclusao
   function excluir($si126_sequencial = null, $dbwhere = null)
   {
-    if ($dbwhere == null || $dbwhere == "") {
-      $resaco = $this->sql_record($this->sql_query_file($si126_sequencial));
-    } else {
-      $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
-    }
-    if (($resaco != false) || ($this->numrows != 0)) {
-//      for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
-//        $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-//        $acount = pg_result($resac, 0, 0);
-//        $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
-//        $resac = db_query("insert into db_acountkey values($acount,2010865,'$si126_sequencial','E')");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010865,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010866,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_tiporegistro')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010867,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_codext')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010868,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_codreduzidoop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010869,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_nroop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010870,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_dtpagamento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010871,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_tipodocumentocredor')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010872,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_nrodocumento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010873,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_vlop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010874,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_especificacaoop')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010875,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_cpfresppgto')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010876,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_mes')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2010877,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_reg21')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//        $resac = db_query("insert into db_acount values($acount,2010355,2011639,'','" . AddSlashes(pg_result($resaco, $iresaco, 'si126_instit')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-//      }
-    }
-    $sql = " delete from ext302023
-                    where ";
+    $sql = " delete from ext302023 where ";
     $sql2 = "";
     if ($dbwhere == null || $dbwhere == "") {
       if ($si126_sequencial != "") {
@@ -661,8 +582,7 @@ class cl_ext302023
       $sql .= $campos;
     }
     $sql .= " from ext302023 ";
-    $sql .= "      left  join ext212020  on  ext212020.si125_sequencial = ext302023.si126_reg21";
-    $sql .= "      left  join ext202020  on  ext202020.si165_sequencial = ext212020.si125_reg20";
+    $sql .= " left join ext202023 on (si165_codext, si165_mes, si165_instit) = (si126_codext, si126_mes, si126_instit)";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($si126_sequencial != null) {
@@ -725,6 +645,111 @@ class cl_ext302023
 
     return $sql;
   }
+
+  /**
+   * @SICOM
+   *
+   * @param $oExtras
+   * @param $oExtRecurso
+   * @param $iAnousu
+   * @param $sDataFinal
+   * @return sql
+   */
+  public function sqlReg30($oExtras, $oExtRecurso, $iAnousu, $sDataFinal)
+  {
+    /**
+     * CARREGA OS DADOS DO REGISTRO 30
+     */
+      return "SELECT conlancamdoc.c71_codlan AS codreduzidomov,
+                     CASE
+                         WHEN conplanoreduz.c61_codtce !=0 THEN conplanoreduz.c61_codtce
+                         ELSE conplanoreduz.c61_reduz
+                     END AS codext,
+                     orctiporec.o15_codtri AS codfontrecursos,
+                     '2' AS categoria,
+                     conlancamval.c69_data AS dtLancamento,
+                     c69_valor AS vllancamento,
+                     conlancamcorrente.c86_id AS id,
+                     conlancamcorrente.c86_data AS DATA,
+                     conlancamcorrente.c86_autent AS autent,
+                     conlancamval.c69_credito AS contapagadora
+              FROM conlancamval
+              INNER JOIN conlancamdoc ON conlancamdoc.c71_codlan = conlancamval.c69_codlan
+              INNER JOIN conlancamcorrente ON conlancamval.c69_codlan = conlancamcorrente.c86_conlancam
+              INNER JOIN conplanoreduz ON conplanoreduz.c61_reduz = conlancamval.c69_credito
+              INNER JOIN orctiporec ON orctiporec.o15_codigo = conplanoreduz.c61_codigo AND conplanoreduz.c61_anousu = conlancamval.c69_anousu
+              WHERE conlancamdoc.c71_coddoc IN (120, 151, 161)
+                AND conlancamval.c69_debito = {$oExtras->codext}
+                AND DATE_PART('YEAR',conlancamval.c69_data) = {$iAnousu}
+                AND DATE_PART('MONTH',conlancamval.c69_data) = '{$sDataFinal}'
+                AND orctiporec.o15_codigo = {$oExtRecurso}";
+  }
+
+  /**
+   * @SICOM
+   *
+   * @param $oExtMov
+   * @param $iInstit
+   * @param $iAnousu
+   * @return sql
+   */
+  public function sqlMovimentosReg30($oExtMov, $iInstit, $iAnousu)
+  {
+      return "SELECT '30' as tiporegistro,
+                      c50_descr,
+                      CASE
+                          WHEN conplano.c60_codsis = 5
+                          THEN 5
+                          ELSE e91_codcheque
+                      END AS e91_codcheque,
+                      c86_data as dtpagamento,
+                      (SELECT coalesce(c86_conlancam, 0) FROM conlancamcorrente
+                          WHERE c86_id = corrente.k12_id
+                              AND c86_data = corrente.k12_data
+                              AND c86_autent = corrente.k12_autent) AS codreduzidomov,
+                      (slip.k17_codigo||slip.k17_debito)::int8 AS codreduzidoop,
+                      (slip.k17_codigo||slip.K17_debito)::int8 AS nroop,
+                      CASE WHEN LENGTH(cc.z01_cgccpf::varchar) = 11 THEN 1 ELSE 2 END AS tipodocumentocredor,
+                      cc.z01_cgccpf AS nrodocumentocredor,
+                      k17_valor AS vlop,
+                      k17_texto AS especificacaoop,
+                      CASE WHEN c61_codtce <> 0 THEN c61_codtce ELSE slip.k17_credito END AS contapagadora,
+                      orctiporec.o15_codtri AS fontepagadora,
+                      (SELECT CASE WHEN o41_subunidade != 0
+                                                  OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
+                                  OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+                                                              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)||lpad(o41_subunidade::integer,3,0)
+                                          ELSE lpad((CASE WHEN o40_codtri = '0'
+                                                  OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
+                                                      OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
+                          END AS unidade
+                          FROM orcunidade
+                          JOIN orcorgao ON o41_anousu = o40_anousu and o41_orgao = o40_orgao
+                          WHERE o41_instit = {$iInstit} AND o40_anousu = {$iAnousu} ORDER BY o40_orgao LIMIT 1) AS codunidadesub
+              FROM corlanc
+              INNER JOIN corrente ON corlanc.k12_id = corrente.k12_id
+                          AND corlanc.k12_data = corrente.k12_data
+                          AND corlanc.k12_autent = corrente.k12_autent
+              INNER JOIN slip on slip.k17_codigo = corlanc.k12_codigo
+              INNER JOIN conhist ON slip.k17_hist = conhist.c50_codhist
+              INNER JOIN conplanoreduz on slip.k17_credito = conplanoreduz.c61_reduz and c61_anousu = {$iAnousu}
+              INNER JOIN conplano ON (conplano.c60_codcon, conplano.c60_anousu) = (conplanoreduz.c61_codcon, conplanoreduz.c61_anousu)
+              INNER JOIN orctiporec on orctiporec.o15_codigo = conplanoreduz.c61_codigo
+              INNER JOIN slipnum on slipnum.k17_codigo = slip.k17_codigo
+              INNER JOIN cgm cc on cc.z01_numcgm = slipnum.k17_numcgm
+              LEFT JOIN corconf ON corlanc.k12_id = corconf.k12_id
+                          AND corlanc.k12_data = corconf.k12_data
+                          AND corlanc.k12_autent = corconf.k12_autent
+              LEFT JOIN empageconfche ON k12_codmov = e91_codcheque
+              LEFT JOIN empagemovforma ON e91_codmov = e97_codmov
+              LEFT JOIN empageforma ON e97_codforma = e96_codigo
+              LEFT JOIN conlancamcorrente ON conlancamcorrente.c86_id = corrente.k12_id
+                          AND conlancamcorrente.c86_data = corrente.k12_data
+                          AND conlancamcorrente.c86_autent = corrente.k12_autent
+              WHERE c86_id     = {$oExtMov->id}
+                AND c86_data   = '{$oExtMov->data}'
+                AND c86_autent = {$oExtMov->autent} ";
+  }
 }
 
-?>
+
