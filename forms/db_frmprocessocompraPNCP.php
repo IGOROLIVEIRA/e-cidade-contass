@@ -817,6 +817,7 @@ $clrotulo->label("descrdepto");
                 pc80_amparolegal: oCampos.pc80_amparolegal.value,
                 pc80_categoriaprocesso: oCampos.pc80_categoriaprocesso.value,
                 iSolicitacao: document.getElementById('oGridItensrow0cell0').innerText,
+                data: oCampos.data.value,
                 aItens: aItensLote
             }
 
