@@ -513,6 +513,7 @@ $clrotulo->label("descrdepto");
                 } else {
                     document.getElementById('pc80_dispvalor').selectedIndex = 2;
                 }
+                js_verificadispensa();
                 if (oRetorno.pc80_orcsigiloso == 't') {
                     document.getElementById('pc80_orcsigiloso').selectedIndex = 1;
                 } else {
