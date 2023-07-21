@@ -1837,9 +1837,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             if (iTipoAditamento != 6) {
 
 
-                oInputQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value);"+me.sInstance+".js_bloqueivalorunt(" + iSeq +","+$('oCboTipoAditivo').value + ")");
-                oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); ");
-                oInputQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '');" + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
+                oInputQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value);");
+                oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
+                oInputQuantidade.addEvent("onInput", "js_ValidaCampos(this,4,'Quantidade','f','f',event);");
+                oInputQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '');");
             }
 
 
@@ -1850,9 +1851,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oInputUnitario.setReadOnly(iTipoAditamento == 6);
 
             if (iTipoAditamento != 6) {
-                oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value);"+me.sInstance+".js_bloqueiquantidade("+ iSeq +","+$('oCboTipoAditivo').value +")");
-                oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 4); ");
-                oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
+                oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value);");
+                oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 4); "+ me.sInstance + ".calculaValorTotal(" + iSeq + ")");
+                //oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); ");
+                oInputUnitario.addEvent("onInput", "js_ValidaCampos(this,4,'Valor Unitario','f','f',event);");
             }
 
             if(oItem.novo == true){
@@ -2126,7 +2128,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
      * Calcula o valor da coluna Valor Total
      */
     this.calculaValorTotal = function (iLinha) {
-
+        console.log('valor');
         var aLinha = me.oGridItens.aRows[iLinha],
             nQuantidade  = aLinha.aCells[6].getValue().getNumber(),
             nUnitario    = aLinha.aCells[7].getValue().getNumber(),
@@ -2134,11 +2136,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             nUnitarioA   = Number(aLinha.aCells[5].getValue().split('.').join("").replace(",","."));//OC5304
             valor1 = nQuantidade.toString();
             valor = valor1.split('.');
-            if(valor.length>1){
-                casas = valor[1].length;
-            }else{
-                casas = 2;
-            }
+        console.log('atualizado2');
+        console.log(aLinha.aCells[7].getValue())
+        console.log(aLinha.aCells[7].getValue().replace(".","").replace(",","."))
+        console.log(nUnitario);
+        if(valor.length>1){
+            casas = valor[1].length;
+        }else{
+            casas = 2;
+        }
 
         aItensPosicao[iLinha].novaquantidade  = nQuantidade;
         aItensPosicao[iLinha].novounitario    = nUnitario;
