@@ -1,4 +1,5 @@
 function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinatura) {
+
     var me = this,
         aItensPosicao = new Array();
 
@@ -533,6 +534,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
      * monta a tela principal do aditamento
      */
     this.main = function () {
+
         me.oTxtCodigoAcordo = new DBTextField('oTxtCodigoAcordo', me.sInstance + '.oTxtCodigoAcordo', '', 10);
         me.oTxtCodigoAcordo.addEvent("onChange", ";" + me.sInstance + ".pesquisaAcordo(false);");
         me.oTxtCodigoAcordo.show($('ctnCodigoAcordo'));
@@ -724,6 +726,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
      * Controle das dotacoes do item.
      */
     this.ajusteDotacao = function (iLinha, iElemento) {
+
         let valorItem = me.oGridItens.aRows[iLinha].aCells[1].getValue();
 
         document.getElementById(`chkoGridItens${valorItem}`).checked = true;
@@ -826,6 +829,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.preencheGridDotacoes = function (iLinha) {
+
         oGridDotacoes.clearAll(true);
 
         nValorTotal = 0;
@@ -864,6 +868,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
      * Atualiza a informação das Dotacoes do item
      */
     this.atualizarItemDotacao = function (iLinha, iDotacao, oValor) {
+
         var oItem = aItensPosicao[iLinha];
 
         oItem.dotacoes[iDotacao].valor = oValor.value.getNumber();
@@ -890,6 +895,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
      * Remove a Dotacao
      */
     this.removerDotacao = function (iLinha, iDotacao) {
+
         if (confirm("Remover Dotação do item?")) {
 
             aItensPosicao[iLinha].dotacoes.splice(iDotacao, 1);
@@ -898,6 +904,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.saveDotacao = function (iLinha) {
+
         if (oTxtDotacao.getValue() == "") {
 
             alert("Campo dotação de preenchimento obrigatório.");
@@ -961,12 +968,14 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.retornoGetSaldotacao = function (oAjax) {
+
         js_removeObj('msgBox');
         var oRetorno = eval("(" + oAjax.responseText + ")");
         oTxtSaldoDotacao.setValue(js_formatar(oRetorno.saldofinal, "f"));
     }
 
     me.mostraSaldo = function (chave) {
+
         var arq = 'func_saldoorcdotacao.php?o58_coddot=' + chave
         js_OpenJanelaIframe('top.corpo', 'db_iframe_saldos', arq, 'Saldo da Dotação', true);
         $('Jandb_iframe_saldos').style.zIndex = '1500000';
@@ -993,12 +1002,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             nQuantTotalItem = nQuantidade,
             nValorTotalAnterior = 0;
 
-
         /**
          * Soma o valor original total
          */
         aItensPosicao[iLinha].dotacoes.each(function (oDotacao) {
-
             nValorTotalAnterior += +oDotacao.valororiginal;
         });
 
@@ -1010,7 +1017,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             nValorTotal -= nValorDotacao;
             nQuantidade -= nQuantDotacao;
-
             if (iDot == aItensPosicao[iLinha].dotacoes.length - 1) {
 
                 if (nValorTotal != nValorTotalItem) {
@@ -1049,6 +1055,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.aditar = function () {
+
         var oSelecionados = {};
         var iSelecionados = [];
         /**
@@ -1201,6 +1208,26 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
             oItemAdicionar.controlaServico = oItem.ServicoQuantidade;
 
+            //alert(oItem.ServicoQuantidade);
+            //alert("teste");
+
+
+            // console.log('Qtde anterior: ', oItem.qtdeanterior);
+            // /*comentado para atender a OC 6387*/
+            // if ($('oCboTipoAditivo').value == 6 || $('oCboTipoAditivo').value == 13) {
+            //
+            //
+            //     var dt1 = me.oTxtDataFinal.getValue().split("/");
+            //     var dt2 = me.oTxtDataFinalCompara.getValue().split("/");
+            //
+            //     var datafim1 = dt1[2] + "-" + dt1[1] + "-" + dt1[0];
+            //     var datafim2 = dt2[2] + "-" + dt2[1] + "-" + dt2[0];
+            // if (datafim1 <= datafim2) {
+            //   lAditar = false;
+            //   return alert("A nova data final do contrato deve ser maior que a data inserida!");
+            // }
+            // }
+
             if ($('oCboTipoAditivo').value == 14) {
                 var dt1 = me.oTxtDataFinal.getValue().split("/");
                 var dt2 = me.oTxtDataFinalCompara.getValue().split("/");
@@ -1217,7 +1244,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             if (oSelecionados[iIndice] != undefined) {
 
                 document.getElementById('btnRemoveItem').style.disabled = false;
-                oItemAdicionar.quantidade    = Number(oSelecionados[iIndice].aCells[6].getValue().split('.').join("").replace(",",".")),
+                oItemAdicionar.quantidade    = oSelecionados[iIndice].aCells[6].getValue().getNumber();
                 oItemAdicionar.valorunitario = js_strToFloat(oSelecionados[iIndice].aCells[7].getValue());
                 oItemAdicionar.valor = oItemAdicionar.quantidade * oItemAdicionar.valorunitario;
                 var nQuantidadeA = js_strToFloat(oSelecionados[iIndice].aCells[4].getValue());
@@ -1587,6 +1614,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
      * Adiciona um periodo ao item novo do acordo
      */
     this.adicionarPeriodo = function () {
+
         var dtDataInicial = oTxtDataInicialItem.getValue();
         var dtDataFinal = oTxtDataFinalItem.getValue();
 
@@ -1641,6 +1669,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.getElementosMateriais = function (iValorDefault) {
+
         iValorElemento = '';
         if (iValorDefault != null) {
             iValorElemento = iValorDefault;
@@ -1743,6 +1772,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.preencheItens = function (aItens) {
+
+
+
         var sizeLabelItens = 0;
         if (aItens.length < 12) {
             sizeLabelItens = (aItens.length / 2) * 50;
@@ -2094,19 +2126,19 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
      * Calcula o valor da coluna Valor Total
      */
     this.calculaValorTotal = function (iLinha) {
+
         var aLinha = me.oGridItens.aRows[iLinha],
-            nQuantidade  = Number(aLinha.aCells[6].getValue().split('.').join("").replace(",",".")),
-            nUnitario    = Number(aLinha.aCells[7].getValue().split('.').join("").replace(",",".")),
-            nQuantidadeA = Number(aLinha.aCells[4].getValue().split('.').join("").replace(",",".")),//OC5304
+            nQuantidade  = aLinha.aCells[6].getValue().getNumber(),
+            nUnitario    = aLinha.aCells[7].getValue().getNumber(),
+            nQuantidadeA = aLinha.aCells[4].getValue().getNumber(),//OC5304
             nUnitarioA   = Number(aLinha.aCells[5].getValue().split('.').join("").replace(",","."));//OC5304
             valor1 = nQuantidade.toString();
             valor = valor1.split('.');
-
-        if(valor.length>1){
-            casas = valor[1].length;
-        }else{
-            casas = 2;
-        }
+            if(valor.length>1){
+                casas = valor[1].length;
+            }else{
+                casas = 2;
+            }
 
         aItensPosicao[iLinha].novaquantidade  = nQuantidade;
         aItensPosicao[iLinha].novounitario    = nUnitario;
@@ -2114,7 +2146,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         nValorTotal = nQuantidade * nUnitario;
         valorTotal  = nQuantidadeA * nUnitarioA;
 
+
         aLinha.aCells[8].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
+
 
         if (aItensPosicao[iLinha].servico == false && (aItensPosicao[iLinha].controlaquantidade == "t" || aItensPosicao[iLinha].controlaquantidade != "")) {
             aLinha.aCells[9].setContent(js_formatar((nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
@@ -2131,6 +2165,23 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         me.salvarInfoDotacoes(iLinha);
     }
+
+    // this.js_bloqueivalorunt = function (iLinha,iTipo) {
+    //
+    //     if(iTipo == 14){
+    //         document.getElementById('valorunitario'+iLinha).disabled = true;
+    //         document.getElementById('valorunitario'+iLinha).style.backgroundColor = '#DEB887';
+    //     }
+    //
+    // };
+    //
+    // this.js_bloqueiquantidade = function (iLinha,iTipo) {
+    //
+    //     if(iTipo == 14) {
+    //         document.getElementById('quantidade' + iLinha).disabled = true;
+    //         document.getElementById('quantidade' + iLinha).style.backgroundColor = '#DEB887';
+    //     }
+    // };
 
     this.pesquisaMaterial = function (mostra) {
 
@@ -2172,6 +2223,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.mostraMaterial = function (chave1, chave2, chave3) {
+
         me.mostraSelectServico(chave3);
 
         oTxtMaterial.setValue(chave1);
@@ -2363,12 +2415,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.somaAditamentos = () => {
         const tdLista = document.body.querySelectorAll("#oGridItensbody tbody td:nth-child(11)");
-        let soma = 0.0;
+        soma = 0.0;
         for (let count = 0; count < tdLista.length; count++) {
             let valorMonetario = tdLista[count].textContent;
-
-            let valorTd = !valorMonetario  ? 0.0 : js_strToFloat(valorMonetario);
-
+            valorMonetario = valorMonetario.replace(".","");
+            valorMonetario = valorMonetario.replace(",",".");
+            let valorTd = parseFloat(valorMonetario);
+            if (!tdLista[count].textContent) {
+                valorTd = 0.0;
+            }
             soma += valorTd;
         }
         this.atualizarLabelTotal(soma);
