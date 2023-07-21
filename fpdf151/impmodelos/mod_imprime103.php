@@ -227,23 +227,26 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     $complemento ='';
     /*Realiza a consulta se o item é tabela e tem itens associados*/
 
-		$sqlItemTabela = "SELECT * FROM empordemtabela where l223_pcmaterordem = ". pg_result($this->recorddositens, $ii, $this->codmater) ." and l223_codordem = ".$this->numordem."order by l223_pcmatertabela";
-		$resItemTabela = @db_query($sqlItemTabela);
-
-		if(@pg_numrows($resItemTabela) > 0){
-            $complemento ="DETALHAMENTO: \n";
-            for($contitem=0;$contitem < @pg_numrows($resItemTabela);$contitem++){
-                $oDadosItemTabela = db_utils::fieldsMemory($resItemTabela, $contitem);
-
-                $this->objpdf->Setfont('Arial', '', 8);
-                //$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety() + (($itempag*4)*2),($itempag+1)." - ".$oDadosItemTabela->l223_descr);
-                //$this->objpdf->text($this->objpdf->getx() + 56, $this->objpdf->gety()+ ($itempag*4)+(($itempag+1)*4), " Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f'));
-                $complemento .= ($contitem+1)." - ".$oDadosItemTabela->l223_descr . "\n Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f')."\n";
-
-
+	$sqlItemTabela = "SELECT * FROM empordemtabela where l223_pcmaterordem = ". pg_result($this->recorddositens, $ii, $this->codmater) ." and l223_codordem = ".$this->numordem."order by l223_pcmatertabela";
+	$resItemTabela = @db_query($sqlItemTabela);
+    $oldy = $this->objpdf->gety();
+    $linhaitem = $this->objpdf->NbLines(102, pg_result($this->recorddositens, $ii, $this->descricaoitem) . pg_result($this->recorddositens, $ii, $this->pc01_complmater) . "\n" . 'Marca: ' . pg_result($this->recorddositens, $ii, $this->obs_ordcom_orcamval))*5;
+    $oldy += $linhaitem;
+    $contalinha = 0;
+    $tamanhopag = $oldy;
+    if(@pg_numrows($resItemTabela) > 0){
+        $complemento ="DETALHAMENTO: \n";
+        for($contitem=0;$contitem < @pg_numrows($resItemTabela);$contitem++){
+            $oDadosItemTabela = db_utils::fieldsMemory($resItemTabela, $contitem);        
+            $complemento .= ($contitem+1)." - ".$oDadosItemTabela->l223_descr . "\n Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f')."\n";;
+            $contalinha++;
+            if ((($tamanhopag > $this->objpdf->h - 30) && $pagina == 1) || (($tamanhopag > $this->objpdf->h - 50) && $pagina != 1)) {
+                break;
             }
+            $tamanhopag = $oldy + ($contalinha*5)+(($contalinha+1)*5);
         }
-
+    }
+    
     $this->objpdf->Row(
         array(
             pg_result($this->recorddositens, $ii, $this->codmater),
@@ -259,6 +262,50 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
         0,
         true
     );
+    
+    
+	if($contitem < @pg_numrows($resItemTabela))
+    {
+        $this->objpdf->sety($xlin + 22);
+        $this->objpdf->Setfont('Arial', 'B', 8);
+        $this->objpdf->AddPage();
+        $this->objpdf->Cell(20, 5, 'Item', 1, 0, 'C');
+        $this->objpdf->Cell(20, 5, 'Quant.', 1, 0, 'C');
+        $this->objpdf->Cell(20, 5, 'Unid.', 1, 0, 'C');
+        $this->objpdf->Cell(102, 5, 'Material/Serviço', 1, 0, 'C');
+        $this->objpdf->Cell(20, 5, 'Unitário', 1, 0, 'C');
+        $this->objpdf->Cell(20, 5, 'Total', 1, 1, 'C');
+        $this->objpdf->Setfont('Arial', '', 8);
+        $complemento ='';
+        $contalinha = 0;
+        $oldy = $this->objpdf->gety() + 5;    
+        for($contitem=$contitem+1;$contitem < @pg_numrows($resItemTabela);$contitem++)
+        {
+            $oDadosItemTabela = db_utils::fieldsMemory($resItemTabela, $contitem);
+            $this->objpdf->Setfont('Arial', '', 8);
+            //$this->objpdf->text($this->objpdf->getx() + 61, $oldy + (($contalinha*5)*2),($contitem+1)." - ".$oDadosItemTabela->l223_descr);
+            //$this->objpdf->text($this->objpdf->getx() + 61, $oldy+ ($contalinha*5)+(($contalinha+1)*5)," Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f'));
+            $complemento .= ($contitem+1)." - ".$oDadosItemTabela->l223_descr . "\n Quantidade: ".$oDadosItemTabela->l223_quant." - Unitário:".db_formatar($oDadosItemTabela->l223_vlrn,'f')." - Total: ".db_formatar($oDadosItemTabela->l223_total,'f')."\n";;
+            $contalinha++;
+            if ((($oldy+ ($contalinha*5)+(($contalinha+1)*5)) > $this->objpdf->h - 30 && $pagina == 1) || (($oldy+ ($contalinha*5)+(($contalinha+1)*5)) > $this->objpdf->h - 50 && $pagina != 1) || ($contitem + 1 == @pg_numrows($resItemTabela)))
+            {  
+                $this->objpdf->Row(
+                    array("","","",$complemento,
+                        "",
+                        ""
+                        ),
+                        5,
+                        true,
+                        5,
+                        0,
+                        true
+                );
+                $complemento ='';
+                $contalinha = 0;
+            }
+        }
+       
+    }
    
     if ($valorItemAnulado > 0) {
         $this->objpdf->Setfont('Arial', 'B', 8);
