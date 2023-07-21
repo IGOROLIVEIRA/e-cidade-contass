@@ -37,16 +37,22 @@ $this->objpdf->Text(140,$top+17,$this->cgmpessoa);
 $this->objpdf->Text(168,$top+17,$this->matricula);
 
 $this->objpdf->SetFont('Arial','',6); 
-$this->objpdf->Text(12,$top+21,"COMPONENTES DO LANÇAMENTO: ");
+$this->objpdf->Rect(10,$top+18,192,4,'DF');
+$this->objpdf->Text(12,$top+21,"END. DE CORRESPONDÊNCIA: ");
 $this->objpdf->SetFont('Arial','',7);
-$this->objpdf->sety(28);
+$this->objpdf->Text(44,$top+21,$this->endercorrespondencia);
+
+$this->objpdf->SetFont('Arial','',6); 
+$this->objpdf->Text(12,$top+25,"COMPONENTES DO LANÇAMENTO: ");
+$this->objpdf->SetFont('Arial','',7);
+$this->objpdf->sety(30);
 $this->objpdf->setx(12);
 $this->objpdf->MultiCell(189,3,$this->descrquadro,0,"L",0,0);
 
 $this->objpdf->sety(35);
 $this->objpdf->setx(12);
 $this->objpdf->SetFont('Arial','B',7);
-$this->objpdf->MultiCell(189,3,$this->descr4_2,0,"C",0,0);
+$this->objpdf->MultiCell(189,3,$this->descr4_2,0,"L",0,0);
 
 $this->objpdf->sety(58);
 
@@ -115,13 +121,10 @@ $this->objpdf->SetFont('Arial','B',7);
 $this->objpdf->Text(75,$y+6,$this->descr5); // Parcela inicial e total de parcelas
 
 $this->objpdf->SetFont('Arial','',5);
-$this->objpdf->Text(13,$y+10,"Contribuinte/Endereço de correspondência/Endereço do imóvel"); // contribuinte/endereço
+$this->objpdf->Text(13,$y+10,"Contribuinte/Endereço do imóvel"); // contribuinte/endereço
 $this->objpdf->SetFont('Arial','B',7);
 $this->objpdf->Text(13,$y+13,substr($this->descr3_1, 0, 45)."..."); // nome do contribuinte
-$this->objpdf->sety($y+14);
-$this->objpdf->setx(12);
-$this->objpdf->MultiCell(70,2,$this->endercorrespondencia);
-$this->objpdf->Text(13,$y+20,$this->enderimovel);// endereço
+$this->objpdf->Text(13,$y+17,$this->enderimovel);// // endereço do imovel
 
 
 $this->objpdf->SetFont('Arial','',5);
@@ -180,13 +183,10 @@ $this->objpdf->Text(183,$y+6,$this->descr13); // livre
 
 //guia banco
 $this->objpdf->SetFont('Arial','',5);
-$this->objpdf->Text(97,$y+10,"Contribuinte/Endereço de correspondência/Endereço do imóvel"); // contribuinte / endereço
+$this->objpdf->Text(97,$y+10,"Contribuinte/Endereço do imóvel"); // contribuinte / endereço
 $this->objpdf->SetFont('Arial','B',7);
 $this->objpdf->Text(97,$y+13,$this->descr11_1); // nome do contribuinte
-$this->objpdf->sety($y+14);
-$this->objpdf->setx(96);
-$this->objpdf->MultiCell(70,2,$this->endercorrespondencia); //endereço de correspondência
-$this->objpdf->Text(97,$y+20,$this->enderimovel);// endereço do imovel
+$this->objpdf->Text(97,$y+17,$this->enderimovel);// endereço do imovel
 
 $this->objpdf->SetFont('Arial','',5);
 $this->objpdf->Text(97,$y+24,"Descrição"); // descrição
@@ -242,5 +242,5 @@ if ($this->codigo_barras != null) {
 
 $this->objpdf->SetLineWidth(0.05);
 $this->objpdf->SetDash(1,1);
-$this->objpdf->Line(0,$this->objpdf->gety()-30, $this->objpdf->w ,$this->objpdf->gety()-30); // linha tracejada horizontal
+$this->objpdf->Line(0,$this->objpdf->gety()-12, $this->objpdf->w ,$this->objpdf->gety()-12); // linha tracejada horizontal
 $this->objpdf->SetDash();
