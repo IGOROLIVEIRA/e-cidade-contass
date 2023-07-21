@@ -452,7 +452,9 @@ $val = false;
 
     const select = document.querySelector('#pc10_numero');
     select.options[select.options.length] = new Option(numero, numero);
-    document.getElementById('pc10_data').value = data;
+    if (data.trim.length > 0) {
+        document.getElementById('pc10_data').value = data;
+    }
     document.getElementById('descrdepto').value = descrdepto;
 
 
