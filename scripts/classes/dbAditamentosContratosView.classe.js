@@ -2128,7 +2128,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
      * Calcula o valor da coluna Valor Total
      */
     this.calculaValorTotal = function (iLinha) {
-        console.log('valor');
+
         var aLinha = me.oGridItens.aRows[iLinha],
             nQuantidade  = aLinha.aCells[6].getValue().getNumber(),
             nUnitario    = aLinha.aCells[7].getValue().getNumber(),
@@ -2136,10 +2136,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             nUnitarioA   = Number(aLinha.aCells[5].getValue().split('.').join("").replace(",","."));//OC5304
             valor1 = nQuantidade.toString();
             valor = valor1.split('.');
-        console.log('atualizado2');
-        console.log(aLinha.aCells[7].getValue())
-        console.log(aLinha.aCells[7].getValue().replace(".","").replace(",","."))
-        console.log(nUnitario);
+
         if(valor.length>1){
             casas = valor[1].length;
         }else{
