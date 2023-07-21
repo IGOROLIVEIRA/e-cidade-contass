@@ -1835,15 +1835,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oInputQuantidade.setReadOnly(iTipoAditamento == 6);
 
             if (iTipoAditamento != 6) {
-
-
                 oInputQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value);");
                 oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
                 oInputQuantidade.addEvent("onInput", "js_ValidaCampos(this,4,'Quantidade','f','f',event);");
-                oInputQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '');");
             }
-
-
 
             oInputUnitario = new DBTextField('valorunitario' + iSeq, 'valorunitario' + iSeq, js_formatar(nUnitario, "f", 4)); //
             oInputUnitario.addStyle("width", "100%");
@@ -1853,7 +1848,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             if (iTipoAditamento != 6) {
                 oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value);");
                 oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 4); "+ me.sInstance + ".calculaValorTotal(" + iSeq + ")");
-                //oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); ");
                 oInputUnitario.addEvent("onInput", "js_ValidaCampos(this,4,'Valor Unitario','f','f',event);");
             }
 
@@ -2130,13 +2124,12 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.calculaValorTotal = function (iLinha) {
 
         var aLinha = me.oGridItens.aRows[iLinha],
-            nQuantidade  = aLinha.aCells[6].getValue().getNumber(),
-            nUnitario    = aLinha.aCells[7].getValue().getNumber(),
-            nQuantidadeA = aLinha.aCells[4].getValue().getNumber(),//OC5304
+            nQuantidade  = Number(aLinha.aCells[6].getValue().split('.').join("").replace(",",".")),
+            nUnitario    = Number(aLinha.aCells[7].getValue().split('.').join("").replace(",",".")),
+            nQuantidadeA = Number(aLinha.aCells[4].getValue().split('.').join("").replace(",",".")),//OC5304
             nUnitarioA   = Number(aLinha.aCells[5].getValue().split('.').join("").replace(",","."));//OC5304
-            valor1 = nQuantidade.toString();
-            valor = valor1.split('.');
-
+        valor1 = nQuantidade.toString();
+        valor = valor1.split('.');
         if(valor.length>1){
             casas = valor[1].length;
         }else{
