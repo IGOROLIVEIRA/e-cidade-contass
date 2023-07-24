@@ -139,7 +139,6 @@ switch ($situacao) {
     $dbwhere .= $and;
 }
 */
-
 $instituicao = db_getsession('DB_instit');
 $instituicaoDepartamento = " and instit =" . $instituicao . " ";
 $dbwhere .= "ve01_instit = " . $instituicao . $instituicaoDepartamento;
