@@ -138,7 +138,11 @@ switch ($situacao) {
 /**if ($dbwhere != "") {
     $dbwhere .= $and;
 }
-$dbwhere .= " ve01_veictipoabast = 1 ";*/
+*/
+
+$instituicao = db_getsession('DB_instit');
+$instituicaoDepartamento = " and instit =" . $instituicao . " ";
+$dbwhere .= "ve01_instit = " . $instituicao . $instituicaoDepartamento;
 $sCampos = " distinct
 	      coddepto,
 	      descrdepto,
@@ -168,14 +172,16 @@ $sCampos = " distinct
               ve70_valor,
               e60_codemp||'/'||e60_anousu as numemp,ve71_veiccadposto ";
 
-if($exibir_cupom){
+if ($exibir_cupom) {
     $sCampos .= ', ve71_nota';
 }
 
-$sSqlBuscaAbastecimentos = $clveicabast->sql_query_abast_novo(null, $sCampos,"ve70_dtabast,ve70_hora,ve70_codigo", $dbwhere, $iCoddepto);
-$result = db_query(" drop table if exists w_relabastecimentoveiculos; create table w_relabastecimentoveiculos as {$sSqlBuscaAbastecimentos} ") or die(pg_last_error());
+$sSqlBuscaAbastecimentos = $clveicabast->sql_query_abast_novo(null, $sCampos, "ve70_dtabast,ve70_hora,ve70_codigo", $dbwhere, $iCoddepto);
 
-                    if (pg_num_rows(db_query("select * from w_relabastecimentoveiculos")) == 0) {
+$result = db_query(" drop table if exists w_relabastecimentoveiculos; create table w_relabastecimentoveiculos as {$sSqlBuscaAbastecimentos} ") or die(pg_last_error());
+//var_dump($result);
+//die();
+if (pg_num_rows(db_query("select * from w_relabastecimentoveiculos")) == 0) {
     db_redireciona('db_erros.php?fechar=true&db_erro=Não foi encontrado nenhuma abastecimento com esses filtros.');
 }
 
@@ -247,17 +253,17 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
 
                 $pdf->cell(0, $alt, "Código do Veículo: {$ve01_codigo} Placa: {$ve01_placa} - Origem Gasto: {$origemgasto} - Posto: {$posto}", 1, 1, "L", true);
                 $pdf->cell(30, $alt, "Abastecimento", 1, 0, "C", 1);
-                $pdf->cell(19+$moreWidth, $alt, "Data", 1, 0, "C", 1);
+                $pdf->cell(19 + $moreWidth, $alt, "Data", 1, 0, "C", 1);
                 $pdf->cell(20, $alt, "H. Saída", 1, 0, "C", 1);
-                $pdf->cell(25+$moreWidth, $alt, "Combustível", 1, 0, "C", 1);
-                $pdf->cell(23+$moreWidth, $alt, "Km Inicial", 1, 0, "C", 1);
-                $pdf->cell(23+$moreWidth, $alt, "Km Final", 1, 0, "C", 1);
+                $pdf->cell(25 + $moreWidth, $alt, "Combustível", 1, 0, "C", 1);
+                $pdf->cell(23 + $moreWidth, $alt, "Km Inicial", 1, 0, "C", 1);
+                $pdf->cell(23 + $moreWidth, $alt, "Km Final", 1, 0, "C", 1);
                 $pdf->cell(30, $alt, "Km Percorrido", 1, 0, "C", 1);
-                if($exibir_cupom){
+                if ($exibir_cupom) {
                     $pdf->cell(18, $alt, "Cupom", 1, 0, "C", 1);
                 }
-                $pdf->cell(25+$moreWidth, $alt, "Qtde Comb.", 1, 0, "C", 1);
-                $pdf->cell(27+$moreWidth, $alt, "Valor Abastec.", 1, 0, "C", 1);
+                $pdf->cell(25 + $moreWidth, $alt, "Qtde Comb.", 1, 0, "C", 1);
+                $pdf->cell(27 + $moreWidth, $alt, "Valor Abastec.", 1, 0, "C", 1);
                 $pdf->cell(20, $alt, "Empenho", 1, 0, "C", 1);
                 $pdf->cell(24, $alt, "Cons. Médio", 1, 1, "C", 1);
 
@@ -278,23 +284,23 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
 
                     $pdf->setfont('arial', '', 8);
                     $pdf->cell(30, $alt, $ve70_codigo, 1, 0, "C", 1);
-                    $pdf->cell(19+$moreWidth, $alt, db_formatar($ve70_data, "d"), 1, 0, "C", 1);
+                    $pdf->cell(19 + $moreWidth, $alt, db_formatar($ve70_data, "d"), 1, 0, "C", 1);
                     $pdf->cell(20, $alt, $ve70_hora, 1, 0, "C", 1);
-                    $pdf->cell(25+$moreWidth, $alt, $ve26_descr, 1, 0, "C", 1);
-                    if(($medida_retirada == $contralakminicial || $medida_retirada < $contralakmfinal) && $contralakmfinal != 0){
-                        $pdf->cell(23+$moreWidth, $alt, $contralakmfinal, 1, 0, "C", 1);
+                    $pdf->cell(25 + $moreWidth, $alt, $ve26_descr, 1, 0, "C", 1);
+                    if (($medida_retirada == $contralakminicial || $medida_retirada < $contralakmfinal) && $contralakmfinal != 0) {
+                        $pdf->cell(23 + $moreWidth, $alt, $contralakmfinal, 1, 0, "C", 1);
                         $medida_rodada = $medida_devolucao - $contralakmfinal;
-                    }else{
-                        $pdf->cell(23+$moreWidth, $alt, $medida_retirada, 1, 0, "C", 1);
+                    } else {
+                        $pdf->cell(23 + $moreWidth, $alt, $medida_retirada, 1, 0, "C", 1);
                     }
-                    
-                    $pdf->cell(23+$moreWidth, $alt, $medida_devolucao, 1, 0, "C", 1);
+
+                    $pdf->cell(23 + $moreWidth, $alt, $medida_devolucao, 1, 0, "C", 1);
                     $pdf->cell(30, $alt, $medida_rodada, 1, 0, "C", 1);
-                    if($exibir_cupom){
+                    if ($exibir_cupom) {
                         $pdf->cell(18, $alt, $ve71_nota, 1, 0, "C", 1);
                     }
-                    $pdf->cell(25+$moreWidth, $alt, $ve70_litros . " L", 1, 0, "C", 1);
-                    $pdf->cell(27+$moreWidth, $alt, "R$ " . number_format($ve70_valor, 2, ',', '.'), 1, 0, "C", 1);
+                    $pdf->cell(25 + $moreWidth, $alt, $ve70_litros . " L", 1, 0, "C", 1);
+                    $pdf->cell(27 + $moreWidth, $alt, "R$ " . number_format($ve70_valor, 2, ',', '.'), 1, 0, "C", 1);
                     $pdf->cell(20, $alt, $numemp, 1, 0, "C", 1);
                     $pdf->cell(24, $alt, number_format(($medida_rodada / $ve70_litros), 2, ',', '') . " Km/L", 1, 1, "C", 1);
                     $nTotalCombustivel += $ve70_litros;
@@ -302,7 +308,6 @@ for ($iContDep = 0; $iContDep < pg_num_rows($rSqlDepartamentos); $iContDep++) {
                     $nTotalConsumoMedio += ($medida_rodada / $ve70_litros);
                     $contralakminicial = $medida_retirada;
                     $contralakmfinal = $medida_devolucao;
-
                 }
                 $pdf->setfont('arial', 'b', 10);
                 $pdf->cell(180, $alt, "Totalizadores", 1, 0, "L", 0);
@@ -327,4 +332,3 @@ $pdf->cell(20, $alt, "Média:", "LTB", 0, "R", 0);
 $pdf->cell(24, $alt, number_format(($nTotalMedia), 2, ',', '') . " Km/L", "BRT", 1, "R", 0);
 $pdf->ln();
 $pdf->Output();
-?>
