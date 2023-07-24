@@ -221,6 +221,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
 
         if(tiporelatorio == 2){
             processodecompras = $F('pc80_codproc');
+            imprimevalor = $F('imprimeValor');
 
             if(processodecompras == ""){
                 alert("Processo de Compras não informado.");
@@ -230,6 +231,8 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"),
             Filtros = "";
             Filtros += "processodecompras="+processodecompras;
             Filtros += "&tipo=2";
+            Filtros += "&imprimevalor="+imprimevalor;
+
 
             var jan = window.open('com2_relatorioorcamentario005.php?'+Filtros, '', 'location=0, width='+(screen.availWidth - 5)+
                 'width='+(screen.availWidth - 5)+', scrollbars=1');

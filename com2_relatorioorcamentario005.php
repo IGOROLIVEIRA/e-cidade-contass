@@ -266,23 +266,62 @@ header("Content-Disposition: attachment; Filename=Declaracao_Recursos_Orcamentar
                 ?>
             </div>
             <table width="100%">
-                <tr class="headertr">
-                <td class="headertitulo">Ficha</td>
-                <td class="headertitulo">Cód. orçamentário</td>
-                <td class="headertitulo">Projeto Atividade</td>
-                <td class="headertitulo">Fonte de Recurso</td>
-                <tr>
+                <?php 
+                if($imprimevalor == "t"){
+                    echo '<tr class="headertr">
+                    <td class="headertitulo">Ficha</td>
+                    <td class="headertitulo">Cód. orçamentário</td>
+                    <td class="headertitulo">Projeto Atividade</td>
+                    <td class="headertitulo">Fonte de Recurso</td>
+                    <td class="headertitulo">Valor</td>
+                    <tr>';
+                } else {
+                    echo '<tr class="headertr">
+                    <td class="headertitulo">Ficha</td>
+                    <td class="headertitulo">Cód. orçamentário</td>
+                    <td class="headertitulo">Projeto Atividade</td>
+                    <td class="headertitulo">Fonte de Recurso</td>
+                    <tr>';
+                }
+                 ?>
                 <?php
                     if(pg_num_rows($resultDotacao) != 0){
-                        for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
-                            $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
-                            echo "<tr class=\"headertr\">
-                            <td>".$oDadosDotacoes->ficha."</td>
-                            <td>".$oDadosDotacoes->codorcamentario."</td>
-                            <td>".$oDadosDotacoes->projetoativ."</td>
-                            <td>".$oDadosDotacoes->fonterecurso."</td>
-                            <tr>";
+
+                        if($imprimevalor == "t"){
+
+                            $sSqlvlTotalPrecoReferencia = "select pc13_coddot, sum(si02_vltotalprecoreferencia) as valortotal from itemprecoreferencia
+                            inner join pcorcamitem on si02_itemproccompra = pc22_orcamitem
+                            inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem
+                            inner join pcprocitem on pc31_pcprocitem = pc81_codprocitem
+                            inner join solicitem on pc81_solicitem = pc11_codigo
+                            inner join pcdotac on pc13_codigo = pc11_codigo
+                            where si02_precoreferencia = (select si01_sequencial from precoreferencia where si01_processocompra = $processodecompras) group by pcdotac.pc13_coddot order by pc13_coddot;";
+                            $rsVlTotalPrecoReferencia = db_query($sSqlvlTotalPrecoReferencia);
+                        
+                            for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
+                                $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
+                                echo "<tr class=\"headertr\">
+                                <td>".$oDadosDotacoes->ficha."</td>
+                                <td>".$oDadosDotacoes->codorcamentario."</td>
+                                <td>".$oDadosDotacoes->projetoativ."</td>
+                                <td>".$oDadosDotacoes->fonterecurso."</td>
+                                <td>".db_utils::fieldsMemory($rsVlTotalPrecoReferencia, $iCont)->valortotal."</td>
+                                <tr>";
+                            }
+
+                            
+                        } else {
+                            for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
+                                $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
+                                echo "<tr class=\"headertr\">
+                                <td>".$oDadosDotacoes->ficha."</td>
+                                <td>".$oDadosDotacoes->codorcamentario."</td>
+                                <td>".$oDadosDotacoes->projetoativ."</td>
+                                <td>".$oDadosDotacoes->fonterecurso."</td>
+                                <tr>";
+                            }
                         }
+
                     }else{
                         echo "<tr class=\"headertr\">
                             <td colspan='4' align='center'>Nenhum Registro Encontrato.</td>
