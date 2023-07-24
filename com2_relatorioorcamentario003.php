@@ -219,34 +219,10 @@ if(pg_num_rows($resparag) != 0){
 }
 $pdf->ln($alt+3);
 $pdf->x = 30;
-/*
-$pdf->cell(20,6,"Ficha"                           ,1,0,"C",1);
-$pdf->cell(40,6,"Cód. orçamentário"               ,1,0,"C",1);
-$pdf->cell(60,6,"Projeto Atividade"               ,1,0,"C",1);
-$pdf->cell(40,6,"Fonte de Recurso"                ,1,1,"C",1); */
+
 cabecalho($pdf,$imprimevalor);
 $pdf->setfont('arial','',11);
 $pdf->x = 30;
-
-/*
-if(pg_num_rows($resultDotacao) != 0){
-    for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
-        $pdf->x = 30;
-        $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
-        $pdf->cell(20, 6, $oDadosDotacoes->ficha,           1, 0, "C", 0);
-        $pdf->cell(40, 6, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
-        $pdf->cell(60, 6, $oDadosDotacoes->projetoativ,     1, 0, "C", 0);
-        $pdf->cell(40, 6, $oDadosDotacoes->fonterecurso,    1, 1, "C", 0);
-    }
-}else{
-    $pdf->x = 30;
-    $pdf->setfont('arial','b',11);
-    $pdf->cell(190,6,"Nenhum Registro Encontrato."     ,0,1,"C",0);
-}*/
-
-
-$vlTotalPrecoReferencia = db_utils::fieldsMemory($rsItensPrecoReferencia, 0);
-
 
 colunas ($pdf,$imprimevalor,$resultDotacao,$processodecompras);
 $pdf->ln($alt+3);
