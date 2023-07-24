@@ -209,6 +209,15 @@ $db_opcao = 1;
       return false;
     }
 
+    if ($F('caddocumento') == 'po') {
+      let tipo = $('uploadfile').files[0].type;
+      let valido = tipo.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') ? true : false;
+      if(!valido){
+        alert('Tipo do documento Planilha Orçamentaria permite somente arquivo XLSX');
+        $('uploadfile').value = '';
+        return false;
+      }
+    }
     var oParam = new Object();
     oParam.exec = 'adicionarDocumento';
     oParam.licitacao = iLicitacao;
