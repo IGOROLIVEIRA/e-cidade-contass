@@ -51,3 +51,4 @@ jobs/configuracoes/taskManager/fila/*.xml
 cache/menus/*
 cache/forms/*
 cache/preferencias/*
+node_modules
