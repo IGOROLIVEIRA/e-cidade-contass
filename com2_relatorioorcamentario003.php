@@ -1,6 +1,4 @@
 <?php
-//ini_set('display_errors','on');
-//require_once("fpdf151/fpdf.php");
 include("fpdf151/pdf.php");
 require_once("std/DBDate.php");
 include("libs/db_sql.php");
@@ -221,14 +219,16 @@ if(pg_num_rows($resparag) != 0){
 }
 $pdf->ln($alt+3);
 $pdf->x = 30;
-
+/*
 $pdf->cell(20,6,"Ficha"                           ,1,0,"C",1);
 $pdf->cell(40,6,"Cód. orçamentário"               ,1,0,"C",1);
 $pdf->cell(60,6,"Projeto Atividade"               ,1,0,"C",1);
-$pdf->cell(40,6,"Fonte de Recurso"                ,1,1,"C",1);
+$pdf->cell(40,6,"Fonte de Recurso"                ,1,1,"C",1); */
+cabecalho($pdf,$imprimevalor);
 $pdf->setfont('arial','',11);
 $pdf->x = 30;
 
+/*
 if(pg_num_rows($resultDotacao) != 0){
     for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
         $pdf->x = 30;
@@ -242,7 +242,13 @@ if(pg_num_rows($resultDotacao) != 0){
     $pdf->x = 30;
     $pdf->setfont('arial','b',11);
     $pdf->cell(190,6,"Nenhum Registro Encontrato."     ,0,1,"C",0);
-}
+}*/
+
+
+$vlTotalPrecoReferencia = db_utils::fieldsMemory($rsItensPrecoReferencia, 0);
+
+
+colunas ($pdf,$imprimevalor,$resultDotacao,$processodecompras);
 $pdf->ln($alt+3);
 
 $pdf->setfont('arial','',11);
@@ -261,6 +267,71 @@ $pdf->ln($alt+20);
 if(pg_num_rows($resparag) != 0){
     $paragr1 = db_utils::fieldsMemory($resparag, 2);
     eval($paragr1->db02_texto);
+}
+
+function cabecalho ($pdf,$imprimevalor){
+    if($imprimevalor == "t"){
+        $pdf->cell(20,6,"Ficha",1,0,"C",1);
+        $pdf->cell(40,6,"Cód. orçamentário",1,0,"C",1);
+        $pdf->cell(35,6,"Projeto Atividade",1,0,"C",1);
+        $pdf->cell(35,6,"Fonte de Recursos",1,0,"C",1);
+        $pdf->cell(30,6,"Valor",1,1,"C",1);
+
+        return;
+    }
+
+    $pdf->cell(20,6,"Ficha",1,0,"C",1);
+    $pdf->cell(40,6,"Cód. orçamentário",1,0,"C",1);
+    $pdf->cell(60,6,"Projeto Atividade",1,0,"C",1);
+    $pdf->cell(40,6,"Fonte de Recursos",1,1,"C",1);
+    
+}
+
+function colunas ($pdf,$imprimevalor,$resultDotacao,$processodecompras){
+
+    if(pg_num_rows($resultDotacao) != 0){
+
+        if($imprimevalor == "t"){
+
+            $sSqlvlTotalPrecoReferencia = "select pc13_coddot, sum(si02_vltotalprecoreferencia) as valortotal from itemprecoreferencia
+inner join pcorcamitem on si02_itemproccompra = pc22_orcamitem
+inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem
+inner join pcprocitem on pc31_pcprocitem = pc81_codprocitem
+inner join solicitem on pc81_solicitem = pc11_codigo
+inner join pcdotac on pc13_codigo = pc11_codigo
+where si02_precoreferencia = (select si01_sequencial from precoreferencia where si01_processocompra = $processodecompras) group by pcdotac.pc13_coddot order by pc13_coddot;";
+$rsVlTotalPrecoReferencia = db_query($sSqlvlTotalPrecoReferencia);
+
+            for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
+                $pdf->x = 30;
+                $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
+                $pdf->cell(20, 6, $oDadosDotacoes->ficha,           1, 0, "C", 0);
+                $pdf->cell(40, 6, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
+                $pdf->cell(35, 6, $oDadosDotacoes->projetoativ,     1, 0, "C", 0);
+                $pdf->cell(35, 6, $oDadosDotacoes->fonterecurso,    1, 0, "C", 0);
+                $pdf->cell(30, 6, db_utils::fieldsMemory($rsVlTotalPrecoReferencia, $iCont)->valortotal,1, 1, "C", 0);
+            }
+
+            return;
+        }
+
+        for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
+            $pdf->x = 30;
+            $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
+            $pdf->cell(20, 6, $oDadosDotacoes->ficha,           1, 0, "C", 0);
+            $pdf->cell(40, 6, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
+            $pdf->cell(60, 6, $oDadosDotacoes->projetoativ,     1, 0, "C", 0);
+            $pdf->cell(40, 6, $oDadosDotacoes->fonterecurso,    1, 1, "C", 0);
+        }
+
+        return;
+    }
+        
+    $pdf->x = 30;
+    $pdf->setfont('arial','b',11);
+    $pdf->cell(190,6,"Nenhum Registro Encontrato."     ,0,1,"C",0);
+    
+
 }
 
 $pdf->Output();
