@@ -482,6 +482,7 @@ class db_impcarne extends cl_assinatura
     public $conta = null;    // conta
     public $contadv = null;    // conta
     public $dotacao = null;    // dotacao orcamentaria (orgao,unidade,funcao,subfuncao,programa,projativ,elemento,recurso)
+    public $sequencialitem   = null;   // sequencial do item
     public $descrdotacao = null;    // descricao da dotacao
     public $coddot = null;    // codigo reduzido da despesa
     public $destino = null;    // destino do material ou servi�o
