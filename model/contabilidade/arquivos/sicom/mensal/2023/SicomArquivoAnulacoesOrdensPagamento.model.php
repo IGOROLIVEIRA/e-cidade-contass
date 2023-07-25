@@ -192,7 +192,8 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                    si09_codorgaotce,
                    o41_subunidade AS subunidade,
                    e60_emendaparlamentar,
-                    e60_esferaemendaparlamentar
+                    e60_esferaemendaparlamentar,
+                    e60_tipodespesa
             FROM conlancam
             JOIN conlancamdoc ON c71_codlan = c70_codlan
             JOIN conlancamord ON c80_codlan = c71_codlan
@@ -359,10 +360,12 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                     }
                     
                     $oControleOrcamentario = new ControleOrcamentario();
+                    $oControleOrcamentario->setTipoDespesa($oAnulacoes->e60_tipodespesa);
                     $oControleOrcamentario->setFonte($oAnulacoes->o15_codigo);
                     $oControleOrcamentario->setEmendaParlamentar($oAnulacoes->e60_emendaparlamentar);
                     $oControleOrcamentario->setEsferaEmendaParlamentar($oAnulacoes->e60_esferaemendaparlamentar);
-           
+                    $oControleOrcamentario->setDeParaFonteCompleta();
+
                     $oDadosAnulacaoFonte->si138_codco = $oControleOrcamentario->getCodigoParaEmpenho();
                     $oDadosAnulacaoFonte->si138_valoranulacaofonte = $oAnulacoes->vlrordem;
                     $oDadosAnulacaoFonte->si138_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
