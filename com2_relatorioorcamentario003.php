@@ -269,7 +269,7 @@ function colunas ($pdf,$imprimevalor,$resultDotacao,$processodecompras){
 
         if($imprimevalor == "t"){
 
-            $sSqlvlTotalPrecoReferencia = "select pc13_coddot, sum(si02_vltotalprecoreferencia) as valortotal from itemprecoreferencia
+            $sSqlvlTotalPrecoReferencia = "select pc13_coddot, sum(si02_vlprecoreferencia * pcdotac.pc13_quant) as valortotal from itemprecoreferencia
 inner join pcorcamitem on si02_itemproccompra = pc22_orcamitem
 inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem
 inner join pcprocitem on pc31_pcprocitem = pc81_codprocitem
