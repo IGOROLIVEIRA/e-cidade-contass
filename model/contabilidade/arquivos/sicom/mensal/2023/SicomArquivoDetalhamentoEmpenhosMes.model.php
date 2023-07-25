@@ -721,10 +721,11 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
       $oDadosEmpenhoFonte = new cl_emp112023();
 
         $oCodigoAcompanhamento = new ControleOrcamentario();
+        $oCodigoAcompanhamento->setTipoDespesa($oEmpenho10->e60_tipodespesa);
         $oCodigoAcompanhamento->setFonte($oEmpenho10->o15_codigo);
         $oCodigoAcompanhamento->setEmendaParlamentar($oEmpenho10->e60_emendaparlamentar);
         $oCodigoAcompanhamento->setEsferaEmendaParlamentar($oEmpenho10->e60_esferaemendaparlamentar);
-
+        $oCodigoAcompanhamento->setDeParaFonteCompleta();
       $oDadosEmpenhoFonte->si107_tiporegistro = 11;
       $oDadosEmpenhoFonte->si107_codunidadesub = $sCodUnidade;
       $oDadosEmpenhoFonte->si107_nroempenho = $oEmpenho10->nroempenho;
