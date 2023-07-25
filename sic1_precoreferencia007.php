@@ -148,6 +148,9 @@ $pdf1->impjust = $impjust;
 $pdf1->tipoprecoreferencia = $tipoprecoreferencia;
 $pdf1->rsLotes = $rsLotes;
 $pdf1->sqlitens = $rsResult;
+$pdf1->quantLinhas = $quantLinhas;
+$pdf1->arrayValores = $arrayValores;
+
 
 
 $pdf1->imprime();

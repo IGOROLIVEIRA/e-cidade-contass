@@ -277,6 +277,7 @@ class db_impcarne extends cl_assinatura
      public $tipoprecoreferencia = 0;
      public $rsLotes = null;
      public $sqlitens = null;
+     public $quantLinhas = 0;
 
 
     //////  VARIÁVEIS PARA EMISSAO DE ALVARÁ
@@ -481,6 +482,7 @@ class db_impcarne extends cl_assinatura
     public $conta = null;    // conta
     public $contadv = null;    // conta
     public $dotacao = null;    // dotacao orcamentaria (orgao,unidade,funcao,subfuncao,programa,projativ,elemento,recurso)
+    public $sequencialitem   = null;   // sequencial do item
     public $descrdotacao = null;    // descricao da dotacao
     public $coddot = null;    // codigo reduzido da despesa
     public $destino = null;    // destino do material ou serviï¿½o
@@ -1244,7 +1246,7 @@ class db_impcarne extends cl_assinatura
 
             // Imprime cabeï¿½alho com dados sobre a prefeitura se mudar de pï¿½gina
             $this->objpdf->setfillcolor(245);
-            $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 292, 2, 'DF', '1234');
+            $this->objpdf->rect($xcol - 2, $xlin - 18, 206, 289, 2, 'DF', '1234');
             $this->objpdf->setfillcolor(255, 255, 255);
             $this->objpdf->Setfont('Arial', 'B', 9);
             $this->objpdf->text(130, $xlin - 13, 'PROCESSO DE COMPRA N' . CHR(176));
@@ -1277,22 +1279,22 @@ class db_impcarne extends cl_assinatura
                     $this->objpdf->rect($xcol, $xlin + 24, 10, 6, 2, 'DF', '12');
                     $this->objpdf->rect($xcol + 10, $xlin + 24, 12, 6, 2, 'DF', '12');
                     $this->objpdf->rect($xcol + 22, $xlin + 24, 22, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 44, $xlin + 24, 98, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 142, $xlin + 24, 30, 6, 2, 'DF', '12');
-                    $this->objpdf->rect($xcol + 172, $xlin + 24, 30, 6, 2, 'DF', '12');
+                    $this->objpdf->rect($xcol + 44, $xlin + 24, 158, 6, 2, 'DF', '12');
+                    //$this->objpdf->rect($xcol + 142, $xlin + 24, 30, 6, 2, 'DF', '12');
+                    //$this->objpdf->rect($xcol + 172, $xlin + 24, 30, 6, 2, 'DF', '12');
 
 
                     // Caixa dos itens
-                    $this->objpdf->rect($xcol, $xlin + 30, 10, 262, 2, 'DF', '34');
+                    $this->objpdf->rect($xcol, $xlin + 30, 10, 233, 2, 'DF', '34');
                     // Caixa da quantidade
-                    $this->objpdf->rect($xcol + 10, $xlin + 30, 12, 262, 2, 'DF', '34');
-                    $this->objpdf->rect($xcol + 22, $xlin + 30, 22, 262, 2, 'DF', '34');
+                    $this->objpdf->rect($xcol + 10, $xlin + 30, 12, 233, 2, 'DF', '34');
+                    $this->objpdf->rect($xcol + 22, $xlin + 30, 22, 233, 2, 'DF', '34');
                     // Caixa dos materiais ou servicos
-                    $this->objpdf->rect($xcol + 44, $xlin + 30, 98, 262, 2, 'DF', '34');
+                    $this->objpdf->rect($xcol + 44, $xlin + 30, 158, 233, 2, 'DF', '34');
                     // Caixa dos valores unitario
-                    $this->objpdf->rect($xcol + 142, $xlin + 30, 30, 262, 2, 'DF', '');
+                    //$this->objpdf->rect($xcol + 142, $xlin + 30, 30, 262, 2, 'DF', '');
                     // Caixa dos valores totais dos iten
-                    $this->objpdf->rect($xcol + 172, $xlin + 30, 30, 262, 2, 'DF', '34');
+                    //$this->objpdf->rect($xcol + 172, $xlin + 30, 30, 262, 2, 'DF', '34');
 
                     $this->objpdf->sety($xlin + 66);
                     $alt = 4;
@@ -1300,10 +1302,10 @@ class db_impcarne extends cl_assinatura
                     $this->objpdf->Setfont('Arial', 'B', 8);
                     $this->objpdf->text($xcol + 2, $xlin + 28, 'ITEM');
                     $this->objpdf->text($xcol + 11, $xlin + 28, 'QUANT');
-                    $this->objpdf->text($xcol + 30, $xlin + 28, 'REF');
+                    $this->objpdf->text($xcol + 26, $xlin + 28, 'UNIDADE');
                     $this->objpdf->text($xcol + 70, $xlin + 28, 'MATERIAL OU SERVIÇO');
-                    $this->objpdf->text($xcol + 145, $xlin + 28, 'VALOR UNITÁRIO');
-                    $this->objpdf->text($xcol + 176, $xlin + 28, 'VALOR TOTAL');
+                    //$this->objpdf->text($xcol + 145, $xlin + 28, 'VALOR UNITÁRIO');
+                    //$this->objpdf->text($xcol + 176, $xlin + 28, 'VALOR TOTAL');
 
                     $maiscol = 0;
                     $xlin = 20;

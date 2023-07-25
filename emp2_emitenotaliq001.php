@@ -221,6 +221,8 @@ function getForncedores() {
 function js_abre(){
 
   var obj            = document.form1;
+  var sDtini = obj.dtini.value.split("/");
+  var sDtfim = obj.dtfim.value.split("/");
   var e50_codord_ini     = obj.e50_codord_ini.value;
   var e50_codord_fim     = obj.e50_codord_fim.value;
   var e60_codemp_ini = obj.e60_codemp_ini.value;
@@ -228,12 +230,12 @@ function js_abre(){
   var e60_numemp     = obj.e60_numemp.value;
   var historico      = obj.historico.value;
   var valor_ordem    = obj.valor_ordem.value;
-  var dtini_dia      = obj.dtini_dia.value;
-  var dtini_mes      = obj.dtini_mes.value;
-  var dtini_ano      = obj.dtini_ano.value;
-  var dtfim_dia      = obj.dtfim_dia.value;
-  var dtfim_mes      = obj.dtfim_mes.value;
-  var dtfim_ano      = obj.dtfim_ano.value;
+  var dtini_dia      = sDtini[0];
+  var dtini_mes      = sDtini[1];
+  var dtini_ano      = sDtini[2];
+  var dtfim_dia      = sDtfim[0];
+  var dtfim_mes      = sDtfim[1];
+  var dtfim_ano      = sDtfim[2];
   var aFornecedores  = getForncedores();
 
   var query          = '';

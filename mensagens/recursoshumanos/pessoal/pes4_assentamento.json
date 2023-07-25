@@ -16,5 +16,5 @@
   "servidores_assentamento_vazio"                                 : "Não há servidores com assentamento de substituição.",
   "servidor_assentamentos_vazio"                                  : "Não há assentamentos de substituição a pagar para o servidor.",
   "sucesso_cancelar_lancamento_assentamento"                      : "Cancelamento efetuado com sucesso.",
-  "sucesso_processar_lancamento_assentamento"                     : "Processado com sucesso.",
+  "sucesso_processar_lancamento_assentamento"                     : "Processado com sucesso."
 }

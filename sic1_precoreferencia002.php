@@ -63,7 +63,15 @@ if (isset($imprimirword)) {
     </script>";
     }
 }
- 
+
+$datesistema = date("d/m/Y", db_getsession('DB_datausu'));
+
+if (isset($alterar) && $si01_datacotacao > $datesistema) {
+    $msg = "Data da Cotação maior que data do Sistema";
+    unset($alterar);
+    db_msgbox($msg);
+}
+
 if (isset($alterar)) {
 
     if ($respCotacaocodigo != "" && $respOrcacodigo != "") {
@@ -81,9 +89,9 @@ if (isset($alterar)) {
 
     $clitemprecoreferencia->excluir(null, "si02_precoreferencia = $si01_sequencial");
     /**
-     * Atualização do valor dos itens do preço referência
+     * Atualizao do valor dos itens do preo referncia
      */
-    
+
     if ($si01_tipoprecoreferencia == '1') {
         $sFuncao = "avg";
     } else if ($si01_tipoprecoreferencia == '2') {
@@ -105,7 +113,7 @@ if (isset($alterar)) {
 
 
     $arrayValores = array();
-    $cont = 0; 
+    $cont = 0;
 
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
@@ -131,10 +139,20 @@ if (isset($alterar)) {
             }
         }
     }
-    
-    
+
+
     for ($iCont = 0; $iCont < $cont; $iCont++) {
         $valor = $arrayValores[$iCont];
+        /*$sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
+            round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
+            round($sFuncao(pc23_percentualdesconto),2) as percreferencia2
+                from pcproc
+                join pcprocitem on pc80_codproc = pc81_codproc
+                join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
+                join pcorcamitem on pc31_orcamitem = pc22_orcamitem
+                join pcorcamval on pc22_orcamitem = pc23_orcamitem
+                where pc80_codproc = $si01_processocompra and pc23_orcamitem = $valor group by pc23_orcamitem";*/
+
 
         $sSql = "select
                     pc23_orcamitem,
@@ -191,11 +209,11 @@ if (isset($alterar)) {
                     m61_codmatunid,
                     pc80_criterioadjudicacao order by pc11_seq asc
                    ";
-       
-        $rsResultee = db_query($sSql);  
-       
 
-        $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);  
+        $rsResultee = db_query($sSql);
+
+
+        $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);
 
         $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
         $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
@@ -216,12 +234,12 @@ if (isset($alterar)) {
         $clitemprecoreferencia->si02_taxa = $oItemOrc->pc01_taxa;
         $clitemprecoreferencia->si02_criterioadjudicacao = $oItemOrc->pc80_criterioadjudicacao;
         $clitemprecoreferencia->si02_mediapercentual = $oItemOrc->mediapercentual;
-        $clitemprecoreferencia->si02_vltotalprecoreferencia = str_replace(',','.',number_format($oItemOrc->valor*$oItemOrc->pc23_quant,2, ',', ''));
-        $clitemprecoreferencia->incluir(null);    
+        $clitemprecoreferencia->si02_vltotalprecoreferencia = str_replace(',','',number_format($oItemOrc->valor*$oItemOrc->pc23_quant,2));
+        $clitemprecoreferencia->incluir(null);
 
-       
+
     }
-    
+
     if ($clitemprecoreferencia->erro_status == 0) {
 
         $sqlerro = true;
@@ -230,11 +248,31 @@ if (isset($alterar)) {
     }
     if($cont == 0){
         $sqlerro = true;
-        $clprecoreferencia->erro_msg    = 'Quantidade de orçamentos cadastrados é menor que a quantidade de cotação selecionada.';
+        $clprecoreferencia->erro_msg    = 'Quantidade de oramentos cadastrados  menor que a quantidade de cotao selecionada.';
         $clprecoreferencia->erro_status = "0";
         $clprecoreferencia->erro_campo = "si01_cotacaoitem";
     }
-    
+    /*
+    $sSql = "select pc23_orcamitem,round($sFuncao(pc23_vlrun),4) as valor,
+                round($sFuncao(pc23_perctaxadesctabela),2) as percreferencia1,
+                round($sFuncao(pc23_percentualdesconto),2) as percreferencia2,
+                si02_sequencial as sequencial
+                from pcproc
+                join pcprocitem on pc80_codproc = pc81_codproc
+                join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
+                join pcorcamitem on pc31_orcamitem = pc22_orcamitem
+                join pcorcamval on pc22_orcamitem = pc23_orcamitem
+                join itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
+                where pc80_codproc = $si01_processocompra and pc23_vlrun > 0 group by pc23_orcamitem, si02_sequencial";
+
+    $rsResult = db_query($sSql);
+
+    for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
+
+        $oItem = db_utils::fieldsMemory($rsResult, $iCont);
+        $clitemprecoreferencia->si02_vlprecoreferencia = $oItem->valor;
+        $clitemprecoreferencia->alterar($oItem->sequencial);
+    }*/
 
     if ($clitemprecoreferencia->numrows > 0) {
         $clprecoreferencia->alterar($si01_sequencial);
@@ -245,7 +283,7 @@ if (isset($alterar)) {
         $clprecoreferenciaacount->si233_acao =  'Alterar';
         $clprecoreferenciaacount->si233_idusuario = db_getsession("DB_id_usuario");
         $clprecoreferenciaacount->si233_datahr =  date("Y-m-d", db_getsession("DB_datausu"));
-        $clprecoreferenciaacount->incluir(null);  
+        $clprecoreferenciaacount->incluir(null);
     }
 
     db_fim_transacao();
