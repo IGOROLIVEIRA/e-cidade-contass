@@ -258,9 +258,11 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
                     $oDadosAnulacaoFonte->si138_codfontrecursos = substr($this->oDeParaRecurso->getDePara($oDadosAnulacaoFonte->si138_codfontrecursos), 0, 7);
 
                     $oControleOrcamentario = new ControleOrcamentario();
+                    $oControleOrcamentario->setTipoDespesa($oAnulacoes->e60_tipodespesa);
                     $oControleOrcamentario->setFonte($oAnulacoes->o15_codigo);
                     $oControleOrcamentario->setEmendaParlamentar($oAnulacoes->e60_emendaparlamentar);
                     $oControleOrcamentario->setEsferaEmendaParlamentar($oAnulacoes->e60_esferaemendaparlamentar);
+                    $oControleOrcamentario->setDeParaFonteCompleta();
 
                     $oDadosAnulacaoFonte->si138_codco = $oControleOrcamentario->getCodigoParaEmpenho();
                     $oDadosAnulacaoFonte->si138_valoranulacaofonte = $oAnulacoes->vlrordem;
