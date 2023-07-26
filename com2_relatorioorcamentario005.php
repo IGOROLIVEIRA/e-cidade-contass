@@ -300,12 +300,17 @@ header("Content-Disposition: attachment; Filename=Declaracao_Recursos_Orcamentar
                         
                             for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
                                 $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
+                                $valorTotalPrecoReferencia = db_utils::fieldsMemory($rsVlTotalPrecoReferencia, $iCont)->valortotal;
+                                $valorTotalPrecoReferencia = number_format($valorTotalPrecoReferencia,2);
+                                $valorTotalPrecoReferencia = str_replace(",","",$valorTotalPrecoReferencia);
+                                $valorTotalPrecoReferencia = str_replace(".",",",$valorTotalPrecoReferencia);
+                                $valorTotalPrecoReferencia = "R$ $valorTotalPrecoReferencia";
                                 echo "<tr class=\"headertr\">
                                 <td>".$oDadosDotacoes->ficha."</td>
                                 <td>".$oDadosDotacoes->codorcamentario."</td>
                                 <td>".$oDadosDotacoes->projetoativ."</td>
                                 <td>".$oDadosDotacoes->fonterecurso."</td>
-                                <td>".db_utils::fieldsMemory($rsVlTotalPrecoReferencia, $iCont)->valortotal."</td>
+                                <td>".$valorTotalPrecoReferencia."</td>
                                 <tr>";
                             }
 

@@ -278,14 +278,21 @@ inner join pcdotac on pc13_codigo = pc11_codigo
 where si02_precoreferencia = (select si01_sequencial from precoreferencia where si01_processocompra = $processodecompras) group by pcdotac.pc13_coddot order by pc13_coddot;";
 $rsVlTotalPrecoReferencia = db_query($sSqlvlTotalPrecoReferencia);
 
+
             for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
                 $pdf->x = 30;
                 $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
+                $valorTotalPrecoReferencia = db_utils::fieldsMemory($rsVlTotalPrecoReferencia, $iCont)->valortotal;
+                $valorTotalPrecoReferencia = number_format($valorTotalPrecoReferencia,2);
+                $valorTotalPrecoReferencia = str_replace(",","",$valorTotalPrecoReferencia);
+                $valorTotalPrecoReferencia = str_replace(".",",",$valorTotalPrecoReferencia);
+                $valorTotalPrecoReferencia = "R$ $valorTotalPrecoReferencia";
+
                 $pdf->cell(20, 6, $oDadosDotacoes->ficha,           1, 0, "C", 0);
                 $pdf->cell(40, 6, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
                 $pdf->cell(35, 6, $oDadosDotacoes->projetoativ,     1, 0, "C", 0);
                 $pdf->cell(35, 6, $oDadosDotacoes->fonterecurso,    1, 0, "C", 0);
-                $pdf->cell(30, 6, db_utils::fieldsMemory($rsVlTotalPrecoReferencia, $iCont)->valortotal,1, 1, "C", 0);
+                $pdf->cell(30, 6, $valorTotalPrecoReferencia,1, 1, "C", 0);
             }
 
             return;
