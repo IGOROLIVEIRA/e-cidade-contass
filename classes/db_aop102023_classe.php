@@ -707,7 +707,8 @@ class cl_aop102023
                    si09_codorgaotce,
                    o41_subunidade AS subunidade,
                    e60_emendaparlamentar,
-                    e60_esferaemendaparlamentar
+                    e60_esferaemendaparlamentar,
+                    e60_tipodespesa
             FROM conlancam
             JOIN conlancamdoc ON c71_codlan = c70_codlan
             JOIN conlancamord ON c80_codlan = c71_codlan
