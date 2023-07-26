@@ -9,8 +9,8 @@ require_once("libs/db_sessoes.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/db_app.utils.php");
 require_once("classes/db_pcproc_classe.php");
+require_once("classes/db_itemprecoreferencia_classe.php");
 db_postmemory($HTTP_GET_VARS);
-$clpcproc = new cl_pcproc();
 
 /**
  * BUSCO DADOS DA INSTITUICAO
@@ -175,20 +175,9 @@ db_fieldsmemory($resultObjeto,0);
  * BUSCO OS DADOS DA DOTACAO
  *
  */
-$sqlDotacao = "SELECT DISTINCT pc13_coddot AS ficha,
-                o15_codtri AS fonterecurso,
-                o58_projativ AS projetoativ,
-                o56_elemento as codorcamentario
-FROM pcproc
-INNER JOIN pcprocitem ON pcprocitem.pc81_codproc = pcproc.pc80_codproc 
-INNER JOIN solicitem ON pcprocitem.pc81_solicitem = solicitem.pc11_codigo
-INNER JOIN pcdotac ON pcdotac.pc13_codigo = solicitem.pc11_codigo
-INNER JOIN orcdotacao ON (orcdotacao.o58_anousu,orcdotacao.o58_coddot) = (pcdotac.pc13_anousu,pcdotac.pc13_coddot)
-INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
-INNER JOIN orcelemento on (orcelemento.o56_codele,orcelemento.o56_anousu) = (orcdotacao.o58_codele,orcdotacao.o58_anousu)
-WHERE pc80_codproc = $processodecompras";
+
 $resultDotacao = db_query($sqlDotacao);
-//db_criatabela($resultDotacao);exit;
+
 /**
 * BUSCO O TEXTO NO CADASTRO DE PARAGRAFOS
 *
@@ -220,11 +209,11 @@ if(pg_num_rows($resparag) != 0){
 $pdf->ln($alt+3);
 $pdf->x = 30;
 
-cabecalho($pdf,$imprimevalor);
+imprimeCabecalho($pdf,$imprimevalor);
 $pdf->setfont('arial','',11);
 $pdf->x = 30;
 
-colunas ($pdf,$imprimevalor,$resultDotacao,$processodecompras);
+imprimeColunas ($pdf,$imprimevalor,$processodecompras);
 $pdf->ln($alt+3);
 
 $pdf->setfont('arial','',11);
@@ -245,7 +234,8 @@ if(pg_num_rows($resparag) != 0){
     eval($paragr1->db02_texto);
 }
 
-function cabecalho ($pdf,$imprimevalor){
+function imprimeCabecalho($pdf,$imprimevalor){
+
     if($imprimevalor == "t"){
         $pdf->cell(20,6,"Ficha",1,0,"C",1);
         $pdf->cell(40,6,"Cód. orçamentário",1,0,"C",1);
@@ -263,36 +253,33 @@ function cabecalho ($pdf,$imprimevalor){
     
 }
 
-function colunas ($pdf,$imprimevalor,$resultDotacao,$processodecompras){
+function imprimeColunas($pdf,$imprimevalor,$processodecompras){
+
+    $clpcproc = new cl_pcproc();
+    $sqlDotacao = $clpcproc->sql_query_dotacao($processodecompras);
+    $resultDotacao = db_query($sqlDotacao);
+
 
     if(pg_num_rows($resultDotacao) != 0){
 
         if($imprimevalor == "t"){
 
-            $sSqlvlTotalPrecoReferencia = "select pc13_coddot, sum(si02_vlprecoreferencia * pcdotac.pc13_quant) as valortotal from itemprecoreferencia
-inner join pcorcamitem on si02_itemproccompra = pc22_orcamitem
-inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem
-inner join pcprocitem on pc31_pcprocitem = pc81_codprocitem
-inner join solicitem on pc81_solicitem = pc11_codigo
-inner join pcdotac on pc13_codigo = pc11_codigo
-where si02_precoreferencia = (select si01_sequencial from precoreferencia where si01_processocompra = $processodecompras) group by pcdotac.pc13_coddot order by pc13_coddot;";
-$rsVlTotalPrecoReferencia = db_query($sSqlvlTotalPrecoReferencia);
-
+            $clitemprecoreferencia = new cl_itemprecoreferencia();
+            $sSqlvlTotalPrecoReferencia = $clitemprecoreferencia->sql_query_valortotalprecoreferencia($processodecompras); 
+            $rsVlTotalPrecoReferencia = db_query($sSqlvlTotalPrecoReferencia);
 
             for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
                 $pdf->x = 30;
                 $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
                 $valorTotalPrecoReferencia = db_utils::fieldsMemory($rsVlTotalPrecoReferencia, $iCont)->valortotal;
-                $valorTotalPrecoReferencia = number_format($valorTotalPrecoReferencia,2);
-                $valorTotalPrecoReferencia = str_replace(",","",$valorTotalPrecoReferencia);
-                $valorTotalPrecoReferencia = str_replace(".",",",$valorTotalPrecoReferencia);
-                $valorTotalPrecoReferencia = "R$ $valorTotalPrecoReferencia";
+                $valorTotalPrecoReferencia = trim(db_formatar($valorTotalPrecoReferencia, 'f'));
+                $valorTotalPrecoReferencia = str_replace(".","",$valorTotalPrecoReferencia);
 
                 $pdf->cell(20, 6, $oDadosDotacoes->ficha,           1, 0, "C", 0);
                 $pdf->cell(40, 6, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
                 $pdf->cell(35, 6, $oDadosDotacoes->projetoativ,     1, 0, "C", 0);
                 $pdf->cell(35, 6, $oDadosDotacoes->fonterecurso,    1, 0, "C", 0);
-                $pdf->cell(30, 6, $valorTotalPrecoReferencia,1, 1, "C", 0);
+                $pdf->cell(30, 6, "R$ " . $valorTotalPrecoReferencia ,1, 1, "C", 0);
             }
 
             return;
@@ -312,9 +299,8 @@ $rsVlTotalPrecoReferencia = db_query($sSqlvlTotalPrecoReferencia);
         
     $pdf->x = 30;
     $pdf->setfont('arial','b',11);
-    $pdf->cell(190,6,"Nenhum Registro Encontrato."     ,0,1,"C",0);
+    $pdf->cell(190,6,"Nenhum Registro Encontrato.",0,1,"C",0);
     
-
 }
 
 $pdf->Output();

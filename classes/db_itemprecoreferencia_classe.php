@@ -628,7 +628,19 @@ class cl_itemprecoreferencia {
     return $sSql;
   }
 
+  public function sql_query_valortotalprecoreferencia($si01_processocompra){
+    $sSql = "select pc13_coddot, sum(si02_vlprecoreferencia * pcdotac.pc13_quant) as valortotal from itemprecoreferencia
+             inner join pcorcamitem on si02_itemproccompra = pc22_orcamitem
+             inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem
+             inner join pcprocitem on pc31_pcprocitem = pc81_codprocitem
+             inner join solicitem on pc81_solicitem = pc11_codigo
+             inner join pcdotac on pc13_codigo = pc11_codigo
+             where si02_precoreferencia = (select si01_sequencial from precoreferencia
+             where si01_processocompra = $si01_processocompra) group by pcdotac.pc13_coddot order by pc13_coddot;";
 
+    return $sSql;
+
+  }
 
   
 

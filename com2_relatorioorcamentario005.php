@@ -1,5 +1,6 @@
 <?php
 require_once 'model/relatorios/Relatorio.php';
+require_once("classes/db_itemprecoreferencia_classe.php");
 include("classes/db_db_docparag_classe.php");
 
 // include("fpdf151/pdf.php");
@@ -289,21 +290,15 @@ header("Content-Disposition: attachment; Filename=Declaracao_Recursos_Orcamentar
 
                         if($imprimevalor == "t"){
 
-                            $sSqlvlTotalPrecoReferencia = "select pc13_coddot, sum(si02_vlprecoreferencia * pcdotac.pc13_quant) as valortotal from itemprecoreferencia
-                            inner join pcorcamitem on si02_itemproccompra = pc22_orcamitem
-                            inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem
-                            inner join pcprocitem on pc31_pcprocitem = pc81_codprocitem
-                            inner join solicitem on pc81_solicitem = pc11_codigo
-                            inner join pcdotac on pc13_codigo = pc11_codigo
-                            where si02_precoreferencia = (select si01_sequencial from precoreferencia where si01_processocompra = $processodecompras) group by pcdotac.pc13_coddot order by pc13_coddot;";
+                            $clitemprecoreferencia = new cl_itemprecoreferencia();
+                            $sSqlvlTotalPrecoReferencia = $clitemprecoreferencia->sql_query_valortotalprecoreferencia($processodecompras); 
                             $rsVlTotalPrecoReferencia = db_query($sSqlvlTotalPrecoReferencia);
                         
                             for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
                                 $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
                                 $valorTotalPrecoReferencia = db_utils::fieldsMemory($rsVlTotalPrecoReferencia, $iCont)->valortotal;
-                                $valorTotalPrecoReferencia = number_format($valorTotalPrecoReferencia,2);
-                                $valorTotalPrecoReferencia = str_replace(",","",$valorTotalPrecoReferencia);
-                                $valorTotalPrecoReferencia = str_replace(".",",",$valorTotalPrecoReferencia);
+                                $valorTotalPrecoReferencia = trim(db_formatar($valorTotalPrecoReferencia, 'f'));
+                                $valorTotalPrecoReferencia = str_replace(".","",$valorTotalPrecoReferencia);
                                 $valorTotalPrecoReferencia = "R$ $valorTotalPrecoReferencia";
                                 echo "<tr class=\"headertr\">
                                 <td>".$oDadosDotacoes->ficha."</td>
