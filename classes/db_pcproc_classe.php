@@ -1687,7 +1687,7 @@ class cl_pcproc
     return $sql;
   }
 
-  public function sql_query_dotacao($pc80_codproc){
+  public function queryDotacao($pc80_codproc){
 
     $sSql = "SELECT DISTINCT pc13_coddot AS ficha,
                 o15_codtri AS fonterecurso,

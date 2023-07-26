@@ -291,7 +291,7 @@ header("Content-Disposition: attachment; Filename=Declaracao_Recursos_Orcamentar
                         if($imprimevalor == "t"){
 
                             $clitemprecoreferencia = new cl_itemprecoreferencia();
-                            $sSqlvlTotalPrecoReferencia = $clitemprecoreferencia->sql_query_valortotalprecoreferencia($processodecompras); 
+                            $sSqlvlTotalPrecoReferencia = $clitemprecoreferencia->queryValorTotalPrecoReferencia($processodecompras); 
                             $rsVlTotalPrecoReferencia = db_query($sSqlvlTotalPrecoReferencia);
                         
                             for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
