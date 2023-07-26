@@ -2,6 +2,7 @@
 
 use App\Repositories\Tributario\Arrecadacao\ArDigital\DTO\ArDigitalServicePayloadDTO;
 use App\Services\Tributario\Notificacoes\GenerateArDigitalService;
+use App\Services\Tributario\Notificacoes\ResolveCheckerDigit;
 
 require_once("libs/db_sql.php");
 require_once("libs/db_libtributario.php");
@@ -22,7 +23,15 @@ require_once("fpdf151/scpdf.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
+$resolveCheckerDigit = new ResolveCheckerDigit();
 $lServicoArDigital = $_GET['lServArDigital'] === 'true';
+$numeroEtiqueta = (int) $_GET['numeroEtiqueta'];
+
+if($lServicoArDigital && empty($numeroEtiqueta)) {
+    $sMsg = 'Informe o número inicial da etiqueta.';
+    db_redireciona("db_erros.php?fechar=true&db_erro={$sMsg}");
+    exit;
+}
 
 $clrotulo = new rotulocampo;
 $clrotulo->label("k60_codigo");
@@ -1259,6 +1268,11 @@ for($indx=0;$indx < $numrows; $indx++) {
     $cldb_layouttxt->setCampo("inst_linha15",$historico15);
     $cldb_layouttxt->setCampo("inst_linha16",$k00_msgrecibo);
     $cldb_layouttxt->setCampo("valor_bruto",$nValorBruto);
+
+    $digitoVerificador = $resolveCheckerDigit->execute((string) $numeroEtiqueta);
+    $cldb_layouttxt->setCampo("numero_etiqueta","{$numeroEtiqueta}-{$digitoVerificador}");
+
+    $numeroEtiqueta++;
 
     $cldb_layouttxt->geraDadosLinha();
     db_atutermometro($indx, $numrows, 'termometro');
