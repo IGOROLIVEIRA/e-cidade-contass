@@ -143,7 +143,8 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
                    si09_codorgaotce ,
                    o56_elemento,
                    e60_emendaparlamentar,
-                   e60_esferaemendaparlamentar
+                   e60_esferaemendaparlamentar,
+                   e60_tipodespesa
             FROM empempenho
             INNER JOIN conlancamemp ON c75_numemp = empempenho.e60_numemp
             INNER JOIN conlancam ON c70_codlan = c75_codlan
@@ -278,6 +279,7 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
         $oDadosDetalhamento->e60_datasentenca = $oDetalhamento->e60_datasentenca;
         $oDadosDetalhamento->e60_emendaparlamentar = $oDetalhamento->e60_emendaparlamentar;
         $oDadosDetalhamento->e60_esferaemendaparlamentar = $oDetalhamento->e60_esferaemendaparlamentar;
+        $oDadosDetalhamento->e60_tipodespesa = $oDetalhamento->e60_tipodespesa;
 
         $aDadosAgrupados[$sHash] = $oDadosDetalhamento;
 
@@ -330,9 +332,11 @@ class SicomArquivoDetalhamentoAnulacao extends SicomArquivoBase implements iPadA
 
       $oDadosAgrupados->Reg11->si122_codfontrecursos = $this->oDeParaRecurso->getDePara($oDadosAgrupados->Reg11->si122_codfontrecursos);
       $oControleOrcamentario = new ControleOrcamentario();
+      $oControleOrcamentario->setTipoDespesa($oDadosAgrupados->e60_tipodespesa);
       $oControleOrcamentario->setFonte($oDadosAgrupados->Reg11->si122_codfontrecursos);
       $oControleOrcamentario->setEmendaParlamentar($oDadosAgrupados->e60_emendaparlamentar);
       $oControleOrcamentario->setEsferaEmendaParlamentar($oDadosAgrupados->e60_esferaemendaparlamentar);
+      $oControleOrcamentario->setDeParaFonteCompleta();
 
       $oDados11->si122_tiporegistro = 11;
       $oDados11->si122_codreduzido = $oDadosAgrupados->Reg11->si122_codreduzido;
