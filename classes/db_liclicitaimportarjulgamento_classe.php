@@ -154,6 +154,7 @@ class cl_liclicitaimportarjulgamento
             delete from pcorcamitemlic where pc26_orcamitem in (select pc22_orcamitem from pcorcamitem where pc22_codorc = $pc20_codorc);
             delete from pcorcamitem where pc22_codorc = $pc20_codorc;
             delete from pcorcam where pc20_codorc = $pc20_codorc;
+            delete from  liclicitasituacao where l11_liclicita = $l20_codigo  and l11_licsituacao = 1;
             update liclicita set l20_licsituacao = 0 where l20_codigo = $l20_codigo;
         commit;
         ";
