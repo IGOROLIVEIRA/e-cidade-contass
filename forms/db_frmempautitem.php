@@ -24,7 +24,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 //MODULO: empenho
 require_once(modification("classes/db_empparametro_classe.php"));
 require_once(modification("dbforms/db_classesgenericas.php"));
@@ -81,13 +80,13 @@ if (isset($opcao) && $opcao=="alterar") {
 ?>
 
 <style>
-     @media screen and (min-width: 1281px) and (max-width: 1440px) {
+     /* @media screen and (min-width: 1281px) and (max-width: 1440px) {
         #e55_autori, #e55_sequen, #e55_item {
-            width: 92px;
+            width: 90px;
         }
 
         #pc01_descrmater, #e55_marca, #e55_descr {
-            width: 492px;
+            width: 450px;
         }
 
         #e55_vltot {
@@ -103,7 +102,7 @@ if (isset($opcao) && $opcao=="alterar") {
     }
     @media screen and  (max-width: 1280px) {
          #pc01_descrmater, #e55_marca, #e55_descr {
-             width: 400px;
+             width: 380px;
          }
 
          #e55_vltot, #e55_vluni, #e55_quant {
@@ -113,7 +112,18 @@ if (isset($opcao) && $opcao=="alterar") {
              margin-left: 1px;
              width: 240px;
          }
+   / }*/
+   #e55_autori, #e55_sequen, #e55_item {
+        width: 80px;
     }
+   #pc01_descrmater{
+        width: 310px;
+    }
+    #e55_quant {
+        width: 80px;
+    }
+
+
 </style>
 
 <script type="text/javascript" src="scripts/scripts.js"></script>
@@ -196,7 +206,7 @@ function js_troca(codele) {
 
 <form name="form1" method="post" action="">
 <center>
-<fieldset style="margin-top:5px; width:55%;">
+<fieldset style="margin-top:5px; width:80%; text-align:left;">
   <legend><b>Itens</b></legend>
   <table border="0" cellpadding='0' cellspacing='0' >
     <tr style="height: 20px;">

@@ -1211,7 +1211,7 @@ function js_desabilitaTipoCompra() {
         let result = eval("(" + oAjax.responseText + ")");
 
         if (result.tipocompratribunal != 13) {
-            alert('Tipo de compra invlido para este tipo de autorizao');
+            alert('Tipo de compra inválido para este tipo de autorizao');
             document.querySelector('#e54_codcom').value = '';
             document.querySelector('#e54_codcomdescr').value = '';
 
