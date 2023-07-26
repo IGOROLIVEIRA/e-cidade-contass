@@ -232,8 +232,8 @@ $tam2 = "5";
 // $sqlempresto = $clempresto->sql_rp_novo(db_getsession("DB_anousu"), $sele_work, $dtini, $dtfim, $sele_work1, $sql_where_externo, "$sql_order ");
               
 $pdtini = $dtini_ano . "-" . "01". "-" . "01";
-$dtini = $dtini_ano . "-" . $dtini_mes. "-" . $dtini_dia;
-$dtfim = $dtfim_ano . "-" . $dtfim_mes . "-" . $dtfim_dia;
+$dtini = implode("-", array_reverse(explode("/", $dtini)));
+$dtfim = implode("-", array_reverse(explode("/", $dtfim)));
 
 //filtro por agrupamento
 $arr_tipos = explode(",",$vertipos);

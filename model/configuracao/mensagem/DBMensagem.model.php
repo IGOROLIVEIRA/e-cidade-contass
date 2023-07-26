@@ -121,7 +121,6 @@ class DBMensagem {
       }
 
     }
-
     return $sMensagem;
   }
 

@@ -707,7 +707,7 @@ HTML;
 HTML;
                     $auxo58_codigo = $oNotas->o58_codigo;
                     }    
-                    if($oNotas->e60_codemp == $oNotas2->e60_codemp && $oNotas->e60_numcgm == $oNotas2->e60_numcgm){
+                    if($oNotas->e60_codemp == $oNotas2->e60_codemp && $oNotas->e60_numcgm == $oNotas2->e60_numcgm && $oNotas->e50_codord == $oNotas2->e50_codord ){
                         if($auxRetencoes != $oNotas->outrasretencoes)
                             $auxRetencoes += $oNotas->outrasretencoes;
                         if($auxInss != $oNotas->valor_inss)        

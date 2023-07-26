@@ -1342,7 +1342,10 @@ class ordemCompra {
         if ( pg_num_rows($rsValidaDataEmp) > 0 ) {
           $oDataEmpenho = db_utils::fieldsMemory($rsValidaDataEmp,0);
           if ( implode("-",array_reverse(explode("/",$dtDataNota))) < $oDataEmpenho->e60_emiss ) {
-            throw new Exception("Data da nota inferior a data do empenho!");
+            $o56_elemento = pg_fetch_object(db_query((cl_empelemento::sql_query($oItemAtivo->e60_numemp, null, "o56_elemento"))))->o56_elemento;
+            if (!preg_match('/^.{5}92/', $o56_elemento)){
+              throw new Exception("Data da nota inferior a data do empenho!");
+            }
           }
         }
 

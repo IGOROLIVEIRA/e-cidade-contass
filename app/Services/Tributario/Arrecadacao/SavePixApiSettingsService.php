@@ -3,9 +3,13 @@
 namespace App\Services\Tributario\Arrecadacao;
 
 use App\Models\Concerns\IApiPixConfiguration;
+use BusinessException;
 
 class SavePixApiSettingsService
 {
+    private const ATIVO_SIM = 't';
+    private const ATIVO_NAO = 'f';
+
     private IApiPixConfiguration $apiPixConfiguration;
 
     public function __construct(
@@ -15,13 +19,20 @@ class SavePixApiSettingsService
     }
 
     /**
-     * @throws \BusinessException
+     * @throws BusinessException
      */
     public function execute(array $data)
     {
-        if ($data['k03_ativo_integracao_pix']) {
-            $this->validate($data);
+        $active = $data['k03_ativo_integracao_pix'] === self::ATIVO_SIM;
+
+        if (!$active) {
+            $this->apiPixConfiguration
+                ->where('k177_instituicao_financeira', $data['k03_instituicao_financeira'])
+                ->delete();
+            return;
         }
+
+        $this->validate($data);
 
         $result = $this->apiPixConfiguration->updateOrCreate(
             ['k177_instituicao_financeira' => $data['k03_instituicao_financeira']],
@@ -39,12 +50,12 @@ class SavePixApiSettingsService
         );
 
         if (!$result) {
-            throw new \BusinessException('Não foi possível salvar');
+            throw new BusinessException('Não foi possível salvar');
         }
     }
 
     /**
-     * @throws \BusinessException
+     * @throws BusinessException
      */
     public function validate(array $data): void
     {
@@ -53,7 +64,7 @@ class SavePixApiSettingsService
             $msg = 'Instituição financeira para integração com o PIX não foi informada';
         }
         if ($msg) {
-            throw new \BusinessException($msg);
+            throw new BusinessException($msg);
         }
     }
 }

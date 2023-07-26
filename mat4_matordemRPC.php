@@ -729,7 +729,7 @@ if ($method == "getDados") {
 
 
       $oRequisicao  = new requisicaoMaterial($codigo);
-      $atendido = $oRequisicao->atenderRequisicao(17, $aItens, $aDadosConsumoImediato->dpto);
+      $atendido = $oRequisicao->atenderRequisicao(17, $aItens, $aDadosConsumoImediato['dpto']);
       if ($atendido == false) {
         throw new Exception("Saída de material não atendida.");
       }

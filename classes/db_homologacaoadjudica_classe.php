@@ -935,18 +935,18 @@ class cl_homologacaoadjudica
         /* Consulta dos itens conforme a rotina executada */
 
         if ($iRotina == 1) {
-            $sWhere = " liclicitem.l21_codliclicita = $iLicitacao and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
+            $sWhere = "pc11_servicoquantidade != 'f' and liclicitem.l21_codliclicita = $iLicitacao and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
             $rsItens = $this->sql_record($this->sql_query_itens_semhomologacao(null, $sCampos, $sOrder, $sWhere));
         }
 
         if ($iRotina == 2) {
-            $sWhere = "pc81_codprocitem in ($sItensHomologados) and liclicitem.l21_codliclicita = $iLicitacao and pc24_pontuacao = 1 AND pc81_codprocitem not in (select l203_item from homologacaoadjudica
+            $sWhere = "pc11_servicoquantidade != 'f' and pc81_codprocitem in ($sItensHomologados) and liclicitem.l21_codliclicita = $iLicitacao and pc24_pontuacao = 1 AND pc81_codprocitem not in (select l203_item from homologacaoadjudica
             inner join itenshomologacao on l203_homologaadjudicacao = l202_sequencial where l202_licitacao = $iLicitacao)";
             $rsItens = $this->sql_record($this->sql_query_itens_semhomologacao(null, $sCampos, $sOrder, $sWhere));
         }
 
         if ($iRotina == 3) {
-            $sWhere = " liclicitem.l21_codliclicita = $iLicitacao and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = $iHomologacao";
+            $sWhere = "pc11_servicoquantidade != 'f' and liclicitem.l21_codliclicita = $iLicitacao and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = $iHomologacao";
             $rsItens = $this->sql_record($this->sql_query_itens_comhomologacao(null, $sCampos, $sOrder, $sWhere));
         }
 

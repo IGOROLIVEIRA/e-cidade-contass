@@ -45,10 +45,9 @@ class GerarAOP extends GerarAM
                 AND si138_instit = " . db_getsession("DB_instit");
         $rsAOP11 = db_query($sSql2);
 
-        $sSql3 = "SELECT *
-        FROM aop122023
-        WHERE si139_mes = " . $this->iMes . "
-        AND si139_instit = " . db_getsession("DB_instit");
+        $sSql3 = "SELECT * FROM aop122023
+                  WHERE si139_mes = " . $this->iMes . "
+                    AND si139_instit = " . db_getsession("DB_instit");
         $rsAOP12 = db_query($sSql3);
 
         if (pg_num_rows($rsAOP10) == 0) {
@@ -109,7 +108,7 @@ class GerarAOP extends GerarAM
 
                 for ($iCont3 = 0; $iCont3 < pg_num_rows($rsAOP12); $iCont3++) {
 
-                    $aAOP12 = pg_fetch_array($rsAOP12, $iCont3);
+                    $aAOP12 = pg_fetch_assoc($rsAOP12, $iCont3);
 
                     if ($aAOP10['si137_sequencial'] == $aAOP12['si139_reg10']) {
                         $aCSVAOP12['si139_tiporegistro']        = $this->padLeftZero($aAOP12['si139_tiporegistro'], 2);
@@ -120,7 +119,7 @@ class GerarAOP extends GerarAM
                         $aCSVAOP12['si139_codfontectb']         = substr($this->padLeftZero($aAOP12['si139_codfontectb'], 3) == 0 ? " " : $this->padLeftZero($aAOP12['si139_codfontectb'], 3), 0, 7);
                         $aCSVAOP12['si139_desctipodocumentoop'] = substr($aAOP12['si139_desctipodocumentoop'], 0, 50);
                         $aCSVAOP12['si139_dtemissao']           = $this->sicomDate($aAOP10['si137_dtpagamento']);
-                        $aCSVAOP12['si139_vldocumento']         = $this->sicomNumberReal($aAOP11['si138_valoranulacaofonte'], 2);
+                        $aCSVAOP12['si139_vldocumento']         = $this->sicomNumberReal($aAOP12['si139_vldocumento'], 2);
 
                         $this->sLinha = $aCSVAOP12;
                         $this->adicionaLinha();
