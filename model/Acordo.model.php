@@ -3206,7 +3206,6 @@ class Acordo
         $sSqlAutorizacoes .= "  order by codigo";
 
         $rsAutorizacoes = db_query($sSqlAutorizacoes);
-
         return db_utils::getCollectionByRecord($rsAutorizacoes);
     }
 
