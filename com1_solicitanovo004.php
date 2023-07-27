@@ -183,7 +183,7 @@ if (count($aParametrosOrcamento) > 0) {
 
 				db_fieldsmemory($result_importacao, 0);
 				$ano_imp 							 = substr($data_imp, 0, 4);
-				$clsolicita->pc10_data = date("Y-m-d", db_getsession("DB_datausu"));
+				$clsolicita->pc10_data = $pc10_data; 
 
 				$clsolicita->pc10_log  = $pc10_log;
 				if ($pc10_correto == "f") {
@@ -229,7 +229,7 @@ if (count($aParametrosOrcamento) > 0) {
 
 			$clsolicita->pc10_instit          = db_getsession("DB_instit");
 			$clsolicita->pc10_login           = db_getsession("DB_id_usuario");
-			$clsolicita->pc10_data            = date("Y-m-d", db_getsession("DB_datausu"));
+			$clsolicita->pc10_data            = $pc10_data;
 			$clsolicita->pc10_resumo          = addslashes(stripslashes(chop($pc10_resumo)));
 			$clsolicita->pc10_solicitacaotipo = 1;
 			$clsolicita->incluir(@$pc10_numero);
