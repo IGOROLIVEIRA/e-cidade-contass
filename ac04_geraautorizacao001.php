@@ -1635,6 +1635,7 @@ if ($x->consultarDataDoSistema == true) {
             var oParamTipoCompra = new Object();
             oParamTipoCompra.iTipoCompra = iTipoCompra;
             oParamTipoCompra.exec = "getTipoLicitacao";
+            oParamTipoCompra.iAcordo = document.getElementById('oTxtCodigoAcordo').value;
             var oAjaxTipoCompra = new Ajax.Request('lic4_geraAutorizacoes.RPC.php', {
                 method: 'post',
                 parameters: 'json=' + Object.toJSON(oParamTipoCompra),
@@ -1650,6 +1651,12 @@ if ($x->consultarDataDoSistema == true) {
 
         var oRetorno = eval("(" + oAjax.responseText + ")");
         $('e54_tipol').innerHTML = "";
+
+        if(oRetorno.tipoorigem == 1 && oRetorno.tipocompratribunal != 13){
+            document.getElementById('e54_codcomdescr').value = "";
+            document.getElementById('e54_codcom').value = "";
+            return alert('Usuário: Tipo de compra inválido para este tipo origem do contrato.');
+        }
 
         tipocompratribunal = oRetorno.tipocompratribunal;
 
