@@ -124,7 +124,7 @@ if ($clusuarios > 0) {
 
                         <b>Código Anterior: </b>
                         <?
-                        db_input('ve01_codigoant', 10, 1, true, 'text', $db_opcao, "");
+                        db_input('ve01_codigoant', 10, 1, true, 'text', $db_opcao, "", "", "", "", 10);
                         ?>
 
                         <b>Código da Unidade: </b>
