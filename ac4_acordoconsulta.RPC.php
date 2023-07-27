@@ -234,7 +234,7 @@ switch ($oParam->exec) {
       $oAut->codigoempenho     = $oEmpenhamento->codigoempenho;
       $oAut->dataEmissao       = $oEmpenhamento->dataemissao;
       $oAut->dataAnulacao      = $oEmpenhamento->dataanulacao;
-      $oAut->valor             = $oEmpenhamento->valor;
+      $oAut->valor             = $oEmpenhamento->e54_valor;
 
       $oRetorno->dados[]       = $oAut;
     }
