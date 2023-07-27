@@ -80,39 +80,6 @@ if (isset($opcao) && $opcao=="alterar") {
 ?>
 
 <style>
-     /* @media screen and (min-width: 1281px) and (max-width: 1440px) {
-        #e55_autori, #e55_sequen, #e55_item {
-            width: 90px;
-        }
-
-        #pc01_descrmater, #e55_marca, #e55_descr {
-            width: 450px;
-        }
-
-        #e55_vltot {
-            width: 119px;
-        }
-        #o56_descr {
-            margin-left: 1px;
-            width: 337px;
-        }
-        #e55_quant {
-            width: 106px;
-        }
-    }
-    @media screen and  (max-width: 1280px) {
-         #pc01_descrmater, #e55_marca, #e55_descr {
-             width: 380px;
-         }
-
-         #e55_vltot, #e55_vluni, #e55_quant {
-             width: 81px;
-         }
-         #o56_descr {
-             margin-left: 1px;
-             width: 240px;
-         }
-   / }*/
    #e55_autori, #e55_sequen, #e55_item {
         width: 80px;
     }
