@@ -135,13 +135,8 @@ switch ($situacao) {
         $dbwhere .= " ve70_ativo = 0 ";
         break;
 }
-/**if ($dbwhere != "") {
-    $dbwhere .= $and;
-}
-*/
-$instituicao = db_getsession('DB_instit');
-$instituicaoDepartamento = " and instit =" . $instituicao . " ";
-$dbwhere .= "ve01_instit = " . $instituicao . $instituicaoDepartamento;
+
+$dbwhere .= " and instit =" . db_getsession('DB_instit');
 $sCampos = " distinct
 	      coddepto,
 	      descrdepto,
