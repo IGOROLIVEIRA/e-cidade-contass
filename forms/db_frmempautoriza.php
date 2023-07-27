@@ -1,29 +1,29 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
+* E-cidade Software Publico para Gestao Municipal
+* Copyright (C) 2014 DBselller Servicos de Informatica
+* www.dbseller.com.br
+* e-cidade@dbseller.com.br
+*
+* Este programa e software livre; voce pode redistribui-lo e/ou
+* modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+* publicada pela Free Software Foundation; tanto a versao 2 da
+* Licenca como (a seu criterio) qualquer versao mais nova.
+*
+* Este programa e distribuido na expectativa de ser util, mas SEM
+* QUALQUER GARANTIA; sem mesmo a garantia implicita de
+* COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+* PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+* detalhes.
+*
+* Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+* junto com este programa; se nao, escreva para a Free Software
+* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+* 02111-1307, USA.
+*
+* Copia da licenca no diretorio licenca/licenca_en.txt
+* licenca/licenca_pt.txt
+*/
 
 //MODULO: empenho
 $clempautoriza->rotulo->label();
@@ -113,16 +113,16 @@ db_app::load("DBFormCache.js");
                     db_input('e54_autori', 10, $Ie54_autori, true, 'text', 3);
                     db_input('o58_codele', 10, $Ie54_autori, true, 'hidden', 3);
                     ?>
-                    
+
                     <!-- Inclui data de emissão de autorização -->
                     <b> Data da Autorização: </b>
                     <?
-                        if ($db_opcao == 1 && !$e54_emiss) {
-                            $e54_emiss_dia = date("d",db_getsession("DB_datausu"));
-                            $e54_emiss_mes = date("m",db_getsession("DB_datausu"));
-                            $e54_emiss_ano = date("Y",db_getsession("DB_datausu"));
-                        }
-                        db_inputData('e54_emiss', @$e54_emiss_dia, @$e54_emiss_mes, @$e54_emiss_ano, true, 'text', $db_opcao);
+                    if ($db_opcao == 1 && !$e54_emiss) {
+                        $e54_emiss_dia = date("d", db_getsession("DB_datausu"));
+                        $e54_emiss_mes = date("m", db_getsession("DB_datausu"));
+                        $e54_emiss_ano = date("Y", db_getsession("DB_datausu"));
+                    }
+                    db_inputData('e54_emiss', @$e54_emiss_dia, @$e54_emiss_mes, @$e54_emiss_ano, true, 'text', $db_opcao);
                     ?>
                 </td>
             </tr>
@@ -152,7 +152,7 @@ db_app::load("DBFormCache.js");
                         2 => 'Decorrente de Licitação de Outro Órgão',
                         4 => 'Adesão à ata de Registro de Preços'
                     );
-                    db_select('e54_tipoautorizacao', $valores, true, $db_opcao, "onchange='js_mostrarancora();'");
+                    db_select('e54_tipoautorizacao', $valores, true, $db_opcao, "onchange='js_handleChangeTipoAutorizacao()'");
                     ?>
                 </td>
             </tr>
@@ -252,9 +252,6 @@ db_app::load("DBFormCache.js");
                         }
                     }
 
-                    /*
-* alterado para liberar o campo tipo de compra para alteracao
-*/
                     $result = $clpctipocompra->sql_record($clpctipocompra->sql_query_file(null, "pc50_codcom as e54_codcom,pc50_descr"));
                     db_selectrecord("e54_codcom", $result, true, isset($emprocesso) && $emprocesso == true ? "1" : $db_opcao, "", "", "", "", "js_verificatipocompratribunal(this.value)");
                     ?>
@@ -485,6 +482,11 @@ db_app::load("DBFormCache.js");
     }
 
     function js_validaLicitacao() {
+
+        if ($('e54_codcomdescr').value === '' || $('e54_codcomdescr').value === '') {
+            alert("Usuário:\nO Tipo de Compra deve ser informado");
+            return false;
+        }
 
         if (codigotribunal != 13 && $('e54_tipoautorizacao').value == '1') {
             alert("Usuário:\nO tipo de compra selecionado não pode ser utilizado para autorização direta. Gentileza alterar para o tipo de autorização adequado");
@@ -1074,6 +1076,46 @@ db_app::load("DBFormCache.js");
         }
     }
 
+    function js_handleChangeTipoAutorizacao() {
+        js_mostrarancora();
+        js_desabilitaTipoCompra();
+
+        const e54_tipoautorizacao = document.querySelector('#e54_tipoautorizacao');
+        if (e54_tipoautorizacao.value == '1') {
+            js_habilitaTipoCompra();
+
+        }
+    }
+
+    function js_habilitaTipoCompra() {
+        const e54_codcom = document.querySelector('#e54_codcom');
+        const e54_codcomdescr = document.querySelector('#e54_codcomdescr');
+
+        let atributos = "background-color:#FFF; pointer-events: auto; touch-action: auto;";
+
+        e54_codcom.style.cssText = atributos;
+        e54_codcom.removeAttribute('readonly');
+        e54_codcom.value = '';
+
+        e54_codcomdescr.style.cssText = atributos;
+        e54_codcomdescr.removeAttribute('readonly');
+        e54_codcomdescr.value = '';
+    }
+
+    function js_desabilitaTipoCompra() {
+
+        const e54_codcom = document.querySelector('#e54_codcom');
+        const e54_codcomdescr = document.querySelector('#e54_codcomdescr');
+
+        let atributos = "background-color:#DEB887; pointer-events: none; touch-action: none;";
+
+        e54_codcom.style.cssText = atributos;
+        e54_codcom.setAttribute('readonly', 'true');
+
+        e54_codcomdescr.style.cssText = atributos;
+        e54_codcomdescr.setAttribute('readonly', 'true');
+    }
+
     function js_mostrarancora() {
         let itipolic = document.form1.e54_tipoautorizacao.value;
 
@@ -1193,12 +1235,10 @@ db_app::load("DBFormCache.js");
                 document.getElementById('trdadoslicitacao').style.display = ' ';
             }
         }
-
     }
 
-
-
     function js_verificatipocompratribunal(value) {
+
         var sUrlRPC = 'com4_tipocompra.RPC.php';
         var pc50_codcom = value;
         js_divCarregando('Aguarde, carregando informações...', 'msgbox');
@@ -1224,12 +1264,24 @@ db_app::load("DBFormCache.js");
             document.form1.e54_nummodalidade.value = '';
             document.form1.e54_numerl.value = '';
         } else if (oRetorno.tipocompratribunal != 13) {
-            document.getElementById('trdadoslicitacao').style.display = '';
-            document.getElementById('e54_codcom').value = oRetorno.tipocompra;
-            document.getElementById('e54_codcomdescr').value = oRetorno.tipocompra;
+            validaTipoAutorizacao(oRetorno);
         }
         js_removeObj('msgbox');
+    }
 
+    function validaTipoAutorizacao(oRetorno) {
+        let tipoAutorizacao = document.getElementById('e54_tipoautorizacao').value;
+
+        if (tipoAutorizacao === '1') {
+            alert('Tipo de compra inválido para este tipo de autorização');
+            document.getElementById('e54_codcom').value = '';
+            document.getElementById('e54_codcomdescr').value = '';
+            return;
+        }
+
+        document.getElementById('trdadoslicitacao').style.display = '';
+        document.getElementById('e54_codcom').value = oRetorno.tipocompra;
+        document.getElementById('e54_codcomdescr').value = oRetorno.tipocompra;
     }
 
     function js_tipocompra(codigotipocompratribunal) {
