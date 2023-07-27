@@ -117,13 +117,18 @@ if (isset($opcao) && $opcao=="alterar") {
         width: 80px;
     }
    #pc01_descrmater{
-        width: 310px;
+        width: 340px;
     }
     #e55_quant {
         width: 80px;
     }
 
-
+    #o56_descr {
+        width: 300px;
+    }
+    #e55_descr  {
+        width: 415px;
+    }
 </style>
 
 <script type="text/javascript" src="scripts/scripts.js"></script>
@@ -206,7 +211,7 @@ function js_troca(codele) {
 
 <form name="form1" method="post" action="">
 <center>
-<fieldset style="margin-top:5px; width:80%; text-align:left;">
+<fieldset style="margin-top:5px; width:45%; text-align:left;">
   <legend><b>Itens</b></legend>
   <table border="0" cellpadding='0' cellspacing='0' >
     <tr style="height: 20px;">
@@ -236,7 +241,7 @@ function js_troca(codele) {
     </tr>
     <tr>
       <td><b>Unidade:</b></td>
-      <td style = 'width: 106px'>
+      <td>
         <?php
             $result_unidade = array ();
             $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
