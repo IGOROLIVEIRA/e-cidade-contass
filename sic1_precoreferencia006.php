@@ -313,7 +313,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 
                 $rsResult2 = db_query($sSql2) or die(pg_last_error());
                 $oResult2 = db_utils::fieldsMemory($rsResult2,0);
-                $lTotal = $oResult->si02_vlprecoreferencia * $oResult->si02_qtditem;
+                $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * $oResult->si02_qtditem;
 
                 $nTotalItens += $lTotal;
                 $oDadosDaLinha = new stdClass();
@@ -352,11 +352,11 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                     }
                     $oDadosDaLinha->unidadeDeMedida = "-";
                     if($controle==1){
-                        $lTotal = $oResult->si02_vlprecoreferencia * ($oResult->si02_qtditem - $valorqtd);
+                        $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * ($oResult->si02_qtditem - $valorqtd);
                     }
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                 } else {
-                    $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 4, ",", ".");
+                    $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
                     if($controle == 0 && $fazerloop==2){
                         $oDadosDaLinha->quantidade = $oResult->si02_qtditem - $valorqtd;
                     }else if($controle == 1 && $fazerloop==2){
@@ -372,9 +372,9 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                     }
                     $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
                     if($controle==0 && $fazerloop==2){
-                        $lTotal = $oResult->si02_vlprecoreferencia * ($oResult->si02_qtditem - $valorqtd);
+                        $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * ($oResult->si02_qtditem - $valorqtd);
                     }else if($controle==1 && $fazerloop==2){
-                        $lTotal = round($oResult->si02_vlprecoreferencia, 4) * $valorqtd;
+                        $lTotal = round($oResult->si02_vlprecoreferencia, $oGet->quant_casas) * $valorqtd;
                     }
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", "."); 
                 }
@@ -636,7 +636,7 @@ HTML;
                 for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
                     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-                    $lTotal = round($oResult->si02_vlprecoreferencia, 4) * $oResult->pc11_quant;
+                    $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * $oResult->pc11_quant;
 
                     $nTotalItens += $lTotal;
                     $oDadosDaLinha = new stdClass();
@@ -660,7 +660,7 @@ HTML;
                         $oDadosDaLinha->unidadeDeMedida = "-";
                         $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                     } else {
-                        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 4, ",", ".");
+                        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
                         $oDadosDaLinha->quantidade = $oResult->pc11_quant;
                         if ($oResult->mediapercentual == 0) {
                             $oDadosDaLinha->mediapercentual = "-";

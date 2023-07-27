@@ -231,7 +231,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
 
 
 
-            $nTotalItens += $oResult->si02_vltotalprecoreferencia;
+            
             $oDadosDaLinha = new stdClass();
             $oDadosDaLinha->seq = $iCont + 1;
             $oDadosDaLinha->item = $oResult->pc01_codmater;
@@ -250,8 +250,9 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 }
                 $oDadosDaLinha->unidadeDeMedida = "-";
                 $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia, 2, ",", ".");
+                $nTotalItens += $oResult->si02_vltotalprecoreferencia;
             } else {
-                $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 4, ",", ".");
+                $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $this->quant_casas, ",", ".");
                 $oDadosDaLinha->quantidade = $oResult->pc11_quant;
                 if ($oResult->mediapercentual == 0) {
                     $oDadosDaLinha->mediapercentual = "-";
@@ -259,7 +260,8 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
                 }
                 $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
-                $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia, 2, ",", ".");
+                $oDadosDaLinha->total = number_format(((round($oResult->si02_vlprecoreferencia,$this->quant_casas))*$oDadosDaLinha->quantidade), 2, ",", ".");
+                $nTotalItens += round($oResult->si02_vlprecoreferencia,$this->quant_casas)*$oDadosDaLinha->quantidade;
             }
             if (($this->objpdf->gety() > $this->objpdf->h - 20) || $this->objpdf->gety() + $addalt > $this->objpdf->h) {
                 $this->objpdf->Line(4, $this->objpdf->gety(), 287, $this->objpdf->gety());
@@ -419,7 +421,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
         $rsResult2 = db_query($sSql2) or die(pg_last_error());
         $oResult2 = db_utils::fieldsMemory($rsResult2, 0);
 
-        $nTotalItens += $oResult->si02_vltotalprecoreferencia;
+        
         $oDadosDaLinha = new stdClass();
 
         $op = 1;
@@ -457,8 +459,9 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 }
                 $oDadosDaLinha->unidadeDeMedida = "-";
                 $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia, 2, ",", ".");
+                $nTotalItens += $oResult->si02_vltotalprecoreferencia;
             } else {
-                $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, 4, ",", ".");
+                $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $this->quant_casas, ",", ".");
                 if ($controle == 0 && $fazerloop == 2) {
                     $oDadosDaLinha->quantidade = $oResult->si02_qtditem - $valorqtd;
                 } else if ($controle == 1 && $fazerloop == 2) {
@@ -473,12 +476,8 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                 }
                 $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
-                if ($controle == 1 && $fazerloop == 2) {
-                    $oDadosDaLinha->total = number_format(($oDadosDaLinha->quantidade*$oResult->si02_vlprecoreferencia), 2, ",", ".");
-                } else {
-                    $oDadosDaLinha->total = number_format(($oDadosDaLinha->quantidade*$oResult->si02_vlprecoreferencia), 2, ",", ".");
-                }
-                
+                $oDadosDaLinha->total = number_format(((round($oResult->si02_vlprecoreferencia,$this->quant_casas))*$oDadosDaLinha->quantidade), 2, ",", ".");
+                $nTotalItens += round($oResult->si02_vlprecoreferencia,$this->quant_casas)*$oDadosDaLinha->quantidade;
             }
 
             $controle++;

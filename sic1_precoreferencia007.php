@@ -147,10 +147,10 @@ $pdf1->pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->si02_cri
 $pdf1->impjust = $impjust;
 $pdf1->tipoprecoreferencia = $tipoprecoreferencia;
 $pdf1->rsLotes = $rsLotes;
+$pdf1->quant_casas = $quant_casas;
 $pdf1->sqlitens = $rsResult;
 $pdf1->quantLinhas = $quantLinhas;
 $pdf1->arrayValores = $arrayValores;
-
 
 
 $pdf1->imprime();
