@@ -398,7 +398,7 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
     public function sqlEstornos($oAnulacoes, $sDataInicial, $sDataFinal)
     {
         $sSqlEstornos = " SELECT sum(CASE ";
-        $sSqlEstornos .= "                WHEN c53_tipo = 31 THEN -1 * c70_valor ";
+        $sSqlEstornos .= "                WHEN c53_tipo = 21 THEN -1 * c70_valor ";
         $sSqlEstornos .= "                ELSE c70_valor ";
         $sSqlEstornos .= "            END) AS valor ";
         $sSqlEstornos .= " FROM conlancamdoc ";
