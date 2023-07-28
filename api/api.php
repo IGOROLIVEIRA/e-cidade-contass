@@ -34,7 +34,6 @@ $app['debug'] = false;
  * Converting Errors to Exceptions
  * @see https://github.com/silexphp/Silex/blob/master/doc/cookbook/error_handler.rst#converting-errors-to-exceptions
  */
-ErrorHandler::register();
 ExceptionHandler::register($app['debug']);
 
 $app['class.loader'] = Registry::get('app.loader');
@@ -94,9 +93,7 @@ $app->before(function (Request $request, Application $app) {
     require_once(dirname(__DIR__) . DIRECTORY_SEPARATOR . "libs/db_sessoes.php");
 
     global $conn;
-//    $conn = pg_connect("host={$_SESSION['DB_servidor']} dbname={$_SESSION['DB_base']} port={$_SESSION['DB_porta']} user={$_SESSION['DB_user']} password={$_SESSION['DB_senha']}");
-    $conn = $eloquent->manager->getDatabaseManager()->getPdo()->;
-
+    $conn = pg_connect("host={$_SESSION['DB_servidor']} dbname={$_SESSION['DB_base']} port={$_SESSION['DB_porta']} user={$_SESSION['DB_user']} password={$_SESSION['DB_senha']}");
     Registry::get('app.request')->session()->close();
 });
 
