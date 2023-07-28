@@ -9,7 +9,9 @@ use App\Models\Disbanco;
 use App\Models\Discla;
 use App\Models\RecibopagaQrcodePix;
 use App\Services\Tributario\Contabilidade\WriteOfAuthenticateBankService;
+use AutenticacaoBaixaBanco;
 use BusinessException;
+use DateTime;
 use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
 use ParameterException;
@@ -17,20 +19,19 @@ use Throwable;
 
 class PixReturnService
 {
-    private Disarq $disarc;
+    private Disarq $disarq;
     private Disbanco $disbanco;
     private Discla $discla;
     private Cfautent $cfautent;
     private int $userId;
     private int $institId;
-    private \DateTime $time;
-    private WriteOfAuthenticateBankService $authenticateBankService;
+    private DateTime $time;
 
     private const TERMINAL = '127.0.0.1';
 
     public function __construct(int $userId, int $institId = 1)
     {
-        $this->disarc = new Disarq();
+        $this->disarq = new Disarq();
         $this->disbanco = new Disbanco();
         $this->discla = new Discla();
         $this->cfautent = new Cfautent();
@@ -45,7 +46,7 @@ class PixReturnService
     public function execute(array $data): void
     {
         $code = $data['endToEndId'];
-        $this->time = new \DateTime($data['horario']);
+        $this->time = new DateTime($data['horario']);
         $recibopagaQrcodePix = RecibopagaQrcodePix::ofCodigoConciliacaoRecebedor($code)->first();
 
         if (empty($recibopagaQrcodePix)) {
@@ -57,17 +58,17 @@ class PixReturnService
         $valor = (float) $data['valor'];
 
         try {
-            db_inicio_transacao();
+            db_query('BEGIN');
             $this->includeDisAarq($recibopagaQrcodePix->k176_instituicao_financeira);
             $this->includeDisbanco($numpre, $numpar, $valor);
             $this->executeProcedure();
             $this->createCfautent();
             $this->authenticate();
         } catch (Exception $exception) {
-            db_fim_transacao(true);
+            db_query('ROLLBACK');
             throw new Exception('Falha na baixa de banco do PIX: '. $exception->getMessage());
         }
-        db_fim_transacao();
+        db_query('COMMIT');
     }
 
     /**
@@ -76,16 +77,16 @@ class PixReturnService
     private function includeDisAarq(int $bankId): void
     {
         $cadban = Cadban::ofBankId($bankId)->first();
-        $this->disarc->k15_codbco = $cadban->k15_codbco;
-        $this->disarc->k15_codage = $cadban->k15_codage;
-        $this->disarc->arqret = "ARRECADAÇÃO VIA PIX";
-        $this->disarc->dtretorno = $this->time->format('Y-m-d');
-        $this->disarc->dtarquivo = date('Y-m-d');
-        $this->disarc->k00_conta = $cadban->k15_conta;
-        $this->disarc->id_usuario = $this->userId;
-        $this->disarc->instit = $this->institId;
-        $this->disarc->codret = $this->disarc->getNextval();
-        $this->disarc->save();
+        $this->disarq->k15_codbco = $cadban->k15_codbco;
+        $this->disarq->k15_codage = $cadban->k15_codage;
+        $this->disarq->arqret = "ARRECADAÇÃO VIA PIX";
+        $this->disarq->dtretorno = $this->time->format('Y-m-d');
+        $this->disarq->dtarquivo = date('Y-m-d');
+        $this->disarq->k00_conta = $cadban->k15_conta;
+        $this->disarq->id_usuario = $this->userId;
+        $this->disarq->instit = $this->institId;
+        $this->disarq->codret = $this->disarq->getNextval();
+        $this->disarq->save();
     }
 
     /**
@@ -93,9 +94,9 @@ class PixReturnService
      */
     private function includeDisbanco(int $numpre, int $numpar, float $valor): void
     {
-        $this->disbanco->k15_codbco = $this->disarc->k15_codbco;
-        $this->disbanco->k15_codage = $this->disarc->k15_codage;
-        $this->disbanco->codret = $this->disarc->codret;
+        $this->disbanco->k15_codbco = $this->disarq->k15_codbco;
+        $this->disbanco->k15_codage = $this->disarq->k15_codage;
+        $this->disbanco->codret = $this->disarq->codret;
         $this->disbanco->dtarq = date('Y-m-d');
         $this->disbanco->dtpago = $this->time->format('Y-m-d');
         $this->disbanco->dtcredito = $this->time->format('Y-m-d');
@@ -124,7 +125,7 @@ class PixReturnService
                 select fc_putsession('DB_id_usuario','1');
                 select fc_putsession('DB_datausu','".date("Y-m-d")."');
                 select fc_putsession('DB_use_pcasp','t');
-                select fc_executa_baixa_banco({$this->disarc->codret},'".date("Y-m-d")."') as result
+                select fc_executa_baixa_banco({$this->disarq->codret},'".date("Y-m-d")."') as result
         ";
 
         $result = DB::connection()
@@ -137,24 +138,18 @@ class PixReturnService
 
     /**
      * @throws BusinessException
-     * @throws ParameterException
      * @throws Exception
      */
     private function authenticate(): void
     {
-        $discla = $this->discla->getByCodret($this->disarc->codret);
-        $this->authenticateBankService = new WriteOfAuthenticateBankService($discla->codcla, $this->time, $this->userId, self::TERMINAL, $this->institId);
-        $this->authenticateBankService->execute();
-    }
-
-    private function executeCountability(): void
-    {
-
+        $discla = $this->discla->getByCodret($this->disarq->codret);
+        $oAutenticacaoBaixaBanco = new AutenticacaoBaixaBanco($discla->codcla);
+        $oAutenticacaoBaixaBanco->autenticar();
     }
 
     private function createCfautent()
     {
-        $this->cfautent = Cfautent::firstOrCreate(
+        Cfautent::firstOrCreate(
             ['k11_ipterm' => self::TERMINAL],
             [
                 'k11_id' => $this->cfautent->getNextval(),
