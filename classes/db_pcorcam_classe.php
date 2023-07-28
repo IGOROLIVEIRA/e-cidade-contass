@@ -29,29 +29,31 @@
 //CLASSE DA ENTIDADE pcorcam
 class cl_pcorcam {
    // cria variaveis de erro
-   var $rotulo     = null;
-   var $query_sql  = null;
-   var $numrows    = 0;
-   var $numrows_incluir = 0;
-   var $numrows_alterar = 0;
-   var $numrows_excluir = 0;
-   var $erro_status= null;
-   var $erro_sql   = null;
-   var $erro_banco = null;
-   var $erro_msg   = null;
-   var $erro_campo = null;
-   var $pagina_retorno = null;
+   public $rotulo     = null;
+   public $query_sql  = null;
+   public $numrows    = 0;
+   public $numrows_incluir = 0;
+   public $numrows_alterar = 0;
+   public $numrows_excluir = 0;
+   public $erro_status= null;
+   public $erro_sql   = null;
+   public $erro_banco = null;
+   public $erro_msg   = null;
+   public $erro_campo = null;
+   public $pagina_retorno = null;
    // cria variaveis do arquivo
-   var $pc20_codorc = 0;
-   var $pc20_dtate_dia = null;
-   var $pc20_dtate_mes = null;
-   var $pc20_dtate_ano = null;
-   var $pc20_dtate = null;
-   var $pc20_hrate = null;
-   var $pc20_obs = null;
-   var $pc20_prazoentrega = 0;
-   var $pc20_validadeorcamento = 0;
-   var $pc20_cotacaoprevia = 0;
+   public $pc20_codorc = 0;
+   public $pc20_dtate_dia = null;
+   public $pc20_dtate_mes = null;
+   public $pc20_dtate_ano = null;
+   public $pc20_dtate = null;
+   public $pc20_hrate = null;
+   public $pc20_obs = null;
+   public $pc20_prazoentrega = 0;
+   public $pc20_validadeorcamento = 0;
+   public $pc20_cotacaoprevia = 0;
+   public $pc20_importado = null;
+
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  pc20_codorc = int4 = Código do orçamento
@@ -94,6 +96,7 @@ class cl_pcorcam {
        $this->pc20_prazoentrega = ($this->pc20_prazoentrega == ""?@$GLOBALS["HTTP_POST_VARS"]["pc20_prazoentrega"]:$this->pc20_prazoentrega);
        $this->pc20_validadeorcamento = ($this->pc20_validadeorcamento == ""?@$GLOBALS["HTTP_POST_VARS"]["pc20_validadeorcamento"]:$this->pc20_validadeorcamento);
        $this->pc20_cotacaoprevia = ($this->pc20_cotacaoprevia == ""?@$GLOBALS["HTTP_POST_VARS"]["pc20_cotacaoprevia"]:$this->pc20_cotacaoprevia);
+       $this->pc20_importado = ($this->pc20_importado == ""?@$GLOBALS["HTTP_POST_VARS"]["pc20_importado"]:$this->pc20_importado);
      }else{
        $this->pc20_codorc = ($this->pc20_codorc == ""?@$GLOBALS["HTTP_POST_VARS"]["pc20_codorc"]:$this->pc20_codorc);
      }
@@ -168,6 +171,7 @@ class cl_pcorcam {
                                       ,pc20_prazoentrega
                                       ,pc20_validadeorcamento
                                       ,pc20_cotacaoprevia
+                                      ,pc20_importado
                        )
                 values (
                                 $this->pc20_codorc
@@ -177,6 +181,7 @@ class cl_pcorcam {
                                ,$this->pc20_prazoentrega
                                ,$this->pc20_validadeorcamento
                                ,$this->pc20_cotacaoprevia
+                               ,'$this->pc20_importado'
                       )";
      $result = db_query($sql);
      if($result==false){
