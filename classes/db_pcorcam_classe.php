@@ -52,7 +52,7 @@ class cl_pcorcam {
    public $pc20_prazoentrega = 0;
    public $pc20_validadeorcamento = 0;
    public $pc20_cotacaoprevia = 0;
-   public $pc20_importado = null;
+   public $pc20_importado = 'f';
 
    // cria propriedade com as variaveis do arquivo
    var $campos = "
