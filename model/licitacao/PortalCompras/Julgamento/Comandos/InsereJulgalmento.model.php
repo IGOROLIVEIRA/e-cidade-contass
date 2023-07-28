@@ -43,6 +43,7 @@ class InsereJulgamento
             ." - ". $numero;
         $clpcorcam->pc20_dtate = $julgamento->getDataProposta();
         $clpcorcam->pc20_hrate = $julgamento->getHoraProposta();
+        $clpcorcam->pc20_importado = 't';
         $lotes = $julgamento->getLotes();
 
         $participantes = $julgamento->getParticipantes();
