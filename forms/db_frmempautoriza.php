@@ -1090,16 +1090,18 @@ db_app::load("DBFormCache.js");
     function js_habilitaTipoCompra() {
         const e54_codcom = document.querySelector('#e54_codcom');
         const e54_codcomdescr = document.querySelector('#e54_codcomdescr');
+        e54_codcom.options[e54_codcom.options.length] = new Option('0', '0');
+        e54_codcomdescr.options[e54_codcomdescr.options.length] = new Option('Selecione', '0');
 
         let atributos = "background-color:#FFF; pointer-events: auto; touch-action: auto;";
 
         e54_codcom.style.cssText = atributos;
         e54_codcom.removeAttribute('readonly');
-        e54_codcom.value = '';
+        e54_codcom.value = '0';
 
         e54_codcomdescr.style.cssText = atributos;
         e54_codcomdescr.removeAttribute('readonly');
-        e54_codcomdescr.value = '';
+        e54_codcomdescr.value = '0';
     }
 
     function js_desabilitaTipoCompra() {
