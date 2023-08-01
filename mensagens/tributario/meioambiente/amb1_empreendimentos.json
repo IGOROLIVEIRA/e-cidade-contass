@@ -49,6 +49,5 @@
   "erro_excluir_responsavel_tecnico"                 : "Erro ao excluir Responsável Técnico",
   "sucesso_excluir_responsavel_tecnico"              : "Exclusão do Responsável Técnico efetuada com sucesso!",
   "erro_responsavel_inserido"                        : "Este CGM já está inserido como Responsável Técnico deste Empreendimento.",
-  "erro_minimo_responsavel"                          : "Deve haver pelo menos um Responsável Técnico para este Empreendimento",
-  "excluindo_dados_atividades"                       : "Aguarde, excluindo dados do Responsável Técnico..."
+  "erro_minimo_responsavel"                          : "Deve haver pelo menos um Responsável Técnico para este Empreendimento"
 }

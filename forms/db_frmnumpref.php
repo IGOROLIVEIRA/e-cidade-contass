@@ -794,24 +794,25 @@ function js_mostraReceitaHide(sDescricao, lErro) {
 }
 
 function showInstituicaoFinanceira(element) {
-    const tableSettingsApi = document.getElementById('instituicaoFinanceira');
-    const instituicaoFinanceira = document.getElementById('k03_instituicao_financeira');
+    const instituicaoFinanceiraRow = document.getElementById('instituicaoFinanceira');
+    const selectInstituicaoFinanceira = document.getElementById('k03_instituicao_financeira');
     const event = new Event('change');
 
+    selectInstituicaoFinanceira.dispatchEvent(event);
     if (element.value === 't') {
-        tableSettingsApi.removeAttribute('style');
-        instituicaoFinanceira.dispatchEvent(event);
+        instituicaoFinanceiraRow.removeAttribute('style');
         return;
     }
-    tableSettingsApi.style.display = 'none';
+    instituicaoFinanceiraRow.style.display = 'none';
 }
 
 function showApiSettings(element) {
     const settingsForms = ['apiSettings1'];
     const formNameSelected = `apiSettings${element.value}`;
+    const selectAtivoIntegracao = document.getElementById('k03_ativo_integracao_pix');
     settingsForms.each(function (form) {
         const formToShow = document.getElementById(form);
-        if (form === formNameSelected) {
+        if (form === formNameSelected && selectAtivoIntegracao.value === 't') {
             formToShow.removeAttribute('style');
             return;
         }

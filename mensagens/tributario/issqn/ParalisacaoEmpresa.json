@@ -1,6 +1,5 @@
 {
   "erro_inteiro"                  : "O Código informado não é um número inteiro.",
-  "erro_buscar_paralizacao"       : "Ocorreu um erro ao buscar a paralização para a empresa. \n Erro técnico: \n [sErroBanco]",
   "nenhuma_paralizacao"           : "Nenhuma paralização encontrada para o código [iCodigo]",
   "nenhuma_transacao_banco"       : "Nenhuma transação com o banco ativa.",
   "issbase_nao_informado"         : "IssBase não informado.",

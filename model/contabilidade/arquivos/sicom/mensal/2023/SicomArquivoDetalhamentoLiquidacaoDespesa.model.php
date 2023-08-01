@@ -122,7 +122,8 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
                    o41_subunidade AS subunidade,
                    o56_elemento,
                    o40_orgao,
-                   o41_unidade
+                   o41_unidade,
+                   e60_tipodespesa
             FROM pagordem
             JOIN empempenho ON e50_numemp = e60_numemp
             JOIN orcdotacao ON e60_coddot = o58_coddot AND o58_anousu = e60_anousu
@@ -244,9 +245,11 @@ class SicomArquivoDetalhamentoLiquidacaoDespesa extends SicomArquivoBase impleme
         $oDadosLiquidacaoFonte = new stdClass();
         $oControleOrcamentario = new ControleOrcamentario();
         $oDadosLiquidacaoFonte->si119_codfontrecursos = $oDeParaRecurso->getDePara($oLiquidacao->o15_codigo);
+        $oControleOrcamentario->setTipoDespesa($oLiquidacao->e60_tipodespesa);
         $oControleOrcamentario->setFonte($oDadosLiquidacaoFonte->si119_codfontrecursos);
         $oControleOrcamentario->setEmendaParlamentar($oLiquidacao->e60_emendaparlamentar);
         $oControleOrcamentario->setEsferaEmendaParlamentar($oLiquidacao->e60_esferaemendaparlamentar);
+        $oControleOrcamentario->setDeParaFonteCompleta();
 
         $oDadosLiquidacaoFonte->si119_tiporegistro = '11';
         $oDadosLiquidacaoFonte->si119_codreduzido = substr($oLiquidacao->codreduzido, 0, 15);

@@ -368,6 +368,8 @@ class cl_acocontroletermospncp
             $sql .= $campos;
         }
         $sql .= " from acocontroletermospncp ";
+        $sql .= " join acordo on ac16_sequencial = l214_acordo ";
+
         $sql2 = "";
         if ($dbwhere == "") {
             if ($l214_sequencial != "" && $l214_sequencial != null) {

@@ -3520,7 +3520,7 @@ class cl_liclicita
 
     public function sql_query_pncp($l20_codigo = null)
     {
-        return " select distinct (SELECT CASE
+        $sql  = " select distinct (SELECT CASE
         WHEN o41_subunidade != 0
              OR NOT NULL THEN lpad((CASE WHEN o40_codtri = '0'
                 OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
@@ -3593,11 +3593,12 @@ class cl_liclicita
         LEFT JOIN liclicitemlote ON l04_liclicitem=l21_codigo
         INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
         where liclicita.l20_codigo = {$l20_codigo}";
+        return $sql;
     }
 
     public function sql_query_pncp_itens($l20_codigo = null)
     {
-        return "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
+        $sql  = "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
                                     CASE
                                         WHEN pcmater.pc01_servico='t' THEN 'S'
                                         ELSE 'M'
@@ -3664,6 +3665,7 @@ class cl_liclicita
                         INNER JOIN cflicita ON cflicita.l03_codigo = liclicita.l20_codtipocom
                         WHERE liclicita.l20_codigo = $l20_codigo
                         ORDER BY numeroitem";
+        return $sql;
     }
 
     public function sql_query_pncp_itens_retifica_situacao ($l20_codigo,$ordem){
@@ -3757,7 +3759,7 @@ class cl_liclicita
     public function sql_query_valor_item_reservado($pc11_numero = null, $pc01_codmater = false)
     {
 
-        return " SELECT DISTINCT
+        $sql  = " SELECT DISTINCT
                     si02_vlprecoreferencia AS valorUnitarioEstimado
                 FROM liclicita
                 JOIN db_depart ON coddepto=l20_codepartamento
@@ -3781,12 +3783,13 @@ class cl_liclicita
                 WHERE pcmater.pc01_codmater = {$pc01_codmater}
                             AND solicitem.pc11_numero = {$pc11_numero}
                             AND si02_vlprecoreferencia != 0";
+        return $sql;
     }
 
     public function sql_query_item_pncp($l20_codigo)
     {
 
-        return " SELECT    pc01_codmater,
+        $sql  = " SELECT    pc01_codmater,
                             l21_ordem,
                             pc01_descrmater,
                             CASE
@@ -3826,12 +3829,14 @@ class cl_liclicita
             AND pc24_pontuacao =1
 
             ORDER BY l21_ordem";
+
+        return $sql;
     }
 
     public function sql_query_item_pncp_retifica($l20_codigo)
     {
 
-        return " SELECT pc01_codmater,
+        $sql  = " SELECT pc01_codmater,
                         l21_ordem,
                         pc24_pontuacao,
                         pc01_descrmater,
@@ -3915,12 +3920,14 @@ class cl_liclicita
                         (SELECT pc24_orcamitem
                         FROM pcorcamjulg)
                 ORDER BY l21_ordem";
+
+        return $sql;
     }
 
     public function sql_query_resultado_pncp($l20_codigo, $ordem)
     {
 
-        return "SELECT pcorcamval.pc23_quant AS quantidadeHomologada,
+        $sql  = "SELECT pcorcamval.pc23_quant AS quantidadeHomologada,
                         pcorcamval.pc23_vlrun AS valorUnitarioHomologado,
                         pcorcamval.pc23_valor AS valorTotalHomologado,
                         pcorcamval.pc23_percentualdesconto AS percentualDesconto,
@@ -3938,7 +3945,7 @@ class cl_liclicita
                         'BRA' AS codigoPais,
                         liclicita.l20_subcontratacao AS indicadorSubcontratacao,
                         CASE
-                            WHEN pc50_pctipocompratribunal IN (100,101,102,103) THEN l20_dptubratificacao
+                            WHEN pc50_pctipocompratribunal IN (100,101,102,103) THEN l20_dtpubratificacao
                             ELSE l202_datahomologacao
                         END AS dataResultado
                 FROM liclicitem
@@ -3972,12 +3979,14 @@ class cl_liclicita
                     and l202_datahomologacao is not null
                     AND pc24_pontuacao = 1
                 ORDER BY l21_ordem";
+
+        return $sql;
     }
 
     public function sql_query_resultado_retifica_pncp($l20_codigo, $ordem)
     {
 
-        return "SELECT pcorcamval.pc23_quant AS quantidadeHomologada,
+        $sql  = "SELECT pcorcamval.pc23_quant AS quantidadeHomologada,
                         pcorcamval.pc23_vlrun AS valorUnitarioHomologado,
                         pcorcamval.pc23_valor AS valorTotalHomologado,
                         pcorcamval.pc23_percentualdesconto AS percentualDesconto,
@@ -4032,23 +4041,27 @@ class cl_liclicita
                     and l202_datahomologacao is not null
                     AND pc24_pontuacao = 1
                 ORDER BY l21_ordem";
+
+        return $sql;
     }
 
     public function sql_query_ata_pncp($l20_codigo)
     {
-        return "SELECT   l221_numata AS numeroAtaRegistroPreco,
+        $sql = "SELECT   l221_numata AS numeroAtaRegistroPreco,
                         l221_exercicio AS anoAta,
                         l221_dataini AS dataAssinatura,
                         l221_dataini AS dataVigenciaInicio,
                         l221_datafinal AS dataVigenciaFim
         FROM licatareg
         WHERE l221_licitacao = $l20_codigo";
+
+        return $sql;
     }
 
     function sql_query_publicacaoEmpenho_pncp()
     {
         $ano  = db_getsession("DB_anousu");
-        return "SELECT *
+        $sql  = "SELECT *
         FROM
             (SELECT DISTINCT e60_numemp,
                              e213_numerocontrolepncp,
@@ -4193,13 +4206,14 @@ class cl_liclicita
              INNER JOIN liccontrolepncp ON l213_licitacao = l20_codigo ) AS x
         ORDER BY x.e60_numemp DESC
         ";
+        return $sql;
     }
 
     function sql_query_pncp_empenho($codigoempenho, $data)
     {
         $ano  = substr($data, 0, 4);
 
-        return "SELECT DISTINCT e60_numemp,
+        $sql  = "SELECT DISTINCT e60_numemp,
                     e213_numerocontrolepncp,
                     z01_cgccpf AS cnpjCompra,
                     l213_anousu AS anoCompra,
@@ -4346,12 +4360,14 @@ class cl_liclicita
                 INNER JOIN liccontrolepncp ON l213_licitacao = l20_codigo
                 WHERE e60_numemp = $codigoempenho
                 ";
+
+        return $sql;
     }
 
     function sql_query_pncp_empenho_enviado()
     {
         $ano  = db_getsession("DB_anousu");
-        return "select  distinct
+        $sql  = "select  distinct
         e60_numemp,
         e213_numerocontrolepncp,
         z01_cgccpf as cnpjCompra,
@@ -4424,5 +4440,7 @@ class cl_liclicita
             e213_contrato = e60_numemp
 
         where e60_emiss >='$ano-01-01' and e60_emiss <='$ano-12-31' ";
+
+        return $sql;
     }
 }
