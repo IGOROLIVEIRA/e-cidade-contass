@@ -20,7 +20,7 @@ class Detalhe
     {
         return ArquivoPrevisaoPostagem::TIPO_REGISTRO_DETALHE .
             $this->format($this->arquivoPrevisaoPostagemDetalheDTO->codigoDoCliente, 4) .
-            $this->format($this->arquivoPrevisaoPostagemDetalheDTO->identificadorDoCliente, 8) .
+            $this->format($this->arquivoPrevisaoPostagemDetalheDTO->identificadorDoCliente, 8, ' ', STR_PAD_RIGHT) .
             $this->format($this->arquivoPrevisaoPostagemDetalheDTO->siglaDoObjeto, 2) .
             $this->format($this->arquivoPrevisaoPostagemDetalheDTO->numeroDoObjeto, 9) .
             $this->arquivoPrevisaoPostagemDetalheDTO->paisDeOrigem .

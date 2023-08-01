@@ -608,7 +608,7 @@ for($indx=0;$indx < $numrows; $indx++) {
     $xvalor2   = 0;
     $sql = "select nomeinst,bairro,cgc,cep,ender,upper(munic) as munic,uf,numero from db_config where codigo = ".db_getsession("DB_instit");
     $result = db_query($sql);
-   //echo $sql;
+    $digitoVerificador = $resolveCheckerDigit->execute((string) $numeroEtiqueta);
     db_fieldsmemory($result,0);
     $dia = date('d',strtotime($k60_datadeb));
     $mes = db_mes(date('m',strtotime($k60_datadeb)));
@@ -655,6 +655,7 @@ for($indx=0;$indx < $numrows; $indx++) {
         $notificacao->cidadeDestinatario = $z01_munic;
         $notificacao->estadoDestinatario = $z01_uf;
         $notificacao->cepDestino = $z01_cep;
+        $notificacao->numeroEtiqueta = $numeroEtiqueta.$digitoVerificador;
         $notificacoes[] = $notificacao;
     }
 
@@ -1268,9 +1269,7 @@ for($indx=0;$indx < $numrows; $indx++) {
     $cldb_layouttxt->setCampo("inst_linha15",$historico15);
     $cldb_layouttxt->setCampo("inst_linha16",$k00_msgrecibo);
     $cldb_layouttxt->setCampo("valor_bruto",$nValorBruto);
-
-    $digitoVerificador = $resolveCheckerDigit->execute((string) $numeroEtiqueta);
-    $cldb_layouttxt->setCampo("numero_etiqueta","{$numeroEtiqueta}-{$digitoVerificador}");
+    $cldb_layouttxt->setCampo("numero_etiqueta",$numeroEtiqueta.$digitoVerificador);
 
     $numeroEtiqueta++;
 
