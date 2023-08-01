@@ -1276,8 +1276,8 @@ db_app::load("DBFormCache.js");
 
         if (tipoAutorizacao === '1') {
             alert('Tipo de compra inválido para este tipo de autorização');
-            document.getElementById('e54_codcom').value = '';
-            document.getElementById('e54_codcomdescr').value = '';
+            document.getElementById('e54_codcom').value = '0';
+            document.getElementById('e54_codcomdescr').value = '0';
             return;
         }
 
