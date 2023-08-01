@@ -3724,7 +3724,8 @@ class cl_liclicita
                     WHEN l03_pctipocompratribunal = 101 THEN 8
                     WHEN l03_pctipocompratribunal = 100 THEN 9
                     WHEN l03_pctipocompratribunal = 102 THEN 12
-                END AS modalidadeId
+                END AS modalidadeId,
+                pc23_vlrun
         FROM liclicita
         JOIN db_depart ON coddepto=l20_codepartamento
         JOIN db_config ON codigo=instit

@@ -263,7 +263,7 @@ class cl_pcproc
                                       ,pc80_dispvalor
                                       ,pc80_orcsigiloso
                                       ,pc80_subcontratacao
-                                      ,pc80_dadoscomplementares 
+                                      ,pc80_dadoscomplementares
                                       ,pc80_amparolegal
                                       ,pc80_categoriaprocesso
                        )
@@ -1622,7 +1622,8 @@ class cl_pcproc
                           ELSE 3
                       END AS itemCategoriaId,
                       pcmater.pc01_regimobiliario AS codigoRegistroImobiliario,
-                      2 as situacaoCompraItemId
+                      2 as situacaoCompraItemId,
+                      pc23_vlrun
                     FROM pcproc
                     JOIN pcprocitem ON pc81_codproc=pc80_codproc
                     JOIN solicitem ON pc11_codigo=pc81_solicitem
