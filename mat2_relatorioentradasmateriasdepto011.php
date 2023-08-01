@@ -51,6 +51,7 @@ if($clparcustos->numrows > 0){
     db_app::load("scripts.js,
                   strings.js,
                   prototype.js,
+                  windowAux.widget.js,
                   datagrid.widget.js,
                   widgets/DBLancador.widget.js,
                   estilos.css,
@@ -161,8 +162,7 @@ if($clparcustos->numrows > 0){
 	    </tr>
       <tr>
         <td colspan="2" align = "center"><br> 
-          <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_mandadados();" >
-          <input  name="emitexlsx" id="emitexlsx" type="button" value="Gerar em Excel" onclick="js_gerarxls();" >
+          <input  name="processar" id="processar" type="button" value="Processar" onclick="js_selecionarFormatoRelatorio();" >
         </td>
       </tr>
   </form>
@@ -283,198 +283,145 @@ function js_testord(valor){
 	}
 }
 
-
-
-function js_gerarxls(){
- 
- query="";
- vir="";
- listadepart="";
- 
- for(x=0;x<document.form1.departamentos.length;x++){
-  listadepart+=vir+document.form1.departamentos.options[x].value;
-  vir=",";
- }
- 
- vir="";
- listamat="";
- for(x=0;x<parent.iframe_g2.document.form1.material.length;x++){
-  listamat+=vir+parent.iframe_g2.document.form1.material.options[x].value;
-  vir=",";
- }
- 
- vir="";
- listausu="";
- for(x=0;x<parent.iframe_g3.document.form1.usuario.length;x++){
-  listausu+=vir+parent.iframe_g3.document.form1.usuario.options[x].value;
-  vir=",";
- }
-
- vir        = "";
- listamatestoquetipo = "";
- obj        = parent.iframe_g4.db_iframe_matestoquetipo.document.getElementsByTagName("input");
- nObj       = obj.length;
-
- for (x=0 ; x < nObj;x++){
- 
-   if (obj[x].type == "checkbox" && obj[x].checked==true){
-     listamatestoquetipo += vir+obj[x].value;
-     vir = ",";
-   }        
-
- }
-
- vir        = "";
- listaorgao = "";
- obj        = parent.iframe_g4.db_iframe_orgao.document.getElementsByTagName("input");
- nObj       = obj.length;
-
- for (x=0 ; x < nObj;x++){
- 
-   if (obj[x].type == "checkbox" && obj[x].checked==true){
-     listaorgao += vir+obj[x].value;
-     vir = ",";
-   }        
-
- }
-       
- var sDataIni = new String(document.form1.data1.value).trim();
- var sDataFim = new String(document.form1.data2.value).trim();
+function js_selecionarFormatoRelatorio(){
+  var sDataIni = new String(document.form1.data1.value).trim();
+  var sDataFim = new String(document.form1.data2.value).trim();
    
-    
- if ( sDataIni == '' && sDataFim == '' ) {
-   alert('Favor informe algum período!');
-   return false;
- } else if ( sDataIni == '' ) {
-   alert('Favor informe período inicial!');
-   return false;
- } else if ( sDataFim == '' ) {
-   alert('Favor informe período final!');
-   return false;     
- }
+  if (sDataIni == '' && sDataFim == '') {
+    return alert('Favor informe algum período!');
+  } 
 
- var aLinhas = oTreeViewGrupos.getNodesChecked();
- var aContas = new Array();
- 
- aLinhas.each ( 
-   function(oRetornoCheck) {
-   
-     aContas.push(oRetornoCheck.value);
-   }
- );
+  if (sDataIni == '') {
+    return alert('Favor informe período inicial!');
+  }
 
- 
- query+='&listadepart='+listadepart+'&verdepart='+document.form1.ver.value;
- query+='&listamat='+listamat+'&vermat='+parent.iframe_g2.document.form1.ver.value;
- query+='&listausu='+listausu+'&verusu='+parent.iframe_g3.document.form1.ver.value;
- query+='&dataini='+sDataIni;
- query+='&datafin='+sDataFim; 
- query+='&ordem='+document.form1.ordem.value;
- query+='&listaorgao='+listaorgao;
- query+='&listamatestoquetipo='+listamatestoquetipo;
+  if (sDataFim == '') {
+    return alert('Favor informe período final!');
+  }
 
- query+= '&grupos=' + aContas.implode(',');
- 
- jan = window.open('mat2_relatorioentradasmateriasdeptoxlsx002.php?'+query,'',
-                   'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
- jan.moveTo(0,0);
- 
+  var iHeight = 200;
+    var iWidth = 300;
+    windowFormatoRelatorio = new windowAux('windowFormatoRelatorio',
+      'Gerar Relatório ',
+      iWidth,
+      iHeight
+    );
+
+    var sContent = "<div style='margin-top:30px;'>";
+    sContent += "<fieldset>";
+    sContent += "<legend>Gerar Relatório em:</legend>";
+    sContent += "  <div >";
+    sContent += "  <input checked type='radio' id='pdf' name='formato'>";
+    sContent += "  <label>PDF</label>";
+    sContent += "  </div>";
+    sContent += "  <div>";
+    sContent += "  <input type='radio' id='excel' name='formato'>";
+    sContent += "  <label>EXCEL</label>";
+    sContent += "  </div>";
+    sContent += "</fieldset>";
+    sContent += "<center>";
+    sContent += "<input type='button' id='btnGerar' value='Confirmar' onclick='js_gerarRelatorio()'>";
+    sContent += "</center>";
+    sContent += "</div>";
+    windowFormatoRelatorio.setContent(sContent);
+    windowFormatoRelatorio.show();
+
+    document.getElementById('windowwindowFormatoRelatorio_btnclose').onclick = destroyWindow;
+
 }
 
-function js_mandadados(){
- 
- query="";
- vir="";
- listadepart="";
- 
- for(x=0;x<document.form1.departamentos.length;x++){
-  listadepart+=vir+document.form1.departamentos.options[x].value;
-  vir=",";
- }
- 
- vir="";
- listamat="";
- for(x=0;x<parent.iframe_g2.document.form1.material.length;x++){
-  listamat+=vir+parent.iframe_g2.document.form1.material.options[x].value;
-  vir=",";
- }
- 
- vir="";
- listausu="";
- for(x=0;x<parent.iframe_g3.document.form1.usuario.length;x++){
-  listausu+=vir+parent.iframe_g3.document.form1.usuario.options[x].value;
-  vir=",";
- }
+function destroyWindow() {
+    windowFormatoRelatorio.destroy();
+  }
 
- vir        = "";
- listamatestoquetipo = "";
- obj        = parent.iframe_g4.db_iframe_matestoquetipo.document.getElementsByTagName("input");
- nObj       = obj.length;
+function js_gerarRelatorio(){
+  query="";
+  vir="";
+  listadepart="";
+  
+  for(x=0;x<document.form1.departamentos.length;x++){
+    listadepart+=vir+document.form1.departamentos.options[x].value;
+    vir=",";
+  }
+  
+  vir="";
+  listamat="";
+  for(x=0;x<parent.iframe_g2.document.form1.material.length;x++){
+    listamat+=vir+parent.iframe_g2.document.form1.material.options[x].value;
+    vir=",";
+  }
+  
+  vir="";
+  listausu="";
+  for(x=0;x<parent.iframe_g3.document.form1.usuario.length;x++){
+    listausu+=vir+parent.iframe_g3.document.form1.usuario.options[x].value;
+    vir=",";
+  }
 
- for (x=0 ; x < nObj;x++){
- 
-   if (obj[x].type == "checkbox" && obj[x].checked==true){
-     listamatestoquetipo += vir+obj[x].value;
-     vir = ",";
-   }        
+  vir        = "";
+  listamatestoquetipo = "";
+  obj        = parent.iframe_g4.db_iframe_matestoquetipo.document.getElementsByTagName("input");
+  nObj       = obj.length;
 
- }
+  for (x=0 ; x < nObj;x++){
+  
+    if (obj[x].type == "checkbox" && obj[x].checked==true){
+      listamatestoquetipo += vir+obj[x].value;
+      vir = ",";
+    }        
 
- vir        = "";
- listaorgao = "";
- obj        = parent.iframe_g4.db_iframe_orgao.document.getElementsByTagName("input");
- nObj       = obj.length;
+  }
 
- for (x=0 ; x < nObj;x++){
- 
-   if (obj[x].type == "checkbox" && obj[x].checked==true){
-     listaorgao += vir+obj[x].value;
-     vir = ",";
-   }        
+  vir        = "";
+  listaorgao = "";
+  obj        = parent.iframe_g4.db_iframe_orgao.document.getElementsByTagName("input");
+  nObj       = obj.length;
 
- }
-       
- var sDataIni = new String(document.form1.data1.value).trim();
- var sDataFim = new String(document.form1.data2.value).trim();
-   
+  for (x=0 ; x < nObj;x++){
+  
+    if (obj[x].type == "checkbox" && obj[x].checked==true){
+      listaorgao += vir+obj[x].value;
+      vir = ",";
+    }        
+
+  }
+        
+  var aLinhas = oTreeViewGrupos.getNodesChecked();
+  var aContas = new Array();
+  
+  aLinhas.each ( 
+    function(oRetornoCheck) {
     
- if ( sDataIni == '' && sDataFim == '' ) {
-   alert('Favor informe algum período!');
-   return false;
- } else if ( sDataIni == '' ) {
-   alert('Favor informe período inicial!');
-   return false;
- } else if ( sDataFim == '' ) {
-   alert('Favor informe período final!');
-   return false;     
- }
+      aContas.push(oRetornoCheck.value);
+    }
+  );
 
- var aLinhas = oTreeViewGrupos.getNodesChecked();
- var aContas = new Array();
- 
- aLinhas.each ( 
-   function(oRetornoCheck) {
-   
-     aContas.push(oRetornoCheck.value);
-   }
- );
+  var sDataIni = new String(document.form1.data1.value).trim();
+  var sDataFim = new String(document.form1.data2.value).trim();
+  
+  query+='&listadepart='+listadepart+'&verdepart='+document.form1.ver.value;
+  query+='&listamat='+listamat+'&vermat='+parent.iframe_g2.document.form1.ver.value;
+  query+='&listausu='+listausu+'&verusu='+parent.iframe_g3.document.form1.ver.value;
+  query+='&dataini='+sDataIni;
+  query+='&datafin='+sDataFim; 
+  query+='&ordem='+document.form1.ordem.value;
+  query+='&listaorgao='+listaorgao;
+  query+='&listamatestoquetipo='+listamatestoquetipo;
 
- 
- query+='&listadepart='+listadepart+'&verdepart='+document.form1.ver.value;
- query+='&listamat='+listamat+'&vermat='+parent.iframe_g2.document.form1.ver.value;
- query+='&listausu='+listausu+'&verusu='+parent.iframe_g3.document.form1.ver.value;
- query+='&dataini='+sDataIni;
- query+='&datafin='+sDataFim; 
- query+='&ordem='+document.form1.ordem.value;
- query+='&listaorgao='+listaorgao;
- query+='&listamatestoquetipo='+listamatestoquetipo;
+  query+= '&grupos=' + aContas.implode(',');
 
- query+= '&grupos=' + aContas.implode(',');
- 
- jan = window.open('mat2_relatorioentradasmateriasdepto002.php?'+query,'',
+  if (document.getElementById('pdf').checked == true) {
+      jan = window.open('mat2_relatorioentradasmateriasdepto002.php?'+query,'',
+                    'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+      jan.moveTo(0,0);
+  }
+
+  if (document.getElementById('excel').checked == true) {
+      jan = window.open('mat2_relatorioentradasmateriaisdeptoxlsx002.php?'+query,'',
                    'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
- jan.moveTo(0,0);
- 
+      jan.moveTo(0,0);
+  }
+  
 }
 
 function js_verifica_orgao(){
