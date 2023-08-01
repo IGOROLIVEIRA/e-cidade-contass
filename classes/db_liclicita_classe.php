@@ -3621,7 +3621,25 @@ class cl_liclicita
                                         WHEN liclicitem.l21_sigilo IS NOT NULL THEN liclicitem.l21_sigilo
                                         ELSE 'f'
                                     END AS l21_sigilo,
-                                    3 AS itemCategoriaId,
+                                    CASE
+                                        WHEN substring(o56_elemento
+                                                        FROM 0
+                                                        FOR 8) IN
+                                                (SELECT DISTINCT substring(o56_elemento
+                                                                            FROM 0
+                                                                            FOR 8)
+                                                FROM orcelemento
+                                                WHERE o56_elemento LIKE '%3449061%') THEN 1
+                                        WHEN substring(o56_elemento
+                                                        FROM 0
+                                                        FOR 8) IN
+                                                (SELECT DISTINCT substring(o56_elemento
+                                                                            FROM 0
+                                                                            FOR 8)
+                                                FROM orcelemento
+                                                WHERE o56_elemento LIKE '%3449052%') THEN 2
+                                        ELSE 3
+                                    END AS itemCategoriaId,
                                     pcmater.pc01_regimobiliario AS codigoRegistroImobiliario
                         FROM liclicita
                         JOIN db_depart ON coddepto=l20_codepartamento
@@ -3650,9 +3668,8 @@ class cl_liclicita
         return $sql;
     }
 
-    public function sql_query_pncp_itens_retifica_situacao($l20_codigo, $ordem)
-    {
-        $sql = "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
+    public function sql_query_pncp_itens_retifica_situacao ($l20_codigo,$ordem){
+        return "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
                 CASE
                     WHEN pcmater.pc01_servico='t' THEN 'S'
                     ELSE 'M'
@@ -3737,7 +3754,6 @@ class cl_liclicita
         WHERE liclicita.l20_codigo = $l20_codigo
         AND liclicitem.l21_ordem = $ordem
         ORDER BY l217_sequencial desc limit 1";
-        return $sql;
     }
 
     public function sql_query_valor_item_reservado($pc11_numero = null, $pc01_codmater = false)
