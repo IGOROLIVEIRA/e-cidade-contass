@@ -501,7 +501,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             if ($sSubUnidade == 1) {
                 $sCodUnidade .= str_pad($sSubUnidade, 3, "0", STR_PAD_LEFT);
             }
-            
+
             /*
             * Origem
             * 1 - manual
@@ -652,7 +652,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                 $clcontratos10->si83_garantia = ''; //campo 33
             } else {
                 $clcontratos10->si83_formafornecimento = $this->removeCaracteres($oDados10->ac16_formafornecimento); //campo 20
-                $clcontratos10->si83_formapagamento = $this->removeCaracteres($oDados10->ac16_formapagamento); //campo 21
+                $clcontratos10->si83_formapagamento = $this->removeCaracteres(mb_convert_encoding($oDados10->ac16_formapagamento, "ISO-8859-1", "UTF-8")); //campo 21
                 $clcontratos10->si83_unidadedemedidaprazoexec = $oDados10->ac16_tipounidtempoperiodo; //campo 29
                 $clcontratos10->si83_prazoexecucao = $oDados10->ac16_qtdperiodo; //campo 30
                 $clcontratos10->si83_multarescisoria = substr($this->removeCaracteres($this->getPenalidadeByAcordo($oDados10->ac16_sequencial, 1)), 0, 99); //campo 31
@@ -782,7 +782,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                         } elseif ($oDadosItensObra->obr06_tabela == "3") {
                             $oContrato11->si84_coditemsinapi = null; //campo 06
                             $oContrato11->si84_coditemsimcro = null; //campo 07
-                            $oContrato11->si84_descoutrosmateriais = $oDadosItensObra->obr06_descricaotabela; //campo 08
+                            $oContrato11->si84_descoutrosmateriais = $this->removeCaracteres(mb_convert_encoding($oDadosItensObra->obr06_descricaotabela, "ISO-8859-1", "UTF-8"));
                         }
                         $oContrato11->si84_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                         $aDadosAgrupados[$sHash] = $oContrato11;
@@ -1271,7 +1271,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                 $clcontratos21->si88_coditemsinapi = null; //campo 06
                                 $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
+                                $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres(mb_convert_encoding($oDadosItensObra->obr06_descricaotabela, "ISO-8859-1", "UTF-8")); //campo 08
                             }
                             $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                             $clcontratos21->incluir(null);
@@ -1337,7 +1337,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                     $clcontratos21->si88_coditemsinapi = null; //campo 06
                                     $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
+                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres(mb_convert_encoding($oDadosItensObra->obr06_descricaotabela, "ISO-8859-1", "UTF-8")); //campo 08
                                 }
                                 $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                                 $clcontratos21->incluir(null);
@@ -1575,7 +1575,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                             } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                 $clcontratos21->si88_coditemsinapi = null; //campo 06
                                 $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
+                                $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres(mb_convert_encoding($oDadosItensObra->obr06_descricaotabela, "ISO-8859-1", "UTF-8")); //campo 08
                             }
                             $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                             $clcontratos21->incluir(null);
@@ -1640,7 +1640,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                     $clcontratos21->si88_coditemsinapi = null; //campo 06
                                     $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
+                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres(mb_convert_encoding($oDadosItensObra->obr06_descricaotabela, "ISO-8859-1", "UTF-8")); //campo 08
                                 }
                                 $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                                 $clcontratos21->incluir(null);
@@ -1763,7 +1763,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                     $clcontratos21->si88_coditemsinapi = null; //campo 06
                                     $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
+                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres(mb_convert_encoding($oDadosItensObra->obr06_descricaotabela, "ISO-8859-1", "UTF-8")); //campo 08
                                 }
                                 $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                                 $clcontratos21->incluir(null);
@@ -1877,7 +1877,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                     $clcontratos21->si88_coditemsinapi = null; //campo 06
                                     $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
+                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres(mb_convert_encoding($oDadosItensObra->obr06_descricaotabela, "ISO-8859-1", "UTF-8")); //campo 08
                                 }
                                 $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                                 $clcontratos21->incluir(null);
@@ -1974,7 +1974,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 } elseif ($oDadosItensObra->obr06_tabela == "3") {
                                     $clcontratos21->si88_coditemsinapi = null; //campo 06
                                     $clcontratos21->si88_coditemsimcro = null; //campo 07
-                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres($oDadosItensObra->obr06_descricaotabela); //campo 08
+                                    $clcontratos21->si88_descoutrosmateriais = $this->removeCaracteres(mb_convert_encoding($oDadosItensObra->obr06_descricaotabela, "ISO-8859-1", "UTF-8")); //campo 08
                                 }
                                 $clcontratos21->si88_itemplanilha = $oDadosItensObra->obr06_pcmater; //campo 09
                                 $clcontratos21->incluir(null);

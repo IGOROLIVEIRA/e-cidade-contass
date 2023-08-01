@@ -940,11 +940,9 @@ if (!isset($arqinclude)){
   $pdf->ln();
   // ----------------------------------------------------------------
   $oRelatorio = new relatorioContabil($iCodigoRelatorio, false);
-  $oRelatorio->getNotaExplicativa(&$pdf, $iCodigoPeriodo,280);
+  $oRelatorio->getNotaExplicativa($pdf, $iCodigoPeriodo,280);
   $pdf->ln(15);
-  assinaturas(&$pdf,&$classinatura,'LRF');
+  assinaturas($pdf,$classinatura,'LRF');
   $pdf->Output();
 
 }
-
-?>

@@ -3669,7 +3669,7 @@ class cl_liclicita
     }
 
     public function sql_query_pncp_itens_retifica_situacao ($l20_codigo,$ordem){
-        $sql = "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
+        return "SELECT DISTINCT    liclicitem.l21_ordem AS numeroItem,
                 CASE
                     WHEN pcmater.pc01_servico='t' THEN 'S'
                     ELSE 'M'
@@ -3755,7 +3755,6 @@ class cl_liclicita
         WHERE liclicita.l20_codigo = $l20_codigo
         AND liclicitem.l21_ordem = $ordem
         ORDER BY l217_sequencial desc limit 1";
-        return $sql;
     }
 
     public function sql_query_valor_item_reservado($pc11_numero = null, $pc01_codmater = false)

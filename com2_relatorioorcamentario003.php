@@ -1,6 +1,4 @@
 <?php
-//ini_set('display_errors','on');
-//require_once("fpdf151/fpdf.php");
 include("fpdf151/pdf.php");
 require_once("std/DBDate.php");
 include("libs/db_sql.php");
@@ -11,8 +9,8 @@ require_once("libs/db_sessoes.php");
 require_once("dbforms/db_funcoes.php");
 require_once("libs/db_app.utils.php");
 require_once("classes/db_pcproc_classe.php");
+require_once("classes/db_itemprecoreferencia_classe.php");
 db_postmemory($HTTP_GET_VARS);
-$clpcproc = new cl_pcproc();
 
 /**
  * BUSCO DADOS DA INSTITUICAO
@@ -177,20 +175,9 @@ db_fieldsmemory($resultObjeto,0);
  * BUSCO OS DADOS DA DOTACAO
  *
  */
-$sqlDotacao = "SELECT DISTINCT pc13_coddot AS ficha,
-                o15_codtri AS fonterecurso,
-                o58_projativ AS projetoativ,
-                o56_elemento as codorcamentario
-FROM pcproc
-INNER JOIN pcprocitem ON pcprocitem.pc81_codproc = pcproc.pc80_codproc 
-INNER JOIN solicitem ON pcprocitem.pc81_solicitem = solicitem.pc11_codigo
-INNER JOIN pcdotac ON pcdotac.pc13_codigo = solicitem.pc11_codigo
-INNER JOIN orcdotacao ON (orcdotacao.o58_anousu,orcdotacao.o58_coddot) = (pcdotac.pc13_anousu,pcdotac.pc13_coddot)
-INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
-INNER JOIN orcelemento on (orcelemento.o56_codele,orcelemento.o56_anousu) = (orcdotacao.o58_codele,orcdotacao.o58_anousu)
-WHERE pc80_codproc = $processodecompras";
+
 $resultDotacao = db_query($sqlDotacao);
-//db_criatabela($resultDotacao);exit;
+
 /**
 * BUSCO O TEXTO NO CADASTRO DE PARAGRAFOS
 *
@@ -222,27 +209,11 @@ if(pg_num_rows($resparag) != 0){
 $pdf->ln($alt+3);
 $pdf->x = 30;
 
-$pdf->cell(20,6,"Ficha"                           ,1,0,"C",1);
-$pdf->cell(40,6,"Cód. orçamentário"               ,1,0,"C",1);
-$pdf->cell(60,6,"Projeto Atividade"               ,1,0,"C",1);
-$pdf->cell(40,6,"Fonte de Recurso"                ,1,1,"C",1);
+imprimeCabecalho($pdf,$imprimevalor);
 $pdf->setfont('arial','',11);
 $pdf->x = 30;
 
-if(pg_num_rows($resultDotacao) != 0){
-    for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
-        $pdf->x = 30;
-        $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
-        $pdf->cell(20, 6, $oDadosDotacoes->ficha,           1, 0, "C", 0);
-        $pdf->cell(40, 6, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
-        $pdf->cell(60, 6, $oDadosDotacoes->projetoativ,     1, 0, "C", 0);
-        $pdf->cell(40, 6, $oDadosDotacoes->fonterecurso,    1, 1, "C", 0);
-    }
-}else{
-    $pdf->x = 30;
-    $pdf->setfont('arial','b',11);
-    $pdf->cell(190,6,"Nenhum Registro Encontrato."     ,0,1,"C",0);
-}
+imprimeColunas ($pdf,$imprimevalor,$processodecompras);
 $pdf->ln($alt+3);
 
 $pdf->setfont('arial','',11);
@@ -261,6 +232,75 @@ $pdf->ln($alt+20);
 if(pg_num_rows($resparag) != 0){
     $paragr1 = db_utils::fieldsMemory($resparag, 2);
     eval($paragr1->db02_texto);
+}
+
+function imprimeCabecalho($pdf,$imprimevalor){
+
+    if($imprimevalor == "t"){
+        $pdf->cell(20,6,"Ficha",1,0,"C",1);
+        $pdf->cell(40,6,"Cód. orçamentário",1,0,"C",1);
+        $pdf->cell(35,6,"Projeto Atividade",1,0,"C",1);
+        $pdf->cell(35,6,"Fonte de Recursos",1,0,"C",1);
+        $pdf->cell(30,6,"Valor",1,1,"C",1);
+
+        return;
+    }
+
+    $pdf->cell(20,6,"Ficha",1,0,"C",1);
+    $pdf->cell(40,6,"Cód. orçamentário",1,0,"C",1);
+    $pdf->cell(60,6,"Projeto Atividade",1,0,"C",1);
+    $pdf->cell(40,6,"Fonte de Recursos",1,1,"C",1);
+    
+}
+
+function imprimeColunas($pdf,$imprimevalor,$processodecompras){
+
+    $clpcproc = new cl_pcproc();
+    $sqlDotacao = $clpcproc->queryDotacao($processodecompras);
+    $resultDotacao = db_query($sqlDotacao);
+
+
+    if(pg_num_rows($resultDotacao) != 0){
+
+        if($imprimevalor == "t"){
+
+            $clitemprecoreferencia = new cl_itemprecoreferencia();
+            $sSqlvlTotalPrecoReferencia = $clitemprecoreferencia->queryValorTotalPrecoReferencia($processodecompras); 
+            $rsVlTotalPrecoReferencia = db_query($sSqlvlTotalPrecoReferencia);
+
+            for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
+                $pdf->x = 30;
+                $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
+                $valorTotalPrecoReferencia = db_utils::fieldsMemory($rsVlTotalPrecoReferencia, $iCont)->valortotal;
+                $valorTotalPrecoReferencia = trim(db_formatar($valorTotalPrecoReferencia, 'f'));
+                $valorTotalPrecoReferencia = str_replace(".","",$valorTotalPrecoReferencia);
+
+                $pdf->cell(20, 6, $oDadosDotacoes->ficha,           1, 0, "C", 0);
+                $pdf->cell(40, 6, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
+                $pdf->cell(35, 6, $oDadosDotacoes->projetoativ,     1, 0, "C", 0);
+                $pdf->cell(35, 6, $oDadosDotacoes->fonterecurso,    1, 0, "C", 0);
+                $pdf->cell(30, 6, "R$ " . $valorTotalPrecoReferencia ,1, 1, "C", 0);
+            }
+
+            return;
+        }
+
+        for ($iCont = 0; $iCont < pg_num_rows($resultDotacao); $iCont++) {
+            $pdf->x = 30;
+            $oDadosDotacoes = db_utils::fieldsMemory($resultDotacao, $iCont);
+            $pdf->cell(20, 6, $oDadosDotacoes->ficha,           1, 0, "C", 0);
+            $pdf->cell(40, 6, $oDadosDotacoes->codorcamentario, 1, 0, "C", 0);
+            $pdf->cell(60, 6, $oDadosDotacoes->projetoativ,     1, 0, "C", 0);
+            $pdf->cell(40, 6, $oDadosDotacoes->fonterecurso,    1, 1, "C", 0);
+        }
+
+        return;
+    }
+        
+    $pdf->x = 30;
+    $pdf->setfont('arial','b',11);
+    $pdf->cell(190,6,"Nenhum Registro Encontrato.",0,1,"C",0);
+    
 }
 
 $pdf->Output();

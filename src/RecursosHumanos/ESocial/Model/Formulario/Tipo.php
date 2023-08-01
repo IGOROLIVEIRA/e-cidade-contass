@@ -37,6 +37,7 @@ class Tipo
     const ALTERACAO_CONTRATO = 39;
     const TSV_INICIO = 44;
     const TSV_ALT_CONTR = 45;
+    const TSV_TERMINO = 46;
     const CD_BENEF_IN = 47;
     const AFASTAMENTO_TEMPORARIO = 40;
     const CADASTRO_BENEFICIO = 49;
@@ -129,7 +130,6 @@ class Tipo
             28 => 'S2210',
             29 => 'S2220',
             30 => 'S2221',
-            31 => 'S2399',
             32 => 'S2240',
             33 => 'S2245',
             34 => 'S2250',

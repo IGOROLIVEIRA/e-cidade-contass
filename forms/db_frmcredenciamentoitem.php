@@ -84,6 +84,7 @@ $clrotulo->label("pc01_descrmater");
                             <th data-orderable="false">Vl. Unitário</th>
                             <th data-orderable="false">Qtd. Solicitada</th>
                             <th data-orderable="false">Vlr. Total.</th>
+                            <th data-orderable="false" style="display: none;">Serviço Quantidade.</th>
                         </tr>
                     </thead>
                 </table>
@@ -293,6 +294,7 @@ $clrotulo->label("pc01_descrmater");
                 oDados.vlrunit = $(this).find("td").eq(7).find("input").val();
                 oDados.qtd = $(this).find("td").eq(8).find("input").val();
                 oDados.total = $(this).find("td").eq(9).find("input").val();
+                oDados.servicoquantidade = $(this).find("td").eq(10).find("input").val();
 
                 aDados.push(oDados);
                 oDados = {};

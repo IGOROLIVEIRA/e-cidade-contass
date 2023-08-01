@@ -1687,4 +1687,23 @@ class cl_pcproc
 
     return $sql;
   }
+
+  public function queryDotacao($pc80_codproc){
+
+    $sSql = "SELECT DISTINCT pc13_coddot AS ficha,
+                o15_codtri AS fonterecurso,
+                o58_projativ AS projetoativ,
+                o56_elemento as codorcamentario
+                FROM pcproc
+                INNER JOIN pcprocitem ON pcprocitem.pc81_codproc = pcproc.pc80_codproc 
+                INNER JOIN solicitem ON pcprocitem.pc81_solicitem = solicitem.pc11_codigo
+                INNER JOIN pcdotac ON pcdotac.pc13_codigo = solicitem.pc11_codigo
+                INNER JOIN orcdotacao ON (orcdotacao.o58_anousu,orcdotacao.o58_coddot) = (pcdotac.pc13_anousu,pcdotac.pc13_coddot)
+                INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
+                INNER JOIN orcelemento on (orcelemento.o56_codele,orcelemento.o56_anousu) = (orcdotacao.o58_codele,orcdotacao.o58_anousu)
+                WHERE pc80_codproc = $pc80_codproc";
+                
+                return $sSql;
+
+  }
 }
