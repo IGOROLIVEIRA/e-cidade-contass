@@ -872,5 +872,130 @@ class cl_matestoqueini {
    }
    return $sql;
   }
+
+  /**
+   * O método monta a query do relatório de entradas de materiais por departamento. 
+   * 
+   * @param object $oParametros
+   * @return string
+   */
+  function sqlQueryRelatorioEntradasMateriais($oParametros = null) {
+
+    $sql  = "SELECT m80_codigo,  ";
+    $sql  .= "       m80_codtipo,";
+    $sql  .= "       m52_codordem,";
+    $sql  .= "       m70_coddepto,  ";
+    $sql  .= "       m70_codmatmater, ";
+    $sql  .= "       m80_coddepto, ";
+    $sql  .= "       m60_descr,  ";
+    $sql  .= "       descrdepto,  ";
+    $sql  .= "       sum(m82_quant) as qtde, ";
+    $sql  .= "       m80_data,  ";
+    $sql  .= "       m80_codtipo,  ";
+    $sql  .= "       m83_coddepto,  ";
+    $sql  .= "       m81_descr,  ";
+    $sql  .= "       m41_codmatrequi, ";
+    $sql  .= "       m89_precomedio as precomedio, ";
+    $sql  .= "       sum(coalesce((m82_quant::numeric * m89_valorunitario::numeric),0)) as m89_valorfinanceiro, ";
+    $sql  .= "       m40_depto ";
+    $sql  .= "FROM matestoqueini";
+    $sql  .= "       inner join matestoqueinimei    on m80_codigo              = m82_matestoqueini ";
+    $sql  .= "       inner join matestoqueinimeipm  on m82_codigo              = m89_matestoqueinimei ";
+    $sql  .= "       inner join matestoqueitem      on m82_matestoqueitem      = m71_codlanc  ";
+    $sql  .= "       left join matestoqueitemoc on m73_codmatestoqueitem = m71_codlanc ";
+    $sql  .= "       left join matordemitem on m73_codmatordemitem = m52_codlanc ";
+    $sql  .= "       inner join matestoque          on m70_codigo              = m71_codmatestoque ";
+    $sql  .= "       inner join matmater            on m70_codmatmater         = m60_codmater  ";
+    $sql  .= "       inner join matestoquetipo      on m80_codtipo             = m81_codtipo  ";
+    $sql  .= "       left  join db_depart           on m70_coddepto            = coddepto  ";
+    $sql  .= "       left  join db_departorg        on db01_coddepto           = db_depart.coddepto  ";
+    $sql  .= "                                     and db01_anousu             = ".db_getsession("DB_anousu");
+    $sql  .= "       left  join orcorgao            on o40_orgao               = db_departorg.db01_orgao ";
+    $sql  .= "                                     and o40_anousu              = ".db_getsession("DB_anousu");
+    $sql  .= "       left  join matestoquetransf    on m83_matestoqueini       = m80_codigo   ";
+    $sql  .= "       left  join matestoqueinimeiari on m49_codmatestoqueinimei = m82_codigo  ";
+    $sql  .= "       left  join atendrequiitem      on m49_codatendrequiitem   = m43_codigo  ";
+    $sql  .= "       left  join matrequiitem        on m41_codigo              = m43_codmatrequiitem ";
+
+    $sWhere  = " instit=".db_getsession('DB_instit');
+    $sWhere .= " and m71_servico = false";
+    $sWhere .= $oParametros->listamatestoquetipo != "" ? " and m80_codtipo in ({$oParametros->listamatestoquetipo})" : " and m81_tipo  = 1";
+
+    if ($oParametros->listadepart != "") {
+      $sWhere .= isset ($oParametros->verdepart) && $oParametros->verdepart == "com" ?
+      " and m80_coddepto in ({$oParametros->listadepart})" : " and m80_coddepto not in ({$oParametros->listadepart})";
+    }
+
+    if ($oParametros->listamat != "") {
+      $sWhere .= isset ($oParametros->vermat) && $oParametros->vermat == "com" ?
+      " and m70_codmatmater in ({$oParametros->listamat})" : " and m70_codmatmater not in ({$oParametros->listamat})";
+    }
+
+    if ($oParametros->listausu != "") {
+      $sWhere .= isset ($oParametros->verusu) && $oParametros->verusu == "com" ?
+      " and m80_login in ({$oParametros->listausu})" : " and m80_login not in ({$oParametros->listausu})";
+    }
+
+    $whereData = function($oParametros) {
+
+      $sDataIni = implode('-',array_reverse(explode('/',$oParametros->dataini)));
+      $sDataFin = implode('-',array_reverse(explode('/',$oParametros->datafin)));
+
+      if ((trim($oParametros->dataini) != "--") && ( trim($oParametros->datafin) != "--")) return " and m80_data between '{$sDataIni}' and '{$sDataFin}' ";
+      if (trim($oParametros->dataini) != "--") return " and m80_data >= '{$sDataIni}' ";
+      if (trim($oParametros->datafin) != "--") return " and m80_data <= '{$sDataFin}' ";
+      if ($sDataIni == $sDataFin) return " and m80_data = '{$sDataFin}' ";
+      
+    };
+
+    $sWhere .= $whereData($oParametros);
+
+    if ( isset($oParametros->grupos) && trim($oParametros->grupos) != "" )  {
+
+      $sWhere  .= " and materialestoquegrupo.m65_db_estruturavalor in ({$oParametros->grupos}) ";
+      $sInnerJoinGrupos = " 
+             inner join matmatermaterialestoquegrupo on matmater.m60_codmater = matmatermaterialestoquegrupo.m68_matmater 
+             inner join materialestoquegrupo on matmatermaterialestoquegrupo.m68_materialestoquegrupo = materialestoquegrupo.m65_sequencial 
+      ";
+    
+    }
+
+    $sql  .=         $sInnerJoinGrupos; 
+    $sql  .= "       left  join matrequi            on m40_codigo              = m41_codmatrequi ";
+    $sql  .= " where {$sWhere} ";
+    $sql  .= " group by m80_codigo,  ";
+    $sql  .= "          m52_codordem,  ";
+    $sql  .= "          m70_coddepto,  ";
+    $sql  .= "          m70_codmatmater, ";
+    $sql  .= "          m80_data,  ";
+    $sql  .= "          m40_depto,  ";
+    $sql  .= "          m81_descr,  ";
+    $sql  .= "          m80_codtipo,  ";
+    $sql  .= "          m80_coddepto,  ";
+    $sql  .= "          m83_coddepto,  ";
+    $sql  .= "          descrdepto,  ";
+    $sql  .= "          m89_precomedio,  ";
+    $sql  .= "          m60_descr,  ";
+    $sql  .= "          m41_codmatrequi ";
+
+    $sOrderBy = "m80_data";
+
+    $camposOrdernacao = function($oParametros) {
+
+      if (isset($oParametros->quebra) && $oParametros->quebra == "S") return 'm80_coddepto, m60_descr, m80_data';
+      if ($oParametros->ordem == 'a') return 'm70_codmatmater, m80_data';
+      if ($oParametros->ordem == 'b') return 'm80_coddepto, m60_descr, m80_data';
+      if ($oParametros->ordem == 'c') return 'm60_descr';
+      if ($oParametros->ordem == 'd') return 'm80_data';
+
+    };
+
+    $sOrderBy = $camposOrdernacao($oParametros);
+
+    $sql  .= " order by {$sOrderBy} ";
+
+    return $sql;
+
+   }
   
 }
