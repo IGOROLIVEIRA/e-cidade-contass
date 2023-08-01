@@ -1,29 +1,4 @@
 <?php
-/**
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2014  DBseller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
 
 require_once("fpdf151/pdf3.php");
 require_once("libs/db_sql.php");
@@ -139,7 +114,6 @@ $resultpardiv = $clpardiv->sql_record($clpardiv->sql_query_file(null,"*",null,""
 db_fieldsmemory($resultpardiv, 0);
 
 if ( isset($v04_confexpfalec) && $v04_confexpfalec != 1) {
-
 	if ( !empty($v04_expfalecimentocda) ) {
 		$sExpFalecido = trim($v04_expfalecimentocda)." ";
 	}
@@ -263,7 +237,6 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
     	continue;
     }
 
-
   } else if ( trim($oOrigemInicial->certter) != "" ) {
 
     $sSqlDadosTermo = " select coalesce(k00_matric,0) as matric2,
@@ -284,9 +257,7 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
     $rsDadosInicial = db_query($sSqlDadosTermo);
 
     if ( pg_num_rows($rsDadosInicial) > 0 ) {
-
       db_fieldsmemory($rsDadosInicial,0);
-
     } else {
 
     	$sSqlReparc = " select coalesce(k00_matric,0) as matric2,
@@ -313,7 +284,6 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
     	} else {
     		continue;
     	}
-
     }
 
     $matric1       = 0;
@@ -325,39 +295,9 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
   	continue;
   }
 
-  $sqlPagoCancelado  = " select a.k00_numpre as inicial_paga,                              ";
-  $sqlPagoCancelado .= "        b.k00_numpre as parc_pago,                                 ";
-  $sqlPagoCancelado .= "        r.k00_numpre,                                              ";
-  $sqlPagoCancelado .= "        v59_numpre,                                                ";
-  $sqlPagoCancelado .= "        v59_inicial                                                ";
-  $sqlPagoCancelado .= "   from inicialnumpre                                              ";
-  $sqlPagoCancelado .= "        left join arrecant a on a.k00_numpre = v59_numpre          ";
-  $sqlPagoCancelado .= "        left join termoini   on inicial      = v59_inicial         ";
-  $sqlPagoCancelado .= "                            and inicial      = $inicialproc        ";
-  $sqlPagoCancelado .= "        left join arrecad r  on r.k00_numpre = v59_numpre          ";
-  $sqlPagoCancelado .= "        left join termo o    on o.v07_numpre   = v59_numpre        ";
-  $sqlPagoCancelado .= "        left join termo      on termo.v07_parcel   = parcel        ";
-  $sqlPagoCancelado .= "        left join arrecant b on termo.v07_numpre   = b.k00_numpre  ";
-  $sqlPagoCancelado .= "        left join arrecad  c on termo.v07_numpre   = c.k00_numpre  ";
-  $sqlPagoCancelado .= "  where ( a.k00_numpre is not null or b.k00_numpre is not null )   ";
-  $sqlPagoCancelado .= "    and r.k00_numpre is null                                       ";
-  $sqlPagoCancelado .= "    and o.v07_numpre is null                                       ";
-  $sqlPagoCancelado .= "    and c.k00_numpre is null                                       ";
-  $sqlPagoCancelado .= "    and v59_inicial = $inicialproc                                 ";
-
-  $rsPagoCancelado = db_query($sqlPagoCancelado);
-
-  if (pg_numrows($rsPagoCancelado) > 0 ) {
-    continue;
-  }else{
-    $lTemInicial = true;
-  }
-
+  $lTemInicial = true;
   $xinicial = $v50_inicial;
-
   $iLinhaDadosInicial = pg_num_rows($rsDadosInicial);
-
-
   $aListaProcedencia = array();
 
   for ($iInd=0; $iInd < $iLinhaDadosInicial; $iInd++ ) {
@@ -374,7 +314,6 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
 
   $oLibDocumento->Exercicio    = "Exercício(s) de ".implode(",",$aListaExercicio);
   $oLibDocumento->Procedencias = "Procedência(s) ".ucfirst(strtolower(implode(",",$aListaProcedencia)));
-
 
   $sSqlCert = " select distinct v51_certidao
                   from inicialcert
@@ -479,7 +418,6 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
         } else {
           $rsDadosDebitoCorrigido = debitos_numpre($k00_numpre, 0, 0, mktime(0, 0, 0, substr($v13_dtemis, 5, 2), substr($v13_dtemis, 8, 2), substr($v13_dtemis, 0, 4)), substr($v13_dtemis, 0, 4), $k00_numpar);
         }
-
       }
 
       if($rsDadosDebitoCorrigido) {
@@ -487,10 +425,7 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
           $ValorTotal += db_utils::fieldsMemory($rsDadosDebitoCorrigido, $iIndDebito)->total;
         }
       }
-
     }
-
-
   } else {
 
     $oParms           = new stdClass();
@@ -547,7 +482,6 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
     $sSqlEnvolvidos = "select  * from fc_busca_envolvidos({$lPrincipal},{$oParJuridico->v19_envolinicialiptu},'M',{$xmatric})";
     $rsEnvolvidos   = db_query($sSqlEnvolvidos) or die($sSqlEnvolvidos);
     $iLinhasEnvol   = pg_num_rows($rsEnvolvidos);
-
 
     if ($oParJuridico->v19_envolinicialiptu == 2 && $iLinhasEnvol == 0 ) {
 
@@ -612,7 +546,6 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
 
       $oEnvolvidos  = db_utils::fieldsMemory($rsEnvolvidos,$i);
       $rsDadosEnvol = $clcgm->sql_record($clcgm->sql_query_file($oEnvolvidos->rinumcgm));
-
 
       if ($clcgm->numrows > 0) {
 
@@ -768,7 +701,6 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
       $pdf->SetX(35);
     }
 
-
     if($oParag->oParag->db02_descr == "inicial_p2"){
       if ($v04_peticaoinicial == 2) {
         $pdf->SetX(25);
@@ -781,42 +713,21 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
       continue;
     }
 
-    $oParag->writeText( &$pdf );
+    $oParag->writeText( $pdf );
 
   }
-
-/*
-  $pdf->Ln($pula);
-  $pdf->MultiCell(0, 5, 'Valor da Causa R$ ' . $Valor . ' (' . $Valorext . ').', 0, "J", 0, 70);
-  $pdf->SetLeftMargin(80);
-  $pdf->Ln($pula);
-
-  if ($v04_peticaoinicial == 2) {
-    $pdf->MultiCell(0, 5, 'Nesses Termos,', 0, "J", 0, 0);
-    $pdf->MultiCell(0, 5, 'Pede Deferimento.', 0, "J", 0, 0);
-  } else {
-    $pdf->MultiCell(0, 5, 'Nesses Termos, Pede Deferimento.', 0, "J", 0, 0);
-  }
-  $pdf->Ln($pula);
-
-  if ($v04_peticaoinicial == 2) {
-    $pdf->Cell(0,   8, $munic.', '.date('d')." de ".db_mes(date('m'))." de ".date('Y').'.', 0, 1, "J", 10);
-  } else {
-    $pdf->Cell(120, 8, $munic.', '.date('d')." de ".db_mes(date('m'))." de ".date('Y').'.', 0, 1, "R", 0);
-  }
-*/
 
   foreach ($aParagrafos as $oParag) {
 
     if($oParag->oParag->db02_descr == "ass_adv1"){
       $pdf->SetX(30);
-      $oParag->writeText( &$pdf );
+      $oParag->writeText( $pdf );
     }
 
     if($oParag->oParag->db02_descr == "ass_adv2"){
       $pdf->SetY(($pdf->getY()-10));
       $pdf->SetX(130);
-      $oParag->writeText( &$pdf );
+      $oParag->writeText( $pdf );
     }
 
     if($oParag->oParag->db02_descr == "ASSINATURAS_CODIGOPHP"){

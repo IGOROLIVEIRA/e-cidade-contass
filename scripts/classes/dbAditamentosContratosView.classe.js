@@ -1835,14 +1835,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oInputQuantidade.setReadOnly(iTipoAditamento == 6);
 
             if (iTipoAditamento != 6) {
-
-
-                oInputQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value);"+me.sInstance+".js_bloqueivalorunt(" + iSeq +","+$('oCboTipoAditivo').value + ")");
-                oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); ");
-                oInputQuantidade.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, '');" + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
+                oInputQuantidade.addEvent("onFocus", "this.value = js_strToFloat(this.value);");
+                oInputQuantidade.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 3); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
+                oInputQuantidade.addEvent("onInput", "js_ValidaCampos(this,4,'Quantidade','f','f',event);");
             }
-
-
 
             oInputUnitario = new DBTextField('valorunitario' + iSeq, 'valorunitario' + iSeq, js_formatar(nUnitario, "f", 4)); //
             oInputUnitario.addStyle("width", "100%");
@@ -1850,9 +1846,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oInputUnitario.setReadOnly(iTipoAditamento == 6);
 
             if (iTipoAditamento != 6) {
-                oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value);"+me.sInstance+".js_bloqueiquantidade("+ iSeq +","+$('oCboTipoAditivo').value +")");
-                oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 4); ");
-                oInputUnitario.addEvent("onInput", "this.value = this.value.replace(/[^0-9\.]/g, ''); " + me.sInstance + ".calculaValorTotal(" + iSeq + ")");
+                oInputUnitario.addEvent("onFocus", "this.value = js_strToFloat(this.value);");
+                oInputUnitario.addEvent("onBlur", "this.value = js_formatar(this.value, 'f', 4); "+ me.sInstance + ".calculaValorTotal(" + iSeq + ")");
+                oInputUnitario.addEvent("onInput", "js_ValidaCampos(this,4,'Valor Unitario','f','f',event);");
             }
 
             if(oItem.novo == true){
@@ -2128,17 +2124,17 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.calculaValorTotal = function (iLinha) {
 
         var aLinha = me.oGridItens.aRows[iLinha],
-            nQuantidade  = aLinha.aCells[6].getValue().getNumber(),
-            nUnitario    = aLinha.aCells[7].getValue().getNumber(),
-            nQuantidadeA = aLinha.aCells[4].getValue().getNumber(),//OC5304
+            nQuantidade  = Number(aLinha.aCells[6].getValue().split('.').join("").replace(",",".")),
+            nUnitario    = Number(aLinha.aCells[7].getValue().split('.').join("").replace(",",".")),
+            nQuantidadeA = Number(aLinha.aCells[4].getValue().split('.').join("").replace(",",".")),//OC5304
             nUnitarioA   = Number(aLinha.aCells[5].getValue().split('.').join("").replace(",","."));//OC5304
-            valor1 = nQuantidade.toString();
-            valor = valor1.split('.');
-            if(valor.length>1){
-                casas = valor[1].length;
-            }else{
-                casas = 2;
-            }
+        valor1 = nQuantidade.toString();
+        valor = valor1.split('.');
+        if(valor.length>1){
+            casas = valor[1].length;
+        }else{
+            casas = 2;
+        }
 
         aItensPosicao[iLinha].novaquantidade  = nQuantidade;
         aItensPosicao[iLinha].novounitario    = nUnitario;
@@ -2415,15 +2411,12 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.somaAditamentos = () => {
         const tdLista = document.body.querySelectorAll("#oGridItensbody tbody td:nth-child(11)");
-        soma = 0.0;
+        let soma = 0.0;
         for (let count = 0; count < tdLista.length; count++) {
             let valorMonetario = tdLista[count].textContent;
-            valorMonetario = valorMonetario.replace(".","");
-            valorMonetario = valorMonetario.replace(",",".");
-            let valorTd = parseFloat(valorMonetario);
-            if (!tdLista[count].textContent) {
-                valorTd = 0.0;
-            }
+
+            let valorTd = !valorMonetario  ? 0.0 : js_strToFloat(valorMonetario);
+
             soma += valorTd;
         }
         this.atualizarLabelTotal(soma);

@@ -48,11 +48,27 @@ $clrotulo->label('e50_codord');
 
 <script>
 function js_emite(){
-  var dtEmpIni = document.form1.dt_emp_ini_ano.value+'-'+document.form1.dt_emp_ini_mes.value+'-'+document.form1.dt_emp_ini_dia.value;
-  var dtEmpFim = document.form1.dt_emp_fim_ano.value+'-'+document.form1.dt_emp_fim_mes.value+'-'+document.form1.dt_emp_fim_dia.value;
+
+  if (document.form1.data.value){
+      var sPeriodoInicial = document.form1.data.value.split("/");
+      sPeriodoInicial     = sPeriodoInicial[2]+'-'+sPeriodoInicial[1]+'-'+sPeriodoInicial[0];
+  }
+  if (document.form1.data1.value){
+      var sPeriodoFinal   = document.form1.data1.value.split("/");
+      sPeriodoFinal       = sPeriodoFinal[2]+'-'+sPeriodoFinal[1]+'-'+sPeriodoFinal[0];
+  }
+  if (document.form1.dt_emp_ini.value){
+      var dtEmpIni        = document.form1.dt_emp_ini.value.split("/");
+      dtEmpIni            = dtEmpIni[2]+'-'+dtEmpIni[1]+'-'+dtEmpIni[0];
+  }
+  if (document.form1.dt_emp_fim.value){
+      var dtEmpFim        = document.form1.dt_emp_fim.value.split("/");
+      dtEmpFim            = dtEmpFim[2]+'-'+dtEmpFim[1]+'-'+dtEmpFim[0];
+  }
+ 
   jan = window.open(
-    'emp2_ordempag002.php?data='+document.form1.data_ano.value+'-'+document.form1.data_mes.value+'-'+document.form1.data_dia.value+
-    '&data1='+document.form1.data1_ano.value+'-'+document.form1.data1_mes.value+'-'+document.form1.data1_dia.value+
+    'emp2_ordempag002.php?data='+sPeriodoInicial+
+    '&data1='+sPeriodoFinal+
     '&codini='+document.form1.e50_codordINI.value+'&codfim='+document.form1.e50_codordFIM.value+
     '&numempini='+document.form1.e50_numempINI.value+'&numempfim='+document.form1.e50_numempFIM.value+'&e60_numcgm='+document.form1.e60_numcgm.value+
     '&dt_emp_ini='+dtEmpIni+'&dt_emp_fim='+dtEmpFim,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');

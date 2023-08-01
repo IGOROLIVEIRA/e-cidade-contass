@@ -374,7 +374,8 @@ switch($oParam->exec) {
 
           }
 
-          $oTransferencia->executaAutenticacao();
+          //parametro adcionado devido a OC20697
+          $oTransferencia->executaAutenticacao(str_replace('/', '-', $oParam->dtPagamento));
 
           if (USE_PCASP) {
             $oTransferencia->executarLancamentoContabil();

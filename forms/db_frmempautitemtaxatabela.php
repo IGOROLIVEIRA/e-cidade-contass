@@ -158,7 +158,8 @@ $clrotulo->label("pc01_descrmater");
         var table = $('#myTable').DataTable({
             bAutoWidth: false,
             bInfo: false,
-            searchable: false,
+            searching: false,
+            info: false,
             paging: false,
             processing: true,
             serverSide: true,
@@ -322,7 +323,7 @@ $clrotulo->label("pc01_descrmater");
             success: function(data) {
 
                 let response = JSON.parse(data);
-                alert(response.message);
+                alert(response.message.urlDecode());
                 //top.corpo.iframe_empautitem.location.reload();
                 top.corpo.iframe_empautoriza.location.reload();
                 //window.location.reload();
@@ -343,7 +344,7 @@ $clrotulo->label("pc01_descrmater");
         if ($('#servico_' + id).val() == 't') {
             //$('#qtd_' + id).val(0);
             $('#qtd_' + id).attr('readonly', false);
-        } 
+        }
 
         if ($('#servico_' + id).val() == 'f') {
             $('#qtd_' + id).val(1);
@@ -490,7 +491,7 @@ $clrotulo->label("pc01_descrmater");
                     elementos.elementos.forEach(function(oElementos, ele) {
                         let option = document.createElement('option');
                         option.value = oElementos.pc07_codele;
-                        option.text = oElementos.o56_descr;
+                        option.text = oElementos.o56_descr.urlDecode();
                         select.append(option);
                     })
                 } else {

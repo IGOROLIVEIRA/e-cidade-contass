@@ -480,10 +480,11 @@ class cl_licobras
     $sql .= " from licobras ";
     $sql .= " left join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
     $sql .= " left join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
-    $sql .= " left join acordo on ac16_licitacao = l20_codigo";
+    
     $sql .= " left join licobraslicitacao on obr07_sequencial = obr01_licitacao";
     $sql .= " left join pctipocompratribunal on obr07_tipoprocesso = l44_sequencial";
-
+    $sql .= " left join acordoobra on obr08_licobras = obr01_sequencial ";
+    $sql .= " left join acordo on ac16_licitacao = l20_codigo ";
     if ($dbwhere == "") {
       if ($obr01_sequencial != "" && $obr01_sequencial != null) {
         $sql .= " where obr01_sequencial = $obr01_sequencial";
