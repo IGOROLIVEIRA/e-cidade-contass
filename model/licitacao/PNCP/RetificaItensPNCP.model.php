@@ -51,14 +51,10 @@ class RetificaitensPNCP extends ModeloBasePNCP
         if($oDado[0]->modalidadeid == "3"){
             $oDadosAPI->criterioJulgamentoId    = 8;
         }
-        $oDadosAPI->itemCategoriaId             = $oDado[0]->itemcategoriaid;
-        if($oDado[0]->itemcategoriaid == '3'){
-            $oDadosAPI->justificativa           = utf8_encode($oDado[0]->justificativa);
-        }
+        $oDadosAPI->itemCategoriaId             = 3;
+        $oDadosAPI->justificativa           = utf8_encode($oDado[0]->justificativa);
 
-        $aDadosAPI = json_encode($oDadosAPI);
-
-        return $aDadosAPI;
+        return json_encode($oDadosAPI);
     }
 
     public function montarRetificacao()
