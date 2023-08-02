@@ -23,7 +23,7 @@ class RetificaitensPNCP extends ModeloBasePNCP
     public function montarDados()
     {
         $aDadosAPI = array();
-        
+
         $oDado = $this->dados;
 
         $vlrtotal = $oDado[0]->pc11_quant * $oDado[0]->valorunitarioestimado;
@@ -38,14 +38,15 @@ class RetificaitensPNCP extends ModeloBasePNCP
         $oDadosAPI->orcamentoSigiloso           = $oDado[0]->l21_sigilo == 'f' ? 'false' : 'true';
         $oDadosAPI->valorUnitarioEstimado       = $oDado[0]->valorunitarioestimado;
         $oDadosAPI->valorTotal                  = $vlrtotal;
-        $oDadosAPI->situacaoCompraItemId        = $oDado[0]->situacaocompraitemid;    
-           
+        $oDadosAPI->situacaoCompraItemId        = $oDado[0]->situacaocompraitemid;
+        $oDadosAPI->criterioJulgamentoId        = $oDado[0]->criteriojulgamentoid;
+
         //DISPENSA E INEXIGIBILIDADE
         if($oDado[0]->modalidadeid == "8" || $oDado[0]->modalidadeid == "9"){
-        $oDadosAPI->criterioJulgamentoId        = 7;
-        }else{
-            $oDadosAPI->criterioJulgamentoId    = $oDado[0]->criteriojulgamentoid;
+            $oDadosAPI->situacaoCompraItemId        = $oDado[0]->pc23_vlrun > 0 ? 2 : 4;
+            $oDadosAPI->criterioJulgamentoId        = 7;
         }
+
         //CONCURSO
         if($oDado[0]->modalidadeid == "3"){
             $oDadosAPI->criterioJulgamentoId    = 8;
@@ -62,7 +63,7 @@ class RetificaitensPNCP extends ModeloBasePNCP
 
     public function montarRetificacao()
     {
-        
+
     }
 
     public function retificarItem($oDados, $sCodigoControlePNCP, $iAnoCompra, $seqitem)
@@ -74,7 +75,7 @@ class RetificaitensPNCP extends ModeloBasePNCP
         $cnpj =  $this->getCnpj();
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/itens/$seqitem";
-       
+
         $method = 'PUT';
 
         $chpncp      = curl_init($url);
@@ -116,7 +117,7 @@ class RetificaitensPNCP extends ModeloBasePNCP
         print_r($header);
         exit;*/
         $retorno = explode(':', $contentpncp);
-        
+
         if (substr($retorno[0], 7, 3) == '200') {
             return array(201, "Enviado com Sucesso!");
         } else {

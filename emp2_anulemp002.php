@@ -207,6 +207,7 @@ for($i = 0;$i < pg_numrows($result02);$i++){
    $sqlitens .= "                left join empempaut        on e60_numemp           = e61_numemp             ";
    $sqlitens .= "                left join empautoriza      on e61_autori           = e54_autori             ";
    $sqlitens .= "                left join empautitem       on e54_autori           = e55_autori             ";
+   $sqlitens .= "                                           and e62_item = e55_item                          ";  
    $sqlitens .= "                left join matunid          on e55_unid             = m61_codmatunid         ";
    //FIM - OC19614   
    /*OC4401*/

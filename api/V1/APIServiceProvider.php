@@ -2,6 +2,7 @@
 
 namespace ECidade\Api\V1;
 
+use App\Routes\Api;
 use ECidade\Api\V1\Providers\ProtocoloControllerProvider;
 use ECidade\Api\V1\Providers\ConfiguracaoControllerProvider;
 use Silex\Application;
@@ -18,6 +19,7 @@ class APIServiceProvider implements ServiceProviderInterface {
     $prefix = $app['ecidade_api.mount_prefix'];
     $app->mount($prefix . "/protocolo", new ProtocoloControllerProvider());
     $app->mount($prefix . "/configuracao", new ConfiguracaoControllerProvider());
+    $app->mount($prefix . '/pix', new Api());
   }
 
 }

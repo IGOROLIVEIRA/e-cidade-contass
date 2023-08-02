@@ -63,8 +63,11 @@ abstract class AbstractMetadata  {
 
       $instance = $storage->getData();
 
-      // @todo - verificar se deve salvar caminho relativo
-      // corrigi o caminho absoluto do path, pelo novo, ignorando o caminho que foi salvo
+      //@fixme as vezes $instance retorna null precisa ser investigado com mais calma
+      if (!$instance) {
+        $instance = new static($path);
+      }
+
       $instance->getStorage()->setPath($absolutePath);
     }
 
