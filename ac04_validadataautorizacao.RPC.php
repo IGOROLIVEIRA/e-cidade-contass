@@ -34,40 +34,6 @@ try {
     throw new Exception("Usuario: A data da autorização de empenho nao esta dentro do periodo de vigencia do contrato");
   }
 
-  /*
-    /* Validação tipo de origem de contrato 
-
-  $rsAcordo = db_query("select ac16_tipoorigem,ac16_licitacao,ac16_adesaoregpreco,ac16_licoutroorgao from acordo where ac16_sequencial = $oParam->ac16_sequencial;");
-  $ac16_tipoorigem = db_utils::fieldsMemory($rsAcordo, 0)->ac16_tipoorigem;
-  $ac16_licitacao = db_utils::fieldsMemory($rsAcordo, 0)->ac16_licitacao;
-  $ac16_adesaoregpreco = db_utils::fieldsMemory($rsAcordo, 0)->ac16_adesaoregpreco;
-  $ac16_licoutroorgao = db_utils::fieldsMemory($rsAcordo, 0)->ac16_licoutroorgao;
-  $aTipoorigem = array(
-    0 => 'Selecione',
-    1 => '1 - Não ou dispensa por valor',
-    2 => '2 - Licitação',
-    3 => '3 - Dispensa ou Inexigibilidade',
-    4 => '4 - Adesão à ata de registro de preços',
-    5 => '5 - Licitação realizada por outro órgão ou entidade',
-    6 => '6 - Dispensa ou Inexigibilidade realizada por outro órgão ou entidade',
-    7 => '7 - Licitação - Regime Diferenciado de Contratações Públicas - RDC',
-    8 => '8 - Licitação realizada por consorcio público',
-    9 => '9 - Licitação realizada por outro ente da federação',
-  );
-
-  if(($ac16_tipoorigem == 2 || $ac16_tipoorigem == 3) && $ac16_licitacao == null){
-    throw new Exception("Usuário: Inclusão abortada. Contrato de origem {$aTipoorigem[$ac16_tipoorigem]} sem vínculo com Licitação. Gentileza entrar em contato com o suporte para a vinculação correta.");
-  }
-
-  if($ac16_tipoorigem == 4 && $ac16_adesaoregpreco == null){
-    throw new Exception("Usuário: Inclusão abortada. Contrato de origem {$aTipoorigem[$ac16_tipoorigem]} sem vínculo com Adesão de Registro de Preço. Gentileza entrar em contato com o suporte para a vinculação correta.");
-  }
-
-  if(($ac16_tipoorigem == 5 || $ac16_tipoorigem == 6 || $ac16_tipoorigem == 7 || $ac16_tipoorigem == 8 || $ac16_tipoorigem == 9) && $ac16_licoutroorgao == null){
-    throw new Exception("Usuário: Inclusão abortada. Contrato de origem {$aTipoorigem[$ac16_tipoorigem]} sem vínculo com Licitação de Outros Órgãos. Gentileza entrar em contato com o suporte para a vinculação correta.");
-  }*/
-
-
 } catch (Exception $e) {
   $oRetorno->erro   = urlencode($e->getMessage());
   $oRetorno->status = 2;
