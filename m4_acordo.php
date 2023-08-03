@@ -416,27 +416,35 @@ if (isset($alterar)) {
       $clmanutencaoacordo->incluir();
     
    
-    function alteracaoTipoOrigem($ac16_tipoorigem,$ac16_licitacao,$ac16_licoutroorgao,$ac16_adesaoregpreco,$ac16_sequencial){
+    function alteracaoTipoOrigem($ac16_tipoorigem,$ac16_licitacao,$ac16_licoutroorgao,$ac16_adesaoregpreco,$ac16_sequencial,$ac16_origem){
       if ($ac16_tipoorigem == 1) {
 
+        if($ac16_origem == 2){
+           db_msgbox(" Usuário: Para a origem Licitação, só poderão ser selecionados os tipos origem Licitação ou Dispensas e Inexigibilidades");
+           return true;
+        }
+        
+        $rsPc50_codcom = db_query("select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = 13;");
+        $pc50_codcom = db_utils::fieldsMemory($rsPc50_codcom, 0)->pc50_codcom;
+
         db_query("UPDATE empautoriza
-        SET e54_adesaoregpreco = null, e54_numerl = null, e54_nummodalidade = null,e54_codlicitacao = null,e54_licoutrosorgaos = null,e54_codcom = null
+        SET e54_adesaoregpreco = null, e54_numerl = null, e54_nummodalidade = null,e54_codlicitacao = null,e54_licoutrosorgaos = null,e54_codcom = $pc50_codcom
         where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
-  
+        
         db_query("UPDATE empempenho
-        SET e60_numerol = null,e60_codcom = null
+        SET e60_numerol = null,e60_codcom = $pc50_codcom
         where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
 
-        db_query("UPDATE acordo SET ac16_licitacao = null, ac16_licoutroorgao = null,ac16_adesaoregpreco = null");
+        db_query("UPDATE acordo SET ac16_licitacao = null, ac16_licoutroorgao = null,ac16_adesaoregpreco = null where ac16_sequencial = $ac16_sequencial");
 
-        return true;
+        return false;
       }
   
       if ($ac16_tipoorigem == 2 || $ac16_tipoorigem == 3) {
 
         if($ac16_licitacao == ""){
           db_msgbox("Informe a licitação");
-          return false;
+          return true;
         } 
   
         $rsLiclicita = db_query("select l03_codcom,l20_edital,l20_anousu,l20_numero from liclicita 
@@ -456,18 +464,23 @@ if (isset($alterar)) {
         SET e60_numerol = '$e54_numerl',e60_codcom = $pc50_codcom
         where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
 
-        db_query("UPDATE acordo SET ac16_licitacao = $ac16_licitacao, ac16_licoutroorgao = null,ac16_adesaoregpreco = null");
+        db_query("UPDATE acordo SET ac16_licitacao = $ac16_licitacao, ac16_licoutroorgao = null,ac16_adesaoregpreco = null where ac16_sequencial = $ac16_sequencial");
 
 
-        return true;
+        return false;
 
       }
   
       if ($ac16_tipoorigem == 4) {
 
+        if($ac16_origem == 2){
+          db_msgbox(" Usuário: Para a origem Licitação, só poderão ser selecionados os tipos origem Licitação ou Dispensas e Inexigibilidades");
+          return true;
+       }
+
         if($ac16_adesaoregpreco == ""){
           db_msgbox("Informe a adesão de registro de preço");
-          return false;
+          return true;
         } 
 
         $rsPc50_codcom = db_query("select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = 104;");
@@ -489,15 +502,22 @@ if (isset($alterar)) {
         SET e60_numerol = '$e54_numerl',e60_codcom = $pc50_codcom
         where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
 
-        db_query("UPDATE acordo SET ac16_licitacao = null, ac16_licoutroorgao = null,ac16_adesaoregpreco = $ac16_adesaoregpreco");
+        db_query("UPDATE acordo SET ac16_licitacao = null, ac16_licoutroorgao = null,ac16_adesaoregpreco = $ac16_adesaoregpreco where ac16_sequencial = $ac16_sequencial");
+
+        return false;
 
       }
   
       if ($ac16_tipoorigem == 5 || $ac16_tipoorigem == 6 || $ac16_tipoorigem == 7 || $ac16_tipoorigem == 8 || $ac16_tipoorigem == 9) {
-         
+          
+        if($ac16_origem == 2){
+          db_msgbox(" Usuário: Para a origem Licitação, só poderão ser selecionados os tipos origem Licitação ou Dispensas e Inexigibilidades");
+          return true;
+       }
+
         if($ac16_licoutroorgao == ""){
           db_msgbox("Informe a licitação de outro órgão");
-          return false;
+          return true;
         } 
 
         $aCodtribunal = array(5 => "105", 6 => "106", 7 => "107", 8 => "108", 9 => "109");
@@ -523,12 +543,14 @@ if (isset($alterar)) {
         SET e60_numerol = '$e54_numerl',e60_codcom = $pc50_codcom
         where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
 
-        db_query("UPDATE acordo SET ac16_licitacao = null, ac16_licoutroorgao = $ac16_licoutroorgao,ac16_adesaoregpreco = null");
+        db_query("UPDATE acordo SET ac16_licitacao = null, ac16_licoutroorgao = $ac16_licoutroorgao,ac16_adesaoregpreco = null where ac16_sequencial = $ac16_sequencial");
+
+        return false;
 
       }
     }
 
-    alteracaoTipoOrigem($ac16_tipoorigem,$ac16_licitacao,$ac16_licoutroorgao,$ac16_adesaoregpreco,$ac16_sequencial);
+    $sqlerro = alteracaoTipoOrigem($ac16_tipoorigem,$ac16_licitacao,$ac16_licoutroorgao,$ac16_adesaoregpreco,$ac16_sequencial,$ac16_origem);
 
 
     if ($sqlerro == false) {
