@@ -69,7 +69,7 @@ foreach ($tpCadastros as $tpCadastro) {
     </td>
     <td>
     <?php
-      db_textarea('c206_objetoconvenio', 6, 50,'',true,"text",$db_opcao,"","","",500);
+      db_textarea('c206_objetoconvenio', 6, 50,'',true,"text",$db_opcao,"onkeyup='alterarContador(this);'","","",500);
     ?>
     </td>
   </tr>
@@ -150,4 +150,11 @@ function js_preenchepesquisa(chave){
   }
   ?>
 }
+function alterarContador(valor){
+	  var qnt = valor.length;
+		if(qnt >= 500) {
+			document.getElementById('c206_objetoconvenioobsdig').value = 500;
+		}
+}
+alterarContador(document.getElementById('c206_objetoconvenio').value)
 </script>
