@@ -240,7 +240,7 @@ class AtaRegistroprecoPNCP extends ModeloBasePNCP
             'Content-Type: multipart/form-data',
             'Authorization: ' . $token,
             'Titulo-Documento: ' . $sDescricao,
-            'Tipo-Documento-Id: ' . $iTipoAnexo
+            'Tipo-Documento: ' . $iTipoAnexo
         );
 
         $optionspncp = array(
@@ -282,13 +282,13 @@ class AtaRegistroprecoPNCP extends ModeloBasePNCP
         }
     }
 
-    public function excluirAnexos($iAnoContrato,$iCodigoContrato,$iCodigoTermo,$iSeqAnexo)
+    public function excluirAnexos($iAnoCompra,$iCodigoCompra,$iCodigoAta,$iSeqAnexo)
     {
 
         $cnpj =  $this->getCnpj();
         $token = $this->login();
 
-        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/contratos/" . $iAnoContrato . "/" . $iCodigoContrato . "/termos/".$iCodigoTermo."/arquivos/".$iSeqAnexo;
+        $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $iCodigoCompra . "/atas/".$iCodigoAta."/arquivos/".$iSeqAnexo;
 
         $method = 'DELETE';
 

@@ -15,7 +15,7 @@ class cl_controleanexosataspncp
     var $pagina_retorno = null;
     // cria variaveis do arquivo
     var $l217_sequencial = 0;
-    var $l217_licanexoataspncp = 0;
+    var $l217_licatareg = 0;
     var $l217_usuario = 0;
     var $l217_dataenvio_dia = null;
     var $l217_dataenvio_mes = null;
@@ -31,7 +31,7 @@ class cl_controleanexosataspncp
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  l217_sequencial = int8 = Sequencial Anexos
-                 l217_licanexoataspncp = int8 = Código da licitacao
+                 l217_licatareg = int8 = Código da licatareg
                  l217_usuario = int8 = Código do Usuário
                  l217_dataenvio = date = Data Lançamento
                  l217_sequencialata = varchar(250) = Número de Controle Anexo PNCP
@@ -63,7 +63,7 @@ class cl_controleanexosataspncp
     {
         if ($exclusao == false) {
             $this->l217_sequencial = ($this->l217_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l217_sequencial"] : $this->l217_sequencial);
-            $this->l217_licanexoataspncp = ($this->l217_licanexoataspncp == "" ? @$GLOBALS["HTTP_POST_VARS"]["l217_licanexoataspncp"] : $this->l217_licanexoataspncp);
+            $this->l217_licatareg = ($this->l217_licatareg == "" ? @$GLOBALS["HTTP_POST_VARS"]["l217_licatareg"] : $this->l217_licatareg);
             $this->l217_usuario = ($this->l217_usuario == "" ? @$GLOBALS["HTTP_POST_VARS"]["l217_usuario"] : $this->l217_usuario);
             if ($this->l217_dataenvio == "") {
                 $this->l217_dataenvio_dia = @$GLOBALS["HTTP_POST_VARS"]["l217_dataenvio_dia"];
@@ -85,8 +85,8 @@ class cl_controleanexosataspncp
     function incluir()
     {
         $this->atualizacampos();
-        if ($this->l217_licanexoataspncp == null) {
-            $this->l217_licanexoataspncp = "NULL";
+        if ($this->l217_licatareg == null) {
+            $this->l217_licatareg = "NULL";
         }
 
         if ($this->l217_usuario == null) {
@@ -176,7 +176,7 @@ class cl_controleanexosataspncp
 
         $sql = "insert into controleanexosataspncp(
                                        l217_sequencial
-                                      ,l217_licanexoataspncp
+                                      ,l217_licatareg
                                       ,l217_usuario
                                       ,l217_dataenvio
                                       ,l217_sequencialata
@@ -188,7 +188,7 @@ class cl_controleanexosataspncp
                        )
                 values (
                                 $this->l217_sequencial
-                               ,$this->l217_licanexoataspncp
+                               ,$this->l217_licatareg
                                ,$this->l217_usuario
                                ," . ($this->l217_dataenvio == "null" || $this->l217_dataenvio == "" ? "null" : "'" . $this->l217_dataenvio . "'") . "
                                ,$this->l217_sequencialata
@@ -243,15 +243,15 @@ class cl_controleanexosataspncp
                 return false;
             }
         }
-        if (trim($this->l217_licanexoataspncp) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l217_licanexoataspncp"])) {
-            if (trim($this->l217_licanexoataspncp) == "" && isset($GLOBALS["HTTP_POST_VARS"]["l217_licanexoataspncp"])) {
-                $this->l217_licanexoataspncp = "0";
+        if (trim($this->l217_licatareg) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l217_licatareg"])) {
+            if (trim($this->l217_licatareg) == "" && isset($GLOBALS["HTTP_POST_VARS"]["l217_licatareg"])) {
+                $this->l217_licatareg = "0";
             }
-            $sql  .= $virgula . " l217_licanexoataspncp = $this->l217_licanexoataspncp ";
+            $sql  .= $virgula . " l217_licatareg = $this->l217_licatareg ";
             $virgula = ",";
-            if (trim($this->l217_licanexoataspncp) == null) {
+            if (trim($this->l217_licatareg) == null) {
                 $this->erro_sql = " Campo Código do Acordo nao Informado.";
-                $this->erro_campo = "l217_licanexoataspncp";
+                $this->erro_campo = "l217_licatareg";
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -455,13 +455,13 @@ class cl_controleanexosataspncp
         }
     }
     // funcao para exclusao
-    function excluir_licitacao($l217_licanexoataspncp = null)
+    function excluir_licitacao($l217_licatareg = null)
     {
         $this->atualizacampos(true);
         $sql = " delete from controleanexosataspncp
                     where ";
         $sql2 = "";
-        $sql2 = "l217_licanexoataspncp = $l217_licanexoataspncp";
+        $sql2 = "l217_licatareg = $l217_licatareg";
         //  echo $sql.$sql2;
         $result = @pg_exec($sql . $sql2);
         if ($result == false) {
@@ -529,7 +529,8 @@ class cl_controleanexosataspncp
             $sql .= $campos;
         }
         $sql .= " from controleanexosataspncp ";
-        $sql .= " left join acocontroletermospncp on l214_acordo = l217_licanexoataspncp ";
+        $sql .= " left join licatareg on l221_sequencial = l217_licatareg";
+        $sql .= " left join liccontrolepncp on l213_licitacao = l221_licitacao";
         $sql2 = "";
         if ($dbwhere == "") {
             if ($l217_sequencial != "" && $l217_sequencial != null) {

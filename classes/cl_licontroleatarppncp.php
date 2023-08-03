@@ -432,6 +432,7 @@ class cl_licontroleatarppncp
         }
         $sql .= " from licontroleatarppncp ";
         $sql .= " left join licatareg on l221_licitacao = l215_licitacao ";
+        $sql .= " left join liccontrolepncp on l213_licitacao = l221_licitacao ";
         $sql2 = "";
         if ($dbwhere == "") {
             if ($l215_sequencial != "" && $l215_sequencial != null) {
