@@ -303,8 +303,6 @@ switch ($oParam->exec) {
         $aItens    = array();
 
         $oRetorno->iCasasDecimais = 2;
-        //echo 'info contrato ';
-        //print_r($oContrato);
 
         $oRetorno->iOrigemContrato      = $oContrato->getOrigem();
 
@@ -734,7 +732,7 @@ switch ($oParam->exec) {
             $oRetorno->iNumModalidade = '';
             $oRetorno->iProcesso = '';
             $oRetorno->sTipo = '';
-            $oRetorno->sTipoorigem = '';
+            $oRetorno->sTipoorigem =$oAcordo->getTipoOrigem();
             $oRetorno->sTipoautorizacao = urlencode(2);
             $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
         }
@@ -743,6 +741,8 @@ switch ($oParam->exec) {
          *Retorna dados da licitacao de outro orgao
          */
         $aLicOutrosorgaosVinculadas = $oAcordo->getiLicoutroorgao();
+        $oRetorno->sLicitacaooutroorgao = $aLicOutrosorgaosVinculadas;
+
         if ($aLicOutrosorgaosVinculadas[0] != "") {
             $oDaoAcordo = db_utils::getDao("liclicitaoutrosorgaos");
             $codLicOutrosOrgaos = $aLicOutrosorgaosVinculadas[0];
@@ -785,6 +785,7 @@ switch ($oParam->exec) {
          * retorna adesao de registro de preco
          */
         $aAdesaoVinculada = $oAcordo->getiAdesaoregpreco();
+        $oRetorno->sAdesaoRegPreco = $aAdesaoVinculada;
 
         if ($aAdesaoVinculada[0] != "") {
 
@@ -797,7 +798,6 @@ switch ($oParam->exec) {
             $oRetorno->iModalidade = urlencode($oAcordo->getModalidade());
             $oRetorno->iNumModalidade = urlencode($oDadosAdesao->si06_nummodadm);
             $oRetorno->iProcesso = $oDadosAdesao->si06_numeroadm;
-            $oRetorno->iSequencial = $oDadosAdesao->si06_sequencial;
 
             //ACHAR CODCOMPRA
             $sPctipocampos = "pc50_codcom";
