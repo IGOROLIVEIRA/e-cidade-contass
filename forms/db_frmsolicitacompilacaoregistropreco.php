@@ -351,16 +351,4 @@ function js_imprimir() {
 }
 $('btnSalvar').observe("click", js_salvarEstimativa);
 $('btnImprimir').observe("click", js_imprimir);
-<?
-/*
-if ($lBtnShowBtnConsulta) {
-
-  echo "\$('btnConsultar').observe('click', js_pesquisar);\n";
-  echo "parent.iframe_itens.location.href='com4_solicitacompilacaoitens.php';\n";
-  echo "js_pesquisar();\n";
-
-} else {
-  echo "js_pesquisaaberturaprecos(true);\n";
-}*/
-?>
 </script>

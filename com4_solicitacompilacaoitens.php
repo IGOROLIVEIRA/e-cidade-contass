@@ -88,6 +88,7 @@ db_app::load("widgets/windowAux.widget.js");
       <tr>
         <td colspan="2" style="text-align: center;">
           <input type="button" value="Salvar Itens" id='btnSalvarItens'>
+          <input style="display: none;" onclick="js_incluirProcessamento()" type="button" value="Incluir Processamento" id='btnIncluirProcessamento'>
         </td>
       </tr>
     </table>
@@ -344,11 +345,14 @@ function js_retornoSalvarItem(oAjax) {
   
   js_removeObj('msgBox');
   var oRetorno = eval("("+oAjax.responseText+")");
+
   if (oRetorno.status == 1) {
-    alert('Itens Salvos Com sucesso.')
-  } else {
-   alert(oRetorno.message.urlDecode());
-  }
+    document.getElementById("btnIncluirProcessamento").style.display = '';
+    return alert('Itens Salvos Com sucesso.')
+  } 
+
+  alert(oRetorno.message.urlDecode());
+
 }
 
 function js_limparForm() {
@@ -575,6 +579,12 @@ function js_bloqueiaCamposWindowAux(lDisabled) {
   $('pc17_unid').disabled = lDisabled;
   $('pc17_quant').disabled = lDisabled;
 }
+
+function js_incluirProcessamento(){
+  var codigoSolicitacao = parent.iframe_registro.document.getElementById('pc10_numero').value;
+  top.corpo.document.location.href='com4_processacompilacao001.php?pc10_numero='+codigoSolicitacao;
+}
+
 /**
  * Adicionamos as unidades ao combo pc17_unid
  */
