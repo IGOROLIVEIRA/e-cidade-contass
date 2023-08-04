@@ -460,7 +460,8 @@ $db_opcao           = 1;
 
       }
     }
-    if(aItens.length > 0) document.getElementById('btnLancarEstimativa').style.display = '';
+    var lAlteracao = <?=isset($alterar)?"true":"false";?>;
+    if(aItens.length > 0 && lAlteracao) document.getElementById('btnLancarEstimativa').style.display = '';
     oGridItens.renderRows();
   }
 
