@@ -78,7 +78,7 @@
      <?
      
      $clcriaabas->identifica = array("registro" => "Compilação","itens"=>"Itens");//nome do iframe e o label    
-     $clcriaabas->src        = array("registro" => "com4_registroprecocompilacao011.php",
+     $clcriaabas->src        = array("registro" => "com4_registroprecocompilacao011.php?pc54_solicita=$codigoAbertura",
                                      "itens"    => "com4_solicitacompilacaoitens.php");    
      $clcriaabas->title      = array("registro" => "Estimativa","itens"=>"Itens");//nome do iframe e o label    
      $clcriaabas->sizecampo  = array("registro" => "20","itens"=>"20");

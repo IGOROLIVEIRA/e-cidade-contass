@@ -124,7 +124,7 @@ function js_init() {
   
   if (lAlteracao) {
     $("btnConsultar").observe("click", js_pesquisar);
-    parent.iframe_itens.location.href = "com4_solicitaestimativaitens.php";
+    parent.iframe_itens.location.href = "com4_solicitaestimativaitens.php?alterar=true";
     return true;
   }
 
