@@ -5,13 +5,21 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Models\Builders\LegacyBuilder;
+use Illuminate\Database\Capsule\Manager as DB;
 use Illuminate\Database\Eloquent\Model;
+use LogicException;
 
 class LegacyModel extends Model
 {
     public array $legacy = [];
 
     protected string $builder = LegacyBuilder::class;
+
+    /**
+     * Used to search the nextval
+     * @var string
+     */
+    protected string $sequenceName = '';
 
     public function __get($key)
     {
@@ -67,5 +75,15 @@ class LegacyModel extends Model
         }
 
         return $key;
+    }
+
+    public function getNextval(): int
+    {
+        if (empty($this->sequenceName)) {
+            throw new LogicException('É necessário informar a propriedade sequenceName no model.');
+        }
+        ['acount' => $sequence] = (array)DB::connection()
+            ->selectOne("select nextval('{$this->sequenceName}') as acount");
+        return $sequence;
     }
 }

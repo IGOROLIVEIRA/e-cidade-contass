@@ -90,7 +90,7 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         $cnpj =  $this->getCnpj();
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/itens/$seqitem/resultados";
-        
+
         $method = 'POST';
 
         $chpncp      = curl_init($url);
