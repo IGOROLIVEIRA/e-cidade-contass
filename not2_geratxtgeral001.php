@@ -133,6 +133,14 @@ if (count($clpostgresqlutils->getTableIndexes('debitos')) == 0) {
                 <?php db_input("numero_etiqueta", 8, null, true, "text",1); ?>
             </td>
         </tr>
+        <tr id="paginas" style="display: none">
+            <td>
+                Quantidade de páginas impressas:
+            </td>
+            <td>
+                <?php db_input("quantidade_paginas", 5, null, true, "text",1); ?>
+            </td>
+        </tr>
 	  <tr>
 	    <td>
 	      Quantidade de registros a processar:
@@ -173,9 +181,15 @@ if (count($clpostgresqlutils->getTableIndexes('debitos')) == 0) {
 
         const checkArDigital = document.getElementById('lServArDigital');
         const numeroEtiqueta = document.getElementById('numero_etiqueta');
+        const quantidadePaginas = document.getElementById('quantidade_paginas');
 
         if (checkArDigital.checked && numeroEtiqueta.value === '') {
-            alert('Informe o número inicial da etiqueta!');
+            alert('Informe o número inicial da etiqueta.');
+            return false;
+        }
+
+        if (checkArDigital.checked && quantidadePaginas.value === '') {
+            alert('Informe a Quantidade de páginas impressas por objeto.');
             return false;
         }
 
@@ -198,6 +212,7 @@ if (count($clpostgresqlutils->getTableIndexes('debitos')) == 0) {
         url += '&modelo=' + document.form1.modelo.value;
         url += '&lServArDigital=' + checkArDigital.checked;
         url += '&numeroEtiqueta=' + numeroEtiqueta.value;
+        url += '&quantidadePaginas=' + quantidadePaginas.value;
         url += '&k60_datavenc=' + document.form1.dtvencimento.value;
 
         js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_txt', url, 'Pesquisa', true);
@@ -260,11 +275,14 @@ if (count($clpostgresqlutils->getTableIndexes('debitos')) == 0) {
 
     const handleArDigital = (element) => {
         const trEtiqueta = document.getElementById('etiquetas');
+        const trPaginas = document.getElementById('paginas');
         if (element.checked) {
             trEtiqueta.removeAttribute('style');
+            trPaginas.removeAttribute('style');
             return;
         }
         trEtiqueta.setAttribute('style', 'display: none;');
+        trPaginas.setAttribute('style', 'display: none;');
     }
 
 </script>

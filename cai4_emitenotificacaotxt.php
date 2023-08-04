@@ -27,9 +27,16 @@ db_postmemory($HTTP_POST_VARS);
 $resolveCheckerDigit = new ResolveCheckerDigit();
 $lServicoArDigital = $_GET['lServArDigital'] === 'true';
 $numeroEtiqueta = (int) $_GET['numeroEtiqueta'];
+$quantidadePaginas = (int) $_GET['quantidadePaginas'];
 
 if($lServicoArDigital && empty($numeroEtiqueta)) {
     $sMsg = 'Informe o número inicial da etiqueta.';
+    db_redireciona("db_erros.php?fechar=true&db_erro={$sMsg}");
+    exit;
+}
+
+if($lServicoArDigital && empty($quantidadePaginas)) {
+    $sMsg = 'Informe a Quantidade de páginas impressas por objeto.';
     db_redireciona("db_erros.php?fechar=true&db_erro={$sMsg}");
     exit;
 }
@@ -659,6 +666,7 @@ for($indx=0;$indx < $numrows; $indx++) {
         $notificacao->estadoDestinatario = $z01_uf;
         $notificacao->cepDestino = $z01_cep;
         $notificacao->numeroEtiqueta = $numeroEtiqueta.$digitoVerificador;
+        $notificacao->peso = $quantidadePaginas;
         $notificacoes[] = $notificacao;
     }
 
