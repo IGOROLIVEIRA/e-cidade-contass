@@ -2177,7 +2177,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     //
     // this.js_bloqueiquantidade = function (iLinha,iTipo) {
     //
-    //     if(iTipo == 14) {
+    //     if(iTipo == 1mostraMateriajs_changeTipoAditivo()4) {
     //         document.getElementById('quantidade' + iLinha).disabled = true;
     //         document.getElementById('quantidade' + iLinha).style.backgroundColor = '#DEB887';
     //     }
@@ -2264,6 +2264,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.js_changeTipoAditivo = function () {
+        console.log('ChangeTipoAditivo');
         $('oTextAreaDescricaoAlteracao').addClassName('readonly');
         $('oTextAreaDescricaoAlteracao').readOnly = true;
         $('oTxtDataInicial').readOnly = true;
@@ -2291,6 +2292,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             $('oTxtDataInicial').style.backgroundColor= 'white';
             $('oTxtDataFinal').readOnly = false;
             $('oTxtDataFinal').style.backgroundColor= 'white';
+            console.log('tipo 14');
+            this.handleTypeItems();
+
 
         } else if ($('oCboTipoAditivo').value == 6 || $('oCboTipoAditivo').value == 13 ) {
             $('oTxtDataInicial').readOnly = false;
@@ -2303,6 +2307,55 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }
 
     }
+
+    this.handleTypeItems = () => {
+        let acordo = document.getElementById('oTxtCodigoAcordo').value;
+        this.getAcordo(acordo);
+    }
+
+    this.getAcordo = function (iAcordo) {
+        console.log(iAcordo);
+        var oParam = new Object();
+        oParam.exec = "getItensAditamento";
+        oParam.iAcordo = iAcordo;
+        js_divCarregando('Aguarde, carregando', 'msgBox');
+        var oAjax = new Ajax.Request(
+            "con4_contratos.RPC.php",
+            {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: me.retornoGetAcordo
+            }
+        );
+
+    }
+
+    this.retornoGetAcordo = function (oAjax) {
+
+        js_removeObj('msgBox');
+        var oRetorno = eval("(" + oAjax.responseText + ")");
+        let acordo = document.getElementById('oTxtCodigoAcordo').value;
+        console.log(oRetorno.itens)
+        console.log(me.oGridItens.aRows);
+        let itensGrid = me.oGridItens.aRows;
+        let iQuantidadeItens = itensGrid.length;
+        let retornoItens = oRetorno.itens;
+
+        for (var i = 0; i < iQuantidadeItens; i++) {
+            console.log("primeiro for");
+            let aLinha = itensGrid[i];
+            let codigoGrid = aLinha.aCells[2].getValue();
+            for (var j = 0; j < retornoItens.length; j++) {
+                console.log("segundo for");
+                console.log(retornoItens[j].ac20_pcmater);
+                console.log(codigoGrid);
+                if (retornoItens[j].ac20_pcmater == codigoGrid) {
+                    console.log("chegou dentro dos dois for")
+                }
+            }
+         }
+    }
+
 
     this.removeItens = () => {
       let listaItens = me.oGridItens.aRows;

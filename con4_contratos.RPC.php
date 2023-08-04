@@ -68,6 +68,7 @@ require_once("model/contrato/AcordoItemTipoCalculoFactory.model.php");
 require_once("classes/db_credenciamentotermo_classe.php");
 require_once("model/contrato/PNCP/ContratoPNCP.model.php");
 require_once("classes/db_acocontratopncp_classe.php");
+require_once("classes/db_acordoitem_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 
@@ -515,7 +516,7 @@ switch ($oParam->exec) {
         break;
 
     case "verificaCredenciamentoTermo":
-        
+
         $clcredenciamentotermo = new cl_credenciamentotermo;
         $rsLicitacao           = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,'*',null,"l212_licitacao = {$oParam->iLicitacao}"));
         db_fieldsmemory($rsLicitacao, 0)->l212_sequencial;
@@ -1340,7 +1341,7 @@ switch ($oParam->exec) {
     case "getItensOrigem":
 
         if (isset($_SESSION["oContrato"]) && $_SESSION["oContrato"] instanceof Acordo) {
-            
+
             $oContrato = $_SESSION["oContrato"];
 
             $oDataInicialAcordo        = new DBDate($oContrato->getDataInicial());
@@ -1359,13 +1360,13 @@ switch ($oParam->exec) {
             }
 
             $iTipocompraTribunal = $oContrato->getTipoCompraTribunal($oContrato->getLicitacao());
-            
+
             if ($oContrato->getOrigem() == 2) {
 
                 if ($iTipocompraTribunal == "103" || $iTipocompraTribunal == "102") {
                     $aItens = licitacao::getItensPorFornecedorCredenciamento($oContrato->getContratado()->getCodigo(), $oContrato->getLicitacao());
                 } else {
-                    $aItens = licitacao::getItensPorFornecedor($oContrato->getLicitacao(), $oContrato->getContratado()->getCodigo(), 0);  
+                    $aItens = licitacao::getItensPorFornecedor($oContrato->getLicitacao(), $oContrato->getContratado()->getCodigo(), 0);
                 }
             } else {
 
@@ -1458,10 +1459,10 @@ switch ($oParam->exec) {
                                     pc81_solicitem = pc16_solicitem
                                 where
                                     l20_codigo = {$iLicitacao} and pc16_codmater = {$oItem->codigomaterial};");
-            
+
                                 $oDaoLicitemlote = db_utils::fieldsMemory($rsLiclicitemlite, 0);
 
-                                    
+
                                     throw new Exception("Usuário: o lote {$oDaoLicitemlote->l04_descricao} da licitação {$iLicitacao} não possuí obra cadastrada!");
                                 }
                             }
@@ -1523,7 +1524,7 @@ switch ($oParam->exec) {
                 $oPosicao->removerItem($oParam->material->iCodigo);
 
                 $oContrato->atualizaValorContratoPorTotalItens();
-                
+
 
                 db_fim_transacao(false);
             } catch (Exception $eErro) {
@@ -1694,7 +1695,7 @@ switch ($oParam->exec) {
         try {
 
             if (!isset($oParam->iAcordo) || empty($oParam->iAcordo)) {
-                throw new ParameterException(_M($sCaminhoMensagens . 'acordo_nao_informado')); 
+                throw new ParameterException(_M($sCaminhoMensagens . 'acordo_nao_informado'));
             }
 
             db_inicio_transacao();
@@ -1707,12 +1708,12 @@ switch ($oParam->exec) {
 
                 $result = $clempelemento->sql_record($clempelemento->sql_query($e100_numemp,null,"*","e64_codele"));
                 db_fieldsmemory($result,0);
-            
+
                 if($e64_vlremp!=$e64_vlranu){
-                    throw new ParameterException(('Acordo não pode ser excluido.'));  
+                    throw new ParameterException(('Acordo não pode ser excluido.'));
                 }
             }
-            
+
             $oAcordo = new Acordo($oParam->iAcordo);
             $oAcordo->remover();
 
@@ -1949,6 +1950,19 @@ switch ($oParam->exec) {
             $oRetorno->message = utf8_decode($oErro->getMessage());
             $oRetorno->status  = 2;
         }
+        case 'getItensAditamento':
+            $cl_acordoitem = new cl_acordoitem;
+            $query = $cl_acordoitem->queryGetItensAdimento($oParam->iAcordo);
+            $oResult = $cl_acordoitem->sql_record($query);
+            $aResult = array();
+            if ($cl_acordoitem->numrows > 0) {
+                for ($i = 0; $i < $cl_acordoitem->numrows; $i++) {
+                    $linha = db_utils::fieldsMemory($oResult, $i);
+                    array_push($aResult,$linha);
+                }
+            }
+            $oRetorno->status  = 1;
+            $oRetorno->itens = $aResult;
         break;
 }
 /**
