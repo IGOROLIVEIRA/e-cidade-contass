@@ -65,6 +65,7 @@ db_input('l206_sequencial',10,$Il206_sequencial,true,'hidden',$db_opcao,"")
 	 if (isset($pc20_codorc) && !empty($pc20_codorc)) {
     $sWhere = " pc21_codorc=".@$pc20_codorc;
 	 }
+   $sWhere .= " and pc21_numcgm not in(select l206_fornecedor  from habilitacaoforn where l206_licitacao = $l206_licitacao)";
    $result = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_numcgm,z01_nome","",$sWhere));
 
    db_selectrecord("l206_fornecedor",$result,true,$db_opcao,"","","","","js_verificaforn()");
