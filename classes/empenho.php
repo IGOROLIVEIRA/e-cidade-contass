@@ -89,7 +89,7 @@ class empenho {
     $this->sCamposNota   .= "case when cgmordem.z01_numcgm is not null then cgmordem.z01_numcgm else cgm.z01_numcgm end as z01_numcgm,";
     $this->sCamposNota   .= "case when cgmordem.z01_nome is not null then cgmordem.z01_nome else cgm.z01_nome end as z01_nome,";
     $this->sCamposNota   .= "case when cgmordem.z01_cgccpf is not null then cgmordem.z01_cgccpf else cgm.z01_cgccpf end as z01_cgccpf,";
-    $this->sCamposNota   .= "fc_valorretencaonota(e50_codord) as vlrretencao";
+    $this->sCamposNota   .= "fc_valorretencaonota(e50_codord) as vlrretencao, m72_codordem";
 
   }
   /**
@@ -1464,6 +1464,7 @@ class empenho {
     $sSqlNota .= " LEFT JOIN matordem ON m72_codordem = m51_codordem";
     $sSqlNota .= " LEFT JOIN matordemanu ON m51_codordem = m53_codordem";
     $sSqlNota .= " WHERE e69_numemp = {$iEmpenho} {$sWhere}";
+    $sSqlNota .= " ORDER BY m72_codordem desc";
     $rsNota    = $objNota->sql_record($sSqlNota);
     $this->iNumRowsNotas = $objNota->numrows;
     if ($objNota->numrows > 0) {
@@ -1654,6 +1655,7 @@ class empenho {
                 "e53_vlrpag"  => trim(db_formatar($objNotas->e53_vlrpag,"f")),
                 "vlrretencao" => trim(db_formatar($objNotas->vlrretencao,"f")),
                 "e50_codord"  => $objNotas->e50_codord,
+                "m72_codordem"=> $objNotas->m72_codordem,
                 "sInfoAgenda" => urlencode($sStrNotas),
                 "libera"      => $checked
               );
