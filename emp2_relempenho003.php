@@ -929,7 +929,9 @@ if ($agrupar == 'gest') {
         $GeralTotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
 
 
-        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$objeto->z01_nome;";
+        $z01_cgccpf = strlen($objeto->z01_cgccpf) == 11 ? db_formatar($objeto->z01_cgccpf,'cpf'):db_formatar($objeto->z01_cgccpf,'cnpj');
+
+        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$z01_cgccpf - $objeto->z01_nome;";
         echo "$dotacao - $objeto->dl_estrutural;$objeto->o56_elemento;$EMPENHADO;$ANULADO;$LIQUIDADO;$PAGO;$LIQUIDADO2;$NAOLIQUID;$GERAL;";
         echo "\n";
 
@@ -1099,7 +1101,9 @@ if ($agrupar == 'oo') {
         $GeralTotalNaoLiquidado += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
         $GeralTotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
 
-        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$objeto->z01_nome;";
+        $z01_cgccpf = strlen($objeto->z01_cgccpf) == 11 ? db_formatar($objeto->z01_cgccpf,'cpf'):db_formatar($objeto->z01_cgccpf,'cnpj');
+
+        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$z01_cgccpf - $objeto->z01_nome;";
         echo "$dotacao - $objeto->dl_estrutural;$objeto->o56_elemento;$EMPENHADO;$ANULADO;$LIQUIDADO;$PAGO;$LIQUIDADO2;$NAOLIQUID;$GERAL;";
         echo "\n";
 
@@ -1564,8 +1568,9 @@ if ($agrupar == 'orgao') {
         $GeralTotalNaoLiquidado += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
         $GeralTotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
 
+        $z01_cgccpf = strlen($objeto->z01_cgccpf) == 11 ? db_formatar($objeto->z01_cgccpf,'cpf'):db_formatar($objeto->z01_cgccpf,'cnpj');
 
-        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$objeto->z01_nome;";
+        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$z01_cgccpf - $objeto->z01_nome;";
         echo "$dotacao - $objeto->dl_estrutural;$objeto->o56_elemento;$EMPENHADO;$ANULADO;$LIQUIDADO;$PAGO;$LIQUIDADO2;$NAOLIQUID;$GERAL;";
         echo "\n";
 
@@ -1756,8 +1761,9 @@ if ($agrupar == 'r') {
         $GeralTotalNaoLiquidado += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
         $GeralTotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
 
+        $z01_cgccpf = strlen($objeto->z01_cgccpf) == 11 ? db_formatar($objeto->z01_cgccpf,'cpf'):db_formatar($objeto->z01_cgccpf,'cnpj');
 
-        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$objeto->z01_nome;";
+        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$z01_cgccpf - $objeto->z01_nome;";
         echo "$dotacao - $objeto->dl_estrutural;$objeto->o56_elemento;$EMPENHADO;$ANULADO;$LIQUIDADO;$PAGO;$LIQUIDADO2;$NAOLIQUID;$GERAL;";
         echo "\n";
 
@@ -2180,8 +2186,9 @@ if ($agrupar == 'd') {
             $GeralTotalNaoLiquidado += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
             $GeralTotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
 
+            $z01_cgccpf = strlen($objeto->z01_cgccpf) == 11 ? db_formatar($objeto->z01_cgccpf,'cpf'):db_formatar($objeto->z01_cgccpf,'cnpj');
 
-            echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$objeto->z01_nome;";
+            echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$z01_cgccpf - $objeto->z01_nome;";
             echo "$dotacao - $objeto->dl_estrutural;$objeto->o56_elemento;$EMPENHADO;$ANULADO;$LIQUIDADO;$PAGO;$LIQUIDADO2;$NAOLIQUID;$GERAL;";
             echo "\n";
 
@@ -2371,8 +2378,9 @@ if ($agrupar == 'ta') {
         $GeralTotalNaoLiquidado += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
         $GeralTotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
 
+        $z01_cgccpf = strlen($objeto->z01_cgccpf) == 11 ? db_formatar($objeto->z01_cgccpf,'cpf'):db_formatar($objeto->z01_cgccpf,'cnpj');
 
-        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$objeto->z01_nome";
+        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$z01_cgccpf - $objeto->z01_nome";
         echo "$dotacao - $objeto->dl_estrutural;$objeto->o56_elemento;$EMPENHADO;$ANULADO;$LIQUIDADO;$PAGO;$LIQUIDADO2;$NAOLIQUID;$GERAL;";
         echo "\n";
 
@@ -2563,8 +2571,9 @@ if ($agrupar == 'do') {
         $GeralTotalNaoLiquidado += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
         $GeralTotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
 
+        $z01_cgccpf = strlen($objeto->z01_cgccpf) == 11 ? db_formatar($objeto->z01_cgccpf,'cpf'):db_formatar($objeto->z01_cgccpf,'cnpj');
 
-        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$objeto->z01_nome;";
+        echo "$objeto->pc50_descr;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$z01_cgccpf - $objeto->z01_nome;";
         echo "$dotacao - $objeto->dl_estrutural;$objeto->o56_elemento;$EMPENHADO;$ANULADO;$LIQUIDADO;$PAGO;$LIQUIDADO2;$NAOLIQUID;$GERAL;";
         echo "\n";
 
@@ -2753,8 +2762,10 @@ if ($agrupar == "c") {
         $GeralTotalLiquidado2   += $objeto->e60_vlrliq - $objeto->e60_vlrpag;
         $GeralTotalNaoLiquidado += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrliq;
         $GeralTotalGeral        += $objeto->e60_vlremp - $objeto->e60_vlranu - $objeto->e60_vlrpag;
+        
+        $z01_cgccpf = strlen($objeto->z01_cgccpf) == 11 ? db_formatar($objeto->z01_cgccpf,'cpf'):db_formatar($objeto->z01_cgccpf,'cnpj');
 
-        echo "$objeto->ac16_sequencial - $objeto->ac16_numero - $objeto->ac16_resumoobjeto;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$objeto->z01_nome;";
+        echo "$objeto->ac16_sequencial - $objeto->ac16_numero - $objeto->ac16_resumoobjeto;$objeto->e60_numerol;$objeto->e60_codemp;$objeto->e60_emiss;$z01_cgccpf - $objeto->z01_nome;";
         echo "$dotacao - $objeto->dl_estrutural;$objeto->o56_elemento;$EMPENHADO;$ANULADO;$LIQUIDADO;$PAGO;$LIQUIDADO2;$NAOLIQUID;$GERAL;";
         echo "\n";
         

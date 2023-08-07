@@ -101,7 +101,7 @@ class cl_veiculos
                  ve01_veictipoabast = int4 = Tipo de Abastecimento
                  ve01_medidaini = float8 = Medida Inicial
                  ve01_nroserie = varchar(20) = Nº de Série
-                 ve01_codigoant = integer = Codigo anterior do veiculo;
+                 ve01_codigoant = varchar(10) = Codigo anterior do veiculo;
                  ve01_codunidadesub = varchar(8) = Codigo da unidade anterior do veiculo;
                  ve01_instit = varchar(8) = Instituiçao;
                  ";
@@ -470,7 +470,7 @@ class cl_veiculos
                                ,$this->ve01_veictipoabast
                                ,$this->ve01_medidaini
                                ,'$this->ve01_nroserie'
-                               ," . ($this->ve01_codigoant == null ? 'null' : $this->ve01_codigoant) . "
+                               ," . ($this->ve01_codigoant == "null" || $this->ve01_codigoant == "" ? "null" : "'" . $this->ve01_codigoant . "'") . "
                                ,'" . ($this->ve01_codunidadesub == null ? '' : $this->ve01_codunidadesub) . "'
                                ," . ($this->vei01_instit == null || $this->vei01_instit == '' ? db_getsession("DB_instit") : $this->vei01_instit) . "
                       )";
@@ -867,7 +867,7 @@ class cl_veiculos
       }
     }
     if (trim($this->ve01_codigoant) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codigoant"])) {
-      $sql  .= $virgula . " ve01_codigoant = " . ($this->ve01_codigoant == 0 || $this->ve01_codigoant == null ? 'null' : $this->ve01_codigoant) . " ";
+      $sql  .= $virgula . " ve01_codigoant = '" . ($this->ve01_codigoant == '' ? null : $this->ve01_codigoant) . "' ";
       $virgula = ",";
     }
     if (trim($this->ve01_codunidadesub) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ve01_codunidadesub"])) {
