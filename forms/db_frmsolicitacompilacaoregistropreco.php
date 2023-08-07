@@ -158,6 +158,7 @@ js_preenche(aberturaPreco,null);
 }
 
 js_init();
+
 function js_salvarEstimativa() {
 
   /**

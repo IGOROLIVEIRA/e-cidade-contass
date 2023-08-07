@@ -162,6 +162,7 @@ db_app::load("widgets/windowAux.widget.js");
         <td style="text-align: center;">
           <input type='button' value='Processar' disabled id='btnProcessar'>
           <input type='button' value='Pesquisar' id='btnConsultar'>
+          <input style="display: none;" type='button' value='Incluir Orçamento'  id='btnIncluirOrcamento' onclick="js_incluirOrcamento()">
         </td>
       </tr>
     </table>
@@ -361,7 +362,9 @@ function js_processarCompilacao() {
     oParam.iSolicitacao = $F('pc10_numero');
     oParam.tipo         = 6;
     oParam.criterioadj  = $F('pc80_criterioadjudicacao');
-    db_iframe_solicita.hide();
+    if(typeof db_iframe_solicita !== "undefined"){
+      db_iframe_solicita.hide();
+    }
     var oAjax           = new Ajax.Request(sUrlRC,
                                          {
                                           method: "post",
@@ -373,16 +376,20 @@ function js_processarCompilacao() {
 
 }
 
+var processodecompra = '';
+
 function js_retornoProcessarCompilacao(oAjax) {
 
   js_removeObj("msgBox");
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 1) {
-
-   alert('Compilacao Processada com sucesso!\nProcesso de Compras Gerado: '+oRetorno.iProcessoCompras);
-  } else {
-    alert(oRetorno.message.urlDecode());
-  }
+    document.getElementById("btnIncluirOrcamento").style.display = '';
+    processodecompra = oRetorno.iProcessoCompras;
+    return alert('Compilacao Processada com sucesso!\nProcesso de Compras Gerado: '+oRetorno.iProcessoCompras);
+  } 
+  
+  return alert(oRetorno.message.urlDecode());
+  
 }
 function js_limpar() {
 
@@ -393,6 +400,11 @@ function js_limpar() {
   $('pc54_datainicio').value = '';
   oGridItens.clearAll(true);
 }
+
+function js_incluirOrcamento(){
+    top.corpo.document.location.href='com1_processo001.php?pc80_codproc='+processodecompra;
+}
+
 $('btnConsultar').observe('click', js_pesquisar);
 $('btnProcessar').observe('click', js_processarCompilacao);
 $('btnVisualizarItens').observe('click', js_showItens);

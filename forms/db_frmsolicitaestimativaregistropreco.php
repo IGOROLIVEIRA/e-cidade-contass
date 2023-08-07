@@ -256,8 +256,10 @@ function js_preenche(solicita) {
 
   $('btnSalvar').disabled  = true;
   $('pc54_solicita').value = solicita;
-  js_validarEstimativaDepto(solicita)
-  db_iframe_registropreco.hide();
+  js_validarEstimativaDepto(solicita);
+  if(typeof db_iframe_registropreco != 'undefined'){
+    db_iframe_registropreco.hide();
+  }
 }
 
 function js_validarEstimativaDepto(iSolicita) {
