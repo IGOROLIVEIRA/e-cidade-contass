@@ -283,6 +283,14 @@ function js_retornodebitosemaberto(oAjax) {
   var iParamFornecDeb         = new Number(oRetorno.iParamFornecDeb);
   var iDebitosEmAberto        = new Number(oRetorno.iDebitosEmAberto);
   var lParamGerarNotifDebitos = oRetorno.lParamGerarNotifDebitos;
+  var iValidaNaturezaJurifica = oRetorno.ErroNaturezajuridicaCNPJ;
+
+  if(iValidaNaturezaJurifica === true){
+     alert("No cadastro do CGM deverá ser selecionada a NATUREZA JURIDICA correta para o fornecedor selecionado.");
+      $('pc21_numcgm').value = '';
+      $('z01_nome').value    = '';
+    return
+  }
 
   if (iParamFornecDeb == 1) {
 

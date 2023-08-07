@@ -204,6 +204,17 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                             </tr>
                             <tr>
                                 <td>
+                                    <strong>Natureza Juridica:</strong>
+                                </td>
+                                <td>
+                                    <?php
+                                        $rsNaturezajuridica = db_query("select n1_codigo,n1_descricao from naturezajurifica where n1_codigo='0000'");
+                                        db_selectrecord('z01_naturezajuridica', $rsNaturezajuridica, true, 1, '', '', '', '', '', 2);
+                                    ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
                                     <?= @$Lz01_identorgao ?>
                                 </td>
                                 <td align="left">
@@ -639,6 +650,18 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                                     ?>
                                 </td>
 
+                            </tr>
+                            <tr>
+                                <td>
+                                    <strong>Natureza Juridica:</strong>
+                                </td>
+                                <td>
+
+                                    <?php
+                                        $rsNaturezajuridica = db_query("select n1_codigo,n1_descricao from naturezajurifica where n1_codigo not in ('0000','8885')");
+                                        db_selectrecord('z01_naturezajuridica', $rsNaturezajuridica, true, $db_opcao, '', '', '', true, '', 2);
+                                    ?>
+                                </td>
                             </tr>
                             <tr>
                                 <td nowrap title=<?= @$Tz01_nome ?>>
@@ -1571,6 +1594,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                 var oPessoa = new Object();
                 oPessoa.z01_numcgm = $F('z01_numcgm').trim();
                 oPessoa.z01_cgccpf = $F('z01_cpf');
+                oPessoa.z01_naturezajuridica = $F('z01_naturezajuridica');
                 oPessoa.z01_ident = $F('z01_ident');
                 oPessoa.z01_nome = tagString($F('z01_nome'));
                 oPessoa.z01_nomecomple = tagString($F('z01_nome'));
@@ -1646,6 +1670,7 @@ $rsTipoEmpresa   = $cltipoempresa->sql_record($sSqlTipoEmpresa);
                 var oPessoa = new Object();
                 oPessoa.z01_numcgm = $F('z01_numcgm').trim();
                 oPessoa.z01_cgccpf = $F('z01_cgc');
+                oPessoa.z01_naturezajuridica = $F('z01_naturezajuridica');
                 oPessoa.z01_nome = tagString($F('z01_nome'));
                 oPessoa.z01_contato = tagString($F('z01_contato'));
                 oPessoa.z01_incest = $F('z01_incest');

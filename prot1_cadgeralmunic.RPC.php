@@ -353,6 +353,7 @@ switch ($oParam->exec) {
                 $oCgm->setCodigo($oParam->pessoa->z01_numcgm);
                 $oCgm->setCpf($oParam->pessoa->z01_cgccpf);
                 $oCgm->setIdentidade($oParam->pessoa->z01_ident);
+                $oCgm->setNaturezaJuridica($oParam->pessoa->z01_naturezajuridica);
                 $oCgm->setNome(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_nome)));
                 $oCgm->setNomeCompleto(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_nome)));
                 $oCgm->setNomePai(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_pai)));
@@ -563,6 +564,7 @@ switch ($oParam->exec) {
 
                 $oCgm->setCodigo($oParam->pessoa->z01_numcgm);
                 $oCgm->setCnpj($oParam->pessoa->z01_cgccpf);
+                $oCgm->setNaturezaJuridica($oParam->pessoa->z01_naturezajuridica);
                 $oCgm->setNome(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_nome)));
                 $oCgm->setNomeCompleto(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_nomecomple)));
                 $oCgm->setNomeFantasia(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_nomefanta)));
