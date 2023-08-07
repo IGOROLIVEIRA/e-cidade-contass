@@ -81,6 +81,18 @@ $styleCabecalho = array(
     ),
 );
 
+$styleCelulas = array(
+  'borders' => array(
+      'allborders' => array(
+          'style' => PHPExcel_Style_Border::BORDER_THIN,
+          'color' => array('argb' => 'FF000000'),
+      ),
+  ),
+  'alignment' => array(
+      'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+  ),
+);
+
 // Create new PHPExcel object
 $objPHPExcel = new PHPExcel();
 
@@ -89,12 +101,12 @@ $objPHPExcel = new PHPExcel();
 $objPHPExcel->setActiveSheetIndex(0);
 $sheet = $objPHPExcel->getActiveSheet();
 $sheet->setCellValue('A1', 'Material');
-$sheet->setCellValue('B1', 'Descricao do Material');
+$sheet->setCellValue('B1', mb_convert_encoding("Descrição do Material",'UTF-8'));
 $sheet->setCellValue('C1', 'Depto Origem');
 $sheet->setCellValue('D1', 'Depto Destino');
-$sheet->setCellValue('E1', 'Lancamento');
+$sheet->setCellValue('E1', mb_convert_encoding("Lançamento",'UTF-8'));
 $sheet->setCellValue('F1', 'Data');
-$sheet->setCellValue('G1', 'Preco Medio');
+$sheet->setCellValue('G1', mb_convert_encoding("Preço Médio",'UTF-8'));
 $sheet->setCellValue('H1', 'Quantidade');
 $sheet->setCellValue('I1', 'Valor Total');
 
@@ -118,6 +130,9 @@ $objPHPExcel->getActiveSheet()
         PHPExcel_Style_Protection::PROTECTION_UNPROTECTED
     );
 
+    $sheet->getStyle('A2:I2000')->applyFromArray($styleCelulas);
+
+
 // Rename sheet
 $objPHPExcel->getActiveSheet()->setTitle('Entrada de materiais');
 $i = 0;
@@ -136,8 +151,8 @@ foreach ($aLinhas as $oLinha) {
     $celulaI = "I" . ($numcell + 1);
 
     $sheet->setCellValue($celulaA, substr($oLinha->m70_codmatmater, 0, 40));
-    $sheet->setCellValue($celulaB, $oLinha->m60_descr);
-    $sheet->setCellValue($celulaC, substr($oLinha->m70_coddepto." - ".$oLinha->descrdepto, 0, 25));
+    $sheet->setCellValue($celulaB, mb_convert_encoding($oLinha->m60_descr,'UTF-8'));
+    $sheet->setCellValue($celulaC, substr($oLinha->m70_coddepto." - ".mb_convert_encoding($oLinha->descrdepto,'UTF-8'), 0, 25));
     $iDeptoDestino = $oLinha->m40_depto;
     if ($oLinha->m83_coddepto != "") {
       $iDeptoDestino = $oLinha->m83_coddepto;
@@ -151,7 +166,8 @@ foreach ($aLinhas as $oLinha) {
       $rsDeptoDestino   = db_query($sSqlDeptoDestino);
       $iDeptoDestino    = "{$iDeptoDestino} - ".db_utils::fieldsMemory($rsDeptoDestino, 0)->descrdepto;
     }
-    $sheet->setCellValue($celulaD, substr($iDeptoDestino, 0, 24));
+    if($iDeptoDestino == "") $iDeptoDestino = " ";
+    $sheet->setCellValue($celulaD, substr(mb_convert_encoding($iDeptoDestino,'UTF-8'), 0, 24));
 
     $iCodigoLancamento = $oLinha->m41_codmatrequi;
     if ($oLinha->m41_codmatrequi == "") {
@@ -164,7 +180,7 @@ foreach ($aLinhas as $oLinha) {
     $sheet->setCellValue($celulaF, db_formatar($oLinha->m80_data, "d"));
     $sheet->setCellValue($celulaG, number_format($oLinha->precomedio, $iParametroNumeroDecimal));
     $sheet->setCellValue($celulaH, $oLinha->qtde);
-    $sheet->setCellValue($celulaH, db_formatar($oLinha->m89_valorfinanceiro, 'f'));
+    $sheet->setCellValue($celulaI, db_formatar($oLinha->m89_valorfinanceiro, 'f'));
 
     $numcell++;
 

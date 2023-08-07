@@ -97,7 +97,7 @@ foreach ($aLinhas as $oLinha) {
 
     $pdf->AddPage();
     $pdf->setfont('arial', 'b', 8);
-    $pdf->Cell(15, $iAlt, "Material","RTB", 0, "C", 1);
+    $pdf->Cell(15, $iAlt, "Material",1, 0, "C", 1);
     $pdf->Cell(75, $iAlt, "Descrição do Material", 1, 0, "C", 1);
     $pdf->Cell(32, $iAlt, "Depto Origem", 1, 0, "C", 1);
     $pdf->Cell(32, $iAlt, "Depto Destino", 1, 0, "C", 1);
@@ -105,19 +105,20 @@ foreach ($aLinhas as $oLinha) {
     $pdf->Cell(18, $iAlt, "Data", 1, 0, "C", 1);
     $pdf->Cell(18, $iAlt, "Preço Médio", 1, 0, "C", 1);
     $pdf->Cell(20, $iAlt, "Quantidade", 1, 0, "C", 1);
-    $pdf->Cell(20, $iAlt, "Valor Total", "LTB", 1, "C", 1);
+    $pdf->Cell(20, $iAlt, "Valor Total", 1, 1, "C", 1);
     $lEscreveHeader = false;
     $pdf->setfont('arial', '', 6);
   }
-  $iAltLinha = $pdf->NbLines(75, $oLinha->m60_descr);
+  $iAltLinha = $pdf->NbLines(75, mb_strtoupper($oLinha->m60_descr,'ISO-8859-1'));
   $iAltLinha = $iAltLinha * $iAlt;
-  $pdf->Cell(15, $iAltLinha, substr($oLinha->m70_codmatmater, 0, 40), "RTB", 0, "R");
+  
+  $pdf->Cell(15, $iAltLinha, substr($oLinha->m70_codmatmater, 0, 40), 1, 0, "C");
   $y =  $pdf->GetY();
   $x =  $pdf->GetX();
-  $pdf->MultiCell(75, $iAlt, $oLinha->m60_descr, 1, "L", 2);
+  $pdf->MultiCell(75, $iAlt, mb_strtoupper($oLinha->m60_descr,'ISO-8859-1'), 1, "C", 2);
   $pdf->SetY($y);
   $pdf->SetX(100);
-  $pdf->Cell(32, $iAltLinha, substr($oLinha->m70_coddepto." - ".$oLinha->descrdepto, 0, 25), 1, 0, "L");
+  $pdf->Cell(32, $iAltLinha, substr($oLinha->m70_coddepto." - ".$oLinha->descrdepto, 0, 25), 1, 0, "C");
   $iDeptoDestino = $oLinha->m40_depto;
   if ($oLinha->m83_coddepto != "") {
     $iDeptoDestino = $oLinha->m83_coddepto;
@@ -131,7 +132,7 @@ foreach ($aLinhas as $oLinha) {
     $rsDeptoDestino   = db_query($sSqlDeptoDestino);
     $iDeptoDestino    = "{$iDeptoDestino} - ".db_utils::fieldsMemory($rsDeptoDestino, 0)->descrdepto;
   }
-  $pdf->Cell(32, $iAltLinha, substr($iDeptoDestino, 0, 24), 1, 0, "L");
+  $pdf->Cell(32, $iAltLinha, substr($iDeptoDestino, 0, 24), 1, 0, "C");
   $iCodigoLancamento = $oLinha->m41_codmatrequi;
   if ($oLinha->m41_codmatrequi == "") {
     $iCodigoLancamento = "$oLinha->m80_codigo";
@@ -139,17 +140,17 @@ foreach ($aLinhas as $oLinha) {
   if($oLinha->m80_codtipo == 12){
     $iCodigoLancamento = "$oLinha->m52_codordem";
   }
-  $pdf->Cell(50, $iAltLinha, substr($oLinha->m81_descr,0,30 )."(".$iCodigoLancamento.")", 1, 0, "L");
+  $pdf->Cell(50, $iAltLinha, substr($oLinha->m81_descr,0,30 )."(".$iCodigoLancamento.")", 1, 0, "C");
   $pdf->Cell(18, $iAltLinha, db_formatar($oLinha->m80_data, "d"), 1, 0, "C");
-  $pdf->Cell(18, $iAltLinha, number_format($oLinha->precomedio, $iParametroNumeroDecimal), 1, 0, "R");
-  $pdf->Cell(20, $iAltLinha, $oLinha->qtde, 1, 0, "R");
-  $pdf->Cell(20, $iAltLinha, db_formatar($oLinha->m89_valorfinanceiro, 'f'), "LTB", 1, "R");
+  $pdf->Cell(18, $iAltLinha, number_format($oLinha->precomedio, $iParametroNumeroDecimal), 1, 0, "C");
+  $pdf->Cell(20, $iAltLinha, $oLinha->qtde, 1, 0, "C");
+  $pdf->Cell(20, $iAltLinha, db_formatar($oLinha->m89_valorfinanceiro, 'f'), 1, 1, "C");
   $nValorTotal += $oLinha->m89_valorfinanceiro;
   $nTotalItens += $oLinha->qtde;
 }
 $pdf->setfont('arial', 'b', 6);
-$pdf->Cell(240, $iAlt, "Total", "RTB", 0, "R", 1);
-$pdf->Cell(20, $iAlt, $nTotalItens, 1, 0, "R", 1);
-$pdf->Cell(20, $iAlt, db_formatar($nValorTotal, "f"), "LTB", 1, "R", 1);
+$pdf->Cell(240, $iAlt, "Total", "RTB", 0, "C", 1);
+$pdf->Cell(20, $iAlt, $nTotalItens, 1, 0, "C", 1);
+$pdf->Cell(20, $iAlt, db_formatar($nValorTotal, "f"), "LTB", 1, "C", 1);
 $pdf->Output();
 ?>
