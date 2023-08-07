@@ -45,11 +45,15 @@ class cl_orcsuplementacaoparametro {
    var $o134_anousu = 0; 
    var $o134_percentuallimiteloa = 0; 
    var $o134_orcamentoaprovado = '';
+   var $o134_superavitloa = '';
+   var $o134_excessoarrecad = '';
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  o134_anousu = int4 = Ano do Parâmetro 
                  o134_percentuallimiteloa = float8 = Percentual para Limite de Loa 
                  o134_orcamentoaprovado = boolean = Orçamento Aprovado
+                 o134_superavitloa  = boolean = Considerar o Superávit no limite da Loa
+                 o134_excessoarrecad = boolean = Considerar Excesso de Arrecadação no limite da Loa
                  ";
    //funcao construtor da classe 
    function cl_orcsuplementacaoparametro() { 
@@ -72,7 +76,9 @@ class cl_orcsuplementacaoparametro {
        $this->o134_anousu = ($this->o134_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["o134_anousu"]:$this->o134_anousu);
        $this->o134_percentuallimiteloa = ($this->o134_percentuallimiteloa == ""?@$GLOBALS["HTTP_POST_VARS"]["o134_percentuallimiteloa"]:$this->o134_percentuallimiteloa);
        $this->o134_orcamentoaprovado = ($this->o134_orcamentoaprovado == ""?@$GLOBALS["HTTP_POST_VARS"]["o134_orcamentoaprovado"]:$this->o134_orcamentoaprovado);
-      }else{
+       $this->o134_superavitloa = ($this->o134_superavitloa == ""?@$GLOBALS["HTTP_POST_VARS"]["o134_superavitloa"]:$this->o134_superavitloa); 
+       $this->o134_excessoarrecad = ($this->o134_excessoarrecad == ""?@$GLOBALS["HTTP_POST_VARS"]["o134_excessoarrecad"]:$this->o134_excessoarrecad); 
+       }else{
        $this->o134_anousu = ($this->o134_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["o134_anousu"]:$this->o134_anousu);
      }
    }
@@ -110,13 +116,17 @@ class cl_orcsuplementacaoparametro {
                                        o134_anousu 
                                       ,o134_percentuallimiteloa
                                       ,o134_orcamentoaprovado 
+                                      ,o134_superavitloa,
+                                      o134_excessoarrecad
                        )
                 values (
                                 $this->o134_anousu 
                                ,$this->o134_percentuallimiteloa 
                                ,'$this->o134_orcamentoaprovado'
+                               ,'$this->o134_superavitloa'
+                               ,'$this->o134_excessoarrecad'
                       )";
-     $result = db_query($sql); 
+     $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
@@ -149,7 +159,9 @@ class cl_orcsuplementacaoparametro {
        $resac = db_query("insert into db_acount values($acount,3118,17658,'','".AddSlashes(pg_result($resaco,0,'o134_anousu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,3118,17659,'','".AddSlashes(pg_result($resaco,0,'o134_percentuallimiteloa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,3118,17660,'','".AddSlashes(pg_result($resaco,0,'o134_orcamentoaprovado'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");    
-        }
+       $resac = db_query("insert into db_acount values($acount,3118,17661,'','".AddSlashes(pg_result($resaco,0,'o134_superavitloa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");    
+       $resac = db_query("insert into db_acount values($acount,3118,17662,'','".AddSlashes(pg_result($resaco,0,'o134_excessoarrecad'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");    
+    } 
      return true;
    } 
    // funcao para alteracao
@@ -196,6 +208,14 @@ class cl_orcsuplementacaoparametro {
           return false;
         }
      }
+     if(trim($this->o134_superavitloa)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o134_superavitloa"])){ 
+      $sql  .= $virgula." o134_superavitloa = '$this->o134_superavitloa' ";
+      $virgula = ",";
+     }  
+     if(trim($this->o134_excessoarrecad)!="" || isset($GLOBALS["HTTP_POST_VARS"]["o134_excessoarrecad"])){ 
+      $sql  .= $virgula." o134_excessoarrecad = '$this->o134_excessoarrecad' ";
+      $virgula = ",";
+     }
      $sql .= " where ";
      if($o134_anousu!=null){
        $sql .= " o134_anousu = $this->o134_anousu";
@@ -213,7 +233,11 @@ class cl_orcsuplementacaoparametro {
            $resac = db_query("insert into db_acount values($acount,3118,17659,'".AddSlashes(pg_result($resaco,$conresaco,'o134_percentuallimiteloa'))."','$this->o134_percentuallimiteloa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["o134_orcamentoaprovado"]) || $this->o134_orcamentoaprovado != "")
            $resac = db_query("insert into db_acount values($acount,3118,17660,'".AddSlashes(pg_result($resaco,$conresaco,'o134_orcamentoaprovado'))."','$this->o134_orcamentoaprovado',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-          }
+         if(isset($GLOBALS["HTTP_POST_VARS"]["o134_superavitloa"]) || $this->o134_superavitloa != "")
+           $resac = db_query("insert into db_acount values($acount,3118,17661,'".AddSlashes(pg_result($resaco,$conresaco,'o134_superavitloa'))."','$this->o134_superavitloa',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["o134_superavitloa"]) || $this->o134_superavitloa != "")
+           $resac = db_query("insert into db_acount values($acount,3118,17662,'".AddSlashes(pg_result($resaco,$conresaco,'o134_excessoarrecad'))."','$this->o134_excessoarrecad',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          } 
      }
      $result = db_query($sql);
      if($result==false){ 
@@ -263,7 +287,9 @@ class cl_orcsuplementacaoparametro {
          $resac = db_query("insert into db_acount values($acount,3118,17658,'','".AddSlashes(pg_result($resaco,$iresaco,'o134_anousu'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,3118,17659,'','".AddSlashes(pg_result($resaco,$iresaco,'o134_percentuallimiteloa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,3118,17660,'','".AddSlashes(pg_result($resaco,$iresaco,'o134_orcamentoaprovado'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-        }
+         $resac = db_query("insert into db_acount values($acount,3118,17661,'','".AddSlashes(pg_result($resaco,$iresaco,'o134_superavitloa'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3118,17662,'','".AddSlashes(pg_result($resaco,$iresaco,'o134_excessoarrecad'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      } 
      }
      $sql = " delete from orcsuplementacaoparametro
                     where ";
