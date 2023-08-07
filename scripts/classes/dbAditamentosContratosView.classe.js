@@ -2313,7 +2313,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         this.getAcordo(acordo);
     }
 
-    this.getAcordo = function (iAcordo) {
+    this.getAcordo = (iAcordo) => {
         console.log(iAcordo);
         var oParam = new Object();
         oParam.exec = "getItensAditamento";
@@ -2330,30 +2330,51 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     }
 
-    this.retornoGetAcordo = function (oAjax) {
-
+    this.retornoGetAcordo =  (oAjax) => {
         js_removeObj('msgBox');
+        const tipoAditivo = $('oCboTipoAditivo').value
         var oRetorno = eval("(" + oAjax.responseText + ")");
-        let acordo = document.getElementById('oTxtCodigoAcordo').value;
-        console.log(oRetorno.itens)
-        console.log(me.oGridItens.aRows);
+
         let itensGrid = me.oGridItens.aRows;
         let iQuantidadeItens = itensGrid.length;
         let retornoItens = oRetorno.itens;
+        let tamanhoRetornoItens = retornoItens.length;
 
         for (var i = 0; i < iQuantidadeItens; i++) {
             console.log("primeiro for");
             let aLinha = itensGrid[i];
             let codigoGrid = aLinha.aCells[2].getValue();
-            for (var j = 0; j < retornoItens.length; j++) {
-                console.log("segundo for");
-                console.log(retornoItens[j].ac20_pcmater);
-                console.log(codigoGrid);
+            let j = 0;
+
+            while( j < tamanhoRetornoItens) {
+
                 if (retornoItens[j].ac20_pcmater == codigoGrid) {
-                    console.log("chegou dentro dos dois for")
+                    console.log("chegou dentro dos dois for");
+                    this.desativaInputValorFinal(aLinha, retornoItens[j], tipoAditivo);
+                    j = tamanhoRetornoItens + j;
                 }
+                j++;
             }
          }
+    }
+
+    this.desativaInputValorFinal = (aLinha, retornoItem, tipoAditivo) => {
+        console.log('dentro do desabiliza input');
+        const tiposAditivo = ['9','10','11','14'];
+        let atributos = `background-color:#DEB887;
+                        pointer-events: none;
+                        touch-action: none;
+                        width:100%`;
+
+        if (tiposAditivo.includes(tipoAditivo)
+        && retornoItem.ac20_servicoquantidade === 'f') {
+            let idCelula = aLinha.aCells[7].getId();
+            const valorFinalDom = document.getElementById(idCelula);
+            const valorFinalInput = valorFinalDom.children;
+
+            valorFinalInput[0].style.cssText = atributos;
+            return;
+        }
     }
 
 
