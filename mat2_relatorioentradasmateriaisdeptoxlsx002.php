@@ -130,7 +130,7 @@ $objPHPExcel->getActiveSheet()
         PHPExcel_Style_Protection::PROTECTION_UNPROTECTED
     );
 
-    $sheet->getStyle('A2:I2000')->applyFromArray($styleCelulas);
+$sheet->getStyle('A2:I2000')->applyFromArray($styleCelulas);
 
 
 // Rename sheet
@@ -176,7 +176,7 @@ foreach ($aLinhas as $oLinha) {
     if($oLinha->m80_codtipo == 12){
       $iCodigoLancamento = "$oLinha->m52_codordem";
     }
-    $sheet->setCellValue($celulaE, substr($oLinha->m81_descr,0,30 )."(".$iCodigoLancamento.")");
+    $sheet->setCellValue($celulaE, substr(mb_convert_encoding($oLinha->m81_descr,'UTF-8'),0,30)."(".$iCodigoLancamento.")");
     $sheet->setCellValue($celulaF, db_formatar($oLinha->m80_data, "d"));
     $sheet->setCellValue($celulaG, number_format($oLinha->precomedio, $iParametroNumeroDecimal));
     $sheet->setCellValue($celulaH, $oLinha->qtde);
@@ -185,6 +185,8 @@ foreach ($aLinhas as $oLinha) {
     $numcell++;
 
 }
+
+$sheet->getStyle('B2:B1000')->getAlignment()->setWrapText(true);
 
 header('Content-Type: application/vnd.ms-excel');
 header("Content-Disposition: attachment;filename=entradasmateriaisdepto.xlsx");
