@@ -82,6 +82,20 @@ $clempempitem			= new cl_empempitem;
 $clempnotaele           = new cl_empnotaele;
 $clempnota           = new cl_empnota;
 
+//Atualiza o campo historico da op
+if(isset($HTTP_POST_VARS['alterar'])){
+    $clempempenho->e60_informacaoop = $HTTP_POST_VARS['e60_informacaoop'];
+    $clempempenho->alterar($e60_numemp);
+    if($HTTP_POST_VARS['historico_alterado'] === 'true'){
+        if(isset($msgCampoAlterado)){
+            $msgCampoAlterado .= " - Histórico da OP\n";
+        }else{
+            $msgCampoAlterado = "\n\nCampos alterados: \n";
+            $msgCampoAlterado .= " - Histórico da OP\n";
+        }
+    }
+}
+
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $db_opcao =  22;
@@ -91,22 +105,238 @@ if(isset($alterar)){
     $sqlerro=false;
     $db_botao = true;
     db_inicio_transacao();
-    /*rotina de incluir  na tabela empempenho*/
+    /*rotina de incluir  na tabela empempenho*/    
+    $data_empenho = str_replace('/','-',$data_empenho);
+    $data_empenho = date('Y-m-d', strtotime($data_empenho));
+    $e60_emiss_ano = date('Y',strtotime($e60_emiss));
+    $e60_emiss_mes = date('m', strtotime($e60_emiss));
 
-    $sSqlConsultaFimPeriodoContabil   = "SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." and c99_instit = ".db_getsession('DB_instit');
-    $rsConsultaFimPeriodoContabil     = db_query($sSqlConsultaFimPeriodoContabil);
-
-    if (pg_num_rows($rsConsultaFimPeriodoContabil) > 0) {
-      
-        $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
-
-        if ($oFimPeriodoContabil->c99_data != '' && db_strtotime($e60_emiss) < db_strtotime($oFimPeriodoContabil->c99_data)) {
-
-            $erro_msg = "Data inferior à data do fim do período contábil.";
+    //Verifica se a data do empenho esta sendo alterada de um ano para outro
+    if ($sqlerro == false){
+        if ($e60_emiss_ano !== $data_empenho_ano){
+            $erro_msg = "Alteração não realizada! Ano inválido.";
             $sqlerro = true;
-
         }
+    }
 
+    //Verifica se o periodo contabil esta encerrado na data do empenho
+    $sSqlConsultaFimPeriodoContabil   = "SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." and c99_instit = ".db_getsession('DB_instit');
+    $rsConsultaFimPeriodoContabil     = db_query($sSqlConsultaFimPeriodoContabil);    
+
+    if($sqlerro == false){
+        if (pg_num_rows($rsConsultaFimPeriodoContabil) > 0) {
+            
+            $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
+            
+            if ($oFimPeriodoContabil->c99_data != '' && 
+            (db_strtotime($e60_emiss) < db_strtotime($oFimPeriodoContabil->c99_data) || 
+            db_strtotime($data_empenho) < db_strtotime($oFimPeriodoContabil->c99_data))) {
+                $erro_msg = "Período contábil encerrado.";
+                $sqlerro = true;
+            }
+            
+        }
+        
+    }
+    
+    //Verifica se é empenho de prestação de contas
+    if($sqlerro == false && isset($e44_tipo)){
+        if($e44_tipo == 4){
+            $erro_msg = "Alteração não realizada! Não é possivel alterar empenhos de prestação de contas.";
+            $sqlerro = true;
+        }
+    }
+
+    //Verifica se a data nova é posterior ao lançamento contabil mais antigo
+    if($sqlerro == false){
+        $sql = "SELECT DISTINCT c70_data, c71_coddoc
+            FROM conlancam 
+            INNER JOIN conlancamval ON c69_codlan = c70_codlan
+            INNER JOIN conlancamdoc ON c71_codlan = c70_codlan  
+            INNER JOIN conhistdoc   ON c71_coddoc = c53_coddoc  
+            INNER JOIN conlancamemp ON c75_codlan = c70_codlan  
+            WHERE c75_numemp = {$e60_numemp} AND c71_coddoc NOT IN (1, 410)
+            ORDER BY c70_data ASC
+            ";
+        $result = db_query($sql);
+        if(pg_num_rows($result) > 0){
+            $result = pg_fetch_assoc($result);
+            if (strtotime($data_empenho) > strtotime($result['c70_data'])){
+                $erro_msg = "Alteração não realizada! Verifique as datas dos lançamentos contábeis.";
+                $sqlerro = true;
+            }
+        }
+    }
+
+    //Verifica se a dotação do empenho tem saldo
+    if ($sqlerro == false){
+        $tipoSaldo = 2; //Saldo do mês
+        if ($data_empenho_mes === $e60_emiss_mes){
+            $tipoSaldo = 3;//Saldo do dia
+        } 
+        $result = db_dotacaosaldo(8,2,$tipoSaldo,true," o58_coddot = $e60_coddot and o58_anousu = $e60_emiss_ano",$e60_emiss_ano,$data_empenho,$data_empenho);
+        $result = pg_fetch_assoc($result);
+        $saldoDotacao = $result['atual_menos_reservado'];            
+        if($saldoDotacao < $e60_vlremp){                
+            $erro_msg = "Alteração não realizada! A dotação não possui saldo nesta data.";
+            $sqlerro = true;
+        }
+    }
+
+    //Altera a data do empenho
+    if($sqlerro == false){
+        if(strtotime($data_empenho) < strtotime(db_getsession("DB_anousu"))){
+            $mesAtual = date('m',db_getsession('DB_datausu'));
+            if ($data_empenho_mes > $e60_emiss_mes){
+                $mesMenor = $e60_emiss_mes;
+            } else {
+                $mesMenor = $data_empenho_mes;
+            }
+            
+            //ALTERAR DATA EMPENHO
+            $sqlAlteraData = "SELECT fc_startsession();
+
+            CREATE TEMP TABLE cod_lan ON COMMIT DROP AS
+            SELECT DISTINCT c75_codlan
+            FROM conlancamemp 
+            JOIN conlancamdoc on c71_codlan = c75_codlan
+            JOIN conhistdoc on c71_coddoc = c53_coddoc
+            WHERE c75_numemp = {$e60_numemp} AND c53_tipo = 10;
+
+            CREATE TEMP TABLE saldo_ctas ON COMMIT DROP AS 
+            SELECT DISTINCT conplanoexesaldo.*, deb.c69_data c69_data 
+            FROM conplanoexesaldo 
+            JOIN conlancamval deb ON (deb.c69_debito, deb.c69_anousu, EXTRACT (MONTH FROM deb.c69_data)::integer) = (c68_reduz, c68_anousu, c68_mes) 
+            WHERE deb.c69_codlan IN (SELECT c75_codlan from cod_lan) 
+            UNION ALL 
+            SELECT DISTINCT conplanoexesaldo.*, cred.c69_data c69_data 
+            FROM conplanoexesaldo 
+            JOIN conlancamval cred ON (cred.c69_credito, cred.c69_anousu, EXTRACT (MONTH FROM cred.c69_data)::integer) = (c68_reduz, c68_anousu, c68_mes)
+            WHERE cred.c69_codlan IN (SELECT c75_codlan from cod_lan);
+
+            CREATE TEMP TABLE alt_emp ON COMMIT DROP AS
+            SELECT e60_numemp AS nro_emp,
+                e60_emiss AS data_emp,
+                e61_autori AS autoriza
+            FROM empempenho
+            INNER JOIN empempaut ON e61_numemp = e60_numemp
+            INNER JOIN conlancamemp ON e60_numemp = c75_numemp
+            WHERE e60_numemp IN ({$e60_numemp})
+            AND c75_codlan IN (SELECT c75_codlan from cod_lan);
+            
+            CREATE TEMP TABLE w_lancamentos ON COMMIT DROP AS
+            SELECT * FROM conlancamval
+            JOIN conlancamdoc ON c71_codlan = c69_codlan
+            WHERE c69_codlan IN
+                (SELECT c75_codlan FROM conlancamemp
+                WHERE c75_numemp IN 
+                    (SELECT nro_emp FROM alt_emp))
+            AND c71_codlan IN (SELECT c75_codlan from cod_lan);
+            
+            ALTER TABLE conlancamval DISABLE TRIGGER ALL;
+            
+            UPDATE conlancamval
+            SET c69_data = '{$data_empenho}'
+            WHERE c69_codlan IN
+                (SELECT c69_codlan FROM w_lancamentos);
+            
+            ALTER TABLE conlancamval ENABLE TRIGGER ALL;
+            
+            UPDATE conlancamemp
+            SET c75_data = '{$data_empenho}'
+            WHERE c75_codlan IN
+                (SELECT c71_codlan FROM w_lancamentos);
+            
+            UPDATE conlancam
+            SET c70_data = '{$data_empenho}'
+            WHERE c70_codlan IN
+                (SELECT c71_codlan FROM w_lancamentos);
+            
+            UPDATE conlancamdot
+            SET c73_data = '{$data_empenho}'
+            WHERE c73_codlan IN
+                (SELECT c71_codlan FROM w_lancamentos);
+            
+            UPDATE conlancamdoc
+            SET c71_data = '{$data_empenho}'
+            WHERE c71_codlan IN
+                (SELECT c71_codlan FROM w_lancamentos);
+
+            UPDATE conlancamcorrente
+            SET c86_data = '{$data_empenho}'
+            WHERE c86_conlancam IN 
+                (SELECT c71_codlan FROM w_lancamentos);
+
+            UPDATE empempenho
+            SET e60_emiss = '{$data_empenho}',
+                e60_vencim = '{$data_empenho}'
+            WHERE e60_numemp IN
+                (SELECT nro_emp FROM alt_emp);
+            
+            UPDATE empautoriza
+            SET e54_emiss = '{$data_empenho}'
+            WHERE e54_autori IN
+                (SELECT autoriza FROM alt_emp);";
+
+            for($i = $mesMenor; $i <= $mesAtual; $i++){
+                $sqlAlteraData .= " DELETE FROM conplanoexesaldo
+                USING saldo_ctas
+                WHERE (saldo_ctas.c68_reduz, saldo_ctas.c68_anousu) = (conplanoexesaldo.c68_reduz, conplanoexesaldo.c68_anousu)
+                AND conplanoexesaldo.c68_mes = {$i};
+
+                CREATE TEMP TABLE landeb".$i." ON COMMIT DROP AS
+                SELECT c69_anousu,
+                    c69_debito,
+                    to_char(conlancamval.c69_data,'MM')::integer,
+                    sum(round(c69_valor,2)),0::float8
+                FROM conlancamval
+                JOIN saldo_ctas ON (saldo_ctas.c68_reduz, saldo_ctas.c68_anousu) = (conlancamval.c69_debito, conlancamval.c69_anousu)
+                WHERE conlancamval.c69_anousu = {$data_empenho_ano}
+                AND EXTRACT (MONTH FROM conlancamval.c69_data)::integer = {$i}
+                GROUP BY conlancamval.c69_anousu, conlancamval.c69_debito, to_char(conlancamval.c69_data,'MM')::integer;
+                
+                CREATE TEMP TABLE lancre".$i." ON COMMIT DROP AS
+                SELECT c69_anousu,
+                    c69_credito,
+                    to_char(conlancamval.c69_data,'MM')::integer as c69_data,
+                    0::float8,
+                    sum(round(c69_valor,2))
+                FROM conlancamval
+                JOIN saldo_ctas ON (saldo_ctas.c68_reduz, saldo_ctas.c68_anousu) = (conlancamval.c69_credito, conlancamval.c69_anousu)
+                WHERE conlancamval.c69_anousu = {$data_empenho_ano}
+                AND EXTRACT (MONTH FROM conlancamval.c69_data)::integer = {$i}
+                GROUP BY conlancamval.c69_anousu, conlancamval.c69_credito, to_char(conlancamval.c69_data,'MM')::integer;
+                
+                INSERT INTO conplanoexesaldo
+                SELECT * FROM landeb".$i."
+                WHERE c69_anousu = {$data_empenho_ano};
+                
+                UPDATE conplanoexesaldo
+                SET c68_credito = lancre".$i.".sum
+                FROM lancre".$i."
+                WHERE c68_anousu = lancre".$i.".c69_anousu
+                AND c68_reduz = lancre".$i.".c69_credito
+                AND c68_mes = lancre".$i.".c69_data
+                AND c68_anousu = {$data_empenho_ano};
+                
+                DELETE FROM lancre".$i."
+                USING conplanoexesaldo
+                WHERE lancre".$i.".c69_anousu = conplanoexesaldo.c68_anousu
+                AND conplanoexesaldo.c68_reduz = lancre".$i.".c69_credito
+                AND conplanoexesaldo.c68_mes = lancre".$i.".c69_data
+                AND c68_anousu = {$data_empenho_ano};
+                
+                INSERT INTO conplanoexesaldo
+                SELECT * FROM lancre".$i."
+                WHERE c69_anousu = {$data_empenho_ano};
+                ";
+            }
+            db_query($sqlAlteraData);
+            //FIM ALTERAR DATA EMPENHO
+        }else{
+            $erro_msg = "Alteração não realizada! A data do empenho não pode ser posterior a data atual.";
+            $sqlerro = true;  
+        }
     }
 
     if($sqlerro==false){
@@ -143,23 +373,13 @@ if(isset($alterar)){
             if($clempempenho->erro_status == 0) {
                 $sqlerro=true;
             }
-            $erro_msg = $clempempenho->erro_msg;
+            $erro_msg = "Alteração não realizada! Houve um erro durante a alteração.";
         }
     }
-
-    if (isset($e54_gestaut) && isset($e54_autori) && !empty($e54_gestaut)) {
-
-        // atualiza o campo do gestor do empenho
-        $sSql = " UPDATE empautoriza SET e54_gestaut = '{$e54_gestaut}' "
-            ." WHERE e54_autori={$e54_autori} AND e54_numcgm={$e60_numcgm} ";
-        db_query($sSql);
-
-    }
-
     /**
      * Manutenção da tabela emppresta
      */
-    if (isset($e44_tipo) && $e44_tipo != "") {
+    if ($sqlerro==false && isset($e44_tipo) && $e44_tipo != "") {
 
         $result = $clempprestatip->sql_record($clempprestatip->sql_query_file($e44_tipo,"e44_obriga"));
         $opera = true;
@@ -238,8 +458,8 @@ if(isset($alterar)){
         }
     }
 
-    if (isset($e68_numemp) && $e68_numemp == "s") {
-
+    if ($sqlerro==false && isset($e68_numemp) && $e68_numemp == "s") {
+        
         $oDaoEmpenhoNl->e68_numemp = $e60_numemp;
         $oDaoEmpenhoNl->e68_data   = date("Y-m-d",db_getsession("DB_datausu"));
         $oDaoEmpenhoNl->incluir(null);
@@ -248,7 +468,7 @@ if(isset($alterar)){
         }
     }
 
-    if(!$sqlerro && isset($e64_codele)){
+    if($sqlerro==false && isset($e64_codele)){
 
         $clempelemento->e64_codele = $e56_codele;
         $clempelemento->e64_numemp = $e60_numemp;
@@ -259,7 +479,7 @@ if(isset($alterar)){
         }
     }
 
-    if(!$sqlerro && isset($e64_codele)){
+    if($sqlerro==false && isset($e64_codele)){
 
         $sqlNota = $clempnota->sql_query_file(null,"e69_codnota",null,"e69_numemp = {$e60_numemp}");
         $rsNota = db_query($sqlNota);
@@ -290,7 +510,7 @@ if(isset($alterar)){
         }
     }
 
-    if(!$sqlerro && isset($e64_codele)){
+    if($sqlerro==false && isset($e64_codele)){
 
         $result = $clempempitem->sql_record($clempempitem->sql_query_file($e60_numemp,null,"e62_numemp,e62_sequen,e62_item"));
 
@@ -315,7 +535,7 @@ if(isset($alterar)){
 
     }
 
-    if(!$sqlerro){
+    if($sqlerro==false){
 
         $sSql = "SELECT c75_codlan, c67_codele from conlancamele inner join conlancamemp on c75_codlan = c67_codlan
                                      inner join conlancamdoc on c71_codlan = c75_codlan
@@ -339,7 +559,7 @@ if(isset($alterar)){
 
     }
 
-    if (!$sqlerro) {
+    if ($sqlerro==false) {
 
         try {
 
@@ -359,7 +579,7 @@ if(isset($alterar)){
         }
     }
 
-    if (!$sqlerro) {
+    if ($sqlerro==false) {
         $result = $clempempenho->sql_record($clempempenho->sql_query($e60_numemp,"e60_anousu,e60_vlrliq"));
 
         if ( $clempempenho->erro_status == '0' ) {
@@ -370,9 +590,28 @@ if(isset($alterar)){
             db_fieldsmemory($result,0);
         }
     }
+    
+    if ($sqlerro==false) {
+        $erro_msg = "Alteração realizada com sucesso!";
+    }
+    
     /**[Extensao Ordenador Despesa] inclusao_ordenador*/
 
     db_fim_transacao($sqlerro);
+  
+    // atualiza o campo do gestor do empenho
+    if (isset($e54_gestaut) && isset($e54_autori) && !empty($e54_gestaut)) {
+        $sSql = " UPDATE empautoriza SET e54_gestaut = '{$e54_gestaut}' WHERE e54_autori={$e54_autori} AND e54_numcgm={$e60_numcgm} ";
+        db_query($sSql);
+        if($gestor_alterado === 'true'){
+            if(isset($msgCampoAlterado)){
+                $msgCampoAlterado .= " - Gestor do Empenho\n";
+            }else{
+                $msgCampoAlterado = "\n\nCampos alterados: \n";
+                $msgCampoAlterado .= " - Gestor do Empenho\n";
+            }
+        }
+    }
 
 } else if(isset($chavepesquisa)) {
 
@@ -426,7 +665,7 @@ if(isset($alterar)){
 <?php
 if(isset($alterar)){
     if($sqlerro == true){
-        db_msgbox($erro_msg);
+        db_msgbox($erro_msg.$msgCampoAlterado);
         if($clempempenho->erro_campo!=""){
             echo "<script> document.form1.".$clempempenho->erro_campo.".style.backgroundColor='#99A9AE';</script>";
             echo "<script> document.form1.".$clempempenho->erro_campo.".focus();</script>";
