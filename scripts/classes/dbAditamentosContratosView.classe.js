@@ -2361,7 +2361,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.validaTipoAditivo = (aLinha, retornoItem, tipoAditivo) => {
 
-         if (retornoItem.ac20_servicoquantidade === 't') {
+         if (retornoItem.ac20_servicoquantidade === 'f') {
              this.desabilitaLinha(aLinha, tipoAditivo);
              return;
          }
