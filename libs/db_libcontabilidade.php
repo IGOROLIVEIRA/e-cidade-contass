@@ -6006,8 +6006,7 @@ function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte
         $sql .= " AND o58_codigo IN ({$fonte}) ";
     }
     $sql .= " {$group} ) AS x";
-    if ($where == "c60_estrut LIKE '331909401%' AND o58_codigo NOT IN (16040000, 26040000) ")
-        die($sql);
+
     return db_utils::getColectionByRecord(db_query($sql));
 }
 
