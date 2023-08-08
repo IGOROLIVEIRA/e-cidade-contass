@@ -2264,7 +2264,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.js_changeTipoAditivo = function () {
-        console.log('ChangeTipoAditivo');
+
         $('oTextAreaDescricaoAlteracao').addClassName('readonly');
         $('oTextAreaDescricaoAlteracao').readOnly = true;
         $('oTxtDataInicial').readOnly = true;
@@ -2292,9 +2292,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             $('oTxtDataInicial').style.backgroundColor= 'white';
             $('oTxtDataFinal').readOnly = false;
             $('oTxtDataFinal').style.backgroundColor= 'white';
-            console.log('tipo 14');
-            this.handleTypeItems();
-
 
         } else if ($('oCboTipoAditivo').value == 6 || $('oCboTipoAditivo').value == 13 ) {
             $('oTxtDataInicial').readOnly = false;
@@ -2305,12 +2302,18 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             $('btnItens').style.display = '';
             $('btnItens').observe('click', me.novoItem);
         }
-
+        this.handleTypeItems();
     }
 
     this.handleTypeItems = () => {
-        let acordo = document.getElementById('oTxtCodigoAcordo').value;
-        this.getAcordo(acordo);
+        const tiposAditivo = ['9','10','11','14'];
+
+        if (tiposAditivo.includes($('oCboTipoAditivo').value)) {
+            let acordo = document.getElementById('oTxtCodigoAcordo').value;
+            this.getAcordo(acordo);
+            return;
+        }
+        this.habilitaInputValorFinal();
     }
 
     this.getAcordo = (iAcordo) => {
@@ -2341,16 +2344,14 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         let tamanhoRetornoItens = retornoItens.length;
 
         for (var i = 0; i < iQuantidadeItens; i++) {
-            console.log("primeiro for");
             let aLinha = itensGrid[i];
             let codigoGrid = aLinha.aCells[2].getValue();
             let j = 0;
 
             while( j < tamanhoRetornoItens) {
-
                 if (retornoItens[j].ac20_pcmater == codigoGrid) {
                     console.log("chegou dentro dos dois for");
-                    this.desativaInputValorFinal(aLinha, retornoItens[j], tipoAditivo);
+                    this.validaTipoAditivo(aLinha, retornoItens[j], tipoAditivo);
                     j = tamanhoRetornoItens + j;
                 }
                 j++;
@@ -2358,23 +2359,81 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
          }
     }
 
-    this.desativaInputValorFinal = (aLinha, retornoItem, tipoAditivo) => {
-        console.log('dentro do desabiliza input');
-        const tiposAditivo = ['9','10','11','14'];
-        let atributos = `background-color:#DEB887;
-                        pointer-events: none;
-                        touch-action: none;
-                        width:100%`;
+    this.validaTipoAditivo = (aLinha, retornoItem, tipoAditivo) => {
 
-        if (tiposAditivo.includes(tipoAditivo)
-        && retornoItem.ac20_servicoquantidade === 'f') {
-            let idCelula = aLinha.aCells[7].getId();
+         if (retornoItem.ac20_servicoquantidade === 't') {
+             this.desabilitaLinha(aLinha, tipoAditivo);
+             return;
+         }
+
+        let iQuantidadeAtual = Number(aLinha.aCells[4].getValue().split('.').join("").replace(",","."));
+        if (tipoAditivo === '14'
+            && retornoItem.ac20_servicoquantidade === 't'
+            && iQuantidadeAtual > 0) {
+            console.log('CHEGOU AQUI')
+            this.desativaInput(aLinha,7);
+            return;
+        }
+
+        this.habilitaInputValorFinal()
+    }
+
+    this.desabilitaLinha = (aLinha,tipoAditivo) => {
+        console.log('Desabilita linha');
+        let colunasTotal = aLinha.aCells.length;
+        let colunasDesabilitadas = tipoAditivo === '14'
+            ? [0,6,7,9,10,11,12,13]
+            : [0,6,7,9,10];
+
+        for (let i = 0; i < colunasTotal; i++) {
+            if (colunasDesabilitadas.includes(i)) {
+                let idCelula = aLinha.aCells[i].getId();
+                const valorFinalDom = document.getElementById(idCelula);
+                const valorFinalInput = valorFinalDom.children;
+
+                valorFinalInput[0].disabled = true;
+            }
+
+        }
+    }
+
+    this.desativaInput = (aLinha,coluna) => {
+        console.log('chegou dentro de desativa valor');
+        let atributos = `
+            background-color:#DEB887;
+            pointer-events: none;
+            touch-action: none;
+            width:100%
+        `;
+
+        let idCelula = aLinha.aCells[coluna].getId();
+        const valorFinalDom = document.getElementById(idCelula);
+        const valorFinalInput = valorFinalDom.children;
+
+        valorFinalInput[0].style.cssText = atributos;
+        return;
+    }
+
+    this.habilitaInputValorFinal = () => {
+        console.log('habilitaInputValorFinal');
+        let itensGrid = me.oGridItens.aRows;
+        let iQuantidadeItens = itensGrid.length;
+        let atributos = `
+            background-color:#FFF;
+            pointer-events: auto;
+            touch-action: auto;
+            width:100%;
+        `;
+
+        for (var i = 0; i < iQuantidadeItens; i++) {
+
+            let idCelula = itensGrid[i].aCells[7].getId();
             const valorFinalDom = document.getElementById(idCelula);
             const valorFinalInput = valorFinalDom.children;
 
             valorFinalInput[0].style.cssText = atributos;
-            return;
         }
+        return;
     }
 
 
