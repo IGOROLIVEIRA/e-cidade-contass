@@ -52,11 +52,10 @@ if (
   isset($base)     &&
   $base     != ""
 ) {
-
   $DB_SERVIDOR = $servidor;
   $DB_BASE     = $base;
   $DB_PORTA    = $port;
-  $DB_USUARIO  = base64_decode($user);
+  $DB_USUARIO  = "dbportal";//base64_decode($user);
   $DB_SENHA    = base64_decode($stdClass->db_stripTagsJson($senha));
 }
 
@@ -217,7 +216,7 @@ if ($DB_login != 'dbseller' && pg_num_rows($result) > 0 && pg_result($result, 0,
 
   $result1 = db_query($conn, "select db21_ativo from db_config
   join db_userinst on db_config.codigo = db_userinst.id_instit
-  join db_usuarios on db_usuarios.id_usuario=db_userinst.id_usuario 
+  join db_usuarios on db_usuarios.id_usuario=db_userinst.id_usuario
   where db_usuarios.id_usuario=" . pg_result($result, 0, "id_usuario")) or die("Erro ao verificar se sistema está liberado! Contate suporte!");
   $ativo   = pg_result($result1, 0, 0);
 
