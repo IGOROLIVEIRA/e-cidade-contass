@@ -582,7 +582,7 @@ function js_bloqueiaCamposWindowAux(lDisabled) {
 
 function js_incluirProcessamento(){
   var codigoSolicitacao = parent.iframe_registro.document.getElementById('pc10_numero').value;
-  top.corpo.document.location.href='com4_processacompilacao001.php?pc10_numero='+codigoSolicitacao;
+  CurrentWindow.corpo.document.location.href='com4_processacompilacao001.php?pc10_numero='+codigoSolicitacao;
 }
 
 /**

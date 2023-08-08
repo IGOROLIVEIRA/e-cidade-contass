@@ -402,7 +402,7 @@ function js_limpar() {
 }
 
 function js_incluirOrcamento(){
-    top.corpo.document.location.href='com1_processo001.php?pc80_codproc='+processodecompra;
+  CurrentWindow.corpo.document.location.href='com1_processo001.php?pc80_codproc='+processodecompra;
 }
 
 $('btnConsultar').observe('click', js_pesquisar);

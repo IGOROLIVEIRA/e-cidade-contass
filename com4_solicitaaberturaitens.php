@@ -700,6 +700,6 @@ $db_opcao           = 1;
 
   function js_lancarEstimativa(){
     var codigoAbertura = parent.iframe_registro.document.getElementById('pc10_numero').value;
-    top.corpo.document.location.href='com4_estimativaregistro001.php?codigoAbertura='+codigoAbertura;
+    CurrentWindow.corpo.document.location.href='com4_estimativaregistro001.php?codigoAbertura='+codigoAbertura;
   }
 </script>

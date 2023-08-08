@@ -837,7 +837,7 @@ if ($processar) {
 
   function js_incluirCompilacao(){
     var codigoAbertura = parent.iframe_registro.document.getElementById('pc54_solicita').value;
-    top.corpo.document.location.href='com4_registroprecocompilacao001.php?codigoAbertura='+codigoAbertura;
+    CurrentWindow.corpo.document.location.href='com4_registroprecocompilacao001.php?codigoAbertura='+codigoAbertura;
   }
   
 </script>
