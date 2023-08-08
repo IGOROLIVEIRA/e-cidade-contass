@@ -6,6 +6,7 @@ require_once("model/licitacao/PortalCompras/Fabricas/PregaoFabrica.model.php");
 require_once("model/licitacao/PortalCompras/Provedor/LigadorClasses.model.php");
 require("model/licitacao/PortalCompras/Fabricas/LoteFabrica.model.php");
 require_once("model/licitacao/PortalCompras/Fabricas/DispensaFabrica.model.php");
+require_once("model/licitacao/PortalCompras/Fabricas/ConcorrenciaFabrica.model.php");
 class LicitacaoFabrica implements LicitacaoFabricaInterface
 {
     private array $modalidades;

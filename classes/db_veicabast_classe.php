@@ -1,94 +1,94 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 //MODULO: veiculos
 //CLASSE DA ENTIDADE veicabast
-class cl_veicabast { 
-   // cria variaveis de erro 
-   var $rotulo     = null; 
-   var $query_sql  = null; 
-   var $numrows    = 0; 
-   var $numrows_incluir = 0; 
-   var $numrows_alterar = 0; 
-   var $numrows_excluir = 0; 
-   var $erro_status= null; 
-   var $erro_sql   = null; 
-   var $erro_banco = null;  
-   var $erro_msg   = null;  
-   var $erro_campo = null;  
-   var $pagina_retorno = null; 
-   // cria variaveis do arquivo 
-   var $ve70_codigo = 0; 
-   var $ve70_veiculos = 0; 
-   var $ve70_veiculoscomb = 0; 
-   var $ve70_dtabast_dia = null; 
-   var $ve70_dtabast_mes = null; 
-   var $ve70_dtabast_ano = null; 
-   var $ve70_dtabast = null; 
-   var $ve70_litros = 0; 
-   var $ve70_valor = 0; 
-   var $ve70_vlrun = 0; 
-   var $ve70_medida = 0; 
-   var $ve70_ativo = 0; 
-   var $ve70_usuario = 0; 
-   var $ve70_data_dia = null; 
-   var $ve70_data_mes = null; 
-   var $ve70_data_ano = null; 
-   var $ve70_data = null; 
-   var $ve70_hora = null; 
-   var $ve70_observacao = null; 
+class cl_veicabast {
+   // cria variaveis de erro
+   var $rotulo     = null;
+   var $query_sql  = null;
+   var $numrows    = 0;
+   var $numrows_incluir = 0;
+   var $numrows_alterar = 0;
+   var $numrows_excluir = 0;
+   var $erro_status= null;
+   var $erro_sql   = null;
+   var $erro_banco = null;
+   var $erro_msg   = null;
+   var $erro_campo = null;
+   var $pagina_retorno = null;
+   // cria variaveis do arquivo
+   var $ve70_codigo = 0;
+   var $ve70_veiculos = 0;
+   var $ve70_veiculoscomb = 0;
+   var $ve70_dtabast_dia = null;
+   var $ve70_dtabast_mes = null;
+   var $ve70_dtabast_ano = null;
+   var $ve70_dtabast = null;
+   var $ve70_litros = 0;
+   var $ve70_valor = 0;
+   var $ve70_vlrun = 0;
+   var $ve70_medida = 0;
+   var $ve70_ativo = 0;
+   var $ve70_usuario = 0;
+   var $ve70_data_dia = null;
+   var $ve70_data_mes = null;
+   var $ve70_data_ano = null;
+   var $ve70_data = null;
+   var $ve70_hora = null;
+   var $ve70_observacao = null;
    var $ve70_origemgasto = null;
-   var $ve70_importado  = null;    
+   var $ve70_importado  = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
-                 ve70_codigo = int4 = Código do Abastecimento 
-                 ve70_veiculos = int4 = Veiculo 
-                 ve70_veiculoscomb = int4 = Combustível 
-                 ve70_dtabast = date = Data do Abastecimento 
-                 ve70_litros = float8 = Litros 
-                 ve70_valor = float8 = Valor Abastecido 
-                 ve70_vlrun = float8 = Valor do Litro 
-                 ve70_medida = float8 = Medida de consumo 
-                 ve70_ativo = int4 = Ativo 
-                 ve70_usuario = int4 = Usuário 
-                 ve70_data = date = Data da inclusão do registro 
-                 ve70_hora = char(5) = Hora da Inclusão do registro 
-                 ve70_observacao = text = Observação 
+                 ve70_codigo = int4 = Código do Abastecimento
+                 ve70_veiculos = int4 = Veiculo
+                 ve70_veiculoscomb = int4 = Combustível
+                 ve70_dtabast = date = Data do Abastecimento
+                 ve70_litros = float8 = Litros
+                 ve70_valor = float8 = Valor Abastecido
+                 ve70_vlrun = float8 = Valor do Litro
+                 ve70_medida = float8 = Medida de consumo
+                 ve70_ativo = int4 = Ativo
+                 ve70_usuario = int4 = Usuário
+                 ve70_data = date = Data da inclusão do registro
+                 ve70_hora = char(5) = Hora da Inclusão do registro
+                 ve70_observacao = text = Observação
                  ve70_origemgasto = int4 = Origem do Gasto
                  ve70_importado = bool = Importado
                  ";
-   //funcao construtor da classe 
-   function cl_veicabast() { 
+   //funcao construtor da classe
+   function cl_veicabast() {
      //classes dos rotulos dos campos
-     $this->rotulo = new rotulo("veicabast"); 
+     $this->rotulo = new rotulo("veicabast");
      $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
    }
-   //funcao erro 
-   function erro($mostra,$retorna) { 
+   //funcao erro
+   function erro($mostra,$retorna) {
      if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
         echo "<script>alert(\"".$this->erro_msg."\");</script>";
         if($retorna==true){
@@ -133,9 +133,9 @@ class cl_veicabast {
      }
    }
    // funcao para inclusao
-   function incluir (){ 
+   function incluir (){
       $this->atualizacampos();
-     if($this->ve70_veiculos == null ){ 
+     if($this->ve70_veiculos == null ){
        $this->erro_sql = " Campo Veiculo nao Informado.";
        $this->erro_campo = "ve70_veiculos";
        $this->erro_banco = "";
@@ -144,7 +144,7 @@ class cl_veicabast {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve70_veiculoscomb == null ){ 
+     if($this->ve70_veiculoscomb == null ){
        $this->erro_sql = " Campo Combustível nao Informado.";
        $this->erro_campo = "ve70_veiculoscomb";
        $this->erro_banco = "";
@@ -153,7 +153,7 @@ class cl_veicabast {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve70_dtabast == null ){ 
+     if($this->ve70_dtabast == null ){
        $this->erro_sql = " Campo Data do Abastecimento nao Informado.";
        $this->erro_campo = "ve70_dtabast_dia";
        $this->erro_banco = "";
@@ -162,7 +162,7 @@ class cl_veicabast {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve70_litros == null ){ 
+     if($this->ve70_litros == null ){
        $this->erro_sql = " Campo Litros nao Informado.";
        $this->erro_campo = "ve70_litros";
        $this->erro_banco = "";
@@ -171,13 +171,13 @@ class cl_veicabast {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve70_valor == null ){ 
+     if($this->ve70_valor == null ){
        $this->ve70_valor = "0";
      }
-     if($this->ve70_vlrun == null ){ 
+     if($this->ve70_vlrun == null ){
        $this->ve70_vlrun = "0";
      }
-     if($this->ve70_medida == null ){ 
+     if($this->ve70_medida == null ){
        $this->erro_sql = " Campo Medida de consumo nao Informado.";
        $this->erro_campo = "ve70_medida";
        $this->erro_banco = "";
@@ -186,7 +186,7 @@ class cl_veicabast {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve70_ativo == null ){ 
+     if($this->ve70_ativo == null ){
        $this->erro_sql = " Campo Ativo nao Informado.";
        $this->erro_campo = "ve70_ativo";
        $this->erro_banco = "";
@@ -195,7 +195,7 @@ class cl_veicabast {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve70_usuario == null ){ 
+     if($this->ve70_usuario == null ){
        $this->erro_sql = " Campo Usuário nao Informado.";
        $this->erro_campo = "ve70_usuario";
        $this->erro_banco = "";
@@ -204,7 +204,7 @@ class cl_veicabast {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve70_data == null ){ 
+     if($this->ve70_data == null ){
        $this->erro_sql = " Campo Data da inclusão do registro nao Informado.";
        $this->erro_campo = "ve70_data_dia";
        $this->erro_banco = "";
@@ -213,11 +213,11 @@ class cl_veicabast {
        $this->erro_status = "0";
        return false;
      }
-     if($this->ve70_importado == null ){ 
+     if($this->ve70_importado == null ){
       $this->ve70_importado = 'f';
-    } 
-     
-     if($this->ve70_hora == null ){ 
+    }
+
+     if($this->ve70_hora == null ){
        $this->erro_sql = " Campo Hora da Inclusão do registro nao Informado.";
        $this->erro_campo = "ve70_hora";
        $this->erro_banco = "";
@@ -227,18 +227,18 @@ class cl_veicabast {
        return false;
      }
      if($this->ve70_codigo == "" || $this->ve70_codigo == null ){
-       $result = db_query("select nextval('veicabast_ve70_codigo_seq')"); 
+       $result = db_query("select nextval('veicabast_ve70_codigo_seq')");
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
-         $this->erro_sql   = "Verifique o cadastro da sequencia: veicabast_ve70_codigo_seq do campo: ve70_codigo"; 
+         $this->erro_sql   = "Verifique o cadastro da sequencia: veicabast_ve70_codigo_seq do campo: ve70_codigo";
          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
-         return false; 
+         return false;
        }
-       $this->ve70_codigo = pg_result($result,0,0); 
+       $this->ve70_codigo = pg_result($result,0,0);
      }
-     
+
      /*else{
        $result = db_query("select last_value from veicabast_ve70_codigo_seq");
        if(($result != false) && (pg_result($result,0,0) < $ve70_codigo)){
@@ -249,10 +249,10 @@ class cl_veicabast {
          $this->erro_status = "0";
          return false;
        }else{
-         $this->ve70_codigo = $ve70_codigo; 
+         $this->ve70_codigo = $ve70_codigo;
        }
      }*/
-     if(($this->ve70_codigo == null) || ($this->ve70_codigo == "") ){ 
+     if(($this->ve70_codigo == null) || ($this->ve70_codigo == "") ){
        $this->erro_sql = " Campo ve70_codigo nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
@@ -261,41 +261,41 @@ class cl_veicabast {
        return false;
      }
      $sql = "insert into veicabast(
-                                       ve70_codigo 
-                                      ,ve70_veiculos 
+                                       ve70_codigo
+                                      ,ve70_veiculos
                                       ,ve70_veiculoscomb
                                       ,ve70_origemgasto
-                                      ,ve70_dtabast 
-                                      ,ve70_litros 
-                                      ,ve70_valor 
-                                      ,ve70_vlrun 
-                                      ,ve70_medida 
-                                      ,ve70_ativo 
-                                      ,ve70_usuario 
-                                      ,ve70_data 
-                                      ,ve70_hora 
+                                      ,ve70_dtabast
+                                      ,ve70_litros
+                                      ,ve70_valor
+                                      ,ve70_vlrun
+                                      ,ve70_medida
+                                      ,ve70_ativo
+                                      ,ve70_usuario
+                                      ,ve70_data
+                                      ,ve70_hora
                                       ,ve70_observacao
-                                      ,ve70_importado 
+                                      ,ve70_importado
                        )
                 values (
-                                $this->ve70_codigo 
-                               ,$this->ve70_veiculos 
+                                $this->ve70_codigo
+                               ,$this->ve70_veiculos
                                ,$this->ve70_veiculoscomb
                                ,$this->ve70_origemgasto
-                               ,".($this->ve70_dtabast == "null" || $this->ve70_dtabast == ""?"null":"'".$this->ve70_dtabast."'")." 
-                               ,$this->ve70_litros 
-                               ,$this->ve70_valor 
-                               ,$this->ve70_vlrun 
-                               ,$this->ve70_medida 
-                               ,$this->ve70_ativo 
-                               ,$this->ve70_usuario 
-                               ,".($this->ve70_data == "null" || $this->ve70_data == ""?"null":"'".$this->ve70_data."'")." 
-                               ,'$this->ve70_hora' 
+                               ,".($this->ve70_dtabast == "null" || $this->ve70_dtabast == ""?"null":"'".$this->ve70_dtabast."'")."
+                               ,$this->ve70_litros
+                               ,$this->ve70_valor
+                               ,$this->ve70_vlrun
+                               ,$this->ve70_medida
+                               ,$this->ve70_ativo
+                               ,$this->ve70_usuario
+                               ,".($this->ve70_data == "null" || $this->ve70_data == ""?"null":"'".$this->ve70_data."'")."
+                               ,'$this->ve70_hora'
                                ,'$this->ve70_observacao'
-                               ,'$this->ve70_importado' 
-                      )";            
-     $result = db_query($sql); 
-     if($result==false){ 
+                               ,'$this->ve70_importado'
+                      )";
+     $result = db_query($sql);
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
          $this->erro_sql   = "Cadastro de Abastecimento dos Veículos ($this->ve70_codigo) nao Incluído. Inclusao Abortada.";
@@ -340,16 +340,16 @@ class cl_veicabast {
        $resac = db_query("insert into db_acount values($acount,1610,18843,'','".AddSlashes(pg_result($resaco,0,'ve70_origemgasto'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
      }
      return true;
-   } 
+   }
    // funcao para alteracao
-   function alterar ($ve70_codigo=null) { 
+   function alterar ($ve70_codigo=null) {
       $this->atualizacampos();
      $sql = " update veicabast set ";
      $virgula = "";
-     if(trim($this->ve70_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_codigo"])){ 
+     if(trim($this->ve70_codigo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_codigo"])){
        $sql  .= $virgula." ve70_codigo = $this->ve70_codigo ";
        $virgula = ",";
-       if(trim($this->ve70_codigo) == null ){ 
+       if(trim($this->ve70_codigo) == null ){
          $this->erro_sql = " Campo Código do Abastecimento nao Informado.";
          $this->erro_campo = "ve70_codigo";
          $this->erro_banco = "";
@@ -359,10 +359,10 @@ class cl_veicabast {
          return false;
        }
      }
-     if(trim($this->ve70_veiculos)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_veiculos"])){ 
+     if(trim($this->ve70_veiculos)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_veiculos"])){
        $sql  .= $virgula." ve70_veiculos = $this->ve70_veiculos ";
        $virgula = ",";
-       if(trim($this->ve70_veiculos) == null ){ 
+       if(trim($this->ve70_veiculos) == null ){
          $this->erro_sql = " Campo Veiculo nao Informado.";
          $this->erro_campo = "ve70_veiculos";
          $this->erro_banco = "";
@@ -372,10 +372,10 @@ class cl_veicabast {
          return false;
        }
      }
-     if(trim($this->ve70_veiculoscomb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_veiculoscomb"])){ 
+     if(trim($this->ve70_veiculoscomb)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_veiculoscomb"])){
        $sql  .= $virgula." ve70_veiculoscomb = $this->ve70_veiculoscomb ";
        $virgula = ",";
-       if(trim($this->ve70_veiculoscomb) == null ){ 
+       if(trim($this->ve70_veiculoscomb) == null ){
          $this->erro_sql = " Campo Combustível nao Informado.";
          $this->erro_campo = "ve70_veiculoscomb";
          $this->erro_banco = "";
@@ -389,10 +389,10 @@ class cl_veicabast {
          $sql  .= $virgula." ve70_origemgasto = $this->ve70_origemgasto ";
          $virgula = ",";
      }
-     if(trim($this->ve70_dtabast)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_dtabast_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ve70_dtabast_dia"] !="") ){ 
+     if(trim($this->ve70_dtabast)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_dtabast_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ve70_dtabast_dia"] !="") ){
        $sql  .= $virgula." ve70_dtabast = '$this->ve70_dtabast' ";
        $virgula = ",";
-       if(trim($this->ve70_dtabast) == null ){ 
+       if(trim($this->ve70_dtabast) == null ){
          $this->erro_sql = " Campo Data do Abastecimento nao Informado.";
          $this->erro_campo = "ve70_dtabast_dia";
          $this->erro_banco = "";
@@ -401,11 +401,11 @@ class cl_veicabast {
          $this->erro_status = "0";
          return false;
        }
-     }     else{ 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["ve70_dtabast_dia"])){ 
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["ve70_dtabast_dia"])){
          $sql  .= $virgula." ve70_dtabast = null ";
          $virgula = ",";
-         if(trim($this->ve70_dtabast) == null ){ 
+         if(trim($this->ve70_dtabast) == null ){
            $this->erro_sql = " Campo Data do Abastecimento nao Informado.";
            $this->erro_campo = "ve70_dtabast_dia";
            $this->erro_banco = "";
@@ -416,10 +416,10 @@ class cl_veicabast {
          }
        }
      }
-     if(trim($this->ve70_litros)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_litros"])){ 
+     if(trim($this->ve70_litros)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_litros"])){
        $sql  .= $virgula." ve70_litros = $this->ve70_litros ";
        $virgula = ",";
-       if(trim($this->ve70_litros) == null ){ 
+       if(trim($this->ve70_litros) == null ){
          $this->erro_sql = " Campo Litros nao Informado.";
          $this->erro_campo = "ve70_litros";
          $this->erro_banco = "";
@@ -429,24 +429,24 @@ class cl_veicabast {
          return false;
        }
      }
-     if(trim($this->ve70_valor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_valor"])){ 
-        if(trim($this->ve70_valor)=="" && isset($GLOBALS["HTTP_POST_VARS"]["ve70_valor"])){ 
-           $this->ve70_valor = "0" ; 
-        } 
+     if(trim($this->ve70_valor)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_valor"])){
+        if(trim($this->ve70_valor)=="" && isset($GLOBALS["HTTP_POST_VARS"]["ve70_valor"])){
+           $this->ve70_valor = "0" ;
+        }
        $sql  .= $virgula." ve70_valor = $this->ve70_valor ";
        $virgula = ",";
      }
-     if(trim($this->ve70_vlrun)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_vlrun"])){ 
-        if(trim($this->ve70_vlrun)=="" && isset($GLOBALS["HTTP_POST_VARS"]["ve70_vlrun"])){ 
-           $this->ve70_vlrun = "0" ; 
-        } 
+     if(trim($this->ve70_vlrun)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_vlrun"])){
+        if(trim($this->ve70_vlrun)=="" && isset($GLOBALS["HTTP_POST_VARS"]["ve70_vlrun"])){
+           $this->ve70_vlrun = "0" ;
+        }
        $sql  .= $virgula." ve70_vlrun = $this->ve70_vlrun ";
        $virgula = ",";
      }
-     if(trim($this->ve70_medida)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_medida"])){ 
+     if(trim($this->ve70_medida)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_medida"])){
        $sql  .= $virgula." ve70_medida = $this->ve70_medida ";
        $virgula = ",";
-       if(trim($this->ve70_medida) == null ){ 
+       if(trim($this->ve70_medida) == null ){
          $this->erro_sql = " Campo Medida de consumo nao Informado.";
          $this->erro_campo = "ve70_medida";
          $this->erro_banco = "";
@@ -456,10 +456,10 @@ class cl_veicabast {
          return false;
        }
      }
-     if(trim($this->ve70_ativo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_ativo"])){ 
+     if(trim($this->ve70_ativo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_ativo"])){
        $sql  .= $virgula." ve70_ativo = $this->ve70_ativo ";
        $virgula = ",";
-       if(trim($this->ve70_ativo) == null ){ 
+       if(trim($this->ve70_ativo) == null ){
          $this->erro_sql = " Campo Ativo nao Informado.";
          $this->erro_campo = "ve70_ativo";
          $this->erro_banco = "";
@@ -469,10 +469,10 @@ class cl_veicabast {
          return false;
        }
      }
-     if(trim($this->ve70_usuario)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_usuario"])){ 
+     if(trim($this->ve70_usuario)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_usuario"])){
        $sql  .= $virgula." ve70_usuario = $this->ve70_usuario ";
        $virgula = ",";
-       if(trim($this->ve70_usuario) == null ){ 
+       if(trim($this->ve70_usuario) == null ){
          $this->erro_sql = " Campo Usuário nao Informado.";
          $this->erro_campo = "ve70_usuario";
          $this->erro_banco = "";
@@ -482,10 +482,10 @@ class cl_veicabast {
          return false;
        }
      }
-     if(trim($this->ve70_data)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_data_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ve70_data_dia"] !="") ){ 
+     if(trim($this->ve70_data)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_data_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["ve70_data_dia"] !="") ){
        $sql  .= $virgula." ve70_data = '$this->ve70_data' ";
        $virgula = ",";
-       if(trim($this->ve70_data) == null ){ 
+       if(trim($this->ve70_data) == null ){
          $this->erro_sql = " Campo Data da inclusão do registro nao Informado.";
          $this->erro_campo = "ve70_data_dia";
          $this->erro_banco = "";
@@ -494,11 +494,11 @@ class cl_veicabast {
          $this->erro_status = "0";
          return false;
        }
-     }     else{ 
-       if(isset($GLOBALS["HTTP_POST_VARS"]["ve70_data_dia"])){ 
+     }     else{
+       if(isset($GLOBALS["HTTP_POST_VARS"]["ve70_data_dia"])){
          $sql  .= $virgula." ve70_data = null ";
          $virgula = ",";
-         if(trim($this->ve70_data) == null ){ 
+         if(trim($this->ve70_data) == null ){
            $this->erro_sql = " Campo Data da inclusão do registro nao Informado.";
            $this->erro_campo = "ve70_data_dia";
            $this->erro_banco = "";
@@ -509,10 +509,10 @@ class cl_veicabast {
          }
        }
      }
-     if(trim($this->ve70_hora)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_hora"])){ 
+     if(trim($this->ve70_hora)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_hora"])){
        $sql  .= $virgula." ve70_hora = '$this->ve70_hora' ";
        $virgula = ",";
-       if(trim($this->ve70_hora) == null ){ 
+       if(trim($this->ve70_hora) == null ){
          $this->erro_sql = " Campo Hora da Inclusão do registro nao Informado.";
          $this->erro_campo = "ve70_hora";
          $this->erro_banco = "";
@@ -522,7 +522,7 @@ class cl_veicabast {
          return false;
        }
      }
-     if(trim($this->ve70_observacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_observacao"])){ 
+     if(trim($this->ve70_observacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["ve70_observacao"])){
        $sql  .= $virgula." ve70_observacao = '$this->ve70_observacao' ";
        $virgula = ",";
      }
@@ -581,7 +581,7 @@ class cl_veicabast {
        }
      }
      $result = db_query($sql);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Cadastro de Abastecimento dos Veículos nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->ve70_codigo;
@@ -609,14 +609,14 @@ class cl_veicabast {
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao para exclusao 
-   function excluir ($ve70_codigo=null,$dbwhere=null) { 
+       }
+     }
+   }
+   // funcao para exclusao
+   function excluir ($ve70_codigo=null,$dbwhere=null) {
      if($dbwhere==null || $dbwhere==""){
        $resaco = $this->sql_record($this->sql_query_file($ve70_codigo));
-     }else{ 
+     }else{
        $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
      }
      if(($resaco!=false)||($this->numrows!=0)){
@@ -655,7 +655,7 @@ class cl_veicabast {
        $sql2 = $dbwhere;
      }
      $result = db_query($sql.$sql2);
-     if($result==false){ 
+     if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Cadastro de Abastecimento dos Veículos nao Excluído. Exclusão Abortada.\\n";
        $this->erro_sql .= "Valores : ".$ve70_codigo;
@@ -683,11 +683,11 @@ class cl_veicabast {
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
          return true;
-       } 
-     } 
-   } 
-   // funcao do recordset 
-   function sql_record($sql) { 
+       }
+     }
+   }
+   // funcao do recordset
+   function sql_record($sql) {
      $result = db_query($sql);
      if($result==false){
        $this->numrows    = 0;
@@ -709,8 +709,8 @@ class cl_veicabast {
       }
      return $result;
    }
-   // funcao do sql 
-   function sql_query ( $ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query ( $ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = explode("#",$campos);
@@ -740,8 +740,8 @@ class cl_veicabast {
      $sql2 = "";
      if($dbwhere==""){
        if($ve70_codigo!=null ){
-         $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo "; 
-       } 
+         $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -770,8 +770,8 @@ class cl_veicabast {
     $sql .= "from veicabast";
     if($dbwhere==""){
       if($ve70_codigo!=null ){
-        $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo "; 
-      } 
+        $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo ";
+      }
     }else if($dbwhere != ""){
       $sql2 = " where $dbwhere";
     }
@@ -793,8 +793,8 @@ class cl_veicabast {
     $sql .= "from veicabast";
     if($dbwhere==""){
       if($ve70_codigo!=null ){
-        $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo "; 
-      } 
+        $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo ";
+      }
     }else if($dbwhere != ""){
       $sql2 = " where $dbwhere";
     }
@@ -805,12 +805,12 @@ class cl_veicabast {
   }
   function sql_query_AbasData ($ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
     $sql = "select *";
-    
+
     $sql .= "from veicabast";
     if($dbwhere==""){
       if($ve70_codigo!=null ){
-        $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo "; 
-      } 
+        $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo ";
+      }
     }else if($dbwhere != ""){
       $sql2 = " where $dbwhere";
     }
@@ -819,8 +819,8 @@ class cl_veicabast {
     return $sql;
 
   }
-   // funcao do sql 
-   function sql_query_file ( $ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   // funcao do sql
+   function sql_query_file ( $ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
        $campos_sql = explode("#",$campos);
@@ -836,8 +836,8 @@ class cl_veicabast {
      $sql2 = "";
      if($dbwhere==""){
        if($ve70_codigo!=null ){
-         $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo "; 
-       } 
+         $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo ";
+       }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
      }
@@ -1049,7 +1049,7 @@ if($dbwhere==""){
      }
      return $sql;
   }
-   function sql_query_file_anula ( $ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){ 
+   function sql_query_file_anula ( $ve70_codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select * from (select ";
      if($campos != "*" ){
        $campos_sql = explode("#",$campos);
@@ -1154,34 +1154,34 @@ if($dbwhere==""){
               ve01_placa,
               si04_especificacao,
               ve01_veiccadmarca,
-              ve01_veiccadmodelo, 
+              ve01_veiccadmodelo,
               ve01_veictipoabast,
               ve06_veiccadcomb,
               upper(si05_descricao) as si05_descricao,
-              ve21_descr, 
-              ve22_descr, 
+              ve21_descr,
+              ve22_descr,
               ve01_anofab,
-              ve01_anomod, 
-              ve70_data, 
-              ve70_hora, 
-              case 
+              ve01_anomod,
+              ve70_data,
+              ve70_hora,
+              case
                 when coalesce(ve60_medidasaida, ve70_medida) > coalesce(ve70_medida,0) then
                   0
                 else
                   ve70_litros
-              end as ve70_litros, 
-              ve26_descr, 
+              end as ve70_litros,
+              ve26_descr,
               ve70_dtabast,
               ve70_veiculoscomb,
               ve07_sigla,
               ve60_destino,
-              coalesce(ve60_medidasaida, ve70_medida) as medida_retirada, 
-              coalesce(ve70_medida,0) as medida_devolucao, 
-              case 
+              coalesce(ve60_medidasaida, ve70_medida) as medida_retirada,
+              coalesce(ve70_medida,0) as medida_devolucao,
+              case
                 when coalesce(ve60_medidasaida, ve70_medida) > coalesce(ve70_medida,0) then
                   0
                 else
-                  coalesce(ve70_medida,0) - coalesce(ve60_medidasaida,0) 
+                  coalesce(ve70_medida,0) - coalesce(ve60_medidasaida,0)
               end as medida_rodada,
               ve40_veiccadcentral,
               descrdepto
@@ -1191,19 +1191,19 @@ if($dbwhere==""){
                             ve01_placa,
                             si04_especificacao,
                             ve01_veiccadmarca,
-                            ve01_veiccadmodelo, 
+                            ve01_veiccadmodelo,
                             ve01_veictipoabast,
                             upper(si05_descricao) as si05_descricao,
-                            ve21_descr, 
-                            ve22_descr, 
+                            ve21_descr,
+                            ve22_descr,
                             ve01_anofab,
-                            ve01_anomod, 
-                            ve70_data, 
-                            ve70_hora, 
-                            ve70_medida, 
+                            ve01_anomod,
+                            ve70_data,
+                            ve70_hora,
+                            ve70_medida,
                             ve70_ativo,
-                            ve70_litros, 
-                            ve26_descr, 
+                            ve70_litros,
+                            ve26_descr,
                             ve70_dtabast,
                             ve70_veiculoscomb,
                             ve06_veiccadcomb,
@@ -1317,6 +1317,7 @@ if($dbwhere==""){
                             coddepto,
                             ve70_origemgasto,
                             ve71_nota,
+                            instit,
                             z01_nome,
                             z01_numcgm,
                             (select ve60_destino

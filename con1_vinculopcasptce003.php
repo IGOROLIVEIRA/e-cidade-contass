@@ -8,12 +8,12 @@ include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clvinculopcasptce = new cl_vinculopcasptce;
-$db_botao = false;
+$db_botao = true;
 $db_opcao = 33;
 if(isset($excluir)){
   db_inicio_transacao();
   $db_opcao = 3;
-  $clvinculopcasptce->excluir($oid);
+  $clvinculopcasptce->excluir($oid, " c209_pcaspestrut = '$pcaspestrut' and c209_tceestrut = '$tceestrut' ");
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 3;

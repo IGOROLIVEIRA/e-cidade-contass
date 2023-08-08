@@ -143,6 +143,8 @@ $sAnd   = "";
 		  $sWhere .= " {$sAnd} ac16_dataassinatura IS NOT NULL ";
 		  $sAnd    = " AND ";
 	  }
+
+    $sWhere .= " {$sAnd} ac16_instit = " . db_getsession("DB_instit");
       
       if (!isset($pesquisa_chave)) {
       	
@@ -198,7 +200,6 @@ $sAnd   = "";
           $repassa = array("chave_ac10_sequencial"=>$chave_ac10_sequencial,
                            "chave_ac10_sequencial"=>$chave_ac10_sequencial);
         }
-
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       } else {
       	

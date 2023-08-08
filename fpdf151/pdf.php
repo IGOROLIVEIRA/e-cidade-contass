@@ -47,11 +47,17 @@ class PDF extends FPDF
 
   protected $lDateFooter = true;
 
+  protected $lPageFooter = true;
+
   public $imprime_rodape = true;
 
   public function showDateFooter($lDateFooter)
   {
     $this->lDateFooter = $lDateFooter;
+  }
+  public function showPageFooter($lPageFooter)
+  {
+    $this->lPageFooter = $lPageFooter;
   }
   //Page header
   function Header()
@@ -214,8 +220,10 @@ class PDF extends FPDF
         $sDataSistema = '  Exerc: ' . db_getsession("DB_anousu") . '   Data: ' . date("d-m-Y", db_getsession("DB_datausu")) . " - " . date("H:i:s");
       }
       $this->Cell(0, 10, $sMenuAcess . "  " . $nome . '   Emissor: ' . substr(ucwords(strtolower($emissor)), 0, 30) . $sDataSistema, "T", 0, 'L');
-
-      $this->Cell(0, 10, 'Pág ' . $this->PageNo() . '/{nb}', 0, 1, 'R');
+      
+      if($this->lPageFooter){
+        $this->Cell(0, 10, 'Pág ' . $this->PageNo() . '/{nb}', 0, 1, 'R');
+      }
     }
   }
 

@@ -8,12 +8,12 @@ include("dbforms/db_funcoes.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $clvinculopcasptce = new cl_vinculopcasptce;
-$db_opcao = 22;
-$db_botao = false;
+$db_opcao = 2;
+$db_botao = true;
 if(isset($alterar)){
   db_inicio_transacao();
   $db_opcao = 2;
-  $clvinculopcasptce->alterar($oid);
+  $clvinculopcasptce->alterar(array($pcaspestrut,$tceestrut));
   db_fim_transacao();
 }else if(isset($chavepesquisa)){
    $db_opcao = 2;
@@ -69,7 +69,7 @@ if(isset($alterar)){
     $clvinculopcasptce->erro(true,true);
   }
 }
-if($db_opcao==22){
+if($db_opcao==2){
   echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>

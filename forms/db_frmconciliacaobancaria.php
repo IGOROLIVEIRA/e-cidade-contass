@@ -186,7 +186,7 @@ db_app::load("widgets/windowAux.widget.js");
                                             <tr>
                                                 <td><b>Valor Total Selecionado:</b></td>
                                                 <td align="left">
-                                                    <? db_input("total_selecionado", 10, 0, true, "text", 1, "disabled"); ?>
+                                                    <? db_input("total_selecionado", 12, 0, true, "text", 1, "disabled"); ?>
                                                 </td>
                                                 <td><input type="checkbox" name="fechar_conciliacao" id="fechar_conciliacao"/><b>Fechar Conciliação</b></td>
                                             </tr>
@@ -717,8 +717,11 @@ db_app::load("widgets/windowAux.widget.js");
 
         gridLancamentos.selectSingle = function(oCheckbox, sRow, oRow, lVerificaSaldo, bSelectAll) {
             var limpar = true;
-            var valor = document.form1.total_selecionado.value.replace('.', '');
-            valor = valor.replace(',', '.');
+            var valorCampo = document.form1.total_selecionado.value;
+            // Remove os pontos do número (apenas os pontos, sem remover a vírgula)
+            var valorSemPontos = valorCampo.replace(/\./g, '');
+            // Remove a vírgula decimal do número
+            var valor = valorSemPontos.replace(',', '.');
             valor = parseFloat(valor);
 
             if (js_comparadata($F("data_conciliacao"), oRow.aCells[2].getValue(), "<")) {
@@ -740,10 +743,16 @@ db_app::load("widgets/windowAux.widget.js");
                 $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML) + 1;
 
                 // if (oRow.aCells[3].getValue().length == 1) {
+                    valorCampo = oRow.aCells[9].getValue();
+                    // Remove os pontos do número (apenas os pontos, sem remover a vírgula)
+                    var valorSemPontos = valorCampo.replace(/\./g, ''); 
+                    // Remove a vírgula decimal do número
+                    var valorSemVirgula = valorSemPontos.replace(',', '.');
                     if (oRow.aCells[8].getValue() == 'E' || oRow.aCells[8].getValue() == 'EP')
-                        valor += parseFloat(oRow.aCells[9].getValue().replace(".", "").replace(",", "."));
+                        valor += parseFloat(valorSemVirgula);
                     else
-                        valor -= parseFloat(oRow.aCells[9].getValue().replace(".", "").replace(",", "."));
+                        valor -= parseFloat(valorSemVirgula);
+
                 // }
             } else {
                 if (limpar) {
@@ -752,10 +761,15 @@ db_app::load("widgets/windowAux.widget.js");
                     $('total_selecionados').innerHTML = new Number($('total_selecionados').innerHTML) - 1;
 
                     // f (oRow.aCells[3].getValue().length == 1) {
+                        valorCampo = oRow.aCells[9].getValue();
+                        // Remove os pontos do número (apenas os pontos, sem remover a vírgula)
+                        var valorSemPontos = valorCampo.replace(/\./g, ''); 
+                        // Remove a vírgula decimal do número
+                        var valorSemVirgula = valorSemPontos.replace(',', '.');
                         if (oRow.aCells[8].getValue() == 'S' || oRow.aCells[8].getValue() == 'SP')
-                            valor = parseFloat(valor) + parseFloat(oRow.aCells[9].getValue().replace(".", "").replace(",", "."));
+                            valor = parseFloat(valor) + parseFloat(valorSemVirgula);
                         else
-                            valor = parseFloat(valor) - parseFloat(oRow.aCells[9].getValue().replace(".", "").replace(",", "."));
+                            valor = parseFloat(valor) - parseFloat(valorSemVirgula);
                     // }
                 }
             }
@@ -795,7 +809,7 @@ db_app::load("widgets/windowAux.widget.js");
         gridLancamentos.setCheckbox(0);
         gridLancamentos.hasTotalizador = true;
         gridLancamentos.allowSelectColumns(true);
-        gridLancamentos.setCellWidth(new Array("5%", "5%", "5%", "26%", "15%", "8%", "7%", "3%", "5%", "20%"));
+        gridLancamentos.setCellWidth(new Array("5%", "5%", "5%", "26%", "15%", "8%", "7%", "3%", "10%", "15%"));
         gridLancamentos.setCellAlign(new Array("center", "center", "center", "left", "left", "center", "center", "center", "right", "left"));
         gridLancamentos.setHeader(new Array("M", "Data", "Conciliado", "Credor", "Tipo", "OP/REC/SLIP", "Documento", "Mov", "Valor", "Histórico"));
         gridLancamentos.aHeaders[1].lDisplayed = false;
@@ -1116,7 +1130,7 @@ db_app::load("widgets/windowAux.widget.js");
             jan.moveTo(0,0);
         }
 
-        sUrl = "cai4_concbancnovo002.php?conta_nova=" + $F("k13_conta") + "&data_inicial=" + js_data($F("data_inicial")) + "&data_final=" + js_data($F("data_final")) + "&saldo_extrato=" + $F("saldo_conciliado");
+        sUrl = "cai4_concbancnovo002.php?conta_nova=(" + $F("k13_conta") + ")&data_inicial=" + js_data($F("data_inicial")) + "&data_final=" + js_data($F("data_final")) + "&saldo_extrato=" + $F("saldo_conciliado");
         window.open(sUrl, '', 'location=0');
     }
     // Final das funções verificadas

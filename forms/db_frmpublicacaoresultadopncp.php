@@ -130,8 +130,12 @@ db_app::load("estilos.css, grid.style.css");
                 aLinha[1] = oLinha.l21_ordem;
                 aLinha[2] = oLinha.pc01_descrmater.urlDecode();
                 aLinha[3] = oLinha.l04_descricao.urlDecode();
-                aLinha[4] = oLinha.z01_numcgm;
-                aLinha[5] = oLinha.z01_nome.urlDecode();
+                aLinha[4] = '';
+                aLinha[5] = '';
+                if(oLinha.pc23_valor != 0){
+                    aLinha[4] = oLinha.z01_numcgm;
+                    aLinha[5] = oLinha.z01_nome.urlDecode();
+                }
                 aLinha[6] = oLinha.m61_descr;
                 aLinha[7] = oLinha.pc11_quant;
                 aLinha[8] = oLinha.pc23_valor;

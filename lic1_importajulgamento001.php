@@ -157,7 +157,13 @@ db_postmemory($HTTP_POST_VARS);
             js_removeObj('msgbox');
 
             let oRetorno = eval("(" + oAjax.responseText + ")");
+
             alert(oRetorno.message);
+            document.form1.l20_codigo.value = "";
+            document.form1.l03_descr.value = "";
+            document.form1.l20_objeto.value = "";
+            document.form1.l20_numero.value = "";
+            document.form1.btn_processar.disabled = true;
         }
     </script>
 </body>

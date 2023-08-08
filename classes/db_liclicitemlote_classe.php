@@ -140,7 +140,7 @@ class cl_liclicitemlote
             $this->erro_status = "0";
             return false;
         }
-        
+        if (($this->l04_numerolote == null) || ($this->l04_numerolote == "")) {
             $result = db_query("select nextval('liclicitemlote_l04_numerolote_seq')");
             if ($result == false) {
                 $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -151,7 +151,7 @@ class cl_liclicitemlote
                 return false;
             }
             $this->l04_numerolote = pg_result($result, 0, 0);
-        
+        }
         $sql = "insert into liclicitemlote(
                                        l04_codigo
                                       ,l04_liclicitem
