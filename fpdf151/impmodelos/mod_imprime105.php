@@ -481,7 +481,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
             }
 
             $controle++;
-            if ($oDadosDaLinha->quantidade == 0) {
+            if ($oDadosDaLinha->quantidade === 0) {
                 continue;
             }
             $sqencia++;
