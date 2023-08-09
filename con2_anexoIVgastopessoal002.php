@@ -1961,30 +1961,23 @@ ob_start();
                                 $aSaldoEstrut6 = getValorDespesaInformado($oDataIni->getDate("Y-m-d"), buscarDataImplantacao(), '331969403', $valorcalculoManual, $oInstit);
 
                                 $fSaldoIndenizacaoDemissaoServidores += $aSaldoEstrut1[0]->$valoresperado + $aSaldoEstrut2[0]->$valoresperado + $aSaldoEstrut3[0]->$valoresperado + $aSaldoEstrut4[0]->$valoresperado + $aSaldoEstrut5[0]->$valoresperado + $aSaldoEstrut6[0]->$valoresperado;
-
-                                $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331909401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), buscarDataImplantacao(), $dtfim, "170, 16040000, 26040000", "");
-                                $aSaldoEstrut2 = getSaldoDesdobramento("c60_estrut LIKE '331909403%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), buscarDataImplantacao(), $dtfim, "170, 16040000, 26040000", "");
-                                $aSaldoEstrut3 = getSaldoDesdobramento("c60_estrut LIKE '331919401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), buscarDataImplantacao(), $dtfim, "170, 16040000, 26040000", "");
-                                $aSaldoEstrut4 = getSaldoDesdobramento("c60_estrut LIKE '331919403%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), buscarDataImplantacao(), $dtfim, "170, 16040000, 26040000", "");
-                                $aSaldoEstrut5 = getSaldoDesdobramento("c60_estrut LIKE '331969401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), buscarDataImplantacao(), $dtfim, "170, 16040000, 26040000", "");
-                                $aSaldoEstrut6 = getSaldoDesdobramento("c60_estrut LIKE '331969403%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), buscarDataImplantacao(), $dtfim, "170, 16040000, 26040000", "");
-                                // $fSaldoIndenizacaoDemissaoServidores += $aSaldoEstrut1[0]->$valoresperado + $aSaldoEstrut2[0]->$valoresperado + $aSaldoEstrut3[0]->$valoresperado + $aSaldoEstrut4[0]->$valoresperado + $aSaldoEstrut5[0]->$valoresperado + $aSaldoEstrut6[0]->$valoresperado;
- 
                             } else {
                                 if ($valoresperado == 'liquidado') {
-                                    $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331909401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "170, 16040000, 26040000", "");
-                                    $aSaldoEstrut2 = getSaldoDesdobramento("c60_estrut LIKE '331909403%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "16040000, 26040000", "");
-                                    $aSaldoEstrut3 = getSaldoDesdobramento("c60_estrut LIKE '331919401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "16040000, 26040000", "");
-                                    $aSaldoEstrut4 = getSaldoDesdobramento("c60_estrut LIKE '331919403%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "16040000, 26040000", "");
-                                    $aSaldoEstrut5 = getSaldoDesdobramento("c60_estrut LIKE '331969401%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "16040000, 26040000", "");
-                                    $aSaldoEstrut6 = getSaldoDesdobramento("c60_estrut LIKE '331969403%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "16040000, 26040000", "");
+                                    $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331909401%' AND o58_codigo NOT IN (16040000, 26040000) ", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
+                                    $aSaldoEstrut2 = getSaldoDesdobramento("c60_estrut LIKE '331909403%' AND o58_codigo NOT IN (16040000, 26040000) ", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
+                                    $aSaldoEstrut3 = getSaldoDesdobramento("c60_estrut LIKE '331919401%' AND o58_codigo NOT IN (16040000, 26040000) ", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
+                                    $aSaldoEstrut4 = getSaldoDesdobramento("c60_estrut LIKE '331919403%' AND o58_codigo NOT IN (16040000, 26040000) ", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
+                                    $aSaldoEstrut5 = getSaldoDesdobramento("c60_estrut LIKE '331969401%' AND o58_codigo NOT IN (16040000, 26040000) ", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
+                                    $aSaldoEstrut6 = getSaldoDesdobramento("c60_estrut LIKE '331969403%' AND o58_codigo NOT IN (16040000, 26040000) ", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "", "");
+                                    $aSaldoEstrut7 = getSaldoDesdobramento("c60_estrut LIKE '331%'", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataIni)), $oInstit->getCodigo(), "01-01-" . date("Y", strtotime($dtini)), $dtini, "16040000, 26040000", "");
 
                                     $fSaldoIndenizacaoDemissaoServidores += ($aSaldoEstrut1[0]->empenhado - $aSaldoEstrut1[0]->liquidado)
                                         + ($aSaldoEstrut2[0]->empenhado - $aSaldoEstrut2[0]->liquidado)
                                         + ($aSaldoEstrut3[0]->empenhado - $aSaldoEstrut3[0]->liquidado)
                                         + ($aSaldoEstrut4[0]->empenhado - $aSaldoEstrut4[0]->liquidado)
                                         + ($aSaldoEstrut5[0]->empenhado - $aSaldoEstrut5[0]->liquidado)
-                                        + ($aSaldoEstrut6[0]->empenhado - $aSaldoEstrut6[0]->liquidado);
+                                        + ($aSaldoEstrut6[0]->empenhado - $aSaldoEstrut6[0]->liquidado)
+                                        + ($aSaldoEstrut7[0]->empenhado - $aSaldoEstrut7[0]->liquidado);
                                 }
 
                                 $aSaldoEstrut1 = getSaldoDesdobramento("c60_estrut LIKE '331909401%' AND o58_codigo NOT IN (16040000, 26040000) ", array_keys(DBDate::getMesesNoIntervalo($oDataIni, $oDataFim)), $oInstit->getCodigo(), $dtini, $dtfim, true, "");
