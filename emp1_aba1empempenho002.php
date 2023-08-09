@@ -187,7 +187,7 @@ if(isset($alterar)){
     if($sqlerro == false){
         if(strtotime($data_empenho) < strtotime(db_getsession("DB_anousu"))){
         if(strtotime($data_empenho) < db_getsession("DB_datausu")){
-            $sqlAlteraData = $clempempenho->altera_data($e60_numemp,$e60_emiss,$data_empenho, date('m',db_getsession('DB_datausu')));
+            $sqlAlteraData = $clempempenho->alteraData($e60_numemp,$e60_emiss,$data_empenho, date('m',db_getsession('DB_datausu')));
             db_query($sqlAlteraData);
         }else{
             $erro_msg = "Alteração não realizada! A data do empenho não pode ser posterior a data atual.";

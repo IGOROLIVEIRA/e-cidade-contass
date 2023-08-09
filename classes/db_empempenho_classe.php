@@ -2615,7 +2615,7 @@ class cl_empempenho
         return $sSql;
     }
 
-    public function altera_data($e60_numemp, $atualDataEmpenho, $novaDataEmpenho, $mesAtual)
+    public function alteraData($e60_numemp, $atualDataEmpenho, $novaDataEmpenho, $mesAtual)
     {
         $atualDataEmpenhoMes = date('m', strtotime($atualDataEmpenho));
         $novaDataEmpenhoMes = date('m', strtotime($novaDataEmpenho));
