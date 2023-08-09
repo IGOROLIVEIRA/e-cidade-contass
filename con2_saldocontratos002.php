@@ -76,11 +76,11 @@ if (isset($ac02_acordonatureza) && $ac02_acordonatureza != "") {
   $sWhere .= " AND ac16_acordogrupo = '$ac02_acordonatureza' ";
 }
 if (isset($ac16_datainicio) && $ac16_datainicio != "") {
-  $ac16_datainicio = $ac16_datainicio_ano . '-' . $ac16_datainicio_mes . '-' . $ac16_datainicio_dia;
+  $ac16_datainicio = implode("-", (array_reverse(explode("/", $ac16_datainicio))));
   $sWhere .= " AND ac16_datainicio >= '$ac16_datainicio'" . '::date ';
 }
 if (isset($ac16_datafim) && $ac16_datafim != "") {
-  $ac16_datafim = $ac16_datafim_ano . '-' . $ac16_datafim_mes . '-' . $ac16_datafim_dia;
+  $ac16_datafim = implode("-", (array_reverse(explode("/", $ac16_datafim))));
   $sWhere .= " AND ac16_datafim <= '$ac16_datafim'" . '::date ';
 }
 switch ($ordem) {
