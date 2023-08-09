@@ -166,14 +166,14 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
         $rsPrefeitura = $infoComplmentar->sql_record($sSqlPrefeitura);
 
         // matriz de entrada
-        $what = array( 'ä','ã','à','á','â','ê','ë','è','é','ï','ì','í','ö','õ','ò','ó','ô','ü','ù','ú','û',
-        'Ä','Ã','À','Á','Â','Ê','Ë','È','É','Ï','Ì','Í','Ö','Õ','Ò','Ó','Ô','Ü','Ù','Ú','Û',
-        'ñ','Ñ','ç','Ç','-','(',')',',',';',':','|','!','"','#','$','%','&','/','=','?','~','^','>','<','ª','°', "°",chr(13),chr(10),"'");
+        $what = array('ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û',
+            'Ä', 'Ã', 'À', 'Á', 'Â', 'Ê', 'Ë', 'È', 'É', 'Ï', 'Ì', 'Í', 'Ö', 'Õ', 'Ò', 'Ó', 'Ô', 'Ü', 'Ù', 'Ú', 'Û',
+            'ñ', 'Ñ', 'ç', 'Ç', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', '°', "°", chr(13), chr(10), "'");
 
         // matriz de saÃ­da
-        $by = array( 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u',
-        'A','A','A','A','A','E','E','E','E','I','I','I','O','O','O','O','O','U','U','U','U',
-        'n','N','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ', " "," "," "," ");
+        $by = array('a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u',
+            'A', 'A', 'A', 'A', 'A', 'E', 'E', 'E', 'E', 'I', 'I', 'I', 'O', 'O', 'O', 'O', 'O', 'U', 'U', 'U', 'U',
+            'n', 'N', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', " ", " ", " ", " ");
 
         if (pg_num_rows($rsPrefeitura) > 0) {
 
@@ -245,11 +245,11 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                             $oDados12->tipolei = "LAO";
                         }
 
-                        $claoc12->si40_nroleialteracao  = substr($oDados12->nroleialteracao, 0, 6);
+                        $claoc12->si40_nroleialteracao = substr($oDados12->nroleialteracao, 0, 6);
                         $claoc12->si40_dataleialteracao = $oDados12->dataleialteracao;
                         $claoc12->si40_tpleiorigdecreto = $oDados12->tipolei;
                         $claoc12->si40_tipoleialteracao = $oDados12->tipolei == "LAO" ? $oDados12->tipoleialteracao : 0;
-                        $claoc12->si40_valorabertolei   = $oDados11->valoraberto;
+                        $claoc12->si40_valorabertolei = $oDados11->valoraberto;
 
                         $claoc12->si40_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
                         $claoc12->si40_reg10 = $claoc10->si38_sequencial;
@@ -304,9 +304,9 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
 
                     $oDadosSql14 = db_utils::fieldsMemory($rsResult, $iCont14);
 
-                    if ($oDadosSql14->tipodecretoalteracao == 3 || $oDadosSql14->tipodecretoalteracao == 98){
+                    if ($oDadosSql14->tipodecretoalteracao == 3 || $oDadosSql14->tipodecretoalteracao == 98) {
 
-                        $sHash  = $oDadosSql14->codreduzidodecreto . $oDadosSql14->codorigem . $oDadosSql14->codorgao . $oDadosSql14->codunidadesub . $oDadosSql14->codfuncao;
+                        $sHash = $oDadosSql14->codreduzidodecreto . $oDadosSql14->codorigem . $oDadosSql14->codorgao . $oDadosSql14->codunidadesub . $oDadosSql14->codfuncao;
                         $sHash .= $oDadosSql14->codsubfuncao . $oDadosSql14->codprograma . $oDadosSql14->idacao . $oDadosSql14->naturezadespesa . $oDadosSql14->codfontrecursos;
 
                         if ($oDadosSql14->tiporegistro == 14) {
@@ -371,109 +371,109 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                                 $aDadosAgrupados15[$sHash]->si194_vlreducao += $oDadosSql14->vlacrescimoreducao;
                             }
                         }
-                    }else{
-                      $oDadosSql14Vlr = db_utils::fieldsMemory($rsResult14, $iCont14);
-                      if (!empty($oDadosSql14Vlr->tipodecretoalteracao)){
+                    } else {
+                        $oDadosSql14Vlr = db_utils::fieldsMemory($rsResult14, $iCont14);
+                        if (!empty($oDadosSql14Vlr->tipodecretoalteracao)) {
 
-                        $sHash  = $oDadosSql14Vlr->codorgao . $oDadosSql14Vlr->codunidadesub . $oDadosSql14Vlr->codfuncao . $oDadosSql14Vlr->codsubfuncao;
-                        $sHash .= $oDadosSql14Vlr->codprograma . $oDadosSql14Vlr->idacao . $oDadosSql14Vlr->naturezadespesa . $oDadosSql14Vlr->codfontrecursos;
+                            $sHash = $oDadosSql14Vlr->codorgao . $oDadosSql14Vlr->codunidadesub . $oDadosSql14Vlr->codfuncao . $oDadosSql14Vlr->codsubfuncao;
+                            $sHash .= $oDadosSql14Vlr->codprograma . $oDadosSql14Vlr->idacao . $oDadosSql14Vlr->naturezadespesa . $oDadosSql14Vlr->codfontrecursos;
 
-                        if (!isset($aDadosAgrupados14[$sHash])){
+                            if (!isset($aDadosAgrupados14[$sHash])) {
 
-                          $oDados14 = new stdClass();
-                          $oDados14->si42_tiporegistro = 14;
-                          $oDados14->si42_codreduzidodecreto = $oDadosSql14Vlr->codreduzidodecreto;
-                          $oDados14->si42_origemrecalteracao = $oDadosSql14Vlr->tipodecretoalteracao;
-                          $oDados14->si42_codorigem = $oDadosSql14Vlr->codorigem;
-                          $oDados14->si42_codorgao = $oDadosSql14Vlr->codorgao;
-                          $oDados14->si42_codunidadesub = $oDadosSql14Vlr->codunidadesub;
-                          $oDados14->si42_codfuncao = $oDadosSql14Vlr->codfuncao;
-                          $oDados14->si42_codsubfuncao = $oDadosSql14Vlr->codsubfuncao;
-                          $oDados14->si42_codprograma = $oDadosSql14Vlr->codprograma;
-                          $oDados14->si42_idacao = $oDadosSql14Vlr->idacao;
-                          $oDados14->si42_idsubacao = $oDadosSql14Vlr->idsubacao;
-                          $oDados14->si42_naturezadespesa = $oDadosSql14Vlr->naturezadespesa;
-                          $oDados14->si42_codfontrecursos = $oDadosSql14Vlr->codfontrecursos;
-                          $oDados14->si42_vlacrescimo = $oDadosSql14Vlr->vlacrescimoreducao;
-                          $oDados14->si42_codsup = $oDadosSql14Vlr->o47_codsup;
-                          $oDados14->si42_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                          $oDados14->si42_reg10 = $claoc10->si38_sequencial;
-                          $oDados14->si42_instit = $instituicao;
-                          $aDadosAgrupados14[$sHash] = $oDados14;
+                                $oDados14 = new stdClass();
+                                $oDados14->si42_tiporegistro = 14;
+                                $oDados14->si42_codreduzidodecreto = $oDadosSql14Vlr->codreduzidodecreto;
+                                $oDados14->si42_origemrecalteracao = $oDadosSql14Vlr->tipodecretoalteracao;
+                                $oDados14->si42_codorigem = $oDadosSql14Vlr->codorigem;
+                                $oDados14->si42_codorgao = $oDadosSql14Vlr->codorgao;
+                                $oDados14->si42_codunidadesub = $oDadosSql14Vlr->codunidadesub;
+                                $oDados14->si42_codfuncao = $oDadosSql14Vlr->codfuncao;
+                                $oDados14->si42_codsubfuncao = $oDadosSql14Vlr->codsubfuncao;
+                                $oDados14->si42_codprograma = $oDadosSql14Vlr->codprograma;
+                                $oDados14->si42_idacao = $oDadosSql14Vlr->idacao;
+                                $oDados14->si42_idsubacao = $oDadosSql14Vlr->idsubacao;
+                                $oDados14->si42_naturezadespesa = $oDadosSql14Vlr->naturezadespesa;
+                                $oDados14->si42_codfontrecursos = $oDadosSql14Vlr->codfontrecursos;
+                                $oDados14->si42_vlacrescimo = $oDadosSql14Vlr->vlacrescimoreducao;
+                                $oDados14->si42_codsup = $oDadosSql14Vlr->o47_codsup;
+                                $oDados14->si42_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                                $oDados14->si42_reg10 = $claoc10->si38_sequencial;
+                                $oDados14->si42_instit = $instituicao;
+                                $aDadosAgrupados14[$sHash] = $oDados14;
 
-                      }else{
-                          $aDadosAgrupados14[$sHash]->si42_vlacrescimo += $oDadosSql14Vlr->vlacrescimoreducao;
-                      }
-                  }
-              }
-          }
-
-          if ($oDadosSql14->tipodecretoalteracao == 3 || $oDadosSql14->tipodecretoalteracao == 98) {
-
-            $sTipoDecretoReg11          = $claoc11->si39_tipodecretoalteracao;
-            $aTipoDecretoNaoObrigReg15  = array(4,6,7);
-
-            if($oDadosSql14->tipodecretoalteracao == 98 && in_array($sTipoDecretoReg11, $aTipoDecretoNaoObrigReg15)){
-
-                foreach ($aDadosAgrupados14 as $oDadosReg14) {
-
-                    $claoc14 = new cl_aoc142023();
-
-                    $claoc14->si42_tiporegistro = 14;
-                    $claoc14->si42_codreduzidodecreto = $oDadosReg14->si42_codreduzidodecreto;
-                    $claoc14->si42_codorigem = '';
-                    $claoc14->si42_codorgao = $oDadosReg14->si42_codorgao;
-                    $claoc14->si42_codunidadesub = $oDadosReg14->si42_codunidadesub;
-                    $claoc14->si42_codfuncao = $oDadosReg14->si42_codfuncao;
-                    $claoc14->si42_codsubfuncao = $oDadosReg14->si42_codsubfuncao;
-                    $claoc14->si42_codprograma = $oDadosReg14->si42_codprograma;
-                    $claoc14->si42_idacao = $oDadosReg14->si42_idacao;
-                    $claoc14->si42_idsubacao = $oDadosReg14->si42_idsubacao;
-                    $claoc14->si42_naturezadespesa = $oDadosReg14->si42_naturezadespesa;
-                    $claoc14->si42_codfontrecursos = $oDadosReg14->si42_codfontrecursos;
-                    $claoc14->si42_vlacrescimo = $oDadosReg14->si42_vlacrescimo;
-                    $claoc14->si42_origemrecalteracao = $oDadosReg14->si42_origemrecalteracao;
-                    $claoc14->si42_mes = $oDadosReg14->si42_mes;
-                    $claoc14->si42_reg10 = $oDadosReg14->si42_reg10;
-                    $claoc14->si42_instit = $oDadosReg14->si42_instit;
-
-                    $claoc14->incluir(null);
-                    if ($claoc14->erro_status == 0) {
-                        throw new Exception($claoc14->erro_msg);
+                            } else {
+                                $aDadosAgrupados14[$sHash]->si42_vlacrescimo += $oDadosSql14Vlr->vlacrescimoreducao;
+                            }
+                        }
                     }
-
                 }
-            }else{
+
+                if ($oDadosSql14->tipodecretoalteracao == 3 || $oDadosSql14->tipodecretoalteracao == 98) {
+
+                    $sTipoDecretoReg11 = $claoc11->si39_tipodecretoalteracao;
+                    $aTipoDecretoNaoObrigReg15 = array(4, 6, 7);
+
+                    if ($oDadosSql14->tipodecretoalteracao == 98 && in_array($sTipoDecretoReg11, $aTipoDecretoNaoObrigReg15)) {
+
+                        foreach ($aDadosAgrupados14 as $oDadosReg14) {
+
+                            $claoc14 = new cl_aoc142023();
+
+                            $claoc14->si42_tiporegistro = 14;
+                            $claoc14->si42_codreduzidodecreto = $oDadosReg14->si42_codreduzidodecreto;
+                            $claoc14->si42_codorigem = '';
+                            $claoc14->si42_codorgao = $oDadosReg14->si42_codorgao;
+                            $claoc14->si42_codunidadesub = $oDadosReg14->si42_codunidadesub;
+                            $claoc14->si42_codfuncao = $oDadosReg14->si42_codfuncao;
+                            $claoc14->si42_codsubfuncao = $oDadosReg14->si42_codsubfuncao;
+                            $claoc14->si42_codprograma = $oDadosReg14->si42_codprograma;
+                            $claoc14->si42_idacao = $oDadosReg14->si42_idacao;
+                            $claoc14->si42_idsubacao = $oDadosReg14->si42_idsubacao;
+                            $claoc14->si42_naturezadespesa = $oDadosReg14->si42_naturezadespesa;
+                            $claoc14->si42_codfontrecursos = $oDadosReg14->si42_codfontrecursos;
+                            $claoc14->si42_vlacrescimo = $oDadosReg14->si42_vlacrescimo;
+                            $claoc14->si42_origemrecalteracao = $oDadosReg14->si42_origemrecalteracao;
+                            $claoc14->si42_mes = $oDadosReg14->si42_mes;
+                            $claoc14->si42_reg10 = $oDadosReg14->si42_reg10;
+                            $claoc14->si42_instit = $oDadosReg14->si42_instit;
+
+                            $claoc14->incluir(null);
+                            if ($claoc14->erro_status == 0) {
+                                throw new Exception($claoc14->erro_msg);
+                            }
+
+                        }
+                    } else {
 
 
-                foreach ($aDadosAgrupados15 as $oDadosReg14) {
+                        foreach ($aDadosAgrupados15 as $oDadosReg14) {
 
-                    $claoc14 = new cl_aoc142023();
+                            $claoc14 = new cl_aoc142023();
 
-                    $claoc14->si42_tiporegistro = 14;
-                    $claoc14->si42_codreduzidodecreto = $oDadosReg14->si194_codreduzidodecreto;
-                    $claoc14->si42_codorigem = $oDadosReg14->si194_codorigem;
-                    $claoc14->si42_codorgao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codorgao;
-                    $claoc14->si42_codunidadesub = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codunidadesub;
-                    $claoc14->si42_codfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codfuncao;
-                    $claoc14->si42_codsubfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codsubfuncao;
-                    $claoc14->si42_codprograma = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codprograma;
-                    $claoc14->si42_idacao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_idacao;
-                    $claoc14->si42_idsubacao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_idsubacao;
-                    $claoc14->si42_naturezadespesa = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_naturezadespesa;
-                    $claoc14->si42_codfontrecursos = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codfontrecursos;
-                    $claoc14->si42_vlacrescimo = $oDadosReg14->si194_vlreducao;
-                    $claoc14->si42_origemrecalteracao = $oDadosReg14->si194_origemrecalteracao;
-                    $claoc14->si42_mes = $oDadosReg14->si194_mes;
-                    $claoc14->si42_reg10 = $oDadosReg14->si194_reg10;
-                    $claoc14->si42_instit = $oDadosReg14->si194_instit;
+                            $claoc14->si42_tiporegistro = 14;
+                            $claoc14->si42_codreduzidodecreto = $oDadosReg14->si194_codreduzidodecreto;
+                            $claoc14->si42_codorigem = $oDadosReg14->si194_codorigem;
+                            $claoc14->si42_codorgao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codorgao;
+                            $claoc14->si42_codunidadesub = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codunidadesub;
+                            $claoc14->si42_codfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codfuncao;
+                            $claoc14->si42_codsubfuncao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codsubfuncao;
+                            $claoc14->si42_codprograma = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codprograma;
+                            $claoc14->si42_idacao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_idacao;
+                            $claoc14->si42_idsubacao = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_idsubacao;
+                            $claoc14->si42_naturezadespesa = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_naturezadespesa;
+                            $claoc14->si42_codfontrecursos = $aDadosAgrupados14[$aCodOrigem[$oDadosReg14->si194_codsup][14][0]]->si42_codfontrecursos;
+                            $claoc14->si42_vlacrescimo = $oDadosReg14->si194_vlreducao;
+                            $claoc14->si42_origemrecalteracao = $oDadosReg14->si194_origemrecalteracao;
+                            $claoc14->si42_mes = $oDadosReg14->si194_mes;
+                            $claoc14->si42_reg10 = $oDadosReg14->si194_reg10;
+                            $claoc14->si42_instit = $oDadosReg14->si194_instit;
 
-                    $claoc14->incluir(null);
-                    if ($claoc14->erro_status == 0) {
-                        throw new Exception($claoc14->erro_msg);
-                    }
+                            $claoc14->incluir(null);
+                            if ($claoc14->erro_status == 0) {
+                                throw new Exception($claoc14->erro_msg);
+                            }
 
-                }
+                        }
 
                         /**
                          * 15 - Alterações Orçamentárias de Redução
@@ -510,7 +510,7 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
                         }
 
                     }
-                }else{
+                } else {
                     foreach ($aDadosAgrupados14 as $oDadosReg14) {
 
                         $claoc14 = new cl_aoc142023();
