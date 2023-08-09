@@ -26,7 +26,7 @@ if(isset($alterar)){
       $clnumeracaotipoproc->p200_numeracao = $p200_numeracao;
       $clnumeracaotipoproc->p200_tipoproc = $p200_tipoproc;
       $clnumeracaotipoproc->p200_ano = $p200_ano;
-      $clnumeracaotipoproc->incluir(null);
+      $clnumeracaotipoproc->incluir();
   }
 
   db_fim_transacao();
@@ -47,8 +47,8 @@ if(isset($alterar)){
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 <table width="790" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
+  <tr> 
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
     <center>
 	<?
 	include("forms/db_frmnumeracaotipoproc.php");
