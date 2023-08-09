@@ -15,6 +15,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.lReajuste = false;
     this.totalizador = false;
 
+
     switch (iTipoAditamento) {
 
         case 2:
@@ -1231,7 +1232,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             if ($('oCboTipoAditivo').value == 14) {
                 var dt1 = me.oTxtDataFinal.getValue().split("/");
                 var dt2 = me.oTxtDataFinalCompara.getValue().split("/");
-
                 var datafim1 = dt1[2] + "-" + dt1[1] + "-" + dt1[0];
                 var datafim2 = dt2[2] + "-" + dt2[1] + "-" + dt2[0];
 
@@ -1242,7 +1242,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             }
 
             if (oSelecionados[iIndice] != undefined) {
-
                 document.getElementById('btnRemoveItem').style.disabled = false;
                 oItemAdicionar.quantidade    = oSelecionados[iIndice].aCells[6].getValue().getNumber();
                 oItemAdicionar.valorunitario = js_strToFloat(oSelecionados[iIndice].aCells[7].getValue());
@@ -1258,7 +1257,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 oItemAdicionar.servico = oItem.servico;
                 oItemAdicionar.controlaServico = oItem.servico;
 
-                if(oSelecionados[iIndice].aCells[9].getValue().getNumber() == 0 && oSelecionados[iIndice].aCells[10].getValue().getNumber()==0 && $('oCboTipoAditivo').value != 12 && $('oCboTipoAditivo').value != 8 && $('oCboTipoAditivo').value != 13 && $('oCboTipoAditivo').value != 6){
+                // if(oSelecionados[iIndice].aCells[9].getValue().getNumber() == 0 && oSelecionados[iIndice].aCells[10].getValue().getNumber()==0 && $('oCboTipoAditivo').value != 12 && $('oCboTipoAditivo').value != 8 && $('oCboTipoAditivo').value != 13 && $('oCboTipoAditivo').value != 6){
+                //     lAditar = false;
+                //     return alert("Desmarque os itens que não foram aditados!");
+                // }
+                if(me.validaItensNaoAditados(oSelecionados[iIndice])){
                     lAditar = false;
                     return alert("Desmarque os itens que não foram aditados!");
                 }
@@ -1420,6 +1423,14 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
 
 
+    }
+
+    this.validaItensNaoAditados = (oSelecionado) => {
+        const tiposAditivo = [12,13,6,8];
+        return (oSelecionado.aCells[9].getValue().getNumber() == 0
+        && oSelecionado.aCells[10].getValue().getNumber() == 0
+        && !tiposAditivo.includes($('oCboTipoAditivo').value)
+        );
     }
 
     /**
@@ -2140,6 +2151,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 casas = 2;
             }
 
+
+
         aItensPosicao[iLinha].novaquantidade  = nQuantidade;
         aItensPosicao[iLinha].novounitario    = nUnitario;
 
@@ -2302,22 +2315,21 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             $('btnItens').style.display = '';
             $('btnItens').observe('click', me.novoItem);
         }
-        this.handleTypeItems();
+        this.lidaTiposAdimentos();
     }
 
-    this.handleTypeItems = () => {
+    this.lidaTiposAdimentos = () => {
         const tiposAditivo = ['9','10','11','14'];
 
         if (tiposAditivo.includes($('oCboTipoAditivo').value)) {
+            this.aEstadoInputQtdFinal = new Array();
             let acordo = document.getElementById('oTxtCodigoAcordo').value;
             this.getAcordo(acordo);
             return;
         }
-        this.habilitaInputValorFinal();
     }
 
     this.getAcordo = (iAcordo) => {
-        console.log(iAcordo);
         var oParam = new Object();
         oParam.exec = "getItensAditamento";
         oParam.iAcordo = iAcordo;
@@ -2350,7 +2362,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             while( j < tamanhoRetornoItens) {
                 if (retornoItens[j].ac20_pcmater == codigoGrid) {
-                    console.log("chegou dentro dos dois for");
                     this.validaTipoAditivo(aLinha, retornoItens[j], tipoAditivo);
                     j = tamanhoRetornoItens + j;
                 }
@@ -2370,35 +2381,27 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         if (tipoAditivo === '14'
             && retornoItem.ac20_servicoquantidade === 't'
             && iQuantidadeAtual > 0) {
-            console.log('CHEGOU AQUI')
             this.desativaInput(aLinha,7);
             return;
         }
-
-        this.habilitaInputValorFinal()
     }
 
     this.desabilitaLinha = (aLinha,tipoAditivo) => {
-        console.log('Desabilita linha');
         let colunasTotal = aLinha.aCells.length;
         let colunasDesabilitadas = tipoAditivo === '14'
-            ? [0,6,7,9,10,11,12,13]
+            ? [0,6,7,9,10,12,13]
             : [0,6,7,9,10];
 
         for (let i = 0; i < colunasTotal; i++) {
             if (colunasDesabilitadas.includes(i)) {
-                let idCelula = aLinha.aCells[i].getId();
-                const valorFinalDom = document.getElementById(idCelula);
-                const valorFinalInput = valorFinalDom.children;
-
-                valorFinalInput[0].disabled = true;
+                const valorFinalInput = this.buscaInput(aLinha.aCells[i]);
+                valorFinalInput.disabled = true;
             }
 
         }
     }
 
-    this.desativaInput = (aLinha,coluna) => {
-        console.log('chegou dentro de desativa valor');
+    this.desativaInput = (aLinha, coluna) => {
         let atributos = `
             background-color:#DEB887;
             pointer-events: none;
@@ -2406,36 +2409,17 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             width:100%
         `;
 
-        let idCelula = aLinha.aCells[coluna].getId();
+        const valorFinalInput = this.buscaInput(aLinha.aCells[7]);
+        valorFinalInput.style.cssText = atributos;
+        return;
+    }
+
+    this.buscaInput = (itemGrid) => {
+        let idCelula = itemGrid.getId();
         const valorFinalDom = document.getElementById(idCelula);
         const valorFinalInput = valorFinalDom.children;
-
-        valorFinalInput[0].style.cssText = atributos;
-        return;
+        return valorFinalInput[0];
     }
-
-    this.habilitaInputValorFinal = () => {
-        console.log('habilitaInputValorFinal');
-        let itensGrid = me.oGridItens.aRows;
-        let iQuantidadeItens = itensGrid.length;
-        let atributos = `
-            background-color:#FFF;
-            pointer-events: auto;
-            touch-action: auto;
-            width:100%;
-        `;
-
-        for (var i = 0; i < iQuantidadeItens; i++) {
-
-            let idCelula = itensGrid[i].aCells[7].getId();
-            const valorFinalDom = document.getElementById(idCelula);
-            const valorFinalInput = valorFinalDom.children;
-
-            valorFinalInput[0].style.cssText = atributos;
-        }
-        return;
-    }
-
 
     this.removeItens = () => {
       let listaItens = me.oGridItens.aRows;
