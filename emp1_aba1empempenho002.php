@@ -185,7 +185,6 @@ if(isset($alterar)){
 
     //Altera a data do empenho
     if($sqlerro == false){
-        if(strtotime($data_empenho) < strtotime(db_getsession("DB_anousu"))){
         if(strtotime($data_empenho) < db_getsession("DB_datausu")){
             $sqlAlteraData = $clempempenho->alteraData($e60_numemp,$e60_emiss,$data_empenho, date('m',db_getsession('DB_datausu')));
             db_query($sqlAlteraData);
