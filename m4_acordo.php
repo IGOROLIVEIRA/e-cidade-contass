@@ -13,7 +13,6 @@ require_once 'classes/db_acordoaux_classe.php';
 require_once 'classes/db_parametroscontratos_classe.php';
 require_once 'classes/db_manutencaoacordo_classe.php';
 require_once 'classes/db_acordoposicao_classe.php';
-
 $clacordo = new cl_acordo;
 $clmanutencaoacordo = new cl_manutencaoacordo;
 $clacordoposicao = new cl_acordoposicao;
@@ -241,28 +240,7 @@ if (isset($alterar)) {
     ");
 
     $cflicita = db_utils::fieldsMemory($resultadocflicita, 0);
-    $ac16_datareferencia = implode('-', array_reverse(explode('/', $ac16_datareferencia)));
-    $ac16_datapublicacao = implode('-', array_reverse(explode('/', $ac16_datapublicacao)));
-    $dTinicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
-    $dTfim = implode('-', array_reverse(explode('/', $ac16_datafim)));
-    $setac16 = '';
-    if ($ac16_datareferencia != "" && $ac16_datareferencia != null) {
-      $setac16 .= ",ac16_datareferencia = '$ac16_datareferencia'";
-    }
-    if ($ac16_datapublicacao != "" && $ac16_datapublicacao != null) {
-      $setac16 .= ",ac16_datapublicacao = '$ac16_datapublicacao'";
-    }
-    if ($ac16_veiculodivulgacao != "" && $ac16_veiculodivulgacao != null) {
-      $setac16 .= ",ac16_veiculodivulgacao = '$ac16_veiculodivulgacao'";
-    }
-    if ($dTinicio != "" && $dTinicio != null) {
-      $setac16 .= ",ac16_datainicio = '$dTinicio'";
-    }
-    if ($dTfim != "" && $dTfim != null) {
-      $setac16 .= ",ac16_datafim = '$dTfim'";
-    }
-
-    db_query("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' $setac16 WHERE ac16_sequencial = '$ac16_sequencial';");
+    db_query("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' WHERE ac16_sequencial = '$ac16_sequencial';");
   }
 
   $ac16_datainicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
