@@ -124,7 +124,7 @@ function js_pesquisarEstimativa() {
 
   js_OpenJanelaIframe( '',
                      'db_iframe_solicitaestimativa',
-                     'func_solicitaestimativa.php?funcao_js=parent.js_mostraEstimativa|pc10_numero&departamento=true',
+                     'func_alterasolicitaestimativa.php?funcao_js=parent.js_mostraEstimativa|pc10_numero&departamento=true',
                      'Pesquisa de Estimativa de Registro de Preço',
                      true );
 }
@@ -140,7 +140,7 @@ function js_pesquisarAbertura() {
 
   js_OpenJanelaIframe( '',
                      'db_iframe_solicitaabertura',
-                     'func_solicitaregistropreco.php?funcao_js=parent.js_mostraAbertura|pc54_solicita&departamento=true',
+                     'func_alterarsolicitaregistropreco.php?funcao_js=parent.js_mostraAbertura|pc54_solicita&departamento=true',
                      'Pesquisa de Abertura de Registro de Preço',
                      true );
 }

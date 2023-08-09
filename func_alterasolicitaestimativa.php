@@ -89,9 +89,7 @@ $clsolicita->rotulo->label("pc10_data");
 
 
        $where_depart = "";
-       if (isset($departamento) && trim($departamento)!="") {
-         $where_depart .= " and pc10_depto=".db_getsession("DB_coddepto");
-      }
+      
 
       if (isset($nada)) {
         $where_depart = "";
@@ -131,7 +129,7 @@ $clsolicita->rotulo->label("pc10_data");
 
         $sWhere .= " and pc10_numero = {$numero} ";
       
-    }
+     }
 
       if (!empty($formacontrole)) {
 
@@ -154,6 +152,7 @@ $clsolicita->rotulo->label("pc10_data");
 
         $where_depart .= " and pc10_instit          = ". db_getsession("DB_instit");
         $where_depart .= " and pc10_solicitacaotipo = 4";
+        $where_depart .= $sWhere;
         $campos = " distinct ".$campos;
         if (isset($chave_pc10_numero) && (trim($chave_pc10_numero)!="") ) {
           $sql = $clsolicita->sql_query_solicitaanulada(null,$campos,"pc10_numero desc "," pc10_numero=$chave_pc10_numero $where_depart ");
@@ -162,7 +161,8 @@ $clsolicita->rotulo->label("pc10_data");
         } else {
           $sql = $clsolicita->sql_query_solicitaanulada("",$campos,"pc10_numero desc "," 1=1 $where_depart");
         }
-        db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",array(),false);
+        
+        db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",array());
       } else {
         if ($pesquisa_chave!=null && $pesquisa_chave!="") {
           $result = $clsolicita->sql_record($clsolicita->sql_query_solicitaanulada(null,"distinct *",""," pc10_numero=$pesquisa_chave $where_depart "));

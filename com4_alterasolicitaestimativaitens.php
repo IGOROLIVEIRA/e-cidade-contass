@@ -577,6 +577,7 @@ if ($processar) {
     var oParam = new Object();
     oParam.exec = "alterarItens";
     oParam.iCodigoItem = oGridItens.aRows[iSeq].aCells[1].content;
+    oParam.iQuantidade = oGridItens.aRows[iSeq].aCells[5].content;
     oParam.iIndice = iSeq;
     var oAjax = new Ajax.Request(sUrlRC, {
       method: "post",
