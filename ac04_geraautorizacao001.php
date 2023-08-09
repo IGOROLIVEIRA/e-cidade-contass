@@ -1579,15 +1579,15 @@ if ($x->consultarDataDoSistema == true) {
         }
 
         if((oRetorno.sTipoorigem == '2' || oRetorno.sTipoorigem == '3') && oRetorno.sLicitacao == ''){
-            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoorigem] + 'sem vínculo com Licitação. Gentileza entrar em contato com o suporte para a vinculação correta.');
+            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoorigem] + ' sem vínculo com Licitação. Gentileza entrar em contato com o suporte para a vinculação correta.');
         }
 
         if((oRetorno.sTipoorigem == '4' ) && oRetorno.sAdesaoRegPreco == ''){
-            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoorigem] + 'sem vínculo com Adesão de Registro de Preço. Gentileza entrar em contato com o suporte para a vinculação correta.');
+            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoorigem] + ' sem vínculo com Adesão de Registro de Preço. Gentileza entrar em contato com o suporte para a vinculação correta.');
         }
         
         if((oRetorno.sTipoorigem == '5' || oRetorno.sTipoorigem == '6' || oRetorno.sTipoorigem == '7' || oRetorno.sTipoorigem == '8' || oRetorno.sTipoorigem == '9') && oRetorno.sLicitacaooutroorgao == ''){
-            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoorigem] + 'sem vínculo com Licitação de Outros Órgãos. Gentileza entrar em contato com o suporte para a vinculação correta.');
+            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoorigem] + ' sem vínculo com Licitação de Outros Órgãos. Gentileza entrar em contato com o suporte para a vinculação correta.');
         }
 
         if (oRetorno.status > 1) {
