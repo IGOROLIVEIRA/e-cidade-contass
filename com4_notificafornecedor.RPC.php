@@ -256,9 +256,9 @@ switch ($oParam->sExecucao) {
 
 
       if(strlen($oFornecedor->getCgm()->getCgccpf()) == 14 && $oFornecedor->getCgm()->getNaturezaJuridica() != "8885"){
-          $oRetorno->ErroNaturezajuridicaCNPJ = true;
-      }else{
           $oRetorno->ErroNaturezajuridicaCNPJ = false;
+      }else{
+          $oRetorno->ErroNaturezajuridicaCNPJ = true;
       }
 
       /**

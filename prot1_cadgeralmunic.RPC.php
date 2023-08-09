@@ -652,6 +652,12 @@ switch ($oParam->exec) {
                     }
                 }
 
+                if($oParam->pessoa->z01_naturezajuridica == "1"){
+                    $oRetorno->status = 2;
+                    $oRetorno->message = urlencode("Campo Natureza Juridica não informado !");
+                    $sqlErro  = true;
+                }
+
                 if ($oParam->action == 'alterar'){
                     //HISTORICOCGM OC12852
                     $result = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_sequencial","","z09_numcgm = {$oParam->pessoa->z01_numcgm} and z09_tipo = 2"));
