@@ -634,21 +634,17 @@ if (pg_num_rows($this->rsLotes) > 0) {
                             $old_y = $this->objpdf->gety();
 
                             $this->objpdf->setfont('arial', '', 7);
-                            $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
-                            $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
+                            $this->objpdf->cell(15, $alt + $addalt, '', 1, 0, "C", 1);
+                            $this->objpdf->cell(15, $alt + $addalt, '', 1, 0, "C", 1);
                             $this->objpdf->multicell(160, $alt, mb_strtoupper(str_replace("\n", "", $descricao)), "T", "J", 0);
 
                             $this->objpdf->sety($old_y);
                             $this->objpdf->setx(194);
-                            $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
-                            $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
-                            if ($oDadosDaLinha->valorUnitario > 0) {
-                                $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
-                            } else {
-                                $this->objpdf->cell(20, $alt + $addalt, " - ", 1, 0, "C", 1);
-                            }
-                            $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual, 1, 0, "C", 1);
-                            $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->total, 1, 1, "C", 1);
+                            $this->objpdf->cell(15, $alt + $addalt, '', 1, 0, "C", 1);
+                            $this->objpdf->cell(20, $alt + $addalt, '', 1, 0, "C", 1);
+                            $this->objpdf->cell(20, $alt + $addalt, '', 1, 0, "C", 1);                            
+                            $this->objpdf->cell(20, $alt + $addalt, '', 1, 0, "C", 1);
+                            $this->objpdf->cell(20, $alt + $addalt, '', 1, 1, "C", 1);
                         } else {
                             
 
