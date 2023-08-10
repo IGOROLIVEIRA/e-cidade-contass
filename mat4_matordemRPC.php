@@ -591,8 +591,8 @@ if ($method == "getDados") {
 
       $rsitens = db_query("select pc01_codmater from pcmater where pc01_codmater in
           (select distinct e62_item from empempitem
-          inner join matordemitem on e62_numemp = m52_numemp 
-          inner join pcmater on e62_item = pc01_codmater 
+          inner join matordemitem on e62_numemp = m52_numemp
+          inner join pcmater on e62_item = pc01_codmater
           where m52_codlanc in ($codigoslancamento)) and pc01_servico = 'f';");
 
       if (pg_numrows($rsitens) > 0) {
@@ -726,8 +726,9 @@ if ($method == "getDados") {
         $oItem->iCentroDeCusto = NULL;
         array_push($aItens, $oItem);
       }
+        db_fim_transacao(false);
 
-
+        db_inicio_transacao();
       $oRequisicao  = new requisicaoMaterial($codigo);
       $atendido = $oRequisicao->atenderRequisicao(17, $aItens, $aDadosConsumoImediato['dpto']);
       if ($atendido == false) {
@@ -753,7 +754,7 @@ if ($method == "getDados") {
         // Condicao da OC17910
         if ($objJson->iCgmEmitente > 0)
             $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->iCgmEmitente);
-        else 
+        else
             $sSqlCgm   = $oDaoCgm->sql_query_file($objJson->m51_numcgm);
       $rsCgm     = $oDaoCgm->sql_record($sSqlCgm);
       $oDadosCgm = db_utils::fieldsMemory($rsCgm, 0);
