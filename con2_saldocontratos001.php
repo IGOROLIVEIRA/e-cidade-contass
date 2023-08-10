@@ -356,18 +356,18 @@ function js_gerarRelatorio(){
 
     $("sDepartsResponsavel").value = sDepartsResponsavel;
 
-    parametros = 'ac16_sequencial=' + $F("ac16_sequencial") + '&iAgrupamento=' + $F("iAgrupamento") +
+    filtros = 'ac16_sequencial=' + $F("ac16_sequencial") + '&iAgrupamento=' + $F("iAgrupamento") +
     '&ac02_acordonatureza=' + $F("ac02_acordonatureza") + '&ac16_datainicio=' + $F('ac16_datainicio') +
     '&ac16_datafim=' + $F('ac16_datafim') + '&ordem=' + $F('ordem') + '&sDepartsInclusao=' + $F('sDepartsInclusao') +
     '&sDepartsResponsavel=' + $F('sDepartsResponsavel');
 
     if (document.getElementById('pdf').checked == true) {
-      jan = window.open('con2_saldocontratos002.php?'+parametros, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+      jan = window.open('con2_saldocontratos002.php?'+filtros, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
       jan.moveTo(0, 0);
     }
 
     if (document.getElementById('excel').checked == true) {
-      jan = window.open('con2_saldocontratosexcel002.php?'+parametros, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+      jan = window.open('con2_saldocontratosexcel002.php?'+filtros, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
       jan.moveTo(0, 0);
     }
 
