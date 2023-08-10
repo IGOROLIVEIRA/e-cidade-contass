@@ -590,53 +590,49 @@ class cl_aoc122023
      */
     public function sqlReg12($oDados10): string
     {
-        if ($oDados10->tipodecreto == 1) {
-            $sSql = "select distinct '12' as tiporegistro,
-                                        o39_codproj as codReduzidoDecreto,
-                                        o45_numlei as nroLeiAlteracao,
-                                        o45_datalei as dataLeiAlteracao,
-                                        case
-                                            when o45_tipolei = 1 then 'LOA'
-                                            when o45_tipolei = 2 then 'LDO'
-                                            when o45_tipolei = 3 then 'LAO'
-                                            when o45_tipolei = 4 then 'LAOP'
-                                            else ''
-                                        end as tipoLei,
-                                        (case
-                                            when o46_tiposup in (1006, 1007, 1008, 1009, 1010, 1012) then 2
-                                            when o46_tiposup in (1023, 1024, 1025) then 5
-                                            when o46_tiposup in (1014, 1015, 1016) then 3
-                                            else 1
-                                        END ) AS tipoLeiAlteracao,
-                                        1 as sql
-                                    from orcprojeto
-                                        join orclei on o39_codlei = o45_codlei
-                                        join orcsuplem on o46_codlei = o39_codproj
-                                    where o39_codproj in ({$oDados10->codigovinc}) ";
+        $codigosVinculados = implode(',', $oDados10->codigovinc);
 
-        } else {
-            $sSql = "select distinct '12' as tiporegistro,
-                                        o39_codproj as codReduzidoDecreto,
-                                        o138_numerolei as nroLeiAlteracao,
-                                        o138_data as dataLeiAlteracao,
-                                        case
-                                            when o138_altpercsuplementacao = 1 then 'LAOP'
-                                            else 'LAO'
-                                        end tipoLei,
-                                        (case
-                                            when o46_tiposup in (1006, 1007, 1008, 1009, 1010, 1012) then 2
-                                            when o46_tiposup in (1023, 1024, 1025) then 5
-                                            when o46_tiposup in (1014, 1015, 1016) then 3
-                                            else 1
-                                        END ) AS tipoLeiAlteracao,
-                                        2 as sql
-                                from orcprojeto
-                                    join orcprojetoorcprojetolei on o39_codproj = o139_orcprojeto
-                                    join orcprojetolei on o139_orcprojetolei = o138_sequencial
-                                    join orcsuplem on o46_codlei = o39_codproj
-                        where o39_codproj in ({$oDados10->codigovinc})";
-
-        }
-        return $sSql;
+        return "SELECT '12' AS tiporegistro,
+                       o39_codproj AS codReduzidoDecreto,
+                       CASE
+                           WHEN {$oDados10->tipodecreto} = 1 THEN o45_numlei
+                           ELSE o138_numerolei
+                       END AS nroLeiAlteracao,
+                       CASE
+                           WHEN {$oDados10->tipodecreto} = 1 THEN o45_datalei
+                           ELSE o138_data
+                       END AS dataLeiAlteracao,
+                       CASE
+                           WHEN {$oDados10->tipodecreto} = 1 THEN
+                               CASE o45_tipolei
+                                   WHEN 1 THEN 'LOA'
+                                   WHEN 2 THEN 'LDO'
+                                   WHEN 3 THEN 'LAO'
+                                   WHEN 4 THEN 'LAOP'
+                                   ELSE ''
+                               END
+                           ELSE
+                               CASE o138_altpercsuplementacao
+                                   WHEN 1 THEN 'LAOP'
+                                   ELSE 'LAO'
+                               END
+                       END AS tipoLei,
+                       (CASE
+                           WHEN o46_tiposup IN (1006, 1007, 1008, 1009, 1010, 1012) THEN 2
+                           WHEN o46_tiposup IN (1023, 1024, 1025) THEN 5
+                           WHEN o46_tiposup IN (1014, 1015, 1016) THEN 3
+                           ELSE 1
+                       END) AS tipoLeiAlteracao,
+                       CASE
+                           WHEN {$oDados10->tipodecreto} = 1 THEN 1
+                           ELSE 2
+                       END AS sql
+                FROM orcprojeto
+                JOIN orcsuplem ON o46_codlei = o39_codproj
+                LEFT JOIN orclei ON o39_codlei = o45_codlei
+                LEFT JOIN orcprojetoorcprojetolei ON o39_codproj = o139_orcprojeto
+                LEFT JOIN orcprojetolei ON o139_orcprojetolei = o138_sequencial
+                WHERE o39_codproj IN ({$codigosVinculados})";
     }
+
 }
