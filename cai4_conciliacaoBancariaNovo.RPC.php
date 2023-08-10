@@ -60,7 +60,7 @@ try {
             $data_final = data($oParam->params[0]->data_final);
             $condicao_lancamento = condicao_lancamento($oParam->params[0]->tipo_lancamento);
             $sql = query_lancamentos($oParam->params[0]->conta, $data_inicial, $data_final, $condicao_lancamento, $oParam->params[0]->tipo_lancamento);
-            // $oRetorno->aLinhasExtrato[] = $sql;
+            // \$oRetorno->aLinhasExtrato[] = $sql;
             $resultado   = db_query($sql);
             $rows        = pg_numrows($resultado);
             $lancamentos = array();
@@ -972,6 +972,7 @@ function query_padrao_op()
     $sql .= "         END ";
     $sql .= "         ) ";
     $sql .= "     ) ";
+    $sql .= " AND conc.k172_valor = c69_valor ";
     $sql .= " WHERE ";
 
     return $sql;
