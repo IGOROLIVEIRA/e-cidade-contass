@@ -93,13 +93,13 @@ $oRotulo->label("descrdepto");
                 <tr id="trLicitacao" style="display: none;">
                   <td nowrap title="<?php echo $Tac16_sequencial; ?>" width="130">
                    <?php
-                   db_ancora("Licitação", "js_ancoralicitacao(true);",1);
+                   db_ancora("Licitação", "js_pesquisa_liclicita(true);",1);
                    ?>
                  </td>
                  <td colspan="3">
                   <?php
-                  db_input('codigoLicitacao', 10, $Iac16_sequencial, true, 'text', 1, "onchange='js_ancoralicitacao(false);'");
-                  db_input('descricaoLicitacao', 45, $Iac16_resumoobjeto, true, 'text', 3);
+                  db_input('ac16_licitacao', 10, $Iac16_sequencial, true, 'text', 1, "onchange='js_pesquisa_liclicita(false);'");
+                  db_input('l20_objeto', 45, $Iac16_resumoobjeto, true, 'text', 3);
                   ?>
                 </td>
               
@@ -292,7 +292,7 @@ function js_mostraAcordo1(chave1,chave2){
 }
 
 function js_selecionarFormatoRelatorio() {
-  if (document.getElementById('trLicitacao').style.display == '' && document.getElementById('ac16_sequencial').value == '')
+  if (document.getElementById('trLicitacao').style.display == '' && document.getElementById('ac16_licitacao').value == '')
     return alert("Usuário: Selecione a licitação.");
 
   var iHeight = 200;
@@ -333,7 +333,7 @@ function destroyWindow() {
 
 function js_gerarRelatorio(){
 
-    let sDepartsInclusao         = "";
+    let sDepartsInclusao = "";
 
     for (var iDepartamento = 0; iDepartamento < aDepartsInclusao.length; iDepartamento++) {
         sDepartsInclusao += aDepartsInclusao[iDepartamento].iDepartInc + ",";
@@ -359,7 +359,7 @@ function js_gerarRelatorio(){
     filtros = 'ac16_sequencial=' + $F("ac16_sequencial") + '&iAgrupamento=' + $F("iAgrupamento") +
     '&ac02_acordonatureza=' + $F("ac02_acordonatureza") + '&ac16_datainicio=' + $F('ac16_datainicio') +
     '&ac16_datafim=' + $F('ac16_datafim') + '&ordem=' + $F('ordem') + '&sDepartsInclusao=' + $F('sDepartsInclusao') +
-    '&sDepartsResponsavel=' + $F('sDepartsResponsavel');
+    '&sDepartsResponsavel=' + $F('sDepartsResponsavel') + '&ac16_licitacao=' + $F("ac16_licitacao");
 
     if (document.getElementById('pdf').checked == true) {
       jan = window.open('con2_saldocontratos002.php?'+filtros, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
@@ -376,33 +376,72 @@ function js_gerarRelatorio(){
 /**
  * Função para mostrar os campos necessários para os filtros
  */
- function js_verificaFiltro(iValor) {
- 
-    if (iValor == 1) {
-
-      $("trAcordos").style.display = "";
-      $("trDepartInc").style.display = "none";
-      $("trDepartResp").style.display = "none";
-      $("trLicitacao").style.display = "none";
-      return true;
-
-    } 
-    
-    if(iValor == 2) { 
-
-      $("trDepartInc").style.display = "";
-      $("trDepartResp").style.display = "";
-      $("trAcordos").style.display = "none";
-      $("trLicitacao").style.display = "none";
-      return true;
-
-    }
-
-    $("trLicitacao").style.display = "";
-    $("trAcordos").style.display = "none";
+function js_verificaFiltro(iValor) {
+  if (iValor == 1) {
+    $("trAcordos").style.display = "";
     $("trDepartInc").style.display = "none";
     $("trDepartResp").style.display = "none";
+    $("trLicitacao").style.display = "none";
+    return true;
+  }
 
+  if (iValor == 2) {
+    $("trDepartInc").style.display = "";
+    $("trDepartResp").style.display = "";
+    $("trAcordos").style.display = "none";
+    $("trLicitacao").style.display = "none";
+    return true;
+  }
+
+  $("trLicitacao").style.display = "";
+  $("trAcordos").style.display = "none";
+  $("trDepartInc").style.display = "none";
+  $("trDepartResp").style.display = "none";
+}
+
+
+function js_pesquisa_liclicita(mostra) {
+  if (mostra == true) {
+    js_OpenJanelaIframe(
+      "top.corpo",
+      "db_iframe_liclicita",
+      "func_liclicita.php?situacao=10&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto",
+      "Pesquisa",
+      true,
+    );
+    return true;
+  }
+
+  if (document.form1.ac16_licitacao.value != "") {
+    js_OpenJanelaIframe(
+      "top.corpo",
+      "db_iframe_liclicita",
+      "func_liclicita.php?situacao=10&pesquisa_chave=" +
+        document.form1.ac16_licitacao.value +
+        "&funcao_js=parent.js_mostraliclicita",
+      "Pesquisa",
+      false,
+    );
+    return true;
+  }
+
+  document.form1.l20_codigo.value = "";
+}
+
+function js_mostraliclicita(l20_objeto, erro) {
+  if (erro == true) {
+    document.getElementById("ac16_licitacao").value = "";
+    document.getElementById("l20_objeto").value = "";
+    document.getElementById("ac16_licitacao").focus();
+    return;
+  }
+  document.getElementById("l20_objeto").value = l20_objeto;
+}
+
+function js_mostraliclicita1(ac16_licitacao, l20_objeto) {
+  document.getElementById("ac16_licitacao").value = ac16_licitacao;
+  document.getElementById("l20_objeto").value = l20_objeto;
+  db_iframe_liclicita.hide();
 }
 
 var aDepartsInclusao        = new Array();

@@ -53,7 +53,9 @@ if ($iAgrupamento == 1) {
     FROM acordoposicao
     WHERE ac26_acordo = '$ac16_sequencial') ";
   }
-} else {
+} 
+
+if($iAgrupamento == 2){
   /*
  * Filtro pelo departamento de Inclusão
  * */
@@ -72,6 +74,11 @@ if ($iAgrupamento == 1) {
     $sWhere .= ' ac16_deptoresponsavel in (' . $sDepartsResponsavel . ') ';
   }
 }
+
+if($iAgrupamento == 3){
+  $sWhere .= " AND ac16_licitacao = '$ac16_licitacao' ";
+}
+
 if (isset($ac02_acordonatureza) && $ac02_acordonatureza != "") {
   $sWhere .= " AND ac16_acordogrupo = '$ac02_acordonatureza' ";
 }
