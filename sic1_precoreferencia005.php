@@ -63,7 +63,7 @@ if (pg_num_rows($rsLotes) == 0) {
             from
                 precoreferencia
             where
-                si01_processocompra = {$codigo_preco});";
+                si01_processocompra = {$codigo_preco}) order by si02_sequencial;";
             $rsResult = db_query($sSql) or die(pg_last_error());
 
             $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->si02_criterioadjudicacao;
@@ -179,7 +179,7 @@ if (pg_num_rows($rsLotes) == 0) {
                         from
                             precoreferencia
                         where
-                            si01_processocompra = {$codigo_preco});";
+                            si01_processocompra = {$codigo_preco}) order by si02_sequencial;";
                     $rsResult = db_query($sSql) or die(pg_last_error());
 
             }
@@ -193,13 +193,26 @@ if (pg_num_rows($rsLotes) == 0) {
     echo "Processo de Compra: $codigo_preco \n";
     echo "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResultData, 0)->si01_datacotacao))) . " \n";
 
-    echo "SEQ;";
-    echo "ITEM;";
-    echo "DESCRICAO DO ITEM;";
-    echo "VALOR UN;";
-    echo "QUANT;";
-    echo "UN;";
-    echo "TOTAL;\n";
+    if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
+
+        echo "SEQ;";
+        echo "ITEM;";
+        echo "DESCRICAO DO ITEM;";
+        echo "VALOR UN;";
+        echo "QUANT;";
+        echo "UN;";
+        echo "PERCENTUAL;";
+        echo "TOTAL;\n";
+    } else {
+
+        echo "SEQ;";
+        echo "ITEM;";
+        echo "DESCRICAO DO ITEM;";
+        echo "VALOR UN;";
+        echo "QUANT;";
+        echo "UN;";
+        echo "TOTAL;\n";
+    }
 
 
     $nTotalItens = 0;
@@ -208,7 +221,6 @@ if (pg_num_rows($rsLotes) == 0) {
 
         $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
-        $oResult = db_utils::fieldsMemory($rsResult, $iCont); 
                 $sSql1 = "select
                             m61_abrev
                         from
@@ -262,32 +274,66 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 $oDadosDaLinha->descricao = str_replace(';', "", $oResult2->pc01_descrmater);
             }
             //$oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
-            $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
-            if($controle == 0 && $fazerloop==2){
-                $oDadosDaLinha->quantidade = $oResult->si02_qtditem - $valorqtd;
-            }else if($controle == 1 && $fazerloop==2){
-                $oDadosDaLinha->quantidade = $valorqtd;
+            if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
+
+                $oDadosDaLinha->valorUnitario = " - ";
+                $oDadosDaLinha->quantidade = " - ";
+
+                if ($oResult->si02_mediapercentual == 0) {
+                    $oDadosDaLinha->mediapercentual = "";
+                } else {
+                    $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
+                }
+
+                $oDadosDaLinha->unidadeDeMedida = " - ";
+                $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia, 2, ",", ".");
+            
             }else{
-                $oDadosDaLinha->quantidade = $oResult->si02_qtditem;
+
+            
+                $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+                if($controle == 0 && $fazerloop==2){
+                    $oDadosDaLinha->quantidade = $oResult->si02_qtditem - $valorqtd;
+                }else if($controle == 1 && $fazerloop==2){
+                    $oDadosDaLinha->quantidade = $valorqtd;
+                }else{
+                    $oDadosDaLinha->quantidade = $oResult->si02_qtditem;
+                }
+                if ($oResult->si02_mediapercentual == 0) {
+                    $oDadosDaLinha->mediapercentual = "";
+                } else {
+                    $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
+                }
+                $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
+                if($controle==0 && $fazerloop==2){
+                    $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * ($oResult->si02_qtditem - $valorqtd);
+                }else if($controle==1 && $fazerloop==2){
+                    $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * $valorqtd;
+                }
+                $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
             }
-            $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
-            if($controle==0 && $fazerloop==2){
-                $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * ($oResult->si02_qtditem - $valorqtd);
-            }else if($controle==1 && $fazerloop==2){
-                $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * $valorqtd;
-            }
-            $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
 
             $controle++;
             $sqencia++;
-
-            echo "$oDadosDaLinha->seq;";
-            echo "$oDadosDaLinha->item;";
-            echo "$oDadosDaLinha->descricao;";
-            echo "R$ $oDadosDaLinha->valorUnitario;";
-            echo "$oDadosDaLinha->quantidade;";
-            echo "$oDadosDaLinha->unidadeDeMedida;";
-            echo "R$ $oDadosDaLinha->total;\n";
+            if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
+                echo "$oDadosDaLinha->seq;";
+                echo "$oDadosDaLinha->item;";
+                echo "$oDadosDaLinha->descricao;";
+                echo "R$ $oDadosDaLinha->valorUnitario;";
+                echo "$oDadosDaLinha->quantidade;";
+                echo "$oDadosDaLinha->unidadeDeMedida;";
+                echo "$oDadosDaLinha->mediapercentual;";
+                echo "R$ $oDadosDaLinha->total;\n";
+            } else {
+                echo "$oDadosDaLinha->seq;";
+                echo "$oDadosDaLinha->item;";
+                echo "$oDadosDaLinha->descricao;";
+                echo "R$ $oDadosDaLinha->valorUnitario;";
+                echo "$oDadosDaLinha->quantidade;";
+                echo "$oDadosDaLinha->unidadeDeMedida;";
+                echo "$oDadosDaLinha->mediapercentual;";
+                echo "R$ $oDadosDaLinha->total;\n";
+            }
         }
     }
 
