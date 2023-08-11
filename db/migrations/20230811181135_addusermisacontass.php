@@ -1,8 +1,8 @@
 <?php
 
-use Phinx\Migration\AbstractMigration;
+use Classes\PostgresMigration;
 
-class Addusermisacontass extends AbstractMigration
+class Addusermisacontass extends PostgresMigration
 {
     public function up()
     {
