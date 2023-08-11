@@ -1544,7 +1544,7 @@ switch ($oParam->exec) {
                                     $seqlote++;
                                     $clliclicitemlote->l04_seq = $seqlote;
                                 }
-                                $oDaoLoteReservado->l04_numerolote = null;
+                                $clliclicitemlote->l04_numerolote = null;
                                 $clliclicitemlote->incluir(null);
 
                                 if ($clliclicitemlote->erro_status == 0) {
