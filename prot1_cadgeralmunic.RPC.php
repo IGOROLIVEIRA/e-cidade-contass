@@ -658,6 +658,12 @@ switch ($oParam->exec) {
                     $sqlErro  = true;
                 }
 
+                if(strlen($oParam->pessoa->z01_cgccpf) == 14 && $oParam->pessoa->z01_naturezajuridica == "8885"){
+                    $oRetorno->status = 2;
+                    $oRetorno->message = urlencode("Natureza não informada, selecione a Natureza Jurídica correta!");
+                    $sqlErro  = true;
+                }
+
                 if ($oParam->action == 'alterar'){
                     //HISTORICOCGM OC12852
                     $result = $clhistoricocgm->sql_record($clhistoricocgm->sql_query_file(null,"z09_sequencial","","z09_numcgm = {$oParam->pessoa->z01_numcgm} and z09_tipo = 2"));
@@ -817,6 +823,13 @@ switch ($oParam->exec) {
 
     case 'getCodigoIbge' :
         $oRetorno->codigo = municipio::getCodigoIbge($oParam->estado, utf8_decode($oParam->cidade));
+        echo $oJson->encode($oRetorno);
+        break;
+
+    case 'getNaturezaJuridica' :
+
+        $oCgm = CgmFactory::getInstanceByCgm($oParam->numcgm);
+        $oRetorno->naturezajuridica = $oCgm->getNaturezaJuridica();
         echo $oJson->encode($oRetorno);
         break;
 
