@@ -5,7 +5,7 @@ namespace ECidade\RecursosHumanos\ESocial\Model\Formulario;
 use ECidade\RecursosHumanos\ESocial\Model\Formulario\EventoCargaInterface;
 
 /**
- * Classe responsável por retornar dados da carga
+ * Classe responsï¿½vel por retornar dados da carga
  * do evento 2399
  * @package ECidade\RecursosHumanos\ESocial\Model\Formulario
  */
@@ -45,7 +45,6 @@ class EventoCargaS2399 implements EventoCargaInterface
         $mesfolha = db_mesfolha();
         $sql = "
     	SELECT distinct
-        --trabalhador
         rh02_instit AS instituicao,
         cgm.z01_cgccpf as cpfTrab,
         cgm.z01_nome as nmTrab,
@@ -78,7 +77,6 @@ class EventoCargaS2399 implements EventoCargaInterface
             when rhpessoal.rh01_instru = 0 then '01'
             end as grauInstr,
             '' as nmSoc,
-            --nascimento
             rhpessoal.rh01_nasc as dtNascto,
             '105' as paisNascto,
             '105' as paisNac,
@@ -119,18 +117,8 @@ class EventoCargaS2399 implements EventoCargaInterface
                 ) AS codMunic,
             CASE WHEN cgm.z01_uf is null or trim(cgm.z01_uf) = '' then 'MG'
             else cgm.z01_uf end as uf,
-            --exterior
-            --'' as paisResid,
-            --'' as dscLogradExterior,
-            --'' as nrLogradExterior,
-            --'' as complementoExterior,
-            --'' as bairroExterior,
-            --'' as nmCidExterior,
-            --'' as codPostalExterior,
-            --trabImig
             '' as tmpResid,
             '' as condIng,
-            --infoDeficiencia
             case when rh02_deficientefisico = true then 'S' else 'N' end as defFisica,
             case when rh02_deficientefisico = true and rh02_tipodeficiencia = 3 then 'S' else 'N' end as defVisual,
             case when rh02_deficientefisico = true and rh02_tipodeficiencia = 2 then 'S' else 'N' end as defAuditiva,
@@ -138,41 +126,12 @@ class EventoCargaS2399 implements EventoCargaInterface
             case when rh02_deficientefisico = true and rh02_tipodeficiencia = 4 then 'S' else 'N' end as defIntelectual,
             case when rh02_reabreadap = true then 'S' else 'N' end as reabReadap,
             '' as observacao,
-            --dependente
-            --case when rh31_gparen 'C' then '01' 
-            --when rh31_gparen 'F' and rh31_irf IN('0','2') then '03' 
-            --when rh31_gparen 'F' and rh31_irf IN('3') then '04' 
-            --when rh31_gparen in('P','M','A') then '09' 
-            --when rh31_gparen = 'O' then '99' 
-            --end as tpDep,
-            --rh31_nome as nmDep,
-            --rh31_dtnasc as dtNascto,
-            --rh31_cpf as cpfDep,
-            --rh31_sexo as sexoDep,
-            --case when rh31_irf in (1,2,3,4,5,6,7,8) then 'S'
-            --case when rh31_irf = 0 then 'N'
-            --else 'N' end as depIRRF
-            --case when rh31_depend in ('C','S') then 'S'
-            --when rh31_depend = 'N' then 'N'
-            --else 'N' end as depSF
-            --case when rh31_especi in ('C','S') then 'S'
-            --when rh31_especi = 'N' then 'N'
-            --else 'N' end as incTrab
-            --contato
-            --cgm.z01_telef as fonePrinc,
-            --cgm.z01_email as emailPrinc,
-            --infoTSVInicio
             CASE WHEN rhpessoal.rh01_admiss <= '2021-11-22'::date then 'S' else 'N' end as cadIni,
             rhpessoal.rh01_regist as matricula,
             h13_categoria as codCateg,
             rhpessoal.rh01_admiss as dtInicio,
-            --'' as nrProcTrab,
-            --cargoFuncao
             rh37_descr as nmCargo,
             rh37_cbo as CBOCargo,
-            --'' as nmFuncao,
-            --'' as CBOFuncao,
-            --remuneracao
             round(rh02_salari,2) as vrSalFx,
             case when rh02_tipsal = 'M' then 5
         when rh02_tipsal = 'Q' then 4
@@ -180,17 +139,7 @@ class EventoCargaS2399 implements EventoCargaInterface
         when rh02_tipsal = 'H' then 1
             else 5 end as undSalFixo,
             '' as dscSalVar,
-            --FGTS
             '' as dtOpcFGTS,
-            --infoDirigenteSindical
-            --'' as categOrigInfoDirigenteSindical,
-            --'' as tpInscInfoDirigenteSindical,
-            --'' as nrInscInfoDirigenteSindical,
-            --'' as dtAdmOrigInfoDirigenteSindical,
-            --'' as matricOrigInfoDirigenteSindical,
-            --'' as tpRegTrabInfoDirigenteSindical,
-            --'' as tpRegPrevInfoDirigenteSindical,
-            --infoTrabCedido
             case when rhpessoal.rh01_tipadm in (3,4) then h13_categoria else NULL end as categOrig,
             case when rhpessoal.rh01_tipadm in (3,4) then rh02_cnpjcedente else '' end as cnpjCednt,
             case when rhpessoal.rh01_tipadm in (3,4) then rh02_mattraborgcedente else '' end as matricCed,
@@ -201,7 +150,6 @@ class EventoCargaS2399 implements EventoCargaInterface
             case 
             when rhpessoal.rh01_tipadm in (3,4) and r33_tiporegime in ('1','2') then r33_tiporegime
             else NULL end as tpRegPrev,
-            --infoMandElet
             case when h13_categoria = 304 then 'N' ELSE NULL end as indRemunCargo,
             case when h13_categoria = 304 and rh30_regime in (1,3) then 2 
             when h13_categoria = 304 and rh30_regime = 2 then 1 
@@ -209,7 +157,6 @@ class EventoCargaS2399 implements EventoCargaInterface
             case when h13_categoria = 304 and r33_tiporegime = '1' then 1 
             when h13_categoria = 304 and r33_tiporegime = '2' then 2 
             else NULL end as tpRegPrevInfoMandElet,
-            --infoEstagiario
             CASE 
             WHEN h83_naturezaestagio in ('O','N') THEN 'O'
             ELSE NULL
@@ -226,29 +173,20 @@ class EventoCargaS2399 implements EventoCargaInterface
             h83_curso as areaAtuacao,
             h83_numapoliceseguro as nrApol,
             h83_dtfim as dtPrevTerm,
-            --instEnsino
             h83_cnpjinstensino as cnpjInstEnsino,
-            --'' as nmRazao,
-            --'' as dscLogradInstEnsino,
-            --'' as nrLogradInstEnsino,
-            --'' as bairroInstEnsino,
-            --'' as cepInstEnsino,
-            --'' as codMunicInstEnsino,
-            --'' as ufInstEnsino,
-            --ageIntegracao
             '' as cnpjAgntInteg,
-            --supervisorEstagio
             cgmsupervisor.z01_cgccpf as cpfSupervisor,
-            --mudancaCPF
-            --'' as cpfAnt,
-            --'' as matricAnt,
-            --'' as dtAltCPF,
-            --'' as observacao,
-            --afastamento
             '' as dtIniAfast,
             '' as codMotAfast,
-            --termino
-            '' as dtDeslig
+            '' as dtDeslig,
+            rh05_recis,
+            cgc as nrinsc,
+            rh30_regime,
+            eso08_codempregadorlotacao as codLotacao,
+            rhinssoutros.rh51_indicadesconto as indMV,
+            rhinssoutros.rh51_cgcvinculo as nrInscremunOutrEmpr,
+            rhinssoutros.rh51_categoria,
+            rhinssoutros.rh51_basefo
             FROM rhpessoal
             join cgm on rhpessoal.rh01_numcgm = cgm.z01_numcgm
             join rhpessoalmov on rhpessoal.rh01_regist = rh02_regist and (rh02_anousu,rh02_mesusu) = ({$this->ano},{$this->mes})
@@ -264,6 +202,9 @@ class EventoCargaS2399 implements EventoCargaInterface
         left join cgm as cgmsupervisor ON cgmsupervisor.z01_numcgm = rhpessoalsupervisor.rh01_numcgm
         left join inssirf on (r33_codtab::integer-2,r33_anousu,r33_mesusu) = (rh02_tbprev,{$anofolha},{$mesfolha})
         left join rhpesrescisao on rh05_seqpes = rh02_seqpes
+        LEFT JOIN eventos1020 ON eventos1020.eso08_instit = {$this->instit}
+        LEFT JOIN rhinssoutros ON rhpessoalmov.rh02_seqpes = rhinssoutros.rh51_seqpes
+        LEFT JOIN db_config ON rhpessoal.rh01_instit = db_config.codigo
         WHERE rhpessoal.rh01_instit = {$this->instit} 
         AND h13_categoria in (304,701,711,712,721,722,723,731,734,738,771,901,903,410)
         AND rh30_vinculo = 'A'
@@ -285,6 +226,8 @@ class EventoCargaS2399 implements EventoCargaInterface
         }
         
         $rsResult = \db_query($sql);
+        // var_dump($sql);
+        // db_criatabela($rsResult);exit;
         if (!$rsResult) {
             throw new \Exception("Erro ao buscar preenchimentos do S2399");
         }
