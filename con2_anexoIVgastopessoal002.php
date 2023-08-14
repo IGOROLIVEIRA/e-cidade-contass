@@ -1028,59 +1028,50 @@ ob_start();
                         if ($valoresperado == 'liquidado') {
                             $mesFinal = date("m", strtotime($dataFinal));
                             $chaveMesDezembro = "DEZ/" . date("Y", strtotime($dataAtual));
+                            $janeiro = "01-01-" . date("Y", strtotime($dataAtual));
+                            $dezembro = "31-12-" . date("Y", strtotime($dataAtual));
+
                             if ($dataAtual >= buscarDataImplantacao() or !buscarDataImplantacao()) {
-                                
                                 foreach ($aInstits as $oInstit) {
                                     $oInstit = new Instituicao($iInstit);
-                                    foreach (getDespesaMensal("01-01-" . date("Y", strtotime($dataAtual)), date("d-m-Y", strtotime($dataAtual . '- 1 day')), [$oInstit->getCodigo()]) as $data) {
+                                    
+                                    foreach (getDespesaMensal($janeiro, $dezembro, [$oInstit->getCodigo()]) as $data) {
                                         $chave = substr($data->o58_elemento, 0, 7);
-                                        if ($valoresperado == 'liquidado' AND $mesFinal != 12) {
-                                            $despesa[$chave][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
-                                        }
+                                        $despesa[$chave][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
                                     }
-                                }
-
-                                foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprio("01-01-" . date("Y", strtotime($dataAtual)), $dataAtual, $aInstits, $iRpps) as $data) {
-                                    $chave2 = $data->o58_elemento;
-                                    if ($mesFinal != 12) {
+                                    
+                                    foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprio($janeiro, $dezembro, [$oInstit->getCodigo()], $iRpps) as $data) {
+                                        $chave2 = $data->o58_elemento;
                                         $despesaSaldoIntaivosPensionistasProprio[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
                                     }
-                                }
 
-                                if ($iRpps) {
-                                   foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprioDeduzir("01-01-" . date("Y", strtotime($dataAtual)), $dataAtual, $aInstits) as $data) {
-                                        $chave2 = substr($data->o58_elemento, 0, 7);
-                                        if ($mesFinal != 12) {
-                                            $despesa[$chave2][$chaveMesDezembro] -= $data->empenhado - $data->liquidado;
-                                        }
+                                    if ($iRpps) {
+                                        foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprioDeduzir($janeiro, $dezembro, [$oInstit->getCodigo()]) as $data) {
+                                                $chave2 = substr($data->o58_elemento, 0, 7);
+                                                $despesa[$chave2][$chaveMesDezembro] -= $data->empenhado - $data->liquidado;
+                                            }
                                     }
-                                }
 
-                               foreach (getDespesaMensalExclusaoSaldoSentencasJudAnt("01-01-" . date("Y", strtotime($dtini)), "01-01-" . date("Y", strtotime($dataAtual)), $dataAtual, $aInstits) as $data) {
-                                    $chave2 = $data->o58_elemento;
-                                    if ($mesFinal != 12) {
+                                    foreach (getDespesaMensalExclusaoSaldoSentencasJudAnt($janeiro, $dezembro, $dataAtual, [$oInstit->getCodigo()]) as $data) {
+                                        $chave2 = $data->o58_elemento;
                                         $despesaSaldoSentencasJudAnt[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
                                     }
-                                }
 
-                                foreach (getDespesaMensalSaldoIndenizacaoDemissaoServidores("01-01-" . date("Y", strtotime($dataAtual)), $dataAtual, $aInstits) as $data) {
-                                    $chave2 = $data->o58_elemento;
-                                    if ($mesFinal != 12) {
+                                    foreach (getDespesaMensalSaldoIndenizacaoDemissaoServidores($janeiro, $dezembro, [$oInstit->getCodigo()]) as $data) {
+                                        $chave2 = $data->o58_elemento;
                                         $despesaSaldoIndenizacaoDemissaoServidores[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
                                     }
-                                }
 
-                                foreach (getDespesaMensalSaldoDespesasAnteriores("01-01-" . date("Y", strtotime($dataAtual)), date("d-m-Y", strtotime($dataAtual)), $aInstits, $dtini) as $data) {
-                                    $chave2 = $data->o58_elemento;
-                                    echo "A $data->empenhado - $data->liquidado </br>";
-                                    if ($mesFinal != 12) {
+                                    foreach (getDespesaMensalSaldoDespesasAnteriores($janeiro, $dezembro, [$oInstit->getCodigo()], $dtini) as $data) {
+                                        $chave2 = $data->o58_elemento;
                                         $despesaSaldoDespesasAnteriores[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
                                     }
                                 }
-                            } else {
-                                foreach (getDespesaMensalInformada("01-01-" . date("Y", strtotime($dataAtual)), $dataAtual, $aInstits, "01-01-" . date("Y", strtotime($dataAtual))) as $data) {
-                                    $chave = substr($data->o58_elemento, 0, 7);
-                                    if ($mesFinal != 12) {
+                            } else {        
+                                foreach ($aInstits as $oInstit) {
+                                    $oInstit = new Instituicao($iInstit);        
+                                    foreach (getDespesaMensalInformada($janeiro, $dezembro, [$oInstit->getCodigo()], $janeiro) as $data) {
+                                        $chave = substr($data->o58_elemento, 0, 7);
                                         $despesa[$chave][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
                                     }
                                 }
@@ -1119,20 +1110,18 @@ ob_start();
                                             $despesa[$chave]['descricao'] = $data->o56_descr;
                                         }
 
-                                        if ($valoresperado == 'liquidado') {
+                                        if (date("Y", strtotime($dataFinal)) >date("Y", strtotime($dataFinal))) {
                                             $despesa[$chave][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
                                         }
                                     }
 
                                     if ($iRpps) {
                                         foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprioDeduzir($inicio, date('Y-m-t', strtotime($inicio)), [$codigoInstit], false) as $data) {
-                                          
                                             $chave2 = substr($data->o58_elemento, 0, 7);
-    
-                                            if ($valoresperado == 'liquidado') {
+
+                                            if (date("Y", strtotime($dataFinal)) >date("Y", strtotime($dataFinal))) {
                                                 $despesa[$chave2][$chaveMesDezembro] -= $data->empenhado - $data->liquidado;
                                             }
-    
                                             $despesa[$chave2][$chaveMes] -= $data->$valoresperado;
                                         }
                                     }
@@ -1142,10 +1131,9 @@ ob_start();
                                 foreach (getDespesaMensalExclusaoSaldoIntaivosPensionistasProprio($inicio, date('Y-m-t', strtotime($inicio)), $aInstits, $iRpps) as $data) {
                                     $chave2 = $data->o58_elemento;
 
-                                    if ($valoresperado == 'liquidado') {
+                                    if (date("Y", strtotime($dataFinal)) >date("Y", strtotime($dataFinal))) {
                                         $despesaSaldoIntaivosPensionistasProprio[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
                                     }
-
                                     $despesaSaldoIntaivosPensionistasProprio[$chave2][$chaveMes]   += $data->$valoresperado;
                                     $despesaSaldoIntaivosPensionistasProprio[$chave2]['descricao']  = $data->o56_descr;
                                 }
@@ -1154,11 +1142,9 @@ ob_start();
 
                                 foreach (getDespesaMensalExclusaoSaldoSentencasJudAnt($dtini, $inicio, date('Y-m-t', strtotime($inicio)), $aInstits) as $data) {
                                     $chave2 = $data->o58_elemento;
-
-                                    if ($valoresperado == 'liquidado') {
+                                    if (date("Y", strtotime($dataFinal)) >date("Y", strtotime($dataFinal))) {
                                         $despesaSaldoSentencasJudAnt[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
                                     }
-
                                     $despesaSaldoSentencasJudAnt[$chave2][$chaveMes]   += $data->$valoresperado;
                                     $despesaSaldoSentencasJudAnt[$chave2]['descricao']  = $data->o56_descr;
                                 }
@@ -1167,32 +1153,22 @@ ob_start();
 
                                 foreach (getDespesaMensalSaldoIndenizacaoDemissaoServidores($inicio, date('Y-m-t', strtotime($inicio)), $aInstits) as $data) {
                                     $chave2 = $data->o58_elemento;
-
-                                    if ($valoresperado == 'liquidado'){
+                                    if (date("Y", strtotime($dataFinal)) >date("Y", strtotime($dataFinal))) {
                                         $despesaSaldoIndenizacaoDemissaoServidores[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
-                                    }  
-
-                                    $empdez += $data->empenhado;
-                                    $liqdez += $data->liquidado;  
-
+                                    }    
                                     $despesaSaldoIndenizacaoDemissaoServidores[$chave2][$chaveMes]   += $data->$valoresperado;
                                     $despesaSaldoIndenizacaoDemissaoServidores[$chave2]['descricao']  = $data->o56_descr;
                                 }
           
                                 foreach (getDespesaMensalSaldoDespesasAnteriores($inicio, date('Y-m-t', strtotime($inicio)), $aInstits, $dtini) as $data) {
                                     $chave2 = $data->o58_elemento;
-
-                                    if ($valoresperado == 'liquidado') {
+                                    if (date("Y", strtotime($dataFinal)) >date("Y", strtotime($dataFinal))) {
                                         $despesaSaldoDespesasAnteriores[$chave2][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
                                     }
-
-                                    echo "B $data->empenhado - $data->liquidado </br>";
-
                                     $despesaSaldoDespesasAnteriores[$chave2][$chaveMes]   += $data->$valoresperado;
                                     $despesaSaldoDespesasAnteriores[$chave2]['descricao']  = $data->o56_descr;
                                 }
                             } else {
-                    
                                 foreach (getDespesaMensalInformada($dataAtual, date('Y-m-t', strtotime($dataAtual)), $aInstits, $dtini) as $data) {
                                     $chave = substr($data->o58_elemento, 0, 7);
 
@@ -1203,8 +1179,7 @@ ob_start();
                                         $despesa[$chave][$chaveMes] = $data->$valoresperado;
                                         $despesa[$chave]['descricao'] = $data->o56_descr;
                                     }
-
-                                    if ($valoresperado == 'liquidado') {
+                                    if (date("Y", strtotime($dataFinal)) >date("Y", strtotime($dataFinal))) {
                                         $despesa[$chave][$chaveMesDezembro] += $data->empenhado - $data->liquidado;
                                     }
                                 }
@@ -1248,17 +1223,6 @@ ob_start();
                         <? } ?>
                         <td class="bdleft bdtop s0">TOTAL GERAL</td>
                     </tr>
-
-                    <?php
-                        
-                    /*
-                    echo "<pre>";
-                        var_dump($despesa);
-                        echo "</pre>";
-                        die()
-                    */
-                          
-                    ?>
                     <?php ksort($despesa); ?>
                     <?php ksort($despesa2); ?>
                     <tr>
@@ -1278,9 +1242,6 @@ ob_start();
                             unset($despesa[$elemento]);
                         }
                     }
-                    ?>
-                    <?php
-                        // die();
                     ?>
                     <!-- Bloco que preenche dos dados mensais que precisam igualar ao oficial --> 
                     <? foreach ($despesa as $elemento => $datas) { ?>
@@ -1367,10 +1328,8 @@ ob_start();
                     $aDespesas = array();
                     $aDespesas2 = array();
                     if ($tipoEmissao == 1) {
-                        if (temDataImplantacao($dtini)) {
-                            
+                        if (temDataImplantacao($dtini)) {   
                             foreach (getValorDespesaInformado($oDataIni->getDate("Y-m-d"), buscarDataImplantacao(), '331', $valorcalculoManual, $oInstit) as $oDespesa) {
-
                                 $chave = substr($oDespesa->o58_elemento, 0, 7);
                                 if ($oDespesa->$valoresperado <> 0) {
                                     if (array_key_exists($chave, $aDespesas)) {
@@ -1428,7 +1387,6 @@ ob_start();
                         }
 
                         // Tratando o acumulado do ano anterior
-
                         if ($valoresperado == 'liquidado') {
                             foreach (getDespesaMensal("01-01-" . date("Y", strtotime($dtini)), "31-12-" . date("Y", strtotime($dtini)), array($oInstit->getCodigo())) as $data) {
                                 $chave = str_pad(substr($data->o58_elemento, 0, 7), 13, "0");
@@ -1476,7 +1434,7 @@ ob_start();
                                 }
                             }
                         }
-
+                 
                         ksort($aDespesas);
 
                         foreach ($despesa as $elemento => $datas) {   
@@ -2032,15 +1990,17 @@ ob_start();
                            
                             
                             if($i==11){
+                                /*
                                if($liqdez != db_formatar($fSaldoIndenizacaoDemissaoServidores[$i], "f") ){
                                    $subtotal += db_formatar($liqdez, "f");
                                    echo db_formatar($liqdez, "f");
                                    $fSaldoIndenizacaoDemissaoServidores[$i] = $liqdez;
                                }
                                else{
+                                */
                                    $subtotal += $fSaldoIndenizacaoDemissaoServidores[$i];   
                                    echo db_formatar($fSaldoIndenizacaoDemissaoServidores[$i], "f");
-                               }
+                                // }
                                 }
                             else{ 
                                 $subtotal += $fSaldoIndenizacaoDemissaoServidores[$i];
@@ -2542,7 +2502,7 @@ function getDespesaMensal($inicio, $fim, $instituicao)
         ) AS xxx
     WHERE
         empenhado + liquidado <> 0 ) as x ";
-    // echo $sql . "<br/>";
+
     return db_utils::getColectionByRecord(db_query($sql));
 }
 
