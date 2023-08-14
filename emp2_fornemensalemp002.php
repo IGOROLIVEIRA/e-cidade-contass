@@ -38,6 +38,7 @@ require_once("classes/db_cgm_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
 include("libs/db_sql.php");
 require("vendor/mpdf/mpdf/mpdf.php");
+require_once("dbforms/db_funcoes.php");
 
 $clFornecedores = new cl_fornemensalemp();
 $clinfocomplementaresinstit = new cl_infocomplementaresinstit();

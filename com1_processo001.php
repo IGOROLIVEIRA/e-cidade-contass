@@ -49,7 +49,7 @@ $db_opcao   = 1;
                                        "item" => "Itens",
                                        "fornec" => "Fornecedores" ); //nome do iframe e o label
 
-      $clcriaabas->src       = array("orcam"=>"com1_selsolicproc001.php?op=incluir");
+      $clcriaabas->src       = array("orcam"=>"com1_selsolicproc001.php?op=incluir&pc80_codproc=$pc80_codproc");
       $clcriaabas->title     = array( "orcam" => "Orçamento",
                                       "item" => "Itens",
                                       "fornec" => "Fornecedores" ); //nome do iframe e o label
