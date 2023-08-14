@@ -371,7 +371,7 @@ $db_opcao = 1;
   }
 
   function js_AssinarContrato() {
-    let iAcordo = document.form1.ac15_acordo.value;
+    let iAcordo = top.corpo.iframe_acordo.document.form1.ac16_sequencial.value;
     parent.location.href = 'aco4_assinaturacontratosinclusao001.php?ac16_sequencial=' + iAcordo;
   }
   js_main();
