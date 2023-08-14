@@ -82,7 +82,7 @@ function montagemCabecalhoAcordo($sheet, $oItem, &$iCelula)
 
   $iCelula++;
 
-  $sheet->setCellValue("A" . $iCelula, mb_convert_encoding("Nº Contrato: ", 'UTF-8') . $oItem->ac16_numero / $oItem->ac16_anousu);
+  $sheet->setCellValue("A" . $iCelula, mb_convert_encoding("Nº Contrato: ", 'UTF-8') . $oItem->ac16_numero . "/" . $oItem->ac16_anousu);
   $sheet->setCellValue("B" . $iCelula, mb_convert_encoding("Vigência: ", 'UTF-8') . date("d/m/Y", strtotime($oItem->datainicio)) . ' a ' . date("d/m/Y", strtotime($oItem->datafim)));
   $sheet->setCellValue("C" . $iCelula, "Natureza: $oItem->natureza");
 
@@ -94,6 +94,7 @@ function montagemCabecalhoAcordo($sheet, $oItem, &$iCelula)
 
 function montagemCabecalhoItens($sheet, &$iCelula)
 {
+  $iCelula++;
   $styleCabecalhoItens = array('borders' => array('allborders' => array('style' => PHPExcel_Style_Border::BORDER_THIN, 'color' => array('rgb' => '000000'),),), 'fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID, 'startcolor' => array('rgb' => 'd3d3d3')), 'font' => array('size' => 10, 'bold' => true,), 'alignment' => array('horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,),);
   $sheet->getStyle("A$iCelula:H$iCelula")->applyFromArray($styleCabecalhoItens);
   $sheet->getStyle("A:H")->getFont()->setBold(true);
