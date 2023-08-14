@@ -1544,7 +1544,10 @@ switch ($oParam->exec) {
                                     $seqlote++;
                                     $clliclicitemlote->l04_seq = $seqlote;
                                 }
-                                $clliclicitemlote->l04_numerolote = null;
+                                if($clliclicitemlote->l04_seq == 1){
+                                    $clliclicitemlote->l04_numerolote = null;
+                                }
+                                
                                 $clliclicitemlote->incluir(null);
 
                                 if ($clliclicitemlote->erro_status == 0) {
