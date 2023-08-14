@@ -96,6 +96,9 @@ if (pg_num_rows($this->rsLotes) > 0) {
         pc11_reservado,
         si02_vlprecoreferencia,
         si02_vltotalprecoreferencia,
+        si02_tabela,
+        si02_taxa,
+        si02_mediapercentual,
         si01_justificativa
         FROM pcprocitem
         JOIN solicitem ON pc11_codigo=pc81_solicitem
@@ -206,7 +209,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 $this->objpdf->cell(20, $alt, "UNITÁRIO", 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt, "PERCENTUAL", 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt, "VLR ESTIMADO", 1, 1, "C", 1);
-                $this->objpdf->setfillcolor(235);
+                $this->objpdf->setfillcolor(255);
             } else {
 
                 $this->objpdf->setfont('arial', 'B', 7);
@@ -240,15 +243,13 @@ if (pg_num_rows($this->rsLotes) > 0) {
             } else {
                 $oDadosDaLinha->descricao = $oResult->pc01_descrmater;
             }
-            if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
-                $oDadosDaLinha->valorUnitario = "-";
-                $oDadosDaLinha->quantidade = "-";
-                if ($oResult->mediapercentual == 0) {
-                    $oDadosDaLinha->mediapercentual = "";
-                } else {
-                    $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
-                }
-                $oDadosDaLinha->unidadeDeMedida = "-";
+            if ($oResult->si02_tabela == "t" || $oResult->si02_taxa == "t") {
+                $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $this->quant_casas, ",", ".");
+                $oDadosDaLinha->quantidade = $oResult->pc11_quant;
+                
+                    $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
+                
+                $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
                 $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia, 2, ",", ".");
                 $nTotalItens += $oResult->si02_vltotalprecoreferencia;
             } else {
@@ -257,7 +258,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 if ($oResult->mediapercentual == 0) {
                     $oDadosDaLinha->mediapercentual = "-";
                 } else {
-                    $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
+                    $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                 }
                 $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
                 $oDadosDaLinha->total = number_format(((round($oResult->si02_vlprecoreferencia,$this->quant_casas))*$oDadosDaLinha->quantidade), 2, ",", ".");
@@ -345,7 +346,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 $this->objpdf->multicell(140, $alt, mb_strtoupper($oDadosDaLinha->descricao), "T", "J", 0);
 
                 $this->objpdf->sety($old_y);
-                $this->objpdf->setx(214);
+                $this->objpdf->setx(194);
                 $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
                 if ($oDadosDaLinha->valorUnitario > 0) {

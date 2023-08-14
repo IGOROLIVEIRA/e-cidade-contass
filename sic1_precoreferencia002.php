@@ -196,7 +196,7 @@ if (isset($alterar)) {
        
 
         $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);  
-        var_dump($oItemOrc);
+        
         $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
         $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
         $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;
