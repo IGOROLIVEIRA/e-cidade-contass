@@ -27,14 +27,14 @@ class cl_aoc132023
   var $si41_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si41_sequencial = int8 = sequencial 
-                 si41_tiporegistro = int8 = Tipo do registro 
-                 si41_codreduzidodecreto = int8 = Código do decreto 
-                 si41_origemrecalteracao = varchar(2) = Origem do recurso 
-                 si41_valorabertoorigem = float8 = Valor aberto 
-                 si41_mes = int8 = Mês 
-                 si41_reg10 = int8 = reg10 
-                 si41_instit = int8 = Instituição 
+                 si41_sequencial = int8 = sequencial
+                 si41_tiporegistro = int8 = Tipo do registro
+                 si41_codreduzidodecreto = int8 = Código do decreto
+                 si41_origemrecalteracao = varchar(2) = Origem do recurso
+                 si41_valorabertoorigem = float8 = Valor aberto
+                 si41_mes = int8 = Mês
+                 si41_reg10 = int8 = reg10
+                 si41_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -153,24 +153,24 @@ class cl_aoc132023
       return false;
     }
     $sql = "insert into aoc132023(
-                                       si41_sequencial 
-                                      ,si41_tiporegistro 
-                                      ,si41_codreduzidodecreto 
-                                      ,si41_origemrecalteracao 
-                                      ,si41_valorabertoorigem 
-                                      ,si41_mes 
-                                      ,si41_reg10 
-                                      ,si41_instit 
+                                       si41_sequencial
+                                      ,si41_tiporegistro
+                                      ,si41_codreduzidodecreto
+                                      ,si41_origemrecalteracao
+                                      ,si41_valorabertoorigem
+                                      ,si41_mes
+                                      ,si41_reg10
+                                      ,si41_instit
                        )
                 values (
-                                $this->si41_sequencial 
-                               ,$this->si41_tiporegistro 
-                               ,$this->si41_codreduzidodecreto 
-                               ,'$this->si41_origemrecalteracao' 
-                               ,$this->si41_valorabertoorigem 
-                               ,$this->si41_mes 
-                               ,$this->si41_reg10 
-                               ,$this->si41_instit 
+                                $this->si41_sequencial
+                               ,$this->si41_tiporegistro
+                               ,$this->si41_codreduzidodecreto
+                               ,'$this->si41_origemrecalteracao'
+                               ,$this->si41_valorabertoorigem
+                               ,$this->si41_mes
+                               ,$this->si41_reg10
+                               ,$this->si41_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -471,7 +471,7 @@ class cl_aoc132023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -493,7 +493,7 @@ class cl_aoc132023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -509,7 +509,7 @@ class cl_aoc132023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -530,7 +530,7 @@ class cl_aoc132023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -540,6 +540,32 @@ class cl_aoc132023
 
     return $sql;
   }
-}
 
-?>
+    /**
+     * @SICOM AOC132023
+     *
+     * @param $oDados10
+     * @return string
+     */
+    public function sqlReg13($oDados10): string
+    {
+        $sSql = "select '13' as tiporegistro,
+                                o46_codlei as codreduzidodecreto,
+                                case
+                                    when o46_tiposup in (1001, 1006, 1018, 1023,1026) then 3
+                                    when o46_tiposup in (1002,1027) then 4
+                                    when o46_tiposup in (1003, 1008, 1024, 2026,1028) then 1
+                                    when o46_tiposup in (1004,1005,1007,1009,1010,1019,1025,1029) then 2
+                                    else 98
+                                end as tipoDecretoAlteracao,
+                                sum(o47_valor) as valorAberto
+                            from orcsuplem
+                                join orcsuplemval  on o47_codsup = o46_codsup
+                                join orcprojeto    on o46_codlei = o39_codproj
+                                join orcsuplemtipo on o46_tiposup =  o48_tiposup
+                                join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
+                            where o47_valor > 0 and o46_codlei in ({$oDados10->codigovinc})
+                            group by o46_codlei, o39_numero,o46_tiposup";
+        return $sSql;
+    }
+}
