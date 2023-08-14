@@ -1566,7 +1566,7 @@ if ($x->consultarDataDoSistema == true) {
         }
         var oRetorno = JSON.parse(oAjax.responseText);
         var sMensagem = oRetorno.message;
-        var aTipoorigem = {
+        var aTipoOrigem = {
             1 : '1 - Não ou dispensa por valor',
             2 : '2 - Licitação',
             3 : '3 - Dispensa ou Inexigibilidade',
@@ -1578,16 +1578,18 @@ if ($x->consultarDataDoSistema == true) {
             9 : '9 - Licitação realizada por outro ente da federação'
         }
 
-        if((oRetorno.sTipoorigem == '2' || oRetorno.sTipoorigem == '3') && oRetorno.sLicitacao == ''){
-            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoorigem] + ' sem vínculo com Licitação. Gentileza entrar em contato com o suporte para a vinculação correta.');
+        aTipoOrigemLicitacaoOutrosOrgaos = ['5', '6', '7', '8', '9'];
+
+        if((oRetorno.sTipoOrigem == '2' || oRetorno.sTipoOrigem == '3') && oRetorno.sLicitacao == ''){
+            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoOrigem] + ' sem vínculo com Licitação. Gentileza entrar em contato com o suporte para a vinculação correta.');
         }
 
-        if((oRetorno.sTipoorigem == '4' ) && oRetorno.sAdesaoRegPreco == ''){
-            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoorigem] + ' sem vínculo com Adesão de Registro de Preço. Gentileza entrar em contato com o suporte para a vinculação correta.');
+        if((oRetorno.sTipoOrigem == '4' ) && oRetorno.sAdesaoRegPreco == ''){
+            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoOrigem] + ' sem vínculo com Adesão de Registro de Preço. Gentileza entrar em contato com o suporte para a vinculação correta.');
         }
         
-        if((oRetorno.sTipoorigem == '5' || oRetorno.sTipoorigem == '6' || oRetorno.sTipoorigem == '7' || oRetorno.sTipoorigem == '8' || oRetorno.sTipoorigem == '9') && oRetorno.sLicitacaooutroorgao == ''){
-            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoorigem] + ' sem vínculo com Licitação de Outros Órgãos. Gentileza entrar em contato com o suporte para a vinculação correta.');
+        if(aTipoOrigemLicitacaoOutrosOrgaos.includes(oRetorno.sTipoOrigem)  && oRetorno.sLicitacaooutroorgao == ''){
+            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoOrigem] + ' sem vínculo com Licitação de Outros Órgãos. Gentileza entrar em contato com o suporte para a vinculação correta.');
         }
 
         if (oRetorno.status > 1) {
@@ -1601,7 +1603,7 @@ if ($x->consultarDataDoSistema == true) {
         $('e54_codcom').value = oRetorno.sTipo;
         $('e54_codcomdescr').value = oRetorno.sTipo;
         $('e54_nummodalidade').value = oRetorno.iNumModalidade;
-        if (oRetorno.sTipoorigem == 4) {
+        if (oRetorno.sTipoOrigem == 4) {
             $('e54_adesaoregpreco').value = oRetorno.sAdesaoRegPreco;
         } else {
             $('e54_adesaoregpreco').value = null;
@@ -1620,7 +1622,7 @@ if ($x->consultarDataDoSistema == true) {
             $('e54_nummodalidade').setAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
         }
 
-        if(oRetorno.sTipoorigem != '1'){
+        if(oRetorno.sTipoOrigem != '1'){
             $('e54_codcom').setAttribute('disabled', true);
             $('e54_codcomdescr').setAttribute('disabled', true);
             $('e54_codcom').setAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');

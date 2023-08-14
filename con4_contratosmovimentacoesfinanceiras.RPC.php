@@ -723,7 +723,7 @@ switch ($oParam->exec) {
             $oRetorno->iNumModalidade = urlencode($oStdDados->l20_numero);
             $oRetorno->iProcesso = $oStdDados->l20_edital . "/" . $oStdDados->l20_anousu;
             $oRetorno->sTipo = urlencode($oStdDados->l03_codcom);
-            $oRetorno->sTipoorigem = $oAcordo->getTipoOrigem();
+            $oRetorno->sTipoOrigem = $oAcordo->getTipoOrigem();
             $oRetorno->sTipoautorizacao = urlencode(2);
             $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
         } else {
@@ -732,7 +732,7 @@ switch ($oParam->exec) {
             $oRetorno->iNumModalidade = '';
             $oRetorno->iProcesso = '';
             $oRetorno->sTipo = '';
-            $oRetorno->sTipoorigem =$oAcordo->getTipoOrigem();
+            $oRetorno->sTipoOrigem = $oAcordo->getTipoOrigem();
             $oRetorno->sTipoautorizacao = urlencode(2);
             $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
         }
@@ -777,7 +777,7 @@ switch ($oParam->exec) {
             $rsTipocompra  = $oDaoTipocompra->sql_record($sqlTipocompra);
             $oTipocompra = db_utils::fieldsMemory($rsTipocompra, 0)->pc50_codcom;
             $oRetorno->sTipo = ($oTipocompra);
-            $oRetorno->sTipoorigem = $oAcordo->getTipoOrigem();
+            $oRetorno->sTipoOrigem = $oAcordo->getTipoOrigem();
             $oRetorno->sTipoautorizacao = urlencode(2);
             $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
         }
@@ -806,7 +806,7 @@ switch ($oParam->exec) {
             $rsTipocompra  = $oDaoTipocompra->sql_record($sqlTipocompra);
             $oTipocompra = db_utils::fieldsMemory($rsTipocompra, 0)->pc50_codcom;
             $oRetorno->sTipo = ($oTipocompra);
-            $oRetorno->sTipoorigem = $oAcordo->getTipoOrigem();
+            $oRetorno->sTipoOrigem = $oAcordo->getTipoOrigem();
             $oRetorno->sTipoautorizacao = urlencode(4);
             $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
         }
