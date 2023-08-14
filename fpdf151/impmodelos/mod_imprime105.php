@@ -449,15 +449,16 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 $oDadosDaLinha->descricao = $oResult2->pc01_descrmater;
             }
             if ($oResult->si02_tabela == "t" || $oResult->si02_taxa == "t") {
-                $oDadosDaLinha->valorUnitario = "-";
-                $oDadosDaLinha->quantidade = "-";
-
-                if ($oResult->si02_mediapercentual == 0) {
-                    $oDadosDaLinha->mediapercentual = "";
-                } else {
-                    $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
+                $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $this->quant_casas, ",", ".");
+                if($controle == 0 && $fazerloop==2){
+                    $oDadosDaLinha->quantidade = $oResult->si02_qtditem - $valorqtd;
+                }else if($controle == 1 && $fazerloop==2){
+                    $oDadosDaLinha->quantidade = $valorqtd;
+                }else{
+                    $oDadosDaLinha->quantidade = $oResult->si02_qtditem;
                 }
-                $oDadosDaLinha->unidadeDeMedida = "-";
+                $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
+                $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
                 $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia, 2, ",", ".");
                 $nTotalItens += $oResult->si02_vltotalprecoreferencia;
             } else {

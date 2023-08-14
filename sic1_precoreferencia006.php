@@ -72,7 +72,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
                 si01_processocompra = {$codigo_preco}) order by si02_sequencial;";
             $rsResult = db_query($sSql) or die(pg_last_error());
 
-            $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->si02_criterioadjudicacao;
+            $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResultado, 0)->pc80_criterioadjudicacao;
             $codigoItem = db_utils::fieldsMemory($rsResult, 0)->si02_coditem;
             //$itemnumero = db_utils::fieldsMemory($rsResult, 0)->si02_itemproccompra;
 
@@ -282,7 +282,6 @@ HTML;
                 <td><strong>SEQ</strong></td>
                 <td><strong>ITEM</strong></td>
                 <td><strong>DESCRIÇÃO DO ITEM</strong></td>
-                <td><strong>TAXA/TABELA</strong></td>
                 <td><strong>VALOR UN</strong></td>
                 <td><strong>QUANT</strong></td>
                 <td><strong>UN</strong></td>
@@ -343,15 +342,16 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                     $oDadosDaLinha->descricao = $oResult2->pc01_descrmater;
                 }
                 if ($oResult->si02_tabela == "t" || $oResult->si02_taxa == "t") {
-                    $oDadosDaLinha->valorUnitario = "-";
-                    $oDadosDaLinha->quantidade = "-";
-                    
-                    if ($oResult->si02_mediapercentual == 0) {
-                        $oDadosDaLinha->mediapercentual = ""; 
-                    } else {
-                        $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
+                    $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+                    if($controle == 0 && $fazerloop==2){
+                        $oDadosDaLinha->quantidade = $oResult->si02_qtditem - $valorqtd;
+                    }else if($controle == 1 && $fazerloop==2){
+                        $oDadosDaLinha->quantidade = $valorqtd;
+                    }else{
+                        $oDadosDaLinha->quantidade = $oResult->si02_qtditem;
                     }
-                    $oDadosDaLinha->unidadeDeMedida = "-";
+                    $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
+                    $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
                     if($controle==1){
                         $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * ($oResult->si02_qtditem - $valorqtd);
                     }
@@ -393,7 +393,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
           <td>{$oDadosDaLinha->unidadeDeMedida}</td>
           <td>{$oDadosDaLinha->total}</td>
         </tr>
-        </table>
+        
 HTML;
                 } else {
                     echo <<<HTML
@@ -401,7 +401,6 @@ HTML;
             <td> {$oDadosDaLinha->seq}</td>
             <td> {$oDadosDaLinha->item}            </td>
             <td> {$oDadosDaLinha->descricao}       </td>
-            <td>{$oDadosDaLinha->mediapercentual}</td>
             <td> {$oDadosDaLinha->valorUnitario}   </td>
             <td> {$oDadosDaLinha->quantidade}      </td>
             <td> {$oDadosDaLinha->unidadeDeMedida} </td>
@@ -649,15 +648,15 @@ HTML;
                         $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
                     }
                     //$oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
-                    if ($oResult->pc01_tabela == "t" || $oResult->pc01_taxa == "t") {
-                        $oDadosDaLinha->valorUnitario = "-";
-                        $oDadosDaLinha->quantidade = "-";
+                    if ($oResult->si02_tabela == "t" || $oResult->si02_taxa == "t") {
+                        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+                        $oDadosDaLinha->quantidade = $oResult->pc11_quant;
                         if ($oResult->mediapercentual == 0) {
                             $oDadosDaLinha->mediapercentual = "";
                         } else {
                             $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
                         }
-                        $oDadosDaLinha->unidadeDeMedida = "-";
+                        $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
                         $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                     } else {
                         $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
@@ -683,7 +682,7 @@ HTML;
           <td>{$oDadosDaLinha->unidadeDeMedida}</td>
           <td>{$oDadosDaLinha->total}</td> 
         </tr>
-        </table>
+
 
 HTML;
                     } else {
@@ -697,10 +696,13 @@ HTML;
             <td> {$oDadosDaLinha->unidadeDeMedida} </td>
             <td> {$oDadosDaLinha->total}           </td>
         </tr>
-
+        
 HTML;
                     }
                 }
+                echo <<<HTML
+                    </table>
+                HTML;
             }
 
             ?>
