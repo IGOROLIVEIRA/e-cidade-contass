@@ -82,7 +82,8 @@ if($clparcustos->numrows > 0){
   <tr>
   </tr>
 </table >
-
+<fieldset style = "width: 50%; margin: 0px auto;">
+   <legend><b>Relatório de Movimentações Manuais</b></legend>
   <table    align="center" border='0'>
     <form name="form1" method="post" action="">
        <tr> 
@@ -162,6 +163,7 @@ if($clparcustos->numrows > 0){
         </td>
       </tr>
   </form>
+  </fieldset>
  </table>
 </body>
 </html>
