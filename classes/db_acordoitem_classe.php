@@ -1051,7 +1051,5 @@ class cl_acordoitem {
       WHERE ac26_acordo = $iAcordo)";
     return $sql;
   }
-
-
 }
 
