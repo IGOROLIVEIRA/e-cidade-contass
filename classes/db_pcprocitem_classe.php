@@ -24,7 +24,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 //MODULO: compras
 //CLASSE DA ENTIDADE pcprocitem
 class cl_pcprocitem {

@@ -46,6 +46,9 @@ trait LegacyAccount
             $oldValue = empty($model->getOriginal($field)) ? '' : $model->getOriginal($field);
             $newValue = empty($model->getAttributeValue($field)) ? '' : $model->getAttributeValue($field);
             $codCam = $this->getCodcamByName($field);
+            if (empty($codCam)) {
+                continue;
+            }
             $this->insertAcount($sequence, $codArq, $codCam, $newValue, $oldValue);
         }
     }
@@ -78,12 +81,15 @@ trait LegacyAccount
     {
         foreach (explode(',', $this->getKeyName()) as $primaryKey) {
             $codCam = $this->getCodcamByName($primaryKey);
+            if (empty($codCam)) {
+                continue;
+            }
             DB::connection()
                 ->unprepared("insert into db_acountkey values($sequence,$codCam,'$primaryKey','$action')");
         }
     }
 
-    protected function getCodcamByName(string $name): int
+    protected function getCodcamByName(string $name): ?int
     {
         $sql = "select db_syscampo.codcam
                 from db_syscampo

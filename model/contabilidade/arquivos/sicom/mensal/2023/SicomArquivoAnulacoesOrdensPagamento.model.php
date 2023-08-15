@@ -140,6 +140,8 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
             }
         }
 
+        $aAnulacoes = array();
+
         $iInstit = db_getsession ("DB_instit");
         $sDataInicial = $this->sDataInicial;
         $sDataFinal = $this->sDataFinal;
@@ -150,144 +152,45 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
         /**
          * Percorrer registros retornados do sql acima
          */
-        $aAnulacoes = array();
         for ($iCont = 0; $iCont < pg_num_rows($rsAnulacao); $iCont++) {
 
             $oAnulacoes = db_utils::fieldsMemory($rsAnulacao, $iCont);
 
-            $itipoOP = 0;
-            if ($oAnulacoes->c71_coddoc == 6 && $oAnulacoes->divida != 46) {
-                $itipoOP = 1;
-            } else {
-
-                if ($oAnulacoes->c71_coddoc == 36) {
+            switch ($oAnulacoes->c71_coddoc) {
+                case 6:
+                    $itipoOP = ($oAnulacoes->divida != 46) ? 1 : 2;
+                    break;
+                case 36:
                     $itipoOP = 3;
-                } else {
-
-                    if ($oAnulacoes->c71_coddoc == 38) {
-                        $itipoOP = 4;
-                    } else {
-                        $itipoOP = 2;
-                    }
-                }
+                    break;
+                case 38:
+                    $itipoOP = 4;
+                    break;
+                default:
+                    $itipoOP = 2;
+                    break;
             }
 
-            if (($sTrataCodUnidade == "2") && ($oAnulacoes->subunidade != '' && $oAnulacoes->subunidade != 0)) {
+            if ($sTrataCodUnidade == "2" && ($oAnulacoes->subunidade != '' && $oAnulacoes->subunidade != 0)) {
 
-                $sCodUnidade  = str_pad($oAnulacoes->o58_orgao, 2, "0", STR_PAD_LEFT);
-                $sCodUnidade .= str_pad($oAnulacoes->o58_unidade, 3, "0", STR_PAD_LEFT);
-                $sCodUnidade .= str_pad($oAnulacoes->subunidade, 3, "0", STR_PAD_LEFT);
+                $sCodUnidade  = str_pad($oAnulacoes->o58_orgao, 2, "0", STR_PAD_LEFT).
+                                str_pad($oAnulacoes->o58_unidade, 3, "0", STR_PAD_LEFT).
+                                str_pad($oAnulacoes->subunidade, 3, "0", STR_PAD_LEFT);
             } else {
 
-                $sCodUnidade = str_pad($oAnulacoes->o58_orgao, 2, "0", STR_PAD_LEFT);
-                $sCodUnidade .= str_pad($oAnulacoes->o58_unidade, 3, "0", STR_PAD_LEFT);
+                $sCodUnidade = str_pad($oAnulacoes->o58_orgao, 2, "0", STR_PAD_LEFT).
+                               str_pad($oAnulacoes->o58_unidade, 3, "0", STR_PAD_LEFT);
             }
-            /**
-             * Consulta quantidade de estornos.
-             */
-            $sSqlEstornos = $this->sqlEstornos($oAnulacoes, $sDataInicial, $this->sDataFinal);
-            $rsQuantEstornos = db_query($sSqlEstornos);
 
+            if ($numOrdem == $oAnulacoes->numordem){
 
-            if (db_utils::fieldsMemory($rsQuantEstornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantEstornos, 0)->valor <> 0) {
-
-                $rsResultOP = $this->sqlOpDoEstorno ($oAnulacoes);
-
-                $iOpDoEstorno = db_utils::fieldsMemory($rsResultOP)->codlan;
-                $iOpPagamento = db_utils::fieldsMemory($rsResultOP)->c70_codlan;
-                $DataOpExorno = db_utils::fieldsMemory($rsResultOP)->dtpagamento;
-
-                /**
-                 * Registro 10
-                 **/
-                $Hash = $oAnulacoes->c71_codlan;
-                if (!isset($aAnulacoes[$Hash])) {
-                    $oDadosAnulacao = new stdClass();
-
-                    /*
-                     * Verifica se o empenho existe na tabela dotacaorpsicom
-                     * Caso exista, busca os dados da dotação.
-                     * */
-                    $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oAnulacoes->e60_numemp}";
-                    $iFonteAlterada = '0';
-                    if (pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
-                        $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
-                        $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos, 3, "0", STR_PAD_LEFT);
-                        $oDadosAnulacao->si137_codorgao = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
-                        $oDadosAnulacao->si137_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
-                        $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos, 3, "0", STR_PAD_LEFT);
-                    } else {
-                        $oDadosAnulacao->si137_codorgao = $oAnulacoes->si09_codorgaotce;
-                        $oDadosAnulacao->si137_codunidadesub = $sCodUnidade;
-                    }
-
-                    $oDadosAnulacao->si137_tiporegistro = 10;
-                    $oDadosAnulacao->si137_codreduzido = $oAnulacoes->c71_codlan;
-                    $oDadosAnulacao->si137_nroop = $iOpDoEstorno;
-                    $oDadosAnulacao->si137_dtpagamento = ($DataOpExorno == '' || $DataOpExorno == null) ? $oAnulacoes->dtanulacao : $DataOpExorno; //$oAnulacoes->dtpag;
-                    $oDadosAnulacao->si137_nroanulacaoop = $iOpDoEstorno;
-                    $oDadosAnulacao->si137_dtanulacaoop = $oAnulacoes->dtanulacao;
-                    $oDadosAnulacao->si137_justificativaanulacao = "ESTORNO DE PAGAMENTO";
-                    $oDadosAnulacao->si137_vlanulacaoop = $oAnulacoes->vlrordem;
-                    $oDadosAnulacao->si137_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                    $oDadosAnulacao->si137_instit = db_getsession("DB_instit");
-                    $oDadosAnulacao->reg11 = array();
-
-                    /**
-                     * Registro 11
-                     */
-
-                    $oDadosAnulacaoFonte = new stdClass();
-
-                    $oDadosAnulacaoFonte->si138_tiporegistro = 11;
-                    $oDadosAnulacaoFonte->si138_codreduzido = $oAnulacoes->c71_codlan;
-                    $oDadosAnulacaoFonte->si138_tipopagamento = $itipoOP;
-                    $oDadosAnulacaoFonte->si138_nroempenho = $oAnulacoes->e60_codemp;
-                    $oDadosAnulacaoFonte->si138_dtempenho = $oAnulacoes->dtempenho;
-                    if ($itipoOP == 3) {
-                        $oDadosAnulacaoFonte->si138_nroliquidacao = "";
-                        $oDadosAnulacaoFonte->si138_dtliquidacao = "";
-                    } else {
-                        $oDadosAnulacaoFonte->si138_nroliquidacao = $oAnulacoes->nroliquidacao;
-                        $oDadosAnulacaoFonte->si138_dtliquidacao = $oAnulacoes->dtliquida;
-                    }
-                    $oDadosAnulacaoFonte->si138_codfontrecursos = $iFonteAlterada != 0 ? $iFonteAlterada : str_pad($oAnulacoes->recurso, 3, "0", STR_PAD_LEFT);
-                    if (in_array($oDadosAnulacaoFonte->si138_codfontrecursos, $this->aFontesEncerradas)) {
-                        $oDadosAnulacaoFonte->si138_codfontrecursos = substr($oDadosAnulacaoFonte->si138_codfontrecursos, 0, 1) . '59';
-                    }
-                    $oDadosAnulacaoFonte->si138_codfontrecursos = substr($this->oDeParaRecurso->getDePara($oDadosAnulacaoFonte->si138_codfontrecursos), 0, 7);
-
-                    $oControleOrcamentario = new ControleOrcamentario();
-                    $oControleOrcamentario->setTipoDespesa($oAnulacoes->e60_tipodespesa);
-                    $oControleOrcamentario->setFonte($oAnulacoes->o15_codigo);
-                    $oControleOrcamentario->setEmendaParlamentar($oAnulacoes->e60_emendaparlamentar);
-                    $oControleOrcamentario->setEsferaEmendaParlamentar($oAnulacoes->e60_esferaemendaparlamentar);
-                    $oControleOrcamentario->setDeParaFonteCompleta();
-
-                    $oDadosAnulacaoFonte->si138_codco = $oControleOrcamentario->getCodigoParaEmpenho();
-                    $oDadosAnulacaoFonte->si138_valoranulacaofonte = $oAnulacoes->vlrordem;
-                    $oDadosAnulacaoFonte->si138_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                    $oDadosAnulacaoFonte->si138_reg10 = 0;
-                    $oDadosAnulacaoFonte->si138_instit = db_getsession("DB_instit");
-
-                    $oDadosAnulacao->reg11[$Hash] = $oDadosAnulacaoFonte;
-                    $aAnulacoes[$Hash] = $oDadosAnulacao;
-                } else {
-                    $aAnulacoes[$Hash]->si137_vlanulacaoop += $oAnulacoes->vlrordem;
-                    $aAnulacoes[$Hash]->reg11[$Hash]->si138_valoranulacaofonte += $oAnulacoes->vlrordem;
-                }
-
-                $oEmpPago = new stdClass();
-                $oEmpPago->ordem = $oAnulacoes->e50_codord;
-                $oEmpPago->lancamento = $iOpPagamento;
-                $oEmpPago->valor = $oAnulacoes->vlrordem;
-
-                $sDataFinal = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                $iAnoUsu = db_getsession ("DB_anousu");
-                $iInstit = db_getsession ("DB_instit");
-
-                $aAnulacoes[$Hash]->reg11[$Hash]->reg12 = $this->setDetalhamento12($oEmpPago, $aAnulacoes[$Hash], $aAnulacoes[$Hash]->reg11[$Hash], $sDataFinal, $iAnoUsu, $iInstit);
+                $this->aopDuplicados($oAnulacoes, $sDataInicial, $sDataFinal, $iCont);
             }
+
+            $numOrdem = $oAnulacoes->numordem;
+
+            list($aAnulacoes) = $this->aopTratamentoDados($oAnulacoes, $sDataInicial, $aAnulacoes, $sCodUnidade, $itipoOP);
+
         }
 
         foreach ($aAnulacoes as $anulacao) {
@@ -395,6 +298,126 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
         return $claop12;
     }
 
+    /**
+     * @param $oAnulacoes
+     * @param $sDataInicial
+     * @param array $aAnulacoes
+     * @param $sCodUnidade
+     * @param $itipoOP
+     * @return array
+     */
+    public function aopTratamentoDados($oAnulacoes, $sDataInicial, array $aAnulacoes, $sCodUnidade, $itipoOP)
+    {
+        /**
+         * Consulta quantidade de estornos.
+         */
+        $sSqlEstornos = $this->sqlEstornos($oAnulacoes, $sDataInicial, $this->sDataFinal);
+        $rsQuantEstornos = db_query($sSqlEstornos);
+
+
+        if (db_utils::fieldsMemory($rsQuantEstornos, 0)->valor == "" || db_utils::fieldsMemory($rsQuantEstornos, 0)->valor <> 0) {
+
+            $rsResultOP = $this->sqlOpDoEstorno($oAnulacoes);
+
+            $iOpDoEstorno = db_utils::fieldsMemory($rsResultOP)->codlan;
+            $iOpPagamento = db_utils::fieldsMemory($rsResultOP)->c70_codlan;
+            $DataOpExorno = db_utils::fieldsMemory($rsResultOP)->dtpagamento;
+
+            $iOpDoEstorno = $iOpDoEstorno != $oAnulacoes->numordem ? $oAnulacoes->numordem : $iOpDoEstorno;
+
+            /**
+             * Registro 10
+             **/
+            $Hash = $oAnulacoes->c71_codlan;
+            if (!isset($aAnulacoes[$Hash])) {
+                $oDadosAnulacao = new stdClass();
+
+                /*
+                 * Verifica se o empenho existe na tabela dotacaorpsicom
+                 * Caso exista, busca os dados da dotação.
+                 * */
+                $sSqlDotacaoRpSicom = "select * from dotacaorpsicom where si177_numemp = {$oAnulacoes->e60_numemp}";
+                $iFonteAlterada = '0';
+                if (pg_num_rows(db_query($sSqlDotacaoRpSicom)) > 0) {
+                    $aDotacaoRpSicom = db_utils::getColectionByRecord(db_query($sSqlDotacaoRpSicom));
+                    $oDadosAnulacao->si137_codorgao = str_pad($aDotacaoRpSicom[0]->si177_codorgaotce, 2, "0", STR_PAD_LEFT);
+                    $oDadosAnulacao->si137_codunidadesub = strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 5 && strlen($aDotacaoRpSicom[0]->si177_codunidadesub) != 8 ? "0" . $aDotacaoRpSicom[0]->si177_codunidadesub : $aDotacaoRpSicom[0]->si177_codunidadesub;
+                    $iFonteAlterada = str_pad($aDotacaoRpSicom[0]->si177_codfontrecursos, 3, "0", STR_PAD_LEFT);
+                } else {
+                    $oDadosAnulacao->si137_codorgao = $oAnulacoes->si09_codorgaotce;
+                    $oDadosAnulacao->si137_codunidadesub = $sCodUnidade;
+                }
+
+                $oDadosAnulacao->si137_tiporegistro = 10;
+                $oDadosAnulacao->si137_codreduzido = $oAnulacoes->c71_codlan;
+                $oDadosAnulacao->si137_nroop = $iOpDoEstorno;
+                $oDadosAnulacao->si137_dtpagamento = ($DataOpExorno == '' || $DataOpExorno == null) ? $oAnulacoes->dtanulacao : $DataOpExorno; //$oAnulacoes->dtpag;
+                $oDadosAnulacao->si137_nroanulacaoop = $iOpDoEstorno;
+                $oDadosAnulacao->si137_dtanulacaoop = $oAnulacoes->dtanulacao;
+                $oDadosAnulacao->si137_justificativaanulacao = "ESTORNO DE PAGAMENTO";
+                $oDadosAnulacao->si137_vlanulacaoop = $oAnulacoes->vlrordem;
+                $oDadosAnulacao->si137_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                $oDadosAnulacao->si137_instit = db_getsession("DB_instit");
+                $oDadosAnulacao->reg11 = array();
+
+                /**
+                 * Registro 11
+                 */
+
+                $oDadosAnulacaoFonte = new stdClass();
+
+                $oDadosAnulacaoFonte->si138_tiporegistro = 11;
+                $oDadosAnulacaoFonte->si138_codreduzido = $oAnulacoes->c71_codlan;
+                $oDadosAnulacaoFonte->si138_tipopagamento = $itipoOP;
+                $oDadosAnulacaoFonte->si138_nroempenho = $oAnulacoes->e60_codemp;
+                $oDadosAnulacaoFonte->si138_dtempenho = $oAnulacoes->dtempenho;
+                if ($itipoOP == 3) {
+                    $oDadosAnulacaoFonte->si138_nroliquidacao = "";
+                    $oDadosAnulacaoFonte->si138_dtliquidacao = "";
+                } else {
+                    $oDadosAnulacaoFonte->si138_nroliquidacao = $oAnulacoes->nroliquidacao;
+                    $oDadosAnulacaoFonte->si138_dtliquidacao = $oAnulacoes->dtliquida;
+                }
+                $oDadosAnulacaoFonte->si138_codfontrecursos = $iFonteAlterada != 0 ? $iFonteAlterada : str_pad($oAnulacoes->recurso, 3, "0", STR_PAD_LEFT);
+                if (in_array($oDadosAnulacaoFonte->si138_codfontrecursos, $this->aFontesEncerradas)) {
+                    $oDadosAnulacaoFonte->si138_codfontrecursos = substr($oDadosAnulacaoFonte->si138_codfontrecursos, 0, 1) . '59';
+                }
+                $oDadosAnulacaoFonte->si138_codfontrecursos = substr($this->oDeParaRecurso->getDePara($oDadosAnulacaoFonte->si138_codfontrecursos), 0, 7);
+
+                    $oControleOrcamentario = new ControleOrcamentario();
+                    $oControleOrcamentario->setTipoDespesa($oAnulacoes->e60_tipodespesa);
+                    $oControleOrcamentario->setFonte($oAnulacoes->o15_codigo);
+                    $oControleOrcamentario->setEmendaParlamentar($oAnulacoes->e60_emendaparlamentar);
+                    $oControleOrcamentario->setEsferaEmendaParlamentar($oAnulacoes->e60_esferaemendaparlamentar);
+                    $oControleOrcamentario->setDeParaFonteCompleta();
+
+                $oDadosAnulacaoFonte->si138_codco = $oControleOrcamentario->getCodigoParaEmpenho();
+                $oDadosAnulacaoFonte->si138_valoranulacaofonte = $oAnulacoes->vlrordem;
+                $oDadosAnulacaoFonte->si138_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+                $oDadosAnulacaoFonte->si138_reg10 = 0;
+                $oDadosAnulacaoFonte->si138_instit = db_getsession("DB_instit");
+
+                $oDadosAnulacao->reg11[$Hash] = $oDadosAnulacaoFonte;
+                $aAnulacoes[$Hash] = $oDadosAnulacao;
+            } else {
+                $aAnulacoes[$Hash]->si137_vlanulacaoop += $oAnulacoes->vlrordem;
+                $aAnulacoes[$Hash]->reg11[$Hash]->si138_valoranulacaofonte += $oAnulacoes->vlrordem;
+            }
+
+            $oEmpPago = new stdClass();
+            $oEmpPago->ordem = $oAnulacoes->e50_codord;
+            $oEmpPago->lancamento = $iOpPagamento;
+            $oEmpPago->valor = $oAnulacoes->vlrordem;
+
+            $sDataFinal = $this->sDataFinal['5'] . $this->sDataFinal['6'];
+            $iAnoUsu = db_getsession("DB_anousu");
+            $iInstit = db_getsession("DB_instit");
+
+            $aAnulacoes[$Hash]->reg11[$Hash]->reg12 = $this->setDetalhamento12($oEmpPago, $aAnulacoes[$Hash], $aAnulacoes[$Hash]->reg11[$Hash], $sDataFinal, $iAnoUsu, $iInstit);
+        }
+        return array($aAnulacoes, $oDadosAnulacao, $oDadosAnulacaoFonte);
+    }
+
     public function sqlEstornos($oAnulacoes, $sDataInicial, $sDataFinal)
     {
         $sSqlEstornos = " SELECT sum(CASE ";
@@ -444,6 +467,34 @@ class SicomArquivoAnulacoesOrdensPagamento extends SicomArquivoBase implements i
         }
 
         return $rsResultOP;
+    }
+
+    /**
+     * @param $oAnulacoes
+     * @param $sDataInicial
+     * @param $sDataFinal
+     * @param $iCont
+     */
+    public function aopDuplicados($oAnulacoes, $sDataInicial, $sDataFinal, $iCont)
+    {
+        // Quando existem estornos na mesma data e valor para o OPS, essa query retorna a numordem mais precisa
+        // por considerar os movimentos da agenda.
+
+        $sqlAopDuplicado = "SELECT * FROM
+                            (SELECT DISTINCT ON (c1.k12_id, c80_codlan) c80_codlan||lpad(e82_codord, 10, 0) AS numordem FROM coremp c1
+                             JOIN corrente c2 ON (c1.k12_id, c1.k12_data, c1.k12_autent) = (c2.k12_id, c2.k12_data, c2.k12_autent)
+                             JOIN conlancamord ON (c80_codord, c80_data) = (k12_codord, c1.k12_data)
+                             JOIN empord ON e82_codord = k12_codord
+                             WHERE (k12_codord, k12_valor) = ({$oAnulacoes->e50_codord}, {$oAnulacoes->vlrordem})
+                               AND c1.k12_data BETWEEN '{$sDataInicial}' AND '$sDataFinal') AS x
+                            WHERE numordem::int8 != {$oAnulacoes->numordem}
+                            ORDER BY 1";
+        $rsDuplicados = db_query($sqlAopDuplicado);
+        $oAopDuplicado = db_utils::fieldsMemory($rsDuplicados, $iCont);
+
+        // Atribui novo valor a numordem, considerando o movimento da agenda para o lançamento.
+
+        $oAnulacoes->numordem = $oAopDuplicado->numordem;
     }
 
 }

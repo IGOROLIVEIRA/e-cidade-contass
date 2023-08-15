@@ -464,7 +464,7 @@ class cl_aoc102023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -485,7 +485,7 @@ class cl_aoc102023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -501,7 +501,7 @@ class cl_aoc102023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -522,7 +522,7 @@ class cl_aoc102023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -532,6 +532,33 @@ class cl_aoc102023
 
     return $sql;
   }
+
+    /**
+     * @SICOM AOC102023
+     *
+     * @param $instituicao
+     * @return string
+     */
+    public function sqlReg10($instituicao): string
+    {
+        /**
+         * Seleciona as informacoes pertinentes ao AOC.
+         */
+
+        return "select  distinct o39_codproj as codigovinc,
+                        '10' as tiporegistro,
+                        si09_codorgaotce as codorgao,
+                        replace(o39_numero,' ','') as nroDecreto,
+                        o39_data as dataDecreto,o39_tipoproj as tipodecreto
+                    from orcsuplem
+                        join orcsuplemval  on o47_codsup = o46_codsup
+                        join orcprojeto    on o46_codlei = o39_codproj
+                        join db_config on prefeitura  = 't'
+                        join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
+                        left join infocomplementaresinstit on si09_instit = {$instituicao}
+                    where o39_data between  '$this->sDataInicial' and '$this->sDataFinal'
+                    and o46_tiposup not in (1017)
+                    order by 4";
+    }
 }
 
-?>

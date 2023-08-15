@@ -320,6 +320,7 @@ if(isset($tot) && $tot<0 && empty($cancelar) && isset($pesquisa_dot)){
         js_OpenJanelaIframe('CurrentWindow.corpo.iframe_empautidot','db_iframe_orcdotacao','func_permorcdotacao.php?'+query+'pesquisa_chave='+document.form1.o47_coddot.value+'&funcao_js=parent.js_mostraorcdotacao','Pesquisa',false);
       }
     }
+
     function js_mostraorcdotacao(chave,erro){
       if(erro==true){
         document.form1.o47_coddot.focus();

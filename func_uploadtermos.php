@@ -39,7 +39,6 @@ db_postmemory($HTTP_POST_VARS);
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 $clrotulo = new rotulocampo;
-$cllicobrasanexo = new cl_licobrasanexo();
 
 $lFail    = false;
 if(isset($uploadfile)) {

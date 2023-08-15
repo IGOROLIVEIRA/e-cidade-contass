@@ -283,10 +283,10 @@ class cl_aoc112023
       $sql .= $virgula . " si39_tipodecretoalteracao = $this->si39_tipodecretoalteracao ";
       $virgula = ",";
     }
-    
+
     $sql .= $virgula . " si39_justificativa = '$this->si39_justificativa' ";
     $virgula = ",";
-    
+
     if (trim($this->si39_valoraberto) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si39_valoraberto"])) {
       if (trim($this->si39_valoraberto) == "" && isset($GLOBALS["HTTP_POST_VARS"]["si39_valoraberto"])) {
         $this->si39_valoraberto = "0";
@@ -506,7 +506,7 @@ class cl_aoc112023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -528,7 +528,7 @@ class cl_aoc112023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -540,11 +540,11 @@ class cl_aoc112023
   }
 
   // funcao do sql
-  function sql_query_file($si39_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
+    function sql_query_file($si39_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -565,7 +565,7 @@ class cl_aoc112023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -575,6 +575,42 @@ class cl_aoc112023
 
     return $sql;
   }
-}
 
-?>
+    /**
+     * @SICOM AOC112023
+     *
+     * @param $oDados10
+     * @return string
+     */
+    public function sqlReg11($oDados10): string
+    {
+        return "SELECT '11' AS tiporegistro,
+                    o46_codlei AS codreduzidodecreto,
+                    o39_numero AS nrodecreto,
+                    (CASE
+                    WHEN o46_tiposup IN (1006, 1007, 1008, 1009, 1010, 1012) THEN 2
+                    WHEN o46_tiposup IN (1001, 1002, 1003, 1004, 1005,1026,1027,1028,1029) THEN 1
+                    WHEN o46_tiposup = 1012 THEN 6
+                    WHEN o46_tiposup = 1013 THEN 7
+                    WHEN o46_tiposup = 1014 THEN 9
+                    WHEN o46_tiposup = 1015 THEN 10
+                    WHEN o46_tiposup = 1016 THEN 8
+                    WHEN o46_tiposup = 1017 THEN 5
+                    WHEN o46_tiposup IN (1011, 1018, 1019, 2026) THEN 4
+                    WHEN o46_tiposup = 1020 THEN 12
+                    WHEN o46_tiposup = 1021 THEN 14
+                    WHEN o46_tiposup = 1022 THEN 15
+                    WHEN o46_tiposup IN (1023, 1024, 1025) THEN 11
+                    END ) AS tipoDecretoAlteracao,
+                    o39_justi as justificativa,
+                    sum(o47_valor) AS valorAberto
+                FROM orcsuplem
+                    JOIN orcsuplemval ON o47_codsup = o46_codsup
+                    JOIN orcprojeto ON o46_codlei = o39_codproj
+                    JOIN orcsuplemtipo ON o46_tiposup = o48_tiposup
+                    JOIN orcsuplemlan ON o49_codsup=o46_codsup AND o49_data IS NOT NULL
+                WHERE o47_valor > 0
+                    AND o46_codlei IN ({$oDados10->codigovinc})
+                GROUP BY o46_codlei, o39_numero, o46_tiposup, o39_justi";
+    }
+}

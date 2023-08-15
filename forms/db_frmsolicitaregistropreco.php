@@ -157,7 +157,7 @@ function js_retornoSalvarabertura(oAjax) {
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 1) {
      
-     parent.iframe_itens.location.href='com4_solicitaaberturaitens.php';
+     parent.iframe_itens.location.href='com4_solicitaaberturaitens.php?';
      $('pc10_numero').value = oRetorno.iCodigoSolicita;
      parent.mo_camada('itens');
   } else {
@@ -227,7 +227,7 @@ if ($lBtnShowBtnConsulta) {
 
   echo "js_pesquisar();\n";
   echo "\$('btnConsultar').observe('click', js_pesquisar);\n";
-  echo "parent.iframe_itens.location.href='com4_solicitaaberturaitens.php'";
+  echo "parent.iframe_itens.location.href='com4_solicitaaberturaitens.php?alterar=true'";
    
 }
 
