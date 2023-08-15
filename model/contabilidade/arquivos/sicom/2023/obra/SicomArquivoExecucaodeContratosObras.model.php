@@ -168,7 +168,7 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
              obr01_linkobra AS si197_linkobra,
             CASE
                 WHEN l20_tipojulg = 1 THEN '1'
-                ELSE l04_codigo
+                ELSE obr08_liclicitemlote
             END AS si197_nrolote,
             ac16_tipoorigem
       FROM acordo
@@ -179,11 +179,17 @@ class SicomArquivoExecucaodeContratosObras extends SicomArquivoBase implements i
       INNER JOIN cflicita ON l20_codtipocom = l03_codigo
       INNER JOIN db_config ON (liclicita.l20_instit=db_config.codigo)
       LEFT JOIN infocomplementaresinstit ON db_config.codigo = infocomplementaresinstit.si09_instit
+      left join acordoobra on obr08_acordo = ac16_sequencial 
       WHERE si09_tipoinstit in (1,2,3,4,5,6,8,9)
           AND ac16_instit = ".db_getsession("DB_instit")."
           AND l03_pctipocompratribunal NOT IN (100,101,102,103)
           AND DATE_PART('YEAR',acordo.ac16_dataassinatura)= " . db_getsession("DB_anousu") . "
-          AND DATE_PART('MONTH',acordo.ac16_dataassinatura)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'];
+          AND DATE_PART('MONTH',acordo.ac16_dataassinatura)=" . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and 
+          case 
+            when l20_tipojulg = 3
+              then obr08_liclicitemlote = obr01_licitacaolote 
+            else 1 = 1
+        end";
         $rsResult10 = db_query($sql);//echo $sql;db_criatabela($rsResult10);exit;
 
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {

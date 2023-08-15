@@ -99,6 +99,16 @@ if ($op == "alterar") {
     }
   ?>
 
+  function js_init(){
+    var processodecompra = document.getElementById('pc80_codproc').value;
+    if(processodecompra == ""){
+      js_pesquisapc80_codproc(true);
+    }
+
+  }
+
+  js_init();
+
   function js_verifica() {
 
     if(document.form1.pc80_codproc.value==''){
@@ -135,8 +145,6 @@ if ($op == "alterar") {
   <?
   if($clickaut == true){
     echo "js_pesquisapc80_codproc(false);";
-  }else{
-    echo "js_pesquisapc80_codproc(true);";
   }
   ?>
   document.form1.retorno.value = document.form1.pc22_codorc.value;
