@@ -444,34 +444,23 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
    * Retorna os dados da inclusão assinatura
    */
   function js_retornoDadosAssinatura(oAjax) {
+  js_removeObj("msgBoxAssianturaContrato");
 
-    js_removeObj("msgBoxAssianturaContrato");
+  var oRetorno = eval("(" + oAjax.responseText + ")");
 
-    var oRetorno = eval("(" + oAjax.responseText + ")");
-
-    /*    $('ac16_sequencial').value = "";
-        $('ac16_resumoobjeto').value = "";
-        $('ac10_datamovimento').value = "";
-        $('ac16_datapublicacao').value = "";
-        $('ac16_veiculodivulgacao').value = "";
-        $('ac10_obs').value = "";*/
-
-    if (oRetorno.status == 2) {
-
-      alert(oRetorno.erro.urlDecode());
-      return false;
-    } else {
-      $('ac16_sequencial').value = "";
-      $('ac16_datareferencia').value = "";
-      $('ac10_datamovimento').value = "";
-      $('ac16_datapublicacao').value = "";
-      $('ac16_veiculodivulgacao').value = "";
-      $('ac10_obs').value = "";
-      document.getElementById("trdatareferencia").style.display == 'none'
-      alert("Inclusão efetuada com Sucesso.");
-      return true;
-    }
+  if (oRetorno.status == 2) {
+    alert(oRetorno.erro.urlDecode());
+    return false;
   }
+  $("ac16_datareferencia").value = "";
+  $("ac10_datamovimento").value = "";
+  $("ac16_datapublicacao").value = "";
+  $("ac16_veiculodivulgacao").value = "";
+  $("ac10_obs").value = "";
+  document.getElementById("trdatareferencia").style.display == "none";
+  alert("Inclusão efetuada com Sucesso.");
+  return true;
+}
 
   function js_finalizaracordo() {
     let iAcordo = $('ac16_sequencial').value;
