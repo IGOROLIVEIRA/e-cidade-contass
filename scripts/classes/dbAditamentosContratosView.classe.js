@@ -1418,12 +1418,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             me.pesquisarDadosAcordo()
 
-        }).setMessage("Aguarde, aditando contrato.")
+         }).setMessage("Aguarde, aditando contrato.")
             .execute();
-
-
-
-    }
+            $('oCboTipoAditivo').value = 0;
+        }
 
     this.validaItensNaoAditados = (oSelecionado) => {
         const tiposAditivo = [12,13,6,8];
