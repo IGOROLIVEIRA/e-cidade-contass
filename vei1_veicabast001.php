@@ -24,7 +24,6 @@
  *  Cópia da licença no diretório licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 require("libs/db_utils.php");
@@ -39,6 +38,7 @@ include("classes/db_veicabastretirada_classe.php");
 include("classes/db_veicparam_classe.php");
 include("classes/db_veicretirada_classe.php");
 include("classes/db_empveiculos_classe.php");
+include("classes/db_empempenho_classe.php");
 require_once("classes/db_condataconf_classe.php");
 
 require("libs/db_app.utils.php");
@@ -53,6 +53,7 @@ $clveicabastretirada     = new cl_veicabastretirada;
 $clveicparam             = new cl_veicparam;
 $clveicretirada          = new cl_veicretirada;
 $clempveiculos           = new cl_empveiculos;
+$clempempenho           = new cl_empempenho;
 
 $clempveiculos->rotulo->label();
 
