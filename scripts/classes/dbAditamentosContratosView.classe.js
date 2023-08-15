@@ -2372,14 +2372,19 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.validaTipoAditivo = (aLinha, retornoItem, tipoAditivo) => {
 
-         if (retornoItem.ac20_servicoquantidade === 'f') {
+         if (retornoItem.ac20_servicoquantidade === 'f'
+            && retornoItem.pc01_servico === 't') {
              this.desabilitaLinha(aLinha, tipoAditivo);
              return;
          }
 
         let iQuantidadeAtual = Number(aLinha.aCells[4].getValue().split('.').join("").replace(",","."));
         if (tipoAditivo === '14'
-            && retornoItem.ac20_servicoquantidade === 't'
+            && (retornoItem.ac20_servicoquantidade === 't'
+            ||
+            retornoItem.ac20_servicoquantidade === 'f'
+            && retornoItem.pc01_servico === 'f'
+            )
             && iQuantidadeAtual > 0) {
             this.desativaInput(aLinha,7);
             return;

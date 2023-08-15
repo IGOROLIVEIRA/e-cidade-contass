@@ -1038,11 +1038,13 @@ class cl_acordoitem {
   {
     $sql = "
     SELECT ac20_sequencial,
-    ac20_pcmater,
-    ac20_resumo,
-    ac20_quantidade,
-    ac20_servicoquantidade
+        ac20_pcmater,
+        ac20_resumo,
+        ac20_quantidade,
+        ac20_servicoquantidade,
+        pc01_servico
     FROM acordoitem
+    INNER JOIN pcmater ON pc01_codmater = ac20_pcmater
     WHERE ac20_acordoposicao IN
      (SELECT max(ac26_sequencial)
       FROM acordoposicao

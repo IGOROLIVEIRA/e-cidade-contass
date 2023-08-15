@@ -271,7 +271,6 @@ db_app::load("estilos.css, grid.style.css");
                                                 <td>
                                                     <input type="button" id='addPerido' value='Adicionar' onclick="addPeriodo();">
                                                 </td>
-
                                             </tr>
                                         </table>
                                         <div id="gridPeriodos">
@@ -432,7 +431,6 @@ db_app::load("estilos.css, grid.style.css");
     }
 
     function js_mostrapcmater1(chave1, chave2, chave3) {
-
         if (chave3 === 'f') {
             $('tdlabelservico').style.display = 'none';
             $('tdselectservico').style.display = 'none';
@@ -751,7 +749,7 @@ db_app::load("estilos.css, grid.style.css");
         var sResumo = $F('ac20_resumo');
         var iElemento = $F('ac20_elemento');
         var iUnidade = $F('ac20_matunid');
-        var iServicoQuantidade = $F('ac20_servicoquantidade');
+        var iServicoQuantidade = isServico == "t" ? $F('ac20_servicoquantidade')  : 't';
         var iTipoControle = 1;
 
         aGridPeriodosRows.each(function(oPeriodos, iLinha) {
@@ -1751,7 +1749,6 @@ db_app::load("estilos.css, grid.style.css");
 
                 VlrTotal = Number(aRow[6]) * Number(oRow[11]);
                 let nvalor = aRow[6];
-                console.log(aRow);
                 oDadosItens = new Object();
                 oDadosItens.codigo = aRow[0];
                 oDadosItens.codigomaterial = aRow[3];
@@ -2593,6 +2590,7 @@ db_app::load("estilos.css, grid.style.css");
     function js_verificaServico() {
 
         var servicoquantidade = $('ac20_servicoquantidade').value;
+
         if (servicoquantidade == 'f' && isServico == "t") {
             $('ac20_quantidade').disabled = true;
             $('ac20_quantidade').readOnly = true;
