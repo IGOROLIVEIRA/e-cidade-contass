@@ -37,24 +37,24 @@ class cl_aoc142023
   var $si42_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si42_sequencial = int8 = sequencial 
-                 si42_tiporegistro = int8 = Tipo do registro 
+                 si42_sequencial = int8 = sequencial
+                 si42_tiporegistro = int8 = Tipo do registro
                  si42_codreduzidodecreto = int8 = Código do decreto
                  si42_origemrecalteracao = varchar(2) = Origem do recurso
                  si42_codorigem = int8 = Código da Origem
-                 si42_codorgao = varchar(2) = Código do órgão 
-                 si42_codunidadesub = varchar(8) = Código da unidade 
-                 si42_codfuncao = varchar(2) = Código da função 
-                 si42_codsubfuncao = varchar(3) = Código da   Subfunção 
-                 si42_codprograma = varchar(4) = Código do   programa 
-                 si42_idacao = varchar(4) = Código que  identifica 
-                 si42_idsubacao = varchar(4) = Identifica a Sub ação 
-                 si42_naturezadespesa = int8 = Natureza de  Despesa 
-                 si42_codfontrecursos = int8 = Código da fonte de recursos 
-                 si42_vlacrescimo = float8 = Valor do acréscimo   ou redução 
-                 si42_mes = int8 = Mês 
-                 si42_reg10 = int8 = reg10 
-                 si42_instit = int8 = Instituição 
+                 si42_codorgao = varchar(2) = Código do órgão
+                 si42_codunidadesub = varchar(8) = Código da unidade
+                 si42_codfuncao = varchar(2) = Código da função
+                 si42_codsubfuncao = varchar(3) = Código da   Subfunção
+                 si42_codprograma = varchar(4) = Código do   programa
+                 si42_idacao = varchar(4) = Código que  identifica
+                 si42_idsubacao = varchar(4) = Identifica a Sub ação
+                 si42_naturezadespesa = int8 = Natureza de  Despesa
+                 si42_codfontrecursos = int8 = Código da fonte de recursos
+                 si42_vlacrescimo = float8 = Valor do acréscimo   ou redução
+                 si42_mes = int8 = Mês
+                 si42_reg10 = int8 = reg10
+                 si42_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -194,43 +194,43 @@ class cl_aoc142023
       return false;
     }
     $sql = "insert into aoc142023(
-                                       si42_sequencial 
-                                      ,si42_tiporegistro 
-                                      ,si42_codreduzidodecreto 
+                                       si42_sequencial
+                                      ,si42_tiporegistro
+                                      ,si42_codreduzidodecreto
                                       ,si42_origemrecalteracao
-                                      ,si42_codorigem 
-                                      ,si42_codorgao 
-                                      ,si42_codunidadesub 
-                                      ,si42_codfuncao 
-                                      ,si42_codsubfuncao 
-                                      ,si42_codprograma 
-                                      ,si42_idacao 
-                                      ,si42_idsubacao 
-                                      ,si42_naturezadespesa 
-                                      ,si42_codfontrecursos 
-                                      ,si42_vlacrescimo 
-                                      ,si42_mes 
-                                      ,si42_reg10 
-                                      ,si42_instit 
+                                      ,si42_codorigem
+                                      ,si42_codorgao
+                                      ,si42_codunidadesub
+                                      ,si42_codfuncao
+                                      ,si42_codsubfuncao
+                                      ,si42_codprograma
+                                      ,si42_idacao
+                                      ,si42_idsubacao
+                                      ,si42_naturezadespesa
+                                      ,si42_codfontrecursos
+                                      ,si42_vlacrescimo
+                                      ,si42_mes
+                                      ,si42_reg10
+                                      ,si42_instit
                        )
                 values (
-                                $this->si42_sequencial 
-                               ,$this->si42_tiporegistro 
+                                $this->si42_sequencial
+                               ,$this->si42_tiporegistro
                                ,$this->si42_codreduzidodecreto
                                ,'$this->si42_origemrecalteracao'
                                ,$this->si42_codorigem
-                               ,'$this->si42_codorgao' 
-                               ,'$this->si42_codunidadesub' 
-                               ,'$this->si42_codfuncao' 
-                               ,'$this->si42_codsubfuncao' 
-                               ,'$this->si42_codprograma' 
-                               ,'$this->si42_idacao' 
-                               ,'$this->si42_idsubacao' 
-                               ,$this->si42_naturezadespesa 
-                               ,$this->si42_codfontrecursos 
-                               ,$this->si42_vlacrescimo 
-                               ,$this->si42_mes 
-                               ,$this->si42_reg10 
+                               ,'$this->si42_codorgao'
+                               ,'$this->si42_codunidadesub'
+                               ,'$this->si42_codfuncao'
+                               ,'$this->si42_codsubfuncao'
+                               ,'$this->si42_codprograma'
+                               ,'$this->si42_idacao'
+                               ,'$this->si42_idsubacao'
+                               ,$this->si42_naturezadespesa
+                               ,$this->si42_codfontrecursos
+                               ,$this->si42_vlacrescimo
+                               ,$this->si42_mes
+                               ,$this->si42_reg10
                                ,$this->si42_instit
                       )";
 
@@ -614,7 +614,7 @@ class cl_aoc142023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -636,7 +636,7 @@ class cl_aoc142023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -652,7 +652,7 @@ class cl_aoc142023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -673,7 +673,7 @@ class cl_aoc142023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -683,6 +683,105 @@ class cl_aoc142023
 
     return $sql;
   }
-}
 
-?>
+    /**
+     * @SICOM AOC142023
+     *
+     * @param $oDados10
+     * @return array
+     */
+    public function sqlReg14($oDados10): array
+    {
+        $sSql = "SELECT DISTINCT row_number () over () as seq_row_number,
+                                        o46_codsup,
+                                        CASE
+                                            WHEN o47_valor > 0 THEN 14
+                                            WHEN o47_valor < 0 AND o46_tiposup IN (1001,1006,1018,1020,1021,1026) THEN 15
+                                        END AS tipoRegistro,
+                                        o46_codlei AS codReduzidoDecreto,
+                                        CASE
+                                            WHEN o46_tiposup IN (1001, 1006, 1018, 1023,1026) THEN 3
+                                            WHEN o46_tiposup IN (1002,1027) THEN 4
+                                            WHEN o46_tiposup IN (1003, 1008, 1024, 2026,1028) THEN 1
+                                            WHEN o46_tiposup IN (1004, 1005, 1007, 1009, 1010, 1019, 1025,1029) THEN 2
+                                            ELSE 98
+                                        END AS tipoDecretoAlteracao,
+                                        si09_codorgaotce AS codOrgao,
+                                        substr(o47_codsup, length(o47_codsup::varchar) -2, 3)||substr(o56_elemento,3,5)||o58_projativ||o58_subfuncao AS codorigem,
+                                        o47_codsup,
+                                        CASE
+                                            WHEN o41_subunidade != 0
+                                                OR NOT NULL THEN lpad((CASE
+                                                                        WHEN o40_codtri = '0'
+                                                                            OR NULL THEN o40_orgao::varchar
+                                                                        ELSE o40_codtri
+                                                                    END),2,0)||lpad((CASE
+                                                                                        WHEN o41_codtri = '0'
+                                                                                            OR NULL THEN o41_unidade::varchar
+                                                                                        ELSE o41_codtri
+                                                                                    END),3,0)||lpad(o41_subunidade::integer,3,0)
+                                            ELSE lpad((CASE
+                                                            WHEN o40_codtri = '0'
+                                                                OR NULL THEN o40_orgao::varchar
+                                                            ELSE o40_codtri
+                                                        END),2,0)||lpad((CASE
+                                                                            WHEN o41_codtri = '0'
+                                                                                OR NULL THEN o41_unidade::varchar
+                                                                            ELSE o41_codtri
+                                                                        END),3,0)
+                                        END AS codunidadesub,
+                                        o58_funcao AS codFuncao,
+                                        o58_subfuncao AS codSubFuncao,
+                                        o58_programa AS codPrograma,
+                                        o58_projativ AS idAcao,
+                                        ' ' AS idSubAcao,
+                                        o58_coddot,
+                                        substr(o56_elemento,2,6) AS naturezaDespesa,
+                                        o15_codtri AS codFontRecursos,
+                                        abs(o47_valor) AS vlacrescimoreducao,
+                                        o41_subunidade AS subunidade,
+                                        op01_numerocontratoopc AS numerocontratoopc,
+                                        op01_dataassinaturacop AS dataassinaturacontratoop
+                        FROM orcsuplemval
+                        JOIN orcsuplem ON o47_codsup = o46_codsup
+                        JOIN orcdotacao ON (o47_anousu, o47_coddot) = (o58_anousu, o58_coddot)
+                        JOIN orcelemento ON (o58_codele, o58_anousu) = (o56_codele, o56_anousu)
+                        JOIN orctiporec ON o58_codigo = o15_codigo
+                        JOIN db_config ON o58_instit = codigo
+                        JOIN orcunidade ON (orcdotacao.o58_orgao, orcdotacao.o58_unidade, orcdotacao.o58_anousu) = (orcunidade.o41_orgao, orcunidade.o41_unidade, orcunidade.o41_anousu)
+                        JOIN orcorgao ON (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
+                        JOIN orcsuplemlan ON o49_codsup=o46_codsup AND o49_data IS NOT NULL
+                        LEFT JOIN infocomplementaresinstit ON codigo = si09_instit
+                        LEFT JOIN db_operacaodecredito ON op01_sequencial = o47_codigoopcredito
+                        WHERE o46_codlei IN ({$oDados10->codigovinc})
+                        group by o46_codsup,o47_valor,o46_codlei,o46_tiposup,si09_codorgaotce,o58_programa,o58_projativ,o56_elemento,o47_codsup,o41_subunidade,o40_codtri,o40_orgao,o41_codtri,o41_unidade,o58_funcao,o58_subfuncao,
+                        o58_programa,o58_projativ,o15_codtri,op01_numerocontratoopc,op01_dataassinaturacop, o58_coddot
+                        ORDER BY o46_codsup";
+
+        $rsResult = db_query($sSql);
+
+        $rsResult14 = db_query("
+                    SELECT tiporegistro,
+                    codreduzidodecreto,
+                    tipodecretoalteracao,
+                    codorgao,
+                    codunidadesub,
+                    codfuncao,
+                    codsubfuncao,
+                    codprograma,
+                    idacao,
+                    idsubacao,
+                    naturezadespesa,
+                    codfontrecursos,
+                    sum(vlacrescimoreducao) vlacrescimoreducao,
+                    subunidade,
+                    numerocontratoopc,
+                    dataassinaturacontratoop,
+                    codorigem
+                    FROM
+                    ($sSql) reg14
+                    GROUP BY codorgao, codunidadesub, codfuncao, codsubfuncao, codprograma, idacao, idsubacao, tiporegistro, codreduzidodecreto,
+                    tipodecretoalteracao, naturezadespesa, codfontrecursos, subunidade, numerocontratoopc, dataassinaturacontratoop, codorigem");
+        return array($sSql, $rsResult, $rsResult14);
+    }
+}
