@@ -60,6 +60,26 @@ $clorcsuplementacaoparametro->rotulo->label();
     <? db_input('o134_percentuallimiteloa',10,$Io134_percentuallimiteloa,true,'text',$db_opcao,"")?>
         </td>
       </tr>
+      <td nowrap title="<?=@$To134_superavitloa?>">
+          <?=@$Lo134_superavitloa?> 
+      </td>
+      <td >
+            <?
+              $aSuperavitloa = array("" => "Selecione","t" => "Sim","f" => "Não");
+              db_select("o134_superavitloa", $aSuperavitloa, true, $db_opcao);
+            ?>
+          </td>
+      </tr>
+      <td nowrap title="<?=@$To134_excessoarrecad?>">
+          <?=@$Lo134_excessoarrecad?> 
+      </td>
+      <td >
+            <?
+              $aExcessoarrecad = array("" => "Selecione","t" => "Sim","f" => "Não");
+              db_select("o134_excessoarrecad", $aExcessoarrecad, true, $db_opcao);
+            ?>
+          </td>
+      </tr>
       <td nowrap title="<?=@$To134_orcamentoaprovado?>">
           <?=@$Lo134_orcamentoaprovado?> 
       </td>
@@ -98,13 +118,31 @@ function js_preenchepesquisa(chave){
  */
 function ver_valor_limite() {
   var iValor = document.getElementById('o134_percentuallimiteloa').value;
+  
   if((iValor < 0) ||(iValor > 100) ) {
     alert('Valor Somente entre 0 e 100');
     document.getElementById('o134_percentuallimiteloa').value="";
     document.getElementById('o134_percentuallimiteloa').focus();
     return false;
   }else{
+    if(js_validarCampos() == false){
+      return false;
+    }
     return true;
   }
 }
+function js_validarCampos()
+{
+    if (document.form1.o134_superavitloa.value == "") {
+      alert('Campo Considerar o Superávit no limite da Loa não informado.');
+      return false;
+    }
+    if (document.form1.o134_excessoarrecad.value == "") {
+      alert('Campo Considerar Excesso de Arrecadação no limite da Loa não informado.');
+      return false;
+    }  
+}
+document.form1.o134_superavitloa.style.width = '100%';
+document.form1.o134_excessoarrecad.style.width = '100%';
+document.form1.o134_orcamentoaprovado.style.width = '100%';
 </script>

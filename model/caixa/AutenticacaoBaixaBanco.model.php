@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 /**
@@ -65,8 +65,7 @@ class AutenticacaoBaixaBanco {
 
   /**
    *
-   * @param integer $iCodigoClassificacao Codigo da Classificacao
-   * @throws ParameterException
+   * @param int $iCodigoClassificacao Codigo da Classificacao
    */
   public function __construct ($iCodigoClassificacao) {
 
@@ -140,7 +139,7 @@ class AutenticacaoBaixaBanco {
    * @param string  $lEstorno
    * @throws BusinessException
    */
-  protected function executarLancamentoContabeis($lDesconto=false, $lArrecadaDesconto = false) {
+  public function executarLancamentoContabeis($lDesconto=false, $lArrecadaDesconto = false) {
 
     $aWhereReceitas   = array();
     $aWhereReceitas[] = "k12_codcla = {$this->iCodigoBaixaBanco}";
@@ -162,11 +161,11 @@ class AutenticacaoBaixaBanco {
   	                                          corrente.k12_autent,
                                               corrente.k12_conta,
                                               k02_codrec,
-  	                                          round((cornump.k12_valor - coalesce((select sum(vlrrec) from disrec_desconto_integral where codcla = corcla.k12_codcla 
+  	                                          round((cornump.k12_valor - coalesce((select sum(vlrrec) from disrec_desconto_integral where codcla = corcla.k12_codcla
                              and k00_receit = cornump.k12_receit),0)),2) as total_receita",
                                               null,
                                               "{$sWhereReceitas}");
-    
+
     $rsReceitasBaixaBanco = db_query($sSqlDisrec);
     if (!$rsReceitasBaixaBanco) {
       throw new BusinessException("Não foi possível localizar as receitas a serem arrecadadas.");
@@ -204,7 +203,7 @@ class AutenticacaoBaixaBanco {
          * Quando realiza uma renúncia ou desconto, considera o estrutural da receita principal para fazer o lançamento.
          */
         if($oDadosRec == 9000 || $oDadosRec == 25003){
-          
+
           $sEstruturalContaDeducao      = substr($oReceitaDeducao->getContaOrcamento()->getEstrutural(), 3, 14);
           $sEstruturalContaArrecadacao  = "4{$sEstruturalContaDeducao}00";
           $oContaPlano                  = ContaOrcamento::getContaPorEstrutural($sEstruturalContaArrecadacao, $this->iAnoUsu);
@@ -242,7 +241,7 @@ class AutenticacaoBaixaBanco {
   /**
    * Executa o lançamento das receitas originadas de empenhos de prestação de contas.
    */
-  private function processaLancamentoPrestacaoContas() {
+  public function processaLancamentoPrestacaoContas() {
 
     $sCampos  = "  distinct on (k02_codrec) k02_codrec,";
     $sCampos .= "  corrente.k12_id";
@@ -252,7 +251,7 @@ class AutenticacaoBaixaBanco {
     $sCampos .= ", empprestarecibo.e170_numpre";
     $sCampos .= ", empprestarecibo.e170_numpar";
     $sCampos .= ", cornump.k12_valor";
-    
+
     $sWhere   = "    k12_codcla = {$this->iCodigoBaixaBanco}  ";
     $sWhere  .= "and orcreceita.o70_anousu = {$this->iAnoUsu} ";
 
@@ -273,7 +272,7 @@ class AutenticacaoBaixaBanco {
     if ($iTotalReceitas <= 0) {
       return false;
     }
-      
+
     for ($iRowReceita = 0; $iRowReceita < $iTotalReceitas; $iRowReceita ++) {
 
       $oDadoSqlGeral    = db_utils::fieldsMemory($rsReceitasBaixaBanco, $iRowReceita);

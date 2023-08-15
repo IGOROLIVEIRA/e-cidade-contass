@@ -29,6 +29,9 @@
 $clorcprojeto->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("o45_numlei");
+$superaviloa = $suplementacaoparametro->o134_superavitloa;
+$excessoarrecad= $suplementacaoparametro->o134_excessoarrecad;
+
 ?>
 <fieldset>
 <form name="form1" method="post" action="" onsubmit="js_validaSubmit();">
@@ -85,6 +88,8 @@ $clrotulo->label("o45_numlei");
                 <? db_input('o45_numlei', 40, $Io45_numlei, true, 'text', 3, '', '', '', 'width: 100%')     ?>
                 <input type="hidden" id="iTipoLei" value="" name="iTipoLei">
                 <input type="hidden" id="bModalidadeAplic" value="<?= $bModalidadeAplic ?>" name="bModalidadeAplic">
+                <input type="hidden" id="superaviloa" value="<?= $superaviloa ?>" name="superaviloa">
+                <input type="hidden" id="excessoarrecad" value="<?= $excessoarrecad ?>" name="excessoarrecad">
               </td>
             </tr>
 
@@ -153,7 +158,8 @@ $clrotulo->label("o45_numlei");
 </form>
 </fieldset>
 <script>
-
+var superaviloa = document.getElementById('superaviloa').value;
+var excessoarrecad = document.getElementById('excessoarrecad').value;
 function js_incrementaCaracDig(contcaracteres){
   document.getElementById('obsdig').value = contcaracteres;
   return contcaracteres;
@@ -203,16 +209,21 @@ function js_validacaracter() {
 
     }
 
-    if ((iTipoSup == 1001 && iTipoLei != 3 ) || (iTipoSup == 1002 && iTipoLei != 3 ) || (iTipoSup == 1003 && iTipoLei != 3 ) || iTipoSup == 1004) {
-
-      document.getElementById('o39_usalimite').value = 't';
-      document.getElementById('o39_usalimite_select_descr').value = 'Sim';
-
-    } else {
-
-      document.getElementById('o39_usalimite').value = 'f';
-      document.getElementById('o39_usalimite_select_descr').value = 'Não';
-
+    if (iTipoLei == 3){
+        document.getElementById('o39_usalimite_select_descr').value = 'Não';
+    }else{
+        if ((iTipoSup == 1003 && superaviloa == 'f') || iTipoSup == 1004 && excessoarrecad == 'f'){
+          document.getElementById('o39_usalimite').value = 'f';
+          document.getElementById('o39_usalimite_select_descr').value = 'Não';
+        } else{
+            if (iTipoSup == 1001  || iTipoSup == 1002 || iTipoSup == 1003  || iTipoSup == 1004  ){
+              document.getElementById('o39_usalimite').value = 't';
+              document.getElementById('o39_usalimite_select_descr').value = 'Sim';
+            } else {
+              document.getElementById('o39_usalimite').value = 'f';
+              document.getElementById('o39_usalimite_select_descr').value = 'Não';
+            }
+        }    
     }
 
     let aTiposModalidade = ['1020', '1021', '1022'];

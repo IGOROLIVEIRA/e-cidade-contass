@@ -340,6 +340,7 @@ if ($processar) {
         <tr>
           <td colspan="2" style="text-align: center;">
             <input type="button" value="Salvar Itens" id='btnSalvarItens'>
+            <input style="display: none;" onclick="js_incluirCompilacao()" type="button" value="Incluir Compilação" id='btnIncluirCompilacao'>
           </td>
         </tr>
       </table>
@@ -573,6 +574,8 @@ if ($processar) {
 
       }
     }
+    var lAlteracao = <?=isset($alterar)?"true":"false";?>;
+    if(aItens.length > 0 && lAlteracao) document.getElementById('btnIncluirCompilacao').style.display = '';
     oGridItens.renderRows();
   }
 
@@ -594,10 +597,12 @@ if ($processar) {
     js_removeObj('msgBox');
     var oRetorno = eval("(" + oAjax.responseText + ")");
     if (oRetorno.status == 1) {
-      alert('Itens Salvos Com sucesso.')
-    } else {
-      alert(oRetorno.message.urlDecode());
-    }
+      document.getElementById("btnIncluirCompilacao").style.display = '';
+      return alert('Itens Salvos Com sucesso.')
+    } 
+
+    alert(oRetorno.message.urlDecode());
+    
   }
   oAutoComplete = new dbAutoComplete($('pc01_descrmater'), 'com4_pesquisamateriais.RPC.php');
   oAutoComplete.setTxtFieldId(document.getElementById('pc16_codmater'));
@@ -829,5 +834,10 @@ if ($processar) {
     }
     $('pc17_unid').value = opcparam[0].pc30_unid;
   }
-  //$('frmItens').disable();
+
+  function js_incluirCompilacao(){
+    var codigoAbertura = parent.iframe_registro.document.getElementById('pc54_solicita').value;
+    CurrentWindow.corpo.document.location.href='com4_registroprecocompilacao001.php?codigoAbertura='+codigoAbertura;
+  }
+  
 </script>

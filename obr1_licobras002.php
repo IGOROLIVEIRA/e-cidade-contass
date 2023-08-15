@@ -55,7 +55,7 @@ if (isset($alterar)) {
       throw new Exception("Usuário: Numero da Obra ja utilizado !");
     }
 
-    $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null, "obr01_licitacaolote", null, "obr01_licitacao = $obr01_licitacao"));
+    $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null, "obr01_licitacaolote", null, "obr01_licitacao = $obr01_licitacao and obr01_sequencial != $obr01_sequencial"));
    
     for($x=0;$x<pg_num_rows($resultobras);$x++){
       $oDaoObra = db_utils::fieldsMemory($resultobras, $x);

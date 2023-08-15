@@ -661,6 +661,12 @@ class cl_aop102023
                    c70_data AS dtanulacao,
                    e50_data AS dtordem,
                    e50_data AS dtliquida,
+                   (SELECT c71_codlan AS lanc_pgto FROM conlancamdoc
+                    WHERE c71_codlan = (SELECT max(c71_codlan) FROM conlancamdoc
+                                        JOIN conlancamord ON c80_codlan = c71_codlan
+                                        WHERE c80_codord = e50_codord
+                                            AND c71_coddoc IN (5, 35, 37)
+                                            AND c71_codlan < c70_codlan) ) AS lanc_pgto,
                    (SELECT c71_codlan AS dtpagamento FROM conlancamdoc
                     WHERE c71_codlan = (SELECT max(c71_codlan) FROM conlancamdoc
                                         JOIN conlancamord ON c80_codlan = c71_codlan

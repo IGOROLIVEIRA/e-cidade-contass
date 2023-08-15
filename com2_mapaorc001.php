@@ -122,6 +122,15 @@ $clrotulo->label("pc20_codorc");
                 </td>
               </tr>
               <tr>
+                <td><b>Qtd. de casas decimais:</b></td>
+                <td>
+                  <?php
+                    $aQuant_casas = array("2" => "2", "3" => "3", "4" => "4");
+                    db_select("quant_casas", $aQuant_casas, true, 4, "style='width:83px;'");
+                  ?>
+                </td>
+              </tr>
+              <tr>
                 <td><b>Imprimir justificativa de troca de fornecedores:</b></td>
                 <td>
                   <?php
@@ -291,6 +300,7 @@ $clrotulo->label("pc20_codorc");
       sQueryString     += '&tipoOrcamento=' + sTipoOrcamento;
       sQueryString     += '&modelo=' + $F('modelo');
       sQueryString     += '&imp_troca=' + $F('imp_troca');
+      sQueryString     += '&quant_casas=' + $F('quant_casas');
 
       var jan = window.open('com2_mapaorc002.php?' + sQueryString,
                             '',
