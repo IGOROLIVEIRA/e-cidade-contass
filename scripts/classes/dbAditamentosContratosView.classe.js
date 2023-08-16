@@ -287,6 +287,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 sUrl,
                 'Pesquisa de Acordo',
                 true);
+                $('oCboTipoAditivo').value = 0;
         } else {
 
             if (me.oTxtCodigoAcordo.getValue() != '') {
@@ -302,6 +303,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             } else {
                 me.oTxtCodigoAcordo.setValue('');
             }
+
         }
     }
 
@@ -492,6 +494,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.oGridItens.clearAll(true);
 
         document.getElementById("trdatareferencia").style.display = 'none';
+
+
 
         new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
 
