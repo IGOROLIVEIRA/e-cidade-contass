@@ -612,16 +612,16 @@ db_app::load("widgets/windowAux.widget.js");
                     if (agrupado) {
                         aLinha[5] = ''
                         if (documento != 0) {
-                            aLinha[6] = documento[0];
+                            aLinha[6] = numdocumento != '' ? numdocumento:documento[0];
                         } else {
-                            aLinha[6] = '';
+                            aLinha[6] = numdocumento != '' ? numdocumento:'';
                         }
                     } else {
                         aLinha[5] = op_rec_slip;
                         if (documento != 0) {
-                            aLinha[6] = documento;
+                            aLinha[6] = numdocumento != '' ? numdocumento:documento;
                         } else {
-                            aLinha[6] = '';
+                            aLinha[6] = numdocumento != '' ? numdocumento:'';
                         }
                     }
                     var color = 'red';
