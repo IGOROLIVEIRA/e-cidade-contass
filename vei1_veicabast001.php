@@ -130,10 +130,6 @@ if (isset($incluir)) {
         $clempempenho->e60_vlrutilizado =  $valor;
         $clempempenho->sql_query_valorutilizado($si05_numemp);
       }
-    } else {
-      db_msgbox("Usuário: Abastecimento não incluído, data de liberação de validação do empenho maior do que data da Emissão do empenho");
-      $sqlerro = true;
-      $erro_msg = "Não foi possível incluir.";
     }
   }
 
