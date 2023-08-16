@@ -200,7 +200,10 @@ switch ($oParam->exec) {
       $oTransferencia->setCodigoCgm($oParam->iCGM);
       $oTransferencia->setCaracteristicaPeculiarDebito($oParam->sCaracteristicaPeculiarDebito);
       $oTransferencia->setCaracteristicaPeculiarCredito($oParam->sCaracteristicaPeculiarCredito);
-      $oTransferencia->setData(date("Y-m-d",db_getsession("DB_datausu")));
+      $k17_data = $oParam->k17_data != ''? implode("-", array_reverse(explode("/", $oParam->k17_data))) : date("Y-m-d",db_getsession("DB_datausu"));
+      $oTransferencia->setData($k17_data);
+      $oTransferencia->setNumeroDocumento($oParam->k17_numdocumento);
+      $oTransferencia->setTipoSelect($oParam->k17_tiposelect);
       $oTransferencia->setProcessoAdministrativo(db_stdClass::normalizeStringJsonEscapeString($oParam->k145_numeroprocesso));
       if (isset($oParam->iExercicioCompetenciaDevolucao) && $oParam->iExercicioCompetenciaDevolucao != '')
         $oTransferencia->setExercicioCompetenciaDevolucao($oParam->iExercicioCompetenciaDevolucao);
@@ -218,8 +221,8 @@ switch ($oParam->exec) {
        // ou quando for um recebimento de pagamento de uma transferencia
       if (in_array($oParam->iCodigoTipoOperacao, $aTipoOperacao)) {
 
-        $oTransferencia->executaAutenticacao();
-        $oTransferencia->executarLancamentoContabil();
+        $oTransferencia->executaAutenticacao($k17_data);
+        $oTransferencia->executarLancamentoContabil($k17_data); 
 
       }
 
@@ -301,7 +304,9 @@ switch ($oParam->exec) {
             $oTransferencia->setExercicioCompetenciaDevolucao($oParam->iExercicioCompetenciaDevolucao);
 
       $oTransferencia->setObservacao(db_stdClass::normalizeStringJsonEscapeString($oParam->k17_texto));
-      $oTransferencia->setData(date("Y-m-d",db_getsession("DB_datausu")));
+      $k17_data = $oParam->k17_data != ''? implode("-", array_reverse(explode("/", $oParam->k17_data))) : date("Y-m-d",db_getsession("DB_datausu"));
+      $oTransferencia->setData($k17_data);
+      $oTransferencia->setNumeroDocumento($oParam->k17_numdocumento);
       $oTransferencia->setProcessoAdministrativo(db_stdClass::normalizeStringJsonEscapeString($oParam->k145_numeroprocesso));
 
       /**
@@ -322,7 +327,7 @@ switch ($oParam->exec) {
         $oTransferencia->setInstituicaoDestino($iInstituicaoSessao);
       }
 
-      $oTransferencia->receberTransferencia($iCodigoTransferencia);
+      $oTransferencia->receberTransferencia($iCodigoTransferencia,$k17_data);
       $oRetorno->message     = urlencode("Transferência {$iCodigoTransferencia} recebida com sucesso.");
       $oRetorno->iCodigoSlip = $oTransferencia->getCodigoSlip();
 
@@ -347,8 +352,9 @@ switch ($oParam->exec) {
 
     try {
 
+      $sDataLancamento     = implode("-", array_reverse(explode("/", $oParam->iDataEstorno))); 
       $oTransferencia = TransferenciaFactory::getInstance($oParam->iCodigoTipoOperacao, $oParam->k17_codigo);
-      $oTransferencia->anular($oParam->sMotivo);
+      $oTransferencia->anular($oParam->sMotivo,$sDataLancamento);
 
       /**
        * Verifica existência de lançamento contábil
@@ -358,7 +364,7 @@ switch ($oParam->exec) {
       $rsLancamento        = $oDaoLancamentoSlip->sql_record($sSqlLancamento);
 
       if ($oDaoLancamentoSlip->numrows > 0) {
-        $oTransferencia->executarLancamentoContabil(null, true);
+        $oTransferencia->executarLancamentoContabil($sDataLancamento, true);
       }
 
       $oRetorno->message = urlencode("Procedimento executado com sucesso.");
@@ -391,7 +397,9 @@ switch ($oParam->exec) {
       $oRetorno->iSituacao              = $oTransferencia->getSituacao();
       $oRetorno->dtData                 = $oTransferencia->getData();
       $oRetorno->iDevolucao             = $oTransferencia->getDevolucao();
-
+      $oRetorno->iData                  = $oTransferencia->getData();
+      $oRetorno->iNumeroDocumento       = $oTransferencia->getNumeroDocumento();
+      $oRetorno->iTipoSelect            = $oTransferencia->getTipoSelect();
       $rsSlipFonte = db_query("SELECT k29_recurso FROM sliprecurso WHERE k29_slip = {$oParam->k17_codigo}");
       $oRetorno->iCodigoFonte = db_utils::fieldsMemory($rsSlipFonte, 0)->k29_recurso ? db_utils::fieldsMemory($rsSlipFonte, 0)->k29_recurso : '';
 
