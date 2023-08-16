@@ -345,9 +345,7 @@ function addLinha($oPdf, $oItem, $iPreenche = 0){
 	$oPdf->cell(25,$iNovaAlturaLinha, $oItem->nQuantidade,$iBorda, 0, "C", $iPreenche);
 	$oPdf->cell(25,$iNovaAlturaLinha, db_formatar($oItem->nValor,'f'),$iBorda, 0, "C", $iPreenche);
 	$oPdf->cell(20,$iNovaAlturaLinha, date("d/m/Y",strtotime($oItem->dData)),$iBorda, 1, "C", $iPreenche);
-	if($oItem->sObservacao != ""){
-		$oPdf->cell(279,$iAlturaLinha, "Observação: ". substr($oItem->sObservacao,0,150),1, 1, "L", 0);
-	}
+	$oItem->sObservacao != "" ? $oPdf->cell(279,$iAlturaLinha, "Observação: ". substr($oItem->sObservacao,0,150),1, 1, "L", 0) : "";
 
 }
 
