@@ -104,7 +104,11 @@ $clsaltes->rotulo->label("k13_reduz");
                   $dbwhere .= " and db83_tipoconta = ".$tipocontadebito ;
               }
               if ( $tipocontadebito == 2){
-                $dbwhere .= " and db83_tipoconta = ".$tipocontadebito ;
+                 if ($tiposelecione == 01){
+                    $dbwhere .= "  and ( db83_tipoconta = ".$tipocontadebito."  or db83_tipoconta = 3 )"  ;
+                 } else{
+                    $dbwhere .= " and db83_tipoconta = ".$tipocontadebito ;
+                 }
               }
               if ( $tipocontadebito == 3){
                 $dbwhere .= " and db83_tipoconta is null" ;
@@ -130,8 +134,15 @@ $clsaltes->rotulo->label("k13_reduz");
                                   conplanoconta.c63_codcon = conplanoreduz.c61_codcon
                                   and conplanoconta.c63_anousu = conplanoreduz.c61_anousu
                               where  k13_reduz = $codigoconta and c61_anousu = $iAnoSessao
-                              ) and db83_tipoconta = $tipocontacredito " ;
+                              )  " ;
+                
+                if ($tiposelecione == 02){
+                    $dbwhere .= "  and ( db83_tipoconta = ".$tipocontacredito."  or db83_tipoconta = 3 )"  ;
+                } else{
+                    $dbwhere .= " and db83_tipoconta = $tipocontacredito ";
                 }
+                
+            } 
       }
       if ($tiposelecione == 03){
             if ($tipoconta == "Debito"){

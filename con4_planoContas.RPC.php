@@ -195,8 +195,13 @@ switch ($oParam->exec) {
               $sSqlWhere .= " and db83_tipoconta = ".$oParam->tipodaconta ;
           }
           if ( $oParam->tipodaconta == 2){
-              $sSqlWhere .= " and db83_tipoconta = ".$oParam->tipodaconta ;
+              if ($oParam->tiposelecione == 01){
+                $sSqlWhere .= "  and ( db83_tipoconta = ".$oParam->tipodaconta."  or db83_tipoconta = 3 )"  ;
+              } else{
+                $sSqlWhere .= " and db83_tipoconta = ".$oParam->tipodaconta ;
+              }
           }
+          
           if ( $oParam->tipodaconta == 3){
               $sSqlWhere .= " and db83_tipoconta is null" ;
           }
@@ -223,8 +228,13 @@ switch ($oParam->exec) {
                                 and conplanoconta.c63_anousu = conplanoreduz.c61_anousu
                             where  k13_reduz = $oParam->codigoconta and c61_anousu = $iAnoSessao
                             )";
-            $sSqlWhere .= " and db83_tipoconta = ".$oParam->tipodaconta ;
-          }
+            
+            if ($oParam->tiposelecione == 02){
+              $sSqlWhere .= "  and ( db83_tipoconta = ".$oParam->tipodaconta."  or db83_tipoconta = 3 )"  ;
+            } else{
+              $sSqlWhere .= " and db83_tipoconta = ".$oParam->tipodaconta ;
+            }
+          } 
         }
     }
     if ($oParam->tiposelecione == 03){
