@@ -117,6 +117,7 @@ $this->objpdf->SetFont('Arial','',5);
 $this->objpdf->Text(13,$y+10,"Contribuinte/Endereço do imóvel"); // contribuinte/endereço
 $this->objpdf->SetFont('Arial','B',7);
 $this->objpdf->Text(13,$y+13,substr($this->descr3_1, 0, 45)."..."); // nome do contribuinte
+$this->objpdf->Text(13,$y+17,$this->enderimovel);// // endereço do imovel
 
 $this->objpdf->SetFont('Arial','',5);
 $this->objpdf->Text(13,$y+25,"Descrição"); // Descrição
@@ -187,6 +188,7 @@ $yy = $this->objpdf->gety();
 $this->objpdf->setleftmargin(97);
 $this->objpdf->setrightmargin(2);
 $this->objpdf->sety($y+25);
+$this->objpdf->Text(97,$y+17,$this->enderimovel);// endereo do imovel
 
 // mensagem de instruções da guia prefeitura
 $this->objpdf->SetFont('Arial','B',5);
