@@ -87,7 +87,9 @@ $sql = "         select slip.k17_codigo,
                         ELSE k29_recurso
                     END k29_recurso,
                              o15_descr,
-                             k17_devolucao
+                             k17_devolucao,
+                             k17_tiposelect,
+                             k17_numdocumento
                       from slip
 	                     left join conplanoreduz r1 on r1.c61_reduz       = k17_debito
 	                                               and r1.c61_anousu      = extract(year from k17_data)
@@ -177,6 +179,39 @@ if ( !empty($oFinalidadePagamento) ) {
   $sCodigoFinalidadeFundeb    = $oFinalidadePagamento->getCodigo();
   $sDescricaoFinalidadeFundeb = $oFinalidadePagamento->getDescricao();
 }
+$sDescricaoTipo = "";
+if ( empty($sDescricaoTipo) ) {
+     if ($oSlip->k17_tiposelect == '01'){
+        $sDescricaoTipo = mb_strtoupper("01 - Aplicação Financeira");
+     }
+     if ($oSlip->k17_tiposelect == '02'){
+        $sDescricaoTipo = mb_strtoupper("02 - Resgate de Aplicação Financeira");
+     }
+     if ($oSlip->k17_tiposelect == '03'){
+        $sDescricaoTipo = mb_strtoupper("03 - Transferência entre contas bancárias");
+     }
+     if ($oSlip->k17_tiposelect == '04'){
+        $sDescricaoTipo = mb_strtoupper("04 - Transferências de Valores Retidos");
+     }
+     if ($oSlip->k17_tiposelect == '05'){
+        $sDescricaoTipo = mb_strtoupper("05 - Depósito decendial educação");
+     }
+     if ($oSlip->k17_tiposelect == '06'){
+        $sDescricaoTipo = mb_strtoupper("06 - Depósito decendial saúde");
+     }
+     if ($oSlip->k17_tiposelect == '07'){
+        $sDescricaoTipo = mb_strtoupper("07 - Transferência da Contrapartida do Convênio");
+     }
+     if ($oSlip->k17_tiposelect == '08'){
+        $sDescricaoTipo = mb_strtoupper("08 - Transferência entre contas de fontes diferentes");
+     }
+     if ($oSlip->k17_tiposelect == '09'){
+        $sDescricaoTipo = mb_strtoupper("09 - Transferência da conta caixa para esta conta");
+     }
+     if ($oSlip->k17_tiposelect == '10'){
+        $sDescricaoTipo = mb_strtoupper("10 - Saques");
+     } 
+}
 ?>
 <html>
 <head>
@@ -257,7 +292,7 @@ if ( !empty($oFinalidadePagamento) ) {
 			 <input type='text' size=80 readonly value='<?=$sDescricaoCPCredito; ?>' '>
        </td>
 	  </tr>
-	  <tr>
+	  <tr style="display: none;">
 		  <td>
         <b>Finalidade FUNDEB (Crédito):</b>
 			</td>
@@ -265,6 +300,16 @@ if ( !empty($oFinalidadePagamento) ) {
 			<input type='text' value="<?=$sCodigoFinalidadeFundeb; ?>" size=10 readonly '>
 			&nbsp;
 			<input type='text' size=80 readonly value='<?=$sDescricaoFinalidadeFundeb; ?>' '>
+       </td>
+	  </tr>
+    <tr >
+		  <td>
+        <b>Tipo:</b>
+			</td>
+			<td colspan=5>
+			<input type='text' value="<?=$oSlip->k17_tiposelect;?>" size=10 readonly '>
+			&nbsp;
+			<input type='text' size=80 readonly value='<?=$sDescricaoTipo; ?>' '>
        </td>
 	  </tr>
 
@@ -327,7 +372,7 @@ if ( !empty($oFinalidadePagamento) ) {
     	<td><strong>Processo Administrativo:</strong></td>
       <td><input type='text' value="<?=$oSlip->k145_numeroprocesso; ?>" size=10 readonly '>
       <td><?=$Le81_numdoc; ?></td>
-      <td><input type='text' value="<?=@$aSlip->e81_numdoc; ?>" size=15 readonly></td>
+      <td><input type='text' value="<?=($oSlip->k17_numdocumento ?$oSlip->k17_numdocumento:@$aSlip->e81_numdoc);  ?>" size=15 readonly></td>
 	  
       
     
