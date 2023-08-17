@@ -400,16 +400,13 @@ db_app::import("configuracao.DBDepartamento");
                     "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=licrealizadaoutrosorgaos"
                 );
             }
-
-            $clAcordo->getReajuste() == "t" 
-                ? $oTabDetalhes->add(
-                "criterioreajuste",
-                "Critério de Reajuste",
-                "con4_consacordosdetalhescriterioreajuste001.php?ac16_sequencial={$oGet->ac16_sequencial}")
-                : $oTabDetalhes->add(
-                "posicoes",
-                "Posições",
-                "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=posicoes");
+            
+            if($clAcordo->getReajuste() == "t"){
+                $oTabDetalhes->add(
+                    "criterioreajuste",
+                    "Critério de Reajuste",
+                    "con4_consacordosdetalhescriterioreajuste001.php?ac16_sequencial={$oGet->ac16_sequencial}");
+            }
 
             $oTabDetalhes->add(
                 "rescisoes",
