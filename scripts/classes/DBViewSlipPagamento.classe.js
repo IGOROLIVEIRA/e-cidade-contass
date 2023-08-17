@@ -1568,18 +1568,7 @@
       me.buscaFavorecidoAutoComplete(inputField,inputCodigo,ulField,me.oTxtFavorecidoInputDescricao.getValue()); 
     }
     me.buscaContas = function(inputField,inputCodigo,ulField,descricao,tipoconta)
-    {   
-       if (descricao) {
-            var sValorCaracteres      = descricao;
-            var sExpressaoCaracteres  = /^[A-Za-z0-9 -]+?$/i;
-            var sRegExpCaracteres     = new RegExp(sExpressaoCaracteres);
-            var lResultadoCaracteres  = sRegExpCaracteres.test(sValorCaracteres);
-            if (!lResultadoCaracteres) {
-              alert('São permitidas apenas letras, números e/ou caracter "_" (underline)');
-              document.getElementById(inputField).value = '';
-              return false;
-            }
-       }  
+    {    
         var oParam    = new Object();
         
         if (me.iTipoInclusao == 5){
@@ -1706,7 +1695,7 @@
                 me.pesquisaContaSaltes(false, false);
               }
             }
-        }, 2000
+        }, 4000
       ); 
 
       window.setTimeout(
@@ -1720,7 +1709,7 @@
             }
            }
        
-       }, 2000
+       }, 4000
      ); 
       
       if (tiposelect == 08) {
