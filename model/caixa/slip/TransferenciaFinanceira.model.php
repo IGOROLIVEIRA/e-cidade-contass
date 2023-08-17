@@ -179,13 +179,13 @@ class TransferenciaFinanceira extends Transferencia {
    * @return bool
    * @throws Exception
    */
-  public function receberTransferencia($iCodigoTransferencia){
+  public function receberTransferencia($iCodigoTransferencia,$sDataEstorno){
 
     $iCodigoSlipRecebido = $this->getCodigoSlip();
     $this->setCodigoSlip(null);
     parent::salvar();
 
-    $this->executaAutenticacao();
+    $this->executaAutenticacao($sDataEstorno);
 
     $oDaoTipoOperacaoVinculo                        = db_utils::getDao('sliptipooperacaovinculo');
     $oDaoTipoOperacaoVinculo->k153_slip             = $this->getCodigoSlip();
@@ -281,7 +281,7 @@ class TransferenciaFinanceira extends Transferencia {
    * Anula uma transferência financeira
    * @param string $sMotivo
    */
-  public function anular($sMotivo) {
+  public function anular($sMotivo,$sDataEstorno) {
 
     /**
      * Verifica se existe não existe recebimento ou se existe mas está estornado
@@ -319,7 +319,7 @@ class TransferenciaFinanceira extends Transferencia {
         }
       }
     }
-    $this->oSlip->anular($sMotivo, $lExcluirCheque);
+    $this->oSlip->anular($sMotivo, $lExcluirCheque,null,$sDataEstorno);
     return true;
   }
 
