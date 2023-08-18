@@ -346,10 +346,10 @@ switch ($oParam->exec) {
           }
         }  
     }
-        
+    $limit = ' limit 30 ';    
     $sSqlMonta = $clsaltes->sql_query_anousu(null, $sSqlCampos, "k13_conta", $sSqlWhere);
- 
-    $rsExecutaQueryReduz = $clsaltes->sql_record($sSqlMonta);
+
+    $rsExecutaQueryReduz = $clsaltes->sql_record($sSqlMonta.$limit);
 
     if ($clsaltes->numrows > 0) {
       for($i=0;$i<$clsaltes->numrows;$i++){
@@ -432,6 +432,71 @@ switch ($oParam->exec) {
       }
     
       break;  
+      case "buscarCamposAtivos":
+
+        $oDaoConHist = db_utils::getDao('conhist');
+        $dbwhere     = " c50_codhist = $oParam->codhist and c50_ativo = true ";
+        $sSqlConHist = $oDaoConHist->sql_query("",$campos="*",$ordem=null,$dbwhere);
+        $rsConHist   = $oDaoConHist->sql_record($sSqlConHist);
+
+        if ($oDaoConHist->numrows > 0) {
+          $oRetorno->sCodhist = urlencode(db_utils::fieldsMemory($rsConHist, 0)->c50_codhist);
+        } else {
+          switch ($oParam->codhist) {
+            case "9791":
+              $oCodhist = 9891;
+            break; 
+            case "9792":
+              $oCodhist = 9892;
+            break; 
+            case "9793":
+              $oCodhist = 9893;
+            break; 
+            case "9794":
+              $oCodhist = 9894;
+            break;
+            case "9795":
+              $oCodhist = 9895;
+            break; 
+            case "9796":
+              $oCodhist = 9896;
+            break;
+            case "9797":
+              $oCodhist = 9897;
+            break; 
+            case "9798":
+              $oCodhist = 9898;
+            break; 
+            case "9799":
+              $oCodhist = 9899;
+            break;
+          }  
+            $dbwhere     = " c50_codhist = $oCodhist and c50_ativo = true ";
+            $sSqlConHist = $oDaoConHist->sql_query("",$campos="*",$ordem=null,$dbwhere);
+            $rsConHist   = $oDaoConHist->sql_record($sSqlConHist);
+            if ($oDaoConHist->numrows > 0) {
+              $oRetorno->sCodhist = urlencode(db_utils::fieldsMemory($rsConHist, 0)->c50_codhist);
+            }  
+               
+        }
+        break;
+        case "buscarFontes":
+ 
+            $clsaltes = new cl_saltes;
+            $sSqlCampos   = " c61_codigo ";
+            $iAnoSessao = db_getsession("DB_anousu");
+            $sSqlWhere    = " c61_instit = $iInstituicaoSessao and (k13_limite is null or k13_limite >= '".date("Y-m-d",db_getsession("DB_datausu"))."') and c62_anousu = {$iAnoSessao} and k13_reduz =  $oParam->iCodigo ";
+            $sSqlMonta = $clsaltes->sql_query_anousu(null, $sSqlCampos, "k13_conta", $sSqlWhere);
+            $rsExecutaQueryReduz = $clsaltes->sql_record($sSqlMonta);
+
+            if ($clsaltes->numrows > 0) {
+              for($i=0;$i<$clsaltes->numrows;$i++){
+                $oDadosConPlano = db_utils::fieldsMemory($rsExecutaQueryReduz, $i);
+                
+              }
+              $oRetorno->oFonte = $oDadosConPlano->c61_codigo;
+            } 
+        break;  
 
 }
 

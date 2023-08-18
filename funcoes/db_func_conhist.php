@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "conhist.c50_codhist,conhist.c50_descr,conhist.c50_compl,conhist.c50_descrcompl";
+$campos = "conhist.c50_codhist,conhist.c50_descr,conhist.c50_compl,conhist.c50_descrcompl,conhist.c50_ativo";
 ?>

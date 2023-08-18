@@ -62,6 +62,8 @@
      * Define o tipo de transferencia
      */
 
+    oCodigoContaDebito  = 0;
+
     switch (iTipoTransferencia) {
 
       /*
@@ -621,56 +623,54 @@
         if (valorSelecionado == 01){
             me.tipocontadebito   = 2;
             me.tipocontacredito  = 1; 
-            me.oTxtHistoricoInputCodigo.setValue(9791);
+            me.buscaCamposAtivos(9791);
         }
         if (valorSelecionado == 02){
             me.tipocontadebito   = 1;
             me.tipocontacredito  = 2; 
-            me.oTxtHistoricoInputCodigo.setValue(9792);
+            me.buscaCamposAtivos(9792);
         }
         if (valorSelecionado == 03){
             me.tipocontadebito   = 1; 
             me.tipocontacredito  = 1; 
-            me.oTxtHistoricoInputCodigo.setValue(9793);
+            me.buscaCamposAtivos(9793);
         }
         if (valorSelecionado == 04){
             me.tipocontadebito   = 1;
             me.tipocontacredito  = 1; 
-            me.oTxtHistoricoInputCodigo.setValue(9794);
+            me.buscaCamposAtivos(9794);
         }
         if (valorSelecionado == 05){
             me.tipocontadebito   = 1; 
             me.tipocontacredito  = 1; 
-            me.oTxtHistoricoInputCodigo.setValue(9795);
+            me.buscaCamposAtivos(9795);
         }
         if (valorSelecionado == 06){
             me.tipocontadebito   = 1; 
             me.tipocontacredito  = 1; 
-            me.oTxtHistoricoInputCodigo.setValue(9796);
+            me.buscaCamposAtivos(9796);
         }
         if (valorSelecionado == 07){
             me.tipocontadebito   = 1; 
             me.tipocontacredito  = 1; 
-            me.oTxtHistoricoInputCodigo.setValue(9797);
+            me.buscaCamposAtivos(9797);
         }
         if (valorSelecionado == 08){
             me.tipocontadebito   = 1;
             me.tipocontacredito  = 1;
-            me.oTxtHistoricoInputCodigo.setValue(9798); 
+            me.buscaCamposAtivos(9798); 
         }
         if (valorSelecionado == 09){
             me.tipocontadebito   = 1;
             me.tipocontacredito  = 3; 
-            me.oTxtHistoricoInputCodigo.setValue(9799);
+            me.buscaCamposAtivos(9799);
         }
         if (valorSelecionado == 10){
             me.tipocontadebito   = 3;
             me.tipocontacredito  = 1; 
-            me.oTxtHistoricoInputCodigo.setValue(9790);
+            me.buscaCamposAtivos(9790);
         }
-        var sUrlHistorico = "func_conhist.php?pesquisa_chave="+me.oTxtHistoricoInputCodigo.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preencheHistorico";
-        js_OpenJanelaIframe("", 'db_iframe_conhist', sUrlHistorico, "Pesquisa Histórico", false);
-
+        
     }
 
       /**
@@ -1462,7 +1462,7 @@
           document.getElementById("oTxtContaCreditoDescricao").focus();
       }
       if (iTipoTransferencia == 5){
-        if (($("txt_tipo_" + me.sNomeInstancia).value != 07 || $("txt_tipo_" + me.sNomeInstancia).value != 10) && $("txt_tipo_" + me.sNomeInstancia).value != 08){
+        if (($("txt_tipo_" + me.sNomeInstancia).value != 07 && $("txt_tipo_" + me.sNomeInstancia).value != 10) && $("txt_tipo_" + me.sNomeInstancia).value != 08){
             me.oTxtFonteInputCodigo.setValue(iCodfonte);
             me.oTxtFonteInputCodigo.setReadOnly(true);
             me.pesquisaFonte(false)   
@@ -1485,7 +1485,7 @@
         document.getElementById("oTxtContaCreditoDescricao").focus();
       }
       if (iTipoTransferencia == 5){
-        if (($("txt_tipo_" + me.sNomeInstancia).value != 07 || $("txt_tipo_" + me.sNomeInstancia).value != 10) && $("txt_tipo_" + me.sNomeInstancia).value != 08){
+        if (($("txt_tipo_" + me.sNomeInstancia).value != 07 && $("txt_tipo_" + me.sNomeInstancia).value != 10) && $("txt_tipo_" + me.sNomeInstancia).value != 08){
           
           me.oTxtFonteInputCodigo.setValue(sCodfonte);
             me.oTxtFonteInputCodigo.setReadOnly(true);
@@ -1681,27 +1681,31 @@
 
       var oRetorno = JSON.parse(oAjax.responseText);
 
-      var oCodigoContaDebito  = 0;
-      var oCodigoContaCredito = 0;
       var tiposelect = $("txt_tipo_" + me.sNomeInstancia).value;
-
+      
       window.setTimeout(
          function() {
-            oCodigoContaDebito  = document.getElementById("oTxtContaDebitoCodigo").value;
-            if (oRetorno.inputField == 'oTxtContaDebitoDescricao' && oCodigoContaDebito != 0) {
+          var oCodigoContaDebito  = document.getElementById("oTxtContaDebitoCodigo").value;
+            if (oRetorno.inputField == 'oTxtContaDebitoDescricao' && oCodigoContaDebito ) {
+        
               document.getElementById("oTxtContaCreditoDescricao").focus();
               const tipos = ['01', '02', '03', '04', '05', '06', '09'];
               if (tipos.includes(tiposelect)) {
-                me.pesquisaContaSaltes(false, false);
+
+                me.buscaFontes(oCodigoContaDebito)
+                // me.pesquisaFonte(false)
+                // me.pesquisaContaSaltes(false, false);
+                // console.log(document.getElementById("oTxtFonteInputCodigo").value)
+                // js_removeObj("msgBox");
               }
             }
-        }, 4000
+        }, 2000
       ); 
 
       window.setTimeout(
         function() {
-           oCodigoContaCredito = document.getElementById("oTxtContaCreditoCodigo").value;
-           if (oRetorno.inputField == 'oTxtContaCreditoDescricao' && oCodigoContaCredito != 0) {
+           var oCodigoContaCredito = document.getElementById("oTxtContaCreditoCodigo").value;
+           if (oRetorno.inputField == 'oTxtContaCreditoDescricao' && oCodigoContaCredito) {
              document.getElementById("oTxtNumDocumentoInput").focus();
              const tipos = ['07', '10'];
              if (tipos.includes(tiposelect)) {
@@ -1709,7 +1713,7 @@
             }
            }
        
-       }, 4000
+       }, 3000
      ); 
       
       if (tiposelect == 08) {
@@ -1717,6 +1721,31 @@
       }
     
     };
+
+    me.buscaFontes = function(codigo)
+    {
+        var oParam    = new Object();
+        oParam.exec   = "buscarFontes";
+        oParam.iCodigo = codigo;
+        
+        
+        if (codigo){
+          let oAjax = new Ajax.Request ( "con4_planoContas.RPC.php",
+            {method: 'post',
+            parameters: 'json='+Object.toJSON(oParam),
+            onComplete: me.retornoFontes
+            }); 
+          }    
+    }; 
+    me.retornoFontes = function(oAjax)
+    {
+
+      var oRetorno = eval("("+oAjax.responseText+")");
+      me.oTxtFonteInputCodigo.setValue(oRetorno.oFonte);
+      me.oTxtFonteInputCodigo.setReadOnly(true);
+      me.pesquisaFonte(false)
+    }
+
     /**
      * Lookup de pesquisa do Historico
      */
@@ -2421,7 +2450,29 @@
       window.onload = function() {
         document.getElementById("txt_tipo_" + me.sNomeInstancia).focus();
       }
-    }  
+    } 
+    
+    me.buscaCamposAtivos = function(codhist)
+    {
+        var oParam    = new Object();
+        oParam.exec   = "buscarCamposAtivos";
+        oParam.codhist = codhist;
+        js_divCarregando("Aguarde, verificando Historico...", "msgBox");
+        let oAjax = new Ajax.Request ( "con4_planoContas.RPC.php",
+            {method: 'post',
+            parameters: 'json='+Object.toJSON(oParam),
+            onComplete: me.resultCampoAtivo
+            });     
+    }; 
+    me.resultCampoAtivo = function (oAjax) {
+
+      js_removeObj("msgBox");
+      var oRetorno = eval("("+oAjax.responseText+")");
+      me.oTxtHistoricoInputCodigo.setValue(oRetorno.sCodhist);
+      var sUrlHistorico = "func_conhist.php?pesquisa_chave="+me.oTxtHistoricoInputCodigo.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preencheHistorico";
+      js_OpenJanelaIframe("", 'db_iframe_conhist', sUrlHistorico, "Pesquisa Histórico", false);
    
-  };
+   };
+
+};
 
