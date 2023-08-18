@@ -189,6 +189,17 @@ class Inventario {
        */
       $iCodigoBem = $oInventarioBem->getBem()->getCodigoBem();
 
+      if($oInventarioBem->getBem()->getDepartamento() == $oInventarioBem->getDepartamento()->getCodigo()){
+
+          $oDaohistbem                              = db_utils::getDao("histbem");
+          $oDaohistbem->t56_codbem                  = $iCodigoBem;
+          $oDaohistbem->t56_data                    = date("Y-m-d", db_getsession("DB_datausu"));
+          $oDaohistbem->t56_situac                  = $oInventarioBem->getSituacao();
+          $oDaohistbem->t56_depart                  = $oInventarioBem->getBem()->getDepartamento();
+          $oDaohistbem->t56_histor                  = "Processamento de Reavaliação";
+          $oDaohistbem->incluir(null);
+      }
+
       $oDaoBensDepreciacao                      = db_utils::getDao("bensdepreciacao");
       $oDaoBensDepreciacao->t44_vidautil        = $oInventarioBem->getVidaUtil();
       $oDaoBensDepreciacao->t44_valoratual      = $oInventarioBem->getValorDepreciavel();
@@ -342,6 +353,21 @@ class Inventario {
         $oTransferenciaBem->transferenciaAutomatica();
       }
 
+      if($oInventarioBem->getBem()->getDepartamento() == $oInventarioBem->getDepartamento()->getCodigo()){
+
+          $oDaohistbem                              = db_utils::getDao("histbem");
+          $iCodigoBem = $oInventarioBem->getBem()->getCodigoBem();
+          $rsUltimaSituacao = db_query($oDaohistbem->sql_query_file(null,"t56_situac","t56_histbem desc limit 1 OFFSET 1","t56_codbem = {$iCodigoBem}"));
+          $oHistbem = db_utils::fieldsMemory($rsUltimaSituacao, 0);
+
+          $oDaohistbem->t56_codbem                  = $iCodigoBem;
+          $oDaohistbem->t56_data                    = date("Y-m-d", db_getsession("DB_datausu"));
+          $oDaohistbem->t56_situac                  = $oHistbem->t56_situac;
+          $oDaohistbem->t56_depart                  = $oInventarioBem->getBem()->getDepartamento();
+          $oDaohistbem->t56_histor                  = "Desprocessamento de Reavaliação";
+          $oDaohistbem->incluir(null);
+      }
+
       $oBem = $oInventarioBem->getBem();
       if ($oBem->getValorResidual() != $oInventarioBem->getValorResidual()    ||
       		$oBem->getValorDepreciavel() != $oInventarioBem->getValorDepreciavel()) {
@@ -379,13 +405,14 @@ class Inventario {
       $nValorAnterior          = 0;
       $iTipoDepreciacao        = 0;
       $nValorResidualAnterior  = 0;
+      $nValorResidual          = 0;
 
       for ($iRowBem = 0; $iRowBem < $iTotalBem; $iRowBem++) {
 
         $oStdBem = db_utils::fieldsMemory($rsBensHistoricoCalculoBem, $iRowBem);
         if ($oStdBem->t58_benstipodepreciacao == 6) {
 
-          $iVidaUtilAterior = $oStdBem->t58_vidautilanterior;
+          $iVidaUtilAterior        = $oStdBem->t58_vidautilanterior;
           $nValorAtualAnterior     = $oStdBem->t58_valoratual;
           $iCodigoBem              = $oStdBem->t58_bens;
           $nValorCalculado         = $oStdBem->t58_valorcalculado;
@@ -393,6 +420,16 @@ class Inventario {
           $nValorAnterior          = $oStdBem->t58_valoranterior;
           $iTipoDepreciacao        = $oStdBem->t58_benstipodepreciacao;
           $nValorResidualAnterior  = $oStdBem->t58_valorresidualanterior;
+          $nValorResidual          = $oStdBem->t58_valorresidual;
+
+          /**
+           * Aqui foi necessrio fazer essa comparacao pois quando havia alteracao no valor residual era necessario recalcular o valor do bem
+           */
+          if($nValorResidualAnterior == $nValorResidual){
+             $t44_valoratual =  $nValorCalculado;
+          }else{
+              $t44_valoratual =  $nValorCalculado + $nValorResidualAnterior;
+          }
 
           break;
         }
@@ -421,7 +458,7 @@ class Inventario {
        */
       $oDaoBensDepreciacao                           = db_utils::getDao("bensdepreciacao");
       $oDaoBensDepreciacao->t44_vidautil             = $iVidaUtilAterior;
-      $oDaoBensDepreciacao->t44_valoratual           = $nValorAtualAnterior;
+      $oDaoBensDepreciacao->t44_valoratual           = $t44_valoratual;
       $oDaoBensDepreciacao->t44_valorresidual        = $nValorResidualAnterior;
       $oDaoBensDepreciacao->t44_ultimaavaliacao      = date("Y-m-d", db_getsession("DB_datausu"));
 
@@ -430,6 +467,7 @@ class Inventario {
       }
 
       $oDaoBensDepreciacao->t44_sequencial = $oInventarioBem->getBem()->getCodigoBemDepreciacao();
+
       $oDaoBensDepreciacao->alterar($oDaoBensDepreciacao->t44_sequencial);
 
       /**
