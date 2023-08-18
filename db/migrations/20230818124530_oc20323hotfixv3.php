@@ -13,10 +13,7 @@ class Oc20323hotfixv3 extends AbstractMigration
 
     SELECT fc_startsession();
 
-        ALTER TABLE conhist ADD c50_ativo bool NULL;
-
-        UPDATE conhist  SET c50_ativo= true
-        WHERE c50_codhist > 0;
+        ALTER TABLE conhist ADD c50_ativo bool DEFAULT TRUE;
 
         -- Insere novo campo
         INSERT INTO db_syscampo
