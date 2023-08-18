@@ -6,6 +6,7 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_liclicita_classe.php");
 include("classes/db_liclicitem_classe.php");
+include("classes/db_licitaparam_classe.php");
 
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
@@ -14,6 +15,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 $clliclicitem = new cl_liclicitem;
 $clliclicita  = new cl_liclicita;
+$cllicitaparam = new cl_licitaparam;
 
 $clliclicita->rotulo->label("l20_codigo");
 $clliclicita->rotulo->label("l20_numero");
@@ -100,10 +102,13 @@ $sWhereContratos = " and 1 = 1 ";
                 $dbwhere   = "l08_altera is true and";
             }
 
+            $rsParamLic = $cllicitaparam->sql_record($cllicitaparam->sql_query(null, "*", null, "l12_instit = " . db_getsession('DB_instit')));
+            $l12_adjudicarprocesso = db_utils::fieldsMemory($rsParamLic, 0)->l12_adjudicarprocesso;
+
             /**
              * QUANDO FOR ADJUDICACAO NAO DEVE RETORNAR PROCESSO QUE SAO REGISTRO DE PRECO
              */
-            if(isset($adjudicacao) &&trim($adjudicacao) != ""){
+            if(isset($adjudicacao) && trim($adjudicacao) != "" && $l12_adjudicarprocesso == "f"){
                 $dbwhere .= "l20_tipnaturezaproced != 2 AND ";
             }
             /**
@@ -192,7 +197,7 @@ $sWhereContratos = " and 1 = 1 ";
                         $sql = $clliclicitem->sql_query_inf("",$campos,"l20_codigo","1=1$dbwhere $whereHab");
                     }
                 }
-    
+                               
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js);
 
 

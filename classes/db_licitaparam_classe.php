@@ -54,6 +54,8 @@ class cl_licitaparam
     var $l12_numeracaomanual = null;
     var $l12_validafornecedor_emailtel = null;
     var $l12_acessoapipcp = null;
+    var $l12_adjudicarprocesso = null;
+
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -67,6 +69,7 @@ class cl_licitaparam
                  l12_pncp = bool = Validacao PNCP
                  l12_numeracaomanual = bool = Numeração Manual na Licitação
                  l12_validafornecedor_emailtel = bool = Numeração Manual na Licitação
+                 l12_adjudicarprocesso = bool = Adjudicar Processo RP
                  ";
     //funcao construtor da classe
     function cl_licitaparam()
@@ -100,6 +103,7 @@ class cl_licitaparam
             $this->l12_numeracaomanual = ($this->l12_numeracaomanual == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_numeracaomanual"] : $this->l12_numeracaomanual);
             $this->l12_validafornecedor_emailtel = ($this->l12_validafornecedor_emailtel == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_validafornecedor_emailtel"] : $this->l12_validafornecedor_emailtel);
             $this->l12_acessoapipcp = ($this->l12_acessoapipcp == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_acessoapipcp"] : $this->l12_acessoapipcp);
+            $this->l12_adjudicarprocesso = ($this->l12_adjudicarprocesso == "f" ? @$GLOBALS["HTTP_POST_VARS"]["l12_adjudicarprocesso"] : $this->l12_adjudicarprocesso);
         } else {
             $this->l12_instit = ($this->l12_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["l12_instit"] : $this->l12_instit);
         }
@@ -153,6 +157,13 @@ class cl_licitaparam
             $this->erro_status = "0";
             return false;
         }
+        if (($this->l12_adjudicarprocesso == null) || ($this->l12_adjudicarprocesso == "")) {
+            $this->erro_sql = " Campo l12_adjudicarprocesso nao declarado.";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n "));
+            $this->erro_status = "0";
+            return false;
+        }
         $sql = "insert into licitaparam(
                                        l12_instit
                                       ,l12_escolherprocesso
@@ -165,6 +176,7 @@ class cl_licitaparam
                                       ,l12_numeracaomanual
                                       ,l12_validafornecedor_emailtel
                                       ,l12_acessoapipcp
+                                      ,l12_adjudicarprocesso
                        )
                 values (
                                 $this->l12_instit
@@ -178,6 +190,7 @@ class cl_licitaparam
                                ,'$this->l12_numeracaomanual'
                                ,'$this->l12_validafornecedor_emailtel'
                                ,'$this->l12_acessoapipcp'
+                               ,'$this->l12_adjudicarprocesso'
                       )";
         $result = db_query($sql);
         if ($result == false) {
@@ -350,6 +363,18 @@ class cl_licitaparam
                 $this->erro_banco = "";
                 $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
+        if (trim($this->l12_adjudicarprocesso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l12_adjudicarprocesso"])) {
+            $sql  .= $virgula . " l12_adjudicarprocesso = '$this->l12_adjudicarprocesso' ";
+            $virgula = ",";
+            if (trim($this->l12_adjudicarprocesso) == null) {
+                $this->erro_sql = " Campo Adjudicar Processo RP nao Informado.";
+                $this->erro_campo = "l12_adjudicarprocesso";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n "));
                 $this->erro_status = "0";
                 return false;
             }
