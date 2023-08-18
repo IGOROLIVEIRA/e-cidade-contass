@@ -105,7 +105,7 @@ $clAcordo = new Acordo($ac16_sequencial);
           <fieldset style="margin-top: 30px;">
             <legend>Descrição do Critério de Reajuste</legend>
             <?
-            db_textarea('descricaoReajuste', 10, 145, 1, true, 'text', $db_opcao, "readonly=''");
+            db_textarea('descricaoReajuste', 10, 145, 1, true, 'text', $db_opcao, "readonly='' style='resize: none'");
             echo "<script> document.getElementById('descricaoReajuste').value = '{$clAcordo->getDescricaoReajuste()} {$clAcordo->getDescricaoIndice()}'; </script>";
             ?>
           </fieldset>
