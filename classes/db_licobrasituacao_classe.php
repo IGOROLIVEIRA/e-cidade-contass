@@ -701,5 +701,32 @@ class cl_licobrasituacao {
     }
     return $sql;
   }
+
+  function permissaoAlteracaoDescricao($obr02_dtlancamento,$obr02_veiculopublicacao,$obr02_dtsituacao,$obr02_dtpublicacao,$obr02_descrisituacao,$obr02_seqobra){
+
+    $resultSituacao = $this->sql_record($this->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 1"));
+    $obr02_descrisituacaoAnterior = db_utils::fieldsMemory($resultSituacao,0)->obr02_descrisituacao;
+    $obr02_dtlancamentoAnterior = db_utils::fieldsMemory($resultSituacao,0)->obr02_dtlancamento;
+    $obr02_veiculopublicacaoAnterior = db_utils::fieldsMemory($resultSituacao,0)->obr02_veiculopublicacao;
+    $obr02_dtsituacaoAnterior = db_utils::fieldsMemory($resultSituacao,0)->obr02_dtsituacao;
+    $obr02_dtpublicacaoAnterior = db_utils::fieldsMemory($resultSituacao,0)->obr02_dtpublicacao;
+    $obr02_dtlancamento =  implode('-', array_reverse(explode('/', $obr02_dtlancamento)));
+    $obr02_dtsituacao =  implode('-', array_reverse(explode('/', $obr02_dtsituacao)));
+    $obr02_dtpublicacao =  implode('-', array_reverse(explode('/', $obr02_dtpublicacao)));
+
+    if($obr02_descrisituacaoAnterior != $obr02_descrisituacao){
+      
+      if($obr02_dtlancamentoAnterior != $obr02_dtlancamento) return false;
+      if($obr02_veiculopublicacaoAnterior != $obr02_veiculopublicacao) return false;
+      if($obr02_dtsituacaoAnterior != $obr02_dtsituacao) return false;
+      if($obr02_dtpublicacaoAnterior != $obr02_dtpublicacao) return false;
+
+      return true;
+
+    }
+
+    return false;
+  }
+
 }
 ?>
