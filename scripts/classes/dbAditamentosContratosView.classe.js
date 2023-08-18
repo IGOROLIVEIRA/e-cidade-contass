@@ -1428,7 +1428,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }
 
     this.validaItensNaoAditados = (oSelecionado) => {
-        const tiposAditivo = [12,13,6,8];
+        const tiposAditivo = ['12','13','6','8'];
+
         return (oSelecionado.aCells[9].getValue().getNumber() == 0
         && oSelecionado.aCells[10].getValue().getNumber() == 0
         && !tiposAditivo.includes($('oCboTipoAditivo').value)
