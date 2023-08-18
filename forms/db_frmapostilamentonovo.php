@@ -1,9 +1,10 @@
-<?
+<?php
 //MODULO: sicom
 $clapostilamento->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
+$viewAlterar = $_GET['viewAlterar'];
 ?>
 <fieldset style="width: 1000px;  margin-top: 25px; ">
     <legend><b>Dados do acordo</b></legend>
@@ -12,7 +13,10 @@ $clrotulo->label("ac16_resumoobjeto");
         <table border="0" style="margin-right: 10px; margin-left: -45%;">
             <tr>
                 <td title="<?= @$Tac16_sequencial ?>">
-                    <?php db_ancora("Acordo", "js_pesquisaac16_sequencial(true);", $db_opcao); ?>
+                    <?php
+                    $jsExec =  $viewAlterar ? "js_acordosc_apostilamentos()" : "js_pesquisaac16_sequencial(true);";
+                    db_ancora("Acordo", $jsExec, $db_opcao);
+                     ?>
                 </td>
                 <td>
                     <?
@@ -1428,4 +1432,14 @@ $clrotulo->label("ac16_resumoobjeto");
     }
     //js_changeTipoApostila();
     js_pesquisaac16_sequencial(true);
+
+    function js_acordosc_apostilamentos() {
+        console.log("entrou aqui");
+        var sUrl = 'func_acordonovo.php?viewalterar=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura&iTipoFiltro=4';
+            js_OpenJanelaIframe('top.corpo',
+                'db_iframe_acordo',
+                sUrl,
+                'Pesquisar Acordo',
+                true);
+    }
 </script>

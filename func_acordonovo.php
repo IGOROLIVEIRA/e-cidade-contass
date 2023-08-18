@@ -118,6 +118,7 @@ $iInstituicaoSessao = db_getsession('DB_instit');
           $sWhere  = " 1 = 1 ";
 
           $sWhere .= " and ac16_instit = {$iInstituicaoSessao} ";
+
           if (!isset($lNovoDetalhe)) {
 
             if (!isset($lDepartamento)) {
@@ -198,6 +199,12 @@ $iInstituicaoSessao = db_getsession('DB_instit');
               $sWhere  = "ac16_numeroacordo = {$iNumero} and ac16_anousu = {$iAno} and ac16_instit = {$iInstituicaoSessao} and {$sDepartamentos}";
             }
 
+
+            if (!empty($viewalterar)) {
+                $sWhere .= 'AND ac26_acordoposicaotipo = 17 AND ac26_numeroapostilamento IS NOT NULL ';
+            }
+
+
             if (isset($chave_ac16_sequencial) && (trim($chave_ac16_sequencial) != "")) {
 
               $sql = $clacordo->sql_query_acordoitemexecutado(
@@ -227,7 +234,6 @@ $iInstituicaoSessao = db_getsession('DB_instit');
 
             db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
           } else {
-
 
             if ($pesquisa_chave != null && $pesquisa_chave != "") {
 
