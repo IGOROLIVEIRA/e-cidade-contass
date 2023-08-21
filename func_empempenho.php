@@ -155,6 +155,8 @@ $rotulo->label("z01_cgccpf");
           cgm.z01_cgccpf,
           empempenho.e60_coddot,
           e60_vlremp,
+          e60_vlremp-e60_vlrutilizado as saldodisponivel,
+          e60_vlrutilizado,
           e60_vlrliq,
           e60_vlrpag,
           e60_vlranu,

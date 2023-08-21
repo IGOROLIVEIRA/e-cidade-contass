@@ -251,6 +251,20 @@ db_app::load("estilos.css");
 
               </tr>
 
+              <tr id="trSaldoDisponivel">
+                <td><b>Saldo Disponível: </b></td>
+                <td>
+                  <?php 
+                  db_input('saldoDisponivel', 10, 1, true, 'text', 3); 
+                  $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(1, "*", null, ""));
+                  $resultParamres = db_utils::fieldsMemory($resultParam, 0);
+                  if ($resultParamres->ve50_abastempenho != 1) {
+                    echo "<script> document.getElementById('trSaldoDisponivel').style.display = 'none';</script>";
+                  }
+                  ?>
+                </td>
+              </tr>
+
               <?
               if (isset($ve50_postoproprio) && $ve50_postoproprio == 3) {
                 db_input('posto_proprio', 1, "", true, 'hidden', 3, '');
@@ -517,7 +531,7 @@ db_app::load("estilos.css");
       if (controlador == 0) {
         js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
       } else {
-        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm|saldodisponivel', 'Pesquisa', true);
       }
 
     } else {
@@ -529,7 +543,7 @@ db_app::load("estilos.css");
    * Função alterada para validar se a data do empenho escolhido é maior que a data do abastecimento.
    * Ocorrência 1017: A contabilidade, em acordo com o suporte, solicitaram a remoção destas validações. Foi removida a obrigatoriedade e mantido a mensagem de alerta.
    * */
-  function js_mostraempempenho2(chave1, chave2, chave3, chave4, chave5) {
+  function js_mostraempempenho2(chave1, chave2, chave3, chave4, chave5,chave6) {
     var dtEmpenho = new Date(chave4);
     var dtAbast = new Date(document.form1.ve70_dtabast_ano.value + "-" + document.form1.ve70_dtabast_mes.value + "-" + document.form1.ve70_dtabast_dia.value);
     if (dtEmpenho > dtAbast) {
@@ -549,6 +563,8 @@ db_app::load("estilos.css");
         }
       }
     } else {
+      chave6 = parseFloat(chave6);
+      document.form1.saldoDisponivel.value = chave6.toLocaleString('pt-BR', { minimumFractionDigits: 2});
       document.form1.si05_numemp.value = chave1;
       document.form1.e60_codemp.value = chave2 + '/' + chave3;
       document.form1.numcgm_posto.value = chave5;
