@@ -956,6 +956,21 @@ class materialEstoque
     return $nPrecoMedio;
   }
 
+  public function getUltimoPrecoMedio(){
+    $sql = "SELECT m85_sequencial,
+                   m85_precomedio
+            FROM matmaterprecomedio
+            WHERE m85_matmater = {$this->iCodigoMater}
+            and m85_coddepto = {$this->iCodDepto}
+            ORDER BY m85_sequencial desc limit 1";
+
+      $rsPrecoMedio = db_query($sql);
+      if (pg_num_rows($rsPrecoMedio)  > 0) {
+          $nPrecoMedio = db_utils::fieldsMemory($rsPrecoMedio, 0)->m85_precomedio;
+      }
+      return $nPrecoMedio;
+  }
+
   /**
    * metodo criado para retornar preco medio do material, onde nao necessita o filtro por DEPTO
    * @param string $sData

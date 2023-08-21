@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "distinct veicretirada.ve60_codigo,veicretirada.ve60_veiculo,veicretirada.ve60_veicmotoristas,veicretirada.ve60_datasaida,veicretirada.ve60_horasaida,veicretirada.ve60_medidasaida,veicretirada.ve60_destino,veicretirada.ve60_coddepto,veicretirada.ve60_usuario,veicretirada.ve60_data,veicretirada.ve60_hora";
+$campos = "distinct veicretirada.ve60_codigo,veicretirada.ve60_veiculo,veicretirada.ve60_veicmotoristas,z01_cgccpf,veicretirada.ve60_datasaida,veicretirada.ve60_horasaida,veicretirada.ve60_medidasaida,veicretirada.ve60_destino,veicretirada.ve60_coddepto,veicretirada.ve60_usuario,veicretirada.ve60_data,veicretirada.ve60_hora";
 ?>

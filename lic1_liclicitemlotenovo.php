@@ -135,6 +135,7 @@ if (isset($incluir) && trim($incluir) != "") {
     if ($sqlerro == false) {
         $clliclicitemlote->l04_descricao = strtoupper(trim($l04_descricao));
         $sequenciallote = 0;
+        $clliclicitemlote->l04_numerolote = null;
         for ($i = 0; $i < sizeof($vetor_itens); $i++) {
             $clliclicitemlote->l04_liclicitem = trim($vetor_itens[$i]);
 

@@ -45,11 +45,15 @@ class cl_conhist {
    var $c50_codhist = 0; 
    var $c50_compl = 'f'; 
    var $c50_descr = null; 
+   var $c50_descrcompl = null; 
+   var $c50_ativo = '';
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  c50_codhist = int4 = Histórico 
                  c50_compl = bool = Complemento 
                  c50_descr = varchar(80) = Descrição 
+                 c50_descrcompl = varchar(500) = Descrição do Complemento 
+                 c50_ativo   = bool = Ativo
                  ";
    //funcao construtor da classe 
    function cl_conhist() { 
@@ -72,6 +76,9 @@ class cl_conhist {
        $this->c50_codhist = ($this->c50_codhist == ""?@$GLOBALS["HTTP_POST_VARS"]["c50_codhist"]:$this->c50_codhist);
        $this->c50_compl = ($this->c50_compl == "f"?@$GLOBALS["HTTP_POST_VARS"]["c50_compl"]:$this->c50_compl);
        $this->c50_descr = ($this->c50_descr == ""?@$GLOBALS["HTTP_POST_VARS"]["c50_descr"]:$this->c50_descr);
+       $this->c50_descrcompl = ($this->c50_descrcompl == ""?@$GLOBALS["HTTP_POST_VARS"]["c50_descrcompl"]:$this->c50_descrcompl);
+       $this->c50_ativo = ($this->c50_ativo == ""?@$GLOBALS["HTTP_POST_VARS"]["c50_ativo"]:$this->c50_ativo);
+      
      }else{
        $this->c50_codhist = ($this->c50_codhist == ""?@$GLOBALS["HTTP_POST_VARS"]["c50_codhist"]:$this->c50_codhist);
      }
@@ -97,6 +104,16 @@ class cl_conhist {
        $this->erro_status = "0";
        return false;
      }
+     if($this->c50_descrcompl == null ){ 
+      $this->erro_sql = " Campo Descrição do Complemento nao Informado.";
+      $this->erro_campo = "c50_descrcompl";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+     
        $this->c50_codhist = $c50_codhist; 
      if(($this->c50_codhist == null) || ($this->c50_codhist == "") ){ 
        $this->erro_sql = " Campo c50_codhist nao declarado.";
@@ -110,11 +127,15 @@ class cl_conhist {
                                        c50_codhist 
                                       ,c50_compl 
                                       ,c50_descr 
+                                      ,c50_descrcompl
+                                      ,c50_ativo
                        )
                 values (
                                 $this->c50_codhist 
                                ,'$this->c50_compl' 
                                ,'$this->c50_descr' 
+                               ,'$this->c50_descrcompl' 
+                               ,'$this->c50_ativo'
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -149,8 +170,11 @@ class cl_conhist {
        $resac = db_query("insert into db_acount values($acount,806,5431,'','".AddSlashes(pg_result($resaco,0,'c50_codhist'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,806,5433,'','".AddSlashes(pg_result($resaco,0,'c50_compl'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,806,5432,'','".AddSlashes(pg_result($resaco,0,'c50_descr'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     }
-     return true;
+       $resac = db_query("insert into db_acount values($acount,806,5434,'','".AddSlashes(pg_result($resaco,0,'c50_descrcompl'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,806,5435,'','".AddSlashes(pg_result($resaco,0,'c50_ativo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+   
+      }
+     return true; 
    } 
    // funcao para alteracao
    function alterar ($c50_codhist=null) { 
@@ -196,6 +220,32 @@ class cl_conhist {
          return false;
        }
      }
+     if(trim($this->c50_descrcompl)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c50_descrcompl"])){ 
+      $sql  .= $virgula." c50_descrcompl = '$this->c50_descrcompl' ";
+      $virgula = ",";
+      if(trim($this->c50_descrcompl) == null ){ 
+        $this->erro_sql = " Campo Descrição do Complemento nao Informado.";
+        $this->erro_campo = "c50_descrcompl";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if(trim($this->c50_ativo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c50_ativo"])){ 
+      $sql  .= $virgula." c50_ativo = '$this->c50_ativo' ";
+      $virgula = ",";
+      if(trim($this->c50_ativo) == null ){ 
+        $this->erro_sql = " Campo Ativo nao Informado.";
+        $this->erro_campo = "c50_ativo";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
      $sql .= " where ";
      if($c50_codhist!=null){
        $sql .= " c50_codhist = $this->c50_codhist";
@@ -213,8 +263,10 @@ class cl_conhist {
            $resac = db_query("insert into db_acount values($acount,806,5433,'".AddSlashes(pg_result($resaco,$conresaco,'c50_compl'))."','$this->c50_compl',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["c50_descr"]))
            $resac = db_query("insert into db_acount values($acount,806,5432,'".AddSlashes(pg_result($resaco,$conresaco,'c50_descr'))."','$this->c50_descr',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
-     }
+         if(isset($GLOBALS["HTTP_POST_VARS"]["c50_descrcompl"]))
+           $resac = db_query("insert into db_acount values($acount,806,5432,'".AddSlashes(pg_result($resaco,$conresaco,'c50_descrcompl'))."','$this->c50_descr',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         } 
+     } 
      $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -263,7 +315,9 @@ class cl_conhist {
          $resac = db_query("insert into db_acount values($acount,806,5431,'','".AddSlashes(pg_result($resaco,$iresaco,'c50_codhist'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,806,5433,'','".AddSlashes(pg_result($resaco,$iresaco,'c50_compl'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,806,5432,'','".AddSlashes(pg_result($resaco,$iresaco,'c50_descr'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
+         $resac = db_query("insert into db_acount values($acount,806,5434,'','".AddSlashes(pg_result($resaco,$iresaco,'c50_descrcompl'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,806,5435,'','".AddSlashes(pg_result($resaco,$iresaco,'c50_ativo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        } 
      }
      $sql = " delete from conhist
                     where ";

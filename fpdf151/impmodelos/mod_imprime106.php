@@ -42,13 +42,6 @@ $this->objpdf->Text(12,$top+21,"END. DE CORRESPONDÊNCIA: ");
 $this->objpdf->SetFont('Arial','',7);
 $this->objpdf->Text(44,$top+21,$this->endercorrespondencia);
 
-$this->objpdf->SetFont('Arial','',6); 
-$this->objpdf->Text(12,$top+25,"COMPONENTES DO LANÇAMENTO: ");
-$this->objpdf->SetFont('Arial','',7);
-$this->objpdf->sety(30);
-$this->objpdf->setx(12);
-$this->objpdf->MultiCell(189,3,$this->descrquadro,0,"L",0,0);
-
 $this->objpdf->sety(35);
 $this->objpdf->setx(12);
 $this->objpdf->SetFont('Arial','B',7);
@@ -126,7 +119,6 @@ $this->objpdf->SetFont('Arial','B',7);
 $this->objpdf->Text(13,$y+13,substr($this->descr3_1, 0, 45)."..."); // nome do contribuinte
 $this->objpdf->Text(13,$y+17,$this->enderimovel);// // endereço do imovel
 
-
 $this->objpdf->SetFont('Arial','',5);
 $this->objpdf->Text(13,$y+25,"Descrição"); // Descrição
 
@@ -186,7 +178,6 @@ $this->objpdf->SetFont('Arial','',5);
 $this->objpdf->Text(97,$y+10,"Contribuinte/Endereço do imóvel"); // contribuinte / endereço
 $this->objpdf->SetFont('Arial','B',7);
 $this->objpdf->Text(97,$y+13,$this->descr11_1); // nome do contribuinte
-$this->objpdf->Text(97,$y+17,$this->enderimovel);// endereço do imovel
 
 $this->objpdf->SetFont('Arial','',5);
 $this->objpdf->Text(97,$y+24,"Descrição"); // descrição
@@ -197,6 +188,7 @@ $yy = $this->objpdf->gety();
 $this->objpdf->setleftmargin(97);
 $this->objpdf->setrightmargin(2);
 $this->objpdf->sety($y+25);
+$this->objpdf->Text(97,$y+17,$this->enderimovel);// endereo do imovel
 
 // mensagem de instruções da guia prefeitura
 $this->objpdf->SetFont('Arial','B',5);

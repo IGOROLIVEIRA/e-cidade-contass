@@ -65,11 +65,13 @@ db_input('l206_sequencial',10,$Il206_sequencial,true,'hidden',$db_opcao,"")
 	 if (isset($pc20_codorc) && !empty($pc20_codorc)) {
     $sWhere = " pc21_codorc=".@$pc20_codorc;
 	 }
+   $sWhere .= " and pc21_numcgm not in(select l206_fornecedor  from habilitacaoforn where l206_licitacao = $l206_licitacao)";
+   if($db_opcao != 1){
+    $sWhere .= " union select pc21_numcgm,z01_nome from pcorcamforne inner join cgm on cgm.z01_numcgm = pcorcamforne.pc21_numcgm inner join pcorcam on pcorcam.pc20_codorc = pcorcamforne.pc21_codorc where pc21_codorc = $pc20_codorc and pc21_numcgm = $z01_numcgm;";
+   }
    $result = $clpcorcamforne->sql_record($clpcorcamforne->sql_query(null,"pc21_numcgm,z01_nome","",$sWhere));
-
    db_selectrecord("l206_fornecedor",$result,true,$db_opcao,"","","","","js_verificaforn()");
 
-//db_input('l206_fornecedor',10,$Il206_fornecedor,true,'text',$db_opcao," onchange='js_pesquisal206_fornecedor(false);'")
 ?>
     </td>
   </tr>

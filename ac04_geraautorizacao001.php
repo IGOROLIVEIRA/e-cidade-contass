@@ -234,7 +234,7 @@ if ($x->consultarDataDoSistema == true) {
                                                 }
                                             }
                                             $result_tipocompra = $clpctipocompra->sql_record($clpctipocompra->sql_query_file(null, "pc50_codcom,pc50_descr"));
-                                            db_selectrecord("e54_codcom", $result_tipocompra, true, 1, "", "", "", "", "js_buscarTipoLicitacao(this.value)");
+                                            db_selectrecord("e54_codcom", $result_tipocompra, true, 1, "", "", "", "0", "js_buscarTipoLicitacao(this.value)");
 
                                             ?>
 
@@ -1342,6 +1342,9 @@ if ($x->consultarDataDoSistema == true) {
     }
 
     function js_consultarDataDoSistema(lProcessar) {
+        
+        if($('e54_codcom').value == "0") return alert("Selecione o tipo.");
+
         let botao = $('btnSalvarAutorizacoes');
 
         if (botao != null) {
@@ -1363,7 +1366,6 @@ if ($x->consultarDataDoSistema == true) {
     }
 
     function js_processarAutorizacoes(oAjax) {
-
         var x = JSON.parse(oAjax.responseText);
         if (Date.parse(x['dataDoSistema']) <= Date.parse(x.dataFechamentoContabil)) {
 
@@ -1564,6 +1566,31 @@ if ($x->consultarDataDoSistema == true) {
         }
         var oRetorno = JSON.parse(oAjax.responseText);
         var sMensagem = oRetorno.message;
+        var aTipoOrigem = {
+            1 : '1 - Não ou dispensa por valor',
+            2 : '2 - Licitação',
+            3 : '3 - Dispensa ou Inexigibilidade',
+            4 : '4 - Adesão à ata de registro de preços',
+            5 : '5 - Licitação realizada por outro órgão ou entidade',
+            6 : '6 - Dispensa ou Inexigibilidade realizada por outro órgão ou entidade',
+            7 : '7 - Licitação - Regime Diferenciado de Contratações Públicas - RDC',
+            8 : '8 - Licitação realizada por consorcio público',
+            9 : '9 - Licitação realizada por outro ente da federação'
+        }
+
+        aTipoOrigemLicitacaoOutrosOrgaos = ['5', '6', '7', '8', '9'];
+
+        if((oRetorno.sTipoOrigem == '2' || oRetorno.sTipoOrigem == '3') && oRetorno.sLicitacao == ''){
+            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoOrigem] + ' sem vínculo com Licitação. Gentileza entrar em contato com o suporte para a vinculação correta.');
+        }
+
+        if((oRetorno.sTipoOrigem == '4' ) && oRetorno.sAdesaoRegPreco == ''){
+            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoOrigem] + ' sem vínculo com Adesão de Registro de Preço. Gentileza entrar em contato com o suporte para a vinculação correta.');
+        }
+        
+        if(aTipoOrigemLicitacaoOutrosOrgaos.includes(oRetorno.sTipoOrigem)  && oRetorno.sLicitacaooutroorgao == ''){
+            return alert ('Usuário: Inclusão abortada. Contrato de origem ' + aTipoorigem[oRetorno.sTipoOrigem] + ' sem vínculo com Licitação de Outros Órgãos. Gentileza entrar em contato com o suporte para a vinculação correta.');
+        }
 
         if (oRetorno.status > 1) {
 
@@ -1576,8 +1603,8 @@ if ($x->consultarDataDoSistema == true) {
         $('e54_codcom').value = oRetorno.sTipo;
         $('e54_codcomdescr').value = oRetorno.sTipo;
         $('e54_nummodalidade').value = oRetorno.iNumModalidade;
-        if (oRetorno.sTipoorigem == 4) {
-            $('e54_adesaoregpreco').value = oRetorno.iSequencial;
+        if (oRetorno.sTipoOrigem == 4) {
+            $('e54_adesaoregpreco').value = oRetorno.sAdesaoRegPreco;
         } else {
             $('e54_adesaoregpreco').value = null;
         }
@@ -1593,6 +1620,17 @@ if ($x->consultarDataDoSistema == true) {
             $('e54_nummodalidade').setAttribute('readOnly', true);
             $('e54_nummodalidade').setAttribute('disabled', true);
             $('e54_nummodalidade').setAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+        }
+
+        if(oRetorno.sTipoOrigem != '1'){
+            $('e54_codcom').setAttribute('disabled', true);
+            $('e54_codcomdescr').setAttribute('disabled', true);
+            $('e54_codcom').setAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+            $('e54_codcomdescr').setAttribute('style', 'background-color: rgb(222, 184, 135); color: rgb(0, 0, 0);');
+        } else {
+            document.getElementById("e54_codcom").value = "0";
+            document.getElementById("e54_codcomdescr").value = "0";
+            document.getElementsByName('e54_codcomdescr')[0].options[0].innerHTML = "Selecione";
         }
 
     }
@@ -1635,6 +1673,7 @@ if ($x->consultarDataDoSistema == true) {
             var oParamTipoCompra = new Object();
             oParamTipoCompra.iTipoCompra = iTipoCompra;
             oParamTipoCompra.exec = "getTipoLicitacao";
+            oParamTipoCompra.iAcordo = document.getElementById('oTxtCodigoAcordo').value;
             var oAjaxTipoCompra = new Ajax.Request('lic4_geraAutorizacoes.RPC.php', {
                 method: 'post',
                 parameters: 'json=' + Object.toJSON(oParamTipoCompra),
@@ -1650,6 +1689,12 @@ if ($x->consultarDataDoSistema == true) {
 
         var oRetorno = eval("(" + oAjax.responseText + ")");
         $('e54_tipol').innerHTML = "";
+
+        if(oRetorno.tipoorigem == 1 && oRetorno.tipocompratribunal != 13){
+            document.getElementById('e54_codcomdescr').value = "";
+            document.getElementById('e54_codcom').value = "";
+            return alert('Usuário: Tipo de compra inválido para este tipo origem do contrato.');
+        }
 
         tipocompratribunal = oRetorno.tipocompratribunal;
 

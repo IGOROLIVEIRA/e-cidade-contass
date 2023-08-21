@@ -519,7 +519,6 @@ class compilacaoRegistroPreco extends solicitacaoCompra {
    * @return compilacaoRegistroPreco
    */
   public function toProcessoCompra($criterioAdj = null) {
-
     $iNumeroProcesso = $this->getProcessodeCompras();
     if ($iNumeroProcesso != null) {
       throw new Exception("Compilação já processada!\nProcesso de Compras da Cmpilacao({$iNumeroProcesso}).");
