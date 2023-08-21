@@ -239,7 +239,7 @@ class Inventario {
       $oBemDepreciacao = BemDepreciacao::getInstance($oInventarioBem->getBem());
 
       $nValorCalculado = $oInventarioBem->getBem()->getValorAtual();
-      $nValorAnterior  = ($oBemDepreciacao ? $oBemDepreciacao->getValorAtual() : $oInventarioBem->getBem()->getValorAtual());
+      $nValorAnterior  = $oInventarioBem->getBem()->getValorAtual();
 
       if ($nValorAnterior == null) {
         $nValorAnterior = $oInventarioBem->getBem()->getValorAquisicao();
@@ -426,7 +426,7 @@ class Inventario {
            * Aqui foi necessrio fazer essa comparacao pois quando havia alteracao no valor residual era necessario recalcular o valor do bem
            */
           if($nValorResidualAnterior == $nValorResidual){
-             $t44_valoratual =  $nValorCalculado;
+             $t44_valoratual =  $nValorAtualAnterior - ($nValorCalculado + $nValorResidual);
           }else{
               $t44_valoratual =  $nValorCalculado + $nValorResidualAnterior;
           }
@@ -503,7 +503,7 @@ class Inventario {
       $oDaoBensHistoricoCalculoBem->t58_benshistoricocalculo  = $oDaoBensHistoricoCalculo->t57_sequencial;
       $oDaoBensHistoricoCalculoBem->t58_bens                  = $iCodigoBem;
       $oDaoBensHistoricoCalculoBem->t58_valorresidual         = $nValorResidualAnterior;
-      $oDaoBensHistoricoCalculoBem->t58_valoratual            = $nValorAtualAnterior;
+      $oDaoBensHistoricoCalculoBem->t58_valoratual            = $nValorAnterior;
       $oDaoBensHistoricoCalculoBem->t58_valorcalculado        = $nValorCalculado;
       $oDaoBensHistoricoCalculoBem->t58_valoranterior         = $nValorAnterior;
       $oDaoBensHistoricoCalculoBem->t58_percentualdepreciado  = "{$nPercentualAnterior}";
