@@ -1051,5 +1051,24 @@ class cl_acordoitem {
       WHERE ac26_acordo = $iAcordo)";
     return $sql;
   }
+  public function getItemsApostilaUltPosicao($ac26_acordo)
+  {
+        $sql = "SELECT
+            ac26_numeroapostilamento,
+            si03_acordo,
+            si03_dataapostila,
+            si03_tipoalteracaoapostila,
+            si03_tipoapostila,
+            si03_descrapostila,
+            si03_sequencial
+        FROM apostilamento
+        INNER JOIN acordo ON ac16_sequencial = si03_acordo
+        INNER JOIN acordoposicao ON acordoposicao.ac26_acordo = acordo.ac16_sequencial
+        WHERE ac26_acordo = $ac26_acordo
+        and ac26_numeroapostilamento = (select max(ac26_numeroapostilamento) from acordoposicao where ac26_acordo = $ac26_acordo)
+        order by si03_dataapostila desc
+        limit 1;";
+        return $sql;
+    }
 }
 

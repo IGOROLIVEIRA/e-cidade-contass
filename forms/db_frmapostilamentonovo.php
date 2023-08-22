@@ -5,6 +5,7 @@ $clrotulo = new rotulocampo;
 $clrotulo->label("ac16_sequencial");
 $clrotulo->label("ac16_resumoobjeto");
 $viewAlterar = $_GET['viewAlterar'];
+unset($_GET['viewAlterar']);
 ?>
 <fieldset style="width: 1000px;  margin-top: 25px; ">
     <legend><b>Dados do acordo</b></legend>
@@ -274,6 +275,8 @@ $viewAlterar = $_GET['viewAlterar'];
 </table>
 <input type='button' disabled id='btnSalvar' value='Salvar' onclick="apostilar();">
 <script>
+    let viewAlterar = "<?php echo $viewAlterar ?>";
+    let si03_sequencial = null;
     document.getElementById("si03_datareferencia").style.width = "80px"
     document.getElementById("si03_tipoalteracaoapostila").disabled = true;
     sUrlRpc = 'con4_contratoapostilamento.RPC.php';
@@ -488,7 +491,6 @@ $viewAlterar = $_GET['viewAlterar'];
     }
 
     function preencheItens(aItens) {
-
         /* Calculo realizado para ajuste do tamanho do label dos itens
          *  conforme a quantidade de itens.
          */
@@ -1200,7 +1202,7 @@ $viewAlterar = $_GET['viewAlterar'];
         if ($("si03_justificativa").value == "" && document.getElementById("justificativa").style.display != 'none') {
             return alert("Usuário: Este contrato  decorrente de Licitação e está utilizando a lei n 14133/2021, sendo assim,  necessário o preenchimento do campo Justificativa.");
         }
-        if ($("si03_tipoapostila").value == "01") {
+        if ($("si03_tipoapostila").value == "01" && !viewAlterar) {
             if ($("si03_percentualreajuste").value == "") {
                 return alert("Obrigatório informar o Percentual de Reajuste.");
             }
@@ -1236,6 +1238,7 @@ $viewAlterar = $_GET['viewAlterar'];
         oApostila.percentualreajuste = $("si03_percentualreajuste").value;
         oApostila.indicereajuste = $("si03_indicereajuste").value;
         oApostila.descricaoindice = decodeURIComponent(encodeURIComponent($("si03_descricaoindice").value));
+
 
 
         var oParam = {
@@ -1317,6 +1320,11 @@ $viewAlterar = $_GET['viewAlterar'];
 
             oParam.aItens.push(oItemAdicionar);
         });
+
+        if (viewAlterar) {
+            this.alteraApostilamento(oApostila, oParam.aItens);
+            return
+        }
 
         if (dotacaoIncluida == false && $("si03_tipoapostila").value == "03") {
             return alert("Usuário:  necessário a inserção de Dotação em no mínimo um item.");
@@ -1431,15 +1439,115 @@ $viewAlterar = $_GET['viewAlterar'];
         document.getElementById("trdatareferencia").style.display = 'none';
     }
     //js_changeTipoApostila();
-    js_pesquisaac16_sequencial(true);
+
+    if (viewAlterar) {
+        js_acordosc_apostilamentos();
+    } else {
+        js_pesquisaac16_sequencial(true);
+    }
 
     function js_acordosc_apostilamentos() {
-        console.log("entrou aqui");
-        var sUrl = 'func_acordonovo.php?viewalterar=true&funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura&iTipoFiltro=4';
+        var sUrl = 'func_acordonovo.php?viewalterar=true&funcao_js=parent.js_mostraacordoultimaposicao|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura&iTipoFiltro=4';
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_acordo',
                 sUrl,
                 'Pesquisar Acordo',
                 true);
     }
+
+    function js_mostraacordoultimaposicao(ac16_sequencial,ac16_resumoobjeto,ac16_dataassinatura) {
+        var oParam = {
+            exec: 'getleilicitacao',
+            licitacao: ac16_sequencial
+        }
+
+        new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
+                if (oRetorno.lei == 1) {
+                    $('justificativa').style.display = '';
+                } else {
+                    $('justificativa').style.display = 'none';
+                }
+
+            }).setMessage("Aguarde, pesquisando acordos.")
+            .execute();
+        $('ac16_sequencial').value = ac16_sequencial;
+        $('ac16_resumoobjeto').value = ac16_resumoobjeto;
+
+        //$('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
+        pesquisarDadosAcordoAlteracao(ac16_sequencial);
+        db_iframe_acordo.hide();
+    }
+
+    function pesquisarDadosAcordoAlteracao(iAcordo) {
+        if (iAcordo == "") {
+            alert('Acordo Não informado!');
+            return false;
+        }
+        const oParam = {
+            exec: 'getItensAlteracao',
+            iAcordo: iAcordo
+        }
+
+        new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
+
+                if (lErro) {
+                    return alert(oRetorno.message.urlDecode());
+                }
+
+                $('btnSalvar').disabled = false;
+
+                $('si03_numapostilamento').value = oRetorno.dadosAcordo.ac26_numeroapostilamento;
+                $('si03_tipoalteracaoapostila').value = oRetorno.dadosAcordo.si03_tipoalteracaoapostila;
+                $('si03_tipoapostila').value = "0" + oRetorno.dadosAcordo.si03_tipoapostila;
+                $('si03_dataapostila').value = oRetorno.dadosAcordo.si03_dataapostila;
+                $('si03_descrapostila').value = oRetorno.dadosAcordo.si03_descrapostila;
+                si03_sequencial = oRetorno.dadosAcordo.si03_sequencial;
+
+                aItensPosicao = oRetorno.itens;
+                //preencheItens(aItensPosicao);
+
+                /*aItensPosicao.each(function (oItem, iLinha) {
+                    me.salvarInfoDotacoes(iLinha);
+                });*/
+
+            }).setMessage("Aguarde, pesquisando acordos.")
+            .execute();
+
+            oParam.exec = 'getItens';
+           new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
+            aItensPosicao = oRetorno.itens;
+            preencheItens(aItensPosicao);
+
+        }).setMessage("Aguarde, pesquisando acordos.")
+            .execute();
+    }
+
+    function alteraApostilamento(oApostila, oSelecionados) {
+        console.log(oSelecionados, oApostila);
+        const apostilamento = {
+            si03_tipoapostila:  oApostila.tipoapostila,
+            si03_tipoalteracaoapostila: oApostila.tipoalteracaoapostila,
+            ac26_numeroapostilamento: oApostila.numeroapostilamento,
+            si03_dataapostila: oApostila.dataapostila,
+            si03_descrapostila: oApostila.descrapostila
+        }
+
+        const oParam = {
+            exec: 'updateApostilamento',
+            apostilamento,
+            iAcordo: $('ac16_sequencial').value
+        }
+
+        new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
+
+            if (lErro) {
+                return alert(oRetorno.message.urlDecode());
+            }
+
+        }).setMessage("Aguarde, pesquisando acordos.")
+        .execute();
+
+    }
+
+
 </script>
