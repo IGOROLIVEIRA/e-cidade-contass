@@ -517,6 +517,8 @@ if (pg_num_rows($this->rsLotes) > 0) {
                         $this->objpdf->setx(194);
                         $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
                         $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
+                        $oDadosDaLinha->valorUnitario = $this->pc80_criterioadjudicacao == 1 ? 0 : $oDadosDaLinha->valorUnitario;
+
                         if ($oDadosDaLinha->valorUnitario > 0) {
                             $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
                         } else {
@@ -756,6 +758,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $this->objpdf->setx(194);
                     $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
                     $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
+                    $oDadosDaLinha->valorUnitario = $this->pc80_criterioadjudicacao == 1 ? 0 : $oDadosDaLinha->valorUnitario;
                     if ($oDadosDaLinha->valorUnitario > 0) {
                         $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
                     } else {
