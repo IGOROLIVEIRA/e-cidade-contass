@@ -54,7 +54,7 @@ if (trim($oGet->t52_ident != "")) {
   $oDaoBensPlaca           = db_utils::getDao('bensplaca');
   $sCamposBuscaBemPorPlaca = " t52_bem ";
   $sWhereBuscaBemPorPlaca  = "     t41_placaseq  = '{$oGet->t52_ident}' ";
-  $sWhereBuscaBemPorPlaca .= " and t52_instit = " . db_getsession('DB_instit'); 
+  $sWhereBuscaBemPorPlaca .= " and t52_instit = " . db_getsession('DB_instit');
 
   $sSqlBuscaBemPorPlaca = $oDaoBensPlaca->sql_query(null, $sCamposBuscaBemPorPlaca, null, $sWhereBuscaBemPorPlaca);
   $rsBuscaBemPorPlaca   = $oDaoBensPlaca->sql_record($sSqlBuscaBemPorPlaca);
@@ -97,10 +97,6 @@ if ($rsBuscaOrgaoUnidade) {
 $oDaoDbDepart             = db_utils::getDao('db_depart');
 $sCamposBuscaDepartamento = " descrdepto, t30_codigo, t30_descr ";
 $sWhereBuscaDepartamento  = " coddepto = {$oBem->getDepartamento()} ";
-
-if ($oBem->getDivisao() != '') {
-  $sWhereBuscaDepartamento .= " AND t30_codigo = {$oBem->getDivisao()}";
-}
 
 $sSqlBuscaDepartamento    = $oDaoDbDepart->sql_query_div(null, $sCamposBuscaDepartamento, null, $sWhereBuscaDepartamento);
 
