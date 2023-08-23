@@ -1070,5 +1070,65 @@ class cl_acordoitem {
         limit 1;";
         return $sql;
     }
+
+    public function updateByApostilamento(
+        $iAcordo,
+        $codigoitem,
+        $si03_sequencial
+    ) {
+        $sql = "
+        UPDATE acordoitem
+        SET
+            ac20_valorunitario = {$this->ac20_valorunitario},
+            ac20_valortotal = {$this->ac20_valortotal}
+        WHERE
+         ac20_sequencial = (
+            SELECT ac20_sequencial
+            FROM apostilamento
+            INNER JOIN acordo ON ac16_sequencial = si03_acordo
+            INNER JOIN acordoposicao ON acordoposicao.ac26_acordo = acordo.ac16_sequencial
+            INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+            WHERE ac26_acordo = $iAcordo
+                AND ac20_pcmater = $codigoitem
+                AND si03_sequencial = $si03_sequencial
+                AND ac26_numeroapostilamento =
+                    (SELECT max(ac26_numeroapostilamento)
+                     FROM acordoposicao
+                     WHERE ac26_acordo = $iAcordo)
+            ORDER BY si03_sequencial DESC)
+        ";
+
+        $result = db_query($sql);
+         if($result==false) {
+           $this->erro_banco = str_replace("\n","",@pg_last_error());
+           $this->erro_sql   = "Acordo Item nao Alterado. Alteracao Abortada.\\n";
+             $this->erro_sql .= "Valores : ".$this->ac20_sequencial;
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           $this->numrows_alterar = 0;
+           return false;
+         }else{
+           if(pg_affected_rows($result)==0){
+             $this->erro_banco = "";
+             $this->erro_sql = "Acordo Item nao foi Alterado. Alteracao Executada.\\n";
+             $this->erro_sql .= "Valores : ".$this->ac20_sequencial;
+             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+             $this->erro_status = "1";
+             $this->numrows_alterar = 0;
+             return true;
+           }else{
+             $this->erro_banco = "";
+             $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+             $this->erro_sql .= "Valores : ".$this->ac20_sequencial;
+             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+             $this->erro_status = "1";
+             $this->numrows_alterar = pg_affected_rows($result);
+             return true;
+            }
+        }
+    }
 }
 

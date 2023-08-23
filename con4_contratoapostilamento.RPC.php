@@ -250,7 +250,7 @@ try {
 
         case 'updateApostilamento':
             $tiposalteracaoapostila = array('1'=>15,'2'=>16,'3'=>17);
-            $oDaoAcordoItem  = db_utils::getDao("acordoitem");
+
             $oDaoApostilamento  = new cl_apostilamento;
             $tipoalteracaoapostila = $oParam->apostilamento->si03_tipoalteracaoapostila;
 
@@ -262,14 +262,26 @@ try {
             $oDaoApostilamento->si03_descrapostila = $oParam->apostilamento->si03_descrapostila;
 
             $oDaoApostilamento->alterar($oDaoApostilamento->si03_sequencial);
-            // $updateQuery = $oDaoApostilamento->sqlQueryUpdate();
-
-            // $oDaoAcordoItem->sql_record($updateQuery);
 
             if ($oDaoApostilamento->erro_status === 0) {
                 throw new Exception($oDaoApostilamento->erro_msg);
             }
 
+            foreach ($oParam->itens as $item) {
+                $oDaoAcordoItem  = db_utils::getDao("acordoitem");
+                $oDaoAcordoItem->ac20_valorunitario = $item->valorunitario;
+                $oDaoAcordoItem->ac20_valortotal = $item->valorunitario * $item->quantidade;
+
+                $oDaoAcordoItem->updateByApostilamento(
+                    $oParam->iAcordo,
+                    $item->codigoitem,
+                    $oDaoApostilamento->si03_sequencial
+                );
+
+                if ($oDaoAcordoItem->erro_status == "0") {
+                    throw new Exception($oDaoAcordoItem->erro_msg);
+                }
+            }
 
             break;
     }

@@ -1322,7 +1322,7 @@ unset($_GET['viewAlterar']);
         });
 
         if (viewAlterar) {
-            this.alteraApostilamento(oApostila, iSelecionados);
+            this.alteraApostilamento(oApostila, oParam.aItens, iSelecionados);
             return
         }
 
@@ -1522,7 +1522,7 @@ unset($_GET['viewAlterar']);
             .execute();
     }
 
-    function alteraApostilamento(oApostila, oSelecionados) {
+    function alteraApostilamento(oApostila, listaItens, indicesSelecionados) {
 
         const apostilamento = {
             si03_sequencial,
@@ -1532,12 +1532,14 @@ unset($_GET['viewAlterar']);
             si03_dataapostila: oApostila.dataapostila,
             si03_descrapostila: oApostila.descrapostila
         }
-        console.log(apostilamento);
+
+        const itens = filtraAcordosSelecionados(listaItens, indicesSelecionados);
 
         const oParam = {
             exec: 'updateApostilamento',
             apostilamento,
-            iAcordo: $('ac16_sequencial').value
+            iAcordo: $('ac16_sequencial').value,
+            itens
         }
 
         new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
@@ -1545,11 +1547,23 @@ unset($_GET['viewAlterar']);
             if (lErro) {
                 return alert(oRetorno.message.urlDecode());
             }
-            console.log('inseriu');
-
-        }).setMessage("Aguarde, pesquisando acordos.")
+            alert("Apostilamento alterado com sucesso!");
+           return js_acordosc_apostilamentos();
+        }).setMessage("Processando apostilamento")
         .execute();
 
+    }
+
+    function filtraAcordosSelecionados(listaItens, indicesSelecionados) {
+        const itensSelecionados = new Array();
+        indicesSelecionados.forEach((indice) => {
+            let resultado = listaItens.filter((item)=> {
+            return item.codigoitem == indice;
+            });
+            itensSelecionados.push(resultado[0]);
+        });
+        console.log(itensSelecionados);
+        return itensSelecionados;
     }
 
 
