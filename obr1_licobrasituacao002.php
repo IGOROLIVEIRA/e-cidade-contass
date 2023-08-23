@@ -68,11 +68,9 @@ if(isset($alterar)){
 
     if($obr02_situacao == "1"){
       $resultSituacao = $cllicobrasituacao->sql_record($cllicobrasituacao->sql_query(null,"obr02_sequencial as sequencial",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 2"));
-      if(pg_num_rows($resultSituacao) > 0){
-        $permissaoAlteracaoDescricao = $cllicobrasituacao->permissaoAlteracaoDescricao($obr02_dtlancamento,$obr02_veiculopublicacao,$obr02_dtsituacao,$obr02_dtpublicacao,$obr02_descrisituacao,$obr02_seqobra);
-        if($permissaoAlteracaoDescricao == false){
+      $permissaoAlteracaoDescricao = $cllicobrasituacao->permissaoAlteracaoDescricao($obr02_dtlancamento,$obr02_veiculopublicacao,$obr02_dtsituacao,$obr02_dtpublicacao,$obr02_descrisituacao,$obr02_seqobra);
+      if(pg_num_rows($resultSituacao) > 0 && $permissaoAlteracaoDescricao == false){
           throw new Exception ("Obra já iniciada!");
-        }
       }
     }
 
