@@ -475,7 +475,7 @@ if (isset($_POST["processar"])) {
             echo "</td>";
 
             echo "<td style='text-align:center; width:100px;'>";
-            echo "<input type='text' style='text-align:center;' id='empenho$i' name='empenho$i' placeholder='num/ano' onkeypress='return onlynumber();'>";
+            echo "<input type='text' style='text-align:center;' id='empenho$i' name='empenho$i' placeholder='num/ano' onchange='return verificacaoEmpenho(this.value);' onkeypress='return onlynumber();'>";
             echo "</td>";
             echo "</tr>";
             $i++;
@@ -786,7 +786,21 @@ if (isset($_POST["processar"])) {
 
     }
 
+    function verificacaoEmpenho(empenho){
+        empenho = empenho.split("/");
+        anoempenho = empenho[1];
+        
+        if(anoempenho == "" || anoempenho == undefined){
+            document.getElementById(event.target.id).value = '';
+            return alert('Usuário: informar o número do empenho com exercício');
+        }
+    }
+
     function js_pesquisae60_codemp(mostra, controlador) {
+       
+       let empenho = document.getElementById('e60_codemp').value;
+       verificacaoEmpenho(empenho);
+
         if (mostra == true) {
             var ve70_abast = "";
             var e60_codemp = "";
