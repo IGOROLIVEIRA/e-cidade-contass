@@ -1066,7 +1066,7 @@ class cl_acordoitem {
         INNER JOIN acordoposicao ON acordoposicao.ac26_acordo = acordo.ac16_sequencial
         WHERE ac26_acordo = $ac26_acordo
         and ac26_numeroapostilamento = (select max(ac26_numeroapostilamento) from acordoposicao where ac26_acordo = $ac26_acordo)
-        order by si03_dataapostila desc
+        order by si03_sequencial desc
         limit 1;";
         return $sql;
     }

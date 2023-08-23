@@ -1322,7 +1322,7 @@ unset($_GET['viewAlterar']);
         });
 
         if (viewAlterar) {
-            this.alteraApostilamento(oApostila, oParam.aItens);
+            this.alteraApostilamento(oApostila, iSelecionados);
             return
         }
 
@@ -1523,14 +1523,16 @@ unset($_GET['viewAlterar']);
     }
 
     function alteraApostilamento(oApostila, oSelecionados) {
-        console.log(oSelecionados, oApostila);
+
         const apostilamento = {
+            si03_sequencial,
             si03_tipoapostila:  oApostila.tipoapostila,
             si03_tipoalteracaoapostila: oApostila.tipoalteracaoapostila,
-            ac26_numeroapostilamento: oApostila.numeroapostilamento,
+            si03_numapostilamento: $('si03_numapostilamento').value,
             si03_dataapostila: oApostila.dataapostila,
             si03_descrapostila: oApostila.descrapostila
         }
+        console.log(apostilamento);
 
         const oParam = {
             exec: 'updateApostilamento',
@@ -1543,6 +1545,7 @@ unset($_GET['viewAlterar']);
             if (lErro) {
                 return alert(oRetorno.message.urlDecode());
             }
+            console.log('inseriu');
 
         }).setMessage("Aguarde, pesquisando acordos.")
         .execute();
