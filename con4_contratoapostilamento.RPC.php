@@ -9,7 +9,10 @@ require_once "libs/db_sessoes.php";
 require_once "libs/db_usuariosonline.php";
 require_once "dbforms/db_funcoes.php";
 require_once("classes/db_condataconf_classe.php");
-require_once("classes/db_apostilamento_classe.php");
+require_once("model/contrato/apostilamento/Command/UpdateApostilamentoCommand.model.php");
+require_once("model/contrato/apostilamento/Command/UpdateAcordoItemCommand.model.php");
+
+require_once("model/contrato/apostilamento/Command/ValidaAlteracaoApostilamentoCommand.model.php");
 
 $oParam            = json_decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno          = new stdClass();
@@ -225,63 +228,43 @@ try {
             $oRetorno->itens = $aUnidades;
             break;
         case 'getItensAlteracao':
-                $tiposalteracaoapostila = array('15'=>1,'16'=>2,'17'=>3);
-                $oDaoAcordoItem  = db_utils::getDao("acordoitem");
-                $sSqlItens = $oDaoAcordoItem->getItemsApostilaUltPosicao($oParam->iAcordo);
 
-                $result = $oDaoAcordoItem->sql_record($sSqlItens);
+            $validaAlterecao = new ValidaAlteracaoApostilamentoCommand;
+            $validaAlterecao->execute($oParam->iAcordo);
 
-                if ($oDaoAcordoItem->erro_status == "0") {
-                    throw new Exception($oDaoAcordoItem->erro_msg);
-                }
+            $tiposalteracaoapostila = array('15'=>1,'16'=>2,'17'=>3);
 
+            $oDaoAcordoItem  = db_utils::getDao("acordoitem");
+            $sSqlItens = $oDaoAcordoItem->getItemsApostilaUltPosicao($oParam->iAcordo);
+            $result = $oDaoAcordoItem->sql_record($sSqlItens);
 
-                $record = db_utils::fieldsmemory($result, 0);
-                $oDadosAcordo = new stdClass();
-                $oDadosAcordo->si03_sequencial = $record->si03_sequencial;
-                $oDadosAcordo->si03_tipoapostila = $record->si03_tipoapostila;
-                $oDadosAcordo->si03_tipoalteracaoapostila = $tiposalteracaoapostila[$record->si03_tipoalteracaoapostila];
-                $oDadosAcordo->ac26_numeroapostilamento = $record->ac26_numeroapostilamento;
-                $oDadosAcordo->si03_dataapostila = $record->si03_dataapostila;
-                $oDadosAcordo->si03_descrapostila = utf8_encode($record->si03_descrapostila);
-                $oRetorno->dadosAcordo = $oDadosAcordo;
+            if ($oDaoAcordoItem->erro_status == "0") {
+                throw new Exception($oDaoAcordoItem->erro_msg);
+            }
+
+            $record = db_utils::fieldsmemory($result, 0);
+            $oDadosAcordo = new stdClass();
+            $oDadosAcordo->si03_sequencial = $record->si03_sequencial;
+            $oDadosAcordo->si03_tipoapostila = $record->si03_tipoapostila;
+            $oDadosAcordo->si03_tipoalteracaoapostila = $tiposalteracaoapostila[$record->si03_tipoalteracaoapostila];
+            $oDadosAcordo->ac26_numeroapostilamento = $record->ac26_numeroapostilamento;
+            $oDadosAcordo->si03_dataapostila = $record->si03_dataapostila;
+            $oDadosAcordo->si03_descrapostila = utf8_encode($record->si03_descrapostila);
+            $oRetorno->dadosAcordo = $oDadosAcordo;
 
             break;
 
         case 'updateApostilamento':
-            $tiposalteracaoapostila = array('1'=>15,'2'=>16,'3'=>17);
 
-            $oDaoApostilamento  = new cl_apostilamento;
-            $tipoalteracaoapostila = $oParam->apostilamento->si03_tipoalteracaoapostila;
+            $updateApostilamento = new UpdateApostilamentoCommand;
+            $updateApostilamento->execute($oParam->apostilamento);
 
-            $oDaoApostilamento->si03_sequencial = $oParam->apostilamento->si03_sequencial;
-            $oDaoApostilamento->si03_tipoapostila = $oParam->apostilamento->si03_tipoapostila;
-            $oDaoApostilamento->si03_tipoalteracaoapostila = $tiposalteracaoapostila[$tipoalteracaoapostila];
-            $oDaoApostilamento->si03_numapostilamento = $oParam->apostilamento->si03_numapostilamento;
-            $oDaoApostilamento->si03_dataapostila = $oParam->apostilamento->si03_dataapostila;
-            $oDaoApostilamento->si03_descrapostila = $oParam->apostilamento->si03_descrapostila;
-
-            $oDaoApostilamento->alterar($oDaoApostilamento->si03_sequencial);
-
-            if ($oDaoApostilamento->erro_status === 0) {
-                throw new Exception($oDaoApostilamento->erro_msg);
-            }
-
-            foreach ($oParam->itens as $item) {
-                $oDaoAcordoItem  = db_utils::getDao("acordoitem");
-                $oDaoAcordoItem->ac20_valorunitario = $item->valorunitario;
-                $oDaoAcordoItem->ac20_valortotal = $item->valorunitario * $item->quantidade;
-
-                $oDaoAcordoItem->updateByApostilamento(
-                    $oParam->iAcordo,
-                    $item->codigoitem,
-                    $oDaoApostilamento->si03_sequencial
-                );
-
-                if ($oDaoAcordoItem->erro_status == "0") {
-                    throw new Exception($oDaoAcordoItem->erro_msg);
-                }
-            }
+            $updateAcordoItem = new UpdateAcordoItemCommand;
+            $updateAcordoItem->execute(
+                $oParam->itens,
+                $oParam->iAcordo,
+                $oParam->apostilamento->si03_sequencial
+            );
 
             break;
     }

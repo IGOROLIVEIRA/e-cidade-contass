@@ -1438,7 +1438,6 @@ unset($_GET['viewAlterar']);
         $("si03_datareferencia").value = "";
         document.getElementById("trdatareferencia").style.display = 'none';
     }
-    //js_changeTipoApostila();
 
     if (viewAlterar) {
         js_acordosc_apostilamentos();
@@ -1473,7 +1472,6 @@ unset($_GET['viewAlterar']);
         $('ac16_sequencial').value = ac16_sequencial;
         $('ac16_resumoobjeto').value = ac16_resumoobjeto;
 
-        //$('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
         pesquisarDadosAcordoAlteracao(ac16_sequencial);
         db_iframe_acordo.hide();
     }
@@ -1491,7 +1489,8 @@ unset($_GET['viewAlterar']);
         new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
 
                 if (lErro) {
-                    return alert(oRetorno.message.urlDecode());
+                    alert(oRetorno.message.urlDecode());
+                    return js_acordosc_apostilamentos();
                 }
 
                 $('btnSalvar').disabled = false;
@@ -1504,11 +1503,6 @@ unset($_GET['viewAlterar']);
                 si03_sequencial = oRetorno.dadosAcordo.si03_sequencial;
 
                 aItensPosicao = oRetorno.itens;
-                //preencheItens(aItensPosicao);
-
-                /*aItensPosicao.each(function (oItem, iLinha) {
-                    me.salvarInfoDotacoes(iLinha);
-                });*/
 
             }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
@@ -1565,6 +1559,4 @@ unset($_GET['viewAlterar']);
         console.log(itensSelecionados);
         return itensSelecionados;
     }
-
-
 </script>

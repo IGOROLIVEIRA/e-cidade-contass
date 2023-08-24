@@ -1091,6 +1091,8 @@ class cl_acordoitem {
             WHERE ac26_acordo = $iAcordo
                 AND ac20_pcmater = $codigoitem
                 AND si03_sequencial = $si03_sequencial
+                AND ac26_acordoposicaotipo IN (17,16,15)
+                AND ac26_numeroapostilamento IS NOT NULL
                 AND ac26_numeroapostilamento =
                     (SELECT max(ac26_numeroapostilamento)
                      FROM acordoposicao

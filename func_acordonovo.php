@@ -201,9 +201,8 @@ $iInstituicaoSessao = db_getsession('DB_instit');
 
 
             if (!empty($viewalterar)) {
-                $sWhere .= 'AND ac26_acordoposicaotipo = 17 AND ac26_numeroapostilamento IS NOT NULL ';
+                $sWhere .= 'AND ac26_acordoposicaotipo in (17,16,15) AND ac26_numeroapostilamento IS NOT NULL ';
             }
-
 
             if (isset($chave_ac16_sequencial) && (trim($chave_ac16_sequencial) != "")) {
 

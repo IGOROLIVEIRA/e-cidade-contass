@@ -904,7 +904,8 @@ class cl_acordoposicao {
   }
 
 
-  public function getTermoContrato($iCodigotermo){
+  public function getTermoContrato($iCodigotermo)
+  {
     $sql = "
             SELECT CASE
                   WHEN ac26_acordoposicaotipo IN (15,16,17) THEN 3
@@ -949,7 +950,29 @@ class cl_acordoposicao {
         LEFT JOIN apostilamento ON si03_acordoposicao = ac26_sequencial
         WHERE acordoposicao.ac26_sequencial = $iCodigotermo
     ";
+    return $sql;
+  }
 
+  public function sqlAPosicaoApostilamentoEmpenho($ac26Acordo)
+  {
+    $sql = "
+        SELECT DISTINCT ac26_numeroapostilamento AS numerodoapostilamento,
+                    e54_autori AS codigodaautorizacao,
+                    e61_numemp AS codigodoempenho
+        FROM acordoposicao
+        INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+        INNER JOIN acordoitemexecutado ON ac29_acordoitem = ac20_sequencial
+        INNER JOIN acordoitemexecutadoempautitem ON ac19_acordoitemexecutado = ac29_sequencial
+        LEFT  JOIN empautoriza ON e54_autori = ac19_autori
+        LEFT  JOIN empautitem ON (ac19_autori,ac19_sequen) = (e55_autori,e55_sequen)
+        LEFT  JOIN empempaut ON e61_autori = e54_autori
+        WHERE ac26_acordo = $ac26Acordo
+            AND ac26_acordoposicaotipo IN (15,16,17)
+            AND ac26_numeroapostilamento IN
+                (SELECT max(ac26_numeroapostilamento)
+                 FROM acordoposicao
+                 WHERE ac26_acordo = $ac26Acordo);
+    ";
     return $sql;
   }
 
