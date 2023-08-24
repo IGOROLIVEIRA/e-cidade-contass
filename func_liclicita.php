@@ -476,7 +476,7 @@ $sWhereContratos = " and 1 = 1 ";
                             LEFT JOIN acordoliclicitem ON liclicitem.l21_codigo = acordoliclicitem.ac24_liclicitem
                             LEFT JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
                             WHERE l20_licsituacao = $situacao
-                                AND l20_instit = 1
+                            AND l20_instit = " . db_getsession('DB_instit') . "
                             ORDER BY l20_codigo
                         ";
                     }
