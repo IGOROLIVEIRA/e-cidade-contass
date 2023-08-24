@@ -8,6 +8,7 @@ manuais
 .history
 .editorconfig
 config/sicom
+config/PNCP/.env
 imagens/files/
 login_externo.php
 config/preferencias.json
