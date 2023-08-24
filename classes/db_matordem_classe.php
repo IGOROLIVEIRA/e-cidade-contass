@@ -877,4 +877,21 @@ class cl_matordem
     $resSql = db_query($sSql) or die(pg_last_error());
     return db_utils::fieldsMemory($resSql, 0)->e60_emiss;
   }
+
+  public function verificaTipo($codOrdem){
+    $sSql  = "SELECT m51_codordem, m51_data, case when m51_tipo = 2 then 'virtual' else 'normal' end as tipo";
+    $sSql .= " FROM conlancamord";
+    $sSql .= " join conlancamnota on c80_codlan = c66_codlan";
+    $sSql .= " JOIN empnotaord ON c66_codnota = m72_codnota";
+    $sSql .= " JOIN matordem ON m72_codordem = m51_codordem";
+    $sSql .= " JOIN conlancamdoc ON c71_codlan = c80_codlan";
+    $sSql .= " JOIN conhistdoc ON c53_coddoc = c71_coddoc";
+    $sSql .= " WHERE c80_codord = {$codOrdem} and c53_tipo in (20);";
+    $ordemCompra = db_query($sSql);
+    if(pg_num_rows($ordemCompra) > 0){
+      return pg_fetch_object($ordemCompra);
+    }else{
+      return null;
+    }
+  }
 }

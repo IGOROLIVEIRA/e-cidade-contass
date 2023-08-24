@@ -31,12 +31,14 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_pagordem_classe.php");
 include("classes/db_empempenho_classe.php");
+include("classes/db_conlancam_classe.php");
 require_once("std/Modification.php");
 
 $clmatordem = new cl_matordem;
 $clpagordem   = new cl_pagordem;
 $clempempenho = new cl_empempenho;
 $clrotulo = new rotulocampo;
+$clconlancam = new cl_conlancam;
 
 $clempempenho->rotulo->label();
 $clmatordem->rotulo->label();
@@ -62,8 +64,15 @@ if (isset($aFiltros['empenho']) && !empty($aFiltros['empenho'])) {
 $sqlerro = false;
 
 db_inicio_transacao();
-if (isset($alterar)) {
 
+if (isset($alterar)) {
+    $dataLiquidacao = str_replace('/', '-', $dataLiquidacao);
+    $dataLiquidacao = date('Y-m-d', strtotime($dataLiquidacao));
+    if($dataEstorno !== ""){
+        $dataEstorno = str_replace('/', '-', $dataEstorno);
+        $dataEstorno = date('Y-m-d', strtotime($dataEstorno));
+    }
+    
     $sSqlConsultaFimPeriodoContabil   = "SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." and c99_instit = ".db_getsession('DB_instit');
     $rsConsultaFimPeriodoContabil     = db_query($sSqlConsultaFimPeriodoContabil);
 
@@ -71,13 +80,115 @@ if (isset($alterar)) {
       
         $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
 
-        if ($oFimPeriodoContabil->c99_data != '' && db_strtotime($e50_data) < db_strtotime($oFimPeriodoContabil->c99_data)) {
+        if ($oFimPeriodoContabil->c99_data != '' 
+            && (db_strtotime($e50_data) < db_strtotime($oFimPeriodoContabil->c99_data) 
+            || db_strtotime($dataLiquidacao) < db_strtotime($oFimPeriodoContabil->c99_data))) {
 
-            $erro_msg = "Data inferior à data do fim do período contábil.";
+            $erro_msg = "Alteração não realizada!\nData inferior à data do fim do período contábil.";
             $sqlerro = true;
 
         }
 
+    }
+
+    //Verifica se a data de OP e anterior a data da OC, caso não seja uma OC gerada automaticamente
+    if(!$sqlerro){
+        $ordemCompra = $clmatordem->verificaTipo($e50_codord);
+        if(isset($ordemCompra)){
+            if($ordemCompra->tipo === 'normal'){
+                if($dataLiquidacao < $ordemCompra->m51_data){
+                    $erro_msg = "Alteração não realizada!\nA data da OP não pode ser anterior a data da Ordem de Compra.";
+                    $sqlerro = true;
+                }
+            }
+        }
+    }
+
+    //Verifica se data da liquidação é anterior a data do empenho
+    if(!$sqlerro){
+        $sql = $clconlancam->verificaDataEmpenho($e60_numemp);
+        $result = db_query($sql);
+        if(pg_num_rows($result) > 0){
+            $result = pg_fetch_object($result);
+            if (strtotime($dataLiquidacao) < strtotime($result->data_empenho)){
+                $erro_msg = "Alteração não realizada!\nVerifique as datas dos lançamentos contábeis.";
+                $sqlerro = true;
+            }
+        }
+    }
+
+    //Verifica se data de liquidaçao é posterior a data de pagamento
+    if(!$sqlerro){
+        $sql = $clconlancam->verificaDataPagamento($e50_codord);
+        $result = db_query($sql);
+        if(pg_num_rows($result) > 0){
+            $result = pg_fetch_object($result);
+            if (strtotime($dataLiquidacao) > strtotime($result->data_pagamento)){
+                $erro_msg = "Alteração não realizada!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
+                $sqlerro = true;
+            }
+        }
+    }
+
+    //Verifica se empenho tem saldo na data desejada
+    if(!$sqlerro && strtotime($dataLiquidacao) < strtotime($e50_data)){
+        $sql = $clempempenho->verificaSaldoEmpenho($e60_numemp, $dataLiquidacao);
+        $result = pg_fetch_object(db_query($sql));
+        if ($result->saldo_empenho < $e53_valor){
+            $erro_msg = "Alteração não realizada!\nEmpenho não possui saldo na data desejada.";
+            $sqlerro = true;
+        }
+    }
+
+        //Verifica se empenho não ficará negativo
+        if(!$sqlerro && strtotime($dataLiquidacao) < strtotime($e50_data)){
+            $sql = $clempempenho->verificaSaldoEmpenhoPosterior($e60_numemp, $dataLiquidacao, $e50_codord);
+            $result = pg_fetch_object(db_query($sql));
+            if ($result->saldo_empenho < 0){
+                $erro_msg = "Alteração não realizada!\nO empenho não pode ficar com saldo negativo.";
+                $sqlerro = true;
+            }
+        }
+
+    //Verifica se data da liquidação é posterior a data do estorno
+    if(!$sqlerro){
+        if(isset($dataEstorno) && $dataEstorno !== ""){
+            if (strtotime($dataLiquidacao) > strtotime($dataEstorno)){
+                $erro_msg = "Alteração não realizada!\nVerifique as datas dos lançamentos contábeis.";
+                $sqlerro = true;
+            }
+        }
+    }
+
+    //Altera data liquidação
+    if(!$sqlerro){
+        $dataLiquidacaoAtual = str_replace('/', '-', $dataLiquidacaoAtual);
+        $dataLiquidacaoAtual = date('Y-m-d', strtotime($dataLiquidacaoAtual)); 
+        if(strtotime($dataLiquidacao) <= db_getsession("DB_datausu")){
+            db_inicio_transacao();
+            $sqlAlteraDataOp = $clpagordem->alteraDataOp($e50_codord,$dataLiquidacaoAtual,$dataLiquidacao, date('m',db_getsession('DB_datausu')), $ordemCompra->tipo);
+            db_query($sqlAlteraDataOp);
+            db_fim_transacao();
+        }else{
+            $erro_msg = "Alteração não realizada!\nA data da OP não pode ser posterior a data atual.";
+            $sqlerro = true;  
+        }
+    }
+
+    //Altera data do estorno
+    if(!$sqlerro && isset($dataEstorno) && $dataEstorno !== ""){
+        $dataEstornoAtual = str_replace('/', '-', $dataEstornoAtual);
+        $dataEstornoAtual = date('Y-m-d', strtotime($dataEstornoAtual));
+
+        if(strtotime($dataEstorno) <= db_getsession("DB_datausu")){
+            db_inicio_transacao();
+            $sqlAlteraDataEstorno = $clpagordem->alteraDataEstorno($e50_codord,$dataEstornoAtual,$dataEstorno, date('m',db_getsession('DB_datausu')));
+            db_query($sqlAlteraDataEstorno);
+            db_fim_transacao();
+        }else{
+            $erro_msg = "Alteração não realizada!\nA data do estorno não pode ser posterior a data atual.";
+            $sqlerro = true;  
+        }
     }
 
     if (!$sqlerro) {
@@ -93,6 +204,10 @@ if (isset($alterar)) {
         $erro_msg = $clpagordem->erro_msg;
 
     }
+
+    if (!$sqlerro) {
+        $erro_msg = "Alteração realizada com sucesso!";
+    }
 }
 db_fim_transacao($sqlerro);
 
@@ -105,7 +220,7 @@ db_fim_transacao($sqlerro);
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc" onload="pesquisaOrdemPagamento(document.form1.empenho.value)">
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc" onload="pesquisaOrdemPagamento(document.form1.empenho.value)" >
 <br><br>
 <center>
     <?php require_once (modification::getFile("forms/db_frmordempagamento.php")); ?>
