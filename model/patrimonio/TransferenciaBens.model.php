@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2012  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2012  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 
@@ -130,7 +130,7 @@ class TransferenciaBens {
    * transferencia de bens
    */
 
-  public function receberTransferencia(){
+  public function receberTransferencia($iCodigoHistbem){
 
     if ( !db_utils::inTransaction() ) {
       throw new DBException("[ 1 - receberTransferencia ] - Nenhuma transação encontrada!");
@@ -153,17 +153,6 @@ class TransferenciaBens {
       throw new DBException("[ 2 - receberTransferencia ] - " . $oDaoBensTransfConf->erro_msg);
     }
 
-    // incluimos dados na histbem
-    $oDaoHistbens->t56_codbem = $this->getBem();
-    $oDaoHistbens->t56_data   = $this->getData();
-    $oDaoHistbens->t56_depart = $this->getDepartamentoDestino();
-    $oDaoHistbens->t56_situac = $this->getSituacao();
-    $oDaoHistbens->t56_histor = $this->getHistorico();
-    $oDaoHistbens->incluir(null);
-    if ($oDaoHistbens->erro_status == "0") {
-      throw new DBException(" [ 3 - receberTransferencia] - " . $oDaoHistbens->erro_msg);
-    }
-
     // inserir na histbensocorrencia
     $oDaoHistBensOcorrencia->t69_codbem           = $this->getBem();
     $oDaoHistBensOcorrencia->t69_ocorrenciasbens  = 1; // valor fixo = transferencia
@@ -184,7 +173,7 @@ class TransferenciaBens {
     }
 
     //incluir na tabela histbemtrans vinculando a transferencia com o bem
-    $oDaoHistBemTrans->t97_histbem = $oDaoHistbens->t56_histbem;
+    $oDaoHistBemTrans->t97_histbem = $iCodigoHistbem;
     $oDaoHistBemTrans->t97_codtran = $this->getTransferencia();
     $oDaoHistBemTrans->incluir($oDaoHistBemTrans->t97_histbem, $oDaoHistBemTrans->t97_codtran);
     if ($oDaoHistBemTrans->erro_status == "0") {
@@ -192,7 +181,7 @@ class TransferenciaBens {
     }
 
     // incluir histbemdiv
-    $oDaoHistBemDiv->t32_histbem = $oDaoHistbens->t56_histbem;
+    $oDaoHistBemDiv->t32_histbem = $iCodigoHistbem;
     $oDaoHistBemDiv->t32_divisao = $this->getDivisaoDestino();
     $oDaoHistBemDiv->incluir(null);
     if ($oDaoHistBemDiv->erro_status == "0") {
@@ -215,7 +204,7 @@ class TransferenciaBens {
   }
 
 
-  public function transferenciaAutomatica(){
+  public function transferenciaAutomatica($iCodigoHistbem){
 
     $oBem = new Bem($this->getBem());
     $iDepartamentoAtual = $oBem->getDepartamento();
@@ -292,7 +281,7 @@ class TransferenciaBens {
       if ($oDaoBensTransfOrigemDestino->erro_status == "0") {
         throw new DBException(" [6 - transferenciaAutomatica - ]" . $oDaoBensTransfOrigemDestino->erro_msg);
       }
-      $this->receberTransferencia();
+      $this->receberTransferencia($iCodigoHistbem);
     }
 
   }

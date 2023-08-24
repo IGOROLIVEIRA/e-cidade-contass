@@ -4,6 +4,7 @@ tmp/*
 !tmp/.tmp
 manuais
 .idea
+config/PNCP/.env
 .vscode
 .history
 .editorconfig

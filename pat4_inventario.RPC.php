@@ -333,7 +333,7 @@ try {
     case "getDivisaoDepartamentos":
 
     	$oDaoDepartamento= db_utils::getDao('db_depart');
-    	$sSqlDepartamento= $oDaoDepartamento->sql_query_file();
+    	$sSqlDepartamento= $oDaoDepartamento->sql_query_file(null,"coddepto, descrdepto",null,"instit = ".db_getsession('DB_instit'));
     	$rsDepartamento  = $oDaoDepartamento->sql_record($sSqlDepartamento, "coddepto, descrdepto");
     	$aDepartamento   = array();
     	if ($oDaoDepartamento->numrows > 0) {
