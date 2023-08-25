@@ -103,6 +103,7 @@ if (isset($alterar)) {
     $erro_msg = "";
   }
 
+  $clacordo->alteracaoCriterioReajuste($ac16_sequencial,$ac16_reajuste,$ac16_criterioreajuste,$ac16_datareajuste,$ac16_periodoreajuste,$ac16_indicereajuste,$ac16_descricaoreajuste,$ac16_descricaoindice);
 
   $rsPosicoes = db_query(
     "select distinct
@@ -184,6 +185,7 @@ if (isset($alterar)) {
                     ac18_datainicio,
                     ac18_datafim,
                     ac35_dataassinaturatermoaditivo,
+                    ac35_datapublicacao,
                     ac26_numeroaditamento
       from
         acordoposicao
@@ -320,14 +322,13 @@ if (isset($alterar)) {
     for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
       $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
 
-      if ($aditivo) {
-
-
+      if ($aditivo) {     
 
         $inicio = 'ac18_datainicio_' . $oPosicao->ac18_sequencial;
         $fim = 'ac18_datafim_' . $oPosicao->ac18_sequencial;
         $dataaditivo = 'ac35_dataassinaturatermoaditivo_' . $oPosicao->ac18_sequencial;
         $dataaditivoreferencia = 'ac35_datareferencia_' . $oPosicao->ac18_sequencial;
+        $datapublicacao = 'ac35_datapublicacao_' . $oPosicao->ac18_sequencial;
 
         $dTinicio = '';
         $dTfim = '';
@@ -338,6 +339,11 @@ if (isset($alterar)) {
         $dTfim = implode('-', array_reverse(explode('/', $$fim)));
         $dTassaditivo = implode('-', array_reverse(explode('/', $$dataaditivo)));
         $dTassaditivoreferencia = implode('-', array_reverse(explode('/', $$dataaditivoreferencia)));
+
+        if($$datapublicacao != ""){
+          $ac35_datapublicacao = implode('-', array_reverse(explode('/', $$datapublicacao)));
+          db_query("update acordoposicaoaditamento set ac35_datapublicacao = '$ac35_datapublicacao' where ac35_acordoposicao = '$oPosicao->posicao'");
+        }
 
         if (!empty($dTinicio) && !empty($dTfim)) {
           db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
@@ -553,6 +559,7 @@ if (isset($alterar)) {
                             ac18_datafim,
                             ac35_dataassinaturatermoaditivo,
                             ac35_datareferencia,
+                            ac35_datapublicacao,
                             ac26_numeroaditamento
               from
                 acordoposicao
@@ -575,7 +582,7 @@ if (isset($alterar)) {
                 inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
                 where ac16_sequencial = '$ac16_sequencial' order by posicao"
         );
-        $result = $clacordo->sql_record($clacordo->sql_query_vinculos($ac16_sequencial, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
+        $result = $clacordo->sql_record($clacordo->sql_query_vinculos($ac16_sequencial, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim,ac16_criterioreajuste,ac16_reajuste,ac16_datareajuste,ac16_periodoreajuste,ac16_indicereajuste,ac16_descricaoreajuste,ac16_descricaoindice", null, ""));
 
         db_fieldsmemory($result, 0);
       }
@@ -591,7 +598,7 @@ if (isset($alterar)) {
 } elseif (isset($chavepesquisa)) {
   $db_opcao = 2;
   $db_botao = true;
-  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
+  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim,ac16_reajuste,ac16_criterioreajuste,ac16_datareajuste,ac16_periodoreajuste,ac16_indicereajuste,ac16_descricaoreajuste,ac16_descricaoindice", null, ""));
 
   db_fieldsmemory($result, 0);
 
@@ -618,6 +625,7 @@ if (isset($alterar)) {
                         ac18_datafim,
                         ac35_dataassinaturatermoaditivo,
                         ac35_datareferencia,
+                        ac35_datapublicacao,
                         ac26_numeroaditamento
           from
             acordoposicao
@@ -1033,14 +1041,14 @@ if (isset($alterar)) {
                         <?
                         $aPossui = array(
                           0 => 'Selecione',
-                          1 => 'Sim',
-                          2 => 'Não'
+                          "t" => 'Sim',
+                          "f" => 'Não'
                         );
                           db_select('ac16_reajuste', $aPossui, true, $db_opcao, "onchange='js_possuireajuste()'", "");
                           ?>
                     </td>
 
-                    <td width="23%" id='tdcriterioreajuste' style="display: inline;">
+                    <td width="23%" id='tdcriterioreajuste' style="display: none;">
                       <b>Critério de Reajuste:</b>
 
                       <?
@@ -1060,7 +1068,7 @@ if (isset($alterar)) {
           <tr>
             <td colspan="2">
               <table border="0">
-                <tr id='trdatareajuste'>
+                <tr id='trdatareajuste' style="display: none;">
                   <td width="140px">
                     <b>Data Base Reajuste:</b>
                   </td>
@@ -1082,7 +1090,7 @@ if (isset($alterar)) {
                           ?>
                   </td>
 
-                  <td id='tdindicereajuste'>
+                  <td id='tdindicereajuste' style="display: none;">
                     <b>Índice de Reajuste:</b>
 
                       <?
@@ -1099,7 +1107,7 @@ if (isset($alterar)) {
                       ?>
                   </td>
                 </tr>
-                <tr id='trperiodoreajuste'>
+                <tr id='trperiodoreajuste' style="display: none;">
                   <td width="140px">
                     <b>Período do Reajuste:</b>
                   </td>
@@ -1112,7 +1120,7 @@ if (isset($alterar)) {
               </table>
             </td>
           </tr>
-            <tr id='trdescricaoreajuste'>
+            <tr id='trdescricaoreajuste' style="display: none;">
               <td>
                 <b> Descrição do Critério de Reajuste </b>
               </td>
@@ -1122,7 +1130,7 @@ if (isset($alterar)) {
                 ?>
               </td>
             </tr>
-            <tr id='trdescricaoindicereajuste'>
+            <tr id='trdescricaoindicereajuste' style="display: none;">
               <td>
                 <b> Descrição do Índice de Reajuste </b>
               </td>
@@ -1219,6 +1227,20 @@ if (isset($alterar)) {
                               $iOpcao,
                               "class='numeroaditivo'"
                             ); ?>
+                          </td>
+                          <td><b>Data de Publicação:</b></td>
+                          <td>
+                          <?php
+                            db_inputdata(
+                              "ac35_datapublicacao_$ac18_sequencial",
+                              @$ac35_datapublicacao_dia,
+                              @$ac35_datapublicacao_mes,
+                              @$ac35_datapublicacao_ano,
+                              true,
+                              'text',
+                              $iOpcao,
+                              "class='datapublicacaoaditamento'"
+                             ); ?>
                           </td>
                         </tr>
                       </table>
@@ -1457,6 +1479,9 @@ if (isset($alterar)) {
     if (!confirm("Deseja realmente alterar")) {
       return false;
     }
+
+    if(js_validacoesReajuste() == false) return false;
+
     if (($('ac16_dataassinatura').value == "" || $('ac16_dataassinatura').value == null) && $('ac16_acordosituacao').value == 4) {
       alert("O preenchimento da Data de Assinatura é obrigatório ! ");
       return false;
@@ -1470,6 +1495,13 @@ if (isset($alterar)) {
     si03_dataapostila = document.getElementsByClassName('dataapostila');
     si03_datareferencia = document.getElementsByClassName('datareferenciaapostila');
     ac26_sequencial = document.getElementsByClassName('ac26_sequencial');
+    aDatasDePublicacaoAditamento = document.getElementsByClassName('datapublicacaoaditamento');
+
+    for(i = 0; i < aDatasDePublicacaoAditamento.length; i++){
+      if(aDatasDePublicacaoAditamento[i].value == ""){
+        return alert("O preenchimento da data de publicação do aditamento é obrigatório.");
+      }
+    }
 
     if (($('ac16_datareferencia').value == "" || $('ac16_datareferencia').value == null) && $('ac16_acordosituacao').value == 4) {
       alert("O preenchimento a data de referência do acordo é obrigatório !");
@@ -1730,6 +1762,147 @@ if (isset($alterar)) {
       document.form1.si06_objetoadesao.focus();
     }
   }
+
+  function js_iniciaInformacoesReajuste() {
+
+    iPossuicriterio = document.form1.ac16_reajuste.value;
+
+    if (iPossuicriterio == "t") {
+      document.getElementById("tdcriterioreajuste").style.display = "inline";
+      document.getElementById("trdatareajuste").style.display = "inline";
+      document.getElementById("trperiodoreajuste").style.display = "inline";
+
+      icriterio = document.form1.ac16_criterioreajuste.value;
+
+      if (icriterio == 1) {
+        document.getElementById("tdindicereajuste").style.display = "inline";
+        document.getElementById("trdescricaoreajuste").style.display = "none";
+        document.getElementById("ac16_descricaoreajuste").value = "";
+        js_indicereajuste();
+        return;
+      }
+      if (icriterio == 2 || icriterio == 3) {
+        document.getElementById("tdindicereajuste").style.display = "none";
+        document.getElementById("trdescricaoreajuste").style.display = "";
+        document.getElementById("ac16_indicereajuste").value = 0;
+        document.getElementById("trdescricaoindicereajuste").style.display ="none";
+        document.getElementById("ac16_descricaoindice").value = "";
+        return;
+      }
+      document.getElementById("trdescricaoreajuste").style.display = "none";
+      document.getElementById("tdindicereajuste").style.display = "none";
+      document.getElementById("ac16_indicereajuste").value = 0;
+      document.getElementById("trdescricaoindicereajuste").style.display = "none";
+      document.getElementById("ac16_descricaoindice").value = "";
+    }
+  }
+
+  function js_indicereajuste() {
+    iIndicereajuste = document.form1.ac16_indicereajuste.value;
+    if (iIndicereajuste == 6) {
+      document.getElementById("trdescricaoindicereajuste").style.display = "";
+      return;
+    }
+    document.getElementById("trdescricaoindicereajuste").style.display = "none";
+    document.getElementById("ac16_descricaoindice").value = "";
+  }
+
+  function js_possuireajuste() {
+    iPossuicriterio = document.form1.ac16_reajuste.value;
+    if (iPossuicriterio == "t") {
+      document.getElementById("tdcriterioreajuste").style.display = "inline";
+      document.getElementById("trdatareajuste").style.display = "inline";
+      document.getElementById("trperiodoreajuste").style.display = "inline";
+      return;
+    }
+    document.getElementById("tdcriterioreajuste").style.display = "none";
+    document.getElementById("trdatareajuste").style.display = "none";
+    document.getElementById("trperiodoreajuste").style.display = "none";
+    document.getElementById("trdescricaoreajuste").style.display = "none";
+    document.getElementById("ac16_descricaoreajuste").value = "";
+    document.getElementById("ac16_indicereajuste").value = 0;
+    documentt.getElementById("ac16_criterioreajuste").value = 0;
+    document.getElementById("ac16_periodoreajuste").value = "";
+    document.getElementById("ac16_datareajuste").value = null;
+  }
+
+  function js_criterio() {
+    icriterio = document.form1.ac16_criterioreajuste.value;
+
+    if (icriterio == 1) {
+      document.getElementById("tdindicereajuste").style.display = "inline";
+      document.getElementById("trdescricaoreajuste").style.display = "none";
+      document.getElementById("ac16_descricaoreajuste").value = "";
+      return;
+    }
+    if (icriterio == 2 || icriterio == 3) {
+      document.getElementById("tdindicereajuste").style.display = "none";
+      document.getElementById("trdescricaoreajuste").style.display = "";
+      document.getElementById("ac16_indicereajuste").value = "0";
+      document.getElementById("trdescricaoindicereajuste").style.display = "none";
+      document.getElementById("ac16_descricaoindice").value = "";
+      return;
+    }
+    document.getElementById("trdescricaoreajuste").style.display = "none";
+    document.getElementById("tdindicereajuste").style.display = "none";
+    document.getElementById("ac16_indicereajuste").value = 0;
+    document.getElementById("trdescricaoindicereajuste").style.display = "none";
+    document.getElementById("ac16_descricaoindice").value = "";
+  }
+
+  function js_validacoesReajuste() {
+    let iReajuste = $F("ac16_reajuste");
+    let iCriterioreajuste = $F("ac16_criterioreajuste");
+    let dtReajuste = $F("ac16_datareajuste");
+    let sPeriodoreajuste = $F("ac16_periodoreajuste");
+    let iIndicereajuste = $F("ac16_indicereajuste");
+    let sDescricaoreajuste = $F("ac16_descricaoreajuste");
+    let sDescricaoindice = $F("ac16_descricaoindice");
+
+    if (iReajuste == 0) {
+      alert("Usuário: Campo Possui Critério de Reajuste não informado.");
+      return false;
+    }
+
+    if (iReajuste == "t") {
+
+      if (iCriterioreajuste == 0) {
+        alert("Usuário: Campo Critério de Reajuste não informado.");
+        return false;
+      }
+
+      if (dtReajuste == "") {
+        alert("Usuário: Campo Data Base de Reajuste não informado.");
+        return false;
+      }
+
+      if (sPeriodoreajuste == "") {
+        alert("Usuário: Campo Período de Reajuste não informado.");
+        return false;
+      }
+
+      if (iCriterioreajuste == 1 && iIndicereajuste == 0) {
+        alert("Usuário: Campo Índice de Reajuste não informado.");
+        return false;
+      }
+
+      if (iIndicereajuste == 6 && sDescricaoindice == "") {
+        alert("Usuário: Campo Descrição do Índice não informado.");
+        return false;
+      }
+
+      if (iCriterioreajuste != 1 &&sDescricaoreajuste == "") {
+        alert("Usuário: Campo Descrição de Reajuste não informado.");
+        return false;
+      }
+
+      return true;
+
+    }
+
+  }
+
+  js_iniciaInformacoesReajuste();
   js_verificaorigem();
   js_verificatipoorigem();
 </script>
