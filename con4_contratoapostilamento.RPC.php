@@ -11,7 +11,6 @@ require_once "dbforms/db_funcoes.php";
 require_once("classes/db_condataconf_classe.php");
 require_once("model/contrato/apostilamento/Command/UpdateApostilamentoCommand.model.php");
 require_once("model/contrato/apostilamento/Command/UpdateAcordoItemCommand.model.php");
-
 require_once("model/contrato/apostilamento/Command/ValidaAlteracaoApostilamentoCommand.model.php");
 
 $oParam            = json_decode(str_replace("\\", "", $_POST["json"]));
@@ -248,7 +247,10 @@ try {
             $oDadosAcordo->si03_tipoapostila = $record->si03_tipoapostila;
             $oDadosAcordo->si03_tipoalteracaoapostila = $tiposalteracaoapostila[$record->si03_tipoalteracaoapostila];
             $oDadosAcordo->ac26_numeroapostilamento = $record->ac26_numeroapostilamento;
-            $oDadosAcordo->si03_dataapostila = $record->si03_dataapostila;
+            $date = new DateTime( $record->si03_dataapostila );
+            $oDadosAcordo->si03_dataapostila = $date-> format( 'd/m/Y' );
+            $oDadosAcordo->si03_percentualreajuste = $record->si03_percentualreajuste;
+            $oDadosAcordo->si03_indicereajuste = $record->si03_indicereajuste;
             $oDadosAcordo->si03_descrapostila = utf8_encode($record->si03_descrapostila);
             $oRetorno->dadosAcordo = $oDadosAcordo;
 

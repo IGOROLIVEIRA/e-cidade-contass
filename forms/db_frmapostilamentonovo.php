@@ -1,4 +1,5 @@
 <?php
+
 //MODULO: sicom
 $clapostilamento->rotulo->label();
 $clrotulo = new rotulocampo;
@@ -1397,9 +1398,6 @@ unset($_GET['viewAlterar']);
                 document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "";
                 document.getElementById('col11').style.display = "";
 
-
-
-
             } else {
                 $("si03_tipoalteracaoapostila").value = 1;
                 document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = false;
@@ -1446,7 +1444,8 @@ unset($_GET['viewAlterar']);
     }
 
     function js_acordosc_apostilamentos() {
-        var sUrl = 'func_acordonovo.php?viewalterar=true&funcao_js=parent.js_mostraacordoultimaposicao|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura&iTipoFiltro=4';
+        console.log('js_acordosc_apostilamentos');
+        var sUrl = 'func_acordonovo.php?viewalterar=true&funcao_js=parent.js_mostraacordoultimaposicao|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura';
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_acordo',
                 sUrl,
@@ -1455,13 +1454,15 @@ unset($_GET['viewAlterar']);
     }
 
     function js_mostraacordoultimaposicao(ac16_sequencial,ac16_resumoobjeto,ac16_dataassinatura) {
+       console.log('js_mostraacordoultimaposicao');
         var oParam = {
             exec: 'getleilicitacao',
             licitacao: ac16_sequencial
         }
 
         new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
-                if (oRetorno.lei == 1) {
+            console.log('js_mostraacordoultimaposicao deentro do ajax');
+            if (oRetorno.lei == 1) {
                     $('justificativa').style.display = '';
                 } else {
                     $('justificativa').style.display = 'none';
@@ -1477,6 +1478,7 @@ unset($_GET['viewAlterar']);
     }
 
     function pesquisarDadosAcordoAlteracao(iAcordo) {
+        console.log('pesquisarDadosAcordoAlteracao');
         if (iAcordo == "") {
             alert('Acordo Não informado!');
             return false;
@@ -1487,7 +1489,7 @@ unset($_GET['viewAlterar']);
         }
 
         new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
-
+                console.log('pesquisarDadosAcordoAlteracao dentro ajax');
                 if (lErro) {
                     alert(oRetorno.message.urlDecode());
                     return js_acordosc_apostilamentos();
@@ -1502,8 +1504,18 @@ unset($_GET['viewAlterar']);
                 $('si03_descrapostila').value = oRetorno.dadosAcordo.si03_descrapostila;
                 si03_sequencial = oRetorno.dadosAcordo.si03_sequencial;
 
-                aItensPosicao = oRetorno.itens;
+                document.getElementById('trreajuste').style.display = "none";
+                $("si03_percentualreajuste").value = "";
+                $("si03_indicereajuste").options[0].selected = true;
 
+                if ($('si03_tipoapostila').value == "01") {
+                    document.getElementById('trreajuste').style.display = "";
+                    $("si03_percentualreajuste").value = oRetorno.dadosAcordo.si03_percentualreajuste;
+                    let si03_indicereajuste = oRetorno.dadosAcordo.si03_indicereajuste;
+                    $("si03_indicereajuste").options[si03_indicereajuste].selected = true;
+                    console.log(oRetorno.dadosAcordo.si03_indicereajuste);
+                }
+                aItensPosicao = oRetorno.itens;
             }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
 
@@ -1517,14 +1529,16 @@ unset($_GET['viewAlterar']);
     }
 
     function alteraApostilamento(oApostila, listaItens, indicesSelecionados) {
-
+        console.log(oApostila);
         const apostilamento = {
             si03_sequencial,
             si03_tipoapostila:  oApostila.tipoapostila,
             si03_tipoalteracaoapostila: oApostila.tipoalteracaoapostila,
             si03_numapostilamento: $('si03_numapostilamento').value,
             si03_dataapostila: oApostila.dataapostila,
-            si03_descrapostila: oApostila.descrapostila
+            si03_descrapostila: oApostila.descrapostila,
+            si03_percentualreajuste: oApostila.percentualreajuste,
+            si03_indicereajuste: oApostila.indicereajuste
         }
 
         const itens = filtraAcordosSelecionados(listaItens, indicesSelecionados);

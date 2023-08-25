@@ -1055,12 +1055,14 @@ class cl_acordoitem {
   {
         $sql = "SELECT
             ac26_numeroapostilamento,
+            si03_sequencial,
             si03_acordo,
             si03_dataapostila,
             si03_tipoalteracaoapostila,
             si03_tipoapostila,
             si03_descrapostila,
-            si03_sequencial
+            si03_percentualreajuste,
+            si03_indicereajuste
         FROM apostilamento
         INNER JOIN acordo ON ac16_sequencial = si03_acordo
         INNER JOIN acordoposicao ON acordoposicao.ac26_acordo = acordo.ac16_sequencial
