@@ -7,32 +7,16 @@
 	include("libs/db_usuariosonline.php");
 	include("libs/db_libsys.php");
 
-	$oGet = db_utils::postMemory($_GET);
+	$oDaoIssBase	= new cl_issbase;
+	$oGet 			= db_utils::postMemory($_GET);
+
 	/*
 	* clausula FROM para o SQL do relatório. O select está contido no arquivo .agt,
 	* pois ele é fixo na consulta e o FROM pode ser váriavel dependendo o tipo de
 	* configuração
 	*/
-	$sFrom  = "   issbase                                          																	";
-	$sFrom .= "   inner join cgm					on cgm.z01_numcgm 					= issbase.q02_numcgm						";
-	$sFrom .= "   inner join tabativ				on tabativ.q07_inscr 				= issbase.q02_inscr							"; 
-	$sFrom .= "   inner join ativid					on ativid.q03_ativ 					= tabativ.q07_ativ							";
-	$sFrom .= "   inner join ativprinc				on ativprinc.q88_inscr 				= tabativ.q07_inscr							";
-	$sFrom .= "   left join issbasecaracteristica	on issbasecaracteristica.q138_inscr = issbase.q02_inscr							";
-	$sFrom .= "	  	and issbasecaracteristica.q138_caracteristica in (select caracteristica.db140_sequencial 						";
-	$sFrom .= "		from caracteristica where caracteristica.db140_grupocaracteristica = 4)											";
-	$sFrom .= "   left join caracteristica 			on caracteristica.db140_sequencial 	= issbasecaracteristica.q138_caracteristica	";
-	$sFrom .= "   left join issbairro				on issbairro.q13_inscr 				= issbase.q02_inscr							";
-	$sFrom .= "   left join bairro					on bairro.j13_codi 					= issbairro.q13_inscr						";
-	$sFrom .= "   left join issruas					on issruas.q02_inscr 				= issbase.q02_inscr							";
-	$sFrom .= "   left join ruas					on ruas.j14_codigo 					= issruas.j14_codigo						";
-	$sFrom .= "   left join ruastipo				on ruastipo.j88_codigo 				= ruas.j14_tipo								";
-	$sFrom .= "   left join atividcnae				on atividcnae.q74_ativid 			= ativid.q03_ativ							";
-	$sFrom .= "   left join clasativ				on clasativ.q82_ativ 				= ativid.q03_ativ							";
-	$sFrom .= "   left join classe					on classe.q12_classe 				= clasativ.q82_classe						";
-	$sFrom .= "   left join cnaeanalitica			on cnaeanalitica.q72_sequencial 	= atividcnae.q74_cnaeanalitica				";
-	$sFrom .= "   left join cnae					on cnae.q71_sequencial 				= cnaeanalitica.q72_cnae					";
-
+	$sFrom = $oDaoIssBase->sql_queryFromRelatorioExportacaoInscricao();
+	
 	$sWhere = null;
 
 	// Tratamento de dados para pessoa
