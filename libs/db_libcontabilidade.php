@@ -5933,27 +5933,27 @@ function getSaldoDespesaSentenca($o58_elemento = null, $campos = "*", $ordem = n
  * @param $instit
  * @param $dtIni
  * @param $dtFim
- * @param string $fonte
+ * @param string|bool $fonte
  * @param $group
  * @return array|stdClass[]
  */
 
-
 function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte="", $group) {
-
     $aDatas = array();
     $dt_inicial = "";
     $dt_final   = "";
+
     if (count($aAnousu) == 2) {
-        $aDatas[$aAnousu[0]] = $dtIni.'a'.$aAnousu[0].'-12-31';
-        $aDatas[$aAnousu[1]] = $aAnousu[1].'-01-01'.'a'.$dtFim;
+        $aDatas[$aAnousu[0]] = $dtIni . 'a' . $aAnousu[0] . '-12-31';
+        $aDatas[$aAnousu[1]] = $aAnousu[1] . '-01-01' . 'a' . $dtFim;
     }
 
-    $sql = " SELECT COALESCE(SUM(CASE
-                            WHEN c53_tipo = 20 THEN ROUND(c70_valor, 2)
-                            WHEN c53_tipo = 21 THEN ROUND(c70_valor * -(1::FLOAT8),2)
-                            ELSE 0::FLOAT8
-                        END),0) AS liquidado,
+    $sql = " SELECT 
+                COALESCE(SUM(CASE
+                    WHEN c53_tipo = 20 THEN ROUND(c70_valor, 2)
+                    WHEN c53_tipo = 21 THEN ROUND(c70_valor * -(1::FLOAT8),2)
+                    ELSE 0::FLOAT8
+                    END),0) AS liquidado,
                     COALESCE(SUM(CASE
                             WHEN c53_tipo = 10 THEN ROUND(c70_valor, 2)
                             WHEN c53_tipo = 11 THEN ROUND(c70_valor * -(1::FLOAT8),2)
@@ -5975,13 +5975,8 @@ function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte
         $sql .= " INNER JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu ";
     }
 
-    $sql .= "WHERE ".$where;
-
-    if (count($aAnousu) == 2) {
-        $sql .= " AND c70_anousu IN ({$aAnousu[0]}, {$aAnousu[1]})";
-    } else {
-        $sql .= " AND c70_anousu = {$aAnousu[0]}";
-    }
+    $sql .= " WHERE {$where} ";
+    $sql .= " AND c70_anousu IN (" . implode(",", $aAnousu) . ")";
     $sql .= " AND e60_instit = {$instit}";
     $sql .= " AND c61_instit = {$instit}";
     $sql .= " AND c53_tipo IN (10, 11, 20, 21)";
@@ -6006,14 +6001,13 @@ function getSaldoDesdobramento($where, $aAnousu, $instit, $dtIni, $dtFim, $fonte
         }
       }
 
-      $sql .= ")";
-      if($fonte!="") {
-          $sql .= " AND o58_codigo IN ({$fonte}) ";
-      }
-      $sql .= " {$group} ) AS x";
+    $sql .= ")";
+    if ($fonte != "" && !is_bool($fonte)) {
+        $sql .= " AND o58_codigo IN ({$fonte}) ";
+    }
+    $sql .= " {$group} ) AS x";
 
-      return db_utils::getColectionByRecord(db_query($sql));
-
+    return db_utils::getColectionByRecord(db_query($sql));
 }
 
 /**
