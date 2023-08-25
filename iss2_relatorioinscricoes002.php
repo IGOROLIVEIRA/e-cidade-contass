@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBselller Servicos de Informatica
@@ -154,14 +154,13 @@ switch ($oGet->ordem) {
 
 	case "n":
 	  $sOrdem   = "Nome";
-		$sOrderBy = "z01_nome asc";
+		$sOrderBy = '"Nome / Razão Social" asc';
 	break;
 
   case "a":
 	  $sOrdem   = "Atividade";
-		$sOrderBy = "q03_descr asc";
+		$sOrderBy = '"Descrição da Atividade" asc';
 	break;
-
 }
 
 # Include AgataAPI class
@@ -200,4 +199,3 @@ else
 {
     db_redireciona($clagata->arquivo);
 }
-?>
