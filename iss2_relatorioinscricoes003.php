@@ -1,4 +1,4 @@
-<?
+<?php
 
 require("libs/db_stdlib.php");
 require("libs/db_utils.php");
@@ -135,22 +135,21 @@ if ($oGet->regime != "0") {
 // Tratamento de dados para Ordem
 switch ($oGet->ordem) {
 
-  case "i":
-	  $sOrdem   = "Inscrição";
-    $sOrderBy = "issbase.q02_inscr asc";
-	break;
-
-	case "n":
-	  $sOrdem   = "Nome";
-		$sOrderBy = "z01_nome asc";
-	break;
-
-  case "a":
-	  $sOrdem   = "Atividade";
-		$sOrderBy = "q03_descr asc";
-	break;
-
-}
+	case "i":
+		$sOrdem   = "Inscrição";
+	  $sOrderBy = "q02_inscr asc";
+	  break;
+  
+	  case "n":
+		$sOrdem   = "Nome";
+		  $sOrderBy = '"Nome / Razão Social" asc';
+	  break;
+  
+	case "a":
+		$sOrdem   = "Atividade";
+		  $sOrderBy = '"Descrição da Atividade" asc';
+	  break;
+  }
 
 # Include AgataAPI class
 include_once('dbagata/classes/core/AgataAPI.class');
@@ -188,4 +187,3 @@ else
 {
     db_redireciona($clagata->arquivo);
 }
-?>
