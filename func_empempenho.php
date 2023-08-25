@@ -221,7 +221,7 @@ $rotulo->label("z01_cgccpf");
             $dbwhere .= " and (elementoempenho.o56_elemento like '3339039%' ";
             $dbwhere .= " or elementoempenho.o56_elemento like '3339036%' ";
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%' ";
-            $dbwhere .= " or elementoempenho.o56_elemento in ('3339030010000','3339030250000','3339030370000','3339030990000','3339030020000','3339030030000','3339092000000') )";
+            $dbwhere .= " or elementoempenho.o56_elemento in ('3339030010000','3339030250000','3339030370000','3339030990000','3339030020000','3339030030000','3339092000000','3339339990000') )";
             $dbwhere .= " and empempenho.e60_emiss <= '$ve62_dtmanut'";
             $dbwhere .= " and date_part('year', empempenho.e60_emiss) <= date_part('year', date'" . $ve62_dtmanut . "')";
             $filtroempelemento = 1;

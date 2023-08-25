@@ -3754,6 +3754,7 @@ class cl_liclicita
         LEFT JOIN situacaoitem ON l217_sequencial=l219_situacao
         WHERE liclicita.l20_codigo = $l20_codigo
         AND liclicitem.l21_ordem = $ordem
+        AND pc23_vlrun > 0
         ORDER BY l217_sequencial desc limit 1";
     }
 

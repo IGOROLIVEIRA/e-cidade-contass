@@ -1,0 +1,103 @@
+{
+    "fontes": [
+        {
+            "FonteEcidade": "16050000",
+            "FonteTCEMG": "1605000",
+            "FonteSTN": "1605",
+            "DESCRICAO": "ASSIS FINAN UNIAO COMP PISO SALARIAL PROFIS. DA ENFERMAGEM",
+            "FINALIDADE": "Assistencia financeira da Uniao destinada a complementacao ao pagamento dos pisos salariais para profissionais da enfermagem"
+        },
+        {
+            "FonteEcidade": "16590310",
+            "FonteTCEMG": "1659031",
+            "FonteSTN": "1659",
+            "DESCRICAO": "TC SEPLAG/RAM-CB N 64808118/2023 CONSTRUCAO DE UPA EM BETIM",
+            "FINALIDADE": "Recursos do Termo de Compromisso SEPLAG/RAM-CB n 64808118/2023 - Construcao de Unidade de Pronto Atendimento (UPA) em Betim."
+        },
+        {
+            "FonteEcidade": "16590320",
+            "FonteTCEMG": "1659032",
+            "FonteSTN": "1659",
+            "DESCRICAO": "TC SEPLAG/RAM-CB N 64842861/2023 AMP HOSPITAL PUB REG BETIM",
+            "FINALIDADE": "Recursos do Termo de Compromisso SEPLAG/RAM-CB n 64842861/2023 - Ampliacao do Hospital Publico Regional de Betim: aumento da quantidade de leitos de CTI e vagas de estacionamento em Betim."
+        },
+        {
+            "FonteEcidade": "18990330",
+            "FonteTCEMG": "1899033",
+            "FonteSTN": "1899",
+            "DESCRICAO": "TC SEPLAG/RAM-CB N 64840441/2023TREVO E PISTA LATERAL POMPEU",
+            "FINALIDADE": "Recursos do Termo de Compromisso SEPLAG/RAM-CB n 64840441/2023 - Criacao do trevo e pista lateral MG-420 e MG-164 em Pompeu."
+        },
+        {
+            "FonteEcidade": "18990340",
+            "FonteTCEMG": "1899034",
+            "FonteSTN": "1899",
+            "DESCRICAO": "TC SEPLAG/RAM-CB N 64806035/2023 CANALIZ DE CORREGOS IGARAPE",
+            "FINALIDADE": "Recursos do Termo de Compromisso SEPLAG/RAM-CB n 64806035/2023 - Canalizacao de Corregos - Igarape."
+        },
+        {
+            "FonteEcidade": "26050000",
+            "FonteTCEMG": "2605000",
+            "FonteSTN": "2605",
+            "DESCRICAO": "ASSIS FINAN UNIAO COMP PISO SALARIAL PROFIS. DA ENFERMAGEM",
+            "FINALIDADE": "Assistencia financeira da Uniao destinada a complementacao ao pagamento dos pisos salariais para profissionais da enfermagem"
+        },
+        {
+            "FonteEcidade": "26590310",
+            "FonteTCEMG": "2659031",
+            "FonteSTN": "2659",
+            "DESCRICAO": "TC SEPLAG/RAM-CB N 64808118/202 CONSTRUCAO DE UPA EM BETIM",
+            "FINALIDADE": "Recursos do Termo de Compromisso SEPLAG/RAM-CB n 64808118/2023 - Construcao de Unidade de Pronto Atendimento (UPA) em Betim."
+        },
+        {
+            "FonteEcidade": "26590320",
+            "FonteTCEMG": "2659032",
+            "FonteSTN": "2659",
+            "DESCRICAO": "TC SEPLAG/RAM-CB N 64842861/2023 AMP HOSPITAL PUB REG BETIM",
+            "FINALIDADE": "Recursos do Termo de Compromisso SEPLAG/RAM-CB n 64842861/2023 - Ampliacao do Hospital Publico Regional de Betim: aumento da quantidade de leitos de CTI e vagas de estacionamento em Betim."
+        },
+        {
+            "FonteEcidade": "28990330",
+            "FonteTCEMG": "2899033",
+            "FonteSTN": "2899",
+            "DESCRICAO": "TC SEPLAG/RAM-CB N 64840441/2023TREVO E PISTA LATERAL POMPEU",
+            "FINALIDADE": "Recursos do Termo de Compromisso SEPLAG/RAM-CB n 64840441/2023 - Criacao do trevo e pista lateral MG-420 e MG-164 em Pompeu."
+        },
+        {
+            "FonteEcidade": "28990340",
+            "FonteTCEMG": "2899034",
+            "FonteSTN": "2899",
+            "DESCRICAO": "TC SEPLAG/RAM-CB N 64806035/2023 CANALIZ DE CORREGOS IGARAPE",
+            "FINALIDADE": "Recursos do Termo de Compromisso SEPLAG/RAM-CB n 64806035/2023 - Canalizacao de Corregos - Igarape."
+        },
+        {
+            "FonteEcidade": "17200000",
+            "FonteTCEMG": "1720000",
+            "FonteSTN": "1720",
+            "DESCRICAO": "TRANSF DA UNIAO REF PETROLEO E GAS NATURAL DESTINADAS AO FEP",
+            "FINALIDADE": "Controle das transferencias da Uniao referentes as participacoes na exploracao de petroleo, gas natural e outros hidrocarbonetos fluidos, destinadas ao Fundo Especial - FEP, conforme estabelece o art. 50-F da Lei 9.478/97, exceto os recursos obrigatorios para educacao e saude de que trata a Lei 12.858/2013."
+        },
+        {
+            "FonteEcidade": "17210000",
+            "FonteTCEMG": "1721000",
+            "FonteSTN": "1721",
+            "DESCRICAO": "TRANSF DA UNIAO REF A CESSAO ONEROSA DE PETROLEO LEI 13.885",
+            "FINALIDADE": "Controle dos recursos transferidos pela Uniao, provenientes da cessao onerosa a Petroleo Brasileiro S.A. - PETROBRAS, do exercicio das atividades de pesquisa e lavra de petroleo, gas natural e outros hidrocarbonetos fluidos, originarios dos leiloes dos volumes excedentes ao limite a que se refere o § 2º do art. 1º da Lei nº 12.276/2010, conforme estabelecido na Lei nº 13.885/2019."
+        },
+        {
+            "FonteEcidade": "27200000",
+            "FonteTCEMG": "2720000",
+            "FonteSTN": "2720",
+            "DESCRICAO": "TRANSF DA UNIAO REF PETROLEO E GAS NATURAL DESTINADAS AO FEP",
+            "FINALIDADE": "Controle das transferencias da Uniao referentes as participacoes na exploracao de petroleo, gas natural e outros hidrocarbonetos fluidos, destinadas ao Fundo Especial - FEP, conforme estabelece o art. 50-F da Lei 9.478/97, exceto os recursos obrigatorios para educacao e saude de que trata a Lei 12.858/2013."
+        },
+        {
+            "FonteEcidade": "27210000",
+            "FonteTCEMG": "2721000",
+            "FonteSTN": "2721",
+            "DESCRICAO": "TRANSF DA UNIAO REF A CESSAO ONEROSA DE PETROLEO LEI 13.885",
+            "FINALIDADE": "Controle dos recursos transferidos pela Uniao, provenientes da cessao onerosa a Petroleo Brasileiro S.A. - PETROBRAS, do exercicio das atividades de pesquisa e lavra de petroleo, gas natural e outros hidrocarbonetos fluidos, originarios dos leiloes dos volumes excedentes ao limite a que se refere o § 2º do art. 1º da Lei nº 12.276/2010, conforme estabelecido na Lei nº 13.885/2019."
+        }
+    ]
+}
+

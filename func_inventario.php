@@ -126,15 +126,15 @@ if (isset($lApenasComItens)) {
 
         if(isset($chave_t75_sequencial) && (trim($chave_t75_sequencial) != "") ) {
 
-	         $sql = $clinventario->sql_query(null, $campos,"t75_sequencial", "{$sWhere} and t75_sequencial = {$chave_t75_sequencial}");
+	         $sql = $clinventario->sql_query(null, $campos,"t75_sequencial desc", "{$sWhere} and t75_sequencial = {$chave_t75_sequencial}");
 
         }else if (isset($chave_t75_sequencial) && (trim($chave_t75_sequencial) != "") ) {
 
-	         $sql = $clinventario->sql_query("", $campos, "t75_sequencial"," {$sWhere} and t75_sequencial like '$chave_t75_sequencial%' ");
+	         $sql = $clinventario->sql_query("", $campos, "t75_sequencial desc"," {$sWhere} and t75_sequencial like '$chave_t75_sequencial%' ");
 
         } else {
 
-           $sql = $clinventario->sql_query("", $campos, "t75_sequencial","{$sWhere}");
+           $sql = $clinventario->sql_query("", $campos, "t75_sequencial desc","{$sWhere}");
 
         }
 

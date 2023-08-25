@@ -4,10 +4,12 @@ tmp/*
 !tmp/.tmp
 manuais
 .idea
+config/PNCP/.env
 .vscode
 .history
 .editorconfig
 config/sicom
+config/PNCP/.env
 imagens/files/
 login_externo.php
 config/preferencias.json
