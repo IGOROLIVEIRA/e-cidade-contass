@@ -55,10 +55,9 @@ switch ($oGet->pessoa) {
 }
 
 // adiciona o AND no SQL quando necessário
-if ($sWhere != null) {
+$and = null;
+if ($sWhere !== null) {
   $and = "and";
-} else {
-  $and = null;
 }
 
 // Tratamento de dados para Baixa
@@ -80,10 +79,9 @@ switch ($oGet->baixa) {
 
 }
 
-if ($sWhere != null) {
-	$and = "and";
-} else {
-	$and = null;
+$and = null;
+if ($sWhere !== null) {
+  $and = "and";
 }
 
 // Tratamento de dados para Atividade
@@ -100,36 +98,32 @@ switch ($oGet->atividade) {
 
 }
 
-if ($sWhere != null) {
-	$and = "and";
-} else {
-	$and = null;
+$and = null;
+if ($sWhere !== null) {
+  $and = "and";
 }
 
 if ($oGet->datainicioatividade != "--") {
   $sWhere .= " {$and} tabativ.q07_datain > '{$oGet->datainicioatividade}'";
 }
 
-if ($sWhere != null) {
-	$and = "and";
-} else {
-	$and = null;
+$and = null;
+if ($sWhere !== null) {
+  $and = "and";
 }
 
 if ($oGet->datafinalatividade != "--") {
 	$sWhere .= " {$and} tabativ.q07_datafi < '{$oGet->datafinalatividade}'";
 }
 
-if ($sWhere != null) {
-	$and = "and";
-} else {
-	$and = null;
+$and = null;
+if ($sWhere !== null) {
+  $and = "and";
 }
 
-if ($oGet->regime != "0") {
+$descricaoregime = "Todos";
+if ($oGet->regime !== "0") {
   $sWhere .= " {$and} q138_caracteristica = {$oGet->regime}";
-} else {
-	$descricaoregime = "Todos";
 }
 
 // Tratamento de dados para Ordem
@@ -137,7 +131,7 @@ switch ($oGet->ordem) {
 
 	case "i":
 		$sOrdem   = "Inscrição";
-	  $sOrderBy = "q02_inscr asc";
+	  $sOrderBy = "issbase.q02_inscr asc";
 	  break;
   
 	  case "n":
