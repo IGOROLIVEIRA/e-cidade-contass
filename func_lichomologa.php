@@ -6,6 +6,7 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_liclicita_classe.php");
 include("classes/db_liclicitem_classe.php");
+include("classes/db_licitaparam_classe.php");
 
 db_postmemory($HTTP_GET_VARS);
 db_postmemory($HTTP_POST_VARS);
@@ -14,6 +15,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 
 $clliclicitem = new cl_liclicitem;
 $clliclicita  = new cl_liclicita;
+$cllicitaparam = new cl_licitaparam;
 
 $clliclicita->rotulo->label("l20_codigo");
 $clliclicita->rotulo->label("l20_numero");
@@ -100,13 +102,21 @@ $sWhereContratos = " and 1 = 1 ";
                 $dbwhere   = "l08_altera is true and";
             }
 
+            $rsParamLic = $cllicitaparam->sql_record($cllicitaparam->sql_query(null, "*", null, "l12_instit = " . db_getsession('DB_instit')));
+            $l12_adjudicarprocesso = db_utils::fieldsMemory($rsParamLic, 0)->l12_adjudicarprocesso;
+
             /**
              * QUANDO FOR ADJUDICACAO NAO DEVE RETORNAR PROCESSO QUE SAO REGISTRO DE PRECO
              */
             if(isset($homologacao) &&trim($homologacao) == "1") {
-                $dbwhere .= "((liclicita.l20_tipnaturezaproced = 2 and l20_licsituacao in (1,10)) or (l20_licsituacao in (13,10))) and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
-             and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and ";
-
+                if($l12_adjudicarprocesso == "f"){
+                    $dbwhere .= "((liclicita.l20_tipnaturezaproced = 2 and l20_licsituacao in (1,10)) or (l20_licsituacao in (13,10))) and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
+                    and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and ";
+                }
+                if($l12_adjudicarprocesso == "t"){
+                    $dbwhere .= "((liclicita.l20_tipnaturezaproced = 2 and l20_licsituacao in (13))) and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
+                    and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and ";
+                }
             }else if(isset($homologacao) &&trim($homologacao) == "0") {
                 $dbwhere .= "l202_dataadjudicacao IS NOT NULL AND l202_datahomologacao IS NOT NULL AND ";
             }else{
@@ -289,6 +299,7 @@ $sWhereContratos = " and 1 = 1 ";
                 order by
                 l20_codigo";
                 }  
+                echo $sql;
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js); 
 
             } else {  
