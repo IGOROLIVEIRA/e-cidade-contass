@@ -1,4 +1,4 @@
-<?
+<?php
 
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
