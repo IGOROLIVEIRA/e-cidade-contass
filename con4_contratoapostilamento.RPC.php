@@ -259,7 +259,7 @@ try {
         case 'updateApostilamento':
 
             $updateApostilamento = new UpdateApostilamentoCommand;
-            $updateApostilamento->execute($oParam->apostilamento);
+            $updateApostilamento->execute($oParam->apostilamento, $oParam->iAcordo);
 
             $updateAcordoItem = new UpdateAcordoItemCommand;
             $updateAcordoItem->execute(

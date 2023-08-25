@@ -976,5 +976,54 @@ class cl_acordoposicao {
     return $sql;
   }
 
+  public function updateNumeroApositilamento($ac26_acordo, $ac26_numeroapostilamento)
+  {
+    $sql = "
+    UPDATE
+        acordoposicao
+    SET
+        ac26_numeroapostilamento = $ac26_numeroapostilamento
+    WHERE
+        ac26_acordo = $ac26_acordo
+        AND ac26_numeroapostilamento IS NOT NULL
+        AND ac26_numeroapostilamento IN (
+            SELECT max(ac26_numeroapostilamento)
+            FROM acordoposicao WHERE ac26_acordo = $ac26_acordo)
+    ";
+
+    $result = db_query($sql);
+     if($result==false){
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "posicoes do acordo nao Alterado. Alteracao Abortada.\\n";
+       $this->erro_sql .= "Valores : ".$this->ac26_sequencial;
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       $this->numrows_alterar = 0;
+       return false;
+     }else{
+       if(pg_affected_rows($result)==0){
+         $this->erro_banco = "";
+         $this->erro_sql = "posicoes do acordo nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql .= "Valores : ".$this->ac26_sequencial;
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_alterar = 0;
+         return true;
+       }else{
+         $this->erro_banco = "";
+         $this->erro_sql = "Alterao efetuada com Sucesso\\n";
+         $this->erro_sql .= "Valores : ".$this->ac26_sequencial;
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_alterar = pg_affected_rows($result);
+         return true;
+       }
+     }
+
+  }
+
 }
 ?>

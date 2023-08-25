@@ -1438,7 +1438,7 @@ unset($_GET['viewAlterar']);
     }
 
     if (viewAlterar) {
-        js_acordosc_apostilamentos();
+        js_acordosc_apostilamentos(true);
     } else {
         js_pesquisaac16_sequencial(true);
     }
@@ -1451,6 +1451,30 @@ unset($_GET['viewAlterar']);
                 sUrl,
                 'Pesquisar Acordo',
                 true);
+        if (lMostrar == true) {
+            var sUrl = 'func_acordonovo.php?viewalterar=true&funcao_js=parent.js_mostraacordoultimaposicao|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura';
+            js_OpenJanelaIframe('top.corpo',
+                'db_iframe_acordo',
+                sUrl,
+                'Pesquisar Acordo',
+                true);
+
+        } else {
+
+            if ($('ac16_sequencial').value != '') {
+
+                var sUrl = 'func_acordonovo.php?viewalterar=true&pesquisa_chave=' + $('ac16_sequencial').value +
+                    '&funcao_js=parent.js_mostraacordo';
+
+                js_OpenJanelaIframe('top.corpo',
+                    'db_iframe_acordo',
+                    sUrl,
+                    'Pesquisar Acordo',
+                    false);
+            } else {
+                $('ac16_sequencial').value = '';
+            }
+        }
     }
 
     function js_mostraacordoultimaposicao(ac16_sequencial,ac16_resumoobjeto,ac16_dataassinatura) {
@@ -1461,7 +1485,6 @@ unset($_GET['viewAlterar']);
         }
 
         new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
-            console.log('js_mostraacordoultimaposicao deentro do ajax');
             if (oRetorno.lei == 1) {
                     $('justificativa').style.display = '';
                 } else {
@@ -1478,7 +1501,7 @@ unset($_GET['viewAlterar']);
     }
 
     function pesquisarDadosAcordoAlteracao(iAcordo) {
-        console.log('pesquisarDadosAcordoAlteracao');
+
         if (iAcordo == "") {
             alert('Acordo Não informado!');
             return false;
@@ -1489,7 +1512,7 @@ unset($_GET['viewAlterar']);
         }
 
         new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
-                console.log('pesquisarDadosAcordoAlteracao dentro ajax');
+
                 if (lErro) {
                     alert(oRetorno.message.urlDecode());
                     return js_acordosc_apostilamentos();
@@ -1504,18 +1527,8 @@ unset($_GET['viewAlterar']);
                 $('si03_descrapostila').value = oRetorno.dadosAcordo.si03_descrapostila;
                 si03_sequencial = oRetorno.dadosAcordo.si03_sequencial;
 
-                document.getElementById('trreajuste').style.display = "none";
-                $("si03_percentualreajuste").value = "";
-                $("si03_indicereajuste").options[0].selected = true;
+                validaCamposTela(oRetorno);
 
-                if ($('si03_tipoapostila').value == "01") {
-                    document.getElementById('trreajuste').style.display = "";
-                    $("si03_percentualreajuste").value = oRetorno.dadosAcordo.si03_percentualreajuste;
-                    let si03_indicereajuste = oRetorno.dadosAcordo.si03_indicereajuste;
-                    $("si03_indicereajuste").options[si03_indicereajuste].selected = true;
-                    console.log(oRetorno.dadosAcordo.si03_indicereajuste);
-                }
-                aItensPosicao = oRetorno.itens;
             }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
 
@@ -1526,6 +1539,28 @@ unset($_GET['viewAlterar']);
 
         }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
+    }
+
+    function validaCamposTela(oRetorno) {
+
+        let tipoApostila = $('si03_tipoapostila').value;
+
+        document.getElementById('trreajuste').style.display = "none";
+        $("si03_percentualreajuste").value = "";
+        $("si03_indicereajuste").options[0].selected = true;
+
+        if (tipoApostila == "01") {
+            document.getElementById('trreajuste').style.display = "";
+            $("si03_percentualreajuste").value = oRetorno.dadosAcordo.si03_percentualreajuste;
+            let si03_indicereajuste = oRetorno.dadosAcordo.si03_indicereajuste;
+            $("si03_indicereajuste").options[si03_indicereajuste].selected = true;
+            console.log(oRetorno.dadosAcordo.si03_indicereajuste);
+        }
+
+        if (tipoApostila == "03") {
+            document.getElementById("si03_tipoapostila").disabled = true;
+        }
+
     }
 
     function alteraApostilamento(oApostila, listaItens, indicesSelecionados) {
@@ -1556,6 +1591,7 @@ unset($_GET['viewAlterar']);
                 return alert(oRetorno.message.urlDecode());
             }
             alert("Apostilamento alterado com sucesso!");
+
            return js_acordosc_apostilamentos();
         }).setMessage("Processando apostilamento")
         .execute();

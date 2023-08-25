@@ -44,27 +44,27 @@ class cl_apostilamento
   var $si03_indicereajuste = 0;
   var $si03_percentualreajuste = null;
   var $si03_descricaoindice = null;
-  // cria propriedade com as variaveis do arquivo 
+  // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si03_sequencial = int8 = Codigo Sequencial 
-                 si03_licitacao = int8 = Numero da licitacao 
-                 si03_numcontrato = int8 = N Contrato 
-                 si03_dataassinacontrato = date = Data Ass Contrato 
-                 si03_tipoapostila = int8 = TIpo de Apostila 
-                 si03_dataapostila = date = Data da Apostila 
+                 si03_sequencial = int8 = Codigo Sequencial
+                 si03_licitacao = int8 = Numero da licitacao
+                 si03_numcontrato = int8 = N Contrato
+                 si03_dataassinacontrato = date = Data Ass Contrato
+                 si03_tipoapostila = int8 = TIpo de Apostila
+                 si03_dataapostila = date = Data da Apostila
                  si03_descrapostila = text = Descricao das alteracoes
                  si03_justificativa = text = Justificativa do apostilamento
-                 si03_tipoalteracaoapostila = int8 = Tipo de Alteracao Apostila 
-                 si03_numapostilamento = int8 = Numero  Seq. Apostila 
-                 si03_valorapostila = float8 = Valor da Aposlila 
-                 si03_instit = int8 = Instituio 
+                 si03_tipoalteracaoapostila = int8 = Tipo de Alteracao Apostila
+                 si03_numapostilamento = int8 = Numero  Seq. Apostila
+                 si03_valorapostila = float8 = Valor da Aposlila
+                 si03_instit = int8 = Instituio
                  si03_numcontratoanosanteriores = int8 = Numero Contrato de Anos Anteriores
-                 si03_acordoposicao = int8 = Acordo Posicao 
-                 si03_acordo = int8 = Acordo 
-                 si03_datareferencia = date = Data de Referencia 
-                 si03_indicereajuste = int8 = Indice de Reajuste 
-                 si03_percentualreajuste = varchar = Percentual Reajuste 
-                 si03_descricaoindice = varchar = Percentual Reajuste 
+                 si03_acordoposicao = int8 = Acordo Posicao
+                 si03_acordo = int8 = Acordo
+                 si03_datareferencia = date = Data de Referencia
+                 si03_indicereajuste = int8 = Indice de Reajuste
+                 si03_percentualreajuste = varchar = Percentual Reajuste
+                 si03_descricaoindice = varchar = Percentual Reajuste
 
                  ";
   //funcao construtor da classe
@@ -269,10 +269,10 @@ class cl_apostilamento
                                       ,si03_acordoposicao
                                       ,si03_acordo
                                       ,si03_datareferencia
-                                      ,si03_justificativa 
-                                      ,si03_indicereajuste 
-                                      ,si03_percentualreajuste 
-                                      ,si03_descricaoindice 
+                                      ,si03_justificativa
+                                      ,si03_indicereajuste
+                                      ,si03_percentualreajuste
+                                      ,si03_descricaoindice
 
                        )
                 values (
@@ -290,11 +290,11 @@ class cl_apostilamento
                                ," . ($this->si03_numcontratoanosanteriores == null ? '0' : $this->si03_numcontratoanosanteriores) . "
                                ," . ($this->si03_acordoposicao == null || $this->si03_acordoposicao == "" ? "null" : $this->si03_acordoposicao) . "
                                ," . ($this->si03_acordo == null || $this->si03_acordo == "" ? "null" : $this->si03_acordo) . "
-                               ,'$this->si03_datareferencia' 
-                               ,'$this->si03_justificativa' 
-                               ,$this->si03_indicereajuste 
-                               ,'$this->si03_percentualreajuste' 
-                               ," . ($this->si03_descricaoindice == "null" || $this->si03_descricaoindice == "" ? "null" : "'" . $this->si03_descricaoindice . "'") . " 
+                               ,'$this->si03_datareferencia'
+                               ,'$this->si03_justificativa'
+                               ,$this->si03_indicereajuste
+                               ,'$this->si03_percentualreajuste'
+                               ," . ($this->si03_descricaoindice == "null" || $this->si03_descricaoindice == "" ? "null" : "'" . $this->si03_descricaoindice . "'") . "
 
                       )";
 
@@ -380,6 +380,33 @@ class cl_apostilamento
         $this->erro_status = "0";
         return false;
       }
+    }
+
+    if (trim($this->si03_percentualreajuste) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si03_dataapostila_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si03_dataapostila_dia"] != "")) {
+        $sql  .= $virgula . " si03_percentualreajuste = '$this->si03_percentualreajuste' ";
+        $virgula = ",";
+        if (trim($this->si03_percentualreajuste) == null) {
+          $this->erro_sql = " Campo Percentual de Reajuste nao Informado.";
+          $this->erro_campo = "si03_dataapostila_dia";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+          $this->erro_status = "0";
+          return false;
+        }
+    }
+      if (trim($this->si03_indicereajuste) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si03_indicereajuste"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si03_indicereajuste"] != "")) {
+        $sql  .= $virgula . " si03_indicereajuste = $this->si03_indicereajuste ";
+        $virgula = ",";
+        if (trim($this->si03_indicereajuste) == null) {
+          $this->erro_sql = " Campo  Indice Reajuste: nao Informado.";
+          $this->erro_campo = "si03_indicereajuste";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+          $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+          $this->erro_status = "0";
+          return false;
+        }
     }
     if (trim($this->si03_dataassinacontrato) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si03_dataassinacontrato_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si03_dataassinacontrato_dia"] != "")) {
       $sql  .= $virgula . " si03_dataassinacontrato = '$this->si03_dataassinacontrato' ";
@@ -612,6 +639,8 @@ class cl_apostilamento
           $resac = db_query("insert into db_acount values($acount,2010197,2011686,'" . AddSlashes(pg_result($resaco, $conresaco, 'si03_instit')) . "','$this->si03_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       }
     }
+    // var_dump($sql);
+    // die();
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
