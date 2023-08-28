@@ -1,6 +1,32 @@
 <?php
 global $resparag, $resparagpadrao, $db61_texto, $db02_texto;
 
+function definicaoValorUnitarioePercentual($pc80_criterioadjudicacao,$si02_tabela,$si02_taxa,&$valorUnitario,&$percentual){
+
+    if($pc80_criterioadjudicacao == 1 && $si02_tabela == "t"){
+        $valorUnitario = 0;
+        $valorUnitario = $valorUnitario > 0 ? "R$ $valorUnitario" : "-";
+        return true;
+    }
+
+    if($pc80_criterioadjudicacao == 1 && $si02_tabela == "f"){
+        $percentual->mediapercentual = "-";
+        return true;
+    }
+
+    if($pc80_criterioadjudicacao == 2 && $si02_taxa == "t"){
+        $valorUnitario = 0;
+        $valorUnitario = $valorUnitario > 0 ? "R$ $valorUnitario" : "-";
+        return true;
+    }
+    
+    if($pc80_criterioadjudicacao == 2 && $si02_taxa == "f"){
+        $percentual = "-";
+        return true;
+
+    }
+}
+
 $dist = 4;
 
 $this->objpdf->SetAutoPageBreak(false);
@@ -517,13 +543,10 @@ if (pg_num_rows($this->rsLotes) > 0) {
                         $this->objpdf->setx(194);
                         $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
                         $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
-                        $oDadosDaLinha->valorUnitario = $this->pc80_criterioadjudicacao == 1 ? 0 : $oDadosDaLinha->valorUnitario;
 
-                        if ($oDadosDaLinha->valorUnitario > 0) {
-                            $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
-                        } else {
-                            $this->objpdf->cell(20, $alt + $addalt, " - ", 1, 0, "C", 1);
-                        }
+                        definicaoValorUnitarioePercentual($this->pc80_criterioadjudicacao,$oResult->si02_tabela,$oResult->si02_taxa,$oDadosDaLinha->valorUnitario,$oDadosDaLinha->mediapercentual);
+
+                        $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
                         $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual, 1, 0, "C", 1);
                         $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->total, 1, 1, "C", 1);
                     } else {
@@ -754,16 +777,14 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
                     $this->objpdf->multicell(160, $alt, mb_strtoupper(str_replace("\n", "", $oDadosDaLinha->descricao)), "T", "J", 0);
 
-                    $this->objpdf->sety($old_y);
+                    $this->objpdf->sety($old_y);  
                     $this->objpdf->setx(194);
                     $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
                     $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
-                    $oDadosDaLinha->valorUnitario = $this->pc80_criterioadjudicacao == 1 ? 0 : $oDadosDaLinha->valorUnitario;
-                    if ($oDadosDaLinha->valorUnitario > 0) {
-                        $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
-                    } else {
-                        $this->objpdf->cell(20, $alt + $addalt, " - ", 1, 0, "C", 1);
-                    }
+
+                    definicaoValorUnitarioePercentual($this->pc80_criterioadjudicacao,$oResult->si02_tabela,$oResult->si02_taxa,$oDadosDaLinha->valorUnitario,$oDadosDaLinha->mediapercentual);
+                     
+                    $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
                     $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual, 1, 0, "C", 1);
                     $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->total, 1, 1, "C", 1);
                 } else {

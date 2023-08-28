@@ -342,8 +342,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                     $oDadosDaLinha->descricao = $oResult2->pc01_descrmater;
                 }
                 if ($oResult->si02_tabela == "t" || $oResult->si02_taxa == "t") {
-                    $oDadosDaLinha->valorUnitario = $pc80_criterioadjudicacao == 1 ? "-" : number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
-                    //$oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+                    $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
                     if($controle == 0 && $fazerloop==2){
                         $oDadosDaLinha->quantidade = $oResult->si02_qtditem - $valorqtd;
                     }else if($controle == 1 && $fazerloop==2){
@@ -381,6 +380,21 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
             
                 $controle++;
                 $sqencia++;
+
+                if($pc80_criterioadjudicacao == 1 && $oResult->si02_tabela == "t"){
+                    $oDadosDaLinha->valorUnitario = 0;
+                }
+                if($pc80_criterioadjudicacao == 1 && $oResult->si02_tabela == "f"){
+                    $oDadosDaLinha->mediapercentual = "-";
+                }
+                if($pc80_criterioadjudicacao == 2 && $oResult->si02_taxa == "t"){
+                    $oDadosDaLinha->valorUnitario = 0;
+                }
+                if($pc80_criterioadjudicacao == 2 && $oResult->si02_taxa == "f"){
+                    $oDadosDaLinha->mediapercentual = "-";
+                }
+
+                $oDadosDaLinha->valorUnitario = $oDadosDaLinha->valorUnitario > 0 ? "R$ $oDadosDaLinha->valorUnitario" : "-";
 
                 if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
                     echo <<<HTML
@@ -650,7 +664,7 @@ HTML;
                     }
                     //$oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
                     if ($oResult->si02_tabela == "t" || $oResult->si02_taxa == "t") {
-                        $oDadosDaLinha->valorUnitario = $pc80_criterioadjudicacao == 1 ? "-" : number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+                        $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
                         $oDadosDaLinha->quantidade = $oResult->pc11_quant;
                         if ($oResult->mediapercentual == 0) {
                             $oDadosDaLinha->mediapercentual = "";
@@ -670,6 +684,21 @@ HTML;
                         $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
                         $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                     }
+                    
+                    if($pc80_criterioadjudicacao == 1 && $oResult->si02_tabela == "t"){
+                        $oDadosDaLinha->valorUnitario = 0;
+                    }
+                    if($pc80_criterioadjudicacao == 1 && $oResult->si02_tabela == "f"){
+                        $oDadosDaLinha->mediapercentual = "-";
+                    }
+                    if($pc80_criterioadjudicacao == 2 && $oResult->si02_taxa == "t"){
+                        $oDadosDaLinha->valorUnitario = 0;
+                    }
+                    if($pc80_criterioadjudicacao == 2 && $oResult->si02_taxa == "f"){
+                        $oDadosDaLinha->mediapercentual = "-";
+                    }
+                    
+                    $oDadosDaLinha->valorUnitario = $oDadosDaLinha->valorUnitario > 0 ? "R$ $oDadosDaLinha->valorUnitario" : "-";
 
                     if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
                         echo <<<HTML
