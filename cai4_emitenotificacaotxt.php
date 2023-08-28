@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Notidebitos;
 use App\Repositories\Tributario\Arrecadacao\ArDigital\DTO\ArDigitalServicePayloadDTO;
 use App\Services\Tributario\Notificacoes\GenerateArDigitalService;
 use App\Services\Tributario\Notificacoes\ResolveCheckerDigit;
@@ -1011,6 +1012,7 @@ for($indx=0;$indx < $numrows; $indx++) {
     $numpre   = $numpre . db_CalculaDV($numpre,11);
     $especie  = "R$";
     $tottotal = 0;
+    $descranos = "";
 
     if ( $oParam->k102_tipoemissao == 2 ) {
       $sInnerArrecad = " inner join arrecad  on arrecad.k00_numpre = notidebitos.k53_numpre
@@ -1019,62 +1021,34 @@ for($indx=0;$indx < $numrows; $indx++) {
       $sInnerArrecad = "";
     }
 
+        if ($somenteparc == false and $somenteiptu == false) {
 
-    if ($somenteparc == false and $somenteiptu == false) {
+            $dataAtual = new DateTime(date($db_datausu));
+            $dataAtual = new DateTime(date($k60_datadeb));
+            $tributos = Notidebitos::getSomaTributosCorrigidosPorAnoDescricao($notifica, $dataAtual, $dataAtual, $dataAtual, db_getsession("DB_anousu"));
 
-     $sqlanos = "	select case
-                             when k22_exerc is null then extract (year from k22_dtoper)
-                             else k22_exerc
-                           end as k22_ano,
-          				       k22_numpar,arretipo.k00_descr
-          			   from notidebitos
-          				      inner join debitos on k22_numpre = k53_numpre
-          				   		                	and k22_numpar = k53_numpar
-          				   					            and k22_data   = '$k60_datadeb'
-          				      inner join arretipo on k00_tipo   = k22_tipo
-          				      {$sInnerArrecad}
-          			  where k53_notifica = $notifica
-         		      group by case when k22_exerc is null then extract (year from k22_dtoper) else k22_exerc end,
-          				      k22_numpar,arretipo.k00_descr
-          		    order by case when k22_exerc is null then extract (year from k22_dtoper) else k22_exerc end ";
+            if (empty($tributos)) {
 
-          $resultanos = db_query($sqlanos) or die($sqlanos);
-          if ($resultanos == false) {
-
-            $oParms = new stdClass();
-            $oParms->sqlAnos = $sqlanos;
-            $sMsg = _M('tributario.notificacoes.cai4_emitenotificacaotxt.problemas_gerar_totais_ano', $oParms);
-            db_redireciona("db_erros.php?fechar=true&db_erro={$sMsg}");
-            exit;
-          }
-
-
-          $descranos = "";
-          $descricao = "";
-          $relanos 	 = 0;
-          $hifen     = "";
-
-          for ($totano = 0; $totano < pg_numrows($resultanos); $totano++) {
-
-            db_fieldsmemory($resultanos,$totano);
-
-           if ($descricao != $k00_descr) {
-              $descranos .= ($descranos == ""?"":" / ") . $k00_descr . '-';
-              $descricao = $k00_descr;
+                $oParms = new stdClass();
+                $oParms->sqlAnos = $sqlanos;
+                $sMsg = _M('tributario.notificacoes.cai4_emitenotificacaotxt.problemas_gerar_totais_ano', $oParms);
+                db_redireciona("db_erros.php?fechar=true&db_erro={$sMsg}");
+                exit;
             }
 
-            if ($relanos != $k22_ano) {
-              $descranos .= ' '.$k22_ano.'- ';
-              $relanos = $k22_ano;
-              $hifen = "";
+            $descrAnosAgrupados = [];
+            foreach ($tributos as $tributo) {
+                $dadosTributos = str_pad($tributo->tributo, 30, ' ');
+                $dadosTributos .= $tributo->k22_ano;
+                $dadosTributos .= str_pad($tributo->k22_vlrhis, 12, ' ');
+                $dadosTributos .= str_pad($tributo->k22_vlrcor, 12, ' ');
+                $dadosTributos .= str_pad($tributo->k22_juros, 12, ' ');
+                $dadosTributos .= str_pad($tributo->k22_multa, 12, ' ');
+                $dadosTributos .= str_pad($tributo->k22_desconto, 12, ' ');
+                $dadosTributos .= str_pad($tributo->k22_total, 12, ' ');
+                $descrAnosAgrupados[] = $dadosTributos;
             }
-
-            $descranos .= $hifen.$k22_numpar;
-            $hifen = ",";
-
-
-
-          }
+            $cldb_layouttxt->setCampo("total_por_ano", implode('|', $descrAnosAgrupados));
 
         } elseif ($somenteparc == false and $somenteiptu == true) {
 
@@ -1316,7 +1290,6 @@ for($indx=0;$indx < $numrows; $indx++) {
     $cldb_layouttxt->geraDadosLinha();
 
   }
-
 
   if ( $oParam->k102_tipoemissao == 3 && !empty($aListaNotifica) ) {
 
