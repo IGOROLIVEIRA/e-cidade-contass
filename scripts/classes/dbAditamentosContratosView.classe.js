@@ -1060,7 +1060,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.aditar = function () {
-
+      console.log("Inicio Aditar");
         var oSelecionados = {};
         var iSelecionados = [];
         /**
@@ -1182,7 +1182,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             lAditar = false;
             return alert("Data final da vigência do aditivo deve ser maior que a data iní­cio!");
         }
-
+        console.log("MEio aditar linha 1185");
         if(iTipoAditamento == 7){
             oParam.tipoalteracaoaditivo = me.oCboTipoAditivo.getValue();
             if(oParam.tipoalteracaoaditivo == 0){
@@ -1377,7 +1377,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
                 oItemAdicionar.dotacoes = oItem.dotacoesoriginal;
             }
-
+            console.log(" linha 1380 ");
             /**
              * Adiciona os perodos dos itens novos
              */
@@ -1406,9 +1406,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
 
             if (lErro) {
+              console.log("Entrou erro");
                 if (oRetorno.datareferencia) {
                     document.getElementById("trdatareferencia").style.display = 'contents';
                 }
+                console.log(oRetorno.message.urlDecode());
                 return alert(oRetorno.message.urlDecode());
             }
             document.getElementById("trdatareferencia").style.display = 'none';
@@ -1421,10 +1423,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             }
 
             me.pesquisarDadosAcordo()
-
+            $('oCboTipoAditivo').value = 0;
          }).setMessage("Aguarde, aditando contrato.")
             .execute();
-            $('oCboTipoAditivo').value = 0;
+
         }
 
     this.validaItensNaoAditados = (oSelecionado) => {
