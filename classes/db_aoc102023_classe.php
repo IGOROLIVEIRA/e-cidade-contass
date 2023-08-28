@@ -539,7 +539,7 @@ class cl_aoc102023
      * @param $instituicao
      * @return string
      */
-    public function sqlReg10($dados):
+    public function sqlReg10($dados)
     {
         /**
          * Seleciona as informacoes pertinentes ao AOC.
