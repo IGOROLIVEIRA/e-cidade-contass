@@ -75,7 +75,7 @@ if (isset($oPost->cancelarliberacao)) {
 
   if( pg_num_rows($rsItbiNumpre) > 0) {
     $lSqlErro = true;
-    $sMsgErro = 'Jï¿½ existe recibo gerado para esta ITBI.';
+    $sMsgErro = 'Já existe recibo gerado para esta ITBI.';
   }
 
 
@@ -119,7 +119,7 @@ SQL;
 
         if (!empty($oDadosArrecad->k00_numpre)) {
 
-          $msgCancelDebtItbi = "Cancelamento de dï¿½bito ITBI";
+          $msgCancelDebtItbi = "Cancelamento de d?bito ITBI";
 
           $clcancdebitos->k20_descr           = $msgCancelDebtItbi;
           $clcancdebitos->k20_hora            = db_hora();
@@ -208,7 +208,7 @@ SQL;
 
           if ($result == false) {
             $lSqlErro = true;
-            $sMsgErro .= "[4] - Erro ao cancelar dï¿½bito ITBI\n";
+            $sMsgErro .= "[4] - Erro ao cancelar débito ITBI\n";
           }
 
         }
@@ -241,7 +241,7 @@ SQL;
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
-<?
+<?php
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
 <form name="form1" method="post" action="">
@@ -255,21 +255,21 @@ SQL;
     <tr>
       <td>
         <fieldset>
-        <legend><b>Cancela Liberaï¿½ï¿½o</b></legend>
+        <legend><b>Cancela Liberação</b></legend>
           <table border="0">
               <tr>
                 <td title="<?=@$Tit01_guia?>">
-                  <?
+                    <?php
                     db_ancora(@$Lit01_guia,"js_pesquisait01_guia(true);",1);
                   ?>&nbsp;
                 </td>
                 <td>
-                  <?
+                    <?php
                     db_input('it01_guia',10,$Iit01_guia,true,'text',1," onchange='js_pesquisait01_guia(false);'");
                   ?>
                 </td>
                 <td>
-                  <?
+                    <?php
                     db_input('it03_nome',40,$Iit03_nome,true,'text',3,'');
                   ?>
                 </td>
@@ -283,7 +283,7 @@ SQL;
     </tr>
     <tr align="center">
       <td>
-        <input name="cancelarliberacao" id="cancelarliberacao" disabled="disabled" type="submit" onclick="return js_valida()" value="Cancelar Liberaï¿½ï¿½o">
+        <input name="cancelarliberacao" id="cancelarliberacao" disabled="disabled" type="submit" onclick="return js_valida()" value="Cancelar Liberação">
       </td>
     </tr>
   </table>
@@ -333,14 +333,14 @@ function js_valida() {
 
   if ( document.form1.it01_guia.value == '' || document.form1.it03_nome.value == '' ) {
 
-    alert('Por favor, selecione um cï¿½digo de ITBI Vï¿½lido');
+    alert('Por favor, selecione um código de ITBI Válido');
     return false;
   }
 
   return true;
 }
 </script>
-<?
+<?php
 if ( isset($oPost->cancelarliberacao) ) {
   db_msgbox($sMsgErro);
 }
