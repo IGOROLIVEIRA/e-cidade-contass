@@ -2622,7 +2622,7 @@ class cl_empempenho
         $sSql .= " JOIN conlancamdoc ON c70_codlan = c71_codlan";
         $sSql .= " JOIN conhistdoc ON c71_coddoc = c53_coddoc";
         $sSql .= " JOIN conlancamemp  ON c70_codlan = c75_codlan ";
-        $sSql .= " WHERE c75_numemp  = {$numEmpenho} AND c53_tipo = 20 AND c70_data < '$dataLiquidacao'),";
+        $sSql .= " WHERE c75_numemp  = {$numEmpenho} AND c53_tipo = 20 AND c70_data <= '$dataLiquidacao'),";
 
         $sSql .= " total_estornado AS ";
         $sSql .= " (SELECT CASE WHEN count(*) = 0 THEN 0 ELSE sum(c70_valor) END AS total_estornado ";
@@ -2630,7 +2630,7 @@ class cl_empempenho
         $sSql .= " JOIN conlancamdoc ON c70_codlan = c71_codlan";
         $sSql .= " JOIN conhistdoc ON c71_coddoc = c53_coddoc";
         $sSql .= " JOIN conlancamemp  ON c70_codlan = c75_codlan ";
-        $sSql .= " WHERE c75_numemp  = {$numEmpenho} AND c53_tipo = 21 AND c70_data < '$dataLiquidacao'),";
+        $sSql .= " WHERE c75_numemp  = {$numEmpenho} AND c53_tipo = 21 AND c70_data <= '$dataLiquidacao'),";
 
         $sSql .= " valor_empenho AS ";
         $sSql .= " (SELECT e60_vlremp AS valor_empenho FROM empempenho WHERE e60_numemp = {$numEmpenho})";
@@ -2641,29 +2641,41 @@ class cl_empempenho
         return $sSql;
     }
 
-    public function verificaSaldoEmpenhoPosterior($numEmpenho, $dataLiquidacao, $codOrd){
+    public function verificaSaldoEmpenhoPosterior($numEmpenho, $saldoData, $codOrd, $tipoDoc){
         $sSql = "";
-        $sSql .= " with lancamento as";
-        $sSql .= " (SELECT c70_codlan as cod_lan, c70_valor as valor_lan";
+        $sSql .= " WITH lancamento AS";
+        $sSql .= " (SELECT c70_codlan AS cod_lan, c70_valor AS valor_lan";
         $sSql .= " FROM conlancam";
-        $sSql .= " join conlancamord on c70_codlan = c80_codlan";
+        $sSql .= " JOIN conlancamord ON c70_codlan = c80_codlan";
         $sSql .= " JOIN conlancamdoc ON c71_codlan = c80_codlan";
         $sSql .= " JOIN conhistdoc ON c53_coddoc = c71_coddoc";
-        $sSql .= " WHERE c80_codord = {$codOrd} AND c53_tipo = 20), ";
+        $sSql .= " WHERE c80_codord = {$codOrd} AND c53_tipo = {$tipoDoc}), ";
 
-        $sSql .= " total_liquidado as";
-        $sSql .= " (select sum(c70_valor) as total_liquidado ";
-        $sSql .= " from lancamento, conlancam";
-        $sSql .= " join conlancamdoc on c70_codlan = c71_codlan";
-        $sSql .= " join conhistdoc on c71_coddoc = c53_coddoc";
-        $sSql .= " join conlancamemp  on c70_codlan = c75_codlan ";
-        $sSql .= " where c75_numemp = {$numEmpenho} and c53_tipo = 20 and c70_codlan not in (cod_lan) and c70_data >= '{$dataLiquidacao}'),";
+        $tipoLiqui = $tipoDoc == 20 ? "AND c70_codlan not in (cod_lan)), " : "),";
+        $sSql .= " total_liquidado AS";
+        $sSql .= " (SELECT CASE WHEN count(*) = 0 THEN 0 ELSE sum(c70_valor) END AS total_liquidado ";
+        $sSql .= " FROM lancamento, conlancam";
+        $sSql .= " JOIN conlancamdoc ON c70_codlan = c71_codlan";
+        $sSql .= " JOIN conhistdoc ON c71_coddoc = c53_coddoc";
+        $sSql .= " JOIN conlancamemp  ON c70_codlan = c75_codlan ";
+        $sSql .= " WHERE c75_numemp = {$numEmpenho} AND c53_tipo = 20";
+        $sSql .= " AND c70_data <= '{$saldoData}' ".$tipoLiqui;
+
+        $tipoAnul = $tipoDoc == 21 ? "AND c70_codlan not in (cod_lan)), " : "),";
+        $sSql .= " total_estornado AS ";
+        $sSql .= " (SELECT CASE WHEN count(*) = 0 THEN 0 ELSE sum(c70_valor) END AS total_estornado ";
+        $sSql .= " FROM lancamento, conlancam";
+        $sSql .= " JOIN conlancamdoc ON c70_codlan = c71_codlan";
+        $sSql .= " JOIN conhistdoc ON c71_coddoc = c53_coddoc";
+        $sSql .= " JOIN conlancamemp  ON c70_codlan = c75_codlan ";
+        $sSql .= " WHERE c75_numemp  = 52316 AND c53_tipo = 21";
+        $sSql .= " AND c70_data <= '{$saldoData}' ".$tipoAnul;
         
-        $sSql .= " valor_empenho as ";
-        $sSql .= " (select e60_vlremp as valor_empenho from empempenho where e60_numemp = {$numEmpenho})";
+        $sSql .= " valor_empenho AS ";
+        $sSql .= " (SELECT e60_vlremp AS valor_empenho FROM empempenho WHERE e60_numemp = {$numEmpenho})";
 
-        $sSql .= " select (valor_empenho - total_liquidado) - valor_lan as saldo_empenho ";
-        $sSql .= " from total_liquidado, valor_empenho, lancamento;";
+        $sSql .= " SELECT (valor_empenho - total_liquidado + total_estornado) - valor_lan AS saldo_empenho ";
+        $sSql .= " FROM total_liquidado, total_estornado, valor_empenho, lancamento;";
 
         return $sSql;
     }

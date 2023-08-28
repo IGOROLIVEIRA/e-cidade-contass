@@ -68,6 +68,8 @@ db_inicio_transacao();
 if (isset($alterar)) {
     $dataLiquidacao = str_replace('/', '-', $dataLiquidacao);
     $dataLiquidacao = date('Y-m-d', strtotime($dataLiquidacao));
+    $dataEstornoAtual = str_replace('/', '-', $dataEstornoAtual);
+    $dataEstornoAtual = date('Y-m-d', strtotime($dataEstornoAtual));
     if($dataEstorno !== ""){
         $dataEstorno = str_replace('/', '-', $dataEstorno);
         $dataEstorno = date('Y-m-d', strtotime($dataEstorno));
@@ -81,8 +83,8 @@ if (isset($alterar)) {
         $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
 
         if ($oFimPeriodoContabil->c99_data != '' 
-            && (db_strtotime($e50_data) < db_strtotime($oFimPeriodoContabil->c99_data) 
-            || db_strtotime($dataLiquidacao) < db_strtotime($oFimPeriodoContabil->c99_data))) {
+        && (db_strtotime($e50_data) <= db_strtotime($oFimPeriodoContabil->c99_data) 
+        || db_strtotime($dataLiquidacao) <= db_strtotime($oFimPeriodoContabil->c99_data))) {
 
             $erro_msg = "Alteração não realizada!\nData inferior à data do fim do período contábil.";
             $sqlerro = true;
@@ -97,7 +99,7 @@ if (isset($alterar)) {
         if(isset($ordemCompra)){
             if($ordemCompra->tipo === 'normal'){
                 if($dataLiquidacao < $ordemCompra->m51_data){
-                    $erro_msg = "Alteração não realizada!\nA data da OP não pode ser anterior a data da Ordem de Compra.";
+                    $erro_msg = "Alteração não realizada!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
                     $sqlerro = true;
                 }
             }
@@ -140,21 +142,31 @@ if (isset($alterar)) {
         }
     }
 
-        //Verifica se empenho não ficará negativo
-        if(!$sqlerro && strtotime($dataLiquidacao) < strtotime($e50_data)){
-            $sql = $clempempenho->verificaSaldoEmpenhoPosterior($e60_numemp, $dataLiquidacao, $e50_codord);
-            $result = pg_fetch_object(db_query($sql));
-            if ($result->saldo_empenho < 0){
-                $erro_msg = "Alteração não realizada!\nO empenho não pode ficar com saldo negativo.";
-                $sqlerro = true;
-            }
+    //Verifica se empenho não ficará negativo
+    if(!$sqlerro){
+        $sql = $clempempenho->verificaSaldoEmpenhoPosterior($e60_numemp, $dataLiquidacao, $e50_codord, 20);
+        $result = pg_fetch_object(db_query($sql));
+        if ($result->saldo_empenho < 0){
+            $erro_msg = "Alteração não realizada!\nO empenho não pode ficar com saldo negativo.";
+            $sqlerro = true;
         }
+    }
+
+    //Verifica se empenho não ficará negativo quando altera estorno
+    if(!$sqlerro && isset($dataEstorno) && $dataEstorno !== "" && strtotime($dataEstornoAtual) !== strtotime($dataEstorno)){
+        $sql = $clempempenho->verificaSaldoEmpenhoPosterior($e60_numemp, $dataEstorno, $e50_codord, 21);
+        $result = pg_fetch_object(db_query($sql));
+        if ($result->saldo_empenho < 0){
+            $erro_msg = "Alteração não realizada!\nO empenho não pode ficar com saldo negativo.";
+            $sqlerro = true;
+        }
+    }
 
     //Verifica se data da liquidação é posterior a data do estorno
     if(!$sqlerro){
         if(isset($dataEstorno) && $dataEstorno !== ""){
             if (strtotime($dataLiquidacao) > strtotime($dataEstorno)){
-                $erro_msg = "Alteração não realizada!\nVerifique as datas dos lançamentos contábeis.";
+                $erro_msg = "Alteração não realizada!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
                 $sqlerro = true;
             }
         }
@@ -176,9 +188,7 @@ if (isset($alterar)) {
     }
 
     //Altera data do estorno
-    if(!$sqlerro && isset($dataEstorno) && $dataEstorno !== ""){
-        $dataEstornoAtual = str_replace('/', '-', $dataEstornoAtual);
-        $dataEstornoAtual = date('Y-m-d', strtotime($dataEstornoAtual));
+    if(!$sqlerro && isset($dataEstorno) && $dataEstorno !== "" && strtotime($dataEstornoAtual) !== strtotime($dataEstorno)){
 
         if(strtotime($dataEstorno) <= db_getsession("DB_datausu")){
             db_inicio_transacao();
