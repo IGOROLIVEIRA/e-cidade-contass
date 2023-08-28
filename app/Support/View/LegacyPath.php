@@ -11,6 +11,7 @@ trait LegacyPath
     private function pathMap(): array
     {
         return [
+            'ac' => 'acordo',
             'aco' => 'acordo',
             'age' => 'agenda',
             'agu' => 'agua',
@@ -39,6 +40,7 @@ trait LegacyPath
             'fis' => 'fiscal',
             'ges' => 'gestor_bi',
             'hab' => 'habitacao',
+            'hip' => 'farmacia',
             'inf' => 'inflatores',
             'ipa' => 'ipasem',
             'iss' => 'issqn',
@@ -49,6 +51,7 @@ trait LegacyPath
             'lic' => 'licitacao',
             'rat' => 'licitacao',
             'mar' => 'marcas',
+            'm' => 'materiais',
             'mat' => 'materiais',
             'mer' => 'merenda',
             'not' => 'notificacoes',
@@ -99,14 +102,26 @@ trait LegacyPath
 
     private function getPrefix(string $fileName): string
     {
+        $hasNumeric = false;
+        $hasUnderscore = false;
         $prefix = '';
 
         for ($i = 0; $i < strlen($fileName); $i++){
             $caracter = $fileName[$i];
             if (is_numeric($caracter)) {
-               break;
+                $hasNumeric = true;
+                break;
             }
             $prefix .= $caracter;
+        }
+
+        if (!$hasNumeric && strpos($fileName, '_')) {
+            $hasUnderscore = true;
+            $prefix = explode("_", $fileName)[0];
+        }
+
+        if (!$hasNumeric && !$hasUnderscore) {
+            $prefix = explode($fileName, '.')[0];
         }
 
         return $prefix;
