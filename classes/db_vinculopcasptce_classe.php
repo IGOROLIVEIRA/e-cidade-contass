@@ -137,7 +137,7 @@ class cl_vinculopcasptce {
        }
      }
      $sql .= " where ";
-$sql .= "oid = '$oid'";     $result = db_query($sql);
+$sql .= "c209_pcaspestrut = '$oid[0]' and c209_tceestrut = '$oid[1]' ";    $result = db_query($sql);
      if($result==false){ 
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Vinculo PCASP TCE nao Alterado. Alteracao Abortada.\\n";

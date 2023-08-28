@@ -41,7 +41,6 @@ $cldb_pcforneconpad = new cl_pcforneconpad;
 $clempanuladoele    = new cl_empanuladoele;
 $atual              = 0;
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
-//db_postmemory($HTTP_SERVER_VARS,2);
 
 $where1 = '';
 if(isset($e94_codanu)) {
@@ -137,13 +136,11 @@ $sqlemp .= "       inner join orctiporec  	 on o58_codigo       = o15_codigo    
 $sqlemp .= "       inner join cgm 		     on z01_numcgm       = e60_numcgm                 ";
 $sqlemp .= "       left join empempaut	     on e60_numemp       = e61_numemp                 ";
 $sqlemp .= "	where  $dbwhere ";
-//die($sqlemp);
 $result = db_query($sqlemp);
 if($result==false || pg_numrows($result) == 0 ){
   db_redireciona('db_erros.php?fechar=true&db_erro=Anulação n'.chr(176).' '.$e94_codanu.' não encontrada. Verifique!');
 }
 db_fieldsmemory($result,0);
-
 /**
  *
  * Busca dados bancários
@@ -165,7 +162,6 @@ if (!$rsSqlPcFornecOnPad == false && $cldb_pcforneconpad->numrows > 0) {
 
 //rotina que pega o numero de vias
 $result02 = db_query("select * from empanulado $where1 ");
-//db_criatabela($result02);
 if($clempparametro->numrows>0){
   db_fieldsmemory($result02, 0);
 }
@@ -192,18 +188,33 @@ for($i = 0;$i < pg_numrows($result02);$i++){
       db_fieldsmemory($res_dot,0);
    }
 
-   $sqlitens  = "select distinct *                                                                           ";
-   $sqlitens .= "     from empanuladoele                                                                     ";
+   $sqlitens  = "select distinct empanuladoele.*,";
+   $sqlitens .= "                empanulado.*,";
+   $sqlitens .= "                empanuladoitem.*,";
+   $sqlitens .= "                empempitem.*,";
+   $sqlitens .= "                empempenho.*,";
+   $sqlitens .= "                m61_descr,";
+   $sqlitens .= "                db_usuarios.*,";
+   $sqlitens .= "                orcelemento.*,";
+   $sqlitens .= "                pcmater.*    ";                                                                       
+   $sqlitens .= "                from empanuladoele";
    $sqlitens .= "                inner join empanulado      on e94_codanu            = e95_codanu            ";
    $sqlitens .= "                inner join empanuladoitem  on e37_empanulado        = e94_codanu            ";
    $sqlitens .= "                inner join empempitem      on e62_sequencial        = e37_empempitem        ";
    $sqlitens .= "                                          and empempitem.e62_numemp = empanulado.e94_numemp ";
    $sqlitens .= "                inner join empempenho      on e60_numemp            = e62_numemp            ";
+   //OC19614
+   $sqlitens .= "                left join empempaut        on e60_numemp           = e61_numemp             ";
+   $sqlitens .= "                left join empautoriza      on e61_autori           = e54_autori             ";
+   $sqlitens .= "                left join empautitem       on e54_autori           = e55_autori             ";
+   $sqlitens .= "                                           and e62_item = e55_item                          ";  
+   $sqlitens .= "                left join matunid          on e55_unid             = m61_codmatunid         ";
+   //FIM - OC19614   
    /*OC4401*/
    $sqlitens .= "                LEFT JOIN db_usuarios ON db_usuarios.id_usuario = e94_id_usuario            ";
    /*FIM - OC4401*/
-   $sqlitens .= "       		 inner join orcelemento     on o56_codele            = e62_codele            ";
-   $sqlitens .= "       		      					   and o56_anousu            = e60_anousu            ";
+   $sqlitens .= "       		     inner join orcelemento     on o56_codele            = e62_codele            ";
+   $sqlitens .= "       		      					                and o56_anousu = e60_anousu                      ";
    $sqlitens .= "                inner join pcmater         on pc01_codmater         = e62_item              ";
    $sqlitens .= " 	where e95_codanu = $e94_codanu ";
    $resultitem = db_query($sqlitens);
@@ -236,9 +247,12 @@ for($i = 0;$i < pg_numrows($result02);$i++){
 
    $pdf1->recorddositens   = $resultitem;
    $pdf1->linhasdositens   = pg_numrows($resultitem);
-// $pdf1->quantitem        = "e62_quant";
+   $pdf1->sequencialitem   = "e62_sequen";
+   $pdf1->quantitem        = "e62_quant";
+   $pdf1->item             = "pc01_codmater";
+   $pdf1->unidadeitem      = "m61_descr";
    $pdf1->valoritem        = "e95_valor";
-// $pdf1->descricaoitem    = "pc01_descrmater";
+   $pdf1->descricaoitem    = "pc01_descrmater";
 
    $pdf1->orcado	       = $e60_vlrorc;
    $pdf1->saldo_ant        = $e94_saldoant;

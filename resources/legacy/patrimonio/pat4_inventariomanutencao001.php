@@ -496,7 +496,7 @@ function js_montaWindowGridItens (oAjax) {
       sContent += "<p align='center'><input type='button' value='Fechar' onclick='js_fecharWindow();' /></p>";
   oWindowAux.setContent(sContent);
 
-  var sHelpMsgBoardBens = _M('patrimonial.patrimonio.pat4_inventariomanutencao001.marque_registros');
+  var sHelpMsgBoardBens = _M('patrimonial.patrimonio.pat4_inventariomanutencao001.bens_inventario_help');
   var oMessageBoardBens = new DBMessageBoard('msg_boardBens',
 		  _M('patrimonial.patrimonio.pat4_inventariomanutencao001.marque_registros', {intervalo: $F('iInventario')}),
                                              sHelpMsgBoardBens,

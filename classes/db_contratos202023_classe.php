@@ -260,7 +260,7 @@ class cl_contratos202023 {
                                ,$this->si87_codaditivo
                                ,'$this->si87_codorgao'
                                ,'$this->si87_codunidadesub'
-                               ,$this->si87_nrocontrato
+                               ,'$this->si87_nrocontrato'
                                ,".($this->si87_dtassinaturacontoriginal == "null" || $this->si87_dtassinaturacontoriginal == ""?"null":"'".$this->si87_dtassinaturacontoriginal."'")."
                                ,'$this->si87_nroseqtermoaditivo'
                                ,".($this->si87_dtassinaturatermoaditivo == "null" || $this->si87_dtassinaturatermoaditivo == ""?"null":"'".$this->si87_dtassinaturatermoaditivo."'")."

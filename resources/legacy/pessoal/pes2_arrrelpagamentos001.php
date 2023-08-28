@@ -76,11 +76,11 @@ function js_emitecsv(){
          <td >&nbsp;</td>
       </tr>
       <tr >
-        <td align="right" nowrap title="Vinculo" ><strong>Totaliza por Lotacao :</strong>
+        <td align="right" nowrap title="Vinculo" ><strong>Totaliza por  :</strong>
         </td>
         <td align="left">
           <?
-          $v = array("s"=>"Sim", "n"=>"Nao");
+          $v = array("s"=>"Lotação", "n"=>"Banco", 'r' => 'Recurso');
           db_select('lotacao',$v,true,4,"");
           ?>
         </td>

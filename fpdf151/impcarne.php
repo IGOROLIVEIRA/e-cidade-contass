@@ -277,6 +277,7 @@ class db_impcarne extends cl_assinatura
      public $tipoprecoreferencia = 0;
      public $rsLotes = null;
      public $sqlitens = null;
+     public $quant_casas = 0;
 
 
     //////  VARIÁVEIS PARA EMISSAO DE ALVARÁ
@@ -519,6 +520,7 @@ class db_impcarne extends cl_assinatura
     public $Scodemp = null;         // descriï¿½ï¿½o da anulaï¿½ï¿½o
     public $resumo_item = null;         // resumo de item de SC em aut. de licitaï¿½ï¿½o
     public $informa_adic = null;         // informaï¿½ï¿½es adicionais de autorizaï¿½ï¿½o: PC - aut. de processo de compras
+    public $unid = null;
     //                                        AU - somente autorizaï¿½ï¿½o
     public $obs_ordcom_orcamval = null;      // Observacao de ordem de compra lanï¿½a valores
 

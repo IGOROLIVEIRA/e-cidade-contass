@@ -473,7 +473,7 @@ class RequisicaoMaterial {
            */
           if (USE_PCASP && $lPossuiIntegracao) {
 
-            $nValorAtendimentoItem = round($oMaterialEstoque->getPrecoMedio() * $oDaoMatEstoqueIniMei->m82_quant, 2);
+            $nValorAtendimentoItem = round($oMaterialEstoque->getUltimoPrecoMedio() * $oDaoMatEstoqueIniMei->m82_quant, 2);
 
             /**
              * Não efetuar lançamento contabil quando o valor do item for menor que 0.01 centavos

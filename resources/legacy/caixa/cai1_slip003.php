@@ -180,13 +180,49 @@ try {
 
     $dados = db_query($sql);
     $sEvento = "";
+    $oTipoSelect = "";
 
     if (pg_numrows($dados) > 0){
 
         $aMotivo = db_fieldsMemory($dados,0);
         $motivo  = $k18_motivo;
+        if ($k17_tiposelect){
+            if ($k17_tiposelect == '01'){
+                $oTipoSelect = "01 - Aplicação Financeira"; 
+            }
+            if ($k17_tiposelect == '02'){
+                $oTipoSelect = '02 - Resgate de Aplicação Financeira';
+            }
+            if ($k17_tiposelect == '03'){  
+                $oTipoSelect = '03 - Transferência entre contas bancárias';
+            }
+            if ($k17_tiposelect == '04'){ 
+                $oTipoSelect = '04 - Transferências de Valores Retidos';
+            }
+            if ($k17_tiposelect == '05'){  
+                $oTipoSelect = '05 - Depósito decendial educação';
+            }
+            if ($k17_tiposelect == '06'){  
+              $oTipoSelect = '06 - Depósito decendial saúde';
+            }
+            if ($k17_tiposelect == '07'){  
+                $oTipoSelect = '07 - Transferência da Contrapartida do Convênio';
+            }
+            if ($k17_tiposelect == '08'){
+                $oTipoSelect = '08 - Transferência entre contas de fontes diferentes'; 
+            }
+            if ($k17_tiposelect == '09'){
+                $oTipoSelect = '09 - Transferência da conta caixa para esta conta';
+            }
+            if ($k17_tiposelect == '10'){
+                $oTipoSelect = '10 - Saques';
+            }
+        }
         if (USE_PCASP) {
-            $sEvento = $k152_sequencial . " - " . $k152_descricao;
+            $sEvento = $oTipoSelect;
+            if (empty($k17_tiposelect)){
+                $sEvento = $k152_sequencial . " - " . $k152_descricao;
+            }
         }
     }
 

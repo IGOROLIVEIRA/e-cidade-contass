@@ -92,7 +92,7 @@ $db_opcao_inf=1;
             <td><?=db_ancora($Le60_coddot,"js_JanelaAutomatica('orcdotacao',\$F('e60_coddot'),'".@$e60_anousu."')",$db_opcao_inf)?></td>
             <td><? db_input('e60_coddot', 13, $Ie60_coddot, true, 'text', 3); ?></td>
             <td width="20"><?=db_ancora($Lo15_codigo,"",3)?></td>
-            <td><? db_input('o15_codigo', 5, $Io15_codigo, true, 'text', 3); db_input('o15_descr', 29, $Io15_descr, true, 'text', 3)?></td>
+            <td><? db_input('o15_codigo', 7, $Io15_codigo, true, 'text', 3); db_input('o15_descr', 29, $Io15_descr, true, 'text', 3)?></td>
           </tr>
           <tr>
             <td><?db_ancora("<b>Conta Pagadora:</b>","js_pesquisa_contapagadora(true);",1);?></td>
@@ -268,7 +268,7 @@ $db_opcao_inf=1;
 	          <input type='checkbox'  style='display:none' id='mtodos' onclick='js_marca()'>
            	<a onclick='js_marca()' style='cursor:pointer'>M</a></b></th>
             <th class='table_header'>OP</th>
-            <th class='table_header'>Seq. Nota</th>
+            <th class='table_header'>Ordem De Compra</th>
             <th class='table_header'>Nota Fiscal</th>
             <th class='table_header'>Data</th>
             <th class='table_header'>Valor</th>
@@ -515,13 +515,6 @@ function js_saida(oAjax){
     var iNumEmpOld = $F('e60_numemp');
     obj  = eval("("+oAjax.responseText+")");
 
-    // Condição de período
-    if (obj.bPermitidoLiquidacao == false) {
-        alert("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
-        $('confirmar').disabled = true;
-        return false;
-    }
-
     $('e60_codemp').value = obj.e60_codemp;
     $('e60_numemp').value = obj.e60_numemp;
     $('e60_numcgm').value = js_decodeUrl(obj.e60_numcgm);
@@ -643,10 +636,11 @@ function js_saida(oAjax){
           saida += " class='chkmarca' name='chk" + obj.data[i].e69_codnota + "'";
           saida += " id='chk" + obj.data[i].e69_codnota + "' value='" + obj.data[i].e69_codnota + "' "+sClassName+"></td>";
           saida += "<td class='linhagrid' style='text-align:center'>" + iCodOrd + "</td>";
+          
+          saida += "<td class='linhagrid' style='text-align:center' id='numero"+obj.data[i].e69_codnota+"' >" +obj.data[i].m72_codordem + "</td>";
           saida += "<td class='linhagrid' style='text-align:center'><b>"
           saida += "<a href='' onclick='js_consultaNota("+obj.data[i].e69_codnota+");return false'>";
-          saida += obj.data[i].e69_codnota + "</a></b></td>";
-          saida += "<td class='linhagrid' style='text-align:center' id='numero"+obj.data[i].e69_codnota+"' >" + numnota + "</td>";
+          saida += numnota + "</a></b></td>";
           saida += "<td class='linhagrid' style='text-align:center'>" + obj.data[i].e69_dtnota + "</td>";
           saida += "<td class='linhagrid' style='text-align:center'>" + obj.data[i].e70_valor + "</td>";
           saida += "<td class='linhagrid' style='text-align:right;width:10%'>" + obj.data[i].e70_vlranu + "</td>";
@@ -861,12 +855,6 @@ function js_saidaLiquidacao(oAjax){
     $('pesquisar').disabled = false;
     $('confirmar').disabled = false;
     obj      = eval("("+oAjax.responseText+")");
-
-    if (obj.bPermitidoLiquidacao == false) {
-        alert("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
-        $('confirmar').disabled = true;
-        return false;
-    }
 
     if (obj.lErro == true) {
       alert(obj.sMensagem.urlDecode()); return false;
@@ -1105,5 +1093,5 @@ $('multiplosvinculos').style.width =' 120px';
 
 
 
-$("o15_descr").style.width = "222px";
+$("o15_descr").style.width = "206px";
 </script>

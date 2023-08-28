@@ -74,6 +74,7 @@ $cldespesaexercicioanterior->rotulo->label();
                     <td>
                         <?
                         $c233_meses = array(
+                            0 => 'Selecione',
                             1 => 'JANEIRO',
                             'FEVEREIRO',
                             'MARÇO',

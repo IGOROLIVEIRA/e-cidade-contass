@@ -32,6 +32,8 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_liclicitemlote_classe.php");
 include("classes/db_liclicita_classe.php");
+require_once("classes/db_liclicitaportalcompras_classe.php");
+require_once("model/licitacao/PortalCompras/Provedor/LigadorClasses.model.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -39,6 +41,9 @@ db_postmemory($HTTP_POST_VARS);
 $clliclicitemlote = new cl_liclicitemlote;
 $clliclicita      = new cl_liclicita;
 $clliccomissaocgm     = new cl_liccomissaocgm;
+$cl_liclicitaportalcompras = new cl_liclicitaportalcompras;
+
+$listaModalidades = LigadorClasses::listaBindModalidades();
 
 if ($licitacao == "") {
     $licitacao = -1;
@@ -59,13 +64,21 @@ WHERE cflicita.l03_codigo = $oLicitacao->l20_codtipocom");
 $tribunal = db_utils::fieldsMemory($tribunal, 0);
 $tribunal = $tribunal->l44_sequencial;
 
+$acessoPcpResource = db_query("
+select lic.l12_acessoapipcp as acessopcp
+from licitacao.licitaparam as lic
+where l12_instit =".db_getsession("DB_instit")
+);
+
+$acessoPcp = (db_utils::fieldsMemory($acessoPcpResource, 0))->acessopcp;
 
 $ocultar_box_publicacoes = false;
 if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103) {
     $ocultar_box_publicacoes = true;
 }
 
-
+$resource = $cl_liclicitaportalcompras->buscaCodigoModalidade($licitacao);
+$codigoModalidade = (db_utils::fieldsMemory($resource, 0))->codigomodalidade;
 
 ?>
 <html>
@@ -283,6 +296,27 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
                 <input name="emite2" type="button" id="emite2" value="Imprimir" onclick="js_emite();">
 
             </form>
+            <?php
+
+            if ($acessoPcp == 't' &&
+                array_key_exists($codigoModalidade, $listaModalidades)):
+            ?>
+                <form name="form2">
+                    <fieldset style="width: 550;">
+                        <legend><strong>Enviar Publicações para Plataforma: </strong></legend>
+                        <table>
+                            <tr id="PortalCompras">
+                                <td nowrap title="enviarPortalCompras">
+                                    Portal de Compras:
+                                </td>
+                                <td>
+                                    <input name="enviarPortalCompras" type="button" id="enviarPortalCompras" value="Enviar" onclick="js_EnviarPortalDeCompras();">
+                                </td>
+                            </tr>
+                        </table>
+                    </fieldset>
+                </form>
+            <?php endif; ?>
         </div>
     </center>
 
@@ -323,7 +357,7 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
     function js_mostracgm(erro, chave) {
         document.getElementById(varNomeCampo).value = chave;
         if (erro == true) {
-            //  document.form1.l31_numcgm.focus(); 
+            //  document.form1.l31_numcgm.focus();
             document.getElementById(varNumCampo).value = "";
             document.getElementById(varNomeCampo).value = "";
             alert("Responsável não encontrado!");
@@ -478,6 +512,29 @@ if ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103
         } else {
             return false;
         }
+    }
+
+    function js_EnviarPortalDeCompras() {
+        var sUrl = 'lic1_enviointegracaocompraspublicas.RPC.php';
+        var oParam = new Object();
+        oParam.codigo = "<?= $licitacao?>";
+        oParam.exec = "EnviarPregao";
+
+        js_divCarregando('Aguarde...', 'msgbox');
+
+        var oAjax = new Ajax.Request(sUrl, {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_retornoportaldecompras
+        });
+
+    }
+
+    function js_retornoportaldecompras(oAjax) {
+        js_removeObj('msgbox');
+        var oRetorno = eval("(" + oAjax.responseText + ")");
+
+        alert(oRetorno.message);
     }
 
     document.getElementById('l20_linkedital').value = "<?php echo $oLicitacao->l20_linkedital ?>";

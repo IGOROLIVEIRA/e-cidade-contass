@@ -7,6 +7,7 @@ include("classes/db_rhvinculodotpatronais_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clrhvinculodotpatronais = new cl_rhvinculodotpatronais;
+$clinssirf = new cl_inssirf;
 $db_opcao       = 1;
 $db_opcao_orig  = 1;
 $db_botao       = true;
@@ -29,6 +30,7 @@ if (isset($incluir)) {
     $sWhere     .= " and rh171_subfuncaoorig = {$rh171_subfuncaoorig} ";
     $sWhere     .= " and rh171_anousu = {$iAnoUsu} ";
     $sWhere     .= " and rh171_instit = {$iInstit} ";
+    $sWhere     .= " and rh171_codtab = {$rh171_codtab} ";
     
     $rsVinculo  = $oDaoRhVinculoDotPatronais->sql_record($oDaoRhVinculoDotPatronais->sql_query_file(null, "*", null, $sWhere));
 

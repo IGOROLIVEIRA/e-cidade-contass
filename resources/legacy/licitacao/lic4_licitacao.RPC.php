@@ -515,7 +515,7 @@ switch ($oParam->exec) {
             $sCampos .= " m61_descr, pc01_codmater, pc01_descrmater, e54_autori,e55_quant,  {$sBuscaFornecedor}";
 
             $sOrdem   = " l21_ordem ";
-            $sWhere   = " l21_codliclicita = {$oParam->iCodigoLicitacao} ";
+            $sWhere   = " pc11_quant > 0 and l21_codliclicita = {$oParam->iCodigoLicitacao} ";
 
             /**
              * adicionado essa condição pois licitações do tipo 102 e 103 nao tem julgamento OC8339
@@ -803,7 +803,7 @@ switch ($oParam->exec) {
 
         $sSqlMarcados = $oDaoProcItem->sql_query_pcmater('null', 'DISTINCT pc81_codprocitem', '', $sWhere, true);
         $rsMarcados = db_query($sSqlMarcados);
-
+        //print_r($sSqlMarcados);
         for ($count = 0; $count < pg_numrows($rsSql); $count++) {
 
             $oItem = db_utils::fieldsMemory($rsSql, $count);
@@ -1063,7 +1063,7 @@ switch ($oParam->exec) {
                                     if ($oDaoSolicitemReservado->numrows_incluir) {
                                         //compila\E7\E3o
                                         $oItemAlterado = db_utils::getDao('solicitem');
-                                        $oItemAlterado->pc11_quant = $nova_qtd;
+                                        $oItemAlterado->pc11_quant = $nova_qtd > 0 ? $nova_qtd : '0';
                                         $oItemAlterado->pc11_codigo = $oItem->pc11_codigo;
                                         $oItemAlterado->alterar($oItem->pc11_codigo);
 
@@ -1544,7 +1544,10 @@ switch ($oParam->exec) {
                                     $seqlote++;
                                     $clliclicitemlote->l04_seq = $seqlote;
                                 }
-                                $oDaoLoteReservado->l04_numerolote = null;
+                                if($clliclicitemlote->l04_seq == 1){
+                                    $clliclicitemlote->l04_numerolote = null;
+                                }
+                                
                                 $clliclicitemlote->incluir(null);
 
                                 if ($clliclicitemlote->erro_status == 0) {

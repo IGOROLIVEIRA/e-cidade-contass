@@ -238,6 +238,7 @@ class cl_convconvenios {
        $this->erro_status = "0";
        return false;
      }
+     $this->c206_objetoconvenio = str_pad(preg_replace( "/\r|\n/", "", $this->c206_objetoconvenio),500," ");  
      $sql = "insert into convconvenios(
                                        c206_sequencial
                                       ,c206_instit
@@ -379,6 +380,7 @@ class cl_convconvenios {
        }
      }
      if(trim($this->c206_objetoconvenio)!="" || isset($GLOBALS["HTTP_POST_VARS"]["c206_objetoconvenio"])){
+       $this->c206_objetoconvenio = str_pad(preg_replace( "/\r|\n/", "", $this->c206_objetoconvenio),500," "); 
        $sql  .= $virgula." c206_objetoconvenio = '$this->c206_objetoconvenio' ";
        $virgula = ",";
        if(trim($this->c206_objetoconvenio) == null ){

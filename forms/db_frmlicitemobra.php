@@ -201,7 +201,7 @@ $cllicitemobra->rotulo->label();
                             </td>
 
                             <td class="linhagrid" style="width: 305px">
-                                <input type="text" name="" value="<?= $aItem->obr06_descricaotabela ?>" id="<?= 'obr06_descricaotabela_' . $iItem ?>">
+                                <input type="text" name="" value="<?= mb_convert_encoding($aItem->obr06_descricaotabela, "ISO-8859-1", "UTF-8") ?>" id="<?= 'obr06_descricaotabela_' . $iItem ?>">
                             </td>
 
                             <td class="linhagrid" style="width: 150px">

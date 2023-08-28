@@ -814,6 +814,7 @@ class cl_conplano {
     $sql .= "      inner join conclass  on  conclass.c51_codcla = conplano.c60_codcla";
     $sql .= "      inner join consistema  on  consistema.c52_codsis = conplano.c60_codsis";
     $sql .= "      inner join conplanoreduz  on  conplanoreduz.c61_codcon = conplano.c60_codcon and c61_anousu=c60_anousu ";
+    $sql .= "      left join conplanoconta on conplanoconta.c63_codcon = conplanoreduz.c61_codcon and conplanoconta.c63_anousu = conplanoreduz.c61_anousu	 ";
     $sql2 = "";
     if($dbwhere==""){
       if($c60_codcon!=null ){

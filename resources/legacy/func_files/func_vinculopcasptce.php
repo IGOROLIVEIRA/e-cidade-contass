@@ -35,7 +35,7 @@ $clvinculopcasptce = new cl_vinculopcasptce;
            $campos = "vinculopcasptce.oid,vinculopcasptce.*";
            }
         }
-	         $sql = $clvinculopcasptce->sql_query();
+	         $sql = $clvinculopcasptce->sql_query(null,$campos);
         $repassa = array();
         echo '<div class="container">';
         echo '  <fieldset>';

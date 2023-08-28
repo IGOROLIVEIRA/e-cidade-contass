@@ -125,20 +125,20 @@ $clrotulo->label("pc01_descrmater");
 
                 <table style="display: none" id="myTable" class="display nowrap">
                     <thead>
-                        <tr>
-                            <th data-orderable="false"></th>
-                            <th data-orderable="false">Código</th>
-                            <th data-orderable="false">Item</th>
-                            <th data-orderable="false">Descrição</th>
-                            <th data-orderable="false">Unidade</th>
-                            <th data-orderable="false">Marca</th>
-                            <th data-orderable="false">Serviço</th>
-                            <th data-orderable="false">Qtdd</th>
-                            <th data-orderable="false">Vlr. Unit.</th>
-                            <th data-orderable="false">Desc. %</th>
-                            <th data-orderable="false">Total</th>
-                            <th data-orderable="false" style="display:none;">Teste</th>
-                        </tr>
+                    <tr>
+                        <th data-orderable="false"></th>
+                        <th data-orderable="false">Código</th>
+                        <th data-orderable="false">Item</th>
+                        <th data-orderable="false">Descrição</th>
+                        <th data-orderable="false">Unidade</th>
+                        <th data-orderable="false">Marca</th>
+                        <th data-orderable="false">Controla Qtd.</th>
+                        <th data-orderable="false">Qtdd</th>
+                        <th data-orderable="false">Vlr. Unit.</th>
+                        <th data-orderable="false">Desc. %</th>
+                        <th data-orderable="false">Total</th>
+                        <th data-orderable="false" style="display:none;">Teste</th>
+                    </tr>
                     </thead>
                 </table>
             </div>
@@ -158,7 +158,8 @@ $clrotulo->label("pc01_descrmater");
         var table = $('#myTable').DataTable({
             bAutoWidth: false,
             bInfo: false,
-            searchable: false,
+            searching: false,
+            info: false,
             paging: false,
             processing: true,
             serverSide: true,
@@ -231,6 +232,7 @@ $clrotulo->label("pc01_descrmater");
             return false;
         }
 
+
         var oParam = new Object();
         oParam.action = "salvar";
         oParam.autori = $('#e55_autori').val();
@@ -242,7 +244,12 @@ $clrotulo->label("pc01_descrmater");
         $("#mytable tr").each(function() {
 
             if ($(this).find("input[type='checkbox']").is(":checked")) {
+                let servico = $(this).find("td").eq(6).find("select").val();
 
+                if(servico == 0){
+                    alert("Campo Controla Qtd. não informado.");
+                    return false;
+                }
                 oDados.id = $(this).find("td").eq(1).html();
                 oDados.descr = $(this).find("td").eq(3).find("input").val();
                 oDados.unidade = $(this).find("td").eq(4).find("select").val();
@@ -316,7 +323,7 @@ $clrotulo->label("pc01_descrmater");
             success: function(data) {
 
                 let response = JSON.parse(data);
-                alert(response.message);
+                alert(response.message.urlDecode());
                 //top.corpo.iframe_empautitem.location.reload();
                 top.corpo.iframe_empautoriza.location.reload();
                 //window.location.reload();
@@ -324,8 +331,6 @@ $clrotulo->label("pc01_descrmater");
             }
         });
     }
-
-    console.log($(this).find("input[type='checkbox']"));
 
     function js_mudaTabela(campo) {
         js_loadTable();
@@ -336,14 +341,20 @@ $clrotulo->label("pc01_descrmater");
         const item = origem.id.split('_');
         const id = item[1];
 
-        if ($('#servico_' + id).val() == 1) {
-            $('#qtd_' + id).val(1);
-            $('#qtd_' + id).attr('readonly', true);
-        } else {
-            $('#qtd_' + id).val(0);
+        if ($('#servico_' + id).val() == 't') {
+            //$('#qtd_' + id).val(0);
             $('#qtd_' + id).attr('readonly', false);
         }
 
+        if ($('#servico_' + id).val() == 'f') {
+            $('#qtd_' + id).val(1);
+            $('#qtd_' + id).attr('readonly', true);
+        }
+
+        if ($('#servico_' + id).val() == 0) {
+            $('#qtd_' + id).val();
+            $('#qtd_' + id).attr('readonly', true);
+        }
     }
 
     function js_desconto(obj) {
@@ -480,7 +491,7 @@ $clrotulo->label("pc01_descrmater");
                     elementos.elementos.forEach(function(oElementos, ele) {
                         let option = document.createElement('option');
                         option.value = oElementos.pc07_codele;
-                        option.text = oElementos.o56_descr;
+                        option.text = oElementos.o56_descr.urlDecode();
                         select.append(option);
                     })
                 } else {

@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
   require_once("libs/db_stdlib.php");
@@ -53,16 +53,14 @@
     $rsAvaliacaoEstruturaNota     = $oDaoAvaliacaoEstruturaNota->sql_record($sSqlAvaliacaoEstruturaNota);
 
     if ($oDaoAvaliacaoEstruturaNota->numrows > 0) {
+        $lErroInclusao = true;
+        $sParametros  = "ed315_db_estrutura={$ed315_db_estrutura}&db77_descr={$db77_descr}&ed315_ativo={$ed315_ativo}";
+        $sParametros .= "&ed315_arredondamedia={$ed315_arredondamedia}&ed315_observacao={$ed315_observacao}";
+        $sParametros .= "&ed316_sequencial={$ed316_sequencial}&ed316_descricao={$ed316_descricao}";
+        $sParametros .= "&ed315_escola={$ed315_escola}&ed315_ano={$ed315_ano}&lErroInclusao=true";
 
-      $lErroInclusao = true;
-      $sParametros  = "ed315_db_estrutura={$ed315_db_estrutura}&db77_descr={$db77_descr}&ed315_ativo={$ed315_ativo}";
-      $sParametros .= "&ed315_arredondamedia={$ed315_arredondamedia}&ed315_observacao={$ed315_observacao}";
-      $sParametros .= "&ed316_sequencial={$ed316_sequencial}&ed316_descricao={$ed316_descricao}";
-      $sParametros .= "&ed315_escola={$ed315_escola}&ed315_ano={$ed315_ano}&lErroInclusao=true";
-
-      db_msgbox("Já existe uma estrutura de nota configurada para o ano informado.");
-      db_redireciona("edu1_avaliacaoestruturanota001.php");
-      break;
+        db_msgbox("Já existe uma estrutura de nota configurada para o ano informado.");
+        db_redireciona("edu1_avaliacaoestruturanota001.php");
     }
 
     db_inicio_transacao();

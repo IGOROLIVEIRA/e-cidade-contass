@@ -256,7 +256,6 @@ $dataini = $perini;
 $datafin = $perfin;
 
 if( $nivel_agrupar == 0 ){
-
   $result = db_receitasaldo(11,1,$opcao,true,$db_filtro,$anousu,$dataini,$datafin,false,' * ',true,$nivel_agrupar);
 
   //db_criatabela($result);exit;

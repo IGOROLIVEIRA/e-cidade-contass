@@ -85,6 +85,7 @@ function js_emite(tiporel) {
   url += '&quantidade='+document.form1.quantidade.value;
   url += '&tipo='+document.form1.tipo.value;
   url += '&modelo='+document.form1.modelo.value;
+  url += '&lServArDigital='+document.form1.lServArDigital.checked;
   url += '&k60_datavenc='+document.form1.dtvencimento.value;
 
   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_txt',url,'Pesquisa',true);
@@ -146,6 +147,13 @@ function js_emite(tiporel) {
 	      ?>
 	    </td>
 	  </tr>
+        <tr>
+            <td title="Serviço AR Digital">
+                Serviço AR Digital:
+            <td>
+                <?php db_input("lServArDigital", 1, null, true, "checkbox",1); ?>
+            </td>
+        </tr>
 	  <tr>
 	    <td>
 	      Quantidade de registros a processar:

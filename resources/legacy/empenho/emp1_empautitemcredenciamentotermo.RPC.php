@@ -46,7 +46,7 @@ switch ($_POST["action"]) {
                        pc01_descrmater,
                        m61_codmatunid,
                        m61_descr,
-                
+
                     (SELECT si02_vlprecoreferencia
                      FROM itemprecoreferencia
                      WHERE si02_itemproccompra = pcorcamitemproc.pc31_orcamitem) AS pc23_vlrun,
@@ -125,11 +125,13 @@ switch ($_POST["action"]) {
                     $qtd_disponivel = 1;
                     $vlr_total = $qtd_disponivel * $vlr_disponivel;
                 }
+                $pc01_descrmater = utf8_encode($oDados->pc01_descrmater);
+
                 $itemRows  = array();
                 $itemRows[] = "<input type='checkbox' id='checkbox_{$oDados->pc01_codmater}' name='checkbox_{$oDados->pc01_codmater}'>";
                 $itemRows[] = $oDados->pc11_seq;
                 $itemRows[] = $oDados->pc01_codmater;
-                $itemRows[] = utf8_encode($oDados->pc01_descrmater);
+                $itemRows[] = "<input type='text' title='{$pc01_descrmater}' value='{$pc01_descrmater}' readonly style='background-color: #DEB887; width: 300px' />";
                 $itemRows[] = $selectunid;
                 if($oDados->pc01_servico == "f"){
                     $vlr_disponivel = $oDados->pc23_vlrun * $qtd_disponivel;
@@ -152,6 +154,7 @@ switch ($_POST["action"]) {
                 }
 
                 $itemRows[] = "<input type='text' id='total_{$oDados->pc01_codmater}' value='{$vlr_total}' readonly style='background-color: #DEB887; width: 80px' />";
+                $itemRows[] = "<input style='display: none;' type='text' id='servicoquantidade_{$oDados->pc01_codmater}' value='{$oDados->pc11_servicoquantidade}' width: 80px' />";
                 $employeeData[] = $itemRows;
             }
 
@@ -260,7 +263,7 @@ switch ($_POST["action"]) {
                 $clempautitem->e55_quant  = $item['qtd'];
                 $clempautitem->e55_unid   = $item['unidade'];
                 $clempautitem->e55_marca  = $item['marca'];
-                $clempautitem->e55_servicoquantidade  = 'f';
+                $clempautitem->e55_servicoquantidade  = $item['servicoquantidade'];
                 $clempautitem->e55_vlrun  = $item['vlrunit'];
                 $clempautitem->e55_vltot  = $item['total'];
                 $clempautitem->e55_sequen = $Seq + 1;
@@ -296,7 +299,7 @@ switch ($_POST["action"]) {
                 $clempautitem->e55_quant  = $item['qtd'];
                 $clempautitem->e55_unid   = $item['unidade'];
                 $clempautitem->e55_marca  = $item['marca'];
-                $clempautitem->e55_servicoquantidade = 'f';
+                $clempautitem->e55_servicoquantidade = $item['servicoquantidade'];
                 $clempautitem->e55_vlrun  = $item['vlrunit'];
                 $clempautitem->e55_vltot  = $item['total'];
 

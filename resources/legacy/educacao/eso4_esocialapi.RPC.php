@@ -273,18 +273,25 @@ try {
                         Tipo::DESLIGAMENTO,
                         Tipo::CD_BENEF_IN,
                         Tipo::BENEFICIOS_ENTESPUBLICOS,
+                        Tipo::ALTERACAO_CONTRATO,
+                        Tipo::EXCLUSAO_EVENTOS,
+                        Tipo::REABERTURA_EVENTOS,
+                        Tipo::FECHAMENTO_EVENTOS,
                     )
                 )) {
+                    
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(
                         Tipo::getTipoFormulario($arquivo),
                         empty($oParam->matricula) ? null : $oParam->matricula,
                         empty($oParam->cgm) ? null : $oParam->cgm,
                         empty($oParam->tpevento) ? null : $oParam->tpevento
                     );
+                    
                     if (current($dadosDoPreenchimento) instanceof \ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento) {
                         $formatter = FormatterFactory::get($arquivo);
                         $dadosDoPreenchimento = $formatter->formatar($dadosDoPreenchimento);
                     }
+                    
                     foreach (array_chunk($dadosDoPreenchimento, 50) as $aTabela) {
                         $eventoFila = new Evento(
                             $arquivo,
@@ -297,7 +304,8 @@ try {
                             empty($oParam->dtalteracao) ? null : $oParam->dtalteracao,
                             $oParam->indapuracao,
                             $oParam->tppgto,
-                            $oParam->tpevento
+                            $oParam->tpevento,
+                            $oParam->transDCTFWeb
                         );
                         $eventoFila->adicionarFila();
                     }
@@ -322,7 +330,9 @@ try {
                             empty($oParam->dtalteracao) ? null : $oParam->dtalteracao,
                             $oParam->indapuracao,
                             $oParam->tppgto,
-                            $oParam->tpevento
+                            $oParam->tpevento,
+                            $oParam->transDCTFWeb,
+                            $oParam->evtpgtos
                         );
                         $eventoFila->adicionarFila();
                     }
@@ -366,6 +376,8 @@ try {
                         $oParam->indapuracao,
                         $oParam->tppgto,
                         $oParam->tpevento,
+                        $oParam->transDCTFWeb,
+                        $oParam->evtpgtos,
                         $evento
                     );
                     

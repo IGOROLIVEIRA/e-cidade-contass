@@ -76,7 +76,7 @@ $cliccategoriaprocesso = new cl_liccategoriaprocesso;
 $db_opcao = 1;
 $db_botao = true;
 
-$oParamNumManual = db_query("select * from licitaparam;");
+$oParamNumManual = db_query("select * from licitaparam where l12_instit = " . db_getsession("DB_instit"));
 $oParamNumManual = db_utils::fieldsmemory($oParamNumManual, 0);
 $l12_numeracaomanual = $oParamNumManual->l12_numeracaomanual;
 
@@ -670,7 +670,7 @@ if (isset($incluir)) {
 		db_msgbox($erro_msg);
 		echo "<script> document.form1." . $nomeCampo . ".focus();</script>";
 		echo "<script> document.form1." . $nomeCampo . ".style.backgroundColor='#99A9AE';</script>";
-		if($nomeCampo == "l20_mododisputa"){
+		if ($nomeCampo == "l20_mododisputa") {
 			echo "<script>document.getElementById('disputa').style.display = '';</script>";
 		}
 

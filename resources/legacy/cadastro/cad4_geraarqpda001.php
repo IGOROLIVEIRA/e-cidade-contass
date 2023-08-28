@@ -1,51 +1,25 @@
 <?
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2009  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
-
-require("fpdf151/scpdf.php");
-require("libs/db_conecta.php");
-include("libs/db_sessoes.php");
-include("libs/db_usuariosonline.php");
-include("libs/db_sql.php");
-include("dbforms/db_funcoes.php");
-include("classes/db_ruas_classe.php");
-include("classes/db_bairro_classe.php");
-include("classes/db_cgm_classe.php");
-include("classes/db_ativid_classe.php");
-include("classes/db_caracter_classe.php");
-include("classes/db_cadtipo_classe.php");
-include("classes/db_iptucale_classe.php");
-include("classes/db_iptucalc_classe.php");
-include("classes/db_iptucalv_classe.php");
-include("classes/db_lote_classe.php");
-include("classes/db_face_classe.php");
-include("classes/db_carlote_classe.php");
-include("classes/db_carface_classe.php");
-include("classes/db_carconstr_classe.php");
-include("classes/db_isscalc_classe.php");
+require ("fpdf151/scpdf.php");
+require ("libs/db_conecta.php");
+include ("libs/db_sessoes.php");
+include ("libs/db_usuariosonline.php");
+include ("libs/db_sql.php");
+include ("dbforms/db_funcoes.php");
+include ("classes/db_ruas_classe.php");
+include ("classes/db_bairro_classe.php");
+include ("classes/db_cgm_classe.php");
+include ("classes/db_ativid_classe.php");
+include ("classes/db_caracter_classe.php");
+include ("classes/db_cadtipo_classe.php");
+include ("classes/db_iptucale_classe.php");
+include ("classes/db_iptucalc_classe.php");
+include ("classes/db_iptucalv_classe.php");
+include ("classes/db_lote_classe.php");
+include ("classes/db_face_classe.php");
+include ("classes/db_carlote_classe.php");
+include ("classes/db_carface_classe.php");
+include ("classes/db_carconstr_classe.php");
+include ("classes/db_isscalc_classe.php");
 
 
 $clrotulo = new rotulocampo;
@@ -54,7 +28,6 @@ $clrotulo->label("j34_quadra");
 $clrotulo->label("j34_setor");
 
 db_postmemory($HTTP_POST_VARS);
-//db_postmemory($HTTP_POST_VARS,2);
 
 $clruas = new cl_ruas;
 $clbairro = new cl_bairro;
@@ -84,7 +57,7 @@ $clisscalc = new cl_isscalc;
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#CCCCCC" >
 <table width="790" border="0" cellpadding="0" cellspacing="0">
-  <tr>
+  <tr> 
     <td width="360" height="18">&nbsp;</td>
     <td width="263">&nbsp;</td>
     <td width="25">&nbsp;</td>
@@ -96,7 +69,7 @@ db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsessio
 ?>
 <?
 if (isset ($gerar)) {
-	$descricao_erro = "";
+	$descricao_erro = ""; 
 	$erro = false;
 	$anousu = db_getsession("DB_anousu");
 
@@ -104,8 +77,8 @@ if (isset ($gerar)) {
                             z01_nome,
                             z01_ender,
                             j34_setor,
-			    j34_quadra,
-			    j34_lote,
+							j34_quadra,
+							j34_lote,
                             j34_zona,
                             j01_idbql,
                             j39_idcons,
@@ -127,7 +100,7 @@ if (isset ($gerar)) {
                           left join testadanumero on j01_idbql = j15_idbql
                           left join ruas as a on a.j14_codigo=j49_codigo
                           left join iptuconstr on j01_matric = j39_matric and j39_dtdemo is null
-			  left join ruas as b on b.j14_codigo = j39_codigo
+			  		 left join ruas as b on b.j14_codigo = j39_codigo
                      where j01_baixa is null
 				";
 		if($j34_setor!="")
@@ -136,9 +109,9 @@ if (isset ($gerar)) {
 		  $sql .= " and j34_quadra = '$j34_quadra' ";
 		if($j34_lote!="")
 		  $sql .= " and j34_lote = '$j34_lote'";
-
+		
 		$sql .=	"   order by j01_matric, j39_idcons   ";
-
+           
 	        $result = pg_exec($sql);
 
 			$numrows = pg_numrows($result);
@@ -147,7 +120,7 @@ if (isset ($gerar)) {
 				$descricao_erro .= "Não existe matricula cadastrada!";
 			}
 		}
-			$nomedoarquivo = "tmp/".$gerar."_matricula".$anousu."_".date("Y-m-d_His", db_getsession("DB_datausu")).".txt";
+			$nomedoarquivo = "tmp/Gerar_arquivo_matricula_".$anousu."_".date("Y-m-d_His", db_getsession("DB_datausu")).".txt";
 				$erro = false;
 				$descricao_erro = false;
 				set_time_limit(0);
@@ -219,26 +192,25 @@ if (isset ($gerar)) {
 								fputs($clabre_arquivo->arquivo, str_pad(@ $j49_face, 5));
 
 								fputs($clabre_arquivo->arquivo, "\n");
-								//---------------------------------------------------------------------------------------
+								//---------------------------------------------------------------------------------------														
 							//break;
 
 				}
 						$erro = false;
 						$descricao_erro = "Informações $info gerados com sucesso no diretorio /tmp do servidor.";
-
+	
 					fclose($clabre_arquivo->arquivo);
 
 				} else {
 					$erro = true;
 					$descricao_erro = "Erro ao Criar arquivo: $arquivo";
 				}
-
+		
 		if (@ $erro == true) {
 			echo "<script>alert('$descricao_erro');</script>";
-		}
+		}		
 function db_contador($apelido, $expressao, $contador, $valor) {
-	global $contador;
-	//  echo "x: $contador - valor: $valor<br>";
+	global $contador;	
 	$contadorant = $contador +1;
 	$contador += $valor;
 	return str_pad($apelido, 30)." - ".str_pad($expressao, 80)." - ".str_pad($valor, 4, "0", STR_PAD_LEFT)." - ".str_pad($contadorant, 4, "0", STR_PAD_LEFT)." - ".str_pad($contador, 4, "0", STR_PAD_LEFT)."\n";
@@ -249,9 +221,9 @@ function db_contador($apelido, $expressao, $contador, $valor) {
 <br>
 <br>
 <table align="center">
-   <tr title="<?=@$Tj34_setor?>">
+   <tr title="<?=@$Tj34_setor?>"> 
    <td nowrap>
-         <?= str_replace(":", "", $Lj34_setor) . "cad4_geraarqpda001.php/" .str_replace(":","",$Lj34_quadra)."/".$Lj34_lote?>
+         <?=str_replace(":","",$Lj34_setor)."/".str_replace(":","",$Lj34_quadra)."/".$Lj34_lote?>
    </td>
    <td nowrap>
    <?
@@ -267,21 +239,21 @@ function db_contador($apelido, $expressao, $contador, $valor) {
    ?>
    </td>
    </tr>
-
-  <tr>
+ 
+  <tr>   
     <td colspan=3 align="center"><br><br>
       <input type="submit" name="gerar" value="Gerar Arquivo">
-    </td>
+    </td>      
   </tr>
 
 <?
 if(isset($gerar)){
-  echo "<tr>
+  echo "<tr>   
     <td colspan=3 align=\"center\"><br><br>
-      <a href=\"$nomedoarquivo\">Clique com o Botão Direito do Mouse e Salve</a>
-    </td>
+      <a target='_blank' href=\"$nomedoarquivo\">Clique com o Botão Direito do Mouse e Salve</a>
+    </td>      
   </tr>";
-}
+} 
 ?>
 
 </table>

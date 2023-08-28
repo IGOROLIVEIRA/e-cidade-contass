@@ -409,7 +409,6 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                                                 var sUrl    = 'cai3_emiterecibo.php?json='+Object.toJSON(oRetorno);
 
                                                 if ((oRetorno.recibos_emitidos.length == 1 && oRetorno.aSessoesCarne.length == '0') && !lForcajanela) {
-
                                                   var lForcarVencimento = $('forcarvencimento').checked;
                                                   sUrl    = 'cai3_gerfinanc003.php';
                                                   sUrl   += debitos.location.search;
@@ -427,7 +426,7 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                                                   oJanela = window.open(sUrl,'reciboweb2','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
                                                   oJanela.moveTo(0,0);
                                                 } else if (((oRetorno.recibos_emitidos.length == 0 || oRetorno.aSessoesRecibo.length == 0) && oRetorno.aSessoesCarne.length == 0)) {
-
+                                                  //TO-DO: Para refactor: este else if está completamente vazio(??)
                                                 } else {
                                                   /**
                                                    * Cria Janela

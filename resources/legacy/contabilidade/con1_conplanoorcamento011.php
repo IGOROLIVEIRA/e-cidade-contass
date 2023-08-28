@@ -188,6 +188,7 @@ $clrotulo->label("c64_descr");
 					          <center>
 					            <input type="button" name="acao"   id="acao" onclick="js_acaoConta();" value="Salvar" />
 					            <input type="button" name="pesquisarConta" id="pesquisarConta" onclick="js_pesquisarConta();" value="Pesquisar" />
+                      <input type="button" name="btnNovo" id="btnNovo" onclick="js_novo();" value="Novo" <?=($db_opcao!=1?"disabled":"")?> />
 					          </center>
 					        </td>
 					      </tr>
@@ -590,5 +591,12 @@ function js_preencheDadosConta(oResponse) {
   $("c90_estrutcontabil").disabled = true;
   js_pesquisaContaPCASP(false);
 }
+
+function js_novo()
+    {
+        var lAbaReduzidos = false ;
+        js_liberaAbasPlano(null, lAbaReduzidos);
+        window.location.reload();
+    }
 
 </script>

@@ -104,6 +104,7 @@ switch (db_getsession("DB_modulo")) {
     <td align="center" valign="top">
       <?
       $sWhereTipoComissao = " and ac08_acordocomissaotipo = {$iCodigoComissaoTipo} ";
+      $sWhereInstit .= "and ac08_instit = " . db_getsession('DB_instit');
 
       $campos = " acordocomissao.ac08_sequencial,
                   acordocomissao.ac08_descricao,
@@ -127,11 +128,11 @@ switch (db_getsession("DB_modulo")) {
         }
 
         if(isset($chave_ac08_sequencial) && (trim($chave_ac08_sequencial)!="") ){
-	         $sql = $clacordocomissao->sql_query(null,$campos,"ac08_sequencial", null, "ac08_sequencial = {$chave_ac08_sequencial} {$sWhereTipoComissao}");
+	         $sql = $clacordocomissao->sql_query(null,$campos,"ac08_sequencial", null, "ac08_sequencial = {$chave_ac08_sequencial} $sWhereTipoComissao $sWhereInstit");
         }else if(isset($chave_ac08_descricao) && (trim($chave_ac08_descricao)!="") ){
-	         $sql = $clacordocomissao->sql_query(null,$campos,"ac08_descricao"," ac08_descricao like '$chave_ac08_descricao%' {$sWhereTipoComissao}");
+	         $sql = $clacordocomissao->sql_query(null,$campos,"ac08_descricao"," ac08_descricao like '$chave_ac08_descricao%' $sWhereTipoComissao $sWhereInstit");
         }else{
-           $sql = $clacordocomissao->sql_query(null,$campos,"ac08_sequencial", str_replace(" and ", "", $sWhereTipoComissao));
+           $sql = $clacordocomissao->sql_query(null,$campos,"ac08_sequencial", str_replace(" and ", "", $sWhereTipoComissao) . $sWhereInstit);
         }
         $repassa = array();
         if(isset($chave_ac08_descricao)){
@@ -143,7 +144,7 @@ switch (db_getsession("DB_modulo")) {
 
           $sWhereAcordoComissao = "ac08_sequencial = {$pesquisa_chave} {$sWhereTipoComissao}";
 
-          $result = $clacordocomissao->sql_record($clacordocomissao->sql_query(null, $campos, null, $sWhereAcordoComissao));
+          $result = $clacordocomissao->sql_record($clacordocomissao->sql_query(null, $campos, null, $sWhereAcordoComissao . $sWhereInstit));
           if($clacordocomissao->numrows!=0){
             db_fieldsmemory($result,0);
             echo "<script>".$funcao_js."('$ac08_descricao',false);</script>";

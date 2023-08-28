@@ -68,7 +68,7 @@ $clrotulo->label("descrdepto");
               <label class="bold" for="pc80_data" id="lbl_pc80_data"><?php echo $Spc80_data; ?>:</label>
             </td>
             <td>
-              <?php db_inputdata('pc80_data', date("d"), date("m"), date("Y"), true, 'text', 3); ?>
+              <?php db_inputdata('pc80_data', date("d"), date("m"), date("Y"), true, 'text', 1); ?>
             </td>
           </tr>
           <tr>
@@ -596,6 +596,11 @@ $clrotulo->label("descrdepto");
         return false;
       }
 
+      if (oCampos.data.value == '') {
+        alert("Campo data não informado.");
+        return false;
+      }
+
       if (oCampos.criterioajudicacao.value == '') {
         alert("Campo Critério de Adjudicação não informado.");
         return false;
@@ -638,6 +643,8 @@ $clrotulo->label("descrdepto");
           iProcessoCompra : iCodigoProcesso,
           sResumo : oCampos.resumo.value,
           criterioaj : oCampos.criterioajudicacao.value,
+          data: oCampos.data.value,
+          iSolicitacao: document.getElementById('oGridItensrow0cell0').innerText,
           aItens : aItensLote
       }
 

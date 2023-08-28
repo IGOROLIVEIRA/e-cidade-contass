@@ -116,7 +116,28 @@ $clrotulo->label("o74_descricao");
 </form>
 <script>
 var sUrlRC = 'com4_solicitacaoCompras.RPC.php';
-var lAlteracao = <?=isset($oGet->alterar)?"true":"false";?>;
+
+function js_init() {
+
+  var lAlteracao = <?=isset($oGet->alterar)?"true":"false";?>;
+  var aberturaPreco = document.getElementById("pc54_solicita").value;
+  
+  if (lAlteracao) {
+    $("btnConsultar").observe("click", js_pesquisar);
+    parent.iframe_itens.location.href = "com4_solicitaestimativaitens.php?alterar=true";
+    return true;
+  }
+
+  if (aberturaPreco == "") {
+    js_pesquisaaberturaprecos(true);
+    return true;
+  }
+
+  js_preenche(aberturaPreco);
+}
+
+js_init();
+
 function js_salvarEstimativa() {
 
   /**
@@ -235,8 +256,10 @@ function js_preenche(solicita) {
 
   $('btnSalvar').disabled  = true;
   $('pc54_solicita').value = solicita;
-  js_validarEstimativaDepto(solicita)
-  db_iframe_registropreco.hide();
+  js_validarEstimativaDepto(solicita);
+  if(typeof db_iframe_registropreco != 'undefined'){
+    db_iframe_registropreco.hide();
+  }
 }
 
 function js_validarEstimativaDepto(iSolicita) {
@@ -284,14 +307,5 @@ function js_imprimir() {
 }
 $('btnSalvar').observe("click", js_salvarEstimativa);
 $('btnImprimir').observe("click", js_imprimir);
-<?
-if ($lBtnShowBtnConsulta) {
 
-  echo "\$('btnConsultar').observe('click', js_pesquisar);\n";
-  echo "parent.iframe_itens.location.href='com4_solicitaestimativaitens.php'";
-
-} else {
-  echo "js_pesquisaaberturaprecos(true);\n";
-}
-?>
 </script>

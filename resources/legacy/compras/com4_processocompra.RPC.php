@@ -29,7 +29,8 @@
  * @author $Author: dbmauricio $
  * @version $Revision: 1.6 $
  */
-require_once("std/db_stdClass.php");
+
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_app.utils.php");
@@ -48,217 +49,218 @@ $oRetorno->sMessage     = '';
 
 try {
 
-  db_inicio_transacao();
+    db_inicio_transacao();
 
-  switch ($oParam->sExecutar) {
+    switch ($oParam->sExecutar) {
 
-    case "getDadosProcesso":
+        case "getDadosProcesso":
 
-      $iSequencialProcessoCompra = $oParam->iProcessoCompra;
+            $iSequencialProcessoCompra = $oParam->iProcessoCompra;
 
-      if (empty($iSequencialProcessoCompra)) {
-        throw new BusinessException(_M(MENSAGENS . "nao_informado_processo_compra"));
-      }
+            if (empty($iSequencialProcessoCompra)) {
+                throw new BusinessException(_M(MENSAGENS . "nao_informado_processo_compra"));
+            }
 
-      $oRetorno->lLicitacao = false;
-      $oRetorno->lOrcamento = false;
+            $oRetorno->lLicitacao = false;
+            $oRetorno->lOrcamento = false;
 
-      /**
-       * Verifica se o processo de compra possui algum item na licitação
-       */
-      $oDAOLiclicitem  = new cl_liclicitem();
-      $sQueryLicitacao = $oDAOLiclicitem->sql_query(null, "*", null, "pc80_codproc = {$iSequencialProcessoCompra} limit 1");
+            /**
+             * Verifica se o processo de compra possui algum item na licitação
+             */
+            $oDAOLiclicitem  = new cl_liclicitem();
+            $sQueryLicitacao = $oDAOLiclicitem->sql_query(null, "*", null, "pc80_codproc = {$iSequencialProcessoCompra} limit 1");
 
-      $oDAOLiclicitem->sql_record($sQueryLicitacao);
-      if ($oDAOLiclicitem->numrows > 0) {
-        $oRetorno->lLicitacao = true;
-      }
+            $oDAOLiclicitem->sql_record($sQueryLicitacao);
+            if ($oDAOLiclicitem->numrows > 0) {
+                $oRetorno->lLicitacao = true;
+            }
 
-      /**
-       * Verifica se o processo de compras possui algum item em um orçamento
-       */
-      $oDaoOrcamentoItem = new cl_pcorcamitemproc();
-      $sQueryOrcamento   = $oDaoOrcamentoItem->sql_query(null, null, "*", null, "pc80_codproc = {$iSequencialProcessoCompra} limit 1");
-      $teste = $oDaoOrcamentoItem->sql_record($sQueryOrcamento);
-      if ($oDaoOrcamentoItem->numrows > 0) {
-        $oRetorno->lOrcamento = true;
-      }
+            /**
+             * Verifica se o processo de compras possui algum item em um orçamento
+             */
+            $oDaoOrcamentoItem = new cl_pcorcamitemproc();
+            $sQueryOrcamento   = $oDaoOrcamentoItem->sql_query(null, null, "*", null, "pc80_codproc = {$iSequencialProcessoCompra} limit 1");
+            $teste = $oDaoOrcamentoItem->sql_record($sQueryOrcamento);
+            if ($oDaoOrcamentoItem->numrows > 0) {
+                $oRetorno->lOrcamento = true;
+            }
 
-      $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
+            $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
 
-      $oRetorno->pc80_codproc = $oProcessoCompra->getCodigo();
-      $oRetorno->pc80_data =  $oProcessoCompra->getDataEmissao();
-      $oRetorno->id_usuario = $oProcessoCompra->getUsuario();
-      $oRetorno->nome = urlencode($oProcessoCompra->getNomeUsuario());
-      $oRetorno->coddepto = $oProcessoCompra->getCodigoDepartamento();
-      $oRetorno->descrdepto = urlencode($oProcessoCompra->getDescricaoDepartamento());
-      $oRetorno->pc80_resumo = urlencode($oProcessoCompra->getResumo());
-      $oRetorno->pc80_tipoprocesso = $oProcessoCompra->getTipoProcesso();
-      /*OC3770*/
-      $oRetorno->pc80_criterioadjudicacao = $oProcessoCompra->getCriterioAdjudicacao();
-      $oRetorno->pc80_numdispensa = $oProcessoCompra->getNumerodispensa();
-      $oRetorno->pc80_dispvalor = $oProcessoCompra->getDispensaPorValor();
-      $oRetorno->pc80_orcsigiloso = $oProcessoCompra->getOrcSigiloso();
-      $oRetorno->pc80_subcontratacao = $oProcessoCompra->getSubContratacao();
-      $oRetorno->pc80_dadoscomplementares = urlencode($oProcessoCompra->getDadosComplementares());
-      $oRetorno->pc80_amparolegal = urlencode($oProcessoCompra->getAmparoLegal());
-      $oRetorno->pc80_categoriaprocesso = $oProcessoCompra->getCategoriaProcesso();
+            $oRetorno->pc80_codproc = $oProcessoCompra->getCodigo();
+            $oRetorno->pc80_data =  $oProcessoCompra->getDataEmissao();
+            $oRetorno->id_usuario = $oProcessoCompra->getUsuario();
+            $oRetorno->nome = urlencode($oProcessoCompra->getNomeUsuario());
+            $oRetorno->coddepto = $oProcessoCompra->getCodigoDepartamento();
+            $oRetorno->descrdepto = urlencode($oProcessoCompra->getDescricaoDepartamento());
+            $oRetorno->pc80_resumo = urlencode($oProcessoCompra->getResumo());
+            $oRetorno->pc80_tipoprocesso = $oProcessoCompra->getTipoProcesso();
+            $oRetorno->pc80_numdispensa = $oProcessoCompra->getNumerodispensa();
+            $oRetorno->pc80_dadoscomplementares = $oProcessoCompra->getDadosComplementares();
+            $oRetorno->pc80_dispvalor = $oProcessoCompra->getDispensaPorValor();
+            $oRetorno->pc80_categoriaprocesso = $oProcessoCompra->getCategoriaProcesso();
+            $oRetorno->pc80_amparolegal = $oProcessoCompra->getAmparoLegal();
 
-      $aLotes = array();
-      foreach ($oProcessoCompra->getLotes() as $oLotesProcessoCompra) {
-        $aLotes[$oLotesProcessoCompra->getCodigo()] = $oLotesProcessoCompra->getNome();
-      }
-      $oRetorno->aLotes = $aLotes;
-
-      break;
-
-    case "getItens":
-
-      $iSequencialProcessoCompra = $oParam->iProcessoCompra;
-
-      if (empty($iSequencialProcessoCompra)) {
-        throw new  BusinessException(_M(MENSAGENS . "nao_informado_processo_compra"));
-      }
-
-      $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
-
-      $aItens          = array();
-      foreach ($oProcessoCompra->getItens() as $oItemProcessoCompra) {
-
-        $iUnidadeMedida      = $oItemProcessoCompra->getItemSolicitacao()->getUnidade();
-        $oLoteProcessoCompra = $oItemProcessoCompra->getLote();
-
-        $aItem = array(
-          'codigo_item'        => $oItemProcessoCompra->getCodigo(),
-          'solicitacao'        => $oItemProcessoCompra->getItemSolicitacao()->getCodigoSolicitacao(),
-          'sequencial'         => $oItemProcessoCompra->getItemSolicitacao()->getOrdem(),
-          'codigo_material'    => $oItemProcessoCompra->getItemSolicitacao()->getCodigoMaterial(),
-          'descricao_material' => $oItemProcessoCompra->getItemSolicitacao()->getDescricaoMaterial(),
-          'unidade'            => ($iUnidadeMedida ? itemSolicitacao::getDescricaoUnidade($iUnidadeMedida) : ''),
-          'quantidade'         => $oItemProcessoCompra->getItemSolicitacao()->getQuantidade(),
-          'vlr_unitario'       => $oItemProcessoCompra->getItemSolicitacao()->getValorUnitario(),
-          'vlr_total'          => $oItemProcessoCompra->getItemSolicitacao()->getValorTotal(),
-          'lote'               => (!empty($oLoteProcessoCompra) ? $oLoteProcessoCompra->getCodigo() : '')
-        );
-        $aItens[] = $aItem;
-      }
-
-      $oRetorno->aItens = $aItens;
-
-      break;
-
-    case "salvar":
-
-      $iSequencialProcessoCompra = $oParam->iProcessoCompra;
-      $aLotes                    = $oParam->aItens;
-      $sResumo                   = db_stdClass::normalizeStringJsonEscapeString($oParam->sResumo);
-      /*OC3770*/
-      $sCriterioAjudicacao       = $oParam->criterioaj;
-      $iNumdispensa              = $oParam->pc80_numdispensa;
-      $sDiepensaValor            = $oParam->pc80_dispvalor;
-      $sOrcsigiloso              = $oParam->pc80_orcsigiloso;
-      $sSubContratacao           = $oParam->pc80_subcontratacao;
-      $sDadosComplementares      = $oParam->pc80_dadoscomplementares;
-      $iAmparolegal              = $oParam->pc80_amparolegal;
-      $iCategoriaprocesso        = $oParam->pc80_categoriaprocesso;
+            /*OC3770*/
+            $oRetorno->pc80_criterioadjudicacao = $oProcessoCompra->getCriterioAdjudicacao();
 
 
-      if (empty($iSequencialProcessoCompra)) {
-        throw new DBException(_M(MENSAGENS . "nao_informado_processo_compra"));
-      }
+            $aLotes = array();
+            foreach ($oProcessoCompra->getLotes() as $oLotesProcessoCompra) {
+                $aLotes[$oLotesProcessoCompra->getCodigo()] = $oLotesProcessoCompra->getNome();
+            }
+            $oRetorno->aLotes = $aLotes;
 
-      $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
+            break;
 
-      /*if ($oProcessoCompra->getNumerodispensa() != '0' && ($oProcessoCompra->getNumerodispensa() == $oParam->pc80_numdispensa)) {
-        throw new DBException(_M(MENSAGENS . 'dispensa_ja_existe'));
-      }*/
+        case "getItens":
 
-      $oProcessoCompra->setResumo($sResumo);
-      $oProcessoCompra->setCriterioAdjudicacao($sCriterioAjudicacao);
+            $iSequencialProcessoCompra = $oParam->iProcessoCompra;
 
-      $oProcessoCompra->setNumerodispensa($iNumdispensa);
-      $oProcessoCompra->setDispensaPorValor($sDiepensaValor);
-      $oProcessoCompra->setOrcSigiloso($sOrcsigiloso);
-      $oProcessoCompra->setSubContratacao($sSubContratacao);
-      $oProcessoCompra->setDadosComplementares($sDadosComplementares);
-      $oProcessoCompra->setAmparoLegal($iAmparolegal);
-      $oProcessoCompra->setCategoriaProcesso($iCategoriaprocesso);
+            if (empty($iSequencialProcessoCompra)) {
+                throw new  BusinessException(_M(MENSAGENS . "nao_informado_processo_compra"));
+            }
 
+            $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
 
-      foreach ($aLotes as $oStdLote) {
+            $aItens          = array();
+            foreach ($oProcessoCompra->getItens() as $oItemProcessoCompra) {
 
-        $oLote = $oProcessoCompra->getLotePorCodigo($oStdLote->lote);
-        if (empty($oLote)) {
-          throw new BusinessException(_M(MENSAGENS . 'lote_nao_encontrado'));
-        }
-        $oLote->removerItens();
-        foreach ($oStdLote->itens as $iCodigoItem) {
+                $iUnidadeMedida      = $oItemProcessoCompra->getItemSolicitacao()->getUnidade();
+                $oLoteProcessoCompra = $oItemProcessoCompra->getLote();
 
-          $oItem = $oProcessoCompra->getItemPorCodigo($iCodigoItem);
-          if (empty($oItem)) {
-            throw new BusinessException(_M(MENSAGENS . 'item_nao_encontrado'));
-          }
-          $oLote->adicionarItem($oItem);
-        }
-      }
-      $oProcessoCompra->salvar();
-      break;
+                $aItem = array(
+                    'codigo_item'        => $oItemProcessoCompra->getCodigo(),
+                    'solicitacao'        => $oItemProcessoCompra->getItemSolicitacao()->getCodigoSolicitacao(),
+                    'sequencial'         => $oItemProcessoCompra->getItemSolicitacao()->getOrdem(),
+                    'codigo_material'    => $oItemProcessoCompra->getItemSolicitacao()->getCodigoMaterial(),
+                    'descricao_material' => $oItemProcessoCompra->getItemSolicitacao()->getDescricaoMaterial(),
+                    'unidade'            => ($iUnidadeMedida ? itemSolicitacao::getDescricaoUnidade($iUnidadeMedida) : ''),
+                    'quantidade'         => $oItemProcessoCompra->getItemSolicitacao()->getQuantidade(),
+                    'vlr_unitario'       => $oItemProcessoCompra->getItemSolicitacao()->getValorUnitario(),
+                    'vlr_total'          => $oItemProcessoCompra->getItemSolicitacao()->getValorTotal(),
+                    'lote'               => (!empty($oLoteProcessoCompra) ? $oLoteProcessoCompra->getCodigo() : '')
+                );
+                $aItens[] = $aItem;
+            }
 
-    case "excluir":
+            $oRetorno->aItens = $aItens;
 
-      $iSequencialProcessoCompra = $oParam->iProcessoCompra;
+            break;
 
-      if (empty($iSequencialProcessoCompra)) {
-        throw new  BusinessException(_M(MENSAGENS . "nao_informado_processo_compra"));
-      }
+        case "salvar":
 
-      $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
-      $oProcessoCompra->remover();
+            $iSequencialProcessoCompra = $oParam->iProcessoCompra;
+            $aLotes                    = $oParam->aItens;
+            $sResumo                   = db_stdClass::normalizeStringJsonEscapeString($oParam->sResumo);
+            /*OC3770*/
+            $sCriterioAjudicacao       = $oParam->criterioaj;
+            $iNumdispensa              = $oParam->pc80_numdispensa;
+            $sDiepensaValor            = $oParam->pc80_dispvalor;
+            $sOrcsigiloso              = $oParam->pc80_orcsigiloso;
+            $sSubContratacao           = $oParam->pc80_subcontratacao;
+            $sDadosComplementares      = $oParam->pc80_dadoscomplementares;
+            $iAmparolegal              = $oParam->pc80_amparolegal;
+            $iCategoriaprocesso        = $oParam->pc80_categoriaprocesso;
+            $data = implode("-", array_reverse(explode("/", $oParam->data)));
+            $iSolicitacao = $oParam->iSolicitacao;
 
-      break;
+            $rsDataSolicitacao = db_query("select pc10_data from solicita where pc10_numero = $iSolicitacao;");
+            $dataSolicitacao = db_utils::fieldsMemory($rsDataSolicitacao, 0)->pc10_data;
 
-    case "incluirLote":
+            if ($data < $dataSolicitacao) {
+                throw new Exception("Usuário: a data do processo de compra não pode ser menor que a data da solicitação.");
+            }
 
-      $iSequencialProcessoCompra = $oParam->iProcessoCompra;
-      $sNomeLote                 = db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricao);
+            if (empty($iSequencialProcessoCompra)) {
+                throw new DBException(_M(MENSAGENS . "nao_informado_processo_compra"));
+            }
 
-      if (empty($iSequencialProcessoCompra)) {
-        throw new  BusinessException(_M(MENSAGENS . "nao_informado_processo_compra"));
-      }
+            $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
+            $oProcessoCompra->setResumo($sResumo);
+            $oProcessoCompra->setCriterioAdjudicacao($sCriterioAjudicacao);
+            $oProcessoCompra->setDataEmissao($data);
+            $oProcessoCompra->setNumerodispensa($iNumdispensa);
+            $oProcessoCompra->setDispensaPorValor($sDiepensaValor);
+            $oProcessoCompra->setOrcSigiloso($sOrcsigiloso);
+            $oProcessoCompra->setSubContratacao($sSubContratacao);
+            $oProcessoCompra->setDadosComplementares($sDadosComplementares);
+            $oProcessoCompra->setAmparoLegal($iAmparolegal);
+            $oProcessoCompra->setCategoriaProcesso($iCategoriaprocesso);
+            foreach ($aLotes as $oStdLote) {
 
-      $oProcessoCompra     = new ProcessoCompras($iSequencialProcessoCompra);
-      $oLoteProcessoCompra = $oProcessoCompra->adicionarLote($sNomeLote);
-      $oLoteProcessoCompra->salvar();
+                $oLote = $oProcessoCompra->getLotePorCodigo($oStdLote->lote);
+                if (empty($oLote)) {
+                    throw new BusinessException(_M(MENSAGENS . 'lote_nao_encontrado'));
+                }
+                $oLote->removerItens();
+                foreach ($oStdLote->itens as $iCodigoItem) {
 
-      $oRetorno->iCodigoLote = $oLoteProcessoCompra->getCodigo();
+                    $oItem = $oProcessoCompra->getItemPorCodigo($iCodigoItem);
+                    if (empty($oItem)) {
+                        throw new BusinessException(_M(MENSAGENS . 'item_nao_encontrado'));
+                    }
+                    $oLote->adicionarItem($oItem);
+                }
+            }
+            $oProcessoCompra->salvar();
+            break;
 
-      break;
+        case "excluir":
 
-    case "removerLote":
+            $iSequencialProcessoCompra = $oParam->iProcessoCompra;
 
-      $iSequencialProcessoCompra = $oParam->iProcessoCompra;
-      $iCodigoLote               = $oParam->iCodigoLote;
+            if (empty($iSequencialProcessoCompra)) {
+                throw new  BusinessException(_M(MENSAGENS . "nao_informado_processo_compra"));
+            }
 
-      if (empty($iSequencialProcessoCompra)) {
-        throw new  BusinessException(_M(MENSAGENS . "nao_informado_processo_compra"));
-      }
+            $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
+            $oProcessoCompra->remover();
 
-      $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
-      $oLoteProcesso   = $oProcessoCompra->getLotePorCodigo($iCodigoLote);
+            break;
 
-      if ($oLoteProcesso) {
-        $oLoteProcesso->remover();
-      }
+        case "incluirLote":
 
-      break;
-  }
+            $iSequencialProcessoCompra = $oParam->iProcessoCompra;
+            $sNomeLote                 = db_stdClass::normalizeStringJsonEscapeString($oParam->sDescricao);
 
-  db_fim_transacao(false);
+            if (empty($iSequencialProcessoCompra)) {
+                throw new  BusinessException(_M(MENSAGENS . "nao_informado_processo_compra"));
+            }
+
+            $oProcessoCompra     = new ProcessoCompras($iSequencialProcessoCompra);
+            $oLoteProcessoCompra = $oProcessoCompra->adicionarLote($sNomeLote);
+            $oLoteProcessoCompra->salvar();
+
+            $oRetorno->iCodigoLote = $oLoteProcessoCompra->getCodigo();
+
+            break;
+
+        case "removerLote":
+
+            $iSequencialProcessoCompra = $oParam->iProcessoCompra;
+            $iCodigoLote               = $oParam->iCodigoLote;
+
+            if (empty($iSequencialProcessoCompra)) {
+                throw new  BusinessException(_M(MENSAGENS . "nao_informado_processo_compra"));
+            }
+
+            $oProcessoCompra = new ProcessoCompras($iSequencialProcessoCompra);
+            $oLoteProcesso   = $oProcessoCompra->getLotePorCodigo($iCodigoLote);
+
+            if ($oLoteProcesso) {
+                $oLoteProcesso->remover();
+            }
+
+            break;
+    }
+
+    db_fim_transacao(false);
 } catch (Exception $eErro) {
 
-  db_fim_transacao(true);
-  $oRetorno->erro     = true;
-  $oRetorno->sMessage = urlencode($eErro->getMessage());
+    db_fim_transacao(true);
+    $oRetorno->erro     = true;
+    $oRetorno->sMessage = urlencode($eErro->getMessage());
 }
 
 echo $oJson->encode($oRetorno);

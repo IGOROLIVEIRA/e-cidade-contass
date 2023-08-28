@@ -172,7 +172,7 @@ if  (isset($tipocompra) &&  ($tipocompra!=0)){
 //$mostraritem = "m";
 
 if($ordem == 'e'){
-  $xordem = " e60_numemp, c70_codlan ";
+  $xordem = " e60_codemp::int8, c70_codlan ";
   $head7 = 'ORDEM : EMPENHO, TIPO:'.$tipocompra_descr;
 }elseif($ordem == 'd'){
   $xordem = ' e60_emiss, e60_numemp, c70_codlan';
@@ -405,9 +405,9 @@ for ($x=0; $x < $rows;$x++){
 
      $pdf->Cell(15,$tam,"EMP",1,0,"C",1);
      $pdf->Cell(15,$tam,"DT.EMP.",1,0,"C",1);
-     $pdf->Cell(55,$tam,"DOTAÇÃO",1,0,"C",1);
+     $pdf->Cell(65,$tam,"DOTAÇÃO",1,0,"C",1);
      $pdf->Cell(15,$tam,"DT.MOV.",1,0,"C",1);
-     $pdf->Cell(45,$tam,"VALOR",1,0,"C",1);
+     $pdf->Cell(35,$tam,"VALOR",1,0,"C",1);
      $pdf->Cell(45,$tam,'TOTAL/PARCIAL',1,1,"C",1);
      $pdf->cell(20,$tam,"CREDOR ",1,0,"C",1);
      $pdf->cell(85,$tam,"NOME",1,0,"C",1);
@@ -491,9 +491,9 @@ for ($x=0; $x < $rows;$x++){
         $pdf->SetFont('Arial','',7);
         $pdf->Cell(15,$tam,$e60_codemp,0,0,"C",$pre);
         $pdf->Cell(15,$tam,db_formatar($e60_emiss,'d'),0,0,"C",$pre);
-        $pdf->Cell(55,$tam,$dl_estrutural,0,0,"L",$pre);
+        $pdf->Cell(65,$tam,$dl_estrutural,0,0,"L",$pre);
         $pdf->Cell(15,$tam,db_formatar($c70_data,'d'),0,0,"C",$pre);
-        $pdf->Cell(45,$tam,db_formatar($c70_valor,'f'),0,0,"C",$pre);
+        $pdf->Cell(35,$tam,db_formatar($c70_valor,'f'),0,0,"C",$pre);
       }  
       if($c53_tipo == 10 || $c53_tipo == 11){
         if($c53_tipo == 10){
@@ -531,9 +531,9 @@ for ($x=0; $x < $rows;$x++){
       $pdf->SetFont('Arial','',7);
       $pdf->Cell(15,$tam,$e60_codemp,0,0,"C",$pre);
       $pdf->Cell(15,$tam,db_formatar($e60_emiss,'d'),0,0,"C",$pre);
-      $pdf->Cell(55,$tam,$dl_estrutural,0,0,"L",$pre);
+      $pdf->Cell(65,$tam,$dl_estrutural,0,0,"L",$pre);
       $pdf->Cell(15,$tam,db_formatar($c70_data,'d'),0,0,"C",$pre);
-      $pdf->Cell(45,$tam,db_formatar($c70_valor,'f'),0,0,"C",$pre);
+      $pdf->Cell(35,$tam,db_formatar($c70_valor,'f'),0,0,"C",$pre);
     }
       if($c53_tipo == 20 || $c53_tipo == 21){
         if($mostrarlancamentos == 's')

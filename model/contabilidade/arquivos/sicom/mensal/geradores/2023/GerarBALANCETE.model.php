@@ -276,7 +276,7 @@ class GerarBALANCETE extends GerarAM
                         $aCSVBALANCETE16['si183_codfundo']                    = $aBALACETE16['si183_codfundo'];
                         $aCSVBALANCETE16['si183_atributosf']                  = trim($aBALACETE16['si183_atributosf']);
                         $aCSVBALANCETE16['si183_codfontrecursos']             = ($aBALACETE16['si183_codfontrecursos'] == 0) ? ' ' : $this->padLeftZero($aBALACETE16['si183_codfontrecursos'], 3);
-                        $aCSVBALANCETE16['si183_codco']                       = $this->padLeftZero($aBALACETE16['si183_codco'], 4);
+                        $aCSVBALANCETE16['si183_codco']                       = trim($aBALACETE16['si183_atributosf']) == 'F' ? $this->padLeftZero($aBALACETE16['si183_codco'], 4) : " ";
                         $aCSVBALANCETE16['si183_saldoinicialfontsf']          = $this->sicomNumberReal($aBALACETE16['si183_saldoinicialfontsf'], 2);
                         $aCSVBALANCETE16['si183_naturezasaldoinicialfontsf']  = $this->padLeftZero($aBALACETE16['si183_naturezasaldoinicialfontsf'], 1);
                         $aCSVBALANCETE16['si183_totaldebitosfontsf']          = $this->sicomNumberReal($aBALACETE16['si183_totaldebitosfontsf'], 2);

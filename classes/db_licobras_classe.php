@@ -478,9 +478,13 @@ class cl_licobras
       $sql .= $campos;
     }
     $sql .= " from licobras ";
-    $sql .= " inner join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
-    $sql .= " inner join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
-    $sql .= " left join acordo on ac16_licitacao = l20_codigo";
+    $sql .= " left join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
+    $sql .= " left join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
+    
+    $sql .= " left join licobraslicitacao on obr07_sequencial = obr01_licitacao";
+    $sql .= " left join pctipocompratribunal on obr07_tipoprocesso = l44_sequencial";
+    $sql .= " left join acordoobra on obr08_licobras = obr01_sequencial ";
+    $sql .= " left join acordo on ac16_licitacao = l20_codigo ";
     if ($dbwhere == "") {
       if ($obr01_sequencial != "" && $obr01_sequencial != null) {
         $sql .= " where obr01_sequencial = $obr01_sequencial";
@@ -488,35 +492,6 @@ class cl_licobras
     } else if ($dbwhere != "") {
       $sql .= " where $dbwhere";
     }
-    $sql .= "UNION ";
-    $sql .= "select ";
-    $sql .= "obr01_sequencial,
-              obr01_numeroobra,
-              obr01_licitacao,
-              l20_edital,
-              l03_descr,
-              l20_numero,
-              ac16_sequencial,
-              l20_objeto,
-              obr01_dtlancamento,
-              obr01_licitacaosistema,
-              obr01_linkobra,
-              obr01_licitacaolote";
-    $sql .= " from licobras ";
-    $sql .= " inner join licobraslicitacao on obr07_sequencial = obr01_licitacao ";
-    $sql .= " left join liclicita on l20_codigo = obr01_licitacao ";
-    $sql .= " left join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
-    $sql .= " inner join pctipocompratribunal on obr07_tipoprocesso = l44_sequencial";
-    $sql .= " left join acordo on ac16_licitacao = l20_codigo";
-    $sql2 = "";
-    if ($dbwhere == "") {
-      if ($obr01_sequencial != "" && $obr01_sequencial != null) {
-        $sql2 = " where obr01_sequencial = $obr01_sequencial";
-      }
-    } else if ($dbwhere != "") {
-      $sql2 = " where $dbwhere";
-    }
-    $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
       $campos_sql = explode("#", $ordem);

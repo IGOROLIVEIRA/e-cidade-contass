@@ -99,7 +99,14 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
   me.oTxtContaDebitoCodigo.addEvent("onChange", ";" + me.sNomeInstancia + ".pesquisaConta" + me.sPesquisaContaDebito + "(false, false);");
   me.oTxtContaDebitoDescricao                = new DBTextField("oTxtContaDebitoDescricao",  me.sNomeInstancia + ".oTxtContaDebitoDescricao",  "", 56);
 
+  me.oTxtContaCreditodiv               = new DBTextField("oTxtContaCreditodiv", me.sNomeInstancia + ".oTxtContaCreditodiv",    "", 80);
+  me.oTxtContaCreditodiv.addEvent("onKeyUp", ";" + me.sNomeInstancia + "");
+  me.oTxtContaCreditoDescricao.addEvent("onKeyUp", ";" + me.sNomeInstancia + ".buscaContasCredito(this.value);");
+  me.oTxtContaDebitoDescricao.addEvent("onKeyUp", ";" + me.sNomeInstancia + ".buscaContasDebito(this.value);");
 
+  me.oTxtContaDebitodiv               = new DBTextField("oTxtContaDebitodiv", me.sNomeInstancia + ".oTxtContaDebitodiv",    "", 80);
+  me.oTxtContaDebitodiv.addEvent("onKeyUp", ";" + me.sNomeInstancia + "");
+  
     // Criando o campo Exercício da Competência da Devolução
     me.oTxtExercicioCompetenciaDevolucaoInput = new DBTextField('oTxtExercicioCompetenciaDevolucaoInput', me.sNomeInstancia+'.oTxtExercicioCompetenciaDevolucaoInput', '', me.iTamanhoCampo);
     me.oTxtExercicioCompetenciaDevolucaoInput.setMaxLength(4);
@@ -125,6 +132,8 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
   //me.oTxtValorInput.addEvent("onKeyPress", "return js_mask(event,\"0-9|,|-\");");
   //me.oTxtValorInput.setReadOnly(true);
 
+  me.oTxtNumDocumentoInput                       = new DBTextField('oTxtNumDocumentoInput', me.sNomeInstancia+'.oTxtNumDocumentoInput', '', 8);
+  me.oTxtNumDocumentoInput.setMaxLength(15);
 
   /**
    * Valor
@@ -132,6 +141,8 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
   me.oTxtValorInput                          = new DBTextField('oTxtValorInput', me.sNomeInstancia+'.oTxtValorInput', '', 8);
   me.oTxtValorInput.addEvent("onKeyPress", "return js_mask(event,\"0-9|,|-\");");
   me.oTxtValorInput.setReadOnly(true);
+
+  me.oTxtDataInput                          = new DBTextFieldData('oTxtDataInput', 'oTxtDataInput', null);
 
   /**
    * Text area das observações
@@ -232,22 +243,33 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
      */
     var oCellContaDebitoDescricao = oRowContaDebito.insertCell(2);
     oCellContaDebitoDescricao.id  = "td_contadebito_"+me.sNomeInstancia;
-    me.oTxtContaDebitoDescricao.setReadOnly(true);
     me.oTxtContaDebitoDescricao.show(oCellContaDebitoDescricao);
+
+    /**
+    * Input div onde mostra os valores do autocomplete
+    */
+    var oRowContaDebitodiv = oTabela.insertRow(3);
+    var oCellContaDebitodiv = oRowContaDebitodiv.insertCell(0);
+    oCellContaDebitodiv = oRowContaDebitodiv.insertCell(1);
+    oCellContaDebitodiv = oRowContaDebitodiv.insertCell(2);
+    oCellContaDebitodiv.colSpan  = "8";
+    oCellContaDebitodiv.id  = "resultdebito";
+    oCellContaDebitodiv.setAttribute("hidden","hidden");
 
     /**
      * Label Caracteristica Peculiar
      */
-    var oRowCaracteristica                   = oTabela.insertRow(3);
+    var oRowCaracteristica                   = oTabela.insertRow(4);
     var oCellCaracteristicaDebitoLabel       = oRowCaracteristica.insertCell(0);
     oCellCaracteristicaDebitoLabel.id        = 'td_caracteristicapeculiar_'+me.sNomeInstancia;
     oCellCaracteristicaDebitoLabel.innerHTML = "<b><a href='#' onclick='"+me.sNomeInstancia+".pesquisaCaracteristicaPeculiarDebito(true);'>C.Peculiar / C.Aplicação:</a></b>";
-
+    oCellCaracteristicaDebitoLabel.setAttribute("hidden","hidden");
     /**
      * Codigo Caracteristica Peculiar
      */
     var oCellCaracteristicaDebitoInputCodigo = oRowCaracteristica.insertCell(1);
     me.oTxtCaracteristicaDebitoInputCodigo.show(oCellCaracteristicaDebitoInputCodigo);
+    oCellCaracteristicaDebitoInputCodigo.setAttribute("hidden","hidden");
 
     /**
      * Descricao Caracteristica Peculiar
@@ -255,11 +277,12 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     var oCellCaracteristicaDebitoInputDescricao = oRowCaracteristica.insertCell(2);
     me.oTxtCaracteristicaDebitoInputDescricao.setReadOnly(true);
     me.oTxtCaracteristicaDebitoInputDescricao.show(oCellCaracteristicaDebitoInputDescricao);
+    oCellCaracteristicaDebitoInputDescricao.setAttribute("hidden","hidden");
 
     /**
      * Label Conta Credito
      */
-    var oRowContaCredito             = oTabela.insertRow(4);
+    var oRowContaCredito             = oTabela.insertRow(5);
     var oCellContaCreditoLabel       = oRowContaCredito.insertCell(0);
     oCellContaCreditoLabel.innerHTML = "<b><a href='#' onclick='"+me.sNomeInstancia+".pesquisaConta"+me.sPesquisaContaCredito+"(true,true);'>Conta Crédito:</a></b>";
     oCellContaCreditoLabel.id = "labelContaCredito";
@@ -276,23 +299,34 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
      */
     var oCellContaCreditoDescricao = oRowContaCredito.insertCell(2);
     oCellContaCreditoDescricao.id  = "td_contaCredito_"+me.sNomeInstancia;
-    me.oTxtContaCreditoDescricao.setReadOnly(true);
     me.oTxtContaCreditoDescricao.show(oCellContaCreditoDescricao);
+
+   /**
+       * Input div onde mostra os valores do autocomplete
+       */
+   var oRowContaCreditodiv = oTabela.insertRow(6); 
+   var oCellContaCreditodiv = oRowContaCreditodiv.insertCell(0);
+   oCellContaCreditodiv = oRowContaCreditodiv.insertCell(1);
+   oCellContaCreditodiv = oRowContaCreditodiv.insertCell(2);
+   oCellContaCreditodiv.colSpan  = "8";
+   oCellContaCreditodiv.id  = "resultcredito";
+   oCellContaCreditodiv.setAttribute("hidden","hidden");  
 
 
     /**
      * Caracteristica peculiar conta credito
      */
-    var oRowCaracteristicaContaCredito        = oTabela.insertRow(5);
+    var oRowCaracteristicaContaCredito        = oTabela.insertRow(7);
     var oCellCaracteristicaCreditoLabel       = oRowCaracteristicaContaCredito.insertCell(0);
     oCellCaracteristicaCreditoLabel.id         = 'td_caracteristicapeculiar_credito_'+me.sNomeInstancia;
     oCellCaracteristicaCreditoLabel.innerHTML = "<b><a href='#' onclick='"+me.sNomeInstancia+".pesquisaCaracteristicaPeculiarCredito(true);'>C.Peculiar / C.Aplicação:</a></b>";
-
+    oCellCaracteristicaCreditoLabel.setAttribute("hidden","hidden");
     /**
      * Codigo Caracteristica Peculiar
      */
     var oCellCaracteristicaCreditoInputCodigo = oRowCaracteristicaContaCredito.insertCell(1);
     me.oTxtCaracteristicaCreditoInputCodigo.show(oCellCaracteristicaCreditoInputCodigo);
+    oCellCaracteristicaCreditoInputCodigo.setAttribute("hidden","hidden");
 
     /**
      * Descricao Caracteristica Peculiar
@@ -300,11 +334,12 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     var oCellCaracteristicaCreditoInputDescricao = oRowCaracteristicaContaCredito.insertCell(2);
     me.oTxtCaracteristicaCreditoInputDescricao.setReadOnly(true);
     me.oTxtCaracteristicaCreditoInputDescricao.show(oCellCaracteristicaCreditoInputDescricao);
+    oCellCaracteristicaCreditoInputDescricao.setAttribute("hidden","hidden");
 
     /**
      * Label Historico
      */
-    var oRowHistorico             = oTabela.insertRow(6);
+    var oRowHistorico             = oTabela.insertRow(8);
     var oCellHistoricoLabel       = oRowHistorico.insertCell(0);
     oCellHistoricoLabel.id        = "td_historico_"+me.sNomeInstancia;
     oCellHistoricoLabel.innerHTML = "<b><a href='#' onclick='"+me.sNomeInstancia+".pesquisaHistorico(true);'>Histórico:</a></b>";
@@ -326,7 +361,7 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
         * Label Fonte
         */
         if (me.iAno >= 2022) {
-            var oRowFonte             = oTabela.insertRow(7);
+            var oRowFonte             = oTabela.insertRow(9);
             var oCellFonteLabel       = oRowFonte.insertCell(0);
             oCellFonteLabel.id        = "td_fonte_"+me.sNomeInstancia;
             oCellFonteLabel.innerHTML = "<b><a href='#' onclick='"+me.sNomeInstancia+".pesquisaFonte(true);'>Fonte de Recursos:</a></b>";
@@ -352,9 +387,9 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
         /**
          * Label Exercício da Competência da Devolução
         */
-        me.iLinhaExercicioDevolucao = 7;
+        me.iLinhaExercicioDevolucao = 9;
         if (me.iAno >= 2022)
-            me.iLinhaExercicioDevolucao = 8;
+            me.iLinhaExercicioDevolucao = 10;
 
          var oRowExercicioCompetenciaDevolucao = oTabela.insertRow(me.iLinhaExercicioDevolucao);
          var oCelloRowExercicioCompetenciaDevolucaoLabel = oRowExercicioCompetenciaDevolucao.insertCell(0);
@@ -370,9 +405,9 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
      * Label Processo
      */
     if (me.iAno >= 2022)
-        var oRowProcesso = oTabela.insertRow(9);
+        var oRowProcesso = oTabela.insertRow(11);
     else
-        var oRowProcesso = oTabela.insertRow(8);
+        var oRowProcesso = oTabela.insertRow(10);
     var oCellProcessoLabel           = oRowProcesso.insertCell(0);
         oCellProcessoLabel.innerHTML = "<strong>Processo Administrativo:</strong>";
 
@@ -380,14 +415,26 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
         oCellProcessoInput.colSpan = "2";
     me.oTxtProcessoInput.show(oCellProcessoInput);
 
-
+    
+    /**
+    * Label Número do Documento
+    */
+    var oRowNumDocumento                 = oTabela.insertRow(12); 
+    var oCellNumDocumentoLabel           = oRowNumDocumento.insertCell(0);
+        oCellNumDocumentoLabel.innerHTML = "<strong>Número do Documento:</strong>";
+      
+    var oCellNumDocumentoInput           = oRowNumDocumento.insertCell(1);
+        oCellNumDocumentoInput.colSpan   = "2";
+        me.oTxtNumDocumentoInput.show(oCellNumDocumentoInput);
+       
+     
     /**
      * Label Valor
      */
     if (me.iAno >= 2022)
-        var oRowValor = oTabela.insertRow(10);
+        var oRowValor = oTabela.insertRow(13);
     else
-        var oRowValor = oTabela.insertRow(9);
+        var oRowValor = oTabela.insertRow(14);
 
     var oCellValorLabel       = oRowValor.insertCell(0);
     oCellValorLabel.innerHTML = "<b>Valor:</b>";
@@ -396,12 +443,24 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     oCellValorInput.colSpan   = "2";
     me.oTxtValorInput.show(oCellValorInput);
 
+   /**
+   * Label Data
+   */
+    var oRowData             = oTabela.insertRow(14); 
+    var oCellDataLabel       = oRowData.insertCell(0);
+    oCellDataLabel.innerHTML = "<b>Data:</b>";
+       
+    var oCellDataInput       = oRowData.insertCell(1);
+    oCellDataInput.colSpan   = "2";
+    oCellDataInput.id        = "td_data_"+me.sNomeInstancia;
+    me.oTxtDataInput.show(oCellDataInput);
+
     /**
      * Fieldset Observacao
      */
     var oFieldsetObservacao       = document.createElement('fieldset');
     var oLegendObservacao         = document.createElement('legend');
-    oLegendObservacao.innerHTML   = "<b>Observação</b>";
+    oLegendObservacao.innerHTML   = "<b>Descrição do Histórico:</b>";   
     oFieldsetObservacao.appendChild(oLegendObservacao);
     oFieldsetObservacao.appendChild(me.oTxtObservacaoInput);
 
@@ -472,9 +531,16 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
       return false;
     }
 
+          
+    if (me.oTxtDataInput.getValue() == "") {
+
+      alert("Informe a Data.");
+      return false;
+    }
+
     if (me.getObservacao() == "") {
 
-      alert("Campo observação é obrigatório.");
+      alert("Campo descrição do histórico é obrigatório.");
       return false;
     }
 
@@ -511,6 +577,8 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     oParam.k17_hist                       = me.oTxtHistoricoInputCodigo.getValue();
     oParam.k17_valor                      = me.oTxtValorInput.getValue();
     oParam.k17_texto                      = encodeURIComponent(me.getObservacao());
+    oParam.k17_numdocumento               = encodeURIComponent(tagString(me.oTxtNumDocumentoInput.getValue())) ;
+    oParam.k17_data                       = me.oTxtDataInput.getValue();
     oParam.k145_numeroprocesso            = encodeURIComponent(tagString(me.oTxtProcessoInput.getValue())) ;
     if (me.iAno >= 2022)
         oParam.iCodigoFonte = me.oTxtFonteInputCodigo.getValue();
@@ -525,6 +593,7 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
       oParam.exec          = "anularSlip";
       oParam.sMotivo       = encodeURIComponent(me.oTxtMotivoInput.value);
       oParam.k17_codigo    = me.oTxtCodigoSlip.getValue();
+      oParam.iDataEstorno  = me.oTxtDataInput.getValue(); 
     }
 
     new Ajax.Request(me.sUrlRpc,
@@ -812,6 +881,14 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     me.oTxtContaDebitoCodigo.setReadOnly(true);
     var sFunctionPesquisa = "me.pesquisaConta";
 
+    window.setTimeout(
+
+      function() {
+        me.oTxtContaDebitoCodigo.setValue(oRetorno.iContaDebito);
+       
+      }, 3000
+    );
+
     var oFunctionDebito =  eval(sFunctionPesquisa + me.sPesquisaContaDebito);
     oFunctionDebito(false, false, true);
 
@@ -825,8 +902,8 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
 
     me.oTxtCodigoSlip.setValue(oRetorno.iCodigoSlip);
     me.oTxtInstituicaoOrigemCodigo.setValue(oRetorno.iInstituicaoOrigem);
-    me.oTxtDescricaoInstituicaoOrigem.setValue(oRetorno.sDescricaoInstituicaoOrigem.urlDecode());
-    me.oTxtCNPJInstituicaoOrigem.setValue(oRetorno.sCNPJ);
+    $('oTxtDescricaoInstituicaoOrigem').value = (oRetorno.sDescricaoInstituicaoOrigem.urlDecode());
+    $('oTxtCNPJInstituicaoOrigem').value = oRetorno.sCNPJ;
 
     me.oTxtCaracteristicaDebitoInputCodigo.setValue(oRetorno.sCaracteristicaDebito);
     me.pesquisaCaracteristicaPeculiarDebito(false);
@@ -839,6 +916,9 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     me.oTxtFonteInputCodigo.setValue(oRetorno.iCodigoFonte);
     me.pesquisaFonte(false);
     me.oTxtFonteInputCodigo.setReadOnly(true);
+     
+    me.oTxtProcessoInput.setValue(oRetorno.k145_numeroprocesso);
+    me.oTxtNumDocumentoInput.setValue(oRetorno.iNumeroDocumento);
 
     me.oTxtHistoricoInputCodigo.setValue(oRetorno.iHistorico);
     me.pesquisaHistorico(false);
@@ -988,6 +1068,77 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
     }
   }
 
+  me.buscaContasCredito = function()
+  {
+    let inputField  = 'oTxtContaCreditoDescricao';
+    let inputCodigo = 'oTxtContaCreditoCodigo';
+    let ulField     = 'resultcredito';
+    me.buscaContas(inputField,inputCodigo,ulField,me.oTxtContaCreditoDescricao.getValue(),1); 
+
+  }
+  me.buscaContasDebito = function()
+  {
+    let inputField  = 'oTxtContaDebitoDescricao';
+    let inputCodigo = 'oTxtContaDebitoCodigo';
+    let ulField     = 'resultdebito';
+    me.buscaContas(inputField,inputCodigo,ulField,me.oTxtContaDebitoDescricao.getValue(),2); 
+  }
+  me.buscaContas = function(inputField,inputCodigo,ulField,descricao,tipoconta)
+    {   
+       if (descricao) {
+            var sValorCaracteres      = descricao;
+            var sExpressaoCaracteres  = /^[A-Za-z0-9 -]+?$/i;
+            var sRegExpCaracteres     = new RegExp(sExpressaoCaracteres);
+            var lResultadoCaracteres  = sRegExpCaracteres.test(sValorCaracteres);
+            if (!lResultadoCaracteres) {
+              alert('São permitidas apenas letras, números e/ou caracter "_" (underline)');
+              document.getElementById(inputField).value = '';
+              return false;
+            }
+       }  
+        var oParam    = new Object();
+        oParam.exec   = "verificaContaGeral";  
+        if(tipoconta == 1)
+          oParam.exec   = "verificaContaEventoContabil"; 
+        oParam.iDescricao  = descricao;
+        oParam.inputField  = inputField;
+        oParam.inputCodigo = inputCodigo;
+        oParam.ulField     = ulField;
+        oParam.tipodaconta = me.tipocontadebito;
+        oParam.tipoDebCred = tipoconta;
+        oParam.iTipoInclusao = me.iTipoTransferencia;
+        oParam.tiposelecione = 0;
+
+        if (descricao){
+            me.oTxtContaCreditoCodigo.setReadOnly(false);
+            me.oTxtContaCreditoDescricao.setReadOnly(false);
+        }
+       
+        if (tipoconta == 1) {
+            oParam.tipodaconta = me.tipocontacredito;
+            oParam.codigoconta =  me.oTxtContaDebitoCodigo.getValue();
+        }
+       
+        if(descricao.length == 3){
+          js_divCarregando("Aguarde, verificando contas...", "msgBox");
+        };  
+          var oAjax = new Ajax.Request ( "con4_planoContas.RPC.php",
+            {method: 'post',
+            parameters: 'json='+Object.toJSON(oParam),
+            onComplete: me.fillAutoComplete
+            });
+        
+    };
+    me.fillAutoComplete = function(oAjax)
+    {    
+      js_removeObj("msgBox");
+     // Importe o arquivo JavaScript que contém o método performsAutoComplete
+      require_once('scripts/classes/autocomplete/AutoComplete.js');  
+      performsAutoComplete(oAjax);
+      
+                 
+    }
+
   /**
    * Lookup de pesquisa do Histórico
    */
@@ -995,7 +1146,7 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
 
     var sUrlHistorico = "func_conhist.php?pesquisa_chave="+me.oTxtHistoricoInputCodigo.getValue()+"&funcao_js=parent."+me.sNomeInstancia+".preencheHistorico";
     if (lMostra) {
-      sUrlHistorico = "func_conhist.php?funcao_js=parent."+me.sNomeInstancia+".completaHistorico|c50_codhist|c50_descr";
+      sUrlHistorico = "func_conhist.php?funcao_js=parent."+me.sNomeInstancia+".completaHistorico|c50_codhist|c50_descr|c50_descrcompl";
     }
     js_OpenJanelaIframe("", 'db_iframe_conhist', sUrlHistorico, "Pesquisa Histórico", lMostra);
   };
@@ -1032,21 +1183,25 @@ DBViewSlipRecebimento = function(sNomeInstancia, iTipoTransferencia, oDivDestino
   /**
    * Preenche a descrição histórico
    */
-  me.preencheHistorico = function (sDescricao, lErro) {
+  me.preencheHistorico = function (sDescricao,sHistorico, lErro) {
 
     me.oTxtHistoricoInputDescricao.setValue(sDescricao);
+    if (sHistorico) {
+      me.oTxtObservacaoInput.setValue(sHistorico);
+    }
     if (lErro) {
-      me.oTxtHistoricoInputCodigo.setValue('');
+      me.oTxtHistoricoInputCodigo.setValue();
     }
   };
 
   /**
    * Completa os campos do Histórico
    */
-  me.completaHistorico = function (iCodigoHistorico, sDescricao) {
+  me.completaHistorico = function (iCodigoHistorico, sDescricao, sHistorico) {
 
     me.oTxtHistoricoInputCodigo.setValue(iCodigoHistorico);
     me.oTxtHistoricoInputDescricao.setValue(sDescricao);
+    me.oTxtObservacaoInput.setValue(sHistorico);
     db_iframe_conhist.hide();
   };
 

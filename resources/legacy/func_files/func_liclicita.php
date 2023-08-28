@@ -256,6 +256,10 @@ $sWhereContratos = " and 1 = 1 ";
                                       else true end) AND ";
                 }
 
+                if ($relatoriocredenciamento == 'true') {
+                    $dbwhere .= " l03_pctipocompratribunal IN (102,103) AND ";
+                }
+
                 if (!isset($pesquisa_chave)) {
 
                     if (isset($campos) == false) {
@@ -472,7 +476,7 @@ $sWhereContratos = " and 1 = 1 ";
                             LEFT JOIN acordoliclicitem ON liclicitem.l21_codigo = acordoliclicitem.ac24_liclicitem
                             LEFT JOIN liclancedital ON liclancedital.l47_liclicita = liclicita.l20_codigo
                             WHERE l20_licsituacao = $situacao
-                                AND l20_instit = 1
+                            AND l20_instit = " . db_getsession('DB_instit') . "
                             ORDER BY l20_codigo
                         ";
                     }
@@ -599,7 +603,6 @@ $sWhereContratos = " and 1 = 1 ";
                                 }
                             } else {
                                 $result = $clliclicita->sql_record($clliclicita->sql_queryContratos(null, "*", null, "$dbwhere l20_codigo = $pesquisa_chave $and $dbwhere_instit "));
-
                                 if ($clliclicita->numrows != 0) {
                                     db_fieldsmemory($result, 0);
                                     if ($tipoproc == "true") {

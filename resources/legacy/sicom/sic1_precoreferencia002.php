@@ -26,7 +26,7 @@ if (isset($imprimir)) {
     } else {
 
         echo "<script>
-        jan = window.open('sic1_precoreferencia007.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+
+        jan = window.open('sic1_precoreferencia007.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -41,7 +41,7 @@ if (isset($imprimircsv)) {
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia005.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+
+    jan = window.open('sic1_precoreferencia005.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -56,7 +56,7 @@ if (isset($imprimirword)) {
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia006.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+
+    jan = window.open('sic1_precoreferencia006.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -196,7 +196,7 @@ if (isset($alterar)) {
        
 
         $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);  
-
+        
         $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
         $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
         $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;

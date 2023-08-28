@@ -120,8 +120,8 @@ $head5 = "PERÍODO : " . db_formatar($data1, 'd') . " à " . db_formatar($data2, '
 
 $pdf = new PDFDocument(); // abre a classe
 // $pdf->clearHeaderDescription();
-// $pdf->addHeaderDescription("\n".$head2);
-// $pdf->addHeaderDescription("\n\n".$head5);
+$pdf->addHeaderDescription("\n".$head2);
+$pdf->addHeaderDescription("\n\n".$head5);
 $pdf->Open();          // abre o relatorio
 $pdf->AliasNbPages();  // gera alias para as paginas
 $pdf->AddPage('L'); // adiciona uma pagina

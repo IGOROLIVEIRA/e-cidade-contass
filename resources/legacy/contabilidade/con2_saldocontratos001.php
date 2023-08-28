@@ -85,10 +85,24 @@ $oRotulo->label("descrdepto");
                   </td>
                   <td>
                     <?php
-                    $aFiltros = array(1 => "Acordo", 2 => "Departamento");
+                    $aFiltros = array(1 => "Acordo", 2 => "Departamento", 3 => "Licitação");
                     db_select("iAgrupamento", $aFiltros, true, 1, "class='select' onchange='js_verificaFiltro(this.value)'");
                     ?>
                   </td>
+                </tr>
+                <tr id="trLicitacao" style="display: none;">
+                  <td nowrap title="<?php echo $Tac16_sequencial; ?>" width="130">
+                   <?php
+                   db_ancora("Licitação", "js_pesquisa_liclicita(true);",1);
+                   ?>
+                 </td>
+                 <td colspan="3">
+                  <?php
+                  db_input('ac16_licitacao', 10, $Iac16_sequencial, true, 'text', 1, "onchange='js_pesquisa_liclicita(false);'");
+                  db_input('l20_objeto', 45, $Iac16_resumoobjeto, true, 'text', 3);
+                  ?>
+                </td>
+              
                 </tr>
                 <tr id="trDepartInc" style="display:none;">
                   <td colspan="4">
@@ -208,7 +222,7 @@ $oRotulo->label("descrdepto");
   </tr>
   <tr>
     <td style="text-align: center;">
-      <input type='button' onclick="js_gerarRelatorio();" value='Gerar Relatório' >
+      <input type='button' onclick="js_selecionarFormatoRelatorio();" value='Gerar Relatório' >
     </td>
   </tr>
 </table>
@@ -277,43 +291,49 @@ function js_mostraAcordo1(chave1,chave2){
   db_iframe_acordo.hide();
 }
 
+function js_selecionarFormatoRelatorio() {
+  if (document.getElementById('trLicitacao').style.display == '' && document.getElementById('ac16_licitacao').value == '')
+    return alert("Usuário: Selecione a licitação.");
+
+  var iHeight = 200;
+  var iWidth = 300;
+  windowFormatoRelatorio = new windowAux(
+    "windowFormatoRelatorio",
+    "Gerar Relatório ",
+    iWidth,
+    iHeight,
+  );
+
+  var sContent = "<div style='margin-top:30px;'>";
+  sContent += "<fieldset>";
+  sContent += "<legend>Gerar Relatório de Credenciados em:</legend>";
+  sContent += "  <div >";
+  sContent += "  <input checked type='radio' id='pdf' name='formato'>";
+  sContent += "  <label>PDF</label>";
+  sContent += "  </div>";
+  sContent += "  <div>";
+  sContent += "  <input type='radio' id='excel' name='formato'>";
+  sContent += "  <label>EXCEL</label>";
+  sContent += "  </div>";
+  sContent += "</fieldset>";
+  sContent += "<center>";
+  sContent +=
+    "<input type='button' id='btnGerar' value='Confirmar' onclick='js_gerarRelatorio()'>";
+  sContent += "</center>";
+  sContent += "</div>";
+  windowFormatoRelatorio.setContent(sContent);
+  windowFormatoRelatorio.show();
+
+  document.getElementById("windowwindowFormatoRelatorio_btnclose").onclick = destroyWindow;
+}
+
+function destroyWindow() {
+  windowFormatoRelatorio.destroy();
+}
+
 function js_gerarRelatorio(){
-  // dpts = aDepartsInclusao;
-  // let departsInc = aDepartsInclusao.map( (obj) => {
-  //   return Object.keys(obj).map((chave) => {
-  //     return obj[chave];
-  //   });
-  // });
 
-  // document.form1.departamentos.value = JSON.stringify(departsInc);
-  $('ordemdescricao').value = $('ordem').options[$('ordem').selectedIndex].innerHTML;
-
-  var dataInicio = $F('ac16_datainicio');
-  var dataFim    = $F('ac16_datafim');
-  var iAcordo    = $F("ac16_sequencial");
-
-  /**
-   * Se tiver preenchido algo no campo acordo, não vai haver verificação de data
-   */
-
-  var sVirgula         = '';
-  var listaacordogrupo = '';
-  /*for(i=0; i < parent.iframe_grupoacordo.$('listaacordogrupo').length; i++) {
-    listaacordogrupo += sVirgula + parent.iframe_grupoacordo.$('listaacordogrupo').options[i].value;
-    sVirgula          = ",";
-  }*/
-
-  $('listaacordogrupo').value = listaacordogrupo;
-
-  var sVirgula        = '';
-  var listacontratado = '';
-  /*for(i=0; i < parent.iframe_contratado.$('listacontratado').length; i++) {
-    listacontratado += sVirgula + parent.iframe_contratado.$('listacontratado').options[i].value;
-    sVirgula         = ",";
-  }*/
-
-  $('listacontratado').value = listacontratado;
-    let sDepartsInclusao         = "";
+    let sDepartsInclusao = "";
 
     for (var iDepartamento = 0; iDepartamento < aDepartsInclusao.length; iDepartamento++) {
         sDepartsInclusao += aDepartsInclusao[iDepartamento].iDepartInc + ",";
@@ -333,35 +353,95 @@ function js_gerarRelatorio(){
     if (sDepartsResponsavel != "") {
         sDepartsResponsavel = sDepartsResponsavel.substring(0, sDepartsResponsavel.length -1);
     }
+
     $("sDepartsResponsavel").value = sDepartsResponsavel;
 
-    rel = 'relatorioacordosavencer'+Math.floor((Math.random() * 10) + 1);
-    document.form1.setAttribute('target',rel);
-    window.open('', rel,
-    'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, copyhistory=yes, width=1080, height=720');
-    document.form1.submit();
-    //jan.moveTo(0,0);
-    return true;
+    filtros = 'ac16_sequencial=' + $F("ac16_sequencial") + '&iAgrupamento=' + $F("iAgrupamento") +
+    '&ac02_acordonatureza=' + $F("ac02_acordonatureza") + '&ac16_datainicio=' + $F('ac16_datainicio') +
+    '&ac16_datafim=' + $F('ac16_datafim') + '&ordem=' + $F('ordem') + '&sDepartsInclusao=' + $F('sDepartsInclusao') +
+    '&sDepartsResponsavel=' + $F('sDepartsResponsavel') + '&ac16_licitacao=' + $F("ac16_licitacao");
+
+    if (document.getElementById('pdf').checked == true) {
+      jan = window.open('con2_saldocontratos002.php?'+filtros, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+      jan.moveTo(0, 0);
+    }
+
+    if (document.getElementById('excel').checked == true) {
+      jan = window.open('con2_saldocontratosexcel002.php?'+filtros, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+      jan.moveTo(0, 0);
+    }
+
 }
 
 /**
  * Função para mostrar os campos necessários para os filtros
  */
- function js_verificaFiltro(iValor) {
-  /**
-    * Filtro por acordo
-    */
-    if (iValor == 1) {
+function js_verificaFiltro(iValor) {
+  if (iValor == 1) {
+    $("trAcordos").style.display = "";
+    $("trDepartInc").style.display = "none";
+    $("trDepartResp").style.display = "none";
+    $("trLicitacao").style.display = "none";
+    return true;
+  }
 
-      $("trAcordos").style.display = "";
-      $("trDepartInc").style.display = "none";
-      $("trDepartResp").style.display = "none";
-  } else { // Filtro por departamento
-
+  if (iValor == 2) {
     $("trDepartInc").style.display = "";
     $("trDepartResp").style.display = "";
     $("trAcordos").style.display = "none";
+    $("trLicitacao").style.display = "none";
+    return true;
   }
+
+  $("trLicitacao").style.display = "";
+  $("trAcordos").style.display = "none";
+  $("trDepartInc").style.display = "none";
+  $("trDepartResp").style.display = "none";
+}
+
+
+function js_pesquisa_liclicita(mostra) {
+  if (mostra == true) {
+    js_OpenJanelaIframe(
+      "top.corpo",
+      "db_iframe_liclicita",
+      "func_liclicita.php?situacao=10&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto",
+      "Pesquisa",
+      true,
+    );
+    return true;
+  }
+
+  if (document.form1.ac16_licitacao.value != "") {
+    js_OpenJanelaIframe(
+      "top.corpo",
+      "db_iframe_liclicita",
+      "func_liclicita.php?situacao=10&pesquisa_chave=" +
+        document.form1.ac16_licitacao.value +
+        "&funcao_js=parent.js_mostraliclicita",
+      "Pesquisa",
+      false,
+    );
+    return true;
+  }
+
+  document.form1.l20_codigo.value = "";
+}
+
+function js_mostraliclicita(l20_objeto, erro) {
+  if (erro == true) {
+    document.getElementById("ac16_licitacao").value = "";
+    document.getElementById("l20_objeto").value = "";
+    document.getElementById("ac16_licitacao").focus();
+    return;
+  }
+  document.getElementById("l20_objeto").value = l20_objeto;
+}
+
+function js_mostraliclicita1(ac16_licitacao, l20_objeto) {
+  document.getElementById("ac16_licitacao").value = ac16_licitacao;
+  document.getElementById("l20_objeto").value = l20_objeto;
+  db_iframe_liclicita.hide();
 }
 
 var aDepartsInclusao        = new Array();

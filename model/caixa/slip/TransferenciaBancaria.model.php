@@ -44,7 +44,7 @@ class TransferenciaBancaria extends Transferencia {
    * Anula o slip
    * @see Transferencia::anular()
    */
-  public function anular($sMotivo) {
-    parent::anular($sMotivo);
+  public function anular($sMotivo, $sDataEstorno) {
+    parent::anular($sMotivo,$sDataEstorno);
   }
 }
