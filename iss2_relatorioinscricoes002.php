@@ -134,7 +134,6 @@ switch ($oGet->ordem) {
 
 # Include AgataAPI class
 include_once('dbagata/classes/core/AgataAPI.class');
-ini_set("error_reporting","E_ALL & ~NOTICE");
 
 # Instantiate AgataAPI
 $clagata = new cl_dbagata("issqn/iss1_inscr002.agt");
