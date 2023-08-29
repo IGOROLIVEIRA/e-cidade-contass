@@ -72,8 +72,6 @@ $clrescisao->rotulo->label("r59_caub");
 $clrescisao->rotulo->label("r59_menos1");
 $clrescisao->rotulo->label("r59_descr");
 $clrescisao->rotulo->label("r59_motivo");
-$clrescisao->rotulo->label("r05_motivo");
-$clrescisao->rotulo->label("rh05_motivo");
 $clrhpesrescisao->rotulo->label("rh05_motivo");
 
 if(!isset($chave_r59_anousu)){
