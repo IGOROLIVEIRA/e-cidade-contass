@@ -256,6 +256,7 @@ class cl_acordo
             $this->ac16_adesaoregpreco = ($this->ac16_adesaoregpreco === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_adesaoregpreco"] : $this->ac16_adesaoregpreco);
             $this->ac16_tipocadastro = ($this->ac16_tipocadastro === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_tipocadastro"] : $this->ac16_tipocadastro);
             $this->ac16_providencia = ($this->ac16_providencia === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_providencia"] : $this->ac16_providencia);
+            $this->ac16_datareferencia = ($this->ac16_datareferencia === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareferencia"] : $this->ac16_datareferencia);
         } else {
             $this->ac16_sequencial = ($this->ac16_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"] : $this->ac16_sequencial);
         }
@@ -1131,6 +1132,10 @@ class cl_acordo
             }
         }
 
+        if ($this->ac16_datareferencia != null && $this->ac16_datareferencia != "") {
+            $sql  .= $virgula . " ac16_datareferencia = '$this->ac16_datareferencia' ";
+            $virgula = ",";
+        }
 
         if (trim($this->ac16_licitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_licitacao"])) {
             $sql .= $virgula . " ac16_licitacao = $this->ac16_licitacao ";

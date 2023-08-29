@@ -2,15 +2,18 @@
 
 namespace ECidade\RecursosHumanos\ESocial\Agendamento\Eventos;
 
+use cl_rubricasesocial;
+use db_utils;
+use DBPessoal;
 use ECidade\RecursosHumanos\ESocial\Agendamento\Eventos\EventoBase;
 
 /**
- * Classe responsável por montar as informações do evento S2300 Esocial
+ * Classe responsÃ¡vel por montar as informaÃ§Ãµes do evento S2399 Esocial
  *
  * @package  ECidade\RecursosHumanos\ESocial\Agendamento\Eventos
- * @author   Robson de Jesus
+ * @author   Marcelo Hernane
  */
-class EventoS2300 extends EventoBase
+class EventoS2399 extends EventoBase
 {
 
     /**
@@ -29,7 +32,7 @@ class EventoS2300 extends EventoBase
      */
     public function montarDados()
     {
-        exit(var_dump($this->dados));
+        //exit(var_dump($this->dados));
         $aDadosAPI = array();
         $iSequencial = 1;
         foreach ($this->dados as $oDados) {
@@ -40,105 +43,314 @@ class EventoS2300 extends EventoBase
             $oDadosAPI->evtTSVTermino->indRetif            = 1;
             $oDadosAPI->evtTSVTermino->nrRecibo            = null;
             $oDadosAPI->evtTSVTermino->cpfTrab             = $oDados->cpftrab;
-            $oDadosAPI->evtTSVTermino->nmTrab              = $oDados->nmtrab;
-            $oDadosAPI->evtTSVTermino->sexo                = $oDados->sexo;
-            $oDadosAPI->evtTSVTermino->racaCor             = $oDados->racacor;
-            $oDadosAPI->evtTSVTermino->estCiv              = empty($oDados->estciv) ? null : $oDados->estciv;
-            $oDadosAPI->evtTSVTermino->grauInstr           = $oDados->grauinstr;
-            $oDadosAPI->evtTSVTermino->nmSoc               = empty($oDados->nmsoc) ? null : $oDados->nmsoc;
-
-            $oDadosAPI->evtTSVTermino->dtNascto            = $oDados->dtnascto;
-            $oDadosAPI->evtTSVTermino->paisNascto          = $oDados->paisnascto;
-            $oDadosAPI->evtTSVTermino->paisNac             = $oDados->paisnac;
-
-            $oDadosAPI->evtTSVTermino->endereco->brasil->tplograd    = empty($oDados->tplograd) ? null : $oDados->tplograd;
-            $oDadosAPI->evtTSVTermino->endereco->brasil->dsclograd   = empty($oDados->dsclograd) ? null : $oDados->dsclograd;
-            $oDadosAPI->evtTSVTermino->endereco->brasil->nrlograd    = empty($oDados->nrlograd) ? null : $oDados->nrlograd;
-            $oDadosAPI->evtTSVTermino->endereco->brasil->complemento = empty($oDados->complemento) ? null : $oDados->complemento;
-            $oDadosAPI->evtTSVTermino->endereco->brasil->bairro      = empty($oDados->bairro) ? null : $oDados->bairro;
-            $oDadosAPI->evtTSVTermino->endereco->brasil->codmunic    = empty($oDados->codmunic) ? null : $oDados->codmunic;
-            $oDadosAPI->evtTSVTermino->endereco->brasil->uf    = empty($oDados->uf) ? null : $oDados->uf;
-            $oDadosAPI->evtTSVTermino->endereco->brasil->cep = str_pad($oDados->cep, 8, "0", STR_PAD_RIGHT);
-
-            $oDadosAPI->evtTSVTermino->infodeficiencia->observacao = empty($oDados->observacao) ? null : $oDados->observacao;
-            empty($oDados->deffisica) ? null : $oDadosAPI->evtTSVTermino->infodeficiencia->deffisica = $oDados->deffisica;
-            empty($oDados->defvisual) ? null : $oDadosAPI->evtTSVTermino->infodeficiencia->defvisual = $oDados->defvisual;
-            empty($oDados->defauditiva) ? null : $oDadosAPI->evtTSVTermino->infodeficiencia->defauditiva = $oDados->defauditiva;
-            empty($oDados->defmental) ? null : $oDadosAPI->evtTSVTermino->infodeficiencia->defmental = $oDados->defmental;
-            empty($oDados->defintelectual) ? null : $oDadosAPI->evtTSVTermino->infodeficiencia->defintelectual = $oDados->defintelectual;
-            empty($oDados->reabreadap) ? null : $oDadosAPI->evtTSVTermino->infodeficiencia->reabreadap = $oDados->reabreadap;
-
-            $oDadosAPI->evtTSVTermino->dependente = $this->buscarDependentes($oDados->matricula);
-            if (empty($oDadosAPI->evtTSVTermino->dependente)) {
-                unset($oDadosAPI->evtTSVTermino->dependente);
-            }
-
-            $oDadosAPI->evtTSVTermino->contato->foneprinc = empty($oDados->foneprinc) ? null : $oDados->foneprinc;
-            $oDadosAPI->evtTSVTermino->contato->emailprinc = empty($oDados->emailprinc) ? null : $oDados->emailprinc;
-
-            $oDadosAPI->evtTSVTermino->cadini = empty($oDados->cadini) ? null : $oDados->cadini;
-            $oDadosAPI->evtTSVTermino->matricula = empty($oDados->matricula) ? null : $oDados->matricula;
-            $oDadosAPI->evtTSVTermino->codcateg = empty($oDados->codcateg) ? null : $oDados->codcateg;
-            $oDadosAPI->evtTSVTermino->dtinicio = empty($oDados->dtinicio) ? null : $oDados->dtinicio;
-            $oDadosAPI->evtTSVTermino->nrProcTrab = empty($oDados->nrproctrab) ? null : $oDados->nrproctrab;
-            $oDadosAPI->evtTSVTermino->natatividade = null;
-
-            $oDadosAPI->evtTSVTermino->cargofuncao->nmCargo = empty($oDados->nmcargo) ? null : $oDados->nmcargo;
-            $oDadosAPI->evtTSVTermino->cargofuncao->cboCargo = empty($oDados->cbocargo) ? null : $oDados->cbocargo;
-            $oDadosAPI->evtTSVTermino->cargofuncao->nmFuncao = empty($oDados->nmfuncao) ? null : $oDados->nmfuncao;
-            $oDadosAPI->evtTSVTermino->cargofuncao->cboFuncao = empty($oDados->cbofuncao) ? null : $oDados->cbofuncao;
+            $oDadosAPI->evtTSVTermino->matricula           = $oDados->matricula;
+            //$oDadosAPI->evtTSVTermino->codcateg          = ;
+            $oDadosAPI->evtTSVTermino->dtTerm              = $oDados->rh05_recis;
+            //$oDadosAPI->evtTSVTermino->mtvdesligtsv      = ;
+            $oDadosAPI->evtTSVTermino->pensalim            = 0;
+            //$oDadosAPI->evtTSVTermino->percaliment       = ;
+            //$oDadosAPI->evtTSVTermino->vralim            = ;
+            //$oDadosAPI->evtTSVTermino->nrproctrab        = ;
+            //$oDadosAPI->novocpf                          = ;
             
-            $oDadosAPI->evtTSVTermino->remuneracao->vrSalFx = empty($oDados->vrsalfx) ? null : $oDados->vrsalfx;
-            $oDadosAPI->evtTSVTermino->remuneracao->undSalFixo = empty($oDados->undsalfixo) ? null : $oDados->undsalfixo;
-            $oDadosAPI->evtTSVTermino->remuneracao->dscSalVar = empty($oDados->dscsalvar) ? null : $oDados->dscsalvar;
+            $std = $this->dmDevRH($oDados);
 
-            $oDadosAPI->evtTSVTermino->infotrabcedido = null;
-            // if (!empty($oDados->categorig)) {
-            //     $oDadosAPI->evtTSVTermino->infotrabcedido->categorig = empty($oDados->categorig) ? null : "301";
-            //     $oDadosAPI->evtTSVTermino->infotrabcedido->cnpjcednt = empty($oDados->cnpjcednt) ? null : $oDados->cnpjcednt;
-            //     $oDadosAPI->evtTSVTermino->infotrabcedido->matricCed = empty($oDados->matricced) ? null : $oDados->matricced;
-            //     $oDadosAPI->evtTSVTermino->infotrabcedido->dtAdmCed = empty($oDados->dtadmced) ? null : $oDados->dtadmced;
-            //     $oDadosAPI->evtTSVTermino->infotrabcedido->tpRegTrab = empty($oDados->tpregtrab) ? null : $oDados->tpregtrab;
-            //     $oDadosAPI->evtTSVTermino->infotrabcedido->tpRegPrev = empty($oDados->tpregprev) ? null : $oDados->tpregprev;
-            // }
+            if ($std->verbasresc->dmdev == null)
+                continue;
 
-            // $oDadosAPI->evtTSVTermino->infoMandElet = null;
-            // if (!empty($oDados->tpregtrabinfomandelet)) {
-            //     $oDadosAPI->evtTSVTermino->infoMandElet->indRemunCargo = empty($oDados->indremuncargo) ? null : $oDados->indremuncargo;
-            //     $oDadosAPI->evtTSVTermino->infoMandElet->tpRegTrab = empty($oDados->tpregtrabinfomandelet) ? null : $oDados->tpregtrabinfomandelet;
-            //     $oDadosAPI->evtTSVTermino->infoMandElet->tpRegPrev = empty($oDados->tpregprevinfomandelet) ? null : $oDados->tpregprevinfomandelet;
-            // }
-
-            // $oDadosAPI->evtTSVTermino->infoEstagiario = null;
-            // if (!empty($oDados->natestagio)) {
-            //     $oDadosAPI->evtTSVTermino->infoEstagiario->natEstagio = empty($oDados->natestagio) ? null : $oDados->natestagio;
-            //     $oDadosAPI->evtTSVTermino->infoEstagiario->nivEstagio = empty($oDados->nivestagio) ? null : $oDados->nivestagio;
-            //     $oDadosAPI->evtTSVTermino->infoEstagiario->areaAtuacao = empty($oDados->areaatuacao) ? null : $oDados->areaatuacao;
-            //     $oDadosAPI->evtTSVTermino->infoEstagiario->nrApol = empty($oDados->nrapol) ? null : $oDados->nrapol;
-            //     $oDadosAPI->evtTSVTermino->infoEstagiario->dtPrevTerm = empty($oDados->dtprevterm) ? null : $oDados->dtprevterm;
-
-            //     $oDadosAPI->evtTSVTermino->infoEstagiario->instEnsino->cnpjInstEnsino = empty($oDados->cnpjinstensino) ? null : $oDados->cnpjinstensino;
-            //     $oDadosAPI->evtTSVTermino->infoEstagiario->cnpjAgntInteg = empty($oDados->cnpjagntinteg) ? null : $oDados->cnpjagntinteg;
-
-            //     $oDadosAPI->evtTSVTermino->infoEstagiario->cpfSupervisor = empty($oDados->cpfsupervisor) ? null : $oDados->cpfsupervisor;
-            // }
-
-            // $oDadosAPI->evtTSVTermino->afastamento = null;
-            // if (!empty($oDados->dtiniafast)) {
-            //     $oDadosAPI->evtTSVTermino->afastamento->dtIniAfast = empty($oDados->dtiniafast) ? null : $oDados->dtiniafast;
-            //     $oDadosAPI->evtTSVTermino->afastamento->codMotAfast = empty($oDados->codmotafast) ? null : $oDados->codmotafast;
-            // }
-
-            if (!empty($oDados->dtterm)) {
-                $oDadosAPI->evtTSVTermino->termino->dtTerm = $oDados->dtterm;
-            }
+            $oDadosAPI->evtTSVTermino->dmdev = $std->verbasresc->dmdev;
 
             $aDadosAPI[] = $oDadosAPI;
             $iSequencial++;
         }
-        echo '<pre>';
-        var_dump($aDadosAPI);exit;
+        // echo '<pre>';
+        // var_dump($aDadosAPI);exit;
         return $aDadosAPI;
+    }
+
+    private function dmDevRH($aDadosPorMatriculas)
+    {
+        $std = new \stdClass();
+        $seqdmdev = 0;
+        // for ($iCont = 0; $iCont < count($aDadosPorMatriculas); $iCont++) {
+            $aIdentificador = $this->buscarIdentificador($aDadosPorMatriculas->matricula, $aDadosPorMatriculas->rh30_regime);
+
+            for ($iCont2 = 0; $iCont2 < count($aIdentificador); $iCont2++) {
+                $std->verbasresc->dmdev[$seqdmdev] = new \stdClass();
+                
+                if ($aIdentificador[$iCont2]->idedmdev == 1) {
+                    $std->verbasresc->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas->matricula . 'gerfsal';
+                }
+                if ($aIdentificador[$iCont2]->idedmdev == 2) {
+                    $std->verbasresc->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas->matricula . 'gerfres';
+                }
+                if ($aIdentificador[$iCont2]->idedmdev == 3) {
+                    $std->verbasresc->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas->matricula . 'gerfcom';
+                }
+                if ($aIdentificador[$iCont2]->idedmdev == 4) {
+                    $std->verbasresc->dmdev[$seqdmdev]->idedmdev = $aDadosPorMatriculas->matricula . 'gerfs13';
+                }
+                //$std->verbasresc->dmdev[$seqdmdev]->codcateg = $aDadosPorMatriculas->codcateg;
+
+                $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0] = new \stdClass();
+                $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->tpinsc = "1";
+                $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->nrinsc = $aDadosPorMatriculas->nrinsc;
+                $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->codlotacao = $aDadosPorMatriculas->codlotacao;
+
+                $aDadosValoreRubrica = $this->buscarValorRubrica($aDadosPorMatriculas->matricula, $aDadosPorMatriculas->rh30_regime, $aIdentificador[$iCont2]->idedmdev);
+
+                if (count($aDadosValoreRubrica) == 0) {
+                    continue;
+                }
+
+                for ($iCont4 = 0; $iCont4 < count($aDadosValoreRubrica); $iCont4++) {
+                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[$iCont4] = new \stdClass(); 
+                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[$iCont4]->codrubr = $aDadosValoreRubrica[$iCont4]->codrubr; 
+                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[$iCont4]->idetabrubr = 'TABRUB1';//$aDadosValoreRubrica[$iCont4]->idetabrubr; 
+                    //$std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[$iCont4]->vrunit = $aDadosValoreRubrica[$iCont4]->vrrubr; 
+                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[$iCont4]->vrrubr = $aDadosValoreRubrica[$iCont4]->vrrubr; 
+                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[$iCont4]->indapurir = 0;//$aDadosValoreRubrica[$iCont4]->indapurir; 
+                }
+
+                $seqdmdev++;
+            }
+        // }
+
+            $std->verbasresc->infomv = new \stdClass();
+            $std->verbasresc->infomv->indmv = $aDadosPorMatriculas->indmv;
+
+            $std->verbasresc->infomv->remunoutrempr[1] = new \stdClass();
+            $std->verbasresc->infomv->remunoutrempr[1]->tpinsc = 1;
+            $std->verbasresc->infomv->remunoutrempr[1]->nrinsc = $aDadosPorMatriculas->nrInscremunOutrEmpr;
+            $std->verbasresc->infomv->remunoutrempr[1]->codcateg = $aDadosPorMatriculas->rh51_categoria;
+            $std->verbasresc->infomv->remunoutrempr[1]->vlrremunoe = $aDadosPorMatriculas->rh51_basefo;
+
+        return $std;
+    }
+
+    private function buscarIdentificador($matricula, $rh30_regime)
+    {
+        $iAnoUsu = date("Y", db_getsession("DB_datausu"));
+        $iMesusu = date("m", db_getsession("DB_datausu"));
+        if ($rh30_regime == 1 || $rh30_regime == 3) {
+            $aPontos = array('13salario');
+            if ($this->indapuracao != 2)
+                $aPontos = array('salario', 'complementar', 'rescisao');
+        } else {
+            $aPontos = array('13salario');
+            if ($this->indapuracao != 2)
+                $aPontos = array('salario', 'complementar');
+        }
+
+        foreach ($aPontos as $opcao) {
+            switch ($opcao) {
+                case 'salario':
+                    $sigla          = 'r14_';
+                    $arquivo        = 'gerfsal';
+                    break;
+
+                case 'complementar':
+                    $sigla          = 'r48_';
+                    $arquivo        = 'gerfcom';
+                    break;
+
+                case '13salario':
+                    $sigla          = 'r35_';
+                    $arquivo        = 'gerfs13';
+                    break;
+
+                case 'rescisao':
+                    $sigla          = 'r20_';
+                    $arquivo        = 'gerfres';
+                    break;
+
+                default:
+                    continue;
+                    break;
+            }
+            if ($opcao) {
+                $sql = "  select distinct
+                        case
+                        when '{$arquivo}' = 'gerfsal' then 1
+                        when '{$arquivo}' = 'gerfcom' then 3
+                        when '{$arquivo}' = 'gerfs13' then 4
+                        when '{$arquivo}' = 'gerfres' then 2
+                        end as ideDmDev
+                        from {$arquivo}
+                        where " . $sigla . "anousu = '" . $iAnoUsu . "'
+                        and  " . $sigla . "mesusu = '" . $iMesusu . "'
+                        and  " . $sigla . "instit = " . db_getsession("DB_instit") . "
+                        and {$sigla}regist = $matricula";
+            }
+
+            $rsIdentificadores = db_query($sql);
+            // echo $sql;
+            // db_criatabela($rsIdentificadores);
+            // exit;
+            if (pg_num_rows($rsIdentificadores) > 0) {
+                for ($iCont = 0; $iCont < pg_num_rows($rsIdentificadores); $iCont++) {
+                    $oIdentificadores = \db_utils::fieldsMemory($rsIdentificadores, $iCont);
+
+                    $aItens[] = $oIdentificadores;
+                }
+            }
+        }
+        return $aItens;
+    }
+
+    /**
+     * Retorna os valores por rubrica no formato necessario para envio
+     * pela API sped-esocial
+     * @return array stdClass
+     */
+    private function buscarValorRubrica($matricula, $rh30_regime, $ponto)
+    {
+        require_once 'libs/db_libpessoal.php';
+
+        $clrubricasesocial = new cl_rubricasesocial;
+
+        $iAnoUsu = date("Y", db_getsession("DB_datausu"));
+        $iMesusu = date("m", db_getsession("DB_datausu"));
+        $xtipo = "'x'";
+
+        if ($ponto == 1)
+            $opcao = 'salario';
+        if ($ponto == 2)
+            $opcao = 'rescisao';
+        if ($ponto == 3)
+            $opcao = 'complementar';
+        if ($ponto == 4)
+            $opcao = '13salario';
+
+        switch ($opcao) {
+            case 'salario':
+                $sigla          = 'r14_';
+                $arquivo        = 'gerfsal';
+                $sTituloCalculo = 'Sal?rio';
+                break;
+
+            case 'complementar':
+                $sigla          = 'r48_';
+                $arquivo        = 'gerfcom';
+                $sTituloCalculo = 'Complementar';
+                break;
+
+            case '13salario':
+                $sigla          = 'r35_';
+                $arquivo        = 'gerfs13';
+                $sTituloCalculo = '13? Sal?rio';
+                break;
+            case 'rescisao':
+                $sigla          = 'r20_';
+                $arquivo        = 'gerfres';
+                $xtipo          = ' r20_tpp ';
+                $sTituloCalculo = 'Rescis?o';
+                break;
+
+            default:
+                continue;
+                break;
+        }
+        if ($opcao) {
+
+            $sql = "  select '1' as ordem ,
+                               {$sigla}rubric as rubrica,
+                               case
+                                 when rh27_pd = 3 then 0
+                                 else case
+                                        when {$sigla}pd = 1 then {$sigla}valor
+                                        else 0
+                                      end
+                               end as Provento,
+                               case
+                                 when rh27_pd = 3 then 0
+                                 else case
+                                        when {$sigla}pd = 2 then {$sigla}valor
+                                        else 0
+                                      end
+                               end as Desconto,
+                               {$sigla}quant as quant,
+                               rh27_descr,
+                               {$xtipo} as tipo ,
+                               case
+                                 when rh27_pd = 3 then 'Base'
+                                 else case
+                                        when {$sigla}pd = 1 then 'Provento'
+                                        else 'Desconto'
+                                      end
+                               end as provdesc,
+                               case
+                                when '{$arquivo}' = 'gerfsal' then 1
+                                when '{$arquivo}' = 'gerfcom' then 3
+                                when '{$arquivo}' = 'gerfs13' then 4
+                                when '{$arquivo}' = 'gerfres' then 2
+                                end as ideDmDev
+                          from {$arquivo}
+                               inner join rhrubricas on rh27_rubric = {$sigla}rubric
+                                                    and rh27_instit = " . db_getsession("DB_instit") . "
+                          " . bb_condicaosubpesproc($sigla, $iAnoUsu . "/" . $iMesusu) . "
+                           and {$sigla}regist = $matricula
+                           and {$sigla}pd != 3
+                           and {$sigla}rubric not in ('R985','R993','R981')
+                           order by {$sigla}pd,{$sigla}rubric";
+        }
+        $rsValores = db_query($sql);
+        // echo $sql;
+        // db_criatabela($rsValores);
+        if ($opcao != 'rescisao') {
+            for ($iCont = 0; $iCont < pg_num_rows($rsValores); $iCont++) {
+                $oResult = \db_utils::fieldsMemory($rsValores, $iCont);
+                $oFormatado = new \stdClass();
+                $oFormatado->codrubr    = $oResult->rubrica;
+                $oFormatado->idetabrubr = 'tabrub1';
+                $oFormatado->vrrubr     = ($oResult->provdesc == 'Provento') ? $oResult->provento : $oResult->desconto;
+                $oFormatado->indapurir  = 0;
+                $oFormatado->idedmdev   = $oResult->idedmdev;
+
+                $aItens[] = $oFormatado;
+            }
+        } else {
+            for ($iCont2 = 0; $iCont2 < pg_num_rows($rsValores); $iCont2++) {
+                $oResult = \db_utils::fieldsMemory($rsValores, $iCont2);
+                $rsRubEspeciais = db_query($clrubricasesocial->sql_query(null, "e990_sequencial,e990_descricao", null, "baserubricasesocial.e991_rubricas = '{$oResult->rubrica}' AND e990_sequencial IN ('1000','5001','1020')"));
+                $rubrica = $oResult->rubrica;
+                if (pg_num_rows($rsRubEspeciais) > 0) {
+                    $oRubEspeciais = db_utils::fieldsMemory($rsRubEspeciais);
+                    switch ($oRubEspeciais->e990_sequencial) {
+                        case '1000':
+                            $rubrica = '9000';
+                            $rh27_descr = 'Saldo de Sal?rio na Rescis?o';
+                            break;
+                        case '5001':
+                            $rubrica = '9001';
+                            $rh27_descr = '13? Sal?rio na Rescis?o';
+                            break;
+                        case '1020':
+                            $rubrica = '9002';
+                            $rh27_descr = 'F?rias Proporcional na Rescis?o';
+                            break;
+                        case '1020':
+                            $rubrica = '9003';
+                            $rh27_descr = 'F?rias Vencidas na Rescis?o';
+                            break;
+
+                        default:
+                            break;
+                    }
+                }
+                $oFormatado = new \stdClass();
+                $oFormatado->codrubr    = $rubrica;
+                $oFormatado->idetabrubr = 'tabrub1';
+                $oFormatado->vrrubr     = ($oResult->provdesc == 'Provento') ? $oResult->provento : $oResult->desconto;
+                $oFormatado->indapurir  = 0;
+                $oFormatado->idedmdev   = $oResult->idedmdev;
+
+                $aItens[] = $oFormatado;
+            }
+        }
+        // echo '<pre>';
+        // var_dump($aItens);exit;
+        return $aItens;
     }
 
     /**

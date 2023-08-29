@@ -96,6 +96,16 @@ try {
                     }
                     $valor = $valor_debito <> 0 ? abs($valor_debito) : abs($valor_credito);
                     // $chave = $i++;
+                    if ($codigo){
+                        
+                        $sql = "select k17_numdocumento from slip
+                        where k17_codigo = $codigo";
+                        $numdocumento = db_query($sql);
+                        if (pg_numrows($numdocumento)>0){
+                            db_fieldsmemory($numdocumento,0);
+                        }
+                    }
+                   
                     $agrupado[$chave][] = array(
                         "identificador" => $caixa,
                         "data_lancamento" => date("d/m/Y", strtotime($data)),
@@ -105,6 +115,7 @@ try {
                         "tipo" => descricaoTipoLancamento($cod_doc),
                         "op_rec_slip" => !$documento ? "" : $documento,
                         "documento" => trim($cheque),
+                        "numdocumento" => $k17_numdocumento,
                         "movimento" => $movimento,
                         "valor_individual" => $valor,
                         "valor" => $valor,
@@ -120,6 +131,7 @@ try {
                         $lancamentos[$chave]["credor"] = $credor;
                         $lancamentos[$chave]["tipo"] = $tipo_lancamento == 2 ? utf8_encode("PENDÊNCIA") : descricaoTipoLancamento($cod_doc);
                         $lancamentos[$chave]["op_rec_slip"][] = !$documento ? "" : $documento;
+                        $lancamentos[$chave]["numdocumento"][] = $k17_numdocumento;
                         $lancamentos[$chave]["documento"][] = trim($cheque);
                         $lancamentos[$chave]["movimento"] = $movimento;
                         $lancamentos[$chave]["valor"] = $valor_debito <> 0 ? $valor_debito : $valor_credito;
@@ -164,6 +176,7 @@ try {
                     $oDadosLinha->tipo             = $lancamento["tipo"];
                     $oDadosLinha->op_rec_slip      = $lancamento["op_rec_slip"];
                     $oDadosLinha->documento        = $lancamento["documento"];
+                    $oDadosLinha->numdocumento     = $lancamento["numdocumento"];
                     $oDadosLinha->movimento        = $lancamento["movimento"];
                     $oDadosLinha->valor_individual = $lancamento["valor_individual"];
                     $oDadosLinha->valor            = abs($lancamento["valor"]);

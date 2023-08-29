@@ -107,7 +107,7 @@ $clrotulo->label("ac10_obs");
               <td colspan="3">
                 <fieldset id="fieldsetobservacao" class="fieldsetinterno">
                   <legend>
-                    <b>Observao</b>
+                    <b>Observação</b>
                   </legend>
                   <?
                   db_textarea('ac10_obs', 5, 64, $Iac10_obs, true, 'text', $db_opcao, "");

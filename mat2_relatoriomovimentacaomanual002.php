@@ -113,7 +113,8 @@ $sSqlDados = "SELECT m80_codigo as codlancamento,
        m80_data,
        m89_precomedio AS precomedio,
        sum(coalesce((m82_quant::numeric * m89_valorunitario::numeric),0)) AS m89_valorfinanceiro,
-       m81_codtipo
+       m81_codtipo,
+	   m80_obs
 FROM matestoqueini
 INNER JOIN matestoqueinimei ON m80_codigo = m82_matestoqueini
 INNER JOIN matestoqueinimeipm ON m82_codigo = m89_matestoqueinimei
@@ -178,6 +179,7 @@ if ($iTotalItens > 0) {
 		$oMaterial->nPrecoMedio                    = $oItem->precomedio;
 		$oMaterial->nValor                         = $oItem->m89_valorfinanceiro;
 		$oMaterial->iTipo                          = $oItem->m81_codtipo;
+		$oMaterial->sObservacao                    = $oItem->m80_obs;
 		$aMateriais[] = $oMaterial;
 
 		/**
@@ -309,10 +311,10 @@ function addHeader($oPdf) {
 	$oPdf->setfont('arial', 'b', 7);
 
 	$oPdf->cell(20,$iAlturaLinha, "Cod. Lan",$iBorda, 0, "C", 1);
-	$oPdf->cell(20,$iAlturaLinha, "Cod. M",$iBorda, 0, "C", 1);
-	$oPdf->cell(99,$iAlturaLinha, "Descrição Material", 1, 0, "L", 1);
+	$oPdf->cell(20,$iAlturaLinha, "Material",$iBorda, 0, "C", 1);
+	$oPdf->cell(99,$iAlturaLinha, "Descrição do Material", 1, 0, "L", 1);
 	$oPdf->cell(30,$iAlturaLinha, "Tipo",$iBorda, 0, "L", 1);
-	$oPdf->cell(40,$iAlturaLinha, "Almoxarifado",$iBorda, 0, "L", 1);
+	$oPdf->cell(40,$iAlturaLinha, "Almoxarifado",$iBorda, 0, "C", 1);
 	$oPdf->cell(25,$iAlturaLinha, "Quant.",$iBorda, 0, "C", 1);
 	$oPdf->cell(25,$iAlturaLinha, "Valor",$iBorda, 0, "C", 1);
 	$oPdf->cell(20,$iAlturaLinha, "Data",$iBorda, 1, "C", 1);
@@ -334,15 +336,16 @@ function addLinha($oPdf, $oItem, $iPreenche = 0){
 
 	$sAlmoxarifado       = "{$oItem->iCodigoAlmoxarifado} - {$oItem->sDescricaoAlmoxarifado}";
 
-  $iNovaAlturaLinha = getAlturaLinha($iAlturaLinha,$oItem->sDescricaoItem,$sAlmoxarifado);
-  $oPdf->cell(20,$iNovaAlturaLinha, $oItem->iCodLancamento,$iBorda, 0, "C", $iPreenche);
+  	$iNovaAlturaLinha = getAlturaLinha($iAlturaLinha,$oItem->sDescricaoItem,$sAlmoxarifado);
+  	$oPdf->cell(20,$iNovaAlturaLinha, $oItem->iCodLancamento,$iBorda, 0, "C", $iPreenche);
 	$oPdf->cell(20,$iNovaAlturaLinha, $oItem->iCodMaterial,$iBorda, 0, "C", $iPreenche);
-  multCell($oPdf,99,$iAlturaLinha,$iNovaAlturaLinha,ltrim($oItem->sDescricaoItem),$iBorda,"J",$iPreenche,0);
+  	multCell($oPdf,99,$iAlturaLinha,$iNovaAlturaLinha,ltrim($oItem->sDescricaoItem),$iBorda,"J",$iPreenche,0);
 	$oPdf->cell(30,$iNovaAlturaLinha, substr($oItem->sDescricaoTipo,0,18),$iBorda, 0, "L", $iPreenche);
-	multCell($oPdf,40,$iAlturaLinha,$iNovaAlturaLinha,$sAlmoxarifado,$iBorda,"J",$iPreenche,0);
-	$oPdf->cell(25,$iNovaAlturaLinha, $oItem->nQuantidade,$iBorda, 0, "R", $iPreenche);
-	$oPdf->cell(25,$iNovaAlturaLinha, db_formatar($oItem->nValor,'f'),$iBorda, 0, "R", $iPreenche);
+	multCell($oPdf,40,$iAlturaLinha,$iNovaAlturaLinha,$sAlmoxarifado,$iBorda,"C",$iPreenche,0);
+	$oPdf->cell(25,$iNovaAlturaLinha, $oItem->nQuantidade,$iBorda, 0, "C", $iPreenche);
+	$oPdf->cell(25,$iNovaAlturaLinha, db_formatar($oItem->nValor,'f'),$iBorda, 0, "C", $iPreenche);
 	$oPdf->cell(20,$iNovaAlturaLinha, date("d/m/Y",strtotime($oItem->dData)),$iBorda, 1, "C", $iPreenche);
+	$oItem->sObservacao != "" ? $oPdf->cell(279,$iAlturaLinha, "Observação: ". substr($oItem->sObservacao,0,150),1, 1, "L", 0) : "";
 
 }
 

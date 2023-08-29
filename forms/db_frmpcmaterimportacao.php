@@ -232,8 +232,8 @@ if (isset($_POST["processar"])) {
             $pc07_codele = $cell->getValue();
 
 
-            $dataArr[$i][0] = $pc01_descrmater;
-            $dataArr[$i][1] = $pc01_complmater;
+            $dataArr[$i][0] = preg_replace('/[^\p{L}\p{N}\s]/', '', $pc01_descrmater );
+            $dataArr[$i][1] = preg_replace('/[^\p{L}\p{N}\s]/', '', $pc01_complmater );
             $dataArr[$i][2] = $pc01_servico;
             $dataArr[$i][3] = $pc01_codsubgrupo;
             $dataArr[$i][4] = $pc01_obras;

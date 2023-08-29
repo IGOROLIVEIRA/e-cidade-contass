@@ -148,6 +148,17 @@ class slip {
    */
   protected $dtDataAutenticacao;
 
+   /**
+   * NumDocumento
+   * @var string
+   */
+  protected $iNumDocumento;
+
+     /**
+   * Select Tipo
+   * @var string
+   */
+  protected $iTipoSelect;
 
   /**
    * Tipo Autenticacao
@@ -205,6 +216,8 @@ class slip {
          $this->setHistorico($oDadosSlip->k17_hist);
          $this->setSituacao($oDadosSlip->k17_situacao);
          $this->setValor($oDadosSlip->k17_valor);
+         $this->setNumeroDocumento($oDadosSlip->k17_numdocumento);
+         $this->setTipoSelect($oDadosSlip->k17_tiposelect);
          $this->dtDataAutenticacao = $oDadosSlip->k17_dtaut;
          $this->iTipoAutenticacao  = $oDadosSlip->k17_autent;
          $this->iSlip = $iSlip;
@@ -387,7 +400,7 @@ class slip {
 
     $clslip                    =  db_utils::getDao("slip");
     if ($this->getData())
-        $clslip->k17_data          = date("Y-m-d", strtotime($this->getData()));
+        $clslip->k17_data          = $this->getData();
     else 
         $clslip->k17_data          = date("Y-m-d",db_getsession("DB_datausu"));
     $clslip->k17_debito        = $this->getContaDebito();
@@ -396,13 +409,15 @@ class slip {
     $clslip->k17_hist          = $this->getHistorico();
     $clslip->k17_texto         = $this->getObservacoes();
     $clslip->k17_instit        = db_getsession("DB_instit");
+    $clslip->k17_numdocumento  = $this->getNumeroDocumento();
+    $clslip->k17_tiposelect    = $this->getTipoSelect();
     /*OC4401*/
     $clslip->k17_id_usuario    = db_getsession("DB_id_usuario");
     /*FIM - OC4401*/
     $clslip->k17_dtanu         = "";
     $clslip->k17_tipopagamento = "".$this->getTipoPagamento()."";
     $clslip->k17_situacao      = $this->getSituacao();
-    $clslip->k17_devolucao = $this->iExercicioCompetenciaDevolucao;
+    $clslip->k17_devolucao     = $this->iExercicioCompetenciaDevolucao;
 
     if ($this->iSlip == null) {
       $clslip->incluir(null);
@@ -580,10 +595,14 @@ class slip {
    * @throws Exception
    * @return boolean true
    */
-  public function estornar($lExcluirCheque = true, Transferencia $oTransferencia = null) {
+  public function estornar($lExcluirCheque = true, Transferencia $oTransferencia = null, $sDataEstorno = null) {
 
     $iInstituicaoSessao = db_getsession("DB_instit");
     $dtSessao           = date("Y-m-d", db_getsession("DB_datausu"));
+		if (!empty($sDataEstorno)) {
+			$dtSessao = $sDataEstorno;
+		}
+   
     $sIPSessao          = db_getsession("DB_ip");
 
     $oDaocfautent      = db_utils::getDao('cfautent');
@@ -716,14 +735,17 @@ class slip {
    * @param  string $sMotivo
    * @throws Exception
    */
-  public function anular($sMotivo, $lExcluirCheque=true, Transferencia $oTransferencia = null) {
+  public function anular($sMotivo, $lExcluirCheque=true, Transferencia $oTransferencia = null,$sDataEstorno) {
 
     if ($this->isAnulado()) {
       throw new Exception("A transferência {$this->iSlip} já está anulada. Procedimento abortado.");
     }
-
+   
     $dtDataAtual = date("Y-m-d",db_getsession("DB_datausu"));
-
+		if (!empty($sDataEstorno)) {
+			$dtDataAtual = $sDataEstorno;
+		}
+   
     if (!empty($this->dtDataAutenticacao) && ($this->dtDataAutenticacao > $dtDataAtual || $this->dtDataAutenticacao = '')) {
 
       $sMsgErro    = "Não foi possível anular o slip {$this->iSlip}!\n";
@@ -732,7 +754,7 @@ class slip {
     }
 
     $this->sMotivoEstornoAnulacao = $sMotivo;
-    $this->estornar($lExcluirCheque, $oTransferencia);
+    $this->estornar($lExcluirCheque, $oTransferencia,$sDataEstorno);
     $oDaoEmpageslip = db_utils::getDao("empageslip");
     $sCamposBusca     = "e97_codforma,e96_descr,e90_codgera, e81_codmov,e91_cheque";
     $sWhere           = "e89_codigo = {$this->iSlip} and e81_cancelado is null";
@@ -771,10 +793,15 @@ class slip {
       throw new Exception($sMensagemUsuario);
     }
 
+    $dtDataUsu = date("Y-m-d", db_getsession('DB_datausu'));
+		if (!empty($sDataEstorno)) {
+			$dtDataUsu = $sDataEstorno;
+		}
+
     $oDaoSlip               = db_utils::getDao('slip');
     $oDaoSlip->k17_codigo   = $this->getSlip();
     $oDaoSlip->k17_situacao = 4;
-    $oDaoSlip->k17_dtanu    = date("Y-m-d",db_getsession("DB_datausu"));
+    $oDaoSlip->k17_dtanu    = $dtDataUsu;
     $oDaoSlip->alterar($this->getSlip());
 
     if ($oDaoSlip->erro_status == 0) {
@@ -991,6 +1018,38 @@ class slip {
     $this->dtData = $dtData;
   }
 
+     /**
+   * Retorna o Numumero Documento
+   * @return integer
+   */
+  final public function getNumeroDocumento() {
+    return $this->iNumDocumento;
+  }
+
+  /**
+   * Seta o codigo de um movimento
+   * @param integer $iCodigoMovimento
+   */
+  final public function setNumeroDocumento($iNumDocumento) {
+    $this->iNumDocumento = $iNumDocumento;
+  }
+
+   /**
+   * Retorna o Select Tipo
+   * @return integer
+   */
+  final public function getTipoSelect() {
+    return $this->iTipoSelect;
+  }
+
+  /**
+   * Seta o codigo de um movimento
+   * @param integer $iTipoSelect
+   */
+  final public function setTipoSelect($iTipoSelect) {
+    $this->iTipoSelect = $iTipoSelect;
+  }
+
   /**
    * @return integer
    */
@@ -1117,7 +1176,6 @@ class slip {
   public function setMovimento($iCodigoMovimento) {
     $this->iMovimento = $iCodigoMovimento;
   }
-
 
 
   /**

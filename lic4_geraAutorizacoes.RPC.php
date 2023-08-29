@@ -99,6 +99,11 @@ switch ($oParam->exec) {
     $rsExecPcTipoCompra = $oDaoPcTipoCompra->sql_record($sSqlPcTipoCompra);
     $oRetorno->tipocompratribunal = db_utils::fieldsMemory($rsExecPcTipoCompra, 0)->pc50_pctipocompratribunal;
 
+    $oDaoAcordo = db_utils::getDao("acordo");
+    $sSqlAcordoTipoorigem = $oDaoAcordo->sql_query($oParam->iAcordo,"ac16_tipoorigem",null,"");
+    $rsAcordoTipoorigem = $oDaoAcordo->sql_record($sSqlAcordoTipoorigem);
+    $oRetorno->tipoorigem = db_utils::fieldsMemory($rsAcordoTipoorigem, 0)->ac16_tipoorigem;
+
 
     break;
     /**

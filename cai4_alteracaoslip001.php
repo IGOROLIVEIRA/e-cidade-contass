@@ -21,7 +21,8 @@ db_app::load("widgets/windowAux.widget.js");
 db_app::load("widgets/dbmessageBoard.widget.js");
 db_app::load("dbcomboBox.widget.js");
 db_app::load("widgets/DBToogle.widget.js");
-
+db_app::load("dbtextFieldData.widget.js");
+db_app::load("arrays.js"); 
 
 $oPost = db_utils::postMemory($_POST);
 $oGet  = db_utils::postMemory($_GET);
@@ -148,9 +149,12 @@ function js_retornoGetDados(oAjax) {
   oDBViewSlipPagamento.oTxtCodigoSlip.setValue(oRetorno.iCodigoSlip);
   oDBViewSlipPagamento.getDadosTransferencia();
 
-
-  oDBViewSlipPagamento.oTxtFonteInputCodigo.setValue(oRetorno.iFonteRecurso);
-  oDBViewSlipPagamento.pesquisaFonte(false);
+  window.setTimeout(
+        function() {
+          oDBViewSlipPagamento.oTxtFonteInputCodigo.setValue(oRetorno.iFonteRecurso);
+          oDBViewSlipPagamento.pesquisaFonte(false);
+        }, 8000
+      );
 
   oDBViewSlipPagamento.pesquisaCaracteristicaPeculiarCredito(false);
   oDBViewSlipPagamento.pesquisaCaracteristicaPeculiarDebito(false);

@@ -15,5 +15,6 @@
   "selecione_orgao"                  : "Selecione um Orgão.",
   "bem_sem_placa"                    : "O bem selecionado não possui placa cadastrada.",
   "marque_registros"                 : "Marque os registros para liberar a edição. O registro será feito de forma instantânea. O valor depreciável não é editável.",
-  "bens_inventario"                  : "Bens do inventário [inventario]."
+  "bens_inventario"                  : "Bens do inventário [inventario].",
+  "bens_inventario_help"             : ""
 }

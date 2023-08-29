@@ -33,17 +33,17 @@ class cl_aoc122023
   var $si40_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si40_sequencial = int8 = sequencial 
-                 si40_tiporegistro = int8 = Tipo do registro 
-                 si40_codreduzidodecreto = int8 = Código do decreto 
-                 si40_nroleialteracao = varchar(6) = Número da Lei 
+                 si40_sequencial = int8 = sequencial
+                 si40_tiporegistro = int8 = Tipo do registro
+                 si40_codreduzidodecreto = int8 = Código do decreto
+                 si40_nroleialteracao = varchar(6) = Número da Lei
                  si40_dataleialteracao = date = Data da lei
                  si40_tpleiorigdecreto = varchar(6) = Tipo Lei Origem Decreto
                  si40_tipoleialteracao = int8 = Tipo Lei Alteração
                  si40_valorabertolei = float8 = Valor Aberto
-                 si40_mes = int8 = Mês 
-                 si40_reg10 = int8 = reg10 
-                 si40_instit = int8 = Instituição 
+                 si40_mes = int8 = Mês
+                 si40_reg10 = int8 = reg10
+                 si40_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -171,29 +171,29 @@ class cl_aoc122023
       return false;
     }
     $sql = "insert into aoc122023(
-                                       si40_sequencial 
-                                      ,si40_tiporegistro 
-                                      ,si40_codreduzidodecreto 
-                                      ,si40_nroleialteracao 
-                                      ,si40_dataleialteracao 
+                                       si40_sequencial
+                                      ,si40_tiporegistro
+                                      ,si40_codreduzidodecreto
+                                      ,si40_nroleialteracao
+                                      ,si40_dataleialteracao
                                       ,si40_tpleiorigdecreto
                                       ,si40_tipoleialteracao
-                                      ,si40_mes 
-                                      ,si40_reg10 
-                                      ,si40_instit 
+                                      ,si40_mes
+                                      ,si40_reg10
+                                      ,si40_instit
                                       ,si40_valorabertolei
                        )
                 values (
-                                $this->si40_sequencial 
-                               ,$this->si40_tiporegistro 
-                               ,$this->si40_codreduzidodecreto 
-                               ,'$this->si40_nroleialteracao' 
+                                $this->si40_sequencial
+                               ,$this->si40_tiporegistro
+                               ,$this->si40_codreduzidodecreto
+                               ,'$this->si40_nroleialteracao'
                                ," . ($this->si40_dataleialteracao == "null" || $this->si40_dataleialteracao == "" ? "null" : "'" . $this->si40_dataleialteracao . "'") . "
                                ,'$this->si40_tpleiorigdecreto'
                                ," . ($this->si40_tipoleialteracao == "null" || $this->si40_tipoleialteracao == "" ? "null" : "'" . $this->si40_tipoleialteracao . "'") . "
-                               ,$this->si40_mes 
-                               ,$this->si40_reg10 
-                               ,$this->si40_instit 
+                               ,$this->si40_mes
+                               ,$this->si40_reg10
+                               ,$this->si40_instit
                                ," . ($this->si40_valorabertolei == "null" || $this->si40_valorabertolei == "" ? "null" : "'" . $this->si40_valorabertolei . "'") . "
                       )";
     $result = db_query($sql);
@@ -512,7 +512,7 @@ class cl_aoc122023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -534,7 +534,7 @@ class cl_aoc122023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -550,7 +550,7 @@ class cl_aoc122023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -571,7 +571,7 @@ class cl_aoc122023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -581,6 +581,61 @@ class cl_aoc122023
 
     return $sql;
   }
-}
 
-?>
+    /**
+     * @SICOM AOC122023
+     *
+     * @param $oDados10
+     * @return string
+     */
+    public function sqlReg12($oDados10)
+    {
+        $codigosVinculados = implode(',', $oDados10->codigovinc);
+        if (isset($codigosVinculados) || $codigosVinculados == null) {
+          $codigosVinculados = $oDados10->codigovinc;
+        }  
+
+        return "SELECT distinct '12' AS tiporegistro,
+                       o39_codproj AS codReduzidoDecreto,
+                       CASE
+                           WHEN {$oDados10->tipodecreto} = 1 THEN o45_numlei
+                           ELSE o138_numerolei
+                       END AS nroLeiAlteracao,
+                       CASE
+                           WHEN {$oDados10->tipodecreto} = 1 THEN o45_datalei
+                           ELSE o138_data
+                       END AS dataLeiAlteracao,
+                       CASE
+                           WHEN {$oDados10->tipodecreto} = 1 THEN
+                               CASE o45_tipolei
+                                   WHEN 1 THEN 'LOA'
+                                   WHEN 2 THEN 'LDO'
+                                   WHEN 3 THEN 'LAO'
+                                   WHEN 4 THEN 'LAOP'
+                                   ELSE ''
+                               END
+                           ELSE
+                               CASE o138_altpercsuplementacao
+                                   WHEN 1 THEN 'LAOP'
+                                   ELSE 'LAO'
+                               END
+                       END AS tipoLei,
+                       (CASE
+                           WHEN o46_tiposup IN (1006, 1007, 1008, 1009, 1010, 1012) THEN 2
+                           WHEN o46_tiposup IN (1023, 1024, 1025) THEN 5
+                           WHEN o46_tiposup IN (1014, 1015, 1016) THEN 3
+                           ELSE 1
+                       END) AS tipoLeiAlteracao,
+                       CASE
+                           WHEN {$oDados10->tipodecreto} = 1 THEN 1
+                           ELSE 2
+                       END AS sql
+                FROM orcprojeto
+                JOIN orcsuplem ON o46_codlei = o39_codproj
+                LEFT JOIN orclei ON o39_codlei = o45_codlei
+                LEFT JOIN orcprojetoorcprojetolei ON o39_codproj = o139_orcprojeto
+                LEFT JOIN orcprojetolei ON o139_orcprojetolei = o138_sequencial
+                WHERE o39_codproj IN ({$codigosVinculados})";
+    }
+
+}
