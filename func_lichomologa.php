@@ -299,7 +299,6 @@ $sWhereContratos = " and 1 = 1 ";
                 order by
                 l20_codigo";
                 }  
-                echo $sql;
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js); 
 
             } else {  
