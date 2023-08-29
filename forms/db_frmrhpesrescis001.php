@@ -184,6 +184,7 @@ $r59_descr = $descr;
               ?>
             </td>
         </tr>
+            </tr>
           <tr>
             <td nowrap title="<?=@$Trh05_mremun?>" align="right">
               <?
