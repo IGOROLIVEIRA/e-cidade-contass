@@ -98,6 +98,10 @@ $oDaoDbDepart             = db_utils::getDao('db_depart');
 $sCamposBuscaDepartamento = " descrdepto, t30_codigo, t30_descr ";
 $sWhereBuscaDepartamento  = " coddepto = {$oBem->getDepartamento()} ";
 
+if ($oBem->getDivisao() != '') {
+  $sWhereBuscaDepartamento .= " AND t30_codigo = {$oBem->getDivisao()}";
+}
+
 $sSqlBuscaDepartamento    = $oDaoDbDepart->sql_query_div(null, $sCamposBuscaDepartamento, null, $sWhereBuscaDepartamento);
 
 $rsBuscaDepartameto       = $oDaoDbDepart->sql_record($sSqlBuscaDepartamento);
