@@ -57,6 +57,7 @@ include("libs/db_sessoes.php");
 include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_rescisao_classe.php");
+include("classes/db_rhpesrescisao_classe.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -71,7 +72,7 @@ $clrescisao->rotulo->label("r59_menos1");
 $clrescisao->rotulo->label("r59_descr");
 $clrescisao->rotulo->label("r59_motivo");
 $clrescisao->rotulo->label("r05_motivo");
-$clrescisao->rotulo->label("r5_motivo");
+$clrescisao->rotulo->label("rh05_motivo");
 
 if(!isset($chave_r59_anousu)){
   $chave_r59_anousu = db_anofolha();
