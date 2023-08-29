@@ -754,6 +754,7 @@ class AcordoPosicao
             $oItem->setValorTotal($oItemLicitacao->pc23_quant * $oItemLicitacao->pc23_vlrun);
             $oItem->setResumo($oItemLicitacao->pc11_resum);
             $oItem->setServicoQuantidade($oItemLicitacao->pc11_servicoquantidade);
+            $oItem->setMarca($oItemLicitacao->pc23_obs);
             /**
              * pesquisamos as dotacoes do item
              */
