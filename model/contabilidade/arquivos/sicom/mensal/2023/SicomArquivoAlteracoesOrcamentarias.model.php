@@ -156,7 +156,11 @@ class SicomArquivoAlteracoesOrcamentarias extends SicomArquivoBase implements iP
         /**
          * fim da exclusao dos registros do mes selecionado
          */
-        $sSql = $claoc10->sqlReg10($instituicao);
+        $dados = array(
+            "Instituicao" => $instituicao,
+            "Mes" => $dataFinalMes
+        );
+        $sSql = $claoc10->sqlReg10($dados);
         $rsResult10 = db_query($sSql);
 
         $infoComplmentar = new cl_infocomplementaresinstit();

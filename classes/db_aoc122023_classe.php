@@ -588,11 +588,14 @@ class cl_aoc122023
      * @param $oDados10
      * @return string
      */
-    public function sqlReg12($oDados10): string
+    public function sqlReg12($oDados10)
     {
         $codigosVinculados = implode(',', $oDados10->codigovinc);
+        if (isset($codigosVinculados) || $codigosVinculados == null) {
+          $codigosVinculados = $oDados10->codigovinc;
+        }  
 
-        return "SELECT '12' AS tiporegistro,
+        return "SELECT distinct '12' AS tiporegistro,
                        o39_codproj AS codReduzidoDecreto,
                        CASE
                            WHEN {$oDados10->tipodecreto} = 1 THEN o45_numlei

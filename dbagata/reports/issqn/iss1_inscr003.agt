@@ -68,7 +68,15 @@ Base: $db_base  #tab270$db_programa  Emissor: $db_nomeusu  Exercício: $db_anousu
         <PreQuery></PreQuery>
         <PosQuery></PosQuery>
         <Query>
-            <Select>distinct q02_inscr as "Inscrição", z01_cgccpf as "CNPJ/CPF", q02_numcgm as "CGM", fc_remove_acentos(z01_nome) as "Nome / Razão Social", q07_ativ as "Atividade", fc_remove_acentos(q03_descr) as "Descrição da Atividade"</Select>
+            <Select>distinct issbase.q02_inscr as "IM", z01_cgccpf as "CNPJ/CPF", 
+                    q02_numcgm as "CGM", fc_remove_acentos(z01_nome) as "Nome / Razão Social", 
+                    fc_remove_acentos((coalesce(j88_sigla,'')||' '||coalesce(j14_nome,'')||', '||coalesce(q02_numero,null)||' '||coalesce(q02_compl,'')||', '||
+                    coalesce(j13_descr,'')||', '||coalesce(q02_cxpost,'')||', '||coalesce(q02_cep,''))) as "Endereço",
+                    fc_remove_acentos(db140_descricao) as "Reg.Tributário",
+                    fc_remove_acentos(q12_descr) as "Classe", 
+                    (to_char(q02_dtinic,'dd/mm/yyyy')) as "Dt.Inicio", (to_char(q02_dtbaix, 'dd/mm/yyyy')) as "Dt.Baixa",
+                    q71_estrutural as "Cnae", q07_ativ as "Atividade", fc_remove_acentos(q03_descr) as "Descrição da Atividade"
+            </Select>
             <From></From>
             <Where></Where>
             <GroupBy></GroupBy>
@@ -92,15 +100,15 @@ Base: $db_base  #tab270$db_programa  Emissor: $db_nomeusu  Exercício: $db_anousu
             </Config>
 
             <Formulas>
-                <Group0>count(1) as 'Total de Inscrições'</Group0>
+                <Group0>count(1) as '*                    Total de Inscrições'</Group0>
             </Formulas>
 
         </Groups>
 
         <Fields>
             <Column1>
-                <Chars>15</Chars>
-                <Points>30</Points>
+                <Chars>10</Chars>
+                <Points>10</Points>
                 <Align>center</Align>
                 <HeadAlign>center</HeadAlign>
                 <Mask></Mask>
@@ -112,7 +120,7 @@ Base: $db_base  #tab270$db_programa  Emissor: $db_nomeusu  Exercício: $db_anousu
 
             <Column2>
                 <Chars>15</Chars>
-                <Points>30</Points>
+                <Points>22</Points>
                 <Align>center</Align>
                 <HeadAlign>center</HeadAlign>
                 <Mask></Mask>
@@ -124,7 +132,7 @@ Base: $db_base  #tab270$db_programa  Emissor: $db_nomeusu  Exercício: $db_anousu
 
             <Column3>
                 <Chars>15</Chars>
-                <Points>30</Points>
+                <Points>10</Points>
                 <Align>center</Align>
                 <HeadAlign>center</HeadAlign>
                 <Mask></Mask>
@@ -136,7 +144,7 @@ Base: $db_base  #tab270$db_programa  Emissor: $db_nomeusu  Exercício: $db_anousu
 
             <Column4>
                 <Chars>40</Chars>
-                <Points>80</Points>
+                <Points>45</Points>
                 <Align>left</Align>
                 <HeadAlign>center</HeadAlign>
                 <Mask></Mask>
@@ -147,9 +155,9 @@ Base: $db_base  #tab270$db_programa  Emissor: $db_nomeusu  Exercício: $db_anousu
             </Column4>
 
             <Column5>
-                <Chars>15</Chars>
-                <Points>30</Points>
-                <Align>center</Align>
+                <Chars>40</Chars>
+                <Points>38</Points>
+                <Align>left</Align>
                 <HeadAlign>center</HeadAlign>
                 <Mask></Mask>
                 <Function></Function>
@@ -159,8 +167,8 @@ Base: $db_base  #tab270$db_programa  Emissor: $db_nomeusu  Exercício: $db_anousu
             </Column5>
 
             <Column6>
-                <Chars>40</Chars>
-                <Points>81</Points>
+                <Chars>30</Chars>
+                <Points>32</Points>
                 <Align>left</Align>
                 <HeadAlign>center</HeadAlign>
                 <Mask></Mask>
@@ -169,6 +177,78 @@ Base: $db_base  #tab270$db_programa  Emissor: $db_nomeusu  Exercício: $db_anousu
                 <Conditional></Conditional>
                 <Hidden></Hidden>
             </Column6>
+
+            <Column7>
+                <Chars>20</Chars>
+                <Points>25</Points>
+                <Align>left</Align>
+                <HeadAlign>center</HeadAlign>
+                <Mask></Mask>
+                <Function></Function>
+                <Cross></Cross>
+                <Conditional></Conditional>
+                <Hidden></Hidden>
+            </Column7>
+
+            <Column8>
+                <Chars>15</Chars>
+                <Points>14</Points>
+                <Align>center</Align>
+                <HeadAlign>center</HeadAlign>
+                <Mask></Mask>
+                <Function></Function>
+                <Cross></Cross>
+                <Conditional></Conditional>
+                <Hidden></Hidden>
+            </Column8>
+
+            <Column9>
+                <Chars>15</Chars>
+                <Points>14</Points>
+                <Align>center</Align>
+                <HeadAlign>center</HeadAlign>
+                <Mask></Mask>
+                <Function></Function>
+                <Cross></Cross>
+                <Conditional></Conditional>
+                <Hidden></Hidden>
+            </Column9>
+
+            <Column10>
+                <Chars>20</Chars>
+                <Points>20</Points>
+                <Align>left</Align>
+                <HeadAlign>center</HeadAlign>
+                <Mask></Mask>
+                <Function></Function>
+                <Cross></Cross>
+                <Conditional></Conditional>
+                <Hidden></Hidden>
+            </Column10>
+
+            <Column11>
+                <Chars>15</Chars>
+                <Points>12</Points>
+                <Align>center</Align>
+                <HeadAlign>center</HeadAlign>
+                <Mask></Mask>
+                <Function></Function>
+                <Cross></Cross>
+                <Conditional></Conditional>
+                <Hidden></Hidden>
+            </Column11>
+
+            <Column12>
+                <Chars>40</Chars>
+                <Points>40</Points>
+                <Align>left</Align>
+                <HeadAlign>center</HeadAlign>
+                <Mask></Mask>
+                <Function></Function>
+                <Cross></Cross>
+                <Conditional></Conditional>
+                <Hidden></Hidden>
+            </Column12>
 
         </Fields>
 
@@ -240,7 +320,7 @@ Base: $db_base  #tab270$db_programa  Emissor: $db_nomeusu  Exercício: $db_anousu
     <Label>
         <Body></Body>
         <Config>
-            <HorizontalSpacing>15</HorizontalSpacing>
+            <HorizontalSpacing>5</HorizontalSpacing>
             <VerticalSpacing>0</VerticalSpacing>
             <LabelWidth>288</LabelWidth>
             <LabelHeight>72</LabelHeight>
