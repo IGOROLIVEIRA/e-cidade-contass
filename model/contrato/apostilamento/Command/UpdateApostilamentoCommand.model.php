@@ -9,7 +9,19 @@ class UpdateApostilamentoCommand
     {
         $tiposalteracaoapostila = array('1'=>15,'2'=>16,'3'=>17);
 
+        $cl_acordoposicao = new cl_acordoposicao;
+
+        if ($apostilamento->updateNumApostilamento &&
+            !$this->validaUpdateNumApostilamento(
+                $cl_acordoposicao,
+                $apostilamento->si03_numapostilamento,
+                $iAcordo
+            )) {
+                throw new Exception("Não é possível atualizar para esta numeração de apostila");
+        }
+
         $oDaoApostilamento  = new cl_apostilamento;
+
         $tipoalteracaoapostila = $apostilamento->si03_tipoalteracaoapostila;
         $oDaoApostilamento->si03_sequencial = $apostilamento->si03_sequencial;
         $oDaoApostilamento->si03_tipoapostila = $apostilamento->si03_tipoapostila;
@@ -20,14 +32,29 @@ class UpdateApostilamentoCommand
         $oDaoApostilamento->si03_descrapostila = $apostilamento->si03_descrapostila;
         $oDaoApostilamento->si03_percentualreajuste = $apostilamento->si03_percentualreajuste;
         $oDaoApostilamento->si03_indicereajuste = $apostilamento->si03_indicereajuste;
-        
+
         $oDaoApostilamento->alterar($oDaoApostilamento->si03_sequencial);
 
         if ($oDaoApostilamento->erro_status === 0) {
             throw new Exception($oDaoApostilamento->erro_msg);
         }
 
-        $cl_acordoposicao = new cl_acordoposicao;
         $cl_acordoposicao->updateNumeroApositilamento($iAcordo, $apostilamento->si03_numapostilamento);
+
+        if ($cl_acordoposicao->erro_status === 0) {
+            throw new Exception($cl_acordoposicao->erro_msg);
+        }
+    }
+
+    private function validaUpdateNumApostilamento($cl_acordoposicao, $numApostilamento, $acordo)
+    {
+        $sql = $cl_acordoposicao->sqlValidaUpdateNumApostilamento($acordo, $numApostilamento);
+        $cl_acordoposicao->sql_record($sql);
+
+        if ($cl_acordoposicao->erro_status === 0 || $cl_acordoposicao->numrows > 0) {
+            return false;
+        }
+
+        return true;
     }
 }

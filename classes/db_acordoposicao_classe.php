@@ -1022,8 +1022,17 @@ class cl_acordoposicao {
          return true;
        }
      }
-
   }
 
+    public function sqlValidaUpdateNumApostilamento($acordo,  $numApostilamento)
+    {
+        $sql = "
+        SELECT *
+        FROM acordoposicao
+        WHERE ac26_acordo = $acordo
+            AND ac26_numeroapostilamento = '$numApostilamento';
+        ";
+        return $sql;
+    }
 }
 ?>

@@ -279,6 +279,7 @@ unset($_GET['viewAlterar']);
     let viewAlterar = "<?php echo $viewAlterar ?>";
     let si03_sequencial = null;
     let tipoApostilaInicial = null;
+    let numApostilaInicial = null;
     document.getElementById("si03_datareferencia").style.width = "80px"
     document.getElementById("si03_tipoalteracaoapostila").disabled = true;
     sUrlRpc = 'con4_contratoapostilamento.RPC.php';
@@ -1526,7 +1527,8 @@ unset($_GET['viewAlterar']);
 
                 $('btnSalvar').disabled = false;
 
-                $('si03_numapostilamento').value = oRetorno.dadosAcordo.ac26_numeroapostilamento;
+                numApostilaInicial = oRetorno.dadosAcordo.ac26_numeroapostilamento;
+                $('si03_numapostilamento').value = numApostilaInicial;
                 $('si03_tipoalteracaoapostila').value = oRetorno.dadosAcordo.si03_tipoalteracaoapostila;
                 tipoApostilaInicial = "0" + oRetorno.dadosAcordo.si03_tipoapostila;
                 $('si03_tipoapostila').value = tipoApostilaInicial;
@@ -1557,6 +1559,7 @@ unset($_GET['viewAlterar']);
         document.getElementById('trreajuste').style.display = "none";
         $("si03_percentualreajuste").value = "";
         $("si03_indicereajuste").options[0].selected = true;
+        document.getElementById("si03_tipoalteracaoapostila").disabled = false;
 
         if (tipoApostila == "01") {
             document.getElementById('trreajuste').style.display = "";
@@ -1568,11 +1571,14 @@ unset($_GET['viewAlterar']);
 
         if (tipoApostila == "03") {
             document.getElementById("si03_tipoapostila").disabled = true;
+            document.getElementById("si03_tipoalteracaoapostila").disabled = true;
         }
 
     }
 
     function alteraApostilamento(oApostila, listaItens, indicesSelecionados) {
+
+        let updateNumApostilamento = $('si03_numapostilamento').value != numApostilaInicial ? true : false;
 
         const apostilamento = {
             si03_sequencial,
@@ -1584,9 +1590,10 @@ unset($_GET['viewAlterar']);
             si03_percentualreajuste: oApostila.percentualreajuste,
             si03_indicereajuste: oApostila.indicereajuste,
             si03_datareferencia: $('si03_datareferencia').value,
-            si03_justificativa: $('si03_justificativa').value
+            si03_justificativa: $('si03_justificativa').value,
+            updateNumApostilamento
         }
-
+        
         const itens = filtraAcordosSelecionados(listaItens, indicesSelecionados);
 
         const oParam = {
