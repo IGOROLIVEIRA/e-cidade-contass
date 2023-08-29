@@ -63,6 +63,7 @@ parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
 $clrescisao = new cl_rescisao;
+$clrhpesrescisao = new cl_rhpesrescisao;
 $clrescisao->rotulo->label("r59_anousu");
 $clrescisao->rotulo->label("r59_mesusu");
 $clrescisao->rotulo->label("r59_regime");
@@ -73,6 +74,7 @@ $clrescisao->rotulo->label("r59_descr");
 $clrescisao->rotulo->label("r59_motivo");
 $clrescisao->rotulo->label("r05_motivo");
 $clrescisao->rotulo->label("rh05_motivo");
+$clrhpesrescisao->rotulo->label("rh05_motivo");
 
 if(!isset($chave_r59_anousu)){
   $chave_r59_anousu = db_anofolha();
