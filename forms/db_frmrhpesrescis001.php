@@ -54,13 +54,15 @@ $rh05_mremun = $remun;
 $r59_descr1 = $descr1;
 $r59_descr = $descr;
 ?>
+
+
 <form name="form1" method="post" action="">
 <center>
 <table border="0">
   <tr>
     <td align="center">
       <fieldset>
-        <legend align="left"><b>FUNCIONÁRIO</b></legend>
+        <legend align="left"><b>FUNCION?RIO</b></legend>
         <table width="100%">
         <tr>
           <td align="center">
@@ -76,7 +78,7 @@ $r59_descr = $descr;
   <tr>
     <td align="center">
       <fieldset>
-        <legend align="left"><b>RESCISÃO</b></legend>
+        <legend align="left"><b>RESCIS?O</b></legend>
         <table width="100%">
           <tr>
             <td nowrap title="<?=@$Trh05_recis?>" align="right">
@@ -142,6 +144,7 @@ $r59_descr = $descr;
               db_input('descr1',40,0,true,'hidden',3);
               ?>
             </td>
+
           </tr>
           <tr>
             <td nowrap title="<?=@$Trh05_taviso?>" align="right">
@@ -167,7 +170,20 @@ $r59_descr = $descr;
               db_inputdata('rh05_aviso',@$rh05_aviso_dia,@$rh05_aviso_mes,@$rh05_aviso_ano,true,'text',$db_opcao,"onchange='js_validaaviso(1);'","","","parent.js_validaaviso(1);","js_validaaviso(2);","js_validaaviso(2);")
               ?>
             </td>
-          </tr>
+
+        <tr>
+         <td>
+              <?php
+              db_ancora("Motivo Rescis?o:", "js_pesquisarMotivorescisao(true);", $db_opcao);
+              ?>
+            </td>
+            <td colspan="3" nowrap>
+              <?php
+              db_input('rh173_codigo', 6, $Irh173_codigo, true, 'text', 3, "onChange='js_pesquisarMotivorescisao(false);'");
+              db_input('rh173_descricao', 48, $Irh173_descricao, true, 'text', 3, "js_DescricaoCompleta();");
+              ?>
+            </td>
+        </tr>
           <tr>
             <td nowrap title="<?=@$Trh05_mremun?>" align="right">
               <?
@@ -189,9 +205,9 @@ $r59_descr = $descr;
   <tr>
     <td align="center">
      <input name="enviar" type="button" id="db_opcao" value="Processar dados" <?=($db_botao==false?"disabled":"")?> onclick="js_verificadados();">
-     <input name="voltar" type="button" id="voltar" value="Nova Seleção" onclick="location.href = 'pes4_rhpesrescislote001.php';">
+     <input name="voltar" type="button" id="voltar" value="Nova Sele??o" onclick="location.href = 'pes4_rhpesrescislote001.php';">
      <?if(isset($campomatriculas) && trim($campomatriculas) != ""){?>
-     <input name="proximo" type="submit" id="proximo" value="Próximo">
+     <input name="proximo" type="submit" id="proximo" value="Pr?ximo">
      <?}?>
     </td>
   </tr>
@@ -201,6 +217,7 @@ $r59_descr = $descr;
 <script>
 function js_faltas(registro){
 	qry = 'opcao=enviarescis';
+  qry+= '&r59_descr='+document.form1.r59_descr.value;
   qry+= '&causa='+document.form1.rh05_causa.value;
   qry+= '&regime='+document.form1.rh02_codreg.value;
   qry+= '&regist='+document.form1.r30_regist.value;
@@ -208,16 +225,40 @@ function js_faltas(registro){
   qry+= '&rh05_recis_mes='+document.form1.rh05_recis_mes.value;
   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa',false);
 }
+
+function js_pesquisarMotivorescisao(mostra) {
+    if (mostra == true) {
+      js_OpenJanelaIframe("top.corpo", "db_iframe_rhmotivorescisao", "func_rhmotivorescisao.php?&funcao_js=parent.js_mostraRescisaoMotivo1|rh173_codigo|rh173_descricao", "Pesquisa", true, "20");
+    }
+    else {
+      if (document.form1.rh173_codigo.value != "") {
+        js_OpenJanelaIframe("top.corpo", "db_iframe_rhrescisao", "func_rhmotivorescisao.php?&pesquisa_chave_codigo=" + document.form1.rh173_codigo.value + "&funcao_js=parent.js_mostraAfastaMotivo", "Pesquisa", false, "20");
+      } else {
+        document.form1.z01_nome.value = "";
+      }
+  }
+}
+
+function js_mostraAfastaMotivo(descricao, error) {
+    document.form1.rh173_descricao.value = descricao;
+}
+
+function js_mostraRescisaoMotivo1(codigo, descricao) {
+    document.form1.rh173_codigo.value = codigo;
+    document.form1.rh173_descricao.value = descricao;
+    db_iframe_rhmotivorescisao.hide();
+}
+
 function js_verificadados(){
   if(document.form1.r30_regist.value == ""){
-    alert("Informe a matrícula do funcionário.");
+    alert("Informe a matr?cula do funcion?rio.");
     document.form1.r30_regist.focus();
   }else if(document.form1.rh05_recis_dia.value == "" || document.form1.rh05_recis_mes.value == "" || document.form1.rh05_recis_ano.value == ""){
-    alert("Informe a data da rescisão.");
+    alert("Informe a data da rescis?o.");
     document.form1.rh05_recis.focus();
     document.form1.rh05_recis.select();
   }else if(document.form1.rh05_causa.value == ""){
-    alert("Informe a causa da rescisão.");
+    alert("Informe a causa da rescis?o.");
     document.form1.rh05_causa.focus();
   }else{
     js_faltas(document.form1.r30_regist.value);
@@ -233,7 +274,7 @@ function js_validaaviso(opcao){
       dtreciss = new Date(x.rh05_recis_ano.value,(x.rh05_recis_mes.value - 1),x.rh05_recis_dia.value);
       dtavisos = new Date(x.rh05_aviso_ano.value,(x.rh05_aviso_mes.value - 1),x.rh05_aviso_dia.value);
       if(dtreciss < dtadmiss){
-	alert("Data de rescisão não pode ser posterior a data de admissão. Verifique.");
+	alert("Data de rescis?o n?o pode ser posterior a data de admiss?o. Verifique.");
 	x.rh05_recis_dia.value = "";
 	x.rh05_recis_mes.value = "";
 	x.rh05_recis_ano.value = "";
@@ -247,9 +288,9 @@ function js_validaaviso(opcao){
     }
   }else if(opcao == 1){
     if(x.rh05_causa.value == ""){
-      alert("Informe a causa da rescisão.");
+      alert("Informe a causa da rescis?o.");
     }else{
-      alert("Informe a data da rescisão.");
+      alert("Informe a data da rescis?o.");
     }
     x.rh05_aviso_dia.value = "";
     x.rh05_aviso_mes.value = "";
@@ -281,7 +322,7 @@ function js_validarecis(){
       dtreciss = new Date(x.rh05_recis_ano.value,(x.rh05_recis_mes.value - 1),x.rh05_recis_dia.value);
       dtatualh = new Date(anoatual,mesatual,1);
       if(dtreciss < dtadmiss){
-        alert("Data de rescisão não pode ser posterior a data de admissão. Verifique.");
+        alert("Data de rescis?o n?o pode ser posterior a?data de admiss?o. Verifique.");
         x.rh05_recis_dia.value = "";
         x.rh05_recis_mes.value = "";
         x.rh05_recis_ano.value = "";
@@ -290,13 +331,13 @@ function js_validarecis(){
         x.rh05_aviso_ano.value = "";
         x.rh05_recis_dia.focus();
       }else if(anoatual > anorecis){
-        alert("ALERTA: Data da rescisão com ano anterior ao atual.");
+        alert("ALERTA: Data da rescis?o com ano anterior ao atual.");
       }else if(anomesatual < anomesrecis){
-        alert("ALERTA: Data da rescisão posterior ao ano / mês atual..");
+        alert("ALERTA: Data da rescis?o posterior ao ano / m?s atual..");
       }
     }
   }else{
-    alert("Informe a matrí­cula do funcionário.");
+    alert("Informe a matr??cula do funcion?rio.");
     x.rh05_recis_dia.value = "";
     x.rh05_recis_mes.value = "";
     x.rh05_recis_ano.value = "";

@@ -42,6 +42,7 @@ $clrotulo->label("r59_menos1");
 $clrotulo->label("r59_aviso");
 $clrotulo->label("rh02_seqpes");
 $clrotulo->label("r59_regime");
+$clrotulo->label("rh05_motivo");
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -57,33 +58,33 @@ $clrotulo->label("r59_regime");
 
   $geraform->db_opcao = $db_opcao;
 
-  $geraform->manomes = false;                     // PARA NÃO MOSTRAR ANO E MES DE COMPETÊNCIA DA FOLHA
+  $geraform->manomes = false;                     // PARA N?O MOSTRAR ANO E MES DE COMPET?NCIA DA FOLHA
 
-  $geraform->usaregi = true;                      // PERMITIR SELEÇÃO DE MATRÍCULAS
-  $geraform->usalota = true;                      // PERMITIR SELEÇÃO DE LOTAÇÕES
+  $geraform->usaregi = true;                      // PERMITIR SELE??O DE MATR?CULAS
+  $geraform->usalota = true;                      // PERMITIR SELE??O DE LOTA??ES
 
-  $geraform->re1nome = "regisi";                  // NOME DO CAMPO DA MATRÍCULA INICIAL
-  $geraform->re2nome = "regisf";                  // NOME DO CAMPO DA MATRÍCULA FINAL
-  $geraform->re3nome = "selreg";                  // NOME DO CAMPO DE SELEÇÃO DE MATRÍCULAS
+  $geraform->re1nome = "regisi";                  // NOME DO CAMPO DA MATR?CULA INICIAL
+  $geraform->re2nome = "regisf";                  // NOME DO CAMPO DA MATR?CULA FINAL
+  $geraform->re3nome = "selreg";                  // NOME DO CAMPO DE SELE??O DE MATR?CULAS
 
-  $geraform->lo1nome = "lotai";                  // NOME DO CAMPO DA LOTAÇÃO INICIAL
-  $geraform->lo2nome = "lotaf";                  // NOME DO CAMPO DA LOTAÇÃO FINAL
-  $geraform->lo3nome = "sellot";                  // NOME DO CAMPO DE SELEÇÃO DE LOTAÇÕES
+  $geraform->lo1nome = "lotai";                  // NOME DO CAMPO DA LOTA??O INICIAL
+  $geraform->lo2nome = "lotaf";                  // NOME DO CAMPO DA LOTA??O FINAL
+  $geraform->lo3nome = "sellot";                  // NOME DO CAMPO DE SELE??O DE LOTA??ES
 
   $geraform->trenome = "tipo";               // NOME DO CAMPO TIPO DE RESUMO
   $geraform->tfinome = "filtro";                  // NOME DO CAMPO TIPO DE FILTRO
 
-  //$geraform->filtropadrao = "s";                  // TIPO DE FILTRO PADRÃO
-  //$geraform->resumopadrao = "g";                  // TIPO DE RESUMO PADRÃO
+  //$geraform->filtropadrao = "s";                  // TIPO DE FILTRO PADR?O
+  //$geraform->resumopadrao = "g";                  // TIPO DE RESUMO PADR?O
 
-  $geraform->campo_auxilio_regi = "faixa_regis";  // NOME DO DAS MATRÍCULAS SELECIONADAS
-  $geraform->campo_auxilio_lota = "faixa_lotac";  // NOME DO DAS LOTAÇÕES SELECIONADAS
+  $geraform->campo_auxilio_regi = "faixa_regis";  // NOME DO DAS MATR?CULAS SELECIONADAS
+  $geraform->campo_auxilio_lota = "faixa_lotac";  // NOME DO DAS LOTA??ES SELECIONADAS
 
-  $geraform->strngtipores = "gml";                // OPÇÕES PARA MOSTRAR NO TIPO DE RESUMO g - geral,
-                                                  //                                       m - Matrícula,
+  $geraform->strngtipores = "gml";                // OP??ES PARA MOSTRAR NO TIPO DE RESUMO g - geral,
+                                                  //                                       m - Matr?cula,
                                                   //                                       r - Resumo
   $geraform->selecao = true;
-  $geraform->onchpad = true;                 // MUDAR AS OPÇÕES AO SELECIONAR OS TIPOS DE FILTRO OU RESUMO
+  $geraform->onchpad = true;                 // MUDAR AS OP??ES AO SELECIONAR OS TIPOS DE FILTRO OU RESUMO
   $geraform->gera_form(null,null);
 ?>
             </td>
@@ -95,7 +96,7 @@ $clrotulo->label("r59_regime");
   <tr>
     <td align="center">
       <fieldset>
-        <legend align="left"><b>RESCISÃO</b></legend>
+        <legend align="left"><b>RESCIS?O</b></legend>
         <table width="100%">
           <tr>
             <td nowrap title="<?=@$Trh05_recis?>" align="right">
@@ -215,16 +216,16 @@ function js_verificadados() {
   x = document.form1;
   if (document.form1.selreg == '') {
 
-    alert("Informe a matrícula do funcionário.");
+    alert("Informe a matr?cula do funcion?rio.");
     x.rh01_regist.focus();
   } else if (x.rh05_recis_dia.value == "" || x.rh05_recis_mes.value == "" || x.rh05_recis_ano.value == "") {
 
-    alert("Informe a data da rescisão.");
+    alert("Informe a data da rescis?o.");
     x.rh05_recis.focus();
     x.rh05_recis.select();
   } else if (x.rh05_causa.value == "") {
 
-    alert("Informe a causa da rescisão.");
+    alert("Informe a causa da rescis?o.");
     x.rh05_causa.focus();
   } else {
 
@@ -276,7 +277,7 @@ function js_validaaviso(opcao) {
 
       if (dtreciss < dtadmiss) {
 
-        alert("Data de rescisão não pode ser posterior à data de admissão. Verifique.");
+        alert("Data de rescis?o n?o pode ser posterior ? data de admiss?o. Verifique.");
         x.rh05_recis_dia.value = "";
         x.rh05_recis_mes.value = "";
         x.rh05_recis_ano.value = "";
@@ -291,9 +292,9 @@ function js_validaaviso(opcao) {
   } else if (opcao == 1) {
 
     if (x.rh05_causa.value == "") {
-      alert("Informe a causa da rescisão.");
+      alert("Informe a causa da rescis?o.");
     } else {
-      alert("Informe a data da rescisão.");
+      alert("Informe a data da rescis?o.");
     }
 
     x.rh05_aviso_dia.value = "";
@@ -332,7 +333,7 @@ function js_validarecis() {
 
       if (dtreciss < dtadmiss) {
 
-        alert("Data de rescisão não pode ser posterior à data de admissão. Verifique.");
+        alert("Data de rescis?o n?o pode ser posterior ? data de admiss?o. Verifique.");
         x.rh05_recis_dia.value = "";
         x.rh05_recis_mes.value = "";
         x.rh05_recis_ano.value = "";
@@ -341,16 +342,16 @@ function js_validarecis() {
         x.rh05_aviso_ano.value = "";
         x.rh05_recis_dia.focus();
       } else if (anoatual > anorecis) {
-        alert("ALERTA: Data da rescisão com ano anterior ao atual.");
+        alert("ALERTA: Data da rescis?o com ano anterior ao atual.");
       } else if (anomesatual < anomesrecis) {
 
         alert("anomesatual :  " + anomesatual + "  anomesrecis : " + anomesrecis);
-        alert("ALERTA: Data da rescisão posterior ao ano / mês atual..");
+        alert("ALERTA: Data da rescis?o posterior ao ano / m?s atual..");
       }
     }
   } else {
 
-    alert("Informe a matrícula do funcionário.");
+    alert("Informe a matr?cula do funcion?rio.");
     x.rh05_recis_dia.value = "";
     x.rh05_recis_mes.value = "";
     x.rh05_recis_ano.value = "";
@@ -470,7 +471,7 @@ function js_disabdata(valor) {
 
 js_disabdata("<?=($rh05_taviso)?>");
 
-// Esconde os filtros caso a tela seja bloqueada pela liberação do dbpref
+// Esconde os filtros caso a tela seja bloqueada pela libera??o do dbpref
 <?php if ($db_botao == false) { ?>
   document.getElementById('field-filtros').style.display = 'none';
 <?php } ?>
