@@ -12,6 +12,7 @@ require_once("classes/db_condataconf_classe.php");
 require_once("model/contrato/apostilamento/Command/UpdateApostilamentoCommand.model.php");
 require_once("model/contrato/apostilamento/Command/UpdateAcordoItemCommand.model.php");
 require_once("model/contrato/apostilamento/Command/ValidaAlteracaoApostilamentoCommand.model.php");
+require_once("model/contrato/apostilamento/Command/ValidaDataApostilamentoCommand.model.php");
 
 $oParam            = json_decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno          = new stdClass();
@@ -96,100 +97,63 @@ try {
             break;
 
         case "processarApostilamento":
-            $clcondataconf = new cl_condataconf;
+            // $clcondataconf = new cl_condataconf;
+             $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
 
-            if ($sqlerro == false) {
-                $anousu = db_getsession('DB_anousu');
+            // $anousu = db_getsession('DB_anousu');
 
-                $sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
-                        from condataconf
-                          where c99_instit = " . db_getsession('DB_instit') . "
-                            order by c99_anousu desc limit 1";
+            // $sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
+            //         from condataconf
+            //           where c99_instit = " . db_getsession('DB_instit') . "
+            //             order by c99_anousu desc limit 1";
 
-                $rsResult       = db_query($sSQL);
-                $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
+            // $rsResult       = db_query($sSQL);
+            // $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
 
-                $sNSQL = "";
-                if ($anousu > $maxC99_datapat) {
-                    $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat, db_getsession('DB_instit'), 'c99_datapat');
-                } else {
-                    $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat');
-                }
+            // $sNSQL = "";
+            // if ($anousu > $maxC99_datapat) {
+            //     $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat, db_getsession('DB_instit'), 'c99_datapat');
+            // } else {
+            //     $sNSQL = $clcondataconf->sql_query_file($anousu, db_getsession('DB_instit'), 'c99_datapat');
+            // }
 
-                $result = db_query($sNSQL);
-                $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+            // $result = db_query($sNSQL);
+            // $rsData = db_utils::fieldsMemory($result, 0)->c99_datapat;
+            // $c99_datapat = (implode("/",(array_reverse(explode("-",$rsData)))));
+            // $c99_datapat = DateTime::createFromFormat('d/m/Y', $c99_datapat);
+            // $datareferencia = DateTime::createFromFormat('d/m/Y', $oParam->oApostila->datareferencia);
+            // $dateApostila = DateTime::createFromFormat('d/m/Y', $oParam->oApostila->dataapostila);
+            // $dateAssinaturaContrato = DateTime::createFromFormat('d/m/Y', $oContrato->getDataAssinatura());
 
-                $datareferencia = implode("-", array_reverse(explode("/", $oParam->oApostila->datareferencia)));
+            // if ($oParam->oApostila->datareferencia != "") {
 
+            //     $datareferenciaapostila = implode("-", array_reverse(explode("/", $oParam->oApostila->datareferencia)));
 
-                if ($oParam->oApostila->datareferencia != "") {
+            //     if (substr($rsData, 0, 4) == substr($datareferenciaapostila, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferenciaapostila, 5, 2)) {
+            //         throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
+            //     }
 
-                    if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
-                        throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
-                    }
+            //     if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
+            //         throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+            //     }
+            // }
 
-                    if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
-                        throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
-                    }
-                }
+            // if ($rsData != "" && $dateApostila <= $c99_datapat) {
+            //     $oRetorno->datareferencia = true;
+            //     throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
+            // }
 
-                $dateassinatura = implode("-", array_reverse(explode("/", $oParam->oApostila->dataapostila)));
+            // if($dateApostila < $dateAssinaturaContrato){
+            //     throw new Exception('Usuário: A data da apostila não pode ser anterior a data de assinatura do contrato. Assinatura do contrato: ' . $oContrato->getDataAssinatura());
+            // }
 
-                if ($dateassinatura != "" && $oParam->oApostila->datareferencia == "") {
-                    if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
-                        $oRetorno->datareferencia = true;
-                        throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
-                    }
-                }
-            }
-            $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
-
-            $anousu = db_getsession('DB_anousu');
-
-            $sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
-                    from condataconf
-                      where c99_instit = " . db_getsession('DB_instit') . "
-                        order by c99_anousu desc limit 1";
-
-            $rsResult       = db_query($sSQL);
-            $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
-
-            $sNSQL = "";
-            if ($anousu > $maxC99_datapat) {
-                $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat, db_getsession('DB_instit'), 'c99_datapat');
-            } else {
-                $sNSQL = $clcondataconf->sql_query_file($anousu, db_getsession('DB_instit'), 'c99_datapat');
-            }
-
-            $result = db_query($sNSQL);
-            $rsData = db_utils::fieldsMemory($result, 0)->c99_datapat;
-            $c99_datapat = (implode("/",(array_reverse(explode("-",$rsData)))));
-            $c99_datapat = DateTime::createFromFormat('d/m/Y', $c99_datapat);
-            $datareferencia = DateTime::createFromFormat('d/m/Y', $oParam->oApostila->datareferencia);
-            $dateApostila = DateTime::createFromFormat('d/m/Y', $oParam->oApostila->dataapostila);
-            $dateAssinaturaContrato = DateTime::createFromFormat('d/m/Y', $oContrato->getDataAssinatura());
-
-            if ($oParam->oApostila->datareferencia != "") {
-
-                $datareferenciaapostila = implode("-", array_reverse(explode("/", $oParam->oApostila->datareferencia)));
-
-                if (substr($rsData, 0, 4) == substr($datareferenciaapostila, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferenciaapostila, 5, 2)) {
-                    throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
-                }
-
-                if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
-                    throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
-                }
-            }
-
-            if ($rsData != "" && $dateApostila <= $c99_datapat) {
-                $oRetorno->datareferencia = true;
-                throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
-            }
-
-            if($dateApostila < $dateAssinaturaContrato){
-                throw new Exception('Usuário: A data da apostila não pode ser anterior a data de assinatura do contrato. Assinatura do contrato: ' . $oContrato->getDataAssinatura());
-            }
+            $validaDatas =  new  ValidaDataApostilamentoCommand();
+            $validaDatas->execute(
+                $oParam->oApostila->datareferencia,
+                $oParam->oApostila->dataapostila,
+                $oContrato,
+                $oRetorno
+            );
 
             $oContrato->apostilar($oParam->aItens, $oParam->oApostila, $oParam->datainicial, $oParam->datafinal, $oParam->aSelecionados, $oParam->oApostila->datareferencia);
             break;
@@ -248,15 +212,28 @@ try {
             $oDadosAcordo->si03_tipoalteracaoapostila = $tiposalteracaoapostila[$record->si03_tipoalteracaoapostila];
             $oDadosAcordo->ac26_numeroapostilamento = $record->ac26_numeroapostilamento;
             $date = new DateTime( $record->si03_dataapostila );
-            $oDadosAcordo->si03_dataapostila = $date-> format( 'd/m/Y' );
+            $oDadosAcordo->si03_dataapostila = $date->format( 'd/m/Y' );
             $oDadosAcordo->si03_percentualreajuste = $record->si03_percentualreajuste;
             $oDadosAcordo->si03_indicereajuste = $record->si03_indicereajuste;
+            $oDadosAcordo->si03_justificativa = $record->si03_justificativa;
+            $date = new DateTime( $record->si03_datareferencia );
+            $oDadosAcordo->si03_datareferencia = $date->format( 'd/m/Y' );
             $oDadosAcordo->si03_descrapostila = utf8_encode($record->si03_descrapostila);
             $oRetorno->dadosAcordo = $oDadosAcordo;
 
             break;
 
         case 'updateApostilamento':
+
+            $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
+
+            $validaDatas =  new  ValidaDataApostilamentoCommand();
+            $validaDatas->execute(
+                $oParam->apostilamento->si03_datareferencia,
+                $oParam->apostilamento->si03_dataapostila,
+                $oContrato,
+                $oRetorno
+            );
 
             $updateApostilamento = new UpdateApostilamentoCommand;
             $updateApostilamento->execute($oParam->apostilamento, $oParam->iAcordo);

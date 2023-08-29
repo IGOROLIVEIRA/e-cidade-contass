@@ -16,7 +16,7 @@ unset($_GET['viewAlterar']);
             <tr>
                 <td title="<?= @$Tac16_sequencial ?>">
                     <?php
-                    $jsExec =  $viewAlterar ? "js_acordosc_apostilamentos()" : "js_pesquisaac16_sequencial(true);";
+                    $jsExec =  $viewAlterar ? "js_acordosc_apostilamentos(true)" : "js_pesquisaac16_sequencial(true);";
                     db_ancora("Acordo", $jsExec, $db_opcao);
                      ?>
                 </td>
@@ -278,6 +278,7 @@ unset($_GET['viewAlterar']);
 <script>
     let viewAlterar = "<?php echo $viewAlterar ?>";
     let si03_sequencial = null;
+    let tipoApostilaInicial = null;
     document.getElementById("si03_datareferencia").style.width = "80px"
     document.getElementById("si03_tipoalteracaoapostila").disabled = true;
     sUrlRpc = 'con4_contratoapostilamento.RPC.php';
@@ -1367,7 +1368,12 @@ unset($_GET['viewAlterar']);
 
     function js_changeTipoApostila(iTipo) {
 
+        if (iTipo == "03" && (tipoApostilaInicial == "01" || tipoApostilaInicial == "02")) {
+            iTipo = tipoApostilaInicial;
 
+            $('si03_tipoapostila').value = tipoApostilaInicial;
+            alert("Não é permitido alterar para este tipo de apostila.");
+        }
 
         if (iTipo == "03") {
             oGridItens.aHeaders[10].lDisplayed = true;
@@ -1444,7 +1450,7 @@ unset($_GET['viewAlterar']);
     }
 
     function js_acordosc_apostilamentos() {
-        console.log('js_acordosc_apostilamentos');
+
         var sUrl = 'func_acordonovo.php?viewalterar=true&funcao_js=parent.js_mostraacordoultimaposicao|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura';
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_acordo',
@@ -1478,7 +1484,7 @@ unset($_GET['viewAlterar']);
     }
 
     function js_mostraacordoultimaposicao(ac16_sequencial,ac16_resumoobjeto,ac16_dataassinatura) {
-       console.log('js_mostraacordoultimaposicao');
+
         var oParam = {
             exec: 'getleilicitacao',
             licitacao: ac16_sequencial
@@ -1515,16 +1521,19 @@ unset($_GET['viewAlterar']);
 
                 if (lErro) {
                     alert(oRetorno.message.urlDecode());
-                    return js_acordosc_apostilamentos();
+                    return js_acordosc_apostilamentos(false);
                 }
 
                 $('btnSalvar').disabled = false;
 
                 $('si03_numapostilamento').value = oRetorno.dadosAcordo.ac26_numeroapostilamento;
                 $('si03_tipoalteracaoapostila').value = oRetorno.dadosAcordo.si03_tipoalteracaoapostila;
-                $('si03_tipoapostila').value = "0" + oRetorno.dadosAcordo.si03_tipoapostila;
+                tipoApostilaInicial = "0" + oRetorno.dadosAcordo.si03_tipoapostila;
+                $('si03_tipoapostila').value = tipoApostilaInicial;
                 $('si03_dataapostila').value = oRetorno.dadosAcordo.si03_dataapostila;
                 $('si03_descrapostila').value = oRetorno.dadosAcordo.si03_descrapostila;
+                $('si03_datareferencia').value = oRetorno.dadosAcordo.si03_datareferencia;
+                $('si03_datareferencia').value = oRetorno.dadosAcordo.si03_justificativa;
                 si03_sequencial = oRetorno.dadosAcordo.si03_sequencial;
 
                 validaCamposTela(oRetorno);
@@ -1554,7 +1563,7 @@ unset($_GET['viewAlterar']);
             $("si03_percentualreajuste").value = oRetorno.dadosAcordo.si03_percentualreajuste;
             let si03_indicereajuste = oRetorno.dadosAcordo.si03_indicereajuste;
             $("si03_indicereajuste").options[si03_indicereajuste].selected = true;
-            console.log(oRetorno.dadosAcordo.si03_indicereajuste);
+
         }
 
         if (tipoApostila == "03") {
@@ -1564,7 +1573,7 @@ unset($_GET['viewAlterar']);
     }
 
     function alteraApostilamento(oApostila, listaItens, indicesSelecionados) {
-        console.log(oApostila);
+
         const apostilamento = {
             si03_sequencial,
             si03_tipoapostila:  oApostila.tipoapostila,
@@ -1573,7 +1582,9 @@ unset($_GET['viewAlterar']);
             si03_dataapostila: oApostila.dataapostila,
             si03_descrapostila: oApostila.descrapostila,
             si03_percentualreajuste: oApostila.percentualreajuste,
-            si03_indicereajuste: oApostila.indicereajuste
+            si03_indicereajuste: oApostila.indicereajuste,
+            si03_datareferencia: $('si03_datareferencia').value,
+            si03_justificativa: $('si03_justificativa').value
         }
 
         const itens = filtraAcordosSelecionados(listaItens, indicesSelecionados);
@@ -1592,7 +1603,7 @@ unset($_GET['viewAlterar']);
             }
             alert("Apostilamento alterado com sucesso!");
 
-           return js_acordosc_apostilamentos();
+           return js_acordosc_apostilamentos(false);
         }).setMessage("Processando apostilamento")
         .execute();
 
@@ -1606,7 +1617,7 @@ unset($_GET['viewAlterar']);
             });
             itensSelecionados.push(resultado[0]);
         });
-        console.log(itensSelecionados);
+
         return itensSelecionados;
     }
 </script>
