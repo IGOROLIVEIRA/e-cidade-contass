@@ -1535,7 +1535,7 @@ unset($_GET['viewAlterar']);
                 $('si03_dataapostila').value = oRetorno.dadosAcordo.si03_dataapostila;
                 $('si03_descrapostila').value = oRetorno.dadosAcordo.si03_descrapostila;
                 $('si03_datareferencia').value = oRetorno.dadosAcordo.si03_datareferencia;
-                $('si03_datareferencia').value = oRetorno.dadosAcordo.si03_justificativa;
+                $('si03_justificativa').value = oRetorno.dadosAcordo.si03_justificativa;
                 si03_sequencial = oRetorno.dadosAcordo.si03_sequencial;
 
                 validaCamposTela(oRetorno);
@@ -1593,7 +1593,7 @@ unset($_GET['viewAlterar']);
             si03_justificativa: $('si03_justificativa').value,
             updateNumApostilamento
         }
-        
+
         const itens = filtraAcordosSelecionados(listaItens, indicesSelecionados);
 
         const oParam = {

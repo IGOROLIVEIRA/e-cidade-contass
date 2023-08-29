@@ -28,8 +28,8 @@ class UpdateApostilamentoCommand
         $oDaoApostilamento->si03_tipoalteracaoapostila = $tiposalteracaoapostila[$tipoalteracaoapostila];
         $oDaoApostilamento->si03_numapostilamento = $apostilamento->si03_numapostilamento;
         $oDaoApostilamento->si03_dataapostila = $apostilamento->si03_dataapostila;
-        $oDaoApostilamento->si03_descrapostila = $apostilamento->si03_descrapostila;
-        $oDaoApostilamento->si03_descrapostila = $apostilamento->si03_descrapostila;
+        $oDaoApostilamento->si03_descrapostila = utf8_decode($apostilamento->si03_descrapostila);
+        $oDaoApostilamento->si03_justificativa = utf8_decode($apostilamento->si03_justificativa);
         $oDaoApostilamento->si03_percentualreajuste = $apostilamento->si03_percentualreajuste;
         $oDaoApostilamento->si03_indicereajuste = $apostilamento->si03_indicereajuste;
 

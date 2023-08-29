@@ -215,7 +215,7 @@ try {
             $oDadosAcordo->si03_dataapostila = $date->format( 'd/m/Y' );
             $oDadosAcordo->si03_percentualreajuste = $record->si03_percentualreajuste;
             $oDadosAcordo->si03_indicereajuste = $record->si03_indicereajuste;
-            $oDadosAcordo->si03_justificativa = $record->si03_justificativa;
+            $oDadosAcordo->si03_justificativa = utf8_encode($record->si03_justificativa);
             $date = new DateTime( $record->si03_datareferencia );
             $oDadosAcordo->si03_datareferencia = $date->format( 'd/m/Y' );
             $oDadosAcordo->si03_descrapostila = utf8_encode($record->si03_descrapostila);
