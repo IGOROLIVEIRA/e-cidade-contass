@@ -1060,7 +1060,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.aditar = function () {
-      console.log("Inicio Aditar");
         var oSelecionados = {};
         var iSelecionados = [];
         /**
@@ -1182,7 +1181,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             lAditar = false;
             return alert("Data final da vigência do aditivo deve ser maior que a data iní­cio!");
         }
-        console.log("MEio aditar linha 1185");
+
         if(iTipoAditamento == 7){
             oParam.tipoalteracaoaditivo = me.oCboTipoAditivo.getValue();
             if(oParam.tipoalteracaoaditivo == 0){
@@ -1373,7 +1372,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
                 oItemAdicionar.dotacoes = oItem.dotacoesoriginal;
             }
-            console.log(" linha 1380 ");
+
             /**
              * Adiciona os perodos dos itens novos
              */
@@ -1402,11 +1401,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
 
             if (lErro) {
-              console.log("Entrou erro");
+
                 if (oRetorno.datareferencia) {
                     document.getElementById("trdatareferencia").style.display = 'contents';
                 }
-                console.log(oRetorno.message.urlDecode());
+
                 return alert(oRetorno.message.urlDecode());
             }
             document.getElementById("trdatareferencia").style.display = 'none';
@@ -2179,23 +2178,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         me.salvarInfoDotacoes(iLinha);
     }
-
-    // this.js_bloqueivalorunt = function (iLinha,iTipo) {
-    //
-    //     if(iTipo == 14){
-    //         document.getElementById('valorunitario'+iLinha).disabled = true;
-    //         document.getElementById('valorunitario'+iLinha).style.backgroundColor = '#DEB887';
-    //     }
-    //
-    // };
-    //
-    // this.js_bloqueiquantidade = function (iLinha,iTipo) {
-    //
-    //     if(iTipo == 1mostraMateriajs_changeTipoAditivo()4) {
-    //         document.getElementById('quantidade' + iLinha).disabled = true;
-    //         document.getElementById('quantidade' + iLinha).style.backgroundColor = '#DEB887';
-    //     }
-    // };
 
     this.pesquisaMaterial = function (mostra) {
 
