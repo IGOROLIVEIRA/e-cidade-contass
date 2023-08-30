@@ -38,7 +38,7 @@ $rs_totaladitado = db_query("select sum(ac20_valoraditado) as valoraditado from 
 inner join pcmater on ac20_pcmater = pc01_codmater
 inner join acordoposicao on ac26_sequencial = ac20_acordoposicao  
 where ac20_acordoposicao = (select max(ac26_sequencial) from acordoposicao where ac26_acordo = $ac16_acordo);");
-$totaladitado =  db_utils::fieldsMemory($rs_totaladitado, 0)->valoraditado;
+$valorTotalAditado =  db_utils::fieldsMemory($rs_totaladitado, 0)->valoraditado;
 
 $head3 = "RELATÓRIO DE ADITAMENTO";
 
@@ -136,5 +136,5 @@ for ($i = 0; $i < pg_numrows($rs_acordoitem); $i++) {
 
 $pdf->setfont('arial', 'B', 7);
 $pdf->cell(170, 6, "Valor Total: ", 0, 0, "R", 0);
-$pdf->cell(20, 6, 'R$ ' . number_format($totaladitado, 2, ',', '.'), 0, 1, "C", 0);
+$pdf->cell(20, 6, 'R$ ' . number_format($valorTotalAditado, 2, ',', '.'), 0, 1, "C", 0);
 $pdf->Output();
