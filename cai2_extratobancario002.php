@@ -808,7 +808,18 @@ select caixa,
 				$oMovimentacao->empenho		= "";
 				$oMovimentacao->ordem 		= $ordem;
 			}
-			$oMovimentacao->numdoc 			= $numdoc;
+			if ($codigo){
+
+				$sql = "select k17_numdocumento from slip
+				where k17_codigo = $codigo";
+				$numdocumento = db_query($sql);
+				if (pg_numrows($numdocumento)>0){
+					db_fieldsmemory($numdocumento,0);
+				}
+				
+			}
+
+			$oMovimentacao->numdoc 			= $k17_numdocumento ? $k17_numdocumento:$numdoc;
 
 			if($tipo=='slip'){
 				//$pdf->Cell(15,$alt,$codigo,0,0,"C",0);

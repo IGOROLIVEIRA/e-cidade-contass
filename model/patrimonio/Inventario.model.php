@@ -166,9 +166,22 @@ class Inventario {
     foreach ($aInventarioBens as $oInventarioBem) {
 
       /*
-       * instancia da classe transferencia de bem que ira realizar a
-       * transferencia e o recebimento
+       * inclusao dos dados na bensdepreciacao
        */
+      $iCodigoBem = $oInventarioBem->getBem()->getCodigoBem();
+
+      $oDaohistbem                              = db_utils::getDao("histbem");
+      $oDaohistbem->t56_codbem                  = $iCodigoBem;
+      $oDaohistbem->t56_data                    = date("Y-m-d", db_getsession("DB_datausu"));
+      $oDaohistbem->t56_situac                  = $oInventarioBem->getSituacao();
+      $oDaohistbem->t56_depart                  = $oInventarioBem->getBem()->getDepartamento();
+      $oDaohistbem->t56_histor                  = "Processamento de Reavaliação";
+      $oDaohistbem->incluir(null);
+
+      /*
+      * instancia da classe transferencia de bem que ira realizar a
+      * transferencia e o recebimento
+      */
       $oTransferenciaBem = new TransferenciaBens();
       $oTransferenciaBem->setBem($oInventarioBem->getBem()->getCodigoBem());
       $oTransferenciaBem->setDepartamentoOrigem($oInventarioBem->getBem()->getDepartamento());
@@ -181,13 +194,7 @@ class Inventario {
       $oTransferenciaBem->setSituacao($oInventarioBem->getSituacao());
       $oTransferenciaBem->setHistorico($sObservacao);
       $oTransferenciaBem->setObservacao($sObservacao);
-
-      $oTransferenciaBem->transferenciaAutomatica();
-
-      /*
-       * inclusao dos dados na bensdepreciacao
-       */
-      $iCodigoBem = $oInventarioBem->getBem()->getCodigoBem();
+      $oTransferenciaBem->transferenciaAutomatica($oDaohistbem->t56_histbem);
 
       $oDaoBensDepreciacao                      = db_utils::getDao("bensdepreciacao");
       $oDaoBensDepreciacao->t44_vidautil        = $oInventarioBem->getVidaUtil();
@@ -228,7 +235,7 @@ class Inventario {
       $oBemDepreciacao = BemDepreciacao::getInstance($oInventarioBem->getBem());
 
       $nValorCalculado = $oInventarioBem->getBem()->getValorAtual();
-      $nValorAnterior  = ($oBemDepreciacao ? $oBemDepreciacao->getValorAtual() : $oInventarioBem->getBem()->getValorAtual());
+      $nValorAnterior  = $oInventarioBem->getBem()->getValorAtual();
 
       if ($nValorAnterior == null) {
         $nValorAnterior = $oInventarioBem->getBem()->getValorAquisicao();
@@ -296,51 +303,63 @@ class Inventario {
      */
     foreach ($aInventarioBens as $iInventarioBens => $oInventarioBem) {
 
-      $oDaoBensTransfOrigemDestino = db_utils::getDao("benstransforigemdestino");
-      $sCampos                     = "max(t34_sequencial),       ";
-      $sCampos                    .= "t34_divisaodestino,        ";
-      $sCampos                    .= "t34_divisaoorigem,         ";
-      $sCampos                    .= "t34_departamentoorigem,    ";
-      $sCampos                    .= "t34_departamentodestino ,  ";
-      $sCampos                    .= "t77_situabens              ";
+        $oDaohistbem                              = db_utils::getDao("histbem");
+        $iCodigoBem = $oInventarioBem->getBem()->getCodigoBem();
+        $rsUltimaSituacao = db_query($oDaohistbem->sql_query_file(null,"t56_situac","t56_histbem desc limit 1 OFFSET 1","t56_codbem = {$iCodigoBem}"));
+        $oHistbem = db_utils::fieldsMemory($rsUltimaSituacao, 0);
 
-      $sWhere  = "t34_bem = {$oInventarioBem->getBem()->getCodigoBem()} ";
-      $sWhere .= "group by t34_divisaodestino, ";
-      $sWhere .= "t34_divisaoorigem,           ";
-      $sWhere .= "t34_departamentoorigem,      ";
-      $sWhere .= "t34_departamentodestino ,    ";
-      $sWhere .= "t77_situabens                ";
+        $oDaohistbem->t56_codbem                  = $iCodigoBem;
+        $oDaohistbem->t56_data                    = date("Y-m-d", db_getsession("DB_datausu"));
+        $oDaohistbem->t56_situac                  = $oHistbem->t56_situac;
+        $oDaohistbem->t56_depart                  = $oInventarioBem->getBem()->getDepartamento();
+        $oDaohistbem->t56_histor                  = "Desprocessamento de Reavaliação";
+        $oDaohistbem->incluir(null);
 
-      $sSQLBensTransfOrigemDestino = $oDaoBensTransfOrigemDestino->sql_query_desprocessamento(null,
+        $oDaoBensTransfOrigemDestino = db_utils::getDao("benstransforigemdestino");
+        $sCampos                     = "max(t34_sequencial),       ";
+        $sCampos                    .= "t34_divisaodestino,        ";
+        $sCampos                    .= "t34_divisaoorigem,         ";
+        $sCampos                    .= "t34_departamentoorigem,    ";
+        $sCampos                    .= "t34_departamentodestino ,  ";
+        $sCampos                    .= "t77_situabens              ";
+
+        $sWhere  = "t34_bem = {$oInventarioBem->getBem()->getCodigoBem()} ";
+        $sWhere .= "group by t34_divisaodestino, ";
+        $sWhere .= "t34_divisaoorigem,           ";
+        $sWhere .= "t34_departamentoorigem,      ";
+        $sWhere .= "t34_departamentodestino ,    ";
+        $sWhere .= "t77_situabens                ";
+
+        $sSQLBensTransfOrigemDestino = $oDaoBensTransfOrigemDestino->sql_query_desprocessamento(null,
                                                                                               $sCampos,
                                                                                               null,
                                                                                               $sWhere
                                                                                              );
-      $rsBensTransfOrigemDestino   = $oDaoBensTransfOrigemDestino->sql_record($sSQLBensTransfOrigemDestino);
+        $rsBensTransfOrigemDestino   = $oDaoBensTransfOrigemDestino->sql_record($sSQLBensTransfOrigemDestino);
 
-      if ($oDaoBensTransfOrigemDestino->numrows != 0) {
+        if ($oDaoBensTransfOrigemDestino->numrows != 0) {
 
-        $oBensTransfOrigemDestino =  db_utils::fieldsMemory($rsBensTransfOrigemDestino, 0);
+            $oBensTransfOrigemDestino =  db_utils::fieldsMemory($rsBensTransfOrigemDestino, 0);
 
-        /**
-         * Cria uma transferência do bem, para seu antigo departamento
-         * Cria uma transferência inversa a criada pelo processamento (departamento origem será destino)
-         */
-        $oTransferenciaBem = new TransferenciaBens();
-        $oTransferenciaBem->setBem($oInventarioBem->getBem()->getCodigoBem());
-        $oTransferenciaBem->setDepartamentoDestino($oBensTransfOrigemDestino->t34_departamentoorigem);
-        $oTransferenciaBem->setDepartamentoOrigem($oBensTransfOrigemDestino->t34_departamentodestino);
-        $oTransferenciaBem->setDivisaoDestino($oBensTransfOrigemDestino->t34_divisaoorigem);
-        $oTransferenciaBem->setDivisaoOrigem($oBensTransfOrigemDestino->t34_divisaodestino);
-        $oTransferenciaBem->setUsuario(db_getsession('DB_id_usuario'));
-        $oTransferenciaBem->setInstit(db_getsession('DB_instit'));
-        $oTransferenciaBem->setClabens(0);
-        $oTransferenciaBem->setData(date("Y-m-d", db_getsession("DB_datausu")));
-        $oTransferenciaBem->setSituacao($oBensTransfOrigemDestino->t77_situabens);
-        $oTransferenciaBem->setHistorico($sObservacao);
-        $oTransferenciaBem->setObservacao($sObservacao);
-        $oTransferenciaBem->transferenciaAutomatica();
-      }
+            /**
+             * Cria uma transferência do bem, para seu antigo departamento
+             * Cria uma transferência inversa a criada pelo processamento (departamento origem será destino)
+             */
+            $oTransferenciaBem = new TransferenciaBens();
+            $oTransferenciaBem->setBem($oInventarioBem->getBem()->getCodigoBem());
+            $oTransferenciaBem->setDepartamentoDestino($oBensTransfOrigemDestino->t34_departamentoorigem);
+            $oTransferenciaBem->setDepartamentoOrigem($oBensTransfOrigemDestino->t34_departamentodestino);
+            $oTransferenciaBem->setDivisaoDestino($oBensTransfOrigemDestino->t34_divisaoorigem);
+            $oTransferenciaBem->setDivisaoOrigem($oBensTransfOrigemDestino->t34_divisaodestino);
+            $oTransferenciaBem->setUsuario(db_getsession('DB_id_usuario'));
+            $oTransferenciaBem->setInstit(db_getsession('DB_instit'));
+            $oTransferenciaBem->setClabens(0);
+            $oTransferenciaBem->setData(date("Y-m-d", db_getsession("DB_datausu")));
+            $oTransferenciaBem->setSituacao($oBensTransfOrigemDestino->t77_situabens);
+            $oTransferenciaBem->setHistorico($sObservacao);
+            $oTransferenciaBem->setObservacao($sObservacao);
+            $oTransferenciaBem->transferenciaAutomatica($oDaohistbem->t56_histbem);
+       }
 
       $oBem = $oInventarioBem->getBem();
       if ($oBem->getValorResidual() != $oInventarioBem->getValorResidual()    ||
@@ -379,13 +398,14 @@ class Inventario {
       $nValorAnterior          = 0;
       $iTipoDepreciacao        = 0;
       $nValorResidualAnterior  = 0;
+      $nValorResidual          = 0;
 
       for ($iRowBem = 0; $iRowBem < $iTotalBem; $iRowBem++) {
 
         $oStdBem = db_utils::fieldsMemory($rsBensHistoricoCalculoBem, $iRowBem);
         if ($oStdBem->t58_benstipodepreciacao == 6) {
 
-          $iVidaUtilAterior = $oStdBem->t58_vidautilanterior;
+          $iVidaUtilAterior        = $oStdBem->t58_vidautilanterior;
           $nValorAtualAnterior     = $oStdBem->t58_valoratual;
           $iCodigoBem              = $oStdBem->t58_bens;
           $nValorCalculado         = $oStdBem->t58_valorcalculado;
@@ -393,7 +413,21 @@ class Inventario {
           $nValorAnterior          = $oStdBem->t58_valoranterior;
           $iTipoDepreciacao        = $oStdBem->t58_benstipodepreciacao;
           $nValorResidualAnterior  = $oStdBem->t58_valorresidualanterior;
+          $nValorResidual          = $oStdBem->t58_valorresidual;
 
+          /**
+           * Aqui foi necessrio fazer essa comparacao pois quando havia alteracao no valor residual era necessario recalcular o valor do bem
+           */
+          if($nValorResidualAnterior == $nValorResidual){
+              //aqui somente bens que tiveram acrescimo no valor
+              $t44_valoratual =  $nValorAtualAnterior - ($nValorCalculado + $nValorResidual);
+             //essa condicao foi adicionada para calcular o valor anterior de bens que tiveram o decrescimo no valor.
+             if($nValorAnterior  > $nValorAtualAnterior) {
+                 $t44_valoratual = $nValorAtualAnterior + $nValorCalculado - $nValorResidual;
+             }
+          }else{
+              $t44_valoratual =  $nValorCalculado + $nValorResidualAnterior;
+          }
           break;
         }
       }
@@ -421,7 +455,7 @@ class Inventario {
        */
       $oDaoBensDepreciacao                           = db_utils::getDao("bensdepreciacao");
       $oDaoBensDepreciacao->t44_vidautil             = $iVidaUtilAterior;
-      $oDaoBensDepreciacao->t44_valoratual           = $nValorAtualAnterior;
+      $oDaoBensDepreciacao->t44_valoratual           = $t44_valoratual;
       $oDaoBensDepreciacao->t44_valorresidual        = $nValorResidualAnterior;
       $oDaoBensDepreciacao->t44_ultimaavaliacao      = date("Y-m-d", db_getsession("DB_datausu"));
 
@@ -430,6 +464,7 @@ class Inventario {
       }
 
       $oDaoBensDepreciacao->t44_sequencial = $oInventarioBem->getBem()->getCodigoBemDepreciacao();
+
       $oDaoBensDepreciacao->alterar($oDaoBensDepreciacao->t44_sequencial);
 
       /**
@@ -465,7 +500,7 @@ class Inventario {
       $oDaoBensHistoricoCalculoBem->t58_benshistoricocalculo  = $oDaoBensHistoricoCalculo->t57_sequencial;
       $oDaoBensHistoricoCalculoBem->t58_bens                  = $iCodigoBem;
       $oDaoBensHistoricoCalculoBem->t58_valorresidual         = $nValorResidualAnterior;
-      $oDaoBensHistoricoCalculoBem->t58_valoratual            = $nValorAtualAnterior;
+      $oDaoBensHistoricoCalculoBem->t58_valoratual            = $nValorAnterior;
       $oDaoBensHistoricoCalculoBem->t58_valorcalculado        = $nValorCalculado;
       $oDaoBensHistoricoCalculoBem->t58_valoranterior         = $nValorAnterior;
       $oDaoBensHistoricoCalculoBem->t58_percentualdepreciado  = "{$nPercentualAnterior}";

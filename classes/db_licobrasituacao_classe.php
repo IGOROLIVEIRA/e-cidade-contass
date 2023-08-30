@@ -207,19 +207,6 @@ class cl_licobrasituacao {
       return false;
     }
 
-//    if ($this->obr02_descrisituacao == null ) {
-//      $this->erro_sql = " Campo Desc. Situação da Obra não informado.";
-//      $this->erro_campo = "obr02_descrisituacao";
-//      $this->erro_banco = "";
-//      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//      $this->erro_status = "0";
-//      return false;
-//    }
-    /**
-     * VALIDAÇÕES
-     *
-     */
     if($this->obr02_situacao == "3" || $this->obr02_situacao == "4"){
       if ($this->obr02_motivoparalisacao == null || $this->obr02_motivoparalisacao == "0" ) {
         $this->erro_sql = " Campo Motivo Paralização não informado.";
@@ -240,16 +227,6 @@ class cl_licobrasituacao {
         $this->erro_status = "0";
         return false;
       }
-
-//      if ($this->obr02_dtretomada == null ) {
-//        $this->erro_sql = " Campo Data Retomada não informado.";
-//        $this->erro_campo = "obr02_dtretomada_dia";
-//        $this->erro_banco = "";
-//        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//        $this->erro_status = "0";
-//        return false;
-//      }
 
       if($this->obr02_motivoparalisacao == "99"){
         if ($this->obr02_outrosmotivos == null ) {
@@ -340,19 +317,6 @@ class cl_licobrasituacao {
     $sql = " update licobrasituacao set ";
     $virgula = "";
 
-//    if (trim($this->obr02_seqobra)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_seqobra"])) {
-//      $sql  .= $virgula." obr02_seqobra = $this->obr02_seqobra ";
-//      $virgula = ",";
-//      if (trim($this->obr02_seqobra) == null ) {
-//        $this->erro_sql = " Campo Nº Obra não informado.";
-//        $this->erro_campo = "obr02_seqobra";
-//        $this->erro_banco = "";
-//        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//        $this->erro_status = "0";
-//        return false;
-//      }
-//    }
     if (trim($this->obr02_dtlancamento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_dtlancamento_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr02_dtlancamento_dia"] !="") ) {
       $sql  .= $virgula." obr02_dtlancamento = '$this->obr02_dtlancamento' ";
       $virgula = ",";
@@ -552,19 +516,19 @@ class cl_licobrasituacao {
       }
     }
 
-//    if (trim($this->obr02_descrisituacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_descrisituacao"])) {
-//      $sql  .= $virgula." obr02_descrisituacao = '$this->obr02_descrisituacao' ";
-//      $virgula = ",";
-//      if (trim($this->obr02_descrisituacao) == null ) {
-//        $this->erro_sql = " Campo Desc. Situação da Obra não informado.";
-//        $this->erro_campo = "obr02_descrisituacao";
-//        $this->erro_banco = "";
-//        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//        $this->erro_status = "0";
-//        return false;
-//      }
-//    }
+    if (trim($this->obr02_descrisituacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_descrisituacao"])) {
+      $sql  .= $virgula." obr02_descrisituacao = '$this->obr02_descrisituacao' ";
+      $virgula = ",";
+      if (trim($this->obr02_descrisituacao) == null ) {
+        $this->erro_sql = " Campo Desc. Situação da Obra não informado.";
+        $this->erro_campo = "obr02_descrisituacao";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+        return false;
+      }
+    }
 
     if (trim($this->obr02_instit)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr02_instit"])) {
       $sql  .= $virgula." obr02_instit = $this->obr02_instit ";
@@ -665,14 +629,6 @@ class cl_licobrasituacao {
       return false;
     }
     $this->numrows = pg_numrows($result);
-//    if ($this->numrows==0) {
-//      $this->erro_banco = "";
-//      $this->erro_sql   = "Record Vazio na Tabela:licobrasituacao";
-//      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-//      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-//      $this->erro_status = "0";
-//      return false;
-//    }
     return $result;
   }
 
@@ -745,5 +701,32 @@ class cl_licobrasituacao {
     }
     return $sql;
   }
+
+  function permissaoAlteracaoDescricao($obr02_dtlancamento,$obr02_veiculopublicacao,$obr02_dtsituacao,$obr02_dtpublicacao,$obr02_descrisituacao,$obr02_seqobra){
+
+    $resultSituacao = $this->sql_record($this->sql_query(null,"*",null,"obr02_seqobra = $obr02_seqobra and obr02_situacao = 1"));
+    $obr02_descrisituacaoAnterior = db_utils::fieldsMemory($resultSituacao,0)->obr02_descrisituacao;
+    $obr02_dtlancamentoAnterior = db_utils::fieldsMemory($resultSituacao,0)->obr02_dtlancamento;
+    $obr02_veiculopublicacaoAnterior = db_utils::fieldsMemory($resultSituacao,0)->obr02_veiculopublicacao;
+    $obr02_dtsituacaoAnterior = db_utils::fieldsMemory($resultSituacao,0)->obr02_dtsituacao;
+    $obr02_dtpublicacaoAnterior = db_utils::fieldsMemory($resultSituacao,0)->obr02_dtpublicacao;
+    $obr02_dtlancamento =  implode('-', array_reverse(explode('/', $obr02_dtlancamento)));
+    $obr02_dtsituacao =  implode('-', array_reverse(explode('/', $obr02_dtsituacao)));
+    $obr02_dtpublicacao =  implode('-', array_reverse(explode('/', $obr02_dtpublicacao)));
+
+    if($obr02_descrisituacaoAnterior != $obr02_descrisituacao){
+      
+      if($obr02_dtlancamentoAnterior != $obr02_dtlancamento) return false;
+      if($obr02_veiculopublicacaoAnterior != $obr02_veiculopublicacao) return false;
+      if($obr02_dtsituacaoAnterior != $obr02_dtsituacao) return false;
+      if($obr02_dtpublicacaoAnterior != $obr02_dtpublicacao) return false;
+
+      return true;
+
+    }
+
+    return false;
+  }
+
 }
 ?>

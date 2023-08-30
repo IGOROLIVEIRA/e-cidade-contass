@@ -70,6 +70,8 @@ class cl_slip {
    var $k17_dtestorno = null;
    var $k17_motivoestorno = null;
    var $k17_devolucao = null;
+   var $k17_numdocumento = null;
+   var $k17_tiposelect = null;
    /*OC4401*/
    var $k17_id_usuario = 0;
    // cria propriedade com as variaveis do arquivo
@@ -91,6 +93,8 @@ class cl_slip {
                  k17_motivoestorno = text = Motivo do estorno
                  k17_id_usuario = int4 = Usuário
                  k17_devolucao = int4 = Exercicio da Devolução
+                 k17_numdocumento = text = Numero do Documento
+                 k17_tiposelect = text = Campo Select Tipo
                  ";
    //funcao construtor da classe
    function cl_slip() {
@@ -124,6 +128,9 @@ class cl_slip {
        $this->k17_valor = ($this->k17_valor == ""?@$GLOBALS["HTTP_POST_VARS"]["k17_valor"]:$this->k17_valor);
        $this->k17_hist = ($this->k17_hist == ""?@$GLOBALS["HTTP_POST_VARS"]["k17_hist"]:$this->k17_hist);
        $this->k17_texto = ($this->k17_texto == ""?@$GLOBALS["HTTP_POST_VARS"]["k17_texto"]:$this->k17_texto);
+       $this->k17_numdocumento = ($this->k17_numdocumento == ""?@$GLOBALS["HTTP_POST_VARS"]["k17_numdocumento"]:$this->k17_numdocumento);
+       $this->k17_tiposelect = ($this->k17_tiposelect == ""?@$GLOBALS["HTTP_POST_VARS"]["k17_tiposelect"]:$this->k17_tiposelect);
+
        if($this->k17_dtaut == ""){
          $this->k17_dtaut_dia = ($this->k17_dtaut_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["k17_dtaut_dia"]:$this->k17_dtaut_dia);
          $this->k17_dtaut_mes = ($this->k17_dtaut_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["k17_dtaut_mes"]:$this->k17_dtaut_mes);
@@ -291,6 +298,8 @@ class cl_slip {
                                       ,k17_motivoestorno
                                       ,k17_id_usuario
                                       ,k17_devolucao
+                                      ,k17_numdocumento
+                                      ,k17_tiposelect
                        )
                 values (
                                 $this->k17_codigo
@@ -310,6 +319,8 @@ class cl_slip {
                                ,'$this->k17_motivoestorno'
                                ,$this->k17_id_usuario
                                ,".($this->k17_devolucao == "null" || $this->k17_devolucao == ""?"null":"'".$this->k17_devolucao."'")."
+                               ,".($this->k17_numdocumento == "null" || $this->k17_numdocumento == ""?"null":"'".$this->k17_numdocumento."'")."
+                               ,".($this->k17_tiposelect == "null" || $this->k17_tiposelect == ""?"null":"'".$this->k17_tiposelect."'")."
                       )";
      $result = db_query($sql);
      if($result==false){
@@ -357,8 +368,10 @@ class cl_slip {
        $resac = db_query("insert into db_acount values($acount,196,15070,'','".AddSlashes(pg_result($resaco,0,'k17_dtestorno'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,196,15071,'','".AddSlashes(pg_result($resaco,0,'k17_motivoestorno'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,196,15072,'','".AddSlashes(pg_result($resaco,0,'k17_devolucao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-    }
-     return true;
+       $resac = db_query("insert into db_acount values($acount,196,15073,'','".AddSlashes(pg_result($resaco,0,'k17_numdocumento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,196,15074,'','".AddSlashes(pg_result($resaco,0,'k17_tiposelect'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      }
+     return true; 
    }
    // funcao para alteracao
    function alterar ($k17_codigo=null) {
@@ -530,6 +543,14 @@ class cl_slip {
         $sql  .= $virgula." k17_devolucao = $this->k17_devolucao ";
         $virgula = ",";
       }
+      if(trim($this->k17_numdocumento)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k17_numdocumento"])){
+        $sql  .= $virgula." k17_numdocumento = $this->k17_numdocumento ";
+        $virgula = ",";
+      }
+      if(trim($this->k17_tiposelect)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k17_tiposelect"])){
+        $sql  .= $virgula." k17_tiposelect = $this->k17_tiposelect ";
+        $virgula = ",";
+      }
      $sql .= " where ";
      if($k17_codigo!=null){
        $sql .= " k17_codigo = $this->k17_codigo";
@@ -573,7 +594,10 @@ class cl_slip {
            $resac = db_query("insert into db_acount values($acount,196,15071,'".AddSlashes(pg_result($resaco,$conresaco,'k17_motivoestorno'))."','$this->k17_motivoestorno',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         if(isset($GLOBALS["HTTP_POST_VARS"]["k17_devolucao"]) || $this->k17_devolucao != "")
            $resac = db_query("insert into db_acount values($acount,196,15072,'".AddSlashes(pg_result($resaco,$conresaco,'k17_devolucao'))."','$this->k17_devolucao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-
+         if(isset($GLOBALS["HTTP_POST_VARS"]["k17_numdocumento"]) || $this->k17_numdocumento != "")
+           $resac = db_query("insert into db_acount values($acount,196,15073,'".AddSlashes(pg_result($resaco,$conresaco,'k17_numdocumento'))."','$this->k17_numdocumento',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["k17_tiposelect"]) || $this->k17_tiposelect != "")
+           $resac = db_query("insert into db_acount values($acount,196,15074,'".AddSlashes(pg_result($resaco,$conresaco,'k17_tiposelect'))."','$this->k17_tiposelect',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
         }
      }
      $result = db_query($sql);
@@ -637,6 +661,8 @@ class cl_slip {
          $resac = db_query("insert into db_acount values($acount,196,15070,'','".AddSlashes(pg_result($resaco,$iresaco,'k17_dtestorno'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,196,15071,'','".AddSlashes(pg_result($resaco,$iresaco,'k17_motivoestorno'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,196,15072,'','".AddSlashes(pg_result($resaco,$iresaco,'k17_devolucao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,196,15073,'','".AddSlashes(pg_result($resaco,$iresaco,'k17_numdocumento'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,196,15074,'','".AddSlashes(pg_result($resaco,$iresaco,'k17_tiposelect'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
 
         }
      }

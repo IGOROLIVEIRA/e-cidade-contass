@@ -1421,4 +1421,41 @@ $sql = "select ";
 
     return $sSql;
   }
+
+  function sql_queryFromRelatorioExportacaoInscricao() {
+
+    $sFrom  = "   issbase                                          										        							                      ";
+    $sFrom .= "   inner join cgm					        on cgm.z01_numcgm 					        = issbase.q02_numcgm						            ";
+    $sFrom .= "   inner join tabativ				      on tabativ.q07_inscr 				        = issbase.q02_inscr							            "; 
+    $sFrom .= "   inner join ativid					      on ativid.q03_ativ 					        = tabativ.q07_ativ							            ";
+    $sFrom .= "   inner join ativprinc				    on ativprinc.q88_inscr 				      = tabativ.q07_inscr							            ";
+    $sFrom .= "   left join issbasecaracteristica	on issbasecaracteristica.q138_inscr = issbase.q02_inscr							            ";
+    $sFrom .= "	  	and issbasecaracteristica.q138_caracteristica in (select caracteristica.db140_sequencial 					            ";
+    $sFrom .= "		  from caracteristica where caracteristica.db140_grupocaracteristica  = 4)											                ";
+    $sFrom .= "   left join caracteristica 			  on caracteristica.db140_sequencial 	= issbasecaracteristica.q138_caracteristica	";
+    $sFrom .= "   left join issbairro				      on issbairro.q13_inscr 				= issbase.q02_inscr							                  ";
+    $sFrom .= "   left join bairro					      on bairro.j13_codi 					= issbairro.q13_inscr						                    ";
+    $sFrom .= "   left join issruas					      on issruas.q02_inscr 				= issbase.q02_inscr							                    ";
+    $sFrom .= "   left join ruas					        on ruas.j14_codigo 					= issruas.j14_codigo						                    ";
+    $sFrom .= "   left join ruastipo				      on ruastipo.j88_codigo 				= ruas.j14_tipo								                    ";
+    $sFrom .= "   left join atividcnae				    on atividcnae.q74_ativid 			= ativid.q03_ativ							                    ";
+    $sFrom .= "   left join clasativ				      on clasativ.q82_ativ 				= ativid.q03_ativ							                      ";
+    $sFrom .= "   left join classe					      on classe.q12_classe 				= clasativ.q82_classe						                    ";
+    $sFrom .= "   left join cnaeanalitica			    on cnaeanalitica.q72_sequencial 	= atividcnae.q74_cnaeanalitica				        ";
+    $sFrom .= "   left join cnae					        on cnae.q71_sequencial 				= cnaeanalitica.q72_cnae					                ";
+
+  	return $sFrom;
+  }  
+
+  function sql_queryExportacaoExcelInscricao(){
+    $sSql   = " select                                                                            ";
+    $sSql  .= "     distinct issbase.q02_inscr, z01_cgccpf, z01_numcgm, z01_nome,                 ";
+    $sSql  .= "     j88_sigla,j14_nome,q02_numero, q02_compl, j13_descr, q02_cxpost,q02_cep,      ";
+    $sSql  .= "     db140_descricao, q12_descr, (to_char(q02_dtinic,'dd/mm/yyyy')) as q02_dtinic, ";
+    $sSql  .= "     (to_char(q02_dtbaix, 'dd/mm/yyyy')) as q02_dtbaix,                            ";
+    $sSql  .= "     q07_ativ, q03_descr, q71_estrutural, q71_descr                                ";
+    $sSql  .= " from                                                                              ";
+        
+    return $sSql;
+  }
 }

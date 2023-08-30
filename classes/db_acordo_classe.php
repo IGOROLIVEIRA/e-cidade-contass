@@ -256,6 +256,7 @@ class cl_acordo
             $this->ac16_adesaoregpreco = ($this->ac16_adesaoregpreco === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_adesaoregpreco"] : $this->ac16_adesaoregpreco);
             $this->ac16_tipocadastro = ($this->ac16_tipocadastro === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_tipocadastro"] : $this->ac16_tipocadastro);
             $this->ac16_providencia = ($this->ac16_providencia === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_providencia"] : $this->ac16_providencia);
+            $this->ac16_datareferencia = ($this->ac16_datareferencia === null ? @$GLOBALS["HTTP_POST_VARS"]["ac16_datareferencia"] : $this->ac16_datareferencia);
         } else {
             $this->ac16_sequencial = ($this->ac16_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["ac16_sequencial"] : $this->ac16_sequencial);
         }
@@ -1131,6 +1132,10 @@ class cl_acordo
             }
         }
 
+        if ($this->ac16_datareferencia != null && $this->ac16_datareferencia != "") {
+            $sql  .= $virgula . " ac16_datareferencia = '$this->ac16_datareferencia' ";
+            $virgula = ",";
+        }
 
         if (trim($this->ac16_licitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["ac16_licitacao"])) {
             $sql .= $virgula . " ac16_licitacao = $this->ac16_licitacao ";
@@ -3024,5 +3029,35 @@ class cl_acordo
                 AND e60_emiss >='$ano-01-01'
                 AND e60_emiss <='$ano-12-31'";
         return $sql;
+    }
+    public function alteracaoCriterioReajuste($ac16_sequencial,$ac16_reajuste,$ac16_criterioreajuste,$ac16_datareajuste,$ac16_periodoreajuste,$ac16_indicereajuste,$ac16_descricaoreajuste,$ac16_descricaoindice)
+    {
+        
+        $ac16_datareajuste = implode("-", (array_reverse(explode("/", $ac16_datareajuste))));;
+
+        $ac16_criterioreajuste = $ac16_reajuste == "f" ? "null" : "'$ac16_criterioreajuste'";
+        $ac16_datareajuste = $ac16_reajuste == "f" ? "null" : "'$ac16_datareajuste'";
+        $ac16_periodoreajuste = $ac16_reajuste == "f" ? "null" : "'$ac16_periodoreajuste'";
+        $ac16_indicereajuste = $ac16_reajuste == "f" ? "null" : $ac16_indicereajuste;
+        $ac16_descricaoreajuste = $ac16_reajuste == "f" ? "null" : "'$ac16_descricaoreajuste'";
+        $ac16_descricaoindice = $ac16_reajuste == "f" ? "null" : "'$ac16_descricaoindice'";
+
+        $sSql = 
+        "
+        update
+	        acordo
+        set
+            ac16_reajuste = '$ac16_reajuste',
+            ac16_criterioreajuste = $ac16_criterioreajuste,
+            ac16_datareajuste = $ac16_datareajuste,
+            ac16_periodoreajuste = $ac16_periodoreajuste,
+            ac16_indicereajuste = $ac16_indicereajuste,
+            ac16_descricaoreajuste = $ac16_descricaoreajuste,
+            ac16_descricaoindice = $ac16_descricaoindice
+        where
+	        ac16_sequencial = $ac16_sequencial;
+        ";
+        
+        db_query($sSql);
     }
 }

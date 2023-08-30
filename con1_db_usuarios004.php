@@ -159,6 +159,14 @@ if (isset($incluir)) {
       } catch(Exception $e) { }
     }
 
+    //  Instalando o V3 para o novo usuario
+    ini_set('memory_limit', '-1');
+    $extensionData = \ECidade\V3\Extension\Data::restore('Desktop');
+    if ($extensionData->exists()) {
+        $extensionManager = new \ECidade\V3\Extension\Manager();
+        $success = $extensionManager->install('Desktop', $cldb_usuarios->login);
+    }
+
   } catch (Exception $e) {
 
     db_fim_transacao(true);

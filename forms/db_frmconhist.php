@@ -62,6 +62,28 @@ db_select('c50_compl',$x,true,$db_opcao,"");
 ?>
     </td>
   </tr>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$Tc50_ativo?>">
+       <?=@$Lc50_ativo?>
+    </td>
+    <td>
+<?
+$x = array("t"=>"SIM","f"=>"NAO");
+db_select('c50_ativo',$x,true,$db_opcao,"");
+?>
+    </td>
+  </tr>
+  <tr>
+    <td nowrap title="<?=@$Tc50_descrcompl?>">
+       <?=@$Lc50_descrcompl?>
+    </td>
+    <td>
+    <?
+    db_textarea('c50_descrcompl',7,50,$Ic50_descrcompl,true,'text',$db_opcao,"","","",500)
+    ?>
+    </td>
+  </tr>
   </table>
   </center>
 <input name="db_opcao" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >

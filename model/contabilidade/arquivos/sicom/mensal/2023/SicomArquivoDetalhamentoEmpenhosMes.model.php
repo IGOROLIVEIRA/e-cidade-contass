@@ -309,6 +309,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         WHEN l03_pctipocompratribunal = 104 THEN 4
         WHEN l03_pctipocompratribunal = 105 THEN 5
         WHEN l03_pctipocompratribunal = 106 THEN 6
+        WHEN l03_pctipocompratribunal = 108 THEN 8
         WHEN l03_pctipocompratribunal = 109 THEN 9
         WHEN l20_codigo IS NULL THEN 1
         ELSE 2

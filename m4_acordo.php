@@ -13,7 +13,6 @@ require_once 'classes/db_acordoaux_classe.php';
 require_once 'classes/db_parametroscontratos_classe.php';
 require_once 'classes/db_manutencaoacordo_classe.php';
 require_once 'classes/db_acordoposicao_classe.php';
-
 $clacordo = new cl_acordo;
 $clmanutencaoacordo = new cl_manutencaoacordo;
 $clacordoposicao = new cl_acordoposicao;
@@ -104,6 +103,7 @@ if (isset($alterar)) {
     $erro_msg = "";
   }
 
+  $clacordo->alteracaoCriterioReajuste($ac16_sequencial,$ac16_reajuste,$ac16_criterioreajuste,$ac16_datareajuste,$ac16_periodoreajuste,$ac16_indicereajuste,$ac16_descricaoreajuste,$ac16_descricaoindice);
 
   $rsPosicoes = db_query(
     "select distinct
@@ -185,6 +185,7 @@ if (isset($alterar)) {
                     ac18_datainicio,
                     ac18_datafim,
                     ac35_dataassinaturatermoaditivo,
+                    ac35_datapublicacao,
                     ac26_numeroaditamento
       from
         acordoposicao
@@ -241,28 +242,7 @@ if (isset($alterar)) {
     ");
 
     $cflicita = db_utils::fieldsMemory($resultadocflicita, 0);
-    $ac16_datareferencia = implode('-', array_reverse(explode('/', $ac16_datareferencia)));
-    $ac16_datapublicacao = implode('-', array_reverse(explode('/', $ac16_datapublicacao)));
-    $dTinicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
-    $dTfim = implode('-', array_reverse(explode('/', $ac16_datafim)));
-    $setac16 = '';
-    if ($ac16_datareferencia != "" && $ac16_datareferencia != null) {
-      $setac16 .= ",ac16_datareferencia = '$ac16_datareferencia'";
-    }
-    if ($ac16_datapublicacao != "" && $ac16_datapublicacao != null) {
-      $setac16 .= ",ac16_datapublicacao = '$ac16_datapublicacao'";
-    }
-    if ($ac16_veiculodivulgacao != "" && $ac16_veiculodivulgacao != null) {
-      $setac16 .= ",ac16_veiculodivulgacao = '$ac16_veiculodivulgacao'";
-    }
-    if ($dTinicio != "" && $dTinicio != null) {
-      $setac16 .= ",ac16_datainicio = '$dTinicio'";
-    }
-    if ($dTfim != "" && $dTfim != null) {
-      $setac16 .= ",ac16_datafim = '$dTfim'";
-    }
-
-    db_query("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' $setac16 WHERE ac16_sequencial = '$ac16_sequencial';");
+    db_query("update acordo set ac16_numodalidade = '$licitacao->l20_numero', ac16_tipomodalidade = '$cflicita->l03_descr' WHERE ac16_sequencial = '$ac16_sequencial';");
   }
 
   $ac16_datainicio = implode('-', array_reverse(explode('/', $ac16_datainicio)));
@@ -342,14 +322,13 @@ if (isset($alterar)) {
     for ($iCont = 0; $iCont < pg_num_rows($rsPosicoes); $iCont++) {
       $oPosicao = db_utils::fieldsMemory($rsPosicoes, $iCont);
 
-      if ($aditivo) {
-
-
+      if ($aditivo) {     
 
         $inicio = 'ac18_datainicio_' . $oPosicao->ac18_sequencial;
         $fim = 'ac18_datafim_' . $oPosicao->ac18_sequencial;
         $dataaditivo = 'ac35_dataassinaturatermoaditivo_' . $oPosicao->ac18_sequencial;
         $dataaditivoreferencia = 'ac35_datareferencia_' . $oPosicao->ac18_sequencial;
+        $datapublicacao = 'ac35_datapublicacao_' . $oPosicao->ac18_sequencial;
 
         $dTinicio = '';
         $dTfim = '';
@@ -360,6 +339,11 @@ if (isset($alterar)) {
         $dTfim = implode('-', array_reverse(explode('/', $$fim)));
         $dTassaditivo = implode('-', array_reverse(explode('/', $$dataaditivo)));
         $dTassaditivoreferencia = implode('-', array_reverse(explode('/', $$dataaditivoreferencia)));
+
+        if($$datapublicacao != ""){
+          $ac35_datapublicacao = implode('-', array_reverse(explode('/', $$datapublicacao)));
+          db_query("update acordoposicaoaditamento set ac35_datapublicacao = '$ac35_datapublicacao' where ac35_acordoposicao = '$oPosicao->posicao'");
+        }
 
         if (!empty($dTinicio) && !empty($dTfim)) {
           db_query("update acordovigencia  set ac18_datainicio = '$dTinicio', ac18_datafim  = '$dTfim' where ac18_acordoposicao  = '$oPosicao->posicao'");
@@ -414,84 +398,143 @@ if (isset($alterar)) {
       $clmanutencaoacordo->manutac_codunidsubanterior = $manutac_codunidsubanterior;
       $clmanutencaoacordo->manutac_numeroant = $manutac_numeroant;
       $clmanutencaoacordo->incluir();
+    
+   
+    function alteracaoTipoOrigem($ac16_tipoorigem,$ac16_licitacao,$ac16_licoutroorgao,$ac16_adesaoregpreco,$ac16_sequencial,$ac16_origem){
+      if ($ac16_tipoorigem == 1) {
 
-    if ($ac16_tipoorigem == 1) {
+        if($ac16_origem == 2){
+           db_msgbox(" Usuário: Para a origem Licitação, só poderão ser selecionados os tipos origem Licitação ou Dispensas e Inexigibilidades");
+           return true;
+        }
+        
+        $rsPc50_codcom = db_query("select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = 13;");
+        $pc50_codcom = db_utils::fieldsMemory($rsPc50_codcom, 0)->pc50_codcom;
 
-      db_query("UPDATE empautoriza
-      SET e54_adesaoregpreco = null, e54_numerl = null, e54_nummodalidade = null,e54_codlicitacao = null,e54_licoutrosorgaos = null,e54_codcom = null
-      where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
+        db_query("UPDATE empautoriza
+        SET e54_adesaoregpreco = null, e54_numerl = null, e54_nummodalidade = null,e54_codlicitacao = null,e54_licoutrosorgaos = null,e54_codcom = $pc50_codcom
+        where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
+        
+        db_query("UPDATE empempenho
+        SET e60_numerol = null,e60_codcom = $pc50_codcom
+        where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
 
-      db_query("UPDATE empempenho
-      SET e60_numerol = null,e60_codcom = null
-      where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
+        db_query("UPDATE acordo SET ac16_licitacao = null, ac16_licoutroorgao = null,ac16_adesaoregpreco = null where ac16_sequencial = $ac16_sequencial");
+
+        return false;
+      }
+  
+      if ($ac16_tipoorigem == 2 || $ac16_tipoorigem == 3) {
+
+        if($ac16_licitacao == ""){
+          db_msgbox("Informe a licitação");
+          return true;
+        } 
+  
+        $rsLiclicita = db_query("select l03_codcom,l20_edital,l20_anousu,l20_numero from liclicita 
+        inner join cflicita on l03_codigo = l20_codtipocom where l20_codigo = $ac16_licitacao;");
+        $l20_edital = db_utils::fieldsMemory($rsLiclicita, 0)->l20_edital;
+        $l20_anousu = db_utils::fieldsMemory($rsLiclicita, 0)->l20_anousu;
+        $l20_numero = db_utils::fieldsMemory($rsLiclicita, 0)->l20_numero;
+        $pc50_codcom = db_utils::fieldsMemory($rsLiclicita, 0)->l03_codcom;
+  
+        $e54_numerl = "$l20_edital/$l20_anousu";
+  
+        db_query("UPDATE empautoriza
+        SET e54_adesaoregpreco = null,e54_nummodalidade = $l20_numero,e54_licoutrosorgaos = null,e54_numerl = '$e54_numerl', e54_codcom = $pc50_codcom, e54_codlicitacao = $ac16_licitacao
+        where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
+  
+        db_query("UPDATE empempenho
+        SET e60_numerol = '$e54_numerl',e60_codcom = $pc50_codcom
+        where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
+
+        db_query("UPDATE acordo SET ac16_licitacao = $ac16_licitacao, ac16_licoutroorgao = null,ac16_adesaoregpreco = null where ac16_sequencial = $ac16_sequencial");
+
+
+        return false;
+
+      }
+  
+      if ($ac16_tipoorigem == 4) {
+
+        if($ac16_origem == 2){
+          db_msgbox(" Usuário: Para a origem Licitação, só poderão ser selecionados os tipos origem Licitação ou Dispensas e Inexigibilidades");
+          return true;
+       }
+
+        if($ac16_adesaoregpreco == ""){
+          db_msgbox("Informe a adesão de registro de preço");
+          return true;
+        } 
+
+        $rsPc50_codcom = db_query("select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = 104;");
+        $pc50_codcom = db_utils::fieldsMemory($rsPc50_codcom, 0)->pc50_codcom;
+  
+        $rsAdesaoregprecos = db_query("select si06_numeroadm,si06_anomodadm,si06_nummodadm from adesaoregprecos where si06_sequencial = $ac16_adesaoregpreco");
+        $si06_numeroadm = db_utils::fieldsMemory($rsAdesaoregprecos, 0)->si06_numeroadm;
+        $si06_anomodadm = db_utils::fieldsMemory($rsAdesaoregprecos, 0)->si06_anomodadm;
+        $si06_nummodadm = db_utils::fieldsMemory($rsAdesaoregprecos, 0)->si06_nummodadm;
+  
+  
+        $e54_numerl = "$si06_numeroadm/$si06_anomodadm";
+  
+        db_query("UPDATE empautoriza
+        SET e54_adesaoregpreco = $ac16_adesaoregpreco, e54_numerl = '$e54_numerl', e54_nummodalidade = $si06_nummodadm, e54_codcom = $pc50_codcom,e54_licoutrosorgaos = null,e54_codlicitacao = null
+        where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
+  
+        db_query("UPDATE empempenho
+        SET e60_numerol = '$e54_numerl',e60_codcom = $pc50_codcom
+        where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
+
+        db_query("UPDATE acordo SET ac16_licitacao = null, ac16_licoutroorgao = null,ac16_adesaoregpreco = $ac16_adesaoregpreco where ac16_sequencial = $ac16_sequencial");
+
+        return false;
+
+      }
+  
+      if ($ac16_tipoorigem == 5 || $ac16_tipoorigem == 6 || $ac16_tipoorigem == 7 || $ac16_tipoorigem == 8 || $ac16_tipoorigem == 9) {
+          
+        if($ac16_origem == 2){
+          db_msgbox(" Usuário: Para a origem Licitação, só poderão ser selecionados os tipos origem Licitação ou Dispensas e Inexigibilidades");
+          return true;
+       }
+
+        if($ac16_licoutroorgao == ""){
+          db_msgbox("Informe a licitação de outro órgão");
+          return true;
+        } 
+
+        $aCodtribunal = array(5 => "105", 6 => "106", 7 => "107", 8 => "108", 9 => "109");
+        $pc50_pctipocompratribunal = $aCodtribunal[$ac16_tipoorigem];
+  
+  
+        $rsPc50_codcom = db_query("select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = $pc50_pctipocompratribunal;");
+        $pc50_codcom = db_utils::fieldsMemory($rsPc50_codcom, 0)->pc50_codcom;
+  
+        $rsLiclicita = db_query("select lic211_processo,lic211_anousu,lic211_numero from liclicitaoutrosorgaos where lic211_sequencial = $ac16_licoutroorgao;");
+        $l20_edital = db_utils::fieldsMemory($rsLiclicita, 0)->lic211_processo;
+        $l20_anousu = db_utils::fieldsMemory($rsLiclicita, 0)->lic211_anousu;
+        $lic211_numero = db_utils::fieldsMemory($rsLiclicita, 0)->lic211_numero;
+  
+  
+        $e54_numerl = "$l20_edital/$l20_anousu";
+  
+        db_query("UPDATE empautoriza
+        SET e54_adesaoregpreco = null,e54_nummodalidade = $lic211_numero,e54_licoutrosorgaos = $ac16_licoutroorgao,e54_numerl = '$e54_numerl', e54_codcom = $pc50_codcom, e54_codlicitacao = null
+        where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
+  
+        db_query("UPDATE empempenho
+        SET e60_numerol = '$e54_numerl',e60_codcom = $pc50_codcom
+        where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
+
+        db_query("UPDATE acordo SET ac16_licitacao = null, ac16_licoutroorgao = $ac16_licoutroorgao,ac16_adesaoregpreco = null where ac16_sequencial = $ac16_sequencial");
+
+        return false;
+
+      }
     }
 
-    if ($ac16_tipoorigem == 2 || $ac16_tipoorigem == 3) {
-
-      $rsLiclicita = db_query("select l03_codcom,l20_edital,l20_anousu,l20_numero from liclicita 
-      inner join cflicita on l03_codigo = l20_codtipocom where l20_codigo = $ac16_licitacao;");
-      $l20_edital = db_utils::fieldsMemory($rsLiclicita, 0)->l20_edital;
-      $l20_anousu = db_utils::fieldsMemory($rsLiclicita, 0)->l20_anousu;
-      $l20_numero = db_utils::fieldsMemory($rsLiclicita, 0)->l20_numero;
-      $pc50_codcom = db_utils::fieldsMemory($rsLiclicita, 0)->l03_codcom;
-
-      $e54_numerl = "$l20_edital/$l20_anousu";
-
-      db_query("UPDATE empautoriza
-      SET e54_adesaoregpreco = null,e54_nummodalidade = $l20_numero,e54_licoutrosorgaos = null,e54_numerl = '$e54_numerl', e54_codcom = $pc50_codcom, e54_codlicitacao = $ac16_licitacao
-      where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
-
-      db_query("UPDATE empempenho
-      SET e60_numerol = '$e54_numerl',e60_codcom = $pc50_codcom
-      where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
-    }
-
-    if ($ac16_tipoorigem == 4) {
-      $rsPc50_codcom = db_query("select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = 104;");
-      $pc50_codcom = db_utils::fieldsMemory($rsPc50_codcom, 0)->pc50_codcom;
-
-      $rsAdesaoregprecos = db_query("select si06_numeroadm,si06_anomodadm,si06_nummodadm from adesaoregprecos where si06_sequencial = $ac16_adesaoregpreco");
-      $si06_numeroadm = db_utils::fieldsMemory($rsAdesaoregprecos, 0)->si06_numeroadm;
-      $si06_anomodadm = db_utils::fieldsMemory($rsAdesaoregprecos, 0)->si06_anomodadm;
-      $si06_nummodadm = db_utils::fieldsMemory($rsAdesaoregprecos, 0)->si06_nummodadm;
-
-
-      $e54_numerl = "$si06_numeroadm/$si06_anomodadm";
-
-      db_query("UPDATE empautoriza
-      SET e54_adesaoregpreco = $ac16_adesaoregpreco, e54_numerl = '$e54_numerl', e54_nummodalidade = $si06_nummodadm, e54_codcom = $pc50_codcom,e54_licoutrosorgaos = null,e54_codlicitacao = null
-      where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
-
-      db_query("UPDATE empempenho
-      SET e60_numerol = '$e54_numerl',e60_codcom = $pc50_codcom
-      where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
-    }
-
-    if ($ac16_tipoorigem == 5 || $ac16_tipoorigem == 6 || $ac16_tipoorigem == 7 || $ac16_tipoorigem == 8 || $ac16_tipoorigem == 9) {
-
-      $aCodtribunal = array(5 => "105", 6 => "106", 7 => "107", 8 => "108", 9 => "109");
-      $pc50_pctipocompratribunal = $aCodtribunal[$ac16_tipoorigem];
-
-
-      $rsPc50_codcom = db_query("select pc50_codcom from pctipocompra where pc50_pctipocompratribunal = $pc50_pctipocompratribunal;");
-      $pc50_codcom = db_utils::fieldsMemory($rsPc50_codcom, 0)->pc50_codcom;
-
-      $rsLiclicita = db_query("select lic211_processo,lic211_anousu,lic211_numero from liclicitaoutrosorgaos where lic211_sequencial = $ac16_licoutroorgao;");
-      $l20_edital = db_utils::fieldsMemory($rsLiclicita, 0)->lic211_processo;
-      $l20_anousu = db_utils::fieldsMemory($rsLiclicita, 0)->lic211_anousu;
-      $lic211_numero = db_utils::fieldsMemory($rsLiclicita, 0)->lic211_numero;
-
-
-      $e54_numerl = "$l20_edital/$l20_anousu";
-
-      db_query("UPDATE empautoriza
-      SET e54_adesaoregpreco = null,e54_nummodalidade = $lic211_numero,e54_licoutrosorgaos = $ac16_licoutroorgao,e54_numerl = '$e54_numerl', e54_codcom = $pc50_codcom, e54_codlicitacao = null
-      where e54_autori in (select ac45_empautoriza from acordoempautoriza where ac45_acordo = $ac16_sequencial);");
-
-      db_query("UPDATE empempenho
-      SET e60_numerol = '$e54_numerl',e60_codcom = $pc50_codcom
-      where e60_numemp in (select e100_numemp from empempenhocontrato where e100_acordo = $ac16_sequencial);");
-    }
+    $sqlerro = alteracaoTipoOrigem($ac16_tipoorigem,$ac16_licitacao,$ac16_licoutroorgao,$ac16_adesaoregpreco,$ac16_sequencial,$ac16_origem);
 
 
     if ($sqlerro == false) {
@@ -516,6 +559,7 @@ if (isset($alterar)) {
                             ac18_datafim,
                             ac35_dataassinaturatermoaditivo,
                             ac35_datareferencia,
+                            ac35_datapublicacao,
                             ac26_numeroaditamento
               from
                 acordoposicao
@@ -538,7 +582,7 @@ if (isset($alterar)) {
                 inner join acordoposicaoperiodo on ac36_acordoposicao = ac26_sequencial
                 where ac16_sequencial = '$ac16_sequencial' order by posicao"
         );
-        $result = $clacordo->sql_record($clacordo->sql_query_vinculos($ac16_sequencial, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
+        $result = $clacordo->sql_record($clacordo->sql_query_vinculos($ac16_sequencial, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim,ac16_criterioreajuste,ac16_reajuste,ac16_datareajuste,ac16_periodoreajuste,ac16_indicereajuste,ac16_descricaoreajuste,ac16_descricaoindice", null, ""));
 
         db_fieldsmemory($result, 0);
       }
@@ -554,7 +598,7 @@ if (isset($alterar)) {
 } elseif (isset($chavepesquisa)) {
   $db_opcao = 2;
   $db_botao = true;
-  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim", null, ""));
+  $result = $clacordo->sql_record($clacordo->sql_query_vinculos($chavepesquisa, "ac16_sequencial,ac16_resumoobjeto,ac16_datareferencia,ac16_datapublicacao,ac16_veiculodivulgacao,ac16_acordosituacao, ac16_objeto,ac16_origem,ac16_tipoorigem,ac16_licitacao,l20_objeto,ac16_adesaoregpreco,si06_objetoadesao,orgao.z01_nome,ac16_licoutroorgao,ac16_acordogrupo,ac02_descricao,ac16_numeroacordo,ac16_dataassinatura,ac16_datainicio,ac16_datafim,ac16_reajuste,ac16_criterioreajuste,ac16_datareajuste,ac16_periodoreajuste,ac16_indicereajuste,ac16_descricaoreajuste,ac16_descricaoindice", null, ""));
 
   db_fieldsmemory($result, 0);
 
@@ -581,6 +625,7 @@ if (isset($alterar)) {
                         ac18_datafim,
                         ac35_dataassinaturatermoaditivo,
                         ac35_datareferencia,
+                        ac35_datapublicacao,
                         ac26_numeroaditamento
           from
             acordoposicao
@@ -986,6 +1031,115 @@ if (isset($alterar)) {
                 </fieldset>
               </td>
             </tr>
+            <tr>
+              <td colspan="2">
+                <table>
+                  <tr>
+                    <td id='tdpossuireajuste' width="300px">
+                      <b>Possui Critério Reajuste:</b>
+
+                        <?
+                        $aPossui = array(
+                          0 => 'Selecione',
+                          "t" => 'Sim',
+                          "f" => 'Não'
+                        );
+                          db_select('ac16_reajuste', $aPossui, true, $db_opcao, "onchange='js_possuireajuste()'", "");
+                          ?>
+                    </td>
+
+                    <td width="23%" id='tdcriterioreajuste' style="display: none;">
+                      <b>Critério de Reajuste:</b>
+
+                      <?
+                      $aCriterios = array(
+                          0 => 'Selecione',
+                          1 => 'Índice Único',
+                          2 => 'Cesta de Índices',
+                          3 => 'Índice Específico'
+                      );
+                      db_select('ac16_criterioreajuste', $aCriterios, true, $db_opcao, "onchange='js_criterio()'", "");
+                      ?>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          <tr>
+            <td colspan="2">
+              <table border="0">
+                <tr id='trdatareajuste' style="display: none;">
+                  <td width="140px">
+                    <b>Data Base Reajuste:</b>
+                  </td>
+                  <td width="160px">
+                   <?
+                    db_inputdata(
+                        'ac16_datareajuste',
+                         @$ac16_datareajuste_dia,
+                         @$ac16_datareajuste_mes,
+                         @$ac16_datareajuste_ano,
+                         true,
+                         'text',
+                         $iCampo,
+                         "onchange='return js_somardias();'",
+                          "",
+                          "",
+                          "return parent.js_somardias();"
+                          );
+                          ?>
+                  </td>
+
+                  <td id='tdindicereajuste' style="display: none;">
+                    <b>Índice de Reajuste:</b>
+
+                      <?
+                      $aIndice = array(
+                          0 => 'Selecione',
+                          1 => 'IPCA',
+                          2 => 'INPC',
+                          3 => 'INCC',
+                          4 => 'IGP-M',
+                          5 => 'IGP-DI',
+                          6 => 'Outro'
+                          );
+                      db_select('ac16_indicereajuste', $aIndice, true, $db_opcao, "onchange='js_indicereajuste()'", "");
+                      ?>
+                  </td>
+                </tr>
+                <tr id='trperiodoreajuste' style="display: none;">
+                  <td width="140px">
+                    <b>Período do Reajuste:</b>
+                  </td>
+                  <td>
+                    <?
+                    db_input('ac16_periodoreajuste', 12, 1, true, $db_opcao, "", "", "", "", "", 2);
+                    ?>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+            <tr id='trdescricaoreajuste' style="display: none;">
+              <td>
+                <b> Descrição do Critério de Reajuste </b>
+              </td>
+              <td>
+                <?
+                db_textarea('ac16_descricaoreajuste', 3, 69, '', true, 'text', $db_opcao, "", "", "", "300");
+                ?>
+              </td>
+            </tr>
+            <tr id='trdescricaoindicereajuste' style="display: none;">
+              <td>
+                <b> Descrição do Índice de Reajuste </b>
+              </td>
+              <td>
+                <?
+                db_textarea('ac16_descricaoindice', 3, 69, '', true, 'text', $db_opcao, "", "", "", "300");
+                ?>
+              </td>
+            </tr>
             <?php
 
             if ($aditivo) :
@@ -1073,6 +1227,20 @@ if (isset($alterar)) {
                               $iOpcao,
                               "class='numeroaditivo'"
                             ); ?>
+                          </td>
+                          <td><b>Data de Publicação:</b></td>
+                          <td>
+                          <?php
+                            db_inputdata(
+                              "ac35_datapublicacao_$ac18_sequencial",
+                              @$ac35_datapublicacao_dia,
+                              @$ac35_datapublicacao_mes,
+                              @$ac35_datapublicacao_ano,
+                              true,
+                              'text',
+                              $iOpcao,
+                              "class='datapublicacaoaditamento'"
+                             ); ?>
                           </td>
                         </tr>
                       </table>
@@ -1311,6 +1479,9 @@ if (isset($alterar)) {
     if (!confirm("Deseja realmente alterar")) {
       return false;
     }
+
+    if(js_validacoesReajuste() == false) return false;
+
     if (($('ac16_dataassinatura').value == "" || $('ac16_dataassinatura').value == null) && $('ac16_acordosituacao').value == 4) {
       alert("O preenchimento da Data de Assinatura é obrigatório ! ");
       return false;
@@ -1324,6 +1495,13 @@ if (isset($alterar)) {
     si03_dataapostila = document.getElementsByClassName('dataapostila');
     si03_datareferencia = document.getElementsByClassName('datareferenciaapostila');
     ac26_sequencial = document.getElementsByClassName('ac26_sequencial');
+    aDatasDePublicacaoAditamento = document.getElementsByClassName('datapublicacaoaditamento');
+
+    for(i = 0; i < aDatasDePublicacaoAditamento.length; i++){
+      if(aDatasDePublicacaoAditamento[i].value == ""){
+        return alert("O preenchimento da data de publicação do aditamento é obrigatório.");
+      }
+    }
 
     if (($('ac16_datareferencia').value == "" || $('ac16_datareferencia').value == null) && $('ac16_acordosituacao').value == 4) {
       alert("O preenchimento a data de referência do acordo é obrigatório !");
@@ -1584,6 +1762,147 @@ if (isset($alterar)) {
       document.form1.si06_objetoadesao.focus();
     }
   }
+
+  function js_iniciaInformacoesReajuste() {
+
+    iPossuicriterio = document.form1.ac16_reajuste.value;
+
+    if (iPossuicriterio == "t") {
+      document.getElementById("tdcriterioreajuste").style.display = "inline";
+      document.getElementById("trdatareajuste").style.display = "inline";
+      document.getElementById("trperiodoreajuste").style.display = "inline";
+
+      icriterio = document.form1.ac16_criterioreajuste.value;
+
+      if (icriterio == 1) {
+        document.getElementById("tdindicereajuste").style.display = "inline";
+        document.getElementById("trdescricaoreajuste").style.display = "none";
+        document.getElementById("ac16_descricaoreajuste").value = "";
+        js_indicereajuste();
+        return;
+      }
+      if (icriterio == 2 || icriterio == 3) {
+        document.getElementById("tdindicereajuste").style.display = "none";
+        document.getElementById("trdescricaoreajuste").style.display = "";
+        document.getElementById("ac16_indicereajuste").value = 0;
+        document.getElementById("trdescricaoindicereajuste").style.display ="none";
+        document.getElementById("ac16_descricaoindice").value = "";
+        return;
+      }
+      document.getElementById("trdescricaoreajuste").style.display = "none";
+      document.getElementById("tdindicereajuste").style.display = "none";
+      document.getElementById("ac16_indicereajuste").value = 0;
+      document.getElementById("trdescricaoindicereajuste").style.display = "none";
+      document.getElementById("ac16_descricaoindice").value = "";
+    }
+  }
+
+  function js_indicereajuste() {
+    iIndicereajuste = document.form1.ac16_indicereajuste.value;
+    if (iIndicereajuste == 6) {
+      document.getElementById("trdescricaoindicereajuste").style.display = "";
+      return;
+    }
+    document.getElementById("trdescricaoindicereajuste").style.display = "none";
+    document.getElementById("ac16_descricaoindice").value = "";
+  }
+
+  function js_possuireajuste() {
+    iPossuicriterio = document.form1.ac16_reajuste.value;
+    if (iPossuicriterio == "t") {
+      document.getElementById("tdcriterioreajuste").style.display = "inline";
+      document.getElementById("trdatareajuste").style.display = "inline";
+      document.getElementById("trperiodoreajuste").style.display = "inline";
+      return;
+    }
+    document.getElementById("tdcriterioreajuste").style.display = "none";
+    document.getElementById("trdatareajuste").style.display = "none";
+    document.getElementById("trperiodoreajuste").style.display = "none";
+    document.getElementById("trdescricaoreajuste").style.display = "none";
+    document.getElementById("ac16_descricaoreajuste").value = "";
+    document.getElementById("ac16_indicereajuste").value = 0;
+    documentt.getElementById("ac16_criterioreajuste").value = 0;
+    document.getElementById("ac16_periodoreajuste").value = "";
+    document.getElementById("ac16_datareajuste").value = null;
+  }
+
+  function js_criterio() {
+    icriterio = document.form1.ac16_criterioreajuste.value;
+
+    if (icriterio == 1) {
+      document.getElementById("tdindicereajuste").style.display = "inline";
+      document.getElementById("trdescricaoreajuste").style.display = "none";
+      document.getElementById("ac16_descricaoreajuste").value = "";
+      return;
+    }
+    if (icriterio == 2 || icriterio == 3) {
+      document.getElementById("tdindicereajuste").style.display = "none";
+      document.getElementById("trdescricaoreajuste").style.display = "";
+      document.getElementById("ac16_indicereajuste").value = "0";
+      document.getElementById("trdescricaoindicereajuste").style.display = "none";
+      document.getElementById("ac16_descricaoindice").value = "";
+      return;
+    }
+    document.getElementById("trdescricaoreajuste").style.display = "none";
+    document.getElementById("tdindicereajuste").style.display = "none";
+    document.getElementById("ac16_indicereajuste").value = 0;
+    document.getElementById("trdescricaoindicereajuste").style.display = "none";
+    document.getElementById("ac16_descricaoindice").value = "";
+  }
+
+  function js_validacoesReajuste() {
+    let iReajuste = $F("ac16_reajuste");
+    let iCriterioreajuste = $F("ac16_criterioreajuste");
+    let dtReajuste = $F("ac16_datareajuste");
+    let sPeriodoreajuste = $F("ac16_periodoreajuste");
+    let iIndicereajuste = $F("ac16_indicereajuste");
+    let sDescricaoreajuste = $F("ac16_descricaoreajuste");
+    let sDescricaoindice = $F("ac16_descricaoindice");
+
+    if (iReajuste == 0) {
+      alert("Usuário: Campo Possui Critério de Reajuste não informado.");
+      return false;
+    }
+
+    if (iReajuste == "t") {
+
+      if (iCriterioreajuste == 0) {
+        alert("Usuário: Campo Critério de Reajuste não informado.");
+        return false;
+      }
+
+      if (dtReajuste == "") {
+        alert("Usuário: Campo Data Base de Reajuste não informado.");
+        return false;
+      }
+
+      if (sPeriodoreajuste == "") {
+        alert("Usuário: Campo Período de Reajuste não informado.");
+        return false;
+      }
+
+      if (iCriterioreajuste == 1 && iIndicereajuste == 0) {
+        alert("Usuário: Campo Índice de Reajuste não informado.");
+        return false;
+      }
+
+      if (iIndicereajuste == 6 && sDescricaoindice == "") {
+        alert("Usuário: Campo Descrição do Índice não informado.");
+        return false;
+      }
+
+      if (iCriterioreajuste != 1 &&sDescricaoreajuste == "") {
+        alert("Usuário: Campo Descrição de Reajuste não informado.");
+        return false;
+      }
+
+      return true;
+
+    }
+
+  }
+
+  js_iniciaInformacoesReajuste();
   js_verificaorigem();
   js_verificatipoorigem();
 </script>

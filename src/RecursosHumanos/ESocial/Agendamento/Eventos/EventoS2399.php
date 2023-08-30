@@ -104,12 +104,12 @@ class EventoS2399 extends EventoBase
                 }
 
                 for ($iCont4 = 0; $iCont4 < count($aDadosValoreRubrica); $iCont4++) {
-                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[0] = new \stdClass(); 
-                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[0]->codrubr = $aDadosValoreRubrica[$iCont4]->codrubr; 
-                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[0]->idetabrubr = 'TABRUB1';//$aDadosValoreRubrica[$iCont4]->idetabrubr; 
-                    //$std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[0]->vrunit = $aDadosValoreRubrica[$iCont4]->vrrubr; 
-                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[0]->vrrubr = $aDadosValoreRubrica[$iCont4]->vrrubr; 
-                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[0]->indapurir = 0;//$aDadosValoreRubrica[$iCont4]->indapurir; 
+                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[$iCont4] = new \stdClass(); 
+                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[$iCont4]->codrubr = $aDadosValoreRubrica[$iCont4]->codrubr; 
+                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[$iCont4]->idetabrubr = 'TABRUB1';//$aDadosValoreRubrica[$iCont4]->idetabrubr; 
+                    //$std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[$iCont4]->vrunit = $aDadosValoreRubrica[$iCont4]->vrrubr; 
+                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[$iCont4]->vrrubr = $aDadosValoreRubrica[$iCont4]->vrrubr; 
+                    $std->verbasresc->dmdev[$seqdmdev]->ideestablot[0]->detverbas[$iCont4]->indapurir = 0;//$aDadosValoreRubrica[$iCont4]->indapurir; 
                 }
 
                 $seqdmdev++;
@@ -348,6 +348,8 @@ class EventoS2399 extends EventoBase
                 $aItens[] = $oFormatado;
             }
         }
+        // echo '<pre>';
+        // var_dump($aItens);exit;
         return $aItens;
     }
 
