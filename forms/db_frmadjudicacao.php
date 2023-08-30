@@ -396,16 +396,9 @@ $clrotulo->label("l20_codigo");
         js_removeObj('msgBox');
         var oRetorno = JSON.parse(oAjax.responseText);
         if(oRetorno.status == '1'){
-            alert(oRetorno.message.urlDecode());
-            oGridItens.clearAll(true);
-            document.getElementById('l202_licitacao').value = '';
-            document.getElementById('pc50_descr').value = '';
-            document.getElementById('l202_dataadjudicacao').value = '';
-            document.getElementById('respAdjudicodigo').value = '';
-            document.getElementById('respAdjudinome').value = '';
-        }else{
-            alert(oRetorno.message.urlDecode());
+            return alert(oRetorno.message.urlDecode());
         }
+        return alert(oRetorno.message.urlDecode());
     }
 
     function js_alterarAdjudicacao(){

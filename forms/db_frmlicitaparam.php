@@ -151,6 +151,17 @@ $cllicitaparam->rotulo->label();
                   ?>
                 </td>
               </tr>
+              <tr>
+                <td>
+                  <strong>Adjudicar Processo RP</strong>
+                </td>
+                <td>
+                  <?
+                  $x = array("f" => "NAO", "t" => "SIM");
+                  db_select('l12_adjudicarprocesso', $x, true, $db_opcao, "");
+                  ?>
+                </td>
+              </tr>
             </table>
           </fieldset>
         <td>
