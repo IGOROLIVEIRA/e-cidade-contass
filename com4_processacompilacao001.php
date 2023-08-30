@@ -136,7 +136,6 @@ db_app::load("widgets/windowAux.widget.js");
                 <input type="button" value='visualizar Itens' id='btnVisualizarItens'>
               </td>
             </tr>
-            <!--OC3770-->
             <tr>
               <td align="left">
                 <label class="bold">Critério de Adjudicação:</label>
@@ -153,7 +152,22 @@ db_app::load("widgets/windowAux.widget.js");
                 ?>
               </td>
             </tr>
-            <!-- FIM - OC3770-->
+            <tr>
+              <td align="left">
+                <b>Tipo de Processo: </b>
+              </td>
+              <td>
+                <?php
+
+                $aTipos = array(
+                  1 => 'Item',
+                  2 => 'Lote'
+                );
+
+                db_select('pc80_tipoprocesso', $aTipos, true, '', 'style="width:100%"');
+                ?>
+              </td>
+            </tr>
           </table>
           </fieldset>
         </td>
@@ -362,6 +376,7 @@ function js_processarCompilacao() {
     oParam.iSolicitacao = $F('pc10_numero');
     oParam.tipo         = 6;
     oParam.criterioadj  = $F('pc80_criterioadjudicacao');
+    oParam.tipoProcesso = $F('pc80_tipoprocesso');
     if(typeof db_iframe_solicita !== "undefined"){
       db_iframe_solicita.hide();
     }
@@ -385,9 +400,12 @@ function js_retornoProcessarCompilacao(oAjax) {
   if (oRetorno.status == 1) {
     document.getElementById("btnIncluirOrcamento").style.display = '';
     processodecompra = oRetorno.iProcessoCompras;
-    return alert('Compilacao Processada com sucesso!\nProcesso de Compras Gerado: '+oRetorno.iProcessoCompras);
+    alert('Compilacao Processada com sucesso!\nProcesso de Compras Gerado: '+oRetorno.iProcessoCompras);
+    if($('pc80_tipoprocesso').value == 2){
+      top.corpo.document.location.href='com4_processocompra001.php?acao=2&iCodigo='+processodecompra;
+    }
+    return true;
   } 
-  
   return alert(oRetorno.message.urlDecode());
   
 }
