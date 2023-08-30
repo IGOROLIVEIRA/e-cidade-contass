@@ -1842,6 +1842,21 @@ class empenho {
         $this->sMsgErro = "Erro (2) Empenho sem elemento.";
       }
     }
+    if (!$this->lSqlErro) {
+
+      $clempelemento = new cl_empelemento();
+      $rsEle         = $clempelemento->sql_record($clempelemento->sql_query_file($iEmpenho, null, " e64_codele "));
+      $iAnoSessao          = db_getsession("DB_anousu");
+      if ($clempelemento->numrows > 0){
+        $objEmpElem  = db_utils::fieldsMemory($rsEle,0);        
+        $oPlanoContaOrcamento = new ContaOrcamento( $objEmpElem->e64_codele, $iAnoSessao, null, db_getsession("DB_instit") );
+        $oPlanoConta          = $oPlanoContaOrcamento->getPlanoContaPCASP();
+        if (empty($oPlanoConta)) {
+          $this->lSqlErro = true;
+          $this->sMsgErro = "Desdobramento sem vínculo com PCASP.";
+        }
+      }
+    }
 
     if (!$this->lSqlErro){
 
