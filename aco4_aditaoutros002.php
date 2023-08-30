@@ -40,28 +40,6 @@ inner join acordoposicao on ac26_sequencial = ac20_acordoposicao
 where ac20_acordoposicao = (select max(ac26_sequencial) from acordoposicao where ac26_acordo = $ac16_acordo);");
 $totaladitado =  db_utils::fieldsMemory($rs_totaladitado, 0)->valoraditado;
 
-/* Consulta do valor total dos itens acrescentados
- * caso o aditivo seja do tipo Alteração de Projeto/Especificação
-*/
-
-$totalacrescido = 0;
-
-if ($acordo->ac26_acordoposicaotipo == 12) {
-    $rs_totalitens = db_query("select sum(ac20_valortotal) as valortotal from acordoitem
-    inner join pcmater on ac20_pcmater = pc01_codmater
-    where ac20_acordoposicao = ((select max (ac20_acordoposicao) from acordoitem))
-    and pc01_codmater not in (select pc01_codmater from acordoitem
-    inner join pcmater on ac20_pcmater = pc01_codmater
-    where ac20_acordoposicao = (select ac26_sequencial from acordo
-    inner join acordoposicao on ac16_sequencial = ac26_acordo
-    where ac16_sequencial = $ac16_acordo and 
-    ac26_sequencial != ((select max (ac26_sequencial) from acordoposicao))
-    order by ac26_sequencial desc limit 1) order by ac20_ordem);");
-    $totalacrescido =  db_utils::fieldsMemory($rs_totalitens, 0)->valortotal;
-}
-
-$valortotal = $totaladitado + $totalacrescido;
-
 $head3 = "RELATÓRIO DE ADITAMENTO";
 
 $pdf = new PDF();
@@ -158,5 +136,5 @@ for ($i = 0; $i < pg_numrows($rs_acordoitem); $i++) {
 
 $pdf->setfont('arial', 'B', 7);
 $pdf->cell(170, 6, "Valor Total: ", 0, 0, "R", 0);
-$pdf->cell(20, 6, 'R$ ' . number_format($valortotal, 2, ',', '.'), 0, 1, "C", 0);
+$pdf->cell(20, 6, 'R$ ' . number_format($totaladitado, 2, ',', '.'), 0, 1, "C", 0);
 $pdf->Output();
