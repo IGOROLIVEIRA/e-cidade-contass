@@ -1,7 +1,8 @@
 <?php
 global $resparag, $resparagpadrao, $db61_texto, $db02_texto;
 
-function definicaoValorUnitarioePercentual($pc80_criterioadjudicacao,$si02_tabela,$si02_taxa,&$valorUnitario,&$percentual){
+function definicaoValorUnitarioePercentual($pc80_criterioadjudicacao,$si02_tabela,$si02_taxa,&$valorUnitario,&$percentual)
+{
 
     if($pc80_criterioadjudicacao == 1 && $si02_tabela == "t"){
         $valorUnitario = 0;

@@ -2,7 +2,8 @@
 require_once 'model/relatorios/Relatorio.php';
 require("libs/db_utils.php");
 
-function definicaoValorUnitarioePercentual($pc80_criterioadjudicacao,$si02_tabela,$si02_taxa,&$valorUnitario,&$percentual){
+function definicaoValorUnitarioePercentual($pc80_criterioadjudicacao,$si02_tabela,$si02_taxa,&$valorUnitario,&$percentual)
+{
 
     if($pc80_criterioadjudicacao == 1 && $si02_tabela == "t"){
         $valorUnitario = 0;
