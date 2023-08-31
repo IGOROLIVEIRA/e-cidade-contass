@@ -187,13 +187,13 @@ $rotulo->label("z01_cgccpf");
           if ($filtroabast == 1) {
 
             $anoant = db_getsession("DB_anousu") - 1;
+            $ve70_abast = implode("-", array_reverse(explode("/", $ve70_abast)));
 
             $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000','3339039990000') ";
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
-            $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "')";
-            $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')";
+            $dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast' and empempenho.e60_anousu = " . db_getsession("DB_anousu");
             $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
-            $dbwhere .= "	and e91_anousu = " . db_getsession('DB_anousu') . "))";
+            $dbwhere .= "	and e91_anousu = " . db_getsession('DB_anousu') . ")";
             $filtroempelemento = 1;
           }
 
@@ -403,13 +403,13 @@ $rotulo->label("z01_cgccpf");
               if ($filtroabast == 1) {
 
                 $anoant = db_getsession("DB_anousu") - 1;
-
-                $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000','3339039990000') ";
+                $ve70_abast = implode("-", array_reverse(explode("/", $ve70_abast)));
+    
+                $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000') ";
                 $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
-                $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "')";
-                $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')";
+                $dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast' and empempenho.e60_anousu = " . db_getsession("DB_anousu");
                 $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
-                $dbwhere .= "	and e91_anousu = " . db_getsession("DB_anousu") . "))";
+                $dbwhere .= "	and e91_anousu = " . db_getsession('DB_anousu') . ")";
                 $filtroempelemento = 1;
               }
 
