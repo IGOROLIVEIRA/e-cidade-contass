@@ -1,30 +1,4 @@
-<?
-/*
- *     E-cidade Software Publico para Gestao Municipal
- *  Copyright (C) 2013  DBselller Servicos de Informatica
- *                            www.dbseller.com.br
- *                         e-cidade@dbseller.com.br
- *
- *  Este programa e software livre; voce pode redistribui-lo e/ou
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
- *  publicada pela Free Software Foundation; tanto a versao 2 da
- *  Licenca como (a seu criterio) qualquer versao mais nova.
- *
- *  Este programa e distribuido na expectativa de ser util, mas SEM
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
- *  detalhes.
- *
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
- *  junto com este programa; se nao, escreva para a Free Software
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- *  02111-1307, USA.
- *
- *  Copia da licenca no diretorio licenca/licenca_en.txt
- *                                licenca/licenca_pt.txt
- */
-
+<?php
 
 include("libs/db_sql.php");
 include("fpdf151/pdf1.php");
@@ -35,8 +9,6 @@ if ( !isset($parcel) || $parcel == '' ) {
   db_redireciona('db_erros.php?fechar=true&db_erro=Parcelamento não encontrado!');
   exit;
 }
-
-//arreprescr k30_anulado is false
 
 $alt = "5";
 $exercicio = db_getsession("DB_anousu");
@@ -852,7 +824,6 @@ if ($matric > 0 ) {
 
 $resultnomedeb = db_query($sqlnomedeb);
 if ( pg_numrows($resultnomedeb) == 0 ) {
-
   db_redireciona('db_erros.php?fechar=true&db_erro=Numpre não encontrado.');
   exit;
 }
@@ -918,7 +889,6 @@ if ( $tipo == 21 ) {
   $exerc = "EXERC";
 }
 
-
 $sqltexto  =" select k40_db_documento,                                              ";
 $sqltexto .="        v07_desconto                                                   ";
 $sqltexto .="   from termo                                                          ";
@@ -946,7 +916,6 @@ if ($linhastexto > 0 ) {
   db_redireciona('db_erros.php?fechar=true&db_erro=Não encontrado documento cadastrado para regra de parcelamento ('.$v07_desconto.')!');
   exit;
 }
-
 
 $objteste = new libdocumento(1700,$k40_db_documento);
 $objteste->getParagrafos();
@@ -1102,7 +1071,6 @@ foreach ($parag as $chave ) {
           $npa=$k00_numpar;
         }
 
-
       }
       if ( @$matric > 0 ){
         $xnumero = 'M-'.$matric;
@@ -1199,8 +1167,6 @@ foreach ($parag as $chave ) {
     $pdf->Cell(20,4," Vlr. Desc. "     ,1,0,"C",1);
     $pdf->Cell(20,4," Total "          ,1,1,"C",1);
 
-
-
     $k00_descrnovo = "";
     $primeiro = true;
     $trocou = false;
@@ -1272,19 +1238,16 @@ foreach ($parag as $chave ) {
         db_fieldsmemory($resultdesc,0);
         
         $honorarios = 0;
-        /*$oInstit = new Instituicao(db_getsession('DB_instit'));
-        
-        if($oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA || $oInstit->getCodigoCliente() == Instituicao::COD_CLI_BURITIZEIRO){
-          $rechonorarios = $oInstit->getCodigoCliente() == Instituicao::COD_CLI_PMPIRAPORA ? 718 : 330;
-          $honorarios = "select sum(k00_valor) as honorarios from arrecad where k00_receit = ".$rechonorarios." and k00_numpre = ".$v07_numpre ;
-          $resulthonorarios = db_query($honorarios);
-          db_fieldsmemory($resulthonorarios,0);
-        }*/
-
         db_sel_instit(null, "db21_honorarioadvocaticio");
         
         if($db21_honorarioadvocaticio > 0){
-          $honorarios = "select sum(k00_valor) as honorarios from arrecad where k00_receit = ".$db21_honorarioadvocaticio." and k00_numpre = ".$v07_numpre ;
+          $honorarios = "  select sum(honorarios) as honorarios from ( ";
+          $honorarios .= "    select sum(k00_valor) as honorarios from arrecad ";
+          $honorarios .= "      where k00_receit = ".$db21_honorarioadvocaticio." and k00_numpre = ".$v07_numpre ;
+          $honorarios .= "    union all ";
+          $honorarios .= "    select sum(k00_valor) as honorarios from arrecant ";
+          $honorarios .= "      where k00_receit = ".$db21_honorarioadvocaticio." and k00_numpre = ".$v07_numpre ;
+          $honorarios .= " )as x" ;
           $resulthonorarios = db_query($honorarios);
           db_fieldsmemory($resulthonorarios,0);
         }
