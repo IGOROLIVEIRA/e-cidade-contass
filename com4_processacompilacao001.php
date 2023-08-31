@@ -402,7 +402,7 @@ function js_retornoProcessarCompilacao(oAjax) {
     processodecompra = oRetorno.iProcessoCompras;
     alert('Compilacao Processada com sucesso!\nProcesso de Compras Gerado: '+oRetorno.iProcessoCompras);
     if($('pc80_tipoprocesso').value == 2){
-      top.corpo.document.location.href='com4_processocompra001.php?acao=2&iCodigo='+processodecompra;
+      CurrentWindow.corpo.document.location.href='com4_processocompra001.php?acao=2&iCodigo='+processodecompra;
     }
     return true;
   } 
