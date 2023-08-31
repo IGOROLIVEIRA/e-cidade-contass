@@ -66,13 +66,26 @@ $sqlerro = false;
 db_inicio_transacao();
 
 if (isset($alterar)) {
-    $dataLiquidacao = str_replace('/', '-', $dataLiquidacao);
-    $dataLiquidacao = date('Y-m-d', strtotime($dataLiquidacao));
-    $dataEstornoAtual = str_replace('/', '-', $dataEstornoAtual);
-    $dataEstornoAtual = date('Y-m-d', strtotime($dataEstornoAtual));
+    $estornoAlterado = false;
     if($dataEstorno !== ""){
         $dataEstorno = str_replace('/', '-', $dataEstorno);
         $dataEstorno = date('Y-m-d', strtotime($dataEstorno));
+        if($dataEstornoAtual !== ""){
+            $dataEstornoAtual = str_replace('/', '-', $dataEstornoAtual);
+            $dataEstornoAtual = date('Y-m-d', strtotime($dataEstornoAtual));
+            $estornoAlterado = strtotime($dataEstornoAtual) !== strtotime($dataEstorno) ? true : false;
+        }
+    }
+
+    $liquidacaoAlterado = false;
+    if($dataLiquidacao !== ""){
+        $dataLiquidacao = str_replace('/', '-', $dataLiquidacao);
+        $dataLiquidacao = date('Y-m-d', strtotime($dataLiquidacao));
+        if($dataLiquidacaoAtual !== ""){
+            $dataLiquidacaoAtual = str_replace('/', '-', $dataLiquidacaoAtual);
+            $dataLiquidacaoAtual = date('Y-m-d', strtotime($dataLiquidacaoAtual));
+            $liquidacaoAlterado = strtotime($dataLiquidacaoAtual) !== strtotime($dataLiquidacao) ? true : false;
+        }
     }
     
     $sSqlConsultaFimPeriodoContabil   = "SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." and c99_instit = ".db_getsession('DB_instit');
@@ -83,8 +96,9 @@ if (isset($alterar)) {
         $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
 
         if ($oFimPeriodoContabil->c99_data != '' 
-        && (db_strtotime($e50_data) <= db_strtotime($oFimPeriodoContabil->c99_data) 
-        || db_strtotime($dataLiquidacao) <= db_strtotime($oFimPeriodoContabil->c99_data))) {
+        && (db_strtotime($e50_data) <= db_strtotime($oFimPeriodoContabil->c99_data)
+        || ($estornoAlterado && db_strtotime($dataEstorno) <= db_strtotime($oFimPeriodoContabil->c99_data))
+        || ($liquidacaoAlterado && db_strtotime($dataLiquidacao) <= db_strtotime($oFimPeriodoContabil->c99_data)))) {
 
             $erro_msg = "Alteração não realizada!\nData inferior à data do fim do período contábil.";
             $sqlerro = true;
@@ -94,7 +108,7 @@ if (isset($alterar)) {
     }
 
     //Verifica se a data de OP e anterior a data da OC, caso não seja uma OC gerada automaticamente
-    if(!$sqlerro){
+    if(!$sqlerro && isset($dataLiquidacao) && $dataLiquidacao !== ""){
         $ordemCompra = $clmatordem->verificaTipo($e50_codord);
         if(isset($ordemCompra)){
             if($ordemCompra->tipo === 'normal'){
@@ -107,7 +121,7 @@ if (isset($alterar)) {
     }
 
     //Verifica se data da liquidação é anterior a data do empenho
-    if(!$sqlerro){
+    if(!$sqlerro && $liquidacaoAlterado){
         $sql = $clconlancam->verificaDataEmpenho($e60_numemp);
         $result = db_query($sql);
         if(pg_num_rows($result) > 0){
@@ -120,7 +134,7 @@ if (isset($alterar)) {
     }
 
     //Verifica se data de liquidaçao é posterior a data de pagamento
-    if(!$sqlerro){
+    if(!$sqlerro && $liquidacaoAlterado){
         $sql = $clconlancam->verificaDataPagamento($e50_codord);
         $result = db_query($sql);
         if(pg_num_rows($result) > 0){
@@ -133,7 +147,7 @@ if (isset($alterar)) {
     }
 
     //Verifica se empenho tem saldo na data desejada
-    if(!$sqlerro && strtotime($dataLiquidacao) < strtotime($e50_data)){
+    if(!$sqlerro && strtotime($dataLiquidacao) < strtotime($e50_data) && $liquidacaoAlterado){
         $sql = $clempempenho->verificaSaldoEmpenho($e60_numemp, $dataLiquidacao);
         $result = pg_fetch_object(db_query($sql));
         if ($result->saldo_empenho < $e53_valor){
@@ -143,7 +157,7 @@ if (isset($alterar)) {
     }
 
     //Verifica se empenho não ficará negativo
-    if(!$sqlerro){
+    if(!$sqlerro && $liquidacaoAlterado){
         $sql = $clempempenho->verificaSaldoEmpenhoPosterior($e60_numemp, $dataLiquidacao, $e50_codord, 20);
         $result = pg_fetch_object(db_query($sql));
         if ($result->saldo_empenho < 0){
@@ -152,18 +166,8 @@ if (isset($alterar)) {
         }
     }
 
-    //Verifica se empenho não ficará negativo quando altera estorno
-    if(!$sqlerro && isset($dataEstorno) && $dataEstorno !== "" && strtotime($dataEstornoAtual) !== strtotime($dataEstorno)){
-        $sql = $clempempenho->verificaSaldoEmpenhoPosterior($e60_numemp, $dataEstorno, $e50_codord, 21);
-        $result = pg_fetch_object(db_query($sql));
-        if ($result->saldo_empenho < 0){
-            $erro_msg = "Alteração não realizada!\nO empenho não pode ficar com saldo negativo.";
-            $sqlerro = true;
-        }
-    }
-
     //Verifica se data da liquidação é posterior a data do estorno
-    if(!$sqlerro){
+    if(!$sqlerro && ($estornoAlterado || $liquidacaoAlterado)){
         if(isset($dataEstorno) && $dataEstorno !== ""){
             if (strtotime($dataLiquidacao) > strtotime($dataEstorno)){
                 $erro_msg = "Alteração não realizada!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
@@ -173,7 +177,7 @@ if (isset($alterar)) {
     }
 
     //Altera data liquidação
-    if(!$sqlerro){
+    if(!$sqlerro && $liquidacaoAlterado){
         $dataLiquidacaoAtual = str_replace('/', '-', $dataLiquidacaoAtual);
         $dataLiquidacaoAtual = date('Y-m-d', strtotime($dataLiquidacaoAtual)); 
         if(strtotime($dataLiquidacao) <= db_getsession("DB_datausu")){
@@ -188,7 +192,7 @@ if (isset($alterar)) {
     }
 
     //Altera data do estorno
-    if(!$sqlerro && isset($dataEstorno) && $dataEstorno !== "" && strtotime($dataEstornoAtual) !== strtotime($dataEstorno)){
+    if(!$sqlerro && $estornoAlterado){
 
         if(strtotime($dataEstorno) <= db_getsession("DB_datausu")){
             db_inicio_transacao();

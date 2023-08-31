@@ -2668,7 +2668,7 @@ class cl_empempenho
         $sSql .= " JOIN conlancamdoc ON c70_codlan = c71_codlan";
         $sSql .= " JOIN conhistdoc ON c71_coddoc = c53_coddoc";
         $sSql .= " JOIN conlancamemp  ON c70_codlan = c75_codlan ";
-        $sSql .= " WHERE c75_numemp  = 52316 AND c53_tipo = 21";
+        $sSql .= " WHERE c75_numemp  = {$numEmpenho} AND c53_tipo = 21";
         $sSql .= " AND c70_data <= '{$saldoData}' ".$tipoAnul;
         
         $sSql .= " valor_empenho AS ";
@@ -2679,4 +2679,5 @@ class cl_empempenho
 
         return $sSql;
     }
+    
 }
