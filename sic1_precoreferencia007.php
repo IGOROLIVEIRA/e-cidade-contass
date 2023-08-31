@@ -47,7 +47,6 @@ $sSql = "select * from itemprecoreferencia inner join precoreferencia on si01_se
         where si02_precoreferencia = (select si01_sequencial from precoreferencia where si01_processocompra = {$codigo_preco}) order by si02_sequencial;";
 
 $rsResult = db_query($sSql) or die(pg_last_error());
-
 $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->si02_criterioadjudicacao;
 $codigoItem = db_utils::fieldsMemory($rsResult, 0)->si02_coditem;
 $precoreferencia = db_utils::fieldsMemory($rsResult, 0)->si02_precoreferencia;
