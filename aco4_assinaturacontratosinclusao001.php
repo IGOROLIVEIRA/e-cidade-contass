@@ -230,7 +230,6 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     <tr>
       <td align="center">
         <input id="incluir" name="incluir" type="button" value="Incluir" onclick="return js_checaValor();">
-        <input id="finalizar" name="Finalizar Acordo" type="button" value="Finalizar Acordo" onclick="js_finalizaracordo();">
       </td>
     </tr>
   </table>
