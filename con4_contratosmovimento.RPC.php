@@ -366,6 +366,14 @@ switch ($oParam->exec) {
 
             db_inicio_transacao();
 
+            $oHomologacao = new AcordoHomologacao($oParam->codigo);
+            $oHomologacao->setObservacao($sObservacao);
+            $oHomologacao->cancelar();
+            $oAcordo                   = new Acordo($oHomologacao->getAcordo());
+            $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+            $sHistorico = "Valor referente a cancelamento da homologação do contrato de código: {$oAcordo->getCodigoAcordo()}.";
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $oAcordo->getValorContrato(), $sHistorico, $oHomologacao->getDataMovimento());
+
             $oAssinatura = new AcordoAssinatura($oParam->codigo);
 
             /*
