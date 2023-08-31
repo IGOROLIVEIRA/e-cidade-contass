@@ -229,11 +229,11 @@ function js_faltas(registro){
 
 function js_pesquisarMotivorescisao(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe("top.corpo", "db_iframe_rhmotivorescisao", "func_rhmotivorescisao.php?&funcao_js=parent.js_mostraRescisaoMotivo1|rh173_codigo|rh173_descricao", "Pesquisa", true, "20");
+      js_OpenJanelaIframe("CurrentWindow.corpo", "db_iframe_rhmotivorescisao", "func_rhmotivorescisao.php?&funcao_js=parent.js_mostraRescisaoMotivo1|rh173_codigo|rh173_descricao", "Pesquisa", true, "20");
     }
     else {
       if (document.form1.rh173_codigo.value != "") {
-        js_OpenJanelaIframe("top.corpo", "db_iframe_rhrescisao", "func_rhmotivorescisao.php?&pesquisa_chave_codigo=" + document.form1.rh173_codigo.value + "&funcao_js=parent.js_mostraAfastaMotivo", "Pesquisa", false, "20");
+        js_OpenJanelaIframe("CurrentWindow.corpo", "db_iframe_rhrescisao", "func_rhmotivorescisao.php?&pesquisa_chave_codigo=" + document.form1.rh173_codigo.value + "&funcao_js=parent.js_mostraAfastaMotivo", "Pesquisa", false, "20");
       } else {
         document.form1.z01_nome.value = "";
       }
@@ -323,7 +323,7 @@ function js_validarecis(){
       dtreciss = new Date(x.rh05_recis_ano.value,(x.rh05_recis_mes.value - 1),x.rh05_recis_dia.value);
       dtatualh = new Date(anoatual,mesatual,1);
       if(dtreciss < dtadmiss){
-        alert("Data de rescisão não pode ser posterior a data de admissão. Verifique.");
+        alert("Data de rescisão não pode ser posterior a data de admissão. Verifique.");
         x.rh05_recis_dia.value = "";
         x.rh05_recis_mes.value = "";
         x.rh05_recis_ano.value = "";
@@ -338,7 +338,7 @@ function js_validarecis(){
       }
     }
   }else{
-    alert("Informe a matrí­cula do funcionário.");
+    alert("Informe a matrícula do funcionário.");
     x.rh05_recis_dia.value = "";
     x.rh05_recis_mes.value = "";
     x.rh05_recis_ano.value = "";
