@@ -255,7 +255,7 @@ switch ($oParam->sExecucao) {
       $oRetorno->iDebitosEmAberto         = count($aDebitos);
 
 
-      if(strlen($oFornecedor->getCgm()->getCgccpf()) == 14 && $oFornecedor->getCgm()->getNaturezaJuridica() != "8885"){
+      if(strlen($oFornecedor->getCgm()->getCgccpf()) == 14 && $oFornecedor->getCgm()->getNaturezaJuridica() != "8885" || strlen($oFornecedor->getCgm()->getCgccpf()) == 11){
           $oRetorno->ErroNaturezajuridicaCNPJ = false;
       }else{
           $oRetorno->ErroNaturezajuridicaCNPJ = true;
