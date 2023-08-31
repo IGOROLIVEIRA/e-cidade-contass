@@ -40,8 +40,7 @@ include("classes/db_veicretirada_classe.php");
 include("classes/db_empveiculos_classe.php");
 include("classes/db_empempenho_classe.php");
 require_once("classes/db_condataconf_classe.php");
-
-require("libs/db_app.utils.php");
+require_once("libs/db_app.utils.php");
 db_app::import("veiculos.*");
 db_postmemory($HTTP_POST_VARS);
 

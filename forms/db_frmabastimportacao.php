@@ -798,9 +798,6 @@ if (isset($_POST["processar"])) {
 
     function js_pesquisae60_codemp(mostra, controlador) {
        
-       let empenho = document.getElementById('e60_codemp').value;
-       verificacaoEmpenho(empenho);
-
         if (mostra == true) {
             var ve70_abast = "";
             var e60_codemp = "";
@@ -818,6 +815,8 @@ if (isset($_POST["processar"])) {
             }
 
         } else {
+            let empenho = document.getElementById('e60_codemp').value;
+            verificacaoEmpenho(empenho);
             var datainicial = "<?php print $dataI; ?>";
             var datafinal = "<?php print $dataF; ?>";
             var dataAbastecimento = "<?php print $dataAbastecimento; ?>";
