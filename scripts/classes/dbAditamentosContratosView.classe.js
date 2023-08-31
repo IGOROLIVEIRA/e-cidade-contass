@@ -15,6 +15,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.lReajuste = false;
     this.totalizador = false;
 
+
     switch (iTipoAditamento) {
 
         case 2:
@@ -286,6 +287,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 sUrl,
                 'Pesquisa de Acordo',
                 true);
+                $('oCboTipoAditivo').value = 0;
         } else {
 
             if (me.oTxtCodigoAcordo.getValue() != '') {
@@ -301,6 +303,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             } else {
                 me.oTxtCodigoAcordo.setValue('');
             }
+
         }
     }
 
@@ -491,6 +494,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.oGridItens.clearAll(true);
 
         document.getElementById("trdatareferencia").style.display = 'none';
+
+
 
         new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
 
@@ -1055,7 +1060,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.aditar = function () {
-
         var oSelecionados = {};
         var iSelecionados = [];
         /**
@@ -1231,7 +1235,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             if ($('oCboTipoAditivo').value == 14) {
                 var dt1 = me.oTxtDataFinal.getValue().split("/");
                 var dt2 = me.oTxtDataFinalCompara.getValue().split("/");
-
                 var datafim1 = dt1[2] + "-" + dt1[1] + "-" + dt1[0];
                 var datafim2 = dt2[2] + "-" + dt2[1] + "-" + dt2[0];
 
@@ -1242,7 +1245,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             }
 
             if (oSelecionados[iIndice] != undefined) {
-
                 document.getElementById('btnRemoveItem').style.disabled = false;
                 oItemAdicionar.quantidade    = oSelecionados[iIndice].aCells[6].getValue().getNumber();
                 oItemAdicionar.valorunitario = js_strToFloat(oSelecionados[iIndice].aCells[7].getValue());
@@ -1258,7 +1260,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 oItemAdicionar.servico = oItem.servico;
                 oItemAdicionar.controlaServico = oItem.servico;
 
-                if(oSelecionados[iIndice].aCells[9].getValue().getNumber() == 0 && oSelecionados[iIndice].aCells[10].getValue().getNumber()==0 && $('oCboTipoAditivo').value != 12 && $('oCboTipoAditivo').value != 8 && $('oCboTipoAditivo').value != 13 && $('oCboTipoAditivo').value != 6){
+                if(me.validaItensNaoAditados(oSelecionados[iIndice])){
                     lAditar = false;
                     return alert("Desmarque os itens que não foram aditados!");
                 }
@@ -1399,9 +1401,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
 
             if (lErro) {
+
                 if (oRetorno.datareferencia) {
                     document.getElementById("trdatareferencia").style.display = 'contents';
                 }
+
                 return alert(oRetorno.message.urlDecode());
             }
             document.getElementById("trdatareferencia").style.display = 'none';
@@ -1414,12 +1418,19 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             }
 
             me.pesquisarDadosAcordo()
-
-        }).setMessage("Aguarde, aditando contrato.")
+            $('oCboTipoAditivo').value = 0;
+         }).setMessage("Aguarde, aditando contrato.")
             .execute();
 
+        }
 
+    this.validaItensNaoAditados = (oSelecionado) => {
+        const tiposAditivo = ['12','13','6','8'];
 
+        return (oSelecionado.aCells[9].getValue().getNumber() == 0
+        && oSelecionado.aCells[10].getValue().getNumber() == 0
+        && !tiposAditivo.includes($('oCboTipoAditivo').value)
+        );
     }
 
     /**
@@ -2140,6 +2151,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 casas = 2;
             }
 
+
+
         aItensPosicao[iLinha].novaquantidade  = nQuantidade;
         aItensPosicao[iLinha].novounitario    = nUnitario;
 
@@ -2165,23 +2178,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         me.salvarInfoDotacoes(iLinha);
     }
-
-    // this.js_bloqueivalorunt = function (iLinha,iTipo) {
-    //
-    //     if(iTipo == 14){
-    //         document.getElementById('valorunitario'+iLinha).disabled = true;
-    //         document.getElementById('valorunitario'+iLinha).style.backgroundColor = '#DEB887';
-    //     }
-    //
-    // };
-    //
-    // this.js_bloqueiquantidade = function (iLinha,iTipo) {
-    //
-    //     if(iTipo == 14) {
-    //         document.getElementById('quantidade' + iLinha).disabled = true;
-    //         document.getElementById('quantidade' + iLinha).style.backgroundColor = '#DEB887';
-    //     }
-    // };
 
     this.pesquisaMaterial = function (mostra) {
 
@@ -2264,6 +2260,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.js_changeTipoAditivo = function () {
+
         $('oTextAreaDescricaoAlteracao').addClassName('readonly');
         $('oTextAreaDescricaoAlteracao').readOnly = true;
         $('oTxtDataInicial').readOnly = true;
@@ -2301,7 +2298,115 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             $('btnItens').style.display = '';
             $('btnItens').observe('click', me.novoItem);
         }
+        this.lidaTiposAdimentos();
+    }
 
+    this.lidaTiposAdimentos = () => {
+        const tiposAditivo = ['9','10','11','14'];
+
+        if (tiposAditivo.includes($('oCboTipoAditivo').value)) {
+            this.aEstadoInputQtdFinal = new Array();
+            let acordo = document.getElementById('oTxtCodigoAcordo').value;
+            this.getAcordo(acordo);
+            return;
+        }
+    }
+
+    this.getAcordo = (iAcordo) => {
+        var oParam = new Object();
+        oParam.exec = "getItensAditamento";
+        oParam.iAcordo = iAcordo;
+        js_divCarregando('Aguarde, carregando', 'msgBox');
+        var oAjax = new Ajax.Request(
+            "con4_contratos.RPC.php",
+            {
+                method: 'post',
+                parameters: 'json=' + Object.toJSON(oParam),
+                onComplete: me.retornoGetAcordo
+            }
+        );
+
+    }
+
+    this.retornoGetAcordo =  (oAjax) => {
+        js_removeObj('msgBox');
+        const tipoAditivo = $('oCboTipoAditivo').value
+        var oRetorno = eval("(" + oAjax.responseText + ")");
+
+        let itensGrid = me.oGridItens.aRows;
+        let iQuantidadeItens = itensGrid.length;
+        let retornoItens = oRetorno.itens;
+        let tamanhoRetornoItens = retornoItens.length;
+
+        for (var i = 0; i < iQuantidadeItens; i++) {
+            let aLinha = itensGrid[i];
+            let codigoGrid = aLinha.aCells[2].getValue();
+            let j = 0;
+
+            while( j < tamanhoRetornoItens) {
+                if (retornoItens[j].ac20_pcmater == codigoGrid) {
+                    this.validaTipoAditivo(aLinha, retornoItens[j], tipoAditivo);
+                    j = tamanhoRetornoItens + j;
+                }
+                j++;
+            }
+         }
+    }
+
+    this.validaTipoAditivo = (aLinha, retornoItem, tipoAditivo) => {
+
+         if (retornoItem.ac20_servicoquantidade === 'f'
+            && retornoItem.pc01_servico === 't') {
+             this.desabilitaLinha(aLinha, tipoAditivo);
+             return;
+         }
+
+        let iQuantidadeAtual = Number(aLinha.aCells[4].getValue().split('.').join("").replace(",","."));
+        if (tipoAditivo === '14'
+            && (retornoItem.ac20_servicoquantidade === 't'
+            ||
+            retornoItem.ac20_servicoquantidade === 'f'
+            && retornoItem.pc01_servico === 'f'
+            )
+            && iQuantidadeAtual > 0) {
+            this.desativaInput(aLinha,7);
+            return;
+        }
+    }
+
+    this.desabilitaLinha = (aLinha,tipoAditivo) => {
+        let colunasTotal = aLinha.aCells.length;
+        let colunasDesabilitadas = tipoAditivo === '14'
+            ? [0,6,7,9,10,12,13]
+            : [0,6,7,9,10];
+
+        for (let i = 0; i < colunasTotal; i++) {
+            if (colunasDesabilitadas.includes(i)) {
+                const valorFinalInput = this.buscaInput(aLinha.aCells[i]);
+                valorFinalInput.disabled = true;
+            }
+
+        }
+    }
+
+    this.desativaInput = (aLinha, coluna) => {
+        let atributos = `
+            background-color:#DEB887;
+            pointer-events: none;
+            touch-action: none;
+            width:100%
+        `;
+
+        const valorFinalInput = this.buscaInput(aLinha.aCells[7]);
+        valorFinalInput.style.cssText = atributos;
+        return;
+    }
+
+    this.buscaInput = (itemGrid) => {
+        let idCelula = itemGrid.getId();
+        const valorFinalDom = document.getElementById(idCelula);
+        const valorFinalInput = valorFinalDom.children;
+        return valorFinalInput[0];
     }
 
     this.removeItens = () => {
