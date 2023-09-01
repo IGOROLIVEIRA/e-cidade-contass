@@ -29,7 +29,7 @@ try {
 <html>
 
 <head>
-    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <title>DBSeller Informática Ltda - Página Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
@@ -48,7 +48,7 @@ try {
             <div style="display: table">
                 <fieldset>
                     <legend>
-                        <b>Exportaï¿½ï¿½o - eSocial</b>
+                        <b>Exportação - eSocial</b>
                     </legend>
                     <table style='empty-cells: show; border-collapse: collapse;' class='form-container'>
                         <tr>
@@ -59,7 +59,7 @@ try {
                                     </legend>
                                     <table style="width: 100%;">
                                         <tr>
-                                            <td align="left"><label>Inï¿½cio de Validade:</label>
+                                            <td align="left"><label>Início de Validade:</label>
                                                 <?php
                                                 db_input('anofolha', 4, 1, true, 'text', 2, "class='field-size1'");
                                                 db_input('mesfolha', 2, 1, true, 'text', 2, "class='field-size1'");
@@ -73,24 +73,24 @@ try {
                                             <td align="right"><label for="tpAmb">Ambiente:</label>
                                                 <select name="tpAmb" id="tpAmb" style="width: 76%;">
                                                     <option value="">selecione</option>
-                                                    <option value="1">Produï¿½ï¿½o</option>
-                                                    <option value="2">Produï¿½ï¿½o restrita - dados reais</option>
-                                                    <option value="3">Produï¿½ï¿½o restrita - dados fictï¿½cios</option>
+                                                    <option value="1">Produção</option>
+                                                    <option value="2">Produção restrita - dados reais</option>
+                                                    <option value="3">Produção restrita - dados fictícios</option>
                                                 </select>
                                             </td>
                                             <td align="right"><label for="modo">Tipo:</label>
                                                 <select name="modo" id="modo" style="width: 76%;">
                                                     <option value="">selecione</option>
-                                                    <option value="INC">Inclusï¿½o</option>
-                                                    <option value="ALT">Alteraï¿½ï¿½o</option>
-                                                    <option value="EXC">Exclusï¿½o</option>
+                                                    <option value="INC">Inclusão</option>
+                                                    <option value="ALT">Alteração</option>
+                                                    <option value="EXC">Exclusão</option>
                                                 </select>
                                             </td>
                                         </tr>
                                     </table>
                                     <table>
                                         <tr>
-                                            <td align="left" id="dtalteracao" style="display:none" style="width: 25%;"><label>Data Alteraï¿½ï¿½o:</label>
+                                            <td align="left" id="dtalteracao" style="display:none" style="width: 25%;"><label>Data Alteração:</label>
                                                 <?php
                                                 db_inputdata(
                                                     'dt_alteracao',
@@ -104,7 +104,7 @@ try {
                                                 );
                                                 ?>
                                             </td>
-                                            <td align="left" id="indapuracao_col" style="display:none"><label>Apuraï¿½ï¿½o:</label>
+                                            <td align="left" id="indapuracao_col" style="display:none"><label>Apuração:</label>
                                                 <select name="indapuracao" id="indapuracao" style="width: 25%;">
                                                     <option value="1">Mensal</option>
                                                     <option value="2">Anual</option>
@@ -112,19 +112,19 @@ try {
                                             </td>
                                             <td align="right" id="tppgto_col" style="display:none"><label>Tipo de Pagamento:</label>
                                                 <select name="tppgto" id="tppgto" style="width: 50%;">
-                                                    <option value="1">Pagamento de remuneraï¿½ï¿½o, conforme apurado em
+                                                    <option value="1">Pagamento de remuneração, conforme apurado em
                                                         ideDmDev do S-1200
                                                     </option>
-                                                    <option value="2">Pagamento de verbas rescisï¿½rias conforme apurado
+                                                    <option value="2">Pagamento de verbas rescisórias conforme apurado
                                                         em ideDmDev do S-2299
                                                     </option>
-                                                    <option value="3">Pagamento de verbas rescisï¿½rias conforme apurado
+                                                    <option value="3">Pagamento de verbas rescisórias conforme apurado
                                                         em ideDmDev do S-2399
                                                     </option>
-                                                    <option value="4">Pagamento de remuneraï¿½ï¿½o conforme apurado em
+                                                    <option value="4">Pagamento de remuneração conforme apurado em
                                                         ideDmDev do S-1202
                                                     </option>
-                                                    <option value="5">Pagamento de benefï¿½cios previdenciï¿½rios, conforme
+                                                    <option value="5">Pagamento de benefícios previdenciários, conforme
                                                         apurado em ideDmDev do S-1207
                                                     </option>
                                                 </select>
@@ -138,13 +138,13 @@ try {
                                             <td align="left" id="transDCTFWeb_col" style="display:none"><label>transDCTFWeb:</label>
                                                 <select name="transDCTFWeb" id="transDCTFWeb" style="width: 25%;">
                                                     <option value="S">Sim</option>
-                                                    <option value="N">Nï¿½o</option>
+                                                    <option value="N">Não</option>
                                                 </select>
                                             </td>
                                             <td align="left" id="evtpgtos_col" style="display:none"><label>evtpgtos:</label>
                                                 <select name="evtpgtos" id="evtpgtos" style="width: 25%;">
                                                     <option value="S">Sim</option>
-                                                    <option value="N">Nï¿½o</option>
+                                                    <option value="N">Não</option>
                                                 </select>
                                             </td>
                                         </tr>
@@ -156,21 +156,21 @@ try {
                             <td>
                                 <fieldset>
                                     <legend>
-                                        <b>Fase de Geraï¿½ï¿½o</b>
+                                        <b>Fase de Geração</b>
                                     </legend>
                                     <table>
                                         <tr>
                                             <td>
                                                 <input type="radio" value="EvtIniciaisTabelas" name="fase" onclick="checkFase(this.value);" />
-                                                <label for="Fase1">1ï¿½ Fase - Eventos Iniciais e de Tabelas</label><br>
+                                                <label for="Fase1">1ª Fase - Eventos Iniciais e de Tabelas</label><br>
                                             </td>
                                             <td>
                                                 <input type="radio" value="EvtNaoPeriodicos" name="fase" onclick="checkFase(this.value);" />
-                                                <label for="Fase2">2ï¿½ Fase - Eventos nï¿½o Periï¿½dicos</label><br>
+                                                <label for="Fase2">2ª Fase - Eventos não Periódicos</label><br>
                                             </td>
                                             <td>
                                                 <input type="radio" value="EvtPeriodicos" name="fase" onclick="checkFase(this.value);" />
-                                                <label for="Fase3">3ï¿½ Fase - Eventos Periï¿½dicos</label><br>
+                                                <label for="Fase3">3ª Fase - Eventos Periódicos</label><br>
                                             </td>
                                             <td>
                                                 <input type="radio" value="" name="fase" onclick="checkFase(this.value);" />
@@ -237,7 +237,7 @@ try {
 
     function js_processar() {
 
-        //let result = confirm('Atenï¿½ï¿½o: Confirmar envio das informaï¿½ï¿½es do mï¿½s ' + parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
+        //let result = confirm('Atenção: Confirmar envio das informaçães do mãs ' + parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
 
         // if (!result) {
         //     return false;
@@ -245,7 +245,7 @@ try {
 
         if ($F('anofolha').length < 4 || parseInt($("mesfolha").value) < 1 || parseInt($("mesfolha").value) > 12) {
 
-            alert("Inï¿½cio Validade invï¿½lido.");
+            alert("Inãcio Validade invãlido.");
             return false;
         }
 
@@ -395,12 +395,12 @@ try {
         var button = document.getElementById("btnEnviar");
         if (e.checked) {
             document.getElementById('indapuracao_col').style.display = 'inline';
-            console.log("Checkbox estï¿½ marcado");
+            console.log("Checkbox estão marcados");
             js_OpenJanelaIframe('top.corpo', 'iframe_envio_s3000', 'func_envioesocialS3000.php', 'Pesquisa', true);
             button.disabled = true;
         } else {
             document.getElementById('indapuracao_col').style.display = 'none';
-            console.log("Checkbox nï¿½o estï¿½ marcado");
+            console.log("Checkbox não estão marcados");
             button.disabled = false;
         }
 
