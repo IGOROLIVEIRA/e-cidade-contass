@@ -54,8 +54,8 @@ $sql = "SELECT DISTINCT l20_numero || '/' || l20_anousu AS licitacao,
         LEFT JOIN solicitatipo ON solicitatipo.pc12_numero = solicitem.pc11_numero
         LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = solicitatipo.pc12_tipo
         WHERE date_part ('year',pc54_datatermino) = $anousu
-        AND l20_instit = ". db_getsession('DB_instit');
-
+        AND l20_instit = ". db_getsession('DB_instit') .
+        " ORDER BY fim ASC";
 
 $resultVigencia = db_query($sql);
 
@@ -91,7 +91,7 @@ $pdf->addpage("L");
 $pdf->setfont('arial', 'b', 8);
 
 for($i = 0; $i < pg_num_rows($resultVigencia); $i++){
-    
+
     db_fieldsmemory($resultVigencia,$i);
 
     $pdf->setfont('arial', 'b', 8);
