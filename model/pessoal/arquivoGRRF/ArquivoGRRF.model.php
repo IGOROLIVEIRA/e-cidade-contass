@@ -133,7 +133,7 @@ class ArquivoGRRF {
             db_fim_transacao(true); 
         }         
         db_fim_transacao();
-        return $oOidBanco;
+        return $oDaoRHGRRF->rh168_sequencial;
    }
 
    private function removerArquivo()
