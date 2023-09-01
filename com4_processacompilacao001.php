@@ -164,7 +164,7 @@ db_app::load("widgets/windowAux.widget.js");
                   2 => 'Lote'
                 );
 
-                db_select('pc80_tipoprocesso', $aTipos, true, '', 'style="width:100%"');
+                db_select('pc80_tipoprocesso', $aTipos, true, '', 'style="width:69%"');
                 ?>
               </td>
             </tr>
