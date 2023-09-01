@@ -390,12 +390,5 @@ if (isset($db_opcaoal)) {
         js_removeObj("msgBox");
 
         var oRetorno = eval("(" + oAjax.responseText + ")");
-        var iValidaNaturezaJurifica = oRetorno.ErroNaturezajuridicaCNPJ;
-
-        if(iValidaNaturezaJurifica === true){
-            alert("No cadastro do CGM deverá ser selecionada a NATUREZA JURIDICA correta para o fornecedor selecionado.");
-            document.form1.pc21_numcgm.value = '';
-            document.form1.z01_nome.value = '';
-        }
     }
 </script>
