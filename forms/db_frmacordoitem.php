@@ -1042,7 +1042,7 @@ db_app::load("estilos.css, grid.style.css");
                 $('ac20_quantidade').value = quantidade;
                 $('ac20_elemento').value = elemento;
                 $('ac20_matunid').value = unidade;
-                $('ac20_marca').value = marca;
+                $('ac20_marca').value = marca.urlDecode();
                 $('ac20_resumo').value = resumo.urlDecode();
                 $('ac20_tipocontrole').value = tipocontrole;
                 $('ac20_servicoquantidade').value = servicoquantidade;
