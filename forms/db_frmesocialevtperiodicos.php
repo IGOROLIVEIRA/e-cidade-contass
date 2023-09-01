@@ -31,7 +31,7 @@
                         <label for="S1298">S-1298 - Reabertura dos Eventos Periódicos</label><br>
                     </td>
                     <td>
-                        <input type="checkbox" value="S1299" id="S1299" onclick="js_alt()" />
+                        <input type="checkbox" value="S1299" id="S1299" />
                         <label for="S1299">S-1299 - Fechamento dos Eventos Periódicos</label><br>
                     </td>
                 </tr>
