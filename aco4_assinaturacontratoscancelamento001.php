@@ -258,8 +258,10 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
   function js_pesquisarAssinatura() {
 
     $('cancelar').disabled = true;
-    var sUrl = 'func_acordomovimentacao.php?movimento=1&tipo=2&ativos=true&assinados=true';
+    var sUrl = 'func_acordomovimentacao.php?movimento=1&tipo=2&ativos=true&assinados=true&homologados=true';
     sUrl += '&funcao_js=parent.js_mostrarPesquisaAssinatura|ac10_sequencial';
+    // var sUrl  = 'func_acordomovimentacao.php?movimento=1&tipo=11&autorizacao=false';
+    //   sUrl += '&funcao_js=parent.js_mostrarpesquisahomologacao|ac10_sequencial';
 
     js_OpenJanelaIframe('top.corpo',
       'db_iframe_assinatura',

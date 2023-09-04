@@ -67,13 +67,15 @@ $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
 
 $sNSQL = "";
 if ($anousu > $maxC99_datapat) {
-  $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat, db_getsession('DB_instit'), 'c99_datapat');
+
+  $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat, db_getsession('DB_instit'), 'c99_datapat,c99_data');
 } else {
-  $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat');
+  $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat,c99_data');
 }
 
 $result = db_query($sNSQL);
 $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+$c99_data = db_utils::fieldsMemory($result, 0)->c99_data;
 ?>
 <html>
 
@@ -244,7 +246,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
   $('ac16_resumoobjeto').style.width = "100%";
 
   var sUrl = 'con4_contratosmovimento.RPC.php';
-
+  let c99_data = "<?= $c99_data ?>";
   /**
    * Pesquisa acordos ao clicar no botao assinar acordo na aba Penalidades
    */
@@ -387,26 +389,32 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
      * Verificar Encerramento Periodo Patrimonial
      */
     //    DATA DO MOVIMENTO
-    var partesData = oParam.dtmovimentacao.split("/");
-    var dataMovimento = new Date(partesData[2], partesData[1] - 1, partesData[0]);
+    let partesData = oParam.dtmovimentacao.split("/");
+    let dataMovimento = new Date(partesData[2], partesData[1] - 1, partesData[0]);
+
+    //    DATA DO FECHAMENTO Contabil
+    partesData = c99_data.split("-");
+    let dataContabil = new Date(partesData[0], partesData[1] - 1, partesData[2]);
 
     //    DATA DO FECHAMENTO PATRIMONIAL
-    var partesData = $("c99_datapat_hidden").value.split("-");
-    var dataPatrimonial = new Date(partesData[0], partesData[1] - 1, partesData[2]);
+    partesData = $("c99_datapat_hidden").value.split("-");
+    let dataPatrimonial = new Date(partesData[0], partesData[1] - 1, partesData[2]);
 
     //    DATA DE REFERÊNCIA
-    var partesData = oParam.dtreferencia.split("/");
-    var dataReferencia = new Date(partesData[2], partesData[1] - 1, partesData[0]);
-
+    partesData = oParam.dtreferencia.split("/");
+    let dataReferencia = new Date(partesData[2], partesData[1] - 1, partesData[0]);
 
     if (oParam.dtreferencia != "") {
 
-      if (dataReferencia.getMonth() == dataPatrimonial.getMonth() && dataReferencia.getFullYear() == dataPatrimonial.getFullYear()) {
+      if ((dataReferencia.getMonth() == dataPatrimonial.getMonth()
+        && dataReferencia.getFullYear() == dataPatrimonial.getFullYear())
+        || (dataReferencia.getMonth() == dataContabil.getMonth()
+        && dataReferencia.getFullYear() == dataContabil.getFullYear())) {
         alert("Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.");
         return;
       }
 
-      if (dataReferencia <= dataPatrimonial) {
+      if (dataReferencia <= dataPatrimonial || dataReferencia <= dataContabil) {
         alert("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
         return;
       }
@@ -422,13 +430,11 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     }
 
 
-    if (dataMovimento <= dataPatrimonial && oParam.dtreferencia == null) {
+    if (oParam.dtreferencia == null && ((dataMovimento <= dataPatrimonial) || (dataMovimento <= dataContabil ))) {
       document.getElementById("trdatareferencia").style.display = 'contents';
       alert("O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.");
       return;
     }
-
-
 
     js_divCarregando('Aguarde incluindo assinatura...', 'msgBoxAssianturaContrato');
 
