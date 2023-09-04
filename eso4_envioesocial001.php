@@ -29,7 +29,7 @@ try {
 <html>
 
 <head>
-    <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
+    <title>DBSeller Informática Ltda - Página Inicial</title>
     <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
@@ -237,7 +237,7 @@ try {
 
     function js_processar() {
 
-        //let result = confirm('Atenção: Confirmar envio das informações do mês ' + parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
+        //let result = confirm('Atenção: Confirmar envio das informaçães do mãs ' + parent.bstatus.document.getElementById('dtatual').innerHTML.substr(3, 7) + ' para o eSocial?');
 
         // if (!result) {
         //     return false;
@@ -245,7 +245,7 @@ try {
 
         if ($F('anofolha').length < 4 || parseInt($("mesfolha").value) < 1 || parseInt($("mesfolha").value) > 12) {
 
-            alert("Início Validade inválido.");
+            alert("Inãcio Validade invãlido.");
             return false;
         }
 
@@ -357,8 +357,7 @@ try {
             transDCTFWeb.style.display = 'none';
             tipoCol.style.display = 'inline';
         } else if (document.getElementById('S1202').checked ||
-                document.getElementById('S1207').checked ||
-                document.getElementById('S1299').checked) {
+                document.getElementById('S1207').checked) {
             indapuracaoCol.style.display = 'inline';
             tppgtoCol.style.display = 'none';
             transDCTFWeb.style.display = 'none';
@@ -381,35 +380,6 @@ try {
             tipoCol.style.display = 'none';
             evtpgtos.style.display = 'none';
         }
-
-        if (document.getElementById('S1200').checked) {
-            document.getElementById('indapuracao_col').style.display = 'inline';
-            document.getElementById('tppgto_col').style.display = 'none';
-            document.getElementById('tipo_col').style.display = 'inline';
-            return true;
-        }
-        if (document.getElementById('S1202').checked) {
-            document.getElementById('indapuracao_col').style.display = 'inline';
-            document.getElementById('tppgto_col').style.display = 'inline';
-            document.getElementById('tipo_col').style.display = 'inline';
-            return true;
-        }
-        if (document.getElementById('S1207').checked) {
-            document.getElementById('indapuracao_col').style.display = 'inline';
-            document.getElementById('tppgto_col').style.display = 'inline';
-            document.getElementById('tipo_col').style.display = 'inline';
-            return true;
-        }
-        if (document.getElementById('S1210').checked) {
-            document.getElementById('indapuracao_col').style.display = 'inline';
-            document.getElementById('tppgto_col').style.display = 'inline';
-            document.getElementById('tipo_col').style.display = 'inline';
-            return true;
-        }
-        document.getElementById('indapuracao_col').style.display = 'none';
-        document.getElementById('tppgto_col').style.display = 'none';
-        document.getElementById('tipo_col').style.display = 'none';
-
     }
 
 
@@ -425,12 +395,12 @@ try {
         var button = document.getElementById("btnEnviar");
         if (e.checked) {
             document.getElementById('indapuracao_col').style.display = 'inline';
-            console.log("Checkbox está marcado");
+            console.log("Checkbox estão marcados");
             js_OpenJanelaIframe('top.corpo', 'iframe_envio_s3000', 'func_envioesocialS3000.php', 'Pesquisa', true);
             button.disabled = true;
         } else {
             document.getElementById('indapuracao_col').style.display = 'none';
-            console.log("Checkbox não está marcado");
+            console.log("Checkbox não estão marcados");
             button.disabled = false;
         }
 

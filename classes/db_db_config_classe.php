@@ -1499,7 +1499,7 @@ class cl_db_config {
    }
    // funcao para mudar ordenação
    function alterarOrdenacao ($codigo) {
-    $sql = " update db_config set orderdepart = ".$this->orderdepart." where codigo = ".$codigo; 
+    $sql = " update db_config set orderdepart = ".$this->orderdepart." where codigo = ".$codigo;
 
     $result = db_query($sql);
      if($result==false){
@@ -1668,7 +1668,7 @@ class cl_db_config {
    function sql_query ( $codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1692,7 +1692,7 @@ class cl_db_config {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1705,7 +1705,7 @@ class cl_db_config {
    function sql_query_file ( $codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1727,7 +1727,7 @@ class cl_db_config {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1739,7 +1739,7 @@ class cl_db_config {
    function sql_query_log ( $codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1761,7 +1761,7 @@ class cl_db_config {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1773,7 +1773,7 @@ class cl_db_config {
    function sql_query_usu ( $codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1794,7 +1794,7 @@ class cl_db_config {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1806,7 +1806,7 @@ class cl_db_config {
    function sql_query_tipoinstit ( $codigo=null,$campos="*",$ordem=null,$dbwhere=""){
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1827,7 +1827,7 @@ class cl_db_config {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1841,7 +1841,7 @@ class cl_db_config {
 
      $sql = "select ";
      if($campos != "*" ){
-       $campos_sql = split("#",$campos);
+       $campos_sql = explode("#",$campos);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1862,7 +1862,7 @@ class cl_db_config {
      $sql .= $sql2;
      if($ordem != null ){
        $sql .= " order by ";
-       $campos_sql = split("#",$ordem);
+       $campos_sql = explode("#",$ordem);
        $virgula = "";
        for($i=0;$i<sizeof($campos_sql);$i++){
          $sql .= $virgula.$campos_sql[$i];
@@ -1918,5 +1918,28 @@ class cl_db_config {
 
     return null;
   }
+
+    /**
+     * @param $instituicao
+     * @return string
+     */
+    public function orgaoReg10($instituicao): string
+    {
+        return "SELECT db21_codigomunicipoestado AS codmunicipio,
+                       cgc as cnpjmunicipio,
+                       si09_tipoinstit as tipoorgao,
+                       si09_codorgaotce as codorgao,
+                       prefeitura,
+                       si09_assessoriacontabil as assessoriacontabil,
+                       CASE
+                           WHEN LENGTH(cgmassessoria.z01_cgccpf) = 11 THEN 1
+                           WHEN LENGTH(cgmassessoria.z01_cgccpf) = 14 THEN 2
+                           ELSE NULL
+                       END AS tipodocumentoassessoria,
+                       cgmassessoria.z01_cgccpf AS nrodocumentoassessoria
+                FROM db_config
+                LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
+                LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacontabil = cgmassessoria.z01_numcgm
+                  WHERE codigo = {$instituicao}";
+    }
 }
-?>
