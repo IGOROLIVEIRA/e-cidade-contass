@@ -42,11 +42,6 @@ $this->objpdf->Text(12,$top+21,"END. DE CORRESPONDÊNCIA: ");
 $this->objpdf->SetFont('Arial','',7);
 $this->objpdf->Text(44,$top+21,$this->endercorrespondencia);
 
-$this->objpdf->sety(35);
-$this->objpdf->setx(12);
-$this->objpdf->SetFont('Arial','B',7);
-$this->objpdf->MultiCell(189,3,$this->descr4_2,0,"L",0,0);
-
 $this->objpdf->sety(58);
 
 $this->objpdf->SetLineWidth(0.05);
