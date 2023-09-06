@@ -3,6 +3,8 @@ require_once("model/iPadArquivoBaseCSV.interface.php");
 require_once("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 require_once("classes/db_orgao102023_classe.php");
 require_once("classes/db_orgao112023_classe.php");
+require_once("classes/db_identificacaoresponsaveis_classe.php");
+require_once("classes/db_db_config_classe.php");
 require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2023/GerarORGAO.model.php");
 
 /**
@@ -97,6 +99,8 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
 
     $clorgao10 = new cl_orgao102023();
     $clorgao11 = new cl_orgao112023();
+    $clidentresp = new cl_identificacaoresponsaveis();
+    $cl_db_config = new cl_db_config();
 
     db_inicio_transacao();
     /**
@@ -117,29 +121,12 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
         throw new Exception($clorgao10->erro_msg);
       }
     }
+      $instituicao = db_getsession("DB_instit");
+      $sSql = $cl_db_config->orgaoReg10($instituicao);
+      $rsResult10 = db_query($sSql);
 
     /**
-     * selecionar informacoes
-     */
-    $sSql = "SELECT db21_codigomunicipoestado AS codmunicipio,
-          cgc as cnpjmunicipio,
-          si09_tipoinstit as tipoorgao,
-          si09_codorgaotce as codorgao,
-          prefeitura,
-          si09_assessoriacontabil as assessoriacontabil,
-          CASE WHEN LENGTH(cgmassessoria.z01_cgccpf) = 11 THEN 1
-          WHEN  LENGTH(cgmassessoria.z01_cgccpf) = 14 THEN 2
-          ELSE NULL END AS tipodocumentoassessoria,
-          cgmassessoria.z01_cgccpf AS nrodocumentoassessoria
-FROM db_config
-LEFT JOIN infocomplementaresinstit ON si09_instit = codigo
-LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacontabil = cgmassessoria.z01_numcgm
-  WHERE codigo = " . db_getsession("DB_instit");
-
-    $rsResult10 = db_query($sSql); // db_criatabela($rsResult10);
-
-    /**
-     * tirar caracteres de campo
+     * Remover caracteres de campo
      */
     $aCaracteres = array(".", "-");
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
@@ -158,7 +145,7 @@ LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacon
       else
         $clorgao10->si14_nrodocumentofornsoftware = "09016362000145";
 
-      $clorgao10->si14_versaosoftware = "2.3.31";
+      $clorgao10->si14_versaosoftware = "3.0.0";
       $clorgao10->si14_assessoriacontabil = $oDados10->assessoriacontabil;
       $clorgao10->si14_tipodocumentoassessoria = $oDados10->tipodocumentoassessoria;
       $clorgao10->si14_nrodocumentoassessoria = $oDados10->nrodocumentoassessoria;
@@ -171,15 +158,14 @@ LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacon
         throw new Exception($clorgao10->erro_msg);
       }
 
-      $sSql = "select * from identificacaoresponsaveis join cgm on si166_numcgm = z01_numcgm where si166_instit = " . db_getsession("DB_instit") . " and si166_tiporesponsavel in (1, 2, 3, 4, 5, 6) and (si166_dataini <= '{$this->sDataInicial}' AND si166_datafim >= '{$this->sDataInicial}') AND (si166_dataini <= '{$this->sDataFinal}' AND si166_datafim >= '{$this->sDataFinal}')";
-      $rsResult11 = db_query($sSql); // db_criatabela($rsResult11);
-   
+        $where = "si166_instit = {$instituicao} and si166_tiporesponsavel in (1, 2, 3, 4, 5, 6) and si166_dataini <= '{$this->sDataFinal}' AND si166_datafim >= '{$this->sDataInicial}'";
+        $rsResult11 = $clidentresp->sql_record($clidentresp->sql_query(null, "*", null, $where));
+
       for ($iCont11 = 0; $iCont11 < pg_num_rows($rsResult11); $iCont11++) {
-        
+
         $clorgao11 = new cl_orgao112023();
-        $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);    
-        //if (strlen($oDados11->z01_cgccpf) > 11)
-        //echo $oDados11->z01_numcgm." | ".$oDados11->z01_cgccpf."<br>";
+        $oDados11 = db_utils::fieldsMemory($rsResult11, $iCont11);
+
         $clorgao11->si15_tiporegistro = 11; //echo $clorgao11->si15_tiporegistro ;
         $clorgao11->si15_tiporesponsavel = $oDados11->si166_tiporesponsavel;
         $clorgao11->si15_cartident = str_replace($aCaracteres, "", $oDados11->z01_ident);
@@ -188,8 +174,8 @@ LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacon
         $clorgao11->si15_crccontador = $oDados11->si166_crccontador;
         $clorgao11->si15_ufcrccontador = $oDados11->si166_ufcrccontador;
         $clorgao11->si15_cargoorddespdeleg = $oDados11->si166_cargoorddespesa;
-        $clorgao11->si15_dtinicio = $this->sDataInicial;
-        $clorgao11->si15_dtfinal = $this->sDataFinal;
+        $clorgao11->si15_dtinicio = ($oDados11->si166_dataini > $this->sDataInicial ? $oDados11->si166_dataini : $this->sDataInicial);
+        $clorgao11->si15_dtfinal = ($oDados11->si166_datafim > $this->sDataFinal ? $this->sDataFinal : $oDados11->si166_datafim);
         $clorgao11->si15_email = $oDados11->z01_email;
         $clorgao11->si15_reg10 = $clorgao10->si14_sequencial;
         $clorgao11->si15_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
@@ -209,4 +195,5 @@ LEFT JOIN cgm AS cgmassessoria ON infocomplementaresinstit.si09_cgmassessoriacon
     $oGerarOrgao->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarOrgao->gerarDados();
   }
+
 }

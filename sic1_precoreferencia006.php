@@ -381,6 +381,21 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 $controle++;
                 $sqencia++;
 
+                if($pc80_criterioadjudicacao == 1 && $oResult->si02_tabela == "t"){
+                    $oDadosDaLinha->valorUnitario = 0;
+                }
+                if($pc80_criterioadjudicacao == 1 && $oResult->si02_tabela == "f"){
+                    $oDadosDaLinha->mediapercentual = "-";
+                }
+                if($pc80_criterioadjudicacao == 2 && $oResult->si02_taxa == "t"){
+                    $oDadosDaLinha->valorUnitario = 0;
+                }
+                if($pc80_criterioadjudicacao == 2 && $oResult->si02_taxa == "f"){
+                    $oDadosDaLinha->mediapercentual = "-";
+                }
+
+                $oDadosDaLinha->valorUnitario = $oDadosDaLinha->valorUnitario > 0 ? "R$ $oDadosDaLinha->valorUnitario" : "-";
+
                 if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
                     echo <<<HTML
         <tr>
@@ -669,6 +684,21 @@ HTML;
                         $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
                         $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                     }
+                    
+                    if($pc80_criterioadjudicacao == 1 && $oResult->si02_tabela == "t"){
+                        $oDadosDaLinha->valorUnitario = 0;
+                    }
+                    if($pc80_criterioadjudicacao == 1 && $oResult->si02_tabela == "f"){
+                        $oDadosDaLinha->mediapercentual = "-";
+                    }
+                    if($pc80_criterioadjudicacao == 2 && $oResult->si02_taxa == "t"){
+                        $oDadosDaLinha->valorUnitario = 0;
+                    }
+                    if($pc80_criterioadjudicacao == 2 && $oResult->si02_taxa == "f"){
+                        $oDadosDaLinha->mediapercentual = "-";
+                    }
+                    
+                    $oDadosDaLinha->valorUnitario = $oDadosDaLinha->valorUnitario > 0 ? "R$ $oDadosDaLinha->valorUnitario" : "-";
 
                     if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
                         echo <<<HTML
