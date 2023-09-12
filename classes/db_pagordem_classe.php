@@ -1239,5 +1239,343 @@ class cl_pagordem {
     return $sql;
   }
 
+  public function alteraDataOp($e50_codord, $atualDataOp, $novaDataOp, $mesAtual, $ordemCompraTipo){
+        $atualDataOpMes = date('m', strtotime($atualDataOp));
+        $novaDataOpMes = date('m', strtotime($novaDataOp));
+        $novaDataOpAno = date('Y', strtotime($novaDataOp));
+        $mesAtual = date('m',db_getsession('DB_datausu'));
+
+        if ($novaDataOpMes > $atualDataOpMes){
+            $mesMenor = $atualDataOpMes;
+        } else {
+            $mesMenor = $novaDataOpMes;
+        }
+
+        $sSql = "SELECT fc_startsession();";
+
+        $sSql .= " CREATE TEMP TABLE pgto_emp ON COMMIT DROP AS";
+        $sSql .= " SELECT c80_codord,";
+        $sSql .= "        c80_codlan,";
+        $sSql .= "        c80_data";
+        $sSql .= " FROM conlancamord";
+        $sSql .= " JOIN conlancamdoc ON c71_codlan = c80_codlan";
+        $sSql .= " JOIN conhistdoc ON c53_coddoc = c71_coddoc";
+        $sSql .= " WHERE c80_codord = {$e50_codord}";
+        $sSql .= "   AND c53_tipo = 20;";
+        
+        $sSql .= " CREATE TEMP TABLE saldo_ctas ON COMMIT DROP AS";
+        $sSql .= " SELECT DISTINCT conplanoexesaldo.*,";
+        $sSql .= "        deb.c69_data c69_data";
+        $sSql .= " FROM conplanoexesaldo";
+        $sSql .= " JOIN conlancamval deb ON (deb.c69_debito, deb.c69_anousu, EXTRACT (MONTH FROM deb.c69_data)::integer) = (c68_reduz, c68_anousu, c68_mes)";
+        $sSql .= " WHERE deb.c69_codlan IN (SELECT c80_codlan FROM pgto_emp)";
+        $sSql .= " UNION ALL";
+        $sSql .= " SELECT DISTINCT conplanoexesaldo.*,";
+        $sSql .= "        cred.c69_data c69_data";
+        $sSql .= " FROM conplanoexesaldo";
+        $sSql .= " JOIN conlancamval cred ON (cred.c69_credito, cred.c69_anousu, EXTRACT (MONTH FROM cred.c69_data)::integer) = (c68_reduz, c68_anousu, c68_mes)";
+        $sSql .= " WHERE cred.c69_codlan IN (SELECT c80_codlan FROM pgto_emp);";
+        
+        $sSql .= " CREATE TEMP TABLE nota_altera ON COMMIT DROP AS";
+        $sSql .= " SELECT c75_numemp AS empenho,";
+        $sSql .= "        c80_codlan AS lancamento,";
+        $sSql .= "        c80_codord AS ord_pag,";
+        $sSql .= "        m72_codnota AS ordem_compra,";
+        $sSql .= "        c66_codnota AS nota_liq,";
+        $sSql .= "        c80_data AS data_nota";
+        $sSql .= " FROM conlancamemp";
+        $sSql .= " JOIN conlancamord ON c80_codlan = c75_codlan";
+        $sSql .= " JOIN conlancamnota ON c66_codlan = c75_codlan";
+        $sSql .= " JOIN conlancamdoc ON c71_codlan = c75_codlan";
+        $sSql .= " JOIN empnotaord ON c66_codnota = m72_codnota";
+        $sSql .= " JOIN conhistdoc ON c71_coddoc = c53_coddoc";
+        $sSql .= " WHERE c80_codlan IN (SELECT c80_codlan FROM pgto_emp);";
+        
+        if($ordemCompraTipo === 'virtual'){
+
+          $sSql .= " CREATE TEMPORARY TABLE w_matordem ON COMMIT DROP AS";
+          $sSql .= " SELECT m51_codordem FROM conlancamnota";
+          $sSql .= " JOIN empnotaord ON c66_codnota = m72_codnota";
+          $sSql .= " JOIN matordem ON m72_codordem = m51_codordem";
+          $sSql .= " WHERE c66_codlan IN (SELECT c80_codlan FROM pgto_emp);";
+
+          // -- Ordens de Compra
+          // -- Confirmar se alterar a OP para data posterior a data da Ordem de Compra, essa Ordem de Compra tb devera ser alterada.
+          
+          $sSql .= " UPDATE matordemanu SET m53_data = '{$novaDataOp}'";
+          $sSql .= " WHERE m53_codordem IN";
+          $sSql .= "     (SELECT m51_codordem";
+          $sSql .= "      FROM w_matordem);";
+          
+          $sSql .= " UPDATE matordem SET m51_data = '{$novaDataOp}'";
+          $sSql .= " WHERE m51_codordem IN";
+          $sSql .= "      (SELECT m51_codordem";
+          $sSql .= "       FROM w_matordem);";
+        }
+          
+        // -- Fim Ordens de Compra
+        
+        $sSql .= " UPDATE empnota";
+        $sSql .= " SET e69_dtnota = '{$novaDataOp}',";
+        $sSql .= "     e69_dtrecebe = '{$novaDataOp}',";
+        $sSql .= "     e69_dtinclusao = '{$novaDataOp}'";
+        $sSql .= " WHERE e69_codnota IN";
+        $sSql .= "     (SELECT nota_liq FROM nota_altera);";
+        
+        $sSql .= " UPDATE pagordem";
+        $sSql .= " SET e50_data = '{$novaDataOp}'";
+        $sSql .= " WHERE e50_codord IN";
+        $sSql .= "     (SELECT ord_pag FROM nota_altera);";
+        
+        $sSql .= " ALTER TABLE conlancamval DISABLE TRIGGER ALL;";
+        
+        $sSql .= " UPDATE conlancamval";
+        $sSql .= " SET c69_data = '{$novaDataOp}'";
+        $sSql .= " WHERE c69_codlan IN (SELECT lancamento FROM nota_altera);";
+        
+        $sSql .= " ALTER TABLE conlancamval ENABLE TRIGGER ALL;";
+        
+        $sSql .= " UPDATE conlancamemp";
+        $sSql .= " SET c75_data = '{$novaDataOp}'";
+        $sSql .= " WHERE c75_codlan IN (SELECT lancamento FROM nota_altera);";
+        
+        $sSql .= " UPDATE conlancamdoc";
+        $sSql .= " SET c71_data = '{$novaDataOp}'";
+        $sSql .= " WHERE c71_codlan IN (SELECT lancamento FROM nota_altera);";
+        
+        $sSql .= " UPDATE conlancamdot";
+        $sSql .= " SET c73_data = '{$novaDataOp}'";
+        $sSql .= " WHERE c73_codlan IN (SELECT lancamento FROM nota_altera);";
+        
+        $sSql .= " UPDATE conlancamord";
+        $sSql .= " SET c80_data = '{$novaDataOp}'";
+        $sSql .= " WHERE c80_codlan IN (SELECT lancamento FROM nota_altera);";
+        
+        $sSql .= " UPDATE conlancamcgm";
+        $sSql .= " SET c76_data = '{$novaDataOp}'";
+        $sSql .= " WHERE c76_codlan IN (SELECT lancamento FROM nota_altera);";
+        
+        $sSql .= " UPDATE conlancam";
+        $sSql .= " SET c70_data = '{$novaDataOp}'";
+        $sSql .= " WHERE c70_codlan IN (SELECT lancamento FROM nota_altera);";
+
+        for($i = $mesMenor; $i <= $mesAtual; $i++){
+            $sSql .= " DELETE FROM conplanoexesaldo";
+            $sSql .= " USING saldo_ctas";
+            $sSql .= " WHERE (saldo_ctas.c68_reduz, saldo_ctas.c68_anousu) = (conplanoexesaldo.c68_reduz, conplanoexesaldo.c68_anousu)";
+            $sSql .= " AND conplanoexesaldo.c68_mes = {$i};";
+
+            $sSql .= " CREATE TEMP TABLE landeb".$i." ON COMMIT DROP AS";
+            $sSql .= " SELECT c69_anousu,";
+            $sSql .= "     c69_debito,";
+            $sSql .= "     to_char(conlancamval.c69_data,'MM')::integer,";
+            $sSql .= "     sum(round(c69_valor,2)),0::float8";
+            $sSql .= " FROM conlancamval";
+            $sSql .= " JOIN saldo_ctas ON (saldo_ctas.c68_reduz, saldo_ctas.c68_anousu) = (conlancamval.c69_debito, conlancamval.c69_anousu)";
+            $sSql .= " WHERE conlancamval.c69_anousu = {$novaDataOpAno}";
+            $sSql .= " AND EXTRACT (MONTH FROM conlancamval.c69_data)::integer = {$i}";
+            $sSql .= " GROUP BY conlancamval.c69_anousu, conlancamval.c69_debito, to_char(conlancamval.c69_data,'MM')::integer;";
+            
+            $sSql .= " CREATE TEMP TABLE lancre".$i." ON COMMIT DROP AS";
+            $sSql .= " SELECT c69_anousu,";
+            $sSql .= "     c69_credito,";
+            $sSql .= "     to_char(conlancamval.c69_data,'MM')::integer as c69_data,";
+            $sSql .= "     0::float8,";
+            $sSql .= "     sum(round(c69_valor,2))";
+            $sSql .= " FROM conlancamval";
+            $sSql .= " JOIN saldo_ctas ON (saldo_ctas.c68_reduz, saldo_ctas.c68_anousu) = (conlancamval.c69_credito, conlancamval.c69_anousu)";
+            $sSql .= " WHERE conlancamval.c69_anousu = {$novaDataOpAno}";
+            $sSql .= " AND EXTRACT (MONTH FROM conlancamval.c69_data)::integer = {$i}";
+            $sSql .= " GROUP BY conlancamval.c69_anousu, conlancamval.c69_credito, to_char(conlancamval.c69_data,'MM')::integer;";
+            
+            $sSql .= " INSERT INTO conplanoexesaldo";
+            $sSql .= " SELECT * FROM landeb".$i."";
+            $sSql .= " WHERE c69_anousu = {$novaDataOpAno};";
+            
+            $sSql .= " UPDATE conplanoexesaldo";
+            $sSql .= " SET c68_credito = lancre".$i.".sum";
+            $sSql .= " FROM lancre".$i."";
+            $sSql .= " WHERE c68_anousu = lancre".$i.".c69_anousu";
+            $sSql .= " AND c68_reduz = lancre".$i.".c69_credito";
+            $sSql .= " AND c68_mes = lancre".$i.".c69_data";
+            $sSql .= " AND c68_anousu = {$novaDataOpAno};";
+            
+            $sSql .= " DELETE FROM lancre".$i."";
+            $sSql .= " USING conplanoexesaldo";
+            $sSql .= " WHERE lancre".$i.".c69_anousu = conplanoexesaldo.c68_anousu";
+            $sSql .= " AND conplanoexesaldo.c68_reduz = lancre".$i.".c69_credito";
+            $sSql .= " AND conplanoexesaldo.c68_mes = lancre".$i.".c69_data";
+            $sSql .= " AND c68_anousu = {$novaDataOpAno};";
+            
+            $sSql .= " INSERT INTO conplanoexesaldo";
+            $sSql .= " SELECT * FROM lancre".$i."";
+            $sSql .= " WHERE c69_anousu = {$novaDataOpAno};";
+        }
+        $sSql .= " CREATE TEMP TABLE cod_mov ON COMMIT DROP AS";
+        $sSql .= " SELECT e81_codmov as codmov FROM empage ";
+        $sSql .= " JOIN empagemov ON e80_codage = e81_codage";
+        $sSql .= " JOIN empord ON e81_codmov = e82_codmov";
+        $sSql .= " WHERE e82_codord = {$e50_codord};";
+
+        $sSql .= " CREATE TEMP TABLE cod_age ON COMMIT DROP AS";
+        $sSql .= " SELECT e80_codage AS codage ";
+        $sSql .= " FROM empage ";
+        $sSql .= " WHERE e80_data = '{$novaDataOp}'";
+        $sSql .= " AND e80_instit = ".db_getsession('DB_instit')." limit 1;";
+
+        $sSql .= " WITH nova_agenda AS (";
+        $sSql .= "     INSERT INTO empage (e80_codage, e80_data, e80_instit) ";
+        $sSql .= "     VALUES ((SELECT nextval('empage_e80_codage_seq')),'{$novaDataOp}', ".db_getsession('DB_instit').") ";
+        $sSql .= "     RETURNING e80_codage)";
+        $sSql .= " UPDATE empagemov";
+        $sSql .= " SET e81_codage = ";
+        $sSql .= "     CASE";
+        $sSql .= "         WHEN (SELECT COUNT(*) FROM cod_age) > 0 THEN (SELECT codage FROM cod_age)";
+        $sSql .= "         ELSE (select e80_codage from nova_agenda)";
+        $sSql .= "     END";
+        $sSql .= " WHERE e81_codmov = (SELECT codmov FROM cod_mov); ";
+
+        return $sSql;
+  }
+
+  public function alteraDataEstorno($e50_codord, $atualDataEstorno, $novaDataEstorno, $mesAtual){
+    $atualDataEstornoMes = date('m', strtotime($atualDataEstorno));
+    $novaDataEstornoMes = date('m', strtotime($novaDataEstorno));
+    $novaDataEmpenhoAno = date('Y', strtotime($novaDataEstorno));
+    $mesAtual = date('m',db_getsession('DB_datausu'));
+
+    if ($novaDataEstornoMes > $atualDataEstornoMes){
+        $mesMenor = $atualDataEstornoMes;
+    } else {
+        $mesMenor = $novaDataEstornoMes;
+    }
+
+    $sSql = "SELECT fc_startsession();";
+
+    $sSql .= " CREATE TEMP TABLE pgto_emp ON COMMIT DROP AS";
+    $sSql .= " SELECT c80_codord,";
+    $sSql .= "        c80_codlan,";
+    $sSql .= "        c80_data";
+    $sSql .= " FROM conlancamord";
+    $sSql .= " JOIN conlancamdoc ON c71_codlan = c80_codlan";
+    $sSql .= " JOIN conhistdoc ON c53_coddoc = c71_coddoc";
+    $sSql .= " WHERE c80_codord = {$e50_codord}";
+    $sSql .= "   AND c53_tipo = 21;";
+    
+    $sSql .= " CREATE TEMP TABLE saldo_ctas ON COMMIT DROP AS";
+    $sSql .= " SELECT DISTINCT conplanoexesaldo.*,";
+    $sSql .= "        deb.c69_data c69_data";
+    $sSql .= " FROM conplanoexesaldo";
+    $sSql .= " JOIN conlancamval deb ON (deb.c69_debito, deb.c69_anousu, EXTRACT (MONTH FROM deb.c69_data)::integer) = (c68_reduz, c68_anousu, c68_mes)";
+    $sSql .= " WHERE deb.c69_codlan IN (SELECT c80_codlan FROM pgto_emp)";
+    $sSql .= " UNION ALL";
+    $sSql .= " SELECT DISTINCT conplanoexesaldo.*,";
+    $sSql .= "        cred.c69_data c69_data";
+    $sSql .= " FROM conplanoexesaldo";
+    $sSql .= " JOIN conlancamval cred ON (cred.c69_credito, cred.c69_anousu, EXTRACT (MONTH FROM cred.c69_data)::integer) = (c68_reduz, c68_anousu, c68_mes)";
+    $sSql .= " WHERE cred.c69_codlan IN (SELECT c80_codlan FROM pgto_emp);     ";
+    
+    $sSql .= " CREATE TEMP TABLE nota_altera ON COMMIT DROP AS";
+    $sSql .= " SELECT c75_numemp AS empenho,";
+    $sSql .= "        c80_codlan AS lancamento,";
+    $sSql .= "        c80_codord AS ord_pag,";
+    $sSql .= "        m72_codnota AS ordem_compra,";
+    $sSql .= "        c66_codnota AS nota_liq,";
+    $sSql .= "        c80_data AS data_nota";
+    $sSql .= " FROM conlancamemp";
+    $sSql .= " JOIN conlancamord ON c80_codlan = c75_codlan";
+    $sSql .= " JOIN conlancamnota ON c66_codlan = c75_codlan";
+    $sSql .= " JOIN conlancamdoc ON c71_codlan = c75_codlan";
+    $sSql .= " JOIN empnotaord ON c66_codnota = m72_codnota";
+    $sSql .= " JOIN conhistdoc ON c71_coddoc = c53_coddoc";
+    $sSql .= " WHERE c80_codlan IN (SELECT c80_codlan FROM pgto_emp);";
+
+    $sSql .= " ALTER TABLE conlancamval DISABLE TRIGGER ALL;";
+
+    $sSql .= " UPDATE conlancamval";
+    $sSql .= " SET c69_data = '{$novaDataEstorno}'";
+    $sSql .= " WHERE c69_codlan IN (SELECT lancamento FROM nota_altera);";
+    
+    $sSql .= " ALTER TABLE conlancamval ENABLE TRIGGER ALL;";
+    
+    $sSql .= " UPDATE conlancamemp";
+    $sSql .= " SET c75_data = '{$novaDataEstorno}'";
+    $sSql .= " WHERE c75_codlan IN (SELECT lancamento FROM nota_altera);  ";
+    
+    $sSql .= " UPDATE conlancamdoc";
+    $sSql .= " SET c71_data = '{$novaDataEstorno}'";
+    $sSql .= " WHERE c71_codlan IN (SELECT lancamento FROM nota_altera);";
+    
+    $sSql .= " UPDATE conlancamdot";
+    $sSql .= " SET c73_data = '{$novaDataEstorno}'";
+    $sSql .= " WHERE c73_codlan IN (SELECT lancamento FROM nota_altera);";
+    
+    $sSql .= " UPDATE conlancamord";
+    $sSql .= " SET c80_data = '{$novaDataEstorno}'";
+    $sSql .= " WHERE c80_codlan IN (SELECT lancamento FROM nota_altera);";
+    
+    $sSql .= " UPDATE conlancamcgm";
+    $sSql .= " SET c76_data = '{$novaDataEstorno}'";
+    $sSql .= " WHERE c76_codlan IN (SELECT lancamento FROM nota_altera);";
+    
+    $sSql .= " UPDATE conlancam";
+    $sSql .= " SET c70_data = '{$novaDataEstorno}'";
+    $sSql .= " WHERE c70_codlan IN (SELECT lancamento FROM nota_altera);";
+
+    for($i = $mesMenor; $i <= $mesAtual; $i++){
+        $sSql .= " DELETE FROM conplanoexesaldo";
+        $sSql .= " USING saldo_ctas";
+        $sSql .= " WHERE (saldo_ctas.c68_reduz, saldo_ctas.c68_anousu) = (conplanoexesaldo.c68_reduz, conplanoexesaldo.c68_anousu)";
+        $sSql .= " AND conplanoexesaldo.c68_mes = {$i};";
+
+        $sSql .= " CREATE TEMP TABLE landeb".$i." ON COMMIT DROP AS";
+        $sSql .= " SELECT c69_anousu,";
+        $sSql .= "     c69_debito,";
+        $sSql .= "     to_char(conlancamval.c69_data,'MM')::integer,";
+        $sSql .= "     sum(round(c69_valor,2)),0::float8";
+        $sSql .= " FROM conlancamval";
+        $sSql .= " JOIN saldo_ctas ON (saldo_ctas.c68_reduz, saldo_ctas.c68_anousu) = (conlancamval.c69_debito, conlancamval.c69_anousu)";
+        $sSql .= " WHERE conlancamval.c69_anousu = {$novaDataEmpenhoAno}";
+        $sSql .= " AND EXTRACT (MONTH FROM conlancamval.c69_data)::integer = {$i}";
+        $sSql .= " GROUP BY conlancamval.c69_anousu, conlancamval.c69_debito, to_char(conlancamval.c69_data,'MM')::integer;";
+        
+        $sSql .= " CREATE TEMP TABLE lancre".$i." ON COMMIT DROP AS";
+        $sSql .= " SELECT c69_anousu,";
+        $sSql .= "     c69_credito,";
+        $sSql .= "     to_char(conlancamval.c69_data,'MM')::integer as c69_data,";
+        $sSql .= "     0::float8,";
+        $sSql .= "     sum(round(c69_valor,2))";
+        $sSql .= " FROM conlancamval";
+        $sSql .= " JOIN saldo_ctas ON (saldo_ctas.c68_reduz, saldo_ctas.c68_anousu) = (conlancamval.c69_credito, conlancamval.c69_anousu)";
+        $sSql .= " WHERE conlancamval.c69_anousu = {$novaDataEmpenhoAno}";
+        $sSql .= " AND EXTRACT (MONTH FROM conlancamval.c69_data)::integer = {$i}";
+        $sSql .= " GROUP BY conlancamval.c69_anousu, conlancamval.c69_credito, to_char(conlancamval.c69_data,'MM')::integer;";
+        
+        $sSql .= " INSERT INTO conplanoexesaldo";
+        $sSql .= " SELECT * FROM landeb".$i."";
+        $sSql .= " WHERE c69_anousu = {$novaDataEmpenhoAno};";
+        
+        $sSql .= " UPDATE conplanoexesaldo";
+        $sSql .= " SET c68_credito = lancre".$i.".sum";
+        $sSql .= " FROM lancre".$i."";
+        $sSql .= " WHERE c68_anousu = lancre".$i.".c69_anousu";
+        $sSql .= " AND c68_reduz = lancre".$i.".c69_credito";
+        $sSql .= " AND c68_mes = lancre".$i.".c69_data";
+        $sSql .= " AND c68_anousu = {$novaDataEmpenhoAno};";
+        
+        $sSql .= " DELETE FROM lancre".$i."";
+        $sSql .= " USING conplanoexesaldo";
+        $sSql .= " WHERE lancre".$i.".c69_anousu = conplanoexesaldo.c68_anousu";
+        $sSql .= " AND conplanoexesaldo.c68_reduz = lancre".$i.".c69_credito";
+        $sSql .= " AND conplanoexesaldo.c68_mes = lancre".$i.".c69_data";
+        $sSql .= " AND c68_anousu = {$novaDataEmpenhoAno};";
+        
+        $sSql .= " INSERT INTO conplanoexesaldo";
+        $sSql .= " SELECT * FROM lancre".$i."";
+        $sSql .= " WHERE c69_anousu = {$novaDataEmpenhoAno};";
+    }
+    return $sSql;
+}
+
 }
 ?>

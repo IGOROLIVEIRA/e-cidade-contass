@@ -1201,7 +1201,7 @@ class cl_balancete142023
                                 and DATE_PART('YEAR',c69_data) = " . db_getsession("DB_anousu") . " and DATE_PART('MONTH',c69_data) <= {$nMes}";
 
 
-                if ($sEstrutural == "5312" || $sEstrutural == "5322" || $sEstrutural == "6311" || $sEstrutural == "6321" || $sEstrutural == "6313"
+                if ($sEstrutural == "5312" || $sEstrutural == "5322" || $sEstrutural == "6311" || $sEstrutural == "6312" || $sEstrutural == "6321" || $sEstrutural == "6313"
                                            || $sEstrutural == "5317" | $sEstrutural == "5327" || $sEstrutural == "6317" || $sEstrutural == "6327") {
                                 $sSqlRestos .= " union ";
                                 $sSqlRestos .= " select distinct

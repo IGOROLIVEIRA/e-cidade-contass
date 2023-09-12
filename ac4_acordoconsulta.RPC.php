@@ -1,29 +1,28 @@
 <?php
-
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once('classes/db_acordocomissao_classe.php');
@@ -67,13 +66,12 @@ switch ($oParam->exec) {
 
   case 'itensConsulta':
 
-
     $itens = db_query("select * from acordoposicao
     inner join acordoitem on ac20_acordoposicao = ac26_sequencial
     inner join pcmater on ac20_pcmater = pc01_codmater
     inner join matunid on ac20_matunid = m61_codmatunid
     inner join pcmaterele on pc07_codmater = pc01_codmater and pc07_codele = ac20_elemento
-    where ac26_acordo = $oParam->ac16_sequencial and ac26_acordoposicaotipo = 1;");
+    where ac26_acordo = $oParam->ac16_sequencial and ac26_acordoposicaotipo = 1 order by ac20_ordem;");
 
     for ($i = 0; $i < pg_numrows($itens); $i++) {
       $item = db_utils::fieldsmemory($itens, $i);
@@ -544,10 +542,10 @@ switch ($oParam->exec) {
           $oRetorno->dados[]    = $oInfoObras;
 
       }
-  
-      
+
+
       $oRetorno->detalhe  = $oParam->detalhe;
-  
+
     break;
 }
 echo $oJson->encode($oRetorno);

@@ -1158,4 +1158,32 @@ class cl_conlancam {
     }
     return $sSql;
   }
+
+  public function verificaDataEmpenho($numEmpenho){
+    $sSql  = "SELECT DISTINCT c70_data AS data_empenho, c71_coddoc";
+    $sSql .= " FROM conlancam ";
+    $sSql .= " INNER JOIN conlancamval ON c69_codlan = c70_codlan";
+    $sSql .= " INNER JOIN conlancamdoc ON c71_codlan = c70_codlan  ";
+    $sSql .= " INNER JOIN conhistdoc   ON c71_coddoc = c53_coddoc  ";
+    $sSql .= " INNER JOIN conlancamemp ON c75_codlan = c70_codlan";
+    $sSql .= " INNER JOIN empempenho   ON c75_numemp = e60_numemp";
+    $sSql .= " WHERE e60_numemp = '{$numEmpenho}' AND c53_tipo = 10";
+    $sSql .= " ORDER BY c70_data ASC LIMIT 1;";
+    
+    return $sSql;
+  }
+
+  public function verificaDataPagamento($codOrdem){
+    $sSql = "SELECT c70_data AS data_pagamento, c71_coddoc";
+    $sSql .= " FROM conlancam ";
+    $sSql .= " INNER JOIN conlancamval ON c69_codlan = c70_codlan";
+    $sSql .= " INNER JOIN conlancamdoc ON c71_codlan = c70_codlan  ";
+    $sSql .= " INNER JOIN conhistdoc   ON c71_coddoc = c53_coddoc  ";
+    $sSql .= " inner join conlancamord on c69_codlan = c80_codlan ";
+    $sSql .= " WHERE c80_codord = {$codOrdem} and c53_tipo = 30";
+    $sSql .= " ORDER BY c70_data ASC LIMIT 1;";
+    
+    return $sSql;
+  }
+
 }
