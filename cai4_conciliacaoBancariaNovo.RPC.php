@@ -60,7 +60,7 @@ try {
             $data_final = data($oParam->params[0]->data_final);
             $condicao_lancamento = condicao_lancamento($oParam->params[0]->tipo_lancamento);
             $sql = query_lancamentos($oParam->params[0]->conta, $data_inicial, $data_final, $condicao_lancamento, $oParam->params[0]->tipo_lancamento);
-            // \$oRetorno->aLinhasExtrato[] = $sql;
+            // $oRetorno->aLinhasExtrato[] = $sql;
             $resultado   = db_query($sql);
             $rows        = pg_numrows($resultado);
             $lancamentos = array();
@@ -270,11 +270,11 @@ try {
             $conta = $oParam->params[0]->conta;
             // Preenche os dados para retorno
             $oDadosLinha = new StdClass();
-            $oDadosLinha->saldo_anterior   = saldo_anterior_extrato($conta, $data_inicial, $data_final);
-            $oDadosLinha->total_entradas   = movimentacao_extrato($conta, $data_inicial, $data_final, 1);
-            $oDadosLinha->total_saidas     = movimentacao_extrato($conta, $data_inicial, $data_final, 2);
-            $oDadosLinha->saldo_final      = saldo_final_extrato($conta, $data_final);
-            $oDadosLinha->valor_conciliado = valor_conciliado($conta, $data_final);
+            $oDadosLinha->saldo_anterior     = saldo_anterior_extrato($conta, $data_inicial, $data_final);
+            $oDadosLinha->total_entradas     = movimentacao_extrato($conta, $data_inicial, $data_final, 1);
+            $oDadosLinha->total_saidas       = movimentacao_extrato($conta, $data_inicial, $data_final, 2);
+            $oDadosLinha->saldo_final        = saldo_final_extrato($conta, $data_final);
+            $oDadosLinha->valor_conciliado   = valor_conciliado($conta, $data_final);
             $oDadosLinha->fechar_conciliacao = fechar_conciliacao($conta, $data_final);
             // Retorna os dados
             $oRetorno->aLinhasExtrato[] = $oDadosLinha;
@@ -601,7 +601,7 @@ function query_lancamentos($conta, $data_inicial, $data_final, $condicao_lancame
         $sql .= " UNION ALL ";
         $sql .= query_transferencias_credito($conta, $data_inicial, $data_final, $condicao_lancamento, data($dataImplantacao));
     }
-    $sql .= ") as w ORDER BY w.data";
+    $sql .= ") as w WHERE (valor_credito <> 0 AND valor_credito - COALESCE(retencao, 0) <> 0) ORDER BY w.data";
     return $sql;
 }
 
@@ -732,7 +732,8 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
 function movimentacao_extrato($conta, $dataInicial, $dataFinal, $movimentacao)
 {
     $implantacao = data(data_implantacao());
-    $sql  = query_empenhos_total($conta, $dataInicial, $dataFinal, $implantacao);
+    $sql = " SELECT * FROM ( ";
+    $sql .= query_empenhos_total($conta, $dataInicial, $dataFinal, $implantacao);
     $sql .= " UNION ALL ";
     $sql .= query_baixa_total($conta, $dataInicial, $dataFinal, $implantacao);
     $sql .= " union all ";
@@ -741,7 +742,8 @@ function movimentacao_extrato($conta, $dataInicial, $dataFinal, $movimentacao)
     $sql .= query_transferencias_debito_total($conta, $dataInicial, $dataFinal, $implantacao);
     $sql .= " union all ";
     $sql .= query_transferencias_credito_total($conta, $dataInicial, $dataFinal, $implantacao);
-
+    $sql .= ") as w WHERE (valor_credito <> 0 AND valor_credito - COALESCE(retencao, 0) <> 0) ORDER BY w.data";
+    // return $sql;
     $query = pg_query($sql);
 
     $valor = 0;
@@ -940,7 +942,68 @@ function query_padrao_op()
     $sql .= "     coremp.k12_codord::text AS ordem, ";
     $sql .= "     z01_nome::text AS credor, ";
     $sql .= "     z01_numcgm::text AS numcgm, ";
-    $sql .= "     '' AS historico ";
+    $sql .= "     '' AS historico, ";
+    $sql .= " CASE
+    WHEN conhistdoc.c53_tipo = 31 THEN (
+        SELECT valor_retencao FROM (
+            SELECT
+                round(SUM(numpre.k12_valor), 2) valor_retencao
+            FROM
+                retencaoreceitas
+                INNER JOIN retencaotiporec ON retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
+                INNER JOIN retencaopagordem ON retencaopagordem.e20_sequencial = retencaoreceitas.e23_retencaopagordem
+                INNER JOIN tabrec ON tabrec.k02_codigo = retencaotiporec.e21_receita
+                INNER JOIN retencaotipocalc ON retencaotipocalc.e32_sequencial = retencaotiporec.e21_retencaotipocalc
+                INNER JOIN pagordem ON pagordem.e50_codord = retencaopagordem.e20_pagordem
+                INNER JOIN pagordemnota ON pagordem.e50_codord = pagordemnota.e71_codord
+                INNER JOIN empnota ON pagordemnota.e71_codnota = empnota.e69_codnota
+                INNER JOIN retencaoempagemov ON e23_sequencial = e27_retencaoreceitas
+                LEFT JOIN empagemovslips ON e27_empagemov = k107_empagemov
+                LEFT JOIN slipempagemovslips ON k107_sequencial = k108_empagemovslips
+                LEFT JOIN retencaocorgrupocorrente ON e23_sequencial = e47_retencaoreceita
+                LEFT JOIN corgrupocorrente ON e47_corgrupocorrente = k105_sequencial
+                LEFT JOIN cornump as numpre ON numpre.k12_data = k105_data
+                AND numpre.k12_autent = k105_autent
+                AND numpre.k12_id = k105_id
+                LEFT JOIN issplannumpre ON numpre.k12_numpre = q32_numpre
+            WHERE
+                e20_pagordem = coremp.k12_codord
+                AND e27_principal IS true
+                -- AND e23_ativo IS FALSE
+                
+                AND corgrupocorrente.k105_corgrupotipo = 6
+            ) as x  WHERE round(valor_retencao, 2) = corrente.k12_valor
+    )
+    ELSE (
+        SELECT valor_retencao FROM (
+            SELECT
+                round(SUM(numpre.k12_valor), 2) valor_retencao
+            FROM
+                retencaoreceitas
+                INNER JOIN retencaotiporec ON retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
+                INNER JOIN retencaopagordem ON retencaopagordem.e20_sequencial = retencaoreceitas.e23_retencaopagordem
+                INNER JOIN tabrec ON tabrec.k02_codigo = retencaotiporec.e21_receita
+                INNER JOIN retencaotipocalc ON retencaotipocalc.e32_sequencial = retencaotiporec.e21_retencaotipocalc
+                INNER JOIN pagordem ON pagordem.e50_codord = retencaopagordem.e20_pagordem
+                INNER JOIN pagordemnota ON pagordem.e50_codord = pagordemnota.e71_codord
+                INNER JOIN empnota ON pagordemnota.e71_codnota = empnota.e69_codnota
+                INNER JOIN retencaoempagemov ON e23_sequencial = e27_retencaoreceitas
+                LEFT JOIN empagemovslips ON e27_empagemov = k107_empagemov
+                LEFT JOIN slipempagemovslips ON k107_sequencial = k108_empagemovslips
+                LEFT JOIN retencaocorgrupocorrente ON e23_sequencial = e47_retencaoreceita
+                LEFT JOIN corgrupocorrente ON e47_corgrupocorrente = k105_sequencial
+                LEFT JOIN cornump as numpre ON numpre.k12_data = k105_data
+                AND numpre.k12_autent = k105_autent
+                AND numpre.k12_id = k105_id
+                LEFT JOIN issplannumpre ON numpre.k12_numpre = q32_numpre
+            WHERE
+                e20_pagordem = coremp.k12_codord
+                AND e27_principal IS true
+                -- AND e23_ativo IS FALSE
+                AND corgrupocorrente.k105_corgrupotipo = 3
+            ) as x  WHERE  round(valor_retencao, 2) = corrente.k12_valor
+    )
+END retencao ";
     $sql .= " FROM corrente ";
     $sql .= " INNER JOIN coremp ON coremp.k12_id = corrente.k12_id ";
     $sql .= "     AND coremp.k12_data = corrente.k12_data ";
@@ -985,7 +1048,7 @@ function query_padrao_op()
     $sql .= "         END ";
     $sql .= "         ) ";
     $sql .= "     ) ";
-    $sql .= " AND conc.k172_valor = c69_valor ";
+    $sql .= " AND conc.k172_valor = corrente.k12_valor ";
     $sql .= " WHERE ";
 
     return $sql;
@@ -1006,7 +1069,8 @@ function query_baixa_padrao()
     $sql .= "     ordem::text ordem, ";
     $sql .= "     credor, ";
     $sql .= "     numcgm::text numcgm, ";
-    $sql .= utf8_encode(" 'Arrecadação de Receita' historico ");
+    $sql .= utf8_encode(" 'Arrecadação de Receita' historico, ");
+    $sql .= "     0 as retencao ";
     $sql .= " FROM ( ";
     $sql .= "    SELECT ";
     $sql .= "        data, ";
@@ -1085,7 +1149,8 @@ function query_pendencias($conta, $data_inicial, $data_final, $tipo)
     $sql .= "     '' as ordem, ";
     $sql .= "     z01_nome credor, ";
     $sql .= "     k173_numcgm::text numcgm, ";
-    $sql .= "     k173_sequencial::text as historico ";
+    $sql .= "     k173_sequencial::text as historico, ";
+    $sql .= "     0 as retencao ";
     $sql .= " FROM conciliacaobancariapendencia ";
     $sql .= " LEFT JOIN cgm ON z01_numcgm = k173_numcgm ";
     $sql .= " LEFT JOIN conciliacaobancarialancamento ON k172_data = k173_data ";
@@ -1126,7 +1191,8 @@ function query_padrao_rec($conta, $condicao)
   ordem :: text,
   credor,
   numcgm :: text as numcgm,
-  '' as historico
+  '' as historico,
+  0 as retencao
  from
   (
       select
@@ -1232,7 +1298,8 @@ function query_padrao_slip_debito()
   '' as ordem,
   z01_nome::text as credor,
   z01_numcgm::text as numcgm,
-  '' as historico
+  '' as historico,
+  0 as retencao
  from
   corlanc
   inner join corrente on corrente.k12_id = corlanc.k12_id
@@ -1300,7 +1367,8 @@ function query_padrao_slip_credito()
       '' as ordem,
       z01_nome::text as credor,
       z01_numcgm::text as numcgm,
-      '' as historico
+      '' as historico, 
+      0 as retencao
   from
       corrente
       inner join corlanc on corrente.k12_id = corlanc.k12_id
@@ -1409,13 +1477,15 @@ function condicao_retencao()
     $sql .= "     LEFT JOIN slipempagemovslips ON k107_sequencial = k108_empagemovslips ";
     $sql .= "     LEFT JOIN retencaocorgrupocorrente ON e23_sequencial = e47_retencaoreceita ";
     $sql .= "     LEFT JOIN corgrupocorrente ON e47_corgrupocorrente = k105_sequencial ";
+    $sql .= "    AND k105_data = e20_data ";
     $sql .= "     LEFT JOIN cornump as numpre ON numpre.k12_data = k105_data ";
     $sql .= "         AND numpre.k12_autent = k105_autent ";
     $sql .= "         AND numpre.k12_id = k105_id ";
     $sql .= "     LEFT JOIN issplannumpre ON numpre.k12_numpre = q32_numpre ";
     $sql .= "     WHERE e20_pagordem = coremp.k12_codord ";
     $sql .= "         AND e27_principal IS true ";
-    $sql .= "         AND e23_ativo IS true ";
+    $sql .= "        AND k105_sequencial IS NOT NULL ";
+    // $sql .= "         AND e23_ativo IS true ";
     $sql .= "     ) as w ";
     $sql .= " WHERE round(retencao,2) = round(corrente.k12_valor,2) ";
     $sql .= " ) IS NULL ";
