@@ -1425,10 +1425,8 @@ class cl_liclicita
             $virgula = ",";
         }
 
-        if (trim($this->l20_dataaberproposta) == null || trim($this->l20_dataaberproposta) == "") {
-            $sql .= $virgula . " l20_dataaberproposta =null ";
-            $virgula = ",";
-        } else {
+        if (trim($this->l20_dataaberproposta) != null || trim($this->l20_dataaberproposta) != "") {
+           
             $sql .= $virgula . " l20_dataaberproposta = '$this->l20_dataaberproposta' ";
             $virgula = ",";
         }
