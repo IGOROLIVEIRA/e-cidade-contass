@@ -362,7 +362,7 @@ switch ($oParam->exec) {
         $criterio = $oParam->criterioadj;
       }
       db_inicio_transacao();
-      $oSolicita->toProcessoCompra($criterio);
+      $oSolicita->toProcessoCompra($criterio,$oParam->tipoProcesso);
       $oRetorno->iProcessoCompras = $oSolicita->getProcessodeCompras();
       db_fim_transacao(false);
     } catch (Exception $eErro) {
