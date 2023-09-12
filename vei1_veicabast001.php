@@ -115,9 +115,8 @@ if (isset($incluir)) {
       }
 
       if ($ve70_valor > $valorautilizar) {
-        db_msgbox("Usuário: Abastecimento não incluído, valor total do abastecimento ultrapassou o valor disponível no empenho. Saldo disponível R$ $valorautilizar");
         $sqlerro = true;
-        $erro_msg = "Não foi possível incluir.";
+        $erro_msg = "Usuário: Abastecimento não incluído, valor total do abastecimento ultrapassou o valor disponível no empenho. Saldo disponível R$ $valorautilizar";
       }
       if ($sqlerro == false) {
         if ($resultadoEmp->e60_vlrutilizado == "") {
@@ -140,9 +139,8 @@ if (isset($incluir)) {
   }
 
   if ($retirada == "" || $retirada == null) {
-    db_msgbox("Campo: Retirada não informado");
     $sqlerro = true;
-    $erro_msg = "Não foi possível incluir.";
+    $erro_msg = "Campo: Retirada não informado";
   }
 
   /*
