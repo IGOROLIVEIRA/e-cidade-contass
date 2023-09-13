@@ -1076,9 +1076,7 @@ class cl_acordoitem {
     }
 
     public function updateByApostilamento(
-        $iAcordo,
-        $codigoitem,
-        $si03_sequencial
+        $ac20Sequencial
     ) {
         $sql = "
         UPDATE acordoitem
@@ -1086,22 +1084,7 @@ class cl_acordoitem {
             ac20_valorunitario = {$this->ac20_valorunitario},
             ac20_valortotal = {$this->ac20_valortotal}
         WHERE
-         ac20_sequencial = (
-            SELECT ac20_sequencial
-            FROM apostilamento
-            INNER JOIN acordo ON ac16_sequencial = si03_acordo
-            INNER JOIN acordoposicao ON acordoposicao.ac26_acordo = acordo.ac16_sequencial
-            INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
-            WHERE ac26_acordo = $iAcordo
-                AND ac20_pcmater = $codigoitem
-                AND si03_sequencial = $si03_sequencial
-                AND ac26_acordoposicaotipo IN (17,16,15)
-                AND ac26_numeroapostilamento IS NOT NULL
-                AND ac26_numeroapostilamento =
-                    (SELECT max(ac26_numeroapostilamento)
-                     FROM acordoposicao
-                     WHERE ac26_acordo = $iAcordo)
-            ORDER BY si03_sequencial DESC)
+         ac20_sequencial = $ac20Sequencial;
         ";
 
         $result = db_query($sql);
@@ -1135,6 +1118,32 @@ class cl_acordoitem {
              return true;
             }
         }
+    }
+
+    public function getIdByAcordoPcmaterApostilamento(
+        $iAcordo,
+        $codigoitem,
+        $si03_sequencial
+    )
+    {
+        $sql = "
+            SELECT ac20_sequencial
+            FROM apostilamento
+            INNER JOIN acordo ON ac16_sequencial = si03_acordo
+            INNER JOIN acordoposicao ON acordoposicao.ac26_acordo = acordo.ac16_sequencial
+            INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+            WHERE ac26_acordo = $iAcordo
+                AND ac20_pcmater = $codigoitem
+                AND si03_sequencial = $si03_sequencial
+                AND ac26_acordoposicaotipo IN (17,16,15)
+                AND ac26_numeroapostilamento IS NOT NULL
+                AND ac26_numeroapostilamento =
+                    (SELECT max(ac26_numeroapostilamento)
+                     FROM acordoposicao
+                     WHERE ac26_acordo = $iAcordo)
+            ORDER BY si03_sequencial DESC
+        ";
+        return $sql;
     }
 }
 

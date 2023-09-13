@@ -12,7 +12,7 @@ class ValidaAlteracaoApostilamentoCommand
         $cl_acordoposicao->sql_record($sql);
 
         if ($cl_acordoposicao->numrows != 0) {
-            throw new Exception("Só possível alterar apostilamentos que já tem empenho");
+            throw new Exception("A alteração não poderá ser efetuada, o apostilamento possui autorização(ões) e/ou empenho(s) vinculado(s).");
         }
     }
 }

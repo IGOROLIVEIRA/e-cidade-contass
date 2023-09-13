@@ -276,6 +276,7 @@ unset($_GET['viewAlterar']);
 </table>
 <input type='button' disabled id='btnSalvar' value='Salvar' onclick="apostilar();">
 <script>
+    let RetornoItens = null;
     let viewAlterar = "<?php echo $viewAlterar ?>";
     let si03_sequencial = null;
     let tipoApostilaInicial = null;
@@ -283,7 +284,7 @@ unset($_GET['viewAlterar']);
     document.getElementById("si03_datareferencia").style.width = "80px"
     document.getElementById("si03_tipoalteracaoapostila").disabled = true;
     sUrlRpc = 'con4_contratoapostilamento.RPC.php';
-    aItensPosicao = new Array();
+    let aItensPosicao = new Array();
     oGridItens = new DBGrid('oGridItens');
     oGridItens.nameInstance = 'oGridItens';
     oGridItens.setCheckbox(0);
@@ -483,6 +484,7 @@ unset($_GET['viewAlterar']);
                 $('si03_numapostilamento').value = oRetorno.seqapostila;
 
                 aItensPosicao = oRetorno.itens;
+                console.log(aItensPosicao, 'linha 486');
                 preencheItens(aItensPosicao);
 
                 /*aItensPosicao.each(function (oItem, iLinha) {
@@ -627,11 +629,9 @@ unset($_GET['viewAlterar']);
             oDBHint.make($(oHint.idLinha), 2);
         });
 
-
-        me.oGridItens.renderRows();
-
-
-
+        console.log("antes do render");
+        oGridItens.renderRows();
+        console.log("final Grid)");
     }
 
     /**
@@ -1324,14 +1324,14 @@ unset($_GET['viewAlterar']);
             oParam.aItens.push(oItemAdicionar);
         });
 
-        if (viewAlterar) {
-            this.alteraApostilamento(oApostila, oParam.aItens, iSelecionados);
-            return
+
+        if (dotacaoIncluida == false && $("si03_tipoapostila").value == "03" && !viewAlterar) {
+            return alert("Usuário:  necessário a inserção de Dotação em no mínimo um item.");
         }
 
-        if (dotacaoIncluida == false && $("si03_tipoapostila").value == "03") {
-            return alert("Usuário:  necessário a inserção de Dotação em no mínimo um item.");
-
+        if (viewAlterar) {
+            alteraApostilamento(oApostila, oParam.aItens, iSelecionados);
+            return
         }
 
 
@@ -1377,6 +1377,7 @@ unset($_GET['viewAlterar']);
         }
 
         if (iTipo == "03") {
+            console.log("passou aqui");
             oGridItens.aHeaders[10].lDisplayed = true;
             oGridItens.aHeaders[5].lDisplayed = true;
             document.getElementById("si03_tipoalteracaoapostila").disabled = true;
@@ -1390,10 +1391,12 @@ unset($_GET['viewAlterar']);
             oGridItens.aHeaders[5].lDisplayed = false;
         }
 
-
+        console.log("fora do foreach");
+        console.log(aItensPosicao);
         aItensPosicao.forEach(function(oItem, iIndice) {
-
+            console.log("dentro do foreach");
             if (iTipo == "03") {
+                console.log("dentro do foreach");
                 $("si03_tipoalteracaoapostila").value = 3;
                 document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = true;
                 document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = true;
@@ -1450,7 +1453,7 @@ unset($_GET['viewAlterar']);
         js_pesquisaac16_sequencial(true);
     }
 
-    function js_acordosc_apostilamentos() {
+    function js_acordosc_apostilamentos(lMostrar) {
 
         var sUrl = 'func_acordonovo.php?viewalterar=true&funcao_js=parent.js_mostraacordoultimaposicao|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura';
             js_OpenJanelaIframe('top.corpo',
@@ -1538,7 +1541,7 @@ unset($_GET['viewAlterar']);
                 $('si03_justificativa').value = oRetorno.dadosAcordo.si03_justificativa;
                 si03_sequencial = oRetorno.dadosAcordo.si03_sequencial;
 
-                validaCamposTela(oRetorno);
+                validaDadosAcordo(oRetorno);
 
             }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
@@ -1547,13 +1550,15 @@ unset($_GET['viewAlterar']);
            new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
             aItensPosicao = oRetorno.itens;
             preencheItens(aItensPosicao);
+            validaDadosItens(oRetorno);
+            console.log("Passou dotaçoes");
 
         }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
+
     }
 
-    function validaCamposTela(oRetorno) {
-
+    function validaDadosAcordo(oRetorno) {
         let tipoApostila = $('si03_tipoapostila').value;
 
         document.getElementById('trreajuste').style.display = "none";
@@ -1572,8 +1577,18 @@ unset($_GET['viewAlterar']);
         if (tipoApostila == "03") {
             document.getElementById("si03_tipoapostila").disabled = true;
             document.getElementById("si03_tipoalteracaoapostila").disabled = true;
-        }
 
+        }
+    }
+
+    function validaDadosItens(oRetorno) {
+        console.log("validaDadosItens");
+        let tipoApostila = $('si03_tipoapostila').value;
+        if (tipoApostila == "03") {
+            aItensPosicao = oRetorno.itens;
+            console.log(aItensPosicao);
+            js_changeTipoApostila(tipoApostila);
+        }
     }
 
     function alteraApostilamento(oApostila, listaItens, indicesSelecionados) {
@@ -1596,6 +1611,8 @@ unset($_GET['viewAlterar']);
 
         const itens = filtraAcordosSelecionados(listaItens, indicesSelecionados);
 
+        console.log(itens);
+        console.log(listaItens);
         const oParam = {
             exec: 'updateApostilamento',
             apostilamento,
@@ -1610,7 +1627,7 @@ unset($_GET['viewAlterar']);
             }
             alert("Apostilamento alterado com sucesso!");
 
-           return js_acordosc_apostilamentos(false);
+           return js_acordosc_apostilamentos(true);
         }).setMessage("Processando apostilamento")
         .execute();
 
