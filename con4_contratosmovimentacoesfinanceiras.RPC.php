@@ -745,7 +745,7 @@ switch ($oParam->exec) {
 
         if ($aLicOutrosorgaosVinculadas[0] != "") {
             $oDaoAcordo = db_utils::getDao("liclicitaoutrosorgaos");
-            $codLicOutrosOrgaos = $aLicOutrosorgaosVinculadas[0];
+            $codLicOutrosOrgaos = $aLicOutrosorgaosVinculadas;
             $sCampos = "lic211_processo||'/'||lic211_anousu as lic211_processo,lic211_numero,lic211_anousu,lic211_tipo";
             $sSqlLicoutroorgao = $oDaoAcordo->sql_query($codLicOutrosOrgaos, $sCampos);
             $rsLicoutroorgao = $oDaoAcordo->sql_record($sSqlLicoutroorgao);
@@ -757,19 +757,19 @@ switch ($oParam->exec) {
             $oRetorno->iAnoProc = urlencode($oDadosLicoutroorgao->lic211_anousu);
 
             //ACHAR CODCOMPRA
-            if ($oDadosLicoutroorgao->lic211_tipo = 5) {
+            if ($oDadosLicoutroorgao->lic211_tipo == 5) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 105";
-            } elseif ($oDadosLicoutroorgao->lic211_tipo = 6) {
+            } elseif ($oDadosLicoutroorgao->lic211_tipo == 6) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 106";
-            } elseif ($oDadosLicoutroorgao->lic211_tipo = 7) {
+            } elseif ($oDadosLicoutroorgao->lic211_tipo == 7) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 107";
-            } elseif ($oDadosLicoutroorgao->lic211_tipo = 8) {
+            } elseif ($oDadosLicoutroorgao->lic211_tipo == 8) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 108";
-            } elseif ($oDadosLicoutroorgao->lic211_tipo = 9) {
+            } elseif ($oDadosLicoutroorgao->lic211_tipo == 9) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 109";
             }

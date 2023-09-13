@@ -84,7 +84,6 @@ class cl_liclicitaportalcompras
         end as descricaoitem,
         1 as natureza,
         m61_abrev as siglaunidade,
-        4 as valorreferencia,
         pc11_quant as quantidadetotal,
         case when
                 pc11_reservado = 't' then pc11_quant
@@ -106,7 +105,7 @@ class cl_liclicitaportalcompras
         case when
                 si02_criterioadjudicacao=3 then si02_vlprecoreferencia
                 else si02_vlpercreferencia
-        end as valorReferencia,
+        end as valorreferencia,
         pc54_datainicio as datainicio,
         pc54_datatermino as datatermino
         from liclicita
