@@ -484,12 +484,7 @@ unset($_GET['viewAlterar']);
                 $('si03_numapostilamento').value = oRetorno.seqapostila;
 
                 aItensPosicao = oRetorno.itens;
-                console.log(aItensPosicao, 'linha 486');
                 preencheItens(aItensPosicao);
-
-                /*aItensPosicao.each(function (oItem, iLinha) {
-                    me.salvarInfoDotacoes(iLinha);
-                });*/
 
             }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
@@ -629,9 +624,8 @@ unset($_GET['viewAlterar']);
             oDBHint.make($(oHint.idLinha), 2);
         });
 
-        console.log("antes do render");
+
         oGridItens.renderRows();
-        console.log("final Grid)");
     }
 
     /**
@@ -1377,7 +1371,7 @@ unset($_GET['viewAlterar']);
         }
 
         if (iTipo == "03") {
-            console.log("passou aqui");
+
             oGridItens.aHeaders[10].lDisplayed = true;
             oGridItens.aHeaders[5].lDisplayed = true;
             document.getElementById("si03_tipoalteracaoapostila").disabled = true;
@@ -1391,12 +1385,9 @@ unset($_GET['viewAlterar']);
             oGridItens.aHeaders[5].lDisplayed = false;
         }
 
-        console.log("fora do foreach");
-        console.log(aItensPosicao);
         aItensPosicao.forEach(function(oItem, iIndice) {
-            console.log("dentro do foreach");
             if (iTipo == "03") {
-                console.log("dentro do foreach");
+
                 $("si03_tipoalteracaoapostila").value = 3;
                 document.getElementById("si03_tipoalteracaoapostila").options[0].disabled = true;
                 document.getElementById("si03_tipoalteracaoapostila").options[1].disabled = true;
@@ -1551,7 +1542,6 @@ unset($_GET['viewAlterar']);
             aItensPosicao = oRetorno.itens;
             preencheItens(aItensPosicao);
             validaDadosItens(oRetorno);
-            console.log("Passou dotaçoes");
 
         }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
@@ -1582,11 +1572,9 @@ unset($_GET['viewAlterar']);
     }
 
     function validaDadosItens(oRetorno) {
-        console.log("validaDadosItens");
         let tipoApostila = $('si03_tipoapostila').value;
         if (tipoApostila == "03") {
             aItensPosicao = oRetorno.itens;
-            console.log(aItensPosicao);
             js_changeTipoApostila(tipoApostila);
         }
     }
@@ -1611,8 +1599,6 @@ unset($_GET['viewAlterar']);
 
         const itens = filtraAcordosSelecionados(listaItens, indicesSelecionados);
 
-        console.log(itens);
-        console.log(listaItens);
         const oParam = {
             exec: 'updateApostilamento',
             apostilamento,
