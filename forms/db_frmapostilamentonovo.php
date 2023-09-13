@@ -1227,7 +1227,7 @@ unset($_GET['viewAlterar']);
             }
         });
 
-        if (Object.keys(oSelecionados).length == 0) {
+        if (Object.keys(oSelecionados).length == 0 && !viewAlterar) {
             return alert('Nenhum item selecionado para apostilar.');
         }
         var oApostila = new Object();

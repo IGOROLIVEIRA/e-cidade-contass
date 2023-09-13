@@ -174,7 +174,6 @@ try {
             break;
 
         case 'updateApostilamento':
-
             $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
 
             $validaDatas =  new  ValidaDataApostilamentoCommand();
@@ -188,12 +187,14 @@ try {
             $updateApostilamento = new UpdateApostilamentoCommand;
             $updateApostilamento->execute($oParam->apostilamento, $oParam->iAcordo);
 
-            $updateAcordoItem = new UpdateAcordoItemCommand;
-            $updateAcordoItem->execute(
-                $oParam->itens,
-                $oParam->iAcordo,
-                $oParam->apostilamento->si03_sequencial
-            );
+            if (!empty($oParam->itens)) {
+                $updateAcordoItem = new UpdateAcordoItemCommand;
+                $updateAcordoItem->execute(
+                    $oParam->itens,
+                    $oParam->iAcordo,
+                    $oParam->apostilamento->si03_sequencial
+                );
+            }
 
             break;
     }
