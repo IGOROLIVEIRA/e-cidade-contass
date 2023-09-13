@@ -232,7 +232,7 @@ try {
             // Preenche a movimentação
             $oRetorno->aLinhasExtrato   = array();
             $retorno = lancamentos_conciliados($oParam->params[0]->movimentos, $conta, $data_conciliacao);
-            $oRetorno->aLinhasExtrato[] = $retorno["retorno"];
+            $oRetorno->aLinhasExtrato[] = $retorno;
             $oRetorno->error = false;
             if (array_key_exists("error", $retorno))
                 $oRetorno->error = $retorno["error"];
@@ -519,7 +519,7 @@ function lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
                     $conciliacao->k172_data = data($movimento->data_lancamento);
                     $conciliacao->k172_numcgm = trim($movimento->cgm);
                     $conciliacao->k172_coddoc = $tipo;
-                    $conciliacao->k172_mov = $movimento->movimentacao == "E" ? 1 : 2;
+                    $conciliacao->k172_mov = ($movimento->movimentacao == "E" OR $movimento->movimentacao == "EP") ? 1 : 2;
                     $conciliacao->k172_codigo = trim($documento);
                     $conciliacao->k172_valor = $valor;
                     $conciliacao->k172_dataconciliacao = $data_conciliacao;
@@ -530,8 +530,8 @@ function lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
                     $conciliacao->k172_data = data($movimento->data_lancamento);
                     $conciliacao->k172_numcgm = trim($movimento->cgm);
                     $conciliacao->k172_coddoc = $tipo;
-                    $conciliacao->k172_mov = $movimento->movimentacao == "E" ? 1 : 2;
-                    $conciliacao->k172_codigo = $documento;
+                    $conciliacao->k172_mov = ($movimento->movimentacao == "E" OR $movimento->movimentacao == "EP") ? 1 : 2;
+                    $conciliacao->k172_codigo = trim($documento);
                     $conciliacao->k172_valor = $valor;
                     $conciliacao->k172_dataconciliacao = $data_conciliacao;
                     $conciliacao->incluir();
@@ -601,8 +601,16 @@ function query_lancamentos($conta, $data_inicial, $data_final, $condicao_lancame
         $sql .= " UNION ALL ";
         $sql .= query_transferencias_credito($conta, $data_inicial, $data_final, $condicao_lancamento, data($dataImplantacao));
     }
-    $sql .= ") as w WHERE (valor_credito <> 0 AND valor_credito - COALESCE(retencao, 0) <> 0) ORDER BY w.data";
+    $sql .= ") as w " . where_retencoes() . " ORDER BY w.data";
     return $sql;
+}
+
+function where_retencoes() {
+    return " WHERE (
+                (valor_credito <> 0 AND (valor_credito - COALESCE(retencao, 0)) <> 0) 
+            OR 
+                (valor_debito <> 0 AND (valor_debito - COALESCE(retencao, 0)) <> 0)
+            ) ";
 }
 
 function query_empenhos($conta, $data_inicial, $data_final, $condicao_lancamento, $data_implantacao)
@@ -742,8 +750,8 @@ function movimentacao_extrato($conta, $dataInicial, $dataFinal, $movimentacao)
     $sql .= query_transferencias_debito_total($conta, $dataInicial, $dataFinal, $implantacao);
     $sql .= " union all ";
     $sql .= query_transferencias_credito_total($conta, $dataInicial, $dataFinal, $implantacao);
-    $sql .= ") as w WHERE (valor_credito <> 0 AND valor_credito - COALESCE(retencao, 0) <> 0) ORDER BY w.data";
-    // return $sql;
+    $sql .= ") as w " . where_retencoes() . " ORDER BY w.data";
+
     $query = pg_query($sql);
 
     $valor = 0;
@@ -1048,7 +1056,7 @@ END retencao ";
     $sql .= "         END ";
     $sql .= "         ) ";
     $sql .= "     ) ";
-    $sql .= " AND conc.k172_valor = corrente.k12_valor ";
+    // $sql .= " AND conc.k172_valor = corrente.k12_valor ";
     $sql .= " WHERE ";
 
     return $sql;
@@ -1069,8 +1077,8 @@ function query_baixa_padrao()
     $sql .= "     ordem::text ordem, ";
     $sql .= "     credor, ";
     $sql .= "     numcgm::text numcgm, ";
-    $sql .= utf8_encode(" 'Arrecadação de Receita' historico, ");
-    $sql .= "     0 as retencao ";
+    $sql .= utf8_encode(" 'Arrecadação de Receita' historico ");
+    $sql .= "     ,0 as retencao ";
     $sql .= " FROM ( ";
     $sql .= "    SELECT ";
     $sql .= "        data, ";

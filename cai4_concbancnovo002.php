@@ -393,7 +393,11 @@ function query_lancamentos($conta, $data_inicial, $data_final)
     $sql .= query_transferencias_debito($conta, $data_inicial, $data_final, $condicao_lancamento, $data_implantacao);
     $sql .= " union all ";
     $sql .= query_transferencias_credito($conta, $data_inicial, $data_final, $condicao_lancamento, $data_implantacao);
-    $sql .= ") as w WHERE (valor_credito <> 0 AND valor_credito - COALESCE(retencao, 0) <> 0) ORDER BY w.data";
+    $sql .= ") as w WHERE (
+        (valor_credito <> 0 AND (valor_credito - COALESCE(retencao, 0)) <> 0) 
+        OR (
+        (valor_debito <> 0 AND (valor_debito - COALESCE(retencao, 0)) <> 0)
+        )) ORDER BY w.data";
 
     return $sql;
 }
@@ -580,7 +584,11 @@ function movimentacao_extrato($conta, $inicio, $fim, $tipo) {
     $sql .= query_transferencias_debito_total($conta, $inicio, $fim, $implantacao);
     $sql .= " UNION ALL ";
     $sql .= query_transferencias_credito_total($conta, $inicio, $fim, $implantacao);
-    $sql .= ") as w WHERE (valor_credito <> 0 AND valor_credito - COALESCE(retencao, 0) <> 0) ORDER BY w.data";
+    $sql .= ") as w WHERE (
+        (valor_credito <> 0 AND (valor_credito - COALESCE(retencao, 0)) <> 0) 
+        OR (
+        (valor_debito <> 0 AND (valor_debito - COALESCE(retencao, 0)) <> 0)
+        )) ORDER BY w.data";
 
     $query = pg_query($sql);
 
