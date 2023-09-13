@@ -140,9 +140,10 @@ $rotulo->label("z01_cgccpf");
         si174_novadatatermino
         ";
 
-                $filtroempelemento = "";
-                if (!isset($pesquisa_chave)) {
-                    $campos = "empempenho.e60_numemp,
+        $filtroempelemento = "";
+        if (!isset($pesquisa_chave)) {
+          $campos = "empempenho.e60_numemp,
+          e60_emiss,
           empempenho.e60_codemp,
           empempenho.e60_anousu,
           empempaut.e61_autori,
@@ -404,12 +405,12 @@ $rotulo->label("z01_cgccpf");
 
                 $anoant = db_getsession("DB_anousu") - 1;
                 $ve70_abast = implode("-", array_reverse(explode("/", $ve70_abast)));
-    
+                $aCodEmp  = explode("/", $pesquisa_chave);
+                $dbwhere .= " e60_codemp = '" . $aCodEmp[0] . "'";
+                $dbwhere .= " and e60_anousu = " . $aCodEmp[1];
                 $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000') ";
                 $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
-                $dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast' and empempenho.e60_anousu = " . db_getsession("DB_anousu");
-                $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
-                $dbwhere .= "	and e91_anousu = " . db_getsession('DB_anousu') . ")";
+                $dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast' ";
                 $filtroempelemento = 1;
               }
 
@@ -510,7 +511,6 @@ $rotulo->label("z01_cgccpf");
               $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
               $sSql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
             }
-
             $result = $clempempenho->sql_record($sSql);
 
             if ($clempempenho->numrows != 0) {

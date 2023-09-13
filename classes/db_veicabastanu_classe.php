@@ -545,5 +545,10 @@ class cl_veicabastanu {
      }
      return $sql;
   }
+  function atualizacaoSaldoEmpenho($ve70_codigo)
+    {
+        db_query("update empempenho set e60_vlrutilizado = e60_vlrutilizado - (select ve70_valor from veicabast where ve70_codigo = $ve70_codigo) 
+        where e60_numemp = (select si05_numemp from empveiculos where si05_codabast = $ve70_codigo)");
+    }
 }
 ?>

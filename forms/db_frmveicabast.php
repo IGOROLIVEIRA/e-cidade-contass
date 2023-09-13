@@ -491,7 +491,7 @@ db_app::load("estilos.css");
     var valor_e60Codemp = document.form1.e60_codemp.value;
     var valor_ve70Dtabast = document.form1.ve70_dtabast.value;
     if (valor_e60Codemp != "" && valor_ve70Dtabast != "") {
-      js_pesquisae60_codemp(true, 0);
+      js_pesquisae60_codemp(false, 0);
     }
     if (valor_ve70Dtabast == "") {
       alert("Preencher Data de Abastecimento");
@@ -518,9 +518,9 @@ db_app::load("estilos.css");
   //--------------------------------
   //Para filtrar apenas empenhos com o elemento 333903099000000, usar o parametro filtroabast=1
   function js_pesquisae60_codemp(mostra, controlador) {
+    var ve70_abast = $F("ve70_dtabast");
+    var e60_codemp = $F("e60_codemp");
     if (mostra == true) {
-      var ve70_abast = $F("ve70_dtabast");
-      var e60_codemp = $F("e60_codemp");
       var e60_numemp = $F("si05_numemp");
       document.form1.ve70_vlrun.value = "";
       document.form1.ve70_litros.value = "";
@@ -535,7 +535,7 @@ db_app::load("estilos.css");
       }
 
     } else {
-      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&pesquisa_chave=' + document.form1.si05_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&lPesquisaPorCodigoEmpenho=1&ve70_abast=' + ve70_abast + '&pesquisa_chave=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
     }
   }
   /*
@@ -590,7 +590,8 @@ db_app::load("estilos.css");
    * }
    * */
 
-  function js_mostraempempenho(chave1) {
+  function js_mostraempempenho(chave1,erro) {
+    if(erro) return;
     document.form1.e60_codemp.value = chave1;
     db_iframe_empempenho.hide();
   }

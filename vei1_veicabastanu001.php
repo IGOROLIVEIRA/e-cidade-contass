@@ -46,6 +46,7 @@ if(isset($incluir)){
   $clveicabastanu->ve74_hora=db_hora();
   $clveicabastanu->ve74_usuario=db_getsession("DB_id_usuario");  
   $clveicabastanu->incluir($ve74_codigo);
+  $clveicabastanu->atualizacaoSaldoEmpenho($ve74_veicabast);
   $erro_msg=$clveicabastanu->erro_msg;
   if ($clveicabastanu->erro_status==0){
   	$sqlerro=true;
@@ -59,22 +60,6 @@ if(isset($incluir)){
   		$erro_msg=$clveicabast->erro_msg;
   	}  	  	
   }
-//  /**
-//   * Verificar Encerramento Periodo Contabil
-//   */
-//  $ve70_dtabast = db_utils::fieldsMemory(db_query($clveicabast->sql_query_file($ve74_veicabast,"ve70_dtabast")),0)->ve70_dtabast;
-//  if (!empty($ve70_dtabast)) {
-//    $clcondataconf = new cl_condataconf;
-//    if (!$clcondataconf->verificaPeriodoContabil($ve70_dtabast)) {
-//        echo "<script>alert(\"Qualquer coisa\");</script>";
-//      $sqlerro  = true;
-//      $erro_msg=$clcondataconf->erro_msg;
-//    }
-//  }
-
-    /**
-     * Verificar Encerramento Periodo Patrimonial
-     */
 
   $ve70_dtabast = db_utils::fieldsMemory(db_query($clveicabast->sql_query_file($ve74_veicabast,"ve70_dtabast")),0)->ve70_dtabast;
   if (!empty($ve70_dtabast)) {
