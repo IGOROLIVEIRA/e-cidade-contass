@@ -220,7 +220,7 @@ for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
 </html>
 <script type="text/javascript">
   var descricaoDocumento = "";
-  var permissaoDocumentos = new Map();
+  var protocolosComPermissaoParaDownload = new Map();
 
 
 
@@ -266,6 +266,7 @@ for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
   oGridDocumentos.allowSelectColumns(true);
   oGridDocumentos.show($('ctnDbGridDocumentos'));
   var anexosSigilosos = new Array();
+  var protocolosComPermissaoParaExclusao = new Array();
 
 
   /**
@@ -319,16 +320,20 @@ for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
 
             var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
             var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
-
-            permissaoDocumentos.set(oDocumento.iCodigoDocumento, oDocumento.permissao);
-
             var sHTMLBotoes = '';
+
+            if(departamentoLogado == oDocumento.iDepart){
+                protocolosComPermissaoParaExclusao.push(iIndice);
+            }
 
             if (oDocumento.nivelacesso == '1') {
 
               sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
               sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
               sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+
+              protocolosComPermissaoParaDownload.set(oDocumento.iCodigoDocumento, true);
+              
             } else {
 
               anexosSigilosos.push(iIndice);
@@ -339,16 +344,20 @@ for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
                 sHTMLBotoes += '<input type="button"  value="Alterar Acesso" onClick="js_alterarNivelAcessoDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
                 sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
                 sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
-
+                protocolosComPermissaoParaDownload.set(oDocumento.iCodigoDocumento, true);
               } else if (departamentoLogado == oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
                 sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
+                protocolosComPermissaoParaDownload.set(oDocumento.iCodigoDocumento, false);
               } else if (departamentoLogado == oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
                 sHTMLBotoes += '<input type="button"  value="Alterar" onClick="js_alterarDocumento(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\' );" />  ';
                 sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+                protocolosComPermissaoParaDownload.set(oDocumento.iCodigoDocumento, true);
               } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && oDocumento.permissao) {
                 sHTMLBotoes += '<input type="button" value="Download" onClick="js_downloadDocumento(' + oDocumento.iCodigoDocumento + ');" />  ';
+                protocolosComPermissaoParaDownload.set(oDocumento.iCodigoDocumento, true);
               } else if (departamentoLogado != oDocumento.iDepart && adm != 1 && !oDocumento.permissao) {
                 sHTMLBotoes += '<input type="button" value="Detalhes" onClick="js_detalhes(' + oDocumento.iCodigoDocumento + ', \'' + sDescricaoDocumento + '\' , \'' + oDocumento.nivelacesso + '\');" />  ';
+                protocolosComPermissaoParaDownload.set(oDocumento.iCodigoDocumento, false);
               }
 
 
@@ -401,8 +410,7 @@ for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
     var aDocumentos = [];
 
     for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
-
-      if (anexosSigilosos.includes(documentosSelecionados[iIndice].getRowNumber()) == true) {
+      if (protocolosComPermissaoParaExclusao.includes(documentosSelecionados[iIndice].getRowNumber()) == true) {
         alert("Usuário sem permissão para excluir documento selecionado.");
         return false;
       }
@@ -606,7 +614,7 @@ for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
     }
 
     if (codigosDosDocumentos.length == '1') {
-      if (permissaoDocumentos.get(codigosDosDocumentos[0]) == true) {
+      if (protocolosComPermissaoParaDownload.get(codigosDosDocumentos[0]) == true) {
         js_downloadDocumento(codigosDosDocumentos[0])
         js_removeObj("msgbox");
         return false;
@@ -630,7 +638,7 @@ for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
 
       oCodigoDocumento.exec = 'download'
       oCodigoDocumento.iCodigoDocumento = codigoDoDocumento
-      if (permissaoDocumentos.get(codigoDoDocumento) == true) {
+      if (protocolosComPermissaoParaDownload.get(codigoDoDocumento) == true) {
         urlDosArquivos.push(js_arquivos(oCodigoDocumento))
 
       }
