@@ -474,6 +474,7 @@ if (isset($incluir)) {
 			$clliclicita->l20_dataaber = $l20_dataaber;
 			$clliclicita->l20_datacria = $l20_datacria;
 			$clliclicita->l20_recdocumentacao = $l20_dataaberproposta;
+			$clliclicita->l20_dataaberproposta = $l20_dataaberproposta;
 			$clliclicita->incluir(null, null);
 
 			if ($clliclicita->erro_status == "0") {
