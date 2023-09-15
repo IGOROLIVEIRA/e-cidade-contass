@@ -48,7 +48,7 @@ if (isset($incluir)) {
     $pendencia = new cl_conciliacaobancariapendencia;
     $pendencia->k173_conta = $conta;
     $pendencia->k173_tipolancamento = $tipo_lancamento;
-    $pendencia->k173_mov = $movimento == "E" ? 1 : 2;
+    $pendencia->k173_mov = ($movimento == "E" OR $movimento == "EP") ? 1 : 2;
     $pendencia->k173_tipomovimento = $tipo_movimento ? tipoDocumentoLancamento($tipo_movimento) : "";
     $pendencia->k173_numcgm = $z01_numcgm;
     $pendencia->k173_codigo = $codigo;
@@ -72,7 +72,7 @@ if (isset($alterar)) {
         $pendencia->k173_sequencial = $sequencial;
         $pendencia->k173_conta = $conta;
         $pendencia->k173_tipolancamento = $tipo_lancamento;
-        $pendencia->k173_mov = $movimento == "E" ? 1 : 2;
+        $pendencia->k173_mov = ($movimento == "E" OR $movimento == "EP") ? 1 : 2;
         $pendencia->k173_tipomovimento = $tipo_movimento ? tipoDocumentoLancamento($tipo_movimento) : "";
         $pendencia->k173_numcgm = $z01_numcgm;
         $pendencia->k173_codigo = $codigo;
