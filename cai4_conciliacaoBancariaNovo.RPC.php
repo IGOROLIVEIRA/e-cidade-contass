@@ -498,7 +498,7 @@ function lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
     // $retorno[] = $movimentos;
     // $retorno[] = $movimentos;
     foreach ($movimentos as $id => $movimento) {
-        // $retorno[] = $movimento;
+        $retorno[] = $movimento;
         $i = 0;
         foreach ($movimento->tipo as $tipo) {
             $valor = $movimento->valor[$i];
@@ -506,7 +506,8 @@ function lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
             $documento = trim($movimento->codigo[$i] . $movimento->documento[$i]);
             $data = data($movimento->data_lancamento);
             if ($data <= $data_conciliacao) {
-                $where = where_conciliados($conta, $data, $tipo, $valor, NULL, $numcgm, $documento);
+                $mov = ($movimento->movimentacao == "E" OR $movimento->movimentacao == "EP") ? 1 : 2;
+                $where = where_conciliados($conta, $data, $tipo, $valor, NULL, $numcgm, $documento, $mov);
 
                 $conciliacao = new cl_conciliacaobancarialancamento();
 
@@ -519,7 +520,7 @@ function lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
                     $conciliacao->k172_data = data($movimento->data_lancamento);
                     $conciliacao->k172_numcgm = trim($movimento->cgm);
                     $conciliacao->k172_coddoc = $tipo;
-                    $conciliacao->k172_mov = ($movimento->movimentacao == "E" OR $movimento->movimentacao == "EP") ? 1 : 2;
+                    $conciliacao->k172_mov = $mov;
                     $conciliacao->k172_codigo = trim($documento);
                     $conciliacao->k172_valor = $valor;
                     $conciliacao->k172_dataconciliacao = $data_conciliacao;
@@ -558,7 +559,8 @@ function excluir_lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
                 $numcgm = trim($movimento->cgm);
                 $documento = trim($movimento->codigo[$i] . $movimento->documento[$i]);
                 $data = data($movimento->data_lancamento);
-                $where = where_conciliados($conta, $data, $tipo, $valor, data($movimento->data_conciliacao), $numcgm, $documento);
+                $mov = ($movimento->movimentacao == "E" OR $movimento->movimentacao == "EP") ? 1 : 2;
+                $where = where_conciliados($conta, $data, $tipo, $valor, data($movimento->data_conciliacao), $numcgm, $documento, $mov);
                 $conciliacao = new cl_conciliacaobancarialancamento();
                 // $retorno[] = $where;
                 $retorno[] = $conciliacao->excluir(null, $where);
@@ -569,12 +571,13 @@ function excluir_lancamentos_conciliados($movimentos, $conta, $data_conciliacao)
     return $retorno;
 }
 
-function where_conciliados($conta, $data, $tipo, $valor, $data_conciliacao, $numcgm, $documento)
+function where_conciliados($conta, $data, $tipo, $valor, $data_conciliacao, $numcgm, $documento, $mov)
 {
     $where = "k172_conta = {$conta} AND k172_data = '{$data}' AND round(k172_valor,2) = round({$valor},2) ";
     $where .= $data_conciliacao ? " AND k172_dataconciliacao = '{$data_conciliacao}' " : " ";
     $where .= $tipo ? " AND k172_coddoc = {$tipo} " : " AND k172_coddoc IS NULL ";
     $where .= $numcgm ? " AND k172_numcgm = {$numcgm} " :  " AND k172_numcgm IS NULL ";
+    $where .= $mov ? " AND k172_mov = {$mov} " : " AND k172_mov IS NULL ";
     // $documento = preg_replace( "~\x{00a0}~siu", "", $documento);
     $where .= $documento ? " AND k172_codigo = '{$documento}' " : " AND (k172_codigo IS NULL OR k172_codigo = '') ";
 
@@ -1007,7 +1010,7 @@ function query_padrao_op()
             WHERE
                 e20_pagordem = coremp.k12_codord
                 AND e27_principal IS true
-                -- AND e23_ativo IS FALSE
+                AND e23_ativo IS FALSE
                 AND corgrupocorrente.k105_corgrupotipo = 3
             ) as x  WHERE  round(valor_retencao, 2) = corrente.k12_valor
     )
