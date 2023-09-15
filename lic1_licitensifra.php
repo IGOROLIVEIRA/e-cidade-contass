@@ -237,34 +237,6 @@ $codtribunal = $codtribunal->l03_pctipocompratribunal;
                 parent.parent.document.formaba.liclicitemlote.disabled = false;
             }
 
-            if (codtribunal == 100 || codtribunal == 101 || codtribunal == 102 || codtribunal == 103) {
-
-                if (tipoJulgamento == '1') {
-                    if (naturezaObj == '1' || naturezaObj == '7') {
-                        parent.parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
-                    }
-                }
-
-            }
-
-            let oParam = new Object();
-            oParam.exec = 'getRedirecionaEdital';
-            oParam.licitacao = licitacao;
-            var oAjax = new Ajax.Request('lic4_licitacao.RPC.php', {
-                method: 'POST',
-                parameters: 'json=' + Object.toJSON(oParam),
-                onComplete: (oAjax) => {
-
-                    let response = eval('(' + oAjax.responseText + ')');
-
-                    if (response.redireciona_edital && tipoJulgamento != '3') {
-                        parent.parent.window.location.href = `lic4_editalabas.php?licitacao=${licitacao}`;
-                    } else {
-                        //parent.parent.mo_camada('liclicitemlote');
-                    }
-                }
-            });
-
         }
         if (oRetorno.status == 2) {
             js_removeObj('msgbox');

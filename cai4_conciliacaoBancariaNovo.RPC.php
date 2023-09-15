@@ -270,11 +270,11 @@ try {
             $conta = $oParam->params[0]->conta;
             // Preenche os dados para retorno
             $oDadosLinha = new StdClass();
-            $oDadosLinha->saldo_anterior     = saldo_anterior_extrato($conta, $data_inicial, $data_final);
-            $oDadosLinha->total_entradas     = movimentacao_extrato($conta, $data_inicial, $data_final, 1);
-            $oDadosLinha->total_saidas       = movimentacao_extrato($conta, $data_inicial, $data_final, 2);
-            $oDadosLinha->saldo_final        = saldo_final_extrato($conta, $data_final);
-            $oDadosLinha->valor_conciliado   = valor_conciliado($conta, $data_final);
+            $oDadosLinha->saldo_anterior   = saldo_anterior_extrato($conta, $data_inicial, $data_final);
+            $oDadosLinha->total_entradas   = movimentacao_extrato($conta, $data_inicial, $data_final, 1);
+            $oDadosLinha->total_saidas     = movimentacao_extrato($conta, $data_inicial, $data_final, 2);
+            $oDadosLinha->saldo_final      = saldo_final_extrato($conta, $data_final);
+            $oDadosLinha->valor_conciliado = valor_conciliado($conta, $data_final);
             $oDadosLinha->fechar_conciliacao = fechar_conciliacao($conta, $data_final);
             // Retorna os dados
             $oRetorno->aLinhasExtrato[] = $oDadosLinha;
@@ -743,8 +743,7 @@ function query_transferencias_credito($conta, $data_inicial, $data_final, $condi
 function movimentacao_extrato($conta, $dataInicial, $dataFinal, $movimentacao)
 {
     $implantacao = data(data_implantacao());
-    $sql = " SELECT * FROM ( ";
-    $sql .= query_empenhos_total($conta, $dataInicial, $dataFinal, $implantacao);
+    $sql  = query_empenhos_total($conta, $dataInicial, $dataFinal, $implantacao);
     $sql .= " UNION ALL ";
     $sql .= query_baixa_total($conta, $dataInicial, $dataFinal, $implantacao);
     $sql .= " union all ";
@@ -1160,8 +1159,7 @@ function query_pendencias($conta, $data_inicial, $data_final, $tipo)
     $sql .= "     '' as ordem, ";
     $sql .= "     z01_nome credor, ";
     $sql .= "     k173_numcgm::text numcgm, ";
-    $sql .= "     k173_sequencial::text as historico, ";
-    $sql .= "     0 as retencao ";
+    $sql .= "     k173_sequencial::text as historico ";
     $sql .= " FROM conciliacaobancariapendencia ";
     $sql .= " LEFT JOIN cgm ON z01_numcgm = k173_numcgm ";
     $sql .= " LEFT JOIN conciliacaobancarialancamento ON k172_data = k173_data ";
@@ -1202,8 +1200,7 @@ function query_padrao_rec($conta, $condicao)
   ordem :: text,
   credor,
   numcgm :: text as numcgm,
-  '' as historico,
-  0 as retencao
+  '' as historico
  from
   (
       select
@@ -1309,8 +1306,7 @@ function query_padrao_slip_debito()
   '' as ordem,
   z01_nome::text as credor,
   z01_numcgm::text as numcgm,
-  '' as historico,
-  0 as retencao
+  '' as historico
  from
   corlanc
   inner join corrente on corrente.k12_id = corlanc.k12_id
@@ -1378,8 +1374,7 @@ function query_padrao_slip_credito()
       '' as ordem,
       z01_nome::text as credor,
       z01_numcgm::text as numcgm,
-      '' as historico, 
-      0 as retencao
+      '' as historico
   from
       corrente
       inner join corlanc on corrente.k12_id = corlanc.k12_id
@@ -1488,15 +1483,13 @@ function condicao_retencao()
     $sql .= "     LEFT JOIN slipempagemovslips ON k107_sequencial = k108_empagemovslips ";
     $sql .= "     LEFT JOIN retencaocorgrupocorrente ON e23_sequencial = e47_retencaoreceita ";
     $sql .= "     LEFT JOIN corgrupocorrente ON e47_corgrupocorrente = k105_sequencial ";
-    $sql .= "    AND k105_data = e20_data ";
     $sql .= "     LEFT JOIN cornump as numpre ON numpre.k12_data = k105_data ";
     $sql .= "         AND numpre.k12_autent = k105_autent ";
     $sql .= "         AND numpre.k12_id = k105_id ";
     $sql .= "     LEFT JOIN issplannumpre ON numpre.k12_numpre = q32_numpre ";
     $sql .= "     WHERE e20_pagordem = coremp.k12_codord ";
     $sql .= "         AND e27_principal IS true ";
-    $sql .= "        AND k105_sequencial IS NOT NULL ";
-    // $sql .= "         AND e23_ativo IS true ";
+    $sql .= "         AND e23_ativo IS true ";
     $sql .= "     ) as w ";
     $sql .= " WHERE round(retencao,2) = round(corrente.k12_valor,2) ";
     $sql .= " ) IS NULL ";
