@@ -345,7 +345,7 @@ if ($_GET["quantidade"] != null || $_GET["quantidade"] != 0){
 }
 $rsNotifica = db_query($sql) or die($sql);
 
-if (pg_numrows($result) == 0){
+if (pg_numrows($rsNotifica) == 0){
 
   $oParms = new stdClass();
   $oParms->sLista = $lista;
@@ -801,7 +801,7 @@ for($indx=0;$indx < $numrows; $indx++) {
     $tipo_arrecadacao = 0;
     $tipo_cobranca    = 0;
     $dt_venc          = substr($db_datausu,0,10);
-	  $tot_desc 	      = 0 ;
+    $tot_desc 	      = 0 ;
 
 		try {
 		  $oRecibo = new recibo(2, null, 23);
@@ -1024,8 +1024,13 @@ for($indx=0;$indx < $numrows; $indx++) {
         if ($somenteparc == false and $somenteiptu == false) {
 
             $dataAtual = new DateTime(date($db_datausu));
-            $dataAtual = new DateTime(date($k60_datadeb));
-            $tributos = Notidebitos::getSomaTributosCorrigidosPorAnoDescricao($notifica, $dataAtual, $dataAtual, $dataAtual, db_getsession("DB_anousu"));
+            $tributos = Notidebitos::getSomaTributosCorrigidosPorAnoDescricao(
+                $notifica,
+                $dataAtual,
+                $dataAtual,
+                $dataAtual,
+                $dataAtual->format('Y')
+            );
 
             if (empty($tributos)) {
 
