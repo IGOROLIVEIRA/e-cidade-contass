@@ -276,7 +276,7 @@ if($this->hasQrCode) {
     $this->objpdf->RoundedRect(178,$y+29,23,6,2,'DF','1234'); // valor
     $this->objpdf->Image($this->qrcode,181,$y+3, 17, 17, 'png');
     $this->objpdf->SetFont('Arial','',5);
-    $this->objpdf->Text(180,$y+3,'Pague com QRCode'); // livre
+    $this->objpdf->Text(180,$y+3,'Pague com PIX'); // livre
 } else {
     $this->objpdf->RoundedRect(178,$y+1,23,6,2,'DF','1234'); // livre
     $this->objpdf->RoundedRect(95,$y+22,106,13,2,'DF','1234'); // instrucoes
