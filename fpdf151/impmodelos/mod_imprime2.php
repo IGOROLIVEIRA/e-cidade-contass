@@ -84,7 +84,7 @@ for ($i = 0;$i < 2;$i++){
       $this->objpdf->Roundedrect($xcol+167,$xlin+24,35,35,2,'DF','1234');
       $this->objpdf->Image($this->qrcode, 176, $xlin+29, 25, 25, 'png');
       $this->objpdf->SetFont('Arial','',5);
-      $this->objpdf->Text(173,$xlin+27,'Pague com QRCode'); // livre
+      $this->objpdf->Text(173,$xlin+27,'Pague com PIX'); // livre
   } else {
       $this->objpdf->Roundedrect($xcol,$xlin+24,202,35,2,'DF','1234');
   }
