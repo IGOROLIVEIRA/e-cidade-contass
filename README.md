@@ -79,7 +79,7 @@ db_input(
 
 
 ## Usando docker na v3
-Para usar o docker primeiro edit o env com a porta para o apache
+Para configurar o docker primeiro edit o env com a porta para o apache
 ```bash
     $cp .env-exemplo .env
 ```
@@ -87,6 +87,11 @@ Para usar o docker primeiro edit o env com a porta para o apache
 Depois execute o comando para subir o docker do apache
 ```bash
     $docker-compose up -d 
+```
+
+Depois execute o comando para parar o docker do apache
+```bash
+    $docker-compose down
 ```
 
 Acesse no navegador com o portal informada no .env: http://localhost:8888
