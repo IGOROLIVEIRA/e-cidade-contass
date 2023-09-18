@@ -1086,7 +1086,8 @@ function query_pendencias($conta, $data_inicial, $data_final, $tipo)
     $sql .= "     '' as ordem, ";
     $sql .= "     z01_nome credor, ";
     $sql .= "     k173_numcgm::text numcgm, ";
-    $sql .= "     k173_sequencial::text as historico ";
+    $sql .= "     k173_sequencial::text as historico, ";
+    $sql .= " 0 as retencao";
     $sql .= " FROM conciliacaobancariapendencia ";
     $sql .= " LEFT JOIN cgm ON z01_numcgm = k173_numcgm ";
     $sql .= " LEFT JOIN conciliacaobancarialancamento ON k172_data = k173_data ";
@@ -1127,7 +1128,8 @@ function query_padrao_rec($conta, $condicao)
   ordem :: text,
   credor,
   numcgm :: text as numcgm,
-  '' as historico
+  '' as historico,
+  0 as retencao
  from
   (
       select
@@ -1233,7 +1235,8 @@ function query_padrao_slip_debito()
   '' as ordem,
   z01_nome::text as credor,
   z01_numcgm::text as numcgm,
-  '' as historico
+  '' as historico,
+  0 as retencao
  from
   corlanc
   inner join corrente on corrente.k12_id = corlanc.k12_id
@@ -1301,7 +1304,8 @@ function query_padrao_slip_credito()
       '' as ordem,
       z01_nome::text as credor,
       z01_numcgm::text as numcgm,
-      '' as historico
+      '' as historico,
+      0 as retencao
   from
       corrente
       inner join corlanc on corrente.k12_id = corlanc.k12_id
