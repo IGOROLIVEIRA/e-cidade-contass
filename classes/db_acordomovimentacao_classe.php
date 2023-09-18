@@ -54,14 +54,14 @@ class cl_acordomovimentacao
   var $ac10_hora = null;
   var $ac10_obs = null;
   var $ac10_justificativa = null;
-  // cria propriedade com as variaveis do arquivo 
+  // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 ac10_sequencial = int4 = Sequencial 
-                 ac10_acordomovimentacaotipo = int4 = Acordo Movimentação Tipo 
-                 ac10_acordo = int4 = Acordo 
-                 ac10_id_usuario = int4 = Codigo Usuario 
-                 ac10_datamovimento = date = Data Movimentação 
-                 ac10_hora = char(5) = Hora 
+                 ac10_sequencial = int4 = Sequencial
+                 ac10_acordomovimentacaotipo = int4 = Acordo Movimentação Tipo
+                 ac10_acordo = int4 = Acordo
+                 ac10_id_usuario = int4 = Codigo Usuario
+                 ac10_datamovimento = date = Data Movimentação
+                 ac10_hora = char(5) = Hora
                  ac10_obs = text = Observacaoo
                  ac10_justificativa = text = Justificativa
                  ";
@@ -664,5 +664,27 @@ class cl_acordomovimentacao
       }
     }
     return $sql;
+  }
+  public function subQueryUltimoAcordoHomologado()
+  {
+    return "SELECT max(ac10_sequencial)
+    FROM acordomovimentacao
+    WHERE ac10_acordomovimentacaotipo = 11
+        AND NOT EXISTS
+            (SELECT 1
+             FROM acordoempautoriza
+             WHERE ac45_acordo = ac16_sequencial)
+        AND ac16_instit =1";
+  }
+
+  public function getUltimaAssinatura($acordo)
+  {
+    return "
+    SELECT
+        max(ac10_sequencial)
+    FROM acordomovimentacao
+    WHERE ac10_acordo = {$acordo}
+        AND ac10_acordomovimentacaotipo = 2;
+    ";
   }
 }

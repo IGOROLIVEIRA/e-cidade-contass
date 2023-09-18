@@ -25,6 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_conecta.php");
@@ -50,6 +51,7 @@ require_once("model/licitacao.model.php");
 require_once("model/Dotacao.model.php");
 require_once("model/MaterialCompras.model.php");
 require_once("std/DBDate.php");
+require_once("model/AcordoMovimentacao.model.php");
 
 $oJson    = new services_json();
 $oRetorno = new stdClass();
@@ -117,7 +119,7 @@ switch ($oParam->exec) {
    * Cancelar homologação para o contrato
    */
     case "cancelarHomologacao":
-
+        
         try {
 
             db_inicio_transacao();
@@ -365,16 +367,19 @@ switch ($oParam->exec) {
         try {
 
             db_inicio_transacao();
+            $ac10Sequencial = $oParam->codigo;
+            if(!empty($oParam->acordoMovimentacaoTipo) && $oParam->acordoMovimentacaoTipo == '11') {
+                $oHomologacao = new AcordoHomologacao($oParam->codigo);
+                $oHomologacao->setObservacao($sObservacao);
+                $oHomologacao->cancelar();
+                $oAcordo                   = new Acordo($oHomologacao->getAcordo());
+                $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+                $sHistorico = "Valor referente a cancelamento da homologação do contrato de código: {$oAcordo->getCodigoAcordo()}.";
+                $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $oAcordo->getValorContrato(), $sHistorico, $oHomologacao->getDataMovimento());
+                $ac10Sequencial = $oHomologacao->getUltimaAssinatura($oParam->ac16Sequencial);
+            }
 
-            $oHomologacao = new AcordoHomologacao($oParam->codigo);
-            $oHomologacao->setObservacao($sObservacao);
-            $oHomologacao->cancelar();
-            $oAcordo                   = new Acordo($oHomologacao->getAcordo());
-            $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
-            $sHistorico = "Valor referente a cancelamento da homologação do contrato de código: {$oAcordo->getCodigoAcordo()}.";
-            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $oAcordo->getValorContrato(), $sHistorico, $oHomologacao->getDataMovimento());
-
-            $oAssinatura = new AcordoAssinatura($oParam->codigo);
+            $oAssinatura = new AcordoAssinatura($ac10Sequencial);
 
             /*
             if (!$oAssinatura->verificaPeriodoPatrimonial()) {

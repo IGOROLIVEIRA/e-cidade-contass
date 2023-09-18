@@ -1,33 +1,32 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2014  DBSeller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
-
 /**
  * Classe abstrata para tratar uma movimentação
- * 
+ *
  * @package Contratos
  */
 abstract class AcordoMovimentacao
@@ -111,7 +110,7 @@ abstract class AcordoMovimentacao
 
   /**
    * Retorna a data de movimentação
-   * 
+   *
    * @return string
    */
   public function getDataMovimento()
@@ -122,7 +121,7 @@ abstract class AcordoMovimentacao
 
   /**
    * Retorna o código de movimentação
-   * 
+   *
    * @return integer
    */
   public function getCodigo()
@@ -133,7 +132,7 @@ abstract class AcordoMovimentacao
 
   /**
    * Retorna o id do usuário logado no sistema
-   * 
+   *
    * @return integer
    */
   public function getUsuario()
@@ -144,7 +143,7 @@ abstract class AcordoMovimentacao
 
   /**
    * Retorna a hora atual
-   * 
+   *
    * @return string
    */
   public function getHora()
@@ -155,7 +154,7 @@ abstract class AcordoMovimentacao
 
   /**
    * Retorna o acordo
-   * 
+   *
    * @return integer
    */
   public function getAcordo()
@@ -166,7 +165,7 @@ abstract class AcordoMovimentacao
 
   /**
    * Retorna o tipo de acordo
-   * 
+   *
    * @return integer
    */
   public function getTipo()
@@ -177,7 +176,7 @@ abstract class AcordoMovimentacao
 
   /**
    * Retorna a observação da movimentação
-   * 
+   *
    * @return string
    */
   public function getObservacao()
@@ -188,7 +187,7 @@ abstract class AcordoMovimentacao
 
    /**
    * Retorna a justificativa da movimentação
-   * 
+   *
    * @return string
    */
   public function getJustificativa()
@@ -199,7 +198,7 @@ abstract class AcordoMovimentacao
 
   /**
    * Seta o acordo de movimentação
-   * 
+   *
    * @param integer $iAcordo
    */
   public function setAcordo($iAcordo)
@@ -210,7 +209,7 @@ abstract class AcordoMovimentacao
 
   /**
    * Seta o tipo de acordo para a movimentação
-   * 
+   *
    * @param integer $iTipo
    */
   public function setTipo($iTipo)
@@ -221,7 +220,7 @@ abstract class AcordoMovimentacao
 
   /**
    * Seta a observação da movimentação
-   * 
+   *
    * @param string $sObservacao
    */
   public function setObservacao($sObservacao)
@@ -232,7 +231,7 @@ abstract class AcordoMovimentacao
 
    /**
    * Seta a observação da movimentação
-   * 
+   *
    * @param string $sJustificativa
    */
   public function setJustificativa($sJustificativa)
@@ -243,7 +242,7 @@ abstract class AcordoMovimentacao
 
   /**
    * Método construtor
-   * 
+   *
    * @param integer $iCodigo
    */
   public function __construct($iCodigo = null)
@@ -485,7 +484,7 @@ abstract class AcordoMovimentacao
     return $this;
   }
   /**
-   * corrige as reservas de saldo 
+   * corrige as reservas de saldo
    *
    */
   protected function corrigeReservas()
@@ -608,7 +607,7 @@ abstract class AcordoMovimentacao
 
   /**
    * Remove um acordomovimentacao
-   * 
+   *
    * @throws DBException
    * @throws BusinessException
    */
@@ -657,5 +656,18 @@ abstract class AcordoMovimentacao
     }
 
     return $retorno;
+  }
+
+  public function getUltimaAssinatura($acordo)
+  {
+    $oDaoAcordoMovimentacao     = db_utils::getDao("acordomovimentacao");
+    $sql = $oDaoAcordoMovimentacao->getUltimaAssinatura($acordo);
+    $result = $oDaoAcordoMovimentacao->sql_record($sql);
+
+    if ($oDaoAcordoMovimentacao->erro_status === 0) {
+        throw new Exception($oDaoAcordoMovimentacao->erro_msg);
+    }
+
+    return db_utils::fieldsMemory($result, 0)->max;
   }
 }

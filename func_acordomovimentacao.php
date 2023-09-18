@@ -171,15 +171,10 @@ $sAnd   = "";
           } else {
             if (!empty($homologados)) {
                 $sWhere .= "
-                OR (ac10_acordomovimentacaotipo = 11
-                AND NOT EXISTS
-                    (SELECT 1
-                     FROM acordoempautoriza
-                     WHERE ac45_acordo = ac16_sequencial)
-                AND ac16_instit =". db_getsession("DB_instit") .")";
+                OR ac10_sequencial = ({$clacordomovimentacao->subQueryUltimoAcordoHomologado()})";
             }
             $sql    = $clacordomovimentacao->sql_query_verificacancelado("", $campos, "ac10_sequencial", $sWhere);
-          }
+            }
 
         } else {
 
