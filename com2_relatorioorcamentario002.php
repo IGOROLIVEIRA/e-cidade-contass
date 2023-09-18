@@ -171,7 +171,7 @@ for ($iCont = 0; $iCont < pg_num_rows($resultpreco); $iCont++) {
        $oResult = db_utils::fieldsMemory($resultpreco, $iCont);
 
        //    if($quant_casas){
-       $lTotal = round($oResult->si02_vltotalprecoreferencia,$oResult->si01_casasdecimais) * $oResult->pc11_quant;
+       $lTotal = round($oResult->si02_vltotalprecoreferencia, $oResult->si01_casasdecimais) * $oResult->pc11_quant;
        $nTotalItens += $lTotal;
 }
 
@@ -209,7 +209,7 @@ $sqlparag = "select db02_texto from db_paragrafo inner join db_docparag on db02_
 $resparag = db_query($sqlparag);
 
 
-$head5 = "SOLICITAÇÃO DE PARECER DE DISPONIBILIDADE FINANCEIRA";
+$head5 = "SOLICITAO DE PARECER DE DISPONIBILIDADE FINANCEIRA";
 
 $pdf = new PDF();
 $pdf->Open();
@@ -221,7 +221,7 @@ $pdf->addPage('P');
 $alt = 3;
 $pdf->SetFont('arial','B',14);
 $pdf->ln($alt + 4);
-$pdf->cell(190,4,"SOLICITAÇÃO DE PARECER DE DISPONIBILIDADE FINANCEIRA",0,1,"C",0);
+$pdf->cell(190,4,"SOLICITAO DE PARECER DE DISPONIBILIDADE FINANCEIRA",0,1,"C",0);
 $pdf->ln($alt + 4);
 $pdf->SetFont('arial','',11);
 if(pg_num_rows($resparag) != 0){
