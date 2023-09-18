@@ -670,6 +670,11 @@ class cl_acordomovimentacao
     return "SELECT max(ac10_sequencial)
     FROM acordomovimentacao
     WHERE ac10_acordomovimentacaotipo = 11
+        AND ac10_sequencial > (
+                SELECT max(ac10_sequencial)
+                FROM acordomovimentacao
+                WHERE ac10_acordomovimentacaotipo = 12
+                )
         AND NOT EXISTS
             (SELECT 1
              FROM acordoempautoriza
