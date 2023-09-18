@@ -15,6 +15,7 @@ class Oc21128 extends AbstractMigration
 
         COMMIT;
         "
+        $this->execute($sql);
 
     }
 }
