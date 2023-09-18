@@ -167,10 +167,10 @@ EXPOSE 80
 
 WORKDIR /var/www/html
 
-RUN chmod -R 775 *
+RUN chmod -R 775 /var/www/html/*
 
-RUN chmod -R 777  tmp
-
-RUN chmod composer install
+#RUN chmod -R 777 /var/www/html/tmp/
+#
+#RUN /var/www/html/composer install
 
 CMD ["/bin/bash", "/iniciar.sh"]
