@@ -197,7 +197,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
     $oLinha = null;
 
     $sWhere  = " db02_descr like 'ASS. RESP. DEC. DE RECURSOS FINANCEIROS' ";
-    //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
+    //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSVEL PELA DECLARAO DE RECURSOS FINANCEIROS' ";
     $sWhere .= " AND db03_instit = db02_instit ";
     $sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
 
@@ -208,8 +208,8 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
     $oLinha = db_utils::fieldsMemory($rs, 0)->db02_texto;
 
 
-    $sWhere  = " db02_descr like 'RESPONSÁVEL PELA COTAÇÃO' ";
-    //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
+    $sWhere  = " db02_descr like 'RESPONSVEL PELA COTAO' ";
+    //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSVEL PELA DECLARAO DE RECURSOS FINANCEIROS' ";
     $sWhere .= " AND db03_instit = db02_instit ";
     $sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
 
@@ -237,7 +237,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
     <html xmlns="http://www.w3.org/1999/html">
 
     <head>
-        <title>Relatório</title>
+        <title>Relatrio</title>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     </head>
     <style>
@@ -256,7 +256,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
     <body>
         <center>
             <div>
-                <strong>Preço de Referência</strong>
+                <strong>Preo de Referncia</strong>
             </div>
             <div>
                 <p>Processo de Compras: <?= $codigo_preco ?></p>
@@ -271,7 +271,7 @@ WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0";
             <tr>
                 <td><strong>SEQ</strong></td>
                 <td><strong>ITEM</strong></td>
-                <td><strong>DESCRIÇÃO DO ITEM</strong></td>
+                <td><strong>DESCRIO DO ITEM</strong></td>
                 <td><strong>TAXA/TABELA</strong></td>
                 <td><strong>VALOR UN</strong></td>
                 <td><strong>QUANT</strong></td>
@@ -286,7 +286,7 @@ HTML;
             <tr>
                 <td><strong>SEQ</strong></td>
                 <td><strong>ITEM</strong></td>
-                <td><strong>DESCRIÇÃO DO ITEM</strong></td>
+                <td><strong>DESCRIO DO ITEM</strong></td>
                 <td><strong>VALOR UN</strong></td>
                 <td><strong>QUANT</strong></td>
                 <td><strong>UN</strong></td>
@@ -318,7 +318,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 
                 $rsResult2 = db_query($sSql2) or die(pg_last_error());
                 $oResult2 = db_utils::fieldsMemory($rsResult2,0);
-                $lTotal = round($oResult->si02_vlprecoreferencia,$si01_casasdecimais) * $oResult->si02_qtditem;
+                $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * $oResult->si02_qtditem;
 
                 $nTotalItens += $lTotal;
                 $oDadosDaLinha = new stdClass();
@@ -358,7 +358,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                     $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                     $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
                     if($controle==1){
-                        $lTotal = round($oResult->si02_vlprecoreferencia,$si01_casasdecimais) * ($oResult->si02_qtditem - $valorqtd);
+                        $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * ($oResult->si02_qtditem - $valorqtd);
                     }
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                 } else {
@@ -376,7 +376,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                     
                     $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
                     if($controle==0 && $fazerloop==2){
-                        $lTotal = round($oResult->si02_vlprecoreferencia,$si01_casasdecimais) * ($oResult->si02_qtditem - $valorqtd);
+                        $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * ($oResult->si02_qtditem - $valorqtd);
                     }else if($controle==1 && $fazerloop==2){
                         $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * $valorqtd;
                     }
@@ -459,7 +459,7 @@ HTML;
     $oLinha = null;
 
     $sWhere  = " db02_descr like 'ASS. RESP. DEC. DE RECURSOS FINANCEIROS' ";
-    //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
+    //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSVEL PELA DECLARAO DE RECURSOS FINANCEIROS' ";
     $sWhere .= " AND db03_instit = db02_instit ";
     $sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
 
@@ -470,8 +470,8 @@ HTML;
     $oLinha = db_utils::fieldsMemory($rs, 0)->db02_texto;
 
 
-    $sWhere  = " db02_descr like 'RESPONSÁVEL PELA COTAÇÃO' ";
-    //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSÁVEL PELA DECLARAÇÃO DE RECURSOS FINANCEIROS' ";
+    $sWhere  = " db02_descr like 'RESPONSVEL PELA COTAO' ";
+    //$sWhere .= " AND db03_descr like 'ASSINATURA DO RESPONSVEL PELA DECLARAO DE RECURSOS FINANCEIROS' ";
     $sWhere .= " AND db03_instit = db02_instit ";
     $sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
 
@@ -497,7 +497,7 @@ HTML;
     <html xmlns="http://www.w3.org/1999/html">
 
     <head>
-        <title>Relatório</title>
+        <title>Relatrio</title>
         <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     </head>
     <style>
@@ -516,7 +516,7 @@ HTML;
     <body>
         <center>
             <div>
-                <strong>Preço de Referência</strong>
+                <strong>Preo de Referncia</strong>
             </div>
             <div>
                 <p>Processo de Compras: <?= $codigo_preco ?></p>
@@ -598,7 +598,7 @@ HTML;
                 <tr>
                     <td align= "left"><strong>ITEM LOTE</strong></td>
                     <td align= "left"><strong>CODIGO</strong></td>
-                    <td align= "left"><strong>DESCRIÇÃO DO ITEM</strong></td>
+                    <td align= "left"><strong>DESCRIO DO ITEM</strong></td>
                     <td align= "left"><strong>TAXA/TABELA</strong></td>
                     <td align= "left"><strong>VALOR UN</strong></td>
                     <td align= "left"><strong>QUANT</strong></td>
@@ -615,7 +615,7 @@ HTML;
                 <tr>
                     <td align= "left"><strong>ITEM LOTE</strong></td>
                     <td align= "left"><strong>CODIGO</strong></td>
-                    <td align= "left"><strong>DESCRIÇÃO DO ITEM</strong></td>
+                    <td align= "left"><strong>DESCRIO DO ITEM</strong></td>
                     <td align= "left"><strong>VALOR UN</strong></td>
                     <td align= "left"><strong>QUANT</strong></td>
                     <td align= "left"><strong>UN</strong></td>
@@ -629,7 +629,7 @@ HTML;
                 for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
                     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-                    $lTotal = round($oResult->si02_vlprecoreferencia,$si01_casasdecimais) * $oResult->pc11_quant;
+                    $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * $oResult->pc11_quant;
 
                     $nTotalItens += $lTotal;
                     $oDadosDaLinha = new stdClass();
