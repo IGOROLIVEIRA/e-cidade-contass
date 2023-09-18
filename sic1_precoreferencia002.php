@@ -26,7 +26,7 @@ if (isset($imprimir)) {
     } else {
 
         echo "<script>
-        jan = window.open('sic1_precoreferencia007.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+        jan = window.open('sic1_precoreferencia007.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$si01_casasdecimais}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -41,7 +41,7 @@ if (isset($imprimircsv)) {
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia005.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+    jan = window.open('sic1_precoreferencia005.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$si01_casasdecimais}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -56,7 +56,7 @@ if (isset($imprimirword)) {
     } else {
 
         echo "<script>
-    jan = window.open('sic1_precoreferencia006.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$quant_casas}+
+    jan = window.open('sic1_precoreferencia006.php?impjust=$si01_impjustificativa&codigo_preco='+{$si01_processocompra}+'&quant_casas='+{$si01_casasdecimais}+
     '&tipoprecoreferencia='+$oPost->si01_tipoprecoreferencia,
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	   jan.moveTo(0,0);
@@ -77,11 +77,12 @@ if (isset($alterar)) {
     $db_opcao = 2;
     $clprecoreferencia->si01_justificativa = $si01_justificativa;
     $clprecoreferencia->si01_impjustificativa = $si01_impjustificativa;
+    $clprecoreferencia->si01_casasdecimais = $si01_casasdecimais;
 
 
     $clitemprecoreferencia->excluir(null, "si02_precoreferencia = $si01_sequencial");
     /**
-     * Atualização do valor dos itens do preço referência
+     * Atualizao do valor dos itens do preo referncia
      */
     
     if ($si01_tipoprecoreferencia == '1') {
@@ -216,7 +217,7 @@ if (isset($alterar)) {
         $clitemprecoreferencia->si02_taxa = $oItemOrc->pc01_taxa;
         $clitemprecoreferencia->si02_criterioadjudicacao = $oItemOrc->pc80_criterioadjudicacao;
         $clitemprecoreferencia->si02_mediapercentual = $oItemOrc->mediapercentual;
-        $clitemprecoreferencia->si02_vltotalprecoreferencia = str_replace(',','.',number_format($oItemOrc->valor*$oItemOrc->pc23_quant,2, ',', ''));
+        $clitemprecoreferencia->si02_vltotalprecoreferencia = str_replace(',', '.', number_format(round($oItemOrc->valor, $si01_casasdecimais) * $oItemOrc->pc23_quant, 2, ',', ''));
         $clitemprecoreferencia->incluir(null);    
 
        
@@ -230,7 +231,7 @@ if (isset($alterar)) {
     }
     if($cont == 0){
         $sqlerro = true;
-        $clprecoreferencia->erro_msg    = 'Quantidade de orçamentos cadastrados é menor que a quantidade de cotação selecionada.';
+        $clprecoreferencia->erro_msg    = 'Quantidade de oramentos cadastrados  menor que a quantidade de cotao selecionada.';
         $clprecoreferencia->erro_status = "0";
         $clprecoreferencia->erro_campo = "si01_cotacaoitem";
     }

@@ -65,6 +65,7 @@ $clpcorcam = new cl_pcorcam();
 $clpcorcamforne = new cl_pcorcamforne();
 $clpcorcamitem = new cl_pcorcamitem();
 $clpcorcamval = new cl_pcorcamval();
+$clprecoreferencia = new cl_precoreferencia();
 $clliclicita = new cl_liclicita();
 $clpcorcamdescla = new cl_pcorcamdescla();
 $clpcorcamtroca = new cl_pcorcamtroca();
@@ -287,6 +288,22 @@ if ($modelo == 1) {
       if (pg_num_rows($result_valor) == 0) {
         continue;
       }
+
+      if ($sOrigem == "processo") {
+        $sSqlCasasPreco = $clprecoreferencia->sql_query_file(
+          null,
+          "si01_casasdecimais",
+          null,
+          "si01_processocompra=$pc81_codproc"
+        );
+        $result_casaspreco = $clprecoreferencia->sql_record($sSqlCasasPreco);
+  
+        if (pg_num_rows($result_casaspreco) > 0) {
+          db_fieldsmemory($result_casaspreco);
+          $quant_casas = $si01_casasdecimais;
+        }
+      }
+      
       db_fieldsmemory($result_valor);
       $pdf->setfont('arial', '', 7);
       if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
