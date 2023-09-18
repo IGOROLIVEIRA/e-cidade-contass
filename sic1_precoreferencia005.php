@@ -218,7 +218,7 @@ if (pg_num_rows($rsLotes) == 0) {
     header("Content-Disposition: attachment; filename=Preco_de_Referencia_PRC_" . $codigo_preco . ".csv");
     header("Pragma: no-cache");
 
-    echo "Preço de Referência \n";
+    echo "Preo de Referncia \n";
     echo "Processo de Compra: $codigo_preco \n";
     echo "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResultData, 0)->si01_datacotacao))) . " \n";
 
@@ -275,7 +275,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 $oResult2 = db_utils::fieldsMemory($rsResult2,0);
 
         //if($quant_casas == 2){
-        $lTotal = round($oResult->si02_vlprecoreferencia,$si01_casasdecimais) * $oResult->si02_qtditem;
+        $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * $oResult->si02_qtditem;
         //}else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
 
         $nTotalItens += $lTotal;
@@ -340,9 +340,9 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 }
                 $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
                 if($controle==0 && $fazerloop==2){
-                    $lTotal = round($oResult->si02_vlprecoreferencia,$si01_casasdecimais) * ($oResult->si02_qtditem - $valorqtd);
+                    $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * ($oResult->si02_qtditem - $valorqtd);
                 }else if($controle==1 && $fazerloop==2){
-                    $lTotal = round($oResult->si02_vlprecoreferencia,$si01_casasdecimais) * $valorqtd;
+                    $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * $valorqtd;
                 }
                 $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
             }
@@ -402,7 +402,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
     header("Content-Disposition: attachment; filename=Preco_de_Referencia_PRC_" . $codigo_preco . ".csv");
     header("Pragma: no-cache");
 
-    echo "Preço de Referência \n";
+    echo "Preo de Referncia \n";
     echo "Processo de Compra: $codigo_preco \n";
     echo "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResultData, 0)->si01_datacotacao))) . " \n";
 
@@ -482,7 +482,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
             $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
             //if($quant_casas == 2){
-            $lTotal = round($oResult->si02_vlprecoreferencia,$si01_casasdecimais) * $oResult->pc11_quant;
+            $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * $oResult->pc11_quant;
             //}else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
 
             $nTotalItens += $lTotal;
