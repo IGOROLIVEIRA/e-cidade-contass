@@ -879,3 +879,12 @@
 [2021-07-12 15:52:56] ERROR: modification() - update file: libs/db_stdlib.php : N√£o foi poss√≠vel abrir o arquivo para escrita: /var/www/html/e-cidade/extension/modification/log/dbportal-v3-desktop
 [2021-07-12 15:52:56] ERROR: modification() - update file: libs/db_stdlib.php : N√£o foi poss√≠vel abrir o arquivo para escrita: /var/www/html/e-cidade/extension/modification/log/dbportal-v3-desktop
 [2021-07-12 15:52:56] ERROR: modification() - update file: skins/default/estilos/estilos.css : N√£o foi poss√≠vel abrir o arquivo para escrita: /var/www/html/e-cidade/extension/modification/log/dbportal-v3-desktop
+[2023-09-18 13:25:10] ERROR: modification() - update file: libs/db_conn.php : Arquivo n„o existe: libs/db_conn.php
+[2023-09-18 13:31:21] ERROR: modification() - update file: libs/db_conn.php : Arquivo n„o existe: libs/db_conn.php
+[2023-09-18 13:34:38] ERROR: modification() - update file: libs/db_conn.php : Arquivo n„o existe: libs/db_conn.php
+[2023-09-18 13:34:39] ERROR: modification() - update file: libs/db_conn.php : Arquivo n„o existe: libs/db_conn.php
+[2023-09-18 13:34:46] ERROR: modification() - update file: libs/db_conn.php : Arquivo n„o existe: libs/db_conn.php
+[2023-09-18 13:35:30] ERROR: modification() - update file: libs/db_conn.php : Arquivo n„o existe: libs/db_conn.php
+[2023-09-18 13:35:48] ERROR: modification() - update file: libs/db_conn.php : Arquivo n„o existe: libs/db_conn.php
+[2023-09-18 13:36:58] ERROR: modification() - update file: templates/template_login_e-cidade.php : Arquivo sem modificacao: templates/template_login_e-cidade.php
+[2023-09-18 13:38:52] ERROR: modification() - update file: templates/template_login_e-cidade.php : Arquivo sem modificacao: templates/template_login_e-cidade.php

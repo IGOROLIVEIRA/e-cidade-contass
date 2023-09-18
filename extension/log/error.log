@@ -13815,3 +13815,11 @@ Stack trace:
 #11 app.php:160 - require_once(skins/estilos.php)
 #12 FrontController.php:7 - require(app.php)
 
+[2023-09-18 13:39:11] ERROR: E_WARNING - unlink(cache/): Is a directory in std/DBCache.php on line 78
+#1 std/DBCache.php:78 - unlink()
+#2 std/DBMenu.php:208 - DBCache::remove()
+#3 model/configuracao/PreferenciaUsuario.model.php:283 - DBMenu::limpaCache()
+#4 extension/modification/data/cache/global/acesso.php:67 - PreferenciaUsuario->salvar()
+#5 app.php:178 - require_once(extension/modification/data/cache/global/acesso.php)
+#6 FrontController.php:7 - require(app.php)
+

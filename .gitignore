@@ -54,3 +54,4 @@ cache/menus/*
 cache/forms/*
 cache/preferencias/*
 node_modules
+.env
