@@ -87,6 +87,11 @@ Para configurar o docker primeiro edit o env com a porta para o apache
 Depois execute o comando para subir o docker do apache
 ```bash
     $docker-compose up -d 
+    $docker exec -it <NOME-ou-ID-CONTAINER> /bin/bash
+    $chmod -R 775 /var/www/html/*
+    $chmod -R 777 /var/www/html/tmp/
+    $cd /var/www/html/
+    $composer install
 ```
 
 Depois execute o comando para parar o docker do apache
