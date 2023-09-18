@@ -499,7 +499,7 @@ db_app::load("widgets/windowAux.widget.js");
         if (oResponse.status == 1) {
             // console.log(oResponse.aLinhasExtrato);
             for (var i = 0; i < oResponse.aLinhasExtrato.length; i++) {
-                // console.log(oResponse.aLinhasExtrato[i]);
+                console.log(oResponse.aLinhasExtrato[i]);
                 with (oResponse.aLinhasExtrato[i]) {
                     if (fechar_conciliacao == 1)
                         document.getElementById("fechar_conciliacao").checked = true;
@@ -584,7 +584,7 @@ db_app::load("widgets/windowAux.widget.js");
         var oResponse = eval("(" + oAjax.responseText + ")");
         var iRowAtiva     = 0;
         var iTotalizador  = 0;
-        // console.log(oResponse);
+        console.log(oResponse);
         gridLancamentos.clearAll(true);
         gridLancamentos.setStatus("");
 
@@ -972,7 +972,7 @@ db_app::load("widgets/windowAux.widget.js");
             var lancamento = js_preenche_lancamento(movimentos[iMov]);
             oParam.movimentos.push(lancamento);
         }
-        // console.log(oParam);
+        console.log(oParam);
         // Final dos movimentos
         var sParam = js_objectToJson(oParam);
         url = 'cai4_conciliacaoBancariaNovo.RPC.php';
@@ -1060,7 +1060,7 @@ db_app::load("widgets/windowAux.widget.js");
         if (movimento[8] == "SP") 
             lancamento.movimentacao = "S";
         lancamento.valor            = dados_complementares_valor_individual[movimento[1]];
-        // console.log(lancamento);
+        console.log(lancamento);
         return lancamento;
     }
 
