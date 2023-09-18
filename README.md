@@ -92,3 +92,12 @@ Depois execute o comando para subir o docker do apache
 Acesse no navegador com o portal informada no .env: http://localhost:8888
 
 Obs.: Nesse momento não temos um docker do banco de dados;
+
+### Para debugar no PHPSTORM
+
+...
+
+### Para Debugar no VSCode
+
+...
+
