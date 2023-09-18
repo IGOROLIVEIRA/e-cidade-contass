@@ -73,10 +73,10 @@ $instits = str_replace('-', ', ', db_getsession("DB_instit"));
 /**
  * @param cl_retencaotipocalc $retencaotipocalc
  * @param cl_db_config $cldbconfig
- * @param $instits
+ * @param int $instits
  * @return array
  */
-function consultasBanco(cl_retencaotipocalc $retencaotipocalc, cl_db_config $cldbconfig, $instits): array
+function consultasBanco(cl_retencaotipocalc $retencaotipocalc, cl_db_config $cldbconfig, int $instits): array
 {
     // Retorna todos os tipos de calculos para as retencoes.
     $rsTipoCalculo = $retencaotipocalc->sql_record($retencaotipocalc->sql_query_file(null, "e32_sequencial", "e32_sequencial"));
