@@ -621,6 +621,29 @@ db_app::load("estilos.css");
 
   function js_verificaDataAbastecimento() {
 
+    if(si05_numemp != ""){
+
+      var oParametros = new Object();
+      var oRetorno;
+      oParametros.e60_numemp = document.getElementById('si05_numemp').value;
+      oParametros.sMetodo = "validacaoAbastecimentoPorEmpenho";
+      var oAjax = new Ajax.Request('vei1_veicabast.RPC.php', {
+          method: 'post',
+          parameters: 'json=' + Object.toJSON(oParametros),
+          asynchronous: false,
+          onComplete: function(oAjax) {
+            oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
+          }
+      });
+
+      if(oRetorno.lErro){
+        if (!confirm("Usuário: A data de emissão do empenho é anterior à data de ativação do parametro controle de saldo do empenho, portanto, o saldo não será controlado.")) {
+            return false;
+        }
+      }
+
+    }
+
     var dtRetirada = $F("ve60_datasaida");
     var dtAbastecimento = $F("ve70_dtabast");
 

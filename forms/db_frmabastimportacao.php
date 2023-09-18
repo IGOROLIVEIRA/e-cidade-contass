@@ -862,14 +862,38 @@ if (isset($_POST["processar"])) {
     function js_verificarEmpenho() {
         var nControle = 0;
         var itens = getItensMarcados();
+        let aEmpenhos = [];
 
         for (i = 0; i < itens.length; i++) {
             var id_registro = itens[i].value;
             var numempenho = document.getElementById('empenho' + id_registro).value;
+            aEmpenhos[i] = numempenho;
             if (!numempenho) {
                 nControle = 1;
                 alert("Preencher número de empenho");
                 break;
+            }
+        }
+
+        let oParametros = new Object();
+        let oRetorno;
+        oParametros.exec = "validacaoAbastecimentoPorEmpenho";
+        oParametros.itensEmpenho = aEmpenhos;
+        let oAjax = new Ajax.Request('vei1_xlsabastecimento.RPC.php', {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParametros),
+            asynchronous: false,
+            onComplete: function(oAjax) {
+                oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
+            }
+        });
+
+        let aEmpenhosInvalidos = [...new Set(oRetorno.aEmpenhosInvalidos)];
+        let sEmpenhosInvalidos = JSON.stringify(aEmpenhosInvalidos);
+
+        if(aEmpenhosInvalidos.length > 0){
+            if (!confirm(`Usuário: A data de emissão do(s) empenho(os) ${sEmpenhosInvalidos} é anterior à data de ativação do parametro controle de saldo do empenho, portanto, o saldo não será controlado.`)) {
+                return false;
             }
         }
 

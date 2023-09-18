@@ -376,6 +376,11 @@ $rotulo->label("z01_cgccpf");
               echo "<script>" . $lin . "('Número(" . $chave_e60_codemp . ") não Encontrado', true);</script>";
             } else {
               db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa, true);
+              if($importacaoveiculo == 1 || $filtroabast == 1){
+                echo "<script> document.getElementsByClassName('DBLovrotInputCabecalho').item(13).value = 'Valor Disponível' </script>;";
+                echo "<script> document.getElementsByClassName('DBLovrotInputCabecalho').item(14).value = 'Valor Utilizado' </script>;";
+
+              }
             }
 
             ?>

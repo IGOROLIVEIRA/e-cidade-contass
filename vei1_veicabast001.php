@@ -83,7 +83,7 @@ if (isset($incluir)) {
   $datahoraAbastecimento = strtotime($oDataAbast->getDate() . " " . $ve70_hora);
   $dataabast = $oDataAbast->getDate();
 
-  $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(1, "*", null, ""));
+  $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(null, "*", null, "ve50_instit = " . db_getsession("DB_instit")));
   $resultParamres = db_utils::fieldsMemory($resultParam, 0);
 
   if ($resultParamres->ve50_abastempenho == 1) {
@@ -131,6 +131,12 @@ if (isset($incluir)) {
     }
   }
 
+  $rsDataEmpenho = $clempempenho->sql_record($clempempenho->sql_query_file($si05_numemp,"e60_emiss",null,"")); 
+  $dataEmpenho = db_utils::fieldsMemory($rsDataEmpenho, 0)->e60_emiss;
+  if(strtotime($dataEmpenho) > strtotime($dataabast)){
+    $sqlerro = true;
+    $erro_msg = "Usuário: a data do empenho não pode ser maior que a data do abastecimento";
+  }
 
   if (isset($ve70_medida) and $ve70_medida == 0) {
     $medidazero = true;

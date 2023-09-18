@@ -76,6 +76,30 @@ $dataF = $oParam->dataF;
 
 switch ($oParam->exec) {
 
+    case 'validacaoAbastecimentoPorEmpenho':
+
+        $aEmpenhosInvalidos = array();
+
+        foreach ($resultadoEmpenho as $empenhoDoAbastecimento) {
+
+            $aEmpenho = explode("/", $empenhoDoAbastecimento);
+            $e60_codemp = $aEmpenho[0];
+            $e60_anousu = $aEmpenho[1];
+
+            $rsEmpenho = $clempempenho->sql_record($clempempenho->sql_query(null, "e60_emiss", null, "e60_codemp like '$codEmp' and e60_anousu = $anoEmp and e60_instit = ". db_getsession('DB_instit')));
+            $e60_emiss = db_utils::fieldsMemory($resultadoEm, 0)->e60_emiss;
+
+            $rsVeicparam = $clveicparam->sql_record($clveicparam->sql_query_file(null, "ve50_datacorte", null, "ve50_instit = " . db_getsession("DB_instit")));
+            $ve50_datacorte = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_datacorte;
+
+            if($ve50_datacorte > $e60_emiss){
+                $aEmpenhosInvalidos[] = $empenhoDoAbastecimento;
+            }
+        }
+        $oRetorno->aEmpenhosInvalidos = $aEmpenhosInvalidos;
+
+    break;    
+
     case 'importar':
 
         $erro = false;
@@ -116,7 +140,7 @@ switch ($oParam->exec) {
             $aSaldoUtilizadoPorEmpenho = array();
             $aEmpenhosComSaldoTotalUtilizado = array();
 
-            $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(1, "*", null, ""));
+            $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(null, "*", null, "ve50_instit = " . db_getsession("DB_instit")));
             $resultParamres = db_utils::fieldsMemory($resultParam, 0);
             
             //verifica data do empenho
@@ -353,7 +377,7 @@ switch ($oParam->exec) {
                 $resultadoEm = $clempempenho->sql_record($clempempenho->sql_query(null, "*", null, "e60_codemp like '$codEmp' and e60_anousu = $anoEmp and e60_instit = ". db_getsession('DB_instit')));
                 $resultEm = db_utils::fieldsMemory($resultadoEm, 0);
 
-                $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(1, "*", null, ""));
+                $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(null, "*", null, "ve50_instit = " . db_getsession("DB_instit")));
                 $resultParamres = db_utils::fieldsMemory($resultParam, 0);
 
                 $quantidade = count($arrayValores);
