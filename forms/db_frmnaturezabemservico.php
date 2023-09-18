@@ -37,7 +37,13 @@ $clnaturezabemservico->rotulo->label();
             <?php echo $Le101_sequencial; ?>
           </td>
           <td>
-            <?php db_input('e101_sequencial', 8, $Ie101_sequencial, true, 'text', 3); ?>
+            <?php db_input('e101_sequencial', 5, $Ie101_sequencial, true, 'text', 3); ?>
+          <!-- </td>
+          <td  nowrap title="<?php echo $Te101_codnaturezarendimento; ?>"> -->
+            <?php echo $Le101_codnaturezarendimento; ?>
+          <!-- </td>
+          <td> -->
+            <?php db_input('e101_codnaturezarendimento', 5, $Ie101_codnaturezarendimento, true, 'text', $db_opcao); ?>
           </td>
         </tr>
         <tr>
@@ -53,9 +59,10 @@ $clnaturezabemservico->rotulo->label();
             <?php echo $Le101_aliquota; ?>
           </td>
           <td>
-            <?php db_input('e101_aliquota', 8, $Ie101_aliquota, true, 'text', $db_opcao); ?>
+            <?php db_input('e101_aliquota', 5, $Ie101_aliquota, true, 'text', $db_opcao); ?>
           </td>
         </tr>
+
       </table>
     </fieldset>
 

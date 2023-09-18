@@ -256,6 +256,36 @@ $db_opcao_inf=1;
         </tr>                
   </table>      
  </fieldset>
+  <fieldset id='reinf'><legend><b>Efd-Reinf</b></legend>
+    <table >
+      <tr>
+        <td>
+          <strong>Incide Retenção do Imposto de Renda:</strong>
+          <td colspan="4">
+          <?
+            $aIncide = array('0'=>'Selecione', '1'=>'Sim', '2'=>'Não');
+            db_select('aIncide', $aIncide, true, 1); 
+          ?>
+          </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Natureza do Bem ou Serviço:</strong>
+
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Retenção Realizada por Terceiro:</strong>
+          <td colspan="4">
+          <?
+            $aRetencao = array('2'=>'Não', '1'=>'Sim');
+            db_select('aRetencao', $aRetencao, true, 1); 
+          ?>
+        </td>
+      </tr>           
+   </table>      
+  </fieldset>
  </td>
  </tr>
   <tr>
@@ -577,6 +607,14 @@ function js_saida(oAjax){
       document.getElementById('esocial').style.display = "none";
       tipodesdobramento = 0;
       opcao = 3;
+    }
+
+    if(obj.Tipofornec == 'cnpj' && !(desdobramento.substr(0, 3) == '331' || desdobramento.substr(0, 7) == '3339014' || desdobramento.substr(0, 3) == '346')){
+      document.getElementById('reinf').style.display = "table-cell";
+      opcaoReinf = 1;   
+    }else{
+      document.getElementById('reinf').style.display = "none";
+      opcaoReinf = 3;
     }
     
     if (obj.aItensPendentesPatrimonio.length > 0) {

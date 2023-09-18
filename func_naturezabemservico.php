@@ -79,7 +79,7 @@ $clnaturezabemservico->rotulo->label("e101_aliquota");
             if (file_exists("funcoes/db_func_naturezabemservico.php") == true) {
               include("funcoes/db_func_naturezabemservico.php");
             } else {
-              $campos = "e101_sequencial, e101_resumo, e101_aliquota ";
+              $campos = "e101_sequencial, e101_codnaturezarendimento, e101_resumo, e101_aliquota ";
             }
           }
           if (isset($chave_e101_sequencial) && (trim($chave_e101_sequencial) != "")) {
