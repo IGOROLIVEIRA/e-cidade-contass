@@ -31,6 +31,7 @@ class cl_precoreferencia
   var $si01_tipoOrcamento = 0;
   var $si01_numcgmOrcamento = 0;
   var $si01_impjustificativa = false;
+  var $si01_casasdecimais = 2;
 
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
@@ -82,6 +83,7 @@ class cl_precoreferencia
       $this->si01_tipoOrcamento = ($this->si01_tipoOrcamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si01_tipoOrcamento"] : $this->si01_tipoOrcamento);
       $this->si01_numcgmOrcamento = ($this->si01_numcgmOrcamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si01_numcgmOrcamento"] : $this->si01_numcgmOrcamento);
       $this->si01_impjustificativa = ($this->si01_impjustificativa == "" ? @$GLOBALS["HTTP_POST_VARS"]["si01_impjustificativa"] : $this->si01_impjustificativa);
+      $this->si01_casasdecimais = ($this->si01_casasdecimais == "" ? @$GLOBALS["HTTP_POST_VARS"]["si01_casasdecimais"] : $this->si01_casasdecimais);
     } else {
       $this->si01_sequencial = ($this->si01_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si01_sequencial"] : $this->si01_sequencial);
     }
@@ -213,6 +215,7 @@ class cl_precoreferencia
                                       ,si01_tipoOrcamento 
                                       ,si01_numcgmOrcamento 
                                       ,si01_impjustificativa
+                                      ,si01_casasdecimais
                        )
                 values (
                                 $this->si01_sequencial 
@@ -226,6 +229,7 @@ class cl_precoreferencia
                                ,$this->si01_tipoOrcamento 
                                ,$this->si01_numcgmOrcamento
                                ,'$this->si01_impjustificativa'  
+                               ,$this->si01_casasdecimais  
                       )";
     $result = db_query($sql);
 
@@ -282,7 +286,8 @@ class cl_precoreferencia
     }
     $sql = " update precoreferencia set ";
     $virgula = "";
-    $sql .= " si01_impjustificativa = '$this->si01_impjustificativa' ";
+    $sql .= " si01_impjustificativa = '$this->si01_impjustificativa', ";
+    $sql .= " si01_casasdecimais = '$this->si01_casasdecimais' ";
     $virgula = ",";
     if (trim($this->si01_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si01_sequencial"])) {
       $sql  .= $virgula . " si01_sequencial = $this->si01_sequencial ";
