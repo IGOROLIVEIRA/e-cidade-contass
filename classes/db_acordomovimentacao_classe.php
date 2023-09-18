@@ -665,7 +665,8 @@ class cl_acordomovimentacao
     }
     return $sql;
   }
-  public function subQueryUltimoAcordoHomologado()
+  
+  public function subQueryUltimaMovimenHomologado()
   {
     return "SELECT max(ac10_sequencial)
     FROM acordomovimentacao

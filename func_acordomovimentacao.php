@@ -171,7 +171,7 @@ $sAnd   = "";
           } else {
             if (!empty($homologados)) {
                 $sWhere .= "
-                OR ac10_sequencial = ({$clacordomovimentacao->subQueryUltimoAcordoHomologado()})";
+                OR ac10_sequencial = ({$clacordomovimentacao->subQueryUltimaMovimenHomologado()})";
             }
             $sql    = $clacordomovimentacao->sql_query_verificacancelado("", $campos, "ac10_sequencial", $sWhere);
             }
