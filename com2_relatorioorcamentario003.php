@@ -160,7 +160,7 @@ for ($iCont = 0; $iCont < pg_num_rows($resultpreco); $iCont++) {
        $oResult = db_utils::fieldsMemory($resultpreco, $iCont);
 
        //    if($quant_casas){
-       $lTotal = round($oResult->si02_vltotalprecoreferencia,$oResult->si01_casasdecimais) * $oResult->pc11_quant;
+       $lTotal = round($oResult->si02_vltotalprecoreferencia, $oResult->si01_casasdecimais) * $oResult->pc11_quant;
        $nTotalItens += $lTotal;
 }
 
@@ -185,7 +185,7 @@ $resultDotacao = db_query($sqlDotacao);
 */
 $sqlparag = "select db02_texto from db_paragrafo inner join db_docparag on db02_idparag = db04_idparag inner join db_documento on db04_docum = db03_docum where db03_descr='DECLARACAO DE REC. ORC. E FINANCEIRO1' and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
 $resparag = db_query($sqlparag);
-$head5 = "DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO";
+$head5 = "DECLARAO DE RECURSOS ORAMENTRIOS E FINANCEIRO";
 
 
 $pdf = new PDF();
@@ -199,7 +199,7 @@ $alt = 3;
 $pdf->SetFont('arial','B',14);
 $pdf->ln($alt+6);
 $pdf->x = 30;
-$pdf->Cell(160,6,"DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO",0,1,"C",0);
+$pdf->Cell(160,6,"DECLARAO DE RECURSOS ORAMENTRIOS E FINANCEIRO",0,1,"C",0);
 $pdf->ln($alt+3);
 $pdf->x = 30;
 $pdf->SetFont('arial','',11);
@@ -239,7 +239,7 @@ function imprimeCabecalho($pdf,$imprimevalor){
 
     if($imprimevalor == "t"){
         $pdf->cell(20,6,"Ficha",1,0,"C",1);
-        $pdf->cell(40,6,"Cód. orçamentário",1,0,"C",1);
+        $pdf->cell(40,6,"Cd. oramentrio",1,0,"C",1);
         $pdf->cell(35,6,"Projeto Atividade",1,0,"C",1);
         $pdf->cell(35,6,"Fonte de Recursos",1,0,"C",1);
         $pdf->cell(30,6,"Valor",1,1,"C",1);
@@ -248,7 +248,7 @@ function imprimeCabecalho($pdf,$imprimevalor){
     }
 
     $pdf->cell(20,6,"Ficha",1,0,"C",1);
-    $pdf->cell(40,6,"Cód. orçamentário",1,0,"C",1);
+    $pdf->cell(40,6,"Cd. oramentrio",1,0,"C",1);
     $pdf->cell(60,6,"Projeto Atividade",1,0,"C",1);
     $pdf->cell(40,6,"Fonte de Recursos",1,1,"C",1);
     
