@@ -941,7 +941,8 @@ function query_padrao_op()
     $sql .= "     coremp.k12_codord::text AS ordem, ";
     $sql .= "     z01_nome::text AS credor, ";
     $sql .= "     z01_numcgm::text AS numcgm, ";
-    $sql .= "     '' AS historico ";
+    $sql .= "     '' AS historico, ";
+    $sql .= "     0 AS retencao ";
     $sql .= " FROM corrente ";
     $sql .= " INNER JOIN coremp ON coremp.k12_id = corrente.k12_id ";
     $sql .= "     AND coremp.k12_data = corrente.k12_data ";
@@ -1007,6 +1008,7 @@ function query_baixa_padrao()
     $sql .= "     credor, ";
     $sql .= "     numcgm::text numcgm, ";
     $sql .= utf8_encode(" 'Arrecadação de Receita' historico ");
+    $sql .= ", 0 as retencao ";
     $sql .= " FROM ( ";
     $sql .= "    SELECT ";
     $sql .= "        data, ";
