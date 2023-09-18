@@ -776,7 +776,7 @@ function sql_query_fornec ( $pc23_orcamforne=null,$pc23_orcamitem=null,$campos="
      $sql .= "      inner join processocompralote on pc68_sequencial = pc69_processocompralote";
      $sql .= "      inner join cgm  on  cgm.z01_numcgm = pcorcamforne.pc21_numcgm";
      $sql .= "      inner join pcorcam  on  pc20_codorc = pcorcamitem.pc22_codorc";
-     $sql .= "      inner join pcorcamjulg  on  pcorcamjulg.pc24_orcamitem = pcorcamval.pc23_orcamitem and pcorcamjulg.pc24_orcamforne=pcorcamval.pc23_orcamforne";
+     $sql .= "      inner join pcorcamjulg  on  pcorcamjulg.pc24_orcamitem = pcorcamval.pc23_orcamitem";
      $sql2 = "";
      if($dbwhere==""){
        if($pc23_orcamforne!=null ){

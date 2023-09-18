@@ -61,10 +61,10 @@ if ($oDaoPcorcamforne->numrows == 0) {
 $sSqlItens = $oDaoPcorcamitem->sql_query_pcmaterproc(
     null,
     "distinct pc11_seq, pc22_orcamitem,pc01_codmater, pc01_descrmater, pc80_tipoprocesso, pc68_nome, pc68_sequencial, pc80_codproc, pc69_seq, \n"
-        . "(select coalesce(sum(val.pc23_valor), 0) / case when count(val.*) > 0 then count(val.*) else 1 end             \n"
+        . "(select round(coalesce(sum(val.pc23_vlrun), 0) / case when count(val.*) > 0 then count(val.*) else 1 end, $oGet->sCasasdecimais) * sum(pc23_quant) / case when count(val.*) > 0 then count(val.*) else 1 end        \n"
         . "   from pcorcamval as val                                                                                      \n"
-        . "        inner join pcorcamjulg on pc24_orcamitem = pc23_orcamitem and pc24_orcamforne = pc23_orcamforne        \n"
-        . "  where val.pc23_orcamitem = pc22_orcamitem) as valor_medio_item                                               \n",
+        . "               \n"
+        . "  where val.pc23_orcamitem = pc22_orcamitem and pc23_valor > 0) as valor_medio_item                                               \n",
     "pc68_sequencial, pc11_seq",
     "pc22_codorc = {$oGet->iOrcamento}"
 );
@@ -115,19 +115,13 @@ for ($iRow = 0; $iRow < pg_num_rows($rsItens); $iRow++) {
         if ($oPdf->getAvailHeight() < $iLine * 2) {
             $oPdf->addPage();
         }
-
-        $sSqlValorMedio = $oDaoPcorcamval->sql_query_julg_lote(
-            null,
-            null,
-            "sum(pc23_valor) / count(distinct pc24_orcamforne) as valor_medio",
-            null,
-            "pc20_codorc = {$oGet->iOrcamento} and pc68_sequencial = {$oItem->pc68_sequencial}"
-        );
-        $rsValorMedio   = $oDaoPcorcamval->sql_record($sSqlValorMedio);
-
+        $iLote = $oItem->pc68_sequencial;
         $nValorMedioLote = 0;
-        if ($rsValorMedio && $oDaoPcorcamval->numrows > 0) {
-            $nValorMedioLote = db_utils::fieldsMemory($rsValorMedio, 0)->valor_medio;
+        for ($cont = $iRow; $cont < pg_num_rows($rsItens); $cont++) {
+            $nValorMedioLote += db_utils::fieldsMemory($rsItens, $cont)->valor_medio_item;
+            if (db_utils::fieldsMemory($rsItens, $cont + 1)->pc68_sequencial != $iLote) {
+                break;
+            }
         }
 
         $nValorMedioLote = number_format($nValorMedioLote, 2, ',', '.');
@@ -148,7 +142,7 @@ for ($iRow = 0; $iRow < pg_num_rows($rsItens); $iRow++) {
 
     $iLote = $oItem->pc68_sequencial;
 
-    $nValorMedioItem = number_format($oItem->valor_medio_item, 2, ',', '.');
+    $nValorMedioItem = number_format($oItem->valor_medio_item, $oGet->sCasasdecimais, ',', '.');
     $oPdf->cell(15, $iLine, "{$oItem->pc69_seq}", 1, 0, 'C');
     $oPdf->cell(15, $iLine, "{$oItem->pc01_codmater}", 1, 0, 'C');
     $oPdf->cell(130, $iLine, "{$oItem->pc01_descrmater}", 1);
@@ -163,9 +157,9 @@ for ($iRow = 0; $iRow < pg_num_rows($rsItens); $iRow++) {
         $sSqlFornecedores  = $oDaoPcorcamval->sql_query_julg_lote(
             null,
             null,
-            "sum(pc23_valor) as valor_cotado, pc23_orcamforne, pc68_nome, pc24_pontuacao, z01_nome",
+            "DISTINCT sum(pc23_valor) as valor_cotado, pc23_orcamforne, pc68_nome, pc24_pontuacao, z01_nome",
             null,
-            "pc20_codorc = {$oGet->iOrcamento} and pc68_sequencial = {$oItem->pc68_sequencial}"
+            "pc20_codorc = {$oGet->iOrcamento} and pc68_sequencial = {$oItem->pc68_sequencial} and pc23_valor > 0 and pc24_pontuacao = 1"
         );
         $sSqlFornecedores .= " group by pc23_orcamforne, pc68_nome, pc24_pontuacao, z01_nome order by pc24_pontuacao";
         $rsFornecedores    = $oDaoPcorcamval->sql_record($sSqlFornecedores);
@@ -203,10 +197,6 @@ for ($iRow = 0; $iRow < pg_num_rows($rsItens); $iRow++) {
                 $nValorCotado = number_format($oFornecedor->valor_cotado, 2, ',', '.');
 
                 $oPdf->setfillcolor($iCorVencedor);
-
-                if ($iRowFornecedor == 0) {
-                    $oPdf->setfont('arial', 'b');
-                }
 
                 $oPdf->cell(157, $iLine, $oFornecedor->z01_nome, 1, 0, 'L', ($iRowFornecedor == 0));
                 $oPdf->cell(35, $iLine, "R$ {$nValorCotado}", 1, 0, 'R', ($iRowFornecedor == 0));
