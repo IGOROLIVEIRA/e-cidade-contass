@@ -14,7 +14,7 @@ class Oc21128 extends AbstractMigration
         UPDATE precoreferencia SET si01_casasdecimais = 2;
 
         COMMIT;
-        "
+        ";
         $this->execute($sql);
 
     }
