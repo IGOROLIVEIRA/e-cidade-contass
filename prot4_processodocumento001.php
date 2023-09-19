@@ -321,7 +321,6 @@ for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
             var oDocumento = oRetorno.aDocumentosVinculados[iIndice];
             var sDescricaoDocumento = oDocumento.sDescricaoDocumento;
             var sHTMLBotoes = '';
-
             if(departamentoLogado == oDocumento.iDepart){
                 protocolosComPermissaoParaExclusao.push(iIndice);
             }
@@ -410,13 +409,11 @@ for ($i = 0; $i < pg_numrows($rsAllPermissoes); $i++) {
     var aDocumentos = [];
 
     for (var iIndice = 0; iIndice < iSelecionados; iIndice++) {
-      if (protocolosComPermissaoParaExclusao.includes(documentosSelecionados[iIndice].getRowNumber()) == true) {
+      if (protocolosComPermissaoParaExclusao.includes(documentosSelecionados[iIndice].getRowNumber()) != true) {
         alert("Usuário sem permissão para excluir documento selecionado.");
         return false;
       }
-
     }
-
 
     if (iSelecionados == 0) {
 
