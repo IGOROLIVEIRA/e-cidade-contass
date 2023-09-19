@@ -54,14 +54,8 @@ final class ListaDePostagem
             $this->format($this->arquivoPostagemDTO->larguraObjeto, 5) .
             $this->format($this->arquivoPostagemDTO->alturaObjeto, 5) .
             $this->format($this->arquivoPostagemDTO->valorACobrarDestinatario, 8) .
-            $this->format($this->arquivoPostagemDTO->nomeDestinatario, 40) .
+            $this->format($this->arquivoPostagemDTO->nomeDestinatario, 40, ' ') .
             $this->format($this->arquivoPostagemDTO->codigoTipoObjeto, 3) .
-            $this->format($this->arquivoPostagemDTO->diametroObjeto, 5) .
-            $this->format($this->arquivoPostagemDTO->numeroCelularDestinatario, 11) .
-            $this->format($this->arquivoPostagemDTO->nomeLogradouroDestinatario, 40) .
-            $this->format($this->arquivoPostagemDTO->complementoEnderecoDestinatario, 40) .
-            $this->format($this->arquivoPostagemDTO->bairroDestinatario, 40) .
-            $this->format($this->arquivoPostagemDTO->cidadeDestinatario, 40) .
-            $this->format($this->arquivoPostagemDTO->estadoDestinatario, 2) . PHP_EOL;
+            $this->format($this->arquivoPostagemDTO->diametroObjeto, 5) . PHP_EOL;
     }
 }

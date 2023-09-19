@@ -72,6 +72,7 @@ class GenerateArDigitalService
             $arquivoPrevisaoPostagemDetalhe->uf = $item->estadoDestinatario;
             $arquivoPrevisaoPostagemDetalhe->numeroSequencialRegistro = $key+2;
             $arquivoPrevisaoPostagemDetalhe->cep = $item->cepDestino;
+            $arquivoPrevisaoPostagemDetalhe->numeroDoObjeto = $item->numeroEtiqueta;
             $detalhe = $this->arquivoPrevisaoPostagem->getDetalheInstance($arquivoPrevisaoPostagemDetalhe);
             $this->arquivoPrevisaoPostagem->setRegistroDetalhe($detalhe);
         }

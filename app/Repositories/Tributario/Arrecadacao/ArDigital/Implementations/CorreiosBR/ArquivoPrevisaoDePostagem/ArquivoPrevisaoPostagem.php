@@ -57,7 +57,7 @@ class ArquivoPrevisaoPostagem
 
     public function getFileName(): string
     {
-        return 'PMTeste1'.date('dm').'0.'.'SD1';
+        return 'MHF1'.date('dm').'0.'.'SD1';
     }
 
     public function getPathToSave(): string
