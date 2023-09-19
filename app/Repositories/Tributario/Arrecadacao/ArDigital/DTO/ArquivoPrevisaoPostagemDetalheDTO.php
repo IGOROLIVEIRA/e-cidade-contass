@@ -6,9 +6,9 @@ class ArquivoPrevisaoPostagemDetalheDTO
 {
     public const OPERACAO_INCLUSAO = '1101';
 
-    public string $codigoDoCliente = '0000';
-    public string $identificadorDoCliente = '00000000';
-    public string $siglaDoObjeto = '00';
+    public string $codigoDoCliente = '8443';
+    public string $identificadorDoCliente = 'MHF';
+    public string $siglaDoObjeto = 'BH';
     public string $numeroDoObjeto = '000000000';
     public string $paisDeOrigem = 'BR';
     public string $codigoDaOperacao = self::OPERACAO_INCLUSAO;

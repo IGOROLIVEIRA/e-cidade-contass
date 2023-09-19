@@ -179,6 +179,13 @@ abstract class CgmBase {
     protected $sMunicipioComercial;
 
     /**
+     * Natureza Juridica;
+     *
+     * @var unknown_type
+     */
+    protected $sNaturezaJuridica;
+
+    /**
      * UF do Endereço Comercial;
      *
      * @var string
@@ -302,6 +309,7 @@ abstract class CgmBase {
 
                 $this->setCodigo              ($oDadosCgm->z01_numcgm);
                 $this->setCgccpf              ($oDadosCgm->z01_cgccpf);
+                $this->setNaturezaJuridica    ($oDadosCgm->z01_naturezajuridica);
                 $this->setNome                ($oDadosCgm->z01_nome);
                 $this->setNomeCompleto        ($oDadosCgm->z01_nomecomple);
                 $this->setLogradouro          ($oDadosCgm->z01_ender);
@@ -407,6 +415,20 @@ abstract class CgmBase {
      */
     public function setCgccpf ($iCgccpf) {
         $this->iCgccpf = $iCgccpf;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNaturezaJuridica(){
+        return $this->sNaturezaJuridica;
+    }
+
+    /**
+     * @param string $sNaturezaJuridica
+     */
+    public function setNaturezaJuridica($sNaturezaJuridica){
+        $this->sNaturezaJuridica= $sNaturezaJuridica;
     }
 
     /**
@@ -1009,6 +1031,7 @@ abstract class CgmBase {
         $oDaoCgm->z01_nomecomple = addslashes($this->getNomeCompleto());
         $oDaoCgm->z01_ender      = addslashes($this->getLogradouro());
         $oDaoCgm->z01_numero     = $this->getNumero();
+        $oDaoCgm->z01_naturezajuridica     = $this->getNaturezaJuridica();
         $oDaoCgm->z01_compl      = addslashes($this->getComplemento());
         $oDaoCgm->z01_bairro     = addslashes($this->getBairro());
         $oDaoCgm->z01_munic      = addslashes($this->getMunicipio());

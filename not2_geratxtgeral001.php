@@ -65,38 +65,9 @@ if (count($clpostgresqlutils->getTableIndexes('debitos')) == 0) {
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
-<script>
-function js_emite(tiporel) {
-
-	if (document.form1.k60_codigo.value == '') {
-		alert(_M('tributario.notificacoes.not2_geratxtgeral001.selecione_lista'));
-		return false;
-	}
-
-  if (document.form1.modelo.value == 3) {
-    url = "cai4_emitenotificacaotxt.php";
-  } else {
-    url = "not2_geratxtgeral002.php";
-  }
-
-  url += '?ordem='+document.form1.ordem.value;
-  url += '&tiporel='+tiporel;
-  url += '&lista='+document.form1.k60_codigo.value;
-  url += '&quantidade='+document.form1.quantidade.value;
-  url += '&tipo='+document.form1.tipo.value;
-  url += '&modelo='+document.form1.modelo.value;
-  url += '&lServArDigital='+document.form1.lServArDigital.checked;
-  url += '&k60_datavenc='+document.form1.dtvencimento.value;
-
-  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_txt',url,'Pesquisa',true);
-}
-</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor="#cccccc">
-
-
-
 <form class="container" name="form1" method="post" action="" >
   <fieldset>
     <legend>Emissão Geral TXT</legend>
@@ -151,7 +122,23 @@ function js_emite(tiporel) {
             <td title="Serviço AR Digital">
                 Serviço AR Digital:
             <td>
-                <?php db_input("lServArDigital", 1, null, true, "checkbox",1); ?>
+                <?php db_input("lServArDigital", 1, null, true, "checkbox",1, "onchange='handleArDigital(this)'"); ?>
+            </td>
+        </tr>
+        <tr id="etiquetas" style="display: none">
+            <td>
+                Número da Etiqueta (Sem dígito verificador):
+            </td>
+            <td>
+                <?php db_input("numero_etiqueta", 8, null, true, "text",1); ?>
+            </td>
+        </tr>
+        <tr id="paginas" style="display: none">
+            <td>
+                Quantidade de páginas impressas:
+            </td>
+            <td>
+                <?php db_input("quantidade_paginas", 5, null, true, "text",1); ?>
             </td>
         </tr>
 	  <tr>
@@ -188,65 +175,116 @@ function js_emite(tiporel) {
 <?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
 ?>
+<script type="text/javascript">
+
+    function js_emite(tiporel) {
+
+        const checkArDigital = document.getElementById('lServArDigital');
+        const numeroEtiqueta = document.getElementById('numero_etiqueta');
+        const quantidadePaginas = document.getElementById('quantidade_paginas');
+
+        if (checkArDigital.checked && numeroEtiqueta.value === '') {
+            alert('Informe o número inicial da etiqueta.');
+            return false;
+        }
+
+        if (checkArDigital.checked && quantidadePaginas.value === '') {
+            alert('Informe a Quantidade de páginas impressas por objeto.');
+            return false;
+        }
+
+        if (document.form1.k60_codigo.value == '') {
+            alert(_M('tributario.notificacoes.not2_geratxtgeral001.selecione_lista'));
+            return false;
+        }
+
+        if (document.form1.modelo.value == 3) {
+            url = "cai4_emitenotificacaotxt.php";
+        } else {
+            url = "not2_geratxtgeral002.php";
+        }
+
+        url += '?ordem=' + document.form1.ordem.value;
+        url += '&tiporel=' + tiporel;
+        url += '&lista=' + document.form1.k60_codigo.value;
+        url += '&quantidade=' + document.form1.quantidade.value;
+        url += '&tipo=' + document.form1.tipo.value;
+        url += '&modelo=' + document.form1.modelo.value;
+        url += '&lServArDigital=' + checkArDigital.checked;
+        url += '&numeroEtiqueta=' + numeroEtiqueta.value;
+        url += '&quantidadePaginas=' + quantidadePaginas.value;
+        url += '&k60_datavenc=' + document.form1.dtvencimento.value;
+
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_txt', url, 'Pesquisa', true);
+    }
+    function js_pesquisalista(mostra){
+        if(mostra==true){
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lista','func_lista.php?funcao_js=parent.js_mostralista1|k60_codigo|k60_descr','Pesquisa',true);
+        }else{
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lista','func_lista.php?pesquisa_chave='+document.form1.k60_codigo.value+'&funcao_js=parent.js_mostralista','Pesquisa',false);
+        }
+    }
+
+    function js_mostralista(chave,erro){
+        document.form1.k60_descr.value = chave;
+        if(erro==true){
+            document.form1.k60_descr.focus();
+            document.form1.k60_descr.value = '';
+        }
+    }
+
+    function js_mostralista1(chave1,chave2){
+        document.form1.k60_codigo.value = chave1;
+        document.form1.k60_descr.value = chave2;
+        db_iframe_lista.hide();
+    }
+
+    // cadban
+    function js_pesquisacadban(mostra){
+        if(mostra==true){
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cadban','func_cadban.php?funcao_js=parent.js_mostracadban1|k15_codigo|z01_nome','Pesquisa',true);
+        }else{
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cadban','func_cadban.php?pesquisa_chave='+document.form1.k15_codigo.value+'&funcao_js=parent.js_mostracadban','Pesquisa',false);
+        }
+    }
+
+    function js_mostracadban(chave,erro){
+        document.form1.z01_nome.value = chave;
+        if(erro==true){
+            document.form1.k15_codigo.focus();
+            document.form1.k15_codigo.value = '';
+        }
+    }
+
+    function js_mostracadban1(chave1,chave2){
+        document.form1.k15_codigo.value = chave1;
+        document.form1.z01_nome.value = chave2;
+        db_iframe_cadban.hide();
+    }
+
+    $("k60_codigo").addClassName("field-size2");
+    $("k60_descr").addClassName("field-size7");
+    $("ordem").setAttribute("rel","ignore-css");
+    $("ordem").addClassName("field-size4");
+    $("modelo").setAttribute("rel","ignore-css");
+    $("modelo").addClassName("field-size4");
+    $("tipo").setAttribute("rel","ignore-css");
+    $("tipo").addClassName("field-size4");
+    $("quantidade").addClassName("field-size2");
+    $("dtvencimento").addClassName("field-size2");
+
+    const handleArDigital = (element) => {
+        const trEtiqueta = document.getElementById('etiquetas');
+        const trPaginas = document.getElementById('paginas');
+        if (element.checked) {
+            trEtiqueta.removeAttribute('style');
+            trPaginas.removeAttribute('style');
+            return;
+        }
+        trEtiqueta.setAttribute('style', 'display: none;');
+        trPaginas.setAttribute('style', 'display: none;');
+    }
+
+</script>
 </body>
 </html>
-<script>
-function js_pesquisalista(mostra){
-     if(mostra==true){
-       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lista','func_lista.php?funcao_js=parent.js_mostralista1|k60_codigo|k60_descr','Pesquisa',true);
-     }else{
-       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_lista','func_lista.php?pesquisa_chave='+document.form1.k60_codigo.value+'&funcao_js=parent.js_mostralista','Pesquisa',false);
-     }
-}
-
-function js_mostralista(chave,erro){
-  document.form1.k60_descr.value = chave;
-  if(erro==true){
-     document.form1.k60_descr.focus();
-     document.form1.k60_descr.value = '';
-  }
-}
-
-function js_mostralista1(chave1,chave2){
-     document.form1.k60_codigo.value = chave1;
-     document.form1.k60_descr.value = chave2;
-     db_iframe_lista.hide();
-}
-
-// cadban
-function js_pesquisacadban(mostra){
-     if(mostra==true){
-       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cadban','func_cadban.php?funcao_js=parent.js_mostracadban1|k15_codigo|z01_nome','Pesquisa',true);
-     }else{
-       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cadban','func_cadban.php?pesquisa_chave='+document.form1.k15_codigo.value+'&funcao_js=parent.js_mostracadban','Pesquisa',false);
-     }
-}
-
-function js_mostracadban(chave,erro){
-  document.form1.z01_nome.value = chave;
-  if(erro==true){
-     document.form1.k15_codigo.focus();
-     document.form1.k15_codigo.value = '';
-  }
-}
-
-function js_mostracadban1(chave1,chave2){
-     document.form1.k15_codigo.value = chave1;
-     document.form1.z01_nome.value = chave2;
-     db_iframe_cadban.hide();
-}
-</script>
-<script>
-
-$("k60_codigo").addClassName("field-size2");
-$("k60_descr").addClassName("field-size7");
-$("ordem").setAttribute("rel","ignore-css");
-$("ordem").addClassName("field-size4");
-$("modelo").setAttribute("rel","ignore-css");
-$("modelo").addClassName("field-size4");
-$("tipo").setAttribute("rel","ignore-css");
-$("tipo").addClassName("field-size4");
-$("quantidade").addClassName("field-size2");
-$("dtvencimento").addClassName("field-size2");
-
-</script>

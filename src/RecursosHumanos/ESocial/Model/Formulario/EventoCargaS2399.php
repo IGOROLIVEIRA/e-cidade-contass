@@ -208,17 +208,8 @@ class EventoCargaS2399 implements EventoCargaInterface
         WHERE rhpessoal.rh01_instit = {$this->instit} 
         AND h13_categoria in (304,701,711,712,721,722,723,731,734,738,771,901,903,410)
         AND rh30_vinculo = 'A'
-        AND (
-            ( 
-            (date_part('year',rhpessoal.rh01_admiss)::varchar || lpad(date_part('month',rhpessoal.rh01_admiss)::varchar,2,'0'))::integer <= 202207
-            and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer <= 202207
-            and (rh05_recis is null or (date_part('year',rh05_recis)::varchar || lpad(date_part('month',rh05_recis)::varchar,2,'0'))::integer > 202207)
-            ) or (
-            date_part('month',rhpessoal.rh01_admiss) = date_part('month',fc_getsession('DB_datausu')::date)
-            and date_part('year',rhpessoal.rh01_admiss) = date_part('year',fc_getsession('DB_datausu')::date) 
-            and (date_part('year',fc_getsession('DB_datausu')::date)::varchar || lpad(date_part('month',fc_getsession('DB_datausu')::date)::varchar,2,'0'))::integer > 202207
-            )
-            )
+        AND date_part('month',rh05_recis)::integer = {$this->mes}
+        AND date_part('year',rh05_recis)::integer = {$this->ano}
     	";
 
         if (!empty($matricula)) {

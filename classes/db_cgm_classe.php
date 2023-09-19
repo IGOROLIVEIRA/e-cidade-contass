@@ -127,6 +127,7 @@ class cl_cgm {
     var $z01_incmunici = 0;
     var $z01_notificaemail = 't';
     var $z01_ibge = null;
+    var $z01_naturezajuridica = null;
 
     // cria propriedade com as variaveis do arquivo
     var $campos = "
@@ -191,6 +192,7 @@ class cl_cgm {
                  z01_incmunici = int8 = Inscrição Municipal
                  z01_notificaemail = bool = Notifica
                  z01_ibge = char(7) = Código do IBGE
+                 z01_naturezajuridica = char(4) = natureza juridica
                  ";
     //funcao construtor da classe
     function cl_cgm() {
@@ -327,6 +329,7 @@ class cl_cgm {
             $this->z01_obs = ($this->z01_obs == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_obs"]:$this->z01_obs);
             $this->z01_incmunici = ($this->z01_incmunici == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_incmunici"]:$this->z01_incmunici);
             $this->z01_ibge = ($this->z01_ibge == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_ibge"]:$this->z01_ibge);
+            $this->z01_naturezajuridica = ($this->z01_naturezajuridica == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_naturezajuridica"]:$this->z01_naturezajuridica);
         }else{
             $this->z01_numcgm = ($this->z01_numcgm == ""?@$GLOBALS["HTTP_POST_VARS"]["z01_numcgm"]:$this->z01_numcgm);
         }
@@ -505,6 +508,7 @@ class cl_cgm {
                                       ,z01_incmunici
                                       ,z01_notificaemail
                                       ,z01_ibge
+                                      ,z01_naturezajuridica
                        )
                 values (
                                 $this->z01_numcgm
@@ -568,6 +572,7 @@ class cl_cgm {
                                ,$this->z01_incmunici
                                ,'$this->z01_notificaemail'
                                ,'$this->z01_ibge'
+                               ,'$this->z01_naturezajuridica'
                       )";
         $result = db_query($sql);
         if($result==false){
@@ -862,10 +867,10 @@ class cl_cgm {
             $sql  .= $virgula." z01_nasc = '$this->z01_nasc' ";
             $virgula = ",";
         }     else{
-            
+
                 $sql  .= $virgula." z01_nasc = null ";
                 $virgula = ",";
-            
+
         }
         if(trim($this->z01_pai)!="" || isset($GLOBALS["HTTP_POST_VARS"]["z01_pai"])){
             $sql  .= $virgula." z01_pai = '$this->z01_pai' ";
@@ -994,6 +999,10 @@ class cl_cgm {
         }
         if(trim($this->z01_ibge)!="" || isset($GLOBALS["HTTP_POST_VARS"]["z01_ibge"])){
             $sql  .= $virgula." z01_ibge = '$this->z01_ibge' ";
+            $virgula = ",";
+        }
+        if(trim($this->z01_naturezajuridica)!="" || isset($GLOBALS["HTTP_POST_VARS"]["z01_naturezajuridica"])){
+            $sql  .= $virgula." z01_naturezajuridica = '$this->z01_naturezajuridica' ";
             $virgula = ",";
         }
         if(trim($this->z01_incmunici)!="" || isset($GLOBALS["HTTP_POST_VARS"]["z01_incmunici"])){

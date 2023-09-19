@@ -33,6 +33,7 @@ if (isset($incluir)) {
     $clprecoreferencia->si01_numcgmCotacao = $respCotacaocodigo;
     $clprecoreferencia->si01_numcgmOrcamento = $respOrcacodigo;
     $clprecoreferencia->si01_impjustificativa = $si01_impjustificativa;
+    $clprecoreferencia->si01_casasdecimais = $si01_casasdecimais;
     $datesistema = date("d/m/Y", db_getsession('DB_datausu'));
     if ($si01_datacotacao > $datesistema) {
         $msg = "Data da Cotação maior que data do Sistema";
@@ -267,7 +268,7 @@ if (isset($incluir)) {
     if ($clprecoreferencia->erro_status != 0) {
         echo "<script>
       jan = window.open('sic1_precoreferencia007.php?impjust=$si01_impjustificativa&codigo_preco='+{$clprecoreferencia->si01_processocompra}+
-      '&tipoprecoreferencia='+$si01_tipoprecoreferencia+'&quant_casas='+$quant_casas,
+      '&tipoprecoreferencia='+$si01_tipoprecoreferencia+'&quant_casas='+$si01_casasdecimais,
                     '',
                       'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
       jan.moveTo(0,0);

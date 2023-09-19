@@ -114,6 +114,15 @@ if ($si01_processocompra != "") {
           </td>
         </tr>
         <tr>
+          <td><strong>Qtd. de casas decimais:</strong></td>
+          <td>
+            <?php
+            $aQuant_casas = array("2" => "2", "3" => "3", "4" => "4");
+            db_select("si01_casasdecimais", $aQuant_casas, true, 4, "style='width:83px;'");
+            ?>
+          </td>
+        </tr>
+        <tr>
           <td nowrap title="<?= @$Tsi01_justificativa ?>">
             <strong>Justificativa: </strong>
           </td>
@@ -132,11 +141,6 @@ if ($si01_processocompra != "") {
       <input name="imprimirword" type="submit" id="imprimirword" value="Imprimir Word">
       <input name="imprimircsv" type="submit" id="imprimircsv" value="Imprimir CSV">
     <?php endif; ?>
-    <b>Qtd. de casas decimais:</b>
-    <?php
-    $aQuant_casas = array("2" => "2", "3" => "3", "4" => "4");
-    db_select("quant_casas", $aQuant_casas, true, 4, "style='width:83px;'");
-    ?>
   </div>
 </form>
 <script>
