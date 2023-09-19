@@ -318,7 +318,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 
                 $rsResult2 = db_query($sSql2) or die(pg_last_error());
                 $oResult2 = db_utils::fieldsMemory($rsResult2,0);
-                $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * $oResult->si02_qtditem;
+                $lTotal = $oResult->si02_vltotalprecoreferencia;
 
                 $nTotalItens += $lTotal;
                 $oDadosDaLinha = new stdClass();
@@ -358,7 +358,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                     $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                     $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
                     if($controle==1){
-                        $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * ($oResult->si02_qtditem - $valorqtd);
+                        $lTotal = $oResult->si02_vltotalprecoreferencia;
                     }
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                 } else {
@@ -375,11 +375,9 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                         $oDadosDaLinha->mediapercentual = "-";
                     
                     $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
-                    if($controle==0 && $fazerloop==2){
-                        $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * ($oResult->si02_qtditem - $valorqtd);
-                    }else if($controle==1 && $fazerloop==2){
-                        $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * $valorqtd;
-                    }
+                    
+                    $lTotal = $oResult->si02_vltotalprecoreferencia;
+                    
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", "."); 
                 }
             
@@ -629,7 +627,7 @@ HTML;
                 for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
                     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
-                    $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * $oResult->pc11_quant;
+                    $lTotal = $oResult->si02_vltotalprecoreferencia;
 
                     $nTotalItens += $lTotal;
                     $oDadosDaLinha = new stdClass();
