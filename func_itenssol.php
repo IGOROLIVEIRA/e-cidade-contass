@@ -66,7 +66,7 @@ if (isset($oGet->pc16_codmater) && !empty($oGet->pc16_codmater)) {
 		if ($oPcMater->pc01_liberaresumo == 'f') {
 	    $db_opcao   = 3;
 		}
-	  $pc11_resum = $oPcMater->pc01_complmater;
+	  //$pc11_resum = $oPcMater->pc01_complmater;
 	}
 }
 

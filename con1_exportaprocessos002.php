@@ -256,7 +256,7 @@ if ($leiaute == 1) {
                WHEN pc80_criterioadjudicacao = 3 THEN si02_vlprecoreferencia
                ELSE si02_vlpercreferencia
            END AS vlrun,
-    pc01_descrmater
+    pc01_descrmater||'. '||pc01_complmater as pc01_descrmater
     FROM liclicitem
     LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
     INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
@@ -273,7 +273,7 @@ if ($leiaute == 1) {
     LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
     LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
     LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
-    where l20_codigo= $l20_codigo
+    where l20_codigo= $l20_codigo and pc11_quant != 0
     ORDER BY l21_ordem;");
 
     if (pg_numrows($resultRegistro3) == 0) {
