@@ -1516,7 +1516,7 @@ unset($_GET['viewAlterar']);
 
                 if (lErro) {
                     alert(oRetorno.message.urlDecode());
-                    return js_acordosc_apostilamentos(false);
+                    return js_acordosc_apostilamentos(true);
                 }
 
                 $('btnSalvar').disabled = false;
