@@ -78,25 +78,31 @@ switch ($oParam->exec) {
 
     case 'validacaoAbastecimentoPorEmpenho':
 
-        $aEmpenhosInvalidos = array();
+        $rsVeicparam = $clveicparam->sql_record($clveicparam->sql_query_file(null, "*", null, "ve50_instit = " . db_getsession("DB_instit")));
+        $ve50_abastempenho = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_abastempenho;
 
-        foreach ($resultadoEmpenho as $empenhoDoAbastecimento) {
+        if($ve50_abastempenho == 1){
 
-            $aEmpenho = explode("/", $empenhoDoAbastecimento);
-            $e60_codemp = $aEmpenho[0];
-            $e60_anousu = $aEmpenho[1];
+            $aEmpenhosInvalidos = array();
 
-            $rsEmpenho = $clempempenho->sql_record($clempempenho->sql_query(null, "e60_emiss", null, "e60_codemp like '$codEmp' and e60_anousu = $anoEmp and e60_instit = ". db_getsession('DB_instit')));
-            $e60_emiss = db_utils::fieldsMemory($resultadoEm, 0)->e60_emiss;
+            foreach ($resultadoEmpenho as $empenhoDoAbastecimento) {
 
-            $rsVeicparam = $clveicparam->sql_record($clveicparam->sql_query_file(null, "ve50_datacorte", null, "ve50_instit = " . db_getsession("DB_instit")));
-            $ve50_datacorte = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_datacorte;
+                $aEmpenho = explode("/", $empenhoDoAbastecimento);
+                $e60_codemp = $aEmpenho[0];
+                $e60_anousu = $aEmpenho[1];
 
-            if($ve50_datacorte > $e60_emiss){
-                $aEmpenhosInvalidos[] = $empenhoDoAbastecimento;
+                $rsEmpenho = $clempempenho->sql_record($clempempenho->sql_query(null, "e60_emiss", null, "e60_codemp like '$e60_codemp' and e60_anousu = $e60_anousu and e60_instit = ". db_getsession('DB_instit')));
+                $e60_emiss = db_utils::fieldsMemory($rsEmpenho, 0)->e60_emiss;
+                $ve50_datacorte = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_datacorte;
+
+                if($ve50_datacorte > $e60_emiss){
+                    $aEmpenhosInvalidos[] = $empenhoDoAbastecimento;
+                }
             }
+
+            $oRetorno->aEmpenhosInvalidos = $aEmpenhosInvalidos;
+
         }
-        $oRetorno->aEmpenhosInvalidos = $aEmpenhosInvalidos;
 
     break;    
 
@@ -384,7 +390,6 @@ switch ($oParam->exec) {
                 $opEmpenho = 0;
                 $controleData = 0;
                 if ($resultParamres->ve50_abastempenho == 1) {
-                    if (strtotime($resultEm->e60_emiss) >= strtotime($resultParamres->ve50_datacorte)) {
                         if ($quantidade > 0) {
                             for ($i = 0; $i < $quantidade; $i++) {
                                 if ($arrayValores[$i][0] == $resultEm->e60_numemp) {
@@ -448,10 +453,6 @@ switch ($oParam->exec) {
                                 $j++;
                             }
                         }
-                    } else {
-                        $controleData = 1;
-                        break;
-                    }
                 }
                 //final 
 
@@ -951,10 +952,6 @@ switch ($oParam->exec) {
                     }
 
                     $oRetorno->itens = $arrayRetornoVeiculoN;
-                } else if ($controleData == 1) {
-                    $oRetorno->status = 6;
-                    $oRetorno->message = urlencode("Usuário: abastecimento/empenho em data anterior à data da ativação do parametro (tanto para RP quanto para do exercicio)");
-                    $erro = true;
                 } else if ($controleDataEmpenho == 1){
                     $oRetorno->status = 6;
                     $oRetorno->message = urlencode("Usuário: Data do empenho e posterior a data do abastecimento");

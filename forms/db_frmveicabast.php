@@ -477,7 +477,7 @@ db_app::load("estilos.css");
       </tr>
       <tr>
         <td colspan="2" style="text-align: center;">
-          <input onclick='return js_verificaDataAbastecimento();' name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
+          <input onclick='return js_verificaDataAbastecimento(<?= $db_opcao ?>);' name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
           <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
         </td>
       </tr>
@@ -619,9 +619,9 @@ db_app::load("estilos.css");
   //--------------------------------
 
 
-  function js_verificaDataAbastecimento() {
+  function js_verificaDataAbastecimento(opcao) {
 
-    if(si05_numemp != ""){
+    if(si05_numemp != "" && opcao == 1){
 
       var oParametros = new Object();
       var oRetorno;

@@ -75,6 +75,7 @@ if (isset($ve60_datasaida) && $ve60_datasaida != "") {
  *
  */
 if (isset($incluir)) {
+  db_inicio_transacao();
   $medida     = $ve70_medida;
   $oDataAbast = new DBDate($ve70_dtabast);
   $passa = false;
@@ -238,7 +239,6 @@ if (!empty($ve70_dtabast)) {
 
 if (isset($incluir) && $self != "") {
   if ($sqlerro == false) {
-    db_inicio_transacao();
 
     if (isset($sel_proprio) && trim($sel_proprio) != "") {
       if ($sel_proprio == 0 && (isset($ve71_veiccadposto) &&

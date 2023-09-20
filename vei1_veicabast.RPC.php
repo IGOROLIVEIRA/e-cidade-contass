@@ -25,15 +25,20 @@ try {
      
      case "validacaoAbastecimentoPorEmpenho":
 
-      $e60_numemp = $oParametros->e60_numemp;
-      $rsDataEmpenho = $clempempenho->sql_record($clempempenho->sql_query_file($e60_numemp,"e60_emiss",null,"")); 
-      $e60_emiss = db_utils::fieldsMemory($rsDataEmpenho, 0)->e60_emiss;
+      $rsVeicparam = $clveicparam->sql_record($clveicparam->sql_query_file(null, "*", null, "ve50_instit = " . db_getsession("DB_instit")));
+      $ve50_abastempenho = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_abastempenho;
 
-      $rsVeicparam = $clveicparam->sql_record($clveicparam->sql_query_file(null, "ve50_datacorte", null, "ve50_instit = " . db_getsession("DB_instit")));
-      $ve50_datacorte = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_datacorte;
+      if($ve50_abastempenho == 1){
 
-      if($ve50_datacorte > $e60_emiss){
-        $oRetorno->lErro = true;
+        $e60_numemp = $oParametros->e60_numemp;
+        $rsDataEmpenho = $clempempenho->sql_record($clempempenho->sql_query_file($e60_numemp,"e60_emiss",null,"")); 
+        $e60_emiss = db_utils::fieldsMemory($rsDataEmpenho, 0)->e60_emiss;
+        $ve50_datacorte = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_datacorte;
+
+        if($ve50_datacorte > $e60_emiss){
+          $oRetorno->lErro = true;
+        }
+
       }
 
      break;
