@@ -298,7 +298,6 @@ switch ($oParam->exec) {
         break;
 
     case "getUltimaPosicao":
-
         $oContrato = new Acordo($oParam->iAcordo);
         $aItens    = array();
 
@@ -308,14 +307,24 @@ switch ($oParam->exec) {
 
         if ($oRetorno->iOrigemContrato == 2) {
             $aLicitacoesVinculadas = $oContrato->getLicitacoes();
-            $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
-            $oRetorno->iCodigoLicitacao     = $oStdDados->l20_codigo;
-            $oRetorno->iEdital              = $oStdDados->l20_edital;
-            $oRetorno->iAnoLicitacao        = $oStdDados->l20_anousu;
-            $oRetorno->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
-            $oRetorno->iNumModalidade       = $oStdDados->l20_numero;
-            $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
-            $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
+            if (empty($aLicitacoesVinculadas[0])) {
+                $oRetorno->iCodigoLicitacao     = '';
+                $oRetorno->iEdital              = '';
+                $oRetorno->iAnoLicitacao        = '';
+                $oRetorno->iModalidadeLicitacao = '';
+                $oRetorno->pc50_codcom          = '';
+                $oRetorno->l03_tipo             = '';
+            } else {
+                $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
+                $oRetorno->iCodigoLicitacao     = $oStdDados->l20_codigo;
+                $oRetorno->iEdital              = $oStdDados->l20_edital;
+                $oRetorno->iAnoLicitacao        = $oStdDados->l20_anousu;
+                $oRetorno->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
+                $oRetorno->iNumModalidade       = $oStdDados->l20_numero;
+                $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
+                $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
+            }
+            
         } else if ($oRetorno->iOrigemContrato == 3) {
             $aLicitacoesVinculadas = $oContrato->getLicitacoes();
 
@@ -339,8 +348,6 @@ switch ($oParam->exec) {
                 $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
             }
         }
-
-
 
         foreach ($oContrato->getUltimaPosicao(true)->getItens() as $oItem) {
 
@@ -712,7 +719,6 @@ switch ($oParam->exec) {
         break;
 
     case 'getDadosAcordo':
-
         $oAcordo = new Acordo($oParam->iCodigoAcordo);
 
         $aLicitacoesVinculadas = $oAcordo->getLicitacoes();
