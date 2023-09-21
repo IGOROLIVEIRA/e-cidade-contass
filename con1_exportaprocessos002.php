@@ -252,6 +252,7 @@ if ($leiaute == 1) {
     l21_ordem as numerodoitem,
     m61_descr as unidade,
     pc11_quant,
+    pc80_codproc,
     CASE
                WHEN pc80_criterioadjudicacao = 3 THEN si02_vlprecoreferencia
                ELSE si02_vlpercreferencia
@@ -388,7 +389,13 @@ if ($leiaute == 1) {
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "pc11_quant") . "|");
 
             if (pg_result($resultRegistro3, $w, "vlrun") == null) {
-                fputs($clabre_arquivo->arquivo,  $valores[pg_result($resultRegistro3, $w, "pc16_codmater")] . "|");
+                $processoDeCompra = pg_result($resultRegistro3,$w, "pc80_codproc");
+                $rsPrecoReferencia = db_query("select si01_sequencial from precoreferencia where si01_processocompra = $processoDeCompra;");
+                $si01_sequencial = db_utils::fieldsMemory($rsPrecoReferencia, 0)->si01_sequencial;
+                $pc16_codmater = pg_result($resultRegistro3, $w, "pc16_codmater");
+                $rsValorPrecoReferencia = db_query("select si02_vlprecoreferencia from itemprecoreferencia where si02_coditem = $pc16_codmater and si02_precoreferencia = $si01_sequencial;");
+                $valorPrecoReferencia = pg_result($rsValorPrecoReferencia, 0, "si02_vlprecoreferencia");
+                fputs($clabre_arquivo->arquivo,  $valorPrecoReferencia . "|");
             } else {
                 fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "vlrun") . "|");
             }
