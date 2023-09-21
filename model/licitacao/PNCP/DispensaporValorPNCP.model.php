@@ -117,8 +117,6 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras";
 
-        $method = 'POST';
-
         $file = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.json';
         $filezip = curl_file_create('model/licitacao/PNCP/anexoslicitacao/' . $aAnexos[0]->l216_nomedocumento);
 
@@ -139,11 +137,9 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         );
 
         $optionspncp = $this->getParancurl('POST',$post_data,$headers,false,false);
-
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
         curl_close($chpncp);
-
         $retorno = json_decode($contentpncp);
 
         if ($retorno->status) {
@@ -161,8 +157,6 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         $cnpj =  $this->getCnpj();
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
-
-        $method = 'PATCH';
 
         $chpncp      = curl_init($url);
 

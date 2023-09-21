@@ -48,7 +48,7 @@ switch ($oParam->exec) {
 
                 //validacao para enviar somente idocumentos de contratos que ja foram enviados para PNCP
                 if (pg_num_rows($rsAvisodeContratacao) == null) {
-                    throw new Exception("Compra não localizado no PNCP !");
+                    throw new Exception("Compra não localizada no PNCP, verificar a publicação!");
                 }
 
                 for ($iCont = 0; $iCont < pg_num_rows($rsAvisodeContratacao); $iCont++) {
@@ -119,7 +119,7 @@ switch ($oParam->exec) {
 
                 //validacao para enviar somente idocumentos de contratos que ja foram enviados para PNCP
                 if (pg_num_rows($rsAvisodeContratacao) == null) {
-                    throw new Exception("Compra não localizado no PNCP !");
+                    throw new Exception("Compra não localizada no PNCP, verificar a publicação!");
                 }
 
                 for ($iCont = 0; $iCont < pg_num_rows($rsAvisodeContratacao); $iCont++) {
