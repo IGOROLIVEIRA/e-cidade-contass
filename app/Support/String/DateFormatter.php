@@ -12,7 +12,7 @@ class DateFormatter
         $dateObj = DateTime::createFromFormat('d/m/Y', $date);
 
         if ($dateObj === false) {
-            throw new Exception("Please, provide an string with d/m/Y formmat.");
+            throw new Exception("Please, provide a string with d/m/Y format.");
         }
 
         return $dateObj->format('d/m/Y');
