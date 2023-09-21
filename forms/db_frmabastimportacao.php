@@ -119,29 +119,14 @@ if (isset($_POST["processar"])) {
             $cell = $objWorksheet->getCellByColumnAndRow(1, $row);
             $data = $cell->getValue();
 
-            //data formatada para não precisar vim com formatação de String na palnilha
-            //$data = date('d/m/Y', PHPExcel_Shared_Date::ExcelToPHP( $cell->getValue()));
-
-
             if ($data == "") {
                 break;
             }
-
-            PHPExcel_Shared_Date::setExcelCalendar(PHPExcel_Shared_Date::CALENDAR_WINDOWS_1900);
-
-            $valorData = strlen($data);
-            if ($valorData == 10) {
-                $data = explode("/", $data);
-                $data = $data[2] . "-" . $data[1] . "-" . $data[0];
-            } else {
-                $data = date('d/m/Y', PHPExcel_Shared_Date::ExcelToPHP($cell->getValue()));
-                $data = explode("/", $data);
-                $data = $data[2] . "-" . $data[1] . "-" . ($data[0]);
-            }
-            //$hora = PHPExcel_Shared_Date::stringToExcel($data+1);
+        		
+            $data = DateTime::createFromFormat("m/d/Y" , $aDatas[$i][0]);
+            $data = $data->format('Y-m-d');
 
             $cell = $objWorksheet->getCellByColumnAndRow(2, $row);
-            //$hora = $cell->getValue();
             $val = $cell->getValue();
             $tamVal = strlen($val);
 
