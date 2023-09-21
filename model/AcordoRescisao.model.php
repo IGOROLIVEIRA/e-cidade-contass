@@ -136,7 +136,7 @@ class AcordoRescisao extends AcordoMovimentacao
     if ($oDaoAcordo->erro_status == 0) {
       throw new Exception($oDaoAcordo->erro_msg);
     }
-    
+
     return $this;
   }
 
@@ -159,70 +159,7 @@ class AcordoRescisao extends AcordoMovimentacao
     }
 
     parent::cancelar();
-    /**
-     * verificamos o tipo do acordo
-     */
-    $oContrato       = new Acordo($this->getAcordo());
-    $iOrigemContrato = $oContrato->getOrigem();
-    $oUltimaPosicao  = $oContrato->getUltimaPosicao();
-    foreach ($oUltimaPosicao->getItens() as $oItem) {
 
-      $oOrigemItem = $oItem->getOrigem();
-      if ($oOrigemItem->tipo == 1) {
-
-        /**
-         * Verificamos no processo de compras qual o codigo do item da solicitacao.
-         */
-        $oDaoPcProcitem   = db_utils::getDao("pcprocitem");
-        $sSqlDadosDotacao = $oDaoPcProcitem->sql_query_dotacao_reserva($oOrigemItem->codigo, "pcdotac.*, orcreserva.*");
-        $rsDotacoes       = $oDaoPcProcitem->sql_record($sSqlDadosDotacao);
-        $oDaoReservalSolicitacao = db_utils::getDao("orcreservasol");
-        $oDaoReserva             = db_utils::getDao("orcreserva");
-        for ($iDot = 0; $iDot < $oDaoPcProcitem->numrows; $iDot++) {
-
-          $oDadosDotacao = db_utils::fieldsMemory($rsDotacoes, $iDot);
-          if($oDadosDotacao->o80_codres != null){
-           $oDaoReservalSolicitacao->excluir(null, "o82_codres={$oDadosDotacao->o80_codres}");
-            if ($oDaoReservalSolicitacao->erro_status == 0) {
-
-            $sErroMsg = "Houve um erro ao remover a reserva de saldo da solicitacao\n{$oDaoReservalSolicitacao->erro_msg}";
-            throw new Exception($sErroMsg);
-            }
-            $oDaoReserva->excluir($oDadosDotacao->o80_codres);
-            if ($oDaoReserva->erro_status == 0) {
-
-              $sErroMsg = "Houve um erro ao remover a reserva de saldo da solicitacao\n{$oDaoReserva->erro_msg}";
-              throw new Exception($sErroMsg);
-            }
-          }
-        }
-        $oItem->reservarSaldos();
-      } else if ($oOrigemItem->tipo == 2) {
-
-        $oDaoLiclicitem   = db_utils::getDao("liclicitem");
-        $sSqlDadosDotacao = $oDaoLiclicitem->sql_query_dotacao_reserva($oOrigemItem->codigo, "pcdotac.*, orcreserva.*");
-        $rsDotacoes       = $oDaoLiclicitem->sql_record($sSqlDadosDotacao);
-        $oDaoReservalSolicitacao = db_utils::getDao("orcreservasol");
-        $oDaoReserva             = db_utils::getDao("orcreserva");
-        for ($iDot = 0; $iDot < $oDaoLiclicitem->numrows; $iDot++) {
-
-          $oDadosDotacao = db_utils::fieldsMemory($rsDotacoes, $iDot);
-          $oDaoReservalSolicitacao->excluir(null, "o82_codres={$oDadosDotacao->o80_codres}");
-          if ($oDaoReservalSolicitacao->erro_status == 0) {
-
-            $sErroMsg = "Houve um erro ao remover a reserva de saldo da solicitacao\n{$oDaoReservalSolicitacao->erro_msg}";
-            throw new Exception($sErroMsg);
-          }
-          $oDaoReserva->excluir($oDadosDotacao->o80_codres);
-          if ($oDaoReserva->erro_status == 0) {
-
-            $sErroMsg = "Houve um erro ao remover a reserva de saldo da solicitacao\n{$oDaoReserva->erro_msg}";
-            throw new Exception($sErroMsg);
-          }
-        }
-        $oItem->reservarSaldos();
-      }
-    }
     return $this;
   }
 
