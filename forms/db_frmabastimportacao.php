@@ -110,8 +110,6 @@ if (isset($_POST["processar"])) {
         $highestRow = $highestRow;
         $visibilidadeEmpenhos = "";
 
-        $aDatas = $objWorksheet->rangetoArray('B7:'.'B' . $highestRow, null, true, true, false);
-
         $i = 0;
         for ($row = 7; $row <= $highestRow; $row++) {
 
