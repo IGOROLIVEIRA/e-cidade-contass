@@ -136,7 +136,7 @@ class AcordoRescisao extends AcordoMovimentacao
     if ($oDaoAcordo->erro_status == 0) {
       throw new Exception($oDaoAcordo->erro_msg);
     }
-    $this->corrigeReservas();
+    
     return $this;
   }
 
