@@ -7,14 +7,14 @@ use Exception;
 
 class DateFormatter
 {
-    public static function formatDateToDmy(string $date): string
+    public static function convertDateFormatBRToISO(string $date): string
     {
-        $dateObj = DateTime::createFromFormat('d/m/Y', $date);
+        $dateTime = DateTime::createFromFormat('d/m/Y', $date);
 
-        if ($dateObj === false) {
+        if ($dateTime === false) {
             throw new Exception("Please, provide a string with d/m/Y format.");
         }
 
-        return $dateObj->format('d/m/Y');
+        return $dateTime->format('Y-m-d');
     }
 }
