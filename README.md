@@ -79,7 +79,8 @@ db_input(
 
 
 ## Usando docker na v3
-Para configurar o docker primeiro edit o env com a porta para o apache
+Para configurar o docker primeiro edit o env com a porta para
+o apache
 ```bash
     $cp .env-exemplo .env
 ```
@@ -92,6 +93,8 @@ Depois execute o comando para subir o docker do apache
     $chmod -R 777 /var/www/html/tmp/
     $cd /var/www/html/
     $composer install
+    $bin/v3/extension/unpack desktop-package.tar.gz true
+    $bin/v3/extension/install Desktop <NOME-DO-SEU-USUARIO>
 ```
 
 Depois execute o comando para parar o docker do apache

@@ -48,6 +48,8 @@ extension/data/extension/Desktop.data
 extension/log/error.log
 extension/modification/data/modification/dbportal-v3-desktop.data
 extension/modification/log/dbportal-v3-desktop
+desktop-package.tar.gz
+extension/modification/xml/desktop.xml
 webservices/environments/
 model/licitacao/PNCP/anexoslicitacao/*
 model/licitacao/PNCP/arquivos/*
