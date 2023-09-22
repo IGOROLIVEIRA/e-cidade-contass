@@ -665,7 +665,7 @@ class cl_acordomovimentacao
     }
     return $sql;
   }
-  
+
   public function subQueryUltimaMovimenHomologado()
   {
     return "SELECT max(ac10_sequencial)
@@ -683,7 +683,7 @@ class cl_acordomovimentacao
         AND ac16_instit =1";
   }
 
-  public function getUltimaAssinatura($acordo)
+  public function sqlQueryUltimaAssinatura($acordo)
   {
     return "
     SELECT

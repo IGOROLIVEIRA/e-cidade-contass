@@ -661,7 +661,7 @@ abstract class AcordoMovimentacao
   public function getUltimaAssinatura($acordo)
   {
     $oDaoAcordoMovimentacao     = db_utils::getDao("acordomovimentacao");
-    $sql = $oDaoAcordoMovimentacao->getUltimaAssinatura($acordo);
+    $sql = $oDaoAcordoMovimentacao->sqlQueryUltimaAssinatura($acordo);
     $result = $oDaoAcordoMovimentacao->sql_record($sql);
 
     if ($oDaoAcordoMovimentacao->erro_status === 0) {
