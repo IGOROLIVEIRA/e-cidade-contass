@@ -274,7 +274,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
    */
   function js_mostrarPesquisaAssinatura(ac10_sequencial,ac10_acordomovimentacaotipo) {
     ac10Acordomovimentacaotipo = ac10_acordomovimentacaotipo;
-    console.log(ac10Acordomovimentacaotipo);
+
     $('cancelar').disabled = false;
     js_getDadosAssinatura(ac10_sequencial);
     db_iframe_assinatura.hide();
@@ -316,7 +316,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
       $('ac10_obs').value = "";
       return false;
     } else {
-        console.log(oRetorno);
+
       $('ac16_datareferencia').value = js_formatar(oRetorno.datareferencia, 'd');
       $('ac10_sequencial').value = oRetorno.codigo;
       $('ac16_sequencial').value = oRetorno.acordo;
@@ -382,7 +382,6 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     oParam.codigo = $F('ac10_sequencial');
     oParam.acordoMovimentacaoTipo = ac10Acordomovimentacaotipo;
 
-    console.log("antes do envio",ac10Acordomovimentacaotipo);
     oParam.ac16Sequencial = $F('ac16_sequencial');
 
     oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
