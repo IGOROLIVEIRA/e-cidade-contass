@@ -246,7 +246,7 @@ $c99_data = db_utils::fieldsMemory($result, 0)->c99_data;
   $('ac16_resumoobjeto').style.width = "100%";
 
   var sUrl = 'con4_contratosmovimento.RPC.php';
-  let c99_data = "<?= $c99_data ?>";
+  const c99_data = "<?= $c99_data ?>";
   /**
    * Pesquisa acordos ao clicar no botao assinar acordo na aba Penalidades
    */
@@ -390,19 +390,19 @@ $c99_data = db_utils::fieldsMemory($result, 0)->c99_data;
      */
     //    DATA DO MOVIMENTO
     let partesData = oParam.dtmovimentacao.split("/");
-    let dataMovimento = new Date(partesData[2], partesData[1] - 1, partesData[0]);
+    const dataMovimento = new Date(partesData[2], partesData[1] - 1, partesData[0]);
 
     //    DATA DO FECHAMENTO Contabil
     partesData = c99_data.split("-");
-    let dataContabil = new Date(partesData[0], partesData[1] - 1, partesData[2]);
+    const dataContabil = new Date(partesData[0], partesData[1] - 1, partesData[2]);
 
     //    DATA DO FECHAMENTO PATRIMONIAL
     partesData = $("c99_datapat_hidden").value.split("-");
-    let dataPatrimonial = new Date(partesData[0], partesData[1] - 1, partesData[2]);
+    const dataPatrimonial = new Date(partesData[0], partesData[1] - 1, partesData[2]);
 
     //    DATA DE REFERÊNCIA
     partesData = oParam.dtreferencia.split("/");
-    let dataReferencia = new Date(partesData[2], partesData[1] - 1, partesData[0]);
+    const dataReferencia = new Date(partesData[2], partesData[1] - 1, partesData[0]);
 
     if (oParam.dtreferencia != "") {
 
