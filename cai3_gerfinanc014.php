@@ -129,7 +129,23 @@ if (isset($numcgm)) {
 
   $aWherePagamento[] = " arreinscr.k00_inscr   = ".$inscr;
 
-} else {
+} else if(isset($numpre)) {
+
+
+    $sSqlEnderInscr = " select * from arrenumcgm inner join cgm on z01_numcgm = k00_numcgm where k00_numpre = $numpre ";
+    $oEnderNumpre = db_utils::fieldsMemory(db_query($sSqlEnderInscr),0);
+
+    $nome  = 'CGM         : '.$oEnderNumpre->z01_numcgm.' - '.$oEnderNumpre->z01_nome.'       C?d. Arrecada??o : '.$numpre;
+    $ender = $oEnderNumpre->z01_ender.', '.$oEnderNumpre->z01_numero.' '.$oEnderNumpre->z01_compl;
+
+    $sWhereNumpreNormal = " and arrepaga.k00_numpre   = ".$numpre;
+
+    $sWhereNumprePgto   = " and (  arrepaga.k00_numpre = {$numpre} ";
+    $sWhereNumprePgto  .= "     or arreckey.k00_numpre = {$numpre} ";
+    $sWhereNumprePgto  .= "     )                                  ";
+
+
+}else {
 
   $sSqlEnderNumpre  = " select cgm.*                                                                                 ";
   $sSqlEnderNumpre .= "   from ( select arrecad.k00_numcgm                                                           ";

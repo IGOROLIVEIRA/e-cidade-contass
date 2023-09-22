@@ -41,10 +41,10 @@ $cltabrec->rotulo->label("k02_codigo");
 $clrotulo = new rotulocampo();
 $clrotulo->label('v70_sequencial');
 $clrotulo->label('v70_codforo');
-
 if (isset($Parcelamento) && $Parcelamento != "") {
     $sql = " select v07_numpre from termo where v07_parcel = $Parcelamento";
     $result = db_query($sql);
+
     $numrows = pg_num_rows($result);
     if ($numrows > 0) {
         db_fieldsmemory($result, 0);
