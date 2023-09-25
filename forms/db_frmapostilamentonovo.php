@@ -450,7 +450,6 @@ unset($_GET['viewAlterar']);
         $('ac16_sequencial').value = chave1;
         $('ac16_resumoobjeto').value = chave2;
 
-        //$('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
         pesquisarDadosAcordo(chave1);
         db_iframe_acordo.hide();
     }
@@ -488,6 +487,7 @@ unset($_GET['viewAlterar']);
 
             }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
+
     }
 
     function preencheItens(aItens) {
@@ -626,6 +626,7 @@ unset($_GET['viewAlterar']);
 
 
         oGridItens.renderRows();
+
     }
 
     /**
@@ -1508,7 +1509,7 @@ unset($_GET['viewAlterar']);
             return false;
         }
         const oParam = {
-            exec: 'getItensAlteracao',
+            exec: 'getDadosAlteracao',
             iAcordo: iAcordo
         }
 
@@ -1534,16 +1535,15 @@ unset($_GET['viewAlterar']);
 
                 validaDadosAcordo(oRetorno);
 
+                oParam.exec = 'getItens';
+            new AjaxRequest(sUrlRpc, oParam, function(oResult, lErro) {
+                aItensPosicao = oResult.itens;
+
+                preencheItens(aItensPosicao);
+                validaDadosItens(aItensPosicao);
+            }).execute();
+
             }).setMessage("Aguarde, pesquisando acordos.")
-            .execute();
-
-            oParam.exec = 'getItens';
-           new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
-            aItensPosicao = oRetorno.itens;
-            preencheItens(aItensPosicao);
-            validaDadosItens(oRetorno);
-
-        }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
 
     }
@@ -1571,12 +1571,15 @@ unset($_GET['viewAlterar']);
         }
     }
 
-    function validaDadosItens(oRetorno) {
+    function validaDadosItens( aItens ) {
         let tipoApostila = $('si03_tipoapostila').value;
+        
         if (tipoApostila == "03") {
-            aItensPosicao = oRetorno.itens;
+            console.log(aItens);
+            aItensPosicao = aItens;
             js_changeTipoApostila(tipoApostila);
         }
+        return;
     }
 
     function alteraApostilamento(oApostila, listaItens, indicesSelecionados) {

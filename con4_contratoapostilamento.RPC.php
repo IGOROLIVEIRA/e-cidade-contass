@@ -140,7 +140,7 @@ try {
             }
             $oRetorno->itens = $aUnidades;
             break;
-        case 'getItensAlteracao':
+        case 'getDadosAlteracao':
 
             $validaAlterecao = new ValidaAlteracaoApostilamentoCommand;
             $validaAlterecao->execute($oParam->iAcordo);
