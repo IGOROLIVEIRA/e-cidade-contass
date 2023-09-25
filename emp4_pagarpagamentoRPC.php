@@ -510,7 +510,7 @@ switch ($oParam->exec) {
           }
         }
 
-        $oOrdemPagamento->estornarOrdem($iCaracteristicaPeculiar);
+        $oOrdemPagamento->estornarOrdem($iCaracteristicaPeculiar, $sDataLancamento);
 
         $oRetorno->iTipoAutentica = $oOrdemPagamento->getTipoAutenticacao();
         $oRetorno->sAutenticacao  = $oOrdemPagamento->getRetornoautenticacao();
