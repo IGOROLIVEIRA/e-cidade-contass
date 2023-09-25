@@ -90,7 +90,9 @@ if (isset($abast)&&$abast!=""){
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
-</head>
+<?
+db_app::load("prototype.js, scripts.js, strings.js");
+?></head>
 <body bgcolor=#CCCCCC style='margin-top: 25px'topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 	<?
 	include("forms/db_frmveicabastanu.php");

@@ -877,15 +877,17 @@ if (isset($_POST["processar"])) {
 
         let aEmpenhosInvalidos = [...new Set(oRetorno.aEmpenhosInvalidos)];
         let sEmpenhosInvalidos = JSON.stringify(aEmpenhosInvalidos);
+        let permissaoParaControlarSaldo = true;
 
         if(aEmpenhosInvalidos.length > 0){
             if (!confirm(`Usuário: A data de emissão do(s) empenho(os) ${sEmpenhosInvalidos} é anterior à data de ativação do parametro controle de saldo do empenho, portanto, o saldo não será controlado.`)) {
                 return false;
             }
+            permissaoParaControlarSaldo = false;
         }
 
         if (nControle == 0) {
-            js_importxlsfornecedor();
+            js_importxlsfornecedor(permissaoParaControlarSaldo);
         }
     }
 
@@ -898,7 +900,7 @@ if (isset($_POST["processar"])) {
     /***
      * ROTINA PARA CARREGAR VALORES DA PLANILHA ANEXADA
      */
-    function js_importxlsfornecedor() {
+    function js_importxlsfornecedor(permissaoParaControlarSaldo) {
 
         var oParam = new Object();
         var empenho = [];
@@ -915,6 +917,7 @@ if (isset($_POST["processar"])) {
             empenho[i] = $F('empenho' + nInput);
         }
         oParam.itensEmpenho = empenho;
+        oParam.permissaoParaControlarSaldo = permissaoParaControlarSaldo;
 
         js_divCarregando('Aguarde... Carregando Arquivo', 'msgbox');
 

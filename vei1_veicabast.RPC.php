@@ -6,11 +6,13 @@ require_once("libs/db_utils.php");
 require_once("libs/JSON.php");
 require_once("classes/db_empempenho_classe.php");
 require_once("classes/db_veicparam_classe.php");
+require_once("classes/db_empveiculos_classe.php");
 
 db_postmemory($_POST);
 
-$clempempenho           = new cl_empempenho;
-$clveicparam             = new cl_veicparam;
+$clempempenho = new cl_empempenho;
+$clveicparam  = new cl_veicparam;
+$clempveiculos = new cl_empveiculos;
 
 $oJson = new services_json();
 $oParametros = json_decode(str_replace('\\', '', $_POST["json"]));
@@ -30,7 +32,13 @@ try {
 
       if($ve50_abastempenho == 1){
 
-        $e60_numemp = $oParametros->e60_numemp;
+        $e60_numemp = isset($oParametros->e60_numemp) ? $oParametros->e60_numemp : "";  
+
+        if(isset($oParametros->anulacaoAbastecimento)){
+          $rsEmpenhoVeiculo = $clempveiculos->sql_record($clempveiculos->sql_query_file($e60_numemp,"si05_numemp",null,"si05_codabast = $oParametros->codigoAbastecimento"));
+          $e60_numemp = db_utils::fieldsMemory($rsEmpenhoVeiculo, 0)->si05_numemp;  
+        }
+
         $rsDataEmpenho = $clempempenho->sql_record($clempempenho->sql_query_file($e60_numemp,"e60_emiss",null,"")); 
         $e60_emiss = db_utils::fieldsMemory($rsDataEmpenho, 0)->e60_emiss;
         $ve50_datacorte = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_datacorte;
