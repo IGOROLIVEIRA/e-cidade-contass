@@ -1401,7 +1401,7 @@ if (isset($HTTP_POST_VARS ["pesquisar"]) || isset($matricula) || isset($inscrica
   if (isset($Label)) {
 
     echo "<strong style=\"color:blue\">$Label</strong>
-    <input style=\"border: 1px solid blue;font-weight: bold;background-color:#80E6FF\" tipoPesquisa=\"{$sTipoChavePesquisa}\" class=\"btcols\" type=\"text\" id=\"botaoChavePesquisa\" name=\"Label\" value=\"" . @$codOrigem . "\" size=\"10\" readonly>\n";
+    <input style=\"border: 1px solid blue;font-weight: bold;background-color:#80E6FF\" tipoPesquisa=\"{$sTipoChavePesquisa}\" class=\"btcols\" type=\"text\" id=\"botaoChavePesquisa\" name=\"$Label\" value=\"" . @$codOrigem . "\" size=\"10\" readonly>\n";
   }
 
   if ($mensagemcorte != "") {
@@ -1668,7 +1668,7 @@ if (isset($tipo_filtro) && $tipo_filtro != "" && isset($cod_filtro) && $cod_filt
   }
 }
 
-if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
+if (@$tipo_pesq[0] != "numpre") { // inicio do tipo de certidao
   $permissao = db_permissaomenu(db_getsession("DB_anousu"), 1985522, 5604);
 
   //colocado aqui
