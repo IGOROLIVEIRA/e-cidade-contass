@@ -275,7 +275,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 $oResult2 = db_utils::fieldsMemory($rsResult2,0);
 
         //if($quant_casas == 2){
-        $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * $oResult->si02_qtditem;
+        $lTotal = $oResult->si02_vltotalprecoreferencia;
         //}else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
 
         $nTotalItens += $lTotal;
@@ -339,11 +339,9 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                     $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                 }
                 $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
-                if($controle==0 && $fazerloop==2){
-                    $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * ($oResult->si02_qtditem - $valorqtd);
-                }else if($controle==1 && $fazerloop==2){
-                    $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * $valorqtd;
-                }
+                
+                $lTotal = $oResult->si02_vltotalprecoreferencia;
+                
                 $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
             }
 
@@ -482,7 +480,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
             $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
             //if($quant_casas == 2){
-            $lTotal = round($oResult->si02_vlprecoreferencia, $si01_casasdecimais) * $oResult->pc11_quant;
+            $lTotal = $oResult->si02_vltotalprecoreferencia;
             //}else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
 
             $nTotalItens += $lTotal;

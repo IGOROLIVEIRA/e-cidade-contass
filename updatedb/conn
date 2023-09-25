@@ -19,6 +19,7 @@ e-cidade			5432	mctrans
 e-cidade            5432    cmarinos
 e-cidade            5432    pmlagoadospatos
 e-cidade            5432    pmjuramento
+e-cidade            5432    cisajev3
 
 
 e-cidade            5432    pmsaoromao
@@ -160,3 +161,4 @@ cisarp                  5432 e-cidadev3-prod
 cimvales                5432 e-cidadev3-prod
 mctrans                 5432 e-cidadev3-prod
 samu                    5432 e-cidadev3-prod
+cmarinos                5432 e-cidadev3-prod
