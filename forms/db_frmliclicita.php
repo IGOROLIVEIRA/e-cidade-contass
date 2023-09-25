@@ -1383,7 +1383,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 document.getElementById("dataaberturapncp").style.display = '';
             } else {
                 document.getElementById("receita").style.display = 'none';
-                document.getElementById("dataaberturapncp").style.display = 'none';°
+                document.getElementById("dataaberturapncp").style.display = 'none';
             }
             document.getElementById("respCondProcesso").style.display = "none"
             document.getElementById("l20_tipnaturezaproced").style.display = "none";
