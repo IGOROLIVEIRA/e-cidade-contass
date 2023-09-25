@@ -877,7 +877,7 @@ if (isset($_POST["processar"])) {
 
         let aEmpenhosInvalidos = [...new Set(oRetorno.aEmpenhosInvalidos)];
         let sEmpenhosInvalidos = JSON.stringify(aEmpenhosInvalidos);
-        let permissaoParaControlarSaldo = true;
+        var permissaoParaControlarSaldo = true;
 
         if(aEmpenhosInvalidos.length > 0){
             if (!confirm(`Usuário: A data de emissão do(s) empenho(os) ${sEmpenhosInvalidos} é anterior à data de ativação do parametro controle de saldo do empenho, portanto, o saldo não será controlado.`)) {

@@ -186,7 +186,7 @@ switch ($oParam->exec) {
                 }
             }
 
-            if(!empty($aEmpenhosComSaldoTotalUtilizado)){
+            if(!empty($aEmpenhosComSaldoTotalUtilizado) &&  $oParam->permissaoParaControlarSaldo == true){
                 $sEmpenhosComSaldoTotalUtilizado = implode(", ", array_unique($aEmpenhosComSaldoTotalUtilizado));
                 $oRetorno->message = urlencode("Usuário: Abastecimento(s): não incluído(s), valor total do(s) abastecimento(s) ultrapassaram o valor disponível no(s) empenho(s): $sEmpenhosComSaldoTotalUtilizado.");
                 $erro = true;
