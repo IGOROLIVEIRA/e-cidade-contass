@@ -1,3 +1,4 @@
+-- [OC21216] Altera a receita de algumas dividas ativas
 BEGIN;
 
 SELECT fc_putsession('DB_instit', '1');
