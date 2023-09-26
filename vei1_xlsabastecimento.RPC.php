@@ -411,8 +411,6 @@ switch ($oParam->exec) {
 
                                         $valorutilizado += $rsAbastecimento1->ve70_valor;
                                     }
-                                    $clempempenho->e60_vlrutilizado =  $valorutilizado;
-                                    $clempempenho->sql_query_valorutilizado($resultEm->e60_numemp);
                                     $valorautilizar = $resultEm->e60_vlremp - $valorutilizado;
                                     $arrayValores[$j][0] = $resultEm->e60_numemp;
                                     $arrayValores[$j][1] = $valorautilizar;
@@ -439,8 +437,6 @@ switch ($oParam->exec) {
 
                                     $valorutilizado += $rsAbastecimento1->ve70_valor;
                                 }
-                                $clempempenho->e60_vlrutilizado =  $valorutilizado;
-                                $clempempenho->sql_query_valorutilizado($resultEm->e60_numemp);
                                 $valorautilizar = $resultEm->e60_vlremp - $valorutilizado;
                                 $arrayValores[$j][0] = $resultEm->e60_numemp;
                                 $arrayValores[$j][1] = $valorautilizar;
