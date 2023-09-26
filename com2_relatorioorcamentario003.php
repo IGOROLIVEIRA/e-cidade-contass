@@ -184,7 +184,7 @@ $resultDotacao = db_query($sqlDotacao);
 */
 $sqlparag = "select db02_texto from db_paragrafo inner join db_docparag on db02_idparag = db04_idparag inner join db_documento on db04_docum = db03_docum where db03_descr='DECLARACAO DE REC. ORC. E FINANCEIRO1' and db03_instit = " . db_getsession("DB_instit")." order by db04_ordem ";
 $resparag = db_query($sqlparag);
-$head5 = "DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO";
+$head5 = "DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIROS";
 
 
 $pdf = new PDF();
@@ -198,7 +198,7 @@ $alt = 3;
 $pdf->SetFont('arial','B',14);
 $pdf->ln($alt+6);
 $pdf->x = 30;
-$pdf->Cell(160,6,"DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIRO",0,1,"C",0);
+$pdf->Cell(160,6,"DECLARAÇÃO DE RECURSOS ORÇAMENTÁRIOS E FINANCEIROS",0,1,"C",0);
 $pdf->ln($alt+3);
 $pdf->x = 30;
 $pdf->SetFont('arial','',11);
