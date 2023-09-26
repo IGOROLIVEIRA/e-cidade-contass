@@ -650,13 +650,20 @@ switch ($oParam->exec) {
 
       db_inicio_transacao();
       $oSolicita = $_SESSION["oSolicita"];
-      $iCodAbertura = $oSolicita->getCodigoSolicitacao();
-      $aitens = $oSolicita->getItens();
-      
 
+      $aitens = $oSolicita->getItens();
+
+      $codigo     = $aitens[$oParam->iIndice]->getCodigoMaterial();
+      $quantidade = $aitens[$oParam->iIndice]->getQuantidade();
+
+
+      $iCodAbertura = $oSolicita->getCodigoSolicitacao();
+      
       //solicitem aqui tem a quantidade, valor, serviquantidade e reservado
       $estimativaRegistro = new estimativaRegistroPreco();
       
+
+      $estimativaRegistro->adicionarQuantidade($quantidade,$codigo,$iCodAbertura);
 
       foreach ($aitens as $iIndice => $oItem) {
 
@@ -675,8 +682,11 @@ switch ($oParam->exec) {
         $oItemRetono->temestimativa     = $lTemEstimativa;
         $oRetorno->itens[] = $oItemRetono;
       }
+
       $iDescricaoLog = 'EXCLUSAO ITEM '.$oParam->iCodigoItem;
       db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'".$iDescricaoLog." REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,3)");
+
+      db_fim_transacao(false);
     } catch (Exception $eErro) {
 
 

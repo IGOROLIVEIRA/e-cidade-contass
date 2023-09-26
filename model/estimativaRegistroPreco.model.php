@@ -1,4 +1,5 @@
 <?php
+//ini_set('display_errors','on');
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -634,6 +635,92 @@ class estimativaRegistroPreco extends solicitacaoCompra
     } else {
       throw new Exception("Erro ao incluir a cedência: {$oDaoRegistroPrecoCedencia->erro_msg}.");
     }
+    return true;
+  }
+
+  /**
+   * adiciona quantidade ao item da estimativa
+   *
+   * @param  integer $iDeptoDestino Código do departamento que vai receber o saldo
+   * @param  integer   $aListaItens   Lista de itens que devem ser cedidos para o departamento de destino (array de objetos)
+   * @param  integer  $sResumo       Resumo da cedencia de saldo
+   * @throws Exception
+   * @return boolean
+   */
+  public function adicionarQuantidade($quantidade,$item,$codigoestimativa)
+  {
+    
+    //ALTERA A ESTIMATIVA
+    $oDaoSolicitem     = db_utils::getDao("solicitem");
+
+    $rsSolicitem    = $oDaoSolicitem->sql_record($oDaoSolicitem->sql_query_serv(
+      null,
+      'pc11_codigo, pc11_quant',
+      null,
+      'pc11_numero = '.$codigoestimativa.' and pc16_codmater = '.$item
+    ));
+
+    $iCodigoitemEstimativa = db_utils::fieldsMemory($rsSolicitem, 0)->pc11_codigo;
+    $iQuantidadeantiga =  db_utils::fieldsMemory($rsSolicitem, 0)->pc11_quant;
+
+    $oDaoSolicitem->pc11_quant             = $quantidade;
+    $oDaoSolicitem->pc11_codigo  = $iCodigoitemEstimativa;
+    $oDaoSolicitem->alterar($iCodigoitemEstimativa);
+
+
+    //ALTERA A QUANTIDADE MAXIMA DA ESTIMATIVA
+    $oDaosolicitemregistropreco     = db_utils::getDao("solicitemregistropreco");
+    print_r("select * from solicitemregistropreco where pc57_solicitem = $iCodigoitemEstimativa");
+    $rssolicitemregistropreco    = $oDaosolicitemregistropreco->sql_record("select * from solicitemregistropreco where pc57_solicitem = $iCodigoitemEstimativa");
+
+    $iCodigoSolicitemRegistro = db_utils::fieldsMemory($rssolicitemregistropreco, 0)->pc57_sequencial;
+
+
+    $oDaosolicitemregistropreco->pc57_quantmax             = $quantidade;
+    $oDaosolicitemregistropreco->pc57_sequencial  = $iCodigoSolicitemRegistro;
+    $oDaosolicitemregistropreco->alterar($iCodigoSolicitemRegistro);
+
+
+    //ALTERA A COMPILAÇÃO
+    $oDaoSolicita     = db_utils::getDao("solicita");
+
+    $rsSolicita    = $oDaoSolicita->sql_record("select pc53_solicitafilho from solicitavinculo inner join solicita on pc53_solicitafilho = pc10_numero where pc53_solicitapai = (select pc53_solicitapai from solicitavinculo where pc53_solicitafilho = $codigoestimativa) and pc10_solicitacaotipo = 6");
+
+    $iCodigoCompilacao = db_utils::fieldsMemory($rsSolicita, 0)->pc53_solicitafilho;
+    
+    if($iCodigoCompilacao == null || $iCodigoCompilacao == ""){
+      
+    }
+
+    
+
+    $rsSolicitem    = $oDaoSolicitem->sql_record($oDaoSolicitem->sql_query_serv(
+      null,
+      'pc11_codigo, pc11_quant',
+      null,
+      'pc11_numero = '.$iCodigoCompilacao.' and pc16_codmater = '.$item
+    ));
+
+    $iCodigoitemCompilacao = db_utils::fieldsMemory($rsSolicitem, 0);
+
+    $oDaoSolicitem->pc11_quant             = $iCodigoitemCompilacao->pc11_quant + $quantidade;
+    $oDaoSolicitem->pc11_codigo  = $iCodigoitemCompilacao->pc11_codigo;
+    $oDaoSolicitem->alterar($iCodigoitemCompilacao->pc11_codigo);
+
+    //ALTERA A QUANTIDADE MAXIMA DA COMPILAÇÃO
+    $rssolicitemregistropreco    = $oDaosolicitemregistropreco->sql_record("select * from solicitemregistropreco where pc57_solicitem = $iCodigoitemCompilacao->pc11_codigo");
+
+    $iCodigoSolicitemRegistro = db_utils::fieldsMemory($rssolicitemregistropreco, 0);
+
+
+    $oDaosolicitemregistropreco->pc57_quantmax             = $iCodigoSolicitemRegistro->pc57_sequencial + $quantidade - $iQuantidadeantiga;
+    $oDaosolicitemregistropreco->pc57_sequencial  = $iCodigoSolicitemRegistro->pc57_sequencial;
+    $oDaosolicitemregistropreco->alterar($iCodigoSolicitemRegistro->pc57_sequencial);
+
+
+
+    
+
     return true;
   }
 }

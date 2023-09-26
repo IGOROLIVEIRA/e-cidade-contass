@@ -169,7 +169,7 @@ function js_pesquisar() {
 
   js_OpenJanelaIframe('',
                       'db_iframe_solicita',
-                      'func_solicitaestimativa.php?funcao_js=parent.js_completaPesquisa|pc10_numero'+
+                      'func_alterasolicitaestimativa.php?funcao_js=parent.js_completaPesquisa|pc10_numero'+
                       '&numero='+$('pc10_numero').value,
                       'Estimativas de Registro de Preço',
                       true,
@@ -180,7 +180,7 @@ function js_completaPesquisa(iSolicitacao) {
 
    var oParam          = new Object();
    oParam.exec         = "pesquisarAbertura";
-   oParam.iSolicitacao = iSolicitacao;
+   oParam.iSolicitacao = $('pc10_numero').value;
    oParam.tipo         = 4;
    db_iframe_solicita.hide();
    var oAjax           = new Ajax.Request(sUrlRC,
@@ -191,6 +191,7 @@ function js_completaPesquisa(iSolicitacao) {
                                          });
 }
 
+js_pesquisar();
 function js_retornoCompletaPesquisa(oAjax) {
 
   var oRetorno = eval("("+oAjax.responseText+")");

@@ -749,6 +749,20 @@ class aberturaRegistroPreco extends solicitacaoCompra {
       $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemAbertura->pc11_codigo;
       $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitem->pc11_codigo;
       $oDaoSolicitemVinculo->incluir(null);
+
+      /**
+      * Salvamos as informacoes da Unidade do material
+      */
+      $oDaosolicitemregistropreco = db_utils::getDao('solicitemregistropreco');
+      
+      $oDaosolicitemregistropreco->pc57_solicitem = $oDaoSolicitem->pc11_codigo;
+      $oDaosolicitemregistropreco->pc57_quantmin = 0;
+      $oDaosolicitemregistropreco->pc57_quantmax = 1;
+      $oDaosolicitemregistropreco->pc57_itemorigem = $oDaoSolicitemAbertura->pc11_codigo;
+      $oDaosolicitemregistropreco->pc57_ativo = 't';
+      $oDaosolicitemregistropreco->pc57_quantidadeexecedente = 0;
+      $oDaosolicitemregistropreco->incluir(null);
+
     }
     if($tipo == 6){
       /**
@@ -767,7 +781,20 @@ class aberturaRegistroPreco extends solicitacaoCompra {
             $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemAbertura->pc11_codigo;
             $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitem->pc11_codigo;
             $oDaoSolicitemVinculo->incluir(null);
+
+            /**
+            * Salvamos as informacoes da Unidade do material
+            */
+            $oDaosolicitemregistropreco = db_utils::getDao('solicitemregistropreco');
             
+            $oDaosolicitemregistropreco->pc57_solicitem = $oDaoSolicitem->pc11_codigo;
+            $oDaosolicitemregistropreco->pc57_quantmin = 0;
+            $oDaosolicitemregistropreco->pc57_quantmax = 1;
+            $oDaosolicitemregistropreco->pc57_itemorigem = $oDaoSolicitemAbertura->pc11_codigo;
+            $oDaosolicitemregistropreco->pc57_ativo = 't';
+            $oDaosolicitemregistropreco->pc57_quantidadeexecedente = 0;
+            $oDaosolicitemregistropreco->incluir(null);
+                  
           }
 
           $oDaoPcProcItem = db_utils::getDao('pcprocitem');
