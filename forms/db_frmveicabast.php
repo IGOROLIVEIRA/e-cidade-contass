@@ -535,8 +535,7 @@ db_app::load("estilos.css");
       }
 
     } else {
-      //js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&lPesquisaPorCodigoEmpenho=1&ve70_abast=' + ve70_abast + '&pesquisa_chave=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
-      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&pesquisa_chave=' + document.form1.si05_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&lPesquisaPorCodigoEmpenho=1&ve70_abast=' + ve70_abast + '&pesquisa_chave=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
     }
   }
   /*
@@ -592,7 +591,10 @@ db_app::load("estilos.css");
    * */
 
   function js_mostraempempenho(chave1,erro) {
-    if(erro) return;
+    if(erro){
+      document.form1.e60_codemp.value = '';
+      return false;
+    }
     document.form1.e60_codemp.value = chave1;
     db_iframe_empempenho.hide();
   }
@@ -1232,7 +1234,7 @@ db_app::load("estilos.css");
   };
   //js_pesquisa_ultimamedida();
   js_formataHora();
-  js_pesquisae60_codemp(false);
+  js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + document.form1.ve70_dtabast.value + '&pesquisa_chave=' + document.form1.si05_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
 
   var litros = 0;
   var valor = 0;
