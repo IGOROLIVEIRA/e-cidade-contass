@@ -30,6 +30,9 @@ require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
+require_once("classes/db_solicita_classe.php");
+$clsolicita = new cl_solicita;
+$clsolicita->rotulo->label();
 ?>
 <html>
 
@@ -67,16 +70,46 @@ require_once("dbforms/db_funcoes.php");
                 <legend style="font-weight: bold">Material / Serviço </legend>
                 <table border='0'>
                     <tr>
+                        <td>
+                            <?php db_ancora("Solicitação:","js_pesquisapc10_numero();",1); ?>
+                        </td>
+                        <td>
+                            <?php
+                            db_input("pc10_numero",10,$Ipc10_numero,true,"text",3,"");
+                            db_input("pc10_resumo",60,$Ipc10_resumo,true,"text",3,"");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap="nowrap" title="<?=$Tl20_codigo?>">
+                            <?db_ancora("Licitação:","js_pesquisa_liclicita();",1);?>
+                        </td>
+                        <td>
+                            <?php
+                            db_input("l20_codigo",10,$Il20_codigo,true,"text",3,"");
+                            db_input("l20_objeto",60,$Il20_objeto,true,"text",3,"");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap title="<?php echo $Tac16_sequencial; ?>" width="130">
+                            <?php db_ancora("Contrato:", "js_acordo();",1); ?>
+                        </td>
+                        <td>
+                            <?php
+                            db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 3, "");
+                            db_input('ac16_resumoobjeto', 60, $Iac16_resumoobjeto, true, 'text', 3);
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
                         <td nowrap title="À partir de qual data">
                             <?php db_ancora("Código de: ", "pesquisaCodigoMaterialServico(true, `inicial`);",1); ?>
                         </td>
                         <td>
-                            <?php db_input('iCodigoMaterialInicial',4, true, 1, 'text', 1, "onchange='pesquisaCodigoMaterialServico(false, `inicial`);'"); ?>
+                            <?php db_input('iCodigoMaterialInicial',10, true, 1, 'text', 1, "onchange='pesquisaCodigoMaterialServico(false, `inicial`);'"); ?>
                             <b><?php db_ancora('a', "pesquisaCodigoMaterialServico(true, `final`);",1); ?></b>
-                            <?php db_input('iCodigoMaterialFinal', 4, true, 1, 'text', 1, "onchange='pesquisaCodigoMaterialServico(false, `final`);'"); ?>
-                        </td>
-                        <td>
-                            <input name="btnProcessar" id="btnProcessar" type="button" value="Processar"  onclick='consultaCodigoMaterial();' >
+                            <?php db_input('iCodigoMaterialFinal', 10, true, 1, 'text', 1, "onchange='pesquisaCodigoMaterialServico(false, `final`);'"); ?>
                         </td>
                     </tr>
                     <tr>
@@ -89,8 +122,11 @@ require_once("dbforms/db_funcoes.php");
                             ?>
                             <b></b>
                         </td>
+                    </tr>
+                    <tr>
                         <td>
                             <input name="btnAplicar" id="btnAplicar" type="button" value="Aplicar"  onclick='atualizarDataPara();' >
+                            <input name="btnProcessar" id="btnProcessar" type="button" value="Processar"  onclick='consultaCodigoMaterial();' >
                         </td>
                     </tr>
                 </table>
@@ -119,26 +155,49 @@ require_once("dbforms/db_funcoes.php");
 
     function consultaCodigoMaterial() {
         let oParametros = {};
+        let iSolicitacao = $F('pc10_numero');
+        let iLicitacao = $F('l20_codigo');
+        let iContrato = $F('ac16_sequencial');
+
         oParametros.exec = 'consultaCodigoMaterial';
         oParametros.codigoMaterialIinicial = $F('iCodigoMaterialInicial');
         oParametros.codigoMaterialFinal = $F('iCodigoMaterialFinal');
 
-        if (validaCodigoMaterial(oParametros.codigoMaterialIinicial)) {
-            js_divCarregando('Aguarde, Atualizando leituras...<br>Esse procedimento pode levar algum tempo.', 'msgBox');
-            new Ajax.Request(sUrlRpc, {
-                method: 'post',
-                parameters: 'json=' + Object.toJSON(oParametros),
-                onComplete: function(oResponse) {
-                    const oRetorno = eval("(" + oResponse.responseText + ")");
-                    aMateriaisCadastrados = oRetorno.materiais;
-                    js_removeObj('msgBox');
-                    renderizaMateriais();
-                    if (oRetorno.status === 2) {
-                        alert(oRetorno.message.urlDecode());
-                    }
-                }
-            });
+        if(iSolicitacao){
+            oParametros.exec = 'consultaCodigoMaterialSolicitacao';
+            oParametros.codigoMaterialIinicial = $F('iCodigoMaterialInicial');
+            oParametros.codigoMaterialFinal = $F('iCodigoMaterialFinal');
+            oParametros.iSolicitacao = iSolicitacao;
         }
+
+        if(iLicitacao){
+            oParametros.exec = 'consultaCodigoMaterialLicitacao';
+            oParametros.codigoMaterialIinicial = $F('iCodigoMaterialInicial');
+            oParametros.codigoMaterialFinal = $F('iCodigoMaterialFinal');
+            oParametros.iLicitacao = iLicitacao;
+        }
+
+        if(iContrato){
+            oParametros.exec = 'consultaCodigoMaterialContrato';
+            oParametros.codigoMaterialIinicial = $F('iCodigoMaterialInicial');
+            oParametros.codigoMaterialFinal = $F('iCodigoMaterialFinal');
+            oParametros.iContrato = iContrato;
+        }
+
+        //js_divCarregando('Aguarde, Atualizando leituras...<br>Esse procedimento pode levar algum tempo.', 'msgBox');
+        new Ajax.Request(sUrlRpc, {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParametros),
+            onComplete: function(oResponse) {
+                const oRetorno = eval("(" + oResponse.responseText + ")");
+                aMateriaisCadastrados = oRetorno.materiais;
+                js_removeObj('msgBox');
+                renderizaMateriais();
+                if (oRetorno.status === 2) {
+                    alert(oRetorno.message.urlDecode());
+                }
+            }
+        });
     }
 
     function validaCodigoMaterial(codigo) {
@@ -302,6 +361,49 @@ require_once("dbforms/db_funcoes.php");
             }
         });
     }
+
+    function js_pesquisapc10_numero(){
+       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero|pc10_resumo','Pesquisa',true);
+    }
+
+    function js_mostrapcorcamitem1(pc10_numero,pc10_resumo){
+        document.form1.pc10_numero.value = pc10_numero;
+        document.form1.pc10_resumo.value = pc10_resumo;
+        document.form1.l20_codigo.value = '';
+        document.form1.l20_objeto.value = '';
+        document.form1.ac16_sequencial.value = '';
+        document.form1.ac16_resumoobjeto.value = '';
+        db_iframe_solicita.hide();
+    }
+
+    function js_pesquisa_liclicita() {
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita|l20_codigo|l20_objeto','Pesquisa',true);
+    }
+
+    function js_mostraliclicita(l20_codigo,l20_objeto,erro) {
+        document.form1.l20_codigo.value = l20_codigo;
+        document.form1.l20_objeto.value = l20_objeto;
+        document.form1.pc10_numero.value = '';
+        document.form1.pc10_resumo.value = '';
+        document.form1.ac16_sequencial.value = '';
+        document.form1.ac16_resumoobjeto.value = '';
+        db_iframe_liclicita.hide();
+    }
+
+    function js_acordo(){
+        js_OpenJanelaIframe('','db_iframe_acordo', 'func_acordoinstit.php?funcao_js=parent.js_mostraAcordo1|ac16_sequencial|ac16_resumoobjeto', 'Pesquisa',true);
+    }
+
+    function js_mostraAcordo1(ac16_sequencial,ac16_resumoobjeto, erro){
+        document.form1.ac16_sequencial.value = ac16_sequencial;
+        document.form1.ac16_resumoobjeto.value = ac16_resumoobjeto;
+        document.form1.pc10_numero.value = '';
+        document.form1.pc10_resumo.value = '';
+        document.form1.l20_codigo.value = '';
+        document.form1.l20_objeto.value = '';
+        db_iframe_acordo.hide();
+    }
+
 </script>
 </html>
 <?php

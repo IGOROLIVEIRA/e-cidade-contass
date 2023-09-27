@@ -106,6 +106,154 @@ switch ($oParam->exec) {
 
       break;
 
+    case 'consultaCodigoMaterialSolicitacao':
+        if (empty($oParam->codigoMaterialIinicial)) {
+            $oParam->codigoMaterialIinicial = 0;
+        }
+
+        if (empty($oParam->codigoMaterialFinal) && !empty($oParam->codigoMaterialIinicial)) {
+            $oParam->codigoMaterialFinal = $oParam->codigoMaterialIinicial;
+        }
+
+        $sqlintervaloFormatado = "";
+
+        if($oParam->codigoMaterialIinicial){
+            $intervaloDatas = range($oParam->codigoMaterialIinicial, $oParam->codigoMaterialFinal);
+            $intervaloFormatadoParaSql = implode(',', $intervaloDatas);
+            $sqlintervaloFormatado = "and pc01_codmater IN ($intervaloFormatadoParaSql)";
+        }
+
+        $sql = "
+            SELECT pc01_codmater AS codigo,
+                   CASE
+                       WHEN pc01_complmater IS NOT NULL THEN pc01_descrmater || '. ' || pc01_complmater
+                       ELSE pc01_descrmater
+                   END AS descricao,
+                   pc01_data AS DATA,
+                   pc01_dataalteracao AS dataalteracao
+            FROM solicitem
+            INNER JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+            INNER JOIN pcmater ON pc16_codmater = pc01_codmater
+            WHERE pc11_numero=$oParam->iSolicitacao $sqlintervaloFormatado
+        ";
+
+        $rsCodigosMateriais = db_query($sql);
+        $oRetorno->materiais = array();
+
+        if (pg_num_rows($rsCodigosMateriais) == 0) {
+            $oRetorno->message = urlencode('Não há nenhum material/serviço com o intervalo informado.');
+            $oRetorno->status = 2;
+            break;
+        }
+
+        $oRetorno->materiais = db_utils::getCollectionByRecord(
+            $rsCodigosMateriais,
+            false,
+            false,
+            true
+        );
+
+        break;
+
+    case 'consultaCodigoMaterialLicitacao':
+        if (empty($oParam->codigoMaterialIinicial)) {
+            $oParam->codigoMaterialIinicial = 0;
+        }
+
+        if (empty($oParam->codigoMaterialFinal) && !empty($oParam->codigoMaterialIinicial)) {
+            $oParam->codigoMaterialFinal = $oParam->codigoMaterialIinicial;
+        }
+
+        $sqlintervaloFormatado = "";
+
+        if($oParam->codigoMaterialIinicial){
+            $intervaloDatas = range($oParam->codigoMaterialIinicial, $oParam->codigoMaterialFinal);
+            $intervaloFormatadoParaSql = implode(',', $intervaloDatas);
+            $sqlintervaloFormatado = "and pc01_codmater IN ($intervaloFormatadoParaSql)";
+        }
+
+        $sql = "
+            SELECT pc01_codmater AS codigo,
+                   CASE
+                       WHEN pc01_complmater IS NOT NULL THEN pc01_descrmater || '. ' || pc01_complmater
+                       ELSE pc01_descrmater
+                   END AS descricao,
+                   pc01_data AS DATA,
+                   pc01_dataalteracao AS dataalteracao
+            FROM liclicitem
+            INNER JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
+            INNER JOIN solicitem ON pc81_solicitem = pc11_codigo
+            INNER JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+            INNER JOIN pcmater ON pc16_codmater = pc01_codmater
+            WHERE l21_codliclicita = $oParam->iLicitacao $sqlintervaloFormatado
+        ";
+
+        $rsCodigosMateriais = db_query($sql);
+        $oRetorno->materiais = array();
+
+        if (pg_num_rows($rsCodigosMateriais) == 0) {
+            $oRetorno->message = urlencode('Não há nenhum material/serviço com o intervalo informado.');
+            $oRetorno->status = 2;
+            break;
+        }
+
+        $oRetorno->materiais = db_utils::getCollectionByRecord(
+            $rsCodigosMateriais,
+            false,
+            false,
+            true
+        );
+
+        break;
+
+    case 'consultaCodigoMaterialContrato':
+        if (empty($oParam->codigoMaterialIinicial)) {
+            $oParam->codigoMaterialIinicial = 0;
+        }
+
+        if (empty($oParam->codigoMaterialFinal) && !empty($oParam->codigoMaterialIinicial)) {
+            $oParam->codigoMaterialFinal = $oParam->codigoMaterialIinicial;
+        }
+
+        $sqlintervaloFormatado = "";
+
+        if($oParam->codigoMaterialIinicial){
+            $intervaloDatas = range($oParam->codigoMaterialIinicial, $oParam->codigoMaterialFinal);
+            $intervaloFormatadoParaSql = implode(',', $intervaloDatas);
+            $sqlintervaloFormatado = "and pc01_codmater IN ($intervaloFormatadoParaSql)";
+        }
+
+        $sql = "
+            SELECT pc01_codmater AS codigo,
+                   CASE
+                       WHEN pc01_complmater IS NOT NULL THEN pc01_descrmater || '. ' || pc01_complmater
+                       ELSE pc01_descrmater
+                   END AS descricao,
+                   pc01_data AS DATA,
+                   pc01_dataalteracao AS dataalteracao
+            FROM acordoposicao
+            INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+            INNER JOIN pcmater ON pc01_codmater = ac20_pcmater
+            where ac26_acordo = $oParam->iContrato $sqlintervaloFormatado
+        ";
+
+        $rsCodigosMateriais = db_query($sql);
+        $oRetorno->materiais = array();
+
+        if (pg_num_rows($rsCodigosMateriais) == 0) {
+            $oRetorno->message = urlencode('Não há nenhum material/serviço com o intervalo informado.');
+            $oRetorno->status = 2;
+            break;
+        }
+
+        $oRetorno->materiais = db_utils::getCollectionByRecord(
+            $rsCodigosMateriais,
+            false,
+            false,
+            true
+        );
+
+        break;
     case 'atualizarDatasMateriais' :
       $rsCodigosMateriaisAtualizados = false;
 
