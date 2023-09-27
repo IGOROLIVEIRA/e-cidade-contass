@@ -27,6 +27,9 @@ class Oc20960 extends AbstractMigration
             MAXVALUE 9223372036854775807
             START 1
             CACHE 1;
+
+            INSERT INTO db_itensmenu values ((select max(id_item)+1 from db_itensmenu),'Alteração de Data de Cadastro','Alteração de Data de Cadastro','com1_alteradatacadastro.php',1,1,'Alteração de Data de Cadastro','t');
+            INSERT INTO db_menu VALUES((select id_item from db_menu where id_item_filho in (select id_item from db_itensmenu where funcao='com1_pcmaterimportacao001.php')),(select max(id_item) from db_itensmenu),5,28);
         ";
         $this->execute($sql);
     }
