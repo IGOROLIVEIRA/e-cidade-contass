@@ -1425,12 +1425,18 @@ class cl_liclicita
             $virgula = ",";
         }
 
-        if (trim($this->l20_dataaberproposta) == null || trim($this->l20_dataaberproposta) == "") {
-            $sql .= $virgula . " l20_dataaberproposta =null ";
-            $virgula = ",";
-        } else {
+        if (trim($this->l20_dataaberproposta) != null || trim($this->l20_dataaberproposta) != "") {
             $sql .= $virgula . " l20_dataaberproposta = '$this->l20_dataaberproposta' ";
             $virgula = ",";
+            if (trim($this->l20_dataaberproposta) == null) {
+                $this->erro_sql = " Campo data da abertura da proposta não informado.";
+                $this->erro_campo = "l20_dataaberproposta";
+                $this->erro_banco = "";
+                $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
         }
 
         if (trim($this->l20_dataencproposta) == null || trim($this->l20_dataencproposta) == "") {
@@ -1859,6 +1865,36 @@ class cl_liclicita
                 $this->erro_status = "0";
                 return false;
             }
+        }
+
+        if (!empty($this->l20_datadiario) || isset($GLOBALS["HTTP_POST_VARS"]["l20_datadiario"])) {
+            $data = ($this->l20_datadiario !== null) ? "'" . $this->l20_datadiario . "'" : 'null';
+            $sql .= $virgula . " l20_datadiario = $data";
+            $virgula = ",";
+        }
+
+        if (!empty($this->l20_dtpulicacaopncp) || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaopncp"])) {
+            $data = ($this->l20_dtpulicacaopncp !== null) ? "'" . $this->l20_dtpulicacaopncp . "'" : 'null';
+            $sql .= $virgula . " l20_dtpulicacaopncp = $data";
+            $virgula = ",";
+        }
+
+        if (!empty($this->l20_datapublicacao1) || isset($GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao1"])) {
+            $data = ($this->l20_datapublicacao1 !== null) ? "'" . $this->l20_datapublicacao1 . "'" : 'null';
+            $sql .= $virgula . " l20_datapublicacao1 = $data";
+            $virgula = ",";
+        }
+
+        if (!empty($this->l20_datapublicacao2) || isset($GLOBALS["HTTP_POST_VARS"]["l20_datapublicacao2"])) {
+            $data = ($this->l20_datapublicacao2 !== null) ? "'" . $this->l20_datapublicacao2 . "'" : 'null';
+            $sql .= $virgula . " l20_datapublicacao2 = $data";
+            $virgula = ",";
+        }
+
+        if (!empty($this->l20_dtpulicacaoedital) || isset($GLOBALS["HTTP_POST_VARS"]["l20_dtpulicacaoedital"])) {
+            $data = ($this->l20_dtpulicacaoedital !== null) ? "'" . $this->l20_dtpulicacaoedital . "'" : 'null';
+            $sql .= $virgula . " l20_dtpulicacaoedital = $data";
+            $virgula = ",";
         }
 
         if (trim($this->l20_mododisputa) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_mododisputa"])) {
@@ -3754,6 +3790,7 @@ class cl_liclicita
         LEFT JOIN situacaoitem ON l217_sequencial=l219_situacao
         WHERE liclicita.l20_codigo = $l20_codigo
         AND liclicitem.l21_ordem = $ordem
+        AND pc23_vlrun > 0
         ORDER BY l217_sequencial desc limit 1";
     }
 

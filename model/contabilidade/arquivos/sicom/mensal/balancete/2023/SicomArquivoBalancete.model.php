@@ -231,15 +231,15 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         return 0;
     }
 
-    public function getCodCoByFonteRegistro30($fonte, $tipodespesaEmpRPPS, $emenda)
+    public function getCodCoByFonteRegistro30($fonte, $tipodespesaEmpRPPS, $emenda, $esferaemendaparlamentar)
     {
 
         $fonte = trim(strval($fonte));
-        if (in_array($fonte, array('15000001'))) {
+        if (in_array($fonte, array('15000001','25000001'))) {
             return 1001;
         }
 
-        if (in_array($fonte, array('15000002'))) {
+        if (in_array($fonte, array('15000002','25000002'))) {
             return 1002;
         }
 
@@ -247,15 +247,15 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
             return 1070;
         }
 
-        if (in_array($fonte, array('18000001'))) {
+        if (in_array($fonte, array('18000001','28000001'))) {
             return 1111;
         }
 
-        if (in_array($fonte, array('18000000')) && $tipodespesaEmpRPPS == 1) {
+        if (in_array($fonte, array('18000000','28000000')) && $tipodespesaEmpRPPS == 1) {
             return 1111;
         }
 
-        if (in_array($fonte, array('18000000')) && $tipodespesaEmpRPPS == 2) {
+        if (in_array($fonte, array('18000000','28000000')) && $tipodespesaEmpRPPS == 2) {
             return 1121;
         }
         $arrayFonteEmenda1 = array('551000', '552000', '553000', '569000', '570000', '600000', '601000', '602000', '603000', '631000', '660000', '700000', '700007', '700014', '706000', '749014', '759014');
@@ -286,7 +286,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         }
 
         if (in_array(substr($fonte, 1, 6), $arrayFonteEmenda2) && $emenda == 4) {
-            return 7000;
+            return 7001;
         }
 
         if (in_array(substr($fonte, 1, 6), $arrayFonteEmenda2) && $emenda == 3) {
@@ -294,16 +294,31 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         }
 
         $arrayFonteEmenda3 = array('665000');
-        if (in_array(substr($fonte, 1, 6), $arrayFonteEmenda3) && $emenda == 1) {
-            return 3110;
-        }
+        if ($esferaemendaparlamentar == 1){
+            if (in_array(substr($fonte, 1, 6), $arrayFonteEmenda3) && $emenda == 1) {
+                return 3110;
+            }
 
-        if (in_array(substr($fonte, 1, 6), $arrayFonteEmenda3) && $emenda == 2) {
-            return 3120;
-        }
+            if (in_array(substr($fonte, 1, 6), $arrayFonteEmenda3) && $emenda == 2) {
+                return 3120;
+            }
 
-        if (in_array(substr($fonte, 1, 6), $arrayFonteEmenda3) && $emenda == 4) {
-            return 7000;
+            if (in_array(substr($fonte, 1, 6), $arrayFonteEmenda3) && $emenda == 4) {
+                return 7000;
+            }
+        }
+        if ($esferaemendaparlamentar == 2){
+            if (in_array(substr($fonte, 1, 6), $arrayFonteEmenda3) && $emenda == 1) {
+                return 3210;
+            }
+
+            if (in_array(substr($fonte, 1, 6), $arrayFonteEmenda3) && $emenda == 2) {
+                return 3220;
+            }
+
+            if (in_array(substr($fonte, 1, 6), $arrayFonteEmenda3) && $emenda == 4) {
+                return 7001;
+            }
         }
 
         return 0;
@@ -390,9 +405,9 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         $aContasModalidadeAplicacao = array('52211', '52212', '52213', '52219', '62211', '62212');
 
 
-        $aContasTransfereSaldoRP = array('6311', '6321', '6313', '6317', '6317', '6327', '5312', '5322', '5317', '5327');
+        $aContasTransfereSaldoRP = array('6311','6312', '6321', '6313', '6317', '6317', '6327', '5312', '5322', '5317', '5327');
 
-        $aContasNaoTransfereSaldoRP = array('6311','6313','6321');
+        $aContasNaoTransfereSaldoRP = array('6311','6312','6313','6321');
 
 
         /**
@@ -1856,7 +1871,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                  * Controle por Fonte de Recursos, Atributo SF e D?vida Consolidada
                                  */
 
-                                $sHash29 = '29' . $oContas10->si177_contacontaabil . $oReg16Saldo->identificadorfinanceiro . $oReg16Font->codfontrecursos;
+                                $sHash29 = '29' . $oContas10->si177_contacontaabil . $oReg16Saldo->identificadorfinanceiro;
 
                                 if (!isset($aContasReg10[$reg10Hash]->reg29[$sHash29])) {
 
@@ -2907,7 +2922,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                                 }
                             }
 
-                            $codCo = $this->getCodCoByFonteRegistro30($oReg30->o15_codigo, $oReg30->tipodespesaemprpps, $oReg30->e60_emendaparlamentar);
+                            $codCo = $this->getCodCoByFonteRegistro30($oReg30->o15_codigo, $oReg30->e60_tipodespesa, $oReg30->e60_emendaparlamentar, $oReg30->e60_esferaemendaparlamentar);
 
                             $sHash30 = '30' . $oContas10->si177_contacontaabil . $oReg30->codorgao . $oReg30->codunidadesub . $oReg30->codfuncao . $oReg30->codsubfuncao . $oReg30->codprograma;
                             $sHash30 .= $oReg30->idacao . $oReg30->idsubacao . $sElemento . $sSubElemento . $oReg30->codfontrecursos . $oReg30->e60_tipodespesa . $codCo;

@@ -90,7 +90,7 @@ class cl_itemprecoreferencia {
        $this->erro_sql = " Campo codigo do preco de referencia nao Informado.";
        $this->erro_campo = "si02_precoreferencia";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -99,7 +99,7 @@ class cl_itemprecoreferencia {
        $this->erro_sql = " Campo Codigo do Item nao Informado.";
        $this->erro_campo = "si02_itemproccompra";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -108,7 +108,7 @@ class cl_itemprecoreferencia {
        $this->erro_sql = " Campo Valor do preco de referencia nao Informado.";
        $this->erro_campo = "si02_vlprecoreferencia";
        $this->erro_banco = "";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -117,52 +117,52 @@ class cl_itemprecoreferencia {
       $this->erro_sql = " Campo Valor Total do preco de referencia nao Informado.";
       $this->erro_campo = "si02_vltotalprecoreferencia";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
     }
      if($this->si02_coditem == null ){
-      $this->erro_sql = " Campo codigo do item do material não informado.";
+      $this->erro_sql = " Campo codigo do item do material no informado.";
       $this->erro_campo = "si02_coditem";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
     }
     /*if($this->si02_descritem == null ){
-      $this->erro_sql = " Campo descricao do item não informado.";
+      $this->erro_sql = " Campo descricao do item no informado.";
       $this->erro_campo = "si02_descritem";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
     }*/
     if($this->si02_qtditem == null ){
-      $this->erro_sql = " Campo quantidade do item não informado.";
+      $this->erro_sql = " Campo quantidade do item no informado.";
       $this->erro_campo = "si02_qtditem";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
     } 
     if($this->si02_codunidadeitem == null ){
-      $this->erro_sql = " Campo codigo unidade do item não informado.";
+      $this->erro_sql = " Campo codigo unidade do item no informado.";
       $this->erro_campo = "si02_codunidadeitem";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
     }
     if($this->si02_criterioadjudicacao == null ){
-      $this->erro_sql = " Campo critério de ajudicacao não informado.";
+      $this->erro_sql = " Campo critrio de ajudicacao no informado.";
       $this->erro_campo = "si02_criterioadjudicacao";
       $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
       $this->erro_status = "0";
       return false;
@@ -187,7 +187,7 @@ class cl_itemprecoreferencia {
        if($result==false){
          $this->erro_banco = str_replace("\n","",@pg_last_error());
          $this->erro_sql   = "Verifique o cadastro da sequencia: sic_itemprecoreferencia_si02_sequencial_seq do campo: si02_sequencial";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -196,9 +196,9 @@ class cl_itemprecoreferencia {
      }else{
        $result = db_query("select last_value from sic_itemprecoreferencia_si02_sequencial_seq");
        if(($result != false) && (pg_result($result,0,0) < $si02_sequencial)){
-         $this->erro_sql = " Campo si02_sequencial maior que último número da sequencia.";
-         $this->erro_banco = "Sequencia menor que este número.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql = " Campo si02_sequencial maior que ltimo nmero da sequencia.";
+         $this->erro_banco = "Sequencia menor que este nmero.";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -209,7 +209,7 @@ class cl_itemprecoreferencia {
      if(($this->si02_sequencial == null) || ($this->si02_sequencial == "") ){
        $this->erro_sql = " Campo si02_sequencial nao declarado.";
        $this->erro_banco = "Chave Primaria zerada.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -252,13 +252,13 @@ class cl_itemprecoreferencia {
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
-         $this->erro_sql   = "Item do preco de referencia ($this->si02_sequencial) nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-         $this->erro_banco = "Item do preco de referencia já Cadastrado";
+         $this->erro_sql   = "Item do preco de referencia ($this->si02_sequencial) nao Includo. Inclusao Abortada.";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_banco = "Item do preco de referencia j Cadastrado";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }else{
-         $this->erro_sql   = "Item do preco de referencia ($this->si02_sequencial) nao Incluído. Inclusao Abortada.";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_sql   = "Item do preco de referencia ($this->si02_sequencial) nao Includo. Inclusao Abortada.";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        }
        $this->erro_status = "0";
@@ -268,7 +268,7 @@ class cl_itemprecoreferencia {
      $this->erro_banco = "";
      $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->si02_sequencial;
-     $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+     $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
      $this->erro_status = "1";
      $this->numrows_incluir= pg_affected_rows($result);
@@ -300,7 +300,7 @@ class cl_itemprecoreferencia {
          $this->erro_sql = " Campo codigo sequencial nao Informado.";
          $this->erro_campo = "si02_sequencial";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -313,7 +313,7 @@ class cl_itemprecoreferencia {
          $this->erro_sql = " Campo codigo do preco de referencia nao Informado.";
          $this->erro_campo = "si02_precoreferencia";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -326,7 +326,7 @@ class cl_itemprecoreferencia {
          $this->erro_sql = " Campo Codigo do Item nao Informado.";
          $this->erro_campo = "si02_itemproccompra";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -339,7 +339,7 @@ class cl_itemprecoreferencia {
          $this->erro_sql = " Campo Valor do preco de referencia nao Informado.";
          $this->erro_campo = "si02_vlprecoreferencia";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -352,7 +352,7 @@ class cl_itemprecoreferencia {
         $this->erro_sql = " Campo Valor Total do preco de referencia nao Informado.";
         $this->erro_campo = "si02_vltotalprecoreferencia";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;
@@ -365,7 +365,7 @@ class cl_itemprecoreferencia {
          $this->erro_sql = " Campo Media de desconto referencia nao Informado.";
          $this->erro_campo = "si02_vlpercreferencia";
          $this->erro_banco = "";
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "0";
          return false;
@@ -378,7 +378,7 @@ class cl_itemprecoreferencia {
         $this->erro_sql = " Campo Media de desconto referencia nao Informado.";
         $this->erro_campo = "si02_qtditem";
         $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;
@@ -415,7 +415,7 @@ class cl_itemprecoreferencia {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Item do preco de referencia nao Alterado. Alteracao Abortada.\\n";
          $this->erro_sql .= "Valores : ".$this->si02_sequencial;
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_alterar = 0;
@@ -425,16 +425,16 @@ class cl_itemprecoreferencia {
          $this->erro_banco = "";
          $this->erro_sql = "Item do preco de referencia nao foi Alterado. Alteracao Executada.\\n";
          $this->erro_sql .= "Valores : ".$this->si02_sequencial;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_alterar = 0;
          return true;
        }else{
          $this->erro_banco = "";
-         $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+         $this->erro_sql = "Alterao efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->si02_sequencial;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_alterar = pg_affected_rows($result);
@@ -478,9 +478,9 @@ class cl_itemprecoreferencia {
      $result = db_query($sql.$sql2);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
-       $this->erro_sql   = "Item do preco de referencia nao Excluído. Exclusão Abortada.\\n";
+       $this->erro_sql   = "Item do preco de referencia nao Excludo. Excluso Abortada.\\n";
        $this->erro_sql .= "Valores : ".$si02_sequencial;
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        $this->numrows_excluir = 0;
@@ -488,18 +488,18 @@ class cl_itemprecoreferencia {
      }else{
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
-         $this->erro_sql = "Item do preco de referencia nao Encontrado. Exclusão não Efetuada.\\n";
+         $this->erro_sql = "Item do preco de referencia nao Encontrado. Excluso no Efetuada.\\n";
          $this->erro_sql .= "Valores : ".$si02_sequencial;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = 0;
          return true;
        }else{
          $this->erro_banco = "";
-         $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
+         $this->erro_sql = "Excluso efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$si02_sequencial;
-         $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
          $this->erro_status = "1";
          $this->numrows_excluir = pg_affected_rows($result);
@@ -514,7 +514,7 @@ class cl_itemprecoreferencia {
        $this->numrows    = 0;
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "Erro ao selecionar os registros.";
-       $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
        $this->erro_status = "0";
        return false;
@@ -523,7 +523,7 @@ class cl_itemprecoreferencia {
       if($this->numrows==0){
         $this->erro_banco = "";
         $this->erro_sql   = "Record Vazio na Tabela:itemprecoreferencia";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+        $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
         $this->erro_status = "0";
         return false;
@@ -629,8 +629,9 @@ class cl_itemprecoreferencia {
   }
 
   public function queryValorTotalPrecoReferencia($si01_processocompra){
-    $sSql = "select pc13_coddot, sum(si02_vlprecoreferencia * pcdotac.pc13_quant) as valortotal from itemprecoreferencia
+    $sSql = "select pc13_coddot, sum(round(si02_vlprecoreferencia, si01_casasdecimais) * pcdotac.pc13_quant) as valortotal from itemprecoreferencia
              inner join pcorcamitem on si02_itemproccompra = pc22_orcamitem
+             inner join precoreferencia on si01_sequencial = si02_precoreferencia
              inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem
              inner join pcprocitem on pc31_pcprocitem = pc81_codprocitem
              inner join solicitem on pc81_solicitem = pc11_codigo

@@ -3030,4 +3030,34 @@ class cl_acordo
                 AND e60_emiss <='$ano-12-31'";
         return $sql;
     }
+    public function alteracaoCriterioReajuste($ac16_sequencial,$ac16_reajuste,$ac16_criterioreajuste,$ac16_datareajuste,$ac16_periodoreajuste,$ac16_indicereajuste,$ac16_descricaoreajuste,$ac16_descricaoindice)
+    {
+        
+        $ac16_datareajuste = implode("-", (array_reverse(explode("/", $ac16_datareajuste))));;
+
+        $ac16_criterioreajuste = $ac16_reajuste == "f" ? "null" : "'$ac16_criterioreajuste'";
+        $ac16_datareajuste = $ac16_reajuste == "f" ? "null" : "'$ac16_datareajuste'";
+        $ac16_periodoreajuste = $ac16_reajuste == "f" ? "null" : "'$ac16_periodoreajuste'";
+        $ac16_indicereajuste = $ac16_reajuste == "f" ? "null" : $ac16_indicereajuste;
+        $ac16_descricaoreajuste = $ac16_reajuste == "f" ? "null" : "'$ac16_descricaoreajuste'";
+        $ac16_descricaoindice = $ac16_reajuste == "f" ? "null" : "'$ac16_descricaoindice'";
+
+        $sSql = 
+        "
+        update
+	        acordo
+        set
+            ac16_reajuste = '$ac16_reajuste',
+            ac16_criterioreajuste = $ac16_criterioreajuste,
+            ac16_datareajuste = $ac16_datareajuste,
+            ac16_periodoreajuste = $ac16_periodoreajuste,
+            ac16_indicereajuste = $ac16_indicereajuste,
+            ac16_descricaoreajuste = $ac16_descricaoreajuste,
+            ac16_descricaoindice = $ac16_descricaoindice
+        where
+	        ac16_sequencial = $ac16_sequencial;
+        ";
+        
+        db_query($sSql);
+    }
 }

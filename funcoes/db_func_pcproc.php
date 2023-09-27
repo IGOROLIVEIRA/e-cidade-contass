@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBselller Servicos de Informatica
@@ -24,7 +24,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
-//$campos = "fc_solproc(pcproc.pc80_codproc) as DL_Solicitacoes,pcproc.pc80_codproc,pcproc.pc80_data,nome,pcproc.pc80_depto,descrdepto,pcproc.pc80_resumo";
 $campos = "pcproc.pc80_codproc,pcproc.pc80_data,nome,pcproc.pc80_criterioadjudicacao,pcproc.pc80_depto,descrdepto,pcproc.pc80_resumo, case when pc80_tipoprocesso = 1 then 'Item'::varchar else 'Lote'::varchar end as pc80_tipoprocesso";
-?>
+$camposControleData = "pcproc.pc80_codproc,pcproc.pc80_data,pcproc.pc80_resumo,pcproc.pc80_depto,descrdepto,pcproc.pc80_criterioadjudicacao,pcproc.pc80_usuario,nome";
+

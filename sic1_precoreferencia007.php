@@ -47,7 +47,6 @@ $sSql = "select * from itemprecoreferencia inner join precoreferencia on si01_se
         where si02_precoreferencia = (select si01_sequencial from precoreferencia where si01_processocompra = {$codigo_preco}) order by si02_sequencial;";
 
 $rsResult = db_query($sSql) or die(pg_last_error());
-
 $pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->si02_criterioadjudicacao;
 $codigoItem = db_utils::fieldsMemory($rsResult, 0)->si02_coditem;
 $precoreferencia = db_utils::fieldsMemory($rsResult, 0)->si02_precoreferencia;
@@ -147,7 +146,7 @@ $pdf1->pc80_criterioadjudicacao = db_utils::fieldsMemory($rsResult, 0)->si02_cri
 $pdf1->impjust = $impjust;
 $pdf1->tipoprecoreferencia = $tipoprecoreferencia;
 $pdf1->rsLotes = $rsLotes;
-$pdf1->quant_casas = $quant_casas;
+$pdf1->quant_casas = db_utils::fieldsMemory($rsResult, 0)->si01_casasdecimais;
 $pdf1->sqlitens = $rsResult;
 $pdf1->quantLinhas = $quantLinhas;
 $pdf1->arrayValores = $arrayValores;

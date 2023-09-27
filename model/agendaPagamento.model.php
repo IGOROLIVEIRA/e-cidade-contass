@@ -426,7 +426,7 @@ class agendaPagamento {
    * @param  object  $oObjeto objeto com informações da nota/slip que sera incluso;
    * @return integer
    */
-  function addMovimentoAgenda($iTipo, $oObjeto) {
+  function addMovimentoAgenda($iTipo, $oObjeto, $dtDataDia = null) {
 
     if (!db_utils::inTransaction()) {
       throw new Exception("Erro [0] - Não há nenhuma transação ativa. Processo cancelado");
@@ -440,7 +440,7 @@ class agendaPagamento {
     }
     if ($this->getiCodAgenda() == null) {
 
-      $this->setCodigoAgenda($this->newAgenda());
+      $this->setCodigoAgenda($this->newAgenda($dtDataDia));
     }
 
 
@@ -615,7 +615,7 @@ class agendaPagamento {
    * Adiciona uma nova agenda ;
    * @return void;
    */
-  function newAgenda() {
+  function newAgenda($dtDataDia = null) {
 
     if (!db_utils::inTransaction()) {
       throw new Exception("Erro [0] - Não há nenhuma transação ativa. Processo cancelado");
@@ -627,7 +627,7 @@ class agendaPagamento {
      */
 
     $oDaoEmpAge = db_utils::getDao("empage");
-    $dtDataDia  = date("Y-m-d",db_getsession("DB_datausu"));
+    $dtDataDia  = !$dtDataDia ? date("Y-m-d",db_getsession("DB_datausu")) : $dtDataDia;
     $sSqlAgenda = $oDaoEmpAge->sql_query_file(null, "*",
       "e80_codage desc limit 1",
       "e80_data = '{$dtDataDia}'

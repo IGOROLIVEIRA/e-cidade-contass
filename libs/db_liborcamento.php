@@ -2328,7 +2328,6 @@ function db_resto_a_pagar($sqlprinc){
 
 function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr = true, $where = '', $anousu = null, $dataini = null, $datafim = null, $query = false, $campos = ' * ', $comit = true, $nivel_agrupar = 0)
 {
-
   if ($anousu == null || $anousu == "")
     $anousu = db_getsession("DB_anousu");
 

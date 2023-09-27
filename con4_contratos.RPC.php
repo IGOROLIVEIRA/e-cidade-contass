@@ -1,4 +1,31 @@
 <?php
+//ini_set('display_errors','on');
+/*
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2014  DBSeller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
+ */
+
 require_once('classes/db_acordocomissao_classe.php');
 require_once('classes/db_acordocomissaomembro_classe.php');
 require_once("classes/db_acordotipo_classe.php");
@@ -44,6 +71,7 @@ require_once("classes/db_acocontratopncp_classe.php");
 require_once("classes/db_historicomaterial_classe.php");
 require_once("classes/db_pcmater_classe.php");
 require_once("classes/db_matunid_classe.php");
+require_once("classes/db_acordoitem_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 
@@ -752,6 +780,102 @@ switch ($oParam->exec) {
 
                 $aSessaoEmpenhos = db_getsession("oEmpenhosSalvar", false);
 
+                /*
+               * verificamos se a origem nao for empenhos
+               * devemos desfazer todos possiveis antigos vinculos
+               *  deletar acordoempempitem
+               *  deletar acordoitem
+               *  deletar acordoposicao
+               *  deletar empempenhocontrato
+               *  $oDaoEmpEmpenhoContrato = db_utils::getDao("empempenhocontrato");
+               *  $oDaoAcordoPosicao      = db_utils::getDao("acordoposicao");
+               *  $oDaoAcordoItem         = db_utils::getDao("acordoitem");
+               *  $oDaoAcordoEmpEmpitem   = db_utils::getDao("acordoempempitem");
+               *  $oDaoEmpEmpitem         = db_utils::getDao("empempitem");
+               *
+               *  buscamos possiveis vinculos existentes entre o contrato e empenhos
+               */
+                //        if ($oParam->contrato->iOrigem != 6) {
+                //
+                //          $sSqlEmpenhosVinculados = $oDaoEmpEmpenhoContrato->sql_query_file(null, "*", null, "e100_acordo = {$iContrato}");
+                //          $rsEmpenhosVinculados   = $oDaoEmpEmpenhoContrato->sql_record($sSqlEmpenhosVinculados);
+                //
+                //          if ($oDaoEmpEmpenhoContrato->numrows > 0) {
+                //
+                //            for ($iEmpEmpenhoContrato = 0; $iEmpEmpenhoContrato < $oDaoEmpEmpenhoContrato->numrows; $iEmpEmpenhoContrato++) {
+                //
+                //              $oValoresEmpEmpenhoContrato = db_utils::fieldsMemory($rsEmpenhosVinculados, $iEmpEmpenhoContrato);
+                //
+                //              //trazemos os empempitem para deletar da acordoempempitem
+                //              $sSqlEmpEmpItem = $oDaoEmpEmpitem->sql_query_file(null, null, "e62_sequencial", null, "e62_numemp = {$oDaoEmpEmpenhoContrato->e100_numemp}");
+                //              $rsEmpEmpItem   = $oDaoEmpEmpitem->sql_record($sSqlEmpEmpItem);
+                //              if ($oDaoEmpEmpitem->numrows > 0) {
+                //
+                //                for($iEmpEmpitem = 0; $iEmpEmpitem < $oDaoEmpEmpitem->numrows; $iEmpEmpitem++){
+                //
+                //                  $oValorEmpEmpitem = db_utils::fieldsMemory($rsEmpEmpItem, $iEmpEmpitem);
+                //                  $oDaoAcordoEmpEmpitem->excluir(null, "ac44_empempitem = {$oValorEmpEmpitem->e62_sequencial}");
+                //                  if ($oDaoAcordoEmpEmpitem->erro_status == 0) {
+                //
+                //                    //throw new Exception(" [ 8 ] - ERRO - Desvinculando itens - " . $oDaoAcordoEmpEmpitem->erro_msg);
+                //                    $oErro->erro_msg = $oDaoAcordoEmpEmpitem->erro_msg;
+                //                    throw new Exception($sCaminhoMensagens."acordo_empempitem_excluir", $oErro);
+                //                  }
+                //                }
+                //              }
+                //
+                //              /*
+                //               * trazemos os acordoposicao para deletar da acordoitem
+                //               * depois da acordoposicao
+                //               */
+                //              $sSqlAcordoPosicao = $oDaoAcordoPosicao->sql_query_file(null, "ac26_sequencial", null, "ac26_acordo = {$iContrato}");
+                //              $rsAcordoPosicao   = $oDaoAcordoPosicao->sql_record($sSqlAcordoPosicao);
+                //              if ($oDaoAcordoPosicao->numrows > 0) {
+                //
+                //                for($iAcordoPosicao = 0; $iAcordoPosicao < $oDaoAcordoPosicao->numrows; $iAcordoPosicao++){
+                //
+                //                  $oValorAcordoPosicao = db_utils::fieldsMemory($rsAcordoPosicao, $iAcordoPosicao);
+                //                  $oDaoAcordoItem->excluir(null, "ac20_acordoposicao = {$oValorAcordoPosicao->ac26_sequencial}");
+                //                  if ($oDaoAcordoItem->erro_status == 0) {
+                //
+                //                    $oErro->erro_msg = $oDaoAcordoItem->erro_msg;
+                //                    throw new Exception(_M($sCaminhoMensagens."acordo_item_excluir", $oErro));
+                //                  }
+                //
+                //                  $oDaoAcordoVigencia->excluir(null, "ac18_acordoposicao = {$oValorAcordoPosicao->ac26_sequencial}");
+                //                  if ($oDaoAcordoVigencia->erro_status == 0) {
+                //
+                //                    $oErro->erro_msg = $oDaoAcordoVigencia->erro_msg;
+                //                    throw new Exception(_M($sCaminhoMensagens."acordo_vigencia_excluir", $oErro));
+                //
+                //                  }
+                //
+                //                  $oDaoAcordoPosicaoPeriodo->excluir(null, "ac36_acordoposicao = {$oValorAcordoPosicao->ac26_sequencial}");
+                //                  if($oDaoAcordoPosicaoPeriodo->erro_status == 0){
+                //
+                //                    $oErro->erro_msg = $oDaoAcordoPosicaoPeriodo->erro_msg;
+                //                    throw new Exception(_M($sCaminhoMensagens."acordo_posicao_periodo_excluir", $oErro));
+                //                  }
+                //
+                //                  $oDaoAcordoPosicao->excluir($oValorAcordoPosicao->ac26_sequencial);
+                //                  if ($oDaoAcordoPosicao->erro_status == 0) {
+                //
+                //                    $oErro->erro_msg = $oDaoAcordoPosicao->erro_msg;
+                //                    throw new Exception(_M($sCaminhoMensagens."acordo_posicao", $oErro));
+                //                  }
+                //                }
+                //              }
+                //            }
+                //
+                //            $oDaoEmpEmpenhoContrato->excluir(null, "e100_acordo = {$iContrato}");
+                //            if ($oDaoEmpEmpenhoContrato->erro_status == 0) {
+                //
+                //              $oErro->erro_msg = $oDaoEmpEmpenhoContrato->erro_msg;
+                //              throw new Exception(_M($sCaminhoMensagens."empempenho_contrato_excluir", $oErro));
+                //            }
+                //          }
+                //        }
+
                 db_fim_transacao(false);
                 $_SESSION["oContrato"]     = $oContrato;
                 $oRetorno->iCodigoContrato = $oContrato->getCodigoAcordo();
@@ -864,38 +988,10 @@ switch ($oParam->exec) {
             $oItemContrato->setPeriodos($oParam->material->aPeriodo);
             $oItemContrato->setMarca($oParam->material->sMarca);
             $oItemContrato->setPeriodosExecucao($oContrato->getCodigoAcordo(), $oContrato->getPeriodoComercial());
+            //removido pois impedia a inclusao de itens no acordo normal
+            //            $oItemContrato->setILicitacao($oContrato->getLicitacao());
+            //            $oItemContrato->setITipocompratribunal($iTipocompraTribunal);
             $oItemContrato->save();
-
-            //Salva o item na tabela historicomaterial para gerar no sicom OC20960
-            $clhistoricomaterial = new cl_historicomaterial;
-            $clmatunid = new cl_matunid();
-
-            $db150_coditem = $oParam->material->iMaterial.$oParam->material->iUnidade;
-
-            $rsMatunid = $clmatunid->sql_record($clmatunid->sql_query_file($oParam->material->iUnidade));
-            $oMatunid = db_utils::fieldsmemory($rsMatunid, 0);
-
-            $rsHistoricoMaterial = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_coditem =$db150_coditem"));
-
-            if(pg_num_rows($rsHistoricoMaterial) == 0 ){
-
-                //inserir na tabela historico material
-                $clhistoricomaterial->db150_tiporegistro              = 10;
-                $clhistoricomaterial->db150_coditem                   = $db150_coditem;
-                $clhistoricomaterial->db150_pcmater                   = $oParam->material->iMaterial;
-                $clhistoricomaterial->db150_dscitem                   = $oItemContrato->getMaterial()->getDescricao();
-                $clhistoricomaterial->db150_unidademedida             = $oMatunid->m61_descr;
-                $clhistoricomaterial->db150_tipocadastro              = 1;
-                $clhistoricomaterial->db150_justificativaalteracao    = '';
-                $clhistoricomaterial->db150_mes                       = date("m", db_getsession("DB_datausu"));
-                $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
-                $clhistoricomaterial->incluir(null);
-
-                if ($clhistoricomaterial->erro_status == 0) {
-                    $oRetorno->status  = 2;
-                    $oRetorno->message = urlencode($clhistoricomaterial->erro_msg);
-                }
-            }
 
             $oPosicao->adicionarItens($oItemContrato);
 

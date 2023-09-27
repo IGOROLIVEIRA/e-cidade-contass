@@ -89,6 +89,15 @@ $oRotulo->label("pc20_codorc");
                   ?>
                 </td>
               </tr>
+              <tr>
+                <td><b>Qtd. de casas decimais:</b></td>
+                <td>
+                  <?php
+                    $aQuant_casas = array("2" => "2", "3" => "3", "4" => "4");
+                    db_select("quant_casas", $aQuant_casas, true, 4, "style='width:83px;'");
+                  ?>
+                </td>
+              </tr>
             </table>
           </fieldset>
 
@@ -152,7 +161,8 @@ $oRotulo->label("pc20_codorc");
       e.stop();
 
       var iOrcamento = $F('pc20_codorc'),
-          sJustificativa = $F('justificativa');
+          sJustificativa = $F('justificativa'),
+          sCasasdecimais =  $F('quant_casas');
 
       if (iOrcamento == '') {
 
@@ -160,7 +170,7 @@ $oRotulo->label("pc20_codorc");
         return false;
       }
 
-      oJanela = window.open( "com2_mapaorcamentolote002.php?iOrcamento=" + iOrcamento + "&sJustificativa=" + sJustificativa,
+      oJanela = window.open( "com2_mapaorcamentolote002.php?iOrcamento=" + iOrcamento + "&sJustificativa=" + sJustificativa + "&sCasasdecimais=" + sCasasdecimais ,
                              '',
                              'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
       oJanela.moveTo(0,0);

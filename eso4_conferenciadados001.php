@@ -174,6 +174,8 @@ try {
                         <select name="evento" id="evento" style="width: 78%;" onchange="js_alt_evento()">
                             <option value="">selecione</option>
                             <option value="S2200">S-2200 - Cadastramento Inicial do Vínculo e Admissão/Ingresso de Trabalhador</option>
+                            <option value="S2205">S-2205 - Alteração de Dados Cadastrais do Trabalhador</option>
+                            <option value="S2206">S-2206 - Alteração de Contrato de Trabalho/Relação Estatutária</option>
                             <option value="S2300">S-2300 - Trabalhador Sem Vínculo de Emprego/Estatutário - Início</option>
                             <option value="S2230">S-2230 - Afastamento Temporário</option>
                             <option value="S2306">S-2306 - Trabalhador Sem Vínculo de Emprego/Estatutário - Alteração Contratual</option>

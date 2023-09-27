@@ -286,6 +286,7 @@ function js_exibir_mapa_por_item(iCodigoOrcamento) {
   sQueryString     += '&modelo=' + sTipoModelo;
   sQueryString     += '&tipoOrcamento=processo';
   sQueryString     += '&imp_troca=S';
+  sQueryString     += '&quant_casas=2';
 
   var jan = window.open(sUrl + sQueryString,
                         '',
@@ -298,6 +299,7 @@ function js_exibir_mapa_por_lote(iCodigoOrcamento) {
   var sUrl          = 'com2_mapaorcamentolote002.php?';
   var sQueryString  = 'iOrcamento=' + iCodigoOrcamento;
   sQueryString     += '&sJustificativa=S';
+  sQueryString     += '&sCasasdecimais=2';
 
   var jan = window.open(sUrl + sQueryString,
                         '',

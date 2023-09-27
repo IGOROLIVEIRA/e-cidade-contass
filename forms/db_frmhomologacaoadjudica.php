@@ -453,14 +453,31 @@ db_app::load("estilos.css, grid.style.css");
         if (oRetorno.status == '1') {
             alert(oRetorno.message.urlDecode());
             oGridItens.clearAll(true);
-            document.getElementById('l202_licitacao').value = '';
+            document.getElementById('l202_sequencial').value = oRetorno.sequencial;
             document.getElementById('pc50_descr').value = '';
             document.getElementById('l202_datahomologacao').value = '';
             document.getElementById('respHomologcodigo').value = '';
             document.getElementById('respHomolognome').value = '';
-        } else {
-            alert(oRetorno.message.urlDecode());
-        }
+            if (oRetorno.regpreco == 2) {
+                alert('Confira a vigência do registro de preço');
+                window.location.replace('com4_vigenciaregistropreco001.php?pc54_solicita=' + oRetorno.pc10_numero);
+                return;
+            } 
+
+            licitacao = $F('l202_licitacao');
+            descricao = $F('pc50_descr');
+            data = $F('l202_datahomologacao');
+            codigo = $F('respHomologcodigo');
+            nome = $F('respHomolognome');
+            sequencial = oRetorno.sequencial;
+            window.location.replace("lic1_homologacaoadjudica002.php?lic=" + licitacao + "&seq=" + sequencial + "&nome=" + nome + "&codigo=" + codigo + "&descricao=" + descricao + "&data=" + data);
+            return;
+            
+        } 
+
+        alert(oRetorno.message.urlDecode());
+        return;
+        
     }
 
     function js_alterarHomologacao() {
