@@ -127,7 +127,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                       END AS codunidadesub,
                       CASE
                           WHEN veiculos.ve01_codigoant IS NULL
-                               OR veiculos.ve01_codigoant = '0' THEN cast (veiculos.ve01_codigo as varchar)
+                               OR veiculos.ve01_codigoant = '' THEN cast (veiculos.ve01_codigo as varchar)
                           ELSE veiculos.ve01_codigoant
                       END AS codVeiculo,
                       veiculos.ve01_codunidadesub,
@@ -360,7 +360,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                                 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                           ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0)
                       END AS codunidadesub,
-                     case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = '0' then cast (veiculos.ve01_codigo as varchar) else veiculos.ve01_codigoant end AS codVeiculo,
+                     case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = '' then cast (veiculos.ve01_codigo as varchar) else veiculos.ve01_codigoant end AS codVeiculo,
                      veiculos.ve01_codunidadesub,
                      ve62_origemgasto AS origemGasto,
                      CASE
@@ -441,7 +441,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                     WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
                     WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
                         ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-                    case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = '0' then cast (veiculos.ve01_codigo as varchar) else veiculos.ve01_codigoant end AS codVeiculo,
+                    case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = '' then cast (veiculos.ve01_codigo as varchar) else veiculos.ve01_codigoant end AS codVeiculo,
                     veiculos.ve01_codunidadesub,
                     2 AS origemGasto,
                     CASE WHEN (unemp.o41_codtri::INT != 0 AND orcemp.o40_codtri::INT = 0) THEN lpad(o58_orgao,2,0)||lpad(unemp.o41_codtri,3,0)
@@ -628,7 +628,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 	    WHEN (unveic.o41_codtri::INT = 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_unidade,3,0)
 	    WHEN (unveic.o41_codtri::INT != 0 AND orveic.o40_codtri::INT != 0) THEN lpad(orveic.o40_codtri,2,0)||lpad(unveic.o41_codtri,3,0)
             ELSE lpad(orveic.o40_orgao,2,0)||lpad(unveic.o41_unidade,3,0) END AS codunidadesub,
-       case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = '0' then cast (veiculos.ve01_codigo as varchar) else veiculos.ve01_codigoant end AS codVeiculo,
+       case when veiculos.ve01_codigoant is null or veiculos.ve01_codigoant = '' then cast (veiculos.ve01_codigo as varchar) else veiculos.ve01_codigoant end AS codVeiculo,
        veiculos.ve01_codunidadesub,
        transporteescolar.v200_escola AS nomeEstabelecimento,
        transporteescolar.v200_localidade AS localidade,
@@ -699,7 +699,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 END AS codunidadesub,
                 CASE
                     WHEN veiculos.ve01_codigoant IS NULL
-                         OR veiculos.ve01_codigoant = '0' THEN cast (veiculos.ve01_codigo as varchar)
+                         OR veiculos.ve01_codigoant = '' THEN cast (veiculos.ve01_codigo as varchar)
                     ELSE veiculos.ve01_codigoant
                 END AS codVeiculo,
                 veicbaixa.ve04_veiccadtipobaixa AS tipoBaixa,
@@ -736,7 +736,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                       veiculostransferencia.ve81_codunidadesubant AS codunidadesub,
                       CASE
                           WHEN veiculos.ve01_codigoant IS NULL
-                               OR veiculos.ve01_codigoant = '0' THEN cast (veiculos.ve01_codigo as varchar)
+                               OR veiculos.ve01_codigoant = '' THEN cast (veiculos.ve01_codigo as varchar)
                           ELSE veiculos.ve01_codigoant
                       END AS codVeiculo,
                       veicbaixa.ve04_veiccadtipobaixa AS tipoBaixa,
