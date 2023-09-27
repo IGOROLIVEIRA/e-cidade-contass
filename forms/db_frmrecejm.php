@@ -34,7 +34,7 @@
 									<td align="left">
 									<?php 
 										db_input('k02_codjm',5,$Ik02_codjm,true,'text',3,'');
-										db_input('k02_descrjm',40,$Ik02_descrjm,true,'text',$db_opcao,'');?>
+										db_input('k02_descrjm',40,$Ik02_descrjm,true,'text',$db_opcao,'','','','',40);?>
 									</td>
 								</tr>
 							</table>
