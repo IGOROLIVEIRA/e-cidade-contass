@@ -683,6 +683,8 @@ switch ($oParam->exec) {
         $oRetorno->itens[] = $oItemRetono;
       }
 
+      $oRetorno->message = urlencode("O item $codigo alterado com sucesso!!");
+
       $iDescricaoLog = 'EXCLUSAO ITEM '.$oParam->iCodigoItem;
       db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'".$iDescricaoLog." REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,3)");
 

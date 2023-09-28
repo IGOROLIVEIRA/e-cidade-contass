@@ -239,56 +239,7 @@ if ($processar) {
 
 
 
-        <tr>
-          <td>
-            <fieldset id='itensEstimativa' style='display: <?= $sDisplay ?>'>
-              <legend>
-                <b>Adicionar Item</b>
-              </legend>
-              <table>
-                <tr>
-                  <td>
-                    <?
-                    db_ancora(@$Lpc16_codmater, "js_pesquisapc16_codmater(true);", 1);
-                    ?>
-                  </td>
-                  <td nowrap>
-                    <?
-                    $pc17_quant = 1;
-                    db_input('pc16_codmater', 8, $Ipc16_codmater, true, 'text', 1, " onchange='js_pesquisapc16_codmater(false);'");
-                    db_input('pc01_descrmater', 45, $Ipc01_descrmater, true, 'text', 1, '');
-                    db_select('pc17_unid', array(), true, 1, "style='width:150px' onchange='js_usaQuantidade(this)'");
-                    db_input('pc17_quant', 5, 0, true, 'text', 1, "style='display:none'");
-                    ?>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    &nbsp;
-                  </td>
-                  <td>
-                    <input type='button' id='btnOutrasInf' value='Mais Informações'>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <b>Quantidade:</b>
-                  </td>
-                  <td>
-                    <?
-                    db_input('quantidade', 8, $Ipc16_codmater, true, 'text', 1);
-                    ?>
-                  </td>
-                </tr>
-                <tr>
-                  <td colspan="2" style="text-align: center;">
-                    <input type="button" value='Adicionar Item' id='btnAddItem'>
-                  </td>
-                </tr>
-              </table>
-            </fieldset>
-          </td>
-        </tr>
+       
         <tr>
           <td>
             <fieldset>
@@ -497,8 +448,10 @@ if ($processar) {
     var oRetorno = eval("(" + oAjax.responseText + ")");
     if (oRetorno.status == 1) {
 
+      alert(oRetorno.message.urlDecode());
       js_preencheGrid(oRetorno.itens);
       js_limparForm();
+      
 
     } else {
       alert(oRetorno.message.urlDecode());

@@ -1,4 +1,5 @@
 <?php
+//ini_Set('display_errors','on');
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -805,6 +806,41 @@ class aberturaRegistroPreco extends solicitacaoCompra {
             $oDaoPcProcItem->pc81_codproc = $pc81_codproc;
             $oDaoPcProcItem->pc81_solicitem = $oDaoSolicitem->pc11_codigo;
             $oDaoPcProcItem->incluir(null);
+            $pc81_codprocitem = $oDaoPcProcItem->pc81_codprocitem;
+
+            $oDaoPcOrcamItem = db_utils::getDao('pcorcamitem');
+            $oDaoPcOrcamItemProc = db_utils::getDao('pcorcamitemproc');
+
+            $rsPcOrcamItem = $oDaoPcOrcamItem->sql_record("select distinct pc22_codorc from pcorcamitem inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem inner join pcprocitem on pc81_codprocitem = pc31_pcprocitem where pc81_codproc = $pc81_codproc");
+            $pc22_codorc = db_utils::fieldsmemory($rsPcOrcamItem, 0)->pc22_codorc;
+
+            if($pc22_codorc != null && pg_num_rows($rsPcOrcamItem) != 0){
+
+              $oDaoPcOrcamItem->pc22_codorc    = $pc22_codorc;
+              $oDaoPcOrcamItem->pc22_orcamitem = null;
+              $oDaoPcOrcamItem->incluir(null);
+              $pc22_orcamitem = $oDaoPcOrcamItem->pc22_orcamitem;
+              
+              
+              $oDaoPcOrcamItemProc->pc31_orcamitem = $pc22_orcamitem;
+              $oDaoPcOrcamItemProc->pc31_pcprocitem = $pc81_codprocitem;
+              $oDaoPcOrcamItemProc->incluir($pc22_orcamitem,$pc81_codprocitem);
+
+              $oDaoPcOrcamVal = db_utils::getDao('pcorcamval');
+              $rsPcOrcamVal = $oDaoPcOrcamVal->sql_record("select distinct pc23_orcamforne from pcorcamval inner join pcorcamitem on pc23_orcamitem = pc22_orcamitem inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem inner join pcprocitem on pc81_codprocitem = pc31_pcprocitem where pc81_codproc = $pc81_codproc");
+              $pc23_orcamforne = db_utils::fieldsmemory($rsPcOrcamVal, 0)->pc23_orcamforne;
+
+              if($pc23_orcamforne != null && pg_num_rows($rsPcOrcamVal) != 0){
+
+                $oDaoPcOrcamVal->pc23_valor = '0';
+                $oDaoPcOrcamVal->pc23_quant = '0';
+                $oDaoPcOrcamVal->pc23_vlrun = '0';
+                $oDaoPcOrcamVal->incluir($pc23_orcamforne, $pc22_orcamitem);
+                
+              }
+            
+            }
+            
           }          
     }
     
@@ -822,7 +858,7 @@ class aberturaRegistroPreco extends solicitacaoCompra {
     $oDaoSolicitem->alterar($iCodigoSolicitem);
     
     if ($oDaoSolicitem->erro_status == 0) {
-      throw new Exception("Erro ao salsssvar item {$item->iCodigoItem}!\nErro Retornado:{$oDaoSolicitem->erro_msg}");
+      throw new Exception("Erro ao salvar item {$item->iCodigoItem}!\nErro Retornado:{$oDaoSolicitem->erro_msg}");
     }
   }
 }

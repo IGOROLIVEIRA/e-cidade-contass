@@ -670,7 +670,7 @@ class estimativaRegistroPreco extends solicitacaoCompra
 
     //ALTERA A QUANTIDADE MAXIMA DA ESTIMATIVA
     $oDaosolicitemregistropreco     = db_utils::getDao("solicitemregistropreco");
-    print_r("select * from solicitemregistropreco where pc57_solicitem = $iCodigoitemEstimativa");
+    
     $rssolicitemregistropreco    = $oDaosolicitemregistropreco->sql_record("select * from solicitemregistropreco where pc57_solicitem = $iCodigoitemEstimativa");
 
     $iCodigoSolicitemRegistro = db_utils::fieldsMemory($rssolicitemregistropreco, 0)->pc57_sequencial;
@@ -686,10 +686,14 @@ class estimativaRegistroPreco extends solicitacaoCompra
 
     $rsSolicita    = $oDaoSolicita->sql_record("select pc53_solicitafilho from solicitavinculo inner join solicita on pc53_solicitafilho = pc10_numero where pc53_solicitapai = (select pc53_solicitapai from solicitavinculo where pc53_solicitafilho = $codigoestimativa) and pc10_solicitacaotipo = 6");
 
+    $rsSolicitemquantidade = $oDaoSolicita->sql_record("select sum(pc11_quant) as pc11_quant from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc11_numero in (select pc53_solicitafilho from solicitavinculo inner join solicita on pc53_solicitafilho = pc10_numero where pc53_solicitapai = (select pc53_solicitapai from solicitavinculo where pc53_solicitafilho = $codigoestimativa) and pc10_solicitacaotipo = 4) and pc16_codmater = $item");
+    
+    $iQuantidadeSolicitem = db_utils::fieldsMemory($rsSolicitemquantidade, 0)->pc11_quant;
+
     $iCodigoCompilacao = db_utils::fieldsMemory($rsSolicita, 0)->pc53_solicitafilho;
     
-    if($iCodigoCompilacao == null || $iCodigoCompilacao == ""){
-      
+    if($iCodigoCompilacao == null || pg_num_rows($rsSolicita) == 0){
+      return true;
     }
 
     
@@ -703,7 +707,7 @@ class estimativaRegistroPreco extends solicitacaoCompra
 
     $iCodigoitemCompilacao = db_utils::fieldsMemory($rsSolicitem, 0);
 
-    $oDaoSolicitem->pc11_quant             = $iCodigoitemCompilacao->pc11_quant + $quantidade;
+    $oDaoSolicitem->pc11_quant             = $iQuantidadeSolicitem;
     $oDaoSolicitem->pc11_codigo  = $iCodigoitemCompilacao->pc11_codigo;
     $oDaoSolicitem->alterar($iCodigoitemCompilacao->pc11_codigo);
 
@@ -712,14 +716,25 @@ class estimativaRegistroPreco extends solicitacaoCompra
 
     $iCodigoSolicitemRegistro = db_utils::fieldsMemory($rssolicitemregistropreco, 0);
 
-
-    $oDaosolicitemregistropreco->pc57_quantmax             = $iCodigoSolicitemRegistro->pc57_sequencial + $quantidade - $iQuantidadeantiga;
+    $oDaosolicitemregistropreco->pc57_quantmin             =  1;
+    $oDaosolicitemregistropreco->pc57_quantmax             =  $iQuantidadeSolicitem;
     $oDaosolicitemregistropreco->pc57_sequencial  = $iCodigoSolicitemRegistro->pc57_sequencial;
     $oDaosolicitemregistropreco->alterar($iCodigoSolicitemRegistro->pc57_sequencial);
 
-
-
+    //ALTERA A QUANTIDADE DO ORÇAMENTO
+    $oDaoPcOrcamVal = db_utils::getDao('pcorcamval');
+    $rsPcOrcamVal    = $oDaoPcOrcamVal->sql_record("select distinct pc23_orcamforne, pc23_orcamitem from pcorcamval inner join pcorcamitem on pc22_orcamitem = pc23_orcamitem inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem inner join pcprocitem on pc81_codprocitem = pc31_pcprocitem where pc81_codprocitem = (select pc81_codprocitem from pcprocitem where pc81_solicitem = $iCodigoitemCompilacao->pc11_codigo)");
     
+    $iCodigoOrcamVal = db_utils::fieldsMemory($rsPcOrcamVal, 0);
+
+    if($iCodigoOrcamVal->pc23_orcamforne == null || pg_num_rows($rsPcOrcamVal) == 0){
+      return true;
+    }
+
+    $oDaoPcOrcamVal->pc23_orcamforne = $iCodigoOrcamVal->pc23_orcamforne;
+    $oDaoPcOrcamVal->pc23_orcamitem = $iCodigoOrcamVal->pc23_orcamitem;
+    $oDaoPcOrcamVal->pc23_quant      = $iQuantidadeSolicitem;
+    $oDaoPcOrcamVal->alterar($iCodigoOrcamVal->pc23_orcamforne,$iCodigoOrcamVal->pc23_orcamitem);
 
     return true;
   }
