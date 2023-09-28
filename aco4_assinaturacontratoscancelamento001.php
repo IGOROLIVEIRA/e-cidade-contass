@@ -25,6 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -259,10 +260,10 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
   function js_pesquisarAssinatura() {
 
     $('cancelar').disabled = true;
-    var sUrl = 'func_acordomovimentacao.php?movimento=1&tipo=2&ativos=true&assinados=true&homologados=true';
+    var sUrl = 'func_acordomovimentacao.php?movimento=1&tipo=2&ativos=false&assinados=true&homologados=true';
     sUrl += '&funcao_js=parent.js_mostrarPesquisaAssinatura|ac10_sequencial|ac10_acordomovimentacaotipo';
 
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
       'db_iframe_assinatura',
       sUrl,
       'Pesquisar Assinatura',
@@ -274,6 +275,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
    */
   function js_mostrarPesquisaAssinatura(ac10_sequencial,ac10_acordomovimentacaotipo) {
     ac10Acordomovimentacaotipo = ac10_acordomovimentacaotipo;
+    console.log(ac10_sequencial,ac10_acordomovimentacaotipo);
 
     $('cancelar').disabled = false;
     js_getDadosAssinatura(ac10_sequencial);

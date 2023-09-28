@@ -153,7 +153,6 @@ $sAnd   = "";
         	$campos  = "acordomovimentacao.ac10_acordo,                           ";
         	$campos .= "acordomovimentacao.ac10_acordomovimentacaotipo,               ";
         	$campos .= "acordomovimentacaotipo.ac09_descricao,                        ";
-//        	$campos .= "acordomovimentacaocancela.ac25_acordomovimentacaocancela,     ";
         	$campos .= "acordomovimentacao.ac10_sequencial,                               ";
         	$campos .= "acordomovimentacao.ac10_id_usuario,                           ";
         	$campos .= "acordomovimentacao.ac10_datamovimento,                        ";
@@ -169,12 +168,15 @@ $sAnd   = "";
             $sWhere .= "{$sAnd} ac10_sequencial like '$chave_ac10_sequencial%' ";
             $sql     = $clacordomovimentacao->sql_query_verificacancelado(null, $campos, "ac10_sequencial", $sWhere);
           } else {
-            if (!empty($homologados)) {
+            if (!empty($homologados) && (bool)$homologados) {
                 $sWhere .= "
+                {$sAnd} ac16_acordosituacao = 4
                 OR ac10_sequencial = ({$clacordomovimentacao->subQueryUltimaMovimenHomologado()})";
+
             }
             $sql    = $clacordomovimentacao->sql_query_verificacancelado("", $campos, "ac10_sequencial", $sWhere);
-            }
+
+        }
 
         } else {
 
@@ -250,3 +252,4 @@ if(!isset($pesquisa_chave)){
 <script>
 js_tabulacaoforms("form2","chave_ac10_sequencial",true,1,"chave_ac10_sequencial",true);
 </script>
+
