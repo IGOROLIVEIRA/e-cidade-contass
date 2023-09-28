@@ -144,7 +144,7 @@ GROUP BY m80_codigo,
          m80_data,
 		 m70_codmatmater,m81_codtipo";
 
- //die($sSqlDados);
+//die($sSqlDados);
 
 $rsDados = db_query($sSqlDados);
 $iTotalItens    = pg_num_rows($rsDados);
@@ -345,7 +345,8 @@ function addLinha($oPdf, $oItem, $iPreenche = 0){
 	$oPdf->cell(25,$iNovaAlturaLinha, $oItem->nQuantidade,$iBorda, 0, "C", $iPreenche);
 	$oPdf->cell(25,$iNovaAlturaLinha, db_formatar($oItem->nValor,'f'),$iBorda, 0, "C", $iPreenche);
 	$oPdf->cell(20,$iNovaAlturaLinha, date("d/m/Y",strtotime($oItem->dData)),$iBorda, 1, "C", $iPreenche);
-	$oItem->sObservacao != "" ? $oPdf->cell(279,$iAlturaLinha, "Observação: ". substr($oItem->sObservacao,0,150),1, 1, "L", 0) : "";
+	$iAlturaCelulaObservacao = $oPdf->NbLines(279, $oItem->sObservacao) + 2;
+	$oPdf->MultiCell(279,$iAlturaCelulaObservacao,"Observação: ". $oItem->sObservacao, 1, 'L', 0);
 
 }
 
