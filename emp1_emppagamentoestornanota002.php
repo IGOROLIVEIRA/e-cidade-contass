@@ -142,7 +142,10 @@ if (isset($e81_codmov) && !empty($e81_codmov)) {
 if (isset($confirmar)) {
   try {
     db_inicio_transacao();
-    $oOrdemPagamento = new ordemPagamento($e50_codord);
+    $dataLancamento = new DBDate($dataLancamento);
+    $dataLancamento = $dataLancamento->getDate();
+    
+    $oOrdemPagamento = new ordemPagamento($e50_codord, $dataLancamento);
     $oOrdemPagamento->setCheque($k12_cheque);
     $oOrdemPagamento->setChequeAgenda($e91_codcheque);
     $oOrdemPagamento->setConta($k13_conta);
@@ -150,8 +153,6 @@ if (isset($confirmar)) {
     $oOrdemPagamento->setHistorico($c72_complem);
     $nEmpenho = $oOrdemPagamento->getDadosOrdem()->e50_numemp;
 
-    $dataLancamento = new DBDate($dataLancamento);
-    $dataLancamento = $dataLancamento->getDate();
     if(pg_num_rows(db_query("SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." "))>0){
       $oConsultaFimPeriodoContabil = db_query("SELECT * FROM condataconf WHERE (c99_data < '$dataLancamento' OR c99_data IS NULL) AND c99_anousu = ".db_getsession('DB_anousu')." ");
 
@@ -169,7 +170,8 @@ if (isset($confirmar)) {
     if(pg_num_rows($oConsultaDataLancamento) > 0){
       throw new Exception("Já existe um lançamento com a data posterior à informada.");
     }
-    $oOrdemPagamento->estornarOrdem();
+
+    $oOrdemPagamento->estornarOrdem(null, $dataLancamento);
 
     db_fim_transacao(false);
     $sqlerro       = false;
