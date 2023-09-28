@@ -275,7 +275,6 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
    */
   function js_mostrarPesquisaAssinatura(ac10_sequencial,ac10_acordomovimentacaotipo) {
     ac10Acordomovimentacaotipo = ac10_acordomovimentacaotipo;
-    console.log(ac10_sequencial,ac10_acordomovimentacaotipo);
 
     $('cancelar').disabled = false;
     js_getDadosAssinatura(ac10_sequencial);
