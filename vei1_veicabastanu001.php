@@ -33,11 +33,15 @@ include("classes/db_veicabastanu_classe.php");
 include("classes/db_veicabast_classe.php");
 include("classes/db_condataconf_classe.php");
 include("classes/db_veicparam_classe.php");
+require_once("classes/db_empempenho_classe.php");
+require_once("classes/db_empveiculos_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clveicabast = new cl_veicabast;
 $clveicabastanu = new cl_veicabastanu;
 $clveicparam = new cl_veicparam;
+$clempempenho = new cl_empempenho;
+$clempveiculos = new cl_empveiculos;
 $db_opcao = 1;
 $db_botao = true;
 $pesq=false;
@@ -48,11 +52,11 @@ if(isset($incluir)){
   $clveicabastanu->ve74_hora=db_hora();
   $clveicabastanu->ve74_usuario=db_getsession("DB_id_usuario");  
   $clveicabastanu->incluir($ve74_codigo);
-  $rsParametrosVeiculos = $clveicparam->sql_record($clveicparam->sql_query_file(1, "*", null, ""));
-  $rsParametrosVeiculos = db_utils::fieldsMemory($rsParametrosVeiculos, 0);
-  if ($rsParametrosVeiculos->ve50_abastempenho == 1){
+
+  if ($clveicabastanu->permissaoAtualizacaoSaldo($ve74_veicabast)){
     $clveicabastanu->atualizacaoSaldoEmpenho($ve74_veicabast);
   } 
+
   $erro_msg=$clveicabastanu->erro_msg;
   if ($clveicabastanu->erro_status==0){
   	$sqlerro=true;
