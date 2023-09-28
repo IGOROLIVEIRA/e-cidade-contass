@@ -240,7 +240,7 @@ switch ($oParam->exec) {
     if ($oParam->tiposelecione == 03){
           if ($oParam->tipoDebCred == 2){
             if ( $oParam->tipodaconta == 1){
-                $sSqlWhere .= " and db83_tipoconta = ".$oParam->tipodaconta ;
+                $sSqlWhere .= "  and ( db83_tipoconta = ".$oParam->tipodaconta." or db83_tipoconta = 3 )"  ;
                 $oRetorno->tipoconta   = 2;
             }
           } 
@@ -265,7 +265,7 @@ switch ($oParam->exec) {
                                   and conplanoconta.c63_anousu = conplanoreduz.c61_anousu
                               where  k13_reduz = $oParam->codigoconta and c61_anousu = $iAnoSessao
                               )";
-              $sSqlWhere .= " and db83_tipoconta = ".$oParam->tipodaconta ;
+              $sSqlWhere .= " and ( db83_tipoconta = ".$oParam->tipodaconta." or db83_tipoconta = 3 )";
             }
           } 
     }
