@@ -24,73 +24,7 @@ try {
          * Pesquisa as posicoes do acordo
          */
         case "getItens":
-            $oContrato  = AcordoRepository::getByCodigo($oParam->iAcordo);
-
-            $oPosicao                    = $oContrato->getUltimaPosicao(true);
-            $oRetorno->tipocontrato      = $oContrato->getOrigem();
-            $oRetorno->datainicial       = $oContrato->getDataInicial();
-            $oRetorno->datafinal         = $oContrato->getDataFinal();
-            $oRetorno->valores           = $oContrato->getValoresItens();
-            $oRetorno->seqapostila       = $oContrato->getProximoNumeroApostila($oParam->iAcordo);
-
-            $aItens = array();
-            foreach ($oPosicao->getItens() as $oItemPosicao) {
-                $oItem                 = new stdClass();
-
-                $oItem->codigo         = $oItemPosicao->getCodigo();
-                $oItem->codigoitem     = $oItemPosicao->getMaterial()->getMaterial();
-                $oItem->elemento       = $oItemPosicao->getDesdobramento();
-                $oItem->descricaoitem  = $oItemPosicao->getMaterial()->getDescricao();
-                $oItem->valorunitario  = $oItemPosicao->getValorUnitario();
-                $oItem->quantidade     = $oItemPosicao->getQuantidadeAtualizadaRenovacao();
-                $oItem->valor          = $oItemPosicao->getValorAtualizadoRenovacao();
-                $aItemPosicao = $oItemPosicao->getPeriodosItem();
-                $oItem->periodoini     = $aItemPosicao[0]->dtDataInicial;
-                $oItem->periodofim     = $aItemPosicao[0]->dtDataFinal;
-                $oItem->servico        = $oItemPosicao->getMaterial()->isServico();
-                $oItem->controlaquantidade = $oItemPosicao->getServicoQuantidade();
-                $oItem->dotacoes       = array();
-
-                /**
-                 * retornar saldo do item conforme autorizacoes
-                 */
-                $oItemUltimoValor = $oItemPosicao->getSaldos();
-                $oItem->qtdeanterior = $oItemUltimoValor->quantidadeautorizar;
-                $oItem->vlunitanterior = $oItem->valorunitario;
-                $oItem->quantidade = $oItemUltimoValor->quantidadeautorizar;
-
-                /**
-                 * Caso seja servico e nao controlar quantidade, a quantidade padrao sera 1
-                 * e o valor sera o saldo a executar
-                 */
-                if ($oItem->servico && $oItem->controlaquantidade == "f") {
-                    $oItem->quantidade     = 1;
-                    $oItem->qtdeanterior   = 1;
-                    $oItem->valor          = $oItemUltimoValor->valorautorizar;
-                    $oItem->vlunitanterior = $oItemUltimoValor->valorautorizar;
-                    $oItem->valorunitario  = $oItemUltimoValor->valorautorizar;
-                }
-
-                foreach ($oItemPosicao->getDotacoes() as $oDotacao) {
-                    if ($oItem->servico && $oItem->controlaquantidade == "f") {
-                        $iQuantDot =  1;
-                        $nValorDot = $oDotacao->valor - $oDotacao->executado;
-                    } else {
-                        $iQuantDot = $oDotacao->quantidade - ($oDotacao->executado / $oItem->valorunitario);
-                        $nValorDot = $oDotacao->valor;
-                    }
-                    $oItem->dotacoes[] = (object) array(
-                        'dotacao' => $oDotacao->dotacao,
-                        'quantidade' => $iQuantDot,
-                        'valor' => $nValorDot,
-                        'valororiginal' => $nValorDot
-                    );
-                }
-
-                $aItens[] = $oItem;
-            }
-
-            $oRetorno->itens = $aItens;
+            getItens($oParam, $oRetorno);
             break;
 
         case "processarApostilamento":
@@ -170,7 +104,7 @@ try {
             $oDadosAcordo->si03_datareferencia = $date->format( 'd/m/Y' );
             $oDadosAcordo->si03_descrapostila = utf8_encode($record->si03_descrapostila);
             $oRetorno->dadosAcordo = $oDadosAcordo;
-
+            getItens($oParam, $oRetorno);
             break;
 
         case 'updateApostilamento':
@@ -205,6 +139,75 @@ try {
     db_fim_transacao(true);
     $oRetorno->erro  = true;
     $oRetorno->message = urlencode($eErro->getMessage());
+}
+
+function getItens($oParam, $oRetorno)
+{
+    $oContrato  = AcordoRepository::getByCodigo($oParam->iAcordo);
+
+    $oPosicao                    = $oContrato->getUltimaPosicao(true);
+    $oRetorno->tipocontrato      = $oContrato->getOrigem();
+    $oRetorno->datainicial       = $oContrato->getDataInicial();
+    $oRetorno->datafinal         = $oContrato->getDataFinal();
+    $oRetorno->valores           = $oContrato->getValoresItens();
+    $oRetorno->seqapostila       = $oContrato->getProximoNumeroApostila($oParam->iAcordo);
+
+    $aItens = array();
+    foreach ($oPosicao->getItens() as $oItemPosicao) {
+        $oItem                 = new stdClass();
+
+        $oItem->codigo         = $oItemPosicao->getCodigo();
+        $oItem->codigoitem     = $oItemPosicao->getMaterial()->getMaterial();
+        $oItem->elemento       = $oItemPosicao->getDesdobramento();
+        $oItem->descricaoitem  = $oItemPosicao->getMaterial()->getDescricao();
+        $oItem->valorunitario  = $oItemPosicao->getValorUnitario();
+        $oItem->quantidade     = $oItemPosicao->getQuantidadeAtualizadaRenovacao();
+        $oItem->valor          = $oItemPosicao->getValorAtualizadoRenovacao();
+        $aItemPosicao = $oItemPosicao->getPeriodosItem();
+        $oItem->periodoini     = $aItemPosicao[0]->dtDataInicial;
+        $oItem->periodofim     = $aItemPosicao[0]->dtDataFinal;
+        $oItem->servico        = $oItemPosicao->getMaterial()->isServico();
+        $oItem->controlaquantidade = $oItemPosicao->getServicoQuantidade();
+        $oItem->dotacoes       = array();
+
+        /**
+         * retornar saldo do item conforme autorizacoes
+         */
+        $oItemUltimoValor = $oItemPosicao->getSaldos();
+        $oItem->qtdeanterior = $oItemUltimoValor->quantidadeautorizar;
+        $oItem->vlunitanterior = $oItem->valorunitario;
+        $oItem->quantidade = $oItemUltimoValor->quantidadeautorizar;
+
+        /**
+         * Caso seja servico e nao controlar quantidade, a quantidade padrao sera 1
+         * e o valor sera o saldo a executar
+         */
+        if ($oItem->servico && $oItem->controlaquantidade == "f") {
+            $oItem->quantidade     = 1;
+            $oItem->qtdeanterior   = 1;
+            $oItem->valor          = $oItemUltimoValor->valorautorizar;
+            $oItem->vlunitanterior = $oItemUltimoValor->valorautorizar;
+            $oItem->valorunitario  = $oItemUltimoValor->valorautorizar;
+        }
+
+        foreach ($oItemPosicao->getDotacoes() as $oDotacao) {
+            if ($oItem->servico && $oItem->controlaquantidade == "f") {
+                $iQuantDot =  1;
+                $nValorDot = $oDotacao->valor - $oDotacao->executado;
+            } else {
+                $iQuantDot = $oDotacao->quantidade - ($oDotacao->executado / $oItem->valorunitario);
+                $nValorDot = $oDotacao->valor;
+            }
+            $oItem->dotacoes[] = (object) array(
+                'dotacao' => $oDotacao->dotacao,
+                'quantidade' => $iQuantDot,
+                'valor' => $nValorDot,
+                'valororiginal' => $nValorDot
+            );
+        }
+        $aItens[] = $oItem;
+    }
+    $oRetorno->itens = $aItens;
 }
 
 echo json_encode($oRetorno);

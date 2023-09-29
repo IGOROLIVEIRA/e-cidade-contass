@@ -1535,17 +1535,16 @@ unset($_GET['viewAlterar']);
 
                 validaDadosAcordo(oRetorno);
 
-                oParam.exec = 'getItens';
-            new AjaxRequest(sUrlRpc, oParam, function(oResult, lErro) {
-                aItensPosicao = oResult.itens;
+                aItensPosicao = oRetorno.itens;
 
                 preencheItens(aItensPosicao);
-                validaDadosItens(aItensPosicao);
-            }).execute();
+
+                if ( tipoApostilaInicial == "03") {
+                    js_changeTipoApostila(tipoApostila);
+                }
 
             }).setMessage("Aguarde, pesquisando acordos.")
             .execute();
-
     }
 
     function validaDadosAcordo(oRetorno) {
@@ -1569,17 +1568,6 @@ unset($_GET['viewAlterar']);
             document.getElementById("si03_tipoalteracaoapostila").disabled = true;
 
         }
-    }
-
-    function validaDadosItens( aItens ) {
-        let tipoApostila = $('si03_tipoapostila').value;
-        
-        if (tipoApostila == "03") {
-            console.log(aItens);
-            aItensPosicao = aItens;
-            js_changeTipoApostila(tipoApostila);
-        }
-        return;
     }
 
     function alteraApostilamento(oApostila, listaItens, indicesSelecionados) {
