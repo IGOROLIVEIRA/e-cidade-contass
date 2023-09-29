@@ -296,7 +296,7 @@ $this->objpdf->sety($xlin + 28);
 $this->objpdf->Setfont('Arial', 'B', 8);
 $this->objpdf->text($xcol + 2, $xlin + $getdoy + 4, 'ITEM');
 $this->objpdf->text($xcol + 11, $xlin + $getdoy + 4, 'QUANT');
-$this->objpdf->text($xcol + 30, $xlin + $getdoy + 4, 'REF');
+$this->objpdf->text($xcol + 27, $xlin + $getdoy + 4, 'UNIDADE');
 $this->objpdf->text($xcol + 70, $xlin + $getdoy + 4, 'MATERIAL OU SERVIÇO');
 $this->objpdf->text($xcol + 145, $xlin + $getdoy + 4, 'VALOR UNITÁRIO');
 $this->objpdf->text($xcol + 176, $xlin + $getdoy + 4, 'VALOR TOTAL');
