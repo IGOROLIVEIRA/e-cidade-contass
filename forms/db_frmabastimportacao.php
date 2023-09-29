@@ -120,14 +120,14 @@ if (isset($_POST["processar"])) {
 
             $cell = $objWorksheet->getCellByColumnAndRow(1, $row);
             $data = $cell->getValue();
+            
+            $data = explode("/", $data);
+            $data = $data[2] . "-" . $data[1] . "-" . $data[0];
 
             if ($data == "") {
                 break;
             }
         		
-            $data = DateTime::createFromFormat("m/d/Y" , $aDatas[$i][0]);
-            $data = $data->format('Y-m-d');
-
             $cell = $objWorksheet->getCellByColumnAndRow(2, $row);
             $val = $cell->getValue();
             $tamVal = strlen($val);
