@@ -25,6 +25,8 @@
  *                                licenca/licenca_pt.txt
  */
 
+use App\Services\Tributario\Arrecadacao\ExtractNumprePaymentReturnService;
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -74,6 +76,13 @@ $sCamposParametrosNumpref = "k03_agrupadorarquivotxtbaixabanco, k03_pgtoparcial"
 $sSqlParametrosNumpref    = $oDaoNumpref->sql_query_file(db_getsession("DB_anousu"), db_getsession("DB_instit"), $sCamposParametrosNumpref);
 $rsParametrosNumpref      = $oDaoNumpref->sql_record($sSqlParametrosNumpref);
 $oDadosParametrosNumpref  = db_utils::fieldsMemory($rsParametrosNumpref, 0);
+
+const IDENTIFICADOR_PIX = 9;
+
+function isPagamentoViaPix(string $line): bool
+{
+    return ((int) substr($line, 116, 1) === IDENTIFICADOR_PIX);
+}
 
 /**
  * Função responsavel por controlar a taxa bancaria
@@ -1061,6 +1070,13 @@ if ($situacao == 2) {
 
                     $numpre = substr($arq_array[$i], substr($k15_numpre, 0, 3) - 1, substr($k15_numpre, 3, 3));
                     $numpar = substr($arq_array[$i], substr($k15_numpar, 0, 3) - 1, substr($k15_numpar, 3, 3));
+
+                    if(isPagamentoViaPix($arq_array[$i])) {
+                        $numpre = (new ExtractNumprePaymentReturnService())->execute($arq_array[$i]);
+                        $numpar = '000';
+                    }
+
+
                     $hlhposicaonumpre = substr($arq_array[$i], 67, 5);
                     $elposicaonumpre = substr($arq_array[$i], 64, 4);
 
