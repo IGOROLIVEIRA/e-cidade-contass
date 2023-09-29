@@ -177,7 +177,7 @@ if (isset($incluir) || isset($juntar)) {
       $pc80_codproc = $juntar;
 
       //localiza o codigo da solicitacao do processo de compras
-      $oDaoSolicita = $clsolicita->sql_record("select distinct pc11_numero, pc10_resumo, pc10_solicitacaotipo, pc13_codele from solicitem inner join solicita on pc10_numero = pc11_numero inner join pcdotac on pc13_codigo = pc11_codigo where pc11_codigo in (select pc81_solicitem from pcprocitem where pc81_codproc = $pc80_codproc)");
+      $oDaoSolicita = $clsolicita->sql_record("select distinct pc11_numero, pc10_resumo, pc10_solicitacaotipo from solicitem inner join solicita on pc10_numero = pc11_numero where pc11_codigo in (select pc81_solicitem from pcprocitem where pc81_codproc = $pc80_codproc)");
       $pc10_solicitacaotipo = db_utils::fieldsMemory($oDaoSolicita,0)->pc10_solicitacaotipo;
       $pc10_resumo = db_utils::fieldsMemory($oDaoSolicita,0)->pc10_resumo;
       $novaSolicita = db_utils::fieldsMemory($oDaoSolicita,0)->pc11_numero;
@@ -186,7 +186,7 @@ if (isset($incluir) || isset($juntar)) {
         $pc11_numero = db_utils::fieldsMemory($oDaoSolicita,0)->pc11_numero;
         
         //localiza os itens da solicitacao select * from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo inner join solicitemunid on pc17_codigo=pc11_codigo inner join solicitemele on pc18_solicitem = pc11_codigo inner join pcdotac on pc13_codigo = pc11_codigo inner join orcdotacao on o58_coddot = pc13_coddot where pc11_numero = 12928 and o58_anousu = 2023;
-        $oDaoSolicitem = $clsolicitem->sql_record("select * from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo inner join solicitemunid on pc17_codigo=pc11_codigo inner join solicitemele on pc18_solicitem = pc11_codigo inner join pcdotac on pc13_codigo = pc11_codigo inner join orcdotacao on o58_coddot = pc13_coddot where pc11_numero = $pc11_numero and o58_anousu = ".db_getsession('DB_anousu'));
+        $oDaoSolicitem = $clsolicitem->sql_record("select * from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo inner join solicitemunid on pc17_codigo = pc11_codigo inner join solicitemele on pc18_solicitem = pc11_codigo inner join pcdotac on pc13_codigo = pc11_codigo inner join orcdotacao on o58_coddot = pc13_coddot where pc11_numero = $pc11_numero and o58_anousu = ".db_getsession('DB_anousu'));
       
         //localiza os parametros
         $result_tipo = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_mincar,pc30_obrigamat,pc30_obrigajust,pc30_seltipo,pc30_sugforn,pc30_permsemdotac,pc30_contrandsol,pc30_tipoprocsol,pc30_gerareserva,pc30_passadepart"));
@@ -283,7 +283,7 @@ if (isset($incluir) || isset($juntar)) {
         
       }
         
-      $oDaoSolicitemnova = $clsolicitem->sql_record("select pc11_codigo, pc16_codmater, pc11_quant, pc13_codele, pc13_quant , pc13_valor, pc13_sequencial from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo inner join pcdotac on pc13_codigo = pc11_codigo where pc11_numero = $novaSolicita");
+      $oDaoSolicitemnova = $clsolicitem->sql_record("select pc11_codigo, pc16_codmater, pc11_quant from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc11_numero = $novaSolicita");
       $sequencialNovosItens = pg_num_rows($oDaoSolicitemnova);
       $arr_numero = Array();
       $arr_solici = Array();
@@ -336,7 +336,7 @@ if (isset($incluir) || isset($juntar)) {
           }
         }
 
-        $oDaoSolicitem = $clsolicitem->sql_record("select * from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo inner join solicitemunid on pc17_codigo=pc11_codigo where pc11_codigo = $pc11_codigo");
+        $oDaoSolicitem = $clsolicitem->sql_record("select * from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo inner join solicitemunid on pc17_codigo = pc11_codigo inner join pcdotac on pc13_codigo = pc11_codigo where pc11_codigo = $pc11_codigo");
         
         //replica os itens da primeira solicitacao para a nova solicitacao
       
