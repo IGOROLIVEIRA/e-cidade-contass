@@ -2,8 +2,6 @@
 require("libs/db_utils.php");
 require("model/configuracao/TraceLog.model.php");
 require("libs/db_stdlib.php");
-require("libs/db_conn.php");
-
 
 ini_set('memory_limit', '-1');
 
@@ -26,7 +24,7 @@ try {
     $resultsessao = db_query($conn, $sqlsessao);
 
     for ($record_correto=0; $record_correto < pg_num_rows($resultsessao); $record_correto++) {
-        db_fieldsmemory($resultsessao, $record_correto);
+        $login = db_fieldsmemory($resultsessao, $record_correto);
         $output = shell_exec("bin/v3/extension/install Desktop ".$login);
         echo $output;
     }

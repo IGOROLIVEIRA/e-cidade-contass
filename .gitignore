@@ -20,7 +20,6 @@ modification/*
 *.csv
 updatedb/scripts*
 libs/..cache/
-*.yml
 integracao_externa/portal_transparencia/log/
 integracao_externa/portal_transparencia/con4_portaltransparencia001_pmmontalvania.php
 integracao_externa/portal_transparencia/db/sql_especifico/*
