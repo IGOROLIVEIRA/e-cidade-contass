@@ -828,14 +828,22 @@ class aberturaRegistroPreco extends solicitacaoCompra {
 
               $oDaoPcOrcamVal = db_utils::getDao('pcorcamval');
               $rsPcOrcamVal = $oDaoPcOrcamVal->sql_record("select distinct pc23_orcamforne from pcorcamval inner join pcorcamitem on pc23_orcamitem = pc22_orcamitem inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem inner join pcprocitem on pc81_codprocitem = pc31_pcprocitem where pc81_codproc = $pc81_codproc");
-              $pc23_orcamforne = db_utils::fieldsmemory($rsPcOrcamVal, 0)->pc23_orcamforne;
+              
 
-              if($pc23_orcamforne != null && pg_num_rows($rsPcOrcamVal) != 0){
+              if(pg_num_rows($rsPcOrcamVal) > 0){
 
-                $oDaoPcOrcamVal->pc23_valor = '0';
-                $oDaoPcOrcamVal->pc23_quant = '0';
-                $oDaoPcOrcamVal->pc23_vlrun = '0';
-                $oDaoPcOrcamVal->incluir($pc23_orcamforne, $pc22_orcamitem);
+                for ($x = 0; $x < pg_num_rows($rsPcOrcamVal); $x++) {
+
+                  $pc23_orcamforne = db_utils::fieldsmemory($rsPcOrcamVal, $x)->pc23_orcamforne;
+
+                  $oDaoPcOrcamVal->$pc23_orcamforne = null;
+                  $oDaoPcOrcamVal->$pc22_orcamitem = null;
+                  $oDaoPcOrcamVal->pc23_valor = '0';
+                  $oDaoPcOrcamVal->pc23_quant = '0';
+                  $oDaoPcOrcamVal->pc23_vlrun = '0';
+                  $oDaoPcOrcamVal->incluir($pc23_orcamforne, $pc22_orcamitem);
+                
+                }
                 
               }
             
