@@ -283,8 +283,9 @@ if (isset($incluir) || isset($juntar)) {
         
       }
         
-      $oDaoSolicitemnova = $clsolicitem->sql_record("select pc11_codigo, pc16_codmater, pc11_quant from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc11_numero = $novaSolicita");
+      $oDaoSolicitemnova = $clsolicitem->sql_record("select distinct pc11_codigo, pc16_codmater, pc13_coddot, pc13_sequencial, pc13_quant, pc11_quant, pc13_valor from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo inner join pcdotac on pc13_codigo = pc11_codigo where pc11_numero = $novaSolicita");
       $sequencialNovosItens = pg_num_rows($oDaoSolicitemnova);
+
       $arr_numero = Array();
       $arr_solici = Array();
       for($i=0;$i<sizeof($arr_valores);$i++){
@@ -364,7 +365,7 @@ if (isset($incluir) || isset($juntar)) {
               $clsolicitem->pc11_codigo             = $rsSolicitemnova->pc11_codigo;
               $clsolicitem->alterar($rsSolicitemnova->pc11_codigo);
 
-              if ($rsSolicitemnova->pc13_codele == $rsSolicitem->pc13_codele) {
+              if ($rsSolicitemnova->pc13_coddot == $rsSolicitem->pc13_coddot) {
     
                 $clpcdotac->pc13_anousu = '';
                 $clpcdotac->pc13_coddot = '';
