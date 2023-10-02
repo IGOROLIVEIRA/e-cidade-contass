@@ -290,7 +290,7 @@ unset($_GET['viewAlterar']);
     oGridItens.setCheckbox(0);
     oGridItens.setCellAlign(['center', 'left', "right", "right", "right", "right", "center", "right", "center", "center", "center", "center", "center"]);
     //oGridItens.setCellWidth(["50px", "30%", "8%", "8%", "3%", "25%", "8%", "8%", "3%", "25%", "8%", "8%", "8%"]);
-    oGridItens.setHeader(["Cd", "Item", "Quantidade", "Unit. Anterior", "Quantidade", "Valor Unitário", "Valor Total", "Valor Apostilado", "Qt Aditada", "Dotacoes", "Seq"]);
+    oGridItens.setHeader(["Código", "Item", "Quantidade", "Unit. Anterior", "Quantidade", "Valor Unitário", "Valor Total", "Valor Apostilado", "Qt Aditada", "Dotacoes", "Seq"]);
     oGridItens.aHeaders[11].lDisplayed = false;
     oGridItens.aHeaders[10].lDisplayed = false;
     oGridItens.aHeaders[5].lDisplayed = false;
@@ -626,7 +626,6 @@ unset($_GET['viewAlterar']);
 
 
         oGridItens.renderRows();
-
     }
 
     /**
@@ -1363,7 +1362,6 @@ unset($_GET['viewAlterar']);
     }
 
     function js_changeTipoApostila(iTipo) {
-
         if (iTipo == "03" && (tipoApostilaInicial == "01" || tipoApostilaInicial == "02")) {
             iTipo = tipoApostilaInicial;
 
@@ -1540,7 +1538,7 @@ unset($_GET['viewAlterar']);
                 preencheItens(aItensPosicao);
 
                 if ( tipoApostilaInicial == "03") {
-                    js_changeTipoApostila(tipoApostila);
+                    js_changeTipoApostila(tipoApostilaInicial);
                 }
 
             }).setMessage("Aguarde, pesquisando acordos.")
