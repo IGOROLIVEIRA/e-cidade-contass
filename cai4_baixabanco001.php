@@ -25,6 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
+use App\Models\Numpref;
 use App\Services\Tributario\Arrecadacao\ExtractNumprePaymentReturnService;
 
 require_once("libs/db_stdlib.php");
@@ -54,6 +55,16 @@ define('MENSAGENS', 'tributario.arrecadacao.cai4_baixabanco001.');
 
 $situacao      = "";
 $sMd5Arquivo   = null;
+
+/**
+ * @var Numpref $settings
+ */
+$settings = Numpref::query()
+    ->where('k03_anousu', db_getsession("DB_anousu"))
+    ->where('k03_instit', db_getsession("DB_instit"))
+    ->first();
+
+$usePixIntegration = $settings->k03_ativo_integracao_pix;
 
 /**
  * Variável de Debug da rotina
@@ -1071,7 +1082,7 @@ if ($situacao == 2) {
                     $numpre = substr($arq_array[$i], substr($k15_numpre, 0, 3) - 1, substr($k15_numpre, 3, 3));
                     $numpar = substr($arq_array[$i], substr($k15_numpar, 0, 3) - 1, substr($k15_numpar, 3, 3));
 
-                    if(isPagamentoViaPix($arq_array[$i])) {
+                    if($usePixIntegration && isPagamentoViaPix($arq_array[$i])) {
                         $numpre = (new ExtractNumprePaymentReturnService())->execute($arq_array[$i]);
                         $numpar = '000';
                     }
