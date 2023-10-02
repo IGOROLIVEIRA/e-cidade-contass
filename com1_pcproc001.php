@@ -336,7 +336,7 @@ if (isset($incluir) || isset($juntar)) {
           }
         }
 
-        $oDaoSolicitem = $clsolicitem->sql_record("select * from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo inner join solicitemunid on pc17_codigo = pc11_codigo inner join pcdotac on pc13_codigo = pc11_codigo where pc11_codigo = $pc11_codigo");
+        $oDaoSolicitem = $clsolicitem->sql_record("select * from solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo inner join solicitemunid on pc17_codigo = pc11_codigo inner join solicitemele on pc18_solicitem = pc11_codigo inner join pcdotac on pc13_codigo = pc11_codigo where pc11_codigo = $pc11_codigo");
         
         //replica os itens da primeira solicitacao para a nova solicitacao
       
@@ -377,8 +377,6 @@ if (isset($incluir) || isset($juntar)) {
                 $clpcdotac->alterar($rsSolicitemnova->pc13_sequencial);
 
               } else {
-
-                $clsolicitemele->incluir($rsSolicitemnova->pc11_codigo, $rsSolicitem->pc18_codele);
     
                 $clpcdotac->pc13_anousu = $rsSolicitem->pc13_anousu;
                 $clpcdotac->pc13_coddot = $rsSolicitem->pc13_coddot;
