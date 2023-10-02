@@ -10,7 +10,7 @@ class Oc16205 extends AbstractMigration
                                             (SELECT '10' AS db150_tiporegistro,
                                                     pc01_codmater ||''|| pc17_unid AS db150_coditem,
                                                     pc01_codmater AS db150_pcmater,
-                                                    pc01_descrmater AS db150_dscitem,
+                                                    substring(pc01_descrmater ||'-'|| pc01_complmater from 0 for 999) AS db150_dscitem,
                                                     m61_abrev AS db150_unidademedida,
                                                     '1' AS db150_tipocadastro,
                                                     EXTRACT (MONTH
@@ -24,7 +24,7 @@ class Oc16205 extends AbstractMigration
                                              UNION SELECT '10' AS db150_tiporegistro,
                                                           pc01_codmater ||''|| m61_codmatunid AS db150_coditem,
                                                           pc01_codmater AS db150_pcmater,
-                                                          pc01_descrmater AS db150_dscitem,
+                                                          substring(pc01_descrmater ||'-'|| pc01_complmater from 0 for 999) AS db150_dscitem,
                                                           m61_abrev AS db150_unidademedida,
                                                           '1' AS db150_tipocadastro,
                                                           EXTRACT (MONTH

@@ -483,7 +483,7 @@ if (isset($incluir) && $sqlerro == false) {
           $clhistoricomaterial->db150_tiporegistro              = 10;
           $clhistoricomaterial->db150_coditem                   = $db150_coditem;
           $clhistoricomaterial->db150_pcmater                   = $pc16_codmater;
-          $clhistoricomaterial->db150_dscitem                   = $pc01_descrmater;
+          $clhistoricomaterial->db150_dscitem                   = substr($pc01_descrmater.'-'.$pc01_complmater,0,999);
           $clhistoricomaterial->db150_unidademedida             = $m61_descr;
           $clhistoricomaterial->db150_tipocadastro              = 1;
           $clhistoricomaterial->db150_justificativaalteracao    = '';
@@ -1778,7 +1778,7 @@ if (isset($opcao) && $opcao != "incluir") {
 
     db_fieldsmemory($result_dad_solicitem, 0);
 
-    $sSqlMaterial = $clsolicitem->sql_query_pcmater(null, "pc16_codmater,pc01_descrmater", '', " pc16_solicitem=" . @$pc11_codigo);
+    $sSqlMaterial = $clsolicitem->sql_query_pcmater(null, "pc16_codmater,pc01_descrmater,pc01_complmater", '', " pc16_solicitem=" . @$pc11_codigo);
     $result_dad_solicitempcmater = $clsolicitem->sql_record($sSqlMaterial);
 
     if ($clsolicitem->numrows > 0) {

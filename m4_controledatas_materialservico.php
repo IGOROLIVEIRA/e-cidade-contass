@@ -62,8 +62,8 @@ $clsolicita->rotulo->label();
     ?>
 </head>
 
-<body style='margin-top: 25px' bgcolor="#cccccc">
-<form name="form1" id='frmMaterialServico' method="post">
+<body bgcolor="#cccccc">
+<form name="form1" id='frmMaterialServico' method="post" style='margin-top: 25px'>
     <center>
         <div style='display:table;'>
             <fieldset>
@@ -113,6 +113,12 @@ $clsolicita->rotulo->label();
                         </td>
                     </tr>
                     <tr>
+                        <td><strong>Codigo Sicom:</strong></td>
+                        <td>
+                            <?php db_input('db150_coditem', 10, $Idb150_coditem, true, 'text', 1, "");?>
+                        </td>
+                    </tr>
+                    <tr>
                         <td nowrap title="Atualizar para">
                             <strong>Atualizar para:</strong>
                         </td>
@@ -130,7 +136,7 @@ $clsolicita->rotulo->label();
                         </td>
                     </tr>
                 </table>
-                <fieldset style='width:600px;'>
+                <fieldset style='width:1000px;'>
                     <div id='ctnGridMaterialServico'></div>
                 </fieldset>
             </fieldset>
@@ -144,9 +150,9 @@ $clsolicita->rotulo->label();
     let oGridMaterialServico = new DBGrid('gridMaterialServico');
     oGridMaterialServico.nameInstance = 'oGridMaterialServico';
     oGridMaterialServico.setCheckbox(0);
-    oGridMaterialServico.setCellWidth( [ '0%', '20%', '50%', '25%', '25%' ] );
-    oGridMaterialServico.setHeader( [ 'codigo', 'Código', 'Descrição', 'Data', 'Data Alteração'] );
-    oGridMaterialServico.setCellAlign( [ 'left', 'left', 'left', 'center', 'center' ] );
+    oGridMaterialServico.setCellWidth( [ '0%', '10%', '10%','10%','10%', '50%', '15%', '15%' ] );
+    oGridMaterialServico.setHeader( [ 'codigo', 'Código','Código Sicom','Tipo Registro','Unidade', 'Descrição', 'Data', 'Data Alteração'] );
+    oGridMaterialServico.setCellAlign( [ 'left', 'left', 'left', 'left','left','left', 'center', 'center' ] );
     oGridMaterialServico.setHeight(130);
     oGridMaterialServico.aHeaders[1].lDisplayed = false;
     oGridMaterialServico.show($('ctnGridMaterialServico'));
@@ -158,6 +164,7 @@ $clsolicita->rotulo->label();
         let iSolicitacao = $F('pc10_numero');
         let iLicitacao = $F('l20_codigo');
         let iContrato = $F('ac16_sequencial');
+        let iCodigoSicom = $F('db150_coditem');
 
         oParametros.exec = 'consultaCodigoMaterial';
         oParametros.codigoMaterialIinicial = $F('iCodigoMaterialInicial');
@@ -184,7 +191,12 @@ $clsolicita->rotulo->label();
             oParametros.iContrato = iContrato;
         }
 
-        //js_divCarregando('Aguarde, Atualizando leituras...<br>Esse procedimento pode levar algum tempo.', 'msgBox');
+        if(iCodigoSicom){
+            oParametros.exec = 'consultaCodigoSicom';
+            oParametros.codigoMaterialSicom = iCodigoSicom;
+        }
+
+        js_divCarregando('Aguarde, Atualizando leituras...<br>Esse procedimento pode levar algum tempo.', 'msgBox');
         new Ajax.Request(sUrlRpc, {
             method: 'post',
             parameters: 'json=' + Object.toJSON(oParametros),
@@ -254,6 +266,9 @@ $clsolicita->rotulo->label();
             let aLinha = [];
             aLinha.push(oMaterial.codigo);
             aLinha.push(oMaterial.codigo);
+            aLinha.push(oMaterial.db150_coditem);
+            aLinha.push(oMaterial.db150_unidademedida);
+            aLinha.push(oMaterial.db150_tipocadastro);
             aLinha.push(oMaterial.descricao.urlDecode());
             const sDBDataFormatada = oMaterial.data.split('-').reverse().join('/');
             const sDBData = oMaterial.data.length ? sDBDataFormatada : "";
@@ -329,9 +344,9 @@ $clsolicita->rotulo->label();
                 aMateriaisParaAtualizacao[iMaterialSeleciona].codigo =
                     oMaterialSelecionado[1];
                 aMateriaisParaAtualizacao[iMaterialSeleciona].data =
-                    oMaterialSelecionado[4];
+                    oMaterialSelecionado[7];
                 aMateriaisParaAtualizacao[iMaterialSeleciona].data_alteracao =
-                    oMaterialSelecionado[5];
+                    oMaterialSelecionado[8];
             }
         );
 

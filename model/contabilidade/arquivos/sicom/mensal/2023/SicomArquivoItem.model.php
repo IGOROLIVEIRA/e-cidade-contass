@@ -75,16 +75,26 @@ class SicomArquivoItem extends SicomArquivoBase implements iPadArquivoBaseCSV
       }
     }
     $mes = intval($this->sDataFinal['5'] . $this->sDataFinal['6']);
-    $sSql = "
-            SELECT db150_tiporegistro AS tipoRegistro,
-                   db150_coditem AS coditem,
-                   db150_dscitem AS dscItem,
-                   db150_unidademedida AS unidadeMedida,
-                   db150_tipocadastro AS tipoCadastro,
-                   '' AS justificativaAlteracao
-            FROM historicomaterial
-            WHERE db150_instit = " . db_getsession("DB_instit") . "
-                AND db150_mes = $mes";
+    $sSql = "SELECT    db150_tiporegistro AS tipoRegistro,
+                       db150_coditem AS coditem,
+                       db150_dscitem AS dscItem,
+                       db150_unidademedida AS unidadeMedida,
+                       db150_tipocadastro AS tipoCadastro,
+                       '' AS justificativaAlteracao
+                FROM historicomaterial
+                WHERE db150_instit = " . db_getsession("DB_instit") . "
+                    AND db150_mes = $mes
+                UNION
+                SELECT db150_tiporegistro AS tipoRegistro,
+                       db150_coditem AS coditem,
+                       db150_dscitem AS dscItem,
+                       db150_unidademedida AS unidadeMedida,
+                       db150_tipocadastro AS tipoCadastro,
+                       '' AS justificativaAlteracao
+                FROM historicomaterial
+                WHERE db150_instit = " . db_getsession("DB_instit") . "
+                    AND db150_tipocadastro = 2
+                    AND db150_mes = $mes";
     $rsResult10 = db_query($sSql);
 
     // matriz de entrada

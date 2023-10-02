@@ -100,6 +100,32 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
     db_msgbox($erro_msg);
   }
 
+    //Salva o item na tabela historicomaterial para gerar no sicom OC20960
+    $clhistoricomaterial = new cl_historicomaterial;
+
+    $rsHistoricoMaterial = $clhistoricomaterial->sql_record($clhistoricomaterial->sql_query(null,"*",null,"db150_pcmater =$pc01_codmater"));
+
+    for($iMaterial = 0; $iMaterial < pg_num_rows($rsHistoricoMaterial); $iMaterial++ ){
+        db_fieldsmemory($rsHistoricoMaterial, $iMaterial);
+
+        //inserir na tabela historico material
+        $clhistoricomaterial->db150_tiporegistro              = 10;
+        $clhistoricomaterial->db150_coditem                   = $db150_coditem;
+        $clhistoricomaterial->db150_pcmater                   = $db150_pcmater;
+        $clhistoricomaterial->db150_dscitem                   = substr($pc01_descrmater.'-'.$pc01_complmater,0,999);
+        $clhistoricomaterial->db150_unidademedida             = $db150_unidademedida;
+        $clhistoricomaterial->db150_tipocadastro              = 2;
+        $clhistoricomaterial->db150_justificativaalteracao    = $pc01_justificativa;
+        $clhistoricomaterial->db150_mes                       = date("m", db_getsession("DB_datausu"));
+        $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
+        $clhistoricomaterial->incluir(null);
+
+        if ($clhistoricomaterial->erro_status == 0) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($clhistoricomaterial->erro_msg);
+        }
+    }
+
   if (!$sqlerro) {
     $clpcmater->pc01_dataalteracao = date("Y-m-d", db_getsession("DB_datausu"));
     $clpcmater->pc01_justificativa = $pc01_justificativa;

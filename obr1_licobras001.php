@@ -7,7 +7,7 @@ include("classes/db_licobras_classe.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_homologacaoadjudica_classe.php");
 include("classes/db_condataconf_classe.php");
-
+testeeeeeeeeeeeeeeeeeeeeeeeeee
 db_postmemory($HTTP_POST_VARS);
 $cllicobras = new cl_licobras;
 $clhomologacaoadjudica = new cl_homologacaoadjudica();
@@ -49,9 +49,9 @@ if(isset($incluir)){
         if($obr01_licitacaolote == 0 && $licitacaolote != ""){
                 throw new Exception ("Usuário: Informe o lote da licitação.");
         }
-        
+
         $obr01_licitacaolote = "";
-        
+
 
         $resultobras = $cllicobras->sql_record($cllicobras->sql_query(null,"obr01_numeroobra","obr01_numeroobra desc limit 1","obr01_numeroobra = $obr01_numeroobra"));
 

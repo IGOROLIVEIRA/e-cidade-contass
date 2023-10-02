@@ -179,7 +179,7 @@ switch ($oParam->exec) {
             $clhistoricomaterial->db150_tiporegistro              = 10;
             $clhistoricomaterial->db150_coditem                   = $db150_coditem;
             $clhistoricomaterial->db150_pcmater                   = $oParam->iCodigoItem;
-            $clhistoricomaterial->db150_dscitem                   = $oPcmater->pc01_descrmater;
+            $clhistoricomaterial->db150_dscitem                   = substr($oPcmater->pc01_descrmater.'-'.$oPcmater->pc01_complmater,0,999);
             $clhistoricomaterial->db150_unidademedida             = $oMatunid->m61_descr;
             $clhistoricomaterial->db150_tipocadastro              = 1;
             $clhistoricomaterial->db150_justificativaalteracao    = '';
@@ -285,7 +285,7 @@ switch ($oParam->exec) {
               $clhistoricomaterial->db150_tiporegistro              = 10;
               $clhistoricomaterial->db150_coditem                   = $db150_coditem;
               $clhistoricomaterial->db150_pcmater                   = $oParam->iCodigoItem;
-              $clhistoricomaterial->db150_dscitem                   = $oPcmater->pc01_descrmater;
+              $clhistoricomaterial->db150_dscitem                   = substr($oPcmater->pc01_descrmater.'-'.$oPcmater->pc01_complmater,0,999);
               $clhistoricomaterial->db150_unidademedida             = $oMatunid->m61_descr;
               $clhistoricomaterial->db150_tipocadastro              = 1;
               $clhistoricomaterial->db150_justificativaalteracao    = '';

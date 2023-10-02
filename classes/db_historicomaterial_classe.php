@@ -488,6 +488,7 @@ class cl_historicomaterial
             $sql .= $campos;
         }
         $sql .= " from historicomaterial ";
+        $sql .= " inner join pcmater on pc01_codmater = db150_pcmater ";
         $sql2 = "";
         if ($dbwhere == "") {
             if ($db150_sequencial != null) {
