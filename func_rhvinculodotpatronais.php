@@ -73,7 +73,8 @@ $clrhvinculodotpatronais->rotulo->label();
                     rh171_funcaonov as dl_Funcao_Novo,
                     rh171_subfuncaoorig as dl_Subfuncao_Original,
                     rh171_subfuncaonov as dl_Subfuncao_Novo,
-                    rh171_mes";
+                    rh171_mes,
+                    CASE WHEN rh171_codtab = 1 THEN 'INSS' ELSE 'Previdência' END as dl_Tabela";
         
         $sWhere = null;
 	    $aWhere = array();

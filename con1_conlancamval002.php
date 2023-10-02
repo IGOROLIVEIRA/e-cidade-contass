@@ -234,7 +234,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
                 $contacorrentedetalheconlancamval->c28_contacorrentedetalhe = $oDaoContaCorrenteDetalhe->c19_sequencial != '' ? $oDaoContaCorrenteDetalhe->c19_sequencial : $seqContaCorrenteDetalhe;
                 $contacorrentedetalheconlancamval->c28_tipo = 'D';
                 if($c18_contacorrente == 103)
-                    $contacorrentedetalheconlancamval->incluir();
+                    $contacorrentedetalheconlancamval->incluir(null);
                 if ($contacorrentedetalheconlancamval->erro_status == "0") {
                     db_msgbox("Não foi possível incluir detalhe da conta débito. Procedimento abortado.".$contacorrentedetalheconlancamval->erro_msg);
                     $erro = true;
@@ -281,7 +281,7 @@ if((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"])=="Alterar
                 $contacorrentedetalheconlancamval->c28_contacorrentedetalhe = $oDaoContaCorrenteDetalhe->c19_sequencial != '' ? $oDaoContaCorrenteDetalhe->c19_sequencial : $seqContaCorrenteDetalhe;
                 $contacorrentedetalheconlancamval->c28_tipo = 'C';
                 if($c18_contacorrente == 103)
-                    $contacorrentedetalheconlancamval->incluir();
+                    $contacorrentedetalheconlancamval->incluir(null);
                 if ($contacorrentedetalheconlancamval->erro_status == "0") {
                     db_msgbox("Não foi possível incluir detalhe da conta crédito. Procedimento abortado.".$contacorrentedetalheconlancamval->erro_msg);
                     $erro = true;

@@ -2499,7 +2499,7 @@ class cl_empempenho
         $sSql .= "             inner join conhistdoc   on c53_coddoc = c71_coddoc                                                                                            ";
         $sSql .= "             inner join conlancam    on c70_codlan = c75_codlan                                                                                            ";
         $sSql .= "             inner join empempenho   on e60_numemp = c75_numemp                                                                                            ";
-        $sSql .= "        where e60_anousu = $iAnoUsu and c75_data between '$sDataInicial' and '$sDataFinal'                                                                ";
+        $sSql .= "        where e60_anousu = $iAnoUsu and e60_emiss between '$sDataInicial' and '$sDataFinal'                                                                ";
         $sSql .= "             and  e60_instit in ($sInstituicoes)                                                                                                          ";
         $sSql .= "        group by c75_numemp, c70_anousu                                                                                                                    ";
         $sSql .= "        ) as x on x.c75_numemp = e60_numemp                                                                                                               ";
@@ -2614,4 +2614,221 @@ class cl_empempenho
 
         return $sSql;
     }
+
+    public function verificaSaldoEmpenho($numEmpenho, $dataLiquidacao){
+        $sSql = " WITH total_liquidado AS";
+        $sSql .= " (SELECT CASE WHEN count(*) = 0 THEN 0 ELSE sum(c70_valor) END AS total_liquidado ";
+        $sSql .= " FROM conlancam";
+        $sSql .= " JOIN conlancamdoc ON c70_codlan = c71_codlan";
+        $sSql .= " JOIN conhistdoc ON c71_coddoc = c53_coddoc";
+        $sSql .= " JOIN conlancamemp  ON c70_codlan = c75_codlan ";
+        $sSql .= " WHERE c75_numemp  = {$numEmpenho} AND c53_tipo = 20 AND c70_data <= '$dataLiquidacao'),";
+
+        $sSql .= " total_estornado AS ";
+        $sSql .= " (SELECT CASE WHEN count(*) = 0 THEN 0 ELSE sum(c70_valor) END AS total_estornado ";
+        $sSql .= " FROM conlancam";
+        $sSql .= " JOIN conlancamdoc ON c70_codlan = c71_codlan";
+        $sSql .= " JOIN conhistdoc ON c71_coddoc = c53_coddoc";
+        $sSql .= " JOIN conlancamemp  ON c70_codlan = c75_codlan ";
+        $sSql .= " WHERE c75_numemp  = {$numEmpenho} AND c53_tipo = 21 AND c70_data <= '$dataLiquidacao'),";
+
+        $sSql .= " valor_empenho AS ";
+        $sSql .= " (SELECT e60_vlremp AS valor_empenho FROM empempenho WHERE e60_numemp = {$numEmpenho})";
+
+        $sSql .= " SELECT valor_empenho - total_liquidado + total_estornado AS saldo_empenho ";
+        $sSql .= " FROM total_liquidado, total_estornado, valor_empenho;";
+
+        return $sSql;
+    }
+
+    public function alteraData($e60_numemp, $atualDataEmpenho, $novaDataEmpenho, $mesAtual)
+    {
+        $atualDataEmpenhoMes = date('m', strtotime($atualDataEmpenho));
+        $novaDataEmpenhoMes = date('m', strtotime($novaDataEmpenho));
+        $novaDataEmpenhoAno = date('Y', strtotime($novaDataEmpenho));
+
+        if ($novaDataEmpenhoMes > $atualDataEmpenhoMes){
+            $mesMenor = $atualDataEmpenhoMes;
+        } else {
+            $mesMenor = $novaDataEmpenhoMes;
+        }
+
+        $sSql = "SELECT fc_startsession();";
+        $sSql .= " CREATE TEMP TABLE cod_lan ON COMMIT DROP AS";
+        $sSql .= " SELECT DISTINCT c75_codlan";
+        $sSql .= " FROM conlancamemp ";
+        $sSql .= " JOIN conlancamdoc on c71_codlan = c75_codlan";
+        $sSql .= " JOIN conhistdoc on c71_coddoc = c53_coddoc";
+        $sSql .= " WHERE c75_numemp = {$e60_numemp} AND c53_tipo = 10;";
+
+        $sSql .= " CREATE TEMP TABLE saldo_ctas ON COMMIT DROP AS ";
+        $sSql .= " SELECT DISTINCT conplanoexesaldo.*, deb.c69_data c69_data ";
+        $sSql .= " FROM conplanoexesaldo ";
+        $sSql .= " JOIN conlancamval deb ON (deb.c69_debito, deb.c69_anousu, EXTRACT (MONTH FROM deb.c69_data)::integer) = (c68_reduz, c68_anousu, c68_mes) ";
+        $sSql .= " WHERE deb.c69_codlan IN (SELECT c75_codlan from cod_lan) ";
+        $sSql .= " UNION ALL ";
+        $sSql .= " SELECT DISTINCT conplanoexesaldo.*, cred.c69_data c69_data ";
+        $sSql .= " FROM conplanoexesaldo ";
+        $sSql .= " JOIN conlancamval cred ON (cred.c69_credito, cred.c69_anousu, EXTRACT (MONTH FROM cred.c69_data)::integer) = (c68_reduz, c68_anousu, c68_mes)";
+        $sSql .= " WHERE cred.c69_codlan IN (SELECT c75_codlan from cod_lan);";
+
+        $sSql .= " CREATE TEMP TABLE alt_emp ON COMMIT DROP AS";
+        $sSql .= " SELECT e60_numemp AS nro_emp,";
+        $sSql .= "     e60_emiss AS data_emp,";
+        $sSql .= "     e61_autori AS autoriza";
+        $sSql .= " FROM empempenho";
+        $sSql .= " INNER JOIN empempaut ON e61_numemp = e60_numemp";
+        $sSql .= " INNER JOIN conlancamemp ON e60_numemp = c75_numemp";
+        $sSql .= " WHERE e60_numemp IN ({$e60_numemp})";
+        $sSql .= " AND c75_codlan IN (SELECT c75_codlan from cod_lan);";
+        
+        $sSql .= " CREATE TEMP TABLE w_lancamentos ON COMMIT DROP AS";
+        $sSql .= " SELECT * FROM conlancamval";
+        $sSql .= " JOIN conlancamdoc ON c71_codlan = c69_codlan";
+        $sSql .= " WHERE c69_codlan IN";
+        $sSql .= "     (SELECT c75_codlan FROM conlancamemp";
+        $sSql .= "     WHERE c75_numemp IN ";
+        $sSql .= "         (SELECT nro_emp FROM alt_emp))";
+        $sSql .= " AND c71_codlan IN (SELECT c75_codlan from cod_lan);";
+        
+        $sSql .= " ALTER TABLE conlancamval DISABLE TRIGGER ALL;";
+        
+        $sSql .= " UPDATE conlancamval";
+        $sSql .= " SET c69_data = '{$novaDataEmpenho}'";
+        $sSql .= " WHERE c69_codlan IN";
+        $sSql .= "     (SELECT c69_codlan FROM w_lancamentos);";
+        
+        $sSql .= " ALTER TABLE conlancamval ENABLE TRIGGER ALL;";
+        
+        $sSql .= " UPDATE conlancamemp";
+        $sSql .= " SET c75_data = '{$novaDataEmpenho}'";
+        $sSql .= " WHERE c75_codlan IN";
+        $sSql .= "     (SELECT c71_codlan FROM w_lancamentos);";
+        
+        $sSql .= " UPDATE conlancam";
+        $sSql .= " SET c70_data = '{$novaDataEmpenho}'";
+        $sSql .= " WHERE c70_codlan IN";
+        $sSql .= "     (SELECT c71_codlan FROM w_lancamentos);";
+        
+        $sSql .= " UPDATE conlancamdot";
+        $sSql .= " SET c73_data = '{$novaDataEmpenho}'";
+        $sSql .= " WHERE c73_codlan IN";
+        $sSql .= "     (SELECT c71_codlan FROM w_lancamentos);";
+        
+        $sSql .= " UPDATE conlancamdoc";
+        $sSql .= " SET c71_data = '{$novaDataEmpenho}'";
+        $sSql .= " WHERE c71_codlan IN";
+        $sSql .= "     (SELECT c71_codlan FROM w_lancamentos);";
+
+        $sSql .= " UPDATE conlancamcorrente";
+        $sSql .= " SET c86_data = '{$novaDataEmpenho}'";
+        $sSql .= " WHERE c86_conlancam IN ";
+        $sSql .= "     (SELECT c71_codlan FROM w_lancamentos);";
+
+        $sSql .= " UPDATE empempenho";
+        $sSql .= " SET e60_emiss = '{$novaDataEmpenho}',";
+        $sSql .= "     e60_vencim = '{$novaDataEmpenho}'";
+        $sSql .= " WHERE e60_numemp IN";
+        $sSql .= "     (SELECT nro_emp FROM alt_emp);";
+        
+        $sSql .= " UPDATE empautoriza";
+        $sSql .= " SET e54_emiss = '{$novaDataEmpenho}'";
+        $sSql .= " WHERE e54_autori IN";
+        $sSql .= "     (SELECT autoriza FROM alt_emp);";
+
+        for($i = $mesMenor; $i <= $mesAtual; $i++){
+            $sSql .= " DELETE FROM conplanoexesaldo";
+            $sSql .= " USING saldo_ctas";
+            $sSql .= " WHERE (saldo_ctas.c68_reduz, saldo_ctas.c68_anousu) = (conplanoexesaldo.c68_reduz, conplanoexesaldo.c68_anousu)";
+            $sSql .= " AND conplanoexesaldo.c68_mes = {$i};";
+
+            $sSql .= " CREATE TEMP TABLE landeb".$i." ON COMMIT DROP AS";
+            $sSql .= " SELECT c69_anousu,";
+            $sSql .= "     c69_debito,";
+            $sSql .= "     to_char(conlancamval.c69_data,'MM')::integer,";
+            $sSql .= "     sum(round(c69_valor,2)),0::float8";
+            $sSql .= " FROM conlancamval";
+            $sSql .= " JOIN saldo_ctas ON (saldo_ctas.c68_reduz, saldo_ctas.c68_anousu) = (conlancamval.c69_debito, conlancamval.c69_anousu)";
+            $sSql .= " WHERE conlancamval.c69_anousu = {$novaDataEmpenhoAno}";
+            $sSql .= " AND EXTRACT (MONTH FROM conlancamval.c69_data)::integer = {$i}";
+            $sSql .= " GROUP BY conlancamval.c69_anousu, conlancamval.c69_debito, to_char(conlancamval.c69_data,'MM')::integer;";
+            
+            $sSql .= " CREATE TEMP TABLE lancre".$i." ON COMMIT DROP AS";
+            $sSql .= " SELECT c69_anousu,";
+            $sSql .= "     c69_credito,";
+            $sSql .= "     to_char(conlancamval.c69_data,'MM')::integer as c69_data,";
+            $sSql .= "     0::float8,";
+            $sSql .= "     sum(round(c69_valor,2))";
+            $sSql .= " FROM conlancamval";
+            $sSql .= " JOIN saldo_ctas ON (saldo_ctas.c68_reduz, saldo_ctas.c68_anousu) = (conlancamval.c69_credito, conlancamval.c69_anousu)";
+            $sSql .= " WHERE conlancamval.c69_anousu = {$novaDataEmpenhoAno}";
+            $sSql .= " AND EXTRACT (MONTH FROM conlancamval.c69_data)::integer = {$i}";
+            $sSql .= " GROUP BY conlancamval.c69_anousu, conlancamval.c69_credito, to_char(conlancamval.c69_data,'MM')::integer;";
+            
+            $sSql .= " INSERT INTO conplanoexesaldo";
+            $sSql .= " SELECT * FROM landeb".$i."";
+            $sSql .= " WHERE c69_anousu = {$novaDataEmpenhoAno};";
+            
+            $sSql .= " UPDATE conplanoexesaldo";
+            $sSql .= " SET c68_credito = lancre".$i.".sum";
+            $sSql .= " FROM lancre".$i."";
+            $sSql .= " WHERE c68_anousu = lancre".$i.".c69_anousu";
+            $sSql .= " AND c68_reduz = lancre".$i.".c69_credito";
+            $sSql .= " AND c68_mes = lancre".$i.".c69_data";
+            $sSql .= " AND c68_anousu = {$novaDataEmpenhoAno};";
+            
+            $sSql .= " DELETE FROM lancre".$i."";
+            $sSql .= " USING conplanoexesaldo";
+            $sSql .= " WHERE lancre".$i.".c69_anousu = conplanoexesaldo.c68_anousu";
+            $sSql .= " AND conplanoexesaldo.c68_reduz = lancre".$i.".c69_credito";
+            $sSql .= " AND conplanoexesaldo.c68_mes = lancre".$i.".c69_data";
+            $sSql .= " AND c68_anousu = {$novaDataEmpenhoAno};";
+            
+            $sSql .= " INSERT INTO conplanoexesaldo";
+            $sSql .= " SELECT * FROM lancre".$i."";
+            $sSql .= " WHERE c69_anousu = {$novaDataEmpenhoAno};";
+        }
+        return $sSql;
+        
+    }
+
+    public function verificaSaldoEmpenhoPosterior($numEmpenho, $saldoData, $codOrd, $tipoDoc){
+        $sSql = "";
+        $sSql .= " WITH lancamento AS";
+        $sSql .= " (SELECT c70_codlan AS cod_lan, c70_valor AS valor_lan";
+        $sSql .= " FROM conlancam";
+        $sSql .= " JOIN conlancamord ON c70_codlan = c80_codlan";
+        $sSql .= " JOIN conlancamdoc ON c71_codlan = c80_codlan";
+        $sSql .= " JOIN conhistdoc ON c53_coddoc = c71_coddoc";
+        $sSql .= " WHERE c80_codord = {$codOrd} AND c53_tipo = {$tipoDoc}), ";
+
+        $tipoLiqui = $tipoDoc == 20 ? "AND c70_codlan not in (cod_lan)), " : "),";
+        $sSql .= " total_liquidado AS";
+        $sSql .= " (SELECT CASE WHEN count(*) = 0 THEN 0 ELSE sum(c70_valor) END AS total_liquidado ";
+        $sSql .= " FROM lancamento, conlancam";
+        $sSql .= " JOIN conlancamdoc ON c70_codlan = c71_codlan";
+        $sSql .= " JOIN conhistdoc ON c71_coddoc = c53_coddoc";
+        $sSql .= " JOIN conlancamemp  ON c70_codlan = c75_codlan ";
+        $sSql .= " WHERE c75_numemp = {$numEmpenho} AND c53_tipo = 20";
+        $sSql .= " AND c70_data <= '{$saldoData}' ".$tipoLiqui;
+
+        $tipoAnul = $tipoDoc == 21 ? "AND c70_codlan not in (cod_lan)), " : "),";
+        $sSql .= " total_estornado AS ";
+        $sSql .= " (SELECT CASE WHEN count(*) = 0 THEN 0 ELSE sum(c70_valor) END AS total_estornado ";
+        $sSql .= " FROM lancamento, conlancam";
+        $sSql .= " JOIN conlancamdoc ON c70_codlan = c71_codlan";
+        $sSql .= " JOIN conhistdoc ON c71_coddoc = c53_coddoc";
+        $sSql .= " JOIN conlancamemp  ON c70_codlan = c75_codlan ";
+        $sSql .= " WHERE c75_numemp  = {$numEmpenho} AND c53_tipo = 21";
+        $sSql .= " AND c70_data <= '{$saldoData}' ".$tipoAnul;
+        
+        $sSql .= " valor_empenho AS ";
+        $sSql .= " (SELECT e60_vlremp AS valor_empenho FROM empempenho WHERE e60_numemp = {$numEmpenho})";
+
+        $sSql .= " SELECT (valor_empenho - total_liquidado + total_estornado) - valor_lan AS saldo_empenho ";
+        $sSql .= " FROM total_liquidado, total_estornado, valor_empenho, lancamento;";
+
+        return $sSql;
+    }
+    
 }

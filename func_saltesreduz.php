@@ -97,6 +97,171 @@ $clsaltes->rotulo->label("k13_reduz");
       if (isset($ver_datalimite) && trim(@$ver_datalimite)=="1"){
            $dbwhere .= " and (k13_limite is null or k13_limite >= '".date("Y-m-d",db_getsession("DB_datausu"))."')";  /* OC 2386 - A falta de parenteses na data limite interferia na busca da conta na confecção de slips. */
       }
+      $iAnoSessao = db_getsession("DB_anousu");
+      if ($tiposelecione == 01 || $tiposelecione == 02){
+            if ($tipoconta == "Debito"){
+              if ( $tipocontadebito == 1){
+                  $dbwhere .= " and db83_tipoconta = ".$tipocontadebito ;
+              }
+              if ( $tipocontadebito == 2){
+                 if ($tiposelecione == 01){
+                    $dbwhere .= "  and ( db83_tipoconta = ".$tipocontadebito."  or db83_tipoconta = 3 )"  ;
+                 } else{
+                    $dbwhere .= " and db83_tipoconta = ".$tipocontadebito ;
+                 }
+              }
+              if ( $tipocontadebito == 3){
+                $dbwhere .= " and db83_tipoconta is null" ;
+              }
+            }
+            if ($tipoconta == "Credito"){
+                
+                $dbwhere .= " and c63_conta = 
+                            ( select 
+                                  c63_conta
+                              from
+                                  saltes
+                              inner join conplanoreduz on
+                                  conplanoreduz.c61_reduz = saltes.k13_reduz
+                                  and c61_anousu = $iAnoSessao
+                              inner join conplanoexe on
+                                  conplanoexe.c62_reduz = conplanoreduz.c61_reduz
+                                  and c61_anousu = c62_anousu
+                              inner join conplano on
+                                  conplanoreduz.c61_codcon = conplano.c60_codcon
+                                  and c61_anousu = c60_anousu
+                              left join conplanoconta on
+                                  conplanoconta.c63_codcon = conplanoreduz.c61_codcon
+                                  and conplanoconta.c63_anousu = conplanoreduz.c61_anousu
+                              where  k13_reduz = $codigoconta and c61_anousu = $iAnoSessao
+                              )  " ;
+                
+                if ($tiposelecione == 02){
+                    $dbwhere .= "  and ( db83_tipoconta = ".$tipocontacredito."  or db83_tipoconta = 3 )"  ;
+                } else{
+                    $dbwhere .= " and db83_tipoconta = $tipocontacredito ";
+                }
+                
+            } 
+      }
+      if ($tiposelecione == 03){
+            if ($tipoconta == "Debito"){
+              if ( $tipocontadebito == 1){
+                $dbwhere .= " and ( db83_tipoconta = ".$tipocontadebito."  or db83_tipoconta = 3 ) " ;
+              }
+            } 
+            if ($tipoconta == "Credito"){
+              
+              if ($codigoconta){
+                
+                $dbwhere .= " and c61_codigo = 
+                              ( select 
+                                    c61_codigo
+                                from
+                                    saltes
+                                inner join conplanoreduz on
+                                    conplanoreduz.c61_reduz = saltes.k13_reduz
+                                    and c61_anousu = $iAnoSessao
+                                inner join conplanoexe on
+                                    conplanoexe.c62_reduz = conplanoreduz.c61_reduz
+                                    and c61_anousu = c62_anousu
+                                inner join conplano on
+                                    conplanoreduz.c61_codcon = conplano.c60_codcon
+                                    and c61_anousu = c60_anousu
+                                left join conplanoconta on
+                                    conplanoconta.c63_codcon = conplanoreduz.c61_codcon
+                                    and conplanoconta.c63_anousu = conplanoreduz.c61_anousu
+                                where  k13_reduz = $codigoconta and c61_anousu = $iAnoSessao
+                                )";
+                                $dbwhere .= " and ( db83_tipoconta = ".$tipocontadebito."  or db83_tipoconta = 3 )" ;
+              }
+            }     
+      }
+      if ($tiposelecione == 04){
+          if ($tipoconta == "Debito"){
+            if ( $tipocontadebito == 1){
+              $dbwhere .= " and db83_tipoconta = ".$tipocontadebito ;
+            }
+          }    
+          if ($tipoconta == "Credito"){    
+            if ( $tipocontacredito == 1){
+              $dbwhere .= " and db83_tipoconta = ".$tipocontacredito ;
+            }
+          }  
+      }
+      if ($tiposelecione == 05){
+            if ($tipoconta == "Debito"){
+                if ( $tipocontadebito == 1){
+                  $dbwhere .= "  and c61_codigo in ('15000001') and db83_tipoconta = ".$tipocontadebito ;
+                }
+            }    
+            if ($tipoconta == "Credito"){
+                if ( $tipocontacredito == 1){
+                  $dbwhere .= "  and c61_codigo in ('15000000') and db83_tipoconta = ".$tipocontacredito ;
+                }
+            }    
+      }
+      if ($tiposelecione == 06){
+        if ($tipoconta == "Debito"){
+            if ( $tipocontadebito == 1){
+              $dbwhere .= "  and c61_codigo in ('15000002') and db83_tipoconta = ".$tipocontadebito ;
+            }
+        }    
+        if ($tipoconta == "Credito"){
+            if ( $tipocontacredito == 1){
+              $dbwhere .= "  and c61_codigo in ('15000000') and db83_tipoconta = ".$tipocontacredito ;
+            }
+        }    
+      }
+      if ($tiposelecione == 07){
+          if ($tipoconta == "Debito"){
+              if ( $tipocontadebito == 1){
+                $dbwhere .= "  and c61_codigo in ('15700000','15710000','15720000','15750000','16310000','16320000','16330000','16360000','16650000','17000000','17010000','17020000','17030000') and db83_tipoconta = ".$tipocontadebito ;
+              }
+          }    
+          if ($tipoconta == "Credito"){
+              if ( $tipocontacredito == 1){
+                $dbwhere .= "  and c61_codigo in ('15000000') and db83_tipoconta = ".$tipocontacredito ;
+              }
+          }    
+      }
+      if ($tiposelecione == "08"){
+        if ($tipoconta == "Debito"){
+          if ( $tipocontadebito == 1){
+            $dbwhere .= " and db83_tipoconta = ".$tipocontadebito ;
+          }
+        }    
+        if ($tipoconta == "Credito"){  
+          if ( $tipocontacredito == 1){
+            $dbwhere .= " and db83_tipoconta = ".$tipocontacredito ;
+          }
+        }  
+      }
+      if ($tiposelecione == "09"){
+        if ($tipoconta == "Debito"){
+          if ( $tipocontadebito == 1){
+            $dbwhere .= " and db83_tipoconta = ".$tipocontadebito ;
+          }
+        }    
+        if ($tipoconta == "Credito"){
+          if ( $tipocontacredito == 3){
+            $dbwhere .= " and db83_tipoconta is null " ;
+          }
+        }  
+      }
+      if ($tiposelecione == 10){
+        if ($tipoconta == "Debito"){
+          if ( $tipocontadebito == 3){
+            $dbwhere .= " and db83_tipoconta is null " ;
+          }
+        }    
+        if ($tipoconta == "Credito"){
+          if ( $tipocontacredito == 1){
+            $dbwhere .= " and db83_tipoconta = ".$tipocontacredito ;
+          }
+        } 
+      }
+
 
       if(!isset($pesquisa_chave)){
         if(isset($campos)==false){
@@ -119,7 +284,7 @@ $clsaltes->rotulo->label("k13_reduz");
           $result = $clsaltes->sql_record($clsaltes->sql_query_anousu(null,"*","","k13_conta=$pesquisa_chave and c61_instit = ".db_getsession("DB_instit") . $dbwhere));
           if($clsaltes->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$k13_descr',false);</script>";
+            echo "<script>".$funcao_js."('$k13_descr','$c61_codigo','$k13_reduz',false);</script>";
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

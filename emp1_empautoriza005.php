@@ -158,13 +158,13 @@ if (isset($alterar) && !$sqlerro) {
         $result = $clorcreservaaut->sql_record(
             $clorcreservaaut->sql_query_file(null, "o83_codres as o80_codres", "", "o83_autori = $e54_autori")
         );
-      
+
         if ($clorcreservaaut->numrows > 0) {
             db_fieldsmemory($result, 0);
             $result = $clorcreserva->sql_record(
                 $clorcreserva->sql_query_file($o80_codres)
             );
-            
+
             if ($clorcreserva->numrows > 0) {
                 db_fieldsmemory($result, 0);
                 if ($e54_emiss != $o80_dtini) {
@@ -176,15 +176,15 @@ if (isset($alterar) && !$sqlerro) {
     }
 
     if ($sqlerro == false) {
-        if ($e54_emiss > date("Y-m-d")) {
-            $erro_msg = "Usuário: ALTERAÇÃO NO EFETUATA! A DATA DA AUTORIZAÇÃO NO PODE SER POSTERIOR A DATA DO SISTEMA";
-            $sqlerro = true;
-        }
+      if ($e54_emiss > date("Y-m-d", db_getsession("DB_datausu"))) {
+          $erro_msg = "Usuário: ALTERAÇÃO NÃO EFETUADA! A DATA DA AUTORIZAÇÃO NÃO PODE SER POSTERIOR A DATA DO SISTEMA";
+          $sqlerro = true;
+      }
     }
 
     if ($sqlerro == false) {
-        if (date("Y", strtotime($e54_emiss)) <> date("Y")) {
-            $erro_msg = "Usuário: ALTERAÇÃO NO EFETUATA! A DATA DA AUTORIZAÇÃO DEVE PERMANCER NO EXERCÍCIO ATUAL";
+        if (date("Y", strtotime($e54_emiss)) <> date("Y", db_getsession("DB_datausu"))) {
+            $erro_msg = "Usuário: ALTERAÇÃO NÃO EFETUADA! A DATA DA AUTORIZAÇÃO DEVE PERMANECER NO EXERCÍCIO ATUAL";
             $sqlerro = true;
         }
     }
@@ -411,7 +411,7 @@ if (isset($e54_autori)) {
 </body>
 
 </html>
-<?
+<?php
 if (isset($erro_msg)) {
   db_msgbox($erro_msg);
   //db_redireciona("emp1_empautoriza005.php");
@@ -481,6 +481,7 @@ if (isset($chavepesquisa)) {
 
 /////////////////////////////////////////////
 if (isset($alterar)) {
+
   if ($sqlerro == true) {
     //    $clempautoriza->erro(true,false);
     $db_botao = true;
@@ -496,3 +497,24 @@ if ($db_opcao == 22 && $anulacao == false) {
   echo "<script>document.form1.pesquisar.click();</script>";
 }
 ?>
+
+<script>
+    window.onload = function () {
+        js_desabilitaTipoCompra();
+    }
+
+    function js_desabilitaTipoCompra() {
+
+    const e54_codcom = document.querySelector('#e54_codcom');
+    const e54_codcomdescr = document.querySelector('#e54_codcomdescr');
+
+    let atributos = 'background-color:#DEB887; pointer-events: none; touch-action: none;';
+
+    e54_codcom.style.cssText = atributos;
+    e54_codcom.setAttribute('readonly', 'true');
+
+    e54_codcomdescr.style.cssText = atributos;
+    e54_codcomdescr.setAttribute('readonly', 'true');
+    }
+</script>
+

@@ -144,7 +144,7 @@ class licitacao
                 null,
                 $sCampos,
                 "l21_ordem asc",
-                "l20_codigo = {$this->iCodLicitacao}"
+                "l20_codigo = {$this->iCodLicitacao} and pc11_quant != 0"
             )
         );
 

@@ -24,7 +24,6 @@
  *  Copia da licenca no diretorio licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 //MODULO: empenho
 require_once(modification("classes/db_empparametro_classe.php"));
 require_once(modification("dbforms/db_classesgenericas.php"));
@@ -79,6 +78,25 @@ if (isset($opcao) && $opcao=="alterar") {
     }
 }
 ?>
+
+<style>
+   #e55_autori, #e55_sequen, #e55_item {
+        width: 80px;
+    }
+   #pc01_descrmater{
+        width: 340px;
+    }
+    #e55_quant {
+        width: 80px;
+    }
+
+    #o56_descr {
+        width: 300px;
+    }
+    #e55_descr  {
+        width: 415px;
+    }
+</style>
 
 <script type="text/javascript" src="scripts/scripts.js"></script>
 <script type="text/javascript" src="scripts/prototype.js"></script>
@@ -157,10 +175,11 @@ function js_troca(codele) {
   document.form1.o56_descr.value = descricao;
 }
 </script>
+
 <form name="form1" method="post" action="">
 <center>
-<fieldset style="margin-top:5px; width:45%;">
-  <legend><b>Ítens</b></legend>
+<fieldset style="margin-top:5px; width:45%; text-align:left;">
+  <legend><b>Itens</b></legend>
   <table border="0" cellpadding='0' cellspacing='0' >
     <tr style="height: 20px;">
       <td nowrap title="<?=@$Te55_autori?>">
@@ -183,28 +202,33 @@ function js_troca(codele) {
 	 <? db_ancora(@$Le55_item,"js_pesquisae55_item(true);",$db_opcao); ?>
       </td>
       <td>
-         <?  db_input('e55_item',8,$Ie55_item,true,'text',$db_opcao," onchange='js_pesquisae55_item(false);'")  ?>
-	       <?  db_input('pc01_descrmater',52,$Ipc01_descrmater,true,'text',3,'')	 ?>
-
+         <?php  db_input('e55_item',8,$Ie55_item,true,'text',$db_opcao," onchange='js_pesquisae55_item(false);'")  ?>
+	     <?php  db_input('pc01_descrmater',52,$Ipc01_descrmater,true,'text',3)	 ?>
       </td>
     </tr>
     <tr>
       <td><b>Unidade:</b></td>
-      <td style = 'width: 100px'>
-      <?
-	       $result_unidade = array ();
-	       $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
-           $numrows_unid = $clmatunid->numrows;
-           for ($i = 0; $i < $numrows_unid; $i++){
-                            db_fieldsmemory($result_sql_unid, $i);
-                            $result_unidade[$m61_codmatunid] = $m61_descr;
-           }
-         db_select("e55_unid", $result_unidade, true, $db_opcao,"")
-      ?>
-      <label style="margin-left: 20px"><b>Marca:</b></label>
-      <? db_input('e55_marca',20,$Ie55_marca,true,'text',$db_opcao,'','','','',100)	 ?>
-      </td>
+      <td>
+        <?php
+            $result_unidade = array ();
+            $result_sql_unid = $clmatunid->sql_record($clmatunid->sql_query_file(null, "m61_codmatunid,substr(m61_descr,1,20) as m61_descr,m61_usaquant,m61_usadec", "m61_descr"));
+            $numrows_unid = $clmatunid->numrows;
+            for ($i = 0; $i < $numrows_unid; $i++){
+                                db_fieldsmemory($result_sql_unid, $i);
+                                $result_unidade[$m61_codmatunid] = $m61_descr;
+            }
+            db_select("e55_unid", $result_unidade, true, $db_opcao,"")
+        ?>
     </tr>
+    <tr>
+        <td>
+            <label><b>Marca:</b></label>
+
+      </td>
+      <td>
+        <?php db_input('e55_marca',20,$Ie55_marca,true,'text',$db_opcao,'','','','',100)	 ?>
+      </td>
+   </tr>
 
 <?if( isset($e55_item) && $e55_item!='' && (empty($liberado) || (isset($liberado) && $liberado==true) ) ){?>
     <tr style="height: 20px;">
@@ -255,7 +279,7 @@ function js_troca(codele) {
     }
     $clempautitem->erro_msg=$ero;
     db_input('elemento01',20,0,true,'text',3);
-    db_input('o56_descr',40,0,true,'text',3);
+    db_input('o56_descr',40,0,true,'text',3,'','','','');
     if (isset($numrows99) && $numrows99>0) {
       for($i=0; $i<$numrows99; $i++){
         db_fieldsmemory($result99,$i);
@@ -282,7 +306,7 @@ function js_troca(codele) {
             } else {
                 $db_opcao_e55_quant = $db_opcao;
             }
-            db_input('e55_quant',8,$Ie55_quant,true,'text',$db_opcao_e55_quant,"onchange=\"js_calcula('quant');\"");
+            db_input('e55_quant',8,$Ie55_quant,true,'text',$db_opcao_e55_quant,"onchange=\"js_calcula('quant');\"",'','','');
         ?>
         <script>
           ///Controla a validação de vírgulas e pontos.

@@ -65,6 +65,7 @@ $clpcorcam = new cl_pcorcam();
 $clpcorcamforne = new cl_pcorcamforne();
 $clpcorcamitem = new cl_pcorcamitem();
 $clpcorcamval = new cl_pcorcamval();
+$clprecoreferencia = new cl_precoreferencia();
 $clliclicita = new cl_liclicita();
 $clpcorcamdescla = new cl_pcorcamdescla();
 $clpcorcamtroca = new cl_pcorcamtroca();
@@ -287,14 +288,30 @@ if ($modelo == 1) {
       if (pg_num_rows($result_valor) == 0) {
         continue;
       }
+
+      if ($sOrigem == "processo") {
+        $sSqlCasasPreco = $clprecoreferencia->sql_query_file(
+          null,
+          "si01_casasdecimais",
+          null,
+          "si01_processocompra=$pc81_codproc"
+        );
+        $result_casaspreco = $clprecoreferencia->sql_record($sSqlCasasPreco);
+  
+        if (pg_num_rows($result_casaspreco) > 0) {
+          db_fieldsmemory($result_casaspreco);
+          $quant_casas = $si01_casasdecimais;
+        }
+      }
+      
       db_fieldsmemory($result_valor);
       $pdf->setfont('arial', '', 7);
       if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
         $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
         if (strlen($z01_cgccpf) == 11) {
-          $pdf->cell(224, $alt, $z01_nome . ' - CPF: ' . $z01_cgccpf, 1, 0, "L", 0);
+          $pdf->cell(200, $alt, $z01_nome . ' - CPF: ' . $z01_cgccpf, 1, 0, "L", 0);
         } else {
-          $pdf->cell(224, $alt, $z01_nome . ' - CNPJ: ' . $z01_cgccpf, 1, 0, "L", 0);
+          $pdf->cell(200, $alt, $z01_nome . ' - CNPJ: ' . $z01_cgccpf, 1, 0, "L", 0);
         }
         /*OC3770*/
         if ($pc23_perctaxadesctabela != 0) {
@@ -356,7 +373,7 @@ if ($modelo == 1) {
 
       $pdf->cell(279, $alt, '', '', 1, "L", 0);
       //            if ($quant_casas == 2) {
-      $total_media += round(($total_unit / $iContOrcamento), 2) * $quant;
+      $total_media += round(round(($total_unit / $iContOrcamento),$quant_casas)* $quant, 4);
       $total_mediapercentual += ($total_percentualdesconto / $iContOrcamento);
       $total_mediapercentualtaxa += ($total_percentualdescontotaxa / $iContOrcamento);
       //            } else {
@@ -371,12 +388,12 @@ if ($modelo == 1) {
       if ($pc23_perctaxadesctabela != 0 || $pc23_percentualdesconto != 0) {
         $pdf->cell(20, $alt, "", 0, 0, "R", 0);
       } else {
-        $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, 4, ',', '.'), 0, 0, "R", 0);
+        $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, $quant_casas, ',', '.'), 0, 0, "R", 0);
       }
       /*FIM - OC3770*/
 
       //if ($quant_casas == 2) {
-      $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 2) * $quant, 2, ',', '.'), 0, 1, "R", 0);
+      $pdf->cell(20, $alt, number_format(round((round($total_unit / $iContOrcamento, $quant_casas)) * $quant, 2), 2, ',', '.'), 0, 1, "R", 0);
       //            } else {
       //                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 3) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
       //            }
@@ -385,7 +402,7 @@ if ($modelo == 1) {
       //            if ($quant_casas == 2) {
       //                $total_media += round(($total_unit / $iContOrcamento), 2) * $quant;
       //            } else {
-      $total_media += round($total_unit / $iContOrcamento, 2) * $quant;
+      $total_media += round((round($total_unit / $iContOrcamento, $quant_casas))* $quant, 4);
       //            }
     }
   }

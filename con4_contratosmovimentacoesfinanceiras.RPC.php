@@ -298,26 +298,33 @@ switch ($oParam->exec) {
         break;
 
     case "getUltimaPosicao":
-
         $oContrato = new Acordo($oParam->iAcordo);
         $aItens    = array();
 
         $oRetorno->iCasasDecimais = 2;
-        //echo 'info contrato ';
-        //print_r($oContrato);
 
         $oRetorno->iOrigemContrato      = $oContrato->getOrigem();
 
         if ($oRetorno->iOrigemContrato == 2) {
             $aLicitacoesVinculadas = $oContrato->getLicitacoes();
-            $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
-            $oRetorno->iCodigoLicitacao     = $oStdDados->l20_codigo;
-            $oRetorno->iEdital              = $oStdDados->l20_edital;
-            $oRetorno->iAnoLicitacao        = $oStdDados->l20_anousu;
-            $oRetorno->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
-            $oRetorno->iNumModalidade       = $oStdDados->l20_numero;
-            $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
-            $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
+            if (empty($aLicitacoesVinculadas[0])) {
+                $oRetorno->iCodigoLicitacao     = '';
+                $oRetorno->iEdital              = '';
+                $oRetorno->iAnoLicitacao        = '';
+                $oRetorno->iModalidadeLicitacao = '';
+                $oRetorno->pc50_codcom          = '';
+                $oRetorno->l03_tipo             = '';
+            } else {
+                $oStdDados     = $aLicitacoesVinculadas[0]->getDados();
+                $oRetorno->iCodigoLicitacao     = $oStdDados->l20_codigo;
+                $oRetorno->iEdital              = $oStdDados->l20_edital;
+                $oRetorno->iAnoLicitacao        = $oStdDados->l20_anousu;
+                $oRetorno->iModalidadeLicitacao = $oStdDados->l20_codtipocom;
+                $oRetorno->iNumModalidade       = $oStdDados->l20_numero;
+                $oRetorno->pc50_codcom          = $oStdDados->pc50_codcom;
+                $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
+            }
+            
         } else if ($oRetorno->iOrigemContrato == 3) {
             $aLicitacoesVinculadas = $oContrato->getLicitacoes();
 
@@ -341,8 +348,6 @@ switch ($oParam->exec) {
                 $oRetorno->l03_tipo             = $oStdDados->l03_tipo;
             }
         }
-
-
 
         foreach ($oContrato->getUltimaPosicao(true)->getItens() as $oItem) {
 
@@ -417,6 +422,7 @@ switch ($oParam->exec) {
                 $oParam->dados->sTipoorigem = 3;
             }
             $oParam->dados->sTipoautorizacao = 2;
+
 
             $oRetorno->itens  = $oContrato->processarAutorizacoes($oParam->aItens, $oParam->lProcessar, $oParam->dados);
 
@@ -713,7 +719,6 @@ switch ($oParam->exec) {
         break;
 
     case 'getDadosAcordo':
-
         $oAcordo = new Acordo($oParam->iCodigoAcordo);
 
         $aLicitacoesVinculadas = $oAcordo->getLicitacoes();
@@ -724,7 +729,7 @@ switch ($oParam->exec) {
             $oRetorno->iNumModalidade = urlencode($oStdDados->l20_numero);
             $oRetorno->iProcesso = $oStdDados->l20_edital . "/" . $oStdDados->l20_anousu;
             $oRetorno->sTipo = urlencode($oStdDados->l03_codcom);
-            $oRetorno->sTipoorigem = $oAcordo->getTipoOrigem();
+            $oRetorno->sTipoOrigem = $oAcordo->getTipoOrigem();
             $oRetorno->sTipoautorizacao = urlencode(2);
             $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
         } else {
@@ -733,7 +738,7 @@ switch ($oParam->exec) {
             $oRetorno->iNumModalidade = '';
             $oRetorno->iProcesso = '';
             $oRetorno->sTipo = '';
-            $oRetorno->sTipoorigem = '';
+            $oRetorno->sTipoOrigem = $oAcordo->getTipoOrigem();
             $oRetorno->sTipoautorizacao = urlencode(2);
             $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
         }
@@ -742,9 +747,11 @@ switch ($oParam->exec) {
          *Retorna dados da licitacao de outro orgao
          */
         $aLicOutrosorgaosVinculadas = $oAcordo->getiLicoutroorgao();
+        $oRetorno->sLicitacaooutroorgao = $aLicOutrosorgaosVinculadas;
+
         if ($aLicOutrosorgaosVinculadas[0] != "") {
             $oDaoAcordo = db_utils::getDao("liclicitaoutrosorgaos");
-            $codLicOutrosOrgaos = $aLicOutrosorgaosVinculadas[0];
+            $codLicOutrosOrgaos = $aLicOutrosorgaosVinculadas;
             $sCampos = "lic211_processo||'/'||lic211_anousu as lic211_processo,lic211_numero,lic211_anousu,lic211_tipo";
             $sSqlLicoutroorgao = $oDaoAcordo->sql_query($codLicOutrosOrgaos, $sCampos);
             $rsLicoutroorgao = $oDaoAcordo->sql_record($sSqlLicoutroorgao);
@@ -756,19 +763,19 @@ switch ($oParam->exec) {
             $oRetorno->iAnoProc = urlencode($oDadosLicoutroorgao->lic211_anousu);
 
             //ACHAR CODCOMPRA
-            if ($oDadosLicoutroorgao->lic211_tipo = 5) {
+            if ($oDadosLicoutroorgao->lic211_tipo == 5) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 105";
-            } elseif ($oDadosLicoutroorgao->lic211_tipo = 6) {
+            } elseif ($oDadosLicoutroorgao->lic211_tipo == 6) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 106";
-            } elseif ($oDadosLicoutroorgao->lic211_tipo = 7) {
+            } elseif ($oDadosLicoutroorgao->lic211_tipo == 7) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 107";
-            } elseif ($oDadosLicoutroorgao->lic211_tipo = 8) {
+            } elseif ($oDadosLicoutroorgao->lic211_tipo == 8) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 108";
-            } elseif ($oDadosLicoutroorgao->lic211_tipo = 9) {
+            } elseif ($oDadosLicoutroorgao->lic211_tipo == 9) {
                 $sPctipocampos = "pc50_codcom";
                 $sPctipowhere = "pc50_pctipocompratribunal = 109";
             }
@@ -776,7 +783,7 @@ switch ($oParam->exec) {
             $rsTipocompra  = $oDaoTipocompra->sql_record($sqlTipocompra);
             $oTipocompra = db_utils::fieldsMemory($rsTipocompra, 0)->pc50_codcom;
             $oRetorno->sTipo = ($oTipocompra);
-            $oRetorno->sTipoorigem = $oAcordo->getTipoOrigem();
+            $oRetorno->sTipoOrigem = $oAcordo->getTipoOrigem();
             $oRetorno->sTipoautorizacao = urlencode(2);
             $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
         }
@@ -784,6 +791,7 @@ switch ($oParam->exec) {
          * retorna adesao de registro de preco
          */
         $aAdesaoVinculada = $oAcordo->getiAdesaoregpreco();
+        $oRetorno->sAdesaoRegPreco = $aAdesaoVinculada;
 
         if ($aAdesaoVinculada[0] != "") {
 
@@ -796,7 +804,6 @@ switch ($oParam->exec) {
             $oRetorno->iModalidade = urlencode($oAcordo->getModalidade());
             $oRetorno->iNumModalidade = urlencode($oDadosAdesao->si06_nummodadm);
             $oRetorno->iProcesso = $oDadosAdesao->si06_numeroadm;
-            $oRetorno->iSequencial = $oDadosAdesao->si06_sequencial;
 
             //ACHAR CODCOMPRA
             $sPctipocampos = "pc50_codcom";
@@ -805,7 +812,7 @@ switch ($oParam->exec) {
             $rsTipocompra  = $oDaoTipocompra->sql_record($sqlTipocompra);
             $oTipocompra = db_utils::fieldsMemory($rsTipocompra, 0)->pc50_codcom;
             $oRetorno->sTipo = ($oTipocompra);
-            $oRetorno->sTipoorigem = $oAcordo->getTipoOrigem();
+            $oRetorno->sTipoOrigem = $oAcordo->getTipoOrigem();
             $oRetorno->sTipoautorizacao = urlencode(4);
             $oRetorno->sResumoAcordo = urlencode($oAcordo->getObjeto());
         }

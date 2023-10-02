@@ -118,8 +118,9 @@ $rotulo->label("z01_nome");
           } else if (isset($chave_z01_nome) && (trim($chave_z01_nome) != "")) {
             $sql = $clempautoriza->sql_query("", $campos, "e54_anousu", " z01_nome like '$chave_z01_nome%' $where_anul ", $possuiPC);
           } else {
-            $sql = $clempautoriza->sql_query(null, $campos, "empautoriza.e54_autori DESC", "", $possuiPC);
+            $sql = $clempautoriza->sql_query("empautoriza.e54_autori", $campos, "empautoriza.e54_autori DESC", "", $possuiPC);
           }
+
           db_lovrot($sql, 15, "()", "", $funcao_js);
         } else {
           if ($pesquisa_chave != null && $pesquisa_chave != "") {

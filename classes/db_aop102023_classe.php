@@ -38,19 +38,19 @@ class cl_aop102023
   var $si137_instit = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
-                 si137_sequencial = int8 = sequencial 
-                 si137_tiporegistro = int8 = Tipo do  registro 
-                 si137_codreduzido = int8 = Código identificador da anulação 
-                 si137_codorgao = varchar(2) = Código do órgão 
-                 si137_codunidadesub = varchar(8) = Código da unidade 
-                 si137_nroop = int8 = Número da  Ordem de  Pagamento 
-                 si137_dtpagamento = date = Data de  pagamento da  OP 
-                 si137_nroanulacaoop = int8 = Número da  anulação da  ordem pagamento 
-                 si137_dtanulacaoop = date = Data da anulação  da OP 
-                 si137_justificativaanulacao = varchar(500) = Justificativa para a anulação 
-                 si137_vlanulacaoop = float8 = Valor da  Anulação da OP 
-                 si137_mes = int8 = Mês 
-                 si137_instit = int8 = Instituição 
+                 si137_sequencial = int8 = sequencial
+                 si137_tiporegistro = int8 = Tipo do  registro
+                 si137_codreduzido = int8 = Código identificador da anulação
+                 si137_codorgao = varchar(2) = Código do órgão
+                 si137_codunidadesub = varchar(8) = Código da unidade
+                 si137_nroop = int8 = Número da  Ordem de  Pagamento
+                 si137_dtpagamento = date = Data de  pagamento da  OP
+                 si137_nroanulacaoop = int8 = Número da  anulação da  ordem pagamento
+                 si137_dtanulacaoop = date = Data da anulação  da OP
+                 si137_justificativaanulacao = varchar(500) = Justificativa para a anulação
+                 si137_vlanulacaoop = float8 = Valor da  Anulação da OP
+                 si137_mes = int8 = Mês
+                 si137_instit = int8 = Instituição
                  ";
 
   //funcao construtor da classe
@@ -197,34 +197,34 @@ class cl_aop102023
       return false;
     }
     $sql = "insert into aop102023(
-                                       si137_sequencial 
-                                      ,si137_tiporegistro 
-                                      ,si137_codreduzido 
-                                      ,si137_codorgao 
-                                      ,si137_codunidadesub 
-                                      ,si137_nroop 
-                                      ,si137_dtpagamento 
-                                      ,si137_nroanulacaoop 
-                                      ,si137_dtanulacaoop 
-                                      ,si137_justificativaanulacao 
-                                      ,si137_vlanulacaoop 
-                                      ,si137_mes 
-                                      ,si137_instit 
+                                       si137_sequencial
+                                      ,si137_tiporegistro
+                                      ,si137_codreduzido
+                                      ,si137_codorgao
+                                      ,si137_codunidadesub
+                                      ,si137_nroop
+                                      ,si137_dtpagamento
+                                      ,si137_nroanulacaoop
+                                      ,si137_dtanulacaoop
+                                      ,si137_justificativaanulacao
+                                      ,si137_vlanulacaoop
+                                      ,si137_mes
+                                      ,si137_instit
                        )
                 values (
-                                $this->si137_sequencial 
-                               ,$this->si137_tiporegistro 
-                               ,$this->si137_codreduzido 
-                               ,'$this->si137_codorgao' 
-                               ,'$this->si137_codunidadesub' 
-                               ,$this->si137_nroop 
+                                $this->si137_sequencial
+                               ,$this->si137_tiporegistro
+                               ,$this->si137_codreduzido
+                               ,'$this->si137_codorgao'
+                               ,'$this->si137_codunidadesub'
+                               ,$this->si137_nroop
                                ," . ($this->si137_dtpagamento == "null" || $this->si137_dtpagamento == "" ? "null" : "'" . $this->si137_dtpagamento . "'") . "
-                               ,$this->si137_nroanulacaoop 
+                               ,$this->si137_nroanulacaoop
                                ," . ($this->si137_dtanulacaoop == "null" || $this->si137_dtanulacaoop == "" ? "null" : "'" . $this->si137_dtanulacaoop . "'") . "
-                               ,'$this->si137_justificativaanulacao' 
-                               ,$this->si137_vlanulacaoop 
-                               ,$this->si137_mes 
-                               ,$this->si137_instit 
+                               ,'$this->si137_justificativaanulacao'
+                               ,$this->si137_vlanulacaoop
+                               ,$this->si137_mes
+                               ,$this->si137_instit
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -578,7 +578,7 @@ class cl_aop102023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -599,7 +599,7 @@ class cl_aop102023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -615,7 +615,7 @@ class cl_aop102023
   {
     $sql = "select ";
     if ($campos != "*") {
-      $campos_sql = split("#", $campos);
+      $campos_sql = explode("#", $campos);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -636,7 +636,7 @@ class cl_aop102023
     $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
-      $campos_sql = split("#", $ordem);
+      $campos_sql = explode("#", $ordem);
       $virgula = "";
       for ($i = 0; $i < sizeof($campos_sql); $i++) {
         $sql .= $virgula . $campos_sql[$i];
@@ -646,6 +646,92 @@ class cl_aop102023
 
     return $sql;
   }
-}
 
-?>
+    /**
+     * @param $iInstit
+     * @param $sDataInicial
+     * @param $sDataFinal
+     * @return sql
+     */
+    public function sqlPrincipal($iInstit, $sDataInicial, $sDataFinal)
+    {
+        return "SELECT c71_coddoc,
+                   e50_codord,
+                   c71_codlan,
+                   c70_data AS dtanulacao,
+                   e50_data AS dtordem,
+                   e50_data AS dtliquida,
+                   (SELECT c71_codlan AS lanc_pgto FROM conlancamdoc
+                    WHERE c71_codlan = (SELECT max(c71_codlan) FROM conlancamdoc
+                                        JOIN conlancamord ON c80_codlan = c71_codlan
+                                        WHERE c80_codord = e50_codord
+                                            AND c71_coddoc IN (5, 35, 37)
+                                            AND c71_codlan < c70_codlan) ) AS lanc_pgto,
+                   (SELECT c71_codlan AS dtpagamento FROM conlancamdoc
+                    WHERE c71_codlan = (SELECT max(c71_codlan) FROM conlancamdoc
+                                        JOIN conlancamord ON c80_codlan = c71_codlan
+                                        WHERE c80_codord = e50_codord
+                                            AND c71_coddoc IN (5, 35, 37)
+                                            AND c71_codlan < c70_codlan) )||lpad(e50_codord,10,0) AS numordem,
+                   e50_codord AS numLiquida,
+                   c70_valor AS vlrordem,
+                   (SELECT c71_data AS dtpagamento FROM conlancamdoc
+                    WHERE c71_codlan = (SELECT max(c71_codlan) FROM conlancamdoc
+                                        JOIN conlancamord ON c80_codlan = c71_codlan
+                                        WHERE c80_codord = e50_codord
+                                            AND c71_coddoc IN (5, 35, 37)
+                                            AND c71_codlan < c70_codlan) ) AS dtpag,
+                   e60_codemp,
+                   e60_numemp,
+                   e60_emiss AS dtempenho,
+                   z01_nome,
+                   z01_cgccpf,
+                   lpad((CASE
+                             WHEN o40_codtri = '0'
+                                  OR NULL THEN o40_orgao::varchar
+                             ELSE o40_codtri
+                         END),2,0) AS o58_orgao,
+                   lpad((CASE
+                             WHEN o41_codtri = '0'
+                                  OR NULL THEN o41_unidade::varchar
+                             ELSE o41_codtri
+                         END),3,0) AS o58_unidade,
+                   o58_funcao,
+                   o58_subfuncao,
+                   o58_programa,
+                   o58_projativ,
+                   substr(o56_elemento,2,6) AS elemento,
+                   substr(o56_elemento,8,2) AS subelemento,
+                   substr(o56_elemento,2,2) AS divida,
+                   o15_codtri AS recurso,
+                   o15_codigo,
+                   e50_obs,
+                   CASE
+                       WHEN date_part('year',e50_data) < 2023 THEN e71_codnota::varchar
+                       ELSE (rpad(e71_codnota::varchar,9,'0') || lpad(e71_codord::varchar,9,'0'))
+                   END AS nroliquidacao,
+                   si09_codorgaotce,
+                   o41_subunidade AS subunidade,
+                   e60_emendaparlamentar,
+                    e60_esferaemendaparlamentar,
+                    e60_tipodespesa
+            FROM conlancam
+            JOIN conlancamdoc ON c71_codlan = c70_codlan
+            JOIN conlancamord ON c80_codlan = c71_codlan
+            JOIN pagordem ON c80_codord = e50_codord
+            JOIN pagordemele ON e53_codord = e50_codord
+            JOIN pagordemnota ON e71_codord = c80_codord
+            JOIN empempenho ON e50_numemp = e60_numemp
+            JOIN cgm ON e60_numcgm = z01_numcgm
+            JOIN orcdotacao ON e60_coddot = o58_coddot AND e60_anousu = o58_anousu
+            JOIN orcelemento ON o58_codele = o56_codele AND o58_anousu = o56_anousu
+            JOIN orctiporec ON o58_codigo = o15_codigo
+            JOIN orcunidade ON o58_anousu = o41_anousu AND o58_orgao = o41_orgao AND o58_unidade = o41_unidade
+            JOIN orcorgao ON o40_orgao = o41_orgao AND o40_anousu = o41_anousu
+            LEFT JOIN infocomplementaresinstit ON e60_instit = si09_instit AND si09_instit = {$iInstit}
+            WHERE c71_coddoc IN (6, 36, 38)
+              AND o41_instit = {$iInstit}
+              AND e60_instit = {$iInstit}
+              AND c71_data BETWEEN '{$sDataInicial}' AND '{$sDataFinal}'";
+    }
+}

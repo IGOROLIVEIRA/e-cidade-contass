@@ -165,7 +165,7 @@ $cllicobrasituacao->rotulo->label();
                 14 => '14 - Caso Fortuito ou Força Maior',
                 15 => '15 - Ordem Judicial',
                 99 => '99 - Outros tipos de paralisação');
-              db_select('obr02_motivoparalisacao', $aValoresmotivo, true, $db_opcao," onchange=''");
+              db_select('obr02_motivoparalisacao', $aValoresmotivo, true, $db_opcao," onchange='js_motivoParalisacao(this.value)'");
               ?>
             </td>
             <td>
@@ -175,7 +175,7 @@ $cllicobrasituacao->rotulo->label();
               ?>
             </td>
           </tr>
-          <tr>
+          <tr id="trOutrosMotivos" style="display: none">
             <td nowrap title="<?=@$Tobr02_outrosmotivos?>">
               <?=@$Lobr02_outrosmotivos?>
             </td>
@@ -287,14 +287,27 @@ $cllicobrasituacao->rotulo->label();
   function js_carregar() {
     let db_opcao = <?=$db_opcao?>;
     let situacao = document.form1.obr02_situacao.value;
+    let motivoParalisacao = document.form1.obr02_motivoparalisacao.value;
+
     if(db_opcao != 1){
       js_pesquisa_obra(false);
+      motivoParalisacao == '99' ? document.getElementById('trOutrosMotivos').style.display = '' : document.getElementById('trOutrosMotivos').style.display = 'none';
     }
+
     if(situacao == '3' || situacao == '4'){
       document.getElementById('paralisaobra').style.display = '';
-    }else{
-      document.getElementById('paralisaobra').style.display = 'none';
+      return;
     }
+      
+    document.getElementById('paralisaobra').style.display = 'none';
+  }
+
+  function js_motivoParalisacao(motivoParalisacao) {
+    if(motivoParalisacao == '99'){
+      document.getElementById('trOutrosMotivos').style.display = '';
+      return true;
+    }
+    document.getElementById('trOutrosMotivos').style.display = 'none';
   }
 
 </script>

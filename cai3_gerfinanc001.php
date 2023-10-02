@@ -409,7 +409,6 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                                                 var sUrl    = 'cai3_emiterecibo.php?json='+Object.toJSON(oRetorno);
 
                                                 if ((oRetorno.recibos_emitidos.length == 1 && oRetorno.aSessoesCarne.length == '0') && !lForcajanela) {
-
                                                   var lForcarVencimento = $('forcarvencimento').checked;
                                                   sUrl    = 'cai3_gerfinanc003.php';
                                                   sUrl   += debitos.location.search;
@@ -427,7 +426,7 @@ if (isset($db21_usasisagua) && $db21_usasisagua != '') {
                                                   oJanela = window.open(sUrl,'reciboweb2','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
                                                   oJanela.moveTo(0,0);
                                                 } else if (((oRetorno.recibos_emitidos.length == 0 || oRetorno.aSessoesRecibo.length == 0) && oRetorno.aSessoesCarne.length == 0)) {
-
+                                                  //TO-DO: Para refactor: este else if está completamente vazio(??)
                                                 } else {
                                                   /**
                                                    * Cria Janela
@@ -1402,7 +1401,7 @@ if (isset($HTTP_POST_VARS ["pesquisar"]) || isset($matricula) || isset($inscrica
   if (isset($Label)) {
 
     echo "<strong style=\"color:blue\">$Label</strong>
-    <input style=\"border: 1px solid blue;font-weight: bold;background-color:#80E6FF\" tipoPesquisa=\"{$sTipoChavePesquisa}\" class=\"btcols\" type=\"text\" id=\"botaoChavePesquisa\" name=\"Label\" value=\"" . @$codOrigem . "\" size=\"10\" readonly>\n";
+    <input style=\"border: 1px solid blue;font-weight: bold;background-color:#80E6FF\" tipoPesquisa=\"{$sTipoChavePesquisa}\" class=\"btcols\" type=\"text\" id=\"botaoChavePesquisa\" name=\"$Label\" value=\"" . @$codOrigem . "\" size=\"10\" readonly>\n";
   }
 
   if ($mensagemcorte != "") {
@@ -1669,7 +1668,7 @@ if (isset($tipo_filtro) && $tipo_filtro != "" && isset($cod_filtro) && $cod_filt
   }
 }
 
-if (@$tipo_pesq [0] != "numpre") { // inicio do tipo de certidao
+if (@$tipo_pesq[0] != "numpre") { // inicio do tipo de certidao
   $permissao = db_permissaomenu(db_getsession("DB_anousu"), 1985522, 5604);
 
   //colocado aqui
@@ -2672,6 +2671,13 @@ if($mensagem_semdebitos == true){
 
 function js_mostradetalhes(chave){
   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_mostrainscr',chave,'Pesquisa',true, 20, 0, document.body.clientWidth, document.body.clientHeight - 30);
+}
+
+function js_consultaOrigemAbatimento(iAbatimento) {
+
+    const sUrl = 'func_origemabatimentoparcial.php?iAbatimento='+iAbatimento+'&sOrigem=recibo';
+
+    js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_abatimento',sUrl,'Origem Pagamento Parcial',true,20,0, document.body.clientWidth, document.body.clientHeight - 30);
 }
 
 //-------------func Situação Fiscal - Por /*Rogerio Baum*/ -----------------------

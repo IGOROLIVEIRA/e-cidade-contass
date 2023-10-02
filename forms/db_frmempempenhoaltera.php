@@ -41,6 +41,7 @@ $clrotulo->label("e60_numconvenio");
 $clrotulo->label("e60_dataconvenio");
 $clrotulo->label("e60_datasentenca");
 
+$aDataEmpenho = explode("-", $e60_emiss);
 ?>
 <form name="form1" method="post" action="">
     <center>
@@ -53,8 +54,15 @@ $clrotulo->label("e60_datasentenca");
                     <?
                     db_input('e60_numemp',10,'',true,'hidden',3);
                     db_input('e60_emiss',10,'',true,'hidden',3);
+                    db_input('e60_coddot',10,'',true,'hidden',3);
+                    db_input('e60_vlremp',10,'',true,'hidden',3);
                     db_input('e60_codemp',10,$Ie60_codemp,true,'text',3);
                     ?>
+                    <b>Data Empenho:</b>
+                        <? 
+                        db_inputdata("data_empenho",$aDataEmpenho[2], $aDataEmpenho[1], $aDataEmpenho[0], true, "text", 2);
+                        ?>
+                        <input type="hidden" name="data_empenho_alterado" value="false">
                 </td>
             </tr>
             <tr>
@@ -327,12 +335,14 @@ $clrotulo->label("e60_datasentenca");
                     $iCodDepartamentoAtual = empty($e54_gestaut) ? db_getsession('DB_coddepto') : $e54_gestaut;
                     $sNomDepartamentoAtual = db_utils::fieldsMemory(db_query(" SELECT descrdepto FROM db_depart WHERE coddepto = {$iCodDepartamentoAtual} "), 0)->descrdepto;
                     ?>
+                    <input type="hidden" name="gestor_alterado" id="gestor_alterado" value="false">
                 </td>
             </tr>
 
 
             <tr>
             <td nowrap title="<?= @$Te54_resumo ?>" valign='top' colspan="2">
+
                 <fieldset style="width:500px">
                     <legend><strong>Resumo:</strong></legend>
                     <?php
@@ -348,13 +358,18 @@ $clrotulo->label("e60_datasentenca");
                 <td nowrap title="<?= @$Te54_resumo ?>" valign='top' colspan="2">
 
                 <fieldset style="width:500px">
-                    <legend><strong>Informaes da OP:</strong></legend>
+                    <legend><strong>Histórico Padrão da OP:</strong></legend>
                     <?php
-                    db_textarea('e60_informacaoop', 3, 109, $Ie54_resumo, true, 'text', $db_opcao,"","","#FFFFFF");
+                    $empenhoLiquidado = $e60_vlremp-$e60_vlranu-$e60_vlrliq;
+                    db_textarea('e60_informacaoop', 3, 109, $Ie54_resumo, true, 'text', $empenhoLiquidado > 0 ? $db_opcao : 3,"onchange=js_historico_alterado()","",$empenhoLiquidado > 0 ? "#FFFFFF" : "#DEB887");
                     ?>
+                    <input type="hidden" name="historico_alterado" id="historico_alterado" value="false">
                 </fieldset>
                 </td>
-                </tr>
+            </tr>
+
+
+
             <?
             $anousu = db_getsession("DB_anousu");
 
@@ -498,6 +513,7 @@ $clrotulo->label("e60_datasentenca");
 
         document.form1.e54_gestaut.value = codigo;
         document.form1.e54_nomedodepartamento.value = descricao;
+        document.getElementById("gestor_alterado").value = true;
 
         db_iframe_db_depart.hide();
 
@@ -655,6 +671,10 @@ $clrotulo->label("e60_datasentenca");
         document.form1.e60_numconvenio.value     = chave1;
         document.form1.c206_objetoconvenio.value = chave2;
         db_iframe_convconvenios.hide();
+    }
+
+    function js_historico_alterado(){
+        document.getElementById("historico_alterado").value = true;
     }
 
 </script>

@@ -2704,7 +2704,6 @@ if( $opcao_tipo == 2){
          global $gerfsal_;
          if( db_selectmax( "gerfsal_", "select * from gerfsal ".bb_condicaosubpes( "r14_" ).$condicaoaux )){
             for($Igerfsal=0;$Igerfsal< count($gerfsal_);$Igerfsal++){
-               deleta_para_ajustes( $gerfsal_[$Igerfsal]["r14_rubric"], $gerfsal_[$Igerfsal]["r14_regist"], "S");
                db_delete( "gerfsal", bb_condicaosubpes("r14_").$condicaoaux );
             }
          }
@@ -3015,6 +3014,7 @@ for($Ipessoal=0;$Ipessoal< count($pessoal);$Ipessoal++){
      $matriz_rubrica6000[5] = $dias_avos;
      insertRubricasEspeciaisAviso($matriz1, $matriz_rubrica6000, $cfpess, $arrValoresAviso);
    }
+   grava_ajuste_previdencia();
  }
 //echo "<BR> 22231 passou aqui !!!";
 
@@ -5782,9 +5782,7 @@ function ajusta_previdencia($arquivo, $rubrica_base, $sequencia, $sigla_ajuste)
       db_update("previden", $matriz1, $matriz2, bb_condicaosubpes("r60_").$condicaoaux );
     }
     $condicaoaux  = " and r60_ajuste = 't' and r60_rubric = ".db_sqlformat($rubrica_base );
-    if($arquivo == 'gerfsal' ){
-       $condicaoaux  .= " and r60_folha = 'S'";
-    }elseif($arquivo == 'gerfcom' ){
+    if($arquivo == 'gerfcom' ){
        $condicaoaux  .= " and r60_folha = 'C'";
     }
     $condicaoaux  .= " order by r60_numcgm, r60_regist";
@@ -6322,7 +6320,7 @@ function ajusta_previdencia($arquivo, $rubrica_base, $sequencia, $sigla_ajuste)
               //echo "<BR> R928 --> $arredn";
             }
 
-            if ($arredn > 0 && $arquivo != "gerfres") {
+            if ($arredn > 0) {
               $matriz1 = array();
               $matriz2 = array();
               $matriz1[1] = $sigla_ajuste."regist";
@@ -11460,9 +11458,9 @@ function calc_tabprev ($base_inss=null,$codigo=null, $tpcont=null){
             if ($Iinssirf == 0) {
               $vrlIni = 0;
             }
-            $novoDesconto += arredondarValor((($inssirf[$Iinssirf]["r33_fim"]-$vrlIni)/100)*$inssirf[$Iinssirf]["r33_perc"]);
+            $novoDesconto += DBPessoal::arredondarValor((($inssirf[$Iinssirf]["r33_fim"]-$vrlIni)/100)*$inssirf[$Iinssirf]["r33_perc"]);
           } else {
-            $novoDesconto += arredondarValor((($base_inss-$vrlIni)/100)*$inssirf[$Iinssirf]["r33_perc"]);
+            $novoDesconto += DBPessoal::arredondarValor((($base_inss-$vrlIni)/100)*$inssirf[$Iinssirf]["r33_perc"]);
           }
        }
      } else {
@@ -14336,20 +14334,6 @@ function calc_pensao($icalc, $opcao_geral, $opcao_tipo, $chamada_geral_arquivo=n
   }
 }
 /// fim da funcao calc_pensao ///
-
-
-/**
- * Deixar valores com duas casas decimais sem arredondar
- * A verificacao eh feita porque em alguns caso,
- * o floor em valores com 2 decimais altera o valor
- */
-function arredondarValor($valor) {
-  $aVlr = explode(".", $valor);
-  if (strlen($aVlr[1]) > 2) {
-    return floor(($valor*100))/100;
-  }
-  return $valor;
-}
 
 function insertRubricasEspeciaisAviso($matriz1, $matriz2, $cfpess, $arrValoresAviso) {
   

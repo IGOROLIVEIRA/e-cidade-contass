@@ -68,6 +68,7 @@ require_once("model/contrato/AcordoItemTipoCalculoFactory.model.php");
 require_once("classes/db_credenciamentotermo_classe.php");
 require_once("model/contrato/PNCP/ContratoPNCP.model.php");
 require_once("classes/db_acocontratopncp_classe.php");
+require_once("classes/db_acordoitem_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
 
@@ -517,10 +518,10 @@ switch ($oParam->exec) {
     case "verificaCredenciamentoTermo":
 
         $clcredenciamentotermo = new cl_credenciamentotermo;
-        $rsLicitacao           = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null, '*', null, "l212_licitacao = {$oParam->iLicitacao}"));
+        $rsLicitacao           = $clcredenciamentotermo->sql_record($clcredenciamentotermo->sql_query(null,'*',null,"l212_licitacao = {$oParam->iLicitacao}"));
         db_fieldsmemory($rsLicitacao, 0)->l212_sequencial;
 
-        if ($l212_sequencial != null) {
+        if($l212_sequencial != null){
             $oRetorno->status    = 2;
             $oRetorno->message   = urlencode("Licitação com Termo de Credenciamento vinculado.");
         }
@@ -587,9 +588,7 @@ switch ($oParam->exec) {
     case "salvarContrato":
 
         try {
-
             db_inicio_transacao();
-
             $lAcordoValido            = true;
             $sMessagemInvalido        = '';
 
@@ -665,7 +664,7 @@ switch ($oParam->exec) {
                 $result_tipoparticipacao1 = db_query("select pc81_cgmforn,pc81_tipopart from pcforne inner join pcfornereprlegal on pc81_cgmforn = pc60_numcgm where pc60_numcgm = {$oParam->contrato->iContratado} and pc81_tipopart = 1");
 
                 if (pg_num_rows($result_tipoparticipacao1) == 0) {
-                    throw new Exception('É necessário cadastrar o representante legal e demais membros para o fornecedor.');
+                    throw new Exception("É necessário cadastrar o representante legal e demais membros para o fornecedor.");
                 }
 
                 $result_tipoparticipacao2 = db_query("select pc81_cgmforn,pc81_tipopart from pcforne inner join pcfornereprlegal on pc81_cgmforn = pc60_numcgm where pc60_numcgm = {$oParam->contrato->iContratado} and pc81_tipopart = 2");
@@ -758,8 +757,8 @@ switch ($oParam->exec) {
                 $oContrato->setDataReajuste($oParam->contrato->dtReajuste);
                 $oContrato->setPeriodoreajuste($oParam->contrato->sPeriodoreajuste);
                 $oContrato->setIndiceReajuste($oParam->contrato->iIndicereajuste);
-                $oContrato->setDescricaoReajuste($oParam->contrato->sDescricaoreajuste);
-                $oContrato->setDescricaoIndice($oParam->contrato->sDescricaoindice);
+                $oContrato->setDescricaoReajuste(db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sDescricaoreajuste));
+                $oContrato->setDescricaoIndice(db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sDescricaoindice));
                 $oContrato->save();
                 /*
                * verificamos se existe empenhos a serem vinculados na seção
@@ -1440,6 +1439,33 @@ switch ($oParam->exec) {
                             } else {
                                 $oPosicao->adicionarItemDeLicitacao($oItem->codigo, $oItem);
                             }
+
+                            if($oContrato->getNaturezaAcordo($iCodigoAcordo) == 1){
+                                $iExisteLicobras = $oContrato->adicionarItemAcordoObra($iLicitacao,$iCodigoAcordo,$oItem->codigomaterial);
+                                if (!$iExisteLicobras) {
+
+                                    $clliclicitemlote = new cl_liclicitemlote();
+                                    $rsLiclicitemlite   = $clliclicitemlote->sql_record("select
+                                    l04_descricao
+                                from
+                                    liclicita
+                                inner join liclicitem on
+                                    l21_codliclicita = l20_codigo
+                                inner join liclicitemlote on
+                                    l04_liclicitem = l21_codigo
+                                inner join pcprocitem on
+                                    l21_codpcprocitem = pc81_codprocitem
+                                inner join solicitempcmater on
+                                    pc81_solicitem = pc16_solicitem
+                                where
+                                    l20_codigo = {$iLicitacao} and pc16_codmater = {$oItem->codigomaterial};");
+
+                                $oDaoLicitemlote = db_utils::fieldsMemory($rsLiclicitemlite, 0);
+
+
+                                    throw new Exception("Usuário: o lote {$oDaoLicitemlote->l04_descricao} da licitação {$iLicitacao} não possuí obra cadastrada!");
+                                }
+                            }
                         } else if ($oContrato->getOrigem() == 1) {
 
                             $oPosicao->adicionarItemDeProcesso($oItem->codigo, $oItem);
@@ -1493,9 +1519,12 @@ switch ($oParam->exec) {
 
                 db_inicio_transacao();
 
+                $oContrato->removerAcordoObra($oParam->material->iCodigo);
+
                 $oPosicao->removerItem($oParam->material->iCodigo);
 
                 $oContrato->atualizaValorContratoPorTotalItens();
+
 
                 db_fim_transacao(false);
             } catch (Exception $eErro) {
@@ -1673,14 +1702,14 @@ switch ($oParam->exec) {
             /**
              * Alteração OC15013
              */
-            $result1 = $clempempenhocontrato->sql_record($clempempenhocontrato->sql_query(null, "e100_numemp", "", "e100_acordo=$oParam->iAcordo"));
-            db_fieldsmemory($result1, 0);
-            if ($e100_numemp != "") {
+            $result1 = $clempempenhocontrato->sql_record($clempempenhocontrato->sql_query(null,"e100_numemp","","e100_acordo=$oParam->iAcordo"));
+            db_fieldsmemory($result1,0);
+            if($e100_numemp!=""){
 
-                $result = $clempelemento->sql_record($clempelemento->sql_query($e100_numemp, null, "*", "e64_codele"));
-                db_fieldsmemory($result, 0);
+                $result = $clempelemento->sql_record($clempelemento->sql_query($e100_numemp,null,"*","e64_codele"));
+                db_fieldsmemory($result,0);
 
-                if ($e64_vlremp != $e64_vlranu) {
+                if($e64_vlremp!=$e64_vlranu){
                     throw new ParameterException(('Acordo não pode ser excluido.'));
                 }
             }
@@ -1921,6 +1950,19 @@ switch ($oParam->exec) {
             $oRetorno->message = utf8_decode($oErro->getMessage());
             $oRetorno->status  = 2;
         }
+        case 'getItensAditamento':
+            $cl_acordoitem = new cl_acordoitem;
+            $query = $cl_acordoitem->queryGetItensAdimento($oParam->iAcordo);
+            $oResult = $cl_acordoitem->sql_record($query);
+            $aResult = array();
+            if ($cl_acordoitem->numrows > 0) {
+                for ($i = 0; $i < $cl_acordoitem->numrows; $i++) {
+                    $linha = db_utils::fieldsMemory($oResult, $i);
+                    array_push($aResult,$linha);
+                }
+            }
+            $oRetorno->status  = 1;
+            $oRetorno->itens = $aResult;
         break;
 }
 /**

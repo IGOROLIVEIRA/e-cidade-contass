@@ -61,54 +61,55 @@ function js_relatorio2() {
   var query = "";
   var contadorcontas = 0;
   var contanova = 0;
+  var queryCapa = "";
 
   if(document.getElementById('contas')){
 	//Le os itens lançados na combo da conta
 		vir="";
 		listacontas="";
-		if(document.form1.contas.length==0){
-			contadorcontas = 1;
-			contanova = 0;
-		}else{
-			contadorcontas = document.form1.contas.length;
-			contanova = 1;
-		}
-		for(x=0;x<contadorcontas;x++){
-            if (F.emitir_capa.value == 's' && contanova == 1) {
-                sUrl = "cai4_concbancnovo002.php?conta_nova=" + document.form1.contas.options[x].value + "&data_inicial=" + datai + "&data_final=" + dataf + "&saldo_extrato=" + 0;
-                window.open(sUrl, '', 'location=0');
-            }
-			if (F.emitir_capa.value == 's' && contanova == 0) {
-                sUrl = "cai4_concbancnovo002.php?conta_nova=" + contanova + "&data_inicial=" + datai + "&data_final=" + dataf + "&saldo_extrato=" + 0;
-                window.open(sUrl, '', 'location=0');
-            }
-			if(contanova == 1)
-				listacontas+=vir+document.form1.contas.options[x].value;
-		  vir=",";
-		}
-		if(listacontas!="" && contanova == 1){
-			query +='conta=('+listacontas+')';
-		} else {
-			query +='conta=';
+		if(F.contas.length > 0){
+			for(i = 0; i < F.contas.length; i++){
+				listacontas += vir+document.form1.contas.options[i].value;
+				vir=",";
+			}
 		}
 	}
+	
+	if (F.emitir_capa.value == 's') {
+		queryCapa += "conta_nova=(" + listacontas + ")";
+		queryCapa += "&data_inicial=" + datai;
+		queryCapa += "&data_final=" + dataf;
+		queryCapa += "&saldo_extrato=" + 0;
+		queryCapa += "&quebrar_contas=" + F.quebrar_contas.value;
+		queryCapa += "&somente_capa_com_pendencia=" + F.somente_capa_com_pendencia.value;
+		sUrl = "cai4_concbancnovo002.php?" + queryCapa;
+		window.open(sUrl, '', 'location=0');
+	}
+	
+	if(listacontas!=""){
+		query +='conta=('+listacontas+')';
+	} else {
+		query +='conta=';
+	}
+	
+	query += "&imprime_historico="+F.imprime_historico.value;
+	query += "&imprime_analitico="+F.imprime_analitico.value;
+	query += "&totalizador_diario="+F.totalizador_diario.value;
+	query += "&somente_contas_com_movimento="+F.somente_contas_com_movimento.value
+	query += "&datai="+datai
+	query += "&dataf="+dataf;
+	query += "&agrupapor="+F.agrupapor.value;
+	query += "&receitaspor="+F.receitaspor.value;
+	query += "&pagempenhos="+F.pagempenhos.value;
+	query += "&imprime_pdf="+F.imprime_pdf.value;
+	query += "&quebrar_contas="+F.quebrar_contas.value;
+	//query += "&conta="+F.k13_conta.value;
+	query += "&somente_contas_bancarias="+F.somente_contas_bancarias.value;
+	query += "&exibir_retencoes="+F.exibir_retencoes.value;
+	
+	jan = window.open('cai2_extratobancario002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
+	jan.moveTo(0,0);
 
-  query += "&imprime_historico="+F.imprime_historico.value;
-  query += "&imprime_analitico="+F.imprime_analitico.value;
-  query += "&totalizador_diario="+F.totalizador_diario.value;
-  query += "&somente_contas_com_movimento="+F.somente_contas_com_movimento.value
-  query += "&datai="+datai
-  query += "&dataf="+dataf;
-  query += "&agrupapor="+F.agrupapor.value;
-  query += "&receitaspor="+F.receitaspor.value;
-  query += "&pagempenhos="+F.pagempenhos.value;
-  query += "&imprime_pdf="+F.imprime_pdf.value;
-  //query += "&conta="+F.k13_conta.value;
-  query += "&somente_contas_bancarias="+F.somente_contas_bancarias.value;
-  query += "&exibir_retencoes="+F.exibir_retencoes.value;
-
-  jan = window.open('cai2_extratobancario002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
-  jan.moveTo(0,0);
 }
 </script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -214,6 +215,14 @@ function js_relatorio2() {
           ?></td>
       </tr>
 
+	  <tr>
+          <td nowrap align="right"><b>Somente Conciliações com Pendências:</b></td>
+          <td><?
+               $matriz = array("s"=>"sim","n"=>"nao");
+               db_select("somente_capa_com_pendencia",$matriz,true,1);
+          ?></td>
+      </tr>
+
 			<tr>
 				<td nowrap align=right><b>Somente contas com movimento:</b></td>
 				<td><? $matriz = array("n"=>"nao","s"=>"sim");
@@ -255,6 +264,13 @@ function js_relatorio2() {
         <td><?
                $matriz = array("p"=>"pdf","t"=>"csv");
                db_select("imprime_pdf",$matriz,true,1);
+        ?></td>
+      </tr>
+	  <tr>
+        <td nowrap align="right"><b>Quebrar páginas por Contas:</b></td>
+        <td><?
+               $matriz = array("s"=>"sim","n"=>"nao");
+               db_select("quebrar_contas",$matriz,true,1);
         ?></td>
       </tr>
 		</table>

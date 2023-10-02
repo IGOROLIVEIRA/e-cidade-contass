@@ -17,7 +17,8 @@ require_once("model/licitacao/PNCP/AtaRegistroprecoPNCP.model.php");
 require_once("classes/db_licacontrolenexospncp_classe.php");
 require_once("classes/db_liccontrolepncpitens_classe.php");
 
-db_app::import("configuracao.DBDepartamento");
+$envs = parse_ini_file('config/PNCP/.env', true);
+
 $oJson             = new services_json();
 $oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oErro             = new stdClass();
@@ -131,8 +132,14 @@ switch ($oParam->exec) {
                 //$rsApiPNCP = array(201, 'https://treina.pncp.gov.br/pncp-api/v1/orgaos/17316563000196/compras/2023/130');
 
                 if ($rsApiPNCP[0] == 201) {
-                    //monto o codigo da compra no pncp
-                    $l213_numerocompra = substr($rsApiPNCP[1], 67);
+                    //Ambiente de testes
+                    if($envs['APP_ENV'] === 'T'){
+                        $l213_numerocompra = substr($rsApiPNCP[1], 74);
+                    }else{
+                    //Ambiente de Producao
+                        $l213_numerocompra = substr($rsApiPNCP[1], 67);
+                    }
+
                     $l213_numerocontrolepncp = db_utils::getCnpj() . '-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
 
                     $clliccontrolepncp = new cl_liccontrolepncp();
@@ -337,7 +344,13 @@ switch ($oParam->exec) {
 
                     if ($rsApiPNCP[1] == '201') {
                         $clliccontroleatarppncp = new cl_licontroleatarppncp();
-                        $l215_ata = substr($urlResutltado[0], 86);
+                        //Ambiente de testes
+                        if($envs['APP_ENV'] === 'T'){
+                            $l215_ata = substr($urlResutltado[0],85);
+                        }else{
+                            //Ambiente de Producao
+                            $l215_ata = substr($urlResutltado[0],79);
+                        }
                         $l215_numerocontrolepncp = db_utils::getCnpj() . '-1-' . substr($aLicitacao->numerocontrole, 17, -5) . '/' . substr($aLicitacao->numerocontrole, 24) . '-' . str_pad($l215_ata, 6, '0', STR_PAD_LEFT);
                         $clliccontroleatarppncp->l215_licitacao = $aLicitacao->codigo;
                         $clliccontroleatarppncp->l215_usuario = db_getsession("DB_id_usuario");
@@ -386,7 +399,13 @@ switch ($oParam->exec) {
 
                     if ($rsApiPNCP[0] == '201') {
                         $clliccontroleatarppncp = new cl_licontroleatarppncp();
-                        $l215_ata = substr($urlResutltado[0], 86);
+                        //Ambiente de testes
+                        if($envs['APP_ENV'] === 'T'){
+                            $l215_ata = substr($urlResutltado[0],85);
+                        }else{
+                            //Ambiente de Producao
+                            $l215_ata = substr($urlResutltado[0],79);
+                        }
                         $l215_numerocontrolepncp = db_utils::getCnpj() . '-1-' . substr($aLicitacao->numerocontrole, 17, -5) . '/' . substr($aLicitacao->numerocontrole, 24) . '-' . str_pad($aLicitacao->numeroata, 6, '0', STR_PAD_LEFT);
 
                         $clliccontroleatarppncp->l215_licitacao = $aLicitacao->codigo;

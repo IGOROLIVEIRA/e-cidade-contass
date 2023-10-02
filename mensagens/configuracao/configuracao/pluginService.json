@@ -4,7 +4,6 @@
   "xml_inconsistente"                 : "O arquivo Manifest.xml não consiste com os arquivos do plugin",
   "plugin_ja_instalado"               : "Plugin já instalado.",
   "falha_descompactar"                : "Não foi possível descompactar o plugin",
-  "arquivo_nao_encontrado"            : "Arquivo não existe no projeto: [sPath]",
   "tipo_menu_desconhecido"            : "Tipo de menu desconhecido: [sTipo]",
   "falha_vinculacao_menu"             : "Falha na vinculação do item de menu ao plugin.",
   "falha_organizar_menu"              : "Erro ao organizar o item de menu: [sMenu]",

@@ -18,7 +18,7 @@ $xcol   = 4;
 
 // Imprime caixa externa
 $this->objpdf->setfillcolor(245);
-$this->objpdf->rect($xcol - 2, $xlin - 21, 206, 292, 2, 'DF', '1234');
+$this->objpdf->rect($xcol - 2, $xlin - 19, 206, 291, 2, 'DF', '1234');
 
 // Imprime o cabeçalho com dados sobre a prefeitura
 $this->objpdf->setfillcolor(255, 255, 255);
@@ -483,7 +483,8 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
   }
 
   $this->objpdf->Setfont('Arial', 'B', 7);
-  $mais   = $this->objpdf->NbLines(95, db_formatar($selemento, 'elemento') . " - " . $sdelemento);
+  $mais   = $this->objpdf->NbLines(95, db_formatar($selemento, 'elemento') . " - " . $sdelemento) + $this->objpdf->NbLines(95, $scodpcmater . $descricaoitem . $barran);
+  
   $mostra = $xlin;
   $x      = $this->muda_pag3($pagina, $mostra, $xcol, "false", $contapagina, $mais);
 
@@ -544,6 +545,7 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
     // $mais = $this->objpdf->NbLines(95,$resum);
     $mais = 0;
     $mostra = $xlin;
+    $iContadorLinhasCriterios = 0;
 
     while ($resum != "") {
       $alturapaginafunc = $this->objpdf->h  - 58;
@@ -551,9 +553,15 @@ for ($ii = 0; $ii < $this->linhasdositens; $ii++) {
         $alturapaginafunc = $this->objpdf->h - 30;
       }
       $alturapaginafunc = (int)$alturapaginafunc;
+      $iContadorLinhasCriterios = (239.4 - $this->objpdf->gety())/3;
 
       $resum = $this->objpdf->Row_multicell(array('', '', '', stripslashes($resum), '', ''), 3, false, $dist, 0, true, true, 3, $alturapaginafunc);
 
+      if($resum != "" && $iContadorLinhasCriterios >2){
+        $resummenor = substr($resum, 0, $iContadorLinhasCriterios * 125);
+        $resum = substr($resum, $iContadorLinhasCriterios * 125,strlen($resum));
+        $this->objpdf->Row_multicell(array('',  '', '', stripslashes($resummenor), '', ''), 3, false, $dist, 0, true, true, 3, $alturapaginafunc);
+      }
       $x = $this->muda_pag3($pagina, $mostra, $xcol, "false", $contapagina, $mais);
     }
   }
@@ -594,14 +602,17 @@ if ($contapagina == 1) {
   $this->objpdf->setfillcolor(0, 0, 0);
   $this->objpdf->text($xcol + 23, $xlin + 244, strtoupper($this->municpref) . ', ' . substr($this->emissao, 8, 2) . ' DE ' . strtoupper(db_mes(substr($this->emissao, 5, 2))) . ' DE ' . substr($this->emissao, 0, 4) . '.');
   $this->objpdf->text($xcol + 43, $xlin + 256, "AUTORIZO", 0, 4);
-  $this->objpdf->text($xcol + 45, $xlin + 268, substr($this->Sorgao, 0, 35));
+  $this->objpdf->text($xcol + 23, $xlin + 268, substr($this->Sorgao, 0, 35));
   $this->objpdf->text($xcol + 135, $xlin + 256, "ORDENADOR DA DESPESA", 0, 4);
 } else {
-  $this->objpdf->rect($xcol, $xlin + 262, 142, 10, 2, 'DF', '34');
-  $this->objpdf->rect($xcol + 142, $xlin + 262, 30, 10, 2, 'DF', '34');
-  $this->objpdf->rect($xcol + 172, $xlin + 262, 30, 10, 2, 'DF', '34');
-//  $this->objpdf->text($xcol + 120, $xlin + 268, 'T O T A L');
-//  $this->objpdf->text($xcol + 180, $xlin + 268, db_formatar($xtotal, "f"));
+  $this->objpdf->rect($xcol, $xlin + 243, 102, 27, 2, 'DF', '1234');
+  $this->objpdf->rect($xcol + 103, $xlin + 243, 99, 27, 2, 'DF', '1234');
+  $this->objpdf->setfillcolor(0, 0, 0);
+  $this->objpdf->setfillcolor(0, 0, 0);
+  $this->objpdf->text($xcol + 23, $xlin + 249, strtoupper($this->municpref) . ', ' . substr($this->emissao, 8, 2) . ' DE ' . strtoupper(db_mes(substr($this->emissao, 5, 2))) . ' DE ' . substr($this->emissao, 0, 4) . '.');
+  $this->objpdf->text($xcol + 43, $xlin + 256, "AUTORIZO", 0, 4);
+  $this->objpdf->text($xcol + 23, $xlin + 268, substr($this->Sorgao, 0, 35));
+  $this->objpdf->text($xcol + 135, $xlin + 256, "ORDENADOR DA DESPESA", 0, 4);
 }
 
 /**

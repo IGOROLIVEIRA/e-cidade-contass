@@ -39,6 +39,7 @@ require_once("classes/db_slip_classe.php");
 require_once("classes/db_infocomplementaresinstit_classe.php");
 require_once("classes/db_empresto_classe.php");
 require_once("classes/db_empempenho_classe.php");
+require_once("model/contabilidade/relatorios/ensino/RelatorioReceitaeDespesaEnsino.model.php");
 
 
 $clselorcdotacao = new cl_selorcdotacao();
@@ -123,112 +124,16 @@ $nTotalReceitasRecebidasFundeb = abs($nDevolucaoRecursoFundeb) + abs($nTransfere
 $nResulatadoLiquidoTransfFundeb = $nTotalReceitasRecebidasFundeb-abs($nTotalContribuicaoFundeb);
 
 
+
 $fSubTotal = 0;
 $aSubFuncoes = array(122,272,271,361,365,366,367,843);
 $sFuncao     = "12";
-$aFonte      = array("'101','1101','15000001'");
+$aFonte      = array("'101','1101','15000001','201','25000001'");
 $aFonteFundeb      = array("'118','119','1118','1119','15400007','15400000'");
 
+$oReceitaeDespesaEnsino = new RelatorioReceitaeDespesaEnsino();
 
 
-function getDespesasCusteadosComSuperavit($aFontes, $dtini, $dtfim, $instits) {
-    $clempempenho = new cl_empempenho();
-    if(count($aFontes) < 1){
-        $aFontes = array("'201','218','219','25000001','25400007','25400000'");
-    }
-
-    $sSqlOrder = "";
-    $sCampos = " o15_codtri, sum(vlrpag) as vlrpag ";
-    $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
-    if(db_getsession("DB_anousu") >= 2023)
-        $sSqlWhere = " o15_codigo in (".implode(",", $aFontes).") group by 1";
-    $dtfim = db_getsession("DB_anousu")."-04-30";
-    $aEmpEmpenho = $clempempenho->getDespesasCusteadosComSuperavit(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
-    $valorEmpPagoSuperavit = 0;
-    foreach($aEmpEmpenho as $oEmp){
-        $valorEmpPagoSuperavit += $oEmp->vlrpag;
-    }
-    return  $valorEmpPagoSuperavit;
-}
-
-$nTotalSemDisponbilidade = 0;
-
-
-function getSaldoPlanoContaFonteAnexo($nFonte, $dtIni, $dtFim, $aInstits){
-    $where = " c61_instit in ({$aInstits})" ;
-
-    if(db_getsession("DB_anousu") > 2022){
-        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ($nFonte) ) ";
-    }
-    else{
-        $where .= " and c61_codigo in ( select o15_codigo from orctiporec where o15_codtri in ($nFonte) ) ";
-    }
-    $result = db_planocontassaldo_matriz(db_getsession("DB_anousu"), $dtIni, $dtFim, false, $where, '111');
-    $nTotalAnterior = 0;
-    for($x = 0; $x < pg_numrows($result); $x++){
-        $oPlanoConta = db_utils::fieldsMemory($result, $x);
-        if( ( $oPlanoConta->movimento == "S" )
-            && ( ( $oPlanoConta->saldo_anterior + $oPlanoConta->saldo_anterior_debito + $oPlanoConta->saldo_anterior_credito) == 0 ) ) {
-            continue;
-        }
-        if(substr($oPlanoConta->estrutural,1,14) == '00000000000000'){
-            if($oPlanoConta->sinal_anterior == "C")
-                $nTotalAnterior -= $oPlanoConta->saldo_anterior;
-            else {
-                $nTotalAnterior += $oPlanoConta->saldo_anterior;
-            }
-        }
-    }
-    return $nTotalAnterior;
-}
-
-function getRestosSemDisponilibidadeAnexo($aFontes, $dtIni, $dtFim, $aInstits) {
-    $iSaldoRestosAPagarSemDisponibilidade = 0;
-
-    foreach($aFontes as $sFonte){
-        db_inicio_transacao();
-        $clEmpResto = new cl_empresto();
-        $sSqlOrder = "";
-        $sCampos = " o15_codtri, sum(vlrpag) as pagorpp, sum(vlrpagnproc) as pagorpnp ";
-        $sSqlWhere = " o15_codtri in ($sFonte) group by 1 ";
-        if(db_getsession("DB_anousu") > 2022)
-            $sSqlWhere = " o15_codigo in ($sFonte) group by 1 ";
-        $aEmpRestos = $clEmpResto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtIni, $dtFim, $aInstits, $sCampos, $sSqlWhere, $sSqlOrder);
-        $nValorRpPago = 0;
-        foreach($aEmpRestos as $oEmpResto){
-            $nValorRpPago += $oEmpResto->pagorpp + $oEmpResto->pagorpnp;
-        }
-        $nTotalAnterior = getSaldoPlanoContaFonteAnexo($sFonte, $dtIni, $dtFim, $aInstits);
-        $nSaldo = 0;
-        if($nValorRpPago > $nTotalAnterior){
-            $nSaldo = $nValorRpPago - $nTotalAnterior ;
-        }
-        $iSaldoRestosAPagarSemDisponibilidade += $nSaldo;
-        db_query("drop table if exists work_pl");
-        db_fim_transacao();
-    }
-    return  $iSaldoRestosAPagarSemDisponibilidade;
-}
-
-function getCancelamentoRestosComDisponilibidade($aFontes, $dtini, $dtfim, $instits) {
-    $clempresto = new cl_empresto();
-    if(count($aFontes) < 1){
-        $aFontes = array("'101','118','119','1101','1118','1119','201','218','219','15000001','15400007','15400000','25000001','25400007','25400000'");
-    }
-
-    $sSqlOrder = "";
-    $sCampos = " o15_codtri, sum(vlranu) as vlranu ";
-    $sSqlWhere = " o15_codtri in (".implode(",", $aFontes).") group by 1";
-    if(db_getsession("DB_anousu") > 2022)
-        $sSqlWhere = " o15_codigo in (".implode(",", $aFontes).") group by 1";
-    $aEmpRestos = $clempresto->getRestosPagarFontePeriodo(db_getsession("DB_anousu"), $dtini, $dtfim, $instits,  $sCampos, $sSqlWhere, $sSqlOrder);
-    $valorRpAnulado = 0;
-    foreach($aEmpRestos as $oEmpResto){
-        $valorRpAnulado += $oEmpResto->vlranu;
-    }
-
-    return  $valorRpAnulado;
-}
 /**
  * mPDF
  * @param string $mode | padrão: BLANK
@@ -245,9 +150,11 @@ function getCancelamentoRestosComDisponilibidade($aFontes, $dtini, $dtfim, $inst
  * Nenhum dos parâmetros é obrigatório
  */
 
-
 $mPDF = new mpdf('', '', 0, '', 10, 10, 20, 10, 5, 11);
-
+// DEFINE O FUSO HORARIO COMO O HORARIO DE BRASILIA
+date_default_timezone_set('America/Sao_Paulo');
+// CRIA UMA VARIAVEL E ARMAZENA A HORA ATUAL DO FUSO-HORÀRIO DEFINIDO (BRASÍLIA)
+$dataLocal = date('d/m/Y H:i:s', time());
 
 $header = " <header>
                 <div style=\" height: 120px; font-family:Arial\">
@@ -274,7 +181,7 @@ $footer = "<footer>
                 <div style='border-top:1px solid #000;width:100%;font-family:sans-serif;font-size:10px;height:10px;'>
                     <div style='text-align:left;font-style:italic;width:90%;float:left;'>
                         Financeiro>Contabilidade>Relatórios de Acompanhamento>Receita Despesa Ensino - Anexo III
-                        Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data:" . date("d/m/Y H:i:s", db_getsession("DB_datausu"))  . "
+                        Emissor: " . db_getsession("DB_login") . " Exerc: " . db_getsession("DB_anousu") . " Data:" . $dataLocal  . "
                     <div style='text-align:right;float:right;width:10%;'>
                         {PAGENO}
                     </div>
@@ -321,7 +228,6 @@ ob_start();
                 vertical-align: bottom;
                 white-space: nowrap;
             }
-
             .footer-row-valor {
                 height: 20px;
                 background-color: #d8d8d8;
@@ -350,7 +256,6 @@ ob_start();
                 vertical-align: bottom;
                 white-space: nowrap;
             }
-
             .footer-total-row-valor {
                 height: 20px;
                 background-color: #d8d8d8;
@@ -427,7 +332,7 @@ ob_start();
     </head>
 
     <body>
-        <div class="ritz " >
+        <div class="ritz ">
             <div class="title-relatorio">
                 <strong>Anexo III</strong><br />
                 <strong>Demonstrativo dos Gastos com Manutenção e Desenvolvimento do Ensino</strong><br />
@@ -448,9 +353,9 @@ ob_start();
                         </tr>
                         <tr>
                             <?if(db_getsession("DB_anousu") > 2022) {?>
-                                <td class="subtitle-2-row" colspan="5">1 - EDUCAÇÃO 12 - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS (FONTE 15000001)</td>   
+                                <td class="subtitle-2-row" colspan="5">1 - EDUCAÇÃO 12 - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS </td>   
                             <?} else {?>  
-                                <td class="subtitle-2-row" colspan="5">1 - EDUCAÇÃO 12 - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS (FONTE 101)</td> 
+                                <td class="subtitle-2-row" colspan="5">1 - EDUCAÇÃO 12 - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS </td> 
                             <? } ?>  
                         </tr>
                         <?php
@@ -463,19 +368,18 @@ ob_start();
                         $nValorTotalLiquidadoAPagar = 0;
                         $nValorTotalGeral = 0;
                         foreach ($aSubFuncoes as $iSubFuncao) {
-                            $sDescrSubfuncao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$iSubFuncao}'"), 0)->o53_descr;
-                            $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
-                            $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
-                            if($anousu > 2022){
-                                $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
-                                $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (".implode(",",$aFonte).") and o58_instit in ($instits) group by 1,2");
-                            }
-                            $nValorPagoSubFuncao = $aDespesasSubFuncao[0]->pago;
-                            $nValorEmpenhadoENaoLiquidadoSubFuncao = $aDespesasSubFuncao[0]->empenhado - $aDespesasSubFuncao[0]->anulado - $aDespesasSubFuncao[0]->liquidado;
-                            $nValorLiquidadoAPagarSubFuncao = $aDespesasSubFuncao[0]->liquidado - $aDespesasSubFuncao[0]->pago;
-                            $nValorTotalSubFuncao = $nValorPagoSubFuncao + $nValorEmpenhadoENaoLiquidadoSubFuncao + $nValorLiquidadoAPagarSubFuncao;
-                            if (count($aDespesasProgramas) > 0) {
-
+                            $oReceitaeDespesaEnsino->setAnousu($anousu);
+                            $oReceitaeDespesaEnsino->setSubFuncao($iSubFuncao);
+                            $oReceitaeDespesaEnsino->setFuncao($sFuncao);
+                            $oReceitaeDespesaEnsino->setFontes($aFonte);
+                            $oReceitaeDespesaEnsino->setInstits($instits);
+                            $dadosLinha1 = $oReceitaeDespesaEnsino->getLinha1FuncaoeSubfuncao();
+                            $sDescrSubfuncao                       = $dadosLinha1['0']; 
+                            $nValorPagoSubFuncao                   = $dadosLinha1['2'];
+                            $nValorEmpenhadoENaoLiquidadoSubFuncao = $dadosLinha1['3'];
+                            $nValorLiquidadoAPagarSubFuncao        = $dadosLinha1['4'];
+                            $nValorTotalSubFuncao                  = $dadosLinha1['5'];
+                            if (count($dadosLinha1['1']) > 0) {
                             ?>
                                 <tr>
                                     <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;"><?php echo db_formatar($iSubFuncao, 'subfuncao')." ".$sDescrSubfuncao ?></td>
@@ -488,18 +392,26 @@ ob_start();
                             /**
                              * @todo para cada subfuncao lista os programas
                              */
-                            foreach ($aDespesasProgramas as $oDespesaPrograma) {
-                                $oPrograma = new Programa($oDespesaPrograma->o58_programa, $oDespesaPrograma->o58_anousu);
-                                $fSubTotal += $oDespesaPrograma->pago;
-                                $nValorPago = $oDespesaPrograma->pago;
-                                $nValorEmpenhadoENaoLiquidado = $oDespesaPrograma->empenhado - $oDespesaPrograma->anulado - $oDespesaPrograma->liquidado;
-                                $nValorLiquidadoAPagar = $oDespesaPrograma->liquidado - $oDespesaPrograma->pago;
-                                $nValorTotal = $nValorPago + $nValorEmpenhadoENaoLiquidado + $nValorLiquidadoAPagar;
-                                $nValorTotalPago += $nValorPago;
-                                $nValorTotalEmpenhadoENaoLiquidado += $nValorEmpenhadoENaoLiquidado;
-                                $nValorTotalLiquidadoAPagar += $nValorLiquidadoAPagar;
-                                $nValorTotalGeral += $nValorTotal;
-                                ?>
+                            
+                            foreach ($dadosLinha1['1'] as $oDespesaPrograma) {
+                                $oReceitaeDespesaEnsino->setDespesaPrograma($oDespesaPrograma);
+                                $oReceitaeDespesaEnsino->setSubTotal($fSubTotal);
+                                $oReceitaeDespesaEnsino->setValorTotalPago($nValorTotalPago);
+                                $oReceitaeDespesaEnsino->setValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
+                                $oReceitaeDespesaEnsino->setValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
+                                $oReceitaeDespesaEnsino->setValorTotalGeral($nValorTotalGeral);
+                                $dadoslinha2                  = $oReceitaeDespesaEnsino->getLinha2FuncaoeSubfuncao();
+                                $oPrograma                    = $dadoslinha2['0'];
+                                $fSubTotal                   += $dadoslinha2['1'];
+                                $nValorPago                   = $dadoslinha2['2'];
+                                $nValorEmpenhadoENaoLiquidado = $dadoslinha2['3'];
+                                $nValorLiquidadoAPagar        = $dadoslinha2['4'];
+                                $nValorTotal                  = $dadoslinha2['5'];
+                                $nValorTotalPago             += $dadoslinha2['6'];
+                                $nValorTotalEmpenhadoENaoLiquidado += $dadoslinha2['7'];
+                                $nValorTotalLiquidadoAPagar  += $dadoslinha2['8'];
+                                $nValorTotalGeral            += $dadoslinha2['9'];
+                               ?>
                                 <tr>
                                     <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;"><?php echo db_formatar($oPrograma->getCodigoPrograma(), "programa")." ".$oPrograma->getDescricao(); ?></td>
                                     <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorPago, "f"); ?></td>
@@ -520,38 +432,33 @@ ob_start();
                             }
                         }
                         ?>
-                        <tr>
-                            <? if(db_getsession("DB_anousu") > 2022) { ?>
-                                <td class="subtitle-2-row" colspan="5">2 - EDUCAÇÃO 12 - FUNDEB (FONTES 15400007 e 15400000)</td>
-                                
-                            <?} else { ?>  
-                                <td class="subtitle-2-row" colspan="5">2 - EDUCAÇÃO 12 - FUNDEB (FONTES 118 e 119)</td>
+                         <tr>
+                              <?if(db_getsession("DB_anousu") > 2022) {?>
+                                <td class="subtitle-2-row" colspan="5">2 - EDUCAÇÃO 12 - AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº 123/2022  </td>   
+                            <?} else {?>  
+                                <td class="subtitle-2-row" colspan="5">2 - EDUCAÇÃO 12 - AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº 123/2022  </td> 
                             <? } ?> 
-                            
                         </tr>
                         <?php
                         /**
                          * @todo loop de cada subfuncao
                          *
                          */
-                        foreach ($aSubFuncoes as $iSubFuncao) {
-                            $sDescrSubfuncao = db_utils::fieldsMemory(db_query("select o53_descr from orcsubfuncao where o53_codtri = '{$iSubFuncao}'"), 0)->o53_descr;
-                            if(db_getsession("DB_anousu") > 2022){
-                                $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (".implode(",",$aFonteFundeb).") and o58_instit in ($instits) group by 1,2");
-                                $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codigo in (".implode(",",$aFonteFundeb).") and o58_instit in ($instits) group by 1,2");
-                           
-                            }
-                            else{
-                                $aDespesasProgramas = getSaldoDespesa(null, "o58_programa,o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonteFundeb).") and o58_instit in ($instits) group by 1,2");
-                                $aDespesasSubFuncao = getSaldoDespesa(null, "o58_subfuncao, o58_anousu, coalesce(sum(pago),0) as pago, coalesce(sum(empenhado),0) as empenhado, coalesce(sum(anulado),0) as anulado, coalesce(sum(liquidado),0) as liquidado", null, "o58_funcao = {$sFuncao} and o58_subfuncao in ({$iSubFuncao}) and o15_codtri in (".implode(",",$aFonteFundeb).") and o58_instit in ($instits) group by 1,2");
-                           
-                            }
-                            $nValorPagoSubFuncao = $aDespesasSubFuncao[0]->pago;
-                            $nValorEmpenhadoENaoLiquidadoSubFuncao = $aDespesasSubFuncao[0]->empenhado - $aDespesasSubFuncao[0]->anulado - $aDespesasSubFuncao[0]->liquidado;
-                            $nValorLiquidadoAPagarSubFuncao = $aDespesasSubFuncao[0]->liquidado - $aDespesasSubFuncao[0]->pago;
-                            $nValorTotalSubFuncao = $nValorPagoSubFuncao + $nValorEmpenhadoENaoLiquidadoSubFuncao + $nValorLiquidadoAPagarSubFuncao;
-                            if (count($aDespesasProgramas) > 0) {
-
+                        $aFonte2      = array("'136','17180000'");
+                        $aSubFuncoes2 = array(122,272,271,361,365,366,367,843);
+                        $sFuncao2     = "12";
+                        foreach ($aSubFuncoes2 as $iSubFuncao) {
+                            $oReceitaeDespesaEnsino->setAnousu($anousu);
+                            $oReceitaeDespesaEnsino->setSubFuncao($iSubFuncao);
+                            $oReceitaeDespesaEnsino->setFuncao($sFuncao2);
+                            $oReceitaeDespesaEnsino->setFontes($aFonte2);
+                            $oReceitaeDespesaEnsino->setInstits($instits);
+                            $dadosLinha1 = $oReceitaeDespesaEnsino->getLinha1FuncaoeSubfuncao();
+                            $nValorPagoSubFuncao                   = $dadosLinha1['2'];
+                            $nValorEmpenhadoENaoLiquidadoSubFuncao = $dadosLinha1['3'];
+                            $nValorLiquidadoAPagarSubFuncao        = $dadosLinha1['4'];
+                            $nValorTotalSubFuncao                  = $dadosLinha1['5'];
+                            if (count($dadosLinha1['1']) > 0) {
                             ?>
                                 <tr>
                                     <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;"><?php echo db_formatar($iSubFuncao, 'subfuncao')." ".$sDescrSubfuncao ?></td>
@@ -564,16 +471,100 @@ ob_start();
                             /**
                              * @todo para cada subfuncao lista os programas
                              */
+                            foreach ($dadosLinha1['1'] as $oDespesaPrograma) {
+                                $oReceitaeDespesaEnsino->setDespesaPrograma($oDespesaPrograma);
+                                $oReceitaeDespesaEnsino->setSubTotal($fSubTotal);
+                                $oReceitaeDespesaEnsino->setValorTotalPago($nValorTotalPago);
+                                $oReceitaeDespesaEnsino->setValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
+                                $oReceitaeDespesaEnsino->setValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
+                                $oReceitaeDespesaEnsino->setValorTotalGeral($nValorTotalGeral);
+                                $dadoslinha2                  = $oReceitaeDespesaEnsino->getLinha2FuncaoeSubfuncao();
+                                $oPrograma                    = $dadoslinha2['0'];
+                                $fSubTotal                   += $dadoslinha2['1'];
+                                $nValorPago                   = $dadoslinha2['2'];
+                                $nValorEmpenhadoENaoLiquidado = $dadoslinha2['3'];
+                                $nValorLiquidadoAPagar        = $dadoslinha2['4'];
+                                $nValorTotal                  = $dadoslinha2['5'];
+                                $nValorTotalPago             += $dadoslinha2['6'];
+                                $nValorTotalEmpenhadoENaoLiquidado += $dadoslinha2['7'];
+                                $nValorTotalLiquidadoAPagar  += $dadoslinha2['8'];
+                                $nValorTotalGeral            += $dadoslinha2['9'];
+                                ?>
+                                <tr>
+                                    <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;"><?php echo db_formatar($dadoslinha2['0']->getCodigoPrograma(), "programa")." ".$dadoslinha2['0']->getDescricao(); ?></td>
+                                    <td class="text-row" style="text-align: right; "><?php echo db_formatar($dadoslinha2['2'], "f"); ?></td>
+                                    <td class="text-row" style="text-align: right; "><?php echo db_formatar($dadoslinha2['3'], "f"); ?></td>
+                                    <td class="text-row" style="text-align: right; "><?php echo db_formatar($dadoslinha2['4'], "f"); ?></td>
+                                    <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar($dadoslinha2['5'], "f"); ?></td>
+                                </tr>
+                            <?php }
+                            ?>
+                            <tr>
+                                <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;">&nbsp;</td>
+                                <td class="text-row"></td>
+                                <td class="text-row"></td>
+                                <td class="text-row"></td>
+                                <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"></td>
+                            </tr>
+                            <?php
+                            }
+                        }
+                        ?>
+                        <tr>
+                             <? if(db_getsession("DB_anousu") > 2022) { ?>
+                                <td class="subtitle-2-row" colspan="5">3 - EDUCAÇÃO 12 - FUNDEB </td>
+                                
+                            <?} else { ?>  
+                                <td class="subtitle-2-row" colspan="5">3 - EDUCAÇÃO 12 - FUNDEB </td>
+                            <? } ?> 
+                            
+                        </tr>
+                        <?php
+                        /**
+                         * @todo loop de cada subfuncao
+                         *
+                         */
+                        foreach ($aSubFuncoes as $iSubFuncao) {
+                            $oReceitaeDespesaEnsino->setSubFuncao($iSubFuncao);
+                            $oReceitaeDespesaEnsino->setFuncao($sFuncao);
+                            $oReceitaeDespesaEnsino->setFonteFundeb($aFonteFundeb);
+                            $oReceitaeDespesaEnsino->setInstits($instits);
+                            $dadoslinha3 =  $oReceitaeDespesaEnsino->getLinha1FuncaoFundeb();
+                            $aDespesasProgramas = $dadoslinha3['1'];
+                            if (count($aDespesasProgramas) > 0) {
+                                $nValorPagoSubFuncao                    = $dadoslinha3['2'];
+                                $nValorEmpenhadoENaoLiquidadoSubFuncao  = $dadoslinha3['3'];
+                                $nValorLiquidadoAPagarSubFuncao         = $dadoslinha3['4'];
+                                $nValorTotalSubFuncao                   = $dadoslinha3['5'];
+                            ?>
+                                <tr>
+                                    <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;"><?php echo db_formatar($iSubFuncao, 'subfuncao')." ".$dadoslinha3['0'] ?></td>
+                                    <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorPagoSubFuncao, "f"); ?></td>
+                                    <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorEmpenhadoENaoLiquidadoSubFuncao, "f"); ?></td>
+                                    <td class="text-row" style="text-align: right; "><?php echo db_formatar($nValorLiquidadoAPagarSubFuncao, "f"); ?></td>
+                                    <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar($nValorTotalSubFuncao, "f"); ?></td>
+                                </tr>
+                            <?php
+                            /**
+                             * @todo para cada subfuncao lista os programas
+                             */
                             foreach ($aDespesasProgramas as $oDespesaPrograma) {
-                                $oPrograma = new Programa($oDespesaPrograma->o58_programa, $oDespesaPrograma->o58_anousu);
-                                $nValorPago = $oDespesaPrograma->pago;
-                                $nValorEmpenhadoENaoLiquidado = $oDespesaPrograma->empenhado - $oDespesaPrograma->anulado - $oDespesaPrograma->liquidado;
-                                $nValorLiquidadoAPagar = $oDespesaPrograma->liquidado - $oDespesaPrograma->pago;
-                                $nValorTotal = $nValorPago + $nValorEmpenhadoENaoLiquidado + $nValorLiquidadoAPagar;
-                                $nValorTotalPago += $nValorPago;
-                                $nValorTotalEmpenhadoENaoLiquidado += $nValorEmpenhadoENaoLiquidado;
-                                $nValorTotalLiquidadoAPagar += $nValorLiquidadoAPagar;
-                                $nValorTotalGeral += $nValorTotal;
+                                $oReceitaeDespesaEnsino->setDespesaPrograma($oDespesaPrograma);
+                                $oReceitaeDespesaEnsino->setValorTotalPago($nValorTotalPago);
+                                $oReceitaeDespesaEnsino->setValorTotalEmpenhadoENaoLiquidado($nValorTotalEmpenhadoENaoLiquidado);
+                                $oReceitaeDespesaEnsino->setValorTotalLiquidadoAPagar($nValorTotalLiquidadoAPagar);
+                                $oReceitaeDespesaEnsino->setValorTotalGeral($nValorTotalGeral);
+                                $dadoslinha3 =  $oReceitaeDespesaEnsino->getLinha2FuncaoFundeb();
+
+                                $oPrograma                    = $dadoslinha3['0'];
+                                $nValorPago                   = $dadoslinha3['1'];
+                                $nValorEmpenhadoENaoLiquidado = $dadoslinha3['2'];
+                                $nValorLiquidadoAPagar        = $dadoslinha3['3'];
+                                $nValorTotal                  = $dadoslinha3['4'];
+                                $nValorTotalPago             += $dadoslinha3['5'];
+                                $nValorTotalEmpenhadoENaoLiquidado += $dadoslinha3['6']; 
+                                $nValorTotalLiquidadoAPagar  += $dadoslinha3['7'];
+                                $nValorTotalGeral            += $dadoslinha3['8'];
                                 ?>
                                 <tr>
                                     <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; width: 300px;"><?php echo db_formatar($oPrograma->getCodigoPrograma(), "programa")." ".$oPrograma->getDescricao(); ?></td>
@@ -596,7 +587,7 @@ ob_start();
                         }
                         ?>
                         <tr>
-                            <td class="subtitle-row" style="width: 300px;">3 - TOTAL DESPESAS (1 + 2)</td>
+                            <td class="subtitle-row" style="width: 300px;">4 - TOTAL DESPESAS (1 + 2 + 3)</td>
                             <td class="subtitle-row" style="text-align: right;"><?php echo db_formatar($nValorTotalPago, "f"); ?></td>
                             <td class="subtitle-row" style="text-align: right;"><?php echo db_formatar($nValorTotalEmpenhadoENaoLiquidado, "f"); ?></td>
                             <td class="subtitle-row" style="text-align: right;"><?php echo db_formatar($nValorTotalLiquidadoAPagar, "f"); ?></td>
@@ -617,7 +608,7 @@ ob_start();
                             <td class="subtitle-row" style="width: 100px; text-align: center;">VALOR</td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">4 - VALOR PAGO </td>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">5 - VALOR PAGO </td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
                                     $nTotalAplicadoEntrada = 0;
@@ -627,7 +618,7 @@ ob_start();
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">5 - RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB</td>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">6 - RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
                                     $nTotalAplicadoSaida = 0;
@@ -642,73 +633,218 @@ ob_start();
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">6 - DESPESAS CUSTEADAS COM SUPERÁVIT DO FUNDEB ATÉ O PRIMEIRO QUADRIMESTRE - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS</td>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">7 - DESPESAS CUSTEADAS COM SUPERÁVIT DO FUNDEB ATÉ O PRIMEIRO QUADRIMESTRE - IMPOSTOS E TRANSFERÊNCIAS DE IMPOSTOS</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorCusteadoSuperavit = getDespesasCusteadosComSuperavit(array("'218','219','201','25400007','25400000','25000001'"), $dtini, $dtfim, $instits);
+                                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                                    $oReceitaeDespesaEnsino->setInstits($instits);
+                                    $nValorCusteadoSuperavit = $oReceitaeDespesaEnsino->getLinha7DespesasCusteadaSuperavitDoFundeb();
                                     $nTotalAplicadoEntrada = $nTotalAplicadoEntrada + $nValorCusteadoSuperavit;
                                     echo db_formatar($nValorCusteadoSuperavit, "f");
                                 ?>
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">7 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(0.00, "f"); ?></td>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">8 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO</td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                            <?php
+                                $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                                $oReceitaeDespesaEnsino->setInstits($instits);
+                                $dadosLinha8 = $oReceitaeDespesaEnsino->getLinha8RestosaPagarInscritosFonte101();
+                                $nTotalAplicadoEntrada = $nTotalAplicadoEntrada + $dadosLinha8;
+                                echo db_formatar($dadosLinha8, "f");
+                        ?>
+                        </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">7.1 - RECURSOS DE IMPOSTOS</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(0.00, "f"); ?></td>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">8.1 - RECURSOS DE IMPOSTOS</td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                            <?php
+                            $nLiqAPagar101 = 0;
+                            $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
+                            if($dtfim == $dtfimExercicio){
+                                $oReceitaeDespesaEnsino->setFontes(array("'101','15000001','201','25000001'"));
+                                $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                                $oReceitaeDespesaEnsino->setInstits($instits);
+                                $oReceitaeDespesaEnsino->setTipo('ambos');
+                                $nLiqAPagar101 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
+                            }
+                            echo db_formatar($nLiqAPagar101, "f");
+                            ?>
+                            </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">7.2 - RECURSOS DO FUNDEB</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(0.00, "f"); ?></td>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;"> 8.2 - RECUSOS DO AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº 123/2022 </td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                            <?php
+                            $nLiqAPagar136 = 0;
+                            $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
+                            $aSubFuncoes2 = array(122,272,271,361,365,366,367,843);
+                            $sFuncao2     = "12";
+                            if($dtfim == $dtfimExercicio){
+                                $oReceitaeDespesaEnsino->setFontes(array("'136','17180000'"));
+                                $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                                $oReceitaeDespesaEnsino->setInstits($instits);
+                                $oReceitaeDespesaEnsino->setTipo('ambos');
+                                $oReceitaeDespesaEnsino->setFuncao($sFuncao2);
+                                $oReceitaeDespesaEnsino->setSubFuncoes($aSubFuncoes2);
+                                $nLiqAPagar136 = $oReceitaeDespesaEnsino->getEmpenhosApagarNovo();
+                            }
+                            echo db_formatar($nLiqAPagar136, "f");
+                            ?>
+                            </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">8 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO SEM DISPONIBILIDADE FINANCEIRA</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(0.00, "f"); ?></td>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">8.3 - RECURSOS DO FUNDEB</td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                            <?php
+                            $nLiqAPagar118_119 = 0;
+                            $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
+                            if($dtfim == $dtfimExercicio){
+                                $oReceitaeDespesaEnsino->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
+                                $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                                $oReceitaeDespesaEnsino->setInstits($instits);
+                                $oReceitaeDespesaEnsino->setTipo('ambos');
+                                $nLiqAPagar118_119 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
+                            }
+                            echo db_formatar($nLiqAPagar118_119, "f");
+                            ?>
+                            </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">8.1 - RECURSOS DE IMPOSTOS (7.1 - 16.1)</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(0.00, "f"); ?></td>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">9 - RESTOS A PAGAR INSCRITOS NO EXERCÍCIO SEM DISPONIBILIDADE FINANCEIRA</td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                            <?php
+                                $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                                $oReceitaeDespesaEnsino->setInstits($instits);
+                                $dadosLinha9 = $oReceitaeDespesaEnsino->getLinha9RestosaPagarInscritoSemDis();
+                                $nRPIncritosSemDesponibilidade101     = $dadosLinha9['0'];
+                                $nRPIncritosSemDesponibilidade136     = $dadosLinha9['1'];
+                                $nRPIncritosSemDesponibilidade118_119 = $dadosLinha9['2'];
+                                $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nRPIncritosSemDesponibilidade101 + $nRPIncritosSemDesponibilidade136 + $nRPIncritosSemDesponibilidade118_119;      
+                                echo db_formatar($nRPIncritosSemDesponibilidade101 + $nRPIncritosSemDesponibilidade136 + $nRPIncritosSemDesponibilidade118_119, "f");
+                        ?>
+                        </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">8.2 - RECURSOS DO FUNDEB (7.2 - 16.2)</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar(0.00, "f"); ?></td>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.1 - RECURSOS DE IMPOSTOS (8.1 - 17.1)</td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                            <?php
+                            $nRPIncritosSemDesponibilidade101 = 0;
+                            $oReceitaeDespesaEnsino->setFontes(array("'101','15000001','201','25000001'"));
+                            $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                            $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                            $oReceitaeDespesaEnsino->setInstits($instits);
+                            $oReceitaeDespesaEnsino->setTipo('lqd');
+                            $nLiqAPagar101 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
+                            $oReceitaeDespesaEnsino->setTipo('');
+                            $nNaoLiqAPagar101 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
+                            $aTotalPago101 = $nLiqAPagar101 + $nNaoLiqAPagar101;
+                             
+                        if($dtfim == $dtfimExercicio){
+                            $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
+                            $nRPSemDesponibilidade101 = $dadosLinha9['3'];
+                                  
+                            if($nRPSemDesponibilidade101 <= 0){
+                                $nRPIncritosSemDesponibilidade101 = $aTotalPago101;
+                            }
+                            if($nRPSemDesponibilidade101 > 0){
+                                $nRPIncritosSemDesponibilidade101 = $nRPSemDesponibilidade101 - $aTotalPago101;
+                                if($nRPIncritosSemDesponibilidade101 >=0){
+                                    $nRPIncritosSemDesponibilidade101 = 0;
+                                }
+                                $nRPIncritosSemDesponibilidade101 = abs($nRPIncritosSemDesponibilidade101);
+                            }
+                         }
+                        ?>
+                             <?php echo db_formatar($nRPIncritosSemDesponibilidade101,"f"); ?>
+                            </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">9 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736)</td>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;"> 9.2 - RECUSOS DO AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº 123/2022 (8.2 - 17.2)</td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                            <?php
+                            $nRPIncritosSemDesponibilidade136 = 0;
+                            $oReceitaeDespesaEnsino->setFontes(array("'136','17180000'"));
+                            $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                            $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                            $oReceitaeDespesaEnsino->setInstits($instits);
+                            $oReceitaeDespesaEnsino->setTipo('lqd');
+                            $nLiqAPagar136 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
+                            $oReceitaeDespesaEnsino->setTipo('');
+                            $nNaoLiqAPagar136 = $oReceitaeDespesaEnsino->getEmpenhosApagar(array("'136','17180000'"), $dtini, $dtfim, $instits, '');
+                            $aTotalPago136 = $nLiqAPagar136 + $nNaoLiqAPagar136;
+
+                            
+                        if($dtfim == $dtfimExercicio){
+                            $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
+                            $nRPSemDesponibilidade136 = $dadosLinha9['4'];                             
+                            if($nRPSemDesponibilidade136 <= 0){
+                                $nRPIncritosSemDesponibilidade136 = $aTotalPago136;
+                            }
+                            if($nRPSemDesponibilidade136 > 0){
+                                $nRPIncritosSemDesponibilidade136 = $nRPSemDesponibilidade136 - $aTotalPago136;
+                                if($nRPIncritosSemDesponibilidade136 >=0){
+                                    $nRPIncritosSemDesponibilidade136 = 0;
+                                }
+                                $nRPIncritosSemDesponibilidade136 = abs($nRPIncritosSemDesponibilidade136);
+                            }
+                         }
+                            ?>
+                             <?php echo db_formatar($nRPIncritosSemDesponibilidade136,"f"); ?>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.3 - RECURSOS DO FUNDEB (8.2 - 17.2)</td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                            <?php
+                            $nRPIncritosSemDesponibilidade118_119 = 0;
+                            $oReceitaeDespesaEnsino->setFontes(array("'118','119','1118','1119','15400007','15400000'"));
+                            $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                            $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                            $oReceitaeDespesaEnsino->setInstits($instits);
+                            $oReceitaeDespesaEnsino->setTipo('lqd');
+                            $nLiqAPagar118_119 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
+                            $oReceitaeDespesaEnsino->setTipo('');
+                            $nNaoLiqAPagar118_119 = $oReceitaeDespesaEnsino->getEmpenhosApagar();
+                            $aTotalPago118_119= $nLiqAPagar118_119 + $nNaoLiqAPagar118_119;
+
+                            
+                        if($dtfim == $dtfimExercicio){                       
+                            $dtfimExercicio = db_getsession("DB_anousu")."-12-31";
+                            $nRPSemDesponibilidade118_119 =  $dadosLinha9['5']; 
+                                                  
+                            if($nRPSemDesponibilidade118_119 <= 0){
+                                $nRPIncritosSemDesponibilidade118_119 = $aTotalPago118_119;
+                            }
+                            if($nRPSemDesponibilidade118_119 > 0){
+                                $nRPIncritosSemDesponibilidade118_119 = $nRPSemDesponibilidade118_119 - $aTotalPago118_119;
+                                if($nRPIncritosSemDesponibilidade118_119 >=0){
+                                    $nRPIncritosSemDesponibilidade118_119 = 0;
+                                }
+                                $nRPIncritosSemDesponibilidade118_119 = abs($nRPIncritosSemDesponibilidade118_119);
+                            }
+
+                         }
+                            ?>
+                             <?php echo db_formatar($nRPIncritosSemDesponibilidade118_119,"f"); ?>
+                        </td>
+                        </tr>
+                        <tr>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">10 - RESTOS A PAGAR DE EXERCÍCIOS ANTERIORES SEM DISPONIBILIDADE FINANCEIRA PAGOS NO EXERCÍCIO ATUAL (CONSULTA 932.736)</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorRecursoTotal = getRestosSemDisponilibidadeAnexo(array("'101','15000001','1101'","'201','25000001'","'118','119','1118','1119','15400007','15400000'","'218','219','25400007','25400000'"), $dtini, $dtfim, $instits);
+                                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                                    $oReceitaeDespesaEnsino->setInstits($instits);
+                                    $nValorRecursoTotal = $oReceitaeDespesaEnsino->getLinha10RestoaPagarSemDis();
                                     $nTotalAplicadoEntrada = $nTotalAplicadoEntrada + $nValorRecursoTotal;
-                                    echo db_formatar($nValorRecursoTotal, "f");
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.1 - RECURSOS DE IMPOSTOS</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
-                                <?php
-                                    $nValorRecursoImposto = getRestosSemDisponilibidadeAnexo(array("'101','1101','15000001'","'201','25000001'"), $dtini, $dtfim, $instits);
-                                    echo db_formatar($nValorRecursoImposto, "f");
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">9.2 - RECURSOS DO FUNDEB</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
-                                <?php
-                                    $nValorRecursoFundeb = getRestosSemDisponilibidadeAnexo(array("'118','119','15400007','15400000','1118','1119'","'218','219','25400007','25400000'"), $dtini, $dtfim, $instits);
-                                    echo db_formatar($nValorRecursoFundeb, "f");
-                                ?>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">10 - CANCELAMENTO, NO EXERCÍCIO, DE RESTOS A PAGAR INSCRITOS COM DISPONIBILIDADE FINANCEIRA</td>
-                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
-                                <?php
-                                    $nValorRecursoTotal = getCancelamentoRestosComDisponilibidade(array(), $dtini, $dtfim, $instits);
-                                    $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nValorRecursoTotal;
                                     echo db_formatar($nValorRecursoTotal, "f");
                                 ?>
                             </td>
@@ -717,62 +853,123 @@ ob_start();
                             <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">10.1 - RECURSOS DE IMPOSTOS</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorRecursoTotal = getCancelamentoRestosComDisponilibidade(array("'101','1101','201','15000001','25000001'"), $dtini, $dtfim, $instits);
-                                    echo db_formatar($nValorRecursoTotal, "f");
+                                    $oReceitaeDespesaEnsino->setFontes(array("'101','1101','15000001'", "'201','25000001'"));
+                                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                                    $oReceitaeDespesaEnsino->setInstits($instits);
+                                    $nValorRecursoImposto = $oReceitaeDespesaEnsino->getRestosSemDisponilibidadeFundeb();
+                                    echo db_formatar($nValorRecursoImposto, "f");
                                 ?>
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">10.2 - RECURSOS DO FUNDEB</td>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">10.2 - RECUSOS DO AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº 123/2022</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php
-                                    $nValorRecursoTotal = getCancelamentoRestosComDisponilibidade(array("'118','119','1118','1119','218','219','15400007','15400000','25400007','25400000'"), $dtini, $dtfim, $instits);
-                                    echo db_formatar($nValorRecursoTotal, "f");
+                                    $oReceitaeDespesaEnsino->setFontes(array("'136','17180000'"));
+                                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                                    $oReceitaeDespesaEnsino->setInstits($instits);
+                                    $nValorRecursoImposto = $oReceitaeDespesaEnsino->getRestosSemDisponilibidadeFundeb(array("'136','17180000'"), $dtini, $dtfim, $instits);
+                                    echo db_formatar($nValorRecursoFundeb, "f");
                                 ?>
                             </td>
                         </tr>
                         <tr>
-                            <td class="subtitle-row" style="width: 300px;">11 - TOTAL APLICADO ((4 + 6 + 7 +9) - ( 5 + 8 + 10))</td>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">10.3 - RECURSOS DO FUNDEB</td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    $oReceitaeDespesaEnsino->setFontes(array("'118','119','15400007','15400000','1118','1119'", "'218','219','25400007','25400000'"));
+                                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                                    $oReceitaeDespesaEnsino->setInstits($instits);
+                                    $nValorRecursoImposto = $oReceitaeDespesaEnsino->getRestosSemDisponilibidadeFundeb();
+                                    echo db_formatar($nValorRecursoFundeb, "f");
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000;">11 - CANCELAMENTO, NO EXERCÍCIO, DE RESTOS A PAGAR INSCRITOS COM DISPONIBILIDADE FINANCEIRA</td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    $oReceitaeDespesaEnsino->setDataInicial($dtini);
+                                    $oReceitaeDespesaEnsino->setDataFinal($dtfim);
+                                    $oReceitaeDespesaEnsino->setInstits($instits);
+                                    $dadosLinha11 = $oReceitaeDespesaEnsino->getLinha11CancelamentodeRestoaPagar();
+                                    $nValorRecursoTotal101 = $dadosLinha11['0'];
+                                    $nValorRecursoTotal136 = $dadosLinha11['1'];
+                                    $nValorRecursoTotal118 = $dadosLinha11['2'];
+                                    $nTotalAplicadoSaida = $nTotalAplicadoSaida + $nValorRecursoTotal101 + $nValorRecursoTotal136 + $nValorRecursoTotal118;
+                                    echo db_formatar($nValorRecursoTotal101 + $nValorRecursoTotal136 + $nValorRecursoTotal118, "f");
+                                 
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">11.1 - RECURSOS DE IMPOSTOS</td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    echo db_formatar($nValorRecursoTotal101, "f");
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">11.2 - RECUSOS DO AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº 123/2022 </td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    echo db_formatar($nValorRecursoTotal136, "f");
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="text-row" style="text-align: left; border-left: 1px SOLID #000000; padding-left: 20px;">11.3 - RECURSOS DO FUNDEB</td>
+                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;">
+                                <?php
+                                    echo db_formatar($nValorRecursoTotal118, "f");
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="subtitle-row" style="width: 300px;">12 - TOTAL APLICADO ((5 + 7 + 8 + 10) - ( 6 + 9 + 11))</td>
                             <td class="subtitle-row" style="width: 100px; text-align: right;">
                                 <?php
-
                                     echo db_formatar($nTotalAplicadoEntrada - $nTotalAplicadoSaida, "f");
                                 ?>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000; margin-top: 30px;" autosize="1">
+            <table class="waffle" width="600px" cellspacing="0" cellpadding="0" style="border: 1px #000; margin-top: 50px;" autosize="1">
                     <tbody>
                         <tr>
-                            <td class="title-row" >IV - RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB</td>
+                            <td class="title-row" colspan="5">IV - RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB</td>
                         </tr>
                         <tr>
                             <td class="subtitle-row" style="width: 300px; text-align: center;">DESCRIÇÃO</td>
                             <td class="subtitle-row" style="width: 100px; text-align: center;">VALOR</td>
                         </tr>
                         <tr>
-                            <td class="subtitle-4-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px;">17 - RECEITAS RECEBIDAS DO FUNDEB NO EXERCÍCIO</td>
+                            <td class="subtitle-4-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px;">18 - RECEITAS RECEBIDAS DO FUNDEB NO EXERCÍCIO</td>
                             <td class="subtitle-4-row" style="text-align: right; border-right: 1px SOLID #000000;">
                                 <?php echo db_formatar(abs($nTotalReceitasRecebidasFundeb), "f");?>
                             </td>
                         </tr>
                         <tr>
-                           <td class='text-row' style='text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;'>17.1 - TRANSFERÊNCIAS DE RECURSOS DO FUNDO DE MANUTENÇÃO E DESENVOLVIMENTO DA EDUCAÇÃO BÁSICA E DE VALORIZAÇÃO DOS PROFISSIONAIS DA EDUCAÇÃO - FUNDEB (NR 1.7.5.1.50.0.1)</td>
+                           <td class='text-row' style='text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;'>18.1 - TRANSFERÊNCIAS DE RECURSOS DO FUNDEB (NR 1.7.5.1.50.0.1)</td>
                            <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar($nTransferenciaRecebidaFundeb, "f"); ?></td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">17.2 - DEVOLUÇÃO DE RECURSOS DO FUNDEB, RECEBIDOS EM ATRASOS, PARA AS CONTAS DE ORIGEM DOS RECURSOS (CONSULTA 1.047.710)</td>
+                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.2 - DEVOLUÇÃO DE RECURSOS DO FUNDEB, RECEBIDOS EM ATRASOS, PARA AS CONTAS DE ORIGEM DOS RECURSOS (CONSULTA 1.047.710)</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php echo db_formatar($nDevolucaoRecursoFundeb, "f"); ?></td>
                         </tr>
                         <tr>
-                            <td class="subtitle-4-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px;">18 - CONTRIBUIÇÃO AO FUNDEB (LEI Nº 14.113/2020) </td>
+                            <td class="subtitle-4-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px;">19 - CONTRIBUIÇÃO AO FUNDEB (LEI Nº 14.113/2020) </td>
                             <td class="subtitle-4-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
                                 echo db_formatar(abs($nTotalContribuicaoFundeb), "f");
                             ?></td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.1 - COTA-PARTE FPM</td>
+                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">19.1 - COTA-PARTE FPM</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
                                 $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495171151%'");
                                 $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
@@ -781,7 +978,7 @@ ob_start();
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.2 - COTA-PARTE ICMS</td>
+                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">19.2 - COTA-PARTE ICMS</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
                                 $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495172150%'");
                                 $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
@@ -790,7 +987,7 @@ ob_start();
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.3 - COTA-PARTE IPI - EXPORTAÇÃO</td>
+                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">19.3 - COTA-PARTE IPI - EXPORTAÇÃO</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
                                 $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495172152%'");
                                 $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
@@ -799,7 +996,7 @@ ob_start();
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.4 - COTA-PARTE ITR</td>
+                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">19.4 - COTA-PARTE ITR</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
                                 $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495171152%'");
                                 $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
@@ -808,7 +1005,7 @@ ob_start();
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.5 - COTA-PARTE IPVA</td>
+                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">19.5 - COTA-PARTE IPVA</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
                                 $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '495172151%'");
                                 $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
@@ -817,7 +1014,7 @@ ob_start();
                             </td>
                         </tr>
                         <tr>
-                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">18.6 - AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº123/2022 - PRINCIPAL</td>
+                            <td class="text-row" style="text-align: lefth; border-left: 1px SOLID #000000; width: 300px; padding-left: 20px;">19.6 - AUXÍLIO FINANCEIRO - OUTORGA CRÉDITO TRIBUTÁRIO ICMS - ART. 5º, INCISO V, EC Nº123/2022 - PRINCIPAL</td>
                             <td class="text-row" style="text-align: right; border-right: 1px SOLID #000000;"><?php
                                 $aReceitas = getSaldoReceita(null, "sum(saldo_arrecadado_acumulado) as saldo_arrecadado_acumulado", null, "o57_fonte like '49517196101%'");
                                 $nReceita = count($aReceitas) > 0 ? $aReceitas[0]->saldo_arrecadado_acumulado : 0;
@@ -826,7 +1023,7 @@ ob_start();
                             </td>
                         </tr>
                         <tr>
-                            <td class="subtitle-row" style="width: 300px;">19 - TOTAL DO RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB ( 17 - 18 )</td>
+                            <td class="subtitle-row" style="width: 300px;">20 - TOTAL DO RESULTADO LÍQUIDO DAS TRANSFERÊNCIAS DO FUNDEB ( 18 - 19 )</td>
                             <td class="subtitle-row" style="width: 100px; text-align: right;">
                                 <?php
                                     $resultadoLiquido =  $nTotalReceitasRecebidasFundeb - $nContribuicaoFundeb;

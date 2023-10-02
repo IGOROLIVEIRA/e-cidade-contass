@@ -157,7 +157,8 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
                                                    OR NULL THEN o41_unidade::varchar
                                               ELSE o41_codtri
                                           END),3,0) AS codunidadesub,
-                                          c70_codlan
+                                          c70_codlan,
+            e60_tipodespesa                              
             FROM conlancam
             JOIN conlancamcompl ON c70_codlan = c72_codlan
             JOIN conlancamemp ON c75_codlan = c70_codlan
@@ -250,10 +251,11 @@ class SicomArquivoEmpenhosAnuladosMes extends SicomArquivoBase implements iPadAr
             $oDadosEmpenhoAnuladoFonte = new cl_anl112023();
 
             $oCodigoAcompanhamento = new ControleOrcamentario();
+            $oCodigoAcompanhamento->setTipoDespesa($oEmpenhoAnulado->e60_tipodespesa);
             $oCodigoAcompanhamento->setFonte($oEmpenhoAnulado->o15_codigo);
             $oCodigoAcompanhamento->setEmendaParlamentar($oEmpenhoAnulado->e60_emendaparlamentar);
             $oCodigoAcompanhamento->setEsferaEmendaParlamentar($oEmpenhoAnulado->e60_esferaemendaparlamentar);
-
+            $oCodigoAcompanhamento->setDeParaFonteCompleta();
             $oDadosEmpenhoAnuladoFonte->si111_tiporegistro = 11;
             $oDadosEmpenhoAnuladoFonte->si111_codunidadesub = $sCodUnidade;
             $oDadosEmpenhoAnuladoFonte->si111_nroempenho = substr($oEmpenhoAnulado->e60_codemp, 0, 22);

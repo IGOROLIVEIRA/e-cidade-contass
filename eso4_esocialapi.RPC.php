@@ -273,18 +273,25 @@ try {
                         Tipo::DESLIGAMENTO,
                         Tipo::CD_BENEF_IN,
                         Tipo::BENEFICIOS_ENTESPUBLICOS,
+                        Tipo::ALTERACAO_CONTRATO,
+                        Tipo::EXCLUSAO_EVENTOS,
+                        Tipo::REABERTURA_EVENTOS,
+                        Tipo::FECHAMENTO_EVENTOS,
                     )
                 )) {
+                    
                     $dadosDoPreenchimento = $dadosESocial->getPorTipo(
                         Tipo::getTipoFormulario($arquivo),
                         empty($oParam->matricula) ? null : $oParam->matricula,
                         empty($oParam->cgm) ? null : $oParam->cgm,
                         empty($oParam->tpevento) ? null : $oParam->tpevento
                     );
+                    
                     if (current($dadosDoPreenchimento) instanceof \ECidade\RecursosHumanos\ESocial\Model\Formulario\DadosPreenchimento) {
                         $formatter = FormatterFactory::get($arquivo);
                         $dadosDoPreenchimento = $formatter->formatar($dadosDoPreenchimento);
                     }
+                    
                     foreach (array_chunk($dadosDoPreenchimento, 50) as $aTabela) {
                         $eventoFila = new Evento(
                             $arquivo,
@@ -297,7 +304,8 @@ try {
                             empty($oParam->dtalteracao) ? null : $oParam->dtalteracao,
                             $oParam->indapuracao,
                             $oParam->tppgto,
-                            $oParam->tpevento
+                            $oParam->tpevento,
+                            $oParam->transDCTFWeb
                         );
                         $eventoFila->adicionarFila();
                     }
@@ -322,7 +330,9 @@ try {
                             empty($oParam->dtalteracao) ? null : $oParam->dtalteracao,
                             $oParam->indapuracao,
                             $oParam->tppgto,
-                            $oParam->tpevento
+                            $oParam->tpevento,
+                            $oParam->transDCTFWeb,
+                            $oParam->evtpgtos
                         );
                         $eventoFila->adicionarFila();
                     }
@@ -336,6 +346,54 @@ try {
             // file_put_contents('tmp/textfile.txt', "* * * * * (cd $path; php -q filaEsocial.php) \n\n");
             //exec('crontab tmp/textfile.txt');
             ob_start();
+            $response = system("php -q filaEsocial.php");
+            ob_end_clean();
+
+            $oRetorno->sMessage = "Dados agendados para envio.";
+            break;
+
+        case "excluir":
+
+            $dadosESocial = new DadosESocial();
+
+            db_inicio_transacao();
+            $iCgm = $oParam->empregador;
+            // var_dump($oParam);exit;
+            // var_dump($oParam->eventosParaExcluir);exit;
+            foreach ($oParam->eventosParaExcluir as $evento) {
+                
+                $dadosESocial->setReponsavelPeloPreenchimento($iCgm);
+
+                    $eventoFila = new Evento(
+                        "S3000",
+                        $iCgm,
+                        $iCgm,
+                        $aTabela,
+                        $oParam->tpAmb,
+                        "{$oParam->iAnoValidade}-{$oParam->iMesValidade}",
+                        $oParam->modo,
+                        empty($oParam->dtalteracao) ? null : $oParam->dtalteracao,
+                        $oParam->indapuracao,
+                        $oParam->tppgto,
+                        $oParam->tpevento,
+                        $oParam->transDCTFWeb,
+                        $oParam->evtpgtos,
+                        $evento
+                    );
+                    
+                    $eventoFila->adicionarEventoExclusao();
+                    
+                
+            }
+            
+            db_fim_transacao(false);
+
+            //$path = dirname(__FILE__);
+            // exec('crontab -r');
+            // file_put_contents('tmp/textfile.txt', "* * * * * (cd $path; php -q filaEsocial.php) \n\n");
+            //exec('crontab tmp/textfile.txt');
+            ob_start();
+            
             $response = system("php -q filaEsocial.php");
             ob_end_clean();
 

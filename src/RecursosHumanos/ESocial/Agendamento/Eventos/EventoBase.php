@@ -66,6 +66,21 @@ abstract class EventoBase
         $this->tpevento = $tpevento;
     }
 
+    public function setTransDCTFWeb($transDCTFWeb)
+    {
+        $this->transDCTFWeb = $transDCTFWeb;
+    }
+
+    public function setEvtpgtos($evtpgtos)
+    {
+        $this->evtpgtos = $evtpgtos;
+    }
+
+    public function setDadosExclusao($aDadosExclusao)
+    {
+        $this->aDadosExclusao = $aDadosExclusao;
+    }
+
     /**
      * Retorna dados no formato necessario para envio
      * pela API sped-esocial

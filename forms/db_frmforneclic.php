@@ -27,6 +27,12 @@
 
 //MODULO: patrim
 include("dbforms/db_classesgenericas.php");
+include("classes/db_licitaparam_classe.php");
+
+$cllicitaparam = new cl_licitaparam;
+$rsParamLic = $cllicitaparam->sql_record($cllicitaparam->sql_query(null, "*", null, "l12_instit = " . db_getsession('DB_instit')));
+db_fieldsmemory($rsParamLic, 0)->l12_validafornecedor_emailtel;
+
 $cliframe_alterar_excluir = new cl_iframe_alterar_excluir;
 $clpcorcamforne->rotulo->label();
 $clpcorcamfornelic->rotulo->label();
@@ -91,6 +97,7 @@ if (isset($db_opcaoal)) {
                 </td>
                 <td>
                     <?
+                    db_input('l12_validafornecedor_emailtel', 10, $Il12_validafornecedor_emailtel, true, 'hidden', 3, "");
                     db_input('solic', 40, "", true, 'hidden', 3);
                     db_input('l20_codigo', 8, $Il20_codigo, true, 'text', 3)
                     ?>
@@ -294,30 +301,47 @@ if (isset($db_opcaoal)) {
 
     function js_pesquisapc21_numcgm(mostra) {
         if (mostra == true) {
-            js_OpenJanelaIframe('', 'func_nome', 'func_pcforne.php?validaRepresentante=true&orderName=true&funcao_js=parent.js_mostracgm1|pc60_numcgm|z01_nome', 'Pesquisa', true);
-        } else {
-            if (document.form1.pc21_numcgm.value != '') {
-                js_OpenJanelaIframe('', 'func_nome', 'func_pcforne.php?validaRepresentante=true&orderName=true&pesquisa_chave=' + document.form1.pc21_numcgm.value + '&iParam=true&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
-            } else {
-                document.form1.z01_nome.value = '';
-            }
+            js_OpenJanelaIframe('', 'func_nome', 'func_pcforne.php?validaRepresentante=true&orderName=true&funcao_js=parent.js_mostracgm1|pc60_numcgm|z01_nome|z01_telef|z01_email', 'Pesquisa', true);
+            return true;
         }
+        if (document.form1.pc21_numcgm.value != '') {
+            js_OpenJanelaIframe('', 'func_nome', 'func_pcforne.php?validaRepresentante=true&orderName=true&pesquisa_chave=' + document.form1.pc21_numcgm.value + '&iParam=true&funcao_js=parent.js_mostracgm', 'Pesquisa', false);
+            return true;
+        }
+        document.form1.z01_nome.value = '';
     }
 
-    function js_mostracgm(chave, chave2) {
+    function js_mostracgm(chave, chave2, z01_telef, z01_email) {
+
+        if ((z01_telef.trim() == '' || z01_email.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
+            alert("Usuário: Inclusão abortada. O Fornecedor selecionado não possui Email e Telefone no seu cadastro.");
+            $('pc21_numcgm').value = '';
+            $('z01_nome').value = '';
+            return false;
+        }
+
         if (chave2 == true) {
             document.form1.pc21_numcgm.focus();
             document.form1.pc21_numcgm.value = '';
             document.form1.z01_nome.value = chave;
-        } else {
-            document.form1.z01_nome.value = chave2;
+            return false;
         }
+        document.form1.z01_nome.value = chave2;
+
+        js_verificaFornecedor();
     }
 
-    function js_mostracgm1(chave1, chave2) {
-        document.form1.pc21_numcgm.value = chave1;
-        document.form1.z01_nome.value = chave2;
+    function js_mostracgm1(pc21_numcgm, z01_nome, z01_telef, z01_email) {
+        if ((z01_telef.trim() == '' || z01_email.trim() == '') && $('l12_validafornecedor_emailtel').value == 't') {
+            alert("Usuário: Inclusão abortada. O Fornecedor selecionado não possui Email e Telefone no seu cadastro.");
+            $('pc21_numcgm').value = '';
+            return false;
+        }
+        document.form1.pc21_numcgm.value = pc21_numcgm;
+        document.form1.z01_nome.value = z01_nome;
         func_nome.hide();
+
+        js_verificaFornecedor();
     }
 
     function js_pesquisa() {
@@ -334,5 +358,37 @@ if (isset($db_opcaoal)) {
     function js_gerarxlsbranco() {
         let codorcamento = document.getElementById('pc20_codorc').value;
         const jan = window.open('lic1_gerarxlsbranco.php?pc20_codorc=' + codorcamento);
+    }
+
+    /**
+     * Procura se o fornecedor possui débitos em aberto
+     */
+    function js_verificaFornecedor() {
+
+        var sUrlRPC = 'com4_notificafornecedor.RPC.php';
+        var iCgm = document.form1.pc21_numcgm.value;
+
+        js_divCarregando('Aguarde, verificando...', "msgBox");
+
+        var oParam = new Object();
+        oParam.sExecucao = 'debitosEmAberto';
+        oParam.iNumCgm = iCgm;
+        oParam.sLiberacao = "A";
+
+        var oAjax = new Ajax.Request(sUrlRPC, {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_oretornofornecedor
+        });
+    }
+
+    /**
+     * Retorno com os débitos em aberto e informações de configuração
+     */
+    function js_oretornofornecedor(oAjax) {
+
+        js_removeObj("msgBox");
+
+        var oRetorno = eval("(" + oAjax.responseText + ")");
     }
 </script>

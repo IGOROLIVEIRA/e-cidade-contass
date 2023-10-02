@@ -126,6 +126,17 @@ if (!isset($chave_rh218_perapurmes)) {
                                     onClick="parent.db_iframe_evt5001consulta.hide();">
                             </td>
                         </tr>
+                        <tr>
+                            <td>
+                                &nbsp;
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                                <input name="imprimir" type="button" id="imprimir" value="Imprimir" onclick="js_imprimir()">
+                                <input name="imprimirCsv" type="button" id="imprimirCsv" value="Imprimir CSV" onclick="js_imprimirCsv()">
+                            </td>
+                        </tr>
                     </table>
                 </form>
             </td>
@@ -145,10 +156,8 @@ if (!isset($chave_rh218_perapurmes)) {
                     else z01_nome end as z01_nome,
                     rh218_regist,
                     rh218_numcgm as dl_Cgm,
-                    rh218_codcateg,
-                    CASE WHEN rh218_indapuracao = 1 THEN 'Mensal'::varchar ELSE '13º Salário'::varchar END AS rh218_indapuracao,
-                    rh218_nrrecarqbase,
-                    rh218_tpcr,       
+                    rh218_codcateg,  
+                    rh218_vlrbasecalc,
                     rh218_vrdescseg,
                     rh218_vrcpseg, 
                     (rh218_vrdescseg - rh218_vrcpseg) as dl_Diferença";
@@ -158,6 +167,9 @@ if (!isset($chave_rh218_perapurmes)) {
             }
             if (isset($chave_z01_cgccpf) && (trim($chave_z01_cgccpf) != "")) {
               $where .= " and z01_cgccpf = '$chave_z01_cgccpf' ";
+            }
+            if (isset($chave_rh218_numcgm) && (trim($chave_rh218_numcgm) != "")) {
+              $where .= " and rh218_numcgm = '$chave_rh218_numcgm' ";
             }
             if (isset($chave_rh218_perapurano) && (trim($chave_rh218_perapurano) != "")) {
               $where .= " and rh218_perapurano = $chave_rh218_perapurano ";
@@ -193,6 +205,15 @@ if (!isset($chave_rh218_perapurmes)) {
 if (!isset($pesquisa_chave)) {
 ?>
 <script>
+function js_imprimir() {
+    jan = window.open('eso2_evt5001consulta002.php?rh218_perapurmes='+document.form2.chave_rh218_perapurmes.value+'&rh218_perapurano='+document.form2.chave_rh218_perapurano.value+'&z01_cgccpf='+document.form2.chave_z01_cgccpf.value+'&rh218_regist='+document.form2.chave_rh218_regist.value+'&rh218_numcgm='+document.form2.chave_rh218_numcgm.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
+}
+
+function js_imprimirCsv() {
+    jan = window.open('eso2_evt5001consultacsv002.php?rh218_perapurmes='+document.form2.chave_rh218_perapurmes.value+'&rh218_perapurano='+document.form2.chave_rh218_perapurano.value+'&z01_cgccpf='+document.form2.chave_z01_cgccpf.value+'&rh218_regist='+document.form2.chave_rh218_regist.value+'&rh218_numcgm='+document.form2.chave_rh218_numcgm.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0,0);
+}
 </script>
 <?
 }

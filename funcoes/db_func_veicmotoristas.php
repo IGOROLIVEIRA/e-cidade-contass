@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "veicmotoristas.ve05_codigo,veicmotoristas.ve05_numcgm,cgm.z01_nome,veicmotoristas.ve05_habilitacao,veicmotoristas.ve05_veiccadcategcnh,veicmotoristas.ve05_dtvenc,veicmotoristas.ve05_dtprimcnh,veicmotoristas.ve05_veiccadmotoristasit";
+$campos = "veicmotoristas.ve05_codigo,veicmotoristas.ve05_numcgm,z01_cgccpf,cgm.z01_nome,veicmotoristas.ve05_habilitacao,veicmotoristas.ve05_veiccadcategcnh,veicmotoristas.ve05_dtvenc,veicmotoristas.ve05_dtprimcnh,veicmotoristas.ve05_veiccadmotoristasit";
 ?>

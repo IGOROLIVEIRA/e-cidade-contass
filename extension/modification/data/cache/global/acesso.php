@@ -38,12 +38,12 @@ db_postmemory($HTTP_POST_VARS);
 $_SESSION["DB_itemmenu_acessado"] = "0";
 $sArquivoUsuariosVersaoNova = ECIDADE_EXTENSION_PACKAGE_PATH . 'Desktop/users-install.json';
 $aUsuarios = file_exists($sArquivoUsuariosVersaoNova) ? json_decode(file_get_contents($sArquivoUsuariosVersaoNova)) : array();
-$lUsaVersaoNova = false;
+$lUsaVersaoNova = true;
 
 if (is_array($aUsuarios) && in_array($_SESSION['DB_login'], $aUsuarios)) {
   $lUsaVersaoNova = true;
 }
- 
+
 require(modification("libs/db_usuariosonline.php"));
 
 $lRecarregaSistema = false;
@@ -72,7 +72,7 @@ if (isset($atualiza)) {
       }
 
       ini_set('memory_limit', '-1');
-
+      $extensionData = \ECidade\V3\Extension\Data::restore('Desktop');
       $extensionManager = new \ECidade\V3\Extension\Manager();
       $success = $extensionManager->install('Desktop', $_SESSION['DB_login']);
 
@@ -87,7 +87,7 @@ if (isset($atualiza)) {
       echo "<script>alert('Não foi possível alterar para a versão 3.\\nTente novamente mais tarde.');</script>";
 
     }
- 
+
 
     $sMensagem = _M('configuracao.configuracao.preferenciaUsuario.sucesso');
   } catch (Exception $oErro){
@@ -146,7 +146,7 @@ if(!isset($trocaip) && !isset($atualiza)){
 
   <body class="body-default">
 
-   
+
   <script type="text/javascript">
       function salvandoPreferencias() {
         <?php if ($lUsaVersaoNova) : ?>
@@ -258,7 +258,7 @@ if(!isset($trocaip) && !isset($atualiza)){
             <td><?php db_select('versao3', array('0' => 'Não', '1' => 'Sim'), true, 1); ?></td>
            </tr>
         <?php endif; ?>
- 
+
          </table>
        </fieldset>
        <input type="submit" class="bt_salvar" name="atualiza" value="Salvar" />

@@ -895,7 +895,7 @@ class cl_acordoitem {
               ac16_anousu,
               ac16_dataassinatura,
               l20_codtipocom,
-              
+
               coalesce(sum(CASE WHEN ac29_tipo = 1 THEN ac29_valor END), 0) AS valorAutorizado,
               coalesce(sum(CASE WHEN ac29_tipo = 1 THEN ac29_quantidade END), 0) AS quantidadeautorizada,
               coalesce(sum(CASE WHEN ac29_tipo = 1 THEN (ac20_quantidade - ac29_quantidade) END), 0) AS restante,
@@ -905,7 +905,7 @@ class cl_acordoitem {
               AND ac29_automatico IS FALSE THEN ac29_valor END), 0) AS valorAutorizadoManual,
               coalesce(sum(CASE WHEN ac29_tipo = 1
               AND ac29_automatico IS FALSE THEN ac29_quantidade END), 0) AS quantidadeautorizadaManual
-              
+
               FROM acordoitem
               LEFT JOIN acordoitemexecutado ON ac29_acordoitem = ac20_sequencial
               JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
@@ -916,8 +916,8 @@ class cl_acordoitem {
               LEFT JOIN liclicita ON l20_codigo = ac16_licitacao
               LEFT JOIN empempitem ON e62_item = pc01_codmater
               LEFT JOIN acordogrupo ON ac16_acordogrupo = ac02_sequencial
-              JOIN acordocategoria ON ac16_acordocategoria = ac50_sequencial 
-          
+              JOIN acordocategoria ON ac16_acordocategoria = ac50_sequencial
+
               $sWhere
               GROUP BY
               ac20_quantidade,
@@ -951,6 +951,105 @@ class cl_acordoitem {
     return $sSql;
   }
 
+  /**
+   * Retorna os itens referente ao saldo de contrato
+   *
+   * @param  string $sWhere
+   * @param  string $sOrder
+   * @return string
+   */
+  public function sqlQuerySaldocontratos($sWhere = "", $sOrder = "") {
 
+    $sSql = "SELECT
+              ac16_sequencial as acordo,
+              ac26_sequencial as posicao_acordo,
+              ac29_acordoitem as item,
+              l20_edital as licitacao,
+              ac02_descricao as natureza,
+              z01_nome as nome_contratado,
+              descrdepto as departamento,
+              coddepto as codigo_dpto,
+              ac26_data as data_posicao,
+              ac16_datainicio as datainicio,
+              ac16_datafim as datafim,
+              pc01_codmater as codigomaterial,
+              pc01_descrmater as material,
+              ac20_quantidade as qtd_total,
+              ac20_valorunitario as vlrunitario,
+              ac20_valortotal as total,
+              ac20_sequencial as sequencial,
+              ac20_ordem as ordem,
+              ac16_valor as valor_contrato,
+              l20_anousu as ano_processo_licitatorio,
+              ac16_numero,
+              ac16_anousu,
+              ac16_dataassinatura,
+
+              coalesce(sum(CASE WHEN ac29_tipo = 1 THEN ac29_valor END), 0) AS valorAutorizado,
+              coalesce(sum(CASE WHEN ac29_tipo = 1 THEN ac29_quantidade END), 0) AS quantidadeautorizada,
+              coalesce(sum(CASE WHEN ac29_tipo = 1 THEN (ac20_quantidade - ac29_quantidade) END), 0) AS restante,
+              coalesce(sum(CASE WHEN ac29_tipo = 2 THEN ac29_valor END),0) AS valorExecutado,
+              coalesce(sum(CASE WHEN ac29_tipo = 2 THEN ac29_quantidade END),0) AS quantidadeexecutada,
+              coalesce(sum(CASE WHEN ac29_tipo = 1
+              AND ac29_automatico IS FALSE THEN ac29_valor END), 0) AS valorAutorizadoManual,
+              coalesce(sum(CASE WHEN ac29_tipo = 1
+              AND ac29_automatico IS FALSE THEN ac29_quantidade END), 0) AS quantidadeautorizadaManual
+
+              FROM acordoitem
+              LEFT JOIN acordoitemexecutado ON ac29_acordoitem = ac20_sequencial
+              JOIN acordoposicao ON ac20_acordoposicao = ac26_sequencial
+              JOIN acordo ON ac16_sequencial = ac26_acordo
+              JOIN pcmater ON pc01_codmater = ac20_pcmater
+              JOIN db_depart ON coddepto = ac16_deptoresponsavel
+              JOIN cgm ON ac16_contratado = z01_numcgm
+              LEFT JOIN liclicita ON l20_codigo = ac16_licitacao
+              LEFT JOIN acordogrupo ON ac16_acordogrupo = ac02_sequencial
+              JOIN acordocategoria ON ac16_acordocategoria = ac50_sequencial" . $sWhere . " GROUP BY
+              ac20_quantidade,
+              ac20_valorunitario,
+              ac20_valortotal,
+              ac20_sequencial,
+              ac20_ordem,
+              ac16_datainicio,
+              ac16_valor,
+              ac16_dataassinatura,
+              ac16_licitacao,
+              ac16_datafim,
+              z01_nome,
+              pc01_descrmater,
+              descrdepto,
+              ac29_acordoitem,
+              ac16_sequencial,
+              ac26_sequencial,
+              ac26_data,
+              coddepto,
+              pc01_codmater,
+              l20_edital,
+              l20_anousu,
+              ac02_descricao,
+              ac16_numero,
+              ac16_anousu,
+              ac20_ordem " . $sOrder;
+
+    return $sSql;
+  }
+
+  public function queryGetItensAdimento($iAcordo)
+  {
+    $sql = "
+    SELECT ac20_sequencial,
+        ac20_pcmater,
+        ac20_resumo,
+        ac20_quantidade,
+        ac20_servicoquantidade,
+        pc01_servico
+    FROM acordoitem
+    INNER JOIN pcmater ON pc01_codmater = ac20_pcmater
+    WHERE ac20_acordoposicao IN
+     (SELECT max(ac26_sequencial)
+      FROM acordoposicao
+      WHERE ac26_acordo = $iAcordo)";
+    return $sql;
+  }
 }
 

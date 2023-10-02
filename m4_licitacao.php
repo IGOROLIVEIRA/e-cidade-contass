@@ -158,7 +158,48 @@ if (isset($alterar)) {
   if ($l20_dtpubratificacao != $l20_dtpubratificacao_old) {
     $change = true;
   }
-  
+
+  if ($l20_objeto != $l20_objeto_old) {
+    $change = true;
+  }
+
+  if ($l20_datacria != $l20_datacria_old) {
+    $change = true;
+  }
+
+  if ($l20_dataaber != $l20_dataaber_old) {
+    $change = true;
+  }
+
+  if ($l20_dataaberproposta != $l20_dataaberproposta_old) {
+    $change = true;
+  }
+
+  if ($l20_dataencproposta != $l20_dataencproposta_old) {
+    $change = true;
+  }
+
+  if ($l20_datadiario != $l20_datadiario_old) {
+    $change = true;
+  }
+
+  if ($l20_dtpulicacaopncp != $l20_dtpulicacaopncp_old) {
+    $change = true;
+  }
+
+  if ($l20_datapublicacao1 != $l20_datapublicacao1_old) {
+    $change = true;
+  }
+
+  if ($l20_datapublicacao2 != $l20_datapublicacao2_old) {
+    $change = true;
+  }
+
+  if ($l20_dtpulicacaoedital != $l20_dtpulicacaoedital_old) {
+    $change = true;
+  }
+
+
   if (!isset($erro)) {
     //altera data homologação
     if ($sqlerro == false) {
@@ -198,16 +239,49 @@ if (isset($alterar)) {
       $clliclicita->l20_codtipocom = $l20_codtipocom;
       $clliclicita->l20_veicdivulgacao = $l20_veicdivulgacao;
       $clliclicita->l20_tipojulg = $l20_tipojulg;
-      
+      $clliclicita->l20_objeto = $l20_objeto;
+      $clliclicita->l20_datacria = !empty($l20_datacria)
+        ? "$l20_datacria_ano-$l20_datacria_mes-$l20_datacria_dia"
+        : null;
+      $clliclicita->l20_dataaber = !empty($l20_dataaber)
+        ? "$l20_dataaber_ano-$l20_dataaber_mes-$l20_dataaber_dia"
+        : null;
+      $clliclicita->l20_dataaberproposta = !empty($l20_dataaberproposta)
+        ? "$l20_dataaberproposta_ano-$l20_dataaberproposta_mes-$l20_dataaberproposta_dia"
+        : null;
+      $clliclicita->l20_dataencproposta = !empty($l20_dataencproposta)
+        ? "$l20_dataencproposta_ano-$l20_dataencproposta_mes-$l20_dataencproposta_dia"
+        : null;
+      $clliclicita->l20_datadiario = !empty($l20_datadiario)
+          ? "$l20_datadiario_ano-$l20_datadiario_mes-$l20_datadiario_dia"
+          : null;
+      $clliclicita->l20_dtpulicacaopncp = !empty($l20_dtpulicacaopncp)
+        ? "$l20_dtpulicacaopncp_ano-$l20_dtpulicacaopncp_mes-$l20_dtpulicacaopncp_dia"
+        : null;
+      $clliclicita->l20_datapublicacao1 = !empty($l20_datapublicacao1)
+        ? "$l20_datapublicacao1_ano-$l20_datapublicacao1_mes-$l20_datapublicacao1_dia"
+        : null;
+      $clliclicita->l20_datapublicacao2 = !empty($l20_datapublicacao2)
+        ? "$l20_datapublicacao2_ano-$l20_datapublicacao2_mes-$l20_datapublicacao2_dia"
+        : null;
+      $clliclicita->l20_dtpulicacaoedital = !empty($l20_dtpulicacaoedital)
+        ? "$l20_dtpulicacaoedital_ano-$l20_dtpulicacaoedital_mes-$l20_dtpulicacaoedital_dia"
+        : null;
+      $clliclicita->l20_recdocumentacao = !empty($l20_recdocumentacao)
+        ? "$l20_recdocumentacao_ano-$l20_recdocumentacao_mes-$l20_recdocumentacao_dia"
+        : null;
+
       $clliclicita->alterar($l20_codigo, $descricao);
 
       $db_opcao = 2;
 
       if ($clliclicita->erro_status == "0") {
         $erro_msg = $clliclicita->erro_msg;
+        $erro_msg_formatada = str_replace(array("Usuário:", "Administrador:"), "", $erro_msg);
         $sqlerro = true;
+        echo "<script>alert(`$erro_msg_formatada`);</script>";
       }
-      
+
       //altera data julgamento
 
       if ($sqlerro == false) {
@@ -241,17 +315,15 @@ if (isset($alterar)) {
 
     $clmanutencaolicitacao->manutlic_licitacao = $l20_codigo;
     $clmanutencaolicitacao->manutlic_codunidsubanterior = $manutlic_codunidsubanterior;
+    $clmanutencaolicitacao->manutlic_editalant = $manutlic_editalant;
 
     $clmanutencaolicitacao->incluir();
 
-
-    
-    
     if ($sqlerro == false) {
       $resmanut = db_query("select nextval('db_manut_log_manut_sequencial_seq') as seq");
       $seq = pg_result($resmanut, 0, 0);
       $result = db_query("insert into db_manut_log values($seq,'Vigencia anterior: " . $oPosicao->ac16_datainicio . " - " . $oPosicao->ac16_datafim . " atual: " . $ac16_datainicio . " - " . $ac16_datafim . "  '," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-      
+
       echo "<script>alert('Alteração efetuada');</script>";
       $db_opcao = 3;
       $l20_codigo = '';
@@ -338,48 +410,203 @@ if (isset($alterar)) {
           <table>
             <tr>
               <td nowrap="nowrap" title="<?= $Tl20_codigo ?>">
-                <b><? db_ancora('Licitação:', "js_pesquisa_liclicita(true);", 1); ?></b>
+                <b><?php db_ancora('Licitação:', "js_pesquisa_liclicita(true);", 1); ?></b>
               </td>
               <td align="left" nowrap="nowrap">
-                <?
+                  <?php
                 db_input("l20_codigo", 10, $Il20_codigo, true, "text", 3, "onchange='js_pesquisa_liclicita(false);'");
                 ?>
               </td>
             </tr>
             <?php if ($db_opcao == 2) : ?>
-              <tr>
-                <td nowrap title="Processo Licitatório">
-                  <strong>Processo Licitatório:</strong>
+            <tr>
+                <td nowrap title="Objeto">
+                    <strong>Objeto:</strong>
                 </td>
                 <td>
-                  <?
-                  db_input('l20_edital', 10, $Il20_edital, true, 'text', 2, "");
-                  ?>
+                    <?php
+                    db_textarea('l20_objeto', 0, 50, $Il20_objeto, true, 'text', $db_opcao, "");
+                    ?>
                 </td>
-              </tr>
-              <?php
-              db_input('l20_edital_old', 10, $Il20_edital, true, 'hidden', 2, "");
-              ?>
-              <tr>
-                <td nowrap title="Numeração">
-                  <strong>Modalidade:</strong>
+            </tr>
+                <tr>
+                    <td nowrap title="Processo Licitatório">
+                        <strong>Processo Licitatório:</strong>
+                    </td>
+                    <td>
+                        <?php
+                        db_input('l20_edital', 10, $Il20_edital, true, 'text', 2, "");
+                        ?>
+                    </td>
+                </tr>
+                <?php
+                db_input('l20_edital_old', 10, $Il20_edital, true, 'hidden', 2, "");
+                ?>
+                <tr>
+                    <td nowrap title="Numeração">
+                        <strong>Modalidade:</strong>
+                    </td>
+                    <td>
+                        <?php
+                        db_input('l20_numero', 10, $Il20_numero, true, 'text', 2, "");
+                        ?>
+                    </td>
+                </tr>
+                <?php
+                db_input('l20_numero_old', 10, $Il20_numero, true, 'hidden', 2, "");
+                ?>
+                <tr id="linha_nroedital">
+                    <td nowrap title="<?= @$Tl20_nroedital ?>">
+                        <?= @$Ll20_nroedital ?>
+                    </td>
+                    <td>
+                        <?php
+                        $mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1
+                        || db_getsession('DB_anousu') >= 2021 ? 3 : 1;
+                        db_input('l20_nroedital', 10, $Il20_nroedital, true, 'text', 2, "");
+                        ?>
+                    </td>
+                </tr>
+                <?php
+                db_input('l20_nroedital_old', 10, $Il20_nroedital, true, 'hidden', 2, "");
+                ?>
+            <tr>
+                <td nowrap title="Data abertura Proc. Adm.">
+                    <strong>Data abertura Proc. Adm.: </strong>
                 </td>
                 <td>
-                  <?
-                  db_input('l20_numero', 10, $Il20_numero, true, 'text', 2, "");
-                  ?>
+                    <?php
+                    db_inputdata('l20_datacria', @$l20_datacria_dia, @$l20_datacria_mes, @$l20_datacria_ano, true, 'text', $iCampo);
+                    ?>
                 </td>
-              </tr>
-              <?php
-              db_input('l20_numero_old', 10, $Il20_numero, true, 'hidden', 2, "");
-              ?>
+            </tr>
+            <?php
+            db_inputdata('l20_datacria_old', @$l20_datacria_dia, @$l20_datacria_mes, @$l20_datacria_ano, true, 'hidden', $iCampo);
+            ?>
+            <tr>
+                <td nowrap title="Data Emis./Alt. Edital / Convite">
+                    <strong>Data Emis./Alt. Edital / Convite: </strong>
+                </td>
+                <td>
+                    <?php
+                    db_inputdata('l20_dataaber', @$l20_dataaber_dia, @$l20_dataaber_mes, @$l20_dataaber_ano, true, 'text', $iCampo);
+                    ?>
+                </td>
+            </tr>
+            <?php
+            db_inputdata('l20_dataaber_old', @$l20_dataaber_dia, @$l20_dataaber_mes, @$l20_dataaber_ano, true, 'hidden', $iCampo);
+            ?>
+            <tr>
+                <td nowrap title="Abertura Proposta">
+                    <strong>Abertura Proposta: </strong>
+                </td>
+                <td>
+                    <?php
+                    db_inputdata('l20_dataaberproposta', @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'text', $iCampo);
+                    ?>
+                </td>
+            </tr>
+            <?php
+            db_inputdata('l20_dataaberproposta_old', @$l20_dataaberproposta_dia, @$l20_dataaberproposta_mes, @$l20_dataaberproposta_ano, true, 'hidden', $iCampo);
+            ?>
+            <tr>
+                <td nowrap title="Encerramento Proposta">
+                    <strong>Encerramento Proposta: </strong>
+                </td>
+                <td>
+                    <?php
+                    db_inputdata('l20_dataencproposta', @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'text', $iCampo);
+                    ?>
+                </td>
+            </tr>
+            <?php
+            db_inputdata('l20_dataencproposta_old', @$l20_dataencproposta_dia, @$l20_dataencproposta_mes, @$l20_dataencproposta_ano, true, 'hidden', $iCampo);
+            ?>
+            <tr>
+                <td nowrap title="Publicação DO">
+                    <strong>Publicação DO: </strong>
+                </td>
+                <td>
+                    <?php
+                    db_inputdata('l20_datadiario', @$l20_datadiario_dia, @$l20_datadiario_mes, @$l20_datadiario_ano, true, 'text', $iCampo);
+                    ?>
+                </td>
+            </tr>
+            <?php
+            db_inputdata('l20_datadiario_old', @$l20_datadiario_dia, @$l20_datadiario_mes, @$l20_datadiario_ano, true, 'hidden', $iCampo);
+            ?>
+            <tr>
+                <td nowrap title="Publicação PNCP">
+                    <strong>Publicação PNCP: </strong>
+                </td>
+                <td>
+                    <?php
+                    db_inputdata('l20_dtpulicacaopncp', @$l20_dtpulicacaopncp_dia, @$l20_dtpulicacaopncp_mes, @$l20_dtpulicacaopncp_ano, true, 'text', $iCampo);
+                    ?>
+                </td>
+            </tr>
+            <?php
+            db_inputdata('l20_dtpulicacaopncp_old', @$l20_dtpulicacaopncp_dia, @$l20_dtpulicacaopncp_mes, @$l20_dtpulicacaopncp_ano, true, 'hidden', $iCampo);
+            ?>
+            <tr>
+                <td nowrap title="Veículo 1">
+                    <strong>Veículo 1: </strong>
+                </td>
+                <td>
+                    <?php
+                    db_inputdata('l20_datapublicacao1', @$l20_datapublicacao1_dia, @$l20_datapublicacao1_mes, @$l20_datapublicacao1_ano, true, 'text', $iCampo);
+                    ?>
+                </td>
+            </tr>
+            <?php
+            db_inputdata('l20_datapublicacao1_old', @$l20_datapublicacao1_dia, @$l20_datapublicacao1_mes, @$l20_datapublicacao1_ano, true, 'hidden', $iCampo);
+            ?>
+            <tr>
+                <td nowrap title="Veículo 2">
+                    <strong>Veículo 2: </strong>
+                </td>
+                <td>
+                    <?php
+                    db_inputdata('l20_datapublicacao2', @$l20_datapublicacao2_dia, @$l20_datapublicacao2_mes, @$l20_datapublicacao2_ano, true, 'text', $iCampo);
+                    ?>
+                </td>
+            </tr>
+            <?php
+            db_inputdata('l20_datapublicacao2_old', @$l20_datapublicacao2_dia, @$l20_datapublicacao2_mes, @$l20_datapublicacao2_ano, true, 'hidden', $iCampo);
+            ?>
+            <tr>
+                <td nowrap title="Publicação Edital">
+                    <strong>Publicação Edital: </strong>
+                </td>
+                <td>
+                    <?php
+                    db_inputdata('l20_dtpulicacaoedital', @$l20_dtpulicacaoedital_dia, @$l20_dtpulicacaoedital_mes, @$l20_dtpulicacaoedital_ano, true, 'text', $iCampo);
+                    ?>
+                </td>
+            </tr>
+            <?php
+            db_inputdata('l20_dtpulicacaoedital_old', @$l20_dtpulicacaoedital_dia, @$l20_dtpulicacaoedital_mes, @$l20_dtpulicacaoedital_ano, true, 'hidden', $iCampo);
+            ?>
+            <tr>
+                <td nowrap title="Recebimento de documentos">
+                    <strong>Recebimento de documentos: </strong>
+                </td>
+                <td>
+                    <?php
+                    db_inputdata('l20_recdocumentacao', @$l20_recdocumentacao_dia, @$l20_recdocumentacao_mes, @$l20_recdocumentacao_ano, true, 'text', $iCampo);
+                    ?>
+                </td>
+            </tr>
+            <?php
+                db_inputdata('l20_recdocumentacao_old', @$l20_recdocumentacao_dia, @$l20_recdocumentacao_mes, @$l20_recdocumentacao_ano, true, 'hidden', $iCampo);
+            ?>
 
               <tr>
                 <td nowrap title="Data Julgamento">
                   <strong>Data Julgamento: </strong>
                 </td>
                 <td>
-                  <?
+                    <?php
                   db_inputdata('l11_data', @$l11_data_dia, @$l11_data_mes, @$l11_data_ano, true, 'text', $iCampo);
                   ?>
                 </td>
@@ -397,29 +624,29 @@ if (isset($alterar)) {
                     <strong>Data Pub. Ratificação: </strong>
                   </td>
                   <td>
-                    <?
+                      <?php
                     db_inputdata('l20_dtpubratificacao', @$l20_dtpubratificacao_dia, @$l20_dtpubratificacao_mes, @$l20_dtpubratificacao_ano, true, 'text', $iCampo);
                     ?>
                   </td>
                 </tr>
-              <?
+                  <?php
                 db_inputdata('l20_dtpubratificacao_old', @$l20_dtpubratificacao_dia, @$l20_dtpubratificacao_mes, @$l20_dtpubratificacao_ano, true, 'hidden', $iCampo);
               endif;
               ?>
               <?php
               if ($l20_codtipocom == 9 || $l20_codtipocom == 11 || $l20_codtipocom == 10 ||$l20_codtipocom == 8 ) :
               ?>
-                  <tr>  
+                  <tr>
                     <td nowrap title="Veículo de Publicação">
                       <strong>Veículo de Publicação:</strong>
                     </td>
                     <td>
-                      <?
+                        <?php
                       db_textarea('l20_veicdivulgacao', 0, 50, $Il20_veicdivulgacao, true, 'text', $db_opcao, "");
                       ?>
                     </td>
                   </tr>
-                  <? 
+              <?php
               endif;
               ?>
                   <tr>
@@ -427,7 +654,7 @@ if (isset($alterar)) {
                         <?= @$Ll20_tipoprocesso ?>
                     </td>
                     <td>
-                        <?
+                        <?php
                         $arr_tipo = array("1" => "Por item", "3" => "Por lote");
                         db_select("l20_tipojulg", $arr_tipo, true, 1);
                         db_input("l20_codtipocom",0, $l20_codtipocom, true,'text',$db_opcao,'style="display:none;"');
@@ -440,38 +667,22 @@ if (isset($alterar)) {
                       <strong>Codunidsubanterior:</strong>
                     </td>
                     <td>
-                      <?
+                        <?php
                       db_input('manutlic_codunidsubanterior', 10, $Imanutlic_codunidsubanterior, true, 'text', 2, "");
                       db_input('manutlic_codunidsubanterior_old', 10, $Imanutlic_codunidsubanterior, true, 'hidden', 2, "");
                       ?>
                     </td>
                   </tr>
-                  
-              <?php
-              if ($chavepesquisa2 != 101) :
-                if ($chavepesquisa2 != 100) :
-              ?>
-                  <tr id="linha_nroedital">
-                    <td nowrap title="<?= @$Tl20_nroedital ?>">
-                      <?= @$Ll20_nroedital ?>
+                  <tr>
+                    <td nowrap title="">
+                      <strong>Nº Processo Anterior:</strong>
                     </td>
                     <td>
-                      <?
-                      $mostra = $l20_nroedital && $db_opcao == 2 || !$l20_nroedital && $db_opcao == 1
-                        || db_getsession('DB_anousu') >= 2021 ? 3 : 1;
-                      db_input('l20_nroedital', 10, $Il20_nroedital, true, 'text', 2, "");
+                        <?php
+                      db_input('manutlic_editalant', 10, $Il20_editalant, true, 'text', 2, "");
                       ?>
                     </td>
                   </tr>
-                  <?php
-                  db_input('l20_nroedital_old', 10, $Il20_nroedital, true, 'hidden', 2, "");
-                  ?>
-
-
-              
-                  
-                  
-
 
                   <?php
 
@@ -497,7 +708,7 @@ if (isset($alterar)) {
                                 <strong>Data Homologação: </strong>
                               </td>
                               <td>
-                                <?
+                                  <?php
                                 db_inputdata("l202_datahomologacao_$l202_sequencial", @$l202_datahomologacao_dia, @$l202_datahomologacao_mes, @$l202_datahomologacao_ano, true, '', $iCampo);
                                 ?>
                               </td>
@@ -508,7 +719,7 @@ if (isset($alterar)) {
                                 <strong>Data Adjudicação: </strong>
                               </td>
                               <td>
-                                <?
+                                  <?php
                                 db_inputdata("l202_dataadjudicacao_$l202_sequencial", @$l202_dataadjudicacao_dia, @$l202_dataadjudicacao_mes, @$l202_dataadjudicacao_ano, true, '', $iCampo);
                                 ?>
                               </td>
@@ -523,13 +734,6 @@ if (isset($alterar)) {
 
                   <?php endfor; ?>
 
-
-
-              <?php
-                endif;
-              endif;
-              ?>
-
             <?php endif; ?>
           </table>
         </fieldset>
@@ -538,7 +742,7 @@ if (isset($alterar)) {
     </form>
     </div>
 
-    <?
+  <?php
     db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
     ?>
 </body>
@@ -577,7 +781,7 @@ if (isset($alterar)) {
       document.form1.l20_codigo.focus();
     }
 
-    <?
+      <?php
     echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave;";
     ?>
 
@@ -588,12 +792,12 @@ if (isset($alterar)) {
     document.form1.l20_codigo.value = chave1;
     db_iframe_liclicita.hide();
 
-    <?
+      <?php
     echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave1+'&chavepesquisa2='+chave2";
     ?>
 
   }
 </script>
-<?
+<?php
   }
 ?>

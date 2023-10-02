@@ -47,6 +47,10 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
     $this->objpdf->Setfont('Arial', 'B', 9);
     $this->objpdf->text($xcol +2, $xlin +7, 'DATA');
     $this->objpdf->text($xcol +6, $xlin +11,  db_formatar(pg_result($this->dados, $iDados, "k17_data"), 'd'));
+    if (pg_result($this->dados, $iDados, "k17_numdocumento")){
+        $this->objpdf->text($xcol +80, $xlin +7, 'NÚMERO DO DOCUMENTO');
+        $this->objpdf->text($xcol +80, $xlin +11,  pg_result($this->dados, $iDados, "k17_numdocumento"), '');
+    }
 
     $this->objpdf->text($xcol +152, $xlin +7, 'VALOR');
 
@@ -123,7 +127,6 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
     $this->objpdf->Setfont('Arial', 'B', 9);
     $this->objpdf->text($xcol +2, $xlin +105, 'HISTÓRICO');
     $this->objpdf->Setfont('Arial', '', 9);
-    $this->objpdf->text($xcol +6, $xlin +115, pg_result($this->dados, $iDados, "k17_hist").'  -  '.pg_result($this->dados,0, "descr_hist"));
 
     $this->objpdf->setxy($xcol +2, $xlin +119);
     $this->objpdf->multicell(190, 3, pg_result($this->dados, $iDados, "k17_texto"), 0, "L");

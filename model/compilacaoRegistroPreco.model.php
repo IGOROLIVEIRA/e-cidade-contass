@@ -518,8 +518,7 @@ class compilacaoRegistroPreco extends solicitacaoCompra {
    *
    * @return compilacaoRegistroPreco
    */
-  public function toProcessoCompra($criterioAdj = null) {
-
+  public function toProcessoCompra($criterioAdj = null,$tipoProcesso) {
     $iNumeroProcesso = $this->getProcessodeCompras();
     if ($iNumeroProcesso != null) {
       throw new Exception("Compilação já processada!\nProcesso de Compras da Cmpilacao({$iNumeroProcesso}).");
@@ -533,6 +532,7 @@ class compilacaoRegistroPreco extends solicitacaoCompra {
     $oDaoPcProc->pc80_resumo   = urldecode($this->getResumo());
     $oDaoPcProc->pc80_situacao = 2;
     $oDaoPcProc->pc80_criterioadjudicacao = $criterioAdj;
+    $oDaoPcProc->pc80_tipoprocesso = $tipoProcesso;
     $oDaoPcProc->incluir(null);
     if ($oDaoPcProc->erro_status == 0) {
       throw new Exception("Erro ao incluir processo de compras para a compilação.\nErro retornado:{$oDaoPcProc->erro_msg}");

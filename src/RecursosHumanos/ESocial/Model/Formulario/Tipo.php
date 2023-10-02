@@ -28,6 +28,8 @@ class Tipo
     const REMUNERACAO_SERVIDOR = 13;
     const BENEFICIOS_ENTESPUBLICOS = 14;
     const PAGAMENTOS_RENDIMENTOS = 15;
+    const REABERTURA_EVENTOS = 21;
+    const FECHAMENTO_EVENTOS = 22;
     const REGISTRO_PRELIMINAR = 24;
     const CADASTRAMENTO_INICIAL = 37;
     const ESTABELECIMENTOS = 26;
@@ -35,10 +37,12 @@ class Tipo
     const ALTERACAO_CONTRATO = 39;
     const TSV_INICIO = 44;
     const TSV_ALT_CONTR = 45;
+    const TSV_TERMINO = 46;
     const CD_BENEF_IN = 47;
     const AFASTAMENTO_TEMPORARIO = 40;
     const CADASTRO_BENEFICIO = 49;
     const DESLIGAMENTO = 25;
+    const EXCLUSAO_EVENTOS = 53;
 
 
     /**
@@ -126,7 +130,6 @@ class Tipo
             28 => 'S2210',
             29 => 'S2220',
             30 => 'S2221',
-            31 => 'S2399',
             32 => 'S2240',
             33 => 'S2245',
             34 => 'S2250',

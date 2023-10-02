@@ -174,6 +174,8 @@ try {
                         <select name="evento" id="evento" style="width: 78%;" onchange="js_alt_evento()">
                             <option value="">selecione</option>
                             <option value="S2200">S-2200 - Cadastramento Inicial do Vínculo e Admissão/Ingresso de Trabalhador</option>
+                            <option value="S2205">S-2205 - Alteração de Dados Cadastrais do Trabalhador</option>
+                            <option value="S2206">S-2206 - Alteração de Contrato de Trabalho/Relação Estatutária</option>
                             <option value="S2300">S-2300 - Trabalhador Sem Vínculo de Emprego/Estatutário - Início</option>
                             <option value="S2230">S-2230 - Afastamento Temporário</option>
                             <option value="S2306">S-2306 - Trabalhador Sem Vínculo de Emprego/Estatutário - Alteração Contratual</option>
@@ -451,24 +453,29 @@ try {
     }
 
     function js_alt_evento() {
-        if ((document.getElementById('evento').value == 'S1200' || document.getElementById('evento').value == 'S1202' || document.getElementById('evento').value == 'S1207')) {
-            if (document.getElementById('indapuracao_col').style.display == 'none') {
-                document.getElementById('indapuracao_col').style.display = 'inline';
+        const eventoValue = document.getElementById('evento').value;
+        const indapuracaoCol = document.getElementById('indapuracao_col');
+        const tppgtoCol = document.getElementById('tppgto_col');
+        const tipoCol = document.getElementById('tipo_col');
+
+        if (eventoValue === 'S1200' || eventoValue === 'S1202' || eventoValue === 'S1207' || eventoValue === 'S1299') {
+            if (indapuracaoCol.style.display === 'none') {
+                indapuracaoCol.style.display = 'inline';
             }
-            if (document.getElementById('tipo_col').style.display == 'none') {
-                document.getElementById('tipo_col').style.display = 'inline';
+            if (tipoCol.style.display === 'none') {
+                tipoCol.style.display = 'inline';
             }
-        } else if ((document.getElementById('evento').value == 'S1210')) {
-            if (document.getElementById('tppgto_col').style.display == 'none') {
-                document.getElementById('tppgto_col').style.display = 'inline';
+        } else if (eventoValue === 'S1210') {
+            if (tppgtoCol.style.display === 'none') {
+                tppgtoCol.style.display = 'inline';
             }
-            if (document.getElementById('tipo_col').style.display == 'none') {
-                document.getElementById('tipo_col').style.display = 'inline';
+            if (tipoCol.style.display === 'none') {
+                tipoCol.style.display = 'inline';
             }
         } else {
-            document.getElementById('indapuracao_col').style.display = 'none';
-            document.getElementById('tppgto_col').style.display = 'none'
-            document.getElementById('tipo_col').style.display = 'none';
+            indapuracaoCol.style.display = 'none';
+            tppgtoCol.style.display = 'none';
+            tipoCol.style.display = 'none';
         }
     }
 

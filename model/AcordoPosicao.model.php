@@ -203,6 +203,9 @@ class AcordoPosicao
      */
     protected $sVigenciaalterada; //OC5304
 
+
+    protected  $sJustificativa;
+
     /**
      * Constante do caminho da mensagem do model
      * @var string
@@ -245,6 +248,8 @@ class AcordoPosicao
             $this->setNumeroAditamento($oDadosPosicao->ac26_numeroaditamento);
             $this->setNumeroApostilamento($oDadosPosicao->ac26_numeroapostilamento);
             $this->setVigenciaAlterada($oDadosPosicao->ac26_vigenciaalterada);
+            $this->setJustificativa($oDadosPosicao->ac35_justificativa);
+
         }
     }
 
@@ -274,12 +279,19 @@ class AcordoPosicao
         return $this;
     }
 
-        /**
-     * retorna o numero do aditamento
-     *
-     * @access public
-     * @return void
-     */
+    public function getJusitificativa()
+    {
+
+        return $this->sJustificativa;
+    }
+
+    public function setJustificativa($sJustificativa)
+    {
+
+        $this->sJustificativa = $sJustificativa;
+        return $this;
+    }
+
     public function getPercentualReajuste()
     {
 
@@ -742,6 +754,7 @@ class AcordoPosicao
             $oItem->setValorTotal($oItemLicitacao->pc23_quant * $oItemLicitacao->pc23_vlrun);
             $oItem->setResumo($oItemLicitacao->pc11_resum);
             $oItem->setServicoQuantidade($oItemLicitacao->pc11_servicoquantidade);
+            $oItem->setMarca(urldecode($oItemLicitacao->pc23_obs));
             /**
              * pesquisamos as dotacoes do item
              */
@@ -1882,7 +1895,7 @@ class AcordoPosicao
             $oDaoApostilamento->si03_justificativa = $oApostila->justificativa;
             $oDaoApostilamento->si03_indicereajuste = $oApostila->indicereajuste;
             $oDaoApostilamento->si03_percentualreajuste = $oApostila->percentualreajuste;
-            $oDaoApostilamento->si03_descricaoindice = $oApostila->descricaoindice;
+            $oDaoApostilamento->si03_descricaoindice = db_stdClass::normalizeStringJsonEscapeString($oApostila->descricaoindice);
             if ($oApostila->datareferencia == "") {
                 $oDaoApostilamento->si03_datareferencia = $oDaoApostilamento->si03_dataapostila;
             } else {

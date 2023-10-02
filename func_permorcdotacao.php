@@ -119,7 +119,7 @@ if ($pesquisa_chave != null && $pesquisa_chave != "") {
 
   $result = db_query($clpermusuario_dotacao->sql);
 
-  if (pg_numrows($result) != 0) {
+  if (pg_num_rows($result) != 0) {
     db_fieldsmemory($result, 0);
     echo "<script>" . "parent.js_mostraorcdotacao" . "('$o41_descr','$o50_estrutdespesa',false);</script>";
   } else {
@@ -141,9 +141,10 @@ if (!isset($filtroquery)) {
 
       $result = pg_query($clpermusuario_dotacao->sql);
       $tem_perm = 0;
-      for ($i = 0; $i < pg_numrows($result); $i++) {
+      for ($i = 0; $i < pg_num_rows($result); $i++) {
         if ($chave_o58_coddot == pg_result($result, $i, "o58_coddot")) {
           $tem_perm = 1;
+          $o55_descr = pg_result($result, $i, "o55_descr");
         }
       }
       if ($tem_perm == 1) {
@@ -154,11 +155,13 @@ if (!isset($filtroquery)) {
           }
         }
         if ($passar) {
-          $executa = split("|", $executar);
+          $executa = explode("|", $executar);
           // variável retornadepart usada na solicitação de compras para retornar departamento quando o reduzido é digitado
-          if ($retornadepart == null) {
+          if ($retornadepart == null && $apostilamentonovo == "false") {
             echo "<script>" . $executa[0] . "('$chave_o58_coddot');</script>";
-          } else {
+          } elseif($apostilamentonovo == "true"){
+            echo "<script>" . $executa[0] . "('$chave_o58_coddot','$o55_descr');</script>";
+          }else {
             echo "<script>" . $executa[0] . "('$chave_o58_coddot','$departamento');</script>";
           }
           exit;
@@ -198,7 +201,7 @@ if (!isset($filtroquery)) {
 
 
       <?
-      $executa = split("|", $funcao_js);
+      $executa = explode("|", $funcao_js);
       echo $executa[0] . "(coddot,descricao,estrutural);";
       ?>
 
@@ -211,7 +214,7 @@ if (!isset($filtroquery)) {
       } else {
 
         <?
-        $executa = split("|", $funcao_js);
+        $executa = explode("|", $funcao_js);
         echo $executa[0] . "(coddot,document.form1.departamento.value);";
         ?>
       }
@@ -253,9 +256,9 @@ if (!isset($filtroquery)) {
                   if ($clpermusuario_dotacao->sql != "") {
 
                     $result = pg_query($clpermusuario_dotacao->orgaos);
-                    if ($result != false && pg_numrows($result) > 0) {
+                    if ($result != false && pg_num_rows($result) > 0) {
                       db_selectrecord("secretaria", $result, true, 2, "", "", "", "0", "js_secretaria()");
-                      if (pg_numrows($result) == 1) {
+                      if (pg_num_rows($result) == 1) {
                         echo "<script>
 		      document.form1.secretaria[1].selected = true;
 		      document.form1.secretariadescr[1].selected = true;
@@ -274,9 +277,9 @@ if (!isset($filtroquery)) {
                   if ($clpermusuario_dotacao->sql != "") {
 
                     $result = pg_query($clpermusuario_dotacao->depart);
-                    if ($result != false && pg_numrows($result) > 0) {
+                    if ($result != false && pg_num_rows($result) > 0) {
                       db_selectrecord("departamento", $result, true, 2, "", "", "", "0", "js_departamento()");
-                      if (pg_numrows($result) == 1) {
+                      if (pg_num_rows($result) == 1) {
                       }
                     } else {
                       global $sem_departamento;

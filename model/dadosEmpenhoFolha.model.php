@@ -2470,18 +2470,26 @@ class dadosEmpenhoFolha {
   }  
   
   
-  /**
-   * Consulta o estrutural apartir da lotação  
-   *
-   * @param  integer $iAnoUsu
-   * @param  integer $iLotacao
-   * @param  string  $sVinculo
-   * @param  integer $iElemento
-   * @param  integer $iMesUsu
-   * @param  boolean $lDeParaDotacaoPrevidencia
-   * @return object 
-   */
-  public function getEstrututal($iAnoUsu,$iLotacao,$sVinculo,$iElemento,$iMesUsu=null,$lDeParaDotacaoPrevidencia=false){
+	/**
+	 * Consulta o estrutural apartir da lotação  
+	 *
+	 * @param  integer $iAnoUsu
+	 * @param  integer $iLotacao
+	 * @param  string  $sVinculo
+	 * @param  integer $iElemento
+	 * @param  integer $iMesUsu
+	 * @param  boolean $lDeParaDotacaoPrevidencia
+	 * @return object 
+	 */
+  	public function getEstrututal(
+		$iAnoUsu,
+		$iLotacao,
+		$sVinculo,
+		$iElemento,
+		$iMesUsu = null,
+		$lDeParaDotacaoPrevidencia = false, 
+		$sListaPrev = '')
+	{
 
   	if ( trim($iAnoUsu) == '' ) {
   		throw new Exception('Exercício não informado!');
@@ -2637,7 +2645,6 @@ class dadosEmpenhoFolha {
      * De/para para dotação realizado de acordo com OC14986
      */
     if ($lDeParaDotacaoPrevidencia) {
-
         $iInstit = db_getsession("DB_instit");
         $sCampos = "rh171_orgaonov      as orgao,
                     rh171_unidadenov    as unidade,
@@ -2654,6 +2661,10 @@ class dadosEmpenhoFolha {
                     and rh171_instit        = {$iInstit}
                     and rh171_anousu        = {$iAnoUsu}";
 
+		if ($sListaPrev != '') {
+			  $sWhere .= " AND rh171_codtab IN ($sListaPrev) ";
+    }
+
         if(!empty($iPrograma)){
             $sWhere .= " and rh171_programaorig = {$iPrograma}   ";
         }
@@ -2663,7 +2674,7 @@ class dadosEmpenhoFolha {
         if(!empty($iSubFuncao)){
             $sWhere .= " and rh171_subfuncaoorig = {$iSubFuncao}   ";
         }
-        
+
         $sSqlVinculoDotPatronais    = $oDaorhvinculodotpatronais->sql_query_file(null, $sCampos, null, $sWhere);
         $rsVinculoDotPatronais      = $oDaorhvinculodotpatronais->sql_record($sSqlVinculoDotPatronais);
 
@@ -3321,17 +3332,23 @@ class dadosEmpenhoFolha {
 	}
 	
 	
-  /**
-   * Gera dados para empenhos da folha referente a Previdência ( rubricas = R992 )
-   *
-   * @param string  $sTipo      Tipo de Folha ( m = Mensal ou d = 13º )
-   * @param integer $iAnoUsu    Exercício da Folha
-   * @param integer $iMesUsu    Mês da Folha
-   * @param string  $sListaPrev Lista de Previdências 
-   * @param integer $iInstit    Instituição
-   */	
-  public function geraDadosEmpenhosPrev($sTipo='',$iAnoUsu='',$iMesUsu='',$sListaPrev='',$iInstit=''){
-    
+    /**
+     * Gera dados para empenhos da folha referente a Previdência ( rubricas = R992 )
+     *
+     * @param string  $sTipo      Tipo de Folha ( m = Mensal ou d = 13º )
+     * @param integer $iAnoUsu    Exercício da Folha
+     * @param integer $iMesUsu    Mês da Folha
+     * @param string  $sListaPrev Lista de Previdências 
+     * @param integer $iInstit    Instituição
+     */	
+    public function geraDadosEmpenhosPrev(
+      $sTipo = '', 
+      $iAnoUsu = '', 
+      $iMesUsu = '', 
+      $sListaPrev = '', 
+      $iInstit = '')
+    {
+
     $sMsgErro = 'Geração de empenhos da previdência abortada';
     
     if ( !db_utils::inTransaction() ){
@@ -3491,7 +3508,6 @@ class dadosEmpenhoFolha {
       $sWhereGerador .= " and {$sSigla}_rubric = 'R992'      ";
       $sWhereGerador .= " and rh02_tbprev in ({$sListaPrev}) ";
       
-      
       if ( trim($sSqlGerador) != '' ) {
         $sSqlGerador .= ' union all ';
       }
@@ -3530,8 +3546,15 @@ class dadosEmpenhoFolha {
           
           try {
             
-            $oEstrututal = $this->getEstrututal(db_getsession('DB_anousu'),$oGerador->lotacao,$oGerador->vinculo,$oGerador->elemento,$iMesUsu,true);
-
+            $oEstrututal = $this->getEstrututal(
+                db_getsession('DB_anousu'),
+				$oGerador->lotacao,
+				$oGerador->vinculo,
+				$oGerador->elemento,
+				$iMesUsu,
+				true, 
+				$sListaPrev);
+                
             $iOrgao     = $oEstrututal->iOrgao; 
             $iUnidade   = $oEstrututal->iUnidade;
             $iProjAtiv  = $oEstrututal->iProjAtiv;
@@ -3573,7 +3596,7 @@ class dadosEmpenhoFolha {
           } else {
             $sWhereEmpenhoFolha .= " and rh72_coddot = 0        ";
           }
-          
+
           $sSqlEmpenhoFolha   = $oDaorhEmpenhoFolha->sql_query_file(null,"rh72_sequencial",null,$sWhereEmpenhoFolha);
           $rsEmpenhoFolha     = $oDaorhEmpenhoFolha->sql_record($sSqlEmpenhoFolha);
            
@@ -3610,7 +3633,7 @@ class dadosEmpenhoFolha {
             $iCodEmpenhoFolha = $oDaorhEmpenhoFolha->rh72_sequencial; 
             
           }
-          
+
           try {
             $aExcecoes = $this->getExcessoesEmpenhoFolha($oGerador->rubric,$iAnoUsu,$iInstit);
           } catch (Exception $eException){
@@ -3627,7 +3650,7 @@ class dadosEmpenhoFolha {
             $iPrograma  = $aExcecoes[0]->rh74_programa;
             $iRecurso   = $aExcecoes[0]->rh74_recurso;
             $iCaract    = "{$aExcecoes[0]->rh74_concarpeculiar}";
-            
+
             $iDotacao  = $this->getDotacaoByFiltro($iOrgao, $iUnidade, $iProjAtiv, $iRecurso, $iElement, $iAnousu, $iFuncao, $iSubFuncao, $iPrograma);
                   
             $sWhereEmpenhoFolha  = "     rh72_codele         = {$iElemento}             ";

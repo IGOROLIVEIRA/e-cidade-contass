@@ -39,17 +39,6 @@ switch ($oGet->tipoprecoreferencia) {
         break;
 }
 
-/*$sSql = "select distinct pc11_seq,pc01_codmater,pc01_descrmater,si02_vlprecoreferencia,pc23_quant from pcproc
-join pcprocitem on pc80_codproc = pc81_codproc
-join pcorcamitemproc on pc81_codprocitem = pc31_pcprocitem
-join pcorcamitem on pc31_orcamitem = pc22_orcamitem
-join pcorcamval on pc22_orcamitem = pc23_orcamitem
-join solicitem on pc81_solicitem = pc11_codigo
-join solicitempcmater on pc11_codigo = pc16_solicitem
-join pcmater on pc16_codmater = pc01_codmater
-join itemprecoreferencia on pc23_orcamitem = si02_itemproccompra
-where pc80_codproc = $codigo_preco order by pc11_seq";*/
-
 $rsResultado = db_query("select pc80_criterioadjudicacao from pcproc where pc80_codproc = {$codigo_preco}");
 $criterio    = db_utils::fieldsMemory($rsResultado, 0)->pc80_criterioadjudicacao;
 $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : "";
@@ -115,7 +104,8 @@ $sCondCrit   = ($criterio == 3 || empty($criterio)) ? " AND pc23_valor <> 0 " : 
     $oLibDocumento->l20_edital = $resultLici->l20_edital;
     $oLibDocumento->l20_anousu = $resultLici->l20_anousu;
     $oLibDocumento->l20_objeto = $resultLici->l20_objeto;
-
+    $oLibDocumento->l44_descricao = strtoupper($resultLici->l44_descricao);
+    $oLibDocumento->l03_descr = $resultLici->l03_descr;
     $oLibDocumento->l20_numero = $resultLici->l20_numero;
     $oLibDocumento->z01_nome = $nome;
     $sql1 = "select * from cgm where z01_nome like '$nome'";

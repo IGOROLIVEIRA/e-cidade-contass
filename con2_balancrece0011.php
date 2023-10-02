@@ -62,8 +62,11 @@ function js_emite(opcao,origem){
        alert('Data inicial maior que data final. Verifique!');
        return false;
      }
-     perini = document.form1.DBtxt21_ano.value+'-'+document.form1.DBtxt21_mes.value+'-'+document.form1.DBtxt21_dia.value;
-     perfin = document.form1.DBtxt22_ano.value+'-'+document.form1.DBtxt22_mes.value+'-'+document.form1.DBtxt22_dia.value;;
+     var sPeriodoInicial = document.form1.DBtxt21.value.split("/");
+     perini     = sPeriodoInicial[2] + '-' + sPeriodoInicial[1] + '-' + sPeriodoInicial[0];
+     var sPeriodoFinal   = document.form1.DBtxt22.value.split("/");
+     perfin     = sPeriodoFinal[2] + '-' + sPeriodoFinal[1] + '-' + sPeriodoFinal[0];
+
   }else if (opcao == 2){
      if(document.form1.mesfin.value == 0){
        mesfinal = 12;

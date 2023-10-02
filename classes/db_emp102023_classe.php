@@ -364,7 +364,7 @@ class cl_emp102023
                                ,$this->si106_despdeccontrato
                                ,'$this->si106_codorgaorespcontrato'
                                ,'$this->si106_codunidadesubrespcontrato'
-                               ,$this->si106_nrocontrato
+                               ,'$this->si106_nrocontrato'
                                ," . ($this->si106_dtassinaturacontrato == "null" || $this->si106_dtassinaturacontrato == "" ? "null" : "'" . $this->si106_dtassinaturacontrato . "'") . "
                                ,'$this->si106_nrosequencialtermoaditivo'
                                ,$this->si106_despdecconvenio

@@ -97,6 +97,17 @@ abstract class Transferencia {
    */
   private $oContaPlanoCredito;
 
+ /**
+   * @var string
+   */
+  private $iNumDocumento;
+
+       /**
+   * Select Tipo
+   * @var string
+   */
+  private $iTipoSelect;
+  
   /**
    * @var string
    */
@@ -317,7 +328,7 @@ abstract class Transferencia {
         $dtSessao = date("Y-m-d", db_getsession("DB_datausu"));
     else 
         $dtSessao = date("Y-m-d", strtotime($dtAutenticacao));
-
+ 
     $sSqlExecutaAutenticacao = "select fc_auttransf({$iCodigoSlip}, '{$dtSessao}', '{$iIp}', true, {$this->getCheque()}, {$iCodigoInstituicao}) as fc_autenticacao";
     $rsExecutaAutenticacao = db_query($sSqlExecutaAutenticacao);
     if (!$rsExecutaAutenticacao) {
@@ -432,8 +443,8 @@ abstract class Transferencia {
    * Anula um slip
    * @param string $sMotivo
    */
-  public function anular($sMotivo) {
-    $this->oSlip->anular($sMotivo, true, $this);
+  public function anular($sMotivo,$sDataEstorno) {
+    $this->oSlip->anular($sMotivo, true, $this,$sDataEstorno);
   }
 
   /**
@@ -510,6 +521,36 @@ abstract class Transferencia {
 
   public function setData($dtData) {
     $this->oSlip->setData($dtData);
+  }
+
+    /**
+   * @param $sNumero Documento
+   */
+  public function setNumeroDocumento($iNumDocumento) {
+    $this->oSlip->setNumeroDocumento($iNumDocumento);
+  }
+
+  /**
+   * @return string
+   */
+  public function getNumeroDocumento() {
+    return $this->oSlip->getNumeroDocumento();
+  }
+
+   /**
+   * Retorna o Select Tipo
+   * @return integer
+   */
+  public function getTipoSelect() {
+    return $this->oSlip->getTipoSelect();
+  }
+
+  /**
+   * Seta o codigo de um movimento
+   * @param integer $iTipoSelect
+   */
+  public function setTipoSelect($iTipoSelect) {
+    $this->oSlip->setTipoSelect($iTipoSelect);
   }
 
   /**

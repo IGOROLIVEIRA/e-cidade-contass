@@ -171,6 +171,7 @@ $db_opcao           = 1;
         <td colspan="2" style="text-align: center;">
           <input type="button" value="Salvar Itens" id='btnSalvarItens'>
           <input type='button' value='Exportar Planilha' id='exportarPlanilha' onclick="exportar()">
+          <input style="display: none;" onclick="js_lancarEstimativa()" type="button" value="Lançar Estimativa" id='btnLancarEstimativa'>
         </td>
       </tr>
     </table>
@@ -459,6 +460,8 @@ $db_opcao           = 1;
 
       }
     }
+    var lAlteracao = <?=isset($alterar)?"true":"false";?>;
+    if(aItens.length > 0 && lAlteracao) document.getElementById('btnLancarEstimativa').style.display = '';
     oGridItens.renderRows();
   }
 
@@ -479,11 +482,13 @@ $db_opcao           = 1;
 
     js_removeObj('msgBox');
     var oRetorno = eval("(" + oAjax.responseText + ")");
+
     if (oRetorno.status == 1) {
-      alert('Itens Salvos Com sucesso.')
-    } else {
-      alert(oRetorno.message.urlDecode());
-    }
+      document.getElementById("btnLancarEstimativa").style.display = '';
+      return alert('Itens Salvos Com sucesso.');
+    } 
+
+    return alert(oRetorno.message.urlDecode());
   }
   oAutoComplete = new dbAutoComplete($('pc01_descrmater'), 'com4_pesquisamateriais.RPC.php');
   oAutoComplete.setTxtFieldId(document.getElementById('pc16_codmater'));
@@ -691,5 +696,10 @@ $db_opcao           = 1;
       }
     }
     $('pc17_unid').value = opcparam[0].pc30_unid;
+  }
+
+  function js_lancarEstimativa(){
+    var codigoAbertura = parent.iframe_registro.document.getElementById('pc10_numero').value;
+    CurrentWindow.corpo.document.location.href='com4_estimativaregistro001.php?codigoAbertura='+codigoAbertura;
   }
 </script>

@@ -1,7 +1,8 @@
 <?
 //MODULO: licitacao
 //CLASSE DA ENTIDADE homologacaoadjudica
-class cl_homologacaoadjudica {
+class cl_homologacaoadjudica
+{
     // cria variaveis de erro
     var $rotulo     = null;
     var $query_sql  = null;
@@ -9,7 +10,7 @@ class cl_homologacaoadjudica {
     var $numrows_incluir = 0;
     var $numrows_alterar = 0;
     var $numrows_excluir = 0;
-    var $erro_status= null;
+    var $erro_status = null;
     var $erro_sql   = null;
     var $erro_banco = null;
     var $erro_msg   = null;
@@ -34,54 +35,58 @@ class cl_homologacaoadjudica {
                  l202_dataadjudicacao = date = Data Adjudicação
                  ";
     //funcao construtor da classe
-    function cl_homologacaoadjudica() {
+    function cl_homologacaoadjudica()
+    {
         //classes dos rotulos dos campos
         $this->rotulo = new rotulo("homologacaoadjudica");
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
     //funcao erro
-    function erro($mostra,$retorna) {
-        if(($this->erro_status == "0") || ($mostra == true && $this->erro_status != null )){
-            echo "<script>alert(\"".$this->erro_msg."\");</script>";
-            if($retorna==true){
-                echo "<script>location.href='".$this->pagina_retorno."'</script>";
+    function erro($mostra, $retorna)
+    {
+        if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
+            echo "<script>alert(\"" . $this->erro_msg . "\");</script>";
+            if ($retorna == true) {
+                echo "<script>location.href='" . $this->pagina_retorno . "'</script>";
             }
         }
     }
     // funcao para atualizar campos
-    function atualizacampos($exclusao=false) {
-        if($exclusao==false){
-            $this->l202_sequencial = ($this->l202_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["l202_sequencial"]:$this->l202_sequencial);
-            $this->l202_licitacao = ($this->l202_licitacao == ""?@$GLOBALS["HTTP_POST_VARS"]["l202_licitacao"]:$this->l202_licitacao);
-            if($this->l202_datahomologacao == ""){
-                $this->l202_datahomologacao_dia = ($this->l202_datahomologacao_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao_dia"]:$this->l202_datahomologacao_dia);
-                $this->l202_datahomologacao_mes = ($this->l202_datahomologacao_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao_mes"]:$this->l202_datahomologacao_mes);
-                $this->l202_datahomologacao_ano = ($this->l202_datahomologacao_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao_ano"]:$this->l202_datahomologacao_ano);
-                if($this->l202_datahomologacao_dia != ""){
-                    $this->l202_datahomologacao = $this->l202_datahomologacao_ano."-".$this->l202_datahomologacao_mes."-".$this->l202_datahomologacao_dia;
+    function atualizacampos($exclusao = false)
+    {
+        if ($exclusao == false) {
+            $this->l202_sequencial = ($this->l202_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_sequencial"] : $this->l202_sequencial);
+            $this->l202_licitacao = ($this->l202_licitacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_licitacao"] : $this->l202_licitacao);
+            if ($this->l202_datahomologacao == "") {
+                $this->l202_datahomologacao_dia = ($this->l202_datahomologacao_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao_dia"] : $this->l202_datahomologacao_dia);
+                $this->l202_datahomologacao_mes = ($this->l202_datahomologacao_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao_mes"] : $this->l202_datahomologacao_mes);
+                $this->l202_datahomologacao_ano = ($this->l202_datahomologacao_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao_ano"] : $this->l202_datahomologacao_ano);
+                if ($this->l202_datahomologacao_dia != "") {
+                    $this->l202_datahomologacao = $this->l202_datahomologacao_ano . "-" . $this->l202_datahomologacao_mes . "-" . $this->l202_datahomologacao_dia;
                 }
             }
-            if($this->l202_dataadjudicacao == ""){
-                $this->l202_dataadjudicacao_dia = ($this->l202_dataadjudicacao_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_dia"]:$this->l202_dataadjudicacao_dia);
-                $this->l202_dataadjudicacao_mes = ($this->l202_dataadjudicacao_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_mes"]:$this->l202_dataadjudicacao_mes);
-                $this->l202_dataadjudicacao_ano = ($this->l202_dataadjudicacao_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_ano"]:$this->l202_dataadjudicacao_ano);
-                if($this->l202_dataadjudicacao_dia != ""){
-                    $this->l202_dataadjudicacao = $this->l202_dataadjudicacao_ano."-".$this->l202_dataadjudicacao_mes."-".$this->l202_dataadjudicacao_dia;
+            if ($this->l202_dataadjudicacao == "") {
+                $this->l202_dataadjudicacao_dia = ($this->l202_dataadjudicacao_dia == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_dia"] : $this->l202_dataadjudicacao_dia);
+                $this->l202_dataadjudicacao_mes = ($this->l202_dataadjudicacao_mes == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_mes"] : $this->l202_dataadjudicacao_mes);
+                $this->l202_dataadjudicacao_ano = ($this->l202_dataadjudicacao_ano == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_ano"] : $this->l202_dataadjudicacao_ano);
+                if ($this->l202_dataadjudicacao_dia != "") {
+                    $this->l202_dataadjudicacao = $this->l202_dataadjudicacao_ano . "-" . $this->l202_dataadjudicacao_mes . "-" . $this->l202_dataadjudicacao_dia;
                 }
             }
-        }else{
-            $this->l202_sequencial = ($this->l202_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["l202_sequencial"]:$this->l202_sequencial);
+        } else {
+            $this->l202_sequencial = ($this->l202_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["l202_sequencial"] : $this->l202_sequencial);
         }
     }
     // funcao para inclusao
-    function incluir ($l202_sequencial){
+    function incluir($l202_sequencial)
+    {
         $this->atualizacampos();
-        if($this->l202_licitacao == null ){
+        if ($this->l202_licitacao == null) {
             $this->erro_sql = " Campo Licitação nao Informado.";
             $this->erro_campo = "l202_licitacao";
             $this->erro_banco = "";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -103,35 +108,35 @@ class cl_homologacaoadjudica {
           $this->erro_status = "0";
           return false;
         }*/
-        if($l202_sequencial == "" || $l202_sequencial == null ){
+        if ($l202_sequencial == "" || $l202_sequencial == null) {
             $result = db_query("select nextval('homologacaoadjudica_l202_sequencial_seq')");
-            if($result==false){
-                $this->erro_banco = str_replace("\n","",@pg_last_error());
+            if ($result == false) {
+                $this->erro_banco = str_replace("\n", "", @pg_last_error());
                 $this->erro_sql   = "Verifique o cadastro da sequencia: homologacaoadjudica_l202_sequencial_seq do campo: l202_sequencial";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
-            $this->l202_sequencial = pg_result($result,0,0);
-        }else{
+            $this->l202_sequencial = pg_result($result, 0, 0);
+        } else {
             $result = db_query("select last_value from homologacaoadjudica_l202_sequencial_seq");
-            if(($result != false) && (pg_result($result,0,0) < $l202_sequencial)){
+            if (($result != false) && (pg_result($result, 0, 0) < $l202_sequencial)) {
                 $this->erro_sql = " Campo l202_sequencial maior que último número da sequencia.";
                 $this->erro_banco = "Sequencia menor que este número.";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
-            }else{
+            } else {
                 $this->l202_sequencial = $l202_sequencial;
             }
         }
-        if(($this->l202_sequencial == null) || ($this->l202_sequencial == "") ){
+        if (($this->l202_sequencial == null) || ($this->l202_sequencial == "")) {
             $this->erro_sql = " Campo l202_sequencial nao declarado.";
             $this->erro_banco = "Chave Primaria zerada.";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
@@ -144,106 +149,107 @@ class cl_homologacaoadjudica {
                 values (
                                 $this->l202_sequencial
                                ,$this->l202_licitacao
-                               ,".($this->l202_datahomologacao == "null" || $this->l202_datahomologacao == ""?"null":"'".$this->l202_datahomologacao."'")."
-                               ,".($this->l202_dataadjudicacao == "null" || $this->l202_dataadjudicacao == ""?"null":"'".$this->l202_dataadjudicacao."'")."
+                               ," . ($this->l202_datahomologacao == "null" || $this->l202_datahomologacao == "" ? "null" : "'" . $this->l202_datahomologacao . "'") . "
+                               ," . ($this->l202_dataadjudicacao == "null" || $this->l202_dataadjudicacao == "" ? "null" : "'" . $this->l202_dataadjudicacao . "'") . "
                       )";
         $result = db_query($sql);
-        if($result==false){
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
-            if( strpos(strtolower($this->erro_banco),"duplicate key") != 0 ){
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
+            if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
                 $this->erro_sql   = "Homologação e adjudicação ($this->l202_sequencial) nao Incluído. Inclusao Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
                 $this->erro_banco = "Homologação e adjudicação já Cadastrado";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-            }else{
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            } else {
                 $this->erro_sql   = "Homologação e adjudicação ($this->l202_sequencial) nao Incluído. Inclusao Abortada.";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             }
             $this->erro_status = "0";
-            $this->numrows_incluir= 0;
+            $this->numrows_incluir = 0;
             return false;
         }
         $this->erro_banco = "";
         $this->erro_sql = "Inclusao efetuada com Sucesso\\n";
-        $this->erro_sql .= "Valores : ".$this->l202_sequencial;
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+        $this->erro_sql .= "Valores : " . $this->l202_sequencial;
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
-        $this->numrows_incluir= pg_affected_rows($result);
+        $this->numrows_incluir = pg_affected_rows($result);
         $resaco = $this->sql_record($this->sql_query_file($this->l202_sequencial));
-        if(($resaco!=false)||($this->numrows!=0)){
+        if (($resaco != false) || ($this->numrows != 0)) {
             $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-            $acount = pg_result($resac,0,0);
-            $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+            $acount = pg_result($resac, 0, 0);
+            $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
             $resac = db_query("insert into db_acountkey values($acount,2009446,'$this->l202_sequencial','I')");
-            $resac = db_query("insert into db_acount values($acount,2010223,2009446,'','".AddSlashes(pg_result($resaco,0,'l202_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,2010223,2009447,'','".AddSlashes(pg_result($resaco,0,'l202_licitacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,2010223,2009448,'','".AddSlashes(pg_result($resaco,0,'l202_datahomologacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-            $resac = db_query("insert into db_acount values($acount,2010223,2009449,'','".AddSlashes(pg_result($resaco,0,'l202_dataadjudicacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+            $resac = db_query("insert into db_acount values($acount,2010223,2009446,'','" . AddSlashes(pg_result($resaco, 0, 'l202_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,2010223,2009447,'','" . AddSlashes(pg_result($resaco, 0, 'l202_licitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,2010223,2009448,'','" . AddSlashes(pg_result($resaco, 0, 'l202_datahomologacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,2010223,2009449,'','" . AddSlashes(pg_result($resaco, 0, 'l202_dataadjudicacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         }
         return true;
     }
     // funcao para alteracao
-    function alterar ($l202_sequencial=null) {
+    function alterar($l202_sequencial = null)
+    {
         $this->atualizacampos();
         $sql = " update homologacaoadjudica set ";
         $virgula = "";
-        if(trim($this->l202_sequencial)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l202_sequencial"])){
-            $sql  .= $virgula." l202_sequencial = $this->l202_sequencial ";
+        if (trim($this->l202_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l202_sequencial"])) {
+            $sql  .= $virgula . " l202_sequencial = $this->l202_sequencial ";
             $virgula = ",";
-            if(trim($this->l202_sequencial) == null ){
+            if (trim($this->l202_sequencial) == null) {
                 $this->erro_sql = " Campo Sequencial nao Informado.";
                 $this->erro_campo = "l202_sequencial";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->l202_licitacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l202_licitacao"])){
-            $sql  .= $virgula." l202_licitacao = $this->l202_licitacao ";
+        if (trim($this->l202_licitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l202_licitacao"])) {
+            $sql  .= $virgula . " l202_licitacao = $this->l202_licitacao ";
             $virgula = ",";
-            if(trim($this->l202_licitacao) == null ){
+            if (trim($this->l202_licitacao) == null) {
                 $this->erro_sql = " Campo Licitação nao Informado.";
                 $this->erro_campo = "l202_licitacao";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
         }
-        if(trim($this->l202_datahomologacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao_dia"] !="") ){
-            $sql  .= $virgula." l202_datahomologacao = '$this->l202_datahomologacao' ";
+        if (trim($this->l202_datahomologacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao_dia"] != "")) {
+            $sql  .= $virgula . " l202_datahomologacao = '$this->l202_datahomologacao' ";
             $virgula = ",";
-            if(trim($this->l202_datahomologacao) == null ){
+            if (trim($this->l202_datahomologacao) == null) {
                 $this->erro_sql = " Campo Data Homologação nao Informado.";
                 $this->erro_campo = "l202_datahomologacao_dia";
                 $this->erro_banco = "";
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "0";
                 return false;
             }
-        }     else{
-            if(isset($GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao_dia"])){
-                $sql  .= $virgula." l202_datahomologacao = null ";
+        } else {
+            if (isset($GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao_dia"])) {
+                $sql  .= $virgula . " l202_datahomologacao = null ";
                 $virgula = ",";
-                if(trim($this->l202_datahomologacao) == null ){
+                if (trim($this->l202_datahomologacao) == null) {
                     $this->erro_sql = " Campo Data Homologação nao Informado.";
                     $this->erro_campo = "l202_datahomologacao_dia";
                     $this->erro_banco = "";
-                    $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                    $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                    $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                    $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                     $this->erro_status = "0";
                     return false;
                 }
             }
         }
-        if(trim($this->l202_dataadjudicacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_dia"] !="") ){
-            $sql  .= $virgula." l202_dataadjudicacao = '$this->l202_dataadjudicacao' ";
+        if (trim($this->l202_dataadjudicacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_dia"] != "")) {
+            $sql  .= $virgula . " l202_dataadjudicacao = '$this->l202_dataadjudicacao' ";
             $virgula = ",";
             /*if(trim($this->l202_dataadjudicacao) == null ){
               $this->erro_sql = " Campo Data Adjudicação nao Informado.";
@@ -254,9 +260,9 @@ class cl_homologacaoadjudica {
               $this->erro_status = "0";
               return false;
             }*/
-        }else{
-            if(isset($GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_dia"])){
-                $sql  .= $virgula." l202_dataadjudicacao = null ";
+        } else {
+            if (isset($GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao_dia"])) {
+                $sql  .= $virgula . " l202_dataadjudicacao = null ";
                 $virgula = ",";
                 /*if(trim($this->l202_dataadjudicacao) == null ){
                   $this->erro_sql = " Campo Data Adjudicação nao Informado.";
@@ -270,53 +276,53 @@ class cl_homologacaoadjudica {
             }
         }
         $sql .= " where ";
-        if($l202_sequencial!=null){
+        if ($l202_sequencial != null) {
             $sql .= " l202_sequencial = $l202_sequencial";
         }
 
         $resaco = $this->sql_record($this->sql_query_file($this->l202_sequencial));
-        if($this->numrows>0){
-            for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
+        if ($this->numrows > 0) {
+            for ($conresaco = 0; $conresaco < $this->numrows; $conresaco++) {
                 $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                $acount = pg_result($resac,0,0);
-                $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+                $acount = pg_result($resac, 0, 0);
+                $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
                 $resac = db_query("insert into db_acountkey values($acount,2009446,'$this->l202_sequencial','A')");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["l202_sequencial"]) || $this->l202_sequencial != "")
-                    $resac = db_query("insert into db_acount values($acount,2010223,2009446,'".AddSlashes(pg_result($resaco,$conresaco,'l202_sequencial'))."','$this->l202_sequencial',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["l202_licitacao"]) || $this->l202_licitacao != "")
-                    $resac = db_query("insert into db_acount values($acount,2010223,2009447,'".AddSlashes(pg_result($resaco,$conresaco,'l202_licitacao'))."','$this->l202_licitacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao"]) || $this->l202_datahomologacao != "")
-                    $resac = db_query("insert into db_acount values($acount,2010223,2009448,'".AddSlashes(pg_result($resaco,$conresaco,'l202_datahomologacao'))."','$this->l202_datahomologacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                if(isset($GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao"]) || $this->l202_dataadjudicacao != "")
-                    $resac = db_query("insert into db_acount values($acount,2010223,2009449,'".AddSlashes(pg_result($resaco,$conresaco,'l202_dataadjudicacao'))."','$this->l202_dataadjudicacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["l202_sequencial"]) || $this->l202_sequencial != "")
+                    $resac = db_query("insert into db_acount values($acount,2010223,2009446,'" . AddSlashes(pg_result($resaco, $conresaco, 'l202_sequencial')) . "','$this->l202_sequencial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["l202_licitacao"]) || $this->l202_licitacao != "")
+                    $resac = db_query("insert into db_acount values($acount,2010223,2009447,'" . AddSlashes(pg_result($resaco, $conresaco, 'l202_licitacao')) . "','$this->l202_licitacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["l202_datahomologacao"]) || $this->l202_datahomologacao != "")
+                    $resac = db_query("insert into db_acount values($acount,2010223,2009448,'" . AddSlashes(pg_result($resaco, $conresaco, 'l202_datahomologacao')) . "','$this->l202_datahomologacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                if (isset($GLOBALS["HTTP_POST_VARS"]["l202_dataadjudicacao"]) || $this->l202_dataadjudicacao != "")
+                    $resac = db_query("insert into db_acount values($acount,2010223,2009449,'" . AddSlashes(pg_result($resaco, $conresaco, 'l202_dataadjudicacao')) . "','$this->l202_dataadjudicacao'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             }
         }
         $result = db_query($sql);
-        if($result==false){
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Homologação e adjudicação nao Alterado. Alteracao Abortada.\\n";
-            $this->erro_sql .= "Valores : ".$this->l202_sequencial;
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_sql .= "Valores : " . $this->l202_sequencial;
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_alterar = 0;
             return false;
-        }else{
-            if(pg_affected_rows($result)==0){
+        } else {
+            if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
                 $this->erro_sql = "Homologação e adjudicação nao foi Alterado. Alteracao Executada.\\n";
-                $this->erro_sql .= "Valores : ".$this->l202_sequencial;
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_sql .= "Valores : " . $this->l202_sequencial;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = 0;
                 return true;
-            }else{
+            } else {
                 $this->erro_banco = "";
                 $this->erro_sql = "Alteração efetuada com Sucesso\\n";
-                $this->erro_sql .= "Valores : ".$this->l202_sequencial;
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_sql .= "Valores : " . $this->l202_sequencial;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_alterar = pg_affected_rows($result);
                 return true;
@@ -324,63 +330,64 @@ class cl_homologacaoadjudica {
         }
     }
     // funcao para exclusao
-    function excluir ($l202_sequencial=null,$dbwhere=null) {
-        if($dbwhere==null || $dbwhere==""){
+    function excluir($l202_sequencial = null, $dbwhere = null)
+    {
+        if ($dbwhere == null || $dbwhere == "") {
             $resaco = $this->sql_record($this->sql_query_file($l202_sequencial));
-        }else{
-            $resaco = $this->sql_record($this->sql_query_file(null,"*",null,$dbwhere));
+        } else {
+            $resaco = $this->sql_record($this->sql_query_file(null, "*", null, $dbwhere));
         }
-        if(($resaco!=false)||($this->numrows!=0)){
-            for($iresaco=0;$iresaco<$this->numrows;$iresaco++){
+        if (($resaco != false) || ($this->numrows != 0)) {
+            for ($iresaco = 0; $iresaco < $this->numrows; $iresaco++) {
                 $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
-                $acount = pg_result($resac,0,0);
-                $resac = db_query("insert into db_acountacesso values($acount,".db_getsession("DB_acessado").")");
+                $acount = pg_result($resac, 0, 0);
+                $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
                 $resac = db_query("insert into db_acountkey values($acount,2009446,'$l202_sequencial','E')");
-                $resac = db_query("insert into db_acount values($acount,2010223,2009446,'','".AddSlashes(pg_result($resaco,$iresaco,'l202_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,2010223,2009447,'','".AddSlashes(pg_result($resaco,$iresaco,'l202_licitacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,2010223,2009448,'','".AddSlashes(pg_result($resaco,$iresaco,'l202_datahomologacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-                $resac = db_query("insert into db_acount values($acount,2010223,2009449,'','".AddSlashes(pg_result($resaco,$iresaco,'l202_dataadjudicacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+                $resac = db_query("insert into db_acount values($acount,2010223,2009446,'','" . AddSlashes(pg_result($resaco, $iresaco, 'l202_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,2010223,2009447,'','" . AddSlashes(pg_result($resaco, $iresaco, 'l202_licitacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,2010223,2009448,'','" . AddSlashes(pg_result($resaco, $iresaco, 'l202_datahomologacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+                $resac = db_query("insert into db_acount values($acount,2010223,2009449,'','" . AddSlashes(pg_result($resaco, $iresaco, 'l202_dataadjudicacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             }
         }
         $sql = " delete from homologacaoadjudica
                     where ";
         $sql2 = "";
-        if($dbwhere==null || $dbwhere ==""){
-            if($l202_sequencial != ""){
-                if($sql2!=""){
+        if ($dbwhere == null || $dbwhere == "") {
+            if ($l202_sequencial != "") {
+                if ($sql2 != "") {
                     $sql2 .= " and ";
                 }
                 $sql2 .= " l202_sequencial = $l202_sequencial ";
             }
-        }else{
+        } else {
             $sql2 = $dbwhere;
         }
-        $result = db_query($sql.$sql2);
-        if($result==false){
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
+        $result = db_query($sql . $sql2);
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Homologação e adjudicação nao Excluído. Exclusão Abortada.\\n";
-            $this->erro_sql .= "Valores : ".$l202_sequencial;
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_sql .= "Valores : " . $l202_sequencial;
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             $this->numrows_excluir = 0;
             return false;
-        }else{
-            if(pg_affected_rows($result)==0){
+        } else {
+            if (pg_affected_rows($result) == 0) {
                 $this->erro_banco = "";
                 $this->erro_sql = "Homologação e adjudicação nao Encontrado. Exclusão não Efetuada.\\n";
-                $this->erro_sql .= "Valores : ".$l202_sequencial;
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_sql .= "Valores : " . $l202_sequencial;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = 0;
                 return true;
-            }else{
+            } else {
                 $this->erro_banco = "";
                 $this->erro_sql = "Exclusão efetuada com Sucesso\\n";
-                $this->erro_sql .= "Valores : ".$l202_sequencial;
-                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_sql .= "Valores : " . $l202_sequencial;
+                $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+                $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
                 $this->erro_status = "1";
                 $this->numrows_excluir = pg_affected_rows($result);
                 return true;
@@ -388,39 +395,41 @@ class cl_homologacaoadjudica {
         }
     }
     // funcao do recordset
-    function sql_record($sql) {
+    function sql_record($sql)
+    {
         $result = db_query($sql);
-        if($result==false){
+        if ($result == false) {
             $this->numrows    = 0;
-            $this->erro_banco = str_replace("\n","",@pg_last_error());
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
             $this->erro_sql   = "Erro ao selecionar os registros.";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         $this->numrows = pg_numrows($result);
-        if($this->numrows==0){
+        if ($this->numrows == 0) {
             $this->erro_banco = "";
             $this->erro_sql   = "Record Vazio na Tabela:homologacaoadjudica";
-            $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-            $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
             $this->erro_status = "0";
             return false;
         }
         return $result;
     }
     // funcao do sql
-    function sql_query ( $l202_sequencial=null,$campos="*",$ordem=null,$dbwhere="") {
+    function sql_query($l202_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = explode("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = explode("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from homologacaoadjudica ";
@@ -434,70 +443,72 @@ class cl_homologacaoadjudica {
         $sql .= "      inner join pctipocompra ON pctipocompra.pc50_codcom = cflicita.l03_codcom";
         $sql .= "      left join itenshomologacao on homologacaoadjudica.l202_sequencial = itenshomologacao.l203_homologaadjudicacao";
         $sql2 = "";
-        if($dbwhere==""){
-            if($l202_sequencial!=null ){
+        if ($dbwhere == "") {
+            if ($l202_sequencial != null) {
                 $sql2 .= " where homologacaoadjudica.l202_sequencial = $l202_sequencial ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#",$ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
     // funcao do sql
-    function sql_query_file ( $l202_sequencial=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_file($l202_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = explode("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = explode("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from homologacaoadjudica ";
         $sql2 = "";
-        if($dbwhere==""){
-            if($l202_sequencial!=null ){
+        if ($dbwhere == "") {
+            if ($l202_sequencial != null) {
                 $sql2 .= " where homologacaoadjudica.l202_sequencial = $l202_sequencial ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#",$ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
 
-    function sql_query_itens ( $l202_licitacao=null, $campos="*", $ordem=null, $dbwhere="", $joinPrecoReferencia = false){
+    function sql_query_itens($l202_licitacao = null, $campos = "*", $ordem = null, $dbwhere = "", $joinPrecoReferencia = false)
+    {
         $sql = "select ";
-        if($campos != "*" ) {
-            $campos_sql = explode("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = explode("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from pcprocitem ";
@@ -515,7 +526,7 @@ class cl_homologacaoadjudica {
         $sql .= "      left  join pctipo                 on pctipo.pc05_codtipo                 = pcsubgrupo.pc04_codtipo";
         $sql .= "      left  join solicitemele           on solicitemele.pc18_solicitem         = solicitem.pc11_codigo";
         $sql .= "      left  join orcelemento            on orcelemento.o56_codele              = solicitemele.pc18_codele";
-        $sql .= "                                        and orcelemento.o56_anousu             = ".db_getsession("DB_anousu");
+        $sql .= "                                        and orcelemento.o56_anousu             = " . db_getsession("DB_anousu");
         $sql .= "      left  join empautitempcprocitem   on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
         $sql .= "      left  join empautitem             on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
         $sql .= "                                        and empautitem.e55_sequen              = empautitempcprocitem.e73_sequen";
@@ -534,41 +545,42 @@ class cl_homologacaoadjudica {
         $sql .= "      left join itenshomologacao       on l203_homologaadjudicacao            = l202_sequencial";
         $sql2 = "";
 
-        if($joinPrecoReferencia){
+        if ($joinPrecoReferencia) {
             $sql .= " LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem ";
             $sql .= " LEFT JOIN itemprecoreferencia ON si02_itemproccompra = pcorcamitemproc.pc31_orcamitem ";
         }
 
-        if($dbwhere==""){
-            if($l202_licitacao!= null && $l202_licitacao!= "" ){
+        if ($dbwhere == "") {
+            if ($l202_licitacao != null && $l202_licitacao != "") {
                 $sql2 .= " where liclicitem.l21_codliclicita = $l202_licitacao ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
 
-    function sql_query_itens_semhomologacao ( $l202_licitacao=null, $campos="*", $ordem=null, $dbwhere="", $joinPrecoReferencia = false){
+    function sql_query_itens_semhomologacao($l202_licitacao = null, $campos = "*", $ordem = null, $dbwhere = "", $joinPrecoReferencia = false)
+    {
         $sql = "select ";
-        if($campos != "*" ) {
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from pcprocitem ";
@@ -586,7 +598,7 @@ class cl_homologacaoadjudica {
         $sql .= "      left  join pctipo                 on pctipo.pc05_codtipo                 = pcsubgrupo.pc04_codtipo";
         $sql .= "      left  join solicitemele           on solicitemele.pc18_solicitem         = solicitem.pc11_codigo";
         $sql .= "      left  join orcelemento            on orcelemento.o56_codele              = solicitemele.pc18_codele";
-        $sql .= "                                        and orcelemento.o56_anousu             = ".db_getsession("DB_anousu");
+        $sql .= "                                        and orcelemento.o56_anousu             = " . db_getsession("DB_anousu");
         $sql .= "      left  join empautitempcprocitem   on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
         $sql .= "      left  join empautitem             on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
         $sql .= "                                        and empautitem.e55_sequen              = empautitempcprocitem.e73_sequen";
@@ -606,41 +618,42 @@ class cl_homologacaoadjudica {
         $sql .= "      left join itenshomologacao       on l203_homologaadjudicacao            = l202_sequencial AND l203_item = pc81_codprocitem";
         $sql2 = "";
 
-        if($joinPrecoReferencia){
+        if ($joinPrecoReferencia) {
             $sql .= " LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem ";
             $sql .= " LEFT JOIN itemprecoreferencia ON si02_itemproccompra = pcorcamitemproc.pc31_orcamitem ";
         }
 
-        if($dbwhere==""){
-            if($l202_licitacao!= null && $l202_licitacao!= "" ){
+        if ($dbwhere == "") {
+            if ($l202_licitacao != null && $l202_licitacao != "") {
                 $sql2 .= " where liclicitem.l21_codliclicita = $l202_licitacao ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = split("#",$ordem);
+            $campos_sql = split("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
 
-    function sql_query_itens_comhomologacao ( $l202_licitacao=null, $campos="*", $ordem=null, $dbwhere="", $joinPrecoReferencia = false){
+    function sql_query_itens_comhomologacao($l202_licitacao = null, $campos = "*", $ordem = null, $dbwhere = "", $joinPrecoReferencia = false)
+    {
         $sql = "select ";
-        if($campos != "*" ) {
-            $campos_sql = split("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = split("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from pcprocitem ";
@@ -658,7 +671,7 @@ class cl_homologacaoadjudica {
         $sql .= "      left  join pctipo                 on pctipo.pc05_codtipo                 = pcsubgrupo.pc04_codtipo";
         $sql .= "      left  join solicitemele           on solicitemele.pc18_solicitem         = solicitem.pc11_codigo";
         $sql .= "      left  join orcelemento            on orcelemento.o56_codele              = solicitemele.pc18_codele";
-        $sql .= "                                        and orcelemento.o56_anousu             = ".db_getsession("DB_anousu");
+        $sql .= "                                        and orcelemento.o56_anousu             = " . db_getsession("DB_anousu");
         $sql .= "      left  join empautitempcprocitem   on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
         $sql .= "      left  join empautitem             on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
         $sql .= "                                        and empautitem.e55_sequen              = empautitempcprocitem.e73_sequen";
@@ -679,25 +692,25 @@ class cl_homologacaoadjudica {
         $sql .= "      inner join itenshomologacao       on l203_homologaadjudicacao            = l202_sequencial AND l203_item = pc81_codprocitem";
         $sql2 = "";
 
-        if($joinPrecoReferencia){
+        if ($joinPrecoReferencia) {
             $sql .= " LEFT JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem ";
             $sql .= " LEFT JOIN itemprecoreferencia ON si02_itemproccompra = pcorcamitemproc.pc31_orcamitem ";
         }
 
-        if($dbwhere==""){
-            if($l202_licitacao!= null && $l202_licitacao!= "" ){
+        if ($dbwhere == "") {
+            if ($l202_licitacao != null && $l202_licitacao != "") {
                 $sql2 .= " where liclicitem.l21_codliclicita = $l202_licitacao ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#",$ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
@@ -705,16 +718,17 @@ class cl_homologacaoadjudica {
     }
 
     // funcao do sql
-    function sql_query_ultimo ($campos="*"){
+    function sql_query_ultimo($campos = "*")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = explode("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = explode("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from homologacaoadjudica ";
@@ -726,25 +740,26 @@ class cl_homologacaoadjudica {
         $sql .= "      inner join liccomissao  on  liccomissao.l30_codigo = liclicita.l20_liccomissao";
         $sql .= "      inner join licsituacao  on  licsituacao.l08_sequencial = liclicita.l20_licsituacao";
         $sql .= " order by l202_sequencial desc limit 1";
-        $campos_sql = explode("#",$ordem);
+        $campos_sql = explode("#", $ordem);
         $virgula = "";
-        for($i=0;$i<sizeof($campos_sql);$i++){
-            $sql .= $virgula.$campos_sql[$i];
+        for ($i = 0; $i < sizeof($campos_sql); $i++) {
+            $sql .= $virgula . $campos_sql[$i];
             $virgula = ",";
         }
         return $sql;
     }
 
-    function sql_query_marcados ( $pc81_codprocitem=null,$campos="*",$ordem=null,$dbwhere=""){
+    function sql_query_marcados($pc81_codprocitem = null, $campos = "*", $ordem = null, $dbwhere = "")
+    {
         $sql = "select ";
-        if($campos != "*" ){
-            $campos_sql = explode("#",$campos);
+        if ($campos != "*") {
+            $campos_sql = explode("#", $campos);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
-        }else{
+        } else {
             $sql .= $campos;
         }
         $sql .= " from pcprocitem ";
@@ -761,7 +776,7 @@ class cl_homologacaoadjudica {
         $sql .= "      left  join pctipo                 on pctipo.pc05_codtipo                 = pcsubgrupo.pc04_codtipo";
         $sql .= "      left  join solicitemele           on solicitemele.pc18_solicitem         = solicitem.pc11_codigo";
         $sql .= "      left  join orcelemento            on orcelemento.o56_codele              = solicitemele.pc18_codele";
-        $sql .= "                                       and orcelemento.o56_anousu              = ".db_getsession("DB_anousu");
+        $sql .= "                                       and orcelemento.o56_anousu              = " . db_getsession("DB_anousu");
         $sql .= "      left  join empautitempcprocitem   on empautitempcprocitem.e73_pcprocitem = pcprocitem.pc81_codprocitem";
         $sql .= "      left  join empautitem             on empautitem.e55_autori               = empautitempcprocitem.e73_autori";
         $sql .= "                                       and empautitem.e55_sequen               = empautitempcprocitem.e73_sequen";
@@ -771,38 +786,38 @@ class cl_homologacaoadjudica {
         $sql .= "      left  join empempenho             on empempenho.e60_numemp               = empempaut.e61_numemp ";
         $sql .= "      left  join liclicitem             on liclicitem.l21_codpcprocitem        = pcprocitem.pc81_codprocitem";
         $sql2 = "";
-        if($dbwhere==""){
-            if($pc81_codprocitem!=null ){
+        if ($dbwhere == "") {
+            if ($pc81_codprocitem != null) {
                 $sql2 .= " where pcprocitem.pc81_codprocitem = $pc81_codprocitem ";
             }
-        }else if($dbwhere != ""){
+        } else if ($dbwhere != "") {
             $sql2 = " where $dbwhere";
         }
         $sql .= $sql2;
-        if($ordem != null ){
+        if ($ordem != null) {
             $sql .= " order by ";
-            $campos_sql = explode("#",$ordem);
+            $campos_sql = explode("#", $ordem);
             $virgula = "";
-            for($i=0;$i<sizeof($campos_sql);$i++){
-                $sql .= $virgula.$campos_sql[$i];
+            for ($i = 0; $i < sizeof($campos_sql); $i++) {
+                $sql .= $virgula . $campos_sql[$i];
                 $virgula = ",";
             }
         }
         return $sql;
     }
 
-    function itensHomologados($l202_licitacao=null) {
+    function itensHomologados($l202_licitacao = null)
+    {
 
         $sql = "select * from homologacaoadjudica
                   join itenshomologacao on l203_homologaadjudicacao = l202_sequencial
-                  where l202_licitacao = ". $l202_licitacao;
+                  where l202_licitacao = " . $l202_licitacao;
 
         $rsItens = db_query($sql);
         //db_criatabela($rsItens);
-        for ($iCont = 0;$iCont < pg_num_rows($rsItens); $iCont++) {
+        for ($iCont = 0; $iCont < pg_num_rows($rsItens); $iCont++) {
 
             $oItem[$iCont] = db_utils::fieldsMemory($rsItens, $iCont)->l203_item;
-
         }
 
         $oItem = implode(',', $oItem);
@@ -810,13 +825,15 @@ class cl_homologacaoadjudica {
         return $oItem;
     }
 
-    function excluirItens($l202_sequencial=null){
+    function excluirItens($l202_sequencial = null)
+    {
         $sql = "delete  from itenshomologacao
-                  where l203_homologaadjudicacao = ". $l202_sequencial;
+                  where l203_homologaadjudicacao = " . $l202_sequencial;
         db_query($sql);
     }
 
-    function verificaPrecoReferencia($l202_licitacao){
+    function verificaPrecoReferencia($l202_licitacao)
+    {
 
         $sql = "select distinct pc80_codproc, pc80_data, pc80_usuario, nome, pc80_depto, descrdepto, pc80_resumo
       from liclicitem
@@ -835,10 +852,10 @@ class cl_homologacaoadjudica {
         $rsPreRef  = db_query($sql);
 
         return pg_numrows($rsPreRef);
-
     }
 
-    function alteraLicitacao($iLicitacao, $iSituacao){
+    function alteraLicitacao($iLicitacao, $iSituacao)
+    {
         $sql = "update liclicita set l20_licsituacao = $iSituacao where l20_codigo = $iLicitacao";
         db_query($sql);
     }
@@ -848,7 +865,8 @@ class cl_homologacaoadjudica {
      * @param $iLicitacao
      * @return bool
      */
-    function validaFornecedoresHabilitados($iLicitacao){
+    function validaFornecedoresHabilitados($iLicitacao)
+    {
         //Busco todos os fornecedores da licitação que ganharam itens
         $sSqlFornJulg = "SELECT DISTINCT pc24_orcamforne
                         FROM pcorcamforne
@@ -858,17 +876,17 @@ class cl_homologacaoadjudica {
                         INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamforne.pc21_codorc
                         WHERE pc31_liclicita = {$iLicitacao}";
         $rsSqlFornJulg = db_query($sSqlFornJulg);
-        $aFornJulg = pg_fetch_all_columns($rsSqlFornJulg,0);
+        $aFornJulg = pg_fetch_all_columns($rsSqlFornJulg, 0);
 
         //Busco todos os fornecedores habilitados para a licitação
         $sSqlHabilita = "select distinct pc21_orcamforne from habilitacaoforn inner join pcorcamforne on l206_fornecedor = pc21_numcgm where l206_licitacao = {$iLicitacao}";
         $rsSqlHabilita = db_query($sSqlHabilita);
-        $aFornHabilita = pg_fetch_all_columns($rsSqlHabilita,0);
+        $aFornHabilita = pg_fetch_all_columns($rsSqlHabilita, 0);
 
         //Se as quantidades forem diferentes, já retorna false
-        if(count($aFornJulg) > count($aFornHabilita)){
+        if (count($aFornJulg) > count($aFornHabilita)) {
             return false;
-        } elseif(count(array_diff($aFornJulg,$aFornHabilita)) > 0) {
+        } elseif (count(array_diff($aFornJulg, $aFornHabilita)) > 0) {
             return false;
         }
         return true;
@@ -879,7 +897,8 @@ class cl_homologacaoadjudica {
      * @param $iLicitacao
      * @return date
      **/
-    function verificadatajulgamento($iLicitacao){
+    function verificadatajulgamento($iLicitacao)
+    {
         $sSqlJulg = "SELECT l11_data
                      FROM liclicitasituacao
                      WHERE l11_liclicita = {$iLicitacao}
@@ -889,12 +908,70 @@ class cl_homologacaoadjudica {
         return db_utils::getColectionByRecord($oResult);
     }
 
-    function getdataAdjudicacao($iLicitacao){
+    function getdataAdjudicacao($iLicitacao)
+    {
         $sSql = "SELECT l202_dataadjudicacao
                         FROM homologacaoadjudica
                         WHERE l202_licitacao = {$iLicitacao}";
         $oResultdt = db_query($sSql);
         return db_utils::getColectionByRecord($oResultdt);
     }
+
+    /**
+     * Função responsável por verificar se existem itens com o mesmo código e 
+     * valores unitários diferentes julgados para o mesmo fornecedor.
+     * @param int $iLicitacao - Código da Licitação.
+     * @param int $iRotina - 1 Adjudicação(Inclusão/Alteração), 2 - Homologação(Inclusão), 3 Homologação(Alteração).
+     * @param int $iHomologacao - Código da Homologação.
+     * @param string $sItensHomologados - código dos itens homologados durante a inclusão da homologação
+     * @return Exception
+     **/
+    function validacaoItensComFornecedorIgual($iLicitacao, $iRotina, $iHomologacao, $sItensHomologados)
+    {
+
+        $sCampos = "pc81_codprocitem,pc01_codmater,cgmforncedor.z01_numcgm,cgmforncedor.z01_nome,pc23_vlrun";
+        $sOrder = "pc81_codprocitem";
+
+        /* Consulta dos itens conforme a rotina executada */
+
+        if ($iRotina == 1) {
+            $sWhere = "pc11_servicoquantidade != 'f' and liclicitem.l21_codliclicita = $iLicitacao and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
+            $rsItens = $this->sql_record($this->sql_query_itens_semhomologacao(null, $sCampos, $sOrder, $sWhere));
+        }
+
+        if ($iRotina == 2) {
+            $sWhere = "pc11_servicoquantidade != 'f' and pc81_codprocitem in ($sItensHomologados) and liclicitem.l21_codliclicita = $iLicitacao and pc24_pontuacao = 1 AND pc81_codprocitem not in (select l203_item from homologacaoadjudica
+            inner join itenshomologacao on l203_homologaadjudicacao = l202_sequencial where l202_licitacao = $iLicitacao)";
+            $rsItens = $this->sql_record($this->sql_query_itens_semhomologacao(null, $sCampos, $sOrder, $sWhere));
+        }
+
+        if ($iRotina == 3) {
+            $sWhere = "pc11_servicoquantidade != 'f' and liclicitem.l21_codliclicita = $iLicitacao and pc24_pontuacao = 1 AND itenshomologacao.l203_homologaadjudicacao = $iHomologacao";
+            $rsItens = $this->sql_record($this->sql_query_itens_comhomologacao(null, $sCampos, $sOrder, $sWhere));
+        }
+
+        /* Array responsável por armazenar o código do item/codigo do fornecedor associado com o valor unitário de cada item*/
+        $aItens = array();
+        $sItensInvalidos = "";
+
+        /* Percorrendo sobre os itens e verificando se existem itens com 
+           mesmo fornecedor e valores unitarios diferentes */
+
+        for ($i = 0; $i < pg_num_rows($rsItens); $i++) {
+            $oItem = db_utils::fieldsMemory($rsItens, $i);
+            // indíce do array com o código do item/código do fornecedor
+            $indice = $oItem->pc01_codmater . $oItem->z01_numcgm;
+
+            if (array_key_exists($indice, $aItens)) {
+
+                if (strcmp($oItem->pc23_vlrun, $aItens[$indice]) != 0) {
+                    $sItensInvalidos .= "\nItem $oItem->pc81_codprocitem - Fornecedor $oItem->z01_nome";
+                }
+            }
+
+            $aItens[$indice] = $oItem->pc23_vlrun;
+        }
+
+        if ($sItensInvalidos != "") throw new Exception("Usuário: Inclusão abortada, esta licitação possui itens com o mesmo código e valores unitários divergentes julgados para o mesmo fornecedor." . $sItensInvalidos);
+    }
 }
-?>

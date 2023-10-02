@@ -235,7 +235,7 @@ class Municipio {
     $oDaoCadEnderMunicipio    = new cl_cadendermunicipio();
 
     $replace = array('/É/','/Ê/', '/Í/','/Ó/','/Õ/','/Ô/','/Á/','/Ã/', '/Â/', '/Ñ/', '/Ú/', '/Ü/', '/Ç/');
-    $with = array('E','E','I','O','O', 'O', 'A', 'A', 'A', 'N', 'U', 'U', 'Ç');
+    $with = array('E','E','I','O','O', 'O', 'A', 'A', 'A', 'N', 'U', 'U', 'C');
     $cidadeTratada = preg_replace($replace, $with, $cidade);
     $cidadeTratada = preg_replace('/[^A-Za-z 0-9\-]/', '', $cidadeTratada); // Remove caracteres especiais.
 

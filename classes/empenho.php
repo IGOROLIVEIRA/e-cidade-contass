@@ -89,7 +89,7 @@ class empenho {
     $this->sCamposNota   .= "case when cgmordem.z01_numcgm is not null then cgmordem.z01_numcgm else cgm.z01_numcgm end as z01_numcgm,";
     $this->sCamposNota   .= "case when cgmordem.z01_nome is not null then cgmordem.z01_nome else cgm.z01_nome end as z01_nome,";
     $this->sCamposNota   .= "case when cgmordem.z01_cgccpf is not null then cgmordem.z01_cgccpf else cgm.z01_cgccpf end as z01_cgccpf,";
-    $this->sCamposNota   .= "fc_valorretencaonota(e50_codord) as vlrretencao";
+    $this->sCamposNota   .= "fc_valorretencaonota(e50_codord) as vlrretencao, m72_codordem";
 
   }
   /**
@@ -1464,6 +1464,7 @@ class empenho {
     $sSqlNota .= " LEFT JOIN matordem ON m72_codordem = m51_codordem";
     $sSqlNota .= " LEFT JOIN matordemanu ON m51_codordem = m53_codordem";
     $sSqlNota .= " WHERE e69_numemp = {$iEmpenho} {$sWhere}";
+    $sSqlNota .= " ORDER BY m72_codordem desc";
     $rsNota    = $objNota->sql_record($sSqlNota);
     $this->iNumRowsNotas = $objNota->numrows;
     if ($objNota->numrows > 0) {
@@ -1654,6 +1655,7 @@ class empenho {
                 "e53_vlrpag"  => trim(db_formatar($objNotas->e53_vlrpag,"f")),
                 "vlrretencao" => trim(db_formatar($objNotas->vlrretencao,"f")),
                 "e50_codord"  => $objNotas->e50_codord,
+                "m72_codordem"=> $objNotas->m72_codordem,
                 "sInfoAgenda" => urlencode($sStrNotas),
                 "libera"      => $checked
               );
@@ -1838,6 +1840,21 @@ class empenho {
       }else{
         $this->lSqlErro = true;
         $this->sMsgErro = "Erro (2) Empenho sem elemento.";
+      }
+    }
+    if (!$this->lSqlErro) {
+
+      $clempelemento = new cl_empelemento();
+      $rsEle         = $clempelemento->sql_record($clempelemento->sql_query_file($iEmpenho, null, " e64_codele "));
+      $iAnoSessao          = db_getsession("DB_anousu");
+      if ($clempelemento->numrows > 0){
+        $objEmpElem  = db_utils::fieldsMemory($rsEle,0);        
+        $oPlanoContaOrcamento = new ContaOrcamento( $objEmpElem->e64_codele, $iAnoSessao, null, db_getsession("DB_instit") );
+        $oPlanoConta          = $oPlanoContaOrcamento->getPlanoContaPCASP();
+        if (empty($oPlanoConta)) {
+          $this->lSqlErro = true;
+          $this->sMsgErro = "Desdobramento sem vínculo com PCASP.";
+        }
       }
     }
 
@@ -2046,7 +2063,9 @@ class empenho {
    */
   function gerarOrdemCompra($iNumNota, $nTotal,$aItens,$lLiquidar=false,$dDataNota = null, $sHistorico = null,
                             $lIniciaTransacao=true, $oInfoNota = null, $iNfe = null, $sChaveAcesso = null, $sSerie = null,
-                            $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true, $iCgmEmitente = 0, $iCattrabalhador = null,$iNumempresa = null, $iContribuicaoPrev = null,$iCattrabalhadorremuneracao = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null ){
+                            $iCompDesp = '', $iContaPagadora = null, $lVerificaContaPagadora = true, $iCgmEmitente = 0,
+                            $iCattrabalhador = null,$iNumempresa = null, $iContribuicaoPrev = null, $iCattrabalhadorremuneracao = null,
+                            $iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null){
     $this->lSqlErro  = false;
     $this->sErroMsg  = '';
     $this->iPagOrdem = '';
@@ -2075,9 +2094,13 @@ class empenho {
       $oDataEmpenho = db_utils::fieldsMemory($rsValidaDataEmp,0);
 
       if ( $e69_dtnota < $oDataEmpenho->e60_emiss ) {
-        $this->lSqlErro = true;
-        $this->sMsgErro = "Data da nota inferior a data do empenho!";
-        return false;
+
+        $o56_elemento = pg_fetch_object(db_query((cl_empelemento::sql_query($this->numemp, null, "o56_elemento"))))->o56_elemento;
+        if (!preg_match('/^.{5}92/', $o56_elemento)){
+          $this->lSqlErro = true;
+          $this->sMsgErro = "Data da nota inferior a data do empenho!";
+          return false;
+        }
       }
     }
 

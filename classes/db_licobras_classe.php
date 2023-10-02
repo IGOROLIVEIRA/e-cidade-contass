@@ -27,6 +27,7 @@ class cl_licobras
   public $obr01_linkobra = null;
   public $obr01_instit = 0;
   public $obr01_licitacaosistema = null;
+  public $obr01_licitacaolote = null;
   // cria propriedade com as variaveis do arquivo
   public $campos = "
                  obr01_sequencial = int4 = Sequencial
@@ -37,6 +38,7 @@ class cl_licobras
                  obr01_dtinicioatividades = date = Data Inicio das Ativ. do Eng na Obra
                  obr01_instit = int4 = Instituição
                  obr01_licitacaosistema = int4 = Tipo de licitacao
+                 obr01_licitacaolote = int4 = Numero do lote
                  ";
 
   //funcao construtor da classe
@@ -76,6 +78,7 @@ class cl_licobras
       $this->obr01_linkobra = ($this->obr01_linkobra == "" ? @$GLOBALS["HTTP_POST_VARS"]["obr01_linkobra"] : $this->obr01_linkobra);
       $this->obr01_instit = ($this->obr01_instit == "" ? @$GLOBALS["HTTP_POST_VARS"]["obr01_instit"] : $this->obr01_instit);
       $this->obr01_licitacaosistema = ($this->obr01_licitacaosistema == "" ? @$GLOBALS["HTTP_POST_VARS"]["obr01_licitacaosistema"] : $this->obr01_licitacaosistema);
+      $this->obr01_licitacaolote = ($this->obr01_licitacaolote == "" ? @$GLOBALS["HTTP_POST_VARS"]["obr01_licitacaolote"] : $this->obr01_licitacaolote);
     }
   }
 
@@ -151,6 +154,15 @@ class cl_licobras
       $this->erro_status = "0";
       return false;
     }
+    if ($this->obr01_licitacaolote == null) {
+      $this->erro_sql = " Campo Instituição não informado.";
+      $this->erro_campo = "obr01_licitacaolote";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
     $sql = "insert into licobras(
                                        obr01_sequencial
                                       ,obr01_licitacao
@@ -160,6 +172,7 @@ class cl_licobras
                                       ,obr01_dtinicioatividades
                                       ,obr01_instit
                                       ,obr01_licitacaosistema
+                                      ,obr01_licitacaolote
                        )
                 values (
                                 $this->obr01_sequencial
@@ -170,6 +183,7 @@ class cl_licobras
                                ," . ($this->obr01_dtinicioatividades == "null" || $this->obr01_dtinicioatividades == "" ? "null" : "'" . $this->obr01_dtinicioatividades . "'") . "
                                ,$this->obr01_instit
                                ,$this->obr01_licitacaosistema
+                               ,$this->obr01_licitacaolote
                       )";
     $result = db_query($sql);
     if ($result == false) {
@@ -279,6 +293,19 @@ class cl_licobras
       if (trim($this->obr01_linkobra) == null) {
         $this->erro_sql = " Campo Link da Obra não informado.";
         $this->erro_campo = "obr01_linkobra";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->obr01_licitacaolote) != "" || isset($GLOBALS["HTTP_POST_VARS"]["obr01_licitacaolote"])) {
+      $sql  .= $virgula . " obr01_licitacaolote = '$this->obr01_licitacaolote' ";
+      $virgula = ",";
+      if (trim($this->obr01_licitacaolote) == null) {
+        $this->erro_sql = " Campo Link da Obra não informado.";
+        $this->erro_campo = "obr01_licitacaolote";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -451,9 +478,13 @@ class cl_licobras
       $sql .= $campos;
     }
     $sql .= " from licobras ";
-    $sql .= " inner join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
-    $sql .= " inner join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
-    $sql .= " left join acordo on ac16_licitacao = l20_codigo";
+    $sql .= " left join liclicita on liclicita.l20_codigo = licobras.obr01_licitacao ";
+    $sql .= " left join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
+    
+    $sql .= " left join licobraslicitacao on obr07_sequencial = obr01_licitacao";
+    $sql .= " left join pctipocompratribunal on obr07_tipoprocesso = l44_sequencial";
+    $sql .= " left join acordoobra on obr08_licobras = obr01_sequencial ";
+    $sql .= " left join acordo on ac16_licitacao = l20_codigo ";
     if ($dbwhere == "") {
       if ($obr01_sequencial != "" && $obr01_sequencial != null) {
         $sql .= " where obr01_sequencial = $obr01_sequencial";
@@ -461,34 +492,6 @@ class cl_licobras
     } else if ($dbwhere != "") {
       $sql .= " where $dbwhere";
     }
-    $sql .= "UNION ";
-    $sql .= "select ";
-    $sql .= "obr01_sequencial,
-              obr01_numeroobra,
-              obr01_licitacao,
-              l20_edital,
-              l03_descr,
-              l20_numero,
-              ac16_sequencial,
-              l20_objeto,
-              obr01_dtlancamento,
-              obr01_licitacaosistema,
-              obr01_linkobra";
-    $sql .= " from licobras ";
-    $sql .= " inner join licobraslicitacao on obr07_sequencial = obr01_licitacao ";
-    $sql .= " left join liclicita on l20_codigo = obr01_licitacao ";
-    $sql .= " left join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom ";
-    $sql .= " inner join pctipocompratribunal on obr07_tipoprocesso = l44_sequencial";
-    $sql .= " left join acordo on ac16_licitacao = l20_codigo";
-    $sql2 = "";
-    if ($dbwhere == "") {
-      if ($obr01_sequencial != "" && $obr01_sequencial != null) {
-        $sql2 = " where obr01_sequencial = $obr01_sequencial";
-      }
-    } else if ($dbwhere != "") {
-      $sql2 = " where $dbwhere";
-    }
-    $sql .= $sql2;
     if ($ordem != null) {
       $sql .= " order by ";
       $campos_sql = explode("#", $ordem);

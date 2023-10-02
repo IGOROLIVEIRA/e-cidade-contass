@@ -136,7 +136,6 @@ db_app::load("widgets/windowAux.widget.js");
                 <input type="button" value='visualizar Itens' id='btnVisualizarItens'>
               </td>
             </tr>
-            <!--OC3770-->
             <tr>
               <td align="left">
                 <label class="bold">Critério de Adjudicação:</label>
@@ -153,7 +152,22 @@ db_app::load("widgets/windowAux.widget.js");
                 ?>
               </td>
             </tr>
-            <!-- FIM - OC3770-->
+            <tr>
+              <td align="left">
+                <b>Tipo de Processo: </b>
+              </td>
+              <td>
+                <?php
+
+                $aTipos = array(
+                  1 => 'Item',
+                  2 => 'Lote'
+                );
+
+                db_select('pc80_tipoprocesso', $aTipos, true, '', 'style="width:69%"');
+                ?>
+              </td>
+            </tr>
           </table>
           </fieldset>
         </td>
@@ -162,6 +176,7 @@ db_app::load("widgets/windowAux.widget.js");
         <td style="text-align: center;">
           <input type='button' value='Processar' disabled id='btnProcessar'>
           <input type='button' value='Pesquisar' id='btnConsultar'>
+          <input style="display: none;" type='button' value='Incluir Orçamento'  id='btnIncluirOrcamento' onclick="js_incluirOrcamento()">
         </td>
       </tr>
     </table>
@@ -174,6 +189,76 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
 <script>
 var sUrlRC     = 'com4_solicitacaoComprasRegistroPreco.RPC.php';
 iFormaControle = 1;
+
+function js_init() {
+  windowAuxiliar = new windowAux(
+    "wndAuxiliar",
+    "itens",
+    screen.availWidth - 50,
+    screen.availHeight - 200,
+  );
+  windowAuxiliar.setContent(
+    "<fieldset><legend>Itens da Compilação</legend><div  id='griditens'></div></fieldset>",
+  );
+  windowAuxiliar.hide();
+  $("btnProcessar").disabled = true;
+  oGridItens = new DBGrid("gridItens");
+  oGridItens.nameInstance = "oGridItens";
+  oGridItens.setHeight(screen.availHeight - 400);
+  oGridItens.setCellAlign(
+    new Array(
+      "right",
+      "right",
+      "Left",
+      "left",
+      "center",
+      "right",
+      "right",
+      "right",
+      "right",
+    ),
+  );
+  oGridItens.setCellWidth(
+    new Array(
+      "4%",
+      "10%",
+      "45%",
+      "10%",
+      "5%",
+      "10%",
+      "16%",
+      "16%",
+      "16%",
+      "16%",
+    ),
+  );
+  oGridItens.setHeader([
+    "Seq",
+    "Codigo",
+    "Descrição",
+    "Unidade(Qtd)",
+    "Out.Inf.",
+    "Qtde",
+    "Valor",
+    "Qtd. Min.",
+    "Qtd. Min.",
+    "Ativo",
+  ]);
+
+  oGridItens.show($("griditens"));
+
+  var codigoSolicitacao = document.getElementById('pc10_numero').value;
+  if(codigoSolicitacao != ""){
+    js_completaPesquisa(codigoSolicitacao);
+    return true;
+  }
+
+  js_pesquisar();
+
+}
+
+js_init();
+
 function js_pesquisar() {
 
   js_OpenJanelaIframe('',
@@ -191,7 +276,9 @@ function js_completaPesquisa(iSolicitacao) {
    oParam.exec         = "pesquisarAbertura";
    oParam.iSolicitacao = iSolicitacao;
    oParam.tipo         = 6;
-   db_iframe_solicita.hide();
+   if(typeof db_iframe_solicita !== "undefined"){
+      db_iframe_solicita.hide();
+   }
    var oAjax           = new Ajax.Request(sUrlRC,
                                          {
                                           method: "post",
@@ -215,33 +302,6 @@ function js_retornoCompletaPesquisa(oAjax) {
   } else {
     alert(oRetorno.message.urlDecode());
   }
-
-}
-
-function js_init() {
-
-  windowAuxiliar = new windowAux('wndAuxiliar', 'itens', screen.availWidth - 50,  screen.availHeight - 200);
-  windowAuxiliar.setContent("<fieldset><legend>Itens da Compilação</legend><div  id='griditens'></div></fieldset>");
-  windowAuxiliar.hide();
-  $('btnProcessar').disabled = true;
-  oGridItens     = new DBGrid('gridItens');
-  oGridItens.nameInstance = "oGridItens";
-  oGridItens.setHeight(screen.availHeight - 400);
-  oGridItens.setCellAlign(new Array("right","right","Left","left","center", "right", "right","right", "right"));
-  oGridItens.setCellWidth(new Array("4%", "10%","45%",'10%', "5%","10%", '16%', '16%','16%','16%'));
-  oGridItens.setHeader(["Seq",
-                        "Codigo",
-                        "Descrição",
-                        "Unidade(Qtd)",
-                        "Out.Inf.",
-                        "Qtde",
-                        "Valor",
-                        "Qtd. Min.",
-                        "Qtd. Min.",
-                        "Ativo"]
-                       );
-
-  oGridItens.show($('griditens'));
 
 }
 
@@ -278,7 +338,7 @@ function js_preencheGrid(aItens) {
   oGridItens.renderRows();
   //oGridItens.resizeCols();
 }
-js_init();
+
 function js_showItens() {
 
   windowAuxiliar.show(30, 10);
@@ -316,7 +376,10 @@ function js_processarCompilacao() {
     oParam.iSolicitacao = $F('pc10_numero');
     oParam.tipo         = 6;
     oParam.criterioadj  = $F('pc80_criterioadjudicacao');
-    db_iframe_solicita.hide();
+    oParam.tipoProcesso = $F('pc80_tipoprocesso');
+    if(typeof db_iframe_solicita !== "undefined"){
+      db_iframe_solicita.hide();
+    }
     var oAjax           = new Ajax.Request(sUrlRC,
                                          {
                                           method: "post",
@@ -328,16 +391,23 @@ function js_processarCompilacao() {
 
 }
 
+var processodecompra = '';
+
 function js_retornoProcessarCompilacao(oAjax) {
 
   js_removeObj("msgBox");
   var oRetorno = eval("("+oAjax.responseText+")");
   if (oRetorno.status == 1) {
-
-   alert('Compilacao Processada com sucesso!\nProcesso de Compras Gerado: '+oRetorno.iProcessoCompras);
-  } else {
-    alert(oRetorno.message.urlDecode());
-  }
+    document.getElementById("btnIncluirOrcamento").style.display = '';
+    processodecompra = oRetorno.iProcessoCompras;
+    alert('Compilacao Processada com sucesso!\nProcesso de Compras Gerado: '+oRetorno.iProcessoCompras);
+    if($('pc80_tipoprocesso').value == 2){
+      CurrentWindow.corpo.document.location.href='com4_processocompra001.php?acao=2&iCodigo='+processodecompra;
+    }
+    return true;
+  } 
+  return alert(oRetorno.message.urlDecode());
+  
 }
 function js_limpar() {
 
@@ -348,8 +418,12 @@ function js_limpar() {
   $('pc54_datainicio').value = '';
   oGridItens.clearAll(true);
 }
+
+function js_incluirOrcamento(){
+  CurrentWindow.corpo.document.location.href='com1_processo001.php?pc80_codproc='+processodecompra;
+}
+
 $('btnConsultar').observe('click', js_pesquisar);
 $('btnProcessar').observe('click', js_processarCompilacao);
 $('btnVisualizarItens').observe('click', js_showItens);
-js_pesquisar();
 </script>

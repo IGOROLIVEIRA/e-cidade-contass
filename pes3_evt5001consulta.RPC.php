@@ -23,7 +23,7 @@ try {
             }
 
             db_inicio_transacao();
-            $oImportarDadosEvt5001 = new ImportarDadosEvt5001($oParam->sPath);
+            $oImportarDadosEvt5001 = new ImportarDadosEvt5001($oParam->sPath, null, null);
             $oRetorno->rh218_sequencial = $oImportarDadosEvt5001->processar();
             db_fim_transacao(false);
             $oRetorno->sMessage = "Dados importados com sucesso.";

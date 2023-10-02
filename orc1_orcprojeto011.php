@@ -35,6 +35,7 @@ include("dbforms/db_funcoes.php");
 include("classes/db_orcsuplemtipo_classe.php");
 include("classes/db_orcsuplem_classe.php");
 include("classes/db_ppaleidadocomplementar_classe.php");
+include("classes/db_orcsuplementacaoparametro_classe.php");
 $clorcsuplemtipo = new cl_orcsuplemtipo;
 $clorcsuplem = new cl_orcsuplem;
 
@@ -44,6 +45,10 @@ $clorcprojeto = new cl_orcprojeto;
 $clppaleidadocomplementar 	= new cl_ppaleidadocomplementar;
 $sSqlModalidadeAplic 		= $clppaleidadocomplementar->sql_query_file(null, "o142_orcmodalidadeaplic", "o142_sequencial DESC LIMIT 1");
 $bModalidadeAplic 			= db_utils::fieldsmemory(db_query($sSqlModalidadeAplic))->o142_orcmodalidadeaplic;
+
+$clorcsuplementacaoparametro = new cl_orcsuplementacaoparametro;
+$sqlsuplementacaoparametro  = $clorcsuplementacaoparametro->sql_query(db_getsession('DB_anousu'),"*","");
+$suplementacaoparametro  			= db_utils::fieldsmemory(db_query($sqlsuplementacaoparametro));
 
 $db_opcao = 1;
 $db_botao = true;

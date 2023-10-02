@@ -115,7 +115,7 @@ class GerarCTB extends GerarAM
                         $aCSVCTB21['si97_tiporegistro']       = $this->padLeftZero($aCTB21['si97_tiporegistro'], 2);
                         $aCSVCTB21['si97_codctb']             = substr($aCTB21['si97_codctb'], 0, 20);
                         $aCSVCTB21['si97_codfontrecursos']    = $this->padLeftZero($aCTB21['si97_codfontrecursos'], 3);
-                        $aCSVCTB21['si97_codreduzidomov']     = substr($aCTB21['si97_codreduzidomov'], 0, 15);
+                        $aCSVCTB21['si97_codreduzidomov']     = substr($aCTB21['si97_codreduzidomov'],-15);
                         $aCSVCTB21['si97_tipomovimentacao']   = $this->padLeftZero($aCTB21['si97_tipomovimentacao'], 1);
                         $aCSVCTB21['si97_tipoentrsaida']      = $this->padLeftZero($aCTB21['si97_tipoentrsaida'], 2);
 
@@ -147,7 +147,7 @@ class GerarCTB extends GerarAM
                             if ($aCTB21['si97_sequencial'] == $aCTB22['si98_reg21']) {
 
                                 $aCSVCTB22['si98_tiporegistro']         = $this->padLeftZero($aCTB22['si98_tiporegistro'], 2);
-                                $aCSVCTB22['si98_codreduzidomov']       = substr($aCTB22['si98_codreduzidomov'], 0, 15);
+                                $aCSVCTB22['si98_codreduzidomov']       = substr($aCTB22['si98_codreduzidomov'],-15);
                                 $aCSVCTB22['si98_ededucaodereceita']    = $this->padLeftZero($aCTB22['si98_ededucaodereceita'], 1);
                                 $aCSVCTB22['si98_identificadordeducao'] = $aCTB22['si98_identificadordeducao'] == '0' ? ' ' : $this->padLeftZero($aCTB22['si98_identificadordeducao'], 2);
                                 $aCSVCTB22['si98_naturezareceita']      = $this->padLeftZero($aCTB22['si98_naturezareceita'], 8);

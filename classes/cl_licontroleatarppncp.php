@@ -3,7 +3,7 @@
 //CLASSE DA ENTIDADE licontroleatarppncp
 class cl_licontroleatarppncp
 {
-    // cria variaveis de erro 
+    // cria variaveis de erro
     public $rotulo     = null;
     public $query_sql  = null;
     public $numrows    = 0;
@@ -16,7 +16,7 @@ class cl_licontroleatarppncp
     public $erro_msg   = null;
     public $erro_campo = null;
     public $pagina_retorno = null;
-    // cria variaveis do arquivo 
+    // cria variaveis do arquivo
     public $l215_sequencial = 0;
     public $l215_licitacao = 0;
     public $l215_dtlancamento_dia = null;
@@ -28,19 +28,19 @@ class cl_licontroleatarppncp
     public $l215_situacao = null;
     public $l215_ata = null;
     public $l215_anousu = null;
-    // cria propriedade com as variaveis do arquivo 
+    // cria propriedade com as variaveis do arquivo
     public $campos = "
-                 l215_sequencial = int8 = l215_sequencial 
-                 l215_licitacao = int8 = l215_licitacao 
+                 l215_sequencial = int8 = l215_sequencial
+                 l215_licitacao = int8 = l215_licitacao
                  l215_usuario = int8 = l215_usuario
-                 l215_dtlancamento = date = l215_dtlancamento 
-                 l215_numerocontrolepncp = text = numero de controle do portal pncp 
+                 l215_dtlancamento = date = l215_dtlancamento
+                 l215_numerocontrolepncp = text = numero de controle do portal pncp
                  l215_situacao = int8 = situacao da licitacao pncp
                  l215_ata = int8 = numero da compra no pncp
                  l215_anousu = int8 = ano da compra
                  ";
 
-    //funcao construtor da classe 
+    //funcao construtor da classe
     function __construct()
     {
         //classes dos rotulos dos campos
@@ -48,7 +48,7 @@ class cl_licontroleatarppncp
         $this->pagina_retorno =  basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]);
     }
 
-    //funcao erro 
+    //funcao erro
     function erro($mostra, $retorna)
     {
         if (($this->erro_status == "0") || ($mostra == true && $this->erro_status != null)) {
@@ -183,20 +183,20 @@ class cl_licontroleatarppncp
             return false;
         }
         $sql = "insert into licontroleatarppncp(
-                                       l215_sequencial 
-                                      ,l215_licitacao 
-                                      ,l215_usuario 
-                                      ,l215_dtlancamento 
+                                       l215_sequencial
+                                      ,l215_licitacao
+                                      ,l215_usuario
+                                      ,l215_dtlancamento
                                       ,l215_numerocontrolepncp
-                                      ,l215_situacao 
-                                      ,l215_ata 
-                                      ,l215_anousu  
+                                      ,l215_situacao
+                                      ,l215_ata
+                                      ,l215_anousu
                        )
                 values (
-                                $this->l215_sequencial 
-                               ,$this->l215_licitacao 
-                               ,$this->l215_usuario 
-                               ," . ($this->l215_dtlancamento == "null" || $this->l215_dtlancamento == "" ? "null" : "'" . $this->l215_dtlancamento . "'") . " 
+                                $this->l215_sequencial
+                               ,$this->l215_licitacao
+                               ,$this->l215_usuario
+                               ," . ($this->l215_dtlancamento == "null" || $this->l215_dtlancamento == "" ? "null" : "'" . $this->l215_dtlancamento . "'") . "
                                ,'$this->l215_numerocontrolepncp'
                                ,$this->l215_situacao
                                ,$this->l215_ata
@@ -349,7 +349,7 @@ class cl_licontroleatarppncp
         }
     }
 
-    // funcao para exclusao 
+    // funcao para exclusao
     function excluir($l215_sequencial = null, $dbwhere = null)
     {
 
@@ -391,7 +391,7 @@ class cl_licontroleatarppncp
         }
     }
 
-    // funcao do recordset 
+    // funcao do recordset
     function sql_record($sql)
     {
         $result = db_query($sql);
@@ -416,7 +416,7 @@ class cl_licontroleatarppncp
         return $result;
     }
 
-    // funcao do sql 
+    // funcao do sql
     function sql_query($l215_sequencial = null, $campos = "licontroleatarppncp.l215_sequencial,*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";
@@ -431,6 +431,8 @@ class cl_licontroleatarppncp
             $sql .= $campos;
         }
         $sql .= " from licontroleatarppncp ";
+        $sql .= " left join licatareg on l221_licitacao = l215_licitacao ";
+        $sql .= " left join liccontrolepncp on l213_licitacao = l221_licitacao ";
         $sql2 = "";
         if ($dbwhere == "") {
             if ($l215_sequencial != "" && $l215_sequencial != null) {
@@ -452,7 +454,7 @@ class cl_licontroleatarppncp
         return $sql;
     }
 
-    // funcao do sql 
+    // funcao do sql
     function sql_query_file($l215_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
     {
         $sql = "select ";

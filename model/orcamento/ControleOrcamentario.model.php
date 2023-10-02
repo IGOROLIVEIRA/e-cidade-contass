@@ -42,6 +42,8 @@ class ControleOrcamentario
     private $iEsferaEmendaParlamentar;
     private $deParaFonte6Digitos;
     private $deParaFonte6DigitosEEsfera;
+    private $iTipodespesa;
+    private $tipodespesaEmpRPPS;
 
     public function __construct()
     {
@@ -54,17 +56,65 @@ class ControleOrcamentario
 
     public function setDeParaFonteCompleta()
     {
-        $this->deParaFonteCompleta = array(
-            '15000001' => '1001',
-            '15000002' => '1002',
-            '15400007' => '1070',
-            '25400007' => '1070',
-            '15420007' => '1070',
-            '18000001' => '1111',
-            '18000001' => '1121',
-            '25000001' => '1001',
-            '25000002' => '1002',
-        );
+        
+        if (empty($this->iTipodespesa)){
+          
+            $this->deParaFonteCompleta = array(
+                '15000001' => '1001',
+                '15000002' => '1002',
+                '15400007' => '1070',
+                '25400007' => '1070',
+                '15420007' => '1070',
+                '18000001' => '1111',
+                '18000002' => '1121',
+                '25000001' => '1001',
+                '25000002' => '1002',
+            );
+        }
+        if ($this->iTipodespesa) {
+            if ($this->iTipodespesa == 0) {
+                $this->deParaFonteCompleta = array(
+                    '15000001' => '1001',
+                    '15000002' => '1002',
+                    '15400007' => '1070',
+                    '25400007' => '1070',
+                    '15420007' => '1070',
+                    '18000001' => '1111',
+                    '18000002' => '1121',
+                    '25000001' => '1001',
+                    '25000002' => '1002',
+                );
+            }
+            if ($this->iTipodespesa == 1) {
+                $this->deParaFonteCompleta = array(
+                    '15000001' => '1001',
+                    '15000002' => '1002',
+                    '15400007' => '1070',
+                    '25400007' => '1070',
+                    '15420007' => '1070',
+                    '18000000' => '1111',
+                    '18000001' => '1111',
+                    '18000002' => '1121',
+                    '25000001' => '1001',
+                    '25000002' => '1002',
+                );
+            }
+            if ($this->iTipodespesa == 2) {
+                $this->deParaFonteCompleta = array(
+                    '15000001' => '1001',
+                    '15000002' => '1002',
+                    '15400007' => '1070',
+                    '25400007' => '1070',
+                    '15420007' => '1070',
+                    '18000001' => '1111',
+                    '18000000' => '1121',
+                    '18000002' => '1121',
+                    '25000001' => '1001',
+                    '25000002' => '1002',
+                );
+            }
+        }
+       
     }
 
     public function setDeParaFonte6Digitos()
@@ -168,6 +218,11 @@ class ControleOrcamentario
         $this->iEsferaEmendaParlamentar = $iEsferaEmendaParlamentar;
     }
 
+    public function setTipoDespesa($iTipodespesa)
+    {
+        $this->iTipodespesa = $iTipodespesa;
+    }
+
     public function setCodigoPorNatureza4Digitos()
     {
         if (array_key_exists(substr($this->iNaturezaReceita, 0, 4), $this->deParaFonteInicial))
@@ -189,13 +244,11 @@ class ControleOrcamentario
     {
         if (array_key_exists($this->iFonte, $this->deParaFonteCompleta))
             $this->sCodigo = $this->deParaFonteCompleta[$this->iFonte];
-
         return;
     }
 
     public function setCodigoPorFonte6Digitos()
     {
-
         $iFonte6Digitos = substr($this->iFonte, 1, 6);
         if (array_key_exists($iFonte6Digitos, $this->deParaFonte6Digitos))
             if (array_key_exists($this->iEmendaParlamentar, $this->deParaFonte6Digitos[$iFonte6Digitos]))
@@ -220,6 +273,12 @@ class ControleOrcamentario
         $this->setCodigoPorFonte();
         $this->setCodigoPorFonte6Digitos();
         $this->setCodigoPorFonte6DigitosEEsfera();
+        return $this->sCodigo;
+    }
+
+    public function getCodigoParaDotacao()
+    {
+        $this->setCodigoPorFonte();
         return $this->sCodigo;
     }
 }

@@ -47,9 +47,15 @@ require_once("dbforms/db_funcoes.php");
 require_once("classes/db_empnota_classe.php");
 require_once("classes/db_empnotaitem_classe.php");
 
+require_once("classes/db_retencaotipocalc_classe.php");
+require_once("classes/db_db_config_classe.php");
+
 $oGet            = db_utils::postMemory($_GET);
 $oDaoEmpNota     = new cl_empnota();
 $oDaoEmpNotaItem = new cl_empnotaitem();
+
+$clretencaotipocalc = new cl_retencaotipocalc();
+$cldbconfig         = new cl_db_config();
 
 $clrotulo        = new rotulocampo;
 $clrotulo->label("e69_numero");
@@ -64,86 +70,90 @@ $clrotulo->label("e53_vlrpag");
 
 $instits = str_replace('-', ', ', db_getsession("DB_instit"));
 
+/**
+ * @param cl_retencaotipocalc $retencaotipocalc
+ * @param cl_db_config $cldbconfig
+ * @param int $instits
+ * @return array
+ */
+function consultasBanco(cl_retencaotipocalc $retencaotipocalc, cl_db_config $cldbconfig, int $instits): array
+{
+    // Retorna todos os tipos de calculos para as retencoes.
+    $rsTipoCalculo = $retencaotipocalc->sql_record($retencaotipocalc->sql_query_file(null, "e32_sequencial", "e32_sequencial"));
+    $tipoCalculo = implode(", ", pg_fetch_all_columns($rsTipoCalculo));
+
+    // Retorna os codigos para o tipo de calculo IRRF.
+    $rsTipoCalculoIRRF = $retencaotipocalc->sql_record($retencaotipocalc->sql_query_file(null, "e32_sequencial", "e32_sequencial", "e32_descricao ILIKE '%irrf%'"));
+    $tipoCalculoIRRF = implode(", ", pg_fetch_all_columns($rsTipoCalculoIRRF));
+
+    // Retorna os codigos para o tipo de calculo INSS.
+    $rsTipoCalculoINSS = $retencaotipocalc->sql_record($retencaotipocalc->sql_query_file(null, "e32_sequencial", "e32_sequencial", "e32_descricao ILIKE '%inss%'"));
+    $tipoCalculoINSS = implode(", ", pg_fetch_all_columns($rsTipoCalculoINSS));
+
+    // Retorna o CNPJ da instituicao. Esse CNPJ sera excetuado na consulta.
+    $rsCnpjInstituicao = $cldbconfig->sql_record($cldbconfig->sql_query_tipoinstit($instits, "cgc"));
+    $validarCnpjInstit = implode(", ", pg_fetch_all_columns($rsCnpjInstituicao));
+    return array($tipoCalculo, $tipoCalculoIRRF, $tipoCalculoINSS, $validarCnpjInstit);
+}
+
 if (isset($dtDataInicial)) {
-  
-  $sSqlNota  = "select distinct e50_codord,";
-  $sSqlNota .= " e60_codemp,";
-  $sSqlNota .= " cgm.z01_nome,";
-  $sSqlNota .= " cgm.z01_cgccpf,";
-  $sSqlNota .= " e60_numcgm ,";
-  $sSqlNota .= " e69_numero,";
-  $sSqlNota .= " e69_dtnota,";
-  $sSqlNota .= " e50_data,";
-  $sSqlNota .= " e70_vlrliq,";
-  $sSqlNota .= " e60_anousu,";
-  $sSqlNota .= " case when retencaotiporec.e21_retencaotipocalc in (3,4,7) then (coalesce(e23_valorretencao, 0))
-                    else 0  end as valor_inss, ";
-  $sSqlNota .= " case when retencaotiporec.e21_retencaotipocalc in (1,2) then (coalesce(e23_valorretencao, 0))
-                    else 0 end as valor_irrf,";
-  $sSqlNota .= " case when retencaotiporec.e21_retencaotipocalc in (5,6) then (coalesce(e23_valorretencao, 0))
-		            else 0 end as outrasretencoes, ";
-  $sSqlNota .= " case when c71_coddoc = 904 then c71_data end as c71_data, ";
-  $sSqlNota .= " e69_nfserie, e21_descricao, e23_ativo,e71_anulado, o58_codigo,o58_projativ,o55_descr,o15_descr ";                                  
-  $sSqlNota .= "       from empnota ";
-  $sSqlNota .= "          inner join empempenho   on e69_numemp  = e60_numemp";
-  $sSqlNota .= "          inner join orcdotacao on  (o58_coddot,o58_anousu) = (e60_coddot,e60_anousu)";	
-  $sSqlNota .= "          inner join orcprojativ on (o55_projativ,o55_anousu) = (o58_projativ,o58_anousu)";
-  $sSqlNota .= "          inner join orctiporec on o15_codigo = o58_codigo";
-  $sSqlNota .= "          inner join cgm as cgm   on e60_numcgm  = cgm.z01_numcgm";
-  $sSqlNota .= "          inner join empnotaele   on e69_codnota = e70_codnota";
-  $sSqlNota .= "          inner join orcelemento  on empnotaele.e70_codele = orcelemento.o56_codele";
-  $sSqlNota .= "          left join conlancamemp on c75_numemp = e60_numemp ";
-  $sSqlNota .= "          left join conlancamdoc on c71_codlan = c75_codlan and c71_coddoc = 904 ";
-  $sSqlNota .= "          left  join pagordemnota on e71_codnota = e69_codnota";
-  $sSqlNota .= "                                 and e71_anulado is false";
-  $sSqlNota .= "          left  join pagordem    on  e71_codord = e50_codord";
-  $sSqlNota .= "          left  join pagordemele  on e53_codord = e50_codord";
-  $sSqlNota .= "          left join retencaopagordem on pagordem.e50_codord = retencaopagordem.e20_pagordem";
-  $sSqlNota .= "          left join retencaoreceitas on retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial";
-  $sSqlNota .= "          left join retencaotiporec on retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec"; 
 
-  $dtDataInicial = implode("-", array_reverse(explode("/", $dtDataInicial)));
-  $dtDataFinal = implode("-", array_reverse(explode("/", $dtDataFinal)));
-   
-  if($sReferencia == 1)
-    $sSqlNota .= "  where (e50_data BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) ";
-  if($sReferencia == 2)  
-    $sSqlNota .= "  where (e69_dtnota BETWEEN '$dtDataInicial' AND '$dtDataFinal' ) ";
+    $dtDataInicial = implode("-", array_reverse(explode("/", $dtDataInicial)));
+    $dtDataFinal = implode("-", array_reverse(explode("/", $dtDataFinal)));
 
-  if($sCredoresSelecionados){
-    if($sTipoSelecao == 1)
-            $sSqlNota .= "   and  e60_numcgm in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 14 and e60_instit = $instits";
-    if($sTipoSelecao == 2)
-        $sSqlNota .= "   and  e60_numcgm not in ({$sCredoresSelecionados}) and Length(cgm.z01_cgccpf) = 14 and e60_instit = $instits";
-  }else 
-    $sSqlNota .= "  and Length(cgm.z01_cgccpf) = 14 and e60_instit = $instits ";
- 
- if($sTipo == '1')
-    $sSqlNota .= "  and ( retencaotiporec.e21_retencaotipocalc in (1,2,3,4,5,6,7) and e23_ativo = true ) ";
-  elseif($sTipo == '2')   
-    $sSqlNota .= " and ( retencaotiporec.e21_retencaotipocalc is null or ( retencaotiporec.e21_retencaotipocalc is null and e23_ativo = false ) or (  retencaotiporec.e21_retencaotipocalc is not null
-    and e23_ativo = false) ) ";
+    $campoData = $sReferencia == 1 ? "e50_data" : ($sReferencia == 2 ? "e69_dtnota" : "");
 
- if ($sQuebra == 2){
-    $sSqlNota .= " and  c71_data is null  ";
- }   
- 
-  $sSqlNota .= "  group by     1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22";
+    list($tipoCalculo, $tipoCalculoIRRF, $tipoCalculoINSS, $validarCnpjInstit) = consultasBanco($clretencaotipocalc, $cldbconfig, $instits);
 
-  if($sQuebra == 1)
-        $sSqlNota .= "  order by     3,1 ";
-  if($sQuebra == 2)
-        $sSqlNota .= " order by o58_projativ,o58_codigo";  
+    $where = " WHERE {$campoData} BETWEEN '$dtDataInicial' AND '$dtDataFinal' AND LENGTH(cgm.z01_cgccpf) = 14 AND cgm.z01_cgccpf !='{$validarCnpjInstit}' AND e60_instit = $instits";
 
-  $rsNota    = $oDaoEmpNota->sql_record($sSqlNota);
-//   echo $oDaoEmpNota->numrows ;
-//   db_criatabela($rsNota);exit;
-// echo $sSqlNota;exit;
-$aFornecedores = pg_fetch_all($rsNota);
-  
-  if ($oDaoEmpNota->numrows > 0 ) {
-    $oNotas      = db_utils::FieldsMemory($rsNota, 0);
-  }
+    if ($sCredoresSelecionados) {
+        $numCgm = $sTipoSelecao == 1 ? "AND e60_numcgm IN " : ($sTipoSelecao == 2 ? "AND e60_numcgm NOT IN " : "");
+        $where .= " {$numCgm} ({$sCredoresSelecionados})";
+    }
+
+    switch ($sTipo){
+        // Tipo de impressão Com Retenções - tipo padrão.
+        case '1':
+            $where .= " AND (retencaotiporec.e21_retencaotipocalc IN ({$tipoCalculo}) AND e23_ativo = TRUE) ";
+            break;
+        // Tipo de impressão Sem Retenções.
+        case '2':
+            $where .= " AND (retencaotiporec.e21_retencaotipocalc IS NULL OR (retencaotiporec.e21_retencaotipocalc IS NULL AND e23_ativo = FALSE)
+                         OR (retencaotiporec.e21_retencaotipocalc IS NOT NULL AND e23_ativo = FALSE)) ";
+            break;
+        // Tipo de impressão Somente Retenções IRRF.
+        case '3':
+            $where .= " AND (retencaotiporec.e21_retencaotipocalc IN ({$tipoCalculoIRRF}) AND e23_ativo = TRUE) ";
+            break;
+        // Tipo de impressão Somente Retenções INSS.
+        case '4':
+            $where .= " AND (retencaotiporec.e21_retencaotipocalc IN ({$tipoCalculoINSS}) AND e23_ativo = TRUE) ";
+            break;
+        // Tipo de impressão Outros.
+        default:
+            $where .= "";
+    }
+
+    if ($sQuebra == 2) {
+        $where .= " AND c71_data IS NULL ";
+    }
+
+    $group = " GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15";
+
+    $sqlOrder = " ORDER BY 3, 1 ";
+
+    if ($sQuebra == 2) {
+        $sqlOrder .= " ORDER BY o58_projativ,o58_codigo";
+    }
+
+    $sSqlNota = $oDaoEmpNota->sqlRelRetencoesPJ($where, $group, $sqlOrder);
+    $rsNota = $oDaoEmpNota->sql_record($sSqlNota);
+    $aFornecedores = pg_fetch_all($rsNota);
+
+    if ($oDaoEmpNota->numrows > 0) {
+        $oNotas = db_utils::FieldsMemory($rsNota, 0);
+    }
 }
 
 $clinfocomplementaresinstit = new cl_infocomplementaresinstit();

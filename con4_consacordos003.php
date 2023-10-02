@@ -264,6 +264,15 @@ db_app::import("configuracao.DBDepartamento");
                             </tr>
 
                             <tr>
+                                <td class="tdWidth"><b>Critério de Reajuste:</b></td>
+                                <td class="tdBgColor" colspan="3">
+                                    <?php
+                                        echo $criterioReajuste = $clAcordo->getReajuste() == "t" ? "Sim" : "Não";
+                                    ?>
+                                </td>
+                            </tr>
+
+                            <tr style="display: none;">
                                 <td class="tdWidth">
                                     <b>Categoria:</b>
                                 </td>
@@ -391,12 +400,13 @@ db_app::import("configuracao.DBDepartamento");
                     "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=licrealizadaoutrosorgaos"
                 );
             }
-
-            $oTabDetalhes->add(
-                "posicoes",
-                "Posições",
-                "con4_consacordosdetalhes001.php?ac16_sequencial={$oGet->ac16_sequencial}&exec=posicoes"
-            );
+            
+            if($clAcordo->getReajuste() == "t"){
+                $oTabDetalhes->add(
+                    "criterioreajuste",
+                    "Critério de Reajuste",
+                    "con4_consacordosdetalhescriterioreajuste001.php?ac16_sequencial={$oGet->ac16_sequencial}");
+            }
 
             $oTabDetalhes->add(
                 "rescisoes",

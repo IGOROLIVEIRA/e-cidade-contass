@@ -16,6 +16,7 @@ $clprecoreferencia     = new cl_precoreferencia;
 $clitemprecoreferencia = new cl_itemprecoreferencia;
 $clcondataconf = new cl_condataconf;
 $clliccomissaocgm      = new cl_liccomissaocgm();
+$clprecoreferenciaacount = new cl_precoreferenciaacount;
 
 $db_opcao = 1;
 $db_botao = true;
@@ -32,6 +33,7 @@ if (isset($incluir)) {
     $clprecoreferencia->si01_numcgmCotacao = $respCotacaocodigo;
     $clprecoreferencia->si01_numcgmOrcamento = $respOrcacodigo;
     $clprecoreferencia->si01_impjustificativa = $si01_impjustificativa;
+    $clprecoreferencia->si01_casasdecimais = $si01_casasdecimais;
     $datesistema = date("d/m/Y", db_getsession('DB_datausu'));
     if ($si01_datacotacao > $datesistema) {
         $msg = "Data da Cotação maior que data do Sistema";
@@ -204,10 +206,12 @@ if (isset($incluir)) {
             if($oItemOrc->pc23_orcamitem!=""){
                 
                 $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
+                
                 $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
                 $clitemprecoreferencia->si02_precoreferencia = $clprecoreferencia->si01_sequencial;
                 if ($oItemOrc->percreferencia1 == 0 && $oItemOrc->percreferencia2 == 0) {
                     $clitemprecoreferencia->si02_vlpercreferencia = 0;
+                    $clitemprecoreferencia->si02_vltotalprecoreferencia = 0;
                 } else if ($oItemOrc->percreferencia1 > 0 && $oItemOrc->percreferencia2 == 0) {
                     $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia1;
                 } else {
@@ -223,6 +227,7 @@ if (isset($incluir)) {
                 $clitemprecoreferencia->si02_taxa = $oItemOrc->pc01_taxa;
                 $clitemprecoreferencia->si02_criterioadjudicacao = $oItemOrc->pc80_criterioadjudicacao;
                 $clitemprecoreferencia->si02_mediapercentual = $oItemOrc->mediapercentual;
+                $clitemprecoreferencia->si02_vltotalprecoreferencia = str_replace(',','.',number_format($oItemOrc->valor*$oItemOrc->pc23_quant,2, ',', ''));
                 $clitemprecoreferencia->incluir(null);  
             }
         }
@@ -251,11 +256,19 @@ if (isset($incluir)) {
         }
     }
 
+    if(!$sqlerro){
+        $clprecoreferenciaacount->si233_precoreferencia = $clprecoreferencia->si01_sequencial;
+        $clprecoreferenciaacount->si233_acao =  'Incluir';
+        $clprecoreferenciaacount->si233_idusuario = db_getsession("DB_id_usuario");
+        $clprecoreferenciaacount->si233_datahr =  date("Y-m-d", db_getsession("DB_datausu"));
+        $clprecoreferenciaacount->incluir(null);  
+    }
+
     db_fim_transacao($sqlerro);
     if ($clprecoreferencia->erro_status != 0) {
         echo "<script>
-      jan = window.open('sic1_precoreferencia004.php?impjust=$si01_impjustificativa&codigo_preco='+{$clprecoreferencia->si01_processocompra}+
-      '&tipoprecoreferencia='+$si01_tipoprecoreferencia+'&quant_casas='+$quant_casas,
+      jan = window.open('sic1_precoreferencia007.php?impjust=$si01_impjustificativa&codigo_preco='+{$clprecoreferencia->si01_processocompra}+
+      '&tipoprecoreferencia='+$si01_tipoprecoreferencia+'&quant_casas='+$si01_casasdecimais,
                     '',
                       'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
       jan.moveTo(0,0);

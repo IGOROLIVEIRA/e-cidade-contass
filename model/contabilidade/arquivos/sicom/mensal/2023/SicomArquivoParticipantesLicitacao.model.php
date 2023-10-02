@@ -11,14 +11,14 @@ class SicomArquivoParticipantesLicitacao extends SicomArquivoBase implements iPa
 {
 
 
-        /**
+    /**
      *
      * Codigo do layout. (db_layouttxt.db50_codigo)
      * @var Integer
      */
     protected $iCodigoLayout = 163;
 
-        /**
+    /**
      *
      * Nome do arquivo a ser criado
      * @var String
@@ -58,7 +58,7 @@ class SicomArquivoParticipantesLicitacao extends SicomArquivoBase implements iPa
 
 
 
-    
+
 
 
 
@@ -78,7 +78,7 @@ class SicomArquivoParticipantesLicitacao extends SicomArquivoBase implements iPa
     public function gerarDados()
     {
         $clpartlic10 = new cl_partlic102023();
-        
+
 
         db_inicio_transacao();
 
@@ -95,7 +95,7 @@ class SicomArquivoParticipantesLicitacao extends SicomArquivoBase implements iPa
 
 
 
-       
+
         /*
          * selecionar informacoes registro 10
          */
@@ -142,7 +142,7 @@ class SicomArquivoParticipantesLicitacao extends SicomArquivoBase implements iPa
         AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
         AND cflicita.l03_pctipocompratribunal IN ('48','49','50','51','52','53','54')";
         $rsResult10 = db_query($sSql);
-        
+
 
 
 
@@ -152,10 +152,14 @@ class SicomArquivoParticipantesLicitacao extends SicomArquivoBase implements iPa
 
             $clpartlic10->si203_tiporegistro = '10';
             $clpartlic10->si203_codorgao = $oDados10->codorgaoresp;
-            if($oDados10->codunidsubant!= null || $oDados10->codunidsubant!=''){
-                $clpartlic10->si203_codunidadesub = $oDados10->codunidsubant;    
-            }else{
-                $clpartlic10->si203_codunidadesub = $oDados10->codunidadesubresp;
+            if ($oDados10->codunidsubant != null || $oDados10->codunidsubant != '') {
+                $clpartlic10->si203_codunidadesub = $oDados10->codunidsubant;
+            } else {
+                if ($oDados10->codunidadesubresp == null || $oDados10->codunidadesubresp == '') {
+                    $clpartlic10->si203_codunidadesub = '00000';
+                } else {
+                    $clpartlic10->si203_codunidadesub = $oDados10->codunidadesubresp;
+                }
             }
             $clpartlic10->si203_exerciciolicitacao = $oDados10->exerciciolicitacao;
             $clpartlic10->si203_nroprocessolicitatorio = $oDados10->nroprocessolicitatorio;
@@ -174,6 +178,5 @@ class SicomArquivoParticipantesLicitacao extends SicomArquivoBase implements iPa
         $oGerarPARTLIC = new GerarPARTLIC();
         $oGerarPARTLIC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
         $oGerarPARTLIC->gerarDados();
-        
     }
 }

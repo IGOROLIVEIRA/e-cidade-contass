@@ -378,6 +378,8 @@ $iOpcao = 1;
             <input type="button" name="btnIncluir" id="btnIncluir" value="Salvar" />
             &nbsp;
             <input type="button" name="btnPesquisar" id="btnPesquisar" value="Pesquisar" />
+            &nbsp;
+            <input type="button" name="btnNovo" id="btnNovo" onclick="js_novo();" value="Novo" <?=($db_opcao!=1?"disabled":"")?> />
         </center>
     </form>
 </body>
@@ -1435,5 +1437,11 @@ $iOpcao = 1;
         return 103;
     }
 
+    function js_novo()
+    {
+        var lAbaReduzidos = false ;
+        js_liberaAbasPlano(null, lAbaReduzidos, null, null);
+        window.location.reload();
+    }
     js_main();
 </script>

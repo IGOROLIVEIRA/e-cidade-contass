@@ -76,8 +76,8 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
             if($oDado->modalidadeid == "3"){
                 $oDadosAPI->itensCompra[$key]->criterioJulgamentoId    = 8;
             }
-            //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
-            $oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
+            $oDadosAPI->itensCompra[$key]->itemCategoriaId             = 3;
+            //$oDadosAPI->itensCompra[$key]->itemCategoriaId             = $item->itemcategoriaid;
             //$oDadosAPI->itensCompra[$key]->codigoRegistroImobiliario   = utf8_encode($item->codigoregistroimobiliario);
         }
 
@@ -112,10 +112,18 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDado = $this->dados;
 
         $oDadosAPI                                  = new \stdClass;
-        //$oDadosAPI->codigoUnidadeCompradora         = '01001'; 
+        //$oDadosAPI->codigoUnidadeCompradora         = '01001';
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
-        $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
+        if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
+            if($oDado->tipoinstrumentoconvocatorioid == "2"){
+                $oDadosAPI->modoDisputaId                   = 4;
+            }else{
+                $oDadosAPI->modoDisputaId                   = 5;
+            }
+        }else{
+            $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
+        }
         $oDadosAPI->numeroCompra                    = $oDado->numerocompra;
         $oDadosAPI->numeroProcesso                  = $oDado->numeroprocesso;
         $oDadosAPI->situacaoCompraId                = $oDado->situacaocompraid;

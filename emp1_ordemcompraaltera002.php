@@ -95,13 +95,14 @@ if (isset($dados->altera)) {
             $sSqlTab    = "select sum(l223_total) as totaltabela from empordemtabela where l223_pcmaterordem = ".$dados->itens[$count]->coditem." and l223_codordem = ".$objeto->m51_codordem;
             
             $rsTabItem  = $clempempitem->sql_record($sSqlTab);
-            $oTabItem = db_utils::fieldsMemory($rsTabItem, 0); 
+            $oTabItem = db_utils::fieldsMemory($rsTabItem, 0);
+            $nTabela = round($oTabItem->totaltabela,2) ; 
             
             if ($clempempitem->numrows == 1 && $oTabItem->totaltabela > 0) {
             
             $nValor   = DBNumber::round($objeto->m52_valor,2); 
             
-                if($oTabItem->totaltabela != $nValor){
+                if($nTabela != $nValor){
                     $sqlerro  = true;
                     $erro_msg = "Usuário: A soma dos itens da tabela está divergente do valor total do item Tabela.";
                     break;

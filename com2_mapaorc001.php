@@ -291,6 +291,7 @@ $clrotulo->label("pc20_codorc");
       sQueryString     += '&tipoOrcamento=' + sTipoOrcamento;
       sQueryString     += '&modelo=' + $F('modelo');
       sQueryString     += '&imp_troca=' + $F('imp_troca');
+      sQueryString     += '&quant_casas=2';
 
       var jan = window.open('com2_mapaorc002.php?' + sQueryString,
                             '',

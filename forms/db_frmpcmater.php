@@ -30,6 +30,8 @@ function verPermissaoAlteraServico($iItem)
         return false;
     }
 }
+$oParamLicicita = db_stdClass::getParametro('licitaparam', array(db_getsession("DB_instit")));
+$l12_pncp = $oParamLicicita[0]->l12_pncp;
 ?>
 <script>
     function js_troca() {
@@ -155,21 +157,6 @@ function verPermissaoAlteraServico($iItem)
                     <td><?= $Lpc03_codgrupo ?> </td>
                     <td align='left'>
                         <?
-                        //com query_file na classe
-                        /*
-	  if (!isset($pc013_codgrupo)){
-             if(isset($pc01_codsubgrupo) &&  ($db_opcao == 2 || $db_opcao == 3)){
-                 global $pc03_codgrupo;
-                 // echo "<script>alert('".$clpcsubgrupo->sql_query($pc01_codsubgrupo,"pc04_codgrupo as pc01_codgrupo")."'</script>";
-                 $result = $clpcsubgrupo->sql_record($clpcsubgrupo->sql_query($pc01_codsubgrupo,"pc04_codgrupo as pc03_codgrupo"));
-                 if ($clpcsubgrupo->numrows > 0 ){
-	            db_fieldsmemory($result,0);
-	         }
-              }
-	  }
-          $result = $clpcgrupo->sql_record($clpcgrupo->sql_query(null,"pc03_codgrupo,pc03_descrgrupo","pc03_descrgrupo"));
-          @db_selectrecord("pc03_codgrupo",$result,true,$db_opcao,"","","","0","js_troca(this.value);");
-  */
             if (!isset($pc01_codgrupo)) {
               if (!isset($pc03_codgrupo)) {
                 if (isset($pc01_codsubgrupo) &&  ($db_opcao == 2 || $db_opcao == 3)) {
@@ -298,6 +285,7 @@ function verPermissaoAlteraServico($iItem)
                                     ?>
                 </td>
                 </tr>
+                <?php if ($l12_pncp == 't') : ?>
                 <tr>
                     <td>
                         <strong>Reg. Imobiliário</strong>
@@ -308,6 +296,8 @@ function verPermissaoAlteraServico($iItem)
                         ?>
                     </td>
                 </tr>
+                <?php endif ?>
+                
                 <? if ($db_opcao == 22 || $db_opcao == 2) : ?>
                     <tr>
                         <td><b>Justificativa da Alteração:</b></td>
@@ -428,7 +418,7 @@ function verPermissaoAlteraServico($iItem)
         if (opcao != 1) {
             filtra_atuais = true;
         }
-        js_OpenJanelaIframe('top.corpo', 'db_iframe_pcmater', 'func_pcmater.php?funcao_js=parent.js_preenchepesquisa|pc01_codmater&vertudo=true&filtra_atuais=' + filtra_atuais, 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_pcmater', 'func_pcmater.php?funcao_js=parent.js_preenchepesquisa|pc01_codmater&vertudo=true&filtra_atuais=' + filtra_atuais, 'Pesquisa', true);
     }
 
     function js_preenchepesquisa(chave) {
@@ -508,10 +498,6 @@ function verPermissaoAlteraServico($iItem)
                 erro = true;
             }
         }
-
-        // if(erro){
-        //   alert('Caractere não permitido para inclusão!');
-        // }
 
         novoTexto = novoTexto.join('');
 

@@ -739,6 +739,7 @@ class CgmFisico extends CgmBase  {
     $oDaoCgm->z01_numcgm        = $this->getCodigo();
     $oDaoCgm->z01_cgccpf        = $this->getCpf();
 	  $oDaoCgm->z01_cnh           = $this->getCnh();
+      $oDaoCgm->z01_naturezajuridica = '0000';
 	  $oDaoCgm->z01_categoria     = $this->getCategoriaCnh();
 	  $oDaoCgm->z01_dtemissao     = $this->getDataEmissaoCnh();
 	  $oDaoCgm->z01_dthabilitacao = $this->getDataHabilitacaoCnh();

@@ -353,6 +353,7 @@ switch ($oParam->exec) {
                 $oCgm->setCodigo($oParam->pessoa->z01_numcgm);
                 $oCgm->setCpf($oParam->pessoa->z01_cgccpf);
                 $oCgm->setIdentidade($oParam->pessoa->z01_ident);
+                $oCgm->setNaturezaJuridica($oParam->pessoa->z01_naturezajuridica);
                 $oCgm->setNome(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_nome)));
                 $oCgm->setNomeCompleto(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_nome)));
                 $oCgm->setNomePai(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_pai)));
@@ -563,6 +564,7 @@ switch ($oParam->exec) {
 
                 $oCgm->setCodigo($oParam->pessoa->z01_numcgm);
                 $oCgm->setCnpj($oParam->pessoa->z01_cgccpf);
+                $oCgm->setNaturezaJuridica($oParam->pessoa->z01_naturezajuridica);
                 $oCgm->setNome(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_nome)));
                 $oCgm->setNomeCompleto(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_nomecomple)));
                 $oCgm->setNomeFantasia(utf8_decode(db_stdClass::db_stripTagsJson($oParam->pessoa->z01_nomefanta)));
@@ -648,6 +650,18 @@ switch ($oParam->exec) {
                         $oRetorno->message = urlencode("O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
                         $sqlErro  = true;
                     }
+                }
+
+                if($oParam->pessoa->z01_naturezajuridica == "1"){
+                    $oRetorno->status = 2;
+                    $oRetorno->message = urlencode("Campo Natureza Juridica não informado !");
+                    $sqlErro  = true;
+                }
+
+                if(strlen($oParam->pessoa->z01_cgccpf) == 14 && $oParam->pessoa->z01_naturezajuridica == "8885"){
+                    $oRetorno->status = 2;
+                    $oRetorno->message = urlencode("Natureza não informada, selecione a Natureza Jurídica correta!");
+                    $sqlErro  = true;
                 }
 
                 if ($oParam->action == 'alterar'){
@@ -809,6 +823,13 @@ switch ($oParam->exec) {
 
     case 'getCodigoIbge' :
         $oRetorno->codigo = municipio::getCodigoIbge($oParam->estado, utf8_decode($oParam->cidade));
+        echo $oJson->encode($oRetorno);
+        break;
+
+    case 'getNaturezaJuridica' :
+
+        $oCgm = CgmFactory::getInstanceByCgm($oParam->numcgm);
+        $oRetorno->naturezajuridica = $oCgm->getNaturezaJuridica();
         echo $oJson->encode($oRetorno);
         break;
 

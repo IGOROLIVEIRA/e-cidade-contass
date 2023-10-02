@@ -92,18 +92,6 @@ if (isset($chavepesquisa)) {
                         </td>
                     </tr>
                     <tr>
-                        <td nowrap title="<?= @$Trh218_indapuracao ?>">
-                            <?= @$Lrh218_indapuracao ?>
-                        </td>
-                        <td>
-                            <?
-                            $aIndApuracao = array("1"=>"Mensal",
-                                "2"=>"13º Salário");
-                            db_select('rh218_indapuracao', $aIndApuracao, true, 3,"");
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
                         <td nowrap title="<?= @$Trh218_regist ?>">
                             <?= @$Lrh218_regist ?>
                         </td>
@@ -120,26 +108,6 @@ if (isset($chavepesquisa)) {
                         <td>
                             <?
                             db_input('rh218_codcateg', 10, $Irh218_codcateg, true, 'text', 3, "")
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td nowrap title="<?= @$Trh218_nrrecarqbase ?>">
-                            <?= @$Lrh218_nrrecarqbase ?>
-                        </td>
-                        <td>
-                            <?
-                            db_input('rh218_nrrecarqbase', 30, $Irh218_nrrecarqbase, true, 'text', 3, "")
-                            ?>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td nowrap title="<?= @$Trh218_tpcr ?>">
-                            <?= @$Lrh218_tpcr ?>
-                        </td>
-                        <td>
-                            <?
-                            db_input('rh218_tpcr', 10, $Irh218_tpcr, true, 'text', 3, "")
                             ?>
                         </td>
                     </tr>
@@ -171,6 +139,16 @@ if (isset($chavepesquisa)) {
                             <?
                             $diferenca = $rh218_vrdescseg - $rh218_vrcpseg;
                             db_input('diferenca', 20, 4, true, 'text', 3, "");
+                            ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td nowrap title="<?= @$Trh218_vlrbasecalc ?>">
+                            <?= @$Lrh218_vlrbasecalc ?>
+                        </td>
+                        <td>
+                            <?
+                            db_input('rh218_vlrbasecalc', 20, 4, $Irh218_vlrbasecalc, 'text', 3, "");
                             ?>
                         </td>
                     </tr>
