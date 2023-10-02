@@ -41,6 +41,7 @@ include("classes/db_veictipoabast_classe.php");
 include("classes/db_veicretirada_classe.php");
 include("classes/db_empveiculos_classe.php");
 include("classes/db_condataconf_classe.php");
+require_once("classes/db_empempenho_classe.php");
 require("libs/db_app.utils.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -54,6 +55,7 @@ $clveicparam             = new cl_veicparam;
 $clveictipoabast         = new cl_veictipoabast;
 $clveicretirada          = new cl_veicretirada;
 $clempveiculos           = new cl_empveiculos;
+$clempempenho           = new cl_empempenho;
 
 $clempveiculos->rotulo->label();
 
@@ -231,6 +233,9 @@ if ($sqlerro==false){
   	$sqlerro=true;
   }
 
+  $sqlerro = $clveicabast->alteracaoSaldo($ve70_codigo,$ve70_valor,$si05_numemp);
+  $erro_msg = $clveicabast->erro_msg;
+
   if ($sqlerro==false){
   	$clveicabastposto->ve71_veicabast=$ve70_codigo;
 
@@ -280,7 +285,7 @@ if ($sqlerro==false){
   		           $erro_msg=$clveicabastpostoempnota->erro_msg;
   	          }
         }
-}
+    }
     } else{
   	  $clveicabastposto->alterar(null,"ve71_veicabast=$ve70_codigo");
     }
@@ -319,9 +324,11 @@ if ($sqlerro==false){
       }
   	}
   }
+  if($sqlerro==false){
+    $clempveiculos->alterar(null,$ve70_codigo);
+    $erro_msg=$clempveiculos->erro_msg;
+  }
 
-  $clempveiculos->alterar(null,$ve70_codigo);
-  $erro_msg=$clempveiculos->erro_msg;
   if ($clempveiculos->erro_status=="0"){
   	$sqlerro=true;
   }

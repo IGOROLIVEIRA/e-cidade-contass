@@ -590,13 +590,29 @@ db_app::load("estilos.css");
    * }
    * */
 
-  function js_mostraempempenho(chave1,erro) {
+  function js_mostraempempenho(e60_codemp,erro,e60_numcgm,si05_numemp,saldoDisponivel) {
     if(erro){
       document.form1.e60_codemp.value = '';
       return false;
     }
-    document.form1.e60_codemp.value = chave1;
+
+    document.form1.e60_codemp.value = e60_codemp;
+    document.form1.si05_numemp.value = si05_numemp;
+    document.form1.numcgm_posto.value = e60_numcgm;
+    document.form1.saldoDisponivel.value = saldoDisponivel;
+
     db_iframe_empempenho.hide();
+    
+    let itemEmpenho = document.getElementById("si05_item_empenho").value;
+
+    if (itemEmpenho == 't') {
+      js_pesquisaItem_emp(true);
+      js_pesquisave71_veiccadposto(true, 0);
+      return;
+    }
+
+    js_pesquisave71_veiccadposto(true, 0);
+    
   }
 
   //--------------------------------
@@ -1234,7 +1250,8 @@ db_app::load("estilos.css");
   };
   //js_pesquisa_ultimamedida();
   js_formataHora();
-  js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + document.form1.ve70_dtabast.value + '&pesquisa_chave=' + document.form1.si05_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
+  //js_pesquisae60_codemp(false,0);
+  //js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + document.form1.ve70_dtabast.value + '&pesquisa_chave=' + document.form1.si05_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
 
   var litros = 0;
   var valor = 0;
