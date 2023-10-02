@@ -283,6 +283,15 @@ switch ($oParam->exec) {
           
         }
 
+        //PRECO DE REFERENCIA
+        $rsPrecoReferencia       = db_query("select distinct si01_sequencial,si02_sequencial,si02_coditem from precoreferencia inner join itemprecoreferencia on si02_precoreferencia = si01_sequencial inner join pcprocitem on si01_processocompra = pc81_codproc inner join solicitem on pc11_codigo = pc81_solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo inner join solicita on pc10_numero = pc11_numero where pc10_numero = (select pc53_solicitafilho from solicitavinculo inner join solicita on pc10_numero = pc53_solicitafilho  where pc53_solicitapai = ".$oSolicita->getCodigoSolicitacao()." and pc10_solicitacaotipo = 6) and si02_coditem = $oParam->iCodigoItemNovo");
+        
+        
+        if (pg_num_rows($rsPrecoReferencia) > 0) {
+          $oItemPreco = db_utils::fieldsMemory($rsPrecoReferencia, 0);
+          db_query("update itemprecoreferencia set si02_codunidadeitem = ".$oParam->iUnidade." where si02_sequencial = ".$oItemPreco->si02_sequencial);
+        }
+
 
 
         $rsItens       = db_query("select * from solicitem inner  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo inner  join pcmater  on pcmater.pc01_codmater = solicitempcmater.pc16_codmater where pc11_numero = ".$oSolicita->getCodigoSolicitacao()." order by pc11_codigo");
@@ -431,6 +440,17 @@ switch ($oParam->exec) {
             $iControle = 1;
           }
         }
+      }
+
+      //VALIDANDO SE JÁ TEM PRECO DE REFERENCIA
+      $rsPrecoReferencia       = db_query("select distinct si01_sequencial from precoreferencia inner join pcprocitem on si01_processocompra = pc81_codproc inner join solicitem on pc11_codigo = pc81_solicitem inner join solicita on pc10_numero = pc11_numero where pc10_numero = (select pc53_solicitafilho from solicitavinculo inner join solicita on pc10_numero = pc53_solicitafilho  where pc53_solicitapai = $iCodAbertura and pc10_solicitacaotipo = 6)");
+      
+      
+      if (pg_num_rows($rsPrecoReferencia) > 0) {
+        $oPrecoReferencia = db_utils::fieldsMemory($rsPrecoReferencia, 0);
+        $oRetorno->status  = 2;
+        $oRetorno->message = urlencode("Não é possivel adicionar item, abertura já possuí preço de referencia número: $oPrecoReferencia->si01_sequencial !!");
+        $iControle = 1;
       }
       if ($iControle == 0) {
         //Abertura

@@ -122,11 +122,6 @@ $db_opcao           = 1;
           </fieldset>
         </td>
       </tr>
-      <tr>
-        <td colspan="2" style="text-align: center;">
-          <input type="button" value="Salvar Itens" id='btnSalvarItens'>
-        </td>
-      </tr>
     </table>
   </center>
 </body>
@@ -242,7 +237,6 @@ $db_opcao           = 1;
     oGridItens.aHeaders[3].lDisplayed = false;
     oGridItens.show($('gridItensSolicitacao'));
     js_makeWindow();
-    $('btnSalvarItens').observe("click", js_salvarItens);
     $('btnAddItem').observe("click", js_adicionarItem);
     $('btnNovoItem').observe("click", js_novoItem);
     $('btnAlterarItem').observe("click", js_alterarItem);
@@ -406,19 +400,6 @@ if (oRetorno.status == 1) {
       }
     }
     oGridItens.renderRows();
-  }
-
-  function js_salvarItens() {
-
-    js_divCarregando('Aguarde, Salvando Itens', "msgBox");
-    var oParam = new Object();
-    oParam.exec = "salvarItensAbertura";
-    var oAjax = new Ajax.Request(sUrlRC, {
-      method: "post",
-      parameters: 'json=' + Object.toJSON(oParam),
-      onComplete: js_retornoSalvarItem
-    });
-
   }
 
   function js_retornoSalvarItem(oAjax) {

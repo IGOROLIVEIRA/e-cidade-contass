@@ -723,7 +723,7 @@ class estimativaRegistroPreco extends solicitacaoCompra
 
     //ALTERA A QUANTIDADE DO ORÇAMENTO
     $oDaoPcOrcamVal = db_utils::getDao('pcorcamval');
-    $rsPcOrcamVal    = $oDaoPcOrcamVal->sql_record("select distinct pc23_orcamforne, pc23_orcamitem from pcorcamval inner join pcorcamitem on pc22_orcamitem = pc23_orcamitem inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem inner join pcprocitem on pc81_codprocitem = pc31_pcprocitem where pc81_codprocitem = (select pc81_codprocitem from pcprocitem where pc81_solicitem = $iCodigoitemCompilacao->pc11_codigo)");
+    $rsPcOrcamVal    = $oDaoPcOrcamVal->sql_record("select distinct pc23_orcamforne, pc23_orcamitem, pc23_vlrun, si02_sequencial, si02_vlprecoreferencia, si01_casasdecimais from pcorcamval inner join pcorcamitem on pc22_orcamitem = pc23_orcamitem inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem inner join pcprocitem on pc81_codprocitem = pc31_pcprocitem left join itemprecoreferencia on si02_itemproccompra = pc23_orcamitem left join precoreferencia on si01_sequencial = si02_precoreferencia where pc81_codprocitem = (select pc81_codprocitem from pcprocitem where pc81_solicitem = $iCodigoitemCompilacao->pc11_codigo)");
     
 
     if(pg_num_rows($rsPcOrcamVal) == 0){
@@ -737,7 +737,19 @@ class estimativaRegistroPreco extends solicitacaoCompra
       $oDaoPcOrcamVal->pc23_orcamforne = $iCodigoOrcamVal->pc23_orcamforne;
       $oDaoPcOrcamVal->pc23_orcamitem = $iCodigoOrcamVal->pc23_orcamitem;
       $oDaoPcOrcamVal->pc23_quant      = $iQuantidadeSolicitem;
+      $oDaoPcOrcamVal->pc23_valor = $iCodigoOrcamVal->pc23_vlrun * $iQuantidadeSolicitem;
       $oDaoPcOrcamVal->alterar($iCodigoOrcamVal->pc23_orcamforne,$iCodigoOrcamVal->pc23_orcamitem);
+    }
+
+    //ALTERA A QUANTIDADE DO PRECO DE REFERENCIA
+
+    if($iCodigoOrcamVal->si02_sequencial != null && $iCodigoOrcamVal->si02_sequencial != ""){
+      $oDaoItemPrecoReferencia = db_utils::getDao('itemprecoreferencia');
+
+      $oDaoItemPrecoReferencia->si02_vltotalprecoreferencia = $iQuantidadeSolicitem * round($iCodigoOrcamVal->si02_vlprecoreferencia,$iCodigoOrcamVal->si01_casasdecimais);
+      $oDaoItemPrecoReferencia->si02_qtditem = $iQuantidadeSolicitem;
+      $oDaoItemPrecoReferencia->si02_sequencial = $iCodigoOrcamVal->si02_sequencial;
+      $oDaoItemPrecoReferencia->alterar($iCodigoOrcamVal->si02_sequencial);   
     }
 
     return true;
