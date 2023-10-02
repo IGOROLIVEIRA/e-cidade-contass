@@ -291,6 +291,10 @@ $clsolicita->rotulo->label();
             oGridMaterialServico.addRow(aLinha);
         });
         oGridMaterialServico.renderRows();
+
+        aMateriaisCadastrados.each (function ( oMaterial, iMaterial ) {
+            oGridMaterialServico.setHint(iMaterial, 6, oMaterial.descricao.urlDecode());
+        });
     }
 
     function atualizarDataPara() {
