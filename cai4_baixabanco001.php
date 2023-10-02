@@ -73,6 +73,7 @@ $lDebugAtivo   = false;
 
 if ($lDebugAtivo == true) {
 	 echo "   Debug Ativo<br/>";
+     echo "   Integracao com PIX: {$usePixIntegration}<br/>";
 }
 
 $iInstitSessao = db_getsession("DB_instit");
@@ -1085,6 +1086,10 @@ if ($situacao == 2) {
                     if($usePixIntegration && isPagamentoViaPix($arq_array[$i])) {
                         $numpre = (new ExtractNumprePaymentReturnService())->execute($arq_array[$i]);
                         $numpar = '000';
+                        if ($lDebugAtivo) {
+                            echo '<br>numpre do pix: '.$numpre;
+                            echo '<br>numpar do pix: '.$numpar;
+                        }
                     }
 
 
