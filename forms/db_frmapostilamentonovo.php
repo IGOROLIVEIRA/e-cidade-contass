@@ -1598,7 +1598,10 @@ unset($_GET['viewAlterar']);
         new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
 
             if (lErro) {
-                return alert(oRetorno.message.urlDecode());
+                if (oRetorno.datareferencia) {
+                    document.getElementById("trdatareferencia").style.display = 'contents';
+                }
+                    return alert(oRetorno.message.urlDecode());
             }
             alert("Apostilamento alterado com sucesso!");
 
