@@ -25,6 +25,9 @@
  *                                licenca/licenca_pt.txt
  */
 
+use App\Models\Numpref;
+use App\Services\Tributario\Arrecadacao\ExtractNumprePaymentReturnService;
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -54,12 +57,23 @@ $situacao      = "";
 $sMd5Arquivo   = null;
 
 /**
+ * @var Numpref $settings
+ */
+$settings = Numpref::query()
+    ->where('k03_anousu', db_getsession("DB_anousu"))
+    ->where('k03_instit', db_getsession("DB_instit"))
+    ->first();
+
+$usePixIntegration = $settings->k03_ativo_integracao_pix;
+
+/**
  * Variável de Debug da rotina
  */
 $lDebugAtivo   = false;
 
 if ($lDebugAtivo == true) {
 	 echo "   Debug Ativo<br/>";
+     echo "   Integracao com PIX: {$usePixIntegration}<br/>";
 }
 
 $iInstitSessao = db_getsession("DB_instit");
@@ -74,6 +88,13 @@ $sCamposParametrosNumpref = "k03_agrupadorarquivotxtbaixabanco, k03_pgtoparcial"
 $sSqlParametrosNumpref    = $oDaoNumpref->sql_query_file(db_getsession("DB_anousu"), db_getsession("DB_instit"), $sCamposParametrosNumpref);
 $rsParametrosNumpref      = $oDaoNumpref->sql_record($sSqlParametrosNumpref);
 $oDadosParametrosNumpref  = db_utils::fieldsMemory($rsParametrosNumpref, 0);
+
+const IDENTIFICADOR_PIX = 9;
+
+function isPagamentoViaPix(string $line): bool
+{
+    return ((int) substr($line, 116, 1) === IDENTIFICADOR_PIX);
+}
 
 /**
  * Função responsavel por controlar a taxa bancaria
@@ -1061,6 +1082,17 @@ if ($situacao == 2) {
 
                     $numpre = substr($arq_array[$i], substr($k15_numpre, 0, 3) - 1, substr($k15_numpre, 3, 3));
                     $numpar = substr($arq_array[$i], substr($k15_numpar, 0, 3) - 1, substr($k15_numpar, 3, 3));
+
+                    if($usePixIntegration && isPagamentoViaPix($arq_array[$i])) {
+                        $numpre = (new ExtractNumprePaymentReturnService())->execute($arq_array[$i]);
+                        $numpar = '000';
+                        if ($lDebugAtivo) {
+                            echo '<br>numpre do pix: '.$numpre;
+                            echo '<br>numpar do pix: '.$numpar;
+                        }
+                    }
+
+
                     $hlhposicaonumpre = substr($arq_array[$i], 67, 5);
                     $elposicaonumpre = substr($arq_array[$i], 64, 4);
 
