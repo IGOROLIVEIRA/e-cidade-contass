@@ -1088,7 +1088,7 @@ class cl_acordoitem {
         ";
 
         $result = db_query($sql);
-         if($result==false) {
+         if ($result==false) {
            $this->erro_banco = str_replace("\n","",@pg_last_error());
            $this->erro_sql   = "Acordo Item nao Alterado. Alteracao Abortada.\\n";
              $this->erro_sql .= "Valores : ".$this->ac20_sequencial;
@@ -1097,7 +1097,7 @@ class cl_acordoitem {
            $this->erro_status = "0";
            $this->numrows_alterar = 0;
            return false;
-         }else{
+         } else {
            if(pg_affected_rows($result)==0){
              $this->erro_banco = "";
              $this->erro_sql = "Acordo Item nao foi Alterado. Alteracao Executada.\\n";
@@ -1107,7 +1107,7 @@ class cl_acordoitem {
              $this->erro_status = "1";
              $this->numrows_alterar = 0;
              return true;
-           }else{
+           } else {
              $this->erro_banco = "";
              $this->erro_sql = "Alteração efetuada com Sucesso\\n";
              $this->erro_sql .= "Valores : ".$this->ac20_sequencial;
@@ -1124,8 +1124,7 @@ class cl_acordoitem {
         $iAcordo,
         $codigoitem,
         $si03_sequencial
-    )
-    {
+    ) {
         $sql = "
             SELECT ac20_sequencial
             FROM apostilamento

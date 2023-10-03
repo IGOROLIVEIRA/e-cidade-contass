@@ -992,7 +992,7 @@ class cl_acordoposicao {
     ";
 
     $result = db_query($sql);
-     if($result==false){
+     if ($result==false) {
        $this->erro_banco = str_replace("\n","",@pg_last_error());
        $this->erro_sql   = "posicoes do acordo nao Alterado. Alteracao Abortada.\\n";
        $this->erro_sql .= "Valores : ".$this->ac26_sequencial;
@@ -1001,7 +1001,7 @@ class cl_acordoposicao {
        $this->erro_status = "0";
        $this->numrows_alterar = 0;
        return false;
-     }else{
+     } else {
        if(pg_affected_rows($result)==0){
          $this->erro_banco = "";
          $this->erro_sql = "posicoes do acordo nao foi Alterado. Alteracao Executada.\\n";
@@ -1011,7 +1011,7 @@ class cl_acordoposicao {
          $this->erro_status = "1";
          $this->numrows_alterar = 0;
          return true;
-       }else{
+       } else {
          $this->erro_banco = "";
          $this->erro_sql = "Alterao efetuada com Sucesso\\n";
          $this->erro_sql .= "Valores : ".$this->ac26_sequencial;

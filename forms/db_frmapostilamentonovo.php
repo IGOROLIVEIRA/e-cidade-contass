@@ -419,13 +419,11 @@ unset($_GET['viewAlterar']);
 
             $('ac16_sequencial').value = '';
             $('ac16_resumoobjeto').value = chave1;
-            //$('si03_dataassinacontrato').value = '';
             $('ac16_sequencial').focus();
         } else {
 
             $('ac16_sequencial').value = chave1;
             $('ac16_resumoobjeto').value = chave2;
-            //$('si03_dataassinacontrato').value = chave3.substr(8, 2) + '/' + chave3.substr(5, 2) + '/' + chave3.substr(0, 4);
             pesquisarDadosAcordo(chave1);
         }
     }
@@ -526,10 +524,6 @@ unset($_GET['viewAlterar']);
             aLinha[1] = oItem.descricaoitem.urlDecode();
             aLinha[2] = js_formatar(oItem.qtdeanterior, 'f', 2);
             aLinha[3] = js_formatar(oItem.vlunitanterior, 'f', 2);
-
-
-
-
 
             var nQuantidade = oItem.quantidade || oItem.qtdeanterior,
                 nUnitario = oItem.valorunitario || oItem.vlunitanterior;
@@ -1449,11 +1443,7 @@ unset($_GET['viewAlterar']);
     function js_acordosc_apostilamentos(lMostrar) {
 
         var sUrl = 'func_acordonovo.php?viewalterar=true&funcao_js=parent.js_mostraacordoultimaposicao|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura';
-            js_OpenJanelaIframe('top.corpo',
-                'db_iframe_acordo',
-                sUrl,
-                'Pesquisar Acordo',
-                true);
+
         if (lMostrar == true) {
             var sUrl = 'func_acordonovo.php?viewalterar=true&funcao_js=parent.js_mostraacordoultimaposicao|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura';
             js_OpenJanelaIframe('top.corpo',
@@ -1461,23 +1451,23 @@ unset($_GET['viewAlterar']);
                 sUrl,
                 'Pesquisar Acordo',
                 true);
-
-        } else {
-
-            if ($('ac16_sequencial').value != '') {
-
-                var sUrl = 'func_acordonovo.php?viewalterar=true&pesquisa_chave=' + $('ac16_sequencial').value +
-                    '&funcao_js=parent.js_mostraacordo';
-
-                js_OpenJanelaIframe('top.corpo',
-                    'db_iframe_acordo',
-                    sUrl,
-                    'Pesquisar Acordo',
-                    false);
-            } else {
-                $('ac16_sequencial').value = '';
-            }
+            return;
         }
+
+        if ($('ac16_sequencial').value != '') {
+
+            var sUrl = 'func_acordonovo.php?viewalterar=true&pesquisa_chave=' + $('ac16_sequencial').value +
+                '&funcao_js=parent.js_mostraacordo';
+
+            js_OpenJanelaIframe('top.corpo',
+                'db_iframe_acordo',
+                sUrl,
+                'Pesquisar Acordo',
+                false);
+            return
+        }
+        $('ac16_sequencial').value = '';
+
     }
 
     function js_mostraacordoultimaposicao(ac16_sequencial,ac16_resumoobjeto,ac16_dataassinatura) {

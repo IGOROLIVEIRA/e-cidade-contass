@@ -1,9 +1,5 @@
 <?php
 
-// ini_set('display_errors', '1');
-// ini_set('display_startup_errors', '1');
-// error_reporting(E_ALL);
-
 require_once('model/contrato/apostilamento/Command/SalvaDotacoesCommand.php');
 class UpdateAcordoItemCommand
 {
@@ -29,7 +25,7 @@ class UpdateAcordoItemCommand
                 $salvaDotacoes = new SalvaDotacoesCommand();
                 $salvaDotacoes->execute($item->dotacoes, $ac20Sequencial);
             }
-            
+
             if ($oDaoAcordoItem->erro_status == "0") {
                 throw new Exception($oDaoAcordoItem->erro_msg);
             }

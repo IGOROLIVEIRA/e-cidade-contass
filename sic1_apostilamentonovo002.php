@@ -14,18 +14,6 @@ $db_opcao = 1;
 $db_botao = true;
 $_GET['viewAlterar'] = true;
 
-// if (isset($alterar)) {
-//   $clapostilamento->si03_numcontrato = $ac16_sequencial;
-//   db_inicio_transacao();
-//   $db_opcao = 2;
-//   $clapostilamento->alterar($si03_sequencial);
-//   db_fim_transacao();
-// } else if (isset($chavepesquisa)) {
-//   $db_opcao = 2;
-//   $result = $clapostilamento->sql_record($clapostilamento->sql_query($chavepesquisa));
-//   db_fieldsmemory($result, 0);
-//   $db_botao = true;
-// }
 ?>
 <html>
 
@@ -100,6 +88,3 @@ if (isset($alterar)) {
   }
 }
 ?>
-<!-- <script>
-  js_tabulacaoforms("form1", "si03_licitacao", true, 1, "si03_licitacao", true);
-</script> -->
