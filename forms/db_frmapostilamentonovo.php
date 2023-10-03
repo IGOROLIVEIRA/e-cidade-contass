@@ -281,6 +281,7 @@ unset($_GET['viewAlterar']);
     let si03_sequencial = null;
     let tipoApostilaInicial = null;
     let numApostilaInicial = null;
+    let validaDtApostila = true;
     document.getElementById("si03_datareferencia").style.width = "80px"
     document.getElementById("si03_tipoalteracaoapostila").disabled = true;
     sUrlRpc = 'con4_contratoapostilamento.RPC.php';
@@ -1245,7 +1246,8 @@ unset($_GET['viewAlterar']);
             datafinal: $("datafinal").value,
             oApostila,
             aItens: [],
-            aSelecionados: iSelecionados
+            aSelecionados: iSelecionados,
+            validaDtApostila
         };
 
         var lAditar = true;
@@ -1337,6 +1339,7 @@ unset($_GET['viewAlterar']);
 
                 if (lErro) {
                     if (oRetorno.datareferencia) {
+                        validaDtApostila = false;
                         document.getElementById("trdatareferencia").style.display = 'contents';
                     }
                     return alert(oRetorno.message.urlDecode());
@@ -1592,16 +1595,18 @@ unset($_GET['viewAlterar']);
             exec: 'updateApostilamento',
             apostilamento,
             iAcordo: $('ac16_sequencial').value,
-            itens
+            itens,
+            validaDtApostila
         }
 
         new AjaxRequest(sUrlRpc, oParam, function(oRetorno, lErro) {
 
             if (lErro) {
                 if (oRetorno.datareferencia) {
+                    validaDtApostila = false;
                     document.getElementById("trdatareferencia").style.display = 'contents';
                 }
-                    return alert(oRetorno.message.urlDecode());
+                return alert(oRetorno.message.urlDecode());
             }
             alert("Apostilamento alterado com sucesso!");
 

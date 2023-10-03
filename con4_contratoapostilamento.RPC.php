@@ -35,6 +35,7 @@ try {
             $validaDatas->execute(
                 $oParam->oApostila->datareferencia,
                 $oParam->oApostila->dataapostila,
+                $oParam->validaDtApostila,
                 $oContrato,
                 $oRetorno
             );
@@ -114,6 +115,7 @@ try {
             $validaDatas->execute(
                 $oParam->apostilamento->si03_datareferencia,
                 $oParam->apostilamento->si03_dataapostila,
+                $oParam->validaDtApostila,
                 $oContrato,
                 $oRetorno
             );

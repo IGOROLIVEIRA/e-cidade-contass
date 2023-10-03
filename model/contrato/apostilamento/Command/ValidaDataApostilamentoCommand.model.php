@@ -5,7 +5,7 @@ require_once("classes/db_condataconf_classe.php");
 class ValidaDataApostilamentoCommand
 {
 
-    public function execute($dataReferencia, $dataApostila, $oContrato, $oRetorno)
+    public function execute($dataReferencia, $dataApostila, $validaDtApostila, $oContrato, $oRetorno)
     {
         $clcondataconf = new cl_condataconf;
 
@@ -34,15 +34,18 @@ class ValidaDataApostilamentoCommand
             if (substr($rsData, 0, 4) == substr($datareferenciaapostila, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferenciaapostila, 5, 2)) {
                 throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
             }
+
             if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
                 throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
             }
         }
-        if ($rsData != "" && $dateApostila <= $c99_datapat) {
+
+        if ($rsData != "" && $dateApostila <= $c99_datapat && $validaDtApostila) {
             $oRetorno->datareferencia = true;
             throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
         }
-        if($dateApostila < $dateAssinaturaContrato){
+        
+        if($dateApostila < $dateAssinaturaContrato && $validaDtApostila) {
             throw new Exception('Usuário: A data da apostila não pode ser anterior a data de assinatura do contrato. Assinatura do contrato: ' . $oContrato->getDataAssinatura());
         }
     }
