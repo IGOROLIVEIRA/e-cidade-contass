@@ -395,6 +395,7 @@ class cl_apostilamento
           return false;
         }
     }
+
       if (trim($this->si03_indicereajuste) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si03_indicereajuste"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si03_indicereajuste"] != "")) {
         $sql  .= $virgula . " si03_indicereajuste = $this->si03_indicereajuste ";
         $virgula = ",";
@@ -408,6 +409,7 @@ class cl_apostilamento
           return false;
         }
     }
+
     if (trim($this->si03_dataassinacontrato) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si03_dataassinacontrato_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si03_dataassinacontrato_dia"] != "")) {
       $sql  .= $virgula . " si03_dataassinacontrato = '$this->si03_dataassinacontrato' ";
       $virgula = ",";
@@ -435,6 +437,7 @@ class cl_apostilamento
         }
       }
     }
+
     if (trim($this->si03_datareferencia) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si03_datareferencia_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si03_datareferencia_dia"] != "")) {
       $sql  .= $virgula . " si03_datareferencia = '$this->si03_datareferencia' ";
       $virgula = ",";
@@ -462,6 +465,7 @@ class cl_apostilamento
         }
       }
     }
+
     if (trim($this->si03_tipoapostila) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si03_tipoapostila"])) {
       $sql  .= $virgula . " si03_tipoapostila = $this->si03_tipoapostila ";
       $virgula = ",";
@@ -475,6 +479,7 @@ class cl_apostilamento
         return false;
       }
     }
+
     if (trim($this->si03_dataapostila) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si03_dataapostila_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["si03_dataapostila_dia"] != "")) {
       $sql  .= $virgula . " si03_dataapostila = '$this->si03_dataapostila' ";
       $virgula = ",";
@@ -639,9 +644,9 @@ class cl_apostilamento
           $resac = db_query("insert into db_acount values($acount,2010197,2011686,'" . AddSlashes(pg_result($resaco, $conresaco, 'si03_instit')) . "','$this->si03_instit'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       }
     }
-    // var_dump($sql);
-    // die();
+
     $result = db_query($sql);
+
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
       $this->erro_sql   = "apostilamento nao Alterado. Alteracao Abortada.\\n";
@@ -673,7 +678,7 @@ class cl_apostilamento
       }
     }
   }
-  // funcao para exclusao
+
   function excluir($si03_sequencial = null, $dbwhere = null)
   {
     if ($dbwhere == null || $dbwhere == "") {
@@ -745,6 +750,7 @@ class cl_apostilamento
       }
     }
   }
+
   // funcao do recordset
   function sql_record($sql)
   {
@@ -769,6 +775,7 @@ class cl_apostilamento
     }
     return $result;
   }
+
   // funcao do sql
   function sql_query($si03_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {
@@ -808,6 +815,7 @@ class cl_apostilamento
     }
     return $sql;
   }
+  
   // funcao do sql
   function sql_query_file($si03_sequencial = null, $campos = "*", $ordem = null, $dbwhere = "")
   {

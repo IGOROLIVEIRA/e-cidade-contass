@@ -276,8 +276,8 @@ unset($_GET['viewAlterar']);
 </table>
 <input type='button' disabled id='btnSalvar' value='Salvar' onclick="apostilar();">
 <script>
+    const viewAlterar = "<?php echo $viewAlterar ?>";
     let RetornoItens = null;
-    let viewAlterar = "<?php echo $viewAlterar ?>";
     let si03_sequencial = null;
     let tipoApostilaInicial = null;
     let numApostilaInicial = null;
@@ -290,7 +290,6 @@ unset($_GET['viewAlterar']);
     oGridItens.nameInstance = 'oGridItens';
     oGridItens.setCheckbox(0);
     oGridItens.setCellAlign(['center', 'left', "right", "right", "right", "right", "center", "right", "center", "center", "center", "center", "center"]);
-    //oGridItens.setCellWidth(["50px", "30%", "8%", "8%", "3%", "25%", "8%", "8%", "3%", "25%", "8%", "8%", "8%"]);
     oGridItens.setHeader(["Código", "Item", "Quantidade", "Unit. Anterior", "Quantidade", "Valor Unitário", "Valor Total", "Valor Apostilado", "Qt Aditada", "Dotacoes", "Seq"]);
     oGridItens.aHeaders[11].lDisplayed = false;
     oGridItens.aHeaders[10].lDisplayed = false;
@@ -1441,9 +1440,6 @@ unset($_GET['viewAlterar']);
     }
 
     function js_acordosc_apostilamentos(lMostrar) {
-
-        var sUrl = 'func_acordonovo.php?viewalterar=true&funcao_js=parent.js_mostraacordoultimaposicao|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura';
-
         if (lMostrar == true) {
             var sUrl = 'func_acordonovo.php?viewalterar=true&funcao_js=parent.js_mostraacordoultimaposicao|ac16_sequencial|ac16_resumoobjeto|ac16_dataassinatura';
             js_OpenJanelaIframe('top.corpo',
@@ -1539,7 +1535,7 @@ unset($_GET['viewAlterar']);
     }
 
     function validaDadosAcordo(oRetorno) {
-        let tipoApostila = $('si03_tipoapostila').value;
+        const tipoApostila = $('si03_tipoapostila').value;
 
         document.getElementById('trreajuste').style.display = "none";
         $("si03_percentualreajuste").value = "";
