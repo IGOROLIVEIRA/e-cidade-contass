@@ -752,6 +752,21 @@ class estimativaRegistroPreco extends solicitacaoCompra
       $oDaoItemPrecoReferencia->alterar($iCodigoOrcamVal->si02_sequencial);   
     }
 
+    //ALTERA A QUANTIDADE DO LICITACAO
+    $oDaoPcOrcamItem = db_utils::getDao('pcorcamitem');
+    $rsPCOrcamValLic   = $oDaoPcOrcamItem->sql_record("select pc23_orcamforne, pc23_orcamitem, pc23_vlrun from pcorcamval inner join pcorcamitem on pc23_orcamitem = pc22_orcamitem inner join pcorcamitemlic on pc26_orcamitem = pc22_orcamitem inner join liclicitem on l21_codigo = pc26_liclicitem inner join pcprocitem on pc81_codprocitem = l21_codpcprocitem where pc81_codproc = (select pc81_codproc from pcprocitem where pc81_solicitem = $iCodigoitemCompilacao->pc11_codigo)");
+    
+    for ($x = 0; $x < pg_num_rows($rsPCOrcamValLic); $x++) {
+
+      $iOrcamValLic = db_utils::fieldsMemory($rsPCOrcamValLic, $x);
+
+      $oDaoPcOrcamVal->pc23_orcamforne = $iOrcamValLic->pc23_orcamforne;
+      $oDaoPcOrcamVal->pc23_orcamitem = $iOrcamValLic->pc23_orcamitem;
+      $oDaoPcOrcamVal->pc23_quant      = $iQuantidadeSolicitem;
+      $oDaoPcOrcamVal->pc23_valor = $iOrcamValLic->pc23_vlrun * $iQuantidadeSolicitem;
+      $oDaoPcOrcamVal->alterar($iOrcamValLic->pc23_orcamforne,$iOrcamValLic->pc23_orcamitem);
+    }
+
     return true;
   }
 }
