@@ -420,6 +420,9 @@ if ($sqlerro==false){
    db_fieldsmemory($result_comb,0);
    }
 
+   $rsEmpempenho = $clempempenho->sql_record($clempempenho->sql_query_file($si05_numemp,"e60_vlremp-e60_vlrutilizado as saldoDisponivel,e60_codemp||'/'||e60_anousu as e60_codemp",null));
+   db_fieldsmemory($rsEmpempenho,0);
+
   }
 
 

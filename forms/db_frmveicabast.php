@@ -255,8 +255,8 @@ db_app::load("estilos.css");
                 <td><b>Saldo Disponível: </b></td>
                 <td>
                   <?php 
-                  db_input('saldoDisponivel', 10, 1, true, 'text', 3); 
-                  $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(1, "*", null, ""));
+                  db_input('saldodisponivel', 10, 1, true, 'text', 3); 
+                  $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(null, "*", null, "ve50_instit = " . db_getsession("DB_instit")));
                   $resultParamres = db_utils::fieldsMemory($resultParam, 0);
                   if ($resultParamres->ve50_abastempenho != 1) {
                     echo "<script> document.getElementById('trSaldoDisponivel').style.display = 'none';</script>";
@@ -487,7 +487,6 @@ db_app::load("estilos.css");
 <script>
   var el = document.getElementById("e60_codemp");
   el.onblur = function() {
-    console.log("blur", "saiu do input", this);
     var valor_e60Codemp = document.form1.e60_codemp.value;
     var valor_ve70Dtabast = document.form1.ve70_dtabast.value;
     if (valor_e60Codemp != "" && valor_ve70Dtabast != "") {
@@ -564,7 +563,7 @@ db_app::load("estilos.css");
       }
     } else {
       chave6 = parseFloat(chave6);
-      document.form1.saldoDisponivel.value = chave6.toLocaleString('pt-BR', { minimumFractionDigits: 2});
+      document.form1.saldodisponivel.value = chave6.toLocaleString('pt-BR', { minimumFractionDigits: 2});
       document.form1.si05_numemp.value = chave1;
       document.form1.e60_codemp.value = chave2 + '/' + chave3;
       document.form1.numcgm_posto.value = chave5;
@@ -595,11 +594,34 @@ db_app::load("estilos.css");
       document.form1.e60_codemp.value = '';
       return false;
     }
-
     document.form1.e60_codemp.value = e60_codemp;
     document.form1.si05_numemp.value = si05_numemp;
     document.form1.numcgm_posto.value = e60_numcgm;
-    document.form1.saldoDisponivel.value = saldoDisponivel;
+    document.form1.saldodisponivel.value = saldoDisponivel;
+
+    db_iframe_empempenho.hide();
+    
+    let itemEmpenho = document.getElementById("si05_item_empenho").value;
+
+    if (itemEmpenho == 't') {
+      js_pesquisaItem_emp(true);
+      js_pesquisave71_veiccadposto(true, 0);
+      return;
+    }
+
+    js_pesquisave71_veiccadposto(true, 0);
+    
+  }
+
+  function js_mostraempempenhoalteracao(e60_codemp,erro,e60_numcgm,si05_numemp,saldoDisponivel) {
+    if(erro){
+      document.form1.e60_codemp.value = '';
+      return false;
+    }
+    document.form1.e60_codemp.value = e60_codemp;
+    document.form1.si05_numemp.value = si05_numemp;
+    document.form1.numcgm_posto.value = e60_numcgm;
+    document.form1.saldodisponivel.value = saldoDisponivel;
 
     db_iframe_empempenho.hide();
     
@@ -1250,8 +1272,8 @@ db_app::load("estilos.css");
   };
   //js_pesquisa_ultimamedida();
   js_formataHora();
-  //js_pesquisae60_codemp(false,0);
-  //js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + document.form1.ve70_dtabast.value + '&pesquisa_chave=' + document.form1.si05_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
+  //js_pesquisae60_codemp(false);
+  //js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + document.form1.ve70_dtabast.value + '&pesquisa_chave=' + document.form1.e60_codemp.value + '&funcao_js=parent.js_mostraempempenho', 'Pesquisa', false);
 
   var litros = 0;
   var valor = 0;
