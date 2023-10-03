@@ -37,7 +37,8 @@ $sql = "SELECT DISTINCT l20_numero || '/' || l20_anousu AS licitacao,
                         pc10_resumo AS objeto,
                         coddepto || '-' || descrdepto AS departamento,
                         to_char(pc54_datainicio,'dd / mm / yyyy') AS inicio,
-                        to_char(pc54_datatermino,'dd / mm / yyyy') AS fim
+                        to_char(pc54_datatermino,'dd / mm / yyyy') AS fim,
+                        pc54_datatermino
         FROM liclicitem
         INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
         INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
@@ -55,7 +56,7 @@ $sql = "SELECT DISTINCT l20_numero || '/' || l20_anousu AS licitacao,
         LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = solicitatipo.pc12_tipo
         WHERE date_part ('year',pc54_datatermino) = $anousu
         AND l20_instit = ". db_getsession('DB_instit') .
-        " ORDER BY fim ASC";
+        " ORDER BY pc54_datatermino";
 
 $resultVigencia = db_query($sql);
 
