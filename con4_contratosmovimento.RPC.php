@@ -436,11 +436,12 @@ switch ($oParam->exec) {
             }
 
             $oRecisao->save();
+
             db_query("UPDATE acordo SET ac16_datareferenciarescisao = '$dataReferencia'  WHERE ac16_sequencial = $oParam->acordo");
 
             $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
             $sHistorico = "Valor referente a rescisão do contrato com o código: {$oAcordo->getCodigoAcordo()}.";
-            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $nValorRescisao, $sHistorico, $oRecisao->getDataMovimento());
+            $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $nValorRescisao, $sHistorico, $dataReferencia);
 
             db_fim_transacao(false);
         } catch (Exception $eExeption) {
