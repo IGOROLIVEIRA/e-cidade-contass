@@ -313,8 +313,6 @@ $val = false;
   data = ' <?php echo $data; ?> ';
   descrdepto = ' <?php echo $descrdepto; ?> ';
 
-  const select = document.querySelector('#pc10_numero');
-  select.options[select.options.length] = new Option(numero, numero);
   document.getElementById('pc10_data').value = data;
   document.getElementById('descrdepto').value = descrdepto;
 

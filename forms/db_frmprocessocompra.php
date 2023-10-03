@@ -485,9 +485,7 @@ $clrotulo->label("descrdepto");
           oGridItens.clearAll(true);
 
           seq = 1;
-          for (var iCodigoteste in aRowsGrid) {
-
-
+          for (var iCodigoOrder in aRowsGrid) {
             for (var iCodigo in aRowsGrid){
               if(seq == aRowsGrid[iCodigo].sequencial){
                   var aItem = new Array();
