@@ -969,6 +969,7 @@ switch ($oParam->exec) {
                     if ($erro == false) {
                         unlink($arquivo);
                     }
+                    $erro = true;
                     //$arrayItensPlanilha[] = $objItensPlanilha;
                     //$arrayItens = array_pop($arrayRetornoPlanilha);
 
@@ -984,6 +985,7 @@ switch ($oParam->exec) {
                     if ($erro == false) {
                         unlink($arquivo);
                     }
+                    $erro = true;
 
                     $oRetorno->itens = $arrayRetornoIguais;
                 } else if ($controle1 == 1) {
@@ -991,6 +993,7 @@ switch ($oParam->exec) {
                     if ($erro == false) {
                         unlink($arquivo);
                     }
+                    $erro = true;
 
                     $oRetorno->itens = $arrayRetornoPlanilhaMoto;
                 } else if ($opBaixaCompleta == 1 || $opBaixa == 1) {
@@ -998,6 +1001,7 @@ switch ($oParam->exec) {
                     if ($erro == false) {
                         unlink($arquivo);
                     }
+                    $erro = true;
 
                     $oRetorno->itens = $arrayRetornoBaixa;
                 } else if ($opKm == 1) {
@@ -1005,6 +1009,7 @@ switch ($oParam->exec) {
                     if ($erro == false) {
                         unlink($arquivo);
                     }
+                    $erro = true;
 
                     $oRetorno->itens = $arrayRetornoKm;
                 } else if ($controleCom == 1) {
@@ -1012,6 +1017,7 @@ switch ($oParam->exec) {
                     if ($erro == false) {
                         unlink($arquivo);
                     }
+                    $erro = true;
 
                     $oRetorno->itens = $arrayRetornoComb;
                 }
