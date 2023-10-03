@@ -232,8 +232,7 @@ if ($sqlerro==false){
   if ($clveicabast->erro_status=="0"){
   	$sqlerro=true;
   }
-
-  $sqlerro = $clveicabast->alteracaoSaldo($ve70_codigo,$ve70_valor,$si05_numemp);
+  $sqlerro = $clveicabast->alteracaoSaldo($ve70_codigo,$ve70_valor,$si05_numemp,$ve70_valorantigo);
   $erro_msg = $clveicabast->erro_msg;
 
   if ($sqlerro==false){
@@ -341,7 +340,7 @@ if ($sqlerro==false){
  if(isset($chavepesquisa)){
    $db_botao = true;
    $db_opcao = 2;
-   $result = $clveicabast->sql_record($clveicabast->sql_query($chavepesquisa));
+   $result = $clveicabast->sql_record($clveicabast->sql_query_file($chavepesquisa,"ve70_valor as ve70_valorantigo,*"));
    if ($clveicabast->numrows>0){
    db_fieldsmemory($result,0);
   }

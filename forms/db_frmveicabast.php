@@ -417,6 +417,7 @@ db_app::load("estilos.css");
                     </td>
                     <td>
                       <?
+                      db_input('ve70_valorantigo', 10, 1, true, 'hidden', 1);
                       db_input('ve70_valor', 10, $Ive70_valor, true, 'text', 3, "")
                       ?>
                     </td>

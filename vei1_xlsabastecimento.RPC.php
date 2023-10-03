@@ -109,6 +109,7 @@ switch ($oParam->exec) {
     case 'importar':
 
         $erro = false;
+        db_inicio_transacao();
 
 
         //monto o nome do arquivo
@@ -839,7 +840,7 @@ switch ($oParam->exec) {
                     $resultDepartaCod = db_utils::fieldsMemory($resultDeparta, 0);
 
                     // Incluir a retirada do veiculo
-                    db_inicio_transacao();
+
                     $clveicretirada->ve60_veiculo              = $codigoVeic;
                     $clveicretirada->ve60_veicmotoristas       = $motoristaCodigo;
                     $clveicretirada->ve60_datasaida            = $datasaida;
@@ -931,15 +932,13 @@ switch ($oParam->exec) {
                         $clveicabastposto->incluir(null);
                     }
                     
-                    db_fim_transacao();
-
                     if ($erro == false) {
                         unlink($arquivo);
                     }
 
                     $oRetorno->status = 3;
                     $oRetorno->message = urlencode("Dados inseridos!!");
-                    $erro = true;
+                    $erro = false;
                 }
             } else {
                 if ($opVeic == 1) {
@@ -1018,6 +1017,9 @@ switch ($oParam->exec) {
                 }
             }
         }
+
+        db_fim_transacao($erro);
+
         break;
 }
 echo json_encode($oRetorno);
