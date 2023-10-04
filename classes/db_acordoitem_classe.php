@@ -1051,5 +1051,98 @@ class cl_acordoitem {
       WHERE ac26_acordo = $iAcordo)";
     return $sql;
   }
+  public function getItemsApostilaUltPosicao($ac26_acordo)
+  {
+        $sql = "SELECT
+            ac26_numeroapostilamento,
+            si03_sequencial,
+            si03_acordo,
+            si03_dataapostila,
+            si03_tipoalteracaoapostila,
+            si03_tipoapostila,
+            si03_descrapostila,
+            si03_percentualreajuste,
+            si03_indicereajuste,
+            si03_datareferencia,
+            si03_justificativa
+        FROM apostilamento
+        INNER JOIN acordo ON ac16_sequencial = si03_acordo
+        INNER JOIN acordoposicao ON acordoposicao.ac26_acordo = acordo.ac16_sequencial
+        WHERE ac26_acordo = $ac26_acordo
+        and ac26_numeroapostilamento = (select max(ac26_numeroapostilamento) from acordoposicao where ac26_acordo = $ac26_acordo)
+        order by si03_sequencial desc
+        limit 1;";
+        return $sql;
+    }
+
+    public function updateByApostilamento(
+        $ac20Sequencial
+    ) {
+        $sql = "
+        UPDATE acordoitem
+        SET
+            ac20_valorunitario = {$this->ac20_valorunitario},
+            ac20_valortotal = {$this->ac20_valortotal}
+        WHERE
+         ac20_sequencial = $ac20Sequencial;
+        ";
+
+        $result = db_query($sql);
+         if ($result==false) {
+           $this->erro_banco = str_replace("\n","",@pg_last_error());
+           $this->erro_sql   = "Acordo Item nao Alterado. Alteracao Abortada.\\n";
+             $this->erro_sql .= "Valores : ".$this->ac20_sequencial;
+           $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+           $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+           $this->erro_status = "0";
+           $this->numrows_alterar = 0;
+           return false;
+         } else {
+           if(pg_affected_rows($result)==0){
+             $this->erro_banco = "";
+             $this->erro_sql = "Acordo Item nao foi Alterado. Alteracao Executada.\\n";
+             $this->erro_sql .= "Valores : ".$this->ac20_sequencial;
+             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+             $this->erro_status = "1";
+             $this->numrows_alterar = 0;
+             return true;
+           } else {
+             $this->erro_banco = "";
+             $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+             $this->erro_sql .= "Valores : ".$this->ac20_sequencial;
+             $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+             $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+             $this->erro_status = "1";
+             $this->numrows_alterar = pg_affected_rows($result);
+             return true;
+            }
+        }
+    }
+
+    public function getIdByAcordoPcmaterApostilamento(
+        $iAcordo,
+        $codigoitem,
+        $si03_sequencial
+    ) {
+        $sql = "
+            SELECT ac20_sequencial
+            FROM apostilamento
+            INNER JOIN acordo ON ac16_sequencial = si03_acordo
+            INNER JOIN acordoposicao ON acordoposicao.ac26_acordo = acordo.ac16_sequencial
+            INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+            WHERE ac26_acordo = $iAcordo
+                AND ac20_pcmater = $codigoitem
+                AND si03_sequencial = $si03_sequencial
+                AND ac26_acordoposicaotipo IN (17,16,15)
+                AND ac26_numeroapostilamento IS NOT NULL
+                AND ac26_numeroapostilamento =
+                    (SELECT max(ac26_numeroapostilamento)
+                     FROM acordoposicao
+                     WHERE ac26_acordo = $iAcordo)
+            ORDER BY si03_sequencial DESC
+        ";
+        return $sql;
+    }
 }
 
