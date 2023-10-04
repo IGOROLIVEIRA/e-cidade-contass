@@ -47,7 +47,7 @@ require_once("libs/db_sql.php");
 
 db_postmemory($HTTP_POST_VARS);
 db_postmemory($HTTP_GET_VARS);
-// $clsolicita        = new cl_solicita;
+$clsolicita        = new cl_solicita;
 // $clpcorcamforne2   = new cl_pcorcamforne;
 
 $clsolicitem       = new cl_solicitem;
@@ -61,6 +61,9 @@ $clpcorcamforne    = new cl_pcorcamforne;
 $clpcorcamval      = new cl_pcorcamval;
 $clpcorcamjulg     = new cl_pcorcamjulg;
 $clpcorcamtroca    = new cl_pcorcamtroca;
+$clsolicitemele    = new cl_solicitemele;
+$clpcdotac         = new cl_pcdotac;
+
 $db_botao          = true;
 $db_opcao          = 1;
 
@@ -72,6 +75,19 @@ if (isset($incluir) || isset($juntar)) {
   $sqlerro = false;
   if (isset($valores) && $valores != "") {
     db_inicio_transacao();
+
+    if ($pc80_numdispensa != "") {
+      $sql = "select pc80_numdispensa as numerodispensa,pc80_codproc as codigoprocesso from pcproc where pc80_numdispensa={$pc80_numdispensa} and pc80_numdispensa > 0";
+      $rsPccompra = db_query($sql);
+
+      $dispensacadastrada = db_utils::getColectionByRecord($rsPccompra);
+      foreach ($dispensacadastrada as $dispensa) {
+        $erro_msg = "Já existe uma dispensa cadastrada com mesmo numero codigo do processo: {$dispensa->codigoprocesso}";
+        $sqlerro = true;
+        break;
+      }
+    }
+
     if (isset($incluir)) {
       $rsDataSolicitacao = db_query("select pc10_data from solicita where pc10_numero = $pc10_numero;");
       $dataSolicitacao = db_utils::fieldsMemory($rsDataSolicitacao, 0)->pc10_data;
@@ -530,34 +546,8 @@ if (isset($incluir) || isset($juntar)) {
           }
         }
 
-        //cria a nova solicitacao
-        $clsolicita->pc10_correto = "true";      
-        $clsolicita->pc10_depto           = db_getsession("DB_coddepto");
-        $clsolicita->pc10_log             = 0;
-        $clsolicita->pc10_instit          = db_getsession("DB_instit");
-        $clsolicita->pc10_login           = db_getsession("DB_id_usuario");
-        $clsolicita->pc10_data            = date("Y-m-d", db_getsession("DB_datausu"));
-        $clsolicita->pc10_resumo          = 'SOLICITAÇÃO UNIFICADA '.$pc11_numero;
-        $clsolicita->pc10_solicitacaotipo = 8;
-        $clsolicita->pc10_numero = null;
-        $clsolicita->incluir(null);
-        $pc10_resumo = $clsolicita->pc10_resumo;
-        $novaSolicita = $clsolicita->pc10_numero;
-        if ($clsolicita->erro_status == 0) {
-          $erro_msg = $clsolicita->erro_msg;
-          $sqlerro = true;
-        }
-    
-        //remove todos os itens da pcproc para receber a nova solicitação
-        $clpcprocitem->sql_record("delete from pcprocitem where pc81_codproc = $pc80_codproc");
-
-        //deslibera solicitação
-        for($x=0;$x<pg_num_rows($oDaoSolicitem);$x++){
-          $rsSolicitem = db_utils::fieldsMemory($oDaoSolicitem,$x);
-          $clsolicitem->pc11_liberado          = 'f';
-          $clsolicitem->alterar($rsSolicitem->pc11_codigo);
-        }
-
+        $clpcprocitem->pc81_codproc   = $pc80_codproc;
+        $clpcprocitem->pc81_solicitem = $pc11_codigo;
 
         $clpcprocitem->incluir(@$pc81_codprocitem);
         if (!isset($arr_solici[$pc11_codigo])) {
@@ -571,168 +561,170 @@ if (isset($incluir) || isset($juntar)) {
           break;
         }
       }
-      $arr_importar = explode(",", $importa);
-      $arr_orcam = array();
-      $rowssizeof = sizeof($arr_importar);
-      $arr_orcamfornexist  = array();
+    }
+
+    $arr_importar = explode(",", $importa);
+    $arr_orcam = array();
+    $rowssizeof = sizeof($arr_importar);
+    $arr_orcamfornexist  = array();
 
 
-      for ($i = 0; $i < $rowssizeof; $i++) {
-        if (trim($arr_importar[$i]) != "") {
-          $arr_importaritem = explode("_", $arr_importar[$i]);
-          $orcamento = $arr_importaritem[1];
-          $item      = $arr_importaritem[2];
-          $orcamitem = $arr_importaritem[3];
-          if (isset($arr_solici[$item]) && $sqlerro == false) {
-            if ($gerouorc == false) {
-              $clpcorcam->pc20_dtate = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") + $pc30_dias, date("Y")));
-              $clpcorcam->pc20_hrate = $pc30_horas;
+    for ($i = 0; $i < $rowssizeof; $i++) {
+      if (trim($arr_importar[$i]) != "") {
+        $arr_importaritem = explode("_", $arr_importar[$i]);
+        $orcamento = $arr_importaritem[1];
+        $item      = $arr_importaritem[2];
+        $orcamitem = $arr_importaritem[3];
+        if (isset($arr_solici[$item]) && $sqlerro == false) {
+          if ($gerouorc == false) {
+            $clpcorcam->pc20_dtate = date("Y-m-d", mktime(0, 0, 0, date("m"), date("d") + $pc30_dias, date("Y")));
+            $clpcorcam->pc20_hrate = $pc30_horas;
 
-              if (isset($juntar)) {
-                $result_pc22_codorc = $clpcorcamitemproc->sql_record($clpcorcamitemproc->sql_query(null, null, "max(pc20_codorc) as pc20_codorc", "", " pc80_codproc=$pc80_codproc"));
-                if ($clpcorcamitemproc->numrows > 0) {
-                  db_fieldsmemory($result_pc22_codorc, 0);
-                } else {
-                  $clpcorcam->incluir(null);
-                  $pc20_codorc = $clpcorcam->pc20_codorc;
-                }
+            if (isset($juntar)) {
+              $result_pc22_codorc = $clpcorcamitemproc->sql_record($clpcorcamitemproc->sql_query(null, null, "max(pc20_codorc) as pc20_codorc", "", " pc80_codproc=$pc80_codproc"));
+              if ($clpcorcamitemproc->numrows > 0) {
+                db_fieldsmemory($result_pc22_codorc, 0);
               } else {
                 $clpcorcam->incluir(null);
                 $pc20_codorc = $clpcorcam->pc20_codorc;
               }
-
-              if ($clpcorcam->erro_status == "0") {
-
-                $erro_msg .= $clpcorcam->erro_msg;
-                $sqlerro = true;
-                break;
-              } else {
-                $erro_msg .= "\\n\\nOBS.: Foi gerado o orçamento número $pc20_codorc para este processo de compras.";
-              }
-              $gerouorc = true;
+            } else {
+              $clpcorcam->incluir(null);
+              $pc20_codorc = $clpcorcam->pc20_codorc;
             }
-            if ($sqlerro == false && isset($pc20_codorc)) {
-              $clpcorcamitem->pc22_codorc = $pc20_codorc;
 
-              $clpcorcamitem->incluir(null);
-              $pc22_orcamitem = $clpcorcamitem->pc22_orcamitem;
-              if ($clpcorcamitem->erro_status == 0) {
-                $erro_msg .= $clpcorcamitem->erro_msg;
-                $sqlerro = true;
-                break;
-              }
+            if ($clpcorcam->erro_status == "0") {
+
+              $erro_msg .= $clpcorcam->erro_msg;
+              $sqlerro = true;
+              break;
+            } else {
+              $erro_msg .= "\\n\\nOBS.: Foi gerado o oramento nmero $pc20_codorc para este processo de compras.";
             }
-            if ($sqlerro == false && isset($pc22_orcamitem)) {
+            $gerouorc = true;
+          }
+          if ($sqlerro == false && isset($pc20_codorc)) {
+            $clpcorcamitem->pc22_codorc = $pc20_codorc;
 
-              $clpcorcamitemproc->incluir($pc22_orcamitem, $arr_solici[$item]);
-              if ($clpcorcamitemproc->erro_status == 0) {
-                $erro_msg .= $clpcorcamitemproc->erro_msg;
-                $sqlerro = true;
-                break;
-              }
+            $clpcorcamitem->incluir(null);
+            $pc22_orcamitem = $clpcorcamitem->pc22_orcamitem;
+            if ($clpcorcamitem->erro_status == 0) {
+              $erro_msg .= $clpcorcamitem->erro_msg;
+              $sqlerro = true;
+              break;
             }
-            if ($sqlerro == false && isset($pc20_codorc)) {
-              $result_fornecedores = $clpcorcamforne->sql_record($clpcorcamforne->sql_query_fornec(null, "pc21_numcgm,pc21_orcamforne as selforne", "", " pc22_orcamitem=$orcamitem "));
-              $numrows_contafornec = $clpcorcamforne->numrows;
-              for ($contaforne = 0; $contaforne < $numrows_contafornec; $contaforne++) {
-                db_fieldsmemory($result_fornecedores, $contaforne);
-                if (!isset($arr_orcamfornexist[$pc21_numcgm . "_" . $pc20_codorc])) {
+          }
+          if ($sqlerro == false && isset($pc22_orcamitem)) {
 
-                  $clpcorcamforne->pc21_numcgm    = $pc21_numcgm;
-                  $clpcorcamforne->pc21_codorc    = $pc20_codorc;
-                  $clpcorcamforne->pc21_importado = 'true';
-                  $clpcorcamforne->incluir(null);
-                  $pc21_orcamforne = $clpcorcamforne->pc21_orcamforne;
-                  $arr_orcamfornexist[$pc21_numcgm . "_" . $pc20_codorc] = $pc21_orcamforne;
-                  //	        db_msgbox($arr_orcamfornexist[$pc21_numcgm."_".$pc20_codorc]);
-                  if ($clpcorcamforne->erro_status == 0) {
-                    $erro_msg .= $clpcorcamforne->erro_msg;
-                    $sqlerro = true;
-                    break;
-                  }
+            $clpcorcamitemproc->incluir($pc22_orcamitem, $arr_solici[$item]);
+            if ($clpcorcamitemproc->erro_status == 0) {
+              $erro_msg .= $clpcorcamitemproc->erro_msg;
+              $sqlerro = true;
+              break;
+            }
+          }
+          if ($sqlerro == false && isset($pc20_codorc)) {
+            $result_fornecedores = $clpcorcamforne->sql_record($clpcorcamforne->sql_query_fornec(null, "pc21_numcgm,pc21_orcamforne as selforne", "", " pc22_orcamitem=$orcamitem "));
+            $numrows_contafornec = $clpcorcamforne->numrows;
+            for ($contaforne = 0; $contaforne < $numrows_contafornec; $contaforne++) {
+              db_fieldsmemory($result_fornecedores, $contaforne);
+              if (!isset($arr_orcamfornexist[$pc21_numcgm . "_" . $pc20_codorc])) {
+
+                $clpcorcamforne->pc21_numcgm    = $pc21_numcgm;
+                $clpcorcamforne->pc21_codorc    = $pc20_codorc;
+                $clpcorcamforne->pc21_importado = 'true';
+                $clpcorcamforne->incluir(null);
+                $pc21_orcamforne = $clpcorcamforne->pc21_orcamforne;
+                $arr_orcamfornexist[$pc21_numcgm . "_" . $pc20_codorc] = $pc21_orcamforne;
+                //	        db_msgbox($arr_orcamfornexist[$pc21_numcgm."_".$pc20_codorc]);
+                if ($clpcorcamforne->erro_status == 0) {
+                  $erro_msg .= $clpcorcamforne->erro_msg;
+                  $sqlerro = true;
+                  break;
                 }
-                $pc21_orcamforne = $arr_orcamfornexist[$pc21_numcgm . "_" . $pc20_codorc];
-                //	      db_msgbox($pc21_orcamforne);
-                $result_pcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_file($selforne, $orcamitem, "pc23_valor,pc23_quant,pc23_vlrun,pc23_obs"));
-                $numrows_pcorcamval = $clpcorcamval->numrows;
-                if ($numrows_pcorcamval > 0) {
-                  db_fieldsmemory($result_pcorcamval, 0);
-                  $clpcorcamval->pc23_valor = $pc23_valor;
-                  $clpcorcamval->pc23_quant = $pc23_quant;
-                  $clpcorcamval->pc23_vlrun = $pc23_vlrun;
-                  $clpcorcamval->pc23_obs   = addslashes(stripslashes(chop($pc23_obs)));
+              }
+              $pc21_orcamforne = $arr_orcamfornexist[$pc21_numcgm . "_" . $pc20_codorc];
+              //	      db_msgbox($pc21_orcamforne);
+              $result_pcorcamval = $clpcorcamval->sql_record($clpcorcamval->sql_query_file($selforne, $orcamitem, "pc23_valor,pc23_quant,pc23_vlrun,pc23_obs"));
+              $numrows_pcorcamval = $clpcorcamval->numrows;
+              if ($numrows_pcorcamval > 0) {
+                db_fieldsmemory($result_pcorcamval, 0);
+                $clpcorcamval->pc23_valor = $pc23_valor;
+                $clpcorcamval->pc23_quant = $pc23_quant;
+                $clpcorcamval->pc23_vlrun = $pc23_vlrun;
+                $clpcorcamval->pc23_obs   = addslashes(stripslashes(chop($pc23_obs)));
 
-                  $clpcorcamval->incluir($pc21_orcamforne, $pc22_orcamitem);
-                  if ($clpcorcamval->erro_status == 0) {
-                    $erro_msg .= $clpcorcamval->erro_msg;
-                    $sqlerro = true;
-                    break;
-                  }
+                $clpcorcamval->incluir($pc21_orcamforne, $pc22_orcamitem);
+                if ($clpcorcamval->erro_status == 0) {
+                  $erro_msg .= $clpcorcamval->erro_msg;
+                  $sqlerro = true;
+                  break;
+                }
 
-                  if ($sqlerro == false && isset($pc21_orcamforne) && isset($pc22_orcamitem)) {
-                    $result_itemjulg = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query_file($orcamitem, $selforne, "pc24_pontuacao as pontuacao"));
-                    $numrows_itemjulg = $clpcorcamjulg->numrows;
-                    for ($ii = 0; $ii < $numrows_itemjulg; $ii++) {
-                      db_fieldsmemory($result_itemjulg, $ii);
-                      $clpcorcamjulg->pc24_pontuacao = $pontuacao;
+                if ($sqlerro == false && isset($pc21_orcamforne) && isset($pc22_orcamitem)) {
+                  $result_itemjulg = $clpcorcamjulg->sql_record($clpcorcamjulg->sql_query_file($orcamitem, $selforne, "pc24_pontuacao as pontuacao"));
+                  $numrows_itemjulg = $clpcorcamjulg->numrows;
+                  for ($ii = 0; $ii < $numrows_itemjulg; $ii++) {
+                    db_fieldsmemory($result_itemjulg, $ii);
+                    $clpcorcamjulg->pc24_pontuacao = $pontuacao;
 
-                      $clpcorcamjulg->incluir($pc22_orcamitem, $pc21_orcamforne);
-                      if ($clpcorcamjulg->erro_status == 0) {
-                        $erro_msg = $clpcorcamjulg->erro_msg;
-                        $sqlerro = true;
-                        break;
-                      }
-                    }
-                    if ($sqlerro == true) {
+                    $clpcorcamjulg->incluir($pc22_orcamitem, $pc21_orcamforne);
+                    if ($clpcorcamjulg->erro_status == 0) {
+                      $erro_msg = $clpcorcamjulg->erro_msg;
+                      $sqlerro = true;
                       break;
                     }
                   }
-                  if ($sqlerro == false && isset($pc22_orcamitem)) {
-                    $result_itemtroca = $clpcorcamtroca->sql_record($clpcorcamtroca->sql_query_file(null, "pc25_motivo,pc25_forneant,pc25_forneatu", "", "pc25_orcamitem=$orcamitem"));
-                    $numrows_itemtroca = $clpcorcamtroca->numrows;
-                    for ($ii = 0; $ii < $numrows_itemtroca; $ii++) {
-                      db_fieldsmemory($result_itemtroca, $ii);
-                      $clpcorcamtroca->pc25_orcamitem = $pc22_orcamitem;
-                      $clpcorcamtroca->pc25_motivo    = addslashes(stripslashes(chop($pc25_motivo)));
+                  if ($sqlerro == true) {
+                    break;
+                  }
+                }
+                if ($sqlerro == false && isset($pc22_orcamitem)) {
+                  $result_itemtroca = $clpcorcamtroca->sql_record($clpcorcamtroca->sql_query_file(null, "pc25_motivo,pc25_forneant,pc25_forneatu", "", "pc25_orcamitem=$orcamitem"));
+                  $numrows_itemtroca = $clpcorcamtroca->numrows;
+                  for ($ii = 0; $ii < $numrows_itemtroca; $ii++) {
+                    db_fieldsmemory($result_itemtroca, $ii);
+                    $clpcorcamtroca->pc25_orcamitem = $pc22_orcamitem;
+                    $clpcorcamtroca->pc25_motivo    = addslashes(stripslashes(chop($pc25_motivo)));
 
-                      if (trim(@$pc25_forneant) == "") {
-                        $clpcorcamtroca->pc25_forneant = $clpcorcamforne->pc21_orcamforne;
-                      } else {
-                        $clpcorcamtroca->pc25_forneant = $pc25_forneant;
-                      }
+                    if (trim(@$pc25_forneant) == "") {
+                      $clpcorcamtroca->pc25_forneant = $clpcorcamforne->pc21_orcamforne;
+                    } else {
+                      $clpcorcamtroca->pc25_forneant = $pc25_forneant;
+                    }
 
-                      if (trim(@$pc25_forneatu) == "") {
-                        $clpcorcamtroca->pc25_forneatu = $clpcorcamforne->pc21_orcamforne;
-                      } else {
-                        $clpcorcamtroca->pc25_forneatu = $pc25_forneatu;
-                      }
+                    if (trim(@$pc25_forneatu) == "") {
+                      $clpcorcamtroca->pc25_forneatu = $clpcorcamforne->pc21_orcamforne;
+                    } else {
+                      $clpcorcamtroca->pc25_forneatu = $pc25_forneatu;
+                    }
 
-                      $clpcorcamtroca->incluir(null);
-                      if ($clpcorcamtroca->erro_status == 0) {
-                        $erro_msg = $clpcorcamtroca->erro_msg;
-                        $sqlerro = true;
-                        break;
-                      }
+                    $clpcorcamtroca->incluir(null);
+                    if ($clpcorcamtroca->erro_status == 0) {
+                      $erro_msg = $clpcorcamtroca->erro_msg;
+                      $sqlerro = true;
+                      break;
                     }
                   }
                 }
               }
-              if ($sqlerro == true) {
-                break;
-              }
+            }
+            if ($sqlerro == true) {
+              break;
             }
           }
         }
       }
-
-      if ($sqlerro == false) {
-        unset($valores, $importa);
-        if (isset($juntar)) {
-          db_msgbox("Solicitação $rsSolicitem->pc11_numero vinculada ao processo de compras $juntar!");
-        }
-      }
-      db_fim_transacao($sqlerro);
     }
+
+    if ($sqlerro == false) {
+      unset($valores, $importa);
+      if (isset($juntar)) {
+        db_msgbox("Solicitao $rsSolicitem->pc11_numero vinculada ao processo de compras $juntar!");
+      }
+    }
+    db_fim_transacao($sqlerro);
+
   } else {
     $sqlerro = true;
     $erro_msg = "Não é possível incluir Processo de Compras sem informar Item(ns).";
