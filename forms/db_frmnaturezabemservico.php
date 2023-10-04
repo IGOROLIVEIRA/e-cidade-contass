@@ -38,11 +38,7 @@ $clnaturezabemservico->rotulo->label();
           </td>
           <td>
             <?php db_input('e101_sequencial', 5, $Ie101_sequencial, true, 'text', 3); ?>
-          <!-- </td>
-          <td  nowrap title="<?php echo $Te101_codnaturezarendimento; ?>"> -->
             <?php echo $Le101_codnaturezarendimento; ?>
-          <!-- </td>
-          <td> -->
             <?php db_input('e101_codnaturezarendimento', 5, $Ie101_codnaturezarendimento, true, 'text', $db_opcao); ?>
           </td>
         </tr>
@@ -62,7 +58,6 @@ $clnaturezabemservico->rotulo->label();
             <?php db_input('e101_aliquota', 5, $Ie101_aliquota, true, 'text', $db_opcao); ?>
           </td>
         </tr>
-
       </table>
     </fieldset>
 
@@ -72,11 +67,11 @@ $clnaturezabemservico->rotulo->label();
 </div>
 <script>
   function js_pesquisa() {
-    js_OpenJanelaIframe('top.corpo', 'db_iframe_empprestatip', 'func_naturezabemservico.php?funcao_js=parent.js_preenchepesquisa|e101_sequencial', 'Pesquisa', true);
+    js_OpenJanelaIframe('top.corpo', 'db_iframe_naturezabemservico', 'func_naturezabemservico.php?funcao_js=parent.js_preenchepesquisa|e101_sequencial', 'Pesquisa', true);
   }
 
   function js_preenchepesquisa(chave) {
-    db_iframe_empprestatip.hide();
+    db_iframe_naturezabemservico.hide();
 
     <?php
     if ($db_opcao != 1) {
