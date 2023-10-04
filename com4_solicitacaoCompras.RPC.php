@@ -93,7 +93,24 @@ switch ($oParam->exec) {
       $oRetorno->status  = 2;
     }
     break;
+  case "salvarAberturamanutencao":
 
+      try {
+  
+        db_inicio_transacao();    
+        $oSolicita =  $_SESSION["oSolicita"];
+        $iCodAbertura = $oSolicita->getCodigoSolicitacao();
+        $aberturaRegistro = new aberturaRegistroPreco();
+        $aberturaRegistro->alterarResumoAbertura(db_stdClass::normalizeStringJsonEscapeString($oParam->resumo),$iCodAbertura);
+        $aberturaRegistro->alterarDataAbertura($oParam,$iCodAbertura);
+        db_fim_transacao(false);
+      } catch (Exception $eErro) {
+  
+        db_fim_transacao(true);
+        $oRetorno->message = urlencode($eErro->getMessage());
+        $oRetorno->status  = 2;
+      }
+    break;
   case "salvarEstimativa":
 
     try {
@@ -182,6 +199,131 @@ switch ($oParam->exec) {
 
         $oRetorno->itens[] = $oItemRetono;
       }
+    
+      db_fim_transacao(false);
+    } catch (Exception $eErro) {
+
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+      db_fim_transacao(true);
+    }
+
+    break;
+
+  case "alterarItemAberturaManutencao":
+
+    try {
+      db_inicio_transacao();
+      $oSolicita =  $_SESSION["oSolicita"];
+      $iControle = 0;
+
+      $validaItens = $oSolicita->getItens();
+      if (count($validaItens) > 0) {
+        foreach ($validaItens as $row) {
+          if ($oParam->iCodigoItemNovo == $row->getCodigoMaterial() && $oParam->iCodigoItemNovo != $oParam->iCodigoItem) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode("O item $oParam->iCodigoItemNovo já foi adicionado!!");
+            $iControle = 1;
+          }
+        }
+      }
+      if ($iControle == 0) {
+        $iDescricaoLog = '';
+        if($oParam->iCodigoItemNovo != $oParam->iCodigoItem){
+          $iDescricaoLog .= 'TROCA DO ITEM '.$oParam->iCodigoItem.' PARA O ITEM '.$oParam->iCodigoItemNovo;
+        }
+        $rsUnid = db_query("select m61_descr from matunid where m61_codmatunid = ".$oParam->iUnidade);
+        $oUnid = db_utils::fieldsMemory($rsUnid, 0);
+        $iDescricaoLog .= ' UNIDADE '.$oUnid->m61_descr;
+
+        $rsItens       = db_query("select * from solicitem inner  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo inner  join pcmater  on pcmater.pc01_codmater = solicitempcmater.pc16_codmater where pc11_numero = ".$oSolicita->getCodigoSolicitacao()." order by pc11_codigo");
+        
+        if (pg_num_rows($rsItens) > 0) {
+          
+          for ($iItem = 0; $iItem < pg_num_rows($rsItens); $iItem++) {
+
+            $oItem = db_utils::fieldsMemory($rsItens, $iItem, false, false, true);
+            $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
+            $aItens[]   = $oItemSolicitacao;
+            unset($oItem);
+          }
+        }
+
+        $oItem     = $aItens[$oParam->iIndice];
+        db_query("update solicitempcmater set pc16_codmater = ".$oParam->iCodigoItemNovo." where pc16_solicitem = ".$oItem->getCodigoItemSolicitacao());
+        db_query("update solicitemunid set pc17_unid = ".$oParam->iUnidade." where pc17_codigo= ".$oItem->getCodigoItemSolicitacao());
+
+        //estimativas compilacao e vinculos 
+        
+        $rsVinculoSolicita = db_query("select pc53_solicitafilho,pc10_solicitacaotipo from solicitavinculo inner join solicita on pc10_numero = pc53_solicitafilho  where pc53_solicitapai = ".$oSolicita->getCodigoSolicitacao()." order by pc53_solicitafilho ");
+        for ($iItens = 0; $iItens < pg_num_rows($rsVinculoSolicita); $iItens++) {
+          
+          
+          $pc53_solicitafilho = db_utils::fieldsMemory($rsVinculoSolicita, $iItens)->pc53_solicitafilho;
+          $rsItens       = db_query("select pc11_codigo from solicitem where pc11_numero = ".$pc53_solicitafilho." order by pc11_codigo");
+        
+          
+          if (pg_num_rows($rsItens) > 0) {
+            
+            for ($iItem = 0; $iItem < pg_num_rows($rsItens); $iItem++) {
+
+              $oItem = db_utils::fieldsMemory($rsItens, $iItem);
+              $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
+              $aitens[]   = $oItemSolicitacao;
+              unset($oItem);
+            }
+          }
+
+          $oItem     = $aitens[$oParam->iIndice];
+         
+          db_query("update solicitempcmater set pc16_codmater = ".$oParam->iCodigoItemNovo." where pc16_solicitem = ".$oItem->getCodigoItemSolicitacao());
+          db_query("update solicitemunid set pc17_unid = ".$oParam->iUnidade." where pc17_codigo= ".$oItem->getCodigoItemSolicitacao());
+          unset($aitens);
+          
+        }
+
+        //PRECO DE REFERENCIA
+        $rsPrecoReferencia       = db_query("select distinct si01_sequencial,si02_sequencial,si02_coditem from precoreferencia inner join itemprecoreferencia on si02_precoreferencia = si01_sequencial inner join pcprocitem on si01_processocompra = pc81_codproc inner join solicitem on pc11_codigo = pc81_solicitem inner join solicitempcmater on pc16_solicitem = pc11_codigo inner join solicita on pc10_numero = pc11_numero where pc10_numero = (select pc53_solicitafilho from solicitavinculo inner join solicita on pc10_numero = pc53_solicitafilho  where pc53_solicitapai = ".$oSolicita->getCodigoSolicitacao()." and pc10_solicitacaotipo = 6) and si02_coditem = $oParam->iCodigoItemNovo");
+             
+        if (pg_num_rows($rsPrecoReferencia) > 0) {
+          $oItemPreco = db_utils::fieldsMemory($rsPrecoReferencia, 0);
+          db_query("update itemprecoreferencia set si02_codunidadeitem = ".$oParam->iUnidade." where si02_sequencial = ".$oItemPreco->si02_sequencial);
+        }
+
+        $rsItens       = db_query("select * from solicitem inner  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo inner  join pcmater  on pcmater.pc01_codmater = solicitempcmater.pc16_codmater where pc11_numero = ".$oSolicita->getCodigoSolicitacao()." order by pc11_codigo");
+        
+        if (pg_num_rows($rsItens) > 0) {
+          
+          for ($iItem = 0; $iItem < pg_num_rows($rsItens); $iItem++) {
+
+            $oItem = db_utils::fieldsMemory($rsItens, $iItem, false, false, true);
+            $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
+            $aItensAbertura[]   = $oItemSolicitacao;
+            unset($oItem);
+          }
+        }
+        
+
+        foreach ($aItensAbertura as $iIndice => $oItem) {
+
+          $oItemRetono = new stdClass;
+          $oItemRetono->codigoitem = $oItem->getCodigoMaterial();
+          $oItemRetono->descricaoitem = $oItem->getDescricaoMaterial();
+          $oItemRetono->quantidade = $oItem->getQuantidade();
+          $oItemRetono->automatico = $oItem->isAutomatico();
+          $oItemRetono->resumo = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+          $oItemRetono->justificativa = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+          $oItemRetono->prazo = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+          $oItemRetono->pagamento = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
+          $oItemRetono->unidade = $oItem->getUnidade();
+          $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
+          $oItemRetono->indice = $iIndice;
+          $oItemRetono->temestimativa = $lTemEstimativa;
+
+          $oRetorno->itens[] = $oItemRetono;
+        }
+        db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'".$iDescricaoLog." REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,2)");
+      }
       db_fim_transacao(false);
     } catch (Exception $eErro) {
 
@@ -252,6 +394,114 @@ switch ($oParam->exec) {
           $oItemRetono->indice = $iIndice;
           $oItemRetono->temestimativa = $lTemEstimativa;
 
+          $oRetorno->itens[] = $oItemRetono;
+        }
+      }
+    } catch (Exception $eErro) {
+
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+    }
+
+    break;
+  case "adicionarItemmanutencao":
+    try {
+      $aberturaRegistro = new aberturaRegistroPreco();
+      
+      $iCodAbertura = $oSolicita->getCodigoSolicitacao();
+
+      //VALIDANDO SE JÁ FOI ADD O ITEM
+      $iControle = 0;
+      $validaItens = $oSolicita->getItens();
+      $rsItens       = db_query("select * from solicitem inner  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo inner  join pcmater  on pcmater.pc01_codmater = solicitempcmater.pc16_codmater where pc11_numero = $iCodAbertura order by pc11_codigo");
+      
+      if (pg_num_rows($rsItens) > 0) {
+        
+        for ($iItem = 0; $iItem < pg_num_rows($rsItens); $iItem++) {
+
+          $oItem = db_utils::fieldsMemory($rsItens, $iItem, false, false, true);
+          $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
+          $validaItens[]   = $oItemSolicitacao;
+
+          $aberturaRegistro->ordenarItemmanutencao($oItem->pc11_codigo,$iItem+1);
+
+        }
+      }
+
+      if (count($validaItens) > 0) {
+        foreach ($validaItens as $row) {
+          if ($oParam->iCodigoItem == $row->getCodigoMaterial()) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode("O item $oParam->iCodigoItem já foi adicionado!!");
+            $iControle = 1;
+          }
+        }
+      }
+
+      //VALIDANDO SE JÁ TEM PRECO DE REFERENCIA
+      $rsPrecoReferencia       = db_query("select distinct si01_sequencial from precoreferencia inner join pcprocitem on si01_processocompra = pc81_codproc inner join solicitem on pc11_codigo = pc81_solicitem inner join solicita on pc10_numero = pc11_numero where pc10_numero = (select pc53_solicitafilho from solicitavinculo inner join solicita on pc10_numero = pc53_solicitafilho  where pc53_solicitapai = $iCodAbertura and pc10_solicitacaotipo = 6)");
+      
+      
+      if (pg_num_rows($rsPrecoReferencia) > 0) {
+        $oPrecoReferencia = db_utils::fieldsMemory($rsPrecoReferencia, 0);
+        $oRetorno->status  = 2;
+        $oRetorno->message = urlencode("Não é possivel adicionar item, abertura já possuí preço de referencia número: $oPrecoReferencia->si01_sequencial !!");
+        $iControle = 1;
+      }
+      if ($iControle == 0) {
+        
+        db_inicio_transacao();
+
+        $iDescricaoLog = 'ADICIONADO ITEM '.$oParam->iCodigoItem;
+
+        //Abertura
+        $aberturaRegistro->adicionarItemmanutencao($iCodAbertura,$oParam,pg_num_rows($rsItens)+1,3);
+
+
+        //Estimativas compilacao e vinculos 
+        $rsVinculoSolicita = db_query("select pc53_solicitafilho,pc10_solicitacaotipo from solicitavinculo inner join solicita on pc10_numero = pc53_solicitafilho  where pc53_solicitapai = $iCodAbertura order by pc53_solicitafilho ");
+        for ($iItens = 0; $iItens < pg_num_rows($rsVinculoSolicita); $iItens++) {
+            
+          $pc53_solicitafilho = db_utils::fieldsMemory($rsVinculoSolicita, $iItens)->pc53_solicitafilho;
+          $pc10_solicitacaotipo = db_utils::fieldsMemory($rsVinculoSolicita, $iItens)->pc10_solicitacaotipo;
+          $aberturaRegistro->adicionarItemmanutencao($pc53_solicitafilho,$oParam,pg_num_rows($rsItens)+1,$pc10_solicitacaotipo);
+            
+        }
+
+        //Log
+        db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'".$iDescricaoLog." REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,1)");
+
+        db_fim_transacao(false);
+        $lTemEstimativa = false;
+        
+        $rsItens       = db_query("select * from solicitem inner  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo inner  join pcmater  on pcmater.pc01_codmater = solicitempcmater.pc16_codmater where pc11_numero = $iCodAbertura order by pc11_codigo");
+      
+        if (pg_num_rows($rsItens) > 0) {
+          
+          for ($iItem = 0; $iItem < pg_num_rows($rsItens); $iItem++) {
+
+            $oItem = db_utils::fieldsMemory($rsItens, $iItem, false, false, true);
+            $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
+            $aitens[]   = $oItemSolicitacao;
+
+          }
+        }
+
+        foreach ($aitens as $iIndice => $oItem) {
+
+          $oItemRetono = new stdClass;
+          $oItemRetono->codigoitem        = $oItem->getCodigoMaterial();
+          $oItemRetono->descricaoitem     = $oItem->getDescricaoMaterial();
+          $oItemRetono->quantidade        = $oItem->getQuantidade();
+          $oItemRetono->automatico        = $oItem->isAutomatico();
+          $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+          $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+          $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+          $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
+          $oItemRetono->unidade           = $oItem->getUnidade();
+          $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
+          $oItemRetono->indice            = $iIndice;
+          $oItemRetono->temestimativa     = $lTemEstimativa;
           $oRetorno->itens[] = $oItemRetono;
         }
       }
@@ -387,6 +637,151 @@ switch ($oParam->exec) {
         $oItemRetono->temestimativa     = $lTemEstimativa;
         $oRetorno->itens[] = $oItemRetono;
       }
+      $iDescricaoLog = 'EXCLUSAO ITEM '.$oParam->iCodigoItem;
+      db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'".$iDescricaoLog." REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,3)");
+    } catch (Exception $eErro) {
+
+
+      db_fim_transacao(true);
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+      $aitens = $oSolicita->getItens();
+    }
+    break;
+  case "alterarItens":
+
+    try {
+
+      db_inicio_transacao();
+      $oSolicita = $_SESSION["oSolicita"];
+
+      $aitens = $oSolicita->getItens();
+
+      $codigo     = $aitens[$oParam->iIndice]->getCodigoMaterial();
+      $quantidade = $aitens[$oParam->iIndice]->getQuantidade();
+
+      $iCodAbertura = $oSolicita->getCodigoSolicitacao();
+      
+      $estimativaRegistro = new estimativaRegistroPreco();
+      
+      //ALTERA QUATIDADE DO ITEM
+      $estimativaRegistro->adicionarQuantidade($quantidade,$codigo,$iCodAbertura);
+
+      foreach ($aitens as $iIndice => $oItem) {
+
+        $oItemRetono = new stdClass;
+        $oItemRetono->codigoitem        = $oItem->getCodigoMaterial();
+        $oItemRetono->descricaoitem     = $oItem->getDescricaoMaterial();
+        $oItemRetono->quantidade        = $oItem->getQuantidade();
+        $oItemRetono->automatico        = $oItem->isAutomatico();
+        $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+        $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+        $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+        $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
+        $oItemRetono->unidade           = $oItem->getUnidade();
+        $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
+        $oItemRetono->indice            = $iIndice;
+        $oItemRetono->temestimativa     = $lTemEstimativa;
+        $oRetorno->itens[] = $oItemRetono;
+      }
+
+      $oRetorno->message = urlencode("O item $codigo alterado com sucesso!!");
+
+      $iDescricaoLog = 'ALTERACAO ITEM '.$oParam->iCodigoItem;
+      db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'".$iDescricaoLog." REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,3)");
+
+      db_fim_transacao(false);
+    } catch (Exception $eErro) {
+
+
+      db_fim_transacao(true);
+      $oRetorno->status  = 2;
+      $oRetorno->message = urlencode($eErro->getMessage());
+      $aitens = $oSolicita->getItens();
+    }
+    break;
+  case "excluirItensManutencao":
+
+    try {
+      db_inicio_transacao();
+      
+      $oSolicita = $_SESSION["oSolicita"];
+      //VALIDANDO SE JÁ FOI ADD O ITEM
+      $iControle = 0;
+      $aItens = $oSolicita->getItens();
+      $descricao = '';
+      if (isset($aItens[$oParam->iItemRemover])) {
+        $rsPcmater = db_query("select pc16_codmater from solicitempcmater where pc16_solicitem = ".$aItens[$oParam->iItemRemover]->getCodigoItemSolicitacao());
+        
+        $pcmater = db_utils::fieldsMemory($rsPcmater, 0)->pc16_codmater;
+        $rsVinculo = db_query("select pc55_solicitemfilho from solicitemvinculo where pc55_solicitempai = ".$aItens[$oParam->iItemRemover]->getCodigoItemSolicitacao());
+        for ($iItens = 0; $iItens < pg_num_rows($rsVinculo); $iItens++) {
+
+          $pc55_solicitemfilho = db_utils::fieldsMemory($rsVinculo, $iItens)->pc55_solicitemfilho;
+          $rsItemQuant = db_query("select pc11_quant,pc10_depto from solicitem inner join solicita on pc10_numero=pc11_numero where pc11_codigo = ".$pc55_solicitemfilho);
+          $quantidade = db_utils::fieldsMemory($rsItemQuant, 0)->pc11_quant;
+          
+          if($quantidade != 0){
+            
+            $iControle = 1;
+            $codDepartamento = db_utils::fieldsMemory($rsItemQuant, 0)->pc10_depto;
+            $rsDepart = db_query("select descrdepto from db_depart where coddepto = ".$codDepartamento);
+            $descrDepart = db_utils::fieldsMemory($rsDepart, 0)->descrdepto;
+            $descricao .= "\n $pc55_solicitemfilho departamento $descrDepart ";
+          }
+          
+        }
+      }
+      
+      if($iControle == 1){
+        $oRetorno->status  = 2;
+        $oRetorno->message = urlencode("Exclusão abortada. Este item possui quantidade lançada na(s) estimativa(s)".$descricao);
+      }
+        
+      if ($iControle == 0) {
+        $oSolicita->removerItem($oParam->iItemRemover);
+        db_fim_transacao(false);
+        $aberturaRegistro = new aberturaRegistroPreco();
+      
+        $iCodAbertura = $oSolicita->getCodigoSolicitacao();
+     
+        
+        $lTemEstimativa = false;
+        $rsItens       = db_query("select * from solicitem inner  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo inner  join pcmater  on pcmater.pc01_codmater = solicitempcmater.pc16_codmater where pc11_numero = $iCodAbertura order by pc11_codigo");
+      
+        if (pg_num_rows($rsItens) > 0) {
+          
+          for ($iItem = 0; $iItem < pg_num_rows($rsItens); $iItem++) {
+
+            $oItem = db_utils::fieldsMemory($rsItens, $iItem, false, false, true);
+            $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
+            $aitens[]   = $oItemSolicitacao;
+
+            $aberturaRegistro->ordenarItemmanutencao($oItem->pc11_codigo,$iItem+1);
+
+          }
+        }
+
+        foreach ($aitens as $iIndice => $oItem) {
+
+          $oItemRetono = new stdClass;
+          $oItemRetono->codigoitem        = $oItem->getCodigoMaterial();
+          $oItemRetono->descricaoitem     = $oItem->getDescricaoMaterial();
+          $oItemRetono->quantidade        = $oItem->getQuantidade();
+          $oItemRetono->automatico        = $oItem->isAutomatico();
+          $oItemRetono->resumo            = urlencode(str_replace("\\n", "\n", urldecode($oItem->getResumo())));
+          $oItemRetono->justificativa     = urlencode(str_replace("\\n", "\n", urldecode($oItem->getJustificativa())));
+          $oItemRetono->prazo             = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPrazos())));
+          $oItemRetono->pagamento         = urlencode(str_replace("\\n", "\n", urldecode($oItem->getPagamento())));
+          $oItemRetono->unidade           = $oItem->getUnidade();
+          $oItemRetono->unidade_descricao = urlencode(itemSolicitacao::getDescricaoUnidade($oItemRetono->unidade));
+          $oItemRetono->indice            = $iIndice;
+          $oItemRetono->temestimativa     = $lTemEstimativa;
+          $oRetorno->itens[] = $oItemRetono;
+        }
+        $iDescricaoLog = 'EXCLUSAO ITEM '.$oParam->iCodigoItem;
+        db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'".$iDescricaoLog." REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,3)");
+      }
     } catch (Exception $eErro) {
 
 
@@ -450,6 +845,7 @@ switch ($oParam->exec) {
         $oItemRetono->temestimativa     = $lTemEstimativa;
         $oRetorno->itens[] = $oItemRetono;
       }
+      db_query("insert into db_manut_log values((select nextval('db_manut_log_manut_sequencial_seq')),'ALTERACAO DE ITEM REGISTRO DE PRECO ".$oSolicita->getCodigoSolicitacao()."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').",2679,2)");
       db_fim_transacao(false);
     } catch (Exception $eErro) {
 
