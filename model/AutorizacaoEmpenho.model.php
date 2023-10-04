@@ -640,4 +640,22 @@ class AutorizacaoEmpenho {
     return false;
 
   }
+
+      /**
+     * metodo que retorna se a solicitacao de compras já foi empenhada
+     * @param integer codigo do processo de compras
+     * @return boolean
+     *
+    */
+    public static function verificaempenho($codproc) {
+
+      $sSqlEmpAutori = "select e61_numemp from empempaut inner join empautoriza on e61_autori = e54_autori inner join empautitempcprocitem on e73_autori = e54_autori inner join pcprocitem on pc81_codprocitem = e73_pcprocitem where pc81_codproc = $codproc";
+
+      $rsEmpAutori   = db_query($sSqlEmpAutori);
+
+      if (pg_num_rows($rsEmpAutori) > 0) {
+          return true;
+      }
+      return false;
+  }
 }
