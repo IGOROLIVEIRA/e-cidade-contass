@@ -312,6 +312,23 @@ switch ($oParam->exec) {
 
       foreach ($oParam->materiaisParaAtualizacao as $oMaterial) {
 
+          $data = DateTime::createFromFormat('d/m/Y', $oMaterial->data);
+          $dataAlteracao = DateTime::createFromFormat('d/m/Y', $oMaterial->data_alteracao);
+          $dData_atual = date('d/m/Y', db_getsession('DB_datausu'));
+          $dataServidor = DateTime::createFromFormat('d/m/Y', $dData_atual);
+
+          if($data > $dataServidor){
+              $oRetorno->message = urlencode('Campo Data maior que data do Servidor');
+              $oRetorno->status = 2;
+              break;
+          }
+
+          if($dataAlteracao > $dataServidor){
+              $oRetorno->message = urlencode('Campo Data Alteração maior que data do Servidor');
+              $oRetorno->status = 2;
+              break;
+          }
+
           $datasFormatadas = formataData($oMaterial->data, $oMaterial->data_alteracao, true);
           $dataFormatada = !empty($oMaterial->data)
               ? $datasFormatadas['data']
@@ -327,6 +344,13 @@ switch ($oParam->exec) {
                     pc01_dataalteracao = (SELECT NULLIF('$dataAlteracaoFormatada', '')::DATE)
             WHERE pc01_codmater = {$oMaterial->codigo} ";
           $rsCodigosMateriaisAtualizados = (bool)db_query($sql);
+
+
+          if (!$rsCodigosMateriaisAtualizados) {
+              $oRetorno->message = urlencode('Erro ao atualizar dados do(s) material(ais)/serviço(s)');
+              $oRetorno->status = 2;
+              break;
+          }
 
           $clhistoricomaterial = new cl_historicomaterial;
 
@@ -397,11 +421,6 @@ switch ($oParam->exec) {
                   $clhistoricomaterial->alterar($oMatTipo1[0]->db150_sequencial);
               }
           }
-      }
-
-      if (!$rsCodigosMateriaisAtualizados) {
-          $oRetorno->message = urlencode('Erro ao atualizar dados do(s) material(ais)/serviço(s)');
-          $oRetorno->status = 2;
       }
 
       break;

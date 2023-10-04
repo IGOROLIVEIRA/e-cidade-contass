@@ -71,33 +71,33 @@ $clsolicita->rotulo->label();
                 <table border='0'>
                     <tr>
                         <td>
-                            <?php db_ancora("Solicitação:","js_pesquisapc10_numero();",1); ?>
+                            <?php db_ancora("Solicitação:","js_pesquisapc10_numero(true);",1); ?>
                         </td>
                         <td>
                             <?php
-                            db_input("pc10_numero",10,$Ipc10_numero,true,"text",3,"");
+                            db_input("pc10_numero",10,$Ipc10_numero,true,"text",1,"onchange='js_pesquisapc10_numero(false);'");
                             db_input("pc10_resumo",60,$Ipc10_resumo,true,"text",3,"");
                             ?>
                         </td>
                     </tr>
                     <tr>
                         <td nowrap="nowrap" title="<?=$Tl20_codigo?>">
-                            <?db_ancora("Licitação:","js_pesquisa_liclicita();",1);?>
+                            <?db_ancora("Licitação:","js_pesquisa_liclicita(true);",1);?>
                         </td>
                         <td>
                             <?php
-                            db_input("l20_codigo",10,$Il20_codigo,true,"text",3,"");
+                            db_input("l20_codigo",10,$Il20_codigo,true,"text",1,"onchange='js_pesquisa_liclicita(false);'");
                             db_input("l20_objeto",60,$Il20_objeto,true,"text",3,"");
                             ?>
                         </td>
                     </tr>
                     <tr>
                         <td nowrap title="<?php echo $Tac16_sequencial; ?>" width="130">
-                            <?php db_ancora("Contrato:", "js_acordo();",1); ?>
+                            <?php db_ancora("Contrato:", "js_acordo(true);",1); ?>
                         </td>
                         <td>
                             <?php
-                            db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 3, "");
+                            db_input('ac16_sequencial', 10, $Iac16_sequencial, true, 'text', 1, "onchange='js_acordo(false);'");
                             db_input('ac16_resumoobjeto', 60, $Iac16_resumoobjeto, true, 'text', 3);
                             ?>
                         </td>
@@ -267,8 +267,8 @@ $clsolicita->rotulo->label();
             aLinha.push(oMaterial.codigo);
             aLinha.push(oMaterial.codigo);
             aLinha.push(oMaterial.db150_coditem);
-            aLinha.push(oMaterial.db150_unidademedida);
             aLinha.push(oMaterial.db150_tipocadastro);
+            aLinha.push(oMaterial.db150_unidademedida);
             aLinha.push(oMaterial.descricao.urlDecode());
             const sDBDataFormatada = oMaterial.data.split('-').reverse().join('/');
             const sDBData = oMaterial.data.length ? sDBDataFormatada : "";
@@ -320,7 +320,7 @@ $clsolicita->rotulo->label();
         for (let i = 0; i < iLinhas; i++) {
             if (oGridMaterialServico.aRows[i].isSelected) {
                 let oCheckGrid = document.getElementById(
-                    oGridMaterialServico.aRows[i].aCells[4].getId()
+                    oGridMaterialServico.aRows[i].aCells[7].getId()
                 ).firstChild;
                 oCheckGrid.value = iAtualizarDataPara;
             }
@@ -381,8 +381,12 @@ $clsolicita->rotulo->label();
         });
     }
 
-    function js_pesquisapc10_numero(){
-       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero|pc10_resumo','Pesquisa',true);
+    function js_pesquisapc10_numero(mostra){
+        if(mostra===true){
+            js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_solicita','func_solicita.php?funcao_js=parent.js_mostrapcorcamitem1|pc10_numero|pc10_resumo','Pesquisa',true);
+        }else{
+            document.form1.pc10_resumo.value = "";
+        }
     }
 
     function js_mostrapcorcamitem1(pc10_numero,pc10_resumo){
@@ -395,8 +399,12 @@ $clsolicita->rotulo->label();
         db_iframe_solicita.hide();
     }
 
-    function js_pesquisa_liclicita() {
+    function js_pesquisa_liclicita(mostra) {
+        if(mostra===true){
             js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_liclicita','func_liclicita.php?funcao_js=parent.js_mostraliclicita|l20_codigo|l20_objeto','Pesquisa',true);
+        }else{
+            document.form1.l20_objeto.value = "";
+        }
     }
 
     function js_mostraliclicita(l20_codigo,l20_objeto,erro) {
@@ -409,8 +417,12 @@ $clsolicita->rotulo->label();
         db_iframe_liclicita.hide();
     }
 
-    function js_acordo(){
-        js_OpenJanelaIframe('','db_iframe_acordo', 'func_acordoinstit.php?funcao_js=parent.js_mostraAcordo1|ac16_sequencial|ac16_resumoobjeto', 'Pesquisa',true);
+    function js_acordo(mostra){
+        if(mostra===true){
+            js_OpenJanelaIframe('','db_iframe_acordo', 'func_acordoinstit.php?funcao_js=parent.js_mostraAcordo1|ac16_sequencial|ac16_resumoobjeto', 'Pesquisa',true);
+        }else{
+            document.form1.ac16_resumoobjeto.value = "";
+        }
     }
 
     function js_mostraAcordo1(ac16_sequencial,ac16_resumoobjeto, erro){
