@@ -259,7 +259,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
       </td>
     </tr>
   </table>
-  <?
+  <?php
   db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
   ?>
 </body>
@@ -337,7 +337,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
 
   function js_retornoLeiLicitacao(oAjax) {
 
-  
+
 
     var oRetorno = eval("(" + oAjax.responseText + ")");
     if(oRetorno.lei==1){
