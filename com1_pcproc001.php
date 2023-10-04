@@ -599,7 +599,7 @@ if (isset($incluir) || isset($juntar)) {
               $sqlerro = true;
               break;
             } else {
-              $erro_msg .= "\\n\\nOBS.: Foi gerado o oramento nmero $pc20_codorc para este processo de compras.";
+              $erro_msg .= "\\n\\nOBS.: Foi gerado o orçamento número $pc20_codorc para este processo de compras.";
             }
             $gerouorc = true;
           }
@@ -720,7 +720,7 @@ if (isset($incluir) || isset($juntar)) {
     if ($sqlerro == false) {
       unset($valores, $importa);
       if (isset($juntar)) {
-        db_msgbox("Solicitao $rsSolicitem->pc11_numero vinculada ao processo de compras $juntar!");
+        db_msgbox("Solicitação $rsSolicitem->pc11_numero vinculada ao processo de compras $juntar!");
       }
     }
     db_fim_transacao($sqlerro);
