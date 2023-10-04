@@ -144,8 +144,6 @@ GROUP BY m80_codigo,
          m80_data,
 		 m70_codmatmater,m81_codtipo";
 
-//die($sSqlDados);
-
 $rsDados = db_query($sSqlDados);
 $iTotalItens    = pg_num_rows($rsDados);
 
