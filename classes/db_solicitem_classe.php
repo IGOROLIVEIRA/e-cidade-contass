@@ -217,8 +217,7 @@ class cl_solicitem
                                ,'$this->pc11_liberado'
                                ,'$this->pc11_servicoquantidade'
                                ,'$this->pc11_reservado'
-                      )";
-                      
+                      )";                
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
@@ -1109,6 +1108,8 @@ class cl_solicitem
       $sql .= $campos;
     }
     $sql .= " from solicitem ";
+    $sql .= "      inner  join solicitempcmater  on  solicitempcmater.pc16_solicitem = solicitem.pc11_codigo";
+    $sql .= "      inner  join pcmater  on pcmater.pc01_codmater = solicitempcmater.pc16_codmater";
     $sql2 = "";
     if ($dbwhere == "") {
       if ($pc11_codigo != null) {

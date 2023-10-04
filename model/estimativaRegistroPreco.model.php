@@ -1,5 +1,4 @@
 <?php
-//ini_set('display_errors','on');
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -667,7 +666,6 @@ class estimativaRegistroPreco extends solicitacaoCompra
     $oDaoSolicitem->pc11_codigo  = $iCodigoitemEstimativa;
     $oDaoSolicitem->alterar($iCodigoitemEstimativa);
 
-
     //ALTERA A QUANTIDADE MAXIMA DA ESTIMATIVA
     $oDaosolicitemregistropreco     = db_utils::getDao("solicitemregistropreco");
     
@@ -675,11 +673,9 @@ class estimativaRegistroPreco extends solicitacaoCompra
 
     $iCodigoSolicitemRegistro = db_utils::fieldsMemory($rssolicitemregistropreco, 0)->pc57_sequencial;
 
-
     $oDaosolicitemregistropreco->pc57_quantmax             = $quantidade;
     $oDaosolicitemregistropreco->pc57_sequencial  = $iCodigoSolicitemRegistro;
     $oDaosolicitemregistropreco->alterar($iCodigoSolicitemRegistro);
-
 
     //ALTERA A COMPILAÇÃO
     $oDaoSolicita     = db_utils::getDao("solicita");
@@ -695,8 +691,6 @@ class estimativaRegistroPreco extends solicitacaoCompra
     if($iCodigoCompilacao == null || pg_num_rows($rsSolicita) == 0){
       return true;
     }
-
-    
 
     $rsSolicitem    = $oDaoSolicitem->sql_record($oDaoSolicitem->sql_query_serv(
       null,
@@ -725,7 +719,6 @@ class estimativaRegistroPreco extends solicitacaoCompra
     $oDaoPcOrcamVal = db_utils::getDao('pcorcamval');
     $rsPcOrcamVal    = $oDaoPcOrcamVal->sql_record("select distinct pc23_orcamforne, pc23_orcamitem, pc23_vlrun, si02_sequencial, si02_vlprecoreferencia, si01_casasdecimais from pcorcamval inner join pcorcamitem on pc22_orcamitem = pc23_orcamitem inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem inner join pcprocitem on pc81_codprocitem = pc31_pcprocitem left join itemprecoreferencia on si02_itemproccompra = pc23_orcamitem left join precoreferencia on si01_sequencial = si02_precoreferencia where pc81_codprocitem = (select pc81_codprocitem from pcprocitem where pc81_solicitem = $iCodigoitemCompilacao->pc11_codigo)");
     
-
     if(pg_num_rows($rsPcOrcamVal) == 0){
       return true;
     }
@@ -742,7 +735,6 @@ class estimativaRegistroPreco extends solicitacaoCompra
     }
 
     //ALTERA A QUANTIDADE DO PRECO DE REFERENCIA
-
     if($iCodigoOrcamVal->si02_sequencial != null && $iCodigoOrcamVal->si02_sequencial != ""){
       $oDaoItemPrecoReferencia = db_utils::getDao('itemprecoreferencia');
 

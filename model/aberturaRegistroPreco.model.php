@@ -1,5 +1,4 @@
 <?php
-//ini_Set('display_errors','on');
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -742,7 +741,7 @@ class aberturaRegistroPreco extends solicitacaoCompra {
     
     if($tipo == 4){
       /**
-     * Salvamos as informacoes da Unidade do material
+     * Salvamos o vinculo da abertura
      */
       $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
       $rsSolicitemAbertura = $oDaoSolicitemVinculo->sql_record("select pc11_codigo from solicitem inner join solicitavinculo on pc53_solicitapai = pc11_numero inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc53_solicitafilho = $iCodigoAbertura and pc16_codmater=$item->iCodigoItem");
@@ -752,7 +751,7 @@ class aberturaRegistroPreco extends solicitacaoCompra {
       $oDaoSolicitemVinculo->incluir(null);
 
       /**
-      * Salvamos as informacoes da Unidade do material
+      * Salvamos a quantidade maxima
       */
       $oDaosolicitemregistropreco = db_utils::getDao('solicitemregistropreco');
       
@@ -767,7 +766,7 @@ class aberturaRegistroPreco extends solicitacaoCompra {
     }
     if($tipo == 6){
       /**
-           * Salvamos as informacoes da Unidade do material
+           * Salvamos o vinculo da abertura
            */
           $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
           $rsSolicitemAbertura = $oDaoSolicitemVinculo->sql_record("select pc11_codigo,pc11_numero from solicitem inner join solicitavinculo on pc53_solicitapai = pc11_numero inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc53_solicitafilho = $iCodigoAbertura and pc16_codmater=$item->iCodigoItem");
@@ -784,7 +783,7 @@ class aberturaRegistroPreco extends solicitacaoCompra {
             $oDaoSolicitemVinculo->incluir(null);
 
             /**
-            * Salvamos as informacoes da Unidade do material
+            * Salvamos a quantidade maxima
             */
             $oDaosolicitemregistropreco = db_utils::getDao('solicitemregistropreco');
             
