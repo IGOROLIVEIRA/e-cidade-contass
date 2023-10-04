@@ -88,10 +88,10 @@ class Itbi
      * @throws Exception
      * @return Void
      */
-    public function processarTransferenciaAutomatica($iCodRet)
+    public function processarTransferenciaAutomatica(int $iCodRet): void
     {
 
-        if($this->parItbi->getTransfautomatica() === false) {
+        if(!$this->parItbi->getTransfautomatica()) {
             return;
         }
 
