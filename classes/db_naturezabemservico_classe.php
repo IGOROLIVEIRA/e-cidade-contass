@@ -47,12 +47,14 @@ class cl_naturezabemservico
   var $e101_descr = null;
   var $e101_resumo = null;
   var $e101_aliquota = 0;
+  var $e101_codnaturezarendimento = null;
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
                  e101_sequencial = int4 = Sequencial 
                  e101_descr = text = Descrição
                  e101_resumo = varchar(120) = Resumo da descrição  
                  e101_aliquota = float8 = Alíquota
+                 e101_codnaturezarendimento = int4 = Cod. Natureza do Rendimento
                  ";
   //funcao construtor da classe 
   function cl_naturezabemservico()
@@ -78,6 +80,7 @@ class cl_naturezabemservico
       $this->e101_sequencial = ($this->e101_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["e101_sequencial"] : $this->e101_sequencial);
       $this->e101_descr = ($this->e101_descr == "" ? @$GLOBALS["HTTP_POST_VARS"]["e101_descr"] : $this->e101_descr);
       $this->e101_aliquota = ($this->e101_aliquota == "" ? @$GLOBALS["HTTP_POST_VARS"]["e101_aliquota"] : $this->e101_aliquota);
+      $this->e101_codnaturezarendimento = ($this->e101_codnaturezarendimento == "" ? @$GLOBALS["HTTP_POST_VARS"]["e101_codnaturezarendimento"] : $this->e101_codnaturezarendimento);
       if (strlen($this->e101_descr) > 120) {
         $this->e101_resumo = substr($this->e101_descr, 0, 117) . "...";
       } else {
@@ -87,6 +90,7 @@ class cl_naturezabemservico
       $this->e101_sequencial = ($this->e101_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["e101_sequencial"] : $this->e101_sequencial);
       $this->e101_descr = ($this->e101_descr == "" ? @$GLOBALS["HTTP_POST_VARS"]["e101_descr"] : $this->e101_descr);
       $this->e101_aliquota = ($this->e101_aliquota == "" ? @$GLOBALS["HTTP_POST_VARS"]["e101_aliquota"] : $this->e101_aliquota);
+      $this->e101_codnaturezarendimento = ($this->e101_codnaturezarendimento == "" ? @$GLOBALS["HTTP_POST_VARS"]["e101_codnaturezarendimento"] : $this->e101_codnaturezarendimento);
       if (strlen($this->e101_descr) > 120) {
         $this->e101_resumo = substr($this->e101_descr, 0, 117) . "...";
       } else {
@@ -95,7 +99,7 @@ class cl_naturezabemservico
     }
   }
   // funcao para inclusao
-  function incluir($e101_descr, $e101_aliquota)
+  function incluir($e101_descr, $e101_aliquota, $e101_codnaturezarendimento)
   {
     $this->atualizacampos();
     if (($this->e101_descr == null) || ($this->e101_descr == "")) {
@@ -114,15 +118,25 @@ class cl_naturezabemservico
       $this->erro_status = "0";
       return false;
     }
+    if (($this->e101_codnaturezarendimento == null) || ($this->e101_codnaturezarendimento == "")) {
+      $this->erro_sql = " Campo e101_codnaturezarendimento nao declarado.";
+      $this->erro_banco = "Alíquota não informada.";
+      $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Status: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
     $sql = "insert into naturezabemservico(
                                        e101_descr
                                       ,e101_resumo
-                                      ,e101_aliquota 
+                                      ,e101_aliquota
+                                      ,e101_codnaturezarendimento 
                        )
                 values (
                                       '$this->e101_descr'
                                       ,'$this->e101_resumo' 
-                                      ,$this->e101_aliquota 
+                                      ,$this->e101_aliquota
+                                      ,$e101_codnaturezarendimento 
                       )";
 
     $result = db_query($sql);
@@ -164,6 +178,7 @@ class cl_naturezabemservico
         $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'naturezabemservico'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e101_descr'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_descr')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'naturezabemservico'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e101_resumo'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_resumo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'naturezabemservico'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e101_aliquota'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_aliquota')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'naturezabemservico'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e101_codnaturezarendimento'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_codnaturezarendimento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       }
     }
 
@@ -195,6 +210,18 @@ class cl_naturezabemservico
       if (trim($this->e101_aliquota) == null) {
         $this->erro_sql = " Campo Alíquota nao Informado.";
         $this->erro_campo = "e101_aliquota";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Status: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->e101_codnaturezarendimento) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e101_codnaturezarendimento"])) {
+      $sql  .= $virgula . " e101_codnaturezarendimento = $this->e101_codnaturezarendimento ";
+      if (trim($this->e101_codnaturezarendimento) == null) {
+        $this->erro_sql = " Campo Cod. Natureza do Rendimento nao Informado.";
+        $this->erro_campo = "e101_codnaturezarendimento";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Status: \\n\\n " . $this->erro_banco . " \\n"));
@@ -247,7 +274,9 @@ class cl_naturezabemservico
             $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'naturezabemservico'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e101_resumo'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_resumo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             if (isset($GLOBALS["HTTP_POST_VARS"]["e101_aliquota"]) || $this->e101_aliquota != null)
               $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'naturezabemservico'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e101_aliquota'),'" . AddSlashes(pg_result($resaco, $iresaco, 'e101_aliquota')) . "','$this->e101_aliquota'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-          }
+              if (isset($GLOBALS["HTTP_POST_VARS"]["e101_codnaturezarendimento"]) || $this->e101_codnaturezarendimento != null)
+              $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'naturezabemservico'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e101_codnaturezarendimento'),'" . AddSlashes(pg_result($resaco, $iresaco, 'e101_codnaturezarendimento')) . "','$this->e101_codnaturezarendimento'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            }
         }
 
         return true;

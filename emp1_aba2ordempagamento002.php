@@ -66,6 +66,48 @@ $sqlerro = false;
 db_inicio_transacao();
 
 if (isset($alterar)) {
+    if (!$sqlerro) {
+        $aEstabelecimentos = json_decode(str_replace("\\","",$arrayEstabelecimentos));
+        $aEstabelecimentosExcluidos = json_decode(str_replace("\\","",$arrayEstabelecimentosExcluidos));
+        $clpagordemreinf        = new cl_pagordemreinf;
+        foreach ($aEstabelecimentos as $estabelecimento){
+            $clpagordemreinf->e102_codord = $e50_codord;
+            $clpagordemreinf->e102_numcgm = $estabelecimento->e102_numcgm;
+            $clpagordemreinf->e102_vlrbruto = $estabelecimento->e102_vlrbruto;
+            $clpagordemreinf->e102_vlrbase = $estabelecimento->e102_vlrbase;
+            $clpagordemreinf->e102_vlrir = $estabelecimento->e102_vlrir;
+            $clpagordemreinf->sql_record($clpagordemreinf->sql_query($e50_codord, $estabelecimento->e102_numcgm));
+            if($clpagordemreinf->numrows == 0){
+                $clpagordemreinf->incluir();
+                if($clpagordemreinf->erro_status == 0){
+                    $sqlerro = true;
+                    $erro_msg = $clpagordemreinf->erro_msg;
+                    break;
+                }
+            }else if($clpagordemreinf->numrows == 1){
+                $clpagordemreinf->alterar($e50_codord,$estabelecimento->e102_numcgm);
+                if($clpagordemreinf->erro_status == 0){
+                    $sqlerro = true;
+                    $erro_msg = $clpagordemreinf->erro_msg;
+                    break;
+                }
+            }
+        }
+    }
+
+    if(!$sqlerro){
+        $aEstabelecimentosExcluidos = json_decode(str_replace("\\","",$arrayEstabelecimentosExcluidos));
+        $clpagordemreinf        = new cl_pagordemreinf;
+        foreach ($aEstabelecimentosExcluidos as $estabelecimento){
+            $clpagordemreinf->excluir($e50_codord,$estabelecimento->e102_numcgm);
+            if($clpagordemreinf->erro_status == 0){
+                $sqlerro = true;
+                $erro_msg = $clpagordemreinf->erro_msg;
+                break;
+            }
+        }
+    }
+
     $estornoAlterado = false;
     if($dataEstorno !== ""){
         $dataEstorno = str_replace('/', '-', $dataEstorno);
@@ -210,7 +252,8 @@ if (isset($alterar)) {
         $aEmpenho = explode("/",$e60_codemp);
         $sSql = $clpagordem->sql_query_pagordemele("","substr(o56_elemento,1,7) AS o56_elemento","e50_codord","e60_codemp =  '".$aEmpenho[0]."' and e60_anousu = ".$aEmpenho[1]." and e60_instit = ".db_getsession("DB_instit"));
         $rsElementDesp = db_query($sSql);
-    
+        $clpagordem->e50_retencaoir = $reinfRetencao;
+        $clpagordem->e50_naturezabemservico = $naturezaCod;
         $clpagordem->alterar($e50_codord,db_utils::fieldsMemory($rsElementDesp,0)->o56_elemento);
         if($clpagordem->erro_status == 0) {
             $sqlerro = true;

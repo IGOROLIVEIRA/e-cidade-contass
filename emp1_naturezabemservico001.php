@@ -38,7 +38,7 @@ $db_opcao = 1;
 $db_botao = true;
 if (isset($incluir)) {
   db_inicio_transacao();
-  $erro = $clnaturezabemservico->incluir($e101_descr, $e101_aliquota) ? false : true;
+  $erro = $clnaturezabemservico->incluir($e101_descr, $e101_aliquota, $e101_codnaturezarendimento) ? false : true;
   db_fim_transacao($erro);
 }
 ?>
