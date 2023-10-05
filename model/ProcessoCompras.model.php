@@ -1395,6 +1395,7 @@ class ProcessoCompras
         if ($oDaoPcProcItem->erro_status == "0") {
             throw new DBException(_M(self::ARQUIVO_MENSAGEM . "erro_excluir_processo_compra"));
         }
+
     }
 
     public function getDadosAutorizacao()

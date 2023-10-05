@@ -177,6 +177,18 @@ if (isset($excluir)) {
       }
 
       if (!empty($oDadosSolicitacao->pc80_codproc)) {
+        
+        $oAutorizacaoEmpenho = new AutorizacaoEmpenho();
+        
+        $Empenho = $oAutorizacaoEmpenho->verificaempenho($oDadosSolicitacao->pc80_codproc);
+        
+        if ($Empenho === true) {
+
+          $erro_msg = "Solicitação de Registro de Preço possui itens Empenhados!";
+          $sqlerro = true;
+
+        }
+
         $oProcessoCompra = new ProcessoCompras($oDadosSolicitacao->pc80_codproc);
         $oProcessoCompra->remover();
       }

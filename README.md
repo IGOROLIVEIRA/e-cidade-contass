@@ -76,3 +76,41 @@ db_input(
 ### Observacoes
 - O Eloquent nao coloca em desuso as classes DAO (classes/db_tabela_classe.php) nativas do e-cidade, apenas dá uma possibilidade a mais para o desenvolvedor de utilizar os Models do Eloquent no lugar das classes DAO legadas.
 - A versão atual do Eloquent é 9, no entanto estamos usando a 5.8 devido a outras dependências atuais do e-cidade.
+
+
+## Usando docker na v3
+Para configurar o docker primeiro edit o env com a porta para
+o apache
+```bash
+    $cp .env-exemplo .env
+```
+
+Depois execute o comando para subir o docker do apache
+```bash
+    $docker-compose up -d 
+    $docker exec -it <NOME-ou-ID-CONTAINER> /bin/bash
+    $chmod -R 775 /var/www/html/*
+    $chmod -R 777 /var/www/html/tmp/
+    $cd /var/www/html/
+    $composer install
+    $bin/v3/extension/unpack desktop-package.tar.gz true
+    $bin/v3/extension/install Desktop <NOME-DO-SEU-USUARIO>
+```
+
+Depois execute o comando para parar o docker do apache
+```bash
+    $docker-compose down
+```
+
+Acesse no navegador com o portal informada no .env: http://localhost:8888
+
+Obs.: Nesse momento não temos um docker do banco de dados;
+
+### Para debugar no PHPSTORM
+
+...
+
+### Para Debugar no VSCode
+
+...
+

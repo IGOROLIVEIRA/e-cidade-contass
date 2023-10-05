@@ -53,7 +53,6 @@ abstract class AbstractMetadata  {
    * @return AbstractMetadata
    */
   public static function restore($path = null) {
-
     $instance = new static($path);
     $storage = $instance->getStorage();
     if ($storage->exists()) {

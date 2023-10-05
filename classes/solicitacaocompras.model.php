@@ -429,7 +429,7 @@ class solicitacaoCompra {
     $sSqlItemEstimativa .= "   and pc55_solicitemfilho = {$iCodigoItemORigem}";
     $sSqlItemEstimativa .= "   and pc67_solicita is null";
     $rsItemEstimativa    = db_query($sSqlItemEstimativa);
-    if (pg_num_rows($rsItemEstimativa) != 1) {
+    if (!pg_num_rows($rsItemEstimativa)) {
 
       $sErro  = "Departamento ".db_getsession("DB_coddepto")." Não possui estimativa lançada para o ";
       $sErro .= "item {$oItem->getDescricaoMaterial()}";
