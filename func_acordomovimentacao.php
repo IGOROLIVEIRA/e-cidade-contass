@@ -168,12 +168,7 @@ $sAnd   = "";
             $sWhere .= "{$sAnd} ac10_sequencial like '$chave_ac10_sequencial%' ";
             $sql     = $clacordomovimentacao->sql_query_verificacancelado(null, $campos, "ac10_sequencial", $sWhere);
           } else {
-            if (!empty($homologados) && (bool)$homologados) {
-                $sWhere .= "
-                {$sAnd} ac16_acordosituacao = 4
-                OR ac10_sequencial = ({$clacordomovimentacao->subQueryUltimaMovimenHomologado()})";
 
-            }
             $sql    = $clacordomovimentacao->sql_query_verificacancelado("", $campos, "ac10_sequencial", $sWhere);
 
         }
