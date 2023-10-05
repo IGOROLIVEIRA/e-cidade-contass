@@ -150,6 +150,7 @@ class ProcessoCompras
      */
     protected $iAmparolegal;
 
+    protected  $iModalidadeContratacao;
 
     /**
      * Amparo legal
@@ -189,8 +190,7 @@ class ProcessoCompras
                 $this->setDadosComplementares($oDadosProcesso->pc80_dadoscomplementares);
                 $this->setAmparoLegal($oDadosProcesso->pc80_amparolegal);
                 $this->setCategoriaProcesso($oDadosProcesso->pc80_categoriaprocesso);
-
-
+                $this->setModalidadeContratacao($oDadosProcesso->pc80_modalidadecontratacao);
                 /*FIM - OC3770*/
                 unset($oDadosProcesso);
             }
@@ -208,6 +208,20 @@ class ProcessoCompras
     public function setNumerodispensa($iNumeroDispensa)
     {
         $this->iNumeroDispensa = $iNumeroDispensa;
+    }
+
+    public function getModalidadeContratacao()
+    {
+        return $this->iModalidadeContratacao;
+    }
+
+    /**
+     * Retorna o valor da propriedade iModalidadeContratacao
+     * @return integer
+     */
+    public function setModalidadeContratacao($iModalidadeContratacao)
+    {
+        $this->iModalidadeContratacao = $iModalidadeContratacao;
     }
 
     public function getAmparoLegal()
@@ -572,7 +586,7 @@ class ProcessoCompras
         $oDaoPcProc->pc80_dadoscomplementares = $this->getDadosComplementares();
         $oDaoPcProc->pc80_amparolegal = $this->getAmparoLegal();
         $oDaoPcProc->pc80_categoriaprocesso = $this->getCategoriaProcesso();
-
+        $oDaoPcProc->pc80_modalidadecontratacao = $this->getModalidadeContratacao();
 
         if (empty($this->iCodigo)) {
 
@@ -1392,8 +1406,8 @@ class ProcessoCompras
 
         $sSql            = "select distinct
     l03_descr as TipoLicitacao,
-    pc50_codcom as tipocompra, 
-    l20_edital||'/'||l20_anousu as numerolicitacao, 
+    pc50_codcom as tipocompra,
+    l20_edital||'/'||l20_anousu as numerolicitacao,
     l20_codigo as sequenciallicitacao,
     l20_usaregistropreco,
     l20_numero,
