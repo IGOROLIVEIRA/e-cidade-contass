@@ -179,7 +179,7 @@ if ($clliclicita->numrows > 0) {
                             $sWhere  = " and pc10_solicitacaotipo = 6";
                             $sWhere .= " and pc54_formacontrole   = {$l20_formacontroleregistropreco}";
                         } else {
-                            $sWhere .= " and pc10_solicitacaotipo in(1,2)";
+                            $sWhere .= " and pc10_solicitacaotipo in(1,2,8)";
                         }
                         $sWhere .= " and pc80_situacao = 2";
                         $sWhere .= " and not exists (select 1 ";

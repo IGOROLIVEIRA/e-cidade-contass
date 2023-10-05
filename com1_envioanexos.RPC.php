@@ -38,7 +38,7 @@ switch ($oParam->exec) {
 
             try {
 
-                $rsAnexos = $cl_liccontroleanexopncp->sql_record($cl_liccontroleanexopncp->sql_query_file(null, " * ", null, "l218_sequencialarquivo = " . $iDocumentos));
+                $rsAnexos = $cl_liccontroleanexopncp->sql_record($cl_liccontroleanexopncp->sql_query_file(null, " * ", null, "l218_processodecompras = $oParam->iCodigoProcesso and l218_sequencialarquivo = " . $iDocumentos));
 
                 if (pg_num_rows($rsAnexos) > 0) {
                     throw new Exception("O documento do codigo " . $iDocumentos . " ja foi enviado !");
@@ -48,7 +48,7 @@ switch ($oParam->exec) {
 
                 //validacao para enviar somente idocumentos de contratos que ja foram enviados para PNCP
                 if (pg_num_rows($rsAvisodeContratacao) == null) {
-                    throw new Exception("Compra não localizado no PNCP !");
+                    throw new Exception("Ato de Contratação Direta não localizado no PNCP!");
                 }
 
                 for ($iCont = 0; $iCont < pg_num_rows($rsAvisodeContratacao); $iCont++) {
@@ -98,7 +98,7 @@ switch ($oParam->exec) {
                 }
             } catch (Exception $oErro) {
 
-                $oRetorno->message = $oErro->getMessage();
+                $oRetorno->message = urlencode($oErro->getMessage());
                 $oRetorno->status  = 2;
             }
         }
@@ -124,7 +124,7 @@ switch ($oParam->exec) {
 
                 //validacao para enviar somente idocumentos de contratos que ja foram enviados para PNCP
                 if (pg_num_rows($rsAvisodeContratacao) == null) {
-                    throw new Exception("Compra não localizado no PNCP !");
+                    throw new Exception("Ato de Contratação Direta não localizado no PNCP!");
                 }
 
                 for ($iCont = 0; $iCont < pg_num_rows($rsAvisodeContratacao); $iCont++) {

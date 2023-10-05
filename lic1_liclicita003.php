@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require("libs/db_stdlib.php");
@@ -48,6 +48,8 @@ include("classes/db_liccomissaocgm_classe.php");
 include("classes/db_licobras_classe.php");
 include("classes/db_credenciamentosaldo_classe.php");
 include("classes/db_credenciamento_classe.php");
+require_once("classes/db_situacaoitemcompra_classe.php");
+require_once("classes/db_situacaoitemlic_classe.php");
 require_once("classes/db_condataconf_classe.php");
 require_once("classes/db_pccflicitapar_classe.php");
 require_once("classes/db_pccflicitanum_classe.php");
@@ -74,6 +76,8 @@ $clcredenciamento    = new cl_credenciamento();
 $clcredenciamentosaldo = new cl_credenciamentosaldo();
 $clpccflicitapar     = new cl_pccflicitapar();
 $clpccflicitanum     = new cl_pccflicitanum();
+$clsituacaoitemcompra= new cl_situacaoitemcompra();
+$clsituacaoitemlic   = new cl_situacaoitemlic();
 $erro_msg = '';
 $db_botao = false;
 $db_opcao = 33;
@@ -194,6 +198,27 @@ if (isset($excluir)) {
             $erro_msg = $clliccomissaocgm->erro_msg;
         }
     }
+
+    if($sqlerro == false){
+        $sqlItensCompra = $clsituacaoitemcompra->sql_query(null,"l218_codigo",null,"l218_codigolicitacao=$l20_codigo");
+        $rsItensCompra = $clsituacaoitemcompra->sql_record($sqlItensCompra);
+
+        if(pg_num_rows($rsItensCompra) > 0){
+            for ($item = 0; $item < pg_num_rows($rsItensCompra); $item++) {
+                db_fieldsmemory($rsItensCompra, $item);
+                $clsituacaoitemlic->excluir(null,"l219_codigo = $l218_codigo");
+            }
+        }
+    }
+
+    if($sqlerro == false) {
+        $clsituacaoitemcompra->excluir(null,"l218_codigolicitacao=$l20_codigo");
+        if ($clsituacaoitemcompra->erro_status == 0) {
+            $sqlerro = true;
+            $erro_msg = $clsituacaoitemcompra->erro_msg;
+        }
+    }
+
     if ($sqlerro == false) {
 
         $sqlCredSaldo = $clcredenciamentosaldo->sql_query_file(null, "*", null, 'l213_licitacao = ' . $l20_codigo);

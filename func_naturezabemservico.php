@@ -74,12 +74,12 @@ $clnaturezabemservico->rotulo->label("e101_aliquota");
     <tr>
       <td align="center" valign="top">
         <?
-        if (isset($pesquisa_chave) == false) {
+        if (!isset($pesquisa_chave)) {
           if (isset($campos) == false) {
             if (file_exists("funcoes/db_func_naturezabemservico.php") == true) {
               include("funcoes/db_func_naturezabemservico.php");
             } else {
-              $campos = "e101_sequencial, e101_resumo, e101_aliquota ";
+              $campos = "e101_sequencial, e101_codnaturezarendimento, e101_resumo, e101_aliquota ";
             }
           }
           if (isset($chave_e101_sequencial) && (trim($chave_e101_sequencial) != "")) {
@@ -88,6 +88,16 @@ $clnaturezabemservico->rotulo->label("e101_aliquota");
             $sql = $clnaturezabemservico->sql_query("", $campos, "e101_sequencial");
           }
           db_lovrot($sql, 15, "()", "", $funcao_js);
+        }else{
+          if($pesquisa_chave != ""){
+              $result = $clnaturezabemservico->sql_record($clnaturezabemservico->sql_query(null,"*",null,"e101_codnaturezarendimento = ".$pesquisa_chave));
+              if (($result != false) && (pg_numrows($result) != 0)) {
+                db_fieldsmemory($result, 0);
+              echo "<script>" . $funcao_js . "(false,'$e101_descr');</script>\n";
+            }else{
+              echo "<script>" . $funcao_js . "(true,'Código (" . $pesquisa_chave . ") não Encontrado');</script>\n";
+            }
+          }
         }
         ?>
       </td>

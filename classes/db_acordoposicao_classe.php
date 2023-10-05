@@ -904,7 +904,8 @@ class cl_acordoposicao {
   }
 
 
-  public function getTermoContrato($iCodigotermo){
+  public function getTermoContrato($iCodigotermo)
+  {
     $sql = "
             SELECT CASE
                   WHEN ac26_acordoposicaotipo IN (15,16,17) THEN 3
@@ -949,9 +950,89 @@ class cl_acordoposicao {
         LEFT JOIN apostilamento ON si03_acordoposicao = ac26_sequencial
         WHERE acordoposicao.ac26_sequencial = $iCodigotermo
     ";
-
     return $sql;
   }
 
+  public function sqlAPosicaoApostilamentoEmpenho($ac26Acordo)
+  {
+    $sql = "
+        SELECT DISTINCT ac26_numeroapostilamento AS numerodoapostilamento,
+                    e54_autori AS codigodaautorizacao,
+                    e61_numemp AS codigodoempenho
+        FROM acordoposicao
+        INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
+        INNER JOIN acordoitemexecutado ON ac29_acordoitem = ac20_sequencial
+        INNER JOIN acordoitemexecutadoempautitem ON ac19_acordoitemexecutado = ac29_sequencial
+        LEFT  JOIN empautoriza ON e54_autori = ac19_autori
+        LEFT  JOIN empautitem ON (ac19_autori,ac19_sequen) = (e55_autori,e55_sequen)
+        LEFT  JOIN empempaut ON e61_autori = e54_autori
+        WHERE ac26_acordo = $ac26Acordo
+            AND ac26_acordoposicaotipo IN (15,16,17)
+            AND ac26_numeroapostilamento IN
+                (SELECT max(ac26_numeroapostilamento)
+                 FROM acordoposicao
+                 WHERE ac26_acordo = $ac26Acordo);
+    ";
+    return $sql;
+  }
+
+  public function updateNumeroApositilamento($ac26_acordo, $ac26_numeroapostilamento)
+  {
+    $sql = "
+    UPDATE
+        acordoposicao
+    SET
+        ac26_numeroapostilamento = $ac26_numeroapostilamento
+    WHERE
+        ac26_acordo = $ac26_acordo
+        AND ac26_numeroapostilamento IS NOT NULL
+        AND ac26_numeroapostilamento IN (
+            SELECT max(ac26_numeroapostilamento)
+            FROM acordoposicao WHERE ac26_acordo = $ac26_acordo)
+    ";
+
+    $result = db_query($sql);
+     if ($result==false) {
+       $this->erro_banco = str_replace("\n","",@pg_last_error());
+       $this->erro_sql   = "posicoes do acordo nao Alterado. Alteracao Abortada.\\n";
+       $this->erro_sql .= "Valores : ".$this->ac26_sequencial;
+       $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
+       $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+       $this->erro_status = "0";
+       $this->numrows_alterar = 0;
+       return false;
+     } else {
+       if(pg_affected_rows($result)==0){
+         $this->erro_banco = "";
+         $this->erro_sql = "posicoes do acordo nao foi Alterado. Alteracao Executada.\\n";
+         $this->erro_sql .= "Valores : ".$this->ac26_sequencial;
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_alterar = 0;
+         return true;
+       } else {
+         $this->erro_banco = "";
+         $this->erro_sql = "Alterao efetuada com Sucesso\\n";
+         $this->erro_sql .= "Valores : ".$this->ac26_sequencial;
+         $this->erro_msg   = "Usurio: \\n\\n ".$this->erro_sql." \\n\\n";
+         $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+         $this->erro_status = "1";
+         $this->numrows_alterar = pg_affected_rows($result);
+         return true;
+       }
+     }
+  }
+
+    public function sqlValidaUpdateNumApostilamento($acordo,  $numApostilamento)
+    {
+        $sql = "
+        SELECT *
+        FROM acordoposicao
+        WHERE ac26_acordo = $acordo
+            AND ac26_numeroapostilamento = '$numApostilamento';
+        ";
+        return $sql;
+    }
 }
 ?>

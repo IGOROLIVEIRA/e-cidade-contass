@@ -44,11 +44,11 @@ require_once("libs/db_utils.php");
 require_once("std/db_stdClass.php");
 
 
-//verificação do tipo de usuário por login => .conttas 
+//verificação do tipo de usuário por login => .conttas
 $lusuario = db_getsession("DB_login");
 $uLogin = explode(".", $lusuario, 2);
 
-//url identificada para validação de campo modalidade da para uso de inclusão 
+//url identificada para validação de campo modalidade da para uso de inclusão
 $url_atual = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 $url_particao = explode("_", $url_atual, 2);
 
@@ -270,7 +270,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                             echo "<script> document.getElementById('l20_numero').style.display = 'none'; </script>";
                                             echo "<script> document.getElementById('txtNumeracao').style.display = 'none'; </script>";
                                         }
-                                        
+
                                         ?>
                                         <span id="linha_nroedital" style="display:none;">
                                             <strong>Edital:</strong>
@@ -543,7 +543,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
 
-                                <tr id="disputa" style="display:none">
+                                <tr id="disputa">
                                     <td nowrap title="Modo de disputa">
                                         <b>Modo de disputa: </b>
                                     </td>
@@ -825,7 +825,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
                                 </tr>
                                 -->
-                                <!--        
+                                <!--
                                 <tr>
                                     <td nowrap title="<?= @$Tl20_nomeveiculo1 ?>" id="nomeveiculo1">
                                         <?= @$Ll20_nomeveiculo1 ?>
@@ -854,7 +854,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                     </td>
                                 </tr>
                                 -->
-                                <!--        
+                                <!--
                                 <tr>
                                     <td nowrap title="<?= @$Tl20_nomeveiculo2 ?>" id="nomeveiculo2">
                                         <?= @$Ll20_nomeveiculo2 ?>
@@ -863,7 +863,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         <?
                                         db_input('l20_nomeveiculo2', 50, $Il20_nomeveiculo2, true, 'text', $db_opcao, "");
                                         ?>
-                                       
+
                                     </td>
                                 </tr> -->
 
@@ -960,7 +960,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                                         db_select("l20_usaregistropreco", array("t" => "Sim", "f" => "Não"), true, $db_opcao, "");
                                         ?>
                                     </td>
-                                </tr> 
+                                </tr>
                                 <tr>
                                     <td nowrap title="<?= @$Tl20_liclocal ?>">
                                         <?
@@ -1261,7 +1261,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
 
 
     function js_retornolicitacao(oAjax) {
-        
+
         var oRetornoNatu = document.getElementById("l20_naturezaobjeto").value;
         var oRetornoamparo = document.getElementById("l212_codigo").value;
         if (oRetornoNatu == 1) {
@@ -1370,7 +1370,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
         } else {
             document.getElementById("respAvaliaBens").style.display = "none";
         }
-        
+
         if (oRetorno.tribunal == 100 || oRetorno.tribunal == 101 || oRetorno.tribunal == 102 || oRetorno.tribunal == 103) {
             if(oRetorno.tribunal == 102 || oRetorno.tribunal == 103){
                 document.getElementById("linha_nroedital").style.display = '';
@@ -1385,13 +1385,11 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
                 document.getElementById("receita").style.display = 'none';
                 document.getElementById("dataaberturapncp").style.display = 'none';
             }
-            document.getElementById("respCondProcesso").style.display = "none";
-            document.getElementById("l20_tipliticacao").style.display = "none";
+            document.getElementById("respCondProcesso").style.display = "none"
             document.getElementById("l20_tipnaturezaproced").style.display = "none";
             document.getElementById("usaregistropreco").style.display = 'none';
             document.getElementById("trequipepregao").style.display = 'none';
             document.getElementById("l20_criterioadjudicacao").style.display = "none";
-            document.getElementById("disputa").style.display = "none";
             document.getElementById("respAutoProcesso").style.display = '';
             document.getElementById("respAberProcesso").style.display = "none";
             document.getElementById("respEmissaoEdi").style.display = "none";
@@ -1458,7 +1456,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
             document.getElementById("trequipepregao").style.display = '';
             document.getElementById("usaregistropreco").style.display = '';
             document.getElementById("aceitabilidade").style.display = '';
-            
+
             if (l12_pncp == 't') {
                 document.getElementById("receita").style.display = '';
             } else {
@@ -2339,7 +2337,7 @@ $lBloqueadoRegistroPreco = (empty($itens_lancados) ? $db_opcao : 3);
     function js_mostracgm(erro, chave) {
         document.getElementById(varNomeCampo).value = chave;
         if (erro == true) {
-            //  document.form1.l31_numcgm.focus(); 
+            //  document.form1.l31_numcgm.focus();
             document.getElementById(varNumCampo).value = "";
             document.getElementById(varNomeCampo).value = "";
             alert("Responsável não encontrado!");

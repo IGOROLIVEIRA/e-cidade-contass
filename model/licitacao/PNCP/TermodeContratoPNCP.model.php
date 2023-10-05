@@ -101,7 +101,6 @@ class TermodeContrato extends ModeloBasePNCP
         $cnpj =  $this->getCnpj();
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/contratos/$iAnoContrato/$sCodigoControlePNCP/termos";
-        $method = 'POST';
 
         $chpncp      = curl_init($url);
 
@@ -110,23 +109,7 @@ class TermodeContrato extends ModeloBasePNCP
             'Authorization: ' . $token
         );
 
-        $optionspncp = array(
-            CURLOPT_RETURNTRANSFER => 1,            // return web page
-            CURLOPT_POST           => 1,
-            CURLOPT_HEADER         => true,         // don't return headers
-            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
-            CURLOPT_TIMEOUT        => 120,          // timeout on response
-            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
-            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
-            CURLOPT_POSTFIELDS     => $oDados,
-            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
-            CURLOPT_SSL_VERIFYPEER => false,        //
-            CURLOPT_VERBOSE        => 1,            //
-            CURLINFO_HEADER_OUT    => true
-        );
+        $optionspncp = $this->getParancurl('POST',$oDados,$headers,false,false);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
@@ -147,8 +130,6 @@ class TermodeContrato extends ModeloBasePNCP
 
         $url = $this->envs['URL'] . "orgaos/" . $this->getCnpj() . "/contratos/$iAnoContrato/$iCodigoContrato/termos/$iCodigoTermo";
 
-        $method = 'DELETE';
-
         $chpncp = curl_init($url);
 
         $headers = array(
@@ -156,22 +137,7 @@ class TermodeContrato extends ModeloBasePNCP
             'Authorization: ' . $token
         );
 
-        $optionspncp = array(
-            CURLOPT_RETURNTRANSFER => 1,            // return web page
-            CURLOPT_POST           => 1,
-            CURLOPT_HEADER         => true,         // don't return headers
-            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
-            CURLOPT_TIMEOUT        => 120,          // timeout on response
-            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
-            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
-            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
-            CURLOPT_SSL_VERIFYPEER => false,        //
-            CURLOPT_VERBOSE        => 1,            //
-            CURLINFO_HEADER_OUT    => true
-        );
+        $optionspncp = $this->getParancurl('DELETE',null,$headers,false,false);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
@@ -190,8 +156,6 @@ class TermodeContrato extends ModeloBasePNCP
         $cnpj =  $this->getCnpj();
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/contratos/" . $iAnoContrato . "/" . $iCodigoContrato . "/termos/".$iCodigoTermo."/arquivos";
-
-        $method = 'POST';
 
         db_inicio_transacao();
         global $conn;
@@ -216,23 +180,7 @@ class TermodeContrato extends ModeloBasePNCP
             'Tipo-Documento-Id: ' . $iTipoAnexo
         );
 
-        $optionspncp = array(
-            CURLOPT_RETURNTRANSFER => 1,            // return web page
-            CURLOPT_POST           => 1,
-            CURLOPT_HEADER         => true,         // don't return headers
-            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
-            CURLOPT_TIMEOUT        => 120,          // timeout on response
-            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
-            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
-            CURLOPT_POSTFIELDS     => $post_data,
-            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
-            CURLOPT_SSL_VERIFYPEER => false,        //
-            CURLOPT_VERBOSE        => 1,            //
-            CURLINFO_HEADER_OUT    => true
-        );
+        $optionspncp = $this->getParancurl('POST',$post_data,$headers,false,false);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
@@ -263,8 +211,6 @@ class TermodeContrato extends ModeloBasePNCP
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/contratos/" . $iAnoContrato . "/" . $iCodigoContrato . "/termos/".$iCodigoTermo."/arquivos/".$iSeqAnexo;
 
-        $method = 'DELETE';
-
         $chpncp      = curl_init($url);
 
         $headers = array(
@@ -272,24 +218,7 @@ class TermodeContrato extends ModeloBasePNCP
             'Authorization: ' . $token
         );
 
-        $optionspncp = array(
-            CURLOPT_RETURNTRANSFER => 1,            // return web page
-            CURLOPT_POST           => 1,
-            CURLOPT_HEADER         => false,         // don't return headers
-            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
-            CURLOPT_TIMEOUT        => 120,          // timeout on response
-            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
-            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
-            //CURLOPT_POSTFIELDS     => $oDados,
-            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
-            CURLOPT_SSL_VERIFYPEER => false,        //
-            CURLOPT_VERBOSE        => 1,            //
-            CURLINFO_HEADER_OUT    => true
-        );
-
+        $optionspncp = $this->getParancurl('DELETE',null,$headers,false,false);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);

@@ -25,5 +25,5 @@
  *                                licenca/licenca_pt.txt 
  */
 
-$campos = "naturezabemservico.e101_sequencial,naturezabemservico.e101_resumo,naturezabemservico.e101_aliquota";
+$campos = "naturezabemservico.e101_sequencial,naturezabemservico.e101_codnaturezarendimento,naturezabemservico.e101_resumo,naturezabemservico.e101_aliquota";
 ?>
