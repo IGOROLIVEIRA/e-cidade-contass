@@ -83,10 +83,15 @@ switch ($oParam->exec) {
                         ELSE pc01_descrmater
                     END AS descricao,
                     pc01_data AS data,
-                     pc01_dataalteracao AS dataalteracao
+                     pc01_dataalteracao AS dataalteracao,
+                     db150_coditem,
+                   db150_unidademedida,
+                   db150_tipocadastro,
+                   db150_sequencial
                 FROM
                     pcmater
-                WHERE pc01_codmater IN ($intervaloFormatadoParaSql) ";
+                LEFT JOIN historicomaterial ON db150_pcmater = pc01_codmater
+                WHERE pc01_codmater IN ($intervaloFormatadoParaSql) order by pc01_codmater";
 
       $rsCodigosMateriais = db_query($sql);
       $oRetorno->materiais = array();
