@@ -583,13 +583,13 @@ function js_saida(oAjax){
       tipodesdobramento = 0;
       opcao = 3;
     }
-    if(db_opcao != '3' && (obj.Tipofornec == 'cnpj' && !(desdobramento.substr(0, 3) == '331' || desdobramento.substr(0, 7) == '345' || desdobramento.substr(0, 3) == '346'
+    if(db_opcao != '3' && (obj.Tipofornec == 'cnpj' && !(desdobramento.substr(0, 3) == '331' || desdobramento.substr(0, 3) == '345' || desdobramento.substr(0, 3) == '346'
                                   || desdobramento.substr(0, 3) == '332' || desdobramento.substr(0, 7) == '3335041' || desdobramento.substr(0, 7) == '3333041'
                                   || desdobramento.substr(0, 7) == '3337041' || desdobramento.substr(0, 7) == '3339008' || desdobramento.substr(0, 7) == '3339041' 
                                   || desdobramento.substr(0, 7) == '3339043' || desdobramento.substr(0, 7) == '3339045' || desdobramento.substr(0, 7) == '3339046' 
                                   || desdobramento.substr(0, 7) == '3339047' || desdobramento.substr(0, 7) == '3339048' || desdobramento.substr(0, 7) == '3339049' 
                                   || desdobramento.substr(0, 7) == '3339059' || desdobramento.substr(0, 7) == '3339086' || desdobramento.substr(0, 5) == '33371' 
-                                  || desdobramento.substr(0, 5) == '34471' || desdobramento.substr(0, 5) == '3335043')) 
+                                  || desdobramento.substr(0, 5) == '34471' || desdobramento.substr(0, 7) == '3335043')) 
                                   || (obj.Tipofornec == 'cpf' && desdobramento == '333903614')){
       $('reinf').style.display = "table-cell";
       js_validarEstabelecimentos(true);
