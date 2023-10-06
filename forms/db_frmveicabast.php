@@ -486,10 +486,6 @@ db_app::load("estilos.css");
   </center>
 </form>
 <script>
-  let texto = 'O método contains é útil para verificar se uma string contém outra em JavaScript';
-  let palavra = 'útdsadail';
-
-  console.log(texto.includes(palavra)); // true
   var el = document.getElementById("e60_codemp");
   el.onblur = function() {
     var valor_e60Codemp = document.form1.e60_codemp.value;
