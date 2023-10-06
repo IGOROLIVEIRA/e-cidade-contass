@@ -260,6 +260,7 @@ switch ($objJson->method) {
 
                         $oGrupoElemento->iGrupo = $iGrupo;
                         $oGrupoElemento->sGrupo = urlencode($sDescricao);
+                        $oEmpenho->sDesdobramento = db_utils::fieldsMemory($rsBuscaDesdobramento, 0)->o56_elemento;
                         $oEmpenho->oGrupoElemento = $oGrupoElemento;
                         $oEmpenho->LiberadoLic = $lBloquear;
                         $oEmpenho->Zerado = $zerado;
@@ -270,6 +271,7 @@ switch ($objJson->method) {
 
                         //echo $objEmpenho->empenho2Json('',$item);
                         $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item));
+                        $oEmpenho->sDesdobramento = db_utils::fieldsMemory($rsBuscaDesdobramento, 0)->o56_elemento;
                         $oGrupoElemento->iGrupo = "";
                         $oGrupoElemento->sGrupo = "";
                         $oEmpenho->oGrupoElemento = $oGrupoElemento;
