@@ -5,6 +5,7 @@ use App\Models\InstituicaoFinanceiraApiPix;
 use App\Services\Tributario\Arrecadacao\SavePixApiSettingsService;
 use ECidade\V3\Datasource\Database;
 use ECidade\V3\Extension\Registry;
+use ECidade\V3\Extension\Request;
 
 require_once ("libs/db_stdlib.php");
 require_once ("libs/db_conecta.php");
@@ -16,7 +17,7 @@ require_once ("dbforms/db_funcoes.php");
 require_once ("libs/db_libdicionario.php");
 
 /**
- * @var \ECidade\V3\Extension\Request $request
+ * @var Request $request
  */
 $request = Registry::get('app.request');
 db_postmemory($request->post()->all());
@@ -25,32 +26,45 @@ $db_opcao = 22;
 $db_botao = false;
 $instit = db_getsession("DB_instit");
 $databaseInstance = Database::getInstance();
+const DBSELLER_ID = '1';
+
+function isDBSellerUser(): bool
+{
+    return db_getsession("DB_id_usuario") === DBSELLER_ID;
+}
+
+function savePixSettings(Request $request): void
+{
+    $apiConfiguration = null;
+    $k03_instituicao_financeira = $request->post()->get('k03_instituicao_financeira');
+    $instituicaoFinanceira = InstituicaoFinanceiraApiPix::find($k03_instituicao_financeira);
+
+    if (empty($instituicaoFinanceira)) {
+        throw new BusinessException('Instituição financeira não encontrada');
+    }
+
+    if ((int)$k03_instituicao_financeira === InstituicaoFinanceiraApiPix::BANCO_DO_BRASIL) {
+        $apiConfiguration = new ConfiguracaoPixBancoDoBrasil();
+    }
+
+    if (empty($apiConfiguration)) {
+        throw new BusinessException('Instituição financeira não habilitada para integração via PIX.');
+    }
+
+    $savePixApiSettingsService = new SavePixApiSettingsService($apiConfiguration);
+
+    $savePixApiSettingsService->execute($request->post()->all());
+}
 
 if (isset($alterar)) {
-    $apiConfiguration = null;
-
     try {
-        $instituicaoFinanceira = InstituicaoFinanceiraApiPix::find($k03_instituicao_financeira);
-
-        if (empty($instituicaoFinanceira)) {
-            throw new \BusinessException('Instituição financeira não encontrada');
-        }
-
-        if ((int) $k03_instituicao_financeira === InstituicaoFinanceiraApiPix::BANCO_DO_BRASIL) {
-            $apiConfiguration = new ConfiguracaoPixBancoDoBrasil();
-        }
-
-        if (empty($apiConfiguration)) {
-            throw new \BusinessException('Instituição financeira não habilitada para integração via PIX.');
-        }
-
-        $savePixApiSettingsService = new SavePixApiSettingsService($apiConfiguration);
-
         $databaseInstance->begin();
         $db_opcao = 2;
         $clnumpref->k03_instit = $instit;
         $clnumpref->alterar($k03_anousu, $instit);
-        $savePixApiSettingsService->execute($request->post()->all());
+        if(isDBSellerUser() && isset($k03_ativo_integracao_pix)) {
+            savePixSettings($request);
+        }
         $databaseInstance->commit();
     } catch (BusinessException $ex) {
         $databaseInstance->rollback();
