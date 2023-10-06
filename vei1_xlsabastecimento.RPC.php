@@ -161,7 +161,7 @@ switch ($oParam->exec) {
                 $rsEmpenho = $clempempenho->sql_record($clempempenho->sql_query_file(null,"e60_emiss,e60_vlremp-e60_vlrutilizado as saldodisponivel",null,"e60_codemp ='$codEmp' and e60_anousu = $anoEmp and e60_instit = " .db_getsession('DB_instit')));
                 $resultEmpenho = db_utils::fieldsMemory($rsEmpenho, 0);
 
-                if($resultParamres->ve50_abastempenho == 1){
+                if($resultParamres->ve50_abastempenho == 1 && !in_array($sEmpenho, $oParam->aEmpenhosInvalidos)){
 
                     if(array_key_exists($sEmpenho, $aSaldoUtilizadoPorEmpenho)){
                         $aSaldoUtilizadoPorEmpenho[$sEmpenho] += $row->valor;
@@ -187,18 +187,19 @@ switch ($oParam->exec) {
                 }
             }
 
-            if(!empty($aEmpenhosComSaldoTotalUtilizado) &&  $oParam->permissaoParaControlarSaldo == true){
+            if(!empty($aEmpenhosComSaldoTotalUtilizado)){
+                $oRetorno->saldoutilizado = $aSaldoUtilizadoPorEmpenho;
                 $sEmpenhosComSaldoTotalUtilizado = implode(", ", array_unique($aEmpenhosComSaldoTotalUtilizado));
                 $oRetorno->message = urlencode("Usuário: Abastecimento(s): não incluído(s), valor total do(s) abastecimento(s) ultrapassaram o valor disponível no(s) empenho(s): $sEmpenhosComSaldoTotalUtilizado.");
                 $erro = true;
                 $oRetorno->status = 6;
                 break;
             }
-            
+
             foreach($aSaldoUtilizadoPorEmpenho as $key => $row){
                 $sEmpenho = $key;
                 $saldoUtilizado = $row;
-                if(!array_key_exists($sEmpenho, $aEmpenhosComSaldoTotalUtilizado)){
+                if(!in_array($sEmpenho, $aEmpenhosComSaldoTotalUtilizado)){
                     $sEmpenho = explode("/", $sEmpenho);
                     $e60_codemp = $sEmpenho[0];
                     $e60_anousu = $sEmpenho[1];
@@ -463,7 +464,7 @@ switch ($oParam->exec) {
                 }
                 $filtroempelemento = 1;
                 $data = date('d/m/Y');
-                $resultadoEmpenhoo = $clempempenho1->sql_record($clempempenho1->sql_query(null, "*", null, "e60_instit = " .db_getsession('DB_instit'). " and elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000') AND ((date_part('year', empempenho.e60_emiss) < date_part('year', date '$data') AND date_part('month', empempenho.e60_emiss) <= 12)
+                $resultadoEmpenhoo = $clempempenho1->sql_record($clempempenho1->sql_query(null, "*", null, "e60_instit = " .db_getsession('DB_instit'). " and elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3339039990000') AND ((date_part('year', empempenho.e60_emiss) < date_part('year', date '$data') AND date_part('month', empempenho.e60_emiss) <= 12)
                     OR (date_part('year', empempenho.e60_emiss) = date_part('year', date '$data') AND date_part('month', empempenho.e60_emiss) <= date_part('month', date '$data'))) and e60_codemp like '$codEmp' and e60_anousu = $anoEmp", $filtroempelemento));
                 $resultEmpenho = db_utils::fieldsMemory($resultadoEmpenhoo, 0);
 

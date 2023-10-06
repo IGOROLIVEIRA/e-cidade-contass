@@ -565,7 +565,7 @@ class cl_veicabastanu {
     $e60_emiss = db_utils::fieldsMemory($rsDataEmpenho, 0)->e60_emiss;
     $ve50_datacorte = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_datacorte; 
 
-    if ($abastecimentoPorEmpenho == 1 && $e60_emiss > $ve50_datacorte){
+    if ($abastecimentoPorEmpenho == 1 && $e60_emiss >= $ve50_datacorte){
       return true;
     } 
 

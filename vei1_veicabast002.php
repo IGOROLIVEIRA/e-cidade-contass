@@ -228,11 +228,11 @@ if ($sqlerro==false){
   }
   $clveicabast->ve70_hora = $ve70_hora;
   $clveicabast->alterar($ve70_codigo);
-  $erro_msg=$clveicabast->erro_msg;
+  $erro_msg=$clveicabast->erro_msg . "1";
   if ($clveicabast->erro_status=="0"){
   	$sqlerro=true;
   }
-  $sqlerro = $clveicabast->alteracaoSaldo($ve70_codigo,$ve70_valor,$si05_numemp,$ve70_valorantigo);
+  $sqlerro = $clveicabast->alteracaoSaldo($ve70_valor,$si05_numemp,$ve70_valorantigo);
   $erro_msg = $clveicabast->erro_msg;
 
   if ($sqlerro==false){
@@ -421,6 +421,7 @@ if ($sqlerro==false){
 
    $rsEmpempenho = $clempempenho->sql_record($clempempenho->sql_query_file($si05_numemp,"e60_vlremp-e60_vlrutilizado as saldoDisponivel,e60_codemp||'/'||e60_anousu as e60_codemp",null));
    db_fieldsmemory($rsEmpempenho,0);
+   $saldodisponivel += $ve70_valor;
 
   }
 

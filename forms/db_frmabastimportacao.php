@@ -874,6 +874,7 @@ if (isset($_POST["processar"])) {
         });
 
         let aEmpenhosInvalidos = [...new Set(oRetorno.aEmpenhosInvalidos)];
+        console.log(aEmpenhosInvalidos);
         let sEmpenhosInvalidos = JSON.stringify(aEmpenhosInvalidos);
         var permissaoParaControlarSaldo = true;
 
@@ -885,7 +886,7 @@ if (isset($_POST["processar"])) {
         }
 
         if (nControle == 0) {
-            js_importxlsfornecedor(permissaoParaControlarSaldo);
+            js_importxlsfornecedor(permissaoParaControlarSaldo,aEmpenhosInvalidos);
         }
     }
 
@@ -898,7 +899,7 @@ if (isset($_POST["processar"])) {
     /***
      * ROTINA PARA CARREGAR VALORES DA PLANILHA ANEXADA
      */
-    function js_importxlsfornecedor(permissaoParaControlarSaldo) {
+    function js_importxlsfornecedor(permissaoParaControlarSaldo,aEmpenhosInvalidos) {
 
         var oParam = new Object();
         var empenho = [];
@@ -916,6 +917,7 @@ if (isset($_POST["processar"])) {
         }
         oParam.itensEmpenho = empenho;
         oParam.permissaoParaControlarSaldo = permissaoParaControlarSaldo;
+        oParam.aEmpenhosInvalidos = aEmpenhosInvalidos;
 
         js_divCarregando('Aguarde... Carregando Arquivo', 'msgbox');
 

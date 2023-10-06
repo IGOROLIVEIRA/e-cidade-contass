@@ -1444,10 +1444,9 @@ if($dbwhere==""){
         }
         return $sql;
     }
-    function alteracaoSaldo($codigoAbastecimento,$valorAbastecimento,$codigoEmpenho,$valorAbastecimentoAntigo){
+    function alteracaoSaldo($valorAbastecimento,$codigoEmpenho,$valorAbastecimentoAntigo){
 
       $oDaoVeicparam = db_utils::getDao("veicparam");
-      $oDaoVeicabast = db_utils::getDao("veicabast");
       $oDaoEmpempenho = db_utils::getDao("empempenho");
   
       $rsVeicparam = $oDaoVeicparam->sql_record($oDaoVeicparam->sql_query_file(null, "*", null, "ve50_instit = " . db_getsession("DB_instit")));
@@ -1459,11 +1458,7 @@ if($dbwhere==""){
       $e60_vlrutilizado = db_utils::fieldsMemory($rsEmpempenho, 0)->e60_vlrutilizado;
       $ve50_datacorte = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_datacorte; 
 
-      if ($abastecimentoPorEmpenho == 1 && $ve50_datacorte > $e60_emiss){
-        return true;
-      } 
-
-      if($abastecimentoPorEmpenho == 1 && $e60_emiss > $ve50_datacorte){
+      if($abastecimentoPorEmpenho == 1 && $e60_emiss >= $ve50_datacorte){
 
         $saldoDisponivel = $e60_vlremp - $e60_vlrutilizado;
         $saldoDisponivel += $valorAbastecimentoAntigo;
@@ -1479,6 +1474,8 @@ if($dbwhere==""){
         return false;
 
       }
+
+      return false;
   
     }
 }
