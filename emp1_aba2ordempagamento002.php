@@ -66,48 +66,6 @@ $sqlerro = false;
 db_inicio_transacao();
 
 if (isset($alterar)) {
-    if (!$sqlerro) {
-        $aEstabelecimentos = json_decode(str_replace("\\","",$arrayEstabelecimentos));
-        $aEstabelecimentosExcluidos = json_decode(str_replace("\\","",$arrayEstabelecimentosExcluidos));
-        $clpagordemreinf        = new cl_pagordemreinf;
-        foreach ($aEstabelecimentos as $estabelecimento){
-            $clpagordemreinf->e102_codord = $e50_codord;
-            $clpagordemreinf->e102_numcgm = $estabelecimento->e102_numcgm;
-            $clpagordemreinf->e102_vlrbruto = $estabelecimento->e102_vlrbruto;
-            $clpagordemreinf->e102_vlrbase = $estabelecimento->e102_vlrbase;
-            $clpagordemreinf->e102_vlrir = $estabelecimento->e102_vlrir;
-            $clpagordemreinf->sql_record($clpagordemreinf->sql_query($e50_codord, $estabelecimento->e102_numcgm));
-            if($clpagordemreinf->numrows == 0){
-                $clpagordemreinf->incluir();
-                if($clpagordemreinf->erro_status == 0){
-                    $sqlerro = true;
-                    $erro_msg = $clpagordemreinf->erro_msg;
-                    break;
-                }
-            }else if($clpagordemreinf->numrows == 1){
-                $clpagordemreinf->alterar($e50_codord,$estabelecimento->e102_numcgm);
-                if($clpagordemreinf->erro_status == 0){
-                    $sqlerro = true;
-                    $erro_msg = $clpagordemreinf->erro_msg;
-                    break;
-                }
-            }
-        }
-    }
-
-    if(!$sqlerro){
-        $aEstabelecimentosExcluidos = json_decode(str_replace("\\","",$arrayEstabelecimentosExcluidos));
-        $clpagordemreinf        = new cl_pagordemreinf;
-        foreach ($aEstabelecimentosExcluidos as $estabelecimento){
-            $clpagordemreinf->excluir($e50_codord,$estabelecimento->e102_numcgm);
-            if($clpagordemreinf->erro_status == 0){
-                $sqlerro = true;
-                $erro_msg = $clpagordemreinf->erro_msg;
-                break;
-            }
-        }
-    }
-
     $estornoAlterado = false;
     if($dataEstorno !== ""){
         $dataEstorno = str_replace('/', '-', $dataEstorno);
@@ -142,7 +100,7 @@ if (isset($alterar)) {
         || ($estornoAlterado && db_strtotime($dataEstorno) <= db_strtotime($oFimPeriodoContabil->c99_data))
         || ($liquidacaoAlterado && db_strtotime($dataLiquidacao) <= db_strtotime($oFimPeriodoContabil->c99_data)))) {
 
-            $erro_msg = "Alteração não realizada!\nData inferior à data do fim do período contábil.";
+            $erro_msg = "Dados da OP não alterados!\nData inferior à data do fim do período contábil.";
             $sqlerro = true;
 
         }
@@ -155,7 +113,7 @@ if (isset($alterar)) {
         if(isset($ordemCompra)){
             if($ordemCompra->tipo === 'normal'){
                 if($dataLiquidacao < $ordemCompra->m51_data){
-                    $erro_msg = "Alteração não realizada!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
+                    $erro_msg = "Dados da OP não alterados!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
                     $sqlerro = true;
                 }
             }
@@ -169,7 +127,7 @@ if (isset($alterar)) {
         if(pg_num_rows($result) > 0){
             $result = pg_fetch_object($result);
             if (strtotime($dataLiquidacao) < strtotime($result->data_empenho)){
-                $erro_msg = "Alteração não realizada!\nVerifique as datas dos lançamentos contábeis.";
+                $erro_msg = "Dados da OP não alterados!\nVerifique as datas dos lançamentos contábeis.";
                 $sqlerro = true;
             }
         }
@@ -182,7 +140,7 @@ if (isset($alterar)) {
         if(pg_num_rows($result) > 0){
             $result = pg_fetch_object($result);
             if (strtotime($dataLiquidacao) > strtotime($result->data_pagamento)){
-                $erro_msg = "Alteração não realizada!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
+                $erro_msg = "Dados da OP não alterados!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
                 $sqlerro = true;
             }
         }
@@ -193,7 +151,7 @@ if (isset($alterar)) {
         $sql = $clempempenho->verificaSaldoEmpenho($e60_numemp, $dataLiquidacao);
         $result = pg_fetch_object(db_query($sql));
         if ($result->saldo_empenho < $e53_valor){
-            $erro_msg = "Alteração não realizada!\nEmpenho não possui saldo na data desejada.";
+            $erro_msg = "Dados da OP não alterados!\nEmpenho não possui saldo na data desejada.";
             $sqlerro = true;
         }
     }
@@ -203,7 +161,7 @@ if (isset($alterar)) {
         $sql = $clempempenho->verificaSaldoEmpenhoPosterior($e60_numemp, $dataLiquidacao, $e50_codord, 20);
         $result = pg_fetch_object(db_query($sql));
         if ($result->saldo_empenho < 0){
-            $erro_msg = "Alteração não realizada!\nO empenho não pode ficar com saldo negativo.";
+            $erro_msg = "Dados da OP não alterados!\nO empenho não pode ficar com saldo negativo.";
             $sqlerro = true;
         }
     }
@@ -212,7 +170,7 @@ if (isset($alterar)) {
     if(!$sqlerro && ($estornoAlterado || $liquidacaoAlterado)){
         if(isset($dataEstorno) && $dataEstorno !== ""){
             if (strtotime($dataLiquidacao) > strtotime($dataEstorno)){
-                $erro_msg = "Alteração não realizada!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
+                $erro_msg = "Dados da OP não alterados!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
                 $sqlerro = true;
             }
         }
@@ -228,7 +186,7 @@ if (isset($alterar)) {
             db_query($sqlAlteraDataOp);
             db_fim_transacao();
         }else{
-            $erro_msg = "Alteração não realizada!\nA data da OP não pode ser posterior a data atual.";
+            $erro_msg = "Dados da OP não alterados!\nA data da OP não pode ser posterior a data atual.";
             $sqlerro = true;  
         }
     }
@@ -242,7 +200,7 @@ if (isset($alterar)) {
             db_query($sqlAlteraDataEstorno);
             db_fim_transacao();
         }else{
-            $erro_msg = "Alteração não realizada!\nA data do estorno não pode ser posterior a data atual.";
+            $erro_msg = "Dados da OP não alterados!\nA data do estorno não pode ser posterior a data atual.";
             $sqlerro = true;  
         }
     }
@@ -252,8 +210,7 @@ if (isset($alterar)) {
         $aEmpenho = explode("/",$e60_codemp);
         $sSql = $clpagordem->sql_query_pagordemele("","substr(o56_elemento,1,7) AS o56_elemento","e50_codord","e60_codemp =  '".$aEmpenho[0]."' and e60_anousu = ".$aEmpenho[1]." and e60_instit = ".db_getsession("DB_instit"));
         $rsElementDesp = db_query($sSql);
-        $clpagordem->e50_retencaoir = $reinfRetencao;
-        $clpagordem->e50_naturezabemservico = $naturezaCod;
+        $clpagordem->e50_obs = $historicoOp;
         $clpagordem->alterar($e50_codord,db_utils::fieldsMemory($rsElementDesp,0)->o56_elemento);
         if($clpagordem->erro_status == 0) {
             $sqlerro = true;
@@ -263,10 +220,73 @@ if (isset($alterar)) {
     }
 
     if (!$sqlerro) {
-        $erro_msg = "Alteração realizada com sucesso!";
+        $erro_msg = "Dados da OP alterados com sucesso!";
     }
 }
 db_fim_transacao($sqlerro);
+
+db_inicio_transacao();
+
+if (isset($alterar)) {
+    $sqlerroReinf = false;
+    if (!$sqlerroReinf) {
+        $aEstabelecimentos = json_decode(str_replace("\\","",$arrayEstabelecimentos));
+        $aEstabelecimentosExcluidos = json_decode(str_replace("\\","",$arrayEstabelecimentosExcluidos));
+        $clpagordemreinf        = new cl_pagordemreinf;
+        foreach ($aEstabelecimentos as $estabelecimento){
+            $clpagordemreinf->e102_codord = $e50_codord;
+            $clpagordemreinf->e102_numcgm = $estabelecimento->e102_numcgm;
+            $clpagordemreinf->e102_vlrbruto = $estabelecimento->e102_vlrbruto;
+            $clpagordemreinf->e102_vlrbase = $estabelecimento->e102_vlrbase;
+            $clpagordemreinf->e102_vlrir = $estabelecimento->e102_vlrir;
+            $clpagordemreinf->sql_record($clpagordemreinf->sql_query($e50_codord, $estabelecimento->e102_numcgm));
+            if($clpagordemreinf->numrows == 0){
+                $clpagordemreinf->incluir();
+                if($clpagordemreinf->erro_status == 0){
+                    $sqlerroReinf = true;
+                    $erro_msg_reinf = $clpagordemreinf->erro_msg;
+                    break;
+                }
+            }else if($clpagordemreinf->numrows == 1){
+                $clpagordemreinf->alterar($e50_codord,$estabelecimento->e102_numcgm);
+                if($clpagordemreinf->erro_status == 0){
+                    $sqlerroReinf = true;
+                    $erro_msg_reinf = $clpagordemreinf->erro_msg;
+                    break;
+                }
+            }
+        }
+    }
+
+    if(!$sqlerroReinf){
+        $aEstabelecimentosExcluidos = json_decode(str_replace("\\","",$arrayEstabelecimentosExcluidos));
+        $clpagordemreinf        = new cl_pagordemreinf;
+        foreach ($aEstabelecimentosExcluidos as $estabelecimento){
+            $clpagordemreinf->excluir($e50_codord,$estabelecimento->e102_numcgm);
+            if($clpagordemreinf->erro_status == 0){
+                $sqlerroReinf = true;
+                $erro_msg_reinf = $clpagordemreinf->erro_msg;
+                break;
+            }
+        }
+    }
+
+    if(!$sqlerroReinf){
+    $clpagordem->e50_retencaoir = $reinfRetencao;
+    $clpagordem->e50_naturezabemservico = $naturezaCod;
+    $clpagordem->alterar($e50_codord,db_utils::fieldsMemory($rsElementDesp,0)->o56_elemento);
+    if($clpagordem->erro_status == 0) {
+        $sqlerro = true;
+    }
+    $erro_msg_reinf = $clpagordem->erro_msg;
+
+    }
+
+    if(!$sqlerroReinf){
+        $erro_msg .= "\n\nDados do EFD-Reinf atualizados.";
+    }
+}
+db_fim_transacao($sqlerroReinf);
 
 ?>
 <html>
