@@ -241,7 +241,7 @@ try {
                 if (!(($oEfdreinfr4020->cnpj == $oEfdreinfr4020Proximo->cnpj) && ($oEfdreinfr4020->op == $oEfdreinfr4020Proximo->op) )) {  
                    if ($oEfdreinfr4020->data_pgto >= $sDataInicialFiltros   && $oEfdreinfr4020->data_pgto <= $sDataFinalFiltros) {
                         $oefdreinfr4020 = new stdClass();
-                        $oefdreinfr4020->CNPJBeneficiario = db_formatar($oEfdreinfr4020->cnpj,'cnpj')." - ".$oEfdreinfr4020->beneficiario;
+                        $oefdreinfr4020->CNPJBeneficiario = db_formatar($oEfdreinfr4020->cnpj,'cnpj')." - ". removeAccents($oEfdreinfr4020->beneficiario);
                         $oefdreinfr4020->Identificador = $oEfdreinfr4020->op;
                         $oefdreinfr4020->NaturezaRendimento = $oEfdreinfr4020->natureza_rendimento ? $oEfdreinfr4020->natureza_rendimento : '' ;
                         $oefdreinfr4020->DataFG = formateDate($oEfdreinfr4020->data_pgto);
@@ -392,7 +392,7 @@ try {
                 if (!(($oEfdreinfr4010->cnpj == $oEfdreinfr4010Proximo->cnpj) && ($oEfdreinfr4010->op == $oEfdreinfr4010Proximo->op))) {  
                     if ($oEfdreinfr4010->data_pgto >= $sDataInicialFiltros   && $oEfdreinfr4010->data_pgto <= $sDataFinalFiltros) {
                         $oefdreinfr4010 = new stdClass();
-                        $oefdreinfr4010->CPFBeneficiario = db_formatar($oEfdreinfr4010->cpf,'cpf')." - ".$oEfdreinfr4010->beneficiario;
+                        $oefdreinfr4010->CPFBeneficiario = db_formatar($oEfdreinfr4010->cpf,'cpf')." - ".removeAccents($oEfdreinfr4010->beneficiario);
                         $oefdreinfr4010->Identificador = $oEfdreinfr4010->op;
                         $oefdreinfr4010->NaturezaRendimento = $oEfdreinfr4010->natureza_rendimento ? $oEfdreinfr4010->natureza_rendimento : '' ;
                         $oefdreinfr4010->DataFG = formateDate($oEfdreinfr4010->data_pgto);
@@ -483,7 +483,7 @@ function removeAccents($str) {
         'ú' => 'u', 'ù' => 'u', 'û' => 'u', 'ü' => 'u', 'ç' => 'c', 'Á' => 'A', 'À' => 'A', 'Ã' => 'A', 'Â' => 'A',
         'Ä' => 'A', 'É' => 'E', 'È' => 'E', 'Ê' => 'E', 'Ë' => 'E', 'Í' => 'I', 'Ì' => 'I', 'Î' => 'I', 'Ï' => 'I',
         'Ó' => 'O', 'Ò' => 'O', 'Õ' => 'O', 'Ô' => 'O', 'Ö' => 'O', 'Ú' => 'U', 'Ù' => 'U', 'Û' => 'U', 'Ü' => 'U',
-        'Ç' => 'C'
+        'Ç' => 'C', '&' => 'e'
     );
     return strtr($str, $acentosMap);
 }
