@@ -150,7 +150,7 @@ class Oc21142v3 extends AbstractMigration
                     efd03_numcgm              int8 NOT NULL,
                     efd03_status    	      int8 NULL,
                     efd03_descResposta        character varying(500) NULL,
-                    efd03_dscResp  	      character varying(500) NULL,
+                    efd03_dscResp  	      character varying(500) NULL
                 
                 );
             

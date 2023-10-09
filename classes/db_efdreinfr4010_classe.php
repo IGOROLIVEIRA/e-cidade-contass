@@ -841,7 +841,10 @@ class cl_efdreinfr4010
          AND c53_tipo = 30
          AND e53_vlrpag > 0
          AND e60_instit = {$instituicao}
-         AND LENGTH(cgm.z01_cgccpf) = $tipo
+         AND (
+            (e102_codord IS NULL AND LENGTH(cgm.z01_cgccpf) = $tipo)
+            OR (e102_codord IS NOT NULL AND LENGTH(cgm_pagordemreinf.z01_cgccpf) = $tipo)
+          )
          AND (e21_retencaotipocalc IN (1, 2) OR o56_elemento LIKE '333903614%' OR e50_retencaoir = 't')    
          AND c69_data BETWEEN  '$sDataInicial' AND '$sDataFinal') AS x
          ORDER BY credor_emp, beneficiario, e60_numemp, 2, 5 , valor_irrf  ";
