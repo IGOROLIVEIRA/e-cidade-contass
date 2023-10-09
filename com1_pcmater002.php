@@ -116,6 +116,7 @@ if ((isset($HTTP_POST_VARS["db_opcao"]) && $HTTP_POST_VARS["db_opcao"]) == "Alte
         $clhistoricomaterial->db150_unidademedida             = $db150_unidademedida;
         $clhistoricomaterial->db150_tipocadastro              = 2;
         $clhistoricomaterial->db150_justificativaalteracao    = $pc01_justificativa;
+        $clhistoricomaterial->db150_data                      = date("Y-m-d", db_getsession("DB_datausu"));
         $clhistoricomaterial->db150_mes                       = date("m", db_getsession("DB_datausu"));
         $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
         $clhistoricomaterial->incluir(null);

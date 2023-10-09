@@ -17,6 +17,7 @@ class Oc20960 extends AbstractMigration
                             db150_tipocadastro       int8,
                             db150_justificativaalteracao varchar(100),
                             db150_mes                int4,
+                            db150_data               date,
                             db150_instit             int4);
 
             ALTER TABLE historicomaterial ADD PRIMARY KEY (db150_sequencial);

@@ -184,6 +184,7 @@ switch ($oParam->exec) {
             $clhistoricomaterial->db150_tipocadastro              = 1;
             $clhistoricomaterial->db150_justificativaalteracao    = '';
             $clhistoricomaterial->db150_mes                       = date("m", db_getsession("DB_datausu"));
+            $clhistoricomaterial->db150_data                      = date("Y-m-d", db_getsession("DB_datausu"));
             $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
             $clhistoricomaterial->incluir(null);
 
@@ -290,6 +291,7 @@ switch ($oParam->exec) {
               $clhistoricomaterial->db150_tipocadastro              = 1;
               $clhistoricomaterial->db150_justificativaalteracao    = '';
               $clhistoricomaterial->db150_mes                       = date("m", db_getsession("DB_datausu"));
+              $clhistoricomaterial->db150_data                      = date("Y-m-d", db_getsession("DB_datausu"));
               $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
               $clhistoricomaterial->incluir(null);
 

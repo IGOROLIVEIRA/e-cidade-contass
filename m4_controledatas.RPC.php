@@ -374,6 +374,7 @@ switch ($oParam->exec) {
 
               if(pg_num_rows($rsHistMat)) {
 
+                  $clhistoricomaterial->db150_data = $dataAlteracao;
                   $clhistoricomaterial->db150_mes = $aData[1];
                   $clhistoricomaterial->db150_sequencial = $oMat[0]->db150_sequencial;
                   $clhistoricomaterial->alterar($oMat[0]->db150_sequencial);
@@ -398,6 +399,7 @@ switch ($oParam->exec) {
                   $clhistoricomaterial->db150_unidademedida             = $oMat[0]->db150_unidademedida;
                   $clhistoricomaterial->db150_tipocadastro              = 2;
                   $clhistoricomaterial->db150_mes                       = $aData[1];
+                  $clhistoricomaterial->db150_data                      = $dataAlteracao;
                   $clhistoricomaterial->db150_instit                    = db_getsession('DB_instit');
                   $clhistoricomaterial->incluir(null);
 

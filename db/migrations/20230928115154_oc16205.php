@@ -15,7 +15,8 @@ class Oc16205 extends AbstractMigration
                                                     '1' AS db150_tipocadastro,
                                                     EXTRACT (MONTH
                                                              FROM pc01_data) AS db150_mes,
-                                                            pc01_instit AS db150_instit
+                                                            pc01_instit AS db150_instit,
+                                                    pc01_data
                                              FROM solicitem
                                              INNER JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
                                              INNER JOIN pcmater ON pc16_codmater = pc01_codmater
@@ -63,6 +64,7 @@ class Oc16205 extends AbstractMigration
                         {$item['db150_tipocadastro']},
                         '',
                         {$item['db150_mes']},
+                        {$item['pc01_data']},
                         {$item['db150_instit']});";
             $this->execute($sSql);
         }
