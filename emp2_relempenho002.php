@@ -401,11 +401,11 @@ if ($agrupar == "a") { // fornecedor
 if ($agrupar != "orgao" && $agrupar != "r" && $agrupar != "d") {
     if ($chk_ordem != "0") {
         if ($chk_ordem == "E") {
-            $sOrderSQL = "e60_vlremp desc ";
+            $sOrderSQL = "e60_codemp, e60_vlremp desc ";
         } elseif ($chk_ordem == "L") {
-            $sOrderSQL = "e60_vlrliq desc ";
+            $sOrderSQL = "e60_codemp, e60_vlrliq desc ";
         } elseif ($chk_ordem == "P") {
-            $sOrderSQL = "e60_vlrpag desc ";
+            $sOrderSQL = "e60_codemp, e60_vlrpag desc ";
         }
     }
 }
@@ -549,7 +549,7 @@ if ($processar == "a") {
                         e38_descr,
                     x.l20_edital,
                     x.l20_anousu";
-            $sqlrelemp = "select * from ($sqlrelemp) as yy order by yy.o56_descr";
+            $sqlrelemp = "select * from ($sqlrelemp) as yy order by yy.e60_numemp, yy.o56_descr";
         }
     } elseif ($agrupar == "ta") {
         $sqlrelemp = "select 	  x.e60_resumo,
@@ -740,9 +740,9 @@ if ($processar == "a") {
     }
     if ($agrupar != "d") {
         $sqlrelemp = "select * from ($sqlrelemp) as x " . ($agrupar == "d"
-            ? " order by e64_codele, e60_emiss "
+            ? " order by e60_numemp, e64_codele, e60_emiss "
             : $agrupar == "c"
-            ? " order by  x.ac16_sequencial "
+            ? " order by  x.ac16_sequencial, e60_numemp"
             : " order by $sOrderSQL ");
     }
 
@@ -943,7 +943,7 @@ if ($processar == "a") {
           e60_numerol";
         if ($agrupar == "d") {
             $sqlperiodo .= "
-                         order by  empelemento.e64_codele
+                         order by  e60_codemp, empelemento.e64_codele
   			    ";
         } else {
             $sqlperiodo .= "
@@ -1022,9 +1022,7 @@ if ($processar == "a") {
           e60_concarpeculiar,
           e60_numerol";
 
-        $sqlperiodo .= "
-                         order by  e60_emiss,empelemento.e64_codele
-  			    ";
+        $sqlperiodo .= " order by e60_codemp, e60_emiss, empelemento.e64_codele ";
     }
 
     $res = $clempempenho->sql_record($sqlperiodo);
@@ -1841,7 +1839,7 @@ if ($tipo == "a" or 1 == 1) {
 
             if ($agrupar == "do") {
                 $pdf->Cell(45, $tam, "$e60_coddot", $iBorda, 0, "C", 0);
-                $pdf->Cell(63, $tam, "$dl_estrutural", $iBorda, 1, "L", 0);
+                $pdf->Cell(63, $tam, trataEstruturaDotacao($dl_estrutural), $iBorda, 1, "L", 0);
             }
 
             $pdf->SetFont('Arial', '', 7);
@@ -2072,7 +2070,7 @@ if ($tipo == "a" or 1 == 1) {
             $pdf->Cell(15, $tam, $e60_emiss, $iBorda, 0, "C", $preenche);
             if ($agrupar == "a") {
                 if ($mostrar == "r") {
-                    $pdf->Cell(40, $tam, db_formatar($o15_codigo, 'recurso') . " - " . substr($o15_descr, 0, 20), $iBorda, 0, "L", $preenche); // recurso
+                    $pdf->Cell(40, $tam, db_formatar($o15_codigo, 'recurso'), $iBorda, 0, "C", $preenche); // recurso
                 } else
                     if ($mostrar == "t") {
                     $pdf->Cell(40, $tam, $e60_codcom . " - $pc50_descr", $iBorda, 0, "L", $preenche); // tipo de compra
@@ -2111,9 +2109,9 @@ if ($tipo == "a" or 1 == 1) {
 
             if ($agrupar == "do") {
                 $pdf->Cell(46, $tam, substr($z01_nome, 0, 27), $iBorda, 0, "L", $preenche); //quebra linha 108
-                $pdf->Cell(62, $tam, str_pad($e60_coddot, 4, '0', STR_PAD_LEFT) . " -  $dl_estrutural", $iBorda, 0, "L", $preenche); //quebra linha
+                $pdf->Cell(62, $tam, str_pad($e60_coddot, 4, '0', STR_PAD_LEFT) . " -  " . trataEstruturaDotacao($dl_estrutural), $iBorda, 0, "L", $preenche); //quebra linha
             } else {
-                $pdf->Cell(62, $tam, str_pad($e60_coddot, 4, '0', STR_PAD_LEFT) . " -  $dl_estrutural", $iBorda, 0, "L", $preenche); //quebra linha
+                $pdf->Cell(62, $tam, str_pad($e60_coddot, 4, '0', STR_PAD_LEFT) . " -  " . trataEstruturaDotacao($dl_estrutural), $iBorda, 0, "L", $preenche); //quebra linha
             }
 
             $pdf->Cell(18, $tam, db_formatar($e60_vlremp, 'f'), 'B', 0, "R", $preenche);
@@ -3142,3 +3140,16 @@ if ($hist == "h") {
 }
 // echo $sqlrelemp;exit;
 $pdf->output();
+
+function trataEstruturaDotacao($dotacao)
+{
+    $dotacaoDesmembrada = explode('.', $dotacao);
+    return $dotacaoDesmembrada[0] . '.' .
+        $dotacaoDesmembrada[1] . '.' .
+        $dotacaoDesmembrada[2] . '.' .
+        $dotacaoDesmembrada[3] . '.' .
+        $dotacaoDesmembrada[4] . '.' .
+        $dotacaoDesmembrada[5] . '.' .
+        substr($dotacaoDesmembrada[6], 0, 9) . '.' .
+        $dotacaoDesmembrada[7];
+}
