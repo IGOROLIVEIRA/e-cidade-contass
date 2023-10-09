@@ -161,7 +161,7 @@ class Oc21142v3 extends AbstractMigration
                 NO MAXVALUE
                 CACHE 1;
                 
-    COMMIT;
+    COMMIT; 
 
 SQL;
         $this->execute($sql);

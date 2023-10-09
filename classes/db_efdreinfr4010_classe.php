@@ -849,6 +849,6 @@ class cl_efdreinfr4010
          AND c69_data BETWEEN  '$sDataInicial' AND '$sDataFinal') AS x
          ORDER BY credor_emp, beneficiario, e60_numemp, 2, 5 , valor_irrf  ";
 
-        return $sql; 
+        return $sql;  
     }
 }
