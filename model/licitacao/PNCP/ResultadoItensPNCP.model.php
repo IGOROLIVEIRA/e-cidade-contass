@@ -51,7 +51,7 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         $oDado = $this->dados;
 
         $oDadosAPI                                  = new \stdClass;
-        $oDadosAPI->codigoUnidadeCompradora         = '01001'; //$oDado->codigounidadecompradora;
+        $oDadosAPI->codigoUnidadeCompradora         = $this->getUndCompradora();
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
         $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
