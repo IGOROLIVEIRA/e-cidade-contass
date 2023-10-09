@@ -704,7 +704,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                 END AS codVeiculo,
                 veicbaixa.ve04_veiccadtipobaixa AS tipoBaixa,
                 veicbaixa.ve04_motivo AS descBaixa,
-                veicbaixa.ve04_data AS dtBaixa
+                veicbaixa.ve04_data AS dtBaixa,
+                veiculos.ve01_codunidadesub AS codunidadesubant
       FROM veiculos.veiculos AS veiculos
       INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
       INNER JOIN veiculos.veiccadcentral AS veiccadcentral ON (veiccentral.ve40_veiccadcentral =veiccadcentral.ve36_sequencial)
@@ -733,7 +734,7 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
       UNION
       SELECT DISTINCT '40' AS tipoRegistro,
                       si09_codorgaotce AS codOrgao,
-                      veiculostransferencia.ve81_codunidadesubant AS codunidadesub,
+                      veiculostransferencia.ve81_codunidadesubant AS codunidadesubant,
                       CASE
                           WHEN veiculos.ve01_codigoant IS NULL
                                OR veiculos.ve01_codigoant = '' THEN cast (veiculos.ve01_codigo as varchar)
@@ -741,7 +742,8 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
                       END AS codVeiculo,
                       veicbaixa.ve04_veiccadtipobaixa AS tipoBaixa,
                       veicbaixa.ve04_motivo AS descBaixa,
-                      veicbaixa.ve04_data AS dtBaixa
+                      veicbaixa.ve04_data AS dtBaixa,
+                      '' as codunidadesub
       FROM veiculos.veiculos AS veiculos
       INNER JOIN veiculos.veiccentral AS veiccentral ON (veiculos.ve01_codigo =veiccentral.ve40_veiculos)
       INNER JOIN veiculos.veiccadcentral AS veiccadcentral ON (veiccentral.ve40_veiccadcentral =veiccadcentral.ve36_sequencial)
@@ -786,7 +788,11 @@ class SicomArquivoCadastroVeiculos extends SicomArquivoBase implements iPadArqui
 
                 $clcvc40->si149_tiporegistro = 40;
                 $clcvc40->si149_codorgao = $oDados40->codorgao;
-                $clcvc40->si149_codunidadesub = $oDados40->ve01_codunidadesub != '' || $oDados40->ve01_codunidadesub != 0 ? $oDados40->ve01_codunidadesub : $oDados40->codunidadesub;
+                if($oDados40->codunidadesubant != ""){
+                    $clcvc40->si149_codunidadesub = $oDados40->codunidadesubant;
+                }else{
+                    $clcvc40->si149_codunidadesub = $oDados40->codunidadesub;
+                }
                 $clcvc40->si149_codveiculo = $oDados40->codveiculo;
                 $clcvc40->si149_tipobaixa = $oDados40->tipobaixa;
                 if ($oDados40->tipobaixa == 99) {
