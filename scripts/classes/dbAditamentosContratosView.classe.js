@@ -269,7 +269,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     oNode.innerHTML = sContent;
     oNode.style.display = '';
-
     document.getElementById('btnRemoveItem').addEventListener('click', ()=>{
       me.removeItens()
     })
@@ -464,7 +463,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.pesquisarDadosAcordo = function () {
-
+        console.log("pesquisa acordo");
         if (me.oTxtCodigoAcordo.getValue() == "") {
 
             alert('Informe um acordo!');
@@ -1057,6 +1056,14 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }else{
             me.pesquisaAcordo(true);
         }
+    }
+
+    me.showViewAlterar = (acordo) => {
+      me.main();
+      me.pesquisaAcordoAlteracao(true);
+      
+      console.log(acordo);
+
     }
 
     this.aditar = function () {
@@ -2536,5 +2543,19 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.atualizarLabelTotal = (valorAditado) => {
         document.querySelector("#oGridItenstotalValue").innerHTML = js_formatar(valorAditado, 'f');
+    }
+
+    this.pesquisaAcordoAlteracao = function (lMostrar) {
+
+      if (lMostrar == true) {
+
+          var sUrl = 'func_aditamentoalteracao.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_datafim|ac16_licitacao&iTipoFiltro=4&ac16_acordosituacao=4';
+          js_OpenJanelaIframe('top.corpo',
+              'db_iframe_acordo',
+              sUrl,
+              'Pesquisa de Acordo',
+              true);
+              $('oCboTipoAditivo').value = 0;
+      }
     }
 }

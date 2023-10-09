@@ -40,6 +40,7 @@ $result = $clparametroscontratos->sql_record($clparametroscontratos->sql_query()
 if ($result != false && $clparametroscontratos->numrows > 0) {
     db_fieldsmemory($result, 0);
 }
+
 ?>
 <html>
 
@@ -81,7 +82,7 @@ if ($result != false && $clparametroscontratos->numrows > 0) {
 
         let acordo = "<?= $oGet->acordo ?>";
 
-        oAditamento.show(acordo);
+        oAditamento.showViewAlterar(acordo);
     </script>
 
     <?php db_menu(); ?>
