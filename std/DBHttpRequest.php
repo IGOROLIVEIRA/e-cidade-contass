@@ -118,6 +118,12 @@ class DBHttpRequest
         return true;
     }
 
+    public function sendReinf($url, $method = 'GET', array $options = array())
+    {
+        $options = DBArray::merge($this->options, $options);   
+        return  $this->body = $this->__sendFileWrapper($options['baseUrl'] . $url, $method, $options);
+       
+    }
     /**
      * @param string $url
      * @param string $method
