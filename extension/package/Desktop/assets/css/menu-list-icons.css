@@ -318,6 +318,13 @@
   background-position: -279px -70px;
 }
 
+  /** EFD - Reinf **/
+  #modulos span.modulo_4001396::after {
+    background-position: -19px -199px;
+  }
+  #modulos span.active.modulo_4001396::after {
+    background-position: -247px -199px;
+  }
 /** CONTROLE INTERNO **/
 #modulos span.modulo_4001283::after {
     background-position: -50px -70px;
