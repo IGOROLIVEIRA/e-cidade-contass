@@ -345,8 +345,16 @@ footer($footer, $mPDF, $header);
                 $dataNota = date('d/m/Y', strtotime($itensFiltrados['data_nota']));
                 $dataPgto = date('d/m/Y', strtotime($itensFiltrados['data_pgto']));
 
-                if ((date("Y-d-m", strtotime($dataPgto)) >= date("Y-d-m", strtotime($dtDataInicial)))
-                    && (date("Y-d-m", strtotime($dataPgto)) <= date("Y-d-m", strtotime($dtDataFinal)))) {
+                $dataPgtoBanco = DateTime::createFromFormat('d/m/Y', $dataPgto);
+                $dataPgtoBanco = $dataPgtoBanco->format('Y-m-d');
+
+                $dataInicialFiltro = DateTime::createFromFormat('d/m/Y', $dtDataInicial);
+                $dataInicialFiltro = $dataInicialFiltro->format('Y-m-d');
+
+                $dataFinalFiltro = DateTime::createFromFormat('d/m/Y', $dtDataFinal);
+                $dataFinalFiltro = $dataFinalFiltro->format('Y-m-d');
+
+                if (($dataPgtoBanco >= $dataInicialFiltro) && ($dataPgtoBanco <= $dataFinalFiltro)) {
 
                     $itensFiltrados['reten_terceiros'] = $itensFiltrados['reten_terceiros'] == 't' ? 'Sim' : 'Não';
 
