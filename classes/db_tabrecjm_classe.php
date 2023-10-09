@@ -395,7 +395,7 @@
                                 ,$this->lixomul 
                                 ,$this->k02_jurparate 
                                 ,$this->k02_juroslimite
-                                ,$this->k02_descrjm 
+                                ,'$this->k02_descrjm'
                         )";
       $result = db_query($sql); 
       if($result==false){ 

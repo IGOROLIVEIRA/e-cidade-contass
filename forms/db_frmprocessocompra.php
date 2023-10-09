@@ -484,16 +484,22 @@ $clrotulo->label("descrdepto");
 
           oGridItens.clearAll(true);
 
-          for (var iCodigo in aRowsGrid) {
+          seq = 1;
+          for (var iCodigoOrder in aRowsGrid) {
+            for (var iCodigo in aRowsGrid){
+              if(seq == aRowsGrid[iCodigo].sequencial){
+                  var aItem = new Array();
 
-            var aItem = new Array();
+                  aItem[0] = aRowsGrid[iCodigo].solicitacao;
+                  aItem[1] = aRowsGrid[iCodigo].sequencial;
+                  aItem[2] = aRowsGrid[iCodigo].codigo_material;
+                  aItem[3] = aRowsGrid[iCodigo].descricao_material.urlDecode();
 
-            aItem[0] = aRowsGrid[iCodigo].solicitacao;
-            aItem[1] = aRowsGrid[iCodigo].sequencial;
-            aItem[2] = aRowsGrid[iCodigo].codigo_material;
-            aItem[3] = aRowsGrid[iCodigo].descricao_material.urlDecode();
-
-            oGridItens.addRow( aItem );
+                  oGridItens.addRow( aItem );
+                  break;
+              }
+            }
+            seq++;
           }
 
           oGridItens.renderRows();

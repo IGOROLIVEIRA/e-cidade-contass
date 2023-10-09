@@ -147,7 +147,7 @@ $clsaltes->rotulo->label("k13_reduz");
       if ($tiposelecione == 03){
             if ($tipoconta == "Debito"){
               if ( $tipocontadebito == 1){
-                $dbwhere .= " and db83_tipoconta = ".$tipocontadebito ;
+                $dbwhere .= " and ( db83_tipoconta = ".$tipocontadebito."  or db83_tipoconta = 3 ) " ;
               }
             } 
             if ($tipoconta == "Credito"){
@@ -173,7 +173,7 @@ $clsaltes->rotulo->label("k13_reduz");
                                     and conplanoconta.c63_anousu = conplanoreduz.c61_anousu
                                 where  k13_reduz = $codigoconta and c61_anousu = $iAnoSessao
                                 )";
-                                $dbwhere .= " and db83_tipoconta = ".$tipocontacredito ;
+                                $dbwhere .= " and ( db83_tipoconta = ".$tipocontadebito."  or db83_tipoconta = 3 )" ;
               }
             }     
       }

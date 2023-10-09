@@ -1080,7 +1080,9 @@ class cl_numpref {
          return false;
        }
      }
-       $sql .= $virgula . " k03_ativo_integracao_pix = '$this->k03_ativo_integracao_pix' ";
+     if (!empty($this->k03_ativo_integracao_pix)) {
+         $sql .= $virgula . " k03_ativo_integracao_pix = '$this->k03_ativo_integracao_pix' ";
+     }
 
        if ($this->k03_ativo_integracao_pix === 't') {
            if (empty($this->k03_instituicao_financeira)) {
