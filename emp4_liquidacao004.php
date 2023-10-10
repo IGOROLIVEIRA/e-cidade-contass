@@ -260,6 +260,7 @@ switch ($objJson->method) {
 
                         $oGrupoElemento->iGrupo = $iGrupo;
                         $oGrupoElemento->sGrupo = urlencode($sDescricao);
+                        $oEmpenho->sDesdobramento = db_utils::fieldsMemory($rsBuscaDesdobramento, 0)->o56_elemento;
                         $oEmpenho->oGrupoElemento = $oGrupoElemento;
                         $oEmpenho->LiberadoLic = $lBloquear;
                         $oEmpenho->Zerado = $zerado;
@@ -270,6 +271,7 @@ switch ($objJson->method) {
 
                         //echo $objEmpenho->empenho2Json('',$item);
                         $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item));
+                        $oEmpenho->sDesdobramento = db_utils::fieldsMemory($rsBuscaDesdobramento, 0)->o56_elemento;
                         $oGrupoElemento->iGrupo = "";
                         $oGrupoElemento->sGrupo = "";
                         $oEmpenho->oGrupoElemento = $oGrupoElemento;
@@ -337,7 +339,7 @@ switch ($objJson->method) {
             }
 
             $sHistorico = db_stdClass::normalizeStringJsonEscapeString($objJson->historico); //addslashes(stripslashes(utf8_decode()))
-            $oRetorno   = $objEmpenho->liquidarAjax($objJson->iEmpenho, $objJson->notas, $sHistorico, $objJson->e50_compdesp, $objJson->e83_codtipo, $objJson->cattrabalhador, $objJson->numempresa, $objJson->contribuicaoPrev, $objJson->cattrabalhadorremuneracao, $objJson->valorremuneracao, $objJson->valordesconto, $objJson->competencia);
+            $oRetorno   = $objEmpenho->liquidarAjax($objJson->iEmpenho, $objJson->notas, $sHistorico, $objJson->e50_compdesp, $objJson->e83_codtipo, $objJson->cattrabalhador, $objJson->numempresa, $objJson->contribuicaoPrev, $objJson->cattrabalhadorremuneracao, $objJson->valorremuneracao, $objJson->valordesconto, $objJson->competencia, $objJson->e50_retencaoir, $objJson->e50_naturezabemservico);
             $oDadosRetorno = $json->decode(str_replace("\\", "", $oRetorno));
 
             if ($oRetorno !== false) {
@@ -431,7 +433,9 @@ switch ($objJson->method) {
             $objJson->cattrabalhadorremuneracao,
             $objJson->valorremuneracao,
             $objJson->valordesconto,
-            $objJson->competencia
+            $objJson->competencia,
+            $objJson->e50_retencaoir,
+            $objJson->e50_naturezabemservico
         );
 
         if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->e69_notafiscaleletronica != 2 && $objJson->e69_notafiscaleletronica != 3) {

@@ -311,11 +311,11 @@ class Paritbi {
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
-    public function getTransfautomatica()
+    public function getTransfautomatica(): bool
     {
-        return $this->it24_transfautomatica;
+        return $this->it24_transfautomatica === 't';
     }
 
     /**

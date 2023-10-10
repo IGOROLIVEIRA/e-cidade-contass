@@ -934,9 +934,6 @@ if (isset($pc11_codigo) && $pc11_codigo != '') {
       if (lError) {
         return alert(oResponse.message.urlDecode());
       }
-      if (empty(document.form1.pc11_codigo.value)) {
-        document.form1.pc11_resum.value = oResponse.dados.descricaocomplemento.urlDecode();
-      }
 
     }).setMessage("Carregando dados do item.").execute();
   }

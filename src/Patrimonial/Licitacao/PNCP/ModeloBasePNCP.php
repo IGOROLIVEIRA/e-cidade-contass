@@ -52,7 +52,7 @@ abstract class ModeloBasePNCP
 
     protected function formatText($text)
     {
-        return preg_replace(array("/(�|�|�|�|�)/", "/(�|�|�|�|�)/", "/(�|�|�|�)/", "/(�|�|�|�)/", "/(�|�|�|�)/", "/(�|�|�|�)/", "/(�|�|�|�|�)/", "/(�|�|�|�|�)/", "/(�|�|�|�)/", "/(�|�|�|�)/", "/(�)/", "/(�)/", "/(�)/", "/(�)/", "/(-)/"), explode(" ", "a A e E i I o O u U n c C N "), $text);
+        return preg_replace(array("/(ï¿½|ï¿½|ï¿½|ï¿½|ï¿½)/", "/(ï¿½|ï¿½|ï¿½|ï¿½|ï¿½)/", "/(ï¿½|ï¿½|ï¿½|ï¿½)/", "/(ï¿½|ï¿½|ï¿½|ï¿½)/", "/(ï¿½|ï¿½|ï¿½|ï¿½)/", "/(ï¿½|ï¿½|ï¿½|ï¿½)/", "/(ï¿½|ï¿½|ï¿½|ï¿½|ï¿½)/", "/(ï¿½|ï¿½|ï¿½|ï¿½|ï¿½)/", "/(ï¿½|ï¿½|ï¿½|ï¿½)/", "/(ï¿½|ï¿½|ï¿½|ï¿½)/", "/(ï¿½)/", "/(ï¿½)/", "/(ï¿½)/", "/(ï¿½)/", "/(-)/"), explode(" ", "a A e E i I o O u U n c C N "), $text);
     }
 
     /**
@@ -73,24 +73,7 @@ abstract class ModeloBasePNCP
             'Content-Type: application/json'
         );
 
-        $method = 'POST';
-
-        $options = array(
-            CURLOPT_RETURNTRANSFER => true,         // return web page
-            CURLOPT_HEADER         => true,         // don't return headers
-            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
-            //CURLOPT_USERAGENT      => "spider",     // who am i
-            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
-            CURLOPT_TIMEOUT        => 120,          // timeout on response
-            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
-            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
-            CURLOPT_POSTFIELDS     => json_encode($curl_data),   // this are my post vars
-            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
-            CURLOPT_SSL_VERIFYPEER => false,        //
-            CURLOPT_VERBOSE        => 1,            //
-            CURLOPT_HTTPHEADER     => $headers
-        );
+        $options = $this->getParancurl('POST',$curl_data,$headers,true,true);
 
         $ch      = curl_init($url);
         curl_setopt_array($ch, $options);
@@ -135,5 +118,29 @@ abstract class ModeloBasePNCP
         $rsPNCP = db_query($sqlPNCP);
         $sPNCP = pg_fetch_row($rsPNCP);
         return $sPNCP[0];
+    }
+
+    protected function getParancurl ($method,$curl_data,$headers, $jsonencode = false, $rturnHeader = false){
+        if($jsonencode){
+            $curl_data = json_encode($curl_data);
+        }
+
+        return array(
+            CURLOPT_RETURNTRANSFER => true,                         // return web page
+            CURLOPT_HEADER         => $rturnHeader,                 // don't return headers
+            CURLOPT_FOLLOWLOCATION => true,                         // follow redirects
+            //CURLOPT_USERAGENT      => "spider",                   // who am i
+            CURLOPT_AUTOREFERER    => true,                         // set referer on redirect
+            CURLOPT_CONNECTTIMEOUT => 120,                          // timeout on connect
+            CURLOPT_TIMEOUT        => 120,                          // timeout on response
+            CURLOPT_MAXREDIRS      => 10,                           // stop after 10 redirects
+            CURLOPT_CUSTOMREQUEST  => $method,                      // i am sending post data
+            CURLOPT_POSTFIELDS     => $curl_data,                   // this are my post vars
+            CURLOPT_SSLVERSION     => 6,                            // Force requsts to use TLS 1.2
+            CURLOPT_SSL_VERIFYHOST => 0,                            // don't verify ssl
+            CURLOPT_SSL_VERIFYPEER => false,                        //
+            CURLOPT_VERBOSE        => 1,                            //
+            CURLOPT_HTTPHEADER     => $headers
+        );
     }
 }

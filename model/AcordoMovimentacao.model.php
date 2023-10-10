@@ -33,6 +33,7 @@
 abstract class AcordoMovimentacao
 {
 
+
   /**
    * Código para Mapeamento ORM
    *
@@ -108,6 +109,9 @@ abstract class AcordoMovimentacao
    * @var string
    */
   const CAMINHO_MENSAGENS = 'patrimonial.contratos.AcordoMovimentacao.';
+
+
+  const STATUS_HOMOLOGADO = 4;
 
   /**
    * Retorna a data de movimentação
@@ -473,7 +477,7 @@ abstract class AcordoMovimentacao
        */
       $oAcordoMovimentacao             = db_utils::fieldsMemory($rsSqlAcordoMovimentacao, 0);
       $oDaoAcordo->ac16_sequencial     = $oAcordoMovimentacao->ac10_acordo;
-      $oDaoAcordo->ac16_acordosituacao = $oAcordoMovimentacao->ac09_acordosituacao;
+      $oDaoAcordo->ac16_acordosituacao = self::STATUS_HOMOLOGADO;
       $rsDataAssinatura = db_query('SELECT ac16_dataassinatura from acordo where ac16_sequencial = ' . $oAcordoMovimentacao->ac10_acordo);
       $oDaoAcordo->ac16_dataassinatura = db_utils::fieldsMemory($rsDataAssinatura, 0)->ac16_dataassinatura;
       $oDaoAcordo->alterar($oDaoAcordo->ac16_sequencial);

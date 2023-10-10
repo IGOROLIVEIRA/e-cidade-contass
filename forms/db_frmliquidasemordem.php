@@ -345,6 +345,9 @@ if (USE_PCASP) {
         </tr>                
   </table>      
  </fieldset>
+ <?
+ include("forms/db_frmliquidaboxreinf.php");
+ ?>
  </td>
  </tr>
       <tr>
@@ -792,6 +795,7 @@ function validarVinculos(){
 
   /* Extensao [CotaMensalLiquidacao] - Parte 2 */
 
+  var opcaoReinf = 0;
   function js_saida(oAjax) {
 
     js_removeObj("msgBox");
@@ -870,6 +874,12 @@ function validarVinculos(){
     desdobramento         = obj.sDesdobramento;
     $('e50_compdesp').value = '';
 
+    $('reinfRetencao').value = 0;
+    $('naturezaCod').value   = '';
+    $('naturezaDesc').value  = '';
+    $('reinfRetencaoEstabelecimento').value = 0;
+    js_validarEstabelecimentos();
+
     var lBloquearItens = false;
     if (obj.e60_vlremp == obj.e60_vlrpag) {
       lBloquearItens = true;
@@ -885,20 +895,15 @@ function validarVinculos(){
 
     var db_opcao = "<?php print $op; ?>";
    
-   if(db_opcao != '3' && obj.Tipofornec == 'cpf'  &&  (  desdobramento == '333903604' || desdobramento == '333903606' || desdobramento == '333903610'
-                                   || desdobramento == '333903611' || desdobramento == '333903612' || desdobramento == '333903613'
-                                   || desdobramento == '333903615' || desdobramento == '333903616' || desdobramento == '333903617'
-                                   || desdobramento == '333903618' || desdobramento == '333903619' || desdobramento == '333903620'
-                                   || desdobramento == '333903621' || desdobramento == '333903622' || desdobramento == '333903623'
-                                   || desdobramento == '333903624' || desdobramento == '333903625' || desdobramento == '333903626'
-                                   || desdobramento == '333903627' || desdobramento == '333903628' || desdobramento == '333903629'
-                                   || desdobramento == '333903630' || desdobramento == '333903631' || desdobramento == '333903632'
-                                   || desdobramento == '333903633' || desdobramento == '333903634' || desdobramento == '333903642'
-                                   || desdobramento == '333903643' || desdobramento == '333903644' || desdobramento == '333903645'
-                                   || desdobramento == '333903699' || desdobramento == '333903501' || desdobramento == '333903502'
-                                   || desdobramento == '333903503' || desdobramento == '333903504' || desdobramento == '333903505'
-                                   || desdobramento == '333903506' || desdobramento == '333903599')
-                                   ){
+    if(db_opcao != '3' && obj.Tipofornec == 'cpf'  &&  !(desdobramento.substr(0, 3) == '331' || desdobramento.substr(0, 3) == '345' 
+                                                      || desdobramento.substr(0, 3) == '346' || desdobramento.substr(0, 7) == '3339018' 
+                                                      || desdobramento.substr(0, 7) == '3339019' || desdobramento.substr(0, 7) == '3339014' 
+                                                      || desdobramento.substr(0, 7) == '3339008' || desdobramento.substr(0, 7) == '3339059' 
+                                                      || desdobramento.substr(0, 7) == '3339046' || desdobramento.substr(0, 7) == '3339048'
+                                                      || desdobramento.substr(0, 7) == '3339049' || desdobramento == '333903602' 
+                                                      || desdobramento == '333903603' || desdobramento == '333903607' || desdobramento == '333903608' 
+                                                      || desdobramento == '333903609' || desdobramento == '333903614' || desdobramento == '333903640' 
+                                                      || desdobramento == '333903641')){
      tipodesdobramento = 1;  
      opcao = 1;                                 
      document.getElementById('esocial').style.display = "table-cell";   
@@ -907,6 +912,26 @@ function validarVinculos(){
      tipodesdobramento = 0;
      opcao = 3;
    }
+     if(db_opcao != '3' && (obj.Tipofornec == 'cnpj' && !(desdobramento.substr(0, 3) == '331' || desdobramento.substr(0, 3) == '345' || desdobramento.substr(0, 3) == '346'
+                                  || desdobramento.substr(0, 3) == '332' || desdobramento.substr(0, 7) == '3335041' || desdobramento.substr(0, 7) == '3333041'
+                                  || desdobramento.substr(0, 7) == '3337041' || desdobramento.substr(0, 7) == '3339008' || desdobramento.substr(0, 7) == '3339041' 
+                                  || desdobramento.substr(0, 7) == '3339043' || desdobramento.substr(0, 7) == '3339045' || desdobramento.substr(0, 7) == '3339046' 
+                                  || desdobramento.substr(0, 7) == '3339047' || desdobramento.substr(0, 7) == '3339048' || desdobramento.substr(0, 7) == '3339049' 
+                                  || desdobramento.substr(0, 7) == '3339059' || desdobramento.substr(0, 7) == '3339086' || desdobramento.substr(0, 5) == '33371' 
+                                  || desdobramento.substr(0, 5) == '34471' || desdobramento.substr(0, 7) == '3335043')) 
+                                  || (obj.Tipofornec == 'cpf' && desdobramento == '333903614')){
+      $('reinf').style.display = "table-cell";
+      js_validarEstabelecimentos(true);
+      if(obj.Tipofornec == 'cpf' && desdobramento == '333903614'){
+        $('naturezaCod').value = '13002';
+        $('naturezaDesc').value = 'Rendimentos de Aluguéis, Locação ou Sublocação';
+        $('reinfRetencao').value = 'sim';
+      } 
+      opcaoReinf = 1;
+    }else{
+      $('reinf').style.display = "none";
+      opcaoReinf = 3;
+    }
 
     aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
 
@@ -1080,7 +1105,6 @@ function validarVinculos(){
     sV    = '';
 
     // Condição de período
-    console.log($F('permitido_Liquidacao'));
 
 
 
@@ -1139,6 +1163,38 @@ function validarVinculos(){
       return false;
    }
   }
+
+  if(opcaoReinf != '3'){
+    if($('reinfRetencao').value != 0){
+      if($('reinfRetencao').value == 'sim' && ($('naturezaCod').value == '' || $('naturezaDesc').value == '')){
+        alert("Campo 'Natureza de Bem ou Serviço' Obrigatorio")
+        return false;
+      }
+    }else{
+      alert("Campo 'Incide Retenção do Imposto de Renda' Obrigatorio")
+      return false;
+    }
+  }
+
+  if($('reinfRetencaoEstabelecimento').value != 0 && opcaoReinf != '3'){
+    if(aEstabelecimentos.length == 0){
+      alert("Informe um estabelecimento");
+    return false;
+    }
+  }
+
+  const aNAturezasCpf = ['15','17','18','19','20'];
+  if(obj.Tipofornec =='cpf' && (aNAturezasCpf.includes(($('naturezaCod').value).substr(0,2))) &&  opcaoReinf != '3'){
+    alert("A natureza do rendimento é incompatível com o tipo de credor CPF")
+    return false;
+  }
+
+  const aNaturezasCnpj = ['10','19'];
+  if(obj.Tipofornec =='cnpj' && (aNaturezasCnpj.includes(($('naturezaCod').value).substr(0,2))) &&  opcaoReinf != '3'){  
+    alert("A natureza do rendimento é incompatível com o tipo de credor CNPJ")
+    return false;
+  }
+
     $('pesquisar').disabled = true;
     $('confirmar').disabled = true;
     valorTotal = 0;
@@ -1291,7 +1347,6 @@ function validarVinculos(){
         }
       }
     
-    console.log($F('permitido_Liquidacao'));
     if ($F('permitido_Liquidacao') == 'false') {
         alert("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
         $('confirmar').disabled = true;
@@ -1354,6 +1409,8 @@ function validarVinculos(){
       oParam.valorremuneracao = encodeURIComponent($F('valorremuneracao'));
       oParam.valordesconto = encodeURIComponent($F('valordesconto'));
       oParam.competencia = $F('competencia');
+      oParam.e50_retencaoir = $F('reinfRetencao');
+      oParam.e50_naturezabemservico = $F('naturezaCod');
  
       var oInfoNota                      = new Object();
       oInfoNota.iCfop                = iCfop;
@@ -1392,10 +1449,25 @@ function validarVinculos(){
   }
   function js_saidaLiquidacao(oAjax){
 
+    obj      = eval("("+oAjax.responseText+")");
+    if(aEstabelecimentos.length > 0){
+      var oParam = new Object();
+      oParam.method = "incluiRetencaoImposto"
+      oParam.iCodOrdem = obj.e50_codord
+      oParam.aEstabelecimentos = aEstabelecimentos;
+      url      = 'emp4_pagordemreinf.RPC.php';
+      oAjax    = new Ajax.Request(
+        url,
+        {
+          method: 'post',
+          parameters: 'json='+js_objectToJson(oParam)
+        }
+      );
+    }
+    js_validarEstabelecimentos(true);
     js_removeObj("msgLiq");
     $('pesquisar').disabled = false;
     $('confirmar').disabled = false;
-    obj      = eval("("+oAjax.responseText+")");
     mensagem = obj.mensagem.replace(/\+/g," ");
     mensagem = unescape(mensagem);
     if (obj.erro == 2){

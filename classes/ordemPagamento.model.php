@@ -1012,8 +1012,7 @@ class ordemPagamento {
    * @throws \BusinessException
    * @throws \exception
    */
-  public function estornarOrdem($iCaracteristicaPeculiar = null) {
-
+  public function estornarOrdem($iCaracteristicaPeculiar = null, $dtDataDia = null) {
     //Testa se existe uma transacao aberta com o banco
     if (!db_utils::inTransaction()) {
       throw new exception("Não foi possível encontrar uma transação válida.\nOperação cancelada");
@@ -1352,7 +1351,7 @@ class ordemPagamento {
       if (isset($iCaracteristicaPeculiar) && $iCaracteristicaPeculiar != null) {
         $oNovoMovimento->iConcarPeculiar = $iCaracteristicaPeculiar;
       }
-      $this->iNovoMovimento     = $oAgendaPagamento->addMovimentoAgenda(1, $oNovoMovimento);
+      $this->iNovoMovimento     = $oAgendaPagamento->addMovimentoAgenda(1, $oNovoMovimento, $dtDataDia);
     }
     $this->atualizarSaldoPacto($this->getValorPago()*-1, $oDadosOrdem->e69_codnota, $this->oDadosOrdem->e53_valor);
     return true;

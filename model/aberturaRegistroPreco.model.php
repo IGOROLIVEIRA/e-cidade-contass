@@ -188,10 +188,10 @@ class aberturaRegistroPreco extends solicitacaoCompra {
       $oDaoSolicitem = db_utils::getDao("solicitem");
       $sSqlItens     = $oDaoSolicitem->sql_query_mat(null,"*","pc11_seq", "pc11_numero={$this->iCodigoSolicitacao}");
       $rsItens       = $oDaoSolicitem->sql_record($sSqlItens);
+      
       if ($oDaoSolicitem->numrows > 0) {
 
         for ($iItem = 0; $iItem < $oDaoSolicitem->numrows; $iItem++) {
-
           $oItem = db_utils::fieldsMemory($rsItens, $iItem, false, false, true);
           $oItemSolicitacao = new itemSolicitacao($oItem->pc11_codigo);
           $this->aItens[]   = $oItemSolicitacao;
@@ -210,7 +210,7 @@ class aberturaRegistroPreco extends solicitacaoCompra {
    * @return
    */
 
-  public function anular($sMotivo) {
+  public function anular($sMotivo, $sProcessoAdministrativo = null) {
 
   	$lSolicitaAnulada = $this->isAnulada();
 
@@ -500,6 +500,30 @@ class aberturaRegistroPreco extends solicitacaoCompra {
     return $this;
   }
 
+  public function verificarItem($iSeq) {
+
+    if ($iSeq >= 0) {
+
+      $aItens = $this->getItens();
+      if (isset($aItens[$iSeq])) {
+        $rsPcmater = db_query("select pc16_codmater from solicitempcmater where pc16_solicitem = ".$aItens[$iSeq]->getCodigoItemSolicitacao());
+        $pcmater = db_utils::fieldsMemory($rsPcmater, 0)->pc16_codmater;
+        $rsVinculo = db_query("select pc55_solicitemfilho from solicitemvinculo where pc55_solicitempai = ".$aItens[$iSeq]->getCodigoItemSolicitacao());
+        for ($iItens = 0; $iItens < pg_num_rows($rsVinculo); $iItens++) {
+
+          $pc55_solicitemfilho = db_utils::fieldsMemory($rsVinculo, $iItens)->pc55_solicitemfilho;
+          $rsItemQuant = db_query("select pc11_quant from solicitem where pc11_codigo = ".$pc55_solicitemfilho);
+          $quantidade = db_utils::fieldsMemory($rsItemQuant, 0)->pc11_quant;
+          if($quantidade != 0){
+            return true;
+          }
+          
+        }
+      }
+    }
+    return false;
+  }
+
   public function removerItemVinculadoNoItemDaAbertura($iCodigoItemAbertura) {
 
     $oDaoVinculo         = new cl_solicitemvinculo();
@@ -646,5 +670,202 @@ class aberturaRegistroPreco extends solicitacaoCompra {
    */
   public function getFormaDeControle() {
     return $this->iFormaControle;
+  }
+
+  public function alterarResumoAbertura($iResumo,$iCodigoAbertura) {
+    
+    $oDaoSolicitacao = db_utils::getDao("solicita");
+    $oDaoSolicitacao->pc10_resumo = $iResumo;
+    $oDaoSolicitacao->pc10_numero = $iCodigoAbertura;
+    $oDaoSolicitacao->alterar($iCodigoAbertura);
+
+    
+  }
+
+  public function alterarDataAbertura($iAbertura,$iCodigoAbertura){
+    $oDaoAberturaPreco = db_utils::getDao("solicitaregistropreco");
+    $rsSolicitaAbertura = $oDaoAberturaPreco->sql_record($oDaoAberturaPreco->sql_query_file(null,'pc54_sequencial',null,'pc54_solicita ='.$iCodigoAbertura));
+    $oDaoSolicitaAbeutra = db_utils::fieldsmemory($rsSolicitaAbertura, 0);
+    $oDaoAberturaPreco->pc54_datainicio  = implode("-", array_reverse(explode("/", $iAbertura->datainicio)));
+    $oDaoAberturaPreco->pc54_datatermino = implode("-", array_reverse(explode("/", $iAbertura->datatermino)));
+    $oDaoAberturaPreco->pc54_liberado    = $iAbertura->liberado == 't'?true:false;;
+    $oDaoAberturaPreco->pc54_sequencial    = $oDaoSolicitaAbeutra->pc54_sequencial;
+    $oDaoAberturaPreco->alterar($oDaoSolicitaAbeutra->pc54_sequencial);
+  }
+
+  public function adicionarItemmanutencao($iCodigoAbertura,$item,$iUltimoseq,$tipo){
+    /**
+     * Incluimos na tabela solicitem
+     */
+    $oDaoSolicitem                         = db_utils::getDao("solicitem");
+    $rsOrdem = $oDaoSolicitem->sql_record($oDaoSolicitem->sql_query_file(null,'max(pc11_seq) + 1 as pc11_seq',null,'pc11_numero='.$iCodigoAbertura));
+    $oDaoOrdem = db_utils::fieldsmemory($rsOrdem, 0);
+    $oDaoSolicitem->pc11_just              = null;
+    $oDaoSolicitem->pc11_liberado          = true;
+    $oDaoSolicitem->pc11_pgto              = null;
+    $oDaoSolicitem->pc11_prazo             = null;
+    $oDaoSolicitem->pc11_quant             = '0';
+    $oDaoSolicitem->pc11_vlrun             = '0';
+    $oDaoSolicitem->pc11_seq               = $iUltimoseq;
+    $oDaoSolicitem->pc11_resum             = null;
+    $oDaoSolicitem->pc11_servicoquantidade = false;
+    $oDaoSolicitem->pc11_reservado = false;
+    $oDaoSolicitem->pc11_numero  = $iCodigoAbertura;
+    $oDaoSolicitem->incluir(null);
+    
+    if ($oDaoSolicitem->erro_status == 0) {
+      throw new Exception("Erro ao salvar item {$item->iCodigoItem}!\nErro Retornado:{$oDaoSolicitem->erro_msg}");
+    }
+
+
+    /**
+     * incluimos na tabela solicitempcmater
+     */
+    $oDaosolicitemPcMater = db_utils::getDao("solicitempcmater");
+    $oDaosolicitemPcMater->incluir($item->iCodigoItem,$oDaoSolicitem->pc11_codigo);
+    if ($oDaosolicitemPcMater->erro_status == 0) {
+      throw new Exception("Erro ao salvar item {$item->iCodigoItem}!\nErro Retornado:{$oDaosolicitemPcMater->erro_msg}");
+    }
+
+    /**
+     * Salvamos as informacoes da Unidade do material
+     */
+    $oDaosolicitemUnid = db_utils::getDao("solicitemunid");
+    $oDaosolicitemUnid->pc17_codigo = $oDaoSolicitem->pc11_codigo;
+    $oDaosolicitemUnid->pc17_quant = '0';
+    $oDaosolicitemUnid->pc17_unid  = $item->iUnidade;
+    $oDaosolicitemUnid->incluir($oDaoSolicitem->pc11_codigo);
+    if ($oDaosolicitemUnid->erro_status == 0) {
+      throw new Exception("Erro ao salvar item {$item->iCodigoItem}!\nErro Retornado:{$oDaosolicitemUnid->erro_msg}");
+    }
+    
+    if($tipo == 4){
+      /**
+     * Salvamos o vinculo da abertura
+     */
+      $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
+      $rsSolicitemAbertura = $oDaoSolicitemVinculo->sql_record("select pc11_codigo from solicitem inner join solicitavinculo on pc53_solicitapai = pc11_numero inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc53_solicitafilho = $iCodigoAbertura and pc16_codmater=$item->iCodigoItem");
+      $oDaoSolicitemAbertura = db_utils::fieldsmemory($rsSolicitemAbertura, 0);
+      $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemAbertura->pc11_codigo;
+      $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitem->pc11_codigo;
+      $oDaoSolicitemVinculo->incluir(null);
+
+      /**
+      * Salvamos a quantidade maxima
+      */
+      $oDaosolicitemregistropreco = db_utils::getDao('solicitemregistropreco');
+      
+      $oDaosolicitemregistropreco->pc57_solicitem = $oDaoSolicitem->pc11_codigo;
+      $oDaosolicitemregistropreco->pc57_quantmin = 0;
+      $oDaosolicitemregistropreco->pc57_quantmax = 1;
+      $oDaosolicitemregistropreco->pc57_itemorigem = $oDaoSolicitemAbertura->pc11_codigo;
+      $oDaosolicitemregistropreco->pc57_ativo = 't';
+      $oDaosolicitemregistropreco->pc57_quantidadeexecedente = 0;
+      $oDaosolicitemregistropreco->incluir(null);
+
+    }
+    if($tipo == 6){
+      /**
+           * Salvamos o vinculo da abertura
+           */
+          $oDaoSolicitemVinculo = db_utils::getDao('solicitemvinculo');
+          $rsSolicitemAbertura = $oDaoSolicitemVinculo->sql_record("select pc11_codigo,pc11_numero from solicitem inner join solicitavinculo on pc53_solicitapai = pc11_numero inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc53_solicitafilho = $iCodigoAbertura and pc16_codmater=$item->iCodigoItem");
+          $oDaoSolicitemAbertura = db_utils::fieldsmemory($rsSolicitemAbertura, 0);
+          
+          $rsVinculoSolicita = db_query("select pc53_solicitafilho from solicitavinculo inner join solicita on pc10_numero = pc53_solicitafilho  where pc53_solicitapai = $oDaoSolicitemAbertura->pc11_numero and pc10_solicitacaotipo = 4 order by pc53_solicitafilho ");
+          for ($iCont = 0; $iCont < pg_num_rows($rsVinculoSolicita); $iCont++) {
+            
+            $pc53_solicitafilho = db_utils::fieldsMemory($rsVinculoSolicita, $iCont)->pc53_solicitafilho;
+            $rsSolicitemAbertura = $oDaoSolicitemVinculo->sql_record("select pc11_codigo,pc11_numero from solicitem  inner join solicitempcmater on pc16_solicitem = pc11_codigo where pc11_numero = $pc53_solicitafilho and pc16_codmater=$item->iCodigoItem");
+            $oDaoSolicitemAbertura = db_utils::fieldsmemory($rsSolicitemAbertura, 0);
+            $oDaoSolicitemVinculo->pc55_solicitempai   = $oDaoSolicitemAbertura->pc11_codigo;
+            $oDaoSolicitemVinculo->pc55_solicitemfilho = $oDaoSolicitem->pc11_codigo;
+            $oDaoSolicitemVinculo->incluir(null);
+
+            /**
+            * Salvamos a quantidade maxima
+            */
+            $oDaosolicitemregistropreco = db_utils::getDao('solicitemregistropreco');
+            
+            $oDaosolicitemregistropreco->pc57_solicitem = $oDaoSolicitem->pc11_codigo;
+            $oDaosolicitemregistropreco->pc57_quantmin = 0;
+            $oDaosolicitemregistropreco->pc57_quantmax = 1;
+            $oDaosolicitemregistropreco->pc57_itemorigem = $oDaoSolicitemAbertura->pc11_codigo;
+            $oDaosolicitemregistropreco->pc57_ativo = 't';
+            $oDaosolicitemregistropreco->pc57_quantidadeexecedente = 0;
+            $oDaosolicitemregistropreco->incluir(null);
+                  
+          }
+
+          $oDaoPcProcItem = db_utils::getDao('pcprocitem');
+          $rsPcProcItem = $oDaoPcProcItem->sql_record("select distinct pc81_codproc from pcprocitem where pc81_solicitem in (select pc11_codigo from solicitem where pc11_numero = $iCodigoAbertura)");
+          $pc81_codproc = db_utils::fieldsmemory($rsPcProcItem, 0)->pc81_codproc;
+          
+          if($pc81_codproc != null && pg_num_rows($rsPcProcItem) != 0){
+            $oDaoPcProcItem->pc81_codproc = $pc81_codproc;
+            $oDaoPcProcItem->pc81_solicitem = $oDaoSolicitem->pc11_codigo;
+            $oDaoPcProcItem->incluir(null);
+            $pc81_codprocitem = $oDaoPcProcItem->pc81_codprocitem;
+
+            $oDaoPcOrcamItem = db_utils::getDao('pcorcamitem');
+            $oDaoPcOrcamItemProc = db_utils::getDao('pcorcamitemproc');
+
+            $rsPcOrcamItem = $oDaoPcOrcamItem->sql_record("select distinct pc22_codorc from pcorcamitem inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem inner join pcprocitem on pc81_codprocitem = pc31_pcprocitem where pc81_codproc = $pc81_codproc");
+            $pc22_codorc = db_utils::fieldsmemory($rsPcOrcamItem, 0)->pc22_codorc;
+
+            if($pc22_codorc != null && pg_num_rows($rsPcOrcamItem) != 0){
+
+              $oDaoPcOrcamItem->pc22_codorc    = $pc22_codorc;
+              $oDaoPcOrcamItem->pc22_orcamitem = null;
+              $oDaoPcOrcamItem->incluir(null);
+              $pc22_orcamitem = $oDaoPcOrcamItem->pc22_orcamitem;
+              
+              
+              $oDaoPcOrcamItemProc->pc31_orcamitem = $pc22_orcamitem;
+              $oDaoPcOrcamItemProc->pc31_pcprocitem = $pc81_codprocitem;
+              $oDaoPcOrcamItemProc->incluir($pc22_orcamitem,$pc81_codprocitem);
+
+              $oDaoPcOrcamVal = db_utils::getDao('pcorcamval');
+              $rsPcOrcamVal = $oDaoPcOrcamVal->sql_record("select distinct pc23_orcamforne from pcorcamval inner join pcorcamitem on pc23_orcamitem = pc22_orcamitem inner join pcorcamitemproc on pc31_orcamitem = pc22_orcamitem inner join pcprocitem on pc81_codprocitem = pc31_pcprocitem where pc81_codproc = $pc81_codproc");
+              
+
+              if(pg_num_rows($rsPcOrcamVal) > 0){
+
+                for ($x = 0; $x < pg_num_rows($rsPcOrcamVal); $x++) {
+
+                  $pc23_orcamforne = db_utils::fieldsmemory($rsPcOrcamVal, $x)->pc23_orcamforne;
+
+                  $oDaoPcOrcamVal->$pc23_orcamforne = null;
+                  $oDaoPcOrcamVal->$pc22_orcamitem = null;
+                  $oDaoPcOrcamVal->pc23_valor = '0';
+                  $oDaoPcOrcamVal->pc23_quant = '0';
+                  $oDaoPcOrcamVal->pc23_vlrun = '0';
+                  $oDaoPcOrcamVal->incluir($pc23_orcamforne, $pc22_orcamitem);
+                
+                }
+                
+              }
+            
+            }
+            
+          }          
+    }
+    
+
+    return true;
+  }
+
+  public function ordenarItemmanutencao($iCodigoSolicitem,$iSequencia){
+    /**
+     * Orderna Item Abertura
+     */
+    $oDaoSolicitem                         = db_utils::getDao("solicitem");
+    $oDaoSolicitem->pc11_codigo            = $iCodigoSolicitem;
+    $oDaoSolicitem->pc11_seq               = $iSequencia;
+    $oDaoSolicitem->alterar($iCodigoSolicitem);
+    
+    if ($oDaoSolicitem->erro_status == 0) {
+      throw new Exception("Erro ao salvar item {$item->iCodigoItem}!\nErro Retornado:{$oDaoSolicitem->erro_msg}");
+    }
   }
 }
