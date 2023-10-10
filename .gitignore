@@ -54,3 +54,4 @@ cache/forms/*
 cache/preferencias/*
 node_modules
 .env
+phinx.yml
