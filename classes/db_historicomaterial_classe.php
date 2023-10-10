@@ -180,7 +180,7 @@ class cl_historicomaterial
                                ,$this->db150_tipocadastro
                                ,'$this->db150_justificativaalteracao'
                                ,$this->db150_mes
-                               ,$this->db150_data
+                               ,'$this->db150_data'
                                ,$this->db150_instit
                       )";
         $result = db_query($sql);
