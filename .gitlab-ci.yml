@@ -515,4 +515,4 @@ pmsaofrancisco:
     - 'ssh -p22 contass@10.251.27.7 "cd /var/www/e-cidade-git && php deploy_git.php "'
   environment: production
   only:
-    - master
+    - ecidade_v3
