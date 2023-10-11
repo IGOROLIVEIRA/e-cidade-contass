@@ -117,7 +117,7 @@ class ResultadoItensPNCP extends ModeloBasePNCP
             'Authorization: ' . $token
         );
 
-        $optionspncp = $this->getParancurl('PUT',$oDados,$headers,false,false);
+        $optionspncp = $this->getParancurl('PUT',$oDados,$headers,false,true);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
