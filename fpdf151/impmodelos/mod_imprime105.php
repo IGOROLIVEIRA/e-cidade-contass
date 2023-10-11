@@ -286,7 +286,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                 }
                 $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
-                $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia,2);
+                $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia,2,",", ".");
                 $nTotalItens += $oResult->si02_vltotalprecoreferencia;
             }
             if (($this->objpdf->gety() > $this->objpdf->h - 20) || $this->objpdf->gety() + $addalt > $this->objpdf->h) {
@@ -485,7 +485,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 }
                 $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                 $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
-                $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia,2);
+                $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia,2,",", ".");
                 $nTotalItens += $oResult->si02_vltotalprecoreferencia;
             } else {
                 $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $this->quant_casas, ",", ".");
@@ -503,7 +503,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                 }
                 $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
-                $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia,2);
+                $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia,2,",", ".");
                 $nTotalItens += $oResult->si02_vltotalprecoreferencia;
             }
 
