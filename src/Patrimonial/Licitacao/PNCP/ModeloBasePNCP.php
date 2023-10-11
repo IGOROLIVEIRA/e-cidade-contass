@@ -120,6 +120,13 @@ abstract class ModeloBasePNCP
         return $sPNCP[0];
     }
 
+    protected function getUndCompradora(){
+        $sqlPNCP = "select l12_unidadecompradora from licitaparam where l12_instit = " . db_getsession('DB_instit');
+        $rsPNCP = db_query($sqlPNCP);
+        $sPNCP = pg_fetch_row($rsPNCP);
+        return $sPNCP[0];
+    }
+
     protected function getParancurl ($method,$curl_data,$headers, $jsonencode = false, $rturnHeader = false){
         if($jsonencode){
             $curl_data = json_encode($curl_data);
