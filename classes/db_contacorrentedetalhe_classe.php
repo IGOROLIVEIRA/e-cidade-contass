@@ -1024,5 +1024,99 @@ class cl_contacorrentedetalhe {
   	return $sql;
 }
 
+    /**
+     * @param $instituicao
+     * @param $validaTipoPfPj
+     * @param $filtroCredores
+     * @param $anoSessao
+     * @return string
+     */
+    function consultaEfdReinf($instituicao, $validaTipoPfPj, $filtroCredores, $anoSessao): string
+    {
+        return " SELECT * FROM
+                   (SELECT DISTINCT e60_codemp||'/'||e60_anousu AS empenho,
+                                    e50_codord AS op,
+                                    e69_numero AS nro_nota,
+                                    e69_dtnota AS data_nota,
+                                    c69_data AS data_pgto,
+                
+                                    CASE
+                                        WHEN e102_vlrbruto > 0 THEN coalesce(e102_vlrbruto, 0)
+                                        ELSE coalesce(e70_valor, 0)
+                                    END AS valor_bruto,
+                                       
+                                    CASE
+                                        WHEN e102_vlrbruto > 0 THEN coalesce(e102_vlrbase, 0)
+                                        ELSE coalesce(e23_valorbase, 0)
+                                    END AS valor_base,
+                                       
+                                    CASE
+                                        WHEN e102_vlrbruto > 0 THEN coalesce(e102_vlrir, 0)
+                                        ELSE CASE
+                                                 WHEN e21_retencaotipocalc IN (1, 2) THEN coalesce(retencaoreceitas.e23_valorretencao, 0)
+                                                 ELSE 0
+                                             END
+                                    END AS valor_irrf,
+                                       
+                                    e50_naturezabemservico AS natureza_rendimento,
+                                       
+                                     CASE
+                                         WHEN e102_vlrbase > 0 THEN 't'
+                                         ELSE 'f'
+                                     END AS reten_terceiros,
+                                       
+                                     CASE
+                                         WHEN e102_codord is null THEN e60_numcgm||' - '||cgm.z01_nome
+                                         ELSE cgm_pagordemreinf.z01_numcgm||' - '||cgm_pagordemreinf.z01_nome
+                                     END AS beneficiario,
+                
+                                     e60_numcgm||' - '||cgm.z01_nome AS credor_emp,
+                                     coalesce(e70_valor, 0) AS valor_op,
+                                     e60_numemp
+                    FROM contacorrentedetalhe
+                    JOIN contacorrentedetalheconlancamval ON c28_contacorrentedetalhe = c19_sequencial
+                    JOIN conlancamval ON c69_sequen = c28_conlancamval
+                    JOIN conlancamemp ON c75_codlan = c69_codlan
+                    JOIN conlancamdoc ON c71_codlan = c75_codlan
+                    JOIN conhistdoc ON c71_coddoc = c53_coddoc
+                    JOIN empempenho ON e60_numemp = c75_numemp
+                    JOIN empelemento ON e64_numemp = e60_numemp
+                    JOIN orcelemento ON (o56_codele, o56_anousu) = (e64_codele, e60_anousu)
+                    JOIN cgm AS cgm ON e60_numcgm = cgm.z01_numcgm
+                    JOIN conlancamord ON c80_codlan = c75_codlan
+                    JOIN pagordem ON e50_codord = c80_codord
+                    JOIN pagordemele ON e53_codord = c80_codord
+                    JOIN pagordemnota ON e71_codord = c80_codord
+                    JOIN empnota ON (e69_numemp, e69_codnota) = (e60_numemp, e71_codnota) 
+                    JOIN empnotaele ON e69_codnota = e70_codnota
+                
+                    LEFT JOIN pagordemreinf ON e102_codord = e50_codord
+                    LEFT JOIN cgm AS empresa ON empresa.z01_numcgm = e50_empresadesconto
+                
+                    LEFT JOIN cgm AS cgm_pagordemreinf ON cgm_pagordemreinf.z01_numcgm = e102_numcgm
+                
+                    LEFT JOIN retencaopagordem ON pagordem.e50_codord = retencaopagordem.e20_pagordem
+                    LEFT JOIN retencaoreceitas ON retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial 
+                              AND e23_ativo = 't'
+                
+                    LEFT JOIN retencaotiporec ON retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
+                
+                    JOIN coremp c1 ON (c80_codord, c80_data) = (k12_codord, c1.k12_data)
+                    JOIN corrente c2 ON (c1.k12_id, c1.k12_data, c1.k12_autent) = (c2.k12_id, c2.k12_data, c2.k12_autent)
+                    JOIN corempagemov c3 ON (c3.k12_id, c3.k12_data, c3.k12_autent) = (c2.k12_id, c2.k12_data, c2.k12_autent)
+                    JOIN empord ON (e82_codord, e82_codmov) = (c80_codord, k12_codmov)
+                
+                    WHERE e50_cattrabalhador IS NULL
+                      AND o56_elemento NOT LIKE '331%'
+                      AND e60_numcgm NOT IN (SELECT numcgm FROM db_config)
+                      AND c53_tipo = 30
+                      AND e53_vlrpag > 0
+                      AND e60_instit = {$instituicao}
+                      {$validaTipoPfPj}
+                      {$filtroCredores}
+                      AND (e21_retencaotipocalc IN (1, 2) OR o56_elemento LIKE '333903614%' OR e50_retencaoir = 't')
+                      AND date_part('year', c69_data)::int4 = {$anoSessao}) AS x
+                ORDER BY credor_emp, beneficiario, e60_numemp, 2, 5 DESC, valor_irrf DESC ";
+    }
+
 }
-?>
