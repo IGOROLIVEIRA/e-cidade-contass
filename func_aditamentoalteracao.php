@@ -25,6 +25,10 @@
  *                                licenca/licenca_pt.txt
  */
 
+ ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_app.utils.php");
@@ -62,11 +66,7 @@ function verificaCamposVazios(
         empty($chave_ac16_sequencial);
 }
 
-require_once('model/Acordo.model.php');
-$acordo = new Acordo(634);
-$sql = $acordo->getUltimaPosicao();
-var_dump($sql);
-die();
+$sql = $clacordo->queryAcordosComAditamento();
 ?>
 <html>
 
@@ -167,7 +167,7 @@ die();
         <table height="100%" border="0" align="center" cellspacing="0" bgcolor="#CCCCCC">
             <tr>
                 <td align="center" valign="top">
-
+                    <?php db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", []); ?>
                 </td>
             </tr>
         </table>

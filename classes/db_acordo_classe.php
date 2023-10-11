@@ -133,7 +133,7 @@ class cl_acordo
     ac16_providencia = int4 = Status da Providência do Acordo
     ac16_datareferencia = date = Data de referência para geração do SICOM
     ac16_reajuste = boll = possui reajuste
-    ac16_criterioreajuste = 
+    ac16_criterioreajuste =
     ac16_datareajuste = ;
     ac16_periodoreajuste = ;
     ac16_datareajuste_dia = ;
@@ -568,7 +568,7 @@ class cl_acordo
      ,ac16_adesaoregpreco
      ,ac16_tipocadastro
      ,ac16_reajuste
-     ,ac16_criterioreajuste 
+     ,ac16_criterioreajuste
      ,ac16_datareajuste
      ,ac16_indicereajuste
      ,ac16_periodoreajuste
@@ -2692,7 +2692,7 @@ class cl_acordo
                 JOIN acordopcprocitem ON ac23_acordoitem=ac20_sequencial
                 JOIN pcprocitem ON pc81_codprocitem = ac23_pcprocitem
                 JOIN pcproc ON pc81_codproc = pc80_codproc
-                JOIN db_depart ON coddepto=ac16_deptoresponsavel  
+                JOIN db_depart ON coddepto=ac16_deptoresponsavel
                 JOIN db_departorg ON db01_coddepto=coddepto AND db01_anousu = ac16_anousu
                 JOIN cgm ON z01_numcgm=ac16_contratado
                 LEFT JOIN cgmtipoempresa ON z03_numcgm=z01_numcgm
@@ -2714,10 +2714,10 @@ class cl_acordo
         $instituicao = db_getsession('DB_instit');
         $dbwhere = " ac16_instit =  {$instituicao} and ac16_anousu = {$ano} ";
 
-        $sSql = " select 
-        ac16_sequencial, 
+        $sSql = " select
+        ac16_sequencial,
         ac213_numerocontrolepncp,
-        ac213_sequencialpncp,      
+        ac213_sequencialpncp,
         cgc as cnpjCompra,
         ac16_anousu as anoCompra,
         l213_numerocompra as sequencialCompra,
@@ -3032,7 +3032,7 @@ class cl_acordo
     }
     public function alteracaoCriterioReajuste($ac16_sequencial,$ac16_reajuste,$ac16_criterioreajuste,$ac16_datareajuste,$ac16_periodoreajuste,$ac16_indicereajuste,$ac16_descricaoreajuste,$ac16_descricaoindice)
     {
-        
+
         $ac16_datareajuste = implode("-", (array_reverse(explode("/", $ac16_datareajuste))));;
 
         $ac16_criterioreajuste = $ac16_reajuste == "f" ? "null" : "'$ac16_criterioreajuste'";
@@ -3042,7 +3042,7 @@ class cl_acordo
         $ac16_descricaoreajuste = $ac16_reajuste == "f" ? "null" : "'$ac16_descricaoreajuste'";
         $ac16_descricaoindice = $ac16_reajuste == "f" ? "null" : "'$ac16_descricaoindice'";
 
-        $sSql = 
+        $sSql =
         "
         update
 	        acordo
@@ -3057,7 +3057,62 @@ class cl_acordo
         where
 	        ac16_sequencial = $ac16_sequencial;
         ";
-        
+
         db_query($sSql);
+    }
+
+    public function queryAcordosComAditamento(): string
+    {
+        $sql = "
+        SELECT DISTINCT acordo.ac16_sequencial,
+            CASE
+                WHEN ac16_semvigencia='t' THEN ('-')::varchar
+                ELSE (ac16_numeroacordo || '/' || ac16_anousu)::varchar
+            END dl_Nº_Acordo,
+            ac17_descricao AS dl_Situação,
+            acordo.ac16_contratado,
+            cgm.z01_nome,
+            acordo.ac16_resumoobjeto::text,
+            acordo.ac16_valor,
+            acordo.ac16_dataassinatura,
+            CASE
+                WHEN ac16_semvigencia='t' THEN NULL
+                ELSE ac16_datainicio
+            END ac16_datainicio,
+            CASE
+                WHEN ac16_semvigencia='t' THEN NULL
+                ELSE ac16_datafim
+            END ac16_datafim,
+            CASE
+                WHEN acordo.ac16_origem = 1 THEN 'Processo de Compras'
+                WHEN acordo.ac16_origem = 2 THEN 'Licitação'
+                ELSE 'Manual'
+            END ac16_origem,
+            db_depart.descrdepto AS dl_Dpto_de_Inclusao,
+            responsavel.descrdepto AS dl_Dpto_Responsavel
+        FROM acordo
+        INNER JOIN cgm ON cgm.z01_numcgm = acordo.ac16_contratado
+        INNER JOIN db_depart ON db_depart.coddepto = acordo.ac16_coddepto
+        INNER JOIN db_depart AS responsavel ON responsavel.coddepto = acordo.ac16_deptoresponsavel
+        INNER JOIN acordogrupo ON acordogrupo.ac02_sequencial = acordo.ac16_acordogrupo
+        INNER JOIN acordosituacao ON acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
+        LEFT JOIN acordocomissao ON acordocomissao.ac08_sequencial = acordo.ac16_acordocomissao
+        INNER JOIN db_config ON db_config.codigo = db_depart.instit
+        INNER JOIN acordonatureza ON acordonatureza.ac01_sequencial = acordogrupo.ac02_acordonatureza
+        INNER JOIN acordotipo ON acordotipo.ac04_sequencial = acordogrupo.ac02_acordotipo
+        INNER JOIN acordoposicao ON acordoposicao.ac26_acordo = acordo.ac16_sequencial
+        INNER JOIN acordoitem ON acordoitem.ac20_acordoposicao = acordoposicao.ac26_sequencial
+        LEFT JOIN acordoorigem ON acordoorigem.ac28_sequencial = acordo.ac16_origem
+        LEFT JOIN acordomovimentacao ON acordomovimentacao.ac10_acordo = acordo.ac16_sequencial
+        WHERE 1 = 1
+            AND ac16_instit = 1
+            AND ac16_acordosituacao IN (4)
+            AND ac16_acordosituacao = 4
+            AND ac16_instit = 1
+            AND ac26_acordoposicaotipo in (2,5,6,7,8,9,10,11,12,13)
+            AND ac26_numeroaditamento IS NOT NULL
+        ORDER BY ac16_sequencial DESC
+        ";
+        return $sql;
     }
 }
