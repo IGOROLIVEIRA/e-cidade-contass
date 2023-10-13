@@ -409,6 +409,7 @@ if (!DBNumber::isInteger( trim($k03_diasvalidadecertidao))) {
 </table>
 
 <!-- final tributario -->
+    <?php if (isDBSellerUser()) { ?>
     <fieldset>
         <legend>Integração PIX - Geração QR Code</legend>
         <table style="width: 100%">
@@ -456,6 +457,7 @@ if (!DBNumber::isInteger( trim($k03_diasvalidadecertidao))) {
         require_once 'forms/arrecadacao/numpref/partials/db_frmbbpixsettings.php';
         ?>
     </fieldset>
+    <?php } ?>
 <!-- Inicio mensagens-->
       <fieldset id="field_mensagem" name="field_mensagem">
         <legend>Mensagens</legend>

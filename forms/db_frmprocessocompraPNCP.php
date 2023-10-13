@@ -124,7 +124,7 @@ $clrotulo->label("descrdepto");
                     </tr>
                     <tr>
                         <td>
-                            <label class="bold">Dispensa por valor:</label>
+                            <label class="bold">Contratação Direta:</label>
                         </td>
                         <td>
                             <?php
@@ -232,6 +232,22 @@ $clrotulo->label("descrdepto");
                             ?>
                         </td>
                     </tr>
+                    <tr id="dispensaporvalor5">
+                        <td>
+                            <label class="bold">Modalidade de Contratação:</label>
+                        </td>
+                        <td>
+                            <?php
+                            $aModalidades = array(
+                                "" => 'Selecione',
+                                "8" => 'Dispensa sem Disputa',
+                                "9" => 'Inexigibilidade'
+                            );
+
+                            db_select('pc80_modalidadecontratacao', $aModalidades, true, '','style="width:219px"');
+                            ?>
+                        </td>
+                    </tr>
                     <tr>
                         <td colspan="4">
                             <fieldset>
@@ -317,17 +333,19 @@ $clrotulo->label("descrdepto");
     function js_verificadispensa() {
         var dispensavalor = document.getElementById('pc80_dispvalor').value;
 
-        if (dispensavalor == "f") {
+        if (dispensavalor === "f") {
             document.getElementById('dispensaporvalor1').style.display = 'none';
             document.getElementById('dispensaporvalor2').style.display = 'none';
             document.getElementById('dispensaporvalor3').style.display = 'none';
             document.getElementById('dispensaporvalor4').style.display = 'none';
+            document.getElementById('dispensaporvalor5').style.display = 'none';
             document.getElementById('categoriaprocesso').style.display = 'none';
         } else {
             document.getElementById('dispensaporvalor1').style.display = '';
             document.getElementById('dispensaporvalor2').style.display = '';
             document.getElementById('dispensaporvalor3').style.display = '';
             document.getElementById('dispensaporvalor4').style.display = '';
+            document.getElementById('dispensaporvalor5').style.display = '';
             document.getElementById('categoriaprocesso').style.display = '';
         }
     }
@@ -365,7 +383,8 @@ $clrotulo->label("descrdepto");
                 pc80_subcontratacao: $('pc80_subcontratacao'),
                 pc80_dadoscomplementares: $('pc80_dadoscomplementares'),
                 pc80_amparolegal: $('pc80_amparolegal'),
-                pc80_categoriaprocesso: $('pc80_categoriaprocesso')
+                pc80_categoriaprocesso: $('pc80_categoriaprocesso'),
+                pc80_modalidadecontratacao: $('pc80_modalidadecontratacao')
             },
             lRedirecionaLote = false;
 
@@ -498,40 +517,40 @@ $clrotulo->label("descrdepto");
                 oCampos.codigo_departamento.value = oRetorno.coddepto;
                 oCampos.descricao_departamento.value = oRetorno.descrdepto.urlDecode();
                 oCampos.resumo.value = oRetorno.pc80_resumo.urlDecode();
-                oCampos.tipo_processo.value = (oRetorno.pc80_tipoprocesso == 1 ? "Item" : "Lote");
+                oCampos.tipo_processo.value = (oRetorno.pc80_tipoprocesso === 1 ? "Item" : "Lote");
+
+
                 /*OC3770*/
-                if (oRetorno.pc80_criterioadjudicacao == 3) {
+                if (oRetorno.pc80_criterioadjudicacao === 3) {
                     document.getElementById('pc80_criterioadjudicacao').selectedIndex = 1;
-                } else if (oRetorno.pc80_criterioadjudicacao == 1) {
+                } else if (oRetorno.pc80_criterioadjudicacao === 1) {
                     document.getElementById('pc80_criterioadjudicacao').selectedIndex = 2;
                 } else {
                     document.getElementById('pc80_criterioadjudicacao').selectedIndex = 3;
                 }
                 document.getElementById('pc80_numdispensa').value = oRetorno.pc80_numdispensa;
-                if (oRetorno.pc80_dispvalor == 't') {
+                if (oRetorno.pc80_dispvalor === 't') {
                     document.getElementById('pc80_dispvalor').selectedIndex = 1;
                 } else {
                     document.getElementById('pc80_dispvalor').selectedIndex = 2;
                 }
                 js_verificadispensa();
-                if (oRetorno.pc80_orcsigiloso == 't') {
+                if (oRetorno.pc80_orcsigiloso === 't') {
                     document.getElementById('pc80_orcsigiloso').selectedIndex = 1;
                 } else {
                     document.getElementById('pc80_orcsigiloso').selectedIndex = 2;
                 }
-                if (oRetorno.pc80_subcontratacao == 't') {
+                if (oRetorno.pc80_subcontratacao === 't') {
                     document.getElementById('pc80_subcontratacao').selectedIndex = 1;
                 } else {
                     document.getElementById('pc80_subcontratacao').selectedIndex = 2;
                 }
                 document.getElementById('pc80_dadoscomplementares').value = oRetorno.pc80_dadoscomplementares.urlDecode();
                 document.getElementById('pc80_amparolegal').value = oRetorno.pc80_amparolegal;
-
                 document.getElementById('pc80_categoriaprocesso').selectedIndex = oRetorno.pc80_categoriaprocesso;
-
+                document.getElementById('pc80_modalidadecontratacao').value = oRetorno.pc80_modalidadecontratacao;
 
                 aLotes = (Object.isArray(oRetorno.aLotes) ? {} : oRetorno.aLotes);
-
 
                 js_lotes.renderizaLotes();
                 js_gridItens.carregarDados();
@@ -539,7 +558,7 @@ $clrotulo->label("descrdepto");
                 /**
                  * Libera a aba dos lotes caso o processo de compras seja por lote
                  */
-                if (oRetorno.pc80_tipoprocesso == 2) {
+                if (oRetorno.pc80_tipoprocesso === 2) {
                     oAbaLote.desbloquear();
                 }
 
@@ -817,6 +836,7 @@ $clrotulo->label("descrdepto");
                 pc80_dadoscomplementares: oCampos.pc80_dadoscomplementares.value,
                 pc80_amparolegal: oCampos.pc80_amparolegal.value,
                 pc80_categoriaprocesso: oCampos.pc80_categoriaprocesso.value,
+                pc80_modalidadecontratacao: oCampos.pc80_modalidadecontratacao.value,
                 iSolicitacao: document.getElementById('oGridItensrow0cell0').innerText,
                 data: oCampos.data.value,
                 aItens: aItensLote

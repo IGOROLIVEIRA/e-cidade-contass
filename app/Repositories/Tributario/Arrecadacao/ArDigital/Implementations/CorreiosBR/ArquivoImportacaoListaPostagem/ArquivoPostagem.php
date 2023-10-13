@@ -10,6 +10,7 @@ class ArquivoPostagem
     public const TIPO_REGISTRO_LISTA_POSTAGEM = 3;
     public const TIPO_REGISTRO_TRAILER = 9;
     public const FILLER = '0';
+    public const NOME_GRAFICA = 'CDIPBH';
 
     public const PATH_TO_SAVE =  'tmp' . DS;
 
@@ -48,7 +49,7 @@ class ArquivoPostagem
                 $string .= $listaPostagem->toString();
             }
 
-            $this->trailer->quantidadeRegistros = count($this->registrosListaPostagem);
+            $this->trailer->quantidadeRegistros = count($this->registrosListaPostagem)+1;
             $string .= $this->trailer->toString();
         } catch (Exception $exception) {
             throw new Exception('Erro no toString: ' . $exception->getMessage());
@@ -59,7 +60,7 @@ class ArquivoPostagem
 
     public function getFileName(): string
     {
-        return 'PMTesteGrafica'.date('mdY').'.'.'txt';
+        return 'PMNomePrefeitura' . self::NOME_GRAFICA . date('mdY') . '.' . 'txt';
     }
 
     public function getPathToSave(): string

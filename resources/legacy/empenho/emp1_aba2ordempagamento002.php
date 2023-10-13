@@ -31,12 +31,14 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 include("classes/db_pagordem_classe.php");
 include("classes/db_empempenho_classe.php");
+include("classes/db_conlancam_classe.php");
 require_once("std/Modification.php");
 
 $clmatordem = new cl_matordem;
 $clpagordem   = new cl_pagordem;
 $clempempenho = new cl_empempenho;
 $clrotulo = new rotulocampo;
+$clconlancam = new cl_conlancam;
 
 $clempempenho->rotulo->label();
 $clmatordem->rotulo->label();
@@ -62,8 +64,30 @@ if (isset($aFiltros['empenho']) && !empty($aFiltros['empenho'])) {
 $sqlerro = false;
 
 db_inicio_transacao();
-if (isset($alterar)) {
 
+if (isset($alterar)) {
+    $estornoAlterado = false;
+    if($dataEstorno !== ""){
+        $dataEstorno = str_replace('/', '-', $dataEstorno);
+        $dataEstorno = date('Y-m-d', strtotime($dataEstorno));
+        if($dataEstornoAtual !== ""){
+            $dataEstornoAtual = str_replace('/', '-', $dataEstornoAtual);
+            $dataEstornoAtual = date('Y-m-d', strtotime($dataEstornoAtual));
+            $estornoAlterado = strtotime($dataEstornoAtual) !== strtotime($dataEstorno) ? true : false;
+        }
+    }
+
+    $liquidacaoAlterado = false;
+    if($dataLiquidacao !== ""){
+        $dataLiquidacao = str_replace('/', '-', $dataLiquidacao);
+        $dataLiquidacao = date('Y-m-d', strtotime($dataLiquidacao));
+        if($dataLiquidacaoAtual !== ""){
+            $dataLiquidacaoAtual = str_replace('/', '-', $dataLiquidacaoAtual);
+            $dataLiquidacaoAtual = date('Y-m-d', strtotime($dataLiquidacaoAtual));
+            $liquidacaoAlterado = strtotime($dataLiquidacaoAtual) !== strtotime($dataLiquidacao) ? true : false;
+        }
+    }
+    
     $sSqlConsultaFimPeriodoContabil   = "SELECT * FROM condataconf WHERE c99_anousu = ".db_getsession('DB_anousu')." and c99_instit = ".db_getsession('DB_instit');
     $rsConsultaFimPeriodoContabil     = db_query($sSqlConsultaFimPeriodoContabil);
 
@@ -71,13 +95,114 @@ if (isset($alterar)) {
       
         $oFimPeriodoContabil = db_utils::fieldsMemory($rsConsultaFimPeriodoContabil, 0);
 
-        if ($oFimPeriodoContabil->c99_data != '' && db_strtotime($e50_data) < db_strtotime($oFimPeriodoContabil->c99_data)) {
+        if ($oFimPeriodoContabil->c99_data != '' 
+        && (db_strtotime($e50_data) <= db_strtotime($oFimPeriodoContabil->c99_data)
+        || ($estornoAlterado && db_strtotime($dataEstorno) <= db_strtotime($oFimPeriodoContabil->c99_data))
+        || ($liquidacaoAlterado && db_strtotime($dataLiquidacao) <= db_strtotime($oFimPeriodoContabil->c99_data)))) {
 
-            $erro_msg = "Data inferior à data do fim do período contábil.";
+            $erro_msg = "Dados da OP não alterados!\nData inferior à data do fim do período contábil.";
             $sqlerro = true;
 
         }
 
+    }
+
+    //Verifica se a data de OP e anterior a data da OC, caso não seja uma OC gerada automaticamente
+    if(!$sqlerro && isset($dataLiquidacao) && $dataLiquidacao !== ""){
+        $ordemCompra = $clmatordem->verificaTipo($e50_codord);
+        if(isset($ordemCompra)){
+            if($ordemCompra->tipo === 'normal'){
+                if($dataLiquidacao < $ordemCompra->m51_data){
+                    $erro_msg = "Dados da OP não alterados!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
+                    $sqlerro = true;
+                }
+            }
+        }
+    }
+
+    //Verifica se data da liquidação é anterior a data do empenho
+    if(!$sqlerro && $liquidacaoAlterado){
+        $sql = $clconlancam->verificaDataEmpenho($e60_numemp);
+        $result = db_query($sql);
+        if(pg_num_rows($result) > 0){
+            $result = pg_fetch_object($result);
+            if (strtotime($dataLiquidacao) < strtotime($result->data_empenho)){
+                $erro_msg = "Dados da OP não alterados!\nVerifique as datas dos lançamentos contábeis.";
+                $sqlerro = true;
+            }
+        }
+    }
+
+    //Verifica se data de liquidaçao é posterior a data de pagamento
+    if(!$sqlerro && $liquidacaoAlterado){
+        $sql = $clconlancam->verificaDataPagamento($e50_codord);
+        $result = db_query($sql);
+        if(pg_num_rows($result) > 0){
+            $result = pg_fetch_object($result);
+            if (strtotime($dataLiquidacao) > strtotime($result->data_pagamento)){
+                $erro_msg = "Dados da OP não alterados!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
+                $sqlerro = true;
+            }
+        }
+    }
+
+    //Verifica se empenho tem saldo na data desejada
+    if(!$sqlerro && strtotime($dataLiquidacao) < strtotime($e50_data) && $liquidacaoAlterado){
+        $sql = $clempempenho->verificaSaldoEmpenho($e60_numemp, $dataLiquidacao);
+        $result = pg_fetch_object(db_query($sql));
+        if ($result->saldo_empenho < $e53_valor){
+            $erro_msg = "Dados da OP não alterados!\nEmpenho não possui saldo na data desejada.";
+            $sqlerro = true;
+        }
+    }
+
+    //Verifica se empenho não ficará negativo
+    if(!$sqlerro && $liquidacaoAlterado){
+        $sql = $clempempenho->verificaSaldoEmpenhoPosterior($e60_numemp, $dataLiquidacao, $e50_codord, 20);
+        $result = pg_fetch_object(db_query($sql));
+        if ($result->saldo_empenho < 0){
+            $erro_msg = "Dados da OP não alterados!\nO empenho não pode ficar com saldo negativo.";
+            $sqlerro = true;
+        }
+    }
+
+    //Verifica se data da liquidação é posterior a data do estorno
+    if(!$sqlerro && ($estornoAlterado || $liquidacaoAlterado)){
+        if(isset($dataEstorno) && $dataEstorno !== ""){
+            if (strtotime($dataLiquidacao) > strtotime($dataEstorno)){
+                $erro_msg = "Dados da OP não alterados!\nA data informada é inconsistente. Verifique as datas dos lançamentos contábeis.";
+                $sqlerro = true;
+            }
+        }
+    }
+
+    //Altera data liquidação
+    if(!$sqlerro && $liquidacaoAlterado){
+        $dataLiquidacaoAtual = str_replace('/', '-', $dataLiquidacaoAtual);
+        $dataLiquidacaoAtual = date('Y-m-d', strtotime($dataLiquidacaoAtual)); 
+        if(strtotime($dataLiquidacao) <= db_getsession("DB_datausu")){
+            db_inicio_transacao();
+            $sqlAlteraDataOp = $clpagordem->alteraDataOp($e50_codord,$dataLiquidacaoAtual,$dataLiquidacao, date('m',db_getsession('DB_datausu')), $ordemCompra->tipo);
+            db_query($sqlAlteraDataOp);
+            db_fim_transacao();
+        }else{
+            $erro_msg = "Dados da OP não alterados!\nA data da OP não pode ser posterior a data atual.";
+            $sqlerro = true;  
+        }
+    }
+
+    //Altera data do estorno
+    if(!$sqlerro && $estornoAlterado){
+
+        if(strtotime($dataEstorno) <= db_getsession("DB_datausu")){
+            db_inicio_transacao();
+            $sqlAlteraDataEstorno = $clpagordem->alteraDataEstorno($e50_codord,$dataEstornoAtual,$dataEstorno, date('m',db_getsession('DB_datausu')));
+            db_query($sqlAlteraDataEstorno);
+            db_fim_transacao();
+        }else{
+            $erro_msg = "Dados da OP não alterados!\nA data do estorno não pode ser posterior a data atual.";
+            $sqlerro = true;  
+        }
     }
 
     if (!$sqlerro) {
@@ -85,7 +210,7 @@ if (isset($alterar)) {
         $aEmpenho = explode("/",$e60_codemp);
         $sSql = $clpagordem->sql_query_pagordemele("","substr(o56_elemento,1,7) AS o56_elemento","e50_codord","e60_codemp =  '".$aEmpenho[0]."' and e60_anousu = ".$aEmpenho[1]." and e60_instit = ".db_getsession("DB_instit"));
         $rsElementDesp = db_query($sSql);
-    
+        $clpagordem->e50_obs = $historicoOp;
         $clpagordem->alterar($e50_codord,db_utils::fieldsMemory($rsElementDesp,0)->o56_elemento);
         if($clpagordem->erro_status == 0) {
             $sqlerro = true;
@@ -93,8 +218,75 @@ if (isset($alterar)) {
         $erro_msg = $clpagordem->erro_msg;
 
     }
+
+    if (!$sqlerro) {
+        $erro_msg = "Dados da OP alterados com sucesso!";
+    }
 }
 db_fim_transacao($sqlerro);
+
+db_inicio_transacao();
+
+if (isset($alterar)) {
+    $sqlerroReinf = false;
+    if (!$sqlerroReinf) {
+        $aEstabelecimentos = json_decode(str_replace("\\","",$arrayEstabelecimentos));
+        $aEstabelecimentosExcluidos = json_decode(str_replace("\\","",$arrayEstabelecimentosExcluidos));
+        $clpagordemreinf        = new cl_pagordemreinf;
+        foreach ($aEstabelecimentos as $estabelecimento){
+            $clpagordemreinf->e102_codord = $e50_codord;
+            $clpagordemreinf->e102_numcgm = $estabelecimento->e102_numcgm;
+            $clpagordemreinf->e102_vlrbruto = $estabelecimento->e102_vlrbruto;
+            $clpagordemreinf->e102_vlrbase = $estabelecimento->e102_vlrbase;
+            $clpagordemreinf->e102_vlrir = $estabelecimento->e102_vlrir;
+            $clpagordemreinf->sql_record($clpagordemreinf->sql_query($e50_codord, $estabelecimento->e102_numcgm));
+            if($clpagordemreinf->numrows == 0){
+                $clpagordemreinf->incluir();
+                if($clpagordemreinf->erro_status == 0){
+                    $sqlerroReinf = true;
+                    $erro_msg_reinf = $clpagordemreinf->erro_msg;
+                    break;
+                }
+            }else if($clpagordemreinf->numrows == 1){
+                $clpagordemreinf->alterar($e50_codord,$estabelecimento->e102_numcgm);
+                if($clpagordemreinf->erro_status == 0){
+                    $sqlerroReinf = true;
+                    $erro_msg_reinf = $clpagordemreinf->erro_msg;
+                    break;
+                }
+            }
+        }
+    }
+
+    if(!$sqlerroReinf){
+        $aEstabelecimentosExcluidos = json_decode(str_replace("\\","",$arrayEstabelecimentosExcluidos));
+        $clpagordemreinf        = new cl_pagordemreinf;
+        foreach ($aEstabelecimentosExcluidos as $estabelecimento){
+            $clpagordemreinf->excluir($e50_codord,$estabelecimento->e102_numcgm);
+            if($clpagordemreinf->erro_status == 0){
+                $sqlerroReinf = true;
+                $erro_msg_reinf = $clpagordemreinf->erro_msg;
+                break;
+            }
+        }
+    }
+
+    if(!$sqlerroReinf){
+    $clpagordem->e50_retencaoir = $reinfRetencao;
+    $clpagordem->e50_naturezabemservico = $naturezaCod;
+    $clpagordem->alterar($e50_codord,db_utils::fieldsMemory($rsElementDesp,0)->o56_elemento);
+    if($clpagordem->erro_status == 0) {
+        $sqlerro = true;
+    }
+    $erro_msg_reinf = $clpagordem->erro_msg;
+
+    }
+
+    if(!$sqlerroReinf){
+        $erro_msg .= "\n\nDados do EFD-Reinf atualizados.";
+    }
+}
+db_fim_transacao($sqlerroReinf);
 
 ?>
 <html>
@@ -105,7 +297,7 @@ db_fim_transacao($sqlerro);
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc" onload="pesquisaOrdemPagamento(document.form1.empenho.value)">
+<body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="#cccccc" onload="pesquisaOrdemPagamento(document.form1.empenho.value)" >
 <br><br>
 <center>
     <?php require_once (modification::getFile("forms/db_frmordempagamento.php")); ?>

@@ -955,17 +955,14 @@ if ($oDaoPagOrdemConta->numrows > 0) {
 
       iCodLanc = oRetorno.sCodLanc;
       if (oRetorno.iTipoAutentica != 3) {
-        if (confirm('Estorno efetuado com sucesso.\nDeseja autenticar?')) {
-          js_autentica(oRetorno.sAutenticacao.urlDecode());
+        if (confirm('Estorno efetuado com sucesso.\nDeseja imprimir o documento gerado?')) {
+          js_showRelatorio(iCodLanc);
         } else {
           js_liberaBotoes(true);
-          js_showRelatorio(iCodLanc);
         }
       } else {
-
         alert("Estorno de Pagamento Efetuado com sucesso");
         js_showRelatorio(iCodLanc);
-
       }
 
     } else {

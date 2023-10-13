@@ -327,6 +327,8 @@ if (isset($db_opcaoal)) {
             return false;
         }
         document.form1.z01_nome.value = chave2;
+
+        js_verificaFornecedor();
     }
 
     function js_mostracgm1(pc21_numcgm, z01_nome, z01_telef, z01_email) {
@@ -338,6 +340,8 @@ if (isset($db_opcaoal)) {
         document.form1.pc21_numcgm.value = pc21_numcgm;
         document.form1.z01_nome.value = z01_nome;
         func_nome.hide();
+
+        js_verificaFornecedor();
     }
 
     function js_pesquisa() {
@@ -354,5 +358,37 @@ if (isset($db_opcaoal)) {
     function js_gerarxlsbranco() {
         let codorcamento = document.getElementById('pc20_codorc').value;
         const jan = window.open('lic1_gerarxlsbranco.php?pc20_codorc=' + codorcamento);
+    }
+
+    /**
+     * Procura se o fornecedor possui débitos em aberto
+     */
+    function js_verificaFornecedor() {
+
+        var sUrlRPC = 'com4_notificafornecedor.RPC.php';
+        var iCgm = document.form1.pc21_numcgm.value;
+
+        js_divCarregando('Aguarde, verificando...', "msgBox");
+
+        var oParam = new Object();
+        oParam.sExecucao = 'debitosEmAberto';
+        oParam.iNumCgm = iCgm;
+        oParam.sLiberacao = "A";
+
+        var oAjax = new Ajax.Request(sUrlRPC, {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParam),
+            onComplete: js_oretornofornecedor
+        });
+    }
+
+    /**
+     * Retorno com os débitos em aberto e informações de configuração
+     */
+    function js_oretornofornecedor(oAjax) {
+
+        js_removeObj("msgBox");
+
+        var oRetorno = eval("(" + oAjax.responseText + ")");
     }
 </script>

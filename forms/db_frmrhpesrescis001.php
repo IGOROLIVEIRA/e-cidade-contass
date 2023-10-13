@@ -54,6 +54,8 @@ $rh05_mremun = $remun;
 $r59_descr1 = $descr1;
 $r59_descr = $descr;
 ?>
+
+
 <form name="form1" method="post" action="">
 <center>
 <table border="0">
@@ -142,6 +144,7 @@ $r59_descr = $descr;
               db_input('descr1',40,0,true,'hidden',3);
               ?>
             </td>
+
           </tr>
           <tr>
             <td nowrap title="<?=@$Trh05_taviso?>" align="right">
@@ -167,7 +170,21 @@ $r59_descr = $descr;
               db_inputdata('rh05_aviso',@$rh05_aviso_dia,@$rh05_aviso_mes,@$rh05_aviso_ano,true,'text',$db_opcao,"onchange='js_validaaviso(1);'","","","parent.js_validaaviso(1);","js_validaaviso(2);","js_validaaviso(2);")
               ?>
             </td>
-          </tr>
+
+        <tr>
+         <td>
+              <?php
+              db_ancora("Motivo Rescisão:", "js_pesquisarMotivorescisao(true);", $db_opcao);
+              ?>
+            </td>
+            <td colspan="3" nowrap>
+              <?php
+              db_input('rh173_codigo', 6, $Irh173_codigo, true, 'text', 3, "onChange='js_pesquisarMotivorescisao(false);'");
+              db_input('rh173_descricao', 48, $Irh173_descricao, true, 'text', 3, "js_DescricaoCompleta();");
+              ?>
+            </td>
+        </tr>
+            </tr>
           <tr>
             <td nowrap title="<?=@$Trh05_mremun?>" align="right">
               <?
@@ -201,6 +218,7 @@ $r59_descr = $descr;
 <script>
 function js_faltas(registro){
 	qry = 'opcao=enviarescis';
+  qry+= '&r59_descr='+document.form1.r59_descr.value;
   qry+= '&causa='+document.form1.rh05_causa.value;
   qry+= '&regime='+document.form1.rh02_codreg.value;
   qry+= '&regist='+document.form1.r30_regist.value;
@@ -208,6 +226,30 @@ function js_faltas(registro){
   qry+= '&rh05_recis_mes='+document.form1.rh05_recis_mes.value;
   js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_faltas','func_scriptsdb.php?'+qry,'Pesquisa',false);
 }
+
+function js_pesquisarMotivorescisao(mostra) {
+    if (mostra == true) {
+      js_OpenJanelaIframe("CurrentWindow.corpo", "db_iframe_rhmotivorescisao", "func_rhmotivorescisao.php?&funcao_js=parent.js_mostraRescisaoMotivo1|rh173_codigo|rh173_descricao", "Pesquisa", true, "20");
+    }
+    else {
+      if (document.form1.rh173_codigo.value != "") {
+        js_OpenJanelaIframe("CurrentWindow.corpo", "db_iframe_rhrescisao", "func_rhmotivorescisao.php?&pesquisa_chave_codigo=" + document.form1.rh173_codigo.value + "&funcao_js=parent.js_mostraAfastaMotivo", "Pesquisa", false, "20");
+      } else {
+        document.form1.z01_nome.value = "";
+      }
+  }
+}
+
+function js_mostraAfastaMotivo(descricao, error) {
+    document.form1.rh173_descricao.value = descricao;
+}
+
+function js_mostraRescisaoMotivo1(codigo, descricao) {
+    document.form1.rh173_codigo.value = codigo;
+    document.form1.rh173_descricao.value = descricao;
+    db_iframe_rhmotivorescisao.hide();
+}
+
 function js_verificadados(){
   if(document.form1.r30_regist.value == ""){
     alert("Informe a matrícula do funcionário.");
@@ -281,7 +323,7 @@ function js_validarecis(){
       dtreciss = new Date(x.rh05_recis_ano.value,(x.rh05_recis_mes.value - 1),x.rh05_recis_dia.value);
       dtatualh = new Date(anoatual,mesatual,1);
       if(dtreciss < dtadmiss){
-        alert("Data de rescisão não pode ser posterior a data de admissão. Verifique.");
+        alert("Data de rescisão não pode ser posterior a data de admissão. Verifique.");
         x.rh05_recis_dia.value = "";
         x.rh05_recis_mes.value = "";
         x.rh05_recis_ano.value = "";
@@ -296,7 +338,7 @@ function js_validarecis(){
       }
     }
   }else{
-    alert("Informe a matrí­cula do funcionário.");
+    alert("Informe a matrícula do funcionário.");
     x.rh05_recis_dia.value = "";
     x.rh05_recis_mes.value = "";
     x.rh05_recis_ano.value = "";

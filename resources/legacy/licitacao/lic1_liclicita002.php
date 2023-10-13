@@ -982,9 +982,8 @@ if (isset($alterar)) {
              </script>";
     }
 
-
-
-    if ($pc30_permsemdotac == "t" && $l20_tipnaturezaproced == 1) {
+    $aNatProcedimentosValidosParaDotacao = array(0,1);
+    if ($pc30_permsemdotac == "t" && in_array($l20_tipnaturezaproced,$aNatProcedimentosValidosParaDotacao)) {
         echo "<script>
       
         parent.iframe_dotacoesnovo.location.href='com1_dotacoesnovo001lic.php?licitacao=$chavepesquisa&tipojulg=" . @$tipojulg . "';\n

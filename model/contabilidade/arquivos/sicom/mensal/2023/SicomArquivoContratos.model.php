@@ -1048,7 +1048,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             * ESSE IF FOI CRIADO PARA SEPARAR OS TIPOS 11 e 14 DOS OUTROS TIPOS
             */
             if (!in_array($oAcordoPosicao->getTipo(), array(11, 14))) {
-                //var_dump($oAcordoPosicao->getTipo());
+
                 $clcontratos20->si87_tiporegistro = 20; //campo 01
                 $clcontratos20->si87_codaditivo = $oDados20->ac26_sequencial; //campo 02
                 $clcontratos20->si87_codorgao = $sCodorgao; //campo 03
@@ -1354,7 +1354,7 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
             /*
             *SOMENTE DOS TIPOS 11 e 14
             */ else {
-                //var_dump($oAcordoPosicao->getTipo());
+
                 $clcontratos20->si87_tiporegistro = 20; //campo 01
                 $clcontratos20->si87_codaditivo = $oDados20->ac26_sequencial; //campo 02
                 $clcontratos20->si87_codorgao = $sCodorgao; //campo 03
@@ -1773,7 +1773,6 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                 }
                             } else {
 
-
                                 $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
                                 $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();
 
@@ -1886,7 +1885,9 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
                                     throw new Exception($clcontratos21->erro_msg);
                                 }
 
-
+                                if ($oAcordoItem->getQuantidadePosicaoAnterior($oDados20->ac26_numero) === 0) {
+                                    continue;
+                                }
 
                                 $iTotalPosicaoAnterior += $oAcordoItem->getValorTotalPosicaoAnterior($oDados20->ac26_numero);
                                 $iTotalPosicaoAditivo += $oAcordoItem->getValorTotal();

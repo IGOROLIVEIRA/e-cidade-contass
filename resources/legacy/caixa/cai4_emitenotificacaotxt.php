@@ -1,7 +1,10 @@
 <?php
 
+use App\Models\Notidebitos;
 use App\Repositories\Tributario\Arrecadacao\ArDigital\DTO\ArDigitalServicePayloadDTO;
 use App\Services\Tributario\Notificacoes\GenerateArDigitalService;
+use App\Services\Tributario\Notificacoes\ResolveCheckerDigit;
+use App\Services\Tributario\Notificacoes\ResolveCorreiosTagNumber;
 
 require_once("libs/db_sql.php");
 require_once("libs/db_libtributario.php");
@@ -22,7 +25,24 @@ require_once("fpdf151/scpdf.php");
 
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
+$resolveCheckerDigit = new ResolveCheckerDigit();
 $lServicoArDigital = $_GET['lServArDigital'] === 'true';
+$numeroEtiqueta = (int) $_GET['numeroEtiqueta'];
+$quantidadePaginas = (int) $_GET['quantidadePaginas'];
+
+if($lServicoArDigital && empty($numeroEtiqueta)) {
+    $sMsg = 'Informe o número inicial da etiqueta.';
+    db_redireciona("db_erros.php?fechar=true&db_erro={$sMsg}");
+    exit;
+}
+
+if($lServicoArDigital && empty($quantidadePaginas)) {
+    $sMsg = 'Informe a Quantidade de páginas impressas por objeto.';
+    db_redireciona("db_erros.php?fechar=true&db_erro={$sMsg}");
+    exit;
+}
+
+$tagNumberService = new ResolveCorreiosTagNumber();
 
 $clrotulo = new rotulocampo;
 $clrotulo->label("k60_codigo");
@@ -325,7 +345,7 @@ if ($_GET["quantidade"] != null || $_GET["quantidade"] != 0){
 }
 $rsNotifica = db_query($sql) or die($sql);
 
-if (pg_numrows($result) == 0){
+if (pg_numrows($rsNotifica) == 0){
 
   $oParms = new stdClass();
   $oParms->sLista = $lista;
@@ -599,7 +619,7 @@ for($indx=0;$indx < $numrows; $indx++) {
     $xvalor2   = 0;
     $sql = "select nomeinst,bairro,cgc,cep,ender,upper(munic) as munic,uf,numero from db_config where codigo = ".db_getsession("DB_instit");
     $result = db_query($sql);
-   //echo $sql;
+    $digitoVerificador = $resolveCheckerDigit->execute((string) $numeroEtiqueta);
     db_fieldsmemory($result,0);
     $dia = date('d',strtotime($k60_datadeb));
     $mes = db_mes(date('m',strtotime($k60_datadeb)));
@@ -646,6 +666,8 @@ for($indx=0;$indx < $numrows; $indx++) {
         $notificacao->cidadeDestinatario = $z01_munic;
         $notificacao->estadoDestinatario = $z01_uf;
         $notificacao->cepDestino = $z01_cep;
+        $notificacao->numeroEtiqueta = $numeroEtiqueta.$digitoVerificador;
+        $notificacao->peso = $quantidadePaginas;
         $notificacoes[] = $notificacao;
     }
 
@@ -779,7 +801,7 @@ for($indx=0;$indx < $numrows; $indx++) {
     $tipo_arrecadacao = 0;
     $tipo_cobranca    = 0;
     $dt_venc          = substr($db_datausu,0,10);
-	  $tot_desc 	      = 0 ;
+    $tot_desc 	      = 0 ;
 
 		try {
 		  $oRecibo = new recibo(2, null, 23);
@@ -990,6 +1012,7 @@ for($indx=0;$indx < $numrows; $indx++) {
     $numpre   = $numpre . db_CalculaDV($numpre,11);
     $especie  = "R$";
     $tottotal = 0;
+    $descranos = "";
 
     if ( $oParam->k102_tipoemissao == 2 ) {
       $sInnerArrecad = " inner join arrecad  on arrecad.k00_numpre = notidebitos.k53_numpre
@@ -998,62 +1021,39 @@ for($indx=0;$indx < $numrows; $indx++) {
       $sInnerArrecad = "";
     }
 
+        if ($somenteparc == false and $somenteiptu == false) {
 
-    if ($somenteparc == false and $somenteiptu == false) {
+            $dataAtual = new DateTime(date($db_datausu));
+            $tributos = Notidebitos::getSomaTributosCorrigidosPorAnoDescricao(
+                $notifica,
+                $dataAtual,
+                $dataAtual,
+                $dataAtual,
+                $dataAtual->format('Y')
+            );
 
-     $sqlanos = "	select case
-                             when k22_exerc is null then extract (year from k22_dtoper)
-                             else k22_exerc
-                           end as k22_ano,
-          				       k22_numpar,arretipo.k00_descr
-          			   from notidebitos
-          				      inner join debitos on k22_numpre = k53_numpre
-          				   		                	and k22_numpar = k53_numpar
-          				   					            and k22_data   = '$k60_datadeb'
-          				      inner join arretipo on k00_tipo   = k22_tipo
-          				      {$sInnerArrecad}
-          			  where k53_notifica = $notifica
-         		      group by case when k22_exerc is null then extract (year from k22_dtoper) else k22_exerc end,
-          				      k22_numpar,arretipo.k00_descr
-          		    order by case when k22_exerc is null then extract (year from k22_dtoper) else k22_exerc end ";
+            if (empty($tributos)) {
 
-          $resultanos = db_query($sqlanos) or die($sqlanos);
-          if ($resultanos == false) {
-
-            $oParms = new stdClass();
-            $oParms->sqlAnos = $sqlanos;
-            $sMsg = _M('tributario.notificacoes.cai4_emitenotificacaotxt.problemas_gerar_totais_ano', $oParms);
-            db_redireciona("db_erros.php?fechar=true&db_erro={$sMsg}");
-            exit;
-          }
-
-
-          $descranos = "";
-          $descricao = "";
-          $relanos 	 = 0;
-          $hifen     = "";
-
-          for ($totano = 0; $totano < pg_numrows($resultanos); $totano++) {
-
-            db_fieldsmemory($resultanos,$totano);
-
-           if ($descricao != $k00_descr) {
-              $descranos .= ($descranos == ""?"":" / ") . $k00_descr . '-';
-              $descricao = $k00_descr;
+                $oParms = new stdClass();
+                $oParms->sqlAnos = $sqlanos;
+                $sMsg = _M('tributario.notificacoes.cai4_emitenotificacaotxt.problemas_gerar_totais_ano', $oParms);
+                db_redireciona("db_erros.php?fechar=true&db_erro={$sMsg}");
+                exit;
             }
 
-            if ($relanos != $k22_ano) {
-              $descranos .= ' '.$k22_ano.'- ';
-              $relanos = $k22_ano;
-              $hifen = "";
+            $descrAnosAgrupados = [];
+            foreach ($tributos as $tributo) {
+                $dadosTributos = str_pad($tributo->tributo, 30, ' ');
+                $dadosTributos .= $tributo->k22_ano;
+                $dadosTributos .= str_pad($tributo->k22_vlrhis, 12, ' ');
+                $dadosTributos .= str_pad($tributo->k22_vlrcor, 12, ' ');
+                $dadosTributos .= str_pad($tributo->k22_juros, 12, ' ');
+                $dadosTributos .= str_pad($tributo->k22_multa, 12, ' ');
+                $dadosTributos .= str_pad($tributo->k22_desconto, 12, ' ');
+                $dadosTributos .= str_pad($tributo->k22_total, 12, ' ');
+                $descrAnosAgrupados[] = $dadosTributos;
             }
-
-            $descranos .= $hifen.$k22_numpar;
-            $hifen = ",";
-
-
-
-          }
+            $cldb_layouttxt->setCampo("total_por_ano", implode('|', $descrAnosAgrupados));
 
         } elseif ($somenteparc == false and $somenteiptu == true) {
 
@@ -1259,6 +1259,9 @@ for($indx=0;$indx < $numrows; $indx++) {
     $cldb_layouttxt->setCampo("inst_linha15",$historico15);
     $cldb_layouttxt->setCampo("inst_linha16",$k00_msgrecibo);
     $cldb_layouttxt->setCampo("valor_bruto",$nValorBruto);
+    $cldb_layouttxt->setCampo("numero_etiqueta",$tagNumberService->execute((string) $numeroEtiqueta, (string) $digitoVerificador));
+
+    $numeroEtiqueta++;
 
     $cldb_layouttxt->geraDadosLinha();
     db_atutermometro($indx, $numrows, 'termometro');
@@ -1292,7 +1295,6 @@ for($indx=0;$indx < $numrows; $indx++) {
     $cldb_layouttxt->geraDadosLinha();
 
   }
-
 
   if ( $oParam->k102_tipoemissao == 3 && !empty($aListaNotifica) ) {
 

@@ -2,6 +2,33 @@
 require_once 'model/relatorios/Relatorio.php';
 require("libs/db_utils.php");
 
+function definicaoValorUnitarioePercentual($pc80_criterioadjudicacao,$si02_tabela,$si02_taxa,&$valorUnitario,&$percentual)
+{
+
+    if($pc80_criterioadjudicacao == 1 && $si02_tabela == "t"){
+        $valorUnitario = 0;
+        $valorUnitario = $valorUnitario > 0 ? "R$ $valorUnitario" : "-";
+        return true;
+    }
+
+    if($pc80_criterioadjudicacao == 1 && $si02_tabela == "f"){
+        $percentual->mediapercentual = "-";
+        return true;
+    }
+
+    if($pc80_criterioadjudicacao == 2 && $si02_taxa == "t"){
+        $valorUnitario = 0;
+        $valorUnitario = $valorUnitario > 0 ? "R$ $valorUnitario" : "-";
+        return true;
+    }
+    
+    if($pc80_criterioadjudicacao == 2 && $si02_taxa == "f"){
+        $percentual = "-";
+        return true;
+
+    }
+}
+
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']); //
 db_postmemory($HTTP_POST_VARS);
 $oGet = db_utils::postmemory($_GET);
@@ -191,7 +218,7 @@ if (pg_num_rows($rsLotes) == 0) {
     header("Content-Disposition: attachment; filename=Preco_de_Referencia_PRC_" . $codigo_preco . ".csv");
     header("Pragma: no-cache");
 
-    echo "Preço de Referência \n";
+    echo "Preo de Referncia \n";
     echo "Processo de Compra: $codigo_preco \n";
     echo "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResultData, 0)->si01_datacotacao))) . " \n";
 
@@ -219,6 +246,11 @@ if (pg_num_rows($rsLotes) == 0) {
 
     $nTotalItens = 0;
     $sqencia = 0; 
+    $sSqlCasas = "select si01_casasdecimais from precoreferencia where si01_processocompra = {$codigo_preco};";
+    $result_casaspreco = db_query($sSqlCasas) or die(pg_last_error());;
+
+    $si01_casasdecimais = db_utils::fieldsMemory($result_casaspreco, 0)->si01_casasdecimais;
+
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
         $oResult = db_utils::fieldsMemory($rsResult, $iCont);
@@ -243,7 +275,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 $oResult2 = db_utils::fieldsMemory($rsResult2,0);
 
         //if($quant_casas == 2){
-        $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * $oResult->si02_qtditem;
+        $lTotal = $oResult->si02_vltotalprecoreferencia;
         //}else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
 
         $nTotalItens += $lTotal;
@@ -278,7 +310,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
             //$oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
             if ($oResult->si02_tabela == "t" || $oResult->si02_taxa == "t") {
 
-                $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+                $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $si01_casasdecimais, ",", ".");
                 if($controle == 0 && $fazerloop==2){
                     $oDadosDaLinha->quantidade = $oResult->si02_qtditem - $valorqtd;
                 }else if($controle == 1 && $fazerloop==2){
@@ -293,7 +325,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
             }else{
 
             
-                $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+                $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $si01_casasdecimais, ",", ".");
                 if($controle == 0 && $fazerloop==2){
                     $oDadosDaLinha->quantidade = $oResult->si02_qtditem - $valorqtd;
                 }else if($controle == 1 && $fazerloop==2){
@@ -307,16 +339,17 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                     $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                 }
                 $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
-                if($controle==0 && $fazerloop==2){
-                    $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * ($oResult->si02_qtditem - $valorqtd);
-                }else if($controle==1 && $fazerloop==2){
-                    $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * $valorqtd;
-                }
+                
+                $lTotal = $oResult->si02_vltotalprecoreferencia;
+                
                 $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
             }
 
             $controle++;
             $sqencia++;
+
+            definicaoValorUnitarioePercentual($pc80_criterioadjudicacao,$oResult->si02_tabela,$oResult->si02_taxa,$oDadosDaLinha->valorUnitario,$oDadosDaLinha->mediapercentual);
+
             if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
                 echo "$oDadosDaLinha->seq;";
                 echo "$oDadosDaLinha->item;";
@@ -367,7 +400,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
     header("Content-Disposition: attachment; filename=Preco_de_Referencia_PRC_" . $codigo_preco . ".csv");
     header("Pragma: no-cache");
 
-    echo "Preço de Referência \n";
+    echo "Preo de Referncia \n";
     echo "Processo de Compra: $codigo_preco \n";
     echo "Data: " . implode("/", array_reverse(explode("-", db_utils::fieldsMemory($rsResultData, 0)->si01_datacotacao))) . " \n";
 
@@ -375,25 +408,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
 
         $oLotes = db_utils::fieldsMemory($rsLotes, $i); 
 
-        echo "$oLotes->pc68_nome;\n";
-        echo "ITEM LOTE;";
-        echo "CODIGO;";
-        echo "DESCRICAO DO ITEM;";
-        echo "VALOR UN;";
-        echo "QUANT;";
-        echo "UN;";
-        echo "TOTAL;\n";
-
-        $sSql = "select * from (SELECT
-        pc01_codmater,
-        case when pc01_complmater is not null and pc01_complmater != pc01_descrmater then pc01_descrmater ||'. '|| pc01_complmater
-		     else pc01_descrmater end as pc01_descrmater,
-        m61_abrev,
-        sum(pc11_quant) as pc11_quant,
-        pc69_seq,
-        pc11_seq
-    from (
-    SELECT DISTINCT pc01_servico,
+            $sSql = "SELECT DISTINCT pc01_servico,
         pc11_codigo,
         pc11_seq,
         pc11_quant,
@@ -405,64 +420,58 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
         m61_descr,
         pc17_quant,
         pc01_codmater,
-        pc01_descrmater,pc01_complmater,
+        CASE
+            WHEN pc01_complmater IS NOT NULL
+                AND pc01_complmater != pc01_descrmater THEN pc01_descrmater ||'. '|| pc01_complmater
+            ELSE pc01_descrmater
+        END AS pc01_descrmater,
+        pc01_complmater,
         pc10_numero,
         pc90_numeroprocesso AS processo_administrativo,
         (pc11_quant * pc11_vlrun) AS pc11_valtot,
         m61_usaquant,
-        pc69_seq
-    FROM solicitem
-    INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-    LEFT JOIN solicitaprotprocesso ON solicitaprotprocesso.pc90_solicita = solicita.pc10_numero
-    LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-    LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-    LEFT JOIN pcprocitem ON pcprocitem.pc81_solicitem = solicitem.pc11_codigo
-    LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-    LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-    LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
-    LEFT JOIN orcelemento ON solicitemele.pc18_codele = orcelemento.o56_codele
-    left join processocompraloteitem on
-    pc69_pcprocitem = pcprocitem.pc81_codprocitem
-    left join processocompralote on
-    pc68_sequencial = pc69_processocompralote
-    AND orcelemento.o56_anousu = " . db_getsession("DB_anousu") . "
-    WHERE pc81_codproc = {$codigo_preco}
-    AND pc68_sequencial = $oLotes->pc68_sequencial
-    AND pc10_instit = " . db_getsession("DB_instit") . "
-    ORDER BY pc11_seq) as x GROUP BY
-        pc01_codmater,
-        pc11_seq,
-        pc01_descrmater,pc01_complmater,m61_abrev,pc69_seq ) as matquan join
-    (SELECT DISTINCT
-        pc11_seq,
-        {$tipoReferencia} as si02_vlprecoreferencia,
-                             case when pc80_criterioadjudicacao = 1 then
-             round((sum(pc23_perctaxadesctabela)/count(pc23_orcamforne)),2)
-             when pc80_criterioadjudicacao = 2 then
-             round((sum(pc23_percentualdesconto)/count(pc23_orcamforne)),2)
-             end as mediapercentual,
-        pc01_codmater,
-        si01_datacotacao,
-        pc80_criterioadjudicacao,
-        pc01_tabela,
-        pc01_taxa,
+        pc69_seq,
+        pc11_reservado,
+        si02_vlprecoreferencia,
+        si02_vltotalprecoreferencia,
+        si02_tabela,
+        si02_taxa,
+        si02_mediapercentual,
         si01_justificativa
-    FROM pcproc
-    JOIN pcprocitem ON pc80_codproc = pc81_codproc
-    JOIN pcorcamitemproc ON pc81_codprocitem = pc31_pcprocitem
-    JOIN pcorcamitem ON pc31_orcamitem = pc22_orcamitem
-    JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-    JOIN pcorcamforne ON pc21_orcamforne = pc23_orcamforne
-    JOIN solicitem ON pc81_solicitem = pc11_codigo
-    JOIN solicitempcmater ON pc11_codigo = pc16_solicitem
-    JOIN pcmater ON pc16_codmater = pc01_codmater
-    JOIN itemprecoreferencia ON pc23_orcamitem = si02_itemproccompra
-    JOIN precoreferencia ON itemprecoreferencia.si02_precoreferencia = precoreferencia.si01_sequencial
-    WHERE pc80_codproc = {$codigo_preco} {$sCondCrit} and pc23_vlrun <> 0
-    GROUP BY pc11_seq, pc01_codmater,si01_datacotacao,si01_justificativa,pc80_criterioadjudicacao,pc01_tabela,pc01_taxa
-    ORDER BY pc11_seq) as matpreco on matpreco.pc01_codmater = matquan.pc01_codmater order by matquan.pc11_seq asc";
+        FROM pcprocitem
+        JOIN solicitem ON pc11_codigo=pc81_solicitem
+        JOIN solicita ON pc10_numero = pc11_numero
+        JOIN solicitempcmater ON pc16_solicitem=pc11_codigo
+        JOIN solicitemunid ON pc17_codigo = pc11_codigo
+        JOIN matunid ON pc17_unid = m61_codmatunid
+        JOIN pcmater ON pc01_codmater = pc16_codmater
+        JOIN pcorcamitemproc ON pc31_pcprocitem=pc81_codprocitem
+        JOIN pcorcamitem ON pc22_orcamitem=pc31_orcamitem
+        JOIN itemprecoreferencia ON si02_itemproccompra = pc22_orcamitem
+        JOIN precoreferencia ON si02_precoreferencia = si01_sequencial
+        JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
+        JOIN pcorcamforne ON pc21_orcamforne=pc23_orcamforne
+        JOIN pcorcamjulg ON pc24_orcamforne=pc21_orcamforne
+        LEFT JOIN solicitaprotprocesso ON pc90_solicita = pc10_numero
+        LEFT JOIN processocompraloteitem ON pc69_pcprocitem = pcprocitem.pc81_codprocitem
+        WHERE pc81_codproc={$codigo_preco} and pc69_processocompralote = $oLotes->pc68_sequencial
+            AND pc24_pontuacao=1 order by pc11_seq";
+
+    
 
         $rsResult = db_query($sSql) or die(pg_last_error());
+
+        if(pg_num_rows($rsResult) > 0){
+
+            echo "$oLotes->pc68_nome;\n";
+            echo "ITEM LOTE;";
+            echo "CODIGdO;";
+            echo "DESCRICAO DO ITEM;";
+            echo "VALOR UN;";
+            echo "QUANT;";
+            echo "UN;";
+            echo "TOTAL;\n";
+        }
 
         $nTotalItens = 0;
 
@@ -471,7 +480,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
             $oResult = db_utils::fieldsMemory($rsResult, $iCont);
 
             //if($quant_casas == 2){
-            $lTotal = round($oResult->si02_vlprecoreferencia,$oGet->quant_casas) * $oResult->pc11_quant;
+            $lTotal = $oResult->si02_vltotalprecoreferencia;
             //}else $lTotal = round($oResult->si02_vlprecoreferencia,3) * $oResult->pc11_quant;
 
             $nTotalItens += $lTotal;
@@ -485,10 +494,12 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                 $oDadosDaLinha->descricao = str_replace(';', "", $oResult->pc01_descrmater);
             }
             $oDadosDaLinha->descricao = str_replace("\n", "", $oDadosDaLinha->descricao);
-            $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $oGet->quant_casas, ",", ".");
+            $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $si01_casasdecimais, ",", ".");
             $oDadosDaLinha->quantidade = $oResult->pc11_quant;
             $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
             $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
+
+            definicaoValorUnitarioePercentual($pc80_criterioadjudicacao,$oResult->si02_tabela,$oResult->si02_taxa,$oDadosDaLinha->valorUnitario,$oDadosDaLinha->mediapercentual);
 
             echo "$oDadosDaLinha->seq;";
             echo "$oDadosDaLinha->item;";

@@ -127,6 +127,16 @@ $rotulo->label("e60_numemp");
             }
           }
 
+          if (strlen($whereage) <= 0) {
+            $campos .= ", CASE WHEN e53_vlranu > 0 THEN (SELECT c80_data
+            FROM conlancamord
+            JOIN conlancamdoc ON c71_codlan = c80_codlan
+            JOIN conhistdoc ON c53_coddoc = c71_coddoc
+            WHERE c80_codord = pagordem.e50_codord and c53_tipo in (21)) end as data_anulacao,
+            pagordem.e50_retencaoir,
+            pagordem.e50_naturezabemservico";       
+           }
+
           if (isset($chave_e50_codord) && (trim($chave_e50_codord) != "")) {
             if (strlen($whereage) > 0) {
               $sql = $clpagordem->sql_query_pagordemagenda("", $campos, "e50_codord", "$dbwhere and e50_codord = '$chave_e50_codord' and $whereage ");
@@ -176,7 +186,6 @@ $rotulo->label("e60_numemp");
           }
 
           if (isset($sql)) {
-            //echo $sql;
             db_lovrot($sql, 15, "()", "", $funcao_js);
           }
         } else {

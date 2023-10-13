@@ -539,11 +539,15 @@ class cl_aoc102023
      * @param $instituicao
      * @return string
      */
-    public function sqlReg10($instituicao): string
+    public function sqlReg10($dados)
     {
         /**
          * Seleciona as informacoes pertinentes ao AOC.
          */
+        $instituicao = $dados['Instituicao'];
+        $iUltimoDiaMes = date("d", mktime(0, 0, 0, $dados['Mes'] + 1, 0, db_getsession("DB_anousu")));
+        $sDataInicial = db_getsession("DB_anousu") . "-{$dados['Mes']}-01";
+        $sDataFinal   = db_getsession("DB_anousu") . "-{$dados['Mes']}-{$iUltimoDiaMes}";
 
         return "select  distinct o39_codproj as codigovinc,
                         '10' as tiporegistro,
@@ -556,7 +560,7 @@ class cl_aoc102023
                         join db_config on prefeitura  = 't'
                         join orcsuplemlan on o49_codsup=o46_codsup and o49_data is not null
                         left join infocomplementaresinstit on si09_instit = {$instituicao}
-                    where o39_data between  '$this->sDataInicial' and '$this->sDataFinal'
+                    where o39_data between  '$sDataInicial' and '$sDataFinal'
                     and o46_tiposup not in (1017)
                     order by 4";
     }

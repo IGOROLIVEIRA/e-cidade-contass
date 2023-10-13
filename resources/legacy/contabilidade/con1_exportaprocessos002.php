@@ -252,11 +252,12 @@ if ($leiaute == 1) {
     l21_ordem as numerodoitem,
     m61_descr as unidade,
     pc11_quant,
+    pc80_codproc,
     CASE
                WHEN pc80_criterioadjudicacao = 3 THEN si02_vlprecoreferencia
                ELSE si02_vlpercreferencia
            END AS vlrun,
-    pc01_descrmater
+    pc01_descrmater||'. '||pc01_complmater as pc01_descrmater
     FROM liclicitem
     LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
     INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
@@ -273,7 +274,7 @@ if ($leiaute == 1) {
     LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
     LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
     LEFT JOIN solicitemele ON solicitemele.pc18_solicitem = solicitem.pc11_codigo
-    where l20_codigo= $l20_codigo
+    where l20_codigo= $l20_codigo and pc11_quant != 0
     ORDER BY l21_ordem;");
 
     if (pg_numrows($resultRegistro3) == 0) {
@@ -388,7 +389,13 @@ if ($leiaute == 1) {
             fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "pc11_quant") . "|");
 
             if (pg_result($resultRegistro3, $w, "vlrun") == null) {
-                fputs($clabre_arquivo->arquivo,  $valores[pg_result($resultRegistro3, $w, "pc16_codmater")] . "|");
+                $processoDeCompra = pg_result($resultRegistro3,$w, "pc80_codproc");
+                $rsPrecoReferencia = db_query("select si01_sequencial from precoreferencia where si01_processocompra = $processoDeCompra;");
+                $si01_sequencial = db_utils::fieldsMemory($rsPrecoReferencia, 0)->si01_sequencial;
+                $pc16_codmater = pg_result($resultRegistro3, $w, "pc16_codmater");
+                $rsValorPrecoReferencia = db_query("select si02_vlprecoreferencia from itemprecoreferencia where si02_coditem = $pc16_codmater and si02_precoreferencia = $si01_sequencial;");
+                $valorPrecoReferencia = pg_result($rsValorPrecoReferencia, 0, "si02_vlprecoreferencia");
+                fputs($clabre_arquivo->arquivo,  $valorPrecoReferencia . "|");
             } else {
                 fputs($clabre_arquivo->arquivo, pg_result($resultRegistro3, $w, "vlrun") . "|");
             }

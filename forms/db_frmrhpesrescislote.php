@@ -42,6 +42,7 @@ $clrotulo->label("r59_menos1");
 $clrotulo->label("r59_aviso");
 $clrotulo->label("rh02_seqpes");
 $clrotulo->label("r59_regime");
+$clrotulo->label("rh05_motivo");
 ?>
 <form name="form1" method="post" action="">
 <center>
@@ -366,7 +367,7 @@ function js_pesquisa() {
 function js_pesquisarh05_causa(mostra) {
 
   if (mostra == true) {
-    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_rescisao', 'func_rescisao.php?testarescisao=raf&funcao_js=parent.js_mostrarescisao1|r59_causa|r59_descr|r59_caub|r59_descr1|r59_aviso|r59_menos1|r59_regime', 'Pesquisa', true);
+    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_rescisao', 'func_rescisao.php?testarescisao=raf&funcao_js=parent.js_mostrarescisao1|r59_causa|r59_descr|r59_caub|r59_descr1|r59_aviso|r59_menos1|r59_regime|r59_motivo|rh05_motivo', 'Pesquisa', true);
   }
 }
 

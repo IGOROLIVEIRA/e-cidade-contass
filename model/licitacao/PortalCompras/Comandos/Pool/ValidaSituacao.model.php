@@ -5,7 +5,7 @@ require_once("model/licitacao/PortalCompras/Comandos/ValidaAcessoApiInterface.mo
 class ValidaSituacao implements ValidaAcessoApiInterface
 {
      /**
-     * Verifica se a licitacao esta agendada
+     * Verifica se a licitacao esta em andamento
      *
      * @param resource $results
      * @return void
@@ -14,7 +14,7 @@ class ValidaSituacao implements ValidaAcessoApiInterface
     {
       $situacao =  db_utils::fieldsMemory($results,0)->situacao;
       if((int)$situacao != 0) {
-        throw new Exception('Só é possível publicar licitações em situação "agendada"');
+        throw new Exception('Só é possível publicar licitações em situação "Em andamento"');
       }
     }
 }
