@@ -230,6 +230,7 @@ switch ($objJson->method) {
 
             //echo $objEmpenho->empenho2Json('',$item, $aNotasEmpenho);
             $oEmpenho = json_decode($objEmpenho->empenho2Json('', $item, $aNotasEmpenho));
+            $oEmpenho->sDesdobramento = db_utils::fieldsMemory($rsBuscaDesdobramento, 0)->o56_elemento;
             $oGrupoElemento->iGrupo = "";
             $oGrupoElemento->sGrupo = "";
             $oEmpenho->oGrupoElemento = $oGrupoElemento;
