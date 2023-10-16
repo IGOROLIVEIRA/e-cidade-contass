@@ -2,7 +2,7 @@
 
 use Phinx\Migration\AbstractMigration;
 
-class Oc21000 extends AbstractMigration
+class Hotfixoc21127 extends AbstractMigration
 {
     public function up(){
         $sql = "
