@@ -1061,7 +1061,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     me.showViewAlterar = (acordo) => {
       me.main();
       me.pesquisaAcordoAlteracao(true);
-      
+
       console.log(acordo);
 
     }
@@ -2549,7 +2549,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
       if (lMostrar == true) {
 
-          var sUrl = 'func_aditamentoalteracao.php?funcao_js=parent.js_mostraacordo1|ac16_sequencial|ac16_resumoobjeto|ac16_datafim|ac16_licitacao&iTipoFiltro=4&ac16_acordosituacao=4';
+          var sUrl = 'func_aditamentoalteracao.php?funcao_js=parent.' + me.sInstance + '.js_mostraacordoalteracao|ac16_sequencial';
           js_OpenJanelaIframe('top.corpo',
               'db_iframe_acordo',
               sUrl,
@@ -2557,5 +2557,23 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
               true);
               $('oCboTipoAditivo').value = 0;
       }
+    }
+
+    this.js_mostraacordoalteracao = (ac16_sequencial) => {
+      db_iframe_acordo.hide();
+      const rpc = 'con4_contratosaditamentos.RPC.php';
+      console.log(ac16_sequencial);
+
+      const oParam = {
+        exec: 'getAcordoAditvoAlteracao',
+        ac16Sequencial: ac16_sequencial
+      }
+
+      new AjaxRequest(rpc, oParam, function (oRetorno, lErro) {
+        console.log(oRetorno);
+        console.log(lErro);
+      }).setMessage("Aguarde, pesquisando unidades do material.")
+      .execute();
+
     }
 }

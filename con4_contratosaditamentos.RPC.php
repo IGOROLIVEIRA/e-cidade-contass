@@ -35,6 +35,8 @@ require_once "dbforms/db_funcoes.php";
 require_once("libs/JSON.php");
 require_once("classes/db_condataconf_classe.php");
 
+use  App\Services\Patrimonial\Aditamento\AditamentoService;
+
 $oJson             = new services_json();
 
 //$oParam            = json_decode(str_replace("\\", "", $_POST["json"]));
@@ -241,14 +243,14 @@ try {
             $oRetorno->itens = $aUnidades;
             break;
         case "getleilicitacao":
-            $sSQL = "select l20_leidalicitacao  from liclicita 
+            $sSQL = "select l20_leidalicitacao  from liclicita
             inner join acordo on
                 acordo.ac16_licitacao = liclicita.l20_codigo
             where
             acordo.ac16_origem = 2
             and acordo.ac16_sequencial = $oParam->licitacao";
-            
-            
+
+
             $rsResult       = db_query($sSQL);
             $leilicitacao = db_utils::fieldsMemory($rsResult, 0);
 
@@ -326,6 +328,11 @@ try {
             }
 
 
+            break;
+        case 'getAcordoAditvoAlteracao':
+
+            $service = new AditamentoService();
+            $result = $service->getDadosAditamento((int)$oParam->ac16Sequencial);
             break;
     }
 
