@@ -182,14 +182,14 @@ function js_selecionarFormatoRelatorio() {
 
   var sContent = "<div style='margin-top:30px;'>";
   sContent += "<fieldset>";
-  sContent += "<legend>Gerar Relatório de Credenciados em:</legend>";
+  sContent += "<legend>Selecione o formato do relatório:</legend>";
   sContent += "  <div >";
   sContent += "  <input checked type='radio' id='pdf' name='formato'>";
   sContent += "  <label>PDF</label>";
   sContent += "  </div>";
   sContent += "  <div>";
-  sContent += "  <input type='radio' id='csv' name='formato'>";
-  sContent += "  <label>CSV</label>";
+  sContent += "  <input type='radio' id='excel' name='formato'>";
+  sContent += "  <label>EXCEL</label>";
   sContent += "  </div>";
   sContent += "</fieldset>";
   sContent += "<center>";
@@ -210,14 +210,13 @@ function destroyWindow() {
 function js_gerarRelatorio() {
 
   if (document.getElementById('pdf').checked == true) {
-    jan = window.open('com2_pcmater002.php?ordem='+document.form1.ordem.value+'&grupo='+document.form1.grupo.value+'&elemento='+document.form1.o56_elemento.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');    jan.moveTo(0, 0);
+    jan = window.open('com2_pcmater002.php?ordem='+document.form1.ordem.value+'&grupo='+document.form1.grupo.value+'&elemento='+document.form1.o56_elemento.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
     jan.moveTo(0, 0);
+    return;
   }
 
-  if (document.getElementById('csv').checked == true) {
-    jan = window.open('com2_pcmater002excel.php?ordem='+document.form1.ordem.value+'&grupo='+document.form1.grupo.value+'&elemento='+document.form1.o56_elemento.value, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
-    jan.moveTo(0, 0);
-  }
+  jan = window.open('com2_pcmater002excel.php?ordem='+document.form1.ordem.value+'&grupo='+document.form1.grupo.value+'&elemento='+document.form1.o56_elemento.value, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+  jan.moveTo(0, 0);
 
 }
 
