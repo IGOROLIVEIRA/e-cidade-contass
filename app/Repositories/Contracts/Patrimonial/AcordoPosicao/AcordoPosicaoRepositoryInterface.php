@@ -2,12 +2,14 @@
 
 namespace App\Repositories\Contracts\Patrimonial\AcordoPosicao;
 
+use App\Models\AcordoPosicao;
+
 interface AcordoPosicaoRepositoryInterface
 {
     /**
      *
      * @param integer $ac26Acordo
-     * @return void
+     * @return AcordoPosicao
      */
-    public function getAditamentoUltimaPosicao(int $ac26Acordo);
+    public function getAditamentoUltimaPosicao(int $ac26Acordo): AcordoPosicao;
 }

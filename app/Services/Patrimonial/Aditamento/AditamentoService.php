@@ -20,7 +20,8 @@ class AditamentoService implements AditamentoServiceInterface
      */
     public function getDadosAditamento(int $ac16Sequencial): array
     {
-        $this->acordoPosicaoRepository->getAditamentoUltimaPosicao($ac16Sequencial);
+        $acordoPosicao = $this->acordoPosicaoRepository->getAditamentoUltimaPosicao($ac16Sequencial);
+        
         return [];
     }
 }

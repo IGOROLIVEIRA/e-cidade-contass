@@ -30,7 +30,16 @@ class AcordoPosicao extends LegacyModel
 
     public function itens()
     {
-        return $this->hasMany('App\Model\AcordoItem', 'ac20_acordoposicao', 'ac26_sequencial');
+        return $this->hasMany('App\Models\AcordoItem', 'ac20_acordoposicao', 'ac26_sequencial');
     }
 
+    public function acordo()
+    {
+        return $this->belongsTo(Acordo::class, 'ac26_acordo', 'ac16_sequencial');
+    }
+
+    public function posicaoAditamento()
+    {
+        return $this->hasOne(AcordoPosicaoAditamento::class, 'ac35_acordoposicao', 'ac26_sequencial');
+    }
 }
