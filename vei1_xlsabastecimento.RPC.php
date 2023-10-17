@@ -488,7 +488,7 @@ switch ($oParam->exec) {
                 }
 
                 if ($anoAnterior == $anoEmp) {
-                    $resultadoEmpenhoo = $clempempenho->sql_record($clempempenho->sqlQueryValidacaoEmpenhoAnoAnterior(null, "*", null, "e60_instit = " .db_getsession('DB_instit'). " and e60_codemp like '$codEmp' and e60_anousu = $anoEmp and orcelemento.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000') or orcelemento.o56_elemento like '335041%'"));
+                    $resultadoEmpenhoo = $clempempenho->sql_record($clempempenho->sqlQueryValidacaoEmpenhoAnoAnterior(null, "*", null, "e60_instit = " .db_getsession('DB_instit'). " and e60_codemp like '$codEmp' and e60_anousu = $anoEmp and orcelemento.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000','3339039990000') or orcelemento.o56_elemento like '335041%'"));
                     $resultEmpenho = db_utils::fieldsMemory($resultadoEmpenhoo, 0);
                     
                     if ($clempempenho->numrows == 0) {
