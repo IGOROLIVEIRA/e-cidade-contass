@@ -31,26 +31,54 @@ include("libs/db_sql.php");
 db_postmemory($HTTP_SERVER_VARS);
 $sWhere = "";
 $sAnd = "";
+$sOrder = "";
 
 if ($exercicio) {
-    $sWhere .= $sAnd . " extract (year from l20_anousu) = " . $exercicio;
+    $sWhere .= $sAnd . " and l20_anousu = " . $exercicio;
+}
+if($opselect == "2"){
+    if ($procselect){
+        $sWhere .= $sAnd . " and l20_codigo not in (" . $procselect . ")";
+    }
+}else{
+    if ($procselect){
+        $sWhere .= $sAnd . " and l20_codigo in (" . $procselect . ")";
+    }
+}
+
+if($orderselect == "1"){
+    $sOrder = " order by l202_datahomologacao";
+}
+
+if($orderselect == "2"){
+    $sOrder = " order by descricao";
+}
+
+if($orderselect == "3"){
+    $sOrder = " order by pc21_numcgm,pc01_codmater";
 }
 
 /*
  * query de busca de todos os itens licitados no ano
  */
 $sql = "SELECT DISTINCT pc01_codmater AS codigo,
-                        CASE
-                            WHEN pc01_descrmater = NULL
-                                 OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
-                            ELSE pc01_descrmater||'. '||pc01_complmater
-                        END AS descricao,
-                        sum(pc11_quant) AS quantidade,
-                        CASE
-                            WHEN pc11_reservado ='t' THEN 'Cota exclusiva'
-                            ELSE 'Normal'
-                        END AS tipoitem,
-                        l20_edital||' / '||l20_anousu AS processo
+                CASE
+                    WHEN pc01_descrmater = NULL
+                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                    ELSE pc01_descrmater||'. '||pc01_complmater
+                END AS descricao,
+                pc11_quant AS quantidade,
+                pc23_vlrun AS valorUnitario,
+                pc21_numcgm AS Fornecedor,
+                l20_codigo AS Licitacao,
+                ac16_sequencial AS Contrato,
+                CASE
+                    WHEN pc11_reservado ='t' THEN 'Cota exclusiva'
+                    ELSE 'Normal'
+                END AS tipoitem,
+                l20_edital||' / '||l20_anousu AS processo,
+                l202_datahomologacao,
+                z01_nome
         FROM pcorcamitem
         INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
         LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
@@ -75,14 +103,14 @@ $sql = "SELECT DISTINCT pc01_codmater AS codigo,
         LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
         LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
         AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
+        LEFT JOIN acordo ON ac16_licitacao=l20_codigo
+        left join homologacaoadjudica on l202_licitacao=l20_codigo
         WHERE pc24_pontuacao= 1
-        AND l20_anousu = $exercicio
+        and l202_datahomologacao is not null
+        $sWhere
         AND l20_instit = ". db_getsession("DB_instit") . "
-        GROUP BY pc01_codmater,
-        pc11_reservado,
-        l20_edital,
-        l20_anousu,
-        pc01_descrmater";
+        $sOrder
+        ";
 
 $result = db_query($sql);
 
@@ -116,23 +144,105 @@ $pdf->setfillcolor(235);
 $pdf->addpage("L");
 $pdf->setfont('arial', 'b', 10);
 
-$pdf->cell(24, $alt, "Código", 1, 0, "C",1);
-$pdf->cell(165, $alt, "Descrição", 1, 0, "C",1);
-$pdf->cell(30, $alt, "Quantidade", 1, 0, "C",1);
-$pdf->cell(30, $alt, "Tipo Item", 1, 0, "C",1);
-$pdf->cell(30, $alt, "Processo", 1, 1, "C",1);
 
-for($i = 0; $i < pg_num_rows($result); $i++){
+if($impforne == "true" && $impproc == "true" && $impaco=="true" && $impvlrunit == "true"){
+    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+    $pdf->cell(165, $alt, "Descrição", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
+    $pdf->cell(30, $alt, "Fornecedor", 1, 0, "C",1);
+    $pdf->cell(16, $alt, "Licitação", 1, 0, "C",1);
+    $pdf->cell(16, $alt, "Contrato", 1, 1, "C",1);
 
-    db_fieldsmemory($result,$i);
+    for($i = 0; $i < pg_num_rows($result); $i++){
 
-    $pdf->setfont('arial', '', 8);
-    $pdf->cell(24, $alt, substr($codigo,0,164), 1, 0, "C",0);
-    $pdf->cell(165, $alt, $descricao, 1, 0, "L",0);
-    $pdf->cell(30, $alt, $quantidade, 1, 0, "C",0);
-    $pdf->cell(30, $alt, $tipoitem, 1, 0, "C",0);
-    $pdf->cell(30, $alt, $processo, 1, 1, "C",0);
+        db_fieldsmemory($result,$i);
+
+        $pdf->setfont('arial', '', 8);
+        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
+        $pdf->cell(165, $alt, $descricao, 1, 0, "L",0);
+        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
+        $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
+        $pdf->cell(30, $alt, $fornecedor, 1, 0, "C",0);
+        $pdf->cell(16, $alt, $licitacao, 1, 0, "C",0);
+        $pdf->cell(16, $alt, $contrato, 1, 1, "C",0);
+    }
 }
 
+if($impforne == "true" && $impproc == "true" && $impaco==null && $impvlrunit == "true"){
 
+    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+    $pdf->cell(185, $alt, "Descrição", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
+    $pdf->cell(30, $alt, "Fornecedor", 1, 0, "C",1);
+    $pdf->cell(16, $alt, "Licitação", 1, 1, "C",1);
+
+    for($i = 0; $i < pg_num_rows($result); $i++){
+
+        db_fieldsmemory($result,$i);
+
+        $pdf->setfont('arial', '', 8);
+        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
+        $pdf->cell(185, $alt, $descricao, 1, 0, "L",0);
+        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
+        $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
+        $pdf->cell(30, $alt, $fornecedor, 1, 0, "C",0);
+        $pdf->cell(16, $alt, $licitacao, 1, 1, "C",0);
+    }
+}
+
+if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == "true"){
+    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+    $pdf->cell(185, $alt, "Descrição", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
+    $pdf->cell(50, $alt, "Fornecedor", 1, 1, "C",1);
+
+    for($i = 0; $i < pg_num_rows($result); $i++){
+
+        db_fieldsmemory($result,$i);
+
+        $pdf->setfont('arial', '', 8);
+        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
+        $pdf->cell(185, $alt, $descricao, 1, 0, "L",0);
+        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
+        $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
+        $pdf->cell(50, $alt, $fornecedor."-".$z01_nome, 1, 1, "C",0);
+    }
+}
+
+if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == "true"){
+    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+    $pdf->cell(235, $alt, "Descrição", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Vlr Unit.", 1, 1, "C",1);
+
+    for($i = 0; $i < pg_num_rows($result); $i++){
+
+        db_fieldsmemory($result,$i);
+
+        $pdf->setfont('arial', '', 8);
+        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
+        $pdf->cell(235, $alt, $descricao, 1, 0, "L",0);
+        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
+        $pdf->cell(15, $alt, $valorunitario, 1, 1, "C",0);
+    }
+}
+
+if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == null){
+    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+    $pdf->cell(250, $alt, "Descrição", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Qtd.", 1, 1, "C",1);
+
+    for($i = 0; $i < pg_num_rows($result); $i++){
+
+        db_fieldsmemory($result,$i);
+
+        $pdf->setfont('arial', '', 8);
+        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
+        $pdf->cell(250, $alt, $descricao, 1, 0, "L",0);
+        $pdf->cell(15, $alt, $quantidade, 1, 1, "C",0);
+    }
+}
 $pdf->Output();
