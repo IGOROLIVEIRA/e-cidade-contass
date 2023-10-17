@@ -28,6 +28,7 @@ require_once("classes/db_veiccentral_classe.php");
 require_once("classes/db_veiccadcentral_classe.php");
 require_once("classes/db_veiccadcomb_classe.php");
 require_once("classes/db_veicparam_classe.php");
+require_once("classes/db_veicmanutencaomedida_classe.php");
 
 
 $oJson             = new services_json();
@@ -56,6 +57,7 @@ $clveiccentral          = new cl_veiccentral();
 $clveiccadcentral       = new cl_veiccadcentral();
 $clveiccadcomb          = new cl_veiccadcomb();
 $clveicparam             = new cl_veicparam();
+$clveicmanutencaomedida  = new cl_veicmanutencaomedida;
 
 
 
@@ -336,11 +338,24 @@ switch ($oParam->exec) {
                 $resultadoAbast = $clveicabast->sql_record($clveicabast->sql_query_valorMax(null, "max(veicabast.ve70_codigo)", null, "ve70_veiculos = $codigoVeic"));
                 $resultAbaste = db_utils::fieldsMemory($resultadoAbast, 0);
 
-                /*echo"<pre>";
-                var_dump($clveicabast->sql_query_valorMax(null,"max(veicabast.ve70_codigo)",null,"ve70_veiculos = $codigoVeic"));
-                exit;*/
+                $resultdatamanumedida = $clveicmanutencaomedida->sql_record("select ve66_data from veicmanutencaomedida where ve66_sequencial = (select max(ve66_sequencial) from veicmanutencaomedida where ve66_veiculo = $codigoVeic and ve66_ativo = 't')");
+                $oDatamanumedida = db_utils::fieldsMemory($resultdatamanumedida, 0);
+                $resultdataultabast = $clveicabast->sql_record("select ve70_dtabast from veicabast where ve70_codigo = (select max(veicabast.ve70_codigo)from veicabast where ve70_veiculos = $codigoVeic)");
+                $oDataultimoabast = db_utils::fieldsMemory($resultdataultabast, 0);
+                $resultdatanter = $clveicmanutencaomedida->sql_record("select ve70_medida,ve70_dtabast,ve70_hora,ve70_veiculos from veicabast where ve70_veiculos = $codigoVeic and ve70_dtabast<='$datasaida' union select '0' as ve66_medidaanterior,ve66_data,ve66_hora,ve66_veiculo from veicmanutencaomedida where ve66_veiculo=$codigoVeic and ve66_data<='$datasaida' order by ve70_dtabast DESC,ve70_medida limit 1");
+                $oDatanter = db_utils::fieldsMemory($resultdatanter, 0);
+                $medidaanterior = $oDatanter->ve70_medida;
+                if(pg_num_rows($resultdatanter)==0){
+                    $medidaanterior=0;
+                }
+                $resultdatapost = $clveicmanutencaomedida->sql_record("select ve70_medida,ve70_dtabast,ve70_hora,ve70_veiculos from veicabast where ve70_veiculos = $codigoVeic and ve70_dtabast>='$datasaida' and ve70_medida<>$oDatanter->ve70_medida  union select '0' as ve66_medidaanterior,ve66_data,ve66_hora,ve66_veiculo from veicmanutencaomedida where ve66_veiculo=$codigoVeic and ve66_data>='$datasaida' and ve66_medidaanterior <>$oDatanter->ve70_medida order by ve70_dtabast ASC,ve70_medida limit 1");
+                $oDatapost = db_utils::fieldsMemory($resultdatapost, 0);
+                $medidaposterior = $oDatapost->ve70_medida;
+                if(pg_num_rows($resultdatapost)==0){
+                    $medidaposterior=0;
+                }
 
-                if ($resultAbaste->ve70_medida > $medidasaida) {
+                if ($medidaanterior > $medidasaida || ($medidaposterior < $medidasaida && $medidaposterior != 0)) {
                     $arrayKm[$k][0]  = $codigoVeic;
                     $arrayKm[$k][1]  = $test1;
                     $arrayKm[$k][2]  = $medidasaida;
