@@ -74,10 +74,10 @@ switch ($oParam->exec) {
                     $clResultadoItensPNCP = new ResultadoItensPNCP($aItensProcessoResultado);
                     //monta o json com os dados da licitacao
                     $odadosResultado = $clResultadoItensPNCP->montarDados();
-                    
+
                     //envia para pncp
                     $rsApiPNCP = $clResultadoItensPNCP->enviarResultado($odadosResultado, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->pc11_seq);
-                    
+
                     if ($rsApiPNCP[1] == '201') {
                         $clliccontrolepncpitens->l214_numeroresultado = 1;
                         $clliccontrolepncpitens->l214_numerocompra = $oDadosAvisoPNCP->l213_numerocompra;
@@ -85,7 +85,7 @@ switch ($oParam->exec) {
                         $clliccontrolepncpitens->l214_licitacao = $oParam->iPcproc;
                         $clliccontrolepncpitens->l214_ordem = $item->pc11_seq;
                         $clliccontrolepncpitens->incluir();
-    
+
                         $oRetorno->status  = 1;
                         $oRetorno->message = "Enviado com Sucesso !";
                     } else {
@@ -102,18 +102,18 @@ switch ($oParam->exec) {
 
             $clliccontrolepncp     = new cl_liccontrolepncp();
             $clpcproc              = new cl_pcproc();
-    
+
             //Buscos Chave da compra no PNCP
             $rsAvisoPNCP = $clliccontrolepncp->sql_record($clliccontrolepncp->sql_query(null, "l213_numerocompra,l213_anousu", null, "l213_processodecompras = $oParam->iPcproc limit 1"));
-            
+
             $oDadosAvisoPNCP = db_utils::fieldsMemory($rsAvisoPNCP, 0);
             try {
                 foreach ($oParam->aItensLicitacao as $item) {
-    
+
                     $aItensProcessoResultado = array();
                     //busco resultado dos itens do processo
                     $rsResultado = $clpcproc->sql_record($clpcproc->sql_query_pncp_itens_resultado($oParam->iPcproc, $item->pc01_codmater, $item->pc11_seq));
-                    
+
                     for ($i = 0; $i < pg_num_rows($rsResultado); $i++) {
                         $oDadosResultado = db_utils::fieldsMemory($rsResultado, $i);
                         $aItensProcessoResultado[] = $oDadosResultado;
@@ -122,7 +122,7 @@ switch ($oParam->exec) {
                     $clResultadoItensPNCP = new ResultadoItensPNCP($aItensProcessoResultado);
                     //monta o json com os dados da licitacao
                     $odadosResultado = $clResultadoItensPNCP->montarDados();
-    
+
                     //envia para pncp
                     $rsApiPNCP = $clResultadoItensPNCP->retificarResultado($odadosResultado, $oDadosAvisoPNCP->l213_numerocompra, $oDadosAvisoPNCP->l213_anousu, $item->pc11_seq,1);
                     if ($rsApiPNCP[0] != 201) {
@@ -135,12 +135,12 @@ switch ($oParam->exec) {
 
                     $aItensRetificaItemLicitacao = array();
                     $rsItensRetificacao = $clpcproc->sql_record($clpcproc->sql_query_pncp_itens_retifica_situacao($oParam->iPcproc,$item->pc01_codmater, $item->pc11_seq));
-                    
+
                     for ($i = 0; $i < pg_num_rows($rsItensRetificacao); $i++) {
                         $oDadosResultado = db_utils::fieldsMemory($rsItensRetificacao, $i);
                         $aItensRetificaItemLicitacao[] = $oDadosResultado;
                     }
-                    
+
                     //classe modelo
                     $clResultadoItensPNCP = new RetificaitensPNCP($aItensRetificaItemLicitacao);
                     //monta o json com os dados da licitacao
@@ -151,9 +151,9 @@ switch ($oParam->exec) {
                     if ($rsApiretitensPNCP[0] != 201) {
                         throw new Exception(utf8_decode($rsApiretitensPNCP[1]));
                     }
-       
+
                 }
-                
+
                 $oRetorno->status  = 1;
                 $oRetorno->message = "Enviado com Sucesso !";
             } catch (Exception $eErro) {

@@ -1438,7 +1438,7 @@ class cl_pcproc
       JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
       WHERE db01_coddepto=pc80_depto and db01_anousu=2022 LIMIT 1) AS codigoUnidadeCompradora,
       3 AS tipoInstrumentoConvocatorioId,
-      8 AS modalidadeId,
+      pcproc.pc80_modalidadecontratacao AS modalidadeId,
       5 AS modoDisputaId,
       pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
       pcproc.pc80_numdispensa AS numeroCompra,

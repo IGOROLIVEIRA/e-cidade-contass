@@ -54,7 +54,7 @@ $objGet  = db_utils::postmemory($_GET);
 <script>
 
 function js_mostraParcelamento(parcelamento){
-  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_consultaparc'+parcelamento,'div3_consultaParcelamento.php?parcelamento='+parcelamento,'Consulta Pacelamentos anulados',true);
+  js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_consultaparc'+parcelamento,'div3_consultaParcelamento.php?parcelamento='+parcelamento,'Consulta Parcelamentos Revogados',true);
 }
 
 </script>

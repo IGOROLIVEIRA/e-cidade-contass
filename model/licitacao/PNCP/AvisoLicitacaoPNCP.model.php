@@ -27,7 +27,7 @@ class AvisoLicitacaoPNCP extends ModeloBasePNCP
         $oDado = $this->dados;
 
         $oDadosAPI                                  = new \stdClass;
-        $oDadosAPI->codigoUnidadeCompradora         = '01001'; //$oDado->codigounidadecompradora;
+        $oDadosAPI->codigoUnidadeCompradora         = $this->getUndCompradora();
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
         if($oDado->modalidadeid == "8" || $oDado->modalidadeid == "9"){
