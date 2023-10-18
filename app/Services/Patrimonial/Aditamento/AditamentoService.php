@@ -2,7 +2,9 @@
 
 namespace App\Services\Patrimonial\Aditamento;
 
-use App\Repositories\Patrimonial\AcordoPosicao\AcordoPosicaoRepository;
+use App\Domain\Patrimonial\Aditamento\Aditamento;
+use App\Domain\Patrimonial\Aditamento\Factory\AditamentoFactory;
+use App\Repositories\Patrimonial\AcordoPosicaoRepository;
 use App\Services\Contracts\Patrimonial\Aditamento\AditamentoServiceInterface;
 
 class AditamentoService implements AditamentoServiceInterface
@@ -13,15 +15,19 @@ class AditamentoService implements AditamentoServiceInterface
     {
         $this->acordoPosicaoRepository = new AcordoPosicaoRepository();
     }
+
     /**
      *
      * @param integer $ac16Sequencial
-     * @return array
+     * @return AditamentoSerializeService
      */
-    public function getDadosAditamento(int $ac16Sequencial): array
+    public function getDadosAditamento(int $ac16Sequencial): AditamentoSerializeService
     {
         $acordoPosicao = $this->acordoPosicaoRepository->getAditamentoUltimaPosicao($ac16Sequencial);
-        
-        return [];
+
+        $aditamentoFactory = new AditamentoFactory();
+        $aditamento = $aditamentoFactory->createByEloquentModel($acordoPosicao);
+
+        return new AditamentoSerializeService($aditamento);
     }
 }

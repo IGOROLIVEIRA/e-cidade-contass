@@ -35,6 +35,7 @@ require_once "dbforms/db_funcoes.php";
 require_once("libs/JSON.php");
 require_once("classes/db_condataconf_classe.php");
 
+use App\Domain\Patrimonial\Aditamento\Aditamento;
 use  App\Services\Patrimonial\Aditamento\AditamentoService;
 
 $oJson             = new services_json();
@@ -333,6 +334,7 @@ try {
 
             $service = new AditamentoService();
             $result = $service->getDadosAditamento((int)$oParam->ac16Sequencial);
+
             break;
     }
 

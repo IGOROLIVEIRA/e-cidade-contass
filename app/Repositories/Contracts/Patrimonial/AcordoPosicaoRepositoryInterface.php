@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repositories\Contracts\Patrimonial\AcordoPosicao;
+namespace App\Repositories\Contracts\Patrimonial;
 
 use App\Models\AcordoPosicao;
 

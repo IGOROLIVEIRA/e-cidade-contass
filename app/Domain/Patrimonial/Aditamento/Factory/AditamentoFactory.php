@@ -10,17 +10,26 @@ class AditamentoFactory
 {
     private const TIPO_REAJUSTE = 5;
 
-    public function createByEloquentModel(AcordoPosicao $acordoPosicao)
+    /**
+     * @param AcordoPosicao $acordoPosicao
+     * @return Aditamento
+     */
+    public function createByEloquentModel(AcordoPosicao $acordoPosicao): Aditamento
     {
         $aditamento = new Aditamento();
         $aditamento->setAcordoPosicaoSequencial((int) $acordoPosicao->ac26_sequencial)
             ->setAcordoSequencial((int) $acordoPosicao->ac26_acordo)
             ->setTipoAditivo((int) $acordoPosicao->ac26_acordoposicaotipo)
             ->setNumeroAditamento((int) $acordoPosicao->ac26_numeroaditamento)
-            ->setDataAssinatura(new DateTime($acordoPosicao->ac26_data))
-            ->setDataPublicacao(new DateTime($acordoPosicao->posicaoAditamento->ac16_datapublicacao))
+            ->setDataAssinatura(new DateTime($acordoPosicao->posicaoAditamento->ac35_dataassinaturatermoaditivo))
+            ->setDataPublicacao(new DateTime($acordoPosicao->posicaoAditamento->ac35_datapublicacao))
             ->setVienciaAlterada($acordoPosicao->ac26_vigenciaalterada)
-            ->setVeiculoDivulgacao($acordoPosicao->ac16_veiculodivulgacao);
+            ->setVeiculoDivulgacao($acordoPosicao->posicaoAditamento->ac35_veiculodivulgacao)
+            ->setJustificativa($acordoPosicao->posicaoAditamento->ac35_justificativa)
+            ->setPosicaoAditamentoSequencial((int)$acordoPosicao->posicaoAditamento->ac35_sequencial)
+            ->setDescricaoIndice($acordoPosicao->ac26_descricaoindice)
+            ->setVigenciaInicio(new DateTime($acordoPosicao->acordo->ac16_datainicio))
+            ->setVigenciaFim(new DateTime($acordoPosicao->acordo->ac16_datafim));
 
         if (self::TIPO_REAJUSTE === (int) $acordoPosicao->ac26_acordoposicaotipo) {
             $aditamento->setIndiceReajuste((float) $acordoPosicao->ac26_indicereajuste)
@@ -28,7 +37,11 @@ class AditamentoFactory
                 ->setDescricaoIndice($acordoPosicao->ac26_descricaoindice);
         }
 
+        $itemFactory = new ItemFactory();
+        $itens = $itemFactory->createListByCollection($acordoPosicao->itens);
 
+        $aditamento->setItens($itens);
 
+        return $aditamento;
     }
 }

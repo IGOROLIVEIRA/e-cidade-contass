@@ -30,11 +30,6 @@ class Item
     private float $valorTotal;
 
     /**
-     * @var string
-     */
-    private string $resumo;
-
-    /**
      * @var boolean
      */
     private bool $tipoControle;
@@ -43,6 +38,11 @@ class Item
      * @var boolean
      */
     private bool $servicoQuantidade;
+
+    /**
+     * @var integer
+     */
+    private int $acordoPosicaoTipo;
 
 
     /**
@@ -136,24 +136,6 @@ class Item
     }
 
     /**
-     * Get the value of resumo
-     */
-    public function getResumo(): string
-    {
-        return $this->resumo;
-    }
-
-    /**
-     * Set the value of resumo
-     */
-    public function setResumo(string $resumo): self
-    {
-        $this->resumo = $resumo;
-
-        return $this;
-    }
-
-    /**
      * Get the value of tipoControle
      */
     public function isTipoControle(): bool
@@ -185,6 +167,29 @@ class Item
     public function setServicoQuantidade(bool $servicoQuantidade): self
     {
         $this->servicoQuantidade = $servicoQuantidade;
+
+        return $this;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return integer
+     */
+    public function getAcordoPosicaoTipo(): int
+    {
+        return $this->acordoPosicaoTipo;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param integer $acordoPosicaoTipo
+     * @return self
+     */
+    public function setAcordoPosicaoTipo(int $acordoPosicaoTipo): self
+    {
+        $this->acordoPosicaoTipo = $acordoPosicaoTipo;
 
         return $this;
     }

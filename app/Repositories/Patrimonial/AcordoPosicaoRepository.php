@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repositories\Patrimonial\AcordoPosicao;
+namespace App\Repositories\Patrimonial;
 
 use App\Models\AcordoPosicao;
-use App\Repositories\Contracts\Patrimonial\AcordoPosicao\AcordoPosicaoRepositoryInterface;
+use App\Repositories\Contracts\Patrimonial\AcordoPosicaoRepositoryInterface;
 use DateTime;
 
 class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
@@ -18,22 +18,17 @@ class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
      /**
      *
      * @param integer $ac26Acordo
-     * @return void
+     * @return AcordoPosicao
      */
     public function getAditamentoUltimaPosicao(int $ac26Acordo): AcordoPosicao
     {
         $acordoPosicao = $this->acordoPosicao
-                ->with(['itens','posicaoAditamento'])
+                ->with(['itens','posicaoAditamento','acordo'])
                 ->where('ac26_acordo',$ac26Acordo)
                 ->whereNotNull('ac26_numeroaditamento')
                 ->orderBy('ac26_numeroaditamento', 'desc')
                 ->first();
 
-        echo "<pre>";
-        var_dump($acordoPosicao);
-        //var_dump($acordoPosicao->ac26_numero);
-        var_dump($acordoPosicao->posicaoAditamento->ac35_datapublicacao);
-        //var_dump(new DateTime($acordoPosicao->ac26_data));
-        die();
+       return $acordoPosicao;
     }
 }

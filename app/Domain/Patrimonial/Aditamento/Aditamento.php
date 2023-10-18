@@ -44,32 +44,27 @@ class Aditamento
     /**
      * @var string
      */
-    private string $descricaoAlteracao;
-
-    /**
-     * @var string
-     */
     private string $veiculoDivulgacao;
 
     /**
-     * @var float
+     * @var float|null
      */
-    private float $indiceReajuste = 0.0;
+    private ?float $indiceReajuste = null;
 
     /**
-     * @var float
+     * @var float|null
      */
-    private float $percentualReajuste = 0.0;
+    private ?float $percentualReajuste = null;
+
+    /**
+     * @var string|null
+     */
+    private ?string $descricaoIndice = null;
 
     /**
      * @var boolean
      */
     private bool $vigenciaAlterada = false;
-
-    /**
-     * @var string
-     */
-    private string $descricaoIndice;
 
     /**
      * @var DateTime
@@ -80,6 +75,11 @@ class Aditamento
      * @var DateTime
      */
     private DateTime $vigenciaFim;
+
+    /**
+     * @var string|null
+     */
+    private ?string $justificativa = null;
 
     /**
      * @var Item[]
@@ -197,24 +197,6 @@ class Aditamento
     /**
      * @return string
      */
-    public function getDescricaoAlteracao(): string
-    {
-        return $this->descricaoAlteracao;
-    }
-
-    /**
-     * @param string $descricaoAlteracao
-     * @return self
-     */
-    public function setDescricaoAlteracao(string $descricaoAlteracao): self
-    {
-        $this->descricaoAlteracao = $descricaoAlteracao;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
     public function getVeiculoDivulgacao(): string
     {
         return $this->veiculoDivulgacao;
@@ -230,41 +212,7 @@ class Aditamento
         return $this;
     }
 
-    /**
-     * @return float
-     */
-    public function getIndiceReajuste(): float
-    {
-        return $this->indiceReajuste;
-    }
 
-    /**
-     * @param float $indiceReajuste
-     * @return self
-     */
-    public function setIndiceReajuste(float $indiceReajuste): self
-    {
-        $this->indiceReajuste = $indiceReajuste;
-        return $this;
-    }
-
-    /**
-     * @return float
-     */
-    public function getPercentualReajuste(): float
-    {
-        return $this->percentualReajuste;
-    }
-
-    /**
-     * @param float $percentualReajuste
-     * @return self
-     */
-    public function setPercentualReajuste(float $percentualReajuste): self
-    {
-        $this->percentualReajuste = $percentualReajuste;
-        return $this;
-    }
 
     /**
      * @return boolean
@@ -309,26 +257,6 @@ class Aditamento
     }
 
     /**
-     *
-     * @return string
-     */
-    public function getDescricaoIndice(): string
-    {
-        return $this->descricaoIndice;
-    }
-
-    /**
-     * @param string $descricaoIndice
-     * @return self
-     */
-    public function setDescricaoIndice(string $descricaoIndice): self
-    {
-        $this->descricaoIndice = $descricaoIndice;
-
-        return $this;
-    }
-
-    /**
      * Get the value of vigenciaFim
      */
     public function getVigenciaFim(): DateTime
@@ -360,6 +288,103 @@ class Aditamento
     public function setVigenciaInicio(DateTime $vigenciaInicio): self
     {
         $this->vigenciaInicio = $vigenciaInicio;
+
+        return $this;
+    }
+
+
+    /**
+     * @return string|null
+     */
+    public function getJustificativa(): ?string
+    {
+        return $this->justificativa;
+    }
+
+    /**
+     * @param string|null $justificativa
+     * @return self
+     */
+    public function setJustificativa(?string $justificativa): self
+    {
+        $this->justificativa = $justificativa;
+
+        return $this;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return float|null
+     */
+    public function getIndiceReajuste(): ?float
+    {
+        return $this->indiceReajuste;
+    }
+
+    /**
+     * @param float|null $indiceReajuste
+     * @return self
+     */
+    public function setIndiceReajuste(?float $indiceReajuste): self
+    {
+        $this->indiceReajuste = $indiceReajuste;
+
+        return $this;
+    }
+
+    /**
+     * @return float|null
+     */
+    public function getPercentualReajuste(): ?float
+    {
+        return $this->percentualReajuste;
+    }
+
+    /**
+     * @param float|null $percentualReajuste
+     * @return self
+     */
+    public function setPercentualReajuste(?float $percentualReajuste): self
+    {
+        $this->percentualReajuste = $percentualReajuste;
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getDescricaoIndice(): ?string
+    {
+        return $this->descricaoIndice;
+    }
+
+    /**
+     * @param string|null $descricaoIndice
+     * @return self
+     */
+    public function setDescricaoIndice(?string $descricaoIndice): self
+    {
+        $this->descricaoIndice = $descricaoIndice;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of posicaoAditamentoSequencial
+     */
+    public function getPosicaoAditamentoSequencial(): int
+    {
+        return $this->posicaoAditamentoSequencial;
+    }
+
+    /**
+     * Set the value of posicaoAditamentoSequencial
+     */
+    public function setPosicaoAditamentoSequencial(int $posicaoAditamentoSequencial): self
+    {
+        $this->posicaoAditamentoSequencial = $posicaoAditamentoSequencial;
 
         return $this;
     }
