@@ -18,15 +18,16 @@ class AditamentoService implements AditamentoServiceInterface
     /**
      *
      * @param integer $ac16Sequencial
-     * @return AditamentoSerializeService
+     * @return array
      */
-    public function getDadosAditamento(int $ac16Sequencial): AditamentoSerializeService
+    public function getDadosAditamento(int $ac16Sequencial): array
     {
         $acordoPosicao = $this->acordoPosicaoRepository->getAditamentoUltimaPosicao($ac16Sequencial);
 
         $aditamentoFactory = new AditamentoFactory();
         $aditamento = $aditamentoFactory->createByEloquentModel($acordoPosicao);
 
-        return new AditamentoSerializeService($aditamento);
+        $seriealizer = new AditamentoSerializeService($aditamento);
+        return $seriealizer->jsonSerialize();
     }
 }

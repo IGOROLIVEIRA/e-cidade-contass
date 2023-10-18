@@ -3,10 +3,9 @@
 namespace App\Services\Patrimonial\Aditamento;
 
 use App\Domain\Patrimonial\Aditamento\Aditamento;
-use JsonSerializable;
 use ReflectionClass;
 
-class AditamentoSerializeService implements JsonSerializable
+class AditamentoSerializeService
 {
     private Aditamento $aditamento;
 
