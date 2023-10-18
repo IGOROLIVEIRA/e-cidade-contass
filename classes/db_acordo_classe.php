@@ -3064,37 +3064,39 @@ class cl_acordo
 
     public function queryAcordosAssinadosHomologados(int $ac10Sequencial = null)
     {
-        $sql = "
-        SELECT DISTINCT acordomovimentacao.ac10_sequencial,
-                acordomovimentacao.ac10_acordo,
-                acordomovimentacaotipo.ac09_descricao,
-                acordomovimentacao.ac10_acordomovimentacaotipo,
-                acordomovimentacao.ac10_id_usuario,
-                acordomovimentacao.ac10_datamovimento,
-                acordomovimentacao.ac10_hora,
-                acordomovimentacao.ac10_obs
-        FROM acordo
-        INNER JOIN acordomovimentacao ON ac10_acordo = ac16_sequencial
+        $instituicao = db_getsession('DB_instit');
+        $sql = "SELECT acordomovimentacao.ac10_acordo,
+            acordomovimentacao.ac10_acordomovimentacaotipo,
+            acordomovimentacaotipo.ac09_descricao,
+            acordomovimentacao.ac10_sequencial,
+            acordomovimentacao.ac10_id_usuario,
+            acordomovimentacao.ac10_datamovimento,
+            acordomovimentacao.ac10_hora,
+            acordomovimentacao.ac10_obs
+        FROM acordomovimentacao
         INNER JOIN acordomovimentacaotipo ON acordomovimentacaotipo.ac09_sequencial = acordomovimentacao.ac10_acordomovimentacaotipo
-        WHERE";
+        INNER JOIN acordo ON acordo.ac16_sequencial = acordomovimentacao.ac10_acordo
+        INNER JOIN db_depart ON db_depart.coddepto = acordo.ac16_coddepto
+        INNER JOIN acordosituacao ON acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
+        LEFT JOIN acordomovimentacaocancela ON ac25_acordomovimentacaocancela = ac10_sequencial
+        WHERE ac25_acordomovimentacaocancela IS NULL ";
 
-        if (!empty($ac10Sequencial)) {
-            $sql .= " acordomovimentacao.ac10_acordo = {$ac10Sequencial} AND";
+        if(!empty($ac10Sequencial)) {
+            $sql .= " AND acordomovimentacao.ac10_acordo = $ac10Sequencial ";
         }
 
-        $sql .= "
-            acordomovimentacao.ac10_acordomovimentacaotipo IN (2,11)
-            AND ac10_sequencial IN
-                (SELECT max(ac10_sequencial)
-                 FROM acordomovimentacao
-                 WHERE ac10_acordo=ac16_sequencial)
-            AND ac16_sequencial NOT IN
-                (SELECT ac16_sequencial
-                 FROM acordoempautoriza
-                 WHERE ac45_acordo = ac16_sequencial)
-            AND ac16_instit = 1
-        ORDER BY ac10_sequencial DESC
-        ";
+        $sql .= "AND (ac10_acordomovimentacaotipo = 2
+            AND ac16_acordosituacao = 1
+            AND ac16_dataassinatura IS NOT NULL
+            OR ac10_acordomovimentacaotipo = 11
+            AND ac16_acordosituacao = 4
+            AND NOT EXISTS
+                         (SELECT 1
+                          FROM acordoempautoriza
+                          WHERE ac45_acordo = ac16_sequencial)
+           AND ac16_instit = $instituicao )
+           ORDER BY ac10_sequencial";
+
         return $sql;
     }
 }

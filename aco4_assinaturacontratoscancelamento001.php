@@ -260,8 +260,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
   function js_pesquisarAssinatura() {
 
     $('cancelar').disabled = true;
-    var sUrl = 'func_acordocancelaassinatura.php?movimento=1&tipo=2&ativos=false&assinados=true&homologados=true';
-    sUrl += '&funcao_js=parent.js_mostrarPesquisaAssinatura|ac10_sequencial|ac10_acordomovimentacaotipo';
+    var sUrl = 'func_acordocancelaassinatura.php?homologados=true&funcao_js=parent.js_mostrarPesquisaAssinatura|ac10_sequencial|ac10_acordomovimentacaotipo';
 
     js_OpenJanelaIframe('CurrentWindow.corpo',
       'db_iframe_assinatura',
