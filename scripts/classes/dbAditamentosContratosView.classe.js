@@ -1791,7 +1791,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.preencheItens = function (aItens) {
 
-
+        console.log(atiens);
 
         var sizeLabelItens = 0;
         if (aItens.length < 12) {

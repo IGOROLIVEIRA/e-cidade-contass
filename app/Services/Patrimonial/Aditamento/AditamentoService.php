@@ -2,7 +2,6 @@
 
 namespace App\Services\Patrimonial\Aditamento;
 
-use App\Domain\Patrimonial\Aditamento\Aditamento;
 use App\Domain\Patrimonial\Aditamento\Factory\AditamentoFactory;
 use App\Repositories\Patrimonial\AcordoPosicaoRepository;
 use App\Services\Contracts\Patrimonial\Aditamento\AditamentoServiceInterface;

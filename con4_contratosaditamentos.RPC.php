@@ -333,7 +333,8 @@ try {
         case 'getAcordoAditvoAlteracao':
 
             $service = new AditamentoService();
-            $result = $service->getDadosAditamento((int)$oParam->ac16Sequencial);
+
+            $oRetorno->aditamento = $service->getDadosAditamento((int)$oParam->ac16Sequencial);
 
             break;
     }
