@@ -3095,7 +3095,7 @@ class cl_acordo
                           FROM acordoempautoriza
                           WHERE ac45_acordo = ac16_sequencial)
            AND ac16_instit = $instituicao )
-           ORDER BY ac10_sequencial";
+           ORDER BY ac10_sequencial DESC";
 
         return $sql;
     }
