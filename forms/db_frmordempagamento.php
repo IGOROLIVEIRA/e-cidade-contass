@@ -64,7 +64,7 @@
                     <legend>
                         <strong>Histórico da OP:</strong>
                     </legend>
-                    <? db_textarea('historicoOP', 4, 146, $Ie50_obs, true, 'text', 2) ?>
+                    <? db_textarea('historicoOp', 4, 146, $Ie50_obs, true, 'text', 2) ?>
                 </fieldset>
             </td>
         </tr>
@@ -113,7 +113,7 @@
         $('e60_numemp').value = e60_numemp;
         $('e50_codord').value = e50_codord;
         $('e53_valor').value = e53_valor;
-        $('historicoOP').value = e50_obs;
+        $('historicoOp').value = e50_obs;
         $('e50_data').value = e50_data;
         $('dataLiquidacao').value = converterData(e50_data);
         $('dataLiquidacaoAtual').value = converterData(e50_data);

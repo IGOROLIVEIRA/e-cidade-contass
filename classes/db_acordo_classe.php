@@ -133,7 +133,7 @@ class cl_acordo
     ac16_providencia = int4 = Status da Providência do Acordo
     ac16_datareferencia = date = Data de referência para geração do SICOM
     ac16_reajuste = boll = possui reajuste
-    ac16_criterioreajuste = 
+    ac16_criterioreajuste =
     ac16_datareajuste = ;
     ac16_periodoreajuste = ;
     ac16_datareajuste_dia = ;
@@ -568,7 +568,7 @@ class cl_acordo
      ,ac16_adesaoregpreco
      ,ac16_tipocadastro
      ,ac16_reajuste
-     ,ac16_criterioreajuste 
+     ,ac16_criterioreajuste
      ,ac16_datareajuste
      ,ac16_indicereajuste
      ,ac16_periodoreajuste
@@ -2692,7 +2692,7 @@ class cl_acordo
                 JOIN acordopcprocitem ON ac23_acordoitem=ac20_sequencial
                 JOIN pcprocitem ON pc81_codprocitem = ac23_pcprocitem
                 JOIN pcproc ON pc81_codproc = pc80_codproc
-                JOIN db_depart ON coddepto=ac16_deptoresponsavel  
+                JOIN db_depart ON coddepto=ac16_deptoresponsavel
                 JOIN db_departorg ON db01_coddepto=coddepto AND db01_anousu = ac16_anousu
                 JOIN cgm ON z01_numcgm=ac16_contratado
                 LEFT JOIN cgmtipoempresa ON z03_numcgm=z01_numcgm
@@ -2712,12 +2712,12 @@ class cl_acordo
     {
         $ano = db_getsession("DB_anousu");
         $instituicao = db_getsession('DB_instit');
-        $dbwhere = " ac16_instit =  {$instituicao} and ac16_anousu = {$ano} ";
+        $dbwhere = " ac16_instit =  {$instituicao} and ac16_anousu = {$ano} and ac16_sequencial = $aContratocodigo";
 
-        $sSql = " select 
-        ac16_sequencial, 
+        $sSql = " select
+        ac16_sequencial,
         ac213_numerocontrolepncp,
-        ac213_sequencialpncp,      
+        ac213_sequencialpncp,
         cgc as cnpjCompra,
         ac16_anousu as anoCompra,
         l213_numerocompra as sequencialCompra,
@@ -3032,7 +3032,7 @@ class cl_acordo
     }
     public function alteracaoCriterioReajuste($ac16_sequencial,$ac16_reajuste,$ac16_criterioreajuste,$ac16_datareajuste,$ac16_periodoreajuste,$ac16_indicereajuste,$ac16_descricaoreajuste,$ac16_descricaoindice)
     {
-        
+
         $ac16_datareajuste = implode("-", (array_reverse(explode("/", $ac16_datareajuste))));;
 
         $ac16_criterioreajuste = $ac16_reajuste == "f" ? "null" : "'$ac16_criterioreajuste'";
@@ -3042,7 +3042,7 @@ class cl_acordo
         $ac16_descricaoreajuste = $ac16_reajuste == "f" ? "null" : "'$ac16_descricaoreajuste'";
         $ac16_descricaoindice = $ac16_reajuste == "f" ? "null" : "'$ac16_descricaoindice'";
 
-        $sSql = 
+        $sSql =
         "
         update
 	        acordo
@@ -3057,7 +3057,7 @@ class cl_acordo
         where
 	        ac16_sequencial = $ac16_sequencial;
         ";
-        
+
         db_query($sSql);
     }
 }
