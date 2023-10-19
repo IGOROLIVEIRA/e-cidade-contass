@@ -190,7 +190,7 @@ include("dbforms/db_funcoes.php");
             query += '&impvlrunit=true';
         }
 
-        //jan = window.open('lic1_itenslicitados002.php?'+query, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+        jan = window.open('lic1_itenslicitados002.php?'+query, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
         jan.moveTo(0, 0);
 
     }
