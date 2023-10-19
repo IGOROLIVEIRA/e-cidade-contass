@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-class AcordoItem extends LegacyModel
+class PcMater extends LegacyModel
 {
     /**
      * @var string
      */
-    protected $table = 'acordoitem';
+    protected $table = 'pcmater';
 
     /**
      * @var string
      */
-    protected $primaryKey = 'ac20_sequencial';
+    protected $primaryKey = ' pc01_codmater';
 
      /**
      * Indicates if the IDs are auto-incrementing.
@@ -28,12 +28,8 @@ class AcordoItem extends LegacyModel
      */
     public $timestamps = false;
 
-    public function acordoPosicao()
-    {
-        return $this->belongsTo('App\Models\AcordoPosicao', 'ac20_acordoposicao', 'ac26_sequencial');
-    }
 
-    public function pcMater()
+    public function acordoItem()
     {
         return $this->belongsTo('App\Models\AcordoPosicao', 'ac20_pcmater', 'pc01_codmater');
     }

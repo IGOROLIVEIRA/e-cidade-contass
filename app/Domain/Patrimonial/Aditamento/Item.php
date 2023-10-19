@@ -15,6 +15,13 @@ class Item
     private int $codigoPcMater;
 
     /**
+     * Undocumented variable
+     *
+     * @var string
+     */
+    private string $descricaoItem;
+
+    /**
      * @var float
      */
     private float $quantidade;
@@ -190,6 +197,29 @@ class Item
     public function setAcordoPosicaoTipo(int $acordoPosicaoTipo): self
     {
         $this->acordoPosicaoTipo = $acordoPosicaoTipo;
+
+        return $this;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return string
+     */
+    public function getDescricaoItem(): string
+    {
+        return $this->descricaoItem;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param string $descricaoItem
+     * @return self
+     */
+    public function setDescricaoItem(string $descricaoItem): self
+    {
+        $this->descricaoItem = $descricaoItem;
 
         return $this;
     }

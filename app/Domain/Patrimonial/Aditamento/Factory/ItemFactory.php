@@ -23,7 +23,9 @@ class ItemFactory
             ->setValorTotal((float) $itemAcordo->ac20_valortotal)
             ->setTipoControle((bool) $itemAcordo->ac20_tipoControle)
             ->setAcordoPosicaoTipo($itemAcordo->ac20_acordoposicaotipo)
-            ->setServicoQuantidade($itemAcordo->ac20_servicoquantidade);
+            ->setServicoQuantidade($itemAcordo->ac20_servicoquantidade)
+            ->setDescricaoItem($itemAcordo->pcMater->pc01_descrmater);
+
             return $item;
     }
 
