@@ -1455,11 +1455,16 @@ DBViewLancamentoAvaliacaoTurma.prototype.constroiInputParecer = function(oAluno,
  */
 DBViewLancamentoAvaliacaoTurma.prototype.preencheNotaDisciplina = function(oAluno, oAproveitamento, oElement) {
 
-  var iMenorValor      = oAproveitamento.nMenorValor;
-  var iMaiorValor      = oAproveitamento.nMaiorValor;
-  var mMinimoAprovacao = oAproveitamento.mAproveitamentoMinino;
-  var nVariacao        = oAproveitamento.nVariacao;
-  var lAtingiuMinimo   = true;
+  const iMenorValor = oAproveitamento.nMenorValor;
+  const iMaiorValor = oAproveitamento.nMaiorValor;
+  const mMinimoAprovacao = oAproveitamento.mAproveitamentoMinino;
+  const primeiroPeriodo = this.aPeriodosAvaliacao.find(elemento => elemento !== undefined);
+  let lAtingiuMinimo = true;
+  let nVariacao = '';
+
+  if (primeiroPeriodo.hasOwnProperty('nVariacao')) {
+    nVariacao = primeiroPeriodo.nVariacao;
+  }
 
   if (this.aPeriodosAvaliacao[oAproveitamento.iPeriodo].sFormaAvaliacao == 'NOTA') {
 

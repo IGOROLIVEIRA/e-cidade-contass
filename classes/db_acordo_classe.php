@@ -2712,7 +2712,7 @@ class cl_acordo
     {
         $ano = db_getsession("DB_anousu");
         $instituicao = db_getsession('DB_instit');
-        $dbwhere = " ac16_instit =  {$instituicao} and ac16_anousu = {$ano} ";
+        $dbwhere = " ac16_instit =  {$instituicao} and ac16_anousu = {$ano} and ac16_sequencial = $aContratocodigo";
 
         $sSql = " select
         ac16_sequencial,

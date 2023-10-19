@@ -79,7 +79,7 @@ if ( $cltermo->numrows > 0 ) {
         $sqlTermoParcelas .= "                            and arrecant.k00_receit = arrecad.k00_receit ";
         $sqlTermoParcelas .= "   where arrepaga.k00_numpre is null and arrecant.k00_numpre is null and arrecad.k00_numpre = {$oTermo->v07_numpre} ";
         $sqlTermoParcelas .= "union  ";
-        $sqlTermoParcelas .= "  select arreold.k00_numpre, arreold.k00_numpar, arreold.k00_receit, k00_descr, k02_descr, 'Anulado' as status, arreold.k00_valor ";
+        $sqlTermoParcelas .= "  select arreold.k00_numpre, arreold.k00_numpar, arreold.k00_receit, k00_descr, k02_descr, 'Revogado' as status, arreold.k00_valor ";
         $sqlTermoParcelas .= "    from arreold   ";
         $sqlTermoParcelas .= "         inner join arretipo on arretipo.k00_tipo   = arreold.k00_tipo ";
         $sqlTermoParcelas .= "         inner join tabrec   on tabrec.k02_codigo   = arreold.k00_receit    ";
