@@ -107,12 +107,12 @@ class ContratoPNCP extends ModeloBasePNCP
             'Authorization: ' . $token,
         );
 
-        $optionspncp = $this->getParancurl('POST',$dados,$headers,false,false);
+        $optionspncp = $this->getParancurl('POST',$dados,$headers,false,true);
 
         curl_setopt_array($chpncp, $optionspncp);
 
         $contentpncp = curl_exec($chpncp);
-        /*$err     = curl_errno($chpncp);
+       /*$err     = curl_errno($chpncp);
         $errmsg  = curl_error($chpncp);
         $header  = curl_getinfo($chpncp);
         $header['errno']   = $err;
