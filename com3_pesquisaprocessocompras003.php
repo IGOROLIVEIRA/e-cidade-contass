@@ -96,30 +96,51 @@ switch ($oProcessoCompras->getSituacao()) {
           <td class="valores" style="text-align: right"><?=$oProcessoCompras->getCodigo()?></td>
           <td class="label"><?=$Lpc80_data?> </td>
           <td class="valores"><?=$oProcessoCompras->getDataEmissao()?></td>
+          <td class="label"> <b> Tipo de Processo: </b> </td>
+          <td class="valores"> <?=$oProcessoCompras->getTipoProcesso() == 1 ? "Item" : "Lote"?></td>
        </tr>
        <tr>
           <td class="label"><?=$Lpc80_depto ?> </td>
           <td colspan="3" class="valores">
             <?=$oProcessoCompras->getCodigoDepartamento()." - ".$oProcessoCompras->getDescricaoDepartamento()?>
           </td>  
+          <td class="label"> <b> Critério de Adjudicação: </b> </td>
+          <td class="valores"> 
+            <?
+              $aCriterioAdjudicacao = array(1=>"Desconto sobre tabela", 2=>"Menor taxa ou percentual", 3=>"Outros");
+              echo $aCriterioAdjudicacao[$oProcessoCompras->getCriterioAdjudicacao()];
+            ?>
+          </td>
        </tr>
        <tr>
           <td class="label"><?=$Lpc80_usuario ?> </td>
           <td colspan="3" class="valores">
             <?=$oProcessoCompras->getUsuario()." - ".$oProcessoCompras->getNomeUsuario()?>
           </td>  
+          <td class="label"> <b> Contratação Direta: </b> </td>
+          <td class="valores"> <?=$oProcessoCompras->getDispensaPorValor() == "t" ? "Sim" : "Não"?></td>
        </tr>
        <tr>
           <td class="label"><?=$Lpc80_situacao ?> </td>
           <td colspan="3" class="valores">
             <?=$oProcessoCompras->getSituacao(). " - {$sSituacaoProcesso}"?>
           </td>  
+          <td class="label"> <b> Nº Dispensa: </b> </td>
+          <td class="valores"> <?=$oProcessoCompras->getNumerodispensa()?></td>
        </tr>
        <tr>
           <td class="label"><?=$Lpc80_resumo ?> </td>
           <td colspan="3" class="valores">
             <?=nl2br($oProcessoCompras->getResumo())?>
           </td>  
+          <td class="label"> <b> ID PNCP: </b> </td>
+          <td>
+          <?
+            $rsIdPncp = db_query("select l213_numerocontrolepncp from liccontrolepncp where l213_processodecompras = $pc80_codproc");
+            $idPncp = db_utils::fieldsMemory($rsIdPncp)->l213_numerocontrolepncp;
+            echo $idPncp;
+          ?>
+          </td>
        </tr>
     </table>
   </fieldset>
@@ -132,6 +153,19 @@ switch ($oProcessoCompras->getSituacao()) {
     
     $oTabDetalhes->add("processoItens", "Itens", 
                        "com3_pesquisaprocessocomprasitens.php?iProcesso={$oGet->pc80_codproc}");
+
+    $rsSolicitacao = db_query("select pc11_numero from pcproc
+    inner join pcprocitem on pc81_codproc = pc80_codproc
+    inner join solicitem on pc81_solicitem = pc11_codigo
+    where pc80_codproc = {$oGet->pc80_codproc} limit 1");
+
+    $solicitacao = db_utils::fieldsMemory($rsSolicitacao)->pc11_numero;
+    
+    $oTabDetalhes->add("processoOrcamento", "Orçamento", 
+                       "com3_consultaitens001.php?solicitacao=4&numero=$solicitacao");
+    
+    $oTabDetalhes->add("processoPrecoReferencia", "Preço de Referência", 
+                       "com3_pesquisaprocessocomprasprecoreferencia.php?iProcesso={$oGet->pc80_codproc}");
     
     $oTabDetalhes->add("processoLicitacoes", "Licitações",
                        "com3_pesquisaprocessocompraslicitacao.php?iProcesso={$oGet->pc80_codproc}");
@@ -144,9 +178,6 @@ switch ($oProcessoCompras->getSituacao()) {
     
     $oTabDetalhes->add("processoContratos", "Acordos",
         "com3_pesquisaprocessocompracontrato.php?iProcesso={$oGet->pc80_codproc}");
-
-    $oTabDetalhes->add("criterioAdjudicacao", "Critério de Adjudicação",
-        "com3_pesquisaprocessocriterioadjudicacao.php?iProcesso={$oGet->pc80_codproc}");
     
     $oTabDetalhes->add("processoContratos", "Registro de Preço",
         "com3_pesquisaregistropreco.php?iProcesso={$oGet->pc80_codproc}");
