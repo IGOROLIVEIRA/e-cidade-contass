@@ -33,21 +33,29 @@ try {
     case "pcproc":
 
         $clpcproc = new cl_pcproc;
-        $rsSolicitacao = $clpcproc->sql_record($clpcproc->sql_query_file($sequencial,"pc10_resumo"));
-        $oRetorno->observacao = urlencode(db_utils::fieldsMemory($rsSolicitacao, 0)->pc10_resumo);
+        $rsProcesso = $clpcproc->sql_record($clpcproc->sql_query_file($sequencial,"pc80_resumo"));
+        $oRetorno->observacao = urlencode(db_utils::fieldsMemory($rsProcesso, 0)->pc80_resumo);
         break;
 
     case "empautoriza":
-        echo "i equals 2";
+
+        $clempautoriza = new cl_empautoriza;
+        $rsAutorizacao = $clempautoriza->sql_record($clempautoriza->sql_query_file($sequencial,"e54_resumo"));
+        $oRetorno->observacao = urlencode(db_utils::fieldsMemory($rsAutorizacao, 0)->e54_resumo);
         break;
-    case "empautoriza":
-        echo "i equals 2";
-        break;
+
     case "empempenho":
-        echo "i equals 2";
+
+        $clempempenho = new cl_empempenho;
+        $rsEmpempenho = $clempempenho->sql_record($clempempenho->sql_query_file($sequencial,"e60_resumo"));
+        $oRetorno->observacao = urlencode(db_utils::fieldsMemory($rsEmpempenho, 0)->e60_resumo);
         break;
+
     case "matordem":
-        echo "i equals 2";
+
+        $clmatordem = new cl_matordem;
+        $rsOrdem = $clmatordem->sql_record($clmatordem->sql_query_file($sequencial,"m51_obs"));
+        $oRetorno->observacao = urlencode(db_utils::fieldsMemory($rsOrdem, 0)->m51_obs);
         break;
   }
 
