@@ -275,6 +275,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                 
                 $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
+                $oResult->si02_vltotalprecoreferencia = $oResult->pc11_quant * $oResult->si02_vlprecoreferencia;
                 $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia,2);
                 $nTotalItens += $oResult->si02_vltotalprecoreferencia;
             } else {
@@ -286,6 +287,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                 }
                 $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
+                $oResult->si02_vltotalprecoreferencia = $oResult->pc11_quant * $oResult->si02_vlprecoreferencia;
                 $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia,2,",", ".");
                 $nTotalItens += $oResult->si02_vltotalprecoreferencia;
             }
@@ -485,6 +487,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 }
                 $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                 $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
+                $oResult->si02_vltotalprecoreferencia = $oDadosDaLinha->quantidade * $oResult->si02_vlprecoreferencia;
                 $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia,2,",", ".");
                 $nTotalItens += $oResult->si02_vltotalprecoreferencia;
             } else {
@@ -503,6 +506,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $oDadosDaLinha->mediapercentual = number_format($oResult->si02_mediapercentual, 2) . "%";
                 }
                 $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
+                $oResult->si02_vltotalprecoreferencia = $oDadosDaLinha->quantidade * $oResult->si02_vlprecoreferencia;
                 $oDadosDaLinha->total = number_format($oResult->si02_vltotalprecoreferencia,2,",", ".");
                 $nTotalItens += $oResult->si02_vltotalprecoreferencia;
             }
