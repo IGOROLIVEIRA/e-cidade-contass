@@ -1791,7 +1791,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.preencheItens = function (aItens) {
 
-        console.log(atiens);
+        console.log(aItens);
 
         var sizeLabelItens = 0;
         if (aItens.length < 12) {
@@ -1804,13 +1804,15 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         }
 
+
         me.oGridItens.clearAll(true);
 
         var aEventsIn  = ["onmouseover"];
         var aEventsOut = ["onmouseout"];
         aDadosHintGrid = new Array();
-
+        console.log("fora do foreach")
         aItens.each(function (oItem, iSeq) {
+          console.log("dentro do foreach")
           var aLinha = new Array();
           valor1 = oItem.qtdeanterior.toString();
           valor = valor1.split('.');
@@ -2560,7 +2562,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.js_mostraacordoalteracao = (ac16_sequencial) => {
-      db_iframe_acordo.hide();
+      db_iframe_acordo.hide()
       const rpc = 'con4_contratosaditamentos.RPC.php';
       console.log(ac16_sequencial);
 
@@ -2569,11 +2571,40 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         ac16Sequencial: ac16_sequencial
       }
 
-      new AjaxRequest(rpc, oParam, function (oRetorno, lErro) {
-        console.log(oRetorno);
-        console.log(lErro);
-      }).setMessage("Aguarde, pesquisando unidades do material.")
-      .execute();
+      new Ajax.Request( rpc, {
+        method: 'post',
+        parameters: 'json=' + Object.toJSON(oParam),
+        onComplete: function (response) {
+
+            const oRetorno = eval("(" + response.responseText + ")");
+
+            if (oRetorno.erro == true) {
+              return alert(oRetorno.message.urlDecode());
+            }
+            me.lidaDadosAlteracao(oRetorno.aditamento);
+        }
+      });
 
     }
+
+    this.lidaDadosAlteracao = (aditamento) => {
+      console.log("chegou aqui");
+      $('oTxtCodigoAcordo').value = aditamento.acordoSequencial;
+      $('oCboTipoAditivo').value = aditamento.tipoAditivo;
+      $('oTxtNumeroAditamento').value = aditamento.numeroAditamento;
+      $('oTxtDataAssinatura').value = aditamento.dataAssinatura;
+      $('oTxtDataPublicacao').value = aditamento.dataPublicacao;
+      $('oTxtVeiculoDivulgacao').value = aditamento.veiculoDivulgacao;
+      $('oTxtDataInicial').value = aditamento.vigenciaInicio;
+      $('oTxtDataFinal').value = aditamento.vigenciaFim;
+      $('oTxtJustificativa').value = aditamento.justificativa;
+      $('oTxtDescricaoAcordo').value = aditamento.resumoObjeto;
+      $('oTextAreaDescricaoAlteracao').value = aditamento.descricaoAlteracao;
+      console.log(aditamento.resumoObjeto);
+
+      adapatador = new ItensAdapter(aditamento)
+
+      me.preencheItens(adapatador.criarItens());
+    }
+
 }

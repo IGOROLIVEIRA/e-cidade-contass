@@ -60,6 +60,7 @@ if ($result != false && $clparametroscontratos->numrows > 0) {
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextField.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbtextFieldData.widget.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/widgets/dbcomboBox.widget.js"></script>
+    <script language="JavaScript" type="text/javascript" src="scripts/classes/aditamento/ItensAdapter.js"></script>
     <script language="JavaScript" type="text/javascript" src="scripts/classes/dbAditamentosContratosView.classe.js"></script>
 
     <link href="estilos.css" rel="stylesheet" type="text/css">

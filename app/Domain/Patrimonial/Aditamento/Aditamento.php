@@ -59,6 +59,12 @@ class Aditamento
     /**
      * @var string|null
      */
+    private ?string $resumoObjeto = null;
+
+    /**
+     *
+     * @var string|null
+     */
     private ?string $descricaoIndice = null;
 
     /**
@@ -80,6 +86,12 @@ class Aditamento
      * @var string|null
      */
     private ?string $justificativa = null;
+
+    /**
+     * @var string|null
+     */
+    private ?string $descricaoAlteracao = null;
+
 
     /**
      * @var Item[]
@@ -355,18 +367,18 @@ class Aditamento
     /**
      * @return string|null
      */
-    public function getDescricaoIndice(): ?string
+    public function getResumoObjeto(): ?string
     {
-        return $this->descricaoIndice;
+        return $this->resumoObjeto;
     }
 
     /**
-     * @param string|null $descricaoIndice
+     * @param string|null $resumoObjeto
      * @return self
      */
-    public function setDescricaoIndice(?string $descricaoIndice): self
+    public function setResumoObjeto(?string $resumoObjeto): self
     {
-        $this->descricaoIndice = $descricaoIndice;
+        $this->resumoObjeto = $resumoObjeto;
 
         return $this;
     }
@@ -385,6 +397,42 @@ class Aditamento
     public function setPosicaoAditamentoSequencial(int $posicaoAditamentoSequencial): self
     {
         $this->posicaoAditamentoSequencial = $posicaoAditamentoSequencial;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of descricaoIndice
+     */
+    public function getDescricaoIndice(): ?string
+    {
+        return $this->descricaoIndice;
+    }
+
+    /**
+     * Set the value of descricaoIndice
+     */
+    public function setDescricaoIndice(?string $descricaoIndice): self
+    {
+        $this->descricaoIndice = $descricaoIndice;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of descricaoAlteracao
+     */
+    public function getDescricaoAlteracao(): ?string
+    {
+        return $this->descricaoAlteracao;
+    }
+
+    /**
+     * Set the value of descricaoAlteracao
+     */
+    public function setDescricaoAlteracao(?string $descricaoAlteracao): self
+    {
+        $this->descricaoAlteracao = $descricaoAlteracao;
 
         return $this;
     }

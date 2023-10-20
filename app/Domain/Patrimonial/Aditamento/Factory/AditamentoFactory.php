@@ -27,9 +27,11 @@ class AditamentoFactory
             ->setVeiculoDivulgacao($acordoPosicao->posicaoAditamento->ac35_veiculodivulgacao)
             ->setJustificativa($acordoPosicao->posicaoAditamento->ac35_justificativa)
             ->setPosicaoAditamentoSequencial((int)$acordoPosicao->posicaoAditamento->ac35_sequencial)
-            ->setDescricaoIndice($acordoPosicao->ac26_descricaoindice)
             ->setVigenciaInicio(new DateTime($acordoPosicao->acordo->ac16_datainicio))
-            ->setVigenciaFim(new DateTime($acordoPosicao->acordo->ac16_datafim));
+            ->setVigenciaFim(new DateTime($acordoPosicao->acordo->ac16_datafim))
+            ->setResumoObjeto($acordoPosicao->acordo->ac16_resumoobjeto)
+            ->setDescricaoAlteracao($acordoPosicao->posicaoAditamento->ac35_descricaoalteracao);
+
 
         if (self::TIPO_REAJUSTE === (int) $acordoPosicao->ac26_acordoposicaotipo) {
             $aditamento->setIndiceReajuste((float) $acordoPosicao->ac26_indicereajuste)

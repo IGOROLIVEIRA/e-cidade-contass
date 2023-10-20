@@ -3,6 +3,7 @@
 namespace App\Services\Patrimonial\Aditamento;
 
 use App\Domain\Patrimonial\Aditamento\Aditamento;
+use DateTime;
 use ReflectionClass;
 
 class AditamentoSerializeService
@@ -33,6 +34,8 @@ class AditamentoSerializeService
             $prop = $reflection->getProperty($atributo->getName());
             $prop->setAccessible(true);
             $value = $prop->getValue($this->aditamento);
+            $value = is_a($value, DateTime::class)
+                ? $value->format('d/m/Y') : $value;
 
             if ($atributo->getName() === 'itens') {
                 $lista['itens'] = $this->serializeItem($value);

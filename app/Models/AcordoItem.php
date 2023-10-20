@@ -35,6 +35,6 @@ class AcordoItem extends LegacyModel
 
     public function pcMater()
     {
-        return $this->belongsTo('App\Models\AcordoPosicao', 'ac20_pcmater', 'pc01_codmater');
+        return $this->belongsTo(PcMater::class, 'ac20_pcmater', 'pc01_codmater');
     }
 }
