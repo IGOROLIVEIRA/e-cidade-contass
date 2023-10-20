@@ -51,7 +51,7 @@ class ResultadoItensPNCP extends ModeloBasePNCP
         $oDado = $this->dados;
 
         $oDadosAPI                                  = new \stdClass;
-        $oDadosAPI->codigoUnidadeCompradora         = '01001'; //$oDado->codigounidadecompradora;
+        $oDadosAPI->codigoUnidadeCompradora         = $this->getUndCompradora();
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
         $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
@@ -86,20 +86,11 @@ class ResultadoItensPNCP extends ModeloBasePNCP
             'Authorization: ' . $token
         );
 
-        $optionspncp = $this->getParancurl('POST',$oDados,$headers,null,null);
+        $optionspncp = $this->getParancurl('POST',$oDados,$headers,null,true);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
         curl_close($chpncp);
-        /*$err     = curl_errno($chpncp);
-        $errmsg  = curl_error($chpncp);
-        $header  = curl_getinfo($chpncp);
-        $header['errno']   = $err;
-        $header['errmsg']  = $errmsg;
-        $header['header']  = $contentpncp;
-        echo "<pre>";
-        print_r($header);
-        exit;*/
 
         $retorno = explode(':', $contentpncp);
 
@@ -119,8 +110,6 @@ class ResultadoItensPNCP extends ModeloBasePNCP
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP/itens/$seqitem/resultados/$seqresultado";
 
-        $method = 'PUT';
-
         $chpncp      = curl_init($url);
 
         $headers = array(
@@ -128,12 +117,12 @@ class ResultadoItensPNCP extends ModeloBasePNCP
             'Authorization: ' . $token
         );
 
-        $optionspncp = $this->getParancurl('PUT',$oDados,$headers,false,false);
+        $optionspncp = $this->getParancurl('PUT',$oDados,$headers,false,true);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
         curl_close($chpncp);
-        /*$err     = curl_errno($chpncp);
+        /*$err   = curl_errno($chpncp);
         $errmsg  = curl_error($chpncp);
         $header  = curl_getinfo($chpncp);
         $header['errno']   = $err;

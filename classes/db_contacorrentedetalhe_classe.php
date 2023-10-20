@@ -1097,7 +1097,7 @@ class cl_contacorrentedetalhe {
                 
                     LEFT JOIN retencaopagordem ON pagordem.e50_codord = retencaopagordem.e20_pagordem
                     LEFT JOIN retencaoreceitas ON retencaoreceitas.e23_retencaopagordem = retencaopagordem.e20_sequencial 
-                              AND e23_ativo = 't' AND e23_dtcalculo = c69_data
+                              AND e23_ativo = 't'
                 
                     LEFT JOIN retencaotiporec ON retencaotiporec.e21_sequencial = retencaoreceitas.e23_retencaotiporec
                 

@@ -313,7 +313,7 @@ class cl_efdreinfr4020
                                 $this->efd02_sequencial 
                                ,'$this->efd02_mescompetencia'
                                ,'$this->efd02_anocompetencia '
-                               ,$this->efd02_cnpjbeneficiario 
+                               ,'$this->efd02_cnpjbeneficiario' 
                                ,$this->efd02_identificadorop
                                ,$this->efd02_ambiente
                                ,$this->efd02_instit

@@ -1894,7 +1894,7 @@ if (@$tipo_pesq[0] != "numpre") { // inicio do tipo de certidao
     $htmlParcAnulados = " <table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\">";
     $htmlParcAnulados .= "   <tr>";
     $htmlParcAnulados .= "     <td valign=\"top\" class=\"links2\" id=\"outrasmatriculas\">";
-    $htmlParcAnulados .= "       <a class=\"links2\" onClick=\"js_MudaLink('parcelamentosanulados')\" id=\"parcelamentosanulados\" href=\"cai3_gerfinanc071.php?opcao=" . $tipo . "&codopcao=" . $cod_filtro . "\" target=\"debitos\">PARCELAMENTOS ANULADOS</a>";
+    $htmlParcAnulados .= "       <a class=\"links2\" onClick=\"js_MudaLink('parcelamentosanulados')\" id=\"parcelamentosanulados\" href=\"cai3_gerfinanc071.php?opcao=" . $tipo . "&codopcao=" . $cod_filtro . "\" target=\"debitos\">PARCELAMENTOS REVOGADOS</a>";
     $htmlParcAnulados .= "     </td> ";
     $htmlParcAnulados .= "   </tr> ";
     $htmlParcAnulados .= " </table>\n";

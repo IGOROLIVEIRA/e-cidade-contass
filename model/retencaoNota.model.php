@@ -775,7 +775,7 @@ class retencaoNota
         $sHistoricoRecibo .= " CGM: " . $oNotaLiquidacao->oDadosOrdem->z01_numcgm . " - " . str_replace("'", "", $oNotaLiquidacao->oDadosOrdem->z01_nome);
         if ($oRetencao->e21_retencaotipocalc != 5 || $oInstit->prefeitura == "f") {
           // echo ('primeiro'); die();
-          $oReciboAvulso = new recibo(1, $this->getNumCgm());
+          $oReciboAvulso = new recibo(1, $this->getNumCgm(), 1, null, true);
           $oReciboAvulso->setConta($this->getConta());
           $oReciboAvulso->adicionarRecurso($oDotacao->getRecurso());
           $oReciboAvulso->setDataRecibo($this->getDataBase());

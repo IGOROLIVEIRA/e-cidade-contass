@@ -261,7 +261,8 @@ try {
             
             if($oParam->sStatus)
                 $status = " and efd02_status = $oParam->sStatus ";
-            $sWhere = " efd02_mescompetencia = '{$oParam->sMescompetencia}' and efd02_anocompetencia = '$oParam->sAnocompetencia' and efd02_ambiente = '$oParam->sAmbiente'  $status  ";
+            $instituicao = db_getsession("DB_instit");
+            $sWhere = " efd02_mescompetencia = '{$oParam->sMescompetencia}' and efd02_anocompetencia = '$oParam->sAnocompetencia' and efd02_ambiente = '$oParam->sAmbiente' and efd02_instit = {$instituicao} $status  ";
             $clefdreinfR4020 = new cl_efdreinfr4020;
             $rsEfdreinfR4020 = $clefdreinfR4020->sql_record($clefdreinfR4020->sql_query_file(null,"*",null,$sWhere));
 
@@ -413,7 +414,8 @@ try {
             if($oParam->sStatus) {
                 $status = " and efd03_status = $oParam->sStatus ";
             }
-            $sWhere = " efd03_mescompetencia = '{$oParam->sMescompetencia}' and efd03_anocompetencia = '$oParam->sAnocompetencia' and efd03_ambiente = '$oParam->sAmbiente' $status  ";
+            $instituicao = db_getsession("DB_instit");
+            $sWhere = " efd03_mescompetencia = '{$oParam->sMescompetencia}' and efd03_anocompetencia = '$oParam->sAnocompetencia' and efd03_ambiente = '$oParam->sAmbiente' and efd03_instit = {$instituicao} $status  ";
             $clefdreinfR4010 = new cl_efdreinfr4010;
             $rsEfdreinfR4010 = $clefdreinfR4010->sql_record($clefdreinfR4010->sql_query_file(null,"*",null,$sWhere));
 
