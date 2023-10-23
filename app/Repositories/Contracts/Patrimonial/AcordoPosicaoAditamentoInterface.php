@@ -3,7 +3,7 @@
 namespace App\Repositories\Contracts\Patrimonial;
 
 
-interface AcordoPosicaoAditamentoInterface
+interface AcordoPosicaoAditamentoRepositoryInterface
 {
     public function update(int $codigo, array $data);
 }

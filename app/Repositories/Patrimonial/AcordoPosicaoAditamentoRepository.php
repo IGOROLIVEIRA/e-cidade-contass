@@ -3,9 +3,9 @@
 namespace App\Repositories\Patrimonial;
 
 use App\Models\AcordoPosicaoAditamento;
-use App\Repositories\Contracts\Patrimonial\AcordoPosicaoAditamentoInterface;
+use App\Repositories\Contracts\Patrimonial\AcordoPosicaoAditamentoRepositoryInterface;
 
-class AcordoPosicaoAditamentoRepository implements AcordoPosicaoAditamentoInterface
+class AcordoPosicaoAditamentoRepository implements AcordoPosicaoAditamentoRepositoryInterface
 {
     private AcordoPosicaoAditamento $model;
 

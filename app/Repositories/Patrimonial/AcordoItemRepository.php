@@ -5,7 +5,7 @@ namespace App\Repositories\Patrimonial;
 use App\Models\AcordoItem;
 use App\Repositories\Contracts\Patrimonial\AcordoItemRepositoryInterface;
 
-class AcordoItemRpository implements AcordoItemRepositoryInterface
+class AcordoItemRepository implements AcordoItemRepositoryInterface
 {
     private AcordoItem $model;
 

@@ -9,7 +9,6 @@ use stdClass;
 
 class AditamentoFactory
 {
-    private const TIPO_REAJUSTE = 5;
 
     /**
      * @param AcordoPosicao $acordoPosicao
@@ -34,7 +33,7 @@ class AditamentoFactory
             ->setDescricaoAlteracao($acordoPosicao->posicaoAditamento->ac35_descricaoalteracao);
 
 
-        if (self::TIPO_REAJUSTE === (int) $acordoPosicao->ac26_acordoposicaotipo) {
+        if ($aditamento->isReajuste()) {
             $aditamento->setIndiceReajuste((float) $acordoPosicao->ac26_indicereajuste)
                 ->setPercentualReajuste((float) $acordoPosicao->ac26_percentualreajuste)
                 ->setDescricaoIndice($acordoPosicao->ac26_descricaoindice);
@@ -65,7 +64,7 @@ class AditamentoFactory
             ->setVigenciaInicio(new DateTime($aditamento->datainicial))
             ->setVigenciaFim(new DateTime($aditamento->final));
 
-        if (self::TIPO_REAJUSTE === (int) $aditamento->tipoaditamento) {
+        if ($aditamento->isReajuste()) {
             $aditamento->setIndiceReajuste((float) $aditamento->indicereajuste)
                 ->setPercentualReajuste((float) $aditamento->percentualreajuste)
                 ->setDescricaoIndice($aditamento->descricaoindice);

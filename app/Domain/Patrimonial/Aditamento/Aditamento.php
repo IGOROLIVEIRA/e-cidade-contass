@@ -6,6 +6,7 @@ use DateTime;
 
 class Aditamento
 {
+    private const TIPO_REAJUSTE = 5;
     /**
      * @var integer
      */
@@ -435,5 +436,10 @@ class Aditamento
         $this->descricaoAlteracao = $descricaoAlteracao;
 
         return $this;
+    }
+
+    public function isReajuste(): bool
+    {
+        return $this->getTipoAditivo() === self::TIPO_REAJUSTE;
     }
 }
