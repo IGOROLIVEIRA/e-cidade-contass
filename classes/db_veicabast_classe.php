@@ -836,7 +836,7 @@ class cl_veicabast {
      $sql2 = "";
      if($dbwhere==""){
        if($ve70_codigo!=null ){
-         $sql2 .= " where veicabast.ve70_codigo = $ve70_codigo ";
+         $sql2 .= " where ve70_codigo = $ve70_codigo ";
        }
      }else if($dbwhere != ""){
        $sql2 = " where $dbwhere";
@@ -1443,5 +1443,39 @@ if($dbwhere==""){
             }
         }
         return $sql;
+    }
+    function alteracaoSaldo($valorAbastecimento,$codigoEmpenho,$valorAbastecimentoAntigo){
+
+      $oDaoVeicparam = db_utils::getDao("veicparam");
+      $oDaoEmpempenho = db_utils::getDao("empempenho");
+  
+      $rsVeicparam = $oDaoVeicparam->sql_record($oDaoVeicparam->sql_query_file(null, "*", null, "ve50_instit = " . db_getsession("DB_instit")));
+      $abastecimentoPorEmpenho = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_abastempenho;
+
+      $rsEmpempenho = $oDaoEmpempenho->sql_record($oDaoEmpempenho->sql_query_file($codigoEmpenho,"*",null,"")); 
+      $e60_emiss = db_utils::fieldsMemory($rsEmpempenho, 0)->e60_emiss;
+      $e60_vlremp = db_utils::fieldsMemory($rsEmpempenho, 0)->e60_vlremp;
+      $e60_vlrutilizado = db_utils::fieldsMemory($rsEmpempenho, 0)->e60_vlrutilizado;
+      $ve50_datacorte = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_datacorte; 
+
+      if($abastecimentoPorEmpenho == 1 && $e60_emiss >= $ve50_datacorte){
+
+        $saldoDisponivel = $e60_vlremp - $e60_vlrutilizado;
+        $saldoDisponivel += $valorAbastecimentoAntigo;
+
+        if($valorAbastecimento > $saldoDisponivel){
+          $this->erro_msg = "Usuário: Abastecimento não incluído, valor total do abastecimento ultrapassou o valor disponível no empenho.";
+          return true;
+        }
+
+        $oDaoEmpempenho->e60_vlrutilizado =  $valorAbastecimento;
+        $oDaoEmpempenho->sql_query_valorutilizado($codigoEmpenho);
+    
+        return false;
+
+      }
+
+      return false;
+  
     }
 }
