@@ -14,6 +14,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.lProvidencia = false;
     this.lReajuste = false;
     this.totalizador = false;
+    this.estadoTela = { viewAlterar: false, changeTipoAdivito: false};
 
 
     switch (iTipoAditamento) {
@@ -476,25 +477,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             iAcordo: me.oTxtCodigoAcordo.getValue()
         }
 
-        if(me.oCboTipoAditivo.getValue()== 8 || me.oCboTipoAditivo.getValue()== 14){
-            me.oGridItens.setCellWidth(["5%", "5%", "30%", "7%", "9%", "7%", "9%", "9%", "6%", "6%", "2%", "9%","9%"]);
-            me.oGridItens.aHeaders[12].lDisplayed = true;
-            me.oGridItens.aHeaders[13].lDisplayed = true;
-            me.oGridItens.show($('ctnGridItens'));
+        me.ajusteInicialGrid();
 
-        }else{
-            me.oGridItens.aHeaders[12].lDisplayed = false;
-            me.oGridItens.aHeaders[13].lDisplayed = false;
-            me.oGridItens.show($('ctnGridItens'));
-
+        if (me.estadoTela.viewAlterar == true) {
+          me.estadoTela.changeTipoAdivito = true;
+          me.js_mostraacordoalteracao(me.oTxtCodigoAcordo.getValue());
+          return;
         }
-
-
-        me.oGridItens.clearAll(true);
-
-        document.getElementById("trdatareferencia").style.display = 'none';
-
-
 
         new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
 
@@ -2548,7 +2537,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.pesquisaAcordoAlteracao = function (lMostrar) {
-
       if (lMostrar == true) {
 
           var sUrl = 'func_aditamentoalteracao.php?funcao_js=parent.' + me.sInstance + '.js_mostraacordoalteracao|ac16_sequencial';
@@ -2562,6 +2550,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.js_mostraacordoalteracao = (ac16_sequencial) => {
+      me.estadoTela.viewAlterar = true;
       db_iframe_acordo.hide()
       const rpc = 'con4_contratosaditamentos.RPC.php';
       console.log(ac16_sequencial);
@@ -2590,7 +2579,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.lidaDadosAlteracao = (aditamento) => {
       console.log("chegou aqui");
       $('oTxtCodigoAcordo').value = aditamento.acordoSequencial;
-      $('oCboTipoAditivo').value = aditamento.tipoAditivo;
+
+      if (me.estadoTela.changeTipoAdivito == false)  {
+        $('oCboTipoAditivo').value = aditamento.tipoAditivo;
+      }
+
       $('oTxtNumeroAditamento').value = aditamento.numeroAditamento;
       $('oTxtDataAssinatura').value = aditamento.dataAssinatura;
       $('oTxtDataPublicacao').value = aditamento.dataPublicacao;
@@ -2600,11 +2593,34 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       $('oTxtJustificativa').value = aditamento.justificativa;
       $('oTxtDescricaoAcordo').value = aditamento.resumoObjeto;
       $('oTextAreaDescricaoAlteracao').value = aditamento.descricaoAlteracao;
-      console.log(aditamento.resumoObjeto);
+
+      me.ajusteInicialGrid();
+
 
       adapatador = new ItensAdapter(aditamento)
 
-      me.preencheItens(adapatador.criarItens());
+      aItensPosicao = adapatador.criarItens();
+
+      me.preencheItens(aItensPosicao);
     }
 
+    this.ajusteInicialGrid = () => {
+        if(me.oCboTipoAditivo.getValue()== 8 || me.oCboTipoAditivo.getValue()== 14){
+          me.oGridItens.setCellWidth(["5%", "5%", "30%", "7%", "9%", "7%", "9%", "9%", "6%", "6%", "2%", "9%","9%"]);
+          me.oGridItens.aHeaders[12].lDisplayed = true;
+          me.oGridItens.aHeaders[13].lDisplayed = true;
+          me.oGridItens.show($('ctnGridItens'));
+
+      }else{
+          me.oGridItens.aHeaders[12].lDisplayed = false;
+          me.oGridItens.aHeaders[13].lDisplayed = false;
+          me.oGridItens.show($('ctnGridItens'));
+
+      }
+
+
+      me.oGridItens.clearAll(true);
+
+      document.getElementById("trdatareferencia").style.display = 'none';
+    }
 }

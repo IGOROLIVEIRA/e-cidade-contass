@@ -17,9 +17,9 @@ class ItensAdapter {
     this.#aditamento.itens.forEach(item => {
       const itemAdaptado = {};
       itemAdaptado.codigo = codigo;
-      itemAdaptado.codigoItem = item.itemSequencial;
+      itemAdaptado.codigoitem = item.itemSequencial;
       itemAdaptado.controlaquantidade = item.servicoQuantidade == true ? 't' : 'f';
-      itemAdaptado.tipocontrole = item.tipoControle == true ? 't' : 'f';
+      itemAdaptado.servico = item.tipoControle == true ? 't' : 'f';
 
       itemAdaptado.descricaoitem = item.descricaoItem;
 
