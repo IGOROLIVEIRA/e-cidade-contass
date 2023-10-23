@@ -251,6 +251,20 @@ db_app::load("estilos.css");
 
               </tr>
 
+              <tr id="trSaldoDisponivel">
+                <td><b>Saldo Disponível: </b></td>
+                <td>
+                  <?php 
+                  db_input('saldodisponivel', 10, 1, true, 'text', 3); 
+                  $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(null, "*", null, "ve50_instit = " . db_getsession("DB_instit")));
+                  $resultParamres = db_utils::fieldsMemory($resultParam, 0);
+                  if ($resultParamres->ve50_abastempenho != 1) {
+                    echo "<script> document.getElementById('trSaldoDisponivel').style.display = 'none';</script>";
+                  }
+                  ?>
+                </td>
+              </tr>
+
               <?
               if (isset($ve50_postoproprio) && $ve50_postoproprio == 3) {
                 db_input('posto_proprio', 1, "", true, 'hidden', 3, '');
@@ -403,6 +417,7 @@ db_app::load("estilos.css");
                     </td>
                     <td>
                       <?
+                      db_input('ve70_valorantigo', 10, 1, true, 'hidden', 1);
                       db_input('ve70_valor', 10, $Ive70_valor, true, 'text', 3, "")
                       ?>
                     </td>
@@ -463,7 +478,7 @@ db_app::load("estilos.css");
       </tr>
       <tr>
         <td colspan="2" style="text-align: center;">
-          <input onclick='return js_verificaDataAbastecimento();' name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
+          <input onclick='return js_verificaDataAbastecimento(<?= $db_opcao ?>);' name="<?= ($db_opcao == 1 ? "incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "alterar" : "excluir")) ?>" type="submit" id="db_opcao" value="<?= ($db_opcao == 1 ? "Incluir" : ($db_opcao == 2 || $db_opcao == 22 ? "Alterar" : "Excluir")) ?>" <?= ($db_botao == false ? "disabled" : "") ?>>
           <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();">
         </td>
       </tr>
@@ -473,11 +488,10 @@ db_app::load("estilos.css");
 <script>
   var el = document.getElementById("e60_codemp");
   el.onblur = function() {
-    console.log("blur", "saiu do input", this);
     var valor_e60Codemp = document.form1.e60_codemp.value;
     var valor_ve70Dtabast = document.form1.ve70_dtabast.value;
     if (valor_e60Codemp != "" && valor_ve70Dtabast != "") {
-      js_pesquisae60_codemp(true, 0);
+      js_pesquisae60_codemp(false, 0);
     }
     if (valor_ve70Dtabast == "") {
       alert("Preencher Data de Abastecimento");
@@ -504,9 +518,9 @@ db_app::load("estilos.css");
   //--------------------------------
   //Para filtrar apenas empenhos com o elemento 333903099000000, usar o parametro filtroabast=1
   function js_pesquisae60_codemp(mostra, controlador) {
+    var ve70_abast = $F("ve70_dtabast");
+    var e60_codemp = $F("e60_codemp");
     if (mostra == true) {
-      var ve70_abast = $F("ve70_dtabast");
-      var e60_codemp = $F("e60_codemp");
       var e60_numemp = $F("si05_numemp");
       document.form1.ve70_vlrun.value = "";
       document.form1.ve70_litros.value = "";
@@ -515,13 +529,13 @@ db_app::load("estilos.css");
       document.form1.ve71_veiccadposto.value = "";
       document.form1.posto.value = "";
       if (controlador == 0) {
-        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&chave_e60_codemp=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm|saldodisponivel', 'Pesquisa', true);
       } else {
-        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm', 'Pesquisa', true);
+        js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&funcao_js=parent.js_mostraempempenho2|e60_numemp|e60_codemp|e60_anousu|DB_e60_emiss|e60_numcgm|saldodisponivel', 'Pesquisa', true);
       }
 
     } else {
-      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + ve70_abast + '&pesquisa_chave=' + document.form1.si05_numemp.value + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
+      js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&lPesquisaPorCodigoEmpenho=1&ve70_abast=' + ve70_abast + '&pesquisa_chave=' + e60_codemp + '&funcao_js=parent.js_mostraempempenho&lNovoDetalhe=1', 'Pesquisa', false);
     }
   }
   /*
@@ -529,7 +543,7 @@ db_app::load("estilos.css");
    * Função alterada para validar se a data do empenho escolhido é maior que a data do abastecimento.
    * Ocorrência 1017: A contabilidade, em acordo com o suporte, solicitaram a remoção destas validações. Foi removida a obrigatoriedade e mantido a mensagem de alerta.
    * */
-  function js_mostraempempenho2(chave1, chave2, chave3, chave4, chave5) {
+  function js_mostraempempenho2(chave1, chave2, chave3, chave4, chave5,chave6) {
     var dtEmpenho = new Date(chave4);
     var dtAbast = new Date(document.form1.ve70_dtabast_ano.value + "-" + document.form1.ve70_dtabast_mes.value + "-" + document.form1.ve70_dtabast_dia.value);
     if (dtEmpenho > dtAbast) {
@@ -549,6 +563,8 @@ db_app::load("estilos.css");
         }
       }
     } else {
+      chave6 = parseFloat(chave6);
+      document.form1.saldodisponivel.value = chave6.toLocaleString('pt-BR', { minimumFractionDigits: 2});
       document.form1.si05_numemp.value = chave1;
       document.form1.e60_codemp.value = chave2 + '/' + chave3;
       document.form1.numcgm_posto.value = chave5;
@@ -574,9 +590,52 @@ db_app::load("estilos.css");
    * }
    * */
 
-  function js_mostraempempenho(chave1) {
-    document.form1.e60_codemp.value = chave1;
+  function js_mostraempempenho(e60_codemp,erro,e60_numcgm,si05_numemp,saldoDisponivel) {
+    if(erro){
+      document.form1.e60_codemp.value = '';
+      return false;
+    }
+    document.form1.e60_codemp.value = e60_codemp;
+    document.form1.si05_numemp.value = si05_numemp;
+    document.form1.numcgm_posto.value = e60_numcgm;
+    document.form1.saldodisponivel.value = saldoDisponivel;
+
     db_iframe_empempenho.hide();
+    
+    let itemEmpenho = document.getElementById("si05_item_empenho").value;
+
+    if (itemEmpenho == 't') {
+      js_pesquisaItem_emp(true);
+      js_pesquisave71_veiccadposto(true, 0);
+      return;
+    }
+
+    js_pesquisave71_veiccadposto(true, 0);
+    
+  }
+
+  function js_mostraempempenhoalteracao(e60_codemp,erro,e60_numcgm,si05_numemp,saldoDisponivel) {
+    if(erro){
+      document.form1.e60_codemp.value = '';
+      return false;
+    }
+    document.form1.e60_codemp.value = e60_codemp;
+    document.form1.si05_numemp.value = si05_numemp;
+    document.form1.numcgm_posto.value = e60_numcgm;
+    document.form1.saldodisponivel.value = saldoDisponivel;
+
+    db_iframe_empempenho.hide();
+    
+    let itemEmpenho = document.getElementById("si05_item_empenho").value;
+
+    if (itemEmpenho == 't') {
+      js_pesquisaItem_emp(true);
+      js_pesquisave71_veiccadposto(true, 0);
+      return;
+    }
+
+    js_pesquisave71_veiccadposto(true, 0);
+    
   }
 
   //--------------------------------
@@ -602,7 +661,30 @@ db_app::load("estilos.css");
   //--------------------------------
 
 
-  function js_verificaDataAbastecimento() {
+  function js_verificaDataAbastecimento(opcao) {
+
+    if(si05_numemp != "" && opcao == 1){
+
+      var oParametros = new Object();
+      var oRetorno;
+      oParametros.e60_numemp = document.getElementById('si05_numemp').value;
+      oParametros.sMetodo = "validacaoAbastecimentoPorEmpenho";
+      var oAjax = new Ajax.Request('vei1_veicabast.RPC.php', {
+          method: 'post',
+          parameters: 'json=' + Object.toJSON(oParametros),
+          asynchronous: false,
+          onComplete: function(oAjax) {
+            oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
+          }
+      });
+
+      if(oRetorno.lErro){
+        if (!confirm("Usuário: A data de emissão do empenho é anterior à data de ativação do parametro controle de saldo do empenho, portanto, o saldo não será controlado.")) {
+            return false;
+        }
+      }
+
+    }
 
     var dtRetirada = $F("ve60_datasaida");
     var dtAbastecimento = $F("ve70_dtabast");
@@ -1191,7 +1273,8 @@ db_app::load("estilos.css");
   };
   //js_pesquisa_ultimamedida();
   js_formataHora();
-  js_pesquisae60_codemp(false);
+  //js_pesquisae60_codemp(false);
+  //js_OpenJanelaIframe('top.corpo', 'db_iframe_empempenho', 'func_empempenho.php?filtroabast=1&ve70_abast=' + document.form1.ve70_dtabast.value + '&pesquisa_chave=' + document.form1.e60_codemp.value + '&funcao_js=parent.js_mostraempempenho', 'Pesquisa', false);
 
   var litros = 0;
   var valor = 0;

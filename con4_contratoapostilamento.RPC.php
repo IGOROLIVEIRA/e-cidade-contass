@@ -201,12 +201,10 @@ function getItens($oParam, $oRetorno)
                 $nValorDot = $oDotacao->valor;
             }
             $oItem->dotacoes[] = (object) array(
-                'dotacao' => $oDotacao->dotacao,
-                'quantidade' => $iQuantDot,
-                'valor' => $nValorDot,
-                'valororiginal' => $nValorDot
+                'dotacao' => $oDotacao->dotacao
             );
         }
+
         $aItens[] = $oItem;
     }
     $oRetorno->itens = $aItens;

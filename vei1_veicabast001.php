@@ -24,7 +24,6 @@
  *  Cópia da licença no diretório licenca/licenca_en.txt
  *                                licenca/licenca_pt.txt
  */
-
 require("libs/db_stdlib.php");
 require("libs/db_conecta.php");
 require("libs/db_utils.php");
@@ -39,9 +38,9 @@ include("classes/db_veicabastretirada_classe.php");
 include("classes/db_veicparam_classe.php");
 include("classes/db_veicretirada_classe.php");
 include("classes/db_empveiculos_classe.php");
+include("classes/db_empempenho_classe.php");
 require_once("classes/db_condataconf_classe.php");
-
-require("libs/db_app.utils.php");
+require_once("libs/db_app.utils.php");
 db_app::import("veiculos.*");
 db_postmemory($HTTP_POST_VARS);
 
@@ -53,6 +52,7 @@ $clveicabastretirada     = new cl_veicabastretirada;
 $clveicparam             = new cl_veicparam;
 $clveicretirada          = new cl_veicretirada;
 $clempveiculos           = new cl_empveiculos;
+$clempempenho           = new cl_empempenho;
 
 $clempveiculos->rotulo->label();
 
@@ -75,6 +75,7 @@ if (isset($ve60_datasaida) && $ve60_datasaida != "") {
  *
  */
 if (isset($incluir)) {
+  db_inicio_transacao();
   $medida     = $ve70_medida;
   $oDataAbast = new DBDate($ve70_dtabast);
   $passa = false;
@@ -83,7 +84,7 @@ if (isset($incluir)) {
   $datahoraAbastecimento = strtotime($oDataAbast->getDate() . " " . $ve70_hora);
   $dataabast = $oDataAbast->getDate();
 
-  $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(1, "*", null, ""));
+  $resultParam = $clveicparam->sql_record($clveicparam->sql_query_file(null, "*", null, "ve50_instit = " . db_getsession("DB_instit")));
   $resultParamres = db_utils::fieldsMemory($resultParam, 0);
 
   if ($resultParamres->ve50_abastempenho == 1) {
@@ -115,9 +116,8 @@ if (isset($incluir)) {
       }
 
       if ($ve70_valor > $valorautilizar) {
-        db_msgbox("Usuário: Abastecimento não incluído, valor total do abastecimento ultrapassou o valor disponível no empenho. Saldo disponível R$ $valorautilizar");
         $sqlerro = true;
-        $erro_msg = "Não foi possível incluir.";
+        $erro_msg = "Usuário: Abastecimento não incluído, valor total do abastecimento ultrapassou o valor disponível no empenho. Saldo disponível R$ $valorautilizar";
       }
       if ($sqlerro == false) {
         if ($resultadoEmp->e60_vlrutilizado == "") {
@@ -129,13 +129,15 @@ if (isset($incluir)) {
         $clempempenho->e60_vlrutilizado =  $valor;
         $clempempenho->sql_query_valorutilizado($si05_numemp);
       }
-    } else {
-      db_msgbox("Usuário: Abastecimento não incluído, data de liberação de validação do empenho maior do que data da Emissão do empenho");
-      $sqlerro = true;
-      $erro_msg = "Não foi possível incluir.";
     }
   }
 
+  $rsDataEmpenho = $clempempenho->sql_record($clempempenho->sql_query_file($si05_numemp,"e60_emiss",null,"")); 
+  $dataEmpenho = db_utils::fieldsMemory($rsDataEmpenho, 0)->e60_emiss;
+  if(strtotime($dataEmpenho) > strtotime($dataabast)){
+    $sqlerro = true;
+    $erro_msg = "Usuário: a data do empenho não pode ser maior que a data do abastecimento";
+  }
 
   if (isset($ve70_medida) and $ve70_medida == 0) {
     $medidazero = true;
@@ -144,9 +146,8 @@ if (isset($incluir)) {
   }
 
   if ($retirada == "" || $retirada == null) {
-    db_msgbox("Campo: Retirada não informado");
     $sqlerro = true;
-    $erro_msg = "Não foi possível incluir.";
+    $erro_msg = "Campo: Retirada não informado";
   }
 
   /*
@@ -238,7 +239,6 @@ if (!empty($ve70_dtabast)) {
 
 if (isset($incluir) && $self != "") {
   if ($sqlerro == false) {
-    db_inicio_transacao();
 
     if (isset($sel_proprio) && trim($sel_proprio) != "") {
       if ($sel_proprio == 0 && (isset($ve71_veiccadposto) &&
