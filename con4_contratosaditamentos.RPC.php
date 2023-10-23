@@ -337,6 +337,12 @@ try {
             $oRetorno->aditamento = $service->getDadosAditamento((int)$oParam->ac16Sequencial);
 
             break;
+
+        case 'processarAlteracaoAditivo':
+            $service = new AditamentoService();
+            $service->updateAditamento($oParam->aditamento);
+
+            break;
     }
 
     db_fim_transacao(false);

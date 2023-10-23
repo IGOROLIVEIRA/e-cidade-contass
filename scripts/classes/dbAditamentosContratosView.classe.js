@@ -1390,6 +1390,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oParam.aItens.push(oItemAdicionar);
         });
 
+        if (me.estadoTela.viewAlterar) {
+          me.alterarAdiamento(oParam);
+          return;
+        }
+
         if (!lAditar) {
             return false;
         }
@@ -2578,6 +2583,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.lidaDadosAlteracao = (aditamento) => {
       console.log("chegou aqui");
+
+      $('btnAditar').disabled = false;
+      $('btnItens').disabled = false;
+
+      me.estadoTela.acordoPosicacaoSeq = aditamento.acordoPosicaoSequencial;
+      me.estadoTela.posicaoAditamentoSequencial = aditamento.posicaoAditamentoSequencial;
+
       $('oTxtCodigoAcordo').value = aditamento.acordoSequencial;
 
       if (me.estadoTela.changeTipoAdivito == false)  {
@@ -2611,16 +2623,40 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
           me.oGridItens.aHeaders[13].lDisplayed = true;
           me.oGridItens.show($('ctnGridItens'));
 
-      }else{
+      } else {
           me.oGridItens.aHeaders[12].lDisplayed = false;
           me.oGridItens.aHeaders[13].lDisplayed = false;
           me.oGridItens.show($('ctnGridItens'));
 
       }
 
-
       me.oGridItens.clearAll(true);
 
       document.getElementById("trdatareferencia").style.display = 'none';
     }
+
+    this.alterarAdiamento = (dados) => {
+      const rpc = 'con4_contratosaditamentos.RPC.php';
+      console.log(dados.aItens);
+
+      const oParam = {
+        exec: 'processarAlteracaoAditivo',
+        aditamento: dados
+      }
+
+      new Ajax.Request( rpc, {
+        method: 'post',
+        parameters: 'json=' + Object.toJSON(oParam),
+        onComplete: function (response) {
+
+            const oRetorno = eval("(" + response.responseText + ")");
+
+            if (oRetorno.erro == true) {
+              return alert(oRetorno.message.urlDecode());
+            }
+            console.log("Deu certo");
+        }
+      });
+    }
+
 }

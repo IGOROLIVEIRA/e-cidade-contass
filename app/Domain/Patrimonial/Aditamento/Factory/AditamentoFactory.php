@@ -5,6 +5,7 @@ namespace App\Domain\Patrimonial\Aditamento\Factory;
 use App\Domain\Patrimonial\Aditamento\Aditamento;
 use App\Models\AcordoPosicao;
 use DateTime;
+use stdClass;
 
 class AditamentoFactory
 {
@@ -44,6 +45,36 @@ class AditamentoFactory
 
         $aditamento->setItens($itens);
 
+        return $aditamento;
+    }
+
+    public function createByStdLegacy(stdClass $aditamento)
+    {
+        $aditamento = new Aditamento();
+
+        $aditamento->setAcordoPosicaoSequencial((int) $aditamento->acordoPosicaoSequencial)
+            ->setAcordoSequencial((int) $aditamento->iAcordo)
+            ->setTipoAditivo((int) $aditamento->tipoalteracaoaditivo)
+            ->setNumeroAditamento((int) $aditamento->sNumeroAditamento)
+            ->setDataAssinatura(new DateTime($aditamento->dataassinatura))
+            ->setDataPublicacao(new DateTime($aditamento->datapublicacao))
+            ->setVienciaAlterada($aditamento->sVigenciaalterada)
+            ->setVeiculoDivulgacao($aditamento->veiculodivulgacao)
+            ->setJustificativa($aditamento->justificativa)
+            ->setPosicaoAditamentoSequencial((int)$aditamento->posicaoAditamentoSequencial)
+            ->setVigenciaInicio(new DateTime($aditamento->datainicial))
+            ->setVigenciaFim(new DateTime($aditamento->final));
+
+        if (self::TIPO_REAJUSTE === (int) $aditamento->tipoaditamento) {
+            $aditamento->setIndiceReajuste((float) $aditamento->indicereajuste)
+                ->setPercentualReajuste((float) $aditamento->percentualreajuste)
+                ->setDescricaoIndice($aditamento->descricaoindice);
+        }
+
+        $itemFactory = new ItemFactory();
+        $itens = $itemFactory->createListByStdLegacy($aditamento->aItens);
+
+        $aditamento->setItens($itens);
         return $aditamento;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Services\Contracts\Patrimonial\Aditamento;
 
+use stdClass;
+
 interface AditamentoServiceInterface
 {
     /**
@@ -10,4 +12,6 @@ interface AditamentoServiceInterface
      * @return array
      */
     public function getDadosAditamento(int $ac16Sequencial): array;
+
+    public function updateAditamento(stdClass $aditamentoRaw);
 }

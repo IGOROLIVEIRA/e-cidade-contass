@@ -14,6 +14,26 @@ class AcordoPosicao extends LegacyModel
      */
     protected $primaryKey = 'ac26_sequencial';
 
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        'ac26_sequencial',
+        'ac26_acordo',
+        'ac26_acordoposicaotipo',
+        'ac26_numero',
+        'ac26_situacao',
+        'ac26_data',
+        'ac26_emergencial',
+        'ac26_observacao',
+        'ac26_numeroaditamento',
+        'ac26_numeroapostilamento',
+        'ac26_vigenciaalterada',
+        'ac26_indicereajuste',
+        'ac26_percentualreajuste',
+        'ac26_descricaoindice'
+    ];
+
      /**
      * Indicates if the IDs are auto-incrementing.
      *

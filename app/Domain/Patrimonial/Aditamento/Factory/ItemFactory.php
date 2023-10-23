@@ -38,9 +38,27 @@ class ItemFactory
     {
         $listaItens = [];
 
+
         /** @var AcordoItem $item */
         foreach ($collection as $item) {
             $listaItens[] = $this->createByEloquentModel($item);
+        }
+
+        return $listaItens;
+    }
+
+    public function createListByStdLegacy(array $itensRaw): array
+    {
+        $listaItens = [];
+
+         foreach ($itensRaw as $itemRaw) {
+            $item = new Item();
+            $item->setItemSequencial((int) $itemRaw->codigoitem)
+                ->setQuantidade((float) $itemRaw->ac20_quantidade)
+                ->setValorUnitario((float) $itemRaw->ac20_valorunitario)
+                ->setValorTotal((float) $itemRaw->ac20_valortotal);
+
+            $listaItens[] = $item;
         }
 
         return $listaItens;

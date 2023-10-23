@@ -8,11 +8,11 @@ use DateTime;
 
 class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
 {
-    private AcordoPosicao $acordoPosicao;
+    private AcordoPosicao $model;
 
     public function __construct()
     {
-        $this->acordoPosicao = new AcordoPosicao();
+        $this->model = new AcordoPosicao();
     }
 
      /**
@@ -22,7 +22,7 @@ class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
      */
     public function getAditamentoUltimaPosicao(int $ac26Acordo): AcordoPosicao
     {
-        $acordoPosicao = $this->acordoPosicao
+        $acordoPosicao = $this->model
                 ->with(['itens','posicaoAditamento','acordo'])
                 ->where('ac26_acordo',$ac26Acordo)
                 ->whereNotNull('ac26_numeroaditamento')
@@ -30,5 +30,11 @@ class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
                 ->first();
 
        return $acordoPosicao;
+    }
+
+    public function update($codigo, array $data)
+    {
+        $acordoPosicao = $this->model->find($codigo);
+        $acordoPosicao->update($data);
     }
 }

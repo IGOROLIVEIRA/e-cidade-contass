@@ -14,6 +14,21 @@ class AcordoPosicaoAditamento extends LegacyModel
      */
     protected $primaryKey = 'ac16_sequencial';
 
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        'ac35_sequencial',
+        'ac35_valor',
+        'ac35_acordoposicao',
+        'ac35_dataassinaturatermoaditivo ',
+        'ac35_descricaoalteracao',
+        'ac35_datapublicacao',
+        'ac35_veiculodivulgacao',
+        'ac35_datareferencia',
+        'ac35_justificativa',
+    ];
+
      /**
      * Indicates if the IDs are auto-incrementing.
      *
