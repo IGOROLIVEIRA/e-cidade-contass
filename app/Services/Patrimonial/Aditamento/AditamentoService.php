@@ -5,6 +5,8 @@ namespace App\Services\Patrimonial\Aditamento;
 use App\Domain\Patrimonial\Aditamento\Factory\AditamentoFactory;
 use App\Repositories\Patrimonial\AcordoPosicaoRepository;
 use App\Services\Contracts\Patrimonial\Aditamento\AditamentoServiceInterface;
+use App\Services\Patrimonial\Aditamento\Command\UpdateAditamentoCommand;
+use Exception;
 use stdClass;
 
 class AditamentoService implements AditamentoServiceInterface
@@ -35,11 +37,22 @@ class AditamentoService implements AditamentoServiceInterface
         return $seriealizer->jsonSerialize();
     }
 
-    public function updateAditamento(stdClass $aditamentoRaw)
+    public function updateAditamento(stdClass $aditamentoRaw): array
     {
         $aditamentoFactory = new AditamentoFactory();
         $aditamento = $aditamentoFactory->createByStdLegacy($aditamentoRaw);
 
-        
+        $updateCommand = new UpdateAditamentoCommand();
+        try {
+            $result = $updateCommand->execute($aditamento);
+
+            if ($result === false) {
+                throw new Exception("Não foi possivel atualizar");
+            }
+
+            return ['status' => true];
+        } catch (\Exception $e) {
+            return ['status' => false, 'message' => $e->getMessage()];
+        }
     }
 }

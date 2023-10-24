@@ -3,6 +3,7 @@
 namespace App\Services\Patrimonial\Aditamento\Command;
 
 use App\Domain\Patrimonial\Aditamento\Aditamento;
+use App\Domain\Patrimonial\Aditamento\Item;
 use App\Repositories\Contracts\Patrimonial\AcordoItemRepositoryInterface;
 use App\Repositories\Contracts\Patrimonial\AcordoPosicaoAditamentoRepositoryInterface;
 use App\Repositories\Contracts\Patrimonial\AcordoPosicaoRepositoryInterface;
@@ -14,11 +15,19 @@ use Illuminate\Support\Facades\DB;
 
 class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
 {
-
+    /**
+     * @var AcordoPosicaoRepositoryInterface
+     */
     private AcordoPosicaoRepositoryInterface $acordoPosicaoRepository;
 
+    /**
+     * @var AcordoPosicaoAditamentoRepositoryInterface
+     */
     private AcordoPosicaoAditamentoRepositoryInterface $acordoPosAditRepository;
 
+    /**
+     * @var AcordoItemRepositoryInterface
+     */
     private AcordoItemRepositoryInterface $acordoItemRepository;
 
     public function __construct()
@@ -27,8 +36,12 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
         $this->acordoItemRepository = new AcordoItemRepository();
         $this->acordoPosAditRepository = new AcordoPosicaoAditamentoRepository();
     }
-
-    public function execute(Aditamento $aditamento)
+    /**
+     *
+     * @param Aditamento $aditamento
+     * @return boolean
+     */
+    public function execute(Aditamento $aditamento): bool
     {
         $acordoPosicao = $this->formatAcordoPosicao($aditamento);
         $acordoPosicaoAdimento = $this->formatAcordoPosicaoAditamento($aditamento);
@@ -46,10 +59,24 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
                 $acordoPosicaoAdimento
             );
 
+            $itens = $aditamento->getItens();
+
+            /** @var Item $item */
+            foreach ($itens as $item) {
+                $this->acordoItemRepository->update(
+                    $item->getItemSequencial(),
+                    [
+                        'ac20_quantidade' => $item->getQuantidade(),
+                        'ac20_valorunitario' => $item->getValorUnitario(),
+                        'ac20_valortotal' => $item->getValorTotal()
+                    ]);
+            }
+
             DB::commit();
+            return true;
         } catch (\Exception $e) {
             DB::rollBack();
-
+            throw new \Exception($e->getMessage());
         }
 
     }
@@ -66,6 +93,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
             $acordoPosicao['ac26_indicereajuste'] = $aditamento->getIndiceReajuste();
             $acordoPosicao['ac26_percentualreajuste'] = $aditamento->getPercentualReajuste();
         }
+        return $acordoPosicao;
     }
 
     private function formatAcordoPosicaoAditamento(Aditamento $aditamento): array

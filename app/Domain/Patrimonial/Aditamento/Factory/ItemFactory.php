@@ -16,6 +16,8 @@ class ItemFactory
     public function createByEloquentModel(AcordoItem $itemAcordo): Item
     {
         $item = new Item();
+        var_dump($itemAcordo);
+        die();
         $item->setItemSequencial((int) $itemAcordo->ac20_sequencial)
             ->setCodigoPcMater((int) $itemAcordo->ac20_pcmater)
             ->setQuantidade((float) $itemAcordo->ac20_quantidade)
