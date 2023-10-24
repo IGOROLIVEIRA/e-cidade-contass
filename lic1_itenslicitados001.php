@@ -63,7 +63,7 @@ include("dbforms/db_funcoes.php");
                         $aux->funcao_js = 'js_mostra';
                         $aux->funcao_js_hide = 'js_mostra1';
                         $aux->sql_exec  = "";
-                        $aux->func_arquivo = "func_liclicita.php";
+                        $aux->func_arquivo = "func_relatorioitenslicitados.php";
                         $aux->nomeiframe = "db_iframe_liclicita";
                         $aux->localjan = "";
                         $aux->onclick = "";
@@ -92,7 +92,7 @@ include("dbforms/db_funcoes.php");
                     </td>
                     <td>
                         <?php
-                            $opselect = array("1"=>"Somente Selecionados","2"=>"Menos os Selecionados");
+                            $opselect = array("0"=>"Selecione","1"=>"Somente Selecionados","2"=>"Menos os Selecionados");
                             db_select("opselect",$opselect,true,2);
                         ?>
                     </td>
@@ -103,7 +103,7 @@ include("dbforms/db_funcoes.php");
                     </td>
                     <td>
                         <?php
-                        $orderselect = array("1"=>"Data de Homologação","2"=>"Alfabetica","3"=>"Fornecedor e Código");
+                        $orderselect = array("0"=>"Selecione","1"=>"Data de Homologação","2"=>"Alfabetica","3"=>"Fornecedor e Código");
                         db_select("orderselect",$orderselect,true,2);
                         ?>
                     </td>
@@ -172,8 +172,18 @@ include("dbforms/db_funcoes.php");
             query += '&opselect='+opselect;
         }
 
+        if(opselect === '0'){
+            alert('Campo Opção de Seleção não informado!');
+            return false;
+        }
+
         if(orderselect){
             query += '&orderselect='+orderselect;
+        }
+
+        if(orderselect === '0'){
+            alert('Campo Ordem de Seleção não informado!');
+            return false;
         }
 
         if(impforne === true){
@@ -188,6 +198,13 @@ include("dbforms/db_funcoes.php");
         }
         if(impvlrunit === true){
             query += '&impvlrunit=true';
+        }
+
+        if(impforne === true || impproc === true || impvlrunit === true || impaco === true){
+            if(procselect === ''){
+                alert('É necessário selecionar pelo menos um processo licitatório!');
+                return false;
+            }
         }
 
         jan = window.open('lic1_itenslicitados002.php?'+query, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
