@@ -33,7 +33,7 @@
 //
 // Esse arquivo tem dois grandes SQLs que voc deve se preocupar:
 //  - $sqlrelemp:
-//      Que faz a busca do 'Processar Posio Atual'
+//      Que faz a busca do 'Processar Posição Atual'
 //
 //  - $sqlperiodo:
 //      Que faz a busca do 'Processar Perodos de Lanamento'
@@ -50,7 +50,7 @@
 // A varivel `$sCamposPosicaoAtual` s serve para essa linha:
 //    $sqlrelemp = $clempempenho->sql_query_relatorio(null, $sCamposPosicaoAtual, $sOrderSQL, $sWhereSQL);
 //
-// A varivel `$sOrderSQL` torna possvel os agrupamentos do relatrio,
+// A varivel `$sOrderSQL` torna possvel os agrupamentos do Relatório,
 // determinado pelo `ORDER` da query. Ento na prtica, a query vai
 // ordenar pelo agrupamento determinado, e o `ORDER` fala os campos
 // especficos para isso.
@@ -71,7 +71,7 @@
 // sofreu alterao no mtodo `sql_query_relatorio()`. Agora ele tem
 // `INNER JOIN` com `empempaut` e com `empautoriza`, para chegar no
 // campo `e54_gestaut`. Essa alterao foi feita para atender o
-// 'Processar Posio Atual'; j 'Processar Perodos de Lanamento'
+// 'Processar Posição Atual'; j 'Processar Perodos de Lanamento'
 // teve sua query altera diretamente aqui no arquivo, com os mesmos
 // `INNER`s.
 //
@@ -186,7 +186,7 @@ if ($desdobramentos != "") {
 $resultinst = pg_exec("select munic from db_config where codigo in (" . str_replace('-', ', ', $db_selinstit) . ") ");
 db_fieldsmemory($resultinst, 0);
 
-$head1 = "MUNICPIO DE " . strtoupper($munic);
+$head1 = "MUNICIPIO DE " . strtoupper($munic);
 
 //////////////////////////////////////////////////////////////////
 
@@ -385,17 +385,17 @@ if ($lSepararGestor  && !empty($listagestor)) {
 $sOrderSQL = "z01_nome, e60_emiss";
 
 if ($agrupar == "a") { // fornecedor
-    $sOrderSQL = "z01_nome, e60_emiss";
+    $sOrderSQL = "z01_nome, e60_codemp, e60_emiss";
 } elseif ($agrupar == "orgao") { // orgao
-    $sOrderSQL = "o58_orgao, e60_emiss";
+    $sOrderSQL = "o58_orgao, e60_codemp, e60_emiss";
 } elseif ($agrupar == "r") { // recurso
-    $sOrderSQL = "o15_codigo, e60_emiss";
+    $sOrderSQL = "o15_codigo, e60_codemp, e60_emiss";
 } elseif ($agrupar == "d") {
     // desdobramento
 } elseif ($agrupar == "ta") {
-    $sOrderSQL = "e94_empanuladotipo,e60_emiss";
+    $sOrderSQL = "e94_empanuladotipo, e60_codemp, e60_emiss";
 } elseif ($agrupar == "do") {
-    $sOrderSQL = "e60_coddot, e60_emiss";
+    $sOrderSQL = "e60_coddot, e60_codemp, e60_emiss";
 } else {
 }
 if ($agrupar != "orgao" && $agrupar != "r" && $agrupar != "d") {
@@ -549,7 +549,7 @@ if ($processar == "a") {
                         e38_descr,
                     x.l20_edital,
                     x.l20_anousu";
-            $sqlrelemp = "select * from ($sqlrelemp) as yy order by yy.e60_numemp, yy.o56_descr";
+            $sqlrelemp = "select * from ($sqlrelemp) as yy order by yy.e64_codele, yy.e60_numemp, yy.o56_descr";
         }
     } elseif ($agrupar == "ta") {
         $sqlrelemp = "select 	  x.e60_resumo,
@@ -742,7 +742,7 @@ if ($processar == "a") {
         $sqlrelemp = "select * from ($sqlrelemp) as x " . ($agrupar == "d"
             ? " order by e60_numemp, e64_codele, e60_emiss "
             : $agrupar == "c"
-            ? " order by  x.ac16_sequencial, e60_numemp"
+            ? " order by  x.ac16_sequencial, e60_codemp"
             : " order by $sOrderSQL ");
     }
 
@@ -1035,7 +1035,7 @@ if ($processar == "a") {
 
 //////////////////////////////////////////////////////////////////////
 
-$head3 = "Relatrio de Empenhos";
+$head3 = "Relatório de Empenhos";
 
 if (isset($tipoemp) && $tipoemp != "") {
     if ($tipoemp == "todos") {
@@ -1080,7 +1080,7 @@ if (isset($tipoemp) && $tipoemp != "") {
 $head5 = "$info";
 
 if ($processar == "a") {
-    $head6 = "Posio atual";
+    $head6 = "Posição atual";
 } else {
     $head6 = "Periodo especificado: " . db_formatar($dataesp11, "d") . " a " . db_formatar($dataesp22, "d");
 }
@@ -1216,12 +1216,12 @@ if ($tipo == "a" or 1 == 1) {
                 if ($sememp == "n") {
                     $pdf->Cell(45, $tam, strtoupper($RLo15_codigo), 1, 0, "C", 1);
                     $pdf->Cell(120, $tam, strtoupper($RLo15_descr), 1, 0, "C", 1);
-                    $pdf->Cell(72, $tam, "MOVIMENTAO", 1, 0, "C", 1);
+                    $pdf->Cell(72, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
                 } else {
                     $pdf->Cell(45, $tam, strtoupper($RLo15_codigo), 1, 0, "C", 1);
                     $pdf->Cell(80, $tam, strtoupper($RLo15_descr), 1, 0, "C", 1);
-                    $pdf->Cell(97, $tam, "MOVIMENTAO", 1, 0, "C", 1);
+                    $pdf->Cell(97, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
 
                     $pdf->Cell(125, $tam, '', 1, 0, "C", 1);
@@ -1241,12 +1241,12 @@ if ($tipo == "a" or 1 == 1) {
                 if ($sememp == "n") {
                     $pdf->Cell(45, $tam, strtoupper($RLo56_codele), 1, 0, "C", 1);
                     $pdf->Cell(120, $tam, mb_strtoupper($RLo56_descr), 1, 0, "C", 1);
-                    $pdf->Cell(72, $tam, "MOVIMENTAO", 1, 0, "C", 1);
+                    $pdf->Cell(72, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
                 } else {
                     $pdf->Cell(45, $tam, strtoupper($RLo56_codele), 1, 0, "C", 1);
                     $pdf->Cell(80, $tam, mb_strtoupper($RLo56_descr, $encoding), 1, 0, "C", 1);
-                    $pdf->Cell(97, $tam, "MOVIMENTAO", 1, 0, "C", 1);
+                    $pdf->Cell(97, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
 
                     $pdf->Cell(125, $tam, '', 1, 0, "C", 1);
@@ -1265,12 +1265,12 @@ if ($tipo == "a" or 1 == 1) {
                 if ($sememp == "n") {
                     $pdf->Cell(45, $tam, strtoupper($RLo15_codigo), 1, 0, "C", 1);
                     $pdf->Cell(120, $tam, strtoupper($RLo15_descr), 1, 0, "C", 1);
-                    $pdf->Cell(72, $tam, "MOVIMENTAO", 1, 0, "C", 1);
+                    $pdf->Cell(72, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
                 } else {
                     $pdf->Cell(45, $tam, strtoupper($RLo15_codigo), 1, 0, "C", 1);
                     $pdf->Cell(80, $tam, strtoupper($RLo15_descr), 1, 0, "C", 1);
-                    $pdf->Cell(97, $tam, "MOVIMENTAO", 1, 0, "C", 1);
+                    $pdf->Cell(97, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
 
                     $pdf->Cell(125, $tam, '', 1, 0, "C", 1);
@@ -1289,12 +1289,12 @@ if ($tipo == "a" or 1 == 1) {
                 if ($sememp == "n") {
                     $pdf->Cell(45, $tam, strtoupper($RLo58_codigo), 1, 0, "C", 1);
                     $pdf->Cell(120, $tam, strtoupper($RLo40_descr), 1, 0, "C", 1);
-                    $pdf->Cell(72, $tam, "MOVIMENTAO", 1, 0, "C", 1);
+                    $pdf->Cell(72, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
                 } else {
                     $pdf->Cell(45, $tam, strtoupper($RLo58_codigo), 1, 0, "C", 1);
                     $pdf->Cell(80, $tam, strtoupper($RLo40_descr), 1, 0, "C", 1);
-                    $pdf->Cell(97, $tam, "MOVIMENTAO", 1, 0, "C", 1);
+                    $pdf->Cell(97, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
 
                     $pdf->Cell(125, $tam, '', 1, 0, "C", 1);
@@ -1312,13 +1312,13 @@ if ($tipo == "a" or 1 == 1) {
             if ($agrupar == "do") {
                 if ($sememp == "n") {
                     $pdf->Cell(45, $tam, 'REDUZIDO', 1, 0, "C", 1);
-                    $pdf->Cell(120, $tam, 'DOTAÇÃO ORAMENTRIA', 1, 0, "C", 1);
-                    $pdf->Cell(72, $tam, "MOVIMENTAO", 1, 0, "C", 1);
+                    $pdf->Cell(120, $tam, 'DOTAÇÃO ORÇAMENTÁRIA', 1, 0, "C", 1);
+                    $pdf->Cell(72, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
                 } else {
                     $pdf->Cell(45, $tam, 'REDUZIDO', 1, 0, "C", 1);
-                    $pdf->Cell(80, $tam, 'DOTAÇÃO ORAMENTRIA', 1, 0, "C", 1);
-                    $pdf->Cell(97, $tam, "MOVIMENTAO", 1, 0, "C", 1);
+                    $pdf->Cell(80, $tam, 'DOTAÇÃO ORÇAMENTÁRIA', 1, 0, "C", 1);
+                    $pdf->Cell(97, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
 
                     $pdf->Cell(125, $tam, '', 1, 0, "C", 1);
@@ -1336,7 +1336,7 @@ if ($tipo == "a" or 1 == 1) {
             if ($tipo == "a" and $sememp == "n") {
                 if ($agrupar == "oo" || $agrupar == 'gest') {
                     $pdf->Cell(165, $tam, '', 1, 0, "C", 1);
-                    $pdf->Cell(72, $tam, "MOVIMENTAO", 1, 0, "C", 1);
+                    $pdf->Cell(72, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                     $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
                 }
                 $pdf->Cell(20, $tam, "TP COMPRA", 1, 0, "C", 1);
@@ -1428,7 +1428,7 @@ if ($tipo == "a" or 1 == 1) {
                 }
             } else if ($tipo == "a" and $sememp == "s" and ($agrupar == "oo" || $agrupar == 'gest')) {
                 $pdf->Cell(150, $tam, '', 1, 0, "C", 1);
-                $pdf->Cell(72, $tam, "MOVIMENTAO", 1, 0, "C", 1);
+                $pdf->Cell(72, $tam, "MOVIMENTAÇÃO", 1, 0, "C", 1);
                 $pdf->Cell(54, $tam, "SALDO A PAGAR", 1, 1, "C", 1);
                 $pdf->Cell(150, $tam, "", 1, 0, "C", 1);
                 $pdf->Cell(18, $tam, strtoupper($RLe60_vlremp), 1, 0, "C", 1);
@@ -1792,7 +1792,7 @@ if ($tipo == "a" or 1 == 1) {
             $pdf->SetFont('Arial', '', 7);
         }
 
-        /* ----------- AGRUPAR POR DOTAÇÃO ORAMENTRIA ----------- */
+        /* ----------- AGRUPAR POR DOTAÇÃO ORÇAMENTÁRIA ----------- */
         if ($repete_r != $e60_coddot and $agrupar == "do") {
             if ($quantimp > 0 or ($sememp == "s" and $quantimp > 0)) {
                 if (($quantimp > 0 and $sememp == "n") or ($quantimp > 0 and $sememp == "s")) {
@@ -2192,7 +2192,7 @@ if ($tipo == "a" or 1 == 1) {
                 if ($processar == "e") {
                     $preenche = 0;
                     $pdf->Cell($tamanho, $tam, '', "B", 0, "R", $preenche);
-                    $pdf->Cell(60, $tam, "Movimentao do Empenho no Perodo", "B", 0, "R", $preenche);
+                    $pdf->Cell(60, $tam, "MOVIMENTAÇÃO do Empenho no Perodo", "B", 0, "R", $preenche);
                     $pdf->Cell(18, $tam, db_formatar($totemp, 'f'), "B", 0, "R", $preenche);
                     $pdf->Cell(18, $tam, db_formatar($totanuemp, 'f'), "B", 0, "R", $preenche);
                     $pdf->Cell(18, $tam, db_formatar($totliq - $totanuliq, 'f'), "B", 0, "R", $preenche);
@@ -2348,7 +2348,7 @@ if ($tipo == "a" or 1 == 1) {
                 }
 
                 $pdf->Ln();
-                $pdf->Cell(165, $tam, "MOVIMENTAO CONTABIL NO PERIODO", "T", 0, "L", 1);
+                $pdf->Cell(165, $tam, "MOVIMENTAÇÃO CONTABIL NO PERIODO", "T", 0, "L", 1);
                 $pdf->Cell(18, $tam, db_formatar($lanctotemp, 'f'), "T", 0, "R", 1); //totais globais
                 $pdf->Cell(18, $tam, db_formatar($lanctotanuemp, 'f'), "T", 0, "R", 1);
                 $pdf->Cell(18, $tam, db_formatar($lanctotliq - $lanctotanuliq, 'f'), "T", 0, "R", 1);
@@ -2516,7 +2516,7 @@ if ($tipo == "a" or 1 == 1) {
 
                 $pdf->Ln();
                 $iTam = $sememp == "n" ? 165 : 150;
-                $pdf->Cell($iTam, $tam, "MOVIMENTAO CONTABIL NO PERIODO", "T", 0, "L", 1);
+                $pdf->Cell($iTam, $tam, "MOVIMENTAÇÃO CONTABIL NO PERIODO", "T", 0, "L", 1);
                 $pdf->Cell(18, $tam, db_formatar($lanctotemp, 'f'), "T", 0, "R", 1); //totais globais
                 $pdf->Cell(18, $tam, db_formatar($lanctotanuemp, 'f'), "T", 0, "R", 1);
                 $pdf->Cell(18, $tam, db_formatar($lanctotliq - $lanctotanuliq, 'f'), "T", 0, "R", 1);
