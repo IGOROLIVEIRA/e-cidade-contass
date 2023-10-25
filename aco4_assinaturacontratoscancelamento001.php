@@ -25,6 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
@@ -249,6 +250,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
   $('ac16_sequencial').style.width = "100%";
   $('ac16_resumoobjeto').style.width = "100%";
   $('ac10_datamovimento').style.width = "100%";
+  let ac10Acordomovimentacaotipo = null;
 
   var sUrl = 'con4_contratosmovimento.RPC.php';
 
@@ -258,10 +260,9 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
   function js_pesquisarAssinatura() {
 
     $('cancelar').disabled = true;
-    var sUrl = 'func_acordomovimentacao.php?movimento=1&tipo=2&ativos=true&assinados=true';
-    sUrl += '&funcao_js=parent.js_mostrarPesquisaAssinatura|ac10_sequencial';
+    var sUrl = 'func_acordocancelaassinatura.php?homologados=true&funcao_js=parent.js_mostrarPesquisaAssinatura|ac10_sequencial|ac10_acordomovimentacaotipo';
 
-    js_OpenJanelaIframe('top.corpo',
+    js_OpenJanelaIframe('CurrentWindow.corpo',
       'db_iframe_assinatura',
       sUrl,
       'Pesquisar Assinatura',
@@ -271,10 +272,11 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
   /**
    * Retorno da pesquisa assinaturas
    */
-  function js_mostrarPesquisaAssinatura(chave) {
+  function js_mostrarPesquisaAssinatura(ac10_sequencial,ac10_acordomovimentacaotipo) {
+    ac10Acordomovimentacaotipo = ac10_acordomovimentacaotipo;
 
     $('cancelar').disabled = false;
-    js_getDadosAssinatura(chave);
+    js_getDadosAssinatura(ac10_sequencial);
     db_iframe_assinatura.hide();
   }
 
@@ -314,6 +316,7 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
       $('ac10_obs').value = "";
       return false;
     } else {
+
       $('ac16_datareferencia').value = js_formatar(oRetorno.datareferencia, 'd');
       $('ac10_sequencial').value = oRetorno.codigo;
       $('ac16_sequencial').value = oRetorno.acordo;
@@ -377,6 +380,10 @@ $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     var oParam = new Object();
     oParam.exec = "cancelarAssinatura";
     oParam.codigo = $F('ac10_sequencial');
+    oParam.acordoMovimentacaoTipo = ac10Acordomovimentacaotipo;
+
+    oParam.ac16Sequencial = $F('ac16_sequencial');
+
     oParam.observacao = encodeURIComponent(tagString($F('ac10_obs')));
 
 
