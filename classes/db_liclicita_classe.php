@@ -4286,7 +4286,9 @@ class cl_liclicita
                               (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date))) > 0 THEN
                               (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date)))
                      ELSE 1
-                 END AS numeroParcelas
+                 END AS numeroParcelas,
+                    l213_anousu as anoCompra,
+                    e213_sequencialpncp
                 FROM empautitem
                 LEFT JOIN empautitempcprocitem ON empautitempcprocitem.e73_sequen = empautitem.e55_sequen
                 AND empautitempcprocitem.e73_autori = empautitem.e55_autori
@@ -4337,7 +4339,9 @@ class cl_liclicita
                               (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date))) > 0 THEN
                               (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date)))
                      ELSE 1
-                 END AS numeroParcelas
+                 END AS numeroParcelas,
+                        l213_anousu as anoCompra,
+                        e213_sequencialpncp
                 FROM empautitem
                 LEFT JOIN empautitempcprocitem ON empautitempcprocitem.e73_sequen = empautitem.e55_sequen
                 AND empautitempcprocitem.e73_autori = empautitem.e55_autori
@@ -4386,7 +4390,9 @@ class cl_liclicita
                               (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date))) > 0 THEN
                               (SELECT (DATE_PART('year', '$ano-12-31'::date) - DATE_PART('year', e60_emiss::date)) * 12 + (DATE_PART('month', '$ano-12-31'::date) - DATE_PART('month', e60_emiss::date)))
                      ELSE 1
-                 END AS numeroParcelas
+                 END AS numeroParcelas,
+                    l213_anousu as anoCompra,
+                    e213_sequencialpncp
                 FROM empautitem
                 INNER JOIN empautoriza ON empautoriza.e54_autori = empautitem.e55_autori
                 INNER JOIN liclicita ON liclicita.l20_codigo = empautoriza.e54_codlicitacao
