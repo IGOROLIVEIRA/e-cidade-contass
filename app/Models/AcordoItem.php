@@ -61,4 +61,9 @@ class AcordoItem extends LegacyModel
     {
         return $this->belongsTo(PcMater::class, 'ac20_pcmater', 'pc01_codmater');
     }
+
+    public function itemPeriodo()
+    {
+        return $this->hasOne(AcordoItemPeriodo::class,'ac41_acordoitem', 'ac20_sequencial');
+    }
 }

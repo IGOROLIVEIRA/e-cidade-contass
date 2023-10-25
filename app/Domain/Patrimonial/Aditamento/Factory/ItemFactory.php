@@ -4,6 +4,7 @@ namespace App\Domain\Patrimonial\Aditamento\Factory;
 
 use App\Domain\Patrimonial\Aditamento\Item;
 use App\Models\AcordoItem;
+use DateTime;
 use Illuminate\Database\Eloquent\Collection;
 
 class ItemFactory
@@ -16,8 +17,7 @@ class ItemFactory
     public function createByEloquentModel(AcordoItem $itemAcordo): Item
     {
         $item = new Item();
-        var_dump($itemAcordo);
-        die();
+
         $item->setItemSequencial((int) $itemAcordo->ac20_sequencial)
             ->setCodigoPcMater((int) $itemAcordo->ac20_pcmater)
             ->setQuantidade((float) $itemAcordo->ac20_quantidade)
@@ -56,9 +56,15 @@ class ItemFactory
          foreach ($itensRaw as $itemRaw) {
             $item = new Item();
             $item->setItemSequencial((int) $itemRaw->codigoitem)
-                ->setQuantidade((float) $itemRaw->ac20_quantidade)
-                ->setValorUnitario((float) $itemRaw->ac20_valorunitario)
-                ->setValorTotal((float) $itemRaw->ac20_valortotal);
+                ->setQuantidade((float) $itemRaw->quantidade)
+                ->setValorUnitario((float) $itemRaw->valorunitario)
+                ->setValorTotal((float) $itemRaw->valortotal);
+
+            $dataInicio = $itemRaw->dtexecucaoinicio ? new DateTime($itemRaw->dtexecucaoinicio) : null;
+            $dataFim = $itemRaw->dtexecucaofim ? new DateTime($itemRaw->dtexecucaoinicio) : null;
+
+            $item->setInicioExecucao($dataInicio)
+                 ->setFimExecucao($dataFim);
 
             $listaItens[] = $item;
         }

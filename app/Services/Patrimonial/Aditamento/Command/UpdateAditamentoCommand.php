@@ -4,13 +4,16 @@ namespace App\Services\Patrimonial\Aditamento\Command;
 
 use App\Domain\Patrimonial\Aditamento\Aditamento;
 use App\Domain\Patrimonial\Aditamento\Item;
+use App\Repositories\Contracts\Patrimonial\AcordoItemPeriodoRepositoryInterface;
 use App\Repositories\Contracts\Patrimonial\AcordoItemRepositoryInterface;
 use App\Repositories\Contracts\Patrimonial\AcordoPosicaoAditamentoRepositoryInterface;
 use App\Repositories\Contracts\Patrimonial\AcordoPosicaoRepositoryInterface;
+use App\Repositories\Patrimonial\AcordoItemPeriodoRepository;
 use App\Repositories\Patrimonial\AcordoItemRepository;
 use App\Repositories\Patrimonial\AcordoPosicaoAditamentoRepository;
 use App\Repositories\Patrimonial\AcordoPosicaoRepository;
 use App\Services\Contracts\Patrimonial\Aditamento\UpdateAditamentoInterfaceCommand;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
@@ -30,11 +33,14 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
      */
     private AcordoItemRepositoryInterface $acordoItemRepository;
 
+    private AcordoItemPeriodoRepositoryInterface $acordItemPeriodRepository;
+
     public function __construct()
     {
         $this->acordoPosicaoRepository = new AcordoPosicaoRepository();
         $this->acordoItemRepository = new AcordoItemRepository();
         $this->acordoPosAditRepository = new AcordoPosicaoAditamentoRepository();
+        $this->acordItemPeriodRepository = new AcordoItemPeriodoRepository();
     }
     /**
      *
@@ -49,38 +55,67 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
         try {
             DB::beginTransaction();
 
-            $this->acordoPosicaoRepository->update(
+            $resultAcordoPosicao = $this->acordoPosicaoRepository->update(
                 $aditamento->getAcordoPosicaoSequencial(),
                 $acordoPosicao
             );
 
-            $this->acordoPosAditRepository->update(
+            if (!$resultAcordoPosicao) {
+                throw new Exception("Não foi possível atualizar aditamento. Erro em acordoposicao!");
+            }
+
+
+            $resultacordoPosAdit = $this->acordoPosAditRepository->update(
                 $aditamento->getPosicaoAditamentoSequencial(),
                 $acordoPosicaoAdimento
             );
+
+            if (!$resultacordoPosAdit) {
+                throw new Exception("Não foi possível atualizar aditamento. Erro em acordoposicaoaditamento!");
+            }
 
             $itens = $aditamento->getItens();
 
             /** @var Item $item */
             foreach ($itens as $item) {
-                $this->acordoItemRepository->update(
-                    $item->getItemSequencial(),
+                $codigoItem = $item->getItemSequencial();
+                $resultItem = $this->acordoItemRepository->update(
+                    $codigoItem,
                     [
                         'ac20_quantidade' => $item->getQuantidade(),
                         'ac20_valorunitario' => $item->getValorUnitario(),
                         'ac20_valortotal' => $item->getValorTotal()
                     ]);
+
+                    if (!$resultItem) {
+                        throw new Exception("Não foi possível atualizar aditamento. Erro em acordoitem, no item: ".  $codigoItem);
+                    }
+
+                    if($aditamento->isAlteracaoPrazo()) {
+                        $this->acordItemPeriodRepository->update(
+                            $codigoItem,
+                            [
+                                'ac41_datainicial' => $item->getInicioExecucao()->format('Y-m-d'),
+                                'ac41_datafinal'   => $item->getFimExecucao()->format('Y-m-d'),
+                                'ac41_acordoposicao' => $aditamento->getAcordoPosicaoSequencial()
+                            ]);
+                    }
             }
 
             DB::commit();
             return true;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
-            throw new \Exception($e->getMessage());
+            throw new Exception($e->getMessage());
         }
 
     }
 
+    /**
+     *
+     * @param Aditamento $aditamento
+     * @return array
+     */
     private function formatAcordoPosicao(Aditamento $aditamento): array
     {
         $acordoPosicao = [
@@ -96,6 +131,11 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
         return $acordoPosicao;
     }
 
+    /**
+     *
+     * @param Aditamento $aditamento
+     * @return array
+     */
     private function formatAcordoPosicaoAditamento(Aditamento $aditamento): array
     {
         return [

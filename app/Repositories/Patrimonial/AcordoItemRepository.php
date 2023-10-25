@@ -7,6 +7,10 @@ use App\Repositories\Contracts\Patrimonial\AcordoItemRepositoryInterface;
 
 class AcordoItemRepository implements AcordoItemRepositoryInterface
 {
+    /**
+     *
+     * @var AcordoItem
+     */
     private AcordoItem $model;
 
     public function __construct()
@@ -14,9 +18,9 @@ class AcordoItemRepository implements AcordoItemRepositoryInterface
         $this->model = new AcordoItem();
     }
 
-    public function update(int $codigo, array $data)
+    public function update(int $codigo, array $data): bool
     {
         $acordoItem = $this->model->find($codigo);
-        $acordoItem->update($data);
+        return $acordoItem->update($data);
     }
 }

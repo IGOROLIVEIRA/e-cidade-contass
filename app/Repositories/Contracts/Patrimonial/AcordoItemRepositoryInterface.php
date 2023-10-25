@@ -5,5 +5,11 @@ namespace App\Repositories\Contracts\Patrimonial;
 
 interface AcordoItemRepositoryInterface
 {
-    public function update(int $codigo, array $data);
+    /**
+     *
+     * @param integer $codigo
+     * @param array $data
+     * @return void
+     */
+    public function update(int $codigo, array $data): bool;
 }

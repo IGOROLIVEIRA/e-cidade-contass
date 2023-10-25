@@ -2,6 +2,8 @@
 
 namespace App\Domain\Patrimonial\Aditamento;
 
+use DateTime;
+
 class Item
 {
     /**
@@ -49,8 +51,19 @@ class Item
     /**
      * @var integer
      */
-    private int $acordoPosicaoTipo;
+    private ?int $acordoPosicaoTipo;
 
+    /**
+     *
+     * @var DateTime|null
+     */
+    private ?DateTime $inicioExecucao;
+
+    /**
+     *
+     * @var DateTime|null
+     */
+    private ?DateTime $fimExecucao;
 
     /**
      * Get the value of itemSequencial
@@ -181,9 +194,9 @@ class Item
     /**
      * Undocumented function
      *
-     * @return integer
+     * @return integer|null
      */
-    public function getAcordoPosicaoTipo(): int
+    public function getAcordoPosicaoTipo(): ?int
     {
         return $this->acordoPosicaoTipo;
     }
@@ -191,10 +204,10 @@ class Item
     /**
      * Undocumented function
      *
-     * @param integer $acordoPosicaoTipo
+     * @param integer|null $acordoPosicaoTipo
      * @return self
      */
-    public function setAcordoPosicaoTipo(int $acordoPosicaoTipo): self
+    public function setAcordoPosicaoTipo(?int $acordoPosicaoTipo): self
     {
         $this->acordoPosicaoTipo = $acordoPosicaoTipo;
 
@@ -220,6 +233,42 @@ class Item
     public function setDescricaoItem(string $descricaoItem): self
     {
         $this->descricaoItem = $descricaoItem;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of inicioExecucao
+     */
+    public function getInicioExecucao(): ?DateTime
+    {
+        return $this->inicioExecucao;
+    }
+
+    /**
+     * Set the value of inicioExecucao
+     */
+    public function setInicioExecucao(?DateTime $inicioExecucao): self
+    {
+        $this->inicioExecucao = $inicioExecucao;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of fimExecucao
+     */
+    public function getFimExecucao(): ?DateTime
+    {
+        return $this->fimExecucao;
+    }
+
+    /**
+     * Set the value of fimExecucao
+     */
+    public function setFimExecucao(?DateTime $fimExecucao): self
+    {
+        $this->fimExecucao = $fimExecucao;
 
         return $this;
     }

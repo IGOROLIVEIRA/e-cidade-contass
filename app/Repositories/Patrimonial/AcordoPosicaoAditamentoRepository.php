@@ -14,9 +14,9 @@ class AcordoPosicaoAditamentoRepository implements AcordoPosicaoAditamentoReposi
         $this->model = new AcordoPosicaoAditamento();
     }
 
-    public function update(int $codigo, array $data)
+    public function update(int $codigo, array $data): bool
     {
         $acordoItem = $this->model->find($codigo);
-        $acordoItem->update($data);
+        return $acordoItem->update($data);
     }
 }

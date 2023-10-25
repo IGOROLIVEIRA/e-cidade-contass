@@ -2637,26 +2637,27 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.alterarAdiamento = (dados) => {
       const rpc = 'con4_contratosaditamentos.RPC.php';
-      console.log(dados.aItens);
+      console.log(dados);
 
       const oParam = {
         exec: 'processarAlteracaoAditivo',
         aditamento: dados
       }
 
-      new Ajax.Request( rpc, {
-        method: 'post',
-        parameters: 'json=' + Object.toJSON(oParam),
-        onComplete: function (response) {
 
-            const oRetorno = eval("(" + response.responseText + ")");
+      // new Ajax.Request( rpc, {
+      //   method: 'post',
+      //   parameters: 'json=' + Object.toJSON(oParam),
+      //   onComplete: function (response) {
 
-            if (oRetorno.erro == true) {
-              return alert(oRetorno.message.urlDecode());
-            }
-            console.log("Deu certo");
-        }
-      });
+      //       const oRetorno = eval("(" + response.responseText + ")");
+
+      //       if (oRetorno.erro == true) {
+      //         return alert(oRetorno.message.urlDecode());
+      //       }
+      //       console.log("Deu certo");
+      //   }
+      // });
     }
 
 }
