@@ -89,7 +89,7 @@ class CalculoAtuarialRTM2Ativos extends CalculoAtuarialRTMBase {
 	    to_char(rh01_admiss, 'DD/MM/YYYY') as DT_ING_CARGO,
 	    CASE WHEN rh37_funcaogrupo = 2 THEN 2 ELSE 7 END AS CO_TIPO_CARGO,
 	    rh37_descr AS NO_CARGO,
-	    rh02_salari AS VL_BASE_CALCULO,
+	    trim(translate(round(COALESCE(sal.salariobase,0),2)::varchar,'.',',')) AS VL_BASE_CALCULO,
 	    trim(translate(round(COALESCE(sal.total,0),2)::varchar,'.',',')) AS VL_REMUNERACAO,
 	    trim(translate(round(COALESCE(sal.vlrcontribuicao,0),2)::varchar,'.',',')) AS VL_CONTRIBUICAO,
 	    ' ' AS OCUP_VLR_REAJUSTE,
@@ -151,7 +151,7 @@ class CalculoAtuarialRTM2Ativos extends CalculoAtuarialRTMBase {
 	    {$where}";
 
 	    $rsResult = db_query($sSql);
-	    // db_criatabela($rsResult);echo pg_last_error();die($sSql);
+	     //db_criatabela($rsResult);echo pg_last_error();die($sSql);
 	    $iNum = pg_numrows($rsResult);
 
 	    $this->abreArquivo();
