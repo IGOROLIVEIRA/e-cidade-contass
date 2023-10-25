@@ -6,6 +6,9 @@ $xcol = 12;
 // Condição para multiplas SLIPS OC14441
 for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
 
+    $this->objpdf->settopmargin(1);
+    $xlin = 20;
+
     if ($iDados > 0) {
         $this->objpdf->addPage();
         $this->objpdf->AliasNbPages();
@@ -29,12 +32,12 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
 
     if (USE_PCASP) {
         $this->objpdf->Setfont('Arial', '', 9);
-        //$this->objpdf->text(115, $xlin -2, substr("Evento: " . $this->sEvento, 0, 55), 's', '0', 6, 'e');
+        $this->objpdf->text(115, $xlin -2, substr("Evento: " . $this->sEvento, 0, 55), 's', '0', 6, 'e');
 
-        $y   = $this->objpdf->getY();
-        $this->objpdf->setY($y + 5);
-        $this->objpdf->cell(190,  4, substr("Evento: " . $this->sEvento, 0, 55),      "",  1, "R", 0);
-        $this->objpdf->setY($y);
+        // $y   = $this->objpdf->getY();
+        // $this->objpdf->setY($y + 5);
+        // $this->objpdf->cell(190,  4, substr("Evento: " . $this->sEvento, 0, 55),      "",  1, "R", 0);
+        // $this->objpdf->setY($y);
     }
 
     /// retângulo dos dados da transferência

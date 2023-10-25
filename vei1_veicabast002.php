@@ -41,6 +41,7 @@ include("classes/db_veictipoabast_classe.php");
 include("classes/db_veicretirada_classe.php");
 include("classes/db_empveiculos_classe.php");
 include("classes/db_condataconf_classe.php");
+require_once("classes/db_empempenho_classe.php");
 require("libs/db_app.utils.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
@@ -54,6 +55,7 @@ $clveicparam             = new cl_veicparam;
 $clveictipoabast         = new cl_veictipoabast;
 $clveicretirada          = new cl_veicretirada;
 $clempveiculos           = new cl_empveiculos;
+$clempempenho           = new cl_empempenho;
 
 $clempveiculos->rotulo->label();
 
@@ -226,10 +228,12 @@ if ($sqlerro==false){
   }
   $clveicabast->ve70_hora = $ve70_hora;
   $clveicabast->alterar($ve70_codigo);
-  $erro_msg=$clveicabast->erro_msg;
+  $erro_msg=$clveicabast->erro_msg . "1";
   if ($clveicabast->erro_status=="0"){
   	$sqlerro=true;
   }
+  $sqlerro = $clveicabast->alteracaoSaldo($ve70_valor,$si05_numemp,$ve70_valorantigo);
+  $erro_msg = $clveicabast->erro_msg;
 
   if ($sqlerro==false){
   	$clveicabastposto->ve71_veicabast=$ve70_codigo;
@@ -280,7 +284,7 @@ if ($sqlerro==false){
   		           $erro_msg=$clveicabastpostoempnota->erro_msg;
   	          }
         }
-}
+    }
     } else{
   	  $clveicabastposto->alterar(null,"ve71_veicabast=$ve70_codigo");
     }
@@ -319,9 +323,11 @@ if ($sqlerro==false){
       }
   	}
   }
+  if($sqlerro==false){
+    $clempveiculos->alterar(null,$ve70_codigo);
+    $erro_msg=$clempveiculos->erro_msg;
+  }
 
-  $clempveiculos->alterar(null,$ve70_codigo);
-  $erro_msg=$clempveiculos->erro_msg;
   if ($clempveiculos->erro_status=="0"){
   	$sqlerro=true;
   }
@@ -334,7 +340,7 @@ if ($sqlerro==false){
  if(isset($chavepesquisa)){
    $db_botao = true;
    $db_opcao = 2;
-   $result = $clveicabast->sql_record($clveicabast->sql_query($chavepesquisa));
+   $result = $clveicabast->sql_record($clveicabast->sql_query_file($chavepesquisa,"ve70_valor as ve70_valorantigo,*"));
    if ($clveicabast->numrows>0){
    db_fieldsmemory($result,0);
   }
@@ -412,6 +418,10 @@ if ($sqlerro==false){
    if ($clempveiculos->numrows>0){
    db_fieldsmemory($result_comb,0);
    }
+
+   $rsEmpempenho = $clempempenho->sql_record($clempempenho->sql_query_file($si05_numemp,"e60_vlremp-e60_vlrutilizado as saldoDisponivel,e60_codemp||'/'||e60_anousu as e60_codemp",null));
+   db_fieldsmemory($rsEmpempenho,0);
+   $saldodisponivel += $ve70_valor;
 
   }
 

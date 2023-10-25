@@ -110,8 +110,6 @@ if (isset($_POST["processar"])) {
         $highestRow = $highestRow;
         $visibilidadeEmpenhos = "";
 
-        $aDatas = $objWorksheet->rangetoArray('B7:'.'B' . $highestRow, null, true, true, false);
-
         $i = 0;
         for ($row = 7; $row <= $highestRow; $row++) {
 
@@ -125,7 +123,7 @@ if (isset($_POST["processar"])) {
                 break;
             }
         		
-            $data = DateTime::createFromFormat("m/d/Y" , $aDatas[$i][0]);
+            $data = DateTime::createFromFormat("d/m/Y" , $data);
             $data = $data->format('Y-m-d');
 
             $cell = $objWorksheet->getCellByColumnAndRow(2, $row);
@@ -462,7 +460,7 @@ if (isset($_POST["processar"])) {
             echo "</td>";
 
             echo "<td style='text-align:center; width:100px;'>";
-            echo "<input type='text' style='text-align:center;' id='empenho$i' name='empenho$i' placeholder='num/ano' onkeypress='return onlynumber();'>";
+            echo "<input type='text' style='text-align:center;' id='empenho$i' name='empenho$i' placeholder='num/ano' onchange='return verificacaoEmpenho(this.value);' onkeypress='return onlynumber();'>";
             echo "</td>";
             echo "</tr>";
             $i++;
@@ -773,7 +771,18 @@ if (isset($_POST["processar"])) {
 
     }
 
+    function verificacaoEmpenho(empenho){
+        empenho = empenho.split("/");
+        anoempenho = empenho[1];
+        
+        if(anoempenho == "" || anoempenho == undefined){
+            document.getElementById(event.target.id).value = '';
+            return alert('Usuário: informar o número do empenho com exercício');
+        }
+    }
+
     function js_pesquisae60_codemp(mostra, controlador) {
+       
         if (mostra == true) {
             var ve70_abast = "";
             var e60_codemp = "";
@@ -791,6 +800,8 @@ if (isset($_POST["processar"])) {
             }
 
         } else {
+            let empenho = document.getElementById('e60_codemp').value;
+            verificacaoEmpenho(empenho);
             var datainicial = "<?php print $dataI; ?>";
             var datafinal = "<?php print $dataF; ?>";
             var dataAbastecimento = "<?php print $dataAbastecimento; ?>";
@@ -836,10 +847,12 @@ if (isset($_POST["processar"])) {
     function js_verificarEmpenho() {
         var nControle = 0;
         var itens = getItensMarcados();
+        let aEmpenhos = [];
 
         for (i = 0; i < itens.length; i++) {
             var id_registro = itens[i].value;
             var numempenho = document.getElementById('empenho' + id_registro).value;
+            aEmpenhos[i] = numempenho;
             if (!numempenho) {
                 nControle = 1;
                 alert("Preencher número de empenho");
@@ -847,8 +860,33 @@ if (isset($_POST["processar"])) {
             }
         }
 
+        let oParametros = new Object();
+        let oRetorno;
+        oParametros.exec = "validacaoAbastecimentoPorEmpenho";
+        oParametros.itensEmpenho = aEmpenhos;
+        let oAjax = new Ajax.Request('vei1_xlsabastecimento.RPC.php', {
+            method: 'post',
+            parameters: 'json=' + Object.toJSON(oParametros),
+            asynchronous: false,
+            onComplete: function(oAjax) {
+                oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
+            }
+        });
+
+        let aEmpenhosInvalidos = [...new Set(oRetorno.aEmpenhosInvalidos)];
+        console.log(aEmpenhosInvalidos);
+        let sEmpenhosInvalidos = JSON.stringify(aEmpenhosInvalidos);
+        var permissaoParaControlarSaldo = true;
+
+        if(aEmpenhosInvalidos.length > 0){
+            if (!confirm(`Usuário: A data de emissão do(s) empenho(os) ${sEmpenhosInvalidos} é anterior à data de ativação do parametro controle de saldo do empenho, portanto, o saldo não será controlado.`)) {
+                return false;
+            }
+            permissaoParaControlarSaldo = false;
+        }
+
         if (nControle == 0) {
-            js_importxlsfornecedor();
+            js_importxlsfornecedor(permissaoParaControlarSaldo,aEmpenhosInvalidos);
         }
     }
 
@@ -861,7 +899,7 @@ if (isset($_POST["processar"])) {
     /***
      * ROTINA PARA CARREGAR VALORES DA PLANILHA ANEXADA
      */
-    function js_importxlsfornecedor() {
+    function js_importxlsfornecedor(permissaoParaControlarSaldo,aEmpenhosInvalidos) {
 
         var oParam = new Object();
         var empenho = [];
@@ -878,6 +916,8 @@ if (isset($_POST["processar"])) {
             empenho[i] = $F('empenho' + nInput);
         }
         oParam.itensEmpenho = empenho;
+        oParam.permissaoParaControlarSaldo = permissaoParaControlarSaldo;
+        oParam.aEmpenhosInvalidos = aEmpenhosInvalidos;
 
         js_divCarregando('Aguarde... Carregando Arquivo', 'msgbox');
 
