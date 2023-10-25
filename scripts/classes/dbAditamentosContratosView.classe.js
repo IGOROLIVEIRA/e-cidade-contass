@@ -2393,7 +2393,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.desativaInput = (aLinha, coluna) => {
-        let atributos = `
+        const atributos = `
             background-color:#DEB887;
             pointer-events: none;
             touch-action: none;
@@ -2583,6 +2583,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.lidaDadosAlteracao = (aditamento) => {
       console.log("chegou aqui");
+      const atributosCss = `
+      background-color:#DEB887;
+      pointer-events: none;
+      touch-action: none;
+  `;
 
       $('btnAditar').disabled = false;
       $('btnItens').disabled = false;
@@ -2590,11 +2595,14 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       me.estadoTela.acordoPosicacaoSeq = aditamento.acordoPosicaoSequencial;
       me.estadoTela.posicaoAditamentoSequencial = aditamento.posicaoAditamentoSequencial;
 
+
       $('oTxtCodigoAcordo').value = aditamento.acordoSequencial;
 
       if (me.estadoTela.changeTipoAdivito == false)  {
         $('oCboTipoAditivo').value = aditamento.tipoAditivo;
       }
+
+      $('oCboTipoAditivo').style.cssText = atributosCss;
 
       $('oTxtNumeroAditamento').value = aditamento.numeroAditamento;
       $('oTxtDataAssinatura').value = aditamento.dataAssinatura;
@@ -2635,29 +2643,31 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       document.getElementById("trdatareferencia").style.display = 'none';
     }
 
-    this.alterarAdiamento = (dados) => {
+    this.alterarAdiamento = (aditamento) => {
       const rpc = 'con4_contratosaditamentos.RPC.php';
-      console.log(dados);
+      aditamento.acordoPosicacaoSequencial = me.estadoTela.acordoPosicacaoSeq;
+      aditamento.posicaoAditamentoSequencial = me.estadoTela.posicaoAditamentoSequencial;
+
 
       const oParam = {
         exec: 'processarAlteracaoAditivo',
-        aditamento: dados
+        aditamento
       }
 
 
-      // new Ajax.Request( rpc, {
-      //   method: 'post',
-      //   parameters: 'json=' + Object.toJSON(oParam),
-      //   onComplete: function (response) {
+      new Ajax.Request( rpc, {
+        method: 'post',
+        parameters: 'json=' + Object.toJSON(oParam),
+        onComplete: function (response) {
 
-      //       const oRetorno = eval("(" + response.responseText + ")");
+            const oRetorno = eval("(" + response.responseText + ")");
 
-      //       if (oRetorno.erro == true) {
-      //         return alert(oRetorno.message.urlDecode());
-      //       }
-      //       console.log("Deu certo");
-      //   }
-      // });
+            if (oRetorno.erro == true) {
+              return alert(oRetorno.message.urlDecode());
+            }
+            console.log("Deu certo");
+        }
+      });
     }
 
 }

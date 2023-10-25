@@ -49,20 +49,36 @@ class ItemFactory
         return $listaItens;
     }
 
-    public function createListByStdLegacy(array $itensRaw): array
+    /**
+     *
+     * @param array $itensRaw
+     * @param array $selecionados
+     * @return array
+     */
+    public function createSelectedList(array $itensRaw, array $selecionados): array
     {
         $listaItens = [];
 
          foreach ($itensRaw as $itemRaw) {
+            if (!in_array($itemRaw->codigoitem, $selecionados)) {
+                continue;
+            }
+
             $item = new Item();
             $item->setItemSequencial((int) $itemRaw->codigoitem)
                 ->setQuantidade((float) $itemRaw->quantidade)
                 ->setValorUnitario((float) $itemRaw->valorunitario)
                 ->setValorTotal((float) $itemRaw->valortotal);
 
-            $dataInicio = $itemRaw->dtexecucaoinicio ? new DateTime($itemRaw->dtexecucaoinicio) : null;
-            $dataFim = $itemRaw->dtexecucaofim ? new DateTime($itemRaw->dtexecucaoinicio) : null;
+            $dataInicio = !empty($itemRaw->dtexecucaoinicio)
+                ? DateTime::createFromFormat('Y-m-d',$itemRaw->dtexecucaoinicio)
+                : null;
 
+            $dataFim = !empty($itemRaw->dtexecucaofim)
+                ? DateTime::createFromFormat('Y-m-d', $itemRaw->dtexecucaoinicio)
+                : null;
+
+           
             $item->setInicioExecucao($dataInicio)
                  ->setFimExecucao($dataFim);
 

@@ -51,19 +51,19 @@ class Item
     /**
      * @var integer
      */
-    private ?int $acordoPosicaoTipo;
+    private ?int $acordoPosicaoTipo = null;
 
     /**
      *
      * @var DateTime|null
      */
-    private ?DateTime $inicioExecucao;
+    private ?DateTime $inicioExecucao = null;
 
     /**
      *
      * @var DateTime|null
      */
-    private ?DateTime $fimExecucao;
+    private ?DateTime $fimExecucao = null;
 
     /**
      * Get the value of itemSequencial

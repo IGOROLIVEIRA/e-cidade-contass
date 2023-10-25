@@ -47,31 +47,33 @@ class AditamentoFactory
         return $aditamento;
     }
 
-    public function createByStdLegacy(stdClass $aditamento)
+    public function createByStdLegacy(stdClass $aditamentoRaw)
     {
+
+        var_dump($aditamentoRaw->datafinal, $aditamentoRaw->datainicial);
         $aditamento = new Aditamento();
 
-        $aditamento->setAcordoPosicaoSequencial((int) $aditamento->acordoPosicaoSequencial)
-            ->setAcordoSequencial((int) $aditamento->iAcordo)
-            ->setTipoAditivo((int) $aditamento->tipoalteracaoaditivo)
-            ->setNumeroAditamento((int) $aditamento->sNumeroAditamento)
-            ->setDataAssinatura(new DateTime($aditamento->dataassinatura))
-            ->setDataPublicacao(new DateTime($aditamento->datapublicacao))
-            ->setVienciaAlterada($aditamento->sVigenciaalterada)
-            ->setVeiculoDivulgacao($aditamento->veiculodivulgacao)
-            ->setJustificativa($aditamento->justificativa)
-            ->setPosicaoAditamentoSequencial((int)$aditamento->posicaoAditamentoSequencial)
-            ->setVigenciaInicio(new DateTime($aditamento->datainicial))
-            ->setVigenciaFim(new DateTime($aditamento->final));
+        $aditamento->setAcordoPosicaoSequencial((int) $aditamentoRaw->acordoPosicaoSequencial)
+            ->setAcordoSequencial((int) $aditamentoRaw->iAcordo)
+            ->setTipoAditivo((int) $aditamentoRaw->tipoalteracaoaditivo)
+            ->setNumeroAditamento((int) $aditamentoRaw->sNumeroAditamento)
+            ->setDataAssinatura(DateTime::createFromFormat('d/m/Y', $aditamentoRaw->dataassinatura))
+            ->setDataPublicacao(DateTime::createFromFormat('d/m/Y', $aditamentoRaw->datapublicacao))
+            ->setVienciaAlterada($aditamentoRaw->sVigenciaalterada)
+            ->setVeiculoDivulgacao($aditamentoRaw->veiculodivulgacao)
+            ->setJustificativa($aditamentoRaw->justificativa)
+            ->setPosicaoAditamentoSequencial((int)$aditamentoRaw->posicaoAditamentoSequencial)
+            ->setVigenciaInicio(DateTime::createFromFormat('d/m/Y', $aditamentoRaw->datainicial))
+            ->setVigenciaFim(DateTime::createFromFormat('d/m/Y', $aditamentoRaw->datafinal));
 
         if ($aditamento->isReajuste()) {
-            $aditamento->setIndiceReajuste((float) $aditamento->indicereajuste)
-                ->setPercentualReajuste((float) $aditamento->percentualreajuste)
-                ->setDescricaoIndice($aditamento->descricaoindice);
+            $aditamento->setIndiceReajuste((float) $aditamentoRaw->indicereajuste)
+                ->setPercentualReajuste((float) $aditamentoRaw->percentualreajuste)
+                ->setDescricaoIndice($aditamentoRaw->descricaoindice);
         }
 
         $itemFactory = new ItemFactory();
-        $itens = $itemFactory->createListByStdLegacy($aditamento->aItens);
+        $itens = $itemFactory->createSelectedList($aditamentoRaw->aItens, $aditamentoRaw->aSelecionados);
 
         $aditamento->setItens($itens);
         return $aditamento;

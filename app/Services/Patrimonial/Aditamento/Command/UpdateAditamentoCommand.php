@@ -12,7 +12,7 @@ use App\Repositories\Patrimonial\AcordoItemPeriodoRepository;
 use App\Repositories\Patrimonial\AcordoItemRepository;
 use App\Repositories\Patrimonial\AcordoPosicaoAditamentoRepository;
 use App\Repositories\Patrimonial\AcordoPosicaoRepository;
-use App\Services\Contracts\Patrimonial\Aditamento\UpdateAditamentoInterfaceCommand;
+use App\Services\Contracts\Patrimonial\Aditamento\Command\UpdateAditamentoInterfaceCommand;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -33,6 +33,9 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
      */
     private AcordoItemRepositoryInterface $acordoItemRepository;
 
+    /**
+     * @var AcordoItemPeriodoRepositoryInterface
+     */
     private AcordoItemPeriodoRepositoryInterface $acordItemPeriodRepository;
 
     public function __construct()

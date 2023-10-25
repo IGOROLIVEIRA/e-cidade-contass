@@ -2,7 +2,6 @@
 
 namespace App\Repositories\Contracts\Patrimonial;
 
-
 interface AcordoItemRepositoryInterface
 {
     /**

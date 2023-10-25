@@ -28,7 +28,7 @@ class Aditamento
     /**
      * @var integer
      */
-    private int $tipoAditivo;
+    private int $tipoAditivo = 0;
 
     /**
      * @var integer
@@ -100,7 +100,7 @@ class Aditamento
     /**
      * @var Item[]
      */
-    private array $itens;
+    private array $itens = [];
 
     /**
      * @return integer
