@@ -25,7 +25,7 @@ $clparjuridico = new cl_parjuridico;
 $oLibDocumento = new libdocumento(1203);
 $clcfiptu      = new cl_cfiptu;
 
-$numeropg   = isset($numeropg)?$numeropg:0;
+$numeropg   = isset($numeropg) ? $numeropg : 0 ;
 $oInstit    = new Instituicao(db_getsession('DB_instit'));
 $codInstit  = array(Instituicao::COD_CLI_BURITIZEIRO);
 
