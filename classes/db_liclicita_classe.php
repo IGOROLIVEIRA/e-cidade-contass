@@ -4111,7 +4111,7 @@ class cl_liclicita
                              e60_anousu AS anoContrato,
                              e54_numerl AS processo,
                              l20_categoriaprocesso AS categoriaProcessoId,
-                             FALSE AS receita,
+                             l20_receita AS receita,
                                       01001 AS codigoUnidade,
                                       z01_cgccpf AS niFornecedor,
                                       CASE
@@ -4160,7 +4160,7 @@ class cl_liclicita
                                    e60_anousu AS anoContrato,
                                    e54_numerl AS processo,
                                    pc80_categoriaprocesso AS categoriaProcessoId,
-                                   FALSE AS receita,
+                                   TRUE AS receita,
                                             01001 AS codigoUnidade,
                                             z01_cgccpf AS niFornecedor,
                                             CASE
@@ -4207,7 +4207,7 @@ class cl_liclicita
                                    e60_anousu AS anoContrato,
                                    e54_numerl AS processo,
                                    l20_categoriaprocesso AS categoriaProcessoId,
-                                   FALSE AS receita,
+                                   l20_receita AS receita,
                                             01001 AS codigoUnidade,
                                             z01_cgccpf AS niFornecedor,
                                             CASE
@@ -4312,7 +4312,7 @@ class cl_liclicita
                         e60_anousu AS anoContrato,
                         e54_numerl AS processo,
                         pc80_categoriaprocesso AS categoriaProcessoId,
-                        FALSE AS receita,
+                        TRUE AS receita,
                  01001 AS codigoUnidade,
                  z01_cgccpf AS niFornecedor,
                  CASE
@@ -4416,7 +4416,7 @@ class cl_liclicita
         e60_anousu as anoContrato,
         e54_numerl as processo,
         l20_categoriaprocesso as categoriaProcessoId,
-        false as receita,
+        l20_receita as receita,
         01001 as codigoUnidade,
         z01_cgccpf as niFornecedor,
         case
