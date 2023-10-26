@@ -12,7 +12,7 @@ class AcordoPosicaoAditamento extends LegacyModel
     /**
      * @var string
      */
-    protected $primaryKey = 'ac16_sequencial';
+    protected $primaryKey = 'ac35_sequencial';
 
     /**
      * @var array

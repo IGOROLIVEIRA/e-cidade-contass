@@ -78,7 +78,7 @@ class ItemFactory
                 ? DateTime::createFromFormat('Y-m-d', $itemRaw->dtexecucaoinicio)
                 : null;
 
-           
+
             $item->setInicioExecucao($dataInicio)
                  ->setFimExecucao($dataFim);
 

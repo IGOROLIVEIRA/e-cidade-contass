@@ -27,8 +27,8 @@ class AditamentoFactory
             ->setVeiculoDivulgacao($acordoPosicao->posicaoAditamento->ac35_veiculodivulgacao)
             ->setJustificativa($acordoPosicao->posicaoAditamento->ac35_justificativa)
             ->setPosicaoAditamentoSequencial((int)$acordoPosicao->posicaoAditamento->ac35_sequencial)
-            ->setVigenciaInicio(new DateTime($acordoPosicao->acordo->ac16_datainicio))
-            ->setVigenciaFim(new DateTime($acordoPosicao->acordo->ac16_datafim))
+            ->setVigenciaInicio(new DateTime($acordoPosicao->vigencia->ac18_datainicio))
+            ->setVigenciaFim(new DateTime($acordoPosicao->vigencia->ac18_datafim))
             ->setResumoObjeto($acordoPosicao->acordo->ac16_resumoobjeto)
             ->setDescricaoAlteracao($acordoPosicao->posicaoAditamento->ac35_descricaoalteracao);
 
@@ -49,8 +49,6 @@ class AditamentoFactory
 
     public function createByStdLegacy(stdClass $aditamentoRaw)
     {
-
-        var_dump($aditamentoRaw->datafinal, $aditamentoRaw->datainicial);
         $aditamento = new Aditamento();
 
         $aditamento->setAcordoPosicaoSequencial((int) $aditamentoRaw->acordoPosicaoSequencial)

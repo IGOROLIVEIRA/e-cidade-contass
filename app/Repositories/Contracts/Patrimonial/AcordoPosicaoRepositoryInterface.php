@@ -13,5 +13,5 @@ interface AcordoPosicaoRepositoryInterface
      */
     public function getAditamentoUltimaPosicao(int $ac26Acordo): AcordoPosicao;
 
-    public function update($codigo, array $data);
+    public function update(int $codigo, array $dados);
 }

@@ -439,7 +439,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.getSaldoDotacao(chave1);
     }
 
-    this.ocultacampos = function () {
+    this.ocultaDescricaoAlteracao = function () {
 
         if(me.oCboTipoAditivo.getValue()== 7 || me.oCboTipoAditivo.getValue()== 14){
             $('descricaoaltera').style.display = '';
@@ -602,7 +602,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             me.oCboTipoAditivo.addItem('12', 'Alteração de Projeto/Especificação');
             me.oCboTipoAditivo.addItem('13', 'Vigência/Execução');
             me.oCboTipoAditivo.addItem('14', 'Acréscimo/Decréscimo de item(ns) conjugado com outros tipos de termos aditivos');
-            me.oCboTipoAditivo.addEvent("onChange", me.sInstance + ".pesquisarDadosAcordo();"+me.sInstance + ".js_changeTipoAditivo();"+me.sInstance + ".ocultacampos();"+me.sInstance + ".mostracampos();");
+            me.oCboTipoAditivo.addEvent("onChange", me.sInstance + ".pesquisarDadosAcordo();"+me.sInstance + ".js_changeTipoAditivo();"+me.sInstance + ".ocultaDescricaoAlteracao();"+me.sInstance + ".mostracampos();");
             me.oCboTipoAditivo.show($('ctnTipoAditivo'));
         }
 
@@ -2301,7 +2301,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             $('btnItens').style.display = '';
             $('btnItens').observe('click', me.novoItem);
         }
-        this.lidaTiposAdimentos();
+
+        if (me.estadoTela.viewAlterar  == false) {
+          this.lidaTiposAdimentos();
+        }
     }
 
     this.lidaTiposAdimentos = () => {
@@ -2592,7 +2595,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       $('btnAditar').disabled = false;
       $('btnItens').disabled = false;
 
-      me.estadoTela.acordoPosicacaoSeq = aditamento.acordoPosicaoSequencial;
+      me.estadoTela.acordoPosicaoSeq = aditamento.acordoPosicaoSequencial;
       me.estadoTela.posicaoAditamentoSequencial = aditamento.posicaoAditamentoSequencial;
 
 
@@ -2622,6 +2625,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       aItensPosicao = adapatador.criarItens();
 
       me.preencheItens(aItensPosicao);
+      me.js_changeTipoAditivo();
+      me.lidaLeiLicitacao(aditamento.acordoSequencial);
+      me.ocultaDescricaoAlteracao();
     }
 
     this.ajusteInicialGrid = () => {
@@ -2645,7 +2651,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.alterarAdiamento = (aditamento) => {
       const rpc = 'con4_contratosaditamentos.RPC.php';
-      aditamento.acordoPosicacaoSequencial = me.estadoTela.acordoPosicacaoSeq;
+      aditamento.acordoPosicaoSequencial = me.estadoTela.acordoPosicaoSeq;
       aditamento.posicaoAditamentoSequencial = me.estadoTela.posicaoAditamentoSequencial;
 
 
@@ -2653,7 +2659,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         exec: 'processarAlteracaoAditivo',
         aditamento
       }
-
 
       new Ajax.Request( rpc, {
         method: 'post',
@@ -2665,9 +2670,27 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             if (oRetorno.erro == true) {
               return alert(oRetorno.message.urlDecode());
             }
-            console.log("Deu certo");
+            alert("Aditamento alterado com sucesso");
+            me.pesquisaAcordoAlteracao(true);
         }
       });
+    }
+
+    this.lidaLeiLicitacao = (iAcordo) => {
+        var oParam = {
+          exec: 'getleilicitacao',
+          licitacao: iAcordo
+      }
+
+      new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
+          if(oRetorno.lei==1){
+              $('justificativa').style.display = '';
+          }else{
+              $('justificativa').style.display = 'none';
+          }
+
+      }).setMessage("Aguarde, pesquisando acordos.")
+          .execute();
     }
 
 }

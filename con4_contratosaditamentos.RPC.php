@@ -340,7 +340,9 @@ try {
 
         case 'processarAlteracaoAditivo':
             $service = new AditamentoService();
+
             $result = $service->updateAditamento($oParam->aditamento);
+
             $oRetorno->status = $result['status'];
             $oRetorno->message = $result['message'];
             break;

@@ -14,7 +14,7 @@ use App\Repositories\Patrimonial\AcordoPosicaoAditamentoRepository;
 use App\Repositories\Patrimonial\AcordoPosicaoRepository;
 use App\Services\Contracts\Patrimonial\Aditamento\Command\UpdateAditamentoInterfaceCommand;
 use Exception;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
 {
@@ -45,6 +45,7 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
         $this->acordoPosAditRepository = new AcordoPosicaoAditamentoRepository();
         $this->acordItemPeriodRepository = new AcordoItemPeriodoRepository();
     }
+
     /**
      *
      * @param Aditamento $aditamento
@@ -90,19 +91,19 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
                         'ac20_valortotal' => $item->getValorTotal()
                     ]);
 
-                    if (!$resultItem) {
-                        throw new Exception("Não foi possível atualizar aditamento. Erro em acordoitem, no item: ".  $codigoItem);
-                    }
+                if (!$resultItem) {
+                    throw new Exception("Não foi possível atualizar aditamento. Erro em acordoitem, no item: ".  $codigoItem);
+                }
 
-                    if($aditamento->isAlteracaoPrazo()) {
-                        $this->acordItemPeriodRepository->update(
-                            $codigoItem,
-                            [
-                                'ac41_datainicial' => $item->getInicioExecucao()->format('Y-m-d'),
-                                'ac41_datafinal'   => $item->getFimExecucao()->format('Y-m-d'),
-                                'ac41_acordoposicao' => $aditamento->getAcordoPosicaoSequencial()
-                            ]);
-                    }
+                if($aditamento->isAlteracaoPrazo()) {
+                    $this->acordItemPeriodRepository->update(
+                        $codigoItem,
+                        [
+                            'ac41_datainicial' => $item->getInicioExecucao()->format('Y-m-d'),
+                            'ac41_datafinal'   => $item->getFimExecucao()->format('Y-m-d'),
+                            'ac41_acordoposicao' => $aditamento->getAcordoPosicaoSequencial()
+                        ]);
+                }
             }
 
             DB::commit();

@@ -62,4 +62,10 @@ class AcordoPosicao extends LegacyModel
     {
         return $this->hasOne(AcordoPosicaoAditamento::class, 'ac35_acordoposicao', 'ac26_sequencial');
     }
+
+    public function vigencia()
+    {
+        return $this->hasOne(AcordoVigencia::class, 'ac18_acordoposicao', 'ac26_sequencial');
+    }
+
 }

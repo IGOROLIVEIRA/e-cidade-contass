@@ -32,9 +32,10 @@ class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
        return $acordoPosicao;
     }
 
-    public function update($codigo, array $data): bool
+    public function update(int $codigo, array $dados): bool
     {
         $acordoPosicao = $this->model->find($codigo);
-        return $acordoPosicao->update($data);
+
+        return $acordoPosicao->update($dados);
     }
 }

@@ -382,7 +382,7 @@ class Aditamento
      */
     public function setResumoObjeto(?string $resumoObjeto): self
     {
-        $this->resumoObjeto = $resumoObjeto;
+        $this->resumoObjeto =  mb_convert_encoding($resumoObjeto,"UTF-8", "ISO-8859-1");
 
         return $this;
     }

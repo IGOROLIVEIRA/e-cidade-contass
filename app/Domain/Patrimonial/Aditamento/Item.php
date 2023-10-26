@@ -232,7 +232,7 @@ class Item
      */
     public function setDescricaoItem(string $descricaoItem): self
     {
-        $this->descricaoItem = $descricaoItem;
+        $this->descricaoItem =  mb_convert_encoding($descricaoItem,  "UTF-8", "ISO-8859-1");;
 
         return $this;
     }
