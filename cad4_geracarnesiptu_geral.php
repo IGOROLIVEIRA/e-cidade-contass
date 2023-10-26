@@ -1286,7 +1286,7 @@ where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limi
                     $sqlReceitas .= "        descrreceita, ";
                     $sqlReceitas .= "        reduzreceita ";
                     $sqlReceitas .= "    from (";
-                    $sqlReceitas .= " select k00_receit as codreceita, ";
+                    $sqlReceitas .= " select a.k00_receit as codreceita, ";
                     $sqlReceitas .= "        k02_descr  as descrreceita, ";
                     $sqlReceitas .= "        case when taborc.k02_codigo is not null then k02_codrec ";
                     $sqlReceitas .= "             when tabplan.k02_codigo is not null then k02_reduz ";
