@@ -172,18 +172,8 @@ include("dbforms/db_funcoes.php");
             query += '&opselect='+opselect;
         }
 
-        if(opselect === '0'){
-            alert('Campo Opção de Seleção não informado!');
-            return false;
-        }
-
         if(orderselect){
             query += '&orderselect='+orderselect;
-        }
-
-        if(orderselect === '0'){
-            alert('Campo Ordem de Seleção não informado!');
-            return false;
         }
 
         if(impforne === true){
