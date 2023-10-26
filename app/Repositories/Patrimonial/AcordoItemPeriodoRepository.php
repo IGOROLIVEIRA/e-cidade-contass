@@ -24,9 +24,9 @@ class AcordoItemPeriodoRepository implements AcordoItemPeriodoRepositoryInterfac
      * @param array $data
      * @return boolean
      */
-    public function update(int $codigoItem, array $data): bool
+    public function update(int $codigoItem, array $dados): bool
     {
         $acordoItemPeriodo = $this->model->where('ac41_acordoitem',$codigoItem)->first();
-        return $acordoItemPeriodo->update($data);
+        return $acordoItemPeriodo->update($dados);
     }
 }

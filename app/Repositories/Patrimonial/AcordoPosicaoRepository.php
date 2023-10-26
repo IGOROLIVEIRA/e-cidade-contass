@@ -8,6 +8,10 @@ use DateTime;
 
 class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
 {
+    /**
+     *
+     * @var AcordoPosicao
+     */
     private AcordoPosicao $model;
 
     public function __construct()
@@ -32,6 +36,12 @@ class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
        return $acordoPosicao;
     }
 
+    /**
+     *
+     * @param integer $codigo
+     * @param array $dados
+     * @return boolean
+     */
     public function update(int $codigo, array $dados): bool
     {
         $acordoPosicao = $this->model->find($codigo);

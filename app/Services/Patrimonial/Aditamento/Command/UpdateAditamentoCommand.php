@@ -12,6 +12,7 @@ use App\Repositories\Patrimonial\AcordoItemPeriodoRepository;
 use App\Repositories\Patrimonial\AcordoItemRepository;
 use App\Repositories\Patrimonial\AcordoPosicaoAditamentoRepository;
 use App\Repositories\Patrimonial\AcordoPosicaoRepository;
+use App\Repositories\Patrimonial\AcordoVigenciaRepository;
 use App\Services\Contracts\Patrimonial\Aditamento\Command\UpdateAditamentoInterfaceCommand;
 use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
@@ -68,6 +69,22 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
                 throw new Exception("Não foi possível atualizar aditamento. Erro em acordoposicao!");
             }
 
+            if ($aditamento->isAlteracaoVigencia()) {
+                $acordoVigenciaRepository = new AcordoVigenciaRepository();
+                $resultVigencia =  $acordoVigenciaRepository->update(
+                    $aditamento->getAcordoPosicaoSequencial(),
+                    [
+                        'ac18_datainicio' => $aditamento->getVigenciaInicio()->format('Y-m-d'),
+                        'ac18_datafim' => $aditamento->getVigenciaFim()->format('Y-m-d')
+                    ]
+                );
+
+                if (!$resultVigencia) {
+                    throw new Exception("Não foi possível atualizar aditamento. Erro em acordoVigencia!");
+                }
+
+            }
+
 
             $resultacordoPosAdit = $this->acordoPosAditRepository->update(
                 $aditamento->getPosicaoAditamentoSequencial(),
@@ -112,7 +129,6 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
-
     }
 
     /**

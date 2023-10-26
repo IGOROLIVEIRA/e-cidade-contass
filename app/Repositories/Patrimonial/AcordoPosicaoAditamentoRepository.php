@@ -7,6 +7,9 @@ use App\Repositories\Contracts\Patrimonial\AcordoPosicaoAditamentoRepositoryInte
 
 class AcordoPosicaoAditamentoRepository implements AcordoPosicaoAditamentoRepositoryInterface
 {
+    /**
+     * @var AcordoPosicaoAditamento
+     */
     private AcordoPosicaoAditamento $model;
 
     public function __construct()
@@ -14,9 +17,15 @@ class AcordoPosicaoAditamentoRepository implements AcordoPosicaoAditamentoReposi
         $this->model = new AcordoPosicaoAditamento();
     }
 
-    public function update(int $codigo, array $data): bool
+    /**
+     *
+     * @param integer $codigo
+     * @param array $dados
+     * @return boolean
+     */
+    public function update(int $codigo, array $dados): bool
     {
-        $acordoItem = $this->model->find($codigo);
-        return $acordoItem->update($data);
+        $acordoPosicaoAditamento = $this->model->find($codigo);
+        return $acordoPosicaoAditamento->update($dados);
     }
 }

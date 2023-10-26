@@ -10,6 +10,8 @@ class Aditamento
 
     private const TIPO_ALTERACAO_PRAZO = 8;
 
+    private const TIPO_ALTERACAO_VIGENCIA = 6;
+
     /**
      * @var integer
      */
@@ -459,5 +461,12 @@ class Aditamento
         return $this->getTipoAditivo() === self::TIPO_ALTERACAO_PRAZO;
     }
 
-
+     /**
+     *
+     * @return boolean
+     */
+    public function isAlteracaoVigencia(): bool
+    {
+        return $this->getTipoAditivo() === self::TIPO_ALTERACAO_VIGENCIA;
+    }
 }

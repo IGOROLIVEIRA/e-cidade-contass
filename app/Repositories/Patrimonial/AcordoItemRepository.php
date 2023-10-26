@@ -18,9 +18,15 @@ class AcordoItemRepository implements AcordoItemRepositoryInterface
         $this->model = new AcordoItem();
     }
 
-    public function update(int $codigo, array $data): bool
+    /**
+     *
+     * @param integer $codigo
+     * @param array $dados
+     * @return boolean
+     */
+    public function update(int $codigo, array $dados): bool
     {
         $acordoItem = $this->model->find($codigo);
-        return $acordoItem->update($data);
+        return $acordoItem->update($dados);
     }
 }

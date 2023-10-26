@@ -10,5 +10,5 @@ interface AcordoItemRepositoryInterface
      * @param array $data
      * @return void
      */
-    public function update(int $codigo, array $data): bool;
+    public function update(int $codigo, array $dados): bool;
 }

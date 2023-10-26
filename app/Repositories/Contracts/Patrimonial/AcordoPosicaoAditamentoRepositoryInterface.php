@@ -5,5 +5,5 @@ namespace App\Repositories\Contracts\Patrimonial;
 
 interface AcordoPosicaoAditamentoRepositoryInterface
 {
-    public function update(int $codigo, array $data): bool;
+    public function update(int $codigo, array $dados): bool;
 }
