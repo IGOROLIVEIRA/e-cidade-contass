@@ -70,6 +70,7 @@ class ItemFactory
     {
         $listaItens = [];
 
+
          foreach ($itensRaw as $itemRaw) {
             if (!in_array($itemRaw->codigoitem, $selecionados)) {
                 continue;
@@ -82,13 +83,13 @@ class ItemFactory
                 ->setValorTotal((float) $itemRaw->valortotal);
 
             $dataInicio = !empty($itemRaw->dtexecucaoinicio)
-                ? DateTime::createFromFormat('Y-m-d',$itemRaw->dtexecucaoinicio)
+                ? DateTime::createFromFormat($this->getFormatDate($itemRaw->dtexecucaoinicio),$itemRaw->dtexecucaoinicio)
                 : null;
+
 
             $dataFim = !empty($itemRaw->dtexecucaofim)
-                ? DateTime::createFromFormat('Y-m-d', $itemRaw->dtexecucaofim)
+                ? DateTime::createFromFormat($this->getFormatDate($itemRaw->dtexecucaofim), $itemRaw->dtexecucaofim)
                 : null;
-
 
             $item->setInicioExecucao($dataInicio)
                  ->setFimExecucao($dataFim);
@@ -97,5 +98,13 @@ class ItemFactory
         }
 
         return $listaItens;
+    }
+
+    private function getFormatDate(string $date): string
+    {
+       if (strpos( $date, '/') === false) {
+        return 'Y-m-d';
+       }
+       return 'd/m/Y';
     }
 }
