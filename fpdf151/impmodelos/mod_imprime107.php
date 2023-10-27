@@ -142,7 +142,7 @@ $this->objpdf->sety($y+28);
 $intnumrows = count($this->arraycodreceitas);
 for($x=0;$x<$intnumrows;$x++){
   if( !empty($this->arrayvalreceitas[$x])){
-    $this->objpdf->multicell(57,3,$this->arraydescrreceitas[$x].':'.$this->arrayvalreceitas[$x]);// Instruções 1 - linha 1
+    $this->objpdf->multicell(57,3,$this->arraydescrreceitas[$x].': R$'. db_formatar($this->arrayvalreceitas[$x], 'f'));// Instruções 1 - linha 1
   }
 }
 
@@ -240,13 +240,11 @@ $this->objpdf->sety($y+26);
 
 // mensagem de instruções da guia prefeitura
   if ($this->hasQrCode) {
-      $this->objpdf->multicell(60, 2, $this->descr12_1);// Instruções 2 - linha 1
-      $this->objpdf->multicell(60, 2, $this->descr12_2);// Instruções 2 - linha 2
+      $this->objpdf->multicell(60, 2, $this->descr12_3);// Instruções 2 - linha 1
       $this->objpdf->multicell(60, 2, "Pague com PIX utilizando o QRCode ao lado ---->");
       $this->objpdf->Image($this->qrcode,158,$y+24, 17, 17, 'png');
   } else {
-      $this->objpdf->multicell(80, 2, $this->descr12_1);// Instruções 2 - linha 1
-      $this->objpdf->multicell(80, 2, $this->descr12_2);// Instruções 2 - linha 2
+      $this->objpdf->multicell(80, 2, $this->descr12_3);// Instruções 2 - linha 1
   }
 $this->objpdf->setxy($xx,$yy);
 
