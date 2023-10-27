@@ -1282,11 +1282,14 @@ where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limi
                     $sqlReceitas .= "        substr(fc_calcula,28,13)::float8+ ";
                     $sqlReceitas .= "        substr(fc_calcula,41,13)::float8- ";
                     $sqlReceitas .= "        substr(fc_calcula,54,13)::float8) as valreceita, ";
+                    $sqlReceitas .= "        (substr(fc_calcula,15,13)::float8+ ";
+                    $sqlReceitas .= "        substr(fc_calcula,28,13)::float8+ ";
+                    $sqlReceitas .= "        substr(fc_calcula,41,13)::float8) as valreceitasemdesconto, ";
                     $sqlReceitas .= "        codreceita, ";
                     $sqlReceitas .= "        descrreceita, ";
                     $sqlReceitas .= "        reduzreceita ";
                     $sqlReceitas .= "    from (";
-                    $sqlReceitas .= " select k00_receit as codreceita, ";
+                    $sqlReceitas .= " select a.k00_receit as codreceita, ";
                     $sqlReceitas .= "        k02_descr  as descrreceita, ";
                     $sqlReceitas .= "        case when taborc.k02_codigo is not null then k02_codrec ";
                     $sqlReceitas .= "             when tabplan.k02_codigo is not null then k02_reduz ";
@@ -1313,7 +1316,7 @@ where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limi
                         $pdf1->arraycodreceitas[$x] = $codreceita;
                         $pdf1->arrayreduzreceitas[$x] = $reduzreceita;
                         $pdf1->arraydescrreceitas[$x] = $descrreceita;
-                        $pdf1->arrayvalreceitas[$x] = $valreceita;
+                        $pdf1->arrayvalreceitas[$x] = $valreceitasemdesconto;
                     }
 
                     if (isset($vlrjuros) && $vlrjuros != "" && $vlrjuros != 0) {
@@ -1413,6 +1416,7 @@ where j18_anousu = iptucalc.j23_anousu and j21_matric = iptucalc.j23_matric limi
 
                     $pdf1->descr12_1 = '- PARCELA ÚNICA COM ' . $k00_percdes . '% DE DESCONTO - ' . $descr . ":" . $origem;
                     $pdf1->descr12_1 .= $bql;
+                    $pdf1->descr12_3 = '- PARCELA ÚNICA COM ' . $k00_percdes . '% DE DESCONTO.';
                     $pdf1->prehistoricoparcela = ' PARCELA ÚNICA COM ' . $k00_percdes . '% DE DESCONTO';
                     $pdf1->linha_digitavel = $linha_digitavel;
                     $pdf1->codigo_barras = $codigo_barras;
