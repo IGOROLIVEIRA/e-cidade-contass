@@ -39,11 +39,11 @@ class AditamentoService implements AditamentoServiceInterface
 
     public function updateAditamento(stdClass $aditamentoRaw): array
     {
-        $aditamentoFactory = new AditamentoFactory();
-        $aditamento = $aditamentoFactory->createByStdLegacy($aditamentoRaw);
-
-        $updateCommand = new UpdateAditamentoCommand();
         try {
+            $aditamentoFactory = new AditamentoFactory();
+            $aditamento = $aditamentoFactory->createByStdLegacy($aditamentoRaw);
+
+            $updateCommand = new UpdateAditamentoCommand();
             $result = $updateCommand->execute($aditamento);
 
             if ($result === false) {

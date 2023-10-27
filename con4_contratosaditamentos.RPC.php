@@ -343,6 +343,11 @@ try {
 
             $result = $service->updateAditamento($oParam->aditamento);
 
+
+            if ($result['status'] === false) {
+                throw new Exception($result['message']);
+            }
+
             $oRetorno->status = $result['status'];
             $oRetorno->message = $result['message'];
             break;

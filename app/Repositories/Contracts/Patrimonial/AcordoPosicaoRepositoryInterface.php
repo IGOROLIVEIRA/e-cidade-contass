@@ -6,6 +6,13 @@ use App\Models\AcordoPosicao;
 
 interface AcordoPosicaoRepositoryInterface
 {
+   /**
+    *
+    * @param integer $idAcordo
+    * @param integer $numeroAditamento
+    * @return AcordoPosicao|null
+    */
+    public function getAcordoPorNumeroAditamento(int $idAcordo, int $numeroAditamento): ?AcordoPosicao;
     /**
      *
      * @param integer $ac26Acordo
@@ -13,5 +20,11 @@ interface AcordoPosicaoRepositoryInterface
      */
     public function getAditamentoUltimaPosicao(int $ac26Acordo): AcordoPosicao;
 
+    /**
+     *
+     * @param integer $codigo
+     * @param array $dados
+     * @return void
+     */
     public function update(int $codigo, array $dados);
 }

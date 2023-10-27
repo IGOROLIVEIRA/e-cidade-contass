@@ -23,14 +23,14 @@ class ItensAdapter {
 
       itemAdaptado.descricaoitem = item.descricaoItem;
 
-      //Dotações
-      itemAdaptado.dotacoes = [{ dotacao: "46", quantidade: 12, valor: 20400, valororiginal: "17000" }];
-      itemAdaptado.dotacoesoriginal = [{ dotacao: "46", quantidade: 12, valor: 20400, valororiginal: "17000" }];
-      itemAdaptado.elemento = 3339036;
-      ///
+      //mock dotações para manter compatibilidade com função preencherItens
+      itemAdaptado.dotacoes = [];
+      itemAdaptado.dotacoesoriginal = [];
+      itemAdaptado.elemento = 0;
 
-      itemAdaptado.periodoini = vigenciaInicio;
-      itemAdaptado.periodofim = vigenciaFim;
+
+      itemAdaptado.periodoini = item.inicioExecucao ?? vigenciaInicio;
+      itemAdaptado.periodofim = item.fimExecucao ?? vigenciaFim;
       itemAdaptado.qtdeanterior = item.quantidade;
       itemAdaptado.qtdeaditada = 0;
       itemAdaptado.quantidade = item.quantidade;

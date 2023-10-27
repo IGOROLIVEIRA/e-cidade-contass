@@ -19,6 +19,20 @@ class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
         $this->model = new AcordoPosicao();
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param integer $idAcordo
+     * @param integer $numeroAditamento
+     * @return AcordoPosicao|null
+     */
+    public function getAcordoPorNumeroAditamento(int $idAcordo, int $numeroAditamento): ?AcordoPosicao
+    {
+        return $this->model->where('ac26_acordo', $idAcordo)
+                    ->where('ac26_numeroaditamento', $numeroAditamento)
+                    ->first();
+    }
+
      /**
      *
      * @param integer $ac26Acordo
@@ -35,6 +49,8 @@ class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
 
        return $acordoPosicao;
     }
+
+
 
     /**
      *

@@ -33,9 +33,11 @@ class AditamentoSerializeService
         foreach($atributos as $atributo) {
             $prop = $reflection->getProperty($atributo->getName());
             $prop->setAccessible(true);
+
             $value = $prop->getValue($this->aditamento);
             $value = is_a($value, DateTime::class)
-                ? $value->format('d/m/Y') : $value;
+                    ? $value->format('d/m/Y')
+                    : $value;
 
             if ($atributo->getName() === 'itens') {
                 $lista['itens'] = $this->serializeItem($value);
@@ -63,7 +65,12 @@ class AditamentoSerializeService
             foreach($atributos as $atributo) {
                 $prop = $reflection->getProperty($atributo->getName());
                 $prop->setAccessible(true);
+
                 $value = $prop->getValue($item);
+                $value = is_a($value, DateTime::class)
+                        ? $value->format('d/m/Y')
+                        : $value;
+
                 $listaItens[$key][$atributo->getName()] = $value;
                 $prop->setAccessible(false);
             }

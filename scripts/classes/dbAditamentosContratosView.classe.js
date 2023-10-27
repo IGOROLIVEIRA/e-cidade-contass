@@ -1129,7 +1129,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         });
 
 
-        if (Object.keys(oSelecionados).length == 0 && $('oCboTipoAditivo').value != 6 && $('oCboTipoAditivo').value != 7) {
+        if (Object.keys(oSelecionados).length == 0
+          && $('oCboTipoAditivo').value != 6
+          && $('oCboTipoAditivo').value != 7
+          && me.estadoTela.viewAlterar == false
+          ) {
             return alert('Nenhum item selecionado para aditar.');
         }
 
@@ -1785,8 +1789,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.preencheItens = function (aItens) {
 
-        console.log(aItens);
-
         var sizeLabelItens = 0;
         if (aItens.length < 12) {
             sizeLabelItens = (aItens.length / 2) * 50;
@@ -1804,9 +1806,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         var aEventsIn  = ["onmouseover"];
         var aEventsOut = ["onmouseout"];
         aDadosHintGrid = new Array();
-        console.log("fora do foreach")
+
         aItens.each(function (oItem, iSeq) {
-          console.log("dentro do foreach")
+
           var aLinha = new Array();
           valor1 = oItem.qtdeanterior.toString();
           valor = valor1.split('.');
@@ -2050,20 +2052,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
             }
 
-            // if(!oItem.controlaquantidade){
-            //   if(oItem.servico == 't'){
-            //     oInputQuantidade.setReadOnly(false);
-            //     aLinha[4] = oInputQuantidade.toInnerHtml();
-            //     oInputUnitario.setReadOnly(true);
-            //     aLinha[5] = oInputUnitario.toInnerHtml();
-            //   }else{
-            //     oInputQuantidade.setReadOnly(true);
-            //     aLinha[4] = oInputQuantidade.toInnerHtml();
-            //     oInputUnitario.setReadOnly(false);
-            //     aLinha[5] = oInputUnitario.toInnerHtml();
-            //   }
-            // }
-
             if(!oItem.periodoini && !oItem.periodofim){
                 let datainicio = $('oTxtDataInicial').value.replace('-', '');
                 let datafim = $('oTxtDataFinal').value.replace('-', '');
@@ -2103,13 +2091,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
                 oItem.dotacoes.forEach(function (oDotacaoOriginal) {
                     var oDotacao = new Object();
-                    /* Comentado a pedido da OC5304
-                    if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
-                        oDotacao.dotacao = oDotacaoOriginal.dotacao;
-                        oDotacaoOriginal.quantidade = 1;
-                        oDotacaoOriginal.valor = 0;
-                        oDotacaoOriginal.valororiginal = 0;
-                      }*/
 
                     oItem.dotacoesoriginal.push({
                         dotacao: oDotacaoOriginal.dotacao,
@@ -2670,6 +2651,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             if (oRetorno.erro == true) {
               return alert(oRetorno.message.urlDecode());
             }
+            
             alert("Aditamento alterado com sucesso");
             me.pesquisaAcordoAlteracao(true);
         }

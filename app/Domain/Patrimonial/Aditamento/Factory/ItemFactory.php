@@ -28,7 +28,18 @@ class ItemFactory
             ->setServicoQuantidade($itemAcordo->ac20_servicoquantidade)
             ->setDescricaoItem($itemAcordo->pcMater->pc01_descrmater);
 
-            return $item;
+        $dataInicio = !empty($itemAcordo->itemPeriodo->ac41_datainicial)
+            ? DateTime::createFromFormat('Y-m-d',$itemAcordo->itemPeriodo->ac41_datainicial)
+            : null;
+
+        $dataFim = !empty($itemAcordo->itemPeriodo->ac41_datafinal)
+            ? DateTime::createFromFormat('Y-m-d', $itemAcordo->itemPeriodo->ac41_datafinal)
+            : null;
+
+        $item->setInicioExecucao($dataInicio)
+            ->setFimExecucao($dataFim);
+
+        return $item;
     }
 
     /**
@@ -75,7 +86,7 @@ class ItemFactory
                 : null;
 
             $dataFim = !empty($itemRaw->dtexecucaofim)
-                ? DateTime::createFromFormat('Y-m-d', $itemRaw->dtexecucaoinicio)
+                ? DateTime::createFromFormat('Y-m-d', $itemRaw->dtexecucaofim)
                 : null;
 
 

@@ -54,6 +54,8 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
      */
     public function execute(Aditamento $aditamento): bool
     {
+        $this->validaNumeroAditamento($aditamento);
+
         $acordoPosicao = $this->formatAcordoPosicao($aditamento);
         $acordoPosicaoAdimento = $this->formatAcordoPosicaoAditamento($aditamento);
 
@@ -128,6 +130,19 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
         } catch (Exception $e) {
             DB::rollBack();
             throw new Exception($e->getMessage());
+        }
+    }
+
+    private function validaNumeroAditamento(Aditamento $aditamento): void
+    {
+        $posicao = $this->acordoPosicaoRepository
+                ->getAcordoPorNumeroAditamento(
+                    $aditamento->getAcordoSequencial(),
+                    $aditamento->getNumeroAditamento()
+                );
+
+        if (!empty($posicao) && (int)$posicao->ac26_sequencial !== $aditamento->getAcordoPosicaoSequencial()) {
+            throw new \Exception('Numero de aditamento já esta em uso');
         }
     }
 
