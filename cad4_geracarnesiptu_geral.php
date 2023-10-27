@@ -2202,23 +2202,34 @@ $iFimPag += $intixxx;
 $arquivo       = "tmp/".$nomeTipoMod."_".str_replace(" ","",$k00_descr)."_de_".$iIniPag."_ate_".$iFimPag."_".date('His').".pdf";
 $nomearquivos .= "tmp/".$nomeTipoMod."_".str_replace(" ","",$k00_descr)."_de_".$iIniPag."_ate_".$iFimPag."_".date('His').".pdf#Dowload dos ".$nomeTipoMod." de ".$iIniPag." ate ".$iFimPag."|";
 
-function usePixIntegration(db_impcarne $pdfObject, int $numpre, int $numpar = null): db_impcarne
+function usePixIntegration(db_impcarne $pdfObject, int $numnov): db_impcarne
 {
-    $recibopagaQrcodePix = RecibopagaQrcodePix::whereNumpreNumpar($numpre, $numpar)->firstOrFail();
+    $numpref = Numpref::query()
+        ->where('k03_anousu', db_getsession("DB_anousu"))
+        ->where('k03_instit', db_getsession("DB_instit"))
+        ->first();
+
+    if (!$numpref->k03_ativo_integracao_pix) {
+        return $pdfObject;
+    }
+
+    $recibopagaQrcodePix = RecibopagaQrcodePix::query()->where('k176_numnov', $numnov)->first();
 
     $pdfObject->hasQrCode = true;
 
-    $builder = Builder::create()
+    $result = Builder::create()
+        ->writer(new PngWriter())
+        ->writerOptions([])
+        ->data($recibopagaQrcodePix->k176_qrcode)
+        ->encoding(new Encoding('UTF-8'))
         ->size(300)
         ->margin(10)
         ->validateResult(false)
-        ->writerOptions([])
-        ->writer(new PngWriter())
-        ->encoding(new Encoding('UTF-8'));
+        ->build();
+    $imagePath = "tmp/qrcode{$numnov}.png";
 
-    $qrcodeImgService = new GenerateQrCodeImageService($builder);
+        $result->saveToFile($imagePath);
 
-    $imagePath = $qrcodeImgService->execute($recibopagaQrcodePix->k176_qrcode);
     $pdfObject->qrcode = $imagePath;
     return $pdfObject;
 }
