@@ -98,6 +98,11 @@ class Aditamento
      */
     private ?string $descricaoAlteracao = null;
 
+    /**
+     * @var DateTime|null
+     */
+    private ?DateTime $dataReferencia = null;
+
 
     /**
      * @var Item[]
@@ -468,5 +473,28 @@ class Aditamento
     public function isAlteracaoVigencia(): bool
     {
         return $this->getTipoAditivo() === self::TIPO_ALTERACAO_VIGENCIA;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return DateTime|null
+     */
+    public function getDataReferencia(): ?DateTime
+    {
+        return $this->dataReferencia;
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @param DateTime|null $dataReferencia
+     * @return self
+     */
+    public function setDataReferencia(?DateTime $dataReferencia): self
+    {
+        $this->dataReferencia = $dataReferencia;
+
+        return $this;
     }
 }

@@ -15,6 +15,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.lReajuste = false;
     this.totalizador = false;
     this.estadoTela = { viewAlterar: false, changeTipoAdivito: false};
+    this.desativaInputsCss = `
+      background-color:#DEB887;
+      pointer-events: none;
+      touch-action: none;
+  `;
 
 
     switch (iTipoAditamento) {
@@ -464,7 +469,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.pesquisarDadosAcordo = function () {
-        console.log("pesquisa acordo");
         if (me.oTxtCodigoAcordo.getValue() == "") {
 
             alert('Informe um acordo!');
@@ -654,7 +658,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         me.oTxtDataFinalCompara = new DBTextFieldData('oTxtDataFinalCompara', '.oTxtDataFinalCompara', '');
         me.oTxtDataFinalCompara.show($('vigenciaFinalCompara'));
-        //me.oTxtDataFinalCompara.setReadOnly(true);
 
         if (!me.lDatas) {
 
@@ -666,12 +669,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             me.oTextAreaDescricaoAlteracao.setReadOnly(true);
         }
 
-        //me.oTextAreaDescricaoAlteracao.setRequired(true);
         me.oTextAreaDescricaoAlteracao.setMaxLength(250);
         me.oTxtVeiculoDivulgacao.setMaxLength(50);
         me.oTxtDescricaoIndice.setMaxLength(300);
-        //me.oTxtJustificativa.setMaxLength(5120);
-
 
         /**
          * Valores
@@ -695,7 +695,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         me.oGridItens.setCellAlign(['center', 'center', "left", "right","right", "right", "center", "right", "center", "center", "center", "center", "center"]);
         me.oGridItens.setCellWidth(["5%", "5%", "28%", "7%", "9%", "7%", "9%", "9%", "6%", "8%", "2%", "9%","9%"]);
         me.oGridItens.setHeader(["Ordem", "Codigo", "Descricao", "Qtd Atual", "Valor Atual", "Qtd Final", "Valor Final", "Valor Total", "Qtd Aditada", "Valor Aditado", "Dotacoes", "Inicio Exec", "Fim Exec","Tipo"]);
-        //me.oGridItens.aHeaders[11].lDisplayed = false;
         me.oGridItens.aHeaders[14].lDisplayed = false;
         me.oGridItens.aHeaders[11].lDisplayed = false;
         me.oGridItens.setHeight(300);
@@ -1050,9 +1049,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     me.showViewAlterar = (acordo) => {
       me.main();
       me.pesquisaAcordoAlteracao(true);
-
-      console.log(acordo);
-
     }
 
     this.aditar = function () {
@@ -1162,7 +1158,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             veiculodivulgacao: me.oTxtVeiculoDivulgacao.getValue(),
             percentualreajuste: me.oPercentualReajuste.getValue(),
             indicereajuste: me.oIndiceReajuste.getValue(),
-            descricaoindice:  me.oTxtDescricaoIndice.getValue(),  //decodeURIComponent(encodeURIComponent(me.oTxtDescricaoIndice.getValue())),  //encodeURIComponent(tagString(me.oTxtDescricaoIndice.getValue())),
+            descricaoindice:  me.oTxtDescricaoIndice.getValue(),
             justificativa: $('oTxtJustificativa').getValue(),
             tipoaditamento: me.iTipoAditamento,
             sNumeroAditamento: me.oTxtNumeroAditamento.getValue(),
@@ -1211,26 +1207,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oItemAdicionar.dtexecucaoinicio = oItem.periodoini;
             oItemAdicionar.dtexecucaofim = oItem.periodofim;
             oItemAdicionar.controlaServico = oItem.ServicoQuantidade;
-
-            //alert(oItem.ServicoQuantidade);
-            //alert("teste");
-
-
-            // console.log('Qtde anterior: ', oItem.qtdeanterior);
-            // /*comentado para atender a OC 6387*/
-            // if ($('oCboTipoAditivo').value == 6 || $('oCboTipoAditivo').value == 13) {
-            //
-            //
-            //     var dt1 = me.oTxtDataFinal.getValue().split("/");
-            //     var dt2 = me.oTxtDataFinalCompara.getValue().split("/");
-            //
-            //     var datafim1 = dt1[2] + "-" + dt1[1] + "-" + dt1[0];
-            //     var datafim2 = dt2[2] + "-" + dt2[1] + "-" + dt2[0];
-            // if (datafim1 <= datafim2) {
-            //   lAditar = false;
-            //   return alert("A nova data final do contrato deve ser maior que a data inserida!");
-            // }
-            // }
 
             if ($('oCboTipoAditivo').value == 14) {
                 var dt1 = me.oTxtDataFinal.getValue().split("/");
@@ -1318,15 +1294,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                     lAditar = false;
                     return alert("A Quantidade informada para o item " + oItem.descricaoitem.urlDecode() + " deve ser menor ou igual a quantidade original do item.");
                 }
-                /**
-                 *Comentado para permitir aditar com quantidade 0 conforme OC 5177
-                 **/
-                //if ((oItemAdicionar.quantidade == 0 || oItemAdicionar.valorunitario == 0)
-                //    && ([6, 8, 13].indexOf(parseInt(oParam.tipoalteracaoaditivo)) === -1)) {
-                //
-                //    lAditar = false;
-                //    return alert("Os itens marcados para aditamento devem possuir quantidade e valor unitrio.");
-                //}
 
                 /**
                  * Validamos o total do item com as dotacoes quando no for aditamento de prazo
@@ -1336,25 +1303,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
                     var nValorDotacao = 0;
                     oItem.dotacoes.forEach(function (oDotacao) {
-
-                        /**
-                         * Comentado para permitir dotacao com valor zero conforme solicitado por Danilo
-                         */
-                        /*if (oDotacao.valor == 0) {
-
-                            lAditar = false;
-                            return alert("Os Valores das Dotacoes para o item " + oItem.descricaoitem.urlDecode() + " no podem estar zeradas.");
-                          }*/
-
                         nValorDotacao += oDotacao.valor;
                     });
 
-/*                    if (lAditar && nValorDotacao.toFixed(2) != oItemAdicionar.valor.toFixed(2)) {
-
-                        lAditar = false;
-                        return alert("O valor da soma das Dotacoes do item " + oItem.descricaoitem.urlDecode() + " deve ser igual ao Valor Total do item.");
-                    }
-*/
                     oItemAdicionar.dotacoes = oItem.dotacoes;
                 } else {
                     oItemAdicionar.dotacoes = oItem.dotacoesoriginal;
@@ -1937,7 +1888,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
                 if ($('oCboTipoAditivo').value == 5 || $('oCboTipoAditivo').value == 2) {
                     oInputQuantidade.setReadOnly(true);
-                    //oInputQuantidade.setValue( js_formatar(0, "f", 3));
+
                     aLinha[5] = oInputQuantidade.toInnerHtml();
                     aLinha[11] = js_formatar(oItem.periodoini, 'd');
                     aLinha[12] = js_formatar(oItem.periodofim, 'd');
@@ -2112,7 +2063,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oDBHint.setShowEvents(aEventsIn);
             oDBHint.setHideEvents(aEventsOut);
             oDBHint.setPosition('B', 'L');
-            //oDBHint.setUseMouse(true);
             oDBHint.make($("oGridItensrow"+id+"cell2"), 3);
         });
     }
@@ -2164,7 +2114,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.pesquisaMaterial = function (mostra) {
-
         if (mostra) {
 
             js_OpenJanelaIframe('top.corpo',
@@ -2378,9 +2327,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.desativaInput = (aLinha, coluna) => {
         const atributos = `
-            background-color:#DEB887;
-            pointer-events: none;
-            touch-action: none;
+            ${me.desativaInputsCss}
             width:100%
         `;
 
@@ -2542,7 +2489,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       me.estadoTela.viewAlterar = true;
       db_iframe_acordo.hide()
       const rpc = 'con4_contratosaditamentos.RPC.php';
-      console.log(ac16_sequencial);
 
       const oParam = {
         exec: 'getAcordoAditvoAlteracao',
@@ -2566,12 +2512,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.lidaDadosAlteracao = (aditamento) => {
-      console.log("chegou aqui");
-      const atributosCss = `
-      background-color:#DEB887;
-      pointer-events: none;
-      touch-action: none;
-  `;
+
 
       $('btnAditar').disabled = false;
       $('btnItens').disabled = false;
@@ -2586,7 +2527,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         $('oCboTipoAditivo').value = aditamento.tipoAditivo;
       }
 
-      $('oCboTipoAditivo').style.cssText = atributosCss;
+      $('oCboTipoAditivo').style.cssText = me.desativaInputsCss;
 
       $('oTxtNumeroAditamento').value = aditamento.numeroAditamento;
       $('oTxtDataAssinatura').value = aditamento.dataAssinatura;
@@ -2649,9 +2590,13 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             const oRetorno = eval("(" + response.responseText + ")");
 
             if (oRetorno.erro == true) {
+              if (oRetorno.datareferencia) {
+                document.getElementById("trdatareferencia").style.display = 'contents';
+              }
+
               return alert(oRetorno.message.urlDecode());
             }
-            
+
             alert("Aditamento alterado com sucesso");
             me.pesquisaAcordoAlteracao(true);
         }

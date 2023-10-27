@@ -49,6 +49,7 @@ class AditamentoFactory
 
     public function createByStdLegacy(stdClass $aditamentoRaw)
     {
+
         $aditamento = new Aditamento();
 
         $aditamento->setAcordoPosicaoSequencial((int) $aditamentoRaw->acordoPosicaoSequencial)
@@ -68,6 +69,10 @@ class AditamentoFactory
             $aditamento->setIndiceReajuste((float) $aditamentoRaw->indicereajuste)
                 ->setPercentualReajuste((float) $aditamentoRaw->percentualreajuste)
                 ->setDescricaoIndice($aditamentoRaw->descricaoindice);
+        }
+
+        if (!empty($aditamentoRaw->datareferencia)) {
+            $aditamento->setDataReferencia(DateTime::createFromFormat('d/m/Y', $aditamentoRaw->datareferencia));
         }
 
         $itemFactory = new ItemFactory();

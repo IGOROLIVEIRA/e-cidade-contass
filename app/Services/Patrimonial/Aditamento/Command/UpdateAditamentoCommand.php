@@ -178,6 +178,9 @@ class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
             'ac35_datapublicacao' => $aditamento->getDataPublicacao()->format('Y-m-d'),
             'ac35_veiculodivulgacao' => $aditamento->getVeiculoDivulgacao(),
             'ac35_justificativa' => $aditamento->getJustificativa(),
+            'ac35_datareferencia' => !empty($aditamento->getDataReferencia())
+                                    ? $aditamento->getDataReferencia()->format('Y-m-d')
+                                    : null
         ];
     }
 }

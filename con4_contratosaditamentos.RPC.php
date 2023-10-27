@@ -165,51 +165,8 @@ try {
             break;
 
         case "processarAditamento":
-            $clcondataconf = new cl_condataconf;
-
             if ($sqlerro == false) {
-                $anousu = db_getsession('DB_anousu');
-
-                $sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
-                        from condataconf
-                          where c99_instit = " . db_getsession('DB_instit') . "
-                            order by c99_anousu desc limit 1";
-
-                $rsResult       = db_query($sSQL);
-                $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
-
-                $sNSQL = "";
-                if ($anousu > $maxC99_datapat) {
-                    $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat, db_getsession('DB_instit'), 'c99_datapat');
-                } else {
-                    $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat');
-                }
-
-                $result = db_query($sNSQL);
-                $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
-                $datareferencia = implode("-", array_reverse(explode("/", $oParam->datareferencia)));
-
-
-
-                if ($oParam->datareferencia != "") {
-
-                    if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
-                        throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
-                    }
-
-                    if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
-                        throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
-                    }
-                }
-
-                $dateassinatura = implode("-", array_reverse(explode("/", $oParam->dataassinatura)));
-
-                if ($dateassinatura != "" && $oParam->datareferencia == "") {
-                    if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
-                        $oRetorno->datareferencia = true;
-                        throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
-                    }
-                }
+                validaPeriodoSicom($oParam, $oRetorno);
             }
 
             $oAditivo = db_utils::getDao('acordoposicaoaditamento');
@@ -339,6 +296,8 @@ try {
             break;
 
         case 'processarAlteracaoAditivo':
+            validaPeriodoSicom($oParam->aditamento, $oRetorno);
+
             $service = new AditamentoService();
 
             $result = $service->updateAditamento($oParam->aditamento);
@@ -360,5 +319,52 @@ try {
     $oRetorno->erro  = true;
     $oRetorno->message = urlencode($eErro->getMessage());
 }
+
+function validaPeriodoSicom($aditamento, $oRetorno)
+{
+    $clcondataconf = new cl_condataconf;
+
+    $anousu = db_getsession('DB_anousu');
+
+    $sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
+             from condataconf
+               where c99_instit = " . db_getsession('DB_instit') . "
+                 order by c99_anousu desc limit 1";
+
+    $rsResult       = db_query($sSQL);
+    $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
+
+    $sNSQL = "";
+    if ($anousu > $maxC99_datapat) {
+        $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat, db_getsession('DB_instit'), 'c99_datapat');
+    } else {
+        $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat');
+    }
+
+    $result = db_query($sNSQL);
+    $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
+    $datareferencia = implode("-", array_reverse(explode("/", $aditamento->datareferencia)));
+
+
+
+    if ($aditamento->datareferencia != "") {
+        if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
+            throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
+        }
+
+        if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
+            throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
+        }
+    }
+
+    $dateassinatura = implode("-", array_reverse(explode("/", $aditamento->dataassinatura)));
+
+    if ($dateassinatura != "" && $aditamento->datareferencia == "") {
+        if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
+            $oRetorno->datareferencia = true;
+            throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
+        }
+    }
+}
 echo $oJson->encode($oRetorno);
-//echo json_encode($oRetorno);
+
