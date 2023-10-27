@@ -32,36 +32,31 @@ require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_acordo_classe.php");
 require_once("classes/db_parametroscontratos_classe.php");
-$lAtivo      = '';
 db_postmemory($_POST);
 parse_str($_SERVER["QUERY_STRING"]);
-
 $clacordo = new cl_acordo;
-$clparametroscontratos = new cl_parametroscontratos;
 $clacordo->rotulo->label();
-$iInstituicaoSessao = db_getsession('DB_instit');
 
-$rsParametros = $clparametroscontratos->sql_record($clparametroscontratos->sql_query_file('', '*'));
+$colunasFiltros = [
+    'ac16_sequencial'       => 'chave_ac16_sequencial',
+    'ac16_numeroacordo'     => 'ac16_numeroacordo',
+    'ac16_coddepto'         => 'coddeptoinc',
+    'ac16_deptoresponsavel' => 'coddeptoresp',
+    'ac16_acordogrupo'      => 'ac16_acordogrupo'
+];
 
-$pc01_liberaautorizacao = db_utils::fieldsMemory($rsParametros, 0)->pc01_liberaautorizacao;
-$pc01_libcontratodepart = db_utils::fieldsMemory($rsParametros, 0)->pc01_libcontratodepart;
+$filtros = [];
+$estadoBusca = false;
 
-function verificaCamposVazios(
-    $coddeptoinc,
-    $coddeptoresp,
-    $ac16_numeroacordo,
-    $ac16_acordogrupo,
-    $chave_ac16_sequencial
-) {
-    return empty($coddeptoinc) &&
-        empty($coddeptoresp) &&
-        empty($ac16_numeroacordo) &&
-        empty($coddeptoinc) &&
-        empty($ac16_acordogrupo) &&
-        empty($chave_ac16_sequencial);
+foreach($colunasFiltros as $key => $valor) {
+    if (!empty(${$valor})) {
+        $estadoBusca =true;
+        $filtros[$key] = ${$valor};
+    }
 }
 
-$sql = $clacordo->queryAcordosComAditamento();
+$sql = $clacordo->queryAcordosComAditamento($filtros);
+
 ?>
 <html>
 
@@ -171,11 +166,12 @@ $sql = $clacordo->queryAcordosComAditamento();
 
 </html>
 <?php
-if (!isset($pesquisa_chave)) {
+if ($estadoBusca) {
 ?>
     <script>
+
     </script>
-<?
+<?php
 }
 ?>
 <script>

@@ -3062,7 +3062,7 @@ class cl_acordo
         db_query($sSql);
     }
 
-    public function queryAcordosComAditamento(): string
+    public function queryAcordosComAditamento($filtros = []): string
     {
         $sql = "
         SELECT DISTINCT acordo.ac16_sequencial,
@@ -3105,16 +3105,18 @@ class cl_acordo
         INNER JOIN acordoitem ON acordoitem.ac20_acordoposicao = acordoposicao.ac26_sequencial
         LEFT JOIN acordoorigem ON acordoorigem.ac28_sequencial = acordo.ac16_origem
         LEFT JOIN acordomovimentacao ON acordomovimentacao.ac10_acordo = acordo.ac16_sequencial
-        WHERE 1 = 1
-            AND ac16_instit = 1
-            AND ac16_acordosituacao IN (4)
+        WHERE ac16_acordosituacao IN (4)
             AND ac16_acordosituacao = 4
             AND ac16_instit = 1
             AND ac26_acordoposicaotipo in (2,5,6,7,8,9,10,11,12,13)
-            AND ac26_numeroaditamento IS NOT NULL
-        ORDER BY ac16_sequencial DESC
-        ";
+            AND ac26_numeroaditamento IS NOT NULL";
 
+        foreach ($filtros as $key => $filtro) {
+            $sql .= " AND {$key} = {$filtro} ";
+        }
+
+        $sql .= " ORDER BY ac16_sequencial DESC";
+        
         return $sql;
     }
 

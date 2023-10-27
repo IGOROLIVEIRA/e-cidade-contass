@@ -2473,15 +2473,29 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.pesquisaAcordoAlteracao = function (lMostrar) {
+      const sUrl = 'func_aditamentoalteracao.php?funcao_js=parent.' + me.sInstance + '.js_mostraacordoalteracao|ac16_sequencial';
       if (lMostrar == true) {
 
-          var sUrl = 'func_aditamentoalteracao.php?funcao_js=parent.' + me.sInstance + '.js_mostraacordoalteracao|ac16_sequencial';
           js_OpenJanelaIframe('top.corpo',
               'db_iframe_acordo',
               sUrl,
               'Pesquisa de Acordo',
               true);
               $('oCboTipoAditivo').value = 0;
+      } else {
+
+        if (me.oTxtCodigoAcordo.getValue() != '') {
+            // var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave=' + me.oTxtCodigoAcordo.getValue() +
+            //     '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4&ac16_acordosituacao=4';
+
+            js_OpenJanelaIframe('top.corpo',
+                'db_iframe_acordo',
+                sUrl,
+                'Pesquisa de Acordo',
+                false);
+        } else {
+            me.oTxtCodigoAcordo.setValue('');
+        }
       }
     }
 
