@@ -79,7 +79,7 @@ $clrotulo->label("nome");
     </tr>
     <tr>
       <td colspan="2" style="text-align: center">
-        <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit"
+        <input onclick='return js_verificaDataAbastecimento();' name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" 
                id="db_opcao"  value="<?=($db_opcao==1?"Anular":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>"
                <?=($db_botao==false?"disabled":"")?> >
        <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" >
@@ -89,6 +89,28 @@ $clrotulo->label("nome");
 </center>
 </form>
 <script>
+function js_verificaDataAbastecimento(){
+
+    var oParametros = new Object();
+    var oRetorno;
+    oParametros.codigoAbastecimento = document.getElementById('ve74_veicabast').value;
+    oParametros.anulacaoAbastecimento = true;
+    oParametros.sMetodo = "validacaoAbastecimentoPorEmpenho";
+    var oAjax = new Ajax.Request('vei1_veicabast.RPC.php', {
+        method: 'post',
+        parameters: 'json=' + Object.toJSON(oParametros),
+        asynchronous: false,
+        onComplete: function(oAjax) {
+          oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
+        }
+    });
+
+    if(oRetorno.lErro){
+      if (!confirm("Usuário: A data de emissão do empenho é anterior à data de ativação do parametro controle de saldo do empenho, portanto, o saldo não será controlado.")) {
+          return false;
+      }
+    }
+}  
 function js_pesquisave74_veicabast(mostra){
   if(mostra==true){
     js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_veicabast','func_veicabast.php?funcao_js=parent.js_mostraveicabast1|ve70_codigo|ve70_codigo','Pesquisa',true);

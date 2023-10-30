@@ -545,5 +545,32 @@ class cl_veicabastanu {
      }
      return $sql;
   }
+  function atualizacaoSaldoEmpenho($ve70_codigo)
+    {
+        db_query("update empempenho set e60_vlrutilizado = e60_vlrutilizado - (select ve70_valor from veicabast where ve70_codigo = $ve70_codigo) 
+        where e60_numemp = (select si05_numemp from empveiculos where si05_codabast = $ve70_codigo)");
+    }
+
+  function permissaoAtualizacaoSaldo($codigoAbastecimento){
+    
+    $oDaoVeicparam = db_utils::getDao("veicparam");
+    $oDaoEmpveiculos = db_utils::getDao("empveiculos");
+    $oDaoEmpempenho = db_utils::getDao("empempenho");
+
+    $rsVeicparam = $oDaoVeicparam->sql_record($oDaoVeicparam->sql_query_file(null, "*", null, "ve50_instit = " . db_getsession("DB_instit")));
+    $abastecimentoPorEmpenho = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_abastempenho;
+    $rsEmpenhoVeiculo = $oDaoEmpveiculos->sql_record($oDaoEmpveiculos->sql_query_file(null,"si05_numemp",null,"si05_codabast = $codigoAbastecimento"));
+    $e60_numemp = db_utils::fieldsMemory($rsEmpenhoVeiculo, 0)->si05_numemp;
+    $rsDataEmpenho = $oDaoEmpempenho->sql_record($oDaoEmpempenho->sql_query_file($e60_numemp,"e60_emiss",null,"")); 
+    $e60_emiss = db_utils::fieldsMemory($rsDataEmpenho, 0)->e60_emiss;
+    $ve50_datacorte = db_utils::fieldsMemory($rsVeicparam, 0)->ve50_datacorte; 
+
+    if ($abastecimentoPorEmpenho == 1 && $e60_emiss >= $ve50_datacorte){
+      return true;
+    } 
+
+    return false;
+
+  }
 }
 ?>

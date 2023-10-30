@@ -39,8 +39,8 @@ class ContratoPNCP extends ModeloBasePNCP
             'niFornecedor'                             => $oDado->nifornecedor,
             'tipoPessoaFornecedor'                     => 'PJ', //$oDado->tipopessoafornecedor,
             'nomeRazaoSocialFornecedor'                => $oDado->nomerazaosocialfornecedor,
-            'receita'                                  => $oDado->receita == 'f' ? 'false' : 'true',
-            'codigoUnidade'                            => '01001', //$oDado->codigounidade,
+            'receita'                                  => $oDado->receita == 'f' ? 'true' : 'false',
+            'codigoUnidade'                            => $this->getUndCompradora(),
             'objetoContrato'                           => $oDado->objetocontrato,
             'valorInicial'                             => $oDado->valorinicial,
             'numeroParcelas'                           => $oDado->numeroparcelas,
@@ -72,8 +72,8 @@ class ContratoPNCP extends ModeloBasePNCP
             'niFornecedor'                             => $oDado->nifornecedor,
             'tipoPessoaFornecedor'                     => 'PJ', //$oDado->tipopessoafornecedor,
             'nomeRazaoSocialFornecedor'                => $oDado->nomerazaosocialfornecedor,
-            'receita'                                  => $oDado->receita,
-            'codigoUnidade'                            => '01001', //$oDado->codigounidade,
+            'receita'                                  => $oDado->receita == 'f' ? 'true' : 'false',
+            'codigoUnidade'                            => $this->getUndCompradora(),
             'objetoContrato'                           => $oDado->objetocontrato,
             'valorInicial'                             => $oDado->valorinicial,
             'numeroParcelas'                           => $oDado->numeroparcelas,
@@ -107,12 +107,12 @@ class ContratoPNCP extends ModeloBasePNCP
             'Authorization: ' . $token,
         );
 
-        $optionspncp = $this->getParancurl('POST',$dados,$headers,false,false);
+        $optionspncp = $this->getParancurl('POST',$dados,$headers,false,true);
 
         curl_setopt_array($chpncp, $optionspncp);
 
         $contentpncp = curl_exec($chpncp);
-        /*$err     = curl_errno($chpncp);
+       /*$err     = curl_errno($chpncp);
         $errmsg  = curl_error($chpncp);
         $header  = curl_getinfo($chpncp);
         $header['errno']   = $err;
