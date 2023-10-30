@@ -83,7 +83,6 @@ class CalculoAtuarialRTMAtivos extends CalculoAtuarialRTMBase {
 	    to_char(rh01_admiss, 'DD/MM/YYYY') ||'# '||
 	    rh37_descr ||'# '||
 	    trim(translate(round(COALESCE(sal.salariobase, 0),2)::varchar,'.',','))||'# '||
-	    trim(translate(round(COALESCE(sal.salariobase,0),2)::varchar,'.',',')) ||'# '||
 	    trim(translate(round(COALESCE(sal.total,0),2)::varchar,'.',',')) ||'# '||
 	    ' ' 
 	    ||'# '||
