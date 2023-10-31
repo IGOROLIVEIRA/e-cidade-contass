@@ -1005,7 +1005,8 @@ where j18_anousu = ".db_getsession("DB_anousu")." and j21_matric = {$j01_matric}
 
                 $service = new GeneratePixWithQRCodeService($providerConfig);
                 $service->execute($body);
-                $pdf1 = usePixIntegration($pdf1, $k00_numpre);
+
+                $pdf1 = usePixIntegrationUnica($pdf1, $k00_numpre);
                 $pdf1->hasQrCode = true;
             }
         } catch (Exception $eExeption){
@@ -2700,6 +2701,38 @@ function usePixIntegration(db_impcarne $pdfObject, int $numpre, int $numpar = nu
     $qrcodeImgService = new GenerateQrCodeImageService($builder);
 
     $imagePath = $qrcodeImgService->execute($recibopagaQrcodePix->k176_qrcode);
+
+    $pdfObject->qrcode = $imagePath;
+    return $pdfObject;
+}
+
+function usePixIntegrationUnica(db_impcarne $pdfObject, int $numnov): db_impcarne
+{
+    $numpref = Numpref::query()
+        ->where('k03_anousu', db_getsession("DB_anousu"))
+        ->where('k03_instit', db_getsession("DB_instit"))
+        ->first();
+
+    if (!$numpref->k03_ativo_integracao_pix) {
+        return $pdfObject;
+    }
+
+    $recibopagaQrcodePix = RecibopagaQrcodePix::query()->where('k176_numnov', $numnov)->first();
+
+    $pdfObject->hasQrCode = true;
+
+    $result = Builder::create()
+        ->writer(new PngWriter())
+        ->writerOptions([])
+        ->data($recibopagaQrcodePix->k176_qrcode)
+        ->encoding(new Encoding('UTF-8'))
+        ->size(300)
+        ->margin(10)
+        ->validateResult(false)
+        ->build();
+    $imagePath = "tmp/qrcode{$numnov}.png";
+
+        $result->saveToFile($imagePath);
 
     $pdfObject->qrcode = $imagePath;
     return $pdfObject;
