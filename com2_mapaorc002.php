@@ -200,7 +200,7 @@ if ($modelo == 1) {
   $condCriterioadj = "";
   for ($x = 0; $x < $numrows_itens; $x++) {
 
-    $condCriterioadj = (empty($pc80_criterioadjudicacao) || $pc80_criterioadjudicacao == 3) ? " and pc23_valor > 0 " : "";
+    $condCriterioadj = (empty($pc80_criterioadjudicacao) || $pc80_criterioadjudicacao == 3) ? " and pc23_valor >= 0 " : "";
     $troca = 1;
     db_fieldsmemory($result_itens, $x);
     if ($pdf->gety() > $pdf->h - 60 || $troca != 0) {
@@ -230,8 +230,10 @@ if ($modelo == 1) {
       null,
       "pc23_orcamitem=$pc22_orcamitem {$condCriterioadj}"
     );
+
     $result_valor_item = $clpcorcamval->sql_record($sSqlJulg);
     db_fieldsmemory($result_valor_item);
+    $vlrunit = empty($vlrunit) ? 0 : $vlrunit;
     $pdf->setfont('arial', '', 8);
     $pdf->cell(15, $alt, $pc11_seq, 1, 0, "C", 0);
 
@@ -283,6 +285,7 @@ if ($modelo == 1) {
         null,
         "pc23_orcamforne=$pc21_orcamforne and pc23_orcamitem=$pc22_orcamitem {$condCriterioadj} and pc23_vlrun <> 0"
       );
+
       $result_valor = $clpcorcamval->sql_record($sSqlJulg);
 
       if (pg_num_rows($result_valor) == 0) {
@@ -297,14 +300,23 @@ if ($modelo == 1) {
           "si01_processocompra=$pc81_codproc"
         );
         $result_casaspreco = $clprecoreferencia->sql_record($sSqlCasasPreco);
-  
+
         if (pg_num_rows($result_casaspreco) > 0) {
           db_fieldsmemory($result_casaspreco);
           $quant_casas = $si01_casasdecimais;
         }
       }
-      
+
       db_fieldsmemory($result_valor);
+
+       $pc23_vlrun = empty( $pc23_vlrun) ? 0 : $pc23_vlrun;
+       $pc23_quant = empty( $pc23_vlrun) ? 0 : $pc23_quant;
+       $pc23_valor = empty( $pc23_valor) ? 0 : $pc23_valor;
+       $pc23_perctaxadesctabela = empty($pc23_perctaxadesctabela) ? 0 : $pc23_perctaxadesctabela;
+       $pc23_percentualdesconto = empty($pc23_percentualdesconto) ? 0 :  $pc23_percentualdesconto;
+       $pc24_pontuacao = empty($pc24_pontuacao) ? 0 : $pc24_pontuacao;
+
+
       $pdf->setfont('arial', '', 7);
       if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) { //OC8365
         $pdf->cell(15, $alt, $z01_numcgm, 1, 0, "C", 0);
@@ -340,9 +352,12 @@ if ($modelo == 1) {
       $total_percentualdesconto += $pc23_percentualdesconto;
       $total_percentualdescontotaxa += $pc23_perctaxadesctabela;
 
-      if ($pc23_vlrun != 0)
+      if ($pc23_vlrun != 0){
         $iContOrcamento++;
+      }
     }
+
+    $iContOrcamento = $iContOrcamento === 0 ? 1 : $iContOrcamento;
 
     $pdf->setfont('arial', '', 7);
     $pdf->cell(20, $alt, "", 0, 0, "L", 0);
@@ -363,24 +378,15 @@ if ($modelo == 1) {
       } else {
         $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, 4, ',', '.'), 0, 0, "R", 0);
       }
-      /*FIM - OC3770*/
 
-      //            if ($quant_casas == 2) {
-      //                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 2) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
-      //            } else {
       $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 2) * $quant, 2, ',', '.'), 0, 1, "R", 0);
-      //            }
 
       $pdf->cell(279, $alt, '', '', 1, "L", 0);
-      //            if ($quant_casas == 2) {
-      $total_media += round(round(($total_unit / $iContOrcamento),$quant_casas)* $quant, 4);
+
+      $total_media += 0;
       $total_mediapercentual += ($total_percentualdesconto / $iContOrcamento);
       $total_mediapercentualtaxa += ($total_percentualdescontotaxa / $iContOrcamento);
-      //            } else {
-      //                $total_media += round($total_unit / $iContOrcamento, 3) * $quant;
-      //                $total_mediapercentual += ($total_percentualdesconto/$iContOrcamento);
-      //                $total_mediapercentualtaxa += ($total_percentualdescontotaxa/$iContOrcamento);
-      //            }
+
     } else {
       $pdf->cell(219, $alt, "Média", 0, 0, "L", 0);
 
@@ -390,20 +396,13 @@ if ($modelo == 1) {
       } else {
         $pdf->cell(20, $alt, number_format($total_unit / $iContOrcamento, $quant_casas, ',', '.'), 0, 0, "R", 0);
       }
-      /*FIM - OC3770*/
 
-      //if ($quant_casas == 2) {
       $pdf->cell(20, $alt, number_format(round((round($total_unit / $iContOrcamento, $quant_casas)) * $quant, 2), 2, ',', '.'), 0, 1, "R", 0);
-      //            } else {
-      //                $pdf->cell(20, $alt, number_format(round(($total_unit / $iContOrcamento), 3) * $quant, $oGet->quant_casas, ',', '.'), 0, 1, "R", 0);
-      //            }
 
       $pdf->cell(279, $alt, '', '', 1, "L", 0);
-      //            if ($quant_casas == 2) {
-      //                $total_media += round(($total_unit / $iContOrcamento), 2) * $quant;
-      //            } else {
+
       $total_media += round((round($total_unit / $iContOrcamento, $quant_casas))* $quant, 4);
-      //            }
+
     }
   }
 
@@ -443,6 +442,7 @@ if ($modelo == 1) {
   $pdf->cell(279, $alt, '', '', 1, "L", 0);
   $pdf->cell(15, $alt, "Total da Média", 0, 0, "C", 0);
   if ($pc80_criterioadjudicacao == 2 || $pc80_criterioadjudicacao == 1) {
+
     if ($pc80_criterioadjudicacao == 1) {
       $pdf->cell(224, $alt, $total_mediapercentualtaxa . "%", 0, 0, "R", 0);
       $pdf->cell(40, $alt, number_format($total_media, 2, ',', '.'), 0, 1, "R", 0);
@@ -450,8 +450,10 @@ if ($modelo == 1) {
       $pdf->cell(224, $alt, $total_mediapercentual . "%", 0, 0, "R", 0);
       $pdf->cell(40, $alt, number_format($total_media, 2, ',', '.'), 0, 1, "R", 0);
     } else {
+
       $pdf->cell(40, $alt, number_format($total_media, 2, ',', '.'), 0, 1, "R", 0);
     }
+
   } else {
     $pdf->cell(264, $alt, number_format($total_media, 2, ',', '.'), 0, 1, "R", 0);
   }
