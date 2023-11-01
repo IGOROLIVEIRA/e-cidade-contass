@@ -6044,6 +6044,51 @@ function getSaldoArrecadadoEmendaParlamentar($dtIni, $dtFim, $emenda = NULL)
     return db_utils::getColectionByRecord(db_query($sql));
 }
 
+/**
+ * Busca valor arrecado ou fontes decorrente de emenda parlamentar (k81_emparlamentar in (1,2))
+ * @param $dtIni
+ * @param $dtFim
+ * @param $instit
+ * @param $emenda
+ * @param $fontes
+ * @param $execoes
+ * @return array|stdClass[]
+ */
+function getSaldoArrecadadoEmendaParlamentarRelatorioReceita($dtIni, $dtFim, $emenda = NULL, $fontes = false, $execoes = NULL)
+{
+    $sql = "SELECT ";
+    if($fontes){
+        $sql .= " O57_FONTE ";
+    }else{
+        $sql .= " SUM(
+            CASE
+                WHEN ( C53_TIPO = 100 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR,2)::FLOAT8
+                WHEN ( C53_TIPO = 101 AND K81_EMPARLAMENTAR IN (1,2) ) THEN ROUND(C70_VALOR*-1,2)::FLOAT8
+            ELSE 0::FLOAT8 END) AS ARRECADADO_EMENDA_PARLAMENTAR ";
+    }
+    $sql .=" FROM CONLANCAMREC
+                    INNER JOIN CONLANCAM ON C74_CODLAN = C70_CODLAN
+                    INNER JOIN CONLANCAMDOC ON C71_CODLAN = C74_CODLAN
+                    INNER JOIN CONHISTDOC ON C53_CODDOC = C71_CODDOC
+                    INNER JOIN CONLANCAMCORRENTE ON C86_CONLANCAM = C74_CODLAN
+                    INNER JOIN CORRENTE ON (C86_ID, C86_DATA, C86_AUTENT) = (CORRENTE.K12_ID, CORRENTE.K12_DATA, CORRENTE.K12_AUTENT)
+                    INNER JOIN CORPLACAIXA ON (CORRENTE.K12_ID, CORRENTE.K12_DATA, CORRENTE.K12_AUTENT) = (K82_ID, K82_DATA, K82_AUTENT)
+                    INNER JOIN PLACAIXAREC ON K82_SEQPLA = K81_SEQPLA
+                    INNER JOIN ORCRECEITA ON (O70_ANOUSU, O70_CODREC) = (C74_ANOUSU, C74_CODREC)
+                    INNER JOIN ORCFONTES ON (O70_CODFON, O70_ANOUSU) = (O57_CODFON, O57_ANOUSU)
+                WHERE C74_DATA BETWEEN '{$dtIni}' AND '{$dtFim}'";
+
+    if ($emenda){
+        $sql .= " AND k81_emparlamentar IN (" . implode(",", $emenda) . ") AND O57_FONTE LIKE '4171%'";
+    }else{
+        $sql .= " AND O57_FONTE LIKE '4171%' ";
+    }
+    if ($execoes){
+        $sql .= " AND o70_codigo NOT IN (" . implode(",", $execoes) . ") ";
+    }
+    return pg_fetch_array(db_query($sql));
+}
+
 function getDespesaExercAnterior($dtIni, $instit, $sElemento)
 {
 
