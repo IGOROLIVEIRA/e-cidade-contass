@@ -111,6 +111,7 @@ $sWhereContratos = " and 1 = 1 ";
             if(isset($adjudicacao) && trim($adjudicacao) != "" && $l12_adjudicarprocesso == "f"){
                 $dbwhere .= "l20_tipnaturezaproced != 2 AND ";
             }
+
             /**
              * INCLUSAO
              */
@@ -127,7 +128,13 @@ $sWhereContratos = " and 1 = 1 ";
              * Apresentação para emissão de relatório
              */
             if(isset($adjudicacao) && trim($adjudicacao) == "3"){
-                $dbwhere .= " (l202_dataadjudicacao IS NOT NULL or l202_datahomologacao IS NOT null) AND l20_licsituacao in (10,13) AND l20_codtipocom NOT IN (10,15,29,30) AND l03_pctipocompratribunal NOT IN (100,101,102,103) AND ";
+                $dbwhere .= "
+                        (l20_licsituacao IN (10)
+                            AND l202_datahomologacao IS NOT NULL
+                            OR l20_licsituacao IN (13)
+                            AND l202_dataadjudicacao IS NOT NULL)
+                        AND l20_codtipocom NOT IN (10,15,29,30)
+                        AND l03_pctipocompratribunal NOT IN (100,101,102,103) AND ";
             }
 
             $sWhereModalidade = "";
