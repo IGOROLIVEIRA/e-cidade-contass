@@ -34,6 +34,7 @@ class AditamentoService implements AditamentoServiceInterface
         $aditamento = $aditamentoFactory->createByEloquentModel($acordoPosicao);
 
         $seriealizer = new AditamentoSerializeService($aditamento);
+
         return $seriealizer->jsonSerialize();
     }
 

@@ -68,7 +68,7 @@ class AditamentoSerializeService
 
                 $value = $prop->getValue($item);
                 $value = is_a($value, DateTime::class)
-                        ? $value->format('d/m/Y')
+                        ? $value->format('Y-m-d')
                         : $value;
 
                 $listaItens[$key][$atributo->getName()] = $value;
