@@ -146,7 +146,7 @@
 
     $head3 = "Adjudicação";
     $head5 = "Sequencial: $codigo_preco";
-    $head8 = "Data: " . $data;
+    $head8 = "Data: " . date('d/m/Y');
 
     $mPDF = new Relatorio('', 'A4', 0, "", 7, 7, 50);
 
@@ -302,7 +302,7 @@
 
         $sWhere = " liclicitem.l21_codliclicita = {$codigo_preco} and pc24_pontuacao = 1 ";
         $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null, $campos, "pc11_seq,z01_nome", $sWhere));
-        
+
         $array1 = array();
         $op = 0;
         for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
