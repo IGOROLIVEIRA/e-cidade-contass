@@ -63,7 +63,7 @@ if (isset($imprimirword)) {
     </script>";
     }
 }
- 
+
 if (isset($alterar)) {
 
     if ($respCotacaocodigo != "" && $respOrcacodigo != "") {
@@ -84,7 +84,7 @@ if (isset($alterar)) {
     /**
      * Atualizao do valor dos itens do preo referncia
      */
-    
+
     if ($si01_tipoprecoreferencia == '1') {
         $sFuncao = "avg";
     } else if ($si01_tipoprecoreferencia == '2') {
@@ -106,7 +106,7 @@ if (isset($alterar)) {
 
 
     $arrayValores = array();
-    $cont = 0; 
+    $cont = 0;
 
     for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
 
@@ -132,14 +132,14 @@ if (isset($alterar)) {
             }
         }
     }
-    
-    
+
+
     for ($iCont = 0; $iCont < $cont; $iCont++) {
         $valor = $arrayValores[$iCont];
 
         $sSql = "select
                     pc23_orcamitem,
-                    round($sFuncao(pc23_vlrun), 4) as valor,
+                    round($sFuncao(pc23_vlrun), $si01_casasdecimais) as valor,
                     round($sFuncao(pc23_perctaxadesctabela), 2) as percreferencia1,
                     round($sFuncao(pc23_percentualdesconto), 2) as percreferencia2,
                     pc23_quant,
@@ -192,12 +192,12 @@ if (isset($alterar)) {
                     m61_codmatunid,
                     pc80_criterioadjudicacao order by pc11_seq asc
                    ";
-       
-        $rsResultee = db_query($sSql);  
-       
 
-        $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);  
-        
+        $rsResultee = db_query($sSql);
+
+
+        $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);
+
         $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
         $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
         $clitemprecoreferencia->si02_precoreferencia = $si01_sequencial;
@@ -218,11 +218,11 @@ if (isset($alterar)) {
         $clitemprecoreferencia->si02_criterioadjudicacao = $oItemOrc->pc80_criterioadjudicacao;
         $clitemprecoreferencia->si02_mediapercentual = $oItemOrc->mediapercentual;
         $clitemprecoreferencia->si02_vltotalprecoreferencia = str_replace(',', '.', number_format(round($oItemOrc->valor, $si01_casasdecimais) * $oItemOrc->pc23_quant, 2, ',', ''));
-        $clitemprecoreferencia->incluir(null);    
+        $clitemprecoreferencia->incluir(null);
 
-       
+
     }
-    
+
     if ($clitemprecoreferencia->erro_status == 0) {
 
         $sqlerro = true;
@@ -235,7 +235,7 @@ if (isset($alterar)) {
         $clprecoreferencia->erro_status = "0";
         $clprecoreferencia->erro_campo = "si01_cotacaoitem";
     }
-    
+
 
     if ($clitemprecoreferencia->numrows > 0) {
         $clprecoreferencia->alterar($si01_sequencial);
@@ -246,7 +246,7 @@ if (isset($alterar)) {
         $clprecoreferenciaacount->si233_acao =  'Alterar';
         $clprecoreferenciaacount->si233_idusuario = db_getsession("DB_id_usuario");
         $clprecoreferenciaacount->si233_datahr =  date("Y-m-d", db_getsession("DB_datausu"));
-        $clprecoreferenciaacount->incluir(null);  
+        $clprecoreferenciaacount->incluir(null);
     }
 
     db_fim_transacao();
