@@ -123,7 +123,7 @@ include("dbforms/db_funcoes.php");
                         <label for="">Contrato</label>
 
                         <input type="checkbox" value="ValorUnit" id="vlrunt"/>
-                        <label for="">Valor Unitárop</label>
+                        <label for="">Valor Unitáro</label>
                     </td>
                 </tr>
                 <tr>
