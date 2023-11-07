@@ -710,6 +710,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         $('btnAditar').observe('click', me.aditar);
         $('btnPesquisarAcordo').observe('click', function () {
+            if (me.estadoTela.viewAlterar) {
+              me.pesquisaAcordoAlteracao(true);
+              return ;
+            }
             me.pesquisaAcordo(true);
         });
     }
@@ -2462,10 +2466,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         const tdLista = document.body.querySelectorAll("#oGridItensbody tbody td:nth-child(11)");
         soma = 0.0;
         for (let count = 0; count < tdLista.length; count++) {
-            let valorMonetario = tdLista[count].textContent;
-            valorMonetario = valorMonetario.replace(".","");
-            valorMonetario = valorMonetario.replace(",",".");
-            let valorTd = parseFloat(valorMonetario);
+            let valorTd = Number(tdLista[count].textContent.split('.').join("").replace(",","."));
             if (!tdLista[count].textContent) {
                 valorTd = 0.0;
             }
@@ -2491,8 +2492,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       } else {
 
         if (me.oTxtCodigoAcordo.getValue() != '') {
-            // var sUrl = 'func_acordo.php?descricao=true&pesquisa_chave=' + me.oTxtCodigoAcordo.getValue() +
-            //     '&funcao_js=parent.js_mostraacordo&iTipoFiltro=4&ac16_acordosituacao=4';
 
             js_OpenJanelaIframe('top.corpo',
                 'db_iframe_acordo',
@@ -2508,14 +2507,14 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.js_mostraacordoalteracao = (ac16_sequencial) => {
       me.estadoTela.viewAlterar = true;
       db_iframe_acordo.hide()
-      const rpc = 'con4_contratosaditamentos.RPC.php';
+
 
       const oParam = {
         exec: 'getAcordoAditvoAlteracao',
         ac16Sequencial: ac16_sequencial
       }
 
-      new Ajax.Request( rpc, {
+      new Ajax.Request( me.sUrlRpc, {
         method: 'post',
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: function (response) {
@@ -2543,7 +2542,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
       $('oTxtCodigoAcordo').value = aditamento.acordoSequencial;
 
-      if (me.estadoTela.changeTipoAdivito == false)  {
+      if (me.estadoTela.changeTipoAdivito === false)  {
         $('oCboTipoAditivo').value = aditamento.tipoAditivo;
       }
 
@@ -2592,7 +2591,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     }
 
     this.alterarAdiamento = (aditamento) => {
-      const rpc = 'con4_contratosaditamentos.RPC.php';
       aditamento.acordoPosicaoSequencial = me.estadoTela.acordoPosicaoSeq;
       aditamento.posicaoAditamentoSequencial = me.estadoTela.posicaoAditamentoSequencial;
 
@@ -2602,7 +2600,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         aditamento
       }
 
-      new Ajax.Request( rpc, {
+      new Ajax.Request( me.sUrlRpc, {
         method: 'post',
         parameters: 'json=' + Object.toJSON(oParam),
         onComplete: function (response) {
