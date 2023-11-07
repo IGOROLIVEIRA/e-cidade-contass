@@ -4,7 +4,7 @@ namespace App\Services\Contracts\Patrimonial\Aditamento\Command;
 
 use App\Domain\Patrimonial\Aditamento\Aditamento;
 
-interface UpdateAditamentoInterfaceCommand
+interface UpdateAditamentoCommandInterface
 {
-    public function execute(Aditamento $aditamento);
+    public function execute(Aditamento $aditamento): bool;
 }

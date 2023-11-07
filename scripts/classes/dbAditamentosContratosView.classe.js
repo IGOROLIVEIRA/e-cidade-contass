@@ -2198,8 +2198,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         $('oTextAreaDescricaoAlteracao').readOnly = true;
         $('oTxtDataInicial').readOnly = true;
         $('oTxtDataInicial').style.backgroundColor= 'rgb(222, 184, 135)';
+        $('dtjs_oTxtDataInicial').disabled = true;
         $('oTxtDataFinal').readOnly = true;
         $('oTxtDataFinal').style.backgroundColor= 'rgb(222, 184, 135)';
+        $('dtjs_oTxtDataFinal').disabled = true;
         $('btnItens').style.display = 'none';
 
         if ($('oCboTipoAditivo').value == 7) {
@@ -2209,25 +2211,29 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
         }
 
+        $('btnRemoveItem').style.display = 'none';
+
         if($('oCboTipoAditivo').value == 12){
           $('btnRemoveItem').style.display = '';
-        }else $('btnRemoveItem').style.display = 'none';
+        }
 
-        if ($('oCboTipoAditivo').value == 14) {
+        const oCboTipoAditivo = $('oCboTipoAditivo').value;
+
+        if ( oCboTipoAditivo == 14) {
 
             $('oTextAreaDescricaoAlteracao').removeClassName('readonly');
             $('oTextAreaDescricaoAlteracao').readOnly = false;
+
+        } else if (oCboTipoAditivo == 6 || oCboTipoAditivo == 13 || oCboTipoAditivo == 14 ) {
             $('oTxtDataInicial').readOnly = false;
             $('oTxtDataInicial').style.backgroundColor= 'white';
             $('oTxtDataFinal').readOnly = false;
             $('oTxtDataFinal').style.backgroundColor= 'white';
 
-        } else if ($('oCboTipoAditivo').value == 6 || $('oCboTipoAditivo').value == 13 ) {
-            $('oTxtDataInicial').readOnly = false;
-            $('oTxtDataInicial').style.backgroundColor= 'white';
-            $('oTxtDataFinal').readOnly = false;
-            $('oTxtDataFinal').style.backgroundColor= 'white';
-        } else if($('oCboTipoAditivo').value == 12) {
+            $('dtjs_oTxtDataInicial').disabled = false;
+            $('dtjs_oTxtDataFinal').disabled = false;
+
+        } else if(oCboTipoAditivo == 12) {
             $('btnItens').style.display = '';
             $('btnItens').observe('click', me.novoItem);
         }

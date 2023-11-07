@@ -103,7 +103,6 @@ class Aditamento
      */
     private ?DateTime $dataReferencia = null;
 
-
     /**
      * @var Item[]
      */

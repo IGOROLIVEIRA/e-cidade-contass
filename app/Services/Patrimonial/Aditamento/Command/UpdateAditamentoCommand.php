@@ -13,11 +13,11 @@ use App\Repositories\Patrimonial\AcordoItemRepository;
 use App\Repositories\Patrimonial\AcordoPosicaoAditamentoRepository;
 use App\Repositories\Patrimonial\AcordoPosicaoRepository;
 use App\Repositories\Patrimonial\AcordoVigenciaRepository;
-use App\Services\Contracts\Patrimonial\Aditamento\Command\UpdateAditamentoInterfaceCommand;
+use App\Services\Contracts\Patrimonial\Aditamento\Command\UpdateAditamentoCommandInterface;
 use Exception;
 use Illuminate\Database\Capsule\Manager as DB;
 
-class UpdateAditamentoCommand implements UpdateAditamentoInterfaceCommand
+class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
 {
     /**
      * @var AcordoPosicaoRepositoryInterface

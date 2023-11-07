@@ -6,6 +6,7 @@ use App\Domain\Patrimonial\Aditamento\Factory\AditamentoFactory;
 use App\Repositories\Patrimonial\AcordoPosicaoRepository;
 use App\Services\Contracts\Patrimonial\Aditamento\AditamentoServiceInterface;
 use App\Services\Patrimonial\Aditamento\Command\UpdateAditamentoCommand;
+use App\Services\Patrimonial\Aditamento\Command\ValidaDataAssinaturaCommand;
 use Exception;
 use stdClass;
 
@@ -43,6 +44,8 @@ class AditamentoService implements AditamentoServiceInterface
         try {
             $aditamentoFactory = new AditamentoFactory();
             $aditamento = $aditamentoFactory->createByStdLegacy($aditamentoRaw);
+
+            (new ValidaDataAssinaturaCommand())->execute($aditamento);
 
             $updateCommand = new UpdateAditamentoCommand();
             $result = $updateCommand->execute($aditamento);
