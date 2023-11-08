@@ -15,6 +15,7 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
+use Illuminate\Support\Facades\Date;
 use InvalidArgumentException;
 
 class ApiPixArrecadacao implements IPixProvider
@@ -40,7 +41,7 @@ class ApiPixArrecadacao implements IPixProvider
         $payload['codigoSolicitacaoBancoCentralBrasil'] = $this->configuration->getChavePix();
 
         if (!empty($payload['k00_dtvenc'])) {
-            $dateExpiration = DateTime::createFromFormat('d/m/Y', $payload['k00_dtvenc']);
+            $dateExpiration = $this->parseDate($payload['k00_dtvenc']);
             $payload['quantidadeSegundoExpiracao'] = $this->getExpirationSecondsQuantity($dateExpiration);
         }
 
@@ -130,5 +131,14 @@ class ApiPixArrecadacao implements IPixProvider
         $now = new DateTime(date('Y-m-d'));
         $diff = $dateExpiration->getTimestamp() - $now->getTimestamp();
         return $diff > 0 ? $diff : 3600;
+    }
+
+    private function parseDate(string $date): DateTime
+    {
+        $newDate = DateTime::createFromFormat('d/m/Y', $date);
+        if(!$newDate) {
+            $newDate = DateTime::createFromFormat('Y-m-d', $date);
+        }
+        return $newDate;
     }
 }
