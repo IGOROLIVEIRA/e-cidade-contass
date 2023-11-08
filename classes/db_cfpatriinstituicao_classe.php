@@ -49,12 +49,23 @@ class cl_cfpatriinstituicao {
    var $t59_dataimplanatacaodepreciacao_ano = null; 
    var $t59_dataimplanatacaodepreciacao = null; 
    var $t59_termodeguarda = false;
+   var $t59_usuarioapi = null;
+   var $t59_senhaapi = null;
+   var $t59_enderecoapi = null;
+   var $t59_ativo = null;
+   var $t59_tokenapi = null;
+      
    // cria propriedade com as variaveis do arquivo 
    var $campos = "
                  t59_sequencial = int4 = Sequencial 
                  t59_instituicao = int4 = Instituição 
                  t59_dataimplanatacaodepreciacao = date = Data 
                  t59_termodeguarda = boolean = Termo de Guarda
+                 t59_usuarioapi = varchar(60) = Login
+                 t59_senhaapi = varchar(40) = Senha
+                 t59_enderecoapi = varchar(250) =  Endereï¿½o da API
+                 t59_ativo = boolean = Ativaï¿½ï¿½o da Integraï¿½ï¿½o
+                 t59_tokenapi = varchar(100) = Token
                  ";
    //funcao construtor da classe 
    function cl_cfpatriinstituicao() { 
@@ -84,7 +95,12 @@ class cl_cfpatriinstituicao {
             $this->t59_dataimplanatacaodepreciacao = $this->t59_dataimplanatacaodepreciacao_ano."-".$this->t59_dataimplanatacaodepreciacao_mes."-".$this->t59_dataimplanatacaodepreciacao_dia;
          }
          $this->t59_termodeguarda = ($this->t59_termodeguarda == ""?@$GLOBALS["HTTP_POST_VARS"]["t59_termodeguarda"]:$this->t59_termodeguarda);
-       }
+         $this->t59_usuarioapi = ($this->t59_usuarioapi == ""?@$GLOBALS["HTTP_POST_VARS"]["t59_usuarioapi"]:$this->t59_usuarioapi);
+         $this->t59_senhaapi = ($this->t59_senhaapi == ""?@$GLOBALS["HTTP_POST_VARS"]["t59_senhaapi"]:$this->t59_senhaapi);
+         $this->t59_enderecoapi = ($this->t59_enderecoapi == ""?@$GLOBALS["HTTP_POST_VARS"]["t59_enderecoapi"]:$this->t59_enderecoapi);
+         $this->t59_ativo = ($this->t59_ativo == ""?@$GLOBALS["HTTP_POST_VARS"]["t59_ativo"]:$this->t59_ativo);     
+         $this->t59_tokenapi = ($this->t59_tokenapi == ""?@$GLOBALS["HTTP_POST_VARS"]["t59_tokenapi"]:$this->t59_tokenapi);  
+        }
      }else{
        $this->t59_sequencial = ($this->t59_sequencial == ""?@$GLOBALS["HTTP_POST_VARS"]["t59_sequencial"]:$this->t59_sequencial);
      }
@@ -142,15 +158,27 @@ class cl_cfpatriinstituicao {
        $this->erro_status = "0";
        return false;
      }
+     $this->t59_senhaapi = base64_encode($this->t59_senhaapi);
      $sql = "insert into cfpatriinstituicao(
                                        t59_sequencial 
                                       ,t59_instituicao 
                                       ,t59_dataimplanatacaodepreciacao 
+                                      ,t59_usuarioapi
+                                      ,t59_senhaapi
+                                      ,t59_enderecoapi 
+                                      ,t59_ativo
+                                      ,t59_tokenapi
+
                        )
                 values (
                                 $this->t59_sequencial 
                                ,$this->t59_instituicao 
                                ,".($this->t59_dataimplanatacaodepreciacao == "null" || $this->t59_dataimplanatacaodepreciacao == ""?"null":"'".$this->t59_dataimplanatacaodepreciacao."'")." 
+                               ,$this->t59_usuarioapi
+                               ,$this->t59_senhaapi
+                               ,$this->t59_enderecoapi 
+                               ,$this->t59_ativo
+                               ,$this->t59_tokenapi
                       )";
      $result = db_query($sql); 
      if($result==false){ 
@@ -185,7 +213,12 @@ class cl_cfpatriinstituicao {
        $resac = db_query("insert into db_acount values($acount,3286,18574,'','".AddSlashes(pg_result($resaco,0,'t59_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,3286,18575,'','".AddSlashes(pg_result($resaco,0,'t59_instituicao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        $resac = db_query("insert into db_acount values($acount,3286,18576,'','".AddSlashes(pg_result($resaco,0,'t59_dataimplanatacaodepreciacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-     }
+       $resac = db_query("insert into db_acount values($acount,3286,18576,'','".AddSlashes(pg_result($resaco,0,'t59_usuarioapi'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,3286,18576,'','".AddSlashes(pg_result($resaco,0,'t59_senhaapi'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,3286,18576,'','".AddSlashes(pg_result($resaco,0,'t59_enderecoapi'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,3286,18576,'','".AddSlashes(pg_result($resaco,0,'t59_ativo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       $resac = db_query("insert into db_acount values($acount,3286,18576,'','".AddSlashes(pg_result($resaco,0,'t59_tokenapi'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+      }
      return true;
    } 
    // funcao para alteracao
@@ -249,6 +282,21 @@ class cl_cfpatriinstituicao {
       if(trim($this->t59_termodeguarda)!="" || isset($GLOBALS["HTTP_POST_VARS"]["t59_termodeguarda"]) &&  ($GLOBALS["HTTP_POST_VARS"]["t59_termodeguarda"] !="") ){ 
           $sql  .= $virgula." t59_termodeguarda = '$this->t59_termodeguarda' ";
       }
+      // if(trim($this->t59_usuarioapi)!="" || isset($GLOBALS["HTTP_POST_VARS"]["t59_usuarioapi"]) &&  ($GLOBALS["HTTP_POST_VARS"]["t59_usuarioapi"] !="") ){ 
+        $sql  .= $virgula." t59_usuarioapi = '$this->t59_usuarioapi' ";
+      // }
+      // if(trim($this->t59_senhaapi)!="" || isset($GLOBALS["HTTP_POST_VARS"]["t59_senhaapi"]) &&  ($GLOBALS["HTTP_POST_VARS"]["t59_senhaapi"] !="") ){ 
+        $this->t59_senhaapi = base64_encode($this->t59_senhaapi);
+        $sql  .= $virgula." t59_senhaapi = '$this->t59_senhaapi' ";
+      // }
+      // if(trim($this->t59_enderecoapi)!="" || isset($GLOBALS["HTTP_POST_VARS"]["t59_enderecoapi"]) &&  ($GLOBALS["HTTP_POST_VARS"]["t59_enderecoapi"] !="") ){ 
+        $sql  .= $virgula." t59_enderecoapi = '$this->t59_enderecoapi' ";
+      // }
+      if(trim($this->t59_ativo)!="" || isset($GLOBALS["HTTP_POST_VARS"]["t59_ativo"]) &&  ($GLOBALS["HTTP_POST_VARS"]["t59_ativo"] !="") ){ 
+        $sql  .= $virgula." t59_ativo = '$this->t59_ativo' ";
+      }
+      $this->t59_tokenapi = base64_encode($this->t59_tokenapi);
+        $sql  .= $virgula." t59_tokenapi = '$this->t59_tokenapi' ";     
      $sql .= " where ";
      if($t59_sequencial!=null){
        $sql .= " t59_sequencial = $this->t59_sequencial";
@@ -266,7 +314,18 @@ class cl_cfpatriinstituicao {
            $resac = db_query("insert into db_acount values($acount,3286,18575,'".AddSlashes(pg_result($resaco,$conresaco,'t59_instituicao'))."','$this->t59_instituicao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          if(isset($GLOBALS["HTTP_POST_VARS"]["t59_dataimplanatacaodepreciacao"]) || $this->t59_dataimplanatacaodepreciacao != "")
            $resac = db_query("insert into db_acount values($acount,3286,18576,'".AddSlashes(pg_result($resaco,$conresaco,'t59_dataimplanatacaodepreciacao'))."','$this->t59_dataimplanatacaodepreciacao',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
+         if(isset($GLOBALS["HTTP_POST_VARS"]["t59_usuarioapi"]) || $this->t59_usuarioapi != "")
+           $resac = db_query("insert into db_acount values($acount,3286,18577,'".AddSlashes(pg_result($resaco,$conresaco,'t59_usuarioapi'))."','$this->t59_usuarioapi',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["t59_senhaapi"]) || $this->t59_senhaapi != "")
+           $resac = db_query("insert into db_acount values($acount,3286,18578,'".AddSlashes(pg_result($resaco,$conresaco,'t59_senhaapi'))."','$this->t59_senhaapi',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["t59_enderecoapi"]) || $this->t59_enderecoapi != "")
+           $resac = db_query("insert into db_acount values($acount,3286,18579,'".AddSlashes(pg_result($resaco,$conresaco,'t59_enderecoapi'))."','$this->t59_enderecoapi',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         if(isset($GLOBALS["HTTP_POST_VARS"]["t59_ativo"]) || $this->t59_ativo != "")
+           $resac = db_query("insert into db_acount values($acount,3286,18580,'".AddSlashes(pg_result($resaco,$conresaco,'t59_ativo'))."','$this->t59_ativo',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+          }
+          if(isset($GLOBALS["HTTP_POST_VARS"]["t59_tokenapi"]) || $this->t59_tokenapi != "")
+           $resac = db_query("insert into db_acount values($acount,3286,18578,'".AddSlashes(pg_result($resaco,$conresaco,'t59_tokenapi'))."','$this->t59_tokenapi',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+       
      }
      $result = db_query($sql);
      if($result==false){ 
@@ -316,7 +375,12 @@ class cl_cfpatriinstituicao {
          $resac = db_query("insert into db_acount values($acount,3286,18574,'','".AddSlashes(pg_result($resaco,$iresaco,'t59_sequencial'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,3286,18575,'','".AddSlashes(pg_result($resaco,$iresaco,'t59_instituicao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
          $resac = db_query("insert into db_acount values($acount,3286,18576,'','".AddSlashes(pg_result($resaco,$iresaco,'t59_dataimplanatacaodepreciacao'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
-       }
+         $resac = db_query("insert into db_acount values($acount,3286,18577,'','".AddSlashes(pg_result($resaco,$iresaco,'t59_usuarioapi'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3286,18578,'','".AddSlashes(pg_result($resaco,$iresaco,'t59_senhaapi'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3286,18576,'','".AddSlashes(pg_result($resaco,$iresaco,'t59_enderecoapi'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3286,18576,'','".AddSlashes(pg_result($resaco,$iresaco,'t59_ativo'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+         $resac = db_query("insert into db_acount values($acount,3286,18578,'','".AddSlashes(pg_result($resaco,$iresaco,'t59_tokenapi'))."',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
+        }
      }
      $sql = " delete from cfpatriinstituicao
                     where ";
