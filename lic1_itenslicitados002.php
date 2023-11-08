@@ -151,7 +151,7 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(185, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(185, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(30, $alt, $fornecedor, 1, 0, "C",0);
         $pdf->cell(30, $alt, $contrato, 1, 1, "C",0);
@@ -235,7 +235,7 @@ if($impforne == "true" && $impproc == "true" && $impaco=="true" && $impvlrunit =
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(165, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(165, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
         $pdf->cell(30, $alt, $fornecedor, 1, 0, "C",0);
@@ -315,7 +315,7 @@ if($impforne == "true" && $impproc == "true" && $impaco==null && $impvlrunit == 
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(185, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(185, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
         $pdf->cell(30, $alt, $fornecedor, 1, 0, "C",0);
@@ -397,7 +397,7 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(185, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(185, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
         $pdf->cell(50, $alt, $fornecedor, 1, 1, "C",0);
@@ -472,7 +472,7 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(140, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(140, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(115, $alt, $fornecedor."-".$z01_nome, 1, 1, "C",0);
     }
@@ -544,7 +544,7 @@ if($impforne == "true" && $impproc == "true" && $impaco == null && $impvlrunit =
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(135, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(135, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(85, $alt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
         $pdf->cell(30, $alt, $licitacao, 1, 1, "C",0);
@@ -619,7 +619,7 @@ if($impforne == "true" && $impproc == "true" && $impaco == "true" && $impvlrunit
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(120, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(120, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(90, $alt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
         $pdf->cell(20, $alt, $licitacao, 1, 0, "C",0);
@@ -696,7 +696,7 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(175, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(175, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
         $pdf->cell(30, $alt, $licitacao, 1, 0, "C",0);
@@ -772,7 +772,7 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(205, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(205, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
         $pdf->cell(30, $alt, $contrato, 1, 1, "C",0);
@@ -845,7 +845,7 @@ if($impforne == false && $impproc == false && $impaco == false && $impvlrunit ==
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(235, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(235, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(15, $alt, $valorunitario, 1, 1, "C",0);
 
@@ -917,7 +917,7 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(220, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(220, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(30, $alt, $licitacao, 1, 0, "C",0);
         $pdf->cell(15, $alt, $valorunitario, 1, 1, "C",0);
 
@@ -992,7 +992,7 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(130, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(130, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(80, $alt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
         $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
@@ -1068,7 +1068,7 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(185, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(185, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(30, $alt, $licitacao, 1, 0, "C",0);
         $pdf->cell(30, $alt, $contrato, 1, 1, "C",0);
@@ -1133,7 +1133,7 @@ if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == nu
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(235, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(235, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 1, "C",0);
     }
 }
@@ -1204,7 +1204,7 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(215, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(215, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(30, $alt, $contrato, 1, 1, "C",0);
 
@@ -1276,7 +1276,7 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
 
         $pdf->setfont('arial', '', 8);
         $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(215, $alt, $descricao, 1, 0, "C",0);
+        $pdf->cell(215, $alt, $descricao, 1, 0, "L",0);
         $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
         $pdf->cell(30, $alt, $licitacao, 1, 1, "C",0);
     }
