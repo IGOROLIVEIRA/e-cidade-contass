@@ -15,7 +15,6 @@ use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Query;
 use GuzzleHttp\Psr7\Request;
-use Illuminate\Support\Facades\Date;
 use InvalidArgumentException;
 
 class ApiPixArrecadacao implements IPixProvider
