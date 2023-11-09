@@ -28,6 +28,39 @@
 include("fpdf151/pdf.php");
 include("libs/db_sql.php");
 
+function buscarFornecedoresGanhadores(int $codigoLicitacao): array
+{
+    $fornecedores = [];
+    $sqlFornecedores = "SELECT DISTINCT l21_ordem,
+        pc23_orcamforne,
+        pc23_orcamitem,
+        z01_numcgm,
+        z01_nome
+    FROM liclicita
+    INNER JOIN liclicitem ON l21_codliclicita=l20_codigo
+    INNER JOIN pcorcamitemlic ON pc26_liclicitem=l21_codigo
+    INNER JOIN pcorcamitem ON pc22_orcamitem=pc26_orcamitem
+    INNER JOIN pcorcamjulg ON pc24_orcamitem=pc22_orcamitem
+    INNER JOIN pcorcamforne ON pc21_orcamforne=pc24_orcamforne
+    INNER JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
+        AND pc23_orcamforne = pc21_orcamforne
+    INNER JOIN cgm ON z01_numcgm=pc21_numcgm
+    WHERE
+        l20_codigo={$codigoLicitacao}
+        AND pc24_pontuacao = 1;";
+
+        $result = db_query($sqlFornecedores);
+        $countResult  = pg_num_rows(db_query($sqlFornecedores));
+
+        for($i = 0; $i < $countResult; $i++) {
+           $fornecedor = db_utils::fieldsmemory($result, $i);
+
+            $fornecedores[] =['cgm' => $fornecedor->z01_numcgm, 'nome' => $fornecedor->z01_nome];
+        }
+
+    return $fornecedores;
+}
+
 
 /*
  * query que busca os dados para retorno do relatório
@@ -38,7 +71,8 @@ $sql = "SELECT DISTINCT l20_numero || '/' || l20_anousu AS licitacao,
                         coddepto || '-' || descrdepto AS departamento,
                         to_char(pc54_datainicio,'dd / mm / yyyy') AS inicio,
                         to_char(pc54_datatermino,'dd / mm / yyyy') AS fim,
-                        pc54_datatermino
+                        pc54_datatermino,
+                        l20_codigo
         FROM liclicitem
         INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
         INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
@@ -111,6 +145,24 @@ for($i = 0; $i < pg_num_rows($resultVigencia); $i++){
     $pdf->cell(279, $alt, "Objeto", 1, 1, "C",1);
     $pdf->setfont('arial', '', 6);
     $pdf->multicell(279, $alt, $objeto, 1, "J");
+
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(42, $alt, "Cgm", 1, 0, "C", 1);
+    $pdf->cell(237, $alt, "Fornecedor", 1, 1, "C", 1);
+
+    $fornecedores = buscarFornecedoresGanhadores((int)$l20_codigo);
+
+    if (empty($fornecedores)) {
+        $pdf->setfont('arial', '', 6);
+        $pdf->cell(42, $alt, "", 1, 0, "C", 0);
+        $pdf->cell(237, $alt, "", 1, 1, "C", 0);
+    } else {
+        foreach ($fornecedores as $fornecedor) {
+            $pdf->setfont('arial', '', 6);
+            $pdf->cell(42, $alt, $fornecedor['cgm'], 1, 0, "C", 0);
+            $pdf->cell(237, $alt, $fornecedor['nome'], 1, 1, "C", 0);
+        }
+    }
     $pdf->cell(279, $alt, "", 0, 1, "C");
 }
 
