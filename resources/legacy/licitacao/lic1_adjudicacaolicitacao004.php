@@ -152,8 +152,7 @@
 
     $mPDF
         ->addInfo($head3, 2)
-        ->addInfo($head5, 4)
-        ->addInfo($head8, 7);
+        ->addInfo($head5, 4);
 
 
     ob_start();
@@ -300,7 +299,7 @@
 
         $campos = "DISTINCT pc01_codmater,pc01_tabela,pc01_taxa,pc01_descrmater,cgmforncedor.z01_nome,cgmforncedor.z01_cgccpf,m61_descr,m61_abrev,pc11_quant,pc23_obs,pc23_valor,pcorcamval.pc23_vlrun,pcorcamval.pc23_percentualdesconto as mediapercentual,l203_homologaadjudicacao,pc81_codprocitem,l04_descricao,pc11_seq";
 
-        $sWhere = " liclicitem.l21_codliclicita = {$codigo_preco} and pc24_pontuacao = 1 ";
+        $sWhere = " liclicitem.l21_codliclicita = {$codigo_preco} and pc24_pontuacao = 1 AND itenshomologacao.l203_sequencial is null";
         $result = $clhomologacaoadjudica->sql_record($clhomologacaoadjudica->sql_query_itens_semhomologacao(null, $campos, "pc11_seq,z01_nome", $sWhere));
 
         $array1 = array();
@@ -596,12 +595,8 @@ HTML;
             $dadosAssinatura = explode('\n', $sAssinaturaCotacao);
             $sCotacao = '';
 
-            //if (count($dadosAssinatura) > 1) {
             $sCotacao = '<div class="linha-vertical">';
-            //for ($count = 0; $count < count($dadosAssinatura); $count++) {
             $sCotacao .= "<strong>" . strtoupper($nome) . "</strong>";
-            //$sCotacao .= $count ? '' : "<br/>";
-            //}
             $sCotacao .= "</div>";
             echo <<<HTML
             $sCotacao
