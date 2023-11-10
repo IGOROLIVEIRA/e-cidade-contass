@@ -64,6 +64,29 @@ function buscarFornecedoresGanhadores(int $codigoLicitacao): array
     return $fornecedores;
 }
 
+function insereFornecedores(PDF $pdf, int $alt, int $l20_codigo): void
+{
+    $fornecedores = buscarFornecedoresGanhadores($l20_codigo);
+
+    if (empty($fornecedores)) {
+        $pdf->setfont('arial', '', 6);
+        $pdf->cell(42, $alt, "", 1, 0, "C", 0);
+        $pdf->cell(42, $alt, "", 1, 0, "C", 0);
+        $pdf->cell(119, $alt, "", 1, 0, "C", 0);
+        $pdf->cell(38, $alt, "", 1, 0, "C",0);
+        $pdf->cell(38, $alt, "", 1, 1, "C",0);
+    } else {
+        foreach ($fornecedores as $fornecedor) {
+            $pdf->setfont('arial', '', 6);
+            $pdf->cell(42, $alt, $fornecedor['cgm'], 1, 0, "C", 0);
+            $pdf->cell(42, $alt, $fornecedor['documento'], 1, 0, "C", 0);
+            $pdf->cell(119, $alt, $fornecedor['nome'], 1, 0, "L", 0);
+            $pdf->cell(38, $alt, "", 1, 0, "C",0);
+            $pdf->cell(38, $alt, "", 1, 1, "C",0);
+        }
+    }
+}
+
 
 /*
  * query que busca os dados para retorno do relatório
@@ -168,25 +191,8 @@ for($i = 0; $i < pg_num_rows($resultVigencia); $i++){
     $pdf->cell(38, $alt, "", 1, 0, "C",1);
     $pdf->cell(38, $alt, "", 1, 1, "C",1);
 
-    $fornecedores = buscarFornecedoresGanhadores((int)$l20_codigo);
+    insereFornecedores($pdf, $alt, (int)$l20_codigo);
 
-    if (empty($fornecedores)) {
-        $pdf->setfont('arial', '', 6);
-        $pdf->cell(42, $alt, "", 1, 0, "C", 0);
-        $pdf->cell(42, $alt, "", 1, 0, "C", 0);
-        $pdf->cell(119, $alt, "", 1, 0, "C", 0);
-        $pdf->cell(38, $alt, "", 1, 0, "C",0);
-        $pdf->cell(38, $alt, "", 1, 1, "C",0);
-    } else {
-        foreach ($fornecedores as $fornecedor) {
-            $pdf->setfont('arial', '', 6);
-            $pdf->cell(42, $alt, $fornecedor['cgm'], 1, 0, "C", 0);
-            $pdf->cell(42, $alt, $fornecedor['documento'], 1, 0, "C", 0);
-            $pdf->cell(119, $alt, $fornecedor['nome'], 1, 0, "L", 0);
-            $pdf->cell(38, $alt, "", 1, 0, "C",0);
-            $pdf->cell(38, $alt, "", 1, 1, "C",0);
-        }
-    }
     $pdf->cell(279, $alt, "", 0, 1, "C");
 }
 
