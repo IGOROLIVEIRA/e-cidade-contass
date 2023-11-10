@@ -263,8 +263,29 @@ class ManagerParseFiles {
       $type = array_shift($parts);
       $user = $type == 'user' ? array_shift($parts) : null;
       $originalPath = implode('/', $parts);
-
+      //string(37) "user/mhbc.contass/func_calendario.php" $relativePath
       $dataFile = new FileData($originalPath, $user);
+
+      /*
+      object(ECidade\V3\Modification\Data\File)#428 (4) {
+        ["originalPath":"ECidade\V3\Modification\Data\File":private]=>
+        string(19) "func_calendario.php"
+        ["persistPath":"ECidade\V3\Modification\Data\File":private]=>
+        string(58) "/var/www/e-cidade-teste/extension/modification/data/cache/"
+        ["prefix":"ECidade\V3\Modification\Data\File":private]=>
+        string(18) "user/mhbc.contass/"
+        ["storage":"ECidade\V3\Extension\AbstractMetadata":private]=>
+        object(ECidade\V3\Extension\Storage)#429 (3) {
+          ["path":protected]=>
+          string(95) "/var/www/e-cidade-teste/extension/modification/data/cache/user/mhbc.contass/func_calendario.php"
+          ["data":"ECidade\V3\Extension\Storage":private]=>
+          NULL
+          ["serialize":"ECidade\V3\Extension\Storage":private]=>
+          bool(false)
+        }
+      }
+      */
+
       $fileSync = new FileSync($dataFile);
 
       if (!file_exists($path)) {
