@@ -29,10 +29,31 @@ require_once("fpdf151/scpdf.php");
 require_once("fpdf151/impcarne.php");
 require_once("libs/db_sql.php");
 require_once("libs/db_utils.php");
+include("classes/db_db_docparag_classe.php");
 $oGet = db_utils::postMemory($_GET);
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 db_postmemory($HTTP_POST_VARS);
 
+
+$sWhere  = " db02_descr like 'ASS. RESP. DEC. DE RECURSOS FINANCEIROS' ";
+$sWhere .= " AND db03_instit = db02_instit ";
+$sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
+
+$cl_docparag = new cl_db_docparag;
+
+$sAssinatura = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
+$rs = $cl_docparag->sql_record($sAssinatura);
+$oLinha = db_utils::fieldsMemory($rs, 0)->db02_texto;
+
+
+$sWhere  = " db02_descr like '%RECURSOS FINANCEIROS%' ";
+$sWhere .= " AND db03_instit = db02_instit ";
+$sWhere .= " AND db02_instit = " . db_getsession('DB_instit');
+
+$sSqlCotacao = $cl_docparag->sql_query_doc('', '', 'db02_texto', '', $sWhere);
+$rsCotacao = $cl_docparag->sql_record($sSqlCotacao);
+
+$sAssinaturaCotacao = db_utils::fieldsMemory($rsCotacao, 0)->db02_texto;
 
 $sqlpref  = "select db_config.*, cgm.z01_incest as inscricaoestadualinstituicao ";
 $sqlpref .= "  from db_config     ";
@@ -53,7 +74,7 @@ $precoreferencia = db_utils::fieldsMemory($rsResult, 0)->si02_precoreferencia;
 $datacotacao = db_utils::fieldsMemory($rsResult, 0)->si01_datacotacao;
 
 $sqlV = "select pc11_numero, pc11_reservado, pc11_quant, pc16_codmater, pc80_criterioadjudicacao, pc80_tipoprocesso
-        from pcproc 
+        from pcproc
         inner join pcprocitem on pc80_codproc = pc81_codproc
         inner join solicitem on pc81_solicitem = pc11_codigo
         inner join solicitempcmater on pc11_codigo = pc16_solicitem
@@ -73,7 +94,7 @@ if ($codigoItem == "") {
   for ($iCont = 0; $iCont < pg_num_rows($rsResult); $iCont++) {
     $oResult = db_utils::fieldsMemory($rsResult, $iCont);
     $sSql = "select pc23_quant, pc11_reservado, pc01_codmater, pc01_tabela, pc01_taxa, m61_codmatunid, pc80_criterioadjudicacao
-              from pcproc 
+              from pcproc
               join pcprocitem on pc80_codproc = pc81_codproc
               join solicitem on pc81_solicitem = pc11_codigo
               join solicitempcmater on pc11_codigo = pc16_solicitem
@@ -85,7 +106,7 @@ if ($codigoItem == "") {
               join pcorcamval on pc22_orcamitem = pc23_orcamitem
               where pc23_orcamitem = $oResult->si02_itemproccompra  and (pc23_vlrun <> 0 or  pc23_percentualdesconto <> 0)
               group by pc23_quant, pc31_pcprocitem, pc11_reservado, pc11_seq, pc01_codmater, pc01_tabela, pc01_taxa, m61_codmatunid, pc80_criterioadjudicacao;";
-              
+
     $rsResultee = db_query($sSql);
     $resultado = db_utils::fieldsMemory($rsResultee, 0);
 
@@ -150,6 +171,7 @@ $pdf1->quant_casas = db_utils::fieldsMemory($rsResult, 0)->si01_casasdecimais;
 $pdf1->sqlitens = $rsResult;
 $pdf1->quantLinhas = $quantLinhas;
 $pdf1->arrayValores = $arrayValores;
+$pdf1->sAssinaturaCotacao = $sAssinaturaCotacao;
 
 
 $pdf1->imprime();

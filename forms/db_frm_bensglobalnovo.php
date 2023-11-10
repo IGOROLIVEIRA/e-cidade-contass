@@ -1099,6 +1099,8 @@ function salvarDados() {
      alert(oRetorno.mesage.urlDecode());
    } else {
      alert(_M('patrimonial.patrimonio.db_frm_bensglobalnovo.bens_cadastrados'));
+     var statusbens = oRetorno.statusbens;
+     statusAPI(statusbens);
      parent.document.formaba.bensfotos.disabled = false;
      CurrentWindow.corpo.iframe_bensfotos.location.href=`pat1_cadgeralfotos001.php?t52_codbem=${$F("t52_bem")}&cod_placa=${$F('t41_placa')}`;
      parent.mo_camada('bensfotos');
@@ -1518,4 +1520,17 @@ function SomenteNumero(e){
 	}
 
 getDadosNota();
+
+function statusAPI(statusbens)
+  {
+    if (statusbens == 'Placa repetida') {
+          alert(_M('patrimonial.patrimonio.db_frm_bensnovo.bem_placarep'));
+          return;
+    } 
+    if (statusbens != 'success') {
+      return alert(_M('patrimonial.patrimonio.db_frm_bensnovo.bem_falha'));
+    } 
+   
+
+  }
 </script>

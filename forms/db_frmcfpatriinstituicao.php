@@ -29,10 +29,14 @@
 $clcfpatriinstituicao->rotulo->label();
 $clrotulo = new rotulocampo;
 $clrotulo->label("nomeinst");
+
+include("conectaAPI.php");//chamando a conexão com a API
+
 ?>
+
 <form class="container" name="form1" method="post" action="">
   <fieldset>
-    <legend>Parâmetro de depreciação por instituição</legend>
+    <legend>Depreciação</legend>
     <table class="form-container">
       <tr style="display: none;">
         <td nowrap title="<?=@$Tt59_sequencial?>">
@@ -88,8 +92,76 @@ $clrotulo->label("nomeinst");
       </tr>
     </table>
   </fieldset>
-  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> >
-  <!-- <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa();" > -->
+  <p>
+  
+  
+  <fieldset>
+    <legend>Integração API patrimonial </legend>
+    <table class="form-container">
+    <tr>
+                <td nowrap title="">
+                  Login:
+                </td>
+                <td>
+                  <?php
+                    db_input('t59_usuarioapi',20,$It59_usuarioapi,true,'text',$db_opcao,"")
+                  ?>
+                </td>
+    </tr>
+    <tr>
+                <td nowrap title="">
+                  Senha:
+                </td>
+                <td style="font-weight:bold;">
+                  <?
+                    db_input('t59_senhaapi',20,$It59_senhaapi,true,'password',$db_opcao);
+                  ?>
+                </td>
+    </tr>  
+    <tr style="display: none;">
+                <td nowrap title="">
+                  token:
+                </td>
+                <td style="font-weight:bold;">
+                  <?
+                    db_input('t59_tokenapi',20,$It59_tokenapi,true,'password',$db_opcao);
+                  ?>
+                </td>
+    </tr>  
+    <tr>
+                <td nowrap title="">
+                Endereço da API:
+                </td>
+                <td>
+                  <?php
+                    db_input('t59_enderecoapi',50,$It59_enderecoapi,true,'text',$db_opcao,"")
+                  ?>
+                </td>
+    </tr>               
+      <tr>
+              <td nowrap title="">
+                Ativação da Integração:
+              </td>
+              <td>
+                    <?php
+                     db_select('t59_ativo', array("f"=>"Desativado","t"=>"Ativado"), true, "", "onchange='ativaAPI()'");
+                    ?>
+                                            
+              </td>
+      </tr>
+      <tr>
+          <td nowrap title="">
+            Status:
+          </td>
+          <td>
+              <input name="verifica" type="button" onclick='statusAPI()' id="verifica" value="Verificar o Status da Conexão">
+          </td>
+      </tr>
+      </table>
+  </fieldset>  
+  <p>
+  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="db_opcao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Alterar":"Excluir"))?>" <?=($db_botao==false?"disabled":"")?> onclick="validarAutenticacao()" >
+  <input name="<?=($db_opcao==1?"incluir":($db_opcao==2||$db_opcao==22?"alterar":"excluir"))?>" type="submit" id="botao" value="<?=($db_opcao==1?"Incluir":($db_opcao==2||$db_opcao==22?"Gerar Token":"Excluir"))?>" onclick="validarAutenticacao()" >
   <?php
     if ($db_opcao == 22) {
       db_redireciona("pat1_cfpatriinstituicao002.php?chavepesquisa=".$t59_sequencial);
@@ -131,6 +203,96 @@ function js_preenchepesquisa(chave){
   }
   ?>
 }
+function ativaAPI(){
+     if(document.form1.t59_ativo.value == '0'){
+      alert("Escolha se Deseja Ativar ou Desativar a API")
+      return
+    }
+    if(document.form1.t59_ativo.value == 't'){
+      var x;
+      var r=confirm("Deseja Ativar a API!");
+      if (r!=true){
+        x="Você Cancelou A Ativação!";
+        document.form1.t59_ativo.value = 'f';
+        }
+    }
+    if(document.form1.t59_ativo.value == 'f'){
+      var x;
+      var r=confirm("Se desativar a API, a sicronização dos dados deixará de acontecer!");
+      if (r!=true){
+        x="Você Cancelou A Desativação!";
+        document.form1.t59_ativo.value = 't';
+        } 
+      else{
+        document.form1.t59_tokenapi.value  = '';
+        document.getElementById("botao").disabled = true;
+      }  
+    }
+    if(document.form1.t59_ativo.value == 't'){
+    if(document.form1.t59_usuarioapi.value == ''){
+      document.form1.t59_ativo.value = 'f';
+      alert("Campo Login Necessário para Ativar a Integração")
+      return;
+    }
+    if(document.form1.t59_senhaapi.value == ''){
+      document.form1.t59_ativo.value = 'f';
+      alert("Campo Senha Necessário para Ativar a Integração")
+      return;
+    }
+    if(document.form1.t59_enderecoapi.value == ''){
+      document.form1.t59_ativo.value = 'f';
+      alert("Campo Endereço da API Necessário para Ativar a Integração")
+      return;
+    }
+  }
+}
+function statusAPI(){
+  var status = "<?php print $decode['status']; ?>";
+  var msg    = "<?php print $decode['msg']; ?>";
+  if(status == 'success'){
+     alert(msg)
+  }
+  if(status == 'error'){
+     alert(msg)
+  }  
+  if(msg == ''){
+     alert('Api Não Conectada')
+     return;
+  }  
+
+}
+//Validação de campos da API
+function validarAutenticacao(){
+  if(document.form1.t59_tokenapi.value){
+    document.getElementById("botao").disabled = false; 
+  }
+  if(document.form1.t59_ativo.value == 't'){
+    if(document.form1.t59_usuarioapi.value == ''){
+      alert("Campo Login Necessário para Ativar a Integração")
+      return;
+    }
+    if(document.form1.t59_senhaapi.value == ''){
+      alert("Campo Senha Necessário para Ativar a Integração")
+      return;
+    }
+    if(document.form1.t59_enderecoapi.value == ''){
+      alert("Campo Endereço da API Necessário para Ativar a Integração")
+      return;
+    }
+  }
+  
+}
+$('t59_usuarioapi').style.width ='100%';
+$('t59_senhaapi').style.width ='100%';
+$('t59_enderecoapi').style.width ='100%';
+$('t59_ativo').style.width ='100%';
+$('verifica').style.width ='100%';
+$("t59_dataimplanatacaodepreciacao").style.width ='90%';
+$("t59_termodeguarda").style.width ='90%';
+
+if(!document.form1.t59_tokenapi.value){
+    document.getElementById("botao").disabled = true; 
+  }
 </script>
 <script>
 
