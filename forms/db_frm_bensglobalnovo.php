@@ -1522,7 +1522,10 @@ function SomenteNumero(e){
 getDadosNota();
 
 function statusAPI(statusbens)
-  {
+{
+    if (statusbens == 'f') {
+          return;
+    }
     if (statusbens == 'Placa repetida') {
           alert(_M('patrimonial.patrimonio.db_frm_bensnovo.bem_placarep'));
           return;
@@ -1532,5 +1535,5 @@ function statusAPI(statusbens)
     } 
    
 
-  }
+}
 </script>
