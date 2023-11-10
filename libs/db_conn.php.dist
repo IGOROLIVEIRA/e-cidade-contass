@@ -25,20 +25,23 @@
  *                                licenca/licenca_pt.txt
  */
 
+require_once ECIDADE_PATH . 'vendor/autoload.php';
+
 $DB_COR_FUNDO = "#00CCFF";
 $DB_FILES     = "/dbportal2/imagens/files";
 $DB_DIRPCB    = "/home/sistema";
 $DB_EXEC      = "/usr/bin/dbs";
 $DB_NETSTAT   = "netstat";
 
-// Variaveis de Configuracao
-$DB_USUARIO   = ""; // Usuário do PostgreSQL
-$DB_SENHA     = ""; // Senha do usuário do PostgreSQL
-$DB_SERVIDOR  = ""; // Ip do servidor para a conexão com a base de dados
-$DB_PORTA     = ""; // Porta para conexao com o banco de dados (porta do Pool de Conexoes quando utilizado)
+// Variaveis de Configuracao estão no arquivo .env
+$DB_USUARIO   = config('database.connections.pgsql.username');
+$DB_SENHA     = config('database.connections.pgsql.password');;
+$DB_SERVIDOR  = config('database.connections.pgsql.host');;
+$DB_PORTA     = config('database.connections.pgsql.port');;
+$DB_BASE      = resolveTenantDatabase();
 $DB_PORTA_ALT = ""; // Porta para conexao direta com PostgreSQL quando tivermos um pool de conexao
-$DB_BASE      = ""; // Nome da base de dados
 $DB_SELLER    = "";
-$DB_VALIDA_REQUISITOS = false; // Variável para validar configurações de instalação do sistema.
-$lUtilizaCaptcha = false; // Variável para habilitar a utilização de captcha
+$DB_VALIDA_REQUISITOS = false; // Vari?vel para validar configura??es de instala??o do sistema.
+$lUtilizaCaptcha = false; // Vari?vel para habilitar a utiliza??o de captcha
+$lVeriricaIpPrivado = false; // Vari?vel para habilitar utiliza??o de captcha somente para IPs p?blicos (externos)
 ?>
