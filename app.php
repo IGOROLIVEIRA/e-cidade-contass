@@ -13,180 +13,166 @@ use \ECidade\V3\Error\EntityFactory;
 use \ECidade\V3\Error\Renderer as ErrorRenderer;
 
 try {
+    require_once(__DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php');
 
-  require_once(__DIR__ . DIRECTORY_SEPARATOR . 'bootstrap.php');
+    $front = new Front();
+    $request = new Request($front->getPath());
+    $response = new Response();
+    $router = new Router($request);
+    $config = Registry::get('app.config');
 
-  $front = new Front();
-  $request = new Request($front->getPath());
-  $response = new Response();
-  $router = new Router($request);
-  $config = Registry::get('app.config');
+    Registry::set('app.request', $request);
+    Registry::set('app.response', $response);
 
-  Registry::set('app.request', $request);
-  Registry::set('app.response', $response);
+    // Requiscao /extension/[name]
+    if ($front->isExtension() && $request->getExtension() != null) {
+        $front->createWindow();
 
-  // Requiscao /extension/[name]
-  if ($front->isExtension() && $request->getExtension() != null) {
+        define('ECIDADE_WINDOW_REQUEST_PATH', $front->getWindowRequestPath());
 
-    $front->createWindow();
+        define('ECIDADE_CURRENT_EXTENSION_PATH', ECIDADE_EXTENSION_PACKAGE_PATH . $request->getExtension() . DS);
+        define('ECIDADE_CURRENT_EXTENSION_REQUEST_PATH',
+            ECIDADE_WINDOW_REQUEST_PATH . 'extension' . DS . mb_strtolower($request->getExtension()) . DS
+        );
 
-    define('ECIDADE_WINDOW_REQUEST_PATH', $front->getWindowRequestPath());
+        ini_set('display_errors', $config->get('php.display_errors'));
+        ini_set('error_reporting', $config->get('php.error_reporting'));
+        error_reporting($config->get('php.error_reporting'));
 
-    define('ECIDADE_CURRENT_EXTENSION_PATH', ECIDADE_EXTENSION_PACKAGE_PATH . $request->getExtension() . DS);
-    define('ECIDADE_CURRENT_EXTENSION_REQUEST_PATH',
-      ECIDADE_WINDOW_REQUEST_PATH . 'extension' . DS . mb_strtolower($request->getExtension()) . DS
-    );
+        // Extensao contem arquivo de inicializacao
+        if (file_exists(ECIDADE_CURRENT_EXTENSION_PATH . 'bootstrap.php')) {
+            require_once(ECIDADE_CURRENT_EXTENSION_PATH . 'bootstrap.php');
+        }
 
-    ini_set('display_errors', $config->get('php.display_errors'));
-    ini_set('error_reporting', $config->get('php.error_reporting'));
-    error_reporting($config->get('php.error_reporting'));
+        // Registra eventos adicionado ao cache(metadado)
+        if (!$request->isAsset()) {
+            Registry::get('app.container')->get('app.configData')->loadEvents();
+        }
 
-    // Extensao contem arquivo de inicializacao
-    if (file_exists(ECIDADE_CURRENT_EXTENSION_PATH . 'bootstrap.php')) {
-      require_once(ECIDADE_CURRENT_EXTENSION_PATH . 'bootstrap.php');
+        // Encode das paginas
+        $response->setCharset($config->get('charset'));
+        mb_internal_encoding($config->get('charset'));
+
+        try {
+            $request->session()->start();
+
+            $dispatcher = new Dispatcher();
+            $dispatcher->execute($request, $response);
+            $response->output();
+        } catch (Exception $error) {
+            throw new ResponseException($error->getMessage(), $error->getCode());
+        }
+
+        exit();
     }
+    // END EXTENSION
 
-    // Registra eventos adicionado ao cache(metadado)
-    if (!$request->isAsset()) {
-      Registry::get('app.container')->get('app.configData')->loadEvents();
-    }
-
-    // Encode das paginas
+    // ecidade encoding charset must be LATIN1
+    $config->set('charset', 'ISO-8859-1');
     $response->setCharset($config->get('charset'));
     mb_internal_encoding($config->get('charset'));
 
-    try {
+    $filePath = $front->getPath();
 
-      $request->session()->start();
-
-      $dispatcher = new Dispatcher();
-      $dispatcher->execute($request, $response);
-      $response->output();
-
-    } catch(Exception $error) {
-      throw new ResponseException($error->getMessage(), $error->getCode());
+    // @todo - validar utilidade
+    if ($front->isExtension() && $request->getExtension() == null) {
+        $filePath = 'extension/' . $front->getPath();
     }
 
-    exit();
-  }
-  // END EXTENSION
+    // base '/', usa index
+    if (empty($filePath)) {
+        $filePath = 'index.php';
+    }
 
-  // ecidade encoding charset must be LATIN1
-  $config->set('charset', 'ISO-8859-1');
-  $response->setCharset($config->get('charset'));
-  mb_internal_encoding($config->get('charset'));
+    $realpath = realpath(ECIDADE_PATH . $filePath);
+    $filePath = str_replace(ECIDADE_PATH, '', $realpath);
+    $fileExtension = pathinfo($filePath, PATHINFO_EXTENSION);
 
-  $filePath = $front->getPath();
+    $isLaravel = preg_match('/w\/[0-9]+\/web/', $_SERVER['REQUEST_URI']);
 
-  // @todo - validar utilidade
-  if ($front->isExtension() && $request->getExtension() == null) {
-    $filePath = 'extension/' . $front->getPath();
-  }
+    // Arquivo nao existe, 404
+    if (($realpath === false || !file_exists($filePath)) && !$isLaravel) {
+        throw new ResponseException('P?gina n?o encontrada: ' . $filePath, 404);
+    }
 
-  // base '/', usa index
-  if (empty($filePath)) {
-    $filePath = 'index.php';
-  }
+    // security issue
+    // bloqueia acesso a arquivos acima do root path
+    if (strpos($realpath, ECIDADE_PATH) !== 0 && !$isLaravel) {
+        throw new ResponseException('Acesso negado: ' . $filePath, 403);
+    }
 
-  $realpath = realpath(ECIDADE_PATH . $filePath);
+    // security issue
+    // bloqueia execucao scripts php e html no diretorio tmp/
+    if (in_array($fileExtension, ['php', 'html']) && strpos($filePath, 'tmp/') === 0) {
+        // @TODO usar ResponseException
+        header('HTTP/1.0 403 Forbiden');
+        exit;
+    }
 
-  // Arquivo nao existe, 404
-  if ($realpath === false || !file_exists($filePath)) {
-    throw new ResponseException('Página não encontrada: ' . $filePath, 404);
-  }
+    if (!$isLaravel) {
+        $front->fixQueryString();
+    }
+    $front->createWindow();
 
-  // security issue
-  if (strpos($realpath, ECIDADE_PATH) !== 0) {
-    throw new ResponseException('Acesso negado: ' . $filePath, 403);
-  }
+    // Requisicoes que devem iniciar sessao somente leitura
+    if (preg_match(Glob::toRegex($config->get('app.request.session.readOnlyOn'), true, false), $filePath)) {
+        $request->session()->writeable(false)->start();
+        $filePath = modification($filePath);
+    } elseif (preg_match(Glob::toRegex($config->get('app.request.session.attachOn'), true, false), $filePath)) {
+        // Requisicoes que devem iniciar sessao com escrita
+        $request->session()->start();
+        $filePath = modification($filePath);
+    }
 
-  $front->fixQueryString();
-  $front->createWindow();
+    /**
+     * Asset - define header e retorna o arquivo para o buffer de saida
+     */
+    if ($fileExtension != 'php' && !$isLaravel) {
+        $request->session()->close();
+        $response->setFile($filePath);
+        $response->output();
+        exit();
+    }
 
-  // Requisicoes que devem iniciar sessao somente leitura
-  if (preg_match(Glob::toRegex($config->get('app.request.session.readOnlyOn'), true, false), $filePath)) {
-    $request->session()->writeable(false)->start();
-    $filePath = modification($filePath);
-  }
-
-  // Requisicoes que devem iniciar sessao com escrita
-  else if (preg_match(Glob::toRegex($config->get('app.request.session.attachOn'), true, false), $filePath)) {
+    // Registra eventos adicionado ao cache(metadado)
+    Registry::get('app.container')->get('app.configData')->loadEvents();
 
     $request->session()->start();
-    $filePath = modification($filePath);
-  }
+    $front->emulateRegisterLongArrays();
 
-  /**
-   * Asset - define header e retorna o arquivo para o buffer de saida
-   */
-  if (pathinfo($filePath, PATHINFO_EXTENSION) != 'php') {
+    // @TODO - achar melhor forma de emular register_globals
+    // @see \DBSeller\Legacy\PHP53\Emulate::registerGlobals()
+    // atualmente package DBSeller/Legacy é executado antes de criar sessao
+    if (!ini_get('register_globals')) {
+        $front->emulateRegisterGlobals(array('SESSION'));
+    }
+
+    // lazyload para verificar se usuario tem extensao desktop instalada
+    Registry::get('app.container')->register('ECIDADE_DESKTOP', function () use ($request) {
+        return ExtensionManager::isEnabled('Desktop', $request->session()->get('DB_login'));
+    });
 
     $request->session()->close();
-    $response->setFile($filePath);
-    $response->output();
-    exit();
-  }
+    $response->send();
+    // Remove todas as variaveis criadas neste arquivo
+    // para nao ter impacto em outros arquivos, exemplo: iniciar sessao no db_conecta.php
+    unset($_SESSION, $front, $request, $response, $router, $config);
 
-  // Registra eventos adicionado ao cache(metadado)
-  Registry::get('app.container')->get('app.configData')->loadEvents();
-
-  $request->session()->start();
-  $front->emulateRegisterLongArrays();
-
-  // @TODO - achar melhor forma de emular register_globals
-  // @see \DBSeller\Legacy\PHP53\Emulate::registerGlobals()
-  // atualmente package DBSeller/Legacy é executado antes de criar sessao
-  if (!ini_get('register_globals')) {
-    $front->emulateRegisterGlobals(array('SESSION'));
-  }
-
-  // lazyload para verificar se usuario tem extensao desktop instalada
-  Registry::get('app.container')->register('ECIDADE_DESKTOP', function() use ($request) {
-    return ExtensionManager::isEnabled('Desktop', $request->session()->get('DB_login'));
-  });
-
-  $request->session()->close();
-  $response->send();
-
-    /**
-     * Eloquent bootstrap
-     */
-    /**
-     * @var \ECidade\V3\Window\Session $session
-     */
-    $session = Registry::get('app.request')->session();
-    $userLoggedIn = $session->has('DB_id_usuario');
-
-    if ($userLoggedIn) {
-        $eloquent = new EloquentBootstrap(
-            $session->get('DB_servidor'),
-            $session->get('DB_NBASE', $session->get('DB_base')),
-            $session->get('DB_user'),
-            $session->get('DB_senha'),
-            $session->get('DB_porta')
-        );
-        $eloquent->bootstrap();
+    if ($isLaravel) {
+        $pos = explode('/', $_SERVER['REQUEST_URI']);
+        $index = array_search('w', $pos);
+        unset($pos[$index], $pos[$index + 1]);
+        $_SERVER['REQUEST_URI'] = implode('/', $pos);
+        require_once(__DIR__ . '/public/index.php');
+    } else {
+        require_once($filePath);
     }
-    /**
-     * End Eloquent bootstrap
-     */
-
-  // Remove todas as variaveis criadas neste arquivo
-  // para nao ter impacto em outros arquivos, exemplo: iniciar sessao no db_conecta.php
-  unset($_SESSION, $front, $request, $response, $router, $config);
-
-  require_once($filePath);
-
 } catch (ResponseException $exception) {
-  if (isset($response) === false) {
-     $response = new Response();
-  }
-
-    if (!isset($response)) {
-        $response = new Response();
+    $response = Registry::get('app.response');
+    if ($response) {
+        $response->setCode($exception->getCode() == 0 ? 500 : $exception->getCode());
     }
-  $response->setCode($exception->getCode() == 0 ? 500 : $exception->getCode());
 
-  $entity = EntityFactory::createFromException($exception);
-  ErrorRenderer::render($entity);
+    $entity = EntityFactory::createFromException($exception);
+    ErrorRenderer::render($entity);
 }
