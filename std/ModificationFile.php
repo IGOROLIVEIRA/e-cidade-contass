@@ -139,15 +139,13 @@ class ModificationFile {
         case 'bottom':
 
           $this->content = $this->content . $add;
-          continue;
-        break;
+          break;
 
         // inicio do arquivo
         case 'top':
 
           $this->content = $add . $this->content;
-          continue;
-        break;
+          break;
       }
 
       if ($operation->search->regex) {
