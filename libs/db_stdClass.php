@@ -1,7 +1,7 @@
-<?
+<?php
 
  class db_stdClass {
-   
+
    /**
     * Retorna os dados da instituicao. caso nao seje informado a instituição sera
     * retornado a instituicao da sessao
@@ -10,16 +10,16 @@
     * @return object
     */
    function getDadosInstit($iInstit = null) {
-     
+
       if (empty($iInstit)) {
         $iInstit = db_getsession("DB_instit");
       }
-      
+
       $sSqlInstit = "select * from db_config where codigo = {$iInstit}";
       $rsInstit   = db_query($sSqlInstit);
       return db_utils::fieldsMemory($rsInstit, 0);
    }
-   
+
    /**
     * Retorna os parametros configurados para a tabela de configuracao especificada.
     *
@@ -29,9 +29,9 @@
     * @return object db_utils
     */
    function getParametro($sClassParametro, $aKeys = null, $sFields = "*") {
-     
+
      /*
-      * TODO buscar tabelas de parametro da tabela db_sysarquivo 
+      * TODO buscar tabelas de parametro da tabela db_sysarquivo
       */
      $aClassesValidas = array (
                                "empparametro",
@@ -41,13 +41,13 @@
                                "cfiptu",
                                "",
                               );
-                              
+
      if (empty($sFields)) {
-       $sFields = "*";                              
+       $sFields = "*";
      }
      if (!in_array($sClassParametro, $aClassesValidas)) {
        return false;
-                                
+
      }
      $oRetorno       = false;
      $oClass         = db_utils::getDao($sClassParametro);
@@ -65,15 +65,15 @@
        }
        $i++;
      }
-     
+
      $sRetornoSql  = call_user_func_array(array(&$oClass,"sql_query_file"), $aParam);
      $rsRetornoSql = call_user_func_array(array(&$oClass,"sql_record"), array($sRetornoSql));
      $iNumRows     = $oClass->numrows;
-     $oRetorno     = db_utils::getColectionByRecord($rsRetornoSql);     
+     $oRetorno     = db_utils::getColectionByRecord($rsRetornoSql);
      return $oRetorno;
    }
-}   
-   
+}
+
 
 
 ?>
