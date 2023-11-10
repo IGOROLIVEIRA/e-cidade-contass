@@ -469,17 +469,21 @@ function js_pesquisa_cgm(mostra){
 	function js_emitir(){
 	  jan = window.open('pat2_bensbaixa.php','','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	}
-  function statusAPI(statusbens){
+  function statusAPI(statusbens)
+  {
 
+    if (statusbens == 'f') {
+          return;
+    }
     if (statusbens == 'Placa repetida') {
           alert(_M('patrimonial.patrimonio.db_frm_bensnovo.bem_placarep'));
           return;
     } 
-    if(statusbens == 'success'){
+    if (statusbens == 'success') {
       return  alert(_M('patrimonial.patrimonio.db_frm_bensnovo.bem_sucesso')); 
     } 
     return alert(_M('patrimonial.patrimonio.db_frm_bensnovo.baixa_falha'));
-}
+  }
 </script>
 <script>
 
