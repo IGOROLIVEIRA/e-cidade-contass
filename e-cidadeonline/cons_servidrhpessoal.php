@@ -28,7 +28,7 @@ $sUrlAverba = base64_encode("&averba");
 <head>
 <title><?=$w01_titulo?></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="config/portalservidor.css" rel="stylesheet" type="text/css">
+<link href="legacy_config/portalservidor.css" rel="stylesheet" type="text/css">
 <script language="JavaScript" src="scripts/db_script.js"></script>
 </head>
 <body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" bgcolor="<?=$w01_corbody?>">
@@ -38,7 +38,7 @@ $sUrlAverba = base64_encode("&averba");
  </tr>
 </table>
 <?
-  if ($id_usuario != "") { 
+  if ($id_usuario != "") {
 ?>
 <table width="100%" border="0" cellpadding="2" cellspacing="0" class="texto">
   <tr>
@@ -53,7 +53,7 @@ $sUrlAverba = base64_encode("&averba");
            <td nowrap="nowrap" width="100%">
              <span class="navText" style="cursor: pointer;" onClick="js_atualizaFrame('assentamentos');">Assentamentos</span>
            </td>
-        </tr>     
+        </tr>
         <tr>
            <td nowrap="nowrap" width="100%">
              <span class="navText" style="cursor: pointer;" onClick="js_atualizaFrame('averbacao');">Averbação de Tempo de Serviço</span>
@@ -68,12 +68,12 @@ $sUrlAverba = base64_encode("&averba");
             <td nowrap="nowrap" width="100%">
               <span class="navText" style="cursor: pointer;" onClick="js_atualizaFrame('ferias');">Férias</span>
             </td>
-         </tr>            
+         </tr>
          <tr>
              <td nowrap="nowrap" width="100%">
                <span class="navText" style="cursor: pointer;" onClick="js_atualizaFrame('comprovanteRendimentos');">Comprovante de Rendimentos</span>
              </td>
-         </tr>                              
+         </tr>
          <tr>
             <td nowrap="nowrap" width="100%">
               <span class="navText" style="cursor: pointer;" onClick="js_atualizaFrame('fichaFinanceira');">Ficha Financeira</span>
@@ -81,21 +81,21 @@ $sUrlAverba = base64_encode("&averba");
          </tr>
          <tr>
              <td nowrap="nowrap" width="100%">&nbsp;</td>
-         </tr>                        
+         </tr>
          <tr>
            <td nowrap="nowrap" width="100%">
              <span class="navText" style="cursor: pointer;" onClick="js_voltar('<?=$id_usuario?>');">Voltar</span>
            </td>
-         </tr>          
+         </tr>
      </table>
     </td>
     <td valign="top" width="97%">
       <iframe id="iframePortalServidor" name="iframe" src="centro_pref.php" width="100%" height="500px;" style="border:hidden;"></iframe>
-    </td width="3%"> 
-    <td>&nbsp;</td>       
-  </tr>  
+    </td width="3%">
+    <td>&nbsp;</td>
+  </tr>
 </table>
-<? 
+<?
   } else if ($w13_permfornsemlog == "f") {
 ?>
  <table width="300" align="center" border="0" bordercolor="#cccccc" cellpadding="2" cellspacing="0" class="texto">
@@ -116,7 +116,7 @@ function imprimir(){
  jan=window.open('',
                  '',
                  'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
-                 
+
  jan.moveTo(0,0);
 }
 
@@ -127,8 +127,8 @@ function js_voltar(id){
 
 function js_atualizaFrame( sOpcao ){
 
-  var sQuery = '<?=$sUrl?>'; 
- 
+  var sQuery = '<?=$sUrl?>';
+
   if ( sOpcao == 'dadosCadastrais') {
     document.getElementById('iframePortalServidor').src = 'dadosfuncionario.php?'+sQuery;
   } else if (sOpcao == 'assentamentos') {
@@ -143,8 +143,8 @@ function js_atualizaFrame( sOpcao ){
     document.getElementById('iframePortalServidor').src = 'comprovanterendimentosservidor.php?'+sQuery;
   } else if (sOpcao == 'fichaFinanceira') {
     document.getElementById('iframePortalServidor').src = 'fichafinanceiraservidor.php?'+sQuery;
-  } 
-  
+  }
+
 
 }
 </script>

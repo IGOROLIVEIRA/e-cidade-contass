@@ -33,17 +33,17 @@ class ImportacaoArquivoTCEAC {
   /**
    * @type string
    */
-  const ARQUIVO_PLANOCONTA = 'config/tce/AC/PlanoDeContas.xml';
+  const ARQUIVO_PLANOCONTA = 'legacy_config/tce/AC/PlanoDeContas.xml';
 
   /**
    * @type string
    */
-  const ARQUIVO_RECURSO    = 'config/tce/AC/Recursos.xml';
+  const ARQUIVO_RECURSO    = 'legacy_config/tce/AC/Recursos.xml';
 
   /**
    * @type string
    */
-  const ARQUIVO_DOCUMENTOS = 'config/tce/AC/DocumentosContabeis.xml';
+  const ARQUIVO_DOCUMENTOS = 'legacy_config/tce/AC/DocumentosContabeis.xml';
 
   /**
    * @type integer

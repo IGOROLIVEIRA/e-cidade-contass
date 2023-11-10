@@ -108,7 +108,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
         $rsInst = db_query($sSql);
         $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
-        $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
+        $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
         $sTextoXml = file_get_contents($sArquivo);
         $oDOMDocument = new DOMDocument();
@@ -209,7 +209,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
             $oCodDoc = db_utils::fieldsMemory($rsDocRec, 0);
 
             if (($oCodDoc->c53_tipo == 101 && substr($oDadosRec->o57_fonte, 0, 2) != '49') || ($oCodDoc->c53_tipo == 100 && substr($oDadosRec->o57_fonte, 0, 2) == '49')) {
-                
+
                 if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
 
                     $sNaturezaReceita = substr($oDadosRec->o57_fonte, 1, 8);
@@ -315,7 +315,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                         AND c61_anousu = c60_anousu
                                     INNER JOIN conplanocontabancaria ON c56_codcon = c60_codcon AND c56_anousu = c60_anousu
                                     INNER JOIN contabancaria on contabancaria.db83_sequencial = c56_contabancaria
-                                    LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int 
+                                    LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int
                                     WHERE o15_codigo  = " . $oDadosRec->o70_codigo . "
                                         AND o70_instit = " . db_getsession('DB_instit') . "
                                         AND (CASE
@@ -369,7 +369,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                             }
 
                             $aDadosAgrupados[$sHash10]->Reg11[$sHash11] = $aDadosCgm11;
-                     
+
                             if(!isset($aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11]) && empty($aDadosCgm11)) {
 
                                 $aDados = new stdClass();
@@ -391,7 +391,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                 $aDados->si26_dataassinaturacontratoop = $oCodFontRecursos->op01_dataassinaturacop;
                                 $aDados->si26_vlarrecadadofonte = $oCodDoc2->c70_valor;
                                 $aDados->si26_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
-                            
+
                                 $aDadosAgrupados[$sHash10]->Reg11[$sHash11][$sHash10.$sHash11] = $aDados;
                             }
 

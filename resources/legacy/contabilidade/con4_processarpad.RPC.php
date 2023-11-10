@@ -478,7 +478,7 @@ switch ($oParam->exec) {
         $rsInst = db_query($sSql);
         $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
 
-        $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomorgao.xml";
+        $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomorgao.xml";
         if (!file_exists($sArquivo)) {
           throw new Exception("Arquivo de configuracao dos orgaos do sicom inexistente!");
         }

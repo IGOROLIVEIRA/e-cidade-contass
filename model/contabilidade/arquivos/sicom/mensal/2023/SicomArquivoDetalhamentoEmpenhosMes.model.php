@@ -152,7 +152,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
     /**
      * selecionar arquivo xml de dados elemento da despesa
      */
-    $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
+    $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
     // print_r('enter');
     // print_r($sArquivo);
         if (file_exists($sArquivo)) {
@@ -162,20 +162,20 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
           $oElementos = $oDOMDocument->getElementsByTagName('elemento');
 
         }
-    
+
 
     /**
      * selecionar arquivo xml de Dados Compl LicitaÃ§Ã£o
      */
-    $sArquivo = "config/sicom/" . (db_getsession("DB_anousu") - 1) . "/{$sCnpj}_sicomdadoscompllicitacao.xml";
+    $sArquivo = "legacy_config/sicom/" . (db_getsession("DB_anousu") - 1) . "/{$sCnpj}_sicomdadoscompllicitacao.xml";
     if (file_exists($sArquivo)) {
-            
+
           $sTextoXml = file_get_contents($sArquivo);
           $oDOMDocument = new DOMDocument();
           $oDOMDocument->loadXML($sTextoXml);
           $oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
         }
-    
+
 
     $sSql = "SELECT si09_codorgaotce AS codorgao,
         si09_tipoinstit
@@ -433,7 +433,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
     $aCaracteres = array("Â°", chr(13), chr(10), "'", ";");
     // matriz de entrada
-    
+
     $what = array(
       'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û',
       'Ä', 'Ã', 'À', 'Á', 'Â', 'Ê', 'Ë', 'È', 'É', 'Ï', 'Ì', 'Í', 'Ö', 'Õ', 'Ò', 'Ó', 'Ô', 'Ü', 'Ù', 'Ú', 'Û',

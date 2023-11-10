@@ -549,7 +549,7 @@ class cancelamentoDebitos {
     */
    function getCaraceteristicaPeculiar($iCadAcao) {
 
-     $pXml    = "config/caracteristicapeculiar_acao.xml";
+     $pXml    = "legacy_config/caracteristicapeculiar_acao.xml";
 
      $oDomXml = new DOMDocument();
      $oDomXml->load($pXml);

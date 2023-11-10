@@ -273,13 +273,13 @@ function js_imprime(virada){
      * Copia arquivos XML de dados dos elementos da despesa e da receita para o ano destino da virada
      * após processamento de qualquer item.
      */
-    $sArquivoDesp = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
-    $sArquivoRec = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
+    $sArquivoDesp = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
+    $sArquivoRec = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
 
     if (file_exists($sArquivoDesp) || file_exists($sArquivoRec)){
 
-      passthru("mkdir config/sicom/{$iAnoDestino}");
-      passthru("cp config/sicom/{$iAnoOrigem}/*.xml config/sicom/{$iAnoDestino}/");
+      passthru("mkdir legacy_config/sicom/{$iAnoDestino}");
+      passthru("cp legacy_config/sicom/{$iAnoOrigem}/*.xml legacy_config/sicom/{$iAnoDestino}/");
     }
 
 

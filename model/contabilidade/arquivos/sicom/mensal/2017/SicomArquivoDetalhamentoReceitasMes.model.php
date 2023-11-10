@@ -12,30 +12,30 @@ require_once("model/contabilidade/arquivos/sicom/mensal/geradores/2017/GerarREC.
  */
 class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   /**
    *
    * Codigo do layout. (db_layouttxt.db50_codigo)
    * @var Integer
    */
   protected $iCodigoLayout = 149;
-  
+
   /**
    *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'REC';
-  
+
   /**
    *
    * Construtor da classe
    */
   public function __construct()
   {
-    
+
   }
-  
+
   /**
    * Retorna o codigo do layout
    *
@@ -45,13 +45,13 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos()
   {
-    
+
     $aElementos[10] = array(
       "tipoRegistro",
       "codReceita",
@@ -72,7 +72,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
     return $aElementos;
   }
-  
+
   /**
    * selecionar os dados das receitas do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
@@ -89,14 +89,14 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
     $rsInst = db_query($sSql);
     $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
-    $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
+    $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
     $sTextoXml = file_get_contents($sArquivo);
     $oDOMDocument = new DOMDocument();
     $oDOMDocument->loadXML($sTextoXml);
     $oNaturezaReceita = $oDOMDocument->getElementsByTagName('receita');
-    
-    
+
+
     /**
      * classe para inclusao dos dados na tabela do sicom correspondente ao arquivo
      */
@@ -111,16 +111,16 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
     if (pg_num_rows($rsPref) > 0) {
     	$rsResult10 = 0;
     }*/
-    
+
     $sSql = "select si09_codorgaotce from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit");
     $rsResult = db_query($sSql);
     $sCodOrgaoTce = db_utils::fieldsMemory($rsResult, 0)->si09_codorgaotce;
-    
+
     /**
      * exlcuir informacoes do mes selecionado
      */
     db_inicio_transacao();
-    
+
     $result = $clrec11->sql_record($clrec11->sql_query(null, "*", null, "si26_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6']) . " and si26_instit = " . db_getsession("DB_instit"));
     if (pg_num_rows($result) > 0) {
       $clrec11->excluir(null, "si26_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si26_instit = " . db_getsession("DB_instit"));
@@ -128,7 +128,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         throw new Exception($clrec11->erro_msg);
       }
     }
-    
+
     $result = $clrec10->sql_record($clrec10->sql_query(null, "*", null, "si25_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si25_instit = " . db_getsession("DB_instit")));
     if (pg_num_rows($result) > 0) {
       $clrec10->excluir(null, "si25_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si25_instit = " . db_getsession("DB_instit"));
@@ -143,10 +143,10 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
       '160099', '112299', '176202', '242201', '242202', '222900', '193199',
       '191199', '176101', '160004', '132810', '132820', '132830', '192210',
       '242102', '199099', '247101', '172402', '172233');
-    
+
     $aDadosAgrupados = array();
     for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
-      
+
       $oDadosRec = db_utils::fieldsMemory($rsResult10, $iCont10);
       if ($oDadosRec->o70_codigo != 0 && $oDadosRec->saldo_arrecadado) {
 
@@ -163,7 +163,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           }
 
         }
-        
+
         if (substr($oDadosRec->o57_fonte, 1, 8) == $sNaturezaReceita) {
 
           if (in_array(substr($oDadosRec->o57_fonte, 1, 6), $aRectce)) {
@@ -272,7 +272,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           if ($clrec11->erro_status == 0) {
             throw new Exception($clrec11->erro_msg);
           }
-          
+
           $clrec11->si26_sequencial = null;
           $clrec11->si26_codfontrecursos = '101';
           $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado * 0.25), 2, ".", "");
@@ -280,7 +280,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
           if ($clrec11->erro_status == 0) {
             throw new Exception($clrec11->erro_msg);
           }
-          
+
           $clrec11->si26_sequencial = null;
           $clrec11->si26_codfontrecursos = '102';
           $clrec11->si26_vlarrecadadofonte = number_format(abs($oDados10->si25_vlarrecadado), 2, ".", "") - (number_format(abs($oDados10->si25_vlarrecadado * 0.60), 2, ".", "") + number_format(abs($oDados10->si25_vlarrecadado * 0.25), 2, ".", ""));
@@ -312,12 +312,12 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
         }
 
       }
-      
+
 
     }
-    
+
     db_fim_transacao();
-    
+
     $oGerarREC = new GerarREC();
     $oGerarREC->iMes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
     $oGerarREC->gerarDados();

@@ -151,7 +151,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
     /**
      * selecionar arquivo xml de dados elemento da despesa
      */
-    $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
+    $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
     // print_r('enter');
     // print_r($sArquivo);
     if (!file_exists($sArquivo)) {
@@ -165,7 +165,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
     /**
      * selecionar arquivo xml de Dados Compl Licitação
      */
-    $sArquivo = "config/sicom/" . (db_getsession("DB_anousu") - 1) . "/{$sCnpj}_sicomdadoscompllicitacao.xml";
+    $sArquivo = "legacy_config/sicom/" . (db_getsession("DB_anousu") - 1) . "/{$sCnpj}_sicomdadoscompllicitacao.xml";
     /*if (!file_exists($sArquivo)) {
             throw new Exception("Arquivo de dados compl licitacao inexistente!");
         }*/

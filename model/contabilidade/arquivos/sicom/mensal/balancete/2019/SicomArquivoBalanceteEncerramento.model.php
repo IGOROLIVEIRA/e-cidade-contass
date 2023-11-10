@@ -108,7 +108,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0)||lpad(o41_subunidade::integer,3,0)
                                     else lpad((case when o40_codtri = '0' or null then o40_orgao::varchar else o40_codtri end),2,0)||lpad((case when o41_codtri = '0' or null then o41_unidade::varchar else o41_codtri end),3,0) end as codunidadesub
                      from orcunidade
-                     inner join orcorgao on (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu) 
+                     inner join orcorgao on (o40_orgao, o40_anousu) = (o41_orgao, o41_anousu)
                      where o41_orgao = {$iOrgao}
                        and o41_unidade = {$iUnidade}
                        and o41_anousu = " . db_getsession('DB_anousu') ."
@@ -183,7 +183,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
          */
         if ($iTipoInstit != 1) {
 
-            $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
+            $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
             /*if (!file_exists($sArquivo)) {
                 throw new Exception("Arquivo de natureza da receita inexistente!");
@@ -211,7 +211,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         /**
          * selecionar arquivo xml de dados elemento da despesa
          */
-        $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
+        $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
         /*if (!file_exists($sArquivo)) {
             throw new Exception("Arquivo de elemento da despesa inexistente!");
         }*/
@@ -818,8 +818,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                 select DISTINCT conplanoorcamento.c60_codcon,
                                                             conplanoorcamento.c60_descr,
                                                             conplanoorcamento.c60_estrut, o15_codtri
-                                                FROM orcreceita 
-                                                inner join conplanoorcamento on o70_codfon=c60_codcon and c60_anousu=o70_anousu 
+                                                FROM orcreceita
+                                                inner join conplanoorcamento on o70_codfon=c60_codcon and c60_anousu=o70_anousu
                                                 left JOIN conplanoorcamentoanalitica ON c61_codcon = conplanoorcamento.c60_codcon AND c61_anousu = conplanoorcamento.c60_anousu
                                                 inner JOIN orctiporec ON o70_codigo = orctiporec.o15_codigo
                                                 WHERE  substr(conplanoorcamento.c60_estrut,1,1) in ('3','4') and conplanoorcamentoanalitica.c61_instit = " . db_getsession('DB_instit') . "
@@ -1279,7 +1279,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     e60_numemp numemp,
                                     e60_anousu anoinscricao,
                                     o58_orgao,o58_unidade
-                                    from  contacorrentedetalhe 
+                                    from  contacorrentedetalhe
                                     inner join empempenho on e60_numemp = c19_numemp
                                     inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot
                                     inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
@@ -1874,7 +1874,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                      * Busca o codigo unico do ctb enviado no AM
                      *
                      */
-                    $sSqlVerifica = " select distinct si95_codctb, ano from ( 
+                    $sSqlVerifica = " select distinct si95_codctb, ano from (
                                       SELECT distinct si95_codctb, 2019 as ano FROM ctb102019 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
                                       AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'

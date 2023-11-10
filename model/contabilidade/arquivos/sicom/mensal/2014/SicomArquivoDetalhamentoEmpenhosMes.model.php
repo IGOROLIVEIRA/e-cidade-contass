@@ -55,29 +55,29 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 	 * @see iPadArquivoBase::gerarDados()
 	 */
 	public function gerarDados() {
-		
+
 		$cEmp102014 = new cl_emp102014();
 		$cEmp112014 = new cl_emp112014();
 		$cEmp122014 = new cl_emp122014();
-		
+
 		$sSqlInstit = "select cgc from db_config where codigo = ".db_getsession("DB_instit");
 		$rsResultCnpj = db_query($sSqlInstit);
 		$sCnpj = db_utils::fieldsMemory($rsResultCnpj, 0)->cgc;
-		
-		
+
+
 		$sSqlTrataUnidade = "select si08_tratacodunidade from infocomplementares where si08_instit = ".db_getsession("DB_instit");
 		$rsResultTrataUnidade = db_query($sSqlTrataUnidade);
 		$sTrataCodUnidade = db_utils::fieldsMemory($rsResultTrataUnidade, 0)->si08_tratacodunidade;
-		
-		
+
+
 		 db_inicio_transacao();
 			/**
 		  	 * excluir informacoes do mes caso ja tenha sido gerado anteriormente
 		  	 */
-		    
+
 		    $result = $cEmp102014->sql_record($cEmp102014->sql_query(NULL,"*",NULL,"si106_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6'])
 		     ." and si106_instit = ".db_getsession("DB_instit"));
-		    
+
 		      if (pg_num_rows($result) > 0) {
 		      	$cEmp122014->excluir(NULL,"si108_mes = ".$this->sDataFinal['5'].$this->sDataFinal['6']
 		    	." and si108_instit = ".db_getsession("DB_instit"));
@@ -89,13 +89,13 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 		    	  throw new Exception($cEmp102014->erro_msg);
 		      }
 		    }
-		    
+
 		 db_fim_transacao();
-		
+
 		  /**
 		   * selecionar arquivo xml de dados elemento da despesa
 		   */
-		  $sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomelementodespesa.xml";
+		  $sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomelementodespesa.xml";
 		  if (!file_exists($sArquivo)) {
 			  throw new Exception("Arquivo de elemento da despesa inexistente!");
 	 	  }
@@ -103,11 +103,11 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 		  $oDOMDocument = new DOMDocument();
 		  $oDOMDocument->loadXML($sTextoXml);
 		  $oElementos = $oDOMDocument->getElementsByTagName('elemento');
-		  
+
 		  /**
 		   * selecionar arquivo xml de Dados Compl Licitação
 		   */
-		  $sArquivo = "config/sicom/".(db_getsession("DB_anousu")-1)."/{$sCnpj}_sicomdadoscompllicitacao.xml";
+		  $sArquivo = "legacy_config/sicom/".(db_getsession("DB_anousu")-1)."/{$sCnpj}_sicomdadoscompllicitacao.xml";
 		  /*if (!file_exists($sArquivo)) {
 			  throw new Exception("Arquivo de dados compl licitacao inexistente!");
 	 	  }*/
@@ -117,7 +117,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 		  $oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
 
 		$sSql = "SELECT DISTINCT 10 as tiporegistro,o58_orgao,o58_unidade,o15_codtri,
-				       si09_codorgaotce as codorgao, 
+				       si09_codorgaotce as codorgao,
 				       lpad(o58_orgao,2,0)||lpad(o58_unidade,3,0) as codunidadesub,
 				       o58_funcao as codfuncao,
 				       o58_subfuncao as codsubfuncao,
@@ -146,25 +146,25 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				       case when l20_codigo is null then 1
 				            when l03_pctipocompratribunal in (100,101,102) then 3 else 2 end as despDecLicitacao,
 				       ' ' as codorgaoresplicit,
-				       case when l20_codigo is null then null else (select lpad(db01_orgao,2,0)||lpad(db01_unidade,3,0) as unidadesub 
-				          from db_departorg 
-				         where db01_coddepto = l20_codepartamento 
-				         and db01_anousu = e60_anousu) 
+				       case when l20_codigo is null then null else (select lpad(db01_orgao,2,0)||lpad(db01_unidade,3,0) as unidadesub
+				          from db_departorg
+				         where db01_coddepto = l20_codepartamento
+				         and db01_anousu = e60_anousu)
 				         end as codunidadesubresplicit,
 				         liclicita.l20_codigo,
 				       case when l20_codigo is null then null else l20_edital end nroprocessolicitatorio,
 				       case when l20_codigo is null then null else l20_anousu end exercicioprocessolicitatorio,
 				       case when l20_codigo is null then null
-				            when l03_pctipocompratribunal not in (100,101,102) then null 
-				            when l03_pctipocompratribunal = 100 then 2 
-				            when l03_pctipocompratribunal = 101 then 1  
+				            when l03_pctipocompratribunal not in (100,101,102) then null
+				            when l03_pctipocompratribunal = 100 then 2
+				            when l03_pctipocompratribunal = 101 then 1
 				            else 3 end as tipoprocesso,
-				       o.z01_cgccpf as ordenador,    
+				       o.z01_cgccpf as ordenador,
 				       e60_numemp as numemp,
 				       case when length(cgm.z01_cgccpf) = 11 then 1 else 2 end as tipodocumento,
 				       cgm.z01_cgccpf as nrodocumento,
 				       o41_subunidade as subunidade,
-				       l202_datahomologacao as datahomologacao 
+				       l202_datahomologacao as datahomologacao
 				     FROM empempenho
 				     JOIN orcdotacao ON e60_coddot = o58_coddot
 				     JOIN empelemento ON e60_numemp = e64_numemp
@@ -173,7 +173,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				     JOIN emptipo ON e60_codtipo = e41_codtipo
 				     JOIN cgm ON e60_numcgm = z01_numcgm
 				     JOIN orcprojativ on o58_anousu = o55_anousu and o58_projativ = o55_projativ
-			    LEFT JOIN pctipocompra on e60_codcom = pc50_codcom 
+			    LEFT JOIN pctipocompra on e60_codcom = pc50_codcom
 			    LEFT JOIN cflicita on  pc50_pctipocompratribunal = l03_pctipocompratribunal and l03_instit = ".db_getsession("DB_instit")."
 				LEFT JOIN infocomplementaresinstit on si09_instit = e60_instit
 				LEFT JOIN empcontratos on e60_anousu = si173_anoempenho and e60_codemp = si173_empenho::varchar
@@ -181,8 +181,8 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				LEFT JOIN db_departorg ON si172_codunidadesubresp::int = db01_coddepto AND db01_anousu = e60_anousu
 				LEFT JOIN aditivoscontratos on si174_nrocontrato = si173_codcontrato
 				LEFT JOIN rescisaocontrato on si176_nrocontrato = si173_codcontrato
-				LEFT JOIN liclicita ON ((string_to_array(e60_numerol, '/'))[1])::varchar = l20_numero::varchar 
-				      AND l20_anousu::varchar = ((string_to_array(e60_numerol, '/'))[2])::varchar 
+				LEFT JOIN liclicita ON ((string_to_array(e60_numerol, '/'))[1])::varchar = l20_numero::varchar
+				      AND l20_anousu::varchar = ((string_to_array(e60_numerol, '/'))[2])::varchar
 				      AND l03_codigo = l20_codtipocom
 				LEFT JOIN orcunidade on o58_anousu = o41_anousu and o58_orgao = o41_orgao and o58_unidade = o41_unidade
 				LEFT JOIN cgm o on o.z01_numcgm = o41_orddespesa
@@ -190,11 +190,11 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				    WHERE e60_anousu = ".db_getsession("DB_anousu")."
 				      AND o56_anousu = ".db_getsession("DB_anousu")."
 				      AND o58_anousu = ".db_getsession("DB_anousu")."
-				      AND e60_instit = ".db_getsession("DB_instit")." 
+				      AND e60_instit = ".db_getsession("DB_instit")."
 				      AND e60_emiss between '".$this->sDataInicial."' AND '".$this->sDataFinal."'  order by e60_codemp";
-		
-		
-        
+
+
+
 		$rsEmpenho = db_query($sSql);
         //echo pg_last_error();
 		//echo $sSql;db_criatabela($rsEmpenho);
@@ -204,24 +204,24 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
     // matriz de saída
     $by   = array('','','', 'a','a','a','a','a','e','e','e','e','i','i','i','o','o','o','o','o','u','u','u','u','A','A','A','E','I','O','U','n','n','c','C',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ' );
-		
-		
+
+
 		for ($iCont = 0; $iCont < pg_num_rows($rsEmpenho); $iCont++) {
-			 
+
 			$oEmpenho = db_utils::fieldsMemory($rsEmpenho, $iCont);
-         				
+
 		  if ($sTrataCodUnidade == 2) {
-      		
+
 	            $sCodUnidade  = str_pad($oEmpenho->o58_orgao, 3, "0", STR_PAD_LEFT);
 		   		$sCodUnidade .= str_pad($oEmpenho->o58_unidade, 2, "0", STR_PAD_LEFT);
-		   		
-		   		  
+
+
 	      } else {
-	      		
+
 	          $sCodUnidade  = $oEmpenho->codunidadesub;
-	      		
+
 	      }
-	   
+
 			if ($oEmpenho->subunidade != '' && $oEmpenho->subunidade != 0) {
 				$sCodUnidade .= str_pad($oEmpenho->subunidade, 3, "0", STR_PAD_LEFT);
 				if ($oEmpenho->codunidadesubrespcontrato != '') {
@@ -236,40 +236,40 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 	       * percorrer xml elemento despesa
 	       */
 	      foreach ($oElementos as $oElemento) {
-	      	
-	      	if ($oElemento->getAttribute('instituicao') == db_getsession("DB_instit") 
+
+	      	if ($oElemento->getAttribute('instituicao') == db_getsession("DB_instit")
 							&& $oElemento->getAttribute('elementoEcidade') == $sElemento) {
-								
+
 	      	  $sElemento = $oElemento->getAttribute('elementoSicom');
-	      	  break; 	
-	      	  
+	      	  break;
+
 	      	}
-	      	
+
 	      }
 	      /**
 	       * Nao deve pegar licitacao de 2013
 	       */
 	     /* if ($oEmpenho->exercicioprocessolicitatorio < 2014) {
-	      	
+
 		      foreach ($oDadosComplLicitacoes as $oDadosComplLicitacao) {
-			
+
 			      if ($oDadosComplLicitacao->getAttribute('instituicao') == db_getsession("DB_instit")
 				    && $oDadosComplLicitacao->getAttribute('nroProcessoLicitatorio') == $oEmpenho->l20_codigo
 				    && $oEmpenho->l20_codigo != '') {
-			
+
 			        $oEmpenho->nroprocessolicitatorio       = substr($oDadosComplLicitacao->getAttribute('codigoProcesso'), 0, 12);
-			        $oEmpenho->exercicioprocessolicitatorio = $oDadosComplLicitacao->getAttribute('ano'); 
-				
+			        $oEmpenho->exercicioprocessolicitatorio = $oDadosComplLicitacao->getAttribute('ano');
+
 			      }
-				
+
 			    }
-			    
+
 	      }*/
-	      
+
           db_inicio_transacao();
-	            
+
 			$oDadosEmpenho = new cl_emp102014();
-	
+
 			$oDadosEmpenho->si106_tiporegistro                 = $oEmpenho->tiporegistro;
 			$oDadosEmpenho->si106_codorgao                     = $oEmpenho->codorgao;
 			$oDadosEmpenho->si106_codunidadesub                = $sCodUnidade;
@@ -285,7 +285,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 			$oDadosEmpenho->si106_modalidadeempenho            = $oEmpenho->modalidadempenho;
 			$oDadosEmpenho->si106_tpempenho                    = $oEmpenho->tpempenho;
 			$oDadosEmpenho->si106_vlbruto                      = $oEmpenho->vlbruto;
-			$oDadosEmpenho->si106_especificacaoempenho         = $oEmpenho->especificaoempenho == '' ? 'SEM HISTORICO'  : 
+			$oDadosEmpenho->si106_especificacaoempenho         = $oEmpenho->especificaoempenho == '' ? 'SEM HISTORICO'  :
 			trim(preg_replace("/[^a-zA-Z0-9 ]/", "",substr(str_replace($what, $by, $oEmpenho->especificaoempenho), 0, 200)));
 			$aAnoContrato = explode('-',$oEmpenho->dtassinaturacontrato);
 			if($oEmpenho->dtassinaturacontrato == null || $aAnoContrato[0] < 2014){
@@ -303,9 +303,9 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				$oDadosEmpenho->si106_dtassinaturacontrato         = $oEmpenho->dataassinaturacontrato;
 				$oDadosEmpenho->si106_nrosequencialtermoaditivo    = $oEmpenho->nrosequencialtermoaditivo;
 			}
-			
+
 			$oDadosEmpenho->si106_despdecconvenio              = $oEmpenho->despdecconvenio;
-			$oDadosEmpenho->si106_nroconvenio 				   = $oEmpenho->nroconvenio; 
+			$oDadosEmpenho->si106_nroconvenio 				   = $oEmpenho->nroconvenio;
 			$oDadosEmpenho->si106_dataassinaturaconvenio	   = $oEmpenho->dataassinaturaconvenio;
 			$aHomologa = explode("-", $oEmpenho->datahomologacao);
 			if(($oEmpenho->datahomologacao == null && $oDadosEmpenho->exercicioprocessolicitatorio < 2014) || $aHomologa[0] < 2014){
@@ -321,22 +321,22 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 				$oDadosEmpenho->si106_exercicioprocessolicitatorio = $oEmpenho->exercicioprocessolicitatorio;
 				$oDadosEmpenho->si106_tipoprocesso                 = $oEmpenho->tipoprocesso;
 			}
-			
+
 			$oDadosEmpenho->si106_cpfordenador				   = substr($oEmpenho->ordenador,0,11);
 			$oDadosEmpenho->si106_mes						   = $this->sDataFinal['5'].$this->sDataFinal['6'];
 			$oDadosEmpenho->si106_instit					   = db_getsession("DB_instit");
-			
-			
+
+
 			$oDadosEmpenho->incluir();
 			if ($oDadosEmpenho->erro_status == 0) {
 		      throw new Exception($oDadosEmpenho->erro_msg);
 		    }
-			
+
 			/**
 			 * dados registro 11
 			 */
 			$oDadosEmpenhoFonte = new cl_emp112014();
-			
+
 			$oDadosEmpenhoFonte->si107_tiporegistro    = 11;
 			$oDadosEmpenhoFonte->si107_codunidadesub   = $sCodUnidade;
 			$oDadosEmpenhoFonte->si107_nroempenho      = $oEmpenho->nroempenho;
@@ -345,15 +345,15 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 			$oDadosEmpenhoFonte->si107_mes             = $this->sDataFinal['5'].$this->sDataFinal['6'];
 			$oDadosEmpenhoFonte->si107_reg10           = $oDadosEmpenho->si106_sequencial;
 			$oDadosEmpenhoFonte->si107_instit		   = db_getsession("DB_instit");
-			
+
 			$oDadosEmpenhoFonte->incluir(null);
 		    if ($oDadosEmpenhoFonte->erro_status == 0) {
 	    	  throw new Exception($oDadosEmpenhoFonte->erro_msg);
 	        }
-	        
-	        
+
+
 	        $oEmp12 = new cl_emp122014();
-	        
+
 	        $oEmp12->si108_tiporegistro 	= '12';
 	        $oEmp12->si108_codunidadesub 	= $sCodUnidade;
 	        $oEmp12->si108_nroempenho 		= $oEmpenho->nroempenho;;
@@ -362,17 +362,17 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 	        $oEmp12->si108_mes 				= $this->sDataFinal['5'].$this->sDataFinal['6'];
 	        $oEmp12->si108_reg10 			= $oDadosEmpenho->si106_sequencial;
 	        $oEmp12->si108_instit 			= db_getsession("DB_instit");
-	        
-	        
+
+
 		    $oEmp12->incluir(null);
 		    if ($oEmp12->erro_status == 0) {
 	    	  throw new Exception($oEmp12->erro_msg);
 	        }
-	        
-	        
+
+
 			db_fim_transacao();
 		}
-	
+
 	    $oGerarEMP = new GerarEMP();
 	    $oGerarEMP->iMes = $this->sDataFinal['5'].$this->sDataFinal['6'];;
 	    $oGerarEMP->gerarDados();

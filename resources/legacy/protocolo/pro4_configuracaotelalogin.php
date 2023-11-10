@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2009  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2009  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -37,29 +37,29 @@ $oPost = db_utils::postMemory($_POST);
 if (isset($oPost->enviar)) {
 
   if (isset($oPost->nomearquivo)) {
-  	
-  	$sDiretorioXML = "./config/require_extensions.xml";
+
+  	$sDiretorioXML = "./legacy_config/require_extensions.xml";
 	  $sUploadDir    = "./templates/";
 	  $pUploadFile   = trim($sUploadDir.trim($oPost->nomearquivo).".php");
     $pUploadFile   = trim(str_replace(' ','',$pUploadFile));
-	  
+
     $sExtensao     = array_reverse( explode('.',$_FILES['arquivotemplatelogin']['name'] ));
     $sExtensao     = $sExtensao[0];
-    
+
     if ($sExtensao == 'php' || $sExtensao == 'html') {
 
 	    if (move_uploaded_file($_FILES['arquivotemplatelogin']['tmp_name'], $pUploadFile)) {
-	    	
+
         $oSimpleXML = simplexml_load_file($sDiretorioXML);
         $oAttr = $oSimpleXML->template_login->attributes();
         $oAttr->src = $pUploadFile;
-        
+
         file_put_contents($sDiretorioXML , $oSimpleXML->asXML());
-        
+
 	      $sMsgErro = "Upload concluído com sucesso.";
 	    } else {
 	      $sMsgErro = "Upload de arquivo não concluido!";
-	    } 
+	    }
     } else {
     	$sMsgErro = "O arquvio selecionado é inválido!";
     }
@@ -114,7 +114,7 @@ if (isset($oPost->enviar)) {
   </tr>
   <tr>
     <td align="center">
-      <input name="enviar" type="submit" id="enviar" value="Enviar" onclick="return js_enviar();"> 
+      <input name="enviar" type="submit" id="enviar" value="Enviar" onclick="return js_enviar();">
     </td>
   </tr>
 </table>
@@ -133,16 +133,16 @@ function js_enviar() {
 
   var sNomeArquivo = document.form1.nomearquivo.value;
   var pArquivo     = document.form1.arquivotemplatelogin.value;
-  
+
   if (sNomeArquivo == '') {
-  
+
     alert("Informe o nome do arquivo!");
     document.form1.nomearquivo.focus();
     return false;
   }
-  
+
   if (pArquivo == '') {
-  
+
     alert("Informe um arquivo de template padrão!");
     document.form1.arquivotemplatelogin.focus();
     return false;

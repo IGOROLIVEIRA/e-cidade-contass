@@ -3,25 +3,25 @@ require_once ("model/iPadArquivoBaseCSV.interface.php");
 require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
 
 class SicomArquivoDetalhamentoRiscosFiscais extends SicomArquivoBase implements iPadArquivoBaseCSV {
-  
+
   protected $iCodigoLayout = 144;
-  
+
   protected $sNomeArquivo = 'RFIS';
-  
+
   protected $iCodigoPespectiva;
-  
+
   public function __construct() {
-    
+
   }
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
-  
+
   /**
-   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV 
+   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos(){
-    
+
     $aElementos[10]  = array(
                           "tipoRegistro",
                           "codRF",
@@ -39,16 +39,16 @@ class SicomArquivoDetalhamentoRiscosFiscais extends SicomArquivoBase implements 
                           "dscProvidencia",
                           "vlAssociadoProvidencia"
                         );
-                        
+
     return $aElementos;
   }
-  
+
   public function gerarDados(){
-  	
+
   	/*
   	 * pegar configurações dos orgãos
   	 */
-  	$sArquivo = "config/sicom/sicomorgao.xml";
+  	$sArquivo = "legacy_config/sicom/sicomorgao.xml";
     if (!file_exists($sArquivo)) {
       throw new Exception("Arquivo de configuração dos orgãos do sicom inexistente!");
     }
@@ -57,11 +57,11 @@ class SicomArquivoDetalhamentoRiscosFiscais extends SicomArquivoBase implements 
     $oDOMDocument->loadXML($sTextoXml);
     $oOrgaos      = $oDOMDocument->getElementsByTagName('orgao');
     foreach ($oOrgaos as $oOrgao) {
-    
+
 	    /*
 	  	 * pegar configurações dos riscos fiscais
 	  	 */
-	  	$sArquivo = "config/sicom/sicomriscos.xml";
+	  	$sArquivo = "legacy_config/sicom/sicomriscos.xml";
 	    if (!file_exists($sArquivo)) {
 	      throw new Exception("Arquivo riscos fiscais inexistente!");
 	    }
@@ -69,33 +69,33 @@ class SicomArquivoDetalhamentoRiscosFiscais extends SicomArquivoBase implements 
 	    $oDOMDocument = new DOMDocument();
 	    $oDOMDocument->loadXML($sTextoXml);
 	    $oRiscos      = $oDOMDocument->getElementsByTagName('risco');
-	   
+
 			if (!isset($oRiscos)) {
 	      throw new Exception("Não existem Riscos Fiscais Lançadas.");
-	    } 
-	    
+	    }
+
 	    /*
 	  	 * pegar configurações das providências
 	  	 */
-	    $sArquivo = "config/sicom/sicomprovidenciasriscos.xml";
+	    $sArquivo = "legacy_config/sicom/sicomprovidenciasriscos.xml";
 			if (!file_exists($sArquivo)) {
-				
+
 			  throw new Exception("Arquivo providencias dos riscos fiscais inexistente!");
-			} 
-	    
+			}
+
 			$sTextoXml    = file_get_contents($sArquivo);
 			$oDOMDocument = new DOMDocument();
 			$oDOMDocument->loadXML($sTextoXml);
 			$oProvidencias  = $oDOMDocument->getElementsByTagName('providencia');
 			if (!isset($oProvidencias)) {
 	      throw new Exception("Não existem Proviências Lançadas.");
-	    }  
-			
+	    }
+
 	    foreach ($oRiscos as $oRisco) {
 	      //echo($oRisco->getAttribute('exercicio'));//exit;
-	      if ($oRisco->getAttribute("codPerspectiva") == $this->getCodigoPespectiva() AND 
+	      if ($oRisco->getAttribute("codPerspectiva") == $this->getCodigoPespectiva() AND
 	      		$oRisco->getAttribute("instituicao") == $oOrgao->getAttribute('instituicao')) {
-					
+
 	      	$oDadosRiscos = new stdClass();
 	        $oDadosRiscos->tipoRegistro    = 10;
 	        $oDadosRiscos->detalhesessao   = 10;
@@ -107,7 +107,7 @@ class SicomArquivoDetalhamentoRiscosFiscais extends SicomArquivoBase implements 
 	        $oDadosRiscos->vlRiscoFiscal   = number_format($oRisco->getAttribute("vlRiscoFiscal"),2,"","");
 	        //print_r($oDadosRiscos);echo "<br>";
 	        $this->aDados[] = $oDadosRiscos;
-	        
+
 			    foreach ($oProvidencias as $oProvidencia){
 			    	if($oProvidencia->getAttribute("codRisco") == $oRisco->getAttribute("codRisco")){
 			    		$oDadosProvidencias = new stdClass();
@@ -120,17 +120,17 @@ class SicomArquivoDetalhamentoRiscosFiscais extends SicomArquivoBase implements 
 			    		//print_r($oDadosProvidencias);echo "<br>";
 			    		$this->aDados[] = $oDadosProvidencias;
 			    	}
-			    		
+
 			    }
 	      }
 			 }
-    }     
+    }
   }
-  
+
   public function setCodigoPespectiva($iCodigoPespectiva) {
     $this->iCodigoPespectiva = $iCodigoPespectiva;
   }
-  
+
   public function getCodigoPespectiva() {
     return $this->iCodigoPespectiva;
   }

@@ -36,7 +36,7 @@ final class ParametroCaixa {
   const TIPO_TRANSMISSAO_CNAB240 = 1;
   const TIPO_TRANSMISSAO_OBN     = 2;
 
-  const CAMINHO_ARQUIVO = 'config/financeiro/agenda_pagamento.ini';
+  const CAMINHO_ARQUIVO = 'legacy_config/financeiro/agenda_pagamento.ini';
 
   /**
    * Retorna o código do recurso configurado para FUNDEB configurado para a instituição informada na sessão. Caso a

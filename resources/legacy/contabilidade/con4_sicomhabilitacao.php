@@ -7,59 +7,59 @@ include("libs/db_usuariosonline.php");
 include("dbforms/db_funcoes.php");
 $sSql  = "SELECT * FROM db_config ";
 $sSql .= "	WHERE prefeitura = 't'";
-    	
+
 $rsInst = db_query($sSql);
 $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
 
-$sArquivo       = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomhabilitacao.xml";
-$sArquivoSocios = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomhabilitacaosocios.xml";
+$sArquivo       = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomhabilitacao.xml";
+$sArquivoSocios = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomhabilitacaosocios.xml";
 
 /*
  * inserir ou atualizar registro do xml
  */
 if (isset($_POST['btnSalvar'])){
-	
+
 	/*
    * verificar existencia para criar xml habilitacoes
    */
 	if (!file_exists($sArquivo)) {
-		
+
     $oDOMDocument = new DOMDocument('1.0','ISO-8859-1');
     $oRoot  = $oDOMDocument->createElement('habilitacoes');
-    
+
   }else{
-  	
+
   	$oDOMDocument = new DOMDocument();
   	$sTextoXml    = file_get_contents($sArquivo);
     $oDOMDocument->loadXML($sTextoXml);
     $oRoot  = $oDOMDocument->documentElement;
-    	
+
   }
-  
+
   /*
    * verificar existencia para criar xml socios
    */
   if (!file_exists($sArquivoSocios)) {
-		
+
     $oDOMDocumentSocio = new DOMDocument('1.0','ISO-8859-1');
     $oRootSocio  = $oDOMDocumentSocio->createElement('habilitacoessocios');
-    
+
   }else{
-  	
+
   	$oDOMDocumentSocio = new DOMDocument();
   	$sTextoXmlSocio    = file_get_contents($sArquivoSocios);
     $oDOMDocumentSocio->loadXML($sTextoXmlSocio);
     $oRootSocio  = $oDOMDocumentSocio->documentElement;
-    	
+
   }
-  
-    
+
+
   $oDOMDocument->formatOutput      = true;
   $oDOMDocumentSocio->formatOutput = true;
-  
+
   $oDados       = $oDOMDocument->getElementsByTagName('habilitacao');
   $oDadosSocios = $oDOMDocumentSocio->getElementsByTagName('habilitacaosocio');
-  
+
   unset($_POST['nroDocumentoSocio']);
   unset($_POST['nomeSocio']);
   unset($_POST['tipoParticipacao']);
@@ -77,46 +77,46 @@ if (isset($_POST['btnSalvar'])){
   	 $nroDocumentoSocio = "nroDocumentoSocio$i";
      $nomeSocio         = "nomeSocio$i";
      $tipoParticipacao  = "tipoParticipacao$i";
-  	
+
   	$oPostSocio = new stdClass();
   	$oPostSocio->$nroDocumentoSocio = $_POST['nroDocumentoSocio'.$i];
   	$oPostSocio->$nomeSocio         = $_POST['nomeSocio'.$i];
   	$oPostSocio->$tipoParticipacao  = $_POST['tipoParticipacao'.$i];
   	$aPostSocios[$i] = $oPostSocio;
-  	
+
   	unset($_POST['nroDocumentoSocio'.$i]);
   	unset($_POST['nomeSocio'.$i]);
   	unset($_POST['tipoParticipacao'.$i]);
-  	
+
   }
   unset($_POST['cont_socios']);
   /**
    * caso o codigo já exista no xml irá atualizar o registro
    */
   foreach ($oDados as $oRow) {
-  	
+
   	$iUltimoCodigo = $oRow->getAttribute("codigo");
 		if ($oRow->getAttribute("codigo") == $_POST['codigo']) {
-			
+
 			$oDado = new stdClass();
 			$oDado = $oRow;
 			unset($_POST['btnSalvar']);
 			$oDado->setAttribute("instituicao", db_getsession("DB_instit"));
-			
+
 			$aCaracteres = array('\"', "\'");
 
 		  /**
-		   * tirando barras e tratando acentos dos inputs para texto 
+		   * tirando barras e tratando acentos dos inputs para texto
 		   */
 		  $_POST['nomRazaoSocial'] = str_replace($aCaracteres, "", $_POST['nomRazaoSocial']);
   	  $_POST['nomRazaoSocial'] = trim(utf8_encode($_POST['nomRazaoSocial']));
-			
+
   	  $_POST['objetoSocial'] = str_replace($aCaracteres, "", $_POST['objetoSocial']);
   	  $_POST['objetoSocial'] = trim(utf8_encode($_POST['objetoSocial']));
-  	  
+
   	  $_POST['nomeSocio'] = str_replace($aCaracteres, "", $_POST['nomeSocio']);
   	  $_POST['nomeSocio'] = trim(utf8_encode($_POST['nomeSocio']));
-  	  
+
   	  /**
   	   * passar os valores para o objeto para ser salvo no xml
   	   */
@@ -124,8 +124,8 @@ if (isset($_POST['btnSalvar'])){
 			  $oDado->setAttribute($coll, $value);
 		  }
 		  $oDOMDocument->save($sArquivo);
-		  if (filesize($sArquivo) > filesize("config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacao.xml")/2) { 
-		    system("cp $sArquivo config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacao.xml");
+		  if (filesize($sArquivo) > filesize("legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacao.xml")/2) {
+		    system("cp $sArquivo legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacao.xml");
 		  }
 			echo"
 			<script LANGUAGE=\"Javascript\">
@@ -133,14 +133,14 @@ if (isset($_POST['btnSalvar'])){
 			</SCRIPT>";
 			break;
     }
-    
+
   }
   if (!$oDado) {
-  	 
+
   	unset($_POST['btnSalvar']);
   	$oDado  = $oDOMDocument->createElement('habilitacao');
   	$oDado->setAttribute("instituicao", db_getsession("DB_instit"));
-  	
+
   	$aCaracteres = array('\"', "\'");
 
 		/**
@@ -148,13 +148,13 @@ if (isset($_POST['btnSalvar'])){
 		 */
 		$_POST['nomRazaoSocial'] = str_replace($aCaracteres, "", $_POST['nomRazaoSocial']);
   	$_POST['nomRazaoSocial'] = trim(utf8_encode($_POST['nomRazaoSocial']));
-  	
+
   	$_POST['objetoSocial'] = str_replace($aCaracteres, "", $_POST['objetoSocial']);
   	$_POST['objetoSocial'] = trim(utf8_encode($_POST['objetoSocial']));
-  	
+
   	$_POST['nomeSocio'] = str_replace($aCaracteres, "", $_POST['nomeSocio']);
   	  $_POST['nomeSocio'] = trim(utf8_encode($_POST['nomeSocio']));
-  	
+
   	/**
   	 * passar os valores para o objeto para ser salvo no xml
   	 */
@@ -163,63 +163,63 @@ if (isset($_POST['btnSalvar'])){
 	  }
 	  $iUltimoCodigo++;
 	  $oDado->setAttribute("codigo", $iUltimoCodigo);
-	  
+
 	  if (!file_exists($sArquivo)) {
 
-	  	
+
 	  	$oRoot->appendChild($oDado);
 	    $oDOMDocument->appendChild($oRoot);
-	    
+
 	  } else {
 	  	$oDado = $oRoot->appendChild($oDado);
 	  }
 	  $oDOMDocument->save($sArquivo);
-    if (filesize($sArquivo) > filesize("config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacao.xml")/2) { 
-		  system("cp $sArquivo config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacao.xml");
+    if (filesize($sArquivo) > filesize("legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacao.xml")/2) {
+		  system("cp $sArquivo legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacao.xml");
 		}
 		echo"
 		<script LANGUAGE=\"Javascript\">
 		alert(\"Seu cadastro foi realizado com sucesso.\");
 		</SCRIPT>";
   }
-  
+
   /**
    * caso o codigo já exista no xml dados dos socios, irá atualizar o registro
    */
   $nodeToRemove = array();
   foreach ($oDadosSocios as $oRow) {
-  	
+
 		if ($oRow->getAttribute("codHabilitacao") == $iUltimoCodigo
 		&& $oRow->getAttribute("instituicao") ==  db_getsession("DB_instit")) {
 	    $nodeToRemove[] = $oRow;
     }
-    
+
   }
-  
+
   foreach ($nodeToRemove as $oNode) {
   	$oRootSocio->removeChild($oNode);
   }
   if (count($nodeToRemove) > 0) {
-  	
+
     $oDOMDocumentSocio->save($sArquivoSocios);
-	  system("cp $sArquivoSocios config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacaosocios.xml");
-	  
+	  system("cp $sArquivoSocios legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacaosocios.xml");
+
   }
-  
+
   foreach ($aPostSocios as $iPos => $oSocios) {
-  	
+
   	unset($oDado);
   	$nroDocumentoSocio = "nroDocumentoSocio$iPos";
     $nomeSocio         = "nomeSocio$iPos";
     $tipoParticipacao  = "tipoParticipacao$iPos";
-  
+
   		$nroDocumentoSocio = "nroDocumentoSocio$iPos";
       $nomeSocio         = "nomeSocio$iPos";
       $tipoParticipacao  = "tipoParticipacao$iPos";
-  		
+
   	  $oDado  = $oDOMDocumentSocio->createElement('habilitacaosocio');
   	  $oDado->setAttribute("instituicao", db_getsession("DB_instit"));
-  	
+
   	  $aCaracteres = array('\"', "\'");
 
 		  /**
@@ -227,7 +227,7 @@ if (isset($_POST['btnSalvar'])){
 		   */
   	  $oSocios->$nomeSocio = str_replace($aCaracteres, "", $oSocios->$nomeSocio);
   	  $oSocios->$nomeSocio = trim(utf8_encode($oSocios->$nomeSocio));
-  	
+
   	  /**
   	   * passar os valores para o objeto para ser salvo no xml
   	   */
@@ -235,22 +235,22 @@ if (isset($_POST['btnSalvar'])){
 			$oDado->setAttribute("nroDocumentoSocio", $oSocios->$nroDocumentoSocio);
 			$oDado->setAttribute("nomeSocio", $oSocios->$nomeSocio);
 			$oDado->setAttribute("tipoParticipacao", $oSocios->$tipoParticipacao);
-	  
+
 	  if (!file_exists($sArquivoSocios)) {
 
 	  	$oRootSocio->appendChild($oDado);
 	    $oDOMDocumentSocio->appendChild($oRootSocio);
-	      
+
 	  } else {
 	  	$oDado = $oRootSocio->appendChild($oDado);
 	  }
 	  $oDOMDocumentSocio->save($sArquivoSocios);
-    if (filesize($sArquivoSocios) > filesize("config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacaosocios.xml")/2) { 
-		  system("cp $sArquivoSocios config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacaosocios.xml");
+    if (filesize($sArquivoSocios) > filesize("legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacaosocios.xml")/2) {
+		  system("cp $sArquivoSocios legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacaosocios.xml");
 		}
-  
+
 }
-  
+
 }
 
 /*
@@ -261,60 +261,60 @@ if (isset($_POST['btnExcluir'])){
 	if (!file_exists($sArquivo)) {
     $oDOMDocument = new DOMDocument('1.0','ISO-8859-1');
   }else{
-  	$oDOMDocument = new DOMDocument();		
+  	$oDOMDocument = new DOMDocument();
   }
-    
+
  	$sTextoXml    = file_get_contents($sArquivo);
   $oDOMDocument->loadXML($sTextoXml);
   $oDOMDocument->formatOutput = true;
 	$oDocument = $oDOMDocument->documentElement;
   $oDados      = $oDOMDocument->getElementsByTagName('habilitacao');
-  
+
   /**
    * xml de socios
    */
   if (!file_exists($sArquivoSocios)) {
     $oDOMDocumentSocio = new DOMDocument('1.0','ISO-8859-1');
   }else{
-  	$oDOMDocumentSocio = new DOMDocument();		
+  	$oDOMDocumentSocio = new DOMDocument();
   }
-    
+
  	$sTextoXml    = file_get_contents($sArquivoSocios);
   $oDOMDocumentSocio->loadXML($sTextoXml);
   $oDOMDocumentSocio->formatOutput = true;
 	$oDocumentSocio = $oDOMDocumentSocio->documentElement;
   $oDadosSocios   = $oDOMDocumentSocio->getElementsByTagName('habilitacaosocio');
-  
+
   $nodeToRemove = array();
   foreach ($oDadosSocios as $oRow) {
-  	
+
 		if ($oRow->getAttribute("codHabilitacao") == $iUltimoCodigo
 		&& $oRow->getAttribute("instituicao") ==  db_getsession("DB_instit")) {
 	    $nodeToRemove[] = $oRow;
     }
-    
+
   }
-  
+
   foreach ($nodeToRemove as $oNode) {
   	$oDocumentSocio->removeChild($oNode);
   }
   if (count($nodeToRemove) > 0) {
-  	
+
     $oDOMDocumentSocio->save($sArquivoSocios);
-	  system("cp $sArquivoSocios config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacaosocios.xml");
-	  
+	  system("cp $sArquivoSocios legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacaosocios.xml");
+
   }
-  
+
   /**
    * encontrar o codigo selecionado para excluir o registro no xml
    */
   foreach ($oDados as $oRow) {
-  	
+
 		if ($oRow->getAttribute("codigo") == $_POST['codigo']) {
-			
+
 		  $oDocument->removeChild($oRow);
 		  $oDOMDocument->save($sArquivo);
-		  system("cp $sArquivo config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacao.xml");
+		  system("cp $sArquivo legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomhabilitacao.xml");
 			echo"
 			<script LANGUAGE=\"Javascript\">
 			alert(\"Registro removido com sucesso.\");

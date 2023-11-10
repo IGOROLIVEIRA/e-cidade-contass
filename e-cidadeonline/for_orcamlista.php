@@ -22,16 +22,16 @@ $sql= "select z01_cgccpf,
               pc20_dtate,
               pc20_hrate,
               pc21_prazoent,
-              pc21_validadorc  
-		     from pcorcamforne 
-		    inner join cgm     on pc21_numcgm = z01_numcgm 
+              pc21_validadorc
+		     from pcorcamforne
+		    inner join cgm     on pc21_numcgm = z01_numcgm
 		    inner join pcorcam on pc20_codorc = pc21_codorc
-		    where pc21_numcgm = $cgm 
+		    where pc21_numcgm = $cgm
 		      and pc21_codorc = $orc";
-		
+
 $result= pg_exec($sql);
 db_fieldsmemory($result,0);
-if($sol==1){ 
+if($sol==1){
 $sqlitens="select pc11_codigo,
                   pc11_quant,
                   pc01_descrmater,
@@ -49,27 +49,27 @@ $sqlitens="select pc11_codigo,
 		              pc23_valor,
 		              pc23_obs,
 		              pc23_vlrun,
-		              pc23_validmin 
-			       from pcorcamitemsol 
+		              pc23_validmin
+			       from pcorcamitemsol
 			      inner join pcorcamitem      on pcorcamitem.pc22_orcamitem      = pcorcamitemsol.pc29_orcamitem
-			      inner join pcorcam          on pcorcam.pc20_codorc             = pcorcamitem.pc22_codorc 
-			      inner join solicitem        on solicitem.pc11_codigo           = pcorcamitemsol.pc29_solicitem 
-			      inner join solicita         on solicita.pc10_numero            = solicitem.pc11_numero 
+			      inner join pcorcam          on pcorcam.pc20_codorc             = pcorcamitem.pc22_codorc
+			      inner join solicitem        on solicitem.pc11_codigo           = pcorcamitemsol.pc29_solicitem
+			      inner join solicita         on solicita.pc10_numero            = solicitem.pc11_numero
 		        inner join pcorcamforne     on  pcorcam.pc20_codorc            = pc21_codorc
-			       left join solicitemunid    on solicitemunid.pc17_codigo       = solicitem.pc11_codigo 
-			       left join matunid          on matunid.m61_codmatunid          = solicitemunid.pc17_unid 
-			       left join solicitempcmater on solicitempcmater.pc16_solicitem = solicitem.pc11_codigo 
-			       left join pcmater          on pcmater.pc01_codmater           = solicitempcmater.pc16_codmater 
-			       left join pcsubgrupo       on pcsubgrupo.pc04_codsubgrupo     = pcmater.pc01_codsubgrupo 
+			       left join solicitemunid    on solicitemunid.pc17_codigo       = solicitem.pc11_codigo
+			       left join matunid          on matunid.m61_codmatunid          = solicitemunid.pc17_unid
+			       left join solicitempcmater on solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+			       left join pcmater          on pcmater.pc01_codmater           = solicitempcmater.pc16_codmater
+			       left join pcsubgrupo       on pcsubgrupo.pc04_codsubgrupo     = pcmater.pc01_codsubgrupo
 			       left join pctipo           on pctipo.pc05_codtipo             = pcsubgrupo.pc04_codtipo
 			       left join pcorcamval       on pcorcamitem.pc22_orcamitem      = pc23_orcamitem and pc23_orcamforne=pc21_orcamforne
-			      where pc22_codorc     = $orc 
+			      where pc22_codorc     = $orc
 			        and pc21_orcamforne = $forne
 			      order by pc11_seq";
-			
+
 $result= pg_exec($sqlitens);
 $linhas= pg_num_rows($result);
-}else{ 
+}else{
 	$sol= 2;
 	$sqlproc="select pc11_seq,
 	                 pc11_resum,
@@ -83,17 +83,17 @@ $linhas= pg_num_rows($result);
 				           pc23_obs,
 				           pc23_vlrun,
 				           pc23_validmin
-				      from pcorcamitem 
+				      from pcorcamitem
 				     inner join pcorcam          on pcorcam.pc20_codorc             = pcorcamitem.pc22_codorc
-				     inner join pcorcamforne     on pcorcam.pc20_codorc             = pc21_codorc 
-				     inner join pcorcamitemproc  on pcorcamitemproc.pc31_orcamitem  = pcorcamitem.pc22_orcamitem 
-				     inner join pcprocitem       on pcprocitem.pc81_codprocitem     = pcorcamitemproc.pc31_pcprocitem 
+				     inner join pcorcamforne     on pcorcam.pc20_codorc             = pc21_codorc
+				     inner join pcorcamitemproc  on pcorcamitemproc.pc31_orcamitem  = pcorcamitem.pc22_orcamitem
+				     inner join pcprocitem       on pcprocitem.pc81_codprocitem     = pcorcamitemproc.pc31_pcprocitem
 				      left join pcorcamval       on pcorcamitemproc.pc31_orcamitem  = pc23_orcamitem
 				                                and pc23_orcamforne = $forne
-				     inner join solicitem        on solicitem.pc11_codigo           = pcprocitem.pc81_solicitem 
-				      left join solicitempcmater on solicitempcmater.pc16_solicitem = solicitem.pc11_codigo 
-				      left join pcmater          on pcmater.pc01_codmater           = solicitempcmater.pc16_codmater 
-				     where pc20_codorc=$orc  
+				     inner join solicitem        on solicitem.pc11_codigo           = pcprocitem.pc81_solicitem
+				      left join solicitempcmater on solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+				      left join pcmater          on pcmater.pc01_codmater           = solicitempcmater.pc16_codmater
+				     where pc20_codorc=$orc
 				       and pc21_orcamforne = $forne
 				     order by pc22_orcamitem";
 
@@ -103,9 +103,9 @@ $linhas= pg_num_rows($result);
 }
 // ##################### Incluir ################################
 if (isset($incluir)) {
-	
+
 	db_inicio_transacao();
-	
+
 	$prazo  = $p_ano."-".$p_mes."-".$p_dia;
 	$valorc = $v_ano."-".$v_mes."-".$v_dia;
 	if ($prazo=="--"){
@@ -120,9 +120,9 @@ if (isset($incluir)) {
 	$cl_pcorcamforne->alterar($forne);
 	if ($cl_pcorcamforne->erro_status =="0") {
 		 $erro_msg = "Erro ao incluir Fornecedor";
-		 $sqlerro  = true; 
+		 $sqlerro  = true;
 	} else {
-	
+
   	  for ($i = 0; $i < $linhas; $i ++) {
 	   	 db_fieldsmemory($result,$i);
 	  	 $q  = "quant".$i;
@@ -131,25 +131,25 @@ if (isset($incluir)) {
 	  	 $o  = "obs".$i;
 	  	 $val = "o$i";
 	  	 $val = $$val;
-	  	 
+
 	  	 $val = implode("-",array_reverse(explode("/",$val)));
 	  	 if ($val == "--"){
 	    	$val= null;
 	     }
-       
+
 	     $cl_pcorcamval->pc23_orcamforne = $forne;
 	     if ($sol==1) {
 	       $orcamitem = $pc29_orcamitem;
 	     }
-	  
+
 	     if ($sol==2) {
 	       $orcamitem = $pc31_orcamitem;
 	     }
 	     $cl_pcorcamval->pc23_orcamitem  = $orcamitem;
-	     $cl_pcorcamval->pc23_valor      = $$v; 
+	     $cl_pcorcamval->pc23_valor      = $$v;
 	     $cl_pcorcamval->pc23_quant      = $$q;
-	     $cl_pcorcamval->pc23_obs        = $$o;  
-	     $cl_pcorcamval->pc23_vlrun      = $$vu; 
+	     $cl_pcorcamval->pc23_obs        = $$o;
+	     $cl_pcorcamval->pc23_vlrun      = $$vu;
 	     if ($val == "--"){
 		    $val= null;
 	     }
@@ -161,12 +161,12 @@ if (isset($incluir)) {
 	     }
       }
 	}
-	
+
 	if($sqlerro == false){
 		db_msgbox("Operação realizada com sucesso!");
 	} else {
     db_msgbox($erro_msg);
-    
+
   }
 	db_fim_transacao($sqlerro);
 }
@@ -186,7 +186,7 @@ if (isset($alterar)) {
 	$cl_pcorcamforne->pc21_prazoent = $prazo;
 	$cl_pcorcamforne->pc21_orcamforne=$forne;
 	$cl_pcorcamforne->alterar($forne);
-	
+
 	if ($cl_pcorcamforne->erro_status == 0) {
      $erro_msg = "Erro ao alterar Fornecedor";
      $sqlerro  = true;
@@ -198,13 +198,13 @@ if (isset($alterar)) {
 	  	$vu  = "valor".$i;
 		  $o   = "obs".$i;
 		  $d   = "o".$i;
-		
-		  $val = substr($$d,6,4)."-".substr($$d,3,2)."-".substr($$d,0,2); 
-	 
+
+		  $val = substr($$d,6,4)."-".substr($$d,3,2)."-".substr($$d,0,2);
+
   	  if ($val == "--"){
   		  $val= null;
   	  }
-	
+
   	  $cl_pcorcamval->pc23_orcamforne = $forne;
     	if ($sol==1) {
       	$orcamitem = $pc29_orcamitem;
@@ -212,30 +212,30 @@ if (isset($alterar)) {
 	    if ($sol==2) {
 	      $orcamitem = $pc31_orcamitem;
 	    }
-	  
+
 	    $cl_pcorcamval->pc23_orcamitem  = $orcamitem;
-	    $cl_pcorcamval->pc23_valor      = $$v; 
+	    $cl_pcorcamval->pc23_valor      = $$v;
 	    $cl_pcorcamval->pc23_quant      = $$q;
-	    $cl_pcorcamval->pc23_obs        = $$o;  
-	    $cl_pcorcamval->pc23_vlrun      = $$vu; 
+	    $cl_pcorcamval->pc23_obs        = $$o;
+	    $cl_pcorcamval->pc23_vlrun      = $$vu;
 	    if ($val == "--"){
   	  	$val= null;
   	  }
-  	  $cl_pcorcamval->pc23_validmin   = $val; 
+  	  $cl_pcorcamval->pc23_validmin   = $val;
   	  $cl_pcorcamval->alterar($forne,$orcamitem);
 	  if ( $cl_pcorcamval->erro_status==0) {
          $erro_msg = $cl_pcorcamval->erro_msg;
-         $sqlerro  = true; 
+         $sqlerro  = true;
       }
     }
-	  
+
 	  if($sqlerro == false){
 	    db_msgbox("Operação realizada com sucesso!");
 	  } else {
 	  	db_msgbox($erro_msg);
 	  }
   db_fim_transacao($sqlerro);
-  
+
   }
 }
 ?>
@@ -249,14 +249,14 @@ if (isset($alterar)) {
 <? db_estilosite(); ?>
 </style>
 <link href="estilos.css" rel="stylesheet" type="text/css">
-<link href="config/estilos.css" rel="stylesheet" type="text/css">
+<link href="legacy_config/estilos.css" rel="stylesheet" type="text/css">
 
 <script>
 	function js_calcula(contador,tp){
 		var v = eval("document.form1.valor"+contador+".value");
 		var t = eval("document.form1.valortotal"+contador+".value");
 		var q = eval("document.form1.quant"+contador+".value");
-    		
+
 		if (tp == 1) {
 		 t = v*q;
 		 t = js_round(t,2);
@@ -267,9 +267,9 @@ if (isset($alterar)) {
 		 eval("document.form1.valortotal"+contador+".value=t");
 		 eval("document.form1.valor"+contador+".value=v");
 		}
-		
+
 	}
-	
+
 	function js_imprime(orc,cgm,origem){
 		if(origem=='1'){
 			jan = window.open('com2_solorc002.php?cgm='+cgm+'&pc20_codorc='+orc,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
@@ -277,9 +277,9 @@ if (isset($alterar)) {
 			jan = window.open('com2_procorc002.php?cgm='+cgm+'&pc20_codorc='+orc,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 		}
 	}
-	
+
 	function js_volta(cgm){
-		
+
 		location.href='for_orcamento.php?id_usuario='+cgm;
 	}
 </script>
@@ -333,16 +333,16 @@ $sql= "select z01_cgccpf,
               pc20_dtate,
               pc20_hrate,
               pc21_prazoent,
-              pc21_validadorc  
-		     from pcorcamforne 
-		    inner join cgm     on pc21_numcgm = z01_numcgm 
+              pc21_validadorc
+		     from pcorcamforne
+		    inner join cgm     on pc21_numcgm = z01_numcgm
 		    inner join pcorcam on pc20_codorc = pc21_codorc
-		    where pc21_numcgm=$cgm 
+		    where pc21_numcgm=$cgm
 		      and pc21_codorc = $orc";
-		
+
 $result= pg_exec($sql);
 db_fieldsmemory($result,0);
-	
+
 if ($sol==1) {// se for orçamento por solicitação
 $sol= 1;
 
@@ -363,28 +363,28 @@ $sqlitens="select pc11_codigo,
 		              pc23_valor,
 		              pc23_obs,
 		              pc23_vlrun,
-		              pc23_validmin 
-			       from pcorcamitemsol 
+		              pc23_validmin
+			       from pcorcamitemsol
 			      inner join pcorcamitem      on pcorcamitem.pc22_orcamitem      = pcorcamitemsol.pc29_orcamitem
 			       left join pcorcamval       on pcorcamitem.pc22_orcamitem      = pc23_orcamitem
-			      inner join pcorcam          on pcorcam.pc20_codorc             = pcorcamitem.pc22_codorc 
-			      inner join solicitem        on solicitem.pc11_codigo           = pcorcamitemsol.pc29_solicitem 
-			      inner join solicita         on solicita.pc10_numero            = solicitem.pc11_numero 
-			       left join solicitemunid    on solicitemunid.pc17_codigo       = solicitem.pc11_codigo 
-			       left join matunid          on matunid.m61_codmatunid          = solicitemunid.pc17_unid 
-			       left join solicitempcmater on solicitempcmater.pc16_solicitem = solicitem.pc11_codigo 
-			       left join pcmater          on pcmater.pc01_codmater           = solicitempcmater.pc16_codmater 
-			       left join pcsubgrupo       on pcsubgrupo.pc04_codsubgrupo     = pcmater.pc01_codsubgrupo 
+			      inner join pcorcam          on pcorcam.pc20_codorc             = pcorcamitem.pc22_codorc
+			      inner join solicitem        on solicitem.pc11_codigo           = pcorcamitemsol.pc29_solicitem
+			      inner join solicita         on solicita.pc10_numero            = solicitem.pc11_numero
+			       left join solicitemunid    on solicitemunid.pc17_codigo       = solicitem.pc11_codigo
+			       left join matunid          on matunid.m61_codmatunid          = solicitemunid.pc17_unid
+			       left join solicitempcmater on solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+			       left join pcmater          on pcmater.pc01_codmater           = solicitempcmater.pc16_codmater
+			       left join pcsubgrupo       on pcsubgrupo.pc04_codsubgrupo     = pcmater.pc01_codsubgrupo
 			       left join pctipo           on pctipo.pc05_codtipo             = pcsubgrupo.pc04_codtipo
-			      where pc22_codorc     = $orc 
+			      where pc22_codorc     = $orc
 			        and pc23_orcamforne = $forne
 			      order by pc11_seq";
-			
+
 $result= pg_exec($sqlitens);
 $linhas= pg_num_rows($result);
 
-} else { 
-	$sol= 2;	
+} else {
+	$sol= 2;
 
 	$sqlproc="select pc11_seq,
 	                 pc11_resum,
@@ -398,22 +398,22 @@ $linhas= pg_num_rows($result);
 				           pc23_obs,
 				           pc23_vlrun,
 				           pc23_validmin
-				      from pcorcamitem 
-				     inner join pcorcam          on pcorcam.pc20_codorc             = pcorcamitem.pc22_codorc 
-				     inner join pcorcamitemproc  on pcorcamitemproc.pc31_orcamitem  = pcorcamitem.pc22_orcamitem 
-				     inner join pcprocitem       on pcprocitem.pc81_codprocitem     = pcorcamitemproc.pc31_pcprocitem 
+				      from pcorcamitem
+				     inner join pcorcam          on pcorcam.pc20_codorc             = pcorcamitem.pc22_codorc
+				     inner join pcorcamitemproc  on pcorcamitemproc.pc31_orcamitem  = pcorcamitem.pc22_orcamitem
+				     inner join pcprocitem       on pcprocitem.pc81_codprocitem     = pcorcamitemproc.pc31_pcprocitem
 				      left join pcorcamval       on pcorcamitemproc.pc31_orcamitem  = pc23_orcamitem
-				     inner join solicitem        on solicitem.pc11_codigo           = pcprocitem.pc81_solicitem 
-				      left join solicitempcmater on solicitempcmater.pc16_solicitem = solicitem.pc11_codigo 
-				      left join pcmater          on pcmater.pc01_codmater           = solicitempcmater.pc16_codmater 
-				     where pc20_codorc     = $orc 
+				     inner join solicitem        on solicitem.pc11_codigo           = pcprocitem.pc81_solicitem
+				      left join solicitempcmater on solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+				      left join pcmater          on pcmater.pc01_codmater           = solicitempcmater.pc16_codmater
+				     where pc20_codorc     = $orc
 				       and pc23_orcamforne = $forne
 				     order by pc22_orcamitem";
-			
+
   $result= pg_exec($sqlproc);
   $linhas= pg_num_rows($result);
 
-}	
+}
 
 ?>
 <tr class="texto">
@@ -437,23 +437,23 @@ $linhas= pg_num_rows($result);
 			<th>Validade mínima</th>
 			<th>Valor unitário</th>
 			<th>Valor total</th>
-			
+
 		</tr>
 		<?for ($i = 0; $i < $linhas; $i ++) {
 			db_fieldsmemory($result,$i); ?>
 		<tr>
-		
+
 		<? // mostra antes de imprimir
 		echo"
 			<td>$pc11_seq</td>
-			<td>$pc11_quant  <input name='quant$i' type='hidden' value='$pc11_quant' > </td> 
+			<td>$pc11_quant  <input name='quant$i' type='hidden' value='$pc11_quant' > </td>
 			<td>$pc01_descrmater <br>Resumo: $pc11_resum</td> "; ?>
 			<td><? if ($pc23_obs==""){?>&nbsp<?}else{echo $pc23_obs;} ?></td>
 			<td><? if($pc23_validmin!=""){ echo db_formatar($pc23_validmin, 'd');}else{?>&nbsp<?}?></td>
 			<td> <? echo db_formatar($pc23_vlrun, 'f'); ?> </td>
-			<td><?echo db_formatar($pc23_valor, 'f'); ?> </td>	
-			
-		
+			<td><?echo db_formatar($pc23_valor, 'f'); ?> </td>
+
+
 		</tr>
 		<?}?>
 		</table>
@@ -480,21 +480,21 @@ $linhas= pg_num_rows($result);
 	 	if($pc21_validadorc!= ""){
 						$data = explode("-",$pc21_validadorc);
 						$dia1[$i] = $data[2];
-						$mes1[$i] = $data[1];	
+						$mes1[$i] = $data[1];
 						$ano1[$i] = $data[0];
 		}
-		
+
 		$dia2[$i]="";
 		$mes2[$i]="";
 		$ano2[$i]="";
 	 	if($pc21_prazoent!= ""){
 						$data = explode("-",$pc21_prazoent);
 						$dia2[$i] = $data[2];
-						$mes2[$i] = $data[1];	
+						$mes2[$i] = $data[1];
 						$ano2[$i] = $data[0];
 		}
-		
-//db_inputdata($nome, $dia = "", $mes = "", $ano = "", $dbcadastro = true, $dbtype = 'text', $db_opcao = 3		
+
+//db_inputdata($nome, $dia = "", $mes = "", $ano = "", $dbcadastro = true, $dbtype = 'text', $db_opcao = 3
 ?>
 	<td>Prazo de entrega: <?db_inputdata("p",$dia2[$i],$mes2[$i],$ano2[$i],true,"text",1)?>
 	</td>
@@ -516,40 +516,40 @@ $linhas= pg_num_rows($result);
 			<th>Validade mínima</th>
 			<th>Valor unitário</th>
 			<th>Valor total</th>
-			
+
 		</tr>
 		<?
 		for ($i = 0; $i < $linhas; $i ++) {
 			db_fieldsmemory($result,$i); ?>
 		<tr class="texto">
-		
+
 		<?
 		$dia[$i]="";
 		$mes[$i]="";
 		$ano[$i]="";
-	 	
+
 	 	if($pc23_validmin!= ""){
 						$data = explode("-",$pc23_validmin);
 						$dia[$i] = $data[2];
-						$mes[$i] = $data[1];	
+						$mes[$i] = $data[1];
 						$ano[$i] = $data[0];
-						
+
 		}
 		     //db_input($nome, $dbsize, $dbvalidatipo, $dbcadastro, $dbhidden = 'text', $db_opcao = 3, $js_script = "", $nomevar = "", $bgcolor = "", $css="") {
 		?>
 		 <td><?=$pc11_seq?></td>
- 		 <td><?=$pc11_quant?>  <input name="quant<?=$i?>" type='hidden' value="<?=$pc11_quant?>" > </td> 
-		 <td><?=$pc01_descrmater?> <br>Resumo: <?=$pc11_resum?></td> 
+ 		 <td><?=$pc11_quant?>  <input name="quant<?=$i?>" type='hidden' value="<?=$pc11_quant?>" > </td>
+		 <td><?=$pc01_descrmater?> <br>Resumo: <?=$pc11_resum?></td>
 		 <td><input name="obs<?=$i?>" type='text' size='25' value="<?=$pc23_obs?>" >  </td>
 		 <td width='135px' align='center'>
 		    <?db_inputdata("o$i",$dia[$i],$mes[$i],$ano[$i],true,"text",1)?>
 		 </td>
 		 <td>
-		  <input name="valor<?=$i?>" type='text' style="text-align:right" size='10' value="<?=$pc23_vlrun?>" onBlur="js_calcula(<?=$i?>,1)" onKeyUp="js_ValidaCampos(this,4,'Valor Unitário',false,false,event);"> 
+		  <input name="valor<?=$i?>" type='text' style="text-align:right" size='10' value="<?=$pc23_vlrun?>" onBlur="js_calcula(<?=$i?>,1)" onKeyUp="js_ValidaCampos(this,4,'Valor Unitário',false,false,event);">
 		 </td>
 		 <td>
- 		  <input name="valortotal<?=$i?>" type='text' style="text-align:right" size='10' value="<?=$pc23_valor?>" onBlur="js_calcula(<?=$i?>,2)">   
-		 </td>	
+ 		  <input name="valortotal<?=$i?>" type='text' style="text-align:right" size='10' value="<?=$pc23_valor?>" onBlur="js_calcula(<?=$i?>,2)">
+		 </td>
 		</tr>
 		<?}?>
 		</table>
@@ -565,8 +565,8 @@ $linhas= pg_num_rows($result);
 		echo"<input name='alterar' type='submit' value='Alterar orçamento' class='botao' >";
 	}
 	?>
-		
-	<input name="voltar" type="button" value="Voltar" class="botao" onclick="js_volta(<?=$cgm?>)">	
+
+	<input name="voltar" type="button" value="Voltar" class="botao" onclick="js_volta(<?=$cgm?>)">
 	</td>
 </tr>
 <?

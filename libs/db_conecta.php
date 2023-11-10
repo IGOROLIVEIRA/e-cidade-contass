@@ -133,12 +133,12 @@ if (isset($_SESSION["DB_instit"])) {
         /**
          * alteração para validar a existencia de um arquivo de configuração de ano para implantacao do pcasp
          * ano inicial será 2013 caso o arquivo nao exista
-         * no arquivo config/pcasp.txt.dist  sera renomeado para pcasp.txt e adicionado o ano desejado
+         * no arquivo legacy_config/pcasp.txt.dist  sera renomeado para pcasp.txt e adicionado o ano desejado
          */
         $iAnoPcasp = 2013;
-        if (file_exists("config/pcasp.txt")) {
+        if (file_exists("legacy_config/pcasp.txt")) {
 
-          $aArquivo  = file("config/pcasp.txt");
+          $aArquivo  = file("legacy_config/pcasp.txt");
           if ($aArquivo[0] != '' && $aArquivo[0] > 2013) {
             $iAnoPcasp = $aArquivo[0];
           }
@@ -191,7 +191,7 @@ if (db_getsession("DB_id_usuario") != 1 && db_getsession("DB_administrador") != 
 
   $result1 = pg_exec($conn, "select db21_ativo from db_config
   join db_userinst on db_config.codigo = db_userinst.id_instit
-  join db_usuarios on db_usuarios.id_usuario=db_userinst.id_usuario 
+  join db_usuarios on db_usuarios.id_usuario=db_userinst.id_usuario
   where db_usuarios.id_usuario=" . db_getsession("DB_id_usuario"))
     or die("Erro ao verificar se sistema está liberado! Contate suporte!");
 

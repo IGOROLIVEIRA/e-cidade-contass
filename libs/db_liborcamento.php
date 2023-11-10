@@ -4226,9 +4226,9 @@ function db_receitasaldo($nivel = 11, $tipo_nivel = 1, $tipo_saldo = 2, $descr =
    * Validacao geracao do pad, quando pcasp ativo e rodar o balancete em ano anterior
    */
   $iAnoPcasp = 2013;
-  if (file_exists("config/pcasp.txt")) {
+  if (file_exists("legacy_config/pcasp.txt")) {
 
-    $aArquivo  = file("config/pcasp.txt");
+    $aArquivo  = file("legacy_config/pcasp.txt");
     if ($aArquivo[0] != '' && $aArquivo[0] > 2013) {
       $iAnoPcasp = $aArquivo[0];
     }
@@ -4814,6 +4814,6 @@ class cl_selorcdotacao
     if ($sepc != "")
       $this->recurso = $sele_work_recurso;
   }
- 
+
 }
 ?>

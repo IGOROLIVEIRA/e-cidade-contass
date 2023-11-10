@@ -8,44 +8,44 @@ require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
   * @package Contabilidade
   */
 class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV {
-  
+
   /**
-   * 
+   *
    * Codigo do layout
    * @var Integer
    */
   protected $iCodigoLayout = 148;
-  
+
   /**
-   * 
+   *
    * Nome do arquivo a ser criado
    * @var unknown_type
    */
   protected $sNomeArquivo = 'ORGAO';
-  
+
   /**
-   * 
+   *
    * Contrutor da classe
    */
   public function __construct() {
-    
+
   }
-  
+
   /**
    * retornar o codio do layout
-   * 
+   *
    *@return Integer
    */
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
-   *@return Array 
+   *@return Array
    */
   public function getCampos(){
-    
+
     $aElementos[10] = array(
                           "tipoRegistro",
                           "codOrgao",
@@ -80,21 +80,21 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
                         );
     return $aElementos;
   }
-  
+
   /**
    * selecionar os dados do Orgao referente a instituicao logada
-   * 
+   *
    */
   public function gerarDados() {
-    
+
   	$sSql  = "SELECT * FROM db_config ";
 		$sSql .= "	WHERE prefeitura = 't'";
-		 
+
 		$rsInst = db_query($sSql);
 		$sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
-		
-		
-    $sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomorgao.xml";
+
+
+    $sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomorgao.xml";
     if (!file_exists($sArquivo)) {
       throw new Exception("Arquivo de configuração dos orgãos do sicom inexistente!");
     }
@@ -102,35 +102,35 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oDOMDocument = new DOMDocument();
     $oDOMDocument->loadXML($sTextoXml);
     $oOrgaos      = $oDOMDocument->getElementsByTagName('orgao');
-    
+
     /**
      * percorrer os orgaos retornados do xml para selecionar o orgao da inst logada
      * para selecionar os dados da instit
      */
     foreach ($oOrgaos as $oOrgao) {
-      
+
     	if($oOrgao->getAttribute('instituicao') == db_getsession("DB_instit")){
-    	  
+
         $sOrgao     = str_pad($oOrgao->getAttribute('codOrgao'), 2, "0", STR_PAD_LEFT);
         $sTipoOrgao = str_pad($oOrgao->getAttribute('tipoOrgao'), 2, "0", STR_PAD_LEFT);
-		    
+
     	}
-    	
+
     }
-  
+
     if (!isset($oOrgao)) {
       throw new Exception("Arquivo sem configuração de Orgãos.");
     }
-    
+
     $sSql  = "SELECT * FROM db_config ";
     $sSql .= "	WHERE codigo = ".db_getsession("DB_instit");
-    	
+
     $rsInst = db_query($sSql);
     $oInst  = db_utils::fieldsMemory($rsInst, 0);
 
 		$oDadosOrgao  = new stdClass();
 		$oDadosOrgao->detalhesessao    = 10;
-		$oDadosOrgao->tipoRegistro     = 10; 
+		$oDadosOrgao->tipoRegistro     = 10;
     $oDadosOrgao->codOrgao         = $sOrgao;
     $oDadosOrgao->descOrgao        = substr($oInst->nomeinst, 0, 100);
     $oDadosOrgao->tipoOrgao        = $sTipoOrgao;
@@ -141,11 +141,11 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oDadosOrgao->telefoneOrgao    = substr($oInst->telef, -10);
     $oDadosOrgao->emailOrgao       = substr($oInst->email, 0, 50);
     $this->aDados[] = $oDadosOrgao;
-		
+
     /*
      * selecionar xml com dados dos resposáveis do orgão
-     */    
-    $sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomidentresponsavel.xml";
+     */
+    $sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomidentresponsavel.xml";
     if (!file_exists($sArquivo)) {
       throw new Exception("Arquivo de configuração de responsáveis inexistente!");
     }
@@ -155,19 +155,19 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
     $oResponsaveis      = $oDOMDocument->getElementsByTagName('identresp');
     $aCaracteres = array("-","(",")","/");
     foreach ($oResponsaveis as $oResponsavel) {
-    	
+
     	$dDtFimResp = implode("-", array_reverse(explode("/",$oResponsavel->getAttribute('dtFinal'))));
-    	
+
     	if ($dDtFimResp >= $this->sDataFinal) {
-    	
+
     	if($oResponsavel->getAttribute('instituicao') == db_getsession("DB_instit")){
-    	  
+
         $sSql  = "SELECT * FROM cgm ";
         $sSql .= "	WHERE z01_numcgm = ".$oResponsavel->getAttribute("numCgm");
-    	
+
         $rsResp = db_query($sSql);
         $oResp  = db_utils::fieldsMemory($rsResp, 0);
-        
+
     		$oDadosResp = new stdClass();
     	  $oDadosResp->detalhesessao     = 11;
     	  $oDadosResp->tipoRegistro      = 11;
@@ -188,17 +188,17 @@ class SicomArquivoAmOrgao extends SicomArquivoBase implements iPadArquivoBaseCSV
     	  $oDadosResp->cepLogra          = substr($oResp->z01_cep, 0, 8);
     	  $oDadosResp->telefone          = substr(str_replace($aCaracteres, "", $oResp->z01_telef), -10);
     	  $oDadosResp->email             = substr($oResp->z01_email, 0, 50);
-    	  
+
     	  $this->aDados[] = $oDadosResp;
-    	  
+
     	}
-    	
+
     }
-    	
+
     }
     if (!isset($oResponsavel)) {
       throw new Exception("Arquivo sem configuração de Responsáveis!");
     }
-    
+
   }
 }

@@ -460,7 +460,7 @@ class ArquivoPartida extends ArquivoBase {
 
     $oXml->appendChild( $oTagLista );
 
-    $this->validarXML($oXml, 'config/tce/AC/schema-partida.xsd');
+    $this->validarXML($oXml, 'legacy_config/tce/AC/schema-partida.xsd');
     $this->sArquivo = $oXml->saveXML();
   }
 

@@ -200,7 +200,7 @@ class Processamento
         throw new \Exception("Erro ao criar novo Schema");
       }
 
-      $aTabelasParaDuplicar = json_decode(file_get_contents('config/configuracaoTabelasRecadastramentoIptu.json'));
+      $aTabelasParaDuplicar = json_decode(file_get_contents('legacy_config/configuracaoTabelasRecadastramentoIptu.json'));
       $this->processaTabelas($aTabelasParaDuplicar);
 
 

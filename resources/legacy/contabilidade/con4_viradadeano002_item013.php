@@ -29,8 +29,8 @@
 if ($sqlerro==false) {
 
 	$iAnoBusca = $anoorigem;
-	if ( file_exists("config/pcasp.txt") ) {
-		$aPcasp = file("config/pcasp.txt");
+	if ( file_exists("legacy_config/pcasp.txt") ) {
+		$aPcasp = file("legacy_config/pcasp.txt");
 		if ($aPcasp[0] == 2013) {
 		  $iAnoBusca = $anodestino;
 		}

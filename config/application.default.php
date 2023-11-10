@@ -2,7 +2,7 @@
 
 /**
  * DO NOT CHANGE THIS FILE
- * ONLY USE THIS TO COPY FOR YOUR config/application.php FILE
+ * ONLY USE THIS TO COPY FOR YOUR legacy_config/application.php FILE
  */
 
 \ECidade\V3\Extension\Registry::get('app.config')->merge(array(
@@ -31,7 +31,7 @@
     'centraldeajuda' => 'http://centraldeajuda.dbseller.com.br/help/api/index.php/',
     'esocial' => array(
         'url' => '', // informe a api do eSocial
-        'login' => '', // login do cliente 
+        'login' => '', // login do cliente
         'password' => '' // senha do cliente
     )
   ),

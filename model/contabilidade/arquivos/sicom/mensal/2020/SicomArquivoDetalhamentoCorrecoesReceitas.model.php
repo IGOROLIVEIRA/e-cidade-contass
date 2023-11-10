@@ -108,7 +108,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
         $rsInst = db_query($sSql);
         $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
-        $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
+        $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
         $sTextoXml = file_get_contents($sArquivo);
         $oDOMDocument = new DOMDocument();
@@ -192,18 +192,18 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                JOIN orcfontes ON (o70_codfon, o70_anousu) = (o57_codfon, o57_anousu)
                WHERE c74_anousu = ". db_getsession("DB_anousu") ."
                  AND o57_fonte = '{$oDadosRec->o57_fonte}'
-                 AND ((c53_tipo = 101 AND substr(o57_fonte,1,2) != '49') 
+                 AND ((c53_tipo = 101 AND substr(o57_fonte,1,2) != '49')
                         OR (c53_tipo = 100 AND substr(o57_fonte,1,2) = '49'))
                  AND c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
                ORDER BY 4, 3 DESC";
 
-      $sSqlValor = "SELECT SUM(c70_valor) c70_valor FROM (" . $sSql . ") x 
-                    WHERE ((c53_tipo = 101 AND substr(o57_fonte,1,2) != '49') 
+      $sSqlValor = "SELECT SUM(c70_valor) c70_valor FROM (" . $sSql . ") x
+                    WHERE ((c53_tipo = 101 AND substr(o57_fonte,1,2) != '49')
                         OR (c53_tipo = 100 AND substr(o57_fonte,1,2) = '49'))";
 
       $rsDocRec = db_query($sSql);
       $rsDocRecVlr = db_query($sSqlValor);
-      
+
       $oCodDoc = db_utils::fieldsMemory($rsDocRec);
       $oCodDocVlr = db_utils::fieldsMemory($rsDocRecVlr);
 
@@ -381,7 +381,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                     if($oDados11->si26_nroconvenio == '' || $oDados11->si26_nroconvenio == null) {
 
                         $sSqlConvRec = "    SELECT
-                                                c206_nroconvenio,   
+                                                c206_nroconvenio,
                                                 c206_dataassinatura
                                             FROM conlancamrec
                                                 LEFT JOIN conlancamcorrente ON c86_conlancam = c74_codlan
@@ -389,7 +389,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                                 LEFT JOIN placaixarec 		ON k81_seqpla = k82_seqpla
                                                 LEFT JOIN convconvenios 	ON c206_sequencial = k81_convenio
                                             WHERE c74_codrec = {$oDados10->si25_codreceita}
-                                                AND conlancamrec.c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}' 
+                                                AND conlancamrec.c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
                                                 AND k81_convenio IS NOT NULL";
 
                         $rsConvRec  = db_query($sSqlConvRec);

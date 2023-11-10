@@ -8,29 +8,29 @@ require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
   * @package Contabilidade
   */
 class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArquivoBaseCSV {
-  
+
 	/**
-	 * 
+	 *
 	 * Codigo do layout. (db_layouttxt.db50_codigo)
 	 * @var Integer
 	 */
   protected $iCodigoLayout = 176;
-  
+
   /**
-   * 
+   *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'DDC';
-  
+
   /**
-   * 
+   *
    * Construtor da classe
    */
   public function __construct() {
-    
+
   }
-  
+
   /**
 	 * Retorna o codigo do layout
 	 *
@@ -39,12 +39,12 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
-  
+
   /**
-   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV 
+   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos(){
-    
+
     $aElementos = array(
                           "codOrgao",
                           "tipoLancamento",
@@ -62,27 +62,27 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
 					    					  "vlCancelamento",
 					    					  "vlEncampacao",
 					    					  "vlAtualizacao",
-					    					  "vlSaldoAtual",				  
-                        );			
+					    					  "vlSaldoAtual",
+                        );
     return $aElementos;
   }
-  
+
   /**
    * Parecer da Licitação do mes para gerar o arquivo
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
-    
+
     $sSql  = "SELECT * FROM db_config ";
 	  $sSql .= "	WHERE prefeitura = 't'";
-    	
+
 	  $rsInst = db_query($sSql);
 	  $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
-	  
+
   	/**
   	 * selecionar arquivo xml com dados dos orgão
   	 */
-    $sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomorgao.xml";
+    $sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomorgao.xml";
     if (!file_exists($sArquivo)) {
       throw new Exception("Arquivo de configuração dos orgãos do sicom inexistente!");
     }
@@ -90,53 +90,53 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
     $oDOMDocument = new DOMDocument();
     $oDOMDocument->loadXML($sTextoXml);
     $oOrgaos      = $oDOMDocument->getElementsByTagName('orgao');
-    
+
     /**
      * percorrer os orgaos retornados do xml para selecionar o orgao da inst logada
      * para selecionar os dados da instit
      */
     foreach ($oOrgaos as $oOrgao) {
-      
+
     	if($oOrgao->getAttribute('instituicao') == db_getsession("DB_instit")){
         $sOrgao     = str_pad($oOrgao->getAttribute('codOrgao'), 2, "0", STR_PAD_LEFT);
     	}
-    	
+
     }
-    
+
     if (!isset($oOrgao)) {
       throw new Exception("Arquivo sem configuração de Orgãos.");
     }
-    
+
     /**
   	 * selecionar arquivo xml com dados da divida
   	 */
-	  $sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomdividaconsolidada.xml";
-    
-   
+	  $sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomdividaconsolidada.xml";
+
+
     if (!file_exists($sArquivo)) {
       throw new Exception("Arquivo de configuração da divida do sicom inexistente!");
     }
-    
-    
+
+
     $sTextoXml    = file_get_contents($sArquivo);
     $oDOMDocument = new DOMDocument();
     $oDOMDocument->loadXML($sTextoXml);
     $oDividas     = $oDOMDocument->getElementsByTagName('dividaconsolidada');
-    
+
     /**
      * percorrer os dados retornados do xml para selecionar as dividas da inst logada
      * para selecionar os dados da instit
      */
     $iMesReferencia = explode("-", $this->sDataInicial);
-   
+
     foreach ($oDividas as $oDivida) {
-      
+
     	if ($oDivida->getAttribute('instituicao') == db_getsession("DB_instit")
     	    && $oDivida->getAttribute('nroLeiAutorizacao') != ""
     	    && $oDivida->getAttribute('MesReferencia') == $iMesReferencia[1]) {
-       
+
     	  $oDadosDivida = new stdClass();
-	    	
+
 	      $oDadosDivida->codOrgao              = $sOrgao;
 		    $oDadosDivida->tipoLancamento        = str_pad($oDivida->getAttribute("tipoLancamento"), 2, "0", STR_PAD_LEFT);
 		    $oDadosDivida->nroLeiAutorizacao     = substr($oDivida->getAttribute("nroLeiAutorizacao"), 0, 6);
@@ -154,19 +154,19 @@ class SicomArquivoDividaConsolidada extends SicomArquivoBase implements iPadArqu
 		    $oDadosDivida->vlEncampacao          = number_format($oDivida->getAttribute("vlEncampacao"), 2, "", "");
 		    $oDadosDivida->vlAtualizacao         = number_format($oDivida->getAttribute("vlAtualizacao"), 2, "", "");
 		    $oDadosDivida->vlSaldoAtual          = number_format($oDivida->getAttribute("vlSaldoAtual"), 2, "", "");
-	      
+
 	      $this->aDados[] = $oDadosDivida;
- 
+
     	}
-    	
+
     }
-    
+
     if (!isset($oDivida)) {
       throw new Exception("Arquivo sem configuração de Divida.");
     }
-    
-    
-    
+
+
+
  }
-		
-  }			
+
+  }

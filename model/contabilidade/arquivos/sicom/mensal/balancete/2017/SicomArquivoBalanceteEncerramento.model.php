@@ -132,7 +132,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         if ($iCodOrgaoTce == "") {
           throw new Exception("Não foi possível encontrar o código do TCE do instituição {$iCodInstit} em " . db_getsession('DB_anousu') . " Verifique o cadastro da instituição no módulo Configurações, menu Cadastros->Instiuições.");
         }
-        
+
         return $iCodOrgaoTce;
     }
     /**
@@ -156,7 +156,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
          */
         if ($iTipoInstit != 1) {
 
-            $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
+            $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
             /*if (!file_exists($sArquivo)) {
                 throw new Exception("Arquivo de natureza da receita inexistente!");
@@ -184,7 +184,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
         /**
          * selecionar arquivo xml de dados elemento da despesa
          */
-        $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
+        $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
         /*if (!file_exists($sArquivo)) {
             throw new Exception("Arquivo de elemento da despesa inexistente!");
         }*/
@@ -781,8 +781,8 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                 select DISTINCT conplanoorcamento.c60_codcon,
                                                             conplanoorcamento.c60_descr,
                                                             conplanoorcamento.c60_estrut, o15_codtri
-                                                FROM orcreceita 
-                                                inner join conplanoorcamento on o70_codfon=c60_codcon and c60_anousu=o70_anousu 
+                                                FROM orcreceita
+                                                inner join conplanoorcamento on o70_codfon=c60_codcon and c60_anousu=o70_anousu
                                                 left JOIN conplanoorcamentoanalitica ON c61_codcon = conplanoorcamento.c60_codcon AND c61_anousu = conplanoorcamento.c60_anousu
                                                 inner JOIN orctiporec ON o70_codigo = orctiporec.o15_codigo
                                                 WHERE  substr(conplanoorcamento.c60_estrut,1,1) in ('3','4') and conplanoorcamentoanalitica.c61_instit = " . db_getsession('DB_instit') . "
@@ -1240,7 +1240,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                     e60_numemp numemp,
                                     e60_anousu anoinscricao,
                                     o58_orgao,o58_unidade
-                                    from  contacorrentedetalhe 
+                                    from  contacorrentedetalhe
                                     inner join empempenho on e60_numemp = c19_numemp
                                     inner join orcdotacao on e60_anousu = o58_anousu and o58_coddot = e60_coddot
                                     inner join orcunidade on o41_anousu = o58_anousu and o41_orgao = o58_orgao and o41_unidade = o58_unidade
@@ -1830,7 +1830,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                      * Busca o codigo unico do ctb enviado no AM
                      *
                      */
-                    $sSqlVerifica = " select distinct si95_codctb, ano from ( 
+                    $sSqlVerifica = " select distinct si95_codctb, ano from (
                                       SELECT distinct si95_codctb, 2017 as ano FROM ctb102017 WHERE si95_codorgao = '$objContasctb->si09_codorgaotce' AND si95_banco = '$objContasctb->c63_banco'
                                       AND si95_agencia = '$objContasctb->c63_agencia' AND si95_digitoverificadoragencia = '$objContasctb->c63_dvagencia' AND si95_contabancaria = '$objContasctb->c63_conta'
                                       AND si95_digitoverificadorcontabancaria = '$objContasctb->c63_dvconta' AND si95_tipoconta = '$objContasctb->tipoconta'
@@ -2576,15 +2576,15 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                * SOMENTE CONTAS QUE O NUMERO REGISTRO SEJA IGUAL A 24
                *
                */
-              
+
               if ($oContas10->nregobrig == 24) {
-                
+
                 /*
                  * Constante da contacorrente que indica o orgao
                  */
-                
+
                 $nContaCorrente = 3;
-                
+
                 $sSqlReg24saldos = "SELECT
                                                   (SELECT round(coalesce(saldoimplantado,0) + coalesce(debitoatual,0) - coalesce(creditoatual,0),2) AS saldoinicial
                                                    FROM
@@ -2666,21 +2666,21 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                                                      AND c19_reduz IN (" . implode(',', $oContas10->contas) . ")
                                                      {$sWhereEncerramento}
                                                    GROUP BY c28_tipo) AS debitos";
-                
+
                 $rsReg24saldos = db_query($sSqlReg24saldos);
-                
+
                 for ($iContSaldo24 = 0; $iContSaldo24 < pg_num_rows($rsReg24saldos); $iContSaldo24++) {
-                  
+
                   $oReg24Saldo = db_utils::fieldsMemory($rsReg24saldos, $iContSaldo24);
-                  
+
                   if (!(($oReg24Saldo->saldoanterior == "" || $oReg24Saldo->saldoanterior == 0) && $oReg24Saldo->debitos == "" && $oReg24Saldo->creditos == "")) {
-                    
+
                     $sHash24 = '24' . $oContas10->si177_contacontaabil . $objContasorgao->codorgao;
-                    
+
                     if (!isset($aContasReg10[$reg10Hash]->reg24[$sHash24])) {
-                      
+
                       $obalancete24 = new stdClass();
-                      
+
                       $obalancete24->si191_tiporegistro = 24;
                       $obalancete24->si191_contacontabil = $oContas10->si177_contacontaabil;
                       $obalancete24->si191_codfundo = "00000000";
@@ -2694,10 +2694,10 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                       $obalancete24->si191_naturezasaldofinalorgao = ($oReg24Saldo->saldoanterior + $oReg24Saldo->debitos - $oReg24Saldo->creditos) >= 0 ? 'D' : 'C';
                       $obalancete24->si191_instit = db_getsession("DB_instit");
                       $obalancete24->si191_mes = 13;
-                      
+
                       $aContasReg10[$reg10Hash]->reg24[$sHash24] = $obalancete24;
                     } else {
-                      
+
                       $aContasReg10[$reg10Hash]->reg24[$sHash24]->si191_saldoinicialorgao += $oReg24Saldo->saldoanterior;
                       $aContasReg10[$reg10Hash]->reg24[$sHash24]->si191_totaldebitosorgao += $oReg24Saldo->debitos;
                       $aContasReg10[$reg10Hash]->reg24[$sHash24]->si191_totalcreditosorgao += $oReg24Saldo->creditos;
@@ -2707,7 +2707,7 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                     }
                   }
                 }
-                
+
               }
         }
 
@@ -3223,9 +3223,9 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 }
             }
             foreach ($oDado10->reg24 as $reg24) {
-        
+
                 $obalreg24 = new cl_balancete242017();
-                
+
                 $obalreg24->si191_tiporegistro = $reg24->si191_tiporegistro;
                 $obalreg24->si191_contacontabil = $reg24->si191_contacontabil;
                 $obalreg24->si191_codfundo = "00000000";
@@ -3254,9 +3254,9 @@ class SicomArquivoBalanceteEncerramento extends SicomArquivoBase implements iPad
                 $obalreg24->si191_instit = $reg24->si191_instit;
                 $obalreg24->si191_mes = $reg24->si191_mes;
                 $obalreg24->si191_reg10 = $obalancete10->si177_sequencial;
-                
+
                 $obalreg24->incluir(null);
-                
+
                 if ($obalreg24->erro_status == 0) {
                   throw new Exception($obalreg24->erro_msg);
                 }

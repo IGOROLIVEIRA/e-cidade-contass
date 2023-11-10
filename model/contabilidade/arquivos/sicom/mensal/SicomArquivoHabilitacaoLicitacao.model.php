@@ -8,29 +8,29 @@ require_once ("model/contabilidade/arquivos/sicom/SicomArquivoBase.model.php");
   * @package Contabilidade
   */
 class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadArquivoBaseCSV {
-  
+
 	/**
-	 * 
+	 *
 	 * Codigo do layout. (db_layouttxt.db50_codigo)
 	 * @var Integer
 	 */
   protected $iCodigoLayout = 156;
-  
+
   /**
-   * 
+   *
    * Nome do arquivo a ser criado
    * @var String
    */
   protected $sNomeArquivo = 'HABLIC';
-  
+
   /**
-   * 
+   *
    * Construtor da classe
    */
   public function __construct() {
-    
+
   }
-  
+
   /**
 	 * Retorna o codigo do layout
 	 *
@@ -39,12 +39,12 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
   public function getCodigoLayout(){
     return $this->iCodigoLayout;
   }
-  
+
   /**
-   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV 
+   *esse metodo sera implementado criando um array com os campos que serao necessarios para o escritor gerar o arquivo CSV
    */
   public function getCampos(){
-    
+
     $aElementos[10] = array(
                           "tipoRegistro",
                           "codOrgao",
@@ -114,23 +114,23 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
                         );
     return $aElementos;
   }
-  
+
   /**
    * selecionar os dados dE Habilitação da licitação
    * @see iPadArquivoBase::gerarDados()
    */
   public function gerarDados() {
-        
+
     $sSql  = "SELECT * FROM db_config ";
     $sSql .= "	WHERE prefeitura = 't'";
-    	
+
     $rsInst = db_query($sSql);
     $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
-    
+
   	/**
   	 * selecionar arquivo xml com dados dos orgão
   	 */
-    $sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomorgao.xml";
+    $sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomorgao.xml";
     if (!file_exists($sArquivo)) {
       throw new Exception("Arquivo de configuração dos orgãos do sicom inexistente!");
     }
@@ -138,28 +138,28 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
     $oDOMDocument = new DOMDocument();
     $oDOMDocument->loadXML($sTextoXml);
     $oOrgaos      = $oDOMDocument->getElementsByTagName('orgao');
-    
+
     /**
      * percorrer os orgaos retornados do xml para selecionar o orgao da inst logada
      * para selecionar os dados da instit
      */
     foreach ($oOrgaos as $oOrgao) {
-      
+
     	if($oOrgao->getAttribute('instituicao') == db_getsession("DB_instit")){
         $sOrgao     = str_pad($oOrgao->getAttribute('codOrgao'), 2, "0", STR_PAD_LEFT);
     	}
-    	
+
     }
-  
+
     if (!isset($oOrgao)) {
       throw new Exception("Arquivo sem configuração de Orgãos.");
     }
-    
+
     /**
 		 * selecionar aquivo xml com dados da habilitação da licitação
 		 */
-		$sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomhabilitacao.xml";
-		
+		$sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomhabilitacao.xml";
+
 		if (!file_exists($sArquivo)) {
 			throw new Exception("Arquivo de habilitação da licitação inexistente!");
 		}
@@ -167,12 +167,12 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 		$oDOMDocument = new DOMDocument();
 		$oDOMDocument->loadXML($sTextoXml);
 		$oHabilitacoes = $oDOMDocument->getElementsByTagName('habilitacao');
-		
+
     /**
 		 * selecionar aquivo xml com dados da habilitação da licitação
 		 */
-		$sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomhabilitacaosocios.xml";
-		
+		$sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomhabilitacaosocios.xml";
+
 		/*if (!file_exists($sArquivo)) {
 			throw new Exception("Arquivo de Societários dos participantes da habilitação inexistente!");
 		}*/
@@ -180,12 +180,12 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 		$oDOMDocument = new DOMDocument();
 		$oDOMDocument->loadXML($sTextoXml);
 		$oHabilitacoesSocios = $oDOMDocument->getElementsByTagName('habilitacaosocio');
-		
+
     	/**
 		 * selecionar aquivo xml com dados de identificação do responsável
 		 */
-		$sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomcredenciamento.xml";
-		
+		$sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomcredenciamento.xml";
+
 		if (!file_exists($sArquivo)) {
 			throw new Exception("Arquivo de credenciamentos inexistente!");
 		}
@@ -193,12 +193,12 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 		$oDOMDocument = new DOMDocument();
 		$oDOMDocument->loadXML($sTextoXml);
 		$oCredenciamentos = $oDOMDocument->getElementsByTagName('credenciamento');
-		
-		
+
+
 		/**
 		* selecionar arquivo xml de Dados Compl Licitação
 		*/
-		$sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomdadoscompllicitacao.xml";
+		$sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomdadoscompllicitacao.xml";
 		if (!file_exists($sArquivo)) {
 			throw new Exception("Arquivo de dados compl licitacao inexistente!");
 		}
@@ -206,11 +206,11 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 		$oDOMDocument = new DOMDocument();
 		$oDOMDocument->loadXML($sTextoXml);
 		$oDadosComplLicitacoes = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
-    
+
 		/**
 		 * selecionar arquivo xml de Homologacao
 		 */
-		$sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomhomologalict.xml";
+		$sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomhomologalict.xml";
 		if (!file_exists($sArquivo)) {
 			throw new Exception("Arquivo de Homologação inexistente!");
 		}
@@ -227,60 +227,60 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 			&& $dDtHomologacao <= $this->sDataFinal){
 				$aLicitacao[] = $oHomologacao->getAttribute('nroProcessoLicitatorio');
 			}
-				
+
 		}
   /*if (count($aLicitacao) == 0) {
 			throw new Exception("Não existe Homologação cadastrada para o mês selecionado!");
 		}*/
 		$sLicitacao = implode(",", $aLicitacao);
-		
+
     $sSql  = "select l20_codigo,l20_anousu
-              from liclicita  
-	            inner join db_config on db_config.codigo = liclicita.l20_instit  
-	            inner join db_usuarios on db_usuarios.id_usuario = liclicita.l20_id_usucria  
+              from liclicita
+	            inner join db_config on db_config.codigo = liclicita.l20_instit
+	            inner join db_usuarios on db_usuarios.id_usuario = liclicita.l20_id_usucria
 	            inner join cflicita on cflicita.l03_codigo = liclicita.l20_codtipocom
-	            left  join pctipocompratribunal on cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial  
-	            inner join liclocal on liclocal.l26_codigo = liclicita.l20_liclocal  
-	            inner join liccomissao on liccomissao.l30_codigo = liclicita.l20_liccomissao  
-	            inner join licsituacao on licsituacao.l08_sequencial = liclicita.l20_licsituacao  
-	            inner join cgm on cgm.z01_numcgm = db_config.numcgm  
-	            inner join db_config as dbconfig on dbconfig.codigo = cflicita.l03_instit  
-	            inner join pctipocompra on pctipocompra.pc50_codcom = cflicita.l03_codcom  
-	            inner join bairro on bairro.j13_codi = liclocal.l26_bairro  
-	            inner join ruas on ruas.j14_codigo = liclocal.l26_lograd  
-	            left join liclicitaproc on liclicitaproc.l34_liclicita = liclicita.l20_codigo  
-	            left join protprocesso on protprocesso.p58_codproc = liclicitaproc.l34_protprocesso  
-              where  l20_codigo in (".$sLicitacao.") and l44_codigotribunal in ('1','2','3','4','5','6') and l44_sequencial < 100 
-	            and l20_licsituacao in (1)  
-	            and l20_instit = ".db_getsession("DB_instit")."   
+	            left  join pctipocompratribunal on cflicita.l03_pctipocompratribunal = pctipocompratribunal.l44_sequencial
+	            inner join liclocal on liclocal.l26_codigo = liclicita.l20_liclocal
+	            inner join liccomissao on liccomissao.l30_codigo = liclicita.l20_liccomissao
+	            inner join licsituacao on licsituacao.l08_sequencial = liclicita.l20_licsituacao
+	            inner join cgm on cgm.z01_numcgm = db_config.numcgm
+	            inner join db_config as dbconfig on dbconfig.codigo = cflicita.l03_instit
+	            inner join pctipocompra on pctipocompra.pc50_codcom = cflicita.l03_codcom
+	            inner join bairro on bairro.j13_codi = liclocal.l26_bairro
+	            inner join ruas on ruas.j14_codigo = liclocal.l26_lograd
+	            left join liclicitaproc on liclicitaproc.l34_liclicita = liclicita.l20_codigo
+	            left join protprocesso on protprocesso.p58_codproc = liclicitaproc.l34_protprocesso
+              where  l20_codigo in (".$sLicitacao.") and l44_codigotribunal in ('1','2','3','4','5','6') and l44_sequencial < 100
+	            and l20_licsituacao in (1)
+	            and l20_instit = ".db_getsession("DB_instit")."
               order by l20_codtipocom,l20_numero";
-    
+
     $rsLicitacao = db_query($sSql);
-    
+
     /**
      * percorrer registros de contas retornados do sql acima
      */
     for ($iCont = 0;$iCont < pg_num_rows($rsLicitacao); $iCont++) {
-      	    	
+
     	$oLicitacao = db_utils::fieldsMemory($rsLicitacao, $iCont);
-    
+
     	foreach ($oHabilitacoes as $oHabilitacao) {
-    		
+
     		if ($oHabilitacao->getAttribute('instituicao') == db_getsession("DB_instit")
     		    && $oHabilitacao->getAttribute('nroProcessoLicitatorio') == $oLicitacao->l20_codigo) {
-    			
+
     		  $sTipoDocumento = 2;
     		  if (strlen($oHabilitacao->getAttribute('nroDocumento')) == 11) {
     		  	$sTipoDocumento = 1;
-    		  }  	
-    		  
+    		  }
+
     		  foreach ($oDadosComplLicitacoes as $oDadosComplLicitacao) {
-			
+
 	    	    if ($oDadosComplLicitacao->getAttribute('instituicao') == db_getsession("DB_instit")
 			      && $oDadosComplLicitacao->getAttribute('nroProcessoLicitatorio') == $oLicitacao->l20_codigo) {
-    		    	
+
     			$oDadosHabilitacao = new stdClass();
-    			
+
     			$oDadosHabilitacao->tipoRegistro                       = 10;
 			    $oDadosHabilitacao->detalhesessao                      = 10;
 			    $oDadosHabilitacao->codOrgao                           = $sOrgao;
@@ -310,25 +310,25 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 			    $oDadosHabilitacao->dtHabilitacao                      = implode(explode("/", $oHabilitacao->getAttribute('dtHabilitacao')));
 			    $oDadosHabilitacao->PresencaLicitantes                 = $oHabilitacao->getAttribute('PresencaLicitantes');
 			    $oDadosHabilitacao->renunciaRecurso                    = $oHabilitacao->getAttribute('renunciaRecurso');
-    			
+
 			    $this->aDados[] = $oDadosHabilitacao;
-			    
-			    
+
+
 			      if ($sTipoDocumento == 2){
-    			
+
 			      	foreach ($oHabilitacoesSocios as $oHabilitacaoSocio) {
-			      		
+
 			      		if ($oHabilitacaoSocio->getAttribute('codHabilitacao') == $oHabilitacao->getAttribute('codigo')
 			      		    && $oHabilitacaoSocio->getAttribute('nroDocumentoSocio') != "") {
-			      			
+
 			      			if (strlen($oHabilitacaoSocio->getAttribute('nroDocumentoSocio')) == 11) {
 			      				$iTipoDocumentoSocio = 1;
 			      			} else {
 			      				$iTipoDocumentoSocio = 2;
 			      			}
-			      			
+
 				    		  $oDadosParticipantes = new stdClass();
-				    			
+
 				    			$oDadosParticipantes->tipoRegistro                       = 11;
 							    $oDadosParticipantes->detalhesessao                      = 11;
 							    $oDadosParticipantes->codOrgao                           = $sOrgao;
@@ -341,37 +341,37 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 							    $oDadosParticipantes->nroDocumentoSocio     						 = $oHabilitacaoSocio->getAttribute('nroDocumentoSocio');
 							    $oDadosParticipantes->nomeSocio     						 				 = $oHabilitacaoSocio->getAttribute('nomeSocio');
 							    $oDadosParticipantes->tipoParticipacao     						 	 = $oHabilitacaoSocio->getAttribute('tipoParticipacao');
-							    
+
 							    $this->aDados[] = $oDadosParticipantes;
-			    
+
 			      		}
-						    
+
 			      	}
-    			
+
     		}
-			    
+
 			    break;
-			    
+
 			      }
-			      
+
     		  }
-    		
+
     	  }
-    		
+
     	}
-    	
+
       foreach ($oCredenciamentos as $oCredenciamento) {
-    	  	
+
     		if ($oCredenciamento->getAttribute('instituicao') == db_getsession("DB_instit")
     		    && $oCredenciamento->getAttribute('nroProcessoLicitatorio') == $oLicitacao->l20_codigo) {
-    			
+
     		  $sTipoDocumento = 2;
     		  if (strlen($oCredenciamento->getAttribute('nroDocumento')) == 11) {
     		  	$sTipoDocumento = 1;
-    		  }  	
-    		    	
+    		  }
+
     			$oDadosCredenciamento = new stdClass();
-    			
+
     			$oDadosCredenciamento->tipoRegistro                         = 20;
 			    $oDadosCredenciamento->detalhesessao                        = 20;
 			    $oDadosCredenciamento->codOrgao                             = $sOrgao;
@@ -395,16 +395,16 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 			    $oDadosCredenciamento->nroCNDT                              = $oCredenciamento->getAttribute('nroCNDT');
     			$oDadosCredenciamento->dtEmissaoCNDT                        = implode(explode("/", $oCredenciamento->getAttribute('dtEmissaoCNDT')));
     			$oDadosCredenciamento->dtValidadeCNDT                       = implode(explode("/", $oCredenciamento->getAttribute('dtValidadeCNDT')));
-    			
+
 			    $this->aDados[] = $oDadosCredenciamento;
 			    break;
-			    
+
     		}
-    		
+
     	}
-    	
-    } 
-    	    
+
+    }
+
   }
-		
+
  }

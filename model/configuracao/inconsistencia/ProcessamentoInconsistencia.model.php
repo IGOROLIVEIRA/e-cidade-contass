@@ -308,7 +308,7 @@ class ProcessamentoInconsistencia {
    */
   private function processaArquivoExcecoesDuplo() {
 
-    $sArquivo = "config/processamentoduplos/mapa_dependencias.xml";
+    $sArquivo = "legacy_config/processamentoduplos/mapa_dependencias.xml";
     if (!file_exists($sArquivo)) {
       throw new FileException("Arquivo: mapa_dependencias.xml não encontrado.");
     }

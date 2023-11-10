@@ -89,7 +89,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
 
         $rsInst = db_query($sSql);
         $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
-        $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
+        $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
         $sTextoXml = file_get_contents($sArquivo);
         $oDOMDocument = new DOMDocument();
@@ -153,13 +153,13 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                JOIN orcfontes ON (o70_codfon, o70_anousu) = (o57_codfon, o57_anousu)
                WHERE c74_anousu = ". db_getsession("DB_anousu") ."
                  AND c74_data BETWEEN '{$this->sDataInicial}' AND '{$this->sDataFinal}'
-                 AND ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49') 
+                 AND ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49')
                         OR (c53_tipo = 101 AND substr(o57_fonte,1,2) = '49'))
                  AND o57_fonte = '{$oDadosRec->o57_fonte}'
                ORDER BY 4, 3";
 
-      $sSqlValor = "SELECT SUM(c70_valor) c70_valor FROM (" . $sSql . ") x 
-                    WHERE ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49') 
+      $sSqlValor = "SELECT SUM(c70_valor) c70_valor FROM (" . $sSql . ") x
+                    WHERE ((c53_tipo = 100 AND substr(o57_fonte,1,2) != '49')
                         OR (c53_tipo = 101 AND substr(o57_fonte,1,2) = '49'))";
 
       $rsDocRec = db_query($sSql);
@@ -265,7 +265,7 @@ class SicomArquivoDetalhamentoReceitasMes extends SicomArquivoBase implements iP
                                         ELSE substr(taborc.k02_estorc,2,8) = '". substr($oDadosRec->o57_fonte,1,8) ."'
                                     END)
                                AND c74_data BETWEEN '". $this->sDataInicial ." 'AND '". $this->sDataFinal ."'
-                               AND ((c53_tipo = 100 AND substr(taborc.k02_estorc,1,2) != '49') 
+                               AND ((c53_tipo = 100 AND substr(taborc.k02_estorc,1,2) != '49')
                                       OR (c53_tipo = 101 AND substr(taborc.k02_estorc,1,2) = '49'))
                              GROUP BY taborc.k02_estorc, t2.z01_cgccpf, cgm.z01_cgccpf, orcreceita.o70_codrec, orctiporec.o15_codtri, convconvenios.c206_nroconvenio, convconvenios.c206_dataassinatura, k81_numcgm
                              ORDER BY 1, 4, 2";

@@ -107,7 +107,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         /**
          * selecionar arquivo xml de dados elemento da despesa
          */
-        $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
+        $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
         // print_r('enter');
         // print_r($sArquivo);
         if (!file_exists($sArquivo)) {
@@ -121,7 +121,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         /**
          * selecionar arquivo xml de Dados Compl Licitação
          */
-        $sArquivo = "config/sicom/" . (db_getsession("DB_anousu") - 1) . "/{$sCnpj}_sicomdadoscompllicitacao.xml";
+        $sArquivo = "legacy_config/sicom/" . (db_getsession("DB_anousu") - 1) . "/{$sCnpj}_sicomdadoscompllicitacao.xml";
         /*if (!file_exists($sArquivo)) {
             throw new Exception("Arquivo de dados compl licitacao inexistente!");
         }*/
@@ -223,7 +223,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         WHERE db01_coddepto = ac16_deptoresponsavel
         AND db01_anousu = ac16_anousu
         LIMIT 1)
-        END AS codunidadesubrespcontrato, 
+        END AS codunidadesubrespcontrato,
 
         CASE
         WHEN ac16_sequencial IS NULL THEN NULL
@@ -337,19 +337,19 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
         LEFT JOIN homologacaoadjudica ON l20_codigo = l202_licitacao
         LEFT JOIN empempaut ON e61_numemp = e60_numemp
         LEFT JOIN empautoriza ON e61_autori = e60_numemp
-        
+
         LEFT JOIN acordoitemexecutadoempautitem on ac19_autori = e61_autori
         LEFT JOIN acordoitemexecutado on ac29_sequencial = ac19_acordoitemexecutado
         LEFT JOIN acordoitem on ac20_sequencial = ac29_acordoitem
         LEFT JOIN acordoposicao on ac20_acordoposicao = ac26_sequencial
         LEFT JOIN acordo on ac26_acordo = ac16_sequencial AND ac16_acordosituacao = 4
-        
+
         WHERE e60_anousu = " . db_getsession("DB_anousu") . "
         AND o56_anousu = " . db_getsession("DB_anousu") . "
         AND o58_anousu = " . db_getsession("DB_anousu") . "
         AND e60_instit = " . db_getsession("DB_instit") . "
         AND e60_emiss between '" . $this->sDataInicial . "' AND '" . $this->sDataFinal . "'  order by e60_codemp";
-        
+
         $rsEmpenho10 = db_query($sSql);
 
         $aCaracteres = array("°", chr(13), chr(10), "'", ";");
@@ -452,7 +452,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
 
 
 
-                if ( (date('Y', strtotime($oEmpenho10->dtempenho)) <= date('Y', strtotime($oEmpenho10->dataassinaturacontrato)) &&  date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturacontrato)) ) 
+                if ( (date('Y', strtotime($oEmpenho10->dtempenho)) <= date('Y', strtotime($oEmpenho10->dataassinaturacontrato)) &&  date('m', strtotime($oEmpenho10->dtempenho)) < date('m', strtotime($oEmpenho10->dataassinaturacontrato)) )
                     || $oEmpenho10->dataassinaturacontrato == null) {
 
 
@@ -471,7 +471,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
                 $oDadosEmpenho10->si106_nrocontrato = ''; // campo 20
                 $oDadosEmpenho10->si106_dtassinaturacontrato = ''; // campo 21
                 $oDadosEmpenho10->si106_nrosequencialtermoaditivo = ''; // campo 22
-                
+
             }else {
                 $oDadosEmpenho10->si106_despdeccontrato = $oEmpenho10->despdeccontrato; // campo 17
                 if ($oEmpenho10->despdeccontrato == 3) {
@@ -625,7 +625,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             (select c206_dataassinatura FROM convconvenios WHERE c206_sequencial = e60_numconvenio) END AS dataassinaturaconvenio,
             NULL as si106_nroconvenioconge,
             NULL as si106_dataassinaturaconvenioconge
-            
+
             FROM empempenho
             JOIN orcdotacao ON e60_coddot = o58_coddot
             JOIN empelemento ON e60_numemp = e64_numemp
@@ -657,7 +657,7 @@ class SicomArquivoDetalhamentoEmpenhosMes extends SicomArquivoBase implements iP
             LEFT JOIN acordoitem on ac20_sequencial = ac29_acordoitem
             LEFT JOIN acordoposicao on ac20_acordoposicao = ac26_sequencial
             LEFT JOIN acordo on ac26_acordo = ac16_sequencial
-            and ac16_acordosituacao = 4          
+            and ac16_acordosituacao = 4
             WHERE  e60_numemp = ".db_utils::fieldsMemory($rsEmpenhoContrato30, $jCont)->e60_numemp.";";
 
             $rsRegistro30 = db_query($sSql);

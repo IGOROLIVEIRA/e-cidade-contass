@@ -183,7 +183,7 @@ class ArquivoLancamento extends ArquivoBase {
       $oLista->appendChild($oLancamento);
     }
 
-    $this->validarXML($oDocumento, 'config/tce/AC/schema-lancamento.xsd');
+    $this->validarXML($oDocumento, 'legacy_config/tce/AC/schema-lancamento.xsd');
     $this->sArquivo = $oDocumento->saveXML();
   }
 

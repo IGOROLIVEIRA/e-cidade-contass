@@ -131,12 +131,12 @@ if (isset($_SESSION["DB_instit"])) {
       	/**
       	 * alteração para validar a existencia de um arquivo de configuração de ano para implantacao do pcasp
       	 * ano inicial será 2013 caso o arquivo nao exista
-      	 * no arquivo config/pcasp.txt.dist  sera renomeado para pcasp.txt e adicionado o ano desejado
+      	 * no arquivo legacy_config/pcasp.txt.dist  sera renomeado para pcasp.txt e adicionado o ano desejado
       	 */
       	$iAnoPcasp = 2013;
-      	if ( file_exists("config/pcasp.txt") ) {
+      	if ( file_exists("legacy_config/pcasp.txt") ) {
 
-      		$aArquivo  = file("config/pcasp.txt");
+      		$aArquivo  = file("legacy_config/pcasp.txt");
       		if ($aArquivo[0] != '' && $aArquivo[0] > 2013) {
       			$iAnoPcasp = $aArquivo[0];
       		}
@@ -244,7 +244,7 @@ if ( isset($_SESSION["DB_itemmenu_acessado"])
 
     	if ( in_array($iItemMenu,$aItensMenu) ) {
 
-    		
+
     throw new \ECidade\V3\Extension\Exceptions\ResponseException("A Emissão Geral de IPTU já está em execução em outro acesso.\n");
     		$sMsg .= "Você está sendo redirecionado para tela de seleção de módulos.";
     		db_msgbox($sMsg);

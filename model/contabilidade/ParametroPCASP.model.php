@@ -37,7 +37,7 @@ final class ParametroPCASP {
    * Caminho do arquivo de configuração
    * @var string
    */
-  const CAMINHO_ARQUIVO_CONFIGURACAO = "config/pcasp.txt";
+  const CAMINHO_ARQUIVO_CONFIGURACAO = "legacy_config/pcasp.txt";
 
   /**
    * Ano de inicio padrão para clientes que começaram a utilizar o PCASP em 2013

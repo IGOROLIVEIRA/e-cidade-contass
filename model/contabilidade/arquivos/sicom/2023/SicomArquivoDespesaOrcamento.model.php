@@ -9,29 +9,29 @@ require_once("classes/db_orctiporec_classe.php");
  */
 class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArquivoBaseCSV
 {
-  
+
   protected $iCodigoLayout = 108;
-  
+
   protected $sNomeArquivo = 'DSP';
-  
+
   protected $iCodigoPespectiva;
-  
+
   public function __construct()
   {
-    
+
   }
-  
+
   public function getCodigoLayout()
   {
     return $this->iCodigoLayout;
   }
-  
+
   /**
    *esse metodo sera implementado criando um array com os campos que serão necessários para o escritor gerar o arquivo CSV
    */
   public function getCampos()
   {
-    
+
     $aElementos[10] = array(
       "tipoRegistro",
       "codDespesa",
@@ -51,72 +51,72 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
       "codFontRecursos",
       "valorFonte"
     );
-    
+
     return $aElementos;
   }
-  
+
   public function gerarDados()
   {
-    
+
     $sSql = "SELECT * FROM db_config ";
     $sSql .= "  WHERE prefeitura = 't'";
-    
+
     $rsInst = db_query($sSql);
     $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
-    
+
     /**
      * selecionar arquivo xml de dados elemento da despesa
      */
-    $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
-   
+    $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
+
     $sTextoXml = file_get_contents($sArquivo);
     $oDOMDocument = new DOMDocument();
     $oDOMDocument->loadXML($sTextoXml);
     $oElementos = $oDOMDocument->getElementsByTagName('elemento');
-    
-    
+
+
     $sSqlOrgaos = "SELECT * FROM db_config left join infocomplementaresinstit on si09_instit = codigo";
     //echo $sSqlOrgaos;exit;
     $rsInst = db_query($sSqlOrgaos);
-    
+
     for ($iContador = 0; $iContador < pg_num_rows($rsInst); $iContador++) {
-      
+
       $oInstit = db_utils::fieldsMemory($rsInst, $iContador);
-      
+
       $iAnousu = db_getsession('DB_anousu');
       $sWhere = "o58_anousu = $iAnousu";
       $sWhere .= " AND o58_instit = $oInstit->codigo";
       $rsDotacao = db_dotacaosaldo(8, 2, 3, false, $sWhere, $iAnousu, $this->sDataInicial, $this->sDataFinal);
-      
-      
+
+
       $aDadosAgrupados = array();
-      
+
       for ($iCont = 0; $iCont < pg_num_rows($rsDotacao); $iCont++) {
-        
+
         $oRegistro = db_utils::fieldsMemory($rsDotacao, $iCont);
-        
+
         $iTipoProjetoAtividade = $oRegistro->o58_projativ;
-        
+
         $rsCodTriUnid = db_query("select o41_codtri from orcunidade where o41_unidade = " . $oRegistro->o58_unidade . "
                                   and o41_anousu = " . db_getsession('DB_anousu'));
         $oCodTriUnid = db_utils::fieldsMemory($rsCodTriUnid, 0);
-        
+
         if ($oCodTriUnid->o41_codtri == 0) {
           $unidade = $oRegistro->o58_unidade;
         } else {
           $unidade = $oCodTriUnid->o41_codtri;
         }
-        
+
         $rsCodTriOrg = db_query("select o40_codtri from orcorgao where o40_orgao = " . $oRegistro->o58_orgao . "
                       and o40_anousu = " . db_getsession('DB_anousu'));
         $oCodTriOrg = db_utils::fieldsMemory($rsCodTriOrg, 0);
-        
+
         if ($oCodTriOrg->o40_codtri == 0) {
           $org = $oRegistro->o58_orgao;
         } else {
           $org = $oCodTriOrg->o40_codtri;
         }
-        
+
         /**
          * segundo o manual do sicom, a natureza da acao deve ser descrita como 9 em vez do numeral 0 para indicar
          * operacoes especiais
@@ -124,21 +124,21 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
         if ($iTipoProjetoAtividade[0] == "0") {
           $iTipoProjetoAtividade[0] = 9;
         }
-        
-        
+
+
         $sElemento = substr($oRegistro->o56_elemento, 1, 8);
-        
-        
+
+
         $sHash = $oRegistro->o58_instit . $oRegistro->o58_orgao . $oRegistro->o58_unidade . $oRegistro->o58_funcao . $oRegistro->o58_subfuncao;
         $sHash .= $oRegistro->o58_programa . $iTipoProjetoAtividade . $oRegistro->o58_elemento;
-        
+
         if (!isset($aDadosAgrupados[$sHash])) {
-          
+
           /**
            * Caso não exista o indice, um objeto novo será criado
            */
           $oDadosAcao = new stdClass();
-  
+
           $oDadosAcao->tipoRegistro   = 10;
           $oDadosAcao->detalhesessao  = 10;
           $oDadosAcao->codDespesa     = $oRegistro->o58_coddot . $oRegistro->o58_anousu;
@@ -153,10 +153,10 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
           $oDadosAcao->naturezaDespesa = substr($oRegistro->o58_elemento, 1, 6);;
           $oDadosAcao->vlTotalrecurso = 0;
           $oDadosAcao->recursos = array();
-          
+
           $aDadosAgrupados[$sHash] = $oDadosAcao;
-          
-          
+
+
         } else {
           /**
            *caso já exista esse indice no array, ele será passado para o objeto
@@ -170,16 +170,16 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
 
         $rsCodigoRecurso = db_query($sSqlCodigoRecurso);
         $sCodigoRecurso = db_utils::fieldsMemory($rsCodigoRecurso, 0)->o15_codtri;
-        
+
         $oDadosAcaoRecurso = new stdClass();
         $oDadosAcaoRecurso->codFontRecursos = str_pad($sCodigoRecurso, 7, "0", STR_PAD_LEFT);
         $oDadosAcaoRecurso->valorFonte = number_format($oRegistro->dot_ini, 2, ",", "");
-        
+
         /**
          * realiza o somatorio dos recursos relacionados com o registro 10 em questao
          */
         $oDadosAcao->vlTotalrecurso += $oRegistro->dot_ini;
-        
+
         /**
          * passa cada registro 11 relacionado com o registro 10 selecionado
          */
@@ -187,8 +187,8 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
           $oDadosAcao->recursos[] = $oDadosAcaoRecurso;
         }
       }
-      
-      
+
+
       /**
        * o repetição ocorrerá para cada linha do array $aDadosAgrupados passando a linha do registro 10 a ser gerada
        */
@@ -197,14 +197,14 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
       $controlador = 0;
       $total = 0;
       $comparar = 0;
-      
-      
+
+
       foreach ($aDadosAgrupados as $oDadoaux) {
           $codDespesas[$i] = $oDadoaux;
           $i++;
       }
-     
-      foreach ($aDadosAgrupados as $oDado) {        
+
+      foreach ($aDadosAgrupados as $oDado) {
         if ($oDado->vlTotalrecurso != 0) {
           $oDadosAcao = clone $oDado;
           unset($oDadosAcao->recursos);
@@ -216,41 +216,41 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
           if(count($codDespesas[$controlador]->recursos) > 1){
 
             for($c = 0; $c < count($codDespesas[$controlador]->recursos); $c ++){
-              
-              for($d = 0; $d < count($codDespesas[$controlador]->recursos); $d ++){ 
+
+              for($d = 0; $d < count($codDespesas[$controlador]->recursos); $d ++){
                  if($codDespesas[$controlador]->recursos[$c]->codFontRecursos == $codDespesas[$controlador]->recursos[$d]->codFontRecursos){
                     $total += str_replace(",", ".", $codDespesas[$controlador]->recursos[$d]->valorFonte);
                  }
                   if($codDespesas[$controlador]->recursos[$c]->codFontRecursos == $codDespesas[$controlador]->recursos[$d]->codFontRecursos & $c > $d){
-                   $comparar = 1; 
+                   $comparar = 1;
                  }
               }
-                
-                 if($comparar == 0){   
+
+                 if($comparar == 0){
                     $codDespesas[$controlador]->recursos[$c]->tipoRegistro   = 11;
                     $codDespesas[$controlador]->recursos[$c]->detalhesessao  = 11;
                     $codDespesas[$controlador]->recursos[$c]->codDespesa     = $oDadosAcao->codDespesa;
                     $codDespesas[$controlador]->recursos[$c]->valorFonte     = number_format($total, 2, ",", "");
                     $this->aDados[] = $codDespesas[$controlador]->recursos[$c];
                     $total = 0;
-                   
-                }  
-                $comparar = 0;  
+
+                }
+                $comparar = 0;
                 $total = 0;
-               
-     
-           }  
-            
-           $total = 0;         
+
+
+           }
+
+           $total = 0;
           }else{
             foreach ($oDado->recursos as $oRecurso) {
                       $oRecurso->tipoRegistro   = 11;
                       $oRecurso->detalhesessao  = 11;
                       $oRecurso->codDespesa     = $oDadosAcao->codDespesa;
                       $this->aDados[] = $oRecurso;
-              } 
-          }  
-          
+              }
+          }
+
         }
         $controlador ++;
       }
@@ -260,12 +260,12 @@ class SicomArquivoDespesaOrcamento extends SicomArquivoBase implements iPadArqui
       pg_exec("DROP TABLE work_dotacao");
     }
   }
-  
+
   public function setCodigoPespectiva($iCodigoPespectiva)
   {
     $this->iCodigoPespectiva = $iCodigoPespectiva;
   }
-  
+
   public function getCodigoPespectiva()
   {
     return $this->iCodigoPespectiva;

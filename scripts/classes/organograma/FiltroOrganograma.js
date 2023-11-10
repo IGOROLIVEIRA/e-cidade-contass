@@ -569,7 +569,7 @@ var FiltroOrganograma = function(sNome, lSelecionados, iDepartamento) {
     var oParam  = new Object();
     var sRPC    = 'con1_organograma.RPC.php';
     oParam.exec = 'getEstrutural';
-    oParam.sUrl = 'config/configuracao.xml';
+    oParam.sUrl = 'legacy_config/configuracao.xml';
     var oAjax   = new Ajax.Request(
       sRPC,
       {
@@ -593,7 +593,7 @@ var FiltroOrganograma = function(sNome, lSelecionados, iDepartamento) {
     var oParam  = new Object();
     var sRPC    = 'con1_organograma.RPC.php';
     oParam.exec = 'getCodigoEstrutural';
-    oParam.sUrl = 'config/configuracao.xml';
+    oParam.sUrl = 'legacy_config/configuracao.xml';
     var oAjax   = new Ajax.Request(
       sRPC,
       {

@@ -138,11 +138,11 @@ if ($lParametroUsaPCASP == 't') {
 
             /**
              * Ano de implacantacao do PCASP
-             * - busca ano do arquivo config/pcasp.txt
+             * - busca ano do arquivo legacy_config/pcasp.txt
              * - caso arquivo nao exista sera 2013
              */
-            if ( file_exists(DB_LIBS . 'config/pcasp.txt') ) {
-                $iAnoImplantacaoPCASP = trim(file_get_contents(DB_LIBS . 'config/pcasp.txt'));
+            if ( file_exists(DB_LIBS . 'legacy_config/pcasp.txt') ) {
+                $iAnoImplantacaoPCASP = trim(file_get_contents(DB_LIBS . 'legacy_config/pcasp.txt'));
             }
 
             /**
@@ -1584,7 +1584,7 @@ try {
     $sSqlPlanoConta .= "        conplano.c60_anousu as exercicio   ";
     $sSqlPlanoConta .= "   from conplano                           ";
 
-    if (USE_PCASP || file_exists(DB_LIBS . 'config/pcasp.txt')) {
+    if (USE_PCASP || file_exists(DB_LIBS . 'legacy_config/pcasp.txt')) {
 
         $sSqlPlanoConta  = "   select distinct codcon,                                                                ";
         $sSqlPlanoConta .= "        estrutural,                                                                       ";

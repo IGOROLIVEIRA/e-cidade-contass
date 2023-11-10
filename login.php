@@ -85,7 +85,7 @@ require_once(modification("libs/db_conn.php"));
 require_once(modification("libs/db_utils.php"));
 require_once(modification("libs/db_stdlib.php"));
 
-$sDiretorio         = "config/require_extensions.xml";
+$sDiretorio         = "legacy_config/require_extensions.xml";
 $lValidaLogin       = false;
 
 if (file_exists($sDiretorio)) {

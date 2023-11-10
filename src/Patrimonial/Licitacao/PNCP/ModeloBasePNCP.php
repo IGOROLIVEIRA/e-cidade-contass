@@ -28,7 +28,7 @@ abstract class ModeloBasePNCP
     public function __construct($dados)
     {
         $this->dados = $dados;
-        $this->envs = parse_ini_file('config/PNCP/.env', true);
+        $this->envs = parse_ini_file('legacy_config/PNCP/.env', true);
     }
 
     /**

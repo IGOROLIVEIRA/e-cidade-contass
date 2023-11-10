@@ -108,7 +108,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
 
         $rsInst = db_query($sSql);
         $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
-        $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
+        $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
         $sTextoXml = file_get_contents($sArquivo);
         $oDOMDocument = new DOMDocument();
@@ -313,7 +313,7 @@ class SicomArquivoDetalhamentoCorrecoesReceitas extends SicomArquivoBase impleme
                                         AND c61_anousu = c60_anousu
                                     INNER JOIN conplanocontabancaria ON c56_codcon = c60_codcon AND c56_anousu = c60_anousu
                                     INNER JOIN contabancaria on contabancaria.db83_sequencial = c56_contabancaria
-                                    LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int 
+                                    LEFT JOIN db_operacaodecredito ON op01_sequencial = db83_codigoopcredito::int
                                     WHERE o15_codigo = " . $oDadosRec->o70_codigo . "
                                         AND o70_instit = " . db_getsession('DB_instit') . "
                                         AND (CASE

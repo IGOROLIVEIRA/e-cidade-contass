@@ -203,7 +203,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
      * selecionar informacoes registro 10
      */
 
-    $sArquivo = "config/sicom/".(db_getsession("DB_anousu")-1)."/{$sCnpj}_sicomdadoscompllicitacao.xml";
+    $sArquivo = "legacy_config/sicom/".(db_getsession("DB_anousu")-1)."/{$sCnpj}_sicomdadoscompllicitacao.xml";
 		/*if (!file_exists($sArquivo)) {
 		 throw new Exception("Arquivo de dados compl licitacao inexistente!");
 	 	}*/
@@ -222,13 +222,13 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
          OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
            OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
    END) as codunidadesubresp
-    from contratos 
+    from contratos
     left join liclicita on si172_licitacao = l20_codigo
     left join db_departorg on l20_codepartamento = db01_coddepto and db01_anousu = ".db_getsession("DB_anousu")."
     left join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade and db01_anousu = o41_anousu and o41_anousu = ".db_getsession("DB_anousu")."
     left join orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
-    where si172_dataassinatura <= '{$this->sDataFinal}' 
-    and si172_dataassinatura >= '{$this->sDataInicial}' 
+    where si172_dataassinatura <= '{$this->sDataFinal}'
+    and si172_dataassinatura >= '{$this->sDataInicial}'
     and si172_instit = ". db_getsession("DB_instit");
 
     $rsResult10 = db_query($sSql);//echo $sSql;db_criatabela($rsResult10);
@@ -243,7 +243,7 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
         $sSql  = "select CASE WHEN o40_codtri = '0'
             OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS db01_orgao,
             CASE WHEN o41_codtri = '0'
-              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS db01_unidade,o41_subunidade from db_departorg 
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS db01_unidade,o41_subunidade from db_departorg
          join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
          and db01_anousu = o41_anousu
          JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
@@ -332,9 +332,9 @@ class SicomArquivoContratos extends SicomArquivoBase implements iPadArquivoBaseC
        if($oDados10->si172_licitacao != '') {
         $sSqlItemLicitacao = "SELECT (solicitempcmater.pc16_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS pc01_codmater,
  pcorcamval.pc23_quant as quantidade, pcorcamval.pc23_vlrun as valorun
-from liclicitem 
-	INNER JOIN pcorcamitemlic ON (liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem )      
-	INNER JOIN pcorcamitem ON (pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem)      
+from liclicitem
+	INNER JOIN pcorcamitemlic ON (liclicitem.l21_codigo = pcorcamitemlic.pc26_liclicitem )
+	INNER JOIN pcorcamitem ON (pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem)
 	INNER JOIN pcorcamjulg ON (pcorcamitem.pc22_orcamitem = pcorcamjulg.pc24_orcamitem )
 	INNER JOIN pcorcamforne ON (pcorcamjulg.pc24_orcamforne = pcorcamforne.pc21_orcamforne)
 INNER JOIN pcorcamval ON (pcorcamitem.pc22_orcamitem = pcorcamval.pc23_orcamitem and pcorcamforne.pc21_orcamforne=pcorcamval.pc23_orcamforne)
@@ -350,13 +350,13 @@ where liclicitem.l21_codliclicita = ".$oDados10->si172_licitacao." and pc21_numc
 
        if (pg_num_rows($rsItem) == 0 || $oDados10->si172_licitacao == '') {
          $sSqlItemEmpenho = "SELECT (pcmater.pc01_codmater::varchar || (CASE WHEN m61_codmatunid IS NULL THEN 1 ELSE m61_codmatunid END)::varchar) AS pc01_codmater,
-m60_codmater,m60_codmatunid,m61_descr,e60_numemp, e60_codemp, e60_anousu,e60_emiss, pc01_descrmater,  
-e62_quant as quantidade, e62_vlrun as valorun from empcontratos 
+m60_codmater,m60_codmatunid,m61_descr,e60_numemp, e60_codemp, e60_anousu,e60_emiss, pc01_descrmater,
+e62_quant as quantidade, e62_vlrun as valorun from empcontratos
 inner join empempenho on e60_codemp = si173_empenho::varchar and e60_anousu = si173_anoempenho
-left join empempitem on e62_numemp = e60_numemp 
-left join pcmater on e62_item = pc01_codmater left join transmater on pc01_codmater =  m63_codpcmater 
-left join matmater on m60_codmater = m63_codmatmater 
-left join matunid on m60_codmatunid = m61_codmatunid  
+left join empempitem on e62_numemp = e60_numemp
+left join pcmater on e62_item = pc01_codmater left join transmater on pc01_codmater =  m63_codpcmater
+left join matmater on m60_codmater = m63_codmatmater
+left join matunid on m60_codmatunid = m61_codmatunid
 where si173_codcontrato = '".$oDados10->si172_sequencial."'";
          $rsItem = db_query($sSqlItemEmpenho);//db_criatabela($rsItem);echo $sSql;
 
@@ -418,7 +418,7 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
        */
 
       $sSql = "select * from contratos left join empcontratos on si173_codcontrato = si172_sequencial
-      where si172_dataassinatura <= '{$this->sDataFinal}' and si172_dataassinatura >= '{$this->sDataInicial}' 
+      where si172_dataassinatura <= '{$this->sDataFinal}' and si172_dataassinatura >= '{$this->sDataInicial}'
       and si172_instit = ". db_getsession("DB_instit") ." and si172_sequencial = ".$oDados10->si172_sequencial;
 
       $rsResult12 = db_query($sSql);//db_criatabela($rsResult12);
@@ -434,20 +434,20 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
                          CASE WHEN o40_codtri = '0'
             OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS o58_orgao,
 									       CASE WHEN o41_codtri = '0'
-              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade,  
-              o58_funcao, o58_subfuncao,o58_programa,o58_projativ, o55_origemacao, 
-                   o56_elemento,o15_codtri,o58_valor,o41_subunidade from 
-                   liclicitem 
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade,
+              o58_funcao, o58_subfuncao,o58_programa,o58_projativ, o55_origemacao,
+                   o56_elemento,o15_codtri,o58_valor,o41_subunidade from
+                   liclicitem
                    INNER JOIN pcprocitem  ON (liclicitem.l21_codpcprocitem = pcprocitem.pc81_codprocitem)
-                   INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo) 
-                   join pcdotac on (pcdotac.pc13_codigo = solicitem.pc11_codigo) 
+                   INNER JOIN solicitem ON (pcprocitem.pc81_solicitem = solicitem.pc11_codigo)
+                   join pcdotac on (pcdotac.pc13_codigo = solicitem.pc11_codigo)
                    join orcdotacao on (pcdotac.pc13_anousu = orcdotacao.o58_anousu) and (pcdotac.pc13_coddot = orcdotacao.o58_coddot)
                    and (orcdotacao.o58_instit = ".db_getsession("DB_instit").")
                    join orcelemento on o58_codele = o56_codele and o56_anousu = ".db_getsession("DB_anousu")."
-                   join orctiporec on o58_codigo = o15_codigo 
-                   join orcprojativ on o55_projativ = o58_projativ and o55_anousu = o58_anousu 
+                   join orctiporec on o58_codigo = o15_codigo
+                   join orcprojativ on o55_projativ = o58_projativ and o55_anousu = o58_anousu
                    join orcunidade on o58_orgao = o41_orgao and o58_unidade = o41_unidade and o58_anousu = o41_anousu
-                   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu 
+                   JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
                    where liclicitem.l21_codliclicita = ".$oDados12->si172_licitacao;
            $rsDados = db_query($sSql);
         }
@@ -457,10 +457,10 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
                          CASE WHEN o40_codtri = '0'
             OR NULL THEN o40_orgao::varchar ELSE o40_codtri END AS o58_orgao,
 									       CASE WHEN o41_codtri = '0'
-              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade, 
+              OR NULL THEN o41_unidade::varchar ELSE o41_codtri END AS o58_unidade,
               o58_funcao, o58_subfuncao,o58_programa,o58_projativ, o55_origemacao,
-                      o56_elemento,o15_codtri,o58_valor,o41_subunidade from empempenho 
-                      join orcdotacao on e60_coddot = o58_coddot 
+                      o56_elemento,o15_codtri,o58_valor,o41_subunidade from empempenho
+                      join orcdotacao on e60_coddot = o58_coddot
                       join orcelemento on o58_codele = o56_codele and o56_anousu =   ".db_getsession("DB_anousu")."
                       join orctiporec on o58_codigo = o15_codigo
                       join orcprojativ on o55_projativ = o58_projativ and o55_anousu = o58_anousu
@@ -487,7 +487,7 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
 									       o15_codtri,
 									       o58_valor,
 									       o41_subunidade
-									FROM solicitem 
+									FROM solicitem
 									JOIN pcdotac ON (pcdotac.pc13_codigo = solicitem.pc11_codigo)
 									JOIN orcdotacao ON (pcdotac.pc13_anousu = orcdotacao.o58_anousu)
 									AND (pcdotac.pc13_coddot = orcdotacao.o58_coddot)
@@ -619,11 +619,11 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
      * selecionar informacoes registro 20
      */
     $sSql       = "select distinct aditivoscontratos.*
-    from aditivoscontratos 
+    from aditivoscontratos
     left JOIN contratos  on extract(year from si174_dataassinaturacontoriginal) = si172_exerciciocontrato and si174_nrocontrato = si172_nrocontrato
-    where (case when si172_naturezaobjeto is null then 2 else si172_naturezaobjeto end) not in (4,5) 
-    and si174_dataassinaturatermoaditivo <= '{$this->sDataFinal}' 
-    and si174_dataassinaturatermoaditivo >= '{$this->sDataInicial}' 
+    where (case when si172_naturezaobjeto is null then 2 else si172_naturezaobjeto end) not in (4,5)
+    and si174_dataassinaturatermoaditivo <= '{$this->sDataFinal}'
+    and si174_dataassinaturatermoaditivo >= '{$this->sDataInicial}'
     and si174_instit = ". db_getsession("DB_instit") ." ";
 
     $rsResult20 = db_query($sSql);//db_criatabela($rsResult20);echo $sSql;
@@ -648,7 +648,7 @@ where si173_codcontrato = '".$oDados10->si172_sequencial."'";
     ELSE lpad((CASE WHEN o40_codtri = '0'
          OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
            OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
-   END) as codunidadesub 
+   END) as codunidadesub
    from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
          and db01_anousu = o41_anousu
          JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
@@ -701,8 +701,8 @@ LEFT JOIN contratos ON extract(YEAR
                                FROM si174_dataassinaturacontoriginal) = si172_exerciciocontrato
 AND si174_nrocontrato = si172_nrocontrato
       where aditivoscontratos.si174_tipotermoaditivo::integer in (9,10,11,14)
-      and si174_dataassinaturatermoaditivo <= '{$this->sDataFinal}' 
-      and si174_dataassinaturatermoaditivo >= '{$this->sDataInicial}' 
+      and si174_dataassinaturatermoaditivo <= '{$this->sDataFinal}'
+      and si174_dataassinaturatermoaditivo >= '{$this->sDataInicial}'
       and si174_sequencial = ". $oDados20->si174_sequencial ."
       and si174_instit = ". db_getsession("DB_instit");
 
@@ -742,7 +742,7 @@ AND si174_nrocontrato = si172_nrocontrato
      */
     $sSql       = "select * from apostilamento
     left join contratos on si03_numcontrato=si172_sequencial
-    where si03_dataapostila <= '{$this->sDataFinal}' 
+    where si03_dataapostila <= '{$this->sDataFinal}'
     and si03_dataapostila >= '{$this->sDataInicial}'
     and si03_instit = ". db_getsession("DB_instit");
 
@@ -762,7 +762,7 @@ AND si174_nrocontrato = si172_nrocontrato
     ELSE lpad((CASE WHEN o40_codtri = '0'
          OR NULL THEN o40_orgao::varchar ELSE o40_codtri END),2,0)||lpad((CASE WHEN o41_codtri = '0'
            OR NULL THEN o41_unidade::varchar ELSE o41_codtri END),3,0)
-   END) as codunidadesub 
+   END) as codunidadesub
    from db_departorg join orcunidade on db01_orgao = o41_orgao and db01_unidade = o41_unidade
          and db01_anousu = o41_anousu
          JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
@@ -802,8 +802,8 @@ AND si174_nrocontrato = si172_nrocontrato
      */
     $sSql       = "select * from rescisaocontrato
       join contratos on si176_nrocontrato = si172_sequencial
-      where si1176_datarescisao <= '{$this->sDataFinal}' 
-      and si1176_datarescisao >= '{$this->sDataInicial}' 
+      where si1176_datarescisao <= '{$this->sDataFinal}'
+      and si1176_datarescisao >= '{$this->sDataInicial}'
       and si172_instit = ".db_getsession("DB_instit");
 
     $rsResult40 = db_query($sSql);//db_criatabela($rsResult40);
@@ -862,4 +862,4 @@ AND si174_nrocontrato = si172_nrocontrato
 
   }
 
-}			
+}

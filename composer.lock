@@ -1661,7 +1661,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/7dd5f5040dc04c118d057fb5886563963eb70011",
+                "url": "https://api.github.com/repos/symfony/legacy_config/zipball/7dd5f5040dc04c118d057fb5886563963eb70011",
                 "reference": "7dd5f5040dc04c118d057fb5886563963eb70011",
                 "shasum": ""
             },
@@ -1707,7 +1707,7 @@
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/config/tree/v2.8.50"
+                "source": "https://github.com/symfony/legacy_config/tree/v2.8.50"
             },
             "time": "2018-11-26T09:38:12+00:00"
         },

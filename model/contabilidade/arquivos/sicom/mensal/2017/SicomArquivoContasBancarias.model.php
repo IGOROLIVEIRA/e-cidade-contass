@@ -90,7 +90,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
     $rsInst = db_query($sSql);
     $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
-    $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
+    $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
     $sTextoXml = file_get_contents($sArquivo);
     $oDOMDocument = new DOMDocument();
@@ -138,12 +138,12 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
     $sSqlGeral = "select  10 as tiporegistro,
 					     k13_reduz as codctb,
-					     c61_codtce as codtce, 
+					     c61_codtce as codtce,
 					     si09_codorgaotce,
-				             c63_banco, 
-				             c63_agencia, 
-				             c63_conta, 
-				             c63_dvconta, 
+				             c63_banco,
+				             c63_agencia,
+				             c63_conta,
+				             c63_dvconta,
 				             c63_dvagencia,
 				             case when db83_tipoconta in (2,3) then 2 else 1 end as tipoconta,
 				             case when (select si09_tipoinstit from infocomplementaresinstit where si09_instit = " . db_getsession("DB_instit") . " ) = 5 and db83_tipoconta in (2,3)
@@ -155,15 +155,15 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 				             case when db83_convenio = 1 then db83_numconvenio else null end as nroconvenio,
 				             case when db83_convenio = 1 then db83_dataconvenio else null end as dataassinaturaconvenio,
 				             o15_codtri as recurso
-				       from saltes 
+				       from saltes
 				       join conplanoreduz on k13_reduz = c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
 				       join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu
 				       join orctiporec on c61_codigo = o15_codigo
 				  left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu
 				  left join contabancaria on c56_contabancaria = db83_sequencial
 				  left join infocomplementaresinstit on si09_instit = c61_instit
-				    where  (k13_limite is null 
-				    or k13_limite >= '" . $this->sDataFinal . "') 
+				    where  (k13_limite is null
+				    or k13_limite >= '" . $this->sDataFinal . "')
 				    and (date_part('MONTH',k13_dtimplantacao) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " or date_part('YEAR',k13_dtimplantacao) < " . db_getsession("DB_anousu") . ")
     				  and c61_instit = " . db_getsession("DB_instit") . " order by k13_reduz";
     //echo $sSqlGeral k13_reduz in (4190,4208) and;
@@ -326,7 +326,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 								 where DATE_PART('YEAR',conlancamdoc.c71_data) = " . db_getsession("DB_anousu") . "
 								   and DATE_PART('MONTH',conlancamdoc.c71_data) <= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 								   and conlancamval.c69_debito in ({$nConta})
-                union all 
+                union all
               select ces02_reduz,ces02_fonte::varchar from conctbsaldo where ces02_reduz in ({$nConta}) and ces02_anousu = " . db_getsession("DB_anousu") . "
 							) as xx";
         $rsReg20Fonte = db_query($sSql20Fonte) or die($sSql20Fonte);//db_criatabela($rsReg20Fonte);
@@ -403,7 +403,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
                                              join conlancamdoc  on c71_codlan = c84_conlancam
                                              where c71_codlan=c69_codlan and c71_coddoc in (120) limit 1) = 2 then 13
 											when c71_coddoc in (141,140) then 6
-											--incluir validacao para verificar se a conta (debito) é caixa e o tipo do doc é 140 ou 141 
+											--incluir validacao para verificar se a conta (debito) é caixa e o tipo do doc é 140 ou 141
 											else 99
 									   end as tipoentrsaida,
 									   substr(o57_fonte,0,3) as rubrica,
@@ -740,7 +740,7 @@ substr(fc_saldoctbfonte(" . db_getsession("DB_anousu") . ",$nConta,'" . $iFonte 
 							     k13_reduz as codctb,
 							     'E' as situacaoconta,
 							     k13_limite as dataencerramento
-						       from saltes 
+						       from saltes
 						       join conplanoreduz on k13_reduz = c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
 						       join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu
 						  left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu

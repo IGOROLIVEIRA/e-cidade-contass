@@ -962,13 +962,13 @@ class PluginService {
   }
 
   /**
-   * Lê o arquivo de configuração "config/plugins.json" e retorna seu conteúdo
+   * Lê o arquivo de configuração "legacy_config/plugins.json" e retorna seu conteúdo
    * @throws Exception
    * @return JSON
    */
   public function getConfig() {
 
-    $sPathConfigFile = "config/plugins.json";
+    $sPathConfigFile = "legacy_config/plugins.json";
 
     if (!file_exists($sPathConfigFile)) {
       throw new Exception( _M(self::MENSAGEM . "arquivo_config_nao_encontrado") );

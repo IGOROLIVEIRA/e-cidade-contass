@@ -16,7 +16,7 @@ require_once("classes/db_empempenho_classe.php");
 require_once("model/licitacao.model.php");
 
 db_app::import("configuracao.DBDepartamento");
-$envs = parse_ini_file('config/PNCP/.env', true);
+$envs = parse_ini_file('legacy_config/PNCP/.env', true);
 $oJson             = new services_json();
 $oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oErro             = new stdClass();

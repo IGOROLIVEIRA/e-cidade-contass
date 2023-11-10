@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -68,7 +68,7 @@ if ($oParam->exec == "getParametros") {
     $sSqlParametros .= "       orccenarioeconomicoconplano.* ";
     $sSqlParametros .= "  from orccenarioeconomicoparam ";
     $sSqlParametros .= "       left join orccenarioeconomicoconplano on o04_orccenarioeconomicoparam = o03_sequencial";
-    $sSqlParametros .= "       and o04_conplano = '{$oParam->params->conplano}' "; 
+    $sSqlParametros .= "       and o04_conplano = '{$oParam->params->conplano}' ";
     $sSqlParametros .= "       and o04_anousu in (select generate_series(".db_getsession("DB_anousu").",".db_getsession("DB_anousu").+ppa::ANOS_PREVISAO_CALCULO.",1))";
     $sSqlParametros .= " where o03_instit = ".db_getsession("DB_instit");
     $sSqlParametros .= " order by o03_sequencial,o03_anoreferencia";
@@ -99,7 +99,7 @@ if ($oParam->exec == "getParametros") {
       $oRetorno->itens  = $aColecaoParametros;
 
     }
-    
+
   } else {
 
     $oRetorno->status = 2;
@@ -257,10 +257,10 @@ if ($oParam->exec == "getParametros") {
 	 * @todo - remover
 	 * Ativa PCASP quando arquivo de configuração com ano do PCASP existir
 	 */
-	if ( !USE_PCASP && file_exists("config/pcasp.txt") ) {
+	if ( !USE_PCASP && file_exists("legacy_config/pcasp.txt") ) {
 		$_SESSION["DB_use_pcasp"] = "t";
 	}
-	
+
    $oPPA                  = new ppa($oParam->iCodigoLei, $oParam->iTipo, $oParam->iCodigoVersao);
    try {
 
@@ -274,23 +274,23 @@ if ($oParam->exec == "getParametros") {
      $oRetorno->message     = urlencode("Erro[".$eErro->getCode()."] - " .$eErro->getMessage());
 
    }
-   
+
    /**
     * @todo - remover
     */
-   if ( !USE_PCASP && file_exists("config/pcasp.txt") ) {
+   if ( !USE_PCASP && file_exists("legacy_config/pcasp.txt") ) {
    	$_SESSION["DB_use_pcasp"] = "f";
    }
-   
+
    echo $oJson->encode($oRetorno);
 
 } else if ($oParam->exec == "saveEstimativa") {
-	
+
 	/**
 	 * @todo - remover
 	 * Ativa PCASP quando arquivo de configuração com ano do PCASP existir
 	 */
-	if ( !USE_PCASP && file_exists("config/pcasp.txt") ) {
+	if ( !USE_PCASP && file_exists("legacy_config/pcasp.txt") ) {
 		$_SESSION["DB_use_pcasp"] = "t";
 	}
 
@@ -364,15 +364,15 @@ if ($oParam->exec == "getParametros") {
     $oRetorno->status      = 2;
     $oRetorno->message     = urlencode($eErro->getMessage());
     db_fim_transacao(true);
-  }  
+  }
 
   /**
    * @todo - remover
    */
-  if ( !USE_PCASP && file_exists("config/pcasp.txt") ) {
+  if ( !USE_PCASP && file_exists("legacy_config/pcasp.txt") ) {
   	$_SESSION["DB_use_pcasp"] = "f";
   }
-  
+
   echo $oJson->encode($oRetorno);
 } else if ($oParam->exec == "reprocessaEstimativa") {
 
@@ -380,10 +380,10 @@ if ($oParam->exec == "getParametros") {
 	 * @todo - remover
 	 * Ativa PCASP quando arquivo de configuração com ano do PCASP existir
 	 */
-	if ( !USE_PCASP && file_exists("config/pcasp.txt") ) {
+	if ( !USE_PCASP && file_exists("legacy_config/pcasp.txt") ) {
 		$_SESSION["DB_use_pcasp"] = "t";
 	}
-	
+
   try {
 
     db_inicio_transacao();
@@ -417,14 +417,14 @@ if ($oParam->exec == "getParametros") {
     $oRetorno->message     = urlencode($eErro->getMessage());
     db_fim_transacao(true);
   }
-  
+
   /**
    * @todo - remover
    */
-  if ( !USE_PCASP && file_exists("config/pcasp.txt") ) {
+  if ( !USE_PCASP && file_exists("legacy_config/pcasp.txt") ) {
   	$_SESSION["DB_use_pcasp"] = "f";
   }
-  
+
   echo $oJson->encode($oRetorno);
 } else if ($oParam->exec == "calculaValorEstimativa") {
 
@@ -814,7 +814,7 @@ if ($oParam->exec == "getParametros") {
     $oRetorno->status = 1;
 
     try {
-        
+
         $anousu = db_getsession("DB_anousu");
 
         $fonte = rtrim($oParam->sEstrutural, "0");
@@ -833,7 +833,7 @@ if ($oParam->exec == "getParametros") {
     }
 
     echo $oJson->encode($oRetorno);
-    
+
 }
 
 

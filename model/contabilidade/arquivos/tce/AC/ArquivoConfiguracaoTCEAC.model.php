@@ -40,9 +40,9 @@ class ArquivoConfiguracaoTCEAC {
     'documento'      => array( 'file' => ImportacaoArquivoTCEAC::ARQUIVO_DOCUMENTOS, 'label' => "Vinculação de Documentos" ),
     'recurso'        => array( 'file' => ImportacaoArquivoTCEAC::ARQUIVO_RECURSO, 'label' => "Vinculação de Recursos" ),
     'planoconta'     => array( 'file' => ImportacaoArquivoTCEAC::ARQUIVO_PLANOCONTA, 'label' => "Vinculação do Plano de Contas" ),
-    'contacorrente'  => array( 'file' => 'config/tce/AC/ContaCorrente.xml', 'label' => "Conta Corrente"),
-    'tipoconta'      => array( 'file' => 'config/tce/AC/TipoConta.xml', 'label' => "Tipo de Conta"),
-    'tipoempenho'    => array( 'file' => 'config/tce/AC/TipoEmpenho.xml', 'label' => "Tipo de Empenho")
+    'contacorrente'  => array( 'file' => 'legacy_config/tce/AC/ContaCorrente.xml', 'label' => "Conta Corrente"),
+    'tipoconta'      => array( 'file' => 'legacy_config/tce/AC/TipoConta.xml', 'label' => "Tipo de Conta"),
+    'tipoempenho'    => array( 'file' => 'legacy_config/tce/AC/TipoEmpenho.xml', 'label' => "Tipo de Empenho")
   );
 
   private $aDados = array();

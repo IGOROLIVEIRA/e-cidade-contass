@@ -8,10 +8,10 @@ include("dbforms/db_funcoes.php");
 
 $sSql  = "SELECT * FROM db_config ";
 $sSql .= "	WHERE prefeitura = 't'";
-    	
+
 $rsInst = db_query($sSql);
 $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
-$sArquivo = "config/sicom/{$sCnpj}_sicomdispensas.xml";
+$sArquivo = "legacy_config/sicom/{$sCnpj}_sicomdispensas.xml";
 
 /*
  * inserir ou atualizar registro do xml
@@ -19,107 +19,107 @@ $sArquivo = "config/sicom/{$sCnpj}_sicomdispensas.xml";
 if (isset($_POST['btnSalvar'])){
 
 	if (!file_exists($sArquivo)) {
-		
+
     $oDOMDocument = new DOMDocument('1.0','ISO-8859-1');
     $oRoot  = $oDOMDocument->createElement('dispensas');
-    
+
   }else{
-  	
+
   	$oDOMDocument = new DOMDocument();
   	$sTextoXml    = file_get_contents($sArquivo);
     $oDOMDocument->loadXML($sTextoXml);
     $oRoot  = $oDOMDocument->documentElement;
-    	
+
   }
-    
+
   $oDOMDocument->formatOutput = true;
-  
+
   $oDados      = $oDOMDocument->getElementsByTagName('dispensa');
-  
+
   /**
    * caso o codigo já exista no xml irá atualizar o registro
    */
-  
+
   foreach ($oDados as $oRow) {
-  	
+
   	$iUltimoCodigo = $oRow->getAttribute("codigo");
 		if ($oRow->getAttribute("codigo") == $_POST['codigo']) {
-			
+
 			$oDado = new stdClass();
 			$oDado = $oRow;
 			unset($_POST['btnSalvar']);
 			$oDado->setAttribute("instituicao", db_getsession("DB_instit"));
-		
+
 			$aCaracteres = array('\"', "\'");
 			/*
 			 * tirando barras e tratando acentos dos inputs para texto
 			 */
 			$_POST['justificativa'] = str_replace($aCaracteres, "", $_POST['justificativa']);
   	  $_POST['justificativa'] = trim(utf8_encode($_POST['justificativa']));
-  	  
+
   	  $_POST['razao'] = str_replace($aCaracteres, "", $_POST['razao']);
   	  $_POST['razao'] = trim(utf8_encode($_POST['razao']));
-  	  
+
   	  /**
   	   * passar os valores para o objeto para ser salvo no xml
   	   */
-			
+
 		  foreach ($_POST as $coll => $value) {
 			  $oDado->setAttribute($coll, $value);
 		  }
 		  $oDOMDocument->save($sArquivo);
-		  system("cp $sArquivo config/sicom/backup_{$sCnpj}_sicomdispensas.xml");
+		  system("cp $sArquivo legacy_config/sicom/backup_{$sCnpj}_sicomdispensas.xml");
 			echo"
 			<script LANGUAGE=\"Javascript\">
 			alert(\"Seu cadastro foi realizado com sucesso.\");
 			</SCRIPT>";
 			break;
     }
-    
+
   }
   if (!$oDado) {
-  	 
+
   	unset($_POST['btnSalvar']);
-  	
+
   	$oDado  = $oDOMDocument->createElement('dispensa');
-  	
+
   	$oDado->setAttribute("instituicao", db_getsession("DB_instit"));
-  	
-  	 	
+
+
   	/**
   	 * passar os valores para o objeto para ser salvo no xml
   	 */
-  	
+
   	$aCaracteres = array('\"', "\'");
 			/*
 			 * tirando barras e tratando acentos dos inputs para texto
 			 */
 		$_POST['justificativa'] = str_replace($aCaracteres, "", $_POST['justificativa']);
   	$_POST['justificativa'] = utf8_encode($_POST['justificativa']);
-  	  
+
   	$_POST['razao'] = str_replace($aCaracteres, "", $_POST['razao']);
     $_POST['razao'] = utf8_encode($_POST['razao']);
 
-  	
+
 	  foreach ($_POST as $coll => $value) {
 		  $oDado->setAttribute($coll, $value);
 	  }
-	  
+
 	  $iUltimoCodigo++;
-	  
+
 	  $oDado->setAttribute("codigo", $iUltimoCodigo);
-	  
+
 	  if (!file_exists($sArquivo)) {
-	  	
+
 	  	$oRoot->appendChild($oDado);
 	    $oDOMDocument->appendChild($oRoot);
-	    	
+
 	  } else {
 	  	$oDado = $oRoot->appendChild($oDado);
 	  }
-	  
+
 	  $oDOMDocument->save($sArquivo);
-	  system("cp $sArquivo config/sicom/backup_{$sCnpj}_sicomdispensas.xml");
+	  system("cp $sArquivo legacy_config/sicom/backup_{$sCnpj}_sicomdispensas.xml");
 		echo"
 		<script LANGUAGE=\"Javascript\">
 		alert(\"Seu cadastro foi realizado com sucesso.\");
@@ -135,25 +135,25 @@ if (isset($_POST['btnExcluir'])){
 	if (!file_exists($sArquivo)) {
     $oDOMDocument = new DOMDocument('1.0','ISO-8859-1');
   }else{
-  	$oDOMDocument = new DOMDocument();		
+  	$oDOMDocument = new DOMDocument();
   }
-    
+
  	$sTextoXml    = file_get_contents($sArquivo);
   $oDOMDocument->loadXML($sTextoXml);
   $oDOMDocument->formatOutput = true;
   $oDocument = $oDOMDocument->documentElement;
   $oDados      = $oDOMDocument->getElementsByTagName('dispensa');
-  
+
   /**
    * encontrar o codigo selecionado para excluir o registro no xml
    */
   foreach ($oDados as $oRow) {
-  	
+
 		if ($oRow->getAttribute("codigo") == $_POST['codigo']) {
-			
+
 		  $oDocument->removeChild($oRow);
 		  $oDOMDocument->save($sArquivo);
-		  system("cp $sArquivo config/sicom/backup_{$sCnpj}_sicomdispensas.xml");
+		  system("cp $sArquivo legacy_config/sicom/backup_{$sCnpj}_sicomdispensas.xml");
 			echo"
 			<script LANGUAGE=\"Javascript\">
 			alert(\"Registro removido com sucesso.\");

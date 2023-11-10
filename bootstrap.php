@@ -25,7 +25,7 @@ require_once(ECIDADE_PATH . 'vendor/autoload.php');
 require_once(ECIDADE_PATH . 'libs/db_autoload.php');
 
 // eloquent
-require_once (ECIDADE_PATH . 'config/ORM/Eloquent/bootstrap.php');
+require_once (ECIDADE_PATH . 'legacy_config/ORM/Eloquent/bootstrap.php');
 
 //
 // END DEFAULT AUTOLOADING
@@ -73,10 +73,10 @@ Registry::set('app.loader', $ecidadeLoader);
 
 Registry::set('app.config', new AppConfig());
 
-require_once ECIDADE_PATH . 'config/application.default.php';
+require_once ECIDADE_PATH . 'legacy_config/application.default.php';
 
-if (file_exists(ECIDADE_PATH . 'config/application.php')) {
-  require_once ECIDADE_PATH . 'config/application.php';
+if (file_exists(ECIDADE_PATH . 'legacy_config/application.php')) {
+  require_once ECIDADE_PATH . 'legacy_config/application.php';
 }
 
 /**

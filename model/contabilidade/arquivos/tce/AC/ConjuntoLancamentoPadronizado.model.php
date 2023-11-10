@@ -44,13 +44,13 @@ class ConjuntoLancamentoPadronizado {
    * Caminho do arquivo XML contendo as configurações
    * @var string
    */
-  const PATH_XML = 'config/tce/AC/EventosContabeis.xml';
+  const PATH_XML = 'legacy_config/tce/AC/EventosContabeis.xml';
 
 
   private function __construct() {
 
     if (!file_exists(self::PATH_XML)) {
-      throw new BusinessException("Arquivo XML [config/tce/AC/EventosContabeis.xml] não localizado no projeto.");
+      throw new BusinessException("Arquivo XML [legacy_config/tce/AC/EventosContabeis.xml] não localizado no projeto.");
     }
 
     $oDomXml = new DOMDocument();

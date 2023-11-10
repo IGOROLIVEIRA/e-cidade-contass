@@ -9,7 +9,7 @@ class BuscaJulgamento
      */
     public function __construct()
     {
-        $this->envs = parse_ini_file('config/apipcp/.env', true);
+        $this->envs = parse_ini_file('legacy_config/apipcp/.env', true);
     }
 
     /**

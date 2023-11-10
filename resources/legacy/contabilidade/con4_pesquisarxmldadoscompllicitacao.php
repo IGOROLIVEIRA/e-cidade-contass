@@ -8,37 +8,37 @@ include("dbforms/db_funcoes.php");
 
 $sSql  = "SELECT * FROM db_config ";
 $sSql .= "	WHERE prefeitura = 't'";
-    	
+
 $rsInst = db_query($sSql);
 $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
 
-$sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomdadoscompllicitacao.xml";
+$sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomdadoscompllicitacao.xml";
 
-$oDOMDocument = new DOMDocument();		
-    
+$oDOMDocument = new DOMDocument();
+
 $sTextoXml    = file_get_contents($sArquivo);
 $oDOMDocument->loadXML($sTextoXml);
 $oDOMDocument->formatOutput = true;
-  
+
 $oDados = $oDOMDocument->getElementsByTagName('dadoscompllicitacao');
 
 /**
  * caso tenha passado um dos dois codigos para ser pesquisado
  */
 if ($_POST['codigo1'] || $_POST['codigo2']) {
-  
+
 	/**
 	 * percorrer dados do xml para passar para o objeto para ser adicionado ao array
 	 */
   foreach ($oDados as $oRow) {
-  	
+
   	/**
      * selecionando linha conforme o codigo passado
      */
   	if ($oRow->getAttribute("codigo") == $_POST['codigo1'] || $oRow->getAttribute("nroDecretoMunicipal") == $_POST['codigo2']) {
 
   	  $oValores = new stdClass();
-  	  
+
   	  $oValores->codigo		                  = $oRow->getAttribute("codigo");
 		  $oValores->nroProcessoLicitatorio     = $oRow->getAttribute("nroProcessoLicitatorio");
 		  $oValores->codigoProcesso		          = $oRow->getAttribute("codigoProcesso");
@@ -59,20 +59,20 @@ if ($_POST['codigo1'] || $_POST['codigo2']) {
 		  $oValores->veiculoPublicacao          = $oRow->getAttribute("veiculoPublicacao");
 		  $oValores->PresencaLicitantes         = $oRow->getAttribute("PresencaLicitantes");
 		  $aValores[] = $oValores;
-			
+
   	}
-  	
+
   }
-  
-} else {		
-  
+
+} else {
+
   /**
    * percorrer os dados do xml para passar para o objeto e ser adicionado ao array
    */
   foreach ($oDados as $oRow) {
-  	
+
   	$oValores = new stdClass();
-  	
+
  	  $oValores->codigo		                  = $oRow->getAttribute("codigo");
 	  $oValores->nroProcessoLicitatorio     = $oRow->getAttribute("nroProcessoLicitatorio");
 	  $oValores->codigoProcesso		          = $oRow->getAttribute("codigoProcesso");
@@ -93,8 +93,8 @@ if ($_POST['codigo1'] || $_POST['codigo2']) {
 		$oValores->veiculoPublicacao          = $oRow->getAttribute("veiculoPublicacao");
 		$oValores->PresencaLicitantes         = $oRow->getAttribute("PresencaLicitantes");
 	  $aValores[] = $oValores;
-		
+
   }
-  
+
 }
 echo json_encode($aValores);

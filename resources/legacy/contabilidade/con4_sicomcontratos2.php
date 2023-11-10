@@ -13,27 +13,27 @@ db_postmemory($HTTP_POST_VARS);
 
 $sSql  = "SELECT * FROM db_config ";
 $sSql .= "  WHERE prefeitura = 't'";
-     
+
 $rsInst = db_query($sSql);
 $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
 
 $sCnpj  = '01612477000190';
 
-$sArquivo         = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomcontratos.xml";
+$sArquivo         = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomcontratos.xml";
 echo $sArquivo;
-$sArquivoCompl    = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomdadoscompllicitacao.xml";
-$sArquivoAditivos = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomaditivoscontratos.xml";
+$sArquivoCompl    = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomdadoscompllicitacao.xml";
+$sArquivoAditivos = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomaditivoscontratos.xml";
 /*
  * inserir ou atualizar registro do xml
  */
 $iCTRL = 0;
 if (isset($_POST['btnImportar'])){
-  
+
   $iCTRL = 1;
 
   if (!file_exists($sArquivo)) {
-    
-    echo 
+
+    echo
         "<script>alert('Não existe arquivo xml')</script>";
          db_redireciona('con4_sicomcontratos.php');
 
@@ -47,7 +47,7 @@ if (isset($_POST['btnImportar'])){
     $oDOMDocument2->loadXML($sTextoComplXml);
 
   }
-  
+
   $oDOMDocument->formatOutput = true;
   $oDados      = $oDOMDocument->getElementsByTagName('contrato');
   $oDadosCompl = $oDOMDocument2->getElementsByTagName('dadoscompllicitacao');
@@ -55,25 +55,25 @@ if (isset($_POST['btnImportar'])){
   $sSql = "select * from db_departorg limit 1";
   $rsUnidade = db_query($sSql);
   $iUnidade  = db_utils::fieldsMemory($rsUnidade,0)->db01_unidade;
-  
+
   /*
   * Exclui contratos e aditivos
   */
-  
+
   foreach ($oDados as $oDado) {
 
     db_inicio_transacao();
     $nroContrato = explode("/", $oDado->getAttribute('nroContrato') );
-    $result      = $clcontratos->sql_record($clcontratos->sql_query(null,'*',null,'si172_nrocontrato = '.$nroContrato[0]));    
+    $result      = $clcontratos->sql_record($clcontratos->sql_query(null,'*',null,'si172_nrocontrato = '.$nroContrato[0]));
     $sequencial  = db_utils::fieldsMemory($result,0)->si172_sequencial;
-    $result = $claditivoscontratos->sql_record($claditivoscontratos->sql_query(null,'*',null,'si174_nrocontrato = '.$sequencial));   
-    if (pg_num_rows($result) > 0) { 
+    $result = $claditivoscontratos->sql_record($claditivoscontratos->sql_query(null,'*',null,'si174_nrocontrato = '.$sequencial));
+    if (pg_num_rows($result) > 0) {
       $claditivoscontratos->excluir(null,'si174_nrocontrato = '.$sequencial);
     }
     $clcontratos->excluir(null,'si172_sequencial = '.$sequencial );
     db_fim_transacao();
   }
-  
+
   foreach ($oDados as $oDado) {
 
       db_inicio_transacao();
@@ -82,7 +82,7 @@ if (isset($_POST['btnImportar'])){
 
       if (!$oDado->getAttribute('nroProcessoLicitatorio') ) {
         $iLicitacoes[$oDado->getAttribute('nroProcessoLicitatorio')] = $oDado->getAttribute('nroContrato');
-        $sProcadmin = 'vazio';  
+        $sProcadmin = 'vazio';
         $i++;
       } else {
 
@@ -91,37 +91,37 @@ if (isset($_POST['btnImportar'])){
         $sProcadmin  =  db_utils::fieldsMemory($rsProcadmin,0)->l20_procadmin;
         if($sProcadmin == "" || $sProcadmin == null){
           $iLicitacoes[$oDado->getAttribute('nroProcessoLicitatorio')] = $oDado->getAttribute('nroContrato');
-          $sProcadmin = 'vazio';          
+          $sProcadmin = 'vazio';
           $i++;
         }
 
       }
 
       $aCaracteres = array('\"', "\'");
-        
+
       $nroContrato = explode("/", $oDado->getAttribute('nroContrato') );
       $clcontratos->si172_nrocontrato                = $nroContrato[0];
       $clcontratos->si172_exerciciocontrato          = db_getsession("DB_anousu");
       $clcontratos->si172_licitacao                  = $oDado->getAttribute('nroProcessoLicitatorio');
       $clcontratos->si172_dataassinatura             = $oDado->getAttribute('dataAssinatura');
-      
+
       $sSql    = "select * from cgm inner join pcorcamforne on pc21_numcgm = z01_numcgm where z01_cgccpf = '". $oDado->getAttribute('nroDocumento') ."' ";
       $rsForn  = db_query($sSql);
       $iForn   =  db_utils::fieldsMemory($rsForn,0)->pc21_numcgm;
 
       $clcontratos->si172_fornecedor                 = $iForn;//$oDado->getAttribute('');
-      
+
       $clcontratos->si172_contdeclicitacao           = 2;
       $clcontratos->si172_codunidadesubresp          = $iUnidade; //db_departorg limit 1
       $clcontratos->si172_nroprocesso                = $sProcadmin; //l20_procadmin
       $clcontratos->si172_exercicioprocesso          = db_getsession("DB_anousu"); //db_anousu
 
-      foreach ($oDadosCompl as $oDadoCompl) {      
+      foreach ($oDadosCompl as $oDadoCompl) {
 
         if ($oDado->getAttribute('nroProcessoLicitatorio') == $oDadoCompl->getAttribute('nroProcessoLicitatorio')) {
 
             if ($oDadoCompl->getAttribute('justificativa') != null || $oDadoCompl->getAttribute('justificativa') != "" ) {
-              $clcontratos->si172_tipoprocesso               = $oDadoCompl->getAttribute('tipoProcesso'); //olhar na nova tela, codigo do tribunal        
+              $clcontratos->si172_tipoprocesso               = $oDadoCompl->getAttribute('tipoProcesso'); //olhar na nova tela, codigo do tribunal
             } else {
               $clcontratos->si172_tipoprocesso               = 1; //olhar na nova tela, codigo do tribunal
             }
@@ -129,7 +129,7 @@ if (isset($_POST['btnImportar'])){
         }
 
       }
-      
+
       $clcontratos->si172_naturezaobjeto             = str_replace($aCaracteres, "", utf8_decode($oDado->getAttribute('naturezaObjeto')));
       $clcontratos->si172_objetocontrato             = str_replace($aCaracteres, "", utf8_decode($oDado->getAttribute('objetoContrato')));
       $clcontratos->si172_tipoinstrumento            = $oDado->getAttribute('tipoInstrumento');
@@ -146,11 +146,11 @@ if (isset($_POST['btnImportar'])){
       $clcontratos->si172_datapublicacao             = str_replace($aCaracteres, "", utf8_decode($oDado->getAttribute('dataPublicacao')));
       $clcontratos->si172_veiculodivulgacao          = str_replace($aCaracteres, "", utf8_decode($oDado->getAttribute('veiculoDivulgacao')));
       $clcontratos->si172_instit                     = $oDado->getAttribute('instituicao');
-      
+
       $clcontratos->incluir(null);
-      
-      db_fim_transacao();    
-      
+
+      db_fim_transacao();
+
   }
 
   /**
@@ -158,8 +158,8 @@ if (isset($_POST['btnImportar'])){
   */
 
   if (!file_exists($sArquivoAditivos)) {
-    
-    echo 
+
+    echo
         "<script>alert('Não existe arquivo xml dos aditivos')</script>";
 
 
@@ -193,15 +193,15 @@ if (isset($_POST['btnImportar'])){
         $claditivoscontratos->si174_datapublicacao              = $oDado->getAttribute('dataPublicacao');
         $claditivoscontratos->si174_veiculodivulgacao           = str_replace($aCaracteres, "", utf8_decode($oDado->getAttribute('veiculoDivulgacao')));
         $claditivoscontratos->si174_instit                      = $oDado->getAttribute('instituicao');
-        
+
         $claditivoscontratos->incluir(null);
 
-        db_fim_transacao($sqlerro);    
-        
+        db_fim_transacao($sqlerro);
+
     }
 
   }
-  
+
 }
 
 ?>
@@ -215,14 +215,14 @@ if (isset($_POST['btnImportar'])){
 <script language="JavaScript" type="text/javascript" src="scripts/prototype.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
-<? 
+<?
   db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession("DB_anousu"),db_getsession("DB_instit"));
       ?>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="20" onLoad="a=1" >
 
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr> 
-    <td height="430" align="left" valign="top" bgcolor="#CCCCCC"> 
+  <tr>
+    <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
     <center>
   <?
   include("forms/frmsicomcontratos2.php");
@@ -241,12 +241,12 @@ if ($iCTRL == 1) {
 
     echo 'problema em alguns contratos | licitação -> contrato | <br>';
     print_r($iLicitacoes);
-     echo 
+     echo
         "<script>
         alert('Importação concluida com sucesso');
         document.form1.btnImportar.disabled = true;
         </script>";
 
 }
-   
+
 ?>

@@ -18,7 +18,7 @@ require_once("model/licitacao/PNCP/ResultadoItensPNCP.model.php");
 require_once("classes/db_licacontrolenexospncp_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
-$envs = parse_ini_file('config/PNCP/.env', true);
+$envs = parse_ini_file('legacy_config/PNCP/.env', true);
 $oJson             = new services_json();
 $oParam            = $oJson->decode(str_replace("\\", "", $_POST["json"]));
 $oErro             = new stdClass();
@@ -119,7 +119,7 @@ switch ($oParam->exec) {
                     //Ambiente de Producao
                         $l213_numerocompra = substr($rsApiPNCP[1], 67);
                     }
-                
+
                     $l213_numerocontrolepncp = db_utils::getCnpj() . '-1-' . str_pad($l213_numerocompra, 6, '0', STR_PAD_LEFT) . '/' . $oDadosLicitacao->anocompra;
 
                     //monto o codigo da compra no pncp

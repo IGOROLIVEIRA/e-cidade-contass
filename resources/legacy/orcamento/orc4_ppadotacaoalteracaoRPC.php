@@ -1,28 +1,28 @@
 <?php
 /*
- *     E-cidade Software Publico para Gestao Municipal                
- *  Copyright (C) 2013  DBselller Servicos de Informatica             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa e software livre; voce pode redistribui-lo e/ou     
- *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versao 2 da      
- *  Licenca como (a seu criterio) qualquer versao mais nova.          
- *                                                                    
- *  Este programa e distribuido na expectativa de ser util, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implicita de              
- *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM           
- *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU     
- *  junto com este programa; se nao, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Copia da licenca no diretorio licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Publico para Gestao Municipal
+ *  Copyright (C) 2013  DBselller Servicos de Informatica
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa e software livre; voce pode redistribui-lo e/ou
+ *  modifica-lo sob os termos da Licenca Publica Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versao 2 da
+ *  Licenca como (a seu criterio) qualquer versao mais nova.
+ *
+ *  Este programa e distribuido na expectativa de ser util, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implicita de
+ *  COMERCIALIZACAO ou de ADEQUACAO A QUALQUER PROPOSITO EM
+ *  PARTICULAR. Consulte a Licenca Publica Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Voce deve ter recebido uma copia da Licenca Publica Geral GNU
+ *  junto com este programa; se nao, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Copia da licenca no diretorio licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -43,15 +43,15 @@ $oRetorno->message = "";
 $aParametros         = db_stdClass::getParametro("orcparametro", array(db_getsession("DB_anousu")));
 $oParametroOrcamento = $aParametros[0];
 if ($oParam->exec == "getElementosFromAcao") {
-	
+
 	/**
 	 * @todo - remover
 	 * Ativa PCASP quando arquivo de configuração com ano do PCASP existir
 	 */
-	if ( !USE_PCASP && file_exists("config/pcasp.txt") ) {
+	if ( !USE_PCASP && file_exists("legacy_config/pcasp.txt") ) {
 		$_SESSION["DB_use_pcasp"] = "t";
 	}
-	
+
   $oRetorno->leivalida = false;
   $oDaoLei             = db_utils::getDao("ppaversao");
   $sSqlPPALei          = $oDaoLei->sql_query($oParam->o08_ppaversao);
@@ -159,11 +159,11 @@ if ($oParam->exec == "getElementosFromAcao") {
    * @todo - remover
    * Ativa PCASP quando arquivo de configuração com ano do PCASP existir
    */
-  if ( !USE_PCASP && file_exists("config/pcasp.txt") ) {
+  if ( !USE_PCASP && file_exists("legacy_config/pcasp.txt") ) {
   	$_SESSION["DB_use_pcasp"] = "f";
   }
-  
-  
+
+
   $oRetorno->itens = db_utils::getColectionByRecord($rsDotacaoItens,false, false, true);
 
 } else if ($oParam->exec == "getInformacaoEstivativa") {
@@ -212,7 +212,7 @@ if ($oParam->exec == "getElementosFromAcao") {
                     INNER JOIN ppaestimativadespesa on o07_coddot = p2.o08_sequencial
                     INNER JOIN ppaestimativa ON ppaestimativa.o05_sequencial = ppaestimativadespesa.o07_ppaestimativa
                 WHERE p1.o08_sequencial = {$oParam->o08_sequencial} ";
-    
+
     if ($oParam->atualiza_anos_seguintes) {
         $sSql .= " AND p2.o08_ano >= p1.o08_ano";
     } else {
@@ -232,11 +232,11 @@ if ($oParam->exec == "getElementosFromAcao") {
         if ($iCont == 0) {
             $iAnoInicio = $oPPAano->o08_ano;
         }
-    
+
         /**
          * Apenas alteramos a cadastro da dotacao do ppa caso nao seje estimativa gerada pelo sistema
          */
-  
+
         $oDaoPPaDotacao = db_utils::getDao("ppadotacao");
         if ($oParam->o19_coddot == "") {
 
@@ -290,7 +290,7 @@ if ($oParam->exec == "getElementosFromAcao") {
         $oDaoPPaestimativa->o05_sequencial = $oPPAano->o05_sequencial;
 
         $nValorParam   = ppa::getAcrescimosEstimativa($oParam->o08_elemento, $oPPAano->o08_ano);
-        
+
     	$nValor = $oParam->o05_valor;
     	if ($oPPAano->o08_ano > $iAnoInicio) {
 
@@ -403,7 +403,7 @@ if ($oParam->exec == "getElementosFromAcao") {
   $sCampos          .= "round(o05_valor,2) as o05_valor, ";
   $sCampos          .= "o19_sequencial,";
   $sCampos          .= "o19_coddot,";
-  $sCampos          .= "o19_anousu";  
+  $sCampos          .= "o19_anousu";
   $oDaoPPaDotacao    = db_utils::getDao("ppaestimativadespesa");
   $sWhere       =  " o08_instit=".db_getsession("DB_instit");
   $sWhere      .=  " and o08_orgao          = {$oParam->o40_orgao}";
@@ -465,14 +465,14 @@ if ($oParam->exec == "getElementosFromAcao") {
         $sWhere    .= " and o58_anousu = ";
         $sWhere    .= $oDotacao->o05_anoreferencia > db_getsession("DB_anousu") ? db_getsession("DB_anousu") : $oDotacao->o05_anoreferencia;
     }
-    
-    $sSqlDotacao    = $oDaoDotacao->sql_query_file(null, null, "o58_coddot", null, $sWhere);    
+
+    $sSqlDotacao    = $oDaoDotacao->sql_query_file(null, null, "o58_coddot", null, $sWhere);
     $rsDotacao      = $oDaoDotacao->sql_record($sSqlDotacao);
-    
+
     if ($oDaoDotacao->numrows > 0) {
-        
+
         $oOrcDotacao = db_utils::fieldsMemory($rsDotacao, 0);
-        
+
         /**
          * Caso não exista vinculo na ppadotacaoorcdotacao, cria
          */
@@ -483,7 +483,7 @@ if ($oParam->exec == "getElementosFromAcao") {
             $oDaoPPaOrcDotacao->o19_coddot = $oOrcDotacao->o58_coddot;
             $oDaoPPaOrcDotacao->o19_anousu = $oDotacao->o05_anoreferencia < db_getsession("DB_anousu") ? $oDotacao->o05_anoreferencia : db_getsession("DB_anousu");
             $oDaoPPaOrcDotacao->incluir();
-            
+
             if ($oDaoPPaOrcDotacao->erro_status == 0) {
                 $oRetorno->status = 2;echo $oDaoPPaOrcDotacao->erro_msg;die;
                 $oRetorno->message = urlencode("Não foi possível alterar a dotação.\n{$oDaoPPaOrcDotacao->erro_msg}");
@@ -496,7 +496,7 @@ if ($oParam->exec == "getElementosFromAcao") {
             * Caso exista e o cod dotação seja diferente do existente na ppadotacaoorcdotacao,
             * atualiza a ppadotacaoorcdotacao
             */
-            
+
             $oDaoPPaOrcDotacao = db_utils::getDao("ppadotacaoorcdotacao");
             $oDaoPPaOrcDotacao->o19_sequencial = $oDotacao->o19_sequencial;
             $oDaoPPaOrcDotacao->o19_coddot = $oOrcDotacao->o58_coddot;
@@ -508,10 +508,10 @@ if ($oParam->exec == "getElementosFromAcao") {
             }
 
         }
-   
+
     } else {
-        
-        //Exclui o registro da ppadotacaoorcdotacao        
+
+        //Exclui o registro da ppadotacaoorcdotacao
         if ($oDotacao->o19_sequencial != '') {
             $oDaoPPaOrcDotacao = db_utils::getDao("ppadotacaoorcdotacao");
             $oDaoPPaOrcDotacao->excluir(null, "o19_sequencial={$oDotacao->o19_sequencial}");
@@ -548,7 +548,7 @@ if ($oParam->exec == "getElementosFromAcao") {
             $nValorParam   = ppa::getAcrescimosEstimativa($oParam->oDotacao->o08_elemento, $iAno);
             $nValor        = $oParam->oDotacao->nValor;
     	    if ($iAno >= $oVersao->o01_anoinicio) {
-            
+
                 if ($nValorParam > 0 && $iAno > $oVersao->o01_anoinicio) {
                     $nValor *= $nValorParam;
                 }

@@ -176,7 +176,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
          * selecionar arquivo xml com dados das receitas
          */
 
-        $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
+        $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
         $sTextoXml = file_get_contents($sArquivo);
         $oDOMDocument = new DOMDocument();
@@ -188,7 +188,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
          */
         if ($iTipoInstit != 1) {
 
-            $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
+            $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
             /*if (!file_exists($sArquivo)) {
                 throw new Exception("Arquivo de natureza da receita inexistente!");
@@ -216,7 +216,7 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         /**
          * selecionar arquivo xml de dados elemento da despesa
          */
-        $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
+        $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomelementodespesa.xml";
         /*if (!file_exists($sArquivo)) {
             throw new Exception("Arquivo de elemento da despesa inexistente!");
         }*/
@@ -1735,10 +1735,10 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
                 $sSqlCTB = "select k13_reduz,
                              c61_codtce codctbtce,
                              si09_codorgaotce,
-				             c63_banco, 
-				             c63_agencia, 
-				             c63_conta, 
-				             c63_dvconta, 
+				             c63_banco,
+				             c63_agencia,
+				             c63_conta,
+				             c63_dvconta,
 				             c63_dvagencia,
 				             case when db83_tipoconta in (2,3) then 2 else 1 end as tipoconta,
 				             ' ' as tipoaplicacao,
@@ -1748,14 +1748,14 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
 				             case when db83_convenio = 1 then db83_numconvenio else null end as nroconvenio,
 				             case when db83_convenio = 1 then db83_dataconvenio else null end as dataassinaturaconvenio,
 				             o15_codtri as codfontrecursos
-				       from saltes 
+				       from saltes
 				       join conplanoreduz on k13_reduz = c61_reduz and c61_anousu = " . db_getsession("DB_anousu") . "
 				       join conplanoconta on c63_codcon = c61_codcon and c63_anousu = c61_anousu
 				       join orctiporec on c61_codigo = o15_codigo
 				  left join conplanocontabancaria on c56_codcon = c61_codcon and c56_anousu = c61_anousu
 				  left join contabancaria on c56_contabancaria = db83_sequencial
 				  left join infocomplementaresinstit on si09_instit = c61_instit
-				    where (k13_limite is null 
+				    where (k13_limite is null
 				    or k13_limite >= '" . $this->sDataFinal . "')
     				  and c61_instit = " . db_getsession("DB_instit") . "
     				  and c61_reduz in (" . implode(',', $oContas10->contas) . ") order by k13_reduz";
@@ -2709,8 +2709,8 @@ class SicomArquivoBalancete extends SicomArquivoBase implements iPadArquivoBaseC
         }
 
         if(db_getsession("DB_anousu")==2018){
-            $sSqlEncerradas = "select distinct si95_reduz,si95_codtceant from  acertactb 
-        join conplanoreduz on c61_reduz = si95_reduz and c61_anousu = ".db_getsession("DB_anousu")." 
+            $sSqlEncerradas = "select distinct si95_reduz,si95_codtceant from  acertactb
+        join conplanoreduz on c61_reduz = si95_reduz and c61_anousu = ".db_getsession("DB_anousu")."
          join infocomplementaresinstit on c61_instit = si09_instit and si09_instit = ".db_getsession("DB_instit")." order by si95_reduz desc";
             $rsEncerradas = db_query($sSqlEncerradas);
             $aEncerradas = array();

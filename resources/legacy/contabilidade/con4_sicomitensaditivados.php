@@ -8,10 +8,10 @@ include("dbforms/db_funcoes.php");
 
 $sSql  = "SELECT * FROM db_config ";
 $sSql .= "	WHERE prefeitura = 't'";
-    	
+
 $rsInst = db_query($sSql);
 $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
-$sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomitensaditivados.xml";
+$sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomitensaditivados.xml";
 
 /*
  * inserir ou atualizar registro do xml
@@ -19,54 +19,54 @@ $sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomitensadit
 if (isset($_POST['btnSalvar'])){
 
 	if (!file_exists($sArquivo)) {
-		
+
     $oDOMDocument = new DOMDocument('1.0','ISO-8859-1');
     $oRoot  = $oDOMDocument->createElement('itensaditivados');
-    
+
   }else{
-  	
+
   	$oDOMDocument = new DOMDocument();
   	$sTextoXml    = file_get_contents($sArquivo);
     $oDOMDocument->loadXML($sTextoXml);
     $oRoot  = $oDOMDocument->documentElement;
-    	
+
   }
-    
+
   $oDOMDocument->formatOutput = true;
-  
+
   $oDados      = $oDOMDocument->getElementsByTagName('itensaditivado');
-  
+
   /**
    * caso o codigo já exista no xml irá atualizar o registro
    */
-  
+
   foreach ($oDados as $oRow) {
-  	
+
   	$iUltimoCodigo = $oRow->getAttribute("codigo");
 		if ($oRow->getAttribute("codigo") == $_POST['codigo']) {
-			
+
 			$oDado = new stdClass();
 			$oDado = $oRow;
 			unset($_POST['btnSalvar']);
 			$oDado->setAttribute("instituicao", db_getsession("DB_instit"));
-			
+
   	  /**
   	   * passar os valores para o objeto para ser salvo no xml
   	   */
-			
+
 		  $aCaracteres = array('\"', "\'");
   		  $_POST['descricaoItem'] = str_replace($aCaracteres, "", $_POST['descricaoItem']);
    	      $_POST['descricaoItem'] = trim(utf8_encode($_POST['descricaoItem']));
    	      $_POST['unidade'] = str_replace($aCaracteres, "", $_POST['unidade']);
           $_POST['unidade'] = trim(utf8_encode($_POST['unidade']));
-   	      
-			
+
+
 		  foreach ($_POST as $coll => $value) {
 			  $oDado->setAttribute($coll, $value);
 		  }
 		  $oDOMDocument->save($sArquivo);
-			if (filesize($sArquivo) > filesize("config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomitensaditivados.xml")/2) { 
-		    system("cp $sArquivo config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomitensaditivados.xml");
+			if (filesize($sArquivo) > filesize("legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomitensaditivados.xml")/2) {
+		    system("cp $sArquivo legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomitensaditivados.xml");
 		  }
 			echo"
 			<script LANGUAGE=\"Javascript\">
@@ -74,45 +74,45 @@ if (isset($_POST['btnSalvar'])){
 			</SCRIPT>";
 			break;
     }
-    
+
   }
   if (!$oDado) {
-  	 
+
   	unset($_POST['btnSalvar']);
-  	
+
   	$oDado  = $oDOMDocument->createElement('itensaditivado');
-  	
+
   	$oDado->setAttribute("instituicao", db_getsession("DB_instit"));
-  	
-  	 	
+
+
   	/**
   	 * passar os valores para o objeto para ser salvo no xml
   	 */
-  	
+
     $aCaracteres = array('\"', "\'");
     $_POST['descricaoItem'] = str_replace($aCaracteres, "", $_POST['descricaoItem']);
    	$_POST['descricaoItem'] = trim(utf8_encode($_POST['descricaoItem']));
    	$_POST['unidade'] = str_replace($aCaracteres, "", $_POST['unidade']);
     $_POST['unidade'] = trim(utf8_encode($_POST['unidade']));
-   	
-	  
+
+
    	foreach ($_POST as $coll => $value) {
 		  $oDado->setAttribute($coll, $value);
 	  }
 	  $oDado->setAttribute("codigo", $iUltimoCodigo+1);
-	  
+
 	  if (!file_exists($sArquivo)) {
-	  	
+
 	  	$oRoot->appendChild($oDado);
 	    $oDOMDocument->appendChild($oRoot);
-	    	
+
 	  } else {
 	  	$oDado = $oRoot->appendChild($oDado);
 	  }
-	  
+
 	  $oDOMDocument->save($sArquivo);
-  	if (filesize($sArquivo) > filesize("config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomitensaditivados.xml")/2) { 
-		  system("cp $sArquivo config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomitensaditivados.xml");
+  	if (filesize($sArquivo) > filesize("legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomitensaditivados.xml")/2) {
+		  system("cp $sArquivo legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomitensaditivados.xml");
 		}
 		echo"
 		<script LANGUAGE=\"Javascript\">
@@ -129,25 +129,25 @@ if (isset($_POST['btnExcluir'])){
 	if (!file_exists($sArquivo)) {
     $oDOMDocument = new DOMDocument('1.0','ISO-8859-1');
   }else{
-  	$oDOMDocument = new DOMDocument();		
+  	$oDOMDocument = new DOMDocument();
   }
-    
+
  	$sTextoXml    = file_get_contents($sArquivo);
   $oDOMDocument->loadXML($sTextoXml);
   $oDOMDocument->formatOutput = true;
   $oDocument = $oDOMDocument->documentElement;
   $oDados      = $oDOMDocument->getElementsByTagName('itensaditivado');
-  
+
   /**
    * encontrar o codigo selecionado para excluir o registro no xml
    */
   foreach ($oDados as $oRow) {
-  	
+
 		if ($oRow->getAttribute("codigo") == $_POST['codigo']) {
-			
+
 		  $oDocument->removeChild($oRow);
 		  $oDOMDocument->save($sArquivo);
-		  system("cp $sArquivo config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomitensaditivados.xml");
+		  system("cp $sArquivo legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomitensaditivados.xml");
 			echo"
 			<script LANGUAGE=\"Javascript\">
 			alert(\"Registro removido com sucesso.\");
@@ -177,6 +177,6 @@ if (isset($_POST['btnExcluir'])){
     </center>
 	</td>
   </tr>
-</table>	
+</table>
 </body>
 </html>

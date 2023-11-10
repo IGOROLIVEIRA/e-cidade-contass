@@ -122,7 +122,7 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
     $rsInst = db_query($sSql);
     $sCnpj = db_utils::fieldsMemory($rsInst, 0)->cgc;
-    $sArquivo = "config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
+    $sArquivo = "legacy_config/sicom/" . db_getsession("DB_anousu") . "/{$sCnpj}_sicomnaturezareceita.xml";
 
     $sTextoXml = file_get_contents($sArquivo);
     $oDOMDocument = new DOMDocument();
@@ -1011,15 +1011,15 @@ class SicomArquivoContasBancarias extends SicomArquivoBase implements iPadArquiv
 
                   $contaTransf = db_utils::fieldsMemory($rsConta, 0)->contadebito;
                   $contaTransfTipo = db_utils::fieldsMemory($rsConta, 0)->tipo;
-                  
+
                   if ($oRegistro10->si09_tipoinstit == 5 && $contaTransfTipo == 2) {
-                    
+
                     $contaTransf .= db_utils::fieldsMemory($rsConta, 0)->tipoaplicacao;
                     $contaTransf .= db_utils::fieldsMemory($rsConta, 0)->nroseqaplicacao;
                   }
-                  
+
                   $conta = $aBancosAgrupados[$contaTransf]->si95_codctb;
-                                    
+
                 }
 
 

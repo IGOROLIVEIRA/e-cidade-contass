@@ -50,7 +50,7 @@ if (isset($oGet->verificarequisitossistema) && $oGet->verificarequisitossistema 
 //var_dump($lVerificaRequisitos);
 
 // Diretório das extensoes do servidor necessárias
-$diretorio          = "config/require_extensions.xml";
+$diretorio          = "legacy_config/require_extensions.xml";
 $sDirDocumentRoot   = $_SERVER['DOCUMENT_ROOT'] . "/";
 
 $lErro                = false;
@@ -69,7 +69,7 @@ if (file_exists($diretorio)) {
    $lErroConf = false;
 } else {
 
-// Se não existir o arquivo config/require_extensions.xml retorna mensagem
+// Se não existir o arquivo legacy_config/require_extensions.xml retorna mensagem
    $sMsgConf   = "Erro: 404 Diretório de Configuração Inexistente! \n";
    $sMsgConf  .= "Contate Administrador do Sistema.";
    $lErroConf  = true;

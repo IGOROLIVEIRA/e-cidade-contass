@@ -2,7 +2,7 @@
 
 class DBConfig {
 
-  const CONFIG_FILE = 'config/config.php';
+  const CONFIG_FILE = 'legacy_config/config.php';
 
   private $config = array();
 
@@ -26,7 +26,7 @@ class DBConfig {
 
   private function merge($newConfig) {
     $this->config = DBArray::merge($this->config, $newConfig);
-  }  
+  }
 
   public function get($key = null) {
     return isset($this->config[$key]) ? $this->config[$key] : $this->config;

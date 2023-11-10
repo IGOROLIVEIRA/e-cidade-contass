@@ -1,28 +1,28 @@
 <?
 /*
- *     E-cidade Software Público para Gestão Municipal                
- *  Copyright (C) 2014  DBseller Serviços de Informática             
- *                            www.dbseller.com.br                     
- *                         e-cidade@dbseller.com.br                   
- *                                                                    
- *  Este programa é software livre; você pode redistribuí-lo e/ou     
- *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme  
- *  publicada pela Free Software Foundation; tanto a versão 2 da      
- *  Licença como (a seu critério) qualquer versão mais nova.          
- *                                                                    
- *  Este programa e distribuído na expectativa de ser útil, mas SEM   
- *  QUALQUER GARANTIA; sem mesmo a garantia implícita de              
- *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM           
- *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais  
- *  detalhes.                                                         
- *                                                                    
- *  Você deve ter recebido uma cópia da Licença Pública Geral GNU     
- *  junto com este programa; se não, escreva para a Free Software     
- *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA          
- *  02111-1307, USA.                                                  
- *  
- *  Cópia da licença no diretório licenca/licenca_en.txt 
- *                                licenca/licenca_pt.txt 
+ *     E-cidade Software Público para Gestão Municipal
+ *  Copyright (C) 2014  DBseller Serviços de Informática
+ *                            www.dbseller.com.br
+ *                         e-cidade@dbseller.com.br
+ *
+ *  Este programa é software livre; você pode redistribuí-lo e/ou
+ *  modificá-lo sob os termos da Licença Pública Geral GNU, conforme
+ *  publicada pela Free Software Foundation; tanto a versão 2 da
+ *  Licença como (a seu critério) qualquer versão mais nova.
+ *
+ *  Este programa e distribuído na expectativa de ser útil, mas SEM
+ *  QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ *  COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ *  PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ *  detalhes.
+ *
+ *  Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ *  junto com este programa; se não, escreva para a Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ *  Cópia da licença no diretório licenca/licenca_en.txt
+ *                                licenca/licenca_pt.txt
  */
 
 require_once("libs/db_stdlib.php");
@@ -36,13 +36,13 @@ db_postmemory($HTTP_POST_VARS);
 $anoorigem  = db_getsession("DB_anousu");
 $anodestino = $anoorigem + 1;
 
-$sqlitem  = " select distinct         "; 
+$sqlitem  = " select distinct         ";
 $sqlitem .= "        c33_sequencial,  ";
 $sqlitem .= "        c33_descricao    ";
 $sqlitem .= "   from db_viradacaditem ";
 $sqlitem .= "  order by c33_sequencial";
 
-$sqlitem_disabled  = "  select distinct                                                                 "; 
+$sqlitem_disabled  = "  select distinct                                                                 ";
 $sqlitem_disabled .= "         c33_sequencial,                                                          ";
 $sqlitem_disabled .= "         c33_descricao                                                            ";
 $sqlitem_disabled .= "    from db_viradacaditem                                                         ";
@@ -59,12 +59,12 @@ $sqlitem_disabled .= "         end"; //acrescentado o item 23 CONFIGURAÇÕES PADR
 
 /*
  * Desabilitar os itens quando o usuário utilizar o pcasp
- * Variavel da sessão ou anodestino igual ao ano da implantação do pcasp (pcasp.txt)     
+ * Variavel da sessão ou anodestino igual ao ano da implantação do pcasp (pcasp.txt)
  */
 $aPcasp    = array();
 $aPcasp[0] = "";
-if ( file_exists("config/pcasp.txt") ) {	
-	$aPcasp = file("config/pcasp.txt");
+if ( file_exists("legacy_config/pcasp.txt") ) {
+	$aPcasp = file("legacy_config/pcasp.txt");
 }
 
 if ( USE_PCASP ) {
@@ -73,17 +73,17 @@ if ( USE_PCASP ) {
   $sqlitem_disabled .= "  union                          ";
   $sqlitem_disabled .= " select c33_sequencial,          ";
   $sqlitem_disabled .= "        c33_descricao            ";
-  $sqlitem_disabled .= "   from db_viradacaditem         ";      
+  $sqlitem_disabled .= "   from db_viradacaditem         ";
   $sqlitem_disabled .= " where c33_sequencial in (26,27) ";
 */
 
   /*
    * Caso seja utilizado pcasp, incluimos os dados da virada do item 14.
    */
-  $sSqlValidaViradaItem14 = "select db_virada.c30_sequencial 
-  		                         from db_virada 
-  		                              inner join db_viradaitem on db_viradaitem.c31_db_virada = db_virada.c30_sequencial 
-  		                        where c30_anodestino = {$anoorigem} 
+  $sSqlValidaViradaItem14 = "select db_virada.c30_sequencial
+  		                         from db_virada
+  		                              inner join db_viradaitem on db_viradaitem.c31_db_virada = db_virada.c30_sequencial
+  		                        where c30_anodestino = {$anoorigem}
   		                          and c31_db_viradacaditem = 14;";
   $rsValidaViradaItem14   = db_query($sSqlValidaViradaItem14);
   if (pg_num_rows($rsValidaViradaItem14) == 0) {
@@ -94,9 +94,9 @@ if ( USE_PCASP ) {
   	                                                       from db_virada
   	                                                      where c30_anodestino = {$anoorigem}";
   	$rsInsertViradaItem14 = db_query($sSqlInsertViradaItem14);
-  }		                                 
-  
-} 
+  }
+
+}
 
 /*
  * Desabilitamos os itens quando o cliente não é PCASP em 2013.
@@ -132,7 +132,7 @@ function js_processa(){
          document.form1.itensprocessa.value = document.form1.itensprocessa.value+'_'+objForm[i].value
 
        }
-     }    
+     }
   }
 }
 
@@ -145,11 +145,11 @@ function js_emite(){
 		                                                   +'&anodestino='+document.form1.anodestino.value,
 		                  'Processamento da Virada '+document.form1.anoorigem.value+' para '+document.form1.anodestino.value,
 		                  true);
-     
-} 
- 
 
-</script>  
+}
+
+
+</script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -170,7 +170,7 @@ function js_emite(){
       </tr>
       <tr>
         <td align='center'><b> Ano origem :<? db_input("anoorigem", 10, "", true, "text", 3)?> </b></td>
-		    <td><b> Ano destino :<? db_input("anodestino", 10, "", true, "text",3)?> </b></td>		
+		    <td><b> Ano destino :<? db_input("anodestino", 10, "", true, "text",3)?> </b></td>
       </tr>
       <tr>
         <td colspan="2">
@@ -186,12 +186,12 @@ function js_emite(){
             $cliframe_seleciona->dbscript      = "onClick='parent.js_processa()'";
             $cliframe_seleciona->marcador      = true;
             $cliframe_seleciona->js_marcador   = "parent.js_processa()";
-            $cliframe_seleciona->iframe_seleciona(null);    
+            $cliframe_seleciona->iframe_seleciona(null);
           ?>
         </td>
       </tr>
       <tr>
-        <td colspan="2" align = "center"> 
+        <td colspan="2" align = "center">
           <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
         </td>
       </tr>

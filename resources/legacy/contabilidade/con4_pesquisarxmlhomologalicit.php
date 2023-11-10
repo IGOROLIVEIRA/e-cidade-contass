@@ -8,30 +8,30 @@ include_once("dbforms/db_funcoes.php");
 
 $sSql  = "SELECT * FROM db_config ";
 $sSql .= "	WHERE prefeitura = 't'";
-    	
+
 $rsInst = db_query($sSql);
 $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
 
-$sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomhomologalict.xml";
+$sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomhomologalict.xml";
 
-$oDOMDocument = new DOMDocument();		
-    
+$oDOMDocument = new DOMDocument();
+
 $sTextoXml    = file_get_contents($sArquivo);
 $oDOMDocument->loadXML($sTextoXml);
 $oDOMDocument->formatOutput = true;
-  
+
 $oDados = $oDOMDocument->getElementsByTagName('homologalict');
 
 /**
  * caso tenha passado um dos dois codigos para ser pesquisado
  */
 if ($_POST['codigo1'] || $_POST['codigo2']) {
-  
+
 	/**
 	 * percorrer dados do xml para passar para o objeto para ser adicionado ao array
 	 */
   foreach ($oDados as $oRow) {
-  	
+
   	/**
      * selecionando linha conforme o codigo passado
      */
@@ -43,26 +43,26 @@ if ($_POST['codigo1'] || $_POST['codigo2']) {
 			$oValores->dtHomologacao          = $oRow->getAttribute("dtHomologacao");
 			$oValores->dtAdjudicacao          = $oRow->getAttribute("dtAdjudicacao");
 			$aValores[] = $oValores;
-			
+
   	}
-  	
+
   }
-  
-} else {		
-  
+
+} else {
+
 	/**
 	 * percorrer os dados do xml para passar para o objeto e ser adicionado ao array
 	 */
   foreach ($oDados as $oRow) {
-  	
+
   	$oValores = new stdClass();
 		$oValores->codigo                 = $oRow->getAttribute("codigo");
 		$oValores->nroProcessoLicitatorio = $oRow->getAttribute("nroProcessoLicitatorio");
 		$oValores->dtHomologacao          = $oRow->getAttribute("dtHomologacao");
 		$oValores->dtAdjudicacao          = $oRow->getAttribute("dtAdjudicacao");
 		$aValores[] = $oValores;
-		
+
   }
-  
+
 }
 echo json_encode($aValores);

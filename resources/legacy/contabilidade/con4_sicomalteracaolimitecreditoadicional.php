@@ -8,10 +8,10 @@ include("dbforms/db_funcoes.php");
 
 $sSql  = "SELECT * FROM db_config ";
 $sSql .= "	WHERE prefeitura = 't'";
-    	
+
 $rsInst = db_query($sSql);
 $sCnpj  = db_utils::fieldsMemory($rsInst, 0)->cgc;
-$sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomalteracaolimitecreditoadicional.xml";
+$sArquivo = "legacy_config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomalteracaolimitecreditoadicional.xml";
 
 /*
  * inserir ou atualizar registro do xml
@@ -19,97 +19,97 @@ $sArquivo = "config/sicom/".db_getsession("DB_anousu")."/{$sCnpj}_sicomalteracao
 if (isset($_POST['btnSalvar'])) {
 
 	if (!file_exists($sArquivo)) {
-		
+
     $oDOMDocument = new DOMDocument('1.0','ISO-8859-1');
     $oRoot  = $oDOMDocument->createElement('alteracoeslimitescreditosadicionais');
-    
+
   }else{
-  	
+
   	$oDOMDocument = new DOMDocument();
   	$sTextoXml    = file_get_contents($sArquivo);
     $oDOMDocument->loadXML($sTextoXml);
     $oRoot  = $oDOMDocument->documentElement;
-    	
+
   }
-    
+
   $oDOMDocument->formatOutput = true;
-  
+
   $oDados      = $oDOMDocument->getElementsByTagName('alteracaolimitecreditoadicional');
-  
+
   /**
    * caso o codigo já exista no xml irá atualizar o registro
    */
-  
+
   foreach ($oDados as $oRow) {
-  	
+
   	$iUltimoCodigo = $oRow->getAttribute("codigo");
 		if ($oRow->getAttribute("codigo") == $_POST['codigo']) {
-			
+
 			$oDado = new stdClass();
 			$oDado = $oRow;
 			unset($_POST['btnSalvar']);
 			$oDado->setAttribute("instituicao", db_getsession("DB_instit"));
-			
+
   	  /**
   	   * passar os valores para o objeto para ser salvo no xml
   	   */
-			
+
 		  foreach ($_POST as $coll => $value) {
 			  $oDado->setAttribute($coll, $value);
 		  }
 		  $oDOMDocument->save($sArquivo);
-			if (filesize($sArquivo) > filesize("config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomalteracaolimitecreditoadicional.xml")/2) { 
-		    system("cp $sArquivo config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomalteracaolimitecreditoadicional.xml");
+			if (filesize($sArquivo) > filesize("legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomalteracaolimitecreditoadicional.xml")/2) {
+		    system("cp $sArquivo legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomalteracaolimitecreditoadicional.xml");
 		  }
 			echo"
 			<script LANGUAGE=\"Javascript\">
 			alert(\"Seu cadastro foi realizado com sucesso.\");
 			</SCRIPT>";
 			break;
-			
+
     }
-    
+
   }
   if (!$oDado) {
-  	 
+
   	unset($_POST['btnSalvar']);
-  	
+
   	$oDado  = $oDOMDocument->createElement('alteracaolimitecreditoadicional');
-  	
+
   	$oDado->setAttribute("instituicao", db_getsession("DB_instit"));
-  	
-  	 	
+
+
   	/**
   	 * passar os valores para o objeto para ser salvo no xml
   	 */
 	  foreach ($_POST as $coll => $value) {
 		  $oDado->setAttribute($coll, $value);
 	  }
-	  
+
 	  $iUltimoCodigo++;
-	  
+
 	  $oDado->setAttribute("codigo", $iUltimoCodigo);
-	  
+
 	  if (!file_exists($sArquivo)) {
-	  	
+
 	  	$oRoot->appendChild($oDado);
 	    $oDOMDocument->appendChild($oRoot);
-	    	
+
 	  } else {
 	  	$oDado = $oRoot->appendChild($oDado);
 	  }
-	  
+
 	  $oDOMDocument->save($sArquivo);
-  	if (filesize($sArquivo) > filesize("config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomalteracaolimitecreditoadicional.xml")/2) { 
-		  system("cp $sArquivo config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomalteracaolimitecreditoadicional.xml");
+  	if (filesize($sArquivo) > filesize("legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomalteracaolimitecreditoadicional.xml")/2) {
+		  system("cp $sArquivo legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomalteracaolimitecreditoadicional.xml");
 		}
 		echo"
 		<script LANGUAGE=\"Javascript\">
 		alert(\"Seu cadastro foi realizado com sucesso.\");
 		</SCRIPT>";
-		
+
   }
-  
+
 }
 
 /*
@@ -120,35 +120,35 @@ if (isset($_POST['btnExcluir'])) {
 	if (!file_exists($sArquivo)) {
     $oDOMDocument = new DOMDocument('1.0','ISO-8859-1');
   }else{
-  	$oDOMDocument = new DOMDocument();		
+  	$oDOMDocument = new DOMDocument();
   }
-    
+
  	$sTextoXml    = file_get_contents($sArquivo);
   $oDOMDocument->loadXML($sTextoXml);
   $oDOMDocument->formatOutput = true;
   $oDocument = $oDOMDocument->documentElement;
   $oDados      = $oDOMDocument->getElementsByTagName('alteracaolimitecreditoadicional');
-  
+
   /**
    * encontrar o codigo selecionado para excluir o registro no xml
    */
   foreach ($oDados as $oRow) {
-  	
+
 		if ($oRow->getAttribute("codigo") == $_POST['codigo']) {
-			
+
 		  $oDocument->removeChild($oRow);
 		  $oDOMDocument->save($sArquivo);
-		  system("cp $sArquivo config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomalteracaolimitecreditoadicional.xml");
+		  system("cp $sArquivo legacy_config/sicom/".db_getsession("DB_anousu")."/backup_{$sCnpj}_sicomalteracaolimitecreditoadicional.xml");
 			echo"
 			<script LANGUAGE=\"Javascript\">
 			alert(\"Registro removido com sucesso.\");
 			</SCRIPT>";
 			break;
-			
+
     }
-    
+
   }
-  
+
 }
 
 ?>

@@ -18,7 +18,7 @@
     factory(root);
   }
 } (this, function (exports) {
-  //Default config/variables
+  //Default legacy_config/variables
   var VERSION = '2.1.0';
 
   /**
