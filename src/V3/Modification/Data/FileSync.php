@@ -24,7 +24,9 @@ class FileSync extends Storage {
 
     $this->fileData = $fileData;
     $path = $fileData->getPrefix() . $fileData->getOriginalPath();
+    //string(37) "user/mhbc.contass/func_calendario.php" $path
     parent::__construct(ECIDADE_MODIFICATION_DATA_PATH . "file/sync/" . $path);
+    //string(99) "/var/www/e-cidade-teste/extension/modification/data/file/sync/user/mhbc.contass/func_calendario.php"
     $this->setSerialize(false);
   }
 
