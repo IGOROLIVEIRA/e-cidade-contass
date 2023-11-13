@@ -68,7 +68,7 @@ if (isset($incluir)) {
         //         $processoValidado  = false;
         //     }
         // }
-           
+
         if ($processoValidado) {
             $clprecoreferencia->incluir(null);
         }
@@ -96,7 +96,7 @@ if (isset($incluir)) {
                       where pc80_codproc = $si01_processocompra and pc23_vlrun != 0 group by pc23_orcamitem, pc11_seq order by pc11_seq asc";
 
         $rsResult = db_query($sSql);
-        
+
 
         $arrayValores = array();
         $cont = 0;
@@ -125,7 +125,7 @@ if (isset($incluir)) {
                 }
             }
         }
-        
+
 
         for ($iCont = 0; $iCont < $cont; $iCont++) {
             $valor = $arrayValores[$iCont];
@@ -141,7 +141,7 @@ if (isset($incluir)) {
 
                       $sSql = "select
                       pc23_orcamitem,
-                      round($sFuncao(pc23_vlrun), 4) as valor,
+                      round($sFuncao(pc23_vlrun), $si01_casasdecimais) as valor,
                       round($sFuncao(pc23_perctaxadesctabela), 2) as percreferencia1,
                       round($sFuncao(pc23_percentualdesconto), 2) as percreferencia2,
                       pc23_quant,
@@ -194,19 +194,19 @@ if (isset($incluir)) {
                       m61_codmatunid,
                       pc80_criterioadjudicacao order by pc11_seq asc
                      ";
-                    
 
-            $rsResultee = db_query($sSql); 
 
-            $oItemOrc = db_utils::fieldsMemory($rsResultee, 0); 
-            
+            $rsResultee = db_query($sSql);
+
+            $oItemOrc = db_utils::fieldsMemory($rsResultee, 0);
+
             $chars = array('ç', 'ã', 'â', 'à', 'á', 'é', 'è', 'ê', 'ó', 'ò', 'ô', 'ú', 'ù');
-            $byChars = array('Ç', 'Ã', 'Â', 'À', 'Á', 'É', 'È', 'Ê', 'Ó', 'Ò', 'Ô', 'Ú', 'Ù'); 
+            $byChars = array('Ç', 'Ã', 'Â', 'À', 'Á', 'É', 'È', 'Ê', 'Ó', 'Ò', 'Ô', 'Ú', 'Ù');
 
             if($oItemOrc->pc23_orcamitem!=""){
-                
+
                 $clitemprecoreferencia->si02_vlprecoreferencia = $oItemOrc->valor;
-                
+
                 $clitemprecoreferencia->si02_itemproccompra    = $oItemOrc->pc23_orcamitem;
                 $clitemprecoreferencia->si02_precoreferencia = $clprecoreferencia->si01_sequencial;
                 if ($oItemOrc->percreferencia1 == 0 && $oItemOrc->percreferencia2 == 0) {
@@ -218,7 +218,7 @@ if (isset($incluir)) {
                     $clitemprecoreferencia->si02_vlpercreferencia = $oItemOrc->percreferencia2;
                 }
                 $clitemprecoreferencia->si02_coditem = $oItemOrc->pc01_codmater;
-                
+
                 //$clitemprecoreferencia->si02_descritem = urldecode($oItemOrc->pc01_descrmater);
                 $clitemprecoreferencia->si02_qtditem = $oItemOrc->pc23_quant;
                 $clitemprecoreferencia->si02_codunidadeitem =  $oItemOrc->m61_codmatunid;
@@ -228,14 +228,14 @@ if (isset($incluir)) {
                 $clitemprecoreferencia->si02_criterioadjudicacao = $oItemOrc->pc80_criterioadjudicacao;
                 $clitemprecoreferencia->si02_mediapercentual = $oItemOrc->mediapercentual;
                 $clitemprecoreferencia->si02_vltotalprecoreferencia = str_replace(',','.',number_format($oItemOrc->valor*$oItemOrc->pc23_quant,2, ',', ''));
-                $clitemprecoreferencia->incluir(null);  
+                $clitemprecoreferencia->incluir(null);
             }
         }
 
-        
+
 
         if ($clitemprecoreferencia->erro_status == 0) {
-            
+
             $sqlerro = true;
             $clprecoreferencia->erro_msg    = $clitemprecoreferencia->erro_msg;
             $clprecoreferencia->erro_status = "0";
@@ -261,7 +261,7 @@ if (isset($incluir)) {
         $clprecoreferenciaacount->si233_acao =  'Incluir';
         $clprecoreferenciaacount->si233_idusuario = db_getsession("DB_id_usuario");
         $clprecoreferenciaacount->si233_datahr =  date("Y-m-d", db_getsession("DB_datausu"));
-        $clprecoreferenciaacount->incluir(null);  
+        $clprecoreferenciaacount->incluir(null);
     }
 
     db_fim_transacao($sqlerro);
@@ -303,7 +303,7 @@ if (isset($incluir)) {
             <td height="430" align="left" valign="top" bgcolor="#CCCCCC">
                 <center>
                     <?php
-                    include("forms/db_frmprecoreferencia.php"); 
+                    include("forms/db_frmprecoreferencia.php");
                     ?>
                 </center>
             </td>
@@ -316,7 +316,7 @@ if (isset($incluir)) {
 
 </html>
 <script>
-    js_tabulacaoforms("form1", "si01_processocompra", true, 1, "si01_processocompra", true); 
+    js_tabulacaoforms("form1", "si01_processocompra", true, 1, "si01_processocompra", true);
 </script>
 <?
 if (isset($incluir)) {
@@ -328,7 +328,7 @@ if (isset($incluir)) {
             echo "<script> document.form1." . $clprecoreferencia->erro_campo . ".style.backgroundColor='#99A9AE';</script>";
             echo "<script> document.form1." . $clprecoreferencia->erro_campo . ".focus();</script>";
             echo "<script> document.getElementById('respCotacaocodigo').value=$respCotacaocodigoV;</script>  ";
-            echo "<script> 
+            echo "<script>
             document.getElementById('respOrcacodigo').value=$respOrcacodigoV;
             </script>  ";
             echo "<script> document.getElementById('respCotacaonome').value='$respCotacaonomeV';</script>  ";
@@ -337,7 +337,7 @@ if (isset($incluir)) {
     } else {
         $clprecoreferencia->erro(true, true);
         echo "<script> document.getElementById('respCotacaocodigo').value=$respCotacaocodigoV;</script>  ";
-        echo "<script> 
+        echo "<script>
         document.getElementById('respOrcacodigo').value=$respOrcacodigoV;
         </script>  ";
         echo "<script> document.getElementById('respCotacaonome').value='$respCotacaonomeV';</script>  ";

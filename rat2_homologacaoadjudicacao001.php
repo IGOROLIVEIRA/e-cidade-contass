@@ -40,7 +40,7 @@ $clrotulo->label("l20_codigo");
 <html>
 <head>
     <title>DBSeller Inform&aacute;tica Ltda - P&aacute;gina Inicial</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">  
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
     <meta http-equiv="Expires" CONTENT="0">
     <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 
@@ -49,12 +49,13 @@ $clrotulo->label("l20_codigo");
             var gerar = document.getElementById("gerar").value;
             var imprimir = document.getElementById("tipoImprimir").value;
             var nome = "";
-        
+
             if(gerar==1){
                 var ilicita = document.getElementById("l202_licitacao").value;
                 var data = document.getElementById("dataHom").value;
                 var sequencial = document.getElementById("sequencial").value;
                 var valor = "";
+
                 if(imprimir==1){
                     jan = window.open('lic1_homologacaoadjudica004.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&sequencial='+sequencial+'&data='+data+'&valor='+valor+'&quant_casas=2&tipoprecoreferencia=',
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
@@ -65,25 +66,21 @@ $clrotulo->label("l20_codigo");
 	                jan.moveTo(0,0);
                 }
             }else if(gerar==2){
-
                 var ilicita = document.getElementById("l202_licitacao1").value;
                 var data = document.getElementById("dataAdju").value;
-                
+
                 if(imprimir==1){
                     jan = window.open('lic1_adjudicacaolicitacao004.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&data='+data+'&quant_casas=2&tipoprecoreferencia=',
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+                     jan.moveTo(0,0);
                 }
+
                 if(imprimir==2){
                     jan = window.open('lic1_adjudicacaolicitacao005.php?impjust=$impjustificativa&codigo_preco='+ilicita+'&nome='+nome+'&quant_casas=2&tipoprecoreferencia=',
                      'width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
 	                jan.moveTo(0,0);
                 }
             }
-            /*
-            jan = window.open('rat2_ratificacaoprocnovo002.php?l20_codigo='+document.form1.l20_codigo.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-            jan.moveTo(0,0);
-            document.form1.l20_codigo.value=''; */
-
         }
     </script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
@@ -97,7 +94,7 @@ $clrotulo->label("l20_codigo");
         <td width="140">&nbsp;</td>
     </tr>
 </table>
- 
+
 <fieldset style="width: 300px;margin:auto;margin-top:30px;">
         <legend><b>Relatório de Homologação e Adjudicação</b></legend>
 <table  align="center">
@@ -115,7 +112,7 @@ $clrotulo->label("l20_codigo");
             </td>
 
             <td align="left" nowrap>
-                <? 
+                <?
                 $aValores1 = array(
                     0 => 'Selecione',
                     1 => 'Homologação',
@@ -123,15 +120,15 @@ $clrotulo->label("l20_codigo");
                 );
                 db_select('gerar', $aValores1, true, $db_opcao,"onchange='js_liberar_Ancora()';");
                 ?>
-                
+
                 </td>
-                
+
         </tr>
         <tr id="homolo" style="display: none;">
             <td  align="left" nowrap title="<?=$Tl20_codigo?>">
                 <b>
                     <?db_ancora("Licitação","js_pesquisal202_licitacao(true);",$db_opcao);?>&nbsp;:
-                    
+
                 </b>
             </td>
 
@@ -164,19 +161,19 @@ $clrotulo->label("l20_codigo");
             </td>
 
             <td align="left" nowrap>
-                <? 
+                <?
                 $aValores = array(
-                
+
                     1 => 'PDF',
                     2 => 'WORD',
                 );
                 db_select('tipoImprimir', $aValores, true, $db_opcao,"");
                 ?>
-                
+
                 </td>
-                
+
         </tr>
-        
+
         <tr>
             <td >&nbsp;</td>
             <td >&nbsp;</td>
@@ -188,7 +185,7 @@ $clrotulo->label("l20_codigo");
         </tr>
 
     </form>
-    
+
 </table>
 </fieldset>
 <?
@@ -203,18 +200,18 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         var op = document.getElementById("gerar").value;
         if(op==1){
             document.getElementById("homolo").style.display = "table-row";
-            document.getElementById("adjudi").style.display = "none"; 
+            document.getElementById("adjudi").style.display = "none";
         }
         if(op==2){
             document.getElementById("adjudi").style.display = "table-row";
-            document.getElementById("homolo").style.display = "none"; 
+            document.getElementById("homolo").style.display = "none";
         }
     }
 
-    function js_pesquisal202_licitacao(mostra){ 
-        let opcao = "<?= $db_opcao?>";    
+    function js_pesquisal202_licitacao(mostra){
+        let opcao = "<?= $db_opcao?>";
         var situacao = 10;
-        var homologacao = 0; 
+        var homologacao = 0;
         if(mostra==true){
             js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_lichomologa.php?situacao='+situacao+
                 '&funcao_js=parent.js_mostraliclicita3|l20_codigo|l20_objeto|l20_numero|l202_datahomologacao|l202_sequencial&validafornecedor=0&relatorio=1&homologacao=0'+homologacao,'Pesquisa',true);
@@ -239,13 +236,13 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
                         document.getElementById("sequencial").value = chave5;
                     db_iframe_liclicita.hide();
 
-        }    
+        }
 
         function js_pesquisal202_licitacao1(mostra){
-        
+
                 var situacao = 0;
                 var adjudicacao = 3;
-            
+
                 if(mostra==true){
                     js_OpenJanelaIframe('top.corpo','db_iframe_liclicita','func_licadjudica.php?situacao='+situacao+
                         '&funcao_js=parent.js_mostraliclicita1|l20_codigo|l20_objeto|l20_numero|l202_dataadjudicacao&validafornecedor=0&adjudicacao='+adjudicacao,'Pesquisa',true);
@@ -272,13 +269,13 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
     }
     function js_mostraliclicita1(chave1,chave2,chave3,chave4){
         iLicitacao = chave1;
-        document.form1.l202_licitacao1.value = chave1;       
-       
+        document.form1.l202_licitacao1.value = chave1;
+
             aData = chave4.split('-');
             let dataAdju =  aData[2]+'/'+aData[1]+'/'+aData[0];
             //document.form1.dataAdju.value = dataAdju;
             document.getElementById("dataAdju").value = dataAdju;
-        
+
         db_iframe_liclicita.hide();
 
     }
@@ -297,10 +294,10 @@ db_menu(db_getsession("DB_id_usuario"),db_getsession("DB_modulo"),db_getsession(
         );
     }
 
-    function js_retornoGetResponsavel(oAjax) { 
+    function js_retornoGetResponsavel(oAjax) {
         alert("teste");
         //js_removeObj('msgBox');
-        
+
 
         var oRetornoitens = JSON.parse(oAjax.responseText);
         oRetornoitens.itens.each(function(oLinha, iLinha) {

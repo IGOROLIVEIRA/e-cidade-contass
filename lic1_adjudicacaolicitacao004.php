@@ -146,14 +146,13 @@
 
     $head3 = "Adjudicação";
     $head5 = "Sequencial: $codigo_preco";
-    $head8 = "Data: " . $data;
+    $head8 = "Data: " . date('d/m/Y');
 
     $mPDF = new Relatorio('', 'A4', 0, "", 7, 7, 50);
 
     $mPDF
         ->addInfo($head3, 2)
-        ->addInfo($head5, 4)
-        ->addInfo($head8, 7);
+        ->addInfo($head5, 4);
 
 
     ob_start();
@@ -466,7 +465,7 @@
           <div class="td col-item align-center">
             {$oDadosDaLinha->item}
           </div>
-          
+
           <div class="td col-descricao_item align-justify">
             {$oDadosDaLinha->descricao}
           </div>
@@ -482,8 +481,8 @@
           <div class="td col-valor_un align-right">
              {$oDadosDaLinha->valorUnitario}
           </div>
-          
-          
+
+
           <div class="td col-total align-right">
             R$ {$oDadosDaLinha->total}
           </div>
@@ -596,12 +595,8 @@ HTML;
             $dadosAssinatura = explode('\n', $sAssinaturaCotacao);
             $sCotacao = '';
 
-            //if (count($dadosAssinatura) > 1) {
             $sCotacao = '<div class="linha-vertical">';
-            //for ($count = 0; $count < count($dadosAssinatura); $count++) {
             $sCotacao .= "<strong>" . strtoupper($nome) . "</strong>";
-            //$sCotacao .= $count ? '' : "<br/>";
-            //}
             $sCotacao .= "</div>";
             echo <<<HTML
             $sCotacao
