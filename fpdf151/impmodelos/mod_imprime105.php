@@ -292,6 +292,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 $nTotalItens += $oResult->si02_vltotalprecoreferencia;
             }
             if (($this->objpdf->gety() > $this->objpdf->h - 20) || $this->objpdf->gety() + $addalt > $this->objpdf->h) {
+
                 $this->objpdf->Line(4, $this->objpdf->gety(), 287, $this->objpdf->gety());
                 $this->objpdf->Setfont('Arial', '', 5);
                 $this->objpdf->cell(285, $alt, "Base: " . db_getsession("DB_base"), "T", 1, "L", 1);
@@ -384,6 +385,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                 $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual, 1, 0, "C", 1);
                 $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->total, 1, 1, "C", 1);
             } else {
+
                 $descricao = '';
                 $linhas = ceil(strlen($oDadosDaLinha->descricao) / 115);
                 $addalt = $linhas * 4;
@@ -521,7 +523,8 @@ if (pg_num_rows($this->rsLotes) > 0) {
             $y = ($iContadorLinhasCriterios * 4) + $this->objpdf->gety();
             $addalt = $y;
             $x = 1;
-            if (($this->objpdf->gety() > $this->objpdf->h - 20) || ($y >  $this->objpdf->h - 20)) {
+            if (($this->objpdf->gety() > $this->objpdf->h - 20) || ($y >  $this->objpdf->h - 50)) {
+
                 if ($y >  $this->objpdf->h - 20) {
                     for ($x == 1; $iContadorLinhasCriterios > $x; $x++) {
                         if (($x * 4 + $this->objpdf->gety()) > $this->objpdf->h - 20) {
@@ -574,6 +577,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                         $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->total, 1, 1, "C", 1);
                     }
                 }
+
                 $this->objpdf->Line(4, $this->objpdf->gety(), 287, $this->objpdf->gety());
                 $this->objpdf->Setfont('Arial', '', 5);
                 $this->objpdf->cell(285, $alt, $x . "Base: " . db_getsession("DB_base"), "T", 1, "L", 1);
@@ -697,7 +701,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                         }
 
                         if (($this->objpdf->gety() > $this->objpdf->h - 20)) {
-
+                            var_dump("700");
                             $this->objpdf->Line(4, $this->objpdf->gety(), 287, $this->objpdf->gety());
                             $this->objpdf->Setfont('Arial', '', 5);
                             $this->objpdf->cell(285, $alt, $x . "Base: " . db_getsession("DB_base"), "T", 1, "L", 1);
@@ -815,6 +819,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
         }
     }
     if (($this->objpdf->gety() > $this->objpdf->h - 20)) {
+        var_dump("linha 818");
         $this->objpdf->Line(4, $this->objpdf->gety(), 287, $this->objpdf->gety());
         $this->objpdf->Setfont('Arial', '', 5);
         $this->objpdf->cell(285, $alt, "Base: " . db_getsession("DB_base"), "T", 1, "L", 1);
@@ -886,6 +891,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
 
 if (($this->objpdf->gety() > $this->objpdf->h - 20) || $this->objpdf->gety() + $addalt > $this->objpdf->h)
 {
+    var_dump("passou aqui");
     $this->objpdf->Line(4, $this->objpdf->gety(), 287, $this->objpdf->gety());
     $this->objpdf->Setfont('Arial', '', 5);
     $this->objpdf->cell(285, $alt, "Base: " . db_getsession("DB_base"), "T", 1, "L", 1);
@@ -992,7 +998,7 @@ $this->objpdf->cell(285, $alt, $nomeResponsavel->z01_nome, 0, 1, "C", 1);
 if($this->sAssinaturaCotacao){
     $this->objpdf->sety($this->objpdf->gety()+10);
     $this->objpdf->Line(220, $this->objpdf->gety(), 80, $this->objpdf->gety());
-    $this->sAssinaturaCotacao = $this->sAssinaturaCotacao;
+
 }
 
 $this->objpdf->cell(285, $alt, $this->sAssinaturaCotacao, 0, 0, "C", 1);
