@@ -97,8 +97,6 @@ class ImportacaoReceita
     public function importarReceitas($aArquivoImportar)
     {
         foreach ($aArquivoImportar as $iPosicao => $sLinha) {
-            var_dump($sLinha);
-            die();
             $oReceitaOrcamentaria = $this->preencherLayoutReceitaOrcamentaria($this->iLayout, $sLinha);
             $oReceitaExtraOrcamentaria = $this->preencherLayoutReceitaExtraOrcamentaria($this->iLayout, $sLinha);
 
