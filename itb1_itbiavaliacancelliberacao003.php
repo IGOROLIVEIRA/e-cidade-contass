@@ -216,16 +216,6 @@ SQL;
     }
   }
 
-  $oInstituicao = new Instituicao(db_getsession('DB_instit'));
-  if ($oInstituicao->getUsaDebitosItbi() === true && $lSqlErro === false) {
-      $oItbi = new Itbi($it01_guia);
-      try {
-          $oItbi->removeArrecad();
-      } catch (Exception $ex) {
-          $lSqlErro = true;
-          $sMsgErro = $ex->getMessage();
-      }
-  }
   db_fim_transacao($lSqlErro);
 
   $it01_guia = "";
