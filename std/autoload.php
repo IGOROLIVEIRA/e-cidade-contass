@@ -8,7 +8,7 @@ spl_autoload_register(function ($class_name) {
     );
 
     foreach ($all_files as $file) {
-        if (is_file($file)) {
+        if (is_file($file) && strpos($file, $class_name . '.php') !== false) {
             require_once $file;
         }
     }
