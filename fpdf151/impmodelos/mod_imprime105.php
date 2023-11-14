@@ -992,6 +992,7 @@ $this->objpdf->cell(285, $alt, $nomeResponsavel->z01_nome, 0, 1, "C", 1);
 if($this->sAssinaturaCotacao){
     $this->objpdf->sety($this->objpdf->gety()+10);
     $this->objpdf->Line(220, $this->objpdf->gety(), 80, $this->objpdf->gety());
+    $this->sAssinaturaCotacao = $this->sAssinaturaCotacao;
 }
 
 $this->objpdf->cell(285, $alt, $this->sAssinaturaCotacao, 0, 0, "C", 1);
