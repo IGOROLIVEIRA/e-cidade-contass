@@ -523,7 +523,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
             $y = ($iContadorLinhasCriterios * 4) + $this->objpdf->gety();
             $addalt = $y;
             $x = 1;
-            if (($this->objpdf->gety() > $this->objpdf->h - 20) || ($y >  $this->objpdf->h - 50)) {
+            if (($this->objpdf->gety() > $this->objpdf->h - 20) || ($y >  $this->objpdf->h - 40)) {
 
                 if ($y >  $this->objpdf->h - 20) {
                     for ($x == 1; $iContadorLinhasCriterios > $x; $x++) {
