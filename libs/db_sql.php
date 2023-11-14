@@ -249,15 +249,21 @@ function debitos_matricula($matricula, $limite, $tipo, $datausu, $anousu, $total
                         from ( " . $sql . " ) y
                         group by $totaliza";
 
-        $sql .= " order by $totaliza";
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
         }
+        if ($totalizaordem === "") {
+            $sql .= " order by $totaliza";
+        }
+
     } else {
-        $sql .= " order by k00_numpre,k00_numpar, k00_receit";
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
         }
+        if ($totalizaordem === "") {
+            $sql .= " order by k00_numpre,k00_numpar, k00_receit";
+        }
+
     }
 
     $result = db_query($sql) or die("<br><br><blink><font color=red>VERIFIQUE INFLATORES!!!<br></blink><font color=black> <br> $sql");
@@ -407,14 +413,19 @@ function debitos_inscricao($inscricao, $limite, $tipo, $datausu, $anousu, $total
                         group by $totaliza";
 
 
-        $sql .= " order by $totaliza";
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
         }
+        if ($totalizaordem === "") {
+            $sql .= " order by $totaliza";
+        }
     } else {
-        $sql .= " order by k00_numpre,k00_numpar,k00_receit";
+
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
+        }
+        if ($totalizaordem === "") {
+            $sql .= " order by k00_numpre,k00_numpar,k00_receit";
         }
     }
     $result = db_query($sql) or die("<br><br><blink><font color=red>VERIFIQUE INFLATORES!!!<br></blink><font color=black> <br> $sql");
@@ -564,14 +575,19 @@ function debitos_inscricao_retido($inscricao, $limite, $tipo, $datausu, $anousu,
                         from ( " . $sql . " ) y
                         group by $totaliza";
 
-        $sql .= " order by $totaliza";
+
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
         }
+        if ($totalizaordem === "") {
+            $sql .= " order by $totaliza";
+        }
     } else {
-        $sql .= " order by k00_numpre,k00_numpar,k00_receit";
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
+        }
+        if ($totalizaordem === "") {
+            $sql .= " order by k00_numpre,k00_numpar,k00_receit";
         }
     }
 
@@ -695,14 +711,18 @@ function debitos_numpre_old($numpre, $limite, $tipo, $datausu, $anousu, $numpar 
                         from ( " . $sql . " ) y
                         group by $totaliza";
         
-        $sql .= " order by $totaliza";
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
         }
+        if ($totalizaordem === "") {
+            $sql .= " order by $totaliza";
+        }
     } else {
-        $sql .= " order by k00_numpre,k00_numpar";
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
+        }
+        if ($totalizaordem === "") {
+            $sql .= " order by k00_numpre,k00_numpar,k00_receit";
         }
     }
     $result = db_query($sql) or die("<br><br><blink><font color=red>VERIFIQUE INFLATORES!!!<br></blink><font color=black> <br> $sql");
@@ -858,18 +878,20 @@ function debitos_numpre($numpre, $limite, $tipo, $datausu, $anousu, $numpar = 0,
                         from ( " . $sql . " ) y
                         group by $totaliza";
 
-        $sql .= " order by $totaliza";
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
+        }
+        if ($totalizaordem === "") {
+            $sql .= " order by $totaliza";
         }
     } else {
-        $sql .= " order by k00_numpre,k00_numpar,k00_receit";
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
         }
+        if ($totalizaordem === "") {
+            $sql .= " order by k00_numpre,k00_numpar,k00_receit";
+        }
     }
-
-
 
     $result = db_query($sql) or die("<br><br><blink><font color=red>VERIFIQUE INFLATORES!!!<br></blink><font color=black> <br> $sql");
     if ($limite == 0) {
@@ -1213,14 +1235,18 @@ function debitos_numcgm($numcgm, $limite, $tipo, $datausu, $anousu, $totaliza = 
               from ( " . $sql . " ) y
           group by $totaliza";
 
-          $sql .= " order by $totaliza";
-          if ($totalizaordem != "") {
-            $sql .= " order by $totalizaordem";
-        }
-    } else {
-        $sql .= " order by k00_numpre,k00_numpar,k00_receit";
         if ($totalizaordem != "") {
             $sql .= " order by $totalizaordem";
+        }
+        if ($totalizaordem === "") {
+            $sql .= " order by $totaliza";
+        }
+    } else {
+        if ($totalizaordem != "") {
+            $sql .= " order by $totalizaordem";
+        }
+        if ($totalizaordem === "") {
+            $sql .= " order by k00_numpre,k00_numpar,k00_receit";
         }
     }
 
