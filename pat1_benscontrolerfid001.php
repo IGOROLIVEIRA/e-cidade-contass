@@ -177,6 +177,10 @@ var oAjax = new Ajax.Request(
         return false;
       }
 
+      if(oRetorno.statusbens == 'f'){
+          return;
+      }
+
       if(oRetorno.statusbens == 'placarepetida'){
           alert(_M('patrimonial.patrimonio.db_frm_bensnovo.bem_placarep'));
           window.location.href = "pat1_benscontrolerfid001.php"; 

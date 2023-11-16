@@ -53,7 +53,10 @@ class cl_liclicitaportalcompras
         null as exigegarantia,
         4 as casasdecimais,
         4 as casasdecimaisquantidade,
-        3 as legislacaoaplicavel,
+        case when
+                l20_leidalicitacao = 1 then 3
+                else 1
+        end as legislacaoaplicavel,
         l20_mododisputa as tratamentofaselance,
         case when
                 l20_criterioadjudicacao = 3 then 1

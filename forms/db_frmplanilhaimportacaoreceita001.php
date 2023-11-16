@@ -37,9 +37,9 @@
                     <?php
                     $aLayout = array(
                         0 => 'Selecione',
-                        2 => 'SAAE - Layout 2',
+                        2 => 'BDA - Layout 2',
                     );
-
+                    $layout = 2;
                     db_select("layout", $aLayout, true, $db_opcao, "");
                     ?>
                 </td>
@@ -49,6 +49,11 @@
                 <td nowrap><b>Arquivo:</b></td>
                 <td><?php db_input("arquivo", 29, $Iarqret, true, "file", 4) ?></td>
             </tr>
+            
+            <tr>
+                <td nowrap colspan="2"><b>Antes de realizar a importação confira se a data do arquivo é a mesma data do sistema!</b></td>
+            </tr>
+
         </table>
     </fieldset>
     <center>

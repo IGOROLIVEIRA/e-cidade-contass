@@ -632,10 +632,10 @@ abstract class Licitacao implements \JsonSerializable
     /**
      * Set the value of exclusivoMPE
      */
-    public function setExclusivoMPE(?string $exclusivoMPE): self
+    public function setExclusivoMPE(?int $exclusivoMPE): self
     {
         $this->exclusivoMPE = false;
-        if ($exclusivoMPE == 't') {
+        if ($exclusivoMPE === 1) {
             $this->exclusivoMPE = true;
         }
 
