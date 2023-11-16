@@ -28,6 +28,29 @@ function definicaoValorUnitarioePercentual($pc80_criterioadjudicacao,$si02_tabel
     }
 }
 
+function preencherCelulas($objpdf, $oDadosDaLinha, $iContadorLinhasCriterios, $alt)
+{
+    $descricao = '';
+    $linhas = ceil(strlen($oDadosDaLinha->descricao) / 115);
+
+    $old_y = $objpdf->gety();
+
+    $addalt =  $iContadorLinhasCriterios * 4;
+
+
+    $objpdf->setfont('arial', '', 7);
+    $objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
+    $objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
+    $objpdf->multicell(180, $alt, mb_strtoupper(str_replace("\n", "", $oDadosDaLinha->descricao)), "T", "J", 0);
+
+    $objpdf->sety($old_y);
+    $objpdf->setx(214);
+    $objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
+    $objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
+    $objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
+    $objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->total, 1, 1, "C", 1);
+}
+
 $dist = 4;
 
 $this->objpdf->SetAutoPageBreak(false);
@@ -471,6 +494,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
         $controle = 0;
 
         while ($controle != $fazerloop) {
+            $quebraPagina = false;
             $oDadosDaLinha->seq = $sqencia + 1;
             $oDadosDaLinha->item = $oResult->si02_coditem;
             if ($controle == 1) {
@@ -523,8 +547,8 @@ if (pg_num_rows($this->rsLotes) > 0) {
             $y = ($iContadorLinhasCriterios * 4) + $this->objpdf->gety();
             $addalt = $y;
             $x = 1;
-            if (($this->objpdf->gety() > $this->objpdf->h - 20) || ($y >  $this->objpdf->h - 40)) {
-
+            $quebraPagina = true;
+            if (($this->objpdf->gety() > $this->objpdf->h - 20) || ($y >  $this->objpdf->h - 20) || ($sqencia  == 17)) {
                 if ($y >  $this->objpdf->h - 20) {
                     for ($x == 1; $iContadorLinhasCriterios > $x; $x++) {
                         if (($x * 4 + $this->objpdf->gety()) > $this->objpdf->h - 20) {
@@ -701,7 +725,6 @@ if (pg_num_rows($this->rsLotes) > 0) {
                         }
 
                         if (($this->objpdf->gety() > $this->objpdf->h - 20)) {
-                            var_dump("700");
                             $this->objpdf->Line(4, $this->objpdf->gety(), 287, $this->objpdf->gety());
                             $this->objpdf->Setfont('Arial', '', 5);
                             $this->objpdf->cell(285, $alt, $x . "Base: " . db_getsession("DB_base"), "T", 1, "L", 1);
@@ -770,6 +793,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                             $alt = 4;
                         }
                 }
+                preencherCelulas($this->objpdf, $oDadosDaLinha, $iContadorLinhasCriterios, $alt);
             } else {
 
                 if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {
@@ -795,31 +819,13 @@ if (pg_num_rows($this->rsLotes) > 0) {
                     $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->mediapercentual, 1, 0, "C", 1);
                     $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->total, 1, 1, "C", 1);
                 } else {
-
-                    $descricao = '';
-                    $linhas = ceil(strlen($oDadosDaLinha->descricao) / 115);
-
-                    $old_y = $this->objpdf->gety();
-
-
-                    $addalt =  $iContadorLinhasCriterios * 4;
-                    $this->objpdf->setfont('arial', '', 7);
-                    $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->seq, 1, 0, "C", 1);
-                    $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->item, 1, 0, "C", 1);
-                    $this->objpdf->multicell(180, $alt, mb_strtoupper(str_replace("\n", "", $oDadosDaLinha->descricao)), "T", "J", 0);
-
-                    $this->objpdf->sety($old_y);
-                    $this->objpdf->setx(214);
-                    $this->objpdf->cell(15, $alt + $addalt, $oDadosDaLinha->unidadeDeMedida, 1, 0, "C", 1);
-                    $this->objpdf->cell(20, $alt + $addalt, $oDadosDaLinha->quantidade, 1, 0, "C", 1);
-                    $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->valorUnitario, 1, 0, "C", 1);
-                    $this->objpdf->cell(20, $alt + $addalt, "R$ " . $oDadosDaLinha->total, 1, 1, "C", 1);
+                    preencherCelulas($this->objpdf, $oDadosDaLinha, $iContadorLinhasCriterios, $alt);
                 }
             }
         }
     }
+
     if (($this->objpdf->gety() > $this->objpdf->h - 20)) {
-        var_dump("linha 818");
         $this->objpdf->Line(4, $this->objpdf->gety(), 287, $this->objpdf->gety());
         $this->objpdf->Setfont('Arial', '', 5);
         $this->objpdf->cell(285, $alt, "Base: " . db_getsession("DB_base"), "T", 1, "L", 1);
@@ -891,7 +897,6 @@ if (pg_num_rows($this->rsLotes) > 0) {
 
 if (($this->objpdf->gety() > $this->objpdf->h - 20) || $this->objpdf->gety() + $addalt > $this->objpdf->h)
 {
-    var_dump("passou aqui");
     $this->objpdf->Line(4, $this->objpdf->gety(), 287, $this->objpdf->gety());
     $this->objpdf->Setfont('Arial', '', 5);
     $this->objpdf->cell(285, $alt, "Base: " . db_getsession("DB_base"), "T", 1, "L", 1);
