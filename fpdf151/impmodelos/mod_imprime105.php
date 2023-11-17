@@ -547,12 +547,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
             $y = ($iContadorLinhasCriterios * 4) + $this->objpdf->gety();
             $addalt = $y;
             $x = 1;
-            //if (($this->objpdf->gety() > $this->objpdf->h - 20) || ($y >  $this->objpdf->h - 20) || (($sqencia  % 17) === 0)) {
-                // var_dump($this->objpdf->gety());
-                // var_dump("****");
-                // var_dump($y,  $this->objpdf->h);
-                // var_dump("****");
-
+          
             if (($this->objpdf->gety() > $this->objpdf->h - 10) || ($y >  $this->objpdf->h - 10)) {
                 if ($y >  $this->objpdf->h - 20) {
                     for ($x == 1; $iContadorLinhasCriterios > $x; $x++) {
