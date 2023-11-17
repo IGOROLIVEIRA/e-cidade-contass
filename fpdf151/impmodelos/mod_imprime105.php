@@ -547,7 +547,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
             $y = ($iContadorLinhasCriterios * 4) + $this->objpdf->gety();
             $addalt = $y;
             $x = 1;
-          
+
             if (($this->objpdf->gety() > $this->objpdf->h - 10) || ($y >  $this->objpdf->h - 10)) {
                 if ($y >  $this->objpdf->h - 20) {
                     for ($x == 1; $iContadorLinhasCriterios > $x; $x++) {
@@ -789,7 +789,7 @@ if (pg_num_rows($this->rsLotes) > 0) {
                             $alt = 4;
                         }
                 }
-                //preencherCelulas($this->objpdf, $oDadosDaLinha, $iContadorLinhasCriterios, $alt);
+
             } else {
 
                 if ($this->pc80_criterioadjudicacao == 2 || $this->pc80_criterioadjudicacao == 1) {
