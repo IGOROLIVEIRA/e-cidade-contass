@@ -89,7 +89,7 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -167,7 +167,7 @@ if($impforne == "true" && $impproc == "true" && $impaco=="true" && $impvlrunit =
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -252,7 +252,7 @@ if($impforne == "true" && $impproc == "true" && $impaco==null && $impvlrunit == 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -331,7 +331,7 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -412,7 +412,7 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -483,7 +483,7 @@ if($impforne == "true" && $impproc == "true" && $impaco == null && $impvlrunit =
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -556,7 +556,7 @@ if($impforne == "true" && $impproc == "true" && $impaco == "true" && $impvlrunit
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -633,7 +633,7 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -710,7 +710,7 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -785,7 +785,7 @@ if($impforne == false && $impproc == false && $impaco == false && $impvlrunit ==
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -857,7 +857,7 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -929,7 +929,7 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -1006,7 +1006,7 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -1085,7 +1085,7 @@ if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == nu
                 (SELECT DISTINCT pc01_codmater AS codigo,
                                  CASE
                                      WHEN pc01_descrmater = NULL
-                                          OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                                          OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                                      ELSE pc01_descrmater||'. '||pc01_complmater
                                  END AS descricao,
                                  pc11_quant AS quantidade
@@ -1131,19 +1131,25 @@ if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == nu
 
         db_fieldsmemory($result,$i);
 
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(235, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 1, "C",0);
+        $pdf->setfont('arial', '', 7);
+        $linhas = ceil(strlen($descricao));
+        $addalt = $linhas * 4;
+        $old_y = $pdf->gety();
+
+        $pdf->cell(14, $alt + $addalt, substr($codigo,0,164), 1, 0, "C",0);
+        $pdf->multicell(235, $alt, mb_strtoupper($descricao), "T", "J", 0);
+        $pdf->sety($old_y);
+        $pdf->setx(259);
+        $pdf->cell(15, $alt + $addalt, $quantidade, 1, 1, "C",0);
     }
 }
-
+//exit;
 if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit == false){
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -1216,7 +1222,7 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
                     WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_descrmater THEN pc01_descrmater
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
                     ELSE pc01_descrmater||'. '||pc01_complmater
                 END AS descricao,
                 pc11_quant AS quantidade,
@@ -1281,4 +1287,5 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
         $pdf->cell(30, $alt, $licitacao, 1, 1, "C",0);
     }
 }
+
 $pdf->Output();
