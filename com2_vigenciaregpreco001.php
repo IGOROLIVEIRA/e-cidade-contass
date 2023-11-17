@@ -127,19 +127,35 @@ $db_opcao = 1;
 
     function js_emite(){
 
-        obj = document.form1;
+        form = document.form1;
 
-        if(obj.anousu.value == "" && (obj.periodoInicio.value === "" || obj.periodoFim.value === "")) {
-         alert("Administrador: \n \ncampo Ano deve ser informado \n \n ou campo periodo inicio e fim deve ser informado");
+        if (form.anousu.value == ""
+            && (document.getElementById('linha_periodo').style.display === 'none'
+            || document.getElementById('linha_ano').style.display !== "none" )) {
+         alert("Administrador: \n \ncampo Ano deve ser informado");
          exit;
         }
 
-        if (obj.anousu.value !== "") {
-            query="&anousu="+obj.anousu.value;
+        if (form.periodoInicio.value === ""
+            && document.getElementById('linha_ano').style.display === 'none'
+            || document.getElementById('linha_periodo').style.display !== 'none') {
+            alert("Administrador: \n \ncampo Período Inicio deve ser informado");
+            exit;
         }
 
-        if (obj.periodoInicio.value !== "" && obj.periodoFim.value !== "") {
-            query="&periodoInicio="+obj.periodoInicio.value+"&periodoFim="+obj.periodoFim.value;
+        if (form.periodoFim.value === ""
+            && document.getElementById('linha_ano').style.display === "none"
+            || document.getElementById('linha_periodo').style.display !== 'none') {
+            alert("Administrador: \n \ncampo Período Fim deve ser informado");
+            exit;
+        }
+
+        if (form.anousu.value !== "") {
+            query="&anousu="+form.anousu.value;
+        }
+
+        if (form.periodoInicio.value !== "" && form.periodoFim.value !== "") {
+            query="&periodoInicio="+form.periodoInicio.value+"&periodoFim="+form.periodoFim.value;
         }
 
         jan = window.open('com2_vigenciaregpreco002.php?'+query,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');

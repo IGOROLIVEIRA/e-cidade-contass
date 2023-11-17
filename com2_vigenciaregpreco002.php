@@ -97,6 +97,7 @@ $sql = "SELECT DISTINCT l20_numero || '/' || l20_anousu AS licitacao,
                         to_char(pc54_datainicio,'dd / mm / yyyy') AS inicio,
                         to_char(pc54_datatermino,'dd / mm / yyyy') AS fim,
                         pc54_datatermino,
+                        l20_edital || '/' || l20_anousu AS processoLicitatorio,
                         l20_codigo
         FROM liclicitem
         INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
@@ -113,17 +114,17 @@ $sql = "SELECT DISTINCT l20_numero || '/' || l20_anousu AS licitacao,
         INNER JOIN liccomissao ON liccomissao.l30_codigo = liclicita.l20_liccomissao
         LEFT JOIN solicitatipo ON solicitatipo.pc12_numero = solicitem.pc11_numero
         LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = solicitatipo.pc12_tipo
-        WHERE 1=1";
+        WHERE 1=1 ";
 
         if (!empty($anousu)) {
-           $sql .= "AND date_part ('year',pc54_datatermino) = $anousu ";
+           $sql .= " AND date_part ('year',pc54_datatermino) = $anousu ";
         }
 
         if (!empty($periodoInicio) && !empty($periodoFim)) {
             $periodoInicio =  DateTimeImmutable::createFromFormat('d/m/Y', $periodoInicio);
             $periodoFim =  DateTimeImmutable::createFromFormat('d/m/Y', $periodoFim);
 
-            $sql .= "AND pc54_datatermino between '{$periodoInicio->format('Y-m-d')}' and '{$periodoFim->format('Y-m-d')}' ";
+            $sql .= "AND pc54_datainicio >= '{$periodoInicio->format('Y-m-d')}' AND pc54_datatermino <= '{$periodoFim->format('Y-m-d')}' ";
         }
 
         $sql .= " AND l20_instit = ". db_getsession('DB_instit') .
@@ -169,13 +170,15 @@ for($i = 0; $i < pg_num_rows($resultVigencia); $i++){
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(42, $alt, "Compilação", 1, 0, "C",1);
     $pdf->cell(42, $alt, "Modalidade", 1, 0, "C",1);
-    $pdf->cell(119, $alt, "Departamento", 1, 0, "C",1);
+    $pdf->cell(42, $alt, "Processo Licitatório", 1, 0, "C",1);
+    $pdf->cell(77, $alt, "Departamento", 1, 0, "C",1);
     $pdf->cell(38, $alt, "Inicio", 1, 0, "C",1);
     $pdf->cell(38, $alt, "Fim", 1, 1, "C",1);
     $pdf->setfont('arial', '', 6);
     $pdf->cell(42, $alt, $compilacao, 1, 0, "C",0);
     $pdf->cell(42, $alt, $licitacao, 1, 0, "C",0);
-    $pdf->cell(119, $alt, $departamento, 1, 0, "L",0);
+    $pdf->cell(42, $alt, $processolicitatorio, 1, 0, "C",0);
+    $pdf->cell(77, $alt, $departamento, 1, 0, "L",0);
     $pdf->cell(38, $alt, $inicio, 1, 0, "C",0);
     $pdf->cell(38, $alt, $fim, 1, 1, "C",0);
     $pdf->setfont('arial', 'b', 8);
