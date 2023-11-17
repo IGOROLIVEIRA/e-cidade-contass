@@ -68,7 +68,7 @@ $db_opcao = 1;
     <table>
       <tr id="linha_ano">
         <td nowrap title="<?=@$Tl20_anousu?>">
-            <strong>Ano: </strong>
+            <strong>Exercício: </strong>
         </td>
         <td>
             <?php db_input('anousu',10,$Il20_anousu,true,'text',$db_opcao,"onkeyup='ocultarInputPeriodo()'","anousu")  ?>

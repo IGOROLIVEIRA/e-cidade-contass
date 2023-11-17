@@ -46,7 +46,8 @@ function buscarFornecedoresGanhadores(int $codigoLicitacao): array
     INNER JOIN cgm ON z01_numcgm=pc21_numcgm
     WHERE
         l20_codigo={$codigoLicitacao}
-        AND pc24_pontuacao = 1;";
+        AND pc24_pontuacao = 1
+        ORDER BY z01_nome;";
 
         $result = db_query($sqlFornecedores);
         $countResult  = pg_num_rows(db_query($sqlFornecedores));
@@ -80,9 +81,7 @@ function insereFornecedores(PDF $pdf, int $alt, int $l20_codigo): void
             $pdf->setfont('arial', '', 6);
             $pdf->cell(42, $alt, $fornecedor['cgm'], 1, 0, "C", 0);
             $pdf->cell(42, $alt, $fornecedor['documento'], 1, 0, "C", 0);
-            $pdf->cell(119, $alt, $fornecedor['nome'], 1, 0, "L", 0);
-            $pdf->cell(38, $alt, "", 1, 0, "C",0);
-            $pdf->cell(38, $alt, "", 1, 1, "C",0);
+            $pdf->multicell(195, $alt, $fornecedor['nome'], 1, "J");
         }
     }
 }
@@ -169,7 +168,7 @@ for($i = 0; $i < pg_num_rows($resultVigencia); $i++){
 
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(42, $alt, "Compilação", 1, 0, "C",1);
-    $pdf->cell(42, $alt, "Licitação", 1, 0, "C",1);
+    $pdf->cell(42, $alt, "Modalidade", 1, 0, "C",1);
     $pdf->cell(119, $alt, "Departamento", 1, 0, "C",1);
     $pdf->cell(38, $alt, "Inicio", 1, 0, "C",1);
     $pdf->cell(38, $alt, "Fim", 1, 1, "C",1);
@@ -186,7 +185,7 @@ for($i = 0; $i < pg_num_rows($resultVigencia); $i++){
 
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(42, $alt, "Cgm", 1, 0, "C", 1);
-    $pdf->cell(42, $alt, "Documento", 1, 0, "C", 1);
+    $pdf->cell(42, $alt, "CNPJ/CPF", 1, 0, "C", 1);
     $pdf->cell(119, $alt, "Fornecedor", 1, 0, "C", 1);
     $pdf->cell(38, $alt, "", 1, 0, "C",1);
     $pdf->cell(38, $alt, "", 1, 1, "C",1);
