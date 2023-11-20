@@ -72,11 +72,11 @@ switch ($oParam->exec) {
                 $arraybensjson = json_encode(DBString::utf8_encode_all($oDados));
 
                 $rsApiPNCP = $clliclicitaPNCP->enviarContrato($arraybensjson);
-                
+
                 if ($rsApiPNCP[0] == 201) {
-                    
+
                     $clempcontrolepncp = new cl_empempenhopncp();
-                    
+
                     //Ambiente de testes
                     if($envs['APP_ENV'] === 'T'){
                         $sequencial = trim(substr(str_replace('x-content-type-options', '', $rsApiPNCP[1]), 70));
@@ -117,15 +117,18 @@ switch ($oParam->exec) {
     case 'RetificarEmpenho':
         $clliclicita  = db_utils::getDao("liclicita");
         $clempcontrolepncp = db_utils::getDao("empempenhopncp");
-        // $clliclicita  = new cl_liclicita();
-        // $clempcontrolepncp = db_utils::getDao("empempenhopncp");
+        $clEmpeempnho = new cl_empempenho();
+
         try {
             foreach ($oParam->aEmpenhos as $aEmpenho) {
-                //somente empenho que ja foram enviadas para pncp
-                $rsDadosExtras = $clliclicita->sql_record($clliclicita->sql_query_pncp_empenho_enviado($aEmpenho->codigo));
+                //pega a data do empenho
+                $rsDataEmpenho = $clEmpeempnho->sql_record($clEmpeempnho->sql_query($aEmpenho->codigo, "e60_emiss", null, ""));
+                $odataEmpenho = db_utils::fieldsMemory($rsDataEmpenho, 0);
+                //Empenhos
+                $rsDadosEnvio = $clliclicita->sql_record($clliclicita->sql_query_pncp_empenho($aEmpenho->codigo, $odataEmpenho->e60_emiss));
 
-                for ($aco = 0; $aco < pg_numrows($rsDadosExtras); $aco++) {
-                    $oDadosEmpenhoExtras = db_utils::fieldsMemory($rsDadosExtras, $aco);
+                for ($aco = 0; $aco < pg_numrows($rsDadosEnvio); $aco++) {
+                    $oDadosEmpenhoExtras = db_utils::fieldsMemory($rsDadosEnvio, $aco);
                 }
 
                 $clliclicitaPNCP = new ContratoPNCP($oDadosEmpenhoExtras);

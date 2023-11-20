@@ -35,6 +35,8 @@ require_once ("libs/db_usuariosonline.php");
 require_once ("libs/JSON.php");
 require_once ("dbforms/db_funcoes.php");
 require_once ("dbforms/db_classesgenericas.php");
+require_once("EnviaRFID.php"); 
+require_once("classes/db_benscontrolerfid_classe.php");
 
 db_app::import("patrimonio.*");
 db_app::import("CgmFactory");
@@ -44,6 +46,7 @@ db_app::import("Dotacao");
 db_app::import("patrimonio.*");
 db_app::import("configuracao.Instituicao");
 db_app::import("CgmFactory");
+db_app::import("Bem");
 
 db_app::import("contabilidade.*");
 db_app::import('contabilidade.planoconta.ContaPlano');
@@ -121,7 +124,6 @@ switch ($oParam->exec) {
         $oParam->t41_placa = $iNovaPlaca;
 
       	for ($i = 0; $i < $oParam->quant_lote; $i++) {
-		//print_r($oParam);exit;
 	        $oBemLote->adicionarBem(setDadosBem($oParam));
        		$oParam->t41_placa += 1;
 	      }
@@ -132,8 +134,15 @@ switch ($oParam->exec) {
       	}
       }
   		$oBemLote->salvar();
-
-  		db_fim_transacao(false);
+      db_fim_transacao(false);
+      //  Enviando Dados dos Bens do E-cidade para a API
+      $oParam->t41_placa = $iNovaPlaca;
+      for ($i = 0; $i < $oParam->quant_lote; $i++) {
+          $statusbens = enviaDadosRFid($oParam);
+          $oParam->t41_placa += 1;
+      }
+      $oRetorno->statusbens = $statusbens;
+  		
   		} catch (Exception $oException) {
 
       db_fim_transacao(true);

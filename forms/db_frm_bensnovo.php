@@ -1129,10 +1129,16 @@ $integracao = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataA
 
       $('t41_placa').disabled = true;
       alert(_M('patrimonial.patrimonio.db_frm_bensnovo.bem_salvo'));
+
+      var statusbens = oRetorno.statusbens;
+      statusAPI(statusbens);
+      
       $('t52_bem').value = oRetorno.dados.t52_bem;
       $('db_opcao').value = 'Alterar';
       this.importar.style.display = 'none';
       $("novo").style.display = "";
+      js_liberarAbas();
+
       if (oRetorno.clabens == 2) {
         parent.mo_camada('bensimoveis');
 
@@ -1140,9 +1146,7 @@ $integracao = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataA
         parent.mo_camada('bensmater');
 
       }
-      js_liberarAbas();
 
-      
 
     }
   }
@@ -1410,4 +1414,20 @@ $integracao = ParametroIntegracaoPatrimonial::possuiIntegracaoPatrimonio($oDataA
   $("t67_sequencialdescr").style.width = "150px";
   $("t66_sequencialdescr").style.width = "150px";
   $("t65_sequencialdescr").style.width = "150px";
+
+  function statusAPI(statusbens)
+  {
+    if (statusbens == 'f') {
+          return;
+    }
+    if (statusbens == 'Placa repetida') {
+          alert(_M('patrimonial.patrimonio.db_frm_bensnovo.bem_placarep'));
+          return;
+    } 
+    if (statusbens != 'success') {
+      return alert(_M('patrimonial.patrimonio.db_frm_bensnovo.bem_falha'));
+    } 
+   
+
+  }
 </script>

@@ -39,95 +39,197 @@ $clgerasql->inicio_rh = false;
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
-$dbwhere = " rh23_rubric is null ";
+//where dos descontos
+$dbwheredesc = " rh23_rubric is null ";
+//where dos proventos
+$dbwhereprov = " rh23_rubric is not null ";
 $dbwhererubs = "";
 
-if(trim($recrs) != ""){
-  $dbwhere = " rh25_recurso in (".$recrs.")";
+if (trim($recrs) != "") {
+    $dbwhere = " rh25_recurso in (" . $recrs . ")";
 }
 
-if(trim($rubrs) != ""){
-  $dbwhererubs = " and #s#_rubric in ('".str_replace(",","','",$rubrs)."')";
+if (trim($rubrs) != "") {
+    $dbwhererubs = " and #s#_rubric in ('" . str_replace(",", "','", $rubrs) . "')";
 }
 
-$arr_pontos = explode(",",$ponts);
-$varSQL = "";
+$arr_pontos = explode(",", $ponts);
+//variavel dos descontos
+$varDesc = "";
+//variavel dos proventos
+$varProv = "";
 
 $headPontos = "";
 
-for($i=0; $i<6; $i++){
-  $valor = "";
-  if( isset($arr_pontos[$i]) && trim($arr_pontos[$i]) != "" ){
-    $valor = $arr_pontos[$i];
-  }else if( count($arr_pontos) == 1 && trim($arr_pontos[0]) == "" ){
-    $valor = "$i";
-  }
-  switch ( $valor ) {
-    case "0" :
-               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Salário";
-               $varSQL .= (trim($varSQL) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
-                                                                                                   "r14", $ano, $mes, null, null, 
-                                                                                                   "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
-                                                                                                   "#s#_rubric",
-                                                                                                   "#s#_pd != 3 " . $dbwhererubs
-                                                                                                  ) . " ) ";
-               $sigla = (isset($sigla) ? $sigla : "r14");
-               break;
-    case "1" :
-               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Adiantamento";
-               $varSQL .= (trim($varSQL) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
-                                                                                                   "r22", $ano, $mes, null, null, 
-                                                                                                   "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
-                                                                                                   "#s#_rubric",
-                                                                                                   "#s#_pd != 3 " . $dbwhererubs
-                                                                                                  ) . " ) ";
-               $sigla = (isset($sigla) ? $sigla : "r22");
-               break;
-    case "2" :
-               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Férias";
-               $varSQL .= (trim($varSQL) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
-                                                                                                   "r31", $ano, $mes, null, null, 
-                                                                                                   "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
-                                                                                                   "#s#_rubric",
-                                                                                                   "#s#_pd != 3 " . $dbwhererubs
-                                                                                                  ) . " ) ";
-               $sigla = (isset($sigla) ? $sigla : "r31");
-               break;
-    case "3" :
-               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Rescisão";
-               $varSQL .= (trim($varSQL) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
-                                                                                                   "r20", $ano, $mes, null, null, 
-                                                                                                   "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
-                                                                                                   "#s#_rubric",
-                                                                                                   "#s#_pd != 3 " . $dbwhererubs
-                                                                                                  ) . " ) ";
-               $sigla = (isset($sigla) ? $sigla : "r20");
-               break;
-    case "4" :
-               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Saldo do 13o.";
-               $varSQL .= (trim($varSQL) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
-                                                                                                   "r35", $ano, $mes, null, null, 
-                                                                                                   "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
-                                                                                                   "#s#_rubric",
-                                                                                                   "#s#_pd != 3 " . $dbwhererubs
-                                                                                                  ) . " ) ";
-               $sigla = (isset($sigla) ? $sigla : "r35");
-               break;
-    case "5" :
-               $headPontos .= (trim($varSQL) != "" ? ", " : "") . "Complementar";
-               $varSQL .= (trim($varSQL) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
-                                                                                                   "r48", $ano, $mes, null, null, 
-                                                                                                   "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
-                                                                                                   "#s#_rubric",
-                                                                                                   "#s#_pd != 3 " . $dbwhererubs . (isset($semest) && $semest != "T" ? " and r48_semest = " . $semest : "")
-                                                                                                  ) . " ) ";
-               $sigla = (isset($sigla) ? $sigla : "r48");
-               break;
-  }
+for ($i = 0; $i < 6; $i++) {
+    $valor = "";
+    if (isset($arr_pontos[$i]) && trim($arr_pontos[$i]) != "") {
+        $valor = $arr_pontos[$i];
+    } else if (count($arr_pontos) == 1 && trim($arr_pontos[0]) == "") {
+        $valor = "$i";
+    }
+    switch ($valor) {
+        case "0":
+            $headPontos .= (trim($varDesc) != "" ? ", " : "") . "Salário";
+            //query dos descontos
+            $varDesc .= (trim($varDesc) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+                "r14",
+                $ano,
+                $mes,
+                null,
+                null,
+                "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
+                "#s#_rubric",
+                "#s#_pd != 3 " . $dbwhererubs
+            ) . " ) ";
+            //query dos proventos
+            $varProv .= (trim($varProv) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+                "r14",
+                $ano,
+                $mes,
+                null,
+                null,
+                "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
+                "#s#_rubric",
+                "#s#_pd != 3 "
+            ) . " ) ";
+            $sigla = (isset($sigla) ? $sigla : "r14");
+            break;
+        case "1":
+            $headPontos .= (trim($varDesc) != "" ? ", " : "") . "Adiantamento";
+            //query dos descontos
+            $varDesc .= (trim($varDesc) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+                "r22",
+                $ano,
+                $mes,
+                null,
+                null,
+                "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
+                "#s#_rubric",
+                "#s#_pd != 3 " . $dbwhererubs
+            ) . " ) ";
+            //query dos proventos
+            $varProv .= (trim($varProv) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+                "r22",
+                $ano,
+                $mes,
+                null,
+                null,
+                "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
+                "#s#_rubric",
+                "#s#_pd != 3 "
+            ) . " ) ";
+            $sigla = (isset($sigla) ? $sigla : "r22");
+            break;
+        case "2":
+            $headPontos .= (trim($varDesc) != "" ? ", " : "") . "Férias";
+            //query dos descontos
+            $varDesc .= (trim($varDesc) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+                "r31",
+                $ano,
+                $mes,
+                null,
+                null,
+                "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
+                "#s#_rubric",
+                "#s#_pd != 3 " . $dbwhererubs
+            ) . " ) ";
+            //query dos proventos
+            $varProv .= (trim($varProv) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+                "r31",
+                $ano,
+                $mes,
+                null,
+                null,
+                "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
+                "#s#_rubric",
+                "#s#_pd != 3 "
+            ) . " ) ";
+            $sigla = (isset($sigla) ? $sigla : "r31");
+            break;
+        case "3":
+            $headPontos .= (trim($varDesc) != "" ? ", " : "") . "Rescisão";
+            //query dos descontos
+            $varDesc .= (trim($varDesc) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+                "r20",
+                $ano,
+                $mes,
+                null,
+                null,
+                "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
+                "#s#_rubric",
+                "#s#_pd != 3 " . $dbwhererubs
+            ) . " ) ";
+            //query dos proventos
+            $varProv .= (trim($varProv) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+                "r20",
+                $ano,
+                $mes,
+                null,
+                null,
+                "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
+                "#s#_rubric",
+                "#s#_pd != 3 "
+            ) . " ) ";
+            $sigla = (isset($sigla) ? $sigla : "r20");
+            break;
+        case "4":
+            $headPontos .= (trim($varDesc) != "" ? ", " : "") . "Saldo do 13o.";
+            //query dos descontos
+            $varDesc .= (trim($varDesc) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+                "r35",
+                $ano,
+                $mes,
+                null,
+                null,
+                "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
+                "#s#_rubric",
+                "#s#_pd != 3 " . $dbwhererubs
+            ) . " ) ";
+            //query dos proventos
+            $varProv .= (trim($varProv) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+                "r35",
+                $ano,
+                $mes,
+                null,
+                null,
+                "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
+                "#s#_rubric",
+                "#s#_pd != 3 "
+            ) . " ) ";
+            $sigla = (isset($sigla) ? $sigla : "r35");
+            break;
+        case "5":
+            $headPontos .= (trim($varDesc) != "" ? ", " : "") . "Complementar";
+            //query dos descontos
+            $varDesc .= (trim($varDesc) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+                "r48",
+                $ano,
+                $mes,
+                null,
+                null,
+                "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
+                "#s#_rubric",
+                "#s#_pd != 3 " . $dbwhererubs . (isset($semest) && $semest != "T" ? " and r48_semest = " . $semest : "")
+            ) . " ) ";
+            //query dos proventos
+            $varProv .= (trim($varProv) != "" ? " union " : "") . " ( " . $clgerasql->gerador_sql(
+                "r48",
+                $ano,
+                $mes,
+                null,
+                null,
+                "#s#_rubric, #s#_valor, #s#_regist, #s#_pd, #s#_anousu, #s#_mesusu",
+                "#s#_rubric",
+                "#s#_pd != 3 "
+            ) . " ) ";
+            $sigla = (isset($sigla) ? $sigla : "r48");
+            break;
+    }
 }
 
-if(count($arr_pontos) == 1 && trim($arr_pontos[0]) == ""){
-  $headPontos = "Todos os pontos";
+if (count($arr_pontos) == 1 && trim($arr_pontos[0]) == "") {
+    $headPontos = "Todos os pontos";
 }
 $clgerasql->inicio_rh = true;
 $clgerasql->inner_rel = false;
@@ -136,6 +238,7 @@ $clgerasql->inner_org = true;
 $clgerasql->inner_vin = true;
 $clgerasql->inner_pro = true;
 $clgerasql->inner_rec = true;
+$clgerasql->inner_exc = false;
 $clgerasql->usar_rub = true;
 $clgerasql->usar_rel = true;
 $clgerasql->usar_lot = true;
@@ -144,41 +247,162 @@ $clgerasql->usar_org = true;
 $clgerasql->usar_vin = true;
 $clgerasql->usar_pro = true;
 $clgerasql->usar_rec = true;
-$clgerasql->subsql = $varSQL;
-$clgerasql->subsqlano = $sigla."_anousu";
-$clgerasql->subsqlmes = $sigla."_mesusu";
-$clgerasql->subsqlreg = $sigla."_regist";
-$clgerasql->subsqlrub = $sigla."_rubric";
+$clgerasql->usar_rec = false;
+$clgerasql->subsql = $varDesc;
+$clgerasql->subsqlano = $sigla . "_anousu";
+$clgerasql->subsqlmes = $sigla . "_mesusu";
+$clgerasql->subsqlreg = $sigla . "_regist";
+$clgerasql->subsqlrub = $sigla . "_rubric";
 $clgerasql->trancaGer = true;
-$sqlFinal = $clgerasql->gerador_sql("",
-                                    $ano, $mes, null, null,
-                                    "rh25_recurso,
-                                     o15_descr,
-                                     rh27_descr,
-                                     ".$sigla."_rubric as rubrica,
-                                     round(sum(".$sigla."_valor),2) as valor",
-                                    $sigla."_rubric, rh25_recurso",
-                                    $dbwhere .
-                                    "group by rh25_recurso,
-                                              o15_descr,
-                                              ".$sigla."_rubric,
-                                              rh27_descr"
-                                   );
- //die($sqlFinal);
-$result = $clgerasql->sql_record($sqlFinal);
-if($result === false || ($result !== false && $clgerasql->numrows_exec == 0)){
-   db_redireciona('db_erros.php?fechar=true&db_erro=Não existem dados no período de '.$mes.' / '.$ano);
+
+//consulta dos descontos por matricula
+$sqlDesc = $clgerasql->gerador_sql(
+    "",
+    $ano,
+    $mes,
+    null,
+    null,
+    "rh25_recurso recursodesconto, o15_descr descrrecurso, rh27_descr as descrrubrica," . $sigla . "_rubric as rubrica, round(sum(" . $sigla . "_valor),2) as valordesc, " . $sigla . "_regist matriculadesc",
+    $sigla . "_regist," . $sigla . "_rubric, rh25_recurso",
+    $dbwheredesc . "group by rh25_recurso, o15_descr, " . $sigla . "_rubric, rh27_descr, x." . $sigla . "_regist"
+);
+
+//print_r($sqlDesc); die;
+
+$resultDesc = $clgerasql->sql_record($sqlDesc);
+$aDadoDesc = array();
+
+for ($x = 0; $x < pg_num_rows($resultDesc); $x++) {
+    db_fieldsmemory($resultDesc, $x);
+
+    //consulta dos proventos e excecao por matricula
+    $clgerasql->subsql = $varProv;
+    $clgerasql->inner_rel = true;
+    $clgerasql->inner_exc = false;
+    $clgerasql->usar_exc = true;
+    $sqlProv = $clgerasql->gerador_sql(
+        "",
+        $ano,
+        $mes,
+        null,
+        null,
+        "x." . $sigla . "_regist matricula, " . $sigla . "_rubric AS rubricaprov, round(sum(case when x." . $sigla . "_pd = 1 then x." . $sigla . "_valor else 0 end),2) as valorprovento,round(sum(case when x." . $sigla . "_pd = 2 then x." . $sigla . "_valor else 0 end),2) as valordescontoemp, rh74_recurso recursoexc, o2.o15_descr descrrecursoexc",
+        $sigla . "_regist," . $sigla . "_rubric",
+        $dbwhereprov . " and " . $sigla . "_regist = $matriculadesc group by " . $sigla . "_rubric, o1.o15_codigo, x." . $sigla . "_regist, rh74_recurso, o2.o15_descr"
+    );
+    $resultProv = $clgerasql->sql_record($sqlProv);
+
+    $objDesconto = new stdClass();
+    $objDesconto->matricula = $matriculadesc;
+    $objDesconto->rubrica = $rubrica;
+    $objDesconto->descrrubrica = $descrrubrica;
+    $objDesconto->valordesc = $valordesc;
+    $objDesconto->recurso = $recursodesconto;
+    $objDesconto->descricaorecurso = $descrrecurso;
+    $objDesconto->proventos = db_utils::getCollectionByRecord($resultProv);
+    $valorprovento = 0;
+    $valordescempenho = 0;
+
+    foreach (db_utils::getCollectionByRecord($resultProv) as $key => $provento) {
+
+        $valordescempenho += $provento->valordescontoemp;
+        $valorprovento += $provento->valorprovento;
+        $objDesconto->somaproventos = $valorprovento;
+        $objDesconto->totaldescempenho = $valordescempenho;
+        $objDesconto->totalproventosfinal = $objDesconto->somaproventos - $objDesconto->totaldescempenho;
+    }
+    $aDadoDesc[] = $objDesconto;
+}
+
+foreach ($aDadoDesc as $dado) {
+
+    $percentualexc = 0;
+    $valorexcecao = 0;
+    $sumvalorexcecao = 0;
+
+    //efetua o calculo das execeçoes por matricula e desconto
+    foreach ($dado->proventos as $calcexc) {
+        if ($calcexc->recursoexc != null ||  $calcexc->recursoexc != "") {
+            $percentualexc = $calcexc->valorprovento / $dado->totalproventosfinal * 100;
+            $valorexcecao  = $dado->valordesc * $percentualexc / 100;
+            $sumvalorexcecao += $valorexcecao;
+            $dado->valorexcecaoformat = round($sumvalorexcecao,2);
+            $dado->recursoexcecao = $calcexc->recursoexc;
+            $dado->descrrecursoexc = $calcexc->descrrecursoexc;
+        }
+        $dado->valordescfinal = $dado->valordesc - $dado->valorexcecaoformat;
+    }
+    //trecho dicionado e comentado para caso opte por incluir no calculo as rubricas de salario familia e salario maternidade
+    //if(empty($dado->proventos)){
+    //    $dado->valordescfinal += $dado->valordesc;
+    //}
+}
+
+//echo "<pre>"; print_r($aDadoDesc); die;
+
+// agrupar dados por rubrica
+$aRubrica = array();
+
+foreach ($aDadoDesc as $item) {
+    $key = $item->rubrica . '|' . $item->recurso;
+    if (!isset($aRubrica[$key])) {
+        $aRubrica[$key] = (object) array(
+            'rubrica' => $item->rubrica,
+            'descrrubrica' => $item->descrrubrica,
+            'recurso' => $item->recurso,
+            'descricaorecurso' => $item->descricaorecurso,
+            'valordescfinal' => $item->valordescfinal
+
+        );
+    } else {
+        $aRubrica[$key]->valordescfinal += $item->valordescfinal;
+    }
+
+    if ($item->recursoexcecao !== null) {
+        $keyExcecao = $item->rubrica . '|' . $item->recursoexcecao;
+        if (!isset($aRubrica[$keyExcecao])) {
+            $aRubrica[$keyExcecao] = (object) array(
+                'rubrica' => $item->rubrica,
+                'descrrubrica' => $item->descrrubrica,
+                'recursoexcecao' => $item->recursoexcecao,
+                'descrrecursoexc' => $item->descrrecursoexc,
+                'valorexcecaoformat' => $item->valorexcecaoformat
+            );
+        } else {
+            $aRubrica[$keyExcecao]->valorexcecaoformat += $item->valorexcecaoformat;
+        }
+    }
+}
+
+//ordena recursos por rubrica
+function compararPorRubrica($a, $b)
+{
+    $comparaRubrica = strcmp($a->rubrica, $b->rubrica);
+    if ($comparaRubrica === 0) {
+        $comparacaoRecurso = strcmp($a->recurso, $b->recurso);
+        if ($comparacaoRecurso === 0) {
+            return strcmp($a->recursoexcecao, $b->recursoexcecao);
+        }
+        return $comparacaoRecurso;
+    }
+    return $comparaRubrica;
+}
+usort($aRubrica, 'compararPorRubrica');
+
+//verifica se existem dados para exibir o relatório
+if ($resultDesc === false || ($resultDesc !== false && $clgerasql->numrows_exec == 0)) {
+    db_redireciona('db_erros.php?fechar=true&db_erro=Não existem dados no período de ' . $mes . ' / ' . $ano);
 }
 
 $head3 = "Retenções e Consignações da Folha";
 $head5 = "Período : " . $mes . " / " . $ano;
 $head7 = "Pontos: " . $headPontos;
 
-$pdf = new PDF(); 
-$pdf->Open(); 
-$pdf->AliasNbPages(); 
+$pdf = new PDF();
+$pdf->Open();
+$pdf->AliasNbPages();
 $pdf->setfillcolor(235);
-$pdf->setfont('arial','b',8);
+$pdf->setfont('arial', 'b', 8);
 $troca = 1;
 $alt = 4;
 
@@ -188,68 +412,74 @@ $total_ger = 0;
 $cor = 1;
 $proxpag = true;
 
-for($x = 0; $x < pg_numrows($result);$x++){
-  db_fieldsmemory($result,$x);
-   
-  if($pdf->gety() > $pdf->h - 30 || $troca != 0 ){
-    $pdf->addpage();
-    $pdf->setfont('arial','b',8);
-    $pdf->cell(15,$alt,'RUBRICA',1,0,"C",1);
-    $pdf->cell(75,$alt,'DESCRIÇÃO',1,0,"C",1);
-    $pdf->cell(75,$alt,'RECURSO',1,0,"C",1);
-    $pdf->cell(25,$alt,'DESCONTO',1,1,"C",1);
-    $troca = 0;
-    $cor = 1;
-    $proxpag = true;
-  }
+foreach ($aRubrica as $key => $valor) {
 
-  // $cor = ($cor == 0 ? 1 : 0);
-  $cor = 0;
-  if (strlen($o15_descr) > 45 ) {
-    $altcol = 2;
-  } else {
-    $altcol = 1;
-  }
-
-  if($rubri_ant != $rubrica || $proxpag == true){
-    if($rubri_ant != $rubrica && $rubri_ant != ""){
-      $pdf->setfont('arial','b',7);
-      $pdf->cell(165,$alt,"Total da rubrica ",0,0,"R",1);
-      $pdf->cell( 25,$alt,db_formatar($total_rub, "f"),0,1,"R",1);
-      $pdf->ln(2);
-      $total_rub = 0;
-      $cor = 0;
+    if ($pdf->gety() > $pdf->h - 30 || $troca != 0) {
+        $pdf->addpage();
+        $pdf->setfont('arial', 'b', 8);
+        $pdf->cell(15, $alt, 'RUBRICA', 1, 0, "C", 1);
+        $pdf->cell(75, $alt, 'DESCRIÇÃO', 1, 0, "C", 1);
+        $pdf->cell(75, $alt, 'RECURSO', 1, 0, "C", 1);
+        $pdf->cell(25, $alt, 'DESCONTO', 1, 1, "C", 1);
+        $troca = 0;
+        $cor = 1;
+        $proxpag = true;
     }
-    $pdf->setfont('arial','',7);
-    $pdf->cell(15,$alt*$altcol,$rubrica,0,0,"C",$cor);
-    $pdf->cell(75,$alt*$altcol,$rh27_descr,0,0,"L",$cor);
-  }else{
-    $pdf->setfont('arial','',7);
-    $pdf->cell(15,$alt*$altcol,"",0,0,"C",$cor);
-    $pdf->cell(75,$alt*$altcol,"",0,0,"L",$cor);
-  }
 
-  // $pdf->cell(75,$alt*$altcol,$rh25_recurso . " - " .$o15_descr,0,0,"L",$cor);
-  $pos_x = $pdf->x;
-  $pos_y = $pdf->y;
-  $pdf->multicell(75,$alt,$rh25_recurso . " - " .$o15_descr,0,"L",0,0);
-  $pdf->x = $pos_x+75;
-  $pdf->y = $pos_y;
+    $cor = 0;
+    if (strlen($aRubrica[$key]->descricaorecurso) > 45) {
+        $altcol = 2;
+    } else {
+        $altcol = 1;
+    }
 
-  $pdf->cell(25,$alt*$altcol,db_formatar($valor,"f"),0,1,"R",$cor);
-  $total_rub += $valor;
-  $total_ger += $valor;
-  $rubri_ant = $rubrica;
-  $proxpag = false;
+    for ($x = 0; $x < sizeof($aRubrica[$key]); $x++) {
+
+        if ($rubri_ant != $aRubrica[$key]->rubrica || $proxpag == true) {
+            if ($rubri_ant != $aRubrica[$key]->rubrica && $rubri_ant != "") {
+                $pdf->setfont('arial', 'b', 7);
+                $pdf->cell(165, $alt, "Total da rubrica ", 0, 0, "R", 1);
+                $pdf->cell(25, $alt, db_formatar($total_rub, "f"), 0, 1, "R", 1);
+                $pdf->ln(2);
+                $total_rub = 0;
+                $cor = 0;
+            }
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(15, $alt * $altcol, $aRubrica[$key]->rubrica, 0, 0, "C", $cor);
+            $pdf->cell(75, $alt * $altcol, $aRubrica[$key]->descrrubrica, 0, 0, "L", $cor);
+        } else {
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(15, $alt * $altcol, "", 0, 0, "C", $cor);
+            $pdf->cell(75, $alt * $altcol, "", 0, 0, "L", $cor);
+        }
+
+        $pos_x = $pdf->x;
+        $pos_y = $pdf->y;
+        if ($aRubrica[$key]->recurso != null) {
+            $pdf->multicell(75, $alt, $aRubrica[$key]->recurso . " - " . $aRubrica[$key]->descricaorecurso, 0, "L", 0, 0);
+            $pdf->x = $pos_x + 75;
+            $pdf->y = $pos_y;
+            $pdf->cell(25, $alt * $altcol, db_formatar($aRubrica[$key]->valordescfinal, "f"), 0, 1, "R", $cor);
+        }
+
+        if ($aRubrica[$key]->recursoexcecao != null) {
+            //$pdf->x = 100;
+            $pdf->cell(75, $alt, $aRubrica[$key]->recursoexcecao . " - " . substr($aRubrica[$key]->descrrecursoexc, 0, 40), 0, "R", 1, 0);
+            $pdf->cell(25, $alt * $altcol, db_formatar($aRubrica[$key]->valorexcecaoformat, "f"), 0, 1, "R", $cor);
+        }
+        $total_rub += $aRubrica[$key]->valordescfinal + $aRubrica[$key]->valorexcecaoformat;
+        $total_ger += $aRubrica[$key]->valordescfinal + $aRubrica[$key]->valorexcecaoformat;
+        $rubri_ant = $aRubrica[$key]->rubrica;
+        $proxpag = false;
+    }
 }
-$pdf->ln(3);
-$pdf->setfont('arial','B',7);
-$pdf->cell(165,$alt,"Total da rubrica ",0,0,"R",1);
-$pdf->cell( 25,$alt,db_formatar($total_rub, "f"),0,1,"R",1);
 $pdf->ln(1);
-$pdf->setfont('arial','B',8);
-$pdf->cell(165,$alt,"Total geral ","T",0,"R",1);
-$pdf->cell( 25,$alt,db_formatar($total_ger, "f"),"T",1,"R",1);
+$pdf->setfont('arial', 'B', 7);
+$pdf->cell(165, $alt, "Total da rubrica ", 0, 0, "R", 1);
+$pdf->cell(25, $alt, db_formatar($total_rub, "f"), 0, 1, "R", 1);
+$pdf->ln(1);
+$pdf->setfont('arial', 'B', 8);
+$pdf->cell(165, $alt, "Total geral ", "T", 0, "R", 1);
+$pdf->cell(25, $alt, db_formatar($total_ger, "f"), "T", 1, "R", 1);
 
 $pdf->Output();
-?>

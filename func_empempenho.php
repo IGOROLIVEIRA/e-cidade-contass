@@ -140,9 +140,10 @@ $rotulo->label("z01_cgccpf");
         si174_novadatatermino
         ";
 
-                $filtroempelemento = "";
-                if (!isset($pesquisa_chave)) {
-                    $campos = "empempenho.e60_numemp,
+        $filtroempelemento = "";
+        if (!isset($pesquisa_chave)) {
+          $campos = "empempenho.e60_numemp,
+          e60_emiss,
           empempenho.e60_codemp,
           empempenho.e60_anousu,
           empempaut.e61_autori,
@@ -155,6 +156,8 @@ $rotulo->label("z01_cgccpf");
           cgm.z01_cgccpf,
           empempenho.e60_coddot,
           e60_vlremp,
+          e60_vlremp-e60_vlrutilizado as saldodisponivel,
+          e60_vlrutilizado,
           e60_vlrliq,
           e60_vlrpag,
           e60_vlranu,
@@ -185,11 +188,11 @@ $rotulo->label("z01_cgccpf");
           if ($filtroabast == 1) {
 
             $anoant = db_getsession("DB_anousu") - 1;
-
+            $ve70_abast = implode("-", array_reverse(explode("/", $ve70_abast)));
+            $dbwhere = " (e60_instit = " . db_getsession("DB_instit");
             $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000','3339039990000') ";
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
-            $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "')";
-            $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')";
+            $dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast' and empempenho.e60_anousu = " . db_getsession("DB_anousu");
             $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
             $dbwhere .= "	and e91_anousu = " . db_getsession('DB_anousu') . "))";
             $filtroempelemento = 1;
@@ -221,7 +224,7 @@ $rotulo->label("z01_cgccpf");
             $dbwhere .= " and (elementoempenho.o56_elemento like '3339039%' ";
             $dbwhere .= " or elementoempenho.o56_elemento like '3339036%' ";
             $dbwhere .= " or elementoempenho.o56_elemento like '335041%' ";
-            $dbwhere .= " or elementoempenho.o56_elemento in ('3339030010000','3339030250000','3339030370000','3339030990000','3339030020000','3339030030000','3339092000000','3339339990000') )";
+            $dbwhere .= " or elementoempenho.o56_elemento in ('3339030010000','3339030250000','3339030370000','3339030990000','3339030020000','3339030030000','3339092000000') )";
             $dbwhere .= " and empempenho.e60_emiss <= '$ve62_dtmanut'";
             $dbwhere .= " and date_part('year', empempenho.e60_emiss) <= date_part('year', date'" . $ve62_dtmanut . "')";
             $filtroempelemento = 1;
@@ -373,6 +376,11 @@ $rotulo->label("z01_cgccpf");
               echo "<script>" . $lin . "('Número(" . $chave_e60_codemp . ") não Encontrado', true);</script>";
             } else {
               db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa, true);
+              if($importacaoveiculo == 1 || $filtroabast == 1){
+                echo "<script> document.getElementsByClassName('DBLovrotInputCabecalho').item(13).value = 'Valor Disponível' </script>;";
+                echo "<script> document.getElementsByClassName('DBLovrotInputCabecalho').item(14).value = 'Valor Utilizado' </script>;";
+
+              }
             }
 
             ?>
@@ -401,13 +409,13 @@ $rotulo->label("z01_cgccpf");
               if ($filtroabast == 1) {
 
                 $anoant = db_getsession("DB_anousu") - 1;
-
+                $ve70_abast = implode("-", array_reverse(explode("/", $ve70_abast)));
+                $aCodEmp  = explode("/", $pesquisa_chave);
+                $dbwhere .= " e60_codemp = '" . $aCodEmp[0] . "'";
+                $dbwhere .= " and e60_anousu = " . $aCodEmp[1];
                 $dbwhere .= " and (elementoempenho.o56_elemento in ('3339030010000','3390330100000','3390339900000','3339033990000','3339030030000','3339092000000','3339033000000','3339093010000','3339093020000','3339093030000','3449030000000','3339039990000') ";
                 $dbwhere .= " or elementoempenho.o56_elemento like '335041%')";
-                $dbwhere .= " and (date_part('year', empempenho.e60_emiss) = date_part('year', date '" . $ve70_abast . "')";
-                $dbwhere .= " and date_part('month', empempenho.e60_emiss) <= date_part('month', date '" . $ve70_abast . "')";
-                $dbwhere .= "	or (empempenho.e60_anousu = " . $anoant . "";
-                $dbwhere .= "	and e91_anousu = " . db_getsession("DB_anousu") . "))";
+                $dbwhere .= " and empempenho.e60_emiss <= '$ve70_abast' ";
                 $filtroempelemento = 1;
               }
 
@@ -454,7 +462,7 @@ $rotulo->label("z01_cgccpf");
                 $sSql = $clempempenho->sql_query($pesquisa_chave, "*", null, $where, $filtroempelemento);
               }
             } else {
-              $sSql = $clempempenho->sql_query($pesquisa_chave, "*", null, $dbwhere, $filtroempelemento);
+              $sSql = $clempempenho->sql_query($pesquisa_chave, "e60_vlremp-e60_vlrutilizado as saldodisponivel,*", null, $dbwhere, $filtroempelemento);
             }
 
             if ($inclusaoordemcompra == "true") {
@@ -508,15 +516,14 @@ $rotulo->label("z01_cgccpf");
               $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
               $sSql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
             }
-
             $result = $clempempenho->sql_record($sSql);
 
             if ($clempempenho->numrows != 0) {
 
               db_fieldsmemory($result, 0);
 
-              if (isset($lNovoDetalhe) && $lNovoDetalhe == 1) {
-                echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}', false);</script>";
+              if (isset($filtroabast) && $filtroabast == 1) {
+                echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}', false,'$e60_numcgm','$e60_numemp','$saldodisponivel');</script>";
               } elseif (isset($lPesquisaPorCodigoEmpenho)) {
                 echo "<script>" . $funcao_js . "('{$e60_codemp}/{$e60_anousu}', '" . str_replace("'", "\'", $z01_nome) . "', '{$si172_nrocontrato}','{$si172_datafinalvigencia}','{$si174_novadatatermino}','{$e60_emiss}',false);</script>";
               } elseif (isset($inclusaoordemcompra)) {

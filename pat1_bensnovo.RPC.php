@@ -36,6 +36,8 @@ require_once("libs/JSON.php");
 require_once("dbforms/db_funcoes.php");
 require_once("dbforms/db_classesgenericas.php");
 require_once("std/DBDate.php");
+require_once("EnviaRFID.php"); 
+require_once("classes/db_benscontrolerfid_classe.php");
 
 db_app::import("MaterialCompras");
 db_app::import("patrimonio.*");
@@ -378,6 +380,10 @@ switch ($oParam->exec) {
       $oBem->setInstituicao(db_getsession("DB_instit"));
       $oBem->setCodigoItemNota($oParam->iCodigoItemNota);
       $oBem->salvar();
+
+      // Enviando Dados dos Bens do E-cidade para a API
+      $statusbens = enviaDadosRFid($oParam);
+       
       db_fim_transacao(false);
 
       $result = db_query("select t64_bemtipos from clabens where t64_codcla = $oParam->t64_codcla");
@@ -388,6 +394,7 @@ switch ($oParam->exec) {
       }
 
       $oRetorno->dados->t52_bem = $oBem->getCodigoBem();
+      $oRetorno->statusbens = $statusbens;
     } catch (Exception $oException) {
 
       db_fim_transacao(true);
@@ -435,11 +442,14 @@ switch ($oParam->exec) {
           $aBensErro[] = $iCodigoBem;
         } else {
           $oBem->baixar($iMotivo, $dDataBaixa, $sObservacao, $iDestino);
+          // Enviando Dados dos Bens do E-cidade para a API
+          $statusbens = enviaDadosRFid($oParam);
         }
       }
       if (count($aBensErro) > 0) {
         throw new Exception("Necessario atualizar os dados financeiros dos bens (" . implode(",", $aBensErro) . ")");
       }
+      $oRetorno->statusbens = $statusbens;
       db_fim_transacao(false);
     } catch (Exception $eErro) {
 
@@ -702,6 +712,53 @@ switch ($oParam->exec) {
     $oRetorno->msg = urlencode($erro_msg);
 
     break;
+  case 'carregaBenspendentes':
+
+    $clbemcontrolerfid = new cl_benscontrolerfid();
+    $sSqlBemcontrolerfid =  $clbemcontrolerfid->sql_query_file(null,"*","t214_codigobem","t214_controlerfid = $oParam->controle"); 
+    $rsBemcontrolerfid = $clbemcontrolerfid->sql_record($sSqlBemcontrolerfid);
+    
+    if(pg_num_rows($rsBemcontrolerfid)==0){
+      $oRetorno->status = 2;
+      $erro_msg = 'Nao foi encontrado nenhum Bem pendente de envio!';
+      if($oParam->controle == 3)
+        $erro_msg = 'Nao foi encontrado nenhuma Baixa de Bens pendente de envio!';
+      $oRetorno->msg = $erro_msg; 
+    }
+
+    $oRetorno->dados  = array();
+
+    for ($cont = 0; $cont < pg_num_rows($rsBemcontrolerfid); $cont++) {
+      $dadosBens = db_utils::fieldsMemory($rsBemcontrolerfid, $cont);    
+      
+      $oDadosbens      = new stdClass();
+      $oDadosbens->codigobem    = $dadosBens->t214_codigobem;
+      $oDadosbens->descricaobem = $dadosBens->t214_descbem;
+      $oDadosbens->placabem     = $dadosBens->t214_placabem;
+      $oRetorno->dados[]        = $oDadosbens;
+      $oRetorno->status         = 1; 
+    }   
+    break;
+    case 'enviarBenspendentes':
+
+      try { 
+            $statusbens = enviaDadosRFid($oParam); 
+            $oRetorno->statusbens  = $statusbens;
+      } catch (Exception $eErro) {
+          $oRetorno->status  = 2;
+          $oRetorno->message = urlencode($eErro->getMessage());
+      }      
+      break;
+    case 'enviarBaixaspendentes':
+
+        try { 
+              $statusbens = enviaDadosRFid($oParam);
+              $oRetorno->statusbens  = $statusbens;
+        } catch (Exception $eErro) {
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+        }      
+        break;     
 }
 
 /**

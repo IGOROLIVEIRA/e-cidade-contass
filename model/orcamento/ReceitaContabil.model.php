@@ -789,7 +789,6 @@ class ReceitaContabil {
                                                                                           $sWhereDesdobramento));
 
       if ($oDaoOrcReceita->numrows > 0){
-
         $sEstruturalContaMae = db_le_mae_rec_sin($this->getContaOrcamento()->getEstrutural(), false);
         $sWhereEstrutural    = "     o57_anousu = {$this->getAno()}";
         $sWhereEstrutural   .= " and o70_instit = {$this->getInstituicao()->getSequencial()}";

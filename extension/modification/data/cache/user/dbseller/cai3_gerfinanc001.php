@@ -786,7 +786,7 @@ if (isset($HTTP_POST_VARS ["pesquisar"]) || isset($matricula) || isset($inscrica
     db_fieldsmemory($resultprinc, 0);
 
     if ($db21_usasisagua == true) {
-      require_once ("agu3_conscadastro_002_classe.php");
+      require_once("agu3_conscadastro_002_classe.php");
       $Consulta = new ConsultaAguaBase($HTTP_POST_VARS ["j01_matric"]);
       $sqlcorte = $Consulta->GetAguaCorteMatMovSQL();
       $resultcorte = db_query($sqlcorte) or die($sqlcorte);

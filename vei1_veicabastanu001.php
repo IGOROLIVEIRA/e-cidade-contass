@@ -32,10 +32,16 @@ include("libs/db_usuariosonline.php");
 include("classes/db_veicabastanu_classe.php");
 include("classes/db_veicabast_classe.php");
 include("classes/db_condataconf_classe.php");
+include("classes/db_veicparam_classe.php");
+require_once("classes/db_empempenho_classe.php");
+require_once("classes/db_empveiculos_classe.php");
 include("dbforms/db_funcoes.php");
 db_postmemory($HTTP_POST_VARS);
 $clveicabast = new cl_veicabast;
 $clveicabastanu = new cl_veicabastanu;
+$clveicparam = new cl_veicparam;
+$clempempenho = new cl_empempenho;
+$clempveiculos = new cl_empveiculos;
 $db_opcao = 1;
 $db_botao = true;
 $pesq=false;
@@ -46,6 +52,11 @@ if(isset($incluir)){
   $clveicabastanu->ve74_hora=db_hora();
   $clveicabastanu->ve74_usuario=db_getsession("DB_id_usuario");  
   $clveicabastanu->incluir($ve74_codigo);
+
+  if ($clveicabastanu->permissaoAtualizacaoSaldo($ve74_veicabast)){
+    $clveicabastanu->atualizacaoSaldoEmpenho($ve74_veicabast);
+  } 
+
   $erro_msg=$clveicabastanu->erro_msg;
   if ($clveicabastanu->erro_status==0){
   	$sqlerro=true;
@@ -59,22 +70,6 @@ if(isset($incluir)){
   		$erro_msg=$clveicabast->erro_msg;
   	}  	  	
   }
-//  /**
-//   * Verificar Encerramento Periodo Contabil
-//   */
-//  $ve70_dtabast = db_utils::fieldsMemory(db_query($clveicabast->sql_query_file($ve74_veicabast,"ve70_dtabast")),0)->ve70_dtabast;
-//  if (!empty($ve70_dtabast)) {
-//    $clcondataconf = new cl_condataconf;
-//    if (!$clcondataconf->verificaPeriodoContabil($ve70_dtabast)) {
-//        echo "<script>alert(\"Qualquer coisa\");</script>";
-//      $sqlerro  = true;
-//      $erro_msg=$clcondataconf->erro_msg;
-//    }
-//  }
-
-    /**
-     * Verificar Encerramento Periodo Patrimonial
-     */
 
   $ve70_dtabast = db_utils::fieldsMemory(db_query($clveicabast->sql_query_file($ve74_veicabast,"ve70_dtabast")),0)->ve70_dtabast;
   if (!empty($ve70_dtabast)) {
@@ -99,7 +94,9 @@ if (isset($abast)&&$abast!=""){
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
-</head>
+<?
+db_app::load("prototype.js, scripts.js, strings.js");
+?></head>
 <body bgcolor=#CCCCCC style='margin-top: 25px'topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" >
 	<?
 	include("forms/db_frmveicabastanu.php");
