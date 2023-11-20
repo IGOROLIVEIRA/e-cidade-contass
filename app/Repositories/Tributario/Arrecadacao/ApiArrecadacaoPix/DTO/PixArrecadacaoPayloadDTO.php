@@ -3,6 +3,7 @@
 namespace App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\DTO;
 
 use App\Repositories\Tributario\Arrecadacao\ApiArrecadacaoPix\Contracts\IPixPayload;
+use App\Support\String\StringHelper;
 
 class PixArrecadacaoPayloadDTO implements IPixPayload
 {
@@ -102,6 +103,10 @@ class PixArrecadacaoPayloadDTO implements IPixPayload
 
             if ($attribute === 'valorOriginalSolicitacao') {
                 $value = number_format($value, 2, '.', '');
+            }
+
+            if ($attribute === 'descricaoSolicitacaoPagamento') {
+                $value = StringHelper::removeAccent($value);
             }
 
             $this->$attribute = $value;
