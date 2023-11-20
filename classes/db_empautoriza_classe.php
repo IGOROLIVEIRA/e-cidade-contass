@@ -1960,4 +1960,36 @@ class cl_empautoriza
         $sql = "select e54_autori from empautoriza where e54_licoutrosorgaos = $lic211_sequencial";
         return $sql;
     }
+
+    function alteraGestorEmpenho($e54_gestaut, $e54_autori, $e60_numcgm){
+        $sSql  = " UPDATE empautoriza SET e54_gestaut = '{$e54_gestaut}'"; 
+        $sSql .= " WHERE e54_autori={$e54_autori} AND e54_numcgm={$e60_numcgm} ";
+
+        $result = db_query($sSql);
+
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
+            $this->erro_sql   = "Gestor do empenho nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_msg   =  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            $this->numrows_alterar = 0;
+            return false;
+        } else {
+            if (pg_affected_rows($result) == 0) {
+                $this->erro_banco = "";
+                $this->erro_sql = "Autorização nao encontrada.\\n";
+                $this->erro_msg   =  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "1";
+                $this->numrows_alterar = 0;
+                return false;
+            } else {
+                $this->erro_banco = "";
+                $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+                $this->erro_msg   =  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "1";
+                $this->numrows_alterar = pg_affected_rows($result);
+                return true;
+            }
+        }
+    }
 }
