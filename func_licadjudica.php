@@ -19,7 +19,7 @@ $cllicitaparam = new cl_licitaparam;
 
 $clliclicita->rotulo->label("l20_codigo");
 $clliclicita->rotulo->label("l20_numero");
-$clliclicita->rotulo->label("l20_edital"); 
+$clliclicita->rotulo->label("l20_edital");
 $clrotulo = new rotulocampo;
 $clrotulo->label("l03_descr");
 
@@ -111,6 +111,7 @@ $sWhereContratos = " and 1 = 1 ";
             if(isset($adjudicacao) && trim($adjudicacao) != "" && $l12_adjudicarprocesso == "f"){
                 $dbwhere .= "l20_tipnaturezaproced != 2 AND ";
             }
+
             /**
              * INCLUSAO
              */
@@ -126,11 +127,17 @@ $sWhereContratos = " and 1 = 1 ";
             /**
              * Apresentação para emissão de relatório
              */
-            if(isset($adjudicacao) && trim($adjudicacao) == "3"){ 
-                $dbwhere .= " (l202_dataadjudicacao IS NOT NULL or l202_datahomologacao IS NOT null) AND l20_licsituacao in (10,13) AND l20_codtipocom NOT IN (10,15,29,30) AND l03_pctipocompratribunal NOT IN (100,101,102,103) AND l20_tipnaturezaproced = 2 AND";
+            if(isset($adjudicacao) && trim($adjudicacao) == "3"){
+                $dbwhere .= "
+                        (l20_licsituacao IN (10)
+                            AND l202_datahomologacao IS NOT NULL
+                            OR l20_licsituacao IN (13)
+                            AND l202_dataadjudicacao IS NOT NULL)
+                        AND l20_codtipocom NOT IN (10,15,29,30)
+                        AND l03_pctipocompratribunal NOT IN (100,101,102,103) AND ";
             }
 
-            $sWhereModalidade = ""; 
+            $sWhereModalidade = "";
 
             if (isset($iModalidadeLicitacao) && !empty($iModalidadeLicitacao)) {
                 $sWhereModalidade = "and l20_codtipocom = {$iModalidadeLicitacao}";
@@ -182,7 +189,7 @@ $sWhereContratos = " and 1 = 1 ";
                 }else{
                     $sql = $clliclicita->sql_queryContratosContass(""," " .$campos,"l20_codigo","$dbwhere $dbwhere_instit $sWhereContratos $whereHab",$situacao);
                 }
-                
+
                 if (isset($param) && trim($param) != ""){
                     $dbwhere = " and (e55_sequen is null or (e55_sequen is not null and e54_anulad is not null))";
                     if(isset($chave_l20_codigo) && (trim($chave_l20_codigo)!="") ){
@@ -197,7 +204,7 @@ $sWhereContratos = " and 1 = 1 ";
                         $sql = $clliclicitem->sql_query_inf("",$campos,"l20_codigo","1=1$dbwhere $whereHab");
                     }
                 }
-                
+
                 db_lovrot($sql.' desc ',15,"()","",$funcao_js);
 
 

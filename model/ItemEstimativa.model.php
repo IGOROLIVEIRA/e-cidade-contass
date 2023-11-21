@@ -86,7 +86,7 @@ final class ItemEstimativa extends itemSolicitacao
    * @throws Exception
    * @return ItemEstimativa
    */
-  public function save($iSolicitacao)
+  public function save($iSolicitacao = '')
   {
 
     parent::save($iSolicitacao);

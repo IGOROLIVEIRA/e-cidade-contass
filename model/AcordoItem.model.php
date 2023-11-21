@@ -1408,44 +1408,6 @@ order by
                 throw new Exception($sErroMsg);
             }
 
-            /**
-             * verificamos se existe saldo na dotacao, e
-             * incluimos a reserva
-             */
-            $oDotacaoSaldo  = new Dotacao($oDotacao->dotacao, $oDotacao->ano);
-            $nSaldoReservar = $oDotacao->valor;
-
-            if (round($oDotacaoSaldo->getSaldoFinal(), 2) <= $oDotacao->valor) {
-                $nSaldoReservar = $oDotacaoSaldo->getSaldoFinal();
-            }
-
-            if ($nSaldoReservar > 0 && $lReservarSaldo) {
-
-                $oDaoReserva->o80_anousu = $oDotacao->ano;
-                $oDaoReserva->o80_coddot = $oDotacao->dotacao;
-                $oDaoReserva->o80_dtini  = date("Y-m-d", db_getsession("DB_datausu"));
-                $oDaoReserva->o80_dtfim  = "{$oDotacao->ano}-12-31";
-                $oDaoReserva->o80_dtlanc = date("Y-m-d", db_getsession("DB_datausu"));
-                $oDaoReserva->o80_valor  = $nSaldoReservar;
-                $oDaoReserva->o80_descr  = "reserva item acordo {$this->getCodigo()}";
-                $oDaoReserva->o80_justificativa  = "reserva item acordo {$this->getCodigo()}";
-                $oDaoReserva->incluir(null);
-
-                if ($oDaoReserva->erro_status == 0) {
-
-                    $sMessage = "Erro ao reservar saldo!\n{$oDaoReserva->erro_msg}";
-                    throw new Exception($sMessage);
-                }
-
-                $oDaoAcordoItemDotacaoReserva->o84_orcreserva        = $oDaoReserva->o80_codres;
-                $oDaoAcordoItemDotacaoReserva->o84_acordoitemdotacao = $oDaoAcordoItemDotacao->ac22_sequencial;
-                $oDaoAcordoItemDotacaoReserva->incluir(null);
-                if ($oDaoAcordoItemDotacaoReserva->erro_status == 0) {
-
-                    $sMessage = "Erro ao reservar saldo!\n{$oDaoAcordoItemDotacaoReserva->erro_msg}";
-                    throw new Exception($sMessage);
-                }
-            }
         }
 
         /**

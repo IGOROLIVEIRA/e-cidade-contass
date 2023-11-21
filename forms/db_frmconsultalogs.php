@@ -13,7 +13,8 @@
                         $aValores = array(
                             0 => 'Selecione',
                             889 => 'empempenho',
-                            863 => 'pcorcamval'
+                            863 => 'pcorcamval',
+                            2679 => 'solicitaregistropreco'
                             );
                         db_select('tabela', $aValores, true, $db_opcao,"onchange=''");
                     ?>

@@ -1,5 +1,4 @@
 <?php
-//ini_set('display_errors','on');
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_conecta.php");
@@ -7,10 +6,8 @@ require_once("libs/db_sessoes.php");
 require_once("libs/db_usuariosonline.php");
 require_once("libs/db_libsys.php");
 require_once("std/db_stdClass.php");
-require_once("classes/db_pcorcam_classe.php");
 include("libs/PHPExcel/Classes/PHPExcel.php");
 $oGet        = db_utils::postMemory($_GET);
-$clpcorcam   = new cl_pcorcam(); 
 $objPHPExcel = new PHPExcel;
 
 /**
@@ -166,54 +163,12 @@ $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setWidth(17);
 $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(60);
 $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(60);
 
-//cria protecao na planilha
-//senha para alteração
-//sheet->getProtection()->setPassword('PHPExcel');
-//$sheet->getProtection()->setSheet(false);
-//$sheet->getProtection()->setSort(false);
-//$sheet->getProtection()->setInsertRows(false);
-//$sheet->getProtection()->setFormatCells(false);
-
 $objPHPExcel->getActiveSheet()->protectCells('A6:O6', 'php');
 $objPHPExcel->getActiveSheet()->getProtection()->setSheet(true); 
 
-
-//itens orcamento
-$result_itens = $clpcorcam->sql_record($clpcorcam->sql_query_pcorcam_itemsol(null,"distinct pc22_codorc,pc01_codmater,pc11_seq,pc01_descrmater,pc01_complmater,m61_abrev,pc11_quant","pc11_seq","pc20_codorc = $pc22_codorc"));
-$numrows_itens = $clpcorcam->numrows;
-
-for ($i = 0; $i < 1; $i ++){
-    $numrow = $i + 7;
-    $collA = 'A'.$numrow;
-    $collB = 'B'.$numrow;
-    $collC = 'C'.$numrow;
-    $collD = 'D'.$numrow;
-    $collE = 'E'.$numrow;
-    $collF = 'F'.$numrow;
-    $collG = 'G'.$numrow;
-    $collH = 'H'.$numrow;
-    $collI = 'I'.$numrow;
-    $collJ = 'J'.$numrow;
-    $collK = 'K'.$numrow;
-    $collL = 'L'.$numrow;
-    $collM = 'M'.$numrow;
-   
-    //$sheet->setCellValue($collA,"");
-    //$sheet->setCellValue($collB,iconv('UTF-8', 'ISO-8859-1//IGNORE',""));
-    //$sheet->setCellValue($collC,iconv('UTF-8', 'ISO-8859-1//IGNORE',"10:20:30"));
-    //$sheet->setCellValue($collF,iconv('UTF-8', 'ISO-8859-1//IGNORE',"111.111.111-11"));
-
-    
-   
-
-}
-
 $sheet->getStyle('A7:O1000')->applyFromArray($styleItens);
 $sheet->getStyle('A7:O1000')->getProtection()->setLocked(PHPExcel_Style_Protection::PROTECTION_UNPROTECTED);    
-$objPHPExcel->getActiveSheet()
-    ->getStyle($collB)
-    ->getNumberFormat()
-    ->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
+$objPHPExcel->getActiveSheet()->getStyle("B1:B1000")->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
 
 
 $nomefile = "Abastecimento_".db_getsession('DB_instit').".xlsx";

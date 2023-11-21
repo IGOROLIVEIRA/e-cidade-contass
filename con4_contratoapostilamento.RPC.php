@@ -1,10 +1,15 @@
 <?php
+
 require_once "libs/db_stdlib.php";
 require_once "libs/db_conecta.php";
 require_once "libs/db_sessoes.php";
 require_once "libs/db_usuariosonline.php";
 require_once "dbforms/db_funcoes.php";
 require_once("classes/db_condataconf_classe.php");
+require_once("model/contrato/apostilamento/Command/UpdateApostilamentoCommand.model.php");
+require_once("model/contrato/apostilamento/Command/UpdateAcordoItemCommand.model.php");
+require_once("model/contrato/apostilamento/Command/ValidaAlteracaoApostilamentoCommand.model.php");
+require_once("model/contrato/apostilamento/Command/ValidaDataApostilamentoCommand.model.php");
 
 $oParam            = json_decode(str_replace("\\", "", $_POST["json"]));
 $oRetorno          = new stdClass();
@@ -12,139 +17,34 @@ $oRetorno->erro    = false;
 $oRetorno->message = '';
 
 try {
-
     db_inicio_transacao();
 
     switch ($oParam->exec) {
-
             /**
          * Pesquisa as posicoes do acordo
          */
         case "getItens":
-
-            $oContrato  = AcordoRepository::getByCodigo($oParam->iAcordo);
-
-            $oPosicao                    = $oContrato->getUltimaPosicao(true);
-            $oRetorno->tipocontrato      = $oContrato->getOrigem();
-            $oRetorno->datainicial       = $oContrato->getDataInicial();
-            $oRetorno->datafinal         = $oContrato->getDataFinal();
-            $oRetorno->valores           = $oContrato->getValoresItens();
-            $oRetorno->seqapostila       = $oContrato->getProximoNumeroApostila($oParam->iAcordo);
-
-            $aItens = array();
-            foreach ($oPosicao->getItens() as $oItemPosicao) {
-
-                $oItem                 = new stdClass();
-
-                $oItem->codigo         = $oItemPosicao->getCodigo();
-                $oItem->codigoitem     = $oItemPosicao->getMaterial()->getMaterial();
-                $oItem->elemento       = $oItemPosicao->getDesdobramento();
-                $oItem->descricaoitem  = $oItemPosicao->getMaterial()->getDescricao();
-                $oItem->valorunitario  = $oItemPosicao->getValorUnitario();
-                $oItem->quantidade     = $oItemPosicao->getQuantidadeAtualizadaRenovacao();
-                $oItem->valor          = $oItemPosicao->getValorAtualizadoRenovacao();
-                $aItemPosicao = $oItemPosicao->getPeriodosItem();
-                $oItem->periodoini     = $aItemPosicao[0]->dtDataInicial;
-                $oItem->periodofim     = $aItemPosicao[0]->dtDataFinal;
-                $oItem->servico        = $oItemPosicao->getMaterial()->isServico();
-                $oItem->controlaquantidade = $oItemPosicao->getServicoQuantidade();
-                $oItem->dotacoes       = array();
-
-                /**
-                 * retornar saldo do item conforme autorizacoes
-                 */
-                $oItemUltimoValor = $oItemPosicao->getSaldos();
-                $oItem->qtdeanterior = $oItemUltimoValor->quantidadeautorizar;
-                $oItem->vlunitanterior = $oItem->valorunitario;
-                $oItem->quantidade = $oItemUltimoValor->quantidadeautorizar;
-
-                /**
-                 * Caso seja servico e nao controlar quantidade, a quantidade padrao sera 1
-                 * e o valor sera o saldo a executar
-                 */
-                if ($oItem->servico && $oItem->controlaquantidade == "f") {
-                    $oItem->quantidade     = 1;
-                    $oItem->qtdeanterior   = 1;
-                    $oItem->valor          = $oItemUltimoValor->valorautorizar;
-                    $oItem->vlunitanterior = $oItemUltimoValor->valorautorizar;
-                    $oItem->valorunitario  = $oItemUltimoValor->valorautorizar;
-                }
-
-                foreach ($oItemPosicao->getDotacoes() as $oDotacao) {
-                    if ($oItem->servico && $oItem->controlaquantidade == "f") {
-                        $iQuantDot =  1;
-                        $nValorDot = $oDotacao->valor - $oDotacao->executado;
-                    } else {
-                        $iQuantDot = $oDotacao->quantidade - ($oDotacao->executado / $oItem->valorunitario);
-                        $nValorDot = $oDotacao->valor;
-                    }
-                    $oItem->dotacoes[] = (object) array(
-                        'dotacao' => $oDotacao->dotacao,
-                        'quantidade' => $iQuantDot,
-                        'valor' => $nValorDot,
-                        'valororiginal' => $nValorDot
-                    );
-                }
-
-                $aItens[] = $oItem;
-            }
-
-            $oRetorno->itens = $aItens;
+            getItens($oParam, $oRetorno);
             break;
 
         case "processarApostilamento":
-            $clcondataconf = new cl_condataconf;
 
-            if ($sqlerro == false) {
-                $anousu = db_getsession('DB_anousu');
-
-                $sSQL = "select to_char(c99_datapat,'YYYY') c99_datapat
-                        from condataconf
-                          where c99_instit = " . db_getsession('DB_instit') . "
-                            order by c99_anousu desc limit 1";
-
-                $rsResult       = db_query($sSQL);
-                $maxC99_datapat = db_utils::fieldsMemory($rsResult, 0)->c99_datapat;
-
-                $sNSQL = "";
-                if ($anousu > $maxC99_datapat) {
-                    $sNSQL = $clcondataconf->sql_query_file($maxC99_datapat, db_getsession('DB_instit'), 'c99_datapat');
-                } else {
-                    $sNSQL = $clcondataconf->sql_query_file(db_getsession('DB_anousu'), db_getsession('DB_instit'), 'c99_datapat');
-                }
-
-                $result = db_query($sNSQL);
-                $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
-
-                $datareferencia = implode("-", array_reverse(explode("/", $oParam->oApostila->datareferencia)));
-
-
-                if ($oParam->oApostila->datareferencia != "") {
-
-                    if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
-                        throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
-                    }
-
-                    if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
-                        throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
-                    }
-                }
-
-                $dateassinatura = implode("-", array_reverse(explode("/", $oParam->oApostila->dataapostila)));
-
-                if ($dateassinatura != "" && $oParam->oApostila->datareferencia == "") {
-                    if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
-                        $oRetorno->datareferencia = true;
-                        throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
-                    }
-                }
-            }
             $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
+
+            $validaDatas =  new  ValidaDataApostilamentoCommand();
+            $validaDatas->execute(
+                $oParam->oApostila->datareferencia,
+                $oParam->oApostila->dataapostila,
+                $oParam->validaDtApostila,
+                $oContrato,
+                $oRetorno
+            );
+
             $oContrato->apostilar($oParam->aItens, $oParam->oApostila, $oParam->datainicial, $oParam->datafinal, $oParam->aSelecionados, $oParam->oApostila->datareferencia);
             break;
 
         case "getleilicitacao":
-            $sSQL = "select l20_leidalicitacao  from liclicita 
+            $sSQL = "select l20_leidalicitacao  from liclicita
             inner join acordo on
                 acordo.ac16_licitacao = liclicita.l20_codigo
             where
@@ -160,7 +60,6 @@ try {
             break;
 
         case "getUnidades":
-
             $oDaoMatUnid  = db_utils::getDao("matunid");
             $sSqlUnidades = $oDaoMatUnid->sql_query_file(
                 null,
@@ -176,6 +75,64 @@ try {
             }
             $oRetorno->itens = $aUnidades;
             break;
+        case 'getDadosAlteracao':
+
+            $validaAlterecao = new ValidaAlteracaoApostilamentoCommand;
+            $validaAlterecao->execute($oParam->iAcordo);
+
+            $tiposalteracaoapostila = array('15'=>1,'16'=>2,'17'=>3);
+
+            $oDaoAcordoItem  = db_utils::getDao("acordoitem");
+            $sSqlItens = $oDaoAcordoItem->getItemsApostilaUltPosicao($oParam->iAcordo);
+            $result = $oDaoAcordoItem->sql_record($sSqlItens);
+
+            if ($oDaoAcordoItem->erro_status == "0") {
+                throw new Exception($oDaoAcordoItem->erro_msg);
+            }
+
+            $record = db_utils::fieldsmemory($result, 0);
+            $oDadosAcordo = new stdClass();
+            $oDadosAcordo->si03_sequencial = $record->si03_sequencial;
+            $oDadosAcordo->si03_tipoapostila = $record->si03_tipoapostila;
+            $oDadosAcordo->si03_tipoalteracaoapostila = $tiposalteracaoapostila[$record->si03_tipoalteracaoapostila];
+            $oDadosAcordo->ac26_numeroapostilamento = $record->ac26_numeroapostilamento;
+            $date = new DateTime( $record->si03_dataapostila );
+            $oDadosAcordo->si03_dataapostila = $date->format( 'd/m/Y' );
+            $oDadosAcordo->si03_percentualreajuste = $record->si03_percentualreajuste;
+            $oDadosAcordo->si03_indicereajuste = $record->si03_indicereajuste;
+            $oDadosAcordo->si03_justificativa = utf8_encode($record->si03_justificativa);
+            $date = new DateTime( $record->si03_datareferencia );
+            $oDadosAcordo->si03_datareferencia = $date->format( 'd/m/Y' );
+            $oDadosAcordo->si03_descrapostila = utf8_encode($record->si03_descrapostila);
+            $oRetorno->dadosAcordo = $oDadosAcordo;
+            getItens($oParam, $oRetorno);
+            break;
+
+        case 'updateApostilamento':
+            $oContrato = AcordoRepository::getByCodigo($oParam->iAcordo);
+
+            $validaDatas =  new  ValidaDataApostilamentoCommand();
+            $validaDatas->execute(
+                $oParam->apostilamento->si03_datareferencia,
+                $oParam->apostilamento->si03_dataapostila,
+                $oParam->validaDtApostila,
+                $oContrato,
+                $oRetorno
+            );
+
+            $updateApostilamento = new UpdateApostilamentoCommand;
+            $updateApostilamento->execute($oParam->apostilamento, $oParam->iAcordo);
+
+            if (!empty($oParam->itens)) {
+                $updateAcordoItem = new UpdateAcordoItemCommand;
+                $updateAcordoItem->execute(
+                    $oParam->itens,
+                    $oParam->iAcordo,
+                    $oParam->apostilamento->si03_sequencial
+                );
+            }
+
+            break;
     }
 
     db_fim_transacao(false);
@@ -184,6 +141,73 @@ try {
     db_fim_transacao(true);
     $oRetorno->erro  = true;
     $oRetorno->message = urlencode($eErro->getMessage());
+}
+
+function getItens($oParam, $oRetorno)
+{
+    $oContrato  = AcordoRepository::getByCodigo($oParam->iAcordo);
+
+    $oPosicao                    = $oContrato->getUltimaPosicao(true);
+    $oRetorno->tipocontrato      = $oContrato->getOrigem();
+    $oRetorno->datainicial       = $oContrato->getDataInicial();
+    $oRetorno->datafinal         = $oContrato->getDataFinal();
+    $oRetorno->valores           = $oContrato->getValoresItens();
+    $oRetorno->seqapostila       = $oContrato->getProximoNumeroApostila($oParam->iAcordo);
+
+    $aItens = array();
+    foreach ($oPosicao->getItens() as $oItemPosicao) {
+        $oItem                 = new stdClass();
+
+        $oItem->codigo         = $oItemPosicao->getCodigo();
+        $oItem->codigoitem     = $oItemPosicao->getMaterial()->getMaterial();
+        $oItem->elemento       = $oItemPosicao->getDesdobramento();
+        $oItem->descricaoitem  = $oItemPosicao->getMaterial()->getDescricao();
+        $oItem->valorunitario  = $oItemPosicao->getValorUnitario();
+        $oItem->quantidade     = $oItemPosicao->getQuantidadeAtualizadaRenovacao();
+        $oItem->valor          = $oItemPosicao->getValorAtualizadoRenovacao();
+        $aItemPosicao = $oItemPosicao->getPeriodosItem();
+        $oItem->periodoini     = $aItemPosicao[0]->dtDataInicial;
+        $oItem->periodofim     = $aItemPosicao[0]->dtDataFinal;
+        $oItem->servico        = $oItemPosicao->getMaterial()->isServico();
+        $oItem->controlaquantidade = $oItemPosicao->getServicoQuantidade();
+        $oItem->dotacoes       = array();
+
+        /**
+         * retornar saldo do item conforme autorizacoes
+         */
+        $oItemUltimoValor = $oItemPosicao->getSaldos();
+        $oItem->qtdeanterior = $oItemUltimoValor->quantidadeautorizar;
+        $oItem->vlunitanterior = $oItem->valorunitario;
+        $oItem->quantidade = $oItemUltimoValor->quantidadeautorizar;
+
+        /**
+         * Caso seja servico e nao controlar quantidade, a quantidade padrao sera 1
+         * e o valor sera o saldo a executar
+         */
+        if ($oItem->servico && $oItem->controlaquantidade == "f") {
+            $oItem->quantidade     = 1;
+            $oItem->qtdeanterior   = 1;
+            $oItem->valor          = $oItemUltimoValor->valorautorizar;
+            $oItem->vlunitanterior = $oItemUltimoValor->valorautorizar;
+            $oItem->valorunitario  = $oItemUltimoValor->valorautorizar;
+        }
+
+        foreach ($oItemPosicao->getDotacoes() as $oDotacao) {
+            if ($oItem->servico && $oItem->controlaquantidade == "f") {
+                $iQuantDot =  1;
+                $nValorDot = $oDotacao->valor - $oDotacao->executado;
+            } else {
+                $iQuantDot = $oDotacao->quantidade - ($oDotacao->executado / $oItem->valorunitario);
+                $nValorDot = $oDotacao->valor;
+            }
+            $oItem->dotacoes[] = (object) array(
+                'dotacao' => $oDotacao->dotacao
+            );
+        }
+
+        $aItens[] = $oItem;
+    }
+    $oRetorno->itens = $aItens;
 }
 
 echo json_encode($oRetorno);

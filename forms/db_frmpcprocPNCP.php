@@ -218,7 +218,7 @@ $val = false;
                 </tr>
                 <tr>
                     <td>
-                        <label class="bold">Dispensa por valor:</label>
+                        <label class="bold">Contratação Direta:</label>
                     </td>
                     <td>
                         <?php
@@ -327,6 +327,22 @@ $val = false;
                         }
                         $tipo[0] = 'Selecione';
                         db_select('pc80_amparolegal', $tipo, true, '', 'style="width:100%"');
+                        ?>
+                    </td>
+                </tr>
+                <tr id="dispensaporvalor5" style="display:none">
+                    <td style="width: 158px">
+                        <label class="bold">Modalidade de Contratação:</label>
+                    </td>
+                    <td>
+                        <?php
+                        $aModalidade = array(
+                            '' => 'Selecione',
+                            '8' => 'Dispensa sem Disputa',
+                            '9' => 'Inexigibilidade',
+                        );
+
+                        db_select('pc80_modalidadecontratacao', $aModalidade, true, '');
                         ?>
                     </td>
                 </tr>
@@ -510,12 +526,14 @@ $val = false;
             $('dispensaporvalor2').style.display = '';
             $('dispensaporvalor3').style.display = '';
             $('dispensaporvalor4').style.display = '';
+            $('dispensaporvalor5').style.display = '';
             $('categoriaprocesso').style.display = '';
         } else {
             $('dispensaporvalor1').style.display = 'none';
             $('dispensaporvalor2').style.display = 'none';
             $('dispensaporvalor3').style.display = 'none';
             $('dispensaporvalor4').style.display = 'none';
+            $('dispensaporvalor5').style.display = 'none';
             $('categoriaprocesso').style.display = 'none';
         }
     }

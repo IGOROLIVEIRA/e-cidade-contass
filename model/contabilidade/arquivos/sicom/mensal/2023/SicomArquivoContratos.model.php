@@ -283,12 +283,15 @@ inner join liclicita on ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,
          * excluir informacoes do mes selecionado registro 13
          */
         $result = $clcontratos13->sql_record($clcontratos13->sql_query(NULL, "*", NULL, "si86_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si86_instit = " . db_getsession("DB_instit")));
-        if (pg_num_rows($result) > 0) {
+        
+        if ($clcontratos13->numrows > 0) {
 
             $clcontratos13->excluir(NULL, "si86_mes = " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . " and si86_instit = " . db_getsession("DB_instit"));
+
             if ($clcontratos13->erro_status == 0) {
                 throw new Exception($clcontratos13->erro_msg);
             }
+
         }
 
         /*

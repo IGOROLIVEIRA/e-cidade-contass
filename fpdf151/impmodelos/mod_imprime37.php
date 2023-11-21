@@ -6,6 +6,9 @@ $xcol = 12;
 // Condição para multiplas SLIPS OC14441
 for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
 
+    $this->objpdf->settopmargin(1);
+    $xlin = 20;
+
     if ($iDados > 0) {
         $this->objpdf->addPage();
         $this->objpdf->AliasNbPages();
@@ -28,13 +31,47 @@ for ($iDados = 0; $iDados < pg_num_rows($this->dados); $iDados++) {
     $this->objpdf->text(165, $xlin -8, 'SLIP: ' .  db_formatar(pg_result($this->dados, $iDados, "k17_codigo"), 's', '0', 6, 'e'));
 
     if (USE_PCASP) {
+        $k17_tiposelect = pg_result($this->dados, $iDados, "k17_tiposelect");
+        $sEvento = '';
+        if ($k17_tiposelect){
+            if ($k17_tiposelect == '01'){
+                $oTipoSelect = "01 - Aplicação Financeira"; 
+            }
+            if ($k17_tiposelect == '02'){
+                $oTipoSelect = '02 - Resgate de Aplicação Financeira';
+            }
+            if ($k17_tiposelect == '03'){  
+                $oTipoSelect = '03 - Transferência entre contas bancárias';
+            }
+            if ($k17_tiposelect == '04'){ 
+                $oTipoSelect = '04 - Transferências de Valores Retidos';
+            }
+            if ($k17_tiposelect == '05'){  
+                $oTipoSelect = '05 - Depósito decendial educação';
+            }
+            if ($k17_tiposelect == '06'){  
+              $oTipoSelect = '06 - Depósito decendial saúde';
+            }
+            if ($k17_tiposelect == '07'){  
+                $oTipoSelect = '07 - Transferência da Contrapartida do Convênio';
+            }
+            if ($k17_tiposelect == '08'){
+                $oTipoSelect = '08 - Transferência entre contas de fontes diferentes'; 
+            }
+            if ($k17_tiposelect == '09'){
+                $oTipoSelect = '09 - Transferência da conta caixa para esta conta';
+            }
+            if ($k17_tiposelect == '10'){
+                $oTipoSelect = '10 - Saques';
+            }
+        }
+        $sEvento = $oTipoSelect;
+        if (empty($k17_tiposelect)){
+            $sEvento = pg_result($this->dados, $iDados, "k152_sequencial") . " - " . pg_result($this->dados, $iDados, "k152_descricao");
+        }
         $this->objpdf->Setfont('Arial', '', 9);
-        //$this->objpdf->text(115, $xlin -2, substr("Evento: " . $this->sEvento, 0, 55), 's', '0', 6, 'e');
+        $this->objpdf->text(115, $xlin -2, substr("Evento: " . $sEvento, 0, 55), 's', '0', 6, 'e');
 
-        $y   = $this->objpdf->getY();
-        $this->objpdf->setY($y + 5);
-        $this->objpdf->cell(190,  4, substr("Evento: " . $this->sEvento, 0, 55),      "",  1, "R", 0);
-        $this->objpdf->setY($y);
     }
 
     /// retângulo dos dados da transferência

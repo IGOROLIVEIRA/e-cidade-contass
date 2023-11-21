@@ -156,6 +156,8 @@ class Recibo
    */
   private $iCaracteristicaPeculiar;
 
+  private bool $isReciboRetencao;
+
   /**
    * Cria um novo recibo
    *
@@ -164,7 +166,9 @@ class Recibo
    * @param integer
    *
    */
-  public function __construct($iTipoEmissao = null, $iNumCgm = null, $iTipo = 1, $iNumnov = null) {
+  public function __construct($iTipoEmissao = null, $iNumCgm = null, $iTipo = 1, $iNumnov = null, $reciboRetencao = false) {
+
+    $this->isReciboRetencao = $reciboRetencao;
 
   	if ($iNumnov != null) {
 
@@ -808,9 +812,9 @@ class Recibo
           ->first();
 
       /**
-       * Não gera qrcode para recibos de desconto
+       * Não gera qrcode para recibos de retencao
        */
-      if (!$settings->k03_ativo_integracao_pix) {
+      if (!$settings->k03_ativo_integracao_pix || $this->isReciboRetencao) {
           return true;
       }
 

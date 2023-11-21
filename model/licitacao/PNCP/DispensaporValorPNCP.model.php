@@ -22,13 +22,11 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
     public function montarDados()
     {
-        //ini_set('display_errors', 'on');
-        $aDadosAPI = array();
 
         $oDado = $this->dados;
 
         $oDadosAPI                                  = new \stdClass;
-        $oDadosAPI->codigoUnidadeCompradora         = '01001'; //$oDado->codigounidadecompradora;
+        $oDadosAPI->codigoUnidadeCompradora         = $this->getUndCompradora();
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
         $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
@@ -80,7 +78,7 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
         $oDado = $this->dados;
 
         $oDadosAPI                                  = new \stdClass;
-        $oDadosAPI->codigoUnidadeCompradora         = '01001'; //$oDado->codigounidadecompradora;
+        $oDadosAPI->codigoUnidadeCompradora         = $this->getUndCompradora();
         $oDadosAPI->tipoInstrumentoConvocatorioId   = $oDado->tipoinstrumentoconvocatorioid;
         $oDadosAPI->modalidadeId                    = $oDado->modalidadeid;
         $oDadosAPI->modoDisputaId                   = $oDado->mododisputaid;
@@ -119,8 +117,6 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras";
 
-        $method = 'POST';
-
         $file = 'model/licitacao/PNCP/arquivos/Compra' . $processo . '.json';
         $filezip = curl_file_create('model/licitacao/PNCP/anexoslicitacao/' . $aAnexos[0]->l216_nomedocumento);
 
@@ -140,34 +136,22 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
             'Tipo-Documento-Id:' . $aAnexos[0]->l213_sequencial
         );
 
-        $optionspncp = array(
-            CURLOPT_RETURNTRANSFER => 1,            // return web page
-            CURLOPT_POST           => 1,
-            CURLOPT_HEADER         => false,         // don't return headers
-            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
-            CURLOPT_TIMEOUT        => 120,          // timeout on response
-            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
-            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
-            CURLOPT_POSTFIELDS     => $post_data,
-            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
-            CURLOPT_SSL_VERIFYPEER => false,        //
-            CURLOPT_VERBOSE        => 1,            //
-            CURLINFO_HEADER_OUT    => true
-        );
-
-
+        $optionspncp = $this->getParancurl('POST',$post_data,$headers,false,false);
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
         curl_close($chpncp);
-
         $retorno = json_decode($contentpncp);
 
+        //enviado de api
         if ($retorno->status) {
             return array(422, $retorno->message);
-        } else {
+        }
+        //enviado de cadastro
+        if($retorno->erros){
+            return array(422, $retorno->erros[0]->mensagem);
+        }
+        //enviado com sucesso
+        if($retorno->compraUri){
             return array(201, $retorno->compraUri);
         }
     }
@@ -181,8 +165,6 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
-        $method = 'PATCH';
-
         $chpncp      = curl_init($url);
 
         $headers = array(
@@ -190,24 +172,7 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
             'Authorization: ' . $token
         );
 
-        $optionspncp = array(
-            CURLOPT_RETURNTRANSFER => 1,            // return web page
-            CURLOPT_POST           => 1,
-            CURLOPT_HEADER         => false,         // don't return headers
-            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
-            CURLOPT_TIMEOUT        => 120,          // timeout on response
-            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
-            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
-            CURLOPT_POSTFIELDS     => $oDados,
-            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
-            CURLOPT_SSL_VERIFYPEER => false,        //
-            CURLOPT_VERBOSE        => 1,            //
-            CURLINFO_HEADER_OUT    => true
-        );
-
+        $optionspncp = $this->getParancurl('PATCH',$oDados,$headers,false, false);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
@@ -227,8 +192,6 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$sCodigoControlePNCP";
 
-        $method = 'DELETE';
-
         $chpncp      = curl_init($url);
 
         $headers = array(
@@ -236,24 +199,7 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
             'Authorization: ' . $token
         );
 
-        $optionspncp = array(
-            CURLOPT_RETURNTRANSFER => 1,            // return web page
-            CURLOPT_POST           => 1,
-            CURLOPT_HEADER         => false,         // don't return headers
-            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
-            CURLOPT_TIMEOUT        => 120,          // timeout on response
-            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
-            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
-            //CURLOPT_POSTFIELDS     => $oDados,
-            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
-            CURLOPT_SSL_VERIFYPEER => false,        //
-            CURLOPT_VERBOSE        => 1,            //
-            CURLINFO_HEADER_OUT    => true
-        );
-
+        $optionspncp = $this->getParancurl('DELETE',null,$headers,false,false);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
@@ -274,8 +220,6 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/" . $iAnoCompra . "/" . $iCodigocompra . "/arquivos";
 
-        $method = 'POST';
-
         //arquivo para envio
         $filezip = curl_file_create('model/licitacao/PNCP/anexoslicitacao/' . $sAnexo);
 
@@ -292,23 +236,7 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
             'Tipo-Documento-Id: ' . $iTipoAnexo
         );
 
-        $optionspncp = array(
-            CURLOPT_RETURNTRANSFER => 1,            // return web page
-            CURLOPT_POST           => 1,
-            CURLOPT_HEADER         => true,         // don't return headers
-            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
-            CURLOPT_TIMEOUT        => 120,          // timeout on response
-            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
-            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
-            CURLOPT_POSTFIELDS     => $post_data,
-            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
-            CURLOPT_SSL_VERIFYPEER => false,        //
-            CURLOPT_VERBOSE        => 1,            //
-            CURLINFO_HEADER_OUT    => true
-        );
+        $optionspncp = $this->getParancurl('POST',$post_data,$headers,false,false);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);
@@ -332,8 +260,6 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
 
         $url = $this->envs['URL'] . "orgaos/" . $cnpj . "/compras/$iAnoCompra/$iCodigocompra/arquivos/$iSeqAnexosPNCP";
 
-        $method = 'DELETE';
-
         $chpncp      = curl_init($url);
 
         $headers = array(
@@ -341,24 +267,7 @@ class DispensaPorValorPNCP extends ModeloBasePNCP
             'Authorization: ' . $token
         );
 
-        $optionspncp = array(
-            CURLOPT_RETURNTRANSFER => 1,            // return web page
-            CURLOPT_POST           => 1,
-            CURLOPT_HEADER         => false,         // don't return headers
-            CURLOPT_FOLLOWLOCATION => true,         // follow redirects
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_AUTOREFERER    => true,         // set referer on redirect
-            CURLOPT_CONNECTTIMEOUT => 120,          // timeout on connect
-            CURLOPT_TIMEOUT        => 120,          // timeout on response
-            CURLOPT_MAXREDIRS      => 10,           // stop after 10 redirects
-            CURLOPT_CUSTOMREQUEST  => $method,      // i am sending post data
-            //CURLOPT_POSTFIELDS     => $oDados,
-            CURLOPT_SSL_VERIFYHOST => 0,            // don't verify ssl
-            CURLOPT_SSL_VERIFYPEER => false,        //
-            CURLOPT_VERBOSE        => 1,            //
-            CURLINFO_HEADER_OUT    => true
-        );
-
+        $optionspncp = $this->getParancurl('DELETE',null,$headers,false,false);
 
         curl_setopt_array($chpncp, $optionspncp);
         $contentpncp = curl_exec($chpncp);

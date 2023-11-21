@@ -89,7 +89,7 @@ $responsavel = $z01_nome;
 $numprecerto = $v07_numpre;
 $situacao = '';
 if($v07_situacao == '2'){
-  $situacao = 'Anulado';
+  $situacao = ' - REVOGADO';
 }
 
 if ($leng == '14' ) {

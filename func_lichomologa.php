@@ -114,7 +114,7 @@ $sWhereContratos = " and 1 = 1 ";
                     and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and ";
                 }
                 if($l12_adjudicarprocesso == "t"){
-                    $dbwhere .= "((liclicita.l20_tipnaturezaproced = 2 and l20_licsituacao in (13))) and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
+                    $dbwhere .= "((liclicita.l20_tipnaturezaproced in (1,2) and l20_licsituacao in (13))) and l200_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "'
                     and l11_data <= '" . date('Y-m-d', db_getsession('DB_datausu')) . "' and ";
                 }
             }else if(isset($homologacao) &&trim($homologacao) == "0") {

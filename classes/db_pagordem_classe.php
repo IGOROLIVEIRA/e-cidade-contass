@@ -63,6 +63,8 @@ class cl_pagordem {
    var $e50_valorremuneracao = null;
    var $e50_valordesconto = null;
    var $e50_datacompetencia = null;
+   var $e50_retencaoir = null;
+   var $e50_naturezabemservico = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  e50_codord = int4 = Ordem
@@ -81,6 +83,8 @@ class cl_pagordem {
                  e50_valorremuneracao = float8 = Valor da Remuneração
                  e50_valordesconto = float8 = Valor do desconto
                  e50_datacompetencia = date = Competência
+                 e50_retencaoir = bool = Incide Retenção do Imposto de Renda
+                 e50_naturezabemservico = int4 = Codigo de Natureza de Bem ou Serviço
                  ";
    //funcao construtor da classe
    function cl_pagordem() {
@@ -130,7 +134,8 @@ class cl_pagordem {
        $this->e50_valorremuneracao = ($this->e50_valorremuneracao == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_valorremuneracao"]:$this->e50_valorremuneracao);
        $this->e50_valordesconto = ($this->e50_valordesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_valordesconto"]:$this->e50_valordesconto);
        $this->e50_datacompetencia = ($this->e50_datacompetencia == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_datacompetencia"]:$this->e50_datacompetencia);
-
+       $this->e50_retencaoir = ($this->e50_retencaoir == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_retencaoir"]:$this->e50_retencaoir) == 'sim' ? 1 : 0; 
+       $this->e50_naturezabemservico = ($this->e50_naturezabemservico == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_naturezabemservico"]:$this->e50_naturezabemservico);
 
      }else{
        $this->e50_codord = ($this->e50_codord == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_codord"]:$this->e50_codord);
@@ -234,6 +239,8 @@ class cl_pagordem {
                                       ,e50_valorremuneracao
                                       ,e50_valordesconto
                                       ,e50_datacompetencia
+                                      ,e50_retencaoir
+                                      ,e50_naturezabemservico
                        )
                 values (
                                 $this->e50_codord
@@ -251,8 +258,9 @@ class cl_pagordem {
                                ,$this->e50_cattrabalhadorremurenacao
                                ,$this->e50_valorremuneracao
                                ,$this->e50_valordesconto
-                               ,".($this->e50_datacompetencia == "null" || $this->e50_datacompetencia == ""?"null":"'".$this->e50_datacompetencia."'")."
-
+                               ,".($this->e50_datacompetencia == "null" || $this->e50_datacompetencia == ""?"null":"'".$this->e50_datacompetencia."'")."                               
+                               ,$this->e50_retencaoir::bool
+                               ,".($this->e50_naturezabemservico == "null" || $this->e50_naturezabemservico == ""?"null":"'".$this->e50_naturezabemservico."'")."
                       )";
                 //  echo $sql;exit;
      $result = db_query($sql);
@@ -425,6 +433,14 @@ class cl_pagordem {
      }
      if(trim($this->e50_contapag)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_contapag"])){
         $sql  .= $virgula." e50_contapag = $this->e50_contapag ";
+        $virgula = ",";
+      }
+      if(trim($this->e50_retencaoir)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_retencaoir"])){
+        $sql  .= $virgula." e50_retencaoir = $this->e50_retencaoir::bool ";
+        $virgula = ",";
+      }
+      if(trim($this->e50_naturezabemservico)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_naturezabemservico"])){
+        $sql  .= $virgula." e50_naturezabemservico = $this->e50_naturezabemservico ";
         $virgula = ",";
       }
      $sql .= " where ";

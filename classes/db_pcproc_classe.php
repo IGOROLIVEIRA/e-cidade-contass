@@ -61,6 +61,7 @@ class cl_pcproc
   var $pc80_dadoscomplementares = null;
   var $pc80_amparolegal = null;
   var $pc80_categoriaprocesso = null;
+  var $pc80_modalidadecontratacao = null;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
                  pc80_codproc = int8 = Código do Processo de Compras
@@ -78,6 +79,7 @@ class cl_pcproc
                  pc80_dadoscomplementares = dados complementares
                  pc80_amparolegal = amparo legal
                  pc80_categoriaprocesso = categoria do processo
+                 pc80_modalidadecontratacao = int4 = modalidade de contratacao
                  ";
   //funcao construtor da classe
   function cl_pcproc()
@@ -122,6 +124,7 @@ class cl_pcproc
       $this->pc80_dadoscomplementares = ($this->pc80_dadoscomplementares == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_dadoscomplementares"] : $this->pc80_dadoscomplementares);
       $this->pc80_amparolegal = ($this->pc80_amparolegal == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_amparolegal"] : $this->pc80_amparolegal);
       $this->pc80_categoriaprocesso = ($this->pc80_categoriaprocesso == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_categoriaprocesso"] : $this->pc80_categoriaprocesso);
+      $this->pc80_modalidadecontratacao = ($this->pc80_modalidadecontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_modalidadecontratacao"] : $this->pc80_modalidadecontratacao);
     } else {
       $this->pc80_codproc = ($this->pc80_codproc == "" ? @$GLOBALS["HTTP_POST_VARS"]["pc80_codproc"] : $this->pc80_codproc);
     }
@@ -218,6 +221,10 @@ class cl_pcproc
       $this->pc80_categoriaprocesso = "null";
     }
 
+    if ($this->pc80_modalidadecontratacao == null) {
+        $this->pc80_modalidadecontratacao = "null";
+    }
+
     if ($pc80_codproc == "" || $pc80_codproc == null) {
       $result = db_query("select nextval('pcproc_pc80_codproc_seq')");
       if ($result == false) {
@@ -266,6 +273,7 @@ class cl_pcproc
                                       ,pc80_dadoscomplementares
                                       ,pc80_amparolegal
                                       ,pc80_categoriaprocesso
+                                      ,pc80_modalidadecontratacao
                        )
                 values (
                                 $this->pc80_codproc
@@ -283,6 +291,7 @@ class cl_pcproc
                                ,'$this->pc80_dadoscomplementares'
                                ,$this->pc80_amparolegal
                                ,$this->pc80_categoriaprocesso
+                               ,$this->pc80_modalidadecontratacao
                       )";
     $result = db_query($sql);
 
@@ -458,6 +467,11 @@ class cl_pcproc
     if (trim($this->pc80_dispvalor) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_dispvalor"])) {
       $sql  .= $virgula . " pc80_dispvalor = '$this->pc80_dispvalor' ";
       $virgula = ",";
+    }
+
+    if (trim($this->pc80_modalidadecontratacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_modalidadecontratacao"])) {
+        $sql  .= $virgula . " pc80_modalidadecontratacao = $this->pc80_modalidadecontratacao";
+        $virgula = ",";
     }
 
     if (trim($this->pc80_orcsigiloso) != "" || isset($GLOBALS["HTTP_POST_VARS"]["pc80_orcsigiloso"])) {
@@ -1424,7 +1438,7 @@ class cl_pcproc
       JOIN orcorgao on o40_orgao = o41_orgao and o40_anousu = o41_anousu
       WHERE db01_coddepto=pc80_depto and db01_anousu=2022 LIMIT 1) AS codigoUnidadeCompradora,
       3 AS tipoInstrumentoConvocatorioId,
-      8 AS modalidadeId,
+      pcproc.pc80_modalidadecontratacao AS modalidadeId,
       5 AS modoDisputaId,
       pcproc.pc80_tipoprocesso AS criterioJulgamentoId,
       pcproc.pc80_numdispensa AS numeroCompra,
@@ -1652,37 +1666,71 @@ class cl_pcproc
   public function sql_query_item_pncp($pc80_codproc)
   {
 
-    $sql  = " SELECT pc01_codmater,
-        pc11_seq,
-        pc01_descrmater,
-        CASE
-            WHEN pc80_tipoprocesso = 2 THEN pc68_nome
-            ELSE NULL
-        END AS pc68_nome,
-        cgm.z01_numcgm,
-        cgm.z01_nome,
-        matunid.m61_descr,
-        pcorcamval.pc23_quant,
-        pcorcamval.pc23_valor
-        FROM pcproc
-        INNER JOIN pcprocitem ON pc81_codproc = pc80_codproc
-        INNER JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem
-        INNER JOIN pcorcamitem ON pc22_orcamitem = pc31_orcamitem
-        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
-        LEFT  JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-        left join processocompralote on pc68_pcproc = pc80_codproc
-        left join processocompraloteitem on pc69_processocompralote = pc68_sequencial and pc69_pcprocitem=pc81_codprocitem
-        LEFT  JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-        INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-        INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-        INNER JOIN pcorcam ON pc20_codorc = pc22_codorc
-        INNER JOIN pcorcamforne ON pc21_codorc = pc20_codorc
-        INNER JOIN cgm ON pc21_numcgm = z01_numcgm
-        INNER JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
-        AND pc23_orcamforne=pc21_orcamforne
-        INNER JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
-        AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
-        WHERE pc80_codproc = $pc80_codproc AND pc24_pontuacao =1 ORDER BY pc11_seq
+    $sql  = " SELECT   pc01_codmater,
+                       pc11_seq,
+                       pc01_descrmater,
+                       NULL AS pc68_nome,
+                       cgm.z01_numcgm,
+                       cgm.z01_nome,
+                       matunid.m61_descr,
+                       pcorcamval.pc23_quant,
+                       pcorcamval.pc23_valor
+                FROM pcproc
+                INNER JOIN pcprocitem ON pc81_codproc = pc80_codproc
+                INNER JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem
+                INNER JOIN pcorcamitem ON pc22_orcamitem = pc31_orcamitem
+                INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+                LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                LEFT JOIN processocompralote ON pc68_pcproc = pc80_codproc
+                LEFT JOIN processocompraloteitem ON pc69_processocompralote = pc68_sequencial
+                AND pc69_pcprocitem=pc81_codprocitem
+                LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                INNER JOIN pcorcam ON pc20_codorc = pc22_codorc
+                INNER JOIN pcorcamforne ON pc21_codorc = pc20_codorc
+                INNER JOIN cgm ON pc21_numcgm = z01_numcgm
+                INNER JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+                AND pc23_orcamforne=pc21_orcamforne
+                INNER JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+                AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+                WHERE pc80_codproc = $pc80_codproc
+                    AND pc24_pontuacao =1
+                    AND pc80_tipoprocesso != 2
+                UNION
+                SELECT pc01_codmater,
+                       pc11_seq,
+                       pc01_descrmater,
+                       pc68_nome,
+                       cgm.z01_numcgm,
+                       cgm.z01_nome,
+                       matunid.m61_descr,
+                       pcorcamval.pc23_quant,
+                       pcorcamval.pc23_valor
+                FROM pcproc
+                INNER JOIN pcprocitem ON pc81_codproc = pc80_codproc
+                INNER JOIN pcorcamitemproc ON pc31_pcprocitem = pc81_codprocitem
+                INNER JOIN pcorcamitem ON pc22_orcamitem = pc31_orcamitem
+                INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+                LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+                LEFT JOIN processocompralote ON pc68_pcproc = pc80_codproc
+                LEFT JOIN processocompraloteitem ON pc69_processocompralote = pc68_sequencial
+                AND pc69_pcprocitem=pc81_codprocitem
+                LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+                INNER JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+                INNER JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+                INNER JOIN pcorcam ON pc20_codorc = pc22_codorc
+                INNER JOIN pcorcamforne ON pc21_codorc = pc20_codorc
+                INNER JOIN cgm ON pc21_numcgm = z01_numcgm
+                INNER JOIN pcorcamval ON pc22_orcamitem = pc23_orcamitem
+                AND pc23_orcamforne=pc21_orcamforne
+                INNER JOIN pcorcamjulg ON pcorcamval.pc23_orcamitem = pcorcamjulg.pc24_orcamitem
+                AND pcorcamval.pc23_orcamforne = pcorcamjulg.pc24_orcamforne
+                WHERE pc80_codproc = $pc80_codproc
+                    AND pc24_pontuacao =1
+                    AND pc80_tipoprocesso = 2
+                    and pc69_sequencial is not null
+                ORDER BY pc11_seq
         ";
 
     return $sql;
@@ -1695,14 +1743,14 @@ class cl_pcproc
                 o58_projativ AS projetoativ,
                 o56_elemento as codorcamentario
                 FROM pcproc
-                INNER JOIN pcprocitem ON pcprocitem.pc81_codproc = pcproc.pc80_codproc 
+                INNER JOIN pcprocitem ON pcprocitem.pc81_codproc = pcproc.pc80_codproc
                 INNER JOIN solicitem ON pcprocitem.pc81_solicitem = solicitem.pc11_codigo
                 INNER JOIN pcdotac ON pcdotac.pc13_codigo = solicitem.pc11_codigo
                 INNER JOIN orcdotacao ON (orcdotacao.o58_anousu,orcdotacao.o58_coddot) = (pcdotac.pc13_anousu,pcdotac.pc13_coddot)
                 INNER JOIN orctiporec ON orctiporec.o15_codigo = orcdotacao.o58_codigo
                 INNER JOIN orcelemento on (orcelemento.o56_codele,orcelemento.o56_anousu) = (orcdotacao.o58_codele,orcdotacao.o58_anousu)
                 WHERE pc80_codproc = $pc80_codproc";
-                
+
                 return $sSql;
 
   }
