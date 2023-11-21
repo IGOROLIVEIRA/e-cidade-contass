@@ -2556,6 +2556,9 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       $('oTxtJustificativa').value = aditamento.justificativa;
       $('oTxtDescricaoAcordo').value = aditamento.resumoObjeto;
       $('oTextAreaDescricaoAlteracao').value = aditamento.descricaoAlteracao;
+      $('oPercentualReajuste').value = aditamento.percentualReajuste;
+      $('oIndiceReajuste').value = aditamento.indiceReajuste;
+
 
       me.ajusteInicialGrid();
 
@@ -2568,6 +2571,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       me.lidaLeiLicitacao(aditamento.acordoSequencial);
       me.ocultaDescricaoAlteracao();
       me.lidaCampoDataReferencia(aditamento.dataAssinatura, aditamento.dataReferencia);
+      me.mostracampos();
 
     }
 
