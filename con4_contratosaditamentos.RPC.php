@@ -310,6 +310,9 @@ try {
             $oRetorno->status = $result['status'];
             $oRetorno->message = $result['message'];
             break;
+        case 'validarPeriodoSicom':
+            validaPeriodoSicom($oParam->aditamento, $oRetorno);
+            break;
     }
 
     db_fim_transacao(false);
@@ -361,6 +364,7 @@ function validaPeriodoSicom($aditamento, $oRetorno)
 
     if ($dateassinatura != "" && $aditamento->datareferencia == "") {
         if ($c99_datapat != "" && $dateassinatura <= $c99_datapat) {
+
             $oRetorno->datareferencia = true;
             throw new Exception(' O período já foi encerrado para envio do SICOM. Preencha o campo Data de Referência com uma data no mês subsequente.');
         }

@@ -16,12 +16,14 @@ class AditamentoFactory
      */
     public function createByEloquentModel(AcordoPosicao $acordoPosicao): Aditamento
     {
+        $dataAssinatura = $acordoPosicao->posicaoAditamento->ac35_dataassinaturatermoaditivo;
+
         $aditamento = new Aditamento();
         $aditamento->setAcordoPosicaoSequencial((int) $acordoPosicao->ac26_sequencial)
             ->setAcordoSequencial((int) $acordoPosicao->ac26_acordo)
             ->setTipoAditivo((int) $acordoPosicao->ac26_acordoposicaotipo)
             ->setNumeroAditamento((int) $acordoPosicao->ac26_numeroaditamento)
-            ->setDataAssinatura(new DateTime($acordoPosicao->posicaoAditamento->ac35_dataassinaturatermoaditivo))
+            ->setDataAssinatura(new DateTime($dataAssinatura))
             ->setDataPublicacao(new DateTime($acordoPosicao->posicaoAditamento->ac35_datapublicacao))
             ->setVienciaAlterada($acordoPosicao->ac26_vigenciaalterada)
             ->setVeiculoDivulgacao(mb_convert_encoding($acordoPosicao->posicaoAditamento->ac35_veiculodivulgacao, "UTF-8", "ISO-8859-1"))
@@ -30,7 +32,8 @@ class AditamentoFactory
             ->setVigenciaInicio(new DateTime($acordoPosicao->vigencia->ac18_datainicio))
             ->setVigenciaFim(new DateTime($acordoPosicao->vigencia->ac18_datafim))
             ->setResumoObjeto($acordoPosicao->acordo->ac16_resumoobjeto)
-            ->setDescricaoAlteracao($acordoPosicao->posicaoAditamento->ac35_descricaoalteracao);
+            ->setDescricaoAlteracao($acordoPosicao->posicaoAditamento->ac35_descricaoalteracao)
+            ->setDataReferencia(new DateTime($acordoPosicao->posicaoAditamento->ac35_datareferencia ?? $dataAssinatura));
 
 
         if ($aditamento->isReajuste()) {

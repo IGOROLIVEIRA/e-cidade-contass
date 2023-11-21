@@ -173,14 +173,15 @@ class UpdateAditamentoCommand implements UpdateAditamentoCommandInterface
      */
     private function formatAcordoPosicaoAditamento(Aditamento $aditamento): array
     {
+        $dataAssinatura = $aditamento->getDataAssinatura()->format('Y-m-d');
         return [
-            'ac35_dataassinaturatermoaditivo' => $aditamento->getDataAssinatura()->format('Y-m-d'),
+            'ac35_dataassinaturatermoaditivo' => $dataAssinatura,
             'ac35_datapublicacao' => $aditamento->getDataPublicacao()->format('Y-m-d'),
             'ac35_veiculodivulgacao' => $aditamento->getVeiculoDivulgacao(),
             'ac35_justificativa' => $aditamento->getJustificativa(),
             'ac35_datareferencia' => !empty($aditamento->getDataReferencia())
                                     ? $aditamento->getDataReferencia()->format('Y-m-d')
-                                    : null
+                                    : $dataAssinatura
         ];
     }
 }

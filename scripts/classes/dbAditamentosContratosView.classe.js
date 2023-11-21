@@ -1150,6 +1150,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         if (datafim1 == datafim2) {
             vigenciaalterada = 'n';
         }
+
         var oParam = {
             exec: "processarAditamento",
             iAcordo: me.oTxtCodigoAcordo.getValue(),
@@ -2532,13 +2533,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
     this.lidaDadosAlteracao = (aditamento) => {
 
-
       $('btnAditar').disabled = false;
       $('btnItens').disabled = false;
 
       me.estadoTela.acordoPosicaoSeq = aditamento.acordoPosicaoSequencial;
       me.estadoTela.posicaoAditamentoSequencial = aditamento.posicaoAditamentoSequencial;
-
 
       $('oTxtCodigoAcordo').value = aditamento.acordoSequencial;
 
@@ -2560,7 +2559,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
       me.ajusteInicialGrid();
 
-
       adapatador = new ItensAdapter(aditamento)
 
       aItensPosicao = adapatador.criarItens();
@@ -2569,6 +2567,8 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       me.js_changeTipoAditivo();
       me.lidaLeiLicitacao(aditamento.acordoSequencial);
       me.ocultaDescricaoAlteracao();
+      me.lidaCampoDataReferencia(aditamento.dataAssinatura, aditamento.dataReferencia);
+
     }
 
     this.ajusteInicialGrid = () => {
@@ -2593,7 +2593,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
     this.alterarAdiamento = (aditamento) => {
       aditamento.acordoPosicaoSequencial = me.estadoTela.acordoPosicaoSeq;
       aditamento.posicaoAditamentoSequencial = me.estadoTela.posicaoAditamentoSequencial;
-
 
       const oParam = {
         exec: 'processarAlteracaoAditivo',
@@ -2628,14 +2627,37 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
       }
 
       new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
-          if(oRetorno.lei==1){
+          if (oRetorno.lei==1) {
               $('justificativa').style.display = '';
-          }else{
+          } else {
               $('justificativa').style.display = 'none';
           }
-
       }).setMessage("Aguarde, pesquisando acordos.")
           .execute();
     }
 
+    this.lidaCampoDataReferencia = (dataAssinatura, dataReferencia) => {
+      const oParam = {
+        exec: 'validarPeriodoSicom',
+        aditamento: {
+          datareferencia: "",
+          dataassinatura: dataAssinatura
+        }
+      }
+
+      new AjaxRequest(me.sUrlRpc, oParam, function (oRetorno, lErro) {
+        if (lErro && !oRetorno.datareferencia) {
+            alert("Erro ao validar periodo sicom");
+            return;
+        }
+
+        if (lErro && oRetorno.datareferencia) {
+          document.getElementById("trdatareferencia").style.display = 'contents';
+          $('oTxtDataReferencia').value = dataReferencia;
+          return;
+        }
+
+      }).setMessage("Aguarde, validando periodo sicom")
+      .execute();
+    }
 }
