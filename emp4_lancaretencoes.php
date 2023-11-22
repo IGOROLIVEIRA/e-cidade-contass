@@ -91,8 +91,11 @@ $e50_codord    = $oNota->e50_codord;
 $e60_numemp    = $oNota->e60_numemp;
 
 if (isset($oGet->nValorBase) && $oGet->nValorBase != "") {
-
-  $valorpagar     =  $oNota->e70_vlrliq;
+  
+  $valorpagar     = $oNota->e70_valor;
+  if ( $oNota->e70_vlrliq > 0) {
+    $valorpagar     =  $oNota->e70_vlrliq;
+  }
   $e23_valorbase  = $valorpagar;
   $valormovimento = $valorpagar;
 
