@@ -122,11 +122,6 @@ $val = false;
                             $pc10_data_ano = $arr_data[0];
                         }
                         $result_pcproc = $clpcproc->sql_record('select last_value+1 as pc80_codproc from pcproc_pc80_codproc_seq');
-                        if ($clpcproc->numrows > 0) {
-                            //db_fieldsmemory($result_pcproc,0);
-                        } else {
-                            //$pc80_codproc = 1;
-                        }
                         ?>
                     </td>
                     <td align="left" nowrap title="<?= @$Tpc80_codproc ?>">
