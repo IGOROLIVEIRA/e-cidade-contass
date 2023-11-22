@@ -64,14 +64,6 @@
         "files": [
             "definitions.php",
             "bootstrap/tenant_resolver.php",
-            "app/Helpers/PostgresPls.php",
-            "app/Helpers/Functions.php",
-            "app/Helpers/Drive.php",
-            "app/Helpers/Orcamento/FiltrosOrcamento.php",
-            "app/Helpers/Orcamento/FuncoesOrcamento.php",
-            "app/Helpers/Planejamento/FiltrosDespesaPlanejamento.php",
-            "app/Helpers/Configuracao/VerificaEstado.php",
-            "app/Helpers/Contabilidade/FuncoesContabilidade.php",
             "std/autoload.php"
         ],
         "psr-4": {

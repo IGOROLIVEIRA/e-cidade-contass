@@ -180,7 +180,6 @@ return [
         /*
         * Application Domain Service Providers...
         */
-        App\Domain\Patrimonial\Providers\PatrimonialServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
 
     ],

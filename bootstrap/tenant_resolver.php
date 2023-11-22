@@ -7,6 +7,10 @@ const CACHE_TENANTS_PHP = __DIR__ . DS . 'cache/tenants.php';
 function resolveTenantDatabase()
 {
 
+    if (php_sapi_name() === 'cli') {
+        return;
+    }
+
     $host   = str_replace('-', '', $_SERVER['HTTP_HOST']);
     $tenant =  Str::replaceFirst('.' . config('app.default_host'), '', $host);
 
