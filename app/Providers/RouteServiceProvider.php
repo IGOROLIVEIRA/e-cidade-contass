@@ -48,8 +48,6 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
 
-        $this->mapSIMRoutes();
-        $this->mapConfiguracaoRoutes();
     }
 
     /**
@@ -62,20 +60,5 @@ class RouteServiceProvider extends ServiceProvider
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
         });
-    }
-
-
-    private function mapConfiguracaoRoutes()
-    {
-        Route::prefix('v4/api/configuracao')
-            ->namespace('App\Domain\Configuracao\\')
-            ->group(base_path('routes/api/configuracao/configuracao.php'));
-    }
-
-    private function mapSIMRoutes()
-    {
-        Route::prefix('rest/v1')
-            ->middleware(['AuthSim'])
-            ->group(base_path('routes/api/sim/seguranca-integrada-municipios.php'));
     }
 }
