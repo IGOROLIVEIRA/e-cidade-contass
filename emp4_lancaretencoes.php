@@ -92,8 +92,8 @@ $e60_numemp    = $oNota->e60_numemp;
 
 if (isset($oGet->nValorBase) && $oGet->nValorBase != "") {
 
-  $valorpagar    = round($oGet->nValorBase,2);
-  $e23_valorbase = $valorpagar;
+  $valorpagar     =  $oNota->e70_vlrliq;
+  $e23_valorbase  = $valorpagar;
   $valormovimento = $valorpagar;
 
 } else {
@@ -289,6 +289,7 @@ db_app::load("estilos.css");
           <input type='button' id='recalcularretencao'  value='Recalcular'  onclick='js_calculaRetencao()'>
           <input type='button' id='mostraoutrosmov'     value='Composição da Base'  onclick='js_mostraInfo()'>
           <input type='button' id='tabelas        '     value='Tabelas'     onclick='js_tabelas()'>
+          <input type='button' id='Retenção Produção Rural' value='Retenção Produção Rural' onclick='js_retencaoProducaoRural()'>
         </td>
       </tr>
     </table>
@@ -608,6 +609,7 @@ function js_atualizaCampos (iNumRow) {
     $('e23_deducao').value                  = js_strToFloat(aSelecionados[0][2]);//valor da deducao
     $('e21_aliquota').value                 = js_strToFloat(aSelecionados[0][4]);//aliquota da retencao
     $('e23_valorretencao').value            = aSelecionados[0][5];//valor retido da retencao
+    $('e23_valorbase').value                = js_strToFloat(aSelecionados[0][3]);//valor base
     $('lancarretencao').disabled            = true;
     $('alterarretencao').disabled           = false;
     $('apagarretencao').disabled            = false;
@@ -795,6 +797,13 @@ function adicionaRetencao(sValor, sChave, iTipoCalc,nAliquota, lLiberado) {
 
 function js_setAliquota(selectedIndex) {
 
+  var tipocalculo = $('e21_sequencial').options[selectedIndex].tipocalc;
+  
+  $('e23_valorretencao').disabled      = false;
+  if (tipocalculo == 4 || tipocalculo == 10 || tipocalculo == 11 || tipocalculo == 12) {
+    $('e23_valorretencao').disabled      = true;
+  }
+
   $('e21_aliquota').value = $('e21_sequencial').options[selectedIndex].aliquota;
   $('valorpagar').value    = $F('valormovimento');
   $('e23_valorbase').value = $F('valormovimento');
@@ -808,7 +817,10 @@ function js_calculaRetencao() {
   var iTipoCalc   = $('e21_sequencial').options[$('e21_sequencial').selectedIndex].tipocalc;
   var nAliquota   = new Number($F('e21_aliquota'));
   var nDeducao    = new Number($F('e23_deducao'));
-  var nValorBase  = new Number($F('e23_valorbase'));
+  var nValorBase  = new Number($F('valorpagar'));
+  if (nDeducao > 0) {
+    nValorBase  = new Number($F('e23_valorbase'));
+  }
   var nValorNota  = new Number($F('valorpagar'));
   var dtPagamento = $F("dtpagamento");
   var aMovimentos = new Array();
@@ -1134,6 +1146,99 @@ function js_tabelas() {
                         'Tabelas de Cálculo Pessoa Fisica',
                         true,10,10,750,500);
 }
+
+function js_retencaoProducaoRural() 
+{
+
+  var oRetencao = new Object();
+  
+   isSave = true;
+  //  oRetencao.iCodigoRetencao = $F('e21_sequencial');
+   oRetencao.nValorDeducao   = new Number($F('e23_deducao')).toString();
+   oRetencao.nValorNota      = $F('e70_valor');
+   oRetencao.iCodNota        = $F('e69_codnota');
+   oRetencao.iNumemp         = $F('e60_numemp');
+   oRetencao.nAliquota       = $F('e21_aliquota');
+   oRetencao.iCpfCnpj        = $F('z01_cgccpf');
+   oRetencao.nValorRetencao  = $F('e23_valorretencao');
+   oRetencao.nValorbase      = $F('e23_valorbase');
+   oRetencao.aMovimentos     = new Array();
+   if (typeof(aBaseDeCalculo[$F('e21_sequencial')]) != "undefined") {
+     oRetencao.aMovimentos = aBaseDeCalculo[$F('e21_sequencial')];
+   }
+   var soRetencaojson        = JSON.stringify(oRetencao);
+   soRetencaojson            = soRetencaojson.replace("(","");
+   soRetencaojson            = soRetencaojson.replace(")","");
+   js_divCarregando("Aguarde, Calculando retenção","msgBox");
+   var sJson   = '{';
+   sJson      += '"exec":"addRetencaoProducaoRural",';
+   sJson      += '"params":[{"oRetencao":'+soRetencaojson+',"inSession":true,"isUpdate":false}],';
+   sJson      += '"iCodMov":' + $F('e81_codmov');
+   sJson      += '}';
+   url         = 'emp4_retencaonotaRPC.php';
+   var oAjax   = new Ajax.Request(
+                         url,
+                         {
+                          method    : 'post',
+                          parameters: 'json='+sJson,
+                          onComplete: js_retornoretencaoProducaoRural
+                          }
+                        );
+
+
+
+}
+
+function js_retornoretencaoProducaoRural(oAjax) {
+
+  js_removeObj("msgBox");
+  var oRetencoes = eval("("+oAjax.responseText+")");
+  if (oRetencoes.status == 2) {
+
+    alert(oRetencoes.message.urlDecode());
+    return false;
+
+  }
+
+  gridRetencoes.clearAll(true);
+  //preenchemos a grid com as retencoes;
+  if (oRetencoes.aRetencoes.length > 0) {
+
+
+    for (var iRet = 0; iRet < oRetencoes.aRetencoes.length; iRet++) {
+
+      with (oRetencoes.aRetencoes[iRet]) {
+
+         var aLinha = new Array();
+         aLinha[0]  = e21_sequencial;
+         aLinha[1]  = e21_descricao.urlDecode();
+         aLinha[2]  = js_formatar(e23_deducao,'f');
+         aLinha[3]  = js_formatar(e23_valorbase,'f');
+         aLinha[4]  = js_formatar(e23_aliquota,'f');
+         aLinha[5]  = ParseFloat(e23_valorretencao,2);
+         aLinha[6]  = e21_retencaotipocalc;
+         aLinha[7]  = e21_retencaotiporecgrupo;
+         gridRetencoes.addRow(aLinha);
+         gridRetencoes.aRows[iRet].sEvents = "onDBLClick='js_atualizaCampos("+iRet+")'";
+         gridRetencoes.aRows[iRet].sValue  = e21_sequencial;
+         aBaseDeCalculo[e21_sequencial]  = "";
+         if (aMovimentos.length > 0) {
+
+           var aMov = new Array();
+           for (var iMov = 0; iMov < aMovimentos.length; iMov++) {
+            aMov.push(aMovimentos[iMov]);
+           }
+           aBaseDeCalculo[e21_sequencial] = aMov;
+         }
+      }
+    }
+
+    gridRetencoes.renderRows();
+  }
+  $('valorpagar').value    = $F('valormovimento');
+  $('e23_valorbase').value = $F('valormovimento');
+  js_limpar();
+} 
 
 function setBaseDeCaculo(aBaseDeCalculo1,iCodigoRetencao) {
   aBaseDeCalculo[iCodigoRetencao] = aBaseDeCalculo1;
