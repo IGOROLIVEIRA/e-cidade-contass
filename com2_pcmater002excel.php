@@ -1,13 +1,21 @@
 <?php
-
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/PHPExcel/Classes/PHPExcel.php");
+require_once("libs/db_stdlib.php");
+require_once("libs/db_utils.php");
+require_once("libs/db_conecta.php");
+require_once("libs/db_sessoes.php");
+require_once("libs/db_usuariosonline.php");
+require_once("libs/db_libsys.php");
+require_once("std/db_stdClass.php");
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
 
 $clpcmater = new cl_pcmater;
 $objPHPExcel = new PHPExcel;
+$objPHPExcel->setActiveSheetIndex(0);
+$sheet = $objPHPExcel->getActiveSheet();
 
 /* Funções utilizadas durante preenchimento dos  */
 
@@ -103,6 +111,21 @@ $styleItens = array(
     ),
 );
 
+$styleItensCentralizado = array(
+    'borders' => array(
+        'allborders' => array(
+            'style' => PHPExcel_Style_Border::BORDER_THIN,
+            'color' => array('argb' => 'FF000000'),
+        ),
+    ),
+    'font' => array(
+        'size' => 10,
+    ),
+    'alignment' => array(
+        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
+    ),
+);
+
 /* Montagem cabeçalho */
 
 $sheet = $objPHPExcel->getActiveSheet();
@@ -195,7 +218,11 @@ for ($i = 0; $i < $quantidadeDeItens; $i++) {
         $sheet->setCellValue('D'.$linhaAtual, mb_convert_encoding($item->pc04_descrsubgrupo,'UTF-8'));
         
     }
-    
+
+    $sheet->getStyle('A'.$linhaAtual)->applyFromArray($styleItensCentralizado);
+    $sheet->getStyle('D'.$linhaAtual)->applyFromArray($styleItensCentralizado);
+    $sheet->getStyle('F'.$linhaAtual)->applyFromArray($styleItensCentralizado);
+    $sheet->getStyle('F'.$linhaAtual)->getNumberFormat()->setFormatCode('0');
 }
 
 $linhaAtual++;
@@ -204,12 +231,9 @@ $sheet->setCellValue('B'.$linhaAtual, "Total Geral: $clpcmater->numrows");
 $sheet->getStyle("B2:B".$quantidadeDeItens)->getAlignment()->setWrapText(true);
 
 $namefile = "Itens" . db_getsession('DB_instit') . ".xlsx";
-header("Content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-header("Content-Disposition: attachment; filename=$namefile");
-header("Expires: 0");
-header("Cache-Control: must-revalidate, post-check=0,pre-check=0");
-header("Pragma: public");
+
+header('Content-Type: application/vnd.ms-excel');
+header("Content-Disposition: attachment;filename=$namefile");
+header('Cache-Control: max-age=0');
 $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 $objWriter->save('php://output');
-
-?>
