@@ -42,14 +42,14 @@ function imprimeSubgrupo($i,$sheet,$item,$subgrupoAtual,$linhaAtual){
 }
 
 function imprimeTotalSubgrupo ($i,$sheet,$item,$subgrupoAtual,$linhaAtual,$quantidadeItensSubgrupo){
-    
+
 	if ($i == 0) return false;
     if($item->pc04_codsubgrupo == $subgrupoAtual) return false;
 
 	$sheet->getStyle('B'.$linhaAtual)->getFont()->setBold(true);
     $sheet->setCellValue('B'.$linhaAtual, "Total: $quantidadeItensSubgrupo");
     return true;
-    
+
 }
 
 
@@ -60,7 +60,7 @@ $aOrderBy= array(
     "sub_grupo" => $ordem == "a" ? "pc04_descrsubgrupo,pc01_descrmater" : "pc04_codsubgrupo,pc01_codmater",
     "elemento" => $ordem == "a" ? "o56_descr,pc01_descrmater" : "o56_codele,pc01_codmater"
     );
-$sOrderBy = $aOrderBy[$grupo]; 
+$sOrderBy = $aOrderBy[$grupo];
 
 $sWhere = "pc01_ativo='f' and pc01_conversao is false and o56_anousu = ".db_getsession("DB_anousu");
 $sWhere.= $elemento != "" ? " and o56_elemento = '$elemento'" : "";
@@ -164,6 +164,11 @@ $quantidadeItensSubgrupo = 0;
 $subgrupoAtual = 0;
 $total = 0;
 $linhaAtual = 1;
+// matriz de entrada
+$what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
+
+// matriz de saída
+$by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
 
 for ($i = 0; $i < $quantidadeDeItens; $i++) {
 
@@ -173,7 +178,7 @@ for ($i = 0; $i < $quantidadeDeItens; $i++) {
         $item = db_utils::fieldsMemory($rsPcmater,$i);
         $sheet->setCellValue('A'.$linhaAtual, $item->pc01_codmater);
         $sheet->setCellValue('B'.$linhaAtual, mb_convert_encoding($item->pc01_descrmater,'UTF-8') );
-        $sheet->setCellValue('C'.$linhaAtual, mb_convert_encoding($item->pc01_complmater,'UTF-8'));
+        $sheet->setCellValue('C'.$linhaAtual, str_replace($what, $by, $item->pc01_complmater));
         $sheet->setCellValue('D'.$linhaAtual, $item->pc04_codsubgrupo);
         $sheet->setCellValue('E'.$linhaAtual, mb_convert_encoding($item->pc04_descrsubgrupo,'UTF-8'));
         $sheet->setCellValue('F'.$linhaAtual, $item->o56_elemento);
@@ -189,20 +194,20 @@ for ($i = 0; $i < $quantidadeDeItens; $i++) {
         $item = db_utils::fieldsMemory($rsPcmater,$i);
 
         $impressaoTotalSubgrupo = imprimeTotalSubgrupo($i,$sheet,$item,$subgrupoAtual,$linhaAtual,$quantidadeItensSubgrupo);
-        $linhaAtual = $impressaoTotalSubgrupo == true ? $linhaAtual + 2 : $linhaAtual;
+        $linhaAtual = $impressaoTotalSubgrupo ? $linhaAtual + 2 : $linhaAtual;
 
         $invocacaoFuncaoImprimeSubGrupo = imprimeSubgrupo($i,$sheet,$item,$subgrupoAtual,$linhaAtual);
-        $subgrupoAtual = $invocacaoFuncaoImprimeSubGrupo == true ? $item->pc04_codsubgrupo : $subgrupoAtual;
-        $linhaAtual = $invocacaoFuncaoImprimeSubGrupo == true ? $linhaAtual + 2 : $linhaAtual;
-        $quantidadeItensSubgrupo = $invocacaoFuncaoImprimeSubGrupo == true ? 0 : $quantidadeItensSubgrupo++;
-       
+        $subgrupoAtual = $invocacaoFuncaoImprimeSubGrupo ? $item->pc04_codsubgrupo : $subgrupoAtual;
+        $linhaAtual = $invocacaoFuncaoImprimeSubGrupo ? $linhaAtual + 2 : $linhaAtual;
+        $quantidadeItensSubgrupo = $invocacaoFuncaoImprimeSubGrupo ? 0 : $quantidadeItensSubgrupo++;
+
         $sheet->setCellValue('A'.$linhaAtual, $item->pc01_codmater);
         $sheet->setCellValue('B'.$linhaAtual, mb_convert_encoding($item->pc01_descrmater,'UTF-8') );
         $sheet->setCellValue('C'.$linhaAtual, $item->o56_elemento,'UTF-8');
         $sheet->setCellValue('D'.$linhaAtual, mb_convert_encoding($item->o56_descr,'UTF-8'));
 
         $quantidadeItensSubgrupo++;
-        
+
     }
 
     if($grupo == "elemento"){
@@ -216,7 +221,7 @@ for ($i = 0; $i < $quantidadeDeItens; $i++) {
         $sheet->setCellValue('B'.$linhaAtual, mb_convert_encoding($item->pc01_descrmater,'UTF-8') );
         $sheet->setCellValue('C'.$linhaAtual, $item->pc04_codsubgrupo,'UTF-8');
         $sheet->setCellValue('D'.$linhaAtual, mb_convert_encoding($item->pc04_descrsubgrupo,'UTF-8'));
-        
+
     }
 
     $sheet->getStyle('A'.$linhaAtual)->applyFromArray($styleItensCentralizado);
