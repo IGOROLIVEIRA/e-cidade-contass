@@ -30,7 +30,7 @@ function preenchimentoElementoSelecionado($i,$sheet,$item,$linhaAtual){
 
 }
 
-function imprimeSubgrupo($i,$sheet,$item,$subgrupoAtual,$linhaAtual){
+function imprimeSubgrupo($sheet,$item,$subgrupoAtual,$linhaAtual){
 
     if($item->pc04_codsubgrupo == $subgrupoAtual) return false;
 
@@ -52,6 +52,11 @@ function imprimeTotalSubgrupo ($i,$sheet,$item,$subgrupoAtual,$linhaAtual,$quant
 
 }
 
+function parseUtf8ToIso88591($string){
+    $what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
+    $by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
+    return iconv('UTF-8', 'ISO-8859-1//IGNORE', str_replace($what, $by, $string));
+}
 
 /* Consulta dos itens*/
 
@@ -96,19 +101,10 @@ $styleTitulo = array(
     ),
 );
 
-$styleItens = array(
-    'borders' => array(
-        'allborders' => array(
-            'style' => PHPExcel_Style_Border::BORDER_THIN,
-            'color' => array('argb' => 'FF000000'),
-        ),
-    ),
-    'font' => array(
-        'size' => 10,
-    ),
+$styleAlinhamentoVertical = array(
     'alignment' => array(
-        'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT,
-    ),
+        'vertical' => PHPExcel_Style_Alignment::VERTICAL_CENTER
+    )
 );
 
 $styleItensCentralizado = array(
@@ -125,6 +121,8 @@ $styleItensCentralizado = array(
         'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
     ),
 );
+
+$objPHPExcel->getDefaultStyle()->applyFromArray($styleAlinhamentoVertical);
 
 /* Montagem cabeçalho */
 
@@ -164,11 +162,6 @@ $quantidadeItensSubgrupo = 0;
 $subgrupoAtual = 0;
 $total = 0;
 $linhaAtual = 1;
-// matriz de entrada
-$what = array("°", chr(13), chr(10), 'ä', 'ã', 'à', 'á', 'â', 'ê', 'ë', 'è', 'é', 'ï', 'ì', 'í', 'ö', 'õ', 'ò', 'ó', 'ô', 'ü', 'ù', 'ú', 'û', 'À', 'Á', 'Ã', 'É', 'Í', 'Ó', 'Ú', 'ñ', 'Ñ', 'ç', 'Ç', ' ', '-', '(', ')', ',', ';', ':', '|', '!', '"', '#', '$', '%', '&', '/', '=', '?', '~', '^', '>', '<', 'ª', 'º');
-
-// matriz de saída
-$by = array('', '', '', 'a', 'a', 'a', 'a', 'a', 'e', 'e', 'e', 'e', 'i', 'i', 'i', 'o', 'o', 'o', 'o', 'o', 'u', 'u', 'u', 'u', 'A', 'A', 'A', 'E', 'I', 'O', 'U', 'n', 'n', 'c', 'C', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ');
 
 for ($i = 0; $i < $quantidadeDeItens; $i++) {
 
@@ -177,13 +170,18 @@ for ($i = 0; $i < $quantidadeDeItens; $i++) {
         $linhaAtual = $i + 2;
         $item = db_utils::fieldsMemory($rsPcmater,$i);
         $sheet->setCellValue('A'.$linhaAtual, $item->pc01_codmater);
-        $sheet->setCellValue('B'.$linhaAtual, mb_convert_encoding($item->pc01_descrmater,'UTF-8') );
-        $sheet->setCellValue('C'.$linhaAtual, str_replace($what, $by, $item->pc01_complmater));
+        $sheet->setCellValue('B'.$linhaAtual, parseUtf8ToIso88591($item->pc01_descrmater));
+        $sheet->setCellValue('C'.$linhaAtual, parseUtf8ToIso88591($item->pc01_complmater));
         $sheet->setCellValue('D'.$linhaAtual, $item->pc04_codsubgrupo);
-        $sheet->setCellValue('E'.$linhaAtual, mb_convert_encoding($item->pc04_descrsubgrupo,'UTF-8'));
+        $sheet->setCellValue('E'.$linhaAtual, parseUtf8ToIso88591($item->pc04_descrsubgrupo));
         $sheet->setCellValue('F'.$linhaAtual, $item->o56_elemento);
-        $sheet->setCellValue('G'.$linhaAtual, mb_convert_encoding($item->o56_descr,'UTF-8'));
+        $sheet->setCellValue('G'.$linhaAtual, parseUtf8ToIso88591($item->o56_descr));
         $sheet->setCellValue('H'.$linhaAtual, $item->nome,'UTF-8');
+
+        $sheet->getStyle('A'.$linhaAtual)->applyFromArray($styleItensCentralizado);
+        $sheet->getStyle('D'.$linhaAtual)->applyFromArray($styleItensCentralizado);
+        $sheet->getStyle('F'.$linhaAtual)->applyFromArray($styleItensCentralizado);
+        $sheet->getStyle('F'.$linhaAtual)->getNumberFormat()->setFormatCode('0');
 
     }
 
@@ -196,15 +194,19 @@ for ($i = 0; $i < $quantidadeDeItens; $i++) {
         $impressaoTotalSubgrupo = imprimeTotalSubgrupo($i,$sheet,$item,$subgrupoAtual,$linhaAtual,$quantidadeItensSubgrupo);
         $linhaAtual = $impressaoTotalSubgrupo ? $linhaAtual + 2 : $linhaAtual;
 
-        $invocacaoFuncaoImprimeSubGrupo = imprimeSubgrupo($i,$sheet,$item,$subgrupoAtual,$linhaAtual);
+        $invocacaoFuncaoImprimeSubGrupo = imprimeSubgrupo($sheet,$item,$subgrupoAtual,$linhaAtual);
         $subgrupoAtual = $invocacaoFuncaoImprimeSubGrupo ? $item->pc04_codsubgrupo : $subgrupoAtual;
         $linhaAtual = $invocacaoFuncaoImprimeSubGrupo ? $linhaAtual + 2 : $linhaAtual;
         $quantidadeItensSubgrupo = $invocacaoFuncaoImprimeSubGrupo ? 0 : $quantidadeItensSubgrupo++;
 
         $sheet->setCellValue('A'.$linhaAtual, $item->pc01_codmater);
-        $sheet->setCellValue('B'.$linhaAtual, mb_convert_encoding($item->pc01_descrmater,'UTF-8') );
+        $sheet->setCellValue('B'.$linhaAtual, parseUtf8ToIso88591($item->pc01_descrmater) );
         $sheet->setCellValue('C'.$linhaAtual, $item->o56_elemento,'UTF-8');
-        $sheet->setCellValue('D'.$linhaAtual, mb_convert_encoding($item->o56_descr,'UTF-8'));
+        $sheet->setCellValue('D'.$linhaAtual, parseUtf8ToIso88591($item->o56_descr));
+
+        $sheet->getStyle('A'.$linhaAtual)->applyFromArray($styleItensCentralizado);
+        $sheet->getStyle('C'.$linhaAtual)->applyFromArray($styleItensCentralizado);
+        $sheet->getStyle('C'.$linhaAtual)->getNumberFormat()->setFormatCode('0');
 
         $quantidadeItensSubgrupo++;
 
@@ -218,16 +220,15 @@ for ($i = 0; $i < $quantidadeDeItens; $i++) {
         $linhaAtual = $preenchimentoElemento == true ? $linhaAtual + 2 : $linhaAtual;
 
         $sheet->setCellValue('A'.$linhaAtual, $item->pc01_codmater);
-        $sheet->setCellValue('B'.$linhaAtual, mb_convert_encoding($item->pc01_descrmater,'UTF-8') );
+        $sheet->setCellValue('B'.$linhaAtual, parseUtf8ToIso88591($item->pc01_descrmater));
         $sheet->setCellValue('C'.$linhaAtual, $item->pc04_codsubgrupo,'UTF-8');
-        $sheet->setCellValue('D'.$linhaAtual, mb_convert_encoding($item->pc04_descrsubgrupo,'UTF-8'));
+        $sheet->setCellValue('D'.$linhaAtual, parseUtf8ToIso88591($item->pc04_descrsubgrupo));
+
+        $sheet->getStyle('A'.$linhaAtual)->applyFromArray($styleItensCentralizado);
+        $sheet->getStyle('C'.$linhaAtual)->applyFromArray($styleItensCentralizado);
 
     }
 
-    $sheet->getStyle('A'.$linhaAtual)->applyFromArray($styleItensCentralizado);
-    $sheet->getStyle('D'.$linhaAtual)->applyFromArray($styleItensCentralizado);
-    $sheet->getStyle('F'.$linhaAtual)->applyFromArray($styleItensCentralizado);
-    $sheet->getStyle('F'.$linhaAtual)->getNumberFormat()->setFormatCode('0');
 }
 
 $linhaAtual++;
