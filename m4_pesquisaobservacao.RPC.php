@@ -46,8 +46,11 @@ try {
 
     case "empempenho":
 
+        $aEmpenho  = explode("/", $sequencial);
+        $e60_codemp = $aEmpenho[0];
+        $e60_anousu = $aEmpenho[1];
         $clempempenho = new cl_empempenho;
-        $rsEmpempenho = $clempempenho->sql_record($clempempenho->sql_query_file($sequencial,"e60_resumo"));
+        $rsEmpempenho = $clempempenho->sql_record($clempempenho->sql_query_file("","e60_resumo","","e60_codemp = '$e60_codemp' and e60_anousu = $e60_anousu"));
         $oRetorno->observacao = urlencode(db_utils::fieldsMemory($rsEmpempenho, 0)->e60_resumo);
         break;
 

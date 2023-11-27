@@ -391,6 +391,12 @@ $rotulo->label("z01_cgccpf");
                 $sWherePesquisaPorCodigoEmpenho = " e60_anousu = " . db_getsession("DB_anousu");
               }
 
+              $aEmpenho = explode("/", $pesquisa_chave);
+              $e60_codemp = $aEmpenho[0];
+              $e60_anousu = $aEmpenho[1];
+              $e60_anousu = $e60_anousu == null ? db_getsession("DB_anousu") : $e60_anousu; 
+              var_dump($e60_anousu);
+              $dbwhere = "e60_codemp = '$e60_codemp' and e60_anousu = $e60_anousu";
 
               /**
                * Filtro $filtroabast
@@ -508,7 +514,6 @@ $rotulo->label("z01_cgccpf");
               $dbwhere .= " and e60_instit = " . db_getsession("DB_instit") . " order by e60_numemp desc";
               $sSql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
             }
-
             $result = $clempempenho->sql_record($sSql);
 
             if ($clempempenho->numrows != 0) {
