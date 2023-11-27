@@ -38,6 +38,7 @@ $clbasesr = new cl_basesr;
 $clrhautonomolanc = new cl_rhautonomolanc();
 
 parse_str($HTTP_SERVER_VARS['QUERY_STRING']);
+$mesPdf = $mes;
 if ($tipo == 'd') {
     $mes = 12;
     $mesPdf = 13;
@@ -52,15 +53,14 @@ if ($tipo == 'd') {
         'distinct r11_mes13'
     );
     $rsCfPess   = $oDaoCfpess->sql_record($sSqlCfpess);
-    if (pg_num_rows($rsCfPess) > 1)
+    if (pg_num_rows($rsCfPess) > 1) {
         $vir = "";
+    }
     $sMeses = '';
     for ($i = 0; $i < pg_num_rows($rsCfPess); $i++) {
         $sMeses .= $vir . db_utils::fieldsMemory($rsCfPess, $i)->r11_mes13;
         $vir = ",";
     }
-} else {
-    $mesPdf = $mes;
 }
 
 $sql_in = $clbasesr->sql_query_file($ano, $mes, "B501", null, db_getsession("DB_instit"), "r09_rubric as rubric_salmat");
@@ -71,8 +71,9 @@ for ($i = 0; $i < pg_num_rows($result_salmaternidade); $i++) {
     $salmaternidade .= $vir . "'" . db_utils::fieldsMemory($result_salmaternidade, $i)->rubric_salmat . "'";
     $vir = ",";
 }
-if (empty($salmaternidade))
+if (empty($salmaternidade)) {
     $salmaternidade = "''";
+}
 
 $sql_in = $clbasesr->sql_query_file($ano, $mes, "B502", null, db_getsession("DB_instit"), "r09_rubric as rubric_salmat13");
 $result_salmaternidade13 = db_query($sql_in);
@@ -82,8 +83,9 @@ for ($i = 0; $i < pg_num_rows($result_salmaternidade13); $i++) {
     $salmaternidade13 .= $vir . "'" . db_utils::fieldsMemory($result_salmaternidade13, $i)->rubric_salmat13 . "'";
     $vir = ",";
 }
-if (empty($salmaternidade13))
+if (empty($salmaternidade13)) {
     $salmaternidade13 = "''";
+}
 
 $sql_in = $clbasesr->sql_query_file($ano, $mes, "B995", null, db_getsession("DB_instit"), "r09_rubric");
 
@@ -107,8 +109,7 @@ if (trim($selecao) != "") {
     }
 }
 
-//// nome das previdencias
-$sql_nome = "SELECT distinct (cast(r33_codtab as integer)-2) as r33_codtab,r33_nome, r33_ppatro
+$sSqlPrevidencia = "SELECT distinct (cast(r33_codtab as integer)-2) as r33_codtab,r33_nome, r33_ppatro
          FROM inssirf
    WHERE r33_anousu = $ano
 	   and r33_mesusu = $mes
@@ -116,15 +117,9 @@ $sql_nome = "SELECT distinct (cast(r33_codtab as integer)-2) as r33_codtab,r33_n
 	   and r33_codtab > 2
 	   and r33_instit = " . db_getsession("DB_instit") . "
 	  ";
-$res_nome = db_query($sql_nome);
-
+$rsPrevidencia = db_query($sSqlPrevidencia);
 $virg_nome = '';
 $descr_nome = '';
-for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
-    db_fieldsmemory($res_nome, $inome);
-    $descr_nome .= $virg_nome . $r33_nome;
-    $virg_nome   = ', ';
-}
 
 $xbases    = " ('R992') ";
 $xdeducao  = " (" . $sql_in . ") ";
@@ -140,11 +135,14 @@ $desco    = 0;
 $patronal = 0;
 $agentes_nocivos = 0;
 
-for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
-    db_fieldsmemory($res_nome, $inome);
+for ($iCont = 0; $iCont < pg_numrows($rsPrevidencia); $iCont++) {
+    $oPrevidencia = db_utils::fieldsMemory($rsPrevidencia, $iCont);
+    $descr_nome .= $virg_nome . $oPrevidencia->r33_nome;
+    $virg_nome   = ', ';
+
     if ($tipo == 's') {
 
-        $sql = "
+        $sSqlValores = "
     select count(soma) as soma1,
            round(sum(base),2)                 as base1,
            round(sum(ded),2)                  as ded1,
@@ -162,7 +160,7 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
            sum(ded)                             as ded,
            sum(dev)                             as dev,
            sum(desco)                           as desco,
-           sum(base)/100*$r33_ppatro   as parcela_patronal,
+           sum(base)/100*$oPrevidencia->r33_ppatro   as parcela_patronal,
            sum(base)/100* " . $campoextra . " AS campoextra,
            sum(nocivo) AS agentes_nocivos,
            sum(salmat) AS parcela_salmat,
@@ -201,7 +199,7 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
       and r14_mesusu = $mes
       $where
       and r14_instit = " . db_getsession('DB_instit') . "
-      and rh02_tbprev = $r33_codtab
+      and rh02_tbprev = $oPrevidencia->r33_codtab
       and ( r14_rubric in " . $xrubricas . "
          or r14_rubric in " . $xdeducao . "
          or r14_rubric in " . $devolucao . "
@@ -246,7 +244,7 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
       $where
       and r48_mesusu = $mes
       and r48_instit = " . db_getsession('DB_instit') . "
-      and rh02_tbprev = $r33_codtab
+      and rh02_tbprev = $oPrevidencia->r33_codtab
       and ( r48_rubric in " . $xrubricas . "
          or r48_rubric in " . $xdeducao . "
          or r48_rubric in " . $devolucao . "
@@ -291,7 +289,7 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
       and r20_mesusu = $mes
       $where
       and r20_instit = " . db_getsession('DB_instit') . "
-      and rh02_tbprev = $r33_codtab
+      and rh02_tbprev = $oPrevidencia->r33_codtab
       and ( r20_rubric in " . $xrubricas . "
          or r20_rubric in " . $xdeducao . "
          or r20_rubric in " . $devolucao . "
@@ -308,12 +306,15 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
     ) as xxx
 
            ";
-    } else {
+    } 
 
-        if (pg_num_rows($rsCfPess) > 1)
+    if ($tipo == 'd') {
+
+        if (pg_num_rows($rsCfPess) > 1) {
             $mes = $sMeses;
+        }
 
-        $sql = "
+        $sSqlValores = "
 
     select count(soma) as soma1,
            round(sum(base),2)                 as base1,
@@ -330,7 +331,7 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
            sum(ded)                             as ded,
            sum(dev)                             as dev,
            sum(desco)                           as desco,
-           sum(base - ded)/100*$r33_ppatro   as parcela_patronal,
+           sum(base - ded)/100*$oPrevidencia->r33_ppatro   as parcela_patronal,
            sum(base - ded)/100* " . $campoextra . " AS campoextra,
            sum(nocivo) AS agentes_nocivos
     from
@@ -366,7 +367,7 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
       and r35_mesusu in ($mes)
       $where
       and r35_instit = " . db_getsession('DB_instit') . "
-      and rh02_tbprev = $r33_codtab
+      and rh02_tbprev = $oPrevidencia->r33_codtab
       and ( r35_rubric in " . $xrubricas . "
          or r35_rubric in " . $xdeducao . "
          or r35_rubric in " . $devolucao . "
@@ -385,36 +386,34 @@ for ($inome = 0; $inome < pg_numrows($res_nome); $inome++) {
 
            ";
     }
-    // echo $sql;
-    // exit;
-    $result = db_query($sql);
-    $xxnum = pg_numrows($result);
-    // db_criatabela($result);
-    // exit;
+    
+    $rsValores = db_query($sSqlValores);
+    $xxnum = pg_numrows($rsValores);
+
     if ($xxnum == 0) {
-        db_redireciona('db_erros.php?fechar=true&db_erro=Não existem Códigos cadastrados no período de ' . $mes . ' / ' . $ano);
+        db_redireciona('db_erros.php?fechar=true&db_erro=Não existem Códigos cadastrados no período de ' . $mes . ' / ' . $ano." para a Previdência {$oPrevidencia->r33_codtab} - {$oPrevidencia->r33_nome}");
     }
-    db_fieldsmemory($result, 0);
-    $soma     += $soma1;
-    $base     += $base1;
-    $ded      += $ded1;
-    $dev      += $dev1;
-    $desco    += $desco1;
-    $patronal += $patronal1;
-    $cmpextra += $campoextra1;
-    $agentes_nocivos += $agentes_nocivos1;
+    $oValores = db_utils::fieldsMemory($rsValores, 0);
+    $soma     += $oValores->soma1;
+    $base     += $oValores->base1;
+    $ded      += $oValores->ded1;
+    $dev      += $oValores->dev1;
+    $desco    += $oValores->desco1;
+    $patronal += $oValores->patronal1 - (($oValores->salmat1 + $oValores->salmat13) * ($oPrevidencia->r33_ppatro / 100));
+    $cmpextra += $oValores->campoextra1;
+    $agentes_nocivos += $oValores->agentes_nocivos1;
+    $tot_salmat1 += $oValores->salmat1;
+    $tot_salmat13 += $oValores->salmat13;
 }
-// echo $base1," ",$tipo ; exit;
+
 if ($selautonomo == 'true') {
     $sql = $clrhautonomolanc->sql_query_file(null, "sum((rh89_valorserv*20/100)+rh89_valorretinss) as terceiros,sum(rh89_valorserv) as valor_servico", null, "(rh89_anousu,rh89_mesusu) = ({$ano},{$mes})");
     $rsTerceiros = $clrhautonomolanc->sql_record($sql);
 }
 
-global $pdf;
 $pdf = new scpdf();
 $pdf->Open();
 $pdf1 = new db_impcarne($pdf, 25);
-//$pdf1->modelo     	= 25;
 $pdf1->logo             = $logo;
 $pdf1->prefeitura       = $nomeinst;
 $pdf1->enderpref        = $ender . ', ' . $numero;
@@ -428,10 +427,10 @@ $pdf1->emailpref        = $email;
 $pdf1->ano              = $ano;
 $pdf1->mes              = $mesPdf;
 $pdf1->func             = $soma;
-$pdf1->base             = $base - $salmat1 - $salmat13;
+$pdf1->base             = $base - $tot_salmat1 - $tot_salmat13;
 $pdf1->deducao          = $ded;
 $pdf1->desconto         = $desco - $dev;
-$pdf1->patronal         = $patronal - (($salmat1 + $salmat13) * ($r33_ppatro / 100));
+$pdf1->patronal         = $patronal;
 $pdf1->campoextra       = $cmpextra;
 $pdf1->cod_pagto        = $cod_pagto;
 $pdf1->terceiros        = round(db_utils::fieldsMemory($rsTerceiros, 0)->terceiros, 2);

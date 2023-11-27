@@ -360,6 +360,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                     if($controle==1){
                         $lTotal = $oResult->si02_vltotalprecoreferencia;
                     }
+                    $lTotal = $oResult->si02_vlprecoreferencia * $oDadosDaLinha->quantidade;
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                 } else {
                     $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $si01_casasdecimais, ",", ".");
@@ -376,8 +377,7 @@ else pc01_descrmater||'. '||pc01_complmater end as pc01_descrmater
                     
                     $oDadosDaLinha->unidadeDeMedida = $oResult1->m61_abrev;
                     
-                    $lTotal = $oResult->si02_vltotalprecoreferencia;
-                    
+                    $lTotal = $oResult->si02_vlprecoreferencia * $oDadosDaLinha->quantidade;
                     $oDadosDaLinha->total = number_format($lTotal, 2, ",", "."); 
                 }
             
@@ -649,6 +649,7 @@ HTML;
                             $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
                         }
                         $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
+                        $lTotal = $oResult->si02_vlprecoreferencia * $oDadosDaLinha->quantidade;
                         $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                     } else {
                         $oDadosDaLinha->valorUnitario = number_format($oResult->si02_vlprecoreferencia, $si01_casasdecimais, ",", ".");
@@ -659,6 +660,7 @@ HTML;
                             $oDadosDaLinha->mediapercentual = number_format($oResult->mediapercentual, 2) . "%";
                         }
                         $oDadosDaLinha->unidadeDeMedida = $oResult->m61_abrev;
+                        $lTotal = $oResult->si02_vlprecoreferencia * $oDadosDaLinha->quantidade;
                         $oDadosDaLinha->total = number_format($lTotal, 2, ",", ".");
                     }
                     

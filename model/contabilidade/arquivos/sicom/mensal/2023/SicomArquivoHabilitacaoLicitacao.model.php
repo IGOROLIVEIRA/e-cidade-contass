@@ -212,12 +212,24 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 	habilitacaoforn.l206_dataemissaocndt as dtEmissaoCNDT,
 	habilitacaoforn.l206_datavalidadecndt as dtValidadeCNDT,
 	habilitacaoforn.l206_datahab as dtHabilitacao,
-	(select case when pc31_regata is null then 2 else pc31_regata end as pc31_regata from pcorcamfornelic
-	join pcorcamforne on pc31_orcamforne = pc21_orcamforne where pc31_liclicita = liclicita.l20_codigo and pc21_numcgm = pcforne.pc60_numcgm) as PresencaLicitantes,
-	(select case when pc31_renunrecurso is null then 2 else pc31_renunrecurso end as pc31_renunrecurso from pcorcamfornelic
-	join pcorcamforne on pc31_orcamforne = pc21_orcamforne where pc31_liclicita = liclicita.l20_codigo and pc21_numcgm = pcforne.pc60_numcgm) as renunciaRecurso,
-	l20_codigo as codlicitacao,
-    liclicita.l20_leidalicitacao as leidalicitacao,
+    (SELECT distinct CASE
+    WHEN pc31_regata IS NULL THEN 2
+    ELSE pc31_regata
+    END AS pc31_regata
+    FROM pcorcamfornelic
+    JOIN pcorcamforne ON pc31_orcamforne = pc21_orcamforne
+    WHERE pc31_liclicita = liclicita.l20_codigo
+    AND pc21_numcgm = pcforne.pc60_numcgm) AS PresencaLicitantes,
+    (SELECT distinct CASE
+    WHEN pc31_renunrecurso IS NULL THEN 2
+    ELSE pc31_renunrecurso
+    END AS pc31_renunrecurso
+    FROM pcorcamfornelic
+    JOIN pcorcamforne ON pc31_orcamforne = pc21_orcamforne
+    WHERE pc31_liclicita = liclicita.l20_codigo
+    AND pc21_numcgm = pcforne.pc60_numcgm) AS renunciaRecurso,
+    l20_codigo AS codlicitacao,
+    liclicita.l20_leidalicitacao AS leidalicitacao,
     manutencaolicitacao.manutlic_codunidsubanterior AS codunidsubant
 	FROM liclicita as liclicita
 	INNER JOIN homologacaoadjudica on (liclicita.l20_codigo=homologacaoadjudica.l202_licitacao)
@@ -234,9 +246,10 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
 	AND DATE_PART('MONTH',homologacaoadjudica.l202_datahomologacao)= " . $this->sDataFinal['5'] . $this->sDataFinal['6'] . "
 	AND cflicita.l03_pctipocompratribunal IN ('48','49','50','51','52','53','54')";
 
-        $rsResult10 = db_query($sSql);
-        //db_criatabela($rsResult10); 
-        //exit; 
+    $rsResult10 = db_query($sSql);
+
+        //db_criatabela($rsResult10);
+        //exit;
         for ($iCont10 = 0; $iCont10 < pg_num_rows($rsResult10); $iCont10++) {
 
             $clhablic10 = new cl_hablic102023();
@@ -245,7 +258,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
             $clhablic10->si57_tiporegistro = 10;
             $clhablic10->si57_codorgao = $oDados10->codorgaoresp;
             if($oDados10->codunidsubant!= null || $oDados10->codunidsubant!=''){
-                $clhablic10->si57_codunidadesub = $oDados10->codunidsubant;    
+                $clhablic10->si57_codunidadesub = $oDados10->codunidsubant;
             }else{
                 $clhablic10->si57_codunidadesub = $oDados10->codunidadesubresp;
             }
@@ -285,8 +298,8 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
             $clhablic10->si57_mes = $this->sDataFinal['5'] . $this->sDataFinal['6'];
             $clhablic10->si57_instit = db_getsession("DB_instit");
 
-
             $clhablic10->incluir(null);
+
             if ($clhablic10->erro_status == 0) {
                 throw new Exception($clhablic10->erro_msg);
             }
@@ -349,7 +362,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
                 $clhablic11->si58_reg10 = $clhablic10->si57_sequencial;
                 $clhablic11->si58_codorgao = $oDados11->codorgaoresp;
                 if($oDados11->codunidsubant!= null || $oDados11->codunidsubant!=''){
-                    $clhablic11->si58_codunidadesub = $oDados11->codunidsubant;    
+                    $clhablic11->si58_codunidadesub = $oDados11->codunidsubant;
                 }else{
                     $clhablic11->si58_codunidadesub = $oDados11->codunidadesubresp;
                 }
@@ -444,7 +457,7 @@ class SicomArquivoHabilitacaoLicitacao extends SicomArquivoBase implements iPadA
                 $clhablic20->si59_tiporegistro = '20';
                 $clhablic20->si59_codorgao = $oDados20->codorgaoresp;
                 if($oDados20->codunidsubant!= null || $oDados20->codunidsubant!=''){
-                    $clhablic20->si59_codunidadesub = $oDados20->codunidsubant;    
+                    $clhablic20->si59_codunidadesub = $oDados20->codunidsubant;
                 }else{
                     $clhablic20->si59_codunidadesub = $oDados20->codunidadesubresp;
                 }

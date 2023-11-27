@@ -25,7 +25,9 @@ $clparjuridico = new cl_parjuridico;
 $oLibDocumento = new libdocumento(1203);
 $clcfiptu      = new cl_cfiptu;
 
-$numeropg = isset($numeropg)?$numeropg:0;
+$numeropg   = isset($numeropg) ? $numeropg : 0 ;
+$oInstit    = new Instituicao(db_getsession('DB_instit'));
+$codInstit  = array(Instituicao::COD_CLI_BURITIZEIRO);
 
 db_sel_instit(null, "db21_usasisagua");
 
@@ -687,8 +689,12 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
       $pdf->Ln($pula);
       $pdf->SetFont('Arial', 'B', $tamanho);
       $pdf->Cell(35, 5, "", 0, 0, "L", 0);
-      if ($v04_peticaoinicial <> 2) {
-        $pdf->MultiCell(0, 5, "ANTE O EXPOSTO, REQUER:", 0, "J", 0,35);
+      if ($v04_peticaoinicial <> 2) {        
+        if (in_array($oInstit->getCodigoCliente(), $codInstit)){
+          $pdf->MultiCell(0, 5, "Pelo exposto, requer a V.Exa.:", 0, "J", 0,35);
+        }else{
+          $pdf->MultiCell(0, 5, "ANTE O EXPOSTO, REQUER:", 0, "J", 0,35);
+        }
       }
       $pdf->SetFont('Arial', '', $tamanho);
       $pdf->Ln($pula);
@@ -705,8 +711,12 @@ for ($xyx = 0; $xyx < $iLinhasIniciais; $xyx++) {
       if ($v04_peticaoinicial == 2) {
         $pdf->SetX(25);
       } else {
-        $pdf->SetX(80);
+        $pdf->SetX(80);        
+        if (in_array($oInstit->getCodigoCliente(), $codInstit)){
+          $pdf->SetX(35);
+        }
       }
+      
     }
 
     if($oParag->oParag->db02_descr == "ass_adv1" || $oParag->oParag->db02_descr == "ass_adv2" || $oParag->oParag->db02_descr == "ASSINATURAS_CODIGOPHP"){
