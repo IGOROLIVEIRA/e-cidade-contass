@@ -237,6 +237,9 @@ switch ($objJson->method) {
             $oEmpenho->Zerado = $zerado;
             $oEmpenho->Tipofornec = $tipofornec;
             $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
+            $oEmpenho->obrigaDiaria = $oParam->e30_obrigadiarias;
+            $rsEstruturalDotacao = db_query('SELECT fc_estruturaldotacao('.$oEmpenho->e60_anousu.', '.$oEmpenho->e60_coddot.') as estrutural_dotacao');
+            $oEmpenho->estruturalDotacao = db_utils::fieldsMemory($rsEstruturalDotacao, 0)->estrutural_dotacao;
             echo $json->encode($oEmpenho);
         } else {
 
@@ -266,6 +269,9 @@ switch ($objJson->method) {
                         $oEmpenho->Zerado = $zerado;
                         $oEmpenho->Tipofornec = $tipofornec;
                         $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
+                        $oEmpenho->obrigaDiaria = $oParam->e30_obrigadiarias;
+                        $rsEstruturalDotacao = db_query('SELECT fc_estruturaldotacao('.$oEmpenho->e60_anousu.', '.$oEmpenho->e60_coddot.') as estrutural_dotacao');
+                        $oEmpenho->estruturalDotacao = db_utils::fieldsMemory($rsEstruturalDotacao, 0)->estrutural_dotacao;
                         echo $json->encode($oEmpenho);
                     } else {
 
@@ -279,6 +285,9 @@ switch ($objJson->method) {
                         $oEmpenho->Zerado = $zerado;
                         $oEmpenho->Tipofornec = $tipofornec;
                         $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
+                        $oEmpenho->obrigaDiaria = $oParam->e30_obrigadiarias;
+                        $rsEstruturalDotacao = db_query('SELECT fc_estruturaldotacao('.$oEmpenho->e60_anousu.', '.$oEmpenho->e60_coddot.') as estrutural_dotacao');
+                        $oEmpenho->estruturalDotacao = db_utils::fieldsMemory($rsEstruturalDotacao, 0)->estrutural_dotacao;
                         echo $json->encode($oEmpenho);
                     }
                 }
@@ -295,12 +304,25 @@ switch ($objJson->method) {
                 $oEmpenho->Zerado = $zerado;
                 $oEmpenho->Tipofornec = $tipofornec;
                 $oEmpenho->bPermitidoLiquidacao = $bPermitidoLiquidacao;
+                $oEmpenho->obrigaDiaria = $oParam->e30_obrigadiarias;
+                $rsEstruturalDotacao = db_query('SELECT fc_estruturaldotacao('.$oEmpenho->e60_anousu.', '.$oEmpenho->e60_coddot.') as estrutural_dotacao');
+                $oEmpenho->estruturalDotacao = db_utils::fieldsMemory($rsEstruturalDotacao, 0)->estrutural_dotacao;
                 echo $json->encode($oEmpenho);
             }
         }
         break;
 
     case "liquidarAjax":
+
+        $dDataLiquidacao = App\Support\String\DateFormatter::convertDateFormatBRToISO(trim($objJson->dDataLiquidacao));
+
+        if($objJson->dDataVencimento != null || $objJson->dDataVencimento != ''){
+            $dDataVencimento =  App\Support\String\DateFormatter::convertDateFormatBRToISO(trim($objJson->dDataVencimento));
+        }else{
+            $dDataVencimento = null;
+        }
+        
+        ////////////////////////////////////
 
         if (isset($objJson->z01_credor) && !empty($objJson->z01_credor)) {
             $objEmpenho->setCredor($objJson->z01_credor);
@@ -320,7 +342,7 @@ switch ($objJson->method) {
                 db_fieldsmemory($rsLiquidados, 0);
             
                 if ($oParam->e30_liquidacaodataanterior == 'f') {
-                    if (date("Y-m-d", strtotime($dtServidor)) < date("Y-m-d", strtotime($dtultimaliquidacao))) {
+                    if (date("Y-m-d", strtotime($dDataLiquidacao)) < date("Y-m-d", strtotime($dtultimaliquidacao))) {
                         throw new Exception("Não é permitido liquidar com data anterior ao último lançamento de liquidação.");
                     }
                 }
@@ -330,7 +352,7 @@ switch ($objJson->method) {
             $oDaoConlancamEmp = new cl_conlancamemp();
             $sWhereEmpenho  = "     conlancamemp.c75_numemp = {$objJson->iEmpenho} ";
             $sWhereEmpenho .= " and conhistdoc.c53_tipo     = 200 ";
-            $sWhereEmpenho .= " and conlancam.c70_data      > '{$dtDataSessao}' ";
+            $sWhereEmpenho .= " and conlancam.c70_data      > '{$dDataLiquidacao}' ";
             $sSqlBuscaDocumentos = $oDaoConlancamEmp->sql_query_documentos(null, "conhistdoc.*", 1, $sWhereEmpenho);
             $rsBuscaDocumentos = $oDaoConlancamEmp->sql_record($sSqlBuscaDocumentos);
 
@@ -339,7 +361,7 @@ switch ($objJson->method) {
             }
 
             $sHistorico = db_stdClass::normalizeStringJsonEscapeString($objJson->historico); //addslashes(stripslashes(utf8_decode()))
-            $oRetorno   = $objEmpenho->liquidarAjax($objJson->iEmpenho, $objJson->notas, $sHistorico, $objJson->e50_compdesp, $objJson->e83_codtipo, $objJson->cattrabalhador, $objJson->numempresa, $objJson->contribuicaoPrev, $objJson->cattrabalhadorremuneracao, $objJson->valorremuneracao, $objJson->valordesconto, $objJson->competencia, $objJson->e50_retencaoir, $objJson->e50_naturezabemservico);
+            $oRetorno   = $objEmpenho->liquidarAjax($objJson->iEmpenho, $objJson->notas, $sHistorico, $objJson->e50_compdesp, $objJson->e83_codtipo, $objJson->cattrabalhador, $objJson->numempresa, $objJson->contribuicaoPrev, $objJson->cattrabalhadorremuneracao, $objJson->valorremuneracao, $objJson->valordesconto, $objJson->competencia, $objJson->e50_retencaoir, $objJson->e50_naturezabemservico,$dDataLiquidacao, $dDataVencimento);
             $oDadosRetorno = $json->decode(str_replace("\\", "", $oRetorno));
 
             if ($oRetorno !== false) {
@@ -384,6 +406,14 @@ switch ($objJson->method) {
         break;
 
     case "geraOC":
+        $dDataLiquidacao =  App\Support\String\DateFormatter::convertDateFormatBRToISO(trim($objJson->dDataLiquidacao));
+        if($objJson->dDataVencimento != null || $objJson->dDataVencimento != ''){
+            $dDataVencimento = App\Support\String\DateFormatter::convertDateFormatBRToISO(trim($objJson->dDataVencimento));
+        }else{
+            $dDataVencimento = null;
+        }
+        ////////////////////////////////////
+
         // Condição de validação dos empenhos
         // Verificar data do sistema
         $dtServidor = date('d-m-Y', DB_getsession('DB_datausu'));
@@ -397,7 +427,7 @@ switch ($objJson->method) {
             db_fieldsmemory($rsLiquidados, 0);
         
         if ($oParam->e30_liquidacaodataanterior == 'f') {
-            if (date("Y-m-d", strtotime($dtServidor)) < date("Y-m-d", strtotime($dtultimaliquidacao))) {
+            if (date("Y-m-d", strtotime($dDataLiquidacao)) < date("Y-m-d", strtotime($dtultimaliquidacao))) {
                 $chave = false;
                 $objEmpenho->sMsgErro = "Não é permitido liquidar com data anterior ao último lançamento de liquidação.";
             }
@@ -435,7 +465,9 @@ switch ($objJson->method) {
             $objJson->valordesconto,
             $objJson->competencia,
             $objJson->e50_retencaoir,
-            $objJson->e50_naturezabemservico
+            $objJson->e50_naturezabemservico,
+            $dDataLiquidacao,
+            $dDataVencimento
         );
 
         if (isset($objJson->verificaChave) && $objJson->verificaChave == 1 && $objJson->e69_notafiscaleletronica != 2 && $objJson->e69_notafiscaleletronica != 3) {
@@ -1324,6 +1356,6 @@ switch ($objJson->method) {
         break;
 
     default:
-        echo $objEmpenho->$method($objJson->iEmpenho, $objJson->notas, $objJson->historico);
+        echo $objEmpenho->$method($objJson->iEmpenho, $objJson->notas, $objJson->historico, true,$objJson->dDataEstorno);
         break;
 }
