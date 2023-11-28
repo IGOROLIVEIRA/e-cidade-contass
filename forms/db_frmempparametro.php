@@ -311,6 +311,16 @@ $clempparametro->rotulo->label();
                     ?>
                 </td>
             </tr>
+            <tr>
+                <td nowrap title="<?= @$Te30_obrigadiarias ?>">
+                    <?= @$Le30_obrigadiarias ?>
+                </td>
+                <td><?
+                    $matriz = array("f" => "Não", "t" => "Sim");
+                    db_select("e30_obrigadiarias", $matriz, true, 1);
+                    ?>
+                </td>
+            </tr>
         </table>
     </fieldset>
     <center>

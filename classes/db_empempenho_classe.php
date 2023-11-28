@@ -2831,6 +2831,38 @@ class cl_empempenho
         return $sSql;
     }
     
+    function alteraHistorico($e60_numemp){
+        $sSql  = "UPDATE empempenho SET e60_informacaoop = '{$this->e60_informacaoop}'";
+        $sSql .= " WHERE e60_numemp = {$e60_numemp}";
+        
+        $result = db_query($sSql);
+
+        if ($result == false) {
+            $this->erro_banco = str_replace("\n", "", @pg_last_error());
+            $this->erro_sql   = "Historico do empenho nao Alterado. Alteracao Abortada.\\n";
+            $this->erro_msg   =  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            $this->numrows_alterar = 0;
+            return false;
+        } else {
+            if (pg_affected_rows($result) == 0) {
+                $this->erro_banco = "";
+                $this->erro_sql = "Empenho nao encontrado.\\n";
+                $this->erro_msg   =  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "1";
+                $this->numrows_alterar = 0;
+                return false;
+            } else {
+                $this->erro_banco = "";
+                $this->erro_sql = "Alteração efetuada com Sucesso\\n";
+                $this->erro_msg   =  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+                $this->erro_status = "1";
+                $this->numrows_alterar = pg_affected_rows($result);
+                return true;
+            }
+        }
+    }
+
     function sqlQueryValidacaoEmpenhoAnoAnterior($e60_numemp = null, $campos = "*", $ordem = null, $dbwhere = "", $filtroempelemento = "", $limit = '')
     {
         $sql = "select ";

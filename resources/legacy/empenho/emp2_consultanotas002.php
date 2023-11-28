@@ -34,10 +34,14 @@ require_once("libs/db_usuariosonline.php");
 require_once("dbforms/db_funcoes.php");
 require_once("classes/db_empnota_classe.php");
 require_once("classes/db_empnotaitem_classe.php");
+require_once("classes/db_empdiaria_classe.php");
+require_once("classes/db_pagordemreinf_classe.php");
 
 $oGet            = db_utils::postMemory($_GET);
 $oDaoEmpNota     = new cl_empnota();
 $oDaoEmpNotaItem = new cl_empnotaitem();
+$clEmpdiaria     = new cl_empdiaria();
+$clPagordemreinf = new cl_pagordemreinf();
 
 $clrotulo        = new rotulocampo;
 $clrotulo->label("e69_numero");
@@ -56,11 +60,16 @@ if (isset($oGet->e69_codnota)) {
   $sSqlNota .= "       cgm.z01_cgccpf,";
   $sSqlNota .= "       e69_dtnota,";
   $sSqlNota .= "       e69_numero,";
+  $sSqlNota .= "       e69_chaveacesso,";
+  $sSqlNota .= "       e69_nfserie,";
+  $sSqlNota .= "       e69_notafiscaleletronica,";
   $sSqlNota .= "       e60_codemp||'/'||e60_anousu as codemp,";
   $sSqlNota .= "       e70_valor,";
   $sSqlNota .= "       e70_vlrliq,";
   $sSqlNota .= "       e70_vlranu,";
   $sSqlNota .= "       e50_codord,";
+  $sSqlNota .= "       e50_data,";
+  $sSqlNota .= "       e50_dtvencimento,";
   $sSqlNota .= "       e53_vlrpag,";
   $sSqlNota .= "       e50_cattrabalhador,"; 
   $sSqlNota .= "       cattrabalhador.ct01_descricaocategoria,";
@@ -71,7 +80,13 @@ if (isset($oGet->e69_codnota)) {
   $sSqlNota .= "       e50_datacompetencia,";
   $sSqlNota .= "       e50_contribuicaoprev,";
   $sSqlNota .= "       catremuneracao.ct01_descricaocategoria as descricaoremuneracao,";
-  $sSqlNota .= "       e50_cattrabalhadorremurenacao";
+  $sSqlNota .= "       e50_cattrabalhadorremurenacao,";
+  $sSqlNota .= "       e50_retencaoir,";
+  $sSqlNota .= "       e50_naturezabemservico,";
+  $sSqlNota .= "       e101_resumo,";
+  $sSqlNota .= "       e03_numeroprocesso,";
+  $sSqlNota .= "       e69_cgmemitente,";
+  $sSqlNota .= "       m72_codordem";
   $sSqlNota .= "       from empnota ";
   $sSqlNota .= "          inner join empempenho   on e69_numemp  = e60_numemp";
   $sSqlNota .= "          inner join cgm as cgm   on e60_numcgm  = cgm.z01_numcgm";
@@ -83,9 +98,12 @@ if (isset($oGet->e69_codnota)) {
   $sSqlNota .= "          left  join cgm as empresa on empresa.z01_numcgm = e50_empresadesconto";
   $sSqlNota .= "          left join categoriatrabalhador as cattrabalhador on cattrabalhador.ct01_codcategoria = e50_cattrabalhador";
   $sSqlNota .= "          left join categoriatrabalhador as catremuneracao on	catremuneracao.ct01_codcategoria = e50_cattrabalhadorremurenacao";
+  $sSqlNota .= "          left join naturezabemservico on	e50_naturezabemservico = e101_codnaturezarendimento";
+  $sSqlNota .= "          left join pagordemprocesso on	e71_codord = e03_pagordem";
+  $sSqlNota .= "          left join empnotaord on	e69_codnota = m72_codnota";
   $sSqlNota .= "  where e69_codnota = {$oGet->e69_codnota}";
   $rsNota    = $oDaoEmpNota->sql_record($sSqlNota);
-//  echo $sSqlNota;exit;
+
   if ($oDaoEmpNota->numrows > 0 ) {
 
     $oNotas      = db_utils::FieldsMemory($rsNota, 0);
@@ -98,6 +116,11 @@ if (isset($oGet->e69_codnota)) {
     $e70_vlranu  = $oNotas->e70_vlranu;
     $e53_vlrpag  = $oNotas->e53_vlrpag;
     $e50_codord  = $oNotas->e50_codord;
+    $e69_dtnota  = date('d/m/Y', strtotime($oNotas->e69_dtnota));
+    $e69_nfserie = $oNotas->e69_nfserie;
+    $e50_data    = date('d/m/Y', strtotime($oNotas->e50_data));
+    $e50_dtvencimento  = $oNotas->e50_dtvencimento == '' ? '' : date('d/m/Y', strtotime($oNotas->e50_dtvencimento));
+    $e69_chaveacesso  = $oNotas->e69_chaveacesso == 'null' ? '' : $oNotas->e69_chaveacesso;
     $e50_cattrabalhador = $oNotas->e50_cattrabalhador;
     $ct01_descricaocategoria = $oNotas->ct01_descricaocategoria;
     $e50_empresadesconto = $oNotas->e50_empresadesconto; 
@@ -109,7 +132,47 @@ if (isset($oGet->e69_codnota)) {
     $nomeempresa = $oNotas->nomeempresa;
     $e50_contribuicaoprev = $oNotas->e50_contribuicaoprev;
     $cpfcnpj =  $oNotas->z01_cgccpf;
+    $e50_retencaoir = $oNotas->e50_retencaoir == 't' ? 1 : 0;
+    $e101_resumo = $oNotas->e101_resumo;
+    $e03_numeroprocesso = $oNotas->e03_numeroprocesso;
+    $nfMatrizFilial = $oNotas->e69_cgmemitente > 0 ? 'Sim' : 'Não';
+    $m72_codordem = $oNotas->m72_codordem;
 
+    $aNf = array(1 => 'Sim, padrão Estadual ou SINIEF 07/05',2 => 'Sim, chave de acesso municipal ou outra',3 => 'Não',4 => 'Sim, padrão Estadual ou SINIEF 07/05 - Avulsa');
+    $e69_notafiscaleletronica  = $aNf[$oNotas->e69_notafiscaleletronica];
+
+    $rsDiaria = $clEmpdiaria->sql_record($clEmpdiaria->sql_query(null,"*",null,"e140_codord = ".$e50_codord));
+    if($clEmpdiaria->numrows > 0){
+      
+      $bDiaria = 1;
+      $oDiaria = db_utils::FieldsMemory($rsDiaria, 0);
+      $diariaViajante     = $oNotas->z01_nome;
+      $e140_matricula     = $oDiaria->e140_matricula;
+      $e140_cargo         = $oDiaria->e140_cargo;
+      $e140_dtautorizacao = date('d/m/Y', strtotime($oDiaria->e140_dtautorizacao));
+      $e140_dtinicial     = date('d/m/Y', strtotime($oDiaria->e140_dtinicial));
+      $e140_dtfinal       = date('d/m/Y', strtotime($oDiaria->e140_dtfinal));
+      $e140_origem        = $oDiaria->e140_origem;
+      $e140_destino       = $oDiaria->e140_destino;
+      $e140_qtddiarias    = $oDiaria->e140_qtddiarias;
+      $e140_vrldiariauni  = $oDiaria->e140_vrldiariauni;
+      $diariaVlrTotal     = $e140_qtddiarias * $e140_vrldiariauni;
+      $e140_transporte    = $oDiaria->e140_transporte;
+      $e140_vlrtransport  = $oDiaria->e140_vlrtransport;
+      $diariaVlrDespesa   = $diariaVlrTotal + $e140_vlrtransport;
+      $e140_objetivo      = $oDiaria->e140_objetivo;
+
+    }else{
+      $bDiaria = 0;
+    }
+
+    if($e50_retencaoir){
+      $e50_naturezabemservico = $oNotas->e50_naturezabemservico;
+      $aEstabelecimento = pg_fetch_all($clPagordemreinf->sql_record($clPagordemreinf->sql_query_nome($e50_codord,null,"pagordemreinf.*, z01_nome")));
+      $aEstabelecimento = json_encode($aEstabelecimento);
+    }else{
+      $aEstabelecimento = null;
+    }
   }
 }
 ?>
@@ -121,89 +184,149 @@ if (isset($oGet->e69_codnota)) {
   <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
   <link href="estilos.css" rel="stylesheet" type="text/css">
   <link href="estilos/grid.style.css" rel="stylesheet" type="text/css">
+  <style>
+  .cabecTableEstabelecimento {
+    font-size: 10;
+    color: darkblue;
+    background-color: #aacccc;
+    border: none;
+    width: 90px;
+    text-align: center;
+  }
+
+  .cabecTableEstabelecimentoNome {
+    font-size: 10;
+    color: darkblue;
+    background-color: #aacccc;
+    border: none;
+    width: 500px;
+    text-align: center;
+  }
+
+  .corpoTableEstabelecimento {
+    font-size: 10;
+    color: black;
+    background-color: #ccddcc;
+    width: 90px;
+    text-align: center;
+  }
+
+  .corpoTableEstabelecimentoNome {
+    font-size: 10;
+    color: black;
+    background-color: #ccddcc;
+    width: 500px;
+    text-align: center;
+  }
+</style>
 </head>
 <body bgcolor="#CCCCCC" >
    <fieldset>
      <legend><b>Dados da nota</b></legend>
        <table>
-         <tr>
-           <td>
-             <b>Código da Nota:</b>
-           </td>
-           <td>
+          <tr>
+            <td>
+              <b><?=$Lz01_nome?></b>
+            </td>
+            <td>
               <?
-              db_input('e69_codnota', 13, $Ie69_codnota, true, 'text', 3);
+              db_input('z01_nome', 50, $Lz01_nome, true, 'text', 3);
               ?>
-           </td>
-           <td>
+            </td>
+            <td>
+              <b><?php echo @$Le60_codemp;?></b>
+            </td>
+            <td>
+              <?db_input('codemp', 13, $Ie60_codemp, true, 'text', 3);?>
+            </td>
+            <td>
+              <b>Código da Nota:</b>
+            </td>
+            <td>
+              <?db_input('e69_codnota', 13, $Ie69_codnota, true, 'text', 3);?>
+              <b>Nota de Liquidação:</b>
+              <?db_input('e50_codord', 13, $Ie50_codord, true, 'text', 3);?>
+            </td>
+          </tr>
+          <tr>
+            <td>
              <b>Número:</b>
-           </td>
-           <td>
-              <?
-              db_input('e69_numero', 13, $Ie69_numero, true, 'text', 3);
-              ?>
-           </td>
+            </td>
             <td>
-             <b><?php echo @$Le60_codemp;?></b>
-           </td>
-           <td>
-              <?
-              db_input('codemp', 13, $Ie60_codemp, true, 'text', 3);
-              ?>
-           </td>
+              <?db_input('e69_numero', 13, $Ie69_numero, true, 'text', 3);?>
+              <b>Numero de Série:</b>
+              <? db_input('e69_nfserie', 13, $Ie53_vlrpag, true, 'text', 3);?>
+            </td>
             <td>
-             <b>Nota de Liquidação:</b>
-           </td>
-           <td>
-              <?
-              db_input('e50_codord', 13, $Ie50_codord, true, 'text', 3);
-              ?>
-           </td>
+              <b>Data da Nota:</b>
+            </td>
+            <td>
+              <? db_input('e69_dtnota', 13, $Ie53_vlrpag, true, 'text', 3);?>
+            </td>           
+            <td>
+              <b>Data de Vencimento:</b>
+            </td>
+            <td>
+              <? db_input('e50_dtvencimento', 13, $Ie53_vlrpag, true, 'text', 3);?>
+              <b>Data da Liquidação:</b>
+              <? db_input('e50_data', 13, $Ie53_vlrpag, true, 'text', 3);?>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <b>Chave de Acesso:</b>
+            </td>
+            <td>
+              <? db_input('e69_chaveacesso', 50, $Ie53_vlrpag, true, 'text', 3);?>
+            </td>
+            <td>
+              <b>NF Matriz/Filial:</b>
+            </td>
+            <td>
+              <? db_input('nfMatrizFilial', 13, $Ie53_vlrpag, true, 'text', 3);?>
+            </td>
+            <td>
+              <b>Nota Fiscal Eletronica:</b>
+            </td>
+            <td>
+            <?db_input('e69_notafiscaleletronica', 34, 0,true,'text',3);?>
+            </td>
          </tr>
          <tr>
-           <td>
-             <b><?=$Lz01_nome?></b>
-           </td>
-           <td colspan='8'>
-              <?
-              db_input('z01_nome', 70, $Lz01_nome, true, 'text', 3);
-              ?>
-           </td>
-         </tr>
-         <tr>
             <td>
-             <b>Valor:</b>
-           </td>
-           <td>
-              <?
-              db_input('e70_valor', 13, $Ie70_valor, true, 'text', 3);
-              ?>
-           </td>
-           <td>
-             <b>Valor Liquidado:</b>
-           </td>
-           <td>
-              <?
-              db_input('e70_vlrliq', 13, $Ie70_vlrliq, true, 'text', 3);
-              ?>
-           </td>
-           <td>
-             <b>Valor Anulado: </b>
-           </td>
-           <td>
-              <?
-              db_input('e70_vlranu', 13, $Ie70_vlranu, true, 'text', 3);
-              ?>
-           </td>
-           <td>
-             <b>Valor Pago:</b>
-           </td>
-           <td>
-              <?
-              db_input('e53_vlrpag', 13, $Ie53_vlrpag, true, 'text', 3);
-              ?>
-           </td>
-         </tr>
+              <b>Valor:</b>
+            </td>
+            <td>
+              <?db_input('e70_valor', 13, $Ie70_valor, true, 'text', 3);?>          
+              <b>Valor Liquidado:</b>           
+              <?db_input('e70_vlrliq', 13, $Ie70_vlrliq, true, 'text', 3);?>
+            </td>
+            <td>
+              <b>Valor Anulado: </b>
+            </td>
+            <td>
+              <?db_input('e70_vlranu', 13, $Ie70_vlranu, true, 'text', 3);?>
+            </td>
+            <td>
+              <b>Valor Pago:</b>
+            </td>
+            <td>
+              <?db_input('e53_vlrpag', 13, $Ie53_vlrpag, true, 'text', 3);?>
+            </td>
+          </tr>
+          <tr>
+          <td>
+            <b>Processo Administrativo:</b>
+          </td>
+          <td>
+            <? db_input('e03_numeroprocesso', 50, $Ie53_vlrpag, true, 'text', 3);?>
+          </td>
+          <td>
+            <b>Ordem de Compra:</b>
+          </td>
+          <td>
+            <? db_input('m72_codordem', 13, $Ie53_vlrpag, true, 'text', 3);?>
+          </td>
          </tr>
        </table>
    </fieldset>
@@ -302,6 +425,124 @@ if (isset($oGet->e69_codnota)) {
      </form>
      <form name='form2' method='post'>
    </fieldset>
+  <fieldset id="diariaFieldset">
+    <legend><b>&nbsp;Diárias&nbsp;</b></legend>
+    <table>
+      <tr>
+        <td>
+          <b>Viajante:</b>
+        </td>
+        <td>
+          <? db_input("diariaViajante", 50, 1, true, 'text', 3) ?>
+        </td>
+        <td>
+          <b>Matricula:</b>
+        </td>
+        <td>
+          <? db_input("e140_matricula", 10, 1, true, 'text', 3) ?>
+          <b>Cargo:</b>
+          <? db_input("e140_cargo", 30, 3, true, 'text', 3) ?>
+        </td>
+        <td>
+          <b>Data da Autorização:</b>
+          <? db_input("e140_dtautorizacao", 10, 3, true, 'text', 3) ?>
+        </td>
+      </tr>        
+      <tr>
+        <td>
+          <b>Origem: </b>
+        </td>
+        <td>
+          <?db_input('e140_origem', 50, 2, true, 'text', 3);?>
+        </td>
+        <td>
+          <b>Destino: </b>
+        </td>
+        <td>
+          <?db_input('e140_destino', 50, 2, true, 'text', 3);?>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <b>Data Inicial da Viagem:</b>
+        </td>
+        <td>
+          <? db_input("e140_dtinicial", 10, 3, true, 'text', 3) ?>
+          <b>Data Final da Viagem:</b>
+          <? db_input("e140_dtfinal", 10, 3, true, 'text', 3) ?>
+        </td>
+        <td>
+          <b>Quantidade de Diárias:</b>
+        </td>
+        <td>
+          <? db_input("e140_qtddiarias", 5, 1, true, 'text', 3) ?>
+          <b>Valor Unitário da Diária:</b>
+          <? db_input("e140_vrldiariauni", 10, 4, true, 'text', 3) ?>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <b>Transporte:</b>
+        </td>
+        <td>
+          <? db_input("e140_transporte", 50, 2, true, 'text', 3) ?>
+        </td>
+        <td>
+          <b>Valor do Transporte:</b>
+        </td>
+        <td>
+          <? db_input("e140_vlrtransport", 10, 4, true, 'text', 3) ?>    
+          <b>Valor Total das Diárias:</b>
+          <? db_input("diariaVlrTotal", 10, 4, true, 'text', 3) ?>
+        </td>
+        <td>
+          <b>Valor Total da Despesa:</b>
+          <? db_input("diariaVlrDespesa", 10, 4, true, 'text', 3) ?>
+        </td>
+      </tr>
+    </table>      
+    <b>&nbsp;Objetivo da Viagem:</b></br>
+    <? db_textarea("e140_objetivo", 2, 120, 3, true, 'text', 3) ?>
+  </fieldset>
+  <fieldset id='reinf'>
+  <legend><b>Efd-Reinf</b></legend>
+  <table>
+    <tr>
+      <td><b>Incide Retenção do Imposto de Renda:</b></td>
+      <td>
+        <?
+        $aReinfRetencao = array('0' => 'Não', '1' => 'Sim');
+        db_select('e50_retencaoir', $aReinfRetencao, true, 3);
+        ?>
+      </td>
+    </tr>
+    <tr id='linhaNaturezaRendimento'>
+      <td><b>Natureza do Rendimento: </b></td>
+      <td><? db_input('e50_naturezabemservico', 7, 1, true, 'text', 3); ?></td>
+      <td><? db_input('e101_resumo', 100, 0, true, 'text', 3); ?></td>
+    </tr>
+    <tr id='linhaRetencaoTerceiro'>
+      <td><b>Retenção Realizada por Terceiro:</b></td>
+      <td><? db_input('reinfRetencaoEstabelecimento', 7, 1, true, 'text', 3); ?></td>
+    </tr>
+  </table>
+  <fieldset id='fieldsetEstabelecimentos'>
+    <legend><b>Estabelecimentos</b></legend>
+    <table id="estabelecimentosTable" border="1">
+      <thead>
+        <tr>
+          <th class="cabecTableEstabelecimento">CGM Estabelecimento</th>
+          <th class="cabecTableEstabelecimentoNome">Nome/Razão Social</th>
+          <th class="cabecTableEstabelecimento">Valor Bruto</th>
+          <th class="cabecTableEstabelecimento">Valor Base</th>
+          <th class="cabecTableEstabelecimento">Valor IR</th>
+        </tr>
+      </thead>
+      <tbody id="estabelecimentosTableBody">
+      </tbody>
+    </table>
+  </fieldset>
+</fieldset>
    <fieldset>
      <legend>
        <b>Itens da Nota</b>
@@ -402,10 +643,65 @@ if (isset($oGet->e69_codnota)) {
 </html>
 <script>
     var db_opcao = "<?php print $cpfcnpj; ?>";
+    var bDiaria = <?echo $bDiaria;?>;
+    var bRetencaoir = <?echo $e50_retencaoir;?>;
+
     if(db_opcao.length == '11'){
       document.getElementById('esocial').style.display = "table-cell";   
     }else{
       document.getElementById('esocial').style.display = "none";
     }
+
+    if(bDiaria){
+      document.getElementById('diariaFieldset').style.display = "table-cell";
+    }else{
+      document.getElementById('diariaFieldset').style.display = "none";
+    }
+
+    if(bRetencaoir){
+      document.getElementById('linhaNaturezaRendimento').style.display = "table-row";
+      document.getElementById('linhaRetencaoTerceiro').style.display = "table-row";
+    }else{
+      document.getElementById('linhaNaturezaRendimento').style.display = "none";
+      document.getElementById('linhaRetencaoTerceiro').style.display = "none";
+    }
   
+    var aEstabelecimentos = <?echo $aEstabelecimento == null ? 0 : $aEstabelecimento?>;
+    if (aEstabelecimentos) {
+      document.getElementById('reinfRetencaoEstabelecimento').value = 'Sim';
+      document.getElementById('fieldsetEstabelecimentos').style.display = 'table-cell';
+      for (i = 0; i < aEstabelecimentos.length; i++) {
+          js_adicionarEstabelecimentoTabela(aEstabelecimentos[i]);
+      }
+    } else {
+      document.getElementById('reinfRetencaoEstabelecimento').value = 'Não';
+      document.getElementById('fieldsetEstabelecimentos').style.display = 'none';
+      document.getElementById('estabelecimentosTableBody').innerHTML = '';
+    }
+
+  function js_adicionarEstabelecimentoTabela(item) {
+    const table = document.getElementById("estabelecimentosTableBody");
+    const novoEstabelecimento = table.insertRow();
+
+    const numCgm = novoEstabelecimento.insertCell(0);
+    numCgm.innerHTML = item.e102_numcgm;
+    numCgm.className = "corpoTableEstabelecimento";
+
+    const nomeEstabelecimento = novoEstabelecimento.insertCell(1);
+    nomeEstabelecimento.innerHTML = item.z01_nome;
+    nomeEstabelecimento.className = "corpoTableEstabelecimentoNome";
+
+    const vlrBruto = novoEstabelecimento.insertCell(2);
+    vlrBruto.innerHTML = item.e102_vlrbruto;
+    vlrBruto.className = "corpoTableEstabelecimento";
+
+    const vlrBase = novoEstabelecimento.insertCell(3);
+    vlrBase.innerHTML = item.e102_vlrbase;
+    vlrBase.className = "corpoTableEstabelecimento";
+
+    const vlrIr = novoEstabelecimento.insertCell(4);
+    vlrIr.innerHTML = item.e102_vlrir;
+    vlrIr.className = "corpoTableEstabelecimento";
+    
+  }
 </script>  

@@ -76,6 +76,7 @@ class cl_empparametro
     var $e30_obrigactapagliq = 'f';
     var $e30_empordemcron = 'f';
     var $e30_liquidacaodataanterior = 'f';
+    var $e30_obrigadiarias = 't';
     // cria propriedade com as variaveis do arquivo
     var $campos = "
                  e39_anousu = int4 = Exercício
@@ -108,6 +109,7 @@ class cl_empparametro
                  e30_empordemcron = bool = Empenho fora ordem Cronológica
                  e30_liquidacaodataanterior = bool = Liquidação c/ data anterior a última
                  e30_modeloautempenho = int8 = Controla o modelo de autorização de emepnho
+                 e30_obrigadiarias = bool = Obriga Informar Diárias na Liquidação
                  ";
 
     //funcao construtor da classe
@@ -167,6 +169,7 @@ class cl_empparametro
             $this->e30_obrigactapagliq = ($this->e30_obrigactapagliq == "f" ? @$GLOBALS["HTTP_POST_VARS"]["e30_obrigactapagliq"] : $this->e30_obrigactapagliq);
             $this->e30_empordemcron = ($this->e30_empordemcron == "f" ? @$GLOBALS["HTTP_POST_VARS"]["e30_empordemcron"] : $this->e30_empordemcron);
             $this->e30_liquidacaodataanterior = ($this->e30_liquidacaodataanterior == "f"?@$GLOBALS["HTTP_POST_VARS"]["e30_liquidacaodataanterior"]:$this->e30_liquidacaodataanterior);
+            $this->e30_obrigadiarias = ($this->e30_obrigadiarias == "t"?@$GLOBALS["HTTP_POST_VARS"]["e30_obrigadiarias"]:$this->e30_obrigadiarias);
         } else {
         }
     }
@@ -426,6 +429,15 @@ class cl_empparametro
             $this->erro_status = "0";
             return false;
         }
+        if ($this->e30_obrigadiarias == null) {
+            $this->erro_sql = " Campo Obriga Informar Diárias na Liquidação nao Informado.";
+            $this->erro_campo = "e30_obrigadiarias";
+            $this->erro_banco = "";
+            $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
 
         $sql = "insert into empparametro(
                                        e39_anousu
@@ -456,6 +468,7 @@ class cl_empparametro
                                       ,e30_empordemcron
                                       ,e30_liquidacaodataanterior
                                       ,e30_modeloautempenho
+                                      ,e30_obrigadiarias
                        )
                 values (
                                 $this->e39_anousu
@@ -487,6 +500,7 @@ class cl_empparametro
                                ,$this->e30_empordemcron
                                ,$this->e30_liquidacaodataanterior
                                ,$this->e30_modeloautempenho
+                               ,$this->e30_obrigadiarias
                       )";
 
         $result = db_query($sql);
@@ -544,6 +558,7 @@ class cl_empparametro
             $resac = db_query("insert into db_acount values($acount,893,2012352,'','" . AddSlashes(pg_result($resaco, 0, 'e30_atestocontinterno')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             $resac = db_query("insert into db_acount values($acount,893,2012400,'','" . AddSlashes(pg_result($resaco, 0, 'e30_prazoentordcompra')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             $resac = db_query("insert into db_acount values($acount,893,2012515,'','" . AddSlashes(pg_result($resaco, 0, 'e30_obrigactapagliq')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            $resac = db_query("insert into db_acount values($acount,893,2012515,'','" . AddSlashes(pg_result($resaco, 0, 'e30_obrigadiarias')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
         }
         return true;
     }
@@ -933,6 +948,19 @@ class cl_empparametro
                 return false;
             }
         }
+        if(trim($this->e30_obrigadiarias)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e30_obrigadiarias"])){
+            $sql  .= $virgula." e30_obrigadiarias = '$this->e30_obrigadiarias' ";
+            $virgula = ",";
+            if(trim($this->e30_obrigadiarias) == null ){
+                $this->erro_sql = " Campo Obriga Informar Diárias na Liquidação nao Informado.";
+                $this->erro_campo = "e30_obrigadiarias";
+                $this->erro_banco = "";
+                $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+                $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+                $this->erro_status = "0";
+                return false;
+            }
+        }
         $sql .= " where ";
         if ($e39_anousu != null) {
             $sql .= " e39_anousu = $this->e39_anousu";
@@ -996,7 +1024,9 @@ class cl_empparametro
                     $resac = db_query("insert into db_acount values($acount,893,2012400,'" . AddSlashes(pg_result($resaco, $conresaco, 'e30_prazoentordcompra')) . "','$this->e30_prazoentordcompra'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
                 if (isset($GLOBALS["HTTP_POST_VARS"]["e30_obrigactapagliq"]) || $this->e30_obrigactapagliq != "")
                     $resac = db_query("insert into db_acount values($acount,893,2012515,'" . AddSlashes(pg_result($resaco, $conresaco, 'e30_obrigactapagliq')) . "','$this->e30_obrigactapagliq'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-            }
+                if (isset($GLOBALS["HTTP_POST_VARS"]["e30_obrigadiarias"]) || $this->e30_obrigadiarias != "")
+                $resac = db_query("insert into db_acount values($acount,893,2012515,'" . AddSlashes(pg_result($resaco, $conresaco, 'e30_obrigadiarias')) . "','$this->e30_obrigadiarias'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");            
+                }
         }
         $result = db_query($sql);
         if ($result == false) {
