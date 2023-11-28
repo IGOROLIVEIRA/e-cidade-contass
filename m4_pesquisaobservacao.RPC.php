@@ -13,8 +13,6 @@ $oParam            =  json_decode(str_replace('\\', '', $_POST["json"]));
 $sequencial = $oParam->sequencial;
 $tabela = $oParam->tabela;
 
-$iInstituicao = db_getsession("DB_instit");
-
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
 $oRetorno->erro  = '';

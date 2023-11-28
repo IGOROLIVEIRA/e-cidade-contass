@@ -14,8 +14,6 @@ $sequencial = $oParam->sequencial;
 $tabela = $oParam->tabela;
 $observacao = utf8_decode(db_stdClass::db_stripTagsJson($oParam->observacao));
 
-$iInstituicao = db_getsession("DB_instit");
-
 $oRetorno          = new stdClass();
 $oRetorno->status  = 1;
 $oRetorno->erro  = '';
