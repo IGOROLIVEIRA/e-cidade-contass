@@ -558,7 +558,7 @@ $clrotulo->label("descrdepto");
                 /**
                  * Libera a aba dos lotes caso o processo de compras seja por lote
                  */
-                if (oRetorno.pc80_tipoprocesso === 2) {
+                if (oRetorno.pc80_tipoprocesso === '2') {
                     oAbaLote.desbloquear();
                 }
 
