@@ -3583,7 +3583,8 @@ class cl_liclicita
            WHEN l03_pctipocompratribunal = 51 THEN 3
            WHEN l03_pctipocompratribunal = 53 THEN 6
            WHEN l03_pctipocompratribunal = 52 THEN 7
-           WHEN l03_pctipocompratribunal = 50 THEN 5
+           WHEN l03_pctipocompratribunal = 50 and l03_presencial='f' THEN 4
+           WHEN l03_pctipocompratribunal = 50 and l03_presencial='t' THEN 5
            WHEN l03_pctipocompratribunal = 101 THEN 8
            WHEN l03_pctipocompratribunal = 100 THEN 9
            WHEN l03_pctipocompratribunal = 102 THEN 12
@@ -3756,7 +3757,8 @@ class cl_liclicita
                     WHEN l03_pctipocompratribunal = 51 THEN 3
                     WHEN l03_pctipocompratribunal = 53 THEN 6
                     WHEN l03_pctipocompratribunal = 52 THEN 7
-                    WHEN l03_pctipocompratribunal = 50 THEN 5
+                    WHEN l03_pctipocompratribunal = 50 and l03_presencial='t' THEN 5
+                    WHEN l03_pctipocompratribunal = 50 and l03_presencial='f' THEN 4
                     WHEN l03_pctipocompratribunal = 101 THEN 8
                     WHEN l03_pctipocompratribunal = 100 THEN 9
                     WHEN l03_pctipocompratribunal = 102 THEN 12
