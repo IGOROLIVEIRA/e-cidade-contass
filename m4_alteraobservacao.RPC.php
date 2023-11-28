@@ -13,8 +13,6 @@ $oParam            =  json_decode(str_replace('\\', '', $_POST["json"]));
 $sequencial = $oParam->sequencial;
 $tabela = $oParam->tabela;
 $observacao = utf8_decode(db_stdClass::db_stripTagsJson($oParam->observacao));
-//$observacao = rawurldecode(mb_convert_encoding($oParam->observacao, "ISO-8859-1", "UTF-8"));//addslashes(stripslashes(chop($oParam->observacao)));
-//$observacao = nl2br(mb_convert_encoding($oParam->observacao, "ISO-8859-1", "UTF-8"));
 
 $iInstituicao = db_getsession("DB_instit");
 
@@ -42,8 +40,10 @@ try {
       break;
 
     case "empempenho":
-
-      db_query("update empempenho set e60_resumo = '$observacao' where e60_numemp = $sequencial;");
+      $aEmpenho = explode("/", $sequencial);
+      $e60_codemp = $aEmpenho[0];
+      $e60_anousu = $aEmpenho[1];
+      db_query("update empempenho set e60_resumo = '$observacao' where e60_codemp = '$e60_codemp' and e60_anousu = $e60_anousu;");
       break;
 
     case "matordem":
