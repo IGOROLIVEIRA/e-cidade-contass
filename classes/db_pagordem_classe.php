@@ -65,6 +65,10 @@ class cl_pagordem {
    var $e50_datacompetencia = null;
    var $e50_retencaoir = null;
    var $e50_naturezabemservico = null;
+   var $e50_dtvencimento = null;
+   var $e50_dtvencimento_dia = null;
+   var $e50_dtvencimento_mes = null;
+   var $e50_dtvencimento_ano = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  e50_codord = int4 = Ordem
@@ -85,6 +89,7 @@ class cl_pagordem {
                  e50_datacompetencia = date = Competência
                  e50_retencaoir = bool = Incide Retenção do Imposto de Renda
                  e50_naturezabemservico = int4 = Codigo de Natureza de Bem ou Serviço
+                 e50_dtvencimento = date = Vencimento
                  ";
    //funcao construtor da classe
    function cl_pagordem() {
@@ -114,6 +119,14 @@ class cl_pagordem {
             $this->e50_data = $this->e50_data_ano."-".$this->e50_data_mes."-".$this->e50_data_dia;
          }
        }
+       if($this->e50_dtvencimento == ""){
+        $this->e50_dtvencimento_dia = ($this->e50_dtvencimento_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_dtvencimento_dia"]:$this->e50_dtvencimento_dia);
+        $this->e50_dtvencimento_mes = ($this->e50_dtvencimento_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_dtvencimento_mes"]:$this->e50_dtvencimento_mes);
+        $this->e50_dtvencimento_ano = ($this->e50_dtvencimento_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_dtvencimento_ano"]:$this->e50_dtvencimento_ano);
+        if($this->e50_dtvencimento_dia != ""){
+           $this->e50_data = $this->e50_dtvencimento_ano."-".$this->e50_dtvencimento_mes."-".$this->e50_dtvencimento_dia;
+        }
+      }
        $this->e50_obs = ($this->e50_obs == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_obs"]:$this->e50_obs);
        $this->e50_id_usuario = ($this->e50_id_usuario == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_id_usuario"]:$this->e50_id_usuario);
        $this->e50_hora = ($this->e50_hora == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_hora"]:$this->e50_hora);
@@ -241,6 +254,7 @@ class cl_pagordem {
                                       ,e50_datacompetencia
                                       ,e50_retencaoir
                                       ,e50_naturezabemservico
+                                      ,e50_dtvencimento
                        )
                 values (
                                 $this->e50_codord
@@ -261,6 +275,7 @@ class cl_pagordem {
                                ,".($this->e50_datacompetencia == "null" || $this->e50_datacompetencia == ""?"null":"'".$this->e50_datacompetencia."'")."                               
                                ,$this->e50_retencaoir::bool
                                ,".($this->e50_naturezabemservico == "null" || $this->e50_naturezabemservico == ""?"null":"'".$this->e50_naturezabemservico."'")."
+                               ,".($this->e50_dtvencimento == "null" || $this->e50_dtvencimento == ""?"null":"'".$this->e50_dtvencimento."'")."
                       )";
                 //  echo $sql;exit;
      $result = db_query($sql);

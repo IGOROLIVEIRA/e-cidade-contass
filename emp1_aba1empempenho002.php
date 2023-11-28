@@ -82,20 +82,6 @@ $clempempitem			= new cl_empempitem;
 $clempnotaele           = new cl_empnotaele;
 $clempnota           = new cl_empnota;
 
-//Atualiza o campo historico da op
-if(isset($HTTP_POST_VARS['alterar'])){
-    $clempempenho->e60_informacaoop = $HTTP_POST_VARS['e60_informacaoop'];
-    $clempempenho->alterar($e60_numemp);
-    if($HTTP_POST_VARS['historico_alterado'] === 'true'){
-        if(isset($msgCampoAlterado)){
-            $msgCampoAlterado .= " - Histórico da OP\n";
-        }else{
-            $msgCampoAlterado = "\n\nCampos alterados: \n";
-            $msgCampoAlterado .= " - Histórico da OP\n";
-        }
-    }
-}
-
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 $db_opcao =  22;
@@ -106,10 +92,18 @@ if(isset($alterar)){
     $db_botao = true;
     db_inicio_transacao();
     /*rotina de incluir  na tabela empempenho*/    
-    $data_empenho = str_replace('/','-',$data_empenho);
-    $data_empenho = date('Y-m-d', strtotime($data_empenho));
     $e60_emiss_ano = date('Y',strtotime($e60_emiss));
     $e60_emiss_mes = date('m', strtotime($e60_emiss));
+    $dataAlterada = false;
+    if($data_empenho !== ""){
+        $data_empenho = str_replace('/', '-', $data_empenho);
+        $data_empenho = date('Y-m-d', strtotime($data_empenho));
+        if($dataLiquidacaoAtual !== ""){
+            $dataAtual = str_replace('/', '-', $e60_emiss);
+            $dataAtual = date('Y-m-d', strtotime($e60_emiss));
+            $dataAlterada = strtotime($dataAtual) !== strtotime($data_empenho) ? true : false;
+        }
+    }
 
     //Verifica se a data do empenho esta sendo alterada de um ano para outro
     if ($sqlerro == false){
@@ -148,7 +142,7 @@ if(isset($alterar)){
     }
 
     //Verifica se a data nova é posterior ao lançamento contabil mais antigo
-    if($sqlerro == false){
+    if($sqlerro == false && $dataAlterada){
         $sql = "SELECT DISTINCT c70_data, c71_coddoc
             FROM conlancam 
             INNER JOIN conlancamval ON c69_codlan = c70_codlan
@@ -169,7 +163,7 @@ if(isset($alterar)){
     }
 
     //Verifica se a dotação do empenho tem saldo
-    if ($sqlerro == false){
+    if ($sqlerro == false && $dataAlterada){
         $tipoSaldo = 2; //Saldo do mês
         if ($data_empenho_mes === $e60_emiss_mes){
             $tipoSaldo = 3;//Saldo do dia
@@ -184,7 +178,7 @@ if(isset($alterar)){
     }
 
     //Altera a data do empenho
-    if($sqlerro == false){
+    if($sqlerro == false && $dataAlterada){
         if(strtotime($data_empenho) < db_getsession("DB_datausu")){
             $sqlAlteraData = $clempempenho->alteraData($e60_numemp,$e60_emiss,$data_empenho, date('m',db_getsession('DB_datausu')));
             db_query($sqlAlteraData);
@@ -456,14 +450,31 @@ if(isset($alterar)){
   
     // atualiza o campo do gestor do empenho
     if (isset($e54_gestaut) && isset($e54_autori) && !empty($e54_gestaut)) {
-        $sSql = " UPDATE empautoriza SET e54_gestaut = '{$e54_gestaut}' WHERE e54_autori={$e54_autori} AND e54_numcgm={$e60_numcgm} ";
-        db_query($sSql);
         if($gestor_alterado === 'true'){
-            if(isset($msgCampoAlterado)){
-                $msgCampoAlterado .= " - Gestor do Empenho\n";
-            }else{
-                $msgCampoAlterado = "\n\nCampos alterados: \n";
-                $msgCampoAlterado .= " - Gestor do Empenho\n";
+            $result = $clempautoriza->alteraGestorEmpenho($e54_gestaut, $e54_autori, $e60_numcgm);
+            if($result){
+                if(isset($msgCampoAlterado)){
+                    $msgCampoAlterado .= " - Gestor do Empenho\n";
+                }else{
+                    $msgCampoAlterado = "\n\nCampos alterados: \n";
+                    $msgCampoAlterado .= " - Gestor do Empenho\n";
+                }
+            }
+        }
+    }
+
+    //Atualiza o campo historico da op
+    if(isset($e60_informacaoop)){
+        if($historico_alterado === 'true'){
+            $clempempenho->e60_informacaoop = $e60_informacaoop;
+            $result = $clempempenho->alteraHistorico($e60_numemp);        
+            if($result){
+                if(isset($msgCampoAlterado)){
+                    $msgCampoAlterado .= " - Histórico da OP\n";
+                }else{
+                    $msgCampoAlterado = "\n\nCampos alterados: \n";
+                    $msgCampoAlterado .= " - Histórico da OP\n";
+                }
             }
         }
     }
