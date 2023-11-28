@@ -48,19 +48,23 @@ switch ($oParam->exec) {
     $e140_dtfinal = App\Support\String\DateFormatter::convertDateFormatBRToISO($oParam->e140_dtfinal);
 
     $clempdiaria        = new cl_empdiaria;
-    $clempdiaria->e140_codord        = $oParam->e140_codord;
-    $clempdiaria->e140_dtautorizacao = $e140_dtautorizacao;
-    $clempdiaria->e140_matricula     = $oParam->e140_matricula;
-    $clempdiaria->e140_cargo         = $oParam->e140_cargo;
-    $clempdiaria->e140_dtinicial     = $e140_dtinicial;
-    $clempdiaria->e140_dtfinal       = $e140_dtfinal;
-    $clempdiaria->e140_origem        = $oParam->e140_origem;
-    $clempdiaria->e140_destino       = $oParam->e140_destino;
-    $clempdiaria->e140_qtddiarias    = $oParam->e140_qtddiarias;
-    $clempdiaria->e140_vrldiariauni  = $oParam->e140_vrldiariauni;
-    $clempdiaria->e140_transporte    = $oParam->e140_transporte;
-    $clempdiaria->e140_vlrtransport  = $oParam->e140_vlrtransport;
-    $clempdiaria->e140_objetivo      = $oParam->e140_objetivo;
+    $clempdiaria->e140_codord           = $oParam->e140_codord;
+    $clempdiaria->e140_dtautorizacao    = $e140_dtautorizacao;
+    $clempdiaria->e140_matricula        = $oParam->e140_matricula;
+    $clempdiaria->e140_cargo            = $oParam->e140_cargo;
+    $clempdiaria->e140_dtinicial        = $e140_dtinicial;
+    $clempdiaria->e140_dtfinal          = $e140_dtfinal;
+    $clempdiaria->e140_horainicial      = $oParam->e140_horainicial;
+    $clempdiaria->e140_horafinal        = $oParam->e140_horafinal;
+    $clempdiaria->e140_origem           = $oParam->e140_origem;
+    $clempdiaria->e140_destino          = $oParam->e140_destino;
+    $clempdiaria->e140_qtddiarias       = $oParam->e140_qtddiarias;
+    $clempdiaria->e140_vrldiariauni     = $oParam->e140_vrldiariauni;
+    $clempdiaria->e140_qtdhospedagens   = $oParam->e140_qtdhospedagens;
+    $clempdiaria->e140_vrlhospedagemuni = $oParam->e140_vrlhospedagemuni;
+    $clempdiaria->e140_transporte       = $oParam->e140_transporte;
+    $clempdiaria->e140_vlrtransport     = $oParam->e140_vlrtransport;
+    $clempdiaria->e140_objetivo         = $oParam->e140_objetivo;
     $clempdiaria->incluir();
     if ($clempdiaria->erro_status == 1) {
       $oRetorno->status      = 2;
