@@ -7,7 +7,6 @@ require_once("libs/db_app.utils.php");
 require_once("std/db_stdClass.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
-ini_set("display_errors","on");
 $oGet = db_utils::postMemory($_GET);
 $oDaoPrecoReferencia = db_utils::getDao("precoreferencia");
 $sSqlProcessoCompras = $oDaoPrecoReferencia->sql_query_file(
