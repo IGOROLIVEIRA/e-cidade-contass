@@ -3116,7 +3116,7 @@ class cl_acordo
         }
 
         $sql .= " ORDER BY ac16_sequencial DESC";
-        
+
         return $sql;
     }
 

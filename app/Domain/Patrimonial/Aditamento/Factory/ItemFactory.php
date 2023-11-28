@@ -6,17 +6,20 @@ use App\Domain\Patrimonial\Aditamento\Item;
 use App\Models\AcordoItem;
 use DateTime;
 use Illuminate\Database\Eloquent\Collection;
+use League\Fractal\Resource\Collection as ResourceCollection;
 
 class ItemFactory
 {
     /**
      *
      * @param AcordoItem $itemAcordo
+     * @param AcordoItem $itemPosicaoAnterior
      * @return Item
      */
-    public function createByEloquentModel(AcordoItem $itemAcordo): Item
+    public function createByEloquentModel(AcordoItem $itemAcordo, ?AcordoItem $itemPosicaoAnterior = null): Item
     {
         $item = new Item();
+        $existePosicaoAnterior = empty($itemPosicaoAnterior);
 
         $item->setItemSequencial((int) $itemAcordo->ac20_sequencial)
             ->setCodigoPcMater((int) $itemAcordo->ac20_pcmater)
@@ -38,23 +41,31 @@ class ItemFactory
 
         $item->setInicioExecucao($dataInicio)
             ->setFimExecucao($dataFim);
+        if ( !$existePosicaoAnterior ) {
+            $item->setQuantidadeAnterior((float) $itemPosicaoAnterior->ac20_quantidade)
+                ->setValorAnteriorUnitario((float) $itemPosicaoAnterior->ac20_valorunitario);
+        }
 
         return $item;
     }
 
     /**
      *
-     * @param Collection $collection
+     * @param Collection $itens
+     * @param Collection $itensPosicaoAnterior
      * @return array
      */
-    public function createListByCollection(Collection $collection): array
+    public function createListByCollection(Collection $itens, ?Collection $itensPosicaoAnterior = null): array
     {
         $listaItens = [];
 
-
         /** @var AcordoItem $item */
-        foreach ($collection as $item) {
-            $listaItens[] = $this->createByEloquentModel($item);
+        foreach ($itens as $key => $item) {
+            $itemPosicaoAnterior = !empty($itensPosicaoAnterior)
+                ? $itensPosicaoAnterior[$key]
+                : null;
+
+            $listaItens[] = $this->createByEloquentModel($item, $itemPosicaoAnterior);
         }
 
         return $listaItens;

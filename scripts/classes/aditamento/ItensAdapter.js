@@ -19,7 +19,7 @@ class ItensAdapter {
       itemAdaptado.codigo = codigo;
       itemAdaptado.codigoitem = item.itemSequencial;
       itemAdaptado.controlaquantidade = item.servicoQuantidade == true ? 't' : 'f';
-      itemAdaptado.servico = item.tipoControle == true ? 't' : 'f';
+      itemAdaptado.servico = item.tipoControle == true ? true : false;
 
       itemAdaptado.descricaoitem = item.descricaoItem;
 
@@ -31,13 +31,16 @@ class ItensAdapter {
 
       itemAdaptado.periodoini = item.inicioExecucao ?? vigenciaInicio;
       itemAdaptado.periodofim = item.fimExecucao ?? vigenciaFim;
-      itemAdaptado.qtdeanterior = item.quantidade;
+      itemAdaptado.qtdePosicaoanterior = item.quantidadeAnterior > 0 ? item.quantidadeAnterior : item.quantidade;
+      itemAdaptado.qtdeanterior = item.quantidade
       itemAdaptado.qtdeaditada = 0;
       itemAdaptado.quantidade = item.quantidade;
       itemAdaptado.valoraditado = 0;
       itemAdaptado.valor = item.valorTotal;
       itemAdaptado.valorunitario = item.valorUnitario;
-      itemAdaptado.vlunitanterior = item.valorUnitario;
+      itemAdaptado.vlunitPosicaoanterior = item.valorAnteriorUnitario > 0 ? item.valorAnteriorUnitario : item.valorUnitario;
+      itemAdaptado.vlunitanterior =  item.valorUnitario;
+
       itensAdaptados.push(itemAdaptado);
     });
 

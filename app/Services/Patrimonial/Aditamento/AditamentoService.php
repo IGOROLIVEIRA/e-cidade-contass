@@ -30,9 +30,15 @@ class AditamentoService implements AditamentoServiceInterface
     public function getDadosAditamento(int $ac16Sequencial): array
     {
         $acordoPosicao = $this->acordoPosicaoRepository->getAditamentoUltimaPosicao($ac16Sequencial);
+        $numeroAditamento = (int)$acordoPosicao->ac26_numeroaditamento;
+
+        $acordoPosicaoAnterior = null;
+        if( $numeroAditamento > 1) {
+            $acordoPosicaoAnterior = $this->acordoPosicaoRepository->getAditamentoByNumero($ac16Sequencial, $numeroAditamento - 1);
+        }
 
         $aditamentoFactory = new AditamentoFactory();
-        $aditamento = $aditamentoFactory->createByEloquentModel($acordoPosicao);
+        $aditamento = $aditamentoFactory->createByEloquentModel($acordoPosicao, $acordoPosicaoAnterior);
 
         $seriealizer = new AditamentoSerializeService($aditamento);
 

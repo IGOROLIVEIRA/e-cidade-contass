@@ -9,12 +9,11 @@ use stdClass;
 
 class AditamentoFactory
 {
-
     /**
      * @param AcordoPosicao $acordoPosicao
      * @return Aditamento
      */
-    public function createByEloquentModel(AcordoPosicao $acordoPosicao): Aditamento
+    public function createByEloquentModel(AcordoPosicao $acordoPosicao, ?AcordoPosicao $acordoPosicaoAnterior = null): Aditamento
     {
         $dataAssinatura = $acordoPosicao->posicaoAditamento->ac35_dataassinaturatermoaditivo;
 
@@ -43,7 +42,13 @@ class AditamentoFactory
         }
 
         $itemFactory = new ItemFactory();
-        $itens = $itemFactory->createListByCollection($acordoPosicao->itens);
+
+        $itensPosicaoAnterior = null;
+        if (!empty($acordoPosicaoAnterior)) {
+            $itensPosicaoAnterior = $acordoPosicaoAnterior->itens;
+        }
+
+        $itens = $itemFactory->createListByCollection($acordoPosicao->itens, $itensPosicaoAnterior);
 
         $aditamento->setItens($itens);
 

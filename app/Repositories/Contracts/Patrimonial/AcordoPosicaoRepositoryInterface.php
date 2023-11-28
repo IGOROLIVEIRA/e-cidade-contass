@@ -27,4 +27,12 @@ interface AcordoPosicaoRepositoryInterface
      * @return void
      */
     public function update(int $codigo, array $dados);
+
+     /**
+     *
+     * @param integer $ac26Acordo
+     * @return AcordoPosicao
+     */
+    public function getAditamentoByNumero(int $ac26Acordo, int $numeroAditamento): AcordoPosicao;
+
 }

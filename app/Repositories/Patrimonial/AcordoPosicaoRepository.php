@@ -4,7 +4,6 @@ namespace App\Repositories\Patrimonial;
 
 use App\Models\AcordoPosicao;
 use App\Repositories\Contracts\Patrimonial\AcordoPosicaoRepositoryInterface;
-use DateTime;
 
 class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
 {
@@ -40,11 +39,29 @@ class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
      */
     public function getAditamentoUltimaPosicao(int $ac26Acordo): AcordoPosicao
     {
+
         $acordoPosicao = $this->model
                 ->with(['itens','posicaoAditamento','acordo'])
                 ->where('ac26_acordo',$ac26Acordo)
                 ->whereNotNull('ac26_numeroaditamento')
-                ->orderBy('ac26_numeroaditamento', 'desc')
+                ->orderBy('ac26_numero', 'desc')
+                ->first();
+
+       return $acordoPosicao;
+    }
+
+     /**
+     *
+     * @param integer $ac26Acordo
+     * @return AcordoPosicao
+     */
+    public function getAditamentoByNumero(int $ac26Acordo, int $numeroAditamento): AcordoPosicao
+    {
+        $acordoPosicao = $this->model
+                ->with(['itens','posicaoAditamento','acordo'])
+                ->where('ac26_acordo',$ac26Acordo)
+                ->where('ac26_numeroaditamento', $numeroAditamento)
+                ->orderBy('ac26_numero', 'desc')
                 ->first();
 
        return $acordoPosicao;

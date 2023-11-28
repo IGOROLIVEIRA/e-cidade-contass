@@ -1776,7 +1776,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
           aLinha[0] = parseInt(new String(iSeq)) + 1;
           aLinha[1] = oItem.codigoitem;
           aLinha[2] = oItem.descricaoitem.urlDecode();
-          aLinha[3] = js_formatar(oItem.qtdeanterior, 'f', casas);
+          aLinha[3] = oItem.qtdeanterior;
           aLinha[4] = js_formatar(oItem.vlunitanterior, 'f', 4);
 
             if (!oItem.novo) {
@@ -1926,7 +1926,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
 
                 else if ($('oCboTipoAditivo').value == 9) {
 
-                    oInputQuantidade.setValue( js_formatar(0, "f", 3));
+                    oInputQuantidade.setValue( js_formatar(oItem.qtdeanterior, "f", 3));
                     aLinha[5] = oInputQuantidade.toInnerHtml();
 
                     if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
@@ -1941,7 +1941,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                     aLinha[13].setDisable(true);
                 } else if ($('oCboTipoAditivo').value == 10) {
 
-                    oInputQuantidade.setValue( js_formatar(0, "f", 3));
+                    oInputQuantidade.setValue( js_formatar(oItem.qtdeanterior, "f", 3));
                     aLinha[5] = oInputQuantidade.toInnerHtml();
 
                     if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
@@ -1993,10 +1993,11 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 }
             }
 
+            console.log(aLinha[5]);
             /**
              * Caso seja servico e nao controlar quantidade, a quantidade padrao sera 1
              */
-            if (oItem.servico && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
+            if (oItem.servico == true && (oItem.controlaquantidade == "f" || oItem.controlaquantidade == "")) {
                 aLinha[3] = js_formatar(1, 'f', 2);
                 oInputQuantidade.setReadOnly(true);
                 oInputQuantidade.setValue( js_formatar(1, "f", 3));
@@ -2069,6 +2070,10 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             oDBHint.setHideEvents(aEventsOut);
             oDBHint.setPosition('B', 'L');
             oDBHint.make($("oGridItensrow"+id+"cell2"), 3);
+
+            if (me.estadoTela.viewAlterar) {
+              me.calculaTotalNoCarregamento(aItens[id], id);
+            }
         });
     }
 
@@ -2116,6 +2121,45 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
         }
 
         me.salvarInfoDotacoes(iLinha);
+    }
+
+    /**
+     * Calcula o valor da coluna Valor Total
+     */
+    this.calculaTotalNoCarregamento = function (item,iLinha) {
+
+        let aLinha = me.oGridItens.aRows[iLinha],
+          nQuantidade  = aLinha.aCells[6].getValue().getNumber(),
+          nUnitario    = aLinha.aCells[7].getValue().getNumber(),
+          nQuantidadeA = item.qtdePosicaoanterior,
+          nUnitarioA   = item.vlunitPosicaoanterior
+
+        let casas = 2;
+        console.log(aLinha.aCells[6])
+        console.log(nQuantidadeA, nQuantidade, nQuantidade - nQuantidadeA);
+
+
+        aItensPosicao[iLinha].novaquantidade  = nQuantidade;
+        aItensPosicao[iLinha].novounitario    = nUnitario;
+
+        nValorTotal = nQuantidade * nUnitario;
+        valorTotal  = nQuantidadeA * nUnitarioA;
+
+
+        aLinha.aCells[8].setContent(js_formatar(nQuantidade * nUnitario, 'f', 2));
+
+        if (aItensPosicao[iLinha].servico == false && (aItensPosicao[iLinha].controlaquantidade == "t" || aItensPosicao[iLinha].controlaquantidade != "")) {
+            aLinha.aCells[9].setContent(js_formatar((nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
+        }
+        else if (aItensPosicao[iLinha].servico == true && aItensPosicao[iLinha].controlaquantidade == "t") {
+            aLinha.aCells[9].setContent(js_formatar((nQuantidade - nQuantidadeA), 'f', casas) );//Quantidade Aditada OC5304
+        }
+
+        aLinha.aCells[10].setContent( js_formatar((nValorTotal - valorTotal), 'f', 2));//Valor Aditado OC5304
+
+        if (this.totalizador) {
+            this.somaAditamentos();
+        }
     }
 
     this.pesquisaMaterial = function (mostra) {

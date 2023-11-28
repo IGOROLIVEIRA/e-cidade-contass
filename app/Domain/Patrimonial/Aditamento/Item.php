@@ -31,7 +31,17 @@ class Item
     /**
      * @var float
      */
+    private float $quantidadeAnterior = 0;
+
+    /**
+     * @var float
+     */
     private float $valorUnitario;
+
+    /**
+     * @var float
+     */
+    private float $valorAnteriorUnitario = 0;
 
     /**
     * @var float
@@ -269,6 +279,42 @@ class Item
     public function setFimExecucao(?DateTime $fimExecucao): self
     {
         $this->fimExecucao = $fimExecucao;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of valorAnteriorUnitario
+     */
+    public function getValorAnteriorUnitario(): float
+    {
+        return $this->valorAnteriorUnitario;
+    }
+
+    /**
+     * Set the value of valorAnteriorUnitario
+     */
+    public function setValorAnteriorUnitario(float $valorAnteriorUnitario): self
+    {
+        $this->valorAnteriorUnitario = $valorAnteriorUnitario;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of quantidadeAnterior
+     */
+    public function getQuantidadeAnterior(): float
+    {
+        return $this->quantidadeAnterior;
+    }
+
+    /**
+     * Set the value of quantidadeAnterior
+     */
+    public function setQuantidadeAnterior(float $quantidadeAnterior): self
+    {
+        $this->quantidadeAnterior = $quantidadeAnterior;
 
         return $this;
     }
