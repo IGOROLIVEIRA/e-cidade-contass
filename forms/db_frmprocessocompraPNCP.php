@@ -521,9 +521,9 @@ $clrotulo->label("descrdepto");
 
 
                 /*OC3770*/
-                if (oRetorno.pc80_criterioadjudicacao === 3) {
+                if (oRetorno.pc80_criterioadjudicacao === '3') {
                     document.getElementById('pc80_criterioadjudicacao').selectedIndex = 1;
-                } else if (oRetorno.pc80_criterioadjudicacao === 1) {
+                } else if (oRetorno.pc80_criterioadjudicacao === '1') {
                     document.getElementById('pc80_criterioadjudicacao').selectedIndex = 2;
                 } else {
                     document.getElementById('pc80_criterioadjudicacao').selectedIndex = 3;
