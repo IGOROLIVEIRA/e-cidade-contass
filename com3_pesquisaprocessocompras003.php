@@ -59,6 +59,12 @@ switch ($oProcessoCompras->getSituacao()) {
     $sSituacaoProcesso = 'NÃO AUTORIZADO';
     break;  
 }
+
+$cllicitaparam = new cl_licitaparam;
+$sqlParametroPncp = $cllicitaparam->sql_query(null, '*', null, "l12_instit = " . db_getsession('DB_instit'));
+$rsParametroPncp = db_query($sqlParametroPncp);
+$l12_pncp = db_utils::fieldsMemory($rsParametroPncp,0)->l12_pncp;
+
 ?>
 <html>
   <head>
@@ -120,7 +126,7 @@ switch ($oProcessoCompras->getSituacao()) {
           <td class="label"> <b> Contratação Direta: </b> </td>
           <td class="valores"> <?=$oProcessoCompras->getDispensaPorValor() == "t" ? "Sim" : "Não"?></td>
        </tr>
-       <tr>
+       <tr style="display:<?php echo $l12_pncp == "t" ? "" : "none";?>">
           <td class="label"><?=$Lpc80_situacao ?> </td>
           <td colspan="3" class="valores">
             <?=$oProcessoCompras->getSituacao(). " - {$sSituacaoProcesso}"?>
@@ -128,7 +134,7 @@ switch ($oProcessoCompras->getSituacao()) {
           <td class="label"> <b> Nº Dispensa: </b> </td>
           <td class="valores"> <?=$oProcessoCompras->getNumerodispensa()?></td>
        </tr>
-       <tr>
+       <tr style="display:<?php echo $l12_pncp == "t" ? "" : "none";?>">
           <td class="label"><?=$Lpc80_resumo ?> </td>
           <td colspan="3" class="valores">
             <?=nl2br($oProcessoCompras->getResumo())?>
