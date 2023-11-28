@@ -118,7 +118,7 @@ $l12_pncp = db_utils::fieldsMemory($rsParametroPncp,0)->l12_pncp;
             ?>
           </td>
        </tr>
-       <tr>
+       <tr style="display:<?php echo $l12_pncp == "t" ? "" : "none";?>">
           <td class="label"><?=$Lpc80_usuario ?> </td>
           <td colspan="3" class="valores">
             <?=$oProcessoCompras->getUsuario()." - ".$oProcessoCompras->getNomeUsuario()?>
