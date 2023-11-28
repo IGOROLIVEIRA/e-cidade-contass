@@ -3030,6 +3030,7 @@ class cl_acordo
                 AND e60_emiss <='$ano-12-31'";
         return $sql;
     }
+
     public function alteracaoCriterioReajuste($ac16_sequencial,$ac16_reajuste,$ac16_criterioreajuste,$ac16_datareajuste,$ac16_periodoreajuste,$ac16_indicereajuste,$ac16_descricaoreajuste,$ac16_descricaoindice)
     {
 
@@ -3059,5 +3060,43 @@ class cl_acordo
         ";
 
         db_query($sSql);
+    }
+
+    public function queryAcordosAssinadosHomologados(int $ac10Sequencial = null)
+    {
+        $instituicao = db_getsession('DB_instit');
+        $sql = "SELECT acordomovimentacao.ac10_acordo,
+            acordomovimentacao.ac10_acordomovimentacaotipo,
+            acordomovimentacaotipo.ac09_descricao,
+            acordomovimentacao.ac10_sequencial,
+            acordomovimentacao.ac10_id_usuario,
+            acordomovimentacao.ac10_datamovimento,
+            acordomovimentacao.ac10_hora,
+            acordomovimentacao.ac10_obs
+        FROM acordomovimentacao
+        INNER JOIN acordomovimentacaotipo ON acordomovimentacaotipo.ac09_sequencial = acordomovimentacao.ac10_acordomovimentacaotipo
+        INNER JOIN acordo ON acordo.ac16_sequencial = acordomovimentacao.ac10_acordo
+        INNER JOIN db_depart ON db_depart.coddepto = acordo.ac16_coddepto
+        INNER JOIN acordosituacao ON acordosituacao.ac17_sequencial = acordo.ac16_acordosituacao
+        LEFT JOIN acordomovimentacaocancela ON ac25_acordomovimentacaocancela = ac10_sequencial
+        WHERE ac25_acordomovimentacaocancela IS NULL ";
+
+        if(!empty($ac10Sequencial)) {
+            $sql .= " AND acordomovimentacao.ac10_acordo = $ac10Sequencial ";
+        }
+
+        $sql .= "AND (ac10_acordomovimentacaotipo = 2
+            AND ac16_acordosituacao = 1
+            AND ac16_dataassinatura IS NOT NULL
+            OR ac10_acordomovimentacaotipo = 11
+            AND ac16_acordosituacao = 4
+            AND NOT EXISTS
+                         (SELECT 1
+                          FROM acordoempautoriza
+                          WHERE ac45_acordo = ac16_sequencial)
+           AND ac16_instit = $instituicao )
+           ORDER BY ac10_sequencial DESC";
+
+        return $sql;
     }
 }

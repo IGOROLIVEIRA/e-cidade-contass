@@ -43,7 +43,7 @@ class LoteFabrica
             if ($resultado->descricaolote !== $descricaoLote) {
                 $lote = new Lote();
                 $lote->setDescricao($resultado->descricaolote);
-                $lote->setExclusivoMPE($resultado->exclusivompelote);
+                $lote->setExclusivoMPE($resultado->exclusivompe);
                 $lote->setcotaReservada($resultado->cotareservada);
                 $lote->setJustificativa("");
                 $descricaoLote = $resultado->descricaolote;

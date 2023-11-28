@@ -58,6 +58,7 @@ class cl_bens {
   var $t52_bensmarca = 0;
   var $t52_bensmedida = 0;
   var $t52_bensmodelo = 0;
+  var $t52_codexterno = 0;
   // cria propriedade com as variaveis do arquivo
   var $campos = "
   t52_bem = int8 = Código do bem
@@ -73,6 +74,7 @@ class cl_bens {
   t52_bensmarca = int4 = Cód Marca
   t52_bensmedida = int4 = Cód Medida
   t52_bensmodelo = int4 = Cód Modelo
+  t52_codexterno = int8 = Cod RFID
   ";
   //funcao construtor da classe
   function cl_bens() {
@@ -486,6 +488,19 @@ class cl_bens {
         $this->erro_status = "0";
         return false;
       }
+    }
+      if(trim($this->t52_codexterno)!="" || isset($GLOBALS["HTTP_POST_VARS"]["t52_codexterno"])){
+        $sql  .= $virgula." t52_codexterno = $this->t52_codexterno ";
+        $virgula = ",";
+        if(trim($this->t52_codexterno) == null ){
+          $this->erro_sql = " Campo Cód Externo nao Informado.";
+          $this->erro_campo = "t52_codexterno";
+          $this->erro_banco = "";
+          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+          $this->erro_status = "0";
+          return false;
+        }
     }
     $sql .= " where ";
     if($t52_bem!=null){

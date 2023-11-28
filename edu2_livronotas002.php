@@ -27,7 +27,6 @@
 
 require_once("fpdf151/scpdf.php");
 require_once("libs/db_sql.php");
-require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 require_once("libs/db_sessoes.php");
 require_once("libs/db_utils.php");

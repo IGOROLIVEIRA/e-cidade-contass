@@ -25,6 +25,7 @@
  *                                licenca/licenca_pt.txt
  */
 
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_utils.php");
 require_once("libs/db_conecta.php");
@@ -50,6 +51,7 @@ require_once("model/licitacao.model.php");
 require_once("model/Dotacao.model.php");
 require_once("model/MaterialCompras.model.php");
 require_once("std/DBDate.php");
+require_once("model/AcordoMovimentacao.model.php");
 
 $oJson    = new services_json();
 $oRetorno = new stdClass();
@@ -117,7 +119,7 @@ switch ($oParam->exec) {
    * Cancelar homologação para o contrato
    */
     case "cancelarHomologacao":
-
+        
         try {
 
             db_inicio_transacao();
@@ -140,13 +142,13 @@ switch ($oParam->exec) {
 
         break;
     case "getleilicitacao":
-            $sSQL = "select l20_leidalicitacao  from liclicita 
+            $sSQL = "select l20_leidalicitacao  from liclicita
             inner join acordo on
                 acordo.ac16_licitacao = liclicita.l20_codigo
             where
             acordo.ac16_origem = 2
             and acordo.ac16_sequencial = $oParam->licitacao";
-            
+
 
             $rsResult       = db_query($sSQL);
             $leilicitacao = db_utils::fieldsMemory($rsResult, 0);
@@ -335,6 +337,18 @@ switch ($oParam->exec) {
 
             $oAssinatura->save();
 
+            $dataReferencia = db_query("select ac16_datareferencia from acordo where ac16_sequencial = $oParam->acordo");
+            $dataReferencia = pg_result($dataReferencia, 0, 'ac16_datareferencia');
+            $datoDataLancamentoLancamento = $dataReferencia;
+            $oHomologacao = new AcordoHomologacao();
+            $oHomologacao->setAcordo($oParam->acordo);
+            $oHomologacao->setObservacao($sObservacao);
+            $oHomologacao->save();
+            $oAcordo                   = new Acordo($oParam->acordo);
+            $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+            $sHistorico = "Valor referente a homologação do contrato de código: {$oParam->acordo}.";
+            $oAcordoLancamentoContabil->registraControleContrato($oParam->acordo, $oAcordo->getValorContrato(), $sHistorico, $datoDataLancamentoLancamento);
+
             db_fim_transacao(false);
         } catch (Exception $eExeption) {
 
@@ -353,13 +367,24 @@ switch ($oParam->exec) {
         try {
 
             db_inicio_transacao();
+            $ac10Sequencial = $oParam->codigo;
+            if(!empty($oParam->acordoMovimentacaoTipo) && $oParam->acordoMovimentacaoTipo == '11') {
+                $oHomologacao = new AcordoHomologacao($oParam->codigo);
+                $oHomologacao->setObservacao($sObservacao);
+                $oHomologacao->cancelar();
+                $oAcordo                   = new Acordo($oHomologacao->getAcordo());
+                $oAcordoLancamentoContabil = new AcordoLancamentoContabil();
+                $sHistorico = "Valor referente a cancelamento da homologação do contrato de código: {$oAcordo->getCodigoAcordo()}.";
+                $oAcordoLancamentoContabil->anulaRegistroControleContrato($oAcordo->getCodigoAcordo(), $oAcordo->getValorContrato(), $sHistorico, $oHomologacao->getDataMovimento());
+                $ac10Sequencial = $oHomologacao->getUltimaAssinatura($oParam->ac16Sequencial);
+            }
 
-            $oAssinatura = new AcordoAssinatura($oParam->codigo);
+            $oAssinatura = new AcordoAssinatura($ac10Sequencial);
 
             /*
             if (!$oAssinatura->verificaPeriodoPatrimonial()) {
                 $lAcordoValido = false;
-            } 
+            }
             */
             $oAssinatura->setDataMovimento();
             $oAssinatura->setObservacao($sObservacao);
