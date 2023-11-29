@@ -97,6 +97,7 @@ $sql = "SELECT DISTINCT l20_numero || '/' || l20_anousu AS licitacao,
                         to_char(pc54_datainicio,'dd / mm / yyyy') AS inicio,
                         to_char(pc54_datatermino,'dd / mm / yyyy') AS fim,
                         pc54_datatermino,
+                        pc54_datainicio,
                         l20_edital || '/' || l20_anousu AS processoLicitatorio,
                         l20_codigo
         FROM liclicitem
@@ -116,19 +117,22 @@ $sql = "SELECT DISTINCT l20_numero || '/' || l20_anousu AS licitacao,
         LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = solicitatipo.pc12_tipo
         WHERE 1=1 ";
 
-        if (!empty($anousu)) {
-           $sql .= " AND date_part ('year',pc54_datatermino) = $anousu ";
-        }
+if (!empty($anousu)) {
+   $sql .= " AND date_part ('year',pc54_datatermino) = $anousu ";
+}
 
-        if (!empty($periodoInicio) && !empty($periodoFim)) {
-            $periodoInicio =  DateTimeImmutable::createFromFormat('d/m/Y', $periodoInicio);
-            $periodoFim =  DateTimeImmutable::createFromFormat('d/m/Y', $periodoFim);
+if (!empty($periodoInicio)) {
+    $periodoInicio =  DateTimeImmutable::createFromFormat('d/m/Y', $periodoInicio);
+    $sql .= "AND pc54_datainicio >= '{$periodoInicio->format('Y-m-d')}' ";
+}
 
-            $sql .= "AND pc54_datainicio >= '{$periodoInicio->format('Y-m-d')}' AND pc54_datatermino <= '{$periodoFim->format('Y-m-d')}' ";
-        }
+if (!empty($periodoFim)) {
+    $periodoFim =  DateTimeImmutable::createFromFormat('d/m/Y', $periodoFim);
+    $sql .= " AND pc54_datatermino <= '{$periodoFim->format('Y-m-d')}' ";
+}
 
-        $sql .= " AND l20_instit = ". db_getsession('DB_instit') .
-        " ORDER BY pc54_datatermino";
+$sql .= " AND l20_instit = ". db_getsession('DB_instit') .
+" ORDER BY pc54_datainicio";
 
 $resultVigencia = db_query($sql);
 
