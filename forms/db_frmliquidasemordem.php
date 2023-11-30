@@ -90,10 +90,13 @@ if (USE_PCASP) {
 
 ?>
 <!-- <center> -->
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>
   <form name=form1 action="" method="POST">
-    <table width='80%' cellspacing='0' style='padding:0px; margin-top: 20px;' border='0'>
-      <tr><td style='padding:0px' valign="top" width='35%'>
-          <fieldset style="width:660px" ><legend><b>&nbsp;Empenho&nbsp;</b></legend>
+    <center>
+      <table >
+      <tr>
+        <td valign="top">
+          <fieldset ><legend><b>&nbsp;Empenho&nbsp;</b></legend>
             <table>
               <tr>
                 <td><?=db_ancora($Le60_codemp,"js_JanelaAutomatica('empempenho',\$F('e60_numemp'))",$db_opcao_inf)?></td>
@@ -108,32 +111,33 @@ if (USE_PCASP) {
                 <!-- <td></td> -->
                 <td nowrap><? 
                             db_input('o15_codigo', 5, $Io15_codigo, true, 'hidden', 3); 
-                            db_input('o15_descr', 5, $Io15_descr, true, 'text', 3)?></td>
+                            db_input('o15_descr', 5, $Io15_descr, true, 'hidden', 3);
+                            db_input('estruturalDotacao', 55, 3, true, 'text', 3);?></td>
               </tr>
               <tr>
                 <td><?=db_ancora($Le60_numcgm,"js_JanelaAutomatica('cgm',\$F('e60_numcgm'))",$db_opcao_inf)?></td>
                 <td><? db_input('e60_numcgm', 13, $Ie60_numcgm, true, 'text', 3); ?> </td>
                 <!-- <td></td> -->
-                <td colspan=2><? db_input('z01_nome', 64, $Iz01_nome, true, 'text', 3, '');?></td>
+                <td colspan=2><? db_input('z01_nome', 55, $Iz01_nome, true, 'text', 3, '');?></td>
               </tr>
               <tr>
                 <!-- Oc17910 -->
                 <td>
                     <div class='cgm_emitente'><?php db_ancora("<strong><u>CGM Emitente:&nbsp;</u></strong>", "js_pesquisaz01_numcgm(true);", 1); ?></div>
-                    <div class="credor"><?=db_ancora('<b>Credor:</b>',"js_pesquisae49_numcgm(true)",1)?></div>
+                    <div class="credor" hidden='true'><?=db_ancora('<b>Credor:</b>',"js_pesquisae49_numcgm(true)",1)?></div>
                 </td>
                 <td>
                     <div class='cgm_emitente'>
                         <?php db_input('z01_numcgm', 13, "", true, 'text', 1, " onchange='js_pesquisaz01_numcgm(false);'", "", "", ""); ?>
                     </div>
-                    <div class="credor">
+                    <div class="credor" hidden='true'>
                         <? db_input('e49_numcgm', 13, $Ie60_numcgm, true, 'text', 1,"onchange='js_pesquisae49_numcgm(false)'"); ?> 
                     </div>
                 </td>
                 <!-- <td></td> -->
                 <td colspan=2>
-                    <div class="cgm_emitente"><? db_input('descricao_emitente', 64, "", true, 'text', 3, 'style="background-color: rgb(222, 184, 135); width: 100%;"');?> </div>    
-                    <div class="credor"><? db_input('z01_credor', 64, $Iz01_nome, true, 'text', 3, '');?> </div>
+                    <div class="cgm_emitente"><? db_input('descricao_emitente', 55, "", true, 'text', 3, 'style="background-color: rgb(222, 184, 135);"');?> </div>    
+                    <div class="credor" hidden='true'><? db_input('z01_credor', 55, $Iz01_nome, true, 'text', 3, '');?> </div>
                 </td>
               </tr>
               <tr>
@@ -147,13 +151,13 @@ if (USE_PCASP) {
                     <?    
                     db_input("e83_codtipo",5,1,true,"hidden");
                     ?>
-                <? db_input("e83_descr",64,"",true,"text",3); ?></td>
+                <? db_input("e83_descr",55,"",true,"text",3); ?></td>
               </tr>
                 <tr>
                     <!-- Oc17910 -->
                     <td><b>NF Matriz/Filial: </b></td>
                     <td colspan="3">
-                        <select name="nf_matriz_filial" id="nf_matriz_filial" style='width:100%'>
+                        <select name="nf_matriz_filial" id="nf_matriz_filial" style='width:99.5%'>
                             <option value='s'>Sim</option>
                             <option value='n' selected>Não</option>
                         </select>
@@ -221,8 +225,18 @@ if (USE_PCASP) {
                   /**
                    * Acrescentado por causa do sicom
                    */
-                  db_input('e69_chaveacesso', 80, 0, true, 'text', 1, "onchange='js_verificaChaveAcesso(this.value);'","","","",44);
+                  db_input('e69_chaveacesso', 70, 0, true, 'text', 1, "onchange='js_verificaChaveAcesso(this.value);'","","","",44);
                   ?>
+                </td>
+              </tr>
+              <tr>
+                <td nowrap>
+                    <b>Data da Liquidação:</b>
+                    </td>
+                    <td colspan='2'>
+                      <?db_inputdata('dataLiquidacao','','','',true,'text',1)?>
+                      <b>Data de Vencimento:</b>
+                      <?db_inputdata('dataVencimento','','','',true,'text',1)?>
                 </td>
               </tr>
               <tr>    
@@ -230,7 +244,7 @@ if (USE_PCASP) {
                   <strong>Processo Administrativo:</strong>
                 </td>
                 <td colspan='2'>
-                  <?php db_input('e03_numeroprocesso', 80, '', true, 'text', $db_opcao, null, null, null, null, 15); ?>
+                  <?php db_input('e03_numeroprocesso', 70, '', true, 'text', $db_opcao, null, null, null, null, 15); ?>
                 </td>
 
               </tr>
@@ -247,10 +261,9 @@ if (USE_PCASP) {
             </table>
           </fieldset>
         </td>
-        <td valign='top' style='padding:0px' width='60%'>
-        <center>
-          <fieldset style="width:410px"><legend><b>&nbsp;&nbsp;&nbsp;&nbsp;Valores do Empenho&nbsp;</b></legend>
-            <table style="width:100px;">
+        <td rowspan="1" valign="top" style='height:100%;'>
+          <fieldset ><legend><b>&nbsp;&nbsp;&nbsp;&nbsp;Valores do Empenho&nbsp;</b></legend>
+            <table >
               <tr><td nowrap><?=@$Le60_vlremp?></td><td align=right><? db_input('e60_vlremp', 12, $Ie60_vlremp, true, 'text', 3, '','','','text-align:right')?></td></tr>
               <tr><td nowrap><?=@$Le60_vlranu?></td><td align=right><? db_input('e60_vlranu', 12, $Ie60_vlranu, true, 'text', 3, '','','','text-align:right')?></td></tr>
               <tr><td nowrap><?=@$Le60_vlrliq?></td><td align=right><? db_input('e60_vlrliq', 12, $Ie60_vlrliq, true, 'text', 3, '','','','text-align:right')?></td></tr>
@@ -259,7 +272,6 @@ if (USE_PCASP) {
               <tr><td nowrap><b>Saldo</b></td><td align=right><? db_input('saldodis', 12, 0, true, 'text', 3, '','','','text-align:right')?></td></tr>
             </table>
           </fieldset>
-        </center>  
         </td>
       </tr>
       <td colspan="2"> 
@@ -277,7 +289,7 @@ if (USE_PCASP) {
         <tr>
                   <td id='cattrab'><?=db_ancora('<b>Categoria do Trabalhador:</b>',"js_pesquisaCatTrabalhador(true)",1)?></td>
                   <td id='cattrab1'><? db_input('ct01_codcategoria', 15, $Ict01_codcategoria, true, 'text', 1,"onchange='js_pesquisaCatTrabalhador(false)'"); ?> </td>
-                  <td id='cattrab2'><? db_input('ct01_descricaocategoria', 50, $Ict01_descricaocategoria, true, 'text', 3, '');?></td>
+                  <td id='cattrab2'><? db_input('ct01_descricaocategoria', 48, $Ict01_descricaocategoria, true, 'text', 3, '');?></td>
         </tr>
         <tr>
                 <td id="idvinculos">
@@ -305,12 +317,12 @@ if (USE_PCASP) {
         <tr >
                   <td id='empresa'><?=db_ancora('<b>Empresa que efetuou desconto:</b>',"js_pesquisaEmpresa(true)",1)?></td>
                   <td id='empresa1'><? db_input('numempresa', 15, $Inumempresa, true, 'text', 1,"onchange='js_pesquisaEmpresa(false)'"); ?> </td>
-                  <td id='empresa2'><? db_input('nomeempresa', 50, $Inomeempresa, true, 'text', 3, '');?></td>
+                  <td id='empresa2'><? db_input('nomeempresa', 48, $Inomeempresa, true, 'text', 3, '');?></td>
         </tr>
         <tr>
                   <td id='catremuneracao'><?=db_ancora('<b>Categoria do trabalhador na qual houve a remuneração:</b>',"js_pesquisaCatTrabalhadorremuneracao(true)",1)?></td>
                   <td id='catremuneracao1'><? db_input('ct01_codcategoriaremuneracao', 15, $Ict01_codcategoriaremuneracao, true, 'text', 1,"onchange='js_pesquisaCatTrabalhadorremuneracao(false)'"); ?> </td>
-                  <td id='catremuneracao2'><? db_input('ct01_descricaocategoriaremuneracao', 50, $Ict01_descricaocategoriaremuneracao, true, 'text', 3, '');?></td>
+                  <td id='catremuneracao2'><? db_input('ct01_descricaocategoriaremuneracao', 48, $Ict01_descricaocategoriaremuneracao, true, 'text', 3, '');?></td>
         </tr>
         
 
@@ -345,22 +357,27 @@ if (USE_PCASP) {
         </tr>                
   </table>      
  </fieldset>
- <?
- include("forms/db_frmliquidaboxreinf.php");
- ?>
- </td>
- </tr>
-      <tr>
-        <td colspan='2' style='padding:0px'   width='92%'>
-          <fieldset style="width:97,5%"><legend><b>&nbsp;Itens&nbsp;</b></legend>
+  <tr>
+    <td colspan='2'>
+      <?include("forms/db_frmliquidaboxreinf.php");?>
+    </td>
+  </tr>
+  <tr>
+    <td colspan='2'>
+      <?include("forms/db_frmliquidaboxdiarias.php");?> 
+    </td>
+  </tr>
+    <tr>
+      <td colspan="2">
+        <fieldset><legend><b>&nbsp;Itens&nbsp;</b></legend>  
             <div style='border:2px inset white'>
               <table  cellspacing=0 cellpadding=0 width='100%' >
                 <tr>
-                  <th class='table_header'>
+                  <th class='table_header' >
                     <input type='checkbox'  style='display:none' id='mtodos' onclick='js_marca()'>
                     <a onclick='js_marca()' style='cursor:pointer'>M</a></b></th>
-                  <th class='table_header' width='40%'>Item</th>
-                  <th class='table_header' width='10%'>Sequência</th>
+                  <th class='table_header' width='48%'>Item</th>
+                  <!-- <th class='table_header' width='10%'>Sequência</th> -->
                   <th class='table_header' width='10%'>Valor Unitário</th>
                   <th class='table_header' width='10%'>Quantidade</th>
                   <th class='table_header' width='10%'>Valor Total</th>
@@ -378,7 +395,7 @@ if (USE_PCASP) {
                 </tbody>
                 <tfoot>
                 <tr>
-                  <th colspan='7' style='text-align:right' class='table_footer'>Valor Total:</th>
+                  <th colspan='6' style='text-align:right' class='table_footer'>Valor Total:</th>
                   <th class='table_footer' id='valorTotalItens'>&nbsp;</th>
                   <?
                   if ($iTipoControleCustos > 1) {
@@ -394,52 +411,47 @@ if (USE_PCASP) {
         </td>
       </tr>
       <tr>
-        <td colspan='2' width='77%'>
-          <fieldset style="width:98%"><legend><b>&nbsp;Histórico&nbsp;</b></legend>
+        <td colspan='2' >
+          <fieldset ><legend><b>&nbsp;Histórico&nbsp;</b></legend>  
             <table>
-            <tr  >
+            <tr>
                 <td id='opcredito' style="display: none">
                   <?
-                  db_textarea('informacaoop',5,164,0,true,'text',1,"");
+                  db_textarea('informacaoop',5,128,0,true,'text',1,"");
                   ?>
                 </td>
               </tr>
-            <tr  >
+            <tr>
                 <td id='ophisotrico' style="display: none">
                   <?
-                  db_textarea('historico',5,164,0,true,'text',1,"");
+                  db_textarea('historico',5,128,0,true,'text',1,"");
                   ?>
-                </td>
-              </tr>
-              <tr>
-                <td colspan='2'>
-
                 </td>
               </tr>
             </table>
           </fieldset>
-    </table>
-    <center>
-    <input name="confirmar"  type="button" id="confirmar"  value="Confirmar" onclick="return js_liquidar('<?=$metodo?>')" disabled>
-    <input name="pesquisar"  type="button" id="pesquisar"  value="Pesquisar" onclick="js_pesquisa();" >
-    <input name="zeraritens" type="button" id="zeraritens" value="Zerar Itens" onclick="js_zeraItens();" >
-    <input name="preenche"   type="button" id="preenche"   value="Preencher Itens" onclick="js_preencheItens();" >
-    <input name="retencoes"  type="button" id="retencoes"  disabled value="Retenções" onclick="js_lancarRetencao();" >
-    <input name="iCodMov"    type="hidden" id="e81_codmov" value=""  >
-    <input name="iCodOrd"    type="hidden" id="e50_codord" value=""  >
-    <input name="iCodNota"   type="hidden" id="e69_codnota" value=""  >
-
-  </form>
-</center>
-<div id='divDadosNotaAux' style='display:none; text-align: center;' >
-  <table width="100%">
-    <tr>
-      <td>
-        <fieldset>
+      <tr>
+        <td colspan=2>
+          <div style="display:flex; justify-content:center; gap:1%">
+            <input name="confirmar"  type="button" id="confirmar"  value="Confirmar" onclick="return js_liquidar('<?=$metodo?>')" disabled>
+            <input name="pesquisar"  type="button" id="pesquisar"  value="Pesquisar" onclick="js_pesquisa();" >
+            <input name="zeraritens" type="button" id="zeraritens" value="Zerar Itens" onclick="js_zeraItens();" >
+            <input name="preenche"   type="button" id="preenche"   value="Preencher Itens" onclick="js_preencheItens();" >
+            <input name="retencoes"  type="button" id="retencoes"  disabled value="Retenções" onclick="js_lancarRetencao();" >
+            <input name="iCodMov"    type="hidden" id="e81_codmov" value=""  >
+            <input name="iCodOrd"    type="hidden" id="e50_codord" value=""  >
+            <input name="iCodNota"   type="hidden" id="e69_codnota" value=""  >
+          </div>
+        </td>
+      </tr>
+    </form>
+    <tr id='divDadosNotaAux' style='display:none; text-align: center;' >
+      <td colspan='2'>
+        <fieldset id='dadosComplementaresFieldset'>
           <legend>
             <b>Dados Complementares</b>
           </legend>
-          <table>
+          <table align="left">
             <tr>
               <td nowrap title="<?=@$Te11_cfop?>">
                 <?
@@ -514,26 +526,20 @@ if (USE_PCASP) {
                 ?>
               </td>
             </tr>
+            <tr>
+              <td colspan="4" style='text-align: center'>
+              </td>
+            </tr>
           </table>
         </fieldset>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="4" style='text-align: center'>
         <input type='button' value='Salvar Informações' onclick='windowAuxiliarNota.hide()'>
       </td>
     </tr>
   </table>
-</div>
+</center>
 <script>
-  document.getElementById("e69_notafiscaleletronica").style.width="100%"; 
-  document.getElementById("z01_nome").style.width="100%"; 
-  document.getElementById("z01_credor").style.width="100%"; 
-  document.getElementById("e83_descr").style.width="100%";
-  document.getElementById("e50_compdesp").style.width="80px";
-  document.getElementById("informacaoop").style.width="100%";
-  document.getElementById("historico").style.width="100%%";
-  document.getElementById("o15_descr").style.width="100%"; 
+  var oDBToogleDiarias = new DBToogle('diariaFieldset', false);
+  document.getElementById("e69_notafiscaleletronica").style.width="99.5%"; 
   document.getElementById("e69_dtnota").style.width="80px";
   document.getElementById("e69_nfserie").style.width="85px";
   
@@ -797,7 +803,7 @@ function validarVinculos(){
 
   var opcaoReinf = 0;
   function js_saida(oAjax) {
-
+    document.form1.reset();
     js_removeObj("msgBox");
     obj  = eval("("+oAjax.responseText+")");
     var sMensagemGrupoDesdobramento = null;
@@ -844,6 +850,7 @@ function validarVinculos(){
     $('e49_numcgm').value  = '';
     $('z01_credor').value  = '';
     $('e60_coddot').value  = obj.e60_coddot.urlDecode();
+    $('estruturalDotacao').value  = obj.estruturalDotacao.urlDecode();
     $('o15_codigo').value  = obj.o58_codigo;
     $('o15_descr').value   = obj.o15_descr.urlDecode();
     $('e60_vlremp').value  = obj.e60_vlremp;
@@ -872,6 +879,7 @@ function validarVinculos(){
     iTotItens = 0;
     estrutural             = obj.sEstrutural;
     desdobramento         = obj.sDesdobramento;
+    obrigaDiaria          = obj.obrigaDiaria == 't' ? true : false;
     $('e50_compdesp').value = '';
 
     $('reinfRetencao').value = 0;
@@ -879,6 +887,8 @@ function validarVinculos(){
     $('naturezaDesc').value  = '';
     $('reinfRetencaoEstabelecimento').value = 0;
     js_validarEstabelecimentos();
+
+    oDBToogleDiarias.show(obrigaDiaria);
 
     var lBloquearItens = false;
     if (obj.e60_vlremp == obj.e60_vlrpag) {
@@ -906,7 +916,7 @@ function validarVinculos(){
                                                       || desdobramento == '333903641')){
      tipodesdobramento = 1;  
      opcao = 1;                                 
-     document.getElementById('esocial').style.display = "table-cell";   
+     document.getElementById('esocial').style.display = "table-cell";
    }else{
      document.getElementById('esocial').style.display = "none";
      tipodesdobramento = 0;
@@ -931,6 +941,31 @@ function validarVinculos(){
     }else{
       $('reinf').style.display = "none";
       opcaoReinf = 3;
+    }
+
+    let desdobramentoDiaria = desdobramento.substr(5, 2);
+    if((desdobramentoDiaria == '14' || desdobramentoDiaria == '33') && obrigaDiaria == true){
+      $('diariaFieldset').style.display = "table-cell";
+      $('diariaViajante').value = obj.z01_nome.urlDecode();
+      let oParam        = new Object();
+      oParam.exec     = 'consultaMatricula';
+      oParam.iNumCgm    = obj.e60_numcgm;
+      oAjax    = new Ajax.Request(
+                              'pes1_rhpessoal.RPC.php',
+                                {
+                                method: 'post',
+                                parameters: 'json='+Object.toJSON(oParam),
+                                onComplete: function(oAjax){
+                                  oRetorno = eval("("+oAjax.responseText+")");
+                                  if(oRetorno.iStatus === 1){
+                                    $('e140_matricula').value = oRetorno.rh01_regist;
+                                    $('e140_cargo').value = oRetorno.rh37_descr;
+                                  }
+                                }
+                                }
+                              );
+    }else{
+      $('diariaFieldset').style.display = "none";
     }
 
     aMatrizEntrada = ['3319092', '3319192', '3319592', '3319692'];
@@ -987,6 +1022,7 @@ function validarVinculos(){
 
         saida += "<tr class='"+sClassName+"' id='trchk"+obj.data[i].e62_sequen+"' style='height:1em'>";
         saida += "  <td class='linhagrid' style='text-align:center'>";
+        saida += "<input id='e70_valor"+obj.data[i].e69_codnota+"' type='text' style='display: none' value='" + obj.data[i].e70_valor+"'>";
         saida += "    <input type='checkbox' "+obj.data[i].libera+" onclick='js_marcaLinha(this)'";
         saida += "           class='chkmarca' name='chk"+obj.data[i].e62_sequen+"'";
         saida += "           id='chk"+obj.data[i].e62_sequen+"' value='"+obj.data[i].e62_sequen+"'>";
@@ -994,9 +1030,9 @@ function validarVinculos(){
         saida += "  <td class='linhagrid' id='descr"+obj.data[i].e62_sequen+"' style='text-align:left'>";
         saida +=     descrmater;
         saida += "  </td>";
-        saida += "  <td class='linhagrid' style='text-align:right'>";
-        saida +=      obj.data[i].e62_sequen;
-        saida += "  </td>";
+        // saida += "  <td class='linhagrid' style='text-align:right'>";
+        // saida +=      obj.data[i].e62_sequen;
+        // saida += "  </td>";
         saida += "  <td class='linhagrid' id='vlruni"+obj.data[i].e62_sequen+"' style='text-align:right'>";
         saida +=     obj.data[i].e62_vlrun;
         saida += "  </td>";
@@ -1129,6 +1165,13 @@ function validarVinculos(){
       return false;
 
     }
+
+    if($F('dataLiquidacao') == ''){
+      alert('Campo Data da Liquidação obrigatório!');
+      $('dataLiquidacao').focus();
+      return false;
+    }
+
   if(document.form1.aIncide.value == 1){ 
    if(opcao != '3' && !document.form1.ct01_codcategoria.value &&  obj.Tipofornec =='cpf' && tipodesdobramento == '1' ){
       alert("Campo Categoria do Trabalhador Obrigatorio")
@@ -1192,6 +1235,62 @@ function validarVinculos(){
   const aNaturezasCnpj = ['10','19'];
   if(obj.Tipofornec =='cnpj' && (aNaturezasCnpj.includes(($('naturezaCod').value).substr(0,2))) &&  opcaoReinf != '3'){  
     alert("A natureza do rendimento é incompatível com o tipo de credor CNPJ")
+    return false;
+  }
+
+  const desdobramentoDiaria = desdobramento.substr(5, 2);
+  if((desdobramentoDiaria == '14' || desdobramentoDiaria == '33') && obrigaDiaria == true){
+    if($F('e140_matricula') == '' || $F('e140_matricula') == null){
+      alert('Campo Matricula Obrigatório.');
+      return false;
+    }
+    if($F('e140_cargo') == '' || $F('e140_cargo') == null){
+      alert('Campo Cargo Obrigatório.');
+      return false;
+    }
+    if($F('diariaOrigemMunicipio') == '' || $F('diariaOrigemMunicipio') == null
+      || $F('diariaOrigemUf') == '' || $F('diariaOrigemUf') == null){
+      alert('Campo Origem Obrigatório.');
+      return false;
+    }
+    if($F('diariaDestinoMunicipio') == '' || $F('diariaDestinoMunicipio') == null
+      || $F('diariaDestinoUf') == '' || $F('diariaDestinoUf') == null){
+      alert('Campo Destino Obrigatório.');
+      return false;
+    }
+    if(($F('diariaOrigemMunicipio') + " - " + $F('diariaOrigemUf')) == ($F('diariaDestinoMunicipio') + " - " + $F('diariaDestinoUf'))){
+      alert('Campos Destino e Origem não podem ser iguais.');
+      return false;
+    } 
+    if($F('e140_dtautorizacao') == '' || $F('e140_dtautorizacao') == null){
+      alert('Campo Data da Autorização Obrigatório.');
+      return false;
+    }
+    if($F('e140_dtinicial') == '' || $F('e140_dtinicial') == null){
+      alert('Campo Data Inicial da Viagem Obrigatório.');
+      return false;
+    }
+    if($F('e140_dtfinal') == '' || $F('e140_dtfinal') == null){
+      alert('Campo Data Final da Viagem Obrigatório.');
+      return false;
+    }
+    if($F('e140_objetivo') == '' || $F('e140_objetivo') == null){
+      alert('Campo Objetivo da Viagem Obrigatório.');
+      return false;
+    }
+    if($F('e140_horainicial') == '' || $F('e140_horainicial') == null){
+        alert('Campo Hora Inicial Obrigatório.');
+        return false;
+      }
+      if($F('e140_horafinal') == '' || $F('e140_horafinal') == null){
+        alert('Campo Hora Final Obrigatório.');
+        return false;
+      }
+  }
+
+  if($F('dataLiquidacao') == ''){
+    alert('Campo Data da Liquidação obrigatório!');
+    $('dataLiquidacao').focus();
     return false;
   }
 
@@ -1274,6 +1373,16 @@ function validarVinculos(){
         sV         = ",";
         valorTotal += new Number($F('vlrtot'+itens[i].value));
         valorTotal = valorTotal.toFixed(2);
+      }
+    }
+
+    if((desdobramentoDiaria == '14' || desdobramentoDiaria == '33') && obrigaDiaria == true){
+      let totalDespesa = $F('diariaVlrDespesa') == '' ? 0 : parseFloat($F('diariaVlrDespesa'))
+      if(valorTotal != totalDespesa){
+        alert('Valor da Liquidação precisa ser igual ao Valor Total da Despesa');
+        $('pesquisar').disabled = false;
+        $('confirmar').disabled = false;
+        return false;
       }
     }
 
@@ -1411,6 +1520,8 @@ function validarVinculos(){
       oParam.competencia = $F('competencia');
       oParam.e50_retencaoir = $F('reinfRetencao');
       oParam.e50_naturezabemservico = $F('naturezaCod');
+      oParam.dDataLiquidacao = $F('dataLiquidacao');
+      oParam.dDataVencimento = $F('dataVencimento');
  
       var oInfoNota                      = new Object();
       oInfoNota.iCfop                = iCfop;
@@ -1429,7 +1540,6 @@ function validarVinculos(){
       // oInfoNota.competencia = $F('competencia');
 
       oParam.oInfoNota = oInfoNota;
-      // console.log(oParam)
       url      = 'emp4_liquidacao004.php';
       oAjax    = new Ajax.Request(
         url,
@@ -1465,6 +1575,39 @@ function validarVinculos(){
       );
     }
     js_validarEstabelecimentos(true);
+
+    //Inclui Diaria
+    const desdobramentoDiaria = desdobramento.substr(5, 2);
+    if((desdobramentoDiaria == '14' || desdobramentoDiaria == '33') && obrigaDiaria == true){
+      var oParam = new Object();
+      oParam.exec = 'incluiDiaria';
+      oParam.e140_codord           = obj.e50_codord;
+      oParam.e140_dtautorizacao    = $F('e140_dtautorizacao');
+      oParam.e140_matricula        = $F('e140_matricula');
+      oParam.e140_cargo            = $F('e140_cargo');
+      oParam.e140_dtinicial        = $F('e140_dtinicial');
+      oParam.e140_dtfinal          = $F('e140_dtfinal');
+      oParam.e140_horainicial      = $F('e140_horainicial');
+      oParam.e140_horafinal        = $F('e140_horafinal');
+      oParam.e140_origem           = $F('diariaOrigemMunicipio') + " - " + $F('diariaOrigemUf');
+      oParam.e140_destino          = $F('diariaDestinoMunicipio') + " - " + $F('diariaDestinoUf');
+      oParam.e140_transporte       = $F('e140_transporte');
+      oParam.e140_objetivo         = $F('e140_objetivo');
+      oParam.e140_qtddiarias       = $F('e140_qtddiarias') === '' ? 0 : $F('e140_qtddiarias');
+      oParam.e140_qtdhospedagens   = $F('e140_qtdhospedagens') == '' ? 0 : $F('e140_qtdhospedagens');
+      oParam.e140_vrlhospedagemuni = $F('e140_vrlhospedagemuni') == '' ? 0 : $F('e140_vrlhospedagemuni');
+      oParam.e140_vrldiariauni     = $F('e140_vrldiariauni') === '' ? 0 : $F('e140_vrldiariauni');
+      oParam.e140_vlrtransport     = $F('e140_vlrtransport') === '' ? 0 : $F('e140_vlrtransport');
+      url      = 'emp4_empdiaria.RPC.php';
+      oAjax    = new Ajax.Request(
+        url,
+        {
+          method: 'post',
+          parameters: 'json='+js_objectToJson(oParam)
+        }
+        );
+      }
+
     js_removeObj("msgLiq");
     $('pesquisar').disabled = false;
     $('confirmar').disabled = false;
@@ -1687,6 +1830,7 @@ function js_mostraCatTrabalhadorremuneracao1(chave1,chave2){
   db_iframe_cgm.hide();
 }
   function js_pesquisae49_numcgm(mostra){
+    
     if(mostra==true){
       js_OpenJanelaIframe('CurrentWindow.corpo','db_iframe_cgm','func_nome.php?funcao_js=parent.js_mostracgm1|z01_numcgm|z01_nome',
         'Consulta CGM',true);
@@ -1859,17 +2003,20 @@ function js_mostraCatTrabalhadorremuneracao1(chave1,chave2){
       $('e69_chaveacesso').readOnly           = false;
       $('e69_chaveacesso').style.background   = "#FFFFFF";
       iTipoNfe == 2 ? document.getElementById("e69_chaveacesso").maxLength = 60 : document.getElementById("e69_chaveacesso").maxLength = 44;
+      $('e69_chaveacesso').disabled           = false;
     }else{
       $('e69_chaveacesso').readOnly          = true;
       $('e69_chaveacesso').style.background  = "#DEB887";
       $('e69_numnota').value = "S/N";
       $('e69_nfserie').value = "S/N";
+      $('e69_chaveacesso').disabled           = true;
     }
 
     // codições para a Nf serie
     if (iTipoNfe == 2 || iTipoNfe == 3) {
       $('e69_nfserie').readOnly           = false;
       $('e69_nfserie').style.background   = "#FFFFFF";
+      $('e69_nfserie').disabled            = false;
       if (iTipoNfe == 3) {
         $('e69_numnota').value = "S/N";
         $('e69_nfserie').value = "S/N";
@@ -1882,6 +2029,7 @@ function js_mostraCatTrabalhadorremuneracao1(chave1,chave2){
       $('e69_nfserie').style.background  = "#DEB887";
       $('e69_nfserie').value = "";
       $('e69_numnota').value = "";
+      $('e69_nfserie').disabled           = true;
     }
 
     $('e69_chaveacesso').value         = "";
@@ -2019,17 +2167,11 @@ function js_mostraCatTrabalhadorremuneracao1(chave1,chave2){
             cgm_emitente[0].hidden = false;
             cgm_emitente[1].hidden = false;
             cgm_emitente[2].hidden = false;
-            credor[0].hidden = true;
-            credor[1].hidden = true;
-            credor[2].hidden = true;
             return;
         }
         cgm_emitente[0].hidden = true;
         cgm_emitente[1].hidden = true;
         cgm_emitente[2].hidden = true;
-        credor[0].hidden = false;
-        credor[1].hidden = false;
-        credor[2].hidden = false;
         return;
     }
 
@@ -2075,7 +2217,32 @@ function js_mostraCatTrabalhadorremuneracao1(chave1,chave2){
         document.form1.descricao_emitente.value = chave2;
         func_nome.hide();
     }
-    $('contribuicaoPrev').style.width =' 489px';
+    $('contribuicaoPrev').style.width =' 495px';
     $('aIncide').style.width =' 120px';
     $('multiplosvinculos').style.width =' 120px';
+
+    $('e60_codemp').disabled = true;
+    $('e60_coddot').disabled = true;
+    $('estruturalDotacao').disabled = true;
+    $('e60_numcgm').disabled = true;
+    $('z01_nome').disabled = true;
+    $('descricao_emitente').disabled = true;
+    $('e83_descr').disabled = true;
+    $('e60_vlremp').disabled = true;
+    $('e60_vlranu').disabled = true;
+    $('e60_vlrliq').disabled = true;
+    $('e60_vlrpag').disabled = true;
+    $('saldodis').disabled = true;
+    $('ct01_descricaocategoria').disabled = true;
+    $('nomeempresa').disabled = true;
+    $('ct01_descricaocategoriaremuneracao').disabled = true;
+    $('e69_nfserie').disabled           = true;
+
+    document.addEventListener("DOMContentLoaded", function() {
+    var elementosNoSelect = document.querySelectorAll('input:disabled');
+    elementosNoSelect.forEach(function (elemento) {
+        elemento.style.color = 'black'
+    });
+  });
+
 </script>
