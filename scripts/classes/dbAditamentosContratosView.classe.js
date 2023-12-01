@@ -631,6 +631,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
          * Veiculo de Divulgao
          */
         me.oTxtVeiculoDivulgacao = new DBTextField('oTxtVeiculoDivulgacao', me.sInstance + '.oTxtVeiculoDivulgacao', '', 63);
+        me.oTxtVeiculoDivulgacao.addEvent("onInput", `this.value = this.value.replace(/[;\*\\\:\"\']/gm, '')`);
         me.oTxtVeiculoDivulgacao.show($('ctnVeiculoDivulgacao'));
 
         /**
@@ -1135,6 +1136,16 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
           && me.estadoTela.viewAlterar == false
           ) {
             return alert('Nenhum item selecionado para aditar.');
+        }
+
+        if (Object.keys(oSelecionados).length == 0
+          && $('oCboTipoAditivo').value != 6
+          && $('oCboTipoAditivo').value != 7
+          && me.estadoTela.viewAlterar == true
+          ) {
+            if (!confirm('Nenhum item selecionado para aditar, deseja continuar?')){
+              return;
+            }
         }
 
         var lAditar = true;
@@ -1993,7 +2004,7 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
                 }
             }
 
-            console.log(aLinha[5]);
+
             /**
              * Caso seja servico e nao controlar quantidade, a quantidade padrao sera 1
              */
@@ -2089,13 +2100,12 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             nUnitarioA   = Number(aLinha.aCells[5].getValue().split('.').join("").replace(",","."));//OC5304
             valor1 = nQuantidade.toString();
             valor = valor1.split('.');
-            if(valor.length>1){
-                casas = valor[1].length;
-            }else{
-                casas = 2;
-            }
 
-
+        if(valor.length>1){
+            casas = valor[1].length;
+        }else{
+            casas = 2;
+        }
 
         aItensPosicao[iLinha].novaquantidade  = nQuantidade;
         aItensPosicao[iLinha].novounitario    = nUnitario;
@@ -2135,9 +2145,6 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
           nUnitarioA   = item.vlunitPosicaoanterior
 
         let casas = 2;
-        console.log(aLinha.aCells[6])
-        console.log(nQuantidadeA, nQuantidade, nQuantidade - nQuantidadeA);
-
 
         aItensPosicao[iLinha].novaquantidade  = nQuantidade;
         aItensPosicao[iLinha].novounitario    = nUnitario;
