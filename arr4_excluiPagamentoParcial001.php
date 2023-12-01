@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\AutorizaUsuarioExcluirPgtoParcial;
+
 require_once("libs/db_stdlib.php");
 require_once("libs/db_conecta.php");
 include_once("libs/db_sessoes.php");
@@ -28,10 +30,12 @@ include_once("libs/db_utils.php");
 $cldb_config 	= new cl_db_config;
 $rsConfig 		= $cldb_config->sql_record($cldb_config->sql_query_file(db_getsession('DB_instit'),"db21_codcli"));
 $oConfig  		= db_utils::fieldsMemory($rsConfig,0);
-$sqlUsuarios 	= db_query("select 1 from autorizausuarioexcluirpgtoparcial where id_usuario =" .db_getsession("DB_id_usuario"));
-$resUsuarios	= pg_num_rows($sqlUsuarios);
+$AutorizaUsuarioExcluirPgtoParcial	= AutorizaUsuarioExcluirPgtoParcial::query()
+									->where ('id_usuario', db_getsession("DB_id_usuario"))
+									->first();
+$idUsuario		= $AutorizaUsuarioExcluirPgtoParcial->id_usuario;
 
-if ( db_getsession("DB_id_usuario") == 1 || ( $resUsuarios > 0) ) {
+if (db_getsession("DB_id_usuario") == 1 || (!empty($idUsuario))) {
 ?>
 <div align="center">
 <fieldset style="width: 300px;">
@@ -53,7 +57,7 @@ if ( db_getsession("DB_id_usuario") == 1 || ( $resUsuarios > 0) ) {
   </tr>
   <tr>
     <td colspan=2 style="visibility:hidden;" id ="MI">
-      <?
+      <?s
        db_ancora('Consultar Origens Atuais do Abatimento',"js_consultaOrigemPgtoParcial()",1,'');
       ?>
     </td>
