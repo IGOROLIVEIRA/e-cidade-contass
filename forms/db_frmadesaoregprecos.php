@@ -35,7 +35,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
     }
 </style>
 <fieldset style="width: 650px; margin-top: 0px;">
-  <legend><b>Informações do Orgão Gerenciador</b></legend>
+  <legend><b>Órgão Gerenciador</b></legend>
   <form name="form1" method="post" action="">
     <center>
       <table border="0">
@@ -52,7 +52,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
         <tr>
           <td>
             <?
-            db_ancora("Cod.Departamento", "js_pesquisasi06_departamento(true);", $db_opcao)
+            db_ancora("Cód.Departamento", "js_pesquisasi06_departamento(true);", $db_opcao)
             ?>
           </td>
           <td>
@@ -78,6 +78,21 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
           </td>
         </tr>
         <tr>
+          <td nowrap title="<?= @$Tsi06_cgm ?>">
+            <?
+            db_ancora(@$Lsi06_cgm, "js_pesquisasi06_cgm(true);", $db_opcao);
+            ?>
+          </td>
+          <td>
+            <?
+            db_input('si06_cgm', 10, $Isi06_cgm, true, 'text', $db_opcao, " onchange='js_pesquisasi06_cgm(false);'")
+            ?>
+            <?
+            db_input('z01_nomeresp', 45, $Iz01_nome, true, 'text', 3, '')
+            ?>
+          </td>
+        </tr>
+        <tr>
           <td nowrap title="<?= @$Tsi06_leidalicitacao ?>" id="leidalicitacao">
             <strong>Lei da Licitação:</strong>
           </td>
@@ -88,16 +103,43 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
               "1" => "1 - Lei 14.133/2021",
               "2" => "2 - Lei 8.666/1993 e outras"
             );
-            db_select("si06_leidalicitacao", $arr_tipo, true, $db_opcao, "onchange='js_verificalei(this.value);'");
+            db_select("si06_leidalicitacao", $arr_tipo, true, $db_opcao, "style='width:60%;' onchange='js_verificalei(this.value);'");
             ?>
           </td>
         </tr>
-        <tr id="tr_edital">
+        <tr id="trRegimeContratacao" style="display: none;">
+          <td>
+            <strong>Regime de Contratação:</strong>
+          </td>
+          <td>
+            <?
+            $aRegimes = array(
+              "0" => "Selecione",
+              "1" => "1 - Contratação por licitação",
+              "2" => "2 - Contratação direta por dispensa",
+              "3" => "3 - Contratação direta por inexibilidade"
+            );
+            db_select("si06_regimecontratacao", $aRegimes, true, $db_opcao, "style='width:60%;' onchange='js_alteraRegimeContratacao(this.value);'");
+            ?>
+          </td>
+        </tr>
+        <tr>
+          <td nowrap title="<?= @$Tsi06_orgarparticipante ?>">
+            <?= @$Lsi06_orgarparticipante ?>
+          </td>
+          <td>
+            <?
+            $x = array('1' => 'Orgão Participante', '2' => 'Não Participante');
+            db_select('si06_orgarparticipante', $x, true, $db_opcao, "style='width:60%;' onchange='js_verifica_select(this.value);'");
+            ?>
+          </td>
+        </tr>
+        <tr id="tr_edital"  style="display:none;">
           <td>
             <b><?= "Edital:" ?></b>
           </td>
           <td>
-            <?= db_input('si06_edital', 10, $Isi06_edital, true, 'text', $db_opcao, 'onkeypress="return onlynumber();"', '', '', '', 10); ?>
+            <?= db_input('si06_edital', 10, 1, true, 'text', $db_opcao, '', '', '', '', 10); ?>
           </td>
         </tr>
         <tr>
@@ -120,7 +162,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
             ?>
           </td>
         </tr>
-        <tr>
+        <tr id="tr_modalidade">
           <td nowrap title="<?= @$Tsi06_modalidade ?>">
             <b>
               <?
@@ -136,7 +178,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
           </td>
         </tr>
 
-        <tr>
+        <tr id="tr_nummodalidade">
           <td nowrap title="<?= @$Tsi06_numlicitacao ?>">
             <?= @$Lsi06_numlicitacao ?>
           </td>
@@ -167,39 +209,10 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
             ?>
           </td>
         </tr>
-
-        <tr>
-          <td nowrap title="<?= @$Tsi06_orgarparticipante ?>">
-            <?= @$Lsi06_orgarparticipante ?>
-          </td>
-          <td>
-            <?
-            $x = array('1' => 'Orgão Participante', '2' => 'Não Participante');
-            db_select('si06_orgarparticipante', $x, true, $db_opcao, " onchange='js_verifica_select(this.value);'");
-            ?>
-
-          </td>
-        </tr>
-        <tr>
-          <td nowrap title="<?= @$Tsi06_cgm ?>">
-            <?
-            db_ancora(@$Lsi06_cgm, "js_pesquisasi06_cgm(true);", $db_opcao);
-            ?>
-          </td>
-          <td>
-            <?
-            db_input('si06_cgm', 10, $Isi06_cgm, true, 'text', $db_opcao, " onchange='js_pesquisasi06_cgm(false);'")
-            ?>
-            <?
-            db_input('z01_nomeresp', 45, $Iz01_nome, true, 'text', 3, '')
-            ?>
-          </td>
-        </tr>
-
       </table>
 </fieldset>
 <fieldset style="width: 640px; height: 460px; margin-top: 40px; ">
-  <legend><b>Informações do Orgão de Adesão</b></legend>
+  <legend><b>Órgão de Adesão</b></legend>
   <table>
     <tr>
       <td nowrap title="<?= @$Tsi06_numeroadm ?>">
@@ -266,32 +279,20 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
       </td>
     </tr>
     <tr>
-      <td nowrap title="<?= @$Tsi06_objetoadesao ?>" colspan="2">
-        <fieldset>
-          <legend><?= @$Lsi06_objetoadesao ?></legend>
-
-          <?
-          db_textarea('si06_objetoadesao', '10', '80', $Isi06_objetoadesao, true, 'text', $db_opcao, "onkeypress= 'travarEnter()' onmouseout='travarEnter()'", "", "", 500)
-          ?>
-        </fieldset>
-      </td>
-    </tr>
-
-    <tr>
-      <td nowrap title="<?= @$Tsi06_descontotabela ?>">
-        <?= @$Lsi06_descontotabela ?>
+      <td nowrap title="<?= @$Tsi06_leidalicitacao ?>" id="leidalicitacao">
+        <strong>Critério de Adjudicação:</strong>
       </td>
       <td>
         <?
-        //db_input('si06_descontotabela',10,$Isi06_descontotabela,true,'text',$db_opcao,"")
-
-        $x = array('2' => 'Não', '1' => 'Sim');
-        db_select('si06_descontotabela', $x, true, $db_opcao, " onchange='js_verifica_select(this.value);'");
-
+        $aCriterios = array(
+          "1" => "1 - Desconto sobre tabela",
+          "2" => "2 - Menor taxa ou percentual",
+          "3" => "3 - Outros"
+        );
+        db_select("si06_criterioadjudicacao", $aCriterios, true, $db_opcao, "style='width:70%;'");
         ?>
       </td>
     </tr>
-
     <tr>
       <td nowrap>
         <b>Processo por Lote: </b>
@@ -299,11 +300,10 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
       <td>
         <?
         $x = array('2' => 'Não', '1' => 'Sim');
-        db_select('si06_processoporlote', $x, true, $db_opcao, "");
+        db_select('si06_processoporlote', $x, true, $db_opcao, "style='width:70%;'");
         ?>
       </td>
     </tr>
-
     <tr>
       <td nowrap title="<?= @$Tsi06_processocompra ?>">
         <?
@@ -314,6 +314,17 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
         <?
         db_input('si06_processocompra', 10, $Isi06_processocompra, true, 'text', $db_opcao, " onchange='js_pesquisasi06_processocompra(false);'")
         ?>
+      </td>
+    </tr>
+    <tr>
+      <td nowrap title="<?= @$Tsi06_objetoadesao ?>" colspan="2">
+        <fieldset>
+          <legend><?= @$Lsi06_objetoadesao ?></legend>
+
+          <?
+          db_textarea('si06_objetoadesao', '10', '80', $Isi06_objetoadesao, true, 'text', $db_opcao, "onkeypress= 'travarEnter()' onmouseout='travarEnter()'", "", "", 500)
+          ?>
+        </fieldset>
       </td>
     </tr>
   </table>
@@ -331,7 +342,18 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
 </div>
 </form>
 <script>
-  js_exibeEdital();
+
+  function js_inicializacao(){
+    if(document.getElementById('si06_leidalicitacao').value != 0){
+      document.getElementById("trRegimeContratacao").style.display = '';
+    }
+
+    document.getElementById('si06_criterioadjudicacao').value = '3'
+  
+    js_alteraRegimeContratacao(document.getElementById('si06_regimecontratacao').value);
+  }
+
+  js_inicializacao();
 
   function js_pesquisasi06_orgaogerenciador(mostra) {
     if (mostra == true) {
@@ -433,10 +455,10 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
 
   function js_pesquisasi06_processocompra(mostra) {
     if (mostra == true) {
-      js_OpenJanelaIframe('', 'db_iframe_pcproc', 'func_pcproc.php?lFiltroPrecoRef=1&adesaoregpreco=1&descontotabela=' + document.form1.si06_descontotabela.value + '&filtrovinculo=true&funcao_js=parent.js_mostrapcproc1|pc80_codproc', 'Pesquisa', true);
+      js_OpenJanelaIframe('', 'db_iframe_pcproc', 'func_pcproc.php?lFiltroPrecoRef=1&adesaoregpreco=1&criterioadjudicacao=' + document.form1.si06_criterioadjudicacao.value + '&filtrovinculo=true&funcao_js=parent.js_mostrapcproc1|pc80_codproc', 'Pesquisa', true);
     } else {
       if (document.form1.si06_processocompra.value != '') {
-        js_OpenJanelaIframe('', 'db_iframe_pcproc', 'func_pcproc.php?lFiltroPrecoRef=1&adesaoregpreco=1&descontotabela=' + document.form1.si06_descontotabela.value + '&filtrovinculo=true&pesquisa_chave=' + document.form1.si06_processocompra.value + '&funcao_js=parent.js_mostrapcproc', 'Pesquisa', false);
+        js_OpenJanelaIframe('', 'db_iframe_pcproc', 'func_pcproc.php?lFiltroPrecoRef=1&adesaoregpreco=1&criterioadjudicacao=' + document.form1.si06_criterioadjudicacao.value + '&filtrovinculo=true&pesquisa_chave=' + document.form1.si06_processocompra.value + '&funcao_js=parent.js_mostrapcproc', 'Pesquisa', false);
       }
     }
   }
@@ -460,7 +482,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
 
   function js_preenchepesquisa(chave, anocadastro) {
     db_iframe_adesaoregprecos.hide();
-    js_exibeEdital(anocadastro);
+    //js_exibeEdital(anocadastro);
     <?
     if ($db_opcao) {
       echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+chave";
@@ -494,15 +516,6 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
     db_iframe_pctipocompra.hide();
   }
 
-  function js_exibeEdital(ano = null) {
-    let anousuario = "<?= db_getsession('DB_anousu'); ?>";
-    if (parseInt(anousuario) >= 2020 && (!ano || ano)) {
-      document.getElementById('tr_edital').style.display = '';
-    } else {
-      document.getElementById('tr_edital').style.display = 'none';
-    }
-  }
-
   function js_pesquisasi06_departamento(mostra) {
     if (mostra == true) {
       var sUrl = 'func_db_depart.php?funcao_js=parent.js_mostradepartamento|coddepto|descrdepto';
@@ -533,4 +546,50 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
 
     db_iframe_departamento.hide();
   }
+
+  function js_verificalei(lei){
+
+    if(lei == 1){
+      document.getElementById("trRegimeContratacao").style.display = '';
+      document.getElementById("si06_regimecontratacao").value = "0";
+      document.getElementById("tr_edital").style.display = 'none';
+      document.getElementById("tr_modalidade").style.display = 'none';
+      document.getElementById("tr_nummodalidade").style.display = 'none';
+      document.getElementById("si06_regimecontratacao").style.pointerEvents = "";
+	    document.getElementById("si06_regimecontratacao").style.color = "";
+      return;
+    }
+
+    if(lei == 2){
+      document.getElementById("trRegimeContratacao").style.display = '';
+      document.getElementById("si06_regimecontratacao").value = "1";
+      document.getElementById("tr_edital").style.display = '';
+      document.getElementById("tr_modalidade").style.display = '';
+      document.getElementById("tr_nummodalidade").style.display = '';
+      document.getElementById("si06_regimecontratacao").style.pointerEvents = "none";
+	    document.getElementById("si06_regimecontratacao").style.color = "#999999";
+      return;
+    }
+
+    document.getElementById("trRegimeContratacao").style.display = 'none';
+    document.getElementById("tr_edital").style.display = 'none';
+    document.getElementById("tr_modalidade").style.display = 'none';
+    document.getElementById("tr_nummodalidade").style.display = 'none';
+    document.getElementById("si06_regimecontratacao").style.pointerEvents = "";
+	  document.getElementById("si06_regimecontratacao").style.color = "";
+
+  }
+
+  function js_alteraRegimeContratacao(regimeContratacao){
+    if(regimeContratacao == 1){
+      document.getElementById("tr_edital").style.display = '';
+      document.getElementById("tr_modalidade").style.display = '';
+      document.getElementById("tr_nummodalidade").style.display = '';
+      return;
+    }
+    document.getElementById("tr_edital").style.display = 'none';
+    document.getElementById("tr_modalidade").style.display = 'none';
+    document.getElementById("tr_nummodalidade").style.display = 'none';
+  }
+
 </script>

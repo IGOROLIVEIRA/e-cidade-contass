@@ -233,13 +233,11 @@ $sWhereContrato = " and 1 = 1 ";
           }
 
           if (isset($adesaoregpreco)) {
-            if ($descontotabela == 1) $sql .=  " and pc80_criterioadjudicacao = 1";
+            $sql .=  " and pc80_criterioadjudicacao = $criterioadjudicacao";
           }
 
           $sql .= " and $sWhereSolicitaAnuAndPrecoRef order by pc80_codproc desc ";
           $repassa = array("dataini" => $dataini, "datafim" => $datafim);
-
-          //echo "<br><br>" . $sql . "<br>";
 
           db_lovrot($sql, 15, "()", "", $funcao_js, "", "NoMe", $repassa);
         } else {

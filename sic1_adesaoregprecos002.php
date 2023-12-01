@@ -63,12 +63,6 @@ if (isset($incluir) || isset($alterar)) {
     }
   }
 
-  if (!intval($si06_edital) && !$sqlerro) {
-    $erro_msg = 'Valor do campo Edital inválido. Verifique! ';
-    $sqlerro = true;
-  }
-
-
   $sDataAta = join('-', array_reverse(explode('/', $si06_dataata)));
   $sDataAbertura = join('-', array_reverse(explode('/', $si06_dataabertura)));
 
@@ -91,18 +85,6 @@ if (!$sqlerro) {
     $db_opcao = 1;
 
     db_inicio_transacao();
-
-    //  /**
-    //    * Verificar Encerramento Periodo Contabil
-    //    */
-    //  if (!empty($si06_dataadesao)) {
-    //    $clcondataconf = new cl_condataconf;
-    //    if (!$clcondataconf->verificaPeriodoContabil($si06_dataadesao)) {
-    //      $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
-    //      $cladesaoregprecos->erro_status="0";
-    //      $sqlerro  = true;
-    //    }
-    //  }
 
     /**
      * Verificar Encerramento Periodo Patrimonial
@@ -147,7 +129,6 @@ if (!$sqlerro) {
                 parent.iframe_db_itens.location.href='sic1_itensregpreco001.php?codigoAdesao=" . $si06_sequencial . "';
             </script>";
       }
-      //$cladesaoregprecos->erro(true,true);
     }
     db_fim_transacao();
   }
@@ -158,36 +139,10 @@ if (!$sqlerro) {
       $db_opcao = 2;
       $sqlerro  = false;
 
-
-
-
-      //  /**
-      //    * Verificar Encerramento Periodo Contabil
-      //    */
-      //  if (!empty($si06_dataadesao)) {
-      //    $clcondataconf = new cl_condataconf;
-      //    if (!$clcondataconf->verificaPeriodoContabil($si06_dataadesao)) {
-      //      $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg." $si06_dataadesao";
-      //      $cladesaoregprecos->erro_status="0";
-      //      $sqlerro  = true;
-      //    }
-      //  }
-
       /**
        * Verificar Encerramento Periodo Patrimonial
        */
       $dataadesao = db_utils::fieldsMemory(db_query($cladesaoregprecos->sql_query_file($si06_sequencial, "si06_dataadesao")), 0)->si06_dataadesao;
-
-      /*
-      if (!empty($si06_dataadesao)) {
-        $clcondataconf = new cl_condataconf;
-        if (!$clcondataconf->verificaPeriodoPatrimonial($dataadesao) || !$clcondataconf->verificaPeriodoPatrimonial($si06_dataadesao)) {
-          $cladesaoregprecos->erro_msg = $clcondataconf->erro_msg;
-          $cladesaoregprecos->erro_status = "0";
-          $sqlerro  = true;
-        }
-      }
-      */
 
       if ($sqlerro == false) {
 
@@ -348,24 +303,9 @@ if ($sqlerro) {
 </body>
 
 </html>
-<script>
-  //js_tabulacaoforms("form1","si06_orgaogerenciador",true,1,"si06_orgaogerenciador",true);
-</script>
-<?
-/*if(isset($incluir)){
-  if($cladesaoregprecos->erro_status=="0"){
 
-    $cladesaoregprecos->erro(true,false);
-    $db_botao=true;
-    echo "<script> document.form1.db_opcao.disabled=false;</script>  ";
-    if($cladesaoregprecos->erro_campo!=""){
-      echo "<script> document.form1.".$cladesaoregprecos->erro_campo.".style.backgroundColor='#99A9AE';</script>";
-      echo "<script> document.form1.".$cladesaoregprecos->erro_campo.".focus();</script>";
-    }
-  }else{
-    $cladesaoregprecos->erro(true,true);
-  }
-}*/
+<?
+
 if (isset($alterar)) {
 
   if ($cladesaoregprecos->erro_status == "0") {

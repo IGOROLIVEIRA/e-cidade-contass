@@ -19,10 +19,10 @@ class cl_adesaoregprecos
   // cria variaveis do arquivo
   var $si06_sequencial = 0;
   var $si06_orgaogerenciador = 0;
-  var $si06_modalidade = 0;
+  var $si06_modalidade = null;
   var $si06_anoproc = 0;
   var $si06_numeroprc = 0;
-  var $si06_numlicitacao = 0;
+  var $si06_numlicitacao = null;
   var $si06_dataadesao_dia = null;
   var $si06_dataadesao_mes = null;
   var $si06_dataadesao_ano = null;
@@ -42,7 +42,7 @@ class cl_adesaoregprecos
   var $si06_objetoadesao = null;
   var $si06_orgarparticipante = 0;
   var $si06_cgm = 0;
-  var $si06_descontotabela = 0;
+  var $si06_descontotabela = null;
   var $si06_numeroadm = 0;
   var $si06_dataabertura_dia = null;
   var $si06_dataabertura_mes = null;
@@ -60,7 +60,7 @@ class cl_adesaoregprecos
   var $si06_nummodadm = null;
   var $si06_departamento = null;
   var $si06_codunidadesubant = null;
-
+  var $si06_regimecontratacao = null;
 
   // cria propriedade com as variaveis do arquivo
   var $campos = "
@@ -90,6 +90,8 @@ class cl_adesaoregprecos
                  si06_anomodadm = int4 = Ano do Processo
                  si06_nummodadm = int8 = Numero Modalidade
                  si06_departamento = int8 = codigo do departamento responsavel
+                 si06_regimecontratacao = int4 = Regime de contratação
+                 si06_criterioadjudicacao = int4 = Critério de Adjudicação
                  ";
   //funcao construtor da classe
   function cl_adesaoregprecos()
@@ -174,6 +176,8 @@ class cl_adesaoregprecos
       $this->si06_anomodadm = ($this->si06_anomodadm == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_anomodadm"] : $this->si06_anomodadm);
       $this->si06_nummodadm = ($this->si06_nummodadm == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_nummodadm"] : $this->si06_nummodadm);
       $this->si06_departamento = ($this->si06_departamento == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_departamento"] : $this->si06_departamento);
+      $this->si06_regimecontratacao = ($this->si06_regimecontratacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_regimecontratacao"] : $this->si06_regimecontratacao);
+      $this->si06_criterioadjudicacao = ($this->si06_criterioadjudicacao == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_criterioadjudicacao"] : $this->si06_criterioadjudicacao);
     } else {
       $this->si06_sequencial = ($this->si06_sequencial == "" ? @$GLOBALS["HTTP_POST_VARS"]["si06_sequencial"] : $this->si06_sequencial);
     }
@@ -193,7 +197,7 @@ class cl_adesaoregprecos
       $this->erro_status = "0";
       return false;
     }
-    if ($this->si06_modalidade == null) {
+    if ($this->si06_modalidade == null && $this->si06_regimecontratacao == 1) {
       $this->erro_sql = " Campo Modalidade nao Informado.";
       $this->erro_campo = "si06_modalidade";
       $this->erro_banco = "";
@@ -202,7 +206,8 @@ class cl_adesaoregprecos
       $this->erro_status = "0";
       return false;
     }
-    if (!$this->si06_edital && db_getsession('DB_anousu') >= 2020) {
+    echo $this->si06_regimecontratacao;
+    if (!$this->si06_edital && db_getsession('DB_anousu') >= 2020 && $this->si06_regimecontratacao == 1) {
       $this->erro_sql = " Campo Edital não Informado.";
       $this->erro_campo = "si06_edital";
       $this->erro_banco = "";
@@ -232,7 +237,7 @@ class cl_adesaoregprecos
       $this->erro_status = "0";
       return false;
     }
-    if ($this->si06_numlicitacao == null) {
+    if ($this->si06_numlicitacao == null && $this->si06_regimecontratacao == 1) {
       $this->erro_sql = " Campo Núm. Licitação nao Informado.";
       $this->erro_campo = "si06_numlicitacao";
       $this->erro_banco = "";
@@ -290,15 +295,6 @@ class cl_adesaoregprecos
     if ($this->si06_cgm == null) {
       $this->erro_sql = " Campo Responsável pela Aprovação nao Informado.";
       $this->erro_campo = "si06_cgm";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
-      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
-    if ($this->si06_descontotabela == null) {
-      $this->erro_sql = " Campo Desconto em Tabela nao Informado.";
-      $this->erro_campo = "si06_descontotabela";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -382,10 +378,36 @@ class cl_adesaoregprecos
       return false;
     }
 
+    if ($this->si06_regimecontratacao == null || $this->si06_regimecontratacao == '0') {
+      $this->erro_sql = " Campo Regime de Contratação Não Informado.";
+      $this->erro_campo = "si06_regimecontratacao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
+    if ($this->si06_criterioadjudicacao == null || $this->si06_criterioadjudicacao == '0') {
+      $this->erro_sql = " Campo Critério de Adjudicação nao Informado.";
+      $this->erro_campo = "si06_criterioadjudicacao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+
     if ($this->si06_cadinicial == null && db_getsession('DB_anousu') >= 2020) {
       $this->si06_cadinicial = 1;
     } else {
       $this->si06_cadinicial = 'null';
+    }
+
+    if($this->si06_regimecontratacao != 1){
+      $this->si06_edital = "null";
+      $this->si06_modalidade = "null";
+      $this->si06_numlicitacao = "null";
     }
 
     if ($si06_sequencial == "" || $si06_sequencial == null) {
@@ -449,6 +471,8 @@ class cl_adesaoregprecos
                                       ,si06_anomodadm
                                       ,si06_nummodadm
                                       ,si06_departamento
+                                      ,si06_regimecontratacao
+                                      ,si06_criterioadjudicacao
                        )
                 values (
                                 $this->si06_sequencial
@@ -463,7 +487,7 @@ class cl_adesaoregprecos
                                ,'$this->si06_objetoadesao'
                                ,$this->si06_orgarparticipante
                                ,$this->si06_cgm
-                               ,$this->si06_descontotabela
+                               ,null
                                ,$this->si06_numeroadm
                                ," . ($this->si06_dataabertura == "null" || $this->si06_dataabertura == "" ? "null" : "'" . $this->si06_dataabertura . "'") . "
                                ,$this->si06_processocompra
@@ -478,6 +502,8 @@ class cl_adesaoregprecos
                                ,$this->si06_anomodadm
                                ,$this->si06_nummodadm
                                ,$this->si06_departamento
+                               ,$this->si06_regimecontratacao
+                               ,$this->si06_criterioadjudicacao
 
                       )";
     $result = db_query($sql);
@@ -565,7 +591,7 @@ class cl_adesaoregprecos
         return false;
       }
     }
-    if (trim($this->si06_modalidade) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_modalidade"])) {
+    if (trim($this->si06_modalidade) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_modalidade"]) && $si06_regimecontratacao != 1) {
       $sql  .= $virgula . " si06_modalidade = $this->si06_modalidade ";
       $virgula = ",";
       if (trim($this->si06_modalidade) == null) {
@@ -604,7 +630,7 @@ class cl_adesaoregprecos
         return false;
       }
     }
-    if (trim($this->si06_numlicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_numlicitacao"])) {
+    if (trim($this->si06_numlicitacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_numlicitacao"]) && $si06_regimecontratacao != 1) {
       $sql  .= $virgula . " si06_numlicitacao = $this->si06_numlicitacao ";
       $virgula = ",";
       if (trim($this->si06_numlicitacao) == null) {
@@ -745,12 +771,12 @@ class cl_adesaoregprecos
         return false;
       }
     }
-    if (trim($this->si06_descontotabela) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_descontotabela"])) {
-      $sql  .= $virgula . " si06_descontotabela = $this->si06_descontotabela ";
+    if (trim($this->si06_numeroadm) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_numeroadm"])) {
+      $sql  .= $virgula . " si06_numeroadm = $this->si06_numeroadm ";
       $virgula = ",";
-      if (trim($this->si06_descontotabela) == null) {
-        $this->erro_sql = " Campo Desconto em Tabela nao Informado.";
-        $this->erro_campo = "si06_descontotabela";
+      if (trim($this->si06_numeroadm) == null) {
+        $this->erro_sql = " Campo Número do ADM nao Informado.";
+        $this->erro_campo = "si06_numeroadm";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -758,12 +784,25 @@ class cl_adesaoregprecos
         return false;
       }
     }
-    if (trim($this->si06_numeroadm) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_numeroadm"])) {
-      $sql  .= $virgula . " si06_numeroadm = $this->si06_numeroadm ";
+    if (trim($this->si06_regimecontratacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_regimecontratacao"])) {
+      $sql  .= $virgula . " si06_regimecontratacao = $this->si06_regimecontratacao ";
       $virgula = ",";
-      if (trim($this->si06_numeroadm) == null) {
-        $this->erro_sql = " Campo Número do ADM nao Informado.";
-        $this->erro_campo = "si06_numeroadm";
+      if (trim($this->si06_regimecontratacao) == null || $this->si06_regimecontratacao == "0"){
+        $this->erro_sql = " Campo Regime de Contratação nao Informado.";
+        $this->erro_campo = "si06_regimecontratacao";
+        $this->erro_banco = "";
+        $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->si06_criterioadjudicacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_criterioadjudicacao"])) {
+      $sql  .= $virgula . " si06_criterioadjudicacao = $this->si06_criterioadjudicacao ";
+      $virgula = ",";
+      if (trim($this->si06_criterioadjudicacao) == null || $this->si06_criterioadjudicacao == "0") {
+        $this->erro_sql = " Campo Criterio de Adjudicacao nao Informado.";
+        $this->erro_campo = "si06_criterioadjudicacao";
         $this->erro_banco = "";
         $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
@@ -892,7 +931,7 @@ class cl_adesaoregprecos
       }
     }
 
-    if (trim($this->si06_edital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_edital"])) {
+    if (trim($this->si06_edital) != "" || isset($GLOBALS["HTTP_POST_VARS"]["si06_edital"]) && $si06_regimecontratacao != 1) {
       $sql  .= $virgula . " si06_edital = $this->si06_edital ";
       $virgula = ",";
       if (!trim($this->si06_edital)) {
