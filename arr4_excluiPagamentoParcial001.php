@@ -27,10 +27,8 @@ include_once("libs/db_utils.php");
 <body bgcolor="#cccccc" onload="js_pesquisaAbatimento()">
 <br><br>
 <?php
-$AutorizaUsuarioExcluirPgtoParcial	= AutorizaUsuarioExcluirPgtoParcial::query()
-									->where ('id_usuario', db_getsession("DB_id_usuario"))
-									->first();
-$idUsuario		= $AutorizaUsuarioExcluirPgtoParcial->id_usuario;
+$AutorizaUsuarioExcluirPgtoParcial = AutorizaUsuarioExcluirPgtoParcial::query()->where ('id_usuario', db_getsession("DB_id_usuario"))->first();
+$idUsuario = $AutorizaUsuarioExcluirPgtoParcial->id_usuario;
 
 if (db_getsession("DB_id_usuario") == 1 || (!empty($idUsuario))) {
 ?>
