@@ -57,7 +57,7 @@ if (db_getsession("DB_id_usuario") == 1 || (!empty($idUsuario))) {
   </tr>
   <tr>
     <td colspan=2 style="visibility:hidden;" id ="MI">
-      <?s
+      <?
        db_ancora('Consultar Origens Atuais do Abatimento',"js_consultaOrigemPgtoParcial()",1,'');
       ?>
     </td>
