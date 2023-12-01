@@ -28,7 +28,7 @@ include_once("libs/db_utils.php");
 $cldb_config 	= new cl_db_config;
 $rsConfig 		= $cldb_config->sql_record($cldb_config->sql_query_file(db_getsession('DB_instit'),"db21_codcli"));
 $oConfig  		= db_utils::fieldsMemory($rsConfig,0);
-$sqlUsuarios 	= db_query("select 1 from autorizacgmexcluirpgtoparcial where id_usuario =" .db_getsession("DB_id_usuario"));
+$sqlUsuarios 	= db_query("select 1 from autorizausuarioexcluirpgtoparcial where id_usuario =" .db_getsession("DB_id_usuario"));
 $resUsuarios	= pg_num_rows($sqlUsuarios);
 
 if ( db_getsession("DB_id_usuario") == 1 || ( $resUsuarios > 0) ) {
