@@ -628,302 +628,6 @@ if($impforne == "true" && $impproc == "true" && $impaco == "true" && $impvlrunit
     }
 }
 
-if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit == "true"){
-
-    $sql = "SELECT DISTINCT pc01_codmater AS codigo,
-                CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
-                pc11_quant AS quantidade,
-                pc23_vlrun AS valorUnitario,
-                pc21_numcgm AS Fornecedor,
-                l20_codigo AS Licitacao,
-                CASE
-                    WHEN pc11_reservado ='t' THEN 'Cota exclusiva'
-                    ELSE 'Normal'
-                END AS tipoitem,
-                l20_edital||' / '||l20_anousu AS processo,
-                ac16_sequencial AS Contrato,
-                l202_datahomologacao,
-                z01_nome
-        FROM pcorcamitem
-        INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
-        LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
-        LEFT JOIN cgm ON cgm.z01_numcgm = pcorcamforne.pc21_numcgm
-        INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
-        INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
-        INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
-        INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
-        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
-        INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-        LEFT JOIN solicitaregistropreco ON solicitaregistropreco.pc54_solicita = solicita.pc10_numero
-        LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-        LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-        LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-        LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-        LEFT JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
-        AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
-        LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
-        AND pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne
-        LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
-        LEFT JOIN licsituacao ON liclicita.l20_licsituacao = licsituacao.l08_sequencial
-        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-        LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
-        AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
-        LEFT JOIN acordo ON ac16_licitacao=l20_codigo
-        left join homologacaoadjudica on l202_licitacao=l20_codigo
-        WHERE pc24_pontuacao= 1
-        and l202_datahomologacao is not null
-        $sWhere
-        AND l20_instit = ". db_getsession("DB_instit") . "
-        $sOrder
-        ";
-
-    $result = db_query($sql);
-
-    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
-    $pdf->cell(175, $alt, "Descrição", 1, 0, "C",1);
-    $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
-    $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
-    $pdf->cell(30, $alt, "Licitação", 1, 0, "C",1);
-    $pdf->cell(30, $alt, "Contrato", 1, 1, "C",1);
-
-    for($i = 0; $i < pg_num_rows($result); $i++){
-
-        db_fieldsmemory($result,$i);
-
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(175, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
-        $pdf->cell(30, $alt, $licitacao, 1, 0, "C",0);
-        $pdf->cell(30, $alt, $contrato, 1, 1, "C",0);
-
-    }
-}
-
-if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit == "true"){
-
-    $sql = "SELECT DISTINCT pc01_codmater AS codigo,
-                CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
-                pc11_quant AS quantidade,
-                pc23_vlrun AS valorUnitario,
-                pc21_numcgm AS Fornecedor,
-                l20_codigo AS Licitacao,
-                CASE
-                    WHEN pc11_reservado ='t' THEN 'Cota exclusiva'
-                    ELSE 'Normal'
-                END AS tipoitem,
-                l20_edital||' / '||l20_anousu AS processo,
-                ac16_sequencial AS Contrato,
-                l202_datahomologacao,
-                z01_nome
-        FROM pcorcamitem
-        INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
-        LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
-        LEFT JOIN cgm ON cgm.z01_numcgm = pcorcamforne.pc21_numcgm
-        INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
-        INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
-        INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
-        INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
-        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
-        INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-        LEFT JOIN solicitaregistropreco ON solicitaregistropreco.pc54_solicita = solicita.pc10_numero
-        LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-        LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-        LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-        LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-        LEFT JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
-        AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
-        LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
-        AND pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne
-        LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
-        LEFT JOIN licsituacao ON liclicita.l20_licsituacao = licsituacao.l08_sequencial
-        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-        LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
-        AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
-        LEFT JOIN acordo ON ac16_licitacao=l20_codigo
-        left join homologacaoadjudica on l202_licitacao=l20_codigo
-        WHERE pc24_pontuacao= 1
-        and l202_datahomologacao is not null
-        $sWhere
-        AND l20_instit = ". db_getsession("DB_instit") . "
-        $sOrder
-        ";
-
-    $result = db_query($sql);
-
-    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
-    $pdf->cell(205, $alt, "Descrição", 1, 0, "C",1);
-    $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
-    $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
-    $pdf->cell(30, $alt, "Contrato", 1, 1, "C",1);
-
-    for($i = 0; $i < pg_num_rows($result); $i++){
-
-        db_fieldsmemory($result,$i);
-
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(205, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
-        $pdf->cell(30, $alt, $contrato, 1, 1, "C",0);
-
-    }
-}
-
-if($impforne == false && $impproc == false && $impaco == false && $impvlrunit == "true"){
-
-    $sql = "SELECT DISTINCT pc01_codmater AS codigo,
-                CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
-                pc11_quant AS quantidade,
-                pc23_vlrun AS valorUnitario,
-                pc21_numcgm AS Fornecedor,
-                l20_codigo AS Licitacao,
-                CASE
-                    WHEN pc11_reservado ='t' THEN 'Cota exclusiva'
-                    ELSE 'Normal'
-                END AS tipoitem,
-                l20_edital||' / '||l20_anousu AS processo,
-                l202_datahomologacao,
-                z01_nome
-        FROM pcorcamitem
-        INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
-        LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
-        LEFT JOIN cgm ON cgm.z01_numcgm = pcorcamforne.pc21_numcgm
-        INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
-        INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
-        INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
-        INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
-        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
-        INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-        LEFT JOIN solicitaregistropreco ON solicitaregistropreco.pc54_solicita = solicita.pc10_numero
-        LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-        LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-        LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-        LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-        LEFT JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
-        AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
-        LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
-        AND pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne
-        LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
-        LEFT JOIN licsituacao ON liclicita.l20_licsituacao = licsituacao.l08_sequencial
-        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-        LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
-        AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
-        LEFT JOIN acordo ON ac16_licitacao=l20_codigo
-        left join homologacaoadjudica on l202_licitacao=l20_codigo
-        WHERE pc24_pontuacao= 1
-        and l202_datahomologacao is not null
-        $sWhere
-        AND l20_instit = ". db_getsession("DB_instit") . "
-        $sOrder
-        ";
-
-    $result = db_query($sql);
-
-    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
-    $pdf->cell(235, $alt, "Descrição", 1, 0, "C",1);
-    $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
-    $pdf->cell(15, $alt, "Vlr Unit.", 1, 1, "C",1);
-
-    for($i = 0; $i < pg_num_rows($result); $i++){
-
-        db_fieldsmemory($result,$i);
-
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(235, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(15, $alt, $valorunitario, 1, 1, "C",0);
-
-    }
-}
-
-if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit == "true"){
-
-    $sql = "SELECT DISTINCT pc01_codmater AS codigo,
-                CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
-                pc11_quant AS quantidade,
-                pc23_vlrun AS valorUnitario,
-                pc21_numcgm AS Fornecedor,
-                l20_codigo AS Licitacao,
-                CASE
-                    WHEN pc11_reservado ='t' THEN 'Cota exclusiva'
-                    ELSE 'Normal'
-                END AS tipoitem,
-                l20_edital||' / '||l20_anousu AS processo,
-                l202_datahomologacao,
-                z01_nome
-        FROM pcorcamitem
-        INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
-        LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
-        LEFT JOIN cgm ON cgm.z01_numcgm = pcorcamforne.pc21_numcgm
-        INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
-        INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
-        INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
-        INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
-        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
-        INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
-        LEFT JOIN solicitaregistropreco ON solicitaregistropreco.pc54_solicita = solicita.pc10_numero
-        LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
-        LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
-        LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
-        LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
-        LEFT JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
-        AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
-        LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
-        AND pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne
-        LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
-        LEFT JOIN licsituacao ON liclicita.l20_licsituacao = licsituacao.l08_sequencial
-        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
-        LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
-        AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
-        LEFT JOIN acordo ON ac16_licitacao=l20_codigo
-        left join homologacaoadjudica on l202_licitacao=l20_codigo
-        WHERE pc24_pontuacao= 1
-        and l202_datahomologacao is not null
-        $sWhere
-        AND l20_instit = ". db_getsession("DB_instit") . "
-        $sOrder
-        ";
-
-    $result = db_query($sql);
-
-    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
-    $pdf->cell(220, $alt, "Descrição", 1, 0, "C",1);
-    $pdf->cell(30, $alt, "Licitação", 1, 0, "C",1);
-    $pdf->cell(15, $alt, "Vlr Unit.", 1, 1, "C",1);
-
-    for($i = 0; $i < pg_num_rows($result); $i++){
-
-        db_fieldsmemory($result,$i);
-
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(220, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(30, $alt, $licitacao, 1, 0, "C",0);
-        $pdf->cell(15, $alt, $valorunitario, 1, 1, "C",0);
-
-    }
-}
-
 if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit == "true"){
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
@@ -1001,6 +705,425 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
     }
 }
 
+if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit == "true"){
+
+    $sql = "SELECT DISTINCT pc01_codmater AS codigo,
+                CASE
+                    WHEN pc01_descrmater = NULL
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    ELSE pc01_descrmater||'. '||pc01_complmater
+                END AS descricao,
+                pc11_quant AS quantidade,
+                pc23_vlrun AS valorUnitario,
+                pc21_numcgm AS Fornecedor,
+                l20_codigo AS Licitacao,
+                CASE
+                    WHEN pc11_reservado ='t' THEN 'Cota exclusiva'
+                    ELSE 'Normal'
+                END AS tipoitem,
+                l20_edital||' / '||l20_anousu AS processo,
+                ac16_sequencial AS Contrato,
+                l202_datahomologacao,
+                z01_nome
+        FROM pcorcamitem
+        INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
+        LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
+        LEFT JOIN cgm ON cgm.z01_numcgm = pcorcamforne.pc21_numcgm
+        INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
+        INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
+        INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+        INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
+        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+        INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+        LEFT JOIN solicitaregistropreco ON solicitaregistropreco.pc54_solicita = solicita.pc10_numero
+        LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+        LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+        LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+        LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+        LEFT JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
+        AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
+        LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
+        AND pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne
+        LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
+        LEFT JOIN licsituacao ON liclicita.l20_licsituacao = licsituacao.l08_sequencial
+        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+        LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
+        AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
+        LEFT JOIN acordo ON ac16_licitacao=l20_codigo
+        left join homologacaoadjudica on l202_licitacao=l20_codigo
+        WHERE pc24_pontuacao= 1
+        and l202_datahomologacao is not null
+        $sWhere
+        AND l20_instit = ". db_getsession("DB_instit") . "
+        ";
+
+    $result = db_query($sql);
+
+    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+    $pdf->cell(185, $alt, "Descrição", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
+    $pdf->cell(20, $alt, "Licitação", 1, 0, "C",1);
+    $pdf->cell(20, $alt, "Contrato", 1, 1, "C",1);
+
+    for($i = 0; $i < pg_num_rows($result); $i++){
+
+        db_fieldsmemory($result,$i);
+
+        $old_y = $pdf->gety();
+        $descricao = substr($descricao, 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C", 1);
+            $pdf->cell(185, $alt, "Descrição", 1, 0, "C", 1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
+            $pdf->cell(20, $alt, "Licitação", 1, 0, "C",1);
+            $pdf->cell(20, $alt, "Contrato", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(15, $alt + $addalt, $valorunitario, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $licitacao, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(15, $alt + $addalt, $valorunitario, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $licitacao, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
+    }
+}
+
+if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit == "true"){
+
+    $sql = "SELECT DISTINCT pc01_codmater AS codigo,
+                CASE
+                    WHEN pc01_descrmater = NULL
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    ELSE pc01_descrmater||'. '||pc01_complmater
+                END AS descricao,
+                pc11_quant AS quantidade,
+                pc23_vlrun AS valorUnitario,
+                pc21_numcgm AS Fornecedor,
+                l20_codigo AS Licitacao,
+                CASE
+                    WHEN pc11_reservado ='t' THEN 'Cota exclusiva'
+                    ELSE 'Normal'
+                END AS tipoitem,
+                l20_edital||' / '||l20_anousu AS processo,
+                ac16_sequencial AS Contrato,
+                l202_datahomologacao,
+                z01_nome
+        FROM pcorcamitem
+        INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
+        LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
+        LEFT JOIN cgm ON cgm.z01_numcgm = pcorcamforne.pc21_numcgm
+        INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
+        INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
+        INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+        INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
+        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+        INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+        LEFT JOIN solicitaregistropreco ON solicitaregistropreco.pc54_solicita = solicita.pc10_numero
+        LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+        LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+        LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+        LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+        LEFT JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
+        AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
+        LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
+        AND pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne
+        LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
+        LEFT JOIN licsituacao ON liclicita.l20_licsituacao = licsituacao.l08_sequencial
+        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+        LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
+        AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
+        INNER JOIN acordo ON ac16_licitacao=l20_codigo
+        left join homologacaoadjudica on l202_licitacao=l20_codigo
+        WHERE pc24_pontuacao= 1
+        and l202_datahomologacao is not null
+        $sWhere
+        AND l20_instit = ". db_getsession("DB_instit") . "
+        $sOrder
+        ";
+
+    $result = db_query($sql);
+
+    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+    $pdf->cell(185, $alt, "Descrição", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+    $pdf->cell(30, $alt, "Vlr Unit.", 1, 0, "C",1);
+    $pdf->cell(30, $alt, "Contrato", 1, 1, "C",1);
+
+    for($i = 0; $i < pg_num_rows($result); $i++){
+
+        db_fieldsmemory($result,$i);
+
+        $old_y = $pdf->gety();
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(185, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(30, $alt, "Vlr Unit.", 1, 0, "C",1);
+            $pdf->cell(30, $alt, "Contrato", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
+            $pdf->cell(30, $alt + $addalt, $valorunitario, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $valorunitario, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
+
+    }
+}
+
+if($impforne == false && $impproc == false && $impaco == false && $impvlrunit == "true"){
+
+    $sql = "SELECT DISTINCT pc01_codmater AS codigo,
+                CASE
+                    WHEN pc01_descrmater = NULL
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    ELSE pc01_descrmater||'. '||pc01_complmater
+                END AS descricao,
+                pc11_quant AS quantidade,
+                pc23_vlrun AS valorUnitario,
+                pc21_numcgm AS Fornecedor,
+                l20_codigo AS Licitacao,
+                CASE
+                    WHEN pc11_reservado ='t' THEN 'Cota exclusiva'
+                    ELSE 'Normal'
+                END AS tipoitem,
+                l20_edital||' / '||l20_anousu AS processo,
+                l202_datahomologacao,
+                z01_nome
+        FROM pcorcamitem
+        INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
+        LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
+        LEFT JOIN cgm ON cgm.z01_numcgm = pcorcamforne.pc21_numcgm
+        INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
+        INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
+        INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+        INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
+        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+        INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+        LEFT JOIN solicitaregistropreco ON solicitaregistropreco.pc54_solicita = solicita.pc10_numero
+        LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+        LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+        LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+        LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+        LEFT JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
+        AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
+        LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
+        AND pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne
+        LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
+        LEFT JOIN licsituacao ON liclicita.l20_licsituacao = licsituacao.l08_sequencial
+        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+        LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
+        AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
+        LEFT JOIN acordo ON ac16_licitacao=l20_codigo
+        left join homologacaoadjudica on l202_licitacao=l20_codigo
+        WHERE pc24_pontuacao= 1
+        and l202_datahomologacao is not null
+        $sWhere
+        AND l20_instit = ". db_getsession("DB_instit") . "
+        $sOrder
+        ";
+
+    $result = db_query($sql);
+
+    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+    $pdf->cell(235, $alt, "Descrição", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Vlr Unit.", 1, 1, "C",1);
+
+    for($i = 0; $i < pg_num_rows($result); $i++){
+
+        db_fieldsmemory($result,$i);
+
+        $old_y = $pdf->gety();
+        $descricao = substr($descricao, 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(235, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Vlr Unit.", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(235, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(259);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
+            $pdf->cell(15, $alt + $addalt, $valorunitario, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(235, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(259);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
+            $pdf->cell(15, $alt + $addalt, $valorunitario, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
+
+    }
+}
+
+if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit == "true"){
+
+    $sql = "SELECT DISTINCT pc01_codmater AS codigo,
+                CASE
+                    WHEN pc01_descrmater = NULL
+                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    ELSE pc01_descrmater||'. '||pc01_complmater
+                END AS descricao,
+                pc11_quant AS quantidade,
+                pc23_vlrun AS valorUnitario,
+                pc21_numcgm AS Fornecedor,
+                l20_codigo AS Licitacao,
+                CASE
+                    WHEN pc11_reservado ='t' THEN 'Cota exclusiva'
+                    ELSE 'Normal'
+                END AS tipoitem,
+                l20_edital||' / '||l20_anousu AS processo,
+                l202_datahomologacao,
+                z01_nome
+        FROM pcorcamitem
+        INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
+        LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
+        LEFT JOIN cgm ON cgm.z01_numcgm = pcorcamforne.pc21_numcgm
+        INNER JOIN pcorcamitemlic ON pcorcamitemlic.pc26_orcamitem = pcorcamitem.pc22_orcamitem
+        INNER JOIN liclicitem ON pcorcamitemlic.pc26_liclicitem = liclicitem.l21_codigo
+        INNER JOIN liclicita ON liclicita.l20_codigo = liclicitem.l21_codliclicita
+        INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
+        INNER JOIN solicitem ON solicitem.pc11_codigo = pcprocitem.pc81_solicitem
+        INNER JOIN solicita ON solicita.pc10_numero = solicitem.pc11_numero
+        LEFT JOIN solicitaregistropreco ON solicitaregistropreco.pc54_solicita = solicita.pc10_numero
+        LEFT JOIN solicitemunid ON solicitemunid.pc17_codigo = solicitem.pc11_codigo
+        LEFT JOIN matunid ON matunid.m61_codmatunid = solicitemunid.pc17_unid
+        LEFT JOIN solicitempcmater ON solicitempcmater.pc16_solicitem = solicitem.pc11_codigo
+        LEFT JOIN pcmater ON pcmater.pc01_codmater = solicitempcmater.pc16_codmater
+        LEFT JOIN pcorcamval ON pcorcamval.pc23_orcamitem = pcorcamitem.pc22_orcamitem
+        AND pcorcamval.pc23_orcamforne = pcorcamforne.pc21_orcamforne
+        LEFT JOIN pcorcamdescla ON pcorcamdescla.pc32_orcamitem = pcorcamitem.pc22_orcamitem
+        AND pcorcamdescla.pc32_orcamforne = pcorcamforne.pc21_orcamforne
+        LEFT JOIN liclicitemlote ON liclicitemlote.l04_liclicitem = liclicitem.l21_codigo
+        LEFT JOIN licsituacao ON liclicita.l20_licsituacao = licsituacao.l08_sequencial
+        LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
+        LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
+        AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
+        LEFT JOIN acordo ON ac16_licitacao=l20_codigo
+        left join homologacaoadjudica on l202_licitacao=l20_codigo
+        WHERE pc24_pontuacao= 1
+        and l202_datahomologacao is not null
+        $sWhere
+        AND l20_instit = ". db_getsession("DB_instit") . "
+        $sOrder
+        ";
+
+    $result = db_query($sql);
+
+    $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+    $pdf->cell(200, $alt, "Descrição", 1, 0, "C",1);
+    $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+    $pdf->cell(20, $alt, "Vlr Unit.", 1, 0, "C",1);
+    $pdf->cell(20, $alt, "Licitação", 1, 1, "C",1);
+
+    for($i = 0; $i < pg_num_rows($result); $i++){
+
+        db_fieldsmemory($result,$i);
+
+        $old_y = $pdf->gety();
+        $descricao = substr($descricao, 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(200, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(20, $alt, "Vlr Unit.", 1, 0, "C",1);
+            $pdf->cell(20, $alt, "Licitação", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(200, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(224);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
+            $pdf->cell(20, $alt + $addalt, $licitacao, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $valorunitario, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(200, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(224);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $licitacao, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $valorunitario, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
+
+    }
+}
+
 if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit == false){
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
@@ -1066,12 +1189,43 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
 
         db_fieldsmemory($result,$i);
 
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(185, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(30, $alt, $licitacao, 1, 0, "C",0);
-        $pdf->cell(30, $alt, $contrato, 1, 1, "C",0);
+        $old_y = $pdf->gety();
+        $descricao = substr($descricao, 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C", 1);
+            $pdf->cell(185, $alt, "Descrição", 1, 0, "C", 1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C", 1);
+            $pdf->cell(30, $alt, "Licitação", 1, 0, "C",1);
+            $pdf->cell(30, $alt, "Contrato", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
+            $pdf->cell(30, $alt + $addalt, $licitacao, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $licitacao, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
 
     }
 }
@@ -1131,19 +1285,36 @@ if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == nu
 
         db_fieldsmemory($result,$i);
 
-        $pdf->setfont('arial', '', 7);
-        $linhas = ceil(strlen($descricao));
-        $addalt = $linhas * 4;
         $old_y = $pdf->gety();
+        $descricao = substr($descricao,0,2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
 
-        $pdf->cell(14, $alt + $addalt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->multicell(235, $alt, mb_strtoupper($descricao), "T", "J", 0);
-        $pdf->sety($old_y);
-        $pdf->setx(259);
-        $pdf->cell(15, $alt + $addalt, $quantidade, 1, 1, "C",0);
+        if ($pdf->getY() > $pdf->h - 105) {
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(235, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 1, "C",1);
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt , substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(235, $alt , mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(259);
+            $pdf->cell(15, $alt + $addalt , $quantidade, 1, 1, "C", 0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }else{
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(235, $alt , mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(259);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 1, "C", 0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
     }
 }
-//exit;
+
 if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit == false){
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
@@ -1188,7 +1359,7 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
         LEFT JOIN pcproc ON pcproc.pc80_codproc = pcprocitem.pc81_codproc
         LEFT JOIN pcorcamjulg ON pcorcamjulg.pc24_orcamitem = pcorcamitem.pc22_orcamitem
         AND pcorcamforne.pc21_orcamforne = pcorcamjulg.pc24_orcamforne
-        LEFT JOIN acordo ON ac16_licitacao=l20_codigo
+        INNER JOIN acordo ON ac16_licitacao=l20_codigo
         left join homologacaoadjudica on l202_licitacao=l20_codigo
         WHERE pc24_pontuacao= 1
         and l202_datahomologacao is not null
@@ -1200,20 +1371,46 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
     $result = db_query($sql);
 
     $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
-    $pdf->cell(215, $alt, "Descrição", 1, 0, "C",1);
+    $pdf->cell(205, $alt, "Descrição", 1, 0, "C",1);
     $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
     $pdf->cell(30, $alt, "Contrato", 1, 1, "C",1);
 
-    for($i = 0; $i < pg_num_rows($result); $i++){
+    for($i = 0; $i < pg_num_rows($result); $i++) {
 
-        db_fieldsmemory($result,$i);
+        db_fieldsmemory($result, $i);
+        $old_y = $pdf->gety();
+        $descricao = substr($descricao, 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
 
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(215, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(30, $alt, $contrato, 1, 1, "C",0);
+        if ($pdf->getY() > $pdf->h - 105) {
 
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C", 1);
+            $pdf->cell(205, $alt, "Descrição", 1, 0, "C", 1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C", 1);
+            $pdf->cell(30, $alt, "Contrato", 1, 1, "C", 1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(205, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(229);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
+            $pdf->cell(30, $alt + $addalt, $contrato, 1, 1, "C", 0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(205, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(229);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
+            $pdf->cell(30, $alt + $addalt, $contrato, 1, 1, "C", 0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
     }
 }
 
@@ -1280,11 +1477,39 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
 
         db_fieldsmemory($result,$i);
 
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(215, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(30, $alt, $licitacao, 1, 1, "C",0);
+        $old_y = $pdf->gety();
+        $descricao = substr($descricao, 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(215, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(30, $alt, "Licitação", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(215, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(239);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
+            $pdf->cell(30, $alt + $addalt, $licitacao, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(215, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(239);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
+            $pdf->cell(30, $alt + $addalt, $licitacao, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
     }
 }
 
