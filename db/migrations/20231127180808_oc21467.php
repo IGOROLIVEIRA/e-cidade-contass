@@ -1,12 +1,10 @@
 <?php
 
-use App\Support\Database\AsFunction;
 use App\Support\Database\Instituition;
 use Classes\PostgresMigration;
 
 class Oc21467 extends PostgresMigration
 {
-    use AsFunction;
     use Instituition;
 
 	public const PMPIRAPORA 	= '23539463000121';
