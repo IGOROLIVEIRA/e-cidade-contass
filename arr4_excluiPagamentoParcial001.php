@@ -27,9 +27,6 @@ include_once("libs/db_utils.php");
 <body bgcolor="#cccccc" onload="js_pesquisaAbatimento()">
 <br><br>
 <?php
-$cldb_config 	= new cl_db_config;
-$rsConfig 		= $cldb_config->sql_record($cldb_config->sql_query_file(db_getsession('DB_instit'),"db21_codcli"));
-$oConfig  		= db_utils::fieldsMemory($rsConfig,0);
 $AutorizaUsuarioExcluirPgtoParcial	= AutorizaUsuarioExcluirPgtoParcial::query()
 									->where ('id_usuario', db_getsession("DB_id_usuario"))
 									->first();
