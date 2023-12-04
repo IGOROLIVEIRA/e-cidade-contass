@@ -149,13 +149,43 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
 
         db_fieldsmemory($result,$i);
 
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(185, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(30, $alt, $fornecedor, 1, 0, "C",0);
-        $pdf->cell(30, $alt, $contrato, 1, 1, "C",0);
+        $old_y = $pdf->gety();
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
 
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(185, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(30, $alt, "Fornecedor", 1, 0, "C",1);
+            $pdf->cell(30, $alt, "Contrato", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $fornecedor, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $fornecedor, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
     }
 }
 
@@ -233,14 +263,49 @@ if($impforne == "true" && $impproc == "true" && $impaco=="true" && $impvlrunit =
 
         db_fieldsmemory($result,$i);
 
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(165, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
-        $pdf->cell(30, $alt, $fornecedor, 1, 0, "C",0);
-        $pdf->cell(16, $alt, $licitacao, 1, 0, "C",0);
-        $pdf->cell(16, $alt, $contrato, 1, 1, "C",0);
+        $old_y = $pdf->gety();
+        $descricao = substr($descricao, 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(165, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
+            $pdf->cell(30, $alt, "Fornecedor", 1, 0, "C",1);
+            $pdf->cell(16, $alt, "Licitação", 1, 0, "C",1);
+            $pdf->cell(16, $alt, "Contrato", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(165, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(189);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(15, $alt + $addalt, $valorunitario, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $fornecedor, 1, 0, "C",0);
+            $pdf->cell(16, $alt + $addalt, $licitacao, 1, 0, "C",0);
+            $pdf->cell(16, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(165, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(189);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(15, $alt + $addalt, $valorunitario, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $fornecedor, 1, 0, "C",0);
+            $pdf->cell(16, $alt + $addalt, $licitacao, 1, 0, "C",0);
+            $pdf->cell(16, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
     }
 }
 
@@ -314,12 +379,47 @@ if($impforne == "true" && $impproc == "true" && $impaco==null && $impvlrunit == 
         db_fieldsmemory($result,$i);
 
         $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(185, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
-        $pdf->cell(30, $alt, $fornecedor, 1, 0, "C",0);
-        $pdf->cell(16, $alt, $licitacao, 1, 1, "C",0);
+
+        $old_y = $pdf->gety();
+        $descricao = substr($descricao, 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(185, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
+            $pdf->cell(30, $alt, "Fornecedor", 1, 0, "C",1);
+            $pdf->cell(16, $alt, "Licitação", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(15, $alt + $addalt, $valorunitario, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $fornecedor, 1, 0, "C",0);
+            $pdf->cell(16, $alt + $addalt, $licitacao, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(15, $alt + $addalt, $valorunitario, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $fornecedor, 1, 0, "C",0);
+            $pdf->cell(16, $alt + $addalt, $licitacao, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
     }
 }
 
@@ -395,12 +495,43 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
 
         db_fieldsmemory($result,$i);
 
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(185, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
-        $pdf->cell(50, $alt, $fornecedor, 1, 1, "C",0);
+        $old_y = $pdf->gety();
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(185, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
+            $pdf->cell(50, $alt, "Fornecedor", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(15, $alt + $addalt, $valorunitario, 1, 0, "C",0);
+            $pdf->cell(50, $alt + $addalt, $fornecedor, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(15, $alt + $addalt, $valorunitario, 1, 0, "C",0);
+            $pdf->cell(50, $alt + $addalt, $fornecedor, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
     }
 }
 
@@ -462,19 +593,47 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
     $result = db_query($sql);
 
     $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
-    $pdf->cell(140, $alt, "Descrição", 1, 0, "C",1);
+    $pdf->cell(160, $alt, "Descrição", 1, 0, "C",1);
     $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
-    $pdf->cell(115, $alt, "Fornecedor", 1, 1, "C",1);
+    $pdf->cell(90, $alt, "Fornecedor", 1, 1, "C",1);
 
     for($i = 0; $i < pg_num_rows($result); $i++){
 
         db_fieldsmemory($result,$i);
 
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(140, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(115, $alt, $fornecedor."-".$z01_nome, 1, 1, "C",0);
+        $old_y = $pdf->gety();
+        $descricao = substr($descricao, 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(160, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(90, $alt, "Fornecedor", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(160, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(184);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(90, $alt + $addalt, $fornecedor."-".$z01_nome, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(160, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(184);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(90, $alt + $addalt, $fornecedor."-".$z01_nome, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
     }
 }
 
@@ -542,12 +701,43 @@ if($impforne == "true" && $impproc == "true" && $impaco == null && $impvlrunit =
 
         db_fieldsmemory($result,$i);
 
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(135, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(85, $alt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
-        $pdf->cell(30, $alt, $licitacao, 1, 1, "C",0);
+        $old_y = $pdf->gety();
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(185, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
+            $pdf->cell(50, $alt, "Fornecedor", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(85, $alt + $addalt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $licitacao, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(209);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(85, $alt + $addalt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
+            $pdf->cell(30, $alt + $addalt, $licitacao, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
     }
 }
 
@@ -607,9 +797,9 @@ if($impforne == "true" && $impproc == "true" && $impaco == "true" && $impvlrunit
     $result = db_query($sql);
 
     $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
-    $pdf->cell(120, $alt, "Descrição", 1, 0, "C",1);
+    $pdf->cell(130, $alt, "Descrição", 1, 0, "C",1);
     $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
-    $pdf->cell(90, $alt, "Fornecedor", 1, 0, "C",1);
+    $pdf->cell(80, $alt, "Fornecedor", 1, 0, "C",1);
     $pdf->cell(20, $alt, "Licitação", 1, 0, "C",1);
     $pdf->cell(20, $alt, "Contrato", 1, 1, "C",1);
 
@@ -618,12 +808,47 @@ if($impforne == "true" && $impproc == "true" && $impaco == "true" && $impvlrunit
         db_fieldsmemory($result,$i);
 
         $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(120, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(90, $alt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
-        $pdf->cell(20, $alt, $licitacao, 1, 0, "C",0);
-        $pdf->cell(20, $alt, $contrato, 1, 1, "C",0);
+
+        $old_y = $pdf->gety();
+        $descricao = substr($descricao, 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(130, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(80, $alt, "Fornecedor", 1, 0, "C",1);
+            $pdf->cell(20, $alt, "Licitação", 1, 0, "C",1);
+            $pdf->cell(20, $alt, "Contrato", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(130, 3, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(154);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(80, $alt + $addalt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $licitacao, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(130, 3, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(154);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(80, $alt + $addalt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $licitacao, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
 
     }
 }
@@ -694,13 +919,46 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
 
         db_fieldsmemory($result,$i);
 
-        $pdf->setfont('arial', '', 8);
-        $pdf->cell(14, $alt, substr($codigo,0,164), 1, 0, "C",0);
-        $pdf->cell(130, $alt, $descricao, 1, 0, "L",0);
-        $pdf->cell(15, $alt, $quantidade, 1, 0, "C",0);
-        $pdf->cell(80, $alt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
-        $pdf->cell(15, $alt, $valorunitario, 1, 0, "C",0);
-        $pdf->cell(20, $alt, $contrato, 1, 1, "C",0);
+        $old_y = $pdf->gety();
+        $descricao = substr($descricao, 0, 2000);
+        $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
+        $addalt = $linhas * 6;
+
+        if ($pdf->getY() > $pdf->h - 105) {
+
+            $pdf->addpage();
+            $pdf->setfont('arial', 'b', 10);
+            $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
+            $pdf->cell(130, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
+            $pdf->cell(80, $alt, "Fornecedor", 1, 0, "C",1);
+            $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
+            $pdf->cell(20, $alt, "Contrato", 1, 1, "C",1);
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(130, 3, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety(40);
+            $pdf->setx(154);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(80, $alt + $addalt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
+            $pdf->cell(15, $alt + $addalt, $valorunitario, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+
+        } else {
+
+            $pdf->setfont('arial', '', 7);
+            $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
+            $pdf->multicell(130, 3, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->sety($old_y);
+            $pdf->setx(154);
+            $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
+            $pdf->cell(80, $alt + $addalt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
+            $pdf->cell(15, $alt + $addalt, $valorunitario, 1, 0, "C",0);
+            $pdf->cell(20, $alt + $addalt, $contrato, 1, 1, "C",0);
+            $pdf->multicell(249, 0, '', "T", "J", 0);
+        }
 
     }
 }
