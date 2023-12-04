@@ -347,14 +347,15 @@ function validaPeriodoSicom($aditamento, $oRetorno)
     $c99_datapat = db_utils::fieldsMemory($result, 0)->c99_datapat;
     $datareferencia = implode("-", array_reverse(explode("/", $aditamento->datareferencia)));
 
-
+    //var_dump($datareferencia, $c99_datapat, $datareferencia <= $c99_datapat);
 
     if ($aditamento->datareferencia != "") {
         if (substr($c99_datapat, 0, 4) == substr($datareferencia, 0, 4) && mb_substr($c99_datapat, 5, 2) == mb_substr($datareferencia, 5, 2)) {
             throw new Exception('Usuário: A data de referência deverá ser no mês posterior ao mês da data inserida.');
         }
-
+       
         if ($c99_datapat != "" && $datareferencia <= $c99_datapat) {
+            var_dump("chegou dentro do patrimonial");
             throw new Exception(' O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.');
         }
     }
