@@ -327,13 +327,13 @@ $db_opcao_inf=1;
         <tr>
           <td id='opcredito' style='display:none'>
           <?        
-          db_textarea('informacaoop',4,126,0,true,'text',1,"");       
+          db_textarea('informacaoop',4,128,0,true,'text',1,"");       
           ?>
           </td>
           <tr >
           <td id='ophisotrico' style='display:none'>
           <?
-          db_textarea('historico',4,126,0,true,'',1,"" );         
+          db_textarea('historico',4,128,0,true,'',1,"" );         
           ?>
           </td>
         </tr>
@@ -918,10 +918,6 @@ function js_liquidar(metodo){
         alert('Campo Destino Obrigatório.');
         return false;
       }
-      if(($F('diariaOrigemMunicipio') + " - " + $F('diariaOrigemUf')) == ($F('diariaDestinoMunicipio') + " - " + $F('diariaDestinoUf'))){
-        alert('Campos Destino e Origem não podem ser iguais.');
-        return false;
-      }
       if($F('e140_dtautorizacao') == '' || $F('e140_dtautorizacao') == null){
         alert('Campo Data da Autorização Obrigatório.');
         return false;
@@ -936,6 +932,14 @@ function js_liquidar(metodo){
       }
       if($F('e140_objetivo') == '' || $F('e140_objetivo') == null){
         alert('Campo Objetivo da Viagem Obrigatório.');
+        return false;
+      }
+      if($F('e140_horainicial') == '' || $F('e140_horainicial') == null){
+        alert('Campo Hora Inicial Obrigatório.');
+        return false;
+      }
+      if($F('e140_horafinal') == '' || $F('e140_horafinal') == null){
+        alert('Campo Hora Final Obrigatório.');
         return false;
       }
   }
@@ -1087,19 +1091,25 @@ function js_saidaLiquidacao(oAjax){
 
       var oParam = new Object();
       oParam.exec = 'incluiDiaria';
-      oParam.e140_codord        = obj.sOrdensGeradas;
-      oParam.e140_dtautorizacao = $F('e140_dtautorizacao');
-      oParam.e140_matricula     = $F('e140_matricula');
-      oParam.e140_cargo         = $F('e140_cargo');
-      oParam.e140_dtinicial     = $F('e140_dtinicial');
-      oParam.e140_dtfinal       = $F('e140_dtfinal');
-      oParam.e140_origem        = $F('diariaOrigemMunicipio') + " - " + $F('diariaOrigemUf');
-      oParam.e140_destino       = $F('diariaDestinoMunicipio') + " - " + $F('diariaDestinoUf');
-      oParam.e140_qtddiarias    = $F('e140_qtddiarias') == '' ? 0 : $F('e140_qtddiarias');
-      oParam.e140_vrldiariauni  = $F('e140_vrldiariauni') == '' ? 0 : $F('e140_vrldiariauni');
-      oParam.e140_transporte    = $F('e140_transporte');
-      oParam.e140_vlrtransport  = $F('e140_vlrtransport') == '' ? 0 : $F('e140_vlrtransport');
-      oParam.e140_objetivo      = $F('e140_objetivo');
+      oParam.e140_codord                = obj.sOrdensGeradas;
+      oParam.e140_dtautorizacao         = $F('e140_dtautorizacao');
+      oParam.e140_matricula             = $F('e140_matricula');
+      oParam.e140_cargo                 = $F('e140_cargo');
+      oParam.e140_dtinicial             = $F('e140_dtinicial');
+      oParam.e140_dtfinal               = $F('e140_dtfinal');
+      oParam.e140_horainicial           = $F('e140_horainicial');
+      oParam.e140_horafinal             = $F('e140_horafinal');
+      oParam.e140_origem                = $F('diariaOrigemMunicipio') + " - " + $F('diariaOrigemUf');
+      oParam.e140_destino               = $F('diariaDestinoMunicipio') + " - " + $F('diariaDestinoUf');
+      oParam.e140_qtddiarias            = $F('e140_qtddiarias') == '' ? 0 : $F('e140_qtddiarias');
+      oParam.e140_vrldiariauni          = $F('e140_vrldiariauni') == '' ? 0 : $F('e140_vrldiariauni');
+      oParam.e140_qtddiariaspernoite    = $F('e140_qtddiariaspernoite') == '' ? 0 : $F('e140_qtddiariaspernoite');
+      oParam.e140_vrldiariaspernoiteuni = $F('e140_vrldiariaspernoiteuni') == '' ? 0 : $F('e140_vrldiariaspernoiteuni');
+      oParam.e140_qtdhospedagens        = $F('e140_qtdhospedagens') == '' ? 0 : $F('e140_qtdhospedagens');
+      oParam.e140_vrlhospedagemuni      = $F('e140_vrlhospedagemuni') == '' ? 0 : $F('e140_vrlhospedagemuni');
+      oParam.e140_transporte            = $F('e140_transporte');
+      oParam.e140_vlrtransport          = $F('e140_vlrtransport') == '' ? 0 : $F('e140_vlrtransport');
+      oParam.e140_objetivo              = $F('e140_objetivo');
       url      = 'emp4_empdiaria.RPC.php';
       oAjax    = new Ajax.Request(
         url,

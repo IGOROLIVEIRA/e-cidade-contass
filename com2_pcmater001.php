@@ -44,13 +44,7 @@ $clrotulo->label('o56_descr');
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="Expires" CONTENT="0">
 <script language="JavaScript" type="text/javascript" src="scripts/scripts.js"></script>
-
-<script>
-function js_emite(){
-  jan = window.open('com2_pcmater002.php?ordem='+document.form1.ordem.value+'&grupo='+document.form1.grupo.value+'&elemento='+document.form1.o56_elemento.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
-  jan.moveTo(0,0);
-}
-</script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
 <link href="estilos.css" rel="stylesheet" type="text/css">
 </head>
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
@@ -104,7 +98,7 @@ function js_emite(){
       </tr>
       <tr>
         <td colspan="2" align = "center">
-          <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" >
+          <input  name="emite2" id="emite2" type="button" value="Processar" onclick="js_selecionarFormatoRelatorio();" >
         </td>
       </tr>
 
@@ -175,6 +169,57 @@ function js_mostratabdesc1(chave1,chave2){
      document.form1.k07_descr.value = chave2;
      db_iframe.hide();
 }
+
+function js_selecionarFormatoRelatorio() {
+
+  var iHeight = 200;
+  var iWidth = 300;
+  windowFormatoRelatorio = new windowAux('windowFormatoRelatorio',
+    'Gerar Relatório ',
+    iWidth,
+    iHeight
+  );
+
+  var sContent = "<div style='margin-top:30px;'>";
+  sContent += "<fieldset>";
+  sContent += "<legend>Selecione o formato do relatório:</legend>";
+  sContent += "  <div >";
+  sContent += "  <input checked type='radio' id='pdf' name='formato'>";
+  sContent += "  <label>PDF</label>";
+  sContent += "  </div>";
+  sContent += "  <div>";
+  sContent += "  <input type='radio' id='excel' name='formato'>";
+  sContent += "  <label>EXCEL</label>";
+  sContent += "  </div>";
+  sContent += "</fieldset>";
+  sContent += "<center>";
+  sContent += "<input type='button' id='btnGerar' value='Confirmar' onclick='js_gerarRelatorio()'>";
+  sContent += "</center>";
+  sContent += "</div>";
+  windowFormatoRelatorio.setContent(sContent);
+  windowFormatoRelatorio.show();
+
+  document.getElementById('windowwindowFormatoRelatorio_btnclose').onclick = destroyWindow;
+
+}
+
+function destroyWindow() {
+  windowFormatoRelatorio.destroy();
+}
+
+function js_gerarRelatorio() {
+
+  if (document.getElementById('pdf').checked == true) {
+    jan = window.open('com2_pcmater002.php?ordem='+document.form1.ordem.value+'&grupo='+document.form1.grupo.value+'&elemento='+document.form1.o56_elemento.value,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0 ');
+    jan.moveTo(0, 0);
+    return;
+  }
+
+  jan = window.open('com2_pcmater002excel.php?ordem='+document.form1.ordem.value+'&grupo='+document.form1.grupo.value+'&elemento='+document.form1.o56_elemento.value, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0 ');
+  jan.moveTo(0, 0);
+
+}
+
 </script>
 
 

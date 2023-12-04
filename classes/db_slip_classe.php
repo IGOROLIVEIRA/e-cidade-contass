@@ -548,7 +548,7 @@ class cl_slip {
         $virgula = ",";
       }
       if(trim($this->k17_tiposelect)!="" || isset($GLOBALS["HTTP_POST_VARS"]["k17_tiposelect"])){
-        $sql  .= $virgula." k17_tiposelect = $this->k17_tiposelect ";
+        $sql  .= $virgula." k17_tiposelect = '$this->k17_tiposelect' ";
         $virgula = ",";
       }
      $sql .= " where ";

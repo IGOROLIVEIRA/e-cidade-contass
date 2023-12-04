@@ -1,4 +1,4 @@
-<?
+<?php
 /*
  *     E-cidade Software Publico para Gestao Municipal
  *  Copyright (C) 2014  DBSeller Servicos de Informatica
@@ -1811,5 +1811,60 @@ function sql_query_tipodepreciacao ( $t52_bem=null,$campos="*",$ordem=null,$dbwh
     }
     return $sSql;
   }
+
+    function sql_inventario_bens($campos = "*", $dbwhere = "", $ordem = "") {
+        $sql = "SELECT";
+
+        if ($campos !== "*" ) {
+            $campos_sql = split("#", $campos);
+            $virgula = "";
+            $sql .= ' DISTINCT ';
+
+            foreach ($campos_sql as $csql) {
+                $sql .= $virgula . $csql;
+                $virgula = ",";
+            }
+        } else {
+            $sql .= $campos;
+        }
+
+        $sql .= " FROM bens";
+
+        //Joins
+        $sql .= " JOIN cgm AS cgmbem ON cgmbem.z01_numcgm = bens.t52_numcgm";
+        $sql .= " JOIN histbem ON histbem.t56_codbem = bens.t52_bem AND histbem.t56_histbem = (SELECT MAX(histbem.t56_histbem) from histbem where histbem.t56_codbem = bens.t52_bem)";
+        $sql .= " JOIN situabens ON t70_situac = t56_situac";
+        $sql .= " JOIN bensdepreciacao ON t44_bens = t52_bem";
+        $sql .= " JOIN db_depart ON coddepto = t52_depart";
+        $sql .= " JOIN clabens ON t64_codcla = t52_codcla";
+        $sql .= " JOIN bemtipos ON t24_sequencial = t64_bemtipos";
+
+        //Left joins
+        $sql .= " LEFT JOIN bensdiv ON t33_bem = t52_bem";
+        $sql .= " LEFT JOIN departdiv ON t30_codigo = t33_divisao AND t30_depto = t52_bem";
+        $sql .= " LEFT JOIN cgm ON cgm.z01_numcgm = departdiv.t30_numcgm";
+        $sql .= " LEFT JOIN bensmater ON t53_codbem = t52_bem";
+        $sql .= " LEFT JOIN benscedente ON benscedente.t09_bem = bens.t52_bem";
+        $sql .= " LEFT JOIN benscadcedente ON t09_benscadcedente = t04_sequencial";
+
+        // Wheres
+        $sql .= " WHERE t52_bem NOT IN (SELECT t55_codbem FROM bensbaix)";
+
+        $sql .= $dbwhere;
+
+        if (!empty($ordem)) {
+            $sql .= ' ORDER BY ';
+            $aOrdem = preg_split('/\s+/', $ordem);
+            $aOrdemTratado = array_filter($aOrdem);
+            $sVirgula = "";
+
+            foreach ($aOrdemTratado as $ot) {
+                $sql .= $sVirgula . $ot;
+                $sVirgula = ", ";
+            }
+        }
+
+        return $sql;
+    }
 
 }
