@@ -135,9 +135,15 @@ class ApiPixArrecadacao implements IPixProvider
     private function parseDate(string $date): DateTime
     {
         $newDate = DateTime::createFromFormat('d/m/Y', $date);
+
         if(!$newDate) {
             $newDate = DateTime::createFromFormat('Y-m-d', $date);
         }
+
+        if(!$newDate) {
+            $newDate = DateTime::createFromFormat('Ymd', $date);
+        }
+
         return $newDate;
     }
 }
