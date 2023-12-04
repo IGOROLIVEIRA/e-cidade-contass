@@ -113,7 +113,7 @@ $sql = "SELECT DISTINCT l20_numero || '/' || l20_anousu AS licitacao,
         INNER JOIN liccomissao ON liccomissao.l30_codigo = liclicita.l20_liccomissao
         LEFT JOIN solicitatipo ON solicitatipo.pc12_numero = solicitem.pc11_numero
         LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = solicitatipo.pc12_tipo
-        WHERE 1=1 ";
+        WHERE l20_licsituacao = 10 ";
 
 if (!empty($anousu)) {
    $sql .= " AND date_part ('year',pc54_datatermino) = $anousu ";
