@@ -1,12 +1,9 @@
 <?php
 
-$sSQLTomadorDBPrefeitura    = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is true";
-$sSQLTomadorDBDemaisOrgaos  = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is false";
-$rsTomadorDBPrefeitura      = db_query($sSQLTomadorDBPrefeitura);
-$rsTomadorDBDemaisOrgaos    = db_query($sSQLTomadorDBDemaisOrgaos);
-$lTomadorEhPrefeitura       = !!pg_num_rows($rsTomadorDBPrefeitura);
-$lTomadorEhDemaisOrgaos     = !!pg_num_rows($rsTomadorDBDemaisOrgaos);
-$oInstit = new Instituicao(db_getsession('DB_instit'));
+use App\Models\IssNotaAvulsaTomadorCgmRetencao;
+
+$oInstit                            = new Instituicao(db_getsession('DB_instit'));
+$IssNotaAvulsaTomadorCgmRetencao  = IssNotaAvulsaTomadorCgmRetencao::query()->where ('numcgm',$this->dadosTomador->z01_numcgm)->first();
 
 ##Modelo de nota Fiscal
 $confNumRows = pg_num_rows($this->rsConfig);
@@ -335,12 +332,11 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $fTotalNota = $this->fTotaliUni; 
 
     // valor total da nota
-    if ($lTomadorEhPrefeitura){
+    if ((!empty($IssNotaAvulsaTomadorCgmRetencao)) && ($IssNotaAvulsaTomadorCgmRetencao->prefeitura == true)){
         $fTotalNota = $this->fTotaliUni - $this->fvlrIssqn - $this->fvlrInss - $this->fvlrIrrf;
     }
-    
-    $codInstit = array(Instituicao::COD_CLI_PMGRAOMOGOL, Instituicao::COD_CLI_MONTEAZUL);
-    if (($lTomadorEhPrefeitura == null) && (in_array($oInstit->getCodigoCliente(), $codInstit) || ($lTomadorEhDemaisOrgaos))){
+
+    if ((!empty($IssNotaAvulsaTomadorCgmRetencao)) && ($IssNotaAvulsaTomadorCgmRetencao->prefeitura == false)){
             $fTotalNota = $this->fTotaliUni - $this->fvlrInss - $this->fvlrIrrf;
     }
 
