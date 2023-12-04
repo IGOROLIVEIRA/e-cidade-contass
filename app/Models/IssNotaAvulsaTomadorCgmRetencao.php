@@ -30,7 +30,7 @@ class IssNotaAvulsaTomadorCgmRetencao extends LegacyModel
      * @var array
      */
     protected $fillable = [
-        'numcgm,
-        prefeitura'
+        'numcgm',
+        'prefeitura'
     ];
 }
