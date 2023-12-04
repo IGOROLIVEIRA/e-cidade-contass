@@ -3,7 +3,7 @@
 use App\Models\IssNotaAvulsaTomadorCgmRetencao;
 
 $oInstit                            = new Instituicao(db_getsession('DB_instit'));
-$IssNotaAvulsaTomadorCgmRetencao  = IssNotaAvulsaTomadorCgmRetencao::query()->where ('numcgm',$this->dadosTomador->z01_numcgm)->first();
+$IssNotaAvulsaTomadorCgmRetencao  = IssNotaAvulsaTomadorCgmRetencao::query()->where('numcgm',$this->dadosTomador->z01_numcgm)->first();
 
 ##Modelo de nota Fiscal
 $confNumRows = pg_num_rows($this->rsConfig);
@@ -315,11 +315,11 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $fTotalNota = $this->fTotaliUni; 
 
     // valor total da nota
-    if ((!empty($IssNotaAvulsaTomadorCgmRetencao)) && ($IssNotaAvulsaTomadorCgmRetencao->prefeitura == true)){
+    if ((!empty($IssNotaAvulsaTomadorCgmRetencao)) && ($IssNotaAvulsaTomadorCgmRetencao->prefeitura)){
         $fTotalNota = $this->fTotaliUni - $this->fvlrIssqn - $this->fvlrInss - $this->fvlrIrrf;
     }
 
-    if ((!empty($IssNotaAvulsaTomadorCgmRetencao)) && ($IssNotaAvulsaTomadorCgmRetencao->prefeitura == false)){
+    if ((!empty($IssNotaAvulsaTomadorCgmRetencao)) && (!$IssNotaAvulsaTomadorCgmRetencao->prefeitura)){
             $fTotalNota = $this->fTotaliUni - $this->fvlrInss - $this->fvlrIrrf;
     }
 
