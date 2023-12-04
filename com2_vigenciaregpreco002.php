@@ -73,9 +73,7 @@ function insereFornecedores(PDF $pdf, int $alt, int $l20_codigo): void
         $pdf->setfont('arial', '', 6);
         $pdf->cell(42, $alt, "", 1, 0, "C", 0);
         $pdf->cell(42, $alt, "", 1, 0, "C", 0);
-        $pdf->cell(119, $alt, "", 1, 0, "C", 0);
-        $pdf->cell(38, $alt, "", 1, 0, "C",0);
-        $pdf->cell(38, $alt, "", 1, 1, "C",0);
+        $pdf->multicell(195, $alt, "", 1, "J");
     } else {
         foreach ($fornecedores as $fornecedor) {
             $pdf->setfont('arial', '', 6);
@@ -123,12 +121,12 @@ if (!empty($anousu)) {
 
 if (!empty($periodoInicio)) {
     $periodoInicio =  DateTimeImmutable::createFromFormat('d/m/Y', $periodoInicio);
-    $sql .= "AND pc54_datainicio >= '{$periodoInicio->format('Y-m-d')}' ";
+    $sql .= "AND pc54_datainicio >= '{$periodoInicio->format('Y-m-d')}'::date ";
 }
 
 if (!empty($periodoFim)) {
     $periodoFim =  DateTimeImmutable::createFromFormat('d/m/Y', $periodoFim);
-    $sql .= " AND pc54_datatermino <= '{$periodoFim->format('Y-m-d')}' ";
+    $sql .= " AND pc54_datatermino <= '{$periodoFim->format('Y-m-d')}'::date ";
 }
 
 $sql .= " AND l20_instit = ". db_getsession('DB_instit') .
