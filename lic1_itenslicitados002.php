@@ -88,10 +88,10 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -154,7 +154,7 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -196,10 +196,10 @@ if($impforne == "true" && $impproc == "true" && $impaco=="true" && $impvlrunit =
  */
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -246,7 +246,6 @@ if($impforne == "true" && $impproc == "true" && $impaco=="true" && $impvlrunit =
         ";
 
     $result = db_query($sql);
-
     if (pg_num_rows(db_query($sql)) == 0) {
         db_redireciona('db_erros.php?fechar=true&db_erro=Não foi encontrado nenhum item licitado para essa instituição.');
     }
@@ -264,11 +263,11 @@ if($impforne == "true" && $impproc == "true" && $impaco=="true" && $impvlrunit =
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr($descricao, 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -306,6 +305,7 @@ if($impforne == "true" && $impproc == "true" && $impaco=="true" && $impvlrunit =
             $pdf->cell(16, $alt + $addalt, $contrato, 1, 1, "C",0);
             $pdf->multicell(249, 0, '', "T", "J", 0);
         }
+
     }
 }
 
@@ -316,10 +316,10 @@ if($impforne == "true" && $impproc == "true" && $impaco==null && $impvlrunit == 
      */
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -381,11 +381,11 @@ if($impforne == "true" && $impproc == "true" && $impaco==null && $impvlrunit == 
         $pdf->setfont('arial', '', 8);
 
         $old_y = $pdf->gety();
-        $descricao = substr($descricao, 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -411,7 +411,7 @@ if($impforne == "true" && $impproc == "true" && $impaco==null && $impvlrunit == 
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(185, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(209);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -430,10 +430,10 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
  */
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -500,7 +500,7 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -512,7 +512,7 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(185, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(209);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -524,7 +524,7 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(185, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(209);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -542,10 +542,10 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
      */
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -602,11 +602,11 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr($descricao, 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -617,7 +617,7 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(160, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(160, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(184);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -627,7 +627,7 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
         } else {
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(160, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(160, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(184);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -641,10 +641,10 @@ if($impforne == "true" && $impproc == "true" && $impaco == null && $impvlrunit =
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -706,21 +706,21 @@ if($impforne == "true" && $impproc == "true" && $impaco == null && $impvlrunit =
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
             $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
-            $pdf->cell(185, $alt, "Descrição", 1, 0, "C",1);
+            $pdf->cell(135, $alt, "Descrição", 1, 0, "C",1);
             $pdf->cell(15, $alt, "Qtd.", 1, 0, "C",1);
-            $pdf->cell(15, $alt, "Vlr Unit.", 1, 0, "C",1);
-            $pdf->cell(50, $alt, "Fornecedor", 1, 1, "C",1);
+            $pdf->cell(85, $alt, "Fornecedor", 1, 0, "C",1);
+            $pdf->cell(30, $alt, "Licitação", 1, 1, "C",1);
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(135, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
-            $pdf->setx(209);
+            $pdf->setx(159);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
             $pdf->cell(85, $alt + $addalt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
             $pdf->cell(30, $alt + $addalt, $licitacao, 1, 1, "C",0);
@@ -730,9 +730,9 @@ if($impforne == "true" && $impproc == "true" && $impaco == null && $impvlrunit =
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(135, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
-            $pdf->setx(209);
+            $pdf->setx(159);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
             $pdf->cell(85, $alt + $addalt, $fornecedor."-".$z01_nome, 1, 0, "C",0);
             $pdf->cell(30, $alt + $addalt, $licitacao, 1, 1, "C",0);
@@ -745,10 +745,10 @@ if($impforne == "true" && $impproc == "true" && $impaco == "true" && $impvlrunit
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -810,11 +810,11 @@ if($impforne == "true" && $impproc == "true" && $impaco == "true" && $impvlrunit
         $pdf->setfont('arial', '', 8);
 
         $old_y = $pdf->gety();
-        $descricao = substr($descricao, 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -857,10 +857,10 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -920,11 +920,11 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr($descricao, 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -967,10 +967,10 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -1029,11 +1029,11 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr($descricao, 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1075,10 +1075,10 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -1141,7 +1141,7 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1181,10 +1181,10 @@ if($impforne == false && $impproc == false && $impaco == false && $impvlrunit ==
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -1241,11 +1241,11 @@ if($impforne == false && $impproc == false && $impaco == false && $impvlrunit ==
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr($descricao, 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1281,10 +1281,10 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -1342,11 +1342,11 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr($descricao, 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1386,10 +1386,10 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -1448,11 +1448,11 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr($descricao, 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1495,11 +1495,11 @@ if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == nu
                    sum(x.quantidade) as quantidade
             FROM
                 (SELECT DISTINCT pc01_codmater AS codigo,
-                                 CASE
-                                     WHEN pc01_descrmater = NULL
-                                          OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                                     ELSE pc01_descrmater||'. '||pc01_complmater
-                                 END AS descricao,
+                   CASE
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                       WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                                  pc11_quant AS quantidade
                  FROM pcorcamitem
                  INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
@@ -1548,7 +1548,7 @@ if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == nu
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
             $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
@@ -1577,10 +1577,10 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -1637,11 +1637,11 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
 
         db_fieldsmemory($result, $i);
         $old_y = $pdf->gety();
-        $descricao = substr($descricao, 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1676,10 +1676,10 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
 
     $sql = "SELECT DISTINCT pc01_codmater AS codigo,
                 CASE
-                    WHEN pc01_descrmater = NULL
-                         OR pc01_descrmater = pc01_complmater THEN pc01_descrmater
-                    ELSE pc01_descrmater||'. '||pc01_complmater
-                END AS descricao,
+                    WHEN pc01_descrmater = pc01_complmater THEN pc01_descrmater
+                    WHEN pc01_complmater IS NULL THEN pc01_descrmater
+                        else pc01_descrmater||'. '||pc01_complmater
+                            END AS descricao,
                 pc11_quant AS quantidade,
                 pc23_vlrun AS valorUnitario,
                 pc21_numcgm AS Fornecedor,
@@ -1736,11 +1736,11 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr($descricao, 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 105) {
+        if ($pdf->getY() > $pdf->h - 60) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
