@@ -303,7 +303,7 @@ if ($oParam->exec == "addRetencao") {
     $hash = '';
 
     $camposRetencoes = "e69_codnota, e69_numemp, e60_vlrliq, e23_valorbase, e23_aliquota, e23_valorretencao, e23_retencaotiporec, e21_retencaotipocalc, e69_dtnota " ;
-    $sqlRetencoes    = $clretencaotiporec->sql_query_buscar_retencao(null, $camposRetencoes, null, "z01_cgccpf = '{$oParam->params[0]->oRetencao->iCpfCnpj}' and e23_ativo = true and e21_retencaotipocalc in ('10','11','12') AND EXTRACT(MONTH FROM (SELECT e69_dtnota FROM empnota WHERE e69_codnota = {$oParam->params[0]->oRetencao->iCodNota})) = EXTRACT(MONTH FROM e69_dtnota);");
+    $sqlRetencoes    = $clretencaotiporec->sql_query_buscar_retencao(null, $camposRetencoes, null, "z01_cgccpf = '{$oParam->params[0]->oRetencao->iCpfCnpj}' and e23_ativo = true and e21_retencaotipocalc in ('10','11','12') AND e23_dtcalculo = '$oDataCalculo' AND  EXTRACT(MONTH FROM (SELECT e69_dtnota FROM empnota WHERE e69_codnota = {$oParam->params[0]->oRetencao->iCodNota})) = EXTRACT(MONTH FROM e69_dtnota);");
     $rsRet           = db_query($sqlRetencoes);
     $aRet            = db_utils::getCollectionByRecord($rsRet);
 
