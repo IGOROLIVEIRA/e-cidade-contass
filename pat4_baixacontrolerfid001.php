@@ -177,6 +177,10 @@ var oAjax = new Ajax.Request(
         alert(oRetorno.msg);
         return false;
       }
+
+      if (oRetorno.statusbens == 'f') {
+          return;
+      }
       
       if(oRetorno.statusbens == 'success'){
           alert(_M('patrimonial.patrimonio.db_frm_bensnovo.bem_sucesso'));

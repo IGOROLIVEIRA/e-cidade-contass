@@ -63,6 +63,7 @@ $db_opcao_inf=1;
   height : 8px;
 }
 </style>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>
 <form name=form1 action="" method="POST">
  <input type=hidden name=retencoes value ="">
  <input type=hidden name=e69_codnota value="<?=@$e69_codnota ?>">
@@ -91,8 +92,8 @@ $db_opcao_inf=1;
           <tr>
             <td><?=db_ancora($Le60_coddot,"js_JanelaAutomatica('orcdotacao',\$F('e60_coddot'),'".@$e60_anousu."')",$db_opcao_inf)?></td>
             <td><? db_input('e60_coddot', 13, $Ie60_coddot, true, 'text', 3); ?></td>
-            <td width="20"><?=db_ancora($Lo15_codigo,"",3)?></td>
-            <td><? db_input('o15_codigo', 7, $Io15_codigo, true, 'text', 3); db_input('o15_descr', 29, $Io15_descr, true, 'text', 3)?></td>
+            <td colspan=2><? db_input('estruturalDotacao', 50, 3, true, 'text', 3); ?></td>
+            <td><? db_input('o15_codigo', 7, $Io15_codigo, true, 'hidden', 3); db_input('o15_descr', 29, $Io15_descr, true, 'hidden', 3)?></td>
           </tr>
           <tr>
             <td><?db_ancora("<b>Conta Pagadora:</b>","js_pesquisa_contapagadora(true);",1);?></td>
@@ -104,6 +105,29 @@ $db_opcao_inf=1;
             </td>
             <td colspan='3'><? db_input("e83_descr",50,"",true,"text",3); ?></td>
           </tr>
+          <?
+           if($operacao == 1){
+              echo "<tr>";
+              echo "<td nowrap> ";
+              echo "    <b>Data da Liquidação:</b> ";
+              echo "    </td> ";
+              echo "    <td colspan='3'> ";
+              db_inputdata('dataLiquidacao','','','',true,'text',1);
+              echo "        <b>Data de Vencimento:</b> ";
+              db_inputdata('dataVencimento','','','',true,'text',1);
+              echo " </td>";
+              echo " </tr>";
+            }else if($operacao == 2){
+              echo "<tr>";
+              echo "<td nowrap> ";
+              echo "    <b>Data do Estorno:</b> ";
+              echo "    </td> ";
+              echo "    <td colspan='3'> ";
+              db_inputdata('dataEstorno','','','',true,'text',1);
+              echo " </td>";
+              echo " </tr>";
+            }
+          ?>
           <tr>
             <td>
               <strong>Processo Administrativo:</strong>
@@ -189,7 +213,7 @@ $db_opcao_inf=1;
         <tr>
                   <td id='cattrab'><?=db_ancora('<b>Categoria do Trabalhador:</b>',"js_pesquisaCatTrabalhador(true)",1)?></td>
                   <td id='cattrab1'><? db_input('ct01_codcategoria', 15, $Ict01_codcategoria, true, 'text', 1,"onchange='js_pesquisaCatTrabalhador(false)'"); ?> </td>
-                  <td id='cattrab2'><? db_input('ct01_descricaocategoria', 50, $Ict01_descricaocategoria, true, 'text', 3, '');?></td>
+                  <td id='cattrab2'><? db_input('ct01_descricaocategoria', 48, $Ict01_descricaocategoria, true, 'text', 3, '');?></td>
         </tr>
         <tr>
               <td id="idvinculos">
@@ -218,12 +242,12 @@ $db_opcao_inf=1;
         <tr >
                   <td id='empresa'><?=db_ancora('<b>Empresa que efetuou desconto:</b>',"js_pesquisaEmpresa(true)",1)?></td>
                   <td id='empresa1'><? db_input('numempresa', 15, $Inumempresa, true, 'text', 1,"onchange='js_pesquisaEmpresa(false)'"); ?> </td>
-                  <td id='empresa2'><? db_input('nomeempresa', 50, $Inomeempresa, true, 'text', 3, '');?></td>
+                  <td id='empresa2'><? db_input('nomeempresa', 48, $Inomeempresa, true, 'text', 3, '');?></td>
         </tr>
         <tr>
                   <td id='catremuneracao'><?=db_ancora('<b>Categoria do trabalhador na qual houve a remuneração:</b>',"js_pesquisaCatTrabalhadorremuneracao(true)",1)?></td>
                   <td id='catremuneracao1'><? db_input('ct01_codcategoriaremuneracao', 15, $Ict01_codcategoriaremuneracao, true, 'text', 1,"onchange='js_pesquisaCatTrabalhadorremuneracao(false)'"); ?> </td>
-                  <td id='catremuneracao2'><? db_input('ct01_descricaocategoriaremuneracao', 50, $Ict01_descricaocategoriaremuneracao, true, 'text', 3, '');?></td>
+                  <td id='catremuneracao2'><? db_input('ct01_descricaocategoriaremuneracao', 48, $Ict01_descricaocategoriaremuneracao, true, 'text', 3, '');?></td>
         </tr>
         <tr>
                   <td id='vlrremuneracao'><strong>Valor da Remuneração:</strong></td>
@@ -256,11 +280,19 @@ $db_opcao_inf=1;
         </tr>                
   </table>      
  </fieldset>
- <?
- include("forms/db_frmliquidaboxreinf.php");
- ?>       
-  </fieldset>
- </td>
+ <tr>
+  <td colspan="2">
+    <?
+    include("forms/db_frmliquidaboxreinf.php");
+    ?>
+  </td>
+ </tr>
+ <tr>
+  <td colspan="2">
+    <?
+    include("forms/db_frmliquidaboxdiarias.php");
+    ?>
+  </td>
  </tr>
   <tr>
   <td colspan="2">
@@ -295,13 +327,13 @@ $db_opcao_inf=1;
         <tr>
           <td id='opcredito' style='display:none'>
           <?        
-          db_textarea('informacaoop',4,110,0,true,'text',1,"");       
+          db_textarea('informacaoop',4,128,0,true,'text',1,"");       
           ?>
           </td>
           <tr >
           <td id='ophisotrico' style='display:none'>
           <?
-          db_textarea('historico',4,110,0,true,'',1,"" );         
+          db_textarea('historico',4,128,0,true,'',1,"" );         
           ?>
           </td>
         </tr>
@@ -312,6 +344,11 @@ $db_opcao_inf=1;
 </table>
  <input name="confirmar" type="button" id="confirmar" value="Confirmar" onclick="return js_liquidar('<?=$metodo?>')" >
   <input name="pesquisar" type="button" id="pesquisar" value="Pesquisar" onclick="js_pesquisa('');" >
+    <?
+    if($operacao === 1){
+      echo '<input name="importar" type="button" id="importar" value="Importar Histórico da OC" onclick="js_importarHistorico();" >';
+      }
+    ?>
 </center>
   <? db_input("receitas_valores",30,"",true,'hidden',1,'readonly','','','text-align:right')?>
   <? db_input("valor_liquidar",30,"",true,'hidden',1,'readonly','','','text-align:right')?>
@@ -319,13 +356,14 @@ $db_opcao_inf=1;
 <script>
 iOperacao     = <?=$operacao;?>;
 lPesquisaFunc = false;
+var oDBToogleDiarias = new DBToogle('diariaFieldset', true);
 function js_emitir(codordem){
   jan = window.open('emp2_emitenotaliq002.php?codordem='+codordem,'','width='+(screen.availWidth-5)+',height='+(screen.availHeight-40)+',scrollbars=1,location=0');
   jan.moveTo(0,0);
 }
 function js_pesquisa(iNumEmp) {
   if (iNumEmp == '') {
-    js_OpenJanelaIframe('CurrentWindow.corpo', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp', 'Pesquisa', true);
+    js_OpenJanelaIframe('', 'db_iframe_empempenho', 'func_empempenho.php?funcao_js=parent.js_preenchepesquisa|e60_numemp', 'Pesquisa', true);
   } else {
     js_consultaEmpenho(iNumEmp,<?=$operacao?>);
   }
@@ -515,6 +553,7 @@ function js_consultaEmpenho(iEmpenho,operacao){
   */
   var opcaoReinf = 0
 function js_saida(oAjax){  
+   document.form1.reset();
    js_removeObj("msgBox"); 
 
     var iNumEmpOld = $F('e60_numemp');
@@ -527,6 +566,7 @@ function js_saida(oAjax){
     $('e49_numcgm').value = '';
     $('z01_credor').value = '';
     $('e60_coddot').value = js_decodeUrl(obj.e60_coddot);
+    $('estruturalDotacao').value = js_decodeUrl(obj.estruturalDotacao);
     $('o15_codigo').value = obj.o58_codigo;
     $('o15_descr').value  = js_decodeUrl(obj.o15_descr);
     $('e60_vlremp').value = obj.e60_vlremp;
@@ -547,6 +587,7 @@ function js_saida(oAjax){
     $('dados').innerHTML  = '';
     estrutural            = obj.sEstrutural;
     desdobramento         = obj.sDesdobramento;
+    obrigaDiaria          = obj.obrigaDiaria == 't' ? true : false;
     $('e50_compdesp').value = ''; 
     $('e83_conta').value    = '';
     $('e83_descr').value    = '';
@@ -556,6 +597,8 @@ function js_saida(oAjax){
     $('naturezaDesc').value  = '';
     $('reinfRetencaoEstabelecimento').value = 0;
     js_validarEstabelecimentos();
+
+    oDBToogleDiarias.show(obrigaDiaria);
 
     if(obj.e60_informacaoop!=''){
       document.getElementById('opcredito').style.display = "table-cell";
@@ -577,7 +620,7 @@ function js_saida(oAjax){
                                                       || desdobramento == '333903641')){
       tipodesdobramento = 1;  
       opcao = 1;                                 
-      document.getElementById('esocial').style.display = "table-cell";   
+      document.getElementById('esocial').style.display = "table-cell";
     }else{
       document.getElementById('esocial').style.display = "none";
       tipodesdobramento = 0;
@@ -604,6 +647,32 @@ function js_saida(oAjax){
       opcaoReinf = 3;
     }
     
+    const desdobramentoDiaria = desdobramento.substr(5, 2);
+    if((desdobramentoDiaria == '14' || desdobramentoDiaria == '33') && obrigaDiaria == true && iOperacao === 1){
+      $('diariaFieldset').style.display = "table-cell";
+      $('diariaViajante').value = js_decodeUrl(obj.z01_nome);
+    
+      let oParam        = new Object();
+      oParam.exec     = 'consultaMatricula';
+      oParam.iNumCgm    = obj.e60_numcgm;
+      oAjax    = new Ajax.Request(
+                              'pes1_rhpessoal.RPC.php',
+                                {
+                                method: 'post',
+                                parameters: 'json='+Object.toJSON(oParam),
+                                onComplete: function(oAjax){
+                                  oRetorno = eval("("+oAjax.responseText+")");
+                                  if(oRetorno.iStatus === 1){
+                                    $('e140_matricula').value = oRetorno.rh01_regist;
+                                    $('e140_cargo').value = oRetorno.rh37_descr;
+                                  }
+                                }
+                                }
+                              );
+      }else{
+        $('diariaFieldset').style.display = "none";
+    }
+
     if (obj.aItensPendentesPatrimonio.length > 0) {
 
       oDBViewNotasPendentes = new DBViewNotasPendentes('oDBViewNotasPendentes');
@@ -657,6 +726,8 @@ function js_saida(oAjax){
           saida += "<td class='linhagrid' style='text-align:center'>";
           saida += "<input type='hidden' id='sInfoAgenda"+obj.data[i].e69_codnota+"' value='"+js_decodeUrl(obj.data[i].sInfoAgenda)+"'>";
           /* Extensão CotaMensalLiquidacao - pt 4 */
+          saida += "<input id='m51_obs"+obj.data[i].e69_codnota+"' type='text' style='display: none' value='" + obj.data[i].m51_obs+"'>";
+          saida += "<input id='e70_valor"+obj.data[i].e69_codnota+"' type='text' style='display: none' value='" + obj.data[i].e70_valor+"'>";
           saida += "<input type='checkbox' " + obj.data[i].libera + " onclick='js_marcaLinha(this)'";
           saida += " class='chkmarca' name='chk" + obj.data[i].e69_codnota + "'";
           saida += " id='chk" + obj.data[i].e69_codnota + "' value='" + obj.data[i].e69_codnota + "' "+sClassName+"></td>";
@@ -826,6 +897,69 @@ function js_liquidar(metodo){
     return false;
   }
 
+  const desdobramentoDiaria = desdobramento.substr(5, 2);
+  if((desdobramentoDiaria == '14' || desdobramentoDiaria == '33') && obrigaDiaria == true && iOperacao === 1){
+
+      if($F('e140_matricula') == '' || $F('e140_matricula') == null){
+        alert('Campo Matricula Obrigatório.');
+        return false;
+      }
+      if($F('e140_cargo') == '' || $F('e140_cargo') == null){
+        alert('Campo Cargo Obrigatório.');
+        return false;
+      }
+      if($F('diariaOrigemMunicipio') == '' || $F('diariaOrigemMunicipio') == null
+        || $F('diariaOrigemUf') == '' || $F('diariaOrigemUf') == null){
+        alert('Campo Origem Obrigatório.');
+        return false;
+      }
+      if($F('diariaDestinoMunicipio') == '' || $F('diariaDestinoMunicipio') == null
+        || $F('diariaDestinoUf') == '' || $F('diariaDestinoUf') == null){
+        alert('Campo Destino Obrigatório.');
+        return false;
+      }
+      if($F('e140_dtautorizacao') == '' || $F('e140_dtautorizacao') == null){
+        alert('Campo Data da Autorização Obrigatório.');
+        return false;
+      }
+      if($F('e140_dtinicial') == '' || $F('e140_dtinicial') == null){
+        alert('Campo Data Inicial da Viagem Obrigatório.');
+        return false;
+      }
+      if($F('e140_dtfinal') == '' || $F('e140_dtfinal') == null){
+        alert('Campo Data Final da Viagem Obrigatório.');
+        return false;
+      }
+      if($F('e140_objetivo') == '' || $F('e140_objetivo') == null){
+        alert('Campo Objetivo da Viagem Obrigatório.');
+        return false;
+      }
+      if($F('e140_horainicial') == '' || $F('e140_horainicial') == null){
+        alert('Campo Hora Inicial Obrigatório.');
+        return false;
+      }
+      if($F('e140_horafinal') == '' || $F('e140_horafinal') == null){
+        alert('Campo Hora Final Obrigatório.');
+        return false;
+      }
+  }
+
+  if(iOperacao === 1){
+    if($F('dataLiquidacao') == ''){
+      alert('Campo Data da Liquidação obrigatório!');
+      $('dataLiquidacao').focus();
+      return false;
+    }
+  }
+  
+  if(iOperacao === 2){
+    if($F('dataEstorno') == ''){
+      alert('Campo Data de Estorno obrigatório!');
+      $('dataEstorno').focus();
+      return false;
+    }
+  }
+
    itens = js_getElementbyClass(form1,'chkmarca');
    notas = '';
    sV    = '';
@@ -836,6 +970,21 @@ function js_liquidar(metodo){
       }
     }
     
+    if(aNotas.length > 1 && obrigaDiaria == true && iOperacao === 1){
+      alert("Não é possível realizar liquidação de mais de uma nota quando há Diárias");
+      return false;
+    }
+
+   if((desdobramentoDiaria == '14' || desdobramentoDiaria == '33') && obrigaDiaria == true && iOperacao === 1 && aNotas.length != 0){
+    let totalDespesa = $F('diariaVlrDespesa') == '' ? 0 : parseFloat($F('diariaVlrDespesa'));
+    let vlrLiquidado = parseFloat($F('e70_valor'+aNotas[0]).replace('.','').replace(',','.'));
+    if(vlrLiquidado != totalDespesa){
+      alert('Valor da Liquidação precisa ser igual ao Valor Total da Despesa');
+      return false;
+    }
+   }
+
+
     if(aNotas.length > 1 && $('reinfRetencaoEstabelecimento').value == 1){
       alert("Não é possível realizar liquidação de mais de uma nota quando há Retenção Realizada por Terceiros");
       return false;
@@ -849,7 +998,6 @@ function js_liquidar(metodo){
 
        var sMensagem = "Aguarde, estornando liquidacao das notas";
        if (!confirm("Confirma o estorno da liquidação?")) {
-
          $('pesquisar').disabled = false;
          $('confirmar').disabled = false;
          return false;
@@ -890,9 +1038,14 @@ function js_liquidar(metodo){
      oParam.valordesconto = encodeURIComponent($F('valordesconto'));
      oParam.competencia = $F('competencia');
      oParam.e50_retencaoir = $F('reinfRetencao');
-     oParam.e50_naturezabemservico = $F('naturezaCod');
-
-  
+     oParam.e50_naturezabemservico = $F('naturezaCod');     
+     if(iOperacao === 1){
+      oParam.dDataLiquidacao = $F('dataLiquidacao');
+      oParam.dDataVencimento = $F('dataVencimento');
+     }
+     if(iOperacao === 2){
+      oParam.dDataEstorno = $F('dataEstorno');
+     }
      url      = 'emp4_liquidacao004.php';
      oAjax    = new Ajax.Request(
                             url,
@@ -914,7 +1067,7 @@ function js_liquidar(metodo){
 function js_saidaLiquidacao(oAjax){
 
   obj      = eval("("+oAjax.responseText+")");
-    if(aEstabelecimentos.length > 0){
+    if(aEstabelecimentos.length > 0 && obj.erro == 1 && iOperacao === 1){
       var oParam = new Object();
       oParam.method = "incluiRetencaoImposto"
       oParam.iCodOrdem = obj.sOrdensGeradas
@@ -929,6 +1082,44 @@ function js_saidaLiquidacao(oAjax){
       );
     }
   js_validarEstabelecimentos(true);
+
+  //Inclui Diaria
+  
+  if(iOperacao === 1 && obj.erro == 1){
+    const desdobramentoDiaria = desdobramento.substr(5, 2);
+    if((desdobramentoDiaria == '14' || desdobramentoDiaria == '33') && obrigaDiaria == true){
+
+      var oParam = new Object();
+      oParam.exec = 'incluiDiaria';
+      oParam.e140_codord                = obj.sOrdensGeradas;
+      oParam.e140_dtautorizacao         = $F('e140_dtautorizacao');
+      oParam.e140_matricula             = $F('e140_matricula');
+      oParam.e140_cargo                 = $F('e140_cargo');
+      oParam.e140_dtinicial             = $F('e140_dtinicial');
+      oParam.e140_dtfinal               = $F('e140_dtfinal');
+      oParam.e140_horainicial           = $F('e140_horainicial');
+      oParam.e140_horafinal             = $F('e140_horafinal');
+      oParam.e140_origem                = $F('diariaOrigemMunicipio') + " - " + $F('diariaOrigemUf');
+      oParam.e140_destino               = $F('diariaDestinoMunicipio') + " - " + $F('diariaDestinoUf');
+      oParam.e140_qtddiarias            = $F('e140_qtddiarias') == '' ? 0 : $F('e140_qtddiarias');
+      oParam.e140_vrldiariauni          = $F('e140_vrldiariauni') == '' ? 0 : $F('e140_vrldiariauni');
+      oParam.e140_qtddiariaspernoite    = $F('e140_qtddiariaspernoite') == '' ? 0 : $F('e140_qtddiariaspernoite');
+      oParam.e140_vrldiariaspernoiteuni = $F('e140_vrldiariaspernoiteuni') == '' ? 0 : $F('e140_vrldiariaspernoiteuni');
+      oParam.e140_qtdhospedagens        = $F('e140_qtdhospedagens') == '' ? 0 : $F('e140_qtdhospedagens');
+      oParam.e140_vrlhospedagemuni      = $F('e140_vrlhospedagemuni') == '' ? 0 : $F('e140_vrlhospedagemuni');
+      oParam.e140_transporte            = $F('e140_transporte');
+      oParam.e140_vlrtransport          = $F('e140_vlrtransport') == '' ? 0 : $F('e140_vlrtransport');
+      oParam.e140_objetivo              = $F('e140_objetivo');
+      url      = 'emp4_empdiaria.RPC.php';
+      oAjax    = new Ajax.Request(
+        url,
+        {
+          method: 'post',
+          parameters: 'json='+js_objectToJson(oParam)
+        }
+        );
+      }
+  }
   js_removeObj("msgLiq");
 
     $('pesquisar').disabled = false;
@@ -1162,14 +1353,58 @@ function js_mostracontapagadora1(chave1,chave2,chave3) {
     db_iframe_empagetipo.hide();
 
 }
-$('informacaoop').style.width ='100%';
-$('historico').style.width ='100%';
-$('contribuicaoPrev').style.width =' 489px';
+
+function js_importarHistorico(){
+    itens = js_getElementbyClass(form1,'chkmarca');
+    let aNotas = new Array();
+    for (i = 0;i < itens.length;i++){
+      if (itens[i].checked == true){
+         aNotas.push(itens[i].value);
+      } 
+    }
+
+    if(aNotas.length === 0){
+      alert('Selecione uma nota para importar o histórico.')
+      return false
+    }else if(aNotas.length > 1){
+      alert('Erro. Mais de uma nota selecionada.')
+      return false
+    }else{
+      let m51_obs = 'm51_obs'+aNotas[0]
+      if ($('opcredito').style.display == "table-cell"){
+        $('informacaoop').value = $(m51_obs).value;
+      }else if($('ophisotrico').style.display == "table-cell"){
+        $('historico').value = $(m51_obs).value;
+      }
+    }
+  }
+
+$('contribuicaoPrev').style.width =' 495px';
 $('aIncide').style.width =' 120px';
 $('multiplosvinculos').style.width =' 120px';
 
+$('e60_codemp').disabled = true;
+$('e60_numemp').disabled = true;
+$('e60_numcgm').disabled = true;
+$('z01_nome').disabled = true;
+$('z01_credor').disabled = true;
+$('e60_coddot').disabled = true;
+$('estruturalDotacao').disabled = true;
+$('e83_descr').disabled = true;
+$('e60_vlremp').disabled = true;
+$('e60_vlranu').disabled = true;
+$('e60_vlrliq').disabled = true;
+$('e60_vlrpag').disabled = true;
+$('saldo_disp').disabled = true;
+$('ct01_descricaocategoria').disabled = true;
+$('nomeempresa').disabled = true;
+$('ct01_descricaocategoriaremuneracao').disabled = true;
 
+document.addEventListener("DOMContentLoaded", function() {
+var elementosNoSelect = document.querySelectorAll('input:disabled');
+    elementosNoSelect.forEach(function (elemento) {
+        elemento.style.color = 'black'
+    });
+  });
 
-
-$("o15_descr").style.width = "206px";
 </script>

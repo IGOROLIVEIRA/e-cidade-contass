@@ -38,8 +38,7 @@ if($t59_ativo == 'f'){
     $t59_senhaapi = base64_decode($t59_senhaapi);
     $t59_tokenapi = base64_decode($t59_tokenapi);
     curl_close($curl); 
-    $mensagem = 'Api Não Conectada'; 
-    echo  "<script>alert('$mensagem!');</script>";
+    
 }  
 
 return $decode['token'];

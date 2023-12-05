@@ -93,9 +93,9 @@ class Storage {
       throw new Exception("Sem conteudo para salvar no arquivo: {$this->path}");
     }
 
-//    if (!file_put_contents($this->path, $data, LOCK_EX)) {
-//      throw new Exception("Nao foi possivel criar arquivo de cache: {$this->path}");
-//    }
+    if (!file_put_contents($this->path, $data, LOCK_EX)) {
+      throw new Exception("Nao foi possivel criar arquivo de cache: {$this->path}");
+    }
   }
 
   /**

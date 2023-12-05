@@ -101,6 +101,8 @@ try {
             $oRetorno->pc80_categoriaprocesso = $oProcessoCompra->getCategoriaProcesso();
             $oRetorno->pc80_amparolegal = $oProcessoCompra->getAmparoLegal();
             $oRetorno->pc80_modalidadecontratacao = $oProcessoCompra->getModalidadeContratacao();
+            $oRetorno->pc80_orcsigiloso = $oProcessoCompra->getOrcSigiloso();
+            $oRetorno->pc80_subcontratacao = $oProcessoCompra->getSubContratacao();
 
             /*OC3770*/
             $oRetorno->pc80_criterioadjudicacao = $oProcessoCompra->getCriterioAdjudicacao();

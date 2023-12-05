@@ -9,19 +9,19 @@ use DBHttpRequest;
 use Exception;
 
 /**
- * Classe respons?vel pelo envio dos dados do eSocial para a API do e-cidade
+ * Classe responsável pelo envio dos dados do eSocial para a API do e-cidade
  */
 class ESocial
 {
     /**
-     * Classe para requisi??o HTTP
+     * Classe para requisição HTTP
      *
      * @var DBHttpRequest
      */
     private $httpRequest;
 
     /**
-     * Configura??o da aplica??o
+     * Configuração da aplicação
      *
      * @var Config
      */
@@ -78,7 +78,7 @@ class ESocial
     }
 
     /**
-     * Realiza a requisi??o enviando os dados para API
+     * Realiza a requisição enviando os dados para API
      */
     public function request()
     {
@@ -99,7 +99,7 @@ class ESocial
     }
 
     /**
-     * Retorna o c?digo de resposta HTTP da requisi??o
+     * Retorna o código de resposta HTTP da requisição
      *
      * @return integer
      */
@@ -223,10 +223,14 @@ class ESocial
      *
      * @return object
      */
-    public function getObjXmlEvt5001()
+    public function getObjXmlEvtRetorno()
     {
-        if (current(current($this->httpRequest->getObjXml()->retornoEventos->evento->tot->attributes())) == "S5001") {
-            return $this->httpRequest->getObjXml()->retornoEventos->evento->tot->eSocial;
+        $aXmlAttributes = $this->httpRequest->getObjXml()->retornoEventos->evento->tot;
+        foreach ($aXmlAttributes as $aXmlEventos) {
+            $evento = current(current($aXmlEventos->attributes()));
+            if (in_array($evento, array("S5001","S5011"))) {
+                return $aXmlEventos->eSocial;
+            }
         }
         return null;
     }

@@ -11,7 +11,7 @@ function enviaDadosRFid($oParam)
       $dadosApi = db_query("select * from cfpatriinstituicao where t59_instituicao = $iDBInstituicao "); // consulta de Dados da API
       $dadosApi = db_utils::fieldsMemory($dadosApi, 0);
 
-      if ($dadosApi->t59_ativo) {
+      if ($dadosApi->t59_ativo == 't') {
 
         $token = require("conectaAPI.php");
 
@@ -183,7 +183,7 @@ function enviaDadosRFid($oParam)
 
       $dDataBaixa = implode("", array_reverse(explode("/", $dDataBaixa))) . "000000";
       
-      if ($dadosApi->t59_ativo) {
+      if ($dadosApi->t59_ativo == 't') {
         $token = require("conectaAPI.php");
 
         $arrayBaixa = array([
@@ -241,7 +241,7 @@ function enviaDadosRFid($oParam)
       $dadosApi = db_query("select * from cfpatriinstituicao where t59_instituicao = $iDBInstituicao "); // consulta de Dados da API
       $dadosApi = db_utils::fieldsMemory($dadosApi, 0);
 
-      if ($dadosApi->t59_ativo) {
+      if ($dadosApi->t59_ativo == 't') {
 
         $token = require("conectaAPI.php");
 
@@ -348,7 +348,7 @@ function enviaDadosRFid($oParam)
       $dadosApi = db_query("select * from cfpatriinstituicao where t59_instituicao = $iDBInstituicao "); // consulta de Dados da API
       $dadosApi = db_utils::fieldsMemory($dadosApi, 0);
 
-      if ($dadosApi->t59_ativo) {
+      if ($dadosApi->t59_ativo == 't') {
 
         $token = require("conectaAPI.php");
 
