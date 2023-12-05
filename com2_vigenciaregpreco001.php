@@ -150,7 +150,7 @@ $db_opcao = 1;
             exit;
         }
 
-        query = '1=1'
+        let query = '1=1';
 
         if (form.anousu.value !== "") {
             query+="&anousu="+form.anousu.value;

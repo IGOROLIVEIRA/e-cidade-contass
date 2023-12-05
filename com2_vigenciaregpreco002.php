@@ -27,40 +27,23 @@
 
 include("fpdf151/pdf.php");
 include("libs/db_sql.php");
+require_once("classes/db_liclicita_classe.php");
 
 function buscarFornecedoresGanhadores(int $codigoLicitacao): array
 {
     $fornecedores = [];
-    $sqlFornecedores = "SELECT DISTINCT
-        z01_numcgm,
-        z01_nome,
-        z01_cgccpf
-    FROM liclicita
-    INNER JOIN liclicitem ON l21_codliclicita=l20_codigo
-    INNER JOIN pcorcamitemlic ON pc26_liclicitem=l21_codigo
-    INNER JOIN pcorcamitem ON pc22_orcamitem=pc26_orcamitem
-    INNER JOIN pcorcamjulg ON pc24_orcamitem=pc22_orcamitem
-    INNER JOIN pcorcamforne ON pc21_orcamforne=pc24_orcamforne
-    INNER JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
-        AND pc23_orcamforne = pc21_orcamforne
-    INNER JOIN cgm ON z01_numcgm=pc21_numcgm
-    WHERE
-        l20_codigo={$codigoLicitacao}
-        AND pc24_pontuacao = 1
-        ORDER BY z01_nome;";
+    $sqlFornecedores = (new  cl_liclicita)->queryFornecedoresGanhadores($codigoLicitacao);
 
-        $result = db_query($sqlFornecedores);
-        $countResult  = pg_num_rows(db_query($sqlFornecedores));
-
-        for($i = 0; $i < $countResult; $i++) {
-           $fornecedor = db_utils::fieldsmemory($result, $i);
-
-            $fornecedores[] =[
-                'cgm' => $fornecedor->z01_numcgm,
-                'nome' => $fornecedor->z01_nome,
-                'documento' => $fornecedor->z01_cgccpf
-            ];
-        }
+    $result = db_query($sqlFornecedores);
+    $countResult  = pg_num_rows(db_query($sqlFornecedores));
+    for($i = 0; $i < $countResult; $i++) {
+       $fornecedor = db_utils::fieldsmemory($result, $i);
+        $fornecedores[] =[
+            'cgm' => $fornecedor->z01_numcgm,
+            'nome' => $fornecedor->z01_nome,
+            'documento' => $fornecedor->z01_cgccpf
+        ];
+    }
 
     return $fornecedores;
 }
