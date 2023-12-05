@@ -206,9 +206,13 @@ if ($clliclicita->numrows > 0) {
                          * @OC11589
                          */
                         $sWhere .= "and not EXISTS (SELECT *
-         FROM liclicitem
-         INNER JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
-         WHERE pc81_codproc = pc80_codproc)";
+                                         FROM liclicitem
+                                         INNER JOIN pcprocitem ON pc81_codprocitem = l21_codpcprocitem
+                                         WHERE pc81_codproc = pc80_codproc)";
+
+                        $sWhere .= "and pc80_codproc not in (SELECT l213_processodecompras
+                                        FROM liccontrolepncp
+                                        WHERE l213_processodecompras IS NOT NULL)";
 
                         //aqui e removido processos com autorização de empenho geradas no compras.
                         $sWhere .= "and not EXISTS (select 1 from empautitempcprocitem where e73_pcprocitem = pc81_codprocitem)";
