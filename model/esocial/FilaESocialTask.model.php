@@ -60,7 +60,7 @@ class FilaESocialTask extends Task implements iTarefa
                 /**
                  * Conecta no banco com variaveis definidas no 'libs/db_conn.php'
                  */
-                if (!($conn = @pg_connect("host=$DB_SERVIDOR dbname=$row[0] port=$row[1] user=dbportal password=dbportal"))) {
+                if (!($conn = @pg_connect("host=localhost dbname=$row[0] port=$row[1] user=dbportal password=dbportal"))) {
                     throw new Exception("Erro ao conectar ao banco. host=$DB_SERVIDOR dbname=$row[0] port=$row[1] user=dbportal password=dbportal");
                 }
 
