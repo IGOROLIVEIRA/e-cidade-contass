@@ -328,7 +328,7 @@ foreach ($aRetencoes as $oQuebra) {
   foreach ($oQuebra->itens as $oRetencaoAtiva) {
   
     $sSqlSlip   = " select round(sum(k17_valor),2) as k17_valor from slip where k17_credito = $oRetencaoAtiva->c61_reduz  
-                  and k17_tiposelect = '04' and
+                  and k17_tiposelect in ('04','4') and
                   k17_data between '{$dataInicial}' and '{$dataFinal}' and (k17_dtanu > '{$dataFinal}' or k17_dtanu is null)  ";
     $rsSlip     = db_query($sSqlSlip);
     $iTotalSlip = pg_num_rows($rsSlip); 

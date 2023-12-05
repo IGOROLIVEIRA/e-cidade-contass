@@ -57,6 +57,12 @@ class cl_empdiaria
   var $e140_transporte = '';
   var $e140_vlrtransport = 0;
   var $e140_objetivo = '';
+  var $e140_horainicial = '';
+  var $e140_horafinal = '';
+  var $e140_qtdhospedagens = 0;
+  var $e140_vrlhospedagemuni = 0;
+  var $e140_qtddiariaspernoite = 0;
+  var $e140_vrldiariaspernoiteuni = 0;
   // cria propriedade com as variaveis do arquivo 
   var $campos = "
                 e140_sequencial = int8 = Sequencial,
@@ -68,11 +74,17 @@ class cl_empdiaria
                 e140_dtfinal = DATE = Data Final da Viagem,
                 e140_origem = varchar(60) = Origem,
                 e140_destino = varchar(60) = Destino,
-                e140_qtddiarias = int4 = Quantidade de Diárias,
+                e140_qtddiarias = float4 = Quantidade de Diárias,
                 e140_vrldiariauni = float8 = Valor Unitario da Diária,
                 e140_transporte = varchar(60) = Transporte,
                 e140_vlrtransport = float8 = Valor do Transporte,
-                e140_objetivo = varchar(500) = Objetivo da Viagem
+                e140_objetivo = varchar(500) = Objetivo da Viagem,
+                e140_horainicial = varchar(5) = Hora Inicial,
+                e140_horafinal = varchar(5) = Hora Final,
+                e140_qtdhospedagens = float4 = Quantidade de Hospedagens,
+                e140_vrlhospedagemuni = float8 = Valor Unitario da Hospedagem,
+                e140_qtddiariaspernoite = float4 = Quantidade de Diárias Pernoite,
+                e140_vrldiariaspernoiteuni = float8 = Valor Unitario da Diária Pernoite,
                  ";
   //funcao construtor da classe 
   function cl_empdiaria()
@@ -107,6 +119,13 @@ class cl_empdiaria
     $this->e140_transporte = ($this->e140_transporte === "" ? @$GLOBALS["HTTP_POST_VARS"]["e140_transporte"] : $this->e140_transporte);
     $this->e140_vlrtransport = ($this->e140_vlrtransport === "" ? @$GLOBALS["HTTP_POST_VARS"]["e140_vlrtransport"] : $this->e140_vlrtransport);
     $this->e140_objetivo = ($this->e140_objetivo === "" ? @$GLOBALS["HTTP_POST_VARS"]["e140_objetivo"] : $this->e140_objetivo);
+    $this->e140_horainicial = ($this->e140_horainicial === "" ? @$GLOBALS["HTTP_POST_VARS"]["e140_horainicial"] : $this->e140_horainicial);
+    $this->e140_horafinal = ($this->e140_horafinal === "" ? @$GLOBALS["HTTP_POST_VARS"]["e140_horafinal"] : $this->e140_horafinal);
+    $this->e140_qtdhospedagens = ($this->e140_qtdhospedagens === "" ? @$GLOBALS["HTTP_POST_VARS"]["e140_qtdhospedagens"] : $this->e140_qtdhospedagens);
+    $this->e140_vrlhospedagemuni = ($this->e140_vrlhospedagemuni === "" ? @$GLOBALS["HTTP_POST_VARS"]["e140_vrlhospedagemuni"] : $this->e140_vrlhospedagemuni);
+    $this->e140_qtddiariaspernoite = ($this->e140_qtddiariaspernoite === "" ? @$GLOBALS["HTTP_POST_VARS"]["e140_qtddiariaspernoite"] : $this->e140_qtddiariaspernoite);
+    $this->e140_vrldiariaspernoiteuni = ($this->e140_vrldiariaspernoiteuni === '' ? @$GLOBALS["HTTP_POST_VARS"]["e140_vrldiariaspernoiteuni"] : $this->e140_vrldiariaspernoiteuni);
+
   }
   // funcao para inclusao
   function incluir()
@@ -160,6 +179,18 @@ class cl_empdiaria
       $this->erro_status = "0";
       return false;
     }
+    if (($this->e140_horainicial == null) || ($this->e140_horainicial == "")) {
+      $this->erro_sql = " Campo e140_horainicial nao declarado.";
+      $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_status = "0";
+      return false;
+    }
+    if (($this->e140_horafinal == null) || ($this->e140_horafinal == "")) {
+      $this->erro_sql = " Campo e140_horafinal nao declarado.";
+      $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_status = "0";
+      return false;
+    }
     $sql = "insert into empdiaria(
                                    e140_codord
                                   ,e140_dtautorizacao
@@ -174,6 +205,12 @@ class cl_empdiaria
                                   ,e140_transporte
                                   ,e140_vlrtransport
                                   ,e140_objetivo
+                                  ,e140_horainicial        
+                                  ,e140_horafinal        
+                                  ,e140_qtdhospedagens        
+                                  ,e140_vrlhospedagemuni 
+                                  ,e140_qtddiariaspernoite
+                                  ,e140_vrldiariaspernoiteuni      
                        )
                 values (
                                   $this->e140_codord
@@ -189,6 +226,12 @@ class cl_empdiaria
                                   ,'$this->e140_transporte'
                                   ,$this->e140_vlrtransport
                                   ,'$this->e140_objetivo'
+                                  ,'$this->e140_horainicial'        
+                                  ,'$this->e140_horafinal'        
+                                  ,$this->e140_qtdhospedagens        
+                                  ,$this->e140_vrlhospedagemuni
+                                  ,$this->e140_qtddiariaspernoite
+                                  ,$this->e140_vrldiariaspernoiteuni  
                       )";
 
     $result = db_query($sql);
@@ -226,19 +269,25 @@ class cl_empdiaria
         $resac = db_query("insert into db_acountacesso values($acount," . db_getsession("DB_acessado") . ")");
         $resac = db_query("insert into db_acountkey values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),'$this->e140_sequencial','I')");
         $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_sequencial'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_codord'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_descr')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_dtautorizacao'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_resumo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_matricula'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_aliquota')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_cargo'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_codnaturezarendimento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_dtinicial'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_dtfinal'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_descr')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_origem'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_resumo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_destino'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_aliquota')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_qtddiarias'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_codnaturezarendimento')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_vrldiariauni'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_sequencial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_transporte'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_descr')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_vlrtransport'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_resumo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
-        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_objetivo'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e101_aliquota')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_codord'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_codord')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_dtautorizacao'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_dtautorizacao')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_matricula'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_matricula')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_cargo'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_cargo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_dtinicial'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_dtinicial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_dtfinal'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_dtfinal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_origem'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_origem')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_destino'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_destino')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_qtddiarias'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_qtddiarias')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_vrldiariauni'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_vrldiariauni')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_transporte'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_transporte')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_vlrtransport'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_vlrtransport')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_objetivo'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_objetivo')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_horainicial'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_horainicial')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_horafinal'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_horafinal')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_qtdhospedagens'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_qtdhospedagens')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_vrlhospedagemuni'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_vrlhospedagemuni')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_qtddiariaspernoite'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_qtddiariaspernoite')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+        $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_vrldiariaspernoiteuni'),'','" . AddSlashes(pg_result($resaco, $iresaco, 'e140_vrldiariaspernoiteuni')) . "'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
       }
     }
 
@@ -251,16 +300,6 @@ class cl_empdiaria
     $this->atualizacampos();
     $sql = " update empdiaria set ";
     $virgula = "";
-    if (trim($this->e140_sequencial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_sequencial"])) {
-      $sql  .= $virgula . " e140_sequencial = '$this->e140_sequencial' ";
-      $virgula = ",";
-      if (trim($this->e140_sequencial) == null) {
-        $this->erro_sql = " Campo e140_sequencial nao Informado.";
-        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
-        $this->erro_status = "0";
-        return false;
-      }
-    }
     if (trim($this->e140_codord) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_codord"])) {
       $sql  .= $virgula . " e140_codord = '$this->e140_codord' ";
       $virgula = ",";
@@ -311,6 +350,26 @@ class cl_empdiaria
         return false;
       }
     }
+    if (trim($this->e140_horainicial) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_horainicial"])) {
+      $sql  .= $virgula . " e140_horainicial = '$this->e140_horainicial' ";
+      $virgula = ",";
+      if (trim($this->e140_horainicial) == null) {
+        $this->erro_sql = " Campo e140_horainicial nao declarado.";
+        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->e140_horafinal) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_horafinal"])) {
+      $sql  .= $virgula . " e140_horafinal = '$this->e140_horafinal' ";
+      $virgula = ",";
+      if (trim($this->e140_horafinal) == null) {
+        $this->erro_sql = " Campo e140_horafinal nao declarado.";
+        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_status = "0";
+        return false;
+      }
+    }
     if (trim($this->e140_origem) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_origem"])) {
       $sql  .= $virgula . " e140_origem = '$this->e140_origem' ";
       $virgula = ",";
@@ -331,21 +390,81 @@ class cl_empdiaria
         return false;
       }
     }
-    if (trim($this->e140_origem) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_origem"])) {
-      $sql  .= $virgula . " e140_origem = '$this->e140_origem' ";
+    if (trim($this->e140_qtddiarias) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_qtddiarias"])) {
+      $sql  .= $virgula . " e140_qtddiarias = $this->e140_qtddiarias ";
       $virgula = ",";
-      if (trim($this->e140_origem) == null) {
-        $this->erro_sql = " Campo e140_origem nao declarado.";
+      if (trim($this->e140_qtddiarias) == null) {
+        $this->erro_sql = " Campo e140_qtddiarias nao declarado.";
         $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_status = "0";
         return false;
       }
     }
-    if (trim($this->e140_origem) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_origem"])) {
-      $sql  .= $virgula . " e140_origem = '$this->e140_origem' ";
+    if (trim($this->e140_vrldiariauni) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_vrldiariauni"])) {
+      $sql  .= $virgula . " e140_vrldiariauni = $this->e140_vrldiariauni ";
       $virgula = ",";
-      if (trim($this->e140_origem) == null) {
-        $this->erro_sql = " Campo e140_origem nao declarado.";
+      if (trim($this->e140_vrldiariauni) == null) {
+        $this->erro_sql = " Campo e140_vrldiariauni nao declarado.";
+        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->e140_qtddiariaspernoite) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_qtddiariaspernoite"])) {
+      $sql  .= $virgula . " e140_qtddiariaspernoite = $this->e140_qtddiariaspernoite ";
+      $virgula = ",";
+      if (trim($this->e140_qtddiariaspernoite) == null) {
+        $this->erro_sql = " Campo e140_qtddiariaspernoite nao declarado.";
+        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->e140_vrldiariaspernoiteuni) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_vrldiariaspernoiteuni"])) {
+      $sql  .= $virgula . " e140_vrldiariaspernoiteuni = $this->e140_vrldiariaspernoiteuni ";
+      $virgula = ",";
+      if (trim($this->e140_vrldiariaspernoiteuni) == null) {
+        $this->erro_sql = " Campo e140_vrldiariaspernoiteuni nao declarado.";
+        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->e140_qtdhospedagens) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_qtdhospedagens"])) {
+      $sql  .= $virgula . " e140_qtdhospedagens = $this->e140_qtdhospedagens ";
+      $virgula = ",";
+      if (trim($this->e140_qtdhospedagens) == null) {
+        $this->erro_sql = " Campo e140_qtdhospedagens nao declarado.";
+        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->e140_vrlhospedagemuni) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_vrlhospedagemuni"])) {
+      $sql  .= $virgula . " e140_vrlhospedagemuni = $this->e140_vrlhospedagemuni ";
+      $virgula = ",";
+      if (trim($this->e140_vrlhospedagemuni) == null) {
+        $this->erro_sql = " Campo e140_vrlhospedagemuni nao declarado.";
+        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->e140_transporte) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_transporte"])) {
+      $sql  .= $virgula . " e140_transporte = '$this->e140_transporte' ";
+      $virgula = ",";
+      if (trim($this->e140_transporte) == null) {
+        $this->erro_sql = " Campo e140_transporte nao declarado.";
+        $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
+        $this->erro_status = "0";
+        return false;
+      }
+    }
+    if (trim($this->e140_vlrtransport) != "" || isset($GLOBALS["HTTP_POST_VARS"]["e140_vlrtransport"])) {
+      $sql  .= $virgula . " e140_vlrtransport = $this->e140_vlrtransport ";
+      $virgula = ",";
+      if (trim($this->e140_vlrtransport) == null) {
+        $this->erro_sql = " Campo e140_vlrtransport nao declarado.";
         $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_status = "0";
         return false;
@@ -368,7 +487,7 @@ class cl_empdiaria
     $result = db_query($sql);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Natureza de Bem ou Serviço nao alterada. Alteracao Abortada.\\n";
+      $this->erro_sql   = "Diária nao alterada. Alteracao Abortada.\\n";
       $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Status: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
@@ -377,7 +496,7 @@ class cl_empdiaria
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = str_replace("\n", "", @pg_last_error());
-        $this->erro_sql = "Natureza de Bem ou Serviço nao alterada. Alteracao Abortada.\\n";
+        $this->erro_sql = "Diária nao alterada. Alteracao Abortada.\\n";
         $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Status: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";
@@ -436,6 +555,24 @@ class cl_empdiaria
             if (isset($GLOBALS["HTTP_POST_VARS"]["e140_objetivo"]) || $this->e140_objetivo != null) {
               $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_objetivo'),'" . AddSlashes(pg_result($resaco, $iresaco, 'e140_objetivo')) . "','$this->e140_objetivo'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
             }
+            if (isset($GLOBALS["HTTP_POST_VARS"]["e140_horainicial"]) || $this->e140_horainicial != null) {
+              $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_horainicial'),'" . AddSlashes(pg_result($resaco, $iresaco, 'e140_horainicial')) . "','$this->e140_horainicial'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            }
+            if (isset($GLOBALS["HTTP_POST_VARS"]["e140_horafinal"]) || $this->e140_horafinal != null) {
+              $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_horafinal'),'" . AddSlashes(pg_result($resaco, $iresaco, 'e140_horafinal')) . "','$this->e140_horafinal'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            }
+            if (isset($GLOBALS["HTTP_POST_VARS"]["e140_qtdhospedagens"]) || $this->e140_qtdhospedagens != null) {
+              $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_qtdhospedagens'),'" . AddSlashes(pg_result($resaco, $iresaco, 'e140_qtdhospedagens')) . "','$this->e140_qtdhospedagens'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            }
+            if (isset($GLOBALS["HTTP_POST_VARS"]["e140_vrlhospedagemuni"]) || $this->e140_vrlhospedagemuni != null) {
+              $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_vrlhospedagemuni'),'" . AddSlashes(pg_result($resaco, $iresaco, 'e140_vrlhospedagemuni')) . "','$this->e140_vrlhospedagemuni'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            }
+            if (isset($GLOBALS["HTTP_POST_VARS"]["e140_qtddiariaspernoite"]) || $this->e140_qtddiariaspernoite != null) {
+              $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_qtddiariaspernoite'),'" . AddSlashes(pg_result($resaco, $iresaco, 'e140_qtddiariaspernoite')) . "','$this->e140_qtddiariaspernoite'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            }
+            if (isset($GLOBALS["HTTP_POST_VARS"]["e140_vrldiariaspernoiteuni"]) || $this->e140_vrldiariaspernoiteuni != null) {
+              $resac = db_query("insert into db_acount values($acount,(SELECT codarq FROM db_sysarquivo WHERE nomearq = 'empdiaria'),(SELECT codcam FROM db_syscampo WHERE nomecam = 'e140_vrldiariaspernoiteuni'),'" . AddSlashes(pg_result($resaco, $iresaco, 'e140_vrldiariaspernoiteuni')) . "','$this->e140_vrldiariaspernoiteuni'," . db_getsession('DB_datausu') . "," . db_getsession('DB_id_usuario') . ")");
+            }
           }
         }
 
@@ -476,7 +613,7 @@ class cl_empdiaria
     $result = db_query($sql . $sql2);
     if ($result == false) {
       $this->erro_banco = str_replace("\n", "", @pg_last_error());
-      $this->erro_sql   = "Natureza de Bem ou Serviço nao Excluída. Exclusão Abortada.\\n";
+      $this->erro_sql   = "Diária nao Excluída. Exclusão Abortada.\\n";
       $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
       $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Status: \\n\\n " . $this->erro_banco . " \\n"));
       $this->erro_status = "0";
@@ -485,7 +622,7 @@ class cl_empdiaria
     } else {
       if (pg_affected_rows($result) == 0) {
         $this->erro_banco = str_replace("\n", "", @pg_last_error());
-        $this->erro_sql   = "Natureza de Bem ou Serviço nao Excluída. Exclusão Abortada.\\n";
+        $this->erro_sql   = "Diária nao Excluída. Exclusão Abortada.\\n";
         $this->erro_msg   = "Usuário: " . db_getsession("DB_login") . "\\n\\n " . $this->erro_sql . " \\n\\n";
         $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Status: \\n\\n " . $this->erro_banco . " \\n"));
         $this->erro_status = "1";

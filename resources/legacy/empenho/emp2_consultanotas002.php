@@ -146,21 +146,29 @@ if (isset($oGet->e69_codnota)) {
       
       $bDiaria = 1;
       $oDiaria = db_utils::FieldsMemory($rsDiaria, 0);
-      $diariaViajante     = $oNotas->z01_nome;
-      $e140_matricula     = $oDiaria->e140_matricula;
-      $e140_cargo         = $oDiaria->e140_cargo;
-      $e140_dtautorizacao = date('d/m/Y', strtotime($oDiaria->e140_dtautorizacao));
-      $e140_dtinicial     = date('d/m/Y', strtotime($oDiaria->e140_dtinicial));
-      $e140_dtfinal       = date('d/m/Y', strtotime($oDiaria->e140_dtfinal));
-      $e140_origem        = $oDiaria->e140_origem;
-      $e140_destino       = $oDiaria->e140_destino;
-      $e140_qtddiarias    = $oDiaria->e140_qtddiarias;
-      $e140_vrldiariauni  = $oDiaria->e140_vrldiariauni;
-      $diariaVlrTotal     = $e140_qtddiarias * $e140_vrldiariauni;
-      $e140_transporte    = $oDiaria->e140_transporte;
-      $e140_vlrtransport  = $oDiaria->e140_vlrtransport;
-      $diariaVlrDespesa   = $diariaVlrTotal + $e140_vlrtransport;
-      $e140_objetivo      = $oDiaria->e140_objetivo;
+      $diariaViajante             = $oNotas->z01_nome;
+      $e140_matricula             = $oDiaria->e140_matricula;
+      $e140_cargo                 = $oDiaria->e140_cargo;
+      $e140_dtautorizacao         = date('d/m/Y', strtotime($oDiaria->e140_dtautorizacao));
+      $e140_dtinicial             = date('d/m/Y', strtotime($oDiaria->e140_dtinicial));
+      $e140_dtfinal               = date('d/m/Y', strtotime($oDiaria->e140_dtfinal));
+      $e140_origem                = $oDiaria->e140_origem;
+      $e140_destino               = $oDiaria->e140_destino;
+      $e140_horainicial           = $oDiaria->e140_horainicial;
+      $e140_horafinal             = $oDiaria->e140_horafinal;
+      $e140_qtddiarias            = $oDiaria->e140_qtddiarias;
+      $e140_vrldiariauni          = $oDiaria->e140_vrldiariauni;
+      $diariaVlrTotal             = $e140_qtddiarias * $e140_vrldiariauni;
+      $e140_qtddiariaspernoite    = $oDiaria->e140_qtddiariaspernoite;
+      $e140_vrldiariaspernoiteuni = $oDiaria->e140_vrldiariaspernoiteuni;
+      $diariaPernoiteVlrTotal     = $e140_qtddiariaspernoite * $e140_vrldiariaspernoiteuni;
+      $e140_qtdhospedagens        = $oDiaria->e140_qtdhospedagens;
+      $e140_vrlhospedagemuni      = $oDiaria->e140_vrlhospedagemuni;
+      $hospedagemVlrTotal         = $e140_qtdhospedagens * $e140_vrlhospedagemuni;
+      $e140_transporte            = $oDiaria->e140_transporte;
+      $e140_vlrtransport          = $oDiaria->e140_vlrtransport;
+      $diariaVlrDespesa           = $diariaVlrTotal + $e140_vlrtransport + $hospedagemVlrTotal + $diariaPernoiteVlrTotal;
+      $e140_objetivo              = $oDiaria->e140_objetivo;
 
     }else{
       $bDiaria = 0;
@@ -425,7 +433,7 @@ if (isset($oGet->e69_codnota)) {
      </form>
      <form name='form2' method='post'>
    </fieldset>
-  <fieldset id="diariaFieldset">
+   <fieldset id="diariaFieldset">
     <legend><b>&nbsp;Diárias&nbsp;</b></legend>
     <table>
       <tr>
@@ -433,51 +441,72 @@ if (isset($oGet->e69_codnota)) {
           <b>Viajante:</b>
         </td>
         <td>
-          <? db_input("diariaViajante", 50, 1, true, 'text', 3) ?>
-        </td>
-        <td>
-          <b>Matricula:</b>
-        </td>
-        <td>
-          <? db_input("e140_matricula", 10, 1, true, 'text', 3) ?>
+          <? db_input("diariaViajante", 45, 1, true, 'text', 3) ?>
+          <b>&nbsp;Matrícula:</b>
+          <? db_input("e140_matricula", 7, 1, true, 'text', 3) ?>
           <b>Cargo:</b>
-          <? db_input("e140_cargo", 30, 3, true, 'text', 3) ?>
+          <? db_input("e140_cargo", 26, 3, true, 'text', 3) ?>
         </td>
-        <td>
-          <b>Data da Autorização:</b>
-          <? db_input("e140_dtautorizacao", 10, 3, true, 'text', 3) ?>
-        </td>
-      </tr>        
+      </tr>
       <tr>
         <td>
           <b>Origem: </b>
         </td>
         <td>
-          <?db_input('e140_origem', 50, 2, true, 'text', 3);?>
-        </td>
-        <td>
+          <?db_input('e140_origem', 45, 2, true, 'text', 3);?>
           <b>Destino: </b>
+          <?db_input('e140_destino', 43, 2, true, 'text', 3);?>
+        </td>
+      <tr>
+        <td>
+          <b>Data da Autorização:</b>
         </td>
         <td>
-          <?db_input('e140_destino', 50, 2, true, 'text', 3);?>
+          <? db_input("e140_dtautorizacao", 10, 2, true, 'text', 3) ?>
+          <b>Data Inicial da Viagem:</b>
+          <? db_input("e140_dtinicial", 10, 2, true, 'text', 3) ?>
+          <b>Hora:</b>
+          <?db_input('e140_horainicial',5,3,1,'text',3)?>
+          <b>Data Final da Viagem:</b>
+          <? db_input("e140_dtfinal", 10, 2, true, 'text', 3) ?>
+          <b>Hora:</b>
+          <?db_input('e140_horafinal',5,3,1,'text',3)?>
         </td>
       </tr>
       <tr>
         <td>
-          <b>Data Inicial da Viagem:</b>
-        </td>
-        <td>
-          <? db_input("e140_dtinicial", 10, 3, true, 'text', 3) ?>
-          <b>Data Final da Viagem:</b>
-          <? db_input("e140_dtfinal", 10, 3, true, 'text', 3) ?>
-        </td>
-        <td>
           <b>Quantidade de Diárias:</b>
         </td>
         <td>
-          <? db_input("e140_qtddiarias", 5, 1, true, 'text', 3) ?>
-          <b>Valor Unitário da Diária:</b>
-          <? db_input("e140_vrldiariauni", 10, 4, true, 'text', 3) ?>
+          <? db_input("e140_qtddiarias", 8, 4, true, 'text', 3) ?>
+          <b style='margin-left: 15px'>Valor Unitário da Diária:</b>
+          <? db_input("e140_vrldiariauni", 8, 4, true, 'text', 3) ?>
+          <b style='margin-left: 45px'>Valor Total das Diárias:</b>
+          <? db_input("diariaVlrTotal", 8, 4, true, 'text', 3) ?>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <b>Quantidade de Diárias Pernoite:</b>
+        </td>
+        <td>
+          <? db_input("e140_qtddiariaspernoite", 8, 4, true, 'text', 3) ?>
+          <b style='margin-left: 15px'>Valor Unitário da Diária Pernoite:</b>
+          <? db_input("e140_vrldiariaspernoiteuni", 8, 4, true, 'text', 3) ?>
+          <b style='margin-left: 45px'>Valor Total das Diárias Pernoite:</b>
+          <? db_input("diariaPernoiteVlrTotal", 8, 4, true, 'text', 3) ?>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <b>Quantidade de Hospedagens:</b>
+        </td>
+        <td>
+          <? db_input("e140_qtdhospedagens", 8, 4, true, 'text', 3) ?>
+          <b style='margin-left: 15px'>Valor Unitário da Hospedagem:</b>
+          <? db_input("e140_vrlhospedagemuni", 8, 4, true, 'text', 3) ?>
+          <b style='margin-left: 45px'>Valor Total das Hospedagens:</b>
+          <? db_input("hospedagemVlrTotal", 8, 4, true, 'text', 3) ?>
         </td>
       </tr>
       <tr>
@@ -485,24 +514,16 @@ if (isset($oGet->e69_codnota)) {
           <b>Transporte:</b>
         </td>
         <td>
-          <? db_input("e140_transporte", 50, 2, true, 'text', 3) ?>
-        </td>
-        <td>
+          <? db_input("e140_transporte", 19, 2, true, 'text', 3) ?>
           <b>Valor do Transporte:</b>
-        </td>
-        <td>
-          <? db_input("e140_vlrtransport", 10, 4, true, 'text', 3) ?>    
-          <b>Valor Total das Diárias:</b>
-          <? db_input("diariaVlrTotal", 10, 4, true, 'text', 3) ?>
-        </td>
-        <td>
-          <b>Valor Total da Despesa:</b>
-          <? db_input("diariaVlrDespesa", 10, 4, true, 'text', 3) ?>
+          <? db_input("e140_vlrtransport", 8, 4, true, 'text', 3) ?>
+          <b style='margin-left: 44.5px'>Valor Total da Despesa:</b>
+          <? db_input("diariaVlrDespesa", 8, 4, true, 'text', 3) ?>
         </td>
       </tr>
-    </table>      
+    </table>
     <b>&nbsp;Objetivo da Viagem:</b></br>
-    <? db_textarea("e140_objetivo", 2, 120, 3, true, 'text', 3) ?>
+    <? db_textarea("e140_objetivo", 2, 130, 0, true, 'text', 3) ?>
   </fieldset>
   <fieldset id='reinf'>
   <legend><b>Efd-Reinf</b></legend>
@@ -642,6 +663,13 @@ if (isset($oGet->e69_codnota)) {
 </body>
 </html>
 <script>
+    document.getElementById('e140_vrldiariauni').style.marginLeft = '51px';
+    document.getElementById('e140_vrlhospedagemuni').style.marginLeft = '9px';
+    document.getElementById('e140_vlrtransport').style.marginLeft = '9px';
+    document.getElementById('diariaVlrTotal').style.marginLeft = '52px';
+    document.getElementById('hospedagemVlrTotal').style.marginLeft = '13px';
+    document.getElementById('diariaVlrDespesa').style.marginLeft = '49px';
+
     var db_opcao = "<?php print $cpfcnpj; ?>";
     var bDiaria = <?echo $bDiaria;?>;
     var bRetencaoir = <?echo $e50_retencaoir;?>;

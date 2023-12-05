@@ -517,7 +517,7 @@ $clrotulo->label("descrdepto");
                 oCampos.codigo_departamento.value = oRetorno.coddepto;
                 oCampos.descricao_departamento.value = oRetorno.descrdepto.urlDecode();
                 oCampos.resumo.value = oRetorno.pc80_resumo.urlDecode();
-                oCampos.tipo_processo.value = (oRetorno.pc80_tipoprocesso === 1 ? "Item" : "Lote");
+                oCampos.tipo_processo.value = (oRetorno.pc80_tipoprocesso === '1' ? "Item" : "Lote");
 
 
                 /*OC3770*/
@@ -558,7 +558,7 @@ $clrotulo->label("descrdepto");
                 /**
                  * Libera a aba dos lotes caso o processo de compras seja por lote
                  */
-                if (oRetorno.pc80_tipoprocesso === 2) {
+                if (oRetorno.pc80_tipoprocesso === '2') {
                     oAbaLote.desbloquear();
                 }
 
