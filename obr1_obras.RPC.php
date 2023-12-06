@@ -364,19 +364,25 @@ switch ($oParam->exec) {
     case 'getItensObra':
 
         $cllicitemobra = new cl_licitemobra();
-        if ($oParam->l20_codigo != "") {
-            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_licitacao(null, "licitemobra.*,pc01_codmater,pc01_descrmater", null, "l21_codliclicita = {$oParam->l20_codigo} and pc01_obras = 't' and obr06_instit = " . db_getsession('DB_instit')));
-        } elseif ($oParam->pc80_codproc != "") {
-            $result = $cllicitemobra->sql_record($cllicitemobra->sql_query_itens_obras_processodecompras(null, "licitemobra.*,pc01_codmater,pc01_descrmater", null, "pc80_codproc = {$oParam->pc80_codproc} and pc01_obras = 't' and obr06_instit = " . db_getsession('DB_instit')));
+        
+        $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,l21_ordem";
+
+        if (isset($oParam->l20_codigo) && !empty($oParam->l20_codigo)) {
+            $sOrdem   = "l21_ordem";
+            $sWhere   = "l21_codliclicita = {$oParam->l20_codigo} and pc01_obras = 't' and pc10_instit = " . db_getsession('DB_instit');
+            $sSqlItemLicitacao = $cllicitemobra->sql_query_itens_obras_licitacao(null, $sCampos, $sOrdem, $sWhere);
+            $sResultitens = $cllicitemobra->sql_record($sSqlItemLicitacao);
+            $oRetorno->itens = db_utils::getCollectionByRecord($sResultitens);
+        } else if (isset($oParam->pc80_codproc) && !empty($oParam->pc80_codproc)) {
+            $sOrdem   = "pc11_seq";
+            $sWhere   = "pc80_codproc = {$oParam->pc80_codproc} and pc01_obras = 't' and pc10_instit = " . db_getsession('DB_instit');
+            $sSqlItemProcessodeCompras = $cllicitemobra->sql_query_itens_obras_processodecompras(null, $sCampos, $sOrdem, $sWhere);
+            $sResultitens = $cllicitemobra->sql_record($sSqlItemProcessodeCompras);
+            $oRetorno->itens = db_utils::getCollectionByRecord($sResultitens);
         } else {
             $oRetorno->message = "selecione um processo de compras ou uma licitacao";
         }
 
-        for ($iCont = 0; $iCont < pg_num_rows($result); $iCont++) {
-            $oItensObra = db_utils::fieldsMemory($result, $iCont);
-
-            $oRetorno->itens[] = $oItensObra;
-        }
         break;
 
     case 'SalvarItemObra':
@@ -490,4 +496,5 @@ switch ($oParam->exec) {
         }
         break;
 }
-echo json_encode($oRetorno);
+
+echo $oJson->encode($oRetorno);
