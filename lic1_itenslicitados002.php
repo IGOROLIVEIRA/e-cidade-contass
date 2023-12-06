@@ -150,11 +150,11 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr(str_replace("\n", "", $descricao), 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -166,7 +166,7 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(185, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(209);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -178,7 +178,7 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(185, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(209);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -267,7 +267,7 @@ if($impforne == "true" && $impproc == "true" && $impaco=="true" && $impvlrunit =
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -281,7 +281,7 @@ if($impforne == "true" && $impproc == "true" && $impaco=="true" && $impvlrunit =
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(165, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(165, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(189);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -295,7 +295,7 @@ if($impforne == "true" && $impproc == "true" && $impaco=="true" && $impvlrunit =
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(165, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(165, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(189);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -385,7 +385,7 @@ if($impforne == "true" && $impproc == "true" && $impaco==null && $impvlrunit == 
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -398,7 +398,7 @@ if($impforne == "true" && $impproc == "true" && $impaco==null && $impvlrunit == 
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(185, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(209);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -496,11 +496,11 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr(str_replace("\n", "", $descricao), 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -606,7 +606,7 @@ if($impforne == "true" && $impproc == null && $impaco == null && $impvlrunit == 
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -702,11 +702,11 @@ if($impforne == "true" && $impproc == "true" && $impaco == null && $impvlrunit =
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr(str_replace("\n", "", $descricao), 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -814,7 +814,7 @@ if($impforne == "true" && $impproc == "true" && $impaco == "true" && $impvlrunit
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -924,7 +924,7 @@ if($impforne == "true" && $impproc == false && $impaco == "true" && $impvlrunit 
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1033,7 +1033,7 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1046,7 +1046,7 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(185, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(209);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -1059,7 +1059,7 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(185, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(209);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -1137,11 +1137,11 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr(str_replace("\n", "", $descricao), 0, 2000);
+        $descricao = substr(str_replace("\n", "", $descricao), 0, 1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1153,7 +1153,7 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(185, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(209);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
@@ -1165,7 +1165,7 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(185, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(209);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -1245,7 +1245,7 @@ if($impforne == false && $impproc == false && $impaco == false && $impvlrunit ==
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1256,7 +1256,7 @@ if($impforne == false && $impproc == false && $impaco == false && $impvlrunit ==
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(235, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(235, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(259);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
@@ -1266,7 +1266,7 @@ if($impforne == false && $impproc == false && $impaco == false && $impvlrunit ==
         } else {
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(235, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(235, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(259);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
@@ -1346,7 +1346,7 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1358,7 +1358,7 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(200, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(200, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(224);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
@@ -1370,7 +1370,7 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(200, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(200, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(224);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -1452,7 +1452,7 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1464,7 +1464,7 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(185, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(209);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
@@ -1476,7 +1476,7 @@ if($impforne == false && $impproc == "true" && $impaco == "true" && $impvlrunit 
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(185, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(185, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(209);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C",0);
@@ -1492,7 +1492,8 @@ if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == nu
 
     $sql = "SELECT x.codigo,
                    x.descricao,
-                   sum(x.quantidade) as quantidade
+                   sum(x.quantidade) as quantidade,
+                   x.l202_datahomologacao
             FROM
                 (SELECT DISTINCT pc01_codmater AS codigo,
                    CASE
@@ -1500,7 +1501,8 @@ if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == nu
                        WHEN pc01_complmater IS NULL THEN pc01_descrmater
                         else pc01_descrmater||'. '||pc01_complmater
                             END AS descricao,
-                                 pc11_quant AS quantidade
+                                 pc11_quant AS quantidade,
+                                 l202_datahomologacao
                  FROM pcorcamitem
                  INNER JOIN pcorcam ON pcorcam.pc20_codorc = pcorcamitem.pc22_codorc
                  LEFT JOIN pcorcamforne ON pcorcamforne.pc21_codorc = pcorcam.pc20_codorc
@@ -1531,7 +1533,7 @@ if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == nu
                      AND l202_datahomologacao IS NOT NULL
                      $sWhere
                      AND l20_instit = ". db_getsession("DB_instit") . ") AS x
-                group by x.codigo,x.descricao
+                group by x.codigo,x.descricao,x.l202_datahomologacao
                 $sOrder";
     $result = db_query($sql);
 
@@ -1544,11 +1546,11 @@ if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == nu
         db_fieldsmemory($result,$i);
 
         $old_y = $pdf->gety();
-        $descricao = substr($descricao,0,2000);
+        $descricao = substr(str_replace("\n", "", $descricao),0,1000);
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
-        $addalt = $linhas * 6;
+        $addalt = $linhas * 5;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
             $pdf->cell(14, $alt, "Código", 1, 0, "C",1);
@@ -1556,7 +1558,7 @@ if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == nu
             $pdf->cell(15, $alt, "Qtd.", 1, 1, "C",1);
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt , substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(235, $alt , mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(235, 3 , mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(259);
             $pdf->cell(15, $alt + $addalt , $quantidade, 1, 1, "C", 0);
@@ -1564,7 +1566,7 @@ if($impforne == null && $impproc == null && $impaco == null && $impvlrunit == nu
         }else{
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(235, $alt , mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(235, 3 , mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(259);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 1, "C", 0);
@@ -1641,7 +1643,7 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1652,7 +1654,7 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(205, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(205, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(229);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
@@ -1662,7 +1664,7 @@ if($impforne == false && $impproc == false && $impaco == "true" && $impvlrunit =
         } else {
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(205, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(205, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(229);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
@@ -1740,7 +1742,7 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
         $linhas = $pdf->NbLines(230, mb_strtoupper(str_replace("\n", "", $descricao)));
         $addalt = $linhas * 6;
 
-        if ($pdf->getY() > $pdf->h - 60) {
+        if ($pdf->getY() > $pdf->h - 64) {
 
             $pdf->addpage();
             $pdf->setfont('arial', 'b', 10);
@@ -1751,7 +1753,7 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
 
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(215, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(215, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety(40);
             $pdf->setx(239);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
@@ -1761,7 +1763,7 @@ if($impforne == false && $impproc == "true" && $impaco == false && $impvlrunit =
         } else {
             $pdf->setfont('arial', '', 7);
             $pdf->cell(14, $alt + $addalt, substr($codigo, 0, 164), 1, 0, "C", 0);
-            $pdf->multicell(215, $alt, mb_strtoupper($descricao), "RW", "J", 0);
+            $pdf->multicell(215, 3, mb_strtoupper($descricao), "RW", "J", 0);
             $pdf->sety($old_y);
             $pdf->setx(239);
             $pdf->cell(15, $alt + $addalt, $quantidade, 1, 0, "C", 0);
