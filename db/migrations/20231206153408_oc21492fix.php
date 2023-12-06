@@ -11,7 +11,7 @@ class Oc21492fix extends PostgresMigration
 
     public function up()
     {	
-        //Apaga a tabela issnotaavulsatomadorcgmretencao caso tenha sido criada na migration anterior
+        //Apaga a tabela issnotaavulsatomadorcgmretencao caso tenha sido criada na migration anterior.
         $this->execute("DROP TABLE IF EXISTS issqn.issnotaavulsatomadorcgmretencao");
 
 		//Recria a tabela issnotaavulsatomadorcgmretencao, para inclusão dos cgm para retenção na rotina de impressão fpdf151/imprimemodelos/mod_imprime492.php.php
