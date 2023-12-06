@@ -14,7 +14,7 @@ $cllicitemobra->rotulo->label();
     }
 </style>
 <form name="form1" method="post" action="">
-    <fieldset style="margin-top: 60px; width: 500px">
+    <fieldset style="margin-top: 40px; width: 100%; max-width: 1342px;">
         <legend>Cadastro de itens obra</legend>
         <table border="0">
             <tr>
@@ -43,14 +43,17 @@ $cllicitemobra->rotulo->label();
                     ?>
                 </td>
             </tr>
-            <tr>
+            <!--tr>
                 <td colspan="2">
-                    <input name="Processar" type="submit" id="db_opcao" value="Processar" style="width: 100px; margin-left: 43%;margin-top: 7px; margin-bottom: 5px">
+                    <input name="Processar" type="submit" id="db_opcao" value="Processar Remover" style="width: 100px; margin-left: 43%;margin-top: 7px; margin-bottom: 5px">
                 </td>
-            </tr>
+            </tr-->
         </table>
-
-        <table style="border-top: 2px solid #808080; margin-top: 5px;">
+    </fieldset>
+    
+    <fieldset style="margin-top: 20px; width: 100%; max-width: 1342px;">
+        <legend>Edição em bloco</legend>
+        <table style="margin-top: 5px;">
             <tr>
                 <td></td>
             </tr>
@@ -116,27 +119,10 @@ $cllicitemobra->rotulo->label();
                 </td>
             </tr>
         </table>
-
         <input name="Aplicar" type="button" id="Aplicar" value="Aplicar" style="width: 100px; margin-top: 7px; margin-bottom: 5px" onclick="js_aplicar();">
-
     </fieldset>
-    <fieldset style="width: 100%;">
-        <legend>Itens</legend>
-        <table>
-            <tr class="DBgrid">
-                <td class="table_header" style="width: 35px; height:30px;" onclick="marcarTodos();">M</td>
-                <td class="table_header" style="width: 75px">Códido do item</td>
-                <td class="table_header" style="width: 253px">Descrição do Item</td>
-                <td class="table_header" style="width: 215px">Tabela</td>
-                <td class="table_header" style="width: 90px"> Versão da Tabela</td>
-                <td class="table_header" style="width: 300px">Descrição Tabela</td>
-                <td class="table_header" style="width: 155px">Data de Registro</td>
-                <td class="table_header" style="width: 155px">Data de Cadastro</td>
-                <td class="table_header" style="width: 87px"> Código da Tabela</td>
-                <td class="table_header" style="width: 87px">Ação</td>
-            </tr>
-        </table>
-        <?php
+
+    <?php
 
         if (!empty($l20_codigo)) {
             $sCampos  = " distinct pc01_codmater,pc01_descrmater,obr06_tabela,obr06_descricaotabela,obr06_dtregistro,obr06_dtcadastro,obr06_codigotabela,obr06_versaotabela,l21_ordem";
@@ -159,97 +145,110 @@ $cllicitemobra->rotulo->label();
             $numrows = $cllicitemobra->numrows;
         }
 
-        ?>
-        <div style="overflow:scroll;overflow:auto">
-            <table>
-                <th class="table_header">
-                    <?php foreach ($aItensObras as $key => $aItem) :
-                        if ($aItem->obr06_tabela == "") {
-                            $iItem = $aItem->pc01_codmater . "0";
-                        } else {
-                            $iItem = $aItem->pc01_codmater . $aItem->obr06_tabela;
-                        }
+    ?>
 
-                    ?>
-                        <table class="DBgrid">
-                            <th class="table_header" style="width: 30px">
-                                <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem ?>">
-                            </th>
+    <div style="margin-top: 20px; width: 100%; max-width: 1364px;; max-height: 420px; overflow-y: scroll;">
+        <table class="DBgrid">
+            <thead>
+                <tr>
+                    <td class="table_header" style="width: 35px; height:30px;" onclick="marcarTodos();">M</td>
+                    <td class="table_header" style="width: 75px">Códido do item</td>
+                    <td class="table_header" style="width: 253px">Descrição do Item</td>
+                    <td class="table_header" style="width: 215px">Tabela</td>
+                    <td class="table_header" style="width: 90px"> Versão da Tabela</td>
+                    <td class="table_header" style="width: 300px">Descrição Tabela</td>
+                    <td class="table_header" style="width: 155px">Data de Registro</td>
+                    <td class="table_header" style="width: 155px">Data de Cadastro</td>
+                    <td class="table_header" style="width: 87px"> Código da Tabela</td>
+                    <td class="table_header" style="width: 87px">Ação</td>
+                </tr>
+            </thead>
+            <tbody>
+            <?php 
+                foreach ($aItensObras as $key => $aItem) :
+                    if ($aItem->obr06_tabela == "") {
+                        $iItem = $aItem->pc01_codmater . "0";
+                    } else {
+                        $iItem = $aItem->pc01_codmater . $aItem->obr06_tabela;
+                    }
 
-                            <td class="linhagrid" style="width: 85px">
-                                <?= $aItem->pc01_codmater ?>
-                                <input type="hidden" name="" value="<?= $aItem->pc01_codmater ?>" id="<?= $iItem ?>">
-                            </td>
+            ?>
+                <tr class="normal">
+                    <th class="table_header" style="width: 30px">
+                        <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem ?>">
+                    </th>
 
-                            <td class="linhagrid" style="width: 310px">
-                                <?= $aItem->pc01_descrmater ?>
-                                <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem ?>">
-                            </td>
+                    <td class="linhagrid" style="width: 85px">
+                        <?= $aItem->pc01_codmater ?>
+                        <input type="hidden" name="" value="<?= $aItem->pc01_codmater ?>" id="<?= $iItem ?>">
+                    </td>
 
-                            <td class="linhagrid" style="width: 179px">
-                                <select name="tabela" id="<?= 'obr06_tabela_' . $iItem ?>" onchange='js_validatabelaLinha(this.id)'>
-                                    <option value="0">Selecione</option>
-                                    <option <?php echo $aItem->obr06_tabela == "1" ? "selected" : ""; ?> value="1">1 - Tabela SINAP</option>
-                                    <option <?php echo $aItem->obr06_tabela == "2" ? "selected" : ""; ?> value="2">2 - Tabela SICRO</option>
-                                    <option <?php echo $aItem->obr06_tabela == "3" ? "selected" : ""; ?> value="3">3 - Outras Tabelas Oficiais</option>
-                                    <option <?php echo $aItem->obr06_tabela == "4" ? "selected" : ""; ?> value="4">4 - Cadastro Próprio</option>
-                                </select>
-                            </td>
+                    <td class="linhagrid" style="width: 310px">
+                        <?= $aItem->pc01_descrmater ?>
+                        <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem ?>">
+                    </td>
 
-                            <td class="linhagrid" style="width: 87px">
-                                <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_versaotabela ?>" id="<?= 'obr06_versaotabela_' . $iItem ?>">
-                            </td>
+                    <td class="linhagrid" style="width: 179px">
+                        <select name="tabela" id="<?= 'obr06_tabela_' . $iItem ?>" onchange='js_validatabelaLinha(this.id)'>
+                            <option value="0">Selecione</option>
+                            <option <?php echo $aItem->obr06_tabela == "1" ? "selected" : ""; ?> value="1">1 - Tabela SINAP</option>
+                            <option <?php echo $aItem->obr06_tabela == "2" ? "selected" : ""; ?> value="2">2 - Tabela SICRO</option>
+                            <option <?php echo $aItem->obr06_tabela == "3" ? "selected" : ""; ?> value="3">3 - Outras Tabelas Oficiais</option>
+                            <option <?php echo $aItem->obr06_tabela == "4" ? "selected" : ""; ?> value="4">4 - Cadastro Próprio</option>
+                        </select>
+                    </td>
 
-                            <td class="linhagrid" style="width: 305px">
-                                <input type="text" name="" value="<?= mb_convert_encoding($aItem->obr06_descricaotabela, "ISO-8859-1", "UTF-8") ?>" id="<?= 'obr06_descricaotabela_' . $iItem ?>">
-                            </td>
+                    <td class="linhagrid" style="width: 87px">
+                        <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_versaotabela ?>" id="<?= 'obr06_versaotabela_' . $iItem ?>">
+                    </td>
 
-                            <td class="linhagrid" style="width: 150px">
-                                <?
-                                $obr06_dtregistro = (implode("/", (array_reverse(explode("-", $aItem->obr06_dtregistro)))));
-                                $dataregistro = explode("/", $obr06_dtcadastro);
-                                ?>
-                                <?
-                                db_inputdata('obr06_dtregistro_' . $iItem, $dataregistro[0], $dataregistro[1], $dataregistro[2], true, 'text', 1, "")
-                                ?>
-                            </td>
+                    <td class="linhagrid" style="width: 305px">
+                        <input type="text" name="" value="<?= mb_convert_encoding($aItem->obr06_descricaotabela, "ISO-8859-1", "UTF-8") ?>" id="<?= 'obr06_descricaotabela_' . $iItem ?>">
+                    </td>
 
-                            <td class="linhagrid" style="width: 150px">
-                                <?
-                                $obr06_dtcadastro = (implode("/", (array_reverse(explode("-", $aItem->obr06_dtcadastro)))));
-                                $datacadastro = explode("/", $obr06_dtcadastro);
-                                ?>
-                                <?php
-                                db_inputdata('obr06_dtcadastro_' . $iItem, $datacadastro[0], $datacadastro[1], $datacadastro[2], true, 'text', 1, "")
-                                ?>
-                            </td>
+                    <td class="linhagrid" style="width: 150px">
+                        <?
+                        $obr06_dtregistro = (implode("/", (array_reverse(explode("-", $aItem->obr06_dtregistro)))));
+                        $dataregistro = explode("/", $obr06_dtcadastro);
+                        ?>
+                        <?
+                        db_inputdata('obr06_dtregistro_' . $iItem, $dataregistro[0], $dataregistro[1], $dataregistro[2], true, 'text', 1, "")
+                        ?>
+                    </td>
 
-                            <td class="linhagrid" style="width: 87px">
-                                <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_codigotabela ?>" id="<?= 'obr06_codigotabela_' . $iItem ?>">
-                            </td>
-                            <td class="linhagrid" style="width: 87px">
-                                <input type="button" name="" value="Excluir" id="<?= $iItem ?>" onclick="excluirLinha(<?= $iItem ?>)">
-                            </td>
-                        </table>
-                    <?php
-                    endforeach;
-                    ?>
-                </th>
+                    <td class="linhagrid" style="width: 150px">
+                        <?
+                        $obr06_dtcadastro = (implode("/", (array_reverse(explode("-", $aItem->obr06_dtcadastro)))));
+                        $datacadastro = explode("/", $obr06_dtcadastro);
+                        ?>
+                        <?php
+                        db_inputdata('obr06_dtcadastro_' . $iItem, $datacadastro[0], $datacadastro[1], $datacadastro[2], true, 'text', 1, "")
+                        ?>
+                    </td>
 
-            </table>
-        </div>
+                    <td class="linhagrid" style="width: 87px">
+                        <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_codigotabela ?>" id="<?= 'obr06_codigotabela_' . $iItem ?>">
+                    </td>
+                    <td class="linhagrid" style="width: 87px">
+                        <input type="button" name="" value="Excluir" id="<?= $iItem ?>" onclick="excluirLinha(<?= $iItem ?>)">
+                    </td>
+                </tr>
+            <?php 
+                endforeach; 
+            ?>
+            </tbody>
+        </table>
         <?
         if ($numrows <= 0) {
             echo "<div>Nenhum Item Encontrado !</div>";
         }
         ?>
-
+    </div>
+    <div>
         <br>
-        <div>
-            <input id="Salvar" type="button" value="Salvar" name="Salvar" onclick="js_salvarItens()">
-            <input id="db_opcao" type="button" value="Excluir" name="excluir" onclick="js_excluirItensObra()">
-        </div>
-    </fieldset>
+        <input id="Salvar" type="button" value="Salvar" name="Salvar" onclick="js_salvarItens()">
+        <input id="db_opcao" type="button" value="Excluir" name="excluir" onclick="js_excluirItensObra()">
+    </div>
 </form>
 <script>
     function js_dataFormat(strData, formato) {
@@ -288,7 +287,6 @@ $cllicitemobra->rotulo->label();
                 'func_liclicita.php?itemobra=true&funcao_js=parent.js_preencheLicitacao|l20_codigo|l20_objeto',
                 'Pesquisa Licitações', true);
         } else {
-
             if (document.form1.l20_codigo.value != '') {
 
                 js_OpenJanelaIframe('top.corpo',
@@ -311,6 +309,7 @@ $cllicitemobra->rotulo->label();
         document.form1.pc80_codproc.value = '';
         document.form1.pc80_resumo.value = '';
         db_iframe_liclicita.hide();
+        document.form1.submit();
     }
 
     function js_preencheLicitacao2(objeto, erro) {
@@ -321,6 +320,8 @@ $cllicitemobra->rotulo->label();
         if (erro == true) {
             alert("Nenhuma licitação encontrada.");
             document.form1.l20_objeto.value = "";
+        } else {
+            document.form1.submit();
         }
     }
 
@@ -352,7 +353,7 @@ $cllicitemobra->rotulo->label();
         document.form1.pc80_codproc.value = chave;
         document.form1.pc80_resumo.value = chave2;
         db_iframe_pcproc.hide();
-
+        document.form1.submit();
     }
 
     function js_mostrapcproc1(chave1, chave2, erro) {
@@ -365,6 +366,8 @@ $cllicitemobra->rotulo->label();
             document.form1.pc80_codproc.value = '';
             document.form1.l20_codigo.value = '';
             document.form1.l20_objeto.value = '';
+        } else {
+            document.form1.submit()
         }
     }
 
