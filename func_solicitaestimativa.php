@@ -163,7 +163,7 @@ $clsolicita->rotulo->label("pc10_data");
           $result = $clsolicita->sql_record($clsolicita->sql_query_solicitaanulada(null,"distinct *",""," pc10_numero=$pesquisa_chave $where_depart "));
           if ($clsolicita->numrows!=0) {
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$pc10_data','false');</script>";
+            echo "<script>".$funcao_js."('$pc10_numero',false);</script>";
           } else {
             echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }

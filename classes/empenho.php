@@ -142,10 +142,8 @@ class empenho {
                     ,$iContribuicaoPrev = null,$iCattrabalhadorremuneracao = null,$iValorremuneracao = null,$iValordesconto = null
                     ,$iCompetencia = null, $bRetencaoIr = null, $iNaturezaBemServico = null, $dDataLiquidacao = null, $dDataVencimento = null) {
 
-    if($dDataLiquidacao == null){
-      $this->lSqlErro = true;
-      $this->sMsgErro = "Argumento [dDataLiquidacao] não é uma data válida.";
-      return false;
+    if ($dDataLiquidacao == null){
+      $dDataLiquidacao = date("Y-m-d",db_getsession("DB_datausu"));
     }
     $dDataLiquidacaoAno =  date('Y', strtotime($dDataLiquidacao));
     /*
@@ -636,6 +634,10 @@ class empenho {
    * estorna liquidação
    */
   function estornaLiq($numemp = "", $codele = "", $codnota = "", $valor = "", $historico = "", $dDataEstorno = null) {
+
+    if($dDataEstorno == null){
+      $dDataEstorno = date('Y-m-d',db_getsession("DB_datausu"));
+    }
 
     $iAnoEstorno = date('Y', strtotime($dDataEstorno));
     if ($numemp == "" || $codele == "" || $codnota == "" || $valor == "") {
@@ -1149,11 +1151,10 @@ class empenho {
                           ,$iCattrabalhadorremuneracao = null,$iValorremuneracao = null,$iValordesconto = null,$iCompetencia = null
                           ,$bRetencaoIr = null, $iNaturezaBemServico = null, $dDataLiquidacao = null, $dDataVencimento = null) {
                             
-    if($dDataLiquidacao == null){
-      $this->lSqlErro = true;
-      $this->sMsgErro = "Argumento [dDataLiquidacao] não é uma data válida.";
-      return false;
+    if ($dDataLiquidacao == null){
+      $dDataLiquidacao = date("Y-m-d",db_getsession("DB_datausu"));
     }
+
     $dDataLiquidacaoAno = date('Y', strtotime($dDataLiquidacao));
 
     if ($numemp == "" || $codele == "" || $codnota == "" || $valor == "") {
@@ -1326,6 +1327,10 @@ class empenho {
 
   function estornaOP($numemp = "", $codele = "", $codnota = "", $valor = "", $retencoes = "", $historico, $dDataEstorno = null) {
 
+    if($dDataEstorno == null){
+      $dDataEstorno = date("Y-m-d",db_getsession("DB_datausu"));
+    }
+
     if ($numemp == "" || $codele == "" || $codnota == "" || $valor == "") {
 
       $this->erro_status = '0';
@@ -1350,7 +1355,7 @@ class empenho {
       if (db_strtotime($dDataEstorno) < db_strtotime($oNota->e50_data)) {
 
         $this->erro_status = '0';
-        $this->erro_msg    = "Data inválida. data do estorno deve ser maior ou igual que a data da nota de liquidação";
+        $this->erro_msg    =  "Data inválida. data do estorno deve ser maior ou igual que a data da nota de liquidação";
         return false;
 
       }
@@ -1837,7 +1842,11 @@ class empenho {
     (boolean)$this->lSqlErro = false;
     (string) $this->sMsgErro = false;
 
-    $dDataEstorno = App\Support\String\DateFormatter::convertDateFormatBRToISO(trim($dDataEstorno));
+    if($dDataEstorno == null){
+      $dDataEstorno = date("Y-m-d",db_getsession("DB_datausu"));
+    }else{
+      $dDataEstorno = App\Support\String\DateFormatter::convertDateFormatBRToISO(trim($dDataEstorno));
+    }
 
     if ($sHistorico == ""){
       $sHistorico = "S/Historico";
@@ -2099,9 +2108,7 @@ class empenho {
     $this->iPagOrdem = '';
 
     if($dDataLiquidacao == null){
-      $this->lSqlErro = true;
-      $this->sMsgErro = "Argumento [dDataLiquidacao] não é uma data válida.";
-      return false;
+      $dDataLiquidacao = date("Y-m-d",db_getsession("DB_datausu"));
     }
     $dDataLiquidacaoAno = date('Y', strtotime($dDataLiquidacao));
 
