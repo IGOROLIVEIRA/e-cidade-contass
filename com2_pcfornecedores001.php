@@ -70,7 +70,7 @@ function js_emite(){
         </td>
         <td>
 	  <?
-	  $tipo_ordem = array("a"=>"Alfabética","b"=>"Numérica");
+	  $tipo_ordem = array("a"=>"Todos","b"=>"Ativos","c"=>"Bloqueados");
 	  db_select("ordem",$tipo_ordem,true,2);
 	  ?>
         </td>
