@@ -84,7 +84,8 @@ $cllicitemobra->rotulo->label();
             <tr>
                 <td nowrap title="<?= @$Tobr06_dtcadastro ?>">
                     <?= @$Lobr06_dtcadastro ?>
-
+                </td>
+                <td>
                     <?
                     if (!isset($obr06_dtcadastro)) {
                         $obr06_dtcadastro_dia = date('d', db_getsession("DB_datausu"));
@@ -94,7 +95,7 @@ $cllicitemobra->rotulo->label();
                     db_inputdata('obr06_dtcadastro', @$obr06_dtcadastro_dia, @$obr06_dtcadastro_mes, @$obr06_dtcadastro_ano, true, 'text', $db_opcao);
                     ?>
                 </td>
-                <td colspan="2">
+                <td>
                     <?= @$Lobr06_codigotabela ?>
                     <?
                     db_input('obr06_codigotabela', 15, $Iobr06_codigotabela, true, 'text', $db_opcao, "")
@@ -135,12 +136,12 @@ $cllicitemobra->rotulo->label();
             <thead>
                 <tr>
                     <td class="table_header" style="width: 35px; height:30px;" onclick="marcarTodos();">M</td>
-                    <td class="table_header" style="width: 75px">Códido do item</td>
-                    <td class="table_header" style="width: 353px">Descrição do Item</td>
+                    <td class="table_header" style="width: 75px">Item</td>
+                    <td class="table_header" style="width: 353px">Descrição Item</td>
                     <td class="table_header" style="width: 215px">Tabela</td>
-                    <td class="table_header" style="width: 90px"> Versão da Tabela</td>
+                    <td class="table_header" style="width: 87px"> Cód. Tabela</td>
+                    <td class="table_header" style="width: 90px"> Versão</td>
                     <td class="table_header" style="width: 315px">Descrição Tabela</td>
-                    <td class="table_header" style="width: 87px"> Código da Tabela</td>
                     <td class="table_header" style="width: 87px">Ação</td>
                 </tr>
             </thead>
@@ -165,12 +166,10 @@ $cllicitemobra->rotulo->label();
                         <?= $aItem->pc01_codmater ?>
                         <input type="hidden" name="" value="<?= $aItem->pc01_codmater ?>" id="<?= $iItem ?>">
                     </td>
-
-                    <td class="linhagrid" style="width: 353px">
+                        <td class="linhagrid" style="width: 353px">
                         <?= $aItem->pc01_descrmater ?>
                         <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem ?>">
                     </td>
-
                     <td class="linhagrid" style="width: 215px">
                         <select name="tabela" id="<?= 'obr06_tabela_' . $iItem ?>" onchange='js_validatabelaLinha(this.id)'>
                             <option value="0">Selecione</option>
@@ -180,17 +179,14 @@ $cllicitemobra->rotulo->label();
                             <option <?php echo $aItem->obr06_tabela == "4" ? "selected" : ""; ?> value="4">4 - Cadastro Próprio</option>
                         </select>
                     </td>
-
                     <td class="linhagrid" style="width: 90px">
                         <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_versaotabela ?>" id="<?= 'obr06_versaotabela_' . $iItem ?>">
                     </td>
-
-                    <td class="linhagrid" style="width: 315px">
-                        <input type="text" name="" value="<?= mb_convert_encoding($aItem->obr06_descricaotabela, "ISO-8859-1", "UTF-8") ?>" id="<?= 'obr06_descricaotabela_' . $iItem ?>">
-                    </td>
-
                     <td class="linhagrid" style="width: 87px">
                         <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_codigotabela ?>" id="<?= 'obr06_codigotabela_' . $iItem ?>">
+                    </td>
+                    <td class="linhagrid" style="width: 315px">
+                        <input type="text" name="" value="<?= mb_convert_encoding($aItem->obr06_descricaotabela, "ISO-8859-1", "UTF-8") ?>" id="<?= 'obr06_descricaotabela_' . $iItem ?>">
                     </td>
                     <td class="linhagrid" style="width: 87px">
                         <input type="button" name="" value="Excluir" id="<?= $iItem ?>" onclick="excluirLinha(<?= $iItem ?>)">
