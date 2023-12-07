@@ -27,38 +27,44 @@
 
 include("fpdf151/pdf.php");
 include("libs/db_sql.php");
+require_once("classes/db_liclicita_classe.php");
 
 function buscarFornecedoresGanhadores(int $codigoLicitacao): array
 {
     $fornecedores = [];
-    $sqlFornecedores = "SELECT DISTINCT l21_ordem,
-        pc23_orcamforne,
-        pc23_orcamitem,
-        z01_numcgm,
-        z01_nome
-    FROM liclicita
-    INNER JOIN liclicitem ON l21_codliclicita=l20_codigo
-    INNER JOIN pcorcamitemlic ON pc26_liclicitem=l21_codigo
-    INNER JOIN pcorcamitem ON pc22_orcamitem=pc26_orcamitem
-    INNER JOIN pcorcamjulg ON pc24_orcamitem=pc22_orcamitem
-    INNER JOIN pcorcamforne ON pc21_orcamforne=pc24_orcamforne
-    INNER JOIN pcorcamval ON pc23_orcamitem=pc22_orcamitem
-        AND pc23_orcamforne = pc21_orcamforne
-    INNER JOIN cgm ON z01_numcgm=pc21_numcgm
-    WHERE
-        l20_codigo={$codigoLicitacao}
-        AND pc24_pontuacao = 1;";
+    $sqlFornecedores = (new  cl_liclicita)->queryFornecedoresGanhadores($codigoLicitacao);
 
-        $result = db_query($sqlFornecedores);
-        $countResult  = pg_num_rows(db_query($sqlFornecedores));
-
-        for($i = 0; $i < $countResult; $i++) {
-           $fornecedor = db_utils::fieldsmemory($result, $i);
-
-            $fornecedores[] =['cgm' => $fornecedor->z01_numcgm, 'nome' => $fornecedor->z01_nome];
-        }
+    $result = db_query($sqlFornecedores);
+    $countResult  = pg_num_rows(db_query($sqlFornecedores));
+    for($i = 0; $i < $countResult; $i++) {
+       $fornecedor = db_utils::fieldsmemory($result, $i);
+        $fornecedores[] =[
+            'cgm' => $fornecedor->z01_numcgm,
+            'nome' => $fornecedor->z01_nome,
+            'documento' => $fornecedor->z01_cgccpf
+        ];
+    }
 
     return $fornecedores;
+}
+
+function insereFornecedores(PDF $pdf, int $alt, int $l20_codigo): void
+{
+    $fornecedores = buscarFornecedoresGanhadores($l20_codigo);
+
+    if (empty($fornecedores)) {
+        $pdf->setfont('arial', '', 6);
+        $pdf->cell(42, $alt, "", 1, 0, "C", 0);
+        $pdf->cell(42, $alt, "", 1, 0, "C", 0);
+        $pdf->multicell(195, $alt, "", 1, "J");
+    } else {
+        foreach ($fornecedores as $fornecedor) {
+            $pdf->setfont('arial', '', 6);
+            $pdf->cell(42, $alt, $fornecedor['cgm'], 1, 0, "C", 0);
+            $pdf->cell(42, $alt, $fornecedor['documento'], 1, 0, "C", 0);
+            $pdf->multicell(195, $alt, $fornecedor['nome'], 1, "J");
+        }
+    }
 }
 
 
@@ -72,6 +78,8 @@ $sql = "SELECT DISTINCT l20_numero || '/' || l20_anousu AS licitacao,
                         to_char(pc54_datainicio,'dd / mm / yyyy') AS inicio,
                         to_char(pc54_datatermino,'dd / mm / yyyy') AS fim,
                         pc54_datatermino,
+                        pc54_datainicio,
+                        l20_edital || '/' || l20_anousu AS processoLicitatorio,
                         l20_codigo
         FROM liclicitem
         INNER JOIN pcprocitem ON pcprocitem.pc81_codprocitem = liclicitem.l21_codpcprocitem
@@ -88,9 +96,24 @@ $sql = "SELECT DISTINCT l20_numero || '/' || l20_anousu AS licitacao,
         INNER JOIN liccomissao ON liccomissao.l30_codigo = liclicita.l20_liccomissao
         LEFT JOIN solicitatipo ON solicitatipo.pc12_numero = solicitem.pc11_numero
         LEFT JOIN pctipocompra ON pctipocompra.pc50_codcom = solicitatipo.pc12_tipo
-        WHERE date_part ('year',pc54_datatermino) = $anousu
-        AND l20_instit = ". db_getsession('DB_instit') .
-        " ORDER BY pc54_datatermino";
+        WHERE l20_licsituacao = 10 ";
+
+if (!empty($anousu)) {
+   $sql .= " AND date_part ('year',pc54_datatermino) = $anousu ";
+}
+
+if (!empty($periodoInicio)) {
+    $periodoInicio =  DateTimeImmutable::createFromFormat('d/m/Y', $periodoInicio);
+    $sql .= "AND pc54_datainicio >= '{$periodoInicio->format('Y-m-d')}'::date ";
+}
+
+if (!empty($periodoFim)) {
+    $periodoFim =  DateTimeImmutable::createFromFormat('d/m/Y', $periodoFim);
+    $sql .= " AND pc54_datatermino <= '{$periodoFim->format('Y-m-d')}'::date ";
+}
+
+$sql .= " AND l20_instit = ". db_getsession('DB_instit') .
+" ORDER BY pc54_datainicio";
 
 $resultVigencia = db_query($sql);
 
@@ -131,14 +154,16 @@ for($i = 0; $i < pg_num_rows($resultVigencia); $i++){
 
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(42, $alt, "Compilação", 1, 0, "C",1);
-    $pdf->cell(42, $alt, "Licitação", 1, 0, "C",1);
-    $pdf->cell(119, $alt, "Departamento", 1, 0, "C",1);
+    $pdf->cell(42, $alt, "Modalidade", 1, 0, "C",1);
+    $pdf->cell(42, $alt, "Processo Licitatório", 1, 0, "C",1);
+    $pdf->cell(77, $alt, "Departamento", 1, 0, "C",1);
     $pdf->cell(38, $alt, "Inicio", 1, 0, "C",1);
     $pdf->cell(38, $alt, "Fim", 1, 1, "C",1);
     $pdf->setfont('arial', '', 6);
     $pdf->cell(42, $alt, $compilacao, 1, 0, "C",0);
     $pdf->cell(42, $alt, $licitacao, 1, 0, "C",0);
-    $pdf->cell(119, $alt, $departamento, 1, 0, "L",0);
+    $pdf->cell(42, $alt, $processolicitatorio, 1, 0, "C",0);
+    $pdf->cell(77, $alt, $departamento, 1, 0, "L",0);
     $pdf->cell(38, $alt, $inicio, 1, 0, "C",0);
     $pdf->cell(38, $alt, $fim, 1, 1, "C",0);
     $pdf->setfont('arial', 'b', 8);
@@ -148,21 +173,13 @@ for($i = 0; $i < pg_num_rows($resultVigencia); $i++){
 
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(42, $alt, "Cgm", 1, 0, "C", 1);
-    $pdf->cell(237, $alt, "Fornecedor", 1, 1, "C", 1);
+    $pdf->cell(42, $alt, "CNPJ/CPF", 1, 0, "C", 1);
+    $pdf->cell(119, $alt, "Fornecedor", 1, 0, "C", 1);
+    $pdf->cell(38, $alt, "", 1, 0, "C",1);
+    $pdf->cell(38, $alt, "", 1, 1, "C",1);
 
-    $fornecedores = buscarFornecedoresGanhadores((int)$l20_codigo);
+    insereFornecedores($pdf, $alt, (int)$l20_codigo);
 
-    if (empty($fornecedores)) {
-        $pdf->setfont('arial', '', 6);
-        $pdf->cell(42, $alt, "", 1, 0, "C", 0);
-        $pdf->cell(237, $alt, "", 1, 1, "C", 0);
-    } else {
-        foreach ($fornecedores as $fornecedor) {
-            $pdf->setfont('arial', '', 6);
-            $pdf->cell(42, $alt, $fornecedor['cgm'], 1, 0, "C", 0);
-            $pdf->cell(237, $alt, $fornecedor['nome'], 1, 1, "C", 0);
-        }
-    }
     $pdf->cell(279, $alt, "", 0, 1, "C");
 }
 

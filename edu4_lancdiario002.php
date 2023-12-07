@@ -137,29 +137,34 @@ $db_opcao = 1;
     oParametros.iLancamento = iLancamento;
 
     js_divCarregando('Aguarde, pesquisando disciplinas...<br>Esse procedimento pode levar algum tempo.', 'msgBox')
-    var oAjax = new Ajax.Request(sUrlRpc, {
-      method: 'post',
-      parameters: 'json=' + Object.toJSON(oParametros),
-      onComplete: js_loadDados
-    });
+      new Ajax.Request(sUrlRpc, {
+          method: 'post',
+          parameters: 'json=' + Object.toJSON(oParametros),
+          onComplete: js_loadDados
+      });
   };
 
   js_loadDados = function(oAjax) {
-
-    js_removeObj('msgBox');
     var oRetorno = eval("(" + oAjax.responseText + ")");
+
     oCboDisciplina.clearItens();
     oCboDisciplina.addItem("", "Selecione");
-    oRetorno.itens.each(function(oDisciplina, iSeq) {
+
+      oRetorno.itens.each(function(oDisciplina, iSeq) {
       oCboDisciplina.addItem(oDisciplina.codigo_disciplina, oDisciplina.descricao_disciplina.urlDecode());
     });
+
     iRegente = oRetorno.codigo_regente;
     oTxtFieldRegente.setValue(oRetorno.nome_regente.urlDecode());
-    if (oRetorno.itens.length == 1) {
 
+    if (oRetorno.itens.length == 1) {
       oCboDisciplina.setValue(oRetorno.itens[0].codigo_disciplina);
       js_getDatasProfessor();
     }
+
+    setTimeout(function () {
+        js_removeObj('msgBox');
+    },18000)
   };
 
   function js_atualizarDadosLeitura() {
@@ -491,6 +496,13 @@ $db_opcao = 1;
   }
 
   function js_salvarDiarioClasse(lConfirmar) {
+      const iConteudoDesenvolvido = document.getElementById('oTxtFieldAulaDesenvolvida').value;
+
+      if (iConteudoDesenvolvido === '') {
+          alert("Insira um conteúdo desenvolvido antes de salvar o diário!");
+          return;
+      }
+
       if (lConfirmar == null) {
           lConfirmar = true;
       }
