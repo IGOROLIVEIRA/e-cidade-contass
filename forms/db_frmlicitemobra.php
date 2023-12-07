@@ -17,11 +17,9 @@ $cllicitemobra->rotulo->label();
     <fieldset style="margin-top: 40px; width: 100%; max-width: 1342px;">
         <legend>Cadastro de itens obra</legend>
         <table border="0">
-            <tr>
-                <td>
-                    <?
-                    db_ancora("Sequencial da Licitação:", "js_pesquisa_liclicita(true)", $db_opcao);
-                    ?>
+            <tr id="acoraLicitacao">
+                <td width="150">
+                    <? db_ancora("Sequencial da Licitação:", "js_pesquisa_liclicita(true)", $db_opcao); ?>
                 </td>
                 <td>
                     <?
@@ -30,11 +28,9 @@ $cllicitemobra->rotulo->label();
                     ?>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <?
-                    db_ancora("Processo de Compras:", "js_pesquisa_pcproc(true)", $db_opcao);
-                    ?>
+            <tr id="acoraProcessoCompra">
+                <td width="150">
+                    <? db_ancora("Processo de Compras:", "js_pesquisa_pcproc(true)", $db_opcao); ?>
                 </td>
                 <td>
                     <?
@@ -43,11 +39,6 @@ $cllicitemobra->rotulo->label();
                     ?>
                 </td>
             </tr>
-            <!--tr>
-                <td colspan="2">
-                    <input name="Processar" type="submit" id="db_opcao" value="Processar Remover" style="width: 100px; margin-left: 43%;margin-top: 7px; margin-bottom: 5px">
-                </td>
-            </tr-->
         </table>
     </fieldset>
     
@@ -146,7 +137,7 @@ $cllicitemobra->rotulo->label();
         }
 
     ?>
-
+    
     <div style="margin-top: 20px; width: 100%; max-width: 1364px;; max-height: 420px; overflow-y: scroll;">
         <table class="DBgrid">
             <thead>
@@ -274,11 +265,17 @@ $cllicitemobra->rotulo->label();
         }
         ?>
     }
-    js_carregar_tabela();
+
+    // Busca json demorando muito tempo
+    //js_carregar_tabela();
+
+    verificaAncora();
     /**
      * funcao para retornar licitacao
      */
     function js_pesquisa_liclicita(mostra) {
+        
+        verificaAncora();
 
         if (mostra == true) {
 
@@ -300,7 +297,7 @@ $cllicitemobra->rotulo->label();
         }
     }
 
-    /**
+     /**
      * funcao para preencher licitacao  da ancora
      */
     function js_preencheLicitacao(codigo, objeto) {
@@ -308,7 +305,10 @@ $cllicitemobra->rotulo->label();
         document.form1.l20_objeto.value = objeto;
         document.form1.pc80_codproc.value = '';
         document.form1.pc80_resumo.value = '';
+        
         db_iframe_liclicita.hide();
+
+        // Envia formulário para carregar itens da obra
         document.form1.submit();
     }
 
@@ -316,13 +316,14 @@ $cllicitemobra->rotulo->label();
         document.form1.l20_objeto.value = objeto;
         document.form1.pc80_codproc.value = '';
         document.form1.pc80_resumo.value = '';
-
+        
         if (erro == true) {
             alert("Nenhuma licitação encontrada.");
             document.form1.l20_objeto.value = "";
-        } else {
-            document.form1.submit();
         }
+
+        // Envia formulário para carregar itens da obra
+        document.form1.submit();  
     }
 
     function js_carregar() {
@@ -332,11 +333,52 @@ $cllicitemobra->rotulo->label();
         }
     }
 
+    function verificaAncora() {
+        var codLicitacao = document.form1.l20_codigo.value.trim();
+        var codProcessoCompra = document.form1.pc80_codproc.value.trim();
+
+        // Exibir ambas as âncoras por padrão
+        ocultarAncoraLicitacao(false);
+        ocultarAncoraProcessoCompra(false);
+
+        // Verificar se codLicitacao não está vazio e ocultar a âncora do processo de compra
+        if (codLicitacao !== "") {
+            ocultarAncoraProcessoCompra(true);
+        }
+
+        // Verificar se codProcessoCompra não está vazio e ocultar a âncora da licitação
+        else if (codProcessoCompra !== "") {
+            ocultarAncoraLicitacao(true);
+        }
+    }
+
+    /**
+     * Função para ocultar/mostrar a ancora de licitação
+     */
+    function ocultarAncoraLicitacao(opcao) {
+        var element = document.getElementById("acoraLicitacao");
+        if (element) {
+            element.style.display = opcao === true ? 'none' : 'block';
+        }
+    }
+
+    /**
+     * Função para ocultar/mostrar a ancora de processo de compra
+     */
+    function ocultarAncoraProcessoCompra(opcao) {
+        var element = document.getElementById("acoraProcessoCompra");
+        if (element) {
+            element.style.display = opcao === true ? 'none' : 'block';
+        }
+    }
 
     /**
      * funcao para retornar processo de compra
      */
     function js_pesquisa_pcproc(mostra) {
+        
+        verificaAncora();
+
         if (mostra == true) {
             js_OpenJanelaIframe('top.corpo', 'db_iframe_pcproc', 'func_pcproc.php?funcao_js=parent.js_mostrapcproc|pc80_codproc|pc80_resumo', 'Pesquisa', true);
         } else {
@@ -353,6 +395,8 @@ $cllicitemobra->rotulo->label();
         document.form1.pc80_codproc.value = chave;
         document.form1.pc80_resumo.value = chave2;
         db_iframe_pcproc.hide();
+        
+        // Envia formulário para carregar itens da obra
         document.form1.submit();
     }
 
@@ -361,14 +405,16 @@ $cllicitemobra->rotulo->label();
         document.form1.pc80_resumo.value = chave2;
         document.form1.l20_codigo.value = '';
         document.form1.l20_objeto.value = '';
+        
         if (erro == true) {
+            alert("Nenhuma processo de compra encontrado.");
             document.form1.pc80_codproc.focus();
             document.form1.pc80_codproc.value = '';
-            document.form1.l20_codigo.value = '';
-            document.form1.l20_objeto.value = '';
-        } else {
-            document.form1.submit()
+            document.form1.pc80_resumo.value = '';
         }
+        
+        // Envia formulário para carregar itens da obra
+        document.form1.submit() 
     }
 
     /**
