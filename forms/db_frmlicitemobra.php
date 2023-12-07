@@ -14,7 +14,7 @@ $cllicitemobra->rotulo->label();
     }
 </style>
 <form name="form1" method="post" action="">
-    <fieldset style="margin-top: 40px; width: 100%; max-width: 1342px;">
+    <fieldset style="margin-top: 40px; width: 100%; max-width: 1230px;">
         <legend>Cadastro de itens obra</legend>
         <table border="0">
             <tr id="acoraLicitacao">
@@ -42,7 +42,7 @@ $cllicitemobra->rotulo->label();
         </table>
     </fieldset>
     
-    <fieldset style="margin-top: 20px; width: 100%; max-width: 1342px;">
+    <fieldset style="margin-top: 20px; width: 100%; max-width: 1230px;">
         <legend>Edição em bloco</legend>
         <table style="margin-top: 5px;">
             <tr>
@@ -82,14 +82,6 @@ $cllicitemobra->rotulo->label();
                 </td>
             </tr>
             <tr>
-                <td nowrap title="<?= @$Tobr06_dtregistro ?>">
-                    <?= @$Lobr06_dtregistro ?>
-                </td>
-                <td>
-                    <?
-                    db_inputdata('obr06_dtregistro', @$obr06_dtregistro_dia, @$obr06_dtregistro_mes, @$obr06_dtregistro_ano, true, 'text', $db_opcao, "")
-                    ?>
-                </td>
                 <td nowrap title="<?= @$Tobr06_dtcadastro ?>">
                     <?= @$Lobr06_dtcadastro ?>
 
@@ -102,7 +94,7 @@ $cllicitemobra->rotulo->label();
                     db_inputdata('obr06_dtcadastro', @$obr06_dtcadastro_dia, @$obr06_dtcadastro_mes, @$obr06_dtcadastro_ano, true, 'text', $db_opcao);
                     ?>
                 </td>
-                <td>
+                <td colspan="2">
                     <?= @$Lobr06_codigotabela ?>
                     <?
                     db_input('obr06_codigotabela', 15, $Iobr06_codigotabela, true, 'text', $db_opcao, "")
@@ -138,18 +130,16 @@ $cllicitemobra->rotulo->label();
 
     ?>
     
-    <div style="margin-top: 20px; width: 100%; max-width: 1364px;; max-height: 420px; overflow-y: scroll;">
+    <div style="margin-top: 20px; width: 100%; max-width: 1252px;; max-height: 420px; overflow-y: scroll;">
         <table class="DBgrid">
             <thead>
                 <tr>
                     <td class="table_header" style="width: 35px; height:30px;" onclick="marcarTodos();">M</td>
                     <td class="table_header" style="width: 75px">Códido do item</td>
-                    <td class="table_header" style="width: 253px">Descrição do Item</td>
+                    <td class="table_header" style="width: 353px">Descrição do Item</td>
                     <td class="table_header" style="width: 215px">Tabela</td>
                     <td class="table_header" style="width: 90px"> Versão da Tabela</td>
-                    <td class="table_header" style="width: 300px">Descrição Tabela</td>
-                    <td class="table_header" style="width: 155px">Data de Registro</td>
-                    <td class="table_header" style="width: 155px">Data de Cadastro</td>
+                    <td class="table_header" style="width: 315px">Descrição Tabela</td>
                     <td class="table_header" style="width: 87px"> Código da Tabela</td>
                     <td class="table_header" style="width: 87px">Ação</td>
                 </tr>
@@ -164,22 +154,24 @@ $cllicitemobra->rotulo->label();
                     }
 
             ?>
+                <input type="hidden" id=<?= 'obr06_dtcadastro_' . $iItem ?> value="<?= $aItem->obr06_dtcadastro ?>">
+                
                 <tr class="normal">
-                    <th class="table_header" style="width: 30px">
+                    <th class="table_header" style="width: 35px">
                         <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem ?>">
                     </th>
 
-                    <td class="linhagrid" style="width: 85px">
+                    <td class="linhagrid" style="width: 75px">
                         <?= $aItem->pc01_codmater ?>
                         <input type="hidden" name="" value="<?= $aItem->pc01_codmater ?>" id="<?= $iItem ?>">
                     </td>
 
-                    <td class="linhagrid" style="width: 310px">
+                    <td class="linhagrid" style="width: 353px">
                         <?= $aItem->pc01_descrmater ?>
                         <input type="hidden" name="" value="<?= $aItem->pc01_descrmater ?>" id="<?= $iItem ?>">
                     </td>
 
-                    <td class="linhagrid" style="width: 179px">
+                    <td class="linhagrid" style="width: 215px">
                         <select name="tabela" id="<?= 'obr06_tabela_' . $iItem ?>" onchange='js_validatabelaLinha(this.id)'>
                             <option value="0">Selecione</option>
                             <option <?php echo $aItem->obr06_tabela == "1" ? "selected" : ""; ?> value="1">1 - Tabela SINAP</option>
@@ -189,32 +181,12 @@ $cllicitemobra->rotulo->label();
                         </select>
                     </td>
 
-                    <td class="linhagrid" style="width: 87px">
+                    <td class="linhagrid" style="width: 90px">
                         <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_versaotabela ?>" id="<?= 'obr06_versaotabela_' . $iItem ?>">
                     </td>
 
-                    <td class="linhagrid" style="width: 305px">
+                    <td class="linhagrid" style="width: 315px">
                         <input type="text" name="" value="<?= mb_convert_encoding($aItem->obr06_descricaotabela, "ISO-8859-1", "UTF-8") ?>" id="<?= 'obr06_descricaotabela_' . $iItem ?>">
-                    </td>
-
-                    <td class="linhagrid" style="width: 150px">
-                        <?
-                        $obr06_dtregistro = (implode("/", (array_reverse(explode("-", $aItem->obr06_dtregistro)))));
-                        $dataregistro = explode("/", $obr06_dtcadastro);
-                        ?>
-                        <?
-                        db_inputdata('obr06_dtregistro_' . $iItem, $dataregistro[0], $dataregistro[1], $dataregistro[2], true, 'text', 1, "")
-                        ?>
-                    </td>
-
-                    <td class="linhagrid" style="width: 150px">
-                        <?
-                        $obr06_dtcadastro = (implode("/", (array_reverse(explode("-", $aItem->obr06_dtcadastro)))));
-                        $datacadastro = explode("/", $obr06_dtcadastro);
-                        ?>
-                        <?php
-                        db_inputdata('obr06_dtcadastro_' . $iItem, $datacadastro[0], $datacadastro[1], $datacadastro[2], true, 'text', 1, "")
-                        ?>
                     </td>
 
                     <td class="linhagrid" style="width: 87px">
@@ -267,7 +239,7 @@ $cllicitemobra->rotulo->label();
     }
 
     // Busca json demorando muito tempo
-    //js_carregar_tabela();
+    // js_carregar_tabela();
 
     verificaAncora();
     /**
@@ -492,7 +464,7 @@ $cllicitemobra->rotulo->label();
             document.getElementById('obr06_descricaotabela_' + item.pc01_codmater + tabela).value = item.obr06_descricaotabela;
             document.getElementById('obr06_codigotabela_' + item.pc01_codmater + tabela).value = item.obr06_codigotabela;
             if (item.obr06_dtregistro != "") {
-                document.getElementById('obr06_dtregistro_' + item.pc01_codmater + tabela).value = js_dataFormat(item.obr06_dtregistro, 'u');
+                //document.getElementById('obr06_dtregistro_' + item.pc01_codmater + tabela).value = js_dataFormat(item.obr06_dtregistro, 'u');
                 document.getElementById('obr06_dtcadastro_' + item.pc01_codmater + tabela).value = js_dataFormat(item.obr06_dtcadastro, 'u');
             }
         });
@@ -507,7 +479,7 @@ $cllicitemobra->rotulo->label();
         let tabela = document.getElementById('obr06_tabela').value;
         let versaotabela = document.getElementById('obr06_versaotabela').value;
         let descricaotabela = document.getElementById('obr06_descricaotabela').value;
-        let dtregistro = document.getElementById('obr06_dtregistro').value;
+        //let dtregistro = document.getElementById('obr06_dtregistro').value;
         let dtcadastro = document.getElementById('obr06_dtcadastro').value;
         let codigodatabela = document.getElementById('obr06_codigotabela').value;
         // console.log(aItens());
@@ -517,7 +489,7 @@ $cllicitemobra->rotulo->label();
                 document.getElementById('obr06_tabela_' + item.id).value = tabela;
                 document.getElementById('obr06_versaotabela_' + item.id).value = versaotabela;
                 document.getElementById('obr06_descricaotabela_' + item.id).value = descricaotabela;
-                document.getElementById('obr06_dtregistro_' + item.id).value = dtregistro;
+                //document.getElementById('obr06_dtregistro_' + item.id).value = dtregistro;
                 document.getElementById('obr06_dtcadastro_' + item.id).value = dtcadastro;
                 document.getElementById('obr06_codigotabela_' + item.id).value = codigodatabela;
             }
@@ -559,7 +531,7 @@ $cllicitemobra->rotulo->label();
                     obr06_descricaotabela: document.getElementById('obr06_descricaotabela_' + coditem).value,
                     obr06_codigotabela: document.getElementById('obr06_codigotabela_' + coditem).value,
                     obr06_versaotabela: document.getElementById('obr06_versaotabela_' + coditem).value,
-                    obr06_dtregistro: document.getElementById('obr06_dtregistro_' + coditem).value,
+                    //obr06_dtregistro: document.getElementById('obr06_dtregistro_' + coditem).value,
                     obr06_dtcadastro: document.getElementById('obr06_dtcadastro_' + coditem).value,
                 };
                 itensEnviar.push(novoItem);
@@ -672,7 +644,7 @@ $cllicitemobra->rotulo->label();
                 document.getElementById('obr06_versaotabela_' + item).value = "";
                 document.getElementById('obr06_descricaotabela_' + item).value = "";
                 document.getElementById('obr06_dtcadastro_' + item).value = "";
-                document.getElementById('obr06_dtregistro_' + item).value = "";
+                //document.getElementById('obr06_dtregistro_' + item).value = "";
                 document.getElementById('obr06_codigotabela_' + item).value = "";
             })
             alert("Item Excluido com sucesso!")
@@ -720,7 +692,7 @@ $cllicitemobra->rotulo->label();
                 document.getElementById('obr06_versaotabela_' + item).value = "";
                 document.getElementById('obr06_descricaotabela_' + item).value = "";
                 document.getElementById('obr06_dtcadastro_' + item).value = "";
-                document.getElementById('obr06_dtregistro_' + item).value = "";
+                //document.getElementById('obr06_dtregistro_' + item).value = "";
                 document.getElementById('obr06_codigotabela_' + item).value = "";
             })
             alert("Item Excluido com sucesso!")
