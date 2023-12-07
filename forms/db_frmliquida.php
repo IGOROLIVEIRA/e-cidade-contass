@@ -64,6 +64,10 @@ $db_opcao_inf=1;
 }
 </style>
 <script language="JavaScript" type="text/javascript" src="scripts/widgets/DBToogle.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/classes/DBViewNotasPendentes.classe.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/windowAux.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/widgets/dbmessageBoard.widget.js"></script>
+<script language="JavaScript" type="text/javascript" src="scripts/datagrid.widget.js"></script>
 <form name=form1 action="" method="POST">
  <input type=hidden name=retencoes value ="">
  <input type=hidden name=e69_codnota value="<?=@$e69_codnota ?>">
