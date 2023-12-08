@@ -179,14 +179,25 @@ $cllicitemobra->rotulo->label();
                             <option <?php echo $aItem->obr06_tabela == "4" ? "selected" : ""; ?> value="4">4 - Cadastro Próprio</option>
                         </select>
                     </td>
-                    <td class="linhagrid" style="width: 90px">
-                        <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_versaotabela ?>" id="<?= 'obr06_versaotabela_' . $iItem ?>">
-                    </td>
                     <td class="linhagrid" style="width: 87px">
                         <input style="width: 80px" type="text" name="" value="<?= $aItem->obr06_codigotabela ?>" id="<?= 'obr06_codigotabela_' . $iItem ?>">
                     </td>
+                    <td class="linhagrid" style="width: 90px">
+                        <input 
+                             
+                            type="text" name="" 
+                            value="<?= $aItem->obr06_versaotabela ?>" id="<?= 'obr06_versaotabela_' . $iItem ?>"
+                            <?= $aItem->obr06_tabela === "4" ? "disabled style='background-color: #E6E4F1;width: 80px;'" : "style='width: 80px'"?>
+                            >
+                    </td>
                     <td class="linhagrid" style="width: 315px">
-                        <input type="text" name="" value="<?= mb_convert_encoding($aItem->obr06_descricaotabela, "ISO-8859-1", "UTF-8") ?>" id="<?= 'obr06_descricaotabela_' . $iItem ?>">
+                        <input 
+                            type="text" 
+                            name="" 
+                            value="<?= mb_convert_encoding($aItem->obr06_descricaotabela, "ISO-8859-1", "UTF-8") ?>" 
+                            id="<?= 'obr06_descricaotabela_' . $iItem ?>"
+                            <?= $aItem->obr06_tabela !== "3" ? "disabled style='background-color: #E6E4F1'" : ""?>
+                            >
                     </td>
                     <td class="linhagrid" style="width: 87px">
                         <input type="button" name="" value="Excluir" id="<?= $iItem ?>" onclick="excluirLinha(<?= $iItem ?>)">
@@ -466,31 +477,48 @@ $cllicitemobra->rotulo->label();
         });
     }
 
-    /**
-     * Botão Aplicar
-     */
-
     function js_aplicar() {
 
         let tabela = document.getElementById('obr06_tabela').value;
         let versaotabela = document.getElementById('obr06_versaotabela').value;
         let descricaotabela = document.getElementById('obr06_descricaotabela').value;
-        //let dtregistro = document.getElementById('obr06_dtregistro').value;
         let dtcadastro = document.getElementById('obr06_dtcadastro').value;
         let codigodatabela = document.getElementById('obr06_codigotabela').value;
-        // console.log(aItens());
+
         aItens().forEach(function(item) {
-            // console.log(item.id);
             if (item.checked === true) {
                 document.getElementById('obr06_tabela_' + item.id).value = tabela;
-                document.getElementById('obr06_versaotabela_' + item.id).value = versaotabela;
-                document.getElementById('obr06_descricaotabela_' + item.id).value = descricaotabela;
-                //document.getElementById('obr06_dtregistro_' + item.id).value = dtregistro;
+
+                habilitaDesabilitaTabela(tabela, item.id);
+
+                let inputVersaoTabela = document.getElementById('obr06_versaotabela_' + item.id);
+                if (inputVersaoTabela.disabled === false) {
+                    inputVersaoTabela.style.backgroundColor = '#FFFFFF';
+                    inputVersaoTabela.value = versaotabela;
+                }
+
+                let inputDescricaoTabela =  document.getElementById('obr06_descricaotabela_' + item.id);
+                if(inputDescricaoTabela.disabled === false) {
+                    inputDescricaoTabela.style.backgroundColor = '#FFFFFF';
+                    inputDescricaoTabela.value = descricaotabela;
+                }
+                
                 document.getElementById('obr06_dtcadastro_' + item.id).value = dtcadastro;
                 document.getElementById('obr06_codigotabela_' + item.id).value = codigodatabela;
             }
         })
 
+    }
+
+    /**
+     * Botão Aplicar
+     */
+
+    function js_habilita_campos_da_tabela() {
+        aItens().forEach(function(item) {
+            document.getElementById('obr06_tabela_' + item.id).value = tabela;
+            habilitaDesabilitaTabela(tabela, item.id);
+        })
     }
 
     /**
@@ -563,25 +591,64 @@ $cllicitemobra->rotulo->label();
         }
     }
 
-    function js_validatabela(value) {
+    function habilitaDesabilitaTabela(value, campo) {
+        let tipoTabela;
+        let versaoTabela;
+        let descricaoTabela;
 
-        if (value != 3) {
-            document.getElementById('obr06_descricaotabela').style.backgroundColor = '#E6E4F1'
+        if (campo) {
+            tipoTabela = document.getElementById('obr06_tabela_' + campo).value;
+            versaoTabela = document.getElementById("obr06_versaotabela_" + campo);
+            descricaoTabela = document.getElementById("obr06_descricaotabela_" + campo);
         } else {
-            document.getElementById('obr06_descricaotabela').style.backgroundColor = '#FFFFFF'
-
+            tipoTabela = document.getElementById("obr06_tabela").value;
+            versaoTabela = document.getElementById("obr06_versaotabela");
+            descricaoTabela = document.getElementById("obr06_descricaotabela");
+            
+            versaoTabela.value = '';
+            descricaoTabela.value = '';
         }
+        
+        versaoTabela.disabled = true;
+        versaoTabela.style.backgroundColor = '#E6E4F1';
+
+        descricaoTabela.disabled = true;
+        descricaoTabela.style.backgroundColor = '#E6E4F1';
+
+        const option = parseInt(campo ? tipoTabela : value);
+
+        switch (option) {
+            case 1:
+            case 2:
+                // Se 1 - Tabela SINAP ou 2 - Tabela SICRO somente habilitar o campo "Versão da Tabela"
+                versaoTabela.disabled = false;
+                versaoTabela.style.backgroundColor = '#FFFFFF';
+                break;
+            case 3:
+                // Se 3 - Outras Tabelas Oficiais somente os campos "Versão da Tabela" e "Descrição da Tabela"
+                versaoTabela.disabled = false;
+                versaoTabela.style.backgroundColor = '#FFFFFF';
+
+                descricaoTabela.disabled = false;
+                descricaoTabela.style.backgroundColor = '#FFFFFF';
+                break;
+            default:
+                // Se 4 - Cadastro Próprio desabilitar todos os campos
+                break;
+        }
+    }
+    
+
+    function js_validatabela(value) {
+        habilitaDesabilitaTabela(value);
     }
 
     function js_validatabelaLinha(value) {
         let campo = value.substring(13);
+        
         let tipotabela = document.getElementById('obr06_tabela_' + campo).value;
-        if (tipotabela != 3) {
-            document.getElementById('obr06_descricaotabela_' + campo).style.backgroundColor = '#E6E4F1'
-        } else {
-            document.getElementById('obr06_descricaotabela_' + campo).style.backgroundColor = '#FFFFFF'
 
-        }
+        habilitaDesabilitaTabela(tipotabela, campo);
     }
 
     /**
