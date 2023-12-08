@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Traits\LegacyAccount;
 
-
 class PcForne extends LegacyModel
 {
     use LegacyAccount;
@@ -50,4 +49,9 @@ class PcForne extends LegacyModel
         'pc60_databloqueio_fim',
         'pc60_motivobloqueio',
     ];
+
+    public function cgm()
+    {
+        return $this->belongsTo(Cgm::class, 'pc60_numcgm', 'z01_numcgm');
+    }
 }
