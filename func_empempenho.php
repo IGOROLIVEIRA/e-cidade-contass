@@ -124,6 +124,7 @@ $rotulo->label("z01_cgccpf");
         <table style="margin: 0 auto;">
             <tr>
                 <td align="center">
+                    <input type="hidden" value="1" name="pesquisa_geral">
                     <input name="pesquisar" type="submit" id="pesquisar2" value="Pesquisar">
                     <input name="limpar" type="reset" id="limpar" value="Limpar">
                     <input name="Fechar" type="button" id="fechar" value="Fechar" onClick="parent.db_iframe_empempenho.hide();">
@@ -263,7 +264,7 @@ $rotulo->label("z01_cgccpf");
             $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and z01_nome like '$chave_z01_nome%'", $filtroempelemento);
           } elseif (isset($chave_z01_cgccpf) && !empty($chave_z01_cgccpf)) {
             $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "$dbwhere and z01_cgccpf like '$chave_z01_cgccpf%'", $filtroempelemento);
-          } else {
+          } elseif($pesquisa_geral == 1){  
             $sql = $clempempenho->sql_query("", $campos, "empempenho.e60_emiss desc", "{$dbwhere}", $filtroempelemento);
           }
 
@@ -365,11 +366,7 @@ $rotulo->label("z01_cgccpf");
             $sql = $clempempenho->sql_query_inclusaoempenho(null, $campos, null, $dbwhere);
           }
           $result = $clempempenho->sql_record($sql);
-        ?>
 
-          <fieldset>
-            <legend><strong>Resultado da Pesquisa</strong></legend>
-            <?php
             if ($clempempenho->numrows == 0) {
               $lin = "parent.js_mostraempempenho";
               //echo "<script> alert('Não encontrado');</script>";
@@ -382,11 +379,7 @@ $rotulo->label("z01_cgccpf");
 
               }
             }
-
-            ?>
-
-          </fieldset>
-        <?php
+            
         } else {
 
           if ($pesquisa_chave != null && $pesquisa_chave != "") {
@@ -399,6 +392,12 @@ $rotulo->label("z01_cgccpf");
                 $sWherePesquisaPorCodigoEmpenho = " e60_anousu = " . db_getsession("DB_anousu");
               }
 
+              $aEmpenho = explode("/", $pesquisa_chave);
+              $e60_codemp = $aEmpenho[0];
+              $e60_anousu = $aEmpenho[1];
+              $e60_anousu = $e60_anousu == null ? db_getsession("DB_anousu") : $e60_anousu; 
+              var_dump($e60_anousu);
+              $dbwhere = "e60_codemp = '$e60_codemp' and e60_anousu = $e60_anousu";
 
               /**
                * Filtro $filtroabast

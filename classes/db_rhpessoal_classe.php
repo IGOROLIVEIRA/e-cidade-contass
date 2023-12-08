@@ -2375,4 +2375,22 @@ class cl_rhpessoal
         }
         return $sql;
     }
+
+    public function verificaMatriculaECargo($iNumCgm)
+    {
+        $sSql = "SELECT DISTINCT rh01_regist, rh37_descr";
+        $sSql .= " FROM rhpessoal";
+        $sSql .= " LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rh01_funcao AND rhfuncao.rh37_instit = rh01_instit  ";
+        $sSql .= " WHERE rh01_regist = (";
+        $sSql .= " SELECT max(rh01_regist)";
+        $sSql .= " FROM rhpessoal";
+        $sSql .= " WHERE rh01_numcgm = {$iNumCgm} AND rh01_regist NOT IN (";
+        $sSql .= " SELECT rh01_regist";
+        $sSql .= " FROM rhpessoal";
+        $sSql .= " LEFT JOIN rhpessoalmov  ON  rhpessoalmov.rh02_regist = rhpessoal.rh01_regist";
+        $sSql .= " LEFT JOIN rhpesrescisao ON  rh02_seqpes = rh05_seqpes";
+        $sSql .= " WHERE rh05_recis IS NOT NULL AND rh01_numcgm = {$iNumCgm}))";
+        
+        return $sSql;
+    }
 }

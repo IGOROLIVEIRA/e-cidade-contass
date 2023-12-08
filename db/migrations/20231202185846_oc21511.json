@@ -1,0 +1,790 @@
+{
+    "incluir": [
+        {
+            "CODIGO_ECID": "15020000",
+            "CODIGO_TCE": "1502000",
+            "CODIGO_STN": "1502",
+            "DESCRICAO": "RECURSOS NAO VINCULADOS DA COMPENSACAO DE IMPOSTOS",
+            "TIPO_RECURSO": "Recurso Livre",
+            "FINALIDADE": "Controle recursos nao vinculados-compensacao de impostos."
+        },
+        {
+            "CODIGO_ECID": "15020001",
+            "CODIGO_TCE": "1502000",
+            "CODIGO_STN": "1502",
+            "DESCRICAO": "RECURSOS NAO VINCULADOS DA COMPENSACAO DE IMPOSTOS - MDE",
+            "TIPO_RECURSO": "Recurso Livre",
+            "FINALIDADE": "Controle recursos nao vinculados-compensacao de impostos."
+        },
+        {
+            "CODIGO_ECID": "15020002",
+            "CODIGO_TCE": "1502000",
+            "CODIGO_STN": "1502",
+            "DESCRICAO": "RECURSOS NAO VINCULADOS DA COMPENSACAO DE IMPOSTOS - ASPS",
+            "TIPO_RECURSO": "Recurso Livre",
+            "FINALIDADE": "Controle recursos nao vinculados-compensacao de impostos."
+        },
+        {
+            "CODIGO_ECID": "25020000",
+            "CODIGO_TCE": "2502000",
+            "CODIGO_STN": "2502",
+            "DESCRICAO": "RECURSOS NAO VINCULADOS DA COMPENSACAO DE IMPOSTOS",
+            "TIPO_RECURSO": "Recurso Livre",
+            "FINALIDADE": "Controle recursos nao vinculados-compensacao de impostos."
+        },
+        {
+            "CODIGO_ECID": "25020001",
+            "CODIGO_TCE": "2502000",
+            "CODIGO_STN": "2502",
+            "DESCRICAO": "RECURSOS NAO VINCULADOS DA COMPENSACAO DE IMPOSTOS -MDE",
+            "TIPO_RECURSO": "Recurso Livre",
+            "FINALIDADE": "Controle recursos nao vinculados-compensacao de impostos."
+        },
+        {
+            "CODIGO_ECID": "25020002",
+            "CODIGO_TCE": "2502000",
+            "CODIGO_STN": "2502",
+            "DESCRICAO": "RECURSOS NAO VINCULADOS DA COMPENSACAO DE IMPOSTOS -ASPS",
+            "TIPO_RECURSO": "Recurso Livre",
+            "FINALIDADE": "Controle recursos nao vinculados-compensacao de impostos."
+        },
+        {
+            "CODIGO_ECID": "15990370",
+            "CODIGO_TCE": "1599037",
+            "CODIGO_STN": "1599",
+            "DESCRICAO": "OUT REC VIN EDUC-CONSTRUCAO CRECHES NA BACIA DO PARAOPEBA",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Educacao/Recursos recebidos no ambito do projeto Construcao de Creches na Bacia do Paraopeba vinculado a Acordo Judicial."
+        },
+        {
+            "CODIGO_ECID": "16590190",
+            "CODIGO_TCE": "1659019",
+            "CODIGO_STN": "1659",
+            "DESCRICAO": "OUT REC VIN SAUDE-SEPLAG/RAM-CB 547382572022 BRUMADINHO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 54738257/2022 - Continuidade das Acoes de Assistencia Social e Saude (TPA - Termo de Pactuacao de Atos) de Brumadinho"
+        },
+        {
+            "CODIGO_ECID": "16590260",
+            "CODIGO_TCE": "1659026",
+            "CODIGO_STN": "1659",
+            "DESCRICAO": "OUT REC VIN SAUDE-FORTALECIMENTO ATENCAO PRIMARIA A SAUDE",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos recebidos no ambito do projeto Fortalecimento da Atencao Primaria a Saude"
+        },
+        {
+            "CODIGO_ECID": "16590270",
+            "CODIGO_TCE": "1659027",
+            "CODIGO_STN": "1659",
+            "DESCRICAO": "OUT REC VIN SAUDE-PROMOVE MINAS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos recebidos no ambito do projeto Promove Minas"
+        },
+        {
+            "CODIGO_ECID": "16590280",
+            "CODIGO_TCE": "1659028",
+            "CODIGO_STN": "1659",
+            "DESCRICAO": "OUT REC VIN SAUDE-REDE DE ATENCAO PSICOSSOCIAL (RAPS)",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos recebidos no ambito do projeto Aporte de Recursos Financeiros para Custeio da Manutencao dos Servicos da Rede de Atencao Psicossocial (Raps)"
+        },
+        {
+            "CODIGO_ECID": "16590310",
+            "CODIGO_TCE": "1659031",
+            "CODIGO_STN": "1659",
+            "DESCRICAO": "OUT REC VIN SAUDE-SEPLAG RAM CB 648081182023 UPA EM BETIM",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64808118/2023 -  Construcao de Unidade de Pronto Atendimento (UPA) em Betim"
+        },
+        {
+            "CODIGO_ECID": "16590320",
+            "CODIGO_TCE": "1659032",
+            "CODIGO_STN": "1659",
+            "DESCRICAO": "OUT REC VIN SAUDE-SEPLAG RAM CB 648428612023 HOSPITAL BETIM",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64842861/2023 -  Ampliacao do Hospital Publico Regional de Betim: aumento da quantidade de leitos de CTI e vagas de estacionamento em Betim."
+        },
+        {
+            "CODIGO_ECID": "16590350",
+            "CODIGO_TCE": "1659035",
+            "CODIGO_STN": "1659",
+            "DESCRICAO": "OUT REC VIN SAUDE-SEPLAG RAM CB 648392012023 SAO GONC ABAETE",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64839201/2023 - Construcao de Postos de Saude - Sao Goncalo do Abaete."
+        },
+        {
+            "CODIGO_ECID": "16590380",
+            "CODIGO_TCE": "1659038",
+            "CODIGO_STN": "1659",
+            "DESCRICAO": "OUT REC VIN SAUDE-CONSTRUCAO DE UNIDADE BASICA DE SAUDE",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos recebidos no ambito do projeto Construcao de Unidade Basica de Saude vinculado a Acordo Judicial."
+        },
+        {
+            "CODIGO_ECID": "16590480",
+            "CODIGO_TCE": "1659048",
+            "CODIGO_STN": "1659",
+            "DESCRICAO": "OUT REC VIN SAUDE-SEPLAG RAM CB 648431192023 UBS MATEUS LEME",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64843119/2023 - Reforma de Unidades Basicas de Saude (UBS) - Mateus Leme."
+        },
+        {
+            "CODIGO_ECID": "16590500",
+            "CODIGO_TCE": "1659050",
+            "CODIGO_STN": "1659",
+            "DESCRICAO": "OUT REC VIN SAUDE-SEPLAG RAM CB 513572512022 EXAMES POMPEU",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 51357251/2022  - Amplia Exames - Pompeu."
+        },
+        {
+            "CODIGO_ECID": "16690170",
+            "CODIGO_TCE": "1669017",
+            "CODIGO_STN": "1669",
+            "DESCRICAO": "OUT REC VIN ASSIS SOC-SEPLAG RAM CB 468519432022 BRUMADINHO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Assistencia Social/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 46851943/2022 - Manutencao do Termo de Pactuacao de Atos de Brumadinho "
+        },
+        {
+            "CODIGO_ECID": "16690180",
+            "CODIGO_TCE": "1669018",
+            "CODIGO_STN": "1669",
+            "DESCRICAO": "OUT REC VIN ASSIS SOC-SEPLAG RAM CB 483394672022 BRUMADINHO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Assistencia Social/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 48339467/2022 - Fortalecimento dos Servicos Socioassistenciais de Brumadinho "
+        },
+        {
+            "CODIGO_ECID": "16690190",
+            "CODIGO_TCE": "1669019",
+            "CODIGO_STN": "1669",
+            "DESCRICAO": "OUT REC VIN ASSIS SOC-SEPLAG RAM CB 547382572022 BRUMADINHO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Assistencia Social/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 54738257/2022 - Continuidade das Acoes de Assistencia Social e Saude (TPA - Termo de Pactuacao de Atos) de Brumadinho"
+        },
+        {
+            "CODIGO_ECID": "16690290",
+            "CODIGO_TCE": "1669029",
+            "CODIGO_STN": "1669",
+            "DESCRICAO": "OUT REC VIN ASSIS SOC-FORTALECIMENT SERV SOCIOASSISTENCIAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Assistencia Social/Recursos recebidos no ambito do projeto Fortalecimento dos Servicos Socioassistenciais Municipais"
+        },
+        {
+            "CODIGO_ECID": "17000070",
+            "CODIGO_TCE": "1700007",
+            "CODIGO_STN": "1700",
+            "DESCRICAO": "OUT TRANS CONV-SEGURANCA PUBLICA",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres da Uniao/Transferencias de Convenios Vinculados a Seguranca Publica"
+        },
+        {
+            "CODIGO_ECID": "17000140",
+            "CODIGO_TCE": "1700014",
+            "CODIGO_STN": "1700",
+            "DESCRICAO": "OUT TRANS CONV UNIAO DES NATURAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres da Uniao/Recursos Transferidos pela Uniao destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "17010150",
+            "CODIGO_TCE": "1701015",
+            "CODIGO_STN": "1701",
+            "DESCRICAO": "OUT TRANS CONV ESTADO DES NATURAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres dos Estados/Recursos Transferidos pelo Estado destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "17110140",
+            "CODIGO_TCE": "1711014",
+            "CODIGO_STN": "1711",
+            "DESCRICAO": "TRANS OBRI REPARTICÕES DE REC UNIAO DES NATURAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Demais Transferencias Obrigatorias nao Decorrentes de Reparticoes de Receitas/Recursos Transferidos pela Uniao destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "17110150",
+            "CODIGO_TCE": "1711015",
+            "CODIGO_STN": "1711",
+            "DESCRICAO": "TRANS OBRI REPARTICÕES DE REC ESTADO DES NATURAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Demais Transferencias Obrigatorias nao Decorrentes de Reparticoes de Receitas/Recursos Transferidos pelo Estado destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "17490140",
+            "CODIGO_TCE": "1749014",
+            "CODIGO_STN": "1749",
+            "DESCRICAO": "OUT VIN TRANS UNIAO DES NATURAIS ",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outras vinculacoes de transferencias/Recursos Transferidos pela Uniao destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "17490150",
+            "CODIGO_TCE": "1749015",
+            "CODIGO_STN": "1749",
+            "DESCRICAO": "OUT VIN TRANS ESTADO DES NATURAIS ",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outras vinculacoes de transferencias/Recursos Transferidos pelo Estado destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "17590150",
+            "CODIGO_TCE": "1759015",
+            "CODIGO_STN": "1759",
+            "DESCRICAO": "RECURSOS VINCULADOS A FUNDOS DES NATURAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Recursos Vinculados a Fundos/Recursos Transferidos pela Uniao destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "17590000",
+            "CODIGO_TCE": "1759000",
+            "CODIGO_STN": "1759",
+            "DESCRICAO": "RECURSOS VINCULADOS A FUNDOS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Recursos vinculados a fundos"
+        },
+        {
+            "CODIGO_ECID": "17990060",
+            "CODIGO_TCE": "1799006",
+            "CODIGO_STN": "1799",
+            "DESCRICAO": "OUT VIN LEGAIS CONTRIBUICAO PARA A ASSISTÊNCIA A SAUDE",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outras vinculacoes legais/Contribuicao para a Assistencia a Saude dos Servidores: Patronal; dos Servidores; dos Prestadores de Servicos Contratados"
+        },
+        {
+            "CODIGO_ECID": "18990200",
+            "CODIGO_TCE": "1899020",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 636719242023 GESTAO TERRITORIAL",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 63671924/2023 - Gestao Territorial - Estruturacao de Equipe de Gestao Para Suporte e Acompanhamento dos projetos"
+        },
+        {
+            "CODIGO_ECID": "18990210",
+            "CODIGO_TCE": "1899021",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 648499352023 CONST PARAOPEBA",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64849935/2023 -  Construcao de Casas Populares na bacia do Paraopeba"
+        },
+        {
+            "CODIGO_ECID": "18990220",
+            "CODIGO_TCE": "1899022",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 648524792023 PAVI BRUMADINHO-BONFIM",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos VinculadosRecursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64852479/2023 -  Pavimentacao da Estrada de Brumadinho a Bonfim"
+        },
+        {
+            "CODIGO_ECID": "18990230",
+            "CODIGO_TCE": "1899023",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 648544432023 OBRAS EIXO CENTRAL",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64854443/2023 - Obras de Alargamento e Melhorias da Estrada localizada no Eixo Central"
+        },
+        {
+            "CODIGO_ECID": "18990240",
+            "CODIGO_TCE": "1899024",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 648562952023 CASA BRANCA",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64856295/2023 -  Melhorias da Estrada que Liga Alberto Flores - Corrego do Feijao - Casa Branca"
+        },
+        {
+            "CODIGO_ECID": "18990250",
+            "CODIGO_TCE": "1899025",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 648584602023 SUZANA PALHANO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64858460/2023 -  Obra de Pavimentacao Aranha - Suzana - Palhano"
+        },
+        {
+            "CODIGO_ECID": "18990300",
+            "CODIGO_TCE": "1899030",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-IND BARRAGEM DE BRUMADINHO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos recebidos a título de indenizacao social pelo rompimento da Barragem de Brumadinho, fixados pela Justica do Trabalho."
+        },
+        {
+            "CODIGO_ECID": "18990360",
+            "CODIGO_TCE": "1899036",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 648735502023 CONST PAPAGAIOS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64873550/2023 - Construcao de Distrito Industrial em Papagaios."
+        },
+        {
+            "CODIGO_ECID": "18990390",
+            "CODIGO_TCE": "1899039",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 689667532023 PAVIM FORTUNA DE MINAS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 68966753/2023 - Pavimentacao Asfaltica de Vias - Fortuna de Minas."
+        },
+        {
+            "CODIGO_ECID": "18990400",
+            "CODIGO_TCE": "1899040",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 688930862023 PAVIM FORTUNA DE MINAS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 68893086/2023 - Pavimentacao Asfaltica de Vias - Fortuna de Minas."
+        },
+        {
+            "CODIGO_ECID": "18990410",
+            "CODIGO_TCE": "1899041",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 702705242023 REQUA FORTUNA DE MINAS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 70270524/2023 - Requalificacao de Vias Urbanas e Rurais de Fortuna de Minas"
+        },
+        {
+            "CODIGO_ECID": "18990420",
+            "CODIGO_TCE": "1899042",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 689975852023 PAVIM SAO JOAQ BICAS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 68997585/2023 - Pavimentacao Asfaltica em Vias Urbanas e Rurais - Sao Joaquim de Bicas."
+        },
+        {
+            "CODIGO_ECID": "18990430",
+            "CODIGO_TCE": "1899043",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 684448432023 CONST SAO GONC ABAETE",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 68444843/2023 - Construcao de Um Centro Cultural e Esportivo no Beira Rio em Sao Goncalo do Abaete."
+        },
+        {
+            "CODIGO_ECID": "18990440",
+            "CODIGO_TCE": "1899044",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 718730762023 CONST SAO GONC ABAETE",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 71873076/2023 - Construcao das Vias de Acesso ao Centro Cultural e Esportivo que Sera Implantado no Beira Rio em  Sao Goncalo do Abaete."
+        },
+        {
+            "CODIGO_ECID": "18990450",
+            "CODIGO_TCE": "1899045",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 704996932023 PAVIMEN PARA DE MINAS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 70499693/2023 - Pavimentacao Asfaltica em Vias Diversas - Para de Minas."
+        },
+        {
+            "CODIGO_ECID": "18990460",
+            "CODIGO_TCE": "1899046",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN/REC DO TERMO DE COMPROMISSO BRUMADINHO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso firmado entre o MPMG, o MPF, a DPMG e VALE., com interveniencia da AECOM, do Estado de MG, da COPASA e do Município de Brumadinho."
+        },
+        {
+            "CODIGO_ECID": "18990470",
+            "CODIGO_TCE": "1899047",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN/REC CONST E REFOR ESP ESPORTES E LAZER",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos recebidos no ambito do projeto Construir e Reformar Espacos para a Pratica de Esportes e Lazer."
+        },
+        {
+            "CODIGO_ECID": "18990490",
+            "CODIGO_TCE": "1899049",
+            "CODIGO_STN": "1899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 716681162023 MATEUS LEME",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 71668116/2023 - Reforma de Vias Urbanas e Rurais, e Construcao e Reforma de Pontes - Mateus Leme."
+        },
+        {
+            "CODIGO_ECID": "25990370",
+            "CODIGO_TCE": "2599037",
+            "CODIGO_STN": "2599",
+            "DESCRICAO": "OUT REC VIN EDUCACAO-CONST CRECHES PARAOPEBA",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Educacao/Recursos recebidos no ambito do projeto Construcao de Creches na Bacia do Paraopeba vinculado a Acordo Judicial."
+        },
+        {
+            "CODIGO_ECID": "26590190",
+            "CODIGO_TCE": "2659019",
+            "CODIGO_STN": "2659",
+            "DESCRICAO": "OUT REC VIN SAUDE-SEPLAG RAM CB 547382572022 BRUMADINHO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 54738257/2022 - Continuidade das Acoes de Assistencia Social e Saude (TPA - Termo de Pactuacao de Atos) de Brumadinho"
+        },
+        {
+            "CODIGO_ECID": "26590260",
+            "CODIGO_TCE": "2659026",
+            "CODIGO_STN": "2659",
+            "DESCRICAO": "OUT REC VIN SAUDE-REC FORTAL SAUDE",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos recebidos no ambito do projeto Fortalecimento da Atencao Primaria a Saude"
+        },
+        {
+            "CODIGO_ECID": "26590270",
+            "CODIGO_TCE": "2659027",
+            "CODIGO_STN": "2659",
+            "DESCRICAO": "OUT REC VIN SAUDE-REC PROMOVE MINAS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos recebidos no ambito do projeto Promove Minas"
+        },
+        {
+            "CODIGO_ECID": "26590280",
+            "CODIGO_TCE": "2659028",
+            "CODIGO_STN": "2659",
+            "DESCRICAO": "OUT REC VIN SAUDE-REC RAPS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos recebidos no ambito do projeto Aporte de Recursos Financeiros para Custeio da Manutencao dos Servicos da Rede de Atencao Psicossocial (Raps)"
+        },
+        {
+            "CODIGO_ECID": "26590310",
+            "CODIGO_TCE": "2659031",
+            "CODIGO_STN": "2659",
+            "DESCRICAO": "OUT REC VIN SAUDE-SEPLAG RAM CB 648081182023 UPA BETIM",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64808118/2023 -  Construcao de Unidade de Pronto Atendimento (UPA) em Betim"
+        },
+        {
+            "CODIGO_ECID": "26590320",
+            "CODIGO_TCE": "2659032",
+            "CODIGO_STN": "2659",
+            "DESCRICAO": "OUT REC VIN SAUDE-SEPLAG RAM CB 648428612023 AMPL HOSP BETIM",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64842861/2023 -  Ampliacao do Hospital Publico Regional de Betim: aumento da quantidade de leitos de CTI e vagas de estacionamento em Betim."
+        },
+        {
+            "CODIGO_ECID": "26590350",
+            "CODIGO_TCE": "2659035",
+            "CODIGO_STN": "2659",
+            "DESCRICAO": "OUT REC VIN SAUDE-SEPLAG RAM CB 648392012023 SAO GONC ABAETE",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64839201/2023 - Construcao de Postos de Saude - Sao Goncalo do Abaete."
+        },
+        {
+            "CODIGO_ECID": "26590380",
+            "CODIGO_TCE": "2659038",
+            "CODIGO_STN": "2659",
+            "DESCRICAO": "OUT REC VIN SAUDE-REC CONSTRUCAO UNID BAS SAUDE",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos recebidos no ambito do projeto Construcao de Unidade Basica de Saude vinculado a Acordo Judicial."
+        },
+        {
+            "CODIGO_ECID": "26590480",
+            "CODIGO_TCE": "2659048",
+            "CODIGO_STN": "2659",
+            "DESCRICAO": "OUT REC VIN SAUDE-SEPLAG RAM CB 648431192023 MATEUS LEME",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64843119/2023 - Reforma de Unidades Basicas de Saude (UBS) - Mateus Leme."
+        },
+        {
+            "CODIGO_ECID": "26590500",
+            "CODIGO_TCE": "2659050",
+            "CODIGO_STN": "2659",
+            "DESCRICAO": "OUT REC VIN SAUDE-SEPLAG RAM CB 513572512022 AMPL EXAM POMPEU",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Saude/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 51357251/2022  - Amplia Exames - Pompeu."
+        },
+        {
+            "CODIGO_ECID": "26690170",
+            "CODIGO_TCE": "2669017",
+            "CODIGO_STN": "2669",
+            "DESCRICAO": "OUT REC VIN ASSI SOCIAL-SEPLAG RAM CB 468519432022 BRUMADINHO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Assistencia Social/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 46851943/2022 - Manutencao do Termo de Pactuacao de Atos de Brumadinho "
+        },
+        {
+            "CODIGO_ECID": "26690180",
+            "CODIGO_TCE": "2669018",
+            "CODIGO_STN": "2669",
+            "DESCRICAO": "OUT REC VIN ASSI SOCIAL-SEPLAG RAM CB 483394672022 BRUMADINHO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Assistencia Social/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 48339467/2022 - Fortalecimento dos Servicos Socioassistenciais de Brumadinho "
+        },
+        {
+            "CODIGO_ECID": "26690190",
+            "CODIGO_TCE": "2669019",
+            "CODIGO_STN": "2669",
+            "DESCRICAO": "OUT REC VIN ASSI SOCIAL-SEPLAG RAM CB 547382572022 BRUMADINHO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Assistencia Social/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 54738257/2022 - Continuidade das Acoes de Assistencia Social e Saude (TPA - Termo de Pactuacao de Atos) de Brumadinho"
+        },
+        {
+            "CODIGO_ECID": "26690290",
+            "CODIGO_TCE": "2669029",
+            "CODIGO_STN": "2669",
+            "DESCRICAO": "OUT REC VIN ASSIS SOCIAL REC FORTAL SERV SOCIOASSISTENCIAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados a Assistencia Social/Recursos recebidos no ambito do projeto Fortalecimento dos Servicos Socioassistenciais Municipais"
+        },
+        {
+            "CODIGO_ECID": "27000070",
+            "CODIGO_TCE": "2700007",
+            "CODIGO_STN": "2700",
+            "DESCRICAO": "OUT TRANS CONV INSTR CONG UNIAO-TRANSF CONV SEG PUBLICA",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres da Uniao/Transferencias de Convenios Vinculados a Seguranca Publica"
+        },
+        {
+            "CODIGO_ECID": "27000140",
+            "CODIGO_TCE": "2700014",
+            "CODIGO_STN": "2700",
+            "DESCRICAO": "OUT TRANS CONV INSTR CONG UNIAO-REC UNIAO DES NATURAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres da Uniao/Recursos Transferidos pela Uniao destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "27010150",
+            "CODIGO_TCE": "2701015",
+            "CODIGO_STN": "2701",
+            "DESCRICAO": "OUT TRANS CONV INSTR CONG ESTADOS-REC ESTADO DES NATURAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outras Transferencias de Convenios ou Instrumentos Congeneres dos Estados/Recursos Transferidos pelo Estado destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "27110140",
+            "CODIGO_TCE": "2711014",
+            "CODIGO_STN": "2711",
+            "DESCRICAO": "DEM TRANS OBR NAO DECOR REPARTICÕES-REC UNIAO DES NATURAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Demais Transferencias Obrigatorias nao Decorrentes de Reparticoes de Receitas/Recursos Transferidos pela Uniao destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "27110150",
+            "CODIGO_TCE": "2711015",
+            "CODIGO_STN": "2711",
+            "DESCRICAO": "DEM TRANS OBR NAO DECOR REPARTICÕES-REC ESTADO DES NATURAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Demais Transferencias Obrigatorias nao Decorrentes de Reparticoes de Receitas/Recursos Transferidos pelo Estado destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "27490140",
+            "CODIGO_TCE": "2749014",
+            "CODIGO_STN": "2749",
+            "DESCRICAO": "OUT VIN TRANS-REC UNIAO DES NATURAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outras vinculacoes de transferencias/Recursos Transferidos pela Uniao destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "27490150",
+            "CODIGO_TCE": "2749015",
+            "CODIGO_STN": "2749",
+            "DESCRICAO": "OUT VIN TRANS-REC ESTADO DES NATURAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outras vinculacoes de transferencias/Recursos Transferidos pelo Estado destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "27590150",
+            "CODIGO_TCE": "2759015",
+            "CODIGO_STN": "2759",
+            "DESCRICAO": "REC VIN FUNDOS-REC UNIAO DES NATURAIS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Recursos Vinculados a Fundos/Recursos Transferidos pela Uniao destinados a Situacoes de Desastres Naturais"
+        },
+        {
+            "CODIGO_ECID": "27590000",
+            "CODIGO_TCE": "2759000",
+            "CODIGO_STN": "2759",
+            "DESCRICAO": "RECURSOS VINCULADOS A FUNDOS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Recursos vinculados a fundos"
+        },
+        {
+            "CODIGO_ECID": "27990060",
+            "CODIGO_TCE": "2799006",
+            "CODIGO_STN": "2799",
+            "DESCRICAO": "OUT VIN LEG/CONTRIBUICAO PARA A ASSISTÊNCIA A SAUDE",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outras vinculacoes legais/Contribuicao para a Assistencia a Saude dos Servidores: Patronal; dos Servidores; dos Prestadores de Servicos Contratados"
+        },
+        {
+            "CODIGO_ECID": "28990200",
+            "CODIGO_TCE": "2899020",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 636719242023 GESTAO TERRITORIAL",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 63671924/2023 - Gestao Territorial - Estruturacao de Equipe de Gestao Para Suporte e Acompanhamento dos projetos"
+        },
+        {
+            "CODIGO_ECID": "28990210",
+            "CODIGO_TCE": "2899021",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 648499352023 CONSTRUCAO PARAOPEBA",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64849935/2023 -  Construcao de Casas Populares na bacia do Paraopeba"
+        },
+        {
+            "CODIGO_ECID": "28990220",
+            "CODIGO_TCE": "2899022",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 648524792023 PAVI BRUMADINHO-BONFIM",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos VinculadosRecursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64852479/2023 -  Pavimentacao da Estrada de Brumadinho a Bonfim"
+        },
+        {
+            "CODIGO_ECID": "28990230",
+            "CODIGO_TCE": "2899023",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 648544432023 OBRAS EIXO CENTRAL",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64854443/2023 - Obras de Alargamento e Melhorias da Estrada localizada no Eixo Central"
+        },
+        {
+            "CODIGO_ECID": "28990240",
+            "CODIGO_TCE": "2899024",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 648562952023 CASA BRANCA",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64856295/2023 -  Melhorias da Estrada que Liga Alberto Flores - Corrego do Feijao - Casa Branca"
+        },
+        {
+            "CODIGO_ECID": "28990250",
+            "CODIGO_TCE": "2899025",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 648584602023 SUZANA PALHANO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64858460/2023 -  Obra de Pavimentacao Aranha - Suzana - Palhano"
+        },
+        {
+            "CODIGO_ECID": "28990300",
+            "CODIGO_TCE": "2899030",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-REC INDEN BARRAGEM DE BRUMADINHO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos recebidos a título de indenizacao social pelo rompimento da Barragem de Brumadinho, fixados pela Justica do Trabalho."
+        },
+        {
+            "CODIGO_ECID": "28990360",
+            "CODIGO_TCE": "2899036",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 648735502023 CONSTRUCAO PAPAGAIOS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 64873550/2023 - Construcao de Distrito Industrial em Papagaios."
+        },
+        {
+            "CODIGO_ECID": "28990390",
+            "CODIGO_TCE": "2899039",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 689667532023 PAVIM FORTUNA DE MINAS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 68966753/2023 - Pavimentacao Asfaltica de Vias - Fortuna de Minas."
+        },
+        {
+            "CODIGO_ECID": "28990400",
+            "CODIGO_TCE": "2899040",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 688930862023 PAVIM FORTUNA DE MINAS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 68893086/2023 - Pavimentacao Asfaltica de Vias - Fortuna de Minas."
+        },
+        {
+            "CODIGO_ECID": "28990410",
+            "CODIGO_TCE": "2899041",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 702705242023 REQUA FORTUNA DE MINAS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 70270524/2023 - Requalificacao de Vias Urbanas e Rurais de Fortuna de Minas"
+        },
+        {
+            "CODIGO_ECID": "28990420",
+            "CODIGO_TCE": "2899042",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 689975852023 PAVIM SAO JOAQU BICAS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 68997585/2023 - Pavimentacao Asfaltica em Vias Urbanas e Rurais - Sao Joaquim de Bicas."
+        },
+        {
+            "CODIGO_ECID": "28990430",
+            "CODIGO_TCE": "2899043",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 684448432023 CONST SAO GONCA ABAETE",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 68444843/2023 - Construcao de Um Centro Cultural e Esportivo no Beira Rio em Sao Goncalo do Abaete."
+        },
+        {
+            "CODIGO_ECID": "28990440",
+            "CODIGO_TCE": "2899044",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 718730762023 CONST SAO GONCA ABAETE",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 71873076/2023 - Construcao das Vias de Acesso ao Centro Cultural e Esportivo que Sera Implantado no Beira Rio em  Sao Goncalo do Abaete."
+        },
+        {
+            "CODIGO_ECID": "28990450",
+            "CODIGO_TCE": "2899045",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 704996932023 PAVIM PARA DE MINAS",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 70499693/2023 - Pavimentacao Asfaltica em Vias Diversas - Para de Minas."
+        },
+        {
+            "CODIGO_ECID": "28990460",
+            "CODIGO_TCE": "2899046",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-REC TERMO COMPROMISSO BRUMADINHO",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso firmado entre o MPMG, o MPF, a DPMG e VALE., com interveniencia da AECOM, do Estado de MG, da COPASA e do Município de Brumadinho."
+        },
+        {
+            "CODIGO_ECID": "28990470",
+            "CODIGO_TCE": "2899047",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-REC CONST REF ESP ESPORTES E LAZER",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos recebidos no ambito do projeto Construir e Reformar Espacos para a Pratica de Esportes e Lazer."
+        },
+        {
+            "CODIGO_ECID": "28990490",
+            "CODIGO_TCE": "2899049",
+            "CODIGO_STN": "2899",
+            "DESCRICAO": "OUT REC VIN-SEPLAG RAM CB 716681162023 MATEUS LEME",
+            "TIPO_RECURSO": "Recurso Vinculado",
+            "FINALIDADE": "Outros Recursos Vinculados/Recursos do Termo de Compromisso SEPLAG/RAM-CB nro. 71668116/2023 - Reforma de Vias Urbanas e Rurais, e Construcao e Reforma de Pontes - Mateus Leme."
+        }
+    ],
+    "inativar": [
+        {
+            "Codigo": "15000080",
+            "Data_limite": "02/01/2023"
+        },
+        {
+            "Codigo": "15000090",
+            "Data_limite": "02/01/2023"
+        },
+        {
+            "Codigo": "17040000",
+            "Data_limite": "02/01/2023"
+        },
+        {
+            "Codigo": "17130000",
+            "Data_limite": "02/01/2023"
+        },
+        {
+            "Codigo": "17130070",
+            "Data_limite": "02/01/2023"
+        },
+        {
+            "Codigo": "18990130",
+            "Data_limite": "02/01/2023"
+        },
+        {
+            "Codigo": "25000080",
+            "Data_limite": "02/01/2023"
+        },
+        {
+            "Codigo": "25000090",
+            "Data_limite": "02/01/2023"
+        },
+        {
+            "Codigo": "27040000",
+            "Data_limite": "02/01/2023"
+        },
+        {
+            "Codigo": "27130000",
+            "Data_limite": "02/01/2023"
+        },
+        {
+            "Codigo": "27130070",
+            "Data_limite": "02/01/2023"
+        },
+        {
+            "Codigo": "28990130",
+            "Data_limite": "02/01/2023"
+        }
+    ]
+}

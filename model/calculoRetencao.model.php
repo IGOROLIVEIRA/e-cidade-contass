@@ -117,7 +117,7 @@ class calculoRetencao {
         $this->oObjCalculo = new calculoRetencaoOutros($this->iCpfCnpj,5);
         break;
 
-       case 9:
+      case 9:
         /*
         COMENTADO POR IGOR RUAS PARA VER COM BARBARA COMO FAZER O CALCULO CORRETAMENTE.
         require_once("model/calculoRetencaoInssFisica.model.php");
@@ -127,6 +127,36 @@ class calculoRetencao {
         $this->oObjCalculo = new calculoRetencaoOutros($this->iCpfCnpj,5);
         break;
 
+      case 10:
+          /*
+          COMENTADO POR IGOR RUAS PARA VER COM BARBARA COMO FAZER O CALCULO CORRETAMENTE.
+          require_once("model/calculoRetencaoInssFisica.model.php");
+          $this->oObjCalculo = new calculoRetencaoInssFisica($this->iCpfCnpj,8);
+          */
+          require_once("model/calculoRetencaoOutros.model.php");
+          $this->oObjCalculo = new calculoRetencaoOutros($this->iCpfCnpj,5);
+          break;
+  
+      case 11:
+          /*
+          COMENTADO POR IGOR RUAS PARA VER COM BARBARA COMO FAZER O CALCULO CORRETAMENTE.
+          require_once("model/calculoRetencaoInssFisica.model.php");
+          $this->oObjCalculo = new calculoRetencaoInssFisica($this->iCpfCnpj,8);
+          */
+          require_once("model/calculoRetencaoOutros.model.php");
+          $this->oObjCalculo = new calculoRetencaoOutros($this->iCpfCnpj,5);
+          break;
+
+      case 12:
+            /*
+            COMENTADO POR IGOR RUAS PARA VER COM BARBARA COMO FAZER O CALCULO CORRETAMENTE.
+            require_once("model/calculoRetencaoInssFisica.model.php");
+            $this->oObjCalculo = new calculoRetencaoInssFisica($this->iCpfCnpj,8);
+            */
+            require_once("model/calculoRetencaoOutros.model.php");
+            $this->oObjCalculo = new calculoRetencaoOutros($this->iCpfCnpj,5);
+            break;
+    
       default:
 
         throw new Exception("tipo de cálculo ({$this->iTipoCalculo}) inválido.\nVerifique configuraçoes da Retenção.");

@@ -290,5 +290,138 @@ if ($oParam->exec == "addRetencao") {
     echo $oJson->encode(array("status" => 2, "message"=> urlencode($eErro->getMessage())));
 
   }
+}else if ($oParam->exec == "addRetencaoProducaoRural") {
+  try {
+    $oDataCalculo = date("Y-m-d",db_getsession("DB_datausu"));
+    $clretencaotiporec = new cl_retencaotiporec;
+    $clretencaotiporec->rotulo->label("e21_sequencial");
+    $clretencaotiporec->rotulo->label("e21_descricao");
+    $campos = "retencaotiporec.e21_sequencial,retencaotiporec.e21_retencaotipocalc,retencaotiporec.e21_receita,retencaotiporec.e21_descricao,retencaotiporec.e21_aliquota";
+    $sql = $clretencaotiporec->sql_query(null, $campos, "e21_retencaotipocalc, e21_sequencial desc", "e21_retencaotipocalc in ('10','11','12') ");
+     
+    $rsRetencoes   = db_query($sql);
+    $hash = '';
+
+    $camposRetencoes = "e69_codnota, e69_numemp, e60_vlrliq, e23_valorbase, e23_aliquota, e23_valorretencao, e23_retencaotiporec, e21_retencaotipocalc, e69_dtnota " ;
+    $sqlRetencoes    = $clretencaotiporec->sql_query_buscar_retencao(null, $camposRetencoes, null, "z01_cgccpf = '{$oParam->params[0]->oRetencao->iCpfCnpj}' and e23_ativo = true and e21_retencaotipocalc in ('10','11','12') AND e23_dtcalculo = '$oDataCalculo' AND  EXTRACT(MONTH FROM (SELECT e69_dtnota FROM empnota WHERE e69_codnota = {$oParam->params[0]->oRetencao->iCodNota})) = EXTRACT(MONTH FROM e69_dtnota);");
+    $rsRet           = db_query($sqlRetencoes);
+    $aRet            = db_utils::getCollectionByRecord($rsRet);
+
+    $aRetencoes                       = db_utils::getCollectionByRecord($rsRetencoes);
+    foreach ($aRetencoes as $oRetencoesConferir) { 
+      $itens [] = $oRetencoesConferir->e21_retencaotipocalc;
+    }
+
+    if (!in_array(10, $itens)) {
+      throw new Exception("Lançamento não pode ser realizado, retenções dos tipos de cálculo 10 não encontrada.");
+    } 
+
+    if (!in_array(11, $itens)) {
+      throw new Exception("Lançamento não pode ser realizado, retenções dos tipos de cálculo 11 não encontrada.");
+    } 
+
+    if (!in_array(12, $itens)) {
+      throw new Exception("Lançamento não pode ser realizado, retenções dos tipos de cálculo 12 não encontrada.");
+    } 
+
+    for ($iCont = 0; $iCont < pg_num_rows($rsRetencoes); $iCont++) {
+        $oDadosRetencoes = db_utils::fieldsMemory($rsRetencoes, $iCont);
+
+        if ($hash != $oDadosRetencoes->e21_retencaotipocalc) {
+
+          $oParam->params[0]->oRetencao->nValorRetencao = 0;
+        
+          if ( pg_num_rows($rsRet) > 0) {
+
+            for ($iContador = 0; $iContador < pg_num_rows($rsRetencoes); $iContador++) {
+
+                $oDadosRet = db_utils::fieldsMemory($rsRet, $iContador);
+             
+                if ($oDadosRetencoes->e21_retencaotipocalc == 10 && $oDadosRet->e21_retencaotipocalc == 10 ) {
+                  $oParam->params[0]->oRetencao->nAliquota = strlen($oParam->params[0]->oRetencao->iCpfCnpj) == 11 ? '1.20' : '1.70';
+                  $oParam->params[0]->oRetencao->nValorRetencao = FormatNumberTwoDecimal((($oParam->params[0]->oRetencao->nAliquota * $oDadosRet->e60_vlrliq) / 100)) - FormatNumberTwoDecimal($oDadosRet->e23_valorretencao) ;
+                  $oParam->params[0]->oRetencao->iCodigoRetencao = $oDadosRetencoes->e21_sequencial;
+                } 
+                
+                if ($oDadosRetencoes->e21_retencaotipocalc == 11  && $oDadosRet->e21_retencaotipocalc == 11 ) {
+                  $oParam->params[0]->oRetencao->nAliquota = '0.10';
+                  $oParam->params[0]->oRetencao->nValorRetencao = FormatNumberTwoDecimal((($oParam->params[0]->oRetencao->nAliquota * $oDadosRet->e60_vlrliq) / 100)) - FormatNumberTwoDecimal($oDadosRet->e23_valorretencao) ;
+                  $oParam->params[0]->oRetencao->iCodigoRetencao = $oDadosRetencoes->e21_sequencial;
+                }
+      
+                if ($oDadosRetencoes->e21_retencaotipocalc == 12  && $oDadosRet->e21_retencaotipocalc == 12 ) {
+                  $oParam->params[0]->oRetencao->nAliquota = '0.20';
+                  $oParam->params[0]->oRetencao->nValorRetencao = FormatNumberTwoDecimal((($oParam->params[0]->oRetencao->nAliquota * $oDadosRet->e60_vlrliq) / 100)) - FormatNumberTwoDecimal($oDadosRet->e23_valorretencao) ;
+                  $oParam->params[0]->oRetencao->iCodigoRetencao = $oDadosRetencoes->e21_sequencial;
+                }
+                
+            }    
+
+          } else {
+            
+            if ($oDadosRetencoes->e21_retencaotipocalc == 10 ) {
+              $oParam->params[0]->oRetencao->nAliquota = strlen($oParam->params[0]->oRetencao->iCpfCnpj) == 11 ? '1.20' : '1.70';
+              $oParam->params[0]->oRetencao->nValorRetencao = arredondarNumero(($oParam->params[0]->oRetencao->nAliquota * $oParam->params[0]->oRetencao->nValorbase) / 100);
+              $oParam->params[0]->oRetencao->iCodigoRetencao = $oDadosRetencoes->e21_sequencial;
+            }
+  
+            if ($oDadosRetencoes->e21_retencaotipocalc == 11 ) {
+              $oParam->params[0]->oRetencao->nAliquota = '0.10';
+              $oParam->params[0]->oRetencao->nValorRetencao = arredondarNumero(($oParam->params[0]->oRetencao->nAliquota * $oParam->params[0]->oRetencao->nValorbase) / 100);
+              $oParam->params[0]->oRetencao->iCodigoRetencao = $oDadosRetencoes->e21_sequencial;
+            }
+  
+            if ($oDadosRetencoes->e21_retencaotipocalc == 12 ) {
+              $oParam->params[0]->oRetencao->nAliquota = '0.20';
+              $oParam->params[0]->oRetencao->nValorRetencao = arredondarNumero(($oParam->params[0]->oRetencao->nAliquota * $oParam->params[0]->oRetencao->nValorbase) / 100);
+              $oParam->params[0]->oRetencao->iCodigoRetencao = $oDadosRetencoes->e21_sequencial;
+            }
+
+          }
+
+          $oRetencaoNota = new retencaoNota($oParam->params[0]->oRetencao->iCodNota);
+          $oRetencaoNota->setInSession($oParam->params[0]->inSession);
+
+          if ($oRetencaoNota->podeInserirRetencao($oParam->params[0]->oRetencao) === true) {
+            $oRetencaoNota->addRetencao($oParam->params[0]->oRetencao, $oParam->params[0]->inSession, $oParam->params[0]->isUpdate);
+          } else {
+              throw new Exception("Erro - O valor informado deixa o valor total abaixo de 0.");
+          }
+          
+          if($oParam->params[0]->oRetencao->nValorRetencao <= 0){
+              throw new Exception("Erro - O valor da retenção deve ser maior que zero!");
+          }
+
+        }
+
+        $hash = $oDadosRetencoes->e21_retencaotipocalc;
+    }
+    $oRetorno->aRetencoes = $oRetencaoNota->getRetencoes();
+    $oRetorno->status     = 1;
+    $oRetorno->message    = "";
+    echo $oJson->encode($oRetorno);
+
+  }
+
+  catch (Exception $eErro) {
+    echo $oJson->encode(array("status" => 2, "message"=> urlencode($eErro->getMessage())));
+  }
+  //$oRetencao = new retencaoNota($oParam->params[0]->oRetencao->iCodNota);
 }
+
+function arredondarNumero($numero) {
+  return floor($numero * 100) / 100;
+}
+
+function FormatNumberTwoDecimal($value)
+    {
+        $value    = str_replace(',', '.', $value);
+        $value    = floatval($value);
+        $number   = number_format($value, 3, ',', '.');
+        $number   = explode(',',$number);
+        $decimals = $number[0].",".substr($number[1],0,2);
+        return str_replace(',', '.', $decimals);;
+    }
+
+
 ?>

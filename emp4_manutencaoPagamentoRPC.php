@@ -711,4 +711,70 @@ switch($oParam->exec) {
         }
     echo $oJson->encode($oRetorno);
     break;
+
+    case "migracao" :
+
+        $oAgenda                       = new agendaPagamento();
+        $oRetorno                       = new stdClass();
+        $oRetorno->status               = '1';
+        $oRetorno->iCodigoOrdemAuxiliar = null;
+        $oRetorno->aAutenticacoes      = array();
+        try {
+
+            db_inicio_transacao();
+            $iCodigoOrdemAuxiliar = null;
+            $sql  = "select distinct id   , icodforma ,  nvalor  , icontapagadora , icontasaltes , inota , dtautoriza, empord.*,  ";
+            $sql .= " round(COALESCE((select sum(e23_valorretencao) as nvalorretencao from retencaoreceitas inner join retencaopagordem on e23_retencaopagordem=e20_sequencial where e20_pagordem=inota),0),2) as nvalorretencao ";
+            $sql .= " from empenho.pagordemmigracao inner join empord on inota=e82_codord ";
+            $sql .= " where inota not in (13749,14006,14283,14011,14026,14563,14895,14317,14022,14901,14002,15374,13536,14032,14890,14028,14009,14030,14277,14723,14799,13747,14004) ";
+            $sql .= " order by inota ";
+            $aMovimentos = db_utils::getCollectionByRecord(db_query($sql), false , false , false);
+            //echo "<pre>";print_r($aMovimentos);exit;
+            foreach ($aMovimentos as $oMovimento) {
+
+                $oMovConfig                   = new stdClass();
+                $oMovConfig->iCodForma         = 3;
+                $oMovConfig->iCodMov           = $oMovimento->e82_codmov;
+                $oMovConfig->nValor            = $oMovimento->nvalor - $oMovimento->nvalorretencao;
+                $oMovConfig->iContaPagadora    = $oMovimento->icontapagadora;
+                $oMovConfig->iContaSaltes      = $oMovimento->icontasaltes;
+                $oMovConfig->iCodNota          = $oMovimento->inota;
+                $oMovConfig->nValorRetencao    = $oMovimento->nvalorretencao;
+                $oMovConfig->sConCarPeculiar   = '000';
+
+                $oAgenda->configurarPagamentos($oMovimento->dtautoriza, $oMovConfig, $iCodigoOrdemAuxiliar, false, true);
+
+                $oOrdemPagamento = new ordemPagamento($oMovimento->inota, $oMovimento->dtautoriza);
+
+
+                $oOrdemPagamento->setCheque(null);
+
+                $oOrdemPagamento->setConta($oMovConfig->iContaSaltes);
+                $oOrdemPagamento->setValorPago($oMovConfig->nValor);
+                $oOrdemPagamento->setMovimentoAgenda($oMovConfig->iCodMov);
+                $oOrdemPagamento->setHistorico('');
+                $oOrdemPagamento->pagarOrdem();
+
+                $oRetorno->iItipoAutent     = $oOrdemPagamento->oAutentica->k11_tipautent;
+                $c70_codlan                 = $oOrdemPagamento->iCodLanc;
+                $oAutentica                 = new stdClass();
+                $oAutentica->iNota          = $oMovConfig->iCodNota;
+                $oAutentica->sAutentica     = $oOrdemPagamento->getRetornoautenticacao();
+                $oRetorno->aAutenticacoes[] = $oAutentica;
+
+            }
+
+
+            $oRetorno->iCodigoOrdemAuxiliar = $iCodigoOrdemAuxiliar;
+            db_fim_transacao(false);
+
+        } catch (Exception $eErro) {
+
+            db_fim_transacao(true);
+            $oRetorno->status  = 2;
+            $oRetorno->message = urlencode($eErro->getMessage());
+
+        }
+        echo $oJson->encode($oRetorno);
+        break;
 }

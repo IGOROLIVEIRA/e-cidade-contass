@@ -222,10 +222,11 @@ $('btnProcessar').addEventListener('click', function() {
     var paramentros = {
         'exec' : 'importarDadosXml',
         'sFile' : fileUpload.file,
-        'sPath' : fileUpload.filePath
+        'sPath' : fileUpload.filePath,
+        'evt' : 5001
     };
 
-    new AjaxRequest( 'pes3_evt5001consulta.RPC.php', paramentros, function ( retorno, lErro ) {
+    new AjaxRequest( 'eso3_evtconsulta.RPC.php', paramentros, function ( retorno, lErro ) {
 
         alert(retorno.sMessage);
         if ( lErro ) {
@@ -233,7 +234,7 @@ $('btnProcessar').addEventListener('click', function() {
         }
         limpar();
         <?
-        echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+retorno.rh218_sequencial";
+        echo " location.href = '" . basename($GLOBALS["HTTP_SERVER_VARS"]["PHP_SELF"]) . "?chavepesquisa='+retorno.sequencial";
         ?>
     }).setMessage('Enviando dados para ').execute();
 });

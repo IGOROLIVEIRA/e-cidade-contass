@@ -1133,6 +1133,10 @@ class cl_empagetipo {
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('193','293','18990000','28990000')) and"; 
         
       }
+      elseif($iFonteEmpenho == '1711' || substr($iFonteEmpenho, 1, 7) == '7110000'){
+        $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('15000000')) and"; 
+          
+        }
       else
       $whereFonte = "c61_codigo in ( select o15_codigo from orctiporec where o15_codigo in ('$iFonteEmpenho')) and"; 
       
