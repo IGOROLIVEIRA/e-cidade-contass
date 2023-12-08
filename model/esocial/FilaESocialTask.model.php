@@ -7,7 +7,7 @@ use \ECidade\V3\Extension\Registry;
 require_once("interfaces/iTarefa.interface.php");
 require_once("model/configuracao/Task.model.php");
 require_once("classes/db_esocialenvio_classe.php");
-require_once("model/pessoal/ImportarDadosEvt5001.model.php");
+require_once("model/esocial/ImportarDadosEvt5001.model.php");
 
 class FilaESocialTask extends Task implements iTarefa
 {
@@ -61,7 +61,7 @@ class FilaESocialTask extends Task implements iTarefa
                  * Conecta no banco com variaveis definidas no 'libs/db_conn.php'
                  */
                 if (!($conn = @pg_connect("host=localhost dbname=$row[0] port=$row[1] user=dbportal password=dbportal"))) {
-                    throw new Exception("Erro ao conectar ao banco. host=localhost dbname=$row[0] port=$row[1] user=dbportal password=dbportal");
+                    throw new Exception("Erro ao conectar ao banco. host=$DB_SERVIDOR dbname=$row[0] port=$row[1] user=dbportal password=dbportal");
                 }
 
                 $sql = $dao->sql_query_file(null, "*", "rh213_sequencial", "rh213_situacao = " . cl_esocialenvio::SITUACAO_NAO_ENVIADO);
@@ -96,7 +96,6 @@ class FilaESocialTask extends Task implements iTarefa
             $dao = new \cl_esocialenvio();
             $daoEsocialCertificado = new \cl_esocialcertificado();
             $sql = $daoEsocialCertificado->sql_query(null, "rh214_senha as senha,rh214_certificado as certificado, cgc as nrinsc, z01_nome as nmRazao", "rh214_sequencial", "rh214_cgm = {$dadosEnvio->rh213_empregador}");
-            
             $rsEsocialCertificado  = \db_query($sql);
 
             if (!$rsEsocialCertificado && pg_num_rows($rsEsocialCertificado) == 0) {
@@ -106,7 +105,7 @@ class FilaESocialTask extends Task implements iTarefa
             $dadosCertificado->nmrazao = utf8_encode($dadosCertificado->nmrazao);
             $fase = $this->getFaseEvento($dadosEnvio->rh213_evento);
             $dados = array($dadosCertificado, json_decode($dadosEnvio->rh213_dados), $dadosEnvio->rh213_evento, $dadosEnvio->rh213_ambienteenvio, $fase);
-            
+
             $exportar = new ESocial(Registry::get('app.config'), "run.php");
             $exportar->setDados($dados);
             $retorno = $exportar->request();
@@ -142,7 +141,7 @@ class FilaESocialTask extends Task implements iTarefa
             }
 
             $this->incluirRecido($dadosEnvio->rh213_sequencial, $exportar->getNumeroRecibo());
-            $this->importarEvt5001($exportar->getObjXmlEvt5001(), $dadosEnvio);
+            $this->importarEvtRetorno($exportar->getObjXmlEvtRetorno(), $dadosEnvio);
             echo "{$exportar->getDescResposta()} Recibo de Envio {$exportar->getNumeroRecibo()}";
         } catch (\Exception $e) {
             $dao->setSituacaoErroEnvio($dadosEnvio->rh213_sequencial, $e->getMessage());
@@ -165,7 +164,6 @@ class FilaESocialTask extends Task implements iTarefa
         require_once("libs/db_stdlib.php");
         require_once("libs/db_utils.php");
         require_once("dbforms/db_funcoes.php");
-        //require_once("libs/db_conecta.php");
 
         $hostname = gethostname();
         $cmd = shell_exec("cat updatedb/conn | grep -e {$hostname}$");
@@ -238,7 +236,7 @@ class FilaESocialTask extends Task implements iTarefa
                     }
 
                     $this->incluirRecido($dadosConsulta->rh213_sequencial, $exportar->getNumeroRecibo());
-                    $this->importarEvt5001($exportar->getObjXmlEvt5001(), $dadosConsulta);
+                    $this->importarEvtRetorno($exportar->getObjXmlEvtRetorno(), $dadosConsulta);
                     echo "{$exportar->getDescResposta()} Recibo de Envio {$exportar->getNumeroRecibo()}";
                 }
             } catch (\Exception $e) {
@@ -284,12 +282,25 @@ class FilaESocialTask extends Task implements iTarefa
         throw new Exception("Não foi possível encontrar a fase deste evento.");
     }
 
+    private function importarEvtRetorno($oXml, $dadosEvento)
+    {
+        if (in_array($dadosEvento->rh213_evento, array("1200", "2299", "2399"))) {
+            $this->importarEvt5001($oXml, $dadosEvento);
+        }
+        if (in_array($dadosEvento->rh213_evento, array("1299"))) {
+            $this->importarEvt5011($oXml, $dadosEvento);
+        }
+    }
+
     private function importarEvt5001($oXml, $dadosEvento)
     {
-        if (!in_array($dadosEvento->rh213_evento, array("1200", "2299", "2399"))) {
-            return;
-        }
         $oImportarDadosEvt5001 = new ImportarDadosEvt5001(null, $oXml, $dadosEvento);
         $oImportarDadosEvt5001->processar();
+    }
+
+    private function importarEvt5011($oXml, $dadosEvento)
+    {
+        $oImportarDadosEvt5011 = new ImportarDadosEvt5011(null, $oXml, $dadosEvento);
+        $oImportarDadosEvt5011->processar();
     }
 }

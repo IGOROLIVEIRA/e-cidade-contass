@@ -140,7 +140,7 @@ $oTipoPrestador = db_utils::fieldsMemory(db_query($sqlTipoPrestador), 0);
 if($oTipoPrestador->tipopessoa == 'juridica'){    
     $dbopcaopjpf = $db_opcao;
 }else{
-    $dbopcaopjpf = 3;
+    $dbopcaopjpf = $db_opcao;
 }
 
 $aTiposRetencoesIRRF = array(

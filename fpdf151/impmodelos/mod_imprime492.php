@@ -1,12 +1,9 @@
 <?php
 
-$sSQLTomadorDBPrefeitura    = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is true";
-$sSQLTomadorDBDemaisOrgaos  = "SELECT numcgm FROM db_config WHERE cgc = '{$this->dadosTomador->z01_cgccpf}' and prefeitura is false";
-$rsTomadorDBPrefeitura      = db_query($sSQLTomadorDBPrefeitura);
-$rsTomadorDBDemaisOrgaos    = db_query($sSQLTomadorDBDemaisOrgaos);
-$lTomadorEhPrefeitura       = !!pg_num_rows($rsTomadorDBPrefeitura);
-$lTomadorEhDemaisOrgaos     = !!pg_num_rows($rsTomadorDBDemaisOrgaos);
-$oInstit = new Instituicao(db_getsession('DB_instit'));
+use App\Models\IssNotaAvulsaTomadorCgmRetencao;
+
+$oInstit                            = new Instituicao(db_getsession('DB_instit'));
+$IssNotaAvulsaTomadorCgmRetencao  = IssNotaAvulsaTomadorCgmRetencao::query()->where('numcgm',$this->dadosTomador->z01_numcgm)->first();
 
 ##Modelo de nota Fiscal
 $confNumRows = pg_num_rows($this->rsConfig);
@@ -27,9 +24,7 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->Setfont('Arial', 'B', 10);
     $this->objpdf->rect(10, 2, 29, 28);
     $this->objpdf->Image('imagens/files/' . $this->logo, 19, $xlin - 12, 12);
-    //    $this->objpdf->rect(39,2,121,28);
     $this->objpdf->Setfont('Arial', 'B', 9);
-    //    $this->objpdf->text(69, $xlin -15, $this->prefeitura);
     $this->objpdf->sety(2);
     $this->objpdf->setx($xlin + 19);
     $this->objpdf->cell(121, 5, "$this->prefeitura", "T", 1, "C");
@@ -134,7 +129,6 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->text($xcol + 132, $xlin + 22, 'CEP');
     $this->objpdf->Setfont('Arial', '', 7);
     $this->objpdf->text($xcol + 134, $xlin + 24.3, $this->dadosPrestador->z01_cep);
-    //$this->objpdf->line($xcol + 130, $xlin + 20, $xcol + 130, $xlin + 25);
     //Fone
     $this->objpdf->Setfont('Arial', 'b', 5);
     $this->objpdf->text($xcol + 162, $xlin + 22, 'TELEFONE');
@@ -217,7 +211,6 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->text(12, $xlin + 27, 'CPF/CNPJ');
     $this->objpdf->Setfont('Arial', '', 7);
     $this->objpdf->text(14, $xlin + 29.3, $this->dadosTomador->z01_cgccpf);
-    //$this->objpdf->line(10, $xlin + 30, 200, $xlin + 30);
     //INSCRICAO
     $this->objpdf->Setfont('Arial', 'b', 5);
     $this->objpdf->text($xcol + 52, $xlin + 27, 'INSCRIÇÃO MUNICIPAL');
@@ -230,19 +223,6 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $this->objpdf->Setfont('Arial', '', 7);
     $this->objpdf->text($xcol + 94, $xlin + 29.3, $this->dadosTomador->z01_incest);
     $this->objpdf->line($xcol + 90, $xlin + 25, $xcol + 90, $xlin + 30);
-
-    //Fone
-    //    $this->objpdf->Setfont('Arial', 'b', 5);
-    //    $this->objpdf->text($xcol+8,$xlin+27,'DATA DA PRESTACAO DO SERVIÇO');
-    //    $this->objpdf->Setfont('Arial','',7 );
-    //    $this->objpdf->text($xcol+10,$xlin+29,db_formatar($this->dadosTomador->q53_dtservico,"d"));
-    //    $this->objpdf->line($xcol+50,$xlin+25,$xcol+50,$xlin+30);
-    //Atividade
-    //    $this->objpdf->Setfont('Arial', 'B', 5);
-    //    $this->objpdf->text($xcol+52,$xlin+27,'COD. ATIVIDADE');
-    //    $this->objpdf->Setfont('Arial', '',7 );
-
-    //    $this->objpdf->line(10,$xlin+30,200,$xlin+30);
     //Email
     $this->objpdf->Setfont('Arial', 'B', 5);
     $this->objpdf->text($xcol + 132, $xlin + 27, 'EMAIL');
@@ -335,12 +315,11 @@ for ($j = 0; $j < $confNumRows; $j++) {
     $fTotalNota = $this->fTotaliUni; 
 
     // valor total da nota
-    if ($lTomadorEhPrefeitura){
+    if ((!empty($IssNotaAvulsaTomadorCgmRetencao)) && ($IssNotaAvulsaTomadorCgmRetencao->prefeitura)){
         $fTotalNota = $this->fTotaliUni - $this->fvlrIssqn - $this->fvlrInss - $this->fvlrIrrf;
     }
-    
-    $codInstit = array(Instituicao::COD_CLI_PMGRAOMOGOL, Instituicao::COD_CLI_MONTEAZUL);
-    if (($lTomadorEhPrefeitura == null) && (in_array($oInstit->getCodigoCliente(), $codInstit) || ($lTomadorEhDemaisOrgaos))){
+
+    if ((!empty($IssNotaAvulsaTomadorCgmRetencao)) && (!$IssNotaAvulsaTomadorCgmRetencao->prefeitura)){
             $fTotalNota = $this->fTotaliUni - $this->fvlrInss - $this->fvlrIrrf;
     }
 
