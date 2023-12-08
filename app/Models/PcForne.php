@@ -48,6 +48,7 @@ class PcForne extends LegacyModel
         'pc60_databloqueio_ini',
         'pc60_databloqueio_fim',
         'pc60_motivobloqueio',
+        'pc60_instit'
     ];
 
     public function cgm()
