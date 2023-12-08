@@ -136,6 +136,7 @@ class cl_licitemobra {
     }else{
       $this->obr06_descricaotabela == "";
     }
+    
     if ($this->obr06_codigotabela == null ) {
       $this->erro_sql = " Campo Código da Tabela não informado.";
       $this->erro_campo = "obr06_codigotabela";
@@ -145,7 +146,8 @@ class cl_licitemobra {
       $this->erro_status = "0";
       return false;
     }
-    if ($this->obr06_versaotabela == null ) {
+
+    if ($this->obr06_tabela != "4" && $this->obr06_versaotabela == null ) {
       $this->erro_sql = " Campo Versão da Tabela não informado.";
       $this->erro_campo = "obr06_versaotabela";
       $this->erro_banco = "";
@@ -154,15 +156,7 @@ class cl_licitemobra {
       $this->erro_status = "0";
       return false;
     }
-    if ($this->obr06_dtregistro == null ) {
-      $this->erro_sql = " Campo Data do Registro não informado.";
-      $this->erro_campo = "obr06_dtregistro_dia";
-      $this->erro_banco = "";
-      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-      $this->erro_status = "0";
-      return false;
-    }
+    
     if ($this->obr06_dtcadastro == null ) {
       $this->erro_sql = " Campo Data do Registro não informado.";
       $this->erro_campo = "obr06_dtcadastro_dia";
@@ -333,33 +327,7 @@ class cl_licitemobra {
         return false;
       }
     }
-    if (trim($this->obr06_dtregistro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr06_dtregistro_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr06_dtregistro_dia"] !="") ) {
-      $sql  .= $virgula." obr06_dtregistro = '$this->obr06_dtregistro' ";
-      $virgula = ",";
-      if (trim($this->obr06_dtregistro) == null ) {
-        $this->erro_sql = " Campo Data do Registro não informado.";
-        $this->erro_campo = "obr06_dtregistro_dia";
-        $this->erro_banco = "";
-        $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-        $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-        $this->erro_status = "0";
-        return false;
-      }
-    }     else{
-      if (isset($GLOBALS["HTTP_POST_VARS"]["obr06_dtregistro_dia"])) {
-        $sql  .= $virgula." obr06_dtregistro = null ";
-        $virgula = ",";
-        if (trim($this->obr06_dtregistro) == null ) {
-          $this->erro_sql = " Campo Data do Registro não informado.";
-          $this->erro_campo = "obr06_dtregistro_dia";
-          $this->erro_banco = "";
-          $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
-          $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
-          $this->erro_status = "0";
-          return false;
-        }
-      }
-    }
+    
     if (trim($this->obr06_dtcadastro)!="" || isset($GLOBALS["HTTP_POST_VARS"]["obr06_dtcadastro_dia"]) &&  ($GLOBALS["HTTP_POST_VARS"]["obr06_dtcadastro_dia"] !="") ) {
       $sql  .= $virgula." obr06_dtcadastro = '$this->obr06_dtcadastro' ";
       $virgula = ",";

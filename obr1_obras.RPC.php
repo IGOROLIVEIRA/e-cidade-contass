@@ -411,27 +411,6 @@ switch ($oParam->exec) {
                     }
                 }
 
-                /**
-                 * Clean-up dos valores para tabela
-                 */
-                $option = intval($item->obr06_tabela);
-
-                switch ($option) {
-                    case 1:
-                    case 2:
-                        // Limpa a descrição da tabela
-                        $item->obr06_descricaotabela = "";
-                        break;
-                    case 3:
-                        // Mantem os valores
-                        break;
-                    default:
-                        // Limpa todos os valores
-                        $item->obr06_descricaotabela = "";
-                        $item->obr06_versaotabela = "";
-                        break;
-                }
-                
                 $pcmater = substr($item->obr06_pcmater, 0, -1);
                 $verificaItem = $cllicitemobra->sql_record($cllicitemobra->sql_query_file(null, "obr06_sequencial", null, "obr06_pcmater = $pcmater"));
                 if (pg_num_rows($verificaItem) <= 0) {
@@ -471,7 +450,6 @@ switch ($oParam->exec) {
                     $cllicitemobra->obr06_dtcadastro        = $item->obr06_dtcadastro;
                     $cllicitemobra->obr06_instit            = db_getsession("DB_instit");
 
-                    var_dump($cllicitemobra); die;
                     $cllicitemobra->alterar($obr06_sequencial);
 
                     if ($cllicitemobra->erro_status == 0) {

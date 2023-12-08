@@ -155,9 +155,9 @@ $cllicitemobra->rotulo->label();
                     }
 
             ?>
-                <input type="hidden" id=<?= 'obr06_dtcadastro_' . $iItem ?> value="<?= $aItem->obr06_dtcadastro ?>">
-                
-                <tr class="normal">
+                <tr class="normal" id="<?= "linha_". $iItem  ?>">
+                    <input type="hidden" id=<?= 'obr06_dtcadastro_' . $iItem ?> value="<?= $aItem->obr06_dtcadastro ?>">
+
                     <th class="table_header" style="width: 35px">
                         <input type="checkbox" class="marca_itens[<?= $iItem ?>]" name="aItonsMarcados" value="<?= $iItem ?>" id="<?= $iItem ?>">
                     </th>
@@ -532,43 +532,122 @@ $cllicitemobra->rotulo->label();
     }
 
     /**
+     * Verifica se existe erro de validação em algum campo
+     */
+    function itemEValido(item)
+    {
+        if(item.obr06_codigotabela === "") {
+            return false;
+        }
+
+        if ((item.obr06_tabela === "1" || item.obr06_tabela === "2") && item.obr06_versaotabela === "") {
+            return false;
+        }
+
+        if ((item.obr06_tabela === "3") && (item.obr06_versaotabela === "" || item.obr06_descricaotabela === "")) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Salvar Itens
      */
-
     function js_salvarItens() {
-        let itens = getItensMarcados();
+        const itens = getItensMarcados();
 
         if (itens.length < 1) {
             alert('Selecione pelo menos um item da lista.');
             return false;
         }
 
-        var itensEnviar = [];
+        // Valida se existem campos repetidos no código da tabela
+        // A validação considera até os códigos que não estão marcadas para alteração
+        const codigosUsados = [];
+        let existeCodigoDuplicado = false;
+
+        aItens().forEach(function(item) {
+            const codigoTabela = document.getElementById('obr06_codigotabela_' + item.id);
+
+            codigoTabela.style.backgroundColor = "#FFFFFF";
+
+            if (!codigosUsados.includes(codigoTabela.value)) {
+                codigosUsados.push(codigoTabela.value);
+            } else if (codigoTabela.value !== "") {
+                existeCodigoDuplicado = true;
+                codigoTabela.style.backgroundColor = "#6E9D88";
+            }
+        });
+
+        if (existeCodigoDuplicado) {
+            alert('Usuário: Os itens grifados estão com o mesmo código da tabela. O código deverá ser único para cada item.');
+            return false;
+        }
+
+        const itensEnviar = [];
 
         try {
+            let temErro = false;
+            
             itens.forEach(function(item) {
-                let coditem = item.id;
 
-                var novoItem = {
+                const coditem = item.id;
+                const linha = document.getElementById("linha_" + coditem);
+                linha.style.backgroundColor = "#FFFFFF";
+
+                const novoItem = {
                     obr06_pcmater: coditem,
                     obr06_tabela: document.getElementById('obr06_tabela_' + coditem).value,
                     obr06_descricaotabela: document.getElementById('obr06_descricaotabela_' + coditem).value,
                     obr06_codigotabela: document.getElementById('obr06_codigotabela_' + coditem).value,
                     obr06_versaotabela: document.getElementById('obr06_versaotabela_' + coditem).value,
-                    //obr06_dtregistro: document.getElementById('obr06_dtregistro_' + coditem).value,
                     obr06_dtcadastro: document.getElementById('obr06_dtcadastro_' + coditem).value,
                 };
+
+                if(!itemEValido(novoItem)) {
+                    temErro = true;
+                    linha.style.backgroundColor = "#6E9D88";
+                }
                 itensEnviar.push(novoItem);
             });
-            salvarItemAjax({
-                exec: 'SalvarItemObra',
-                itens: itensEnviar,
-            }, retornoAjax);
+
+            /**
+             * Valida se todos os itens selecionados para salvar estão com
+             * a data de cadastro aplicada.
+             */
+            const dtcadastro = document.getElementById('obr06_dtcadastro').value;
+            const itensSemDataCadastro = itensEnviar.filter(item => !item.obr06_dtcadastro);
+            
+            if (itensSemDataCadastro.length > 0) {
+                var resposta = confirm('Usuário: A data não foi aplicada ao itens. Deseja continuar?');
+                if (resposta) {
+                    itensEnviar.forEach(function(item) {
+                        if (!item.obr06_dtcadastro) {
+                            item.obr06_dtcadastro = dtcadastro;
+                            document.getElementById('obr06_dtcadastro_' + item.obr06_pcmater).value = dtcadastro;
+                        }
+                    });
+                } else {
+                    return false;
+                }
+            }
+
+            if(temErro) {
+                alert("Usuário: Verificar campos obrigatórios sem preenchimento do(s) Item(ns) grifado(s)");
+            } else {
+                salvarItemAjax({
+                    exec: 'SalvarItemObra',
+                    itens: itensEnviar,
+                }, retornoAjax);
+            }
         } catch (e) {
             alert(e.toString());
         }
         return false;
     }
+
+    
 
     function salvarItemAjax(params, onComplete) {
         js_divCarregando('Aguarde salvando', 'div_aguarde');
