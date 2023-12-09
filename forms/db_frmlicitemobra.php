@@ -764,14 +764,14 @@ $cllicitemobra->rotulo->label();
         return false;
     }
 
-    function excluirItemAjax(params, onComplete) {
+    function excluirItemAjax(params, callback) {
         js_divCarregando('Aguarde Excluindo', 'div_aguarde');
         var request = new Ajax.Request('obr1_obras.RPC.php', {
             method: 'post',
             parameters: 'json=' + JSON.stringify(params),
             onComplete: function(res) {
                 js_removeObj('div_aguarde');
-                onComplete(res);
+                callback(res);
             }
         });
     }
@@ -786,12 +786,11 @@ $cllicitemobra->rotulo->label();
                 document.getElementById('obr06_versaotabela_' + item).value = "";
                 document.getElementById('obr06_descricaotabela_' + item).value = "";
                 document.getElementById('obr06_dtcadastro_' + item).value = "";
-                //document.getElementById('obr06_dtregistro_' + item).value = "";
                 document.getElementById('obr06_codigotabela_' + item).value = "";
             })
             alert("Item Excluido com sucesso!")
         }
-    }
+    }  
 
     function excluirLinha(codigo) {
         var itensEnviar = [];
@@ -812,14 +811,14 @@ $cllicitemobra->rotulo->label();
         return false;
     }
 
-    function excluirlinhaAjax(params, onComplete) {
+    function excluirlinhaAjax(params, callback) {
         js_divCarregando('Aguarde Excluindo', 'div_aguarde');
         var request = new Ajax.Request('obr1_obras.RPC.php', {
             method: 'post',
             parameters: 'json=' + JSON.stringify(params),
             onComplete: function(res) {
                 js_removeObj('div_aguarde');
-                onComplete(res);
+                callback(res);
             }
         });
     }
@@ -834,7 +833,6 @@ $cllicitemobra->rotulo->label();
                 document.getElementById('obr06_versaotabela_' + item).value = "";
                 document.getElementById('obr06_descricaotabela_' + item).value = "";
                 document.getElementById('obr06_dtcadastro_' + item).value = "";
-                //document.getElementById('obr06_dtregistro_' + item).value = "";
                 document.getElementById('obr06_codigotabela_' + item).value = "";
             })
             alert("Item Excluido com sucesso!")
