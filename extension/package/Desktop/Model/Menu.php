@@ -8,6 +8,7 @@ use \ECidade\V3\Extension\Request;
 class Menu extends Model
 {
 
+  public const MENU_ATIVO_SIM = 1;
   private $sOrdenacaoMenu = null;
 
   public function getInstituicoes()
@@ -370,6 +371,7 @@ class Menu extends Model
                     from db_itensmenu
               inner join db_menu  on  db_menu.id_item_filho = db_itensmenu.id_item
                     where trim(funcao) = '" . $file . "'
+                    and itemativo = ".self::MENU_ATIVO_SIM."
               $where limit 1 ";
 
     $result = $this->db->execute($sql);

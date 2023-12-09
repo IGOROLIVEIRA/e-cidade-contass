@@ -1266,22 +1266,22 @@ function validarVinculos(){
       alert('Campo Data Inicial da Viagem Obrigatório.');
       return false;
     }
+    if($F('e140_horainicial') == '' || $F('e140_horainicial') == null){
+        alert('Campo Hora Inicial Obrigatório.');
+        return false;
+    }
     if($F('e140_dtfinal') == '' || $F('e140_dtfinal') == null){
       alert('Campo Data Final da Viagem Obrigatório.');
+      return false;
+    }
+    if($F('e140_horafinal') == '' || $F('e140_horafinal') == null){
+      alert('Campo Hora Final Obrigatório.');
       return false;
     }
     if($F('e140_objetivo') == '' || $F('e140_objetivo') == null){
       alert('Campo Objetivo da Viagem Obrigatório.');
       return false;
     }
-    if($F('e140_horainicial') == '' || $F('e140_horainicial') == null){
-        alert('Campo Hora Inicial Obrigatório.');
-        return false;
-      }
-      if($F('e140_horafinal') == '' || $F('e140_horafinal') == null){
-        alert('Campo Hora Final Obrigatório.');
-        return false;
-      }
   }
 
   if($F('dataLiquidacao') == ''){
