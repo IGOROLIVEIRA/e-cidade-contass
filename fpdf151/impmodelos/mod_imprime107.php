@@ -125,7 +125,7 @@ $this->objpdf->setleftmargin(12);
 $this->objpdf->setrightmargin(2);
 $this->objpdf->sety($y+10);
 $this->objpdf->MultiCell(55,3,$this->descr3_1);// nome do contribuinte
-$this->objpdf->MultiCell(55,3,$this->descr3_2);// endereço
+$this->objpdf->MultiCell(55,3,$this->enderimovel);// endereço
 $this->objpdf->MultiCell(55,3,$this->descr17);// Setor/Quadra/Lote
 $this->objpdf->setxy($xx,$yy);
 
@@ -225,7 +225,7 @@ $this->objpdf->setleftmargin(96);
 $this->objpdf->setrightmargin(2);
 $this->objpdf->sety($y+10);
 $this->objpdf->MultiCell(97,3,$this->descr11_1);// nome do contribuinte
-$this->objpdf->MultiCell(97,3,$this->descr11_2);// endereço
+$this->objpdf->MultiCell(97,3,$this->enderimovel);// endereço
 $this->objpdf->MultiCell(97,3,$this->descr17);// Setor/Quadra/Lote
 $this->objpdf->setxy($xx,$yy);
 

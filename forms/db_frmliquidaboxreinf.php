@@ -15,7 +15,7 @@
     color: darkblue;
     background-color: #aacccc;
     border: none;
-    width: 500px;
+    width: 400px;
     text-align: center;
   }
 
@@ -31,7 +31,7 @@
     font-size: 10;
     color: black;
     background-color: #ccddcc;
-    width: 500px;
+    width: 400px;
     text-align: center;
   }
 
@@ -66,7 +66,7 @@
     <tr id='linhaNaturezaRendimento'>
       <td><? db_ancora('Natureza do Rendimento:', 'js_pesquisaNatureza(true)', 1); ?></td>
       <td><? db_input('naturezaCod', 10, 1, true, 'text', 1, 'onchange=js_pesquisaNatureza(false)'); ?></td>
-      <td><? db_input('naturezaDesc', 100, 0, true, 'text', 1, 'onkeyup=js_buscaNaturezaDescricao(this.value)'); ?></td>
+      <td><? db_input('naturezaDesc', 81, 0, true, 'text', 1, 'onkeyup=js_buscaNaturezaDescricao(this.value)'); ?></td>
     </tr>
     <tr>
       <td id='autocompleteNatureza'>

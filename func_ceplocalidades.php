@@ -118,10 +118,18 @@ $clceplocalidades->rotulo->label("cp05_sigla");
         db_lovrot($sql,15,"()","",$funcao_js,"","NoMe",$repassa);
       }else{
         if($pesquisa_chave!=null && $pesquisa_chave!=""){
-          $result = $clceplocalidades->sql_record($clceplocalidades->sql_query($pesquisa_chave));
+          if(isset($origem) && $origem == 'liquidacao'){
+            $result = $clceplocalidades->sql_record($clceplocalidades->sql_query(null,"*",null," cp05_localidades = '".strtoupper($pesquisa_chave)."' "));
+          }else{
+            $result = $clceplocalidades->sql_record($clceplocalidades->sql_query($pesquisa_chave));
+          }
           if($clceplocalidades->numrows!=0){
             db_fieldsmemory($result,0);
-            echo "<script>".$funcao_js."('$cp05_localidades',false);</script>";
+            if(isset($origem) && $origem == 'liquidacao'){
+              echo "<script>".$funcao_js."('$cp05_sigla',false);</script>";
+            }else{
+              echo "<script>".$funcao_js."('$cp05_localidades',false);</script>";
+            }
           }else{
 	         echo "<script>".$funcao_js."('Chave(".$pesquisa_chave.") não Encontrado',true);</script>";
           }
