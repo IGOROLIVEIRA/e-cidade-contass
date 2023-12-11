@@ -69,6 +69,7 @@ class cl_pagordem {
    var $e50_dtvencimento_dia = null;
    var $e50_dtvencimento_mes = null;
    var $e50_dtvencimento_ano = null;
+   var $e50_numliquidacao = null;
    // cria propriedade com as variaveis do arquivo
    var $campos = "
                  e50_codord = int4 = Ordem
@@ -90,6 +91,7 @@ class cl_pagordem {
                  e50_retencaoir = bool = Incide Retenção do Imposto de Renda
                  e50_naturezabemservico = int4 = Codigo de Natureza de Bem ou Serviço
                  e50_dtvencimento = date = Vencimento
+                 e50_numliquidacao = int8 = Número da Liquidação
                  ";
    //funcao construtor da classe
    function cl_pagordem() {
@@ -149,7 +151,7 @@ class cl_pagordem {
        $this->e50_datacompetencia = ($this->e50_datacompetencia == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_datacompetencia"]:$this->e50_datacompetencia);
        $this->e50_retencaoir = ($this->e50_retencaoir == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_retencaoir"]:$this->e50_retencaoir) == 'sim' ? 1 : 0; 
        $this->e50_naturezabemservico = ($this->e50_naturezabemservico == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_naturezabemservico"]:$this->e50_naturezabemservico);
-
+       $this->e50_numliquidacao = ($this->e50_numliquidacao == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_numliquidacao"]:$this->e50_numliquidacao);
      }else{
        $this->e50_codord = ($this->e50_codord == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_codord"]:$this->e50_codord);
      }
@@ -234,7 +236,15 @@ class cl_pagordem {
        $this->erro_status = "0";
        return false;
      }
-
+     if($this->e50_numliquidacao == null ){
+      $this->erro_sql = " Campo Numero da Liquidação nao Informado.";
+      $this->erro_campo = "e50_numliquidacao";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n ".$this->erro_sql." \\n\\n";
+      $this->erro_msg   .=  str_replace('"',"",str_replace("'","",  "Administrador: \\n\\n ".$this->erro_banco." \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
      $sql = "insert into pagordem(
                                        e50_codord
                                       ,e50_numemp
@@ -255,6 +265,7 @@ class cl_pagordem {
                                       ,e50_retencaoir
                                       ,e50_naturezabemservico
                                       ,e50_dtvencimento
+                                      ,e50_numliquidacao
                        )
                 values (
                                 $this->e50_codord
@@ -276,6 +287,7 @@ class cl_pagordem {
                                ,$this->e50_retencaoir::bool
                                ,".($this->e50_naturezabemservico == "null" || $this->e50_naturezabemservico == ""?"null":"'".$this->e50_naturezabemservico."'")."
                                ,".($this->e50_dtvencimento == "null" || $this->e50_dtvencimento == ""?"null":"'".$this->e50_dtvencimento."'")."
+                               ,$this->e50_numliquidacao
                       )";
                 //  echo $sql;exit;
      $result = db_query($sql);
@@ -1607,6 +1619,17 @@ class cl_pagordem {
     }
     return $sSql;
 }
+
+  function pesquisaNumeroOP($iNumemp){
+    $sSql = "select max(e50_numliquidacao) as e50_numliquidacao from pagordem where e50_numemp = {$iNumemp}";
+    $result = db_utils::fieldsMemory(db_query($sSql), 0)->e50_numliquidacao;
+    if($result != null){
+      $e50_numliquidacao = $result;
+    }else{
+      $e50_numliquidacao = 0;
+    }
+    return $e50_numliquidacao;
+  }
 
 }
 ?>
