@@ -73,7 +73,7 @@ db_postmemory($HTTP_POST_VARS);
                 <td>
                     <?
                     $tipo = array("a" => "Todos", "f" => "Ativos", "t" => "Bloqueados");
-                    db_select("ordem", $tipo, true, 2);
+                    db_select("bloqueado", $tipo, true, 2);
                     ?>
                 </td>
             </tr>
@@ -97,10 +97,9 @@ db_postmemory($HTTP_POST_VARS);
 </html>
 <script>
     function js_emite() {
-
         const obj = document.form1;
-        const tipo = document.form1.ordem.value;
-        const query = `tipo_fornecedor=${tipo}`;
+        const tipo = document.form1.bloqueado.value;
+        const query = `bloqueado=${tipo}`;
         jan = window.open('com2_pcfornecedores002.php?' + query, '', 'width=' + (screen.availWidth - 5) + ',height=' + (screen.availHeight - 40) + ',scrollbars=1,location=0');
         jan.moveTo(0, 0);
     }

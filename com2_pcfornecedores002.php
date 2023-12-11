@@ -34,7 +34,7 @@ include("libs/db_sql.php");
 use \App\Repositories\Patrimonial\Fornecedores\PcForneRepository;
 $pcForneRepository = new PcForneRepository();
 
-$fornecedores = $pcForneRepository->getForneByStatusBlockWithCgm($tipo_fornecedor);
+$fornecedores = $pcForneRepository->getForneByStatusBlockWithCgm($bloqueado);
 
 /*
  * construção do relatório
@@ -53,28 +53,61 @@ $pdf->setfont('arial', 'b', 8);
 
 /** @var \App\Models\PcFoner $fornecedor */
 foreach($fornecedores as $fornecedor) {
+
     $pdf->setfont('arial', 'b', 8);
 
-    $pdf->cell(280, $alt, "Objeto Solcial", 1, 1, "C",1);
-
+    $pdf->cell(279, $alt, "Objeto Solcial", 1, 1, "C",1);
     $pdf->setfont('arial', '', 6);
-    $pdf->cell(280, $alt, $fornecedor->pc60_objsocial, 1, 0, "C",1);
+    $pdf->MultiCell(279, $alt,$fornecedor->pc60_obs, 1, 'L', false);
 
-    $pdf->cell(280, $alt, "Dados", 1, 1, "C",1);
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(279, $alt, "Dados", 1, 1, "C",1);
 
+    $pdf->cell(12, $alt, "Estado " , 1, 0, "C",0);
     $pdf->setfont('arial', '', 6);
-    $pdf->cell(140, $alt, "Estado: " + $fornecedor->cgm->z01_uf, 1, 0, "C",0);
-    $pdf->cell(140, $alt, "Município: " + $fornecedor->cgm->z01_munic, 1, 0, "C",1);
+    $pdf->cell(128, $alt, $fornecedor->cgm->z01_uf , 1, 0, "L",0);
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(16, $alt, "Município  ", 1, 0, "L",0);
+    $pdf->setfont('arial', '', 6);
+    $pdf->cell(123, $alt, $fornecedor->cgm->z01_munic, 1, 1, "L",0);
 
-    $pdf->cell(140, $alt, "Cep: " + $fornecedor->cgm->z01_cepcon, 1, 0, "C",0);
-    $pdf->cell(70, $alt, "Bairro: " + $fornecedor->cgm->z01_bairro, 1, 0, "L",0);
-    $pdf->cell(70, $alt, "N°: " + $fornecedor->cgm->z01_numero, 1, 0, "C",1);
-    $pdf->cell(280, $alt, "N°: " + $fornecedor->cgm->z01_ender, 1, 0, "C",1);
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(7, $alt, "Cep  ", 1, 0, "L",0);
+    $pdf->setfont('arial', '', 6);
+    $pdf->cell(133, $alt,$fornecedor->cgm->z01_cep , 1, 0, "L",0);
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(12, $alt, "Bairro  " , 1, 0, "L",0);
+    $pdf->setfont('arial', '', 6);
+    $pdf->cell(58, $alt, $fornecedor->cgm->z01_bairro , 1, 0, "L",0);
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(7, $alt, "N°  ", 1, 0, "L",0);
+    $pdf->setfont('arial', '', 6);
+    $pdf->cell(62, $alt,$fornecedor->cgm->z01_numero , 1, 1, "L",0);
 
-    $pdf->cell(140, $alt, "Telefone: " + $fornecedor->cgm->z01_telcel, 1, 0, "C",0);
-    $pdf->cell(140, $alt, "Email: " + $fornecedor->cgm->z01_email, 1, 0, "C",1);
-    $pdf->cell(280, $alt, "Motivo " + $fornecedor->pc60_motivobloqueio, 1, 0, "C",1);
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(20, $alt, "Lougradouro  ", 1, 0, "L",0);
+    $pdf->setfont('arial', '', 6);
+    $pdf->cell(259, $alt, $fornecedor->cgm->z01_ender , 1, 1, "L",0);
 
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(14, $alt, "Telefone  " , 1, 0, "L",0);
+    $pdf->setfont('arial', '', 6);
+    $pdf->cell(126, $alt, $fornecedor->cgm->z01_telef , 1, 0, "L",0);
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(10, $alt, "Email ", 1, 0, "L",0);
+    $pdf->setfont('arial', '', 6);
+    $pdf->cell(129, $alt,  $fornecedor->cgm->z01_email , 1, 1, "L",0);
+
+    if ($fornecedor->pc60_bloqueado == 'f') {
+        $dataInicio = DateTime::createFromFormat('Y-m-d', $fornecedor->pc60_databloqueio_ini);
+        $dataFim = DateTime::createFromFormat('Y-m-d', $fornecedor->pc60_databloqueio_fim);
+
+        $pdf->setfont('arial', 'b', 8);
+        $pdf->cell(279, $alt, "Bloqueado no período {$dataInicio->format('d/m/Y')} à {$dataFim->format('d/m/Y')}", 1, 1, "L",0);
+        $pdf->cell(12, $alt,"Motivo " , 1, 0, "L",0);
+        $pdf->setfont('arial', '', 6);
+        $pdf->cell(267, $alt,  $fornecedor->pc60_motivobloqueio ?? "" , 1, 1, "L",0);
+    }
 
     $pdf->cell(279, $alt, "", 0, 1, "C");
 }

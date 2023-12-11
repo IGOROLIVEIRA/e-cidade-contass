@@ -32,30 +32,41 @@ class PcForneRepository implements PcForneRepositoryInterface
     {
         $idInstituicao = $this->idInstituicao;
 
-        return $this->model
-                ->with(['cgm' => function (BelongsTo $query) {
-                    $query->select([
-                        'cgm.z01_nome',
-                        'cgm.z01_cgccpf',
-                        'cgm.z01_uf',
-                        'cgm.z01_munic',
-                        'cgm.z01_cepcon',
-                        'cgm.z01_bairro',
-                        'cgm.z01_ender',
-                        'cgm.z01_telcel',
-                    ]);
-                }])
-                ->where( function ($query) use ($ativo,$idInstituicao) {
-                    if ($ativo == 't' || $ativo == 'f') {
-                        $query->where('pc60_bloqueado', $ativo);
-                    }
-                    $query->where('pc60_instit', $idInstituicao)
-                    ->orWhere('pc60_instit',0);
-                })
-                ->select([
-                    'pc60_objsocial',
-                    'pc60_motivobloqueio'
-                     ])
-                ->get();
+        $result = $this->model
+            ->with(['cgm' => function (BelongsTo $query) {
+                $query->select([
+                    'z01_numcgm',
+                    'z01_nome',
+                    'z01_cgccpf',
+                    'z01_uf',
+                    'z01_munic',
+                    'z01_cep',
+                    'z01_bairro',
+                    'z01_ender',
+                    'z01_telef',
+                    'z01_email',
+                    'z01_numero'
+                ]);
+            }])
+            ->where(function ($query) use ($ativo, $idInstituicao) {
+                if ($ativo == 't' || $ativo == 'f') {
+                    $query->where('pc60_bloqueado', $ativo);
+                }
+            })
+            ->where(function ($query) use ($idInstituicao) {
+                $query->where('pc60_instit', $idInstituicao)
+                    ->orWhere('pc60_instit', 0);
+            })
+            ->select([
+                'pc60_numcgm',
+                'pc60_obs',
+                'pc60_motivobloqueio',
+                'pc60_databloqueio_ini',
+                'pc60_databloqueio_fim',
+                'pc60_bloqueado'
+            ])
+            ->get();
+
+        return $result;
     }
 }

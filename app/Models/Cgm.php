@@ -4,7 +4,6 @@ namespace App\Models;
 
 use App\Traits\LegacyAccount;
 
-
 class Cgm extends LegacyModel
 {
     use LegacyAccount;
