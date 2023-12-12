@@ -1101,6 +1101,14 @@ function dbViewAditamentoContrato(iTipoAditamento, sNomeInstance, oNode, Assinat
             return alert("obrigatório informar a data de Referência.");
         }
 
+        if (me.oTxtDataInicial.getValue() == "") {
+            return alert("obrigatório informar a data de vigencia inicial.");
+        }
+
+        if (me.oTxtDataFinal.getValue() == "") {
+            return alert("obrigatório informar a data de vigencia final.");
+        }
+
         if (me.oCboTipoAditivo.getValue() == 5) {
             if(me.oPercentualReajuste.getValue()=="" || me.oPercentualReajuste.getValue()==null){
                 return alert("obrigatório informar o Percentual de Reajuste.");
