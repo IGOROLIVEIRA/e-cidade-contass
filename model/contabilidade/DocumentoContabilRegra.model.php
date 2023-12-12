@@ -75,8 +75,6 @@ class DocumentoContabilRegra {
       
       $oDaoRegra = db_utils::getDao('conhistdocregra');
       $sSqlRegra = $oDaoRegra->sql_query_file($iCodigoRegra);
-//      echo "iCodigoRegra: $iCodigoRegra<br>";
-//      echo $sSqlRegra . "<br>";
       $rsRegra   = $oDaoRegra->sql_record($sSqlRegra);
       
       if ($oDaoRegra->numrows == 0) {
