@@ -482,6 +482,13 @@ class Acordoaux
     private $nValorRescisao;
 
     /**
+     * Vigência Indeterminada;
+     *
+     * @var integer
+     */
+    protected $iVigenciaIndeterminada;
+
+    /**
      * @return mixed
      */
     public function getiLicoutroorgao()
@@ -687,6 +694,22 @@ class Acordoaux
         return $this;
     }
     
+    /**
+     * @return mixed
+     */
+    public function getVigenciaIndeterminada()
+    {
+        return $this->iVigenciaIndeterminada;
+    }
+
+    /**
+     * @param mixed $iLicoutroorgao
+     */
+    public function setVigenciaIndeterminada($iVigenciaIndeterminada)
+    {
+        $this->iVigenciaIndeterminada = $iVigenciaIndeterminada;
+        return $this;
+    }
 
     /**
      * Construtor
@@ -1689,7 +1712,9 @@ class Acordoaux
         $oPosicao = $this->getUltimaPosicao();
 
         $oDataInicial = new DBDate($dtDataInicial);
-        $oDataFinal = new DBDate($dtDataFinal);
+        if($this->getVigenciaIndeterminada() == 2){
+            $oDataFinal   = new DBDate($dtDataFinal);
+        }
         $this->salvarVigencia($oPosicao, $oDataInicial, $oDataFinal);
     }
 
@@ -1711,7 +1736,7 @@ class Acordoaux
         $oDaoAcordoVigencia->ac18_acordoposicao = $oPosicao->getCodigo();
         $oDaoAcordoVigencia->ac18_ativo = "true";
         $oDaoAcordoVigencia->ac18_datainicio = $oDataInicio->getDate(DBDate::DATA_EN);
-        $oDaoAcordoVigencia->ac18_datafim = $oDataFim->getDate(DBDate::DATA_EN);
+        $oDaoAcordoVigencia->ac18_datafim = $this->getVigenciaIndeterminada() == 2 ? $oDataFim->getDate(DBDate::DATA_EN) : null;
         $oDaoAcordoVigencia->incluir(null);
 
         if ($oDaoAcordoVigencia->erro_status == 0) {
@@ -1770,6 +1795,7 @@ class Acordoaux
         $oDaoAcordo->ac16_indicereajuste           = $this->getIndiceReajuste();
         $oDaoAcordo->ac16_descricaoreajuste        = $this->getDescricaoReajuste();
         $oDaoAcordo->ac16_descricaoindice          = $this->getDescricaoIndice();
+        $oDaoAcordo->ac16_vigenciaindeterminada    = $this->getVigenciaIndeterminada();
 
         /**
          * Alteracao

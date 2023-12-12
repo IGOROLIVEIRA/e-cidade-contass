@@ -206,6 +206,13 @@ class AcordoPosicao
 
     protected  $sJustificativa;
 
+     /**
+     * critério de reajuste
+     *
+     * @var integer
+     */
+    protected $iCriterioReajuste;
+
     /**
      * Constante do caminho da mensagem do model
      * @var string
@@ -696,6 +703,26 @@ class AcordoPosicao
         return $this->sVigenciaalterada;
     }
 
+     /**
+     * retorna o tipo da posição
+     * @return integer
+     */
+    public function getCriterioReajuste()
+    {
+        return $this->iCriterioReajuste;
+    }
+
+    /**
+     * define o tipo da posicão
+     * @param integer $iCriterioReajuste
+     * @return AcordoPosicao
+     */
+    public function setCriterioReajuste($iCriterioReajuste)
+    {
+        $this->iCriterioReajuste = $iCriterioReajuste;
+        return $this;
+    }
+
     /**
      * @return AcordoItem[]
      */
@@ -1071,6 +1098,7 @@ class AcordoPosicao
         $oDaoPosicao->ac26_indicereajuste = $this->getIndiceReajusteacordo();
         $oDaoPosicao->ac26_percentualreajuste = $this->getPercentualReajuste();
         $oDaoPosicao->ac26_descricaoindice = $this->getDescricaoIndiceacordo();
+        $oDaoPosicao->ac26_criterioreajuste = $this->getCriterioReajuste();
         $iCodigo                             = $this->getCodigo();
 
         if (empty($iCodigo)) {
@@ -1896,6 +1924,9 @@ class AcordoPosicao
             $oDaoApostilamento->si03_indicereajuste = $oApostila->indicereajuste;
             $oDaoApostilamento->si03_percentualreajuste = $oApostila->percentualreajuste;
             $oDaoApostilamento->si03_descricaoindice = db_stdClass::normalizeStringJsonEscapeString($oApostila->descricaoindice);
+            $oDaoApostilamento->si03_descricaoreajuste = db_stdClass::normalizeStringJsonEscapeString($oApostila->descricaoreajuste);
+            $oDaoApostilamento->si03_criterioreajuste = $oApostila->criterioreajuste;
+
             if ($oApostila->datareferencia == "") {
                 $oDaoApostilamento->si03_datareferencia = $oDaoApostilamento->si03_dataapostila;
             } else {

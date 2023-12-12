@@ -128,10 +128,9 @@ db_app::load("dbtextFieldData.widget.js");
         width: 49px;
     }
 
-    #ac16_tipounidtempoperiodo,
     #ac16_datainicio,
     #ac16_datafim {
-        width: 90px;
+        width: 112px;
     }
 
     #ac16_formafornecimento {
@@ -681,6 +680,19 @@ db_app::load("dbtextFieldData.widget.js");
                                             <b>Vigência</b>
                                         </legend>
                                         <table cellpadding="0" border="0" width="100%" class="table-vigencia">
+                                            <tr id="tr_vigenciaindeterminada" style="display:none;">
+                                                <td colspan="2">
+                                                    <b>Vigência Indeterminada:</b>
+
+                                                    <?
+                                                    $aVigencias = array(
+                                                    1 => 'Sim',
+                                                    2 => 'Não'
+                                                    );
+                                                    db_select('ac16_vigencia', $aVigencias, true, $db_opcao, "onchange='js_alteracaoVigencia(this.value)';", "");
+                                                    ?>
+                                                </td>
+                                            </tr>
                                             <tr>
                                                 <td width="1%">
                                                     <b>Inicio:</b>
@@ -708,10 +720,10 @@ db_app::load("dbtextFieldData.widget.js");
                                                     );
                                                     ?>
                                                 </td>
-                                                <td>
+                                                <td class="vigencia_final">
                                                     <b>Fim:</b>
                                                 </td>
-                                                <td>
+                                                <td class="vigencia_final">
                                                     <?
 
                                                     db_inputdata(
@@ -783,6 +795,9 @@ db_app::load("dbtextFieldData.widget.js");
                                     </fieldset>
                                 </td>
                             </tr>
+                            <?
+                            db_input('leidalicitacao', 50, 3, true, 'text', $db_opcao,"style='display:none'");
+                            ?>
                         </table>
                     </fieldset>
                 </td>
@@ -1778,6 +1793,7 @@ db_app::load("dbtextFieldData.widget.js");
      *funçao para verificar tipo origem do acordo para listar ancorar relacionada
      */
     function js_verificatipoorigem() {
+        js_alteracaoVigencia($('ac16_vigencia').value);
         iTipoOrigem = document.form1.ac16_tipoorigem.value;
         iOrigem = document.form1.ac16_origem.value;
 
@@ -1989,5 +2005,35 @@ db_app::load("dbtextFieldData.widget.js");
         if (erro == true) {
             document.form1.si06_objetoadesao.focus();
         }
+    }
+
+    <?php
+        if ($db_opcao != 1) {
+            echo "js_alteracaoVigencia($('ac16_vigencia').value);";
+            echo "document.getElementById('ac16_vigencia').setAttribute('disabled','disabled');";
+        } 
+    ?>
+
+    function js_alteracaoVigencia(vigenciaIndeterminada){
+        leilicitacao = document.getElementById('leidalicitacao').value;
+        let aOrigensValidas = ["2","3"];
+        let iTipoOrigem = $('ac16_tipoorigem').value;
+        if(!aOrigensValidas.includes(iTipoOrigem)){
+            document.getElementById('tr_vigenciaindeterminada').style.display = 'none';
+            document.getElementsByClassName('vigencia_final')[0].style.display = '';
+            document.getElementsByClassName('vigencia_final')[1].style.display = '';
+            return false;
+        } 
+        
+        document.getElementById('tr_vigenciaindeterminada').style.display = '';
+
+        if(vigenciaIndeterminada == 1){
+            document.getElementsByClassName('vigencia_final')[0].style.display = 'none';
+            document.getElementsByClassName('vigencia_final')[1].style.display = 'none';
+            return;
+        }
+        document.getElementsByClassName('vigencia_final')[0].style.display = '';
+        document.getElementsByClassName('vigencia_final')[1].style.display = '';
+       
     }
 </script>

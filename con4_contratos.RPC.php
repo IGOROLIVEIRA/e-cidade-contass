@@ -759,6 +759,7 @@ switch ($oParam->exec) {
                 $oContrato->setIndiceReajuste($oParam->contrato->iIndicereajuste);
                 $oContrato->setDescricaoReajuste(db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sDescricaoreajuste));
                 $oContrato->setDescricaoIndice(db_stdClass::normalizeStringJsonEscapeString($oParam->contrato->sDescricaoindice));
+                $oContrato->setVigenciaIndeterminada($oParam->contrato->iVigenciaIndeterminada);
                 $oContrato->save();
                 /*
                * verificamos se existe empenhos a serem vinculados na seção
@@ -948,7 +949,7 @@ switch ($oParam->exec) {
             $oDadosContrato->sDescricaoreajuste           = urlencode($oContrato->getDescricaoReajuste());
             $oDadosContrato->sDescricaoindice           = urlencode($oContrato->getDescricaoIndice());
             $oDadosContrato->sPeriodoreajuste             = urlencode($oContrato->getPeriodoreajuste());
-
+            $oDadosContrato->iVigenciaIndeterminada       = $oContrato->getVigenciaIndeterminada();
             $oRetorno->contrato = $oDadosContrato;
         } catch (Exception $eErro) {
 
@@ -1963,6 +1964,13 @@ switch ($oParam->exec) {
             }
             $oRetorno->status  = 1;
             $oRetorno->itens = $aResult;
+        break;
+
+        case 'getLeiLicitacao':
+            $cl_liclicita = new cl_liclicita;
+            $sQueryLicitacao = $cl_liclicita->sql_query_file($oParam->iLicitacao);
+            $oResultLicitacao = $cl_liclicita->sql_record($sQueryLicitacao);
+            $oRetorno->leiLicitacao = db_utils::fieldsMemory($oResultLicitacao,0)->l20_leidalicitacao;
         break;
 }
 /**

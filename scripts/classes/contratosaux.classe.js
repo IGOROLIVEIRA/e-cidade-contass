@@ -62,7 +62,15 @@ contratoaux = function () {
         var iIndicereajuste           = $F('ac16_indicereajuste');
         var sDescricaoreajuste        = $F('ac16_descricaoreajuste');
         var sDescricaoindice          = $F('ac16_descricaoindice');
-        
+        var iVigenciaIndeterminada    = $F('ac16_vigencia');
+
+        vigenciaIsVisible = document.getElementById('tr_vigenciaindeterminada').style.display;
+
+        iVigenciaIndeterminada =
+                    document.getElementById('tr_vigenciaindeterminada').style.display == ""
+                    ? iVigenciaIndeterminada
+                    : "null";
+
         if(iReajuste==0){
             alert("Usuário: Campo Possui Critério de Reajuste não informado.");
             $('ac16_reajuste').focus();
@@ -165,7 +173,7 @@ contratoaux = function () {
             return false;
         }
 
-        if (dtTermino == "") {
+        if (dtTermino == "" && iVigenciaIndeterminada == 2) {
 
             alert('Informe a data de termino do Contrato.');
             $('ac16_datafim').focus();
@@ -260,6 +268,7 @@ contratoaux = function () {
         oParam.contrato.sDescricaoreajuste        = sDescricaoreajuste;
         oParam.contrato.sDescricaoindice          = sDescricaoindice;
         oParam.contrato.sPeriodoreajuste          = sPeriodoreajuste;
+        oParam.contrato.iVigenciaIndeterminada    = iVigenciaIndeterminada;
         js_divCarregando('Aguarde, salvando dados do contrato','msgbox');
         var oAjax   = new Ajax.Request(
             sURL,
@@ -440,7 +449,11 @@ contratoaux = function () {
         if (oRetorno.status == 1) {
 
             oJanela.destroy();
+            let aLicitacaoSelecionada = oGridDados.getSelection("object");
+            $('ac16_licitacao').value = aLicitacaoSelecionada[0].aCells[1].content;
             $('ac16_deptoresponsavel').focus();
+            me.getLeiLicitacao();
+            js_alteracaoVigencia($('ac16_vigencia').value);
 
         } else {
             alert(oRetorno.message.urlDecode());
@@ -540,6 +553,14 @@ contratoaux = function () {
         var iLicitacao                = $F('ac16_licitacao');
         var iLicoutroorgao            = $F('ac16_licoutroorgao');
         var iAdesaoregpreco           = $F('ac16_adesaoregpreco');
+        var iVigenciaIndeterminada    = $F('ac16_vigencia');
+
+        vigenciaIsVisible = document.getElementById('tr_vigenciaindeterminada').style.display;
+
+        iVigenciaIndeterminada =
+                    document.getElementById('tr_vigenciaindeterminada').style.display == ""
+                    ? iVigenciaIndeterminada
+                    : "null";
 
         /* Novas validações para atender o SICOM */
 
@@ -607,7 +628,7 @@ contratoaux = function () {
             return false;
         }
 
-        if (dtTermino == "") {
+        if (dtTermino == ""  && iVigenciaIndeterminada == 2) {
 
             alert('Informe a data de termino do Contrato.');
             $('ac16_datafim').focus();
@@ -672,6 +693,7 @@ contratoaux = function () {
         oParam.contrato.iLicitacao                = iLicitacao;
         oParam.contrato.iAdesaoregpreco           = iAdesaoregpreco;
         oParam.contrato.iLicoutroorgao            = iLicoutroorgao;
+        oParam.contrato.iVigenciaIndeterminada    = iVigenciaIndeterminada;
         js_divCarregando('Aguarde, salvando dados do contrato','msgbox');
         var oAjax   = new Ajax.Request(
             sURL,
@@ -827,6 +849,31 @@ contratoaux = function () {
         }
     };
 
-
+    this.getLeiLicitacao = function() {
+        var oParam = new Object();
+        oParam.exec = "getLeiLicitacao";
+        oParam.iLicitacao = $('ac16_licitacao').value;
+        var oAjax = new Ajax.Request(
+            sURL,{
+                method :'post',
+                parameters: 'json='+Object.toJSON(oParam),
+                asynchronous: false,
+                onComplete: function(oAjax) {
+                    var oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
+                    $('leidalicitacao').value = oRetorno.leiLicitacao;
+                    let aOrigensValidas = ["2","3"];
+                    let iTipoOrigem = $('ac16_tipoorigem').value;
+                    if(!aOrigensValidas.includes(iTipoOrigem)){
+                        return false;
+                    } 
+                    if($('leidalicitacao').value == "1"){
+                        document.getElementById('tr_vigenciaindeterminada').style.display = '';
+                        return;
+                    }
+                    document.getElementById('tr_vigenciaindeterminada').style.display = 'none';
+                }
+            }
+        );
+    };
 
 }

@@ -133,6 +133,20 @@ try {
             }
 
             break;
+
+            case "getLeiAndOrigem":
+                $sSQL = "select l20_leidalicitacao,ac16_tipoorigem from liclicita
+                inner join acordo on
+                    acordo.ac16_licitacao = liclicita.l20_codigo
+                where acordo.ac16_sequencial = $oParam->licitacao";
+    
+                $rsLeiAndOrigem     = db_query($sSQL);
+                $oLeiAndOrigem = db_utils::fieldsMemory($rsLeiAndOrigem, 0);
+    
+                $oRetorno->lei = $oLeiAndOrigem->l20_leidalicitacao;
+                $oRetorno->tipoorigem = $oLeiAndOrigem->ac16_tipoorigem;
+    
+                break;
     }
 
     db_fim_transacao(false);

@@ -678,6 +678,7 @@ switch ($oParam->exec) {
                 $oContrato->setIndiceReajuste($oParam->contrato->iIndicereajuste);
                 $oContrato->setDescricaoReajuste($oParam->contrato->sDescricaoreajuste);
                 $oContrato->setDescricaoIndice($oParam->contrato->sDescricaoindice);
+                $oContrato->setVigenciaIndeterminada($oParam->contrato->iVigenciaIndeterminada);
                 $oContrato->save();
 
                 /*

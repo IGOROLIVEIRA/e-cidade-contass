@@ -290,7 +290,11 @@ contrato = function () {
         if (oRetorno.status == 1) {
 
             oJanela.destroy();
+            let aLicitacaoSelecionada = oGridDados.getSelection("object");
+            $('ac16_licitacao').value = aLicitacaoSelecionada[0].aCells[1].content;
             $('ac16_deptoresponsavel').focus();
+            me.getLeiLicitacao();
+            js_alteracaoVigencia($('ac16_vigencia').value);
 
         } else {
             alert(oRetorno.message.urlDecode());
@@ -408,6 +412,14 @@ contrato = function () {
         var iIndicereajuste           = $F('ac16_indicereajuste');
         var sDescricaoreajuste        = $F('ac16_descricaoreajuste');
         var sDescricaoindice          = $F('ac16_descricaoindice');
+        var iVigenciaIndeterminada    = $F('ac16_vigencia');
+
+        vigenciaIsVisible = document.getElementById('tr_vigenciaindeterminada').style.display;
+
+        iVigenciaIndeterminada =
+                    document.getElementById('tr_vigenciaindeterminada').style.display == ""
+                    ? iVigenciaIndeterminada
+                    : "null";
 
         /* Novas valida��es para atender o SICOM */
 
@@ -528,7 +540,7 @@ contrato = function () {
             return false;
         }
 
-        if (dtTermino == "") {
+        if (dtTermino == "" && iVigenciaIndeterminada == 2) {
 
             alert('Informe a data de termino do Contrato.');
             $('ac16_datafim').focus();
@@ -624,6 +636,7 @@ contrato = function () {
         oParam.contrato.sDescricaoreajuste        = encodeURIComponent(tagString(sDescricaoreajuste));
         oParam.contrato.sDescricaoindice          = encodeURIComponent(tagString(sDescricaoindice));
         oParam.contrato.sPeriodoreajuste          = sPeriodoreajuste;
+        oParam.contrato.iVigenciaIndeterminada    = iVigenciaIndeterminada;
         js_divCarregando('Aguarde, salvando dados do contrato','msgbox');
         var oAjax   = new Ajax.Request(
             sURL,
@@ -798,8 +811,9 @@ contrato = function () {
             $('ac16_indicereajuste').value            = oRetorno.contrato.iIndicereajuste;
             $('ac16_descricaoreajuste').value            = oRetorno.contrato.sDescricaoreajuste.urlDecode();
             $('ac16_descricaoindice').value            = oRetorno.contrato.sDescricaoindice.urlDecode();
-            //$('ac16_acordoclassificacao').value   = oRetorno.contrato.iClassificacao;
             $('ac16_valor').value                 = js_formatar(oRetorno.contrato.nValorContrato, 'f');
+            $('ac16_vigencia').value                = oRetorno.contrato.iVigenciaIndeterminada;
+            
             if($('ac16_reajuste').value == 2){
                 $('tdcriterioreajuste').style.display = 'none';
                 $('trdatareajuste').style.display = 'none';
@@ -860,6 +874,33 @@ contrato = function () {
             $('trValorAcordo').style.display = 'table-row';
             $('ac16_valor').readOnly         = false;
         }
+    };
+
+    this.getLeiLicitacao = function() {
+        var oParam = new Object();
+        oParam.exec = "getLeiLicitacao";
+        oParam.iLicitacao = $('ac16_licitacao').value;
+        var oAjax = new Ajax.Request(
+            sURL,{
+                method :'post',
+                parameters: 'json='+Object.toJSON(oParam),
+                asynchronous: false,
+                onComplete: function(oAjax) {
+                    var oRetorno = eval("(" + oAjax.responseText.urlDecode() + ")");
+                    $('leidalicitacao').value = oRetorno.leiLicitacao;
+                    let aOrigensValidas = ["2","3"];
+                    let iTipoOrigem = $('ac16_tipoorigem').value;
+                    if(!aOrigensValidas.includes(iTipoOrigem)){
+                        return false;
+                    } 
+                    if($('leidalicitacao').value == "1"){
+                        document.getElementById('tr_vigenciaindeterminada').style.display = '';
+                        return;
+                    }
+                    document.getElementById('tr_vigenciaindeterminada').style.display = 'none';
+                }
+            }
+        );
     };
 
 }
