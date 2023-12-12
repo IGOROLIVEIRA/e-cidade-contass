@@ -75,6 +75,8 @@ class DocumentoContabilRegra {
       
       $oDaoRegra = db_utils::getDao('conhistdocregra');
       $sSqlRegra = $oDaoRegra->sql_query_file($iCodigoRegra);
+//      echo "iCodigoRegra: $iCodigoRegra<br>";
+//      echo $sSqlRegra . "<br>";
       $rsRegra   = $oDaoRegra->sql_record($sSqlRegra);
       
       if ($oDaoRegra->numrows == 0) {
@@ -95,7 +97,19 @@ class DocumentoContabilRegra {
    * @return boolean
    */
   public function validaRegra($aVariavel) {
-    
+
+    $instit = db_getsession("DB_instit");
+    $anoSessao = db_getsession("DB_anousu");
+
+    $aRegraDoc200 = array("congrupo = 8", "congrupo = 9");
+
+    $findString = "c21_congrupo";
+    $stringKey = strrchr($this->sRegra, $findString);
+
+    if (in_array($stringKey, $aRegraDoc200)){
+        $this->sRegra = "{$this->sRegra} and c21_instit = {$instit} and c21_anousu = {$anoSessao}";
+    }
+
     $sQuery    = strtr($this->sRegra, $aVariavel);
     $oDaoRegra = db_utils::getDao('conhistdocregra');
     $rsRegra   = $oDaoRegra->sql_record($sQuery);
