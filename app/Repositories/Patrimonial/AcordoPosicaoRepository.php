@@ -49,6 +49,22 @@ class AcordoPosicaoRepository implements AcordoPosicaoRepositoryInterface
 
        return $acordoPosicao;
     }
+     /**
+     *
+     * @param integer $ac26Acordo
+     * @return AcordoPosicao
+     */
+    public function getPosicaoInicial(int $ac26Acordo): AcordoPosicao
+    {
+        $acordoPosicao = $this->model
+                ->with(['itens','acordo'])
+                ->where('ac26_acordo',$ac26Acordo)
+                ->where('ac26_numero', 1)
+                ->orderBy('ac26_numero', 'asc')
+                ->first();
+
+       return $acordoPosicao;
+    }
 
      /**
      *

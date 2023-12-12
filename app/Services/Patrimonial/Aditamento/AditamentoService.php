@@ -35,8 +35,10 @@ class AditamentoService implements AditamentoServiceInterface
         $acordoPosicaoAnterior = null;
         if( $numeroAditamento > 1) {
             $acordoPosicaoAnterior = $this->acordoPosicaoRepository->getAditamentoByNumero($ac16Sequencial, $numeroAditamento - 1);
+        } else {
+            $acordoPosicaoAnterior = $this->acordoPosicaoRepository->getPosicaoInicial($ac16Sequencial);
         }
-
+        
         $aditamentoFactory = new AditamentoFactory();
         $aditamento = $aditamentoFactory->createByEloquentModel($acordoPosicao, $acordoPosicaoAnterior);
 
