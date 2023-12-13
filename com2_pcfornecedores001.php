@@ -68,25 +68,20 @@ db_postmemory($HTTP_POST_VARS);
             </tr>
             <tr>
                 <td align="left" nowrap title="Ordem Alfabética/Numérica">
-                    <strong>Filtrar por:&nbsp;&nbsp;</strong>
+
                 </td>
                 <td>
-                    <?
-                    $tipo = array("a" => "Todos", "f" => "Ativos", "t" => "Bloqueados");
-                    db_select("bloqueado", $tipo, true, 2);
-                    ?>
+                    <fieldset>
+                        <legend>Fornecedores</legend>
+                        <label for="bloqueado"> <strong>Filtrar por:&nbsp;&nbsp;</strong> </label>
+                        <?php
+                        $tipo = array("a" => "Todos", "f" => "Ativos", "t" => "Bloqueados");
+                        db_select("bloqueado", $tipo, true, 2);
+                        ?>
+                        <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" style="display:block; margin: 10px auto">
+                    </fieldset>
                 </td>
             </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center">
-                    <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();">
-                </td>
-            </tr>
-
         </form>
     </table>
     <?

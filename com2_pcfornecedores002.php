@@ -55,48 +55,57 @@ $pdf->setfont('arial', 'b', 8);
 foreach($fornecedores as $fornecedor) {
 
     $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(20, $alt, "Fornecedor:", 0, 0, "L");
+    $pdf->setfont('arial', '', 6);
+    $pdf->cell(120, $alt, $fornecedor->cgm->z01_nome, 0, 0, "L");
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(17, $alt, "CNPJ:", 0, 0, "C");
+    $pdf->setfont('arial', '', 6);
+    $pdf->cell(122, $alt, $fornecedor->cgm->z01_cgccpf, 0, 1, "L",0);
 
-    $pdf->cell(279, $alt, "Objeto Solcial", 1, 1, "C",1);
+
+    $pdf->setfont('arial', 'b', 8);
+    $pdf->cell(279, $alt, "Objeto Social:", 1, 1, "C",1);
     $pdf->setfont('arial', '', 6);
     $pdf->MultiCell(279, $alt,$fornecedor->pc60_obs, 1, 'L', false);
 
     $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(279, $alt, "Dados", 1, 1, "C",1);
+    $pdf->cell(279, $alt, "Dados:", 1, 1, "C",1);
 
-    $pdf->cell(12, $alt, "Estado " , 1, 0, "C",0);
+    $pdf->cell(20, $alt, "Estado: " , 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
-    $pdf->cell(128, $alt, $fornecedor->cgm->z01_uf , 1, 0, "L",0);
+    $pdf->cell(120, $alt, $fornecedor->cgm->z01_uf , 1, 0, "L",0);
     $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(16, $alt, "Município  ", 1, 0, "L",0);
+    $pdf->cell(17, $alt, "Município:  ", 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
-    $pdf->cell(123, $alt, $fornecedor->cgm->z01_munic, 1, 1, "L",0);
+    $pdf->cell(122, $alt, $fornecedor->cgm->z01_munic, 1, 1, "L",0);
 
     $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(7, $alt, "Cep  ", 1, 0, "L",0);
+    $pdf->cell(20, $alt, "CEP:  ", 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
-    $pdf->cell(133, $alt,$fornecedor->cgm->z01_cep , 1, 0, "L",0);
+    $pdf->cell(120, $alt,$fornecedor->cgm->z01_cep , 1, 0, "L",0);
     $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(12, $alt, "Bairro  " , 1, 0, "L",0);
+    $pdf->cell(17, $alt, "Bairro:  " , 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
-    $pdf->cell(58, $alt, $fornecedor->cgm->z01_bairro , 1, 0, "L",0);
+    $pdf->cell(53, $alt, $fornecedor->cgm->z01_bairro , 1, 0, "L",0);
     $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(7, $alt, "N°  ", 1, 0, "L",0);
+    $pdf->cell(7, $alt, "N°:  ", 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
     $pdf->cell(62, $alt,$fornecedor->cgm->z01_numero , 1, 1, "L",0);
 
     $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(20, $alt, "Lougradouro  ", 1, 0, "L",0);
+    $pdf->cell(20, $alt, "Logradouro:  ", 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
     $pdf->cell(259, $alt, $fornecedor->cgm->z01_ender , 1, 1, "L",0);
 
     $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(14, $alt, "Telefone  " , 1, 0, "L",0);
+    $pdf->cell(20, $alt, "Telefone:  " , 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
-    $pdf->cell(126, $alt, $fornecedor->cgm->z01_telef , 1, 0, "L",0);
+    $pdf->cell(120, $alt, $fornecedor->cgm->z01_telef , 1, 0, "L",0);
     $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(10, $alt, "Email ", 1, 0, "L",0);
+    $pdf->cell(17, $alt, "Email: ", 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
-    $pdf->cell(129, $alt,  $fornecedor->cgm->z01_email , 1, 1, "L",0);
+    $pdf->cell(122, $alt,  $fornecedor->cgm->z01_email , 1, 1, "L",0);
 
     if ($fornecedor->pc60_bloqueado == 'f') {
         $dataInicio = DateTime::createFromFormat('Y-m-d', $fornecedor->pc60_databloqueio_ini);
@@ -104,9 +113,9 @@ foreach($fornecedores as $fornecedor) {
 
         $pdf->setfont('arial', 'b', 8);
         $pdf->cell(279, $alt, "Bloqueado no período {$dataInicio->format('d/m/Y')} à {$dataFim->format('d/m/Y')}", 1, 1, "L",0);
-        $pdf->cell(12, $alt,"Motivo " , 1, 0, "L",0);
+        $pdf->cell(20, $alt,"Motivo: " , 1, 0, "L",0);
         $pdf->setfont('arial', '', 6);
-        $pdf->cell(267, $alt,  $fornecedor->pc60_motivobloqueio ?? "" , 1, 1, "L",0);
+        $pdf->cell(259, $alt,  $fornecedor->pc60_motivobloqueio ?? "" , 1, 1, "L",0);
     }
 
     $pdf->cell(279, $alt, "", 0, 1, "C");
