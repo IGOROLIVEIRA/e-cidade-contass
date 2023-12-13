@@ -32,6 +32,8 @@ class UpdateApostilamentoCommand
         $oDaoApostilamento->si03_justificativa = utf8_decode($apostilamento->si03_justificativa);
         $oDaoApostilamento->si03_percentualreajuste = $apostilamento->si03_percentualreajuste;
         $oDaoApostilamento->si03_indicereajuste = $apostilamento->si03_indicereajuste;
+        $oDaoApostilamento->si03_descricaoreajuste = $apostilamento->si03_descricaoreajuste;
+        $oDaoApostilamento->si03_criterioreajuste = $apostilamento->si03_criterioreajuste;
 
         $oDaoApostilamento->alterar($oDaoApostilamento->si03_sequencial);
 

@@ -104,6 +104,9 @@ try {
             $date = new DateTime( $record->si03_datareferencia );
             $oDadosAcordo->si03_datareferencia = $date->format( 'd/m/Y' );
             $oDadosAcordo->si03_descrapostila = utf8_encode($record->si03_descrapostila);
+            $oDadosAcordo->si03_descrapostila = utf8_encode($record->si03_descrapostila);
+            $oDadosAcordo->si03_descricaoreajuste = utf8_encode($record->si03_descricaoreajuste);
+            $oDadosAcordo->si03_criterioreajuste = $record->si03_criterioreajuste;
             $oRetorno->dadosAcordo = $oDadosAcordo;
             getItens($oParam, $oRetorno);
             break;

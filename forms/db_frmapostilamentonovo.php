@@ -1441,6 +1441,17 @@ unset($_GET['viewAlterar']);
             oGridItens.aHeaders[5].lDisplayed = false;
         }
 
+        if (iTipo == "01") {
+            document.getElementById('trreajuste').style.display = "";
+            document.getElementById('tr_criterioreajuste').style.display = "";
+        } else {
+            document.getElementById('trreajuste').style.display = "none";
+            document.getElementById('tr_criterioreajuste').style.display = "none";
+            $("si03_percentualreajuste").value = "";
+            $("si03_indicereajuste").options[0].selected = true;
+        }
+
+
         aItensPosicao.forEach(function(oItem, iIndice) {
             if (iTipo == "03") {
 
@@ -1471,15 +1482,6 @@ unset($_GET['viewAlterar']);
                 document.getElementById('oGridItensrow' + iIndice + 'cell9').style.display = "none";
                 document.getElementById('col11').style.display = "none";
 
-            }
-            if (iTipo == "01") {
-                document.getElementById('trreajuste').style.display = "";
-                document.getElementById('tr_criterioreajuste').style.display = "";
-            } else {
-                document.getElementById('trreajuste').style.display = "none";
-                document.getElementById('tr_criterioreajuste').style.display = "none";
-                $("si03_percentualreajuste").value = "";
-                $("si03_indicereajuste").options[0].selected = true;
             }
 
         });
@@ -1581,7 +1583,13 @@ unset($_GET['viewAlterar']);
                 $('si03_descrapostila').value = oRetorno.dadosAcordo.si03_descrapostila;
                 $('si03_datareferencia').value = oRetorno.dadosAcordo.si03_datareferencia;
                 $('si03_justificativa').value = oRetorno.dadosAcordo.si03_justificativa;
+                $('si03_descricaoreajuste').value = oRetorno.dadosAcordo.si03_descricaoreajuste;
+                $('si03_criterioreajuste').value = oRetorno.dadosAcordo.si03_criterioreajuste;
+                $("si03_indicereajuste").value = oRetorno.dadosAcordo.si03_indicereajuste;
                 si03_sequencial = oRetorno.dadosAcordo.si03_sequencial;
+                js_changeTipoApostila(tipoApostilaInicial);
+                js_indicereajuste($("si03_indicereajuste").value);
+                js_changeCriterioReajuste($("si03_criterioreajuste").value);
 
                 validaDadosAcordo(oRetorno);
 
@@ -1635,6 +1643,8 @@ unset($_GET['viewAlterar']);
             si03_indicereajuste: oApostila.indicereajuste,
             si03_datareferencia: $('si03_datareferencia').value,
             si03_justificativa: $('si03_justificativa').value,
+            si03_descricaoreajuste: oApostila.descricaoreajuste,
+            si03_criterioreajuste: oApostila.criterioreajuste,
             updateNumApostilamento
         }
 

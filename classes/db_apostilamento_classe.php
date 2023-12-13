@@ -616,6 +616,10 @@ class cl_apostilamento
       $sql  .= $virgula . " si03_acordo = $this->si03_acordo ";
       $virgula = ",";
     }
+    $this->si03_descricaoreajuste = $this->si03_descricaoreajuste == "null" || $this->si03_descricaoreajuste == "" ? "null" : "'" . $this->si03_descricaoreajuste . "'";
+    $sql  .= $virgula . " si03_descricaoreajuste = $this->si03_descricaoreajuste";
+    $sql  .= $virgula . " si03_criterioreajuste = $this->si03_criterioreajuste";
+
     $sql .= " where ";
     if ($si03_sequencial != null) {
       $sql .= " si03_sequencial = $this->si03_sequencial";
