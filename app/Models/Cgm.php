@@ -101,5 +101,30 @@ class Cgm extends LegacyModel
     {
         return $this->hasOne(PcForne::class, 'pc60_numcgm', 'z01_numcgm');
     }
+
+    public function getZ01NomeUpperAttribute()
+    {
+        return strtoupper($this->z01_nome);
+    }
+
+    public function getz01UfUpperAttribute()
+    {
+        return strtoupper($this->z01_uf);
+    }
+
+    public function getZ01MunicAttribute()
+    {
+        return strtoupper($this->z01_munic);
+    }
+
+    public function getZ01BairroUpperAttribute()
+    {
+        return strtoupper($this->z01_bairro);
+    }
+
+    public function getZ01EnderUpperAttribute()
+    {
+        return strtoupper($this->z01_ender);
+    }
 }
 

@@ -28,6 +28,14 @@
 include("fpdf151/pdf.php");
 include("libs/db_sql.php");
 
+function verificaTipoDocumento(string $numeroDoc): string
+{
+    if (strlen($numeroDoc) === 11) {
+        return "CPF " . $numeroDoc;
+    }
+    return "CNPJ " . $numeroDoc;
+}
+
 /*
  * query que busca os dados para retorno do relatório
  */
@@ -35,6 +43,9 @@ use \App\Repositories\Patrimonial\Fornecedores\PcForneRepository;
 $pcForneRepository = new PcForneRepository();
 
 $fornecedores = $pcForneRepository->getForneByStatusBlockWithCgm($bloqueado);
+$fornecedores = $fornecedores->sortBy(function ($fornecedor) {
+        return $fornecedor->cgm->z01_nome;
+    })->all();
 
 /*
  * construção do relatório
@@ -55,30 +66,25 @@ $pdf->setfont('arial', 'b', 8);
 foreach($fornecedores as $fornecedor) {
 
     $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(20, $alt, "Fornecedor:", 0, 0, "L");
-    $pdf->setfont('arial', '', 6);
-    $pdf->cell(120, $alt, $fornecedor->cgm->z01_nome, 0, 0, "L");
-    $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(17, $alt, "CNPJ:", 0, 0, "C");
-    $pdf->setfont('arial', '', 6);
-    $pdf->cell(122, $alt, $fornecedor->cgm->z01_cgccpf, 0, 1, "L",0);
+    $cabecalho = "Fornecedor: {$fornecedor->cgm->z01_nome_upper} - ". verificaTipoDocumento($fornecedor->cgm->z01_cgccpf);
+    $pdf->cell(279, $alt, $cabecalho, 0, 1, "L",0);
 
 
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(279, $alt, "Objeto Social:", 1, 1, "C",1);
     $pdf->setfont('arial', '', 6);
-    $pdf->MultiCell(279, $alt,$fornecedor->pc60_obs, 1, 'L', false);
+    $pdf->MultiCell(279, $alt,$fornecedor->pc60_obs_upper, 1, 'L', false);
 
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(279, $alt, "Dados:", 1, 1, "C",1);
 
     $pdf->cell(20, $alt, "Estado: " , 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
-    $pdf->cell(120, $alt, $fornecedor->cgm->z01_uf , 1, 0, "L",0);
+    $pdf->cell(120, $alt, $fornecedor->cgm->z01_uf_upper , 1, 0, "L",0);
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(17, $alt, "Município:  ", 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
-    $pdf->cell(122, $alt, $fornecedor->cgm->z01_munic, 1, 1, "L",0);
+    $pdf->cell(122, $alt, $fornecedor->cgm->z01_munic_upper, 1, 1, "L",0);
 
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(20, $alt, "CEP:  ", 1, 0, "L",0);
@@ -87,7 +93,7 @@ foreach($fornecedores as $fornecedor) {
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(17, $alt, "Bairro:  " , 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
-    $pdf->cell(53, $alt, $fornecedor->cgm->z01_bairro , 1, 0, "L",0);
+    $pdf->cell(53, $alt, $fornecedor->cgm->z01_bairro_upper , 1, 0, "L",0);
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(7, $alt, "N°:  ", 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
@@ -96,7 +102,7 @@ foreach($fornecedores as $fornecedor) {
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(20, $alt, "Logradouro:  ", 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);
-    $pdf->cell(259, $alt, $fornecedor->cgm->z01_ender , 1, 1, "L",0);
+    $pdf->cell(259, $alt, $fornecedor->cgm->z01_ender_upper , 1, 1, "L",0);
 
     $pdf->setfont('arial', 'b', 8);
     $pdf->cell(20, $alt, "Telefone:  " , 1, 0, "L",0);
@@ -115,7 +121,7 @@ foreach($fornecedores as $fornecedor) {
         $pdf->cell(279, $alt, "Bloqueado no período {$dataInicio->format('d/m/Y')} à {$dataFim->format('d/m/Y')}", 1, 1, "L",0);
         $pdf->cell(20, $alt,"Motivo: " , 1, 0, "L",0);
         $pdf->setfont('arial', '', 6);
-        $pdf->cell(259, $alt,  $fornecedor->pc60_motivobloqueio ?? "" , 1, 1, "L",0);
+        $pdf->cell(259, $alt,  $fornecedor->pc60_motivobloqueio_upper, 1, 1, "L",0);
     }
 
     $pdf->cell(279, $alt, "", 0, 1, "C");

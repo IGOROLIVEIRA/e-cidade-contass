@@ -48,7 +48,7 @@ class PcForneRepository implements PcForneRepositoryInterface
                     'z01_numero'
                 ]);
             }])
-            ->where(function ($query) use ($ativo, $idInstituicao) {
+            ->where(function ($query) use ($ativo) {
                 if ($ativo == 't' || $ativo == 'f') {
                     $query->where('pc60_bloqueado', $ativo);
                 }

@@ -55,4 +55,15 @@ class PcForne extends LegacyModel
     {
         return $this->belongsTo(Cgm::class, 'pc60_numcgm', 'z01_numcgm');
     }
+
+    public function getPc60ObsUpperAttribute()
+    {
+        return strtoupper($this->pc60_obs);
+    }
+
+    public function getPc60MotivobloqueioUpperAttribute()
+    {
+        return strtoupper($this->pc60_motivobloqueio);
+    }
+
 }
