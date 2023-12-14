@@ -71,12 +71,12 @@ foreach($fornecedores as $fornecedor) {
 
 
     $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(279, $alt, "Objeto Social:", 1, 1, "C",1);
+    $pdf->cell(279, $alt, "Objeto Social", 1, 1, "C",1);
     $pdf->setfont('arial', '', 6);
     $pdf->MultiCell(279, $alt,$fornecedor->pc60_obs_upper, 1, 'L', false);
 
     $pdf->setfont('arial', 'b', 8);
-    $pdf->cell(279, $alt, "Dados:", 1, 1, "C",1);
+    $pdf->cell(279, $alt, "Dados", 1, 1, "C",1);
 
     $pdf->cell(20, $alt, "Estado: " , 1, 0, "L",0);
     $pdf->setfont('arial', '', 6);

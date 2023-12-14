@@ -48,43 +48,40 @@ db_postmemory($HTTP_POST_VARS);
         }
     </script>
     <link href="estilos.css" rel="stylesheet" type="text/css">
+    <style>
+        .center {
+            width: 1100px;
+            margin: 0 auto;
+            padding: 0 2%;
+            text-align:center;
+        }
+
+        fieldset {
+            width: 43%;
+            margin: 10px auto;
+        }
+
+        fieldset #bloqueado {
+            width: 50%;
+        }
+
+    </style>
 </head>
 
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1" bgcolor="#cccccc">
-    <table width="790" border="0" cellpadding="0" cellspacing="0" bgcolor="#5786B2">
-        <tr>
-            <td width="360" height="18">&nbsp;</td>
-            <td width="263">&nbsp;</td>
-            <td width="25">&nbsp;</td>
-            <td width="140">&nbsp;</td>
-        </tr>
-    </table>
+    <div class="center">
+        <fieldset>
+            <legend>Fornecedores</legend>
+            <label for="bloqueado"> <strong>Filtrar por:&nbsp;&nbsp;</strong> </label>
+            <?php
+            $tipo = array("a" => "Todos", "f" => "Ativos", "t" => "Bloqueados");
+            db_select("bloqueado", $tipo, true, 2);
+            ?>
+            <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" style="display:block; margin: 10px auto">
+        </fieldset>
+    </div>
 
-    <table align="center">
-        <form name="form1" method="post" action="">
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-            <tr>
-                <td align="left" nowrap title="Ordem Alfabética/Numérica">
-
-                </td>
-                <td>
-                    <fieldset>
-                        <legend>Fornecedores</legend>
-                        <label for="bloqueado"> <strong>Filtrar por:&nbsp;&nbsp;</strong> </label>
-                        <?php
-                        $tipo = array("a" => "Todos", "f" => "Ativos", "t" => "Bloqueados");
-                        db_select("bloqueado", $tipo, true, 2);
-                        ?>
-                        <input name="emite2" id="emite2" type="button" value="Processar" onclick="js_emite();" style="display:block; margin: 10px auto">
-                    </fieldset>
-                </td>
-            </tr>
-        </form>
-    </table>
-    <?
+    <?php
     db_menu(db_getsession("DB_id_usuario"), db_getsession("DB_modulo"), db_getsession("DB_anousu"), db_getsession("DB_instit"));
     ?>
 </body>
