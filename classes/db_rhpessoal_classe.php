@@ -2378,9 +2378,10 @@ class cl_rhpessoal
 
     public function verificaMatriculaECargo($iNumCgm)
     {
-        $sSql = "SELECT DISTINCT rh01_regist, rh37_descr";
+        $sSql = "SELECT DISTINCT rh01_regist, rh37_descr, z01_nome";
         $sSql .= " FROM rhpessoal";
         $sSql .= " LEFT JOIN rhfuncao ON rhfuncao.rh37_funcao = rh01_funcao AND rhfuncao.rh37_instit = rh01_instit  ";
+        $sSql .= " LEFT JOIN cgm ON z01_numcgm = rh01_numcgm";
         $sSql .= " WHERE rh01_regist = (";
         $sSql .= " SELECT max(rh01_regist)";
         $sSql .= " FROM rhpessoal";

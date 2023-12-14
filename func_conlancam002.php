@@ -67,6 +67,7 @@ if(isset($e69_codnota)){
 		                   c72_complem,
                        e69_numero as dl_Nota_Fiscal,
                        e50_codord  ,
+                       e50_numliquidacao,
                        e50_data
                   from conlancamemp
                        inner join conlancam on c70_codlan = c75_codlan
