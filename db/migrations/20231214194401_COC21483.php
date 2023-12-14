@@ -15,8 +15,8 @@ class AddTableVeiculosplaca extends PostgresMigration
   {
     $sql = "
             BEGIN;
-              DROP TABLE IF EXISTS veiculosplaca;
-              DROP SEQUENCE IF EXISTS veiculosplaca_ve76_sequencial_seq;
+              DROP TABLE IF EXISTS veiculos.veiculosplaca;
+              DROP SEQUENCE IF EXISTS veiculos.veiculosplaca_ve76_sequencial_seq;
             COMMIT;
         ";
     $this->execute($sql);
