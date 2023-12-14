@@ -25,14 +25,16 @@ class cl_veiculosplaca
   var $ve76_obs = null;
   var $ve76_data = null;
   var $ve76_usuario = null;
+  var $ve76_criadoem = null;
 
   var $campos = "
-    ve76_sequencial = int4 = Sequencial
+    ve76_sequencial = int8 = Sequencial
     ve76_placa = varchar(7) = Placa
     ve76_placaanterior = varchar(7) = Placa Anterior
     ve76_obs = varchar(200) = Observação
     ve76_data = date = Data
-    ve76_usuario = int4 = Usuário 
+    ve76_usuario = int4 = Usuário
+    ve76_criadoem = date = Criado em
   ";
 
   // Construtor
