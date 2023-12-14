@@ -45,6 +45,7 @@ $oRetorno->sMsg    = "";
             $result = $clrhpessoal->sql_record($clrhpessoal->verificaMatriculaECargo($oParam->iNumCgm));
             if ($clrhpessoal->numrows > 0) {
                 $result = db_utils::fieldsMemory($result, 0);
+                $oRetorno->z01_nome = $result->z01_nome;
                 $oRetorno->rh01_regist = $result->rh01_regist;
                 $oRetorno->rh37_descr = $result->rh37_descr;
             } else {

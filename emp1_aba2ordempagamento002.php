@@ -32,6 +32,7 @@ include("dbforms/db_funcoes.php");
 include("classes/db_pagordem_classe.php");
 include("classes/db_empempenho_classe.php");
 include("classes/db_conlancam_classe.php");
+include("classes/db_empdiaria_classe.php");
 require_once("std/Modification.php");
 
 $clmatordem = new cl_matordem;
@@ -39,6 +40,7 @@ $clpagordem   = new cl_pagordem;
 $clempempenho = new cl_empempenho;
 $clrotulo = new rotulocampo;
 $clconlancam = new cl_conlancam;
+$clempdiaria = new cl_empdiaria;
 
 $clempempenho->rotulo->label();
 $clmatordem->rotulo->label();
@@ -217,6 +219,95 @@ if (isset($alterar)) {
         }
         $erro_msg = $clpagordem->erro_msg;
 
+    }
+
+    if (!$sqlerro && $salvarDiaria == 1 && ($desdobramentoDiaria == '14' || $desdobramentoDiaria == '33')) {
+        $sqlerroDiaria = false;
+        $erro_msg_diaria = "Dados da OP não alterados!\n";
+        if($e140_matricula == '' || $e140_matricula == null){
+            $erro_msg_diaria .= "- Campo Matricula Obrigatório.\n";
+            $sqlerroDiaria = true;
+        }
+        if($e140_cargo == '' || $e140_cargo == null){
+            $erro_msg_diaria .= "- Campo Cargo Obrigatório.\n";
+            $sqlerroDiaria = true;
+        }
+        if($diariaOrigemMunicipio == '' || $diariaOrigemMunicipio == null
+        || $diariaOrigemUf == '' || $diariaOrigemUf == null){
+            $erro_msg_diaria .= "- Campo Origem Obrigatório.\n";
+            $sqlerroDiaria = true;
+        }
+        if($diariaDestinoMunicipio == '' || $diariaDestinoMunicipio == null
+        || $diariaDestinoUf == '' || $diariaDestinoUf == null){
+            $erro_msg_diaria .= "- Campo Destino Obrigatório.\n";
+            $sqlerroDiaria = true;
+        }
+        if($e140_dtautorizacao == '' || $e140_dtautorizacao == null){
+            $erro_msg_diaria .= "- Campo Data da Autorização Obrigatório.\n";
+            $sqlerroDiaria = true;
+        }
+        if($e140_dtinicial == '' || $e140_dtinicial == null){
+            $erro_msg_diaria .= "- Campo Data Inicial da Viagem Obrigatório.\n";
+            $sqlerroDiaria = true;
+        }
+        if($e140_horainicial == '' || $e140_horainicial == null){
+            $erro_msg_diaria .= "- Campo Hora Inicial Obrigatório.\n";
+            $sqlerroDiaria = true;
+        }
+        if($e140_dtfinal == '' || $e140_dtfinal == null){
+            $erro_msg_diaria .= "- Campo Data Final da Viagem Obrigatório.\n";
+            $sqlerroDiaria = true;
+        }
+        if($e140_horafinal == '' || $e140_horafinal == null){
+            $erro_msg_diaria .= "- Campo Hora Final Obrigatório.\n";
+            $sqlerroDiaria = true;
+        }
+        if($e140_objetivo == '' || $e140_objetivo == null){
+            $erro_msg_diaria .= "- Campo Objetivo da Viagem Obrigatório.\n";
+            $sqlerroDiaria = true;
+        }
+        if($e53_valor != $diariaVlrDespesa){
+            $erro_msg_diaria .= "- Valor da Liquidação precisa ser igual ao Valor Liquidado.\n";
+            $sqlerroDiaria = true;
+        }          
+
+        if(!$sqlerroDiaria){
+
+            $clempdiaria->sql_record($clempdiaria->sql_query(null,'*',null,' e140_codord = '.$e50_codord));
+
+            $clempdiaria->e140_matricula             = $e140_matricula;
+            $clempdiaria->e140_cargo                 = $e140_cargo;
+            $clempdiaria->e140_dtautorizacao         = $e140_dtautorizacao == '' ? $e140_dtautorizacao : App\Support\String\DateFormatter::convertDateFormatBRToISO($e140_dtautorizacao);
+            $clempdiaria->e140_dtinicial             = $e140_dtinicial == '' ? $e140_dtinicial : App\Support\String\DateFormatter::convertDateFormatBRToISO($e140_dtinicial);
+            $clempdiaria->e140_dtfinal               = $e140_dtfinal == '' ? $e140_dtfinal : App\Support\String\DateFormatter::convertDateFormatBRToISO($e140_dtfinal);
+            $clempdiaria->e140_horainicial           = $e140_horainicial;
+            $clempdiaria->e140_horafinal             = $e140_horafinal;
+            $clempdiaria->e140_origem                = $diariaOrigemMunicipio.' - '.$diariaOrigemUf;
+            $clempdiaria->e140_destino               = $diariaDestinoMunicipio.' - '.$diariaDestinoUf;
+            $clempdiaria->e140_qtddiarias            = $e140_qtddiarias != '' ? $e140_qtddiarias : 0;
+            $clempdiaria->e140_vrldiariauni          = $e140_vrldiariauni != '' ? $e140_vrldiariauni : 0;
+            $clempdiaria->e140_qtddiariaspernoite    = $e140_qtddiariaspernoite != '' ? $e140_qtddiariaspernoite : 0;
+            $clempdiaria->e140_vrldiariaspernoiteuni = $e140_vrldiariaspernoiteuni != '' ? $e140_vrldiariaspernoiteuni : 0;
+            $clempdiaria->e140_qtdhospedagens        = $e140_qtdhospedagens != '' ? $e140_qtdhospedagens : 0;
+            $clempdiaria->e140_vrlhospedagemuni      = $e140_vrlhospedagemuni != '' ? $e140_vrlhospedagemuni : 0;
+            $clempdiaria->e140_transporte            = $e140_transporte;
+            $clempdiaria->e140_vlrtransport          = $e140_vlrtransport != '' ? $e140_vlrtransport : 0;
+            $clempdiaria->e140_objetivo              = $e140_objetivo;
+            if($clempdiaria->numrows > 0){
+                $clempdiaria->alterar($e140_sequencial);
+            }else{
+                $clempdiaria->e140_codord            = $e50_codord;
+                $clempdiaria->incluir();
+            }
+            if($clempdiaria->erro_status == 0) {
+                $sqlerroDiaria = true;
+            }
+        }
+
+        if($sqlerroDiaria){
+            $erro_msg = $erro_msg_diaria;
+            $sqlerro = true;
+        }
     }
 
     if (!$sqlerro) {
