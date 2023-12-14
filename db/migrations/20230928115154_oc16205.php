@@ -5,7 +5,7 @@ use Phinx\Migration\AbstractMigration;
 class Oc16205 extends AbstractMigration
 {
     public function getItensSicom(){
-        return $this->fetchAll("SELECT DISTINCT *
+        /*return $this->fetchAll("SELECT DISTINCT *
                                         FROM
                                             (SELECT '10' AS db150_tiporegistro,
                                                     pc01_codmater ||''|| pc17_unid AS db150_coditem,
@@ -38,7 +38,7 @@ class Oc16205 extends AbstractMigration
                                              INNER JOIN matunid ON ac20_matunid = m61_codmatunid) AS x
                                         WHERE db150_coditem::int8 NOT IN
                                                 (SELECT db150_coditem
-                                                 FROM historicomaterial)");
+                                                 FROM historicomaterial)");*/
     }
     function sanitizeString($string) {
         $what = array('\\', '/','"','\'');
@@ -48,7 +48,7 @@ class Oc16205 extends AbstractMigration
     public function up()
     {
 
-        $aItens = $this->getItensSicom();
+        /*$aItens = $this->getItensSicom();
 
         foreach ($aItens as $item){
 
@@ -68,7 +68,7 @@ class Oc16205 extends AbstractMigration
                         {$item['pc01_data']},
                         {$item['db150_instit']});";
             $this->execute($sSql);
-        }
+        }*/
     }
 
 }
