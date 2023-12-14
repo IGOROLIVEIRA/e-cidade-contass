@@ -124,7 +124,7 @@ switch ($oParam->exec) {
     $oRetorno->aNotasPendentes = array();
     $sCamposBensNotaPendentes  = "distinct e69_codnota as codigonota,";
     $sCamposBensNotaPendentes .= "         e69_numemp as numeroempenho,";
-    $sCamposBensPendentes .= "e69_numero as notafiscal,";
+    $sCamposBensNotaPendentes .= "e69_numero as notafiscal,";
     $sCamposBensNotaPendentes .= "         o56_elemento as desdobramento,";
     $sCamposBensNotaPendentes .= "         e72_qtd as quantidade,";
     $sCamposBensNotaPendentes .= "         pc01_descrmater as descricao,";

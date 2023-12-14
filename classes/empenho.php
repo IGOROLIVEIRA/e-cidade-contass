@@ -1204,6 +1204,7 @@ class empenho {
     $clpagordem->e50_retencaoir = $bRetencaoIr;
     $clpagordem->e50_naturezabemservico = $iNaturezaBemServico;
     $clpagordem->e50_dtvencimento = $dDataVencimento;
+    $clpagordem->e50_numliquidacao = $clpagordem->pesquisaNumeroOP($e60_numemp) + 1;
     $clpagordem->incluir($clpagordem->e50_codord);
     if ($clpagordem->erro_status == 0) {
 
