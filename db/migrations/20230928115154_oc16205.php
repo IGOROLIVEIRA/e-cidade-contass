@@ -30,7 +30,8 @@ class Oc16205 extends AbstractMigration
                                                           '1' AS db150_tipocadastro,
                                                           EXTRACT (MONTH
                                                                    FROM pc01_data) AS db150_mes,
-                                                                  pc01_instit AS db150_instit
+                                                                  pc01_instit AS db150_instit,
+                                                                  pc01_data
                                              FROM acordoposicao
                                              INNER JOIN acordoitem ON ac20_acordoposicao = ac26_sequencial
                                              INNER JOIN pcmater ON pc01_codmater = ac20_pcmater
