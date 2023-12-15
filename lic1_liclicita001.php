@@ -449,6 +449,15 @@ if (isset($incluir)) {
 			}
 		}
 
+		if(in_array($modalidade_tribunal, $aMod) && $l20_leidalicitacao == 1){
+			if($l20_tipoprocesso == "5" || $l20_tipoprocesso == "6"){
+				$l20_criterioadjudicacao = $criterioadjudicao_dispensainexibilidade;
+			} 
+			else {
+				$l20_criterioadjudicacao = "null";
+			}
+		}
+
 		if ($sqlerro == false) {
 			$clliclicita->l20_amparolegal      	  =  $oPost->l212_codigo;
 			$clliclicita->l20_numero      	  =  $l20_numero;

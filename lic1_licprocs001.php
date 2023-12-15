@@ -54,7 +54,7 @@ $clrotulo->label("descrdepto");
 $clrotulo->label("nome");
 $clrotulo->label("l20_codigo");
 $lRegistroPreco = false;
-$result = $clliclicita->sql_record($clliclicita->sql_query($licitacao, "l08_altera, l20_usaregistropreco,  l20_formacontroleregistropreco, l20_datacria , l20_dataaber, l20_criterioadjudicacao, l20_codtipocom, l20_leidalicitacao"));
+$result = $clliclicita->sql_record($clliclicita->sql_query($licitacao, "l08_altera, l20_usaregistropreco,  l20_formacontroleregistropreco, l20_datacria , l20_dataaber, l20_criterioadjudicacao, l20_codtipocom, l20_leidalicitacao,l20_tipoprocesso"));
 $oLicitacao = db_utils::fieldsMemory($result, 0);
 
 $criterio = $oLicitacao->l20_criterioadjudicacao;
@@ -64,6 +64,10 @@ if ($clliclicita->numrows > 0) {
 
     db_fieldsmemory($result, 0);
     if ($l20_usaregistropreco == "t") {
+        $lRegistroPreco = true;
+    }
+
+    if($l20_tipoprocesso == 5 || $l20_tipoprocesso == 6){
         $lRegistroPreco = true;
     }
 }

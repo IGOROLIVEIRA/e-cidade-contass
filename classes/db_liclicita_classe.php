@@ -866,6 +866,16 @@ class cl_liclicita
             return false;
         }
 
+        if ($this->l20_tipoprocesso == "0") {
+            $this->erro_sql = " Campo Tipo de processo não foi informado.";
+            $this->erro_campo = "l20_tipoprocesso";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
+        }
+
         if (db_getsession('DB_anousu') >= 2020) {
             $this->l20_cadinicial = 1;
             $this->l20_exercicioedital = db_getsession('DB_anousu');
@@ -1208,6 +1218,16 @@ class cl_liclicita
             //                $this->erro_status = "0";
             //                return false;
             //            }
+        }
+
+        if ($this->l20_tipoprocesso == "0") {
+            $this->erro_sql = " Campo Tipo de processo não foi informado.";
+            $this->erro_campo = "l20_tipoprocesso";
+            $this->erro_banco = "";
+            $this->erro_msg = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+            $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+            $this->erro_status = "0";
+            return false;
         }
 
         if (trim($this->l20_veicdivulgacao != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_veicdivulgacao"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
@@ -1790,7 +1810,7 @@ class cl_liclicita
         }
 
         if (trim($this->l20_criterioadjudicacao) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_criterioadjudicacao"])) {
-            $sql .= $virgula . " l20_criterioadjudicacao =' $this->l20_criterioadjudicacao' ";
+            $sql .= $virgula . " l20_criterioadjudicacao = $this->l20_criterioadjudicacao ";
             $virgula = ",";
         }
 
