@@ -100,7 +100,26 @@
         ve76_placa: campoVe76_placa.value
       }
     };
-    alterarPlacaRPC(params, preencheForm, "Salvando alteração.");
+    alterarPlacaRPC(params, processaRetornoAlteracao, "Salvando alteração.");
+  }
+
+  function processaRetornoAlteracao(res) {
+    const {
+      status,
+      message,
+      veiculo
+    } = JSON.parse(res.responseText);
+
+    alert(message);
+
+    if (status !== 1) {
+      return;
+    } 
+
+    document.getElementById('ve01_codigo').value = veiculo.ve01_codigo;
+    document.getElementById('si04_descricao').value = veiculo.si04_descricao;
+    document.getElementById('ve01_placa').value = veiculo.ve01_placa;
+    document.getElementById('ve76_placa').value = "";
   }
 
   function preencheForm(res) {
@@ -110,13 +129,15 @@
       veiculo
     } = JSON.parse(res.responseText);
 
-    if (status === 1) {
-      document.getElementById('ve01_codigo').value = veiculo.ve01_codigo;
-      document.getElementById('si04_descricao').value = veiculo.si04_descricao;
-      document.getElementById('ve01_placa').value = veiculo.ve01_placa;
-    } else {
+    if (status !== 1) {
       alert(message);
+      return;
     }
+
+    document.getElementById('ve01_codigo').value = veiculo.ve01_codigo;
+    document.getElementById('si04_descricao').value = veiculo.si04_descricao;
+    document.getElementById('ve01_placa').value = veiculo.ve01_placa;
+    document.getElementById('ve76_placa').value = "";
   }
 
   function alterarPlacaRPC(params, callback, loadingMessage) {

@@ -52,7 +52,7 @@ class AddTableVeiculosplaca extends PostgresMigration
               ve76_obs varchar(200),
               ve76_data date NOT NULL,
               ve76_usuario int4 NOT NULL,
-              ve76_criadoem date NOT NULL,
+              ve76_criadoem timestamp without time zone NOT NULL DEFAULT now(),
               PRIMARY KEY (ve76_sequencial)
           );
         COMMIT;

@@ -16,18 +16,19 @@ db_app::import("configuracao.DBDepartamento");
 
 
 // Função para buscar um veiculo a partir do código
-function buscarVeiculo($codigo) {
-  
+function buscarVeiculo($codigo)
+{
+
   $clveiculos = new cl_veiculos;
 
   if (!isset($codigo)) {
-      return buildResponse(2, "Para buscar veículo é necessário informar o código.");
+    return buildResponse(2, "Para buscar veículo é necessário informar o código.");
   }
 
   $sql = $clveiculos->sql_query($codigo, "ve01_codigo,ve01_placa,si04_descricao");
   $result = $clveiculos->sql_record($sql);
   if (!$result) {
-      return buildResponse(2, "Veiculo código $codigo não encontrado.");
+    return buildResponse(2, "Veiculo código $codigo não encontrado.");
   }
 
   $records = db_utils::getCollectionByRecord($result);
@@ -35,7 +36,8 @@ function buscarVeiculo($codigo) {
 }
 
 // Função para alteração da placa do veículo
-function alterarPlaca($dados) {
+function alterarPlaca($dados)
+{
 
   if (!isset($dados->ve01_codigo) || empty($dados->ve01_codigo)) {
     return buildResponse(2, "É necessário informar o código do veiculo.");
@@ -64,87 +66,118 @@ function alterarPlaca($dados) {
   if (strcasecmp($veiculo->ve01_placa, $dados->ve76_placa) == 0) {
     return buildResponse(2, "A placa informada é igual a placa já cadastrada para o veículo.");
   }
-  
+
   // Verificar se já existe placa cadastrada
-  $sqlPlaca = $clveiculos->sql_query($dados->ve01_codigo, "ve01_codigo,ve01_placa,si04_descricao", "", "ve01_placa = $$data->ve76_placa");
+  $sqlPlaca = $clveiculos->sql_query(null, "ve01_codigo", "", "ve01_placa = '$dados->ve76_placa'");
   $result = $clveiculos->sql_record($sqlPlaca);
-  if($result) {
+  if ($result !== false) {
     return buildResponse(2, "A placa informada já está cadastrada para outro veículo.");
   }
 
   // Verifica a data de encerramento do período patrimonial
   $clcondataconf = new cl_condataconf;
-  $sqlConf = $clcondataconf->sql_query_file(db_getsession("DB_anousu"),db_getsession("DB_instit"));
+  $sqlConf = $clcondataconf->sql_query_file(db_getsession("DB_anousu"), db_getsession("DB_instit"));
   $result = $clcondataconf->sql_record($sqlConf);
-  
+
   if ($result != false) {
     $config = db_utils::getCollectionByRecord($result)[0];
 
     $dataEncerramentoPatrimonial = convertToDate($config->c99_datapat);
-    $dataAlteracaoPlaca = convertToDate($dados->ve76_placa);
-       
-    if($dataAlteracaoPlaca <= $dataEncerramentoPatrimonial) {
+    $dataAlteracaoPlaca = convertToDate($dados->ve76_data);
+
+    if ($dataAlteracaoPlaca <= $dataEncerramentoPatrimonial) {
       return buildResponse(2, "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
     }
   }
 
-  // Adicionar alteração na tabela veiculosplaca
-  $ve76_placaanterior = $veiculo->ve01_placa;
-  
-  // Altera a placa do veiculo
-  $clveiculos->ve01_placa = $dados->ve76_placa;
-  $clveiculos->alterar($veiculo->ve01_codigo);
+  db_inicio_transacao();
 
+  try {
+    // Adicionar alteração na tabela veiculosplaca
+    $ve76_placaanterior = $veiculo->ve01_placa;
 
+    // Altera a placa do veiculo
+    $clveiculos->ve01_codigo = $dados->ve01_codigo;
+    $clveiculos->ve01_placa = $dados->ve76_placa;
+    if (!$clveiculos->alterar($veiculo->ve01_codigo)) {
+      throw new Exception($clveiculos->erro_msg);
+    }
+
+    $clveiculosplaca = new cl_veiculosplaca();
+    $clveiculosplaca->ve76_placa = $dados->ve76_placa;
+    $clveiculosplaca->ve76_placaanterior = $ve76_placaanterior;
+    $clveiculosplaca->ve76_obs = $dados->ve76_obs;
+    $clveiculosplaca->ve76_data = $dados->ve76_data;
+    $clveiculosplaca->ve76_usuario = db_getsession("DB_id_usuario");
+    $clveiculosplaca->ve76_criadoem = (new DateTime())->format('Y-m-d H:i:s');
+
+    if(!$clveiculosplaca->incluir()) {
+      throw new Exception($clveiculosplaca->erro_msg);
+    }
+
+    db_fim_transacao();
+
+    $result = $clveiculos->sql_record($sql);
+    $veiculo = db_utils::getCollectionByRecord($result)[0];
+
+    return buildResponse(1, "Placa alterada com sucesso!", ["veiculo" =>  $veiculo]);
+
+  } catch (Exception $erro) {
+    db_fim_transacao(true);
+    return buildResponse(2, $erro->getMessage());
+  }
 }
 
 // Função para excluir a alteração de placa
-function excluirAlteracao() {
+function excluirAlteracao()
+{
 
 }
 
 // Função responsável por preparar a resposta da requisição
-function buildResponse($status, $message, $data = []) {
+function buildResponse($status, $message, $data = [])
+{
   $oJson    = new services_json();
   $oRetorno = new stdClass();
-  
+
   $oRetorno->status = $status;
-  $oRetorno->message = urldecode($message);
-  
+  $oRetorno->message = mb_convert_encoding($message, 'UTF-8', 'ISO-8859-1');
+
   foreach ($data as $key => $value) {
-      $oRetorno->$key = $value;
+    $oRetorno->$key = $value;
   }
   return $oJson->encode($oRetorno);
 }
 
 // Converter a data para datetime
-function convertToDate($dateString) {
+function convertToDate($dateString)
+{
   if (strpos($dateString, '/') !== false) {
-      return DateTime::createFromFormat('d/m/Y', $dateString);
+    return DateTime::createFromFormat('d/m/Y', $dateString);
   } else if (strpos($dateString, '-') !== false) {
-      return DateTime::createFromFormat('Y-m-d', $dateString);
+    return DateTime::createFromFormat('Y-m-d', $dateString);
   } else {
-      return false;
+    return false;
   }
 }
 
-// Executa as funções disponíveis via Ajaz
+// Executa as funções disponíveis via Ajax
 function executar($oParam)
 {
   switch ($oParam->exec) {
     case 'buscarVeiculo':
-        return buscarVeiculo($oParam->codigo);
-        break;
+      return buscarVeiculo($oParam->codigo);
+      break;
     case 'alterarPlaca':
-        return alterarPlaca($oParam->data);
-        break;
+      return alterarPlaca($oParam->dados);
+      break;
     case 'excluirAlteracao':
       return excluirAlteracao();
       break;
     default:
-        return buildResponse(2, "Operação inválida para opção ($oParam->exec.)");
-        break;
-}
+      return buildResponse(2, "Operação inválida para opção ($oParam->exec.)");
+      break;
+  }
 }
 
 // Recebe os parametros e executa a operação

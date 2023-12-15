@@ -34,7 +34,7 @@ class cl_veiculosplaca
     ve76_obs = varchar(200) = Observação
     ve76_data = date = Data
     ve76_usuario = int4 = Usuário
-    ve76_criadoem = date = Criado em
+    ve76_criadoem = datetime = Criado em
   ";
 
   // Construtor
@@ -70,7 +70,7 @@ class cl_veiculosplaca
   }
 
   // Função para inclusão
-  function incluir($ve76_sequencial)
+  function incluir()
   {
     $this->atualizacampos();
 
@@ -89,12 +89,24 @@ class cl_veiculosplaca
       return false;
     }
 
-    $sqlInsert = "";
+    $sqlInsert = "
+      INSERT INTO veiculosplaca 
+        (ve76_placa, ve76_placaanterior, ve76_obs, ve76_data, ve76_usuario, ve76_criadoem) 
+      VALUES 
+        (
+          '$this->ve76_placa', 
+          '$this->ve76_placaanterior',
+          '$this->ve76_obs',
+          '$this->ve76_data', 
+          '$this->ve76_usuario', 
+          '$this->ve76_criadoem'
+        );
+    ";
+    
     $result = db_query($sqlInsert);
-
     if ($result == false) {
       $erroBanco = str_replace("\n", "", @pg_last_error());
-      $erroSql = "Cadastro de Registro de Alteração de Placa ($this->ve76_sequencial) nao Incluído. Inclusao Abortada.";
+      $erroSql = "Cadastro de Registro de Alteração de Placa nao Incluída. Inclusão Abortada.";
 
       if (strpos(strtolower($this->erro_banco), "duplicate key") != 0) {
         $erroBanco = "Registro de Alteração de Placa já Cadastrado";
@@ -107,9 +119,6 @@ class cl_veiculosplaca
 
     $this->gravaErro("Inclusao efetuada com Sucesso\\n Valores : $this->ve76_sequencial", "", "", 1);
     $this->numrows_incluir = pg_affected_rows($result);
-
-    //$resaco = $this->sql_record($this->sql_query_file($this->ve76_sequencial));
-    // TODO entender o que é isso
 
     return true;
   }
