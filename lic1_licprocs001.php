@@ -218,7 +218,7 @@ if ($clliclicita->numrows > 0) {
                         $sWhere .= "and not EXISTS (select 1 from empautitempcprocitem where e73_pcprocitem = pc81_codprocitem)";
 
                         $sWhere .= " AND pc80_codproc not in (select si06_processocompra from adesaoregprecos) ";
-
+                        $sWhere .= " AND pc80_dispvalor = 'f'";
 
                         if (isset($pc30_contrandsol) && $pc30_contrandsol == 't') {
 
