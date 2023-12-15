@@ -232,7 +232,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
       </td>
       <td>
         <?
-        db_input('si06_anomodadm', 10, '', true, 'text', $db_opcao, "", "", "", "", 4);
+        db_input('si06_anomodadm', 10, 1, true, 'text', $db_opcao, "", "", "", "", 4);
         ?>
       </td>
     </tr>
@@ -454,24 +454,33 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
   }
 
   function js_pesquisasi06_processocompra(mostra) {
+
     if (mostra == true) {
-      js_OpenJanelaIframe('', 'db_iframe_pcproc', 'func_pcproc.php?lFiltroPrecoRef=1&adesaoregpreco=1&criterioadjudicacao=' + document.form1.si06_criterioadjudicacao.value + '&filtrovinculo=true&funcao_js=parent.js_mostrapcproc1|pc80_codproc', 'Pesquisa', true);
-    } else {
-      if (document.form1.si06_processocompra.value != '') {
-        js_OpenJanelaIframe('', 'db_iframe_pcproc', 'func_pcproc.php?lFiltroPrecoRef=1&adesaoregpreco=1&criterioadjudicacao=' + document.form1.si06_criterioadjudicacao.value + '&filtrovinculo=true&pesquisa_chave=' + document.form1.si06_processocompra.value + '&funcao_js=parent.js_mostrapcproc', 'Pesquisa', false);
-      }
+      js_OpenJanelaIframe('', 'db_iframe_pcproc', 'func_pcproc.php?lFiltroPrecoRef=1&adesaoregpreco=1&itemobras=true&criterioadjudicacao=' + document.form1.si06_criterioadjudicacao.value + '&filtrovinculo=true&funcao_js=parent.js_mostrapcproc1|pc80_codproc|pc80_resumo', 'Pesquisa', true);
+      return;
+    } 
+
+    if (document.form1.si06_processocompra.value != '') {
+        js_OpenJanelaIframe('', 'db_iframe_pcproc', 'func_pcproc.php?lFiltroPrecoRef=1&adesaoregpreco=1&itemobras=true&criterioadjudicacao=' + document.form1.si06_criterioadjudicacao.value + '&filtrovinculo=true&pesquisa_chave=' + document.form1.si06_processocompra.value + '&funcao_js=parent.js_mostrapcproc', 'Pesquisa', false);
+        return;
     }
+    
+    document.form1.si06_objetoadesao.value = "";
+
   }
 
-  function js_mostrapcproc(chave, erro) {
+  function js_mostrapcproc(chave,chave2,erro) {
     if (erro == true) {
       document.form1.si06_processocompra.focus();
       document.form1.si06_processocompra.value = '';
+      return;
     }
+    document.form1.si06_objetoadesao.value = chave2;
   }
 
   function js_mostrapcproc1(chave1, chave2) {
     document.form1.si06_processocompra.value = chave1;
+    document.form1.si06_objetoadesao.value = chave2;
     db_iframe_pcproc.hide();
   }
 

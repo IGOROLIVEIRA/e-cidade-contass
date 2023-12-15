@@ -1,6 +1,7 @@
 <?
 //MODULO: sicom
 //CLASSE DA ENTIDADE adesaoregprecos
+ini_set("display_errors","on");
 class cl_adesaoregprecos
 {
   // cria variaveis de erro
@@ -61,6 +62,7 @@ class cl_adesaoregprecos
   var $si06_departamento = null;
   var $si06_codunidadesubant = null;
   var $si06_regimecontratacao = null;
+  var $si06_criterioadjudicacao = null;
 
   // cria propriedade com as variaveis do arquivo
   var $campos = "
@@ -186,7 +188,6 @@ class cl_adesaoregprecos
   // funcao para inclusao
   function incluir($si06_sequencial)
   {
-    echo "$this->si06_leidalicitacao";
     $this->atualizacampos();
     if ($this->si06_orgaogerenciador == null) {
       $this->erro_sql = " Campo Orgão Gerenciador nao Informado.";
@@ -206,7 +207,6 @@ class cl_adesaoregprecos
       $this->erro_status = "0";
       return false;
     }
-    echo $this->si06_regimecontratacao;
     if (!$this->si06_edital && db_getsession('DB_anousu') >= 2020 && $this->si06_regimecontratacao == 1) {
       $this->erro_sql = " Campo Edital não Informado.";
       $this->erro_campo = "si06_edital";
@@ -230,6 +230,15 @@ class cl_adesaoregprecos
     }
     if ($this->si06_numeroprc == null) {
       $this->erro_sql = " Campo Número do PRC nao Informado.";
+      $this->erro_campo = "si06_numeroprc";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->si06_numeroprc == "0") {
+      $this->erro_sql = " Campo Número do Processo Licitatório não pode ser 0.";
       $this->erro_campo = "si06_numeroprc";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
@@ -303,6 +312,15 @@ class cl_adesaoregprecos
     }
     if ($this->si06_numeroadm == null) {
       $this->erro_sql = " Campo Número do ADM nao Informado.";
+      $this->erro_campo = "si06_numeroadm";
+      $this->erro_banco = "";
+      $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
+      $this->erro_msg   .=  str_replace('"', "", str_replace("'", "",  "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
+      $this->erro_status = "0";
+      return false;
+    }
+    if ($this->si06_numeroadm == "0") {
+      $this->erro_sql = " Campo Exercício do Processo de Adesão não pode ser 0.";
       $this->erro_campo = "si06_numeroadm";
       $this->erro_banco = "";
       $this->erro_msg   = "Usuário: \\n\\n " . $this->erro_sql . " \\n\\n";
