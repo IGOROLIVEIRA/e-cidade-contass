@@ -53,6 +53,7 @@ require_once("classes/db_situacaoitemlic_classe.php");
 require_once("classes/db_condataconf_classe.php");
 require_once("classes/db_pccflicitapar_classe.php");
 require_once("classes/db_pccflicitanum_classe.php");
+require_once("classes/db_licanexopncp_classe.php");
 parse_str($HTTP_SERVER_VARS["QUERY_STRING"]);
 db_postmemory($HTTP_POST_VARS);
 
@@ -78,6 +79,7 @@ $clpccflicitapar     = new cl_pccflicitapar();
 $clpccflicitanum     = new cl_pccflicitanum();
 $clsituacaoitemcompra= new cl_situacaoitemcompra();
 $clsituacaoitemlic   = new cl_situacaoitemlic();
+$cllicanexopncp = new cl_licanexopncp();
 $erro_msg = '';
 $db_botao = false;
 $db_opcao = 33;
@@ -136,6 +138,16 @@ if (isset($excluir)) {
                 $erro_msg = $cleditaldocumentos->erro_msg;
             }
         }
+    }
+
+    //verifica se existe anexos na licitacao
+
+    $sSqlBusca   = $cllicanexopncp->sql_query_file(null,"l215_sequencial",null,"l215_liclicita = $l20_codigo");
+    $rsAnexos = $cllicanexopncp->sql_record($sSqlBusca);
+
+    if(pg_num_rows($rsAnexos) > 0){
+        $sqlerro  = true;
+        $erro_msg = "Licitação não Excluída! Licitação com anexos vinculados.";
     }
 
     if (!$sqlerro) {
