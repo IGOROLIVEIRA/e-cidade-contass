@@ -145,5 +145,14 @@ if(!isset($pesquisa_chave)){
       });
   </script>
     <?php
+} else {
+  $clpcproc = new cl_pcproc;
+  $rsProcesso = $clpcproc->sql_record($clpcproc->sql_query_file($pesquisa_chave,"pc80_codproc"));
+  if ($clpcproc->numrows!=0) {
+    $codigoProcesso = db_utils::fieldsMemory($rsProcesso, 0)->pc80_codproc;
+    echo "<script>".$funcao_js."('$codigoProcesso',false);</script>";
+  } else {
+    echo "<script>".$funcao_js."('$codigoProcesso',true);</script>";
+  }
 }
 ?>

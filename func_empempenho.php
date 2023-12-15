@@ -392,6 +392,12 @@ $rotulo->label("z01_cgccpf");
                 $sWherePesquisaPorCodigoEmpenho = " e60_anousu = " . db_getsession("DB_anousu");
               }
 
+              $aEmpenho = explode("/", $pesquisa_chave);
+              $e60_codemp = $aEmpenho[0];
+              $e60_anousu = $aEmpenho[1];
+              $e60_anousu = $e60_anousu == null ? db_getsession("DB_anousu") : $e60_anousu; 
+              var_dump($e60_anousu);
+              $dbwhere = "e60_codemp = '$e60_codemp' and e60_anousu = $e60_anousu";
 
               /**
                * Filtro $filtroabast

@@ -1764,7 +1764,7 @@ class cl_empempenho
         $sql .= "   /* pesquisa no relatorio de empenhos por ítem */
 
                  inner join empempitem on e62_numemp = e60_numemp
-                 LEFT JOIN cflicita on  pc50_pctipocompratribunal = l03_pctipocompratribunal and l03_instit = " . db_getsession("DB_instit") . "
+                 LEFT JOIN cflicita on  pc50_pctipocompratribunal = l03_pctipocompratribunal and pc50_codcom = l03_codcom and l03_instit = " . db_getsession("DB_instit") . "
 
                  LEFT JOIN liclicita ON ltrim(((string_to_array(e60_numerol, '/'))[1])::varchar,'0') = l20_numero::varchar
 				      AND l20_anousu::varchar = ((string_to_array(e60_numerol, '/'))[2])::varchar
