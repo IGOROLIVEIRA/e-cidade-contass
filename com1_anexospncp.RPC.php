@@ -111,7 +111,7 @@ try {
 
         case "excluir":
             $clliccontroleanexopncp = new cl_liccontroleanexopncp();
-            $rsAnexos = $clliccontroleanexopncp->sql_record($clliccontroleanexopncp->sql_query_file(null, " * ", null, "l218_sequencialarquivo = " . $oParam->iCodigoDocumento));
+            $rsAnexos = $clliccontroleanexopncp->sql_record($clliccontroleanexopncp->sql_query_file(null, " * ", null, "l218_processodecompras = $oParam->iCodigoProcesso and l218_sequencialarquivo = " . $oParam->iCodigoDocumento));
 
             if(pg_num_rows($rsAnexos)){
                 $oRetorno->sMensagem = urlencode('Anexo já enviado ao PNCP, para excluí-lo é necessário que seja primeiro EXCLUÍDO no PNCP.');
