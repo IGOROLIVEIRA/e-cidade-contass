@@ -104,9 +104,10 @@ function alterarPlaca($dados)
     }
 
     $clveiculosplaca = new cl_veiculosplaca();
+    $clveiculosplaca->ve76_veiculo = $dados->ve01_codigo;
     $clveiculosplaca->ve76_placa = $dados->ve76_placa;
     $clveiculosplaca->ve76_placaanterior = $ve76_placaanterior;
-    $clveiculosplaca->ve76_obs = $dados->ve76_obs;
+    $clveiculosplaca->ve76_obs = mb_convert_encoding($dados->ve76_obs, 'ISO-8859-1', 'UTF-8');
     $clveiculosplaca->ve76_data = $dados->ve76_data;
     $clveiculosplaca->ve76_usuario = db_getsession("DB_id_usuario");
     $clveiculosplaca->ve76_criadoem = (new DateTime())->format('Y-m-d H:i:s');
@@ -128,10 +129,89 @@ function alterarPlaca($dados)
   }
 }
 
-// Função para excluir a alteração de placa
-function excluirAlteracao()
-{
+// Função que busca alteração de placa
+function buscarAlteracao($ve76_sequencial) {
+  $clveiculosplaca = new cl_veiculosplaca();
+  $clveiculosplaca->ve76_sequencial = $ve76_sequencial;
+  
+  $campos = "ve76_sequencial, ve76_veiculo, ve76_placa, ve76_placaanterior, ve76_obs, ve76_data, ve76_usuario";
+  $sql = $clveiculosplaca->sql_query($ve76_sequencial, $campos, "", "ve76_sequencial = '$ve76_sequencial'");
+  $result = $clveiculosplaca->sql_record($sql);
 
+  if ($result == false) {
+    return buildResponse(2, "Alteração não encontrada.", ["alteração" =>  $ve76_sequencial]);
+  }
+
+  $alterarplaca = db_utils::getCollectionByRecord($result)[0];
+
+  return buildResponse(1, "", ["alterarplaca" =>  $alterarplaca]);
+
+}
+
+// Função para excluir a alteração de placa
+function excluirAlteracao($ve76_sequencial)
+{
+  // Busca a alteração que será excluída
+  $clveiculosplaca = new cl_veiculosplaca();
+  $clveiculosplaca->ve76_sequencial = $ve76_sequencial;
+  
+  $sql = $clveiculosplaca->sql_query($ve76_sequencial, "*", "", "ve76_sequencial = '$ve76_sequencial'");
+  $result = $clveiculosplaca->sql_record($sql);
+
+  if ($result == false) {
+    return buildResponse(2, "Alteração não encontrada.", ["alteração" =>  $ve76_sequencial]);
+  }
+
+  $alterarplaca = db_utils::getCollectionByRecord($result)[0];
+  
+  // Verifica a data de encerramento do período patrimonial
+  $clcondataconf = new cl_condataconf;
+  $sqlConf = $clcondataconf->sql_query_file(db_getsession("DB_anousu"), db_getsession("DB_instit"));
+  $result = $clcondataconf->sql_record($sqlConf);
+
+  if ($result != false) {
+    $config = db_utils::getCollectionByRecord($result)[0];
+
+    $dataEncerramentoPatrimonial = convertToDate($config->c99_datapat);
+    $dataAlteracaoPlaca = convertToDate($alterarplaca->ve76_data);
+
+    if ($dataAlteracaoPlaca <= $dataEncerramentoPatrimonial) {
+      return buildResponse(2, "O período já foi encerrado para envio do SICOM. Verifique os dados do lançamento e entre em contato com o suporte.");
+    }
+  }
+
+  // Inicia transação de exclusão de placa
+  db_inicio_transacao();
+
+  try {
+    
+    // Altera a placa do veiculo
+    $clveiculos = new cl_veiculos;
+
+    $clveiculos->ve01_codigo = $alterarplaca->ve76_veiculo;
+    $clveiculos->ve01_placa = $alterarplaca->ve76_placa;
+    
+    if (!$clveiculos->alterar($alterarplaca->ve76_veiculo)) {
+      throw new Exception($clveiculos->erro_msg);
+    }
+
+    $clveiculosplaca = new cl_veiculosplaca();
+    
+    if(!$clveiculosplaca->excluir($alterarplaca->ve76_sequencial)) {
+      throw new Exception($clveiculosplaca->erro_msg);
+    }
+
+    db_fim_transacao();
+
+    return buildResponse(1, "Alteração de placa excluída sucesso!", []);
+
+  } catch (Exception $erro) {
+    db_fim_transacao(true);
+    return buildResponse(2, $erro->getMessage());
+  }
+
+
+  return buildResponse(1, "Alteração de placa excluída com sucesso!", []);
 }
 
 // Função responsável por preparar a resposta da requisição
@@ -168,11 +248,14 @@ function executar($oParam)
     case 'buscarVeiculo':
       return buscarVeiculo($oParam->codigo);
       break;
+    case 'buscarAlteracao':
+      return buscarAlteracao($oParam->codigo);
+      break;
     case 'alterarPlaca':
       return alterarPlaca($oParam->dados);
       break;
     case 'excluirAlteracao':
-      return excluirAlteracao();
+      return excluirAlteracao($oParam->codigo);
       break;
     default:
       return buildResponse(2, "Operação inválida para opção ($oParam->exec.)");

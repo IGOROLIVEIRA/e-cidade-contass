@@ -32,7 +32,7 @@ db_postmemory($HTTP_POST_VARS);
 <body bgcolor=#CCCCCC leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" onLoad="a=1">
   <center>
     <?
-      include("forms/db_frmalterarplaca.php");
+    include("forms/db_frmalterarplaca.php");
     ?>
   </center>
   <?
@@ -43,6 +43,3 @@ db_postmemory($HTTP_POST_VARS);
 </style>
 
 </html>
-<script>
-  //js_tabulacaoforms("form1", "obr06_pcmater", true, 1, "obr06_pcmater", true);
-</script>

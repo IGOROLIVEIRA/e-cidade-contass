@@ -120,6 +120,7 @@
     document.getElementById('si04_descricao').value = veiculo.si04_descricao;
     document.getElementById('ve01_placa').value = veiculo.ve01_placa;
     document.getElementById('ve76_placa').value = "";
+    document.getElementById('ve76_obs').value = "";
   }
 
   function preencheForm(res) {
@@ -138,6 +139,7 @@
     document.getElementById('si04_descricao').value = veiculo.si04_descricao;
     document.getElementById('ve01_placa').value = veiculo.ve01_placa;
     document.getElementById('ve76_placa').value = "";
+    document.getElementById('ve76_obs').value = "";
   }
 
   function alterarPlacaRPC(params, callback, loadingMessage) {

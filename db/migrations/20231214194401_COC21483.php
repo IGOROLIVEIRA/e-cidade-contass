@@ -47,14 +47,41 @@ class AddTableVeiculosplaca extends PostgresMigration
           -- Cria tabela
           CREATE TABLE veiculos.veiculosplaca (
               ve76_sequencial int8 NOT NULL DEFAULT nextval('veiculosplaca_ve76_sequencial_seq'),
+              ve76_veiculo int4 NOT NULL,
               ve76_placa varchar(7) NOT NULL,
               ve76_placaanterior varchar(7),
               ve76_obs varchar(200),
               ve76_data date NOT NULL,
               ve76_usuario int4 NOT NULL,
               ve76_criadoem timestamp without time zone NOT NULL DEFAULT now(),
-              PRIMARY KEY (ve76_sequencial)
+              PRIMARY KEY (ve76_sequencial),
+              FOREIGN KEY (ve76_veiculo) REFERENCES veiculos.veiculos(ve01_codigo)
           );
+
+          -- Insere campos no dicionário 
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_sequencial', 'int8', 'Sequencial', '', 'Código', 8, false, false, false, 1, 'text', 'Código');
+
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_veiculo', 'int4', 'Código Veículo', '', 'Veículo', 4, false, false, false, 1, 'text', 'Veículo');
+
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_placa', 'varchar(7)', 'Placa', '', 'Placa Atual', 7, false, false, false, 1, 'text', 'Placa Atual');
+
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_placaanterior', 'varchar(7)', 'Placa Anterior', '', 'Placa Anterior', 7, false, false, false, 1, 'text', 'Placa Anterior');
+
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_obs', 'varchar(200)', 'Observação', '', 'Observação', 200, false, false, false, 1, 'text', 'Observação');
+
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_data', 'date', 'Data', '', 'Data', 10, false, false, false, 1, 'text', 'Data');
+
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_usuario', 'int4', 'Usuário', '', 'Usuário', 4, false, false, false, 1, 'text', 'Usuário');
+
+          INSERT INTO db_syscampo (codcam, nomecam, conteudo, descricao, valorinicial, rotulo, tamanho, nulo, maiusculo, autocompl, aceitatipo, tipoobj, rotulorel) 
+          VALUES ((SELECT MAX(codcam) + 1 FROM db_syscampo), 've76_criadoem', 'timestamp without time zone', 'Criado em', '', 'Criado em', null, false, false, false, 1, 'text', 'Criado em');
         COMMIT;
         ";
 
