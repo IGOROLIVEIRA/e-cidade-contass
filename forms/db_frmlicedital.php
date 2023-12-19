@@ -148,6 +148,16 @@ $db_botao = true;
                     ?>
                   </td>
                 </tr>
+                <tr id="email">
+                  <td class="label-email" nowrap title="Descrição do recurso">
+                    <b>Email:</b>
+                  </td>
+                  <td>
+                    <?php
+                        db_input('email', 200, '', true, 'text', 1, "");
+                    ?>
+                  </td>
+                </tr>
                 <tr>
                   <td class="label-textarea" nowrap title="Links da publicação">
                     <b>Links da publicação:</b>
@@ -276,12 +286,14 @@ $db_botao = true;
   function js_salvarEdital() {
     let descricao = document.getElementById('descricao_recurso').value;
     let origem_recurso = document.getElementById('origem_recurso').value;
+    let email = document.getElementById('email').value;
 
   }
 
   function js_exibeDadosCompl(iSequencial = null, incluir = true) {
 
     if (anoLicitacao >= 2021 && iSequencial == null && tipoJulgamento == '3') {
+        console.log('if1');
       oDadosLotesPendentes = new DBViewLotesPendentes('oDadosLotesPendentes');
       oDadosLotesPendentes.setLicitacao(codigoLicitacao);
 
@@ -300,15 +312,17 @@ $db_botao = true;
       oDadosLotesPendentes.show();
 
     } else {
-
+    console.log("Passou aqui 1 else");
       oDadosComplementares = new DBViewCadDadosComplementares('pri', 'oDadosComplementares', '', incluir,
         codigoLicitacao, "<?= $natureza_objeto ?>", iSequencial, '');
       oDadosComplementares.setObjetoRetorno($('idObra'));
       oDadosComplementares.setLicitacao(codigoLicitacao);
 
       if (iSequencial) {
+        console.log("Passou aqui");
         oDadosComplementares.preencheCampos(iSequencial);
       } else {
+        console.log("Passou aqui callback");
         oDadosComplementares.setCallBackFunction(() => {
           js_lancaDadosCompCallBack();
         });

@@ -56,6 +56,7 @@ class cl_liclancedital
 	var $l47_dataenviosicom_ano = null;
 	var $l47_dataenviosicom = null;
 	var $l47_liclicita = null;
+    public ?string $l47_email = '';
 
 	// cria propriedade com as variaveis do arquivo
 	var $campos = "
@@ -323,6 +324,11 @@ class cl_liclancedital
 			$virgula = ",";
 		}
 
+		if (trim($this->l47_email) != "" || isset($GLOBALS["HTTP_POST_VARS"]["l47_email"])) {
+			$sql .= $virgula . " l47_email = '$this->l47_email' ";
+			$virgula = ",";
+		}
+
 		if (!trim($this->l47_origemrecurso)) {
 			if (trim($this->l47_descrecurso) == null && $this->l47_origemrecurso == 9) {
 				$this->erro_sql = " Campo Descrição da Origem do Recurso não Informado.";
@@ -574,4 +580,22 @@ class cl_liclancedital
 		}
 		return $sql;
 	}
+
+    /**
+     * Get the value of l47_email
+     */
+    public function getL47Email(): ?string
+    {
+        return $this->l47_email;
+    }
+
+    /**
+     * Set the value of l47_email
+     */
+    public function setL47Email(?string $l47_email): self
+    {
+        $this->l47_email = $l47_email;
+
+        return $this;
+    }
 }
