@@ -33,12 +33,13 @@ include("classes/db_pagordem_classe.php");
 include("classes/db_empempenho_classe.php");
 include("classes/db_conlancam_classe.php");
 require_once("std/Modification.php");
+require_once ("libs/db_liborcamento.php");
 
 $clmatordem = new cl_matordem;
 $clpagordem   = new cl_pagordem;
 $clempempenho = new cl_empempenho;
 $clrotulo = new rotulocampo;
-$clconlancam = new cl_conlancam;
+$clconlancam = new cl_conlancam;   
 
 $clempempenho->rotulo->label();
 $clmatordem->rotulo->label();
@@ -288,6 +289,43 @@ if (isset($alterar)) {
 }
 db_fim_transacao($sqlerroReinf);
 
+db_inicio_transacao();
+
+if (isset($alterar)) {
+
+  // Esocial
+  $sqlerroEsocial = false;
+  if (!$sqlerroEsocial) {
+      $aEmpenho = explode("/",$e60_codemp);
+      $clpagordemEsocial      = new cl_pagordem;
+      $where = " e60_codemp =  '".$aEmpenho[0]."' and e60_anousu = ".$aEmpenho[1]." and e60_instit = ".db_getsession("DB_instit");
+      $sql = $clpagordemEsocial->sql_record($clpagordemEsocial->sql_query_emp(null,"*",null,$where));
+   
+      if ($clpagordemEsocial->numrows > 0) {
+          $oEsocial= db_utils::fieldsMemory($sql, 0);
+          
+          $clpagordemEsocial = new cl_pagordem;
+          $clpagordemEsocial->e50_cattrabalhador            = $ct01_codcategoria;
+          $clpagordemEsocial->e50_cattrabalhadorremurenacao = $ct01_codcategoriaremuneracao;
+          $clpagordemEsocial->e50_empresadesconto           = $numempresa;
+          $clpagordemEsocial->e50_contribuicaoPrev          = $contribuicaoPrev;
+          $clpagordemEsocial->e50_valorremuneracao          = $valorremuneracao;
+          $clpagordemEsocial->e50_valordesconto             = $valordesconto;
+          if ($competencia) {
+            $clpagordemEsocial->e50_datacompetencia         = $competencia;
+          }
+          
+
+          $clpagordemEsocial->alterar(null,null);
+      } 
+      
+  }
+
+  if(!$sqlerroEsocial){
+      $erro_msg .= "\n\nDados do Esocial atualizados.";
+  }
+}
+db_fim_transacao($sqlerroEsocial);
 ?>
 <html>
 <head>

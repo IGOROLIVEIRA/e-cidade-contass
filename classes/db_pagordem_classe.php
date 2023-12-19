@@ -52,6 +52,7 @@ class cl_pagordem {
    var $e50_id_usuario = 0;
    var $e50_hora = null;
    var $e50_anousu = 0;
+   var $e50_compdesp     = null;
    var $e50_compdesp_dia = null;
    var $e50_compdesp_mes = null;
    var $e50_compdesp_ano = null;
@@ -118,14 +119,6 @@ class cl_pagordem {
        $this->e50_id_usuario = ($this->e50_id_usuario == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_id_usuario"]:$this->e50_id_usuario);
        $this->e50_hora = ($this->e50_hora == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_hora"]:$this->e50_hora);
        $this->e50_anousu = ($this->e50_anousu == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_anousu"]:$this->e50_anousu);
-       if($this->e50_compdesp == ""){
-         $this->e50_compdesp_dia = ($this->e50_compdesp_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"]:$this->e50_compdesp_dia);
-         $this->e50_compdesp_mes = ($this->e50_compdesp_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_mes"]:$this->e50_compdesp_mes);
-         $this->e50_compdesp_ano = ($this->e50_compdesp_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_ano"]:$this->e50_compdesp_ano);
-         if($this->e50_compdesp_dia != ""){
-            $this->e50_compdesp = $this->e50_compdesp_ano."-".$this->e50_compdesp_mes."-".$this->e50_compdesp_dia;
-         }
-       }
        $this->e50_contapag = ($this->e50_contapag == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_contapag"]:$this->e50_contapag);
        $this->e50_cattrabalhador = ($this->e50_cattrabalhador == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_cattrabalhador"]:$this->e50_cattrabalhador);
        $this->e50_empresadesconto = ($this->e50_empresadesconto == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_empresadesconto"]:$this->e50_empresadesconto);
@@ -136,7 +129,14 @@ class cl_pagordem {
        $this->e50_datacompetencia = ($this->e50_datacompetencia == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_datacompetencia"]:$this->e50_datacompetencia);
        $this->e50_retencaoir = ($this->e50_retencaoir == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_retencaoir"]:$this->e50_retencaoir) == 'sim' ? 1 : 0; 
        $this->e50_naturezabemservico = ($this->e50_naturezabemservico == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_naturezabemservico"]:$this->e50_naturezabemservico);
-
+       if($this->e50_compdesp == ""){
+        $this->e50_compdesp_dia = ($this->e50_compdesp_dia == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"]:$this->e50_compdesp_dia);
+        $this->e50_compdesp_mes = ($this->e50_compdesp_mes == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_mes"]:$this->e50_compdesp_mes);
+        $this->e50_compdesp_ano = ($this->e50_compdesp_ano == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_compdesp_ano"]:$this->e50_compdesp_ano);
+        if($this->e50_compdesp_dia != ""){
+           $this->e50_compdesp = $this->e50_compdesp_ano."-".$this->e50_compdesp_mes."-".$this->e50_compdesp_dia;
+        }
+      }
      }else{
        $this->e50_codord = ($this->e50_codord == ""?@$GLOBALS["HTTP_POST_VARS"]["e50_codord"]:$this->e50_codord);
      }
@@ -346,7 +346,7 @@ class cl_pagordem {
          $this->erro_status = "0";
          return false;
        }
-     }     else{
+     }else{
        if(isset($GLOBALS["HTTP_POST_VARS"]["e50_data_dia"])){
          $sql  .= $virgula." e50_data = null ";
          $virgula = ",";
@@ -416,7 +416,7 @@ class cl_pagordem {
          $this->erro_status = "0";
          return false;
        }
-     }     else{
+     }else{
        if(isset($GLOBALS["HTTP_POST_VARS"]["e50_compdesp_dia"])){
          $sql  .= $virgula." e50_compdesp = null ";
          $virgula = ",";
@@ -443,11 +443,41 @@ class cl_pagordem {
         $sql  .= $virgula." e50_naturezabemservico = $this->e50_naturezabemservico ";
         $virgula = ",";
       }
+      if(trim($this->e50_cattrabalhador)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_cattrabalhador"])){
+        $sql  .= $virgula." e50_cattrabalhador = $this->e50_cattrabalhador ";
+        $virgula = ",";
+      }
+      if(trim($this->e50_cattrabalhadorremurenacao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_cattrabalhadorremurenacao"])){
+        $sql  .= $virgula." e50_cattrabalhadorremurenacao = $this->e50_cattrabalhadorremurenacao ";
+        $virgula = ",";
+      }
+      if(trim($this->e50_empresadesconto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_empresadesconto"])){
+        $sql  .= $virgula." e50_empresadesconto = $this->e50_empresadesconto ";
+        $virgula = ",";
+      }
+      if(trim($this->e50_contribuicaoPrev)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_contribuicaoPrev"])){
+        $sql  .= $virgula." e50_contribuicaoPrev = $this->e50_contribuicaoPrev ";
+        $virgula = ",";
+      }
+      if(trim($this->e50_valorremuneracao)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_valorremuneracao"])){
+        $sql  .= $virgula." e50_valorremuneracao = $this->e50_valorremuneracao ";
+        $virgula = ",";
+      }
+      if(trim($this->e50_valordesconto)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_valordesconto"])){
+        $sql  .= $virgula." e50_valordesconto = $this->e50_valordesconto ";
+        $virgula = ",";
+      }
+      if(trim($this->e50_datacompetencia)!="" || isset($GLOBALS["HTTP_POST_VARS"]["e50_datacompetencia"])){
+        $sql  .= $virgula." e50_datacompetencia = '$this->e50_datacompetencia' ";
+        $virgula = ",";
+      }
+      
      $sql .= " where ";
      if($e50_codord!=null){
-       $sql .= " e50_codord = $this->e50_codord";
+       $e50_codord  = $this->e50_codord == '' ? $e50_codord : $this->e50_codord;
+       $sql .= " e50_codord = $e50_codord";
      }
-     $resaco = $this->sql_record($this->sql_query_file($this->e50_codord));
+     $resaco = $this->sql_record($this->sql_query_file($e50_codord));
      if($this->numrows>0){
        for($conresaco=0;$conresaco<$this->numrows;$conresaco++){
          $resac = db_query("select nextval('db_acount_id_acount_seq') as acount");
@@ -469,7 +499,7 @@ class cl_pagordem {
          if(isset($GLOBALS["HTTP_POST_VARS"]["e50_anousu"]) || $this->e50_anousu != "")
            $resac = db_query("insert into db_acount values($acount,808,11134,'".AddSlashes(pg_result($resaco,$conresaco,'e50_anousu'))."','$this->e50_anousu',".db_getsession('DB_datausu').",".db_getsession('DB_id_usuario').")");
        }
-     }
+     } 
      $result = db_query($sql);
      if($result==false){
        $this->erro_banco = str_replace("\n","",@pg_last_error());
@@ -668,6 +698,41 @@ class cl_pagordem {
      }
      return $sql;
   }
+  function sql_query_boxesocial ( $e50_codord=null,$campos="*",$ordem=null,$dbwhere=""){
+    $sql = "select ";
+    if($campos != "*" ){
+      $campos_sql = split("#",$campos);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }else{
+      $sql .= $campos;
+    }
+    $sql .= " from pagordem ";
+    $sql .= " left join categoriatrabalhador on e50_cattrabalhador = ct01_codcategoria ";
+    $sql .= " left join cgm on z01_numcgm = e50_empresadesconto ";
+    $sql2 = "";
+    if($dbwhere==""){
+      if($e50_codord!=null ){
+        $sql2 .= " where pagordem.e50_codord = $e50_codord ";
+      }
+    }else if($dbwhere != ""){
+      $sql2 = " where $dbwhere";
+    }
+    $sql .= $sql2;
+    if($ordem != null ){
+      $sql .= " order by ";
+      $campos_sql = split("#",$ordem);
+      $virgula = "";
+      for($i=0;$i<sizeof($campos_sql);$i++){
+        $sql .= $virgula.$campos_sql[$i];
+        $virgula = ",";
+      }
+    }  
+    return $sql;
+ }
    function sql_query_cheques( $e50_codord=null,$campos="*",$ordem=null,$dbwhere="", $sJoin = ""){
      $sql = "select ";
      if($campos != "*" ){

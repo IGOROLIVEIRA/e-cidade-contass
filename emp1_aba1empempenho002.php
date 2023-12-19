@@ -56,6 +56,7 @@ require_once("classes/db_convconvenios_classe.php");
 require_once("std/Modification.php");
 require_once("classes/db_empnotaele_classe.php");
 require_once("classes/db_empnota_classe.php");
+require_once("classes/db_empefdreinf_classe.php");
 
 $clempempaut			= new cl_empempaut;
 $clempempenho	  	= new cl_empempenho;
@@ -81,6 +82,7 @@ $clempelemento	  = new cl_empelemento;
 $clempempitem			= new cl_empempitem;
 $clempnotaele           = new cl_empnotaele;
 $clempnota           = new cl_empnota;
+$clempefdreinf       = new cl_empefdreinf; 
 
 //Atualiza o campo historico da op
 if(isset($HTTP_POST_VARS['alterar'])){
@@ -230,6 +232,65 @@ if(isset($alterar)){
             }
             $erro_msg = "Alteração não realizada! Houve um erro durante a alteração.";
         }
+    }
+
+    if($sqlerro==false){
+
+        $result=$clempefdreinf->sql_record($clempefdreinf->sql_query_file($e60_numemp));
+       
+        $clempefdreinf->efd60_cessaomaoobra = $efd60_cessaomaoobra;
+        $clempefdreinf->efd60_aquisicaoprodrural = $efd60_aquisicaoprodrural;
+        $clempefdreinf->efd60_possuicno = $efd60_possuicno;
+        $clempefdreinf->efd60_numcno = $efd60_numcno;
+        $clempefdreinf->efd60_indprestservico = $efd60_indprestservico;
+        $clempefdreinf->efd60_prescontricprb = $efd60_prescontricprb;
+        $clempefdreinf->efd60_tiposervico = $efd60_tiposervico;
+        $clempefdreinf->efd60_prodoptacp = $efd60_prodoptacp;
+        
+        if($clempefdreinf->numrows>0){
+            $clempefdreinf->alterar($e60_numemp);
+        } else {
+            $clempefdreinf->efd60_numemp = $e60_numemp;
+            $clempefdreinf->efd60_codemp = $e60_codemp;
+            $clempefdreinf->efd60_anousu = db_getsession("DB_anousu");
+            $clempefdreinf->efd60_instit = db_getsession("DB_instit");
+            $clempefdreinf->incluir($e60_numemp);
+        }
+      
+        
+        if ($clempefdreinf->erro_status == 0) {
+            $sqlerro = true;
+            $erro_msg = $clempefdreinf->erro_msg;
+        }
+    }
+
+    $anoUsu = db_getsession("DB_anousu");
+    $sWhere = "e56_autori = " . $e54_autori . " and e56_anousu = " . $anoUsu;
+    $result = $clempautidot->sql_record($clempautidot->sql_query_dotacao(null, "o58_codigo", null, $sWhere));
+    $numrows = $clempautidot->numrows;
+    if ($numrows > 0) {
+        db_fieldsmemory($result, 0);
+    }	
+
+    $result  = $clempempaut->sql_record($clempempaut->sql_query_empenho(null, " e60_tipodespesa , e60_esferaemendaparlamentar , e60_emendaparlamentar ",null, " e61_autori = $chavepesquisa"));
+    $numrows = $clempempaut->numrows;
+    if ($numrows > 0) {
+        db_fieldsmemory($result, 0);
+    }	
+
+    $oCodigoAcompanhamento = new ControleOrcamentario();
+    $oCodigoAcompanhamento->setTipoDespesa($e60_tipodespesa);
+    $oCodigoAcompanhamento->setFonte($o58_codigo);
+    $oCodigoAcompanhamento->setEmendaParlamentar($e60_emendaparlamentar);
+    $oCodigoAcompanhamento->setEsferaEmendaParlamentar($e60_esferaemendaparlamentar);       
+    $oCodigoAcompanhamento->setDeParaFonteCompleta();
+    $e60_codco = $oCodigoAcompanhamento->getCodigoParaEmpenho();
+    
+    $clempempenho->e60_codco = $e60_codco;
+    $clempempenho->alterar($e60_numemp);
+    if($clempempenho->erro_status == 0) {
+        $sqlerro=true;
+        $erro_msg = $clempempenho->erro_msg;
     }
     /**
      * Manutenção da tabela emppresta
@@ -483,6 +544,10 @@ if(isset($alterar)){
         db_fieldsmemory($result,0);
     }
 
+    $result=$clempefdreinf->sql_record($clempefdreinf->sql_query_file($e60_numemp));
+    if($clempefdreinf->numrows>0){
+        db_fieldsmemory($result,0);
+    }
 
     $result=$clemppresta->sql_record($clemppresta->sql_query_file(null,"e45_tipo as e44_tipo", null, "e45_numemp = $e60_numemp"));
     if($clemppresta->numrows > 0){

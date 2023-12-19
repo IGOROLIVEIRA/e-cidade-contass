@@ -413,7 +413,8 @@ function mensagemesocial(){
       document.getElementById('vlrremuneracao').style.display = "none";
       document.getElementById('vlrremuneracao1').style.display = "none";
       document.getElementById('vlrdesconto').style.display = "none";
-      document.getElementById('vlrdesconto1').style.display = "none";      document.getElementById('multiplosvinculos').style.display = "none";
+      document.getElementById('vlrdesconto1').style.display = "none";      
+      document.getElementById('multiplosvinculos').style.display = "none";
       document.getElementById('idvinculos').style.display = "none";
       document.form1.numempresa.value = '';
       document.form1.nomeempresa.value = '';

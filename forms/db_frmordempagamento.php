@@ -1,12 +1,13 @@
 <style>
-    .divDadosOp{
-        display:flex; 
-        justify-content:space-between; 
+    .divDadosOp {
+        display: flex;
+        justify-content: space-between;
         margin-bottom: 5
     }
-    .fieldsetDadosOp{
-        width:500; 
-        margin:0 auto
+
+    .fieldsetDadosOp {
+        width: 500;
+        margin: 0 auto
     }
 </style>
 
@@ -38,17 +39,17 @@
                     <div>
                         <b>Data da OP:</b>
                         <?
-                    db_inputdata("dataLiquidacaoAtual", '', '', '', true, "hidden", 3);
-                    db_inputdata("dataLiquidacao", '', '', '', true, "text", 2);
-                    ?>
+                        db_inputdata("dataLiquidacaoAtual", '', '', '', true, "hidden", 3);
+                        db_inputdata("dataLiquidacao", '', '', '', true, "text", 2);
+                        ?>
                     </div>
                     <div>
 
                         <b>Data do estorno da OP:</b>
                         <?
-                    db_inputdata("dataEstornoAtual", '', '', '', true, "hidden", 3);
-                    db_inputdata("dataEstorno", '', '', '', true, "text", 2);
-                    ?>
+                        db_inputdata("dataEstornoAtual", '', '', '', true, "hidden", 3);
+                        db_inputdata("dataEstorno", '', '', '', true, "text", 2);
+                        ?>
                     </div>
                 </div>
             </fieldset>
@@ -73,17 +74,146 @@
                 <? include("forms/db_frmliquidaboxreinf.php"); ?>
             </td>
         </tr>
+        <?php
+        $clorcelemento = new cl_orcelemento();
+        $clempautitem  = new cl_empautitem;
+        $clempelemento = new cl_empelemento();
+        $clempempaut      =    new cl_empempaut;
+        $clempautidot  = new cl_empautidot;
+        $dados = explode("/", $empenho);
+        $instit = db_getsession("DB_instit");
+
+        $result = $clempempaut->sql_record($clempempaut->sql_query(null, "*", "", "e60_codemp = '{$dados[0]}' and e54_instit = {$instit} and e54_anousu = {$dados[1]}"));
+
+        if ($clempempaut->numrows > 0) {
+            $oResult = db_utils::fieldsMemory($result, 0);
+            $e54_autori = $oResult->e61_autori;
+            $e60_numemp = $oResult->e60_numemp;
+            $z01cpfcnpj = $oResult->z01_cgccpf;
+            $anoUsu = db_getsession("DB_anousu");
+            $sWhere = "e56_autori = " . $e54_autori . " and e56_anousu = " . $anoUsu;
+
+            $result = $clempautidot->sql_record($clempautidot->sql_query_dotacao(null, "e56_coddot", null, $sWhere));
+
+            if ($clempautidot->numrows > 0) {
+                $oResult = db_utils::fieldsMemory($result, 0);
+
+                $clorcdotacao = new cl_orcdotacao();
+                $result = $clorcdotacao->sql_record($clorcdotacao->sql_query($anoUsu, $oResult->e56_coddot, "o56_elemento,o56_codele"));
+
+                if ($clorcdotacao->numrows > 0) {
+
+                    $oResult = db_utils::fieldsMemory($result, 0);
+                    $oResult->estrutural = criaContaMae($oResult->o56_elemento . "00");
+
+                    $sWhere = "o56_elemento like '$oResult->estrutural%' and o56_codele <> $oResult->o56_codele and o56_anousu = $anoUsu";
+                    $sSql = "select distinct o56_codele,o56_elemento,o56_descr
+                                 from empempitem
+                                       inner join pcmater on pcmater.pc01_codmater    = empempitem.e62_item
+                                       inner join pcmaterele on pcmater.pc01_codmater = pcmaterele.pc07_codmater
+                                       left join orcelemento on orcelemento.o56_codele = pcmaterele.pc07_codele
+                                                             and orcelemento.o56_anousu = $anoUsu
+                                   where o56_elemento like '$oResult->estrutural%'
+                                   and e62_numemp = $e60_numemp and o56_anousu = $anoUsu";
+
+                    $result = $clorcelemento->sql_record($sSql);
+
+                    $oResult = db_utils::getCollectionByRecord($result);
+
+                    $numrows =  $clorcelemento->numrows;
+                    $aEle = array();
+
+                    foreach ($oResult as $oRow) {
+                        $aEle[$oRow->o56_codele] = $oRow->o56_descr;
+                        $aCodele[] = $oRow->o56_elemento;
+                    }
+                    $result = $clempelemento->sql_record($clempelemento->sql_query_file($e60_numemp, null, "e64_codele"));
+                    if ($clempelemento->numrows > 0) {
+                        $oResult = db_utils::fieldsMemory($result, 0);
+                    }
+                    if (!isset($e56_codele)) {
+                        $e56_codele = $oResult->e64_codele;
+                    }
+                }
+            }
+        }
+        $opcao = 3;
+        $tipodesdobramento = 3;
+        if (strlen($z01cpfcnpj) == 11  &&  !(
+            $aCodele . substr(0, 3) == '331' || $aCodele . substr(0, 3) == '345' ||
+            $aCodele . substr(0, 3) == '346' || $aCodele . substr(0, 7) == '3339018' ||
+            $aCodele . substr(0, 7) == '3339019' || $aCodele . substr(0, 7) == '3339014' ||
+            $aCodele . substr(0, 7) == '3339008' || $aCodele . substr(0, 7) == '3339059' ||
+            $aCodele . substr(0, 7) == '3339046' || $aCodele . substr(0, 7) == '3339048' ||
+            $aCodele . substr(0, 7) == '3339049' || $aCodele == '333903602' ||
+            $aCodele == '333903603' || $aCodele == '333903607' ||  $aCodele == '333903608' ||
+            $aCodele == '333903609' || $aCodele == '333903614' || $aCodele == '333903640'  ||
+            $aCodele == '333903641')) {
+            $tipodesdobramento = 1;
+            $opcao = 1;
+        ?>
+            <tr>
+                <td colspan="4">
+                    <? include("forms/db_frmliquidaboxesocial.php"); ?>
+                </td>
+            </tr>
+        <?php    } ?>
     </table>
 
     <div style="margin-top: 10px;">
 
-        <input name="alterar" type="submit" id="db_opcao" value="Alterar" onclick="js_alterarRetencao()">
+        <input name="alterar" type="button" id="db_opcao" value="Alterar" onclick="js_alterar()">
 
     </div>
 </form>
 <script type="text/javascript" src="scripts/prototype.js"></script>
 <script type="text/javascript" src="scripts/strings.js"></script>
 <script>
+    function js_alterar() {
+        js_alterarRetencao();
+        var cpfcnpj = "<?php print $z01cpfcnpj; ?>";
+        var tipodesdobramento = "<?php print $tipodesdobramento; ?>";
+        var opcao = "<?php print $opcao; ?>";
+
+        if (document.form1.aIncide.value == 1) {
+            if (opcao != '3' && !document.form1.ct01_codcategoria.value && cpfcnpj.length == 11 && tipodesdobramento == '1') {
+                alert("Campo Categoria do Trabalhador Obrigatorio")
+                return false;
+            }
+            if (opcao != '3' && !document.form1.multiplosvinculos.value && cpfcnpj.length == 11 && tipodesdobramento == '1') {
+                alert("Campo Possui múltiplos vínculos Obrigatorio")
+                return false;
+            }
+            if (document.form1.multiplosvinculos.value == 1 && opcao != '3' && !document.form1.contribuicaoPrev.value && cpfcnpj.length == 11 && tipodesdobramento == '1') {
+                alert("Campo Indicador de Desconto da Contribuição Previdenciária Obrigatorio")
+                return false;
+            }
+            if (!document.form1.numempresa.value && opcao != '3' && (document.form1.contribuicaoPrev.value == '1' || document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') && cpfcnpj.length == 11 && tipodesdobramento == '1') {
+                alert("Campo Empresa que efetuou desconto Obrigatorio")
+                return false;
+            }
+            if (!document.form1.ct01_codcategoriaremuneracao.value && opcao != '3' && (document.form1.contribuicaoPrev.value == '1' || document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') && cpfcnpj.length == 11 && tipodesdobramento == '1') {
+                alert("Campo Categoria do trabalhador na qual houve a remuneração Obrigatorio")
+                return false;
+            }
+
+            if (!document.form1.valorremuneracao.value && opcao != '3' && (document.form1.contribuicaoPrev.value == '1' || document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') && cpfcnpj.length == 11 && tipodesdobramento == '1') {
+                alert("Campo Valor da Remuneração Obrigatorio")
+                return false;
+            }
+            if (!document.form1.valordesconto.value && opcao != '3' && (document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') && cpfcnpj.length == 11 && tipodesdobramento == '1') {
+                alert("Campo Valor do Desconto Obrigatorio")
+                return false;
+            }
+            if (!document.form1.competencia.value && opcao != '3' && (document.form1.contribuicaoPrev.value == '1' || document.form1.contribuicaoPrev.value == '2' || document.form1.contribuicaoPrev.value == '3') && cpfcnpj.length == 11 && tipodesdobramento == '1') {
+                alert("Campo Competência Obrigatorio")
+                return false;
+            }
+        }
+        js_alterarEsocial();
+        document.getElementById("db_opcao").type = "submit";
+    }
+
     function pesquisaOrdemPagamento() {
         empenho = $('empenho').value;
         $('e60_codemp').value = empenho;
@@ -154,5 +284,6 @@
         $('fieldsetEstabelecimentos').style = "display: none"
         $('estabelecimentosTableBody').innerHTML = '';
         db_iframe_alteracaoop.hide();
+        js_verificaEsocial(e50_codord);
     }
 </script>
