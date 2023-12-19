@@ -52,6 +52,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     this.exibeLote = false;
     // Por padrão seta o julgamento por item
     this.iTipoJulgamento = 1;
+    this.planilhaTce = 0;
 
 
     this.buscaLotes = (sequencial) => {
@@ -320,6 +321,10 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     sContent += "    <legend><b>Obras e serviços :</b></legend>";
     sContent += "     <table border='0' style=\"border-collapse:collapse;\">";
     sContent += "       <tr>";
+    sContent += "         <td id='ctnLabelPlanilhaTce" + sId + "' >";
+    sContent += "           <b>Utilizou planilha modelo TCE/MG?</b>";
+    sContent += "         </td>";
+    sContent += "         <td id='ctnPlanilhaTce" + sId + "'></td>";
     sContent += "         <td id='ctnLabelClassesObjeto" + sId + "' >";
     sContent += "           <b>Classe do objeto:</b>";
     sContent += "         </td>";
@@ -1193,6 +1198,14 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         // }else{
         // }
     }
+
+    me.oCboPlanilhaTce = new DBComboBox('cboPlanilhaTce' + sId, 'cboPlanilhaTce' + sId);
+    me.oCboPlanilhaTce.addStyle('width', '90%');
+    me.oCboPlanilhaTce.show($('ctnPlanilhaTce' + sId));
+    me.oCboPlanilhaTce.addItem(0, 'Selecione');
+    me.oCboPlanilhaTce.addItem(1, 'Sim');
+    me.oCboPlanilhaTce.addItem(2, 'Não');
+
 
     me.oCboClasseObjeto = new DBComboBox('cboClasseObjeto' + sId, 'cboClasseObjeto' + sId);
     me.oCboClasseObjeto.addStyle('width', '90%');
@@ -2538,7 +2551,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
     me.oBdi.addEvent('onKeyUp', "js_ValidaCampos(this,4,\"Campo BDI\",\"f\",\"t\",event)");
     me.oBdi.setMaxLength(5);
     me.oBdi.show($('ctnBdi' + sId));
-  
+
     $('ctnBdi' + sId).observe('change', me.changeBdi);
     $('ctnBdi' + sId).observe('keyup',() => {
         me.js_formataValor($('txtBdi' + sId), 4);
@@ -2553,7 +2566,7 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         let oParam = new Object();
         oParam.exec = 'getBdi';
         oParam.licitacao = codLicitacao;
-    
+
         let oAjax = new Ajax.Request(
             'con4_endereco.RPC.php',
             {
@@ -2564,14 +2577,14 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             }
         )
     }
-    
+
     me.verificaBdi();
-    
+
     function retornoBdi(oAjax){
         let oRetorno = eval('(' + oAjax.responseText + ')');
-    
+
         if(oRetorno.bdi){
-            me.setBdi(oRetorno.bdi);    
+            me.setBdi(oRetorno.bdi);
             $('txtBdi'+sId).value = oRetorno.bdi;
             $('txtBdi'+sId).setAttribute('class', 'readonly');
             $('txtBdi'+sId).setAttribute('disabled', 'disabled');
@@ -3329,6 +3342,15 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
         return this.iCodigoLocal;
     }
 
+
+    this.setPlanilhaTce = function (planilhaTce) {
+      this.planilhaTce = planilhaTce;
+  }
+
+  this.getPlanilhaTce = function () {
+      return this.planilhaTce;
+  }
+
      /**
      *Seta o codigo do endereco
      *@param {string} iCodigoEndereco
@@ -3871,6 +3893,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
                 }
                 $('txtLogradouro' + sId).value = '';
                 me.setLogradouro('');
+                $('cboPlanilhaTce' + sId).value = 0;
+                me.setPlanilhaTce('');
                 $('cboClasseObjeto' + sId).value = 0;
                 me.setClassesObjeto('');
                 $('cboAtividadeObra' + sId).value = 0;
@@ -4172,6 +4196,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
             oEndereco.latitude = me.getLatitude();
             oEndereco.longitude = me.getLongitude();
         }
+
+        oEndereco.planilhaTce = $('cboPlanilhaTcepri').value;
         oEndereco.classeObjeto = me.getClassesObjeto();
         oEndereco.atividadeObra = me.getAtividadeObra();
         oEndereco.atividadeServico = me.getAtividadeServico();
@@ -4411,6 +4437,8 @@ DBViewCadDadosComplementares = function (sId, sNameInstance, iCodigoEndereco, in
 
         $('txtCodigoNumero' + sId).value = dados.db150_numero;
         me.setNumero(dados.db150_numero);
+        $('cboPlanilhaTce' + sId).selectedIndex = dados.db150_planilhatce;
+        me.setClassesObjeto(dados.db150_planilhatce);
         $('cboClasseObjeto' + sId).selectedIndex = dados.db150_classeobjeto;
         me.setClassesObjeto(dados.db150_classeobjeto);
         dados.db150_atividadeobra = !dados.db150_atividadeobra ? 0 : dados.db150_atividadeobra;
