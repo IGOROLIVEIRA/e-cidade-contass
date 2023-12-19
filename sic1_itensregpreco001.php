@@ -28,7 +28,7 @@ if ($codigoAdesao == "") {
 $sSQLTabela = $clitensregpreco->sql_query_novo(null, "itensregpreco.*,z01_nome, case when si07_codunidade is null then si07_unidade else m61_descr end as m61_descr,pc01_descrmater", null, "si07_sequencialadesao = {$codigoAdesao}");
 $rsResultTabela = $clitensregpreco->sql_record($sSQLTabela);
 $result = $cladesaoregpreco->sql_record($cladesaoregpreco->sql_query_file($codigoAdesao, "si06_processocompra,si06_processoporlote,si06_descontotabela,si06_criterioadjudicacao", null, ""));
-$iProcessoLote   = db_utils::fieldsmemory($result, 0)->si06_processoporlote; //db_criatabela($result);
+$iProcessoLote   = db_utils::fieldsmemory($result, 0)->si06_processoporlote;
 $iDescontoTabela = db_utils::fieldsmemory($result, 0)->si06_descontotabela;
 $iCriterioAdjudicacao = db_utils::fieldsmemory($result, 0)->si06_criterioadjudicacao;
 if($iCriterioAdjudicacao != null){

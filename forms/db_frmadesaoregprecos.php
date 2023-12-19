@@ -34,7 +34,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
         background-color: #E6E4F1;
     }
 </style>
-<fieldset style="width: 650px; margin-top: 0px;">
+<fieldset style="width: 750px; margin-top: 0px;">
   <legend><b>Órgão Gerenciador</b></legend>
   <form name="form1" method="post" action="">
     <center>
@@ -211,7 +211,7 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
         </tr>
       </table>
 </fieldset>
-<fieldset style="width: 640px; height: 460px; margin-top: 40px; ">
+<fieldset style="width: 750px; height: 460px; margin-top: 40px; ">
   <legend><b>Órgão de Adesão</b></legend>
   <table>
     <tr>
@@ -344,11 +344,14 @@ if (strpos($_SERVER['HTTP_REFERER'], 'sic1_adesaoregprecos003.php')) {
 <script>
 
   function js_inicializacao(){
+
     if(document.getElementById('si06_leidalicitacao').value != 0){
       document.getElementById("trRegimeContratacao").style.display = '';
     }
-
-    document.getElementById('si06_criterioadjudicacao').value = '3'
+    
+    if(document.getElementById('db_opcao').name == 'incluir'){
+      document.getElementById('si06_criterioadjudicacao').value = '3';
+    }
   
     js_alteraRegimeContratacao(document.getElementById('si06_regimecontratacao').value);
   }

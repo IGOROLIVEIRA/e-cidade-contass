@@ -1,7 +1,6 @@
 <?
 //MODULO: sicom
 //CLASSE DA ENTIDADE adesaoregprecos
-ini_set("display_errors","on");
 class cl_adesaoregprecos
 {
   // cria variaveis de erro
