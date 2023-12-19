@@ -131,9 +131,15 @@ try {
 
         case "excluirDocumento":
             $aDocumentosNaoExcluidos = array();
+            $clliccontroleanexopncp = new cl_liccontroleanexopncp();
             foreach ($oParam->aDocumentosExclusao as $iCodigoDocumento) {
-                $oProcessoDocumento = new ProcessoComprasDocumento($iCodigoDocumento);
-                $oProcessoDocumento->excluir();
+                $rsAnexos = $clliccontroleanexopncp->sql_record($clliccontroleanexopncp->sql_query_file(null, " * ", null, "l218_processodecompras = $oParam->iCodigoProcesso and l218_sequencialarquivo = " . $oParam->iCodigoDocumento));
+                if(pg_num_rows($rsAnexos)){
+                    $oRetorno->sMensagem = urlencode('Anexo já enviado ao PNCP, para excluí-lo é necessário que seja primeiro EXCLUÍDO no PNCP.');
+                }else {
+                    $oProcessoDocumento = new ProcessoComprasDocumento($iCodigoDocumento);
+                    $oProcessoDocumento->excluir();
+                }
             }
             $oRetorno->sMensagem = urlencode('Exclusão realizada com sucesso!');
             break;
