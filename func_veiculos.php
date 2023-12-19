@@ -34,6 +34,7 @@ include("classes/db_veiculos_classe.php");
 include("classes/db_veiccadmodelo_classe.php");
 include("classes/db_veiccadmarca_classe.php");
 include("classes/db_veicespecificacao_classe.php");
+include "classes/db_veiculosplaca_classe.php";
 
 db_postmemory($HTTP_POST_VARS);
 
@@ -197,7 +198,25 @@ $clveiculos->rotulo->label("si04_especificacao");
           if (isset($chave_ve01_codigo) && trim($chave_ve01_codigo) != "") {
             $sql = $clveiculos->sql_query(null, $campos, "ve01_codigo", "ve01_codigo = $chave_ve01_codigo $sWhereInstituicao ");
           } else if (isset($chave_ve01_placa) && trim($chave_ve01_placa) != "") {
-            $sql = $clveiculos->sql_query("", $campos, "ve01_placa", "ve01_placa = '$chave_ve01_placa' $sWhereInstituicao ");
+            // Busca o veiculo por placa nas alterações de placa
+            $clveiculosplaca  = new cl_veiculosplaca;
+            $sqlBuscaVeiculo = $clveiculosplaca->sql_query(null, "distinct ve76_veiculo", "", "trim(ve76_placaanterior) like '$chave_ve01_placa%'");
+            $resultBuscaVeiculo = $clveiculosplaca->sql_record($sqlBuscaVeiculo);
+
+            $alterarplaca = null;
+            if ($resultBuscaVeiculo != false && $clveiculosplaca->numrows > 0) {
+              if ($clveiculosplaca->numrows == 1) {
+                $alterarplaca = db_utils::getCollectionByRecord($resultBuscaVeiculo)[0];
+              } else {
+                echo "<script>alert('Foi encontrado mais de um veículo com essa placa nas alterações de placa.');</script>";
+              }
+            }
+
+            if (!empty($alterarplaca)) {
+              $sql = $clveiculos->sql_query(null, $campos, "ve01_codigo", "ve01_codigo = $alterarplaca->ve76_veiculo $sWhereInstituicao ");
+            } else {
+              $sql = $clveiculos->sql_query("", $campos, "ve01_placa", "ve01_placa = '$chave_ve01_placa' $sWhereInstituicao ");
+            }           
           } else if (isset($chave_ve01_veiccadmodelo)  && trim($chave_ve01_veiccadmodelo) != "" && $chave_ve01_veiccadmodelo > 0) {
             $sql = $clveiculos->sql_query("", $campos, "veiccadmodelo.ve22_descr", "ve01_veiccadmodelo = $chave_ve01_veiccadmodelo $sWhereInstituicao ");
           } else if (isset($chave_ve01_veiccadmarca) && trim($chave_ve01_veiccadmarca) != ""  && $chave_ve01_veiccadmarca > 0) {

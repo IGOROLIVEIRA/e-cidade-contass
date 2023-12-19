@@ -189,7 +189,7 @@ function excluirAlteracao($ve76_sequencial)
     $clveiculos = new cl_veiculos;
 
     $clveiculos->ve01_codigo = $alterarplaca->ve76_veiculo;
-    $clveiculos->ve01_placa = $alterarplaca->ve76_placa;
+    $clveiculos->ve01_placa = $alterarplaca->ve76_placaanterior;
     
     if (!$clveiculos->alterar($alterarplaca->ve76_veiculo)) {
       throw new Exception($clveiculos->erro_msg);

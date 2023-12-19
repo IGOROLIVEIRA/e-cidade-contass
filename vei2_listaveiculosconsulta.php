@@ -39,6 +39,7 @@ require_once "classes/db_veicparam_classe.php";
 require_once "classes/db_veicbaixa_classe.php";
 require_once "classes/db_veiculoscomb_classe.php";
 require_once "classes/db_veictipoabast_classe.php";
+require_once "classes/db_veiculosplaca_classe.php";
 
 $oDaoVeiculos = new cl_veiculos;
 $oGet         = db_utils::postMemory($_GET);
@@ -54,7 +55,26 @@ if (isset($oGet->iVeiculo) && trim($oGet->iVeiculo) != "") {
 }
 
 if (isset($oGet->sPlaca) && trim($oGet->sPlaca) != "") {
-  $aWhere[] = " ve01_placa like '{$oGet->sPlaca}%'";
+  
+  // Busca o veiculo por placa nas alterações de placa
+  $clveiculosplaca  = new cl_veiculosplaca;
+  $sqlBuscaVeiculo = $clveiculosplaca->sql_query(null, "distinct ve76_veiculo", "", "trim(ve76_placaanterior) like '$oGet->sPlaca%'");
+  $resultBuscaVeiculo = $clveiculosplaca->sql_record($sqlBuscaVeiculo);
+
+  $alterarplaca = null;
+  if ($resultBuscaVeiculo != false && $clveiculosplaca->numrows > 0) {
+    if ($clveiculosplaca->numrows == 1) {
+      $alterarplaca = db_utils::getCollectionByRecord($resultBuscaVeiculo)[0];
+    } else {
+      echo "<script>alert('Foi encontrado mais de um veículo com essa placa nas alterações de placa.');</script>";
+    }
+  }
+  
+  if (!empty($alterarplaca)) {
+    $aWhere[] = " ve01_codigo = {$alterarplaca->ve76_veiculo}";
+  } else {
+    $aWhere[] = " ve01_placa like '{$oGet->sPlaca}%'";
+  }
 }
 
 if (isset($oGet->iCentral) && trim($oGet->iCentral) != '') {

@@ -177,7 +177,7 @@ class cl_veiculosplaca
       return false;
     }
 
-    $this->numrows = pg_numrows($result);
+    $this->numrows = pg_num_rows($result);
 
     if ($this->numrows == 0) {
       $this->gravaErro("Record Vazio na Tabela:veiculos", "", "");
