@@ -33,4 +33,3 @@ $sSqlBuscaAlteracoesPlaca = $clveiculosplaca->sql_query(null, $sCampos, "ve76_se
     </center>
   </body>
 </html>
-?>
