@@ -68,6 +68,9 @@ require_once("model/contrato/AcordoItemTipoCalculoFactory.model.php");
 require_once("classes/db_credenciamentotermo_classe.php");
 require_once("model/contrato/PNCP/ContratoPNCP.model.php");
 require_once("classes/db_acocontratopncp_classe.php");
+require_once("classes/db_historicomaterial_classe.php");
+require_once("classes/db_pcmater_classe.php");
+require_once("classes/db_matunid_classe.php");
 require_once("classes/db_acordoitem_classe.php");
 
 db_app::import("configuracao.DBDepartamento");
@@ -1950,19 +1953,6 @@ switch ($oParam->exec) {
             $oRetorno->message = utf8_decode($oErro->getMessage());
             $oRetorno->status  = 2;
         }
-        case 'getItensAditamento':
-            $cl_acordoitem = new cl_acordoitem;
-            $query = $cl_acordoitem->queryGetItensAdimento($oParam->iAcordo);
-            $oResult = $cl_acordoitem->sql_record($query);
-            $aResult = array();
-            if ($cl_acordoitem->numrows > 0) {
-                for ($i = 0; $i < $cl_acordoitem->numrows; $i++) {
-                    $linha = db_utils::fieldsMemory($oResult, $i);
-                    array_push($aResult,$linha);
-                }
-            }
-            $oRetorno->status  = 1;
-            $oRetorno->itens = $aResult;
         break;
 }
 /**
