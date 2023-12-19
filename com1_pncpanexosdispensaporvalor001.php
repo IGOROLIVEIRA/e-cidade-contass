@@ -95,7 +95,7 @@ $oRotulo->label("pc80_resumo");
 
                                 $oTipo = db_utils::fieldsMemory($result_tipo, $iIndiceTipo);
 
-                                $tipo[$oTipo->l213_sequencial] = $oTipo->l213_descricao;
+                                $tipo[$oTipo->l213_sequencial] = utf8_decode($oTipo->l213_descricao);
                             }
 
                             if ($cltipoanexo->numrows == 0) {
