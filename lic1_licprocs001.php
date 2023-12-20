@@ -175,7 +175,7 @@ if ($clliclicita->numrows > 0) {
                     <td>
 
                         <?
-
+                        
                         $rsPcparam = $clpcparam->sql_record($clpcparam->sql_query_file(db_getsession("DB_instit"), "pc30_contrandsol"));
                         db_fieldsmemory($rsPcparam, 0);
                         $sWhere = "";
@@ -204,6 +204,8 @@ if ($clliclicita->numrows > 0) {
                         } else {
                             $sWhere .= " and pc80_data <= '$l20_dataaber' ";
                         }
+
+                        $sWhere .= $l20_criterioadjudicacao != null ? " and pc80_criterioadjudicacao = $l20_criterioadjudicacao " : "";
 
                         /**
                          * Validação inserida no sql que retorna processos de compras no modulo licitação

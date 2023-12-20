@@ -588,6 +588,10 @@ if (isset($alterar)) {
 			}
 		}
 
+        if($l20_tipnaturezaproced == "1" || $l20_tipnaturezaproced == "3"){
+            $l20_usaregistropreco = "f";
+        } 
+
         if ($sqlerro == false) {
             $clliclicita->l20_amparolegal       = $oPost->l212_codigo;
             $clliclicita->l20_numero       = $iNumero;

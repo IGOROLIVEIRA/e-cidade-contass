@@ -1209,15 +1209,12 @@ class cl_liclicita
         if (trim($this->l20_tipoprocesso != "" || isset($GLOBALS["HTTP_POST_VARS"]["l20_tipoprocesso"])) && ($tribunal == 100 || $tribunal == 101 || $tribunal == 102 || $tribunal == 103)) {
             $sql .= $virgula . " l20_tipoprocesso = '$this->l20_tipoprocesso' ";
             $virgula = ",";
-            //            if (trim($this->l20_tipoprocesso) == null || trim($this->l20_tipoprocesso) == 0) {
-            //                $this->erro_sql = "obrigatorio preencher os campos: Tipo de Processo";
-            //                $this->erro_campo = "l20_tipoprocesso";
-            //                $this->erro_banco = "";
-            //                $this->erro_msg = "Usu?rio: \\n\\n " . $this->erro_sql . " \\n\\n";
-            //                $this->erro_msg .= str_replace('"', "", str_replace("'", "", "Administrador: \\n\\n " . $this->erro_banco . " \\n"));
-            //                $this->erro_status = "0";
-            //                return false;
-            //            }
+        }
+
+        if ($this->l20_tipoprocesso == null) {
+            $this->l20_tipoprocesso = 'null';
+            $sql .= $virgula . " l20_tipoprocesso = $this->l20_tipoprocesso ";
+            $virgula = ",";
         }
 
         if ($this->l20_tipoprocesso == "0") {
@@ -1940,12 +1937,11 @@ class cl_liclicita
             $sql .= $virgula . " l20_receita = '$this->l20_receita'";
             $virgula = ",";
         }
-
-
+       
         $sql .= " where ";
         if ($l20_codigo != null) {
             $sql .= " l20_codigo = $this->l20_codigo";
-        }
+        }        
         $result = db_query($sql);
 
 

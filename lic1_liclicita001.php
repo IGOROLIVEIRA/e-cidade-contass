@@ -458,6 +458,10 @@ if (isset($incluir)) {
 			}
 		}
 
+		if($l20_tipoprocesso == "5" || $l20_tipoprocesso == "6"){
+			$clliclicita->l20_usaregistropreco = "t";
+		}
+
 		if ($sqlerro == false) {
 			$clliclicita->l20_amparolegal      	  =  $oPost->l212_codigo;
 			$clliclicita->l20_numero      	  =  $l20_numero;
